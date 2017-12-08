@@ -1,6 +1,5 @@
 import io from 'socket.io-client'
 import EventEmitter from 'events'
-import * as settings from 'settings'
 
 export default class AuthService extends EventEmitter {
   constructor(backend) {
@@ -22,11 +21,12 @@ export default class AuthService extends EventEmitter {
     }
   }
 
-  async login({seedPhrase, pin, gatewayUrl}) {
+  async login({seedPhrase, gatewayUrl}) {
     if (gatewayUrl !== undefined && gatewayUrl.length > 11) {
       this.backend.gateway = gatewayUrl
+      console.log(gatewayUrl)
     }
-    const res = await this.backend.gateway.login({seedPhrase, pin})
+    const res = await this.backend.gateway.login({seedPhrase})
     if (!res.success) {
       throw new Error('Could not log in: invalid seed phrase')
     }
@@ -74,7 +74,7 @@ export class Wallet {
   constructor({gateway, userName, seedPhrase}) {
     this._gateway = gateway
     this.userName = userName
-    this.identityURL = `${settings.gateway}/${userName}`
+    this.identityURL = `${IDENTITY_GATEWAY_URL}/${userName}`
     this.seedPhrase = seedPhrase
   }
 
@@ -122,13 +122,12 @@ export class Wallet {
           userName: this.userName
         })
       } catch (e) {
-        console.log(e)
         displayName = [['value', '']]
       }
-      const [email, phone, passport, idcard] =
+      const [email, phone] =
         await this._gateway.getOwnAttributes({
           userName: this.userName,
-          type: ['email', 'phone', 'passport', 'idcard'],
+          type: ['email', 'phone'],
           checkVerified: true
         })
 
@@ -141,7 +140,6 @@ export class Wallet {
         walletAddress: ethereum.walletAddress
       })
       return {
-        webId: `https://${this.userName}.webid.jolocom.de/profile/card#me`,
         userName: this.userName,
         displayName: {
           edit: false,
@@ -164,17 +162,6 @@ export class Wallet {
             savedToBlockchain: false
           }))
         },
-        passports: passport.map(passport => ({
-          ...passport.contents,
-          verified: passport.verified,
-          savedToBlockchain: false
-        })),
-        idCards: idcard.map(idcard => ({
-          idCardFields: idcard.contents,
-          verified: idcard.verified,
-          savedToBlockchain: false,
-          id: idcard.id
-        })),
         ethereum: {
           walletAddress: ethereum.walletAddress,
           identityAddress: ethereum.identityAddress,

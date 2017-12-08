@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/country'
@@ -12,10 +13,10 @@ import Presentation from '../presentation/country'
 })
 export default class CountryVerificationScreen extends React.Component {
   static propTypes = {
-    setCountryValue: React.PropTypes.func.isRequired,
-    chooseCountry: React.PropTypes.func.isRequired,
-    cancelCountrySelection: React.PropTypes.func.isRequired,
-    verifier: React.PropTypes.object.isRequired
+    setCountryValue: PropTypes.func.isRequired,
+    chooseCountry: PropTypes.func.isRequired,
+    cancelCountrySelection: PropTypes.func.isRequired,
+    verifier: PropTypes.object.isRequired
   }
 
   render() {

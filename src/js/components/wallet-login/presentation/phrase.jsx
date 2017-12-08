@@ -1,18 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
-import {
-  IconButton,
-  RaisedButton,
-  Avatar,
-  TextField,
-  FlatButton
-} from 'material-ui'
+import IconButton from 'material-ui/IconButton'
+import RaisedButton from 'material-ui/RaisedButton'
+import Avatar from 'material-ui/Avatar'
+import TextField from 'material-ui/TextField'
+import FlatButton from 'material-ui/FlatButton'
 
-import {
-  NavigationExpandMore,
-  NavigationExpandLess
-} from 'material-ui/svg-icons'
+import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more'
+import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less'
 
 import {
   Container,
@@ -117,12 +114,12 @@ const Passphrase = (props) => {
 }
 
 Passphrase.propTypes = {
-  back: React.PropTypes.func.isRequired,
-  canSubmit: React.PropTypes.bool.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  toggleHasOwnURL: React.PropTypes.func.isRequired,
-  setValueOwnURL: React.PropTypes.func.isRequired
+  back: PropTypes.func.isRequired,
+  canSubmit: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  toggleHasOwnURL: PropTypes.func.isRequired,
+  setValueOwnURL: PropTypes.func.isRequired
 }
 
 export default Radium(Passphrase)

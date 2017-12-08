@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'redux_state/utils'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
-import {FlatButton, AppBar} from 'material-ui'
+import AppBar from 'material-ui/AppBar'
+import FlatButton from 'material-ui/FlatButton'
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 import Dialog from 'components/common/dialog.jsx'
@@ -16,11 +18,11 @@ import {theme} from 'styles'
 @Radium
 export default class Tour extends React.Component {
   static propTypes = {
-    hideDialog: React.PropTypes.func
+    hideDialog: PropTypes.func
   }
 
   static contextTypes = {
-    store: React.PropTypes.object
+    store: PropTypes.object
   }
 
   constructor(props) {

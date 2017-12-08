@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
-import util from 'lib/util'
+import router from '../router'
 
 const storeIdCardDetailsInBlockchain = ({idCard, webId, services}) => {
   const {wallet} = services.auth.currentUser
@@ -23,8 +22,8 @@ const storeIdCardDetailsInBlockchain = ({idCard, webId, services}) => {
         streetWithNumber: idCard.idCardFields.streetWithNumber,
         zip: idCard.idCardFields.zip
       },
-      definitionUrl:
-        `${util.webidRoot(webId)}/profile/idCard${idCard.id}`,
+      definitionUrl: '',
+      // `${util.webidRoot(webId)}/profile/idCard${idCard.id}`,
       pin: '1234',
       identityAddress: wallet.identityAddress
     }
@@ -39,7 +38,7 @@ const __WINDOW_TO_URL__ = {
   idCard: '/wallet/identity/id-card'
 }
 
-const actions = module.exports = makeActions('wallet/identity', {
+export const actions = makeActions('wallet/identity', {
   changePinValue: {
     expectedParams: ['attrType', 'value', 'index', 'codeType']
   },
@@ -281,7 +280,7 @@ const changePinValue = (state, {attrType, index, value, codeType = 'pin'}) => {
   return state
 }
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.changePinValue.id:
       return changePinValue(state, action)

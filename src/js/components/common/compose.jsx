@@ -1,27 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
-import {IconButton} from 'material-ui'
+import IconButton from 'material-ui/IconButton'
 
-let Compose = React.createClass({
+class Compose extends React.Component {
+  static propTypes = {
+    style: PropTypes.object,
+    placeholder: PropTypes.string,
+    submitIcon: PropTypes.string,
+    onKeyDown: PropTypes.func,
+    onKeyUp: PropTypes.func,
+    onSubmit: PropTypes.func
+  };
 
-  propTypes: {
-    style: React.PropTypes.object,
-    placeholder: React.PropTypes.string,
-    submitIcon: React.PropTypes.string,
-    onKeyDown: React.PropTypes.func,
-    onKeyUp: React.PropTypes.func,
-    onSubmit: React.PropTypes.func
-  },
+  state = {
+    content: ''
+  };
 
-  getInitialState() {
-    return {
-      content: ''
-    }
-  },
-
-  onKeyDown(e) {
+  onKeyDown = (e) => {
     if (this.props.onKeyDown) {
       return this.props.onKeyDown(e)
     }
@@ -36,29 +34,29 @@ let Compose = React.createClass({
         return false
       }
     }
-  },
+  };
 
-  onKeyUp(e) {
+  onKeyUp = (e) => {
     if (this.props.onKeyUp) {
       this.props.onKeyUp(e)
     }
     return false
-  },
+  };
 
-  onSubmit() {
+  onSubmit = () => {
     if (this.props.onSubmit(this.state.content)) {
       this.setState({content: ''})
       ReactDOM.findDOMNode(this.refs.textarea).value = ''
     }
-  },
+  };
 
-  onChange(e) {
+  onChange = (e) => {
     this.setState({
       content: e.target.value
     })
-  },
+  };
 
-  getStyles() {
+  getStyles = () => {
     return {
       container: {
         borderTop: '1px solid #eee'
@@ -97,7 +95,7 @@ let Compose = React.createClass({
         position: 'fixed'
       }
     }
-  },
+  };
 
   render() {
     let {style, placeholder, submitIcon} = this.props
@@ -131,6 +129,6 @@ let Compose = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default Radium(Compose)

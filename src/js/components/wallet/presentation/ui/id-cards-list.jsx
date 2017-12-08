@@ -1,10 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
+import List from 'material-ui/List'
+import FlatButton from 'material-ui/FloatingActionButton'
+import SocialPerson from 'material-ui/svg-icons/social/person'
+import MapsPlace from 'material-ui/svg-icons/maps/place'
+import SocialCake from 'material-ui/svg-icons/social/cake'
 
-import {List, FlatButton} from 'material-ui'
-import {SocialPerson, MapsPlace, SocialCake} from 'material-ui/svg-icons'
-import {theme} from 'styles'
-import {StaticListItem, IconNumber} from './'
+import { theme } from 'styles'
+import { StaticListItem, IconNumber } from './'
 
 const STYLES = {
   requestBtn: {
@@ -120,8 +124,8 @@ const IdCardsList = (props) => {
 }
 
 IdCardsList.propTypes = {
-  idCards: React.PropTypes.array.isRequired,
-  requestIdCardVerification: React.PropTypes.func.isRequired
+  idCards: PropTypes.array.isRequired,
+  requestIdCardVerification: PropTypes.func.isRequired
 }
 
 export default Radium(IdCardsList)

@@ -1,7 +1,6 @@
 import {expect} from 'chai'
-import * as face from './face'
-
-const reducer = require('./face').default
+import {actions} from './face'
+import reducer from './face'
 
 describe('# verifier face redux module', () => {
   describe('# Reducer ', () => {
@@ -12,7 +11,7 @@ describe('# verifier face redux module', () => {
     it('should set isFaceMatchingId to true on confirmFaceIdCardMatch', () => {
       const state = reducer()
       const action = {
-        type: face.confirmFaceIdCardMatch.id
+        type: actions.confirmFaceIdCardMatch.id
       }
       expect(reducer(state, action).get('isFaceMatchingId')).to.be.true
     })

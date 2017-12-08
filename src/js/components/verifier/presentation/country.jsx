@@ -1,7 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
-import {TextField} from 'material-ui'
-import {ActionSearch, NavigationArrowBack} from 'material-ui/svg-icons'
+import TextField from 'material-ui/TextField'
+import ActionSearch from 'material-ui/svg-icons/action/search'
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 
 import {theme} from 'styles'
 
@@ -44,12 +46,12 @@ const STYLES = {
 @Radium
 export default class CountrySelectPresentation extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    countries: React.PropTypes.array,
-    submit: React.PropTypes.func,
-    change: React.PropTypes.func,
-    value: React.PropTypes.string,
-    cancel: React.PropTypes.func
+    children: PropTypes.node,
+    countries: PropTypes.array,
+    submit: PropTypes.func,
+    change: PropTypes.func,
+    value: PropTypes.string,
+    cancel: PropTypes.func
   }
 
   render() {

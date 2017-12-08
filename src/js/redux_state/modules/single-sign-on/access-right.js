@@ -1,9 +1,9 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
-import * as _ from 'lodash'
+import router from '../router'
+import find from 'lodash/find'
 
-const actions = module.exports = makeActions('single-sign-on/access-right', {
+export const actions = makeActions('single-sign-on/access-right', {
   showSharedData: {
     expectedParams: ['index'],
     creator: (params) => {
@@ -28,7 +28,7 @@ const actions = module.exports = makeActions('single-sign-on/access-right', {
       return (dispatch, getState, {backend, services}) => {
         dispatch(actions.deleteService.buildAction(params, () => {
           const servicesOverview = getState().toJS().singleSignOn.accessRight.services // eslint-disable-line max-len
-          const service = _.find(servicesOverview, {id: params})
+          const service = find(servicesOverview, {id: params})
           return backend.gateway.revokeServiceAccess({
             userName: services.auth.currentUser.wallet.userName,
             identity: service.label,
@@ -104,7 +104,7 @@ const initialState = Immutable.fromJS({
   services: []
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.getIdentityInformation.id_fail:
       return state.merge({
@@ -205,7 +205,7 @@ function mapConnectedServices(services, identity) {
         sharedData.push(sharedDetails)
       })
 
-      let cluster = _.find(arrayServices, {label: field.identity})
+      let cluster = find(arrayServices, {label: field.identity})
       if (cluster !== undefined) {
         cluster.sharedData.push(sharedData)
       } else {
@@ -222,7 +222,7 @@ function mapConnectedServices(services, identity) {
         arrayServices.push(detailsService)
       }
     } else {
-      let item = _.find(identityAttribute[attribute + 's'], {id: patternType}) // eslint-disable-line max-len
+      let item = find(identityAttribute[attribute + 's'], {id: patternType}) // eslint-disable-line max-len
       let value
       if (item.hasOwnProperty('number')) {
         value = item.number
@@ -236,7 +236,7 @@ function mapConnectedServices(services, identity) {
         verified: item.verified
         // status: ''
       }
-      let cluster = _.find(arrayServices, {label: field.identity})
+      let cluster = find(arrayServices, {label: field.identity})
       if (cluster !== undefined) {
         cluster.sharedData.push(sharedDetails)
         arrayServices.push(cluster)

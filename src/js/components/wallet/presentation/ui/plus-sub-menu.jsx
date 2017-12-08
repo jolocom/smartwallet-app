@@ -1,13 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import Wallet from 'material-ui/svg-icons/action/account-balance-wallet'
 import {theme} from 'styles'
 
-import {
-  List,
-  FloatingActionButton,
-  Divider
-} from 'material-ui'
+import List from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import Divider from 'material-ui/Divider'
 
 const STYLES = {
   divider: {
@@ -139,15 +138,15 @@ const PlusSubMenu = (props) => {
 }
 
 PlusSubMenu.propTypes = {
-  amount: React.PropTypes.any,
-  currencyPrice: React.PropTypes.number,
-  currency: React.PropTypes.any,
-  children: React.PropTypes.node,
-  style: React.PropTypes.object,
-  goToManagement: React.PropTypes.func,
-  choice: React.PropTypes.bool,
-  overview: React.PropTypes.any,
-  ethSvg: React.PropTypes.object
+  amount: PropTypes.any,
+  currencyPrice: PropTypes.number,
+  currency: PropTypes.any,
+  children: PropTypes.node,
+  style: PropTypes.object,
+  goToManagement: PropTypes.func,
+  choice: PropTypes.bool,
+  overview: PropTypes.any,
+  ethSvg: PropTypes.object
 }
 
 export default Radium(PlusSubMenu)

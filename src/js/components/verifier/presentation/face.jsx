@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
-import {Checkbox} from 'material-ui'
+import Checkbox from 'material-ui/Checkbox'
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
 
@@ -43,10 +44,10 @@ const STYLES = {
 @Radium
 export default class VerificationFacePresentation extends React.Component {
   static propTypes = {
-    verify: React.PropTypes.func.isRequired,
-    cancel: React.PropTypes.func.isRequired,
-    confirmMatch: React.PropTypes.func.isRequired,
-    isFaceMatchingId: React.PropTypes.bool.isRequired
+    verify: PropTypes.func.isRequired,
+    cancel: PropTypes.func.isRequired,
+    confirmMatch: PropTypes.func.isRequired,
+    isFaceMatchingId: PropTypes.bool.isRequired
   }
 
   render() {

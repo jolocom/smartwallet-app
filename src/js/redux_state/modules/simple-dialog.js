@@ -1,21 +1,21 @@
 import { Map } from 'immutable'
-import { action } from './'
-import toggleable from './generic/toggleable'
+import { makeActions } from './'
 
-const simpleDialogVisibility = toggleable('simple-dialog', 'simpleDialog', {
-  initialValue: false
-})
-export const {toggle: toggleSimpleDialog, show: showSimpleDialog,
-hide: hideSimpleDialog } = simpleDialogVisibility.actions
-
-export const configSimpleDialogMessage = action(
-  'simple-dialog', 'configSimpleDialogMessage', {
+export const actions = makeActions('simple-dialog', {
+  configMsg: {
     expectedParams: [
-      'title', 'message', 'primaryActionText', 'style', 'scrollContent'
+      'title',
+      'message',
+      'primaryActionText',
+      'style',
+      'scrollContent'
     ]
-  })
+  },
+  toggleDialog: { expectedParams: [] },
+  showDialog: { expectedParams: [] },
+  hideDialog: { expectedParams: [] }
+})
 
-export const configSimpleDialog = configSimpleDialogMessage
 const initialState = new Map({
   visible: false,
   scrollContent: false,
@@ -25,16 +25,16 @@ const initialState = new Map({
   style: {}
 })
 
-export default function reducer(state = initialState, action = {}) {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case toggleSimpleDialog.id:
-    case hideSimpleDialog.id:
-    case showSimpleDialog.id:
-      return state.set('visible',
-        simpleDialogVisibility.reducer(state.visible, action)
-      )
-    case configSimpleDialog.id:
-      return state.merge(configSimpleDialog.getParams(action))
+    case actions.showDialog.id:
+      return state.set('visible', true)
+    case actions.hideDialog.id:
+      return state.set('visible', false)
+    case actions.toggleDialog.id:
+      return state.set('visible', !state.getIn['visible'])
+    case actions.configMsg.id:
+      return state.merge(actions.configMsg.getParams(action))
     default:
       return state
   }

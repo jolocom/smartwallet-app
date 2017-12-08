@@ -1,12 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import {theme} from 'styles'
 
-import {
-  List,
-  FloatingActionButton,
-  Divider
-} from 'material-ui'
+import List from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import Divider from 'material-ui/Divider'
 
 const STYLES = {
   divider: {
@@ -65,10 +64,10 @@ const SubMenuIcon = (props) => (<div style={{...STYLES.root, ...props.style}}>
 </div>)
 
 SubMenuIcon.propTypes = {
-  name: React.PropTypes.any,
-  style: React.PropTypes.object,
-  onClick: React.PropTypes.func.isRequired,
-  icon: React.PropTypes.bool
+  name: PropTypes.any,
+  style: PropTypes.object,
+  onClick: PropTypes.func.isRequired,
+  icon: PropTypes.object
 }
 
 export default Radium(SubMenuIcon)

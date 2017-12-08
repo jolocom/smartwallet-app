@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/account-details-ethereum'
@@ -8,8 +9,8 @@ import Presentation from '../presentation/account-details-ethereum'
 })
 export default class AccountDetailsEthereum extends React.Component {
   static propTypes = {
-    closeAccountDetails: React.PropTypes.func,
-    money: React.PropTypes.object
+    closeAccountDetails: PropTypes.func,
+    money: PropTypes.object
   }
 
   render() {

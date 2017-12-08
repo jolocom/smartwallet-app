@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {Content, Block} from '../../structure'
@@ -20,11 +21,11 @@ const STYLES = {
 @Radium
 export default class WalletMoney extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    ether: React.PropTypes.object.isRequired,
-    etherBalance: React.PropTypes.number.isRequired,
-    buyEther: React.PropTypes.func.isRequired,
-    goToEtherManagement: React.PropTypes.func.isRequired
+    children: PropTypes.node,
+    ether: PropTypes.object.isRequired,
+    etherBalance: PropTypes.number.isRequired,
+    buyEther: PropTypes.func.isRequired,
+    goToEtherManagement: PropTypes.func.isRequired
   }
 
   render() {

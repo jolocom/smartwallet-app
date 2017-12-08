@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 import {actions as data} from './data'
 import {
   listOfCountries as __LIST_OF_COUNTRIES__
@@ -9,7 +9,7 @@ import {
 const dataPageUrl = '/verifier/data'
 const selectCountryUrl = '/verifier/country'
 
-const actions = module.exports = makeActions('verifier/country', {
+export const actions = makeActions('verifier/country', {
   chooseCountry: {
     expectedParams: [],
     creator: (params) => {
@@ -52,13 +52,13 @@ const actions = module.exports = makeActions('verifier/country', {
   }
 })
 
-const initialState = module.exports.initialState = Immutable.fromJS({
+export const initialState = Immutable.fromJS({
   type: '',
   value: '',
   options: __LIST_OF_COUNTRIES__
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.setCountryType.id:
       return initialState.merge({

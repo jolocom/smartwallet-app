@@ -1,8 +1,8 @@
 import Immutable from 'immutable'
 import {makeActions} from './'
-import * as router from './router'
+import router from './router'
 
-const actions = module.exports = makeActions('ethereum-connect', {
+export const actions = makeActions('ethereum-connect', {
   toggleSecuritySection: {
     expectedParams: ['value']
   },
@@ -125,7 +125,7 @@ const initialState = Immutable.fromJS({
   }]
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.checkRequestedParams.id:
       const paramsCheck = action.value === undefined || action.method === undefined || action.requester === undefined || action.returnURL === undefined || action.contractID === undefined // eslint-disable-line max-len

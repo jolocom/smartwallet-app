@@ -1,17 +1,16 @@
 import React from 'react'
 import Radium from 'radium'
+import SocialPerson from 'material-ui/svg-icons/social/person'
+import MapsLocation from 'material-ui/svg-icons/maps/place'
+import ImageCameraAlt from 'material-ui/svg-icons/image/camera'
+import ActionLanguage from 'material-ui/svg-icons/action/language'
+import SocialCake from 'material-ui/svg-icons/social/cake'
+import {List, ListItem} from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+// import moment from 'moment'
 
-import {
-  SocialPerson,
-  MapsLocation,
-  ImageCameraAlt,
-  ActionLanguage,
-  SocialCake
-} from 'material-ui/svg-icons'
-import moment from 'moment'
-import { List, ListItem, FloatingActionButton } from 'material-ui'
-import {theme} from 'styles'
-
+import { theme } from 'styles'
+import { Content } from '../../structure'
 import {
   EditAppBar,
   EditHeader,
@@ -22,7 +21,6 @@ import {
   ImageItem,
   DateListItem
 } from './ui'
-import { Content } from '../../structure'
 
 const STYLES = {
   verificationBlock: {
@@ -249,7 +247,7 @@ export default class WalletIdCard extends React.Component {
             onFocusChange={(field) => this.props.setFocused(field, group)}
             focused={this.props.focusedGroup === group}
             onChange={(e, date) =>
-              this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
+            } />
         </td>
         <td key="1">
           <EditListItem
@@ -286,7 +284,7 @@ export default class WalletIdCard extends React.Component {
       onDelete={() => { this.props.change(key, '') }}
       enableDelete={value.toString().length > 0}
       onChange={(e, date) =>
-        this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
+      } />
   }
 
   createIcons() {

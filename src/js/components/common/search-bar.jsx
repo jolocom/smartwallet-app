@@ -1,29 +1,28 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
+import AppBar from 'material-ui/AppBar'
+import IconButton from 'material-ui/IconButton'
+import FontIcon from 'material-ui/FontIcon'
 
-import {AppBar, IconButton, FontIcon} from 'material-ui'
+class SearchBar extends React.Component {
+  static contextTypes = {
+    muiTheme: PropTypes.object
+  };
 
-let SearchBar = React.createClass({
+  static propTypes = {
+    onHide: PropTypes.func,
+    onChange: PropTypes.func,
+    onSubmit: PropTypes.func
+  };
 
-  getInitialState() {
-    return {
-      show: false,
-      query: null
-    }
-  },
+  state = {
+    show: false,
+    query: null
+  };
 
-  contextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  propTypes: {
-    onHide: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onSubmit: React.PropTypes.func
-  },
-
-  getStyles() {
+  getStyles = () => {
     const textFieldTheme = this.context.muiTheme.textField
 
     let styles = {
@@ -54,20 +53,20 @@ let SearchBar = React.createClass({
     }
 
     return styles
-  },
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.show && !prevState.show) {
       let input = ReactDOM.findDOMNode(this.refs.input)
       input.focus()
     }
-  },
+  }
 
-  show() {
+  show = () => {
     this.setState({show: true})
-  },
+  };
 
-  hide() {
+  hide = () => {
     this.setState({show: false, query: null})
     let input = ReactDOM.findDOMNode(this.refs.input)
     input.value = ''
@@ -75,20 +74,20 @@ let SearchBar = React.createClass({
     if (typeof this.props.onHide === 'function') {
       this.props.onHide()
     }
-  },
+  };
 
-  _handleChange({target}) {
+  _handleChange = ({target}) => {
     this.setState({query: target.value})
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(target.value)
     }
-  },
+  };
 
-  _handleKeyUp(e) {
+  _handleKeyUp = (e) => {
     if (e.keyCode === 13 && typeof this.props.onSubmit === 'function') {
       this.props.onSubmit(e.target.value)
     }
-  },
+  };
 
   render() {
     let styles = this.getStyles()
@@ -115,7 +114,6 @@ let SearchBar = React.createClass({
       />
     )
   }
-
-})
+}
 
 export default Radium(SearchBar)

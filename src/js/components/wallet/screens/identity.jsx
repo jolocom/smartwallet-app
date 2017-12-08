@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/identity'
@@ -29,23 +30,23 @@ import Loading from 'components/common/loading'
 
 export default class WalletIdentityScreen extends React.Component {
   static propTypes = {
-    changePinValue: React.PropTypes.func.isRequired,
-    confirmPhone: React.PropTypes.func.isRequired,
-    expandField: React.PropTypes.func,
-    getIdentityInformation: React.PropTypes.func.isRequired,
-    goTo: React.PropTypes.func.isRequired,
-    identity: React.PropTypes.object,
-    openConfirmDialog: React.PropTypes.func.isRequired,
-    saveToBlockchain: React.PropTypes.func.isRequired,
-    setFocusedPin: React.PropTypes.func.isRequired,
-    startEmailVerification: React.PropTypes.func.isRequired,
-    startPhoneVerification: React.PropTypes.func.isRequired,
-    buyEther: React.PropTypes.func.isRequired,
-    createEthereumIdentity: React.PropTypes.func.isRequired,
-    getWalletAddressAndBalance: React.PropTypes.func.isRequired,
-    editDisplayName: React.PropTypes.func.isRequired,
-    setDisplayName: React.PropTypes.func.isRequired,
-    saveDisplayName: React.PropTypes.func.isRequired
+    changePinValue: PropTypes.func.isRequired,
+    confirmPhone: PropTypes.func.isRequired,
+    expandField: PropTypes.func,
+    getIdentityInformation: PropTypes.func.isRequired,
+    goTo: PropTypes.func.isRequired,
+    identity: PropTypes.object,
+    openConfirmDialog: PropTypes.func.isRequired,
+    saveToBlockchain: PropTypes.func.isRequired,
+    setFocusedPin: PropTypes.func.isRequired,
+    startEmailVerification: PropTypes.func.isRequired,
+    startPhoneVerification: PropTypes.func.isRequired,
+    buyEther: PropTypes.func.isRequired,
+    createEthereumIdentity: PropTypes.func.isRequired,
+    getWalletAddressAndBalance: PropTypes.func.isRequired,
+    editDisplayName: PropTypes.func.isRequired,
+    setDisplayName: PropTypes.func.isRequired,
+    saveDisplayName: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -77,7 +78,7 @@ export default class WalletIdentityScreen extends React.Component {
       buyEther={(token) => { this.props.buyEther(token) }}
       createEthereumIdentity={this.props.createEthereumIdentity}
       goTo={this.props.goTo}
-      showUserInfo={this.props.openConfirmDialog}
+      // showUserInfo={this.props.openConfirmDialog}
       requestIdCardVerification={({title, message, rightButtonLabel, leftButtonLabel, index}) => // eslint-disable-line max-len
         this.props.openConfirmDialog(title, message, rightButtonLabel,
         () => { this.props.saveToBlockchain(index) }, leftButtonLabel)

@@ -8,8 +8,7 @@ const AddServiceIcon = ({color}) => (<svg
     fill={color}
     id="Ebene_1"
     x="0px" y="0px"
-    viewBox="-4 -4 32 32"
-    style="enable-background:new 0 0 24 24">
+    viewBox="-4 -4 32 32">
   <g>
   	<path
       className="st0"

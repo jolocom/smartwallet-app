@@ -1,7 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
-import {IconButton, AppBar} from 'material-ui'
+import IconButton from 'material-ui/IconButton'
+import AppBar from 'material-ui/AppBar'
+
 import HoverButton from 'components/common/hover-button.jsx'
 
 const STYLES = {
@@ -54,12 +57,12 @@ const EditAppBar = ({title, onSave, onClose, loading, rightTitle}) => {
 }
 
 EditAppBar.propTypes = {
-  title: React.PropTypes.string,
-  children: React.PropTypes.node,
-  onSave: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  rightTitle: React.PropTypes.string,
-  loading: React.PropTypes.bool
+  title: PropTypes.string,
+  children: PropTypes.node,
+  onSave: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  rightTitle: PropTypes.string,
+  loading: PropTypes.bool
 }
 
 export default Radium(EditAppBar)

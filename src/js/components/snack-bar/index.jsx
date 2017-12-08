@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'redux_state/utils'
 
-import { Snackbar } from 'material-ui'
+import Snackbar from 'material-ui/Snackbar'
 
 export default connect({
   props: ['snackBar']

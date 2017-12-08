@@ -2,13 +2,13 @@ import {expect} from 'chai'
 import {
   listOfCountries as __LIST_OF_COUNTRIES__
 } from '../../../lib/list-of-countries'
-import * as actions from './country'
 
-const reducer = require('./country').default
+import { actions } from './country'
+import reducer from './country'
+import { initialState } from './country'
 
 describe('# verifier country redux module', () => {
   describe('# Reducer', () => {
-    let {initialState} = actions
     it('should initialise properly', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal(initialState.toJS())

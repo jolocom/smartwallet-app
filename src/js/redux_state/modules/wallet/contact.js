@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 
 import {
 mapAccountInformationToState,
@@ -11,7 +11,10 @@ submitChanges,
 setNewFieldValue
 } from '../../../lib/edit-contact-util'
 
-const actions = module.exports = makeActions('wallet/contact', {
+export const actions = makeActions('wallet/contact', {
+  setReloadFromBackend: {
+    expectedParams: ['value']
+  },
   saveChanges: {
     expectedParams: [],
     async: true,
@@ -43,9 +46,6 @@ const actions = module.exports = makeActions('wallet/contact', {
         dispatch(router.pushRoute(callback))
       }
     }
-  },
-  setReloadFromBackend: {
-    expectedParams: ['value']
   },
   getUserInformation: {
     expectedParams: ['callback'],
@@ -124,7 +124,7 @@ const initialState = Immutable.fromJS({
   showErrors: false
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.saveChanges.id:
       return state.setIn(['loading'], true)

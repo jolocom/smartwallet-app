@@ -1,16 +1,14 @@
 import React from 'react'
-import {connect} from 'redux_state/utils'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
-import {
-  AppBar,
-  Paper,
-  Tabs,
-  Tab
-} from 'material-ui'
+import AppBar from 'material-ui/AppBar'
+import Paper from 'material-ui/Paper'
+import { Tab, Tabs } from 'material-ui/Tabs'
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 
-import {Layout, Content} from 'components/layout'
-import {NavigationArrowBack} from 'material-ui/svg-icons'
-import {theme} from 'styles'
+import { Layout, Content } from 'components/layout'
+import { connect } from 'redux_state/utils'
+import { theme } from 'styles'
 
 const STYLES = {
   colorBar: {
@@ -38,13 +36,13 @@ const STYLES = {
 @Radium
 export default class EtherTabScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    location: React.PropTypes.object,
-    activeTab: React.PropTypes.string,
-    detectActiveTab: React.PropTypes.func.isRequired,
-    switchTab: React.PropTypes.func.isRequired,
-    goToWalletScreen: React.PropTypes.func.isRequired,
-    retrieveEtherBalance: React.PropTypes.func.isRequired
+    children: PropTypes.node,
+    location: PropTypes.object,
+    activeTab: PropTypes.string,
+    detectActiveTab: PropTypes.func.isRequired,
+    switchTab: PropTypes.func.isRequired,
+    goToWalletScreen: PropTypes.func.isRequired,
+    retrieveEtherBalance: PropTypes.func.isRequired
   }
 
   componentWillMount() {

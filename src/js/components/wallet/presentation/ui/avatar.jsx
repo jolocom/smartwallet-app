@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
-import { Avatar } from 'material-ui'
+import Avatar from 'material-ui/Avatar'
 import {theme} from 'styles'
 
 const STYLES = {
@@ -14,7 +15,7 @@ const IdentityAvatar = ({style = STYLES}) => (<Avatar
   style={style} />)
 
 IdentityAvatar.propTypes = {
-  style: React.PropTypes.object
+  style: PropTypes.object
 }
 
 export default IdentityAvatar

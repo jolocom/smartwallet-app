@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {Header, Content, Block} from '../../structure'
@@ -90,8 +91,8 @@ const STYLES = {
 @Radium
 export default class AccessConfirmation extends React.Component {
   static propTypes = {
-    entity: React.PropTypes.object,
-    redirectToReturnUrl: React.PropTypes.func
+    entity: PropTypes.object,
+    redirectToReturnUrl: PropTypes.func
   }
 
   componentDidMount() {

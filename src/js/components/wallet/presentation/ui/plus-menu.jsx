@@ -1,17 +1,16 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import {theme} from 'styles'
-import {
-  ContentCreate,
-  ContentAdd,
-  NavigationExpandMore,
-  NavigationExpandLess
-} from 'material-ui/svg-icons'
-import {
-  List,
-  FloatingActionButton,
-  Divider
-} from 'material-ui'
+
+import ContentCreate from 'material-ui/svg-icons/content/create'
+import ContentAdd from 'material-ui/svg-icons/content/add'
+import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more'
+import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less'
+
+import List from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import Divider from 'material-ui/Divider'
 
 const STYLES = {
   divider: {
@@ -106,14 +105,14 @@ const PlusMenu = (props) => {
 }
 
 PlusMenu.propTypes = {
-  name: React.PropTypes.any,
-  children: React.PropTypes.node,
-  style: React.PropTypes.object,
-  goToManagement: React.PropTypes.func.isRequired,
-  expand: React.PropTypes.func,
-  expanded: React.PropTypes.bool,
-  disableEdit: React.PropTypes.bool,
-  choice: React.PropTypes.bool
+  name: PropTypes.any,
+  children: PropTypes.node,
+  style: PropTypes.object,
+  goToManagement: PropTypes.func.isRequired,
+  expand: PropTypes.func,
+  expanded: PropTypes.bool,
+  disableEdit: PropTypes.bool,
+  choice: PropTypes.bool
 }
 
 export default Radium(PlusMenu)

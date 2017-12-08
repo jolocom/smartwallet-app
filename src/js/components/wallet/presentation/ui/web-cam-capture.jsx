@@ -1,13 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import Webcam from 'react-webcam'
-import { FloatingActionButton } from 'material-ui'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
 
 @Radium
 export default class WebcamCapture extends React.Component {
   static propTypes = {
-    storeImageSrcInTheState: React.PropTypes.func
+    storeImageSrcInTheState: PropTypes.func
   }
   setRef(webcam) {
     this.webcam = webcam

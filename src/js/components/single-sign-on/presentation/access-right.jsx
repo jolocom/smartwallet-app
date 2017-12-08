@@ -1,8 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import { theme } from 'styles'
-import { Avatar, AppBar, TextField, IconButton, ListItem } from 'material-ui'
+
+import Avatar from 'material-ui/Avatar'
+import AppBar from 'material-ui/AppBar'
+import TextField from 'material-ui/TextField'
+import IconButton from 'material-ui/IconButton'
+import {ListItem} from 'material-ui/List'
 
 import { SubMenuIcon, AddServiceIcon, ServiceIcon } from './ui'
 
@@ -33,7 +39,7 @@ let STYLES = {
     maxWidth: '120px',
     paddingLeft: '24px',
     '@media (minWidth: 321px)': {
-      margin: '0 16px'
+      margin: '0px 16px'
     }
   },
   disabledUnderline: {
@@ -105,6 +111,7 @@ const SingleSignOnAccessRight = (props) => (<div>
               </IconButton>}
               disabled >
               <TextField
+                id="sharedData"
                 style={STYLES.textField}
                 onTouchTap={() => { props.showSharedData(index) }}
                 inputStyle={STYLES.input}
@@ -119,9 +126,9 @@ const SingleSignOnAccessRight = (props) => (<div>
 </div>)
 
 SingleSignOnAccessRight.propTypes = {
-  services: React.PropTypes.array,
-  showSharedData: React.PropTypes.func,
-  showDeleteServiceWindow: React.PropTypes.func
+  services: PropTypes.array,
+  showSharedData: PropTypes.func,
+  showDeleteServiceWindow: PropTypes.func
 }
 
 export default Radium(SingleSignOnAccessRight)

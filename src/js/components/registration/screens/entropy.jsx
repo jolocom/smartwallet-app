@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { connect } from 'redux_state/utils'
 import ImageMaskBuilder from 'lib/image-mask-builder'
@@ -14,10 +15,10 @@ import Presentation from '../presentation/entropy'
 })
 export default class RegistrationEntropyScreen extends React.Component {
   static propTypes = {
-    registration: React.PropTypes.object.isRequired,
-    submitEntropy: React.PropTypes.func.isRequired,
-    addEntropyFromDeltas: React.PropTypes.func.isRequired,
-    setMaskedImageUncovering: React.PropTypes.func.isRequired
+    registration: PropTypes.object.isRequired,
+    submitEntropy: PropTypes.func.isRequired,
+    addEntropyFromDeltas: PropTypes.func.isRequired,
+    setMaskedImageUncovering: PropTypes.func.isRequired
   }
 
   constructor() {

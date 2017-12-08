@@ -1,6 +1,6 @@
 import React from 'react'
-import Reflux from 'reflux'
 import { connect } from 'redux_state/utils'
+import PropTypes from 'prop-types';
 import Radium, {StyleRoot} from 'radium'
 
 import SnackbarContainer from 'components/snack-bar'
@@ -12,46 +12,37 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 
 import LeftNav from 'components/left-nav/nav.jsx'
-// import Tour from 'components/tour'
 
 import Loading from 'components/common/loading.jsx'
 
-import ProfileActions from 'actions/profile'
-import ProfileStore from 'stores/profile'
-
 import {routes, publicRoutes} from 'routes'
 
-let App = React.createClass({
-  mixins: [
-    Reflux.connect(ProfileStore, 'profile')
-  ],
+class App extends React.Component {
+  static propTypes = {
+    location: PropTypes.object,
+    children: PropTypes.node,
+    route: PropTypes.object,
+    account: PropTypes.object.isRequired
+  };
 
-  propTypes: {
-    location: React.PropTypes.object,
-    children: React.PropTypes.node,
-    route: React.PropTypes.object,
-    account: React.PropTypes.object.isRequired,
-    doLogin: React.PropTypes.func.isRequired
-  },
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+    store: PropTypes.object.isRequired
+  };
 
-  contextTypes: {
-    router: React.PropTypes.object.isRequired,
-    store: React.PropTypes.object.isRequired
-  },
+  static childContextTypes = {
+    muiTheme: PropTypes.object,
+    profile: PropTypes.any,
+    account: PropTypes.object,
+    username: PropTypes.string,
+    searchActive: PropTypes.bool,
+    location: PropTypes.object,
+    route: PropTypes.object,
+    router: PropTypes.object,
+    store: PropTypes.object
+  };
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object,
-    profile: React.PropTypes.any,
-    account: React.PropTypes.object,
-    username: React.PropTypes.string,
-    searchActive: React.PropTypes.bool,
-    location: React.PropTypes.object,
-    route: React.PropTypes.object,
-    router: React.PropTypes.object,
-    store: React.PropTypes.object
-  },
-
-  getChildContext: function () {
+  getChildContext() {
     let {profile, searchActive} = this.state
     let {account} = this.props
 
@@ -65,11 +56,10 @@ let App = React.createClass({
       router: this.context.router,
       store: this.context.store
     }
-  },
+  }
 
   componentWillMount() {
-    this.props.doLogin({})
-  },
+  }
 
   componentDidUpdate(prevProps, prevState) {
     let {username} = this.props.account
@@ -78,14 +68,14 @@ let App = React.createClass({
       prevProps.account.username !== username) {
       this.checkLogin()
     }
-  },
+  }
 
-  isPublicRoute(path = this.props.location.pathname) {
+  isPublicRoute = (path = this.props.location.pathname) => {
     return path === '/' ||
       publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
-  },
+  };
 
-  checkLogin() {
+  checkLogin = () => {
     let {username, loggingIn} = this.props.account
 
     // session is still loading, so return for now
@@ -98,13 +88,9 @@ let App = React.createClass({
     } else if (username && this.isPublicRoute()) {
       this.context.router.push(routes.home)
     }
+  };
 
-    if (username) {
-      ProfileActions.load()
-    }
-  },
-
-  getStyles() {
+  getStyles = () => {
     let styles = {
       container: {
         width: '100%',
@@ -113,7 +99,7 @@ let App = React.createClass({
       }
     }
     return styles
-  },
+  };
 
   render() {
     const styles = this.getStyles()
@@ -128,16 +114,14 @@ let App = React.createClass({
         {this.props.children}
 
         <LeftNav />
-        {/** <Tour /> **/}
         <SnackbarContainer />
         <ConfirmationDialog />
         <SimpleDialog />
       </StyleRoot>
     )
   }
-})
+}
 
 export default connect({
-  props: ['account'],
-  actions: ['account:doLogin']
+  props: ['account']
 })(Radium(App))

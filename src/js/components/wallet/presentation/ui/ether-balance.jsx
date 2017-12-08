@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {HalfScreenContainer, PlusSubMenu} from './'
@@ -30,9 +31,9 @@ const EtherBalance = (props) => {
 }
 
 EtherBalance.propTypes = {
-  amount: React.PropTypes.any,
-  currencyPrice: React.PropTypes.number,
-  currency: React.PropTypes.any
+  amount: PropTypes.any,
+  currencyPrice: PropTypes.number,
+  currency: PropTypes.any
 }
 
 export default Radium(EtherBalance)

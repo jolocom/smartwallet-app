@@ -1,28 +1,23 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
-// import {IconButton, Avatar} from 'material-ui'
+class Header extends React.Component {
+  static contextTypes = {
+    profile: PropTypes.any,
+    muiTheme: PropTypes.object,
+    router: PropTypes.any
+  };
 
-import ProfileActions from 'actions/profile'
-// import graphActions from 'actions/graph-actions'
+  static propTypes = {
+    onClose: PropTypes.any
+  };
 
-let Header = React.createClass({
-  contextTypes: {
-    profile: React.PropTypes.any,
-    muiTheme: React.PropTypes.object,
-    router: React.PropTypes.any
-  },
-  propTypes: {
-    onClose: React.PropTypes.any
-  },
-  editProfile() {
-    ProfileActions.show()
-  },
-  _handleNavigateHome() {
-    this.context.router.push('graph')
+  _handleNavigateHome = () => {
     this.props.onClose()
-  },
-  getStyles() {
+  };
+
+  getStyles = () => {
     return {
       header: {
         display: 'flex',
@@ -61,7 +56,8 @@ let Header = React.createClass({
         maxHeight: '120px'
       }
     }
-  },
+  };
+
   render() {
     // let initials, {profile} = this.context
     // let {profile} = this.context
@@ -95,6 +91,6 @@ let Header = React.createClass({
       </header>
     )
   }
-})
+}
 
 export default Radium(Header)

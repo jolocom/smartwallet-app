@@ -8,12 +8,12 @@ import {
 } from '../../../lib/id-card-util'
 
 import { makeActions } from '../'
-import * as router from '../router'
-import * as transition from './transition'
+import router from '../router'
+import { actions as transition } from './transition'
 
 const transitionUrl = '/verifier'
 
-const actions = module.exports = makeActions('verifier/data', {
+export const actions = makeActions('verifier/data', {
   verifyData: {
     expectedParams: [],
     creator: (params) => {
@@ -54,7 +54,7 @@ const actions = module.exports = makeActions('verifier/data', {
   }
 })
 
-const initialState = module.exports.initialState = Immutable.fromJS({
+export const initialState = Immutable.fromJS({
   focusedGroup: '',
   focusedField: '',
   username: '',
@@ -96,7 +96,7 @@ const initialState = module.exports.initialState = Immutable.fromJS({
   }
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.cancel.id:
       return initialState

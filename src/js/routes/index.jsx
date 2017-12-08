@@ -1,56 +1,36 @@
+
 import React from 'react'
 import { Router, Route, IndexRoute } from 'react-router'
 
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
 
-import Login from 'components/accounts/login'
-import Signup from 'components/accounts/signup'
-import ForgotPassword from 'components/accounts/forgot-password'
-import ChangePassword from 'components/accounts/change-password'
-import Profile from 'components/accounts/profile'
-
 import RegistrationNameEntryScreen from
   'components/registration/screens/name-entry'
 import RegistrationEntropyScreen from
   'components/registration/screens/entropy'
-import RegistrationUserTypeScreen from
-  'components/registration/screens/user-type'
 import RegistrationWritePhraseScreen from
   'components/registration/screens/write-phrase'
-import RegistrationPhraseInfoScreen from
-  'components/registration/screens/phrase-info'
-import RegistrationPinScreen from
-  'components/registration/screens/pin'
-import RegistrationIdentifierScreen from
-  'components/registration/screens/identifier'
-import RegistrationPasswordScreen from
-  'components/registration/screens/password'
 
 import WalletTabsScreen from 'components/wallet/screens/tabs'
 import WalletHomeScreen from 'components/wallet/screens/home'
 import WalletMoneyScreen from 'components/wallet/screens/money'
 import WalletIdentityScreen from 'components/wallet/screens/identity'
 import WalletContactScreen from 'components/wallet/screens/contact'
-import WalletIdCardScreen from 'components/wallet/screens/id-card'
 import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
-import CountrySelectScreen from 'components/wallet/screens/country-select'
 import AccessRequestScreen
   from 'components/single-sign-on/screens/access-request'
 import AccessConfirmationScreen from
   'components/single-sign-on/screens/access-confirmation'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
-import WalletIdCardPhotoScreen from 'components/wallet/screens/webcam'
 
 import EtherSendScreen from 'components/wallet/screens/ether-send'
 import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
 import EtherTabScreen from 'components/wallet/screens/ether-tabs'
 
 import WalletLogin from 'components/wallet-login'
-import LaymanLoginScreen from 'components/wallet-login/screens/layman'
 import ExpertLoginPassphraseScreen from 'components/wallet-login/screens/phrase'
-import LoginPinScreen from 'components/wallet-login/screens/pin'
 
 import SingleSignOnAccessRightScreen from
   'components/single-sign-on/screens/access-right'
@@ -117,29 +97,11 @@ function getRoutes() {
       component={RegistrationNameEntryScreen} />
     <Route path="registration/entropy"
       component={RegistrationEntropyScreen} />
-    <Route path="registration/user-type"
-      component={RegistrationUserTypeScreen} />
     <Route path="registration/write-phrase"
       component={RegistrationWritePhraseScreen} />
-    <Route path="registration/phrase-info"
-      component={RegistrationPhraseInfoScreen} />
-    <Route path="registration/pin"
-      component={RegistrationPinScreen} />
-    <Route path="registration/email"
-      component={RegistrationIdentifierScreen} />
-    <Route path="registration/password"
-      component={RegistrationPasswordScreen} />
 
     <Route path="wallet/identity/contact"
       component={WalletContactScreen} />
-    <Route path="wallet/identity/id-card"
-      component={WalletIdCardScreen} />
-    <Route path="wallet/identity/id-card-photo"
-      component={WalletIdCardPhotoScreen} />
-    <Route path="wallet/identity/passport/add"
-      component={WalletIdCardScreen} />
-    <Route path="wallet/identity/country-select"
-      component={CountrySelectScreen} />
 
     <Route path="wallet/ether" component={EtherTabScreen}>
       <Route path="send" component={EtherSendScreen} />
@@ -157,7 +119,6 @@ function getRoutes() {
         component={WalletMoneyScreen} />
     </Route>
 
-    <Route path="profile" component={Profile} />
     <Route path="wallet/single-sign-on/access-request"
       component={AccessRequestScreen} />
     <Route path="wallet/single-sign-on/access-confirmation"
@@ -166,14 +127,8 @@ function getRoutes() {
     <Route path="wallet/ethereum/execute-transaction"
       component={EthApprovalRequestScreen} />
 
-    <Route path="forgot-password" component={ForgotPassword} />
-    <Route path="change-password/:username/:token" component={ChangePassword} />
-    <Route path="signup" component={Signup} />
-    <Route path="oldlogin" component={Login} />
     <Route path="login" component={WalletLogin} />
     <Route path="login/expert" component={ExpertLoginPassphraseScreen} />
-    <Route path="login/layman" component={LaymanLoginScreen} />
-    <Route path="login/pin-entry" component={LoginPinScreen} />
 
     <Route path="verify-email" component={EmailConfirmationScreen} />
     <Route path="wallet/sso/access-rights"
@@ -186,6 +141,3 @@ function getRoutes() {
 export default (history) => {
   return (<Router history={history}>{getRoutes()}</Router>)
 }
-
-// <Route path="wallet/ethereum/execute-transaction"
-//   component={EthereumExecuteTransactionScreen} />

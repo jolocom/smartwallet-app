@@ -1,12 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {theme} from 'styles'
 import VerifiedShield from '../../../wallet/presentation/ui/verified-shield'
-import {
-  TextField,
-  ListItem
-} from 'material-ui'
+import {ListItem} from 'material-ui/List'
+import TextField from 'material-ui/TextField'
 
 var STYLES = {
   icon: {
@@ -60,10 +59,10 @@ var STYLES = {
 @Radium
 export default class StaticListItem extends React.Component {
   static propTypes = {
-    icon: React.PropTypes.any,
-    verified: React.PropTypes.bool,
-    textLabel: React.PropTypes.string.isRequired,
-    textValue: React.PropTypes.string.isRequired
+    icon: PropTypes.any,
+    verified: PropTypes.bool,
+    textLabel: PropTypes.string.isRequired,
+    textValue: PropTypes.string.isRequired
   }
 
   render() {

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 const IconEther = (props) => {
@@ -13,6 +14,6 @@ const IconEther = (props) => {
   )
 }
 IconEther.propTypes = {
-  color: React.PropTypes.string
+  color: PropTypes.string
 }
 export default Radium(IconEther)

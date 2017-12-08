@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {Link} from 'react-router'
@@ -28,10 +29,10 @@ const InfoLink = ({style, info, link, to, ...props}) => {
 }
 
 InfoLink.propTypes = {
-  info: React.PropTypes.string,
-  link: React.PropTypes.string,
-  to: React.PropTypes.string,
-  style: React.PropTypes.object
+  info: PropTypes.string,
+  link: PropTypes.string,
+  to: PropTypes.string,
+  style: PropTypes.object
 }
 
 export default Radium(InfoLink)

@@ -47,7 +47,7 @@ describe('(Component) Wallet Identity', function() {
         resendVerificationCode={() => {}}
         requestIdCardVerification={() => {}}
         setFocusedPin={() => {}}
-        showUserInfo={() => {}}
+        // showUserInfo={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

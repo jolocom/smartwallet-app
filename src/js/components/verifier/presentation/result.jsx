@@ -1,7 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
-import {AppBar, FlatButton} from 'material-ui'
+import FlatButton from 'material-ui/FlatButton'
+import AppBar from 'material-ui/AppBar'
+
 import {theme} from 'styles'
 
 import {EditAppBar} from './ui'
@@ -72,11 +75,11 @@ const STYLES = {
 @Radium
 export default class VerificationResultPresentation extends React.Component {
   static propTypes = {
-    loading: React.PropTypes.bool.isRequired,
-    success: React.PropTypes.bool.isRequired,
-    numberOfFails: React.PropTypes.number.isRequired,
-    startDataCheck: React.PropTypes.func.isRequired,
-    finishVerification: React.PropTypes.func.isRequired
+    loading: PropTypes.bool.isRequired,
+    success: PropTypes.bool.isRequired,
+    numberOfFails: PropTypes.number.isRequired,
+    startDataCheck: PropTypes.func.isRequired,
+    finishVerification: PropTypes.func.isRequired
   }
 
   render() {

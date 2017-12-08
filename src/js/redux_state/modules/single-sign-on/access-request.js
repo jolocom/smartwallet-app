@@ -1,8 +1,8 @@
 import Immutable from 'immutable'
 import {makeActions} from '../'
-import * as router from '../router'
+import router from '../router'
 
-const actions = module.exports = makeActions('single-sign-on/access-request', {
+export const actions = makeActions('single-sign-on/access-request', {
   checkUserLoggedIn: {
     expectedParams: [],
     creator: (params) => {
@@ -112,7 +112,7 @@ const initialState = Immutable.fromJS({
   }
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.requestedDetails.id:
       if (typeof action.details.query['scope[]'] === 'string') {

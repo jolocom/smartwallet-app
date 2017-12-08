@@ -1,10 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import Loading from '../../common/loading'
 
-import {Divider, FlatButton, RaisedButton,
-  ListItem, AppBar, List} from 'material-ui'
+import Divider from 'material-ui/Divider'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
+import { List, ListItem } from 'material-ui/List'
+import AppBar from 'material-ui/AppBar'
+
 import Avatar from 'material-ui/Avatar'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
@@ -65,20 +70,20 @@ const STYLES = {
 @Radium
 export default class AccessRequest extends React.Component {
   static propTypes = {
-    entity: React.PropTypes.object,
-    accessInfo: React.PropTypes.func.isRequired,
-    grantAccessToRequester: React.PropTypes.func.isRequired,
-    identity: React.PropTypes.object,
-    requestedFields: React.PropTypes.array,
-    location: React.PropTypes.object,
-    setInfoComplete: React.PropTypes.func,
-    goToMissingInfo: React.PropTypes.func,
-    requestVerificationCode: React.PropTypes.func,
-    enterVerificationCode: React.PropTypes.func,
-    resendVerificationCode: React.PropTypes.func,
-    changePinValue: React.PropTypes.func,
-    setFocusedPin: React.PropTypes.func,
-    denyAccess: React.PropTypes.func
+    entity: PropTypes.object,
+    accessInfo: PropTypes.func.isRequired,
+    grantAccessToRequester: PropTypes.func.isRequired,
+    identity: PropTypes.object,
+    requestedFields: PropTypes.array,
+    location: PropTypes.object,
+    setInfoComplete: PropTypes.func,
+    goToMissingInfo: PropTypes.func,
+    requestVerificationCode: PropTypes.func,
+    enterVerificationCode: PropTypes.func,
+    resendVerificationCode: PropTypes.func,
+    changePinValue: PropTypes.func,
+    setFocusedPin: PropTypes.func,
+    denyAccess: PropTypes.func
   }
 
   getIcon(field) {

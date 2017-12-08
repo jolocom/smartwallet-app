@@ -1,10 +1,9 @@
-import {expect} from 'chai'
-const reducer = require('./id-card').default
-import * as actions from './id-card'
+import { expect } from 'chai'
+import reducer from './id-card'
+import { initialState, actions } from './id-card'
 
 describe('# IdCard redux module', () => {
   describe('# Reducer', () => {
-    let {initialState} = actions
     it('should initialise properly', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal(initialState.toJS())

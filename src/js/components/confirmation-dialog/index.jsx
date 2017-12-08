@@ -1,8 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import { connect } from 'redux_state/utils'
 
-import { FlatButton, Dialog } from 'material-ui'
+import FlatButton from 'material-ui/FlatButton'
+import Dialog from 'material-ui/Dialog'
 
 const STYLES = {
   buttonRigth: {
@@ -18,23 +20,24 @@ const STYLES = {
 
 @connect({
   props: ['confirm'],
-  actions: ['confirmation-dialog:close']
+  actions: ['confirmation-dialog:closeConfirmDialog']
 })
 @Radium
 export default class ConfirmationDialog extends React.Component {
   static propTypes = {
-    close: React.PropTypes.func,
-    confirm: React.PropTypes.object,
-    cancelActionText: React.PropTypes.string
+    closeConfirmDialog: PropTypes.func,
+    confirm: PropTypes.object,
+    cancelActionText: PropTypes.string
   }
 
   _handleConfirmAction() {
-    this.props.close()
-    this.props.confirm.callback() // Action when the user confirms
+    this.props.closeConfirmDialog()
+    if (this.props.confirm.callback)
+      this.props.confirm.callback() // Action when the user confirms
   }
 
   _handleConfirmCancel() {
-    this.props.close()
+    this.props.closeConfirmDialog()
   }
 
   render() {

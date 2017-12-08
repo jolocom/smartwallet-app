@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
+const webpack = require('webpack')
 
+const common = require('./webpack.config.common.js')
 const nodeModules = {}
 fs.readdirSync('node_modules').forEach(function(module) {
   nodeModules[module] = `require('${module}')`
@@ -10,19 +12,16 @@ module.exports = {
   target: 'node',
   externals: nodeModules,
   resolve: {
-    extensions: ['*', '.js', '.jsx', '.json'],
-    alias: {
-      actions: path.resolve(__dirname, 'src/js/actions'),
-      components: path.resolve(__dirname, 'src/js/components'),
-      lib: path.resolve(__dirname, 'src/js/lib'),
-      redux_state: path.resolve(__dirname, 'src/js/redux_state'),
-      services: path.resolve(__dirname, 'src/js/services'),
-      stores: path.resolve(__dirname, 'src/js/stores'),
-      styles: path.resolve(__dirname, 'src/js/styles'),
-      routes: path.resolve(__dirname, 'src/js/routes'),
+    extensions: common.resolve.extensions,
+    alias: Object.assign(common.resolve.alias, {
       settings: path.resolve(__dirname, 'config/test.js')
-    }
+    })
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'IDENTITY_GATEWAY_URL': JSON.stringify('http://localhost:5678')
+    })
+  ],
   module: {
     noParse: [
       /node_modules\/sinon/
@@ -32,7 +31,6 @@ module.exports = {
       loader: 'babel-loader',
       include: [
         path.resolve(__dirname, 'test'),
-        path.resolve(__dirname, 'node_modules/ethereumjs-tx'),
         path.resolve(__dirname, 'src/js')
       ]
     }]

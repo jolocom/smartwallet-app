@@ -1,4 +1,6 @@
-import _ from 'lodash'
+import fromPairs from 'lodash/fromPairs'
+import map from 'lodash/map'
+import isString from 'lodash/isString'
 import { bindActionCreators } from 'redux'
 import { connect as reduxConnect } from 'react-redux'
 
@@ -20,81 +22,78 @@ import { connect as reduxConnect } from 'react-redux'
  *  </div>
  * )
  */
-export function connect(params, wantedActions = []) {
-  let wantedProps = params.props || params
-  if (!wantedProps.map && typeof wantedProps !== 'function') {
-    wantedProps = []
+const helpers = {
+  getModuleAndActionNameFromID: (id) => {
+    const [moduleName, actionName] = id.split(':')
+
+    // This can be avoided if we improve the export structure
+    const reducer = require('redux_state/modules/' + moduleName).default
+    const { actions } = require('redux_state/modules/' + moduleName)
+
+    const module = {...actions, 'default': reducer}
+
+    if (!actions)
+      console.log(actionName)
+
+    return [module, actionName]
+  },
+
+  getPropPair: (state, prop) => {
+    if (isString(prop)) {
+      prop = prop.split('.')
+    }
+
+    const key = prop.slice(-1)[0]
+    let value = state.getIn(prop)
+
+    if (typeof value === 'undefined') {
+      const errMsg = `Trying to use non-existing state ${prop}, in wrapper`
+      throw new Error(errMsg) 
+    }
+
+    if (value !== null && value.toJS) {
+      value = value.toJS()
+    }
+
+    return [key, value]
   }
-  wantedActions = params.actions || wantedActions
+}
 
-  const mapStateToProps = (state, props) => {
-    const getPropPair = (state, prop) => {
-      if (_.isString(prop)) {
-        prop = prop.split('.')
-      }
+export function connect(params) {
+  const wantedProps = params.props || []
+  const wantedActions = params.actions || []
 
-      const pair = [prop.slice(-1)[0], state.getIn(prop)]
+  const mapStateToProps = (state) =>
+    fromPairs(wantedProps.map(prop =>
+      helpers.getPropPair(state, prop)
+    ))
 
-      if (typeof pair[1] === 'undefined') {
-        throw new Error(
-          'Trying to get non-existing state "' + prop +
-          '" in Redux connect() wrapper')
-      }
+  const namesMappedToFunctions = fromPairs(wantedActions.map(id => {
+    const [module, actionName] = helpers.getModuleAndActionNameFromID(id)
+    return [actionName, module[actionName]]
+  }))
 
-      if (pair[1] !== null && pair[1].toJS) {
-        pair[1] = pair[1].toJS()
-      }
+  const mapDispatchToProps = (dispatch, props) =>
+    bindActionCreators(namesMappedToFunctions, dispatch)
 
-      return pair
-    }
-
-    if (typeof wantedProps !== 'function') {
-      return _.fromPairs(wantedProps.map(prop => {
-        return getPropPair(state, prop)
-      }))
-    } else {
-      return wantedProps(state, props)
-    }
-  }
-
-  const mapDispatchToProps = (dispatch, props) => {
-    const getModuleAndActionNameFromID = (id) => {
-      const [moduleName, actionName] = id.split(':')
-      const module = require('redux_state/modules/' + moduleName)
-      return [module, actionName]
-    }
-
-    if (typeof wantedActions !== 'function') {
-      return bindActionCreators(_.fromPairs(wantedActions.map(id => {
-        const [module, actionName] = getModuleAndActionNameFromID(id)
-        return [actionName, module[actionName]]
-      })), dispatch)
-    } else {
-      return wantedActions(dispatch, props)
-    }
-  }
-
-  const connector = (component) => {
-    const connected = reduxConnect(
-      mapStateToProps,
-      mapDispatchToProps,
-      (stateProps, dispatchProps, ownProps) =>
-        Object.assign({}, ownProps, stateProps, dispatchProps),
-      {
+  return (component) => {
+    const mergeProps = (stateProps, dispatchProps, ownProps) => {
+      const extra = {
         withRef: true,
         pure: typeof params.pure !== 'undefined' ? params.pure : true
       }
+      return Object.assign({}, ownProps, stateProps, dispatchProps, extra)
+    }
+
+    const connected = reduxConnect(
+      mapStateToProps,
+      mapDispatchToProps,
+      mergeProps
     )(component)
+
     connected.mapStateToProps = mapStateToProps
     connected.mapDispatchToProps = mapDispatchToProps
-    // connected.reconnect = (reconnector) => {
-    //   return reconnector(mapStateToProps, mapDispatchToProps)
-    // }
+
     return connected
   }
-  return connector
-}
-
-export function actionsFrom(module, actions) {
-  return _.map(actions, action => module + ':' + action)
 }

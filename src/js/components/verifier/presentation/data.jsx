@@ -1,10 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import Cake from 'material-ui/svg-icons/social/cake'
 import Person from 'material-ui/svg-icons/social/person'
 import Location from 'material-ui/svg-icons/maps/place'
-import {List} from 'material-ui'
+import List from 'material-ui/List'
 
 import {
   EditAppBar,
@@ -38,21 +39,21 @@ const STYLES = {
 @Radium
 export default class VerificationDataPresentation extends React.Component {
   static propTypes = {
-    verify: React.PropTypes.func,
-    showVerifierLocations: React.PropTypes.func,
-    change: React.PropTypes.func,
-    selectCountry: React.PropTypes.func,
-    cancel: React.PropTypes.func,
-    showVerifiers: React.PropTypes.func,
-    focusedGroup: React.PropTypes.string,
-    focusedField: React.PropTypes.string,
-    setFocused: React.PropTypes.func,
-    verifierLocations: React.PropTypes.array,
-    showErrors: React.PropTypes.bool,
-    showAddress: React.PropTypes.bool,
-    username: React.PropTypes.object,
-    physicalAddress: React.PropTypes.array,
-    idCard: React.PropTypes.array
+    verify: PropTypes.func,
+    showVerifierLocations: PropTypes.func,
+    change: PropTypes.func,
+    selectCountry: PropTypes.func,
+    cancel: PropTypes.func,
+    showVerifiers: PropTypes.func,
+    focusedGroup: PropTypes.string,
+    focusedField: PropTypes.string,
+    setFocused: PropTypes.func,
+    verifierLocations: PropTypes.array,
+    showErrors: PropTypes.bool,
+    showAddress: PropTypes.bool,
+    username: PropTypes.object,
+    physicalAddress: PropTypes.array,
+    idCard: PropTypes.array
   }
 
   renderField(field) {

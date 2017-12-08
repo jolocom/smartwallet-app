@@ -1,32 +1,14 @@
-import * as _ from 'lodash'
+import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import * as router from './router'
-import { isPasswordValid, checkPassStrength,
-  passwordCharacters } from '../../lib/password-util'
+import router from './router'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
-  '/registration/entropy': '/registration/user-type',
-  '/registration/user-type': '/registration/phrase-info',
-  '/registration/phrase-info': '/registration/email',
-  '/registration/email': '/registration/password',
-  '/registration/password': '/registration/pin',
-  '/registration/write-phrase': '/registration/pin'
+  '/registration/entropy': '/registration/write-phrase'
 }
 
-const CHECK_BEFORE_SWITCHING = {
-  '/registration': ['username', 'valid'],
-  '/registration/entropy': ['passphrase', 'sufficientEntropy'],
-  '/registration/user-type': ['userType', 'valid'],
-  '/registration/write-phrase': ['passphrase', 'writtenDown'],
-  '/registration/phrase-info': ['passphrase', 'writtenDown'],
-  '/registration/email': ['email', 'valid'],
-  '/registration/password': ['password', 'valid'],
-  '/registration/pin': ['pin', 'valid']
-}
-
-const actions = module.exports = makeActions('registration', {
+export const actions = makeActions('registration', {
   goForward: {
     expectedParams: [],
     creator: () => {
@@ -35,14 +17,11 @@ const actions = module.exports = makeActions('registration', {
         if (state.getIn(['registration', 'complete'])) {
           dispatch(actions.registerWallet())
         } else {
-          const nextUrl = helpers._getNextURLFromState(state)
-          dispatch(router.pushRoute(nextUrl))
+          let nextURL = helpers._getNextURLfromState(state)
+          dispatch(router.pushRoute(nextURL))
         }
       }
     }
-  },
-  setUserType: {
-    expectedParams: ['value']
   },
   setMaskedImageUncovering: {
     expectedParams: ['value']
@@ -80,10 +59,17 @@ const actions = module.exports = makeActions('registration', {
     expectedParams: [],
     creator: () => {
       return (dispatch, getState) => {
-        // eslint-disable-next-line max-len
-        const entropyState = getState().getIn(['registration', 'passphrase', 'sufficientEntropy'])
-        // eslint-disable-next-line max-len
-        entropyState ? dispatch(actions.generateSeedPhrase()) : console.log('not enough entropy')
+        const entropyState = getState().getIn([
+          'registration',
+          'passphrase',
+          'sufficientEntropy'
+        ])
+
+        if (entropyState) {
+          return dispatch(actions.generateSeedPhrase())
+        }
+
+        throw new Error('Not enough entropy!')
       }
     }
   },
@@ -92,11 +78,17 @@ const actions = module.exports = makeActions('registration', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {backend}) => {
-        // eslint-disable-next-line max-len
-        const randomStringState = getState().getIn(['registration', 'passphrase', 'randomString'])
+        const randomStringState = getState().getIn([
+          'registration',
+          'passphrase',
+          'randomString'
+        ])
+
         if (randomStringState === '') {
           return
-        } // eslint-disable-next-line max-len
+        }
+       
+        // eslint-disable-next-line max-len
         dispatch(actions.generateSeedPhrase.buildAction(params, async (backend) => {
           await backend.gateway.generateSeedPhrase({randomStringState})
           .then((params) => {
@@ -104,7 +96,7 @@ const actions = module.exports = makeActions('registration', {
             dispatch(actions.setPassphraseWrittenDown(true))
             dispatch(actions.goForward())
           }).catch(e => {
-            console.log(e, 'error in generate seed phrase')
+            console.error(e, 'error in generate seed phrase')
           })
         }))
       }
@@ -122,56 +114,7 @@ const actions = module.exports = makeActions('registration', {
   setPassphraseWrittenDown: {
     expectedParams: ['value']
   },
-  switchToExpertMode: {
-    expectedParams: []
-  },
-  setPin: {
-    expectedParams: ['value']
-  },
-  setPinConfirm: {
-    expectedParams: ['value']
-  },
-  setPinFocused: {
-    expectedParams: ['value']
-  },
-  submitPin: {
-    expectedParams: [],
-    creator: () => {
-      return (dispatch, getState) => {
-        const pinState = getState().getIn(['registration', 'pin'])
-        if (!pinState.get('valid')) {
-          return
-        }
-        dispatch(actions.goForward())
-      }
-    }
-  },
   setUsername: {
-    expectedParams: ['value']
-  },
-  setEmail: {
-    expectedParams: ['value']
-  },
-  checkEmail: {
-    expectedParams: [],
-    creator: () => {
-      return (dispatch, getState) => {
-        const emailState = getState().getIn(['registration', 'email'])
-        if (emailState.get('valid')) {
-          dispatch(actions.goForward())
-        } else {
-          dispatch(actions.emailError())
-        }
-      }
-    }
-  },
-  emailError: {
-    expectedParams: []
-  },
-  setPassword: {
-    expectedParams: ['value']
-  },
-  setRepeatedPassword: {
     expectedParams: ['value']
   },
   setValueOwnURL: {
@@ -183,13 +126,13 @@ const actions = module.exports = makeActions('registration', {
   checkCredentials: {
     expectedParams: [],
     async: true,
-    creator: (params) => {
+    creator: params => {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkCredentials.buildAction(params, (backend) => {
           return backend.gateway
             .checkUserDoesNotExist({userName: state.username.value})
-            .then((params) => {
+            .then(params => {
               if (state.ownURL.valueOwnURL.length > 1) {
                 dispatch(actions.checkOwnUrl())
               } else {
@@ -225,59 +168,17 @@ const actions = module.exports = makeActions('registration', {
       return (dispatch, getState, {services, backend}) => {
         const state = getState().get('registration').toJS()
         dispatch(actions.registerWallet.buildAction(params, async () => {
-          const userType = state.userType.value
-          if (userType === 'expert') {
-            await services.auth.register({
-              userName: state.username.value,
-              seedPhrase: state.passphrase.phrase,
-              inviteCode: state.inviteCode,
-              gatewayUrl: state.ownURL.valueOwnURL
-            })
-
-            await services.auth.login({
-              seedPhrase: state.passphrase.phrase,
-              pin: state.pin.value,
-              gatewayUrl: state.ownURL.valueOwnURL
-            })
-
-            dispatch(router.pushRoute('/wallet'))
-          } else {
-            // console.log('layman registration')
-
-            // return true
-            // return services.auth.registerWithCredentials({
-            //   userName: state.username.value,
-            //   email: state.email.value,
-            //   password: state.password.value,
-            //   pin: state.pin.value
-            // })
-            // const { wallet } = await services.auth.registerWithCredentials({
-            //   userName: state.username.value,
-            //   email: state.email.value,
-            //   password: state.password.value,
-            //   pin: state.pin.value,
-            //   seedPhrase: state.passphrase.phrase
-            // })
-
-            // await backend.accounts.solidRegister(
-            //   state.username.value,
-            //   state.passphrase.phrase,
-            //   wallet.webIDPrivateKey
-            // )
-
-            // await backend.accounts.solidLogin(
-            //   state.username.value,
-            //   state.passphrase.phrase,
-            //   wallet.webIDPrivateKey
-            // )
-
-            // await backend.solid.setIdentityContractAddress(
-            //   wallet.webId,
-            //   wallet.identityAddress
-            // )
-
-            // dispatch(router.pushRoute('/wallet'))
-          }
+          await services.auth.register({
+            userName: state.username.value,
+            seedPhrase: state.passphrase.phrase,
+            inviteCode: state.inviteCode,
+            gatewayUrl: state.ownURL.valueOwnURL
+          })
+          await services.auth.login({
+            seedPhrase: state.passphrase.phrase,
+            gatewayUrl: state.ownURL.valueOwnURL
+          })
+          dispatch(router.pushRoute('/wallet'))
         })
       )
       }
@@ -296,35 +197,10 @@ const initialState = Immutable.fromJS({
     valid: false,
     alphaNum: false
   },
-  Repuation: 0,
-  email: {
-    value: '',
-    valid: false,
-    errorMsg: ''
-  },
-  password: {
-    value: '',
-    repeated: '',
-    strength: 'weak',
-    hasLowerCase: false,
-    hasUpperCase: false,
-    hasDigit: false,
-    valid: false
-  },
   ownURL: {
     hasOwnURL: false,
     errorMsg: '',
     valueOwnURL: ''
-  },
-  pin: {
-    value: '',
-    focused: false,
-    confirm: false,
-    valid: false
-  },
-  userType: {
-    value: '',
-    valid: false
   },
   maskedImage: {
     uncovering: false
@@ -348,47 +224,10 @@ const initialState = Immutable.fromJS({
   complete: false
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   state = state.set('complete', helpers._isComplete(state))
 
   switch (action.type) {
-    case actions.setUserType.id:
-      const valid = ['expert', 'layman'].indexOf(action.value) !== -1
-      if (action.value && !valid) {
-        throw Error('Invalid user type: ' + action.value)
-      }
-      return state.merge({
-        userType: {
-          value: action.value,
-          valid
-        }
-      })
-
-    case actions.setPassword.id:
-      const oldRepeatedValue = state.get('password').get('repeated')
-      const validPassword = isPasswordValid(action.value, oldRepeatedValue)
-      const characters = passwordCharacters(action.value)
-      const passwordStrength = checkPassStrength(action.value)
-      return state.mergeIn(
-        ['password'],
-        {
-          value: action.value,
-          repeated: '',
-          valid: validPassword,
-          hasLowerCase: characters.lowerCase,
-          hasUpperCase: characters.upperCase,
-          hasDigit: characters.digit,
-          strength: passwordStrength
-        }
-      )
-
-    case actions.setRepeatedPassword.id:
-      const passwordValue = state.get('password').get('value')
-      const validRepeatedValue = isPasswordValid(action.value, passwordValue)
-      return state.mergeIn(['password'], {
-        repeated: action.value,
-        valid: validRepeatedValue
-      })
 
     case actions.setEntropyStatus.id:
       return state.mergeDeep({
@@ -434,49 +273,8 @@ module.exports.default = (state = initialState, action = {}) => {
           errorMsg: null
         }
       })
-
-    case actions.setPin.id:
-      if (!/^[0-9]{0,4}$/.test(action.value)) {
-        return state
-      }
-
-      return state.mergeIn(['pin'], {
-        value: action.value,
-        valid: action.value.length === 4
-      })
-
-    case actions.setPinConfirm.id:
-      return state.mergeDeep({
-        pin: {
-          confirm: action.value
-        }
-      })
-
-    case actions.setPinFocused.id:
-      return state.mergeDeep({
-        pin: {
-          focused: action.value
-        }
-      })
-
     case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
-
-    case actions.setEmail.id:
-      return state.mergeDeep({
-        email: {
-          value: action.value,
-          valid: /^([\w.]+)@([\w.]+)\.(\w+)/.test(action.value),
-          errorMsg: ''
-        }
-      })
-
-    case actions.emailError.id:
-      return state.mergeDeep({
-        email: {
-          errorMsg: 'This email address is invalid. Please check it again'
-        }
-      })
 
     case actions.setPassphraseWrittenDown.id:
       return state.mergeDeep({
@@ -545,10 +343,10 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       })
 
-    case actions.setInviteCode.id:
-      return state.merge({
-        inviteCode: action.code
-      })
+    // case actions.setInviteCode.id:
+    //   return state.merge({
+    //     inviteCode: action.code
+    //   })
 
     case actions.toggleHasOwnURL.id:
       return state.mergeIn(['ownURL'], {
@@ -580,50 +378,14 @@ module.exports.default = (state = initialState, action = {}) => {
   }
 }
 
-const helpers = module.exports.helpers = {}
-helpers._isComplete = (state) => {
-  const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
-  const areFieldsValid = (fields) => _.every(fields, isFieldValid)
-
-  let complete = areFieldsValid(['username', 'userType', 'pin'])
-  if (state.getIn(['userType', 'value']) === 'layman') {
-    complete = complete && areFieldsValid(['email', 'password'])
-  } else {
-    complete = complete && areFieldsValid(['passphrase'])
+export const helpers = {
+  _isComplete: (state) => {
+    const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
+    const areFieldsValid = (fields) => every(fields, isFieldValid)
+    return areFieldsValid(['username', 'passphrase'])
+  },
+  _getNextURLfromState: (state) => {
+    const currentPath = state.get('routing').locationBeforeTransitions.pathname
+    return NEXT_ROUTES[currentPath]
   }
-
-  return complete
-}
-
-helpers._getNextURLFromState = (state) => {
-  const currentPath = state.get('routing').locationBeforeTransitions.pathname
-  const userType = state.getIn(['registration', 'userType', 'value'])
-  if (!helpers._canGoForward(state, currentPath)) {
-    if ((currentPath === '/registration/write-phrase') &&
-      (userType === 'layman')) {
-      return '/registration/phrase-info'
-    }
-    if ((currentPath === '/registration/phrase-info') &&
-      (userType === 'expert')) {
-      return '/registration/write-phrase'
-    }
-    return null
-  }
-  return helpers._getNextURL(currentPath, userType)
-}
-
-helpers._getNextURL = (currentPath, userType) => {
-  if (currentPath === '/registration/user-type') {
-    return userType === 'expert'
-              ? '/registration/write-phrase'
-              : '/registration/phrase-info'
-  }
-
-  return NEXT_ROUTES[currentPath]
-}
-
-helpers._canGoForward = (state, currentPath) => {
-  const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  let result = !toCheck || state.getIn(['registration', toCheck[0], toCheck[1]])
-  return result || false
 }

@@ -1,16 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
-
-import {
-  EtherBalance,
-  TabContainer,
-  HalfScreenContainer
-} from './ui'
-
-import {List, Divider, ListItem, TextField, RaisedButton} from 'material-ui'
-import {Block} from '../../structure'
-import {Loading, Error} from '../../common'
+import {List, ListItem} from 'material-ui/List'
+import Divider from 'material-ui/Divider'
+import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton'
 import NavigationArrowUp from 'material-ui/svg-icons/navigation/arrow-upward'
+
+import { EtherBalance, TabContainer, HalfScreenContainer } from './ui'
+import { Block } from '../../structure'
+import { Loading, Error } from '../../common'
 
 const STYLES = {
   headItem: {
@@ -35,12 +34,12 @@ const STYLES = {
 @Radium
 export default class EtherSend extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    money: React.PropTypes.object,
-    etherBalance: React.PropTypes.number.isRequired,
-    updateField: React.PropTypes.func,
-    wallet: React.PropTypes.object,
-    sendEther: React.PropTypes.func
+    children: PropTypes.node,
+    money: PropTypes.object,
+    etherBalance: PropTypes.number.isRequired,
+    updateField: PropTypes.func,
+    wallet: PropTypes.object,
+    sendEther: PropTypes.func
   }
 
   render() {

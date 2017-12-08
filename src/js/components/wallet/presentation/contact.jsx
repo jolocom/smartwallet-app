@@ -1,17 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
-
-import {theme} from 'styles'
-import {List} from 'material-ui'
-
-import {
-  CommunicationCall,
-  CommunicationEmail
-} from 'material-ui/svg-icons'
+import List from 'material-ui/List'
+import CommunicationCall from 'material-ui/svg-icons/communication/call.js'
+import CommunicationEmail from 'material-ui/svg-icons/communication/email.js'
 import Location from 'material-ui/svg-icons/maps/place'
-
 import Loading from 'components/common/loading'
-import { Content } from '../../structure'
 import {
   EditAppBar,
   EditHeader,
@@ -19,6 +13,9 @@ import {
   AddNew,
   SelectCountryItem
 } from './ui'
+
+import { Content } from '../../structure'
+import { theme } from 'styles'
 
 const STYLES = {
   title: {
@@ -39,21 +36,21 @@ const STYLES = {
 @Radium
 export default class WalletContact extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    focused: React.PropTypes.string.isRequired,
-    onFocusChange: React.PropTypes.func.isRequired,
-    information: React.PropTypes.object.isRequired,
-    updateInformation: React.PropTypes.func.isRequired,
-    deleteInformation: React.PropTypes.func.isRequired,
-    setInformation: React.PropTypes.func.isRequired,
-    exitWithoutSaving: React.PropTypes.func.isRequired,
-    saveChanges: React.PropTypes.func.isRequired,
-    loading: React.PropTypes.bool.isRequired,
-    showErrors: React.PropTypes.bool,
-    addNewEntry: React.PropTypes.func.isRequired,
-    confirm: React.PropTypes.func.isRequired,
-    selectCountry: React.PropTypes.func.isRequired,
-    setAddressField: React.PropTypes.func.isRequired
+    children: PropTypes.node,
+    focused: PropTypes.string.isRequired,
+    onFocusChange: PropTypes.func.isRequired,
+    information: PropTypes.object.isRequired,
+    updateInformation: PropTypes.func.isRequired,
+    deleteInformation: PropTypes.func.isRequired,
+    setInformation: PropTypes.func.isRequired,
+    exitWithoutSaving: PropTypes.func.isRequired,
+    saveChanges: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
+    showErrors: PropTypes.bool,
+    addNewEntry: PropTypes.func.isRequired,
+    confirm: PropTypes.func.isRequired,
+    selectCountry: PropTypes.func.isRequired,
+    setAddressField: PropTypes.func.isRequired
   }
 
   renderContent() {
@@ -207,126 +204,10 @@ export default class WalletContact extends React.Component {
     </div>)
   }
 
-  renderAddressField({streetWithNumber, zip, country, city, state, id, age, index}) { // eslint-disable-line max-len
-    id = id || `address_${age}_${index}`
-    const blank = [streetWithNumber, city, country, zip, state]
-      .every(({value}) => value.trim().length === 0)
-    const addressFieldsVisibility = this.props.focused === id || !blank
-    const {onFocusChange, setAddressField, focused, selectCountry} = this.props
-
-    return (<div key={id}>
-      <EditListItem
-        key="streetWithNumber"
-        id={id}
-        icon={Location}
-        iconStyle={STYLES.icon}
-        value={streetWithNumber.value}
-        label={addressFieldsVisibility ? 'Street' : 'Physical Address'}
-        enableEdit
-        showErrors
-        onFocusChange={() => onFocusChange(id)}
-        onDelete={(evt) => setAddressField(
-          'newInformation', 'streetWithNumber', index, '')}
-        onChange={(e) =>
-          setAddressField(
-            'newInformation', 'streetWithNumber', index, e.target.value)}
-        focused={focused === id}
-        enableDelete={streetWithNumber.value.length > 0} />
-        {
-          addressFieldsVisibility ? <div>
-            <table style={{width: '100%'}}><tbody>
-              <tr><td style={{width: '60%'}} key="city">
-                <EditListItem
-                  id={id}
-                  focused={false}
-                  label="City"
-                  enableEdit
-                  value={city.value}
-                  onFocusChange={() => onFocusChange(id)}
-                  onDelete={() => this.props
-                    .setAddressField('newInformation', 'city', index, '')}
-                  onChange={(evt) => setAddressField(
-                    'newInformation', 'city', index, evt.target.value)}
-                  enableDelete={city.value.length > 0} />
-              </td><td style={{width: '40%'}} key="zip">
-                <EditListItem
-                  id={id}
-                  label="Zip"
-                  enableEdit
-                  value={zip.value}
-                  widthTextField={{padding: '0 0px 0 4px'}}
-                  focused={false}
-                  onFocusChange={(field) => onFocusChange(id)}
-                  onChange={(e) =>
-                  setAddressField(
-                  'newInformation', 'zip', index, e.target.value)}
-                  onDelete={() => setAddressField(
-                    'newInformation', 'zip', index, '')}
-                  enableDelete={zip.value.length > 0} />
-              </td></tr>
-            </tbody></table>
-            <EditListItem
-              id={id}
-              label="State"
-              enableEdit
-              focused={false}
-              enableDelete={state.value.length > 0}
-              value={state.value}
-              onFocusChange={() => onFocusChange(id)}
-              onChange={(e) =>
-              setAddressField(
-                'newInformation', 'state', index, e.target.value)}
-              onDelete={() => setAddressField(
-                'newInformation', 'state', index, '')} />
-            <SelectCountryItem
-              id={id}
-              value={country.value}
-              focused={false}
-              label="Country"
-              onChange={() => {}}
-              onFocusChange={() => {
-                onFocusChange(id)
-                selectCountry('newInformation', index, '')
-              }}
-              onDelete={() => {
-                setAddressField('newInformation', 'country', index, '')
-                onFocusChange(id)
-              }}
-              enableEdit
-              enableDelete={country.value.length > 0} />
-          </div> : null
-        }
-    </div>)
-  }
   render() {
-    let content
     const {loading, saveChanges, exitWithoutSaving} = this.props
     const {originalInformation, newInformation} = this.props.information
-    let addressFields
-    let addNewAddress
-    if (originalInformation) {
-      if (originalInformation.addresses.length > 0 || newInformation.addresses.length > 0 && newInformation.addresses[0].streetWithNumber.value !== '') { // eslint-disable-line max-len
-        addNewAddress = (<AddNew key="add_address" onClick={() => {
-          this.props.addNewEntry('addresses', newInformation.addresses.length)
-          this.props.onFocusChange(`address_newInformation_${newInformation.addresses.length}`) // eslint-disable-line max-len
-        }}
-          value="ADD NEW ADDRESS" />)
-      }
-    } else {
-      addNewAddress = null
-    }
-    if (this.props.loading) {
-      content = <Loading />
-    } else {
-      content = this.renderContent()
-      addressFields = [
-        ...originalInformation.addresses.map((address, index) =>
-        this.renderAddressField({...address, age: 'originalInformation', index})), // eslint-disable-line max-len
-        ...newInformation.addresses.map((address, index) =>
-        this.renderAddressField({...address, age: 'newInformation', index})),
-        addNewAddress
-      ]
-    }
+    const content = this.props.loading ? <Loading /> : this.renderContent()
 
     return (
       <div>
@@ -339,7 +220,6 @@ export default class WalletContact extends React.Component {
           <EditHeader title="Contact" />
           <List>
             {content}
-            {addressFields}
           </List>
         </Content>
       </div>

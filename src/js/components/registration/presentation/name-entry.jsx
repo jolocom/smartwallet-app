@@ -1,15 +1,16 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
-import {RaisedButton, FlatButton} from 'material-ui'
-import {
-  NavigationExpandMore,
-  NavigationExpandLess
-} from 'material-ui/svg-icons'
 
-import {Container, Header, Content, Block, Footer
-} from '../../structure'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
+
+import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more'
+import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less'
+
+import {Container, Header, Content, Block, Footer } from '../../structure'
 import {theme} from 'styles'
 
 const STYLES = {
@@ -66,6 +67,7 @@ const NameEntry = (props) => {
       <Content>
         <Block style={STYLES.textField}>
           <TextField
+            id="uniqueUsername"
             defaultValue={props.value}
             floatingLabelText="Unique Username"
             floatingLabelStyle={STYLES.floatingLabel}
@@ -105,15 +107,15 @@ const NameEntry = (props) => {
 }
 
 NameEntry.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  ownURL: React.PropTypes.object,
-  valid: React.PropTypes.bool.isRequired,
-  errorMsg: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  handleDialog: React.PropTypes.func.isRequired,
-  setValueOwnURL: React.PropTypes.func.isRequired,
-  toggleHasOwnURL: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  ownURL: PropTypes.object,
+  valid: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  handleDialog: PropTypes.func.isRequired,
+  setValueOwnURL: PropTypes.func.isRequired,
+  toggleHasOwnURL: PropTypes.func.isRequired
 }
 
 export default Radium(NameEntry)

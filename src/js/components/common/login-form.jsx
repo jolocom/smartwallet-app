@@ -1,10 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import { Link } from 'react-router'
-import { RaisedButton } from 'material-ui'
-
-import { Form } from 'formsy-react'
-import FormsyText from 'formsy-material-ui/lib/FormsyText'
+import RaisedButton from 'material-ui/RaisedButton'
 
 const LoginForm = (props) => {
   const {
@@ -20,52 +18,19 @@ const LoginForm = (props) => {
   } = props
 
   return (
-    <Form
-      style={Object.assign({}, styles.container, style)}
-      onSubmit={onSubmit}
-      {...otherProps}
-    >
-      <div style={{marginBottom: '20px'}}>
-        <FormsyText
-          name="username"
-          floatingLabelText="Username"
-          value={username}
-          type="text"
-          autoCorrect="off"
-          autoCapitalize="none"
-          autoComplete="none"
-          errorText={usernameError}
-          onChange={onUsernameChange} />
-        <FormsyText
-          name="password"
-          floatingLabelText="Password"
-          type="password"
-          errorText={passwordError}
-          onChange={onPasswordChange} />
-        <Link
-          to="/forgot-password"
-          style={styles.forgotPassword}>Forgot password?</Link>
-      </div>
-
-      <RaisedButton
-        type="submit"
-        disabled={!username || !password}
-        secondary
-        style={styles.submit}
-        label="Login" />
-    </Form>
+    <div />
   )
 }
 
 LoginForm.propTypes = {
-  style: React.PropTypes.object,
-  onSubmit: React.PropTypes.func.isRequired,
-  onUsernameChange: React.PropTypes.func,
-  onPasswordChange: React.PropTypes.func,
-  username: React.PropTypes.string,
-  password: React.PropTypes.string,
-  usernameError: React.PropTypes.string,
-  passwordError: React.PropTypes.string
+  style: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onUsernameChange: PropTypes.func,
+  onPasswordChange: PropTypes.func,
+  username: PropTypes.string,
+  password: PropTypes.string,
+  usernameError: PropTypes.string,
+  passwordError: PropTypes.string
 }
 
 const styles = {

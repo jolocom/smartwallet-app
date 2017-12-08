@@ -1,6 +1,6 @@
 // import {setWebId} from './modules/account'
-import {setAttributeVerified} from './modules/wallet/identity'
-import {setEtherBalance} from './modules/wallet/money'
+import {actions as identityActions} from './modules/wallet/identity'
+import {actions as ethereumActions} from './modules/wallet/money'
 
 export default async function setup({store, services, history}) {
   // services.auth.on('changed', (webId = null) => {
@@ -19,11 +19,11 @@ export default async function setup({store, services, history}) {
     }
 
     services.auth.currentUser.socket.on('verification.stored', (data) => {
-      store.dispatch(setAttributeVerified(data.attrType, data.attrId, true))
+      store.dispatch(identityActions.setAttributeVerified(data.attrType, data.attrId, true))
     })
 
     services.auth.currentUser.socket.on('ether.balance.changed', (data) => {
-      store.dispatch(setEtherBalance(data.newBalance))
+      store.dispatch(ethereumActions.setEtherBalance(data.newBalance))
     })
 
     services.auth.currentUser.socket.on('reconnect', (data) => {

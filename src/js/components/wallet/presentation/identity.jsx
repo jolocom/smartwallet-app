@@ -1,17 +1,26 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
-import CopyToClipboard from 'react-copy-to-clipboard'
-import { TextField, Divider, List, ListItem,
-  FloatingActionButton } from 'material-ui'
-import { CommunicationCall, CommunicationEmail,
-  ContentCreate, ActionDone } from 'material-ui/svg-icons'
+// import CopyToClipboard from 'react-copy-to-clipboard'
+
+import TextField from 'material-ui/TextField'
+import Divider from 'material-ui/Divider'
+import { List, ListItem } from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+
+import CommunicationCall from 'material-ui/svg-icons/communication/call'
+import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import ContentCreate from 'material-ui/svg-icons/content/create'
+import ActionDone from 'material-ui/svg-icons/action/done'
+
 import {theme} from 'styles'
 
 import {Content, Block} from '../../structure'
 
 import {
-  PlusMenu, TabContainer, HalfScreenContainer, ContactList, IdCardsList,
-  PassportsList, InfoDetails, IdentityAvatar, EthConnectItem, StaticListItem
+  PlusMenu, TabContainer, HalfScreenContainer, ContactList,
+  // InfoDetails,
+  EthConnectItem, StaticListItem
 } from './ui'
 
 const STYLES = {
@@ -58,7 +67,7 @@ export default class WalletIdentity extends React.Component {
     resendVerificationCode: React.PropTypes.func.isRequired,
     requestIdCardVerification: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
-    showUserInfo: React.PropTypes.func.isRequired,
+    // showUserInfo: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
     ether: React.PropTypes.object,
     createEthereumIdentity: React.PropTypes.func.isRequired,
@@ -161,65 +170,6 @@ export default class WalletIdentity extends React.Component {
     </div>
   }
 
-  renderIdCards({ idCards, expandedFields }) {
-    return (<span>
-      <Block>
-        <PlusMenu
-          name="ID Card"
-          choice={idCards.length > 0}
-          expanded={expandedFields.idCards}
-          expand={(value) => {
-            this.props.expandField('idCards', value)
-          }}
-          goToManagement={() => { this.props.goTo('idCard') }} />
-      </Block>
-      <Block style={STYLES.innerContainer}>
-      {
-        expandedFields.idCards
-        ? <IdCardsList
-          idCards={idCards}
-          requestIdCardVerification={this.props.requestIdCardVerification} />
-          : null
-        }
-      </Block>
-    </span>)
-  }
-
-  renderPassports({ expandedFields, passports }) {
-    return (<span>
-      <Block>
-        <PlusMenu
-          name="Passport"
-          expanded={expandedFields.passports}
-          expand={(value) => {
-            this.props.expandField('passports', value)
-          }}
-          choice={passports.length > 0}
-          goToManagement={() => { this.props.goTo('passport') }} />
-      </Block>
-      <Block style={STYLES.innerContainer}>
-        {
-          expandedFields.passports
-          ? <PassportsList passports={passports} />
-          : null
-        }
-      </Block>
-    </span>)
-  }
-
-  renderDrivingLicence() {
-    return (<Block>
-      <PlusMenu
-        name="Driving License"
-        expand={(value) => {
-          this.props.expandField('drivingLicence', value)
-        }}
-        choice={false}
-        expanded={false}
-        goToManagement={() => { this.props.goTo('drivingLicence') }} />
-    </Block>)
-  }
-
   renderUsername({ webId, username, displayName }) {
     let actionButton
     if (displayName !== undefined && displayName.edit) {
@@ -252,21 +202,20 @@ export default class WalletIdentity extends React.Component {
         <ListItem
           key={1}
           disabled
-          rightIcon={<InfoDetails
-            showDetails={message => this.props.showUserInfo(
-              null,
-              message,
-              (<CopyToClipboard text={webId}>
-                <span>COPY WEBID</span>
-              </CopyToClipboard>),
-              () => {},
-              'ALL RIGHT',
-              STYLES.usernameWindow
-            )}
-            webId={webId}
-            username={username.value} />
-          }
-          leftAvatar={<IdentityAvatar />}
+          // rightIcon={<InfoDetails
+          //   showDetails={message => this.props.showUserInfo(
+          //     null,
+          //     message,
+          //     (<CopyToClipboard text={webId}>
+          //       <span>COPY WEBID</span>
+          //     </CopyToClipboard>),
+          //     () => {},
+          //     'ALL RIGHT',
+          //     STYLES.usernameWindow
+          //   )}
+          //   webId={webId}
+          //   username={username.value} />
+          // }
           style={STYLES.listItem}>
           <TextField
             fullWidth
@@ -278,7 +227,7 @@ export default class WalletIdentity extends React.Component {
             floatingLabelFixed
             disabled={!displayName.edit}
             hintText={displayName.edit || displayName.value
-              ? '' : 'Bob is that you?'}
+              ? '' : 'no display name found'}
             onChange={(e) => this.props.setDisplayName(e.target.value)}
             value={displayName.value} />
           {actionButton}
@@ -301,9 +250,6 @@ export default class WalletIdentity extends React.Component {
           {this.renderUsername(this.props.identity)}
           {this.renderConnectEther(this.props.identity)}
           {this.renderContact(this.props.identity)}
-          {this.renderPassports(this.props.identity)}
-          {this.renderIdCards(this.props.identity)}
-          {this.renderDrivingLicence()}
         </Content>
       </HalfScreenContainer>
     </TabContainer>)

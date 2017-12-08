@@ -1,6 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
-import {RaisedButton, IconButton} from 'material-ui'
+
+import RaisedButton from 'material-ui/RaisedButton'
+import IconButton from 'material-ui/IconButton'
+
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 import {connect} from 'redux_state/utils'
@@ -33,25 +37,18 @@ const dialogBlockchain = {
   title: 'What is a blockchain?'
 }
 
-let Index = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.object,
-    username: React.PropTypes.string,
-    muiTheme: React.PropTypes.object
-  },
+class Index extends React.Component {
+  static contextTypes = {
+    router: PropTypes.object,
+    username: PropTypes.string,
+    muiTheme: PropTypes.object
+  };
 
-  propTypes: {
-    openConfirmDialog: React.PropTypes.func
-  },
+  static propTypes = {
+    openConfirmDialog: PropTypes.func
+  };
 
-  // componentWillMount() {
-  //   const {account} = this.context
-  //   if (account && account.webId) {
-  //     this.context.router.push('/graph')
-  //   }
-  // },
-
-  getStyles() {
+  getStyles = () => {
     let {muiTheme} = this.context
 
     let styles = {
@@ -156,7 +153,7 @@ let Index = React.createClass({
     }
 
     return styles
-  },
+  };
 
   render() {
     let styles = this.getStyles()
@@ -189,8 +186,7 @@ let Index = React.createClass({
             <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-01.svg)'
             })} />
-            <Header title="Create an independent and
-              secure digital identity." />
+            <Header title="Create an independent and secure digital identity." />
             <SideNote>
               Collect your data at a secure place.
               It’s yours, so only you own it!
@@ -221,8 +217,7 @@ let Index = React.createClass({
               backgroundImage: 'url(img/img_onboarding-04.svg)'
             })} />
             <Header
-              title="Our Wallet keeps your data as safe
-              as your bank account." />
+              title="Our Wallet keeps your data as safe as your bank account." />
             <SideNote>
               We use the latest encryption technology and
               <span style={styles.embeddedLink}
@@ -239,8 +234,7 @@ let Index = React.createClass({
             })} />
             <Header
               style={{marginTop: '0'}}
-              title="Security is hard to maintain, that's
-              why the storage costs." />
+              title="Security is hard to maintain, that's why the storage costs." />
             <SideNote>
               The storage of your data is payed
               in ether, a webbased currency. But only the
@@ -248,12 +242,6 @@ let Index = React.createClass({
             </SideNote>
           </div>
         </Carousel>
-
-        {/** <div style={styles.intro}>
-          <img
-            src="/img/logo_start.svg"
-            style={styles.logoStartImg} />
-        </div> **/}
 
         <div style={styles.actions}>
           <RaisedButton
@@ -274,27 +262,28 @@ let Index = React.createClass({
           to="" />
       </Container>
     )
-  },
-  _setCarouselRef(c) {
-    this.carousel = c
-  },
-
-  _handlePrevious() {
-    this.carousel.slideTowards('right')
-  },
-
-  _handleNext() {
-    this.carousel.slideTowards('left')
-  },
-
-  _handleSignup() {
-    this.context.router.push(routes.signup)
-  },
-
-  _handleLogin() {
-    this.context.router.push('/login')
   }
-})
+
+  _setCarouselRef = (c) => {
+    this.carousel = c
+  };
+
+  _handlePrevious = () => {
+    this.carousel.slideTowards('right')
+  };
+
+  _handleNext = () => {
+    this.carousel.slideTowards('left')
+  };
+
+  _handleSignup = () => {
+    this.context.router.push(routes.signup)
+  };
+
+  _handleLogin = () => {
+    this.context.router.push('/login')
+  };
+}
 
 export default connect({
   actions: [

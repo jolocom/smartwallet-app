@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/email-confirmation'
@@ -11,11 +12,11 @@ import Presentation from '../presentation/email-confirmation'
 })
 export default class EmailConfirmationScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    location: React.PropTypes.object.isRequired,
-    verification: React.PropTypes.object.isRequired,
-    goToAfterConfirmEmail: React.PropTypes.func.isRequired,
-    confirmEmail: React.PropTypes.func.isRequired
+    children: PropTypes.node,
+    location: PropTypes.object.isRequired,
+    verification: PropTypes.object.isRequired,
+    goToAfterConfirmEmail: PropTypes.func.isRequired,
+    confirmEmail: PropTypes.func.isRequired
   }
 
   componentDidMount() {

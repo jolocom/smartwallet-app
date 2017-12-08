@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/contact'
@@ -16,26 +17,24 @@ import Presentation from '../presentation/contact'
     'wallet/contact:saveChanges',
     'wallet/contact:addNewEntry',
     'wallet/contact:setAddressField',
-    'confirmation-dialog:confirm',
-    'confirmation-dialog:openConfirmDialog',
-    'confirmation-dialog:close'
+    'confirmation-dialog:openConfirmDialog'
   ]
 })
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    location: React.PropTypes.object,
-    contact: React.PropTypes.object.isRequired,
-    getUserInformation: React.PropTypes.func.isRequired,
-    updateInformation: React.PropTypes.func.isRequired,
-    setInformation: React.PropTypes.func.isRequired,
-    deleteInformation: React.PropTypes.func.isRequired,
-    exitWithoutSaving: React.PropTypes.func.isRequired,
-    saveChanges: React.PropTypes.func.isRequired,
-    addNewEntry: React.PropTypes.func.isRequired,
-    openConfirmDialog: React.PropTypes.func.isRequired,
-    setAddressField: React.PropTypes.func.isRequired,
-    initiateCountryScreenFromContactScreen: React.PropTypes.func.isRequired
+    children: PropTypes.node,
+    location: PropTypes.object,
+    contact: PropTypes.object.isRequired,
+    getUserInformation: PropTypes.func.isRequired,
+    updateInformation: PropTypes.func.isRequired,
+    setInformation: PropTypes.func.isRequired,
+    deleteInformation: PropTypes.func.isRequired,
+    exitWithoutSaving: PropTypes.func.isRequired,
+    saveChanges: PropTypes.func.isRequired,
+    addNewEntry: PropTypes.func.isRequired,
+    openConfirmDialog: PropTypes.func.isRequired,
+    setAddressField: PropTypes.func.isRequired,
+    initiateCountryScreenFromContactScreen: PropTypes.func.isRequired
   }
   constructor() {
     super()

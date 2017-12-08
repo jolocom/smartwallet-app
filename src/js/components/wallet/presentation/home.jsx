@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import {
   Container,
@@ -8,9 +9,7 @@ import {
 } from '../../structure'
 import {theme} from 'styles'
 
-import {
-  FlatButton
-} from 'material-ui'
+import FlatButton from 'material-ui/FlatButton'
 
 const STYLES = {
   sideNote: {
@@ -37,9 +36,9 @@ const STYLES = {
 @Radium
 export default class WalletHome extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    onClick: React.PropTypes.func.isRequired,
-    username: React.PropTypes.string.isRequired
+    children: PropTypes.node,
+    onClick: PropTypes.func.isRequired,
+    username: PropTypes.string.isRequired
   }
 
   render() {
@@ -49,7 +48,7 @@ export default class WalletHome extends React.Component {
           <img src="/img/illustration_wallet.svg" style={STYLES.homeImg} />
         </Block>
         <Block>
-          <h1 style={STYLES.greeting}>Hi {this.props.username}</h1>
+          <h1 style={STYLES.greeting}>Hi {this.props.username}!</h1>
         </Block>
         <Block>
           <SideNote style={STYLES.sideNote}>

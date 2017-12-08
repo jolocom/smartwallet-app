@@ -1,21 +1,22 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import accepts from 'attr-accept'
 
-import {IconButton} from 'material-ui'
+import IconButton from 'material-ui/IconButton'
 
-let ImageSelect = React.createClass({
-  propTypes: {
-    onError: React.PropTypes.func,
-    onChange: React.PropTypes.func
-  },
+class ImageSelect extends React.Component {
+  static propTypes = {
+    onError: PropTypes.func,
+    onChange: PropTypes.func
+  };
 
-  open() {
+  open = () => {
     this.fileInputEl.value = null
     this.fileInputEl.click()
-  },
+  };
 
-  render: function() {
+  render() {
     return (
       <div>
         <input
@@ -33,9 +34,9 @@ let ImageSelect = React.createClass({
         </IconButton>
       </div>
     )
-  },
+  }
 
-  _handleSelectFile({target}) {
+  _handleSelectFile = ({target}) => {
     let file = target.files[0]
 
     if (!accepts(file, 'image/*')) {
@@ -43,8 +44,8 @@ let ImageSelect = React.createClass({
     } else {
       this.props.onChange(file)
     }
-  }
-})
+  };
+}
 
 let styles = {
   file: {

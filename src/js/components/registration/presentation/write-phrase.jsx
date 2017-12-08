@@ -1,12 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
-import {
-  Checkbox,
-  RaisedButton,
-  FlatButton,
-  Avatar
-} from 'material-ui'
+import Checkbox from 'material-ui/Checkbox'
+import RaisedButton from 'material-ui/RaisedButton'
+import Avatar from 'material-ui/Avatar'
+
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
 
@@ -88,8 +87,8 @@ const WritePhrase = (props) => {
           Write these words down on an analog and secure place. Store it in at
           least two different places. Without these words you cannot access
           your wallet again.
-          Anyone with these words can get access to your wallet!
-          By the way! Taking a screenshot is not secure!
+          Anyone with these words can get access to your wallet.
+          Taking a screenshot is not secure.
         </SideNote>
       </Block>
       <Block style={STYLES.checkBox}>
@@ -108,29 +107,16 @@ const WritePhrase = (props) => {
           onClick={props.onSubmit}
           disabled={!props.isChecked} />
       </Block>
-      <Block>
-        <SideNote>
-          Actually, I do not want to be responsible for the storage.
-        </SideNote>
-      </Block>
-      <Block>
-
-        <FlatButton
-          label="STORE IT FOR ME"
-          style={STYLES.embeddedLink}
-          onClick={() => { props.onChange(); props.onSubmit() }} />
-
-      </Block>
     </Container>
   )
 }
 
 WritePhrase.propTypes = {
-  onToggle: React.PropTypes.func.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  value: React.PropTypes.string.isRequired,
-  isChecked: React.PropTypes.bool.isRequired
+  onToggle: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+  isChecked: PropTypes.bool.isRequired
 }
 
 export default Radium(WritePhrase)

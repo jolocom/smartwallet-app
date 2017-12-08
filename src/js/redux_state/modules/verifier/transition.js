@@ -1,13 +1,13 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 
 const dataCheckUrl = '/verifier/data'
 const faceCheckUrl = '/verifier/face'
 const resultUrl = 'verifier/result'
 const documentTypeUrl = 'verifier/document'
 
-const actions = module.exports = makeActions('wallet/contact', {
+export const actions = makeActions('wallet/contact', {
   setCurrentStep: {
     expectedParams: ['value']
   },
@@ -61,7 +61,7 @@ const initialState = Immutable.fromJS({
   currentStep: 'face'
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.setCurrentStep.id:
       return state.merge({

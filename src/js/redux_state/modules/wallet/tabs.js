@@ -1,15 +1,15 @@
-import * as _ from 'lodash'
+import invert from 'lodash/invert'
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 
 const PATHNAME_TO_TAB = {
   '/wallet/identity': 'identity',
   '/wallet/money': 'money'
 }
-const TAB_TO_PATHNAME = _.invert(PATHNAME_TO_TAB)
+const TAB_TO_PATHNAME = invert(PATHNAME_TO_TAB)
 
-const actions = module.exports = makeActions('wallet/tabs', {
+export const actions = makeActions('wallet/tabs', {
   detectActiveTab: {
     expectedParams: ['path'],
     creator: (params) => {
@@ -32,7 +32,7 @@ const initialState = Immutable.fromJS({
   activeTab: null
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.detectActiveTab.id:
       return state.merge({

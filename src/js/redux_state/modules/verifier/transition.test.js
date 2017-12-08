@@ -1,7 +1,6 @@
 import {expect} from 'chai'
-import * as transition from './transition'
-
-const reducer = require('./transition').default
+import {actions} from './transition'
+import reducer from './transition'
 
 describe('# verifier transition redux module', () => {
   describe('# Reducer ', () => {
@@ -14,7 +13,7 @@ describe('# verifier transition redux module', () => {
     it('should set isFaceMatchingId to true on setCurrentStep', () => {
       const state = reducer()
       const action = {
-        type: transition.setCurrentStep.id,
+        type: actions.setCurrentStep.id,
         value: 'test'
       }
       expect(reducer(state, action).get('currentStep')).to.equal('test')

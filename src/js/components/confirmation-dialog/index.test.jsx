@@ -52,7 +52,7 @@ describe('(Component) ConfirmationDialog', function() {
         message: 'test msg',
         primaryActionText: 'Primary Action Text',
         callback: null
-      }} close={close} />),
+      }} closeConfirmDialog={close} />),
       { context: { muiTheme: { } } }
     )
 
@@ -73,7 +73,7 @@ describe('(Component) ConfirmationDialog', function() {
         message: 'test msg',
         primaryActionText: 'Primary Action Text',
         callback: callback
-      }} close={close} />),
+      }} closeConfirmDialog={close} />),
       { context: { muiTheme: { } } }
     )
 

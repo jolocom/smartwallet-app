@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import { SmsCodeInput } from './'
@@ -30,13 +31,13 @@ const SmsInputMsg = ({
 </div>)
 
 SmsInputMsg.propTypes = {
-  smsCode: React.PropTypes.string,
-  phoneNumber: React.PropTypes.string,
-  type: React.PropTypes.string,
-  pinLength: React.PropTypes.number,
-  pinFocused: React.PropTypes.bool,
-  setFocusedPin: React.PropTypes.func,
-  changePinValue: React.PropTypes.func
+  smsCode: PropTypes.string,
+  phoneNumber: PropTypes.string,
+  type: PropTypes.string,
+  pinLength: PropTypes.number,
+  pinFocused: PropTypes.bool,
+  setFocusedPin: PropTypes.func,
+  changePinValue: PropTypes.func
 }
 
 export default Radium(SmsInputMsg)

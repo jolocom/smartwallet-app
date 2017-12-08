@@ -1,7 +1,6 @@
-import {expect} from 'chai'
-import * as document from './document'
-
-const reducer = require('./document').default
+import { expect } from 'chai'
+import { actions } from './document'
+import reducer from './document'
 
 describe('# verifier document redux module', () => {
   describe('# Reducer ', () => {
@@ -11,7 +10,7 @@ describe('# verifier document redux module', () => {
     it('should set choose document to value on chooseDocument', () => {
       const state = reducer()
       const action = {
-        type: document.chooseDocument.id,
+        type: actions.chooseDocument.id,
         value: 'idCard'
       }
       expect(reducer(state, action).toJS()).to.deep.equal({type: 'idCard'})

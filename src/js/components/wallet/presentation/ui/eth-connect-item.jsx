@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react'
-import {theme} from 'styles'
-import { RaisedButton, FlatButton } from 'material-ui'
-import {Block} from '../../../structure'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 import ReactStripeCheckout from 'react-stripe-checkout'
-import * as settings from 'settings'
+
+import {Block} from '../../../structure'
+import {theme} from 'styles'
 
 const STYLES = {
   container: {
@@ -52,10 +54,10 @@ const STYLES = {
 
 export default class EthConnectItem extends React.Component {
   static propTypes = {
-    createEthereumIdentity: React.PropTypes.func,
-    onToken: React.PropTypes.func,
-    ethereum: React.PropTypes.object,
-    confirmDialog: React.PropTypes.func
+    createEthereumIdentity: PropTypes.func,
+    onToken: PropTypes.func,
+    ethereum: PropTypes.object,
+    confirmDialog: PropTypes.func
   }
 
   connectEthereum() {
@@ -71,7 +73,7 @@ export default class EthConnectItem extends React.Component {
       return (
         <ReactStripeCheckout
           token={(token) => this.props.onToken(token)}
-          stripeKey={settings.stripe.publishableKey}
+          stripeKey={STRIPE_PUB_KEY}
           name="JOLOCOM SMARTWALLET"
           description="Add Ether to your Smart Wallet."
           image="/img/logo.png"
@@ -125,11 +127,11 @@ export default class EthConnectItem extends React.Component {
         <div>
           A blockchain is a distributed database where integrity (security
           from manipulation) is given by a timestamp and a link to the previous
-          data set. These days it is used for cryptocurrency, which means
+          data set. These days, it is used for cryptocurrency, which means
           that it is as secure as your bank account.
         </div><br />
         <div>
-          We use this technology to lock your data. So only you have access
+          We use this technology to lock your data, so only you have access
           to it.
         </div>
       </div>

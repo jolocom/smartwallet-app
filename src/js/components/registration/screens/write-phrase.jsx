@@ -1,18 +1,18 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { connect } from 'redux_state/utils'
 import Presentation from '../presentation/write-phrase'
 
 @connect({
   props: ['registration'],
-  actions: ['registration:goForward', 'registration:setUserType',
+  actions: ['registration:goForward',
     'registration:setPassphraseWrittenDown']
 })
 export default class RegistrationWritePhraseScreen extends React.Component {
   static propTypes = {
-    registration: React.PropTypes.object.isRequired,
-    setUserType: React.PropTypes.func.isRequired,
-    goForward: React.PropTypes.func.isRequired,
-    setPassphraseWrittenDown: React.PropTypes.func.isRequired
+    registration: PropTypes.object.isRequired,
+    goForward: PropTypes.func.isRequired,
+    setPassphraseWrittenDown: PropTypes.func.isRequired
   }
 
   componentDidMount() {
@@ -24,11 +24,15 @@ export default class RegistrationWritePhraseScreen extends React.Component {
       value={this.props.registration.passphrase.phrase}
       onToggle={this.props.setPassphraseWrittenDown}
       onChange={this._handleChange}
-      onSubmit={this.props.goForward}
+      onSubmit={this._handleSubmit}
       isChecked={this.props.registration.passphrase.writtenDown} />
   }
   _handleChange = () => {
-    this.props.setUserType('layman')
     this.props.setPassphraseWrittenDown(false)
+  }
+
+  _handleSubmit = () => {
+    this.props.setPassphraseWrittenDown(true)
+    this.props.goForward()
   }
 }

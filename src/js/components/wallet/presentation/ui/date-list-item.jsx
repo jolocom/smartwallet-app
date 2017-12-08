@@ -1,7 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
-import {IconButton, ListItem} from 'material-ui'
+import IconButton from 'material-ui/IconButton'
+import {ListItem} from 'material-ui/List'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import DatePicker from 'material-ui/DatePicker'
@@ -58,18 +60,18 @@ let STYLES = {
 @Radium
 export default class DateListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string,
-    icon: React.PropTypes.any,
-    iconStyle: React.PropTypes.object,
-    label: React.PropTypes.string,
-    value: React.PropTypes.string,
-    types: React.PropTypes.array,
-    children: React.PropTypes.node,
-    focused: React.PropTypes.bool,
-    onFocusChange: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onDelete: React.PropTypes.func,
-    enableDelete: React.PropTypes.bool
+    id: PropTypes.string,
+    icon: PropTypes.any,
+    iconStyle: PropTypes.object,
+    label: PropTypes.string,
+    value: PropTypes.string,
+    types: PropTypes.array,
+    children: PropTypes.node,
+    focused: PropTypes.bool,
+    onFocusChange: PropTypes.func,
+    onChange: PropTypes.func,
+    onDelete: PropTypes.func,
+    enableDelete: PropTypes.bool
   }
 
   getStyles() {

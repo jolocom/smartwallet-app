@@ -2,16 +2,17 @@
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var concat = require('gulp-concat');
+var clean = require('gulp-clean');
+var rename = require('gulp-rename');
+var eslint = require('gulp-eslint');
+
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
 var webpackConfigProduction = require('./webpack.config.production.js');
-var eslint = require('gulp-eslint');
 var fs = require('fs');
 var path = require('path');
-var concat = require('gulp-concat');
-var clean = require('gulp-clean');
-var rename = require('gulp-rename');
 
 var cordova = require('cordova-lib').cordova
 
@@ -98,7 +99,7 @@ gulp.task('build', ['webpack:build', 'html', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
-	var myConfig = setRoutesEntry(webpackConfigProduction);
+	var myConfig = setRoutesEntry(webpackConfigProduction, 'build');
 	myConfig.plugins = myConfig.plugins.concat(
 		new webpack.DefinePlugin({
 			'process.env': {
@@ -153,7 +154,7 @@ gulp.task('build:cordova', [
 ]);
 
 gulp.task('cordova:configure', function() {
-  var config = process.env.ENTRY || 'graph'
+  var config = process.env.ENTRY || 'wallet'
 
   return gulp.src('./app/' + config + '.xml')
     .pipe(rename('config.xml'))
@@ -213,7 +214,7 @@ gulp.task('cordova:add-android', ['cordova:configure'], function (callback) {
 gulp.task('release:ios', ['build:cordova', 'cordova:add-ios'], function (callback) {
   process.chdir(path.join(__dirname, 'app'));
 
-  var config = process.env.ENTRY || 'graph'
+  var config = process.env.ENTRY || 'wallet'
 
   Promise.resolve()
     .then(function() {

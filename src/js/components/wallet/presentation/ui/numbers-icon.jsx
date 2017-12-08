@@ -1,12 +1,15 @@
+import React from 'react';
+
 /* eslint-disable max-len */
-import React from 'react'
+import PropTypes from 'prop-types';
+
 import Radium from 'radium'
 
 @Radium
 export default class icon extends React.Component {
   static propTypes = {
-    style: React.PropTypes.object,
-    color: React.PropTypes.string
+    style: PropTypes.object,
+    color: PropTypes.string
   }
 
   render() {

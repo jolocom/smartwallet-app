@@ -1,6 +1,8 @@
-import * as _ from 'lodash'
+import isPlainObject from 'lodash/isPlainObject'
+import isArray from 'lodash/isArray'
+import fromPairs from 'lodash/fromPairs'
 import HTTPAgent from 'lib/agents/http'
-import * as settings from 'settings'
+// import * as settings from 'settings'
 
 export default class GatewayAgent {
   constructor(gatewayUrl) {
@@ -10,7 +12,7 @@ export default class GatewayAgent {
 
   retrieveEtherPrice() {
     return this._httpAgent.get(
-      settings.blockchain.jolocomEtherAddress +
+      // settings.blockchain.jolocomEtherAddress +
       '/exchange-rate/ether', null,
       {credentials: 'omit'}
     )
@@ -99,10 +101,10 @@ export default class GatewayAgent {
     )
   }
 
-  register({userName, seedPhrase, email, password, inviteCode}) {
+  register({userName, seedPhrase, inviteCode}) {
     return this._httpAgent.put(
       `${this._gatewayUrl}/${userName}`,
-      JSON.stringify({seedPhrase, email, password, inviteCode}),
+      JSON.stringify({seedPhrase, inviteCode}),
       {
         'Content-type': 'application/json'
       }
@@ -132,13 +134,22 @@ export default class GatewayAgent {
     )
   }
 
-  // createSolidIdentity({userName, seedPhrase}) {
-  //   return this._httpAgent.post(
-  //     `${this._gatewayUrl}/${userName}/solid/create-identity`,
-  //     JSON.stringify({seedPhrase: seedPhrase}),
-  //     {'Content-type': 'application/json'}
-  //   )
-  // }
+  checkSessionExists() {
+    const url = `${this._gatewayUrl}/proxy`
+    return this._httpAgent.head(url)
+    .then((resp) => {
+      console.log(resp)
+    })
+    .catch((e) => {
+      console.log('error', e)
+    })
+  }
+
+  logout(userName) {
+    return this._httpAgent.get(
+      `${this._gatewayUrl}/${userName}/logout`
+    )
+  }
 
   grantAccessToRequester(user, body) {
     return this._httpAgent.post(
@@ -238,7 +249,7 @@ export default class GatewayAgent {
     }
 
     let serialized
-    if (_.isPlainObject(attributeData)) {
+    if (isPlainObject(attributeData)) {
       serialized = this.serializeData(attributeData)
     } else {
       serialized = JSON.stringify(attributeData)
@@ -273,8 +284,8 @@ export default class GatewayAgent {
             let attrValue = await this._httpAgent.get(
               `${this._gatewayUrl}/${userName}/identity/${type}/${id}`
             )
-            if (_.isArray(attrValue)) {
-              attrValue = _.fromPairs(attrValue)
+            if (isArray(attrValue)) {
+              attrValue = fromPairs(attrValue)
             }
             return attrValue
           }

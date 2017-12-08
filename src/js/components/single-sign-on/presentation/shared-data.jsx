@@ -1,21 +1,20 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
-
-import { Divider, AppBar, FlatButton } from 'material-ui'
-import {NavigationArrowBack} from 'material-ui/svg-icons'
+import Divider from 'material-ui/Divider'
+import AppBar from 'material-ui/AppBar'
+import FlatButton from 'material-ui/FlatButton'
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
-import {IconIdCard, IconPassport} from '../../common'
+import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import Location from 'material-ui/svg-icons/maps/place'
-import {theme} from 'styles'
-import {Content, Block} from '../../structure'
-import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 
-import {SubMenuIcon, VerifiedItem} from './ui'
-import {
-  TabContainer,
-  HalfScreenContainer
-} from '../../wallet/presentation/ui'
+import { theme } from 'styles'
+import { IconIdCard, IconPassport } from '../../common'
+import { Content, Block } from '../../structure'
+import { SubMenuIcon, VerifiedItem } from './ui'
+import { TabContainer, HalfScreenContainer } from '../../wallet/presentation/ui'
 
 const STYLES = {
   listItem: {
@@ -70,12 +69,12 @@ const STYLES = {
 @Radium
 export default class SharedDatePresentation extends React.Component {
   static propTypes = {
-    serviceUrl: React.PropTypes.func.isRequired,
-    sharedData: React.PropTypes.array.isRequired,
-    serviceName: React.PropTypes.string.isRequired,
-    deleteService: React.PropTypes.string.isRequired,
-    goToAccessRightScreen: React.PropTypes.func.isRequired,
-    showDeleteServiceWindow: React.PropTypes.func.isRequired
+    serviceUrl: PropTypes.func.isRequired,
+    sharedData: PropTypes.array.isRequired,
+    serviceName: PropTypes.string.isRequired,
+    deleteService: PropTypes.string.isRequired,
+    goToAccessRightScreen: PropTypes.func.isRequired,
+    showDeleteServiceWindow: PropTypes.func.isRequired
   }
 
   getIcon(field) {

@@ -1,30 +1,51 @@
-import { Map } from 'immutable'
-import { action } from './'
+import Immutable from 'immutable'
+import { makeActions } from './'
 
-export const showLeftNav = action('left-nav', 'showLeftNav', {
-  expectedParams: []
-})
-export const hideLeftNav = action('left-nav', 'hideLeftNav', {
-  expectedParams: []
-})
-export const selectItem = action('left-nav', 'selectItem', {
-  expectedParams: ['value']
+export const actions = makeActions('left-nav', {
+  doLogout: {
+    expectedParams: [],
+    async: true,
+    creator: params => {
+      return (dispatch, getState, {backend, services}) => {
+        dispatch(actions.doLogout.buildAction(params, async () => {
+          return backend.gateway.logout(services.auth.currentUser.wallet.userName)
+        }))
+      }
+    }
+  },
+
+  showLeftNav: {
+    expectedParams: []
+  },
+
+  hideLeftNav: {
+    expectedParams: []
+  },
+
+  selectItem: {
+    expectedParams: ['value']
+  }
 })
 
-const initialState = new Map({
+const initialState = Immutable.fromJS({
   selected: '/wallet',
-  open: false
+  open: false,
+  loggedIn: true
 })
 
-export default function reducer(state = initialState, action = {}) {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case showLeftNav.id:
+
+    case actions.doLogout.id:
+      return state.merge({loggedIn: false})
+
+    case actions.showLeftNav.id:
       return state.merge({open: true})
 
-    case hideLeftNav.id:
+    case actions.hideLeftNav.id:
       return state.merge({open: false})
 
-    case selectItem.id:
+    case actions.selectItem.id:
       return state.merge({selected: action.value})
 
     default:

@@ -1,13 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
 import {theme} from 'styles'
 
-import {
-  ListItem,
-  FlatButton,
-  Divider
-} from 'material-ui'
+import {ListItem} from 'material-ui/List'
+import FlatButton from 'material-ui/FlatButton'
+import Divider from 'material-ui/Divider'
 
 const STYLES = {
   divider: {
@@ -56,8 +55,8 @@ const AddNew = ({value, onClick}) => {
 }
 
 AddNew.propTypes = {
-  value: React.PropTypes.any,
-  onClick: React.PropTypes.func.isRequired
+  value: PropTypes.any,
+  onClick: PropTypes.func.isRequired
 }
 
 export default Radium(AddNew)

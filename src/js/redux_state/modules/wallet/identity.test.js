@@ -1,8 +1,7 @@
 import {expect} from 'chai'
-import * as identity from './identity'
-// import * as router from '../router'
+import { actions } from './identity'
 import {stub} from '../../../../../test/utils'
-const reducer = require('./identity').default
+import reducer from './identity'
 
 describe('# Wallet identity redux module', () => {
   describe('# Reducer', () => {
@@ -46,7 +45,7 @@ describe('# Wallet identity redux module', () => {
     it('should get the user\'s information on getIdentityInformation', () => {
       let state = reducer(undefined, '@@INIT')
       const action = {
-        type: identity.actions.getIdentityInformation.id_success,
+        type: actions.getIdentityInformation.id_success,
         result: {
           webId: 'https://test.webid.jolocom.com',
           userName: 'test',
@@ -91,7 +90,7 @@ describe('# Wallet identity redux module', () => {
     it('goTo should redirect the user to the correct screen',
       () => {
         const dispatch = stub()
-        const thunk = identity.actions.goTo('contact')
+        const thunk = actions.goTo('contact')
         thunk(dispatch)
         expect(dispatch.called).to.be.true
         expect(dispatch.calls).to.deep.equal([{
@@ -115,7 +114,7 @@ describe('# Wallet identity redux module', () => {
         }
       }}
       const dispatch = stub()
-      const thunk = identity.actions.getIdentityInformation()
+      const thunk = actions.getIdentityInformation()
       thunk(dispatch, getState, {services})
       expect(dispatch.called).to.be.true
     })

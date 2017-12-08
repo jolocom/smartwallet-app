@@ -1,23 +1,25 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import { connect } from 'redux_state/utils'
 
-import { FlatButton, Dialog } from 'material-ui'
+import FlatButton from 'material-ui/FlatButton'
+import Dialog from 'material-ui/Dialog'
 
 @connect({
   props: ['simpleDialog'],
-  actions: ['simple-dialog:hideSimpleDialog']
+  actions: ['simple-dialog:hideDialog']
 })
 
 @Radium
 export default class SimpleDialog extends React.Component {
   static propTypes = {
-    hideSimpleDialog: React.PropTypes.func,
-    simpleDialog: React.PropTypes.object
+    hideDialog: PropTypes.func,
+    simpleDialog: PropTypes.object
   }
 
   _handleOK() {
-    this.props.hideSimpleDialog()
+    this.props.hideDialog()
   }
 
   parseStyle(style) {
