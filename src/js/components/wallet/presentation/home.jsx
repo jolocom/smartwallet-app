@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import {
   Container,
@@ -26,11 +26,11 @@ const STYLES = {
   walletContainer: {
     backgroundColor: '#fff',
     padding: '24px 24px 0 24px'
+  },
+  homeImg: {
+    width: '50vw',
+    maxHeight: '400px'
   }
-  // homeImg: {
-  //   width: '50vw',
-  //   maxHeight: '400px'
-  // }
 }
 
 @Radium

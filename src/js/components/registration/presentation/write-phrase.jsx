@@ -1,10 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import Checkbox from 'material-ui/Checkbox'
 import RaisedButton from 'material-ui/RaisedButton'
-import FlatButton from 'material-ui/FlatButton'
 import Avatar from 'material-ui/Avatar'
 
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
@@ -112,14 +111,6 @@ const WritePhrase = (props) => {
         <SideNote>
           Actually, I do not want to be responsible for the storage.
         </SideNote>
-      </Block>
-      <Block>
-
-        <FlatButton
-          label="STORE IT FOR ME"
-          style={STYLES.embeddedLink}
-          onClick={() => { props.onChange(); props.onSubmit() }} />
-
       </Block>
     </Container>
   )
