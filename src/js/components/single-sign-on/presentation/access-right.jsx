@@ -111,6 +111,7 @@ const SingleSignOnAccessRight = (props) => (<div>
               </IconButton>}
               disabled >
               <TextField
+                id="sharedData"
                 style={STYLES.textField}
                 onTouchTap={() => { props.showSharedData(index) }}
                 inputStyle={STYLES.input}
