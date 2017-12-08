@@ -1,7 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
-import CopyToClipboard from 'react-copy-to-clipboard'
+// import CopyToClipboard from 'react-copy-to-clipboard'
 
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
@@ -19,7 +19,8 @@ import {Content, Block} from '../../structure'
 
 import {
   PlusMenu, TabContainer, HalfScreenContainer, ContactList,
-  InfoDetails, EthConnectItem, StaticListItem
+  // InfoDetails,
+  EthConnectItem, StaticListItem
 } from './ui'
 
 const STYLES = {
@@ -57,23 +58,23 @@ const STYLES = {
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
-    changePinValue: PropTypes.func.isRequired,
-    expandField: PropTypes.func.isRequired,
-    enterVerificationCode: PropTypes.func.isRequired,
-    goTo: PropTypes.func.isRequired,
-    identity: PropTypes.object.isRequired,
-    requestVerificationCode: PropTypes.func.isRequired,
-    resendVerificationCode: PropTypes.func.isRequired,
-    requestIdCardVerification: PropTypes.func.isRequired,
-    setFocusedPin: PropTypes.func.isRequired,
-    showUserInfo: PropTypes.func.isRequired,
-    buyEther: PropTypes.func.isRequired,
-    ether: PropTypes.object,
-    createEthereumIdentity: PropTypes.func.isRequired,
-    confirmDialog: PropTypes.func.isRequired,
-    editDisplayName: PropTypes.func.isRequired,
-    setDisplayName: PropTypes.func.isRequired,
-    saveDisplayName: PropTypes.func.isRequired
+    changePinValue: React.PropTypes.func.isRequired,
+    expandField: React.PropTypes.func.isRequired,
+    enterVerificationCode: React.PropTypes.func.isRequired,
+    goTo: React.PropTypes.func.isRequired,
+    identity: React.PropTypes.object.isRequired,
+    requestVerificationCode: React.PropTypes.func.isRequired,
+    resendVerificationCode: React.PropTypes.func.isRequired,
+    requestIdCardVerification: React.PropTypes.func.isRequired,
+    setFocusedPin: React.PropTypes.func.isRequired,
+    // showUserInfo: React.PropTypes.func.isRequired,
+    buyEther: React.PropTypes.func.isRequired,
+    ether: React.PropTypes.object,
+    createEthereumIdentity: React.PropTypes.func.isRequired,
+    confirmDialog: React.PropTypes.func.isRequired,
+    editDisplayName: React.PropTypes.func.isRequired,
+    setDisplayName: React.PropTypes.func.isRequired,
+    saveDisplayName: React.PropTypes.func.isRequired
   }
 
   renderConnectEther({ ethereum, expandedFields }) {
@@ -201,20 +202,20 @@ export default class WalletIdentity extends React.Component {
         <ListItem
           key={1}
           disabled
-          rightIcon={<InfoDetails
-            showDetails={message => this.props.showUserInfo(
-              null,
-              message,
-              (<CopyToClipboard text={webId}>
-                <span>COPY WEBID</span>
-              </CopyToClipboard>),
-              () => {},
-              'ALL RIGHT',
-              STYLES.usernameWindow
-            )}
-            webId={webId}
-            username={username.value} />
-          }
+          // rightIcon={<InfoDetails
+          //   showDetails={message => this.props.showUserInfo(
+          //     null,
+          //     message,
+          //     (<CopyToClipboard text={webId}>
+          //       <span>COPY WEBID</span>
+          //     </CopyToClipboard>),
+          //     () => {},
+          //     'ALL RIGHT',
+          //     STYLES.usernameWindow
+          //   )}
+          //   webId={webId}
+          //   username={username.value} />
+          // }
           style={STYLES.listItem}>
           <TextField
             fullWidth

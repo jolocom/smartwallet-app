@@ -26,11 +26,11 @@ const STYLES = {
   walletContainer: {
     backgroundColor: '#fff',
     padding: '24px 24px 0 24px'
-  },
-  homeImg: {
-    width: '50vw',
-    maxHeight: '400px'
   }
+  // homeImg: {
+  //   width: '50vw',
+  //   maxHeight: '400px'
+  // }
 }
 
 @Radium
@@ -44,11 +44,11 @@ export default class WalletHome extends React.Component {
   render() {
     return (
       <Container style={STYLES.walletContainer}>
-        <Block>
+        {/* <Block>
           <img src="/img/illustration_wallet.svg" style={STYLES.homeImg} />
-        </Block>
+        </Block> */}
         <Block>
-          <h1 style={STYLES.greeting}>Hi {this.props.username}</h1>
+          <h1 style={STYLES.greeting}>Hi, {this.props.username}</h1>
         </Block>
         <Block>
           <SideNote style={STYLES.sideNote}>
