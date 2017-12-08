@@ -87,8 +87,8 @@ const WritePhrase = (props) => {
           Write these words down on an analog and secure place. Store it in at
           least two different places. Without these words you cannot access
           your wallet again.
-          Anyone with these words can get access to your wallet!
-          By the way! Taking a screenshot is not secure!
+          Anyone with these words can get access to your wallet.
+          Taking a screenshot is not secure.
         </SideNote>
       </Block>
       <Block style={STYLES.checkBox}>
@@ -106,11 +106,6 @@ const WritePhrase = (props) => {
           secondary
           onClick={props.onSubmit}
           disabled={!props.isChecked} />
-      </Block>
-      <Block>
-        <SideNote>
-          Actually, I do not want to be responsible for the storage.
-        </SideNote>
       </Block>
     </Container>
   )

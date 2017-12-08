@@ -127,11 +127,11 @@ export default class EthConnectItem extends React.Component {
         <div>
           A blockchain is a distributed database where integrity (security
           from manipulation) is given by a timestamp and a link to the previous
-          data set. These days it is used for cryptocurrency, which means
+          data set. These days, it is used for cryptocurrency, which means
           that it is as secure as your bank account.
         </div><br />
         <div>
-          We use this technology to lock your data. So only you have access
+          We use this technology to lock your data, so only you have access
           to it.
         </div>
       </div>
