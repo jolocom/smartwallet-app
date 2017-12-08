@@ -198,7 +198,7 @@ describe('Wallet registration Redux module', () => {
     })
 
     describe('registerWallet', () => {
-      it('should register with seedphrase', () => {
+      it('should register with seedphrase', async () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           username: {value: 'usr'},
@@ -208,22 +208,22 @@ describe('Wallet registration Redux module', () => {
         }})
         const services = {
           auth: {
-            register: stub().returnsAsync('regSeed')
+            register: stub().returnsAsync('regSeed'),
+            login: stub().returnsAsync({success: true})
           }
         }
-        withStubs([
+        await withStubs([
           [actions.actions, 'goForward', {returns: 'forward'}],
           [actions.actions.registerWallet, 'buildAction',
           {returns: 'action'}]],
-          () => {
+          async () => {
             const thunk = actions.registerWallet()
             thunk(dispatch, getState, {services})
             expect(dispatch.calledWithArgs[0]).to.equal('action')
             const registerAction = actions.actions.registerWallet
             const promise = registerAction.buildAction.calledWithArgs[1]
 
-            expect(promise(services.auth.register)).to.eventually.equal('regSeed')
-
+            await promise(services.auth.register)
             expect(services.auth.register.called).to.be.true
             expect(services.auth.register.calls)
               .to.deep.equal([{
