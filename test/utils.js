@@ -45,12 +45,10 @@ export function withStubs(stubs, func) {
       obj[key] = original[idx]
     })
   }
-
   try {
     const promise = func()
     if (promise) {
-      return promise
-        .then(() => cleanup())
+      return promise.then(() => cleanup())
         .catch((e) => {
           cleanup()
           throw e
