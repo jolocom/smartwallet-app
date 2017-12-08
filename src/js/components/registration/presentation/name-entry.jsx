@@ -67,6 +67,7 @@ const NameEntry = (props) => {
       <Content>
         <Block style={STYLES.textField}>
           <TextField
+            id="uniqueUsername"
             defaultValue={props.value}
             floatingLabelText="Unique Username"
             floatingLabelStyle={STYLES.floatingLabel}
