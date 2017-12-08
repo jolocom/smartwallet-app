@@ -44,11 +44,11 @@ export default class WalletHome extends React.Component {
   render() {
     return (
       <Container style={STYLES.walletContainer}>
-        {/* <Block>
-          <img src="/img/illustration_wallet.svg" style={STYLES.homeImg} />
-        </Block> */}
         <Block>
-          <h1 style={STYLES.greeting}>Hi, {this.props.username}</h1>
+          <img src="/img/illustration_wallet.svg" style={STYLES.homeImg} />
+        </Block>
+        <Block>
+          <h1 style={STYLES.greeting}>Hi {this.props.username}!</h1>
         </Block>
         <Block>
           <SideNote style={STYLES.sideNote}>
