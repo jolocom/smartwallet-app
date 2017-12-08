@@ -122,7 +122,6 @@ export class Wallet {
           userName: this.userName
         })
       } catch (e) {
-        console.log(e)
         displayName = [['value', '']]
       }
       const [email, phone] =
