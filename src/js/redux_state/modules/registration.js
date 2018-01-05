@@ -1,6 +1,7 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
+import { deriveMasterKeyPair } from '../key-derivation'
 import router from './router'
 import Mnemonic from 'bitcore-mnemonic'
 
@@ -93,17 +94,15 @@ export const actions = makeActions('registration', {
           // why does this only function as an async?
           const entropy = services.entropy
           let seed = new Mnemonic(entropy.getHashedEntropy(randomStringState), Mnemonic.Words.ENGLISH)
-          const masterKeyPair = seed.toHDPrivateKey()
-          console.log(masterKeyPair)
-          // possibility to pass in additional passphrase above
-          // const key2 = seed.toHDPrivateKey(seed.phrase)
+          let masterKeyPair = deriveMasterKeyPair(seed)
+          // TODO: Save masterKeyPair
           dispatch(actions.setPassphrase(seed.phrase))
-          dispatch(actions.setPassphraseWrittenDown(true))
           dispatch(actions.goForward())
         }))
       }
     }
   },
+
   setEntropyStatus: {
     expectedParams: ['sufficientEntropy', 'progress']
   },
@@ -275,6 +274,7 @@ export default (state = initialState, action = {}) => {
           errorMsg: null
         }
       })
+
     case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
 
