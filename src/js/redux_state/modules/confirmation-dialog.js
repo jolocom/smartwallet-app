@@ -27,7 +27,7 @@ const initialState = new Map({
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case actions.openConfirmDialog.id:
-      const params = actions.openConfirmDialog.getParams(action) 
+      const params = actions.openConfirmDialog.getParams(action)
       return state.merge({open: true, ...params})
     case actions.closeConfirmDialog.id:
       return state.set('open', false)

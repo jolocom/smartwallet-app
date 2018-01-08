@@ -31,6 +31,9 @@ export default combineReducers({
     accessRight: require('./modules/single-sign-on/access-right').default,
     accessRequest: require('./modules/single-sign-on/access-request').default
   }),
+  keystore: combineReducers({
+    keyStorage: require('./modules/keystore/keystorage').default
+  }),
   verification: require('./modules/verification').default,
   ethereumConnect: require('./modules/ethereum-connect').default
 })
