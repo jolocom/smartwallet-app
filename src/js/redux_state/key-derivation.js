@@ -3,15 +3,20 @@ import { Mnemonic, HDPrivateKey } from 'bitcore-lib'
 /* Returns a HDPrivateKey instance (from bitcore-lib)
    which contains both public and private keys */
 export function deriveMasterKeyPair(seed) {
-  const masterKeyPair = seed.toHDPrivateKey()
+  return seed.toHDPrivateKey()
   // possibility to pass in additional passphrase above
-  // masterkeypair can then be stored
-  return masterKeyPair
 }
 
-export function deriveGenericSigningKeys(masterPrivateKey) {
+export function derivePrivateChildKeyPair(masterPrivateKeyPair, path) {
+  return masterPrivateKeyPair.derive(path)
+}
+
+export function deriveGenericSigningKeyPair(masterPrivateKeyPair) {
   /* TODO: re-think second-level path naming (73 =>
   not a previously existing BIP) */
-  const genericSigningKey = masterPrivateKey.derive("m/73'/0'/0'")
-  return genericSigningKey
+  return derivePrivateChildKeyPair(masterPrivateKeyPair, "m/73'/0'/0'")
+}
+
+export function deriveEthereumKeyPair(masterPrivateKeyPair) {
+  return derivePrivateChildKeyPair(masterPrivateKeyPair, "m/44'/60'/0'/0/0")
 }

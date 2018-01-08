@@ -1,7 +1,7 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import { deriveMasterKeyPair, deriveGenericSigningKeys } from 'redux_state/key-derivation'
+import { deriveMasterKeyPair, deriveGenericSigningKeyPair } from 'redux_state/key-derivation'
 import router from './router'
 import Mnemonic from 'bitcore-mnemonic'
 
@@ -96,8 +96,7 @@ export const actions = makeActions('registration', {
           let seed = new Mnemonic(entropy.getHashedEntropy(randomStringState), Mnemonic.Words.ENGLISH)
           let masterKeyPair = deriveMasterKeyPair(seed)
           // TODO: Save masterKeyPair
-          let genericSigningKey = deriveGenericSigningKeys(masterKeyPair)
-          // TODO: save generic signing key
+          let genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
           dispatch(actions.setPassphrase(seed.phrase))
           dispatch(actions.goForward())
         }))
