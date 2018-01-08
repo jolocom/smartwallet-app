@@ -1,7 +1,7 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import { deriveMasterKeyPair } from '../key-derivation'
+import { deriveMasterKeyPair } from 'redux_state/key-derivation'
 import router from './router'
 import Mnemonic from 'bitcore-mnemonic'
 

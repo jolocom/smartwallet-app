@@ -76,7 +76,7 @@
   "dependencies": {
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-regenerator": "^6.22.0",
-    "bitcore": "^4.1.1",
+    "bitcore-lib": "^0.15.0",
     "bitcore-mnemonic": "^1.5.0",
     "cheerio": "^1.0.0-rc.2",
     "create-react-class": "^15.6.2",
@@ -89,6 +89,7 @@
     "material-ui": "^0.16.0",
     "material-ui-password-field": "^1.1.1",
     "moment": "^2.10.6",
+    "node-gyp": "^3.6.2",
     "qrcode.react": "^0.7.1",
     "querystring": "^0.2.0",
     "radium": "^0.18.1",
@@ -113,7 +114,8 @@
     "socket.io-client": "^2.0.3",
     "superagent": "^3.8.1",
     "superagent-es6-promise": "^1.0.0",
-    "web3": "^0.15.3"
+    "web3": "^0.15.3",
+    "zmq": "^2.15.3"
   },
   "engines": {
     "node": "^0.12"
