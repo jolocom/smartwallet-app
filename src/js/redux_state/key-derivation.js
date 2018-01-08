@@ -10,6 +10,8 @@ export function deriveMasterKeyPair(seed) {
 }
 
 export function deriveGenericSigningKeys(masterPrivateKey) {
-  const genericSigningKey = masterPrivateKey.derive("m/identity'/0'/0'")
+  /* TODO: re-think second-level path naming (73 =>
+  not a previously existing BIP) */
+  const genericSigningKey = masterPrivateKey.derive("m/73'/0'/0'")
   return genericSigningKey
 }

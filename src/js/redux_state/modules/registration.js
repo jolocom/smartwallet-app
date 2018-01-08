@@ -1,7 +1,7 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import { deriveMasterKeyPair, deriveGenericSigningKey } from 'redux_state/key-derivation'
+import { deriveMasterKeyPair, deriveGenericSigningKeys } from 'redux_state/key-derivation'
 import router from './router'
 import Mnemonic from 'bitcore-mnemonic'
 
@@ -97,7 +97,7 @@ export const actions = makeActions('registration', {
           let masterKeyPair = deriveMasterKeyPair(seed)
           // TODO: Save masterKeyPair
           let genericSigningKey = deriveGenericSigningKeys(masterKeyPair)
-          console.log(genericSigningKey, "=============================")
+          // TODO: save generic signing key
           dispatch(actions.setPassphrase(seed.phrase))
           dispatch(actions.goForward())
         }))
