@@ -68,14 +68,14 @@ export const actions = makeActions('registration', {
         ])
 
         if (entropyState) {
-          return dispatch(actions.generateSeedPhrase())
+          return dispatch(actions.generateKeyPairs())
         }
-        
+
         throw new Error('Not enough entropy!')
       }
     }
   },
-  generateSeedPhrase: {
+  generateKeyPairs: {
     expectedParams: [],
     async: true,
     creator: (params) => {
@@ -90,7 +90,7 @@ export const actions = makeActions('registration', {
           return
         }
         // eslint-disable-next-line max-len
-        dispatch(actions.generateSeedPhrase.buildAction(params, async (backend) => {
+        dispatch(actions.generateKeyPairs.buildAction(params, async (backend) => {
           // why does this only function as an async?
           const entropy = services.entropy
           let seed = new Mnemonic(entropy.getHashedEntropy(randomStringState), Mnemonic.Words.ENGLISH)
@@ -250,7 +250,7 @@ export default (state = initialState, action = {}) => {
         phrase: action.phrase
       })
 
-    case actions.generateSeedPhrase.id:
+    case actions.generateKeyPairs.id:
       return state.mergeDeep({
         passphrase: {
           generating: true,
@@ -259,7 +259,7 @@ export default (state = initialState, action = {}) => {
         }
       })
 
-    case actions.generateSeedPhrase.id_fail:
+    case actions.generateKeyPairs.id_fail:
       return state.mergeDeep({
         passphrase: {
           generating: false,
@@ -268,7 +268,7 @@ export default (state = initialState, action = {}) => {
         }
       })
 
-    case actions.generateSeedPhrase.id_success:
+    case actions.generateKeyPairs.id_success:
       return state.mergeDeep({
         passphrase: {
           generating: false,
