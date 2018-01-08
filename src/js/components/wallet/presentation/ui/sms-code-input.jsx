@@ -126,7 +126,7 @@ class SmsCodeInput extends React.Component {
       {(value.length > 0) && <div onClick={this.clearAndFocus}
         style={{
           ...STYLES.img,
-          backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
+          backgroundImage: 'url(img/ic_cancel_brown_24px.svg)'
         }} />
       }
       </div>

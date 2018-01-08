@@ -32,11 +32,24 @@
       }
     </style>
 
+    <meta http-equiv="Content-Security-Policy" content="default-src https://codepush.azurewebsites.net https://proxy.jolocom.net https://identity.jolocom.com https://fonts.gstatic.com 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src https://fonts.googleapies.com 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; media-src *; ; img-src 'self' data: content:;">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
   </head>
   <body>
     <div id="app"></div>
+
+    <script src="cordova.js"></script>
+    <script>
+      window.addEventListener('load', function() {
+        document.body.addEventListener('touchmove', function(e) {
+          e.preventDefault()
+        }, false)
+      }, false)
+      document.addEventListener('resume', function () {
+        window.codePush.sync()
+      })
+    </script>
   </body>
 </html>
