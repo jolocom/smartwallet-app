@@ -46,6 +46,7 @@ export default class EncryptionAgent {
       kdfParams.n = 262144
       kdfParams.r = 8
       kdfParams.p = 1
+
       derivedKey = scryptsy(
         Buffer.from(password),
         salt,
@@ -60,7 +61,7 @@ export default class EncryptionAgent {
   }
 
   async decryptInformation({ciphertext, password, salt, iv}) {
-    const key = await this._constructEncryptionKey((salt))
+    const key = await this._constructEncryptionKey(password, Buffer.from(salt, 'hex')) // eslint-disable-line max-len
 
     const decipher = crypto.createDecipheriv(
       'aes-128-ctr',

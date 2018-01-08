@@ -44,6 +44,7 @@ import EthApprovalRequestScreen from
 
 import {IconServices} from '../components/common'
 
+import PasswordEntry from 'components/keystore/passwordEntry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
 
 import {
@@ -138,7 +139,8 @@ function getRoutes() {
     <Route path="wallet/sso/shared-data"
       component={SingleSignOnSharedDatatScreen} />
 
-    <Route path="wallet/keystore" component={PasswordPopUp} />
+    <Route path="wallet/keyencrypt" component={PasswordEntry} />
+    <Route path="wallet/keydecrypt" component={PasswordPopUp} />
   </Route>)
 }
 

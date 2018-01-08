@@ -4,6 +4,7 @@ import {connect} from 'redux_state/utils'
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 
+import {Loading} from '../common'
 import {
   Container,
   Content,
@@ -22,7 +23,8 @@ export default class PasswordPopUp extends React.Component {
   static propTypes = {
     checkPassword: PropTypes.func.isRequired,
     decryptDataWithPassword: PropTypes.func.isRequired,
-    openConfirmDialog: PropTypes.func.isRequired
+    openConfirmDialog: PropTypes.func.isRequired,
+    keyStorage: PropTypes.object
   }
 
   showPasswordWindow() {
@@ -49,9 +51,14 @@ export default class PasswordPopUp extends React.Component {
   }
 
   render() {
-    return (
-      <Container>
-        <Content>
+    let content
+    if (this.props.keyStorage.loading) {
+      content = (
+        <Loading />
+      )
+    } else {
+      content = (
+        <div>
           <Block>
             <div>Test Password PopUp</div>
           </Block>
@@ -61,6 +68,18 @@ export default class PasswordPopUp extends React.Component {
               onClick={() => this.showPasswordWindow()}
               secondary />
           </Block>
+          <Block>
+            {this.props.keyStorage.errorMsg
+              ? <div style={{color: 'red'}}>Ooops. Something went wrong. please try one more time</div> // eslint-disable-line max-len
+              : null}
+          </Block>
+        </div>
+      )
+    }
+    return (
+      <Container>
+        <Content>
+          {content}
         </Content>
       </Container>
     )

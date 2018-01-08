@@ -5,13 +5,13 @@ export const actions = makeActions('keystore/keystorage', {
   checkPassword: {
     expectedParams: ['value', 'key']
   },
-  enryptDataWithPassword: {
+  encryptDataWithPassword: {
     expectedParams: ['data'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {backend, services}) => {
         const pass = getState().toJS().keystore.keyStorage.pass
-        dispatch(actions.enryptDataWithPassword.buildAction(params, () => {
+        dispatch(actions.encryptDataWithPassword.buildAction(params, () => {
           return backend.encryption.encryptInformation({
             password: pass,
             data: 'testingoutfunfunfun' // master key needs to be passed in
@@ -42,7 +42,6 @@ export const actions = makeActions('keystore/keystorage', {
 
 const initialState = Immutable.fromJS({
   loading: false,
-  message: 'testEncryptMessage',
   pass: '',
   passReenter: '',
   errorMsg: ''
@@ -62,18 +61,18 @@ export default (state = initialState, action = {}) => {
       }
       return state
 
-    case actions.enryptDataWithPassword.id:
+    case actions.encryptDataWithPassword.id:
       return state.mergeDeep({
         loading: true
       })
 
-    case actions.enryptDataWithPassword.id_success:
+    case actions.encryptDataWithPassword.id_success:
       window.localStorage.setItem('userData', JSON.stringify(action.result))
       return state.mergeDeep({
         loading: false
       })
 
-    case actions.enryptDataWithPassword.id_fail:
+    case actions.encryptDataWithPassword.id_fail:
       return state.mergeDeep({
         errorMsg: action.error,
         loading: false
@@ -85,13 +84,12 @@ export default (state = initialState, action = {}) => {
       })
 
     case actions.decryptDataWithPassword.id_success:
-      console.log('decryptDataWithPassword REDUCER: ', action)
+      // here plaintext message is returned
       return state.mergeDeep({
         loading: false
       })
 
     case actions.decryptDataWithPassword.id_fail:
-      console.log('decryptDataWithPassword REDUCER: ', action.error)
       return state.mergeDeep({
         errorMsg: action.error,
         loading: false
