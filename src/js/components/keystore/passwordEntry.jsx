@@ -54,9 +54,9 @@ export default class PasswordEntry extends React.Component {
         </Block>
         <Block>
           <TextField
-            key='pass'
-            floatingLabelText='Password'
-            type='password'
+            key="pass"
+            floatingLabelText="Password"
+            type="password"
             value={this.props.keyStorage.pass}
             errorText={this.props.keyStorage.pass.length > 5
               ? passwordValidityCheck(this.props.keyStorage.pass)
@@ -66,9 +66,9 @@ export default class PasswordEntry extends React.Component {
         </Block>
         <Block>
           <TextField
-            key='passReenter'
-            floatingLabelText='Repeat Password'
-            type='password'
+            key="passReenter"
+            floatingLabelText="Repeat Password"
+            type="password"
             value={this.props.keyStorage.passReenter}
             errorText={noMatchMessage.length > 0 ? noMatchMessage : null}
             onChange={(e) =>
@@ -76,7 +76,7 @@ export default class PasswordEntry extends React.Component {
         </Block>
         <Block>
           <FlatButton
-            label='Submit your password'
+            label="Submit your password"
             disabled={allowSubmit}
             onClick={() => this.props.encryptDataWithPassword()}
             secondary />

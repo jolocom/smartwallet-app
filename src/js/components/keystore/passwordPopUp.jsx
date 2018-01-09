@@ -31,9 +31,9 @@ export default class PasswordPopUp extends React.Component {
     const message = (
       <div>
         <TextField
-          key='pass'
-          floatingLabelText='Password'
-          type='password'
+          key="pass"
+          floatingLabelText="Password"
+          type="password"
           onChange={(e) =>
             this.props.checkPassword(e.target.value, 'pass')} />
       </div>
@@ -64,7 +64,7 @@ export default class PasswordPopUp extends React.Component {
           </Block>
           <Block>
             <FlatButton
-              label='Test PopUp'
+              label="Test PopUp"
               onClick={() => this.showPasswordWindow()}
               secondary />
           </Block>
