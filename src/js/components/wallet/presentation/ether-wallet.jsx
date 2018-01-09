@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import Divider from 'material-ui/Divider'
@@ -38,7 +38,6 @@ const STYLES = {
 @Radium
 export default class WalletEther extends React.Component {
   static propTypes = {
-    children: PropTypes.node,
     onToken: PropTypes.func,
     money: PropTypes.object,
     etherBalance: PropTypes.number.isRequired,

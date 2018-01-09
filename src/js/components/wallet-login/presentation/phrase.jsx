@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import IconButton from 'material-ui/IconButton'
@@ -55,7 +55,7 @@ const Passphrase = (props) => {
       <IconButton
         style={STYLES.backButton}
         onClick={props.back}>
-          <NavigationArrowBack />
+        <NavigationArrowBack />
       </IconButton>
       <Header
         image={<Avatar
@@ -68,9 +68,9 @@ const Passphrase = (props) => {
       />
       <Content>
         <Block>
-        {passphrase.failed ? <FailureMessage>
+          {passphrase.failed ? <FailureMessage>
         That passphrase doesn't match our records
-        </FailureMessage> : ''}
+          </FailureMessage> : ''}
         </Block>
         <Block>
           <TextField
@@ -115,7 +115,7 @@ const Passphrase = (props) => {
 
 Passphrase.propTypes = {
   back: PropTypes.func.isRequired,
-  canSubmit: PropTypes.bool.isRequired,
+  passphrase: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   toggleHasOwnURL: PropTypes.func.isRequired,
