@@ -34,7 +34,7 @@ export default (state = initialState, action = {}) => {
     case actions.toggleDialog.id:
       return state.set('visible', !state.getIn['visible'])
     case actions.configMsg.id:
-      return state.merge(actions.configMsg.getParams(action))
+      return state.merge(action)
     default:
       return state
   }

@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
-import { action } from './'
+import { syncAction } from './'
 
-export const showMessage = action('snack-bar', 'showMessage', {
+export const showMessage = syncAction('snack-bar', 'showMessage', {
   expectedParams: ['message'],
   creator: params => {
     const action = showMessage.buildAction(params)
@@ -14,10 +14,10 @@ export const showMessage = action('snack-bar', 'showMessage', {
   }
 })
 export const showSnackBarMessage = showMessage
-export const closeShownMessage = action('snack-bar', 'closeShownMessage', {
+export const closeShownMessage = syncAction('snack-bar', 'closeShownMessage', {
   expectedParams: ['id']
 })
-export const showMessageUndo = action('snack-bar', 'showMessageUndo', {
+export const showMessageUndo = syncAction('snack-bar', 'showMessageUndo', {
   expectedParams: ['message', 'callback'],
   creator: params => {
     return showMessage({

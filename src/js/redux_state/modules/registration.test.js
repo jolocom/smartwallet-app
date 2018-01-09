@@ -190,15 +190,9 @@ describe('Wallet registration Redux module', () => {
         const services = {entropy: {
           getHashedEntropy: stub()
         }}
-        withStubs([
-          [actions.actions, 'generateKeyPairs', {returns: ''}]],
-          () => {
-            const generate = actions.actions.generateKeyPairs
-            generate(dispatch, getState, {services})
-            expect(actions.actions.generateKeyPairs.called).to.equal(true)
-            expect(services.entropy.getHashedEntropy.called).to.equal(false)
-          }
-        )
+        const generate = actions.generateKeyPairs()
+        generate(dispatch, getState, {services})
+        expect(services.entropy.getHashedEntropy.called).to.equal(false)
       })
 
       it('should trigger generateKeyPairs if there is a random string present', () => {
@@ -209,10 +203,12 @@ describe('Wallet registration Redux module', () => {
         const services = {entropy: {
           getHashedEntropy: stub()
         }}
+        const generate = actions.generateKeyPairs()
         withStubs([
-          [actions.actions.generateKeyPairs, 'buildAction', {returns: 'generated'}]],
-          () => {
-            const generate = actions.actions.generateKeyPairs
+          [actions.actions.goForward, 'goForward', {returns: 'forward'}],
+          [actions.actions.setPassphrase, 'setPassphrase', {returns: 'forward'}],
+          [actions.actions.generateKeyPairs, 'buildAction', {returns: 'action'}]],
+          async () => {
             generate(dispatch, getState, {services})
             expect(actions.actions.generateKeyPairs.called).to.equal(true)
             expect(services.entropy.getHashedEntropy.called).to.equal(true)

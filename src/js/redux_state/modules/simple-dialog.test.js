@@ -20,9 +20,13 @@ describe('Simple dialog reducer', function() {
   describe('configSimpleDialog', function() {
     it('should correctly handle the configSimpleDialog action', function() {
       expect(reducer(reducer(undefined, '@INIT'),
-        actions.configMsg(
-        'title', 'test msg', 'Primary Action Text', {}, true
-      )).toJS()).to.deep.equal({
+        actions.configMsg({
+          title: 'title',
+          message: 'test msg',
+          primaryActionText: 'Primary Action Text',
+          style: {},
+          scrollContent: true
+        })).toJS()).to.deep.equal({
         visible: false,
         scrollContent: true,
         title: 'title',
