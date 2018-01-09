@@ -1,19 +1,12 @@
 import {expect} from 'chai'
 import { actions } from './keystorage'
-import {stub} from '../../../../../test/utils'
+// import {stub} from '../../../../../test/utils'
 const reducer = require('./keystorage').default
 
-// which tests seem logical?
-// checkPassword
-// encryptDataWithPassword
-// decryptDataWithPassword
-
-describe.only('# Keystorage redux module', () => {
+describe('# Keystorage redux module', () => {
   describe('# Reducer', () => {
-    // is this super important
     it('should initialize properly', () => {
       const state = reducer(undefined, '@@INIT')
-      // -> this is how I can get the state for the respective reducer
 
       expect(state.toJS()).to.deep.equal({
         loading: false,
@@ -24,24 +17,75 @@ describe.only('# Keystorage redux module', () => {
       })
     })
 
-    // it('should decrypt information and return ciphertext', () => {
-    //   let state = reducer(undefined, '@@INIT')
-    //   // set the password in state
-    //   const actionCheckPassword = {
-    //     type: actions.checkPassword.id,
-    //     key: 'pass',
-    //     value: 'testPasswordNatascha1'
-    //   }
-    //
-    //   state = reducer(state, actionCheckPassword)
-    //   console.log('STATE AFTER ACTION: ', state)
-    //   const password = state.toJS().pass
-    //   const actionencryptDataWithPassword = {
-    //     type: actions.encryptDataWithPassword.id_success,
-    //     result: 'xx'
-    //   }
-    //   state = reducer(state, actionencryptDataWithPassword)
-    //   console.log('STATE AFTER ENCRYPT: ', state)
-    // })
+    it('should update correct state based on key (pass/passReenter)', () => {
+      let state = reducer(undefined, '@@INIT')
+
+      const actionCheckPassword = {
+        type: actions.checkPassword.id,
+        key: 'passReenter',
+        value: 'testPasswordNatascha1'
+      }
+      state = reducer(state, actionCheckPassword)
+      const expectedState = {
+        loading: false,
+        pass: '',
+        passReenter: 'testPasswordNatascha1',
+        errorMsg: '',
+        status: ''
+      }
+      expect(state.toJS()).to.deep.equal(expectedState)
+    })
+
+    it('should encrypt information and return status OK', () => {
+      let state = reducer(undefined, '@@INIT')
+
+      const actionCheckPassword = {
+        type: actions.checkPassword.id,
+        key: 'pass',
+        value: 'testPasswordNatascha1'
+      }
+
+      state = reducer(state, actionCheckPassword)
+
+      const actionEncryptDataWithPassword = {
+        type: actions.encryptDataWithPassword.id_success,
+        result: 'test'
+      }
+      state = reducer(state, actionEncryptDataWithPassword)
+      const expectedState = {
+        loading: false,
+        pass: 'testPasswordNatascha1',
+        passReenter: '',
+        errorMsg: '',
+        status: 'OK'
+      }
+      expect(state.toJS()).to.deep.equal(expectedState)
+    })
+
+    it('should decrypt infromation and return status OK', () => {
+      let state = reducer(undefined, '@@INIT')
+
+      const actionCheckPassword = {
+        type: actions.checkPassword.id,
+        key: 'pass',
+        value: 'testPasswordNatascha1'
+      }
+
+      state = reducer(state, actionCheckPassword)
+
+      const actionDecryptDataWithPassword = {
+        type: actions.encryptDataWithPassword.id_success,
+        result: 'test'
+      }
+      state = reducer(state, actionDecryptDataWithPassword)
+      const expectedState = {
+        loading: false,
+        pass: 'testPasswordNatascha1',
+        passReenter: '',
+        errorMsg: '',
+        status: 'OK'
+      }
+      expect(state.toJS()).to.deep.equal(expectedState)
+    })
   })
 })
