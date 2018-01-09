@@ -79,7 +79,7 @@ export const actions = makeActions('registration', {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {backend, services}) => {
+      return (dispatch, getState, {services}) => {
         const randomStringState = getState().getIn([
           'registration',
           'passphrase',
@@ -90,7 +90,7 @@ export const actions = makeActions('registration', {
           return
         }
         // eslint-disable-next-line max-len
-        dispatch(actions.generateKeyPairs.buildAction(params, async (backend) => {
+        dispatch(actions.generateKeyPairs.buildAction(params, async () => {
           // why does this only function as an async?
           const entropy = services.entropy
           let seed = new Mnemonic(entropy.getHashedEntropy(randomStringState), Mnemonic.Words.ENGLISH)
