@@ -1,5 +1,6 @@
 import Immutable from 'immutable'
 import {makeActions} from '../'
+import StorageManager from '../../../lib/storage'
 
 export const actions = makeActions('keystore/keystorage', {
   checkPassword: {
@@ -16,6 +17,9 @@ export const actions = makeActions('keystore/keystorage', {
             password: pass,
             data: 'testingoutfunfunfun' // master key needs to be passed in
           })
+          .then((result) => {
+            return StorageManager.setItem('userData', JSON.stringify(result))
+          })
         }))
       }
     }
@@ -26,8 +30,9 @@ export const actions = makeActions('keystore/keystorage', {
     creator: (params) => {
       return (dispatch, getState, {backend, services}) => {
         const pass = getState().toJS().keystore.keyStorage.pass
-        dispatch(actions.decryptDataWithPassword.buildAction(params, () => {
-          const userData = JSON.parse(window.localStorage.getItem('userData'))
+        dispatch(actions.decryptDataWithPassword.buildAction(params, async () => { // eslint-disable-line max-len
+          const result = await StorageManager.getItem('userData')
+          const userData = JSON.parse(result)
           return backend.encryption.decryptInformation({
             ciphertext: userData.crypto.ciphertext,
             password: pass,
@@ -44,7 +49,8 @@ const initialState = Immutable.fromJS({
   loading: false,
   pass: '',
   passReenter: '',
-  errorMsg: ''
+  errorMsg: '',
+  status: ''
 })
 
 export default (state = initialState, action = {}) => {
@@ -63,13 +69,15 @@ export default (state = initialState, action = {}) => {
 
     case actions.encryptDataWithPassword.id:
       return state.mergeDeep({
-        loading: true
+        loading: true,
+        status: ''
       })
 
     case actions.encryptDataWithPassword.id_success:
-      window.localStorage.setItem('userData', JSON.stringify(action.result))
+    // here crypto object (JSON) is returned in action.result
       return state.mergeDeep({
-        loading: false
+        loading: false,
+        status: 'OK'
       })
 
     case actions.encryptDataWithPassword.id_fail:
@@ -80,13 +88,15 @@ export default (state = initialState, action = {}) => {
 
     case actions.decryptDataWithPassword.id:
       return state.mergeDeep({
-        loading: true
+        loading: true,
+        status: ''
       })
 
     case actions.decryptDataWithPassword.id_success:
-      // here plaintext message is returned
+      // here plaintext message is returned in action.result
       return state.mergeDeep({
-        loading: false
+        loading: false,
+        status: 'OK'
       })
 
     case actions.decryptDataWithPassword.id_fail:

@@ -19,7 +19,8 @@ describe.only('# Keystorage redux module', () => {
         loading: false,
         pass: '',
         passReenter: '',
-        errorMsg: ''
+        errorMsg: '',
+        status: ''
       })
     })
 

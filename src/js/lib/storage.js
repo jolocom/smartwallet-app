@@ -1,4 +1,4 @@
-export default storage = {
+const storage = {
   setItem: async (key, value) => {
     console.log(nativeStorageAvailable())
     if (!nativeStorageAvailable()) {
@@ -25,3 +25,5 @@ export default storage = {
 const nativeStorageAvailable = () => {
   return !!window.cordova && !!window.NativeStorage
 }
+
+export default storage
