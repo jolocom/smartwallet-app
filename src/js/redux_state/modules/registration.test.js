@@ -165,35 +165,59 @@ describe('Wallet registration Redux module', () => {
         expect(dispatch.calls).to.deep.equal([])
       })
 
-      it('should trigger generateseedphrase when there is enough entropy', () => {
+      it('should trigger generateKeyPairs when there is enough entropy', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {sufficientEntropy: true}
         }})
         withStubs([
-        [actions.actions, 'generateSeedPhrase', {returns: 'generated'}]],
+        [actions.actions, 'generateKeyPairs', {returns: 'generated'}]],
         () => {
-          const readyE = actions.submitEntropy()
+          const readyE = actions.actions.submitEntropy()
           readyE(dispatch, getState)
-          expect(dispatch.calls).to.deep.equal([{args: ['generated']}])
+          expect(actions.actions.generateKeyPairs.called).to.equal(true)
         }
       )
       })
     })
 
-    describe('generateSeedPhrase', () => {
+    describe('generateKeyPairs', () => {
       it('should not do anything is there is no randomString', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {randomString: ''}
         }})
-        const backend = {gateway: {
-          generateSeedPhrase: stub().returnsAsync('seedphrase')
+        const services = {entropy: {
+          getHashedEntropy: stub()
         }}
-        const generate = actions.actions.generateSeedPhrase
-        generate(dispatch, getState, {backend})
+        withStubs([
+          [actions.actions, 'generateKeyPairs', {returns: ''}]],
+          () => {
+            const generate = actions.actions.generateKeyPairs
+            generate(dispatch, getState, {services})
+            expect(actions.actions.generateKeyPairs.called).to.equal(true)
+            expect(services.entropy.getHashedEntropy.called).to.equal(false)
+          }
+        )
+      })
 
-        expect(backend.gateway.generateSeedPhrase.called).to.equal(false)
+      it('should trigger generateKeyPairs if there is a random string present', () => {
+        const dispatch = stub()
+        const getState = () => Immutable.fromJS({registration: {
+          passphrase: {randomString: 'dfghkjdlfgk'}
+        }})
+        const services = {entropy: {
+          getHashedEntropy: stub()
+        }}
+        withStubs([
+          [actions.actions.generateKeyPairs, 'buildAction', {returns: 'generated'}]],
+          () => {
+            const generate = actions.actions.generateKeyPairs
+            generate(dispatch, getState, {services})
+            expect(actions.actions.generateKeyPairs.called).to.equal(true)
+            expect(services.entropy.getHashedEntropy.called).to.equal(true)
+          }
+        )
       })
     })
 
