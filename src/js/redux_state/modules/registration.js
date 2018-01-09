@@ -207,6 +207,11 @@ const initialState = Immutable.fromJS({
   maskedImage: {
     uncovering: false
   },
+  keyPair: {
+    generated: false,
+    generating: false,
+    errorMsg: null
+  },
   passphrase: {
     sufficientEntropy: false,
     progress: 0,
@@ -251,7 +256,7 @@ export default (state = initialState, action = {}) => {
 
     case actions.generateKeyPairs.id:
       return state.mergeDeep({
-        passphrase: {
+        keyPair: {
           generating: true,
           generated: false,
           errorMsg: null
@@ -260,7 +265,7 @@ export default (state = initialState, action = {}) => {
 
     case actions.generateKeyPairs.id_fail:
       return state.mergeDeep({
-        passphrase: {
+        keyPair: {
           generating: false,
           generated: false,
           errorMsg: 'generating passphrase has failed'
@@ -269,7 +274,7 @@ export default (state = initialState, action = {}) => {
 
     case actions.generateKeyPairs.id_success:
       return state.mergeDeep({
-        passphrase: {
+        keyPair: {
           generating: false,
           generated: true,
           errorMsg: null
