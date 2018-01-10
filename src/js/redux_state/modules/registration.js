@@ -243,27 +243,18 @@ export default (state = initialState, action = {}) => {
         phrase: action.phrase
       })
 
-    case actions.generateKeyPairs.id:
-      return state.mergeDeep({
-        keyPair: {
-          generating: true,
-          generated: false,
-          errorMsg: null
-        }
-      })
-
     case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
 
     case actions.setPassphraseWrittenDown.id:
-    console.log(!!state.getIn(['passphrase', 'phrase']) && action.value)
-
-      return state.mergeDeep({
+      state = state.mergeDeep({
         passphrase: {
           writtenDown: action.value,
           valid: !!state.getIn(['passphrase', 'phrase']) && action.value
         }
       })
+
+      return state.set('complete', helpers._isComplete(state))
 
     case actions.registerWallet.id:
       return state.mergeDeep({

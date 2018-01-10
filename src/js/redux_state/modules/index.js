@@ -13,7 +13,8 @@ import fromPairs from 'lodash/fromPairs'
  * @param {Object} actionDefinition - a configuration object defining the
  * expected action parameters, and a custom action creator
  *
- * @returns {Object} actions - TODO
+ * @returns {Object} creator - a sync action creator with an associated ID and
+ * actionBuilder
  * 
  * @example syncAction('exampleModule', 'exampleActionName', {
      expectedParams: ['first', 'second'],
@@ -24,41 +25,61 @@ import fromPairs from 'lodash/fromPairs'
      }
    }
  */
-
 export function syncAction(moduleName, actionName, definition) {
   const id = `${moduleName}/${snakeCase(actionName).toUpperCase()}`
 
-  // Called when .buildAction is called on a function
-  // If no action creator is passed
   const actionBuilder = (actionParams) => {
-    return { type: id, actionParams }
- }
+    return { type: id, ...actionParams }
+  }
 
   const creator = definition.creator || actionBuilder 
   creator.buildAction = actionBuilder
 
-  return _enchanceCreator(creator, id, definition)
+  creator.id = id
+  return creator
 }
 
-export function asyncAction(module, prefix, options) {
-  const id = 'little-sister/' + module + '/' + snakeCase(prefix).toUpperCase()
+/* @summary - creates an async action creator
+ *
+ * @param {String} moduleName - used to generate the unique action identifier
+ * @param {String} actionName - used to generate the unique action identifier
+ * @param {Object} actionDefinition - a configuration object defining the
+ * expected action parameters, and a custom action creator
+ * @param {Object} callback - 
+ *
+ * @returns {Object} creator - an async action creator with an associated ID and
+ * actionBuilder
+ * 
+ * @example asyncAction('exampleModule', 'exampleActionName', {
+     expectedParams: ['first', 'second'],
+     creator: (params, async () => {...}) => {
+       return (dispatch, getState) => {
+         ...
+       }
+     }
+   }
+ */
+export function asyncAction(moduleName, actionName, definition) {
+  const id = `${module}/${snakeCase(actionName).toUpperCase()}`
 
-  const creator = options.creator || ((params) => {
-    return creator.buildAction(params, options.promise)
+  const actionBuilder = (actionParams, promise) => {
+    return {
+      types: [id, creator.id_success, creator.id_fail],
+      promise,
+      ...actionParams
+    }
+  }
+
+  const creator = definition.creator || ((actionParams) => { 
+    return actionBuilder(actionParams, definition.promise)
   })
 
   creator.id_success = id + '_SUCCESS'
   creator.id_fail = id + '_FAIL'
+  creator.buildAction = actionBuilder
+  creator.id = id
 
-  creator.buildAction = (params, promise) => {
-    return {
-      types: [id, creator.id_success, creator.id_fail],
-      promise: promise,
-      ...params
-    }
-  }
-
-  return _enchanceCreator(creator, id, options)
+  return creator
 }
 
 /* @summary - Mass prepares actions by delegating to appropriate creators based 
@@ -85,7 +106,6 @@ export function asyncAction(module, prefix, options) {
     }
   }
  */
-
 export function makeActions(moduleName, actionDefinitions) {
   const actions = {}
 
@@ -100,14 +120,4 @@ export function makeActions(moduleName, actionDefinitions) {
   // TODO Refactor
   actions.actions = actions
   return actions
-}
-
-function _enchanceCreator(creator, id, options) {
-  creator.getParams = (action) => {
-    return pick(action, options.expectedParams)
-  }
-
-  creator.id = id
-  creator.expectedParams = options.expectedParams
-  return creator
 }
