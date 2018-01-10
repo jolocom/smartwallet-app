@@ -113,7 +113,6 @@ const WritePhrase = (props) => {
 
 WritePhrase.propTypes = {
   onToggle: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   isChecked: PropTypes.bool.isRequired

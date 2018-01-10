@@ -1,15 +1,15 @@
 import { Map } from 'immutable'
-import { action } from '../'
+import { syncAction } from '../'
 
-export const show = action('common/dialog', 'show', {
+export const show = syncAction('common/dialog', 'show', {
   expectedParams: ['id']
 })
 export const showDialog = show
-export const hide = action('common/dialog', 'hide', {
+export const hide = syncAction('common/dialog', 'hide', {
   expectedParams: ['id']
 })
 export const hideDialog = hide
-export const toggle = action('common/dialog', 'toggle', {
+export const toggle = syncAction('common/dialog', 'toggle', {
   expectedParams: ['id']
 })
 export const toggleDialog = toggle

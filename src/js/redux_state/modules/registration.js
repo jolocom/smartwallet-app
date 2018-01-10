@@ -32,9 +32,7 @@ export const actions = makeActions('registration', {
     expectedParams: ['x', 'y'],
     creator: (params) => {
       return (dispatch, getState, {backend, services}) => {
-        if (getState().getIn(
-          ['registration', 'passphrase', 'phrase']
-        )) {
+        if (getState().getIn(['registration', 'passphrase', 'phrase'])) {
           return
         }
 
@@ -52,7 +50,7 @@ export const actions = makeActions('registration', {
 
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
-          dispatch(actions.setRandomString(randomString))
+          dispatch(actions.setRandomString({randomString}))
         }
       }
     }
@@ -75,9 +73,10 @@ export const actions = makeActions('registration', {
       }
     }
   },
+
   generateKeyPairs: {
     expectedParams: [],
-    async: true,
+    async: false,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         const randomStringState = getState().getIn([
@@ -90,16 +89,13 @@ export const actions = makeActions('registration', {
           return
         }
         // eslint-disable-next-line max-len
-        dispatch(actions.generateKeyPairs.buildAction(params, async () => {
-          // why does this only function as an async?
-          const entropy = services.entropy
-          let seed = new Mnemonic(entropy.getHashedEntropy(randomStringState), Mnemonic.Words.ENGLISH)
-          let masterKeyPair = deriveMasterKeyPair(seed)
-          // TODO: Save masterKeyPair
-          let genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
-          dispatch(actions.setPassphrase(seed.phrase))
-          dispatch(actions.goForward())
-        }))
+        const entropy = services.entropy
+        let seed = new Mnemonic(entropy.getHashedEntropy(randomStringState), Mnemonic.Words.ENGLISH)
+        let masterKeyPair = deriveMasterKeyPair(seed)
+        // TODO: Save masterKeyPair
+        let genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
+        dispatch(actions.setPassphrase({phrase: seed.phrase}))
+        dispatch(actions.goForward())
       }
     }
   },
@@ -207,18 +203,11 @@ const initialState = Immutable.fromJS({
   maskedImage: {
     uncovering: false
   },
-  keyPair: {
-    generated: false,
-    generating: false,
-    errorMsg: null
-  },
   passphrase: {
     sufficientEntropy: false,
     progress: 0,
     randomString: '',
     phrase: '',
-    generating: false,
-    generated: false,
     writtenDown: false,
     valid: false
   },
@@ -263,32 +252,16 @@ export default (state = initialState, action = {}) => {
         }
       })
 
-    case actions.generateKeyPairs.id_fail:
-      return state.mergeDeep({
-        keyPair: {
-          generating: false,
-          generated: false,
-          errorMsg: 'generating passphrase has failed'
-        }
-      })
-
-    case actions.generateKeyPairs.id_success:
-      return state.mergeDeep({
-        keyPair: {
-          generating: false,
-          generated: true,
-          errorMsg: null
-        }
-      })
-
     case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
 
     case actions.setPassphraseWrittenDown.id:
+    console.log(!!state.getIn(['passphrase', 'phrase']) && action.value)
+
       return state.mergeDeep({
         passphrase: {
           writtenDown: action.value,
-          valid: !!state.getIn('passphrase', 'phrase') && action.value
+          valid: !!state.getIn(['passphrase', 'phrase']) && action.value
         }
       })
 
@@ -390,6 +363,7 @@ export const helpers = {
   _isComplete: (state) => {
     const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
     const areFieldsValid = (fields) => every(fields, isFieldValid)
+
     return areFieldsValid(['username', 'passphrase'])
   },
   _getNextURLfromState: (state) => {

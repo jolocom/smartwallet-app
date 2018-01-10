@@ -31,7 +31,7 @@ export default class RegistrationEntropyScreen extends React.Component {
   }
 
   handleUncoveringChange = (uncovering) => {
-    this.props.setMaskedImageUncovering(uncovering)
+    this.props.setMaskedImageUncovering({value: uncovering})
 
     if (uncovering) {
       this.state.imageMask.startNewPath()

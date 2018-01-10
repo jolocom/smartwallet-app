@@ -72,7 +72,7 @@ const NameEntry = (props) => {
             floatingLabelText="Unique Username"
             floatingLabelStyle={STYLES.floatingLabel}
             inputStyle={STYLES.inputStyle}
-            onChange={(e) => props.onChange(e.target.value)}
+            onChange={(e) => props.onChange({value: e.target.value})}
             errorText={usernameCheck(props.value) || props.errorMsg} />
         </Block>
         <Block>

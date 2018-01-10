@@ -124,8 +124,10 @@ describe('# IdCard redux module', () => {
     })
     describe('# changePhysicalAddressField', () => {
       it('should return the expected params when called properly', () => {
-        const changePhysicalAddressField = actions
-        .changePhysicalAddressField('streetWithNumber', 'test')
+        const changePhysicalAddressField = actions.changePhysicalAddressField({
+          field: 'streetWithNumber',
+          value: 'test'
+        })
         expect(changePhysicalAddressField).to.deep.equal({
           type: actions.changePhysicalAddressField.id,
           value: 'test',
