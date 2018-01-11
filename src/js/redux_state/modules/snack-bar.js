@@ -40,8 +40,10 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case showMessage.id:
       return state.merge({
-        open: true, message: action.message,
-        undo: !!action.undoCallback, id: action.id,
+        open: true,
+        message: action.message,
+        undo: !!action.undoCallback,
+        id: action.id,
         undoCallback: action.undoCallback || null
       })
     case closeShownMessage.id:

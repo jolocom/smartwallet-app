@@ -1,6 +1,8 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
+// eslint-disable-next-line
 import { actions } from './simple-dialog'
+// eslint-disable-next-line
 import reducer from './simple-dialog'
 
 describe('Simple dialog reducer', function() {
@@ -27,13 +29,13 @@ describe('Simple dialog reducer', function() {
           style: {},
           scrollContent: true
         })).toJS()).to.deep.equal({
-        visible: false,
-        scrollContent: true,
-        title: 'title',
-        message: 'test msg',
-        primaryActionText: 'Primary Action Text',
-        style: {}
-      })
+          visible: false,
+          scrollContent: true,
+          title: 'title',
+          message: 'test msg',
+          primaryActionText: 'Primary Action Text',
+          style: {}
+        })
     })
   })
   describe('showSimpleDialog', function() {

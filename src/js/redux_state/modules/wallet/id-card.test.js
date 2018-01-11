@@ -1,6 +1,8 @@
 import { expect } from 'chai'
+/* eslint-disable */
 import reducer from './id-card'
 import { initialState, actions } from './id-card'
+/* eslint-enable */
 
 describe('# IdCard redux module', () => {
   describe('# Reducer', () => {
@@ -31,43 +33,59 @@ describe('# IdCard redux module', () => {
       const action = {
         type: actions.save.id
       }
+      /* eslint-disable */
       expect(reducer(initialState, action).toJS().loaded).to.be.false
       expect(reducer(initialState, action).toJS().showErrors).to.be.false
+      /* eslint-enable */
     })
     it('should set loaded and showErrors to true if save fails', () => {
       const action = {
         type: actions.save.id_fail
       }
+      /* eslint-disable */
       expect(reducer(initialState, action).toJS().showErrors).to.be.true
       expect(reducer(initialState, action).toJS().loaded).to.be.true
+      /* eslint-enable */
     })
     it('should set loaded and showErrors on save success', () => {
       const action = {
         type: actions.save.id_success
       }
+      /* eslint-disable */
       expect(reducer(initialState, action).toJS().loaded).to.be.true
       expect(reducer(initialState, action).toJS().showErrors).to.be.false
+      /* eslint-enable */
     })
     it('should set loaded to false on retrieveIdCardInformation', () => {
       const action = {
         type: actions.retrieveIdCardInformation.id
       }
+      /* eslint-disable */
       expect(reducer(initialState, action).toJS().loaded).to.be.false
+      /* eslint-enable */
     })
     it('should set loaded and showErrors to true on retrieveIdCardInformation fails', () => { // eslint-disable-line max-len
       const action = {
         type: actions.retrieveIdCardInformation.id_fail
       }
       const state = reducer(initialState, action).toJS()
+      /* eslint-disable */
       expect(state.loaded).to.be.true
       expect(state.showErrors).to.be.true
+      /* eslint-enable */
     })
     it('should set loaded to true and showErrors to false on retrieveIdCardInformation success', () => { // eslint-disable-line max-len
       const action = {
         type: actions.retrieveIdCardInformation.id_success,
         result: {
-          locations: '', number: '', expirationDate: '', firstName: '',
-          lastName: '', gender: '', birthDate: '', birthPlace: '',
+          locations: '',
+          number: '',
+          expirationDate: '',
+          firstName: '',
+          lastName: '',
+          gender: '',
+          birthDate: '',
+          birthPlace: '',
           birthCountry: '',
           physicalAddress: {
             streetWithNumber: '', zip: '', city: '', state: '', country: ''
@@ -75,8 +93,10 @@ describe('# IdCard redux module', () => {
         }
       }
       const state = reducer(initialState, action).toJS()
+      /* eslint-disable */
       expect(state.loaded).to.be.true
       expect(state.showErrors).to.be.false
+      /* eslint-enable */
     })
     it('should set showAddress on showPhysicalAddress', () => {
       const action = {
@@ -84,7 +104,9 @@ describe('# IdCard redux module', () => {
         value: true
       }
       const {showAddress} = reducer(initialState, action).toJS().idCard
+      /* eslint-disable */
       expect(showAddress).to.be.true
+      /* eslint-enable */
     })
     it('should set physicalAddress attribute on changePhysicalAddressField',
     () => {
