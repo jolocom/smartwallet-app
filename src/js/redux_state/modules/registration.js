@@ -1,7 +1,7 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import { deriveMasterKeyPair, deriveGenericSigningKeyPair } from 'redux_state/key-derivation'
+import { deriveMasterKeyPair, deriveGenericSigningKeyPair } from 'lib/key-derivation'
 import router from './router'
 import Mnemonic from 'bitcore-mnemonic'
 
@@ -65,15 +65,15 @@ export const actions = makeActions('registration', {
           'sufficientEntropy'
         ])
 
-        if (entropyState) {
-          return dispatch(actions.generateKeyPairs())
+        if (!entropyState) {
+          throw new Error('Not enough entropy!')
+          return
         }
 
-        throw new Error('Not enough entropy!')
+        return dispatch(actions.generateKeyPairs())
       }
     }
   },
-
   generateKeyPairs: {
     expectedParams: [],
     async: false,
@@ -86,15 +86,17 @@ export const actions = makeActions('registration', {
         ])
 
         if (!randomStringState) {
+          throw new Error('No seedphrase found.')
           return
         }
 
-        // eslint-disable-next-line max-len
-        const entropy = services.entropy
-        let seed = new Mnemonic(entropy.getHashedEntropy(randomStringState), Mnemonic.Words.ENGLISH)
-        let masterKeyPair = deriveMasterKeyPair(seed)
+        const hashedEntropy = services.entropy.getHashedEntropy(randomStringState)
+        const seed = new Mnemonic(hashedEntropy, Mnemonic.Words.ENGLISH)
+
         // TODO: Save masterKeyPair
-        let genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
+        const masterKeyPair = deriveMasterKeyPair(seed)
+        const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
+
         dispatch(actions.setPassphrase({phrase: seed.phrase}))
         dispatch(actions.goForward())
       }

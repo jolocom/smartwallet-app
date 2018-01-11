@@ -28,20 +28,18 @@ export default class EntropyService {
   }
 
   getHashedEntropy(randomString) {
-    let Random = bitcore.crypto.Random
-    var entBuf = Buffer.from(randomString)
-    var randBuf = Random.getRandomBuffer(256 / 8)
-    var hashedEnt = this.concatAndSha256(randBuf, entBuf).slice(0, 128 / 8)
-    return hashedEnt
+    const random = bitcore.crypto.Random
+    const entBuff = Buffer.from(randomString)
+    const randBuff = random.getRandomBuffer(256 / 8)
+    return this.concatAndSha256(randBuff, entBuff).slice(0, 128 / 8)
   }
 
   concatAndSha256(entropyBuf0, entropyBuf1) {
-    let Hash = bitcore.crypto.Hash
-    var totalEnt = Buffer.concat([entropyBuf0, entropyBuf1])
+    const hash = bitcore.crypto.Hash
+    const totalEnt = Buffer.concat([entropyBuf0, entropyBuf1])
     if (totalEnt.length !== entropyBuf0.length + entropyBuf1.length) {
-      throw new Error('generateRandomSeed: Logic error! Concatenation of entropy sources failed.')
+      throw new Error('Concatenation of entropy sources failed.')
     }
-    var hashedEnt = Hash.sha256(totalEnt)
-    return hashedEnt
+    return hash.sha256(totalEnt)
   }
 }

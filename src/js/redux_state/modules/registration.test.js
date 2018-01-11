@@ -187,12 +187,14 @@ describe('Wallet registration Redux module', () => {
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {randomString: ''}
         }})
+
         const services = {entropy: {
           getHashedEntropy: stub()
         }}
-        const generate = actions.generateKeyPairs()
-        generate(dispatch, getState, {services})
-        expect(services.entropy.getHashedEntropy.called).to.equal(false)
+
+        expect(() => {
+          actions.generateKeyPairs()(dispatch, getState, {services})
+        }).to.throw('No seedphrase found')
       })
 
       it('should trigger generateKeyPairs if there is a random string present', () => {
