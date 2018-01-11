@@ -101,9 +101,9 @@ describe('# SingleSignOn AccessRequest redux module', () => {
       expect(dispatch.called).to.be.true
       // expect(dispatch.calls[0].args[0].promise()).to.equal('PUT request OK')
       expect(dispatch.calls[0].args[0].types).to.deep.equal([
-        'little-sister/single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER',
-        'little-sister/single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER_SUCCESS', // eslint-disable-line max-len
-        'little-sister/single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER_FAIL' // eslint-disable-line max-len
+        '/single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER',
+        '/single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER_SUCCESS', // eslint-disable-line max-len
+        '/single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER_FAIL' // eslint-disable-line max-len
       ])
     })
 
@@ -118,9 +118,9 @@ describe('# SingleSignOn AccessRequest redux module', () => {
       expect(dispatch.called).to.be.true
       // expect(dispatch.calls[0].args[0].promise()).to.equal('foo')
       expect(dispatch.calls[0].args[0].types).to.deep.equal([
-        'little-sister/single-sign-on/access-request/GET_REQUESTER_IDENTITY', // eslint-disable-line max-len
-        'little-sister/single-sign-on/access-request/GET_REQUESTER_IDENTITY_SUCCESS', // eslint-disable-line max-len
-        'little-sister/single-sign-on/access-request/GET_REQUESTER_IDENTITY_FAIL' // eslint-disable-line max-len
+        '/single-sign-on/access-request/GET_REQUESTER_IDENTITY', // eslint-disable-line max-len
+        '/single-sign-on/access-request/GET_REQUESTER_IDENTITY_SUCCESS', // eslint-disable-line max-len
+        '/single-sign-on/access-request/GET_REQUESTER_IDENTITY_FAIL' // eslint-disable-line max-len
       ])
     })
   })

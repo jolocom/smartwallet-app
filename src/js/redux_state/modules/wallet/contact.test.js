@@ -21,7 +21,7 @@ describe('# Wallet contact redux module', () => {
       expect(dispatch.called).to.be.true
       expect(dispatch.calls).to.deep.equal([{
         args: [{
-          type: 'little-sister/wallet/contact/SET_RELOAD_FROM_BACKEND',
+          type: 'wallet/contact/SET_RELOAD_FROM_BACKEND',
           value: true
         }]
       }, {

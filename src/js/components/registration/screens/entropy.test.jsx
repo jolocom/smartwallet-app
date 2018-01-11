@@ -93,7 +93,7 @@ describe('(Component) RegistrationEntropyScreen', function() {
     expect(setMaskedImageUncovering.called).to.be.true
     expect(setMaskedImageUncovering.calls).to.deep.equal([{
       args: [
-        true
+        {value: true}
       ]
     }])
   })

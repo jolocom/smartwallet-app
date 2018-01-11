@@ -17,7 +17,7 @@ describe('# Wallet webcam redux module', () => {
     const onCancel = () => { return 'canceled' }
     const initiate = () => {}
     const initiatePhotoScreen = {
-      type: 'little-sister/wallet/webCam/INITIATE_PHOTO_SCREEN',
+      type: '/wallet/webCam/INITIATE_PHOTO_SCREEN',
       initiate,
       onSave,
       onCancel
@@ -44,7 +44,7 @@ describe('# Wallet webcam redux module', () => {
       onCancel
     })
     const save = {
-      type: 'little-sister/wallet/webCam/SAVE'
+      type: '/wallet/webCam/SAVE'
     }
     const { numberOfPhotos, photos } = reducer(state, save).toJS()
     expect(numberOfPhotos).to.equal(1)
@@ -52,7 +52,7 @@ describe('# Wallet webcam redux module', () => {
   })
   it('should set the number of pictures properly', () => {
     const action = {
-      type: 'little-sister/wallet/webCam/SET_NUMBER_OF_PHOTOS',
+      type: '/wallet/webCam/SET_NUMBER_OF_PHOTOS',
       value: 4
     }
 
@@ -61,7 +61,7 @@ describe('# Wallet webcam redux module', () => {
   })
   it('should add a new picture properly', () => {
     const action = {
-      type: 'little-sister/wallet/webCam/ADD_PHOTO',
+      type: '/wallet/webCam/ADD_PHOTO',
       value: 'data',
       index: 0
     }
@@ -71,7 +71,7 @@ describe('# Wallet webcam redux module', () => {
   })
   it('should delete a picture properly', () => {
     const action = {
-      type: 'little-sister/wallet/webCam/DELETE_PHOTO',
+      type: '/wallet/webCam/DELETE_PHOTO',
       index: 0
     }
     const state = Immutable.fromJS({
