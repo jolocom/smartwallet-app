@@ -197,20 +197,22 @@ describe('Wallet registration Redux module', () => {
 
       it('should trigger generateKeyPairs if there is a random string present', () => {
         const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          passphrase: {randomString: 'dfghkjdlfgk'}
-        }})
-        const services = {entropy: {
-          getHashedEntropy: stub()
-        }}
+        const getState = () => Immutable.fromJS({
+          registration: {
+            passphrase: {randomString: 'dfghkjdlfgk'}
+          }
+        })
+
+        const services = {
+          entropy: { getHashedEntropy: stub() }
+        }
+
         const generate = actions.generateKeyPairs()
         withStubs([
           [actions.actions.goForward, 'goForward', {returns: 'forward'}],
-          [actions.actions.setPassphrase, 'setPassphrase', {returns: 'forward'}],
-          [actions.actions.generateKeyPairs, 'buildAction', {returns: 'action'}]],
-          async () => {
+          [actions.actions.setPassphrase, 'setPassphrase', {returns: 'forward'}]],
+          () => {
             generate(dispatch, getState, {services})
-            expect(actions.actions.generateKeyPairs.called).to.equal(true)
             expect(services.entropy.getHashedEntropy.called).to.equal(true)
           }
         )
@@ -269,8 +271,6 @@ describe('Wallet registration Redux module', () => {
           progress: 0,
           randomString: '',
           phrase: '',
-          generating: false,
-          generated: false,
           writtenDown: false,
           valid: false
         })
@@ -288,8 +288,6 @@ describe('Wallet registration Redux module', () => {
           progress: 0.4,
           randomString: '',
           phrase: '',
-          generating: false,
-          generated: false,
           writtenDown: false,
           valid: false
         })
