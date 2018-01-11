@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 /* eslint-disable */
 import reducer from './id-card'
-import { initialState, actions, reducer } from './id-card'
+import { initialState, actions } from './id-card'
 /* eslint-enable */
 
 describe('# IdCard redux module', () => {
