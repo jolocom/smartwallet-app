@@ -21,19 +21,19 @@ describe('Confirmation dialog reducer', function() {
     it('should correctly handle the confirm action', function() {
       const callback = () => {}
       const initialState = reducer(undefined, '@INIT')
-      expect(reducer(initialState, actions.openConfirmDialog (
-        'test title',
-        'test msg',
-        'Primary Action Text',
+      expect(reducer(initialState, actions.openConfirmDialog({
+        title: 'test title',
+        message: 'test msg',
+        primaryActionText: 'Primary Action Text',
         callback
-      )).toJS()).to.deep.equal({
+      })).toJS()).to.deep.equal({
         open: true,
         title: 'test title',
         message: 'test msg',
         primaryActionText: 'Primary Action Text',
         callback,
-        cancelActionText: undefined,
-        style: undefined
+        cancelActionText: '',
+        style: {}
       })
     })
   })
