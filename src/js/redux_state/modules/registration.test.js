@@ -1,6 +1,7 @@
 /* global describe: true, it: true */
 import { expect } from 'chai'
 import Immutable from 'immutable'
+// eslint-disable-next-line
 import { actions, helpers } from './registration'
 import router from './router'
 import {stub, withStubs} from '../../../../test/utils'
@@ -43,11 +44,10 @@ describe('Wallet registration Redux module', () => {
         withStubs([
           [router, 'pushRoute', {returns: 'push'}],
           [helpers, '_getNextURLfromState', {returns: '/next/'}]], () => {
-            thunk(dispatch, getState)
-            expect(dispatch.calledWithArgs).to.deep.equal(['push'])
-            expect(router.pushRoute.calledWithArgs).to.deep.equal(['/next/'])
-          }
-        )
+          thunk(dispatch, getState)
+          expect(dispatch.calledWithArgs).to.deep.equal(['push'])
+          expect(router.pushRoute.calledWithArgs).to.deep.equal(['/next/'])
+        })
       })
     })
 
@@ -161,7 +161,7 @@ describe('Wallet registration Redux module', () => {
           passphrase: {sufficientEntropy: false}
         }})
         const readyE = actions.submitEntropy()
-
+        // eslint-disable-next-line
         expect(() => { readyE(dispatch, getState) }).to.throw('Not enough entropy!')
         expect(dispatch.calls).to.deep.equal([])
       })
@@ -197,7 +197,7 @@ describe('Wallet registration Redux module', () => {
           actions.generateKeyPairs()(dispatch, getState, {services})
         }).to.throw('No seedphrase found')
       })
-
+      // eslint-disable-next-line
       it('should trigger generateKeyPairs if there is a random string present', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({
@@ -213,6 +213,7 @@ describe('Wallet registration Redux module', () => {
         const generate = actions.generateKeyPairs()
         withStubs([
           [actions.actions.goForward, 'goForward', {returns: 'forward'}],
+          // eslint-disable-next-line
           [actions.actions.setPassphrase, 'setPassphrase', {returns: 'forward'}]],
           () => {
             generate(dispatch, getState, {services})

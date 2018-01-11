@@ -1,5 +1,6 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
+// eslint-disable-next-line
 import { actions } from './simple-dialog'
 // eslint-disable-next-line
 import reducer from './simple-dialog'

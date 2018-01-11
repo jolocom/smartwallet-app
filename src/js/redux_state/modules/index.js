@@ -83,7 +83,7 @@ export function asyncAction(moduleName, actionName, definition) {
  * expected action parameters, whether it's async or not, and a custom action
  * creator
  *
- * @returns {Object} actions -  action names as keys, the action creator as a 
+ * @returns {Object} actions -  action names as keys, the action creator as a
  * value, and a circular reference to itself
  * * @example makeActions('exampleModule', {
     exampleAction: {

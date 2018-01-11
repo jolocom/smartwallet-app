@@ -70,7 +70,6 @@ export const actions = makeActions('registration', {
 
         if (!entropyState) {
           throw new Error('Not enough entropy!')
-          return
         }
 
         return dispatch(actions.generateKeyPairs())
@@ -90,7 +89,6 @@ export const actions = makeActions('registration', {
 
         if (!randomStringState) {
           throw new Error('No seedphrase found.')
-          return
         }
 
         const hashedEnt = services.entropy.getHashedEntropy(randomStringState)
