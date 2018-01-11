@@ -1,5 +1,6 @@
 import { Map } from 'immutable'
 import { makeActions } from './'
+import pickBy from 'lodash/pickBy'
 
 export const actions = makeActions('confirmation-dialog', {
   openConfirmDialog: {
@@ -27,8 +28,8 @@ const initialState = new Map({
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case actions.openConfirmDialog.id:
-      const params = actions.openConfirmDialog.getParams(action)
-      return state.merge({open: true, ...params})
+      const actionArgs = pickBy(action, (value, key) => key !== 'type')
+      return state.merge({open: true}, actionArgs)
     case actions.closeConfirmDialog.id:
       return state.set('open', false)
     default:

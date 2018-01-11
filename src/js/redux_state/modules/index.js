@@ -60,7 +60,7 @@ export function syncAction(moduleName, actionName, definition) {
    }
  */
 export function asyncAction(moduleName, actionName, definition) {
-  const id = `${module}/${snakeCase(actionName).toUpperCase()}`
+  const id = `${moduleName}/${snakeCase(actionName).toUpperCase()}`
 
   const actionBuilder = (actionParams, promise) => {
     return {

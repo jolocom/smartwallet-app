@@ -28,7 +28,7 @@ export const actions = makeActions('wallet/contact', {
           () => submitChanges(backend, services, information, webId)
           )).then(() => {
             dispatch(router.pushRoute(callback))
-            dispatch(actions.setReloadFromBackend(true))
+            dispatch(actions.setReloadFromBackend({value: true}))
           })
         }
       }
@@ -42,7 +42,7 @@ export const actions = makeActions('wallet/contact', {
     creator: (params) => {
       return (dispatch, getState) => {
         const {callback} = getState().toJS().wallet.contact
-        dispatch(actions.setReloadFromBackend(true))
+        dispatch(actions.setReloadFromBackend({value: true}))
         dispatch(router.pushRoute(callback))
       }
     }

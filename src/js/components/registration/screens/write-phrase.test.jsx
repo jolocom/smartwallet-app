@@ -58,34 +58,7 @@ describe('(Component) RegistrationWritePhraseScreen', function() {
 
     wrapper.find('WritePhrase').props().onToggle('test')
     expect(setPassphraseWrittenDown.called).to.be.true
-    expect(setPassphraseWrittenDown.calls).to.deep.equal([{'args': ['test']}])
-  })
-  it('should call setPassphraseWrittenDown onChange with proper params',
-  function() {
-    const setPassphraseWrittenDown = stub()
-    const wrapper = shallow(
-      (<RegistrationWritePhraseScreen.WrappedComponent {
-        ...RegistrationWritePhraseScreen.mapStateToProps(Immutable.fromJS({
-          registration: {
-            passphrase: {
-              sufficientEntropy: false,
-              progress: 0,
-              randomString: '',
-              phrase: '',
-              writtenDown: false,
-              valid: false
-            }
-          }
-        }))
-      }
-        goForward={() => {}}
-        setPassphraseWrittenDown={setPassphraseWrittenDown}
-    />),
-      { context: { muiTheme: { } } }
-    )
-    wrapper.find('WritePhrase').props().onChange()
-    expect(setPassphraseWrittenDown.called).to.be.true
-    expect(setPassphraseWrittenDown.calls).to.deep.equal([{'args': [false]}])
+    expect(setPassphraseWrittenDown.calls).to.deep.equal([{'args': [{value: 'test'}]}])
   })
   it('should call goForward onSubmit', function() {
     const goForward = stub()

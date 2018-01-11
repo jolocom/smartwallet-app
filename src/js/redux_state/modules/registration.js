@@ -85,9 +85,10 @@ export const actions = makeActions('registration', {
           'randomString'
         ])
 
-        if (randomStringState === '') {
+        if (!randomStringState) {
           return
         }
+
         // eslint-disable-next-line max-len
         const entropy = services.entropy
         let seed = new Mnemonic(entropy.getHashedEntropy(randomStringState), Mnemonic.Words.ENGLISH)
@@ -314,11 +315,6 @@ export default (state = initialState, action = {}) => {
           errorMsg: action.error.message
         }
       })
-
-    // case actions.setInviteCode.id:
-    //   return state.merge({
-    //     inviteCode: action.code
-    //   })
 
     case actions.toggleHasOwnURL.id:
       return state.mergeIn(['ownURL'], {
