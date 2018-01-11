@@ -1,5 +1,6 @@
 import { Map } from 'immutable'
 import { makeActions } from './'
+import pickBy from 'lodash/pickBy'
 
 export const actions = makeActions('simple-dialog', {
   configMsg: {
@@ -34,7 +35,9 @@ export default (state = initialState, action = {}) => {
     case actions.toggleDialog.id:
       return state.set('visible', !state.getIn['visible'])
     case actions.configMsg.id:
-      return state.merge(action)
+      // TODO make more elegant.
+      const actionArgs = pickBy(action, (value, key) => key !== 'type')
+      return state.merge(actionArgs)
     default:
       return state
   }
