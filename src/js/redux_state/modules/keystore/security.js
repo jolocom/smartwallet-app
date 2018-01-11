@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import {makeActions} from '../'
-import StorageManager from '../../../lib/storage'
+import StorageManager from 'lib/storage'
 
 export const actions = makeActions('keystore/security', {
   checkPassword: {
