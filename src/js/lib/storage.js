@@ -1,6 +1,5 @@
 const storage = {
   setItem: async (key, value) => {
-    console.log(nativeStorageAvailable()) // eslint-disable-line no-console
     if (!nativeStorageAvailable()) {
       localStorage.setItem(key, value)
       return Promise.resolve(value)

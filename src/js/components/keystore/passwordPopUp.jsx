@@ -12,9 +12,9 @@ import {
 } from '../structure'
 
 @connect({
-  props: ['keystore.keyStorage'],
-  actions: ['keystore/keystorage:checkPassword',
-    'keystore/keystorage:decryptDataWithPassword',
+  props: ['keystore.security'],
+  actions: ['keystore/security:checkPassword',
+    'keystore/security:decryptDataWithPassword',
     'confirmation-dialog:openConfirmDialog'
   ]
 })
@@ -24,7 +24,7 @@ export default class PasswordPopUp extends React.Component {
     checkPassword: PropTypes.func.isRequired,
     decryptDataWithPassword: PropTypes.func.isRequired,
     openConfirmDialog: PropTypes.func.isRequired,
-    keyStorage: PropTypes.object
+    security: PropTypes.object
   }
 
   showPasswordWindow() {
@@ -52,7 +52,7 @@ export default class PasswordPopUp extends React.Component {
 
   render() {
     let content
-    if (this.props.keyStorage.loading) {
+    if (this.props.security.loading) {
       content = (
         <Loading />
       )
@@ -69,7 +69,7 @@ export default class PasswordPopUp extends React.Component {
               secondary />
           </Block>
           <Block>
-            {this.props.keyStorage.errorMsg
+            {this.props.security.errorMsg
               ? <div style={{color: 'red'}}>Ooops. Something went wrong. please try one more time</div> // eslint-disable-line max-len
               : null}
           </Block>

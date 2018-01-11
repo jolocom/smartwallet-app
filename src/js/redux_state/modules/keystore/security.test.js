@@ -1,9 +1,8 @@
 import {expect} from 'chai'
-import { actions } from './keystorage'
-// import {stub} from '../../../../../test/utils'
-const reducer = require('./keystorage').default
+import { actions } from './security'
+const reducer = require('./security').default
 
-describe('# Keystorage redux module', () => {
+describe('# Security redux module', () => {
   describe('# Reducer', () => {
     it('should initialize properly', () => {
       const state = reducer(undefined, '@@INIT')

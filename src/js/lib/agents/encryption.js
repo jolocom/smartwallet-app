@@ -2,8 +2,9 @@ const crypto = require('crypto')
 const scryptsy = require('scryptsy')
 
 export default class EncryptionAgent {
-  // constructor() {
-  // }
+  // encryption / decryption works in two steps
+  // 1st step: derive a strong key from user password
+  // 2nd step: encrypt / decrypt information with derived key
 
   async encryptInformation({password, data}) {
     const salt = crypto.randomBytes(32)
@@ -43,9 +44,9 @@ export default class EncryptionAgent {
         dervationKeyLength: 32, // suitable for a 256 bit aes key
         salt: salt.toString('hex')
       }
-      kdfParams.n = 262144
-      kdfParams.r = 8
-      kdfParams.p = 1
+      kdfParams.n = 262144 // number of iterations
+      kdfParams.r = 8 // memory factor
+      kdfParams.p = 1 // parallelization factor
 
       derivedKey = scryptsy(
         Buffer.from(password),
