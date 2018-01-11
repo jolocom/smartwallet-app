@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import MaskedImage from './masked-image'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -8,11 +8,11 @@ import {Container, Footer} from '../../structure'
 
 import {theme} from 'styles'
 
-const IMAGE_DATA_URL = '/img/entropy.jpg'
+const IMAGE_DATA_URL = 'img/entropy.jpg'
 
 const STYLES = {
   container: {
-    backgroundImage: 'url(/img/img_seedcreation.svg)',
+    backgroundImage: 'url(img/img_seedcreation.svg)',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     position: 'relative',

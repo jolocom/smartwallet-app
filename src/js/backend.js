@@ -1,5 +1,6 @@
 import VerificationAgent from 'lib/agents/verification'
 import GatewayAgent from 'lib/agents/gateway'
+import EncryptionAgent from 'lib/agents/encryption'
 
 export default class Backend {
   constructor(gatewayUrl) {
@@ -20,5 +21,9 @@ export default class Backend {
 
   get verification() {
     return new VerificationAgent()
+  }
+
+  get encryption() {
+    return new EncryptionAgent()
   }
 }

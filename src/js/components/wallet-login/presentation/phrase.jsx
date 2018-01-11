@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import IconButton from 'material-ui/IconButton'
@@ -8,6 +8,7 @@ import Avatar from 'material-ui/Avatar'
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more'
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less'
 
@@ -53,14 +54,13 @@ const Passphrase = (props) => {
     <Container>
       <IconButton
         style={STYLES.backButton}
-        onClick={props.back}
-        iconClassName="material-icons">
-          arrow_back
+        onClick={props.back}>
+        <NavigationArrowBack />
       </IconButton>
       <Header
         image={<Avatar
           style={STYLES.avatar}
-          src="/img/img_techguy.svg"
+          src="img/img_techguy.svg"
           size={60} />}
         title={
           <div>Welcome back! <br /> Please enter your secure passphrase.</div>
@@ -68,9 +68,9 @@ const Passphrase = (props) => {
       />
       <Content>
         <Block>
-        {passphrase.failed ? <FailureMessage>
+          {passphrase.failed ? <FailureMessage>
         That passphrase doesn't match our records
-        </FailureMessage> : ''}
+          </FailureMessage> : ''}
         </Block>
         <Block>
           <TextField
@@ -115,7 +115,7 @@ const Passphrase = (props) => {
 
 Passphrase.propTypes = {
   back: PropTypes.func.isRequired,
-  canSubmit: PropTypes.bool.isRequired,
+  passphrase: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   toggleHasOwnURL: PropTypes.func.isRequired,

@@ -27,7 +27,7 @@ export function action(module, name, options) {
 
     let params
     if (!hasParamsObject) {
-      params = fromPairs(options.expectedParams.map((key, idx) => 
+      params = fromPairs(options.expectedParams.map((key, idx) =>
         [key, args[idx]]
       ))
     } else {
@@ -64,7 +64,7 @@ export function asyncAction(module, prefix, options) {
 
 export function makeActions(module, defs) {
   const actions = fromPairs(map(defs, (def, name) => {
-    const actionType = def.async 
+    const actionType = def.async
       ? asyncAction
       : action
     return [name, actionType(module, name, def)]

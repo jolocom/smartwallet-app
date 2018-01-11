@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import RaisedButton from 'material-ui/RaisedButton'
@@ -179,14 +179,15 @@ class Index extends React.Component {
           style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.logoImg, {
-              backgroundImage: 'url(/img/logo_start.svg)'
+              backgroundImage: 'url(img/logo_start.svg)'
             })} />
           </div>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-01.svg)'
             })} />
-            <Header title="Create an independent and secure digital identity." />
+            <Header
+              title="Create an independent and secure digital identity." />
             <SideNote>
               Collect your data at a secure place.
               It’s yours, so only you own it!
@@ -217,7 +218,8 @@ class Index extends React.Component {
               backgroundImage: 'url(img/img_onboarding-04.svg)'
             })} />
             <Header
-              title="Our Wallet keeps your data as safe as your bank account." />
+              title={'Our Wallet keeps your data as safe' +
+              ' as your bank account.'} />
             <SideNote>
               We use the latest encryption technology and
               <span style={styles.embeddedLink}
@@ -234,7 +236,8 @@ class Index extends React.Component {
             })} />
             <Header
               style={{marginTop: '0'}}
-              title="Security is hard to maintain, that's why the storage costs." />
+              title={'Security is hard to ' +
+                'maintain, that is why the storage costs.'} />
             <SideNote>
               The storage of your data is payed
               in ether, a webbased currency. But only the

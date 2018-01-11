@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import { theme } from 'styles'
 
@@ -123,11 +123,11 @@ class SmsCodeInput extends React.Component {
         </div>
       ))}
       <div style={STYLES.clear}>
-      {(value.length > 0) && <div onClick={this.clearAndFocus}
-        style={{
-          ...STYLES.img,
-          backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
-        }} />
+        {(value.length > 0) && <div onClick={this.clearAndFocus}
+          style={{
+            ...STYLES.img,
+            backgroundImage: 'url(img/ic_cancel_brown_24px.svg)'
+          }} />
       }
       </div>
       <div>
