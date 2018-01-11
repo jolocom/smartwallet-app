@@ -7,7 +7,7 @@ const reducer = require('./wallet-login').default
 describe('Wallet login Redux module', function() {
   describe('setPassphrase', () => {
     it('should return the correct value', () => {
-      const action = actions.setPassphrase('test')
+      const action = actions.setPassphrase({value: 'test'})
       expect(action.value).to.equal('test')
     })
   })
@@ -42,7 +42,7 @@ describe('Wallet login Redux module', function() {
     describe('#setPassphrase', () => {
       it('should be able to set the passphrase value to a valid value', () => {
         const state = reducer(undefined, '@@INIT')
-        const newState = reducer(state, actions.setPassphrase('Test'))
+        const newState = reducer(state, actions.setPassphrase({value: 'Test'}))
         expect(newState.toJS().passphrase.value).to.equal('Test')
         expect(newState.toJS().passphrase.valid).to.be.true
       })
@@ -52,7 +52,7 @@ describe('Wallet login Redux module', function() {
         () => {
           const phraseState = reducer(
             undefined,
-            actions.setPassphrase('test')
+            actions.setPassphrase({value: 'test'})
           )
           const newState = reducer(phraseState, {
             type: actions.goForward.success
