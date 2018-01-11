@@ -14,15 +14,22 @@ describe('Wallet login Redux module', function() {
   describe('resetPassphrase', () => {
     it('should return the correct value', () => {
       const action = actions.resetPassphrase()
+      /* eslint-disable */
       expect(action.value).to.be.empty
+      /* eslint-enable */
     })
   })
   describe('#Reducer', () => {
     it('should initialize properly', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal({
-        passphrase: {value: '', failed: false, valid: false, errorMsg: '',
-          hasOwnURL: false, valueOwnURL: ''},
+        passphrase: {value: '',
+          failed: false,
+          valid: false,
+          errorMsg: '',
+          hasOwnURL: false,
+          valueOwnURL: ''
+        },
         login: {
           errorMsg: null,
           failed: false,
@@ -44,7 +51,9 @@ describe('Wallet login Redux module', function() {
         const state = reducer(undefined, '@@INIT')
         const newState = reducer(state, actions.setPassphrase({value: 'Test'}))
         expect(newState.toJS().passphrase.value).to.equal('Test')
+        /* eslint-disable */
         expect(newState.toJS().passphrase.valid).to.be.true
+        /* eslint-enable */
       })
     })
     describe('#goForward', () => {
@@ -58,8 +67,10 @@ describe('Wallet login Redux module', function() {
             type: actions.goForward.success
           })
           expect(newState.toJS().passphrase.errorMsg).to.equal('')
+          /* eslint-disable */
           expect(newState.toJS().passphrase.valid).to.be.true
           expect(newState.toJS().passphrase.failed).to.be.false
+          /* eslint-enable */
         }
       )
       it('should update passphrase attributes when goForward fails',
@@ -71,8 +82,10 @@ describe('Wallet login Redux module', function() {
         })
         expect(newState.toJS().login.errorMsg)
         .to.equal('Address for your private space cannot be reached. Please double check.') // eslint-disable-line max-len
+        /* eslint-disable */
         expect(newState.toJS().login.valid).to.be.false
         expect(newState.toJS().login.failed).to.be.true
+        /* eslint-enable */
       })
     })
     describe('goToLogin', () => {
@@ -80,7 +93,9 @@ describe('Wallet login Redux module', function() {
         const dispatch = stub()
         const thunk = actions.goToLogin()
         thunk(dispatch)
+        /* eslint-disable */
         expect(dispatch.called).to.be.true
+        /* eslint-enable */
         expect(dispatch.calls).to.deep.equal([{
           args: [{
             payload: {

@@ -1,8 +1,10 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
+/* eslint-disable */
 import { actions }  from './contact'
 import {stub} from '../../../../../test/utils'
 import reducer from './contact'
+/* eslint-enable */
 
 describe('# Wallet contact redux module', () => {
   describe('# Reducer ', () => {
@@ -18,7 +20,9 @@ describe('# Wallet contact redux module', () => {
       })
       const action = actions.exitWithoutSaving()
       action(dispatch, getState)
+      /* eslint-disable */
       expect(dispatch.called).to.be.true
+      /* eslint-enable */
       expect(dispatch.calls).to.deep.equal([{
         args: [{
           type: 'wallet/contact/SET_RELOAD_FROM_BACKEND',
@@ -49,7 +53,9 @@ describe('# Wallet contact redux module', () => {
         }
       }
       state = reducer(state, action)
+      /* eslint-disable */
       expect(state.toJS().loading).to.be.false
+      /* eslint-enable */
     })
     it('saveChanges should display a spinner while saving Information',
     () => {
@@ -60,14 +66,18 @@ describe('# Wallet contact redux module', () => {
         }
       }
       state = reducer(state, action1)
+      /* eslint-disable */
       expect(state.toJS().loading).to.be.true
+      /* eslint-enable */
       const action = {
         type: actions.saveChanges.id_success,
         result: {
         }
       }
       state = reducer(state, action)
+      /* eslint-disable */
       expect(state.toJS().loading).to.be.false
+      /* eslint-enable */
     })
     describe('# Email', () => {
       it('addNewEntry should add a new field to the emails array', () => {
@@ -104,8 +114,10 @@ describe('# Wallet contact redux module', () => {
           index: 0
         }
         state = reducer(state, action)
+        /* eslint-disable */
         expect(state.toJS().information.newInformation.emails[0].delete)
         .to.be.true
+        /* eslint-enable */
       })
       it('setInformation should change a new field value', () => {
         let state = Immutable.fromJS({
@@ -131,8 +143,11 @@ describe('# Wallet contact redux module', () => {
         let state = Immutable.fromJS({
           information: {
             originalInformation: {
-              emails: [{value: 'a@example.com', valid: true, delete: false,
-                update: false, verified: false}]
+              emails: [{value: 'a@example.com',
+                valid: true,
+                delete: false,
+                update: false,
+                verified: false}]
             }
           }
         })
@@ -145,16 +160,21 @@ describe('# Wallet contact redux module', () => {
         state = reducer(state, action)
         expect(state.toJS().information.originalInformation.emails[0].value)
         .to.equal('test')
+        /* eslint-disable */
         expect(state.toJS().information.originalInformation.emails[0].update)
         .to.be.true
+        /* eslint-enable */
       })
       it('updateInformation should not change a verified original emails ' +
       'field value', () => {
         let oldState = Immutable.fromJS({
           information: {
             originalInformation: {
-              emails: [{value: 'a@example.com', valid: true, delete: false,
-                update: false, verified: true}]
+              emails: [{value: 'a@example.com',
+                valid: true,
+                delete: false,
+                update: false,
+                verified: true}]
             }
           }
         })
@@ -218,8 +238,10 @@ describe('# Wallet contact redux module', () => {
           index: 0
         }
         state = reducer(state, action)
+        /* eslint-disable */
         expect(state.toJS().information.newInformation.phones[0].delete)
         .to.be.true
+        /* eslint-enable */
       })
       it('setInformation should change a new field value',
       () => {

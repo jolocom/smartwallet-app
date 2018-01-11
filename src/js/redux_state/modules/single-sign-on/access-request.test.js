@@ -98,9 +98,10 @@ describe('# SingleSignOn AccessRequest redux module', () => {
       }}
       const thunk = actions.actions.grantAccessToRequester()
       thunk(dispatch, getState, {backend})
+      /* eslint-disable */
       expect(dispatch.called).to.be.true
+      /* eslint-enable */
       // expect(dispatch.calls[0].args[0].promise()).to.equal('PUT request OK')
-      console.log(dispatch.calls[0].args[0].types)
       expect(dispatch.calls[0].args[0].types).to.deep.equal([
         'single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER',
         'single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER_SUCCESS', // eslint-disable-line max-len
@@ -116,7 +117,9 @@ describe('# SingleSignOn AccessRequest redux module', () => {
       }}
       const thunk = actions.getRequesterIdentity()
       thunk(dispatch, getState, {backend})
+      /* eslint-disable */
       expect(dispatch.called).to.be.true
+      /* eslint-enable */
       // expect(dispatch.calls[0].args[0].promise()).to.equal('foo')
       expect(dispatch.calls[0].args[0].types).to.deep.equal([
         'single-sign-on/access-request/GET_REQUESTER_IDENTITY', // eslint-disable-line max-len
