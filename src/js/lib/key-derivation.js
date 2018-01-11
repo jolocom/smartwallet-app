@@ -1,5 +1,3 @@
-import { Mnemonic, HDPrivateKey } from 'bitcore-lib'
-
 /* @summary - Generates a keypair based on provided entropy
  *
  * @param {Mnemonic} seed - a Bitcore-Mnemonic generated from hashed entropy.
@@ -24,7 +22,7 @@ export function derivePrivateChildKeyPair(masterPrivateKeyPair, path) {
 */
 
 export function deriveGenericSigningKeyPair(masterPrivateKeyPair) {
-  return derivePrivateChildKeyPair(masterPrivateKeyPair, "m/73'/0'/0'")
+  return derivePrivateChildKeyPair(masterPrivateKeyPair, 'm/73\'/0\'/0\'')
 }
 
 /* @summary - Generate an Ethereum keypair according to goo.gl/sr5dvy
@@ -37,5 +35,5 @@ export function deriveGenericSigningKeyPair(masterPrivateKeyPair) {
 */
 
 export function deriveEthereumKeyPair(masterPrivateKeyPair) {
-  return derivePrivateChildKeyPair(masterPrivateKeyPair, "m/44'/60'/0'/0/0")
+  return derivePrivateChildKeyPair(masterPrivateKeyPair, 'm/44\'/60\'/0\'/0/0')
 }

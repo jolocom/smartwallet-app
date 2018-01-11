@@ -1,7 +1,10 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import { deriveMasterKeyPair, deriveGenericSigningKeyPair } from 'lib/key-derivation'
+import {
+  deriveMasterKeyPair,
+  deriveGenericSigningKeyPair
+} from 'lib/key-derivation'
 import router from './router'
 import Mnemonic from 'bitcore-mnemonic'
 
@@ -90,11 +93,12 @@ export const actions = makeActions('registration', {
           return
         }
 
-        const hashedEntropy = services.entropy.getHashedEntropy(randomStringState)
-        const seed = new Mnemonic(hashedEntropy, Mnemonic.Words.ENGLISH)
+        const hashedEnt = services.entropy.getHashedEntropy(randomStringState)
+        const seed = new Mnemonic(hashedEnt, Mnemonic.Words.ENGLISH)
 
         // TODO: Save masterKeyPair
         const masterKeyPair = deriveMasterKeyPair(seed)
+        // eslint-disable-next-line
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
 
         dispatch(actions.setPassphrase({phrase: seed.phrase}))
@@ -225,9 +229,7 @@ const initialState = Immutable.fromJS({
 
 export default (state = initialState, action = {}) => {
   state = state.set('complete', helpers._isComplete(state))
-
   switch (action.type) {
-
     case actions.setEntropyStatus.id:
       return state.mergeDeep({
         passphrase: {

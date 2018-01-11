@@ -30,9 +30,11 @@ describe('(Component) RegistrationEntropyScreen', function() {
       { context: { muiTheme: { } } }
     )
 
+    /* eslint-disable */
     expect(wrapper.find('Entropy').prop('valid')).to.be.false
     expect(wrapper.find('Entropy').prop('imageUncovering')).to.be.false
     expect(wrapper.find('Entropy').prop('user')).to.equal('xyz')
+    /* eslint-enable */
   })
   it('should call submitEntropy onSubmit with the right params', function() {
     const submitEntropy = stub()
@@ -60,8 +62,10 @@ describe('(Component) RegistrationEntropyScreen', function() {
     )
 
     wrapper.find('Entropy').props().onSubmit()
+    /* eslint-disable */
     expect(submitEntropy.called).to.be.true
     expect(submitEntropy.calls).to.deep.equal([{'args': []}])
+    /* eslint-enable */
   })
   it('should call setMaskedImageUncovering onImageUncoveringChange ' +
     'with the right params', function() {
@@ -90,11 +94,13 @@ describe('(Component) RegistrationEntropyScreen', function() {
     )
 
     wrapper.find('Entropy').props().onImageUncoveringChange(true)
+    /* eslint-disable */
     expect(setMaskedImageUncovering.called).to.be.true
     expect(setMaskedImageUncovering.calls).to.deep.equal([{
       args: [
         {value: true}
       ]
     }])
+    /* eslint-enable */
   })
 })

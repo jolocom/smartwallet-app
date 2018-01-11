@@ -4,6 +4,7 @@ import Immutable from 'immutable'
 import { actions, helpers } from './registration'
 import router from './router'
 import {stub, withStubs} from '../../../../test/utils'
+// eslint-disable-next-line
 import reducer from './registration'
 
 describe('Wallet registration Redux module', () => {
@@ -248,6 +249,8 @@ describe('Wallet registration Redux module', () => {
             const promise = registerAction.buildAction.calledWithArgs[1]
 
             await promise(services.auth.register)
+
+            // eslint-disable-next-line
             expect(services.auth.register.called).to.be.true
             expect(services.auth.register.calls)
               .to.deep.equal([{

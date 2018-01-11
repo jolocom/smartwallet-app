@@ -1,10 +1,5 @@
 import map from 'lodash/map'
 import snakeCase from 'lodash/snakeCase'
-import isObject from 'lodash/isObject'
-import every from 'lodash/every'
-import has from 'lodash/has'
-import pick from 'lodash/pick'
-import fromPairs from 'lodash/fromPairs'
 
 /* @summary - creates a sync action creator
  *
@@ -15,8 +10,7 @@ import fromPairs from 'lodash/fromPairs'
  *
  * @returns {Object} creator - a sync action creator with an associated ID and
  * actionBuilder
- * 
- * @example syncAction('exampleModule', 'exampleActionName', {
+ * * @example syncAction('exampleModule', 'exampleActionName', {
      expectedParams: ['first', 'second'],
      creator: (params) => {
        return (dispatch, getState) => {
@@ -32,7 +26,7 @@ export function syncAction(moduleName, actionName, definition) {
     return { type: id, ...actionParams }
   }
 
-  const creator = definition.creator || actionBuilder 
+  const creator = definition.creator || actionBuilder
   creator.buildAction = actionBuilder
 
   creator.id = id
@@ -45,12 +39,10 @@ export function syncAction(moduleName, actionName, definition) {
  * @param {String} actionName - used to generate the unique action identifier
  * @param {Object} actionDefinition - a configuration object defining the
  * expected action parameters, and a custom action creator
- * @param {Object} callback - 
- *
+ * @param {Object} callback - *
  * @returns {Object} creator - an async action creator with an associated ID and
  * actionBuilder
- * 
- * @example asyncAction('exampleModule', 'exampleActionName', {
+ * * @example asyncAction('exampleModule', 'exampleActionName', {
      expectedParams: ['first', 'second'],
      creator: (params, async () => {...}) => {
        return (dispatch, getState) => {
@@ -70,7 +62,7 @@ export function asyncAction(moduleName, actionName, definition) {
     }
   }
 
-  const creator = definition.creator || ((actionParams) => { 
+  const creator = definition.creator || ((actionParams) => {
     return actionBuilder(actionParams, definition.promise)
   })
 
@@ -82,7 +74,7 @@ export function asyncAction(moduleName, actionName, definition) {
   return creator
 }
 
-/* @summary - Mass prepares actions by delegating to appropriate creators based 
+/* @summary - Mass prepares actions by delegating to appropriate creators based
  * on the action nature (async / sync)
  *
  * @param {String} moduleName - used to generate the unique action identifier
@@ -91,10 +83,9 @@ export function asyncAction(moduleName, actionName, definition) {
  * expected action parameters, whether it's async or not, and a custom action
  * creator
  *
- * @returns {Object} actions -  action names as keys, the action creator as a value, 
- * and a circular reference to itself
- * 
- * @example makeActions('exampleModule', {
+ * @returns {Object} actions -  action names as keys, the action creator as a 
+ * value, and a circular reference to itself
+ * * @example makeActions('exampleModule', {
     exampleAction: {
       expectedParams: ['first', 'second'],
       async: false,

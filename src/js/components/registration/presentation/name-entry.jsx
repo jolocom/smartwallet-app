@@ -10,7 +10,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more'
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less'
 
-import {Container, Header, Content, Block, Footer } from '../../structure'
+import {Container, Header, Content, Block, Footer} from '../../structure'
 import {theme} from 'styles'
 
 const STYLES = {
@@ -109,11 +109,9 @@ const NameEntry = (props) => {
 NameEntry.propTypes = {
   value: PropTypes.string.isRequired,
   ownURL: PropTypes.object,
-  valid: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  handleDialog: PropTypes.func.isRequired,
   setValueOwnURL: PropTypes.func.isRequired,
   toggleHasOwnURL: PropTypes.func.isRequired
 }

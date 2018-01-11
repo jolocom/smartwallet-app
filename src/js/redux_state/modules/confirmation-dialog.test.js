@@ -1,6 +1,7 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
 import {actions} from './confirmation-dialog'
+// eslint-disable-next-line
 import reducer from './confirmation-dialog'
 
 describe('Confirmation dialog reducer', function() {

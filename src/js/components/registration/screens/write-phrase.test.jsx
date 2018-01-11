@@ -29,8 +29,10 @@ describe('(Component) RegistrationWritePhraseScreen', function() {
       { context: { muiTheme: { } } }
     )
 
+    /*eslint-disable */
     expect(wrapper.find('WritePhrase').prop('value')).to.be.empty
     expect(wrapper.find('WritePhrase').prop('isChecked')).to.be.false
+    /*eslint-enable */
   })
   it('should call setPassphraseWrittenDown onToggle', function() {
     const setPassphraseWrittenDown = stub()
@@ -57,8 +59,13 @@ describe('(Component) RegistrationWritePhraseScreen', function() {
     )
 
     wrapper.find('WritePhrase').props().onToggle('test')
+
+    /*eslint-disable */
     expect(setPassphraseWrittenDown.called).to.be.true
-    expect(setPassphraseWrittenDown.calls).to.deep.equal([{'args': [{value: 'test'}]}])
+    expect(setPassphraseWrittenDown.calls).to.deep.equal([
+      {'args': [{value: 'test'}]}
+    ])
+    /*eslint-enable */
   })
   it('should call goForward onSubmit', function() {
     const goForward = stub()
@@ -84,7 +91,9 @@ describe('(Component) RegistrationWritePhraseScreen', function() {
     )
 
     wrapper.find('WritePhrase').props().onSubmit()
+    /*eslint-disable */
     expect(goForward.called).to.be.true
     expect(goForward.calls).to.deep.equal([{'args': []}])
+    /*eslint-enable */
   })
 })
