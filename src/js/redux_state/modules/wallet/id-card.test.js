@@ -104,7 +104,7 @@ describe('# IdCard redux module', () => {
   describe('# Actions', () => {
     describe('# showPhysicalAddress', () => {
       it('should return the expected params when called properly', () => {
-        const setShowAddress = actions.setShowAddress(true)
+        const setShowAddress = actions.setShowAddress({value: true})
         expect(setShowAddress).to.deep.equal({
           type: actions.setShowAddress.id,
           value: true
@@ -113,8 +113,10 @@ describe('# IdCard redux module', () => {
     })
     describe('# changeIdCardField', () => {
       it('should return the expected params when called properly', () => {
-        const changeIdCardField = actions.changeIdCardField('number',
-        'test')
+        const changeIdCardField = actions.changeIdCardField({
+          field: 'number',
+          value: 'test'
+        })
         expect(changeIdCardField).to.deep.equal({
           type: actions.changeIdCardField.id,
           value: 'test',
