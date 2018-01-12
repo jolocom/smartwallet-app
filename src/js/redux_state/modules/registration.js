@@ -7,6 +7,7 @@ import {
 } from 'lib/key-derivation'
 import router from './router'
 import Mnemonic from 'bitcore-mnemonic'
+import StorageManager from 'lib/storage'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -80,7 +81,7 @@ export const actions = makeActions('registration', {
     expectedParams: [],
     async: false,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
+      return (dispatch, getState, {services, backend}) => {
         const randomStringState = getState().getIn([
           'registration',
           'passphrase',
@@ -99,8 +100,27 @@ export const actions = makeActions('registration', {
         // eslint-disable-next-line
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
 
-        dispatch(actions.setPassphrase({phrase: seed.phrase}))
-        dispatch(actions.goForward())
+        // Store the encrypted seed phrase (12 word)
+        // At later points, retrieve it, instantiate a new Mnemonic, and generate Key based on that
+        // Use the generated key
+
+        console.log(genericSigningKey.privateKey.toWIF())
+        backend.encryption.encryptInformation({password: 'bla', data: seed.phrase}).then((res) => {
+          // TODO Cordova stringify?
+          StorageManager.setItem('masterSeed', JSON.stringify(res.crypto))
+          /*
+          backend.encryption.decryptInformation({
+            ciphertext: res.crypto.ciphertext,
+            password: 'bla',
+            salt: res.crypto.kdfParams.salt,
+            iv: res.crypto.cipherparams.iv
+          }).then(output => {
+            dispatch(actions.setPassphrase({phrase: seed.phrase}))
+            dispatch(actions.goForward())
+          })
+          */
+        })
+        
       }
     }
   },
