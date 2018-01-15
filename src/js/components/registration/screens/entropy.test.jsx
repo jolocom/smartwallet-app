@@ -11,9 +11,6 @@ describe('(Component) RegistrationEntropyScreen', function() {
       (<RegistrationEntropyScreen.WrappedComponent {
         ...RegistrationEntropyScreen.mapStateToProps(Immutable.fromJS({
           registration: {
-            username: {
-              value: 'xyz'
-            },
             maskedImage: {
               uncovering: false
             },
@@ -33,7 +30,6 @@ describe('(Component) RegistrationEntropyScreen', function() {
     /* eslint-disable */
     expect(wrapper.find('Entropy').prop('valid')).to.be.false
     expect(wrapper.find('Entropy').prop('imageUncovering')).to.be.false
-    expect(wrapper.find('Entropy').prop('user')).to.equal('xyz')
     /* eslint-enable */
   })
   it('should call submitEntropy onSubmit with the right params', function() {
@@ -42,9 +38,6 @@ describe('(Component) RegistrationEntropyScreen', function() {
       (<RegistrationEntropyScreen.WrappedComponent {
         ...RegistrationEntropyScreen.mapStateToProps(Immutable.fromJS({
           registration: {
-            username: {
-              value: 'xyz'
-            },
             maskedImage: {
               uncovering: false
             },
@@ -74,9 +67,6 @@ describe('(Component) RegistrationEntropyScreen', function() {
       (<RegistrationEntropyScreen.WrappedComponent {
         ...RegistrationEntropyScreen.mapStateToProps(Immutable.fromJS({
           registration: {
-            username: {
-              value: 'xyz'
-            },
             maskedImage: {
               uncovering: false
             },

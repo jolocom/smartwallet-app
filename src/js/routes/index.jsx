@@ -5,8 +5,6 @@ import { Router, Route, IndexRoute } from 'react-router'
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
 
-import RegistrationNameEntryScreen from
-  'components/registration/screens/name-entry'
 import RegistrationEntropyScreen from
   'components/registration/screens/entropy'
 import RegistrationWritePhraseScreen from
@@ -44,7 +42,7 @@ import EthApprovalRequestScreen from
 
 import {IconServices} from '../components/common'
 
-import PasswordEntry from 'components/keystore/passwordEntry'
+import PasswordEntry from 'components/registration/screens/password-entry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
 
 import {
@@ -97,11 +95,11 @@ function getRoutes() {
       component={VerificationCountryScreen} />
 
     <Route path="registration"
-      component={RegistrationNameEntryScreen} />
-    <Route path="registration/entropy"
       component={RegistrationEntropyScreen} />
     <Route path="registration/write-phrase"
       component={RegistrationWritePhraseScreen} />
+    <Route path="registration/entry-password"
+      component={PasswordEntry} />
 
     <Route path="wallet/identity/contact"
       component={WalletContactScreen} />
