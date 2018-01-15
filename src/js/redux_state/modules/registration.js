@@ -1,4 +1,5 @@
 import every from 'lodash/every'
+import {PrivateKey} from 'bitcore-lib'
 import Immutable from 'immutable'
 import { makeActions } from './'
 import {
@@ -13,6 +14,8 @@ const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
   '/registration/entropy': '/registration/write-phrase'
 }
+
+const Message = require('bitcore-message');
 
 export const actions = makeActions('registration', {
   goForward: {
@@ -104,7 +107,15 @@ export const actions = makeActions('registration', {
         // At later points, retrieve it, instantiate a new Mnemonic, and generate Key based on that
         // Use the generated key
 
-        console.log(genericSigningKey.privateKey.toWIF())
+        const wif = genericSigningKey.privateKey.toWIF()
+        const privateKey = new PrivateKey(wif)
+
+        const message = new Message('This is an example of a signed message.')
+
+        const signedMessage = message.sign(privateKey) 
+        console.log(signedMessage)
+
+
         backend.encryption.encryptInformation({password: 'bla', data: seed.phrase}).then((res) => {
           // TODO Cordova stringify?
           StorageManager.setItem('masterSeed', JSON.stringify(res.crypto))
