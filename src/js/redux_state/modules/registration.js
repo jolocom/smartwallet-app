@@ -1,5 +1,6 @@
 import every from 'lodash/every'
-import {PrivateKey} from 'bitcore-lib'
+import bitcoinjs from 'bitcoinjs-lib'
+import bip39 from 'bip39'
 import Immutable from 'immutable'
 import { makeActions } from './'
 import {
@@ -7,15 +8,12 @@ import {
   deriveGenericSigningKeyPair
 } from 'lib/key-derivation'
 import router from './router'
-import Mnemonic from 'bitcore-mnemonic'
 import StorageManager from 'lib/storage'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
   '/registration/entropy': '/registration/write-phrase'
 }
-
-const Message = require('bitcore-message');
 
 export const actions = makeActions('registration', {
   goForward: {
@@ -56,7 +54,8 @@ export const actions = makeActions('registration', {
         }))
 
         if (entropy.isReady()) {
-          const randomString = entropy.getRandomString(12)
+          const randomString = '213246356765534235943456'
+          console.log(randomString)
           dispatch(actions.setRandomString({randomString}))
         }
       }
@@ -95,8 +94,8 @@ export const actions = makeActions('registration', {
           throw new Error('No seedphrase found.')
         }
 
-        const hashedEnt = services.entropy.getHashedEntropy(randomStringState)
-        const seed = new Mnemonic(hashedEnt, Mnemonic.Words.ENGLISH)
+        const seed = bip39.entropyToMnemonic(randomStringState)
+          console.log(seed, "===========================")
 
         // TODO: Save masterKeyPair
         const masterKeyPair = deriveMasterKeyPair(seed)
@@ -107,13 +106,12 @@ export const actions = makeActions('registration', {
         // At later points, retrieve it, instantiate a new Mnemonic, and generate Key based on that
         // Use the generated key
 
-        const wif = genericSigningKey.privateKey.toWIF()
-        const privateKey = new PrivateKey(wif)
+        //const wif = genericSigningKey.privateKey.toWIF()
+        //const privateKey = new PrivateKey(wif)
 
-        const message = new Message('This is an example of a signed message.')
+        //const message = new Message('This is an example of a signed message.')
 
-        const signedMessage = message.sign(privateKey) 
-        console.log(signedMessage)
+        //const signedMessage = message.sign(privateKey) 
 
 
         backend.encryption.encryptInformation({password: 'bla', data: seed.phrase}).then((res) => {
