@@ -11,26 +11,6 @@ import reducer from './registration'
 describe('Wallet registration Redux module', () => {
   describe('goForward', () => {
     describe('action', () => {
-      it('should dispatch the wallet registration action when complete', () => {
-        const dispatch = stub()
-        const getState = () => Immutable.fromJS({
-          registration: {
-            complete: true
-          }
-        })
-
-        const thunk = actions.goForward()
-
-        withStubs([[actions.actions, 'registerWallet', {returns: 'register'}]],
-          () => {
-            thunk(dispatch, getState)
-            expect(dispatch.calls).to.deep.equal([{
-              args: [ 'register' ]
-            }])
-          }
-        )
-      })
-
       it('should go to the next page if requested', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({
@@ -223,50 +203,6 @@ describe('Wallet registration Redux module', () => {
       })
     })
 
-    describe('registerWallet', () => {
-      it('should register with seedphrase', async () => {
-        const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          username: {value: 'usr'},
-          passphrase: {phrase: 'bla bla bla'},
-          ownURL: {valueOwnURL: 'test'},
-          inviteCode: null
-        }})
-        const services = {
-          auth: {
-            register: stub().returnsAsync('regSeed'),
-            login: stub().returnsAsync({success: true})
-          }
-        }
-        await withStubs([
-          [actions.actions, 'goForward', {returns: 'forward'}],
-          [actions.actions.registerWallet, 'buildAction',
-          {returns: 'action'}]],
-          async () => {
-            const thunk = actions.registerWallet()
-            thunk(dispatch, getState, {services})
-            expect(dispatch.calledWithArgs[0]).to.equal('action')
-            const registerAction = actions.actions.registerWallet
-            const promise = registerAction.buildAction.calledWithArgs[1]
-
-            await promise(services.auth.register)
-
-            // eslint-disable-next-line
-            expect(services.auth.register.called).to.be.true
-            expect(services.auth.register.calls)
-              .to.deep.equal([{
-                args: [{
-                  seedPhrase: 'bla bla bla',
-                  userName: 'usr',
-                  inviteCode: null,
-                  gatewayUrl: 'test'
-                }]
-              }])
-          }
-        )
-      })
-    })
-
     describe('setEntropyStatus', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
@@ -299,61 +235,76 @@ describe('Wallet registration Redux module', () => {
         })
       })
     })
+    it('should update correct state based on key (pass/passReenter)', () => {
+      let state = reducer(undefined, '@@INIT')
 
-    describe('registerWallet', () => {
-      it('should correctly initialize', () => {
-        let state = reducer(undefined, '@@INIT')
+      const actionCheckPassword = {
+        type: actions.checkPassword.id,
+        key: 'passReenter',
+        value: 'testPasswordNatascha1'
+      }
+      state = reducer(state, actionCheckPassword)
+      const expectedState = {
+        maskedImage: {
+          uncovering: false
+        },
+        passphrase: {
+          sufficientEntropy: false,
+          progress: 0,
+          randomString: '',
+          phrase: '',
+          writtenDown: false,
+          valid: false
+        },
+        encryption: {
+          loading: false,
+          pass: '',
+          passReenter: 'testPasswordNatascha1',
+          errorMsg: '',
+          status: ''
+        },
+        complete: false
+      }
+      expect(state.toJS()).to.deep.equal(expectedState)
+    })
 
-        expect(state.get('wallet').toJS())
-        .to.deep.equal({
-          registering: false,
-          registered: false,
-          errorMsg: null
-        })
-      })
+    it('should encrypt information and return status OK', () => {
+      let state = reducer(undefined, '@@INIT')
 
-      it('should correctly handle registration start', () => {
-        let state = reducer(undefined, '@@INIT')
-        state = reducer(state, {
-          type: actions.registerWallet.id
-        })
+      const actionCheckPassword = {
+        type: actions.checkPassword.id,
+        key: 'pass',
+        value: 'testPasswordNatascha1'
+      }
 
-        expect(state.get('wallet').toJS())
-        .to.deep.equal({
-          registering: true,
-          registered: false,
-          errorMsg: null
-        })
-      })
-
-      it('should correctly handle registration success', () => {
-        let state = reducer(undefined, '@@INIT')
-        state = reducer(state, {
-          type: actions.registerWallet.id_success
-        })
-
-        expect(state.get('wallet').toJS())
-         .to.deep.equal({
-           registering: true,
-           registered: true,
-           errorMsg: null
-         })
-      })
-
-      it('should correctly handle registration fail', () => {
-        let state = reducer(undefined, '@@INIT')
-        state = reducer(state, {
-          type: actions.registerWallet.id_fail,
-          error: new Error('test')
-        })
-
-        expect(state.get('wallet').toJS())
-        .to.deep.equal({
-          registering: false,
-          registered: false,
-          errorMsg: 'test'
-        })
-      })
+      state = reducer(state, actionCheckPassword)
+      const encryptDataWithPasswordOnRegister = {
+        type: actions.encryptDataWithPasswordOnRegister.id_success,
+        result: 'test'
+      }
+      state = reducer(state, encryptDataWithPasswordOnRegister)
+      const expectedState = {
+        maskedImage: {
+          uncovering: false
+        },
+        passphrase: {
+          sufficientEntropy: false,
+          progress: 0,
+          randomString: '',
+          phrase: '',
+          writtenDown: false,
+          valid: false
+        },
+        encryption: {
+          loading: false,
+          pass: 'testPasswordNatascha1',
+          passReenter: '',
+          errorMsg: '',
+          status: 'OK'
+        },
+        complete: false
+      }
+      expect(state.toJS()).to.deep.equal(expectedState)
     })
   })
 })

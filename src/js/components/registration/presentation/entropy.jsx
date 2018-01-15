@@ -63,7 +63,7 @@ const Entropy = (props) => {
     header = (
       <header style={STYLES.header}>
         <h1 style={STYLES.title}>
-          Hi {props.user}, for... <br /><br />
+          Hello, for... <br /><br />
           <span style={STYLES.subtitle}>
             ...more security we need some random data.<br /><br />
           Please put your finger anywhere on the screen and draw on it randomly.
@@ -104,7 +104,6 @@ const Entropy = (props) => {
 Entropy.propTypes = {
   imageUncovering: PropTypes.bool.isRequired,
   imageUncoveredPaths: PropTypes.any,
-  user: PropTypes.string,
   onImagePointUncoverd: PropTypes.func.isRequired,
   onImageUncoveringChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

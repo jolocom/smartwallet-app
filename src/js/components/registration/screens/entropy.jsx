@@ -51,7 +51,6 @@ export default class RegistrationEntropyScreen extends React.Component {
       imageUncoveredPaths={this.state.imageMask.paths}
       imageUncovering={this.props.registration.maskedImage.uncovering}
       valid={this.props.registration.passphrase.sufficientEntropy}
-      user={this.props.registration.username.value}
       onImagePointUncoverd={this.handleUncoveredPoint}
       onImageUncoveringChange={this.handleUncoveringChange}
       onMouseMovement={this.handleMouseMovement}
