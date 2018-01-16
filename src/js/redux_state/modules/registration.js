@@ -1,8 +1,6 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import bitcoin from 'bitcoinjs-lib'
-import bitMessage from 'bitcoinjs-message'
 import bip39 from 'bip39'
 import {
   deriveMasterKeyPairFromSeedphrase,
@@ -12,13 +10,8 @@ import router from './router'
 import StorageManager from 'lib/storage'
 
 const NEXT_ROUTES = {
-<<<<<<< Updated upstream
-  '/registration': '/registration/entropy',
-  '/registration/entropy': '/registration/write-phrase'
-=======
   '/registration': '/registration/write-phrase',
   '/registration/write-phrase': '/registration/entry-password'
->>>>>>> Stashed changes
 }
 
 export const actions = makeActions('registration', {
@@ -164,18 +157,6 @@ export const actions = makeActions('registration', {
   checkOwnUrl: {
     expectedParams: [],
     async: true,
-<<<<<<< Updated upstream
-    creator: (params) => {
-      return (dispatch, getState, {backend}) => {
-        const state = getState().get('registration').toJS()
-        dispatch(actions.checkOwnUrl.buildAction(params, (backend) => {
-          return backend.gateway.checkOwnUrlDoesExist({
-            userName: state.username.value,
-            gatewayUrl: state.ownURL.valueOwnURL
-          })
-          .then((params) => {
-            dispatch(actions.goForward())
-=======
     creator: (data) => {
       return (dispatch, getState, {backend, services}) => {
         const pass = getState().toJS().registration.encryption.pass
@@ -183,7 +164,6 @@ export const actions = makeActions('registration', {
           return backend.encryption.encryptInformation({
             password: pass,
             data: data
->>>>>>> Stashed changes
           })
         }))
       }
