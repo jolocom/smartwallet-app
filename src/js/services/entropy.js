@@ -2,8 +2,8 @@ import sjcl from 'sjcl'
 
 export default class EntropyService {
   constructor() {
-    this.generator = new sjcl.prng(7) // eslint-disable-line new-cap
-    // this.generator.startCollectors()
+    // eslint-disable-next-line
+    this.generator = new sjcl.prng(7)
   }
 
   addFromDelta(d) {
@@ -19,6 +19,10 @@ export default class EntropyService {
   }
 
   getRandomString(wordCount) {
-    return this.generator.randomWords(wordCount).join('').replace(/\-/g, '').toString(16).substring(0, 32)
+    return this.generator.randomWords(wordCount)
+      .join('')
+      .replace(/-/g, '') // removing hyphens from result
+      .toString(16)
+      .substring(0, 32)
   }
 }

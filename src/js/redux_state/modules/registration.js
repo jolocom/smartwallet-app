@@ -56,16 +56,14 @@ export const actions = makeActions('registration', {
 
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(6)
-          const mnemonic = bip39.entropyToMnemonic(randomString)
-          dispatch(actions.setRandomString({randomString}))
-          dispatch(actions.setPassphrase({mnemonic}))
+          return dispatch(actions.submitEntropy(randomString))
         }
       }
     }
   },
   submitEntropy: {
-    expectedParams: [],
-    creator: () => {
+    expectedParams: ['randomString'],
+    creator: (randomString) => {
       return (dispatch, getState) => {
         const entropyState = getState().getIn([
           'registration',
@@ -76,11 +74,22 @@ export const actions = makeActions('registration', {
         if (!entropyState) {
           throw new Error('Not enough entropy!')
         }
-
-        return dispatch(actions.generateKeyPairs())
+        dispatch(actions.generateSeedPhrase(randomString))
       }
     }
   },
+
+  generateSeedPhrase: {
+    expectedParams: ['randomString'],
+    creator: (randomString) => {
+      return (dispatch, getState) => {
+        const mnemonic = bip39.entropyToMnemonic(randomString)
+        dispatch(actions.setPassphrase({mnemonic}))
+        dispatch(actions.generateKeyPairs())
+      }
+    }
+  },
+
   generateKeyPairs: {
     expectedParams: [],
     async: false,
@@ -94,10 +103,8 @@ export const actions = makeActions('registration', {
         if (!seedphrase) {
           throw new Error('No seedphrase found.')
         }
-        // Store the encrypted seed phrase (12 word)
         // TODO: Save masterKeyPair
         const masterKeyPair = deriveMasterKeyPair(seedphrase)
-        console.log(masterKeyPair, 'masterkey')
         // eslint-disable-next-line
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
         // console.log(genericSigningKey.parentFingerprint, masterKeyPair.getFingerprint())
@@ -105,16 +112,14 @@ export const actions = makeActions('registration', {
         const wif = genericSigningKey.keyPair.toWIF()
         const key = bitcoin.ECPair.fromWIF(wif)
 
-        console.log(genericSigningKey.keyPair.getAddress(), key.getAddress(), 'addresses')
-
         const address = key.getAddress()
         const keyPair = bitcoin.ECPair.fromWIF(wif)
         const privateKey = keyPair.d.toBuffer(32)
         const message = 'This is an example of a signed message.'
-        
+        // eslint-disable-next-line
         const signature = bitMessage.sign(message, privateKey, keyPair.compressed)
-        console.log(signature.toString('base64'))
         
+        console.log(signature.toString('base64'))
         console.log(bitMessage.verify(message, address, signature))
 
         // At later points, retrieve it and generate Key based on that
@@ -144,9 +149,6 @@ export const actions = makeActions('registration', {
   },
   setPassphrase: {
     expectedParams: ['phrase']
-  },
-  setRandomString: {
-    expectedParams: ['randomString']
   },
   setPassphraseWrittenDown: {
     expectedParams: ['value']
@@ -245,7 +247,6 @@ const initialState = Immutable.fromJS({
   passphrase: {
     sufficientEntropy: false,
     progress: 0,
-    randomString: '',
     phrase: '',
     writtenDown: false,
     valid: false
@@ -268,11 +269,6 @@ export default (state = initialState, action = {}) => {
           sufficientEntropy: action.sufficientEntropy,
           progress: action.progress
         }
-      })
-
-    case actions.setRandomString.id:
-      return state.mergeIn(['passphrase'], {
-        randomString: action.randomString
       })
 
     case actions.setPassphrase.id:
