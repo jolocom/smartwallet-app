@@ -59,7 +59,10 @@ export default class PasswordEntry extends React.Component {
               ? passwordValidityCheck(this.props.security.pass)
               : null}
             onChange={(e) =>
-              this.props.checkPassword({password: e.target.value, fieldName: 'pass'})} />
+              this.props.checkPassword({
+                password: e.target.value,
+                fieldName: 'pass'})
+              } />
         </Block>
         <Block>
           <TextField
