@@ -6,11 +6,12 @@ import {
   deriveGenericSigningKeyPair
 } from 'lib/key-derivation'
 import router from './router'
+import StorageManager from 'lib/storage'
 import Mnemonic from 'bitcore-mnemonic'
 
 const NEXT_ROUTES = {
-  '/registration': '/registration/entropy',
-  '/registration/entropy': '/registration/write-phrase'
+  '/registration': '/registration/write-phrase',
+  '/registration/write-phrase': '/registration/entry-password'
 }
 
 export const actions = makeActions('registration', {
@@ -117,94 +118,31 @@ export const actions = makeActions('registration', {
   setPassphraseWrittenDown: {
     expectedParams: ['value']
   },
-  setUsername: {
-    expectedParams: ['value']
-  },
-  setValueOwnURL: {
-    expectedParams: ['value']
-  },
-  toggleHasOwnURL: {
-    expectedParams: ['value']
-  },
-  checkCredentials: {
-    expectedParams: [],
-    async: true,
-    creator: params => {
-      return (dispatch, getState) => {
-        const state = getState().get('registration').toJS()
-        dispatch(actions.checkCredentials.buildAction(params, (backend) => {
-          return backend.gateway
-            .checkUserDoesNotExist({userName: state.username.value})
-            .then(params => {
-              if (state.ownURL.valueOwnURL.length > 1) {
-                dispatch(actions.checkOwnUrl())
-              } else {
-                dispatch(actions.goForward())
-              }
-            })
-        }))
-      }
-    }
-  },
-  checkOwnUrl: {
-    expectedParams: [],
+  encryptDataWithPasswordOnRegister: {
+    expectedParams: ['data'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {backend}) => {
-        const state = getState().get('registration').toJS()
-        dispatch(actions.checkOwnUrl.buildAction(params, (backend) => {
-          return backend.gateway.checkOwnUrlDoesExist({
-            userName: state.username.value,
-            gatewayUrl: state.ownURL.valueOwnURL
+      return (dispatch, getState, {backend, services}) => {
+        const pass = getState().toJS().registration.encryption.pass
+        dispatch(actions.encryptDataWithPasswordOnRegister.buildAction(params, () => { // eslint-disable-line max-len
+          return backend.encryption.encryptInformation({
+            password: pass,
+            data: 'testingoutfunfunfun' // master key needs to be passed in
           })
-          .then((params) => {
-            dispatch(actions.goForward())
+          .then((result) => {
+            StorageManager.setItem('userData', JSON.stringify(result))
+            dispatch(router.pushRoute('/wallet'))
           })
         }))
       }
     }
   },
-  registerWallet: {
-    expectedParams: [],
-    async: true,
-    creator: (params) => {
-      return (dispatch, getState, {services, backend}) => {
-        const state = getState().get('registration').toJS()
-        dispatch(actions.registerWallet.buildAction(params, async () => {
-          await services.auth.register({
-            userName: state.username.value,
-            seedPhrase: state.passphrase.phrase,
-            inviteCode: state.inviteCode,
-            gatewayUrl: state.ownURL.valueOwnURL
-          })
-          await services.auth.login({
-            seedPhrase: state.passphrase.phrase,
-            gatewayUrl: state.ownURL.valueOwnURL
-          })
-          dispatch(router.pushRoute('/wallet'))
-        })
-      )
-      }
-    }
-  },
-  setInviteCode: {
-    expectedParams: ['value']
+  checkPassword: {
+    expectedParams: ['password', 'fieldName']
   }
 })
 
 const initialState = Immutable.fromJS({
-  username: {
-    value: '',
-    checking: false,
-    errorMsg: '',
-    valid: false,
-    alphaNum: false
-  },
-  ownURL: {
-    hasOwnURL: false,
-    errorMsg: '',
-    valueOwnURL: ''
-  },
   maskedImage: {
     uncovering: false
   },
@@ -216,12 +154,13 @@ const initialState = Immutable.fromJS({
     writtenDown: false,
     valid: false
   },
-  wallet: {
-    registering: false,
-    registered: false,
-    errorMsg: null
+  encryption: {
+    loading: false,
+    pass: '',
+    passReenter: '',
+    errorMsg: '',
+    status: ''
   },
-  inviteCode: null,
   complete: false
 })
 
@@ -259,89 +198,42 @@ export default (state = initialState, action = {}) => {
 
       return state.set('complete', helpers._isComplete(state))
 
-    case actions.registerWallet.id:
+    case actions.encryptDataWithPasswordOnRegister.id:
       return state.mergeDeep({
-        wallet: {
-          registering: true,
-          registered: false,
-          errorMsg: null
+        encryption: {
+          loading: true,
+          status: ''
         }
       })
 
-    case actions.registerWallet.id_success:
+    case actions.encryptDataWithPasswordOnRegister.id_success:
+    // here crypto object (JSON) is returned in action.result
       return state.mergeDeep({
-        wallet: {
-          registering: true,
-          registered: true
+        encryption: {
+          loading: false,
+          status: 'OK'
         }
       })
 
-    case actions.registerWallet.id_fail:
+    case actions.encryptDataWithPasswordOnRegister.id_fail:
       return state.mergeDeep({
-        wallet: {
-          registering: false,
-          registered: false,
-          errorMsg: action.error.message
+        encryption: {
+          errorMsg: action.error,
+          loading: false
         }
       })
 
-    case actions.setUsername.id:
-      return state.mergeDeep({
-        username: {
-          value: action.value,
-          alphaNum: (/^[a-z0-9]+$/i.test(action.value)),
-          valid: action.value.trim() !== '',
-          errorMsg: ''
-        }
-      })
-
-    case actions.checkCredentials.id:
-      return state.mergeDeep({
-        username: {
-          checking: true
-        }
-      })
-
-    case actions.checkCredentials.id_success:
-      return state.mergeDeep({
-        username: {
-          checking: false,
-          errorMsg: ''
-        }
-      })
-
-    case actions.checkCredentials.id_fail:
-      return state.mergeDeep({
-        username: {
-          checking: false,
-          errorMsg: action.error.message
-        }
-      })
-
-    case actions.toggleHasOwnURL.id:
-      return state.mergeIn(['ownURL'], {
-        hasOwnURL: action.value
-      })
-
-    case actions.setValueOwnURL.id:
-      return state.mergeIn(['ownURL'], {
-        valueOwnURL: action.value
-      })
-
-    case actions.checkOwnUrl.id:
-      return state.mergeIn(['ownURL'], {
-        errorMsg: ''
-      })
-
-    case actions.checkOwnUrl.id_success:
-      return state.mergeIn(['ownURL'], {
-        errorMsg: ''
-      })
-
-    case actions.checkOwnUrl.id_fail:
-      return state.mergeIn(['ownURL'], {
-        errorMsg: action.error.message
-      })
+    case actions.checkPassword.id:
+      if (action.fieldName === 'pass') {
+        return state.mergeDeep({
+          encryption: {pass: action.password}
+        })
+      } else if (action.fieldName === 'passReenter') {
+        return state.mergeDeep({
+          encryption: {passReenter: action.password}
+        })
+      }
+      return state
 
     default:
       return state
