@@ -240,8 +240,8 @@ describe('Wallet registration Redux module', () => {
 
       const actionCheckPassword = {
         type: actions.checkPassword.id,
-        key: 'passReenter',
-        value: 'testPasswordNatascha1'
+        fieldName: 'passReenter',
+        password: 'testPasswordNatascha1'
       }
       state = reducer(state, actionCheckPassword)
       const expectedState = {
@@ -273,8 +273,8 @@ describe('Wallet registration Redux module', () => {
 
       const actionCheckPassword = {
         type: actions.checkPassword.id,
-        key: 'pass',
-        value: 'testPasswordNatascha1'
+        fieldName: 'pass',
+        password: 'testPasswordNatascha1'
       }
 
       state = reducer(state, actionCheckPassword)
