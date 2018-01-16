@@ -1,4 +1,5 @@
 import bitcoin from 'bitcoinjs-lib'
+import bip39 from 'bip39'
 
 /* @summary - Generates a keypair based on provided entropy
  *
@@ -7,7 +8,8 @@ import bitcoin from 'bitcoinjs-lib'
 */
 
 export function deriveMasterKeyPair(seedphrase) {
-  return bitcoin.HDNode.fromSeedHex(seedphrase)
+  const seed = bip39.mnemonicToSeed(seedphrase)
+  return bitcoin.HDNode.fromSeedBuffer(seed)
 }
 
 export function derivePrivateChildKeyPair(masterPrivateKeyPair, path) {

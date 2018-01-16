@@ -86,17 +86,18 @@ export const actions = makeActions('registration', {
     async: false,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        const randomStringState = getState().getIn([
+        const seedphrase = getState().getIn([
           'registration',
           'passphrase',
-          'randomString'
+          'phrase'
         ])
-        if (!randomStringState) {
+        if (!seedphrase) {
           throw new Error('No seedphrase found.')
         }
         // Store the encrypted seed phrase (12 word)
         // TODO: Save masterKeyPair
-        const masterKeyPair = deriveMasterKeyPair(randomStringState)
+        const masterKeyPair = deriveMasterKeyPair(seedphrase)
+        console.log(masterKeyPair, 'masterkey')
         // eslint-disable-next-line
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
         // console.log(genericSigningKey.parentFingerprint, masterKeyPair.getFingerprint())
@@ -104,16 +105,15 @@ export const actions = makeActions('registration', {
         const wif = genericSigningKey.keyPair.toWIF()
         const key = bitcoin.ECPair.fromWIF(wif)
 
-        console.log(genericSigningKey.keyPair, key)
+        console.log(genericSigningKey.keyPair.getAddress(), key.getAddress(), 'addresses')
 
+        const address = key.getAddress()
         const keyPair = bitcoin.ECPair.fromWIF(wif)
         const privateKey = keyPair.d.toBuffer(32)
         const message = 'This is an example of a signed message.'
         
         const signature = bitMessage.sign(message, privateKey, keyPair.compressed)
         console.log(signature.toString('base64'))
-
-        const address = '1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN'
         
         console.log(bitMessage.verify(message, address, signature))
 
