@@ -131,8 +131,6 @@ export const actions = makeActions('registration', {
   encryptDataWithPasswordOnRegister: {
     expectedParams: ['data'],
     async: true,
-<<<<<<< HEAD
-=======
     creator: params => {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
@@ -153,7 +151,7 @@ export const actions = makeActions('registration', {
   checkOwnUrl: {
     expectedParams: [],
     async: true,
->>>>>>> removed unused libraries
+
     creator: (data) => {
       return (dispatch, getState, {backend, services}) => {
         const pass = getState().toJS().registration.encryption.pass
@@ -228,23 +226,23 @@ export default (state = initialState, action = {}) => {
           generatedAndEncrypted: false,
           status: ''
         }
-    })
+      })
 
     case actions.generateAndEncryptKeyPairs.id_success:
-    return state.mergeDeep({
-      encryption: {
-        generatedAndEncrypted: true,
-        status: ''
-      }
-  })
+      return state.mergeDeep({
+        encryption: {
+          generatedAndEncrypted: true,
+          status: ''
+        }
+      })
 
-      case actions.generateAndEncryptKeyPairs.id_fail:
+    case actions.generateAndEncryptKeyPairs.id_fail:
       return state.mergeDeep({
         encryption: {
           generatedAndEncrypted: false,
           status: ''
         }
-    })
+      })
 
     case actions.encryptDataWithPasswordOnRegister.id:
       return state.mergeDeep({
