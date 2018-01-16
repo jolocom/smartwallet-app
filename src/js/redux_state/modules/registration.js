@@ -5,15 +5,20 @@ import bitcoin from 'bitcoinjs-lib'
 import bitMessage from 'bitcoinjs-message'
 import bip39 from 'bip39'
 import {
-  deriveMasterKeyPair,
+  deriveMasterKeyPairFromSeedphrase,
   deriveGenericSigningKeyPair
 } from 'lib/key-derivation'
 import router from './router'
 import StorageManager from 'lib/storage'
 
 const NEXT_ROUTES = {
+<<<<<<< Updated upstream
   '/registration': '/registration/entropy',
   '/registration/entropy': '/registration/write-phrase'
+=======
+  '/registration': '/registration/write-phrase',
+  '/registration/write-phrase': '/registration/entry-password'
+>>>>>>> Stashed changes
 }
 
 export const actions = makeActions('registration', {
@@ -22,12 +27,8 @@ export const actions = makeActions('registration', {
     creator: () => {
       return (dispatch, getState) => {
         const state = getState()
-        if (state.getIn(['registration', 'complete'])) {
-          dispatch(actions.registerWallet())
-        } else {
-          let nextURL = helpers._getNextURLfromState(state)
-          dispatch(router.pushRoute(nextURL))
-        }
+        let nextURL = helpers._getNextURLfromState(state)
+        dispatch(router.pushRoute(nextURL))
       }
     }
   },
@@ -85,15 +86,14 @@ export const actions = makeActions('registration', {
       return (dispatch, getState) => {
         const mnemonic = bip39.entropyToMnemonic(randomString)
         dispatch(actions.setPassphrase({mnemonic}))
-        dispatch(actions.generateKeyPairs())
       }
     }
   },
 
-  generateKeyPairs: {
+  generateAndEncryptKeyPairs: {
     expectedParams: [],
-    async: false,
-    creator: (params) => {
+    async: true,
+    creator: () => {
       return (dispatch, getState, {services, backend}) => {
         const seedphrase = getState().getIn([
           'registration',
@@ -103,43 +103,22 @@ export const actions = makeActions('registration', {
         if (!seedphrase) {
           throw new Error('No seedphrase found.')
         }
-        // TODO: Save masterKeyPair
-        const masterKeyPair = deriveMasterKeyPair(seedphrase)
-        // eslint-disable-next-line
+        const masterKeyPair = deriveMasterKeyPairFromSeedphrase(seedphrase)
+        console.log(masterKeyPair, 'master')
+        dispatch(actions.encryptDataWithPasswordOnRegister(masterKeyPair)
+        .then((result) => {
+          console.log('inside master')
+          StorageManager.setItem('masterKeyPair', JSON.stringify(result))
+        }))
+
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
-        // console.log(genericSigningKey.parentFingerprint, masterKeyPair.getFingerprint())
-
-        const wif = genericSigningKey.keyPair.toWIF()
-        const key = bitcoin.ECPair.fromWIF(wif)
-
-        const address = key.getAddress()
-        const keyPair = bitcoin.ECPair.fromWIF(wif)
-        const privateKey = keyPair.d.toBuffer(32)
-        const message = 'This is an example of a signed message.'
-        // eslint-disable-next-line
-        const signature = bitMessage.sign(message, privateKey, keyPair.compressed)
-        
-        console.log(signature.toString('base64'))
-        console.log(bitMessage.verify(message, address, signature))
-
-        // At later points, retrieve it and generate Key based on that
-        // Use the generated key
-
-        // backend.encryption.encryptInformation({password: 'bla', data: seed.phrase}).then((res) => {
-        //   // TODO Cordova stringify?
-        //   StorageManager.setItem('masterSeed', JSON.stringify(res.crypto))
-          /*
-          backend.encryption.decryptInformation({
-            ciphertext: res.crypto.ciphertext,
-            password: 'bla',
-            salt: res.crypto.kdfParams.salt,
-            iv: res.crypto.cipherparams.iv
-          }).then(output => {
-            dispatch(actions.setPassphrase({phrase: seed.phrase}))
-            dispatch(actions.goForward())
-          })
-          */
-        // })
+        console.log(genericSigningKey, 'generic')
+        dispatch(actions.encryptDataWithPasswordOnRegister(genericSigningKey)
+        .then((result) => {
+          console.log('inside generic')
+          StorageManager.setItem('genericSigningKey', JSON.stringify(result))
+        }))
+        // dispatch(router.pushRoute('/wallet'))
       }
     }
   },
@@ -185,6 +164,7 @@ export const actions = makeActions('registration', {
   checkOwnUrl: {
     expectedParams: [],
     async: true,
+<<<<<<< Updated upstream
     creator: (params) => {
       return (dispatch, getState, {backend}) => {
         const state = getState().get('registration').toJS()
@@ -195,6 +175,15 @@ export const actions = makeActions('registration', {
           })
           .then((params) => {
             dispatch(actions.goForward())
+=======
+    creator: (data) => {
+      return (dispatch, getState, {backend, services}) => {
+        const pass = getState().toJS().registration.encryption.pass
+        dispatch(actions.encryptDataWithPasswordOnRegister.buildAction(data, () => { // eslint-disable-line max-len
+          return backend.encryption.encryptInformation({
+            password: pass,
+            data: data
+>>>>>>> Stashed changes
           })
         }))
       }
@@ -383,7 +372,7 @@ export const helpers = {
     const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
     const areFieldsValid = (fields) => every(fields, isFieldValid)
 
-    return areFieldsValid(['username', 'passphrase'])
+    return areFieldsValid(['passphrase'])
   },
   _getNextURLfromState: (state) => {
     const currentPath = state.get('routing').locationBeforeTransitions.pathname

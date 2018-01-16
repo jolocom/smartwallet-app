@@ -7,9 +7,13 @@ import bip39 from 'bip39'
  * @returns {HDPrivateKey} - an HDPrivateKey instance containing a keypair.
 */
 
-export function deriveMasterKeyPair(seedphrase) {
+export function deriveMasterKeyPairFromSeedphrase(seedphrase) {
   const seed = bip39.mnemonicToSeed(seedphrase)
   return bitcoin.HDNode.fromSeedBuffer(seed)
+}
+
+export function deriveMasterKeyPairFromMasterKeyPair(masterKeyPair) {
+  return new bitcoin.HDNode(masterKeyPair.keyPair, masterKeyPair.chainCode)
 }
 
 export function derivePrivateChildKeyPair(masterPrivateKeyPair, path) {
