@@ -87,7 +87,6 @@ export const actions = makeActions('registration', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-
         const seedphrase = getState().getIn([
           'registration',
           'passphrase',
@@ -98,23 +97,28 @@ export const actions = makeActions('registration', {
         }
         const masterKeyPair = deriveMasterKeyPairFromSeedphrase(seedphrase)
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
-        console.log(genericSigningKey, 'generic')
-        console.log(masterKeyPair, 'master')
 
-        dispatch(actions.generateAndEncryptKeyPairs.buildAction(params, async() => { // eslint-disable-line max-len
-          dispatch(actions.encryptDataWithPasswordOnRegister(masterKeyPair)
-          .then((result) => {
-            console.log('inside master')
-            StorageManager.setItem('masterKeyPair', JSON.stringify(result))
-          }))
-  
-          dispatch(actions.encryptDataWithPasswordOnRegister(genericSigningKey)
-          .then((result) => {
-            console.log('inside generic')
-            StorageManager.setItem('genericSigningKey', JSON.stringify(result))
-          }))
+        dispatch(actions.generateAndEncryptKeyPairs.buildAction(params, async () => {
+          const password = getState().getIn([
+            'registration',
+            'encryption',
+            'pass'
+          ])
+
+          const encMaster = await backend.encryption.encryptInformation({
+            password,
+            data: masterKeyPair
+          })
+
+          const encGeneric = await backend.encryption.encryptInformation({
+            password,
+            data: genericSigningKey
+          })
+
+          StorageManager.setItem('masterKeyPair', JSON.stringify(encMaster))
+          StorageManager.setItem('genericSigningKeyPair', JSON.stringify(encGeneric))
+          // dispatch(router.pushRoute('/wallet'))
         }))
-        // dispatch(router.pushRoute('/wallet'))
       }
     }
   },
@@ -127,43 +131,6 @@ export const actions = makeActions('registration', {
   },
   setPassphraseWrittenDown: {
     expectedParams: ['value']
-  },
-  encryptDataWithPasswordOnRegister: {
-    expectedParams: ['data'],
-    async: true,
-    creator: params => {
-      return (dispatch, getState) => {
-        const state = getState().get('registration').toJS()
-        dispatch(actions.checkCredentials.buildAction(params, (backend) => {
-          return backend.gateway
-            .checkUserDoesNotExist({userName: state.username.value})
-            .then(params => {
-              if (state.ownURL.valueOwnURL.length > 1) {
-                dispatch(actions.checkOwnUrl())
-              } else {
-                dispatch(actions.goForward())
-              }
-            })
-        }))
-      }
-    }
-  },
-  checkOwnUrl: {
-    expectedParams: [],
-    async: true,
-
-    creator: (data) => {
-      return (dispatch, getState, {backend, services}) => {
-        const pass = getState().toJS().registration.encryption.pass
-        dispatch(actions.encryptDataWithPasswordOnRegister.buildAction(data, () => { // eslint-disable-line max-len
-          console.log('inside encrypt')
-          return backend.encryption.encryptInformation({
-            password: pass,
-            data: data
-          })
-        }))
-      }
-    }
   },
   checkPassword: {
     expectedParams: ['password', 'fieldName']
@@ -241,31 +208,6 @@ export default (state = initialState, action = {}) => {
         encryption: {
           generatedAndEncrypted: false,
           status: ''
-        }
-      })
-
-    case actions.encryptDataWithPasswordOnRegister.id:
-      return state.mergeDeep({
-        encryption: {
-          loading: true,
-          status: ''
-        }
-      })
-
-    case actions.encryptDataWithPasswordOnRegister.id_success:
-    // here crypto object (JSON) is returned in action.result
-      return state.mergeDeep({
-        encryption: {
-          loading: false,
-          status: 'OK'
-        }
-      })
-
-    case actions.encryptDataWithPasswordOnRegister.id_fail:
-      return state.mergeDeep({
-        encryption: {
-          errorMsg: action.error,
-          loading: false
         }
       })
 

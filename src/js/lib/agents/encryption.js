@@ -5,7 +5,7 @@ export default class EncryptionAgent {
   // encryption / decryption works in two steps
   // 1st step: derive a strong key from user password
   // 2nd step: encrypt / decrypt information with derived key
-
+  // TODO CHECK FOR OBJECT, MAKE SMARTER
   async encryptInformation({password, data}) {
     const salt = crypto.randomBytes(32)
     const iv = crypto.randomBytes(16)
@@ -61,6 +61,7 @@ export default class EncryptionAgent {
     })
   }
 
+  // MAKE SMARTER, PARSE IF OBJECT
   async decryptInformation({ciphertext, password, salt, iv}) {
     const key = await this._constructEncryptionKey(password, Buffer.from(salt, 'hex')) // eslint-disable-line max-len
 
