@@ -19,6 +19,6 @@ export default class EntropyService {
   }
 
   getRandomString(wordCount) {
-    return this.generator.randomWords(wordCount).join('').replace(/\-/g, '').toString('hex')
+    return this.generator.randomWords(wordCount).join('').replace(/\-/g, '').toString(16).substring(0, 32)
   }
 }

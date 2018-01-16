@@ -76,8 +76,9 @@
   "dependencies": {
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-regenerator": "^6.22.0",
-    "bitcoinjs-lib": "^3.3.2",
     "bip39": "^2.5.0",
+    "bitcoinjs-lib": "^3.3.2",
+    "bitcoinjs-message": "^2.0.0",
     "cheerio": "^1.0.0-rc.2",
     "create-react-class": "^15.6.2",
     "debug": "^2.2.0",

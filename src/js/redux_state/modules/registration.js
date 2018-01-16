@@ -1,8 +1,9 @@
 import every from 'lodash/every'
-import bitcoinjs from 'bitcoinjs-lib'
-import bip39 from 'bip39'
 import Immutable from 'immutable'
 import { makeActions } from './'
+import bitcoin from 'bitcoinjs-lib'
+import bitMessage from 'bitcoinjs-message'
+import bip39 from 'bip39'
 import {
   deriveMasterKeyPair,
   deriveGenericSigningKeyPair
@@ -54,9 +55,10 @@ export const actions = makeActions('registration', {
         }))
 
         if (entropy.isReady()) {
-          const randomString = '213246356765534235943456'
-          console.log(randomString)
+          const randomString = entropy.getRandomString(6)
+          const mnemonic = bip39.entropyToMnemonic(randomString)
           dispatch(actions.setRandomString({randomString}))
+          dispatch(actions.setPassphrase({mnemonic}))
         }
       }
     }
@@ -89,34 +91,38 @@ export const actions = makeActions('registration', {
           'passphrase',
           'randomString'
         ])
-
         if (!randomStringState) {
           throw new Error('No seedphrase found.')
         }
-
-        const seed = bip39.entropyToMnemonic(randomStringState)
-          console.log(seed, "===========================")
-
+        // Store the encrypted seed phrase (12 word)
         // TODO: Save masterKeyPair
-        const masterKeyPair = deriveMasterKeyPair(seed)
+        const masterKeyPair = deriveMasterKeyPair(randomStringState)
         // eslint-disable-next-line
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
+        // console.log(genericSigningKey.parentFingerprint, masterKeyPair.getFingerprint())
 
-        // Store the encrypted seed phrase (12 word)
-        // At later points, retrieve it, instantiate a new Mnemonic, and generate Key based on that
+        const wif = genericSigningKey.keyPair.toWIF()
+        const key = bitcoin.ECPair.fromWIF(wif)
+
+        console.log(genericSigningKey.keyPair, key)
+
+        const keyPair = bitcoin.ECPair.fromWIF(wif)
+        const privateKey = keyPair.d.toBuffer(32)
+        const message = 'This is an example of a signed message.'
+        
+        const signature = bitMessage.sign(message, privateKey, keyPair.compressed)
+        console.log(signature.toString('base64'))
+
+        const address = '1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN'
+        
+        console.log(bitMessage.verify(message, address, signature))
+
+        // At later points, retrieve it and generate Key based on that
         // Use the generated key
 
-        //const wif = genericSigningKey.privateKey.toWIF()
-        //const privateKey = new PrivateKey(wif)
-
-        //const message = new Message('This is an example of a signed message.')
-
-        //const signedMessage = message.sign(privateKey) 
-
-
-        backend.encryption.encryptInformation({password: 'bla', data: seed.phrase}).then((res) => {
-          // TODO Cordova stringify?
-          StorageManager.setItem('masterSeed', JSON.stringify(res.crypto))
+        // backend.encryption.encryptInformation({password: 'bla', data: seed.phrase}).then((res) => {
+        //   // TODO Cordova stringify?
+        //   StorageManager.setItem('masterSeed', JSON.stringify(res.crypto))
           /*
           backend.encryption.decryptInformation({
             ciphertext: res.crypto.ciphertext,
@@ -128,8 +134,7 @@ export const actions = makeActions('registration', {
             dispatch(actions.goForward())
           })
           */
-        })
-        
+        // })
       }
     }
   },
@@ -272,7 +277,7 @@ export default (state = initialState, action = {}) => {
 
     case actions.setPassphrase.id:
       return state.mergeIn(['passphrase'], {
-        phrase: action.phrase
+        phrase: action.mnemonic
       })
 
     case actions.setMaskedImageUncovering.id:
