@@ -171,7 +171,7 @@ export const actions = makeActions('registration', {
     }
   },
   checkPassword: {
-    expectedParams: ['value', 'key']
+    expectedParams: ['password', 'fieldName']
   }
 })
 
@@ -251,13 +251,13 @@ export default (state = initialState, action = {}) => {
       })
 
     case actions.checkPassword.id:
-      if (action.key === 'pass') {
+      if (action.fieldName === 'pass') {
         return state.mergeDeep({
-          encryption: {pass: action.value}
+          encryption: {pass: action.password}
         })
-      } else if (action.key === 'passReenter') {
+      } else if (action.fieldName === 'passReenter') {
         return state.mergeDeep({
-          encryption: {passReenter: action.value}
+          encryption: {passReenter: action.password}
         })
       }
       return state

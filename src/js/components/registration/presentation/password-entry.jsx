@@ -59,7 +59,7 @@ export default class PasswordEntry extends React.Component {
               ? passwordValidityCheck(this.props.security.pass)
               : null}
             onChange={(e) =>
-              this.props.checkPassword({value: e.target.value, key: 'pass'})} />
+              this.props.checkPassword({password: e.target.value, fieldName: 'pass'})} />
         </Block>
         <Block>
           <TextField
@@ -70,8 +70,8 @@ export default class PasswordEntry extends React.Component {
             errorText={noMatchMessage.length > 0 ? noMatchMessage : null}
             onChange={(e) =>
               this.props.checkPassword({
-                value: e.target.value,
-                key: 'passReenter'
+                password: e.target.value,
+                fieldName: 'passReenter'
               })} />
         </Block>
         <Block>

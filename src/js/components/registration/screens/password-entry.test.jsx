@@ -50,16 +50,16 @@ describe('(Component) Password entry encryption on register', () => {
     )
 
     wrapper.find('PasswordEntry').props().checkPassword({
-      value: 'test',
-      key: 'pass'
+      password: 'test',
+      fieldName: 'pass'
     })
     // eslint-disable-next-line
     expect(checkPassword.called).to.be.true
     // eslint-enable-next-line
     expect(checkPassword.calls).to.deep.equal([{
       args: [{
-        value: 'test',
-        key: 'pass'
+        password: 'test',
+        fieldName: 'pass'
       }]
     }])
   })
