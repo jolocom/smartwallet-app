@@ -48,7 +48,7 @@ export const actions = makeActions('registration', {
         }))
 
         if (entropy.isReady()) {
-          const randomString = entropy.getRandomString(6)
+          const randomString = entropy.getRandomString(4)
           return dispatch(actions.submitEntropy(randomString))
         }
       }
