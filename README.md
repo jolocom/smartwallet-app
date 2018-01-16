@@ -66,8 +66,6 @@ yarn run android
 
 If you are getting the error `Module parse failed: main.jsx Line 1: Unexpected token`, switch to node version 4.x before running the gulp ([nvm](https://github.com/creationix/nvm) might come in handy).
 
-If you get an error with bitcore-lib duplication, take a look at this issue https://github.com/jolocom/smartwallet-app/issues/893 
-
 Setup for production
 --------------------
 
