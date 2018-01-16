@@ -1,8 +1,6 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import bitcoin from 'bitcoinjs-lib'
-import bitMessage from 'bitcoinjs-message'
 import bip39 from 'bip39'
 import {
   deriveMasterKeyPairFromSeedphrase,
@@ -133,6 +131,29 @@ export const actions = makeActions('registration', {
   encryptDataWithPasswordOnRegister: {
     expectedParams: ['data'],
     async: true,
+<<<<<<< HEAD
+=======
+    creator: params => {
+      return (dispatch, getState) => {
+        const state = getState().get('registration').toJS()
+        dispatch(actions.checkCredentials.buildAction(params, (backend) => {
+          return backend.gateway
+            .checkUserDoesNotExist({userName: state.username.value})
+            .then(params => {
+              if (state.ownURL.valueOwnURL.length > 1) {
+                dispatch(actions.checkOwnUrl())
+              } else {
+                dispatch(actions.goForward())
+              }
+            })
+        }))
+      }
+    }
+  },
+  checkOwnUrl: {
+    expectedParams: [],
+    async: true,
+>>>>>>> removed unused libraries
     creator: (data) => {
       return (dispatch, getState, {backend, services}) => {
         const pass = getState().toJS().registration.encryption.pass
