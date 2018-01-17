@@ -105,7 +105,7 @@ export const actions = makeActions('registration', {
             'encryption',
             'pass'
           ])
-          
+
           const encMaster = await backend.encryption.encryptInformation({
             password,
             data: masterKeyPair.keyPair.toWIF()
@@ -116,6 +116,7 @@ export const actions = makeActions('registration', {
             data: genericSigningKey.keyPair.toWIF()
           })
 
+          // TODO Agent so it can be stubbed in tests
           await StorageManager.setItem('masterKeyWIF', JSON.stringify(encMaster))
           await StorageManager.setItem('genericKeyWIF', JSON.stringify(encGeneric))
 

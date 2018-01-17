@@ -20,7 +20,6 @@ export default class RegistrationEntropyScreen extends React.Component {
     addEntropyFromDeltas: PropTypes.func.isRequired,
     setMaskedImageUncovering: PropTypes.func.isRequired,
     goForward: PropTypes.func.isRequired
-
   }
 
   constructor() {

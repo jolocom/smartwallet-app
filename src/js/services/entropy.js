@@ -21,8 +21,7 @@ export default class EntropyService {
   getRandomString(wordCount) {
     // returns an array of length wordCount filled with random 4 byte words.
     const intArray = new Int32Array(this.generator.randomWords(wordCount))
-    const buf = new Buffer(intArray.buffer)
+    const buf = Buffer.from(intArray.buffer)
     return buf.toString('hex')
   }
 }
-
