@@ -1,4 +1,5 @@
 const storage = {
+  // SMARTEN
   setItem: async (key, value) => {
     if (!nativeStorageAvailable()) {
       localStorage.setItem(key, value)
@@ -10,6 +11,7 @@ const storage = {
     })
   },
 
+  // SMARTEN
   getItem: async (key) => {
     if (!nativeStorageAvailable()) {
       return Promise.resolve(localStorage.getItem(key))

@@ -5,11 +5,11 @@ export default class EncryptionAgent {
   // encryption / decryption works in two steps
   // 1st step: derive a strong key from user password
   // 2nd step: encrypt / decrypt information with derived key
+
   // TODO CHECK FOR OBJECT, MAKE SMARTER
   async encryptInformation({password, data}) {
     const salt = crypto.randomBytes(32)
     const iv = crypto.randomBytes(16)
-
     const key = await this._constructEncryptionKey(password, salt)
 
     const cipher = crypto.createCipheriv(
@@ -37,11 +37,12 @@ export default class EncryptionAgent {
     return result
   }
 
+  // TODO MAKE USE OF CALLBACK FOR ASYNC EXECUTION
   _constructEncryptionKey(password, salt) {
     return new Promise((resolve, reject) => {
       var derivedKey
       var kdfParams = {
-        dervationKeyLength: 32, // suitable for a 256 bit aes key
+        derivationKeyLength: 32, // suitable for a 256 bit aes key
         salt: salt.toString('hex')
       }
       kdfParams.n = 262144 // number of iterations
@@ -54,7 +55,7 @@ export default class EncryptionAgent {
         kdfParams.n,
         kdfParams.r,
         kdfParams.p,
-        kdfParams.dervationKeyLength
+        kdfParams.derivationKeyLength
       )
 
       resolve({derivedKey, kdfParams})

@@ -54,6 +54,7 @@ export const actions = makeActions('registration', {
       }
     }
   },
+
   submitEntropy: {
     expectedParams: ['randomString'],
     creator: (randomString) => {
@@ -104,20 +105,21 @@ export const actions = makeActions('registration', {
             'encryption',
             'pass'
           ])
-
+          
           const encMaster = await backend.encryption.encryptInformation({
             password,
-            data: masterKeyPair
+            data: masterKeyPair.keyPair.toWIF()
           })
 
           const encGeneric = await backend.encryption.encryptInformation({
             password,
-            data: genericSigningKey
+            data: genericSigningKey.keyPair.toWIF()
           })
 
-          StorageManager.setItem('masterKeyPair', JSON.stringify(encMaster))
-          StorageManager.setItem('genericSigningKeyPair', JSON.stringify(encGeneric))
-          // dispatch(router.pushRoute('/wallet'))
+          await StorageManager.setItem('masterKeyWIF', JSON.stringify(encMaster))
+          await StorageManager.setItem('genericKeyWIF', JSON.stringify(encGeneric))
+
+          dispatch(router.pushRoute('/wallet'))
         }))
       }
     }
@@ -160,7 +162,6 @@ const initialState = Immutable.fromJS({
 })
 
 export default (state = initialState, action = {}) => {
-  state = state.set('complete', helpers._isComplete(state))
   switch (action.type) {
     case actions.setEntropyStatus.id:
       return state.mergeDeep({
