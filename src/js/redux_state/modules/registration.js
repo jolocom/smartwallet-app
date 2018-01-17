@@ -3,7 +3,7 @@ import Immutable from 'immutable'
 import { makeActions } from './'
 import bip39 from 'bip39'
 import {
-  deriveMasterKeyPairFromSeedphrase,
+  deriveMasterKeyPairFromSeedPhrase,
   deriveGenericSigningKeyPair
 } from 'lib/key-derivation'
 import router from './router'
@@ -88,15 +88,15 @@ export const actions = makeActions('registration', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        const seedphrase = getState().getIn([
+        const seedPhrase = getState().getIn([
           'registration',
           'passphrase',
           'phrase'
         ])
-        if (!seedphrase) {
+        if (!seedPhrase) {
           throw new Error('No seedphrase found.')
         }
-        const masterKeyPair = deriveMasterKeyPairFromSeedphrase(seedphrase)
+        const masterKeyPair = deriveMasterKeyPairFromSeedPhrase(seedPhrase)
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
 
         dispatch(actions.generateAndEncryptKeyPairs.buildAction(params, async () => {

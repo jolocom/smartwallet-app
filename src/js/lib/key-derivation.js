@@ -3,45 +3,35 @@ import bip39 from 'bip39'
 
 /* @summary - Generates a keypair based on provided entropy
  *
- * @param {Mnemonic} seed - a Bitcore-Mnemonic generated from hashed entropy.
- * @returns {HDPrivateKey} - an HDPrivateKey instance containing a keypair.
+ * @param {String} seedPhrase - a BIP39 compliant mnemonic generated from hashed entropy.
+ * @returns {HDNode} - an instance containing a master keypair and a default Bitcoin network object.
 */
 
-export function deriveMasterKeyPairFromSeedphrase(seedphrase) {
-  const seed = bip39.mnemonicToSeed(seedphrase)
+export function deriveMasterKeyPairFromSeedPhrase(seedPhrase) {
+  const seed = bip39.mnemonicToSeed(seedPhrase)
   return bitcoin.HDNode.fromSeedBuffer(seed)
 }
 
-export function deriveMasterKeyPairFromMasterKeyPair(masterKeyPair) {
-  return new bitcoin.HDNode(masterKeyPair.keyPair, masterKeyPair.chainCode)
-}
-
-export function derivePrivateChildKeyPair(masterPrivateKeyPair, path) {
-  return masterPrivateKeyPair.derive(path)
-}
-
-/* @summary - Generate a generic signing key according to TODO
+/* @summary - Generate a generic signing key according to BIP32 specification
  *
- * @param {HDPrivateKey} masterPrivateKeyPair - the master keypair used to
+ * @param {HDNode} masterKeyPair - the master keypair used to
  * derive the child key.
  *
- * @returns {HDPrivateKey} - the derived generic signing key.
+ * @returns {HDNode} - the derived child  generic signing key.
  *
 */
-
-export function deriveGenericSigningKeyPair(masterPrivateKeyPair) {
-  return masterPrivateKeyPair.derivePath('m/73\'/0\'/0\'')
+export function deriveGenericSigningKeyPair(masterKeyPair) {
+  return masterKeyPair.derivePath('m/73\'/0\'/0\'')
 }
 
 /* @summary - Generate an Ethereum keypair according to goo.gl/sr5dvy
  *
- * @param {HDPrivateKey} masterPrivateKeyPair - the master keypair used to
+ * @param {HDNode} masterKeyPair - the master keypair used to
  * derive the child key.
  *
- * @returns {HDPrivateKey} - the derived Ethereum keypair.
+ * @returns {HDNode} - the derived Ethereum keypair.
  *
 */
-
-export function deriveEthereumKeyPair(masterPrivateKeyPair) {
-  return masterPrivateKeyPair.derivePath('m/44\'/60\'/0\'/0/0')
+export function deriveEthereumKeyPair(masterKeyPair) {
+  return masterKeyPair.derivePath('m/44\'/60\'/0\'/0/0')
 }
