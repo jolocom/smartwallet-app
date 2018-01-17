@@ -99,7 +99,7 @@ describe('Wallet registration Redux module', () => {
         expect(services.entropy.getRandomString.called).to.equal(false)
       })
 
-      it('should set the randomString when entropy is ready', () => {
+      it('should get and submit the randomString when entropy is ready', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {phrase: ''}
@@ -108,21 +108,30 @@ describe('Wallet registration Redux module', () => {
           addFromDelta: stub(),
           isReady: stub().returns(true),
           getProgress: stub().returns(1),
-          getRandomString: stub().returns('bla bla bla bla bla bla bla')
+          getRandomString: stub().returns('you did your homework')
         }}
-
         const thunk = actions.addEntropyFromDeltas({ dx: 5, dy: 3 })
-        thunk(dispatch, getState, {services})
 
-        expect(services.entropy.addFromDelta.called).to.equal(true)
-        expect(services.entropy.getRandomString.called).to.equal(true)
-
-        expect(dispatch.calls).to.deep.equal([
-          {args: [actions.setEntropyStatus({
-            sufficientEntropy: true,
-            progress: 1
-          })]}
-        ])
+        withStubs([
+        [actions.actions, 'submitEntropy', {returns: 'i still need to do mine'}]
+        ], () => {
+          thunk(dispatch, getState, {services})
+          expect(services.entropy.addFromDelta.called).to.equal(true)
+          expect(services.entropy.getRandomString.called).to.equal(true)
+          expect(dispatch.calledWithArgs).to.deep.equal(
+            ['i still need to do mine'])
+          expect(dispatch.calls).to.deep.equal([
+            {args: [{
+              type: 'registration/SET_ENTROPY_STATUS',
+              sufficientEntropy: true,
+              progress: 1
+            }]
+            },
+            {
+              args: ['i still need to do mine']
+            }
+          ])
+        })
       })
     })
 
@@ -140,6 +149,7 @@ describe('Wallet registration Redux module', () => {
         expect(dispatch.calls).to.deep.equal([])
       })
 
+      // eslint-disable-next-line
       it('should trigger generateSeedPhrase when there is enough entropy', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
@@ -169,25 +179,57 @@ describe('Wallet registration Redux module', () => {
       })
 
       // eslint-disable-next-line
-      it('should trigger generateAndEcryptKeyPairs if there is a seed present', () => {
+      it('should execute generateAndEcryptKeyPairs if there is a seed present', async () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({
           registration: {
             passphrase: {
               phrase: 'mnemonic phrase'
+            },
+            encryption: {
+              pass: 'password'
             }
           }
         })
 
-        const backend = {
-          encryption: { 
-            encryptInformation: stub()
+        const services = {
+          storage: {
+            setItem: stub()
           }
         }
-        
-        const thunk = actions.generateAndEncryptKeyPairs()
-        thunk(dispatch, getState, {backend})
-        expect(backend.encryption.encryptInformation.called).to.equal(true)
+
+        const backend = {
+          encryption: {
+            encryptInformation: stub().returns('encrypted')
+          }
+        }
+
+        const promise = actions.generateAndEncryptKeyPairs()
+        await promise(dispatch, getState, {services, backend})
+
+        const expectedStorageCalls = [{
+          'args': ['masterKeyWIF', 'encrypted']
+        }, {
+          'args': ['genericKeyWIF', 'encrypted']
+        }]
+
+        const expectedEncryptionCalls = [{
+          'args': [{
+            'password': 'password',
+            'data': 'KwLXVoqUxif9SQ4TGRSd9ySiXwkQG48Neg4S9HMZmU6MHmQNbZ71'
+          }]
+        }, {
+          'args': [{
+            'password': 'password',
+            'data': 'KwwQkJ1Bb5FLsTPsYxk9hSoEh4WDqdXnvQembfj1yHMk6L8uEv4R'
+          }]
+        }]
+
+        expect(services.storage.setItem.calls)
+          .to.deep.equal(expectedStorageCalls)
+
+        expect(backend.encryption.encryptInformation.calls)
+          .to.deep.equal(expectedEncryptionCalls)
       })
     })
 

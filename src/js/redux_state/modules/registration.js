@@ -7,7 +7,6 @@ import {
   deriveGenericSigningKeyPair
 } from 'lib/key-derivation'
 import router from './router'
-import StorageManager from 'lib/storage'
 const NEXT_ROUTES = {
   '/registration': '/registration/write-phrase',
   '/registration/write-phrase': '/registration/entry-password'
@@ -115,9 +114,8 @@ export const actions = makeActions('registration', {
           data: genericSigningKey.keyPair.toWIF()
         })
 
-        // TODO Agent so it can be stubbed in tests
-        await StorageManager.setItem('masterKeyWIF', encMaster)
-        await StorageManager.setItem('genericKeyWIF', encGeneric)
+        await services.storage.setItem('masterKeyWIF', encMaster)
+        await services.storage.setItem('genericKeyWIF', encGeneric)
 
         // dispatch(router.pushRoute('/wallet'))
       }
@@ -186,7 +184,7 @@ export default (state = initialState, action = {}) => {
         }
       })
       return state.set('complete', helpers._isComplete(state))
-    
+
     case actions.generateAndEncryptKeyPairs.id:
       return state.mergeDeep({
         encryption: {

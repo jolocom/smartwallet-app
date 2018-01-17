@@ -33,7 +33,7 @@ describe('(Component) RegistrationEntropyScreen', function() {
     /* eslint-enable */
   })
   it('should call goForward onSubmit with the right params', function() {
-    const goForward =  stub()
+    const goForward = stub()
     const wrapper = shallow(
       (<RegistrationEntropyScreen.WrappedComponent {
         ...RegistrationEntropyScreen.mapStateToProps(Immutable.fromJS({
@@ -53,8 +53,6 @@ describe('(Component) RegistrationEntropyScreen', function() {
       />),
       { context: { muiTheme: { } } }
     )
-
-    console.log(wrapper.find('Entropy').props())
     wrapper.find('Entropy').props().onSubmit()
     /* eslint-disable */
     expect(goForward.called).to.be.false

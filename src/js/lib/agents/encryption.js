@@ -7,7 +7,6 @@ export default class EncryptionAgent {
   // 2nd step: encrypt / decrypt information with derived key
 
   async encryptInformation({password, data}) {
-
     if (typeof data === 'object' && data !== null) {
       data = JSON.stringify(data)
     }
@@ -15,7 +14,6 @@ export default class EncryptionAgent {
     const salt = crypto.randomBytes(32)
     const iv = crypto.randomBytes(16)
     const key = await this._constructEncryptionKey(password, salt)
-    console.log(key)
 
     const cipher = crypto.createCipheriv(
       'aes-128-ctr',
@@ -76,7 +74,7 @@ export default class EncryptionAgent {
 
     try {
       return JSON.parse(plaintext)
-    } catch(e) {
+    } catch (e) {
       return plaintext
     }
   }

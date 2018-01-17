@@ -1,7 +1,11 @@
 // TODO Does native storage api accept objects?
-const storage = {
-  setItem: async (key, value) => {
-    if (!nativeStorageAvailable()) {
+export default class StorageService {
+  constructor() {
+    this.inBrowser = !nativeStorageAvailable()
+  }
+
+  async setItem(key, value) {
+    if (this.inBrowser) {
       if (typeof value === 'object' && value !== null) {
         value = JSON.stringify(value)
       }
@@ -13,14 +17,14 @@ const storage = {
     return new Promise((resolve, reject) => {
       window.NativeStorage.setItem(key, value, resolve, reject)
     })
-  },
+  }
 
-  getItem: async (key) => {
-    if (!nativeStorageAvailable()) {
+  async getItem(key) {
+    if (this.inBrowser) {
       const data = localStorage.getItem(key)
       try {
         return JSON.parse(data)
-      } catch(e) {
+      } catch (e) {
         return Promise.resolve(localStorage.getItem(key))
       }
     }
@@ -34,5 +38,3 @@ const storage = {
 const nativeStorageAvailable = () => {
   return !!window.cordova && !!window.NativeStorage
 }
-
-export default storage

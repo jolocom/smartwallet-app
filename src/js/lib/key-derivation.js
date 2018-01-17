@@ -1,11 +1,11 @@
 import bitcoin from 'bitcoinjs-lib'
 import bip39 from 'bip39'
 
-/* @summary - Generates a keypair based on provided entropy
- *
- * @param {String} seedPhrase - a BIP39 compliant mnemonic generated from hashed entropy.
- * @returns {HDNode} - an instance containing a master keypair and a default Bitcoin network object.
-*/
+// @summary - Generates a keypair based on provided entropy
+//eslint-disable-next-line
+// @param {String} seedPhrase - a BIP39 compliant mnemonic generated from hashed entropy.
+//eslint-disable-next-line
+// @returns {HDNode} - an instance containing a master keypair and a default Bitcoin network object.
 
 export function deriveMasterKeyPairFromSeedPhrase(seedPhrase) {
   const seed = bip39.mnemonicToSeed(seedPhrase)

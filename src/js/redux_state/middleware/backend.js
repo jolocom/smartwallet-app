@@ -19,6 +19,7 @@ export default function backendMiddleware(backend, services) {
         (result) => next({...rest, result, type: SUCCESS}),
         (error) => next({...rest, error, type: FAILURE})
       ).catch(error => {
+        //eslint-disable-next-line
         console.error('MIDDLEWARE ERROR:', error,
                       ...(error.stack ? [error.stack] : []))
         next({...rest, error, type: FAILURE})

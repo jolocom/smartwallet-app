@@ -1,6 +1,5 @@
 import Immutable from 'immutable'
 import {makeActions} from '../'
-import StorageManager from 'lib/storage'
 
 export const actions = makeActions('keystore/security', {
   checkPassword: {
@@ -18,7 +17,7 @@ export const actions = makeActions('keystore/security', {
             data: 'testingoutfunfunfun' // master key needs to be passed in
           })
           .then((result) => {
-            return StorageManager.setItem('userData', JSON.stringify(result))
+            return services.storage.setItem('userData', JSON.stringify(result))
           })
         }))
       }
@@ -31,7 +30,7 @@ export const actions = makeActions('keystore/security', {
       return (dispatch, getState, {backend, services}) => {
         const pass = getState().toJS().keystore.security.pass
         dispatch(actions.decryptDataWithPassword.buildAction(params, async () => { // eslint-disable-line max-len
-          const result = await StorageManager.getItem('userData')
+          const result = await services.storage.getItem('userData')
           const userData = JSON.parse(result)
           return backend.encryption.decryptInformation({
             ciphertext: userData.crypto.ciphertext,
