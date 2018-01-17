@@ -116,10 +116,10 @@ export const actions = makeActions('registration', {
         })
 
         // TODO Agent so it can be stubbed in tests
-        await StorageManager.setItem('masterKeyWIF', JSON.stringify(encMaster))
-        await StorageManager.setItem('genericKeyWIF', JSON.stringify(encGeneric))
+        await StorageManager.setItem('masterKeyWIF', encMaster)
+        await StorageManager.setItem('genericKeyWIF', encGeneric)
 
-        dispatch(router.pushRoute('/wallet'))
+        // dispatch(router.pushRoute('/wallet'))
       }
     }
   },

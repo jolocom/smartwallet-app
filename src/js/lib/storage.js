@@ -1,7 +1,11 @@
+// TODO Does native storage api accept objects?
 const storage = {
-  // SMARTEN
   setItem: async (key, value) => {
     if (!nativeStorageAvailable()) {
+      if (typeof value === 'object' && value !== null) {
+        value = JSON.stringify(value)
+      }
+
       localStorage.setItem(key, value)
       return Promise.resolve(value)
     }
@@ -11,10 +15,14 @@ const storage = {
     })
   },
 
-  // SMARTEN
   getItem: async (key) => {
     if (!nativeStorageAvailable()) {
-      return Promise.resolve(localStorage.getItem(key))
+      const data = localStorage.getItem(key)
+      try {
+        return JSON.parse(data)
+      } catch(e) {
+        return Promise.resolve(localStorage.getItem(key))
+      }
     }
 
     return new Promise((resolve, reject) => {
