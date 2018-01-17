@@ -9,7 +9,7 @@ import {stub, withStubs} from '../../../../test/utils'
 import reducer from './registration'
 
 describe('Wallet registration Redux module', () => {
-  describe.only('goForward', () => {
+  describe('goForward', () => {
     describe('action', () => {
       it('should go to the next page if requested', () => {
         const dispatch = stub()
@@ -157,15 +157,15 @@ describe('Wallet registration Redux module', () => {
     })
 
     describe('generateKeyPairs', () => {
-      it('should not do anything is there is no randomString', () => {
+      it('should not do anything is there is no randomString', async () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {randomString: ''}
         }})
 
-        expect(() => {
-          actions.generateAndEncryptKeyPairs()(dispatch, getState, {})
-        }).to.throw('No seedphrase found')
+        const promise = actions.generateAndEncryptKeyPairs()
+        await expect(promise(dispatch, getState, {}))
+          .to.be.rejectedWith('No seedphrase found')
       })
 
       // eslint-disable-next-line
@@ -187,7 +187,6 @@ describe('Wallet registration Redux module', () => {
         
         const thunk = actions.generateAndEncryptKeyPairs()
         thunk(dispatch, getState, {backend})
-        console.log(JSON.stringify(dispatch.calls))
         expect(backend.encryption.encryptInformation.called).to.equal(true)
       })
     })

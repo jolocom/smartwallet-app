@@ -87,7 +87,7 @@ export const actions = makeActions('registration', {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services, backend}) => {
+      return async (dispatch, getState, {services, backend}) => {
         const seedPhrase = getState().getIn([
           'registration',
           'passphrase',
@@ -99,29 +99,27 @@ export const actions = makeActions('registration', {
         const masterKeyPair = deriveMasterKeyPairFromSeedPhrase(seedPhrase)
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
 
-        dispatch(actions.generateAndEncryptKeyPairs.buildAction(params, async () => {
-          const password = getState().getIn([
-            'registration',
-            'encryption',
-            'pass'
-          ])
+        const password = getState().getIn([
+          'registration',
+          'encryption',
+          'pass'
+        ])
 
-          const encMaster = await backend.encryption.encryptInformation({
-            password,
-            data: masterKeyPair.keyPair.toWIF()
-          })
+        const encMaster = await backend.encryption.encryptInformation({
+          password,
+          data: masterKeyPair.keyPair.toWIF()
+        })
 
-          const encGeneric = await backend.encryption.encryptInformation({
-            password,
-            data: genericSigningKey.keyPair.toWIF()
-          })
+        const encGeneric = await backend.encryption.encryptInformation({
+          password,
+          data: genericSigningKey.keyPair.toWIF()
+        })
 
-          // TODO Agent so it can be stubbed in tests
-          await StorageManager.setItem('masterKeyWIF', JSON.stringify(encMaster))
-          await StorageManager.setItem('genericKeyWIF', JSON.stringify(encGeneric))
+        // TODO Agent so it can be stubbed in tests
+        await StorageManager.setItem('masterKeyWIF', JSON.stringify(encMaster))
+        await StorageManager.setItem('genericKeyWIF', JSON.stringify(encGeneric))
 
-          dispatch(router.pushRoute('/wallet'))
-        }))
+        dispatch(router.pushRoute('/wallet'))
       }
     }
   },
