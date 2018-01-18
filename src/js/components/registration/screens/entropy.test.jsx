@@ -32,8 +32,8 @@ describe('(Component) RegistrationEntropyScreen', function() {
     expect(wrapper.find('Entropy').prop('imageUncovering')).to.be.false
     /* eslint-enable */
   })
-  it('should call submitEntropy onSubmit with the right params', function() {
-    const submitEntropy = stub()
+  it('should call goForward onSubmit with the right params', function() {
+    const goForward = stub()
     const wrapper = shallow(
       (<RegistrationEntropyScreen.WrappedComponent {
         ...RegistrationEntropyScreen.mapStateToProps(Immutable.fromJS({
@@ -47,17 +47,15 @@ describe('(Component) RegistrationEntropyScreen', function() {
           }
         }))
       }
-        submitEntropy={submitEntropy}
+        goForward={() => {}}
         setMaskedImageUncovering={() => {}}
         addEntropyFromDeltas={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
-
     wrapper.find('Entropy').props().onSubmit()
     /* eslint-disable */
-    expect(submitEntropy.called).to.be.true
-    expect(submitEntropy.calls).to.deep.equal([{'args': []}])
+    expect(goForward.called).to.be.false
     /* eslint-enable */
   })
   it('should call setMaskedImageUncovering onImageUncoveringChange ' +

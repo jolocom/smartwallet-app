@@ -1,5 +1,4 @@
 import fromPairs from 'lodash/fromPairs'
-import map from 'lodash/map'
 import isString from 'lodash/isString'
 import { bindActionCreators } from 'redux'
 import { connect as reduxConnect } from 'react-redux'
@@ -32,9 +31,6 @@ const helpers = {
 
     const module = {...actions, 'default': reducer}
 
-    if (!actions)
-      console.log(actionName)
-
     return [module, actionName]
   },
 
@@ -48,7 +44,7 @@ const helpers = {
 
     if (typeof value === 'undefined') {
       const errMsg = `Trying to use non-existing state ${prop}, in wrapper`
-      throw new Error(errMsg) 
+      throw new Error(errMsg)
     }
 
     if (value !== null && value.toJS) {

@@ -63,31 +63,4 @@ describe('(Component) Password entry encryption on register', () => {
       }]
     }])
   })
-  it('should trigger function call encryptDataWithPasswordOnRegister', () => {
-    const encryptDataWithPasswordOnRegister = stub()
-    const wrapper = shallow(
-      (<PasswordEntry.WrappedComponent {
-        ...PasswordEntry.mapStateToProps(Immutable.fromJS({
-          registration: {
-            encryption: {
-              loading: false,
-              pass: '',
-              passReenter: '',
-              errorMsg: '',
-              status: ''
-            }
-          }
-        }))
-      }
-        checkPassword={() => {}}
-        encryptDataWithPasswordOnRegister={encryptDataWithPasswordOnRegister}
-      />),
-      { context: { muiTheme: { } } }
-    )
-
-    wrapper.find('PasswordEntry').props().encryptDataWithPasswordOnRegister({})
-    // eslint-disable-next-line
-    expect(encryptDataWithPasswordOnRegister.called).to.be.true
-    // eslint-enable-next-line
-  })
 })

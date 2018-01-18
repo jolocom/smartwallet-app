@@ -16,7 +16,7 @@ export default class PasswordEntry extends React.Component {
   static propTypes = {
     security: PropTypes.object,
     checkPassword: PropTypes.func.isRequired,
-    encryptDataWithPasswordOnRegister: PropTypes.func.isRequired
+    generateAndEncryptKeyPairs: PropTypes.func.isRequired
   }
 
   render() {
@@ -81,7 +81,7 @@ export default class PasswordEntry extends React.Component {
           <RaisedButton
             label="Next"
             disabled={allowSubmit}
-            onClick={() => this.props.encryptDataWithPasswordOnRegister()}
+            onClick={() => this.props.generateAndEncryptKeyPairs()}
             secondary />
         </Block>
         <Block>

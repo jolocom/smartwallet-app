@@ -9,16 +9,17 @@ import Presentation from '../presentation/entropy'
   actions: [
     'registration:setMaskedImageUncovering',
     'registration:addEntropyFromDeltas',
-    'registration:submitEntropy'
+    'registration:submitEntropy',
+    'registration:goForward'
   ],
   pure: false
 })
 export default class RegistrationEntropyScreen extends React.Component {
   static propTypes = {
     registration: PropTypes.object.isRequired,
-    submitEntropy: PropTypes.func.isRequired,
     addEntropyFromDeltas: PropTypes.func.isRequired,
-    setMaskedImageUncovering: PropTypes.func.isRequired
+    setMaskedImageUncovering: PropTypes.func.isRequired,
+    goForward: PropTypes.func.isRequired
   }
 
   constructor() {
@@ -54,7 +55,7 @@ export default class RegistrationEntropyScreen extends React.Component {
       onImagePointUncoverd={this.handleUncoveredPoint}
       onImageUncoveringChange={this.handleUncoveringChange}
       onMouseMovement={this.handleMouseMovement}
-      onSubmit={this.props.submitEntropy}
+      onSubmit={this.props.goForward}
     />
   }
 }

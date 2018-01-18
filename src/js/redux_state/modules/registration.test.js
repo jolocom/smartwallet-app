@@ -39,22 +39,16 @@ describe('Wallet registration Redux module', () => {
       const test = ({invalid, result}) => {
         invalid = new Immutable.Set(invalid)
         expect(helpers._isComplete(Immutable.fromJS({
-          username: {valid: !invalid.has('username')},
           passphrase: {valid: !invalid.has('passphrase')}
         }))).to.equal(result)
       }
 
       it('should return false if nothing is filled in', () => {
         test({
-          invalid: [ 'username', 'passphrase' ],
+          invalid: [ 'passphrase' ],
           result: false
         })
       })
-
-      it('should return false if one of the base fields is missing', () => {
-        test({invalid: ['username'], result: false})
-      })
-
       it('should return true if nothing is missing', () => {
         test({invalid: [], result: true})
       })
@@ -105,7 +99,7 @@ describe('Wallet registration Redux module', () => {
         expect(services.entropy.getRandomString.called).to.equal(false)
       })
 
-      it('should set the randomString when entropy is ready', () => {
+      it('should get and submit the randomString when entropy is ready', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {phrase: ''}
@@ -114,23 +108,30 @@ describe('Wallet registration Redux module', () => {
           addFromDelta: stub(),
           isReady: stub().returns(true),
           getProgress: stub().returns(1),
-          getRandomString: stub().returns('bla bla bla bla bla bla bla')
+          getRandomString: stub().returns('you did your homework')
         }}
-
         const thunk = actions.addEntropyFromDeltas({ dx: 5, dy: 3 })
-        thunk(dispatch, getState, {services})
 
-        expect(services.entropy.addFromDelta.called).to.equal(true)
-        expect(services.entropy.getRandomString.called).to.equal(true)
-        expect(dispatch.calls).to.deep.equal([
-          {args: [actions.setEntropyStatus({
-            sufficientEntropy: true,
-            progress: 1
-          })]},
-          {args: [actions.setRandomString({
-            randomString: 'bla bla bla bla bla bla bla'
-          })]}
-        ])
+        withStubs([
+        [actions.actions, 'submitEntropy', {returns: 'i still need to do mine'}]
+        ], () => {
+          thunk(dispatch, getState, {services})
+          expect(services.entropy.addFromDelta.called).to.equal(true)
+          expect(services.entropy.getRandomString.called).to.equal(true)
+          expect(dispatch.calledWithArgs).to.deep.equal(
+            ['i still need to do mine'])
+          expect(dispatch.calls).to.deep.equal([
+            {args: [{
+              type: 'registration/SET_ENTROPY_STATUS',
+              sufficientEntropy: true,
+              progress: 1
+            }]
+            },
+            {
+              args: ['i still need to do mine']
+            }
+          ])
+        })
       })
     })
 
@@ -141,65 +142,94 @@ describe('Wallet registration Redux module', () => {
           passphrase: {sufficientEntropy: false}
         }})
         const readyE = actions.submitEntropy()
-        // eslint-disable-next-line
-        expect(() => { readyE(dispatch, getState) }).to.throw('Not enough entropy!')
+        expect(() => {
+          readyE(dispatch, getState)
+        }).to.throw('Not enough entropy!')
+
         expect(dispatch.calls).to.deep.equal([])
       })
 
-      it('should trigger generateKeyPairs when there is enough entropy', () => {
+      // eslint-disable-next-line
+      it('should trigger generateSeedPhrase when there is enough entropy', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {sufficientEntropy: true}
         }})
         withStubs([
-        [actions.actions, 'generateKeyPairs', {returns: 'generated'}]],
-        () => {
-          const readyE = actions.actions.submitEntropy()
+          [actions.actions, 'generateSeedPhrase', {returns: 'generated'}]
+        ], () => {
+          const readyE = actions.actions.generateSeedPhrase
           readyE(dispatch, getState)
-          expect(actions.actions.generateKeyPairs.called).to.equal(true)
+          expect(actions.actions.generateSeedPhrase.called).to.equal(true)
         }
       )
       })
     })
 
     describe('generateKeyPairs', () => {
-      it('should not do anything is there is no randomString', () => {
+      it('should not do anything is there is no randomString', async () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {randomString: ''}
         }})
 
-        const services = {entropy: {
-          getHashedEntropy: stub()
-        }}
-
-        expect(() => {
-          actions.generateKeyPairs()(dispatch, getState, {services})
-        }).to.throw('No seedphrase found')
+        const promise = actions.generateAndEncryptKeyPairs()
+        await expect(promise(dispatch, getState, {}))
+          .to.be.rejectedWith('No seedphrase found')
       })
+
       // eslint-disable-next-line
-      it('should trigger generateKeyPairs if there is a random string present', () => {
+      it('should execute generateAndEcryptKeyPairs if there is a seed present', async () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({
           registration: {
-            passphrase: {randomString: 'dfghkjdlfgk'}
+            passphrase: {
+              phrase: 'mnemonic phrase'
+            },
+            encryption: {
+              pass: 'password'
+            }
           }
         })
 
         const services = {
-          entropy: { getHashedEntropy: stub() }
+          storage: {
+            setItem: stub()
+          }
         }
 
-        const generate = actions.generateKeyPairs()
-        withStubs([
-          [actions.actions.goForward, 'goForward', {returns: 'forward'}],
-          // eslint-disable-next-line
-          [actions.actions.setPassphrase, 'setPassphrase', {returns: 'forward'}]],
-          () => {
-            generate(dispatch, getState, {services})
-            expect(services.entropy.getHashedEntropy.called).to.equal(true)
+        const backend = {
+          encryption: {
+            encryptInformation: stub().returns('encrypted')
           }
-        )
+        }
+
+        const promise = actions.generateAndEncryptKeyPairs()
+        await promise(dispatch, getState, {services, backend})
+
+        const expectedStorageCalls = [{
+          'args': ['masterKeyWIF', 'encrypted']
+        }, {
+          'args': ['genericKeyWIF', 'encrypted']
+        }]
+
+        const expectedEncryptionCalls = [{
+          'args': [{
+            'password': 'password',
+            'data': 'KwLXVoqUxif9SQ4TGRSd9ySiXwkQG48Neg4S9HMZmU6MHmQNbZ71'
+          }]
+        }, {
+          'args': [{
+            'password': 'password',
+            'data': 'KwwQkJ1Bb5FLsTPsYxk9hSoEh4WDqdXnvQembfj1yHMk6L8uEv4R'
+          }]
+        }]
+
+        expect(services.storage.setItem.calls)
+          .to.deep.equal(expectedStorageCalls)
+
+        expect(backend.encryption.encryptInformation.calls)
+          .to.deep.equal(expectedEncryptionCalls)
       })
     })
 
@@ -211,7 +241,6 @@ describe('Wallet registration Redux module', () => {
         .to.deep.equal({
           sufficientEntropy: false,
           progress: 0,
-          randomString: '',
           phrase: '',
           writtenDown: false,
           valid: false
@@ -228,7 +257,6 @@ describe('Wallet registration Redux module', () => {
         .to.deep.equal({
           sufficientEntropy: 'bla',
           progress: 0.4,
-          randomString: '',
           phrase: '',
           writtenDown: false,
           valid: false
@@ -251,7 +279,6 @@ describe('Wallet registration Redux module', () => {
         passphrase: {
           sufficientEntropy: false,
           progress: 0,
-          randomString: '',
           phrase: '',
           writtenDown: false,
           valid: false
@@ -261,46 +288,8 @@ describe('Wallet registration Redux module', () => {
           pass: '',
           passReenter: 'testPasswordNatascha1',
           errorMsg: '',
+          generatedAndEncrypted: false,
           status: ''
-        },
-        complete: false
-      }
-      expect(state.toJS()).to.deep.equal(expectedState)
-    })
-
-    it('should encrypt information and return status OK', () => {
-      let state = reducer(undefined, '@@INIT')
-
-      const actionCheckPassword = {
-        type: actions.checkPassword.id,
-        fieldName: 'pass',
-        password: 'testPasswordNatascha1'
-      }
-
-      state = reducer(state, actionCheckPassword)
-      const encryptDataWithPasswordOnRegister = {
-        type: actions.encryptDataWithPasswordOnRegister.id_success,
-        result: 'test'
-      }
-      state = reducer(state, encryptDataWithPasswordOnRegister)
-      const expectedState = {
-        maskedImage: {
-          uncovering: false
-        },
-        passphrase: {
-          sufficientEntropy: false,
-          progress: 0,
-          randomString: '',
-          phrase: '',
-          writtenDown: false,
-          valid: false
-        },
-        encryption: {
-          loading: false,
-          pass: 'testPasswordNatascha1',
-          passReenter: '',
-          errorMsg: '',
-          status: 'OK'
         },
         complete: false
       }

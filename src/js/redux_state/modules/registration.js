@@ -1,14 +1,12 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
+import bip39 from 'bip39'
 import {
-  deriveMasterKeyPair,
+  deriveMasterKeyPairFromSeedPhrase,
   deriveGenericSigningKeyPair
 } from 'lib/key-derivation'
 import router from './router'
-import StorageManager from 'lib/storage'
-import Mnemonic from 'bitcore-mnemonic'
-
 const NEXT_ROUTES = {
   '/registration': '/registration/write-phrase',
   '/registration/write-phrase': '/registration/entry-password'
@@ -20,12 +18,8 @@ export const actions = makeActions('registration', {
     creator: () => {
       return (dispatch, getState) => {
         const state = getState()
-        if (state.getIn(['registration', 'complete'])) {
-          dispatch(actions.registerWallet())
-        } else {
-          let nextURL = helpers._getNextURLfromState(state)
-          dispatch(router.pushRoute(nextURL))
-        }
+        let nextURL = helpers._getNextURLfromState(state)
+        dispatch(router.pushRoute(nextURL))
       }
     }
   },
@@ -53,15 +47,16 @@ export const actions = makeActions('registration', {
         }))
 
         if (entropy.isReady()) {
-          const randomString = entropy.getRandomString(12)
-          dispatch(actions.setRandomString({randomString}))
+          const randomString = entropy.getRandomString(4)
+          return dispatch(actions.submitEntropy(randomString))
         }
       }
     }
   },
+
   submitEntropy: {
-    expectedParams: [],
-    creator: () => {
+    expectedParams: ['randomString'],
+    creator: (randomString) => {
       return (dispatch, getState) => {
         const entropyState = getState().getIn([
           'registration',
@@ -72,36 +67,57 @@ export const actions = makeActions('registration', {
         if (!entropyState) {
           throw new Error('Not enough entropy!')
         }
-
-        return dispatch(actions.generateKeyPairs())
+        dispatch(actions.generateSeedPhrase(randomString))
       }
     }
   },
-  generateKeyPairs: {
+
+  generateSeedPhrase: {
+    expectedParams: ['randomString'],
+    creator: (randomString) => {
+      return (dispatch, getState) => {
+        const mnemonic = bip39.entropyToMnemonic(randomString)
+        dispatch(actions.setPassphrase({mnemonic}))
+      }
+    }
+  },
+
+  generateAndEncryptKeyPairs: {
     expectedParams: [],
-    async: false,
+    async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        const randomStringState = getState().getIn([
+      return async (dispatch, getState, {services, backend}) => {
+        const seedPhrase = getState().getIn([
           'registration',
           'passphrase',
-          'randomString'
+          'phrase'
         ])
-
-        if (!randomStringState) {
+        if (!seedPhrase) {
           throw new Error('No seedphrase found.')
         }
-
-        const hashedEnt = services.entropy.getHashedEntropy(randomStringState)
-        const seed = new Mnemonic(hashedEnt, Mnemonic.Words.ENGLISH)
-
-        // TODO: Save masterKeyPair
-        const masterKeyPair = deriveMasterKeyPair(seed)
-        // eslint-disable-next-line
+        const masterKeyPair = deriveMasterKeyPairFromSeedPhrase(seedPhrase)
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
 
-        dispatch(actions.setPassphrase({phrase: seed.phrase}))
-        dispatch(actions.goForward())
+        const password = getState().getIn([
+          'registration',
+          'encryption',
+          'pass'
+        ])
+
+        const encMaster = await backend.encryption.encryptInformation({
+          password,
+          data: masterKeyPair.keyPair.toWIF()
+        })
+
+        const encGeneric = await backend.encryption.encryptInformation({
+          password,
+          data: genericSigningKey.keyPair.toWIF()
+        })
+
+        await services.storage.setItem('masterKeyWIF', encMaster)
+        await services.storage.setItem('genericKeyWIF', encGeneric)
+
+        // dispatch(router.pushRoute('/wallet'))
       }
     }
   },
@@ -112,30 +128,8 @@ export const actions = makeActions('registration', {
   setPassphrase: {
     expectedParams: ['phrase']
   },
-  setRandomString: {
-    expectedParams: ['randomString']
-  },
   setPassphraseWrittenDown: {
     expectedParams: ['value']
-  },
-  encryptDataWithPasswordOnRegister: {
-    expectedParams: ['data'],
-    async: true,
-    creator: (params) => {
-      return (dispatch, getState, {backend, services}) => {
-        const pass = getState().toJS().registration.encryption.pass
-        dispatch(actions.encryptDataWithPasswordOnRegister.buildAction(params, () => { // eslint-disable-line max-len
-          return backend.encryption.encryptInformation({
-            password: pass,
-            data: 'testingoutfunfunfun' // master key needs to be passed in
-          })
-          .then((result) => {
-            StorageManager.setItem('userData', JSON.stringify(result))
-            dispatch(router.pushRoute('/wallet'))
-          })
-        }))
-      }
-    }
   },
   checkPassword: {
     expectedParams: ['password', 'fieldName']
@@ -149,12 +143,12 @@ const initialState = Immutable.fromJS({
   passphrase: {
     sufficientEntropy: false,
     progress: 0,
-    randomString: '',
     phrase: '',
     writtenDown: false,
     valid: false
   },
   encryption: {
+    generatedAndEncrypted: false,
     loading: false,
     pass: '',
     passReenter: '',
@@ -165,7 +159,6 @@ const initialState = Immutable.fromJS({
 })
 
 export default (state = initialState, action = {}) => {
-  state = state.set('complete', helpers._isComplete(state))
   switch (action.type) {
     case actions.setEntropyStatus.id:
       return state.mergeDeep({
@@ -175,14 +168,9 @@ export default (state = initialState, action = {}) => {
         }
       })
 
-    case actions.setRandomString.id:
-      return state.mergeIn(['passphrase'], {
-        randomString: action.randomString
-      })
-
     case actions.setPassphrase.id:
       return state.mergeIn(['passphrase'], {
-        phrase: action.phrase
+        phrase: action.mnemonic
       })
 
     case actions.setMaskedImageUncovering.id:
@@ -195,31 +183,29 @@ export default (state = initialState, action = {}) => {
           valid: !!state.getIn(['passphrase', 'phrase']) && action.value
         }
       })
-
       return state.set('complete', helpers._isComplete(state))
 
-    case actions.encryptDataWithPasswordOnRegister.id:
+    case actions.generateAndEncryptKeyPairs.id:
       return state.mergeDeep({
         encryption: {
-          loading: true,
+          generatedAndEncrypted: false,
           status: ''
         }
       })
 
-    case actions.encryptDataWithPasswordOnRegister.id_success:
-    // here crypto object (JSON) is returned in action.result
+    case actions.generateAndEncryptKeyPairs.id_success:
       return state.mergeDeep({
         encryption: {
-          loading: false,
-          status: 'OK'
+          generatedAndEncrypted: true,
+          status: ''
         }
       })
 
-    case actions.encryptDataWithPasswordOnRegister.id_fail:
+    case actions.generateAndEncryptKeyPairs.id_fail:
       return state.mergeDeep({
         encryption: {
-          errorMsg: action.error,
-          loading: false
+          generatedAndEncrypted: false,
+          status: ''
         }
       })
 
@@ -245,7 +231,7 @@ export const helpers = {
     const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
     const areFieldsValid = (fields) => every(fields, isFieldValid)
 
-    return areFieldsValid(['username', 'passphrase'])
+    return areFieldsValid(['passphrase'])
   },
   _getNextURLfromState: (state) => {
     const currentPath = state.get('routing').locationBeforeTransitions.pathname

@@ -1,5 +1,5 @@
 const crypto = require('crypto')
-const scryptsy = require('scryptsy')
+const scryptsy = require('scrypt-async')
 
 export default class EncryptionAgent {
   // encryption / decryption works in two steps
@@ -7,9 +7,12 @@ export default class EncryptionAgent {
   // 2nd step: encrypt / decrypt information with derived key
 
   async encryptInformation({password, data}) {
+    if (typeof data === 'object' && data !== null) {
+      data = JSON.stringify(data)
+    }
+
     const salt = crypto.randomBytes(32)
     const iv = crypto.randomBytes(16)
-
     const key = await this._constructEncryptionKey(password, salt)
 
     const cipher = crypto.createCipheriv(
@@ -39,30 +42,27 @@ export default class EncryptionAgent {
 
   _constructEncryptionKey(password, salt) {
     return new Promise((resolve, reject) => {
-      var derivedKey
       var kdfParams = {
-        dervationKeyLength: 32, // suitable for a 256 bit aes key
-        salt: salt.toString('hex')
+        derivationKeyLength: 32,
+        salt: salt.toString('hex'),
+        n: 262144,
+        r: 8,
+        p: 1
       }
-      kdfParams.n = 262144 // number of iterations
-      kdfParams.r = 8 // memory factor
-      kdfParams.p = 1 // parallelization factor
 
-      derivedKey = scryptsy(
-        Buffer.from(password),
-        salt,
-        kdfParams.n,
-        kdfParams.r,
-        kdfParams.p,
-        kdfParams.dervationKeyLength
-      )
-
-      resolve({derivedKey, kdfParams})
+      return scryptsy(password, salt.toString('hex'), {
+        N: kdfParams.n,
+        r: kdfParams.r,
+        p: kdfParams.p,
+        dkLen: kdfParams.derivationKeyLength,
+        interruptStep: 1000,
+        encoding: 'hex'
+      }, derivedKey => resolve({derivedKey, kdfParams}))
     })
   }
 
   async decryptInformation({ciphertext, password, salt, iv}) {
-    const key = await this._constructEncryptionKey(password, Buffer.from(salt, 'hex')) // eslint-disable-line max-len
+    const key = await this._constructEncryptionKey(password, salt) // eslint-disable-line max-len
 
     const decipher = crypto.createDecipheriv(
       'aes-128-ctr',
@@ -71,6 +71,11 @@ export default class EncryptionAgent {
     )
 
     const plaintext = decipher.update(ciphertext, 'hex', 'utf-8')
-    return plaintext
+
+    try {
+      return JSON.parse(plaintext)
+    } catch (e) {
+      return plaintext
+    }
   }
 }
