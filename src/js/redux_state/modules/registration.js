@@ -96,6 +96,7 @@ export const actions = makeActions('registration', {
           throw new Error('No seedphrase found.')
         }
         const masterKeyPair = deriveMasterKeyPairFromSeedPhrase(seedPhrase)
+        console.log(masterKeyPair, 'here is our masterkeypair')
         const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
 
         const password = getState().getIn([
