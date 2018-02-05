@@ -3,8 +3,8 @@ import Immutable from 'immutable'
 import { makeActions } from './'
 import router from './router'
 const NEXT_ROUTES = {
-  '/registration': '/registration/write-phrase',
-  '/registration/write-phrase': '/registration/entry-password'
+  '/registration': '/registration/entry-password',
+  '/registration/entry-password': '/registration/write-phrase'
 }
 
 export const actions = makeActions('registration', {
@@ -17,6 +17,10 @@ export const actions = makeActions('registration', {
         dispatch(router.pushRoute(nextURL))
       }
     }
+  },
+
+  setRandomString: {
+    expectedParams: ['randomString']
   },
 
   setMaskedImageUncovering: {
@@ -45,47 +49,37 @@ export const actions = makeActions('registration', {
 
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(4)
-          return dispatch(actions.submitEntropy(randomString))
+          return dispatch(actions.setRandomString({randomString}))
         }
-      }
-    }
-  },
-
-  submitEntropy: {
-    expectedParams: ['randomString'],
-    creator: (randomString) => {
-      return (dispatch, getState) => {
-        const entropyState = getState().getIn([
-          'registration',
-          'passphrase',
-          'sufficientEntropy'
-        ])
-
-        if (!entropyState) {
-          throw new Error('Not enough entropy!')
-        }
-        dispatch(actions.generateAndEncryptKeyPairs(randomString))
       }
     }
   },
 
   generateAndEncryptKeyPairs: {
-    expectedParams: ['randomString'],
+    expectedParams: [],
     async: true,
-    creator: (randomString) => {
+    creator: () => {
       return async (dispatch, getState, {services, backend}) => {
-        if (!randomString) {
-          throw new Error('No random string provided')
-        }
-
-        const identityData = backend.jolocomLib.identity.create(randomString)
-        const { masterKeyWIF, genericSigningKeyWIF } = identityData
+        const randomString = getState().getIn([
+          'registration',
+          'passphrase',
+          'randomString'
+        ])
 
         const password = getState().getIn([
           'registration',
           'encryption',
           'pass'
         ])
+
+        if (!randomString) {
+          throw new Error('No random string provided')
+        }
+
+        const identityData = backend.jolocomLib.identity.create(randomString)
+        const { mnemonic, masterKeyWIF, genericSigningKeyWIF } = identityData
+
+        dispatch(actions.setPassphrase(mnemonic))
 
         const encMaster = await backend.encryption.encryptInformation({
           password,
@@ -98,7 +92,6 @@ export const actions = makeActions('registration', {
 
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
-
         // dispatch(router.pushRoute('/wallet'))
       }
     }
@@ -142,6 +135,7 @@ const initialState = Immutable.fromJS({
   passphrase: {
     sufficientEntropy: false,
     progress: 0,
+    randomString: '',
     phrase: '',
     writtenDown: false,
     valid: false
@@ -165,6 +159,11 @@ export default (state = initialState, action = {}) => {
           sufficientEntropy: action.sufficientEntropy,
           progress: action.progress
         }
+      })
+
+    case actions.setRandomString.id:
+      return state.mergeIn(['passphrase'], {
+        randomString: action.randomString
       })
 
     case actions.setPassphrase.id:

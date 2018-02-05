@@ -10,7 +10,13 @@ import reducer from './reducer'
 export default function createStore(history, client, data) {
   // Sync dispatched route actions to the history
   const reduxRouterMiddleware = routerMiddleware(history)
-  const backend = new Backend()
+  // TODO MOVE TO CONFIG FILE
+  const backend = new Backend({
+    identity: {
+    },
+    ipfs: {
+    }
+  })
   const services = createServices(backend)
 
   if (window) {
