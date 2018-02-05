@@ -1,11 +1,6 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import bip39 from 'bip39'
-import {
-  deriveMasterKeyPairFromSeedPhrase,
-  deriveGenericSigningKeyPair
-} from 'lib/key-derivation'
 import router from './router'
 const NEXT_ROUTES = {
   '/registration': '/registration/write-phrase',
@@ -23,9 +18,11 @@ export const actions = makeActions('registration', {
       }
     }
   },
+
   setMaskedImageUncovering: {
     expectedParams: ['value']
   },
+
   addEntropyFromDeltas: {
     expectedParams: ['x', 'y'],
     creator: (params) => {
@@ -67,37 +64,22 @@ export const actions = makeActions('registration', {
         if (!entropyState) {
           throw new Error('Not enough entropy!')
         }
-        dispatch(actions.generateSeedPhrase(randomString))
-      }
-    }
-  },
-
-  generateSeedPhrase: {
-    expectedParams: ['randomString'],
-    creator: (randomString) => {
-      return (dispatch, getState) => {
-        const mnemonic = bip39.entropyToMnemonic(randomString)
-        dispatch(actions.setPassphrase({mnemonic}))
+        dispatch(actions.generateAndEncryptKeyPairs(randomString))
       }
     }
   },
 
   generateAndEncryptKeyPairs: {
-    expectedParams: [],
+    expectedParams: ['randomString'],
     async: true,
-    creator: (params) => {
+    creator: (randomString) => {
       return async (dispatch, getState, {services, backend}) => {
-        const seedPhrase = getState().getIn([
-          'registration',
-          'passphrase',
-          'phrase'
-        ])
-        if (!seedPhrase) {
-          throw new Error('No seedphrase found.')
+        if (!randomString) {
+          throw new Error('No random string provided')
         }
-        const masterKeyPair = deriveMasterKeyPairFromSeedPhrase(seedPhrase)
-        console.log(masterKeyPair, 'here is our masterkeypair')
-        const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
+
+        const identityData = backend.jolocomLib.identity.create(randomString)
+        const { masterKeyWIF, genericSigningKeyWIF } = identityData
 
         const password = getState().getIn([
           'registration',
@@ -107,12 +89,11 @@ export const actions = makeActions('registration', {
 
         const encMaster = await backend.encryption.encryptInformation({
           password,
-          data: masterKeyPair.keyPair.toWIF()
+          data: masterKeyWIF
         })
-
         const encGeneric = await backend.encryption.encryptInformation({
           password,
-          data: genericSigningKey.keyPair.toWIF()
+          data: genericSigningKeyWIF
         })
 
         await services.storage.setItem('masterKeyWIF', encMaster)
@@ -123,15 +104,32 @@ export const actions = makeActions('registration', {
     }
   },
 
+  publishDDO: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return async (dispatch, getState, {services, backend}) => {
+      }
+    }
+  },
+
+  // TODO Check
+  setDID: {
+    expectedParams: ['DID']
+  },
+
   setEntropyStatus: {
     expectedParams: ['sufficientEntropy', 'progress']
   },
+
   setPassphrase: {
     expectedParams: ['phrase']
   },
+
   setPassphraseWrittenDown: {
     expectedParams: ['value']
   },
+
   checkPassword: {
     expectedParams: ['password', 'fieldName']
   }

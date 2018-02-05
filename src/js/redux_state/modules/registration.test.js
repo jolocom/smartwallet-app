@@ -31,10 +31,6 @@ describe('Wallet registration Redux module', () => {
       })
     })
 
-    describe('_getNextURLFromState()', () => {
-// TODO write new tests for modified functionality
-    })
-
     describe('_isComplete()', () => {
       const test = ({invalid, result}) => {
         invalid = new Immutable.Set(invalid)
@@ -149,8 +145,7 @@ describe('Wallet registration Redux module', () => {
         expect(dispatch.calls).to.deep.equal([])
       })
 
-      // eslint-disable-next-line
-      it('should trigger generateSeedPhrase when there is enough entropy', () => {
+      it('should call generateSeedPhrase when there is enough entropy', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {sufficientEntropy: true}
@@ -169,23 +164,17 @@ describe('Wallet registration Redux module', () => {
     describe('generateKeyPairs', () => {
       it('should not do anything is there is no randomString', async () => {
         const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          passphrase: {randomString: ''}
-        }})
-
         const promise = actions.generateAndEncryptKeyPairs()
-        await expect(promise(dispatch, getState, {}))
-          .to.be.rejectedWith('No seedphrase found')
+        await expect(promise(dispatch, {}, {}))
+          .to.be.rejectedWith('No random string provided')
       })
 
-      // eslint-disable-next-line
-      it('should execute generateAndEcryptKeyPairs if there is a seed present', async () => {
+      it('should execute correctly if seed is set', async () => {
         const dispatch = stub()
+        const randomString = '13912643311766764847120568039921'
+
         const getState = () => Immutable.fromJS({
           registration: {
-            passphrase: {
-              phrase: 'mnemonic phrase'
-            },
             encryption: {
               pass: 'password'
             }
@@ -193,43 +182,66 @@ describe('Wallet registration Redux module', () => {
         })
 
         const services = {
-          storage: {
-            setItem: stub()
-          }
+          storage: { setItem: stub() }
         }
 
         const backend = {
-          encryption: {
-            encryptInformation: stub().returns('encrypted')
+          encryption: { encryptInformation: stub().returns('encrypted') },
+          jolocomLib: {
+            identity: {
+              create: stub().returns({
+                ethereumKeyWIF: 'ethereumKeyWIF',
+                genericSigningKeyWIF: 'genericKeyWIF',
+                masterKeyWIF: 'masterKeyWIF',
+                mnemonic: 'bean matrix move'
+              })
+            }
           }
         }
 
-        const promise = actions.generateAndEncryptKeyPairs()
+        const promise = actions.generateAndEncryptKeyPairs(randomString)
         await promise(dispatch, getState, {services, backend})
 
         const expectedStorageCalls = [{
-          'args': ['masterKeyWIF', 'encrypted']
+          args: ['masterKeyWIF', 'encrypted']
         }, {
-          'args': ['genericKeyWIF', 'encrypted']
+          args: ['genericKeyWIF', 'encrypted']
         }]
 
         const expectedEncryptionCalls = [{
-          'args': [{
-            'password': 'password',
-            'data': 'KwLXVoqUxif9SQ4TGRSd9ySiXwkQG48Neg4S9HMZmU6MHmQNbZ71'
+          args: [{
+            password: 'password',
+            data: 'masterKeyWIF'
           }]
         }, {
-          'args': [{
-            'password': 'password',
-            'data': 'KwwQkJ1Bb5FLsTPsYxk9hSoEh4WDqdXnvQembfj1yHMk6L8uEv4R'
+          args: [{
+            password: 'password',
+            data: 'genericKeyWIF'
           }]
         }]
 
+        const expectedCreationCalls = [{
+          args: [ '13912643311766764847120568039921' ]
+        }]
+
+        expect(backend.jolocomLib.identity.create.calls)
+          .to.deep.equal(expectedCreationCalls)
         expect(services.storage.setItem.calls)
           .to.deep.equal(expectedStorageCalls)
-
         expect(backend.encryption.encryptInformation.calls)
           .to.deep.equal(expectedEncryptionCalls)
+      })
+    })
+
+    describe('publishDDO', () => {
+      it('should attempt to publish the DDO to ipfs', async () => {
+        const dispatch = stub()
+        const getState = {}
+        const services = {}
+        const backend = {}
+
+        const promise = actions.publishDDO()
+        await promise(dispatch, getState, {services, backend})
       })
     })
 

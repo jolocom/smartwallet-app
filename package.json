@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/jolocom/smartwallet-app/issues"
   },
-  "license" : "LGPL",
+  "license": "LGPL",
   "homepage": "https://jolocom.com/",
   "devDependencies": {
     "babel-core": "^6.9.1",
@@ -86,6 +86,7 @@
     "events": "^1.1.0",
     "history": "^1.17.0",
     "immutable": "^3.8.1",
+    "jolocom-lib": "^0.0.1",
     "json-loader": "^0.5.4",
     "lodash": "^4.13.1",
     "material-ui": "^0.16.0",
