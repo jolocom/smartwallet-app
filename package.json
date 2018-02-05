@@ -117,7 +117,6 @@
     "socket.io-client": "^2.0.3",
     "superagent": "^3.8.1",
     "superagent-es6-promise": "^1.0.0",
-    "web3": "^0.15.3",
     "zmq": "^2.15.3"
   },
   "engines": {

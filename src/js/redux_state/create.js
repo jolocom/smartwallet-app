@@ -13,8 +13,13 @@ export default function createStore(history, client, data) {
   // TODO MOVE TO CONFIG FILE
   const backend = new Backend({
     identity: {
+      providerUrl: 'http://localhost:8545',
+      ethereumAddress: '0x00'
     },
     ipfs: {
+      host: 'localhost',
+      prot: 5000,
+      protocol: 'http'
     }
   })
   const services = createServices(backend)

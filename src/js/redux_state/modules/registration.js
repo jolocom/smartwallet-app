@@ -79,7 +79,7 @@ export const actions = makeActions('registration', {
         const identityData = backend.jolocomLib.identity.create(randomString)
         const { mnemonic, masterKeyWIF, genericSigningKeyWIF } = identityData
 
-        dispatch(actions.setPassphrase(mnemonic))
+        dispatch(actions.setPassphrase({mnemonic}))
 
         const encMaster = await backend.encryption.encryptInformation({
           password,
@@ -92,7 +92,8 @@ export const actions = makeActions('registration', {
 
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
-        // dispatch(router.pushRoute('/wallet'))
+
+        dispatch(actions.goForward())
       }
     }
   },
