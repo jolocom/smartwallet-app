@@ -61,8 +61,7 @@ class HTTPAgent {
     return this._fetch(url, Object.assign({
       method,
       headers,
-      body,
-      credentials: 'include'
+      body
     }, options))
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {

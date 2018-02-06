@@ -12,14 +12,15 @@ export default function createStore(history, client, data) {
   const reduxRouterMiddleware = routerMiddleware(history)
   // TODO MOVE TO CONFIG FILE
   const backend = new Backend({
+    fuelingEndpoint: 'https://faucet.jolocom.com/request',
     identity: {
       providerUrl: 'http://localhost:8545',
       ethereumAddress: '0x00'
     },
     ipfs: {
-      host: 'localhost',
-      prot: 5000,
-      protocol: 'http'
+      host: 'ipfs.infura.io',
+      prot: 5001,
+      protocol: 'https'
     }
   })
   const services = createServices(backend)

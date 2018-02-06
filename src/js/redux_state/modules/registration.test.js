@@ -166,15 +166,18 @@ describe('Wallet registration Redux module', () => {
         }
 
         const backend = {
-          encryption: { encryptInformation: stub().returns('encrypted') },
+          encryption: { encryptInformation: stub().returns('encryptedData') },
           jolocomLib: {
             identity: {
               create: stub().returns({
                 ethereumKeyWIF: 'ethereumKeyWIF',
                 genericSigningKeyWIF: 'genericKeyWIF',
                 masterKeyWIF: 'masterKeyWIF',
-                mnemonic: 'bean matrix move'
-              })
+                mnemonic: 'bean matrix move',
+                ddo: {id: 'did'}
+              }),
+              store: stub().returns('mockIpfsHash'),
+              register: stub()
             }
           }
         }
@@ -183,9 +186,9 @@ describe('Wallet registration Redux module', () => {
         await promise(dispatch, getState, {services, backend})
 
         const expectedStorageCalls = [{
-          args: ['masterKeyWIF', 'encrypted']
+          args: ['masterKeyWIF', 'encryptedData']
         }, {
-          args: ['genericKeyWIF', 'encrypted']
+          args: ['genericKeyWIF', 'encryptedData']
         }]
 
         const expectedEncryptionCalls = [{
@@ -204,10 +207,26 @@ describe('Wallet registration Redux module', () => {
           args: [ '13912643311766764847120568039921' ]
         }]
 
+        const expectedIpfsStorageCalls = [{
+          args: [ {id: 'did'} ]
+        }]
+
+        const expectedEthRegisterCalls = [{
+          args: [ 'did', 'mockIpfsHash', 'ethereumKeyWIF' ]
+        }]
+
         expect(backend.jolocomLib.identity.create.calls)
           .to.deep.equal(expectedCreationCalls)
+
+        expect(backend.jolocomLib.identity.store.calls)
+          .to.deep.equal(expectedIpfsStorageCalls)
+
+        expect(backend.jolocomLib.identity.register.calls)
+          .to.deep.equal(expectedEthRegisterCalls)
+
         expect(services.storage.setItem.calls)
           .to.deep.equal(expectedStorageCalls)
+
         expect(backend.encryption.encryptInformation.calls)
           .to.deep.equal(expectedEncryptionCalls)
       })

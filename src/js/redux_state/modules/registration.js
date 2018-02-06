@@ -77,9 +77,25 @@ export const actions = makeActions('registration', {
         }
 
         const identityData = backend.jolocomLib.identity.create(randomString)
-        const { mnemonic, masterKeyWIF, genericSigningKeyWIF } = identityData
+        const {
+          ddo,
+          mnemonic,
+          masterKeyWIF,
+          genericSigningKeyWIF,
+          ethereumKeyWIF
+        } = identityData
 
-        dispatch(actions.setPassphrase({mnemonic}))
+        /* TODO No ddo returned yet, the lib is being updated
+         *
+        const did = ddo.id
+        const ddoHash = backend.jolocomLib.identity.store(ddo)
+        */
+
+        await backend.ethereum.requestEther({ did: 'TODO', address: 'TODO' })
+
+        /* TODO No ddo Available yet
+        await backend.jolocomLib.identity.register(did, ddoHash, ethereumKeyWIF)
+        */
 
         const encMaster = await backend.encryption.encryptInformation({
           password,
@@ -93,6 +109,7 @@ export const actions = makeActions('registration', {
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
 
+        dispatch(actions.setPassphrase({mnemonic}))
         dispatch(actions.goForward())
       }
     }
