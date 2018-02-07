@@ -16,6 +16,7 @@ export default combineReducers({
     etherTabs: require('./modules/wallet/ether-tabs').default,
     contact: require('./modules/wallet/contact').default,
     identity: require('./modules/wallet/identity').default,
+    identityNew: require('./modules/wallet/identityNew').default,
     country: require('./modules/wallet/country-select').default,
     money: require('./modules/wallet/money').default
   }),

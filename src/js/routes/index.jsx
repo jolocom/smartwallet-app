@@ -12,8 +12,12 @@ import RegistrationWritePhraseScreen from
 
 import WalletTabsScreen from 'components/wallet/screens/tabs'
 import WalletHomeScreen from 'components/wallet/screens/home'
-import WalletMoneyScreen from 'components/wallet/screens/money'
-import WalletIdentityScreen from 'components/wallet/screens/identity'
+// import WalletMoneyScreen from 'components/wallet/screens/money'
+// import WalletIdentityScreen from 'components/wallet/screens/identity'
+
+import IdentityScreenNew from 'components/wallet/screens/identityNew'
+import DappsAndServices from 'components/wallet/screens/dappsAndServices'
+
 import WalletContactScreen from 'components/wallet/screens/contact'
 import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
 import AccessRequestScreen
@@ -115,9 +119,9 @@ function getRoutes() {
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />
       <Route path="identity"
-        component={WalletIdentityScreen} />
-      <Route path="money"
-        component={WalletMoneyScreen} />
+        component={IdentityScreenNew} />
+      <Route path="interactions"
+        component={DappsAndServices} />
     </Route>
 
     <Route path="wallet/single-sign-on/access-request"

@@ -31,8 +31,8 @@ export default class WalletMoney extends React.Component {
   render() {
     const {goToEtherManagement, ether, etherBalance} = this.props
     let content
-    if (!ether.loaded) {
-      content = <Loading />
+    if (ether.loaded) {
+      // content = <Loading />
     } else if (ether.errorMsg) {
       content = (
         <Error message={ether.errorMsg} />
