@@ -78,7 +78,9 @@ export default class PasswordEntry extends React.Component {
             floatingLabelText="Repeat Password"
             type="password"
             value={this.props.security.passReenter}
-            errorText={passMatch ? null : 'Make sure the passwords match!'}
+            errorText={passMatch || passReenter.length < 5
+              ? null
+              : 'Make sure the passwords match!'}
             onChange={(e) =>
               this.props.checkPassword({
                 password: e.target.value,
