@@ -130,15 +130,6 @@ export const actions = makeActions('registration', {
     }
   },
 
-  publishDDO: {
-    expectedParams: [],
-    async: true,
-    creator: (params) => {
-      return async (dispatch, getState, {services, backend}) => {
-      }
-    }
-  },
-
   // TODO Check
   setDID: {
     expectedParams: ['DID']

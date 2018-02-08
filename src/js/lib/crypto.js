@@ -1,9 +1,12 @@
 import wallet from 'ethereumjs-wallet'
 import wif from 'wif'
 
-// @summary - Decodes WIF encoded key and returns the key and address
-// @param {String} wif - WIF encoded key
-// @returns {object} - the private key and corresponding address
+/* @summary - Decodes WIF encoded key and returns the key and address
+ *
+ * @param {String} wif - WIF encoded key
+ * @returns {object} - the private key and corresponding address
+ *
+*/
 
 export function decodeWIF(wifEncodedKey) {
   const key = wif.decode(wifEncodedKey).privateKey
