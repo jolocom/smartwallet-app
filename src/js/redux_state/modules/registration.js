@@ -20,6 +20,10 @@ export const actions = makeActions('registration', {
     }
   },
 
+  changeLoading: {
+    expectedParams: ['loading', 'loadingMsg']
+  },
+
   setRandomString: {
     expectedParams: ['randomString']
   },
@@ -62,6 +66,11 @@ export const actions = makeActions('registration', {
     async: true,
     creator: () => {
       return async (dispatch, getState, {services, backend}) => {
+        dispatch(actions.changeLoading({
+          loading: true,
+          loadingMsg: 'hey'
+        }))
+
         const randomString = getState().getIn([
           'registration',
           'passphrase',
@@ -79,6 +88,11 @@ export const actions = makeActions('registration', {
           throw new Error('No random string provided')
         }
 
+        dispatch(actions.changeLoading({
+          loading: true,
+          loadingMsg: 'Generating keys'
+        }))
+
         const {
           didDocument,
           mnemonic,
@@ -86,8 +100,12 @@ export const actions = makeActions('registration', {
           genericSigningKeyWIF,
           ethereumKeyWIF
         } = backend.jolocomLib.identity.create(randomString)
-
         const {privateKey, address} = cryptoUtils.decodeWIF(ethereumKeyWIF)
+
+        dispatch(actions.changeLoading({
+          loading: true,
+          loadingMsg: 'Fueling with Ether'
+        }))
 
         try {
           await backend.ethereum.requestEther({ did: didDocument.did, address })
@@ -96,8 +114,18 @@ export const actions = makeActions('registration', {
           throw new Error(err)
         }
 
+        dispatch(actions.changeLoading({
+          loading: true,
+          loadingMsg: 'Storing data on IPFS'
+        }))
+
         // TODO consistent error handling
         const ddoHash = await backend.jolocomLib.identity.store(didDocument)
+
+        dispatch(actions.changeLoading({
+          loading: true,
+          loadingMsg: 'Registering identity on Ethereum'
+        }))
 
         try {
           await backend.jolocomLib.identity.register(
@@ -109,6 +137,11 @@ export const actions = makeActions('registration', {
           throw new Error(err)
           // TODO consistent error handling
         }
+
+        dispatch(actions.changeLoading({
+          loading: true,
+          loadingMsg: 'Encrypting and storing data on device'
+        }))
 
         const encMaster = await backend.encryption.encryptInformation({
           password,
@@ -125,7 +158,8 @@ export const actions = makeActions('registration', {
 
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassphrase({mnemonic}))
-        // dispatch(actions.goForward())
+        dispatch(actions.changeLoading({ loading: false, loadingMsg: '' }))
+        dispatch(actions.goForward())
       }
     }
   },
@@ -172,6 +206,10 @@ const initialState = Immutable.fromJS({
     errorMsg: '',
     status: ''
   },
+  progress: {
+    loading: false,
+    loadingMsg: ''
+  },
   complete: false
 })
 
@@ -183,6 +221,12 @@ export default (state = initialState, action = {}) => {
           sufficientEntropy: action.sufficientEntropy,
           progress: action.progress
         }
+      })
+
+    case actions.changeLoading.id:
+      return state.mergeIn(['progress'], {
+        loading: action.loading,
+        loadingMsg: action.loadingMsg
       })
 
     case actions.setRandomString.id:

@@ -18,9 +18,9 @@ export default class PasswordEntryScreen extends React.Component {
   render() {
     return <Presentation
       security={this.props.registration.encryption}
+      progress={this.props.registration.progress}
       checkPassword={this.props.checkPassword}
-      generateAndEncryptKeyPairs={
-        this.props.generateAndEncryptKeyPairs
-      } />
+      generateAndEncryptKeyPairs={this.props.generateAndEncryptKeyPairs}
+    />
   }
 }
