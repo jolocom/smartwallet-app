@@ -148,12 +148,18 @@ describe('Wallet registration Redux module', () => {
       })
 
       it('should execute correctly if seed is set', async () => {
+        // eslint-disable-next-line
+        const pKey = 'ABF82FF96B463E9D82B83CB9BB450FE87E6166D4DB6D7021D0C71D7E960D5ABE'
+        const address = '0x959fd7ef9089b7142b6b908dc3a8af7aa8ff0fa1'
+        const mockWIF = 'L2yznSPTTv5yoB8mDDtzNnEtTunvsUJnRCbzzupV4tMZ4uWUPRrB'
+        const mockRandString = '13912643311766764847120568039921'
+
         const dispatch = stub()
 
         const getState = () => Immutable.fromJS({
           registration: {
             passphrase: {
-              randomString: '13912643311766764847120568039921'
+              randomString: mockRandString
             },
             encryption: {
               pass: 'password'
@@ -161,20 +167,21 @@ describe('Wallet registration Redux module', () => {
           }
         })
 
-        const services = {
-          storage: { setItem: stub() }
-        }
-
         const backend = {
-          encryption: { encryptInformation: stub().returns('encryptedData') },
+          ethereum: {
+            requestEther: stub()
+          },
+          encryption: {
+            encryptInformation: stub().returns('encryptedData')
+          },
           jolocomLib: {
             identity: {
               create: stub().returns({
-                ethereumKeyWIF: 'ethereumKeyWIF',
+                ethereumKeyWIF: mockWIF,
                 genericSigningKeyWIF: 'genericKeyWIF',
                 masterKeyWIF: 'masterKeyWIF',
                 mnemonic: 'bean matrix move',
-                ddo: {id: 'did'}
+                didDocument: {id: 'did'}
               }),
               store: stub().returns('mockIpfsHash'),
               register: stub()
@@ -182,14 +189,43 @@ describe('Wallet registration Redux module', () => {
           }
         }
 
+        const services = {
+          storage: { setItem: stub() }
+        }
+
         const promise = actions.generateAndEncryptKeyPairs()
         await promise(dispatch, getState, {services, backend})
 
-        const expectedStorageCalls = [{
-          args: ['masterKeyWIF', 'encryptedData']
-        }, {
-          args: ['genericKeyWIF', 'encryptedData']
+        const expectedCreationCalls = [{
+          args: [ '13912643311766764847120568039921' ]
         }]
+
+        expect(backend.jolocomLib.identity.create.calls)
+          .to.deep.equal(expectedCreationCalls)
+
+        const expectedEthRequestCalls = [{
+          args: [{
+            address,
+            did: undefined
+          }]
+        }]
+
+        expect(backend.ethereum.requestEther.calls)
+          .to.deep.equal(expectedEthRequestCalls)
+
+        const expectedIpfsStorageCalls = [{
+          args: [ {id: 'did'} ]
+        }]
+
+        expect(backend.jolocomLib.identity.store.calls)
+          .to.deep.equal(expectedIpfsStorageCalls)
+
+        const expectedEthRegisterCalls = [{
+          args: [Buffer.from(pKey, 'hex'), 'did', 'mockIpfsHash']
+        }]
+
+        expect(backend.jolocomLib.identity.register.calls)
+          .to.deep.equal(expectedEthRegisterCalls)
 
         const expectedEncryptionCalls = [{
           args: [{
@@ -203,44 +239,32 @@ describe('Wallet registration Redux module', () => {
           }]
         }]
 
-        const expectedCreationCalls = [{
-          args: [ '13912643311766764847120568039921' ]
+        expect(backend.encryption.encryptInformation.calls)
+          .to.deep.equal(expectedEncryptionCalls)
+
+        const expectedStorageCalls = [{
+          args: ['masterKeyWIF', 'encryptedData']
+        }, {
+          args: ['genericKeyWIF', 'encryptedData']
         }]
-
-        const expectedIpfsStorageCalls = [{
-          args: [ {id: 'did'} ]
-        }]
-
-        const expectedEthRegisterCalls = [{
-          args: [ 'did', 'mockIpfsHash', 'ethereumKeyWIF' ]
-        }]
-
-        expect(backend.jolocomLib.identity.create.calls)
-          .to.deep.equal(expectedCreationCalls)
-
-        expect(backend.jolocomLib.identity.store.calls)
-          .to.deep.equal(expectedIpfsStorageCalls)
-
-        expect(backend.jolocomLib.identity.register.calls)
-          .to.deep.equal(expectedEthRegisterCalls)
 
         expect(services.storage.setItem.calls)
           .to.deep.equal(expectedStorageCalls)
 
-        expect(backend.encryption.encryptInformation.calls)
-          .to.deep.equal(expectedEncryptionCalls)
-      })
-    })
+        const expectedDispatchCalls = [{
+          args: [{
+            randomString: '',
+            type: 'registration/SET_RANDOM_STRING'
+          }]
+        }, {
+          args: [{
+            mnemonic: 'bean matrix move',
+            type: 'registration/SET_PASSPHRASE'
+          }]
+        }]
 
-    describe('publishDDO', () => {
-      it('should attempt to publish the DDO to ipfs', async () => {
-        const dispatch = stub()
-        const getState = {}
-        const services = {}
-        const backend = {}
-
-        const promise = actions.publishDDO()
-        await promise(dispatch, getState, {services, backend})
+        expect(dispatch.calls)
+          .to.deep.equal(expectedDispatchCalls)
       })
     })
 

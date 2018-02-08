@@ -125,7 +125,7 @@ export const actions = makeActions('registration', {
 
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassphrase({mnemonic}))
-        dispatch(actions.goForward())
+        // dispatch(actions.goForward())
       }
     }
   },

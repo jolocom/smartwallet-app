@@ -53,10 +53,14 @@ class HTTPAgent {
     return this._req(url, 'HEAD')
   }
 
-  _req(url, method, body = null, headers = new Headers({
-    'Accept': '*/*',
-    'Content-Type': 'application/json'
-  }), options = {}) {
+  _req(url, method, body = null, headers, options = {}) {
+    if (window.Headers && !headers) {
+      headers = new Headers({
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      })
+    }
+
     return this._fetch(url, Object.assign({
       method,
       headers,
