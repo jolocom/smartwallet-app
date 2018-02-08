@@ -19,7 +19,7 @@ export default function createStore(history, client, data) {
     },
     ipfs: {
       host: 'ipfs.infura.io',
-      prot: 5001,
+      port: 5001,
       protocol: 'https'
     }
   })
