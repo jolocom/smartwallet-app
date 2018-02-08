@@ -1,5 +1,3 @@
-const DEFAULT_ACCEPT = '*/*'
-
 // HTTP Requests
 class HTTPAgent {
   constructor() {
@@ -55,13 +53,14 @@ class HTTPAgent {
     return this._req(url, 'HEAD')
   }
 
-  _req(url, method, body = null, headers = {
-    'Accept': DEFAULT_ACCEPT
-  }, options = {}) {
+  _req(url, method, body = null, headers = new Headers({
+    'Accept': '*/*',
+    'Content-Type': 'application/json'
+  }), options = {}) {
     return this._fetch(url, Object.assign({
       method,
       headers,
-      body
+      body: JSON.stringify(body)
     }, options))
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {

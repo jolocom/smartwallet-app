@@ -1,5 +1,6 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
+import * as cryptoUtils from 'lib/crypto'
 import { makeActions } from './'
 import router from './router'
 const NEXT_ROUTES = {
@@ -48,8 +49,9 @@ export const actions = makeActions('registration', {
         }))
 
         if (entropy.isReady()) {
-          const randomString = entropy.getRandomString(4)
-          return dispatch(actions.setRandomString({randomString}))
+          return dispatch(actions.setRandomString({
+            randomString: entropy.getRandomString(4)
+          }))
         }
       }
     }
@@ -73,34 +75,46 @@ export const actions = makeActions('registration', {
         ])
 
         if (!randomString) {
+          // TODO consistent error handling
           throw new Error('No random string provided')
         }
 
-        const identityData = backend.jolocomLib.identity.create(randomString)
         const {
-          ddo,
+          didDocument,
           mnemonic,
           masterKeyWIF,
           genericSigningKeyWIF,
           ethereumKeyWIF
-        } = identityData
+        } = backend.jolocomLib.identity.create(randomString)
 
-        /* TODO No ddo returned yet, the lib is being updated
-         *
-        const did = ddo.id
-        const ddoHash = backend.jolocomLib.identity.store(ddo)
-        */
+        const {privateKey, address} = cryptoUtils.decodeWIF(ethereumKeyWIF)
 
-        await backend.ethereum.requestEther({ did: 'TODO', address: 'TODO' })
+        try {
+          await backend.ethereum.requestEther({ did: didDocument.did, address })
+        } catch (err) {
+          // TODO consistent error handling
+          throw new Error(err)
+        }
 
-        /* TODO No ddo Available yet
-        await backend.jolocomLib.identity.register(did, ddoHash, ethereumKeyWIF)
-        */
+        // TODO consistent error handling
+        const ddoHash = await backend.jolocomLib.identity.store(didDocument)
+
+        try {
+          await backend.jolocomLib.identity.register(
+            Buffer.from(privateKey, 'hex'),
+            didDocument.id,
+            ddoHash
+          )
+        } catch (err) {
+          throw new Error(err)
+          // TODO consistent error handling
+        }
 
         const encMaster = await backend.encryption.encryptInformation({
           password,
           data: masterKeyWIF
         })
+
         const encGeneric = await backend.encryption.encryptInformation({
           password,
           data: genericSigningKeyWIF
@@ -109,6 +123,7 @@ export const actions = makeActions('registration', {
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
 
+        dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassphrase({mnemonic}))
         dispatch(actions.goForward())
       }

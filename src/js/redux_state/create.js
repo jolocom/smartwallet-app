@@ -14,8 +14,8 @@ export default function createStore(history, client, data) {
   const backend = new Backend({
     fuelingEndpoint: 'https://faucet.jolocom.com/request',
     identity: {
-      providerUrl: 'http://localhost:8545',
-      ethereumAddress: '0x00'
+      providerUrl: 'https://rinkeby.infura.io/',
+      contractAddress: '0xd4351c3f383d79ba378ed1875275b1e7b960f120'
     },
     ipfs: {
       host: 'ipfs.infura.io',
@@ -23,8 +23,8 @@ export default function createStore(history, client, data) {
       protocol: 'https'
     }
   })
-  const services = createServices(backend)
 
+  const services = createServices(backend)
   if (window) {
     window.dev = {backend, services}
   }
