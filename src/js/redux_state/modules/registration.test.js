@@ -331,6 +331,10 @@ describe('Wallet registration Redux module', () => {
           generatedAndEncrypted: false,
           status: ''
         },
+        progress: {
+          loading: false,
+          loadingMsg: ''
+        },
         complete: false
       }
       expect(state.toJS()).to.deep.equal(expectedState)

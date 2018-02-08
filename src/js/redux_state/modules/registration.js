@@ -20,8 +20,16 @@ export const actions = makeActions('registration', {
     }
   },
 
-  changeLoading: {
-    expectedParams: ['loading', 'loadingMsg']
+  startLoading: {
+    expectedParams: []
+  },
+
+  stopLoading: {
+    expectedParams: []
+  },
+
+  setLoadingMsg: {
+    expectedParams: ['loadingMsg']
   },
 
   setRandomString: {
@@ -66,10 +74,7 @@ export const actions = makeActions('registration', {
     async: true,
     creator: () => {
       return async (dispatch, getState, {services, backend}) => {
-        dispatch(actions.changeLoading({
-          loading: true,
-          loadingMsg: 'hey'
-        }))
+        dispatch(actions.startLoading())
 
         const randomString = getState().getIn([
           'registration',
@@ -88,10 +93,7 @@ export const actions = makeActions('registration', {
           throw new Error('No random string provided')
         }
 
-        dispatch(actions.changeLoading({
-          loading: true,
-          loadingMsg: 'Generating keys'
-        }))
+        dispatch(actions.setLoadingMsg({loadingMsg: 'Generating keys'}))
 
         const {
           didDocument,
@@ -102,10 +104,7 @@ export const actions = makeActions('registration', {
         } = backend.jolocomLib.identity.create(randomString)
         const {privateKey, address} = cryptoUtils.decodeWIF(ethereumKeyWIF)
 
-        dispatch(actions.changeLoading({
-          loading: true,
-          loadingMsg: 'Fueling with Ether'
-        }))
+        dispatch(actions.setLoadingMsg({loadingMsg: 'Fueling with Ether'}))
 
         try {
           await backend.ethereum.requestEther({ did: didDocument.did, address })
@@ -114,16 +113,12 @@ export const actions = makeActions('registration', {
           throw new Error(err)
         }
 
-        dispatch(actions.changeLoading({
-          loading: true,
-          loadingMsg: 'Storing data on IPFS'
-        }))
+        dispatch(actions.setLoadingMsg({loadingMsg: 'Storing data on IPFS'}))
 
         // TODO consistent error handling
         const ddoHash = await backend.jolocomLib.identity.store(didDocument)
 
-        dispatch(actions.changeLoading({
-          loading: true,
+        dispatch(actions.setLoadingMsg({
           loadingMsg: 'Registering identity on Ethereum'
         }))
 
@@ -138,8 +133,7 @@ export const actions = makeActions('registration', {
           // TODO consistent error handling
         }
 
-        dispatch(actions.changeLoading({
-          loading: true,
+        dispatch(actions.setLoadingMsg({
           loadingMsg: 'Encrypting and storing data on device'
         }))
 
@@ -158,7 +152,7 @@ export const actions = makeActions('registration', {
 
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassphrase({mnemonic}))
-        dispatch(actions.changeLoading({ loading: false, loadingMsg: '' }))
+        dispatch(actions.stopLoading())
         dispatch(actions.goForward())
       }
     }
@@ -223,11 +217,14 @@ export default (state = initialState, action = {}) => {
         }
       })
 
-    case actions.changeLoading.id:
-      return state.mergeIn(['progress'], {
-        loading: action.loading,
-        loadingMsg: action.loadingMsg
-      })
+    case actions.setLoadingMsg.id:
+      return state.setIn(['progress', 'loadingMsg'], action.loadingMsg)
+
+    case actions.startLoading.id:
+      return state.setIn(['progress', 'loading'], true)
+
+    case actions.stopLoading.id:
+      return state.setIn(['progress', 'loading'], false)
 
     case actions.setRandomString.id:
       return state.mergeIn(['passphrase'], {
