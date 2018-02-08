@@ -5,6 +5,9 @@ export const actions = makeActions('wallet/identityNew', {
   toggleEditField: {
     expectedParams: ['value', 'field']
   },
+  toggleQRScan: {
+    expectedParams: ['value']
+  },
   enterField: {
     expectedParams: ['field', 'value']
   },
@@ -51,6 +54,7 @@ const initialState = Immutable.fromJS({
     name: '',
     email: ''
   },
+  qrscan: false,
   errorMsg: ''
 })
 
@@ -62,6 +66,11 @@ export default (state = initialState, action = {}) => {
           field: action.field,
           bool: !action.value
         }
+      })
+
+    case actions.toggleQRScan.id:
+      return state.mergeDeep({
+        qrscan: !action.value
       })
 
     case actions.enterField.id:
@@ -108,3 +117,12 @@ const _resolveClaims = (action) => {
   })
   return claimsUser
 }
+
+// structure of the claim:
+// public '@context': string = "https://w3id.org/credentials/v1"
+// public id: string
+// public 'type': string[]
+// public issuer: string
+// public issued: string
+// public claim: { id: string; [x:string]:any }
+// public proof: string

@@ -15,7 +15,7 @@ import WalletHomeScreen from 'components/wallet/screens/home'
 // import WalletMoneyScreen from 'components/wallet/screens/money'
 // import WalletIdentityScreen from 'components/wallet/screens/identity'
 
-import IdentityScreenNew from 'components/wallet/screens/identityNew'
+import IdentityScreenNew from 'components/wallet/screens/identity-new'
 import DappsAndServices from 'components/wallet/screens/dappsAndServices'
 
 import WalletContactScreen from 'components/wallet/screens/contact'

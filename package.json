@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/jolocom/smartwallet-app/issues"
   },
-  "license" : "LGPL",
+  "license": "LGPL",
   "homepage": "https://jolocom.com/",
   "devDependencies": {
     "babel-core": "^6.9.1",
@@ -102,6 +102,7 @@
     "react-addons-update": "^15.4.0",
     "react-copy-to-clipboard": "^4.3.1",
     "react-dom": "^15.4.2",
+    "react-qr-reader": "^2.0.1",
     "react-redux": "^5.0.2",
     "react-router": "^3.0.2",
     "react-router-redux": "^4.0.7",

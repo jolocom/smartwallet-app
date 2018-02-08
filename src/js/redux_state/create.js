@@ -34,7 +34,7 @@ export default function createStore(history, client, data) {
   }
 
   const store = finalCreateStore(reducer, data)
-  setupObservers({store, services, history})
+  // setupObservers({store, services, history})
 
   if (window.__DEVELOPMENT__ && module.hot) {
     module.hot.accept('./reducer', () => {
