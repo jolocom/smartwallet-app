@@ -88,6 +88,7 @@
     "history": "^1.17.0",
     "immutable": "^3.8.1",
     "jolocom-lib": "^0.1.1",
+    "jolocom-registry-contract": "^0.1.4",
     "json-loader": "^0.5.4",
     "lodash": "^4.13.1",
     "material-ui": "^0.16.0",
