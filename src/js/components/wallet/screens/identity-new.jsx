@@ -21,10 +21,6 @@ export default class IdentityScreenNew extends React.Component {
     enterField: PropTypes.func.isRequired
   }
 
-  // requestVerificationCode
-  // resendVerificationCode
-  // enterVerificationCode
-
   componentDidMount() {
     this.props.retrieveAttributes({claims: ['phone', 'name', 'email']})
   }
@@ -37,11 +33,6 @@ export default class IdentityScreenNew extends React.Component {
         saveAttribute={this.props.saveAttribute}
         toggleEditField={this.props.toggleEditField}
         toggleQRScan={this.props.toggleQRScan}
-        requestVerificationCode={(...args) => this.requestVerification(...args)}
-        resendVerificationCode={(...args) => this.requestVerification(...args)}
-        enterVerificationCode={(...args) => this.showVerificationWindow(...args,
-          ({ index }) => this.enterVerificationCode({index})
-        )}
       />
     )
   }

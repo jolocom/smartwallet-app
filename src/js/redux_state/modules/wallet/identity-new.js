@@ -21,7 +21,7 @@ export const actions = makeActions('wallet/identityNew', {
           const toggle = getState().toJS().wallet.identityNew.toggleEdit.bool
           const property = params.field
           dispatch(actions.toggleEditField({[property]: toggle}))
-          return services.storage.setItem(property, userData[property])
+          services.storage.setItem(property, userData[property])
         }))
       }
     }

@@ -1,6 +1,8 @@
 import {expect} from 'chai'
+// eslint-disable-next-line
 import { actions } from './identity-new'
-import {stub} from '../../../../../test/utils'
+import { stub } from '../../../../../test/utils'
+// eslint-disable-next-line
 import reducer from './identity-new'
 import Immutable from 'immutable'
 describe('Wallet identity-new redux module', () => {
@@ -95,9 +97,11 @@ describe('Wallet identity-new redux module', () => {
         storage: { setItem: stub().returns('Natascha') }
       }
 
-      const thunk = actions.saveAttribute()
+      const thunk = actions.saveAttribute({field: 'name'})
       thunk(dispatch, getState, {services})
+      // eslint-disable-next-line
       expect(dispatch.called).to.be.true
+      // expect(services.storage.getItem.calls).to.be.true
     })
   ))
 })
