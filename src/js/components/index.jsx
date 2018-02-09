@@ -32,7 +32,7 @@ const dialogBlockchain = {
     }
   },
   callback: () => {
-    window.open('https://en.wikipedia.org/wiki/Blockchain', '_blank')
+    window.open('https://en.wikipedia.org/wiki/Blockchain', 'blank')
   },
   title: 'What is a blockchain?'
 }
@@ -46,6 +46,9 @@ class Index extends React.Component {
 
   static propTypes = {
     openConfirmDialog: PropTypes.func
+  };
+
+  componentDidMount() {
   };
 
   getStyles = () => {
@@ -107,19 +110,7 @@ class Index extends React.Component {
           fontSize: '14pt'
         }
       },
-      actions: {
-        display: 'flex',
-        alignItems: 'stretch',
-        padding: '16px',
-        maxWidth: '80%',
-        width: '440px',
-        margin: '0 auto 0px'
-      },
       signup: {
-        margin: '10px',
-        width: '200px'
-      },
-      login: {
         margin: '10px',
         width: '200px'
       },
@@ -132,7 +123,6 @@ class Index extends React.Component {
         '@media screen and (max-width: 468px)': {
           display: 'none'
         }
-
       },
       next: {
         position: 'absolute',
@@ -246,23 +236,13 @@ class Index extends React.Component {
           </div>
         </Carousel>
 
-        <div style={styles.actions}>
           <RaisedButton
             secondary
-            label="Sign up"
+            label="Create your identity"
             style={styles.signup}
             onClick={this._handleSignup}
           />
-          <RaisedButton
-            label="Log in"
-            style={styles.login}
-            onClick={this._handleLogin}
-          />
-        </div>
-        <InfoLink
-          info="With signing up you agree with our"
-          link="AGB"
-          to="" />
+      { /* <InfoLink info="With signing up you agree with our" link="AGB" to="" /> */ }
       </Container>
     )
   }
@@ -281,10 +261,6 @@ class Index extends React.Component {
 
   _handleSignup = () => {
     this.context.router.push(routes.signup)
-  };
-
-  _handleLogin = () => {
-    this.context.router.push('/login')
   };
 }
 
