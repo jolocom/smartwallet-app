@@ -38,6 +38,7 @@ describe('(Component) IdentityScreenNew', () => {
       { context: { muiTheme: { } } }
     )
     wrapper.instance().componentDidMount()
+    // eslint-disable-next-line
     expect(retrieveAttributes.called).to.be.true
     expect(retrieveAttributes.calls).to.deep.equal([{args: [{
       claims: [
@@ -79,6 +80,7 @@ describe('(Component) IdentityScreenNew', () => {
       field: 'name',
       value: 'Edward'
     })
+    // eslint-disable-next-line
     expect(enterField.called).to.be.true
     expect(enterField.calls).to.deep.equal([{
       args: [{
@@ -121,6 +123,7 @@ describe('(Component) IdentityScreenNew', () => {
       field: 'name',
       value: 'false'
     })
+    // eslint-disable-next-line
     expect(toggleEditField.called).to.be.true
     expect(toggleEditField.calls).to.deep.equal([{
       args: [{
@@ -162,6 +165,7 @@ describe('(Component) IdentityScreenNew', () => {
     wrapper.find(Presentation).props().saveAttribute({
       field: 'name'
     })
+    // eslint-disable-next-line
     expect(saveAttribute.called).to.be.true
     expect(saveAttribute.calls).to.deep.equal([{
       args: [{

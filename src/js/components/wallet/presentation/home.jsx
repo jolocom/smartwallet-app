@@ -36,7 +36,6 @@ const STYLES = {
 @Radium
 export default class WalletHome extends React.Component {
   static propTypes = {
-    children: PropTypes.node,
     onClick: PropTypes.func.isRequired
   }
 

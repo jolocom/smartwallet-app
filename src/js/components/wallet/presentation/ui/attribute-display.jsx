@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 
 import TextField from 'material-ui/TextField'
 import { ListItem } from 'material-ui/List'
-import { StaticListItem, VerificationButtons } from './'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import SocialPerson from 'material-ui/svg-icons/social/person'
@@ -110,27 +109,3 @@ export default class AttributeDisplay extends React.Component {
     )
   }
 }
-
-// <StaticListItem
-//   key={attrValue}
-//   verified={verified}
-//   textValue={attrValue}
-//   textLabel={labelText}
-//   icon={index === 0 ? icon : null}
-//   secondaryTextValue={type} />
-// <VerificationButtons
-//   attrType={attrType}
-//   index={index}
-//   requestVerificationCode={requestVerificationCode}
-//   resendVerificationCode={resendVerificationCode}
-//   enterVerificationCode={enterVerificationCode}
-//   smsCode={smsCode}
-//   pinValue={pin}
-//   setFocusedPin={(value) => { setFocusedPin(value, index) }}
-//   changePinValue={(value, codeType) => {
-//     changePinValue(attrTypeToKey(attrType), value, index, codeType)
-//   }}
-//   focused={pinFocused}
-//   value={attrValue}
-//   codeIsSent={codeIsSent}
-//   verified={verified} />

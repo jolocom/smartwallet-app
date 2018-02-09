@@ -4,7 +4,7 @@ import { routerMiddleware } from 'react-router-redux'
 import backendMiddleware from './middleware/backend'
 import Backend from '../backend'
 import createServices from '../services'
-import setupObservers from './observers'
+// import setupObservers from './observers'
 import reducer from './reducer'
 
 export default function createStore(history, client, data) {

@@ -2,10 +2,10 @@ import React from 'react'
 import QrReader from 'react-qr-reader'
 
 export default class QRScanner extends React.Component {
-
   handleScan(result) {
     if (result) {
-      console.log('RESULT CAM: ', result)
+      // TODO: implement logic for token
+      // console.log('RESULT CAM: ', result)
     }
   }
 

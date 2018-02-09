@@ -66,6 +66,7 @@ describe('(Component) WalletMoneyScreen', () => {
       { context: { muiTheme: { } } }
     )
     wrapper.find(Presentation).props().goToEtherManagement()
+    // eslint-disable-next-line
     expect(goToEtherManagement.called).to.be.true
     expect(goToEtherManagement.calls).to.deep.equal([{args: []}])
   })
