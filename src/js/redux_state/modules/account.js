@@ -1,10 +1,20 @@
-import { makeActions } from './'
 import Immutable from 'immutable'
+import router from './router'
+import { makeActions } from './'
 
 export const actions = makeActions('account', {
+
   checkIfAccountExists: {
     expectedParams: [],
+    async: true,
     creator: () => {
+      return async (dispatch, getState, {backend, services}) => {
+        const did = await services.storage.getItem('did')
+        if (did) {
+          dispatch(actions.setDID({did}))
+          dispatch(router.pushRoute('/wallet'))
+        }
+      }
     }
   },
 
@@ -20,7 +30,7 @@ const initialState = Immutable.fromJS({
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case actions.setDID.id:
-      return
+      return state.set('did', action.did)
     default:
       return state
   }
