@@ -14,16 +14,17 @@ import {
 
 export default class PasswordEntry extends React.Component {
   static propTypes = {
+    loading: PropTypes.object,
     security: PropTypes.object,
     checkPassword: PropTypes.func.isRequired,
     generateAndEncryptKeyPairs: PropTypes.func.isRequired
   }
 
   render() {
-    const {pass, passReenter } = this.props.security
+    const {pass, passReenter} = this.props.security
 
     const passMatch = pass === passReenter
-    const allowSubmit =  passMatch && pass.length > 8 || passReenter.length > 8
+    const allowSubmit = passMatch && pass.length > 8
 
     const passwordValidityCheck = (string) => {
       if (string.indexOf(' ') !== -1) {
