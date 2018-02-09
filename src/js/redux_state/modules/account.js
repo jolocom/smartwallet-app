@@ -12,7 +12,7 @@ export const actions = makeActions('account', {
         const did = await services.storage.getItem('did')
         if (did) {
           dispatch(actions.setDID({did}))
-          dispatch(router.pushRoute('/wallet'))
+          dispatch(router.pushRoute('/wallet/identity'))
         }
       }
     }
