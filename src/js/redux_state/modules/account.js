@@ -2,8 +2,14 @@ import { makeActions } from './'
 import Immutable from 'immutable'
 
 export const actions = makeActions('account', {
+  checkIfAccountExists: {
+    expectedParams: [],
+    creator: () => {
+    }
+  },
+
   setDID: {
-    expectedParams: ['did'],
+    expectedParams: ['did']
   }
 })
 

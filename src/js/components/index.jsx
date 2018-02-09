@@ -45,10 +45,12 @@ class Index extends React.Component {
   };
 
   static propTypes = {
-    openConfirmDialog: PropTypes.func
+    openConfirmDialog: PropTypes.func,
+    checkIfAccountExists: PropTypes.func.isRequired
   };
 
   componentDidMount() {
+    this.props.checkIfAccountExists()
   };
 
   getStyles = () => {
@@ -267,6 +269,7 @@ class Index extends React.Component {
 export default connect({
   actions: [
     'confirmation-dialog:openConfirmDialog',
-    'confirmation-dialog:closeConfirmDialog'
+    'confirmation-dialog:closeConfirmDialog',
+    'account:checkIfAccountExists'
   ]
 })(Radium(Index))

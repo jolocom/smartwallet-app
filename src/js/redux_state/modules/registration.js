@@ -2,6 +2,7 @@ import every from 'lodash/every'
 import Immutable from 'immutable'
 import * as cryptoUtils from 'lib/crypto'
 import { makeActions } from './'
+import { actions as accountActions } from './account'
 import router from './router'
 const NEXT_ROUTES = {
   '/registration': '/registration/entry-password',
@@ -123,16 +124,12 @@ export const actions = makeActions('registration', {
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
 
+        dispatch(accountActions.setDID({did: didDocument.id}))
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassphrase({mnemonic}))
         // dispatch(actions.goForward())
       }
     }
-  },
-
-  // TODO Check
-  setDID: {
-    expectedParams: ['DID']
   },
 
   setEntropyStatus: {
