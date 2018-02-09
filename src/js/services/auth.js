@@ -1,4 +1,4 @@
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import EventEmitter from 'events'
 
 export default class AuthService extends EventEmitter {

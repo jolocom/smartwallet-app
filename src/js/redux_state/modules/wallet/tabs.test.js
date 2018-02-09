@@ -1,8 +1,10 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
+// eslint-disable-next-line
 import { actions } from './tabs'
 import router from '../router'
 import {stub, withStubs} from '../../../../../test/utils'
+// eslint-disable-next-line
 import reducer from './tabs'
 // const helpers = registration.helpers
 

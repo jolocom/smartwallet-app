@@ -56,6 +56,7 @@ describe('(Component) WalletIdentityScreen', () => {
       { context: { muiTheme: { } } }
     )
     wrapper.instance()
+    // eslint-disable-next-line
     expect(getIdentityInformation.called).to.be.false
     // expect(getIdentityInformation.calls).to.deep.equal([{args: []}])
   })
@@ -94,6 +95,7 @@ describe('(Component) WalletIdentityScreen', () => {
     { context: { muiTheme: { } } })
 
     wrapper.find(Presentation).props().goTo('test')
+    // eslint-disable-next-line
     expect(goTo.called).to.be.true
     expect(goTo.calls).to.deep.equal([{args: ['test']}])
   })
@@ -136,6 +138,7 @@ describe('(Component) WalletIdentityScreen', () => {
     wrapper.instance().enterVerificationCode({
       index: '1'
     })()
+    // eslint-disable-next-line
     expect(confirmPhone.called).to.be.true
     expect(confirmPhone.calls).to.deep.equal([{args: ['1']}])
   })
@@ -183,6 +186,7 @@ describe('(Component) WalletIdentityScreen', () => {
       leftButtonLabel: ''
     }
     wrapper.instance().showVerificationWindow(window, () => {})
+    // eslint-disable-next-line
     expect(openConfirmDialog.called).to.be.true
     expect(openConfirmDialog.calls).to.deep.equal([{
       args: [undefined, '', '', undefined, '']
