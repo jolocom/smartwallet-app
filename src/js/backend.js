@@ -1,22 +1,19 @@
+import JolocomLib from 'jolocom-lib'
 import VerificationAgent from 'lib/agents/verification'
-import GatewayAgent from 'lib/agents/gateway'
+import EthereumAgent from 'lib/agents/ethereum'
 import EncryptionAgent from 'lib/agents/encryption'
 
 export default class Backend {
-  constructor(gatewayUrl) {
-    if (gatewayUrl === undefined) {
-      this._gatewayUrl = IDENTITY_GATEWAY_URL
-    } else {
-      this._gatewayUrl = gatewayUrl
-    }
+  constructor(config) {
+    this.config = config
   }
 
-  set gateway(gatewayUrl) {
-    this._gatewayUrl = gatewayUrl
+  get ethereum() {
+    return new EthereumAgent(this.config)
   }
 
-  get gateway() {
-    return new GatewayAgent(this._gatewayUrl)
+  get jolocomLib() {
+    return new JolocomLib(this.config)
   }
 
   get verification() {

@@ -1,6 +1,7 @@
 /* global describe: true, it: true */
-var expect = require('chai').expect
 import HTTPAgent from './http'
+
+var expect = require('chai').expect
 
 const DUMMY_JSON_HEADERS = {
   get: (field) => ({
@@ -17,7 +18,8 @@ describe('HTTPAgent', () => {
   describe('#_req()', () => {
     it('should be able to do a normal GET request', async () => {
       const fakeResponse = {
-        status: 200, responseText: 'TEST',
+        status: 200,
+        responseText: 'TEST',
         headers: DUMMY_HTML_HEADERS
       }
 
@@ -31,7 +33,8 @@ describe('HTTPAgent', () => {
 
     it('should be able parse a JSON request', async () => {
       const fakeResponse = {
-        status: 200, json: () => ({foo: 5}),
+        status: 200,
+        json: () => ({foo: 5}),
         headers: DUMMY_JSON_HEADERS
       }
 
@@ -67,7 +70,8 @@ describe('HTTPAgent', () => {
   describe('#get', () => {
     it('should be able to perform a GET request', async () => {
       const fakeResponse = {
-        status: 200, responseText: 'TEST',
+        status: 200,
+        responseText: 'TEST',
         headers: DUMMY_HTML_HEADERS
       }
 
@@ -87,7 +91,8 @@ describe('HTTPAgent', () => {
   describe('#delete', () => {
     it('should be able to perform a DELETE request', async () => {
       const fakeResponse = {
-        status: 200, responseText: 'TEST',
+        status: 200,
+        responseText: 'TEST',
         headers: DUMMY_HTML_HEADERS
       }
 
@@ -105,7 +110,8 @@ describe('HTTPAgent', () => {
   describe('#put', () => {
     it('should be able to perform a PUT request', async () => {
       const fakeResponse = {
-        status: 200, responseText: 'TEST',
+        status: 200,
+        responseText: 'TEST',
         headers: DUMMY_HTML_HEADERS
       }
 
@@ -123,7 +129,8 @@ describe('HTTPAgent', () => {
   describe('#post', () => {
     it('should be able to perform a POST request', async () => {
       const fakeResponse = {
-        status: 200, responseText: 'TEST',
+        status: 200,
+        responseText: 'TEST',
         headers: DUMMY_HTML_HEADERS
       }
 
@@ -141,7 +148,8 @@ describe('HTTPAgent', () => {
   describe('#head', () => {
     it('should be able to perform a HEAD request', async () => {
       const fakeResponse = {
-        status: 200, responseText: 'TEST',
+        status: 200,
+        responseText: 'TEST',
         headers: DUMMY_HTML_HEADERS
       }
 
