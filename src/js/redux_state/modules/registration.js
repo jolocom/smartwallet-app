@@ -121,6 +121,7 @@ export const actions = makeActions('registration', {
           data: genericSigningKeyWIF
         })
 
+        await services.storage.setItem('did', didDocument.id)
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
 
