@@ -1,17 +1,20 @@
+import { makeActions } from './'
 import Immutable from 'immutable'
-// import createReactClass from 'create-react-class'
 
-// TODO: check to see if user is already logged in
-// TODO: rewrite logout function for session management
+export const actions = makeActions('account', {
+  setDID: {
+    expectedParams: ['did'],
+  }
+})
 
 const initialState = Immutable.fromJS({
-  username: '',
-  userExists: false,
-  loggedIn: false
+  did: ''
 })
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case actions.setDID.id:
+      return
     default:
       return state
   }
