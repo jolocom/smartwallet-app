@@ -20,11 +20,11 @@ describe('Wallet tabs Redux module', function() {
           .to.deep.equal(['/wallet/identity'])
 
         dispatch.reset()
-        const moneyThunk = actions.switchTab({tab: 'money'})
+        const moneyThunk = actions.switchTab({tab: 'interactions'})
         moneyThunk(dispatch, 'getState')
         expect(dispatch.calls).to.deep.equal([{args: ['push']}])
         expect(router.pushRoute.calledWithArgs)
-          .to.deep.equal(['/wallet/money'])
+          .to.deep.equal(['/wallet/interactions'])
       }
     )
   })
@@ -35,8 +35,9 @@ describe('Wallet tabs Redux module', function() {
     state = reducer(state, actions.detectActiveTab({path: '/wallet/identity'}))
     expect(state.get('activeTab')).to.equal('identity')
 
-    state = reducer(state, actions.detectActiveTab({path: '/wallet/money'}))
-    expect(state.get('activeTab')).to.equal('money')
+    state = reducer(state,
+      actions.detectActiveTab({path: '/wallet/interactions'}))
+    expect(state.get('activeTab')).to.equal('interactions')
 
     state = reducer(state, actions.detectActiveTab({path: '/wallet'}))
     expect(state.get('activeTab')).to.equal(null)

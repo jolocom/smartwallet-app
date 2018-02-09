@@ -15,24 +15,23 @@ export const actions = makeActions('wallet/identityNew', {
     expectedParams: ['field'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services, backend}) => {
-        const userData = getState().toJS().wallet.identityNew.userData
-        const toogle = getState().toJS().wallet.identityNew.toggleEdit.bool
-
+      return (dispatch, getState, {services}) => {
         dispatch(actions.saveAttribute.buildAction(params, () => {
+          const userData = getState().toJS().wallet.identityNew.userData
+          const toggle = getState().toJS().wallet.identityNew.toggleEdit.bool
           const property = params.field
-          dispatch(actions.toggleEditField({[params.field]: toogle}))
-          return services.storage.setItem(property, userData[params.field])
+          dispatch(actions.toggleEditField({[property]: toggle}))
+          return services.storage.setItem(property, userData[property])
         }))
       }
     }
   },
-  retrieveAttribute: {
+  retrieveAttributes: {
     expectedParams: ['claims'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.retrieveAttribute.buildAction(params, () => {
+        dispatch(actions.retrieveAttributes.buildAction(params, () => {
           let claimsArray = []
           params.claims.map((claim) => {
             claimsArray.push(services.storage.getItem(claim))
@@ -91,16 +90,16 @@ export default (state = initialState, action = {}) => {
         errorMsg: 'Could not save attribute on device.'
       })
 
-    case actions.retrieveAttribute.id:
+    case actions.retrieveAttributes.id:
       return state
 
-    case actions.retrieveAttribute.id_success:
+    case actions.retrieveAttributes.id_success:
       const retrievedData = _resolveClaims(action)
       return state.mergeDeep({
         userData: retrievedData
       })
 
-    case actions.retrieveAttribute.id_fail:
+    case actions.retrieveAttributes.id_fail:
       return state.mergeDeep({
         errorMsg: 'Could not retrieve claims from device.'
       })

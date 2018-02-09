@@ -9,12 +9,12 @@ import Presentation from '../presentation/identity-new'
     'wallet/identity-new:enterField',
     'wallet/identity-new:saveAttribute',
     'wallet/identity-new:toggleQRScan',
-    'wallet/identity-new:retrieveAttribute']
+    'wallet/identity-new:retrieveAttributes']
 })
 export default class IdentityScreenNew extends React.Component {
   static propTypes = {
     identityNew: PropTypes.object,
-    retrieveAttribute: PropTypes.func.isRequired,
+    retrieveAttributes: PropTypes.func.isRequired,
     toggleEditField: PropTypes.func.isRequired,
     toggleQRScan: PropTypes.func.isRequired,
     saveAttribute: PropTypes.func.isRequired,
@@ -26,7 +26,7 @@ export default class IdentityScreenNew extends React.Component {
   // enterVerificationCode
 
   componentDidMount() {
-    this.props.retrieveAttribute({claims: ['phone', 'name', 'email']})
+    this.props.retrieveAttributes({claims: ['phone', 'name', 'email']})
   }
 
   render() {
