@@ -11,7 +11,7 @@ import {connect} from 'redux_state/utils'
 
 import {routes} from 'routes'
 import {theme} from 'styles'
-import { Container, Header, SideNote, InfoLink } from './structure'
+import { Container, Header, SideNote } from './structure'
 
 const message = (<div>
   <div>A Blockchain is a distributed database which
@@ -238,13 +238,14 @@ class Index extends React.Component {
           </div>
         </Carousel>
 
-          <RaisedButton
-            secondary
-            label="Create your identity"
-            style={styles.signup}
-            onClick={this._handleSignup}
-          />
-      { /* <InfoLink info="With signing up you agree with our" link="AGB" to="" /> */ }
+        <RaisedButton
+          secondary
+          label="Create your identity"
+          style={styles.signup}
+          onClick={this._handleSignup}
+        />
+        { /* <InfoLink info="With signing up
+        you agree with our" link="AGB" to="" /> */ }
       </Container>
     )
   }
