@@ -14,82 +14,98 @@ import {
 
 export default class PasswordEntry extends React.Component {
   static propTypes = {
+    progress: PropTypes.object,
     security: PropTypes.object,
     checkPassword: PropTypes.func.isRequired,
     generateAndEncryptKeyPairs: PropTypes.func.isRequired
   }
 
   render() {
-    let noMatchMessage = ''
-    if (this.props.security.passReenter.length > 5 &&
-      this.props.security.pass !== this.props.security.passReenter) {
-      noMatchMessage = 'The passwords do not match!'
-    }
-    const allowSubmit = noMatchMessage.length > 0 || this.props.security.pass.length < 8 || this.props.security.passReenter.length < 8 // eslint-disable-line max-len
+    const {pass, passReenter} = this.props.security
+
+    const passMatch = pass === passReenter
+    const allowSubmit = passMatch && pass.length > 8
+
     const passwordValidityCheck = (string) => {
       if (string.indexOf(' ') !== -1) {
         return (<p>No spaces allowed</p>)
-      } else if (!string.match((/[A-Z]/))) {
-        return (<p>At least one uppercase letter needed.</p>)
-      } else if (!string.match((/[0-9]/))) {
-        return (<p>At least one number needed.</p>)
-      } else {
-        return ''
       }
+      if (!string.match((/[A-Z]/))) {
+        return (<p>At least one uppercase letter needed.</p>)
+      }
+      if (!string.match((/[0-9]/))) {
+        return (<p>At least one number needed.</p>)
+      }
+      return ''
     }
+
     let content
-    if (this.props.security.loading) {
+    if (this.props.progress.loading) {
       content = (
-        <Loading />
+        <Loading
+          size={100}
+          thickness={6}
+          loadingMsg={this.props.progress.loadingMsg}
+        />
       )
     } else {
       content = (<div>
         <Header
-          title="Please enter a secure password" />
+          title="Please enter a secure password"
+        />
         <Block>
           <SideNote style={{color: 'red', marginBottom: '16px'}}>
-            The password is used to encrypt and protect your data.<br />
+            The password is used to encrypt and protect your data. <br />
           </SideNote>
           <TextField
             key="pass"
             floatingLabelText="Password"
             type="password"
-            value={this.props.security.pass}
-            errorText={this.props.security.pass.length > 5
-              ? passwordValidityCheck(this.props.security.pass)
+            value={pass}
+            errorText={pass.length > 5
+              ? passwordValidityCheck(pass)
               : null}
             onChange={(e) =>
               this.props.checkPassword({
                 password: e.target.value,
                 fieldName: 'pass'})
-              } />
+              }
+          />
         </Block>
+
         <Block>
           <TextField
             key="passReenter"
             floatingLabelText="Repeat Password"
             type="password"
             value={this.props.security.passReenter}
-            errorText={noMatchMessage.length > 0 ? noMatchMessage : null}
+            errorText={passMatch || passReenter.length < 5
+              ? null
+              : 'Make sure the passwords match!'}
             onChange={(e) =>
               this.props.checkPassword({
                 password: e.target.value,
                 fieldName: 'passReenter'
-              })} />
+              })}
+          />
         </Block>
+
         <Block>
           <RaisedButton
             label="Next"
-            disabled={allowSubmit}
+            disabled={!allowSubmit}
             onClick={() => this.props.generateAndEncryptKeyPairs()}
             secondary />
         </Block>
+
         <Block>
           {this.props.security.errorMsg
-            ? <div style={{color: 'red'}}>Ooops. Something went wrong. please try one more time</div> // eslint-disable-line max-len
+            ? <div style={{color: 'red'}} >
+              Ooops. Something went wrong. please try one more time.
+            </div>
             : null}
-        </Block></div>
-      )
+        </Block>
+      </div>)
     }
 
     return (
