@@ -14,7 +14,7 @@ import {
 
 export default class PasswordEntry extends React.Component {
   static propTypes = {
-    loading: PropTypes.object,
+    progress: PropTypes.object,
     security: PropTypes.object,
     checkPassword: PropTypes.func.isRequired,
     generateAndEncryptKeyPairs: PropTypes.func.isRequired
