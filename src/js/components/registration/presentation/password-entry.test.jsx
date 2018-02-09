@@ -6,6 +6,7 @@ describe('(Presentation) Password entry encryption on register', function() {
   it('should render properly the first time', function() {
     shallow((<PasswordEntry
       security={{pass: '', passReenter: ''}}
+      progress={{loading: false, loadingMsg: ''}}
       checkPassword={() => {}}
       encryptDataWithPasswordOnRegister={() => {}}
       />),
