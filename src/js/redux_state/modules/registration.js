@@ -1,15 +1,11 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
+import * as cryptoUtils from 'lib/crypto'
 import { makeActions } from './'
-import bip39 from 'bip39'
-import {
-  deriveMasterKeyPairFromSeedPhrase,
-  deriveGenericSigningKeyPair
-} from 'lib/key-derivation'
 import router from './router'
 const NEXT_ROUTES = {
-  '/registration': '/registration/write-phrase',
-  '/registration/write-phrase': '/registration/entry-password'
+  '/registration': '/registration/entry-password',
+  '/registration/entry-password': '/registration/write-phrase'
 }
 
 export const actions = makeActions('registration', {
@@ -23,9 +19,15 @@ export const actions = makeActions('registration', {
       }
     }
   },
+
+  setRandomString: {
+    expectedParams: ['randomString']
+  },
+
   setMaskedImageUncovering: {
     expectedParams: ['value']
   },
+
   addEntropyFromDeltas: {
     expectedParams: ['x', 'y'],
     creator: (params) => {
@@ -47,37 +49,10 @@ export const actions = makeActions('registration', {
         }))
 
         if (entropy.isReady()) {
-          const randomString = entropy.getRandomString(4)
-          return dispatch(actions.submitEntropy(randomString))
+          return dispatch(actions.setRandomString({
+            randomString: entropy.getRandomString(4)
+          }))
         }
-      }
-    }
-  },
-
-  submitEntropy: {
-    expectedParams: ['randomString'],
-    creator: (randomString) => {
-      return (dispatch, getState) => {
-        const entropyState = getState().getIn([
-          'registration',
-          'passphrase',
-          'sufficientEntropy'
-        ])
-
-        if (!entropyState) {
-          throw new Error('Not enough entropy!')
-        }
-        dispatch(actions.generateSeedPhrase(randomString))
-      }
-    }
-  },
-
-  generateSeedPhrase: {
-    expectedParams: ['randomString'],
-    creator: (randomString) => {
-      return (dispatch, getState) => {
-        const mnemonic = bip39.entropyToMnemonic(randomString)
-        dispatch(actions.setPassphrase({mnemonic}))
       }
     }
   },
@@ -85,19 +60,13 @@ export const actions = makeActions('registration', {
   generateAndEncryptKeyPairs: {
     expectedParams: [],
     async: true,
-    creator: (params) => {
+    creator: () => {
       return async (dispatch, getState, {services, backend}) => {
-        const seedPhrase = getState().getIn([
+        const randomString = getState().getIn([
           'registration',
           'passphrase',
-          'phrase'
+          'randomString'
         ])
-        if (!seedPhrase) {
-          throw new Error('No seedphrase found.')
-        }
-        const masterKeyPair = deriveMasterKeyPairFromSeedPhrase(seedPhrase)
-        console.log(masterKeyPair, 'here is our masterkeypair')
-        const genericSigningKey = deriveGenericSigningKeyPair(masterKeyPair)
 
         const password = getState().getIn([
           'registration',
@@ -105,33 +74,79 @@ export const actions = makeActions('registration', {
           'pass'
         ])
 
+        if (!randomString) {
+          // TODO consistent error handling
+          throw new Error('No random string provided')
+        }
+
+        const {
+          didDocument,
+          mnemonic,
+          masterKeyWIF,
+          genericSigningKeyWIF,
+          ethereumKeyWIF
+        } = backend.jolocomLib.identity.create(randomString)
+
+        const {privateKey, address} = cryptoUtils.decodeWIF(ethereumKeyWIF)
+
+        try {
+          await backend.ethereum.requestEther({ did: didDocument.did, address })
+        } catch (err) {
+          // TODO consistent error handling
+          throw new Error(err)
+        }
+
+        // TODO consistent error handling
+        const ddoHash = await backend.jolocomLib.identity.store(didDocument)
+
+        try {
+          await backend.jolocomLib.identity.register(
+            Buffer.from(privateKey, 'hex'),
+            didDocument.id,
+            ddoHash
+          )
+        } catch (err) {
+          throw new Error(err)
+          // TODO consistent error handling
+        }
+
         const encMaster = await backend.encryption.encryptInformation({
           password,
-          data: masterKeyPair.keyPair.toWIF()
+          data: masterKeyWIF
         })
 
         const encGeneric = await backend.encryption.encryptInformation({
           password,
-          data: genericSigningKey.keyPair.toWIF()
+          data: genericSigningKeyWIF
         })
 
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
 
-        // dispatch(router.pushRoute('/wallet'))
+        dispatch(actions.setRandomString({randomString: ''}))
+        dispatch(actions.setPassphrase({mnemonic}))
+        // dispatch(actions.goForward())
       }
     }
+  },
+
+  // TODO Check
+  setDID: {
+    expectedParams: ['DID']
   },
 
   setEntropyStatus: {
     expectedParams: ['sufficientEntropy', 'progress']
   },
+
   setPassphrase: {
     expectedParams: ['phrase']
   },
+
   setPassphraseWrittenDown: {
     expectedParams: ['value']
   },
+
   checkPassword: {
     expectedParams: ['password', 'fieldName']
   }
@@ -144,6 +159,7 @@ const initialState = Immutable.fromJS({
   passphrase: {
     sufficientEntropy: false,
     progress: 0,
+    randomString: '',
     phrase: '',
     writtenDown: false,
     valid: false
@@ -167,6 +183,11 @@ export default (state = initialState, action = {}) => {
           sufficientEntropy: action.sufficientEntropy,
           progress: action.progress
         }
+      })
+
+    case actions.setRandomString.id:
+      return state.mergeIn(['passphrase'], {
+        randomString: action.randomString
       })
 
     case actions.setPassphrase.id:

@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/jolocom/smartwallet-app/issues"
   },
-  "license" : "LGPL",
+  "license": "LGPL",
   "homepage": "https://jolocom.com/",
   "devDependencies": {
     "babel-core": "^6.9.1",
@@ -83,9 +83,11 @@
     "cheerio": "^1.0.0-rc.2",
     "create-react-class": "^15.6.2",
     "debug": "^2.2.0",
+    "ethereumjs-wallet": "^0.6.0",
     "events": "^1.1.0",
     "history": "^1.17.0",
     "immutable": "^3.8.1",
+    "jolocom-lib": "^0.1.1",
     "json-loader": "^0.5.4",
     "lodash": "^4.13.1",
     "material-ui": "^0.16.0",
@@ -116,7 +118,7 @@
     "socket.io-client": "^2.0.3",
     "superagent": "^3.8.1",
     "superagent-es6-promise": "^1.0.0",
-    "web3": "^0.15.3",
+    "wif": "^2.0.6",
     "zmq": "^2.15.3"
   },
   "engines": {

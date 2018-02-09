@@ -31,10 +31,6 @@ describe('Wallet registration Redux module', () => {
       })
     })
 
-    describe('_getNextURLFromState()', () => {
-// TODO write new tests for modified functionality
-    })
-
     describe('_isComplete()', () => {
       const test = ({invalid, result}) => {
         invalid = new Immutable.Set(invalid)
@@ -104,87 +100,66 @@ describe('Wallet registration Redux module', () => {
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {phrase: ''}
         }})
-        const services = {entropy: {
-          addFromDelta: stub(),
-          isReady: stub().returns(true),
-          getProgress: stub().returns(1),
-          getRandomString: stub().returns('you did your homework')
-        }}
+
+        const services = {
+          entropy: {
+            addFromDelta: stub(),
+            isReady: stub().returns(true),
+            getProgress: stub().returns(1),
+            getRandomString: stub().returns('you did your homework')
+          }
+        }
+
         const thunk = actions.addEntropyFromDeltas({ dx: 5, dy: 3 })
 
-        withStubs([
-        [actions.actions, 'submitEntropy', {returns: 'i still need to do mine'}]
-        ], () => {
+        withStubs([], () => {
           thunk(dispatch, getState, {services})
+
           expect(services.entropy.addFromDelta.called).to.equal(true)
           expect(services.entropy.getRandomString.called).to.equal(true)
-          expect(dispatch.calledWithArgs).to.deep.equal(
-            ['i still need to do mine'])
-          expect(dispatch.calls).to.deep.equal([
-            {args: [{
+          expect(dispatch.calls).to.deep.equal([{
+            args: [{
               type: 'registration/SET_ENTROPY_STATUS',
               sufficientEntropy: true,
               progress: 1
             }]
-            },
-            {
-              args: ['i still need to do mine']
-            }
-          ])
+          }, {
+            args: [{
+              randomString: 'you did your homework',
+              type: 'registration/SET_RANDOM_STRING'
+            }]
+          }])
         })
-      })
-    })
-
-    describe('submitEntropy', () => {
-      it('should send an error message if there is not enough entropy', () => {
-        const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          passphrase: {sufficientEntropy: false}
-        }})
-        const readyE = actions.submitEntropy()
-        expect(() => {
-          readyE(dispatch, getState)
-        }).to.throw('Not enough entropy!')
-
-        expect(dispatch.calls).to.deep.equal([])
-      })
-
-      // eslint-disable-next-line
-      it('should trigger generateSeedPhrase when there is enough entropy', () => {
-        const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          passphrase: {sufficientEntropy: true}
-        }})
-        withStubs([
-          [actions.actions, 'generateSeedPhrase', {returns: 'generated'}]
-        ], () => {
-          const readyE = actions.actions.generateSeedPhrase
-          readyE(dispatch, getState)
-          expect(actions.actions.generateSeedPhrase.called).to.equal(true)
-        }
-      )
       })
     })
 
     describe('generateKeyPairs', () => {
       it('should not do anything is there is no randomString', async () => {
         const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          passphrase: {randomString: ''}
-        }})
+        const getState = () => Immutable.fromJS({
+          passphrase: {
+            randomString: ''
+          }
+        })
 
         const promise = actions.generateAndEncryptKeyPairs()
         await expect(promise(dispatch, getState, {}))
-          .to.be.rejectedWith('No seedphrase found')
+          .to.be.rejectedWith('No random string provided')
       })
 
-      // eslint-disable-next-line
-      it('should execute generateAndEcryptKeyPairs if there is a seed present', async () => {
+      it('should execute correctly if seed is set', async () => {
+        // eslint-disable-next-line
+        const pKey = 'ABF82FF96B463E9D82B83CB9BB450FE87E6166D4DB6D7021D0C71D7E960D5ABE'
+        const address = '0x959fd7ef9089b7142b6b908dc3a8af7aa8ff0fa1'
+        const mockWIF = 'L2yznSPTTv5yoB8mDDtzNnEtTunvsUJnRCbzzupV4tMZ4uWUPRrB'
+        const mockRandString = '13912643311766764847120568039921'
+
         const dispatch = stub()
+
         const getState = () => Immutable.fromJS({
           registration: {
             passphrase: {
-              phrase: 'mnemonic phrase'
+              randomString: mockRandString
             },
             encryption: {
               pass: 'password'
@@ -192,44 +167,104 @@ describe('Wallet registration Redux module', () => {
           }
         })
 
-        const services = {
-          storage: {
-            setItem: stub()
+        const backend = {
+          ethereum: {
+            requestEther: stub()
+          },
+          encryption: {
+            encryptInformation: stub().returns('encryptedData')
+          },
+          jolocomLib: {
+            identity: {
+              create: stub().returns({
+                ethereumKeyWIF: mockWIF,
+                genericSigningKeyWIF: 'genericKeyWIF',
+                masterKeyWIF: 'masterKeyWIF',
+                mnemonic: 'bean matrix move',
+                didDocument: {id: 'did'}
+              }),
+              store: stub().returns('mockIpfsHash'),
+              register: stub()
+            }
           }
         }
 
-        const backend = {
-          encryption: {
-            encryptInformation: stub().returns('encrypted')
-          }
+        const services = {
+          storage: { setItem: stub() }
         }
 
         const promise = actions.generateAndEncryptKeyPairs()
         await promise(dispatch, getState, {services, backend})
 
-        const expectedStorageCalls = [{
-          'args': ['masterKeyWIF', 'encrypted']
-        }, {
-          'args': ['genericKeyWIF', 'encrypted']
+        const expectedCreationCalls = [{
+          args: [ '13912643311766764847120568039921' ]
         }]
 
+        expect(backend.jolocomLib.identity.create.calls)
+          .to.deep.equal(expectedCreationCalls)
+
+        const expectedEthRequestCalls = [{
+          args: [{
+            address,
+            did: undefined
+          }]
+        }]
+
+        expect(backend.ethereum.requestEther.calls)
+          .to.deep.equal(expectedEthRequestCalls)
+
+        const expectedIpfsStorageCalls = [{
+          args: [ {id: 'did'} ]
+        }]
+
+        expect(backend.jolocomLib.identity.store.calls)
+          .to.deep.equal(expectedIpfsStorageCalls)
+
+        const expectedEthRegisterCalls = [{
+          args: [Buffer.from(pKey, 'hex'), 'did', 'mockIpfsHash']
+        }]
+
+        expect(backend.jolocomLib.identity.register.calls)
+          .to.deep.equal(expectedEthRegisterCalls)
+
         const expectedEncryptionCalls = [{
-          'args': [{
-            'password': 'password',
-            'data': 'KwLXVoqUxif9SQ4TGRSd9ySiXwkQG48Neg4S9HMZmU6MHmQNbZ71'
+          args: [{
+            password: 'password',
+            data: 'masterKeyWIF'
           }]
         }, {
-          'args': [{
-            'password': 'password',
-            'data': 'KwwQkJ1Bb5FLsTPsYxk9hSoEh4WDqdXnvQembfj1yHMk6L8uEv4R'
+          args: [{
+            password: 'password',
+            data: 'genericKeyWIF'
           }]
+        }]
+
+        expect(backend.encryption.encryptInformation.calls)
+          .to.deep.equal(expectedEncryptionCalls)
+
+        const expectedStorageCalls = [{
+          args: ['masterKeyWIF', 'encryptedData']
+        }, {
+          args: ['genericKeyWIF', 'encryptedData']
         }]
 
         expect(services.storage.setItem.calls)
           .to.deep.equal(expectedStorageCalls)
 
-        expect(backend.encryption.encryptInformation.calls)
-          .to.deep.equal(expectedEncryptionCalls)
+        const expectedDispatchCalls = [{
+          args: [{
+            randomString: '',
+            type: 'registration/SET_RANDOM_STRING'
+          }]
+        }, {
+          args: [{
+            mnemonic: 'bean matrix move',
+            type: 'registration/SET_PASSPHRASE'
+          }]
+        }]
+
+        expect(dispatch.calls)
+          .to.deep.equal(expectedDispatchCalls)
       })
     })
 
@@ -241,6 +276,7 @@ describe('Wallet registration Redux module', () => {
         .to.deep.equal({
           sufficientEntropy: false,
           progress: 0,
+          randomString: '',
           phrase: '',
           writtenDown: false,
           valid: false
@@ -257,6 +293,7 @@ describe('Wallet registration Redux module', () => {
         .to.deep.equal({
           sufficientEntropy: 'bla',
           progress: 0.4,
+          randomString: '',
           phrase: '',
           writtenDown: false,
           valid: false
@@ -279,6 +316,7 @@ describe('Wallet registration Redux module', () => {
         passphrase: {
           sufficientEntropy: false,
           progress: 0,
+          randomString: '',
           phrase: '',
           writtenDown: false,
           valid: false
