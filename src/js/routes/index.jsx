@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Router, Route, IndexRoute } from 'react-router'
 
@@ -27,9 +26,6 @@ import EtherSendScreen from 'components/wallet/screens/ether-send'
 import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
 import EtherTabScreen from 'components/wallet/screens/ether-tabs'
 
-import WalletLogin from 'components/wallet-login'
-import ExpertLoginPassphraseScreen from 'components/wallet-login/screens/phrase'
-
 import SingleSignOnAccessRightScreen from
   'components/single-sign-on/screens/access-right'
 import SingleSignOnSharedDatatScreen from
@@ -55,7 +51,6 @@ import {
 } from 'components/verifier'
 
 export const routes = {
-  login: '/login',
   signup: '/registration',
   home: '/wallet',
   forgotPassword: '/forgot-password',
@@ -127,9 +122,6 @@ function getRoutes() {
 
     <Route path="wallet/ethereum/execute-transaction"
       component={EthApprovalRequestScreen} />
-
-    <Route path="login" component={WalletLogin} />
-    <Route path="login/expert" component={ExpertLoginPassphraseScreen} />
 
     <Route path="verify-email" component={EmailConfirmationScreen} />
     <Route path="wallet/sso/access-rights"

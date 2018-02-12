@@ -1,36 +1,47 @@
 import {expect} from 'chai'
 import {stub} from '../../../../test/utils'
-import snackBar from './snack-bar'
-import {actions} from './account'
-import reducer from './account'
+import {actions, default as reducer} from './account'
 
 describe('Account module reducer', function() {
-  let origShowMessage
+  describe('checkIfAccountExists', () => {
+    it('should correcly detect existing account', async () => {
+      const dispatch = stub()
+      const services = {
+        storage: { getItem: async () => 'mockDid' }
+      }
+      const promise = actions.checkIfAccountExists()
+      await promise(dispatch, {}, {services})
 
-  beforeEach(() => {
-    localStorage.clear()
+      const expectedDispatchCalls = [{
+        args: [ { did: 'mockDid', type: 'account/SET_DID' } ]
+      }, {
+        args: [{
+          payload: { args: [ '/wallet/identity' ], method: 'push' },
+          type: '@@router/CALL_HISTORY_METHOD'
+        }]
+      }]
 
-    origShowMessage = snackBar.showMessage
-    snackBar.showMessage = stub()
-  })
+      expect(dispatch.calls).to.deep.equal(expectedDispatchCalls)
+    })
 
-  afterEach(() => {
-    localStorage.clear()
-    snackBar.showMessage = origShowMessage
+    it('should correctly detect non existing account', async () => {
+      const dispatch = stub()
+      const services = {
+        storage: { getItem: async () => undefined }
+      }
+
+      const promise = actions.checkIfAccountExists()
+      await promise(dispatch, {}, {services})
+
+      expect(dispatch.called).to.equal(false)
+    })
   })
 
   describe('INIT', function() {
     it('should correctly initialize', function() {
       expect(reducer(undefined, '@INIT').toJS()).to.deep.equal({
-        username: '',
-        userExists: false,
-        loggedIn: false
+        did: ''
       })
     })
   })
-
-// TODO: write new tests for login
-
-// TODO: write new tests for logout
 })
-
