@@ -44,7 +44,7 @@ import AccountDetailsEthereumScreen from
 import EthApprovalRequestScreen from
   'components/ethereum-connect/screens/approval-request'
 
-import {IconServices} from '../components/common'
+// import {IconServices} from '../components/common'
 
 import PasswordEntry from 'components/registration/screens/password-entry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
@@ -75,11 +75,12 @@ export const navItems = [
     title: 'Wallet',
     route: routes.home,
     icon: 'account_balance_wallet'
-  }, {
-    title: 'DApps & Services',
-    route: routes.dapps,
-    icon: IconServices
   }
+  // , {
+  //   title: 'DApps & Services',
+  //   route: routes.dapps,
+  //   icon: IconServices
+  // }
 ]
 
 function getRoutes() {

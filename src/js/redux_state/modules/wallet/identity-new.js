@@ -15,13 +15,24 @@ export const actions = makeActions('wallet/identityNew', {
     expectedParams: ['field'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
+      return (dispatch, getState, {services, backend}) => {
         dispatch(actions.saveAttribute.buildAction(params, () => {
           const userData = getState().toJS().wallet.identityNew.userData
           const toggle = getState().toJS().wallet.identityNew.toggleEdit.bool
           const property = params.field
           dispatch(actions.toggleEditField({[property]: toggle}))
-          services.storage.setItem(property, userData[property])
+          const selfSignedClaim = backend.jolocomLib.claims
+          .createVerifiedCredential(
+            'did:lalala', // TODO: replace with real DID
+            property,
+            {
+              id: 'did:lalala', // TODO: replace with real DID
+              [property]: userData[property]
+            },
+            'L1Xs8xNygctCDgry2UsYCPywgC1WUckEePZ9NGdZswTzhjoAooNu' // TODO: replace with real WIF (ecnryption question)
+          )
+
+          return services.storage.setItem(property, selfSignedClaim)
         }))
       }
     }
@@ -112,16 +123,7 @@ export default (state = initialState, action = {}) => {
 const _resolveClaims = (action) => {
   let claimsUser = {}
   action.claims.map((claimType, i) => {
-    claimsUser[claimType] = action.result[i]
+    claimsUser[claimType] = action.result[i].credential.claim[claimType]
   })
   return claimsUser
 }
-
-// structure of the claim:
-// public '@context': string = "https://w3id.org/credentials/v1"
-// public id: string
-// public 'type': string[]
-// public issuer: string
-// public issued: string
-// public claim: { id: string; [x:string]:any }
-// public proof: string
