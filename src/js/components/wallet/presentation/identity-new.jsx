@@ -2,9 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { List } from 'material-ui/List'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-// import {Loading} from '../../common'
 import { Content, Block } from '../../structure'
-// import {theme} from 'styles'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
 import {
   TabContainer,

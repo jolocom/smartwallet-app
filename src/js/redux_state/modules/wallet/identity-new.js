@@ -11,29 +11,35 @@ export const actions = makeActions('wallet/identityNew', {
   enterField: {
     expectedParams: ['field', 'value']
   },
+
   saveAttribute: {
     expectedParams: ['field'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.saveAttribute.buildAction(params, () => {
-          const userData = getState().toJS().wallet.identityNew.userData
-          const toggle = getState().toJS().wallet.identityNew.toggleEdit.bool
-          const property = params.field
-          dispatch(actions.toggleEditField({[property]: toggle}))
-          const promise1 = services.storage.getItem('did')
-          const promise2 = services.storage.getItem('tempGenericKeyWIF')
-          return Promise.all([promise1, promise2])
-          .then((res) => {
-            const did = res[0]
-            const wif = res[1]
-            const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential( // eslint-disable-line max-len
+          const { userData, toggleEdit } = getState().toJS().wallet.identityNew
+          const {field} = params
+
+          dispatch(actions.toggleEditField({ [field]: toggleEdit.bool }))
+
+          const promises = [
+            services.storage.getItem('did'),
+            services.storage.getItem('tempGenericKeyWIF')
+          ]
+
+          return Promise.all(promises).then((res) => {
+            const [did, wif] = res
+
+            // eslint-disable-next-line
+            const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
               did,
-              property,
-              {id: did, [property]: userData[property]},
+              field,
+              {id: did, [field]: userData[field]},
               wif
-              )
-            return services.storage.setItem(property, selfSignedClaim)
+            )
+
+            return services.storage.setItem(field, selfSignedClaim)
           })
         }))
       }
