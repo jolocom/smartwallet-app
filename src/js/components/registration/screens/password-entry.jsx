@@ -5,13 +5,16 @@ import Presentation from '../presentation/password-entry'
 
 @connect({
   props: ['registration'],
-  actions: ['registration:checkPassword',
+  actions: [
+    'registration:setPassword',
+    'registration:setReentryPassword',
     'registration:generateAndEncryptKeyPairs']
 })
 export default class PasswordEntryScreen extends React.Component {
   static propTypes = {
     registration: PropTypes.object,
-    checkPassword: PropTypes.func.isRequired,
+    setPassword: PropTypes.func.isRequired,
+    setReentryPassword: PropTypes.func.isRequired,
     generateAndEncryptKeyPairs: PropTypes.func.isRequired
   }
 
@@ -19,7 +22,8 @@ export default class PasswordEntryScreen extends React.Component {
     return <Presentation
       security={this.props.registration.encryption}
       progress={this.props.registration.progress}
-      checkPassword={this.props.checkPassword}
+      setPassword={this.props.setPassword}
+      setReentryPassword={this.props.setReentryPassword}
       generateAndEncryptKeyPairs={this.props.generateAndEncryptKeyPairs}
     />
   }
