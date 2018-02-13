@@ -243,9 +243,13 @@ describe('Wallet registration Redux module', () => {
           .to.deep.equal(expectedEncryptionCalls)
 
         const expectedStorageCalls = [{
+          args: ['did', 'did']
+        }, {
           args: ['masterKeyWIF', 'encryptedData']
         }, {
           args: ['genericKeyWIF', 'encryptedData']
+        }, {
+          args: ['tempGenericKeyWIF', 'genericKeyWIF']
         }]
 
         expect(services.storage.setItem.calls)

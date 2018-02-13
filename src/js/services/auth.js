@@ -1,4 +1,4 @@
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import EventEmitter from 'events'
 
 export default class AuthService extends EventEmitter {
@@ -55,7 +55,7 @@ export default class AuthService extends EventEmitter {
   _setCurrentUser(user) {
     const oldUser = this.currentUser
     this.currentUser = user
-    this._initSocket()
+    // this._initSocket()
     this.emit('changed', {oldUser, newUser: user})
 
     if (oldUser && !this.currentUser) {
@@ -63,11 +63,11 @@ export default class AuthService extends EventEmitter {
     }
   }
 
-  _initSocket() {
-    this.currentUser.socket = io(new URL(
-      this.currentUser.wallet.identityURL).origin
-    )
-  }
+  // _initSocket() {
+  //   this.currentUser.socket = io(new URL(
+  //     this.currentUser.wallet.identityURL).origin
+  //   )
+  // }
 }
 
 export class Wallet {

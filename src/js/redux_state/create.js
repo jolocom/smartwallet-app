@@ -4,7 +4,7 @@ import { routerMiddleware } from 'react-router-redux'
 import backendMiddleware from './middleware/backend'
 import Backend from '../backend'
 import createServices from '../services'
-import setupObservers from './observers'
+// import setupObservers from './observers'
 import reducer from './reducer'
 
 export default function createStore(history, client, data) {
@@ -46,7 +46,7 @@ export default function createStore(history, client, data) {
   }
 
   const store = finalCreateStore(reducer, data)
-  setupObservers({store, services, history})
+  // setupObservers({store, services, history})
 
   if (window.__DEVELOPMENT__ && module.hot) {
     module.hot.accept('./reducer', () => {

@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/home'
@@ -12,18 +12,11 @@ import Presentation from '../presentation/home'
 })
 export default class WalletHomeScreen extends React.Component {
   static propTypes = {
-    children: PropTypes.node,
-    wallet: PropTypes.any,
-    goTo: PropTypes.func.isRequired,
-    getIdentityInformation: PropTypes.func.isRequired
-  }
-  componentWillMount() {
-    this.props.getIdentityInformation()
+    goTo: PropTypes.func.isRequired
   }
 
   render() {
     return (<Presentation
-      onClick={() => { this.props.goTo('identity') }}
-      username={this.props.wallet.identity.username.value} />)
+      onClick={() => { this.props.goTo('identity') }} />)
   }
 }

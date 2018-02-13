@@ -36,9 +36,7 @@ const STYLES = {
 @Radium
 export default class WalletHome extends React.Component {
   static propTypes = {
-    children: PropTypes.node,
-    onClick: PropTypes.func.isRequired,
-    username: PropTypes.string.isRequired
+    onClick: PropTypes.func.isRequired
   }
 
   render() {
@@ -48,7 +46,7 @@ export default class WalletHome extends React.Component {
           <img src="/img/illustration_wallet.svg" style={STYLES.homeImg} />
         </Block>
         <Block>
-          <h1 style={STYLES.greeting}>Hi {this.props.username}!</h1>
+          <h1 style={STYLES.greeting}>Hello!</h1>
         </Block>
         <Block>
           <SideNote style={STYLES.sideNote}>

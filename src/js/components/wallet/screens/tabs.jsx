@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import AppBar from 'material-ui/AppBar'
 import Paper from 'material-ui/Paper'
@@ -61,7 +61,7 @@ export default class WalletTabScreen extends React.Component {
           <Tabs style={STYLES.bar} value={this.props.activeTab}
             onChange={(tab) => this.props.switchTab({tab})}>
             <Tab label="Identity" value="identity" />
-            <Tab label="Money" value="money" />
+            <Tab label="Interactions" value="interactions" />
           </Tabs>
         </Paper>
         <Content>

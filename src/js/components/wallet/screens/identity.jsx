@@ -3,7 +3,7 @@ import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/identity'
 import WalletError from '../../common/error'
-import Loading from 'components/common/loading'
+// import Loading from 'components/common/loading'
 
 @connect({
   props: ['wallet.identity'],
@@ -33,7 +33,7 @@ export default class WalletIdentityScreen extends React.Component {
     changePinValue: PropTypes.func.isRequired,
     confirmPhone: PropTypes.func.isRequired,
     expandField: PropTypes.func,
-    getIdentityInformation: PropTypes.func.isRequired,
+    // getIdentityInformation: PropTypes.func.isRequired,
     goTo: PropTypes.func.isRequired,
     identity: PropTypes.object,
     openConfirmDialog: PropTypes.func.isRequired,
@@ -43,28 +43,28 @@ export default class WalletIdentityScreen extends React.Component {
     startPhoneVerification: PropTypes.func.isRequired,
     buyEther: PropTypes.func.isRequired,
     createEthereumIdentity: PropTypes.func.isRequired,
-    getWalletAddressAndBalance: PropTypes.func.isRequired,
+    // getWalletAddressAndBalance: PropTypes.func.isRequired,
     editDisplayName: PropTypes.func.isRequired,
     setDisplayName: PropTypes.func.isRequired,
     saveDisplayName: PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    this.props.getIdentityInformation()
+    // this.props.getIdentityInformation()
   }
 
   render() {
     if (this.props.identity.error) {
       return (<WalletError
-        message={'...oops something went wrong! We were not able to load ' +
+        message={'We were not able to load ' +
         'your data.'}
         buttonLabel="RETRY"
         onClick={() => this.render()} />)
     }
 
-    if (!this.props.identity.loaded) {
-      return <Loading />
-    }
+    // if (!this.props.identity.loaded) {
+    //   return <Loading />
+    // }
 
     return (<Presentation
       identity={this.props.identity}
@@ -91,8 +91,8 @@ export default class WalletIdentityScreen extends React.Component {
   }
 
   showVerificationWindow({title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
-    return this.props.openConfirmDialog(title, message, rightButtonLabel,
-      callback({attrValue, attrType, index}), leftButtonLabel)
+    // eslint-disable-next-line
+    return this.props.openConfirmDialog(title, message, rightButtonLabel, callback({attrValue, attrType, index}), leftButtonLabel)
   }
 
   requestVerification(...args) {

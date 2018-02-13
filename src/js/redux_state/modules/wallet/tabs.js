@@ -5,7 +5,8 @@ import router from '../router'
 
 const PATHNAME_TO_TAB = {
   '/wallet/identity': 'identity',
-  '/wallet/money': 'money'
+  // '/wallet/money': 'money'
+  '/wallet/interactions': 'interactions'
 }
 const TAB_TO_PATHNAME = invert(PATHNAME_TO_TAB)
 

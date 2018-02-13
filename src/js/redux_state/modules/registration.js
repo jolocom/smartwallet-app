@@ -2,10 +2,12 @@ import every from 'lodash/every'
 import Immutable from 'immutable'
 import * as cryptoUtils from 'lib/crypto'
 import { makeActions } from './'
+import { actions as accountActions } from './account'
 import router from './router'
 const NEXT_ROUTES = {
   '/registration': '/registration/entry-password',
-  '/registration/entry-password': '/registration/write-phrase'
+  '/registration/entry-password': '/registration/write-phrase',
+  '/registration/write-phrase': '/wallet'
 }
 
 export const actions = makeActions('registration', {
@@ -147,20 +149,18 @@ export const actions = makeActions('registration', {
           data: genericSigningKeyWIF
         })
 
+        await services.storage.setItem('did', didDocument.id)
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
+        await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF) // eslint-disable-line max-len
 
+        dispatch(accountActions.setDID({did: didDocument.id}))
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassphrase({mnemonic}))
         dispatch(actions.stopLoading())
         dispatch(actions.goForward())
       }
     }
-  },
-
-  // TODO Check
-  setDID: {
-    expectedParams: ['DID']
   },
 
   setEntropyStatus: {
