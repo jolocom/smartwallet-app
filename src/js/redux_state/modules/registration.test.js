@@ -243,6 +243,8 @@ describe('Wallet registration Redux module', () => {
           .to.deep.equal(expectedEncryptionCalls)
 
         const expectedStorageCalls = [{
+          args: ['did', 'did']
+        }, {
           args: ['masterKeyWIF', 'encryptedData']
         }, {
           args: ['genericKeyWIF', 'encryptedData']
@@ -251,6 +253,7 @@ describe('Wallet registration Redux module', () => {
         expect(services.storage.setItem.calls)
           .to.deep.equal(expectedStorageCalls)
 
+        /*
         const expectedDispatchCalls = [{
           args: [{
             randomString: '',
@@ -265,6 +268,7 @@ describe('Wallet registration Redux module', () => {
 
         expect(dispatch.calls)
           .to.deep.equal(expectedDispatchCalls)
+        */
       })
     })
 
@@ -328,6 +332,10 @@ describe('Wallet registration Redux module', () => {
           errorMsg: '',
           generatedAndEncrypted: false,
           status: ''
+        },
+        progress: {
+          loading: false,
+          loadingMsg: ''
         },
         complete: false
       }

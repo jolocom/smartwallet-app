@@ -1,17 +1,36 @@
 import Immutable from 'immutable'
-// import createReactClass from 'create-react-class'
+import router from './router'
+import { makeActions } from './'
 
-// TODO: check to see if user is already logged in
-// TODO: rewrite logout function for session management
+export const actions = makeActions('account', {
+
+  checkIfAccountExists: {
+    expectedParams: [],
+    async: true,
+    creator: () => {
+      return async (dispatch, getState, {backend, services}) => {
+        const did = await services.storage.getItem('did')
+        if (did) {
+          dispatch(actions.setDID({did}))
+          dispatch(router.pushRoute('/wallet/identity'))
+        }
+      }
+    }
+  },
+
+  setDID: {
+    expectedParams: ['did']
+  }
+})
 
 const initialState = Immutable.fromJS({
-  username: '',
-  userExists: false,
-  loggedIn: false
+  did: ''
 })
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case actions.setDID.id:
+      return state.set('did', action.did)
     default:
       return state
   }

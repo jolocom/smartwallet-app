@@ -2,6 +2,7 @@ import every from 'lodash/every'
 import Immutable from 'immutable'
 import * as cryptoUtils from 'lib/crypto'
 import { makeActions } from './'
+import { actions as accountActions } from './account'
 import router from './router'
 const NEXT_ROUTES = {
   '/registration': '/registration/entry-password',
@@ -18,6 +19,18 @@ export const actions = makeActions('registration', {
         dispatch(router.pushRoute(nextURL))
       }
     }
+  },
+
+  startLoading: {
+    expectedParams: []
+  },
+
+  stopLoading: {
+    expectedParams: []
+  },
+
+  setLoadingMsg: {
+    expectedParams: ['loadingMsg']
   },
 
   setRandomString: {
@@ -62,6 +75,8 @@ export const actions = makeActions('registration', {
     async: true,
     creator: () => {
       return async (dispatch, getState, {services, backend}) => {
+        dispatch(actions.startLoading())
+
         const randomString = getState().getIn([
           'registration',
           'passphrase',
@@ -79,6 +94,8 @@ export const actions = makeActions('registration', {
           throw new Error('No random string provided')
         }
 
+        dispatch(actions.setLoadingMsg({loadingMsg: 'Generating keys'}))
+
         const {
           didDocument,
           mnemonic,
@@ -86,8 +103,9 @@ export const actions = makeActions('registration', {
           genericSigningKeyWIF,
           ethereumKeyWIF
         } = backend.jolocomLib.identity.create(randomString)
-
         const {privateKey, address} = cryptoUtils.decodeWIF(ethereumKeyWIF)
+
+        dispatch(actions.setLoadingMsg({loadingMsg: 'Fueling with Ether'}))
 
         try {
           await backend.ethereum.requestEther({ did: didDocument.did, address })
@@ -96,8 +114,14 @@ export const actions = makeActions('registration', {
           throw new Error(err)
         }
 
+        dispatch(actions.setLoadingMsg({loadingMsg: 'Storing data on IPFS'}))
+
         // TODO consistent error handling
         const ddoHash = await backend.jolocomLib.identity.store(didDocument)
+
+        dispatch(actions.setLoadingMsg({
+          loadingMsg: 'Registering identity on Ethereum'
+        }))
 
         try {
           await backend.jolocomLib.identity.register(
@@ -110,6 +134,10 @@ export const actions = makeActions('registration', {
           // TODO consistent error handling
         }
 
+        dispatch(actions.setLoadingMsg({
+          loadingMsg: 'Encrypting and storing data on device'
+        }))
+
         const encMaster = await backend.encryption.encryptInformation({
           password,
           data: masterKeyWIF
@@ -120,19 +148,17 @@ export const actions = makeActions('registration', {
           data: genericSigningKeyWIF
         })
 
+        await services.storage.setItem('did', didDocument.id)
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
 
+        dispatch(accountActions.setDID({did: didDocument.id}))
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassphrase({mnemonic}))
-        // dispatch(actions.goForward())
+        dispatch(actions.stopLoading())
+        dispatch(actions.goForward())
       }
     }
-  },
-
-  // TODO Check
-  setDID: {
-    expectedParams: ['DID']
   },
 
   setEntropyStatus: {
@@ -172,6 +198,10 @@ const initialState = Immutable.fromJS({
     errorMsg: '',
     status: ''
   },
+  progress: {
+    loading: false,
+    loadingMsg: ''
+  },
   complete: false
 })
 
@@ -184,6 +214,15 @@ export default (state = initialState, action = {}) => {
           progress: action.progress
         }
       })
+
+    case actions.setLoadingMsg.id:
+      return state.setIn(['progress', 'loadingMsg'], action.loadingMsg)
+
+    case actions.startLoading.id:
+      return state.setIn(['progress', 'loading'], true)
+
+    case actions.stopLoading.id:
+      return state.setIn(['progress', 'loading'], false)
 
     case actions.setRandomString.id:
       return state.mergeIn(['passphrase'], {
