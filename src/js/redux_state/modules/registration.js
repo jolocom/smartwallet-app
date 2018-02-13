@@ -6,7 +6,8 @@ import { actions as accountActions } from './account'
 import router from './router'
 const NEXT_ROUTES = {
   '/registration': '/registration/entry-password',
-  '/registration/entry-password': '/registration/write-phrase'
+  '/registration/entry-password': '/registration/write-phrase',
+  '/registration/write-phrase': '/wallet'
 }
 
 export const actions = makeActions('registration', {
@@ -151,6 +152,7 @@ export const actions = makeActions('registration', {
         await services.storage.setItem('did', didDocument.id)
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
+        await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF) // eslint-disable-line max-len
 
         dispatch(accountActions.setDID({did: didDocument.id}))
         dispatch(actions.setRandomString({randomString: ''}))

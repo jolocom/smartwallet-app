@@ -9,10 +9,22 @@ describe('Wallet identity-new redux module', () => {
   describe('Reducer', () => {
     it('should get user\'s infromation on retrieveAttributes', () => {
       let state = reducer(undefined, '@@INIT')
+      const selfSignedClaim = {
+        credential: {
+          '@context': 'https://w3id.org/credentials/v1',
+          claim: {id: 'did:jolo:TEST', email: 'nat@mail.de'},
+          id: '7TESTa75cffba',
+          issued: 'Tue Feb 13 2018 12:21:15 GMT+0100 (Mitteleuropäische Zeit)',
+          issuer: 'did:jolo:TEST',
+          type: 'email',
+          signature: 'TESTcc16ef169079deeb2ed46080ebfb73e'
+        }
+      }
+
       const action = {
         type: actions.retrieveAttributes.id_success,
         claims: ['phone', 'name', 'email'],
-        result: ['111', 'Natascha', 'b@b.com']
+        result: [null, null, selfSignedClaim]
       }
 
       state = reducer(state, action)
@@ -22,9 +34,9 @@ describe('Wallet identity-new redux module', () => {
           bool: false
         },
         userData: {
-          phone: '111',
-          name: 'Natascha',
-          email: 'b@b.com'
+          phone: '',
+          name: '',
+          email: 'nat@mail.de'
         },
         qrscan: false,
         errorMsg: ''

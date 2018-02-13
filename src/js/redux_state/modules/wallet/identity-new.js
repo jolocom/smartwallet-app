@@ -21,18 +21,21 @@ export const actions = makeActions('wallet/identityNew', {
           const toggle = getState().toJS().wallet.identityNew.toggleEdit.bool
           const property = params.field
           dispatch(actions.toggleEditField({[property]: toggle}))
-          const selfSignedClaim = backend.jolocomLib.claims
-          .createVerifiedCredential(
-            'did:lalala', // TODO: replace with real DID
-            property,
-            {
-              id: 'did:lalala', // TODO: replace with real DID
-              [property]: userData[property]
-            },
-            'L1Xs8xNygctCDgry2UsYCPywgC1WUckEePZ9NGdZswTzhjoAooNu' // TODO: replace with real WIF (ecnryption question)
-          )
-
-          return services.storage.setItem(property, selfSignedClaim)
+          const promise1 = services.storage.getItem('did')
+          const promise2 = services.storage.getItem('tempGenericKeyWIF')
+          return Promise.all([promise1, promise2])
+          .then((res) => {
+            const did = res[0]
+            const wif = res[1]
+            const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential( // eslint-disable-line max-len
+              did,
+              property,
+              {id: did, [property]: userData[property]},
+              wif
+              )
+            console.log('SSCLAIM: ', selfSignedClaim)
+            return services.storage.setItem(property, selfSignedClaim)
+          })
         }))
       }
     }
@@ -123,7 +126,9 @@ export default (state = initialState, action = {}) => {
 const _resolveClaims = (action) => {
   let claimsUser = {}
   action.claims.map((claimType, i) => {
-    claimsUser[claimType] = action.result[i].credential.claim[claimType]
+    if (action.result[i] !== null && action.result[i] !== undefined) {
+      claimsUser[claimType] = action.result[i].credential.claim[claimType]
+    }
   })
   return claimsUser
 }
