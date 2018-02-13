@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress",
-    "build": "yarn install && yarn run webpack:production",
+    "build": "npm install && yarn run webpack:production",
     "build:dev": "yarn install && webpack --progress",
     "test": "mocha-webpack",
     "test:watch": "mocha-webpack --watch",
@@ -22,7 +22,8 @@
   "contributors": [
     "Eugeniu Rusu <eugeniu@jolocom.com>",
     "Natascha Wittenberg <natascha@jolocom.com>",
-    "Charleen Fei <charleen@jolocom.com>"
+    "Charleen Fei <charleen@jolocom.com>",
+    "Kasia Szawan <kasia@jolocom.com>"
   ],
   "bugs": {
     "url": "https://github.com/jolocom/smartwallet-app/issues"
