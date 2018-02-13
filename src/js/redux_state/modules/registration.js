@@ -248,30 +248,6 @@ export default (state = initialState, action = {}) => {
       })
       return state.set('complete', helpers._isComplete(state))
 
-    case actions.generateAndEncryptKeyPairs.id:
-      return state.mergeDeep({
-        encryption: {
-          generatedAndEncrypted: false,
-          status: ''
-        }
-      })
-
-    case actions.generateAndEncryptKeyPairs.id_success:
-      return state.mergeDeep({
-        encryption: {
-          generatedAndEncrypted: true,
-          status: ''
-        }
-      })
-
-    case actions.generateAndEncryptKeyPairs.id_fail:
-      return state.mergeDeep({
-        encryption: {
-          generatedAndEncrypted: false,
-          status: ''
-        }
-      })
-
     case actions.checkPassword.id:
       if (action.fieldName === 'pass') {
         return state.mergeDeep({

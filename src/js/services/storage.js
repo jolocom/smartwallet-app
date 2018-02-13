@@ -1,4 +1,3 @@
-// TODO Does native storage api accept objects?
 export default class StorageService {
   constructor() {
     this.inBrowser = !nativeStorageAvailable()
@@ -29,8 +28,8 @@ export default class StorageService {
       }
     }
 
-    return new Promise((resolve, reject) => {
-      window.NativeStorage.getItem(key, resolve, reject)
+    return new Promise((resolve) => {
+      window.NativeStorage.getItem(key, resolve, () => resolve(null))
     })
   }
 }

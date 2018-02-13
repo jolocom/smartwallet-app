@@ -33,26 +33,23 @@ export const actions = makeActions('wallet/identityNew', {
               {id: did, [property]: userData[property]},
               wif
               )
-            console.log('SSCLAIM: ', selfSignedClaim)
             return services.storage.setItem(property, selfSignedClaim)
           })
         }))
       }
     }
   },
+
   retrieveAttributes: {
     expectedParams: ['claims'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.retrieveAttributes.buildAction(params, () => {
-          let claimsArray = []
-          params.claims.map((claim) => {
-            claimsArray.push(services.storage.getItem(claim))
-          })
-          return Promise.all(claimsArray)
-        }))
-      }
+      return (dispatch, getState, {services, backend}) =>
+        dispatch(actions.retrieveAttributes.buildAction(params, () =>
+          Promise.all(params.claims.map(claim =>
+            services.storage.getItem(claim)
+          ))
+        ))
     }
   }
 })
