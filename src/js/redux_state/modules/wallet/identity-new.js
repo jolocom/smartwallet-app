@@ -11,7 +11,6 @@ export const actions = makeActions('wallet/identityNew', {
   enterField: {
     expectedParams: ['field', 'value']
   },
-
   saveAttribute: {
     expectedParams: ['field'],
     async: true,
@@ -45,7 +44,6 @@ export const actions = makeActions('wallet/identityNew', {
       }
     }
   },
-
   retrieveAttributes: {
     expectedParams: ['claims'],
     async: true,
@@ -57,21 +55,28 @@ export const actions = makeActions('wallet/identityNew', {
           ))
         ))
     }
+  },
+  veryfyAttribute: {
+    expectedParams: []
   }
 })
+
 
 const initialState = Immutable.fromJS({
   toggleEdit: {
     field: '',
-    bool: false
+    bool: false,
+    verified: false
+
   },
   userData: {
-    phone: '',
-    name: '',
-    email: ''
+    phone: { value: '', verifiable: true, verified: false },
+    name: { value: '', verifiable: false, verified: false },
+    email: { value: '', verifiable: true, verified: false }
   },
   qrscan: false,
-  errorMsg: ''
+  errorMsg: '',
+  verifyAttribute: {}
 })
 
 export default (state = initialState, action = {}) => {
@@ -91,7 +96,7 @@ export default (state = initialState, action = {}) => {
 
     case actions.enterField.id:
       return state.mergeDeep({
-        userData: {[action.field]: action.value}
+        userData: {[action.field]: { value: action.value} }
       })
 
     case actions.saveAttribute.id:
@@ -130,7 +135,7 @@ const _resolveClaims = (action) => {
   let claimsUser = {}
   action.claims.map((claimType, i) => {
     if (action.result[i] !== null && action.result[i] !== undefined) {
-      claimsUser[claimType] = action.result[i].credential.claim[claimType]
+      claimsUser[claimType] = action.result[i].value.credential.claim[claimType]
     }
   })
   return claimsUser

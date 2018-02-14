@@ -21,7 +21,7 @@ export default class IdentityScreenNew extends React.Component {
     toggleQRScan: PropTypes.func.isRequired,
     saveAttribute: PropTypes.func.isRequired,
     enterField: PropTypes.func.isRequired,
-    verifyAttribute: PropTypes.func
+    verifyAttribute: PropTypes.func,
   }
 
   componentDidMount() {
@@ -36,7 +36,7 @@ export default class IdentityScreenNew extends React.Component {
         saveAttribute={this.props.saveAttribute}
         toggleEditField={this.props.toggleEditField}
         toggleQRScan={this.props.toggleQRScan}
-        verifyAttribute={this.props.handleConfirmDialog}
+        verifyAttribute={this.props.verifyAttribute}
       />
     )
   }

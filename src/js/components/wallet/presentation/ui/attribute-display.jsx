@@ -41,7 +41,8 @@ export default class AttributeDisplay extends React.Component {
     id: PropTypes.string,
     toggleEditField: PropTypes.func.isRequired,
     enterField: PropTypes.func.isRequired,
-    saveAttribute: PropTypes.func.isRequired
+    saveAttribute: PropTypes.func.isRequired,
+    verifyAttribute: PropTypes.func
   }
 
   componentDidUpdate() {
@@ -64,13 +65,22 @@ export default class AttributeDisplay extends React.Component {
   render() {
     const {identity} = this.props
     const toggle = identity.toggleEdit.bool && identity.toggleEdit.field === this.props.id // eslint-disable-line max-len
+    const verifiable = identity.userData[this.props.id].verifiable
+    const verified = verifiable && identity.userData[this.props.id].verified
     let editButton
     let verificationButton
 
-    verificationButton = (<RaisedButton
+    if (verified) {
+      verificationButton = (<RaisedButton
+        style={STYLES.addBtn1}
+        label = "Verified">
+        </RaisedButton>)
+    } else if (verifiable) {
+      verificationButton = (<RaisedButton
         style={STYLES.addBtn1}
         label = "Verify">
-      </RaisedButton>)
+        </RaisedButton>)
+    }
 
     if (toggle) {
       editButton = (<FloatingActionButton
@@ -108,7 +118,7 @@ export default class AttributeDisplay extends React.Component {
             ref={this.props.id}
             disabled={!toggle}
             underlineShow={toggle}
-            value={identity.userData[this.props.id]}
+            value={identity.userData[this.props.id].value}
             inputStyle={STYLES.textStyle}
             onChange={(e) =>
               this.props.enterField({
