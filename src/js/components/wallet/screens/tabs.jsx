@@ -6,7 +6,7 @@ import Paper from 'material-ui/Paper'
 import {Tab, Tabs} from 'material-ui/Tabs'
 
 import { Layout, Content } from 'components/layout'
-import LeftNavToggle from 'components/left-nav/toggle'
+// import LeftNavToggle from 'components/left-nav/toggle'
 import { connect } from 'redux_state/utils'
 import { theme } from 'styles'
 
@@ -23,6 +23,13 @@ const STYLES = {
     maxWidth: '1200px',
     margin: 'auto',
     boxShadow: 'none'
+  },
+  logo: {
+    width: '24px',
+    heigh: '24px',
+    top: '15px',
+    marginTop: '10px',
+    marginLeft: '5px'
   }
 }
 
@@ -56,7 +63,7 @@ export default class WalletTabScreen extends React.Component {
           <AppBar
             title="SmartWallet"
             style={STYLES.bar}
-            iconElementLeft={<LeftNavToggle />}
+            iconElementLeft={<img src="img/logo.svg" style={STYLES.logo} />}
           />
           <Tabs style={STYLES.bar} value={this.props.activeTab}
             onChange={(tab) => this.props.switchTab({tab})}>
