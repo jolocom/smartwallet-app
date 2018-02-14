@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'redux_state/utils'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium, {StyleRoot} from 'radium'
 
 import SnackbarContainer from 'components/snack-bar'
@@ -11,7 +11,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import JolocomTheme from 'styles/jolocom-theme'
 
-import LeftNav from 'components/left-nav/nav.jsx'
+// import LeftNav from 'components/left-nav/nav.jsx'
 
 import Loading from 'components/common/loading.jsx'
 
@@ -113,7 +113,6 @@ class App extends React.Component {
       <StyleRoot style={styles.container}>
         {this.props.children}
 
-        <LeftNav />
         <SnackbarContainer />
         <ConfirmationDialog />
         <SimpleDialog />
