@@ -24,15 +24,21 @@ export const actions = makeActions('wallet/identityNew', {
           dispatch(actions.toggleEditField({ [field]: toggleEdit.bool }))
 
           const did = await services.storage.getItem('did')
-          const encWif = services.storage.getItem('genericKeyWIF')
-          const decryptionPass = services.storage.getItemSecure('encryptionPassword')
+          const encWif = await services.storage.getItem('genericKeyWIF')
 
-          const wif = await backend.encryption.decryptInformation({
-            ciphertext: encWif.crypto.ciphertext,
-            password: decryptionPass,
-            salt: encWif.crypto.kdfParams.salt,
-            iv: encWif.crypto.cipherparams.iv
-          })
+          let wif
+          try {
+            const decryptionPass = await services.storage.getItemSecure('encryptionPassword')
+            wif = await backend.encryption.decryptInformation({
+              ciphertext: encWif.crypto.ciphertext,
+              password: decryptionPass,
+              salt: encWif.crypto.kdfParams.salt,
+              iv: encWif.crypto.cipherparams.iv
+            })
+          } catch(err) {
+            console.warn(err)
+            wif = await services.storage.getItem('tempGenericKeyWIF')
+          }
 
           // eslint-disable-next-line
           const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
@@ -41,8 +47,7 @@ export const actions = makeActions('wallet/identityNew', {
             {id: did, [field]: userData[field]},
             wif
           )
-
-          return services.storage.setItem(field, selfSignedClaim)
+          await services.storage.setItem(field, selfSignedClaim)
         }))
       }
     }

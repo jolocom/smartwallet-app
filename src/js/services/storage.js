@@ -27,7 +27,11 @@ export default class StorageService {
     }
 
     return new Promise((resolve) => {
-      window.NativeStorage.getItem(key, resolve, () => resolve(null))
+      window.NativeStorage.getItem(
+        key,
+        (val) => resolve(_parseIfObject(val)),
+        () => resolve(null)
+      )
     })
   }
 
@@ -44,7 +48,7 @@ export default class StorageService {
   async setItem(key, value) {
     const data = _stringifyIfObject(value)
     if (this.inBrowser) {
-      localStorage.setItem(key, _stringifyIfObject(data))
+      localStorage.setItem(key, data)
       return Promise.resolve(value)
     }
 
@@ -65,7 +69,7 @@ export default class StorageService {
     return new Promise((resolve, reject) => {
       if (this.secureStorage) {
         return this.secureStorage.get(
-          (value) => resolve(_parseIfObject(value)),
+          (val) => resolve(_parseIfObject(val)),
           () => resolve(null),
           key
         )

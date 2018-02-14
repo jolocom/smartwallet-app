@@ -5,6 +5,7 @@ public/
 build/
 ldpc-*
 data/
+.tern-project
 
 yarn.lock
 
@@ -52,12 +53,6 @@ chrome-user-data
 *.iml
 .vscode
 nbproject
-
-#local solid test server
-utils/localSolidServer/
-config.json
-localhost.cert
-localhost.key
 
 # Cordova
 app/plugins

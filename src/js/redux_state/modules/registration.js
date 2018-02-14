@@ -152,8 +152,12 @@ export const actions = makeActions('registration', {
         await services.storage.setItem('did', didDocument.id)
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
-        await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF) // eslint-disable-line max-len
-        await services.storage.setItemSecure('encryptionPassword', password)
+
+        try {
+          await services.storage.setItemSecure('encryptionPassword', password)
+        } catch(err) {
+          await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF) // eslint-disable-line max-len
+        }
 
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassword({password: ''}))
