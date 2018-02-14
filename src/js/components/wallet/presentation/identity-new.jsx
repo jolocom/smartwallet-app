@@ -25,7 +25,8 @@ export default class IdentityNew extends React.Component {
     enterField: PropTypes.func.isRequired,
     saveAttribute: PropTypes.func.isRequired,
     toggleEditField: PropTypes.func.isRequired,
-    toggleQRScan: PropTypes.func.isRequired
+    toggleQRScan: PropTypes.func.isRequired,
+    verifyAttribute: PropTypes.func
   }
 
   render() {
@@ -55,7 +56,8 @@ export default class IdentityNew extends React.Component {
               enterField={this.props.enterField}
               saveAttribute={this.props.saveAttribute}
               identity={this.props.identityNew}
-              toggleEditField={this.props.toggleEditField} />)
+              toggleEditField={this.props.toggleEditField}
+              verifyAttribute={this.props.verifyAttribute} />)
           })}
         </List>
       )

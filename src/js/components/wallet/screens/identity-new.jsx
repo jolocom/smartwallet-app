@@ -9,7 +9,9 @@ import Presentation from '../presentation/identity-new'
     'wallet/identity-new:enterField',
     'wallet/identity-new:saveAttribute',
     'wallet/identity-new:toggleQRScan',
-    'wallet/identity-new:retrieveAttributes']
+    'wallet/identity-new:retrieveAttributes',
+    'wallet/identity-new:verifyAttribute',
+    'confirmation-dialog:openConfirmDialog']
 })
 export default class IdentityScreenNew extends React.Component {
   static propTypes = {
@@ -18,7 +20,8 @@ export default class IdentityScreenNew extends React.Component {
     toggleEditField: PropTypes.func.isRequired,
     toggleQRScan: PropTypes.func.isRequired,
     saveAttribute: PropTypes.func.isRequired,
-    enterField: PropTypes.func.isRequired
+    enterField: PropTypes.func.isRequired,
+    verifyAttribute: PropTypes.func
   }
 
   componentDidMount() {
@@ -33,7 +36,13 @@ export default class IdentityScreenNew extends React.Component {
         saveAttribute={this.props.saveAttribute}
         toggleEditField={this.props.toggleEditField}
         toggleQRScan={this.props.toggleQRScan}
+        verifyAttribute={this.props.handleConfirmDialog}
       />
     )
+  }
+
+  handleConfirmDialog = ({title, message, rightButtonLabel, leftButtonLabel, callback}) => { // eslint-disable-line max-len
+    this.props.openConfirmDialog(title, message, rightButtonLabel,
+    callback, leftButtonLabel)
   }
 }
