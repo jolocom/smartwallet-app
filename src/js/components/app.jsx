@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'redux_state/utils'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium, {StyleRoot} from 'radium'
 
 import SnackbarContainer from 'components/snack-bar'

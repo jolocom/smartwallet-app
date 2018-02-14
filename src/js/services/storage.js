@@ -3,6 +3,7 @@
 export default class StorageService {
   constructor() {
     this.inBrowser = !_nativeStorageAvailable()
+
     if (_secureStorageAvailable()) {
       const onSuccess = () => {}
       const onFailure = () => { alert('catastrophic failure') }

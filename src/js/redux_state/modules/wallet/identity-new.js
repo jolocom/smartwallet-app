@@ -25,11 +25,19 @@ export const actions = makeActions('wallet/identityNew', {
 
           const promises = [
             services.storage.getItem('did'),
-            services.storage.getItem('tempGenericKeyWIF')
+            services.storage.getItem('genericKeyWIF'),
+            services.storage.getItem('tempGenericKeyWIF'),
+            services.storage.getItemSecure('encryptionPassword')
           ]
 
           return Promise.all(promises).then((res) => {
-            const [did, wif] = res
+            const [did, encWif, wif, password] = res
+            backend.encryption.decryptInformation({
+              ciphertext: encWif.crypto.ciphertext,
+              password,
+              salt: encWif.crypto.kdfParams.salt,
+              iv: encWif.crypto.cipherparams.iv
+            }).then(res => console.log(res)).catch(err => console.log(err))
 
             // eslint-disable-next-line
             const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(

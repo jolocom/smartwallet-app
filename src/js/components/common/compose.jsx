@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import IconButton from 'material-ui/IconButton'
