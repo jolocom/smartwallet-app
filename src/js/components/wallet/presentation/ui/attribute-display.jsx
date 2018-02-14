@@ -9,6 +9,8 @@ import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import SocialPerson from 'material-ui/svg-icons/social/person'
 import RaisedButton from 'material-ui/RaisedButton'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
+import {MissingInfoItem, NotVerifiedItem, VerifiedItem} from '../../../single-sign-on/presentation/ui'
+import VerifiedShield from '../../../wallet/presentation/ui/verified-shield'
 
 import ActionDone from 'material-ui/svg-icons/action/done'
 import ContentCreate from 'material-ui/svg-icons/content/create'
@@ -65,21 +67,29 @@ export default class AttributeDisplay extends React.Component {
   render() {
     const {identity} = this.props
     const toggle = identity.toggleEdit.bool && identity.toggleEdit.field === this.props.id // eslint-disable-line max-len
-    const verifiable = identity.userData[this.props.id].verifiable
-    const verified = verifiable && identity.userData[this.props.id].verified
+    const verifiable = this.props.identity.userData[this.props.id].verifiable
+    const verified = verifiable && this.props.identity.userData[this.props.id].verified
     let editButton
-    let verificationButton
+    let listItem
+    let field = this.props.id
+    let attributes = identity.userData[this.props.id]
 
-    if (verified) {
-      verificationButton = (<RaisedButton
-        style={STYLES.addBtn1}
-        label = "Verified">
-        </RaisedButton>)
-    } else if (verifiable) {
-      verificationButton = (<RaisedButton
-        style={STYLES.addBtn1}
-        label = "Verify">
-        </RaisedButton>)
+    console.log(this.props.id)
+    if (!verified) {
+      listItem = (
+        <NotVerifiedItem
+        key={this.props.id}
+        requestVerificationCode={this.props.requestVerificationCode}
+        enterVerificationCode={this.props.enterVerificationCode}
+        resendVerificationCode={this.props.resendVerificationCode}
+        identity={this.props.identity}
+        field={field}
+        attributes={attributes}
+        textLabel={field}
+        toggle={toggle}
+        enterField={this.props.enterField} />
+      )
+    } else {
     }
 
     if (toggle) {
@@ -116,19 +126,22 @@ export default class AttributeDisplay extends React.Component {
         <div>
           <TextField
             ref={this.props.id}
+            id={this.props.id}
             disabled={!toggle}
             underlineShow={toggle}
-            value={identity.userData[this.props.id].value}
+            value={this.props.identity.userData[this.props.id].value}
             inputStyle={STYLES.textStyle}
             onChange={(e) =>
               this.props.enterField({
                 value: e.target.value,
                 field: this.props.id
-              })}
+            })}
             hintText={'Please enter your ' + this.props.id} />
-          {verificationButton}
-          {editButton}
-        </div>
+            {editButton}
+          </div>
+          <div>
+          </div>
+            {listItem}
       </ListItem>
     )
   }

@@ -42,37 +42,27 @@ const STYLES = {
 @Radium
 export default class NotVerifiedItem extends React.Component {
   static propTypes = {
-    icon: PropTypes.any,
     field: PropTypes.string,
     textLabel: PropTypes.string.isRequired,
-    textValue: PropTypes.string.isRequired,
     requestVerificationCode: PropTypes.func,
     resendVerificationCode: PropTypes.func,
     enterVerificationCode: PropTypes.func,
-    setFocusedPin: PropTypes.func,
-    changePinValue: PropTypes.func,
-    pinFocused: PropTypes.string,
-    attributes: PropTypes.object
+    attributes: PropTypes.object,
+    toggle: PropTypes.bool,
+    enterField: PropTypes.func,
+    identity: PropTypes.object
   }
+
   renderVerificationInfo = (field) => {
-    let verified = false
-    let pin = this.props.attributes.pin
     const smsCode = this.props.attributes.smsCode
     const codeIsSent = this.props.attributes.codeIsSent
-    const attrTypeToKey = (attrType) => (attrType + 's')
+    const verified = this.props.attributes.verified
     // let type = ''
     if (field === 'phone') {
       let index = '0'
       let attrType = 'phone'
       return (
         <div>
-          <div style={STYLES.verificationBlock}>
-            <ListItem
-              innerDivStyle={STYLES.innerDivStyle}
-              primaryText={`We sent you an authentification code via sms
-                for verification.`}
-              disabled />
-          </div>
           <VerificationButtons
             attrType={attrType}
             index={index}
@@ -80,13 +70,7 @@ export default class NotVerifiedItem extends React.Component {
             resendVerificationCode={this.props.resendVerificationCode}
             enterVerificationCode={this.props.enterVerificationCode}
             smsCode={smsCode}
-            pinValue={pin}
-            setFocusedPin={(value) => { this.props.setFocusedPin(value, index) }} // eslint-disable-line max-len
-            changePinValue={(value, codeType) => {
-              this.props.changePinValue(attrTypeToKey(attrType), value, index, codeType) // eslint-disable-line max-len
-            }}
-            focused={this.props.pinFocused}
-            value={this.props.textValue}
+            value={this.props.identity.userData[this.props.field].value}
             codeIsSent={codeIsSent}
             verified={verified} />
         </div>
@@ -96,13 +80,6 @@ export default class NotVerifiedItem extends React.Component {
       let attrType = 'email'
       return (
         <div>
-          <div style={STYLES.verificationBlock}>
-            <ListItem
-              innerDivStyle={STYLES.innerDivStyle}
-              primaryText={`We sent you an email
-              for verification. Please confirm.`}
-              disabled />
-          </div>
           <VerificationButtons
             attrType={attrType}
             index={index}
@@ -110,13 +87,7 @@ export default class NotVerifiedItem extends React.Component {
             resendVerificationCode={this.props.resendVerificationCode}
             enterVerificationCode={this.props.enterVerificationCode}
             smsCode={smsCode}
-            pinValue={pin}
-            setFocusedPin={(value) => { this.props.setFocusedPin(value, index) }} // eslint-disable-line max-len
-            changePinValue={(value, codeType) => {
-              this.props.changePinValue(attrType, value, index)
-            }}
-            focused={this.props.pinFocused}
-            value={this.props.textValue}
+            value={this.props.identity.userData[this.props.field].value}
             codeIsSent={codeIsSent}
             verified={verified} />
         </div>
@@ -125,23 +96,9 @@ export default class NotVerifiedItem extends React.Component {
   }
 
   render() {
-    let leftIcon = <this.props.icon color={'grey'} />
 
     return (
       <div>
-        <ListItem
-          style={STYLES.listItem}
-          leftIcon={<div style={STYLES.icon}>{leftIcon}</div>}
-          rightIconButton={<VerifiedShield
-            style={STYLES.verifiedShield}
-            verified={false} />}
-          disabled >
-          <TextField
-            floatingLabelText={`Unverified ${this.props.textLabel}`}
-            floatingLabelFixed
-            underlineShow={false}
-            value={this.props.textValue} />
-        </ListItem>
         <Block>
           {this.renderVerificationInfo(this.props.field)}
         </Block>

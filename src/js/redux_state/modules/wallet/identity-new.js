@@ -70,13 +70,28 @@ const initialState = Immutable.fromJS({
 
   },
   userData: {
-    phone: { value: '', verifiable: true, verified: false },
-    name: { value: '', verifiable: false, verified: false },
-    email: { value: '', verifiable: true, verified: false }
+    phone: {
+      value: '',
+      verifiable: true,
+      verified: false,
+      smsCode: '',
+      codeIsSent: false
+    },
+    name: {
+      value: '',
+      verifiable: false,
+      verified: false
+    },
+    email: {
+      value: '',
+      verifiable: true,
+      verified: false,
+      smsCode: '',
+      codeIsSent: false
+    }
   },
   qrscan: false,
   errorMsg: '',
-  verifyAttribute: {}
 })
 
 export default (state = initialState, action = {}) => {
