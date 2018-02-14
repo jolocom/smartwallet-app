@@ -11,8 +11,12 @@ import RegistrationWritePhraseScreen from
 
 import WalletTabsScreen from 'components/wallet/screens/tabs'
 import WalletHomeScreen from 'components/wallet/screens/home'
-import WalletMoneyScreen from 'components/wallet/screens/money'
-import WalletIdentityScreen from 'components/wallet/screens/identity'
+// import WalletMoneyScreen from 'components/wallet/screens/money'
+// import WalletIdentityScreen from 'components/wallet/screens/identity'
+
+import IdentityScreenNew from 'components/wallet/screens/identity-new'
+import DappsAndServices from 'components/wallet/screens/dappsAndServices'
+
 import WalletContactScreen from 'components/wallet/screens/contact'
 import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
 import AccessRequestScreen
@@ -36,7 +40,7 @@ import AccountDetailsEthereumScreen from
 import EthApprovalRequestScreen from
   'components/ethereum-connect/screens/approval-request'
 
-import {IconServices} from '../components/common'
+// import {IconServices} from '../components/common'
 
 import PasswordEntry from 'components/registration/screens/password-entry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
@@ -66,11 +70,12 @@ export const navItems = [
     title: 'Wallet',
     route: routes.home,
     icon: 'account_balance_wallet'
-  }, {
-    title: 'DApps & Services',
-    route: routes.dapps,
-    icon: IconServices
   }
+  // , {
+  //   title: 'DApps & Services',
+  //   route: routes.dapps,
+  //   icon: IconServices
+  // }
 ]
 
 function getRoutes() {
@@ -110,9 +115,9 @@ function getRoutes() {
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />
       <Route path="identity"
-        component={WalletIdentityScreen} />
-      <Route path="money"
-        component={WalletMoneyScreen} />
+        component={IdentityScreenNew} />
+      <Route path="interactions"
+        component={DappsAndServices} />
     </Route>
 
     <Route path="wallet/single-sign-on/access-request"

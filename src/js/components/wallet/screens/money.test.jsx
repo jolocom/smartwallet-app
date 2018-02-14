@@ -66,36 +66,37 @@ describe('(Component) WalletMoneyScreen', () => {
       { context: { muiTheme: { } } }
     )
     wrapper.find(Presentation).props().goToEtherManagement()
+    // eslint-disable-next-line
     expect(goToEtherManagement.called).to.be.true
     expect(goToEtherManagement.calls).to.deep.equal([{args: []}])
   })
-  it('should call getPrice on componentDidMount', () => {
-    const getPrice = stub()
-
-    const wrapper = shallow(
-      (<WalletMoneyScreen.WrappedComponent {
-        ...WalletMoneyScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            money: {
-              ether: {
-                loaded: false,
-                errorMsg: '',
-                price: 0,
-                amount: 0,
-                checkingOut: false,
-                buying: false
-              }
-            }
-          }
-        }))
-      }
-        goToEtherManagement={() => {}}
-        getPrice={getPrice}
-        retrieveEtherBalance={() => {}} />),
-      { context: { muiTheme: { } } }
-    )
-    wrapper.instance().componentDidMount()
-    expect(getPrice.called).to.be.true
-    expect(getPrice.calls).to.deep.equal([{args: []}])
-  })
+  // it('should call getPrice on componentDidMount', () => {
+  //   const getPrice = stub()
+  //
+  //   const wrapper = shallow(
+  //     (<WalletMoneyScreen.WrappedComponent {
+  //       ...WalletMoneyScreen.mapStateToProps(Immutable.fromJS({
+  //         wallet: {
+  //           money: {
+  //             ether: {
+  //               loaded: false,
+  //               errorMsg: '',
+  //               price: 0,
+  //               amount: 0,
+  //               checkingOut: false,
+  //               buying: false
+  //             }
+  //           }
+  //         }
+  //       }))
+  //     }
+  //       goToEtherManagement={() => {}}
+  //       getPrice={getPrice}
+  //       retrieveEtherBalance={() => {}} />),
+  //     { context: { muiTheme: { } } }
+  //   )
+  //   wrapper.instance().componentDidMount()
+  //   expect(getPrice.called).to.be.true
+  //   expect(getPrice.calls).to.deep.equal([{args: []}])
+  // })
 })

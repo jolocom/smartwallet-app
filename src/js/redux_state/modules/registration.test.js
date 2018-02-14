@@ -248,6 +248,8 @@ describe('Wallet registration Redux module', () => {
           args: ['masterKeyWIF', 'encryptedData']
         }, {
           args: ['genericKeyWIF', 'encryptedData']
+        }, {
+          args: ['tempGenericKeyWIF', 'genericKeyWIF']
         }]
 
         expect(services.storage.setItem.calls)
