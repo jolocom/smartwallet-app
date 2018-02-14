@@ -8,7 +8,6 @@ import {
   TabContainer,
   HalfScreenContainer,
   AttributeDisplay,
-  QRScanner
 } from './ui'
 
 const STYLES = {
@@ -35,16 +34,15 @@ export default class IdentityNew extends React.Component {
         mini
         secondary
         style={STYLES.qrBtn}
-        onClick={() => this.props.toggleQRScan({
-          value: this.props.identityNew.qrscan
-        })}>
+        onClick={() => this.props.toggleQRScan()}
+      >
         <Camera />
       </FloatingActionButton>
     )
 
     let content
-    if (this.props.identityNew.qrscan) {
-      content = (<QRScanner />)
+    if (this.props.identityNew.scanningQr.scanning) {
+      content = null
     } else {
       content = (
         <List>

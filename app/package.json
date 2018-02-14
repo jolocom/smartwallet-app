@@ -17,12 +17,13 @@
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-zip": {},
             "cordova-plugin-nativestorage": {},
-            "cordova-plugin-secure-storage": {}
+            "cordova-plugin-secure-storage": {},
+            "cordova-plugin-qrscanner": {}
         },
         "platforms": [
-            "android",
             "browser",
-            "ios"
+            "ios",
+            "android"
         ]
     },
     "dependencies": {
@@ -37,6 +38,7 @@
         "cordova-plugin-file": "^6.0.1",
         "cordova-plugin-file-transfer": "^1.7.1",
         "cordova-plugin-nativestorage": "^2.2.2",
+        "cordova-plugin-qrscanner": "^2.5.0",
         "cordova-plugin-secure-storage": "^2.6.8",
         "cordova-plugin-splashscreen": "^4.1.0",
         "cordova-plugin-statusbar": "^2.4.1",

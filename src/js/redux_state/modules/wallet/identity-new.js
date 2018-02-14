@@ -1,13 +1,39 @@
 import Immutable from 'immutable'
+import * as qr from 'lib/qr-scanner'
 import { makeActions } from '../'
 
 export const actions = makeActions('wallet/identityNew', {
   toggleEditField: {
     expectedParams: ['value', 'field']
   },
+
   toggleQRScan: {
-    expectedParams: ['value']
+    expectedParams: [],
+    creator: () => {
+      return async (dispatch, getState, {services, backend}) => {
+        const isScanning = getState().toJS().wallet.identityNew.scanningQr.scanning
+
+        if (isScanning) {
+          qr.cleanUp()
+          return dispatch(actions.toggleQRScan.buildAction())
+        } else {
+          qr.showCameraOutput()
+          dispatch(actions.toggleQRScan.buildAction())
+
+          const message = await qr.scanMessage()
+          dispatch(actions.setScannedValue({scannedValue: message}))
+
+          dispatch(actions.toggleQRScan.buildAction())
+          return qr.cleanUp()
+        }
+      }
+    }
   },
+
+  setScannedValue: {
+    expectedParams: ['scannedValue']
+  },
+
   enterField: {
     expectedParams: ['field', 'value']
   },
@@ -77,7 +103,10 @@ const initialState = Immutable.fromJS({
     name: '',
     email: ''
   },
-  qrscan: false,
+  scanningQr: {
+    scanning: false,
+    scannedValue: ''
+  },
   errorMsg: ''
 })
 
@@ -91,10 +120,14 @@ export default (state = initialState, action = {}) => {
         }
       })
 
+    case actions.setScannedValue.id:
+      return state.setIn(['scanningQr', 'scannedValue'], action.scannedValue)
+
     case actions.toggleQRScan.id:
-      return state.mergeDeep({
-        qrscan: !action.value
-      })
+      return state.setIn(
+        ['scanningQr', 'scanning'],
+        !state.getIn(['scanningQr', 'scanning'])
+      )
 
     case actions.enterField.id:
       return state.mergeDeep({

@@ -2,7 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import Radium from 'radium'
 import extend from 'lodash/extend'
+import { connect } from 'redux_state/utils'
 
+@connect({
+  props: ['wallet.identityNew'],
+  actions: [ ]
+})
 class Content extends React.Component {
   static propTypes = {
     style: PropTypes.string,
@@ -24,11 +29,14 @@ class Content extends React.Component {
 
   render() {
     let styles = this.getStyles()
-
     let {style} = this.props
 
     if (style) {
       extend(styles, style)
+    }
+
+    if (this.props.identityNew.scanningQr.scanning) {
+      styles.backgroundColor = 'rgba(0,0,0,0)'
     }
 
     return (
