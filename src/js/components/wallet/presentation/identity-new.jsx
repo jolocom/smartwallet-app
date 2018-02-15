@@ -22,7 +22,7 @@ const STYLES = {
     position: 'absolute',
     bottom: '24px',
     right: '15px',
-    visibility: 'hidden'
+    display: 'none'
   }
 }
 

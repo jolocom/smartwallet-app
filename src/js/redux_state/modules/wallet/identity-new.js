@@ -48,12 +48,11 @@ export const actions = makeActions('wallet/identityNew', {
         dispatch(actions.saveAttribute.buildAction(params, async () => {
           const { userData, toggleEdit } = getState().toJS().wallet.identityNew
           const { field } = params
-          // eslint-disable-next-line
-          dispatch(actions.toggleEditField({field: [field], value: toggleEdit.bool}))
-
           const did = await services.storage.getItem('did')
           const encWif = await services.storage.getItem('genericKeyWIF')
 
+          // eslint-disable-next-line
+          dispatch(actions.toggleEditField({field: [field], value: toggleEdit.bool}))
           let wif
           try {
             // eslint-disable-next-line
