@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
-import identityActions from './wallet/identity-new'
+import { actions as identityActions } from './wallet/identity-new'
 import router from './router'
 
 export const actions = makeActions('verification', {
@@ -31,20 +31,16 @@ export const actions = makeActions('verification', {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startPhoneVerification.buildAction(params,
         (backend) => {
-          const phoneData = getState().toJS().wallet.identityNew
-
-          console.log(phoneData)
+          const phoneData = getState().toJS().wallet.identityNew.userData.phone
+            dispatch(identityActions.setSmsVerificationCodeStatus(
+              {field: 'phone',
+               value: true}
+            ))
+          let phoneDat = getState().toJS().wallet.identityNew.userData.phone
           return backend.verification.startVerifyingPhone({
             did: "dsgs",
-            value: phone,
+            value: phone.value,
             pin: phoneData.pin
-          }).then((result) => {
-            dispatch(identityActions.setSmsVerificationCodeStatus(
-              'phones',
-              params.index,
-              true
-            ))
-            return result
           })
         }))
       }

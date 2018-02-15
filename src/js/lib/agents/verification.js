@@ -19,11 +19,14 @@ export default class VerificationAgent {
   }
 
   async _startVerifying({ did, value, pin}) {
+    console.log(did)
+    console.log(value)
+    console.log(pin)
     await this.request.post(
-      `http://localhost:4567/${dataType}/start-verification`
+      "http://localhost:4567/" + 'phone' + "/start-verification"
     ).send({
       identity: did,
-      aiitrId: 'phone',
+      attrId: 'phone',
       phone: value
     })
   }

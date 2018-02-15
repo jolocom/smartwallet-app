@@ -41,7 +41,7 @@ export default class IdentityScreenNew extends React.Component {
   }
 
   requestVerification(...args) {
-    return this.showVerificationWindow(...args, ({attrType, attrValue, index}) => { // eslint-disable-line max-len
+    return this.showVerificationWindow(...args, ({attrType, attrValue}) => { // eslint-disable-line max-len
       if (attrType === 'phone') {
         console.log('HERE ' + attrType, + "   " + attrValue)
         return this.props.startPhoneVerification({phone: attrValue}) // eslint-disable-line max-len
@@ -60,12 +60,12 @@ export default class IdentityScreenNew extends React.Component {
     callback(), leftButtonLabel)
   }
 
-  showVerificationWindow({title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
+  showVerificationWindow({title, message, attrValue, attrType, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
     return this.props.openConfirmDialog(
       title,
       message,
       rightButtonLabel,
-      callback({attrValue, attrType, index}),
+      callback({attrValue, attrType}),
       leftButtonLabel
     )
   }

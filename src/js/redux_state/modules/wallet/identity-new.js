@@ -19,7 +19,6 @@ export const actions = makeActions('wallet/identityNew', {
         dispatch(actions.saveAttribute.buildAction(params, () => {
           const { userData, toggleEdit } = getState().toJS().wallet.identityNew
           const {field} = params
-
           dispatch(actions.toggleEditField({ [field]: toggleEdit.bool }))
 
           const promises = [
@@ -66,7 +65,7 @@ export const actions = makeActions('wallet/identityNew', {
     expectedParams: ['value', 'index']
   },
   setSmsVerificationCodeStatus: {
-    expectedParams: ['field', 'index', 'value']
+    expectedParams: ['field', 'value']
   },
 
 })
@@ -87,7 +86,8 @@ const initialState = Immutable.fromJS({
       smsCode: '',
       pin: '',
       pinFocused: false,
-      codeIsSent: false
+      codeIsSent: false,
+      isCodeInputFieldFocused: false
     },
     name: {
       value: '',
@@ -160,9 +160,7 @@ export default (state = initialState, action = {}) => {
       return state.setIn(['userData', 'isCodeInputFieldFocused'], action.value)
 
     case actions.setSmsVerificationCodeStatus.id:
-      return state.mergeIn(['userData', action.field, action.index], {
-        codeIsSent: action.value
-      })
+      return state.setIn(['userData', action.field, 'codeIsSent'], action.value)
 
     default:
       return state
