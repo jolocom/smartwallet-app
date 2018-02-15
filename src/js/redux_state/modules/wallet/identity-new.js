@@ -11,6 +11,7 @@ export const actions = makeActions('wallet/identityNew', {
     expectedParams: [],
     creator: () => {
       return async (dispatch, getState, {services, backend}) => {
+        // eslint-disable-next-line
         const isScanning = getState().toJS().wallet.identityNew.scanningQr.scanning
 
         if (isScanning) {
@@ -21,6 +22,7 @@ export const actions = makeActions('wallet/identityNew', {
           dispatch(actions.toggleQRScan.buildAction())
 
           const message = await qr.scanMessage()
+          // TODO: finish auth process
           dispatch(actions.setScannedValue({scannedValue: message}))
 
           dispatch(actions.toggleQRScan.buildAction())
@@ -46,14 +48,15 @@ export const actions = makeActions('wallet/identityNew', {
         dispatch(actions.saveAttribute.buildAction(params, async () => {
           const { userData, toggleEdit } = getState().toJS().wallet.identityNew
           const { field } = params
-
-          dispatch(actions.toggleEditField({ [field]: toggleEdit.bool }))
+          // eslint-disable-next-line
+          dispatch(actions.toggleEditField({field: [field], value: toggleEdit.bool}))
 
           const did = await services.storage.getItem('did')
           const encWif = await services.storage.getItem('genericKeyWIF')
 
           let wif
           try {
+            // eslint-disable-next-line
             const decryptionPass = await services.storage.getItemSecure('encryptionPassword')
             wif = await backend.encryption.decryptInformation({
               ciphertext: encWif.crypto.ciphertext,
@@ -61,7 +64,7 @@ export const actions = makeActions('wallet/identityNew', {
               salt: encWif.crypto.kdfParams.salt,
               iv: encWif.crypto.cipherparams.iv
             })
-          } catch(err) {
+          } catch (err) {
             console.warn(err)
             wif = await services.storage.getItem('tempGenericKeyWIF')
           }

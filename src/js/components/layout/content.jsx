@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import extend from 'lodash/extend'
 import { connect } from 'redux_state/utils'
@@ -11,8 +11,9 @@ import { connect } from 'redux_state/utils'
 class Content extends React.Component {
   static propTypes = {
     style: PropTypes.string,
-    children: PropTypes.node
-  };
+    children: PropTypes.node,
+    identityNew: PropTypes.object
+  }
 
   getStyles = () => {
     return {
