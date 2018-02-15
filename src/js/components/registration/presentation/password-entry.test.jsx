@@ -7,8 +7,9 @@ describe('(Presentation) Password entry encryption on register', function() {
     shallow((<PasswordEntry
       security={{pass: '', passReenter: ''}}
       progress={{loading: false, loadingMsg: ''}}
-      checkPassword={() => {}}
-      encryptDataWithPasswordOnRegister={() => {}}
+      setPassword={() => {}}
+      setReentryPassword={() => {}}
+      generateAndEncryptKeyPairs={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

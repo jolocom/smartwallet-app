@@ -10,7 +10,16 @@ describe('(Component) IdentityNew', function() {
         saveAttribute={() => {}}
         toggleEditField={() => {}}
         enterField={() => {}}
-        identityNew={{}}
+        identityNew={{
+          toggleEdit: {
+            field: '',
+            bool: false
+          },
+          scanningQr: {
+            scanning: false,
+            scannedValue: ''
+          }
+        }}
       />),
       { context: { muiTheme: { } } }
     )

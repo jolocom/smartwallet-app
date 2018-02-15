@@ -306,42 +306,5 @@ describe('Wallet registration Redux module', () => {
         })
       })
     })
-    it('should update correct state based on key (pass/passReenter)', () => {
-      let state = reducer(undefined, '@@INIT')
-
-      const actionCheckPassword = {
-        type: actions.checkPassword.id,
-        fieldName: 'passReenter',
-        password: 'testPasswordNatascha1'
-      }
-      state = reducer(state, actionCheckPassword)
-      const expectedState = {
-        maskedImage: {
-          uncovering: false
-        },
-        passphrase: {
-          sufficientEntropy: false,
-          progress: 0,
-          randomString: '',
-          phrase: '',
-          writtenDown: false,
-          valid: false
-        },
-        encryption: {
-          loading: false,
-          pass: '',
-          passReenter: 'testPasswordNatascha1',
-          errorMsg: '',
-          generatedAndEncrypted: false,
-          status: ''
-        },
-        progress: {
-          loading: false,
-          loadingMsg: ''
-        },
-        complete: false
-      }
-      expect(state.toJS()).to.deep.equal(expectedState)
-    })
   })
 })
