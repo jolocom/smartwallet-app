@@ -1,7 +1,7 @@
 export async function scanMessage() {
   return new Promise((resolve, reject) => {
     window.QRScanner.scan((err, content) => {
-      if (err) return reject()
+      if (err) return reject(err)
       return resolve(content)
     })
   })
