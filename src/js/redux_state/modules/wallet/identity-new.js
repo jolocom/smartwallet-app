@@ -58,7 +58,17 @@ export const actions = makeActions('wallet/identityNew', {
   },
   veryfyAttribute: {
     expectedParams: []
-  }
+  },
+  changePinValue: {
+    expectedParams: ['attrType', 'value', 'index', 'codeType']
+  },
+  setFocusedPin: {
+    expectedParams: ['value', 'index']
+  },
+  setSmsVerificationCodeStatus: {
+    expectedParams: ['field', 'index', 'value']
+  },
+
 })
 
 
@@ -75,6 +85,8 @@ const initialState = Immutable.fromJS({
       verifiable: true,
       verified: false,
       smsCode: '',
+      pin: '',
+      pinFocused: false,
       codeIsSent: false
     },
     name: {
@@ -139,6 +151,17 @@ export default (state = initialState, action = {}) => {
     case actions.retrieveAttributes.id_fail:
       return state.mergeDeep({
         errorMsg: 'Could not retrieve claims from device.'
+      })
+
+    case actions.changePinValue.id:
+      return changePinValue(state, action)
+
+    case actions.setFocusedPin.id:
+      return state.setIn(['userData', 'isCodeInputFieldFocused'], action.value)
+
+    case actions.setSmsVerificationCodeStatus.id:
+      return state.mergeIn(['userData', action.field, action.index], {
+        codeIsSent: action.value
       })
 
     default:

@@ -13,6 +13,8 @@ import Presentation from '../presentation/identity-new'
     'wallet/identity-new:verifyAttribute',
     'verification:confirmEmail',
     'verification:confirmPhone',
+    'wallet/identity:setFocusedPin',
+    'wallet/identity:changePinValue',
     'verification:startEmailVerification',
     'verification:startPhoneVerification',
     'confirmation-dialog:openConfirmDialog']
@@ -30,6 +32,8 @@ export default class IdentityScreenNew extends React.Component {
     startEmailVerification: PropTypes.func.isRequired,
     confirmPhone: PropTypes.func.isRequired,
     confirmEmail: PropTypes.func.isRequired,
+    changePinValue: PropTypes.func.isRequired,
+    setFocusedPin: PropTypes.func.isRequired,
   }
 
   componentDidMount() {
@@ -39,9 +43,10 @@ export default class IdentityScreenNew extends React.Component {
   requestVerification(...args) {
     return this.showVerificationWindow(...args, ({attrType, attrValue, index}) => { // eslint-disable-line max-len
       if (attrType === 'phone') {
-        return () => this.props.startPhoneVerification({phone: attrValue, index}) // eslint-disable-line max-len
+        console.log('HERE ' + attrType, + "   " + attrValue)
+        return this.props.startPhoneVerification({phone: attrValue}) // eslint-disable-line max-len
       } else if (attrType === 'email') {
-        return () => this.props.startEmailVerification({email: attrValue, index}) // eslint-disable-line max-len
+        return this.props.startEmailVerification({email: attrValue, index}) // eslint-disable-line max-len
       }
     })
   }

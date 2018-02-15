@@ -27,6 +27,8 @@ export default class IdentityNew extends React.Component {
     toggleEditField: PropTypes.func.isRequired,
     toggleQRScan: PropTypes.func.isRequired,
     verifyAttribute: PropTypes.func,
+    setFocusedPin: PropTypes.func,
+    changePinValue: PropTypes.func,
     requestVerificationCode: PropTypes.func,
     onConfirm: PropTypes.func,
     enterVerificationCode: PropTypes.func
@@ -65,6 +67,8 @@ export default class IdentityNew extends React.Component {
               requestVerificationCode={this.props.requestVerificationCode}
               enterVerificationCode={this.props.enterVerificationCode}
               resendVerificationCode={this.props.resendVerificationCode}
+              changePinValue={this.props.changePinValue}
+              setFocusedPin={this.props.setFocusedPin}
               />)
           })}
         </List>

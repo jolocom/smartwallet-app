@@ -76,7 +76,7 @@ const VerificationButtons = ({
               phoneNumber={value}
               value={smsCode}
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
-              changePinValue={(value) => { changePinValue(value, index) }}
+              changePinValue={(value) => { changePinValui(value, index) }}
               focused={pinFocused} />),
             rightButtonLabel: 'RESEND CODE',
             leftButtonLabel: 'CANCEL',

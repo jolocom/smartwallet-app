@@ -5,57 +5,45 @@ export default class VerificationAgent {
     this.request = request
   }
 
-  async startVerifyingEmail({wallet, email, id, pin}) {
+
+  async startVerifyingEmail({did, email, id, pin}) {
     return await this._startVerifying({
-      wallet, pin, dataType: 'email', id, data: email
+      did, pin, dataType: 'email', id, data: email
     })
   }
 
-  async startVerifyingPhone({wallet, phone, type, id, pin}) {
+  async startVerifyingPhone({did, value, pin}) {
     return await this._startVerifying({
-      wallet, pin, dataType: 'phone', id, data: `${type}.${phone}`
+      did, value, pin
     })
   }
 
-  async _startVerifying({wallet, data, id, dataType, pin}) {
-    await Promise.all([
-      this.request.post(wallet.identityURL + '/access/grant').send({
-        identity: 'https://identity.jolocom.com/verification',
-        pattern: `/identity/${dataType}/${id}`,
-        read: true
-      }).withCredentials(),
-      this.request.post(wallet.identityURL + '/access/grant').send({
-        identity: 'https://identity.jolocom.com/verification',
-        pattern: `/identity/${dataType}/${id}/verifications`,
-        read: true,
-        write: true
-      }).withCredentials()
-    ])
-
+  async _startVerifying({ did, value, pin}) {
     await this.request.post(
-      `${VERIFICATION_PROV}/${dataType}/start-verification`
+      `http://localhost:4567/${dataType}/start-verification`
     ).send({
-      identity: wallet.identityURL,
-      id, [dataType]: data
+      identity: did,
+      aiitrId: 'phone',
+      phone: value
     })
   }
 
-  async verifyEmail({wallet, email, id, code}) {
-    await this._verify({wallet, dataType: 'email', id, data: email, code})
+  async verifyEmail({did, email, id, code}) {
+    await this._verify({did, dataType: 'email', id, data: email, code})
   }
 
-  async verifyPhone({wallet, type, phone, id, code}) {
+  async verifyPhone({did, type, phone, id, code}) {
     await this._verify({
-      wallet, dataType: 'phone',
+      did, dataType: 'phone',
       id, data: `${type}.${phone}`, code
     })
   }
 
-  async _verify({wallet, dataType, id, data, code}) {
+  async _verify({did, dataType, id, data, code}) {
     await this.request.post(
       `${VERIFICATION_PROV}/${dataType}/verify`
     ).send({
-      identity: wallet.identityURL,
+      identity: did.identityURL,
       id,
       [dataType]: data,
       code

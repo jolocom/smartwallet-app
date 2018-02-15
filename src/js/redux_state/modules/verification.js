@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
-import identityActions from './wallet/identity'
+import identityActions from './wallet/identity-new'
 import router from './router'
 
 export const actions = makeActions('verification', {
@@ -25,20 +25,19 @@ export const actions = makeActions('verification', {
     }
   },
   startPhoneVerification: {
-    expectedParams: ['phone', 'index'],
+    expectedParams: ['phone'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startPhoneVerification.buildAction(params,
         (backend) => {
-          const { pin, type, id } = getState().toJS().wallet.identity
-            .contact.phones[params.index]
+          const phoneData = getState().toJS().wallet.identityNew
+
+          console.log(phoneData)
           return backend.verification.startVerifyingPhone({
-            wallet: services.auth.currentUser.wallet,
-            id,
-            type,
-            phone: params.phone,
-            pin
+            did: "dsgs",
+            value: phone,
+            pin: phoneData.pin
           }).then((result) => {
             dispatch(identityActions.setSmsVerificationCodeStatus(
               'phones',
