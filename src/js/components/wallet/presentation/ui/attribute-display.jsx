@@ -44,7 +44,10 @@ export default class AttributeDisplay extends React.Component {
     toggleEditField: PropTypes.func.isRequired,
     enterField: PropTypes.func.isRequired,
     saveAttribute: PropTypes.func.isRequired,
-    verifyAttribute: PropTypes.func
+    verifyAttribute: PropTypes.func,
+    requestVerificationCode: PropTypes.func,
+    onConfirm: PropTypes.func,
+    enterVerificationCode: PropTypes.func
   }
 
   componentDidUpdate() {
@@ -74,7 +77,6 @@ export default class AttributeDisplay extends React.Component {
     let field = this.props.id
     let attributes = identity.userData[this.props.id]
 
-    console.log(this.props.id)
     if (!verified) {
       listItem = (
         <NotVerifiedItem
