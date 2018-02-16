@@ -14,7 +14,12 @@ describe('(Component) WalletTabScreen', function() {
     const wrapper = shallow(
       (<WalletTabScreen.WrappedComponent id="test" visible
         {...WalletTabScreen.mapStateToProps(Immutable.fromJS({wallet: {
-          tabs: {activeTab: null}
+          tabs: {activeTab: null},
+          identityNew: {
+            scanningQr: {
+              scanning: false,
+              scannedValue: ''
+            }}
         }}))}
         detectActiveTab={detectActiveTab} switchTab={switchTab}
         location={{pathname: 'bla'}}
@@ -38,7 +43,12 @@ describe('(Component) WalletTabScreen', function() {
     const wrapper = shallow(
       (<WalletTabScreen.WrappedComponent id="test" visible
         {...WalletTabScreen.mapStateToProps(Immutable.fromJS({wallet: {
-          tabs: {activeTab: null}
+          tabs: {activeTab: null},
+          identityNew: {
+            scanningQr: {
+              scanning: false,
+              scannedValue: ''
+            }}
         }}))}
         detectActiveTab={detectActiveTab} switchTab={switchTab}
         location={{pathname: 'bla'}}

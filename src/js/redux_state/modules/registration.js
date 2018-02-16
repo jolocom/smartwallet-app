@@ -155,7 +155,7 @@ export const actions = makeActions('registration', {
 
         try {
           await services.storage.setItemSecure('encryptionPassword', password)
-        } catch(err) {
+        } catch (err) {
           await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF) // eslint-disable-line max-len
         }
 

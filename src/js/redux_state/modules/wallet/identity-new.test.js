@@ -38,7 +38,10 @@ describe('Wallet identity-new redux module', () => {
           name: '',
           email: 'nat@mail.de'
         },
-        qrscan: false,
+        scanningQr: {
+          scanning: false,
+          scannedValue: ''
+        },
         errorMsg: ''
       })
     })
@@ -62,7 +65,10 @@ describe('Wallet identity-new redux module', () => {
           name: 'Natascha',
           email: ''
         },
-        qrscan: false,
+        scanningQr: {
+          scanning: false,
+          scannedValue: ''
+        },
         errorMsg: ''
       }
       expect(state.toJS()).to.deep.equal(expectedState)
@@ -87,7 +93,10 @@ describe('Wallet identity-new redux module', () => {
           name: '',
           email: ''
         },
-        qrscan: false,
+        scanningQr: {
+          scanning: false,
+          scannedValue: ''
+        },
         errorMsg: ''
       }
       expect(state.toJS()).to.deep.equal(expectedState)

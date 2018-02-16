@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import {theme} from 'styles'
 import { connect } from 'redux_state/utils'
@@ -10,24 +10,26 @@ import { connect } from 'redux_state/utils'
 })
 class Layout extends React.Component {
   static propTypes = {
-    children: PropTypes.node
-  };
+    children: PropTypes.node,
+    identityNew: PropTypes.object
+  }
 
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired
-  };
+  }
 
   getStyles = () => {
     return {
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
-      background:  theme.jolocom.gray1
+      background: theme.jolocom.gray1
     }
-  };
+  }
 
   render() {
     const style = this.getStyles()
+
     if (this.props.identityNew.scanningQr.scanning) {
       style.background = 'rgba(0,0,0,0)'
     }

@@ -34,7 +34,8 @@ const STYLES = {
 }
 
 @connect({
-  props: ['wallet.tabs.activeTab'],
+  props: ['wallet.tabs.activeTab',
+    'wallet.identityNew'],
   actions: ['wallet/tabs:detectActiveTab', 'wallet/tabs:switchTab']
 })
 @Radium
@@ -43,7 +44,7 @@ export default class WalletTabScreen extends React.Component {
     children: PropTypes.node,
     location: PropTypes.object,
     activeTab: PropTypes.string,
-
+    identityNew: PropTypes.object,
     detectActiveTab: PropTypes.func.isRequired,
     switchTab: PropTypes.func.isRequired
   }
@@ -57,6 +58,17 @@ export default class WalletTabScreen extends React.Component {
   }
 
   render() {
+    let tabs
+    if (this.props.identityNew.scanningQr.scanning) {
+      tabs = null
+    } else {
+      tabs = (<Tabs style={STYLES.bar} value={this.props.activeTab}
+        onChange={(tab) => this.props.switchTab({tab})}>
+        <Tab label="Identity" value="identity" />
+        <Tab label="Interactions" value="interactions" />
+      </Tabs>)
+    }
+
     return (
       <Layout>
         <Paper style={STYLES.colorBar}>
@@ -65,11 +77,7 @@ export default class WalletTabScreen extends React.Component {
             style={STYLES.bar}
             iconElementLeft={<img src="img/logo.svg" style={STYLES.logo} />}
           />
-          <Tabs style={STYLES.bar} value={this.props.activeTab}
-            onChange={(tab) => this.props.switchTab({tab})}>
-            <Tab label="Identity" value="identity" />
-            <Tab label="Interactions" value="interactions" />
-          </Tabs>
+          {tabs}
         </Paper>
         <Content>
           {this.props.children}
