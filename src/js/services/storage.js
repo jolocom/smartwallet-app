@@ -98,6 +98,25 @@ export default class StorageService {
       return reject(new Error('No secure storage found'))
     })
   }
+
+  /* @summary - Removes item corresponding to the passed key on device storage.
+   * If running in browser, will use localStorage instead.
+   *
+   * @param {string} key - the key for item to be removed
+   *
+   * @returns {string} - OK as confirmation
+   *
+  */
+  async removeItem(key) {
+    if (this.inBrowser) {
+      localStorage.removeItem(key)
+      return Promise.resolve('OK')
+    }
+
+    return new Promise((resolve, reject) => {
+      return window.NativeStorage.remove(key, resolve, reject)
+    })
+  }
 }
 
 const _nativeStorageAvailable = () => {
