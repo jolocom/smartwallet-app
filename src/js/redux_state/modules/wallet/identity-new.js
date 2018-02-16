@@ -53,6 +53,7 @@ export const actions = makeActions('wallet/identityNew', {
 
           // eslint-disable-next-line
           dispatch(actions.toggleEditField({field: [field], value: toggleEdit.bool}))
+
           let wif
           try {
             // eslint-disable-next-line
@@ -67,7 +68,6 @@ export const actions = makeActions('wallet/identityNew', {
             console.warn(err)
             wif = await services.storage.getItem('tempGenericKeyWIF')
           }
-
           // eslint-disable-next-line
           const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
             did,
@@ -75,7 +75,19 @@ export const actions = makeActions('wallet/identityNew', {
             {id: did, [field]: userData[field]},
             wif
           )
-          await services.storage.setItem(field, selfSignedClaim)
+
+          let userClaims = await services.storage.getItem(field)
+          // eslint-disable-next-line
+          let sortedClaims = _preventDoubleEntry({userClaims, selfSignedClaim, did, userData, field})
+
+          if (sortedClaims.itemToRemove) {
+            await services.storage.removeItem(sortedClaims.itemToRemove)
+          }
+
+          await services.storage.setItem(field, sortedClaims.result)
+          // eslint-disable-next-line
+          const res = await services.storage.setItem(selfSignedClaim.credential.id, selfSignedClaim)
+          return res
         }))
       }
     }
@@ -172,8 +184,35 @@ const _resolveClaims = (action) => {
   let claimsUser = {}
   action.claims.map((claimType, i) => {
     if (action.result[i] !== null && action.result[i] !== undefined) {
-      claimsUser[claimType] = action.result[i].credential.claim[claimType]
+      claimsUser[claimType] = action.result[i].value
     }
   })
   return claimsUser
+}
+
+// eslint-disable-next-line
+const _preventDoubleEntry = ({userClaims, selfSignedClaim, userData, field, did}) => {
+  let itemToRemove
+  if (userClaims != null) {
+    userClaims.value = userData[field]
+    userClaims.claims.map((claim, i) => {
+      if (claim.issuer === did) {
+        itemToRemove = claim.id
+        userClaims.claims.splice(i)
+      }
+      userClaims.claims.push({
+        id: selfSignedClaim.credential.id,
+        issuer: selfSignedClaim.credential.issuer
+      })
+    })
+  } else {
+    userClaims = {
+      value: userData[field],
+      claims: [{
+        id: selfSignedClaim.credential.id,
+        issuer: selfSignedClaim.credential.issuer
+      }]
+    }
+  }
+  return {result: userClaims, itemToRemove}
 }
