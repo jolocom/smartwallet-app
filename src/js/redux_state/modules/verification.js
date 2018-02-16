@@ -82,24 +82,28 @@ export const actions = makeActions('verification', {
     }
   },
   confirmPhone: {
-    expectedParams: ['index'],
+    expectedParams: [],
     async: true,
-    creator: (index) => {
+    creator: () => {
       return (dispatch, getState, {services}) => {
-        const { id, smsCode: code, number: phone, type } = getState()
-          .toJS().wallet.identity.contact.phones[index]
-        if ([index, phone, code].includes(undefined)) {
+        const data = getState()
+          .toJS().wallet.identityNew.userData.phone
+        console.log(data)
+        const id =  'phone'
+        const code = data.smsCode
+        const phone =  data.value
+        if ([phone, code].includes(undefined)) {
           let action = {
             type: actions.confirmPhone.id_fail
           }
           return dispatch(action)
         }
-        dispatch(actions.confirmPhone.buildAction(index, (backend) => {
+        dispatch(actions.confirmPhone.buildAction('0', (backend) => {
           return backend.verification.verifyPhone({
-            wallet: services.auth.currentUser.wallet,
-            id,
-            type,
+            did: getState().toJS().wallet,
+            type: id,
             phone,
+            id,
             code
           })
         }))

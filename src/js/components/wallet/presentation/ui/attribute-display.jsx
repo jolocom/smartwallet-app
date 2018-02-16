@@ -47,7 +47,10 @@ export default class AttributeDisplay extends React.Component {
     verifyAttribute: PropTypes.func,
     requestVerificationCode: PropTypes.func,
     onConfirm: PropTypes.func,
-    enterVerificationCode: PropTypes.func
+    enterVerificationCode: PropTypes.func,
+    setFocusedPin: PropTypes.func,
+    changePinValue: PropTypes.func,
+    pinFocused: PropTypes.string,
   }
 
   componentDidUpdate() {
@@ -89,6 +92,8 @@ export default class AttributeDisplay extends React.Component {
         attributes={attributes}
         textLabel={field}
         toggle={toggle}
+        changePinValue={this.props.changePinValue}
+        setFocusedPin={this.props.setFocusedPin}
         enterField={this.props.enterField} />
       )
     } else {
@@ -135,8 +140,9 @@ export default class AttributeDisplay extends React.Component {
             inputStyle={STYLES.textStyle}
             onChange={(e) =>
               this.props.enterField({
+                attrType: this.props.id,
                 value: e.target.value,
-                field: this.props.id
+                field: 'value'
             })}
             hintText={'Please enter your ' + this.props.id} />
             {editButton}

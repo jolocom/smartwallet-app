@@ -51,8 +51,11 @@ export default class IdentityScreenNew extends React.Component {
     })
   }
 
-  enterVerificationCode({index}) {
-    return () => this.props.confirmPhone(index)
+  enterVerificationCode(...args) {
+    console.log(args)
+    return this.showVerificationWindow(...args, ({attrType, attrValue}) => {
+      return this.props.confirmPhone()
+    })
   }
 
   handleConfirmDialog = ({title, message, rightButtonLabel, leftButtonLabel, callback}) => { // eslint-disable-line max-len
@@ -62,11 +65,11 @@ export default class IdentityScreenNew extends React.Component {
 
   showVerificationWindow({title, message, attrValue, attrType, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
     return this.props.openConfirmDialog(
-      title,
+      {title,
       message,
-      rightButtonLabel,
-      callback({attrValue, attrType}),
-      leftButtonLabel
+      primaryActionText: rightButtonLabel,
+      callback: callback({attrValue, attrType}),
+      cancelActionText: leftButtonLabel}
     )
   }
 
@@ -80,10 +83,12 @@ export default class IdentityScreenNew extends React.Component {
         toggleQRScan={this.props.toggleQRScan}
         verifyAttribute={this.props.verifyAttribute}
         onConfirm={(...args) => { this.handleConfirmDialog(...args) }}
+        setFocusedPin={this.props.setFocusedPin}
+        changePinValue={this.props.changePinValue}
         requestVerificationCode={(...args) => this.requestVerification(...args)}
-        enterVerificationCode={(...args) => this.showVerificationWindow(...args,
-          ({ index }) => this.enterVerificationCode({index})
-        )}
+        enterVerificationCode={(...args) =>
+          this.enterVerificationCode(...args)
+        }
         resendVerificationCode={(...args) => this.requestVerification(...args)}
       />
     )

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import Radium from 'radium'
+import TextField from 'material-ui/TextField'
 
 import { InputMsg } from './'
 
@@ -8,23 +9,27 @@ const VerificationButtonMsg = ({
     msgType,
     attrType,
     smsCode = '',
-    phoneNumber,
-    index,
-    pinFocused = false,
     setFocusedPin,
-    changePinValue
+    changePinValue,
+    pinFocused,
+    phoneNumber,
+    enterField,
+    identityNew
   }) => {
   switch (msgType) {
     case 'codeInput':
-      return <InputMsg
-        type="smsCode"
-        value={smsCode}
-        disabled={false}
-        pinLength={6}
-        phoneNumber={phoneNumber}
-        setFocusedPin={setFocusedPin}
-        changePinValue={changePinValue}
-        focused={pinFocused} />
+      console.log(identityNew.userData['phone'].smsCode)
+      return (
+        <div>  <TextField
+            id={attrType}
+            onChange={(e) =>
+              enterField({
+                attrType: 'phone',
+                value: e.target.value,
+                field: attrType
+            })}
+               />
+        </div>)
 
     case 'pinInput':
       return <InputMsg
@@ -62,11 +67,12 @@ VerificationButtonMsg.propTypes = {
   msgType: PropTypes.string,
   phoneNumber: PropTypes.string,
   smsCode: PropTypes.string,
-  index: PropTypes.number,
+  attrType: PropTypes.string,
   pinFocused: PropTypes.bool,
+  enterField: PropTypes.func,
   setFocusedPin: PropTypes.func,
   changePinValue: PropTypes.func,
-  attrType: PropTypes.string
+  identityNew: PropTypes.object
 }
 
 export default Radium(VerificationButtonMsg)

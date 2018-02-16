@@ -9,7 +9,7 @@ export const actions = makeActions('wallet/identityNew', {
     expectedParams: ['value']
   },
   enterField: {
-    expectedParams: ['field', 'value']
+    expectedParams: ['attrType', 'field', 'value']
   },
   saveAttribute: {
     expectedParams: ['field'],
@@ -122,9 +122,8 @@ export default (state = initialState, action = {}) => {
       })
 
     case actions.enterField.id:
-      return state.mergeDeep({
-        userData: {[action.field]: { value: action.value} }
-      })
+      console.log('ENTER FIELD ', action)
+      return state.setIn(['userData', action.attrType, action.field], action.value)
 
     case actions.saveAttribute.id:
       return state
