@@ -9,6 +9,7 @@ export default class StorageService {
         value = JSON.stringify(value)
       }
 
+      console.log("storage")
       localStorage.setItem(key, value)
       return Promise.resolve(value)
     }

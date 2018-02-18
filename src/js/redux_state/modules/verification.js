@@ -30,18 +30,16 @@ export const actions = makeActions('verification', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startPhoneVerification.buildAction(params,
-        (backend) => {
+        async (backend) => {
+          const phoneClaim = await services.storage.getItem('phone')
           const phoneData = getState().toJS().wallet.identityNew.userData.phone
             dispatch(identityActions.setSmsVerificationCodeStatus(
               {field: 'phone',
                value: true}
             ))
-          let phoneDat = getState().toJS().wallet.identityNew.userData.phone
-          return backend.verification.startVerifyingPhone({
-            did: "dsgs",
-            value: phone.value,
-            pin: phoneData.pin
-          })
+          console.log({claim: phoneClaim})
+          return backend.verification.startVerifyingPhone(phoneClaim
+          )
         }))
       }
     }

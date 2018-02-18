@@ -33,7 +33,7 @@ export const actions = makeActions('wallet/identityNew', {
             const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
               did,
               field,
-              {id: did, [field]: userData[field]},
+              {id: did, [field]: userData[field].value},
               wif
             )
 
@@ -122,7 +122,6 @@ export default (state = initialState, action = {}) => {
       })
 
     case actions.enterField.id:
-      console.log('ENTER FIELD ', action)
       return state.setIn(['userData', action.attrType, action.field], action.value)
 
     case actions.saveAttribute.id:
@@ -169,8 +168,9 @@ export default (state = initialState, action = {}) => {
 const _resolveClaims = (action) => {
   let claimsUser = {}
   action.claims.map((claimType, i) => {
+    console.log(action)
     if (action.result[i] !== null && action.result[i] !== undefined) {
-      claimsUser[claimType] = action.result[i].value.credential.claim[claimType]
+      claimsUser[claimType] = action.result[i].credential.claim[claimType]
     }
   })
   return claimsUser

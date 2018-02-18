@@ -12,22 +12,18 @@ export default class VerificationAgent {
     })
   }
 
-  async startVerifyingPhone({did, value, pin}) {
-    return await this._startVerifying({
-      did, value, pin
-    })
+  async startVerifyingPhone(claim) {
+    return await this._startVerifying(
+      claim
+    )
   }
 
-  async _startVerifying({ did, value, pin}) {
-    console.log(did)
-    console.log(value)
-    console.log(pin)
+  async _startVerifying(claim) {
+    console.log('=====fddvc=')
     await this.request.post(
       "http://localhost:4567/" + 'phone' + "/start-verification"
-    ).send({
-      identity: did,
-      attrId: 'phone',
-      phone: value
+    ).set('Content Type', 'application/json').send({
+      claim: claim
     })
   }
 

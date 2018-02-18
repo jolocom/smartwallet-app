@@ -93,7 +93,6 @@ const VerificationButtons = ({
     </div>)
   }
   if (attrType === 'phone') {
-      console.log('INSIDE THE BUTTON==============')
     return (<ListItem disabled leftIcon={<div />} >
       <FlatButton
         label="Request Verification"

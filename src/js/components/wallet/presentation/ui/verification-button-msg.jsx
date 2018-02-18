@@ -20,15 +20,16 @@ const VerificationButtonMsg = ({
     case 'codeInput':
       console.log(identityNew.userData['phone'].smsCode)
       return (
-        <div>  <TextField
-            id={attrType}
-            onChange={(e) =>
-              enterField({
-                attrType: 'phone',
-                value: e.target.value,
-                field: attrType
-            })}
-               />
+        <div>Please enter the authentication code:
+        <TextField
+          id={attrType}
+          onChange={(e) =>
+            enterField({
+              attrType: 'phone',
+              value: e.target.value,
+              field: attrType
+          })}
+         />
         </div>)
 
     case 'pinInput':
