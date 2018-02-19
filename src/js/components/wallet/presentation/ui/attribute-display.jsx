@@ -48,9 +48,6 @@ export default class AttributeDisplay extends React.Component {
     requestVerificationCode: PropTypes.func,
     onConfirm: PropTypes.func,
     enterVerificationCode: PropTypes.func,
-    setFocusedPin: PropTypes.func,
-    changePinValue: PropTypes.func,
-    pinFocused: PropTypes.string,
   }
 
   componentDidUpdate() {
@@ -90,10 +87,7 @@ export default class AttributeDisplay extends React.Component {
         identity={this.props.identity}
         field={field}
         attributes={attributes}
-        textLabel={field}
         toggle={toggle}
-        changePinValue={this.props.changePinValue}
-        setFocusedPin={this.props.setFocusedPin}
         enterField={this.props.enterField} />
       )
     } else {

@@ -9,39 +9,24 @@ const VerificationButtonMsg = ({
     msgType,
     attrType,
     smsCode = '',
-    setFocusedPin,
-    changePinValue,
-    pinFocused,
     phoneNumber,
     enterField,
     identityNew
   }) => {
   switch (msgType) {
     case 'codeInput':
-      console.log(identityNew.userData['phone'].smsCode)
       return (
         <div>Please enter the authentication code:
         <TextField
           id={attrType}
           onChange={(e) =>
             enterField({
-              attrType: 'phone',
+              attrType: attrType,
               value: e.target.value,
-              field: attrType
+              field: 'smsCode'
           })}
          />
         </div>)
-
-    case 'pinInput':
-      return <InputMsg
-        type="pin"
-        value={smsCode}
-        disabled={false}
-        pinLength={4}
-        phoneNumber={phoneNumber}
-        setFocusedPin={setFocusedPin}
-        changePinValue={changePinValue}
-        focused={pinFocused} />
 
     case 'codeResent':
       return <InputMsg />
@@ -69,10 +54,7 @@ VerificationButtonMsg.propTypes = {
   phoneNumber: PropTypes.string,
   smsCode: PropTypes.string,
   attrType: PropTypes.string,
-  pinFocused: PropTypes.bool,
   enterField: PropTypes.func,
-  setFocusedPin: PropTypes.func,
-  changePinValue: PropTypes.func,
   identityNew: PropTypes.object
 }
 

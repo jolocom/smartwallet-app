@@ -5,10 +5,8 @@ export default class VerificationAgent {
     this.request = new HTTPAgent()
   }
 
-  async startVerifyingEmail({did, email, id, pin}) {
-    return await this._startVerifying({
-      did, pin, dataType: 'email', id, data: email
-    })
+  async startVerifyingEmail({email}) {
+    return await this._startVerifying(email)
   }
 
   async startVerifyingPhone(claim) {
@@ -24,25 +22,30 @@ export default class VerificationAgent {
     )
   }
 
-  async verifyEmail({did, email, id, code}) {
-    await this._verify({did, dataType: 'email', id, data: email, code})
-  }
-
-  async verifyPhone({did, type, phone, id, code}) {
+  async verifyEmail({email, code}) {
     await this._verify({
-      did, dataType: 'phone',
-      id, data: `${type}.${phone}`, code
-    })
-  }
-
-  async _verify({did, dataType, id, data, code}) {
-    await this.request.post(
-      `${VERIFICATION_PROV}/${dataType}/verify`
-    ).send({
-      identity: did.identityURL,
-      id,
-      [dataType]: data,
+      did,
+      value: email,
+      attrType: 'email',
       code
     })
+  }
+
+  async verifyPhone({did, phone, code}) {
+    await this._verify({
+      did,
+      value: phone,
+      attrType: 'phone',
+      code
+    })
+  }
+
+  async _verify({did, attrType, value, code}) {
+    console.log('VERIFY====')
+    await this.request.post(
+      `${VERIFICATION_PROV}/${dataType}/finish-verification`,
+      {did, value, attrType, code},
+      {'Content-Type': 'application/json'}
+    )
   }
 }

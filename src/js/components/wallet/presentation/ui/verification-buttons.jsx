@@ -29,12 +29,8 @@ const VerificationButtons = ({
     requestVerificationCode,
     resendVerificationCode,
     enterVerificationCode,
-    setFocusedPin,
-    pinFocused,
-    changePinValue,
     attrType,
     smsCode,
-    index,
     enterField,
     identity
   }) => {
@@ -51,19 +47,15 @@ const VerificationButtons = ({
             title: 'Phone Verification',
             message: (<VerificationButtonMsg
               msgType={"codeInput"}
-              attrType={'smsCode'}
+              attrType={attrType}
               value={smsCode}
-              setFocusedPin={(value, index) => { setFocusedPin(value, index) }}
-              changePinValue={(value, index) => { changePinValue(value, index) }}
               enterField={enterField}
               phoneNumber={value}
-              identityNew={identity}
-              pinFocused={pinFocused} />),
+              identityNew={identity} />),
             rightButtonLabel: 'OK',
             leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
             attrType,
-            index,
             attrValue: value
           })} />
       </ListItem>
@@ -78,14 +70,10 @@ const VerificationButtons = ({
               attrType={attrType}
               msgType="codeRequest"
               phoneNumber={value}
-              value={smsCode}
-              setFocusedPin={(value) => { setFocusedPin(value, index) }}
-              changePinValue={(value) => { changePinValue(value, index) }}
-              focused={pinFocused} />),
+              value={smsCode} />),
             rightButtonLabel: 'RESEND CODE',
             leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
-            index,
             attrType,
             attrValue: value
           })} />
@@ -110,7 +98,6 @@ const VerificationButtons = ({
           leftButtonLabel: 'CANCEL',
           style: STYLES.simpleDialog,
           attrType,
-          index,
           attrValue: value
         })} />
     </ListItem>)
@@ -132,7 +119,6 @@ const VerificationButtons = ({
           leftButtonLabel: 'CANCEL',
           style: STYLES.simpleDialog,
           attrType,
-          index,
           attrValue: value
         })} />
     </ListItem>)
@@ -143,13 +129,9 @@ VerificationButtons.propTypes = {
   value: PropTypes.string,
   codeIsSent: PropTypes.bool,
   verified: PropTypes.bool,
-  index: PropTypes.any,
   smsCode: PropTypes.string,
   attrType: PropTypes.string,
-  pinFocused: PropTypes.bool,
-  setFocusedPin: PropTypes.func,
   enterField: PropTypes.func,
-  changePinValue: PropTypes.func,
   requestVerificationCode: PropTypes.func,
   resendVerificationCode: PropTypes.func,
   enterVerificationCode: PropTypes.func

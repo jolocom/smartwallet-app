@@ -34,8 +34,6 @@ export default class IdentityScreenNew extends React.Component {
     startEmailVerification: PropTypes.func.isRequired,
     confirmPhone: PropTypes.func.isRequired,
     confirmEmail: PropTypes.func.isRequired,
-    changePinValue: PropTypes.func.isRequired,
-    setFocusedPin: PropTypes.func.isRequired,
   }
 
   componentDidMount() {
@@ -57,9 +55,13 @@ export default class IdentityScreenNew extends React.Component {
   }
 
   enterVerificationCode(...args) {
-    console.log(args)
     return this.showVerificationWindow(...args, ({attrType, attrValue}) => {
-      return this.props.confirmPhone()
+    console.log(attrType)
+      if (attrType === 'phone') {
+        return this.props.confirmPhone
+      } else if (attrType === 'email') {
+        return this.props.confirmEmail
+      }
     })
   }
 
@@ -69,13 +71,14 @@ export default class IdentityScreenNew extends React.Component {
   }
 
   showVerificationWindow({title, message, attrValue, attrType, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
-    return this.props.openConfirmDialog(
-      {title,
+    console.log(callback)
+    return this.props.openConfirmDialog({
+      title,
       message,
       primaryActionText: rightButtonLabel,
       callback: callback({attrValue, attrType}),
-      cancelActionText: leftButtonLabel}
-    )
+      cancelActionText: leftButtonLabel
+    })
   }
 
   render() {
@@ -88,8 +91,6 @@ export default class IdentityScreenNew extends React.Component {
         toggleQRScan={this.props.toggleQRScan}
         verifyAttribute={this.props.verifyAttribute}
         onConfirm={(...args) => { this.handleConfirmDialog(...args) }}
-        setFocusedPin={this.props.setFocusedPin}
-        changePinValue={this.props.changePinValue}
         requestVerificationCode={(...args) => this.requestVerification(...args)}
         enterVerificationCode={(...args) =>
           this.enterVerificationCode(...args)

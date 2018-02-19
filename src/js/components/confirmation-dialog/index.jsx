@@ -32,6 +32,7 @@ export default class ConfirmationDialog extends React.Component {
 
   _handleConfirmAction() {
     this.props.closeConfirmDialog()
+    console.log(this.props.confirm)
     if (this.props.confirm.callback)
       this.props.confirm.callback() // Action when the user confirms
   }

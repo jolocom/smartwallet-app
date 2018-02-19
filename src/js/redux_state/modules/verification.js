@@ -5,21 +5,15 @@ import router from './router'
 
 export const actions = makeActions('verification', {
   startEmailVerification: {
-    expectedParams: ['email', 'index', 'pin'],
+    expectedParams: ['email'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startEmailVerification.buildAction(params,
         (backend) => {
-          return backend.verification.startVerifyingEmail({
-            wallet: services.auth.currentUser.wallet,
-            id: id,
-            email: params.email,
-            pin
-          })
-        }))
-      }
-    }
+          return backend.verification.startVerifyingEmail(params.email)
+      }))
+    }}
   },
 
   startPhoneVerification: {
@@ -44,11 +38,16 @@ export const actions = makeActions('verification', {
   },
 
   confirmEmail: {
-    expectedParams: ['email', 'id', 'code'],
+    expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        if (!params || !params.email || !params.id || !params.code) {
+      return async (dispatch, getState, {services}) => {
+        const data = getState().toJS().wallet.identityNew.userData.email
+        const id =  'email'
+        const code = data.smsCode
+        const email =  data.value
+        const did = await services.storage.getItem('did')
+        if (!email || !did || !code) {
           let action = {
             type: actions.confirmEmail.id_fail
           }
@@ -56,10 +55,9 @@ export const actions = makeActions('verification', {
         }
         dispatch(actions.confirmEmail.buildAction(params, (backend) => {
           return backend.verification.verifyEmail({
-            wallet: services.auth.currentUser.wallet,
-            id: params.id,
-            email: params.email,
-            code: params.code
+            did,
+            email: data.value,
+            code
           })
         }))
       }
@@ -82,23 +80,23 @@ export const actions = makeActions('verification', {
     expectedParams: [],
     async: true,
     creator: () => {
-      return (dispatch, getState, {services}) => {
+      return async (dispatch, getState, {services}) => {
         const data = getState().toJS().wallet.identityNew.userData.phone
         const id =  'phone'
         const code = data.smsCode
         const phone =  data.value
+        const did = await services.storage.getItem('did')
         if ([phone, code].includes(undefined)) {
           let action = {
             type: actions.confirmPhone.id_fail
           }
           return dispatch(action)
         }
+        console.log(code)
         dispatch(actions.confirmPhone.buildAction('0', (backend) => {
           return backend.verification.verifyPhone({
-            did: getState().toJS().wallet,
-            type: id,
-            phone,
-            id,
+            did,
+            phone: data.value,
             code
           })
         }))
@@ -120,7 +118,7 @@ export const actions = makeActions('verification', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {}
     }
-  }
+  },
 })
 
 const confirmSuccess = (state) => Immutable.fromJS(state).merge({
