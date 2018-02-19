@@ -5,7 +5,6 @@ export default class VerificationAgent {
     this.request = request
   }
 
-
   async startVerifyingEmail({did, email, id, pin}) {
     return await this._startVerifying({
       did, pin, dataType: 'email', id, data: email
@@ -19,12 +18,10 @@ export default class VerificationAgent {
   }
 
   async _startVerifying(claim) {
-    console.log('=====fddvc=')
-    await this.request.post(
-      "http://localhost:4567/" + 'phone' + "/start-verification"
-    ).set('Content Type', 'application/json').send({
-      claim: claim
-    })
+    const endpoint = 'https://verification.jolocom.com/phone/start-verification'
+    return await this.request.post(endpoint)
+      .set('Content-Type', 'application/json')
+      .send({ claim: claim })
   }
 
   async verifyEmail({did, email, id, code}) {
