@@ -214,6 +214,7 @@ export default (state = initialState, action = {}) => {
       return state.setIn(['userData', 'isCodeInputFieldFocused'], action.value)
 
     case actions.setSmsVerificationCodeStatus.id:
+      console.log(action)
       return state.setIn(['userData', action.field, 'codeIsSent'], action.value)
 
     default:

@@ -1,8 +1,8 @@
-import * as request from 'superagent-es6-promise'
+import * as HTTPAgent from '../agents/http'
 
 export default class VerificationAgent {
   constructor() {
-    this.request = request
+    this.request = new HTTPAgent()
   }
 
   async startVerifyingEmail({did, email, id, pin}) {
@@ -12,6 +12,7 @@ export default class VerificationAgent {
   }
 
   async startVerifyingPhone(claim) {
+    console.log('=========================================')
     return await this._startVerifying(
       claim
     )
@@ -19,9 +20,12 @@ export default class VerificationAgent {
 
   async _startVerifying(claim) {
     const endpoint = 'https://verification.jolocom.com/phone/start-verification'
-    return await this.request.post(endpoint)
-      .set('Content-Type', 'application/json')
-      .send({ claim: claim })
+    console.log('=========================================')
+    return await this.request.post(
+      endpoint,
+      {claim},
+      {'Content-Type': 'application/json'}
+    )
   }
 
   async verifyEmail({did, email, id, code}) {
