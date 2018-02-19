@@ -39,6 +39,7 @@ export const actions = makeActions('wallet/identityNew', {
   enterField: {
     expectedParams: ['attrType', 'field', 'value']
   },
+
   saveAttribute: {
     expectedParams: ['field'],
     async: true,
@@ -47,16 +48,17 @@ export const actions = makeActions('wallet/identityNew', {
         dispatch(actions.saveAttribute.buildAction(params, async () => {
           const { userData, toggleEdit } = getState().toJS().wallet.identityNew
           const { field } = params
+          // eslint-disable-next-line
+
+          dispatch(actions.toggleEditField({field: [field], value: toggleEdit.bool}))
+
           const did = await services.storage.getItem('did')
           const encWif = await services.storage.getItem('genericKeyWIF')
 
-          // eslint-disable-next-line
-          dispatch(actions.toggleEditField({field: [field], value: toggleEdit.bool}))
-
           let wif
           try {
-            // eslint-disable-next-line
-            const decryptionPass = await services.storage.getItemSecure('encryptionPassword')
+            const decryptionPass = await services.storage
+              .getItemSecure('encryptionPassword')
             wif = await backend.encryption.decryptInformation({
               ciphertext: encWif.crypto.ciphertext,
               password: decryptionPass,
@@ -67,11 +69,12 @@ export const actions = makeActions('wallet/identityNew', {
             console.warn(err)
             wif = await services.storage.getItem('tempGenericKeyWIF')
           }
+
           // eslint-disable-next-line
           const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
             did,
             field,
-            {id: did, [field]: userData[field]},
+            { id: did, [field]: userData[field].value },
             wif
           )
 
@@ -114,10 +117,8 @@ export const actions = makeActions('wallet/identityNew', {
   },
   setSmsVerificationCodeStatus: {
     expectedParams: ['field', 'value']
-  },
-
+  }
 })
-
 
 const initialState = Immutable.fromJS({
   toggleEdit: {
@@ -223,11 +224,14 @@ export default (state = initialState, action = {}) => {
 const _resolveClaims = (action) => {
   let claimsUser = {}
   action.claims.map((claimType, i) => {
-    console.log(action)
-    if (action.result[i] !== null && action.result[i] !== undefined) {
-      claimsUser[claimType] = action.result[i].value
+    if (action.result[i]) {
+      claimsUser[claimType] = {
+        value: action.result[i].value,
+        claims: action.result[i].claims
+      }
     }
   })
+
   return claimsUser
 }
 
@@ -235,7 +239,7 @@ const _resolveClaims = (action) => {
 const _preventDoubleEntry = ({userClaims, selfSignedClaim, userData, field, did}) => {
   let itemToRemove
   if (userClaims != null) {
-    userClaims.value = userData[field]
+    userClaims.value = userData[field].value
     userClaims.claims.map((claim, i) => {
       if (claim.issuer === did) {
         itemToRemove = claim.id
@@ -248,7 +252,7 @@ const _preventDoubleEntry = ({userClaims, selfSignedClaim, userData, field, did}
     })
   } else {
     userClaims = {
-      value: userData[field],
+      value: userData[field].value,
       claims: [{
         id: selfSignedClaim.credential.id,
         issuer: selfSignedClaim.credential.issuer
