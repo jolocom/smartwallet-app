@@ -152,10 +152,18 @@ export const actions = makeActions('registration', {
         await services.storage.setItem('did', didDocument.id)
         await services.storage.setItem('masterKeyWIF', encMaster)
         await services.storage.setItem('genericKeyWIF', encGeneric)
-        await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF) // eslint-disable-line max-len
+
+        try {
+          await services.storage.setItemSecure('encryptionPassword', password)
+        } catch (err) {
+          await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF) // eslint-disable-line max-len
+        }
+
+        dispatch(actions.setRandomString({randomString: ''}))
+        dispatch(actions.setPassword({password: ''}))
+        dispatch(actions.setReentryPassword({password: ''}))
 
         dispatch(accountActions.setDID({did: didDocument.id}))
-        dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassphrase({mnemonic}))
         dispatch(actions.stopLoading())
         dispatch(actions.goForward())
@@ -175,8 +183,12 @@ export const actions = makeActions('registration', {
     expectedParams: ['value']
   },
 
-  checkPassword: {
-    expectedParams: ['password', 'fieldName']
+  setPassword: {
+    expectedParams: ['password']
+  },
+
+  setReentryPassword: {
+    expectedParams: ['password']
   }
 })
 
@@ -248,17 +260,11 @@ export default (state = initialState, action = {}) => {
       })
       return state.set('complete', helpers._isComplete(state))
 
-    case actions.checkPassword.id:
-      if (action.fieldName === 'pass') {
-        return state.mergeDeep({
-          encryption: {pass: action.password}
-        })
-      } else if (action.fieldName === 'passReenter') {
-        return state.mergeDeep({
-          encryption: {passReenter: action.password}
-        })
-      }
-      return state
+    case actions.setPassword.id:
+      return state.setIn(['encryption', 'pass'], action.password)
+
+    case actions.setReentryPassword.id:
+      return state.setIn(['encryption', 'passReenter'], action.password)
 
     default:
       return state

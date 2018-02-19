@@ -13,12 +13,12 @@ import {
 
 @connect({
   props: ['keystore.security'],
-  actions: ['keystore/security:checkPassword',
+  actions: [
+    'keystore/security:checkPassword',
     'keystore/security:decryptDataWithPassword',
     'confirmation-dialog:openConfirmDialog'
   ]
 })
-
 export default class PasswordPopUp extends React.Component {
   static propTypes = {
     checkPassword: PropTypes.func.isRequired,

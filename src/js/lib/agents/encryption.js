@@ -62,6 +62,13 @@ export default class EncryptionAgent {
   }
 
   async decryptInformation({ciphertext, password, salt, iv}) {
+    console.log('decryptInfo called')
+    console.log(ciphertext)
+    console.log(password)
+    console.log(salt)
+    console.log(iv)
+    console.log('end decryptInfoCalled')
+
     const key = await this._constructEncryptionKey(password, salt) // eslint-disable-line max-len
 
     const decipher = crypto.createDecipheriv(

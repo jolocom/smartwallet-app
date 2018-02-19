@@ -21,14 +21,14 @@ describe('(Component) Password entry encryption on register', () => {
           }
         }))
       }
-        checkPassword={() => {}}
+        setPassword={() => {}}
         encryptDataWithPasswordOnRegister={() => {}}
         />),
         { context: { muiTheme: {} } }
     )
   })
   it('should update right field on entry', () => {
-    const checkPassword = stub()
+    const setPassword = stub()
     const wrapper = shallow(
       (<PasswordEntry.WrappedComponent {
         ...PasswordEntry.mapStateToProps(Immutable.fromJS({
@@ -43,20 +43,20 @@ describe('(Component) Password entry encryption on register', () => {
           }
         }))
       }
-        checkPassword={checkPassword}
+        setPassword={setPassword}
         encryptDataWithPasswordOnRegister={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('PasswordEntry').props().checkPassword({
+    wrapper.find('PasswordEntry').props().setPassword({
       password: 'test',
       fieldName: 'pass'
     })
     // eslint-disable-next-line
-    expect(checkPassword.called).to.be.true
+    expect(setPassword.called).to.be.true
     // eslint-enable-next-line
-    expect(checkPassword.calls).to.deep.equal([{
+    expect(setPassword.calls).to.deep.equal([{
       args: [{
         password: 'test',
         fieldName: 'pass'
