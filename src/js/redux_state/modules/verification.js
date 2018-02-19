@@ -9,9 +9,6 @@ export const actions = makeActions('verification', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        const { id, pin } = getState().toJS().wallet.identity
-            .contact.emails[params.index]
-
         dispatch(actions.startEmailVerification.buildAction(params,
         (backend) => {
           return backend.verification.startVerifyingEmail({

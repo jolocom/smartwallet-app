@@ -63,7 +63,7 @@ export default class NotVerifiedItem extends React.Component {
     const codeIsSent = this.props.attributes.codeIsSent
     const verified = this.props.attributes.verified
     let pin = this.props.attributes.pin
-    // let type = ''
+
     if (field === 'phone') {
       let index = '0'
       let attrType = 'phone'

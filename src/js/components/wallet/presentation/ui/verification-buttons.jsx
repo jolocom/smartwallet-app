@@ -23,7 +23,6 @@ const STYLES = {
 }
 
 const VerificationButtons = ({
-    buttonMsg,
     value,
     codeIsSent = false,
     verified,
@@ -39,7 +38,8 @@ const VerificationButtons = ({
     enterField,
     identity
   }) => {
-  if (verified) { return null }
+
+  if (verified) return null
   if (codeIsSent) {
     return (<div>
       <ListItem disabled leftIcon={<div />} >
@@ -127,7 +127,7 @@ const VerificationButtons = ({
             attrType={attrType}
             value={smsCode}
             phoneNumber={value}
-             />),
+          />),
           rightButtonLabel: 'Send verification Link',
           leftButtonLabel: 'CANCEL',
           style: STYLES.simpleDialog,
@@ -140,7 +140,6 @@ const VerificationButtons = ({
 }
 
 VerificationButtons.propTypes = {
-  buttonMsg: PropTypes.any,
   value: PropTypes.string,
   codeIsSent: PropTypes.bool,
   verified: PropTypes.bool,

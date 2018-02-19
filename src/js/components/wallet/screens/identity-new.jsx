@@ -50,7 +50,7 @@ export default class IdentityScreenNew extends React.Component {
         })
       } else if (attrType === 'email') {
         return this.props.startEmailVerification({
-          email: attrValue, index
+          email: attrValue
         })
       }
     })
