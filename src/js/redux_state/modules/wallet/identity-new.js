@@ -207,14 +207,10 @@ export default (state = initialState, action = {}) => {
         errorMsg: 'Could not retrieve claims from device.'
       })
 
-    case actions.changePinValue.id:
-      return changePinValue(state, action)
-
     case actions.setFocusedPin.id:
       return state.setIn(['userData', 'isCodeInputFieldFocused'], action.value)
 
     case actions.setSmsVerificationCodeStatus.id:
-      console.log(action)
       return state.setIn(['userData', action.field, 'codeIsSent'], action.value)
 
     default:

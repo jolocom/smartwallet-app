@@ -43,12 +43,15 @@ export default class IdentityScreenNew extends React.Component {
   }
 
   requestVerification(...args) {
-    return this.showVerificationWindow(...args, ({attrType, attrValue}) => { // eslint-disable-line max-len
+    return this.showVerificationWindow(...args, ({attrType, attrValue}) => {
       if (attrType === 'phone') {
-        console.log('HERE ' + attrType, + "   " + attrValue)
-        return this.props.startPhoneVerification({phone: attrValue}) // eslint-disable-line max-len
+        return this.props.startPhoneVerification({
+          phone: attrValue
+        })
       } else if (attrType === 'email') {
-        return this.props.startEmailVerification({email: attrValue, index}) // eslint-disable-line max-len
+        return this.props.startEmailVerification({
+          email: attrValue, index
+        })
       }
     })
   }

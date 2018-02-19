@@ -24,27 +24,28 @@ export const actions = makeActions('verification', {
       }
     }
   },
+
   startPhoneVerification: {
     expectedParams: ['phone'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        dispatch(actions.startPhoneVerification.buildAction(params,
-        async (backend) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.startPhoneVerification.buildAction(params, async (lel) => {
           const phoneClaimId = await services.storage.getItem('phone')
           const claim = await services.storage.getItem(phoneClaimId.claims[0].id)
           const phoneData = getState().toJS().wallet.identityNew.userData.phone
-          dispatch(identityActions.setSmsVerificationCodeStatus(
-            {field: 'phone',
-             value: true}
-          ))
-          console.log(backend)
-          console.log(backend.encryption)
+
+          dispatch(identityActions.setSmsVerificationCodeStatus({
+            field: 'phone',
+            value: true
+          }))
+
           return backend.verification.startVerifyingPhone(claim)
         }))
       }
     }
   },
+
   confirmEmail: {
     expectedParams: ['email', 'id', 'code'],
     async: true,
@@ -85,9 +86,7 @@ export const actions = makeActions('verification', {
     async: true,
     creator: () => {
       return (dispatch, getState, {services}) => {
-        const data = getState()
-          .toJS().wallet.identityNew.userData.phone
-        console.log(data)
+        const data = getState().toJS().wallet.identityNew.userData.phone
         const id =  'phone'
         const code = data.smsCode
         const phone =  data.value
@@ -109,6 +108,7 @@ export const actions = makeActions('verification', {
       }
     }
   },
+
   resendVerificationLink: {
     expectedParams: ['email', 'code'],
     async: true,
@@ -116,6 +116,7 @@ export const actions = makeActions('verification', {
       return (dispatch, getState, {services}) => {}
     }
   },
+
   resendVerificationCode: {
     expectedParams: ['phone', 'code'],
     async: true,
@@ -124,13 +125,16 @@ export const actions = makeActions('verification', {
     }
   }
 })
+
 const confirmSuccess = (state) => Immutable.fromJS(state).merge({
   success: true,
   loading: false
 })
+
 const confirmFail = (state) => Immutable.fromJS(state).merge({
   loading: false
 })
+
 const initialState = Immutable.fromJS({
   success: false,
   loading: true

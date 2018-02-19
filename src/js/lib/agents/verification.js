@@ -1,4 +1,4 @@
-import * as HTTPAgent from '../agents/http'
+import HTTPAgent from './http'
 
 export default class VerificationAgent {
   constructor() {
@@ -12,15 +12,11 @@ export default class VerificationAgent {
   }
 
   async startVerifyingPhone(claim) {
-    console.log('=========================================')
-    return await this._startVerifying(
-      claim
-    )
+    return await this._startVerifying(claim)
   }
 
   async _startVerifying(claim) {
     const endpoint = 'https://verification.jolocom.com/phone/start-verification'
-    console.log('=========================================')
     return await this.request.post(
       endpoint,
       {claim},
