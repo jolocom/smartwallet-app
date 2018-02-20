@@ -22,29 +22,27 @@ export default class VerificationAgent {
     )
   }
 
-  async verifyEmail({email, code}) {
-    await this._verify({
+  async verifyEmail({did, code}) {
+    return await this._verify({
       did,
-      value: email,
       attrType: 'email',
       code
     })
   }
 
-  async verifyPhone({did, phone, code}) {
-    await this._verify({
+  async verifyPhone({did, code}) {
+    return await this._verify({
       did,
-      value: phone,
       attrType: 'phone',
       code
     })
   }
 
-  async _verify({did, attrType, value, code}) {
-    console.log('VERIFY====')
-    await this.request.post(
-      `${VERIFICATION_PROV}/${dataType}/finish-verification`,
-      {did, value, attrType, code},
+  async _verify({did, attrType, code}) {
+    const url = `${VERIFICATION_PROV}/${attrType}/finish-verification`
+    return await this.request.post(
+      url,
+      {identity: did, attrType, code},
       {'Content-Type': 'application/json'}
     )
   }

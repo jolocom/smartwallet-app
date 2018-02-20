@@ -25,12 +25,10 @@ export const actions = makeActions('verification', {
           const phoneClaimId = await services.storage.getItem('phone')
           const claim = await services.storage.getItem(phoneClaimId.claims[0].id)
           const phoneData = getState().toJS().wallet.identityNew.userData.phone
-
           dispatch(identityActions.setSmsVerificationCodeStatus({
             field: 'phone',
             value: true
           }))
-
           return backend.verification.startVerifyingPhone(claim)
         }))
       }
@@ -56,7 +54,6 @@ export const actions = makeActions('verification', {
         dispatch(actions.confirmEmail.buildAction(params, (backend) => {
           return backend.verification.verifyEmail({
             did,
-            email: data.value,
             code
           })
         }))
@@ -92,12 +89,24 @@ export const actions = makeActions('verification', {
           }
           return dispatch(action)
         }
-        console.log(code)
-        dispatch(actions.confirmPhone.buildAction('0', (backend) => {
+        dispatch(actions.confirmPhone.buildAction('0', async (backend) => {
           return backend.verification.verifyPhone({
             did,
-            phone: data.value,
             code
+          }).then(async (res) => {
+            if(res.credential) {
+              const phoneData = await services.storage.getItem('phone')
+              phoneData.claims.push({id: res.credential.id, issuer: res.credential.issuer})
+              await services.storage.setItem(res.credential.id, res)
+              await services.storage.setItem('phone', phoneData)
+              return dispatch(identityActions.enterField({
+                attrType: 'phone',
+                field: 'verified',
+                value: true
+              }))
+            } else {
+              return res
+            }
           })
         }))
       }

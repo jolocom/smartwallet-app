@@ -43,9 +43,7 @@ export default class IdentityScreenNew extends React.Component {
   requestVerification(...args) {
     return this.showVerificationWindow(...args, ({attrType, attrValue}) => {
       if (attrType === 'phone') {
-        return this.props.startPhoneVerification({
-          phone: attrValue
-        })
+        return this.props.startPhoneVerification
       } else if (attrType === 'email') {
         return this.props.startEmailVerification({
           email: attrValue
