@@ -5,16 +5,16 @@ export default class VerificationAgent {
     this.request = new HTTPAgent()
   }
 
-  async startVerifyingEmail({email}) {
-    return await this._startVerifying(email)
+  async startVerifyingEmail(email) {
+    return await this._startVerifying(email, 'email')
   }
 
   async startVerifyingPhone(claim) {
-    return await this._startVerifying(claim)
+    return await this._startVerifying(claim, 'phone')
   }
 
-  async _startVerifying(claim) {
-    const endpoint = 'https://verification.jolocom.com/phone/start-verification'
+  async _startVerifying(claim, attrType) {
+    const endpoint = `${VERIFICATION_PROV}/${attrType}/start-verification`
     return await this.request.post(
       endpoint,
       {claim},

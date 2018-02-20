@@ -9,7 +9,6 @@ const VerificationButtonMsg = ({
     msgType,
     attrType,
     smsCode = '',
-    phoneNumber,
     enterField,
     identityNew
   }) => {
@@ -51,7 +50,6 @@ const VerificationButtonMsg = ({
 
 VerificationButtonMsg.propTypes = {
   msgType: PropTypes.string,
-  phoneNumber: PropTypes.string,
   smsCode: PropTypes.string,
   attrType: PropTypes.string,
   enterField: PropTypes.func,

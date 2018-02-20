@@ -44,13 +44,12 @@ const VerificationButtons = ({
           secondary
           style={STYLES.requestBtn}
           onClick={() => enterVerificationCode({
-            title: 'Phone Verification',
+            title: `${attrType} Verification`,
             message: (<VerificationButtonMsg
               msgType={"codeInput"}
               attrType={attrType}
               value={smsCode}
               enterField={enterField}
-              phoneNumber={value}
               identityNew={identity} />),
             rightButtonLabel: 'OK',
             leftButtonLabel: 'CANCEL',
@@ -69,7 +68,6 @@ const VerificationButtons = ({
             message: (<VerificationButtonMsg
               attrType={attrType}
               msgType="codeRequest"
-              phoneNumber={value}
               value={smsCode} />),
             rightButtonLabel: 'RESEND CODE',
             leftButtonLabel: 'CANCEL',

@@ -90,7 +90,6 @@ export default class AttributeDisplay extends React.Component {
         toggle={toggle}
         enterField={this.props.enterField} />
       )
-    } else {
     }
 
     if (toggle) {

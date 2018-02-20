@@ -83,13 +83,14 @@ export default class NotVerifiedItem extends React.Component {
         <div>
           <VerificationButtons
             attrType={attrType}
-            index={index}
             requestVerificationCode={this.props.requestVerificationCode}
             resendVerificationCode={this.props.resendVerificationCode}
             enterVerificationCode={this.props.enterVerificationCode}
             smsCode={smsCode}
             value={this.props.identity.userData[this.props.field].value}
+            enterField={this.props.enterField}
             codeIsSent={codeIsSent}
+            identity={this.props.identity}
             verified={verified} />
         </div>
       )

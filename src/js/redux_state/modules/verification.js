@@ -8,10 +8,16 @@ export const actions = makeActions('verification', {
     expectedParams: ['email'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
+      return async (dispatch, getState, {backend, services}) => {
         dispatch(actions.startEmailVerification.buildAction(params,
-        (backend) => {
-          return backend.verification.startVerifyingEmail(params.email)
+        async (backend) => {
+          const emailClaimId = await services.storage.getItem('email')
+          const claim = await services.storage.getItem(emailClaimId.claims[0].id)
+          dispatch(identityActions.setSmsVerificationCodeStatus({
+            field: 'email',
+            value: true
+          }))
+          return backend.verification.startVerifyingEmail(claim)
       }))
     }}
   },
@@ -55,6 +61,20 @@ export const actions = makeActions('verification', {
           return backend.verification.verifyEmail({
             did,
             code
+          }).then(async (res) => {
+            if(res.credential) {
+              const emailData = await services.storage.getItem('email')
+              emailData.claims.push({id: res.credential.id, issuer: res.credential.issuer})
+              await services.storage.setItem(res.credential.id, res)
+              await services.storage.setItem('email', emailData)
+              return dispatch(identityActions.enterField({
+                attrType: 'email',
+                field: 'verified',
+                value: true
+              }))
+            } else {
+              return res
+            }
           })
         }))
       }
