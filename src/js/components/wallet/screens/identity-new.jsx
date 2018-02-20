@@ -45,9 +45,7 @@ export default class IdentityScreenNew extends React.Component {
       if (attrType === 'phone') {
         return this.props.startPhoneVerification
       } else if (attrType === 'email') {
-        return this.props.startEmailVerification({
-          email: attrValue
-        })
+        return this.props.startEmailVerification
       }
     })
   }

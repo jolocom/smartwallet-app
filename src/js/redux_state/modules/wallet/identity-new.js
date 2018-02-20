@@ -134,6 +134,7 @@ const initialState = Immutable.fromJS({
       verified: false,
       smsCode: '',
       codeIsSent: false,
+      claims: []
     },
     name: {
       value: '',
@@ -145,7 +146,8 @@ const initialState = Immutable.fromJS({
       verifiable: true,
       verified: false,
       smsCode: '',
-      codeIsSent: false
+      codeIsSent: false,
+      claims: []
     }
   },
   scanningQr: {
@@ -222,7 +224,8 @@ const _resolveClaims = (action) => {
     if (action.result[i]) {
       claimsUser[claimType] = {
         value: action.result[i].value,
-        claims: action.result[i].claims
+        claims: action.result[i].claims,
+        verified: action.result[i].claims.length > 1
       }
     }
   })
