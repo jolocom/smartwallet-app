@@ -1,166 +1,165 @@
 import Immutable from 'immutable'
 import {makeActions} from '../'
 import router from '../router'
+// import { actions as dialogActions } from '../confirmation-dialog'
+import { actions as simpleDialogActions } from '../simple-dialog'
 
 export const actions = makeActions('single-sign-on/access-request', {
-  checkUserLoggedIn: {
+  setInfoComplete: {
+    expectedParams: []
+  },
+  getDid: {
     expectedParams: [],
-    creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        const user = services.auth.currentUser
-        const path = getState().toJS().singleSignOn.accessRequest.entity.path
-        if (user == null) {
-          dispatch(router.pushRoute({
-            pathname: '/login',
-            query: {
-              callbackUrl: path
-            }
-          }))
+    async: true,
+    creator: () => {
+      return async (dispatch, getState, {services}) => {
+        const did = await services.storage.getItem('did')
+        if (did) {
+          dispatch(actions.setDid({did}))
         }
       }
     }
   },
-  requestedDetails: {
-    expectedParams: ['details'],
-    creator: (params) => {
-      return (dispatch, getState) => {
-        dispatch(actions.requestedDetails.buildAction(params))
-        dispatch(actions.checkUserLoggedIn())
-        dispatch(actions.getRequesterIdentity(params.query.requester))
-      }
-    }
-  },
-  getRequesterIdentity: {
-    expectedParams: ['identity'],
+  confirmAccess: {
+    expectedparams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        dispatch(actions.getRequesterIdentity.buildAction(params, (backend) => {
-          return backend.gateway.proxyGet(params + '/identity/name/display')
-        }))
+      return async (dispatch, getState, {services, backend}) => {
+        const { response, did } = getState().toJS().singleSignOn.accessRequest.entity // eslint-disable-line max-len
+        const { scannedValue } = getState().toJS().wallet.identityNew.scanningQr
+
+        let promises = []
+        for (var key in response) {
+          promises.push(services.storage.getItem(response[key]))
+        }
+
+        const claims = await Promise.all(promises)
+        let claimsArray = []
+        claims.map((claim) => {
+          claimsArray.push({[claim.credential.type]: claim})
+        })
+
+        const encWif = await services.storage.getItem('genericKeyWIF')
+        let wif
+        try {
+          // eslint-disable-next-line
+          const decryptionPass = await services.storage.getItemSecure('encryptionPassword')
+          wif = await backend.encryption.decryptInformation({
+            ciphertext: encWif.crypto.ciphertext,
+            password: decryptionPass,
+            salt: encWif.crypto.kdfParams.salt,
+            iv: encWif.crypto.cipherparams.iv
+          })
+        } catch (err) {
+          console.warn(err)
+          wif = await services.storage.getItem('tempGenericKeyWIF')
+        }
+
+        const token = await backend.jolocomLib.authentication.initiateResponse({
+          tokenData: scannedValue,
+          WIF: wif,
+          did: did,
+          claims: claimsArray
+        })
+
+        const res = await backend.httpAgent.post(
+          scannedValue.payload.callbackUrl,
+          token
+        )
+        dispatch(router.pushRoute('wallet/identity'))
+        // TODO CHECK FOR RESPONSE:
+        return res
       }
     }
   },
-  setInfoComplete: {
+  getClaims: {
+    expectedParams: ['claims'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services, backend}) =>
+        dispatch(actions.getClaims.buildAction(params, () =>
+          Promise.all(params.claims.map(claim =>
+            services.storage.getItem(claim)
+          ))
+        ))
+    }
+  },
+  setSelectedClaim: {
+    expectedParams: ['field', 'claimId'],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.setSelectedClaim.buildAction(params))
+        dispatch(simpleDialogActions.hideDialog())
+      }
+    }
+  },
+  denyAccess: {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.setInfoComplete.buildAction())
+        dispatch(router.pushRoute('wallet/identity'))
       }
     }
   },
-  goToMissingInfo: {
-    expectedparams: [],
-    creator: (params) => {
-      return (dispatch, getState) => {
-        const route = getRoute(params)
-        const path = getState().toJS().singleSignOn.accessRequest.entity.path
-        dispatch(router.pushRoute({
-          pathname: route,
-          query: {
-            callbackUrl: path
-          }
-        }))
-      }
-    }
-  },
-  grantAccessToRequester: {
-    expectedparams: ['user', 'query'],
-    async: true,
-    creator: (params) => {
-      return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.grantAccessToRequester.buildAction(params,
-          (backend) => {
-            const {requester} = getState().toJS().singleSignOn.accessRequest.entity // eslint-disable-line max-len
-            const userURL = services.auth.currentUser.wallet.identityURL
-            return backend.gateway.grantAccessToRequester(userURL, {
-              identity: requester,
-              pattern: getPattern(params.query['scope[]']),
-              read: true,
-              write: false
-            }).then((response) => {
-              dispatch(router.pushRoute('wallet/single-sign-on/access-confirmation')) // eslint-disable-line max-len
-            })
-          }))
-      }
-    }
-  },
-  redirectToReturnUrl: {
-    expectedparams: [],
-    creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        const userURL = services.auth.currentUser.wallet.identityURL
-        const {returnURL} = getState().toJS().singleSignOn.accessRequest.entity // eslint-disable-line max-len
-        dispatch(() => {
-          window.location = returnURL + '?success=true&identity=' + encodeURIComponent(userURL) // eslint-disable-line max-len
-        })
-      }
-    }
+  setDid: {
+    expectedParams: ['did']
   }
 })
 
 const initialState = Immutable.fromJS({
   entity: {
     loading: false,
-    path: '',
     name: 'SOME COMPANY',
     image: 'img/hover_board.jpg',
-    requester: '',
     returnURL: '',
-    fields: [],
-    infoComplete: false
+    infoComplete: false,
+    claims: {},
+    response: {},
+    userDid: ''
   }
 })
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.requestedDetails.id:
-      if (typeof action.details.query['scope[]'] === 'string') {
-        action.details.query['scope[]'] = [action.details.query['scope[]']]
-      }
-      return state.mergeIn(['entity'], {
-        loading: true,
-        path: action.details.pathname + action.details.search,
-        requester: action.details.query.requester,
-        returnURL: action.details.query.returnURL,
-        fields: action.details.query['scope[]']
-      })
-
-    case actions.getRequesterIdentity.id:
-      return state.mergeIn(['entity'], {
-        loading: true
-      })
-
-    case actions.getRequesterIdentity.id_success:
-      return state.mergeIn(['entity'], {
-        loading: false,
-        name: action.result.value
-      })
-
-    case actions.getRequesterIdentity.id_fail:
-      return state.mergeIn(['entity'], {
-        loading: false,
-        name: 'Highspeed Hover Board'
-      })
-
-    case actions.grantAccessToRequester.id:
-      return state.mergeIn(['entity'], {
-        loading: true
-      })
-
-    case actions.grantAccessToRequester.id_success:
-      return state.mergeIn(['entity'], {
-        loading: false
-      })
-
-    case actions.grantAccessToRequester.id_fail:
-      return state.mergeIn(['entity'], {
-        loading: false
-      })
-
     case actions.setInfoComplete.id:
       return state.mergeIn(['entity'], {
         infoComplete: true
+      })
+
+    case actions.getClaims.id:
+      return state
+
+    case actions.getClaims.id_success:
+      const claims = _resolveClaims(action)
+      return state.mergeIn(['entity'], {
+        claims: claims
+      })
+
+    case actions.confirmAccess.id_fail:
+      console.log('FAIL CONFIRM ACCESS')
+      return state
+
+    case actions.confirmAccess.id:
+      return state
+
+    case actions.confirmAccess.id_success:
+      return state
+
+    case actions.getClaims.id_fail:
+      return state
+
+    case actions.setDid.id:
+      return state.mergeIn(['entity'], {
+        userDid: action.did
+      })
+
+    case actions.setSelectedClaim.id:
+      return state.mergeDeep({
+        entity: {
+          response: {
+            [action.field]: action.claimId
+          }
+        }
       })
 
     default:
@@ -168,21 +167,12 @@ export default (state = initialState, action = {}) => {
   }
 }
 
-const getPattern = (fields) => {
-  // pattern = ['/identity/phone/*']
-  let pattern = []
-  for (var i = 0; i < fields.length; i++) {
-    pattern.push(`/identity/${fields[i]}/*`)
-    pattern.push(`/identity/${fields[i]}`)
-    pattern.push(`/identity/${fields[i]}/*/verifications`)
-  }
-  return pattern
-}
-
-const getRoute = (field) => {
-  if (field === 'phone' || field === 'email' || field === 'address') {
-    return 'wallet/identity/contact'
-  } else if (field === 'idcard' || field === 'passport') {
-    return 'wallet/identity/passport/add'
-  }
+const _resolveClaims = (action) => {
+  let claimsUser = {}
+  action.claims.map((claimType, i) => {
+    if (action.result[i] !== null && action.result[i] !== undefined) {
+      claimsUser[claimType] = action.result[i]
+    }
+  })
+  return claimsUser
 }

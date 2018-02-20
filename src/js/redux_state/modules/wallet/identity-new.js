@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import * as qr from 'lib/qr-scanner'
 import { makeActions } from '../'
+import router from '../router'
 
 export const actions = makeActions('wallet/identityNew', {
   toggleEditField: {
@@ -19,13 +20,23 @@ export const actions = makeActions('wallet/identityNew', {
           return dispatch(actions.toggleQRScan.buildAction())
         } else {
           qr.showCameraOutput()
-          dispatch(actions.toggleQRScan.buildAction())
-
+          // dispatch(actions.toggleQRScan.buildAction())
           const message = await qr.scanMessage()
-          // TODO: finish auth process
-          dispatch(actions.setScannedValue({scannedValue: message}))
+          // TODO: replace mock by message
+          const mock = {
+            // eslint-disable-next-line
+            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6am9sbzo2eEV4S2ZnZzJXUkdCUExKZVVobVlrIiwiaWF0IjoiMjAxOC0wMi0xNlQxNTo1MjozOC40MzFaIiwiZXhwIjoiMjAxOC0wMi0xNlQxNjo0MjozOC40MzFaIiwianRpIjoiMC5wOWU5dHJyc2NkbyIsInJlcUNsYWltcyI6WyJuYW1lIiwicGhvbmUiXSwiSVBGU3Jvb20iOiJrZXJqbmpmIiwicHViS2V5SXNzIjoiMDIzZTFjNGJkYTM4YmJhNGIzMmZkOTg2YjY5NjAyNmQ1NDUzMGQ4YjJiNjNhNmIzYzdjZDhjMzI0ZWQ3ZDhkMWUyIiwiZW5jcnlwdFByaW1lIjoiIiwiZW5jcnlwdFB1YktleUlzcyI6IiJ9.FSVsHmzBNwMZe8GCou0MTrqK6Vm97Jdxcu8Z6V_IQjOj-i4AE3I_odIVvyyykS_GtmSgpkEUS6oGBMv0AGDiFA"}
 
-          dispatch(actions.toggleQRScan.buildAction())
+          // eslint-disable-next-line
+          const processedMessage = backend.jolocomLib.authentication.authenticateRequest({
+            token: mock.token
+          })
+
+          dispatch(actions.setScannedValue({scannedValue: processedMessage}))
+          if (processedMessage) {
+            dispatch(router.pushRoute('wallet/single-sign-on/access-request'))
+          }
+          // dispatch(actions.toggleQRScan.buildAction())
           return qr.cleanUp()
         }
       }
