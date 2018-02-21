@@ -8,14 +8,21 @@ import {
   TabContainer,
   HalfScreenContainer,
   AttributeDisplay,
-  QRScanner
+  QRFrame
 } from './ui'
 
 const STYLES = {
-  qrBtn: {
+  qrBtnVisible: {
     position: 'absolute',
     bottom: '24px',
-    right: '15px'
+    right: '15px',
+    visibility: 'visible'
+  },
+  qrBtnHidden: {
+    position: 'absolute',
+    bottom: '24px',
+    right: '15px',
+    display: 'none'
   }
 }
 
@@ -34,17 +41,18 @@ export default class IdentityNew extends React.Component {
       <FloatingActionButton
         mini
         secondary
-        style={STYLES.qrBtn}
-        onClick={() => this.props.toggleQRScan({
-          value: this.props.identityNew.qrscan
-        })}>
+        // eslint-disable-next-line
+        style={this.props.identityNew.toggleEdit.bool ? STYLES['qrBtnHidden'] : STYLES.qrBtnVisible}
+        onClick={() => this.props.toggleQRScan()}
+      >
         <Camera />
       </FloatingActionButton>
     )
 
     let content
-    if (this.props.identityNew.qrscan) {
-      content = (<QRScanner />)
+
+    if (this.props.identityNew.scanningQr.scanning) {
+      content = (<QRFrame />)
     } else {
       content = (
         <List>

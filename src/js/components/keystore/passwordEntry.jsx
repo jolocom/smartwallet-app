@@ -13,14 +13,17 @@ import {
 
 @connect({
   props: ['keystore.security'],
-  actions: ['keystore/security:checkPassword',
-    'keystore/security:encryptDataWithPassword']
+  actions: [
+    'keystore/security:setPassword',
+    'keystore/security:setReentryPassword',
+    'keystore/security:encryptDataWithPassword'
+  ]
 })
-
 export default class PasswordEntry extends React.Component {
   static propTypes = {
     security: PropTypes.object,
-    checkPassword: PropTypes.func.isRequired,
+    setPassword: PropTypes.func.isRequired,
+    setReentryPassword: PropTypes.func.isRequired,
     encryptDataWithPassword: PropTypes.func.isRequired
   }
 
@@ -62,7 +65,7 @@ export default class PasswordEntry extends React.Component {
               ? passwordValidityCheck(this.props.security.pass)
               : null}
             onChange={(e) =>
-              this.props.checkPassword(e.target.value, 'pass')} />
+              this.props.setPassword(e.target.value)} />
         </Block>
         <Block>
           <TextField
@@ -72,7 +75,7 @@ export default class PasswordEntry extends React.Component {
             value={this.props.security.passReenter}
             errorText={noMatchMessage.length > 0 ? noMatchMessage : null}
             onChange={(e) =>
-              this.props.checkPassword(e.target.value, 'passReenter')} />
+              this.props.setReentryPassword(e.target.value)} />
         </Block>
         <Block>
           <FlatButton

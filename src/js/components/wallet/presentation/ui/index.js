@@ -1,4 +1,3 @@
-
 export { default as EditHeader } from './edit-header'
 export { default as EditAppBar } from './edit-app-bar'
 export { default as EditListItem } from './edit-list-item'
@@ -27,4 +26,4 @@ export { default as ImageItem } from './image-item'
 export { default as EthConnectItem } from './eth-connect-item'
 export { default as AttributeDisplay } from './attribute-display'
 export { default as DappInteraction } from './dapp-interaction'
-export { default as QRScanner } from './qr-scanner'
+export { default as QRFrame } from './qr-frame'

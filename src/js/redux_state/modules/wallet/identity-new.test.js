@@ -9,22 +9,12 @@ describe('Wallet identity-new redux module', () => {
   describe('Reducer', () => {
     it('should get user\'s infromation on retrieveAttributes', () => {
       let state = reducer(undefined, '@@INIT')
-      const selfSignedClaim = {
-        credential: {
-          '@context': 'https://w3id.org/credentials/v1',
-          claim: {id: 'did:jolo:TEST', email: 'nat@mail.de'},
-          id: '7TESTa75cffba',
-          issued: 'Tue Feb 13 2018 12:21:15 GMT+0100 (Mitteleuropäische Zeit)',
-          issuer: 'did:jolo:TEST',
-          type: 'email',
-          signature: 'TESTcc16ef169079deeb2ed46080ebfb73e'
-        }
-      }
+      const result = {value: 'nat@mail.de', claims: []}
 
       const action = {
         type: actions.retrieveAttributes.id_success,
         claims: ['phone', 'name', 'email'],
-        result: [null, null, selfSignedClaim]
+        result: [null, null, result]
       }
 
       state = reducer(state, action)
@@ -38,7 +28,10 @@ describe('Wallet identity-new redux module', () => {
           name: '',
           email: 'nat@mail.de'
         },
-        qrscan: false,
+        scanningQr: {
+          scanning: false,
+          scannedValue: ''
+        },
         errorMsg: ''
       })
     })
@@ -62,7 +55,10 @@ describe('Wallet identity-new redux module', () => {
           name: 'Natascha',
           email: ''
         },
-        qrscan: false,
+        scanningQr: {
+          scanning: false,
+          scannedValue: ''
+        },
         errorMsg: ''
       }
       expect(state.toJS()).to.deep.equal(expectedState)
@@ -87,7 +83,10 @@ describe('Wallet identity-new redux module', () => {
           name: '',
           email: ''
         },
-        qrscan: false,
+        scanningQr: {
+          scanning: false,
+          scannedValue: ''
+        },
         errorMsg: ''
       }
       expect(state.toJS()).to.deep.equal(expectedState)

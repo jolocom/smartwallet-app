@@ -16,7 +16,8 @@ export default class PasswordEntry extends React.Component {
   static propTypes = {
     progress: PropTypes.object,
     security: PropTypes.object,
-    checkPassword: PropTypes.func.isRequired,
+    setPassword: PropTypes.func.isRequired,
+    setReentryPassword: PropTypes.func.isRequired,
     generateAndEncryptKeyPairs: PropTypes.func.isRequired
   }
 
@@ -66,7 +67,7 @@ export default class PasswordEntry extends React.Component {
               ? passwordValidityCheck(pass)
               : null}
             onChange={(e) =>
-              this.props.checkPassword({
+              this.props.setPassword({
                 password: e.target.value,
                 fieldName: 'pass'})
               }
@@ -83,7 +84,7 @@ export default class PasswordEntry extends React.Component {
               ? null
               : 'Make sure the passwords match!'}
             onChange={(e) =>
-              this.props.checkPassword({
+              this.props.setReentryPassword({
                 password: e.target.value,
                 fieldName: 'passReenter'
               })}

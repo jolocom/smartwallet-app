@@ -5,11 +5,13 @@ import Presentation from '../presentation/identity-new'
 
 @connect({
   props: ['wallet.identityNew'],
-  actions: ['wallet/identity-new:toggleEditField',
+  actions: [
+    'wallet/identity-new:toggleEditField',
     'wallet/identity-new:enterField',
     'wallet/identity-new:saveAttribute',
     'wallet/identity-new:toggleQRScan',
-    'wallet/identity-new:retrieveAttributes']
+    'wallet/identity-new:retrieveAttributes'
+  ]
 })
 export default class IdentityScreenNew extends React.Component {
   static propTypes = {

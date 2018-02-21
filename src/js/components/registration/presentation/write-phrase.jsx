@@ -70,7 +70,7 @@ const WritePhrase = (props) => {
         <Header image={
           <Avatar
             style={STYLES.avatar}
-            src="/img/img_techguy.svg"
+            src="img/img_techguy.svg"
             size={60} />}
           title="Your secure phrase" />
       </Block>

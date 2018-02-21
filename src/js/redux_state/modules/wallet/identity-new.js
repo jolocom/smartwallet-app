@@ -1,13 +1,41 @@
 import Immutable from 'immutable'
+import * as qr from 'lib/qr-scanner'
 import { makeActions } from '../'
 
 export const actions = makeActions('wallet/identityNew', {
   toggleEditField: {
     expectedParams: ['value', 'field']
   },
+
   toggleQRScan: {
-    expectedParams: ['value']
+    expectedParams: [],
+    creator: () => {
+      return async (dispatch, getState, {services, backend}) => {
+        // eslint-disable-next-line
+        const isScanning = getState().toJS().wallet.identityNew.scanningQr.scanning
+
+        if (isScanning) {
+          qr.cleanUp()
+          return dispatch(actions.toggleQRScan.buildAction())
+        } else {
+          qr.showCameraOutput()
+          dispatch(actions.toggleQRScan.buildAction())
+
+          const message = await qr.scanMessage()
+          // TODO: finish auth process
+          dispatch(actions.setScannedValue({scannedValue: message}))
+
+          dispatch(actions.toggleQRScan.buildAction())
+          return qr.cleanUp()
+        }
+      }
+    }
   },
+
+  setScannedValue: {
+    expectedParams: ['scannedValue']
+  },
+
   enterField: {
     expectedParams: ['field', 'value']
   },
@@ -17,30 +45,49 @@ export const actions = makeActions('wallet/identityNew', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.saveAttribute.buildAction(params, () => {
+        dispatch(actions.saveAttribute.buildAction(params, async () => {
           const { userData, toggleEdit } = getState().toJS().wallet.identityNew
-          const {field} = params
+          const { field } = params
+          const did = await services.storage.getItem('did')
+          const encWif = await services.storage.getItem('genericKeyWIF')
 
-          dispatch(actions.toggleEditField({ [field]: toggleEdit.bool }))
+          // eslint-disable-next-line
+          dispatch(actions.toggleEditField({field: [field], value: toggleEdit.bool}))
 
-          const promises = [
-            services.storage.getItem('did'),
-            services.storage.getItem('tempGenericKeyWIF')
-          ]
-
-          return Promise.all(promises).then((res) => {
-            const [did, wif] = res
-
+          let wif
+          try {
             // eslint-disable-next-line
-            const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
-              did,
-              field,
-              {id: did, [field]: userData[field]},
-              wif
-            )
+            const decryptionPass = await services.storage.getItemSecure('encryptionPassword')
+            wif = await backend.encryption.decryptInformation({
+              ciphertext: encWif.crypto.ciphertext,
+              password: decryptionPass,
+              salt: encWif.crypto.kdfParams.salt,
+              iv: encWif.crypto.cipherparams.iv
+            })
+          } catch (err) {
+            console.warn(err)
+            wif = await services.storage.getItem('tempGenericKeyWIF')
+          }
+          // eslint-disable-next-line
+          const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
+            did,
+            field,
+            {id: did, [field]: userData[field]},
+            wif
+          )
 
-            return services.storage.setItem(field, selfSignedClaim)
-          })
+          let userClaims = await services.storage.getItem(field)
+          // eslint-disable-next-line
+          let sortedClaims = _preventDoubleEntry({userClaims, selfSignedClaim, did, userData, field})
+
+          if (sortedClaims.itemToRemove) {
+            await services.storage.removeItem(sortedClaims.itemToRemove)
+          }
+
+          await services.storage.setItem(field, sortedClaims.result)
+          // eslint-disable-next-line
+          const res = await services.storage.setItem(selfSignedClaim.credential.id, selfSignedClaim)
+          return res
         }))
       }
     }
@@ -70,7 +117,10 @@ const initialState = Immutable.fromJS({
     name: '',
     email: ''
   },
-  qrscan: false,
+  scanningQr: {
+    scanning: false,
+    scannedValue: ''
+  },
   errorMsg: ''
 })
 
@@ -84,10 +134,14 @@ export default (state = initialState, action = {}) => {
         }
       })
 
+    case actions.setScannedValue.id:
+      return state.setIn(['scanningQr', 'scannedValue'], action.scannedValue)
+
     case actions.toggleQRScan.id:
-      return state.mergeDeep({
-        qrscan: !action.value
-      })
+      return state.setIn(
+        ['scanningQr', 'scanning'],
+        !state.getIn(['scanningQr', 'scanning'])
+      )
 
     case actions.enterField.id:
       return state.mergeDeep({
@@ -130,8 +184,35 @@ const _resolveClaims = (action) => {
   let claimsUser = {}
   action.claims.map((claimType, i) => {
     if (action.result[i] !== null && action.result[i] !== undefined) {
-      claimsUser[claimType] = action.result[i].credential.claim[claimType]
+      claimsUser[claimType] = action.result[i].value
     }
   })
   return claimsUser
+}
+
+// eslint-disable-next-line
+const _preventDoubleEntry = ({userClaims, selfSignedClaim, userData, field, did}) => {
+  let itemToRemove
+  if (userClaims != null) {
+    userClaims.value = userData[field]
+    userClaims.claims.map((claim, i) => {
+      if (claim.issuer === did) {
+        itemToRemove = claim.id
+        userClaims.claims.splice(i)
+      }
+      userClaims.claims.push({
+        id: selfSignedClaim.credential.id,
+        issuer: selfSignedClaim.credential.issuer
+      })
+    })
+  } else {
+    userClaims = {
+      value: userData[field],
+      claims: [{
+        id: selfSignedClaim.credential.id,
+        issuer: selfSignedClaim.credential.issuer
+      }]
+    }
+  }
+  return {result: userClaims, itemToRemove}
 }
