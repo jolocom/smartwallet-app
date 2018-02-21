@@ -67,7 +67,7 @@ const VerificationButtons = ({
             message: (<VerificationButtonMsg
               attrType={attrType}
               msgType="codeRequest"
-              value={smsCode} />),
+              value={value} />),
             rightButtonLabel: 'RESEND CODE',
             leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
