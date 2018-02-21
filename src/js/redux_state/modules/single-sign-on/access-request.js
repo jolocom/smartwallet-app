@@ -24,51 +24,50 @@ export const actions = makeActions('single-sign-on/access-request', {
     expectedparams: [],
     async: true,
     creator: (params) => {
-      return async (dispatch, getState, {services, backend}) => {
-        const { response, did } = getState().toJS().singleSignOn.accessRequest.entity // eslint-disable-line max-len
-        const { scannedValue } = getState().toJS().wallet.identityNew.scanningQr
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.confirmAccess.buildAction(params, async () => {
+          const { response, did } = getState().toJS().singleSignOn.accessRequest.entity // eslint-disable-line max-len
+          const { scannedValue } = getState().toJS().wallet.identityNew.scanningQr // eslint-disable-line max-len
 
-        let promises = []
-        for (var key in response) {
-          promises.push(services.storage.getItem(response[key]))
-        }
+          let promises = []
+          for (var key in response) {
+            promises.push(services.storage.getItem(response[key]))
+          }
 
-        const claims = await Promise.all(promises)
-        let claimsArray = []
-        claims.map((claim) => {
-          claimsArray.push({[claim.credential.type]: claim})
-        })
-
-        const encWif = await services.storage.getItem('genericKeyWIF')
-        let wif
-        try {
-          // eslint-disable-next-line
-          const decryptionPass = await services.storage.getItemSecure('encryptionPassword')
-          wif = await backend.encryption.decryptInformation({
-            ciphertext: encWif.crypto.ciphertext,
-            password: decryptionPass,
-            salt: encWif.crypto.kdfParams.salt,
-            iv: encWif.crypto.cipherparams.iv
+          const claims = await Promise.all(promises)
+          let claimsArray = []
+          claims.map((claim) => {
+            claimsArray.push({[claim.credential.type]: claim})
           })
-        } catch (err) {
-          console.warn(err)
-          wif = await services.storage.getItem('tempGenericKeyWIF')
-        }
 
-        const token = await backend.jolocomLib.authentication.initiateResponse({
-          tokenData: scannedValue,
-          WIF: wif,
-          did: did,
-          claims: claimsArray
-        })
+          const encWif = await services.storage.getItem('genericKeyWIF')
+          let wif
+          try {
+            // eslint-disable-next-line
+            const decryptionPass = await services.storage.getItemSecure('encryptionPassword')
+            wif = await backend.encryption.decryptInformation({
+              ciphertext: encWif.crypto.ciphertext,
+              password: decryptionPass,
+              salt: encWif.crypto.kdfParams.salt,
+              iv: encWif.crypto.cipherparams.iv
+            })
+          } catch (err) {
+            console.warn(err)
+            wif = await services.storage.getItem('tempGenericKeyWIF')
+          }
 
-        const res = await backend.httpAgent.post(
-          scannedValue.payload.callbackUrl,
-          token
-        )
-        dispatch(router.pushRoute('wallet/identity'))
-        // TODO CHECK FOR RESPONSE:
-        return res
+          const token = await backend.jolocomLib.authentication.initiateResponse({ // eslint-disable-line max-len
+            tokenData: scannedValue,
+            WIF: wif,
+            did: did,
+            claims: claimsArray
+          })
+          return backend.httpAgent.post(scannedValue.payload.callbackUrl, token)
+          .then((res) => {
+            dispatch(router.pushRoute('wallet/identity'))
+            return res
+          })
+        }))
       }
     }
   },
@@ -111,11 +110,11 @@ const initialState = Immutable.fromJS({
     loading: false,
     name: 'SOME COMPANY',
     image: 'img/hover_board.jpg',
-    returnURL: '',
     infoComplete: false,
     claims: {},
     response: {},
-    userDid: ''
+    userDid: '',
+    errorMsg: ''
   }
 })
 
@@ -136,14 +135,23 @@ export default (state = initialState, action = {}) => {
       })
 
     case actions.confirmAccess.id_fail:
-      console.log('FAIL CONFIRM ACCESS')
-      return state
+      if (action.error.response !== undefined) {
+        return state.mergeIn(['entity'], {
+          errorMsg: 'SSO Error ' + action.error.response.statusText
+        })
+      } else {
+        return state.mergeIn(['entity'], {
+          errorMsg: 'SSO process not successful. Please try again.'
+        })
+      }
 
     case actions.confirmAccess.id:
       return state
 
     case actions.confirmAccess.id_success:
-      return state
+      return state.mergeIn(['entity'], {
+        errorMsg: ''
+      })
 
     case actions.getClaims.id_fail:
       return state

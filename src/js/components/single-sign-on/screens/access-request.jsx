@@ -35,7 +35,7 @@ export default class AccessRequestScreen extends React.Component {
     denyAccess: PropTypes.func.isRequired
   }
 
-  handleDeny = (title, message) => {
+  handleDeny = () => {
     this.props.openConfirmDialog({
       message: 'If you deny access, you will not be able ' +
       'to make use of the service',

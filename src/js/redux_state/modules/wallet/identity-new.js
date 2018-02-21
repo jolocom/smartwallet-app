@@ -22,16 +22,15 @@ export const actions = makeActions('wallet/identityNew', {
           qr.showCameraOutput()
           // dispatch(actions.toggleQRScan.buildAction())
           const message = await qr.scanMessage()
+
           // TODO: replace mock by message
-          const mock = {
-            // eslint-disable-next-line
-            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6am9sbzo2eEV4S2ZnZzJXUkdCUExKZVVobVlrIiwiaWF0IjoiMjAxOC0wMi0xNlQxNTo1MjozOC40MzFaIiwiZXhwIjoiMjAxOC0wMi0xNlQxNjo0MjozOC40MzFaIiwianRpIjoiMC5wOWU5dHJyc2NkbyIsInJlcUNsYWltcyI6WyJuYW1lIiwicGhvbmUiXSwiSVBGU3Jvb20iOiJrZXJqbmpmIiwicHViS2V5SXNzIjoiMDIzZTFjNGJkYTM4YmJhNGIzMmZkOTg2YjY5NjAyNmQ1NDUzMGQ4YjJiNjNhNmIzYzdjZDhjMzI0ZWQ3ZDhkMWUyIiwiZW5jcnlwdFByaW1lIjoiIiwiZW5jcnlwdFB1YktleUlzcyI6IiJ9.FSVsHmzBNwMZe8GCou0MTrqK6Vm97Jdxcu8Z6V_IQjOj-i4AE3I_odIVvyyykS_GtmSgpkEUS6oGBMv0AGDiFA"}
+          // eslint-disable-next-line
+          const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6am9sbzo2eEV4S2ZnZzJXUkdCUExKZVVobVlrIiwicHViS2V5SXNzIjoiMDIzZTFjNGJkYTM4YmJhNGIzMmZkOTg2YjY5NjAyNmQ1NDUzMGQ4YjJiNjNhNmIzYzdjZDhjMzI0ZWQ3ZDhkMWUyIiwiY2FsbGJhY2tVcmwiOiJ3d3cuZGVtby1zc28uam9sb2NvbS5jb20vYXV0aGVudGljYXRpb24iLCJyZXFDbGFpbXMiOlsibmFtZSIsInBob25lIl0sImlhdCI6IjIwMTgtMDItMjFUMTM6NTE6NDUuNzk2WiIsImV4cCI6IjIwMTgtMDItMjFUMTQ6NDE6NDUuNzk2WiIsImp0aSI6IjAuZmdncWpzNDZ0MG8ifQ.u0hfIUCS40nOESzhR1U1KSLeZY5J5bEiFeJGokiKDdPTUB_GvTAHVQs8Ypp42uCcCvukK5VLF2Yx6HbnaACAwg"
 
           // eslint-disable-next-line
           const processedMessage = backend.jolocomLib.authentication.authenticateRequest({
-            token: mock.token
+            token: token
           })
-
           dispatch(actions.setScannedValue({scannedValue: processedMessage}))
           if (processedMessage) {
             dispatch(router.pushRoute('wallet/single-sign-on/access-request'))

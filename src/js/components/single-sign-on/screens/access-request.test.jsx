@@ -7,52 +7,27 @@ import AccessRequestScreen from './access-request'
 import {stub} from '../../../../../test/utils'
 
 describe('(Component) AccessRequestScreen', () => {
-  it('should call requestedDetails and getIdentityInformation to start on componentWillMount', () => { // eslint-disable-line max-len
-    const requestedDetails = stub()
-    const getIdentityInformation = stub()
+  it('should call getClaims and getDid to start on componentWillMount', () => { // eslint-disable-line max-len
+    const getClaims = stub()
+    const getDid = stub()
     const wrapper = shallow((<AccessRequestScreen.WrappedComponent
       {...AccessRequestScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
-          identity: {
-            loaded: false,
-            error: false,
-            webId: '',
-            username: {
-              verified: false,
-              value: ''
+          identityNew: {
+            toggleEdit: {
+              field: '',
+              bool: false
             },
-            contact: {
-              phones: [{
-                type: '',
-                number: '111',
-                verified: false,
-                smsCode: '',
-                pin: '',
-                pinFocused: false
-              }],
-              emails: [{
-                type: '',
-                address: '',
-                pin: '',
-                verified: false
-              }]
+            userData: {
+              phone: '',
+              name: '',
+              email: ''
             },
-            passports: [
-              {
-                number: '',
-                givenName: '',
-                familyName: '',
-                birthDate: '',
-                gender: '',
-                showAddress: '',
-                streetAndNumber: '',
-                city: '',
-                zip: '',
-                state: '',
-                country: '',
-                verified: false
-              }
-            ]
+            scanningQr: {
+              scanning: false,
+              scannedValue: ''
+            },
+            errorMsg: ''
           }
         },
         singleSignOn: {
@@ -60,74 +35,58 @@ describe('(Component) AccessRequestScreen', () => {
             entity: {
               loading: false,
               name: 'SOME COMPANY',
-              image: 'img/logo.svg',
-              requester: '',
+              image: 'img/hover_board.jpg',
               returnURL: '',
-              fields: ['phone', 'email']
+              infoComplete: false,
+              claims: {},
+              response: {},
+              userDid: ''
             }
           }
         }
       }))
     }
-      requestedDetails={requestedDetails}
-      getIdentityInformation={getIdentityInformation}
+      getClaims={getClaims}
+      getDid={getDid}
       requestedFields={[]}
-      location={{}}
-      identity={{}}
-      entity={{}}
-      accessInfo={() => {}}
-      grantAccessToRequester={() => {}} />
+      setSelectedClaim={() => {}}
+      identityNew={{}}
+      accessRequest={{}}
+      configMsg={() => {}}
+      showDialog={() => {}}
+      openConfirmDialog={() => {}}
+      confirmAccess={() => {}}
+      denyAccess={() => {}}
+      setInfoComplete={() => {}} />
     ))
-    wrapper.instance()
-    expect(requestedDetails.called).to.be.true
+    wrapper.instance().componentDidMount()
+    // eslint-disable-next-line
+    expect(getClaims.called).to.be.true
+    // eslint-disable-next-line
+    expect(getDid.called).to.be.true
   })
 
-  it('should call handleWhy with proper params', () => {
-    const configMsg = stub()
-    const accessInfo = stub()
+  it('should display dialog on calling handleDeny', () => {
+    const openConfirmDialog = stub()
+    const handleDeny = stub()
     const wrapper = shallow((<AccessRequestScreen.WrappedComponent
       {...AccessRequestScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
-          identity: {
-            loaded: false,
-            error: false,
-            webId: '',
-            username: {
-              verified: false,
-              value: ''
+          identityNew: {
+            toggleEdit: {
+              field: '',
+              bool: false
             },
-            contact: {
-              phones: [{
-                type: '',
-                number: '111',
-                verified: false,
-                smsCode: '',
-                pin: '',
-                pinFocused: false
-              }],
-              emails: [{
-                type: '',
-                address: '',
-                pin: '',
-                verified: false
-              }]
+            userData: {
+              phone: '',
+              name: '',
+              email: ''
             },
-            passports: [
-              {
-                number: '',
-                givenName: '',
-                familyName: '',
-                birthDate: '',
-                gender: '',
-                showAddress: '',
-                streetAndNumber: '',
-                city: '',
-                zip: '',
-                state: '',
-                country: '',
-                verified: false
-              }
-            ]
+            scanningQr: {
+              scanning: false,
+              scannedValue: ''
+            },
+            errorMsg: ''
           }
         },
         singleSignOn: {
@@ -135,29 +94,32 @@ describe('(Component) AccessRequestScreen', () => {
             entity: {
               loading: false,
               name: 'SOME COMPANY',
-              image: 'img/logo.svg',
-              requester: '',
-              returnURL: 'www.test.com',
-              fields: []
+              image: 'img/hover_board.jpg',
+              returnURL: '',
+              infoComplete: false,
+              claims: {},
+              response: {},
+              userDid: ''
             }
           }
         }
       }))}
-      configMsg={configMsg}
-      showDialog={() => {}}
-      requestedDetails={() => {}}
-      getIdentityInformation={() => {}}
+      getClaims={() => {}}
+      getDid={() => {}}
       requestedFields={[]}
-      location={{}}
-      identity={{}}
-      entity={{}}
-      accessInfo={accessInfo}
-      grantAccessToRequester={() => {}} />
+      setSelectedClaim={() => {}}
+      identityNew={{}}
+      accessRequest={{}}
+      configMsg={() => {}}
+      showDialog={() => {}}
+      openConfirmDialog={openConfirmDialog}
+      confirmAccess={() => {}}
+      denyAccess={() => {}}
+      handleDeny={handleDeny}
+      setInfoComplete={() => {}} />
     ))
-    wrapper.instance().handleWhy('test title', 'test message')
-    expect(configMsg.called).to.be.true
-    expect(configMsg.calls).to.deep.equal([{args:
-      ['test title', 'test message', 'OK', {}, false]
-    }])
+    wrapper.instance().handleDeny()
+    // eslint-disable-next-line
+    expect(openConfirmDialog.called).to.be.true
   })
 })

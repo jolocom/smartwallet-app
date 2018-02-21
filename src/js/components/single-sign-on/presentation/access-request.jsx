@@ -14,7 +14,7 @@ import SocialPerson from 'material-ui/svg-icons/social/person'
 import Location from 'material-ui/svg-icons/maps/place'
 import { IconIdCard, IconPassport } from '../../common'
 import { RequestedItem, DisplayClaims, SelectedItem } from './ui'
-import { Content, Block } from '../../structure'
+import { Content, Block, Header } from '../../structure'
 import { TabContainer, HalfScreenContainer } from '../../wallet/presentation/ui'
 import {theme} from 'styles'
 
@@ -142,6 +142,40 @@ export default class AccessRequest extends React.Component {
       )
     })
 
+    let content
+    if (this.props.accessRequest.entity.errorMsg) {
+      content = (
+        <Content>
+          <Header style={{textAlign: 'center'}}
+            title={this.props.accessRequest.entity.errorMsg} />
+        </Content>
+      )
+    } else {
+      content = (<div>
+        <Block style={STYLES.list}>
+          <List>
+            {renderFields}
+          </List>
+        </Block>
+
+        <Block style={STYLES.buttonContainer}>
+          <RaisedButton
+            label="Confirm"
+            secondary
+            disabled={!infoComplete}
+            style={STYLES.buttons}
+            onClick={() => { this.props.confirmAccess() }} />
+        </Block>
+
+        <Block style={STYLES.buttonContainer}>
+          <RaisedButton
+            label="Deny"
+            style={STYLES.buttons}
+            onClick={() => { this.props.denyAccess() }} />
+        </Block></div>
+      )
+    }
+
     return (
       <TabContainer>
         <AppBar
@@ -149,7 +183,6 @@ export default class AccessRequest extends React.Component {
           title="Login Request" />
         <HalfScreenContainer>
           <Content style={STYLES.container}>
-
             <Block style={STYLES.header}>
               <ListItem
                 leftAvatar={<Avatar src="img/logo.svg"
@@ -159,28 +192,7 @@ export default class AccessRequest extends React.Component {
                 innerDivStyle={STYLES.accessHeadline} />
             </Block>
             <Divider style={STYLES.divider} />
-            <Block style={STYLES.list}>
-              <List>
-                {renderFields}
-              </List>
-            </Block>
-
-            <Block style={STYLES.buttonContainer}>
-              <RaisedButton
-                label="Confirm"
-                secondary
-                disabled={!infoComplete}
-                style={STYLES.buttons}
-                onClick={() => { this.props.confirmAccess() }} />
-            </Block>
-
-            <Block style={STYLES.buttonContainer}>
-              <RaisedButton
-                label="Deny"
-                style={STYLES.buttons}
-                onClick={() => { this.props.denyAccess() }} />
-            </Block>
-
+            {content}
           </Content>
         </HalfScreenContainer>
       </TabContainer>
