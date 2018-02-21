@@ -73,20 +73,21 @@ export const actions = makeActions('wallet/identityNew', {
           // eslint-disable-next-line
           const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
             did,
-            field,
+            ["Credential", field],
             { id: did, [field]: userData[field].value },
             wif
           )
 
-          let userClaims = await services.storage.getItem(field)
-          // eslint-disable-next-line
-          let sortedClaims = _preventDoubleEntry({userClaims, selfSignedClaim, did, userData, field})
-
-          if (sortedClaims.itemToRemove) {
-            await services.storage.removeItem(sortedClaims.itemToRemove)
-          }
-
-          await services.storage.setItem(field, sortedClaims.result)
+          /*
+           * let userClaims = await services.storage.getItem(field)
+           * let sortedClaims = _preventDoubleEntry({userClaims, selfSignedClaim, did, userData, field})
+           * if (sortedClaims.itemToRemove) {
+           *   await services.storage.removeItem(sortedClaims.itemToRemove)
+           * }
+           * 
+           * TODO: create a graveyard for the claims
+           * */
+          await services.storage.setItem(field, selfSignedClaim)
           // eslint-disable-next-line
           const res = await services.storage.setItem(selfSignedClaim.credential.id, selfSignedClaim)
           return res
@@ -105,15 +106,6 @@ export const actions = makeActions('wallet/identityNew', {
           ))
         ))
     }
-  },
-  veryfyAttribute: {
-    expectedParams: []
-  },
-  changePinValue: {
-    expectedParams: ['attrType', 'value', 'index', 'codeType']
-  },
-  setFocusedPin: {
-    expectedParams: ['value', 'index']
   },
   setSmsVerificationCodeStatus: {
     expectedParams: ['field', 'value']
@@ -203,9 +195,6 @@ export default (state = initialState, action = {}) => {
       return state.mergeDeep({
         errorMsg: 'Could not retrieve claims from device.'
       })
-
-    case actions.setFocusedPin.id:
-      return state.setIn(['userData', 'isCodeInputFieldFocused'], action.value)
 
     case actions.setSmsVerificationCodeStatus.id:
       return state.setIn(['userData', action.field, 'codeIsSent'], action.value)

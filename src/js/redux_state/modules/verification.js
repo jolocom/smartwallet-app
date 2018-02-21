@@ -64,14 +64,7 @@ export const actions = makeActions('verification', {
           }).then(async (res) => {
             if(res.credential) {
               const emailData = await services.storage.getItem('email')
-              emailData.claims.push({id: res.credential.id, issuer: res.credential.issuer})
-              await services.storage.setItem(res.credential.id, res)
-              await services.storage.setItem('email', emailData)
-              return dispatch(identityActions.enterField({
-                attrType: 'email',
-                field: 'verified',
-                value: true
-              }))
+              await _saveVerifiedClaims('email', emailData)
             } else {
               return res
             }
@@ -104,14 +97,7 @@ export const actions = makeActions('verification', {
           }).then(async (res) => {
             if(res.credential) {
               const phoneData = await services.storage.getItem('phone')
-              phoneData.claims.push({id: res.credential.id, issuer: res.credential.issuer})
-              await services.storage.setItem(res.credential.id, res)
-              await services.storage.setItem('phone', phoneData)
-              return dispatch(identityActions.enterField({
-                attrType: 'phone',
-                field: 'verified',
-                value: true
-              }))
+              await _saveVerifiedClaims('phone', phoneData)
             } else {
               return res
             }
@@ -155,4 +141,16 @@ export default (state = initialState, action = {}) => {
     default:
       return state
   }
+}
+
+async _saveVerifiedClaims(attrType, data) {
+  data.claims.push({id: res.credential.id, issuer: res.credential.issuer})
+  await services.storage.setItem(res.credential.id, res)
+  await services.storage.setItem(attrType, phoneData)
+
+  return dispatch(identityActions.enterField({
+    attrType: attrType,
+    field: 'verified',
+    value: true
+  }))
 }
