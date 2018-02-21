@@ -124,8 +124,6 @@ const initialState = Immutable.fromJS({
   toggleEdit: {
     field: '',
     bool: false,
-    verified: false
-
   },
   userData: {
     phone: {
