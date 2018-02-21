@@ -30,7 +30,6 @@ const VerificationButtons = ({
     resendVerificationCode,
     enterVerificationCode,
     attrType,
-    smsCode,
     enterField,
     identity
   }) => {
@@ -40,7 +39,7 @@ const VerificationButtons = ({
     return (<div>
       <ListItem disabled leftIcon={<div />} >
         <FlatButton
-          label="FILL IN THE CODE"
+          label="ENTER THE CODE"
           secondary
           style={STYLES.requestBtn}
           onClick={() => enterVerificationCode({
@@ -48,7 +47,7 @@ const VerificationButtons = ({
             message: (<VerificationButtonMsg
               msgType={"codeInput"}
               attrType={attrType}
-              value={smsCode}
+              value={value}
               enterField={enterField}
               identityNew={identity} />),
             rightButtonLabel: 'OK',
@@ -89,8 +88,7 @@ const VerificationButtons = ({
           message: (<VerificationButtonMsg
             attrType={attrType}
             msgType="codeRequest"
-            value={smsCode}
-            phoneNumber={value}
+            value={value}
             />),
           rightButtonLabel: 'Send verification code',
           leftButtonLabel: 'CANCEL',
@@ -110,8 +108,7 @@ const VerificationButtons = ({
           message: (<VerificationButtonMsg
             msgType="codeRequest"
             attrType={attrType}
-            value={smsCode}
-            phoneNumber={value}
+            value={value}
           />),
           rightButtonLabel: 'Send verification Link',
           leftButtonLabel: 'CANCEL',
@@ -127,7 +124,6 @@ VerificationButtons.propTypes = {
   value: PropTypes.string,
   codeIsSent: PropTypes.bool,
   verified: PropTypes.bool,
-  smsCode: PropTypes.string,
   attrType: PropTypes.string,
   enterField: PropTypes.func,
   requestVerificationCode: PropTypes.func,

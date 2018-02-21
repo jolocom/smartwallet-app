@@ -32,15 +32,17 @@ const VerificationButtonMsg = ({
 
     case 'codeRequest':
       if (attrType === 'phone') {
-        return (<div>
-            To confirm your Phone Number we will send you a verification code,
-            which you'll receive via text message.
-        </div>)
+        return (<div><block>
+            In order to verify your Phone Number we will send you a text message with the verification code.
+          </block><block>
+            As soon as you get it, just click "Enter the code" button.
+          </block></div>)
       } else {
-        return (<div>
-            To confirm your E-Mail we will send you an confirmation
-            E-Mail with a link.
-        </div>)
+        return (<div><block>
+            In order to verify your E-Mail we will send you an E-Mail with a verification code.
+          </block><block>
+            As soon as you get it, just click "Enter the code" button.
+          </block></div>)
       }
 
     default:

@@ -80,19 +80,7 @@ export const actions = makeActions('verification', {
       }
     }
   },
-  goToAfterConfirmEmail: {
-    expectedParams: [],
-    creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        const user = services.auth.currentUser
-        if (user == null || user.wallet.seedPhrase === undefined) {
-          dispatch(router.pushRoute('/'))
-        } else {
-          dispatch(router.pushRoute('/wallet/identity'))
-        }
-      }
-    }
-  },
+
   confirmPhone: {
     expectedParams: [],
     async: true,
@@ -130,14 +118,6 @@ export const actions = makeActions('verification', {
           })
         }))
       }
-    }
-  },
-
-  resendVerificationLink: {
-    expectedParams: ['email', 'code'],
-    async: true,
-    creator: (params) => {
-      return (dispatch, getState, {services}) => {}
     }
   },
 

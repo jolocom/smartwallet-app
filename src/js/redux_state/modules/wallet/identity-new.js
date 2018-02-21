@@ -175,7 +175,6 @@ export default (state = initialState, action = {}) => {
       )
 
     case actions.enterField.id:
-      console.log(action)
       return state.setIn(['userData', action.attrType, action.field], action.value)
 
     case actions.saveAttribute.id:

@@ -29,7 +29,6 @@ export default class IdentityScreenNew extends React.Component {
     toggleQRScan: PropTypes.func.isRequired,
     saveAttribute: PropTypes.func.isRequired,
     enterField: PropTypes.func.isRequired,
-    verifyAttribute: PropTypes.func,
     startPhoneVerification: PropTypes.func.isRequired,
     startEmailVerification: PropTypes.func.isRequired,
     confirmPhone: PropTypes.func.isRequired,
@@ -52,7 +51,6 @@ export default class IdentityScreenNew extends React.Component {
 
   enterVerificationCode(...args) {
     return this.showVerificationWindow(...args, ({attrType, attrValue}) => {
-    console.log('=================' + attrType)
       if (attrType === 'phone') {
         return this.props.confirmPhone
       } else if (attrType === 'email') {
@@ -67,7 +65,6 @@ export default class IdentityScreenNew extends React.Component {
   }
 
   showVerificationWindow({title, message, attrValue, attrType, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
-    console.log(callback)
     return this.props.openConfirmDialog({
       title,
       message,
@@ -85,7 +82,6 @@ export default class IdentityScreenNew extends React.Component {
         saveAttribute={this.props.saveAttribute}
         toggleEditField={this.props.toggleEditField}
         toggleQRScan={this.props.toggleQRScan}
-        verifyAttribute={this.props.verifyAttribute}
         onConfirm={(...args) => { this.handleConfirmDialog(...args) }}
         requestVerificationCode={(...args) => this.requestVerification(...args)}
         enterVerificationCode={(...args) =>

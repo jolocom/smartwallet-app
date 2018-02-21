@@ -24,10 +24,10 @@ const SmsInputMsg = ({
   }<br />
   <SmsCodeInput
     value={smsCode}
-    pinLength={6}
+    pinLength={pinLength}
     onFocusChange={setFocusedPin}
     onChange={changePinValue}
-    focused={false} />
+    focused={pinFocused} />
 </div>)
 
 SmsInputMsg.propTypes = {
