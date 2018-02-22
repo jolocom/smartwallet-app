@@ -113,7 +113,7 @@ export const actions = makeActions('wallet/identityNew', {
         ))
     }
   },
-  setSmsVerificationCodeStatus: {
+  setVerificationCodeStatus: {
     expectedParams: ['field', 'value']
   }
 })
@@ -208,7 +208,7 @@ export default (state = initialState, action = {}) => {
         errorMsg: 'Could not retrieve claims from device.'
       })
 
-    case actions.setSmsVerificationCodeStatus.id:
+    case actions.setVerificationCodeStatus.id:
       return state.setIn(
         ['userData', action.field, 'codeIsSent'],
         action.value
