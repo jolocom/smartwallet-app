@@ -70,7 +70,6 @@ export default class IdentityNew extends React.Component {
               onConfirm={this.props.onConfirm}
               requestVerificationCode={this.props.requestVerificationCode}
               enterVerificationCode={this.props.enterVerificationCode}
-              resendVerificationCode={this.props.resendVerificationCode}
               />)
           })}
         </List>

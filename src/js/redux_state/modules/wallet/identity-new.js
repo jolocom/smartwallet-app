@@ -50,7 +50,10 @@ export const actions = makeActions('wallet/identityNew', {
           const { field } = params
           // eslint-disable-next-line
 
-          dispatch(actions.toggleEditField({field: [field], value: toggleEdit.bool}))
+          dispatch(actions.toggleEditField({
+            field: [field],
+            value: toggleEdit.bool
+          }))
 
           const did = await services.storage.getItem('did')
           const encWif = await services.storage.getItem('genericKeyWIF')
@@ -73,21 +76,26 @@ export const actions = makeActions('wallet/identityNew', {
           // eslint-disable-next-line
           const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
             did,
-            ["Credential", field],
+            ['Credential', field],
             { id: did, [field]: userData[field].value },
             wif
           )
 
           let userClaims = await services.storage.getItem(field)
-          let sortedClaims = _preventDoubleEntry({userClaims, selfSignedClaim, did, userData, field})
+          let sortedClaims = _preventDoubleEntry(
+            {userClaims, selfSignedClaim, did, userData, field}
+          )
           if (sortedClaims.itemToRemove) {
             await services.storage.removeItem(sortedClaims.itemToRemove)
           }
 
           // TODO: create a graveyard for the claims
           await services.storage.setItem(field, sortedClaims.result)
-          // eslint-disable-next-line
-          const res = await services.storage.setItem(selfSignedClaim.credential.id, selfSignedClaim)
+
+          const res = await services.storage.setItem(
+            selfSignedClaim.credential.id,
+            selfSignedClaim
+          )
           return res
         }))
       }
@@ -113,7 +121,7 @@ export const actions = makeActions('wallet/identityNew', {
 const initialState = Immutable.fromJS({
   toggleEdit: {
     field: '',
-    bool: false,
+    bool: false
   },
   userData: {
     phone: {
@@ -156,7 +164,10 @@ export default (state = initialState, action = {}) => {
       })
 
     case actions.setScannedValue.id:
-      return state.setIn(['scanningQr', 'scannedValue'], action.scannedValue)
+      return state.setIn(
+        ['scanningQr', 'scannedValue'],
+        action.scannedValue
+      )
 
     case actions.toggleQRScan.id:
       return state.setIn(
@@ -165,7 +176,10 @@ export default (state = initialState, action = {}) => {
       )
 
     case actions.enterField.id:
-      return state.setIn(['userData', action.attrType, action.field], action.value)
+      return state.setIn(
+        ['userData', action.attrType, action.field],
+        action.value
+      )
 
     case actions.saveAttribute.id:
       return state
@@ -195,7 +209,10 @@ export default (state = initialState, action = {}) => {
       })
 
     case actions.setSmsVerificationCodeStatus.id:
-      return state.setIn(['userData', action.field, 'codeIsSent'], action.value)
+      return state.setIn(
+        ['userData', action.field, 'codeIsSent'],
+        action.value
+      )
 
     default:
       return state
@@ -208,7 +225,6 @@ const _resolveClaims = (action) => {
   action.claims.map((claimType, i) => {
     if (action.result[i]) {
       if (action.result[i].claims) {
-        console.log(action.result[i].claims.length)
         verified = action.result[i].claims.length > 1
       } else {
         verified = false
@@ -225,7 +241,9 @@ const _resolveClaims = (action) => {
 }
 
 // eslint-disable-next-line
-const _preventDoubleEntry = ({userClaims, selfSignedClaim, userData, field, did}) => {
+const _preventDoubleEntry = (
+  {userClaims, selfSignedClaim, userData, field, did}
+) => {
   let itemToRemove
   if (userClaims != null) {
     userClaims.value = userData[field].value

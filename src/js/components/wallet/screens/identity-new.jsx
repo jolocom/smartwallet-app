@@ -33,6 +33,7 @@ export default class IdentityScreenNew extends React.Component {
     startEmailVerification: PropTypes.func.isRequired,
     confirmPhone: PropTypes.func.isRequired,
     confirmEmail: PropTypes.func.isRequired,
+    openConfirmDialog: PropTypes.func.isRequired
   }
 
   componentDidMount() {
@@ -59,17 +60,21 @@ export default class IdentityScreenNew extends React.Component {
     })
   }
 
-  handleConfirmDialog = ({title, message, rightButtonLabel, leftButtonLabel, callback}) => { // eslint-disable-line max-len
-    this.props.openConfirmDialog(title, message, rightButtonLabel,
-    callback(), leftButtonLabel)
-  }
+  handleConfirmDialog =
+    ({title, message, rightButtonLabel, leftButtonLabel, callback}) => {
+      this.props.openConfirmDialog(title, message, rightButtonLabel,
+      callback(), leftButtonLabel)
+    }
 
-  showVerificationWindow({title, message, attrValue, attrType, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
+  showVerificationWindow(
+    {title, message, attrValue, attrType, rightButtonLabel, leftButtonLabel},
+    callback
+  ) {
     return this.props.openConfirmDialog({
       title,
       message,
       primaryActionText: rightButtonLabel,
-      callback: callback({attrValue, attrType}),
+      callback: callback({attrValue, attrType}), // eslint-disable-line
       cancelActionText: leftButtonLabel
     })
   }

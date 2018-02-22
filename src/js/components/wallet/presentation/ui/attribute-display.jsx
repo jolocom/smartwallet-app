@@ -36,9 +36,8 @@ export default class AttributeDisplay extends React.Component {
     toggleEditField: PropTypes.func.isRequired,
     enterField: PropTypes.func.isRequired,
     saveAttribute: PropTypes.func.isRequired,
-    onConfirm: PropTypes.func,
     requestVerificationCode: PropTypes.func,
-    enterVerificationCode: PropTypes.func,
+    enterVerificationCode: PropTypes.func
   }
 
   componentDidUpdate() {
@@ -61,25 +60,24 @@ export default class AttributeDisplay extends React.Component {
   render() {
     const {identity} = this.props
     const toggle = identity.toggleEdit.bool && identity.toggleEdit.field === this.props.id // eslint-disable-line max-len
-    const verifiable = this.props.identity.userData[this.props.id].verifiable
-    const verified = verifiable && this.props.identity.userData[this.props.id].verified
-    const codeIsSent = this.props.identity.userData[this.props.id].codeIsSent
+    const verifiable = identity.userData[this.props.id].verifiable
+    const verified = verifiable && identity.userData[this.props.id].verified
+    const codeIsSent = identity.userData[this.props.id].codeIsSent
     const attrType = this.props.id
     let editButton
     let verificationButtons
 
     if (!verified && verifiable) {
       verificationButtons = (
-          <VerificationButtons
-            attrType={attrType}
-            requestVerificationCode={this.props.requestVerificationCode}
-            resendVerificationCode={this.props.resendVerificationCode}
-            enterVerificationCode={this.props.enterVerificationCode}
-            value={this.props.identity.userData[attrType].smsCode}
-            codeIsSent={codeIsSent}
-            enterField={this.props.enterField}
-            identity={this.props.identity}
-            verified={verified} />
+        <VerificationButtons
+          attrType={attrType}
+          requestVerificationCode={this.props.requestVerificationCode}
+          enterVerificationCode={this.props.enterVerificationCode}
+          value={this.props.identity.userData[attrType].smsCode}
+          codeIsSent={codeIsSent}
+          enterField={this.props.enterField}
+          identity={this.props.identity}
+          verified={verified} />
       )
     }
 
@@ -127,15 +125,15 @@ export default class AttributeDisplay extends React.Component {
                 attrType: attrType,
                 value: e.target.value,
                 field: 'value'
-            })}
+              })}
             hintText={'Please enter your ' + attrType} />
-            {editButton}
-          </div>
-          <div>
-            <block>
-              {verificationButtons}
-            </block>
-          </div>
+          {editButton}
+        </div>
+        <div>
+          <block>
+            {verificationButtons}
+          </block>
+        </div>
       </ListItem>
     )
   }

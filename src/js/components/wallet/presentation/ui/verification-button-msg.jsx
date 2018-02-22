@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import TextField from 'material-ui/TextField'
 
@@ -16,14 +16,14 @@ const VerificationButtonMsg = ({
     case 'codeInput':
       return (
         <div>Please enter the authentication code:
-        <TextField
-          id={attrType}
-          onChange={(e) =>
+          <TextField
+            id={attrType}
+            onChange={(e) =>
             enterField({
               attrType: attrType,
               value: e.target.value,
               field: 'smsCode'
-          })}
+            })}
          />
         </div>)
 
@@ -33,20 +33,22 @@ const VerificationButtonMsg = ({
     case 'codeRequest':
       if (attrType === 'phone') {
         return (<div><block>
-            In order to verify your Phone Number we will send you a text message with the verification code.
-          </block><block>
-            As soon as you get it, just click "Enter the code" button.
-          </block></div>)
+          In order to verify your Phone Number we will send you
+          a text message with the verification code.
+        </block><block>
+          As soon as you get it, just click "Enter the code" button.
+        </block></div>)
       } else {
         return (<div><block>
-            In order to verify your E-Mail we will send you an E-Mail with a verification code.
-          </block><block>
-            As soon as you get it, just click "Enter the code" button.
-          </block></div>)
+          In order to verify your E-Mail we will send you an E-Mail
+          with a verification code.
+        </block><block>
+          As soon as you get it, just click "Enter the code" button.
+        </block></div>)
       }
 
     default:
-      return <div></div>
+      return <div />
   }
 }
 

@@ -14,6 +14,7 @@ export default class VerificationAgent {
   }
 
   async _startVerifying(claim, attrType) {
+    // eslint-disable-next-line no-undef
     const endpoint = `${VERIFICATION_PROV}/${attrType}/start-verification`
     return await this.request.post(
       endpoint,
@@ -39,6 +40,7 @@ export default class VerificationAgent {
   }
 
   async _verify({did, attrType, code}) {
+    // eslint-disable-next-line no-undef
     const url = `${VERIFICATION_PROV}/${attrType}/finish-verification`
     return await this.request.post(
       url,

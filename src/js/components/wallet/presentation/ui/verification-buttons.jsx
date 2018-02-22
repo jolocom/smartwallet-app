@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 
 import FlatButton from 'material-ui/FlatButton'
@@ -33,7 +33,6 @@ const VerificationButtons = ({
     enterField,
     identity
   }) => {
-
   if (verified) return null
   if (codeIsSent) {
     return (<div>
@@ -45,7 +44,7 @@ const VerificationButtons = ({
           onClick={() => enterVerificationCode({
             title: `${attrType} Verification`,
             message: (<VerificationButtonMsg
-              msgType={"codeInput"}
+              msgType={'codeInput'}
               attrType={attrType}
               value={value}
               enterField={enterField}

@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
 import { actions as identityActions } from './wallet/identity-new'
-import router from './router'
 
 export const actions = makeActions('verification', {
   startEmailVerification: {
@@ -12,14 +11,17 @@ export const actions = makeActions('verification', {
         dispatch(actions.startEmailVerification.buildAction(params,
         async (backend) => {
           const emailClaimId = await services.storage.getItem('email')
-          const claim = await services.storage.getItem(emailClaimId.claims[0].id)
+          const claim = await services.storage.getItem(
+            emailClaimId.claims[0].id
+          )
           dispatch(identityActions.setSmsVerificationCodeStatus({
             field: 'email',
             value: true
           }))
           return backend.verification.startVerifyingEmail(claim)
-      }))
-    }}
+        }))
+      }
+    }
   },
 
   startPhoneVerification: {
@@ -27,16 +29,18 @@ export const actions = makeActions('verification', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.startPhoneVerification.buildAction(params, async (lel) => {
-          const phoneClaimId = await services.storage.getItem('phone')
-          const claim = await services.storage.getItem(phoneClaimId.claims[0].id)
-          const phoneData = getState().toJS().wallet.identityNew.userData.phone
-          dispatch(identityActions.setSmsVerificationCodeStatus({
-            field: 'phone',
-            value: true
+        dispatch(actions.startPhoneVerification.buildAction(
+          params, async () => {
+            const phoneClaimId = await services.storage.getItem('phone')
+            const claim = await services.storage.getItem(
+            phoneClaimId.claims[0].id
+          )
+            dispatch(identityActions.setSmsVerificationCodeStatus({
+              field: 'phone',
+              value: true
+            }))
+            return backend.verification.startVerifyingPhone(claim)
           }))
-          return backend.verification.startVerifyingPhone(claim)
-        }))
       }
     }
   },
@@ -47,9 +51,8 @@ export const actions = makeActions('verification', {
     creator: (params) => {
       return async (dispatch, getState, {services}) => {
         const data = getState().toJS().wallet.identityNew.userData.email
-        const id =  'email'
         const code = data.smsCode
-        const email =  data.value
+        const email = data.value
         const did = await services.storage.getItem('did')
         if (!email || !did || !code) {
           let action = {
@@ -62,9 +65,12 @@ export const actions = makeActions('verification', {
             did,
             code
           }).then(async (res) => {
-            if(res.credential) {
+            if (res.credential) {
               const emailData = await services.storage.getItem('email')
-              emailData.claims.push({id: res.credential.id, issuer: res.credential.issuer})
+              emailData.claims.push({
+                id: res.credential.id,
+                issuer: res.credential.issuer
+              })
               await services.storage.setItem(res.credential.id, res)
               await services.storage.setItem('email', emailData)
               return dispatch(identityActions.enterField({
@@ -87,9 +93,8 @@ export const actions = makeActions('verification', {
     creator: () => {
       return async (dispatch, getState, {services}) => {
         const data = getState().toJS().wallet.identityNew.userData.phone
-        const id =  'phone'
         const code = data.smsCode
-        const phone =  data.value
+        const phone = data.value
         const did = await services.storage.getItem('did')
         if ([phone, code].includes(undefined)) {
           let action = {
@@ -102,9 +107,12 @@ export const actions = makeActions('verification', {
             did,
             code
           }).then(async (res) => {
-            if(res.credential) {
+            if (res.credential) {
               const phoneData = await services.storage.getItem('phone')
-              phoneData.claims.push({id: res.credential.id, issuer: res.credential.issuer})
+              phoneData.claims.push({
+                id: res.credential.id,
+                issuer: res.credential.issuer
+              })
               await services.storage.setItem(res.credential.id, res)
               await services.storage.setItem('phone', phoneData)
               return dispatch(identityActions.enterField({
@@ -127,7 +135,7 @@ export const actions = makeActions('verification', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {}
     }
-  },
+  }
 })
 
 const confirmSuccess = (state) => Immutable.fromJS(state).merge({
