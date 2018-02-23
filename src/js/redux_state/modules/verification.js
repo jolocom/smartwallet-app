@@ -31,16 +31,16 @@ export const actions = makeActions('verification', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.startPhoneVerification.buildAction(
           params, async () => {
-          const phoneClaimId = await services.storage.getItem('phone')
-          const claim = await services.storage.getItem(
+            const phoneClaimId = await services.storage.getItem('phone')
+            const claim = await services.storage.getItem(
             phoneClaimId.claims[0].id
           )
-          dispatch(identityActions.setVerificationCodeStatus({
-            field: 'phone',
-            value: true
+            dispatch(identityActions.setVerificationCodeStatus({
+              field: 'phone',
+              value: true
+            }))
+            return backend.verification.startVerifyingPhone(claim)
           }))
-          return backend.verification.startVerifyingPhone(claim)
-        }))
       }
     }
   },

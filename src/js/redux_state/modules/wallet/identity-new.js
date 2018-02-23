@@ -69,7 +69,7 @@ export const actions = makeActions('wallet/identityNew', {
               iv: encWif.crypto.cipherparams.iv
             })
           } catch (err) {
-            console.warn(err)
+            console.warn(err) // eslint-disable-line no-console
             wif = await services.storage.getItem('tempGenericKeyWIF')
           }
 
