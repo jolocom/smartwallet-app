@@ -109,6 +109,9 @@ export const actions = makeActions('single-sign-on/access-request', {
   },
   setDid: {
     expectedParams: ['did']
+  },
+  tryAgain: {
+    expectedParams: []
   }
 })
 
@@ -175,6 +178,13 @@ export default (state = initialState, action = {}) => {
             [action.field]: action.claimId
           }
         }
+      })
+
+    case actions.tryAgain.id:
+      return state.mergeIn(['entity'], {
+        errorMsg: '',
+        infoComplete: false,
+        response: {}
       })
 
     default:

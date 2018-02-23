@@ -68,7 +68,8 @@ export default class AccessRequest extends React.Component {
     requestedFields: PropTypes.array,
     setInfoComplete: PropTypes.func.isRequired,
     denyAccess: PropTypes.func.isRequired,
-    confirmAccess: PropTypes.func.isRequired
+    confirmAccess: PropTypes.func.isRequired,
+    tryAgain: PropTypes.func.isRequired
   }
 
   getIcon(field) {
@@ -148,6 +149,13 @@ export default class AccessRequest extends React.Component {
         <Content>
           <Header style={{textAlign: 'center'}}
             title={this.props.accessRequest.entity.errorMsg} />
+          <Block style={STYLES.buttonContainer}>
+            <RaisedButton
+              secondary
+              label="Try again"
+              style={STYLES.buttons}
+              onClick={() => { this.props.tryAgain() }} />
+          </Block>
         </Content>
       )
     } else {

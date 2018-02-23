@@ -17,6 +17,7 @@ import Presentation from '../presentation/access-request'
     'single-sign-on/access-request:getDid',
     'single-sign-on/access-request:confirmAccess',
     'single-sign-on/access-request:denyAccess',
+    'single-sign-on/access-request:tryAgain',
     'confirmation-dialog:openConfirmDialog'
   ]
 })
@@ -32,7 +33,8 @@ export default class AccessRequestScreen extends React.Component {
     showDialog: PropTypes.func.isRequired,
     openConfirmDialog: PropTypes.func.isRequired,
     confirmAccess: PropTypes.func.isRequired,
-    denyAccess: PropTypes.func.isRequired
+    denyAccess: PropTypes.func.isRequired,
+    tryAgain: PropTypes.func.isRequired
   }
 
   handleDeny = () => {
@@ -58,6 +60,7 @@ export default class AccessRequestScreen extends React.Component {
     const claims = this.props.identityNew.scanningQr.scannedValue.payload.reqClaims // eslint-disable-line max-len
     return (
       <Presentation
+        tryAgain={this.props.tryAgain}
         configMsg={this.props.configMsg}
         showDialog={this.props.showDialog}
         setSelectedClaim={this.props.setSelectedClaim}
