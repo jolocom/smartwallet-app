@@ -69,12 +69,12 @@ export const actions = makeActions('wallet/identityNew', {
             wif = await services.storage.getItem('tempGenericKeyWIF')
           }
           // eslint-disable-next-line
-          const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
-            did,
-            field,
-            {id: did, [field]: userData[field]},
-            wif
-          )
+          const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential({
+            issier: did,
+            credentialType: ["Credential", field],
+            claim: {id: did, [field]: userData[field]},
+            privateKeyWIF: wif
+          })
 
           let userClaims = await services.storage.getItem(field)
           // eslint-disable-next-line
