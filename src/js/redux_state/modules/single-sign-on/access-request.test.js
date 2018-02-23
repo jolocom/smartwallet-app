@@ -37,11 +37,13 @@ describe('# SingleSignOn AccessRequest redux module', () => {
     //     response: {},
     //     userDid: 'did:jolo:TEST'
     //   }
+    // eslint-disable-next-line
     //   expect(reducer(state, action).getIn(['entity']).toJS()).to.deep.equal(expectedState) // eslint-disable-line max-len
     // })
 
   // describe('# Actions', () => {
     // TODO: on POST to callbackURL success return OK
+    // eslint-disable-next-line
     // it('grantAccessToRequester should return OK status after PUT', () => {  // eslint-disable-line max-len
     //   const dispatch = stub()
     //   const getState = stub()
@@ -53,10 +55,13 @@ describe('# SingleSignOn AccessRequest redux module', () => {
     //   /* eslint-disable */
     //   expect(dispatch.called).to.be.true
     //   /* eslint-enable */
+    // eslint-disable-next-line
     //   // expect(dispatch.calls[0].args[0].promise()).to.equal('PUT request OK')
     //   expect(dispatch.calls[0].args[0].types).to.deep.equal([
     //     'single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER',
+    // eslint-disable-next-line
     //     'single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER_SUCCESS', // eslint-disable-line max-len
+    // eslint-disable-next-line
     //     'single-sign-on/access-request/GRANT_ACCESS_TO_REQUESTER_FAIL' // eslint-disable-line max-len
     //   ])
     // })

@@ -1,12 +1,13 @@
-import React from 'react'
-import Immutable from 'immutable'
-import {expect} from 'chai'
-import {shallow} from 'enzyme'
-import AccessRequestScreen from './access-request'
+// import React from 'react'
+// import Immutable from 'immutable'
+// import {expect} from 'chai'
+// import {shallow} from 'enzyme'
+// import AccessRequestScreen from './access-request'
 // import Presentation from '../presentation/access-request'
-import {stub} from '../../../../../test/utils'
+// import {stub} from '../../../../../test/utils'
 
 // describe('(Component) AccessRequestScreen', () => {
+// eslint-disable-next-line
 //   it('should call getClaims and getDid to start on componentWillMount', () => { // eslint-disable-line max-len
 //     // const getClaims = stub()
 //     const getDid = stub()
