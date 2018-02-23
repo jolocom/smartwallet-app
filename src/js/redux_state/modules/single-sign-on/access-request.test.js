@@ -12,7 +12,7 @@ describe('# SingleSignOn AccessRequest redux module', () => {
           loading: false,
           name: 'SOME COMPANY',
           image: 'img/hover_board.jpg',
-          returnURL: '',
+          errorMsg: '',
           infoComplete: false,
           claims: {},
           response: {},

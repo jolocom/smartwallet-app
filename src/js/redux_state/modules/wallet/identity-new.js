@@ -20,22 +20,23 @@ export const actions = makeActions('wallet/identityNew', {
           return dispatch(actions.toggleQRScan.buildAction())
         } else {
           qr.showCameraOutput()
-          // dispatch(actions.toggleQRScan.buildAction())
+          dispatch(actions.toggleQRScan.buildAction())
           const message = await qr.scanMessage()
-
-          // TODO: replace mock by message
           // eslint-disable-next-line
-          const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6am9sbzo2eEV4S2ZnZzJXUkdCUExKZVVobVlrIiwicHViS2V5SXNzIjoiMDIzZTFjNGJkYTM4YmJhNGIzMmZkOTg2YjY5NjAyNmQ1NDUzMGQ4YjJiNjNhNmIzYzdjZDhjMzI0ZWQ3ZDhkMWUyIiwiY2FsbGJhY2tVcmwiOiJ3d3cuZGVtby1zc28uam9sb2NvbS5jb20vYXV0aGVudGljYXRpb24iLCJyZXFDbGFpbXMiOlsibmFtZSIsInBob25lIl0sImlhdCI6IjIwMTgtMDItMjFUMTM6NTE6NDUuNzk2WiIsImV4cCI6IjIwMTgtMDItMjFUMTQ6NDE6NDUuNzk2WiIsImp0aSI6IjAuZmdncWpzNDZ0MG8ifQ.u0hfIUCS40nOESzhR1U1KSLeZY5J5bEiFeJGokiKDdPTUB_GvTAHVQs8Ypp42uCcCvukK5VLF2Yx6HbnaACAwg"
+          // MOCK
+          // const message = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6am9sbzo2eEV4S2ZnZzJXUkdCUExKZVVobVlrIiwicHViS2V5SXNzIjoiMDIzZTFjNGJkYTM4YmJhNGIzMmZkOTg2YjY5NjAyNmQ1NDUzMGQ4YjJiNjNhNmIzYzdjZDhjMzI0ZWQ3ZDhkMWUyIiwiY2FsbGJhY2tVcmwiOiJodHRwOi8vbG9jYWxob3N0OjkwMDAvYXV0aGVudGljYXRpb24iLCJyZXFDbGFpbXMiOlsibmFtZSJdLCJpYXQiOiIyMDE4LTAyLTIzVDExOjI4OjAwLjAwNFoiLCJleHAiOiIyMDE4LTAyLTIzVDEyOjE4OjAwLjAwNFoiLCJqdGkiOiIwLm9zb3BqMGh0cG0ifQ.txvC8BLNdfoskbIY42_7CWpDZ8aPd61h_2H0jKuvnfHnIzhAefuLQzVNIw3WGT5EMWdnbw5BLjqWn7LEaJK_5g"
 
           // eslint-disable-next-line
           const processedMessage = backend.jolocomLib.authentication.authenticateRequest({
-            token: token
+            token: message
           })
+
           dispatch(actions.setScannedValue({scannedValue: processedMessage}))
+
           if (processedMessage) {
             dispatch(router.pushRoute('wallet/single-sign-on/access-request'))
           }
-          // dispatch(actions.toggleQRScan.buildAction())
+          dispatch(actions.toggleQRScan.buildAction())
           return qr.cleanUp()
         }
       }

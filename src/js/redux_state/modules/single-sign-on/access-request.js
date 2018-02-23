@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import {makeActions} from '../'
 import router from '../router'
-// import { actions as dialogActions } from '../confirmation-dialog'
 import { actions as simpleDialogActions } from '../simple-dialog'
 
 export const actions = makeActions('single-sign-on/access-request', {
@@ -62,7 +61,15 @@ export const actions = makeActions('single-sign-on/access-request', {
             did: did,
             claims: claimsArray
           })
-          return backend.httpAgent.post(scannedValue.payload.callbackUrl, token)
+
+          return backend.httpAgent.post(
+            scannedValue.payload.callbackUrl,
+            {token: token},
+            { 'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            { credentials: 'include' }
+          )
           .then((res) => {
             dispatch(router.pushRoute('wallet/identity'))
             return res

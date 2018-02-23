@@ -49,22 +49,20 @@ export default class AccessRequestScreen extends React.Component {
   }
 
   componentDidMount() {
-    // TODO replace getClaims args with
-    // this.props.identityNew.scanningQr.scannedValue.payload.reqClaims)
-    this.props.getClaims({claims: ['name', 'phone', 'email']})
+    const claims = this.props.identityNew.scanningQr.scannedValue.payload.reqClaims // eslint-disable-line max-len
+    this.props.getClaims({claims: claims})
     this.props.getDid()
   }
 
   render() {
-    // TODO: replace requestedFields
-    // with this.props.identityNew.scanningQr.scannedValue.payload.reqClaims)
+    const claims = this.props.identityNew.scanningQr.scannedValue.payload.reqClaims // eslint-disable-line max-len
     return (
       <Presentation
         configMsg={this.props.configMsg}
         showDialog={this.props.showDialog}
         setSelectedClaim={this.props.setSelectedClaim}
         setInfoComplete={this.props.setInfoComplete}
-        requestedFields={['name', 'phone', 'email']}
+        requestedFields={claims}
         accessRequest={this.props.accessRequest}
         identity={this.props.identityNew}
         denyAccess={this.handleDeny}
