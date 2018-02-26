@@ -66,7 +66,7 @@ class App extends React.Component {
 
     if (prevProps.account.username === undefined ||
       prevProps.account.username !== username) {
-      this.checkLogin()
+      // this.checkLogin()
     }
   }
 
