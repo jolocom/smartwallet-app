@@ -2,6 +2,7 @@ import JolocomLib from 'jolocom-lib'
 import VerificationAgent from 'lib/agents/verification'
 import EthereumAgent from 'lib/agents/ethereum'
 import EncryptionAgent from 'lib/agents/encryption'
+import HttpAgent from 'lib/agents/http'
 
 export default class Backend {
   constructor(config) {
@@ -22,5 +23,9 @@ export default class Backend {
 
   get encryption() {
     return new EncryptionAgent()
+  }
+
+  get httpAgent() {
+    return new HttpAgent()
   }
 }
