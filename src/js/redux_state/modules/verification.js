@@ -1,62 +1,60 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
-import identityActions from './wallet/identity'
-import router from './router'
+import { actions as identityActions } from './wallet/identity-new'
 
 export const actions = makeActions('verification', {
   startEmailVerification: {
-    expectedParams: ['email', 'index', 'pin'],
+    expectedParams: ['email'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        const { id, pin } = getState().toJS().wallet.identity
-            .contact.emails[params.index]
-
+      return async (dispatch, getState, {backend, services}) => {
         dispatch(actions.startEmailVerification.buildAction(params,
-        (backend) => {
-          return backend.verification.startVerifyingEmail({
-            wallet: services.auth.currentUser.wallet,
-            id: id,
-            email: params.email,
-            pin
-          })
+        async (backend) => {
+          const emailClaimId = await services.storage.getItem('email')
+          const claim = await services.storage.getItem(
+            emailClaimId.claims[0].id
+          )
+          dispatch(identityActions.setVerificationCodeStatus({
+            field: 'email',
+            value: true
+          }))
+          return backend.verification.startVerifyingEmail(claim)
         }))
       }
     }
   },
+
   startPhoneVerification: {
-    expectedParams: ['phone', 'index'],
+    expectedParams: ['phone'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        dispatch(actions.startPhoneVerification.buildAction(params,
-        (backend) => {
-          const { pin, type, id } = getState().toJS().wallet.identity
-            .contact.phones[params.index]
-          return backend.verification.startVerifyingPhone({
-            wallet: services.auth.currentUser.wallet,
-            id,
-            type,
-            phone: params.phone,
-            pin
-          }).then((result) => {
-            dispatch(identityActions.setSmsVerificationCodeStatus(
-              'phones',
-              params.index,
-              true
-            ))
-            return result
-          })
-        }))
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.startPhoneVerification.buildAction(
+          params, async () => {
+            const phoneClaimId = await services.storage.getItem('phone')
+            const claim = await services.storage.getItem(
+            phoneClaimId.claims[0].id
+          )
+            dispatch(identityActions.setVerificationCodeStatus({
+              field: 'phone',
+              value: true
+            }))
+            return backend.verification.startVerifyingPhone(claim)
+          }))
       }
     }
   },
+
   confirmEmail: {
-    expectedParams: ['email', 'id', 'code'],
+    expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        if (!params || !params.email || !params.id || !params.code) {
+      return async (dispatch, getState, {services}) => {
+        const data = getState().toJS().wallet.identityNew.userData.email
+        const code = data.smsCode
+        const email = data.value
+        const did = await services.storage.getItem('did')
+        if (!email || !did || !code) {
           let action = {
             type: actions.confirmEmail.id_fail
           }
@@ -64,60 +62,73 @@ export const actions = makeActions('verification', {
         }
         dispatch(actions.confirmEmail.buildAction(params, (backend) => {
           return backend.verification.verifyEmail({
-            wallet: services.auth.currentUser.wallet,
-            id: params.id,
-            email: params.email,
-            code: params.code
+            did,
+            code
+          }).then(async (res) => {
+            if (res.credential) {
+              const emailData = await services.storage.getItem('email')
+              emailData.claims.push({
+                id: res.credential.id,
+                issuer: res.credential.issuer
+              })
+              await services.storage.setItem(res.credential.id, res)
+              await services.storage.setItem('email', emailData)
+              return dispatch(identityActions.enterField({
+                attrType: 'email',
+                field: 'verified',
+                value: true
+              }))
+            } else {
+              return res
+            }
           })
         }))
       }
     }
   },
-  goToAfterConfirmEmail: {
-    expectedParams: [],
-    creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        const user = services.auth.currentUser
-        if (user == null || user.wallet.seedPhrase === undefined) {
-          dispatch(router.pushRoute('/'))
-        } else {
-          dispatch(router.pushRoute('/wallet/identity'))
-        }
-      }
-    }
-  },
+
   confirmPhone: {
-    expectedParams: ['index'],
+    expectedParams: [],
     async: true,
-    creator: (index) => {
-      return (dispatch, getState, {services}) => {
-        const { id, smsCode: code, number: phone, type } = getState()
-          .toJS().wallet.identity.contact.phones[index]
-        if ([index, phone, code].includes(undefined)) {
+    creator: () => {
+      return async (dispatch, getState, {services}) => {
+        const data = getState().toJS().wallet.identityNew.userData.phone
+        const code = data.smsCode
+        const phone = data.value
+        const did = await services.storage.getItem('did')
+        if ([phone, code].includes(undefined)) {
           let action = {
             type: actions.confirmPhone.id_fail
           }
           return dispatch(action)
         }
-        dispatch(actions.confirmPhone.buildAction(index, (backend) => {
+        dispatch(actions.confirmPhone.buildAction('0', async (backend) => {
           return backend.verification.verifyPhone({
-            wallet: services.auth.currentUser.wallet,
-            id,
-            type,
-            phone,
+            did,
             code
+          }).then(async (res) => {
+            if (res.credential) {
+              const phoneData = await services.storage.getItem('phone')
+              phoneData.claims.push({
+                id: res.credential.id,
+                issuer: res.credential.issuer
+              })
+              await services.storage.setItem(res.credential.id, res)
+              await services.storage.setItem('phone', phoneData)
+              return dispatch(identityActions.enterField({
+                attrType: 'phone',
+                field: 'verified',
+                value: true
+              }))
+            } else {
+              return res
+            }
           })
         }))
       }
     }
   },
-  resendVerificationLink: {
-    expectedParams: ['email', 'code'],
-    async: true,
-    creator: (params) => {
-      return (dispatch, getState, {services}) => {}
-    }
-  },
+
   resendVerificationCode: {
     expectedParams: ['phone', 'code'],
     async: true,
@@ -126,13 +137,16 @@ export const actions = makeActions('verification', {
     }
   }
 })
+
 const confirmSuccess = (state) => Immutable.fromJS(state).merge({
   success: true,
   loading: false
 })
+
 const confirmFail = (state) => Immutable.fromJS(state).merge({
   loading: false
 })
+
 const initialState = Immutable.fromJS({
   success: false,
   loading: true

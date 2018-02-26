@@ -8,6 +8,7 @@ import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import SocialPerson from 'material-ui/svg-icons/social/person'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
+import VerificationButtons from '../../../wallet/presentation/ui/verification-buttons' // eslint-disable-line max-len
 
 import ActionDone from 'material-ui/svg-icons/action/done'
 import ContentCreate from 'material-ui/svg-icons/content/create'
@@ -34,7 +35,9 @@ export default class AttributeDisplay extends React.Component {
     id: PropTypes.string,
     toggleEditField: PropTypes.func.isRequired,
     enterField: PropTypes.func.isRequired,
-    saveAttribute: PropTypes.func.isRequired
+    saveAttribute: PropTypes.func.isRequired,
+    requestVerificationCode: PropTypes.func,
+    enterVerificationCode: PropTypes.func
   }
 
   componentDidUpdate() {
@@ -57,26 +60,45 @@ export default class AttributeDisplay extends React.Component {
   render() {
     const {identity} = this.props
     const toggle = identity.toggleEdit.bool && identity.toggleEdit.field === this.props.id // eslint-disable-line max-len
-    let button
+    const verifiable = identity.userData[this.props.id].verifiable
+    const verified = verifiable && identity.userData[this.props.id].verified
+    const codeIsSent = identity.userData[this.props.id].codeIsSent
+    const attrType = this.props.id
+    let editButton
+    let verificationButtons
+
+    if (!verified && verifiable) {
+      verificationButtons = (
+        <VerificationButtons
+          attrType={attrType}
+          requestVerificationCode={this.props.requestVerificationCode}
+          enterVerificationCode={this.props.enterVerificationCode}
+          value={this.props.identity.userData[attrType].smsCode}
+          codeIsSent={codeIsSent}
+          enterField={this.props.enterField}
+          identity={this.props.identity}
+          verified={verified} />
+      )
+    }
 
     if (toggle) {
-      button = (<FloatingActionButton
+      editButton = (<FloatingActionButton
         mini
         secondary
         onClick={() => this.props.saveAttribute({
-          field: this.props.id
+          field: attrType
         })}
         style={STYLES.addBtn} >
         <ActionDone />
       </FloatingActionButton>)
     } else {
-      button = (
+      editButton = (
         <FloatingActionButton
           mini
           iconStyle={{fill: theme.palette.accent1Color}}
           backgroundColor={'#fff'}
           onClick={() => this.props.toggleEditField({
-            field: this.props.id,
+            field: attrType,
             value: identity.toggleEdit.bool
           })}
           style={STYLES.addBtn}>
@@ -92,18 +114,25 @@ export default class AttributeDisplay extends React.Component {
         disabled>
         <div>
           <TextField
-            ref={this.props.id}
+            ref={attrType}
+            id={attrType}
             disabled={!toggle}
             underlineShow={toggle}
-            value={identity.userData[this.props.id]}
+            value={this.props.identity.userData[attrType].value}
             inputStyle={STYLES.textStyle}
             onChange={(e) =>
               this.props.enterField({
+                attrType: attrType,
                 value: e.target.value,
-                field: this.props.id
+                field: 'value'
               })}
-            hintText={'Please enter your ' + this.props.id} />
-          {button}
+            hintText={'Please enter your ' + attrType} />
+          {editButton}
+        </div>
+        <div>
+          <block>
+            {verificationButtons}
+          </block>
         </div>
       </ListItem>
     )
