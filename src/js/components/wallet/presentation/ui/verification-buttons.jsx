@@ -61,8 +61,8 @@ const VerificationButtons = ({
           label="CAN'T FIND THE CODE"
           secondary
           style={STYLES.requestBtn}
-          onClick={() => resendVerificationCode({
-            title: 'Verification Request Phone',
+          onClick={() => requestVerificationCode({
+            title: 'Verification Request',
             message: (<VerificationButtonMsg
               attrType={attrType}
               msgType="codeRequest"
