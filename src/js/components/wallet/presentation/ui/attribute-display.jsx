@@ -58,7 +58,7 @@ export default class AttributeDisplay extends React.Component {
     if (verified) {
       iconStyle = STYLES.verifiedIcon
     } else {
-      iconStyle =  STYLES.icon
+      iconStyle = STYLES.icon
     }
 
     if (id === 'phone') {
