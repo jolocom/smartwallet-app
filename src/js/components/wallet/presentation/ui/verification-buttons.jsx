@@ -11,7 +11,7 @@ const STYLES = {
   dialog: {
   },
   requestBtn: {
-    marginLeft: '-30px'
+    marginLeft: '-87px'
   },
   simpleDialog: {
     contentStyle: {
