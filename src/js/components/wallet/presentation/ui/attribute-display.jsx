@@ -25,7 +25,13 @@ const STYLES = {
     fontSize: '1em'
   },
   icon: {
-    top: '13px'
+    top: '13px',
+    fill: '#6d6d6d',
+    color: '#6d6d6d'
+  },
+  verifiedIcon: {
+    top: '13px',
+    fill: '#B3C82D'
   }
 }
 
@@ -47,13 +53,20 @@ export default class AttributeDisplay extends React.Component {
     }
   }
 
-  getIcon(id) {
+  getIcon(id, verified) {
+    let iconStyle
+    if (verified) {
+      iconStyle = STYLES.verifiedIcon
+    } else {
+      iconStyle = STYLES.icon
+    }
+
     if (id === 'phone') {
-      return <CommunicationCall color={'grey'} style={STYLES.icon} />
+      return <CommunicationCall style={iconStyle} />
     } else if (id === 'email') {
-      return <CommunicationEmail color={'grey'} style={STYLES.icon} />
+      return <CommunicationEmail style={iconStyle} />
     } else if (id === 'name') {
-      return <SocialPerson color={'grey'} style={STYLES.icon} />
+      return <SocialPerson style={iconStyle} />
     }
   }
 
@@ -110,7 +123,7 @@ export default class AttributeDisplay extends React.Component {
     return (
       <ListItem
         key={this.props.id}
-        leftIcon={this.getIcon(this.props.id)}
+        leftIcon={this.getIcon(this.props.id, verified)}
         disabled>
         <div>
           <TextField
