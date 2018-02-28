@@ -13,7 +13,7 @@ import Location from 'material-ui/svg-icons/maps/place'
 import { theme } from 'styles'
 import { IconIdCard, IconPassport } from '../../common'
 import { Content, Block } from '../../structure'
-import { SubMenuIcon } from './ui'
+import { SubMenuIcon, VerifiedItem } from './ui'
 import { TabContainer, HalfScreenContainer } from '../../wallet/presentation/ui'
 
 const STYLES = {
@@ -94,6 +94,15 @@ export default class SharedDatePresentation extends React.Component {
   render() {
     const renderFields = this.props.sharedData.map((field, index) => { // eslint-disable-line max-len
       let icon = this.getIcon(field.attrType)
+      return (
+        <VerifiedItem
+          key={field.value}
+          verified={field.verified}
+          textValue={field.value}
+          textLabel={field.attrType}
+          icon={icon}
+          secondaryTextValue={''} />
+      )
     })
     return (
       <TabContainer>
