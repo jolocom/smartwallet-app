@@ -27,7 +27,6 @@ const VerificationButtons = ({
     codeIsSent = false,
     verified,
     requestVerificationCode,
-    resendVerificationCode,
     enterVerificationCode,
     attrType,
     enterField,
@@ -61,8 +60,8 @@ const VerificationButtons = ({
           label="CAN'T FIND THE CODE"
           secondary
           style={STYLES.requestBtn}
-          onClick={() => resendVerificationCode({
-            title: 'Verification Request Phone',
+          onClick={() => requestVerificationCode({
+            title: 'Verification Request',
             message: (<VerificationButtonMsg
               attrType={attrType}
               msgType="codeRequest"
@@ -125,7 +124,6 @@ VerificationButtons.propTypes = {
   verified: PropTypes.bool,
   attrType: PropTypes.string,
   enterField: PropTypes.func,
-  requestVerificationCode: PropTypes.func,
   resendVerificationCode: PropTypes.func,
   enterVerificationCode: PropTypes.func
 }
