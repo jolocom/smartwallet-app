@@ -27,7 +27,6 @@ const VerificationButtons = ({
     codeIsSent = false,
     verified,
     requestVerificationCode,
-    resendVerificationCode,
     enterVerificationCode,
     attrType,
     enterField,
@@ -125,7 +124,6 @@ VerificationButtons.propTypes = {
   verified: PropTypes.bool,
   attrType: PropTypes.string,
   enterField: PropTypes.func,
-  requestVerificationCode: PropTypes.func,
   resendVerificationCode: PropTypes.func,
   enterVerificationCode: PropTypes.func
 }
