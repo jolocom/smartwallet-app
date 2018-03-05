@@ -1,5 +1,6 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
+import { Content, Block } from '../../../structure'
 // import Radium from 'radium'
 
 import { ListItem } from 'material-ui/List'
@@ -23,24 +24,20 @@ const STYLES = {
 }
 
 export default class DappInteraction extends React.Component {
-  // static propTypes = {
-  //   identity: PropTypes.object,
-  //   id: PropTypes.string,
-  //   toggleEditField: PropTypes.func.isRequired,
-  //   enterField: PropTypes.func.isRequired,
-  //   saveAttribute: PropTypes.func.isRequired
-  // }
+  static propTypes = {
+    claim: PropTypes.object,
+  }
 
   render() {
     const mockDate = '1. Feb 18'
     return (
-      <ListItem
-        key={'1'}
-        leftIcon={<ActionDone color={'grey'} style={STYLES.icon} />}
-        rightIcon={<div style={STYLES.date}>{mockDate}</div>}
-        primaryText={'Jolocom'}
-        secondaryText={'phone, email'}
-        disabled />
+        <ListItem
+          key={'1'}
+          leftIcon={<ActionDone color={'grey'} style={STYLES.icon} />}
+          rightIcon={<div style={STYLES.date}>{mockDate}</div>}
+          primaryText={'Jolocom'}
+          secondaryText={'phone, email'}
+          disabled />
     )
   }
 }

@@ -26,6 +26,19 @@ export const actions = makeActions('wallet/tabs', {
         dispatch(router.pushRoute(TAB_TO_PATHNAME[params.tab]))
       }
     }
+  },
+  getClaims: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState, { backend }) => {
+        const fields = ['name', 'phone', 'email']
+        let claims = { selfSigned: [], thirdPartySigned: [] }
+
+        fields.forEach((field) => {
+        })
+        return claims
+      }
+    }
   }
 })
 
