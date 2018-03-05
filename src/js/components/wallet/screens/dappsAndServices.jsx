@@ -4,18 +4,22 @@ import Presentation from '../presentation/dappsAndServices'
 import { connect } from 'redux_state/utils'
 
 @connect({
-  props: [],
+  props: ['wallet.tabs'],
   actions: ['wallet/tabs:getClaims']
 })
 export default class DappsAndServices extends React.Component {
   static propTypes = {
+    tabs: PropTypes.object,
     getClaims: PropTypes.func
   }
 
+  componentDidMount() {
+    this.props.getClaims()
+  }
+
   render() {
-    console.log('DAPPSANDSER =========')
-    const selfClaims = this.props.getClaims().selfSigned
-    const thirdPartyClaims = this.props.getClaims().thirdPartySigned
+    const selfClaims = this.props.tabs.selfSignedClaims
+    const thirdPartyClaims = this.props.tabs.thirdPartySignedClaims
 
     return (
       <Presentation

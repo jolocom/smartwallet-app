@@ -29,14 +29,15 @@ export default class DappInteraction extends React.Component {
   }
 
   render() {
-    const mockDate = '1. Feb 18'
+    const claim = this.props.claim
+
     return (
         <ListItem
           key={'1'}
           leftIcon={<ActionDone color={'grey'} style={STYLES.icon} />}
-          rightIcon={<div style={STYLES.date}>{mockDate}</div>}
-          primaryText={'Jolocom'}
-          secondaryText={'phone, email'}
+          rightIcon={<div style={STYLES.date}>{new Date(claim.issueDate).toLocaleDateString("en-US")}</div>}
+          primaryText={claim.value}
+          secondaryText={claim.field}
           disabled />
     )
   }
