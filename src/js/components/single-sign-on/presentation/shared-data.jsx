@@ -73,7 +73,7 @@ export default class SharedDatePresentation extends React.Component {
     sharedData: PropTypes.array.isRequired,
     serviceName: PropTypes.string.isRequired,
     deleteService: PropTypes.string.isRequired,
-    goToAccessRightScreen: PropTypes.func.isRequired,
+    goToAccessRightScreen: PropTypes.func.isRequired
   }
 
   getIcon(field) {
@@ -98,7 +98,7 @@ export default class SharedDatePresentation extends React.Component {
           verified={field.verified}
           textValue={field.value}
           textLabel={field.attrType}
-          icon={icon}
+          icon={this.getIcon(field)}
           secondaryTextValue={''} />
       )
     })
@@ -136,11 +136,14 @@ export default class SharedDatePresentation extends React.Component {
                 }} />
             </Block>
             <Block>
-             {renderFields}
+              {renderFields}
             </Block>
             <Block>
-              <div style={{...STYLES.item, marginBottom: '15px',
-                display: 'inline-block'}}>
+              <div style={{
+                ...STYLES.item,
+                marginBottom: '15px',
+                display: 'inline-block'
+              }}>
                 <div style={theme.textStyles.sectionheader}>
                   Status
                 </div>

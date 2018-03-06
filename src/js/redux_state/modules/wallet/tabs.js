@@ -36,16 +36,20 @@ export const actions = makeActions('wallet/tabs', {
         let thirdPartySigned = []
 
         Promise.all(
-          fields.map( async (field) => {
+          fields.map(async (field) => {
             const did = await services.storage.getItem('did')
             const storedClaims = await services.storage.getItem(field)
 
-            if(storedClaims) {
-              storedClaims.claims.map( async (claim) => {
+            if (storedClaims) {
+              storedClaims.claims.map(async (claim) => {
                 const claimData = await services.storage.getItem(claim.id)
-                const claimObj = { field: field, value: storedClaims.value, issueDate: claimData.credential.issued }
+                const claimObj = {
+                  field: field,
+                  value: storedClaims.value,
+                  issueDate: claimData.credential.issued
+                }
 
-                if (claimData.credential.issuer == did) {
+                if (claimData.credential.issuer === did) {
                   selfSigned.push(claimObj)
                 } else {
                   thirdPartySigned.push(claimObj)
@@ -54,7 +58,10 @@ export const actions = makeActions('wallet/tabs', {
             }
           })
         ).then(() => {
-          dispatch(actions.getClaims.buildAction({ selfSigned: selfSigned, thirdPartySigned: thirdPartySigned }))
+          dispatch(actions.getClaims.buildAction({
+            selfSigned: selfSigned,
+            thirdPartySigned: thirdPartySigned
+          }))
         })
       }
     }
