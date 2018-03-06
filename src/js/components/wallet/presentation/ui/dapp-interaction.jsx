@@ -37,8 +37,8 @@ export default class DappInteraction extends React.Component {
             {new Date(claim.issueDate).toLocaleDateString('en-US')}
           </div>
         }
-        primaryText={claim.value}
-        secondaryText={claim.field}
+        primaryText={claim.field.replace( /\b./g, (a) => { return a.toUpperCase(); } ) + ': ' + claim.value}
+        secondaryText={'Expires on 12/31/2018'}
         disabled />
     )
   }
