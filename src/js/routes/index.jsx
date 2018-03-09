@@ -11,8 +11,6 @@ import RegistrationWritePhraseScreen from
 
 import WalletTabsScreen from 'components/wallet/screens/tabs'
 import WalletHomeScreen from 'components/wallet/screens/home'
-// import WalletMoneyScreen from 'components/wallet/screens/money'
-// import WalletIdentityScreen from 'components/wallet/screens/identity'
 
 import IdentityScreenNew from 'components/wallet/screens/identity-new'
 import DappsAndServices from 'components/wallet/screens/dappsAndServices'
@@ -21,8 +19,6 @@ import WalletContactScreen from 'components/wallet/screens/contact'
 import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
 import AccessRequestScreen
   from 'components/single-sign-on/screens/access-request'
-import AccessConfirmationScreen from
-  'components/single-sign-on/screens/access-confirmation'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
 
@@ -30,17 +26,12 @@ import EtherSendScreen from 'components/wallet/screens/ether-send'
 import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
 import EtherTabScreen from 'components/wallet/screens/ether-tabs'
 
-import SingleSignOnAccessRightScreen from
-  'components/single-sign-on/screens/access-right'
-import SingleSignOnSharedDatatScreen from
-  'components/single-sign-on/screens/shared-data'
 import AccountDetailsEthereumScreen from
   'components/wallet/screens/account-details-ethereum'
 
 import EthApprovalRequestScreen from
   'components/ethereum-connect/screens/approval-request'
 
-// import {IconServices} from '../components/common'
 
 import PasswordEntry from 'components/registration/screens/password-entry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
@@ -59,8 +50,7 @@ export const routes = {
   home: '/wallet',
   forgotPassword: '/forgot-password',
   changePassword: '/change-password',
-  verifyEmail: '/verify-email',
-  dapps: '/wallet/sso/access-rights'
+  verifyEmail: '/verify-email'
 }
 
 export const publicRoutes = Object.values(routes)
@@ -71,11 +61,6 @@ export const navItems = [
     route: routes.home,
     icon: 'account_balance_wallet'
   }
-  // , {
-  //   title: 'DApps & Services',
-  //   route: routes.dapps,
-  //   icon: IconServices
-  // }
 ]
 
 function getRoutes() {
@@ -122,17 +107,11 @@ function getRoutes() {
 
     <Route path="wallet/single-sign-on/access-request"
       component={AccessRequestScreen} />
-    <Route path="wallet/single-sign-on/access-confirmation"
-      component={AccessConfirmationScreen} />
 
     <Route path="wallet/ethereum/execute-transaction"
       component={EthApprovalRequestScreen} />
 
     <Route path="verify-email" component={EmailConfirmationScreen} />
-    <Route path="wallet/sso/access-rights"
-      component={SingleSignOnAccessRightScreen} />
-    <Route path="wallet/sso/shared-data"
-      component={SingleSignOnSharedDatatScreen} />
 
     <Route path="wallet/keyencrypt" component={PasswordEntry} />
     <Route path="wallet/keydecrypt" component={PasswordPopUp} />

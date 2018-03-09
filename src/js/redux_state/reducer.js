@@ -29,7 +29,6 @@ export default combineReducers({
     document: require('./modules/verifier/document').default
   }),
   singleSignOn: combineReducers({
-    accessRight: require('./modules/single-sign-on/access-right').default,
     accessRequest: require('./modules/single-sign-on/access-request').default
   }),
   keystore: combineReducers({
