@@ -4,12 +4,12 @@ import Presentation from '../presentation/dappsAndServices'
 import { connect } from 'redux_state/utils'
 
 @connect({
-  props: ['wallet.tabs'],
-  actions: ['wallet/tabs:getClaims']
+  props: ['wallet.interactions'],
+  actions: ['wallet/interactions:getClaims']
 })
-export default class DappsAndServices extends React.Component {
+export default class DappsAndServices extends React.PureComponent {
   static propTypes = {
-    tabs: PropTypes.object,
+    interactions: PropTypes.object,
     getClaims: PropTypes.func
   }
 
@@ -18,13 +18,12 @@ export default class DappsAndServices extends React.Component {
   }
 
   render() {
-    const selfClaims = this.props.tabs.selfSignedClaims
-    const thirdPartyClaims = this.props.tabs.thirdPartySignedClaims
+    const interactions = this.props.interactions
 
     return (
       <Presentation
-        selfClaims={selfClaims}
-        thirdPartyClaims={thirdPartyClaims}
+        selfClaims={interactions.selfSignedClaims}
+        thirdPartyClaims={interactions.thirdPartySignedClaims}
       />
     )
   }

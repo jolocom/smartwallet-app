@@ -36,18 +36,20 @@ export default class DappAndServices extends React.Component {
 
     if (this.props.selfClaims) {
       selfSignedContent = this.props.selfClaims.map(
-        (claim) => {
+        (claim, i) => {
           return (<DappInteraction
             claim={claim}
+            key={'self_' + claim.value}
             />)
         }
       )
     }
 
     if (this.props.thirdPartyClaims) {
-      thirdPartySignedContent = this.props.thirdPartyClaims.map((claim) => {
+      thirdPartySignedContent = this.props.thirdPartyClaims.map((claim, i) => {
         return (<DappInteraction
           claim={claim}
+          key={'thirdParty_' + claim.value}
           />)
       }
       )
@@ -59,7 +61,7 @@ export default class DappAndServices extends React.Component {
           <Content>
             <Block>
               <div style={STYLES.label}>Claims you added:</div>
-              <List>
+              <List key={'selfSigned'}>
                 {selfSignedContent}
               </List>
             </Block>
@@ -67,8 +69,8 @@ export default class DappAndServices extends React.Component {
               <div style={STYLES.label}>
                 Claims verified by third party services:
               </div>
-              <List>
-                { thirdPartySignedContent }
+              <List key={'thirdPartySigned'}>
+                {thirdPartySignedContent}
               </List>
             </Block>
           </Content>

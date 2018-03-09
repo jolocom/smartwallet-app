@@ -21,7 +21,7 @@ import Presentation from '../presentation/identity-new'
     'confirmation-dialog:openConfirmDialog'
   ]
 })
-export default class IdentityScreenNew extends React.Component {
+export default class IdentityScreenNew extends React.PureComponent {
   static propTypes = {
     identityNew: PropTypes.object,
     retrieveAttributes: PropTypes.func.isRequired,

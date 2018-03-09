@@ -19,9 +19,10 @@ const STYLES = {
   }
 }
 
-export default class DappInteraction extends React.Component {
+export default class DappInteraction extends React.PureComponent {
   static propTypes = {
-    claim: PropTypes.object
+    claim: PropTypes.object,
+    key: PropTypes.string
   }
 
   render() {
@@ -29,7 +30,7 @@ export default class DappInteraction extends React.Component {
 
     return (
       <ListItem
-        key={'1'}
+        key={this.props.key}
         style={STYLES.textStyle}
         leftIcon={<ActionDone color={'grey'} style={STYLES.icon} />}
         rightIcon={
