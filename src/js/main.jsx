@@ -7,9 +7,11 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import { AppContainer } from 'react-hot-loader'
 import createStore from 'redux_state/create'
+import initReactFastclick from 'react-fastclick'
 
 const startApp = () => {
   injectTapEventPlugin()
+  initReactFastclick()
 
   locale('en', {
     relativeTime: {
