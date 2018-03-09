@@ -15,7 +15,6 @@ import WalletHomeScreen from 'components/wallet/screens/home'
 import IdentityScreenNew from 'components/wallet/screens/identity-new'
 import DappsAndServices from 'components/wallet/screens/dappsAndServices'
 
-import WalletContactScreen from 'components/wallet/screens/contact'
 import AccessRequestScreen
   from 'components/single-sign-on/screens/access-request'
 
@@ -50,9 +49,6 @@ function getRoutes() {
       component={RegistrationWritePhraseScreen} />
     <Route path="registration/entry-password"
       component={PasswordEntry} />
-
-    <Route path="wallet/identity/contact"
-      component={WalletContactScreen} />
 
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />

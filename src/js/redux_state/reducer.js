@@ -13,11 +13,8 @@ export default combineReducers({
   walletLogin: require('./modules/wallet-login').default,
   wallet: combineReducers({
     tabs: require('./modules/wallet/tabs').default,
-    contact: require('./modules/wallet/contact').default,
     identity: require('./modules/wallet/identity').default,
     identityNew: require('./modules/wallet/identity-new').default,
-    country: require('./modules/wallet/country-select').default,
-    money: require('./modules/wallet/money').default
   }),
   singleSignOn: combineReducers({
     accessRequest: require('./modules/single-sign-on/access-request').default
