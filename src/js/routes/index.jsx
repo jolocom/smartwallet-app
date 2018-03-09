@@ -18,8 +18,6 @@ import DappsAndServices from 'components/wallet/screens/dappsAndServices'
 import WalletContactScreen from 'components/wallet/screens/contact'
 import AccessRequestScreen
   from 'components/single-sign-on/screens/access-request'
-import EmailConfirmationScreen from
-'components/email-confirmation/screens/email-confirmation'
 
 import PasswordEntry from 'components/registration/screens/password-entry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
@@ -66,8 +64,6 @@ function getRoutes() {
 
     <Route path="wallet/single-sign-on/access-request"
       component={AccessRequestScreen} />
-
-    <Route path="verify-email" component={EmailConfirmationScreen} />
 
     <Route path="wallet/keyencrypt" component={PasswordEntry} />
     <Route path="wallet/keydecrypt" component={PasswordPopUp} />
