@@ -20,14 +20,6 @@ export default combineReducers({
     country: require('./modules/wallet/country-select').default,
     money: require('./modules/wallet/money').default
   }),
-  verifier: combineReducers({
-    result: require('./modules/verifier/result').default,
-    face: require('./modules/verifier/face').default,
-    data: require('./modules/verifier/data').default,
-    transition: require('./modules/verifier/transition').default,
-    country: require('./modules/verifier/country').default,
-    document: require('./modules/verifier/document').default
-  }),
   singleSignOn: combineReducers({
     accessRequest: require('./modules/single-sign-on/access-request').default
   }),

@@ -36,15 +36,6 @@ import EthApprovalRequestScreen from
 import PasswordEntry from 'components/registration/screens/password-entry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
 
-import {
-  VerificationDataScreen,
-  VerificationFaceScreen,
-  VerificationTransitionScreen,
-  VerificationCountryScreen,
-  VerificationDocumentScreen,
-  VerificationResultScreen
-} from 'components/verifier'
-
 export const routes = {
   signup: '/registration',
   home: '/wallet',
@@ -66,18 +57,6 @@ export const navItems = [
 function getRoutes() {
   return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
-    <Route path="verifier"
-      component={VerificationTransitionScreen} />
-    <Route path="verifier/face"
-      component={VerificationFaceScreen} />
-    <Route path="verifier/data"
-      component={VerificationDataScreen} />
-    <Route path="verifier/result"
-      component={VerificationResultScreen} />
-    <Route path="verifier/document"
-      component={VerificationDocumentScreen} />
-    <Route path="verifier/country"
-      component={VerificationCountryScreen} />
 
     <Route path="registration"
       component={RegistrationEntropyScreen} />
