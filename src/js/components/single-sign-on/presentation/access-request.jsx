@@ -1,24 +1,21 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
-
-import Loading from '../../common/loading'
-
+// import Loading from '../../common/loading'
 import Divider from 'material-ui/Divider'
-import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import { List, ListItem } from 'material-ui/List'
 import AppBar from 'material-ui/AppBar'
-
 import Avatar from 'material-ui/Avatar'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import Input from 'material-ui/svg-icons/action/input'
+import SocialPerson from 'material-ui/svg-icons/social/person'
 import Location from 'material-ui/svg-icons/maps/place'
-import {IconIdCard, IconPassport} from '../../common'
-import {MissingInfoItem, NotVerifiedItem, VerifiedItem} from './ui'
-import {Content, Block} from '../../structure'
-import {TabContainer, HalfScreenContainer}
-  from '../../wallet/presentation/ui'
+import { IconIdCard, IconPassport } from '../../common'
+import { RequestedItem, DisplayClaims, SelectedItem } from './ui'
+import { Content, Block, Header } from '../../structure'
+import { TabContainer, HalfScreenContainer } from '../../wallet/presentation/ui'
 import {theme} from 'styles'
 
 const STYLES = {
@@ -26,33 +23,15 @@ const STYLES = {
     margin: '16px'
   },
   info: theme.textStyles.sectionheader,
-  infoContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginLeft: '10px',
-    marginRight: '8px'
-  },
   avatar: {
     height: '60px',
     width: '60px',
     left: 0,
-    top: '20%',
+    top: '3%',
     backgroundColor: '#f3f3f3',
     backgroundPosition: 'center'
   },
-  accessHeadline: {
-    fontSize: theme.textStyles.subheadline.fontSize,
-    color: theme.textStyles.subheadline.color,
-    fontWeight: theme.textStyles.subheadline.fontWeight,
-    lineHeight: '24px'
-  },
-  accessMsgHeader: theme.textStyles.sectionheader,
-  accessMsgBody: theme.textStyles.subheadline,
-  accessContainer: {
-    padding: '8px 16px 0 54px'
-  },
+  accessHeadline: theme.textStyles.sectionheader,
   buttons: {
     width: '70%'
   },
@@ -64,26 +43,33 @@ const STYLES = {
   },
   list: {
     marginBottom: '20px'
+  },
+  divider: {
+    marginTop: '8px'
+  },
+  buttonContainer: {
+    textAlign: 'center'
+  },
+  menu: {
+    top: '15px',
+    marginTop: '10px',
+    marginLeft: '5px',
+    marginRight: '5px'
   }
 }
 
 @Radium
 export default class AccessRequest extends React.Component {
   static propTypes = {
-    entity: PropTypes.object,
-    accessInfo: PropTypes.func.isRequired,
-    grantAccessToRequester: PropTypes.func.isRequired,
-    identity: PropTypes.object,
+    accessRequest: PropTypes.object,
+    configMsg: PropTypes.func.isRequired,
+    showDialog: PropTypes.func.isRequired,
+    setSelectedClaim: PropTypes.func.isRequired,
     requestedFields: PropTypes.array,
-    location: PropTypes.object,
-    setInfoComplete: PropTypes.func,
-    goToMissingInfo: PropTypes.func,
-    requestVerificationCode: PropTypes.func,
-    enterVerificationCode: PropTypes.func,
-    resendVerificationCode: PropTypes.func,
-    changePinValue: PropTypes.func,
-    setFocusedPin: PropTypes.func,
-    denyAccess: PropTypes.func
+    setInfoComplete: PropTypes.func.isRequired,
+    denyAccess: PropTypes.func.isRequired,
+    confirmAccess: PropTypes.func.isRequired,
+    tryAgain: PropTypes.func.isRequired
   }
 
   getIcon(field) {
@@ -97,172 +83,125 @@ export default class AccessRequest extends React.Component {
       return Location
     } else if (field === 'idcard') {
       return IconIdCard
+    } else if (field === 'name') {
+      return SocialPerson
     }
   }
 
-  checkCompleteness() {
-    let counter = 0
+  selectClaims = (field) => {
+    const title = 'Your claims for ' + field
+    const message = (<DisplayClaims
+      key={field}
+      field={field}
+      setSelectedClaim={this.props.setSelectedClaim}
+      accessRequest={this.props.accessRequest}
+      />)
+
+    this.props.configMsg({
+      title,
+      message,
+      primaryActionText: 'CANCEL',
+      scrollContent: true
+    })
+    this.props.showDialog()
+  }
+
+  checkInformationComplete() {
+    let complete = 0
     this.props.requestedFields.map((field) => {
-      let attributes = this.checkFields(field)
-      let verified = attributes.verified
-      if (verified === true) {
-        counter++
+      if (this.props.accessRequest.entity.response[field] !== undefined) {
+        complete++
       }
     })
-    if (counter === this.props.requestedFields.length && counter > 0) {
+    if (complete === this.props.requestedFields.length) {
       this.props.setInfoComplete()
     }
   }
 
-  checkFields(field) {
-    const {identity} = this.props
-    let verified, textValue, smsCode, codeIsSent, pin
-    let attribute = identity[field + 's'] || identity.contact[field + 's']
-
-    if (attribute && field === 'phone' && attribute[0] !== undefined) {
-      verified = attribute[0].verified
-      textValue = attribute[0].number
-      smsCode = attribute[0].smsCode
-      codeIsSent = attribute[0].codeIsSent
-      pin = attribute[0].pin
-      return ({verified: verified, textValue: textValue, smsCode: smsCode, codeIsSent: codeIsSent, pin: pin}) // eslint-disable-line max-len
-    } else if (attribute && field === 'email' && attribute[0] !== undefined) {
-      verified = attribute[0].verified
-      textValue = attribute[0].address
-      return ({verified: verified, textValue: textValue})
-    } else if (attribute && attribute[0] !== undefined) {
-      verified = attribute[0].verified
-      textValue = attribute[0].number
-      return ({verified: verified, textValue: textValue})
-    } else {
-      return ({verified: false, textValue: false})
-    }
-  }
-
   render() {
-    this.checkCompleteness()
-    const {name, image, infoComplete} = this.props.entity
-    let popupMessage = {
-      title: 'Why do I have to grant access?',
-      body: `You are about to connect to the service of ${name}. In order ` +
-        'to use this service they need some data of you. ' +
-        'You can always disconnect from ' +
-        'the service through the jolocom app and this way delete your account.'
+    if (this.props.accessRequest.entity.infoComplete === false) {
+      this.checkInformationComplete()
     }
-
-    let popupMessageDeny = {
-      title: 'Access denied...',
-      body: `You denied ${name} the access to your data, therefore you cannot
-      use the services of this website or need to sign up a different way.`
-    }
-    let headerMessage = `${name} wants to have access to your data.`
-
-    const fields = this.props.requestedFields || ['No fields requested. Please try again'] // eslint-disable-line max-len
+    const name = 'Jolocom SSO' // mock
+    const { infoComplete } = this.props.accessRequest.entity
+    const fields = this.props.requestedFields
     const renderFields = fields.map((field) => {
-      let attributes = this.checkFields(field)
-      let verified = attributes.verified
-      let textValue = attributes.textValue
-
-      if (!textValue) {
-        return (
-          <MissingInfoItem
+      return (
+        <div key={field}>
+          <RequestedItem
             key={field}
+            selectClaims={this.selectClaims}
             field={field}
-            goToMissingInfo={this.props.goToMissingInfo}
-            textValue={'Data is missing'} />
-        )
-      }
-      if (!verified) {
-        return (
-          <NotVerifiedItem
-            key={field}
-            requestVerificationCode={this.props.requestVerificationCode}
-            enterVerificationCode={this.props.enterVerificationCode}
-            resendVerificationCode={this.props.resendVerificationCode}
-            changePinValue={this.props.changePinValue}
-            setFocusedPin={this.props.setFocusedPin}
-            field={field}
-            attributes={attributes}
-            textLabel={field}
-            textValue={textValue}
             icon={this.getIcon(field)} />
-        )
-      } else {
-        return (
-          <VerifiedItem
-            key={field}
-            verified
-            textValue={textValue}
-            textLabel={field}
-            icon={this.getIcon(field)}
-            secondaryTextValue={''} />
-        )
-      }
+          {this.props.accessRequest.entity.response[field]
+            ? <SelectedItem
+              field={field}
+              accessRequest={this.props.accessRequest} />
+            : null
+          }
+        </div>
+      )
     })
 
     let content
-    if (this.props.entity.loading || !this.props.identity.loaded) {
+    if (this.props.accessRequest.entity.errorMsg) {
       content = (
         <Content>
-          <Loading style={STYLES.loading} />
+          <Header style={{textAlign: 'center'}}
+            title={this.props.accessRequest.entity.errorMsg} />
+          <Block style={STYLES.buttonContainer}>
+            <RaisedButton
+              secondary
+              label="Try again"
+              style={STYLES.buttons}
+              onClick={() => { this.props.tryAgain() }} />
+          </Block>
         </Content>
       )
     } else {
-      content = (
-        <Content style={STYLES.container}>
-          <Block style={STYLES.header}>
-            <ListItem
-              leftAvatar={<Avatar src={image}
-                style={STYLES.avatar} />}
-              primaryText={headerMessage}
-              disabled
-              innerDivStyle={STYLES.accessHeadline} />
-          </Block>
-          <Block style={STYLES.infoContainer}>
-            <div style={STYLES.info}>Requested Information</div>
-            <FlatButton
-              onClick={() =>
-                this.props.accessInfo(popupMessage.title, popupMessage.body)}
-              style={STYLES.flatButton}>
-              WHY?
-            </FlatButton>
-          </Block>
-          <Divider style={STYLES.container} />
-          <Block style={STYLES.list}>
-            <List>
+      content = (<div>
+        <Block style={STYLES.list}>
+          <List>
             {renderFields}
-            </List>
-          </Block>
-          <Block style={STYLES.accessContainer}>
-            <RaisedButton
-              label="GIVE ACCESS"
-              secondary
-              disabled={!infoComplete}
-              style={STYLES.buttons}
-              onClick={() => this.props.grantAccessToRequester({
-                user: this.props.identity.username.value,
-                query: this.props.location
-              })} />
-          </Block>
-          <Block style={STYLES.accessContainer}>
-            <RaisedButton
-              label="DENY ACCESS"
-              style={STYLES.buttons}
-              onClick={() => {
-                this.props.denyAccess(popupMessageDeny.title,
-                  popupMessageDeny.body)
-              }} />
-          </Block>
-        </Content>
+          </List>
+        </Block>
+
+        <Block style={STYLES.buttonContainer}>
+          <RaisedButton
+            label="Confirm"
+            secondary
+            disabled={!infoComplete}
+            style={STYLES.buttons}
+            onClick={() => { this.props.confirmAccess() }} />
+        </Block>
+
+        <Block style={STYLES.buttonContainer}>
+          <RaisedButton
+            label="Deny"
+            style={STYLES.buttons}
+            onClick={() => { this.props.denyAccess() }} />
+        </Block></div>
       )
     }
 
     return (
       <TabContainer>
         <AppBar
-          title="Access Request" />
+          iconElementLeft={<Input style={STYLES.menu} />}
+          title="Login Request" />
         <HalfScreenContainer>
-          {content}
+          <Content style={STYLES.container}>
+            <Block style={STYLES.header}>
+              <ListItem
+                leftAvatar={<Avatar src="img/logo.svg"
+                  style={STYLES.avatar} />}
+                primaryText={name}
+                disabled
+                innerDivStyle={STYLES.accessHeadline} />
+            </Block>
+            <Divider style={STYLES.divider} />
+            {content}
+          </Content>
         </HalfScreenContainer>
       </TabContainer>
     )

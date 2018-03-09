@@ -24,9 +24,27 @@ describe('Wallet identity-new redux module', () => {
           bool: false
         },
         userData: {
-          phone: '',
-          name: '',
-          email: 'nat@mail.de'
+          phone: {
+            value: '',
+            verifiable: true,
+            verified: false,
+            smsCode: '',
+            codeIsSent: false,
+            claims: []
+          },
+          name: {
+            value: '',
+            verifiable: false,
+            verified: false
+          },
+          email: {
+            value: 'nat@mail.de',
+            verifiable: true,
+            verified: false,
+            smsCode: '',
+            codeIsSent: false,
+            claims: []
+          }
         },
         scanningQr: {
           scanning: false,
@@ -40,7 +58,8 @@ describe('Wallet identity-new redux module', () => {
       let state = reducer(undefined, '@@INIT')
       const action = {
         type: actions.enterField.id,
-        field: 'name',
+        attrType: 'name',
+        field: 'value',
         value: 'Natascha'
       }
 
@@ -51,9 +70,27 @@ describe('Wallet identity-new redux module', () => {
           bool: false
         },
         userData: {
-          phone: '',
-          name: 'Natascha',
-          email: ''
+          phone: {
+            value: '',
+            verifiable: true,
+            verified: false,
+            smsCode: '',
+            codeIsSent: false,
+            claims: []
+          },
+          name: {
+            value: 'Natascha',
+            verifiable: false,
+            verified: false
+          },
+          email: {
+            value: '',
+            verifiable: true,
+            verified: false,
+            smsCode: '',
+            codeIsSent: false,
+            claims: []
+          }
         },
         scanningQr: {
           scanning: false,
@@ -79,9 +116,27 @@ describe('Wallet identity-new redux module', () => {
           bool: false
         },
         userData: {
-          phone: '',
-          name: '',
-          email: ''
+          phone: {
+            value: '',
+            verifiable: true,
+            verified: false,
+            smsCode: '',
+            codeIsSent: false,
+            claims: []
+          },
+          name: {
+            value: '',
+            verifiable: false,
+            verified: false
+          },
+          email: {
+            value: '',
+            verifiable: true,
+            verified: false,
+            smsCode: '',
+            codeIsSent: false,
+            claims: []
+          }
         },
         scanningQr: {
           scanning: false,

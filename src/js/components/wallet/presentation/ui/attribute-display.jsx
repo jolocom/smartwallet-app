@@ -8,6 +8,7 @@ import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import SocialPerson from 'material-ui/svg-icons/social/person'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
+import VerificationButtons from '../../../wallet/presentation/ui/verification-buttons' // eslint-disable-line max-len
 
 import ActionDone from 'material-ui/svg-icons/action/done'
 import ContentCreate from 'material-ui/svg-icons/content/create'
@@ -24,7 +25,13 @@ const STYLES = {
     fontSize: '1em'
   },
   icon: {
-    top: '13px'
+    top: '13px',
+    fill: '#6d6d6d',
+    color: '#6d6d6d'
+  },
+  verifiedIcon: {
+    top: '13px',
+    fill: '#B3C82D'
   }
 }
 
@@ -34,7 +41,9 @@ export default class AttributeDisplay extends React.Component {
     id: PropTypes.string,
     toggleEditField: PropTypes.func.isRequired,
     enterField: PropTypes.func.isRequired,
-    saveAttribute: PropTypes.func.isRequired
+    saveAttribute: PropTypes.func.isRequired,
+    requestVerificationCode: PropTypes.func,
+    enterVerificationCode: PropTypes.func
   }
 
   componentDidUpdate() {
@@ -44,39 +53,65 @@ export default class AttributeDisplay extends React.Component {
     }
   }
 
-  getIcon(id) {
+  getIcon(id, verified) {
+    let iconStyle
+    if (verified) {
+      iconStyle = STYLES.verifiedIcon
+    } else {
+      iconStyle = STYLES.icon
+    }
+
     if (id === 'phone') {
-      return <CommunicationCall color={'grey'} style={STYLES.icon} />
+      return <CommunicationCall style={iconStyle} />
     } else if (id === 'email') {
-      return <CommunicationEmail color={'grey'} style={STYLES.icon} />
+      return <CommunicationEmail style={iconStyle} />
     } else if (id === 'name') {
-      return <SocialPerson color={'grey'} style={STYLES.icon} />
+      return <SocialPerson style={iconStyle} />
     }
   }
 
   render() {
     const {identity} = this.props
     const toggle = identity.toggleEdit.bool && identity.toggleEdit.field === this.props.id // eslint-disable-line max-len
-    let button
+    const verifiable = identity.userData[this.props.id].verifiable
+    const verified = verifiable && identity.userData[this.props.id].verified
+    const codeIsSent = identity.userData[this.props.id].codeIsSent
+    const attrType = this.props.id
+    let editButton
+    let verificationButtons
+
+    if (!verified && verifiable) {
+      verificationButtons = (
+        <VerificationButtons
+          attrType={attrType}
+          requestVerificationCode={this.props.requestVerificationCode}
+          enterVerificationCode={this.props.enterVerificationCode}
+          value={this.props.identity.userData[attrType].smsCode}
+          codeIsSent={codeIsSent}
+          enterField={this.props.enterField}
+          identity={this.props.identity}
+          verified={verified} />
+      )
+    }
 
     if (toggle) {
-      button = (<FloatingActionButton
+      editButton = (<FloatingActionButton
         mini
         secondary
         onClick={() => this.props.saveAttribute({
-          field: this.props.id
+          field: attrType
         })}
         style={STYLES.addBtn} >
         <ActionDone />
       </FloatingActionButton>)
     } else {
-      button = (
+      editButton = (
         <FloatingActionButton
           mini
           iconStyle={{fill: theme.palette.accent1Color}}
           backgroundColor={'#fff'}
           onClick={() => this.props.toggleEditField({
-            field: this.props.id,
+            field: attrType,
             value: identity.toggleEdit.bool
           })}
           style={STYLES.addBtn}>
@@ -88,22 +123,29 @@ export default class AttributeDisplay extends React.Component {
     return (
       <ListItem
         key={this.props.id}
-        leftIcon={this.getIcon(this.props.id)}
+        leftIcon={this.getIcon(this.props.id, verified)}
         disabled>
         <div>
           <TextField
-            ref={this.props.id}
+            ref={attrType}
+            id={attrType}
             disabled={!toggle}
             underlineShow={toggle}
-            value={identity.userData[this.props.id]}
+            value={this.props.identity.userData[attrType].value}
             inputStyle={STYLES.textStyle}
             onChange={(e) =>
               this.props.enterField({
+                attrType: attrType,
                 value: e.target.value,
-                field: this.props.id
+                field: 'value'
               })}
-            hintText={'Please enter your ' + this.props.id} />
-          {button}
+            hintText={'Please enter your ' + attrType} />
+          {editButton}
+        </div>
+        <div>
+          <block>
+            {verificationButtons}
+          </block>
         </div>
       </ListItem>
     )

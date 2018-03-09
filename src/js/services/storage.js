@@ -1,5 +1,3 @@
-// TODO Why stringify?
-
 export default class StorageService {
   constructor() {
     this.inBrowser = !_nativeStorageAvailable()

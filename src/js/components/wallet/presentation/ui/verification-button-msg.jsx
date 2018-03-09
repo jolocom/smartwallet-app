@@ -1,6 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
+import TextField from 'material-ui/TextField'
 
 import { InputMsg } from './'
 
@@ -8,65 +9,55 @@ const VerificationButtonMsg = ({
     msgType,
     attrType,
     smsCode = '',
-    phoneNumber,
-    index,
-    pinFocused = false,
-    setFocusedPin,
-    changePinValue
+    enterField,
+    identityNew
   }) => {
   switch (msgType) {
     case 'codeInput':
-      return <InputMsg
-        type="smsCode"
-        value={smsCode}
-        disabled={false}
-        pinLength={6}
-        phoneNumber={phoneNumber}
-        setFocusedPin={setFocusedPin}
-        changePinValue={changePinValue}
-        focused={pinFocused} />
-
-    case 'pinInput':
-      return <InputMsg
-        type="pin"
-        value={smsCode}
-        disabled={false}
-        pinLength={4}
-        phoneNumber={phoneNumber}
-        setFocusedPin={setFocusedPin}
-        changePinValue={changePinValue}
-        focused={pinFocused} />
+      return (
+        <div>Please enter the authentication code:
+          <TextField
+            id={attrType}
+            onChange={(e) =>
+            enterField({
+              attrType: attrType,
+              value: e.target.value,
+              field: 'smsCode'
+            })}
+         />
+        </div>)
 
     case 'codeResent':
       return <InputMsg />
 
     case 'codeRequest':
       if (attrType === 'phone') {
-        return (<div>
-            To confirm your Phone Number we will send you a verification code,
-            which you'll receive via text message.
-        </div>)
+        return (<div><block>
+          In order to verify your Phone Number we will send you
+          a text message with the verification code.
+        </block><block>
+          As soon as you get it, just click "Enter the code" button.
+        </block></div>)
       } else {
-        return (<div>
-            To confirm your E-Mail we will send you an confirmation
-            E-Mail with a link.
-        </div>)
+        return (<div><block>
+          In order to verify your E-Mail we will send you an E-Mail
+          with a verification code.
+        </block><block>
+          As soon as you get it, just click "Enter the code" button.
+        </block></div>)
       }
 
     default:
-      return <div></div>
+      return <div />
   }
 }
 
 VerificationButtonMsg.propTypes = {
   msgType: PropTypes.string,
-  phoneNumber: PropTypes.string,
   smsCode: PropTypes.string,
-  index: PropTypes.number,
-  pinFocused: PropTypes.bool,
-  setFocusedPin: PropTypes.func,
-  changePinValue: PropTypes.func,
-  attrType: PropTypes.string
+  attrType: PropTypes.string,
+  enterField: PropTypes.func,
+  identityNew: PropTypes.object
 }
 
 export default Radium(VerificationButtonMsg)

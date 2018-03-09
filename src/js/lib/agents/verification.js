@@ -1,64 +1,51 @@
-import * as request from 'superagent-es6-promise'
+import HTTPAgent from './http'
 
 export default class VerificationAgent {
   constructor() {
-    this.request = request
+    this.request = new HTTPAgent()
   }
 
-  async startVerifyingEmail({wallet, email, id, pin}) {
-    return await this._startVerifying({
-      wallet, pin, dataType: 'email', id, data: email
-    })
+  async startVerifyingEmail(email) {
+    return await this._startVerifying(email, 'email')
   }
 
-  async startVerifyingPhone({wallet, phone, type, id, pin}) {
-    return await this._startVerifying({
-      wallet, pin, dataType: 'phone', id, data: `${type}.${phone}`
-    })
+  async startVerifyingPhone(claim) {
+    return await this._startVerifying(claim, 'phone')
   }
 
-  async _startVerifying({wallet, data, id, dataType, pin}) {
-    await Promise.all([
-      this.request.post(wallet.identityURL + '/access/grant').send({
-        identity: 'https://identity.jolocom.com/verification',
-        pattern: `/identity/${dataType}/${id}`,
-        read: true
-      }).withCredentials(),
-      this.request.post(wallet.identityURL + '/access/grant').send({
-        identity: 'https://identity.jolocom.com/verification',
-        pattern: `/identity/${dataType}/${id}/verifications`,
-        read: true,
-        write: true
-      }).withCredentials()
-    ])
-
-    await this.request.post(
-      `${VERIFICATION_PROV}/${dataType}/start-verification`
-    ).send({
-      identity: wallet.identityURL,
-      id, [dataType]: data
-    })
+  async _startVerifying(claim, attrType) {
+    // eslint-disable-next-line no-undef
+    const endpoint = `${VERIFICATION_PROV}/${attrType}/start-verification`
+    return await this.request.post(
+      endpoint,
+      {claim},
+      {'Content-Type': 'application/json'}
+    )
   }
 
-  async verifyEmail({wallet, email, id, code}) {
-    await this._verify({wallet, dataType: 'email', id, data: email, code})
-  }
-
-  async verifyPhone({wallet, type, phone, id, code}) {
-    await this._verify({
-      wallet, dataType: 'phone',
-      id, data: `${type}.${phone}`, code
-    })
-  }
-
-  async _verify({wallet, dataType, id, data, code}) {
-    await this.request.post(
-      `${VERIFICATION_PROV}/${dataType}/verify`
-    ).send({
-      identity: wallet.identityURL,
-      id,
-      [dataType]: data,
+  async verifyEmail({did, code}) {
+    return await this._verify({
+      did,
+      attrType: 'email',
       code
     })
+  }
+
+  async verifyPhone({did, code}) {
+    return await this._verify({
+      did,
+      attrType: 'phone',
+      code
+    })
+  }
+
+  async _verify({did, attrType, code}) {
+    // eslint-disable-next-line no-undef
+    const url = `${VERIFICATION_PROV}/${attrType}/finish-verification`
+    return await this.request.post(
+      url,
+      {identity: did, attrType, code},
+      {'Content-Type': 'application/json'}
+    )
   }
 }
