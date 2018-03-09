@@ -13,7 +13,6 @@ export default combineReducers({
   walletLogin: require('./modules/wallet-login').default,
   wallet: combineReducers({
     tabs: require('./modules/wallet/tabs').default,
-    etherTabs: require('./modules/wallet/ether-tabs').default,
     contact: require('./modules/wallet/contact').default,
     identity: require('./modules/wallet/identity').default,
     identityNew: require('./modules/wallet/identity-new').default,
@@ -27,5 +26,4 @@ export default combineReducers({
     security: require('./modules/keystore/security').default
   }),
   verification: require('./modules/verification').default,
-  ethereumConnect: require('./modules/ethereum-connect').default
 })

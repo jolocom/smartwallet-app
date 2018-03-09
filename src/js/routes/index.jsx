@@ -16,22 +16,10 @@ import IdentityScreenNew from 'components/wallet/screens/identity-new'
 import DappsAndServices from 'components/wallet/screens/dappsAndServices'
 
 import WalletContactScreen from 'components/wallet/screens/contact'
-import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
 import AccessRequestScreen
   from 'components/single-sign-on/screens/access-request'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
-
-import EtherSendScreen from 'components/wallet/screens/ether-send'
-import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
-import EtherTabScreen from 'components/wallet/screens/ether-tabs'
-
-import AccountDetailsEthereumScreen from
-  'components/wallet/screens/account-details-ethereum'
-
-import EthApprovalRequestScreen from
-  'components/ethereum-connect/screens/approval-request'
-
 
 import PasswordEntry from 'components/registration/screens/password-entry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
@@ -68,14 +56,6 @@ function getRoutes() {
     <Route path="wallet/identity/contact"
       component={WalletContactScreen} />
 
-    <Route path="wallet/ether" component={EtherTabScreen}>
-      <Route path="send" component={EtherSendScreen} />
-      <IndexRoute component={WalletEtherScreen} />
-      <Route path="receive" component={EtherReceiveScreen} />
-    </Route>
-    <Route path="wallet/account-details"
-      component={AccountDetailsEthereumScreen} />
-
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />
       <Route path="identity"
@@ -86,9 +66,6 @@ function getRoutes() {
 
     <Route path="wallet/single-sign-on/access-request"
       component={AccessRequestScreen} />
-
-    <Route path="wallet/ethereum/execute-transaction"
-      component={EthApprovalRequestScreen} />
 
     <Route path="verify-email" component={EmailConfirmationScreen} />
 
