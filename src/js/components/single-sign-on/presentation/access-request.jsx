@@ -12,7 +12,6 @@ import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import Input from 'material-ui/svg-icons/action/input'
 import SocialPerson from 'material-ui/svg-icons/social/person'
 import Location from 'material-ui/svg-icons/maps/place'
-import { IconIdCard, IconPassport } from '../../common'
 import { RequestedItem, DisplayClaims, SelectedItem } from './ui'
 import { Content, Block, Header } from '../../structure'
 import { TabContainer, HalfScreenContainer } from '../../wallet/presentation/ui'
@@ -77,12 +76,6 @@ export default class AccessRequest extends React.Component {
       return CommunicationCall
     } else if (field === 'email') {
       return CommunicationEmail
-    } else if (field === 'passport') {
-      return IconPassport
-    } else if (field === 'address') {
-      return Location
-    } else if (field === 'idcard') {
-      return IconIdCard
     } else if (field === 'name') {
       return SocialPerson
     }

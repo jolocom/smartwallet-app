@@ -3,7 +3,6 @@ import { connect } from 'redux_state/utils'
 import PropTypes from 'prop-types'
 import Radium, {StyleRoot} from 'radium'
 
-import SnackbarContainer from 'components/snack-bar'
 import ConfirmationDialog from 'components/confirmation-dialog'
 import SimpleDialog from 'components/simple-dialog'
 
@@ -113,7 +112,6 @@ class App extends React.Component {
       <StyleRoot style={styles.container}>
         {this.props.children}
 
-        <SnackbarContainer />
         <ConfirmationDialog />
         <SimpleDialog />
       </StyleRoot>
