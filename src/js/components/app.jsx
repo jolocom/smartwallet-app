@@ -10,8 +10,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import JolocomTheme from 'styles/jolocom-theme'
 
-// import LeftNav from 'components/left-nav/nav.jsx'
-
 import Loading from 'components/common/loading.jsx'
 
 import {routes, publicRoutes} from 'routes'
@@ -72,21 +70,6 @@ class App extends React.Component {
   isPublicRoute = (path = this.props.location.pathname) => {
     return path === '/' ||
       publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
-  };
-
-  checkLogin = () => {
-    let {username, loggingIn} = this.props.account
-
-    // session is still loading, so return for now
-    if (username === undefined && loggingIn) {
-      return
-    }
-
-    if (!username && !this.isPublicRoute()) {
-      this.context.router.push(routes.login)
-    } else if (username && this.isPublicRoute()) {
-      this.context.router.push(routes.home)
-    }
   };
 
   getStyles = () => {
