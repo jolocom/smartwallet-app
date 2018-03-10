@@ -17,11 +17,7 @@ module.exports = {
       settings: path.resolve(__dirname, 'config/test.js')
     })
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      'IDENTITY_GATEWAY_URL': JSON.stringify('http://localhost:5678')
-    })
-  ],
+  plugins: [],
   module: {
     noParse: [
       /node_modules\/sinon/

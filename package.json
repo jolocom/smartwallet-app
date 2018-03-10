@@ -47,6 +47,7 @@
     "chai-enzyme": "^0.5.0",
     "copy-webpack-plugin": "^4.2.1",
     "cross-env": "^2.0.0",
+    "depcheck": "^0.6.9",
     "enzyme": "^2.6.0",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^10.2.1",
@@ -72,8 +73,9 @@
     "redux-mock-store": "^1.2.2",
     "uglifyjs-webpack-plugin": "^1.1.0",
     "webpack": "^3.8.1",
+    "webpack-bundle-analyzer": "^2.11.1",
     "webpack-dev-server": "^2.8.0",
-    "webpack-merge": "^4.1.1"
+    "webpack-merge": "^4.1.2"
   },
   "dependencies": {
     "babel-plugin-syntax-async-functions": "^6.13.0",
@@ -94,7 +96,6 @@
     "lodash": "^4.13.1",
     "material-ui": "^0.16.0",
     "material-ui-password-field": "^1.1.1",
-    "moment": "^2.10.6",
     "node-gyp": "^3.6.2",
     "qrcode.react": "^0.7.1",
     "querystring": "^0.2.0",

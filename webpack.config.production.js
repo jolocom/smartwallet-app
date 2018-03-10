@@ -6,6 +6,11 @@ const common = require('./webpack.config.common.js')
 module.exports = merge(common, {
   plugins: [
     new webpack.optimize.AggressiveMergingPlugin(),
+    //new webpack.optimize.CommonsChunkPlugin({
+            //children: true,
+            //async: true,
+            //minChunks: 3
+        //})
     new UglifyJSPlugin({
       uglifyOptions: {
         mangle: {
@@ -27,7 +32,6 @@ module.exports = merge(common, {
       minimize: true,
       debug: false
     }),
-    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
     })

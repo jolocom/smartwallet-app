@@ -1,4 +1,3 @@
-import {locale} from 'moment'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -10,26 +9,6 @@ import createStore from 'redux_state/create'
 
 const startApp = () => {
   injectTapEventPlugin()
-
-  locale('en', {
-    relativeTime: {
-      future: 'in %s',
-      past: function (number /*, withoutSuffix, key, isFuture */) {
-        return number
-      },
-      s: 'just now',
-      m: '1m',
-      mm: '%dm',
-      h: '1h',
-      hh: '%dh',
-      d: '1d',
-      dd: '%ddays',
-      M: '1m',
-      MM: '%dm',
-      y: '1y',
-      yy: '%dy'
-    }
-  })
 
   let rootEl = document.getElementById('app')
 
@@ -68,8 +47,4 @@ const startApp = () => {
   }
 }
 
-if (window.cordova) {
-  document.addEventListener('deviceready', startApp, false)
-} else {
-  startApp()
-}
+startApp()
