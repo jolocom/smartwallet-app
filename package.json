@@ -1,7 +1,7 @@
 {
   "name": "Jolocom-SmartWallet",
   "version": "0.9.0",
-  "description": "Application that allows you to manage your digital identity and interact with your identity gateway.",
+  "description": "Application that allows you to manage your self-sovereign digital identity",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress",

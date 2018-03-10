@@ -10,7 +10,6 @@ import RegistrationWritePhraseScreen from
   'components/registration/screens/write-phrase'
 
 import WalletTabsScreen from 'components/wallet/screens/tabs'
-import WalletHomeScreen from 'components/wallet/screens/home'
 
 import IdentityScreenNew from 'components/wallet/screens/identity-new'
 import DappsAndServices from 'components/wallet/screens/dappsAndServices'
@@ -22,22 +21,10 @@ import PasswordEntry from 'components/registration/screens/password-entry'
 import PasswordPopUp from 'components/keystore/passwordPopUp'
 
 export const routes = {
-  signup: '/registration',
-  home: '/wallet',
-  forgotPassword: '/forgot-password',
-  changePassword: '/change-password',
-  verifyEmail: '/verify-email'
+  signup: '/registration'
 }
 
 export const publicRoutes = Object.values(routes)
-
-export const navItems = [
-  {
-    title: 'Wallet',
-    route: routes.home,
-    icon: 'account_balance_wallet'
-  }
-]
 
 function getRoutes() {
   return (<Route path="/" component={App} >
@@ -51,7 +38,6 @@ function getRoutes() {
       component={PasswordEntry} />
 
     <Route path="wallet" component={WalletTabsScreen}>
-      <IndexRoute component={WalletHomeScreen} />
       <Route path="identity"
         component={IdentityScreenNew} />
       <Route path="interactions"

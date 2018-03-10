@@ -8,11 +8,8 @@ export default combineReducers({
   dialog: require('./modules/common/dialog').default,
   account: require('./modules/account').default,
   registration: require('./modules/registration').default,
-  leftNav: require('./modules/left-nav').default,
-  walletLogin: require('./modules/wallet-login').default,
   wallet: combineReducers({
     tabs: require('./modules/wallet/tabs').default,
-    identity: require('./modules/wallet/identity').default,
     identityNew: require('./modules/wallet/identity-new').default,
   }),
   singleSignOn: combineReducers({
