@@ -85,12 +85,12 @@ export const actions = makeActions('wallet/identityNew', {
           }
 
           // eslint-disable-next-line
-          const selfSignedClaim = backend.jolocomLib.claims.createVerifiedCredential(
-            did,
-            ['Credential', field],
-            { id: did, [field]: userData[field].value },
-            wif
-          )
+          const selfSignedClaim = await backend.jolocomLib.claims.createVerifiedCredential({
+            issuer: did,
+            credentialType: ['Credential', field],
+            claim: {id: did, [field]: userData[field].value},
+            privateKeyWIF: wif
+          })
 
           let userClaims = await services.storage.getItem(field)
           let sortedClaims = _preventDoubleEntry(
