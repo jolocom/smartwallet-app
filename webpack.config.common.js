@@ -39,7 +39,7 @@ module.exports = {
       template: path.resolve(__dirname, 'src', 'index.html')
     }),
     new webpack.DefinePlugin({
-      'VERIFICATION_PROV': JSON.stringify('https://verification.jolocom.com'),
+      'VERIFICATION_PROV': JSON.stringify('https://verification.jolocom.com')
     })
   ],
   module: {

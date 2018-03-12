@@ -2,7 +2,7 @@ language: node_js
 addons:
   code_climate:
 node_js:
-  - "6.9.5"
+  - "8.9.0"
 
 before_install: sudo apt-get install libzmq3-dev
 install: yarn

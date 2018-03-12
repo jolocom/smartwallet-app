@@ -12,7 +12,7 @@ import JolocomTheme from 'styles/jolocom-theme'
 
 import Loading from 'components/common/loading.jsx'
 
-import {routes, publicRoutes} from 'routes'
+import {publicRoutes} from 'routes'
 
 class App extends React.Component {
   static propTypes = {

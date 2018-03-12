@@ -10,7 +10,7 @@ export default combineReducers({
   registration: require('./modules/registration').default,
   wallet: combineReducers({
     tabs: require('./modules/wallet/tabs').default,
-    identityNew: require('./modules/wallet/identity-new').default,
+    identityNew: require('./modules/wallet/identity-new').default
   }),
   singleSignOn: combineReducers({
     accessRequest: require('./modules/single-sign-on/access-request').default
@@ -18,5 +18,5 @@ export default combineReducers({
   keystore: combineReducers({
     security: require('./modules/keystore/security').default
   }),
-  verification: require('./modules/verification').default,
+  verification: require('./modules/verification').default
 })

@@ -6,11 +6,6 @@ const common = require('./webpack.config.common.js')
 module.exports = merge(common, {
   plugins: [
     new webpack.optimize.AggressiveMergingPlugin(),
-    //new webpack.optimize.CommonsChunkPlugin({
-            //children: true,
-            //async: true,
-            //minChunks: 3
-        //})
     new UglifyJSPlugin({
       uglifyOptions: {
         mangle: {
