@@ -19,6 +19,8 @@ describe('Wallet identity-new redux module', () => {
 
       state = reducer(state, action)
       expect(state.toJS()).to.deep.equal({
+        loading: false,
+        appStarted: false,
         toggleEdit: {
           field: '',
           bool: false
@@ -65,6 +67,8 @@ describe('Wallet identity-new redux module', () => {
 
       state = reducer(state, action)
       const expectedState = {
+        loading: false,
+        appStarted: false,
         toggleEdit: {
           field: '',
           bool: false
@@ -111,6 +115,8 @@ describe('Wallet identity-new redux module', () => {
 
       state = reducer(state, action)
       const expectedState = {
+        loading: false,
+        appStarted: false,
         toggleEdit: {
           field: 'name',
           bool: false

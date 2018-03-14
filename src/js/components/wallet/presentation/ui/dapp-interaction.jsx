@@ -21,8 +21,7 @@ const STYLES = {
 
 export default class DappInteraction extends React.PureComponent {
   static propTypes = {
-    claim: PropTypes.object,
-    key: PropTypes.string
+    claim: PropTypes.object
   }
 
   render() {
@@ -30,7 +29,6 @@ export default class DappInteraction extends React.PureComponent {
 
     return (
       <ListItem
-        key={this.props.key}
         style={STYLES.textStyle}
         leftIcon={<ActionDone color={'grey'} style={STYLES.icon} />}
         rightIcon={
@@ -38,7 +36,11 @@ export default class DappInteraction extends React.PureComponent {
             {new Date(claim.issueDate).toLocaleDateString('en-US')}
           </div>
         }
-        primaryText={claim.field.replace( /\b./g, (a) => { return a.toUpperCase(); } ) + ': ' + claim.value}
+        primaryText={
+          claim.field.replace(/\b./g, (a) => {
+            return a.toUpperCase()
+          }) + ': ' + claim.value
+        }
         secondaryText={'Expires on 12/31/2018'}
         disabled />
     )

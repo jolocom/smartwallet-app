@@ -6,6 +6,7 @@ import Presentation from '../presentation/identity-new'
 @connect({
   props: ['wallet.identityNew'],
   actions: [
+    'wallet/identity-new:appHasStarted',
     'wallet/identity-new:toggleEditField',
     'wallet/identity-new:enterField',
     'wallet/identity-new:saveAttribute',
@@ -18,7 +19,8 @@ import Presentation from '../presentation/identity-new'
     'wallet/identity:changePinValue',
     'verification:startEmailVerification',
     'verification:startPhoneVerification',
-    'confirmation-dialog:openConfirmDialog'
+    'confirmation-dialog:openConfirmDialog',
+    'wallet/interactions:getClaims'
   ]
 })
 export default class IdentityScreenNew extends React.PureComponent {
@@ -33,11 +35,17 @@ export default class IdentityScreenNew extends React.PureComponent {
     startEmailVerification: PropTypes.func.isRequired,
     confirmPhone: PropTypes.func.isRequired,
     confirmEmail: PropTypes.func.isRequired,
-    openConfirmDialog: PropTypes.func.isRequired
+    openConfirmDialog: PropTypes.func.isRequired,
+    getClaims: PropTypes.func.isRequired,
+    appHasStarted: PropTypes.func.isRequired
   }
 
   componentDidMount() {
-    this.props.retrieveAttributes({claims: ['phone', 'name', 'email']})
+    if (this.props.identityNew.appStarted === false) {
+      this.props.retrieveAttributes({claims: ['phone', 'name', 'email']})
+      this.props.getClaims()
+      this.props.appHasStarted()
+    }
   }
 
   requestVerification(...args) {

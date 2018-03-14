@@ -4,27 +4,27 @@ import Presentation from '../presentation/dappsAndServices'
 import { connect } from 'redux_state/utils'
 
 @connect({
-  props: ['wallet.interactions'],
+  props: ['wallet.interactions',
+    'wallet.identityNew'],
   actions: ['wallet/interactions:getClaims']
 })
 export default class DappsAndServices extends React.PureComponent {
   static propTypes = {
     interactions: PropTypes.object,
+    identityNew: PropTypes.object,
     getClaims: PropTypes.func
   }
 
   componentDidMount() {
-    this.props.getClaims()
+    if (!this.props.identityNew.appStarted) {
+      this.props.getClaims()
+    }
   }
 
   render() {
-    const interactions = this.props.interactions
-
     return (
       <Presentation
-        selfClaims={interactions.selfSignedClaims}
-        thirdPartyClaims={interactions.thirdPartySignedClaims}
-      />
+        interactions={this.props.interactions} />
     )
   }
 }

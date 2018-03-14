@@ -4,7 +4,7 @@ import { List } from 'material-ui/List'
 import {theme} from 'styles'
 import {
   Content,
-  Block
+  Header
 } from '../../structure'
 
 import {
@@ -19,60 +19,56 @@ const STYLES = {
     fontSize: '1em'
   },
   label: {
-    marginLeft: '20px',
-    marginTop: '15px'
+    marginLeft: '72px',
+    marginTop: '15px',
+    color: theme.palette.textColor
   }
 }
 
 export default class DappAndServices extends React.Component {
   static propTypes = {
-    selfClaims: PropTypes.array,
-    thirdPartyClaims: PropTypes.array
+    interactions: PropTypes.object
   }
 
   render() {
+    // eslint-disable-next-line
+    const { selfSignedClaims, thirdPartySignedClaims } = this.props.interactions.claimsOverview
     let selfSignedContent
     let thirdPartySignedContent
 
-    if (this.props.selfClaims) {
-      selfSignedContent = this.props.selfClaims.map(
-        (claim, i) => {
-          return (<DappInteraction
-            claim={claim}
-            key={'self_' + claim.value}
-            />)
-        }
-      )
-    }
-
-    if (this.props.thirdPartyClaims) {
-      thirdPartySignedContent = this.props.thirdPartyClaims.map((claim, i) => {
+    if (selfSignedClaims.length > 0) {
+      selfSignedContent = selfSignedClaims.map((claim, i) => {
         return (<DappInteraction
           claim={claim}
-          key={'thirdParty_' + claim.value}
-          />)
-      }
-      )
+          key={'self_' + claim.value} />)
+      })
+    } else {
+      selfSignedContent = <div style={STYLES.label}>No claims created</div>
+    }
+
+    if (thirdPartySignedClaims.length > 0) {
+      thirdPartySignedContent = thirdPartySignedClaims.map((claim, i) => {
+        return (<DappInteraction
+          claim={claim}
+          key={'thirdParty_' + claim.value} />)
+      })
+    } else {
+      // eslint-disable-next-line
+      thirdPartySignedContent = <div style={STYLES.label}>No third party claims available</div>
     }
 
     return (
       <TabContainer>
         <HalfScreenContainer>
           <Content>
-            <Block>
-              <div style={STYLES.label}>Claims you added:</div>
-              <List key={'selfSigned'}>
-                {selfSignedContent}
-              </List>
-            </Block>
-            <Block>
-              <div style={STYLES.label}>
-                Claims verified by third party services:
-              </div>
-              <List key={'thirdPartySigned'}>
-                {thirdPartySignedContent}
-              </List>
-            </Block>
+            <Header title={'Your claims'} />
+            <List key={'selfSigned'}>
+              {selfSignedContent}
+            </List>
+            <Header title={'Verified claims by third party'} />
+            <List key={'thirdPartySigned'}>
+              {thirdPartySignedContent}
+            </List>
           </Content>
         </HalfScreenContainer>
       </TabContainer>

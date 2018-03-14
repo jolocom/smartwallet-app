@@ -9,11 +9,15 @@ import Presentation from '../presentation/identity-new'
 describe('(Component) IdentityScreenNew', () => {
   it('should call retrieveAttributes on componentDidMount', () => {
     const retrieveAttributes = stub()
+    const getClaims = stub()
+    const appHasStarted = stub()
+
     const wrapper = shallow(
       (<IdentityScreenNew.WrappedComponent {
         ...IdentityScreenNew.mapStateToProps(Immutable.fromJS({
           wallet: {
             identityNew: {
+              appStarted: false,
               toggleEdit: {
                 field: '',
                 bool: false
@@ -33,7 +37,14 @@ describe('(Component) IdentityScreenNew', () => {
         saveAttribute={() => {}}
         toggleEditField={() => {}}
         toggleQRScan={() => {}}
+        startPhoneVerification={() => {}}
+        startEmailVerification={() => {}}
+        confirmPhone={() => {}}
+        confirmEmail={() => {}}
+        openConfirmDialog={() => {}}
         retrieveAttributes={retrieveAttributes}
+        getClaims={getClaims}
+        appHasStarted={appHasStarted}
         />),
       { context: { muiTheme: { } } }
     )
@@ -73,6 +84,13 @@ describe('(Component) IdentityScreenNew', () => {
       toggleEditField={() => {}}
       toggleQRScan={() => {}}
       retrieveAttributes={() => {}}
+      getClaims={() => {}}
+      appHasStarted={() => {}}
+      startPhoneVerification={() => {}}
+      startEmailVerification={() => {}}
+      confirmPhone={() => {}}
+      confirmEmail={() => {}}
+      openConfirmDialog={() => {}}
       />),
     { context: { muiTheme: { } } })
 
@@ -116,6 +134,13 @@ describe('(Component) IdentityScreenNew', () => {
       toggleEditField={toggleEditField}
       toggleQRScan={() => {}}
       retrieveAttributes={() => {}}
+      getClaims={() => {}}
+      appHasStarted={() => {}}
+      startPhoneVerification={() => {}}
+      startEmailVerification={() => {}}
+      confirmPhone={() => {}}
+      confirmEmail={() => {}}
+      openConfirmDialog={() => {}}
       />),
     { context: { muiTheme: { } } })
 
@@ -159,6 +184,13 @@ describe('(Component) IdentityScreenNew', () => {
       toggleEditField={() => {}}
       toggleQRScan={() => {}}
       retrieveAttributes={() => {}}
+      getClaims={() => {}}
+      appHasStarted={() => {}}
+      startPhoneVerification={() => {}}
+      startEmailVerification={() => {}}
+      confirmPhone={() => {}}
+      confirmEmail={() => {}}
+      openConfirmDialog={() => {}}
       />),
     { context: { muiTheme: { } } })
 
