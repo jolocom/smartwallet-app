@@ -100,7 +100,6 @@ export default class IdentityScreenNew extends React.PureComponent {
         enterVerificationCode={(...args) =>
           this.enterVerificationCode(...args)
         }
-        resendVerificationCode={(...args) => this.requestVerification(...args)}
       />
     )
   }
