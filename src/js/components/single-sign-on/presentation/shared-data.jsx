@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import Divider from 'material-ui/Divider'
 import AppBar from 'material-ui/AppBar'
@@ -73,8 +73,7 @@ export default class SharedDatePresentation extends React.Component {
     sharedData: PropTypes.array.isRequired,
     serviceName: PropTypes.string.isRequired,
     deleteService: PropTypes.string.isRequired,
-    goToAccessRightScreen: PropTypes.func.isRequired,
-    showDeleteServiceWindow: PropTypes.func.isRequired
+    goToAccessRightScreen: PropTypes.func.isRequired
   }
 
   getIcon(field) {
@@ -93,14 +92,13 @@ export default class SharedDatePresentation extends React.Component {
 
   render() {
     const renderFields = this.props.sharedData.map((field, index) => { // eslint-disable-line max-len
-      let icon = this.getIcon(field.attrType)
       return (
         <VerifiedItem
           key={field.value}
           verified={field.verified}
           textValue={field.value}
           textLabel={field.attrType}
-          icon={icon}
+          icon={this.getIcon(field)}
           secondaryTextValue={''} />
       )
     })
@@ -131,18 +129,21 @@ export default class SharedDatePresentation extends React.Component {
                     rightButtonLabel: 'OK',
                     leftButtonLabel: 'CANCEL',
                     style: {
-                      dialogContainer: {maxWidth: '480px'},
+                      dialogContainer: {maxWidth: '480px'}, // es-lint-disable
                       maxWidth: '480px'
                     }
                   })
                 }} />
             </Block>
             <Block>
-             {renderFields}
+              {renderFields}
             </Block>
             <Block>
-              <div style={{...STYLES.item, marginBottom: '15px',
-                display: 'inline-block'}}>
+              <div style={{
+                ...STYLES.item,
+                marginBottom: '15px',
+                display: 'inline-block'
+              }}>
                 <div style={theme.textStyles.sectionheader}>
                   Status
                 </div>

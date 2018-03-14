@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
 import { actions as identityActions } from './wallet/identity-new'
+import { actions as interactionsActions } from './wallet/interactions'
 
 export const actions = makeActions('verification', {
   startEmailVerification: {
@@ -73,6 +74,7 @@ export const actions = makeActions('verification', {
               })
               await services.storage.setItem(res.credential.id, res)
               await services.storage.setItem('email', emailData)
+              dispatch(interactionsActions.getClaims())
               return dispatch(identityActions.enterField({
                 attrType: 'email',
                 field: 'verified',
@@ -115,6 +117,7 @@ export const actions = makeActions('verification', {
               })
               await services.storage.setItem(res.credential.id, res)
               await services.storage.setItem('phone', phoneData)
+              dispatch(interactionsActions.getClaims())
               return dispatch(identityActions.enterField({
                 attrType: 'phone',
                 field: 'verified',
