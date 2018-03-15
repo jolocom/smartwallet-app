@@ -1,7 +1,7 @@
 - [ ] Keep flags added to the PR up to date
-- [ ] Made sure the title describes the code well, description should contain `Fixes #number_of_an_issue` and a brief decscription of changes
-- [ ] Made sure the PR is readable and contains changes only related to 1 issue. Otherwise - divided into separate PRs 
-- [ ] Added a screenshot if there were any UI changes involved 
-- [ ] Added new tests and made sure all tests are passing
-- [ ] Made sure all edge cases are taken into account and covered by tests
-- [ ] Ran linter and fixed all the errors and warnings
+- [ ] Make sure the title describes the code well, description should contain `Fixes #number_of_an_issue` and a brief decscription of changes
+- [ ] Make sure the PR is readable and contains changes only related to a single issue. Otherwise - divide into separate PRs 
+- [ ] Add a screenshot if there were any UI changes involved 
+- [ ] Add new tests and made sure all tests are passing
+- [ ] Make sure all edge cases are taken into account and covered by tests
+- [ ] Run linter and fixed all the errors and warnings
