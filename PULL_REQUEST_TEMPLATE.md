@@ -2,9 +2,12 @@
 
 Fixes #
 
-What does it solve? Were there any particular challenges that you faced? What should others know about the solution? 
+What does it solve? 
+Were there any particular challenges that you faced and/or things that were not straightforward? 
+What should others know about the solution?
+Is this change going to break other dependent services? 
 
-##Checklist
+## Checklist
 - [ ] Keep flags added to the PR up to date
 - [ ] Make sure the title describes the code well, description should contain `Fixes #number_of_an_issue` and a brief decscription of changes
 - [ ] Make sure the PR is readable and contains changes only related to a single issue. Otherwise - divide into separate PRs 
