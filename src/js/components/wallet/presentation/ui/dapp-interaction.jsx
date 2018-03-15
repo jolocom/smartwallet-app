@@ -1,9 +1,6 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-// import Radium from 'radium'
-
+import PropTypes from 'prop-types'
 import { ListItem } from 'material-ui/List'
-// import IconButton from 'material-ui/IconButton'
 import ActionDone from 'material-ui/svg-icons/action/done'
 import {theme} from 'styles'
 
@@ -22,24 +19,29 @@ const STYLES = {
   }
 }
 
-export default class DappInteraction extends React.Component {
-  // static propTypes = {
-  //   identity: PropTypes.object,
-  //   id: PropTypes.string,
-  //   toggleEditField: PropTypes.func.isRequired,
-  //   enterField: PropTypes.func.isRequired,
-  //   saveAttribute: PropTypes.func.isRequired
-  // }
+export default class DappInteraction extends React.PureComponent {
+  static propTypes = {
+    claim: PropTypes.object
+  }
 
   render() {
-    const mockDate = '1. Feb 18'
+    const claim = this.props.claim
+
     return (
       <ListItem
-        key={'1'}
+        style={STYLES.textStyle}
         leftIcon={<ActionDone color={'grey'} style={STYLES.icon} />}
-        rightIcon={<div style={STYLES.date}>{mockDate}</div>}
-        primaryText={'Jolocom'}
-        secondaryText={'phone, email'}
+        rightIcon={
+          <div style={STYLES.date}>
+            {new Date(claim.issueDate).toLocaleDateString('en-US')}
+          </div>
+        }
+        primaryText={
+          claim.field.replace(/\b./g, (a) => {
+            return a.toUpperCase()
+          }) + ': ' + claim.value
+        }
+        secondaryText={'Expires on 12/31/2018'}
         disabled />
     )
   }

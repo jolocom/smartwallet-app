@@ -3,6 +3,8 @@ import React from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import {theme} from 'styles'
+
 import {Loading} from '../../common'
 import {
   Container,
@@ -55,8 +57,12 @@ export default class PasswordEntry extends React.Component {
           title="Please enter a secure password"
         />
         <Block>
-          <SideNote style={{color: 'red', marginBottom: '16px'}}>
-            The password is used to encrypt and protect your data. <br />
+          <div style={{color: theme.palette.textColor, marginBottom: '16px'}}>
+            The password is used to encrypt and protect your data
+          </div>
+          <SideNote style={{color: theme.palette.textColor}}>
+            Please use at least 8 characters,
+            no spaces, at least one uppercase letter and one number.
           </SideNote>
           <TextField
             key="pass"
