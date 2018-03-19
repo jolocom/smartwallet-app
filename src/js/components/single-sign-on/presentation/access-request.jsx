@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
-// import Loading from '../../common/loading'
+import Loading from '../../common/loading'
 import Divider from 'material-ui/Divider'
 import RaisedButton from 'material-ui/RaisedButton'
 import { List, ListItem } from 'material-ui/List'
@@ -35,9 +35,6 @@ const STYLES = {
   buttons: {
     width: '70%'
   },
-  loading: {
-    marginTop: '100px'
-  },
   header: {
     padding: '12px'
   },
@@ -55,6 +52,9 @@ const STYLES = {
     marginTop: '10px',
     marginLeft: '5px',
     marginRight: '5px'
+  },
+  loading: {
+    marginTop: '30%'
   }
 }
 
@@ -156,6 +156,14 @@ export default class AccessRequest extends React.Component {
               style={STYLES.buttons}
               onClick={() => { this.props.tryAgain() }} />
           </Block>
+        </Content>
+      )
+    } else if (this.props.accessRequest.entity.loading) {
+      content = (
+        <Content>
+          <div style={STYLES.loading}>
+            <Loading />
+          </div>
         </Content>
       )
     } else {

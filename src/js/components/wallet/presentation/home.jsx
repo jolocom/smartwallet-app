@@ -43,7 +43,7 @@ export default class WalletHome extends React.Component {
     return (
       <Container style={STYLES.walletContainer}>
         <Block>
-          <img src="/img/illustration_wallet.svg" style={STYLES.homeImg} />
+          <img src="img/illustration_wallet.svg" style={STYLES.homeImg} />
         </Block>
         <Block>
           <h1 style={STYLES.greeting}>Hello!</h1>
