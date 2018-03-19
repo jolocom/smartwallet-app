@@ -57,7 +57,6 @@ export default class StorageService {
     })
   }
 
-
 /* @summary - Retrieves value from the device's secure storage. If running
  * in browser, will throw an error.
  *
@@ -101,7 +100,6 @@ export default class StorageService {
     })
   }
 */
-
 
   /*
    * @summary - Removes item corresponding to the passed key on device storage.

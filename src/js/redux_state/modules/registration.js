@@ -153,7 +153,10 @@ export const actions = makeActions('registration', {
 
         await services.storage.setItem('did', didDocument.id)
         await services.storage.setItem('masterKeyWIF', encMaster)
-        await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF)
+        await services.storage.setItem(
+          'tempGenericKeyWIF',
+          genericSigningKeyWIF
+        )
 
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassword({password: ''}))
