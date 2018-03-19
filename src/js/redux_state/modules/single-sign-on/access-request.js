@@ -147,20 +147,25 @@ export default (state = initialState, action = {}) => {
     case actions.confirmAccess.id_fail:
       if (action.error.response !== undefined) {
         return state.mergeIn(['entity'], {
-          errorMsg: 'SSO Error ' + action.error.response.statusText
+          errorMsg: 'SSO Error ' + action.error.response.statusText,
+          loading: false
         })
       } else {
         return state.mergeIn(['entity'], {
-          errorMsg: 'SSO process not successful. Please try again.'
+          errorMsg: 'SSO process not successful. Please try again.',
+          loading: false
         })
       }
 
     case actions.confirmAccess.id:
-      return state
+      return state.mergeIn(['entity'], {
+        loading: true
+      })
 
     case actions.confirmAccess.id_success:
       return state.mergeIn(['entity'], {
-        errorMsg: ''
+        errorMsg: '',
+        loading: false
       })
 
     case actions.getClaims.id_fail:
