@@ -144,20 +144,16 @@ export const actions = makeActions('registration', {
           data: masterKeyWIF
         })
 
+        /* TODO Will be changed soon.
         const encGeneric = await backend.encryption.encryptInformation({
           password,
           data: genericSigningKeyWIF
         })
+        */
 
         await services.storage.setItem('did', didDocument.id)
         await services.storage.setItem('masterKeyWIF', encMaster)
-        await services.storage.setItem('genericKeyWIF', encGeneric)
-
-        try {
-          await services.storage.setItemSecure('encryptionPassword', password)
-        } catch (err) {
-          await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF) // eslint-disable-line max-len
-        }
+        await services.storage.setItem('tempGenericKeyWIF', genericSigningKeyWIF)
 
         dispatch(actions.setRandomString({randomString: ''}))
         dispatch(actions.setPassword({password: ''}))
