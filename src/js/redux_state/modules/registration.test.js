@@ -227,27 +227,10 @@ describe('Wallet registration Redux module', () => {
         expect(backend.jolocomLib.identity.register.calls)
           .to.deep.equal(expectedEthRegisterCalls)
 
-        const expectedEncryptionCalls = [{
-          args: [{
-            password: 'password',
-            data: 'masterKeyWIF'
-          }]
-        }, {
-          args: [{
-            password: 'password',
-            data: 'genericKeyWIF'
-          }]
-        }]
-
-        expect(backend.encryption.encryptInformation.calls)
-          .to.deep.equal(expectedEncryptionCalls)
-
         const expectedStorageCalls = [{
           args: ['did', 'did']
         }, {
           args: ['masterKeyWIF', 'encryptedData']
-        }, {
-          args: ['genericKeyWIF', 'encryptedData']
         }, {
           args: ['tempGenericKeyWIF', 'genericKeyWIF']
         }]

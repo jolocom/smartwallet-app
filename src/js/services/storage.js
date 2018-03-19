@@ -2,6 +2,7 @@ export default class StorageService {
   constructor() {
     this.inBrowser = !_nativeStorageAvailable()
 
+    /*
     if (_secureStorageAvailable()) {
       const onSuccess = () => {}
       const onFailure = () => { alert('catastrophic failure') }
@@ -9,6 +10,7 @@ export default class StorageService {
 
       this.secureStorage = new window.SecureStorage(onSuccess, onFailure, appId)
     }
+    */
   }
 
 /* @summary - Retrieves the key from device storage. If running in browser,
@@ -62,7 +64,8 @@ export default class StorageService {
  *
  * @returns {object} - The stored javascript object
  *
-*/
+ *
+
   async getItemSecure(key) {
     return new Promise((resolve, reject) => {
       if (this.secureStorage) {
@@ -77,7 +80,7 @@ export default class StorageService {
     })
   }
 
-/* @summary - Sets value in device's secure storage. If running in browser
+ * @summary - Sets value in device's secure storage. If running in browser
  * will throw an error.
  *
  * @param {string} key - the key for retrieving the relevant value
@@ -85,7 +88,7 @@ export default class StorageService {
  *
  * @returns {object} - The stored javascript object
  *
-*/
+ *
   async setItemSecure(key, value) {
     return new Promise((resolve, reject) => {
       if (this.secureStorage) {
@@ -96,8 +99,10 @@ export default class StorageService {
       return reject(new Error('No secure storage found'))
     })
   }
+*/
 
-  /* @summary - Removes item corresponding to the passed key on device storage.
+  /*
+   * @summary - Removes item corresponding to the passed key on device storage.
    * If running in browser, will use localStorage instead.
    *
    * @param {string} key - the key for item to be removed
@@ -121,9 +126,11 @@ const _nativeStorageAvailable = () => {
   return !!window.cordova && !!window.NativeStorage
 }
 
+/*
 const _secureStorageAvailable = () => {
   return !!window.cordova && !!window.SecureStorage
 }
+*/
 
 const _stringifyIfObject = (value) => {
   if (typeof value === 'object' && value !== null) {
