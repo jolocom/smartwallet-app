@@ -23,6 +23,14 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <splash density="land-hdpi" src="res/android/wallet-hdpi-portrait.png" />
+        <splash density="land-ldpi" src="res/android/wallet-ldpi-portrait.png" />
+        <splash density="land-mdpi" src="res/android/wallet-mdpi-portrait.png" />
+        <splash density="land-xhdpi" src="res/android/wallet-xhdpi-portrait.png" />
+        <splash density="port-hdpi" src="res/android/wallet-hdpi-portrait.png" />
+        <splash density="port-ldpi" src="res/android/wallet-ldpi-portrait.png" />
+        <splash density="port-mdpi" src="res/android/wallet-mdpi-portrait.png" />
+        <splash density="port-xhdpi" src="res/android/wallet-xhdpi-portrait.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

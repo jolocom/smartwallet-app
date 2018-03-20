@@ -17,6 +17,7 @@ export default combineReducers({
     contact: require('./modules/wallet/contact').default,
     identity: require('./modules/wallet/identity').default,
     identityNew: require('./modules/wallet/identity-new').default,
+    interactions: require('./modules/wallet/interactions').default,
     country: require('./modules/wallet/country-select').default,
     money: require('./modules/wallet/money').default
   }),
