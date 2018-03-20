@@ -25,8 +25,10 @@ export const actions = makeActions('single-sign-on/access-request', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.confirmAccess.buildAction(params, async () => {
-          const { response, did } = getState().toJS().singleSignOn.accessRequest.entity // eslint-disable-line max-len
-          const { scannedValue } = getState().toJS().wallet.identityNew.scanningQr // eslint-disable-line max-len
+          const { response, did } = getState().toJS()
+            .singleSignOn.accessRequest.entity
+          const { scannedValue } = getState().toJS()
+            .wallet.identityNew.scanningQr
 
           let promises = []
           for (var key in response) {
@@ -35,26 +37,11 @@ export const actions = makeActions('single-sign-on/access-request', {
 
           const claims = await Promise.all(promises)
           let claimsArray = []
-          claims.map((claim) => {
+          claims.forEach(claim =>
             claimsArray.push({[claim.credential.type]: claim})
-          })
+          )
 
-          const encWif = await services.storage.getItem('genericKeyWIF')
-          let wif
-          try {
-            // eslint-disable-next-line
-            const decryptionPass = await services.storage.getItemSecure('encryptionPassword')
-            wif = await backend.encryption.decryptInformation({
-              ciphertext: encWif.crypto.ciphertext,
-              password: decryptionPass,
-              salt: encWif.crypto.kdfParams.salt,
-              iv: encWif.crypto.cipherparams.iv
-            })
-          } catch (err) {
-            console.warn(err)
-            wif = await services.storage.getItem('tempGenericKeyWIF')
-          }
-
+          const wif = await services.storage.getItem('tempGenericKeyWIF')
           const token = await backend.jolocomLib.authentication.initiateResponse({ // eslint-disable-line max-len
             tokenData: scannedValue,
             WIF: wif,
@@ -147,20 +134,25 @@ export default (state = initialState, action = {}) => {
     case actions.confirmAccess.id_fail:
       if (action.error.response !== undefined) {
         return state.mergeIn(['entity'], {
-          errorMsg: 'SSO Error ' + action.error.response.statusText
+          errorMsg: 'SSO Error ' + action.error.response.statusText,
+          loading: false
         })
       } else {
         return state.mergeIn(['entity'], {
-          errorMsg: 'SSO process not successful. Please try again.'
+          errorMsg: 'SSO process not successful. Please try again.',
+          loading: false
         })
       }
 
     case actions.confirmAccess.id:
-      return state
+      return state.mergeIn(['entity'], {
+        loading: true
+      })
 
     case actions.confirmAccess.id_success:
       return state.mergeIn(['entity'], {
-        errorMsg: ''
+        errorMsg: '',
+        loading: false
       })
 
     case actions.getClaims.id_fail:

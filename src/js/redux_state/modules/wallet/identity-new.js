@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import * as qr from 'lib/qr-scanner'
 import { makeActions } from '../'
+import { actions as interactionsActions } from './interactions'
 import router from '../router'
 
 export const actions = makeActions('wallet/identityNew', {
@@ -22,10 +23,6 @@ export const actions = makeActions('wallet/identityNew', {
           qr.showCameraOutput()
           dispatch(actions.toggleQRScan.buildAction())
           const message = await qr.scanMessage()
-          // MOCK
-          // eslint-disable-next-line
-          // const message = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6am9sbzo2eEV4S2ZnZzJXUkdCUExKZVVobVlrIiwicHViS2V5SXNzIjoiMDIzZTFjNGJkYTM4YmJhNGIzMmZkOTg2YjY5NjAyNmQ1NDUzMGQ4YjJiNjNhNmIzYzdjZDhjMzI0ZWQ3ZDhkMWUyIiwiY2FsbGJhY2tVcmwiOiJodHRwOi8vbG9jYWxob3N0OjkwMDAvYXV0aGVudGljYXRpb24iLCJyZXFDbGFpbXMiOlsibmFtZSJdLCJpYXQiOiIyMDE4LTAyLTIzVDExOjI4OjAwLjAwNFoiLCJleHAiOiIyMDE4LTAyLTIzVDEyOjE4OjAwLjAwNFoiLCJqdGkiOiIwLm9zb3BqMGh0cG0ifQ.txvC8BLNdfoskbIY42_7CWpDZ8aPd61h_2H0jKuvnfHnIzhAefuLQzVNIw3WGT5EMWdnbw5BLjqWn7LEaJK_5g"
-
           // eslint-disable-next-line
           const processedMessage = backend.jolocomLib.authentication.authenticateRequest({
             token: message
@@ -47,6 +44,10 @@ export const actions = makeActions('wallet/identityNew', {
     expectedParams: ['scannedValue']
   },
 
+  appHasStarted: {
+    expectedParams: []
+  },
+
   enterField: {
     expectedParams: ['attrType', 'field', 'value']
   },
@@ -59,12 +60,15 @@ export const actions = makeActions('wallet/identityNew', {
         dispatch(actions.saveAttribute.buildAction(params, async () => {
           const { userData, toggleEdit } = getState().toJS().wallet.identityNew
           const { field } = params
-          // eslint-disable-next-line
 
           dispatch(actions.toggleEditField({
             field: [field],
             value: toggleEdit.bool
           }))
+
+          if (userData[field].value.length === 0) {
+            return
+          }
 
           const did = await services.storage.getItem('did')
           const encWif = await services.storage.getItem('genericKeyWIF')
@@ -107,6 +111,8 @@ export const actions = makeActions('wallet/identityNew', {
             selfSignedClaim.credential.id,
             selfSignedClaim
           )
+          dispatch(actions.retrieveAttributes({claims: [field]}))
+          dispatch(interactionsActions.getClaims())
           return res
         }))
       }
@@ -131,6 +137,7 @@ export const actions = makeActions('wallet/identityNew', {
 })
 
 const initialState = Immutable.fromJS({
+  appStarted: false,
   toggleEdit: {
     field: '',
     bool: false
@@ -162,11 +169,17 @@ const initialState = Immutable.fromJS({
     scanning: false,
     scannedValue: ''
   },
-  errorMsg: ''
+  errorMsg: '',
+  loading: false
 })
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.appHasStarted.id:
+      return state.mergeDeep({
+        appStarted: true
+      })
+
     case actions.toggleEditField.id:
       return state.mergeDeep({
         toggleEdit: {
@@ -194,15 +207,19 @@ export default (state = initialState, action = {}) => {
       )
 
     case actions.saveAttribute.id:
-      return state
+      return state.mergeDeep({
+        loading: true
+      })
 
     case actions.saveAttribute.id_success:
       return state.mergeDeep({
+        loading: false,
         errorMsg: ''
       })
 
     case actions.saveAttribute.id_fail:
       return state.mergeDeep({
+        loading: false,
         errorMsg: 'Could not save attribute on device.'
       })
 
