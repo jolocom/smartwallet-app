@@ -19,7 +19,7 @@ export default function createStore(history, client, data) {
     },
     ipfs: {
       host: 'ipfs.jolocom.com',
-      port: 5002,
+      port: 443,
       protocol: 'https'
     }
   })
