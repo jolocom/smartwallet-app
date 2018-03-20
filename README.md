@@ -35,33 +35,6 @@ yarn build:dev
 ```
 Rebuilding will be much slower this way, because the entire bundle will be rebuilt on each change.
 
-#### Using a local Gateway
-
-```bash
-GW=LOCAL yarn start
-```
-Sets local gateway as backend.
-
-### Mobile (Cordova)
-
-First make sure to build the Cordova distribution.
-
-```bash
-yarn build:cordova
-```
-
-#### iOS
-
-```bash
-yarn run ios
-```
-
-#### Android
-
-```bash
-yarn run android
-```
-
 ### Notes
 
 If you are getting the error `Module parse failed: main.jsx Line 1: Unexpected token`, switch to node version 4.x before running the gulp ([nvm](https://github.com/creationix/nvm) might come in handy).
@@ -78,24 +51,6 @@ yarn install
 
 ```bash
 yarn build
-```
-
-### Mobile (Cordova)
-
-#### iOS
-
-A valid code sign identity & provisioning needs to be configured in `app/[ENTRY].json` before a release can be build.
-
-```bash
-gulp release:ios
-```
-
-#### Android
-
-Building a valid release package requires a keystore to be configured in `app/[ENTRY].json`.
-
-```bash
-gulp release:android
 ```
 
 Tests

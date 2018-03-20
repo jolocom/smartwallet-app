@@ -133,6 +133,7 @@ export const actions = makeActions('wallet/identityNew', {
   setVerificationCodeStatus: {
     expectedParams: ['field', 'value']
   }
+
 })
 
 const initialState = Immutable.fromJS({

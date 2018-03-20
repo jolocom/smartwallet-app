@@ -27,7 +27,6 @@ module.exports = merge(common, {
       minimize: true,
       debug: false
     }),
-    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
     })

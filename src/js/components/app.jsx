@@ -3,7 +3,6 @@ import { connect } from 'redux_state/utils'
 import PropTypes from 'prop-types'
 import Radium, {StyleRoot} from 'radium'
 
-import SnackbarContainer from 'components/snack-bar'
 import ConfirmationDialog from 'components/confirmation-dialog'
 import SimpleDialog from 'components/simple-dialog'
 
@@ -11,11 +10,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import JolocomTheme from 'styles/jolocom-theme'
 
-// import LeftNav from 'components/left-nav/nav.jsx'
-
 import Loading from 'components/common/loading.jsx'
 
-import {routes, publicRoutes} from 'routes'
+import {publicRoutes} from 'routes'
 
 class App extends React.Component {
   static propTypes = {
@@ -75,21 +72,6 @@ class App extends React.Component {
       publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
   };
 
-  checkLogin = () => {
-    let {username, loggingIn} = this.props.account
-
-    // session is still loading, so return for now
-    if (username === undefined && loggingIn) {
-      return
-    }
-
-    if (!username && !this.isPublicRoute()) {
-      this.context.router.push(routes.login)
-    } else if (username && this.isPublicRoute()) {
-      this.context.router.push(routes.home)
-    }
-  };
-
   getStyles = () => {
     let styles = {
       container: {
@@ -113,7 +95,6 @@ class App extends React.Component {
       <StyleRoot style={styles.container}>
         {this.props.children}
 
-        <SnackbarContainer />
         <ConfirmationDialog />
         <SimpleDialog />
       </StyleRoot>

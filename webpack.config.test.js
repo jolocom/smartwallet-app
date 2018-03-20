@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const webpack = require('webpack')
 
 const common = require('./webpack.config.common.js')
 const nodeModules = {}
@@ -17,11 +16,7 @@ module.exports = {
       settings: path.resolve(__dirname, 'config/test.js')
     })
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      'IDENTITY_GATEWAY_URL': JSON.stringify('http://localhost:5678')
-    })
-  ],
+  plugins: [],
   module: {
     noParse: [
       /node_modules\/sinon/

@@ -38,17 +38,5 @@
   </head>
   <body>
     <div id="app"></div>
-
-    <script src="cordova.js"></script>
-    <script>
-      window.addEventListener('load', function() {
-        document.body.addEventListener('touchmove', function(e) {
-          e.preventDefault()
-        }, false)
-      }, false)
-      document.addEventListener('resume', function () {
-        window.codePush.sync()
-      })
-    </script>
   </body>
 </html>

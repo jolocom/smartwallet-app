@@ -15,8 +15,6 @@ import Presentation from '../presentation/identity-new'
     'wallet/identity-new:verifyAttribute',
     'verification:confirmEmail',
     'verification:confirmPhone',
-    'wallet/identity:setFocusedPin',
-    'wallet/identity:changePinValue',
     'verification:startEmailVerification',
     'verification:startPhoneVerification',
     'confirmation-dialog:openConfirmDialog',

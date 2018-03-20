@@ -6,7 +6,6 @@ import Paper from 'material-ui/Paper'
 import {Tab, Tabs} from 'material-ui/Tabs'
 
 import { Layout, Content } from 'components/layout'
-// import LeftNavToggle from 'components/left-nav/toggle'
 import { connect } from 'redux_state/utils'
 import { theme } from 'styles'
 
