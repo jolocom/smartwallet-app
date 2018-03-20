@@ -4,6 +4,7 @@ import { List } from 'material-ui/List'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import { Content, Block } from '../../structure'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
+import Loading from 'components/common/loading'
 import {
   TabContainer,
   HalfScreenContainer,
@@ -23,6 +24,9 @@ const STYLES = {
     bottom: '24px',
     right: '15px',
     display: 'none'
+  },
+  loading: {
+    marginTop: '30%'
   }
 }
 
@@ -46,8 +50,7 @@ export default class IdentityNew extends React.Component {
         secondary
         // eslint-disable-next-line
         style={this.props.identityNew.toggleEdit.bool ? STYLES['qrBtnHidden'] : STYLES.qrBtnVisible}
-        onClick={() => this.props.toggleQRScan()}
-      >
+        onClick={() => this.props.toggleQRScan()}>
         <Camera />
       </FloatingActionButton>
     )
@@ -56,6 +59,11 @@ export default class IdentityNew extends React.Component {
 
     if (this.props.identityNew.scanningQr.scanning) {
       content = (<QRFrame />)
+    } else if (this.props.identityNew.loading) {
+      content = (<div style={STYLES.loading}>
+        <Loading
+          loadingMsg={'Your claim is created'} />
+      </div>)
     } else {
       content = (
         <List>

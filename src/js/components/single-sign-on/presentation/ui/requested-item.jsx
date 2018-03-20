@@ -6,7 +6,7 @@ import {ListItem} from 'material-ui/List'
 import TextField from 'material-ui/TextField'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
-import NavigateNext from 'material-ui/svg-icons/image/navigate-next'
+import Add from 'material-ui/svg-icons/content/add'
 
 const STYLES = {
   icon: {
@@ -61,7 +61,7 @@ export default class RequestedItem extends React.Component {
       backgroundColor={'#fff'}
       style={STYLES.button}
       onClick={() => this.props.selectClaims(this.props.field)}>
-      <NavigateNext />
+      <Add />
     </FloatingActionButton>)
 
     return (
