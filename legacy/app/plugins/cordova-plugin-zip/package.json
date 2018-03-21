@@ -1,0 +1,59 @@
+{
+  "_from": "cordova-plugin-zip@3.1.0",
+  "_id": "cordova-plugin-zip@3.1.0",
+  "_inBundle": false,
+  "_integrity": "sha1-F2yCSOog058c+VnvXmFWrMqWshc=",
+  "_location": "/cordova-plugin-zip",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "cordova-plugin-zip@3.1.0",
+    "name": "cordova-plugin-zip",
+    "escapedName": "cordova-plugin-zip",
+    "rawSpec": "3.1.0",
+    "saveSpec": null,
+    "fetchSpec": "3.1.0"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-zip/-/cordova-plugin-zip-3.1.0.tgz",
+  "_shasum": "176c8248ea20d39f1cf959ef5e6156acca96b217",
+  "_spec": "cordova-plugin-zip@3.1.0",
+  "_where": "/Users/jolocom/code/smartwallet-app/app",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/MobileChromeApps/zip/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-unzip",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "deprecated": false,
+  "description": "Unzips zip files",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.3.0"
+    }
+  ],
+  "homepage": "https://github.com/MobileChromeApps/zip",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "license": "BSD",
+  "name": "cordova-plugin-zip",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MobileChromeApps/cordova-plugin-zip.git"
+  },
+  "version": "3.1.0"
+}

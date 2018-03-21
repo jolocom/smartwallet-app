@@ -6,6 +6,7 @@ build/
 ldpc-*
 data/
 .tern-project
+.expo/
 
 yarn.lock
 

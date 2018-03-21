@@ -3,11 +3,9 @@ addons:
   code_climate:
 node_js:
   - "8.9.0"
-
 before_install: sudo apt-get install libzmq3-dev
 install: yarn
-before_script: utils/lint-files-changed.sh 
 script: yarn run test
-after_success:before_script: utils/lint-files-changed.sh
+after_success:before_script: node_modules/.bin/tslint -c ./tslint.json './src/**/*.ts?(x)'
   - yarn global add codeclimate-test-reporter
   - codeclimate-test-reporter < ./coverage/lcov.info

@@ -1,14 +1,8 @@
 {
-  "presets":[
-    ["es2015", {"modules": false}],
-    "react",
-    "survivejs-kanban",
-  ],
-  "plugins": [
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    "react-hot-loader/babel",
-    "syntax-async-functions",
-    "transform-regenerator"
-  ]
+  "presets": ["babel-preset-expo"],
+  "env": {
+    "development": {
+      "plugins": ["transform-react-jsx-source"]
+    }
+  }
 }
