@@ -44,6 +44,10 @@
       "**/__tests__/**/*.[tj]s?(x)",
       "**/?(*.)(spec|test).[tj]s?(x)"
     ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/legacy/*"
+    ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     }
