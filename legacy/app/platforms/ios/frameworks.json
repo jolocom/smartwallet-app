@@ -1,0 +1,6 @@
+{
+    "AudioToolbox.framework": 1,
+    "libz.tbd": 1,
+    "libz.dylib": 1,
+    "Security.framework": 1
+}

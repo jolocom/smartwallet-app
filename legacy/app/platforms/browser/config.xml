@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.jolocom.smartwallet" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>SmartWallet</name>
+    <description>
+      Application that allows you to manage your digital identity and interact with your identity gateway.
+    </description>
+    <author email="eugeniu@jolocom.com" href="https://jolocom.com">
+      Jolocom Team
+    </author>
+    <icon density="ldpi" src="res/android/ldpi/icon.png" />
+    <icon density="mdpi" src="res/android/mdpi/icon.png" />
+    <icon density="hdpi" src="res/android/hdpi/icon.png" />
+    <icon density="xhdpi" src="res/android/xhdpi/icon.png" />
+    <icon density="xxhdpi" src="res/android/xxhdpi/icon.png" />
+    <icon density="xxxhdpi" src="res/android/xxxhdpi/icon.png" />
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+</widget>

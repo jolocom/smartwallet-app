@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  id="cordova-plugin-swift-support"
+  version="3.1.1" >
+
+  <name>SwiftSupport</name>
+
+  <hook type="after_prepare" src="src/add-swift-support.js" />
+
+  <platform name="ios">
+    <hook type="after_platform_add" src="src/add-swift-support.js" />
+    <hook type="after_plugin_add" src="src/add-swift-support.js" />
+  </platform>
+</plugin>
