@@ -9,6 +9,7 @@
     "@types/react-navigation": "^1.2.3",
     "@types/react-redux": "^5.0.15",
     "@types/react-test-renderer": "^16.0.0",
+    "eslint": "^4.19.0",
     "jest-expo": "25.0.0",
     "react-native-scripts-ts": "1.11.4",
     "react-native-typescript-transformer": "^1.2.3",
