@@ -6,7 +6,6 @@ node_js:
 
 before_install: sudo apt-get install libzmq3-dev
 install: yarn
-before_script: utils/lint-files-changed.sh 
 script: yarn run test
 after_success:before_script: utils/lint-files-changed.sh
   - yarn global add codeclimate-test-reporter
