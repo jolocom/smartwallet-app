@@ -1,8 +1,8 @@
 import {StackNavigator} from 'react-navigation'
-import * as components from './components/'
+import {Home} from './ui/home/'
 
 export const RootStack = StackNavigator({
-    Home: { screen: components.Home }
+    Home: { screen: Home }
   }, {
     initialRouteName: 'Home'
   }

@@ -4,7 +4,8 @@ import {View} from 'react-native'
 import {RootStack} from './src/routes'
 import {store} from './src/store'
 
-export class App extends React.Component {
+// tslint:disable-next-line: no-default-export
+export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
