@@ -18,7 +18,7 @@ class HomeComponent extends React.Component<ReduxProps, HomeState> {
   render() {
     return (
      <View>
-       <Text> {this.props.did} </Text>
+       <Text> Hey Hey Hey {this.props.did} </Text>
      </View>
     )
   }
