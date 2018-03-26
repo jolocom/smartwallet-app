@@ -6,6 +6,6 @@ export const RootStack = StackNavigator({
     Home: { screen: Home },
     Loading: { screen: Loading }
   }, {
-    initialRouteName: 'Loading'
+    initialRouteName: 'Home'
   }
 )

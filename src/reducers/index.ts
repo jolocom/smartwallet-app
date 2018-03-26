@@ -1,6 +1,8 @@
-import {combineReducers} from 'redux'
-import {did} from './account'
+import { combineReducers } from 'redux'
+import { did } from './account'
+import { registration } from './registration'
 
 export const rootReducer =  combineReducers({
-  did
+  did,
+  registration
 })

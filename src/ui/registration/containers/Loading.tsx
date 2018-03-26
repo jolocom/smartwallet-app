@@ -17,6 +17,7 @@ export interface LoadingState {
 
 class LoadingComponent extends React.Component<ReduxProps, LoadingState> {
   render() {
+    console.log("LOADING")
     return (
      <View style={{
         flex: 1,
