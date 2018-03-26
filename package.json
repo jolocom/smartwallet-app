@@ -11,6 +11,7 @@
     "@types/react-test-renderer": "^16.0.0",
     "eslint": "^4.19.0",
     "jest-expo": "25.0.0",
+    "react-native-debugger-open": "^0.3.17",
     "react-native-scripts-ts": "1.11.4",
     "react-native-typescript-transformer": "^1.2.3",
     "react-test-renderer": "16.2.0",
@@ -56,11 +57,17 @@
   },
   "dependencies": {
     "expo": "^25.0.0",
+    "install": "^0.11.0",
+    "material-colors": "^1.2.5",
+    "material-design-icons": "^3.0.1",
+    "npm": "^5.7.1",
     "react": "16.2.0",
     "react-native": "0.52.0",
+    "react-native-material-ui": "^1.20.0",
     "react-navigation": "^1.5.8",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
+    "redux-mock-store": "^1.5.1",
     "redux-thunk": "^2.2.0"
   }
 }

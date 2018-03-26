@@ -1,23 +1,21 @@
-import { lime700, white, grey300 } from 'material-ui/styles/colors'
-
-import Spacing from 'material-ui/styles/spacing'
-import {fade} from 'material-ui/utils/colorManipulator'
+const { lime, white, grey } = require('material-colors')
 
 const palette = {
+  primaryColor: '#942f51',
   primary1Color: '#b3c90f',
-  primary2Color: fade('#b3c90f', 0.15),
-  primary3Color: fade('#b3c90f', 0.3),
+  primary2Color: '#b3c90f',
+  primary3Color: '#b3c90f',
   accent1Color: '#942f51',
-  accent2Color: fade('#942f51', 0.15),
-  accent3Color: fade('#942f51', 0.3),
+  accent2Color: '#942f51',
+  accent3Color: '#942f51',
   textColor: '#4b132b',
   textColor_grey: '#a4a4a3',
   textColor_silverGrey: '#9ba0aa',
   textColor_darkBrown75: '#633c38',
-  lighterTextColor: fade('#4b132b', 0.6),
+  lighterTextColor: '#4b132b',
   alternateTextColor: white,
   canvasColor: white,
-  borderColor: grey300,
+  borderColor: grey['300'],
   disabledColor: '#9ba0aa'
 }
 
@@ -35,7 +33,7 @@ const textStyles = {
     color: palette.textColor_grey
   },
   sectionheader: {
-    fontSize: '20px',
+    fontSize: 20,
     fontStyle: 'normal',
     fontWeight: '400',
     color: palette.textColor
@@ -59,7 +57,7 @@ const textStyles = {
     color: palette.textColor
   },
   textCopy: {
-    fontSize: '13px',
+    fontSize: 13,
     fontStyle: 'normal',
     fontWeight: '300',
     color: palette.textColor_grey
@@ -84,11 +82,11 @@ const textStyles = {
     color: palette.textColor
   }
 }
-let JolocomTheme = {
-  spacing: Spacing,
+
+export const JolocomTheme = {
   contentFontFamily: 'Roboto, sans-serif',
-  palette: palette,
-  textStyles: textStyles,
+  palette,
+  textStyles,
   appBar: {
     color: '#f8f9fb',
     textColor: '#4b132b'
@@ -104,10 +102,10 @@ let JolocomTheme = {
   tabs: {
     backgroundColor: '#f8f9fb',
     selectedTextColor: '#4b132b',
-    textColor: fade('#4b132b', 0.8)
+    textColor: '#4b132b'
   },
   textField: {
-    focusColor: lime700
+    focusColor: lime['700']
   },
   jolocom: {
     gray1: '#9ba0aa',
@@ -117,5 +115,3 @@ let JolocomTheme = {
     gray5: '#f7f7f7'
   }
 }
-
-export default JolocomTheme
