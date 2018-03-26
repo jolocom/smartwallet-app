@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SeedPhrase } from '../../src/ui/registration/containers/seedPhrase'
+import { SeedPhrase } from '../../../src/ui/registration/containers/seedPhrase'
 import thunk from 'redux-thunk'
 
 const configureStore = require('redux-mock-store')
