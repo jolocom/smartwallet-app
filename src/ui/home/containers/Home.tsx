@@ -11,7 +11,6 @@ export interface HomeProps {
 
 export interface ReduxProps extends HomeProps {
   setDid: (did: string) => void;
-  generateAndEncryptKeyPairs: () => void
 }
 
 export interface HomeState {}
@@ -40,7 +39,6 @@ const mapStateToProps = (state: HomeProps) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     setDid: (did:string) => dispatch(accountActions.setDid(did)),
-    generateAndEncryptKeyPairs: () => dispatch(registrationActions.generateAndEncryptKeyPairs())
   }
 }
 

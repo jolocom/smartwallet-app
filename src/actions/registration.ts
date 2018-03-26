@@ -23,6 +23,7 @@ export const finishLoading = (loading: boolean) => {
 
 export const generateAndEncryptKeyPairs = () => {
   return (dispatch: (actions: AnyAction) => void) => {
-    dispatch(startLoading(true))
+    dispatch(setLoadingMsg('NEW NEW NEW jakdfghksffbfdbvdf'))
+    console.log('generateAndEncryptKeyPairs')
   }
 }
