@@ -21,6 +21,8 @@
     "typescript": "^2.7.0"
   },
   "scripts": {
+    "build": "./node_modules/.bin/tsc -p ./tsconfig.json",
+    "dev": "yarn build --watch",
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
