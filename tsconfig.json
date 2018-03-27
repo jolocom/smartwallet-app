@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "es2015",
-    "outDir": "build/dist",
+    "outDir": "build/",
     "sourceMap": true,
     "experimentalDecorators": true,
     "jsx": "react-native",
@@ -13,5 +13,6 @@
     "importHelpers": true,
     "strict": true,
     "noImplicitReturns": true
-  }
+  },
+    "include": [ "src/**/*" ]
 }
