@@ -12,6 +12,14 @@
     "noEmitHelpers": true,
     "importHelpers": true,
     "strict": true,
-    "noImplicitReturns": true
-  }
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "src": ["./src/"]
+    }
+  },
+  "include": [
+    "./src/**/*"
+  ]
 }
