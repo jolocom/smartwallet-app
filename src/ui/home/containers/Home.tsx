@@ -18,6 +18,7 @@ class HomeComponent extends React.Component<ReduxProps, HomeState> {
   render() {
     return (
      <View>
+       <Text>Home Welcome Screen</Text>
        <Text> {this.props.did} </Text>
      </View>
     )
