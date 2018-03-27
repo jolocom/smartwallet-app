@@ -1,5 +1,5 @@
-import { seedPhrase as reducer } from '../../../src/reducers/registration/'
-import { registrationActions as actions} from '../../../src/actions/'
+import { seedPhrase as reducer } from 'src/reducers/registration/'
+import { registrationActions as actions} from 'src/actions/'
 
 describe('registration reducer', ()=> {
   it('should handle the SEEDPHRASE_SET action ', () => {

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, StyleSheet, ViewStyle } from 'react-native'
-import { JolocomTheme } from '../../styles/jolocom-theme'
 import { ReactNode } from 'react'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SeedPhrase } from '../../../src/ui/registration/components/seedPhrase'
+import { SeedPhrase } from 'src/ui/registration/components/seedPhrase'
 
 const ShallowRenderer = require('react-test-renderer/shallow')
 const configureStore = require('redux-mock-store')

@@ -1,8 +1,8 @@
 import * as React from 'react'
-import {View, Text} from 'react-native'
-import {connect} from 'react-redux'
-import {accountActions} from '../../../actions'
-import {AnyAction} from 'redux'
+import { View, Text } from 'react-native'
+import { connect } from 'react-redux'
+import { AnyAction } from 'redux'
+import { accountActions } from 'src/actions'
 
 export interface HomeProps {
   did: string;

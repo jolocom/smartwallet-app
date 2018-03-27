@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import { rootReducer } from './reducers'
+import { rootReducer } from 'src/reducers'
 
 const middleware = applyMiddleware(thunk)
 

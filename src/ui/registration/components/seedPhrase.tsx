@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { View, Text, Image, Dimensions, StyleSheet } from 'react-native'
-import { JolocomTheme } from '../../../styles/jolocom-theme'
-import { Container } from '../../structure/container'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Container } from 'src/ui/structure/container'
 
 const { Avatar, Checkbox, Button } = require('react-native-material-ui')
-const techGuyImg = require('../../../img/img_techguy.png')
+const techGuyImg = require('src/img/img_techguy.png')
 
 export interface Props {
   seedPhrase: string;

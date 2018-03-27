@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
-import { SeedPhrase as SeedPhraseComponent } from '../components/seedPhrase'
-import { registrationActions } from '../../../actions'
 import { ThunkAction } from 'redux-thunk'
+import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
+import { registrationActions } from 'src/actions/'
 
 export interface PropsFromState {
   seedPhrase: string;

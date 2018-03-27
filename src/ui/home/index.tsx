@@ -1,1 +1,1 @@
-export {Home} from './containers/Home'
+export {Home} from 'src/ui/home/containers/Home'

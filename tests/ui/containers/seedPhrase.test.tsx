@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { SeedPhrase } from '../../../src/ui/registration/containers/seedPhrase'
 import thunk from 'redux-thunk'
+import { SeedPhrase } from 'src/ui/registration/containers/seedPhrase'
 
 const configureStore = require('redux-mock-store')
 const ShallowRenderer = require('react-test-renderer/shallow')
