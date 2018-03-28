@@ -56,16 +56,19 @@
     }
   },
   "dependencies": {
+    "add": "^2.0.6",
     "material-colors": "^1.2.5",
     "react": "16.2.0",
     "react-native": "0.52.0",
     "react-native-material-ui": "^1.22.0",
+    "react-native-remote-svg": "^1.2.0",
     "react-native-vector-icons": "^4.5.0",
     "react-navigation": "^1.5.8",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-mock-store": "^1.5.1",
     "redux-thunk": "^2.2.0",
-    "sjcl": "^1.0.7"
+    "sjcl": "^1.0.7",
+    "yarn": "^1.5.1"
   }
 }

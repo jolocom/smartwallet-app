@@ -5,10 +5,10 @@ exports[`seedPhrase component matches the snapshot 1`] = `
   <Block
     flex={0.1}
   >
-    <Image
+    <MyImage
       source={
         Object {
-          "testUri": "../../../src/img/img_techguy.png",
+          "testUri": "../../../src/img/img_techguy.svg",
         }
       }
       style={

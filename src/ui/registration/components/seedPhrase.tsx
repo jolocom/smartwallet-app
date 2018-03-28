@@ -1,10 +1,11 @@
 import * as React from 'react'
-import { View, Text, Image, Dimensions, StyleSheet, TextStyle } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, TextStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
 
-const { Avatar, Checkbox, Button } = require('react-native-material-ui')
-const techGuyImg = require('src/img/img_techguy.png')
+const { Checkbox, Button } = require('react-native-material-ui')
+const Image = require('react-native-remote-svg').default
+const techGuySvg = require('src/img/img_techguy.svg')
 
 export interface Props {
   seedPhrase: string;
@@ -61,7 +62,7 @@ export const SeedPhrase : React.SFC<Props> = (props) => {
       <Block flex={ 0.1 }>
         <Image
           style={ styles.avatarImage }
-          source={ techGuyImg }
+          source={ techGuySvg }
         />
       </Block>
       <Block flex={ 0.1 }>
