@@ -53,3 +53,7 @@ app/plugins
 app/platforms
 app/wallet.json
 app/graph.json
+
+# Haul
+#
+haul-debug.log
