@@ -22,9 +22,9 @@ const styles = StyleSheet.create({
 })
 
 export interface Props {
-  children: ReactNode;
+  children?: ReactNode;
   style?: ViewStyle;
-  title? : any;
+  title?: string;
 }
 
 export const Header : React.SFC<Props> = (props) => {
