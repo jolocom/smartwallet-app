@@ -60,6 +60,7 @@
     "material-colors": "^1.2.5",
     "react": "16.2.0",
     "react-native": "0.52.0",
+    "react-native-keychain": "^3.0.0-rc.3",
     "react-native-material-ui": "^1.20.0",
     "react-native-remote-svg": "^1.2.0",
     "react-native-snap-carousel": "^3.6.0",

@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux'
 import { NavigationActions } from 'react-navigation'
+import * as Keychain from 'react-native-keychain'
 
 export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
   return {
@@ -26,3 +27,23 @@ export const fetchSeedPhrase = () => {
 //     dispatch(NavigationActions.navigate('PasswordEntry'))
 //   }
 // }
+
+
+export const savePassword = () => {
+  return async (dispatch : (action : AnyAction) => void) => {
+    const username = 'natascha'
+    const password = 'test'
+    console.log('SAVE PASSWORD ACTION CREATOR')
+    await Keychain.setGenericPassword(username, password)
+
+    try {
+      const credentials = await Keychain.getGenericPassword()
+      console.log('CREDENTIALS: ', credentials)
+    } catch (err) {
+      console.log('ERROR GET CREDENTIALS: ', err)
+    }
+
+
+    // dispatch(NavigationActions.navigate('PasswordEntry'))
+  }
+}
