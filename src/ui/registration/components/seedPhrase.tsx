@@ -99,6 +99,8 @@ export const SeedPhrase : React.SFC<Props> = (props) => {
           style={ muiStyles.checkbox }
           onCheck={ props.onCheck } 
           label='Yes, I have securely written down my phrase.'
+          checkedIcon='radio-button-checked'
+          uncheckedIcon='radio-button-unchecked'
           value=''
           checked={props.checked}
         />
