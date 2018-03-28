@@ -2,14 +2,8 @@
 
 exports[`seedPhrase component matches the snapshot 1`] = `
 <Container>
-  <View
-    style={
-      Object {
-        "display": "flex",
-        "flex": 1,
-        "justifyContent": "center",
-      }
-    }
+  <Block
+    flex={0.1}
   >
     <Image
       source={
@@ -19,70 +13,56 @@ exports[`seedPhrase component matches the snapshot 1`] = `
       }
       style={
         Object {
-          "height": 60,
-          "width": 60,
+          "height": 80,
+          "width": 80,
         }
       }
     />
-  </View>
-  <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
-    style={
-      Object {
-        "color": "#a4a4a3",
-        "flex": 1,
-        "fontSize": 20,
-        "fontWeight": "200",
-        "textAlign": "center",
-      }
-    }
+  </Block>
+  <Block
+    flex={0.1}
   >
-    Your secure phrase
-  </Text>
-  <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
-    style={
-      Object {
-        "color": "#4b132b",
-        "flex": 1,
-        "fontSize": 20,
-        "fontWeight": "400",
-        "textAlign": "center",
-        "width": "100%",
+    <CenteredText
+      msg="Your secure phrase is:"
+      style={
+        Object {
+          "color": "#a4a4a3",
+          "fontSize": 20,
+          "fontWeight": "200",
+        }
       }
-    }
+    />
+  </Block>
+  <Block
+    flex={0.1}
   >
-    bla
-  </Text>
-  <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
-    style={
-      Object {
-        "color": "#b3c90f",
-        "flex": 1,
-        "fontSize": 13,
-        "textAlign": "center",
+    <CenteredText
+      msg="mock seedPhrase"
+      style={
+        Object {
+          "color": "#4b132b",
+          "fontSize": 20,
+          "fontWeight": "400",
+        }
       }
-    }
+    />
+  </Block>
+  <Block
+    flex={0.2}
   >
-    IMPORTANT 
-    
-
-    Write these words down on an analog and secure place. Store it in at least two different places. Without these words you cannot access your wallet again. Anyone with these words can get access to your wallet. Taking a screenshot is not secure.
-  </Text>
-  <View
-    style={
-      Object {
-        "flex": 1,
-        "width": "100%",
+    <CenteredText
+      msg="IMPORTANT 
+ Write these words down on an analog andsecure place. Store it in at least two different places.Without these words you cannot access your wallet again.Anyone with these words can get access to your wallet. Taking a screenshot is not secure."
+      style={
+        Object {
+          "color": "#b3c90f",
+          "fontSize": 13,
+        }
       }
-    }
+    />
+  </Block>
+  <Block
+    flex={0.1}
   >
     <Checkbox
       checked={false}
@@ -110,13 +90,9 @@ exports[`seedPhrase component matches the snapshot 1`] = `
       uncheckedIcon="radio-button-unchecked"
       value=""
     />
-  </View>
-  <View
-    style={
-      Object {
-        "flex": 1,
-      }
-    }
+  </Block>
+  <Block
+    flex={0.1}
   >
     <Button
       accent={false}
@@ -130,6 +106,6 @@ exports[`seedPhrase component matches the snapshot 1`] = `
       text="NEXT STEP"
       upperCase={true}
     />
-  </View>
+  </Block>
 </Container>
 `;
