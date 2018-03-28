@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, Image, Dimensions, StyleSheet } from 'react-native'
+import { View, Text, Image, Dimensions, StyleSheet, TextStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
 
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     color: JolocomTheme.textStyles.subheadline.color,
     fontWeight: JolocomTheme.textStyles.subheadline.fontWeight,
     fontSize: JolocomTheme.textStyles.sectionheader.fontSize
-  },
+  } as TextStyle,
   avatarImage: {
     width: 80,
     height: 80
@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
     color: JolocomTheme.textStyles.sectionheader.color,
     fontWeight: JolocomTheme.textStyles.sectionheader.fontWeight,
     fontSize: JolocomTheme.textStyles.sectionheader.fontSize
-  },
+  } as TextStyle,
   sideNoteGreen: {
     color: JolocomTheme.palette.primary1Color,
     fontSize: JolocomTheme.textStyles.textCopy.fontSize,
-  }
+  } as TextStyle
 })
 
 const muiStyles = {
