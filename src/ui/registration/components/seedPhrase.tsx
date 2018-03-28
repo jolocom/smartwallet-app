@@ -13,12 +13,15 @@ export interface Props {
 }
 
 const styles = StyleSheet.create({
-  checkboxContainer: {
+  avatarContainer: {
     flex: 1,
-    width: '100%'
+    display: 'flex',
+    backgroundColor: 'red',
+    justifyContent:'center'
   },
   title: {
     flex: 1,
+    backgroundColor: 'blue',
     color: JolocomTheme.textStyles.subheadline.color,
     fontWeight: JolocomTheme.textStyles.subheadline.fontWeight,
     fontSize: JolocomTheme.textStyles.sectionheader.fontSize,
@@ -28,12 +31,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60
   },
-  avatarContainer: {
-    flex: 1,
-    display: 'flex',
-    justifyContent:'center'
-  },
   phrase: {
+    backgroundColor: 'purple',
     flex: 1,
     width: '100%',
     color: JolocomTheme.textStyles.sectionheader.color,
@@ -43,10 +42,16 @@ const styles = StyleSheet.create({
   },
   sideNoteGreen: {
     flex: 1,
+    backgroundColor: 'pink',
     color: JolocomTheme.palette.primary1Color,
     fontSize: JolocomTheme.textStyles.textCopy.fontSize,
     textAlign: 'center'
-  }
+  },
+  checkboxContainer: {
+    backgroundColor: 'white',
+    flex: 1,
+    width: '100%'
+  },
 })
 
 const muiStyles = {
@@ -105,7 +110,7 @@ export const SeedPhrase : React.SFC<Props> = (props) => {
           checked={props.checked}
         />
       </View>
-      <View style={{ flex: 1}}>
+      <View style={{ backgroundColor: 'gray', flex: 1}}>
         <Button
           style={ props.checked ? muiStyles.button : {} }
           disabled={ !props.checked }
