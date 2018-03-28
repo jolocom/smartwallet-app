@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 
 const ShallowRenderer = require('react-test-renderer/shallow')
 
-describe('seedPhrase component', ()=> {
+describe('generic block component', ()=> {
   it('matches the snapshot with no extra props', () => {
     const renderer = new ShallowRenderer()
     const rendered = renderer.render(<Block> null </Block>)
@@ -32,7 +32,11 @@ describe('seedPhrase component', ()=> {
       }
     })
 
-    const rendered = renderer.render(<Block style={ styles.block }> null </Block>)
+    const rendered = renderer.render(
+      <Block style={ styles.block }>
+        null
+      </Block>
+    )
     expect(rendered).toMatchSnapshot()
   })
 

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`seedPhrase component matches snapshot with flex prop 1`] = `
+exports[`generic block component matches snapshot with flex prop 1`] = `
 <View
   style={
     Array [
@@ -21,7 +21,7 @@ exports[`seedPhrase component matches snapshot with flex prop 1`] = `
 </View>
 `;
 
-exports[`seedPhrase component matches the snapshot with debug prop 1`] = `
+exports[`generic block component matches the snapshot with debug prop 1`] = `
 <View
   style={
     Array [
@@ -44,7 +44,7 @@ exports[`seedPhrase component matches the snapshot with debug prop 1`] = `
 </View>
 `;
 
-exports[`seedPhrase component matches the snapshot with no extra props 1`] = `
+exports[`generic block component matches the snapshot with no extra props 1`] = `
 <View
   style={
     Array [
@@ -62,7 +62,7 @@ exports[`seedPhrase component matches the snapshot with no extra props 1`] = `
 </View>
 `;
 
-exports[`seedPhrase component matches the snapshot with style prop 1`] = `
+exports[`generic block component matches the snapshot with style prop 1`] = `
 <View
   style={
     Array [
@@ -79,6 +79,6 @@ exports[`seedPhrase component matches the snapshot with style prop 1`] = `
     ]
   }
 >
-   null 
+  null
 </View>
 `;
