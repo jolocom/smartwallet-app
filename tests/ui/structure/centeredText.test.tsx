@@ -1,30 +1,29 @@
 import * as React from 'react'
-import { Container } from 'src/ui/structure/'
+import { CenteredText } from 'src/ui/structure/'
 import { StyleSheet } from 'react-native'
 
 const ShallowRenderer = require('react-test-renderer/shallow')
 
-describe('generic container component', ()=> {
+describe('generic centeredText component', ()=> {
   it('matches the snapshot with no extra props', () => {
     const renderer = new ShallowRenderer()
-    const rendered = renderer.render(<Container> null </Container>)
+    const rendered = renderer.render(<CenteredText msg={ 'test' }/>)
     expect(rendered).toMatchSnapshot()
   })
 
   it('matches the snapshot with style prop', () => {
     const renderer = new ShallowRenderer()
     const styles = StyleSheet.create({
-      block: {
+      text: {
         width: '30%',
         backgroundColor: 'blue'
       }
     })
 
     const rendered = renderer.render(
-      <Container style={ styles.block }>
-        null
-      </Container>
+      <CenteredText msg={ 'test' } style={ styles.text } />
     )
+
     expect(rendered).toMatchSnapshot()
   })
 
