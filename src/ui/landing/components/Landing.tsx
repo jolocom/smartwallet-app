@@ -3,6 +3,8 @@ import { View, Text, Animated, StyleSheet, Dimensions, ScrollView  } from 'react
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import Image from 'react-native-remote-svg'
 import { Button } from 'react-native-material-ui'
+import { Container, Header } from '../../structure'
+import { JolocomTheme } from '../../../styles/jolocom-theme'
 
 const { width: viewWidth , height: viewHeight } = Dimensions.get('window')
 export const sliderWidth = viewWidth
@@ -31,7 +33,7 @@ const carouselInfo = [{
 }, {
   imageUrl: require('../../../img/img_onboarding-05.svg'),
   title: 'Security is hard to maintain, that is why the storage costs.',
-  infoText: 'The storage of your data is payed in ether, a webbased currency. But only the change of data costs.'
+  infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
 }]
 
 export interface ComponentState {
@@ -41,9 +43,6 @@ export interface ComponentState {
 export interface Props {
   clickNext: () => void;
 }
-
-
-export interface LandingState {}
 
 export class LandingComponent extends React.Component<Props, ComponentState> {
 
@@ -56,14 +55,18 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
     const { imageUrl, title, infoText  } = item
     return(
       <View style={styles.slide}>
-        <View style={styles.container}>
+        <View style={styles.carouselContainer}>
           <Image
-            style={{width: viewWidth, height: viewHeight * 0.5}}
+            style={{
+              width: viewWidth,
+              height: viewHeight * 0.45,
+              marginTop: index === 0 ? '10%' : 0
+            }}
             source={imageUrl}
           />
-          <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-            <Text style={styles.header}>{ title }</Text>
-            <Text>{ title }</Text>
+          <View>
+            <Header title={title} />
+            <Text style={styles.subHeader}>{ infoText }</Text>
           </View>
         </View>
       </View>
@@ -98,18 +101,17 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
 
   render() {
     return (
-      <View>
-        <Text>Testing My Super Landing Screen</Text>
-        <Carousel
-          ref={(c : any) => { this._carousel = c }}
-          data={carouselInfo}
-          renderItem={this._renderItem}
-          sliderWidth={sliderWidth}
-          itemWidth={itemWidth}
-          layout={'default'}
-          onSnapToItem={(index : number) => this.setState({ activeSlide: index })}
-        />
-        { this.pagination }
+      <Container>
+          <Carousel
+            ref={'carousel'}
+            data={carouselInfo}
+            renderItem={this._renderItem}
+            sliderWidth={sliderWidth}
+            itemWidth={itemWidth}
+            layout={'default'}
+            onSnapToItem={(index : number) => this.setState({ activeSlide: index })}
+          />
+          { this.pagination }
         <View style={styles.buttonContainer}>
           <Button
             onPress={this.props.clickNext}
@@ -117,23 +119,27 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
             primary
             text="Create Your Identity" />
         </View>
-      </View>
+      </Container>
     )
   }
 }
 
 
 const styles = StyleSheet.create({
-  container: {
+  carouselContainer: {
     height: viewHeight * 0.6,
+    width: viewWidth,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: viewHeight * 0.1
   },
-  header: {
-    backgroundColor: 'green',
-    width: viewWidth * 0.6,
-    fontSize: 20,
-    margin: 5
+  subHeader: {
+    width: viewWidth * 0.85,
+    fontSize: 16,
+    color: JolocomTheme.textStyles.subheadline.color,
+    textAlign: 'center',
+    justifyContent: 'center',
+    margin: '5%'
   },
   buttonContainer: {
     flexDirection: 'row',

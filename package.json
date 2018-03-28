@@ -55,6 +55,7 @@
     }
   },
   "dependencies": {
+    "@types/react-native-snap-carousel": "^3.6.0",
     "expo": "^25.0.0",
     "material-colors": "^1.2.5",
     "react": "16.2.0",

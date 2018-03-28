@@ -7,27 +7,27 @@ import { registrationActions } from '../../../actions'
 import { StackNavigator } from 'react-navigation'
 
 export interface ReduxProps {
-  startCreateIdentity: () => void;
+  // startCreateIdentity: () => void;
   navigation : any
 }
 
 class LandingContainer extends React.Component<ReduxProps> {
 
+  static navigationOptions = { title: 'Landing', header: null }
+
   render() {
     const { navigate } = this.props.navigation
     return (
-      <View>
-        <LandingComponent
-          clickNext={() => navigate('PasswordEntry')}/>
-      </View>
+      <LandingComponent
+        clickNext={() => navigate('PasswordEntry')}/>
     )
   }
 }
 
-const mapDispatchToProps = (dispatch : Function) => {
-  return {
-    startCreateIdentity: () => dispatch(registrationActions.startCreateIdentity())
-  }
-}
+// const mapDispatchToProps = (dispatch : Function) => {
+//   return {
+//     startCreateIdentity: () => dispatch(registrationActions.startCreateIdentity())
+//   }
+// }
 
-export const Landing = connect(null, mapDispatchToProps)(LandingContainer)
+export const Landing = LandingContainer
