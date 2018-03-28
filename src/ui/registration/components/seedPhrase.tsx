@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text, Image, Dimensions, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Container } from 'src/ui/structure/container'
+import { Container, Block, CenteredText } from 'src/ui/structure/'
 
 const { Avatar, Checkbox, Button } = require('react-native-material-ui')
 const techGuyImg = require('src/img/img_techguy.png')
@@ -13,45 +13,24 @@ export interface Props {
 }
 
 const styles = StyleSheet.create({
-  avatarContainer: {
-    flex: 1,
-    display: 'flex',
-    backgroundColor: 'red',
-    justifyContent:'center'
-  },
   title: {
-    flex: 1,
-    backgroundColor: 'blue',
     color: JolocomTheme.textStyles.subheadline.color,
     fontWeight: JolocomTheme.textStyles.subheadline.fontWeight,
-    fontSize: JolocomTheme.textStyles.sectionheader.fontSize,
-    textAlign: 'center'
+    fontSize: JolocomTheme.textStyles.sectionheader.fontSize
   },
   avatarImage: {
-    width: 60,
-    height: 60
+    width: 80,
+    height: 80
   },
   phrase: {
-    backgroundColor: 'purple',
-    flex: 1,
-    width: '100%',
     color: JolocomTheme.textStyles.sectionheader.color,
     fontWeight: JolocomTheme.textStyles.sectionheader.fontWeight,
-    fontSize: JolocomTheme.textStyles.sectionheader.fontSize,
-    textAlign: 'center'
+    fontSize: JolocomTheme.textStyles.sectionheader.fontSize
   },
   sideNoteGreen: {
-    flex: 1,
-    backgroundColor: 'pink',
     color: JolocomTheme.palette.primary1Color,
     fontSize: JolocomTheme.textStyles.textCopy.fontSize,
-    textAlign: 'center'
-  },
-  checkboxContainer: {
-    backgroundColor: 'white',
-    flex: 1,
-    width: '100%'
-  },
+  }
 })
 
 const muiStyles = {
@@ -79,27 +58,36 @@ const muiStyles = {
 export const SeedPhrase : React.SFC<Props> = (props) => {
   return(
     <Container>
-      <View style={styles.avatarContainer}>
+      <Block flex={ 0.1 }>
         <Image
           style={ styles.avatarImage }
           source={ techGuyImg }
         />
-      </View>
-      <Text style={styles.title}>
-        Your secure phrase
-      </Text>
-      <Text style={styles.phrase}>
-        {props.seedPhrase}
-      </Text>
-      <Text style={styles.sideNoteGreen}>
-        IMPORTANT {'\n'}
-        Write these words down on an analog and secure place. Store it in at
-        least two different places. Without these words you cannot access
-        your wallet again.
-        Anyone with these words can get access to your wallet.
-        Taking a screenshot is not secure.
-      </Text>
-      <View style={ styles.checkboxContainer }>
+      </Block>
+      <Block flex={ 0.1 }>
+        <CenteredText 
+          msg={ 'Your secure phrase is:' }
+          style={ styles.title }
+        />
+      </Block>
+      <Block flex={ 0.1 }>
+        <CenteredText 
+          style={ styles.phrase }
+          msg={ props.seedPhrase }
+        />
+      </Block>
+      <Block flex={ 0.2 }>
+        <CenteredText 
+          style={ styles.sideNoteGreen }
+          msg={'IMPORTANT \n Write these words down on an analog and' + 
+            'secure place. Store it in at least two different places.' +
+            'Without these words you cannot access your wallet again.' +
+            'Anyone with these words can get access to your wallet. ' +
+            'Taking a screenshot is not secure.'
+          }
+        />
+      </Block>
+      <Block flex={ 0.1 }>
         <Checkbox
           style={ muiStyles.checkbox }
           onCheck={ props.onCheck } 
@@ -109,8 +97,8 @@ export const SeedPhrase : React.SFC<Props> = (props) => {
           value=''
           checked={props.checked}
         />
-      </View>
-      <View style={{ backgroundColor: 'gray', flex: 1}}>
+      </Block>
+      <Block flex={ 0.1 }>
         <Button
           style={ props.checked ? muiStyles.button : {} }
           disabled={ !props.checked }
@@ -118,7 +106,7 @@ export const SeedPhrase : React.SFC<Props> = (props) => {
           primary
           text='NEXT STEP'
         />
-      </View>
+      </Block>
     </Container>
   )
 }
