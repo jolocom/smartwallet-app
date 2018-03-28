@@ -20,9 +20,7 @@
     "typescript": "^2.7.0"
   },
   "scripts": {
-    "build": "./node_modules/.bin/tsc -p ./tsconfig.json",
-    "dev": "yarn build --watch",
-    "start": "react-native start",
+    "start": "react-native start --config ../../../../rn-cli.config.js",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "test": "node node_modules/jest/bin/jest.js"
