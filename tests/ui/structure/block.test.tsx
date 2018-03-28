@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Block } from 'src/ui/structure/'
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 
 const ShallowRenderer = require('react-test-renderer/shallow')
 
