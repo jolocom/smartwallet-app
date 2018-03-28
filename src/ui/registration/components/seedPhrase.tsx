@@ -100,8 +100,6 @@ export const SeedPhrase : React.SFC<Props> = (props) => {
           onCheck={ props.onCheck } 
           label='Yes, I have securely written down my phrase.'
           value=''
-          checkedIcon='radio-button-checked'
-          uncheckedIcon='radio-button-unchecked'
           checked={props.checked}
         />
       </View>

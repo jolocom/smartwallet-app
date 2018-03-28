@@ -10,7 +10,7 @@ describe('seedPhrase component', ()=> {
     const renderer = new ShallowRenderer()
 
     const props = {
-      seedPhrase: 'bla',
+      seedPhrase: 'mock seedPhrase',
       checked: false,
       onCheck: () => null
     }
