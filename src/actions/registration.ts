@@ -22,8 +22,20 @@ export const finishLoading = (loading: boolean) => {
 }
 
 export const generateAndEncryptKeyPairs = () => {
-  return (dispatch: (actions: AnyAction) => void) => {
-    dispatch(setLoadingMsg('NEW NEW NEW jakdfghksffbfdbvdf'))
-    console.log('generateAndEncryptKeyPairs')
+  return (dispatch: (actions: AnyAction) => void, {backendMiddleware}) => {
+    const randomString = '13912643311766764847120568039921' // TODO: grab from the state
+    const password = 'Password1' // TODO: grab from the state
+
+    dispatch(setLoadingMsg('Generating keys'))
+
+    const {
+      didDocument,
+      mnemonic,
+      masterKeyWIF,
+      genericSigningKeyWIF,
+      ethereumKeyWIF
+    } = backendMiddleware.jolocomLib.identity.create(randomString)
+
+    dispatch(setLoadingMsg('Fueling with Ether'))
   }
 }
