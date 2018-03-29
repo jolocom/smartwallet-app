@@ -22,28 +22,21 @@ export const fetchSeedPhrase = () => {
   }
 }
 
-// export const startCreateIdentity = () => {
-//   return (dispatch : (action : AnyAction) => void) => {
-//     dispatch(NavigationActions.navigate('PasswordEntry'))
-//   }
-// }
-
-
 export const savePassword = () => {
   return async (dispatch : (action : AnyAction) => void) => {
     const username = 'natascha'
     const password = 'test'
     console.log('SAVE PASSWORD ACTION CREATOR')
-    await Keychain.setGenericPassword(username, password)
+    // await Keychain.setGenericPassword(username, password)
+    //
+    // try {
+    //   const credentials = await Keychain.getGenericPassword()
+    //   console.log('CREDENTIALS: ', credentials)
+    // } catch (err) {
+    //   console.log('ERROR GET CREDENTIALS: ', err)
+    // }
 
-    try {
-      const credentials = await Keychain.getGenericPassword()
-      console.log('CREDENTIALS: ', credentials)
-    } catch (err) {
-      console.log('ERROR GET CREDENTIALS: ', err)
-    }
-
-
-    // dispatch(NavigationActions.navigate('PasswordEntry'))
+    console.log('NAVIGATION ACTIONS: ', NavigationActions.navigate)
+    return dispatch(NavigationActions.navigate({routeName: 'Landing'}))
   }
 }

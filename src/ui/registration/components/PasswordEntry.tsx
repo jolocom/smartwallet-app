@@ -63,9 +63,13 @@ export class PasswordEntryComponent extends React.Component<Props, ComponentStat
       <Container>
         <View style={styles.infoContainer}>
           <Header title={'Please enter a secure password'} />
-          <Text>The password is used to encrypt and protect your data</Text>
-          <Text>Please use at least 8 characters,
-          no spaces, at least one uppercase letter and one number.</Text>
+          <Text style={styles.subHeader}>
+            The password is used to encrypt and protect your data
+          </Text>
+          <Text style={styles.infoPassword}>
+            Please use at least 8 characters,
+            no spaces, at least one uppercase letter and one number.
+          </Text>
         </View>
         <KeyboardAvoidingView
           style={styles.inputContainer}
@@ -140,5 +144,19 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     height: '20%'
+  },
+  subHeader: {
+    fontSize: 14,
+    color: JolocomTheme.textStyles.subheadline.color,
+    textAlign: 'center',
+    justifyContent: 'center',
+    margin: '2%'
+  },
+  infoPassword: {
+    fontSize: 12,
+    color: JolocomTheme.textStyles.labelInputFields.color,
+    textAlign: 'center',
+    justifyContent: 'center',
+    margin: '2%'
   }
 })
