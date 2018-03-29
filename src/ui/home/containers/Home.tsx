@@ -23,7 +23,7 @@ class HomeComponent extends React.Component<ReduxProps, HomeState> {
        <Text> Hey Hey Hey {this.props.did} </Text>
          <Button
            onPress={() => this.props.navigation.navigate('Loading')}
-           title="Press Me"
+           title="Submit"
          />
      </View>
     )
@@ -36,7 +36,7 @@ const mapStateToProps = (state: HomeProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Function) => {
   return {
     setDid: (did:string) => dispatch(accountActions.setDid(did)),
   }
