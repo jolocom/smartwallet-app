@@ -70,10 +70,6 @@ export class MaskedImageComponent extends React.Component<MaskedImageProps,Maske
     return (
       <Svg style={styles.container} width={width} height={height}{...this._panResponder.panHandlers}>
         <G>
-          {/* <Image
-            href={require('src/img/entropy.jpg')}
-            clipPath='url(#clip)'
-          />  */}
           <Path 
             d={uncoveredPath}
             fill='none'
@@ -82,9 +78,9 @@ export class MaskedImageComponent extends React.Component<MaskedImageProps,Maske
             strokeLinejoin= 'round'
             strokeWidth='20'
           />
-          <Image style={styles.img}
+          {/* <Image style={styles.img}
             href={require('src/img/entropy.jpg')}
-          />
+          /> */}
           </G>
       </Svg>
     )

@@ -2,15 +2,15 @@ import * as React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
-import { entropyActions } from 'src/actions'
+import { registrationActions } from 'src/actions'
 import { EntropyComponent } from '../components/entropy'
 
 
 export interface EntropyProps {
+  isDrawn: boolean
 }
 
 export interface ReduxProps extends EntropyProps {
-  drawUpon: () => void
   submitEntropy: (entropy: any) => void
 }
 
@@ -39,7 +39,7 @@ class EntropyContainer extends React.Component<ReduxProps, EntropyState> {
     return (
      <View>
        <EntropyComponent
-         drawUpon={ entropyActions.drawUpon }
+         drawUpon={ this.drawUpon }
          isDrawn={ this.state.isDrawn }
          submitEntropy={ this.props.submitEntropy }
        />
@@ -56,8 +56,7 @@ const mapStateToProps = (state: EntropyState, props: EntropyProps) => {
 
 const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
-    submitEntropy: (entropy:any) => dispatch(entropyActions.submitEntropy(entropy)),
-    drawUpon: () => dispatch(entropyActions.drawUpon())
+    submitEntropy: (entropy:any) => dispatch(registrationActions.submitEntropy(entropy))
   }
 }
 
