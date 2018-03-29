@@ -2,8 +2,8 @@ import { AnyAction } from 'redux'
 
 export const submitEntropy = (entropy: any) => {
   return {
-    type: 'ENTROPY_SUBMITTED',
-    value: entropy
+    type: 'ENTROPY_READY',
+    value: true
   }
 }
 

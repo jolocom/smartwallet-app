@@ -3,7 +3,7 @@ import { AnyAction } from 'redux'
 export const entropy = (state = {}, action: AnyAction): any => {
   // console.log(action, state, 'reducer')
   switch (action.type) {
-    case 'ENTROPY_SUBMITTED':
+    case 'ENTROPY_READY':
       return action.value
     default:
       return state
