@@ -1,5 +1,19 @@
 import { AnyAction } from 'redux'
 
+export const submitEntropy = (entropy: any) => {
+  return {
+    type: 'ENTROPY_SUBMITTED',
+    value: entropy
+  }
+}
+
+export const drawUpon = () => {
+  return {
+    type: 'DRAWN_UPON',
+    value: true
+  }
+}
+
 export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
   return {
     type: 'SEEDPHRASE_SET',
