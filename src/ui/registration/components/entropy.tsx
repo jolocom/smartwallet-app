@@ -2,7 +2,8 @@ import * as React from 'react'
 import { Button } from 'react-native-material-ui'
 import { StyleSheet, Text, View, TextStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Container, Block, CenteredText } from 'src/ui/structure/'
+import { CenteredText } from 'src/ui/structure/'
+
 import { MaskedImageComponent } from './maskedImage'
 
 const styles = StyleSheet.create({

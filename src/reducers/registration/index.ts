@@ -4,7 +4,9 @@ export const entropy = (state = {}, action: AnyAction): any => {
   // console.log(action, state, 'reducer')
   switch (action.type) {
     case 'ENTROPY_READY':
-      return action.value
+      return Object.assign({}, state, {
+      encodedEntropy: action.value
+      })
     default:
       return state
   }

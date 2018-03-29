@@ -2,11 +2,11 @@ import * as React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
+
 import { registrationActions } from 'src/actions'
 import { EntropyComponent } from '../components/entropy'
 import { EntropyAgent } from 'src/agents/entropyAgent'
 import { entropy } from 'src/reducers/registration'
-import { encode } from 'punycode';
 
 
 export interface EntropyProps {
@@ -42,7 +42,6 @@ class EntropyContainer extends React.Component<ReduxProps, EntropyState> {
     this.state.entropyAgent.addFromDelta(y)
     if (!this.state.sufficientEntropy && this.state.entropyAgent.getProgress() === 1) {
       const encodedEntropy = this.generateRandomString()
-      console.log(encodedEntropy)
       this.props.submitEncodedEntropy(encodedEntropy)
       this.setState({sufficientEntropy: true}) 
     }
