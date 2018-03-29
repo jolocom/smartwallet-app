@@ -1,9 +1,16 @@
-import {StackNavigator} from 'react-navigation'
-import {Home} from './ui/home/'
+import { StackNavigator } from 'react-navigation'
+import { Home } from 'src/ui/home/'
+import { SeedPhrase } from 'src/ui/registration/containers/seedPhrase'
 
 export const RootStack = StackNavigator({
-    Home: { screen: Home }
+    Home: {
+      screen: Home
+    },
+    SeedPhrase: {
+      screen: SeedPhrase
+    }
   }, {
-    initialRouteName: 'Home'
-  }
+    initialRouteName: 'SeedPhrase',
+    headerMode: 'none'
+  },
 )
