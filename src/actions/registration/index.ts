@@ -1,4 +1,5 @@
 import { AnyAction } from 'redux'
+import { NavigationActions } from 'react-navigation'
 
 export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
   return {
