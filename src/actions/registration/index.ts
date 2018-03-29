@@ -7,13 +7,6 @@ export const submitEntropy = (entropy: any) => {
   }
 }
 
-export const drawUpon = () => {
-  return {
-    type: 'DRAWN_UPON',
-    value: true
-  }
-}
-
 export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
   return {
     type: 'SEEDPHRASE_SET',
