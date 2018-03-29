@@ -6,17 +6,14 @@ import { registrationActions } from 'src/actions'
 import { EntropyComponent } from '../components/entropy'
 import { EntropyAgent } from 'src/agents/entropyAgent'
 import { entropy } from 'src/reducers/registration'
+import { encode } from 'punycode';
 
 
 export interface EntropyProps {
-  entropyAgent: any
-  isDrawn: boolean
-  sufficientEntropy: boolean
 }
 
 export interface ReduxProps extends EntropyProps {
-  submitEntropy: (entropy: any) => void
-  // addPoint: (point: number) => void
+  submitEncodedEntropy: (entropy: string) => void
 }
 
 export interface EntropyState {
@@ -44,8 +41,19 @@ class EntropyContainer extends React.Component<ReduxProps, EntropyState> {
     this.state.entropyAgent.addFromDelta(x)
     this.state.entropyAgent.addFromDelta(y)
     if (!this.state.sufficientEntropy && this.state.entropyAgent.getProgress() === 1) {
+      const encodedEntropy = this.generateRandomString()
+      console.log(encodedEntropy)
+      this.props.submitEncodedEntropy(encodedEntropy)
       this.setState({sufficientEntropy: true}) 
     }
+  }
+
+  public generateRandomString = () => {
+    return this.state.entropyAgent.generateRandomString(4)
+  }
+
+  private submitEntropy = () => {
+    console.log(this.props)
   }
 
   public render() {
@@ -55,9 +63,9 @@ class EntropyContainer extends React.Component<ReduxProps, EntropyState> {
        <EntropyComponent
          addPoint={ this.addPoint }
          drawUpon={ this.drawUpon }
-         isDrawn={ this.props.isDrawn }
-         submitEntropy={ this.props.submitEntropy }
-         sufficientEntropy={ this.props.sufficientEntropy }
+         isDrawn={ this.state.isDrawn }
+         submitEntropy={ this.submitEntropy }
+         sufficientEntropy={ this.state.sufficientEntropy }
        />
      </View>
     )
@@ -66,16 +74,12 @@ class EntropyContainer extends React.Component<ReduxProps, EntropyState> {
 
 const mapStateToProps = (state: EntropyState, props: EntropyProps) => {
   return {
-    entropyAgent: state.entropyAgent,
-    isDrawn: state.isDrawn,
-    sufficientEntropy: state.sufficientEntropy
   }
 }
 
 const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
-    // addPoint: (point:number) => dispatch(registrationActions.addEntropyFromDelta(point)),
-    submitEntropy: (entropy:any) => dispatch(registrationActions.submitEntropy(entropy))
+    submitEncodedEntropy: (entropy: string) => dispatch(registrationActions.submitEncodedEntropy(entropy))
   }
 }
 

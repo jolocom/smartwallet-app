@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
 })
 
 export interface EntropyProps {
-  addPoint: any
-  drawUpon: any
+  addPoint: (x: number, y: number) => void
+  drawUpon: () => void
+  submitEntropy: () => void
   isDrawn: boolean
-  submitEntropy: any
   sufficientEntropy: boolean
 }
 
@@ -75,7 +75,7 @@ export class EntropyComponent extends React.Component<EntropyProps, EntropyState
                 disabled={!this.props.sufficientEntropy}
                 raised={ true }
                 text="NEXT STEP"
-                onPress={this.props.submitEntropy }
+                onPress={ this.props.submitEntropy }
               />
             </View>
           </View>

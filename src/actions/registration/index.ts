@@ -1,9 +1,9 @@
 import { AnyAction } from 'redux'
 
-export const submitEntropy = (entropy: any) => {
+export const submitEncodedEntropy = (entropy: string) => {
   return {
     type: 'ENTROPY_READY',
-    value: true
+    value: entropy
   }
 }
 

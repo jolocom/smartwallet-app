@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
 })
 
 export interface MaskedImageProps {
-  addPoint: any
-  drawUpon: any
+  addPoint: (x: number, y: number) => void
+  drawUpon: () => void
 }
 
 export interface MaskedImageState {
@@ -28,12 +28,12 @@ export class MaskedImageComponent extends React.Component<MaskedImageProps,Maske
     uncoveredPath: ''
   }
 
-  handleNewPoint = (point: any) => {
+  private handleNewPoint = (point: any) => {
     let d = this.state.uncoveredPath + point.type + point.x + ' ' + point.y + ' '
     this.setState({uncoveredPath: d})
   }
 
-  componentWillMount() {
+  public componentWillMount() {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
