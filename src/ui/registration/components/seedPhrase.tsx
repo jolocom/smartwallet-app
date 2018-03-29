@@ -59,25 +59,25 @@ const muiStyles = {
 export const SeedPhrase : React.SFC<Props> = (props) => {
   return(
     <Container>
-      <Block flex={ 0.1 }>
+      <Block debug flex={ 0.1 }>
         <Image
           style={ styles.avatarImage }
           source={ techGuySvg }
         />
       </Block>
-      <Block flex={ 0.1 }>
+      <Block debug flex={ 0.1 }>
         <CenteredText 
           msg={ 'Your secure phrase is:' }
           style={ styles.title }
         />
       </Block>
-      <Block flex={ 0.1 }>
+      <Block debug flex={ 0.1 }>
         <CenteredText 
           style={ styles.phrase }
           msg={ props.seedPhrase }
         />
       </Block>
-      <Block flex={ 0.2 }>
+      <Block debug flex={ 0.2 }>
         <CenteredText 
           style={ styles.sideNoteGreen }
           msg={'IMPORTANT \n Write these words down on an analog and' + 

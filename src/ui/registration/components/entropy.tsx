@@ -1,49 +1,43 @@
 import * as React from 'react'
 import { Button } from 'react-native-material-ui'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TextStyle } from 'react-native'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Container, Block, CenteredText } from 'src/ui/structure/'
 import { MaskedImageComponent } from './maskedImage'
-
-// const sjcl = require('node_modules/sjcl')
-// const EntropyAgent = require('src/agents/entropy')
-const JolocomTheme = require('src/styles/jolocom-theme')
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'purple',
+    backgroundColor: JolocomTheme.palette.primaryColor,
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
     width: '100%'
   },
   footerButton: {
-    backgroundColor: 'blue',
     position: 'absolute',
     bottom: 30,
     left: 90,
     right: 90
   },
   maskedImage: {
-    backgroundColor: 'yellow',
-    flex: 4,
-    // position: 'absolute',
-    // top: 0,
-    // left:0,
-    // right:0
-  },
-  header: {
-    backgroundColor: 'purple',
-    flex: 1,
-    justifyContent: 'center'
+    flex: 1
   },
   text: {
-    fontWeight: 'bold'
+    position: 'absolute',
+    top: '20%',
+    backgroundColor: JolocomTheme.palette.primaryColor,
+    fontSize: JolocomTheme.textStyles.headline.fontSize,
+    fontWeight: JolocomTheme.textStyles.headline.fontWeight,
+    color: JolocomTheme.textStyles.headline.color
   }
 })
 
 export interface EntropyProps {
+  addPoint: any
   drawUpon: any
   isDrawn: boolean
   submitEntropy: any
+  sufficientEntropy: boolean
 }
 
 export interface EntropyState {
@@ -57,28 +51,31 @@ export class EntropyComponent extends React.Component<EntropyProps, EntropyState
 
     if (!this.props.isDrawn) {
       Header = (
-        <View style={styles.header}>
-          <Text style={styles.text}> For security purposes, we need some randomness. 
-          Please put your finger anywhere on the screen and draw on it randomly. 
-          </Text>
-        </View>
+          <CenteredText 
+            style={styles.text}
+            msg={ 'For security purposes, we need some randomness.' +
+            ' Please put your finger anywhere on the screen and draw' + 
+            ' on it randomly.' }
+          /> 
       )
     }
 
     return (
 
-          <View style={styles.container}>
-          { Header }
-            <View style={styles.maskedImage}>
+          <View style={ styles.container }>
+            { Header }
+            <View style={ styles.maskedImage }>
               <MaskedImageComponent
-              drawUpon={this.props.drawUpon}
+              addPoint={ this.props.addPoint }
+              drawUpon={ this.props.drawUpon }
               />
             </View>
-            <View style={styles.footerButton}>
+            <View style={ styles.footerButton }>
               <Button
-                raised={true}
+                disabled={!this.props.sufficientEntropy}
+                raised={ true }
                 text="NEXT STEP"
-                onPress={(this.props as any).submitEntropy}
+                onPress={this.props.submitEntropy }
               />
             </View>
           </View>

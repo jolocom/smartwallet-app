@@ -18,6 +18,6 @@ export const RootStack = StackNavigator({
     },
 
   }, {
-    initialRouteName: 'SeedPhrase'
+    initialRouteName: 'Entropy'
   },
 )

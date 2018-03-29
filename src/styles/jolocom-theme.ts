@@ -21,7 +21,7 @@ const palette = {
 
 const textStyles = {
   headline: {
-    fontSize: '24px',
+    fontSize: 24,
     fontStyle: 'normal',
     fontWeight: '200',
     color: palette.textColor_grey
@@ -39,19 +39,19 @@ const textStyles = {
     color: palette.textColor
   },
   labelInputFields: {
-    fontSize: '13px',
+    fontSize: 13,
     fontStyle: 'normal',
     fontWeight: '300',
     color: palette.textColor_darkBrown75
   },
   inputFields: {
-    fontSize: '16px',
+    fontSize: 16,
     fontStyle: 'normal',
     fontWeight: '400',
     color: palette.textColor_silverGrey
   },
   contentInputFields: {
-    fontSize: '16px',
+    fontSize: 16,
     fontStyle: 'normal',
     fontWeight: '400',
     color: palette.textColor

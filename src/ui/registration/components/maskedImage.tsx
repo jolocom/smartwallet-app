@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { Animated, Dimensions, PanResponder, StyleSheet, View } from 'react-native'
+import { Svg, Defs, G, Image, Path } from 'react-native-svg'
 
-const { Svg, Defs, G, Image, Path } = require('react-native-svg')
-// import { setPath } from 'src/lib/stateChanges'
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -13,6 +12,7 @@ const styles = StyleSheet.create({
 })
 
 export interface MaskedImageProps {
+  addPoint: any
   drawUpon: any
 }
 
@@ -46,10 +46,12 @@ export class MaskedImageComponent extends React.Component<MaskedImageProps,Maske
         }
         const point = {type:'M', x: evt.nativeEvent.locationX, y: evt.nativeEvent.locationY}
         this.handleNewPoint(point)
+        this.props.addPoint(point.x, point.y)
       },
       onPanResponderMove: (evt, gestureState) => {
         const point = {type: 'L', x: evt.nativeEvent.locationX, y: evt.nativeEvent.locationY}
         this.handleNewPoint(point)
+        this.props.addPoint(point.x, point.y)
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
