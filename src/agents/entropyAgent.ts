@@ -1,4 +1,5 @@
-// const sjcl = require('node_modules/sjcl')
+const sjcl = require('sjcl')
+
 export class EntropyAgent {
 
   public generator: any
