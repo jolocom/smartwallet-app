@@ -1,17 +1,10 @@
 bower_components/
-dist/
 node_modules/
-public/
 build/
-ldpc-*
-data/
 .tern-project
 .expo/
 
 yarn.lock
-
-autodeploy.js
-pull_and_deploy.sh
 
 # Python
 venv/
@@ -60,3 +53,7 @@ app/plugins
 app/platforms
 app/wallet.json
 app/graph.json
+
+# Haul
+#
+haul-debug.log
