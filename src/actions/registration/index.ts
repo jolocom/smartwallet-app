@@ -20,9 +20,3 @@ export const fetchSeedPhrase = () => {
     dispatch(setSeedPhrase('supreme dinosaur surge pretty hard pony tool obscure meat leader that nasty'))
   }
 }
-
-// export const startCreateIdentity = () => {
-//   return (dispatch : (action : AnyAction) => void) => {
-//     dispatch(NavigationActions.navigate('PasswordEntry'))
-//   }
-// }

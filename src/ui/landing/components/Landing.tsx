@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text, Animated, StyleSheet, Dimensions, ScrollView  } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import Image from 'react-native-remote-svg'
+const ReactSVG = require('react-native-remote-svg').default
 import { Button } from 'react-native-material-ui'
 import { Container, Header } from '../../structure'
 import { JolocomTheme } from '../../../styles/jolocom-theme'
@@ -36,27 +36,20 @@ const carouselInfo = [{
   infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
 }]
 
-export interface ComponentState {
-  activeSlide: number;
-}
-
 export interface Props {
-  clickNext: () => void;
+  clickNext: () => void
+  activeSlide: number
+  updateActiveSlide: (index: number) => void
 }
 
-export class LandingComponent extends React.Component<Props, ComponentState> {
-
-  constructor(props: Props) {
-    super(props)
-    this.state = {activeSlide: 0};
-  }
+export class LandingComponent extends React.Component<Props> {
 
   _renderItem({item, index} : {item : any, index: number}) {
     const { imageUrl, title, infoText  } = item
     return(
       <View style={styles.slide}>
         <View style={styles.carouselContainer}>
-          <Image
+          <ReactSVG
             style={{
               width: viewWidth,
               height: viewHeight * 0.45,
@@ -74,7 +67,7 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
   }
 
   get pagination () {
-    const { activeSlide } = this.state
+    const { activeSlide } = this.props
     return (
       <Pagination
         dotsLength={carouselInfo.length}
@@ -102,16 +95,16 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
   render() {
     return (
       <Container>
-          <Carousel
-            ref={'carousel'}
-            data={carouselInfo}
-            renderItem={this._renderItem}
-            sliderWidth={sliderWidth}
-            itemWidth={itemWidth}
-            layout={'default'}
-            onSnapToItem={(index : number) => this.setState({ activeSlide: index })}
-          />
-          { this.pagination }
+        <Carousel
+          ref={'carousel'}
+          data={carouselInfo}
+          renderItem={this._renderItem}
+          sliderWidth={sliderWidth}
+          itemWidth={itemWidth}
+          layout={'default'}
+          onSnapToItem={(index : number) => this.props.updateActiveSlide(index)}
+        />
+        { this.pagination }
         <View style={styles.buttonContainer}>
           <Button
             onPress={this.props.clickNext}
