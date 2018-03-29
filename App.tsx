@@ -4,7 +4,7 @@ import {View} from 'react-native'
 import {RootStack} from './src/routes'
 import {store} from './src/store'
 import { ThemeProvider } from 'react-native-material-ui'
-import { JolocomTheme } from './src/styles/jolocom-theme'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 
 // tslint:disable-next-line: no-default-export

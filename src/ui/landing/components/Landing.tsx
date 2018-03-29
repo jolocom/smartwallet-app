@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { View, Text, Animated, StyleSheet, Dimensions, ScrollView  } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import Image from 'react-native-remote-svg'
+const ReactSVG = require('react-native-remote-svg').default
 import { Button } from 'react-native-material-ui'
 import { Container, Header } from '../../structure'
-import { JolocomTheme } from '../../../styles/jolocom-theme'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 const { width: viewWidth , height: viewHeight } = Dimensions.get('window')
 export const sliderWidth = viewWidth
@@ -56,7 +56,7 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
     return(
       <View style={styles.slide}>
         <View style={styles.carouselContainer}>
-          <Image
+          <ReactSVG
             style={{
               width: viewWidth,
               height: viewHeight * 0.45,

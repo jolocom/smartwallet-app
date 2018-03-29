@@ -10,27 +10,17 @@ import {
   Platform
 } from 'react-native'
 import { Button } from 'react-native-material-ui'
-import { Container, Header } from '../../structure'
-import { JolocomTheme } from '../../../styles/jolocom-theme'
-
-export interface ComponentState {
-  password: any;
-  confirmPassword: any;
-}
+import { Container, Header } from 'src/ui/structure'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 export interface Props {
-  clickNext: () => void;
+  clickNext: () => void
+  password: string
+  confirmPassword: string
+  handleTextInput: ({type, input} : {type: string, input: string}) => void
 }
 
-export class PasswordEntryComponent extends React.Component<Props, ComponentState> {
-
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      password: '',
-      confirmPassword: ''
-    }
-  }
+export class PasswordEntryComponent extends React.Component<Props> {
 
   passwordValidityCheck(password : string) {
     if (password.indexOf(' ') !== -1) {
@@ -45,19 +35,8 @@ export class PasswordEntryComponent extends React.Component<Props, ComponentStat
     return ''
   }
 
-  handleOnConfirm = () => {
-    let newState = {
-      ...this.state,
-      password: '',
-      confirmPassword: ''
-    }
-    this.setState(newState)
-    this.props.clickNext()
-  }
-
-
   render() {
-    const { password, confirmPassword } = this.state
+    const { password, confirmPassword } = this.props
 
     return (
       <Container>
@@ -81,7 +60,10 @@ export class PasswordEntryComponent extends React.Component<Props, ComponentStat
             editable={true}
             secureTextEntry={true}
             keyboardType={'default'}
-            onChangeText={ (password) => this.setState({password})} />
+            onChangeText={ (password) => this.props.handleTextInput({
+              type: 'password',
+              input: password
+            })} />
           <Text style={styles.textErrorField}>
             {
               password.length > 5 ?
@@ -97,8 +79,10 @@ export class PasswordEntryComponent extends React.Component<Props, ComponentStat
             secureTextEntry={true}
             keyboardType={'default'}
             onChangeText={
-              (confirmPassword) => this.setState({confirmPassword})
-            } />
+              (confirmPassword) => this.props.handleTextInput({
+                type: 'confirmPassword',
+                input: confirmPassword
+              })} />
           <Text style={styles.textErrorField}>
             {
               confirmPassword.length > 5 && password !== confirmPassword ?
@@ -109,7 +93,7 @@ export class PasswordEntryComponent extends React.Component<Props, ComponentStat
         </KeyboardAvoidingView>
         <View style={styles.buttonContainer}>
           <Button
-            onPress={this.handleOnConfirm}
+            onPress={this.props.clickNext}
             raised
             primary
             disabled={
