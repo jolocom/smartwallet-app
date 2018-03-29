@@ -1,6 +1,122 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`seedPhrase component matches the snapshot 1`] = `
+exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
+<Container>
+  <Block
+    flex={0.1}
+  >
+    <MyImage
+      source={
+        Object {
+          "testUri": "../../../src/img/img_techguy.svg",
+        }
+      }
+      style={
+        Object {
+          "height": 80,
+          "width": 80,
+        }
+      }
+    />
+  </Block>
+  <Block
+    flex={0.1}
+  >
+    <CenteredText
+      msg="Your secure phrase is:"
+      style={
+        Object {
+          "color": "#a4a4a3",
+          "fontSize": 20,
+          "fontWeight": "200",
+        }
+      }
+    />
+  </Block>
+  <Block
+    flex={0.1}
+  >
+    <CenteredText
+      msg="mock seedPhrase"
+      style={
+        Object {
+          "color": "#4b132b",
+          "fontSize": 20,
+          "fontWeight": "400",
+        }
+      }
+    />
+  </Block>
+  <Block
+    flex={0.2}
+  >
+    <CenteredText
+      msg="IMPORTANT 
+ Write these words down on an analog andsecure place. Store it in at least two different places.Without these words you cannot access your wallet again.Anyone with these words can get access to your wallet. Taking a screenshot is not secure."
+      style={
+        Object {
+          "color": "#b3c90f",
+          "fontSize": 13,
+        }
+      }
+    />
+  </Block>
+  <Block
+    flex={0.1}
+  >
+    <Checkbox
+      checked={true}
+      checkedIcon="radio-button-checked"
+      disabled={false}
+      label="Yes, I have securely written down my phrase."
+      onCheck={[Function]}
+      size={24}
+      style={
+        Object {
+          "icon": Object {
+            "color": "#b3c90f",
+          },
+          "label": Object {
+            "color": "#a4a4a3",
+            "fontSize": 13,
+            "fontWeight": "300",
+            "marginLeft": -5,
+            "padding": 0,
+            "position": "relative",
+            "textAlign": "left",
+          },
+        }
+      }
+      uncheckedIcon="radio-button-unchecked"
+      value=""
+    />
+  </Block>
+  <Block
+    flex={0.1}
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={null}
+      primary={true}
+      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+          },
+        }
+      }
+      text="NEXT STEP"
+      upperCase={true}
+    />
+  </Block>
+</Container>
+`;
+
+exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] = `
 <Container>
   <Block
     flex={0.1}
