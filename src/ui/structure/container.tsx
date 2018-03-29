@@ -1,12 +1,11 @@
 import * as React from 'react'
 import { View, StyleSheet, ViewStyle } from 'react-native'
 import { ReactNode } from 'react'
-import { JolocomTheme } from '../../styles/jolocom-theme'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',

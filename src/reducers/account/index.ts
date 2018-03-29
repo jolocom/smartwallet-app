@@ -1,4 +1,4 @@
-import {AnyAction} from 'redux'
+import { AnyAction } from 'redux'
 
 export const did = (state = '', action: AnyAction): string => {
   switch (action.type) {
