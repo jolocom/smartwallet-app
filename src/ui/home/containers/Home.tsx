@@ -1,8 +1,8 @@
 import * as React from 'react'
-import {View, Text} from 'react-native'
-import {connect} from 'react-redux'
-import {accountActions} from 'src/actions'
-import {AnyAction} from 'redux'
+import { View, Text } from 'react-native'
+import { connect } from 'react-redux'
+import { AnyAction } from 'redux'
+import { accountActions } from 'src/actions'
 
 export interface HomeProps {
   did: string;
@@ -18,8 +18,7 @@ class HomeComponent extends React.Component<ReduxProps, HomeState> {
   render() {
     return (
      <View>
-       <Text>Home Welcome Screen</Text>
-       <Text> {this.props.did} </Text>
+       <Text> HELLO </Text>
      </View>
     )
   }
@@ -32,9 +31,7 @@ const mapStateToProps = (state: HomeProps) => {
 }
 
 const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
-  return {
-    setDid: (did:string) => dispatch(accountActions.setDid(did))
-  }
+  return { }
 }
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeComponent)
