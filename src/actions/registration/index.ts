@@ -22,21 +22,22 @@ export const fetchSeedPhrase = () => {
   }
 }
 
-export const savePassword = () => {
+export const savePassword = (password : string) => {
   return async (dispatch : (action : AnyAction) => void) => {
-    const username = 'natascha'
-    const password = 'test'
-    console.log('SAVE PASSWORD ACTION CREATOR')
-    // await Keychain.setGenericPassword(username, password)
-    //
-    // try {
-    //   const credentials = await Keychain.getGenericPassword()
-    //   console.log('CREDENTIALS: ', credentials)
-    // } catch (err) {
-    //   console.log('ERROR GET CREDENTIALS: ', err)
-    // }
-
-    console.log('NAVIGATION ACTIONS: ', NavigationActions.navigate)
-    return dispatch(NavigationActions.navigate({routeName: 'Landing'}))
+    const username = 'jolocomSmartWallet'
+    try {
+      const res = await Keychain.setGenericPassword(username, password)
+      // dispatch(NavigationActions.navigate({routeName: 'Entropy'}))
+      return dispatch({
+        type: 'SAVE_PASSWORD',
+        response: res
+      })
+    } catch (err) {
+      console.log('Save password Keychain error:', err)
+      return dispatch({
+        type: 'SAVE_PASSWORD',
+        response: err
+      })
+    }
   }
 }
