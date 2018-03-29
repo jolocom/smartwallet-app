@@ -6,16 +6,6 @@ import {store} from './src/store'
 import { ThemeProvider } from 'react-native-material-ui'
 import { JolocomTheme } from './src/styles/jolocom-theme'
 
-// const uiTheme = {
-//   palette: {
-//     primaryColor: '#942f51',
-//   },
-//   toolbar: {
-//     container: {
-//       height: 50,
-//     }
-//   }
-// }
 
 // tslint:disable-next-line: no-default-export
 export default class App extends React.Component {
