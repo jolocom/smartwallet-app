@@ -16,7 +16,7 @@ export class EntropyAgent {
     return this.generator.getProgress()
   }
 
-  getRandomString(wordCount: number) {
+  generateRandomString(wordCount: number) {
     // returns an array of length wordCount filled with random 4 byte words.
     const intArray = new Int32Array(this.generator.randomWords(wordCount))
     const buf = Buffer.from(intArray.buffer)
