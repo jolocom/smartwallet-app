@@ -68,7 +68,6 @@
     "redux": "^3.7.2",
     "redux-mock-store": "^1.5.1",
     "redux-thunk": "^2.2.0",
-    "sjcl": "^1.0.7",
     "yarn": "^1.5.1"
   }
 }
