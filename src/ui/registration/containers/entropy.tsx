@@ -40,6 +40,10 @@ class EntropyContainer extends React.Component<ReduxProps, EntropyState> {
   private addPoint = (x: number, y: number) => {
     this.state.entropyAgent.addFromDelta(x)
     this.state.entropyAgent.addFromDelta(y)
+    this.checkEntropyProgress()
+  }
+
+  private checkEntropyProgress = () => {
     if (!this.state.sufficientEntropy && this.state.entropyAgent.getProgress() === 1) {
       const encodedEntropy = this.generateRandomString()
       this.props.submitEncodedEntropy(encodedEntropy)
