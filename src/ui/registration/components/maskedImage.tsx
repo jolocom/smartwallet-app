@@ -17,7 +17,7 @@ export interface MaskedImageProps {
 }
 
 export interface MaskedImageState {
-  uncoveredPath: any
+  uncoveredPath: string
 }
 
 export class MaskedImageComponent extends React.Component<MaskedImageProps,MaskedImageState> {
@@ -34,6 +34,7 @@ export class MaskedImageComponent extends React.Component<MaskedImageProps,Maske
   }
 
   public componentWillMount() {
+
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
@@ -80,9 +81,6 @@ export class MaskedImageComponent extends React.Component<MaskedImageProps,Maske
             strokeLinejoin= 'round'
             strokeWidth='20'
           />
-          {/* <Image style={styles.img}
-            href={require('src/img/entropy.jpg')}
-          /> */}
           </G>
       </Svg>
     )
