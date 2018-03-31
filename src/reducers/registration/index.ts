@@ -11,8 +11,6 @@ export const seedPhrase = (state = '', action: AnyAction): string => {
   }
 }
 
-
-
 export const passwordEntry = (state = '', action : AnyAction) : string => {
 
   switch (action.type) {

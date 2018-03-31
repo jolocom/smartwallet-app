@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
 import { registrationActions } from 'src/actions'
-import { PasswordEntryComponent } from 'src/ui/registration/components/PasswordEntry'
+import { PasswordEntryComponent } from 'src/ui/registration/components/passwordEntry'
 
 export interface ReduxProps {
   savePassword: (password : string) => void
