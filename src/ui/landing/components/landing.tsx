@@ -1,37 +1,35 @@
 import * as React from 'react'
-import { View, Text, Animated, StyleSheet, Dimensions, ScrollView  } from 'react-native'
+import { View, StyleSheet, Dimensions,  } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-const ReactSVG = require('react-native-remote-svg').default
+const Image = require('react-native-remote-svg').default
 import { Button } from 'react-native-material-ui'
-import { Container, Header } from '../../structure'
+import { Container, Header, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 const { width: viewWidth , height: viewHeight } = Dimensions.get('window')
 export const sliderWidth = viewWidth
-export const itemWidth = viewHeight
+export const itemWidth = viewWidth
 
 const carouselInfo = [{
-  imageUrl: require('../../../img/logo_start.svg'),
-  title: '',
-  infoText: ''
+  svgImage: require('src/img/img_onboarding-00.svg')
 }, {
-  imageUrl: require('../../../img/img_onboarding-01.svg'),
+  svgImage: require('src/img/img_onboarding-01.svg'),
   title: 'Create an independent and secure digital identity.',
   infoText: 'Collect your data at a secure place. It’s yours, so only you own it!'
 }, {
-  imageUrl: require('../../../img/img_onboarding-02.svg'),
+  svgImage: require('src/img/img_onboarding-02.svg'),
   title: 'Have all your data at your fingertips.',
   infoText: 'See all your data in one safe place. Pull the plug and your data is only yours.'
 }, {
-  imageUrl: require('../../../img/img_onboarding-03.svg'),
+  svgImage: require('src/img/img_onboarding-03.svg'),
   title: 'Be aware of the information you share.',
   infoText: 'See what you shared with whom. Have total control over your data.'
 }, {
-  imageUrl: require('../../../img/img_onboarding-04.svg'),
-  title: 'Our Wallet keeps your data as safe as your bank account.',
+  svgImage: require('src/img/img_onboarding-04.svg'),
+  title: 'Your data is as safe as in your bank account.',
   infoText: 'We use the latest encryption technology and blockchain to store your sensitive data.'
 }, {
-  imageUrl: require('../../../img/img_onboarding-05.svg'),
+  svgImage: require('src/img/img_onboarding-05.svg'),
   title: 'Security is hard to maintain, that is why the storage costs.',
   infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
 }]
@@ -41,7 +39,7 @@ export interface ComponentState {
 }
 
 export interface Props {
-  clickNext: () => void;
+  handleButtonTap: () => void;
 }
 
 export class LandingComponent extends React.Component<Props, ComponentState> {
@@ -51,25 +49,24 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
     this.state = {activeSlide: 0};
   }
 
-  _renderItem({item, index} : {item : any, index: number}) {
-    const { imageUrl, title, infoText  } = item
+  // TODO INTERFACE FOR ITEM
+  _renderItem({item} : {item : any}) {
+    const { svgImage, title, infoText  } = item
     return(
-      <View style={styles.slide}>
-        <View style={styles.carouselContainer}>
-          <ReactSVG
-            style={{
-              width: viewWidth,
-              height: viewHeight * 0.45,
-              marginTop: index === 0 ? '10%' : 0
-            }}
-            source={imageUrl}
-          />
-          <View>
-            <Header title={title} />
-            <Text style={styles.subHeader}>{ infoText }</Text>
-          </View>
-        </View>
-      </View>
+      <Container style={styles.carouselContainer}>
+        <Image
+          style={{ 
+            width: '100%',
+            flex: 1
+          }}
+          source={svgImage}
+        />
+
+        {title ? <Block flex={0.5}>
+          <Header title={title} />
+          <CenteredText style={styles.subHeader} msg={infoText} />
+        </Block> : null}
+      </Container>
     )
   }
 
@@ -102,36 +99,37 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
   render() {
     return (
       <Container>
+        <Block flex={ 0.8 }>
           <Carousel
             ref={'carousel'}
             data={carouselInfo}
             renderItem={this._renderItem}
+            lockScrollWhileSnapping
+            loop
             sliderWidth={sliderWidth}
             itemWidth={itemWidth}
             layout={'default'}
             onSnapToItem={(index : number) => this.setState({ activeSlide: index })}
           />
+        </Block>
+        <Block flex={ 0.1 }>
           { this.pagination }
-        <View style={styles.buttonContainer}>
+        </Block>
+        <Block flex={0.1}>
           <Button
-            onPress={this.props.clickNext}
+            onPress={this.props.handleButtonTap}
             raised
             primary
             text="Create Your Identity" />
-        </View>
+        </Block>
       </Container>
     )
   }
 }
 
-
 const styles = StyleSheet.create({
   carouselContainer: {
-    height: viewHeight * 0.6,
-    width: viewWidth,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: viewHeight * 0.1
+    width: viewWidth
   },
   subHeader: {
     width: viewWidth * 0.85,
@@ -145,9 +143,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     width: viewWidth
-  },
-  slide: {
-	  flexDirection: 'row',
-	  width: itemWidth
-	}
+  }
 })
