@@ -7,7 +7,7 @@ const { Checkbox, Button } = require('react-native-material-ui')
 const Image = require('react-native-remote-svg').default
 const techGuySvg = require('src/img/img_techguy.svg')
 
-export interface Props {
+interface Props {
   seedPhrase: string;
   checked: boolean;
   onCheck: () => void;

@@ -5,7 +5,8 @@ import { ReactNode } from 'react'
 const styles = StyleSheet.create({
   text: {
     width: '100%',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 16
   }
 })
 
