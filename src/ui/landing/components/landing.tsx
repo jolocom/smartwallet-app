@@ -1,17 +1,29 @@
 import * as React from 'react'
-import { View, StyleSheet, Dimensions,  } from 'react-native'
+import { StyleSheet, Dimensions, TextStyle } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-const Image = require('react-native-remote-svg').default
 import { Button } from 'react-native-material-ui'
-import { Container, Header, Block, CenteredText } from 'src/ui/structure'
+import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+const Image = require('react-native-remote-svg').default
 
-const { width: viewWidth , height: viewHeight } = Dimensions.get('window')
-export const sliderWidth = viewWidth
-export const itemWidth = viewWidth
+interface ComponentState {
+  activeSlide: number;
+}
 
-const carouselInfo = [{
-  svgImage: require('src/img/img_onboarding-00.svg')
+interface Props {
+  handleButtonTap: () => void;
+}
+
+interface Slide {
+  svgImage: any;
+  title: string;
+  infoText: string;
+}
+
+const carouselInfo: Array<Slide> = [{
+  svgImage: require('src/img/img_onboarding-00.svg'),
+  title: '',
+  infoText: ''
 }, {
   svgImage: require('src/img/img_onboarding-01.svg'),
   title: 'Create an independent and secure digital identity.',
@@ -34,66 +46,83 @@ const carouselInfo = [{
   infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
 }]
 
-export interface ComponentState {
-  activeSlide: number;
-}
-
-export interface Props {
-  handleButtonTap: () => void;
-}
+const viewWidth: number = Dimensions.get('window').width
 
 export class LandingComponent extends React.Component<Props, ComponentState> {
-
   constructor(props: Props) {
     super(props)
-    this.state = {activeSlide: 0};
+
+    this.state = {
+      activeSlide: 0
+    }
   }
 
-  // TODO INTERFACE FOR ITEM
-  _renderItem({item} : {item : any}) {
+  private _renderItem = ({ item } : { item : Slide }) => {
     const { svgImage, title, infoText  } = item
     return(
-      <Container style={styles.carouselContainer}>
+      <Container style={ this.styles.carouselContainer }>
         <Image
-          style={{ 
-            width: '100%',
-            flex: 1
-          }}
-          source={svgImage}
+          style={ this.styles.carouseSlide }
+          source={ svgImage }
         />
 
-        {title ? <Block flex={0.5}>
-          <Header title={title} />
-          <CenteredText style={styles.subHeader} msg={infoText} />
-        </Block> : null}
+        {title ? <Container style={ this.styles.carouselTextContainer }>
+          <CenteredText style= { this.styles.header } msg={ title } />
+          <CenteredText style={ this.styles.subHeader } msg={ infoText } />
+        </Container> : null}
       </Container>
     )
   }
 
-  get pagination () {
+  private renderPagination () {
     const { activeSlide } = this.state
+    const { gray1 } = JolocomTheme.jolocom
     return (
       <Pagination
-        dotsLength={carouselInfo.length}
-        activeDotIndex={activeSlide}
-        dotStyle={{
-          width: 7,
-          height: 7,
-          borderRadius: 5,
-          marginHorizontal: 1,
-          backgroundColor: '#942f51'
-        }}
-        inactiveDotStyle={{
-          width: 7,
-          height: 7,
-          borderRadius: 5,
-          marginHorizontal: 1,
-          backgroundColor: 'grey'
-        }}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
+        dotsLength={ carouselInfo.length }
+        activeDotIndex={ activeSlide }
+        dotStyle={ this.styles.dotStyle }
+        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: gray1 }]] }
+        inactiveDotOpacity={ 0.4 }
+        inactiveDotScale={ 0.6 }
       />
-    );
+    )
+  }
+
+  private get styles() {
+    return StyleSheet.create({
+      carouselContainer: {
+        width: viewWidth
+      },
+      carouseSlide: {
+        flex: 1,
+        width: '100%'
+      },
+      carouselTextContainer: {
+        flex: 0.4,
+        justifyContent: 'space-around'
+      },
+      dotStyle: {
+        width: 7,
+        height: 7,
+        backgroundColor: JolocomTheme.palette.primaryColor
+      },
+      header: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: JolocomTheme.textStyles.headline.color,
+        fontSize: JolocomTheme.textStyles.headline.fontSize,
+        fontWeight: JolocomTheme.textStyles.headline.fontWeight
+      } as TextStyle,
+      subHeader: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: JolocomTheme.textStyles.subheadline.color
+      },
+      buttonContainer: {
+        backgroundColor: JolocomTheme.palette.primaryColor
+      }
+    })
   }
 
   render() {
@@ -101,23 +130,25 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
       <Container>
         <Block flex={ 0.8 }>
           <Carousel
-            ref={'carousel'}
-            data={carouselInfo}
-            renderItem={this._renderItem}
+            data={ carouselInfo }
+            renderItem={ this._renderItem }
             lockScrollWhileSnapping
             loop
-            sliderWidth={sliderWidth}
-            itemWidth={itemWidth}
-            layout={'default'}
-            onSnapToItem={(index : number) => this.setState({ activeSlide: index })}
+            sliderWidth={ viewWidth }
+            itemWidth={ viewWidth }
+            layout={ 'default' }
+            onSnapToItem={(index : number) =>
+              this.setState({ activeSlide: index })
+            }
           />
         </Block>
         <Block flex={ 0.1 }>
-          { this.pagination }
+          { this.renderPagination() }
         </Block>
-        <Block flex={0.1}>
+        <Block flex={ 0.1 }>
           <Button
-            onPress={this.props.handleButtonTap}
+            onPress={ this.props.handleButtonTap }
+            style={{ container: this.styles.buttonContainer }}
             raised
             primary
             text="Create Your Identity" />
@@ -126,22 +157,3 @@ export class LandingComponent extends React.Component<Props, ComponentState> {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  carouselContainer: {
-    width: viewWidth
-  },
-  subHeader: {
-    width: viewWidth * 0.85,
-    fontSize: 16,
-    color: JolocomTheme.textStyles.subheadline.color,
-    textAlign: 'center',
-    justifyContent: 'center',
-    margin: '5%'
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: viewWidth
-  }
-})
