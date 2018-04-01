@@ -56,7 +56,7 @@ const muiStyles = {
   }
 }
 
-export const SeedPhrase : React.SFC<Props> = (props) => {
+export const SeedPhrase : React.SFC<Props> = props => {
   return(
     <Container>
       <Block flex={ 0.1 }>

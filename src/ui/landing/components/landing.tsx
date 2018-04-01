@@ -46,6 +46,7 @@ const carouselInfo: Array<Slide> = [{
   infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
 }]
 
+
 const viewWidth: number = Dimensions.get('window').width
 
 export class LandingComponent extends React.Component<Props, ComponentState> {

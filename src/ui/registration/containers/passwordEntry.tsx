@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
+import { Keyboard, EmitterSubscription } from 'react-native'
 import { registrationActions } from 'src/actions'
 import { PasswordEntryComponent } from 'src/ui/registration/components/passwordEntry'
 
@@ -10,42 +10,70 @@ export interface ReduxProps {
 }
 
 export interface ComponentState {
-  [x: string]: string
+  password: string;
+  confirmPassword: string;
+  keyboardDrawn: boolean;
 }
 
 class passwordEntryContainer extends React.Component<ReduxProps, ComponentState> {
+  private kbShowListener: EmitterSubscription;
+  private kbHideListener: EmitterSubscription;
+
   constructor(props: ReduxProps) {
     super(props)
     this.state = {
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      keyboardDrawn: false
     }
+
+    this.kbShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this.handleKeyboardShow
+    )
+ 
+    this.kbHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this.handleKeyboardHide
+    )
   }
 
-  handleOnConfirm = () => {
-    console.log('handle on confirm: ', this.state)
-    let newState = {
-      ...this.state,
-      password: '',
-      confirmPassword: ''
-    }
-    this.setState(newState)
+  componentWillUnmount() {
+    this.kbShowListener.remove()
+    this.kbHideListener.remove()
+  }
+
+  private handleKeyboardShow = () : void => {
+    this.setState({ keyboardDrawn: true })
+	}
+
+  private handleKeyboardHide = () : void => {
+    this.setState({ keyboardDrawn: false })
+	}
+
+  // TODO
+  private handleOnConfirm = () => {
     this.props.savePassword(this.state.password)
   }
 
-  handleTextInput = ({type, input} : {type : string, input : string}) => {
-    this.setState({
-      [type]: input
-    })
+  private onPasswordChange = (password: string) : void => {
+    this.setState({ password })
+  }
+
+  private onPasswordConfirmChange = (confirmPassword: string) : void => {
+    this.setState({ confirmPassword })
   }
 
   render() {
     return (
       <PasswordEntryComponent
-        handleTextInput={this.handleTextInput}
-        password={this.state.password}
-        confirmPassword={this.state.confirmPassword}
-        clickNext={this.handleOnConfirm}/>
+        onPasswordChange={ this.onPasswordChange }
+        onPasswordConfirmChange={ this.onPasswordConfirmChange }
+        password={ this.state.password }
+        confirmPassword={ this.state.confirmPassword }
+        keyboardDrawn={ this.state.keyboardDrawn }
+        clickNext={ this.handleOnConfirm }
+      />
     )
   }
 }

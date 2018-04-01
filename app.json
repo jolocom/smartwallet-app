@@ -19,5 +19,6 @@
     }
   },
   "name": "smartwallet",
-  "displayName": "Smartwallet"
+  "displayName": "Smartwallet",
+  "orientation": "portrait"
 }
