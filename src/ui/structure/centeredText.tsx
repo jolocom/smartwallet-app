@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export interface Props {
+interface Props {
   msg: string;
   style?: TextStyle;
 }

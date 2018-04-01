@@ -1,14 +1,16 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { LandingComponent } from 'src/ui/landing/components/landing'
+import { navigationActions } from 'src/actions/'
+import { RootState } from 'src/reducers/'
+import { routeList } from 'src/routes'
 
-export interface PropsFromReduxState {}
-
-export interface Props extends PropsFromReduxState {
-  navigation: {
-    navigate: (route: string) => void;
-  };
+interface ConnectProps {
+  navigate: (route: routeList) => void;
 }
+
+interface OwnProps {}
+interface Props extends ConnectProps, OwnProps {}
 
 class LandingContainer extends React.Component<Props> {
   render() {
@@ -18,18 +20,19 @@ class LandingContainer extends React.Component<Props> {
   }
 
   private goToNextScreen = () => {
-    const nexScreenId = 'PasswordEntry'
-    this.props.navigation.navigate(nexScreenId)
+    this.props.navigate(routeList.PasswordEntry)
   }
-
 }
 
-const mapStateToProps = (state: PropsFromReduxState) => {
+const mapStateToProps = (state: RootState) => {
   return {}
 }
 
 const mapDispatchToProps = (dispatch: Function) => {
-  return {}
+  return {
+    navigate: (route: routeList) => dispatch(navigationActions.navigate(route))
+  }
 }
 
 export const Landing = connect(mapStateToProps, mapDispatchToProps)(LandingContainer)
+

@@ -1,12 +1,11 @@
 import { AnyAction } from 'redux'
+import { combineReducers } from 'redux'
+import { seedPhrase } from 'src/reducers/registration/seedPhrase'
 
-export const seedPhrase = (state = '', action: AnyAction): string => {
-  switch (action.type) {
-    case 'SEEDPHRASE_SET':
-      return action.value
-    case 'SEEDPHRASE_CLEAR':
-      return ''
-    default:
-      return state
-  }
+export interface RegistrationState {
+  readonly seedPhrase: string
 }
+
+export const registrationReducer = combineReducers({
+  seedPhrase
+})

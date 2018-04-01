@@ -5,21 +5,23 @@ import { Keyboard, EmitterSubscription } from 'react-native'
 import { registrationActions } from 'src/actions'
 import { PasswordEntryComponent } from 'src/ui/registration/components/passwordEntry'
 
-export interface ReduxProps {
+interface ConnectProps {
   savePassword: (password : string) => void
 }
 
-export interface ComponentState {
+interface Props extends ConnectProps {}
+
+interface State {
   password: string;
   confirmPassword: string;
   keyboardDrawn: boolean;
 }
 
-class passwordEntryContainer extends React.Component<ReduxProps, ComponentState> {
+class passwordEntryContainer extends React.Component<ConnectProps, State> {
   private kbShowListener: EmitterSubscription;
   private kbHideListener: EmitterSubscription;
 
-  constructor(props: ReduxProps) {
+  constructor(props: Props) {
     super(props)
     this.state = {
       password: '',

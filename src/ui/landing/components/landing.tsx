@@ -6,7 +6,7 @@ import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 const Image = require('react-native-remote-svg').default
 
-interface ComponentState {
+interface State {
   activeSlide: number;
 }
 
@@ -49,7 +49,7 @@ const carouselInfo: Array<Slide> = [{
 
 const viewWidth: number = Dimensions.get('window').width
 
-export class LandingComponent extends React.Component<Props, ComponentState> {
+export class LandingComponent extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 

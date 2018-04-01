@@ -1,14 +1,27 @@
 import * as React from 'react'
-import { NavigationActions, addNavigationHelpers, } from 'react-navigation'
+import { addNavigationHelpers } from 'react-navigation'
 import { connect } from 'react-redux'
 import { BackHandler } from 'react-native'
+import { AnyAction } from 'redux'
 import { Routes } from 'src/routes'
+import { RootState } from 'src/reducers/'
+import { navigationActions } from 'src/actions/'
 
 const { createReduxBoundAddListener } = require('react-navigation-redux-helpers')
 
-class Navigator extends React.Component<any> {
-  constructor(props: any) {
-    super(props)
+interface ConnectProps {
+  navigation: any;
+  goBack: () => void;
+}
+
+interface OwnProps {
+  dispatch: (action: AnyAction) => void;
+}
+
+interface Props extends ConnectProps, OwnProps {}
+
+class Navigator extends React.Component<Props> {
+  componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
   }
 
@@ -17,11 +30,12 @@ class Navigator extends React.Component<any> {
   }
 
   private navigateBack = () => {
-    this.props.dispatch(NavigationActions.back())
+    this.props.goBack()
     return true
   }
 
   render() {
+    console.log(this.props)
     return (
       <Routes navigation={addNavigationHelpers({
         dispatch: this.props.dispatch,
@@ -32,8 +46,16 @@ class Navigator extends React.Component<any> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
-  navigation: state.navigation
-})
+const mapStateToProps = (state: RootState) => {
+  return {
+    navigation: state.navigation
+  }
+}
 
-export const NavigatorContainer = connect(mapStateToProps)(Navigator)
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    goBack: () => dispatch(navigationActions.goBack())
+  }
+}
+
+export const NavigatorContainer = connect(mapStateToProps, mapDispatchToProps)(Navigator)
