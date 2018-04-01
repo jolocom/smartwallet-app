@@ -5,7 +5,9 @@ import { LandingComponent } from 'src/ui/landing/components/landing'
 export interface PropsFromReduxState {}
 
 export interface Props extends PropsFromReduxState {
-  navigation: any;
+  navigation: {
+    navigate: (route: string) => void;
+  };
 }
 
 class LandingContainer extends React.Component<Props> {

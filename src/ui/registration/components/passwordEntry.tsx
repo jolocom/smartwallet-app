@@ -1,146 +1,121 @@
 import * as React from 'react'
-import {
-  View,
-  Text,
-  Animated,
-  StyleSheet,
-  Dimensions,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform
-} from 'react-native'
+import { StyleSheet, TextInput, } from 'react-native'
 import { Button } from 'react-native-material-ui'
-import { Container, Header } from 'src/ui/structure'
+import { Container, Header, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 export interface Props {
-  clickNext: () => void
-  password: string
-  confirmPassword: string
-  handleTextInput: ({type, input} : {type: string, input: string}) => void
+  keyboardDrawn: boolean;
+  password: string;
+  confirmPassword: string;
+  onPasswordChange: (input:  string) => void;
+  onPasswordConfirmChange: (input:  string) => void;
+  clickNext: () => void;
 }
-
-export class PasswordEntryComponent extends React.Component<Props> {
-
-  passwordValidityCheck(password : string) {
-    if (password.indexOf(' ') !== -1) {
-      return 'No spaces allowed'
-    }
-    if (!password.match((/[A-Z]/))) {
-      return 'At least one uppercase letter needed'
-    }
-    if (!password.match((/[0-9]/))) {
-      return 'At least one number needed'
-    }
-    return ''
-  }
-
-  render() {
-    const { password, confirmPassword } = this.props
-
-    return (
-      <Container>
-        <View style={styles.infoContainer}>
-          <Header title={'Please enter a secure password'} />
-          <Text style={styles.subHeader}>
-            The password is used to encrypt and protect your data
-          </Text>
-          <Text style={styles.infoPassword}>
-            Please use at least 8 characters,
-            no spaces, at least one uppercase letter and one number.
-          </Text>
-        </View>
-        <KeyboardAvoidingView
-          style={styles.inputContainer}
-          behavior={Platform.OS === 'ios' ? "padding" : undefined}>
-          <TextInput
-            style={styles.textInputField}
-            placeholder={'Insert password'}
-            maxLength={40}
-            editable={true}
-            secureTextEntry={true}
-            keyboardType={'default'}
-            onChangeText={ (password) => this.props.handleTextInput({
-              type: 'password',
-              input: password
-            })} />
-          <Text style={styles.textErrorField}>
-            {
-              password.length > 5 ?
-              this.passwordValidityCheck(password) :
-              null
-            }
-          </Text>
-          <TextInput
-            style={styles.textInputField}
-            placeholder={'Confirm password'}
-            maxLength={40}
-            editable={true}
-            secureTextEntry={true}
-            keyboardType={'default'}
-            onChangeText={
-              (confirmPassword) => this.props.handleTextInput({
-                type: 'confirmPassword',
-                input: confirmPassword
-              })} />
-          <Text style={styles.textErrorField}>
-            {
-              confirmPassword.length > 5 && password !== confirmPassword ?
-              'Passwords do not match' :
-              null
-            }
-          </Text>
-        </KeyboardAvoidingView>
-        <View style={styles.buttonContainer}>
-          <Button
-            onPress={this.props.clickNext}
-            raised
-            primary
-            disabled={
-              password === confirmPassword && password.length > 7 ?
-              false :
-              true
-            }
-            text="Continue" />
-        </View>
-      </Container>
-    )
-  }
-}
-
 
 const styles = StyleSheet.create({
-  textInputField: {
-    width: '80%',
-    padding: '5%'
-  },
-  textErrorField: {
-    color: 'red'
-  },
-  infoContainer: {
-    height: '30%'
-  },
-  inputContainer: {
-    marginTop: '3%',
-    height: '35%',
-    width: '100%',
-    alignItems: 'center'
-  },
-  buttonContainer: {
-    height: '20%'
-  },
   subHeader: {
     fontSize: 14,
     color: JolocomTheme.textStyles.subheadline.color,
-    textAlign: 'center',
-    justifyContent: 'center',
-    margin: '2%'
   },
   infoPassword: {
     fontSize: 12,
-    color: JolocomTheme.textStyles.labelInputFields.color,
-    textAlign: 'center',
-    justifyContent: 'center',
-    margin: '2%'
+    color: JolocomTheme.textStyles.labelInputFields.color
+  },
+  textInputField: {
+    width: '80%'
+  },
+  textErrorField: {
+    color: 'red',
+    fontSize: 14
+  },
+  mainContainer: {
+    justifyContent: 'space-between'
+  },
+  nestedContainer: {
+    justifyContent: 'space-around'
+  },
+  buttonContainer: {
+    backgroundColor: JolocomTheme.palette.primaryColor
   }
 })
+
+export const PasswordEntryComponent : React.SFC<Props> = props => {
+  const { password, confirmPassword, keyboardDrawn } = props
+  const errorMsg = validateInput(password, confirmPassword)
+
+  return (
+    <Container style={ styles.mainContainer }>
+      <Block style={ styles.nestedContainer } flex={ 0.4 }>
+        <Header title={ keyboardDrawn ? '' : 'Please enter a secure password' }/>
+        <CenteredText
+          style={ styles.subHeader }
+          msg={ keyboardDrawn ? '' : 'The password is used to encrypt and protect your data' }
+        />
+        <CenteredText
+          style={ styles.infoPassword }
+          msg={ 'Please use at least 8 characters, ' +
+            'no spaces, at least one uppercase letter and one number.' }
+        />
+      </Block>
+      <Block style={ styles.nestedContainer } flex={ 0.3 }>
+        <TextInput
+          style={ styles.textInputField }
+          placeholder={ 'Insert password' }
+          maxLength={ 40 }
+          editable
+          secureTextEntry
+          keyboardType={ 'default' }
+          onChangeText={ props.onPasswordChange }
+        /> 
+        <TextInput
+          style={ styles.textInputField }
+          placeholder={ 'Confirm password' }
+          maxLength={ 40 }
+          editable
+          secureTextEntry
+          keyboardType={ 'default' }
+          onChangeText={ props.onPasswordConfirmChange }
+        />
+        <CenteredText
+          style={ styles.textErrorField }
+          msg={ password.length > 5 ? errorMsg : '' }
+        />
+      </Block>
+      <Block flex={ 0.1 }>
+        <Button
+          style={ !errorMsg ? { container: styles.buttonContainer } : {} }
+          onPress={ props.clickNext }
+          raised
+          primary
+          disabled={ !!errorMsg }
+          text="Continue"
+        />
+      </Block>
+    </Container>
+  )
+}
+
+const validateInput = (password: string, confirmPassword: string) : string => {
+  if (password.indexOf(' ') !== -1) {
+    return 'No spaces allowed'
+  }
+
+  if (!password.match((/[A-Z]/))) {
+    return 'At least one uppercase letter needed'
+  }
+
+  if (!password.match((/[0-9]/))) {
+    return 'At least one number needed'
+  }
+
+  if (password !== confirmPassword) {
+    return 'Passwords do not match'
+  }
+
+  if (password.length < 8) {
+    return 'At least 8 characters are required'
+  }
+
+  return ''
+}

@@ -9,7 +9,7 @@ export const RootStack = StackNavigator({
     SeedPhrase: { screen: SeedPhrase },
     Home: { screen: Home }
   }, {
-    initialRouteName: 'Landing',
+    initialRouteName: 'PasswordEntry',
     headerMode: 'none'
   }
 )
