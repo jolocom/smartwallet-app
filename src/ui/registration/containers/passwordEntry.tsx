@@ -51,7 +51,8 @@ class passwordEntryContainer extends React.Component<ReduxProps, ComponentState>
     this.setState({ keyboardDrawn: false })
 	}
 
-  private handleOnConfirm = () => {
+  private handleOnConfirm = () : void => {
+    Keyboard.dismiss()
     this.props.savePassword(this.state.password)
   }
 
