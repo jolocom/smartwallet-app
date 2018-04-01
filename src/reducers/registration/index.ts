@@ -10,15 +10,3 @@ export const seedPhrase = (state = '', action: AnyAction): string => {
       return state
   }
 }
-
-export const passwordEntry = (state = '', action : AnyAction) : string => {
-
-  switch (action.type) {
-    case 'SAVE_PASSWORD':
-      //TODO: indication to user that password saved correctly?
-      return state
-
-    default:
-      return state
-  }
-}
