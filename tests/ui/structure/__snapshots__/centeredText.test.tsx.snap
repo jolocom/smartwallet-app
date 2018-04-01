@@ -8,6 +8,7 @@ exports[`generic centeredText component matches the snapshot with no extra props
   style={
     Array [
       Object {
+        "fontSize": 16,
         "textAlign": "center",
         "width": "100%",
       },
@@ -27,6 +28,7 @@ exports[`generic centeredText component matches the snapshot with style prop 1`]
   style={
     Array [
       Object {
+        "fontSize": 16,
         "textAlign": "center",
         "width": "100%",
       },
