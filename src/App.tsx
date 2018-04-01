@@ -11,7 +11,7 @@ export default class App extends React.Component {
     return (
       <ThemeProvider uiTheme={{}}>
         <Provider store={ store }>
-          <NavigatorContainer />
+          <NavigatorContainer dispatch={ store.dispatch }/>
         </Provider>
       </ThemeProvider>
     )

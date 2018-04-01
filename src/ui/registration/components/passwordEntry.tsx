@@ -4,7 +4,7 @@ import { Button } from 'react-native-material-ui'
 import { Container, Header, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
-export interface Props {
+interface Props {
   keyboardDrawn: boolean;
   password: string;
   confirmPassword: string;

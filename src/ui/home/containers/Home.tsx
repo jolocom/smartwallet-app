@@ -3,18 +3,18 @@ import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
 import { accountActions } from 'src/actions'
+import { RootState } from 'src/reducers/'
 
-export interface HomeProps {
+interface ConnectProps {
   did: string;
-}
-
-export interface ReduxProps extends HomeProps {
   setDid: (did: string) => void;
 }
 
-export interface HomeState {}
+interface Props extends ConnectProps {}
 
-class HomeComponent extends React.Component<ReduxProps, HomeState> {
+interface State {}
+
+class HomeComponent extends React.Component<Props, State> {
   render() {
     return (
      <View>
@@ -26,9 +26,9 @@ class HomeComponent extends React.Component<ReduxProps, HomeState> {
   }
 }
 
-const mapStateToProps = (state: HomeProps) => {
+const mapStateToProps = (state: RootState) => {
   return {
-    did: state.did
+    did: state.account.did
   }
 }
 

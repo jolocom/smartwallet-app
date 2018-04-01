@@ -4,21 +4,21 @@ import { AnyAction } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
 import { registrationActions } from 'src/actions/'
+import { RootState } from 'src/reducers/'
 
-export interface PropsFromReduxState {
+interface ConnectProps {
   seedPhrase: string;
-}
-
-export interface Props extends PropsFromReduxState {
   fetchSeedPhrase: () => void;
   clearSeedPhrase: () => void;
 }
 
-export interface ComponentState {
+interface Props extends ConnectProps {}
+
+interface State {
   checked: boolean;
 }
 
-class SeedPhraseContainer extends React.Component<Props, ComponentState> {
+class SeedPhraseContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -43,9 +43,9 @@ class SeedPhraseContainer extends React.Component<Props, ComponentState> {
   }
 }
 
-const mapStateToProps = (state: PropsFromReduxState) => {
+const mapStateToProps = (state: RootState) => {
   return {
-    seedPhrase: state.seedPhrase
+    seedPhrase: state.registration.seedPhrase
   }
 }
 
