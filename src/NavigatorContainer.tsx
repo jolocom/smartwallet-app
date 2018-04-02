@@ -20,7 +20,7 @@ interface OwnProps {
 
 interface Props extends ConnectProps, OwnProps {}
 
-export class Navigator extends React.Component<Props> {
+export class NavigatorContainer extends React.Component<Props> {
   private addListener: (name: string, cb: NavigationEventCallback) =>
     NavigationEventSubscription
 
@@ -66,4 +66,4 @@ const mapDispatchToProps = (dispatch: Function) => {
   }
 }
 
-export const NavigatorContainer = connect(mapStateToProps, mapDispatchToProps)(Navigator)
+export const Navigator = connect(mapStateToProps, mapDispatchToProps)(NavigatorContainer)

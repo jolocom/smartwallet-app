@@ -17,9 +17,9 @@ interface State {
   keyboardDrawn: boolean;
 }
 
-class passwordEntryContainer extends React.Component<ConnectProps, State> {
-  private kbShowListener: EmitterSubscription;
-  private kbHideListener: EmitterSubscription;
+export class PasswordEntryContainer extends React.Component<Props, State> {
+  private kbShowListener!: EmitterSubscription;
+  private kbHideListener!: EmitterSubscription;
 
   constructor(props: Props) {
     super(props)
@@ -29,29 +29,29 @@ class passwordEntryContainer extends React.Component<ConnectProps, State> {
       keyboardDrawn: false
     }
 
+    this.setupListeners()
+  }
+
+  componentWillUnmount() {
+    this.removeListeners()
+  }
+
+  private setupListeners() : void {
     this.kbShowListener = Keyboard.addListener(
       'keyboardDidShow',
-      this.handleKeyboardShow
+      () => this.setState({ keyboardDrawn: true })
     )
  
     this.kbHideListener = Keyboard.addListener(
       'keyboardDidHide',
-      this.handleKeyboardHide
+      () => this.setState({ keyboardDrawn: false })
     )
   }
 
-  componentWillUnmount() {
+  private removeListeners() : void {
     this.kbShowListener.remove()
     this.kbHideListener.remove()
   }
-
-  private handleKeyboardShow = () : void => {
-    this.setState({ keyboardDrawn: true })
-	}
-
-  private handleKeyboardHide = () : void => {
-    this.setState({ keyboardDrawn: false })
-	}
 
   private handleOnConfirm = () : void => {
     Keyboard.dismiss()
@@ -91,4 +91,4 @@ const mapDispatchToProps = (dispatch : Function ) => {
 export const PasswordEntry = connect(
   null,
   mapDispatchToProps
-)(passwordEntryContainer)
+)(PasswordEntryContainer)
