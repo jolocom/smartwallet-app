@@ -15,9 +15,9 @@ describe('seedPhrase container', ()=> {
     }
 
     const rendered = shallow(<SeedPhraseContainer {...props}/>)
-    rendered.unmount()
-
     expect(rendered).toMatchSnapshot()
+
+    rendered.unmount()
     expect(fetchSeedPhrase.mock.calls.length).toBe(1)
     expect(clearSeedPhrase.mock.calls.length).toBe(1)
   })
