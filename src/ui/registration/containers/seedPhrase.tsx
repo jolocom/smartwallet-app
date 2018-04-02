@@ -18,7 +18,7 @@ interface State {
   checked: boolean;
 }
 
-class SeedPhraseContainer extends React.Component<Props, State> {
+export class SeedPhraseContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -28,6 +28,10 @@ class SeedPhraseContainer extends React.Component<Props, State> {
 
   componentDidMount() {
     this.props.fetchSeedPhrase()
+  }
+
+  componentWillUnmount() {
+    this.props.clearSeedPhrase()
   }
 
   render() {
