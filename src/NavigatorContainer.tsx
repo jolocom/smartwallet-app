@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { addNavigationHelpers } from 'react-navigation'
+import { addNavigationHelpers, NavigationEventSubscription, NavigationEventCallback } from 'react-navigation'
 import { connect } from 'react-redux'
 import { BackHandler } from 'react-native'
 import { AnyAction } from 'redux'
@@ -20,7 +20,15 @@ interface OwnProps {
 
 interface Props extends ConnectProps, OwnProps {}
 
-class Navigator extends React.Component<Props> {
+export class Navigator extends React.Component<Props> {
+  private addListener: (name: string, cb: NavigationEventCallback) =>
+    NavigationEventSubscription
+
+  constructor(props: Props) {
+    super(props)
+    this.addListener = createReduxBoundAddListener('root')
+  }
+
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
   }
@@ -40,7 +48,7 @@ class Navigator extends React.Component<Props> {
       <Routes navigation={addNavigationHelpers({
         dispatch: this.props.dispatch,
         state: this.props.navigation,
-        addListener: createReduxBoundAddListener('root')
+        addListener: this.addListener
       })}/>
     )
   }
