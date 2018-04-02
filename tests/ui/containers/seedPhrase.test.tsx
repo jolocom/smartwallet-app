@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { SeedPhraseContainer } from 'src/ui/registration/containers/seedPhrase'
 
-const { ThemeProvider } = require ('react-native-material-ui')
-
 describe('seedPhrase container', ()=> {
   it('mounts correctly and matches snapshot', () => {
     const fetchSeedPhrase = jest.fn()
@@ -17,8 +15,10 @@ describe('seedPhrase container', ()=> {
     const rendered = shallow(<SeedPhraseContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
 
+    expect(fetchSeedPhrase).toHaveBeenCalledTimes(1)
+    expect(clearSeedPhrase).not.toHaveBeenCalled()
+
     rendered.unmount()
-    expect(fetchSeedPhrase.mock.calls.length).toBe(1)
-    expect(clearSeedPhrase.mock.calls.length).toBe(1)
+    expect(clearSeedPhrase).toHaveBeenCalledTimes(1)
   })
 })

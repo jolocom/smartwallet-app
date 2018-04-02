@@ -55,7 +55,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    fetchSeedPhrase: () => dispatch(registrationActions.fetchSeedPhrase())
+    fetchSeedPhrase: () => dispatch(registrationActions.fetchSeedPhrase()),
+    clearSeedPhrase: () => dispatch(registrationActions.clearSeedPhrase())
   }
 }
 
