@@ -7,10 +7,11 @@ interface getPasswordResponse {
 
 export class KeyChain {
   private username = 'JolocomSmartWallet'
+  private nativeLib : any = Keychain
 
   async savePassword(password: string) : Promise<boolean> {
     try {
-      await Keychain.setGenericPassword(this.username, password)
+      await this.nativeLib.setGenericPassword(this.username, password)
       return true
     } catch (err) {
       return false
@@ -24,7 +25,7 @@ export class KeyChain {
       service: string;
     }
 
-    const result = await Keychain.getGenericPassword()
+    const result = await this.nativeLib.getGenericPassword()
 
     if (typeof result === 'boolean') {
       return {
