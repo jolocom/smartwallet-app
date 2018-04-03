@@ -44,13 +44,12 @@ export interface EntropyProps {
 export interface EntropyState {
 }
 
-export class EntropyComponent extends React.Component<EntropyProps, EntropyState> {
-
-  public render() {
+export const EntropyComponent : React.SFC<EntropyProps> = props => {
+  const { isDrawn, sufficientEntropy } = props
   
     let Header = null
 
-    if (!this.props.isDrawn) {
+    if (!props.isDrawn) {
       Header = (
           <CenteredText 
             style={styles.text}
@@ -61,25 +60,24 @@ export class EntropyComponent extends React.Component<EntropyProps, EntropyState
       )
     }
 
-    return (
+  return (
 
-          <View style={ styles.container }>
-            { Header }
-            <View style={ styles.maskedImage }>
-              <MaskedImageComponent
-              addPoint={ this.props.addPoint }
-              drawUpon={ this.props.drawUpon }
-              />
-            </View>
-            <View style={ styles.footerButton }>
-              <Button
-                disabled={!this.props.sufficientEntropy}
-                raised={ true }
-                text="NEXT STEP"
-                onPress={ this.props.submitEntropy }
-              />
-            </View>
+        <View style={ styles.container }>
+          { Header }
+          <View style={ styles.maskedImage }>
+            <MaskedImageComponent
+            addPoint={ props.addPoint }
+            drawUpon={ props.drawUpon }
+            />
           </View>
-    )
-  }
+          <View style={ styles.footerButton }>
+            <Button
+              disabled={!props.sufficientEntropy}
+              raised={ true }
+              text="NEXT STEP"
+              onPress={ props.submitEntropy }
+            />
+          </View>
+        </View>
+  )
 }
