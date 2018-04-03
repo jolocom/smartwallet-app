@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
-import { registrationActions } from '../../../actions'
+import { registrationActions } from 'src/actions'
 import { AnyAction } from 'redux'
 import Immutable from 'immutable'
 

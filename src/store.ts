@@ -1,7 +1,8 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import {rootReducer} from './reducers'
-import { Middleware } from './middleware'
+import { BackendMiddleware } from './backendMiddleware'
+import {AnyAction, Dispatch, Middleware, MiddlewareAPI, Action} from 'redux'
 
 const config = {
   fuelingEndpoint: 'https://faucet.jolocom.com/request',
@@ -16,11 +17,27 @@ const config = {
   }
 }
 
-const backend = new Middleware(config)
-const backendMiddleware = ({dispatch, getState}) => next => action(dispatch, getState, {backend})
+export interface ExtendedMiddlewareAPI<S=any, D=Action, B=BackendMiddleware> extends MiddlewareAPI<S> {
+  backendMiddleware: BackendMiddleware
+}
+
+export interface ExtendedMiddleware<S=any, D=Action> {
+(api: MiddlewareAPI<S>, middleware: BackendMiddleware): (next: Dispatch<D>) => Dispatch<D>
+}
+
+const middleware = new BackendMiddleware(config)
+const backendExtendedMiddleware: ExtendedMiddleware = (api: MiddlewareAPI<any>, middleware: BackendMiddleware) =>
+  (next: Dispatch<any>) => <A extends Action>(action : A) : A => {
+    if (typeof action === 'function') {
+    return next(action(api.dispatch, api.getState, {middleware}))
+  } else {
+    return next(action)
+  }
+}
+
 
 export const store = createStore(
   rootReducer,
   {},
-  applyMiddleware(thunk, backendMiddleware)
+  applyMiddleware(thunk, backendExtendedMiddleware(middleware))
 )
