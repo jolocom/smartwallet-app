@@ -18,6 +18,7 @@
     "enzyme-to-json": "^3.3.3",
     "haul": "^1.0.0-beta.13",
     "jest": "^22.4.3",
+    "react-dom": "^16.3.0",
     "react-test-renderer": "16.2.0",
     "ts-jest": "^22.0.4",
     "ts-loader": "^3.5.0",
@@ -31,6 +32,12 @@
     "test": "node node_modules/jest/bin/jest.js"
   },
   "jest": {
+    "setupFiles": [
+      "./tests/utils/setup.ts"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "transformIgnorePatterns": [
       "node_modules/(?!react-native|native-base|react-navigation|react-native-fabric)"
     ],
