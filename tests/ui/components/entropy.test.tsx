@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { shallow } from 'enzyme'
 import { EntropyComponent } from 'src/ui/registration/components/entropy'
 
 describe('Entropy component', ()=> {
