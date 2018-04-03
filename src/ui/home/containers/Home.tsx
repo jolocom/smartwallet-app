@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
 import {connect, Dispatch} from 'react-redux'
-import {accountActions, registrationActions} from '../../../actions'
+import {accountActions, registrationActions} from 'src/actions'
 import {AnyAction} from 'redux'
 import { StackNavigator } from 'react-navigation'
 
