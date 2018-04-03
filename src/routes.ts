@@ -10,12 +10,14 @@ export const enum routeList {
   Home = 'Home'
 }
 
+const navigationOptions = {
+  header: null
+}
+
 export const Routes = StackNavigator({
-    Landing: { screen: Landing },
-    PasswordEntry: { screen: PasswordEntry },
-    SeedPhrase: { screen: SeedPhrase },
-    Home: { screen: Home }
-  }, {
-    headerMode: 'none'
+    Landing: { screen: Landing, navigationOptions },
+    PasswordEntry: { screen: PasswordEntry, navigationOptions },
+    SeedPhrase: { screen: SeedPhrase, navigationOptions },
+    Home: { screen: Home, navigationOptions }
   }
 )
