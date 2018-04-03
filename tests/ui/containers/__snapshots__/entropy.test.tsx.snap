@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Entropy container matches the snapshot 1`] = `
+<Connect(EntropyContainer)
+  entropyAgent={
+    EntropyAgent {
+      "generator": Object {
+        "D": false,
+        "H": Object {},
+        "I": 1,
+        "J": 2,
+        "K": Object {
+          "progress": Object {},
+          "seeded": Object {},
+        },
+        "L": undefined,
+        "M": 7,
+        "N": 0,
+        "P": 0,
+        "T": Array [
+          0,
+          48,
+          64,
+          96,
+          128,
+          192,
+          256,
+          384,
+          512,
+          768,
+          1024,
+        ],
+        "U": Object {},
+        "Z": 0,
+        "b": Array [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+        ],
+        "ba": 80,
+        "c": Array [
+          Object {
+            "A": Array [],
+            "F": Array [
+              1779033703,
+              -1150833019,
+              1013904242,
+              -1521486534,
+              1359893119,
+              -1694144372,
+              528734635,
+              1541459225,
+            ],
+            "l": 0,
+          },
+        ],
+        "ca": 65536,
+        "da": 30000,
+        "f": 0,
+        "ga": 0,
+        "h": Array [
+          0,
+          0,
+          0,
+          0,
+        ],
+        "ha": 0,
+        "m": Array [
+          0,
+        ],
+        "o": 0,
+        "u": 0,
+      },
+    }
+  }
+  isDrawn={false}
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+  submitEncodedEntropy={[Function]}
+  sufficientEntropy={false}
+/>
+`;
