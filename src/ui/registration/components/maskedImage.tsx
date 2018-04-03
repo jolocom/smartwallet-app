@@ -17,23 +17,22 @@ export interface MaskedImageProps {
 }
 
 export interface MaskedImageState {
-  uncoveredPath: string
 }
 
 export class MaskedImageComponent extends React.Component<MaskedImageProps,MaskedImageState> {
 
-  public _panResponder: any
-
-  state: MaskedImageState = {
-    uncoveredPath: ''
-  }
+  private _panResponder: any
+  private _pathD: any
+  private _uncoveredPath: any
 
   private handleNewPoint = (point: any) => {
-    let d = this.state.uncoveredPath + point.type + point.x + ' ' + point.y + ' '
-    this.setState({uncoveredPath: d})
+    this._uncoveredPath = this._uncoveredPath + point.type + point.x + ' ' + point.y + ' '
+    this._pathD.setNativeProps({d: this._uncoveredPath})
   }
 
   public componentWillMount() {
+
+    this._uncoveredPath = ''
 
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -42,7 +41,7 @@ export class MaskedImageComponent extends React.Component<MaskedImageProps,Maske
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
   
       onPanResponderGrant: (evt, gestureState) => {
-        if (this.state.uncoveredPath === '') {
+        if (this._uncoveredPath === '') {
           this.props.drawUpon()
         }
         const point = {type:'M', x: evt.nativeEvent.locationX, y: evt.nativeEvent.locationY}
@@ -67,14 +66,14 @@ export class MaskedImageComponent extends React.Component<MaskedImageProps,Maske
 
   public render() {
 
-    const { uncoveredPath } = this.state
     const { width, height } = Dimensions.get('window')
 
     return (
       <Svg style={styles.container} width={width} height={height}{...this._panResponder.panHandlers}>
         <G>
-          <Path 
-            d={uncoveredPath}
+          <Path
+            d={this._uncoveredPath}
+            ref={ref => this._pathD = ref}
             fill='none'
             stroke='black'
             strokeLinecap='round'

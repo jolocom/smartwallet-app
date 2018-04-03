@@ -24,13 +24,10 @@ export interface EntropyState {
 
 class EntropyContainer extends React.Component<ReduxProps, EntropyState> {
 
-  constructor(props: ReduxProps) {
-    super(props)
-    this.state = {
-      entropyAgent: new EntropyAgent(),
-      isDrawn: false,
-      sufficientEntropy: false
-    }
+  state = {
+    entropyAgent: new EntropyAgent(),
+    isDrawn: false,
+    sufficientEntropy: false
   }
 
   private drawUpon = () => {
