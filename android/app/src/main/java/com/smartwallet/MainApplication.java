@@ -28,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new SvgPackage(),
             new KeychainPackage(),
+            new SQLitePluginPackage(),
             new VectorIconsPackage()
       );
     }
