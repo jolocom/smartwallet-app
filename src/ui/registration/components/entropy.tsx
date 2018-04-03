@@ -37,8 +37,8 @@ export interface EntropyProps {
   addPoint: (x: number, y: number) => void
   drawUpon: () => void
   submitEntropy: () => void
-  isDrawn: boolean
-  sufficientEntropy: boolean
+  readonly isDrawn: boolean
+  readonly sufficientEntropy: boolean
 }
 
 export interface EntropyState {
