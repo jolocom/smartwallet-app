@@ -1,34 +1,16 @@
 import * as React from 'react'
+import { mount, shallow } from 'enzyme'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 
-const ShallowRenderer = require('react-test-renderer/shallow')
-const configureStore = require('redux-mock-store')
-const { ThemeProvider } = require ('react-native-material-ui')
-
 describe('MaskedImage component', ()=> {
-  it('matches the snapshot with checkbox unchecked', () => {
-    const renderer = new ShallowRenderer()
+  it('matches the snapshot with empty uncovered path string', () => {
     const props = {
       addPoint: (x: number, y: number) => null, 
       drawUpon: () => null 
     }
-    const state = {
-      uncoveredPath: ''
-    }
-    const rendered = renderer.render(<MaskedImageComponent {...props, state}/>)
-    expect(rendered).toMatchSnapshot()
-  })
 
-  it('matches the snapshot with checkbox checked', () => {
-    const renderer = new ShallowRenderer()
-    const props = {
-      addPoint: (x: number, y: number) => null, 
-      drawUpon: () => null 
-    }
-    const state = {
-      uncoveredPath: ''
-    }
-    const rendered = renderer.render(<MaskedImageComponent {...props, state}/>)
+    const rendered = shallow(<MaskedImageComponent {...props}/>)
     expect(rendered).toMatchSnapshot()
+    expect(rendered.state().uncoveredPath).toEqual('')
   })
 })
