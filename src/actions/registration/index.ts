@@ -1,4 +1,5 @@
 import { AnyAction } from 'redux'
+import { BackendMiddleware } from 'src/backendMiddleware'
 
 export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
   return {
@@ -42,7 +43,7 @@ export const finishLoading = (loading: boolean) => {
 }
 
 export const generateAndEncryptKeyPairs = () => {
-  return (dispatch: (actions: AnyAction) => void, {backendMiddleware}) => {
+  return (dispatch : (actions: AnyAction) => void, middleware : BackendMiddleware) => {
     const randomString = '13912643311766764847120568039921' // TODO: grab from the state
     const password = 'Password1' // TODO: grab from the state
 
@@ -54,7 +55,7 @@ export const generateAndEncryptKeyPairs = () => {
       masterKeyWIF,
       genericSigningKeyWIF,
       ethereumKeyWIF
-    } = backendMiddleware.jolocomLib.identity.create(randomString)
+    } = middleware.jolocomLib.identity.create(randomString)
 
     dispatch(setLoadingMsg('Fueling with Ether'))
   }

@@ -17,21 +17,15 @@ const config = {
   }
 }
 
-export interface ExtendedMiddlewareAPI<S=any, D=Action, B=BackendMiddleware> extends MiddlewareAPI<S> {
-  backendMiddleware: BackendMiddleware
-}
-
-export interface ExtendedMiddleware<S=any, D=Action> {
-(api: MiddlewareAPI<S>, middleware: BackendMiddleware): (next: Dispatch<D>) => Dispatch<D>
-}
-
 const middleware = new BackendMiddleware(config)
-const backendExtendedMiddleware: ExtendedMiddleware = (api: MiddlewareAPI<any>, middleware: BackendMiddleware) =>
+export function backendExtendedMiddleware(middleware : BackendMiddleware): Middleware {
+  return (api: MiddlewareAPI<any>) =>
   (next: Dispatch<any>) => <A extends Action>(action : A) : A => {
     if (typeof action === 'function') {
-    return next(action(api.dispatch, api.getState, {middleware}))
-  } else {
-    return next(action)
+      return next((action as Function)(api.dispatch, api.getState, {middleware}))
+    } else {
+      return next(action)
+    }
   }
 }
 

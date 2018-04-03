@@ -1,5 +1,4 @@
-require 'jolocom-lib'
-
+const JolocomLib = require('jolocom-lib')
 
 export class BackendMiddleware {
   jolocomLib: any
