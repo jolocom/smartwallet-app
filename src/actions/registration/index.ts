@@ -1,4 +1,9 @@
 import { AnyAction } from 'redux'
+import { NavigationActions } from 'react-navigation'
+import { KeyChain } from 'src/lib/keychain'
+
+// TODO MOVE
+type Dispatch = (action: AnyAction) => void;
 
 export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
   return {
@@ -15,7 +20,18 @@ export const clearSeedPhrase = () : AnyAction => {
 
 // TODO Retrieval of encrypted key.
 export const fetchSeedPhrase = () => {
-  return (dispatch: (action: AnyAction) => void) => {
-    dispatch(setSeedPhrase('supreme dinosaur surge pretty hard pony tool obscure meat leader that nasty'))
+  return async (dispatch: Dispatch) => {
+    dispatch(setSeedPhrase('Mock Seed Phrase'))
+  }
+}
+
+export const savePassword = (password : string) => {
+  return async (dispatch : Dispatch) =>  {
+    const KC = new KeyChain()
+    const success = await KC.savePassword(password)
+
+    if (success) {
+      dispatch(NavigationActions.navigate({ routeName: 'SeedPhrase' }))
+    }
   }
 }

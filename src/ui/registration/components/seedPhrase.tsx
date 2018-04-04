@@ -7,7 +7,7 @@ const { Checkbox, Button } = require('react-native-material-ui')
 const Image = require('react-native-remote-svg').default
 const techGuySvg = require('src/img/img_techguy.svg')
 
-export interface Props {
+interface Props {
   seedPhrase: string;
   checked: boolean;
   onCheck: () => void;
@@ -56,7 +56,7 @@ const muiStyles = {
   }
 }
 
-export const SeedPhrase : React.SFC<Props> = (props) => {
+export const SeedPhrase : React.SFC<Props> = props => {
   return(
     <Container>
       <Block flex={ 0.1 }>

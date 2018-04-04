@@ -4,22 +4,22 @@ import { AnyAction } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
 import { registrationActions } from 'src/actions/'
+import { RootState } from 'src/reducers/'
 
-export interface PropsFromState {
+interface ConnectProps {
   seedPhrase: string;
-}
-
-export interface ReduxProps extends PropsFromState {
   fetchSeedPhrase: () => void;
   clearSeedPhrase: () => void;
 }
 
-export interface ComponentState {
+interface Props extends ConnectProps {}
+
+interface State {
   checked: boolean;
 }
 
-class SeedPhraseContainer extends React.Component<ReduxProps, ComponentState> {
-  constructor(props: ReduxProps) {
+export class SeedPhraseContainer extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props)
     this.state = {
       checked: false
@@ -28,6 +28,10 @@ class SeedPhraseContainer extends React.Component<ReduxProps, ComponentState> {
 
   componentDidMount() {
     this.props.fetchSeedPhrase()
+  }
+
+  componentWillUnmount() {
+    this.props.clearSeedPhrase()
   }
 
   render() {
@@ -43,15 +47,16 @@ class SeedPhraseContainer extends React.Component<ReduxProps, ComponentState> {
   }
 }
 
-const mapStateToProps = (state: PropsFromState) => {
+const mapStateToProps = (state: RootState) => {
   return {
-    seedPhrase: state.seedPhrase
+    seedPhrase: state.registration.seedPhrase
   }
 }
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    fetchSeedPhrase: () => dispatch(registrationActions.fetchSeedPhrase())
+    fetchSeedPhrase: () => dispatch(registrationActions.fetchSeedPhrase()),
+    clearSeedPhrase: () => dispatch(registrationActions.clearSeedPhrase())
   }
 }
 
