@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { accountReducer, AccountState } from 'src/reducers/account/'
 import { registrationReducer, RegistrationState } from 'src/reducers/registration/'
 import { navigationReducer } from 'src/reducers/navigation/'
+import { NavigationState } from 'react-navigation';
 
 export const rootReducer =  combineReducers({
   account: accountReducer,
@@ -12,5 +13,5 @@ export const rootReducer =  combineReducers({
 export interface RootState {
   readonly account: AccountState;
   readonly registration: RegistrationState;
-  readonly navigation: any;
+  readonly navigation: NavigationState;
 }

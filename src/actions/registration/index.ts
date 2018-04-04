@@ -1,16 +1,9 @@
 import { AnyAction } from 'redux'
-import { NavigationActions } from 'react-navigation'
 import { KeyChain } from 'src/lib/keychain'
+import { navigate } from 'src/actions/navigation/'
 
 // TODO MOVE
-type Dispatch = (action: AnyAction) => void;
-
-export const submitEncodedEntropy = (entropy: string) => {
-  return {
-    type: 'ENTROPY_READY',
-    value: entropy
-  }
-}
+type Dispatch = (action: AnyAction) => void
 
 export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
   return {
@@ -38,7 +31,7 @@ export const savePassword = (password : string) => {
     const success = await KC.savePassword(password)
 
     if (success) {
-      dispatch(NavigationActions.navigate({ routeName: 'SeedPhrase' }))
+      dispatch(navigate({ routeName: 'Entropy' }))
     }
   }
 }
