@@ -3,6 +3,7 @@ node_modules/
 build/
 .tern-project
 .expo/
+android/.gradle
 
 yarn.lock
 
