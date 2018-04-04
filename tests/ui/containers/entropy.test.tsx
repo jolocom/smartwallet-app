@@ -3,7 +3,7 @@ import thunk from 'redux-thunk'
 import { shallow } from 'enzyme'
 
 import { Entropy } from 'src/ui/registration/containers/entropy'
-import { EntropyAgent } from 'src/agents/entropyAgent'
+import { EntropyAgent } from 'src/lib/entropyAgent'
 
 const configureStore = require('redux-mock-store')
 const { ThemeProvider } = require ('react-native-material-ui')

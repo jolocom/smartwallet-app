@@ -18,20 +18,18 @@ interface State {
 }
 
 export class PasswordEntryContainer extends React.Component<Props, State> {
-  private kbShowListener!: EmitterSubscription;
-  private kbHideListener!: EmitterSubscription;
+  private kbShowListener!: EmitterSubscription
+  private kbHideListener!: EmitterSubscription
 
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      password: '',
-      confirmPassword: '',
-      keyboardDrawn: false
-    }
-
-    this.setupListeners()
+  state = {
+    password: '',
+    confirmPassword: '',
+    keyboardDrawn: false
   }
 
+  componentDidMount() {
+    this.setupListeners()
+  }
   componentWillUnmount() {
     this.removeListeners()
   }

@@ -1,85 +1,90 @@
 import * as React from 'react'
-import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
+import { navigationActions } from 'src/actions'
+import { EntropyComponent } from 'src/ui/registration/components/entropy'
+import { RootState } from 'src/reducers'
+import { 
+  EntropyGenerator,
+  EntropyGeneratorInterface
+} from 'src/lib/entropyGenerator'
 
-import { registrationActions } from 'src/actions'
-import { EntropyComponent } from '../components/entropy'
-import { EntropyAgent } from 'src/agents/entropyAgent'
-import { entropy } from 'src/reducers/registration'
-
-
-export interface EntropyProps {
+interface ConnectProps {
+  navigate: (encodedEntropy: string) => void;
 }
 
-export interface ReduxProps extends EntropyProps {
-  submitEncodedEntropy: (entropy: string) => void
+interface OwnProps { }
+
+interface Props extends OwnProps, ConnectProps {}
+
+interface State {
+  isDrawn: boolean;
+  encodedEntropy: string;
+  sufficientEntropy: boolean;
 }
 
-export interface EntropyState {
-  entropyAgent: any
-  isDrawn: boolean
-  sufficientEntropy: boolean
-}
-
-class EntropyContainer extends React.Component<ReduxProps, EntropyState> {
+export class EntropyContainer extends React.Component<Props, State> {
+  private entropyGenerator!: EntropyGeneratorInterface
 
   state = {
-    entropyAgent: new EntropyAgent(),
     isDrawn: false,
+    encodedEntropy: '',
     sufficientEntropy: false
   }
 
+  componentDidMount() {
+    this.entropyGenerator = new EntropyGenerator()
+  }
+
   private drawUpon = () => {
-    this.setState({isDrawn: true})
+    this.setState({ isDrawn: true })
   }
 
   private addPoint = (x: number, y: number) => {
-    this.state.entropyAgent.addFromDelta(x)
-    this.state.entropyAgent.addFromDelta(y)
+    this.entropyGenerator.addFromDelta(x)
+    this.entropyGenerator.addFromDelta(y)
     this.checkEntropyProgress()
   }
 
   private checkEntropyProgress = () => {
-    if (!this.state.sufficientEntropy && this.state.entropyAgent.getProgress() === 1) {
+    if (!this.state.sufficientEntropy && this.entropyGenerator.getProgress() === 1) {
       const encodedEntropy = this.generateRandomString()
-      this.props.submitEncodedEntropy(encodedEntropy)
-      this.setState({sufficientEntropy: true}) 
+      this.setState({ encodedEntropy })
+      this.setState({ sufficientEntropy: true })
     }
   }
 
-  public generateRandomString = () => {
-    return this.state.entropyAgent.generateRandomString(4)
+  private generateRandomString = () => {
+    return this.entropyGenerator.generateRandomString(4)
   }
 
   private submitEntropy = () => {
-    console.log(this.props)
+    this.props.navigate(this.state.encodedEntropy)
   }
 
-  public render() {
-
+  render() {
     return (
-     <View>
-       <EntropyComponent
-         addPoint={ this.addPoint }
-         drawUpon={ this.drawUpon }
-         isDrawn={ this.state.isDrawn }
-         submitEntropy={ this.submitEntropy }
-         sufficientEntropy={ this.state.sufficientEntropy }
-       />
-     </View>
+      <EntropyComponent
+        addPoint={ this.addPoint }
+        drawUpon={ this.drawUpon }
+        isDrawn={ this.state.isDrawn }
+        submitEntropy={ this.submitEntropy }
+        sufficientEntropy={ this.state.sufficientEntropy }
+      />
     )
   }
 }
 
-const mapStateToProps = (state: EntropyState, props: EntropyProps) => {
-  return {
-  }
+const mapStateToProps = (state: RootState) => {
+  return {}
 }
 
 const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
-    submitEncodedEntropy: (entropy: string) => dispatch(registrationActions.submitEncodedEntropy(entropy))
+    navigate: (encodedEntropy: string) => dispatch(navigationActions.navigate({
+      routeName: 'SeedPhrase',
+      params: { encodedEntropy }
+    }))
   }
 }
 
