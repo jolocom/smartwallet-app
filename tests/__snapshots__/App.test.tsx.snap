@@ -15,7 +15,9 @@ exports[`matches the snapshot 1`] = `
       }
     }
   >
-    <NavigationContainer />
+    <Connect(NavigatorContainer)
+      dispatch={[Function]}
+    />
   </Provider>
 </ThemeProvider>
 `;

@@ -21,7 +21,7 @@ const palette = {
 
 const textStyles = {
   headline: {
-    fontSize: '24px',
+    fontSize: 24,
     fontStyle: 'normal',
     fontWeight: '200',
     color: palette.textColor_grey

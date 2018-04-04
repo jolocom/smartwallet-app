@@ -1,4 +1,8 @@
-import { seedPhrase as reducer } from 'src/reducers/registration/'
+import {
+  registrationReducer as reducer,
+  RegistrationState
+} from 'src/reducers/registration/'
+
 import { registrationActions as actions} from 'src/actions/'
 
 describe('registration reducer', ()=> {
@@ -8,7 +12,9 @@ describe('registration reducer', ()=> {
   })
 
   it('should handle the SEEDPHRASE_CLEAR action', () => {
-    const initialState = 'mock seedPhrase'
+    const initialState : RegistrationState = {
+      seedPhrase: 'mock seedPhrase'
+    }
 
     expect(reducer(initialState, actions.clearSeedPhrase()))
       .toMatchSnapshot()

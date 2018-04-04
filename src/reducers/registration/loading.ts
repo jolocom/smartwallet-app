@@ -8,7 +8,7 @@ const initialState = Immutable.fromJS({
   }
 })
 
-export const registration = (state = initialState, action: AnyAction): string => {
+export const loading = (state = initialState, action: AnyAction): string => {
   switch (action.type) {
     case 'SET_LOADING_MSG':
       console.log('SET LOADING MSG')

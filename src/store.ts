@@ -29,9 +29,18 @@ export function backendExtendedMiddleware(middleware : BackendMiddleware): Middl
   }
 }
 
+const {
+  createReactNavigationReduxMiddleware
+} = require('react-navigation-redux-helpers')
+
+const navMiddleware = createReactNavigationReduxMiddleware(
+  'root',
+  (state : any) => state.navigation
+)
+
 
 export const store = createStore(
   rootReducer,
   {},
-  applyMiddleware(thunk, backendExtendedMiddleware(middleware))
+  applyMiddleware(thunk, navMiddleware, backendExtendedMiddleware(middleware))
 )
