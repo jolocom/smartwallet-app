@@ -1,10 +1,7 @@
 import * as React from 'react'
 import App from 'src/App'
 
-const ShallowRenderer = require('react-test-renderer/shallow')
-
 it('matches the snapshot', () => {
-  const renderer = new ShallowRenderer()
-  const rendered = renderer.render(<App />)
+  const rendered = shallow(<App />)
   expect(rendered).toMatchSnapshot()
 })

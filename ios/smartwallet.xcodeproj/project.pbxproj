@@ -50,6 +50,7 @@
 		A76EF2010AE043DF9AE0DB9A /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2BEE81DBEA5A40BFA1ECC7D0 /* Zocial.ttf */; };
 		A150FDA8A50347EFAD1D040C /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0CB56056AA94B958EBED53B /* libRNSVG.a */; };
 		3CD643797BB242E084059C6B /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3727644A2DD4CB18184E1E9 /* libRNSVG-tvOS.a */; };
+		4C18DB1762D74EF1A8FFBC49 /* libRNKeychain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9700B3E92E48F782F9FF84 /* libRNKeychain.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,6 +316,8 @@
 		28EC54AD24A749A5BD77C5C8 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; name = "RNSVG.xcodeproj"; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		C0CB56056AA94B958EBED53B /* libRNSVG.a */ = {isa = PBXFileReference; name = "libRNSVG.a"; path = "libRNSVG.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		C3727644A2DD4CB18184E1E9 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; name = "libRNSVG-tvOS.a"; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		6AB68C7D89494C879E0E206D /* RNKeychain.xcodeproj */ = {isa = PBXFileReference; name = "RNKeychain.xcodeproj"; path = "../node_modules/react-native-keychain/RNKeychain.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		7C9700B3E92E48F782F9FF84 /* libRNKeychain.a */ = {isa = PBXFileReference; name = "libRNKeychain.a"; path = "libRNKeychain.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,6 +349,7 @@
 				57FB63119747411ABD8F6770 /* libRNVectorIcons.a in Frameworks */,
 				A150FDA8A50347EFAD1D040C /* libRNSVG.a in Frameworks */,
 				3CD643797BB242E084059C6B /* libRNSVG-tvOS.a in Frameworks */,
+				4C18DB1762D74EF1A8FFBC49 /* libRNKeychain.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,6 +529,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				8FC30256DCBE491E85C7D9F5 /* RNVectorIcons.xcodeproj */,
 				28EC54AD24A749A5BD77C5C8 /* RNSVG.xcodeproj */,
+				6AB68C7D89494C879E0E206D /* RNKeychain.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1134,6 +1139,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-keychain\RNKeychainManager",
 				);
 			};
 			name = Debug;
@@ -1156,12 +1162,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-keychain\RNKeychainManager",
 				);
 			};
 			name = Release;
@@ -1185,6 +1191,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-keychain\RNKeychainManager",
 				);
 			};
 			name = Debug;
@@ -1207,6 +1214,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-keychain\RNKeychainManager",
 				);
 			};
 			name = Release;
@@ -1244,6 +1252,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-keychain\RNKeychainManager",
 				);
 			};
 			name = Debug;
@@ -1281,6 +1290,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-keychain\RNKeychainManager",
 				);
 			};
 			name = Release;

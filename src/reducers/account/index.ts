@@ -1,10 +1,11 @@
 import { AnyAction } from 'redux'
+import { combineReducers } from 'redux'
+import { did } from 'src/reducers/account/did'
 
-export const did = (state = '', action: AnyAction): string => {
-  switch (action.type) {
-    case 'DID_SET':
-      return action.value
-    default:
-      return state
-  }
+export interface AccountState {
+  readonly did: string
 }
+
+export const accountReducer = combineReducers({
+  did
+})

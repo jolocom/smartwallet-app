@@ -1,19 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`seedPhrase container matches the snapshot 1`] = `
-<Connect(SeedPhraseContainer)
-  clearSeedPhrase={[Function]}
-  fetchSeedPhrase={[Function]}
-  seedPhrase=""
-  store={
-    Object {
-      "clearActions": [Function],
-      "dispatch": [Function],
-      "getActions": [Function],
-      "getState": [Function],
-      "replaceReducer": [Function],
-      "subscribe": [Function],
-    }
-  }
+exports[`seedPhrase container mounts correctly and matches snapshot 1`] = `
+<SeedPhrase
+  checked={false}
+  onCheck={[Function]}
+  seedPhrase="mock seedPhrase"
 />
 `;

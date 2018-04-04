@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export interface Props {
+interface Props {
   children: ReactNode;
   style?: ViewStyle;
 }
