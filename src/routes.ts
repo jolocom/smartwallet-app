@@ -1,20 +1,24 @@
-import { StackNavigator } from 'react-navigation'
-import { Loading } from './ui'
-import { Home } from 'src/ui/home/containers/Home'
-import { SeedPhrase } from 'src/ui/registration/containers/seedPhrase'
+import { StackNavigator, } from 'react-navigation'
+import { Home } from 'src/ui/home/'
+import { Landing } from 'src/ui/landing/'
+import { PasswordEntry, Loading, SeedPhrase } from 'src/ui/registration'
 
-export const RootStack = StackNavigator({
-    Home: {
-      screen: Home
-    },
-    Loading: {
-      screen: Loading
-    },
-    SeedPhrase: {
-      screen: SeedPhrase
-    }
-  }, {
-    initialRouteName: 'SeedPhrase',
-    headerMode: 'none'
-  },
+export const enum routeList {
+  Landing = 'Landing',
+  PasswordEntry = 'PasswordEntry',
+  SeedPhrase = 'SeedPhrase',
+  Home = 'Home'
+}
+
+const navigationOptions = {
+  header: null
+}
+
+export const Routes = StackNavigator({
+    Landing: { screen: Landing, navigationOptions },
+    PasswordEntry: { screen: PasswordEntry, navigationOptions },
+    Loading: { screen: Loading, navigationOptions },
+    SeedPhrase: { screen: SeedPhrase, navigationOptions },
+    Home: { screen: Home, navigationOptions }
+  }
 )

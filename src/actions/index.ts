@@ -1,7 +1,9 @@
-import * as accountActions from './account'
-import * as registrationActions from './registration'
+import * as accountActions from 'src/actions/account/'
+import * as registrationActions from 'src/actions/registration/'
+import * as navigationActions from 'src/actions/navigation/'
 
 export {
   accountActions,
-  registrationActions
+  registrationActions,
+  navigationActions
 }

@@ -1,21 +1,22 @@
 import * as React from 'react'
+<<<<<<< HEAD
 import { View, Text, StyleSheet, Button } from 'react-native'
 import {connect, Dispatch} from 'react-redux'
 import {accountActions, registrationActions} from 'src/actions'
 import {AnyAction} from 'redux'
 import { StackNavigator } from 'react-navigation'
+import { RootState } from 'src/reducers/'
 
-export interface HomeProps {
+interface ConnectProps {
   did: string;
-}
-
-export interface ReduxProps extends HomeProps {
   setDid: (did: string) => void;
 }
 
-export interface HomeState {}
+interface Props extends ConnectProps {}
 
-class HomeComponent extends React.Component<ReduxProps, HomeState> {
+interface State {}
+
+class HomeComponent extends React.Component<Props, State> {
   render() {
     console.log("HOME")
     return (
@@ -31,9 +32,9 @@ class HomeComponent extends React.Component<ReduxProps, HomeState> {
   }
 }
 
-const mapStateToProps = (state: HomeProps) => {
+const mapStateToProps = (state: RootState) => {
   return {
-    did: state.did
+    did: state.account.did
   }
 }
 
