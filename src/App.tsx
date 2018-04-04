@@ -1,9 +1,7 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
-import { View } from 'react-native'
-import { RootStack } from 'src/routes'
+import { Navigator } from 'src/NavigatorContainer'
 import { store } from 'src/store'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 const { ThemeProvider } = require ('react-native-material-ui')
 
@@ -13,7 +11,7 @@ export default class App extends React.Component {
     return (
       <ThemeProvider uiTheme={{}}>
         <Provider store={ store }>
-          <RootStack />
+          <Navigator dispatch={ store.dispatch }/>
         </Provider>
       </ThemeProvider>
     )

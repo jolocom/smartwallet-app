@@ -1,29 +1,24 @@
 import * as React from 'react'
-import thunk from 'redux-thunk'
-import { SeedPhrase } from 'src/ui/registration/containers/seedPhrase'
-
-const configureStore = require('redux-mock-store')
-const ShallowRenderer = require('react-test-renderer/shallow')
-const { ThemeProvider } = require ('react-native-material-ui')
+import { SeedPhraseContainer } from 'src/ui/registration/containers/seedPhrase'
 
 describe('seedPhrase container', ()=> {
-  it('matches the snapshot', () => {
-    const renderer = new ShallowRenderer()
-    const middlewares = [ thunk ]
-    const mockStore = configureStore(middlewares)
+  it('mounts correctly and matches snapshot', () => {
+    const fetchSeedPhrase = jest.fn()
+    const clearSeedPhrase = jest.fn()
 
     const props = {
-      fetchSeedPhrase: () => null,
-      clearSeedPhrase: () => null,
-      store: mockStore(),
-      seedPhrase: ''
+      fetchSeedPhrase,
+      clearSeedPhrase,
+      seedPhrase: 'mock seedPhrase'
     }
 
-    const rendered = renderer.render(
-      <ThemeProvider uiTheme={{}}>
-        <SeedPhrase {...props}/>
-      </ThemeProvider>,
-    )
+    const rendered = shallow(<SeedPhraseContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
+
+    expect(fetchSeedPhrase).toHaveBeenCalledTimes(1)
+    expect(clearSeedPhrase).not.toHaveBeenCalled()
+
+    rendered.unmount()
+    expect(clearSeedPhrase).toHaveBeenCalledTimes(1)
   })
 })

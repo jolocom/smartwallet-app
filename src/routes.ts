@@ -1,23 +1,25 @@
-import { StackNavigator } from 'react-navigation'
+import { StackNavigator, } from 'react-navigation'
 import { Home } from 'src/ui/home/'
-import { SeedPhrase } from 'src/ui/registration'
-import { Entropy } from 'src/ui/registration'
+import { Landing } from 'src/ui/landing/'
+import { PasswordEntry, SeedPhrase, Entropy } from 'src/ui/registration/'
 
+export const enum routeList {
+  Landing = 'Landing',
+  Entropy = 'Entropy',
+  PasswordEntry = 'PasswordEntry',
+  SeedPhrase = 'SeedPhrase',
+  Home = 'Home'
+}
 
-export const RootStack = StackNavigator({
-    Home: {
-      screen: Home
-    },
-    Entropy: { 
-      screen: Entropy, 
-      navigationOptions: { header: null} 
-    },
-    SeedPhrase: {
-      screen: SeedPhrase,
-      navigationOptions: { header: null} 
-    },
+const navigationOptions = {
+  header: null
+}
 
-  }, {
-    initialRouteName: 'Entropy'
-  },
+export const Routes = StackNavigator({
+    Landing: { screen: Landing, navigationOptions },
+    Entropy: { screen: Entropy, navigationOptions},
+    PasswordEntry: { screen: PasswordEntry, navigationOptions },
+    SeedPhrase: { screen: SeedPhrase, navigationOptions },
+    Home: { screen: Home, navigationOptions }
+  }
 )

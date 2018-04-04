@@ -1,4 +1,6 @@
 import { AnyAction } from 'redux'
+import { combineReducers } from 'redux'
+import { seedPhrase } from 'src/reducers/registration/seedPhrase'
 
 export const entropy = (state = {}, action: AnyAction): any => {
   // console.log(action, state, 'reducer')
@@ -12,13 +14,6 @@ export const entropy = (state = {}, action: AnyAction): any => {
   }
 }
 
-export const seedPhrase = (state = '', action: AnyAction): string => {
-  switch (action.type) {
-    case 'SEEDPHRASE_SET':
-      return action.value
-    case 'SEEDPHRASE_CLEAR':
-      return ''
-    default:
-      return state
-  }
-}
+export const registrationReducer = combineReducers({
+  seedPhrase
+})
