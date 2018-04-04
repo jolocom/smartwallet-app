@@ -6,19 +6,26 @@
     "@types/jest": "^22.0.0",
     "@types/react": "^16.0.40",
     "@types/react-native": "^0.52.0",
+    "@types/react-native-material-ui": "^1.19.2",
+    "@types/react-native-snap-carousel": "^3.6.0",
     "@types/react-navigation": "^1.2.3",
     "@types/react-redux": "^5.0.15",
     "@types/react-test-renderer": "^16.0.0",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-react-native-stage-0": "^1.0.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.3",
     "haul": "^1.0.0-beta.13",
     "jest": "^22.4.3",
+    "react-dom": "^16.3.0",
     "react-test-renderer": "16.2.0",
     "ts-jest": "^22.0.4",
     "ts-loader": "^3.5.0",
     "tslib": "^1.7.1",
     "tslint": "^5.9.1",
-    "typescript": "^2.7.0"
+    "typescript": "^2.7.0",
+    "yarn": "^1.5.1"
   },
   "scripts": {
     "android": "haul start --platform android",
@@ -26,6 +33,12 @@
     "test": "node node_modules/jest/bin/jest.js"
   },
   "jest": {
+    "setupFiles": [
+      "./tests/utils/setup.ts"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "transformIgnorePatterns": [
       "node_modules/(?!react-native|native-base|react-navigation|react-native-fabric)"
     ],
@@ -56,18 +69,18 @@
     }
   },
   "dependencies": {
-    "add": "^2.0.6",
     "material-colors": "^1.2.5",
     "react": "16.2.0",
     "react-native": "0.52.0",
-    "react-native-material-ui": "^1.22.0",
+    "react-native-keychain": "^3.0.0-rc.3",
+    "react-native-material-ui": "^1.20.0",
     "react-native-remote-svg": "^1.2.0",
-    "react-native-vector-icons": "^4.5.0",
+    "react-native-snap-carousel": "^3.6.0",
+    "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.8",
+    "react-navigation-redux-helpers": "^1.0.3",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
-    "redux-mock-store": "^1.5.1",
-    "redux-thunk": "^2.2.0",
-    "yarn": "^1.5.1"
+    "redux-thunk": "^2.2.0"
   }
 }

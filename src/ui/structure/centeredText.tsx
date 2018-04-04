@@ -5,11 +5,12 @@ import { ReactNode } from 'react'
 const styles = StyleSheet.create({
   text: {
     width: '100%',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 16
   }
 })
 
-export interface Props {
+interface Props {
   msg: string;
   style?: TextStyle;
 }
