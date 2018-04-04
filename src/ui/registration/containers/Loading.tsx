@@ -9,21 +9,20 @@ export interface LoadingProps {
   loadingMsg: string
 }
 
-export interface ReduxProps extends LoadingProps {
+export interface Props extends LoadingProps {
   generateAndEncryptKeyPairs: () => void
 }
 
-export interface LoadingState {
+export interface State {
   registration: {
     progress: {
-      loading: boolean,
       loadingMsg: string
   },
     getIn: ([]) => void
   }
 }
 
-class LoadingComponent extends React.Component<ReduxProps, LoadingState> {
+export class LoadingComponent extends React.Component<Props, State> {
 
   componentDidMount() {
     this.props.generateAndEncryptKeyPairs()
@@ -45,16 +44,17 @@ class LoadingComponent extends React.Component<ReduxProps, LoadingState> {
   }
 }
 
-const mapStateToProps = (state: LoadingState) => {
+const mapStateToProps = (state: State) => {
   return {
     loadingMsg: state.registration.getIn(['progress', 'loadingMsg'])
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Function) => {
   return {
     generateAndEncryptKeyPairs: () => dispatch(registrationActions.generateAndEncryptKeyPairs())
   }
 }
 
+// tslint:disable-next-line
 export const Loading = connect(mapStateToProps, mapDispatchToProps)(LoadingComponent)

@@ -22,7 +22,8 @@ class HomeComponent extends React.Component<ReduxProps, HomeState> {
      <View style={styles.container}>
        <Text> Hey Hey Hey {this.props.did} </Text>
          <Button
-           onPress={() => this.props.navigation.navigate('Loading')}
+          // tslint:disable-next-line
+          onPress={() => this.props.navigation.navigate('Loading')}
            title="Submit"
          />
      </View>
