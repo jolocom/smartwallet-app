@@ -1,92 +1,75 @@
 import * as React from 'react'
-import { PanResponder, PanResponderCallbacks, PanResponderInstance } from 'react-native'
+import { PanResponder, PanResponderCallbacks, PanResponderInstance, GestureResponderEvent } from 'react-native'
 import { Svg, Path, G } from 'react-native-svg'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
   addPoint: (x: number, y: number) => void
-  drawUpon: () => void
 }
 
-interface State { 
+interface State {
+  currentPath: string[]
+  limit: number
+}
+
+interface Point {
+  type: string
+  x: number
+  y: number
 }
 
 export class MaskedImageComponent extends React.Component<Props, State> {
   private panResponder!: PanResponderInstance
-  private paths = [[]]
+
+  state = {
+    currentPath: [],
+    limit: 15
+  }
 
   componentWillMount() {
-    const config : PanResponderCallbacks = {}
+    this.panResponder = this.getConfiguredPanResponder()
+  }
+
+  private getConfiguredPanResponder() : PanResponderInstance {
+    const config = {}
     this.configureResponder(config) 
-    this.registerResponderCallbacks(config)
-    this.panResponder = PanResponder.create(config)
+    return PanResponder.create(config)
   }
 
   private configureResponder(config: PanResponderCallbacks) {
-    config.onStartShouldSetPanResponder = () => true
-    config.onStartShouldSetPanResponderCapture = () => true
     config.onMoveShouldSetPanResponder = () => true
     config.onMoveShouldSetPanResponderCapture = () => true
-    config.onPanResponderRelease = () => { }
-    config.onPanResponderTerminate = () => { }
-    config.onShouldBlockNativeResponder = () => true
+    config.onPanResponderGrant = this.handleDrawStart
+    config.onPanResponderMove = this.handleDraw
   }
 
-  private registerResponderCallbacks(config: PanResponderCallbacks) {
-    config.onPanResponderGrant = evt => {
-      if (!this.paths.length) {
-        this.props.drawUpon()
-      }
+  private handleDrawStart = (e: GestureResponderEvent) => {
+    const { locationX, locationY } = e.nativeEvent
+    this.props.addPoint(locationX, locationY)
 
-      const { locationX, locationY } = evt.nativeEvent
-      const point = { type:'M', x: locationX, y: locationY }
-      this.handleNewPoint(point)
-      this.props.addPoint(point.x, point.y)
-    }
+    const point = { type:'M', x: locationX, y: locationY }
+    this.handleNewPoint(point)
+  }
 
-  config.onPanResponderMove = evt => {
-    const { locationX, locationY } = evt.nativeEvent
+  private handleDraw = (e: GestureResponderEvent) => {
+    const { locationX, locationY } = e.nativeEvent
+    this.props.addPoint(locationX, locationY)
+
     const point = { type: 'L', x: locationX, y: locationY }
     this.handleNewPoint(point)
-    this.props.addPoint(point.x, point.y)
-  }
-}
-
-  private handleNewPoint = (point: any) => {
-    let { type, x, y } = point
-    let current: string[]
-
-    if (this.paths[this.paths.length - 1].length < 20) {
-      current = this.paths[this.paths.length - 1]
-    } else {
-      current = []
-      type = 'M'
-      this.paths.push(current)
-      this.forceUpdate()
-    }
-
-    const svgPath = `${type}${x} ${y}`
-    current.push(svgPath)
-    try {
-      this.refs[`line${this.paths.length - 1}`].setNativeProps({d: current.join(' ')})
-    } catch(err) {
-
-    }
-    // this.pathD.setNativeProps({d: this.uncoveredPath})
-    // this.pathD.setNativeProps({d: this.points2.join(" ")})
   }
 
-  private renderPaths() {
-    return this.paths.map((p, i) => {
-      return <Path
-        d=''
-        ref={`line${i}`}
-        fill='none'
-        stroke='black'
-        strokeLinecap='square'
-        strokeLinejoin= 'round'
-        strokeWidth='20'
-      />
-    })
+  private handleNewPoint = (p: Point) => {
+    const svgCoordinate = `${p.type}${p.x} ${p.y}`
+    const newSvgPathCoords: string[] = this.state.currentPath.concat()
+
+    if (newSvgPathCoords.length === this.state.limit) {
+      newSvgPathCoords.shift()
+      newSvgPathCoords[0] = `M${newSvgPathCoords[0].substring(1)}`
+    }
+
+    newSvgPathCoords.push(svgCoordinate)
+    this.setState({ currentPath: newSvgPathCoords })
   }
 
   render() {
@@ -96,9 +79,14 @@ export class MaskedImageComponent extends React.Component<Props, State> {
         height='100%'
         { ...this.panResponder.panHandlers }
       >
-      <G>
-        {this.renderPaths()}
-      </G>
+        <Path
+          d={ this.state.currentPath.join(' ') }
+          fill='none'
+          stroke={ JolocomTheme.palette.primaryColor }
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          strokeWidth={ 20 }
+        />
       </Svg>
     )
   }
