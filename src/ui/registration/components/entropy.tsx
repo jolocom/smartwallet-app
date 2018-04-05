@@ -5,6 +5,12 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Block, Container, CenteredText } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 
+interface Props {
+  addPoint: (x: number, y: number) => void
+  submitEntropy: () => void
+  readonly progress : number
+}
+
 const styles = StyleSheet.create({
   footerButton: {
     position: 'absolute',
@@ -20,21 +26,14 @@ const styles = StyleSheet.create({
   }
 })
 
-interface Props {
-  addPoint: (x: number, y: number) => void;
-  submitEntropy: () => void;
-  readonly isDrawn: boolean;
-  readonly sufficientEntropy: boolean;
-}
-
 export const EntropyComponent : React.SFC<Props> = props => {
-  const { isDrawn, sufficientEntropy } = props
+  const { progress } = props
 
-  const msg = isDrawn ? 
+  const msg = progress === 0 ? 
     'For security purposes, we need some randomness.' +
     ' Please put your finger anywhere on the screen and draw' +
     ' on it randomly.'
-    : ''
+    : `${Math.trunc(progress * 100)} %`
 
   return (
     <Container >
@@ -46,7 +45,7 @@ export const EntropyComponent : React.SFC<Props> = props => {
       </Block>
       <View style={ styles.footerButton }>
         <Button
-          disabled={ !props.sufficientEntropy }
+          disabled={ props.progress !== 1 }
           raised={ true }
           text="NEXT STEP"
           onPress={ props.submitEntropy }
