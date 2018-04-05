@@ -18,9 +18,10 @@ interface OwnProps { }
 interface Props extends OwnProps, ConnectProps {}
 
 interface State {
-  isDrawn: boolean;
-  encodedEntropy: string;
-  sufficientEntropy: boolean;
+  isDrawn: boolean
+  encodedEntropy: string
+  sufficientEntropy: boolean
+  entropyProgress: number
 }
 
 export class EntropyContainer extends React.Component<Props, State> {
@@ -29,6 +30,7 @@ export class EntropyContainer extends React.Component<Props, State> {
   state = {
     isDrawn: false,
     encodedEntropy: '',
+    entropyProgress: 0,
     sufficientEntropy: false
   }
 
@@ -39,11 +41,12 @@ export class EntropyContainer extends React.Component<Props, State> {
   private addPoint = (x: number, y: number) => {
     this.entropyGenerator.addFromDelta(x)
     this.entropyGenerator.addFromDelta(y)
-    this.checkEntropyProgress()
+    this.setState({ entropyProgress: this.entropyGenerator.getProgress() })
+    this.updateEntropyProgress()
   }
 
-  private checkEntropyProgress = () => {
-    if (!this.state.sufficientEntropy && this.entropyGenerator.getProgress() === 1) {
+  private updateEntropyProgress = () => {
+    if (!this.state.sufficientEntropy && this.state.entropyProgress === 1) {
       const encodedEntropy = this.generateRandomString()
       this.setState({ encodedEntropy })
       this.setState({ sufficientEntropy: true })
@@ -62,9 +65,8 @@ export class EntropyContainer extends React.Component<Props, State> {
     return (
       <EntropyComponent
         addPoint={ this.addPoint }
-        isDrawn={ !this.state.encodedEntropy.length }
+        progress={ this.state.entropyProgress }
         submitEntropy={ this.submitEntropy }
-        sufficientEntropy={ this.state.sufficientEntropy }
       />
     )
   }
