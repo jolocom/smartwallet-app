@@ -36,10 +36,6 @@ export class EntropyContainer extends React.Component<Props, State> {
     this.entropyGenerator = new EntropyGenerator()
   }
 
-  private drawUpon = () => {
-    this.setState({ isDrawn: true })
-  }
-
   private addPoint = (x: number, y: number) => {
     this.entropyGenerator.addFromDelta(x)
     this.entropyGenerator.addFromDelta(y)
@@ -66,8 +62,7 @@ export class EntropyContainer extends React.Component<Props, State> {
     return (
       <EntropyComponent
         addPoint={ this.addPoint }
-        drawUpon={ this.drawUpon }
-        isDrawn={ this.state.isDrawn }
+        isDrawn={ !this.state.encodedEntropy.length }
         submitEntropy={ this.submitEntropy }
         sufficientEntropy={ this.state.sufficientEntropy }
       />

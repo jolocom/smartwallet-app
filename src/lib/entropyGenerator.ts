@@ -7,7 +7,7 @@ export interface EntropyGeneratorInterface {
 }
 
 export class EntropyGenerator implements EntropyGenerator {
-  private generator = new sjcl.prng(7)
+  private generator = new sjcl.prng(10)
 
   addFromDelta(d: number) : void {
     this.generator.addEntropy(d, 1, 'user')
