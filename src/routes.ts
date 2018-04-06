@@ -1,5 +1,5 @@
 import { StackNavigator, } from 'react-navigation'
-import { Home } from 'src/ui/home/'
+import { Home } from 'src/ui/home/containers/home'
 import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, Loading, SeedPhrase } from 'src/ui/registration'
 

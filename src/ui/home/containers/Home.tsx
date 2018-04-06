@@ -1,5 +1,4 @@
 import * as React from 'react'
-<<<<<<< HEAD
 import { View, Text, StyleSheet, Button } from 'react-native'
 import {connect, Dispatch} from 'react-redux'
 import {accountActions, registrationActions} from 'src/actions'
@@ -16,17 +15,12 @@ interface Props extends ConnectProps {}
 
 interface State {}
 
-class HomeComponent extends React.Component<Props, State> {
+export class HomeComponent extends React.Component<Props, State> {
   render() {
     console.log("HOME")
     return (
      <View style={styles.container}>
        <Text> Hey Hey Hey {this.props.did} </Text>
-         <Button
-          // tslint:disable-next-line
-          onPress={() => this.props.navigation.navigate('Loading')}
-           title="Submit"
-         />
      </View>
     )
   }

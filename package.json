@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "add": "^2.0.6",
-    "jolocom-lib": "^0.2.6",
+    "jolocom-lib": "^0.2.7",
     "material-colors": "^1.2.5",
     "react": "16.2.0",
     "react-native": "0.52.0",
