@@ -4,6 +4,7 @@ import { LandingComponent } from 'src/ui/landing/components/landing'
 import { navigationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
 import { routeList } from 'src/routes'
+import { Storage } from 'src/lib/storage'
 
 interface ConnectProps {
   navigate: () => void;
@@ -20,7 +21,9 @@ class LandingContainer extends React.Component<Props> {
   }
 
   private goToNextScreen = () => {
-    this.props.navigate()
+    const test = new Storage()
+    test.createDb()
+    this.props.navigate(routeList.PasswordEntry)
   }
 }
 
