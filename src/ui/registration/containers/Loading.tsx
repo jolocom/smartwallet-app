@@ -3,15 +3,15 @@ import { View, Text, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import { registrationActions } from 'src/actions'
 import { AnyAction } from 'redux'
+import { RootState } from 'src/reducers/'
 import Immutable from 'immutable'
 
-export interface LoadingProps {
+export interface ConnectProps {
   loadingMsg: string
-}
-
-export interface Props extends LoadingProps {
   generateAndEncryptKeyPairs: () => void
 }
+
+interface Props extends ConnectProps {}
 
 export interface State {
   registration: {
@@ -44,9 +44,10 @@ export class LoadingComponent extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: RootState) => {
+  const registration = state.registration
   return {
-    loadingMsg: state.registration.getIn(['progress', 'loadingMsg'])
+    loadingMsg: registration.progress.loadingMsg
   }
 }
 
