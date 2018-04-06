@@ -26,5 +26,6 @@ module.exports = ({ platform }, { module, resolve }) => ({
       '.native.tsx',
       ...resolve.extensions
     ]
-  }
+  },
+  externals: ['sqlite3', 'pg', 'tedious', 'pg-hstore']
 });
