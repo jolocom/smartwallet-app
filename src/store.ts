@@ -17,17 +17,7 @@ const config = {
   }
 }
 
-const middleware = new BackendMiddleware(config)
-export function backendExtendedMiddleware(middleware : BackendMiddleware): Middleware {
-  return (api: MiddlewareAPI<any>) =>
-  (next: Dispatch<any>) => <A extends Action>(action : A) : A => {
-    if (typeof action === 'function') {
-      return next((action as Function)(api.dispatch, api.getState, {middleware}))
-    } else {
-      return next(action)
-    }
-  }
-}
+const backendMiddleware = new BackendMiddleware(config)
 
 const {
   createReactNavigationReduxMiddleware
@@ -38,9 +28,8 @@ const navMiddleware = createReactNavigationReduxMiddleware(
   (state : any) => state.navigation
 )
 
-
 export const store = createStore(
   rootReducer,
   {},
-  applyMiddleware(thunk, navMiddleware, backendExtendedMiddleware(middleware))
+  applyMiddleware(thunk.withExtraArgument({backendMiddleware}))
 )
