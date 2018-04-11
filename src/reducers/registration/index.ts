@@ -6,10 +6,7 @@ import { seedPhrase } from 'src/reducers/registration/seedPhrase'
 export interface RegistrationState {
   readonly did: string
   readonly seedPhrase: string
-  readonly progress: {
-    loading: boolean,
-    loadingMsg: string
-  }
+  readonly loadingMsg: string
 }
 
 export const registrationReducer = combineReducers({
