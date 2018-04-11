@@ -32,7 +32,7 @@ export const savePassword = (password : string) => {
     const success = await KC.savePassword(password)
 
     if (success) {
-      dispatch(NavigationActions.navigate({ routeName: 'SeedPhrase' }))
+      dispatch(NavigationActions.navigate({ routeName: 'Loading' }))
     }
   }
 }
@@ -59,7 +59,7 @@ export const finishLoading = (loading: boolean) => {
 }
 
 export const generateAndEncryptKeyPairs = () => {
-  return (dispatch : (actions: AnyAction) => void, middleware : BackendMiddleware) => {
+  return (dispatch : Dispatch, getState: any, { backendMiddleware } : any) => {
     const randomString = '13912643311766764847120568039921' // TODO: grab from the state
     const password = 'Password1' // TODO: grab from the state
 
@@ -71,7 +71,8 @@ export const generateAndEncryptKeyPairs = () => {
       masterKeyWIF,
       genericSigningKeyWIF,
       ethereumKeyWIF
-    } = middleware.jolocomLib.identity.create(randomString)
+    } = backendMiddleware.jolocomLib.identity.create(randomString)
+    console.log(didDocument)
 
     dispatch(setLoadingMsg('Fueling with Ether'))
   }
