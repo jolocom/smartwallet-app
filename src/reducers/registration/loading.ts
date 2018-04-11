@@ -3,7 +3,6 @@ import Immutable from 'immutable'
 
 const initialState = Immutable.fromJS({
   progress: {
-    loading: false,
     loadingMsg: 'Loading'
   }
 })

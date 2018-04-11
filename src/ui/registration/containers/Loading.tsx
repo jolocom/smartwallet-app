@@ -7,29 +7,30 @@ import { RootState } from 'src/reducers/'
 import Immutable from 'immutable'
 
 export interface ConnectProps {
-  loadingMsg: string
+  loadingMsg: string,
   generateAndEncryptKeyPairs: () => void
 }
 
 interface Props extends ConnectProps {}
 
 export interface State {
-  registration: {
-    progress: {
-      loadingMsg: string
-  },
-    getIn: ([]) => void
-  }
+  loadingMsg: string
 }
 
-export class LoadingComponent extends React.Component<Props, State> {
+export class LoadingContainer extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      loadingMsg: "Loading"
+    }
+    console.log(this.props)
+  }
 
   componentDidMount() {
     this.props.generateAndEncryptKeyPairs()
   }
 
   render() {
-    console.log('render LOADING')
     return (
      <View style={{
         flex: 1,
@@ -38,7 +39,7 @@ export class LoadingComponent extends React.Component<Props, State> {
         alignItems: 'center',
      }}>
        <ActivityIndicator size='large' color="#00ff00" />
-       <Text> {this.props.loadingMsg}</Text>
+       <Text> {this.state.loadingMsg}</Text>
      </View>
     )
   }
@@ -47,7 +48,7 @@ export class LoadingComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   const registration = state.registration
   return {
-    loadingMsg: registration.progress.loadingMsg
+    loadingMsg: registration.loadingMsg
   }
 }
 
@@ -58,4 +59,4 @@ const mapDispatchToProps = (dispatch: Function) => {
 }
 
 // tslint:disable-next-line
-export const Loading = connect(mapStateToProps, mapDispatchToProps)(LoadingComponent)
+export const Loading = connect(mapStateToProps, mapDispatchToProps)(LoadingContainer)
