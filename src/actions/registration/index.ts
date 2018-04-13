@@ -30,8 +30,9 @@ export const savePassword = (password : string) => {
   return async (dispatch : Dispatch) =>  {
     const KC = new KeyChain()
     const success = await KC.savePassword(password)
-
     if (success) {
+    console.log("KEYCHAIN")
+
       dispatch(NavigationActions.navigate({ routeName: 'Loading' }))
     }
   }
@@ -60,7 +61,7 @@ export const finishLoading = (loading: boolean) => {
 
 export const generateAndEncryptKeyPairs = () => {
   return (dispatch : Dispatch, getState: any, { backendMiddleware } : any) => {
-    const randomString = '13912643311766764847120568039921' // TODO: grab from the state
+    const randomString = 'c1ac02ceac06bda925a011a7d2134957' // TODO: grab from the state
     const password = 'Password1' // TODO: grab from the state
 
     dispatch(setLoadingMsg('Generating keys'))
