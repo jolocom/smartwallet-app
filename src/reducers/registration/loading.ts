@@ -12,10 +12,6 @@ export const loading = (state = initialState, action: AnyAction): string => {
     case 'SET_LOADING_MSG':
       console.log('SET LOADING MSG')
       return state.setIn(['progress', 'loadingMsg'], action.value)
-    case 'START_LOADING':
-      return state.setIn(['progress', 'loading'], action.value)
-    case 'FINISH_LOADING':
-      return state.setIn(['progress', 'loading'], action.value)
     default:
       return state
   }
