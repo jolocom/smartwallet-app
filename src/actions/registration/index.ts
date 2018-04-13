@@ -45,27 +45,14 @@ export const setLoadingMsg = (loadingMsg: string) => {
   }
 }
 
-export const startLoading = (loading: boolean) => {
-  return {
-    type: 'START_LOADING',
-    value: loading
-  }
-}
-
-export const finishLoading = (loading: boolean) => {
-  return {
-    type: 'FINISH_LOADING',
-    value: loading
-  }
-}
-
 export const generateAndEncryptKeyPairs = () => {
-  return (dispatch : Dispatch, getState: any, { backendMiddleware } : any) => {
+  return async (dispatch : Dispatch, getState: any, { backendMiddleware } : any) => {
     const randomString = 'c1ac02ceac06bda925a011a7d2134957' // TODO: grab from the state
     const password = 'Password1' // TODO: grab from the state
 
     dispatch(setLoadingMsg('Generating keys'))
 
+    console.log(getState)
     const {
       didDocument,
       mnemonic,
@@ -76,5 +63,8 @@ export const generateAndEncryptKeyPairs = () => {
     console.log(didDocument)
 
     dispatch(setLoadingMsg('Fueling with Ether'))
+
+    const ddoHash = await backendMiddleware.jolocomLib.identity.store(didDocument)
+    console.log(ddoHash)
   }
 }

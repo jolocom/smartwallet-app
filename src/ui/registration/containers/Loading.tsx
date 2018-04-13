@@ -14,18 +14,9 @@ export interface ConnectProps {
 interface Props extends ConnectProps {}
 
 export interface State {
-  loadingMsg: string
 }
 
 export class LoadingContainer extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      loadingMsg: "Loading"
-    }
-    console.log(this.props)
-  }
-
   componentDidMount() {
     this.props.generateAndEncryptKeyPairs()
   }
@@ -39,16 +30,15 @@ export class LoadingContainer extends React.Component<Props, State> {
         alignItems: 'center',
      }}>
        <ActivityIndicator size='large' color="#00ff00" />
-       <Text> {this.state.loadingMsg}</Text>
+       <Text>{this.props.loadingMsg}</Text>
      </View>
     )
   }
 }
 
 const mapStateToProps = (state: RootState) => {
-  const registration = state.registration
   return {
-    loadingMsg: registration.loadingMsg
+    loadingMsg: state.registration.loading.getIn(['loadingMsg'])
   }
 }
 
