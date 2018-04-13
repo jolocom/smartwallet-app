@@ -35,17 +35,21 @@ export class EntropyContainer extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    this.entropyGenerator = new EntropyGenerator()
+    this.entropyGenerator = this.setUpEntropyGenerator()
   }
 
-  private addPoint = (x: number, y: number) => {
+  private setUpEntropyGenerator() : EntropyGenerator {
+    return new EntropyGenerator()
+  }
+
+  private addPoint = (x: number, y: number) : void => {
     this.entropyGenerator.addFromDelta(x)
     this.entropyGenerator.addFromDelta(y)
     this.setState({ entropyProgress: this.entropyGenerator.getProgress() })
     this.updateEntropyProgress()
   }
 
-  private updateEntropyProgress = () => {
+  private updateEntropyProgress = () : void => {
     if (!this.state.sufficientEntropy && this.state.entropyProgress === 1) {
       const encodedEntropy = this.generateRandomString()
       this.setState({ encodedEntropy })
@@ -53,11 +57,11 @@ export class EntropyContainer extends React.Component<Props, State> {
     }
   }
 
-  private generateRandomString = () => {
+  private generateRandomString = () : string => {
     return this.entropyGenerator.generateRandomString(4)
   }
 
-  private submitEntropy = () => {
+  private submitEntropy = () : void => {
     this.props.navigate(this.state.encodedEntropy)
   }
 
