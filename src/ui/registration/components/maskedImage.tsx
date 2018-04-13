@@ -39,7 +39,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
     })
   }
 
-  private handleDrawStart = (e: GestureResponderEvent)  => {
+  private handleDrawStart = (e: GestureResponderEvent)  : void => {
     const { locationX, locationY } = e.nativeEvent
     this.props.addPoint(locationX, locationY)
 
@@ -47,7 +47,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
     this.handleNewPoint(point)
   }
 
-  private handleDraw = (e: GestureResponderEvent) => {
+  private handleDraw = (e: GestureResponderEvent) : void => {
     const { locationX, locationY } = e.nativeEvent
     this.props.addPoint(locationX, locationY)
 

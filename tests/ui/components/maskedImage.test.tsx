@@ -8,9 +8,9 @@ describe('MaskedImage component', ()=> {
   }
 
   it('correctly calls the function to configure PanResponder on component mount', () => {
-      const configureSpy = jest.spyOn(MaskedImageComponent.prototype, 'getConfiguredPanResponder');
-      const rendered = shallow(<MaskedImageComponent{...props} />);
-      expect(configureSpy).toHaveBeenCalledTimes(1);
+      const configureSpy = jest.spyOn(MaskedImageComponent.prototype, 'getConfiguredPanResponder')
+      const rendered = shallow(<MaskedImageComponent{...props} />)
+      expect(configureSpy).toHaveBeenCalledTimes(1)
   })
 
   it('matches the snapshot with empty current path string', () => {
