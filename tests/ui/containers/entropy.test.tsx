@@ -1,9 +1,8 @@
 import * as React from 'react'
 import thunk from 'redux-thunk'
 import { shallow } from 'enzyme'
-
 import { Entropy } from 'src/ui/registration/containers/entropy'
-import { EntropyAgent } from 'src/lib/entropyAgent'
+import { EntropyGenerator} from 'src/lib/entropyGenerator'
 
 const configureStore = require('redux-mock-store')
 const { ThemeProvider } = require ('react-native-material-ui')
@@ -16,7 +15,7 @@ describe('Entropy container', ()=> {
     const props = {
       submitEncodedEntropy: (entropy: string) => null,
       store: mockStore(),
-      entropyAgent: new EntropyAgent(),
+      entropyGenerator: new EntropyGenerator(),
       isDrawn: false,
       sufficientEntropy: false
     }

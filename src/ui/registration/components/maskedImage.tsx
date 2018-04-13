@@ -31,19 +31,15 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   }
 
   private getConfiguredPanResponder() : PanResponderInstance {
-    const config = {}
-    this.configureResponder(config) 
-    return PanResponder.create(config)
+    return PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponderCapture: () => true,
+      onPanResponderGrant: this.handleDrawStart,
+      onPanResponderMove: this.handleDraw
+    })
   }
 
-  private configureResponder(config: PanResponderCallbacks) {
-    config.onMoveShouldSetPanResponder = () => true
-    config.onMoveShouldSetPanResponderCapture = () => true
-    config.onPanResponderGrant = this.handleDrawStart
-    config.onPanResponderMove = this.handleDraw
-  }
-
-  private handleDrawStart = (e: GestureResponderEvent) => {
+  private handleDrawStart = (e: GestureResponderEvent)  => {
     const { locationX, locationY } = e.nativeEvent
     this.props.addPoint(locationX, locationY)
 
@@ -59,7 +55,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
     this.handleNewPoint(point)
   }
 
-  private handleNewPoint = (p: Point) => {
+  private handleNewPoint (p: Point) : void {
     const svgCoordinate = `${p.type}${p.x} ${p.y}`
     const newSvgPathCoords: string[] = this.state.currentPath.concat()
 
