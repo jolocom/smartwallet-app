@@ -2,8 +2,8 @@
 
 exports[`Entropy container matches the snapshot 1`] = `
 <Connect(EntropyContainer)
-  entropyAgent={
-    EntropyAgent {
+  entropyGenerator={
+    EntropyGenerator {
       "generator": Object {
         "D": false,
         "H": Object {},
@@ -14,7 +14,7 @@ exports[`Entropy container matches the snapshot 1`] = `
           "seeded": Object {},
         },
         "L": undefined,
-        "M": 7,
+        "M": 10,
         "N": 0,
         "P": 0,
         "T": Array [
