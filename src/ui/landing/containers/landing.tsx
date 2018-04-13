@@ -6,6 +6,8 @@ import { RootState } from 'src/reducers/'
 import { routeList } from 'src/routes'
 import { Storage } from 'src/lib/storage'
 
+// import { Storage } from 'src/lib/storage'
+
 interface ConnectProps {
   navigate: () => void;
 }
@@ -15,6 +17,8 @@ interface Props extends ConnectProps, OwnProps {}
 
 class LandingContainer extends React.Component<Props> {
   render() {
+    const ts = new Storage()
+    ts.provisionTables()
     return (
       <LandingComponent handleButtonTap={this.goToNextScreen} />
     )
@@ -22,7 +26,7 @@ class LandingContainer extends React.Component<Props> {
 
   private goToNextScreen = () => {
     const test = new Storage()
-    test.createDb()
+    test.provisionTables()
     this.props.navigate(routeList.PasswordEntry)
   }
 }
@@ -40,4 +44,3 @@ const mapDispatchToProps = (dispatch: Function) => {
 }
 
 export const Landing = connect(mapStateToProps, mapDispatchToProps)(LandingContainer)
-
