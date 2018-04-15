@@ -20,7 +20,7 @@ interface Slide {
   infoText: string;
 }
 
-const carouselInfo: Array<Slide> = [{
+const carouselInfo: Slide[] = [{
   svgImage: require('src/img/img_onboarding-00.svg'),
   title: '',
   infoText: ''

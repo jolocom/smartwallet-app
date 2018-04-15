@@ -6,7 +6,7 @@ import { RootState } from 'src/reducers/'
 import { routeList } from 'src/routes'
 
 interface ConnectProps {
-  navigate: (route: routeList) => void;
+  navigate: () => void;
 }
 
 interface OwnProps {}
@@ -20,7 +20,7 @@ class LandingContainer extends React.Component<Props> {
   }
 
   private goToNextScreen = () => {
-    this.props.navigate(routeList.PasswordEntry)
+    this.props.navigate()
   }
 }
 
@@ -30,7 +30,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    navigate: (route: routeList) => dispatch(navigationActions.navigate(route))
+    navigate: () => dispatch(navigationActions.navigate({
+      routeName: 'PasswordEntry'
+    }))
   }
 }
 
