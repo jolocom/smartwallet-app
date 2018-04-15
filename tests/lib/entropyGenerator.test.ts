@@ -12,7 +12,7 @@ describe('EntropyGenerator lib', () => {
     Entropy.generator.addEntropy = mockAddEntropy
     Entropy.addFromDelta(1)
 
-    expect(mockAddEntropy).toBeCalledWith(1, 64, 'user')
+    expect(mockAddEntropy).toBeCalledWith(1, 1, 'user')
   })
 
   it('should correctly get progress', () => {
