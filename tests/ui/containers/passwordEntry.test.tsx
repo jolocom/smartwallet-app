@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { PasswordEntryContainer } from 'src/ui/registration/containers/passwordEntry.tsx'
+import { shallow } from 'enzyme'
 
 describe('passwordEntry container', ()=> {
   it('mounts correctly and matches snapshot', () => {
