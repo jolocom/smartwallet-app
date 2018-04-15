@@ -3,7 +3,7 @@ import { combineReducers } from 'redux'
 import { seedPhrase } from 'src/reducers/registration/seedPhrase'
 
 export interface RegistrationState {
-  seedPhrase: string;
+  readonly seedPhrase: string
 }
 
 export const registrationReducer = combineReducers({
