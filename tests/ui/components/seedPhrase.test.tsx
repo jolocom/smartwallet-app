@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { SeedPhrase } from 'src/ui/registration/components/seedPhrase'
+import { shallow } from 'enzyme'
 
 describe('seedPhrase component', ()=> {
   it('matches the snapshot with checkbox unchecked', () => {
