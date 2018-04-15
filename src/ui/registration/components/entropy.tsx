@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 })
 
 export const EntropyComponent : React.SFC<Props> = props => {
-  const { progress } = props
+  const { progress, submitEntropy, addPoint } = props
 
   const msg = progress === 0 ? 
     'For security purposes, we need some randomness.' +
@@ -40,15 +40,15 @@ export const EntropyComponent : React.SFC<Props> = props => {
       <CenteredText style={ styles.text } msg={ msg } />
       <Block>
         <MaskedImageComponent
-          addPoint={ props.addPoint }
+          addPoint={ addPoint }
         />
       </Block>
       <View style={ styles.footerButton }>
         <Button
-          disabled={ props.progress !== 1 }
+          disabled={ progress !== 1 }
           raised={ true }
           text="NEXT STEP"
-          onPress={ props.submitEntropy }
+          onPress={ submitEntropy }
         />
       </View>
     </Container>

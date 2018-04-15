@@ -3,7 +3,7 @@
 exports[`Entropy component matches the snapshot when drawn upon and insufficient entropy 1`] = `
 <Container>
   <CenteredText
-    msg="NaN %"
+    msg="50 %"
     style={
       Object {
         "backgroundColor": "#f8f9fb",
@@ -47,7 +47,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
 exports[`Entropy component matches the snapshot when not drawn upon and insufficient entropy 1`] = `
 <Container>
   <CenteredText
-    msg="NaN %"
+    msg="For security purposes, we need some randomness. Please put your finger anywhere on the screen and draw on it randomly."
     style={
       Object {
         "backgroundColor": "#f8f9fb",
@@ -91,7 +91,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
 exports[`Entropy component matches the snapshot with when drawn upon and sufficient entropy 1`] = `
 <Container>
   <CenteredText
-    msg="NaN %"
+    msg="100 %"
     style={
       Object {
         "backgroundColor": "#f8f9fb",
@@ -118,7 +118,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   >
     <Button
       accent={false}
-      disabled={true}
+      disabled={false}
       icon={null}
       onLongPress={null}
       onPress={[Function]}
