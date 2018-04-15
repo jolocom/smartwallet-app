@@ -10,7 +10,7 @@ export class EntropyGenerator implements EntropyGenerator {
   private generator = new sjcl.prng(10)
 
   addFromDelta(d: number) : void {
-    this.generator.addEntropy(d, 64, 'user')
+    this.generator.addEntropy(d, 1, 'user')
   }
 
   getProgress() : number {
