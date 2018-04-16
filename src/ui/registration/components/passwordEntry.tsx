@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { StyleSheet, TextInput, } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Container, Header, Block, CenteredText } from 'src/ui/structure'

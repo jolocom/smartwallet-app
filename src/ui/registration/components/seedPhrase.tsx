@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { View, Text, Dimensions, StyleSheet, TextStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
