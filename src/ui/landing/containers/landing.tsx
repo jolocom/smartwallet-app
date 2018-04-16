@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { LandingComponent } from 'src/ui/landing/components/landing'
 import { navigationActions } from 'src/actions/'

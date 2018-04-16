@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { StyleSheet, Dimensions, TextStyle } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { Button } from 'react-native-material-ui'

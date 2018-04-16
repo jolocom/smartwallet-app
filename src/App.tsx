@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Provider } from 'react-redux'
 import { Navigator } from 'src/NavigatorContainer'
 import { store } from 'src/store'
