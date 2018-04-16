@@ -37,7 +37,6 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       primary={false}
       raised={true}
       style={Object {}}
-      testID={null}
       text="NEXT STEP"
       upperCase={true}
     />
@@ -82,7 +81,6 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       primary={false}
       raised={true}
       style={Object {}}
-      testID={null}
       text="NEXT STEP"
       upperCase={true}
     />
@@ -127,7 +125,6 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       primary={false}
       raised={true}
       style={Object {}}
-      testID={null}
       text="NEXT STEP"
       upperCase={true}
     />
