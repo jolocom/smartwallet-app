@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { StyleSheet, TextStyle, Text } from 'react-native'
 import { ReactNode } from 'react'
 
