@@ -109,7 +109,6 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
           },
         }
       }
-      testID={null}
       text="NEXT STEP"
       upperCase={true}
     />
@@ -220,7 +219,6 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       primary={true}
       raised={true}
       style={Object {}}
-      testID={null}
       text="NEXT STEP"
       upperCase={true}
     />
