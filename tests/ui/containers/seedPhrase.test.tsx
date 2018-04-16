@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { SeedPhraseContainer } from 'src/ui/registration/containers/seedPhrase'
 import { shallow } from 'enzyme'
 

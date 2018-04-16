@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { PasswordEntryContainer } from 'src/ui/registration/containers/passwordEntry.tsx'
 import { shallow } from 'enzyme'
 
