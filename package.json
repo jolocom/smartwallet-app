@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@types/enzyme": "^3.1.9",
     "@types/jest": "^22.0.0",
     "@types/node": "^9.6.1",
     "@types/react": "^16.0.40",
@@ -76,8 +77,8 @@
     "react-native-keychain": "^3.0.0-rc.3",
     "react-native-material-ui": "^1.22.2",
     "react-native-remote-svg": "^1.2.0",
-    "react-native-svg": "^6.3.1",
     "react-native-snap-carousel": "^3.6.0",
+    "react-native-svg": "^6.3.1",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.8",
     "react-navigation-redux-helpers": "^1.0.3",
