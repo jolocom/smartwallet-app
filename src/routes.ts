@@ -5,6 +5,7 @@ import { PasswordEntry, Loading, SeedPhrase } from 'src/ui/registration'
 
 export const enum routeList {
   Landing = 'Landing',
+  Loading = 'Loading',
   PasswordEntry = 'PasswordEntry',
   SeedPhrase = 'SeedPhrase',
   Home = 'Home'
