@@ -2,6 +2,7 @@ import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation'
 import { Identity, Interactions } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, SeedPhrase, Entropy } from 'src/ui/registration/'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 export const enum routeList {
   Landing = 'Landing',
@@ -18,14 +19,14 @@ const navigationOptions = {
 
 export const HomeRoutes = TabNavigator(
   {
-  Identity: { screen: Identity },
-  Interactions: {screen: Interactions }
+    Identity: { screen: Identity },
+    Interactions: {screen: Interactions }
   },
   {
     tabBarOptions: {
-      activeTintColor: 'purple',
+      activeTintColor: JolocomTheme.palette.primaryColor,
       labelStyle: {
-        fontSize: 20,
+        fontSize: JolocomTheme.textStyles.sectionheader.fontSize,
         textAlign: 'center' 
       }
     },
