@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { EntropyContainer } from 'src/ui/registration/containers/entropy'
 import { EntropyGenerator} from 'src/lib/entropyGenerator'
-import { shallow } from 'enzyme'
+
 
 describe('Entropy container', () => {
     const props = {}
