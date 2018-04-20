@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 import { IdentityComponent } from 'src/ui/home/components/identity'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
@@ -36,14 +37,14 @@ export class IdentityContainer extends React.Component<Props, State> {
 
   render() {
     return (
-    <IdentityComponent 
-      userName: { this.state.userName }
-      phoneNumber: { this.state.phoneNumber }
-      emailAddress: { this.state.emailAddress }
+    <IdentityComponent
+      userName= {this.state.userName}
+      phoneNumber= { this.state.phoneNumber }
+      emailAddress= { this.state.emailAddress }
       onUserNameChange= { this.onUserNameChange }
       onPhoneNumberChange= { this.onPhoneNumberChange }
       onEmailAddressChange= { this.onEmailAddressChange }
-    />
+     />
     )
   }
 }

@@ -1,5 +1,7 @@
 import React from 'react'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { Svg, Path } from 'react-native-svg'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
@@ -17,29 +19,16 @@ interface State {
 }
 
 const styles = StyleSheet.create({
-  subHeader: {
-    fontSize: 14,
-    color: JolocomTheme.textStyles.subheadline.color,
-  },
-  infoPassword: {
-    fontSize: 12,
-    color: JolocomTheme.textStyles.labelInputFields.color
-  },
   textInputField: {
+    flex: 1,
     width: '80%'
   },
-  textErrorField: {
-    color: 'red',
-    fontSize: 14
+  block: {
+    marginBottom: "15%"
   },
-  mainContainer: {
-    justifyContent: 'space-between'
-  },
-  nestedContainer: {
-    justifyContent: 'space-around'
-  },
-  buttonContainer: {
-    backgroundColor: JolocomTheme.palette.primaryColor
+  icon: {
+    marginLeft: "75%",
+    marginBottom: "15%"
   }
 })
 
@@ -49,20 +38,31 @@ export class IdentityComponent extends React.Component<Props, State> {
   render() {
     return (
       <Container>
-        <TextInput
-          style={ styles.textInputField }
-          placeholder='Please enter your name'
-          onChangeText={ this.props.onUserNameChange }
-        />
-        <TextInput
-          style={ styles.textInputField }
-          placeholder='Please enter your phone number'
-          onChangeText={ this.props.onPhoneNumberChange}
-        />
-        <TextInput
-          style={ styles.textInputField }
-          placeholder='Please enter your email address'
-          onChangeText={ this.props.onEmailAddressChange}
+        <Block style={ styles.block }>
+          <TextInput
+            style={ styles.textInputField }
+            placeholder='Please enter your name'
+            onChangeText={ this.props.onUserNameChange }
+            value={ this.props.userName}
+          />
+          <TextInput
+            style={ styles.textInputField }
+            placeholder='Please enter your phone number'
+            onChangeText={ this.props.onPhoneNumberChange}
+            value={ this.props.phoneNumber}
+          />
+          <TextInput
+            style={ styles.textInputField }
+            placeholder='Please enter your email address'
+            onChangeText={ this.props.onEmailAddressChange}
+            value={ this.props.emailAddress}
+          />
+        </Block>
+        <Icon
+          style={ styles.icon }
+          size={ 45 }
+          name="qrcode-scan"
+          color="black"
         />
       </Container>
     )
