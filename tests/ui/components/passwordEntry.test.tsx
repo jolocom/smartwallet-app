@@ -1,5 +1,6 @@
-import * as React from 'react'
+import React from 'react'
 import { PasswordEntryComponent } from 'src/ui/registration/components/passwordEntry'
+import { shallow } from 'enzyme'
 
 describe('passwordEntry component', ()=> {
   const COMMON_PROPS = {

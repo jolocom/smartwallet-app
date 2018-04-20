@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
 import { Keyboard, EmitterSubscription } from 'react-native'
@@ -18,20 +18,18 @@ interface State {
 }
 
 export class PasswordEntryContainer extends React.Component<Props, State> {
-  private kbShowListener!: EmitterSubscription;
-  private kbHideListener!: EmitterSubscription;
+  private kbShowListener!: EmitterSubscription
+  private kbHideListener!: EmitterSubscription
 
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      password: '',
-      confirmPassword: '',
-      keyboardDrawn: false
-    }
-
-    this.setupListeners()
+  state = {
+    password: '',
+    confirmPassword: '',
+    keyboardDrawn: false
   }
 
+  componentDidMount() {
+    this.setupListeners()
+  }
   componentWillUnmount() {
     this.removeListeners()
   }

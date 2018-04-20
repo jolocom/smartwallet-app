@@ -1,10 +1,10 @@
 import { AnyAction } from 'redux'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { NavigationActions } from 'react-navigation'
 import { KeyChain } from 'src/lib/keychain'
+import { navigate } from 'src/actions/navigation/'
 
 // TODO MOVE
-type Dispatch = (action: AnyAction) => void;
+type Dispatch = (action: AnyAction) => void
 
 export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
   return {
@@ -16,6 +16,13 @@ export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
 export const clearSeedPhrase = () : AnyAction => {
   return {
     type: 'SEEDPHRASE_CLEAR'
+  }
+}
+
+export const setLoadingMsg = (loadingMsg: string) => {
+  return {
+    type: 'SET_LOADING_MSG',
+    value: loadingMsg
   }
 }
 
@@ -31,17 +38,8 @@ export const savePassword = (password : string) => {
     const KC = new KeyChain()
     const success = await KC.savePassword(password)
     if (success) {
-    console.log("KEYCHAIN")
-
-      dispatch(NavigationActions.navigate({ routeName: 'Loading' }))
+      dispatch(navigate({ routeName: 'Loading' }))
     }
-  }
-}
-
-export const setLoadingMsg = (loadingMsg: string) => {
-  return {
-    type: 'SET_LOADING_MSG',
-    value: loadingMsg
   }
 }
 

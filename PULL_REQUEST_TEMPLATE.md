@@ -4,8 +4,6 @@ Fixes #
 
 What does it solve? 
 Were there any particular challenges that you faced and/or things that were not straightforward? 
-What should others know about the solution?
-Is this change going to break other dependent services? 
 
 ## Checklist
 - [ ] Keep flags added to the PR up to date

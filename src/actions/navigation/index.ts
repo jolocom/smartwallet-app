@@ -1,8 +1,8 @@
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions, NavigationNavigateActionPayload } from 'react-navigation'
 import { routeList } from 'src/routes'
 
-export const navigate = (route: routeList) => {
-  return NavigationActions.navigate({ routeName: route })
+export const navigate = (options: NavigationNavigateActionPayload) => {
+  return NavigationActions.navigate(options)
 }
 
 export const goBack = () => {
