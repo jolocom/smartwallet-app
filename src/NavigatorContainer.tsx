@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { addNavigationHelpers, NavigationEventSubscription, NavigationEventCallback } from 'react-navigation'
 import { connect } from 'react-redux'
 import { BackHandler } from 'react-native'
@@ -43,7 +43,6 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   render() {
-    console.log(this.props)
     return (
       <Routes navigation={addNavigationHelpers({
         dispatch: this.props.dispatch,

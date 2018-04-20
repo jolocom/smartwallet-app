@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { CenteredText } from 'src/ui/structure/'
 import { StyleSheet } from 'react-native'
 

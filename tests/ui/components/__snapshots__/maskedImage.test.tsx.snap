@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MaskedImage component correctly handles adding new points to the current path if the path length is longer than the limit 1`] = `
+<Svg
+  height="100%"
+  onMoveShouldSetResponder={[Function]}
+  onMoveShouldSetResponderCapture={[Function]}
+  onResponderEnd={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderReject={[Function]}
+  onResponderRelease={[Function]}
+  onResponderStart={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  onStartShouldSetResponderCapture={[Function]}
+  preserveAspectRatio="xMidYMid meet"
+  width="100%"
+>
+  <Path
+    d="L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174"
+    fill="none"
+    stroke="#942f51"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth={20}
+  />
+</Svg>
+`;
+
+exports[`MaskedImage component correctly handles adding new points to the current path if the path length is longer than the limit 2`] = `
+<Svg
+  height="100%"
+  onMoveShouldSetResponder={[Function]}
+  onMoveShouldSetResponderCapture={[Function]}
+  onResponderEnd={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderReject={[Function]}
+  onResponderRelease={[Function]}
+  onResponderStart={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  onStartShouldSetResponderCapture={[Function]}
+  preserveAspectRatio="xMidYMid meet"
+  width="100%"
+>
+  <Path
+    d="M173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L187.5 188.5"
+    fill="none"
+    stroke="#942f51"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth={20}
+  />
+</Svg>
+`;
+
+exports[`MaskedImage component correctly handles adding new points to the current path if the path length is shorter than the limit 1`] = `
+<Svg
+  height="100%"
+  onMoveShouldSetResponder={[Function]}
+  onMoveShouldSetResponderCapture={[Function]}
+  onResponderEnd={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderReject={[Function]}
+  onResponderRelease={[Function]}
+  onResponderStart={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  onStartShouldSetResponderCapture={[Function]}
+  preserveAspectRatio="xMidYMid meet"
+  width="100%"
+>
+  <Path
+    d="M191.5 381"
+    fill="none"
+    stroke="#942f51"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth={20}
+  />
+</Svg>
+`;
+
+exports[`MaskedImage component correctly handles adding new points to the current path if the path length is shorter than the limit 2`] = `
+<Svg
+  height="100%"
+  onMoveShouldSetResponder={[Function]}
+  onMoveShouldSetResponderCapture={[Function]}
+  onResponderEnd={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderReject={[Function]}
+  onResponderRelease={[Function]}
+  onResponderStart={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  onStartShouldSetResponderCapture={[Function]}
+  preserveAspectRatio="xMidYMid meet"
+  width="100%"
+>
+  <Path
+    d="M191.5 381 L188 381"
+    fill="none"
+    stroke="#942f51"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth={20}
+  />
+</Svg>
+`;
+
+exports[`MaskedImage component matches the snapshot with empty current path string 1`] = `
+<Svg
+  height="100%"
+  onMoveShouldSetResponder={[Function]}
+  onMoveShouldSetResponderCapture={[Function]}
+  onResponderEnd={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderReject={[Function]}
+  onResponderRelease={[Function]}
+  onResponderStart={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  onStartShouldSetResponderCapture={[Function]}
+  preserveAspectRatio="xMidYMid meet"
+  width="100%"
+>
+  <Path
+    d=""
+    fill="none"
+    stroke="#942f51"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth={20}
+  />
+</Svg>
+`;

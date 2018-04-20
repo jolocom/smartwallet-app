@@ -34,7 +34,7 @@ describe('KeyChain lib', () => {
 
   it('should correctly retrieve password', async() => {
     KC.nativeLib.getGenericPassword = jest.fn().mockReturnValue({
-      username: 'JolocomSmartWallet'
+      username: 'JolocomSmartWallet',
       password: 'test'
     })
 
