@@ -4,7 +4,16 @@ import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { Button } from 'react-native-material-ui'
 import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-const Image = require('react-native-remote-svg').default
+// const Image = require('react-native-remote-svg').default
+import { ReactNode } from 'react'
+import {
+  Onboarding00,
+  Onboarding01,
+  Onboarding02,
+  Onboarding03,
+  Onboarding04,
+  Onboarding05
+} from 'src/resources'
 
 interface State {
   activeSlide: number;
@@ -15,33 +24,33 @@ interface Props {
 }
 
 interface Slide {
-  svgImage: any;
+  svgImage: ReactNode;
   title: string;
   infoText: string;
 }
 
 const carouselInfo: Slide[] = [{
-  svgImage: require('src/img/img_onboarding-00.svg'),
+  svgImage: <Onboarding00 height={400} width={300} />,
   title: '',
   infoText: ''
 }, {
-  svgImage: require('src/img/img_onboarding-01.svg'),
+  svgImage: <Onboarding01 height={400} width={300} />,
   title: 'Create an independent and secure digital identity.',
   infoText: 'Collect your data at a secure place. It’s yours, so only you own it!'
 }, {
-  svgImage: require('src/img/img_onboarding-02.svg'),
+  svgImage: <Onboarding02 height={400} width={300} />,
   title: 'Have all your data at your fingertips.',
   infoText: 'See all your data in one safe place. Pull the plug and your data is only yours.'
 }, {
-  svgImage: require('src/img/img_onboarding-03.svg'),
+  svgImage: <Onboarding03 height={400} width={300} />,
   title: 'Be aware of the information you share.',
   infoText: 'See what you shared with whom. Have total control over your data.'
 }, {
-  svgImage: require('src/img/img_onboarding-04.svg'),
+  svgImage: <Onboarding04 height={400} width={300} />,
   title: 'Your data is as safe as in your bank account.',
   infoText: 'We use the latest encryption technology and blockchain to store your sensitive data.'
 }, {
-  svgImage: require('src/img/img_onboarding-05.svg'),
+  svgImage: <Onboarding05 height={400} width={300} />,
   title: 'Security is hard to maintain, that is why the storage costs.',
   infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
 }]
@@ -59,13 +68,15 @@ export class LandingComponent extends React.Component<Props, State> {
   }
 
   private _renderItem = ({ item } : { item : Slide }) => {
+    console.log('RENDER ITEM: ', item)
     const { svgImage, title, infoText  } = item
     return(
       <Container style={ this.styles.carouselContainer }>
-        <Image
+        {svgImage}
+        {/* <Image
           style={ this.styles.carouseSlide }
           source={ svgImage }
-        />
+        /> */}
 
         {title ? <Container style={ this.styles.carouselTextContainer }>
           <CenteredText style= { this.styles.header } msg={ title } />
