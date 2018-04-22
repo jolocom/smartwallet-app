@@ -4,7 +4,6 @@ import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { Button } from 'react-native-material-ui'
 import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-// const Image = require('react-native-remote-svg').default
 import { ReactNode } from 'react'
 import {
   Onboarding00,
@@ -29,31 +28,38 @@ interface Slide {
   infoText: string;
 }
 
-const carouselInfo: Slide[] = [{
-  svgImage: <Onboarding00 height={400} width={300} />,
-  title: '',
-  infoText: ''
-}, {
-  svgImage: <Onboarding01 height={400} width={300} />,
-  title: 'Create an independent and secure digital identity.',
-  infoText: 'Collect your data at a secure place. It’s yours, so only you own it!'
-}, {
-  svgImage: <Onboarding02 height={400} width={300} />,
-  title: 'Have all your data at your fingertips.',
-  infoText: 'See all your data in one safe place. Pull the plug and your data is only yours.'
-}, {
-  svgImage: <Onboarding03 height={400} width={300} />,
-  title: 'Be aware of the information you share.',
-  infoText: 'See what you shared with whom. Have total control over your data.'
-}, {
-  svgImage: <Onboarding04 height={400} width={300} />,
-  title: 'Your data is as safe as in your bank account.',
-  infoText: 'We use the latest encryption technology and blockchain to store your sensitive data.'
-}, {
-  svgImage: <Onboarding05 height={400} width={300} />,
-  title: 'Security is hard to maintain, that is why the storage costs.',
-  infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
-}]
+const carouselInfo: Slide[] = [
+  {
+    svgImage: <Onboarding00 height={'100%'} width={'100%'} />,
+    title: '',
+    infoText: ''
+  },
+  {
+    svgImage: <Onboarding01 height={'70%'} width={'100%'} />,
+    title: 'Create an independent and secure digital identity.',
+    infoText: 'Collect your data at a secure place. It’s yours, so only you own it!'
+  },
+  {
+    svgImage: <Onboarding02 height={'70%'} width={'100%'} />,
+    title: 'Have all your data at your fingertips.',
+    infoText: 'See all your data in one safe place. Pull the plug and your data is only yours.'
+  },
+  {
+    svgImage: <Onboarding03 height={'70%'} width={'100%'} />,
+    title: 'Be aware of the information you share.',
+    infoText: 'See what you shared with whom. Have total control over your data.'
+  },
+  {
+    svgImage: <Onboarding04 height={'70%'} width={'100%'} />,
+    title: 'Your data is as safe as in your bank account.',
+    infoText: 'We use the latest encryption technology and blockchain to store your sensitive data.'
+  },
+  {
+    svgImage: <Onboarding05 height={'70%'} width={'100%'} />,
+    title: 'Security is hard to maintain, that is why the storage costs.',
+    infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
+  }
+]
 
 
 const viewWidth: number = Dimensions.get('window').width
@@ -68,16 +74,10 @@ export class LandingComponent extends React.Component<Props, State> {
   }
 
   private _renderItem = ({ item } : { item : Slide }) => {
-    console.log('RENDER ITEM: ', item)
     const { svgImage, title, infoText  } = item
     return(
       <Container style={ this.styles.carouselContainer }>
         {svgImage}
-        {/* <Image
-          style={ this.styles.carouseSlide }
-          source={ svgImage }
-        /> */}
-
         {title ? <Container style={ this.styles.carouselTextContainer }>
           <CenteredText style= { this.styles.header } msg={ title } />
           <CenteredText style={ this.styles.subHeader } msg={ infoText } />
@@ -111,8 +111,9 @@ export class LandingComponent extends React.Component<Props, State> {
         width: '100%'
       },
       carouselTextContainer: {
-        flex: 0.4,
-        justifyContent: 'space-around'
+        flex: 1,
+        justifyContent: 'space-around',
+        padding: '1%'
       },
       dotStyle: {
         width: 7,
@@ -154,10 +155,10 @@ export class LandingComponent extends React.Component<Props, State> {
             }
           />
         </Block>
-        <Block flex={ 0.1 }>
+        <Block flex={ 0.13 }>
           { this.renderPagination() }
         </Block>
-        <Block flex={ 0.1 }>
+        <Block flex={ 0.07 }>
           <Button
             onPress={ this.props.handleButtonTap }
             style={{ container: this.styles.buttonContainer }}
