@@ -107,8 +107,7 @@ export default class Onboarding01 extends React.PureComponent {
             <Circle className="cls-24" x="148.07" y="157.69" r="10.761"/>
             <Circle className="cls-24" x="138.52" y="166.36" r="15.399"/>
             <Circle className="cls-24" x="131.58" y="182.13" r="7.9008"/>
-            <Circle className="cls-24" x="-19.324" y="231.45" r="5.3809" transform="rotate(-39.168)"/>
-            <Circle className="cls-24" x="-24.307" y="237.28" r="4.3159" transform="rotate(-39.168)"/>
+            
           </G>
           <G fill="#6d4326" strokeWidth="1.1808">
             <Circle className="cls-23" x="190.6" y="134.32" r="10.97"/>
