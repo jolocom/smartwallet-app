@@ -4,8 +4,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
 
 const { Checkbox, Button } = require('react-native-material-ui')
-const Image = require('react-native-remote-svg').default
-const techGuySvg = require('src/resources/img/img_techguy.svg')
+import { Techguy } from 'src/resources'
 
 interface Props {
   seedPhrase: string;
@@ -19,10 +18,6 @@ const styles = StyleSheet.create({
     fontWeight: JolocomTheme.textStyles.subheadline.fontWeight,
     fontSize: JolocomTheme.textStyles.sectionheader.fontSize
   } as TextStyle,
-  avatarImage: {
-    width: 80,
-    height: 80
-  },
   phrase: {
     color: JolocomTheme.textStyles.sectionheader.color,
     fontWeight: JolocomTheme.textStyles.sectionheader.fontWeight,
@@ -60,10 +55,7 @@ export const SeedPhrase : React.SFC<Props> = props => {
   return(
     <Container>
       <Block flex={ 0.1 }>
-        <Image
-          style={ styles.avatarImage }
-          source={ techGuySvg }
-        />
+        <Techguy height={80} width={80} />
       </Block>
       <Block flex={ 0.1 }>
         <CenteredText
