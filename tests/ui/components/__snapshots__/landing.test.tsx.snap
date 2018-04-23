@@ -78,6 +78,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       inactiveSlideShift={0}
       itemWidth={750}
       layout="default"
+      lockScrollTimeoutDuration={1000}
       lockScrollWhileSnapping={true}
       loop={true}
       loopClonesPerSide={3}

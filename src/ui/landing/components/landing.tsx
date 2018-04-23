@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Dimensions, TextStyle } from 'react-native'
-import Carousel, { Pagination } from 'react-native-snap-carousel'
+const Carousel = require('react-native-snap-carousel').default
+const Pagination = require('react-native-snap-carousel').Pagination
 import { Button } from 'react-native-material-ui'
 import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
@@ -146,6 +147,7 @@ export class LandingComponent extends React.Component<Props, State> {
             data={ carouselInfo }
             renderItem={ this._renderItem }
             lockScrollWhileSnapping
+            lockScrollTimeoutDuration={1000}
             loop
             sliderWidth={ viewWidth }
             itemWidth={ viewWidth }
