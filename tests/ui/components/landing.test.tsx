@@ -9,7 +9,6 @@ describe('landing component', ()=> {
     }
 
     const rendered = shallow(<LandingComponent {...props}/>)
-    
     expect(rendered).toMatchSnapshot()
   })
 })
