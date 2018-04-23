@@ -74,6 +74,7 @@
     }
   },
   "dependencies": {
+    "@types/react-native-vector-icons": "^4.6.0",
     "material-colors": "^1.2.5",
     "react": "16.2.0",
     "react-native": "0.52.0",
