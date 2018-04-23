@@ -84,6 +84,16 @@ const textStyles = {
 }
 
 export const JolocomTheme = {
+
+  primaryColorBlack: 'black',
+  primaryColorSand: '#ffefdf',
+  primaryColorGrey: '#fafafa',
+  primaryColorWhite: 'white',
+
+  labelFontSize: 20,
+  headerFontSize: 22,
+
+
   contentFontFamily: 'Roboto, sans-serif',
   palette,
   textStyles,
