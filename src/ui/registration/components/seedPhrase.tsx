@@ -4,8 +4,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
 
 const { Checkbox, Button } = require('react-native-material-ui')
-const Image = require('react-native-remote-svg').default
-const techGuySvg = require('src/img/img_techguy.svg')
+import { Techguy } from 'src/resources'
 
 interface Props {
   seedPhrase: string;
@@ -19,10 +18,6 @@ const styles = StyleSheet.create({
     fontWeight: JolocomTheme.textStyles.subheadline.fontWeight,
     fontSize: JolocomTheme.textStyles.sectionheader.fontSize
   } as TextStyle,
-  avatarImage: {
-    width: 80,
-    height: 80
-  },
   phrase: {
     color: JolocomTheme.textStyles.sectionheader.color,
     fontWeight: JolocomTheme.textStyles.sectionheader.fontWeight,
@@ -60,27 +55,24 @@ export const SeedPhrase : React.SFC<Props> = props => {
   return(
     <Container>
       <Block flex={ 0.1 }>
-        <Image
-          style={ styles.avatarImage }
-          source={ techGuySvg }
-        />
+        <Techguy height={80} width={80} />
       </Block>
       <Block flex={ 0.1 }>
-        <CenteredText 
+        <CenteredText
           msg={ 'Your secure phrase is:' }
           style={ styles.title }
         />
       </Block>
       <Block flex={ 0.1 }>
-        <CenteredText 
+        <CenteredText
           style={ styles.phrase }
           msg={ props.seedPhrase }
         />
       </Block>
       <Block flex={ 0.2 }>
-        <CenteredText 
+        <CenteredText
           style={ styles.sideNoteGreen }
-          msg={'IMPORTANT \n Write these words down on an analog and' + 
+          msg={'IMPORTANT \n Write these words down on an analog and' +
             'secure place. Store it in at least two different places.' +
             'Without these words you cannot access your wallet again.' +
             'Anyone with these words can get access to your wallet. ' +
@@ -91,7 +83,7 @@ export const SeedPhrase : React.SFC<Props> = props => {
       <Block flex={ 0.1 }>
         <Checkbox
           style={ muiStyles.checkbox }
-          onCheck={ props.onCheck } 
+          onCheck={ props.onCheck }
           label='Yes, I have securely written down my phrase.'
           checkedIcon='radio-button-checked'
           uncheckedIcon='radio-button-unchecked'
