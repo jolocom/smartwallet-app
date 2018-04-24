@@ -5,18 +5,9 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
   <Block
     flex={0.1}
   >
-    <MyImage
-      source={
-        Object {
-          "testUri": "../../../src/img/img_techguy.svg",
-        }
-      }
-      style={
-        Object {
-          "height": 80,
-          "width": 80,
-        }
-      }
+    <Techguy
+      height={80}
+      width={80}
     />
   </Block>
   <Block
@@ -122,18 +113,9 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
   <Block
     flex={0.1}
   >
-    <MyImage
-      source={
-        Object {
-          "testUri": "../../../src/img/img_techguy.svg",
-        }
-      }
-      style={
-        Object {
-          "height": 80,
-          "width": 80,
-        }
-      }
+    <Techguy
+      height={80}
+      width={80}
     />
   </Block>
   <Block
