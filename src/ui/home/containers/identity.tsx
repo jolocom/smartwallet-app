@@ -7,6 +7,7 @@ import { accountActions } from 'src/actions'
 import { RootState } from 'src/reducers/'
 
 interface ConnectProps {
+
 }
 
 interface Props extends ConnectProps {}
@@ -74,7 +75,8 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
-  return {}
+  return {
+  }
 }
 
 export const Identity = connect(mapStateToProps, mapDispatchToProps)(IdentityContainer)
