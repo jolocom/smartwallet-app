@@ -14,7 +14,8 @@ interface Props extends ConnectProps {}
 interface State {
   userName: string,
   phoneNumber: string,
-  emailAddress: string
+  emailAddress: string,
+  scanning: boolean
 }
 
 export class IdentityContainer extends React.Component<Props, State> {
@@ -22,7 +23,8 @@ export class IdentityContainer extends React.Component<Props, State> {
   state = {
     userName: '',
     phoneNumber: '',
-    emailAddress: ''
+    emailAddress: '',
+    scanning: false
   }
 
   private onUserNameChange= (userName: string) : void => {
@@ -35,15 +37,32 @@ export class IdentityContainer extends React.Component<Props, State> {
     this.setState({ emailAddress })
   }
 
+  private onScannerStart = () : void => {
+    this.setState({ scanning: true })
+  }
+
+  private onScannerCancel = () : void => {
+    this.setState({ scanning: false })
+  }
+
+  private onScannerSuccess = (e : any) : void => {
+    console.log('MOCK ON SCANNER SUCCESS')
+    this.setState({ scanning: false })
+  }
+
   render() {
     return (
     <IdentityComponent
+      scanning={ this.state.scanning }
       userName= {this.state.userName}
       phoneNumber= { this.state.phoneNumber }
       emailAddress= { this.state.emailAddress }
       onUserNameChange= { this.onUserNameChange }
       onPhoneNumberChange= { this.onPhoneNumberChange }
       onEmailAddressChange= { this.onEmailAddressChange }
+      onScannerStart={ this.onScannerStart }
+      onScannerSuccess={ this.onScannerSuccess }
+      onScannerCancel={ this.onScannerCancel }
      />
     )
   }
