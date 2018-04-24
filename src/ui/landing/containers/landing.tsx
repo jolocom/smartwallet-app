@@ -6,7 +6,6 @@ import { RootState } from 'src/reducers/'
 import { routeList } from 'src/routes'
 import { Storage } from 'src/lib/storage'
 
-// import { Storage } from 'src/lib/storage'
 
 interface ConnectProps {
   navigate: () => void;
@@ -16,18 +15,26 @@ interface OwnProps {}
 interface Props extends ConnectProps, OwnProps {}
 
 class LandingContainer extends React.Component<Props> {
+
+  // componentDidMount {
+    
+  // }
+
   render() {
     const ts = new Storage()
     ts.provisionTables()
+    // .then(()=>{
+    //   ts.closeDB()
+    // })
     return (
       <LandingComponent handleButtonTap={this.goToNextScreen} />
     )
   }
 
   private goToNextScreen = () => {
-    const test = new Storage()
-    test.provisionTables()
-    this.props.navigate(routeList.PasswordEntry)
+    // const test = new Storage()
+    // test.provisionTables()
+    this.props.navigate()
   }
 }
 

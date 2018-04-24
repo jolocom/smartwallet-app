@@ -24,7 +24,7 @@ export class Storage {
     this.db.DEBUG(true)
   }
 
-  async provisionTables() : Promise<void> {
+  async provisionTables() : Promise<any> {
     const tableData: TableOptions[] = [{
       name: 'Personas',
       fields: [{
@@ -65,16 +65,15 @@ export class Storage {
       }]
     }]
 
-    const results = await Promise.all(tableData.map(t =>
-      this.createTable(t))
+    this.db = await this.getDbInstance()
+    return await tableData.map(async t =>
+      await this.createTable(t)
     )
   }
 
-  async createTable(options : TableOptions) : Promise<void> {
-    const db = await this.getDbInstance()
+  private async createTable(options : TableOptions) {
     const query = this.assembleCreateTableQuery(options)
-    await this.executeTransaction(db, query)
-    await this.closeDbInstance(db)
+    this.executeCreateTable(this.db, query)
   }
 
   private assembleCreateTableQuery(options: TableOptions) : string {
@@ -89,48 +88,29 @@ export class Storage {
 
       return `${name} ${type} ${fieldOptions}`
     }).join(', ')
-
     return `${st} (${fieldSt})`
   }
 
-
-  // Not true async I think
-  private async executeTransaction(db: any, query: string) : Promise<boolean> {
-    await db.transaction(tx => tx.executeSql(query))
-    return true
-  }
-
-  private async getDbInstance() : Promise<any> {
-    return await this.db.openDatabase({ name: this.dbName })
-  }
-
-  async closeDbInstance(db: any) : Promise<boolean> {
-    return await db.close()
-  }
-
-
-  async createDb() : Promise<boolean> {
-    const result = await this.db.openDatabase({ name: this.dbName })
-
-    /*
-    await result.transaction(tx => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS Version5( version_id INTEGER PRIMARY KEY NOT NULL); ')
+  private executeCreateTable(db: any, query: any) {
+    this.db.transaction((tx: any) => tx.executeSql(query)).then(() => {
+    //do something setState here
+      console.log('success real', this)
     })
-    */
-
-    await result.close()
-    return true
   }
 
-  async populateTables() : Promise<boolean> {
-    const database = await this.db.openDatabase({ name: this.dbName })
+  private async getDbInstance() {
+    return await this.db.openDatabase({ name: this.dbName }, this.querySuccess, this.errorCB)
+  }
 
-    /*
-    database.transaction(tx => {
-      // tx.executeSql(query.toString())
-    })
-    */
+  private errorCB (error: any) {
+    console.log(error, 'query errored')
+  }
 
-    return true
+  private querySuccess() {
+    console.log('query succeed')
+  }
+
+  closeDB() {
+    this.db.close()
   }
 }
