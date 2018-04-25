@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`QRcodeScanner component matches the snapshot when no input is present 1`] = `
+exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
 <Container>
   <QRCodeScanner
     bottomContent={

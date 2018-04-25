@@ -5,14 +5,10 @@ import mockCamera from '../../__mocks__/react-native-camera'
 
 describe('QRcodeScanner component', ()=> {
   jest.mock('react-native-camera', () => mockCamera)
-  const COMMON_PROPS = {
-    onScannerSuccess: () => null,
-    onScannerCancel: () => null,
-    listener: null
-  }
 
-  it('matches the snapshot when no input is present', () => {
+  it('matches the snapshot with back handler', () => {
     const BackHandler = jest.fn()
+
     const props = {
       onScannerSuccess: () => null,
       onScannerCancel: () => null,
