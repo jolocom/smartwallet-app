@@ -45,6 +45,7 @@
       "node_modules/(?!react-native|native-base|react-navigation|react-native-fabric)"
     ],
     "globals": {
+      "window": true,
       "ts-jest": {
         "useBabelrc": true
       }
