@@ -66,14 +66,21 @@ export class Storage {
     }]
 
     this.db = await this.getDbInstance()
-    return await tableData.map(async t =>
-      await this.createTable(t)
+    const finalResults = await Promise.all(
+      tableData.map(async t => {
+        const result = await this.createTable(t)
+        return result
+      })
     )
+    const finished = finalResults.every(result => result)
+    //TODO: better error handling here
+    finished ? this.closeDB() : console.log ('error in provisioning database')
   }
 
   private async createTable(options : TableOptions) {
     const query = this.assembleCreateTableQuery(options)
-    this.executeCreateTable(this.db, query)
+    const result = await this.executeCreateTableQuery(this.db, query)
+    return result 
   }
 
   private assembleCreateTableQuery(options: TableOptions) : string {
@@ -91,11 +98,11 @@ export class Storage {
     return `${st} (${fieldSt})`
   }
 
-  private executeCreateTable(db: any, query: any) {
-    this.db.transaction((tx: any) => tx.executeSql(query)).then(() => {
-    //do something setState here
-      console.log('success real', this)
+  private async executeCreateTableQuery(db: any, query: any) {
+    const result = await this.db.transaction((tx: any) => tx.executeSql(query, this.errorCB)).then(() => {
+      return true
     })
+    return result
   }
 
   private async getDbInstance() {
@@ -103,6 +110,7 @@ export class Storage {
   }
 
   private errorCB (error: any) {
+    //TODO: better error handling here
     console.log(error, 'query errored')
   }
 
