@@ -24,7 +24,7 @@ export class Storage {
     this.db.DEBUG(true)
   }
 
-  async provisionTables() : Promise<any> {
+  async provisionTables() : Promise<void> {
     const tableData: TableOptions[] = [{
       name: 'Personas',
       fields: [{
@@ -77,7 +77,7 @@ export class Storage {
     finished ? this.closeDB() : console.log ('error in provisioning database')
   }
 
-  private async createTable(options : TableOptions) {
+  private async createTable(options : TableOptions) : Promise<boolean> {
     const query = this.assembleCreateTableQuery(options)
     const result = await this.executeCreateTableQuery(this.db, query)
     return result 
@@ -98,27 +98,27 @@ export class Storage {
     return `${st} (${fieldSt})`
   }
 
-  private async executeCreateTableQuery(db: any, query: any) {
+  private async executeCreateTableQuery(db: any, query: any) : Promise<boolean> {
     const result = await this.db.transaction((tx: any) => tx.executeSql(query, this.errorCB)).then(() => {
       return true
     })
     return result
   }
 
-  private async getDbInstance() {
+  private async getDbInstance() : Promise<void>{
     return await this.db.openDatabase({ name: this.dbName }, this.querySuccess, this.errorCB)
   }
 
-  private errorCB (error: any) {
+  private errorCB (error: any) : void {
     //TODO: better error handling here
     console.log(error, 'query errored')
   }
 
-  private querySuccess() {
+  private querySuccess() : void {
     console.log('query succeed')
   }
 
-  closeDB() {
+  closeDB() : void {
     this.db.close()
   }
 }
