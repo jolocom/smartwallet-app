@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QRcodeScanner component matches the snapshot when no input is present 1`] = `
+<Container>
+  <QRCodeScanner
+    bottomContent={
+      <Button
+        accent={false}
+        disabled={false}
+        icon={null}
+        onLongPress={null}
+        onPress={[Function]}
+        primary={false}
+        raised={false}
+        style={
+          Object {
+            "text": Object {
+              "color": "#942f51",
+            },
+          }
+        }
+        testID={null}
+        text="Cancel"
+        upperCase={true}
+      />
+    }
+    cameraType="back"
+    checkAndroid6Permissions={false}
+    fadeIn={true}
+    notAuthorizedView={
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontSize": 16,
+              "textAlign": "center",
+            }
+          }
+        >
+          Camera not authorized
+        </Text>
+      </View>
+    }
+    onRead={[Function]}
+    pendingAuthorizationView={
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontSize": 16,
+              "textAlign": "center",
+            }
+          }
+        >
+          ...
+        </Text>
+      </View>
+    }
+    permissionDialogMessage="Need camera permission"
+    permissionDialogTitle="Info"
+    reactivate={false}
+    reactivateTimeout={0}
+    showMarker={false}
+    topContent={
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      >
+        You can scan the qr code now!
+      </Text>
+    }
+  />
+</Container>
+`;
