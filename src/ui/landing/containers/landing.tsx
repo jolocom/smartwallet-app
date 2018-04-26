@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { LandingComponent } from 'src/ui/landing/components/landing'
 import { navigationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
-import { routeList } from 'src/routes'
 
 interface ConnectProps {
   navigate: () => void
@@ -12,7 +11,7 @@ interface ConnectProps {
 interface OwnProps {}
 interface Props extends ConnectProps, OwnProps {}
 
-class LandingContainer extends React.Component<Props> {
+export class LandingContainer extends React.Component<Props> {
   render() {
     return (
       <LandingComponent handleButtonTap={this.goToNextScreen} />
@@ -37,4 +36,3 @@ const mapDispatchToProps = (dispatch: Function) => {
 }
 
 export const Landing = connect(mapStateToProps, mapDispatchToProps)(LandingContainer)
-
