@@ -38,7 +38,7 @@ export class PasswordEntryContainer extends React.Component<Props, State> {
       'keyboardDidShow',
       () => this.setState({ keyboardDrawn: true })
     )
- 
+
     this.kbHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => this.setState({ keyboardDrawn: false })

@@ -17,7 +17,7 @@ export class InteractionsContainer extends React.Component<Props, State> {
   render() {
 
     return (
-    <InteractionsComponent 
+    <InteractionsComponent
     />
     )
   }
