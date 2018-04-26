@@ -25,15 +25,6 @@ const config = {
 
 const backendMiddleware = new BackendMiddleware(config)
 
-const {
-  createReactNavigationReduxMiddleware
-} = require('react-navigation-redux-helpers')
-
-const navMiddleware = createReactNavigationReduxMiddleware(
-  'root',
-  (state : any) => state.navigation
-)
-
 export const store = createStore(
   rootReducer,
   {},

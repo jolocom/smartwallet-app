@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AnyAction } from 'redux'
 import { Keyboard, EmitterSubscription } from 'react-native'
 import { registrationActions } from 'src/actions'
 import { PasswordEntryComponent } from 'src/ui/registration/components/passwordEntry'

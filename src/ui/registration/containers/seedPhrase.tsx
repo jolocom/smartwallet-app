@@ -1,9 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AnyAction } from 'redux'
-import { ThunkAction } from 'redux-thunk'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
-import { registrationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
 
 interface ConnectProps {

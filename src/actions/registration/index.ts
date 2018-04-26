@@ -1,7 +1,5 @@
 import { AnyAction } from 'redux'
-import { BackendMiddleware } from 'src/backendMiddleware'
 import { KeyChain } from 'src/lib/keychain'
-import { IpfsLib } from 'src/lib/ipfs'
 import { navigationActions } from 'src/actions/'
 
 // TODO MOVE
@@ -38,8 +36,8 @@ export const generateAndEncryptKeyPairs = (encodedEntropy: string) => {
     const {
       didDocument,
       mnemonic,
-      masterKeyWIF,
-      genericSigningKeyWIF,
+      // masterKeyWIF,
+      // genericSigningKeyWIF,
       ethereumKeyWIF
     } = await jolocomLib.identity.create(encodedEntropy)
 

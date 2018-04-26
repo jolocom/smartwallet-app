@@ -1,4 +1,3 @@
-import { AnyAction } from 'redux'
 import { combineReducers } from 'redux'
 import { loading } from 'src/reducers/registration/loading'
 
