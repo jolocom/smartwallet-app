@@ -9,13 +9,8 @@ export class KeyChain {
   private username = 'JolocomSmartWallet'
   private nativeLib : any = Keychain
 
-  async savePassword(password: string) : Promise<boolean> {
-    try {
-      await this.nativeLib.setGenericPassword(this.username, password)
-      return true
-    } catch (err) {
-      return false
-    }
+  async savePassword(password: string) : Promise<void> {
+    await this.nativeLib.setGenericPassword(this.username, password)
   }
 
   async getPassword() : Promise<getPasswordResponse> {

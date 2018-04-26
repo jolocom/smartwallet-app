@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
-import { navigationActions } from 'src/actions'
+import { registrationActions } from 'src/actions'
 import { EntropyComponent } from 'src/ui/registration/components/entropy'
 import { RootState } from 'src/reducers'
 import { 
@@ -10,7 +10,7 @@ import {
 } from 'src/lib/entropyGenerator'
 
 interface ConnectProps {
-  navigate: (encodedEntropy: string) => void;
+  submit: (encodedEntropy: string) => void;
 }
 
 interface OwnProps { }
@@ -62,7 +62,7 @@ export class EntropyContainer extends React.Component<Props, State> {
   }
 
   private submitEntropy = () : void => {
-    this.props.navigate(this.state.encodedEntropy)
+    this.props.submit(this.state.encodedEntropy)
   }
 
   render() {
@@ -80,12 +80,10 @@ const mapStateToProps = (state: RootState) => {
   return {}
 }
 
-const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
+const mapDispatchToProps = (dispatch: (action: Function) => void) => {
   return {
-    navigate: (encodedEntropy: string) => dispatch(navigationActions.navigate({
-      routeName: 'SeedPhrase',
-      params: { encodedEntropy }
-    }))
+    submit: (encodedEntropy: string) => 
+      dispatch(registrationActions.submitEntropy(encodedEntropy))
   }
 }
 

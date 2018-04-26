@@ -1,2 +1,1 @@
-export { Home } from './home/containers/Home'
-export { Loading } from './registration/containers/Loading'
+export { Loading } from './registration/containers/loading'

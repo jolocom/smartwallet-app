@@ -6,9 +6,9 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 export const enum routeList {
   Landing = 'Landing',
+  PasswordEntry = 'PasswordEntry',
   Entropy = 'Entropy',
   Loading = 'Loading',
-  PasswordEntry = 'PasswordEntry',
   SeedPhrase = 'SeedPhrase',
   Identity = 'Identity',
   Interactions = 'Interactions'
