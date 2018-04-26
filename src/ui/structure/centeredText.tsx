@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, TextStyle, Text } from 'react-native'
-import { ReactNode } from 'react'
 
 const styles = StyleSheet.create({
   text: {
