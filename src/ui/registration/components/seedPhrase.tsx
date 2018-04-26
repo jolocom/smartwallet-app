@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TextStyle } from 'react-native'
+import { StyleSheet, TextStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
 

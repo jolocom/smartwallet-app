@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AnyAction } from 'redux'
 import { registrationActions } from 'src/actions'
 import { EntropyComponent } from 'src/ui/registration/components/entropy'
 import { RootState } from 'src/reducers'
