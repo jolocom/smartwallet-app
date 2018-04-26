@@ -58,6 +58,9 @@
       "json",
       "node"
     ],
+    "moduleNameMapper": {
+     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
+    },
     "preset": "react-native",
     "testMatch": [
       "**/__tests__/**/*.[tj]s?(x)",
@@ -76,8 +79,10 @@
     "material-colors": "^1.2.5",
     "react": "16.2.0",
     "react-native": "0.52.0",
+    "react-native-camera": "^1.1.1",
     "react-native-keychain": "^3.0.0-rc.3",
     "react-native-material-ui": "^1.22.2",
+    "react-native-qrcode-scanner": "^1.0.1",
     "react-native-remote-svg": "^1.2.0",
     "react-native-snap-carousel": "^3.6.0",
     "react-native-svg": "^6.3.1",

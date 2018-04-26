@@ -5,7 +5,7 @@ build/
 .tern-project
 .expo/
 android/.gradle
-ios/smartwallet.xcodeproj/
+*.xcodeproj/
 
 
 yarn.lock

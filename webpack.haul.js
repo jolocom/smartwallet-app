@@ -16,6 +16,8 @@ module.exports = ({ platform }, { module, resolve }) => ({
     ...resolve,
     alias: {
       src: path.resolve(__dirname, 'src/'),
+      react: path.join(__dirname, 'node_modules/react'),
+      'react-native': path.join(__dirname, 'node_modules/react-native'),
     },
     extensions: [
       '.ts',
