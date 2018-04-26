@@ -13,6 +13,7 @@
     "@types/react-navigation": "^1.2.3",
     "@types/react-redux": "^5.0.15",
     "@types/react-test-renderer": "^16.0.0",
+    "@types/react-native-vector-icons": "^4.6.0",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-react-native-stage-0": "^1.0.1",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
@@ -63,6 +64,9 @@
       "json",
       "node"
     ],
+    "moduleNameMapper": {
+     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
+    },
     "preset": "react-native",
     "testMatch": [
       "**/__tests__/**/*.[tj]s?(x)",
@@ -81,12 +85,15 @@
     "crypto-js": "^3.1.9-1",
     "ethereumjs-wallet": "^0.6.0",
     "jolocom-lib": "^0.4.3",
+    "react-native": "0.55.0",
     "material-colors": "^1.2.5",
     "react": "16.2.0",
-    "react-native": "0.55.0",
+    "react-native": "0.52.0",
+    "react-native-camera": "^1.1.1",
     "react-native-fetch-blob": "^0.10.8",
     "react-native-keychain": "^3.0.0-rc.3",
     "react-native-material-ui": "^1.22.2",
+    "react-native-qrcode-scanner": "^1.0.1",
     "react-native-remote-svg": "^1.2.0",
     "react-native-snap-carousel": "^3.6.0",
     "react-native-svg": "^6.3.1",

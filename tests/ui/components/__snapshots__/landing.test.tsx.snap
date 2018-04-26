@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`landing component matches the snapshot on render 1`] = `
+<Container>
+  <Block
+    flex={0.8}
+  >
+    <Carousel
+      activeAnimationOptions={null}
+      activeAnimationType="timing"
+      activeSlideAlignment="center"
+      activeSlideOffset={20}
+      apparitionDelay={0}
+      autoplay={false}
+      autoplayDelay={5000}
+      autoplayInterval={3000}
+      callbackOffsetMargin={5}
+      containerCustomStyle={Object {}}
+      contentContainerCustomStyle={Object {}}
+      data={
+        Array [
+          Object {
+            "infoText": "",
+            "svgImage": <Onboarding00
+              height="100%"
+              width="100%"
+            />,
+            "title": "",
+          },
+          Object {
+            "infoText": "Collect your data at a secure place. It’s yours, so only you own it!",
+            "svgImage": <Onboarding01
+              height="70%"
+              width="100%"
+            />,
+            "title": "Create an independent and secure digital identity.",
+          },
+          Object {
+            "infoText": "See all your data in one safe place. Pull the plug and your data is only yours.",
+            "svgImage": <Onboarding02
+              height="70%"
+              width="100%"
+            />,
+            "title": "Have all your data at your fingertips.",
+          },
+          Object {
+            "infoText": "See what you shared with whom. Have total control over your data.",
+            "svgImage": <Onboarding03
+              height="70%"
+              width="100%"
+            />,
+            "title": "Be aware of the information you share.",
+          },
+          Object {
+            "infoText": "We use the latest encryption technology and blockchain to store your sensitive data.",
+            "svgImage": <Onboarding04
+              height="70%"
+              width="100%"
+            />,
+            "title": "Your data is as safe as in your bank account.",
+          },
+          Object {
+            "infoText": "The storage of your data is payed in ether. But only the change of data costs.",
+            "svgImage": <Onboarding04
+              height="70%"
+              width="100%"
+            />,
+            "title": "Security is hard to maintain, that is why the storage costs.",
+          },
+        ]
+      }
+      enableMomentum={false}
+      enableSnap={true}
+      firstItem={0}
+      hasParallaxImages={false}
+      inactiveSlideOpacity={0.7}
+      inactiveSlideScale={0.9}
+      inactiveSlideShift={0}
+      itemWidth={750}
+      layout="default"
+      lockScrollTimeoutDuration={1000}
+      lockScrollWhileSnapping={true}
+      loop={true}
+      loopClonesPerSide={3}
+      onSnapToItem={[Function]}
+      renderItem={[Function]}
+      shouldOptimizeUpdates={true}
+      slideStyle={Object {}}
+      sliderWidth={750}
+      swipeThreshold={20}
+      useScrollView={false}
+      vertical={false}
+    />
+  </Block>
+  <Block
+    flex={0.13}
+  >
+    <Pagination
+      activeDotIndex={0}
+      dotStyle={
+        Object {
+          "backgroundColor": "#942f51",
+          "height": 7,
+          "width": 7,
+        }
+      }
+      dotsLength={6}
+      inactiveDotOpacity={0.4}
+      inactiveDotScale={0.6}
+      inactiveDotStyle={
+        Array [
+          Object {
+            "backgroundColor": "#942f51",
+            "height": 7,
+            "width": 7,
+          },
+          Array [
+            Object {
+              "backgroundColor": "#9ba0aa",
+            },
+          ],
+        ]
+      }
+      tappableDots={false}
+      vertical={false}
+    />
+  </Block>
+  <Block
+    flex={0.07}
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={[Function]}
+      primary={true}
+      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+          },
+        }
+      }
+      testID={null}
+      text="Create Your Identity"
+      upperCase={true}
+    />
+  </Block>
+</Container>
+`;
