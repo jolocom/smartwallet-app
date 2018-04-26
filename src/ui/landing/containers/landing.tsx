@@ -16,11 +16,6 @@ interface Props extends ConnectProps, OwnProps {}
 
 class LandingContainer extends React.Component<Props> {
 
-  componentDidMount() {
-    const ts = new Storage()
-    ts.provisionTables()
-  }
-
   render() {
     return (
       <LandingComponent handleButtonTap={this.goToNextScreen} />
@@ -28,6 +23,8 @@ class LandingContainer extends React.Component<Props> {
   }
 
   private goToNextScreen = () => {
+    const ts = new Storage()
+    ts.provisionTables()
     this.props.navigate()
   }
 }
