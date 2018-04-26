@@ -6,7 +6,6 @@ import { RootState } from 'src/reducers/'
 import { routeList } from 'src/routes'
 import { Storage } from 'src/lib/storage'
 
-
 interface ConnectProps {
   navigate: () => void;
 }
@@ -14,7 +13,7 @@ interface ConnectProps {
 interface OwnProps {}
 interface Props extends ConnectProps, OwnProps {}
 
-class LandingContainer extends React.Component<Props> {
+export class LandingContainer extends React.Component<Props> {
 
   render() {
     return (

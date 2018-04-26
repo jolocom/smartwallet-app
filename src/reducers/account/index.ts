@@ -1,4 +1,4 @@
-import { AnyAction } from 'redux'
+// import { AnyAction } from 'redux'
 import { combineReducers } from 'redux'
 import { did } from 'src/reducers/account/did'
 

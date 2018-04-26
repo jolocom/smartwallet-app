@@ -1,4 +1,4 @@
-import { AnyAction } from 'redux'
+// import { AnyAction } from 'redux'
 import { NavigationStackAction, NavigationActions } from 'react-navigation'
 import { Routes } from 'src/routes'
 

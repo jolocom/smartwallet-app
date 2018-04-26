@@ -2,7 +2,7 @@ import React from 'react'
 import { InteractionsComponent } from 'src/ui/home/components/interactions'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
-import { accountActions } from 'src/actions'
+// import { accountActions } from 'src/actions'
 import { RootState } from 'src/reducers/'
 
 interface ConnectProps {}
@@ -18,7 +18,7 @@ export class InteractionsContainer extends React.Component<Props, State> {
   render() {
 
     return (
-    <InteractionsComponent 
+    <InteractionsComponent
     />
     )
   }
