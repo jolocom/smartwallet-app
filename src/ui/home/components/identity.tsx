@@ -1,10 +1,8 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { View, Text, TextInput, StyleSheet, Button, Linking, TouchableOpacity } from 'react-native'
-import { Svg, Path } from 'react-native-svg'
+import { TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { ActionButton } from 'react-native-material-ui'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 
 
@@ -39,7 +37,7 @@ const styles = StyleSheet.create({
     height: 55,
     width: 55,
     borderRadius: 35,
-    backgroundColor: '#942f51',
+    backgroundColor: JolocomTheme.palette.primaryColor,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

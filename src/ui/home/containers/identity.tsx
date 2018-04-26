@@ -1,9 +1,7 @@
 import React from 'react'
-import { View } from 'react-native'
 import { IdentityComponent } from 'src/ui/home/components/identity'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
-import { accountActions } from 'src/actions'
 import { RootState } from 'src/reducers/'
 
 interface ConnectProps {

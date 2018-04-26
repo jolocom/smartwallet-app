@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, Linking, TouchableOpacity, Platform, BackHandler } from 'react-native'
-import { Container, Block } from 'src/ui/structure'
+import { Text, StyleSheet, Platform, BackHandler } from 'react-native'
+import { Container } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-const QRScanner = require('react-native-qrcode-scanner').default
 import { Button } from 'react-native-material-ui'
+
+const QRScanner = require('react-native-qrcode-scanner').default
+
 
 
 interface Props {
