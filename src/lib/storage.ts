@@ -43,7 +43,7 @@ export class Storage {
       fields: [{
         name: 'id',
         type: 'INTEGER',
-        options: ['PRIMRAY KEY', 'NOT NULL', 'UNIQUE']
+        options: ['PRIMARY KEY', 'NOT NULL', 'UNIQUE']
       }, {
         name: 'wif',
         type: 'VARCHAR(20)',
@@ -66,10 +66,10 @@ export class Storage {
     }]
 
     this.db = await this.getDbInstance()
+    //TODO: error handling for opening DB
     const finalResults = await Promise.all(
       tableData.map(async t => {
-        const result = await this.createTable(t)
-        return result
+        return await this.createTable(t)
       })
     )
     const finished = finalResults.every(result => result)
@@ -79,8 +79,7 @@ export class Storage {
 
   private async createTable(options : TableOptions) : Promise<boolean> {
     const query = this.assembleCreateTableQuery(options)
-    const result = await this.executeCreateTableQuery(this.db, query)
-    return result 
+    return await this.executeCreateTableQuery(this.db, query)
   }
 
   private assembleCreateTableQuery(options: TableOptions) : string {
@@ -99,23 +98,20 @@ export class Storage {
   }
 
   private async executeCreateTableQuery(db: any, query: any) : Promise<boolean> {
-    const result = await this.db.transaction((tx: any) => tx.executeSql(query, this.errorCB)).then(() => {
-      return true
-    })
-    return result
+    return await this.db.transaction((tx: any) => tx.executeSql(query, this.errorCB, this.querySuccess))
   }
 
   private async getDbInstance() : Promise<void>{
     return await this.db.openDatabase({ name: this.dbName }, this.querySuccess, this.errorCB)
   }
 
-  private errorCB (error: any) : void {
+  private errorCB (error: any) : Error {
     //TODO: better error handling here
-    console.log(error, 'query errored')
+    return error
   }
 
-  private querySuccess() : void {
-    console.log('query succeed')
+  private querySuccess() : boolean {
+    return true
   }
 
   closeDB() : void {
