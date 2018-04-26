@@ -1,6 +1,6 @@
 import React from 'react'
-import { PanResponder, PanResponderCallbacks, PanResponderInstance, GestureResponderEvent } from 'react-native'
-import { Svg, Path, G } from 'react-native-svg'
+import { PanResponder, PanResponderInstance, GestureResponderEvent } from 'react-native'
+import { Svg, Path } from 'react-native-svg'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
