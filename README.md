@@ -39,7 +39,7 @@ Rebuilding will be much slower this way, because the entire bundle will be rebui
 
 If you are getting the error `Module parse failed: main.jsx Line 1: Unexpected token`, switch to node version 4.x before running the gulp ([nvm](https://github.com/creationix/nvm) might come in handy).
 
-Setup for production
+Setup for production (iOS)
 --------------------
 
 ## Installation
@@ -47,30 +47,15 @@ Setup for production
 yarn install
 ```
 
-### Browser
+### Preparing a production bundle
 
 ```bash
-yarn build
+haul bundle --platform ios --bundle-output ios/smartwallet/main.jsbundle --assets-dest ios
 ```
 
-Tests
------
+### Setting jsCodeLocation to be the bundled js
 
-## Running tests locally
-
-```bash
-yarn test
-```
-
-## Writing tests
-
-Frameworks used for testing: `Mocha`, `Chai`, `Sinon` and `Enzyme`.
-
-1. Create a .test.js file either in the same directory as the file you're writing a test for, or in a /test subfolder.
-
-2. Write your unit and component tests in this file.
-
-3. Run `$ yarn test`
+Open ios/smartwallet/AppDelegate.m and switch jsCodeLocation to be production build (comment our the development one).
 
 
 Documentation
