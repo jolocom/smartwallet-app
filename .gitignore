@@ -4,6 +4,7 @@ build/
 .tern-project
 .expo/
 android/.gradle
+*.xcodeproj/
 
 yarn.lock
 
