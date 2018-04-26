@@ -3,7 +3,7 @@
     "noUnusedLocals": true,
     "target": "es5",
     "module": "es2015",
-    "outDir": "dist",
+    "outDir": "build",
     "sourceMap": true,
     "experimentalDecorators": true,
     "jsx": "react-native",
@@ -22,8 +22,5 @@
   },
   "include": [
     "./src/**/*"
-  ],
-  "exclude": [
-    "dist"
   ]
 }
