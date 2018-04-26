@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { LandingComponent } from 'src/ui/landing/components/landing'
 import { navigationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
-import { routeList } from 'src/routes'
 import { Storage } from 'src/lib/storage'
 
 interface ConnectProps {
