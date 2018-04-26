@@ -6,7 +6,7 @@ import { RootState } from 'src/reducers/'
 import { routeList } from 'src/routes'
 
 interface ConnectProps {
-  navigate: () => void;
+  navigate: () => void
 }
 
 interface OwnProps {}

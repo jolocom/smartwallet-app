@@ -1,23 +1,11 @@
 import { AnyAction } from 'redux'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { KeyChain } from 'src/lib/keychain'
-import { navigate } from 'src/actions/navigation/'
+import { IpfsLib } from 'src/lib/ipfs'
+import { navigationActions } from 'src/actions/'
 
 // TODO MOVE
 type Dispatch = (action: AnyAction) => void
-
-export const setSeedPhrase = (seedPhrase: string) : AnyAction => {
-  return {
-    type: 'SEEDPHRASE_SET',
-    value: seedPhrase
-  }
-}
-
-export const clearSeedPhrase = () : AnyAction => {
-  return {
-    type: 'SEEDPHRASE_CLEAR'
-  }
-}
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -26,43 +14,60 @@ export const setLoadingMsg = (loadingMsg: string) => {
   }
 }
 
-// TODO Retrieval of encrypted key.
-export const fetchSeedPhrase = () => {
-  return async (dispatch: Dispatch) => {
-    dispatch(setSeedPhrase('Mock Seed Phrase'))
-  }
-}
-
 export const savePassword = (password : string) => {
   return async (dispatch : Dispatch) =>  {
-    const KC = new KeyChain()
-    const success = await KC.savePassword(password)
-    if (success) {
-      dispatch(navigate({ routeName: 'Loading' }))
-    }
+    await new KeyChain().savePassword(password)
+    dispatch(navigationActions.navigate({ routeName: 'Entropy' }))
   }
 }
 
-export const generateAndEncryptKeyPairs = () => {
+export const submitEntropy = (encodedEntropy: string) => {
+  return (dispatch : Dispatch) => {
+    dispatch(navigationActions.navigate({
+      routeName: 'Loading',
+      params: { encodedEntropy }
+    }))
+  } 
+}
+
+// TODO Error handling
+export const generateAndEncryptKeyPairs = (encodedEntropy: string) => {
   return async (dispatch : Dispatch, getState: any, { backendMiddleware } : any) => {
-    const randomString = 'c1ac02ceac06bda925a011a7d2134957' // TODO: grab from the state
-    const password = 'Password1' // TODO: grab from the state
+    const { jolocomLib, ethereumLib } = backendMiddleware
 
-    dispatch(setLoadingMsg('Generating keys'))
-
-    console.log(getState)
     const {
       didDocument,
       mnemonic,
       masterKeyWIF,
       genericSigningKeyWIF,
       ethereumKeyWIF
-    } = backendMiddleware.jolocomLib.identity.create(randomString)
-    console.log(didDocument)
+    } = await jolocomLib.identity.create(encodedEntropy)
+
+    const { privateKey, address } = ethereumLib.wifToEthereumKey(ethereumKeyWIF)
+
+    dispatch(setLoadingMsg('Storing data on IPFS'))
+    const ipfsHash = await jolocomLib.identity.store(didDocument)
 
     dispatch(setLoadingMsg('Fueling with Ether'))
+    await ethereumLib.requestEther(address)
 
-    const ddoHash = await backendMiddleware.jolocomLib.identity.store(didDocument)
-    console.log(ddoHash)
+    dispatch(setLoadingMsg('Registering identity on Ethereum'))
+    await jolocomLib.identity.register({
+      ethereumKey: Buffer.from(privateKey, 'hex'),
+      did: didDocument.id,
+      ipfsHash
+    })
+
+    const encryptionPass = await new KeyChain().getPassword()
+
+    if (!encryptionPass.found) {
+    }
+
+    dispatch(setLoadingMsg('storing of encrypted data comming soon!'))
+
+    dispatch(navigationActions.navigate({
+      routeName: 'SeedPhrase',
+      params: { mnemonic }
+    }))
   }
 }
