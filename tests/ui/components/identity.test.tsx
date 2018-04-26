@@ -20,13 +20,4 @@ describe('Identity component', ()=> {
     const rendered = shallow(<IdentityComponent {...COMMON_PROPS}/>)
     expect(rendered).toMatchSnapshot()
   })
-
-  it('matches the snapshot on render with scanning set to true', () => {
-    const props = Object.assign({}, COMMON_PROPS {
-      scanning: true
-    })
-
-    const rendered = shallow(<IdentityComponent {...COMMON_PROPS}/>)
-    expect(rendered).toMatchSnapshot()
-  })
 })
