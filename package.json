@@ -22,7 +22,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
-    "haul": "1.0.0-beta.13",
+    "haul": "1.0.0-beta.14",
     "immutable": "^3.8.2",
     "jest": "^22.4.3",
     "material-colors": "^1.2.5",
