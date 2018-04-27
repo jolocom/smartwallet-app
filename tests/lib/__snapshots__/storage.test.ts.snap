@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storage Lib | dbHelper should correctly assemble table creation query 1`] = `"CREATE TABLE IF NOT EXISTS Personas (did VARCHAR(20) NOT NULL PRIMARY KEY, FOREIGN KEY(controllingKey) REFERENCES Keys(id) )"`;
+
+exports[`Storage Lib | dbHelper should correctly assemble table creation query 2`] = `"CREATE TABLE IF NOT EXISTS Keys (id INTEGER PRIMARY KEY NOT NULL UNIQUE, FOREIGN KEY(entropySource) REFERENCES MasterKeys(id) )"`;
+
+exports[`Storage lib should attempt to provision tables 1`] = `
+Array [
+  Array [
+    Object {
+      "transaction": [MockFunction],
+    },
+    "CREATE TABLE IF NOT EXISTS Personas (did VARCHAR(20) NOT NULL UNIQUE COLLATE NOCASE PRIMARY KEY, controllingKey INTEGER , FOREIGN KEY(controllingKey) REFERENCES Keys(id) )",
+  ],
+  Array [
+    Object {
+      "transaction": [MockFunction],
+    },
+    "CREATE TABLE IF NOT EXISTS Keys (id INTEGER PRIMARY KEY NOT NULL UNIQUE, wif VARCHAR(20) UNIQUE NOT NULL, path VARCHAR(10) NOT NULL, entropySource INTEGER , algorithm TEXT NOT NULL, FOREIGN KEY(entropySource) REFERENCES MasterKeys(id) )",
+  ],
+]
+`;
