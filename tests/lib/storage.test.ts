@@ -1,5 +1,4 @@
-import { Storage, dbHelper}  from 'src/lib/storage'
-import data from './data/storageTestData'
+import { Storage }  from 'src/lib/storage'
 
 describe('Storage lib', () => {
   let StorageAgent
@@ -31,12 +30,4 @@ describe('Storage lib', () => {
     expect(mockGetDbInstnace).toHaveBeenCalledTimes(1)
     expect(mockCloseDb).toHaveBeenCalledTimes(1)
   })
-})
-
-describe('Storage Lib | dbHelper', () => {
-  it('should correctly assemble table creation query', () => {
-    const { personasTableInfo, keysTableInfo } = data
-    expect(dbHelper.assembleCreateTableQuery(personasTableInfo)).toMatchSnapshot()
-    expect(dbHelper.assembleCreateTableQuery(keysTableInfo)).toMatchSnapshot()
-  }) 
 })
