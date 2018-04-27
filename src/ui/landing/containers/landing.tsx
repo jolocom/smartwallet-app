@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { LandingComponent } from 'src/ui/landing/components/landing'
 import { navigationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
+import { Storage } from 'src/lib/storage'
 
 interface ConnectProps {
   navigate: () => void
@@ -12,6 +13,7 @@ interface OwnProps {}
 interface Props extends ConnectProps, OwnProps {}
 
 export class LandingContainer extends React.Component<Props> {
+
   render() {
     return (
       <LandingComponent handleButtonTap={this.goToNextScreen} />
@@ -19,6 +21,8 @@ export class LandingContainer extends React.Component<Props> {
   }
 
   private goToNextScreen = () => {
+    const ts = new Storage()
+    ts.provisionTables()
     this.props.navigate()
   }
 }

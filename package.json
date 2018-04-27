@@ -11,6 +11,7 @@
     "@types/react-native-material-ui": "^1.19.2",
     "@types/react-native-snap-carousel": "^3.6.0",
     "@types/react-native-vector-icons": "^4.6.0",
+    "@types/react-native-sqlite-storage": "^3.3.0",
     "@types/react-navigation": "^1.2.3",
     "@types/react-redux": "^5.0.15",
     "@types/react-test-renderer": "^16.0.0",
@@ -53,6 +54,7 @@
       "node_modules/(?!react-native|native-base|react-navigation|react-native-fabric)"
     ],
     "globals": {
+      "window": true,
       "ts-jest": {
         "useBabelrc": true
       }
@@ -96,6 +98,7 @@
     "react-native-qrcode-scanner": "^1.0.1",
     "react-native-remote-svg": "^1.2.0",
     "react-native-snap-carousel": "^3.6.0",
+    "react-native-sqlite-storage": "^3.3.4",
     "react-native-svg": "^6.3.1",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.8",
@@ -104,6 +107,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "sjcl": "^1.0.7",
-    "wif": "^2.0.6"
+    "wif": "^2.0.6",
+    "sqlite3": "^4.0.0"
   }
 }

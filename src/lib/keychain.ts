@@ -1,6 +1,6 @@
 import * as Keychain from 'react-native-keychain'
 
-interface getPasswordResponse {
+interface GetPasswordResponse {
   password: string;
   found: boolean;
 }
@@ -13,8 +13,8 @@ export class KeyChain {
     await this.nativeLib.setGenericPassword(this.username, password)
   }
 
-  async getPassword() : Promise<getPasswordResponse> {
-    interface expectedResult {
+  async getPassword() : Promise<GetPasswordResponse> {
+    interface ExpectedResult {
       username: string;
       password: string;
       service: string;
@@ -31,7 +31,7 @@ export class KeyChain {
 
     return {
       found: true,
-      password: (<expectedResult>result).password
+      password: (<ExpectedResult>result).password
     }
   }
 }
