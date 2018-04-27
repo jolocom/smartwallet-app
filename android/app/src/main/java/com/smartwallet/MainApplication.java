@@ -3,10 +3,10 @@ package com.smartwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.keychain.KeychainPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.horcrux.svg.SvgPackage;
-import com.oblador.keychain.KeychainPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
