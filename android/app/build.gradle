@@ -71,12 +71,10 @@ import com.android.build.OutputFile
  *   extraPackagerArgs: []
  * ]
  */
-
 project.ext.react = [
     cliPath: "node_modules/haul/bin/cli.js",
     entryFile: "index.js"
 ]
-
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -149,7 +147,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-fetch-blob')
+    implementation project(':react-native-fetch-blob')
     implementation project(':react-native-svg')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
