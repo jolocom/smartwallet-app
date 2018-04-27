@@ -58,6 +58,6 @@ yarn test --watch --coverage
 
 Documentation
 -------------
-Additional documentation can be found at our [wiki](https://github.com/jolocom/smartwallet/wiki).
+Additional documentation can be found at our [wiki](https://github.com/jolocom/smartwallet-app/wiki).
 
 Copyright (C) 2014-2018  JOLOCOM UG
