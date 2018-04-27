@@ -71,12 +71,10 @@ import com.android.build.OutputFile
  *   extraPackagerArgs: []
  * ]
  */
-
 project.ext.react = [
     cliPath: "node_modules/haul/bin/cli.js",
     entryFile: "index.js"
 ]
-
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -149,6 +147,14 @@ android {
 }
 
 dependencies {
+
+    compile project(':react-native-svg')
+    compile project(':react-native-vector-icons')
+    compile fileTree(dir: "libs", include: ["*.jar"])
+    compile "com.android.support:appcompat-v7:23.0.1"
+    compile "com.facebook.react:react-native:+"  // From node_modules
+    compile project(':react-native-keychain')
+    compile project(':react-native-sqlite-storage')
     implementation project(':react-native-svg')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])

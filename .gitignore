@@ -1,3 +1,4 @@
+# General
 bower_components/
 node_modules/
 build/
@@ -6,56 +7,18 @@ build/
 android/.gradle
 *.xcodeproj/
 
+
 yarn.lock
-
-# Python
-venv/
-*.pyc
-.ropeproject/
-*.egg-info
-localhost.*
-config.json
-
-
-.DS_STORE
-node_modules
-*~
-*.pyc
-static
-.grunt
-_SpecRunner.html
-__benchmarks__
-build/
 coverage/
-.module-cache
-*.gem
-docs/.bundle
-docs/code
-docs/_site
-docs/.sass-cache
-docs/js/*
-docs/downloads/*.zip
-docs/vendor/bundle
-examples/shared/*.js
-examples/**/bundle.js
-fixtures/dom/public/react-dom.js
-fixtures/dom/public/react.js
-test/the-files-to-test.generated.js
-*.log*
-chrome-user-data
-*.sublime-project
-*.sublime-workspace
-.idea
-*.iml
-.vscode
-nbproject
 
-# Cordova
-app/plugins
-app/platforms
-app/wallet.json
-app/graph.json
+# React Native Android
+android/.gradle
+android/.build
 
 # Haul
-#
 haul-debug.log
+
+# Editors
+.vscode/
+yarn-error.log
+
