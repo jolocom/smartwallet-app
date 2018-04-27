@@ -10,6 +10,7 @@
     "@types/react-native": "^0.52.0",
     "@types/react-native-material-ui": "^1.19.2",
     "@types/react-native-snap-carousel": "^3.6.0",
+    "@types/react-native-sqlite-storage": "^3.3.0",
     "@types/react-navigation": "^1.2.3",
     "@types/react-redux": "^5.0.15",
     "@types/react-test-renderer": "^16.0.0",
@@ -59,7 +60,7 @@
       "node"
     ],
     "moduleNameMapper": {
-     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
     },
     "preset": "react-native",
     "testMatch": [
@@ -85,8 +86,8 @@
     "react-native-qrcode-scanner": "^1.0.1",
     "react-native-remote-svg": "^1.2.0",
     "react-native-snap-carousel": "^3.6.0",
-    "react-native-svg": "^6.3.1",
     "react-native-sqlite-storage": "^3.3.4",
+    "react-native-svg": "^6.3.1",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.8",
     "react-navigation-redux-helpers": "^1.0.3",
