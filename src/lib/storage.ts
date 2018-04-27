@@ -30,8 +30,12 @@ export class Storage {
   private location: Location = 'default'
 
   constructor() {
-    this.sqlLite.enablePromise(true)
+    this.enablePromise()
     this.sqlLite.DEBUG(true)
+  }
+
+  private enablePromise() : void {
+    this.sqlLite.enablePromise(true)
   }
 
   private async getDbInstance() : Promise<SQLiteDatabase> {
@@ -68,7 +72,7 @@ export class Storage {
   }
 }
 
-const dbHelper = {
+export const dbHelper = {
   defaultTables: [{
     name: 'Personas',
     fields: [{
