@@ -1,32 +1,42 @@
-
-import { Storage } from 'src/lib/storage'
+import { Storage, dbHelper}  from 'src/lib/storage'
 import data from './data/storageTestData'
 
-describe.only('Storage lib', () => {
-  let database
+describe('Storage lib', () => {
+  let StorageAgent
 
   beforeEach(() => {
-    database = new Storage()
-    const mockTransaction= jest.fn().mockResolvedValue(Promise.resolve(true))
-    database.db.transaction = mockTransaction
-    const mockOpenDB = jest.fn().mockResolvedValue(Promise.resolve(true))
-    database.db.openDatabase = mockOpenDB
+    StorageAgent = Storage
   })
 
-  it('should contain the correct databasename', () => {
-    expect(database.dbName).toBe('LocalSmartWalletData')
-    expect(database.db).toBeDefined()
+  it('should initialize correctly', () => {
+    const mock = StorageAgent.prototype.enablePromise = jest.fn()
+
+    new StorageAgent()
+    expect(mock).toHaveBeenCalledTimes(1)
   })
 
-   it('should correctly assemble table queries', () => {
-    const result = database.assembleCreateTableQuery(data.expectedPersonasTableOptions)
-    const result2 = database.assembleCreateTableQuery(data.expectedKeysTableOptions)
-    expect(result).toEqual(data.expectedPersonasQuery)
-    expect(result2).toEqual(data.expectedKeysQuery)
+  it('should attempt to provision tables', async () => {
+    const agent = new StorageAgent()
+
+    const mockExecQuery = agent.executeQuery = jest.fn()
+    const mockCloseDb = agent.closeDB = jest.fn().mockResolvedValue()
+
+    const mockDbInstance = { transaction: jest.fn() }
+    const mockGetDbInstnace = agent.getDbInstance = jest.fn()
+      .mockResolvedValue(mockDbInstance)
+
+    await agent.provisionTables()
+
+    expect(mockExecQuery.mock.calls).toMatchSnapshot()
+    expect(mockGetDbInstnace).toHaveBeenCalledTimes(1)
+    expect(mockCloseDb).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('Storage Lib | dbHelper', () => {
+  it('should correctly assemble table creation query', () => {
+    const { personasTableInfo, keysTableInfo } = data
+    expect(dbHelper.assembleCreateTableQuery(personasTableInfo)).toMatchSnapshot()
+    expect(dbHelper.assembleCreateTableQuery(keysTableInfo)).toMatchSnapshot()
   }) 
-  
-  it('should correctly return from table queries', async () => {
-    const result = await database.executeCreateTableQuery(data.expectedPersonasQuery)
-    expect(result).toBe(true)
-  })
 })
