@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   text: {
     position: 'absolute',
     top: '20%',
-    backgroundColor: JolocomTheme.jolocom.gray4,
+    backgroundColor: JolocomTheme.palette.backgroundContainer,
     fontSize: JolocomTheme.textStyles.headline.fontSize,
     fontWeight: JolocomTheme.textStyles.headline.fontWeight,
     color: JolocomTheme.textStyles.headline.color
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 export const EntropyComponent : React.SFC<Props> = props => {
   const { progress, submitEntropy, addPoint } = props
 
-  const msg = progress === 0 ? 
+  const msg = progress === 0 ?
     'For security purposes, we need some randomness.' +
     ' Please put your finger anywhere on the screen and draw' +
     ' on it randomly.'

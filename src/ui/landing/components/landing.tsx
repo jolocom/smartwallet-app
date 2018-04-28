@@ -89,13 +89,12 @@ export class LandingComponent extends React.Component<Props, State> {
 
   private renderPagination () {
     const { activeSlide } = this.state
-    const { gray1 } = JolocomTheme.jolocom
     return (
       <Pagination
         dotsLength={ carouselInfo.length }
         activeDotIndex={ activeSlide }
         dotStyle={ this.styles.dotStyle }
-        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: gray1 }]] }
+        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: '#545454' }]] }
         inactiveDotOpacity={ 0.4 }
         inactiveDotScale={ 0.6 }
       />
@@ -132,9 +131,6 @@ export class LandingComponent extends React.Component<Props, State> {
         justifyContent: 'center',
         alignItems: 'center',
         color: JolocomTheme.textStyles.subheadline.color
-      },
-      buttonContainer: {
-        backgroundColor: JolocomTheme.palette.primaryColor
       }
     })
   }
@@ -163,7 +159,6 @@ export class LandingComponent extends React.Component<Props, State> {
         <Block flex={ 0.07 }>
           <Button
             onPress={ this.props.handleButtonTap }
-            style={{ container: this.styles.buttonContainer }}
             raised
             primary
             text="Create Your Identity" />
