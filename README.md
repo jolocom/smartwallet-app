@@ -19,58 +19,45 @@ After cloning the smartwallet-app repository to a directory on your computer, en
 yarn install
 ```
 
-### Browser
+### Device Build
 
-#### With hot module reloading support
+#### Android
 
-```bash
-yarn start
-```
-This will make webpack-dev-server serve the application on https://localhost:8080 and will reload only the modules you've modified instead of rebuilding the entire bundle on every change. The changes will be applied live to your browser.
+Please set up an Android development environment. 
 
-#### Without hot module reloading
+Then:
 
 ```bash
-yarn build:dev
+react-native run-android
+yarn android
 ```
-Rebuilding will be much slower this way, because the entire bundle will be rebuilt on each change.
+The first command will run and install a debug build on an attached Android device. A terminal window may pop up which starts a Metro Bundler, please stop this process.
+The second command will start the Haul bundler and serve the build on your device if both are running on the same network. If remote debugging is enabled, the debugger-ui will also be available here.
 
-### Notes
+#### iOS
 
-If you are getting the error `Module parse failed: main.jsx Line 1: Unexpected token`, switch to node version 4.x before running the gulp ([nvm](https://github.com/creationix/nvm) might come in handy).
+Please set up the appropriate XCode development environment.
 
-Setup for production (iOS)
---------------------
-
-## Installation
-```bash
-yarn install
-```
-
-### Preparing a production bundle
+Then:
 
 ```bash
-haul bundle --platform ios --bundle-output ios/smartwallet/main.jsbundle --assets-dest ios
+react-native run-ios --device
+yarn ios
 ```
 
-### Setting jsCodeLocation to be the bundled js
+The first command will run and install a debug build on an attached iOS device. A terminal window may pop up which starts a Metro Bundler, please stop this process.
+The second command will start the Haul bundler and serve the build on your device if both are running on the same network. If remote debugging is enabled, the debugger-ui will also be available here.
 
-Open ios/smartwallet/AppDelegate.m and switch jsCodeLocation to be production build (comment our the development one).
+#### Testing
 
+Testing uses Jest. The following script enables watch and testing coverage display as well.
+
+```bash
+yarn test --watch --coverage
+```
 
 Documentation
 -------------
-Additional documentation can be found at our [wiki](https://github.com/jolocom/smartwallet/wiki).
+Additional documentation can be found at our [wiki](https://github.com/jolocom/smartwallet-app/wiki).
 
-
-git-flow
---------
-
-We are using git-flow to manage our branching strategy. More details can be found in [this article](http://nvie.com/posts/a-successful-git-branching-model/). Also, you should install a plugin for your git command line: [nvie/gitflow](https://github.com/nvie/gitflow).
-
-Once you have installed the git flow plugin, you should initialize its branch mappings with this command:
-```bash
-git flow init -d
-```
-
-Copyright (C) 2014-2017  JOLOCOM UG
+Copyright (C) 2014-2018  JOLOCOM UG

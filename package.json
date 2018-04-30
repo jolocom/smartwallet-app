@@ -10,6 +10,7 @@
     "@types/react-native": "^0.52.0",
     "@types/react-native-material-ui": "^1.19.2",
     "@types/react-native-snap-carousel": "^3.6.0",
+    "@types/react-native-sqlite-storage": "^3.3.0",
     "@types/react-navigation": "^1.2.3",
     "@types/react-redux": "^5.0.15",
     "@types/react-test-renderer": "^16.0.0",
@@ -18,7 +19,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
-    "haul": "^1.0.0-beta.13",
+    "haul": "1.0.0-beta.13",
     "jest": "^22.4.3",
     "react-dom": "^16.3.0",
     "react-test-renderer": "16.2.0",
@@ -45,6 +46,7 @@
       "node_modules/(?!react-native|native-base|react-navigation|react-native-fabric)"
     ],
     "globals": {
+      "window": true,
       "ts-jest": {
         "useBabelrc": true
       }
@@ -58,7 +60,7 @@
       "node"
     ],
     "moduleNameMapper": {
-     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
     },
     "preset": "react-native",
     "testMatch": [
@@ -84,6 +86,7 @@
     "react-native-qrcode-scanner": "^1.0.1",
     "react-native-remote-svg": "^1.2.0",
     "react-native-snap-carousel": "^3.6.0",
+    "react-native-sqlite-storage": "^3.3.4",
     "react-native-svg": "^6.3.1",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.8",
@@ -91,6 +94,7 @@
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "sjcl": "^1.0.7"
+    "sjcl": "^1.0.7",
+    "sqlite3": "^4.0.0"
   }
 }
