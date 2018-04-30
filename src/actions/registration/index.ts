@@ -1,6 +1,8 @@
 import { AnyAction } from 'redux'
-import { KeyChain } from 'src/lib/keychain'
 import { navigationActions } from 'src/actions/'
+import { EncryptionLib } from 'src/lib/crypto'
+import { Storage } from 'src/lib/storage'
+import { KeyChain } from 'src/lib/keychain'
 
 // TODO MOVE
 type Dispatch = (action: AnyAction) => void
@@ -32,36 +34,64 @@ export const submitEntropy = (encodedEntropy: string) => {
 export const generateAndEncryptKeyPairs = (encodedEntropy: string) => {
   return async (dispatch : Dispatch, getState: any, { backendMiddleware } : any) => {
     const { jolocomLib, ethereumLib } = backendMiddleware
+    const crypto = new EncryptionLib()
+    const stAgent = new Storage()
 
     const {
       didDocument,
       mnemonic,
-      // masterKeyWIF,
-      // genericSigningKeyWIF,
-      ethereumKeyWIF
+      genericSigningKey,
+      ethereumKey
     } = await jolocomLib.identity.create(encodedEntropy)
 
-    const { privateKey, address } = ethereumLib.wifToEthereumKey(ethereumKeyWIF)
+    dispatch(setLoadingMsg('Encrypting and storing data locally'))
+    const { password, found } = await (new KeyChain()).getPassword()
+
+    if (!found) {
+      // HANDLE
+    }
+
+    const encEntropy = crypto.encryptWithPass({ data: encodedEntropy, pass: password }).toString()
+    const encEthWif = crypto.encryptWithPass({ data: ethereumKey.wif, pass: password }).toString()
+    const encGenWif = crypto.encryptWithPass({ data: genericSigningKey.wif, pass: password }).toString()
+
+    await stAgent.addMasterKey(encEntropy)
+    await stAgent.addDerivedKey({
+      encryptedWif: encGenWif,
+      path: genericSigningKey.path,
+      entropySource: 1,
+      keyType: genericSigningKey.keyType
+    })
+
+    await stAgent.addDerivedKey({
+      encryptedWif: encEthWif,
+      path: ethereumKey.path,
+      entropySource: 1,
+      keyType: ethereumKey.keyType
+    })
+
+    await stAgent.addPersona({
+      did: didDocument.id,
+      controllingKey: 2
+    })
+
+    const {
+      privateKey: ethPrivKey,
+      address: ethAddr
+    } = ethereumLib.wifToEthereumKey(ethereumKey.wif)
 
     dispatch(setLoadingMsg('Storing data on IPFS'))
     const ipfsHash = await jolocomLib.identity.store(didDocument)
 
     dispatch(setLoadingMsg('Fueling with Ether'))
-    await ethereumLib.requestEther(address)
+    await ethereumLib.requestEther(ethAddr)
 
     dispatch(setLoadingMsg('Registering identity on Ethereum'))
     await jolocomLib.identity.register({
-      ethereumKey: Buffer.from(privateKey, 'hex'),
+      ethereumKey: Buffer.from(ethPrivKey, 'hex'),
       did: didDocument.id,
       ipfsHash
     })
-
-    const encryptionPass = await new KeyChain().getPassword()
-
-    if (!encryptionPass.found) {
-    }
-
-    dispatch(setLoadingMsg('storing of encrypted data comming soon!'))
 
     dispatch(navigationActions.navigate({
       routeName: 'SeedPhrase',
