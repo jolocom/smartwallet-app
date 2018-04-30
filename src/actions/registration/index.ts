@@ -31,7 +31,7 @@ export const submitEntropy = (encodedEntropy: string) => {
 }
 
 // TODO Error handling
-export const generateAndEncryptKeyPairs = (encodedEntropy: string) => {
+export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch, getState: any, { backendMiddleware } : any) => {
     const { jolocomLib, ethereumLib } = backendMiddleware
     const crypto = new EncryptionLib()

@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { EntropyComponent } from 'src/ui/registration/components/entropy'
 
-describe('Entropy component', ()=> {
+describe.only('Entropy component', ()=> {
   const props = {
     addPoint: (x: number, y: number) => null,
     submitEntropy: () => null,
@@ -13,6 +13,7 @@ describe('Entropy component', ()=> {
     expect(rendered).toMatchSnapshot()
   })
 
+  /*
   it('matches the snapshot when drawn upon and insufficient entropy', () => {
     const rendered = shallow(<EntropyComponent {...props} progress={0.5} />)
     expect(rendered).toMatchSnapshot()
@@ -22,4 +23,5 @@ describe('Entropy component', ()=> {
     const rendered = shallow(<EntropyComponent {...props} progress={1} />)
     expect(rendered).toMatchSnapshot()
   })
+   */
 })
