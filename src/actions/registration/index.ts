@@ -1,11 +1,5 @@
-import { AnyAction } from 'redux'
+import { AnyAction, Dispatch } from 'redux'
 import { navigationActions } from 'src/actions/'
-import { EncryptionLib } from 'src/lib/crypto'
-import { Storage } from 'src/lib/storage'
-import { KeyChain } from 'src/lib/keychain'
-
-// TODO MOVE
-type Dispatch = (action: AnyAction) => void
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -15,14 +9,14 @@ export const setLoadingMsg = (loadingMsg: string) => {
 }
 
 export const savePassword = (password : string) => {
-  return async (dispatch : Dispatch) =>  {
-    await new KeyChain().savePassword(password)
+  return async (dispatch : Dispatch<AnyAction>, getState: any, { backendMiddleware } : any) =>  {
+    await backendMiddleware.keyChainLib.savePassword(password)
     dispatch(navigationActions.navigate({ routeName: 'Entropy' }))
   }
 }
 
 export const submitEntropy = (encodedEntropy: string) => {
-  return (dispatch : Dispatch) => {
+  return (dispatch : Dispatch<AnyAction>) => {
     dispatch(navigationActions.navigate({
       routeName: 'Loading',
       params: { encodedEntropy }
@@ -32,10 +26,8 @@ export const submitEntropy = (encodedEntropy: string) => {
 
 // TODO Error handling
 export const createIdentity = (encodedEntropy: string) => {
-  return async (dispatch : Dispatch, getState: any, { backendMiddleware } : any) => {
-    const { jolocomLib, ethereumLib } = backendMiddleware
-    const crypto = new EncryptionLib()
-    const stAgent = new Storage()
+  return async (dispatch : Dispatch<AnyAction>, getState: any, { backendMiddleware } : any) => {
+    const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
 
     const {
       didDocument,
@@ -45,32 +37,32 @@ export const createIdentity = (encodedEntropy: string) => {
     } = await jolocomLib.identity.create(encodedEntropy)
 
     dispatch(setLoadingMsg('Encrypting and storing data locally'))
-    const { password, found } = await (new KeyChain()).getPassword()
+    const { password, found } = await keyChainLib.getPassword()
 
     if (!found) {
       // HANDLE
     }
 
-    const encEntropy = crypto.encryptWithPass({ data: encodedEntropy, pass: password }).toString()
-    const encEthWif = crypto.encryptWithPass({ data: ethereumKey.wif, pass: password }).toString()
-    const encGenWif = crypto.encryptWithPass({ data: genericSigningKey.wif, pass: password }).toString()
+    const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password }).toString()
+    const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password }).toString()
+    const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password }).toString()
 
-    await stAgent.addMasterKey(encEntropy)
-    await stAgent.addDerivedKey({
+    await storageLib.addMasterKey(encEntropy)
+    await storageLib.addDerivedKey({
       encryptedWif: encGenWif,
       path: genericSigningKey.path,
       entropySource: 1,
       keyType: genericSigningKey.keyType
     })
 
-    await stAgent.addDerivedKey({
+    await storageLib.addDerivedKey({
       encryptedWif: encEthWif,
       path: ethereumKey.path,
       entropySource: 1,
       keyType: ethereumKey.keyType
     })
 
-    await stAgent.addPersona({
+    await storageLib.addPersona({
       did: didDocument.id,
       controllingKey: 2
     })
