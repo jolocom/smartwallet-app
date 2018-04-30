@@ -28,7 +28,7 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
     checkAndroid6Permissions={false}
     fadeIn={true}
     notAuthorizedView={
-      <View
+      <Component
         style={
           Object {
             "alignItems": "center",
@@ -50,11 +50,11 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
         >
           Camera not authorized
         </Text>
-      </View>
+      </Component>
     }
     onRead={[Function]}
     pendingAuthorizationView={
-      <View
+      <Component
         style={
           Object {
             "alignItems": "center",
@@ -76,7 +76,7 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
         >
           ...
         </Text>
-      </View>
+      </Component>
     }
     permissionDialogMessage="Need camera permission"
     permissionDialogTitle="Info"
