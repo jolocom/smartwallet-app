@@ -20,7 +20,7 @@ export class KeyChain {
       service: string;
     }
 
-    const result = await this.nativeLib.getGenericPassword()
+    const result: ExpectedResult = await this.nativeLib.getGenericPassword()
 
     if (typeof result === 'boolean') {
       return {
@@ -31,7 +31,7 @@ export class KeyChain {
 
     return {
       found: true,
-      password: (<ExpectedResult>result).password
+      password: result.password
     }
   }
 }

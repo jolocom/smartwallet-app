@@ -2,7 +2,7 @@ const SQLite = require('react-native-sqlite-storage')
 import { dbHelper, TableOptions } from 'src/lib/dbHelper'
 import { Location, ResultSet, Transaction } from 'react-native-sqlite-storage'
 
-interface asyncTransaction {
+interface AsyncTransaction {
   executeSql: (query: string, args?: any[]) => Promise<{result: ResultSet, transaction: Transaction}>
 }
 
@@ -80,7 +80,7 @@ export class Storage {
   }
 
   private async executeQuery(db: SQLiteDatabase, query: string) : Promise<ResultSet> {
-    return await db.transaction(async (tx: asyncTransaction) => {
+    return await db.transaction(async (tx: AsyncTransaction) => {
       const response = await tx.executeSql(query, [])
       return response.result
     })
