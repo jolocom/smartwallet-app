@@ -7,7 +7,7 @@ import { Container, CenteredText } from 'src/ui/structure/'
 
 export interface ConnectProps {
   loadingMsg: string,
-  generateAndEncryptKeyPairs: (encodedEntropy: string) => void
+  createIdentity: (encodedEntropy: string) => void
 }
 
 interface Props extends ConnectProps {
@@ -20,7 +20,7 @@ export interface State {
 export class LoadingContainer extends React.Component<Props, State> {
   componentDidMount() {
     const { encodedEntropy } = this.props.navigation.state.params
-    this.props.generateAndEncryptKeyPairs(encodedEntropy)
+    this.props.createIdentity(encodedEntropy)
   }
 
   render() {
@@ -41,8 +41,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    generateAndEncryptKeyPairs: (entropy: string) =>
-      dispatch(registrationActions.generateAndEncryptKeyPairs(entropy))
+    createIdentity: (entropy: string) =>
+      dispatch(registrationActions.createIdentity(entropy))
   }
 }
 

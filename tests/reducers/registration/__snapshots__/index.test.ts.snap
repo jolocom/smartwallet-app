@@ -1,19 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`registration reducer should handle the SEEDPHRASE_CLEAR action 1`] = `
-Object {
-  "seedPhrase": "",
-}
-`;
-
-exports[`registration reducer should handle the SEEDPHRASE_SET action  1`] = `
-Object {
-  "seedPhrase": "mock seedPhrase",
-}
-`;
-
 exports[`registration reducer should initialize correctly 1`] = `
 Object {
-  "seedPhrase": "",
+  "loading": Immutable.Map {
+    "loadingMsg": "Loading",
+  },
 }
 `;

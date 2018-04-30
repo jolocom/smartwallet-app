@@ -1,12 +1,7 @@
-import {
-  registrationReducer as reducer,
-  RegistrationState
-} from 'src/reducers/registration/'
-
-import { registrationActions as actions} from 'src/actions/'
+import { registrationReducer } from 'src/reducers/registration/'
 
 describe('registration reducer', ()=> {
   it('should initialize correctly', () => {
-    expect(reducer(undefined, { type: '@INIT' })).toMatchSnapshot()
+    expect(registrationReducer(undefined, { type: '@INIT' })).toMatchSnapshot()
   })
 })
