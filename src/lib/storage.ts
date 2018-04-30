@@ -23,7 +23,7 @@ export class Storage {
 
   constructor() {
     this.enablePromise()
-    this.sqlLite.DEBUG(false)
+    // this.sqlLite.DEBUG(false)
   }
 
   private enablePromise() : void {

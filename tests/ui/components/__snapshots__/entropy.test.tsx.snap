@@ -1,50 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Entropy component matches the snapshot when drawn upon and insufficient entropy 1`] = `
-<Container>
-  <CenteredText
-    msg="50 %"
-    style={
-      Object {
-        "backgroundColor": "#f8f9fb",
-        "color": "#a4a4a3",
-        "fontSize": 24,
-        "fontWeight": "200",
-        "position": "absolute",
-        "top": "20%",
-      }
-    }
-  />
-  <Block>
-    <MaskedImageComponent
-      addPoint={[Function]}
-    />
-  </Block>
-  <View
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  >
-    <Button
-      accent={false}
-      disabled={true}
-      icon={null}
-      onLongPress={null}
-      onPress={[Function]}
-      primary={false}
-      raised={true}
-      style={Object {}}
-      testID={null}
-      text="NEXT STEP"
-      upperCase={true}
-    />
-  </View>
-</Container>
-`;
-
 exports[`Entropy component matches the snapshot when not drawn upon and insufficient entropy 1`] = `
 <Container>
   <CenteredText
@@ -65,7 +20,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       addPoint={[Function]}
     />
   </Block>
-  <View
+  <Component
     style={
       Object {
         "bottom": "5%",
@@ -86,51 +41,6 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       text="NEXT STEP"
       upperCase={true}
     />
-  </View>
-</Container>
-`;
-
-exports[`Entropy component matches the snapshot with when drawn upon and sufficient entropy 1`] = `
-<Container>
-  <CenteredText
-    msg="100 %"
-    style={
-      Object {
-        "backgroundColor": "#f8f9fb",
-        "color": "#a4a4a3",
-        "fontSize": 24,
-        "fontWeight": "200",
-        "position": "absolute",
-        "top": "20%",
-      }
-    }
-  />
-  <Block>
-    <MaskedImageComponent
-      addPoint={[Function]}
-    />
-  </Block>
-  <View
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  >
-    <Button
-      accent={false}
-      disabled={false}
-      icon={null}
-      onLongPress={null}
-      onPress={[Function]}
-      primary={false}
-      raised={true}
-      style={Object {}}
-      testID={null}
-      text="NEXT STEP"
-      upperCase={true}
-    />
-  </View>
+  </Component>
 </Container>
 `;
