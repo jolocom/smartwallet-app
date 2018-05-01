@@ -4,16 +4,8 @@ exports[`Generic action creators showErrorScreen should navigate to error screen
 Array [
   Object {
     "params": Object {
-      "errorMessage": "test error message",
-      "stackTrace": "Error: test error message
-    at Object.<anonymous> (/home/eugen/Documents/Work/Jolocom/smartwallet-app/tests/actions/generic/index.test.ts:9:53)
-    at Object.asyncFn (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)
-    at resolve (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:52:12)
-    at new Promise (<anonymous>)
-    at mapper (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:39:19)
-    at promise.then (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:73:82)
-    at <anonymous>
-    at process._tickCallback (internal/process/next_tick.js:182:7)",
+      "errorMessage": "MOCK BAD ERROR",
+      "stackTrace": "MOCK STACK TRACE",
     },
     "routeName": "Exception",
     "type": "Navigation/NAVIGATE",

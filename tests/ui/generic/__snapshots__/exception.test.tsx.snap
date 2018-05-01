@@ -9,7 +9,7 @@ exports[`Exception screen component Renders correctly when error object is provi
     flex={0.2}
   >
     <CenteredText
-      msg="failed to perform mock operation"
+      msg="MOCK BAD ERROR..."
     />
   </Block>
   <Block
@@ -26,15 +26,7 @@ exports[`Exception screen component Renders correctly when error object is provi
         }
       }
     >
-      Error: failed to perform mock operation
-    at Object.&lt;anonymous&gt; (/home/eugen/Documents/Work/Jolocom/smartwallet-app/tests/ui/generic/exception.test.tsx:8:23)
-    at Object.asyncFn (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)
-    at resolve (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:52:12)
-    at new Promise (&lt;anonymous&gt;)
-    at mapper (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:39:19)
-    at promise.then (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:73:82)
-    at &lt;anonymous&gt;
-    at process._tickCallback (internal/process/next_tick.js:182:7)...
+      MOCK STACK TRACE...
     </Text>
   </Block>
   <Block
@@ -72,7 +64,9 @@ exports[`Exception screen component Renders correctly when no error object is pr
           "fontSize": 10,
         }
       }
-    />
+    >
+      No stack trace available :(
+    </Text>
   </Block>
   <Block
     flex={0.2}

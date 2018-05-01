@@ -6,10 +6,14 @@ describe('Generic action creators', () => {
   describe('showErrorScreen', () => {
     it('should navigate to error screen and provide the message', () => {
       const mockStore = configureStore([thunk])({})
-      const action = genericActions.showErrorScreen(new Error('test error message'))
+      const mockError = {
+        message: 'MOCK BAD ERROR',
+        stack: 'MOCK STACK TRACE'
+      }
+
+      const action = genericActions.showErrorScreen(mockError)
 
       action(mockStore.dispatch)
-
       expect(mockStore.getActions()).toMatchSnapshot()
     })
   })

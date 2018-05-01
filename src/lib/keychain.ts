@@ -1,11 +1,11 @@
 import * as Keychain from 'react-native-keychain'
 
-interface GetPasswordResponse {
-  password: string;
-  found: boolean;
+export interface KeyChainLib {
+  savePassword: (password:string) => Promise<void>
+  getPassword: () => Promise<string>
 }
 
-export class KeyChain {
+export class KeyChain implements KeyChainLib {
   private username = 'JolocomSmartWallet'
   private nativeLib : any = Keychain
 
@@ -13,26 +13,14 @@ export class KeyChain {
     await this.nativeLib.setGenericPassword(this.username, password)
   }
 
-  async getPassword() : Promise<GetPasswordResponse> {
-    interface ExpectedResult {
-      username: string;
-      password: string;
-      service: string;
-    }
-
-    const result: ExpectedResult = await this.nativeLib.getGenericPassword()
+  async getPassword() : Promise<string> {
+    const result = await this.nativeLib.getGenericPassword()
 
     if (typeof result === 'boolean') {
-      return {
-        found: false,
-        password: ''
-      }
+      throw new Error('Password could not be retrieved from the keychain')
     }
 
-    return {
-      found: true,
-      password: result.password
-    }
+    return result.password
   }
 }
 

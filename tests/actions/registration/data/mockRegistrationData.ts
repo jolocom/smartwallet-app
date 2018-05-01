@@ -15,10 +15,7 @@ export default {
     path: 'm/0/1',
     keyType: 'ECDSA secp256k1'
   },
-  getPasswordResult: {
-    password: 'secret',
-    found: true
-  },
+  getPasswordResult: 'secret',
   decodedWif: {
     privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
     address: '0x5000000000000000000000000000000000000000'
