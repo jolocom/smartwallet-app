@@ -6,7 +6,7 @@ import { RootState } from 'src/reducers/'
 import { Storage } from 'src/lib/storage'
 
 interface ConnectProps {
-  navigate: () => void;
+  navigate: () => void
 }
 
 interface OwnProps {}

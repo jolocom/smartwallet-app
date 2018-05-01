@@ -20,7 +20,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       addPoint={[Function]}
     />
   </Block>
-  <View
+  <Component
     style={
       Object {
         "bottom": "5%",
@@ -41,7 +41,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       text="NEXT STEP"
       upperCase={true}
     />
-  </View>
+  </Component>
 </Container>
 `;
 
@@ -65,7 +65,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       addPoint={[Function]}
     />
   </Block>
-  <View
+  <Component
     style={
       Object {
         "bottom": "5%",
@@ -86,7 +86,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       text="NEXT STEP"
       upperCase={true}
     />
-  </View>
+  </Component>
 </Container>
 `;
 
@@ -110,7 +110,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       addPoint={[Function]}
     />
   </Block>
-  <View
+  <Component
     style={
       Object {
         "bottom": "5%",
@@ -131,6 +131,6 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       text="NEXT STEP"
       upperCase={true}
     />
-  </View>
+  </Component>
 </Container>
 `;
