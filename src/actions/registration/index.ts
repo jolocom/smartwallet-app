@@ -46,20 +46,20 @@ export const createIdentity = (encodedEntropy: string) => {
       await storageLib.addDerivedKey({
         encryptedWif: encGenWif,
         path: genericSigningKey.path,
-        entropySource: 1,
+        entropySource: encEntropy,
         keyType: genericSigningKey.keyType
       })
 
       await storageLib.addDerivedKey({
         encryptedWif: encEthWif,
         path: ethereumKey.path,
-        entropySource: 1,
+        entropySource: encEntropy,
         keyType: ethereumKey.keyType
       })
 
       await storageLib.addPersona({
         did: didDocument.id,
-        controllingKey: 2
+        controllingKey: encGenWif
       })
 
       const {
