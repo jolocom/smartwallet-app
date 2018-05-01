@@ -3,6 +3,7 @@ import { Identity, Interactions } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Exception } from 'src/ui/generic/exception'
 
 export const enum routeList {
   Landing = 'Landing',
@@ -20,7 +21,8 @@ const navigationOptions = {
 
 export const HomeRoutes = TabNavigator(
   {
-    Identity: { screen: Identity, 
+    Identity: {
+      screen: Identity,
       navigationOptions: {
         tabBarLabel: 'My identity',
         headerTitle: 'Jolocom ID Wallet',
@@ -31,7 +33,8 @@ export const HomeRoutes = TabNavigator(
         headerTintColor: JolocomTheme.primaryColorWhite
       }
     },
-    Interactions: { screen: Interactions,
+    Interactions: {
+      screen: Interactions,
       navigationOptions: {
         tabBarLabel: 'Data history',
         headerTitle: 'Jolocom ID Wallet',
@@ -70,5 +73,6 @@ export const Routes = StackNavigator({
   Loading: { screen: Loading, navigationOptions },
   PasswordEntry: { screen: PasswordEntry, navigationOptions },
   SeedPhrase: { screen: SeedPhrase, navigationOptions },
-  Home: { screen: HomeRoutes }
+  Home: { screen: HomeRoutes },
+  Exception: { screen: Exception, navigationOptions }
 })

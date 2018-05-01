@@ -1,7 +1,7 @@
 import { NavigationStackAction, NavigationActions } from 'react-navigation'
 import { Routes } from 'src/routes'
 
-const action = NavigationActions.navigate({ routeName: 'Landing' })
+const action = NavigationActions.navigate({ routeName: 'Lanidng' })
 const initialState = Routes.router.getStateForAction(action)
 
 export const navigationReducer = (state = initialState, action: NavigationStackAction) => {
