@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Exception } from 'src/ui/generic/exception'
+import { Exception } from 'src/ui/generic/'
 import { StyleSheet } from 'react-native'
 
 describe('Exception screen component', () => {
