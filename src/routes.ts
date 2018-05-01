@@ -3,7 +3,7 @@ import { Identity, Interactions } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Exception } from 'src/ui/generic/exception'
+import { Exception } from 'src/ui/generic/'
 
 export const enum routeList {
   Landing = 'Landing',
