@@ -3,10 +3,7 @@ import { Text, StyleSheet, Platform, BackHandler } from 'react-native'
 import { Container } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
-
 const QRScanner = require('react-native-qrcode-scanner').default
-
-
 
 interface Props {
   onScannerSuccess: (e : any) => void
@@ -29,7 +26,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    if (Platform.OS == "android" && this.state.listener == null) {
+    if (Platform.OS === "android" && !this.state.listener) {
       this.setState({
         listener: BackHandler.addEventListener('hardwareBackPress', () => {
           this.props.onScannerCancel()
@@ -54,11 +51,11 @@ export class QRcodeScanner extends React.Component<Props, State> {
             <Text>You can scan the qr code now!</Text>
           }
           bottomContent={
-              <Button
-                onPress={ () => onScannerCancel() }
-                style={{ text: styles.buttonText }}
-                text="Cancel"
-              />
+            <Button
+              onPress={ () => onScannerCancel() }
+              style={{ text: styles.buttonText }}
+              text="Cancel"
+            />
           }
         />
       </Container>

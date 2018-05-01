@@ -1,13 +1,15 @@
 import { StackNavigator, TabNavigator, TabBarTop} from 'react-navigation'
 import { Identity, Interactions } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
-import { PasswordEntry, SeedPhrase, Entropy } from 'src/ui/registration/'
+import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Exception } from 'src/ui/generic/'
 
 export const enum routeList {
   Landing = 'Landing',
-  Entropy = 'Entropy',
   PasswordEntry = 'PasswordEntry',
+  Entropy = 'Entropy',
+  Loading = 'Loading',
   SeedPhrase = 'SeedPhrase',
   Identity = 'Identity',
   Interactions = 'Interactions'
@@ -18,9 +20,9 @@ const navigationOptions = {
 }
 
 export const HomeRoutes = TabNavigator(
-
   {
-    Identity: { screen: Identity, 
+    Identity: {
+      screen: Identity,
       navigationOptions: {
         tabBarLabel: 'My identity',
         headerTitle: 'Jolocom ID Wallet',
@@ -31,7 +33,8 @@ export const HomeRoutes = TabNavigator(
         headerTintColor: JolocomTheme.primaryColorWhite
       }
     },
-    Interactions: { screen: Interactions,
+    Interactions: {
+      screen: Interactions,
       navigationOptions: {
         tabBarLabel: 'Data history',
         headerTitle: 'Jolocom ID Wallet',
@@ -67,7 +70,9 @@ export const HomeRoutes = TabNavigator(
 export const Routes = StackNavigator({
   Landing: { screen: Landing, navigationOptions },
   Entropy: { screen: Entropy, navigationOptions},
+  Loading: { screen: Loading, navigationOptions },
   PasswordEntry: { screen: PasswordEntry, navigationOptions },
   SeedPhrase: { screen: SeedPhrase, navigationOptions },
-  Home: { screen: HomeRoutes }
+  Home: { screen: HomeRoutes },
+  Exception: { screen: Exception, navigationOptions }
 })
