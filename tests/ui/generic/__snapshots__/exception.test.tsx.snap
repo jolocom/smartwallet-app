@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Exception screen component Renders correctly when error object is provided 1`] = `
+<Container>
+  <Header
+    title="CATASTROPHIC FAILURE"
+  />
+  <Block
+    flex={0.2}
+  >
+    <CenteredText
+      msg="failed to perform mock operation"
+    />
+  </Block>
+  <Block
+    flex={0.4}
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "color": "#a4a4a3",
+          "fontSize": 10,
+        }
+      }
+    >
+      Error: failed to perform mock operation
+    at Object.&lt;anonymous&gt; (/home/eugen/Documents/Work/Jolocom/smartwallet-app/tests/ui/generic/exception.test.tsx:8:23)
+    at Object.asyncFn (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)
+    at resolve (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:52:12)
+    at new Promise (&lt;anonymous&gt;)
+    at mapper (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:39:19)
+    at promise.then (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:73:82)
+    at &lt;anonymous&gt;
+    at process._tickCallback (internal/process/next_tick.js:182:7)...
+    </Text>
+  </Block>
+  <Block
+    flex={0.2}
+  >
+    <CenteredText
+      msg="Please try to restart the application!"
+    />
+  </Block>
+</Container>
+`;
+
+exports[`Exception screen component Renders correctly when no error object is provided 1`] = `
+<Container>
+  <Header
+    title="CATASTROPHIC FAILURE"
+  />
+  <Block
+    flex={0.2}
+  >
+    <CenteredText
+      msg="No further details are available :("
+    />
+  </Block>
+  <Block
+    flex={0.4}
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "color": "#a4a4a3",
+          "fontSize": 10,
+        }
+      }
+    />
+  </Block>
+  <Block
+    flex={0.2}
+  >
+    <CenteredText
+      msg="Please try to restart the application!"
+    />
+  </Block>
+</Container>
+`;
