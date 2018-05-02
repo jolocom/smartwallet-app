@@ -10,6 +10,6 @@ export const setDid = (did: string) => {
 export const checkIdentityExists = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: any, { backendMiddleware } : any) => {
     const { storageLib } = backendMiddleware
-    const personas = await storageLib.getPersonas()
+    await storageLib.getPersonas()
   }
 }
