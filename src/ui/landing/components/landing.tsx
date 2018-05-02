@@ -94,7 +94,7 @@ export class LandingComponent extends React.Component<Props, State> {
         dotsLength={ carouselInfo.length }
         activeDotIndex={ activeSlide }
         dotStyle={ this.styles.dotStyle }
-        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: '#545454' }]] }
+        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: JolocomTheme.palette.backgroundDot }]] }
         inactiveDotOpacity={ 0.4 }
         inactiveDotScale={ 0.6 }
       />
