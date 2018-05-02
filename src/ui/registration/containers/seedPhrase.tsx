@@ -1,16 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
-import { registrationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
 
 interface ConnectProps {
-  seedPhrase: string;
-  fetchSeedPhrase: () => void;
-  clearSeedPhrase: () => void;
 }
 
-interface Props extends ConnectProps {}
+interface Props extends ConnectProps {
+  navigation: { state: { params: { mnemonic: string } } }
+}
 
 interface State {
   checked: boolean;
@@ -24,17 +22,10 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
     }
   }
 
-  componentDidMount() {
-    this.props.fetchSeedPhrase()
-  }
-
-  componentWillUnmount() {
-    this.props.clearSeedPhrase()
-  }
-
   render() {
+    const { mnemonic } = this.props.navigation.state.params
     return <SeedPhraseComponent
-      seedPhrase={ this.props.seedPhrase }
+      seedPhrase={ mnemonic }
       checked={ this.state.checked }
       onCheck={ this.handleCheckboxTap }
     />
@@ -46,16 +37,11 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  return {
-    seedPhrase: state.registration.seedPhrase
-  }
+  return { }
 }
 
 const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    fetchSeedPhrase: () => dispatch(registrationActions.fetchSeedPhrase()),
-    clearSeedPhrase: () => dispatch(registrationActions.clearSeedPhrase())
-  }
+  return { }
 }
 
 export const SeedPhrase = connect(mapStateToProps, mapDispatchToProps)(SeedPhraseContainer)

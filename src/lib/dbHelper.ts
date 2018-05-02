@@ -9,52 +9,75 @@ export interface TableOptions {
   fields: Field[]
 }
 
+interface DerivedKeyOptions {
+  encryptedWif: string
+  path: string
+  entropySource: string
+  keyType: string
+}
+
+interface PersonaOptions {
+  did: string
+  controllingKey: string
+}
+
 export const dbHelper = {
   defaultTables: [{
     name: 'Personas',
     fields: [{
       name: 'did',
-      type: 'VARCHAR(20)',
-      options: ['NOT NULL', 'UNIQUE', 'COLLATE NOCASE', 'PRIMARY KEY']
+      type: 'VARCHAR(75)',
+      options: ['PRIMARY KEY']
     }, {
       name: 'controllingKey',
-      type: 'INTEGER',
-      options: []
+      type: 'VARCHAR(110)',
+      options: ['NOT NULL', 'UNIQUE']
     }, {
       name: 'FOREIGN KEY(controllingKey)',
-      type: 'REFERENCES Keys(id)',
+      type: 'REFERENCES Keys(encryptedWif)',
       options: []
     }]
   }, {
     name: 'Keys',
     fields: [{
-      name: 'id',
-      type: 'INTEGER',
-      options: ['PRIMARY KEY', 'NOT NULL', 'UNIQUE']
-    }, {
-      name: 'wif',
-      type: 'VARCHAR(20)',
-      options: ['UNIQUE', 'NOT NULL']
+      name: 'encryptedWif',
+      type: 'VARCHAR(110)',
+      options: ['PRIMARY KEY']
     }, {
       name: 'path',
-      type: 'VARCHAR(10)',
+      type: 'TEXT',
       options: ['NOT NULL']
     }, {
       name: 'entropySource',
-      type: 'INTEGER',
-      options: []
+      type: 'VARCHAR(100)',
+      options: ['NOT NULL']
     }, {
-      name: 'algorithm',
+      name: 'keyType',
       type: 'TEXT',
       options: ['NOT NULL']
     }, {
       name: 'FOREIGN KEY(entropySource)',
-      type: 'REFERENCES MasterKeys(id)',
+      type: 'REFERENCES MasterKeys(encryptedEntropy)',
       options: []
+    }]
+  }, {
+    name: 'MasterKeys',
+    fields: [{
+      name: 'encryptedEntropy',
+      type: 'VARCHAR(100)',
+      options: ['PRIMARY KEY']
+    }, {
+      name: 'timestamp',
+      type: 'DATE',
+      options: ['NOT NULL']
     }]
   }],
 
-  assembleCreateTableQuery: (options: TableOptions) : string => {
+  addPersonaQuery: ({ did, controllingKey }: PersonaOptions) : string => {
+    return `INSERT INTO Personas VALUES("${did}", "${controllingKey}")`
+  },
+
+  createTableQuery: (options: TableOptions) : string => {
     const { name, fields } = options
     const st = `CREATE TABLE IF NOT EXISTS ${name}`
 
@@ -64,6 +87,21 @@ export const dbHelper = {
       return `${name} ${type} ${fieldOptions}`
     }).join(', ')
     return `${st} (${fieldSt})`
+  },
+
+  addDerivedKeyQuery: (options: DerivedKeyOptions) : string => {
+    const { encryptedWif, path, entropySource, keyType } = options
+
+    return `INSERT INTO Keys VALUES (
+      "${encryptedWif}",
+      "${path}",
+      "${entropySource}",
+      "${keyType}"
+    )`
+  },
+
+  addMasterKeyQuery: (encryptedEntropy: string) : string => {
+    return `INSERT INTO MasterKeys VALUES ("${encryptedEntropy}", DATETIME('now'))`
   }
 }
 
