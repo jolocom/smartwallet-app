@@ -6,14 +6,14 @@ interface Field {
   options: string[]
 }
 
-interface DerivedKeyOptions {
+export interface DerivedKeyOptions {
   encryptedWif: string
   path: string
   entropySource: string
   keyType: string
 }
 
-interface PersonaOptions {
+export interface PersonaOptions {
   did: string
   controllingKey: string
 }
