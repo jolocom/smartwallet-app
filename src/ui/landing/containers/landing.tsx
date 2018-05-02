@@ -27,7 +27,6 @@ export class LandingContainer extends React.Component<Props> {
   }
 
   render() {
-    console.log(this.props)
     return (
       <LandingComponent handleButtonTap={this.goToNextScreen} />
     )
