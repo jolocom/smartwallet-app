@@ -19,6 +19,7 @@ const palette = {
   primaryColorWhite: 'white',
   backgroundContainer: '#f5f5f5',
   backgroundCard: '#fafafa',
+  backgroundDot: '#545454',
 
   // TODO: remove after ui refactor
   textColor_grey: '#a4a4a3',
@@ -146,11 +147,7 @@ const textStyles = {
   }
 }
 
-export const JolocomTheme = {
-  contentFontFamily: 'Roboto, sans-serif',
-  palette,
-  textStyles,
-  button: {
+const button = {
     container: {
       backgroundColor: palette.primaryColor,
       borderRadius: 4,
@@ -161,4 +158,11 @@ export const JolocomTheme = {
       paddingTop: 12
     }
   }
+
+
+export const JolocomTheme = {
+  contentFontFamily: 'Roboto, sans-serif',
+  palette,
+  textStyles,
+  button
 }
