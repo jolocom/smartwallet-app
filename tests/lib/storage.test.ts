@@ -7,17 +7,10 @@ describe('Storage lib', () => {
     StorageAgent = Storage
   })
 
-  it('should initialize correctly', () => {
-    const mock = StorageAgent.prototype.enablePromise = jest.fn()
-
-    new StorageAgent()
-    expect(mock).toHaveBeenCalledTimes(1)
-  })
-
   it('should attempt to provision tables', async () => {
     const agent = new StorageAgent()
 
-    const mockExecQuery = agent.executeQuery = jest.fn()
+    const mockExecQuery = agent.executeWriteQuery = jest.fn()
     const mockCloseDb = agent.closeDB = jest.fn().mockResolvedValue()
 
     const mockDbInstance = { transaction: jest.fn() }

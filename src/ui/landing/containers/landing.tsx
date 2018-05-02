@@ -16,7 +16,7 @@ interface Props extends ConnectProps, OwnProps {}
 export class LandingContainer extends React.Component<Props> {
 
   componentDidMount() {
-    this.props.checkIfAccountExists()
+    // this.props.checkIfAccountExists()
   }
 
   // TODO ACTION

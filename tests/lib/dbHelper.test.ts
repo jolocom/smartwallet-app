@@ -11,8 +11,8 @@ describe.only('dbHelper', () => {
   it('should correctly assemble derived key addition query', () => {
     const mockArgs = {
       encryptedWif: 'mockWif',
-      path: "m/73'/0'/0",
-      entropySource: 1,
+      path: 'm/73\'/0\'/0',
+      entropySource: 'mockEncryptedWif',
       keyType: 'ECDSA secp256k1'
     }
 
@@ -20,13 +20,17 @@ describe.only('dbHelper', () => {
   }),
 
   it('should correctly assemble master key addition query', () => {
+    const originalFunc = Date.now
+    Date.now = () => 100
+
     expect(dbHelper.addMasterKeyQuery('mockEntropy')).toMatchSnapshot()
+    Date.now = originalFunc
   })
 
   it('should correctly assemble persona addition query', () => {
     expect(dbHelper.addPersonaQuery({
       did: 'mockDid',
-      controllingKey: 1
+      controllingKey: 'mockEncryptedWif'
     })).toMatchSnapshot()
   })
 })
