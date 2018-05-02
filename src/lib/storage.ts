@@ -1,15 +1,11 @@
 const SQLite = require('react-native-sqlite-storage')
-import { dbHelper, TableOptions, AssembledQuery } from 'src/lib/dbHelper'
+import { dbHelper, TableOptions, AssembledQuery, DerivedKeyOptions, PersonaOptions } from 'src/lib/dbHelper'
 import { Location, ResultSet, ResultSetRowList, Transaction, SQLiteDatabase } from 'react-native-sqlite-storage'
 
 export class Storage {
   private sqlLite = SQLite
   private dbName = 'LocalSmartWalletData'
   private location: Location = 'default'
-
-  constructor() {
-    this.sqlLite.DEBUG(true)
-  }
 
   private async getDbInstance() : Promise<SQLiteDatabase> {
     const dbOptions = {
@@ -37,30 +33,30 @@ export class Storage {
     await this.closeDB(db)
   }
 
-  async addPersona(args: {did: string, controllingKey: string}) {
+  async addPersona(args: PersonaOptions) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addPersonaQuery(args)
     await this.executeWriteQuery(db, query)
     await this.closeDB(db)
   }
 
-  async addMasterKey(entropy: string) {
+  async addMasterKey(entropy: string) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addMasterKeyQuery(entropy)
     await this.executeWriteQuery(db, query)
     await this.closeDB(db)
   }
 
-  async addDerivedKey(args: { encryptedWif: string, path: string, entropySource: string, keyType: string }) {
+  async addDerivedKey(args: DerivedKeyOptions) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addDerivedKeyQuery(args)
     await this.executeWriteQuery(db, query)
     await this.closeDB(db)
   }
 
-  async getPersonas() : Promise<{}[]> {
+  async getPersonas() : Promise<PersonaOptions[]> {
     interface ExtendedRowList extends ResultSetRowList {
-      raw: () => any[]
+      raw: () => PersonaOptions[]
     }
 
     const db = await this.getDbInstance()
