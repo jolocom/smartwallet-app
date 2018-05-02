@@ -2,17 +2,16 @@
 
 exports[`dbHelper should correctly assemble derived key addition query 1`] = `
 "INSERT INTO Keys VALUES (
-      null,
       \\"mockWif\\",
       \\"m/73'/0'/0\\",
-      1,
+      \\"1\\",
       \\"ECDSA secp256k1\\"
     )"
 `;
 
-exports[`dbHelper should correctly assemble master key addition query 1`] = `"INSERT INTO MasterKeys VALUES (\\"mockEntropy\\", DATETIME('now'), null)"`;
+exports[`dbHelper should correctly assemble master key addition query 1`] = `"INSERT INTO MasterKeys VALUES (\\"mockEntropy\\", DATETIME('now'))"`;
 
-exports[`dbHelper should correctly assemble persona addition query 1`] = `"INSERT INTO Personas VALUES(\\"mockDid\\", 1)"`;
+exports[`dbHelper should correctly assemble persona addition query 1`] = `"INSERT INTO Personas VALUES(\\"mockDid\\", \\"1\\")"`;
 
 exports[`dbHelper should correctly assemble table creation query 1`] = `"CREATE TABLE IF NOT EXISTS Personas (did VARCHAR(20) NOT NULL PRIMARY KEY, FOREIGN KEY(controllingKey) REFERENCES Keys(id) )"`;
 
