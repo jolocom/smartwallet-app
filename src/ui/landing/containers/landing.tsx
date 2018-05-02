@@ -16,7 +16,7 @@ interface Props extends ConnectProps, OwnProps {}
 export class LandingContainer extends React.Component<Props> {
 
   componentDidMount() {
-    this.props.checkIfAccountExists()
+    // this.props.checkIfAccountExists()
   }
 
   // TODO ACTION
@@ -27,6 +27,7 @@ export class LandingContainer extends React.Component<Props> {
   }
 
   render() {
+    console.log(this.props)
     return (
       <LandingComponent handleButtonTap={this.goToNextScreen} />
     )
