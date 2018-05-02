@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { accountReducer, AccountState } from 'src/reducers/account/'
 import { registrationReducer, RegistrationState } from 'src/reducers/registration/'
 import { navigationReducer } from 'src/reducers/navigation/'
-import { NavigationState } from 'react-navigation';
+import { NavigationState } from 'react-navigation'
 
 export const rootReducer =  combineReducers({
   account: accountReducer,

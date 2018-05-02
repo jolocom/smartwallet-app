@@ -4,16 +4,17 @@ node_modules/
 build/
 .tern-project
 .expo/
-android/.gradle
-*.xcodeproj/
-
-
 yarn.lock
 coverage/
 
 # React Native Android
 android/.gradle
 android/.build
+android/.gradle
+
+# React Native IOS
+ios/main.jsbundle
+ios/main.jsbundle.map
 
 # Haul
 haul-debug.log
@@ -21,4 +22,4 @@ haul-debug.log
 # Editors
 .vscode/
 yarn-error.log
-
+*.xcodeproj/

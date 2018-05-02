@@ -1,11 +1,14 @@
-// import { AnyAction } from 'redux'
 import { combineReducers } from 'redux'
-import { seedPhrase } from 'src/reducers/registration/seedPhrase'
+import { loading } from 'src/reducers/registration/loading'
 
 export interface RegistrationState {
-  readonly seedPhrase: string
+  readonly did: string
+  readonly loading: {
+    loadingMsg: string,
+    getIn: any
+  }
 }
 
 export const registrationReducer = combineReducers({
-  seedPhrase
+  loading
 })
