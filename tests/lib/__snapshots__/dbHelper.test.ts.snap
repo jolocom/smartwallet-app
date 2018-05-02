@@ -17,7 +17,7 @@ Object {
   "text": "INSERT INTO MasterKeys (encryptedEntropy, timestamp) VALUES (?, ?)",
   "values": Array [
     "mockEntropy",
-    100,
+    946681200000,
   ],
 }
 `;

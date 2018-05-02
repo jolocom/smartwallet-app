@@ -13,7 +13,7 @@ export const checkIdentityExists = () => {
     const { storageLib } = backendMiddleware
     try {
       const personas = await storageLib.getPersonas()
-      if (personas.length > 1) {
+      if (personas.length !== 1) {
         // HANDLE
       }
 
@@ -21,10 +21,8 @@ export const checkIdentityExists = () => {
       dispatch(navigationActions.navigate({
         routeName: 'Identity' 
       }))
-      
     } catch(err) {
       console.log(err)
-      console.log('No identity found.')
     }
   }
 }

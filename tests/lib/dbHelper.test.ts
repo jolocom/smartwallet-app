@@ -1,3 +1,4 @@
+import * as MockDate from 'mockdate'
 import { dbHelper } from 'src/lib/dbHelper'
 import data from './testData/storageTestData'
 
@@ -20,11 +21,9 @@ describe.only('dbHelper', () => {
   }),
 
   it('should correctly assemble master key addition query', () => {
-    const originalFunc = Date.now
-    Date.now = () => 100
-
+    MockDate.set('1/1/2000')
     expect(dbHelper.addMasterKeyQuery('mockEntropy')).toMatchSnapshot()
-    Date.now = originalFunc
+    MockDate.reset()
   })
 
   it('should correctly assemble persona addition query', () => {
