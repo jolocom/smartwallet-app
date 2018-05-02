@@ -92,7 +92,8 @@ export const dbHelper = {
     return { text: `${st} (${fieldSt})` }
   },
 
-  addPersonaQuery: ({ did, controllingKey }: PersonaOptions) : AssembledQuery => {
+  addPersonaQuery: (args: PersonaOptions) : AssembledQuery => {
+    const { did, controllingKey } = args
     return squel.insert()
       .into('Personas')
       .setFields({
@@ -102,8 +103,8 @@ export const dbHelper = {
       .toParam()
   },
 
-  addDerivedKeyQuery: (options: DerivedKeyOptions) : AssembledQuery => {
-    const { encryptedWif, path, entropySource, keyType } = options
+  addDerivedKeyQuery: (args: DerivedKeyOptions) : AssembledQuery => {
+    const { encryptedWif, path, entropySource, keyType } = args
     return squel.insert()
       .into('Keys')
       .setFields({
