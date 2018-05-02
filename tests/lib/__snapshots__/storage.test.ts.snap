@@ -6,19 +6,25 @@ Array [
     Object {
       "transaction": [MockFunction],
     },
-    "CREATE TABLE IF NOT EXISTS Personas (did VARCHAR(75) NOT NULL UNIQUE COLLATE NOCASE PRIMARY KEY, controllingKey INTEGER NOT NULL UNIQUE, FOREIGN KEY(controllingKey) REFERENCES Keys(id) )",
+    Object {
+      "text": "CREATE TABLE IF NOT EXISTS Personas (did VARCHAR(75) PRIMARY KEY, controllingKey VARCHAR(110) NOT NULL UNIQUE, FOREIGN KEY(controllingKey) REFERENCES Keys(encryptedWif) )",
+    },
   ],
   Array [
     Object {
       "transaction": [MockFunction],
     },
-    "CREATE TABLE IF NOT EXISTS Keys (id INTEGER PRIMARY KEY NOT NULL UNIQUE, encryptedWif VARCHAR(110) UNIQUE NOT NULL, path VARCHAR(10) NOT NULL, entropySource INTEGER NOT NULL, keyType TEXT NOT NULL, FOREIGN KEY(entropySource) REFERENCES MasterKeys(id) )",
+    Object {
+      "text": "CREATE TABLE IF NOT EXISTS Keys (encryptedWif VARCHAR(110) PRIMARY KEY, path TEXT NOT NULL, entropySource VARCHAR(100) NOT NULL, keyType TEXT NOT NULL, FOREIGN KEY(entropySource) REFERENCES MasterKeys(encryptedEntropy) )",
+    },
   ],
   Array [
     Object {
       "transaction": [MockFunction],
     },
-    "CREATE TABLE IF NOT EXISTS MasterKeys (encryptedEntropy VARCHAR(32) NOT NULL UNIQUE, timestamp DATE NOT NULL, id INTEGER PRIMARY KEY)",
+    Object {
+      "text": "CREATE TABLE IF NOT EXISTS MasterKeys (encryptedEntropy VARCHAR(100) PRIMARY KEY, timestamp DATE NOT NULL)",
+    },
   ],
 ]
 `;

@@ -4,9 +4,7 @@ import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
 import { RootState } from 'src/reducers/'
 
-interface ConnectProps {
-
-}
+interface ConnectProps { }
 
 interface Props extends ConnectProps {}
 
@@ -29,9 +27,11 @@ export class IdentityContainer extends React.Component<Props, State> {
   private onUserNameChange= (userName: string) : void => {
     this.setState({ userName })
   }
+
   private onPhoneNumberChange= (phoneNumber: string) : void => {
     this.setState({ phoneNumber })
   }
+
   private onEmailAddressChange= (emailAddress: string) : void => {
     this.setState({ emailAddress })
   }

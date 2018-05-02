@@ -1,1 +1,6 @@
-{"name": "src"}
+{
+  "name": "src",
+  "dependencies": {
+    "squel": "^5.12.1"
+  }
+}
