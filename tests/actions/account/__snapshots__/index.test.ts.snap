@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Account action creators Should correctly handle an "no such table" error being thrown 1`] = `Array []`;
+
+exports[`Account action creators Should correctly handle an arbitrary error being thrown 1`] = `
+Array [
+  Object {
+    "params": Object {
+      "errorMessage": "gamma rays have flipped our bits!",
+      "stackTrace": "Error: gamma rays have flipped our bits!
+    at /home/eugen/Documents/Work/Jolocom/smartwallet-app/tests/actions/account/index.test.ts:67:23
+    at step (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/tslib/tslib.js:133:27)
+    at Object.next (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/tslib/tslib.js:114:57)
+    at /home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/tslib/tslib.js:107:75
+    at tryCallTwo (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/promise/lib/core.js:45:5)
+    at doResolve (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/promise/lib/core.js:200:13)
+    at new Promise (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/promise/lib/core.js:66:3)
+    at Object.__awaiter (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/tslib/tslib.js:103:16)
+    at Object.<anonymous> (/home/eugen/Documents/Work/Jolocom/smartwallet-app/tests/actions/account/index.test.ts:66:65)
+    at Object.asyncFn (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Account action creators Should correctly handle an empty personas table 1`] = `Array []`;
+
+exports[`Account action creators Should correctly handle more existing user identites 1`] = `
+Array [
+  Object {
+    "type": "DID_SET",
+    "value": "did:jolo:first",
+  },
+  Object {
+    "routeName": "Identity",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Account action creators Should correctly handle one existing user identity 1`] = `
+Array [
+  Object {
+    "type": "DID_SET",
+    "value": "did:jolo:mock",
+  },
+  Object {
+    "routeName": "Identity",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
