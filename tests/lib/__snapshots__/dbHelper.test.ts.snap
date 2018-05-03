@@ -32,6 +32,13 @@ Object {
 }
 `;
 
+exports[`dbHelper should correctly assemble persona retrieval query 1`] = `
+Object {
+  "text": "SELECT * FROM Personas",
+  "values": Array [],
+}
+`;
+
 exports[`dbHelper should correctly assemble table creation query 1`] = `
 Object {
   "text": "CREATE TABLE IF NOT EXISTS Personas (did VARCHAR(20) NOT NULL PRIMARY KEY, FOREIGN KEY(controllingKey) REFERENCES Keys(id) )",
