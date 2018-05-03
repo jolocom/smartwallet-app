@@ -15,7 +15,7 @@ export class Storage {
 
     return new Promise<SQLiteDatabase>((resolve, reject) => {
       this.sqlLite.openDatabase(dbOptions, (db: SQLiteDatabase) => {
-        db.executeSql('PRAGMA foreign_keys = ON;', [], () => resolve(db))
+        db.executeSql('PRAGMA foreign_keys = ON;', [], () => resolve(db), reject)
       }, reject)
     })
   }
@@ -62,6 +62,7 @@ export class Storage {
     const db = await this.getDbInstance()
     const query = dbHelper.getPersonasQuery()
     const rows = await this.executeReadQuery(db, query) as ExtendedRowList
+    await this.closeDB(db)
     return rows.raw()
   }
 

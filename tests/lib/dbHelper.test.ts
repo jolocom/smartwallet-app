@@ -32,5 +32,9 @@ describe.only('dbHelper', () => {
       controllingKey: 'mockEncryptedWif'
     })).toMatchSnapshot()
   })
+
+  it('should correctly assemble persona retrieval query', () => {
+    expect(dbHelper.getPersonasQuery()).toMatchSnapshot()
+  })
 })
 

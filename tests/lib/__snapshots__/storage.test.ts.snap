@@ -1,5 +1,86 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storage lib should attempt to add a derived key 1`] = `
+Array [
+  Array [
+    "mocked",
+    Object {
+      "text": "INSERT INTO Keys (encryptedWif, path, entropySource, keyType) VALUES (?, ?, ?, ?)",
+      "values": Array [
+        "mockWif",
+        "m/0/3'/0",
+        "encEntropy",
+        "ECDSA",
+      ],
+    },
+  ],
+]
+`;
+
+exports[`Storage lib should attempt to add a master key 1`] = `
+Array [
+  Array [
+    "mocked",
+    Object {
+      "text": "INSERT INTO MasterKeys (encryptedEntropy, timestamp) VALUES (?, ?)",
+      "values": Array [
+        "mockEntropy",
+        946681200000,
+      ],
+    },
+  ],
+]
+`;
+
+exports[`Storage lib should attempt to add a persona 1`] = `
+Array [
+  Array [
+    "mocked",
+    Object {
+      "text": "INSERT INTO Personas (did, controllingKey) VALUES (?, ?)",
+      "values": Array [
+        "did:jolo:mock",
+        "mockEncryptedWif",
+      ],
+    },
+  ],
+]
+`;
+
+exports[`Storage lib should attempt to execute read query 1`] = `
+Array [
+  Array [
+    "SELECT * FROM Mock",
+    Array [],
+    [Function],
+    [Function],
+  ],
+]
+`;
+
+exports[`Storage lib should attempt to execute write query 1`] = `
+Array [
+  Array [
+    "INSERT into MOCK VALUES(?)",
+    Array [
+      "mockValue",
+    ],
+  ],
+]
+`;
+
+exports[`Storage lib should attempt to get all personas 1`] = `
+Array [
+  Array [
+    "mocked",
+    Object {
+      "text": "SELECT * FROM Personas",
+      "values": Array [],
+    },
+  ],
+]
+`;
+
 exports[`Storage lib should attempt to provision tables 1`] = `
 Array [
   Array [
@@ -25,6 +106,30 @@ Array [
     Object {
       "text": "CREATE TABLE IF NOT EXISTS MasterKeys (encryptedEntropy VARCHAR(100) PRIMARY KEY, timestamp DATE NOT NULL)",
     },
+  ],
+]
+`;
+
+exports[`Storage lib should provide a db instance with foreign key enforcement 1`] = `
+Array [
+  Array [
+    "PRAGMA foreign_keys = ON;",
+    Array [],
+    [Function],
+    [Function],
+  ],
+]
+`;
+
+exports[`Storage lib should provide a db instance with foreign key enforcement 2`] = `
+Array [
+  Array [
+    Object {
+      "location": "default",
+      "name": "LocalSmartWalletData",
+    },
+    [Function],
+    [Function],
   ],
 ]
 `;
