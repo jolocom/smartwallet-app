@@ -1,20 +1,33 @@
 import React from 'react'
-import { LandingContainer } from 'src/ui/landing/containers/landing'
+import { LandingContainer, Landing } from 'src/ui/landing/containers/landing'
+import { LandingComponent } from 'src/ui/landing/components/landing'
 import { shallow } from 'enzyme'
+
+import configureStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 
 describe('landing container', ()=> {
   it('mounts correctly and matches snapshot', () => {
-    const navigate = jest.fn()
-    const goToNextScreen = jest.fn()
-
     const props = {
-      navigate
+      startRegistration: jest.fn(),
+      checkIfAccountExists: jest.fn()
     }
 
     const rendered = shallow(<LandingContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
 
-    expect(goToNextScreen).not.toHaveBeenCalled()
-    expect(navigate).not.toHaveBeenCalled()
+    expect(props.checkIfAccountExists).toHaveBeenCalledTimes(1)
+    expect(props.startRegistration).not.toHaveBeenCalled()
+
+    const childWrapper = rendered.find(LandingComponent).dive()
+    childWrapper.instance().handleButtonTap()
+
+    expect(props.startRegistration).toHaveBeenCalledTimes(1)
+  })
+
+  it('correctly connects to redux', () => {
+    const mockStore = configureStore()({})
+    const rendered = shallow(<Landing store={ mockStore }/>).find(LandingContainer)
+    expect(rendered.props()).toMatchSnapshot()
   })
 })

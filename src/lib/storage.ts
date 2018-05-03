@@ -77,7 +77,7 @@ export class Storage {
       db.readTransaction((tx: Transaction) => {
         return tx.executeSql(text, values, (tx: Transaction, result: ResultSet) => {
           return resolve(result.rows)
-        })
+        }, reject)
       }, reject)
     )
   }

@@ -43,7 +43,7 @@ describe('Registration action creators', () => {
       const mockGetState = () => {}
 
       const asyncAction = registrationActions.createIdentity(entropy)
-      await asyncAction(mockStore.dispatch, mockGetState, { backendMiddleware: mockMiddleware })
+      await asyncAction(mockStore.dispatch, mockGetState, mockMiddleware)
 
       expect(mockStore.getActions()).toMatchSnapshot()
 
