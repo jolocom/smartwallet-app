@@ -21,7 +21,7 @@ describe.only('dbHelper', () => {
   }),
 
   it('should correctly assemble master key addition query', () => {
-    MockDate.set('1/1/2000')
+    MockDate.set(765000000000, 0)
     expect(dbHelper.addMasterKeyQuery('mockEntropy')).toMatchSnapshot()
     MockDate.reset()
   })
