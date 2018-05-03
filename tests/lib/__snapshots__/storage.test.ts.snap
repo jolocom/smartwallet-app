@@ -1,9 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storage lib should attempt to add a derived key 1`] = `
+exports[`Storage lib abstractions around the library should attempt to execute a read query 1`] = `
 Array [
   Array [
-    "mocked",
+    "SELECT * FROM Mock",
+    Array [],
+    [Function],
+    [Function],
+  ],
+]
+`;
+
+exports[`Storage lib abstractions around the library should attempt to execute a write query 1`] = `
+Array [
+  Array [
+    "INSERT into MOCK VALUES(?)",
+    Array [
+      "mockValue",
+    ],
+  ],
+]
+`;
+
+exports[`Storage lib abstractions around the library should open / provide a db instance with foreign key enforcement 1`] = `
+Array [
+  Array [
+    "PRAGMA foreign_keys = ON;",
+    Array [],
+    [Function],
+    [Function],
+  ],
+]
+`;
+
+exports[`Storage lib abstractions around the library should open / provide a db instance with foreign key enforcement 2`] = `
+Array [
+  Array [
+    Object {
+      "location": "default",
+      "name": "LocalSmartWalletData",
+    },
+    [Function],
+    [Function],
+  ],
+]
+`;
+
+exports[`Storage lib reading from the database should attempt to get all personas 1`] = `
+Array [
+  Array [
+    Object {
+      "transaction": [MockFunction],
+    },
+    Object {
+      "text": "SELECT * FROM Personas",
+      "values": Array [],
+    },
+  ],
+]
+`;
+
+exports[`Storage lib writing data to the database should attempt to add a derived key 1`] = `
+Array [
+  Array [
+    Object {
+      "transaction": [MockFunction],
+    },
     Object {
       "text": "INSERT INTO Keys (encryptedWif, path, entropySource, keyType) VALUES (?, ?, ?, ?)",
       "values": Array [
@@ -17,10 +79,12 @@ Array [
 ]
 `;
 
-exports[`Storage lib should attempt to add a master key 1`] = `
+exports[`Storage lib writing data to the database should attempt to add a master key 1`] = `
 Array [
   Array [
-    "mocked",
+    Object {
+      "transaction": [MockFunction],
+    },
     Object {
       "text": "INSERT INTO MasterKeys (encryptedEntropy, timestamp) VALUES (?, ?)",
       "values": Array [
@@ -32,10 +96,12 @@ Array [
 ]
 `;
 
-exports[`Storage lib should attempt to add a persona 1`] = `
+exports[`Storage lib writing data to the database should attempt to add a persona 1`] = `
 Array [
   Array [
-    "mocked",
+    Object {
+      "transaction": [MockFunction],
+    },
     Object {
       "text": "INSERT INTO Personas (did, controllingKey) VALUES (?, ?)",
       "values": Array [
@@ -47,41 +113,7 @@ Array [
 ]
 `;
 
-exports[`Storage lib should attempt to execute read query 1`] = `
-Array [
-  Array [
-    "SELECT * FROM Mock",
-    Array [],
-    [Function],
-    [Function],
-  ],
-]
-`;
-
-exports[`Storage lib should attempt to execute write query 1`] = `
-Array [
-  Array [
-    "INSERT into MOCK VALUES(?)",
-    Array [
-      "mockValue",
-    ],
-  ],
-]
-`;
-
-exports[`Storage lib should attempt to get all personas 1`] = `
-Array [
-  Array [
-    "mocked",
-    Object {
-      "text": "SELECT * FROM Personas",
-      "values": Array [],
-    },
-  ],
-]
-`;
-
-exports[`Storage lib should attempt to provision tables 1`] = `
+exports[`Storage lib writing data to the database should attempt to create the db tables 1`] = `
 Array [
   Array [
     Object {
@@ -106,30 +138,6 @@ Array [
     Object {
       "text": "CREATE TABLE IF NOT EXISTS MasterKeys (encryptedEntropy VARCHAR(100) PRIMARY KEY, timestamp DATE NOT NULL)",
     },
-  ],
-]
-`;
-
-exports[`Storage lib should provide a db instance with foreign key enforcement 1`] = `
-Array [
-  Array [
-    "PRAGMA foreign_keys = ON;",
-    Array [],
-    [Function],
-    [Function],
-  ],
-]
-`;
-
-exports[`Storage lib should provide a db instance with foreign key enforcement 2`] = `
-Array [
-  Array [
-    Object {
-      "location": "default",
-      "name": "LocalSmartWalletData",
-    },
-    [Function],
-    [Function],
   ],
 ]
 `;
