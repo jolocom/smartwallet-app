@@ -139,6 +139,10 @@ export class LandingComponent extends React.Component<Props, State> {
     })
   }
 
+  private handleButtonTap = () => {
+    this.props.handleButtonTap()
+  }
+
   render() {
     return (
       <Container>
@@ -162,7 +166,7 @@ export class LandingComponent extends React.Component<Props, State> {
         </Block>
         <Block flex={ 0.07 }>
           <Button
-            onPress={ this.props.handleButtonTap }
+            onPress={ this.handleButtonTap }
             style={{ container: this.styles.buttonContainer }}
             raised
             primary

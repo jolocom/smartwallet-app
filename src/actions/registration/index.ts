@@ -9,7 +9,7 @@ export const setLoadingMsg = (loadingMsg: string) => {
 }
 
 export const savePassword = (password : string) => {
-  return async (dispatch : Dispatch<AnyAction>, getState: any, { backendMiddleware } : any) =>  {
+  return async (dispatch : Dispatch<AnyAction>, getState: any, backendMiddleware : any) =>  {
     await backendMiddleware.keyChainLib.savePassword(password)
     dispatch(navigationActions.navigate({ routeName: 'Entropy' }))
   }
@@ -24,8 +24,23 @@ export const submitEntropy = (encodedEntropy: string) => {
   } 
 }
 
+// TODO ENUM FOR NAVIGATION
+export const startRegistration = () => {
+  return async (dispatch: Dispatch<AnyAction>, getState: any, backendMiddleware : any) => {
+    const { storageLib }  = backendMiddleware
+    try {
+      await storageLib.provisionTables()
+      dispatch(navigationActions.navigate({
+        routeName: 'PasswordEntry'
+      }))
+    } catch(err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
+  }
+}
+
 export const createIdentity = (encodedEntropy: string) => {
-  return async (dispatch : Dispatch<AnyAction>, getState: any, { backendMiddleware } : any) => {
+  return async (dispatch : Dispatch<AnyAction>, getState: any, backendMiddleware : any) => {
     const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
     try {
       const {
