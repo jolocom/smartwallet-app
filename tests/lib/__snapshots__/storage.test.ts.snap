@@ -89,7 +89,7 @@ Array [
       "text": "INSERT INTO MasterKeys (encryptedEntropy, timestamp) VALUES (?, ?)",
       "values": Array [
         "mockEntropy",
-        946681200000,
+        765000000000,
       ],
     },
   ],

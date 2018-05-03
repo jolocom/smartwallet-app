@@ -114,7 +114,7 @@ describe('Storage lib', () => {
     })
 
     it('should attempt to add a master key', async () => {
-      MockDate.set('1/1/2000')
+      MockDate.set(new Date(765000000000), 0)
       await storageAgent.addMasterKey('mockEntropy')
 
       expect(storageAgent.executeWriteQuery.mock.calls).toMatchSnapshot()
