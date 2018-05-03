@@ -7,17 +7,7 @@ Array [
   Object {
     "params": Object {
       "errorMessage": "gamma rays have flipped our bits!",
-      "stackTrace": "Error: gamma rays have flipped our bits!
-    at /home/eugen/Documents/Work/Jolocom/smartwallet-app/tests/actions/account/index.test.ts:67:23
-    at step (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/tslib/tslib.js:133:27)
-    at Object.next (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/tslib/tslib.js:114:57)
-    at /home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/tslib/tslib.js:107:75
-    at tryCallTwo (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/promise/lib/core.js:45:5)
-    at doResolve (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/promise/lib/core.js:200:13)
-    at new Promise (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/promise/lib/core.js:66:3)
-    at Object.__awaiter (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/tslib/tslib.js:103:16)
-    at Object.<anonymous> (/home/eugen/Documents/Work/Jolocom/smartwallet-app/tests/actions/account/index.test.ts:66:65)
-    at Object.asyncFn (/home/eugen/Documents/Work/Jolocom/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)",
+      "stackTrace": undefined,
     },
     "routeName": "Exception",
     "type": "Navigation/NAVIGATE",
