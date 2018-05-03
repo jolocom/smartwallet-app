@@ -1,5 +1,6 @@
 import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
+import { BackendMiddleware } from 'src/backendMiddleware'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -9,7 +10,7 @@ export const setLoadingMsg = (loadingMsg: string) => {
 }
 
 export const savePassword = (password : string) => {
-  return async (dispatch : Dispatch<AnyAction>, getState: any, backendMiddleware : any) =>  {
+  return async (dispatch : Dispatch<AnyAction>, getState: any, backendMiddleware : BackendMiddleware) =>  {
     await backendMiddleware.keyChainLib.savePassword(password)
     dispatch(navigationActions.navigate({ routeName: 'Entropy' }))
   }
@@ -26,7 +27,7 @@ export const submitEntropy = (encodedEntropy: string) => {
 
 // TODO ENUM FOR NAVIGATION
 export const startRegistration = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: any, backendMiddleware : any) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: any, backendMiddleware : BackendMiddleware) => {
     const { storageLib }  = backendMiddleware
     try {
       await storageLib.provisionTables()
@@ -40,7 +41,7 @@ export const startRegistration = () => {
 }
 
 export const createIdentity = (encodedEntropy: string) => {
-  return async (dispatch : Dispatch<AnyAction>, getState: any, backendMiddleware : any) => {
+  return async (dispatch : Dispatch<AnyAction>, getState: any, backendMiddleware : BackendMiddleware) => {
     const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
     try {
       const {
@@ -53,9 +54,9 @@ export const createIdentity = (encodedEntropy: string) => {
       dispatch(setLoadingMsg('Encrypting and storing data locally'))
 
       const password = await keyChainLib.getPassword()
-      const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password }).toString()
-      const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password }).toString()
-      const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password }).toString()
+      const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
+      const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
+      const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password })
 
       await storageLib.addMasterKey(encEntropy)
       await storageLib.addDerivedKey({

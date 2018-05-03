@@ -1,5 +1,6 @@
 import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
+import { BackendMiddleware } from 'src/backendMiddleware'
 
 export const setDid = (did: string) => {
   return {
@@ -11,7 +12,7 @@ export const setDid = (did: string) => {
 // TODO Abstract parsing of error messages
 // TODO Type backend middleware
 export const checkIdentityExists = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: any, backendMiddleware : any) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: any, backendMiddleware : BackendMiddleware) => {
     const { storageLib } = backendMiddleware
 
     try {
