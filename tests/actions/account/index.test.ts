@@ -64,7 +64,7 @@ describe.only('Account action creators', () => {
   })
 
   it('Should correctly handle an arbitrary error being thrown', async () => {
-    const mockError = new Error('gamma rays have flipped our bits!')
+    const mockError = { message: 'gamma rays have flipped our bits!' }
     const backendMiddleware = {
       storageLib: {
         getPersonas: jest.fn().mockRejectedValue(mockError)
