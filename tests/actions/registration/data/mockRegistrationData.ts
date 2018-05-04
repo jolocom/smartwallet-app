@@ -1,7 +1,8 @@
 export default {
   entropy: '4f8d84403d760b5b3fc5426c90827dab',
   didDocument: {
-    id: 'did:jolo:mockdid'
+    id: 'did:jolo:mockdid',
+    getDID: () => 'did:jolo:mockdid'
   },
   mnemonic: 'all all all all all all all all all all all all',
   ipfsHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',

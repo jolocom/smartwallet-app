@@ -44,8 +44,8 @@ export class IdentityContainer extends React.Component<Props, State> {
     this.setState({ scanning: false })
   }
 
-  private onScannerSuccess = (e : any) : void => {
-    console.log('MOCK ON SCANNER SUCCESS')
+  // TODO Typings on E, event is not enough
+  private onScannerSuccess = (e : Event) : void => {
     this.setState({ scanning: false })
   }
 

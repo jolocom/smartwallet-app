@@ -1,12 +1,12 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { IConfig } from 'jolocom-lib'
-import { rootReducer } from './reducers'
+import { rootReducer, RootState } from './reducers'
 import { BackendMiddleware } from './backendMiddleware'
 import { IpfsLib } from 'src/lib/ipfs'
 const { createReactNavigationReduxMiddleware } = require('react-navigation-redux-helpers')
 
-createReactNavigationReduxMiddleware('root', (state : any) => state.navigation)
+createReactNavigationReduxMiddleware('root', (state : RootState) => state.navigation)
 
 const jolocomLibConfig: IConfig = {
   identity: {
