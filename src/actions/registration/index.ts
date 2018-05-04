@@ -12,8 +12,12 @@ export const setLoadingMsg = (loadingMsg: string) => {
 
 export const savePassword = (password : string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) =>  {
-    await backendMiddleware.keyChainLib.savePassword(password)
-    dispatch(navigationActions.navigate({ routeName: routeList.Entropy }))
+    try {
+      await backendMiddleware.keyChainLib.savePassword(password)
+      dispatch(navigationActions.navigate({ routeName: routeList.Entropy }))
+    } catch (err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
   }
 }
 
@@ -26,7 +30,6 @@ export const submitEntropy = (encodedEntropy: string) => {
   } 
 }
 
-// TODO ENUM FOR NAVIGATION
 export const startRegistration = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { storageLib }  = backendMiddleware

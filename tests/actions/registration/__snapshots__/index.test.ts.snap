@@ -129,3 +129,65 @@ Array [
   ],
 ]
 `;
+
+exports[`Registration action creators createIdentity should display exception screen in case of error 1`] = `
+Array [
+  Object {
+    "params": Object {
+      "errorMessage": "Mock registration error",
+      "stackTrace": "mock registration error stack trace",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Registration action creators savePassword should attempt to save the password in the keychain 1`] = `
+Array [
+  Object {
+    "routeName": "Entropy",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Registration action creators savePassword should display exception screen in case of error 1`] = `
+Array [
+  Object {
+    "params": Object {
+      "errorMessage": "password could not be saved",
+      "stackTrace": "mock pass error stack",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Registration action creators startRegistration should display exception screen in case of error 1`] = `
+Array [
+  Object {
+    "params": Object {
+      "errorMessage": "Provisioning failed",
+      "stackTrace": "mock trace",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Registration action creators startRegistration should initiate  the registration process 1`] = `[Function]`;
+
+exports[`Registration action creators submitEntropy should correctly navigate to route and provide the entropy 1`] = `
+Array [
+  Object {
+    "params": Object {
+      "encodedEntropy": "mockEntropy",
+    },
+    "routeName": "Loading",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
