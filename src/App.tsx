@@ -2,14 +2,14 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { Navigator } from 'src/NavigatorContainer'
 import { store } from 'src/store'
-
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 const { ThemeProvider } = require ('react-native-material-ui')
 
 // tslint:disable-next-line: no-default-export
 export default class App extends React.Component {
   render() {
     return (
-      <ThemeProvider uiTheme={{}}>
+      <ThemeProvider uiTheme={ JolocomTheme }>
         <Provider store={ store }>
           <Navigator dispatch={ store.dispatch }/>
         </Provider>
