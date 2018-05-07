@@ -64,7 +64,7 @@ Array [
   Array [
     Object {
       "encryptedWif": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
-      "entropySource": 1,
+      "entropySource": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
       "keyType": "ECDSA secp256k1",
       "path": "m/0/0",
     },
@@ -72,7 +72,7 @@ Array [
   Array [
     Object {
       "encryptedWif": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
-      "entropySource": 1,
+      "entropySource": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
       "keyType": "ECDSA secp256k1",
       "path": "m/0/1",
     },
@@ -84,7 +84,7 @@ exports[`Registration action creators createIdentity should attempt to create an
 Array [
   Array [
     Object {
-      "controllingKey": 2,
+      "controllingKey": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
       "did": "did:jolo:mockdid",
     },
   ],

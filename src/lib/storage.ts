@@ -1,47 +1,27 @@
 const SQLite = require('react-native-sqlite-storage')
-import { dbHelper, TableOptions } from 'src/lib/dbHelper'
-import { Location, ResultSet, Transaction } from 'react-native-sqlite-storage'
-
-interface AsyncTransaction {
-  executeSql: (query: string, args?: any[]) => Promise<[Transaction, ResultSet]>
-}
-
-interface SQLiteDatabase {
-  enablePromise: (flag: boolean) => void
-  DEBUG: (flag: boolean) => void
-  openDatabase: (args: {name: string, location: Location}) => Promise<SQLiteDatabase>
-  executeSql: (query: string) => Promise<void>
-  executeWriteQuery: (db: SQLiteDatabase, query: string) => Promise<void>
-  close: (successCB: Function, errCB: Function) => Promise<void>
-  transaction: (tx: Function) => Promise<void>
-}
+import { dbHelper, TableOptions, AssembledQuery, DerivedKeyAttributes, PersonaAttributes } from 'src/lib/dbHelper'
+import { Location, ResultSet, ResultSetRowList, Transaction, SQLiteDatabase } from 'react-native-sqlite-storage'
 
 export class Storage {
-  private sqlLite: SQLiteDatabase = SQLite
+  private sqlLite = SQLite
   private dbName = 'LocalSmartWalletData'
   private location: Location = 'default'
 
-  constructor() {
-    this.enablePromise()
-    this.sqlLite.DEBUG(true)
-  }
-
-  private enablePromise() : void {
-    this.sqlLite.enablePromise(true)
-  }
-
   private async getDbInstance() : Promise<SQLiteDatabase> {
-    const db = await this.sqlLite.openDatabase({
+    const dbOptions = {
       name: this.dbName,
       location: this.location
-    })
+    }
 
-    await db.executeSql('PRAGMA foreign_keys = ON;')
-    return db
+    return new Promise<SQLiteDatabase>((resolve, reject) => {
+      this.sqlLite.openDatabase(dbOptions, (db: SQLiteDatabase) => {
+        db.executeSql('PRAGMA foreign_keys = ON;', [], () => resolve(db), reject)
+      }, reject)
+    })
   }
 
-  async closeDB(db: SQLiteDatabase) : Promise<{}> {
-    return new Promise((resolve, reject) => {
+  async closeDB(db: SQLiteDatabase) : Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       return db.close(resolve, reject)
     })
   }
@@ -53,51 +33,63 @@ export class Storage {
     await this.closeDB(db)
   }
 
-  async addPersona(args: {did: string, controllingKey: string}) {
+  async addPersona(args: PersonaAttributes) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addPersonaQuery(args)
-    await this.executeWriteQuery(db, query)
+    await this.executeWriteTransaction(db, query)
     await this.closeDB(db)
   }
 
-  async addMasterKey(entropy: string) {
+  async addMasterKey(entropy: string) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addMasterKeyQuery(entropy)
-    await this.executeWriteQuery(db, query)
+    await this.executeWriteTransaction(db, query)
     await this.closeDB(db)
   }
 
-  async addDerivedKey(args: { encryptedWif: string, path: string, entropySource: string, keyType: string }) {
+  async addDerivedKey(args: DerivedKeyAttributes) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addDerivedKeyQuery(args)
-    await this.executeWriteQuery(db, query)
+    await this.executeWriteTransaction(db, query)
     await this.closeDB(db)
   }
 
-  async getPersonas() {
+  async getPersonas() : Promise<PersonaAttributes[]> {
+    interface ExtendedRowList extends ResultSetRowList {
+      raw: () => PersonaAttributes[]
+    }
+
     const db = await this.getDbInstance()
-    const query = 'select * from Keys'
-    const res = await this.executeReadQueryAlt(db, query)
-    return res.rows.raw()
+    const query = dbHelper.getPersonasQuery()
+    const rows = await this.executeReadTransaction(db, query) as ExtendedRowList
+    await this.closeDB(db)
+    return rows.raw()
   }
 
   private async createTable(options : TableOptions, db: SQLiteDatabase) : Promise<void> {
     const query = dbHelper.createTableQuery(options)
-    await this.executeWriteQuery(db, query)
+    await this.executeWriteTransaction(db, query)
   }
 
-  private async executeReadQueryAlt(db: SQLiteDatabase, query: string) : Promise<ResultSet> {
-    return new Promise<ResultSet>((resolve, reject) =>
-      db.transaction(async (tx: AsyncTransaction) => {
-        const result = await tx.executeSql(query, [])
-        return resolve(result[1])
-      })
+  private async executeReadTransaction(db: SQLiteDatabase, query: AssembledQuery) : Promise<ResultSetRowList> {
+    const { text, values } = query
+
+    return new Promise<ResultSetRowList>((resolve, reject) =>
+      db.readTransaction((tx: Transaction) => {
+        return tx.executeSql(text, values, (tx: Transaction, result: ResultSet) => {
+          return resolve(result.rows)
+        }, reject)
+      }, reject)
     )
   }
 
-  private async executeWriteQuery(db: SQLiteDatabase, query: string) : Promise<void> {
-    return await db.transaction(async (tx: AsyncTransaction) => 
-      tx.executeSql(query, [])
+  private async executeWriteTransaction(db: SQLiteDatabase, query: AssembledQuery) : Promise<void> {
+    const { text, values } = query
+
+    return new Promise<void>((resolve, reject) => 
+      db.transaction((tx: Transaction) => {
+        return tx.executeSql(text, values)
+      }, reject, () => resolve())
     )
   }
 }

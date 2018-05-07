@@ -1,3 +1,5 @@
+import * as squel from 'squel'
+
 interface Field {
   name: string
   type: string
@@ -9,16 +11,21 @@ export interface TableOptions {
   fields: Field[]
 }
 
-interface DerivedKeyOptions {
+export interface DerivedKeyAttributes {
   encryptedWif: string
   path: string
   entropySource: string
   keyType: string
 }
 
-interface PersonaOptions {
+export interface PersonaAttributes {
   did: string
   controllingKey: string
+}
+
+export interface AssembledQuery {
+  text: string
+  values?: string[]
 }
 
 export const dbHelper = {
@@ -73,35 +80,55 @@ export const dbHelper = {
     }]
   }],
 
-  addPersonaQuery: ({ did, controllingKey }: PersonaOptions) : string => {
-    return `INSERT INTO Personas VALUES("${did}", "${controllingKey}")`
-  },
-
-  createTableQuery: (options: TableOptions) : string => {
+  createTableQuery: (options: TableOptions) : AssembledQuery => {
     const { name, fields } = options
     const st = `CREATE TABLE IF NOT EXISTS ${name}`
 
     const fieldSt = fields.map(f => {
       const { name, type, options } = f
-      const fieldOptions = options.join(' ')
-      return `${name} ${type} ${fieldOptions}`
+      const fieldAttributes = options.join(' ')
+      return `${name} ${type} ${fieldAttributes}`
     }).join(', ')
-    return `${st} (${fieldSt})`
+    return { text: `${st} (${fieldSt})` }
   },
 
-  addDerivedKeyQuery: (options: DerivedKeyOptions) : string => {
-    const { encryptedWif, path, entropySource, keyType } = options
-
-    return `INSERT INTO Keys VALUES (
-      "${encryptedWif}",
-      "${path}",
-      "${entropySource}",
-      "${keyType}"
-    )`
+  addPersonaQuery: (args: PersonaAttributes) : AssembledQuery => {
+    const { did, controllingKey } = args
+    return squel.insert()
+      .into('Personas')
+      .setFields({
+        did: did,
+        controllingKey: controllingKey
+      })
+      .toParam()
   },
 
-  addMasterKeyQuery: (encryptedEntropy: string) : string => {
-    return `INSERT INTO MasterKeys VALUES ("${encryptedEntropy}", DATETIME('now'))`
+  addDerivedKeyQuery: (args: DerivedKeyAttributes) : AssembledQuery => {
+    const { encryptedWif, path, entropySource, keyType } = args
+    return squel.insert()
+      .into('Keys')
+      .setFields({
+        encryptedWif: encryptedWif,
+        path: path,
+        entropySource: entropySource,
+        keyType: keyType
+      })
+      .toParam()
+  },
+
+  addMasterKeyQuery: (encryptedEntropy: string) : AssembledQuery => {
+    return squel.insert()
+      .into('MasterKeys')
+      .setFields({
+        encryptedEntropy: encryptedEntropy,
+        timestamp: Date.now()
+      })
+      .toParam()
+  },
+
+  getPersonasQuery: () : AssembledQuery => {
+    return squel.select()
+      .from('Personas')
+      .toParam()
   }
 }
-
