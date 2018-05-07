@@ -139,6 +139,8 @@ export class LandingComponent extends React.Component<Props, State> {
     })
   }
 
+  // TODO This is here so we can invoke it from tests.
+  // might be replaced during integration tests.
   private handleButtonTap = () => {
     this.props.handleButtonTap()
   }

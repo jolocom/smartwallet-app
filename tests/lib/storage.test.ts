@@ -53,7 +53,7 @@ describe('Storage lib', () => {
       }
 
       const storageAgent = new Storage()
-      await storageAgent.executeWriteQuery(mockDb, mockQuery)
+      await storageAgent.executeWriteTransaction(mockDb, mockQuery)
       expect(mockTransaction.executeSql.mock.calls).toMatchSnapshot()
       expect(mockDb.transaction).toHaveBeenCalledTimes(1)
     })
@@ -77,7 +77,7 @@ describe('Storage lib', () => {
       }
 
 
-      expect(await storageAgent.executeReadQuery(mockDb, mockQuery)).toBe(mockResult.rows)
+      expect(await storageAgent.executeReadTransaction(mockDb, mockQuery)).toBe(mockResult.rows)
       expect(mockTransaction.executeSql.mock.calls).toMatchSnapshot()
       expect(mockDb.readTransaction).toHaveBeenCalledTimes(1)
     })
@@ -91,13 +91,13 @@ describe('Storage lib', () => {
 
     beforeEach(() => {
       storageAgent.closeDB = jest.fn()
-      storageAgent.executeWriteQuery = jest.fn()
+      storageAgent.executeWriteTransaction = jest.fn()
       storageAgent.getDbInstance = jest.fn().mockResolvedValue(mockDb)
     })
 
     it('should attempt to create the db tables', async () => {
       await storageAgent.provisionTables()
-      expect(storageAgent.executeWriteQuery.mock.calls).toMatchSnapshot()
+      expect(storageAgent.executeWriteTransaction.mock.calls).toMatchSnapshot()
       expect(storageAgent.getDbInstance).toHaveBeenCalledTimes(1)
       expect(storageAgent.closeDB).toHaveBeenCalledTimes(1)
     })
@@ -108,7 +108,7 @@ describe('Storage lib', () => {
         controllingKey: 'mockEncryptedWif'
       })
 
-      expect(storageAgent.executeWriteQuery.mock.calls).toMatchSnapshot()
+      expect(storageAgent.executeWriteTransaction.mock.calls).toMatchSnapshot()
       expect(storageAgent.getDbInstance).toHaveBeenCalledTimes(1)
       expect(storageAgent.closeDB).toHaveBeenCalledTimes(1)
     })
@@ -117,7 +117,7 @@ describe('Storage lib', () => {
       MockDate.set(new Date(765000000000), 0)
       await storageAgent.addMasterKey('mockEntropy')
 
-      expect(storageAgent.executeWriteQuery.mock.calls).toMatchSnapshot()
+      expect(storageAgent.executeWriteTransaction.mock.calls).toMatchSnapshot()
       expect(storageAgent.getDbInstance).toHaveBeenCalledTimes(1)
       expect(storageAgent.closeDB).toHaveBeenCalledTimes(1)
       MockDate.reset()
@@ -131,7 +131,7 @@ describe('Storage lib', () => {
         keyType: 'ECDSA'
       })
 
-      expect(storageAgent.executeWriteQuery.mock.calls).toMatchSnapshot()
+      expect(storageAgent.executeWriteTransaction.mock.calls).toMatchSnapshot()
       expect(storageAgent.getDbInstance).toHaveBeenCalledTimes(1)
       expect(storageAgent.closeDB).toHaveBeenCalledTimes(1)
     })
@@ -145,12 +145,12 @@ describe('Storage lib', () => {
 
       const storageAgent = new Storage()
       storageAgent.getDbInstance = jest.fn().mockResolvedValue(mockDb)
-      storageAgent.executeReadQuery = jest.fn().mockResolvedValue(mockRes)
+      storageAgent.executeReadTransaction = jest.fn().mockResolvedValue(mockRes)
       storageAgent.closeDB = jest.fn()
 
       expect(await storageAgent.getPersonas()).toBe(mockPersonas)
       expect(storageAgent.getDbInstance).toHaveBeenCalledTimes(1)
-      expect(storageAgent.executeReadQuery.mock.calls).toMatchSnapshot()
+      expect(storageAgent.executeReadTransaction.mock.calls).toMatchSnapshot()
       expect(storageAgent.closeDB).toHaveBeenCalledTimes(1)
     })
 
