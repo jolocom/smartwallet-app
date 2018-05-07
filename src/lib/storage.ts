@@ -1,5 +1,5 @@
 const SQLite = require('react-native-sqlite-storage')
-import { dbHelper, TableOptions, AssembledQuery, DerivedKeyOptions, PersonaOptions } from 'src/lib/dbHelper'
+import { dbHelper, TableOptions, AssembledQuery, DerivedKeyAttributes, PersonaAttributes } from 'src/lib/dbHelper'
 import { Location, ResultSet, ResultSetRowList, Transaction, SQLiteDatabase } from 'react-native-sqlite-storage'
 
 export class Storage {
@@ -33,45 +33,45 @@ export class Storage {
     await this.closeDB(db)
   }
 
-  async addPersona(args: PersonaOptions) : Promise<void> {
+  async addPersona(args: PersonaAttributes) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addPersonaQuery(args)
-    await this.executeWriteQuery(db, query)
+    await this.executeWriteTransaction(db, query)
     await this.closeDB(db)
   }
 
   async addMasterKey(entropy: string) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addMasterKeyQuery(entropy)
-    await this.executeWriteQuery(db, query)
+    await this.executeWriteTransaction(db, query)
     await this.closeDB(db)
   }
 
-  async addDerivedKey(args: DerivedKeyOptions) : Promise<void> {
+  async addDerivedKey(args: DerivedKeyAttributes) : Promise<void> {
     const db = await this.getDbInstance()
     const query = dbHelper.addDerivedKeyQuery(args)
-    await this.executeWriteQuery(db, query)
+    await this.executeWriteTransaction(db, query)
     await this.closeDB(db)
   }
 
-  async getPersonas() : Promise<PersonaOptions[]> {
+  async getPersonas() : Promise<PersonaAttributes[]> {
     interface ExtendedRowList extends ResultSetRowList {
-      raw: () => PersonaOptions[]
+      raw: () => PersonaAttributes[]
     }
 
     const db = await this.getDbInstance()
     const query = dbHelper.getPersonasQuery()
-    const rows = await this.executeReadQuery(db, query) as ExtendedRowList
+    const rows = await this.executeReadTransaction(db, query) as ExtendedRowList
     await this.closeDB(db)
     return rows.raw()
   }
 
   private async createTable(options : TableOptions, db: SQLiteDatabase) : Promise<void> {
     const query = dbHelper.createTableQuery(options)
-    await this.executeWriteQuery(db, query)
+    await this.executeWriteTransaction(db, query)
   }
 
-  private async executeReadQuery(db: SQLiteDatabase, query: AssembledQuery) : Promise<ResultSetRowList> {
+  private async executeReadTransaction(db: SQLiteDatabase, query: AssembledQuery) : Promise<ResultSetRowList> {
     const { text, values } = query
 
     return new Promise<ResultSetRowList>((resolve, reject) =>
@@ -83,7 +83,7 @@ export class Storage {
     )
   }
 
-  private async executeWriteQuery(db: SQLiteDatabase, query: AssembledQuery) : Promise<void> {
+  private async executeWriteTransaction(db: SQLiteDatabase, query: AssembledQuery) : Promise<void> {
     const { text, values } = query
 
     return new Promise<void>((resolve, reject) => 

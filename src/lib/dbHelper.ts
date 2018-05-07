@@ -6,21 +6,21 @@ interface Field {
   options: string[]
 }
 
-export interface DerivedKeyOptions {
+export interface TableOptions {
+  name: string
+  fields: Field[]
+}
+
+export interface DerivedKeyAttributes {
   encryptedWif: string
   path: string
   entropySource: string
   keyType: string
 }
 
-export interface PersonaOptions {
+export interface PersonaAttributes {
   did: string
   controllingKey: string
-}
-
-export interface TableOptions {
-  name: string
-  fields: Field[]
 }
 
 export interface AssembledQuery {
@@ -86,13 +86,13 @@ export const dbHelper = {
 
     const fieldSt = fields.map(f => {
       const { name, type, options } = f
-      const fieldOptions = options.join(' ')
-      return `${name} ${type} ${fieldOptions}`
+      const fieldAttributes = options.join(' ')
+      return `${name} ${type} ${fieldAttributes}`
     }).join(', ')
     return { text: `${st} (${fieldSt})` }
   },
 
-  addPersonaQuery: (args: PersonaOptions) : AssembledQuery => {
+  addPersonaQuery: (args: PersonaAttributes) : AssembledQuery => {
     const { did, controllingKey } = args
     return squel.insert()
       .into('Personas')
@@ -103,7 +103,7 @@ export const dbHelper = {
       .toParam()
   },
 
-  addDerivedKeyQuery: (args: DerivedKeyOptions) : AssembledQuery => {
+  addDerivedKeyQuery: (args: DerivedKeyAttributes) : AssembledQuery => {
     const { encryptedWif, path, entropySource, keyType } = args
     return squel.insert()
       .into('Keys')
