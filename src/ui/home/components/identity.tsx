@@ -22,6 +22,7 @@ interface Props {
 interface State {
 }
 
+// TODO Magic numbers
 const styles = StyleSheet.create({
   textInputField: {
     flex: 1,
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
   }
 })
 
+// TODO SFC?
 export class IdentityComponent extends React.Component<Props, State> {
   render() {
     let renderContent
