@@ -32,5 +32,5 @@ const backendMiddleware = new BackendMiddleware(config)
 export const store = createStore(
   rootReducer,
   {},
-  applyMiddleware(thunk.withExtraArgument({backendMiddleware}))
+  applyMiddleware(thunk.withExtraArgument(backendMiddleware))
 )

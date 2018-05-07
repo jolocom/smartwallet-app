@@ -135,6 +135,12 @@ export class LandingComponent extends React.Component<Props, State> {
     })
   }
 
+  // TODO This is here so we can invoke it from tests.
+  // might be replaced during integration tests.
+  private handleButtonTap = () => {
+    this.props.handleButtonTap()
+  }
+
   render() {
     return (
       <Container>
@@ -158,7 +164,8 @@ export class LandingComponent extends React.Component<Props, State> {
         </Block>
         <Block flex={ 0.07 }>
           <Button
-            onPress={ this.props.handleButtonTap }
+            onPress={ this.handleButtonTap }
+            style={{ container: this.styles.buttonContainer }}
             raised
             primary
             text="Create Your Identity" />
