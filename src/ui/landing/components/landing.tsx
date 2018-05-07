@@ -131,6 +131,9 @@ export class LandingComponent extends React.Component<Props, State> {
         justifyContent: 'center',
         alignItems: 'center',
         color: JolocomTheme.textStyles.subheadline.color
+      },
+      buttonContainer: {
+        backgroundColor: JolocomTheme.palette.primaryColor
       }
     })
   }
