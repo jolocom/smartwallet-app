@@ -89,13 +89,12 @@ export class LandingComponent extends React.Component<Props, State> {
 
   private renderPagination () {
     const { activeSlide } = this.state
-    const { gray1 } = JolocomTheme.jolocom
     return (
       <Pagination
         dotsLength={ carouselInfo.length }
         activeDotIndex={ activeSlide }
         dotStyle={ this.styles.dotStyle }
-        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: gray1 }]] }
+        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: JolocomTheme.palette.backgroundDot }]] }
         inactiveDotOpacity={ 0.4 }
         inactiveDotScale={ 0.6 }
       />

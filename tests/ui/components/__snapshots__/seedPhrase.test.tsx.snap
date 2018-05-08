@@ -93,13 +93,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       onPress={null}
       primary={true}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-          },
-        }
-      }
+      style={Object {}}
       testID={null}
       text="NEXT STEP"
       upperCase={true}
