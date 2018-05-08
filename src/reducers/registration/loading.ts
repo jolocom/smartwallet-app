@@ -1,4 +1,4 @@
-import {AnyAction} from 'redux'
+import { AnyAction } from 'redux'
 import Immutable from 'immutable'
 
 const initialState = Immutable.fromJS({
@@ -8,7 +8,7 @@ const initialState = Immutable.fromJS({
 export const loading = (state = initialState, action: AnyAction): string => {
   switch (action.type) {
     case 'SET_LOADING_MSG':
-      return state.setIn(['loadingMsg'], action.value)
+      return action.value
     default:
       return state
   }

@@ -97,8 +97,8 @@ export const dbHelper = {
     return squel.insert()
       .into('Personas')
       .setFields({
-        did: did,
-        controllingKey: controllingKey
+        did,
+        controllingKey
       })
       .toParam()
   },
@@ -108,10 +108,10 @@ export const dbHelper = {
     return squel.insert()
       .into('Keys')
       .setFields({
-        encryptedWif: encryptedWif,
-        path: path,
-        entropySource: entropySource,
-        keyType: keyType
+        encryptedWif,
+        path,
+        entropySource,
+        keyType
       })
       .toParam()
   },
@@ -120,7 +120,7 @@ export const dbHelper = {
     return squel.insert()
       .into('MasterKeys')
       .setFields({
-        encryptedEntropy: encryptedEntropy,
+        encryptedEntropy,
         timestamp: Date.now()
       })
       .toParam()

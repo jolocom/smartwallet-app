@@ -10,7 +10,7 @@ import { navigationActions } from 'src/actions/'
 const { createReduxBoundAddListener } = require('react-navigation-redux-helpers')
 
 interface ConnectProps {
-  navigation: any;
+  navigation: RootState["navigation"];
   goBack: () => void;
 }
 

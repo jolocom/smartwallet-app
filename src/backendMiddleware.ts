@@ -1,17 +1,16 @@
 import JolocomLib from 'jolocom-lib'
 import { IConfig } from 'jolocom-lib'
-import { EthereumLib } from 'src/lib/ethereum'
-import { EncryptionLib } from 'src/lib/crypto'
-import { Storage } from 'src/lib/storage'
-import { KeyChain, KeyChainLib } from 'src/lib/keychain'
-
+import { EthereumLib, EthereumLibInterface } from 'src/lib/ethereum'
+import { EncryptionLib, EncryptionLibInterface } from 'src/lib/crypto'
+import { Storage, StorageInterface } from 'src/lib/storage'
+import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 
 export class BackendMiddleware {
-  jolocomLib: any
-  ethereumLib: any
-  storageLib: any
-  encryptionLib: any
-  keyChainLib: KeyChainLib
+  jolocomLib: JolocomLib
+  ethereumLib: EthereumLibInterface
+  storageLib: StorageInterface
+  encryptionLib: EncryptionLibInterface
+  keyChainLib: KeyChainInterface
 
   constructor(config: { jolocomLibConfig: IConfig, fuelingEndpoint: string }) {
     this.jolocomLib = new JolocomLib(config.jolocomLibConfig)

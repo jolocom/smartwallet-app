@@ -2,7 +2,15 @@ const SQLite = require('react-native-sqlite-storage')
 import { dbHelper, TableOptions, AssembledQuery, DerivedKeyAttributes, PersonaAttributes } from 'src/lib/dbHelper'
 import { Location, ResultSet, ResultSetRowList, Transaction, SQLiteDatabase } from 'react-native-sqlite-storage'
 
-export class Storage {
+export interface StorageInterface {
+  provisionTables: () => Promise<void>
+  addPersona: (args: PersonaAttributes) => Promise<void>
+  addMasterKey: (entropy: string) => Promise<void>
+  addDerivedKey: (args: DerivedKeyAttributes) => Promise<void>
+  getPersonas: () => Promise<PersonaAttributes[]> 
+}
+
+export class Storage implements StorageInterface {
   private sqlLite = SQLite
   private dbName = 'LocalSmartWalletData'
   private location: Location = 'default'
@@ -20,7 +28,7 @@ export class Storage {
     })
   }
 
-  async closeDB(db: SQLiteDatabase) : Promise<void> {
+  private async closeDB(db: SQLiteDatabase) : Promise<void> {
     return new Promise<void>((resolve, reject) => {
       return db.close(resolve, reject)
     })
