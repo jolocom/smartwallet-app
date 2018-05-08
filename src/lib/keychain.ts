@@ -1,13 +1,13 @@
 import * as Keychain from 'react-native-keychain'
 
-export interface KeyChainLib {
+export interface KeyChainInterface {
   savePassword: (password:string) => Promise<void>
   getPassword: () => Promise<string>
 }
 
-export class KeyChain implements KeyChainLib {
+export class KeyChain implements KeyChainInterface {
   private username = 'JolocomSmartWallet'
-  private nativeLib : any = Keychain
+  private nativeLib = Keychain
 
   async savePassword(password: string) : Promise<void> {
     await this.nativeLib.setGenericPassword(this.username, password)
