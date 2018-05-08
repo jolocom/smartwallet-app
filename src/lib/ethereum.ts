@@ -1,7 +1,17 @@
 const wif = require('wif')
 const wallet = require('ethereumjs-wallet')
 
-export class EthereumLib  {
+interface DecodedWif {
+  privateKey: string
+  address: string 
+}
+
+export interface EthereumLibInterface {
+  requestEther: (address: string) => Promise<Response>
+  wifToEthereumKey: (wifEncodedKey: string) => DecodedWif
+}
+
+export class EthereumLib implements EthereumLibInterface  {
   private fuelingEndpoint: string
 
   constructor(fuelingEndpoint: string) {
@@ -18,7 +28,7 @@ export class EthereumLib  {
     })
   }
 
-  wifToEthereumKey(wifEncodedKey: string) : any {
+  wifToEthereumKey(wifEncodedKey: string) : DecodedWif {
     const { privateKey } = wif.decode(wifEncodedKey)
     const w = wallet.fromPrivateKey(privateKey)
 

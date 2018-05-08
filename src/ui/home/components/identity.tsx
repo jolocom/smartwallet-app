@@ -5,7 +5,7 @@ import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 
-
+// TODO Type for E, Event is not enough
 interface Props {
   scanning: boolean,
   userName: string,
@@ -15,7 +15,7 @@ interface Props {
   onPhoneNumberChange: (input: string) => void
   onEmailAddressChange: (input: string) => void
   onScannerStart: () => void
-  onScannerSuccess: (e : any) => void
+  onScannerSuccess: (e : Event) => void
   onScannerCancel: () => void
 }
 

@@ -5,14 +5,13 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
 const QRScanner = require('react-native-qrcode-scanner').default
 
+// TODO Typings on E, Event is not enough
 interface Props {
-  onScannerSuccess: (e : any) => void
+  onScannerSuccess: (e : Event) => void
   onScannerCancel: () => void
 }
 
-interface State {
-  listener: any
-}
+interface State {}
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -20,25 +19,15 @@ const styles = StyleSheet.create({
   }
 })
 
+// TODO The Listener is never removed it seems
 export class QRcodeScanner extends React.Component<Props, State> {
-  state = {
-    listener: null
-  }
-
   componentDidMount() {
-    if (Platform.OS === "android" && !this.state.listener) {
-      this.setState({
-        listener: BackHandler.addEventListener('hardwareBackPress', () => {
-          this.props.onScannerCancel()
-        })
+    if (Platform.OS === "android") {
+      // TODO Return true?
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        this.props.onScannerCancel()
       })
     }
-  }
-
-  componentWillUnmount() {
-    this.setState({
-      listener: null
-    })
   }
 
   render() {
@@ -46,7 +35,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
     return (
       <Container>
         <QRScanner
-          onRead={(e : any) => onScannerSuccess(e) }
+          onRead={(e : Event) => onScannerSuccess(e) }
           topContent={
             <Text>You can scan the qr code now!</Text>
           }
