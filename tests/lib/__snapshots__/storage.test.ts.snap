@@ -120,7 +120,7 @@ Array [
       "transaction": [MockFunction],
     },
     Object {
-      "text": "CREATE TABLE IF NOT EXISTS Personas (did VARCHAR(75) PRIMARY KEY, controllingKey VARCHAR(110) NOT NULL UNIQUE, FOREIGN KEY(controllingKey) REFERENCES Keys(encryptedWif) )",
+      "text": "CREATE TABLE IF NOT EXISTS Personas (did VARCHAR(75) PRIMARY KEY NOT NULL, controllingKey VARCHAR(110) NOT NULL UNIQUE, FOREIGN KEY(controllingKey) REFERENCES Keys(encryptedWif) )",
     },
   ],
   Array [
@@ -128,7 +128,7 @@ Array [
       "transaction": [MockFunction],
     },
     Object {
-      "text": "CREATE TABLE IF NOT EXISTS Keys (encryptedWif VARCHAR(110) PRIMARY KEY, path TEXT NOT NULL, entropySource VARCHAR(100) NOT NULL, keyType TEXT NOT NULL, FOREIGN KEY(entropySource) REFERENCES MasterKeys(encryptedEntropy) )",
+      "text": "CREATE TABLE IF NOT EXISTS Keys (encryptedWif VARCHAR(110) PRIMARY KEY NOT NULL, path TEXT NOT NULL, entropySource VARCHAR(100) NOT NULL, keyType TEXT NOT NULL, FOREIGN KEY(entropySource) REFERENCES MasterKeys(encryptedEntropy) )",
     },
   ],
   Array [
@@ -136,7 +136,31 @@ Array [
       "transaction": [MockFunction],
     },
     Object {
-      "text": "CREATE TABLE IF NOT EXISTS MasterKeys (encryptedEntropy VARCHAR(100) PRIMARY KEY, timestamp DATE NOT NULL)",
+      "text": "CREATE TABLE IF NOT EXISTS MasterKeys (encryptedEntropy VARCHAR(100) PRIMARY KEY NOT NULL, timestamp INTEGER NOT NULL)",
+    },
+  ],
+  Array [
+    Object {
+      "transaction": [MockFunction],
+    },
+    Object {
+      "text": "CREATE TABLE IF NOT EXISTS Claims (credentialId VARCHAR(50) NOT NULL, propertyName VARCHAR(50) NOT NULL, encryptedValue TEXT NOT NULL, PRIMARY KEY (credentialId, propertyName)  , UNIQUE (credentialId, propertyName)  , FOREIGN KEY(credentialId) REFERENCES VerifiableCredentials(id) )",
+    },
+  ],
+  Array [
+    Object {
+      "transaction": [MockFunction],
+    },
+    Object {
+      "text": "CREATE TABLE IF NOT EXISTS VerifiableCredentials (context TEXT NOT NULL, id VARCHAR(50) PRIMARY KEY NOT NULL, type TEXT NOT NULL, name VARCHAR(20) NOT NULL, issuer VARCHAR(75) NOT NULL, issued INTEGER NOT NULL, expiry INTEGER , subject VARCHAR(75) NOT NULL, FOREIGN KEY(subject) REFERENCES Personas(did) )",
+    },
+  ],
+  Array [
+    Object {
+      "transaction": [MockFunction],
+    },
+    Object {
+      "text": "CREATE TABLE IF NOT EXISTS Signatures (signatureType VARCHAR(20) NOT NULL, signatures TEXT NOT NULL, credentialId VARCHAR(50) PRIMARY KEY NOT NULL, FOREIGN KEY(credentialId) REFERENCES VerifiableCredentials(id) )",
     },
   ],
 ]
