@@ -1,5 +1,7 @@
 import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
+import { BackendMiddleware } from 'src/backendMiddleware'
+import { routeList } from 'src/routeList'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -9,29 +11,32 @@ export const setLoadingMsg = (loadingMsg: string) => {
 }
 
 export const savePassword = (password : string) => {
-  return async (dispatch : Dispatch<AnyAction>, getState: any, backendMiddleware : any) =>  {
-    await backendMiddleware.keyChainLib.savePassword(password)
-    dispatch(navigationActions.navigate({ routeName: 'Entropy' }))
+  return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) =>  {
+    try {
+      await backendMiddleware.keyChainLib.savePassword(password)
+      dispatch(navigationActions.navigate({ routeName: routeList.Entropy }))
+    } catch (err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
   }
 }
 
 export const submitEntropy = (encodedEntropy: string) => {
   return (dispatch : Dispatch<AnyAction>) => {
     dispatch(navigationActions.navigate({
-      routeName: 'Loading',
+      routeName: routeList.Loading,
       params: { encodedEntropy }
     }))
   } 
 }
 
-// TODO ENUM FOR NAVIGATION
 export const startRegistration = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: any, backendMiddleware : any) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { storageLib }  = backendMiddleware
     try {
       await storageLib.provisionTables()
       dispatch(navigationActions.navigate({
-        routeName: 'PasswordEntry'
+        routeName: routeList.PasswordEntry
       }))
     } catch(err) {
       dispatch(genericActions.showErrorScreen(err))
@@ -40,7 +45,7 @@ export const startRegistration = () => {
 }
 
 export const createIdentity = (encodedEntropy: string) => {
-  return async (dispatch : Dispatch<AnyAction>, getState: any, backendMiddleware : any) => {
+  return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
     try {
       const {
@@ -53,9 +58,9 @@ export const createIdentity = (encodedEntropy: string) => {
       dispatch(setLoadingMsg('Encrypting and storing data locally'))
 
       const password = await keyChainLib.getPassword()
-      const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password }).toString()
-      const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password }).toString()
-      const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password }).toString()
+      const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
+      const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
+      const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password })
 
       await storageLib.addMasterKey(encEntropy)
       await storageLib.addDerivedKey({
@@ -73,7 +78,7 @@ export const createIdentity = (encodedEntropy: string) => {
       })
 
       await storageLib.addPersona({
-        did: didDocument.id,
+        did: didDocument.getDID(),
         controllingKey: encGenWif
       })
 
@@ -91,12 +96,12 @@ export const createIdentity = (encodedEntropy: string) => {
       dispatch(setLoadingMsg('Registering identity on Ethereum'))
       await jolocomLib.identity.register({
         ethereumKey: Buffer.from(ethPrivKey, 'hex'),
-        did: didDocument.id,
+        did: didDocument.getDID(),
         ipfsHash
       })
 
       dispatch(navigationActions.navigate({
-        routeName: 'SeedPhrase',
+        routeName: routeList.SeedPhrase,
         params: { mnemonic }
       }))
     } catch (error) {

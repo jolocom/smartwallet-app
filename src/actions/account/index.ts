@@ -1,5 +1,7 @@
 import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
+import { BackendMiddleware } from 'src/backendMiddleware'
+import { routeList } from 'src/routeList'
 
 export const setDid = (did: string) => {
   return {
@@ -9,9 +11,8 @@ export const setDid = (did: string) => {
 }
 
 // TODO Abstract parsing of error messages
-// TODO Type backend middleware
 export const checkIdentityExists = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: any, backendMiddleware : any) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { storageLib } = backendMiddleware
 
     try {
@@ -22,7 +23,7 @@ export const checkIdentityExists = () => {
 
       dispatch(setDid(personas[0].did))
       dispatch(navigationActions.navigate({
-        routeName: 'Identity' 
+        routeName: routeList.Identity 
       }))
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
