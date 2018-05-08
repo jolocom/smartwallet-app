@@ -4,10 +4,10 @@ import { Location, ResultSet, ResultSetRowList, Transaction, SQLiteDatabase } fr
 
 export interface StorageInterface {
   provisionTables: () => Promise<void>
-  addPersona: (args: PersonaOptions) => Promise<void>
+  addPersona: (args: PersonaAttributes) => Promise<void>
   addMasterKey: (entropy: string) => Promise<void>
-  addDerivedKey: (args: DerivedKeyOptions) => Promise<void>
-  getPersonas: () => Promise<PersonaOptions[]> 
+  addDerivedKey: (args: DerivedKeyAttributes) => Promise<void>
+  getPersonas: () => Promise<PersonaAttributes[]> 
 }
 
 export class Storage implements StorageInterface {
