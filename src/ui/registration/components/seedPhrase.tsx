@@ -30,11 +30,6 @@ const styles = StyleSheet.create({
 })
 
 const muiStyles = {
-  button: {
-    container: {
-      backgroundColor: JolocomTheme.palette.primaryColor
-    },
-  },
   checkbox: {
     label: {
       marginLeft: -5,
@@ -93,7 +88,6 @@ export const SeedPhrase : React.SFC<Props> = props => {
       </Block>
       <Block flex={ 0.1 }>
         <Button
-          style={ props.checked ? muiStyles.button : {} }
           disabled={ !props.checked }
           raised
           primary

@@ -116,7 +116,7 @@ exports[`landing component matches the snapshot on render 1`] = `
           },
           Array [
             Object {
-              "backgroundColor": "#9ba0aa",
+              "backgroundColor": "#545454",
             },
           ],
         ]

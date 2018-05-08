@@ -17,10 +17,10 @@ export const HomeRoutes = TabNavigator(
         tabBarLabel: 'My identity',
         headerTitle: 'Jolocom ID Wallet',
         headerTitleStyle: {
-          fontSize: JolocomTheme.headerFontSize
+          fontSize: JolocomTheme.textStyles.dark.appHeader.fontSize
         },
-        headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-        headerTintColor: JolocomTheme.primaryColorWhite
+        headerStyle: { backgroundColor: JolocomTheme.palette.primaryColorBlack },
+        headerTintColor: JolocomTheme.palette.primaryColorWhite
       }
     },
     Interactions: {
@@ -29,27 +29,29 @@ export const HomeRoutes = TabNavigator(
         tabBarLabel: 'Data history',
         headerTitle: 'Jolocom ID Wallet',
         headerTitleStyle: {
-          fontSize: JolocomTheme.headerFontSize
+          fontSize: JolocomTheme.textStyles.dark.appHeader.fontSize
         },
-        headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-        headerTintColor: JolocomTheme.primaryColorWhite
+        headerStyle: {
+          backgroundColor: JolocomTheme.palette.primaryColorBlack,
+        },
+        headerTintColor: JolocomTheme.palette.primaryColorWhite
       }
     }
   },
   {
     tabBarOptions: {
       upperCaseLabel: false,
-      activeTintColor: JolocomTheme.primaryColorSand, 
-      inactiveTintColor: JolocomTheme.primaryColorGrey,
+      activeTintColor: JolocomTheme.palette.primaryColorSand,
+      inactiveTintColor: JolocomTheme.palette.primaryColorGrey,
       labelStyle: {
-        fontSize: JolocomTheme.labelFontSize,
-        textAlign: 'center' 
+        fontSize: JolocomTheme.textStyles.dark.appHeader.fontSize,
+        textAlign: 'center'
       },
       style: {
-        backgroundColor: JolocomTheme.primaryColorBlack
+        backgroundColor: JolocomTheme.palette.primaryColorBlack
       },
       indicatorStyle: {
-        backgroundColor: JolocomTheme.primaryColorSand
+        backgroundColor: JolocomTheme.palette.primaryColorSand
       }
     },
     tabBarComponent: TabBarTop,
