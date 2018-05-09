@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import { registrationActions } from 'src/actions'
 import { RootState } from 'src/reducers/'
 import { Container, CenteredText } from 'src/ui/structure/'
+const loaders = require('react-native-indicator')
 
 export interface ConnectProps {
   loadingMsg: string,
@@ -26,7 +26,7 @@ export class LoadingContainer extends React.Component<Props, State> {
   render() {
     return (
       <Container>
-        <ActivityIndicator size='large' color="#00ff00" />
+        <loaders.RippleLoader color="#00ff00" />
         <CenteredText msg={this.props.loadingMsg} />
       </Container>
     )
