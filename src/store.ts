@@ -4,6 +4,8 @@ import { IConfig } from 'jolocom-lib'
 import { rootReducer, RootState } from './reducers'
 import { BackendMiddleware } from './backendMiddleware'
 import { IpfsLib } from 'src/lib/ipfs'
+import * as Entities from 'src/lib/storage/entities'
+
 const { createReactNavigationReduxMiddleware } = require('react-navigation-redux-helpers')
 
 createReactNavigationReduxMiddleware('root', (state : RootState) => state.navigation)
@@ -21,9 +23,18 @@ const jolocomLibConfig: IConfig = {
   IpfsConnector: new IpfsLib()
 }
 
+// TODO Break apart
 const config = {
   jolocomLibConfig,
-  fuelingEndpoint: 'https://faucet.jolocom.com/request'
+  fuelingEndpoint: 'https://faucet.jolocom.com/request',
+  typeOrmConfig: {
+    type: 'react-native',
+      database: 'LocalSmartWalletData',
+      location: 'default',
+      logging: ['error', 'query', 'schema'],
+      synchronize: true,
+      entities: Object.values(Entities)
+  }
 }
 
 const backendMiddleware = new BackendMiddleware(config)

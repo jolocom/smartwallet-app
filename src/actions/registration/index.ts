@@ -32,16 +32,10 @@ export const submitEntropy = (encodedEntropy: string) => {
 }
 
 export const startRegistration = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    const { storageLib }  = backendMiddleware
-    try {
-      await storageLib.provisionTables()
-      dispatch(navigationActions.navigate({
-        routeName: routeList.Entropy
-      }))
-    } catch(err) {
-      dispatch(genericActions.showErrorScreen(err))
-    }
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(navigationActions.navigate({
+      routeName: routeList.PasswordEntry
+    }))
   }
 }
 
@@ -63,25 +57,32 @@ export const createIdentity = (encodedEntropy: string) => {
       const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
       const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password })
 
-      await storageLib.addMasterKey(encEntropy)
-      await storageLib.addDerivedKey({
+      const masterKeyData = {
+        encryptedEntropy: encEntropy,
+        timestamp: Date.now()
+      }
+
+      const genericSigningKeyData = {
         encryptedWif: encGenWif,
         path: genericSigningKey.path,
-        entropySource: encEntropy,
-        keyType: genericSigningKey.keyType
-      })
+        keyType: genericSigningKey.keyType,
+        entropySource: masterKeyData
+      }
 
-      await storageLib.addDerivedKey({
+      const ethereumKeyData = {
         encryptedWif: encEthWif,
         path: ethereumKey.path,
-        entropySource: encEntropy,
-        keyType: ethereumKey.keyType
-      })
+        keyType: ethereumKey.keyType,
+        entropySource: masterKeyData
+      }
 
-      await storageLib.addPersona({
+      const personaData = {
         did: didDocument.getDID(),
-        controllingKey: encGenWif
-      })
+        controllingKey: genericSigningKeyData
+      }
+
+      await storageLib.storePersonaFromJSON(personaData)
+      await storageLib.storeDerKeyFromJSON(ethereumKeyData)
 
       const {
         privateKey: ethPrivKey,

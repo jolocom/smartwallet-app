@@ -11,13 +11,6 @@ export interface TableOptions {
   fields: Field[]
 }
 
-export interface DerivedKeyAttributes {
-  encryptedWif: string
-  path: string
-  entropySource: string
-  keyType: string
-}
-
 export interface PersonaAttributes {
   did: string
   controllingKey: string
@@ -231,6 +224,87 @@ export const dbHelper = {
       .toParam()
   },
 
+  // TODO START WILD WEST
+  // TODO Should this take a claim object?
+  addVerifiableClaimQuery: (args: any) => {
+    const testClaim = {
+      "@context": [
+        "https://w3id.org/identity/v1",
+        "https://w3id.org/security/v1"
+      ],
+      "id": "http://example.gov/credentials/3732",
+      "type": ["Credential", "PassportCredential"],
+      "name": "Passport",
+      "issuer": "https://example.gov",
+      "issued": "2010-01-01",
+      "claim": {
+        "id": "did:example:ebfeb1f712ebc6f1c276e12ec21",
+        "name": "Alice Bobman",
+        "birthDate": "1985-12-14",
+        "gender": "female",
+        "nationality": {
+          "name": "United States"
+        },
+        "address": {
+          "type": "PostalAddress",
+          "addressStreet": "372 Sumter Lane",
+          "addressLocality": "Blackrock",
+          "addressRegion": "Nevada",
+          "postalCode": "23784",
+          "addressCountry": "US"
+        },
+        "passport": {
+          "type": "Passport",
+          "name": "United States Passport",
+          "documentId": "123-45-6789",
+          "issuer": "https://example.gov",
+          "issued": "2010-01-07T01:02:03Z",
+          "expires": "2020-01-07T01:02:03Z"
+        }
+      },
+      "signature": {
+        "type": "LinkedDataSignature2015",
+        "created": "2016-06-21T03:40:19Z",
+        "creator": "https://example.com/jdoe/keys/1",
+        "domain": "json-ld.org",
+        "nonce": "783b4dfa",
+        "signatureValue": "Rxj7Kb/tDbGHFAs6ddHjVLsHDiNyYzxs2MPmNG8G47oS06N8i0Dis5mUePIzII4+p/ewcOTjvH7aJxnKEePCO9IrlqaHnO1TfmTut2rvXxE5JNzur0qoNq2yXl+TqUWmDXoHZF+jQ7gCsmYqTWhhsG5ufo9oyqDMzPoCb9ibsNk="
+      }
+    }
+
+    const signature = dbHelper.extractSignature(testClaim)
+    const claim = dbHelper.extractClaim(testClaim)
+    console.log(claim)
+    console.log(signature)
+  },
+
+  // TODO FILTER
+  extractClaim: (claim) => {
+    return {
+      id: claim.claim.id,
+      claims: claim.claim
+    }
+  },
+
+  extractSignature: (claim) => {
+    const result = {
+      type: '',
+      signature: ''
+    }
+
+    const supportedKeys = ['signature', 'signatureChain']
+    supportedKeys.some(k => {
+      if (claim[k]) {
+        result.type = k
+        result.signature = claim[k]
+      }
+      return true
+    })
+
+    return result
+  },
+
+  // TODO END WILD WEST
   getPersonasQuery: () : AssembledQuery => {
     return squel.select()
       .from('Personas')

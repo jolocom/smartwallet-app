@@ -1,0 +1,6 @@
+export { ClaimEntity } from './claimEntity'
+export { DerivedKeyEntity } from './derivedKeyEntity'
+export { MasterKeyEntity } from './masterKeyEntity'
+export { PersonaEntity } from './personaEntity'
+export { SignatureEntity } from './signatureEntity'
+export { VerifiableCredentialEntity } from './verifiableCredentialEntity'
