@@ -15,6 +15,9 @@ export const checkIdentityExists = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { storageLib } = backendMiddleware
 
+    storageLib.getPersonas()
+
+    /*
     try {
       const personas = await storageLib.getPersonas()
       if (!personas.length) {
@@ -32,5 +35,6 @@ export const checkIdentityExists = () => {
 
       dispatch(genericActions.showErrorScreen(err))
     }
+    */
   }
 }
