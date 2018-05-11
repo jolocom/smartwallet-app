@@ -28,5 +28,3 @@ export class VerifiableCredentialEntity {
   @JoinColumn({ name: 'subject' })
   subject!: PersonaEntity
 }
-
-
