@@ -1,14 +1,11 @@
 import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
 import { IConfig } from 'jolocom-lib'
+import thunk from 'redux-thunk'
 import { rootReducer, RootState } from './reducers'
 import { BackendMiddleware } from './backendMiddleware'
 import { IpfsLib } from 'src/lib/ipfs'
 import * as Entities from 'src/lib/storage/entities'
-
 const { createReactNavigationReduxMiddleware } = require('react-navigation-redux-helpers')
-
-createReactNavigationReduxMiddleware('root', (state : RootState) => state.navigation)
 
 const jolocomLibConfig: IConfig = {
   identity: {
@@ -37,8 +34,8 @@ const config = {
   }
 }
 
+createReactNavigationReduxMiddleware('root', (state : RootState) => state.navigation)
 const backendMiddleware = new BackendMiddleware(config)
-
 
 export const store = createStore(
   rootReducer,
