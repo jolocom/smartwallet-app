@@ -1,41 +1,47 @@
 import React from 'react'
-import { IdentityComponent } from 'src/ui/home/components/identity'
+import { ClaimOverviewComponent } from 'src/ui/home/components/claimOverview'
+import { ClaimDetails } from 'src/ui/home/components/claimDetails'
+import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
 import { RootState } from 'src/reducers/'
+import { View } from 'react-native'
 
-interface ConnectProps { }
+interface ConnectProps {
+}
 
 interface Props extends ConnectProps {}
 
 interface State {
-  userName: string,
-  phoneNumber: string,
-  emailAddress: string,
-  scanning: boolean
+  scanning: boolean,
+  showClaimDetails: boolean
+  typeClaimDetails: string
 }
 
 export class IdentityContainer extends React.Component<Props, State> {
 
   state = {
-    userName: '',
-    phoneNumber: '',
-    emailAddress: '',
-    scanning: false
+    scanning: false,
+    showClaimDetails: false,
+    typeClaimDetails: ''
   }
 
-  private onUserNameChange= (userName: string) : void => {
-    this.setState({ userName })
+  private openClaimDetails = (selectedType : string) : void => {
+    this.setState({
+      typeClaimDetails: selectedType
+    })
+    this.toggleClaimDetails()
   }
 
-  private onPhoneNumberChange= (phoneNumber: string) : void => {
-    this.setState({ phoneNumber })
+
+  private toggleClaimDetails = () : void => {
+    this.setState({
+      showClaimDetails: !this.state.showClaimDetails
+    })
   }
 
-  private onEmailAddressChange= (emailAddress: string) : void => {
-    this.setState({ emailAddress })
-  }
 
+// TODO: do I really need 3 func?
   private onScannerStart = () : void => {
     this.setState({ scanning: true })
   }
@@ -49,20 +55,38 @@ export class IdentityContainer extends React.Component<Props, State> {
     this.setState({ scanning: false })
   }
 
+
   render() {
+    let renderContent
+    if (this.state.scanning) {
+      renderContent = (
+        <QRcodeScanner
+          onScannerSuccess={this.onScannerSuccess}
+          onScannerCancel={this.onScannerCancel}
+        />
+      )
+    } else if (this.state.showClaimDetails) {
+      renderContent = (
+        <ClaimDetails
+          typeClaimDetails={ this.state.typeClaimDetails }
+          toggleClaimDetails={ this.toggleClaimDetails }
+        />
+      )
+    } else {
+      renderContent = (
+        <ClaimOverviewComponent
+          claims={[{claimType: 'name'}, {claimType: 'email'}]}
+          openClaimDetails={ this.openClaimDetails }
+          scanning={ this.state.scanning }
+          onScannerStart={ this.onScannerStart }
+         />
+      )
+    }
+
     return (
-    <IdentityComponent
-      scanning={ this.state.scanning }
-      userName= {this.state.userName}
-      phoneNumber= { this.state.phoneNumber }
-      emailAddress= { this.state.emailAddress }
-      onUserNameChange= { this.onUserNameChange }
-      onPhoneNumberChange= { this.onPhoneNumberChange }
-      onEmailAddressChange= { this.onEmailAddressChange }
-      onScannerStart={ this.onScannerStart }
-      onScannerSuccess={ this.onScannerSuccess }
-      onScannerCancel={ this.onScannerCancel }
-     />
+      <View>
+        { renderContent }
+      </View>
     )
   }
 }
