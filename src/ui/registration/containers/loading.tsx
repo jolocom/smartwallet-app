@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { registrationActions } from 'src/actions'
+import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
@@ -21,19 +22,40 @@ export interface State {
 }
 
 const styles = StyleSheet.create({
-  block: {
-    marginBottom: "15%"
+  label: {
+    alignSelf: 'flex-start',
+    marginBottom: '10%'
+  },
+  loadingMsg: {
+    alignSelf: 'flex-end',
+    marginBottom: '-10%'
   },
   container: {
     backgroundColor: JolocomTheme.palette.primaryColorBlack,
+    height: '100%'
+  },
+  dotsContainer: {
     alignItems: 'center',
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  dotActive: {
+    marginRight: 5,
+    marginLeft: 5,
+    color: '#FB6B75' //TODO: add a glow
+  },
+  dotInactive: {
+    marginRight: 5,
+    marginLeft: 5,
+    color: JolocomTheme.palette.textColor_silverGrey
   },
   text: {
     color: JolocomTheme.palette.primaryTextColorSand,
-    fontSize: 20
+    fontSize: 20,
+  },
+  smallText: {
+    color: JolocomTheme.palette.primaryTextColorSand,
+    fontSize: 14
   }
 })
 
@@ -46,15 +68,23 @@ export class LoadingContainer extends React.Component<Props, State> {
   render() {
     return (
       <Container style={styles.container} >
-        <Block>
-          <CenteredText style={styles.text} msg={"Give us a few moments to set up your identity"} />
-        </Block>
-          <loaders.RippleLoader size={100} strokeWidth={5} color={JolocomTheme.palette.spinnerColor} />
-        <Block>
-          <Icon name='circle' color={JolocomTheme.palette.primaryTextColorSand} />
+        <Block style={styles.label} >
+          <CenteredText style={styles.text} msg={"Give us a few moments"} />
+          <CenteredText style={styles.text} msg={"to set up your identity"} />
         </Block>
         <Block>
-          <CenteredText style={styles.text} msg={this.props.loadingMsg} />
+          <loaders.RippleLoader size={80} strokeWidth={4} color={JolocomTheme.palette.spinnerColor} />
+        </Block>
+        <Block style={styles.loadingMsg}>
+          <View style={styles.dotsContainer}>
+            {[0,1,2,3].map((prop, key) => {
+              var stageNumber = loading.loadingStages.indexOf(this.props.loadingMsg)
+              return <Icon name='circle' style={prop <= stageNumber ? styles.dotActive : styles.dotInactive} />
+            })}
+          </View>
+          <View>
+            <CenteredText style={styles.smallText} msg={this.props.loadingMsg} />
+          </View>
         </Block>
       </Container>
     )

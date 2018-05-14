@@ -2,6 +2,7 @@ import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
+import * as loading from 'src/actions/registration/loadingStages'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -46,18 +47,17 @@ export const startRegistration = () => {
 
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-   // const { jolocomLib} = backendMiddleware
-    //const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
-    //try {
-     /* const {
+    const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
+    try {
+      const {
         didDocument,
         mnemonic,
         genericSigningKey,
         ethereumKey
       } = await jolocomLib.identity.create(encodedEntropy)
-*/
-      dispatch(setLoadingMsg('Encrypting and storing data locally'))
-/**
+
+      dispatch(setLoadingMsg(loading.loadingStages[0]))
+
       const password = await keyChainLib.getPassword()
       const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
       const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
@@ -87,29 +87,28 @@ export const createIdentity = (encodedEntropy: string) => {
         privateKey: ethPrivKey,
         address: ethAddr
       } = ethereumLib.wifToEthereumKey(ethereumKey.wif)
-*/
-      dispatch(setLoadingMsg('Storing data on IPFS'))
-      //const ipfsHash = await jolocomLib.identity.store(didDocument)
 
-      dispatch(setLoadingMsg('Fueling with Ether'))
-      //await ethereumLib.requestEther(ethAddr)
+      dispatch(setLoadingMsg(loading.loadingStages[1]))
+      const ipfsHash = await jolocomLib.identity.store(didDocument)
+
+      dispatch(setLoadingMsg(loading.loadingStages[2]))
+      await ethereumLib.requestEther(ethAddr)
 
       dispatch(setLoadingMsg('Registering identity on Ethereum'))
-      /*
-       * await jolocomLib.identity.register({
+
+        await jolocomLib.identity.register({
         ethereumKey: Buffer.from(ethPrivKey, 'hex'),
         did: didDocument.getDID(),
         ipfsHash
       })
 
-       * dispatch(navigationActions.navigate({
+        dispatch(navigationActions.navigate({
         routeName: routeList.SeedPhrase,
         params: { mnemonic }
       }))
     } catch (error) {
       return dispatch(genericActions.showErrorScreen(error))
     }
-    */
 
   }
 }
