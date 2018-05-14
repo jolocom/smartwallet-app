@@ -36,7 +36,7 @@ export const startRegistration = () => {
     try {
       await storageLib.provisionTables()
       dispatch(navigationActions.navigate({
-        routeName: routeList.PasswordEntry
+        routeName: routeList.Entropy
       }))
     } catch(err) {
       dispatch(genericActions.showErrorScreen(err))
@@ -46,17 +46,18 @@ export const startRegistration = () => {
 
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
-    try {
-      const {
+   // const { jolocomLib} = backendMiddleware
+    //const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
+    //try {
+     /* const {
         didDocument,
         mnemonic,
         genericSigningKey,
         ethereumKey
       } = await jolocomLib.identity.create(encodedEntropy)
-
+*/
       dispatch(setLoadingMsg('Encrypting and storing data locally'))
-
+/**
       const password = await keyChainLib.getPassword()
       const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
       const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
@@ -86,27 +87,29 @@ export const createIdentity = (encodedEntropy: string) => {
         privateKey: ethPrivKey,
         address: ethAddr
       } = ethereumLib.wifToEthereumKey(ethereumKey.wif)
-
+*/
       dispatch(setLoadingMsg('Storing data on IPFS'))
-      const ipfsHash = await jolocomLib.identity.store(didDocument)
+      //const ipfsHash = await jolocomLib.identity.store(didDocument)
 
       dispatch(setLoadingMsg('Fueling with Ether'))
-      await ethereumLib.requestEther(ethAddr)
+      //await ethereumLib.requestEther(ethAddr)
 
       dispatch(setLoadingMsg('Registering identity on Ethereum'))
-      await jolocomLib.identity.register({
+      /*
+       * await jolocomLib.identity.register({
         ethereumKey: Buffer.from(ethPrivKey, 'hex'),
         did: didDocument.getDID(),
         ipfsHash
       })
 
-      dispatch(navigationActions.navigate({
+       * dispatch(navigationActions.navigate({
         routeName: routeList.SeedPhrase,
         params: { mnemonic }
       }))
     } catch (error) {
       return dispatch(genericActions.showErrorScreen(error))
     }
+    */
 
   }
 }
