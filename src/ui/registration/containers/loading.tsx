@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { registrationActions } from 'src/actions'
 import { RootState } from 'src/reducers/'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
@@ -29,8 +30,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    color: JolocomTheme.palette.primaryTextColorSand,
   },
+  text: {
+    color: JolocomTheme.palette.primaryTextColorSand,
+    fontSize: 20
+  }
 })
 
 export class LoadingContainer extends React.Component<Props, State> {
@@ -43,11 +47,14 @@ export class LoadingContainer extends React.Component<Props, State> {
     return (
       <Container style={styles.container} >
         <Block>
-          <CenteredText msg={"Give us a few moments to set up your identity"} />
+          <CenteredText style={styles.text} msg={"Give us a few moments to set up your identity"} />
         </Block>
-        <loaders.RippleLoader size={100} strokeWidth={5} color={JolocomTheme.palette.spinnerColor} />
+          <loaders.RippleLoader size={100} strokeWidth={5} color={JolocomTheme.palette.spinnerColor} />
         <Block>
-        <CenteredText msg={this.props.loadingMsg} />
+          <Icon name='circle' color={JolocomTheme.palette.primaryTextColorSand} />
+        </Block>
+        <Block>
+          <CenteredText style={styles.text} msg={this.props.loadingMsg} />
         </Block>
       </Container>
     )
