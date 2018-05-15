@@ -40,9 +40,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   dotActive: {
-    marginRight: 5,
-    marginLeft: 5,
-    color: '#FB6B75' //TODO: add a glow
+    marginRight: 8,
+    marginLeft: 8,
+    color: JolocomTheme.palette.primaryTextColorSand //TODO: add a glow
   },
   dotInactive: {
     marginRight: 5,
@@ -79,7 +79,7 @@ export class LoadingContainer extends React.Component<Props, State> {
           <View style={styles.dotsContainer}>
             {[0,1,2,3].map((prop, key) => {
               var stageNumber = loading.loadingStages.indexOf(this.props.loadingMsg)
-              return <Icon name='circle' style={prop <= stageNumber ? styles.dotActive : styles.dotInactive} />
+              return <Icon name='circle' size={prop <= stageNumber ? 15 : 10} style={prop <= stageNumber ? styles.dotActive : styles.dotInactive} />
             })}
           </View>
           <View>
