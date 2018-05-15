@@ -1,5 +1,5 @@
 import { StackNavigator, TabNavigator, TabBarTop} from 'react-navigation'
-import { Identity, Interactions } from 'src/ui/home/'
+import { Claims, Interactions } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
@@ -12,7 +12,7 @@ const navigationOptions = {
 export const HomeRoutes = TabNavigator(
   {
     Identity: {
-      screen: Identity,
+      screen: Claims,
       navigationOptions: {
         tabBarLabel: 'My identity',
         headerTitle: 'Jolocom ID Wallet',

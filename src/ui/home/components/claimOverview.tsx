@@ -1,9 +1,10 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { ReactNode } from 'react'
 
 // TODO: adjust to actual structure
 interface Claim {
@@ -18,16 +19,23 @@ interface Props {
   openClaimDetails: (selectedType : string) => void
 }
 
+interface State {
+  orderedClaims: {
+    [key: string] : Claim[]
+  }
+}
 
-// TODO Magic numbers
+interface IIconMap {
+  [key: string]: string
+}
+
+const iconMap : IIconMap = {
+  name: 'person',
+  email: 'camera',
+  phone: 'camera'
+}
+
 const styles = StyleSheet.create({
-  textInputField: {
-    flex: 1,
-    width: '80%'
-  },
-  block: {
-    marginBottom: "15%"
-  },
   icon: {
     margin: "20%"
   },
@@ -49,57 +57,143 @@ const styles = StyleSheet.create({
     bottom: '5%',
     alignItems: 'flex-end'
   },
-  centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: '#777',
+  sectionHeader: {
+    fontSize: 17,
+    textAlign: 'left'
   },
-  textBold: {
-    fontWeight: '500',
-    color: '#000',
+  componentContainer: {
+    padding: 0
   },
-  buttonText: {
-    fontSize: 21,
-    color: 'rgb(0,122,255)',
+  scrollComponent: {
+    width: '100%'
   },
-  buttonTouchable: {
-    padding: 16,
+  sectionContainer: {
+    marginBottom: 8,
+    marginTop: 27,
+    marginLeft: 16,
+    marginRight: 16
   }
 })
 
+export class ClaimOverviewComponent extends React.Component<Props, State> {
 
-export const ClaimOverviewComponent : React.SFC<Props> = (props) => {
-  const renderAllClaims = props.claims.map((claim, i) => {
+  state = {
+    orderedClaims: {
+      personal: [],
+      contact: [],
+    }
+  }
+
+  componentDidMount() {
+    if (this.state.orderedClaims.personal.length === 0) {
+      let personalClaims : Claim[] = []
+      let contactClaims : Claim[] = []
+
+      this.props.claims.map((claim, i) => {
+        if (claim.claimType === 'name') {
+          personalClaims.push(claim)
+        } else if (claim.claimType === 'phone' || claim.claimType === 'email') {
+          contactClaims.push(claim)
+        }
+      })
+
+      this.setState({
+        orderedClaims: {
+          personal: personalClaims,
+          contact: contactClaims
+        }
+      })
+    }
+  }
+
+
+  private renderSection = (category: string) : ReactNode => {
+    return this.state.orderedClaims[category].map((claim: Claim, i: number) => {
+      if (claim.claimType === 'name') {
+        if (claim.claimValue === undefined) {
+          return (
+            <ClaimCard
+              key={ claim.claimType }
+              openClaimDetails={ this.props.openClaimDetails }
+              claimType={ claim.claimType }
+              icon={ iconMap[claim.claimType] }
+              firstClaimLabel={ claim.claimType }
+            />
+          )
+        } else {
+          return (
+            <ClaimCard
+              key={ claim.claimType }
+              openClaimDetails={ this.props.openClaimDetails }
+              claimType={ claim.claimType }
+              icon={ iconMap[claim.claimType] }
+              firstClaimLabel={ 'first Name' }
+              firstClaimValue={ claim.claimValue }
+              secondClaimLabel={ 'last Name '}
+              secondClaimValue={ claim.claimValue }
+              claimLines={2}
+            />
+          )
+        }
+      } else {
+        return (
+          <ClaimCard
+            key={ claim.claimType }
+            openClaimDetails={ this.props.openClaimDetails }
+            claimType={ claim.claimType }
+            icon={ iconMap[claim.claimType] }
+            firstClaimLabel={ claim.claimType }
+            firstClaimValue={ claim.claimValue }
+          />
+        )
+      }
+    })
+
+  }
+
+  render() {
     return (
-      <ClaimCard
-        key={claim.claimType}
-        openClaimDetails={props.openClaimDetails}
-        claimType={claim.claimType}
-        icon={'camera'}
-        firstClaimLabel={claim.claimType}
-      />
-    )
-  })
+      <Container style={ styles.componentContainer }>
+        <ScrollView style={ styles.scrollComponent }>
 
-  return (
-    <Container style={{padding: 0}}>
-      <Block>
-        { renderAllClaims }
+          {
+            this.state.orderedClaims.personal.length > 0 ?
+            (<View>
+              <View style={ styles.sectionContainer }>
+                <Text style={ styles.sectionHeader }>Personal / general</Text>
+              </View>
+              { this.renderSection('personal') }
+            </View>) :
+            null
+          }
+
+          {
+            this.state.orderedClaims.contact.length > 0 ?
+            <View>
+              <View style={ styles.sectionContainer }>
+                <Text style={ styles.sectionHeader }>Contact</Text>
+              </View>
+              { this.renderSection('contact') }
+            </View> :
+            null
+          }
+
+        </ScrollView>
+
         <Block style={ styles.actionButtonContainer }>
           <TouchableOpacity
             style={ styles.iconContainer }
-            onPress={ props.onScannerStart }>
+            onPress={ this.props.onScannerStart }>
             <Icon
               style={ styles.icon }
               size={ 30 }
               name="qrcode-scan"
               color="white"
             />
-        </TouchableOpacity>
-      </Block>
+          </TouchableOpacity>
+        </Block>
 
-    </Block>
-    </Container>
-  )
+      </Container>
+    )
+  }
 }
