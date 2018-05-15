@@ -6,6 +6,11 @@ module.exports = ({ platform }, { module, resolve }) => ({
     ...module,
     rules: [
       {
+        test: /\.js/,
+ 				exclude: /node_modules\/(?!(jsonld|rdf-canonize)\/).*/,
+  			loader: 'babel-loader'
+      },
+      {
         test: /\.tsx?$/,
         loader: 'babel-loader!ts-loader'
       },
