@@ -18,7 +18,7 @@ interface State {
   typeClaimDetails: string
 }
 
-export class IdentityContainer extends React.Component<Props, State> {
+export class ClaimsContainer extends React.Component<Props, State> {
 
   state = {
     scanning: false,
@@ -75,7 +75,11 @@ export class IdentityContainer extends React.Component<Props, State> {
     } else {
       renderContent = (
         <ClaimOverviewComponent
-          claims={[{claimType: 'name'}, {claimType: 'email'}]}
+          claims={[
+            {claimType: 'name'},
+            {claimType: 'email', claimValue: 'n@t.com'},
+            {claimType: 'phone', claimValue: '77-222'}
+          ]} // TODO: pass from redux
           openClaimDetails={ this.openClaimDetails }
           scanning={ this.state.scanning }
           onScannerStart={ this.onScannerStart }
@@ -101,4 +105,4 @@ const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   }
 }
 
-export const Identity = connect(mapStateToProps, mapDispatchToProps)(IdentityContainer)
+export const Claims = connect(mapStateToProps, mapDispatchToProps)(ClaimsContainer)

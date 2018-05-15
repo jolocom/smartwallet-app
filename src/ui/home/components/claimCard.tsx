@@ -1,8 +1,8 @@
 import React from 'react'
 import { ListItem } from 'react-native-material-ui'
-import { Text, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-
+import { MoreIcon } from 'src/resources'
 
 interface Props {
   openClaimDetails: (selectedType: string) => void
@@ -17,7 +17,8 @@ interface Props {
 
 const styles = StyleSheet.create({
   containerField: {
-    width: '100%'
+    width: '100%',
+    marginBottom: 1
   },
   listItemPrimaryTextContainer: {
     height: 21,
@@ -33,8 +34,8 @@ const styles = StyleSheet.create({
   },
   listItemRightElementContainer: {
     height: 24,
-    width: 24,
-    marginTop: 20,
+    width: 12,
+    marginTop: 16,
     marginRight: 16,
     marginBottom: 35
   },
@@ -54,10 +55,7 @@ export const ClaimCard : React.SFC<Props> = (props) => {
 
   if (props.firstClaimValue !== undefined ||
     claimLines === 2 && props.secondClaimValue !== undefined) {
-    // TODO: replace with icon for item menu + functionality
-    displayItemMenu = (<Text onPress={
-      () => console.log('right element pressed')
-    }>M</Text>)
+    displayItemMenu = (<MoreIcon />)
   }
 
   return(
@@ -79,7 +77,7 @@ export const ClaimCard : React.SFC<Props> = (props) => {
           rightElementContainer: styles.listItemRightElementContainer
         }}
         centerElement={{
-          primaryText: props.firstClaimLabel,
+          primaryText: stringCapitalize(props.firstClaimLabel),
           secondaryText: props.firstClaimValue === undefined ?
           '+ add' :
           props.firstClaimValue
@@ -107,7 +105,7 @@ export const ClaimCard : React.SFC<Props> = (props) => {
           }}
           centerElement={{
             primaryText: props.secondClaimLabel !== undefined ?
-              props.secondClaimLabel : 'Placeholder',
+              stringCapitalize(props.secondClaimLabel) : 'Attribute',
             secondaryText: props.secondClaimValue === undefined ?
             '+ add' :
             props.secondClaimValue
@@ -118,4 +116,8 @@ export const ClaimCard : React.SFC<Props> = (props) => {
       }
     </View>
   )
+}
+
+const stringCapitalize = (myString : string) : string => {
+  return myString[0].toUpperCase() + myString.slice(1)
 }

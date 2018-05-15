@@ -90,6 +90,10 @@ const textStyles = {
     textDisplayField: {
       fontSize: 22,
       color: palette.primaryColorBlack
+    },
+    subheader: {
+      fontSize: 30,
+      color: palette.primaryColorBlack
     }
   },
   // old styles TODO: remove when finished with refactor ui

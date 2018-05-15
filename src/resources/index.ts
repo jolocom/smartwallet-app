@@ -5,3 +5,4 @@ export const Onboarding03 = require('src/resources/svg/Onboarding03').default
 export const Onboarding04 = require('src/resources/svg/Onboarding04').default
 export const Onboarding05 = require('src/resources/svg/Onboarding05').default
 export const Techguy = require('src/resources/svg/Techguy').default
+export const MoreIcon = require('src/resources/svg/MoreIcon').default
