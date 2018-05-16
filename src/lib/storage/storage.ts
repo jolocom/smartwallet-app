@@ -1,6 +1,15 @@
 import { createConnection, ConnectionOptions, Connection } from 'typeorm/browser'
-import { PersonaEntity, DerivedKeyEntity, MasterKeyEntity } from 'src/lib/storage/entities'
 import { plainToClass } from 'class-transformer'
+import { 
+  PersonaEntity,
+  DerivedKeyEntity,
+  MasterKeyEntity,
+  VerifiableCredentialEntity,
+  SignatureEntity,
+  CredentialEntity
+} from 'src/lib/storage/entities'
+import { IVerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential/types'
+import { IClaim } from 'jolocom-lib/js/credentials/credential/types'
 
 interface PersonaAttributes {
   did: string
@@ -23,42 +32,87 @@ export class Storage {
   private connection!: Connection
   private config: ConnectionOptions
 
+  store = {
+    verifiableCredential: this.storeVClaimFromJSON.bind(this),
+    persona: this.storePersonaFromJSON.bind(this),
+    masterKey: this.storeMasterKeyFromJSON.bind(this),
+    derivedKey: this.storeDerKeyFromJSON.bind(this)
+  }
+
+  get = {
+    persona: this.getPersonas.bind(this),
+    verifiableCredential: this.getVCredential.bind(this)
+  }
+
   constructor(config: ConnectionOptions) {
     this.config = config
   }
 
-  async createConnectionIfNeeded() {
-    if (this.connection) { 
-      return
+  private async createConnectionIfNeeded() : Promise<void> {
+    if (!this.connection) { 
+      this.connection = await createConnection(this.config)
     }
-
-    this.connection = await createConnection(this.config)
   }
 
-  async storePersonaFromJSON(args: PersonaAttributes) : Promise<void> {
+  private async getPersonas(query?: object) : Promise<PersonaEntity[]> {
+    await this.createConnectionIfNeeded()
+    return this.connection.manager.find(PersonaEntity, {
+      where: query,
+      relations: ['controllingKey']
+    })
+  }
+
+  private async getVCredential(query?: object) : Promise<VerifiableCredentialEntity[]>{
+    await this.createConnectionIfNeeded()
+    return this.connection.manager.find(VerifiableCredentialEntity, {
+      where: query,
+      relations: ['credentials', 'signatures']
+    })
+  }
+
+  private async storePersonaFromJSON(args: PersonaAttributes) : Promise<void> {
     await this.createConnectionIfNeeded()
     const persona = plainToClass(PersonaEntity, args)
     await this.connection.manager.save(persona)
   }
 
-  async storeMasterKeyFromJSON(args: MasterKeyAttributes) : Promise<void> {
+  private async storeMasterKeyFromJSON(args: MasterKeyAttributes) : Promise<void> {
     await this.createConnectionIfNeeded()
     const masterKey = plainToClass(MasterKeyEntity, args)
     await this.connection.manager.save(masterKey)
   }
 
-  async storeDerKeyFromJSON(args: DerivedKeyAttributes) : Promise<void> {
+  private async storeDerKeyFromJSON(args: DerivedKeyAttributes) : Promise<void> {
     await this.createConnectionIfNeeded()
     const derivedKey = plainToClass(DerivedKeyEntity, args)
     await this.connection.manager.save(derivedKey)
   }
 
-  async getPersonas() : Promise<PersonaEntity[]> {
+  private async storeVClaimFromJSON(args: IVerifiableCredential) : Promise<void> {
     await this.createConnectionIfNeeded()
-    return this.connection.manager.find(PersonaEntity)
+    const verifiableCredential = plainToClass(VerifiableCredentialEntity, args)
+    const signature = plainToClass(SignatureEntity, args.signature)
+    const credentials = this.assembleCredentials(verifiableCredential, args.claim)
+
+    signature.verifiableCredential = verifiableCredential
+
+    await this.connection.manager.save(verifiableCredential)
+    await this.connection.manager.save(signature)
+    console.log(credentials)
+    await Promise.all(credentials.map(cred => this.connection.manager.save(cred)))
   }
 
-  async addClaim() : Promise<void> {
-    await this.createConnectionIfNeeded()
+  // TODO REVIEW
+  private assembleCredentials(vCred: VerifiableCredentialEntity, args: IClaim) : CredentialEntity[] {
+    const claimNames = Object.keys(args).filter(k => k !== 'id')
+    const claims = claimNames.map(c => {
+      return {
+        verifiableCredential: vCred,
+        propertyName: c,
+        encryptedValue: args[c]
+      }
+    })
+
+    return claims.map(claim => plainToClass(CredentialEntity, claim))
   }
 }
