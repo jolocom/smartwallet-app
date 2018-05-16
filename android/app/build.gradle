@@ -148,11 +148,6 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-svg')
-    compile project(':react-native-keychain')
-    compile project(':react-native-fetch-blob')
-    compile project(':react-native-camera')
     implementation project(':react-native-svg')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-sqlite-storage')
