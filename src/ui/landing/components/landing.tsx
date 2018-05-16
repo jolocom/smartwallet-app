@@ -1,10 +1,23 @@
 import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
+<<<<<<< HEAD
 import { Button } from 'react-native-material-ui'
 import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { Landing00 } from 'src/resources'
+
+const Carousel = require('react-native-snap-carousel').default
+const Pagination = require('react-native-snap-carousel').Pagination
+=======
+import { Button } from 'react-native'
+import { Container, Block, CenteredText } from 'src/ui/structure'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { ReactNode } from 'react'
+import {
+  Landing00
+} from 'src/resources'
+>>>>>>> initial styling fixes: flexbox layout, updated color scheme
 
 const Carousel = require('react-native-snap-carousel').default
 const Pagination = require('react-native-snap-carousel').Pagination
@@ -25,6 +38,7 @@ interface Slide {
 
 const viewWidth: number = Dimensions.get('window').width
 
+<<<<<<< HEAD
 // TODO LINE HEIGHT
 // TODO No 45% margin for centereing
 const styles = StyleSheet.create({
@@ -40,6 +54,20 @@ const styles = StyleSheet.create({
     paddingRight: '10%',
     paddingLeft: '10%',
     flex: 0.6,
+=======
+const styles = StyleSheet.create({
+  mainContainerStyle: {
+    backgroundColor: JolocomTheme.primaryColorBlack,
+    justifyContent: 'space-evenly',
+    flexDirection: 'column',
+    flex: 1
+  },
+  svgContainer: {
+    flex: 3/5
+  },
+  carouselTextContainer: {
+    flex: 3/5,
+>>>>>>> initial styling fixes: flexbox layout, updated color scheme
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   activeDotStyle: {
@@ -55,6 +83,7 @@ const styles = StyleSheet.create({
   },
   header: {
     color: JolocomTheme.primaryColorSand,
+<<<<<<< HEAD
     fontFamily: JolocomTheme.contentFontFamily, 
     fontSize: JolocomTheme.landingHeaderFontSize,
     fontWeight: '100'
@@ -86,6 +115,25 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100'
+=======
+    fontSize: JolocomTheme.landingHeaderFontSize
+  },
+  subHeader: {
+    color: JolocomTheme.primaryColorSand,
+    opacity: 0.8,
+    fontSize: JolocomTheme.labelFontSize
+  },
+  paginationBlockStyle: {
+    flex: 1/5,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  buttonBlockStyle: {
+    flex: 1/10,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  buttonStyle: {
+    color: JolocomTheme.primaryColorPurple
+>>>>>>> initial styling fixes: flexbox layout, updated color scheme
   }
 })
 
@@ -97,6 +145,7 @@ const carouselInfo: Slide[] = [
   },
   {
     svgImage: <Landing00 height={'100%'} width={'100%'} />,
+<<<<<<< HEAD
     title: 'Feature 1',
     infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
   },
@@ -109,13 +158,34 @@ const carouselInfo: Slide[] = [
     svgImage: <Landing00 height={'100%'} width={'100%'} />,
     title: 'Feature 3',
     infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
+=======
+    title: '',
+    infoText: ''
+  },
+  {
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: '',
+    infoText: ''
+  },
+  {
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: '',
+    infoText: ''
+>>>>>>> initial styling fixes: flexbox layout, updated color scheme
   }
 ]
 
 export class LandingComponent extends React.Component<Props, State> {
+<<<<<<< HEAD
   state = {
     activeSlide: 0
   }
+=======
+  
+    state = {
+      activeSlide: 0
+    }
+>>>>>>> initial styling fixes: flexbox layout, updated color scheme
 
   private renderItem = ({ item } : { item : Slide }) => {
     const { svgImage, title, infoText  } = item
@@ -124,6 +194,7 @@ export class LandingComponent extends React.Component<Props, State> {
         <Block style={ styles.svgContainer }>
         {svgImage}
         </Block>
+<<<<<<< HEAD
         <Block style={ styles.carouselTextContainer } >
           <Block flex={0.4}>
             <CenteredText style= { styles.header } msg={ title } />
@@ -131,6 +202,15 @@ export class LandingComponent extends React.Component<Props, State> {
           <Block flex={0.6}>
             <CenteredText style={ styles.subHeader } msg={ infoText } />
           </Block>
+=======
+        <Block style={ styles.carouselTextContainer }>
+            <Block>   
+              <CenteredText style= { styles.header } msg={ title } />
+            </Block>
+            <Block>
+              <CenteredText style={ styles.subHeader } msg={ infoText } />
+            </Block>
+>>>>>>> initial styling fixes: flexbox layout, updated color scheme
         </Block>
       </Block>
     )
@@ -152,7 +232,11 @@ export class LandingComponent extends React.Component<Props, State> {
  
   render() {
     return (
+<<<<<<< HEAD
       <Container style={ styles.mainContainer }>
+=======
+      <Container style= { styles.mainContainerStyle }>
+>>>>>>> initial styling fixes: flexbox layout, updated color scheme
         <Block>
           <Carousel
             data={ carouselInfo }
@@ -168,6 +252,7 @@ export class LandingComponent extends React.Component<Props, State> {
             }
           />
         </Block>
+<<<<<<< HEAD
         <Block style={ styles.paginationBlock}>
           { this.renderPagination() }
         </Block>
@@ -182,6 +267,16 @@ export class LandingComponent extends React.Component<Props, State> {
             upperCase= { false }
             text='Get started'
           />
+=======
+        <Block style={ styles.paginationBlockStyle }>
+          { this.renderPagination() }
+        </Block>
+        <Block style={ styles.buttonBlockStyle }>
+          <Button
+            onPress={ this.props.handleButtonTap }
+            color= { JolocomTheme.primaryColorPurple }
+            title="Get started" />
+>>>>>>> initial styling fixes: flexbox layout, updated color scheme
         </Block>
       </Container>
     )
