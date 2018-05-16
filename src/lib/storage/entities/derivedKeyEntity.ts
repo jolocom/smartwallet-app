@@ -1,5 +1,5 @@
-import { PrimaryColumn, JoinColumn, ManyToOne, Entity, Column } from 'typeorm/browser'
-import { MasterKeyEntity } from 'src/lib/storage/entities'
+import { PrimaryColumn, ManyToOne, Entity, Column, OneToMany, JoinColumn } from 'typeorm/browser'
+import { MasterKeyEntity, PersonaEntity } from 'src/lib/storage/entities'
 import { Type } from 'class-transformer'
 
 @Entity('keys')
@@ -13,10 +13,11 @@ export class DerivedKeyEntity {
   @Column()
   keyType!: string
 
+  @OneToMany(type => PersonaEntity, persona => persona.controllingKey)
+  personas!: PersonaEntity[]
+
   @Type(() => MasterKeyEntity)
-  @ManyToOne(type => MasterKeyEntity, { cascade: true })
+  @ManyToOne(type => MasterKeyEntity, master => master.derivedKeys, { cascade: true })
   @JoinColumn({ name: 'entropySource' })
   entropySource!: MasterKeyEntity
 }
-
-

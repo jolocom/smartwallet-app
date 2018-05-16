@@ -81,8 +81,8 @@ export const createIdentity = (encodedEntropy: string) => {
         controllingKey: genericSigningKeyData
       }
 
-      await storageLib.storePersonaFromJSON(personaData)
-      await storageLib.storeDerKeyFromJSON(ethereumKeyData)
+      await storageLib.store.persona(personaData)
+      await storageLib.store.derivedKey(ethereumKeyData)
 
       const {
         privateKey: ethPrivKey,
@@ -110,6 +110,5 @@ export const createIdentity = (encodedEntropy: string) => {
     } catch (error) {
       return dispatch(genericActions.showErrorScreen(error))
     }
-
   }
 }

@@ -1,18 +1,23 @@
-import { PrimaryColumn, JoinColumn, OneToOne, Entity, Column } from 'typeorm/browser'
+import { Entity, Column, ManyToOne } from 'typeorm/browser'
 import { VerifiableCredentialEntity } from 'src/lib/storage/entities/verifiableCredentialEntity'
 
 @Entity('signatures')
 export class SignatureEntity {
-  @Column({ length: 20})
-  signatureType!: string
+  @ManyToOne(type => VerifiableCredentialEntity, {primary: true})
+  verifiableCredential!: VerifiableCredentialEntity
 
   @Column()
-  signatures!: string
+  type!: string
 
-  @PrimaryColumn()
-  @OneToOne(type => VerifiableCredentialEntity)
-  @JoinColumn({ name: 'credentialId' })
-  credentialId!: VerifiableCredentialEntity
+  @Column()
+  created!: Date
+
+  @Column()
+  creator!: string
+
+  @Column({ nullable: true })
+  nonce!: string
+
+  @Column()
+  signatureValue!: string
 }
-
-
