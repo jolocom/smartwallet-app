@@ -149,17 +149,20 @@ const textStyles = {
   }
 }
 
-const button = {
-    container: {
-      backgroundColor: palette.primaryColor,
-      borderRadius: 4,
-      margin: 0,
-      paddingLeft: 32,
-      paddingRight: 32,
-      paddingBottom: 16,
-      paddingTop: 12
-    }
-  }
+export const JolocomTheme = {
+
+  primaryColorBlack: 'black',
+  primaryColorSand: '#ffefdf',
+  primaryColorGrey: '#fafafa',
+  primaryColorWhite: 'white',
+  primaryColorPurple:'#942f51',
+
+  dotColorActive: "#ffdebc",
+  dotColorInactive: "#fffefc",
+
+  labelFontSize: 20,
+  headerFontSize: 22,
+  landingHeaderFontSize: 30,
 
 
 export const JolocomTheme = {

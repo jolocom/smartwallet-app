@@ -1,19 +1,15 @@
 import React from 'react'
-import { StyleSheet, Dimensions, TextStyle } from 'react-native'
-const Carousel = require('react-native-snap-carousel').default
-const Pagination = require('react-native-snap-carousel').Pagination
-import { Button } from 'react-native-material-ui'
+import { StyleSheet, Dimensions } from 'react-native'
+import { Button } from 'react-native'
 import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import {
-  Onboarding00,
-  Onboarding01,
-  Onboarding02,
-  Onboarding03,
-  Onboarding04,
-  Onboarding05
+  Landing00
 } from 'src/resources'
+
+const Carousel = require('react-native-snap-carousel').default
+const Pagination = require('react-native-snap-carousel').Pagination
 
 interface State {
   activeSlide: number;
@@ -29,61 +25,100 @@ interface Slide {
   infoText: string;
 }
 
+const viewWidth: number = Dimensions.get('window').width
+
+const styles = StyleSheet.create({
+  mainContainerStyle: {
+    backgroundColor: JolocomTheme.primaryColorBlack,
+    justifyContent: 'space-evenly',
+    flexDirection: 'column',
+    flex: 1
+  },
+  svgContainer: {
+    flex: 3/5
+  },
+  carouselTextContainer: {
+    flex: 3/5,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  activeDotStyle: {
+    width: 8,
+    height: 8,
+    backgroundColor: JolocomTheme.dotColorActive
+  },
+  inactiveDotStyle: {
+    width: 4,
+    height: 4,
+    opacity: 0.6,
+    backgroundColor: JolocomTheme.dotColorInactive
+  },
+  header: {
+    color: JolocomTheme.primaryColorSand,
+    fontSize: JolocomTheme.landingHeaderFontSize
+  },
+  subHeader: {
+    color: JolocomTheme.primaryColorSand,
+    opacity: 0.8,
+    fontSize: JolocomTheme.labelFontSize
+  },
+  paginationBlockStyle: {
+    flex: 1/5,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  buttonBlockStyle: {
+    flex: 1/10,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  buttonStyle: {
+    color: JolocomTheme.primaryColorPurple
+  }
+})
+
 const carouselInfo: Slide[] = [
   {
-    svgImage: <Onboarding00 height={'100%'} width={'100%'} />,
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: 'Meet Jolocom Wallet',
+    infoText: 'It will help you to take back ownership of your digital self and control the usage of your private data when signing into services.'
+  },
+  {
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
     title: '',
     infoText: ''
   },
   {
-    svgImage: <Onboarding01 height={'70%'} width={'100%'} />,
-    title: 'Create an independent and secure digital identity.',
-    infoText: 'Collect your data at a secure place. It’s yours, so only you own it!'
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: '',
+    infoText: ''
   },
   {
-    svgImage: <Onboarding02 height={'70%'} width={'100%'} />,
-    title: 'Have all your data at your fingertips.',
-    infoText: 'See all your data in one safe place. Pull the plug and your data is only yours.'
-  },
-  {
-    svgImage: <Onboarding03 height={'70%'} width={'100%'} />,
-    title: 'Be aware of the information you share.',
-    infoText: 'See what you shared with whom. Have total control over your data.'
-  },
-  {
-    svgImage: <Onboarding04 height={'70%'} width={'100%'} />,
-    title: 'Your data is as safe as in your bank account.',
-    infoText: 'We use the latest encryption technology and blockchain to store your sensitive data.'
-  },
-  {
-    svgImage: <Onboarding05 height={'70%'} width={'100%'} />,
-    title: 'Security is hard to maintain, that is why the storage costs.',
-    infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: '',
+    infoText: ''
   }
 ]
 
-
-const viewWidth: number = Dimensions.get('window').width
-
 export class LandingComponent extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-
-    this.state = {
+  
+    state = {
       activeSlide: 0
     }
-  }
 
-  private _renderItem = ({ item } : { item : Slide }) => {
+  private renderItem = ({ item } : { item : Slide }) => {
     const { svgImage, title, infoText  } = item
-    return(
-      <Container style={ this.styles.carouselContainer }>
+    return (
+      <Block>
+        <Block style={ styles.svgContainer }>
         {svgImage}
-        {title ? <Container style={ this.styles.carouselTextContainer }>
-          <CenteredText style= { this.styles.header } msg={ title } />
-          <CenteredText style={ this.styles.subHeader } msg={ infoText } />
-        </Container> : null}
-      </Container>
+        </Block>
+        <Block style={ styles.carouselTextContainer }>
+            <Block>   
+              <CenteredText style= { styles.header } msg={ title } />
+            </Block>
+            <Block>
+              <CenteredText style={ styles.subHeader } msg={ infoText } />
+            </Block>
+        </Block>
+      </Block>
     )
   }
 
@@ -93,64 +128,21 @@ export class LandingComponent extends React.Component<Props, State> {
       <Pagination
         dotsLength={ carouselInfo.length }
         activeDotIndex={ activeSlide }
-        dotStyle={ this.styles.dotStyle }
-        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: JolocomTheme.palette.backgroundDot }]] }
+        dotStyle={ styles.activeDotStyle }
+        inactiveDotStyle={ styles.inactiveDotStyle }
         inactiveDotOpacity={ 0.4 }
         inactiveDotScale={ 0.6 }
       />
     )
   }
-
-  private get styles() {
-    return StyleSheet.create({
-      carouselContainer: {
-        width: viewWidth
-      },
-      carouseSlide: {
-        flex: 1,
-        width: '100%'
-      },
-      carouselTextContainer: {
-        flex: 1,
-        justifyContent: 'space-around',
-        padding: '1%'
-      },
-      dotStyle: {
-        width: 7,
-        height: 7,
-        backgroundColor: JolocomTheme.palette.primaryColor
-      },
-      header: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: JolocomTheme.textStyles.headline.color,
-        fontSize: JolocomTheme.textStyles.headline.fontSize,
-        fontWeight: JolocomTheme.textStyles.headline.fontWeight
-      } as TextStyle,
-      subHeader: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: JolocomTheme.textStyles.subheadline.color
-      },
-      buttonContainer: {
-        backgroundColor: JolocomTheme.palette.primaryColor
-      }
-    })
-  }
-
-  // TODO This is here so we can invoke it from tests.
-  // might be replaced during integration tests.
-  private handleButtonTap = () => {
-    this.props.handleButtonTap()
-  }
-
+ 
   render() {
     return (
-      <Container>
-        <Block flex={ 0.8 }>
+      <Container style= { styles.mainContainerStyle }>
+        <Block>
           <Carousel
             data={ carouselInfo }
-            renderItem={ this._renderItem }
+            renderItem={ this.renderItem }
             lockScrollWhileSnapping
             lockScrollTimeoutDuration={1000}
             loop
@@ -162,16 +154,14 @@ export class LandingComponent extends React.Component<Props, State> {
             }
           />
         </Block>
-        <Block flex={ 0.13 }>
+        <Block style={ styles.paginationBlockStyle }>
           { this.renderPagination() }
         </Block>
-        <Block flex={ 0.07 }>
+        <Block style={ styles.buttonBlockStyle }>
           <Button
-            onPress={ this.handleButtonTap }
-            style={{ container: this.styles.buttonContainer }}
-            raised
-            primary
-            text="Create Your Identity" />
+            onPress={ this.props.handleButtonTap }
+            color= { JolocomTheme.primaryColorPurple }
+            title="Get started" />
         </Block>
       </Container>
     )
