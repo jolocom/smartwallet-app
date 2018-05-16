@@ -4,13 +4,19 @@ module.exports = ({ platform }, { module, resolve }) => ({
   entry: `./index.js`,
   module: {
     ...module,
-    rules: [
-      {
+    rules: [{
         test: /\.js/,
         exclude: /node_modules\/(?!(jsonld|rdf-canonize)\/).*/,
         loader: 'babel-loader'
-      },
-      {
+      }, {
+        test: /\.svg$/,
+        exclude: /node_modules/,
+        use: [ 'babel-inline-import-loader', 'babel-loader' ]
+      }, {
+        test: /\.xml$/,
+        exclude: /node_modules/,
+        use: [ 'babel-inline-import-loader', 'babel-loader' ]
+      }, {
         test: /\.tsx?$/,
         loader: 'babel-loader!ts-loader'
       },
