@@ -78,7 +78,7 @@ export class Storage {
     const db = await this.getDbInstance()
     const query = 'select * from Keys'
     const res = await this.executeReadQueryAlt(db, query)
-    return res.rows.raw()
+    return res.rows
   }
 
   private async createTable(options : TableOptions, db: SQLiteDatabase) : Promise<void> {
