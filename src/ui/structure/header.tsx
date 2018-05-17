@@ -14,9 +14,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     textAlign: 'center',
     justifyContent: 'center',
-    color: JolocomTheme.textStyles.headline.color,
-    fontSize: JolocomTheme.textStyles.headline.fontSize,
-    fontWeight: JolocomTheme.textStyles.headline.fontWeight,
+    color: JolocomTheme.primaryColorSand,
+    fontSize: JolocomTheme.headerFontSize,
     margin: 0
   }
 })

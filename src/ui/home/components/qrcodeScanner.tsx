@@ -16,7 +16,7 @@ interface State {
 
 const styles = StyleSheet.create({
   buttonText: {
-    color: JolocomTheme.palette.primaryColor
+    color: JolocomTheme.primaryColorBlack
   }
 })
 
