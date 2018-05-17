@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   buttonBlock: {
-    flex: 1/10,
+    flex: 1/8,
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   buttonContainer: {
@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.headerFontSize
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: JolocomTheme.headerFontSize 
   }
 })
 
@@ -103,18 +104,18 @@ const carouselInfo: Slide[] = [
   },
   {
     svgImage: <Landing00 height={'100%'} width={'100%'} />,
-    title: '',
-    infoText: ''
+    title: 'Feature 1',
+    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
   },
   {
     svgImage: <Landing00 height={'100%'} width={'100%'} />,
-    title: '',
-    infoText: ''
+    title: 'Feature 2',
+    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
   },
   {
     svgImage: <Landing00 height={'100%'} width={'100%'} />,
-    title: '',
-    infoText: ''
+    title: 'Feature 3',
+    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
   }
 ]
 
@@ -181,6 +182,7 @@ export class LandingComponent extends React.Component<Props, State> {
         </Block>
         <Block style={ styles.buttonBlock}>
           <Button
+            raised
             onPress={ this.props.handleButtonTap }
             style={{ 
               container: styles.buttonContainer, 
@@ -188,8 +190,6 @@ export class LandingComponent extends React.Component<Props, State> {
             }}
             upperCase= { false }
             text='Get started'
-            raised 
-            primary
           />
         </Block>
       </Container>
