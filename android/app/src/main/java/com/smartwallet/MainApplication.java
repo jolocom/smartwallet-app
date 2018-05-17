@@ -40,7 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
             new KeychainPackage(),
             new RNFetchBlobPackage(),
             new RNCameraPackage(),
-            new SQLitePluginPackage(),
+            new SQLitePluginPackage()
       );
     }
 
