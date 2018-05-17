@@ -11,6 +11,7 @@ export const JolocomTheme = {
 
   labelFontSize: 20,
   headerFontSize: 22,
+  // headerFontWeight: 200,
   landingHeaderFontSize: 30,
 
 }

@@ -16,11 +16,11 @@ interface Props {
 const styles = StyleSheet.create({
   subHeader: {
     fontSize: 14,
-    color: JolocomTheme.textStyles.subheadline.color,
+    color: JolocomTheme.primaryColorBlack
   },
   infoPassword: {
     fontSize: 12,
-    color: JolocomTheme.textStyles.labelInputFields.color
+    color: JolocomTheme.primaryColorBlack
   },
   textInputField: {
     width: '80%'
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   buttonContainer: {
-    backgroundColor: JolocomTheme.palette.primaryColor
+    backgroundColor: JolocomTheme.primaryColorWhite
   }
 })
 

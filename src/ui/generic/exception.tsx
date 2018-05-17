@@ -16,7 +16,7 @@ interface Props {
 
 const styles = StyleSheet.create({
   stackTrace: {
-    color: JolocomTheme.textStyles.headline.color,
+    color: JolocomTheme.primaryColorBlack,
     fontSize: 10
   }
 })
