@@ -50,12 +50,18 @@ const styles = StyleSheet.create({
 })
 
 export const ClaimCard : React.SFC<Props> = (props) => {
+  let { icon } = props
   const claimLines = props.claimLines === undefined ? 1 : props.claimLines
   let displayItemMenu
 
   if (props.firstClaimValue !== undefined ||
     claimLines === 2 && props.secondClaimValue !== undefined) {
     displayItemMenu = (<MoreIcon />)
+  }
+
+  // set default icon here
+  if(icon === undefined) {
+    icon = 'camera'
   }
 
   return(
@@ -82,8 +88,8 @@ export const ClaimCard : React.SFC<Props> = (props) => {
           '+ add' :
           props.firstClaimValue
         }}
-        leftElement={ props.icon }
-        onPress={() => props.openClaimDetails(props.claimType)}
+        leftElement={ icon }
+        onPress={() => {}}
         rightElement={ displayItemMenu }
       />
 
@@ -110,7 +116,7 @@ export const ClaimCard : React.SFC<Props> = (props) => {
             '+ add' :
             props.secondClaimValue
           }}
-          onPress={() => props.openClaimDetails(props.claimType)}
+          onPress={() => {}}
         /> :
         null
       }

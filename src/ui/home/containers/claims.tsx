@@ -3,17 +3,21 @@ import { ClaimOverviewComponent } from 'src/ui/home/components/claimOverview'
 import { ClaimDetails } from 'src/ui/home/components/claimDetails'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
-import { AnyAction } from 'redux'
 import { RootState } from 'src/reducers/'
+import { accountActions } from 'src/actions'
 import { View } from 'react-native'
 
+
 interface ConnectProps {
+  getClaimsForDid: () => void
+  toggleLoading: (val: boolean) => void
+  claims: any
 }
 
 interface Props extends ConnectProps {}
 
 interface State {
-  scanning: boolean,
+  scanning: boolean
   showClaimDetails: boolean
   typeClaimDetails: string
 }
@@ -24,6 +28,10 @@ export class ClaimsContainer extends React.Component<Props, State> {
     scanning: false,
     showClaimDetails: false,
     typeClaimDetails: ''
+  }
+
+  componentWillMount() {
+    this.props.getClaimsForDid()
   }
 
   private openClaimDetails = (selectedType : string) : void => {
@@ -65,7 +73,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
           onScannerCancel={this.onScannerCancel}
         />
       )
-    } else if (this.state.showClaimDetails) {
+    } else if(this.state.showClaimDetails) {
       renderContent = (
         <ClaimDetails
           typeClaimDetails={ this.state.typeClaimDetails }
@@ -75,11 +83,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
     } else {
       renderContent = (
         <ClaimOverviewComponent
-          claims={[
-            {claimType: 'name'},
-            {claimType: 'email', claimValue: 'n@t.com'},
-            {claimType: 'phone', claimValue: '77-222'}
-          ]} // TODO: pass from redux
+          claims={this.props.claims}
           openClaimDetails={ this.openClaimDetails }
           scanning={ this.state.scanning }
           onScannerStart={ this.onScannerStart }
@@ -88,7 +92,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
     }
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         { renderContent }
       </View>
     )
@@ -97,11 +101,18 @@ export class ClaimsContainer extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
   return {
+    claims: state.account.claims.toObject()
   }
 }
 
-const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
+const mapDispatchToProps = (dispatch: Function) => {
   return {
+    getClaimsForDid: () => {
+      dispatch(accountActions.getClaimsForDid())
+    },
+    toggleLoading: (val: boolean) => {
+      dispatch(accountActions.toggleLoading(val))
+    }
   }
 }
 
