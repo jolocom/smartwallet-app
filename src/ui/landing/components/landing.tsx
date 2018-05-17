@@ -37,10 +37,12 @@ const styles = StyleSheet.create({
   },
   svgContainer: {
     flex: 4/5,
-    backgroundColor: JolocomTheme.primaryColorPurple
+    marginTop: "10%",
+    marginLeft: '45%',
+    backgroundColor: JolocomTheme.primaryColorBlack
   },
   carouselTextContainer: {
-    padding: '7%',
+    padding: '10%',
     flex: 3/5,
     backgroundColor: JolocomTheme.primaryColorBlack
   },
@@ -57,22 +59,24 @@ const styles = StyleSheet.create({
   },
   header: {
     color: JolocomTheme.primaryColorSand,
+    fontFamily: JolocomTheme.contentFontFamily, 
     fontSize: JolocomTheme.landingHeaderFontSize
   },
   headerBlock: {
     paddingBottom: '5%'
   }, 
   subHeaderBlock: {
-    paddingTop: '5%'
+    paddingTop: '7%'
   },
   subHeader: {
     color: JolocomTheme.primaryColorSand,
+    fontFamily: JolocomTheme.contentFontFamily, 
     opacity: 0.8,
-    fontSize: JolocomTheme.labelFontSize
+    fontSize: JolocomTheme.labelFontSize,
+    lineHeight: 24
   },
   paginationBlock: {
     flex: 1/6,
-    marginBottom:'3%',
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   buttonBlock: {
@@ -82,9 +86,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     height: 48,
     width: 164,
+    borderRadius: 4,
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.headerFontSize
   }
 })

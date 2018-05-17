@@ -115,5 +115,10 @@
     "squel": "^5.12.1",
     "sqlite3": "^4.0.0",
     "wif": "^2.0.6"
+  },
+  "rnpm": {
+    "assets": [
+      "./src/assets/fonts"
+    ]
   }
 }

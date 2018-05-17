@@ -14,5 +14,5 @@ export const JolocomTheme = {
   // headerFontWeight: 200,
   landingHeaderFontSize: 30,
 
-  contentFontFamily: 'Roboto, sans-serif'
+  contentFontFamily: 'TTCommons'
 }
