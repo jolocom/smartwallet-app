@@ -78,7 +78,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
         <Path
           d={ this.state.currentPath.join(' ') }
           fill='none'
-          stroke={ JolocomTheme.palette.primaryColor }
+          stroke={ JolocomTheme.primaryColorSand }
           strokeLinecap='round'
           strokeLinejoin='round'
           strokeWidth={ 20 }

@@ -19,10 +19,9 @@ const styles = StyleSheet.create({
   text: {
     position: 'absolute',
     top: '20%',
-    backgroundColor: JolocomTheme.palette.backgroundContainer,
-    fontSize: JolocomTheme.textStyles.headline.fontSize,
-    fontWeight: JolocomTheme.textStyles.headline.fontWeight,
-    color: JolocomTheme.textStyles.headline.color
+    backgroundColor: JolocomTheme.primaryColorBlack,
+    fontSize: JolocomTheme.headerFontSize,
+    color: JolocomTheme.primaryColorSand
   }
 })
 
