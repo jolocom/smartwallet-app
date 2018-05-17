@@ -6,33 +6,37 @@ import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 
-// TODO: adjust to actual structure
-interface Claim {
+// TODO: adjust to actual structure needed for UI
+export interface Claim {
   claimType: string
   claimValue?: string
+  category: string
 }
 
 interface Props {
-  claims: Claim[]
+  claims: any
   scanning: boolean
   onScannerStart: () => void
   openClaimDetails: (selectedType : string) => void
 }
 
 interface State {
-  orderedClaims: {
-    [key: string] : Claim[]
-  }
 }
 
-interface IIconMap {
+interface IDefMap {
   [key: string]: string
 }
 
-const iconMap : IIconMap = {
+const iconMap : IDefMap = {
   name: 'person',
   email: 'camera',
   phone: 'camera'
+}
+
+const categoryDisplayMap : IDefMap = {
+  personal: 'Personal / general',
+  contact: 'Contact',
+  other: 'Miscellaneous'
 }
 
 const styles = StyleSheet.create({
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
     textAlign: 'left'
   },
   componentContainer: {
+    flex: 1,
     padding: 0
   },
   scrollComponent: {
@@ -75,46 +80,23 @@ const styles = StyleSheet.create({
   }
 })
 
+
+
+
+
 export class ClaimOverviewComponent extends React.Component<Props, State> {
 
-  state = {
-    orderedClaims: {
-      personal: [],
-      contact: [],
-    }
-  }
+  renderClaimCards = (category: any) : ReactNode => {
+    const { openClaimDetails, claims } = this.props
+    const categoryClaims = claims.savedClaims[category]
 
-  componentDidMount() {
-    if (this.state.orderedClaims.personal.length === 0) {
-      let personalClaims : Claim[] = []
-      let contactClaims : Claim[] = []
-
-      this.props.claims.map((claim, i) => {
-        if (claim.claimType === 'name') {
-          personalClaims.push(claim)
-        } else if (claim.claimType === 'phone' || claim.claimType === 'email') {
-          contactClaims.push(claim)
-        }
-      })
-
-      this.setState({
-        orderedClaims: {
-          personal: personalClaims,
-          contact: contactClaims
-        }
-      })
-    }
-  }
-
-
-  private renderSection = (category: string) : ReactNode => {
-    return this.state.orderedClaims[category].map((claim: Claim, i: number) => {
+    return categoryClaims.map((claim: Claim, i: number) => {
       if (claim.claimType === 'name') {
         if (claim.claimValue === undefined) {
           return (
             <ClaimCard
               key={ claim.claimType }
-              openClaimDetails={ this.props.openClaimDetails }
+              openClaimDetails={ openClaimDetails }
               claimType={ claim.claimType }
               icon={ iconMap[claim.claimType] }
               firstClaimLabel={ claim.claimType }
@@ -123,8 +105,8 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
         } else {
           return (
             <ClaimCard
-              key={ claim.claimType }
-              openClaimDetails={ this.props.openClaimDetails }
+              key={ claim.claimValue }
+              openClaimDetails={ openClaimDetails }
               claimType={ claim.claimType }
               icon={ iconMap[claim.claimType] }
               firstClaimLabel={ 'first Name' }
@@ -135,51 +117,63 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
             />
           )
         }
+
       } else {
-        return (
-          <ClaimCard
-            key={ claim.claimType }
-            openClaimDetails={ this.props.openClaimDetails }
-            claimType={ claim.claimType }
-            icon={ iconMap[claim.claimType] }
-            firstClaimLabel={ claim.claimType }
-            firstClaimValue={ claim.claimValue }
-          />
-        )
+        if (claim.claimValue === undefined) {
+          return (
+            <ClaimCard
+              key={ claim.claimType }
+              openClaimDetails={ openClaimDetails }
+              claimType={ claim.claimType }
+              icon={ iconMap[claim.claimType] }
+              firstClaimLabel={ claim.claimType }
+            />
+          )
+        } else {
+          return (
+            <ClaimCard
+              key={ claim.claimValue }
+              openClaimDetails={ openClaimDetails }
+              claimType={ claim.claimType }
+              icon={ iconMap[claim.claimType] }
+              firstClaimLabel={ claim.claimType }
+              firstClaimValue={ claim.claimValue }
+            />
+          )
+        }
       }
     })
-
   }
 
   render() {
+    const { savedClaims } = this.props.claims
+    let content
+    if (this.props.claims.loading) {
+      // TODO: insert loading component
+      content = (
+        <View><Text>Loading</Text></View>
+      )
+    } else {
+      content = (
+        savedClaims.claimCategories.map((category: any, i: number) => {
+          return (
+            <View key={category}>
+              <View>
+                <View style={ styles.sectionContainer }>
+                  <Text style={ styles.sectionHeader }>{ categoryDisplayMap[category] }</Text>
+                </View>
+                { this.renderClaimCards(category) }
+              </View>
+            </View>
+          )})
+      )
+    }
+
     return (
       <Container style={ styles.componentContainer }>
         <ScrollView style={ styles.scrollComponent }>
-
-          {
-            this.state.orderedClaims.personal.length > 0 ?
-            (<View>
-              <View style={ styles.sectionContainer }>
-                <Text style={ styles.sectionHeader }>Personal / general</Text>
-              </View>
-              { this.renderSection('personal') }
-            </View>) :
-            null
-          }
-
-          {
-            this.state.orderedClaims.contact.length > 0 ?
-            <View>
-              <View style={ styles.sectionContainer }>
-                <Text style={ styles.sectionHeader }>Contact</Text>
-              </View>
-              { this.renderSection('contact') }
-            </View> :
-            null
-          }
-
+          { content }
         </ScrollView>
-
         <Block style={ styles.actionButtonContainer }>
           <TouchableOpacity
             style={ styles.iconContainer }
