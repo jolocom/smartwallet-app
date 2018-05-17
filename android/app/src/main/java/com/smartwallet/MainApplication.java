@@ -3,6 +3,11 @@ package com.smartwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.horcrux.svg.SvgPackage;
+import com.oblador.keychain.KeychainPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import org.reactnative.camera.RNCameraPackage;
 import com.horcrux.svg.SvgPackage;
 import com.oblador.keychain.KeychainPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -32,9 +37,6 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new VectorIconsPackage(),
             new SvgPackage(),
-            new SvgPackage(),
-            new RNFetchBlobPackage(),
-            new RNCameraPackage(),
             new KeychainPackage(),
             new RNFetchBlobPackage(),
             new RNCameraPackage(),
