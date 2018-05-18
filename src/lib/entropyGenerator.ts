@@ -20,7 +20,6 @@ export class EntropyGenerator implements EntropyGenerator {
   generateRandomString(wordCount: number) : string {
     // returns an array of length wordCount filled with random 4 byte words.
     const intArray = new Int32Array(this.generator.randomWords(wordCount))
-    intArray.forEach(el => console.log(el))
     const buf = Buffer.from(intArray.buffer)
     return buf.toString('hex')
   }
