@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { Keyboard, EmitterSubscription } from 'react-native'
 import { registrationActions } from 'src/actions'
 import { PasswordEntryComponent } from 'src/ui/registration/components/passwordEntry'
+// import JolocomLib from 'jolocom-lib';
+import { JolocomTheme } from '../../../styles/jolocom-theme';
 
 interface ConnectProps {
   savePassword: (password : string) => void
@@ -11,9 +13,11 @@ interface ConnectProps {
 interface Props extends ConnectProps {}
 
 interface State {
-  password: string;
-  confirmPassword: string;
-  keyboardDrawn: boolean;
+  password: string
+  confirmPassword: string
+  keyboardDrawn: boolean
+  lineColorPassword: string
+  lineColorRepeat: string
 }
 
 export class PasswordEntryContainer extends React.Component<Props, State> {
@@ -23,7 +27,9 @@ export class PasswordEntryContainer extends React.Component<Props, State> {
   state = {
     password: '',
     confirmPassword: '',
-    keyboardDrawn: false
+    keyboardDrawn: false,
+    lineColorPassword: JolocomTheme.primaryColorSand,
+    lineColorRepeat: JolocomTheme.primaryColorSand
   }
 
   componentDidMount() {
@@ -59,6 +65,30 @@ export class PasswordEntryContainer extends React.Component<Props, State> {
     this.setState({ password })
   }
 
+  private onFocusRepeat = () : void => {
+    this.setState({ 
+      lineColorRepeat: JolocomTheme.primaryColorPurple
+    })
+  }
+
+  private onFocusPassword = () : void => {
+    this.setState({ 
+      lineColorPassword: JolocomTheme.primaryColorPurple
+    })
+  }
+
+  private onBlurRepeat = () : void => {
+    this.setState({ 
+      lineColorRepeat: JolocomTheme.primaryColorSand
+    })
+  }
+
+  private onBlurPassword = () : void => {
+    this.setState({ 
+      lineColorPassword: JolocomTheme.primaryColorSand
+    })
+  }
+
   private onPasswordConfirmChange = (confirmPassword: string) : void => {
     this.setState({ confirmPassword })
   }
@@ -72,6 +102,12 @@ export class PasswordEntryContainer extends React.Component<Props, State> {
         confirmPassword={ this.state.confirmPassword }
         keyboardDrawn={ this.state.keyboardDrawn }
         clickNext={ this.handleOnConfirm }
+        onFocusRepeat={ this.onFocusRepeat }
+        onBlurRepeat={ this.onBlurRepeat }
+        onFocusPassword={ this.onFocusPassword }
+        onBlurPassword={ this.onBlurPassword }
+        lineColorPassword={ this.state.lineColorPassword }
+        lineColorRepeat={ this.state.lineColorRepeat }
       />
     )
   }
