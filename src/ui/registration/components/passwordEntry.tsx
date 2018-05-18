@@ -1,16 +1,22 @@
 import React from 'react'
-import { StyleSheet, TextInput, } from 'react-native'
+import { StyleSheet, TextInput } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Container, Header, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
-  keyboardDrawn: boolean;
-  password: string;
-  confirmPassword: string;
-  onPasswordChange: (input:  string) => void;
-  onPasswordConfirmChange: (input:  string) => void;
-  clickNext: () => void;
+  lineColorPassword: string
+  lineColorRepeat: string
+  keyboardDrawn: boolean
+  password: string
+  confirmPassword: string
+  onPasswordChange: (input:  string) => void
+  onPasswordConfirmChange: (input:  string) => void
+  clickNext: () => void
+  onFocusRepeat: () => void
+  onBlurRepeat: () => void
+  onFocusPassword: () => void
+  onBlurPassword: () => void
 }
 
 const styles = StyleSheet.create({
@@ -28,13 +34,14 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorSand
   },
   textInputField: {
+    padding: '3%',
     color: JolocomTheme.primaryColorWhite,
     fontSize: 22,
     fontFamily: JolocomTheme.contentFontFamily,
-    width: '80%'
+    width: '80%',
   },
   textErrorField: {
-    color: 'red',
+    color: JolocomTheme.primaryColorSandInactive,
     fontSize: 14
   },
   mainContainer: {
@@ -42,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   nestedContainer: {
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
   },
   buttonContainer: {
     width: 164,
@@ -83,9 +90,11 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
           secureTextEntry
           keyboardType={ 'default' }
           onChangeText={ props.onPasswordChange }
-          placeholderTextColor={ "rgba(255, 239, 223, 0.38)" }
-          selectionColor= { JolocomTheme.primaryColorSand }
-          underlineColorAndroid= { JolocomTheme.primaryColorSand }
+          onFocus={ props.onFocusPassword }
+          onBlur={ props.onBlurPassword }
+          placeholderTextColor={ JolocomTheme.primaryColorSandInactive }
+          selectionColor= { JolocomTheme.primaryColorPurple } 
+          underlineColorAndroid= { props.lineColorPassword }
         /> 
         <TextInput
           style={ styles.textInputField }
@@ -95,9 +104,11 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
           secureTextEntry
           keyboardType={ 'default' }
           onChangeText={ props.onPasswordConfirmChange }
-          placeholderTextColor={ "rgba(255, 239, 223, 0.38)" }
-          selectionColor= { JolocomTheme.primaryColorSand }
-          underlineColorAndroid= { JolocomTheme.primaryColorSand }
+          onFocus={ props.onFocusRepeat }
+          onBlur={ props.onBlurRepeat }
+          placeholderTextColor={ JolocomTheme.primaryColorSandInactive }
+          selectionColor= { JolocomTheme.primaryColorPurple }
+          underlineColorAndroid= { props.lineColorRepeat }
         />
         <CenteredText
           style={ styles.textErrorField }
