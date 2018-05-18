@@ -71,8 +71,8 @@ export const getClaimsForDid = () => {
         claimValue: 'n@t.de'
       },
       {
-        claimType: 'email',
-        claimValue: 'natascha@world.com'
+        claimType: 'phone',
+        claimValue: '111-222'
       },
       {
         claimType: 'favourite color',

@@ -27,12 +27,6 @@ interface IDefMap {
   [key: string]: string
 }
 
-const iconMap : IDefMap = {
-  name: 'person',
-  email: 'camera',
-  phone: 'camera'
-}
-
 const categoryDisplayMap : IDefMap = {
   personal: 'Personal / general',
   contact: 'Contact',
@@ -98,7 +92,6 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
               key={ claim.claimType }
               openClaimDetails={ openClaimDetails }
               claimType={ claim.claimType }
-              icon={ iconMap[claim.claimType] }
               firstClaimLabel={ claim.claimType }
             />
           )
@@ -108,7 +101,6 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
               key={ claim.claimValue }
               openClaimDetails={ openClaimDetails }
               claimType={ claim.claimType }
-              icon={ iconMap[claim.claimType] }
               firstClaimLabel={ 'first Name' }
               firstClaimValue={ claim.claimValue }
               secondClaimLabel={ 'last Name '}
@@ -125,7 +117,6 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
               key={ claim.claimType }
               openClaimDetails={ openClaimDetails }
               claimType={ claim.claimType }
-              icon={ iconMap[claim.claimType] }
               firstClaimLabel={ claim.claimType }
             />
           )
@@ -135,7 +126,6 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
               key={ claim.claimValue }
               openClaimDetails={ openClaimDetails }
               claimType={ claim.claimType }
-              icon={ iconMap[claim.claimType] }
               firstClaimLabel={ claim.claimType }
               firstClaimValue={ claim.claimValue }
             />

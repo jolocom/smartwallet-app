@@ -2,17 +2,32 @@ import React from 'react'
 import { ListItem } from 'react-native-material-ui'
 import { StyleSheet, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { MoreIcon } from 'src/resources'
+import {
+  MoreIcon,
+  AccessibilityIcon,
+  NameIcon,
+  EmailIcon,
+  PhoneIcon
+} from 'src/resources'
 
 interface Props {
   openClaimDetails: (selectedType: string) => void
   claimType: string
-  icon: string
   firstClaimLabel: string
   firstClaimValue?: string
   claimLines?: number
   secondClaimLabel?: string
   secondClaimValue?: string
+}
+
+interface IIconMap {
+  [key: string]: any
+}
+
+const iconMap : IIconMap = {
+  name: <NameIcon />,
+  email: <EmailIcon />,
+  phone: <PhoneIcon />
 }
 
 const styles = StyleSheet.create({
@@ -50,18 +65,12 @@ const styles = StyleSheet.create({
 })
 
 export const ClaimCard : React.SFC<Props> = (props) => {
-  let { icon } = props
   const claimLines = props.claimLines === undefined ? 1 : props.claimLines
   let displayItemMenu
 
   if (props.firstClaimValue !== undefined ||
     claimLines === 2 && props.secondClaimValue !== undefined) {
     displayItemMenu = (<MoreIcon />)
-  }
-
-  // set default icon here
-  if(icon === undefined) {
-    icon = 'camera'
   }
 
   return(
@@ -88,7 +97,11 @@ export const ClaimCard : React.SFC<Props> = (props) => {
           '+ add' :
           props.firstClaimValue
         }}
-        leftElement={ icon }
+        leftElement={
+          iconMap[props.claimType] === undefined ?
+            <AccessibilityIcon /> :
+            iconMap[props.claimType]
+        }
         onPress={() => {}}
         rightElement={ displayItemMenu }
       />
