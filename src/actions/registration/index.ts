@@ -3,7 +3,7 @@ import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
-import { setDid } from '../account'
+import { setDid } from 'src/actions/account'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
