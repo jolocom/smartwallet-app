@@ -91,18 +91,16 @@ export class Storage {
   private async storeVClaimFromJSON(args: IVerifiableCredential) : Promise<void> {
     await this.createConnectionIfNeeded()
     const verifiableCredential = plainToClass(VerifiableCredentialEntity, args)
-    const signature = plainToClass(SignatureEntity, args.signature)
+    const signature = plainToClass(SignatureEntity, args.proof)
     const credentials = this.assembleCredentials(verifiableCredential, args.claim)
 
     signature.verifiableCredential = verifiableCredential
 
     await this.connection.manager.save(verifiableCredential)
     await this.connection.manager.save(signature)
-    console.log(credentials)
     await Promise.all(credentials.map(cred => this.connection.manager.save(cred)))
   }
 
-  // TODO REVIEW
   private assembleCredentials(vCred: VerifiableCredentialEntity, args: IClaim) : CredentialEntity[] {
     const claimNames = Object.keys(args).filter(k => k !== 'id')
     const claims = claimNames.map(c => {
