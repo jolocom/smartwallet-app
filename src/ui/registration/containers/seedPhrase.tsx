@@ -2,12 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
 import { RootState } from 'src/reducers/'
+import { finishRegistration } from 'src/actions/registration'
 
 interface ConnectProps {
 }
 
 interface Props extends ConnectProps {
   navigation: { state: { params: { mnemonic: string } } }
+  finishRegistration: () => void
 }
 
 interface State {
@@ -28,6 +30,7 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
       seedPhrase={ mnemonic }
       checked={ this.state.checked }
       onCheck={ this.handleCheckboxTap }
+      handleButtonTap={ this.props.finishRegistration }
     />
   }
 
@@ -41,7 +44,7 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = (dispatch: Function) => {
-  return { }
+  return { finishRegistration: () => dispatch(finishRegistration()) }
 }
 
 export const SeedPhrase = connect(mapStateToProps, mapDispatchToProps)(SeedPhraseContainer)

@@ -3,6 +3,7 @@ import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
+import { setDid } from '../account'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -35,6 +36,14 @@ export const startRegistration = () => {
   return (dispatch: Dispatch<AnyAction>) => {
     dispatch(navigationActions.navigate({
       routeName: routeList.PasswordEntry
+    }))
+  }
+}
+
+export const finishRegistration = () => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(navigationActions.navigate({
+      routeName: routeList.Identity
     }))
   }
 }
@@ -84,6 +93,7 @@ export const createIdentity = (encodedEntropy: string) => {
       await storageLib.store.persona(personaData)
       await storageLib.store.derivedKey(ethereumKeyData)
 
+      dispatch(setDid(didDocument.getDID()))
       const {
         privateKey: ethPrivKey,
         address: ethAddr
