@@ -120,7 +120,6 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
           style={ !errorMsg ? { container: styles.buttonContainer, text: styles.buttonText } : { container: styles.buttonContainer, text: styles.buttonText } }
           onPress={ props.clickNext }
           raised
-          primary
           upperCase={ false }
           disabled={ !!errorMsg }
           text="Continue"
