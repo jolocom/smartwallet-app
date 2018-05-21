@@ -2,12 +2,54 @@
 
 exports[`account reducer should handle the DID_SET action  1`] = `
 Object {
+  "claims": Immutable.Map {
+    "loading": false,
+    "savedClaims": Object {
+      "claimCategories": Array [
+        "personal",
+        "contact",
+      ],
+      "contact": Array [
+        Object {
+          "category": "contact",
+          "claimType": "email",
+        },
+      ],
+      "personal": Array [
+        Object {
+          "category": "personal",
+          "claimType": "name",
+        },
+      ],
+    },
+  },
   "did": "mock did",
 }
 `;
 
 exports[`account reducer should initialize correctly 1`] = `
 Object {
+  "claims": Immutable.Map {
+    "loading": false,
+    "savedClaims": Object {
+      "claimCategories": Array [
+        "personal",
+        "contact",
+      ],
+      "contact": Array [
+        Object {
+          "category": "contact",
+          "claimType": "email",
+        },
+      ],
+      "personal": Array [
+        Object {
+          "category": "personal",
+          "claimType": "name",
+        },
+      ],
+    },
+  },
   "did": "",
 }
 `;
