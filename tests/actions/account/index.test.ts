@@ -32,7 +32,7 @@ describe.only('Account action creators', () => {
         ])
       }
     }
-    
+
     const action = accountActions.checkIdentityExists()
     await action(mockStore.dispatch, mocKGetState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
@@ -75,4 +75,8 @@ describe.only('Account action creators', () => {
     await action(mockStore.dispatch, mocKGetState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
+
+  // it('Should correctly retrieve claims from device storage db', () => {
+  //
+  // })
 })
