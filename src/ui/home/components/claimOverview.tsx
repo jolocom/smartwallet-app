@@ -6,11 +6,13 @@ import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 
-// TODO: adjust to actual structure needed for UI
 export interface Claim {
-  claimType: string
-  claimValue?: string
+  claimField: string
   category: string
+  claimValue?: string
+  multiLine?: boolean
+  id?: string
+  type?: string
 }
 
 interface Props {
@@ -85,26 +87,32 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
     const categoryClaims = claims.savedClaims[category]
 
     return categoryClaims.map((claim: Claim, i: number) => {
-      if (claim.claimType === 'name') {
+
+      // TODO: handle multiLine claims e.g. address
+      if (claim.multiLine) {
+        return
+      }
+      if (claim.claimField === 'name') {
         if (claim.claimValue === undefined) {
           return (
             <ClaimCard
-              key={ claim.claimType }
+              key={ claim.claimField }
               openClaimDetails={ openClaimDetails }
-              claimType={ claim.claimType }
-              firstClaimLabel={ claim.claimType }
+              claimField={ claim.claimField }
+              firstClaimLabel={ claim.claimField }
             />
           )
         } else {
+          let splitName = claim.claimValue.split(' ')
           return (
             <ClaimCard
               key={ claim.claimValue }
               openClaimDetails={ openClaimDetails }
-              claimType={ claim.claimType }
-              firstClaimLabel={ 'first Name' }
-              firstClaimValue={ claim.claimValue }
-              secondClaimLabel={ 'last Name '}
-              secondClaimValue={ claim.claimValue }
+              claimField={ claim.claimField }
+              firstClaimLabel={ 'firstName' }
+              firstClaimValue={ splitName[0] }
+              secondClaimLabel={ 'lastName '}
+              secondClaimValue={ splitName[1] }
               claimLines={2}
             />
           )
@@ -114,10 +122,10 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
         if (claim.claimValue === undefined) {
           return (
             <ClaimCard
-              key={ claim.claimType }
+              key={ claim.claimField }
               openClaimDetails={ openClaimDetails }
-              claimType={ claim.claimType }
-              firstClaimLabel={ claim.claimType }
+              claimField={ claim.claimField }
+              firstClaimLabel={ claim.claimField }
             />
           )
         } else {
@@ -125,8 +133,8 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
             <ClaimCard
               key={ claim.claimValue }
               openClaimDetails={ openClaimDetails }
-              claimType={ claim.claimType }
-              firstClaimLabel={ claim.claimType }
+              claimField={ claim.claimField }
+              firstClaimLabel={ claim.claimField }
               firstClaimValue={ claim.claimValue }
             />
           )
