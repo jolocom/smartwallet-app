@@ -12,7 +12,7 @@ exports[`ClaimCard component matches the snapshot of a claim with unspecified ic
   <ListItem
     centerElement={
       Object {
-        "primaryText": "Favourite Color",
+        "primaryText": "Favourite  Color",
         "secondaryText": "green",
       }
     }
@@ -85,7 +85,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
     }
     dense={false}
     divider={false}
-    leftElement={<NameIcon />}
+    leftElement={<AccessibilityIcon />}
     numberOfLines={1}
     onLeftElementPress={null}
     onLongPress={null}
@@ -194,7 +194,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
     }
     dense={false}
     divider={false}
-    leftElement={<NameIcon />}
+    leftElement={<AccessibilityIcon />}
     numberOfLines={1}
     onLeftElementPress={null}
     onLongPress={null}
