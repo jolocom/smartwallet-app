@@ -44,11 +44,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
             Personal / general
           </Text>
         </Component>
-        <ClaimCard
-          claimType="name"
-          firstClaimLabel="name"
-          key="name"
-        />
+        <ClaimCard />
       </Component>
     </Component>
     <Component
@@ -79,11 +75,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
             Contact
           </Text>
         </Component>
-        <ClaimCard
-          claimType="email"
-          firstClaimLabel="email"
-          key="email"
-        />
+        <ClaimCard />
       </Component>
     </Component>
   </ScrollView>

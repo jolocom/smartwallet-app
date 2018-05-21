@@ -12,13 +12,13 @@ Object {
       "contact": Array [
         Object {
           "category": "contact",
-          "claimType": "email",
+          "claimField": "email",
         },
       ],
       "personal": Array [
         Object {
           "category": "personal",
-          "claimType": "name",
+          "claimField": "name",
         },
       ],
     },
@@ -39,13 +39,13 @@ Object {
       "contact": Array [
         Object {
           "category": "contact",
-          "claimType": "email",
+          "claimField": "email",
         },
       ],
       "personal": Array [
         Object {
           "category": "personal",
-          "claimType": "name",
+          "claimField": "name",
         },
       ],
     },
