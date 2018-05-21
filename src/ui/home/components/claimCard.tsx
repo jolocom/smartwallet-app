@@ -12,7 +12,7 @@ import {
 
 interface Props {
   openClaimDetails: (selectedType: string) => void
-  claimType: string
+  claimField: string
   firstClaimLabel: string
   firstClaimValue?: string
   claimLines?: number
@@ -27,7 +27,7 @@ interface IIconMap {
 const iconMap : IIconMap = {
   name: <NameIcon />,
   email: <EmailIcon />,
-  phone: <PhoneIcon />
+  telephone: <PhoneIcon />
 }
 
 const styles = StyleSheet.create({
@@ -98,9 +98,9 @@ export const ClaimCard : React.SFC<Props> = (props) => {
           props.firstClaimValue
         }}
         leftElement={
-          iconMap[props.claimType] === undefined ?
+          iconMap[props.claimField] === undefined ?
             <AccessibilityIcon /> :
-            iconMap[props.claimType]
+            iconMap[props.claimField]
         }
         onPress={() => {}}
         rightElement={ displayItemMenu }
@@ -138,5 +138,13 @@ export const ClaimCard : React.SFC<Props> = (props) => {
 }
 
 const stringCapitalize = (myString : string) : string => {
+  const matches = myString.match(/[A-Z]/g)
+  if (matches !== null) {
+    matches.map((match) => {
+      const ix = myString.indexOf(match)
+      const tx = myString.slice(0, ix) + " " + myString.slice(ix)
+      myString = tx
+    })
+  }
   return myString[0].toUpperCase() + myString.slice(1)
 }
