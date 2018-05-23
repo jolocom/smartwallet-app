@@ -68,7 +68,7 @@ describe('Registration action creators', () => {
 
   describe('createIdentity', () => {
     it('should attempt to create an identity', async () => {
-      MockDate.set('1/1/2000', 0)
+      MockDate.set(new Date(946681200000))
       const mockStore = configureStore([thunk])({})
 
       const {didDocument, mnemonic, genericSigningKey, ethereumKey} = data
