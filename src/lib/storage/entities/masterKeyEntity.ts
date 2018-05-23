@@ -6,7 +6,7 @@ export class MasterKeyEntity {
   @PrimaryColumn({ length: 100 })
   encryptedEntropy!: string
 
-  @OneToMany(type => DerivedKeyEntity, key => key.entropySource)
+  @OneToMany(type => DerivedKeyEntity, key => key.masterKey)
   derivedKeys!: DerivedKeyEntity[]
 
   @Column()
