@@ -2,6 +2,7 @@ import React from 'react'
 import { ListItem } from 'react-native-material-ui'
 import { StyleSheet, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { IClaimUI } from 'src/ui/home/components/claimOverview'
 import {
   MoreIcon,
   AccessibilityIcon,
@@ -12,12 +13,7 @@ import {
 
 interface Props {
   openClaimDetails: (selectedType: string) => void
-  claimField: string
-  firstClaimLabel: string
-  firstClaimValue?: string
-  claimLines?: number
-  secondClaimLabel?: string
-  secondClaimValue?: string
+  claimItem: IClaimUI
 }
 
 interface IIconMap {
@@ -65,74 +61,81 @@ const styles = StyleSheet.create({
 })
 
 export const ClaimCard : React.SFC<Props> = (props) => {
-  const claimLines = props.claimLines === undefined ? 1 : props.claimLines
-  let displayItemMenu
+  const { claimValue, claimField } = props.claimItem
+  let content = []
 
-  if (props.firstClaimValue !== undefined ||
-    claimLines === 2 && props.secondClaimValue !== undefined) {
-    displayItemMenu = (<MoreIcon />)
+  // handling of name as first name and last name
+  if (claimField === 'name' && claimValue !== undefined) {
+    let splitName = claimValue.split(' ')
+    content.push({
+      claimValue: splitName[0],
+      claimField,
+      label: 'firstName',
+      showIcon: true
+    }, {
+      claimValue: splitName[1],
+      claimField,
+      label: 'lastName',
+      showIcon: false
+    })
+  } else {
+    content.push({
+      claimValue,
+      claimField,
+      label: claimField,
+      showIcon: true
+    })
   }
 
-  return(
-    <View style={styles.containerField}>
+  const renderLeftIcon = (claimField: string, showIcon: boolean) => {
+    if (!showIcon) {
+      return ''
+    } else if (iconMap[claimField] !== undefined) {
+      return iconMap[claimField]
+    } else if (iconMap[claimField] === undefined) {
+      return <AccessibilityIcon />
+    }
+  }
+
+
+  const renderCard = (claimVal: any, claimField: string, label: string, showIcon: boolean) => {
+    return (
       <ListItem
         style={{
           primaryTextContainer: styles.listItemPrimaryTextContainer,
-          primaryText: props.firstClaimValue === undefined ?
+          primaryText: claimVal === undefined ?
           JolocomTheme.textStyles.light.labelDisplayFieldEdit :
           JolocomTheme.textStyles.light.labelDisplayField,
           secondaryText: {
-            ...props.firstClaimValue === undefined ?
+            ...claimVal === undefined ?
             JolocomTheme.textStyles.light.textDisplayFieldEdit :
             JolocomTheme.textStyles.light.textDisplayField,
             lineHeight: 24
           },
-          container: styles.listItemContainerOneLine,
+          container: showIcon ? styles.listItemContainerOneLine : styles.listItemContainerTwoLines,
           leftElementContainer: styles.listItemLeftElementContainer,
           rightElementContainer: styles.listItemRightElementContainer
         }}
         centerElement={{
-          primaryText: stringCapitalize(props.firstClaimLabel),
-          secondaryText: props.firstClaimValue === undefined ?
+          primaryText: stringCapitalize(label),
+          secondaryText: claimVal === undefined ?
           '+ add' :
-          props.firstClaimValue
+          claimVal
         }}
-        leftElement={
-          iconMap[props.claimField] === undefined ?
-            <AccessibilityIcon /> :
-            iconMap[props.claimField]
-        }
+        leftElement={ renderLeftIcon(claimField, showIcon) }
         onPress={() => {}}
-        rightElement={ displayItemMenu }
+        rightElement={ claimVal !== undefined ? <MoreIcon /> : '' }
       />
+    )
+  }
 
-      {
-        claimLines === 2 ?
-        <ListItem
-          style={{
-            primaryTextContainer: styles.listItemPrimaryTextContainer,
-            primaryText: props.secondClaimValue === undefined ?
-            JolocomTheme.textStyles.light.labelDisplayFieldEdit :
-            JolocomTheme.textStyles.light.labelDisplayField,
-            secondaryText: {
-              ...props.secondClaimValue === undefined ?
-              JolocomTheme.textStyles.light.textDisplayFieldEdit :
-              JolocomTheme.textStyles.light.textDisplayField,
-              lineHeight: 24
-            },
-            container: styles.listItemContainerTwoLines
-          }}
-          centerElement={{
-            primaryText: props.secondClaimLabel !== undefined ?
-              stringCapitalize(props.secondClaimLabel) : 'Attribute',
-            secondaryText: props.secondClaimValue === undefined ?
-            '+ add' :
-            props.secondClaimValue
-          }}
-          onPress={() => {}}
-        /> :
-        null
-      }
+
+
+  return(
+    <View style={styles.containerField}>
+      { content.map((c) => {
+        return renderCard(c.claimValue, c.claimField, c.label, c.showIcon)
+      }) }
     </View>
   )
 }
