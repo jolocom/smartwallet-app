@@ -2,7 +2,7 @@ import { PrimaryColumn, ManyToOne, Entity, Column, OneToMany, JoinColumn } from 
 import { MasterKeyEntity, PersonaEntity } from 'src/lib/storage/entities'
 import { Type } from 'class-transformer'
 
-@Entity('keys')
+@Entity('derived_keys')
 export class DerivedKeyEntity {
   @PrimaryColumn({ length: 110 })
   encryptedWif!: string
@@ -18,6 +18,5 @@ export class DerivedKeyEntity {
 
   @Type(() => MasterKeyEntity)
   @ManyToOne(type => MasterKeyEntity, master => master.derivedKeys, { cascade: true })
-  @JoinColumn({ name: 'entropySource' })
-  entropySource!: MasterKeyEntity
+  masterKey!: MasterKeyEntity
 }

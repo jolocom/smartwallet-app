@@ -40,9 +40,9 @@ export class VerifiableCredentialEntity {
 
   @Expose()
   @OneToMany(type => SignatureEntity, sig => sig.verifiableCredential)
-  signatures!: SignatureEntity[]
+  proof!: SignatureEntity[]
 
   @Expose()
   @OneToMany(type => CredentialEntity, cred => cred.verifiableCredential)
-  credentials!: CredentialEntity[]
+  claim!: CredentialEntity[]
 }

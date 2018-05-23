@@ -66,7 +66,7 @@ export class Storage {
     await this.createConnectionIfNeeded()
     return this.connection.manager.find(VerifiableCredentialEntity, {
       where: query,
-      relations: ['credentials', 'signatures']
+      relations: ['claim', 'proof']
     })
   }
 

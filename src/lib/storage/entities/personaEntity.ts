@@ -6,7 +6,6 @@ import { Type } from 'class-transformer'
 export class PersonaEntity {
   @Type(() => DerivedKeyEntity)
   @ManyToOne(type => DerivedKeyEntity, { cascade: true })
-  @JoinColumn({ name: 'controllingKey' })
   controllingKey!: DerivedKeyEntity
 
   @PrimaryColumn({ length: 75 })
