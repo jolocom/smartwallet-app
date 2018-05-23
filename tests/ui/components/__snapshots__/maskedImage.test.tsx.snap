@@ -21,7 +21,7 @@ exports[`MaskedImage component correctly handles adding new points to the curren
   <Path
     d="L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174"
     fill="none"
-    stroke="#942f51"
+    stroke="#ffefdf"
     strokeLinecap="round"
     strokeLinejoin="round"
     strokeWidth={20}
@@ -50,7 +50,7 @@ exports[`MaskedImage component correctly handles adding new points to the curren
   <Path
     d="M173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L173 174 L187.5 188.5"
     fill="none"
-    stroke="#942f51"
+    stroke="#ffefdf"
     strokeLinecap="round"
     strokeLinejoin="round"
     strokeWidth={20}
@@ -79,7 +79,7 @@ exports[`MaskedImage component correctly handles adding new points to the curren
   <Path
     d="M191.5 381"
     fill="none"
-    stroke="#942f51"
+    stroke="#ffefdf"
     strokeLinecap="round"
     strokeLinejoin="round"
     strokeWidth={20}
@@ -108,7 +108,7 @@ exports[`MaskedImage component correctly handles adding new points to the curren
   <Path
     d="M191.5 381 L188 381"
     fill="none"
-    stroke="#942f51"
+    stroke="#ffefdf"
     strokeLinecap="round"
     strokeLinejoin="round"
     strokeWidth={20}
@@ -137,7 +137,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
   <Path
     d=""
     fill="none"
-    stroke="#942f51"
+    stroke="#ffefdf"
     strokeLinecap="round"
     strokeLinejoin="round"
     strokeWidth={20}

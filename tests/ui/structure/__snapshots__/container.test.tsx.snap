@@ -6,7 +6,7 @@ exports[`generic container component matches the snapshot with no extra props 1`
     Array [
       Object {
         "alignItems": "center",
-        "backgroundColor": "#f5f5f5",
+        "backgroundColor": "#fafafa",
         "display": "flex",
         "flexDirection": "column",
         "height": "100%",
@@ -28,7 +28,7 @@ exports[`generic container component matches the snapshot with style prop 1`] = 
     Array [
       Object {
         "alignItems": "center",
-        "backgroundColor": "#f5f5f5",
+        "backgroundColor": "#fafafa",
         "display": "flex",
         "flexDirection": "column",
         "height": "100%",

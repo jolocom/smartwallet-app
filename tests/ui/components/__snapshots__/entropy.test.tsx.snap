@@ -1,15 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Entropy component matches the snapshot when drawn upon and insufficient entropy 1`] = `
-<Container>
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+    }
+  }
+>
   <CenteredText
     msg="50 %"
     style={
       Object {
-        "backgroundColor": "#f5f5f5",
-        "color": "#a4a4a3",
-        "fontSize": 24,
-        "fontWeight": "200",
+        "backgroundColor": "black",
+        "color": "#ffefdf",
+        "fontSize": 22,
         "position": "absolute",
         "top": "20%",
       }
@@ -36,9 +41,14 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       onPress={[Function]}
       primary={false}
       raised={true}
-      style={Object {}}
+      style={
+        Object {
+          "container": Object {},
+          "text": Object {},
+        }
+      }
       testID={null}
-      text="NEXT STEP"
+      text="Continue"
       upperCase={true}
     />
   </Component>
@@ -46,15 +56,20 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
 `;
 
 exports[`Entropy component matches the snapshot when not drawn upon and insufficient entropy 1`] = `
-<Container>
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+    }
+  }
+>
   <CenteredText
-    msg="For security purposes, we need some randomness. Please put your finger anywhere on the screen and draw on it randomly."
+    msg="For security purposes, we need some randomness. Please tap the screen and draw on it randomly"
     style={
       Object {
-        "backgroundColor": "#f5f5f5",
-        "color": "#a4a4a3",
-        "fontSize": 24,
-        "fontWeight": "200",
+        "backgroundColor": "black",
+        "color": "#ffefdf",
+        "fontSize": 22,
         "position": "absolute",
         "top": "20%",
       }
@@ -81,9 +96,14 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       onPress={[Function]}
       primary={false}
       raised={true}
-      style={Object {}}
+      style={
+        Object {
+          "container": Object {},
+          "text": Object {},
+        }
+      }
       testID={null}
-      text="NEXT STEP"
+      text="Continue"
       upperCase={true}
     />
   </Component>
@@ -91,15 +111,20 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
 `;
 
 exports[`Entropy component matches the snapshot with when drawn upon and sufficient entropy 1`] = `
-<Container>
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+    }
+  }
+>
   <CenteredText
     msg="100 %"
     style={
       Object {
-        "backgroundColor": "#f5f5f5",
-        "color": "#a4a4a3",
-        "fontSize": 24,
-        "fontWeight": "200",
+        "backgroundColor": "black",
+        "color": "#ffefdf",
+        "fontSize": 22,
         "position": "absolute",
         "top": "20%",
       }
@@ -126,9 +151,14 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       onPress={[Function]}
       primary={false}
       raised={true}
-      style={Object {}}
+      style={
+        Object {
+          "container": Object {},
+          "text": Object {},
+        }
+      }
       testID={null}
-      text="NEXT STEP"
+      text="Continue"
       upperCase={true}
     />
   </Component>

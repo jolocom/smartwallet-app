@@ -21,7 +21,7 @@ exports[`Exception screen component Renders correctly when error object is provi
       ellipsizeMode="tail"
       style={
         Object {
-          "color": "#a4a4a3",
+          "color": "black",
           "fontSize": 10,
         }
       }
@@ -60,7 +60,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
       ellipsizeMode="tail"
       style={
         Object {
-          "color": "#a4a4a3",
+          "color": "black",
           "fontSize": 10,
         }
       }
