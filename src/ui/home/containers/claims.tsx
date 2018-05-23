@@ -4,11 +4,12 @@ import { ClaimDetails } from 'src/ui/home/components/claimDetails'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
-import { accountActions } from 'src/actions'
+import { accountActions, navigationActions } from 'src/actions'
 import { View } from 'react-native'
 import Immutable from 'immutable'
 
 interface ConnectProps {
+  openClaimDetails: () => void
   getClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
   claims: any
@@ -18,20 +19,16 @@ interface Props extends ConnectProps {}
 
 interface State {
   scanning: boolean
-  showClaimDetails: boolean
-  typeClaimDetails: string
 }
 
 export class ClaimsContainer extends React.Component<Props, State> {
 
   state = {
-    scanning: false,
-    showClaimDetails: false,
-    typeClaimDetails: ''
+    scanning: false
   }
 
   componentWillMount() {
-    this.props.getClaimsForDid()
+    // this.props.getClaimsForDid()
   }
 
   private openClaimDetails = (selectedType : string) : void => {
@@ -70,18 +67,11 @@ export class ClaimsContainer extends React.Component<Props, State> {
           onScannerCancel={this.onScannerCancel}
         />
       )
-    } else if(this.state.showClaimDetails) {
-      renderContent = (
-        <ClaimDetails
-          typeClaimDetails={ this.state.typeClaimDetails }
-          toggleClaimDetails={ this.toggleClaimDetails }
-        />
-      )
     } else {
       renderContent = (
         <ClaimOverview
           claims={this.props.claims}
-          openClaimDetails={ this.openClaimDetails }
+          openClaimDetails={ this.props.openClaimDetails }
           scanning={ this.state.scanning }
           onScannerStart={ this.onScannerStart }
          />
@@ -105,6 +95,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
+    openClaimDetails: () => {
+      dispatch(navigationActions.navigate({routeName: 'ClaimDetails'}))
+    },
     getClaimsForDid: () => {
       dispatch(accountActions.getClaimsForDid())
     },

@@ -3,6 +3,7 @@ import { Map } from 'immutable'
 
 const initialState = Map({
   loading: false,
+  selected: {id: 'default1', claimField: 'name', category: 'personal'},
   savedClaims: {
     personal: [{
       claimField: 'name',
