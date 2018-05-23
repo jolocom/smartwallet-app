@@ -7,5 +7,6 @@ export const enum routeList {
   SeedPhrase = 'SeedPhrase',
   Identity = 'Identity',
   Interactions = 'Interactions',
-  Exception = 'Exception'
+  Exception = 'Exception',
+  ClaimDetails = "ClaimDetails"
 }
