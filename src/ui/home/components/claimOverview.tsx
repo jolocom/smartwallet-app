@@ -6,7 +6,7 @@ import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 
-export interface Claim {
+export interface IClaimUI {
   claimField: string
   category: string
   claimValue?: string
@@ -86,59 +86,18 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
     const { openClaimDetails, claims } = this.props
     const categoryClaims = claims.savedClaims[category]
 
-    return categoryClaims.map((claim: Claim, i: number) => {
-
-      // TODO: handle multiLine claims e.g. address
+    return categoryClaims.map((claim: IClaimUI, i: number) => {
+      // TODO: handle multiLine claims e.g. address for later
       if (claim.multiLine) {
         return
-      }
-      if (claim.claimField === 'name') {
-        if (claim.claimValue === undefined) {
-          return (
-            <ClaimCard
-              key={ claim.claimField }
-              openClaimDetails={ openClaimDetails }
-              claimField={ claim.claimField }
-              firstClaimLabel={ claim.claimField }
-            />
-          )
-        } else {
-          let splitName = claim.claimValue.split(' ')
-          return (
-            <ClaimCard
-              key={ claim.claimValue }
-              openClaimDetails={ openClaimDetails }
-              claimField={ claim.claimField }
-              firstClaimLabel={ 'firstName' }
-              firstClaimValue={ splitName[0] }
-              secondClaimLabel={ 'lastName '}
-              secondClaimValue={ splitName[1] }
-              claimLines={2}
-            />
-          )
-        }
-
       } else {
-        if (claim.claimValue === undefined) {
-          return (
-            <ClaimCard
-              key={ claim.claimField }
-              openClaimDetails={ openClaimDetails }
-              claimField={ claim.claimField }
-              firstClaimLabel={ claim.claimField }
-            />
-          )
-        } else {
-          return (
-            <ClaimCard
-              key={ claim.claimValue }
-              openClaimDetails={ openClaimDetails }
-              claimField={ claim.claimField }
-              firstClaimLabel={ claim.claimField }
-              firstClaimValue={ claim.claimValue }
-            />
-          )
-        }
+        return (
+          <ClaimCard
+            key={ claim.claimField }
+            openClaimDetails={ openClaimDetails }
+            claimItem={ claim }
+          />
+        )
       }
     })
   }
