@@ -20,7 +20,7 @@ describe('landing container', ()=> {
     expect(props.startRegistration).not.toHaveBeenCalled()
 
     const childWrapper = rendered.find(LandingComponent).dive()
-    childWrapper.instance().handleButtonTap()
+    childWrapper.instance().props.handleButtonTap()
 
     expect(props.startRegistration).toHaveBeenCalledTimes(1)
   })

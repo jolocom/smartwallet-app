@@ -1,10 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`landing component matches the snapshot on render 1`] = `
-<Container>
-  <Block
-    flex={0.8}
-  >
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+    }
+  }
+>
+  <Block>
     <Carousel
       activeAnimationOptions={null}
       activeAnimationType="timing"
@@ -20,52 +24,36 @@ exports[`landing component matches the snapshot on render 1`] = `
       data={
         Array [
           Object {
-            "infoText": "",
-            "svgImage": <Onboarding00
+            "infoText": "It will help you to take back ownership of your digital self and control the usage of your private data when signing into services.",
+            "svgImage": <Landing00
               height="100%"
               width="100%"
             />,
-            "title": "",
+            "title": "Meet Jolocom Wallet",
           },
           Object {
-            "infoText": "Collect your data at a secure place. It’s yours, so only you own it!",
-            "svgImage": <Onboarding01
-              height="70%"
+            "infoText": "Your (personal) ... one sentence pitch to wrap the main value",
+            "svgImage": <Landing00
+              height="100%"
               width="100%"
             />,
-            "title": "Create an independent and secure digital identity.",
+            "title": "Feature 1",
           },
           Object {
-            "infoText": "See all your data in one safe place. Pull the plug and your data is only yours.",
-            "svgImage": <Onboarding02
-              height="70%"
+            "infoText": "Your (personal) ... one sentence pitch to wrap the main value",
+            "svgImage": <Landing00
+              height="100%"
               width="100%"
             />,
-            "title": "Have all your data at your fingertips.",
+            "title": "Feature 2",
           },
           Object {
-            "infoText": "See what you shared with whom. Have total control over your data.",
-            "svgImage": <Onboarding03
-              height="70%"
+            "infoText": "Your (personal) ... one sentence pitch to wrap the main value",
+            "svgImage": <Landing00
+              height="100%"
               width="100%"
             />,
-            "title": "Be aware of the information you share.",
-          },
-          Object {
-            "infoText": "We use the latest encryption technology and blockchain to store your sensitive data.",
-            "svgImage": <Onboarding04
-              height="70%"
-              width="100%"
-            />,
-            "title": "Your data is as safe as in your bank account.",
-          },
-          Object {
-            "infoText": "The storage of your data is payed in ether. But only the change of data costs.",
-            "svgImage": <Onboarding04
-              height="70%"
-              width="100%"
-            />,
-            "title": "Security is hard to maintain, that is why the storage costs.",
+            "title": "Feature 3",
           },
         ]
       }
@@ -87,65 +75,83 @@ exports[`landing component matches the snapshot on render 1`] = `
       shouldOptimizeUpdates={true}
       slideStyle={Object {}}
       sliderWidth={750}
+      style={
+        Object {
+          "alignItems": "center",
+          "justifyContent": "center",
+        }
+      }
       swipeThreshold={20}
       useScrollView={false}
       vertical={false}
     />
   </Block>
   <Block
-    flex={0.13}
+    style={
+      Object {
+        "backgroundColor": "black",
+        "flex": 0.16666666666666666,
+      }
+    }
   >
     <Pagination
       activeDotIndex={0}
       dotStyle={
         Object {
-          "backgroundColor": "#942f51",
-          "height": 7,
-          "width": 7,
+          "backgroundColor": "#ffdebc",
+          "height": 8,
+          "width": 8,
         }
       }
-      dotsLength={6}
+      dotsLength={4}
       inactiveDotOpacity={0.4}
       inactiveDotScale={0.6}
       inactiveDotStyle={
-        Array [
-          Object {
-            "backgroundColor": "#942f51",
-            "height": 7,
-            "width": 7,
-          },
-          Array [
-            Object {
-              "backgroundColor": "#545454",
-            },
-          ],
-        ]
+        Object {
+          "backgroundColor": "#fffefc",
+          "height": 4,
+          "opacity": 0.6,
+          "width": 4,
+        }
       }
       tappableDots={false}
       vertical={false}
     />
   </Block>
   <Block
-    flex={0.07}
+    style={
+      Object {
+        "backgroundColor": "black",
+        "flex": 0.125,
+      }
+    }
   >
     <Button
       accent={false}
       disabled={false}
       icon={null}
       onLongPress={null}
-      onPress={[Function]}
-      primary={true}
+      onPress={null}
+      primary={false}
       raised={true}
       style={
         Object {
           "container": Object {
             "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "width": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TTCommons",
+            "fontSize": 22,
           },
         }
       }
       testID={null}
-      text="Create Your Identity"
-      upperCase={true}
+      text="Get started"
+      upperCase={false}
     />
   </Block>
 </Container>
