@@ -17,10 +17,10 @@ export const HomeRoutes = TabNavigator(
         tabBarLabel: 'My identity',
         headerTitle: 'Jolocom ID Wallet',
         headerTitleStyle: {
-          fontSize: JolocomTheme.textStyles.dark.appHeader.fontSize
+          fontSize: JolocomTheme.labelFontSize 
         },
-        headerStyle: { backgroundColor: JolocomTheme.palette.primaryColorBlack },
-        headerTintColor: JolocomTheme.palette.primaryColorWhite
+        headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
+        headerTintColor: JolocomTheme.primaryColorWhite
       }
     },
     Interactions: {
@@ -29,29 +29,29 @@ export const HomeRoutes = TabNavigator(
         tabBarLabel: 'Data history',
         headerTitle: 'Jolocom ID Wallet',
         headerTitleStyle: {
-          fontSize: JolocomTheme.textStyles.dark.appHeader.fontSize
+          fontSize: JolocomTheme.labelFontSize
         },
         headerStyle: {
-          backgroundColor: JolocomTheme.palette.primaryColorBlack,
+          backgroundColor: JolocomTheme.primaryColorBlack,
         },
-        headerTintColor: JolocomTheme.palette.primaryColorWhite
+        headerTintColor: JolocomTheme.primaryColorWhite
       }
     }
   },
   {
     tabBarOptions: {
       upperCaseLabel: false,
-      activeTintColor: JolocomTheme.palette.primaryColorSand,
-      inactiveTintColor: JolocomTheme.palette.primaryColorGrey,
+      activeTintColor: JolocomTheme.primaryColorSand,
+      inactiveTintColor: JolocomTheme.primaryColorGrey,
       labelStyle: {
-        fontSize: JolocomTheme.textStyles.dark.appHeader.fontSize,
+        fontSize: JolocomTheme.labelFontSize,
         textAlign: 'center'
       },
       style: {
-        backgroundColor: JolocomTheme.palette.primaryColorBlack
+        backgroundColor: JolocomTheme.primaryColorBlack
       },
       indicatorStyle: {
-        backgroundColor: JolocomTheme.palette.primaryColorSand
+        backgroundColor: JolocomTheme.primaryColorSand
       }
     },
     tabBarComponent: TabBarTop,
