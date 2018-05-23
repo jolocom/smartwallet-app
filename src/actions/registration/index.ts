@@ -2,6 +2,7 @@ import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
+import * as loading from 'src/actions/registration/loadingStages'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -36,7 +37,7 @@ export const startRegistration = () => {
     try {
       await storageLib.provisionTables()
       dispatch(navigationActions.navigate({
-        routeName: routeList.PasswordEntry
+        routeName: routeList.Entropy
       }))
     } catch(err) {
       dispatch(genericActions.showErrorScreen(err))
@@ -55,7 +56,7 @@ export const createIdentity = (encodedEntropy: string) => {
         ethereumKey
       } = await jolocomLib.identity.create(encodedEntropy)
 
-      dispatch(setLoadingMsg('Encrypting and storing data locally'))
+      dispatch(setLoadingMsg(loading.loadingStages[0]))
 
       const password = await keyChainLib.getPassword()
       const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
@@ -87,20 +88,21 @@ export const createIdentity = (encodedEntropy: string) => {
         address: ethAddr
       } = ethereumLib.wifToEthereumKey(ethereumKey.wif)
 
-      dispatch(setLoadingMsg('Storing data on IPFS'))
+      dispatch(setLoadingMsg(loading.loadingStages[1]))
       const ipfsHash = await jolocomLib.identity.store(didDocument)
 
-      dispatch(setLoadingMsg('Fueling with Ether'))
+      dispatch(setLoadingMsg(loading.loadingStages[2]))
       await ethereumLib.requestEther(ethAddr)
 
       dispatch(setLoadingMsg('Registering identity on Ethereum'))
-      await jolocomLib.identity.register({
+
+        await jolocomLib.identity.register({
         ethereumKey: Buffer.from(ethPrivKey, 'hex'),
         did: didDocument.getDID(),
         ipfsHash
       })
 
-      dispatch(navigationActions.navigate({
+        dispatch(navigationActions.navigate({
         routeName: routeList.SeedPhrase,
         params: { mnemonic }
       }))
