@@ -36,7 +36,7 @@
     "ts-loader": "3.5.0",
     "tslib": "^1.7.1",
     "tslint": "^5.9.1",
-    "typescript": "^2.7.0",
+    "typescript": "^2.8.3",
     "yarn": "^1.5.1"
   },
   "scripts": {
@@ -89,12 +89,13 @@
     "browser-ipfs": "^0.0.6",
     "crypto-js": "^3.1.9-1",
     "ethereumjs-wallet": "^0.6.0",
-    "jolocom-lib": "^0.4.9",
+    "jolocom-lib": "0.4.9",
     "material-colors": "^1.2.5",
     "react": "16.2.0",
     "react-native": "^0.55.3",
     "react-native-camera": "^1.1.1",
     "react-native-fetch-blob": "^0.10.8",
+    "react-native-indicator": "^0.7.0",
     "react-native-keychain": "^3.0.0-rc.3",
     "react-native-material-ui": "^1.22.2",
     "react-native-qrcode-scanner": "^1.0.1",
@@ -109,8 +110,8 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "sjcl": "^1.0.7",
-    "sqlite3": "^4.0.0",
     "squel": "^5.12.1",
+    "sqlite3": "^4.0.0",
     "wif": "^2.0.6"
   }
 }

@@ -20,6 +20,8 @@ const palette = {
   backgroundContainer: '#f5f5f5',
   backgroundCard: '#fafafa',
   backgroundDot: '#545454',
+  primaryTextColorSand: '#ffefdf',
+  spinnerColor: '#89ffdebc',
 
   // TODO: remove after ui refactor
   textColor_grey: '#a4a4a3',

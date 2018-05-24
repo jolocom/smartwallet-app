@@ -4,8 +4,8 @@ import { registrationActions } from 'src/actions'
 import { EntropyComponent } from 'src/ui/registration/components/entropy'
 import { RootState } from 'src/reducers'
 import { 
-  EntropyGenerator,
-  EntropyGeneratorInterface
+  EntropyGeneratorInterface,
+  EntropyGenerator
 } from 'src/lib/entropyGenerator'
 
 interface ConnectProps {
@@ -24,7 +24,7 @@ interface State {
 }
 
 export class EntropyContainer extends React.Component<Props, State> {
-  private entropyGenerator!: EntropyGeneratorInterface
+  private entropyGenerator! : EntropyGeneratorInterface
 
   state = {
     isDrawn: false,
