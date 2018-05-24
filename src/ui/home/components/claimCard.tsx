@@ -101,6 +101,7 @@ export const ClaimCard : React.SFC<Props> = (props) => {
   const renderCard = (claimVal: any, claimField: string, label: string, showIcon: boolean) => {
     return (
       <ListItem
+        key={ label }
         style={{
           primaryTextContainer: styles.listItemPrimaryTextContainer,
           primaryText: claimVal === undefined ?
@@ -132,7 +133,7 @@ export const ClaimCard : React.SFC<Props> = (props) => {
 
 
   return(
-    <View style={styles.containerField}>
+    <View style={ styles.containerField }>
       { content.map((c) => {
         return renderCard(c.claimValue, c.claimField, c.label, c.showIcon)
       }) }

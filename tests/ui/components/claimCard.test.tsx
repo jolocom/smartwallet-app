@@ -5,8 +5,10 @@ import { shallow } from 'enzyme'
 describe('ClaimCard component', ()=> {
   it('matches the snapshot on render', () => {
     const props = {
-      claimType: 'name',
-      firstClaimLabel: 'name',
+      claimItem: {
+        claimField: 'name',
+        category: 'personal'
+      },
       openClaimsDetails: () => null
     }
     const rendered = shallow(<ClaimCard
@@ -17,12 +19,11 @@ describe('ClaimCard component', ()=> {
 
   it('matches the snapshot of a two line claim', () => {
     const props = {
-      claimType: 'name',
-      firstClaimLabel: 'first name',
-      firstClaimValue: 'natascha',
-      claimLines: 2,
-      secondClaimLabel: 'last name',
-      secondClaimValue: 'xx',
+      claimItem: {
+        claimField: 'name',
+        category: 'personal',
+        claimValue: 'natascha world'
+      },
       openClaimsDetails: () => null
     }
     const rendered = shallow(<ClaimCard
@@ -33,9 +34,11 @@ describe('ClaimCard component', ()=> {
 
   it('matches the snapshot of a claim with unspecified icon / uses default icon', () => {
     const props = {
-      claimType: 'favColor',
-      firstClaimLabel: 'favourite Color',
-      firstClaimValue: 'green',
+      claimItem: {
+        category: 'other',
+        claimField: 'favColor',
+        claimValue: 'green'
+      },
       openClaimsDetails: () => null
     }
 
