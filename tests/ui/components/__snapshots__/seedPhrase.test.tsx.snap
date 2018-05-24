@@ -5,7 +5,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
   <Block
     flex={0.1}
   >
-    <Techguy
+    <Landing00
       height={80}
       width={80}
     />
@@ -18,7 +18,11 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "color": "#ffefdf",
+<<<<<<< HEAD
           "fontSize": 20,
+=======
+          "fontSize": 22,
+>>>>>>> fix failing test in landing container
         }
       }
     />
@@ -31,7 +35,11 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "color": "#ffefdf",
+<<<<<<< HEAD
           "fontSize": 20,
+=======
+          "fontSize": 22,
+>>>>>>> fix failing test in landing container
         }
       }
     />
@@ -45,7 +53,11 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "color": "#ffefdf",
+<<<<<<< HEAD
           "fontSize": 20,
+=======
+          "fontSize": 22,
+>>>>>>> fix failing test in landing container
         }
       }
     />
@@ -104,7 +116,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
   <Block
     flex={0.1}
   >
-    <Techguy
+    <Landing00
       height={80}
       width={80}
     />
@@ -117,7 +129,11 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "color": "#ffefdf",
+<<<<<<< HEAD
           "fontSize": 20,
+=======
+          "fontSize": 22,
+>>>>>>> fix failing test in landing container
         }
       }
     />
@@ -130,7 +146,11 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "color": "#ffefdf",
+<<<<<<< HEAD
           "fontSize": 20,
+=======
+          "fontSize": 22,
+>>>>>>> fix failing test in landing container
         }
       }
     />
@@ -144,7 +164,11 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "color": "#ffefdf",
+<<<<<<< HEAD
           "fontSize": 20,
+=======
+          "fontSize": 22,
+>>>>>>> fix failing test in landing container
         }
       }
     />

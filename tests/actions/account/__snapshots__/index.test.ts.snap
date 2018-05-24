@@ -15,28 +15,4 @@ Array [
 
 exports[`Account action creators Should correctly handle an empty personas table 1`] = `Array []`;
 
-exports[`Account action creators Should correctly handle more existing user identites 1`] = `
-Array [
-  Object {
-    "type": "DID_SET",
-    "value": "did:jolo:first",
-  },
-  Object {
-    "routeName": "Identity",
-    "type": "Navigation/NAVIGATE",
-  },
-]
-`;
-
-exports[`Account action creators Should correctly handle one existing user identity 1`] = `
-Array [
-  Object {
-    "type": "DID_SET",
-    "value": "did:jolo:mock",
-  },
-  Object {
-    "routeName": "Identity",
-    "type": "Navigation/NAVIGATE",
-  },
-]
-`;
+exports[`Account action creators Should correctly handle more existing user identites 1`] = `Array []`;
