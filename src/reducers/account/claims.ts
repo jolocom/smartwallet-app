@@ -6,11 +6,11 @@ const initialState = Map({
   savedClaims: {
     claimCategories: ['personal', 'contact'],
     personal: [{
-      claimType: 'name',
+      claimField: 'name',
       category: 'personal'
     }],
     contact: [{
-      claimType: 'email',
+      claimField: 'email',
       category: 'contact'
     }]
   }
@@ -21,8 +21,7 @@ export const claims = (state = initialState, action: AnyAction): any => {
   switch (action.type) {
 
     case 'SET_LOADING':
-      const newState = state.setIn(['loading'], action.loading)
-      return newState
+      return state.setIn(['loading'], action.loading)
 
     case 'GET_CLAIMS_DID':
       return state.setIn(['savedClaims'], action.claims).setIn(['loading'], false)
