@@ -5,7 +5,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
   <Block
     flex={0.1}
   >
-    <Techguy
+    <Landing00
       height={80}
       width={80}
     />
@@ -17,9 +17,8 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       msg="Your secure phrase is:"
       style={
         Object {
-          "color": "#a4a4a3",
-          "fontSize": 20,
-          "fontWeight": "200",
+          "color": "#ffefdf",
+          "fontSize": 22,
         }
       }
     />
@@ -31,9 +30,8 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       msg="mock seedPhrase"
       style={
         Object {
-          "color": "#4b132b",
-          "fontSize": 20,
-          "fontWeight": "400",
+          "color": "#ffefdf",
+          "fontSize": 22,
         }
       }
     />
@@ -46,8 +44,8 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
  Write these words down on an analog andsecure place. Store it in at least two different places.Without these words you cannot access your wallet again.Anyone with these words can get access to your wallet. Taking a screenshot is not secure."
       style={
         Object {
-          "color": "#b3c90f",
-          "fontSize": 13,
+          "color": "#ffefdf",
+          "fontSize": 22,
         }
       }
     />
@@ -65,12 +63,11 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "icon": Object {
-            "color": "#b3c90f",
+            "color": "#ffefdf",
           },
           "label": Object {
-            "color": "#a4a4a3",
-            "fontSize": 13,
-            "fontWeight": "300",
+            "color": "#942f51",
+            "fontSize": 20,
             "marginLeft": -5,
             "padding": 0,
             "position": "relative",
@@ -107,7 +104,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
   <Block
     flex={0.1}
   >
-    <Techguy
+    <Landing00
       height={80}
       width={80}
     />
@@ -119,9 +116,8 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       msg="Your secure phrase is:"
       style={
         Object {
-          "color": "#a4a4a3",
-          "fontSize": 20,
-          "fontWeight": "200",
+          "color": "#ffefdf",
+          "fontSize": 22,
         }
       }
     />
@@ -133,9 +129,8 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       msg="mock seedPhrase"
       style={
         Object {
-          "color": "#4b132b",
-          "fontSize": 20,
-          "fontWeight": "400",
+          "color": "#ffefdf",
+          "fontSize": 22,
         }
       }
     />
@@ -148,8 +143,8 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
  Write these words down on an analog andsecure place. Store it in at least two different places.Without these words you cannot access your wallet again.Anyone with these words can get access to your wallet. Taking a screenshot is not secure."
       style={
         Object {
-          "color": "#b3c90f",
-          "fontSize": 13,
+          "color": "#ffefdf",
+          "fontSize": 22,
         }
       }
     />
@@ -167,12 +162,11 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "icon": Object {
-            "color": "#b3c90f",
+            "color": "#ffefdf",
           },
           "label": Object {
-            "color": "#a4a4a3",
-            "fontSize": 13,
-            "fontWeight": "300",
+            "color": "#942f51",
+            "fontSize": 20,
             "marginLeft": -5,
             "padding": 0,
             "position": "relative",
