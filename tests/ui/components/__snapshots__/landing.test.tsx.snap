@@ -75,6 +75,12 @@ exports[`landing component matches the snapshot on render 1`] = `
       shouldOptimizeUpdates={true}
       slideStyle={Object {}}
       sliderWidth={750}
+      style={
+        Object {
+          "alignItems": "center",
+          "justifyContent": "center",
+        }
+      }
       swipeThreshold={20}
       useScrollView={false}
       vertical={false}
@@ -84,7 +90,11 @@ exports[`landing component matches the snapshot on render 1`] = `
     style={
       Object {
         "backgroundColor": "black",
+<<<<<<< HEAD
         "flex": 0.2,
+=======
+        "flex": 0.16666666666666666,
+>>>>>>> fix failing test in landing container
       }
     }
   >
@@ -116,7 +126,11 @@ exports[`landing component matches the snapshot on render 1`] = `
     style={
       Object {
         "backgroundColor": "black",
+<<<<<<< HEAD
         "flex": 0.1,
+=======
+        "flex": 0.125,
+>>>>>>> fix failing test in landing container
       }
     }
   >
@@ -125,7 +139,11 @@ exports[`landing component matches the snapshot on render 1`] = `
       disabled={false}
       icon={null}
       onLongPress={null}
+<<<<<<< HEAD
       onPress={null}
+=======
+      onPress={[Function]}
+>>>>>>> fix failing test in landing container
       primary={false}
       raised={true}
       style={
@@ -133,8 +151,13 @@ exports[`landing component matches the snapshot on render 1`] = `
           "container": Object {
             "backgroundColor": "#942f51",
             "borderRadius": 4,
+<<<<<<< HEAD
             "height": "100%",
             "width": "50%",
+=======
+            "height": 48,
+            "width": 164,
+>>>>>>> fix failing test in landing container
           },
           "text": Object {
             "color": "white",
