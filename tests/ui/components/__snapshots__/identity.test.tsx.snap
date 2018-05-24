@@ -63,7 +63,7 @@ exports[`Identity component matches the snapshot on render 1`] = `
         style={
           Object {
             "alignItems": "center",
-            "backgroundColor": "#942f51",
+            "backgroundColor": "black",
             "borderRadius": 35,
             "elevation": 8,
             "height": 55,
