@@ -8,8 +8,7 @@ import {
   SignatureEntity,
   CredentialEntity
 } from 'src/lib/storage/entities'
-import { IVerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential/types'
-import { IClaim } from 'jolocom-lib/js/credentials/credential/types'
+import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
 
 interface PersonaAttributes {
   did: string
@@ -33,7 +32,7 @@ export class Storage {
   private config: ConnectionOptions
 
   store = {
-    verifiableCredential: this.storeVClaimFromJSON.bind(this),
+    verifiableCredential: this.storeVClaim.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
     masterKey: this.storeMasterKeyFromJSON.bind(this),
     derivedKey: this.storeDerKeyFromJSON.bind(this)
@@ -62,12 +61,14 @@ export class Storage {
     })
   }
 
-  private async getVCredential(query?: object) : Promise<VerifiableCredentialEntity[]>{
+  private async getVCredential(query?: object) : Promise<VerifiableCredential[]> {
     await this.createConnectionIfNeeded()
-    return this.connection.manager.find(VerifiableCredentialEntity, {
+    const entities = await this.connection.manager.find(VerifiableCredentialEntity, {
       where: query,
-      relations: ['claim', 'proof']
+      relations: ['claim', 'proof', 'subject']
     })
+
+    return entities.map(e => e.toVerifiableCredential())
   }
 
   private async storePersonaFromJSON(args: PersonaAttributes) : Promise<void> {
@@ -88,29 +89,18 @@ export class Storage {
     await this.connection.manager.save(derivedKey)
   }
 
-  private async storeVClaimFromJSON(args: IVerifiableCredential) : Promise<void> {
+  private async storeVClaim(vCred: VerifiableCredential) : Promise<void> {
     await this.createConnectionIfNeeded()
-    const verifiableCredential = plainToClass(VerifiableCredentialEntity, args)
-    const signature = plainToClass(SignatureEntity, args.proof)
-    const credentials = this.assembleCredentials(verifiableCredential, args.claim)
+    const verifiableCredential = VerifiableCredentialEntity.fromVeriableCredential(vCred)
+    const signature = SignatureEntity.fromLinkedDataSignature(vCred.getProofSection())
+    const credential = CredentialEntity.fromVerifiableCredential(vCred)
 
     signature.verifiableCredential = verifiableCredential
+    credential.verifiableCredential = verifiableCredential
+
+    verifiableCredential.proof = [signature]
+    verifiableCredential.claim = [credential]
 
     await this.connection.manager.save(verifiableCredential)
-    await this.connection.manager.save(signature)
-    await Promise.all(credentials.map(cred => this.connection.manager.save(cred)))
-  }
-
-  private assembleCredentials(vCred: VerifiableCredentialEntity, args: IClaim) : CredentialEntity[] {
-    const claimNames = Object.keys(args).filter(k => k !== 'id')
-    const claims = claimNames.map(c => {
-      return {
-        verifiableCredential: vCred,
-        propertyName: c,
-        encryptedValue: args[c]
-      }
-    })
-
-    return claims.map(claim => plainToClass(CredentialEntity, claim))
   }
 }

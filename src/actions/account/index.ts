@@ -14,6 +14,7 @@ export const setDid = (did: string) => {
 export const checkIdentityExists = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { storageLib } = backendMiddleware
+
     try {
       const personas = await storageLib.get.persona()
       if (!personas.length) {

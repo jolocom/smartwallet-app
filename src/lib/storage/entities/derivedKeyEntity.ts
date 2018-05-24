@@ -1,4 +1,4 @@
-import { PrimaryColumn, ManyToOne, Entity, Column, OneToMany, JoinColumn } from 'typeorm/browser'
+import { PrimaryColumn, ManyToOne, Entity, Column, OneToMany } from 'typeorm/browser'
 import { MasterKeyEntity, PersonaEntity } from 'src/lib/storage/entities'
 import { Type } from 'class-transformer'
 
