@@ -91,20 +91,8 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
-    fontWeight: '100',
-    fontSize: JolocomTheme.landingHeaderFontSize
-  },
-  paginationBlockStyle: {
-    flex: 1/5,
-    backgroundColor: JolocomTheme.primaryColorBlack
-  },
-  buttonBlockStyle: {
-    flex: 1/10,
-    backgroundColor: JolocomTheme.primaryColorBlack
-  },
-  buttonStyle: {
-    color: JolocomTheme.primaryColorPurple,
-    fontSize: JolocomTheme.headerFontSize
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: "100" 
   }
 })
 

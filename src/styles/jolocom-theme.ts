@@ -9,6 +9,8 @@ const primaryColors = {
   dotColorActive: "#ffdebc",
   dotColorInactive: "#fffefc",
 
+  spinnerColor: '#89ffdebc',
+
   labelFontSize: 20,
   headerFontSize: 22,
   landingHeaderFontSize: 30,
