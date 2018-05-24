@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch } from 'redux'
-import { navigationActions, genericActions } from 'src/actions/'
-import { BackendMiddleware } from 'src/backendMiddleware'
-import { routeList } from 'src/routeList'
+// import { navigationActions, genericActions } from 'src/actions/'
+// import { BackendMiddleware } from 'src/backendMiddleware'
+// import { routeList } from 'src/routeList'
 
 export const setDid = (did: string) => {
   return {

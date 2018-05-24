@@ -4,7 +4,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
 
 const { Checkbox, Button } = require('react-native-material-ui')
-import { Techguy } from 'src/resources'
+import { Landing00 } from 'src/resources'
 
 interface Props {
   seedPhrase: string;
@@ -52,7 +52,7 @@ export const SeedPhrase : React.SFC<Props> = props => {
   return(
     <Container>
       <Block flex={ 0.1 }>
-        <Techguy height={80} width={80} />
+        <Landing00 height={80} width={80} />
       </Block>
       <Block flex={ 0.1 }>
         <CenteredText
