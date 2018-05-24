@@ -37,7 +37,7 @@ export const startRegistration = () => {
     try {
       await storageLib.provisionTables()
       dispatch(navigationActions.navigate({
-        routeName: routeList.Entropy
+        routeName: routeList.PasswordEntry
       }))
     } catch(err) {
       dispatch(genericActions.showErrorScreen(err))
