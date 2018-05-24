@@ -64,7 +64,6 @@ export const ClaimCard : React.SFC<Props> = (props) => {
   const { claimValue, claimField } = props.claimItem
   let content = []
 
-  // handling of name as first name and last name
   if (claimField === 'name' && claimValue !== undefined) {
     let splitName = claimValue.split(' ')
     content.push({
