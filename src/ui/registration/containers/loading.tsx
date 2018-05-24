@@ -74,7 +74,7 @@ export class LoadingContainer extends React.Component<Props, State> {
           <CenteredText style={styles.text} msg={"to set up your identity"} />
         </Block>
         <Block>
-          <loaders.RippleLoader size={80} strokeWidth={4} color={JolocomTheme.primaryColorPurple} />
+          <loaders.RippleLoader size={80} strokeWidth={4} color={JolocomTheme.spinnerColor} />
         </Block>
         <Block style={styles.loadingMsg}>
           <View style={styles.dotsContainer}>
