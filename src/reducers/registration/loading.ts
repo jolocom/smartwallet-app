@@ -3,7 +3,7 @@ import Immutable from 'immutable'
 import { LoadingState } from 'src/reducers/registration/'
 
 const initialState : LoadingState = {
-  loadingMsg: "Loading"
+  loadingMsg: 'Loading'
 }
 
 export const loading = (state = Immutable.fromJS(initialState), action: AnyAction): string => {
