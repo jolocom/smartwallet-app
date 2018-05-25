@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
 import { View } from 'react-native'
+import Immutable from 'immutable'
 
 interface ConnectProps {
   getClaimsForDid: () => void
@@ -96,8 +97,9 @@ export class ClaimsContainer extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => {
+  const claims = Immutable.fromJS(state.account.claims)
   return {
-    claims: state.account.claims.toObject()
+    claims: claims.toObject()
   }
 }
 
