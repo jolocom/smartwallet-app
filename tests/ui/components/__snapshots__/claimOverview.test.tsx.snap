@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ClaimsOverview component matches the snapshot on render 1`] = `
+<Container
+  style={
+    Object {
+      "flex": 1,
+      "padding": 0,
+    }
+  }
+>
+  <ScrollView
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <Component
+      key="claimCategories"
+    >
+      <Component>
+        <Component
+          style={
+            Object {
+              "marginBottom": 8,
+              "marginLeft": 16,
+              "marginRight": 16,
+              "marginTop": 27,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            ellipsizeMode="tail"
+            style={
+              Object {
+                "fontSize": 17,
+                "textAlign": "left",
+              }
+            }
+          />
+        </Component>
+        <ClaimCard
+          claimItem="personal"
+        />
+        <ClaimCard
+          claimItem="contact"
+        />
+      </Component>
+    </Component>
+    <Component
+      key="personal"
+    >
+      <Component>
+        <Component
+          style={
+            Object {
+              "marginBottom": 8,
+              "marginLeft": 16,
+              "marginRight": 16,
+              "marginTop": 27,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            ellipsizeMode="tail"
+            style={
+              Object {
+                "fontSize": 17,
+                "textAlign": "left",
+              }
+            }
+          >
+            Personal / general
+          </Text>
+        </Component>
+        <ClaimCard
+          claimItem={
+            Object {
+              "category": "personal",
+              "claimType": "name",
+            }
+          }
+        />
+      </Component>
+    </Component>
+    <Component
+      key="contact"
+    >
+      <Component>
+        <Component
+          style={
+            Object {
+              "marginBottom": 8,
+              "marginLeft": 16,
+              "marginRight": 16,
+              "marginTop": 27,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            ellipsizeMode="tail"
+            style={
+              Object {
+                "fontSize": 17,
+                "textAlign": "left",
+              }
+            }
+          >
+            Contact
+          </Text>
+        </Component>
+        <ClaimCard
+          claimItem={
+            Object {
+              "category": "contact",
+              "claimType": "email",
+            }
+          }
+        />
+      </Component>
+    </Component>
+  </ScrollView>
+  <Block
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "bottom": "5%",
+        "position": "absolute",
+        "right": "3%",
+      }
+    }
+  >
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#942f51",
+          "borderRadius": 35,
+          "elevation": 8,
+          "height": 55,
+          "shadowColor": "#000",
+          "shadowOffset": Object {
+            "height": 2,
+            "width": 0,
+          },
+          "shadowOpacity": 0.8,
+          "shadowRadius": 2,
+          "width": 55,
+        }
+      }
+    >
+      <Icon
+        allowFontScaling={false}
+        color="white"
+        name="qrcode-scan"
+        size={30}
+        style={
+          Object {
+            "margin": "20%",
+          }
+        }
+      />
+    </TouchableOpacity>
+  </Block>
+</Container>
+`;
