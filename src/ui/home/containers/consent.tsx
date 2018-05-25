@@ -9,9 +9,11 @@ interface ConnectProps { }
 interface Props extends ConnectProps {}
 
 interface State {
+    //TODO: typing for service Provider
   serviceProvider: object
-  requestedClaims: string[] 
-  checkboxList: object[]
+  requestedClaims: string[]
+    //TODO: needs an interface for checkboxlist which will accept filter as a method
+  checkboxList: any
 }
 
 //TODO: requestedClaims interface
@@ -21,7 +23,7 @@ export class ConsentContainer extends React.Component<Props, State> {
   state = {
     //serviceProvider should be passed in
     serviceProvider: { name: 'Jolocom', metadata: 'xyz'},
-    //requestdClaims should be passed in
+    //requestedClaims should be passed in
     requestedClaims: ['name', 'email', 'passport'],
     checkboxList: [],
   }
@@ -30,9 +32,9 @@ export class ConsentContainer extends React.Component<Props, State> {
     this.mapRequestedClaimsToCheckboxes(this.state.requestedClaims)
   }
 
+  //TODO: set into redux action here?
   private mapRequestedClaimsToCheckboxes(requestedClaims: string[]) {
-    //typing
-    const checkboxList: object[] = []
+    const checkboxList: any = []
     requestedClaims.forEach((claim: string) => {
       checkboxList.push(
         {
@@ -42,7 +44,6 @@ export class ConsentContainer extends React.Component<Props, State> {
         }
       )
     })
-    //set into redux action here
     this.setState({ checkboxList })
   }
 

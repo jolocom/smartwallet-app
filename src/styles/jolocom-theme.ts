@@ -18,6 +18,8 @@ const primaryColors = {
   headerFontSize: 22,
   landingHeaderFontSize: 30,
 
+  fontWeight: '100',
+
   contentFontFamily: 'TTCommons'
 }
 
