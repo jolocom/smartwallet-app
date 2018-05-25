@@ -76,12 +76,25 @@ const textStyles = {
     }
   },
   light: {
-    labelDisplayField: {
-      fontSize: 16,
+    labelDisplayFieldEdit: {
+      fontSize: 17,
+      color: palette.primaryColorBlack
+    },
+    textDisplayFieldEdit: {
+      fontSize: 22,
       color: palette.primaryColor
     },
+    labelDisplayField: {
+      fontSize: 17,
+      color: palette.primaryColorBlack,
+      opacity: 0.4
+    },
     textDisplayField: {
-      fontSize: 20,
+      fontSize: 22,
+      color: palette.primaryColorBlack
+    },
+    subheader: {
+      fontSize: 30,
       color: palette.primaryColorBlack
     }
   },
