@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`account reducer should handle the DID_SET action  1`] = `
-Object {
+Immutable.Map {
   "did": "mock did",
 }
 `;
 
 exports[`account reducer should initialize correctly 1`] = `
-Object {
+Immutable.Map {
   "did": "",
 }
 `;

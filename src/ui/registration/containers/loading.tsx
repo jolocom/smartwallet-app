@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { registrationActions } from 'src/actions'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
+import Immutable from 'immutable'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 const loaders = require('react-native-indicator')
@@ -92,8 +93,9 @@ export class LoadingContainer extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => {
+  const loading = Immutable.fromJS(state.registration.loading)
   return {
-    loadingMsg: state.registration.loading.getIn(['loadingMsg'])
+    loadingMsg: loading.get('loadingMsg')
   }
 }
 
