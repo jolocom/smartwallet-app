@@ -11,6 +11,11 @@ export interface ClaimState {
   readonly claims: Map<string, any>
 }
 
+export interface AccountState {
+  did: DidState,
+  claims: ClaimState
+}
+
 export const accountReducer = combineReducers({
   did,
   claims
