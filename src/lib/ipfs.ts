@@ -1,7 +1,8 @@
-import { IipfsConnector } from 'jolocom-lib'
+import { IIpfsConnector } from 'jolocom-lib/js/ipfs/types'
+
 const RNFetchBlob = require('react-native-fetch-blob').default
 
-export class IpfsLib implements IipfsConnector {
+export class IpfsLib implements IIpfsConnector {
   private nativeLib = RNFetchBlob
   private ipfsHost!: string
 

@@ -19,7 +19,9 @@ Object {
       ],
     },
   },
-  "did": "mock did",
+  "did": Immutable.Map {
+    "did": "mock did",
+  },
 }
 `;
 
@@ -42,6 +44,8 @@ Object {
       ],
     },
   },
-  "did": "",
+  "did": Immutable.Map {
+    "did": "",
+  },
 }
 `;

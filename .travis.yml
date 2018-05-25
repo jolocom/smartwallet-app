@@ -1,9 +1,15 @@
 language: node_js
 addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.9
   code_climate:
 node_js:
-  - "9.10.1"
-install: yarn
+  - "8.11.2"
+install: 
+  - CC=gcc-4.9 CXX=g++-4.9 yarn install
 script: yarn test --runInBand
 after_success:before_script: node_modules/.bin/tslint -c ./tslint.json './src/**/*.ts?(x)'
   - yarn global add codeclimate-test-reporter

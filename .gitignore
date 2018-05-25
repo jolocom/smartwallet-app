@@ -4,7 +4,7 @@ node_modules/
 build/
 .tern-project
 .expo/
-yarn.lock
+package-lock.json
 coverage/
 
 # React Native Android

@@ -1,9 +1,15 @@
 import { AnyAction } from 'redux'
+import Immutable from 'immutable'
+import { DidState } from 'src/reducers/account/'
 
-export const did = (state = '', action: AnyAction): string => {
+const initialState : DidState = {
+  did: ''
+}
+
+export const did = (state = Immutable.fromJS(initialState), action: AnyAction): string => {
   switch (action.type) {
     case 'DID_SET':
-      return action.value
+      return state.setIn(['did'], action.value)
     default:
       return state
   }
