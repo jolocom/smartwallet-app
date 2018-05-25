@@ -6,6 +6,11 @@ build/
 .expo/
 package-lock.json
 coverage/
+.flowconfig
+.buckconfig
+.gitattributes
+.watchmanconfig
+.DS_Store
 
 # React Native Android
 android/.gradle
