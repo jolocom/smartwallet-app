@@ -6,7 +6,7 @@ import { accountActions } from 'src/actions'
 
 interface ConnectProps {
   claims: any
-  saveClaim: (claimVal: string) => void
+  saveClaim: (claimVal: string, claimField: string) => void
 }
 
 interface Props extends ConnectProps {}
@@ -25,14 +25,16 @@ state = {
 componentWillMount() {
   const { claims } = this.props
   // TODO: type
-  const { id, claimField, category } = claims.selected
-  claims.savedClaims[category].map((item: any, i: number) => {
-    if(item.id === id && item.claimField === claimField) {
-      this.setState({
-        selectedClaim: item
-      })
-    }
-  })
+  const { id, claimField } = claims.selected
+  for (let key in claims.savedClaims) {
+    claims.savedClaims[key].map((item: any, i: number) => {
+      if(item.id === id && item.claimField === claimField) {
+        this.setState({
+          selectedClaim: item
+        })
+      }
+    })
+  }
 }
 
 render() {
@@ -53,8 +55,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    saveClaim: (claimVal: string) => {
-      dispatch(accountActions.saveClaim(claimVal))
+    saveClaim: (claimVal: string, claimField: string) => {
+      dispatch(accountActions.saveClaim(claimVal, claimField))
     }
   }
 }

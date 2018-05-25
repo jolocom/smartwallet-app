@@ -1,11 +1,13 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { TextField } from 'react-native-material-textfield'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
   claimName: string
   fieldValue: any
-  handleFieldInput: (e: Event) => void
+  field: string
+  handleFieldInput: (fieldValue: string, field: string) => void
 }
 
 interface State {
@@ -13,6 +15,15 @@ interface State {
   errorMsg: string
 }
 
+const styles = StyleSheet.create({
+  inputContainer: {
+    height: 72,
+    width: '80%'
+  },
+  labelStyle: {
+    color: 'grey'
+  }
+})
 
 export class TextInputField extends React.Component<Props, State> {
   state = {
@@ -33,19 +44,22 @@ export class TextInputField extends React.Component<Props, State> {
   }
 
   render() {
-    let labelText = this.props.fieldValue.length > 0 && !this.state.focused ? '' : this.props.claimName
-
+    const { fieldValue } = this.props
+    let labelText = fieldValue.length > 0 && !this.state.focused ?
+      '' : this.props.claimName
     return (
-      <View style={{height: 130, width: '80%'}}>
+      <View style={ styles.inputContainer }>
         <TextField
           onFocus={ () => this.handleFocus() }
           onBlur={ () => this.handleBlur() }
           label={ labelText }
-          labelTextStyle={{color: 'grey'}}
-          tintColor={'#942f51'}
-          textColor={'#05050d'}
-          value={ this.props.fieldValue }
-          onChangeText={ (e : Event) => this.props.handleFieldInput(e) }
+          labelTextStyle={ styles.labelStyle }
+          tintColor={ JolocomTheme.palette.primaryColor }
+          textColor={ JolocomTheme.palette.primaryColorBlack }
+          value={ fieldValue }
+          onChangeText={ (fieldValue: string, field: string) => {
+            this.props.handleFieldInput(fieldValue, this.props.field)
+          } }
         />
       </View>
     )
