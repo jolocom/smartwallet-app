@@ -76,11 +76,7 @@ const styles = StyleSheet.create({
   }
 })
 
-
-
-
-
-export class ClaimOverviewComponent extends React.Component<Props, State> {
+export class ClaimOverview extends React.Component<Props, State> {
 
   renderClaimCards = (category: any) : ReactNode => {
     const { openClaimDetails, claims } = this.props
@@ -104,7 +100,9 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
 
   render() {
     const { savedClaims } = this.props.claims
+    const claimsCategories = Object.keys(savedClaims)
     let content
+
     if (this.props.claims.loading) {
       // TODO: insert loading component
       content = (
@@ -112,7 +110,7 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
       )
     } else {
       content = (
-        savedClaims.claimCategories.map((category: any, i: number) => {
+        claimsCategories.map((category: any, i: number) => {
           return (
             <View key={category}>
               <View>
@@ -143,7 +141,6 @@ export class ClaimOverviewComponent extends React.Component<Props, State> {
             />
           </TouchableOpacity>
         </Block>
-
       </Container>
     )
   }

@@ -48,14 +48,12 @@ export const checkIdentityExists = () => {
   }
 }
 
-
 export const toggleLoading = (val: boolean) => {
   return {
     type: 'SET_LOADING',
     loading: val
   }
 }
-
 
 export const getClaimsForDid = () => {
   return (dispatch: Dispatch<AnyAction>, getState: Function) => {
@@ -202,9 +200,6 @@ const prepareClaimsForState = (claims: any) => {
   })
 
   const orderedClaims = arrayToObject(preparedClaims, 'category')
-  const allClaimCategories = Object.keys(orderedClaims)
-  orderedClaims['claimCategories'] = allClaimCategories
-
   return orderedClaims
 }
 

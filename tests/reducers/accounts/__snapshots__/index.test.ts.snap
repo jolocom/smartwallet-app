@@ -5,10 +5,6 @@ Object {
   "claims": Immutable.Map {
     "loading": false,
     "savedClaims": Object {
-      "claimCategories": Array [
-        "personal",
-        "contact",
-      ],
       "contact": Array [
         Object {
           "category": "contact",
@@ -32,10 +28,6 @@ Object {
   "claims": Immutable.Map {
     "loading": false,
     "savedClaims": Object {
-      "claimCategories": Array [
-        "personal",
-        "contact",
-      ],
       "contact": Array [
         Object {
           "category": "contact",

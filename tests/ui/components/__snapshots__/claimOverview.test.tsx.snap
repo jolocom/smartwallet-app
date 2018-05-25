@@ -17,6 +17,40 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
     }
   >
     <Component
+      key="claimCategories"
+    >
+      <Component>
+        <Component
+          style={
+            Object {
+              "marginBottom": 8,
+              "marginLeft": 16,
+              "marginRight": 16,
+              "marginTop": 27,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            ellipsizeMode="tail"
+            style={
+              Object {
+                "fontSize": 17,
+                "textAlign": "left",
+              }
+            }
+          />
+        </Component>
+        <ClaimCard
+          claimItem="personal"
+        />
+        <ClaimCard
+          claimItem="contact"
+        />
+      </Component>
+    </Component>
+    <Component
       key="personal"
     >
       <Component>

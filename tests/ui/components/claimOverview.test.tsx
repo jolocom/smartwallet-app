@@ -1,5 +1,5 @@
 import React from 'react'
-import { ClaimOverviewComponent } from 'src/ui/home/components/claimOverview'
+import { ClaimOverview } from 'src/ui/home/components/claimOverview'
 import { shallow } from 'enzyme'
 
 describe('ClaimsOverview component', ()=> {
@@ -24,7 +24,7 @@ describe('ClaimsOverview component', ()=> {
   }
   it('matches the snapshot on render', () => {
 
-    const rendered = shallow(<ClaimOverviewComponent {...COMMON_PROPS}/>)
+    const rendered = shallow(<ClaimOverview {...COMMON_PROPS}/>)
     expect(rendered).toMatchSnapshot()
   })
 })
