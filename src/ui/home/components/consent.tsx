@@ -4,11 +4,12 @@ import { Button, Checkbox } from 'react-native-material-ui'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
-//interface for checkbox list
 
 interface Props {
+  //TODO: typing for service Provider
   serviceProvider: any
-  checkboxList: any
+  //TODO: needs an interface for checkboxlist which will accept filter as a method
+  checkboxList: any 
   handleSubmitClaims: () => void
   handleDenySubmit: () => void
 }
@@ -18,7 +19,11 @@ interface State {
   claimsProvided: boolean
 }
 
-//interface for Checkbox
+interface SingleCheckBox {
+  value: string
+  label: string
+  checked: boolean
+}
 
 const styles = StyleSheet.create({
   
@@ -54,6 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: '100'
   },
   fixedText: {
+    alignItems: 'center',
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorBlack
@@ -67,6 +73,15 @@ const styles = StyleSheet.create({
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: 14,
     color: JolocomTheme.primaryColorBlack
+  },
+  checkBox: {
+    color: JolocomTheme.primaryColorPurple
+  },
+  checkBoxText: {
+
+  },
+  checkBoxContainer: {
+
   }
 })
 
@@ -90,9 +105,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     )
   }
 
-  //redux action
   private renderRequestedClaimsList (checkboxList: any) {
-    //typing 
     return checkboxList.map( (checkbox: any, index: number) => {
       return (
         <Block key={index}>
@@ -103,31 +116,32 @@ export class ConsentComponent extends React.Component<Props, State> {
             checkedIcon= 'check-circle'
             uncheckedIcon='fiber-manual-record'
             onCheck={ this.toggleCheck.bind(this, index) }
-            // style={ styles.checkBox }
+            style={{
+              container: styles.checkBoxContainer,
+              icon: styles.checkBox,
+              label: styles.checkBoxText
+            }}
           />
         </Block>
       )
     })
   }
 
-  private toggleCheck (index: any) {
+  private toggleCheck (index: number) {
     const checkboxList  = this.props.checkboxList
     checkboxList[index].checked = !checkboxList[index].checked
-
     this.setState({
       checkboxList
     })
-
-    const test = checkboxList.filter(this.checkAllClaimsSubmitted)
-    if (test.length === 0) {
+    const notSubmitted = checkboxList.filter(this.checkAllClaimsSubmitted)
+    if (notSubmitted.length === 0) {
       this.setState({ claimsProvided: true })
     } else {
       this.setState({ claimsProvided: false })
     }
   }
 
-  private checkAllClaimsSubmitted (checkbox: any) {
-  //interface checkbox
+  private checkAllClaimsSubmitted (checkbox: SingleCheckBox) {
     return !checkbox.checked
   }
 
