@@ -9,6 +9,7 @@ interface ConnectProps { }
 interface Props extends ConnectProps {}
 
 interface State {
+  serviceProvider: object
   requestedClaims: string[] 
   checkboxList: object[]
 }
@@ -22,14 +23,14 @@ export class ConsentContainer extends React.Component<Props, State> {
     serviceProvider: { name: 'Jolocom', metadata: 'xyz'},
     //requestdClaims should be passed in
     requestedClaims: ['name', 'email', 'passport'],
-    checkboxList: []
+    checkboxList: [],
   }
 
   componentDidMount() {
     this.mapRequestedClaimsToCheckboxes(this.state.requestedClaims)
   }
 
-  private mapRequestedClaimsToCheckboxes (requestedClaims: string[]) {
+  private mapRequestedClaimsToCheckboxes(requestedClaims: string[]) {
     //typing
     const checkboxList: object[] = []
     requestedClaims.forEach((claim: string) => {
@@ -45,12 +46,21 @@ export class ConsentContainer extends React.Component<Props, State> {
     this.setState({ checkboxList })
   }
 
+  private handleSubmitClaims() {
+    console.log('submitting')
+  }
+
+  private handleDenySubmit() {
+    console.log('denied')
+  }
+
   render() {
     return (
     <ConsentComponent
       serviceProvider={ this.state.serviceProvider }
-      claimsProvided={ false }
       checkboxList={ this.state.checkboxList }
+      handleSubmitClaims={ this.handleSubmitClaims }
+      handleDenySubmit={ this.handleDenySubmit }
      />
     )
   }

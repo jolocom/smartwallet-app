@@ -4,14 +4,18 @@ import { Button, Checkbox } from 'react-native-material-ui'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
+//interface for checkbox list
+
 interface Props {
-  serviceProvider: any,
-  claimsProvided: boolean,
-  checkboxList: any,
+  serviceProvider: any
+  checkboxList: any
+  handleSubmitClaims: () => void
+  handleDenySubmit: () => void
 }
 
 interface State {
-
+  checkboxList: object[]
+  claimsProvided: boolean
 }
 
 //interface for Checkbox
@@ -68,6 +72,11 @@ const styles = StyleSheet.create({
 
 export class ConsentComponent extends React.Component<Props, State> {
 
+  state = {
+    checkboxList: [],
+    claimsProvided: false
+  }
+
   private renderServiceDetails() {
     return (
       <Block>
@@ -108,6 +117,18 @@ export class ConsentComponent extends React.Component<Props, State> {
     this.setState({
       checkboxList
     })
+
+    const test = checkboxList.filter(this.checkAllClaimsSubmitted)
+    if (test.length === 0) {
+      this.setState({ claimsProvided: true })
+    } else {
+      this.setState({ claimsProvided: false })
+    }
+  }
+
+  private checkAllClaimsSubmitted (checkbox: any) {
+  //interface checkbox
+    return !checkbox.checked
   }
 
   private renderButtons () {
@@ -115,7 +136,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     <Block style={ styles.buttonBlock }>
       <Button
         raised= { false }
-        // onPress={ this.props.handleButtonTap }
+        onPress={ this.props.handleDenySubmit }
         style={{ 
           container: styles.denyShareContainer, 
           text: styles.denyShareText
@@ -124,10 +145,10 @@ export class ConsentComponent extends React.Component<Props, State> {
         text='Deny'
       />
       <Button
-        disabled= { !this.props.claimsProvided }
+        disabled= { !this.state.claimsProvided }
         raised= { false }
-        // onPress={ this.props.handleButtonTap }
-        style={ this.props.claimsProvided ? 
+        onPress={ this.props.handleSubmitClaims }
+        style={ this.state.claimsProvided ? 
           { 
             container: styles.shareClaimsContainer, 
             text: styles.shareClaimsText 
