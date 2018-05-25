@@ -136,7 +136,7 @@ export class ClaimOverview extends React.Component<Props, State> {
             <Icon
               style={ styles.icon }
               size={ 30 }
-              name="qrcode-scan"
+              name='qrcode-scan'
               color="white"
             />
           </TouchableOpacity>

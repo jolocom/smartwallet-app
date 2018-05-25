@@ -41,7 +41,7 @@ exports[`ClaimCard component matches the snapshot of a claim with unspecified ic
           "width": 24,
         },
         "primaryText": Object {
-          "color": "#05050d",
+          "color": "black",
           "fontSize": 17,
           "opacity": 0.4,
         },
@@ -57,7 +57,7 @@ exports[`ClaimCard component matches the snapshot of a claim with unspecified ic
           "width": 12,
         },
         "secondaryText": Object {
-          "color": "#05050d",
+          "color": "black",
           "fontSize": 22,
           "lineHeight": 24,
         },
@@ -109,7 +109,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
           "width": 24,
         },
         "primaryText": Object {
-          "color": "#05050d",
+          "color": "black",
           "fontSize": 17,
           "opacity": 0.4,
         },
@@ -125,7 +125,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
           "width": 12,
         },
         "secondaryText": Object {
-          "color": "#05050d",
+          "color": "black",
           "fontSize": 22,
           "lineHeight": 24,
         },
@@ -167,7 +167,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
           "width": 24,
         },
         "primaryText": Object {
-          "color": "#05050d",
+          "color": "black",
           "fontSize": 17,
           "opacity": 0.4,
         },
@@ -183,7 +183,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
           "width": 12,
         },
         "secondaryText": Object {
-          "color": "#05050d",
+          "color": "black",
           "fontSize": 22,
           "lineHeight": 24,
         },
@@ -235,7 +235,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
           "width": 24,
         },
         "primaryText": Object {
-          "color": "#05050d",
+          "color": "black",
           "fontSize": 17,
         },
         "primaryTextContainer": Object {
