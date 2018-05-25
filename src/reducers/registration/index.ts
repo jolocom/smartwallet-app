@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
 import { loading } from 'src/reducers/registration/loading'
-import { Map } from 'immutable'
 
-// TODO Tighter policy / practices when using immutable with redux.
+export interface LoadingState {
+  readonly loadingMsg: string
+}
+
 export interface RegistrationState {
-  readonly loading: Map<string, string>
+  readonly loading: LoadingState
 }
 
 export const registrationReducer = combineReducers({
