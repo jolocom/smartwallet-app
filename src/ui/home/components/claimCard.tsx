@@ -96,20 +96,22 @@ export const ClaimCard : React.SFC<Props> = (props) => {
     }
   }
 
-
   const renderCard = (claimVal: any, claimField: string, label: string, showIcon: boolean) => {
+    const {
+      labelDisplayFieldEdit,
+      labelDisplayField,
+      textDisplayFieldEdit,
+      textDisplayField
+    } = JolocomTheme.textStyles.light
+
     return (
       <ListItem
         key={ label }
         style={{
           primaryTextContainer: styles.listItemPrimaryTextContainer,
-          primaryText: claimVal === undefined ?
-          JolocomTheme.textStyles.light.labelDisplayFieldEdit :
-          JolocomTheme.textStyles.light.labelDisplayField,
+          primaryText: claimVal === undefined ? labelDisplayFieldEdit : labelDisplayField,
           secondaryText: {
-            ...claimVal === undefined ?
-            JolocomTheme.textStyles.light.textDisplayFieldEdit :
-            JolocomTheme.textStyles.light.textDisplayField,
+            ...claimVal === undefined ? textDisplayFieldEdit : textDisplayField,
             lineHeight: 24
           },
           container: showIcon ? styles.listItemContainerOneLine : styles.listItemContainerTwoLines,
@@ -129,8 +131,6 @@ export const ClaimCard : React.SFC<Props> = (props) => {
     )
   }
 
-
-
   return(
     <View style={ styles.containerField }>
       { content.map((c) => {
@@ -144,8 +144,8 @@ const stringCapitalize = (myString : string) : string => {
   const matches = myString.match(/[A-Z]/g)
   if (matches !== null) {
     matches.map((match) => {
-      const ix = myString.indexOf(match)
-      const tx = myString.slice(0, ix) + " " + myString.slice(ix)
+      const index = myString.indexOf(match)
+      const tx = myString.slice(0, index) + " " + myString.slice(index)
       myString = tx
     })
   }

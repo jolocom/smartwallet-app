@@ -1,12 +1,11 @@
 import React from 'react'
-import { ClaimOverviewComponent } from 'src/ui/home/components/claimOverview'
+import { ClaimOverview } from 'src/ui/home/components/claimOverview'
 import { ClaimDetails } from 'src/ui/home/components/claimDetails'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
 import { View } from 'react-native'
-
 
 interface ConnectProps {
   getClaimsForDid: () => void
@@ -41,13 +40,11 @@ export class ClaimsContainer extends React.Component<Props, State> {
     this.toggleClaimDetails()
   }
 
-
   private toggleClaimDetails = () : void => {
     this.setState({
       showClaimDetails: !this.state.showClaimDetails
     })
   }
-
 
 // TODO: do I really need 3 func?
   private onScannerStart = () : void => {
@@ -62,7 +59,6 @@ export class ClaimsContainer extends React.Component<Props, State> {
   private onScannerSuccess = (e : Event) : void => {
     this.setState({ scanning: false })
   }
-
 
   render() {
     let renderContent
@@ -82,7 +78,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
       )
     } else {
       renderContent = (
-        <ClaimOverviewComponent
+        <ClaimOverview
           claims={this.props.claims}
           openClaimDetails={ this.openClaimDetails }
           scanning={ this.state.scanning }
