@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     height: 55,
     width: 55,
     borderRadius: 35,
-    backgroundColor: JolocomTheme.palette.primaryColor,
+    backgroundColor: JolocomTheme.primaryColorPurple,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
