@@ -3,6 +3,7 @@ import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
+import { setDid } from 'src/actions/account'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -32,16 +33,18 @@ export const submitEntropy = (encodedEntropy: string) => {
 }
 
 export const startRegistration = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    const { storageLib }  = backendMiddleware
-    try {
-      await storageLib.provisionTables()
-      dispatch(navigationActions.navigate({
-        routeName: routeList.Entropy
-      }))
-    } catch(err) {
-      dispatch(genericActions.showErrorScreen(err))
-    }
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(navigationActions.navigate({
+      routeName: routeList.PasswordEntry
+    }))
+  }
+}
+
+export const finishRegistration = () => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(navigationActions.navigate({
+      routeName: routeList.Identity
+    }))
   }
 }
 
@@ -63,26 +66,34 @@ export const createIdentity = (encodedEntropy: string) => {
       const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
       const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password })
 
-      await storageLib.addMasterKey(encEntropy)
-      await storageLib.addDerivedKey({
+      const masterKeyData = {
+        encryptedEntropy: encEntropy,
+        timestamp: Date.now()
+      }
+
+      const genericSigningKeyData = {
         encryptedWif: encGenWif,
         path: genericSigningKey.path,
-        entropySource: encEntropy,
-        keyType: genericSigningKey.keyType
-      })
+        keyType: genericSigningKey.keyType,
+        entropySource: masterKeyData
+      }
 
-      await storageLib.addDerivedKey({
+      const ethereumKeyData = {
         encryptedWif: encEthWif,
         path: ethereumKey.path,
-        entropySource: encEntropy,
-        keyType: ethereumKey.keyType
-      })
+        keyType: ethereumKey.keyType,
+        entropySource: masterKeyData
+      }
 
-      await storageLib.addPersona({
+      const personaData = {
         did: didDocument.getDID(),
-        controllingKey: encGenWif
-      })
+        controllingKey: genericSigningKeyData
+      }
 
+      await storageLib.store.persona(personaData)
+      await storageLib.store.derivedKey(ethereumKeyData)
+
+      dispatch(setDid(didDocument.getDID()))
       const {
         privateKey: ethPrivKey,
         address: ethAddr
@@ -109,6 +120,5 @@ export const createIdentity = (encodedEntropy: string) => {
     } catch (error) {
       return dispatch(genericActions.showErrorScreen(error))
     }
-
   }
 }

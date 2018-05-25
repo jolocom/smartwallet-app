@@ -22,7 +22,6 @@ export class LandingContainer extends React.Component<Props> {
       <LandingComponent handleButtonTap={ this.props.startRegistration } />
     )
   }
-
 }
 
 const mapStateToProps = (state: RootState) => {
