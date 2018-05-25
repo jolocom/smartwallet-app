@@ -7,6 +7,10 @@ Array [
     "value": "Encrypting and storing data locally",
   },
   Object {
+    "type": "DID_SET",
+    "value": "did:jolo:mockdid",
+  },
+  Object {
     "type": "SET_LOADING_MSG",
     "value": "Storing data on IPFS",
   },
@@ -63,18 +67,16 @@ exports[`Registration action creators createIdentity should attempt to create an
 Array [
   Array [
     Object {
-      "encryptedWif": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
-      "entropySource": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
-      "keyType": "ECDSA secp256k1",
-      "path": "m/0/0",
-    },
-  ],
-  Array [
-    Object {
-      "encryptedWif": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
-      "entropySource": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
-      "keyType": "ECDSA secp256k1",
-      "path": "m/0/1",
+      "controllingKey": Object {
+        "encryptedWif": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
+        "entropySource": Object {
+          "encryptedEntropy": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
+          "timestamp": 946681200000,
+        },
+        "keyType": "ECDSA secp256k1",
+        "path": "m/0/0",
+      },
+      "did": "did:jolo:mockdid",
     },
   ],
 ]
@@ -84,8 +86,13 @@ exports[`Registration action creators createIdentity should attempt to create an
 Array [
   Array [
     Object {
-      "controllingKey": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
-      "did": "did:jolo:mockdid",
+      "encryptedWif": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
+      "entropySource": Object {
+        "encryptedEntropy": "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
+        "timestamp": 946681200000,
+      },
+      "keyType": "ECDSA secp256k1",
+      "path": "m/0/1",
     },
   ],
 ]
@@ -94,7 +101,7 @@ Array [
 exports[`Registration action creators createIdentity should attempt to create an identity 6`] = `
 Array [
   Array [
-    "U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=",
+    "Zm2Luz5JV2VCoSTPuUZtCgmA9rcZ2SY8umUJKzC5rtJAhUwMDQ6a",
   ],
 ]
 `;
@@ -102,20 +109,12 @@ Array [
 exports[`Registration action creators createIdentity should attempt to create an identity 7`] = `
 Array [
   Array [
-    "Zm2Luz5JV2VCoSTPuUZtCgmA9rcZ2SY8umUJKzC5rtJAhUwMDQ6a",
-  ],
-]
-`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 8`] = `
-Array [
-  Array [
     "0x5000000000000000000000000000000000000000",
   ],
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 9`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 8`] = `
 Array [
   Array [
     Object {
@@ -165,20 +164,14 @@ Array [
 ]
 `;
 
-exports[`Registration action creators startRegistration should display exception screen in case of error 1`] = `
+exports[`Registration action creators startRegistration should initiate the registration process 1`] = `
 Array [
   Object {
-    "params": Object {
-      "errorMessage": "Provisioning failed",
-      "stackTrace": "mock trace",
-    },
-    "routeName": "Exception",
+    "routeName": "PasswordEntry",
     "type": "Navigation/NAVIGATE",
   },
 ]
 `;
-
-exports[`Registration action creators startRegistration should initiate  the registration process 1`] = `[Function]`;
 
 exports[`Registration action creators submitEntropy should correctly navigate to route and provide the entropy 1`] = `
 Array [

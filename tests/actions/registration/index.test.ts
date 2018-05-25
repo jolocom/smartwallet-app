@@ -2,6 +2,7 @@ import { registrationActions } from 'src/actions'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import data from './data/mockRegistrationData'
+const MockDate = require('mockdate')
 
 describe('Registration action creators', () => {
   describe('savePassword', () => {
@@ -56,39 +57,18 @@ describe('Registration action creators', () => {
   describe('startRegistration', () => {
     const mockGetState = () => {}
 
-    it('should initiate  the registration process', async () => {
+    it('should initiate the registration process', async () => {
       const mockStore = configureStore([thunk])({})
-      const mockBackend = {
-        storageLib: {
-          provisionTables: jest.fn()
-        }
-      }
 
-      const asyncAction  = registrationActions.startRegistration()
-      await asyncAction(mockStore.dispatch, mockGetState, mockBackend)
-      expect(mockStore.getActions).toMatchSnapshot()
-      expect(mockBackend.storageLib.provisionTables).toHaveBeenCalledTimes(1)
-    })
-
-    it('should display exception screen in case of error', async () => {
-      const mockStore = configureStore([thunk])({})
-      const mockBackend = {
-        storageLib: {
-          provisionTables: jest.fn().mockRejectedValue({
-            message: 'Provisioning failed',
-            stack: 'mock trace'
-          })
-        }
-      }
-
-      const asyncAction  = registrationActions.startRegistration()
-      await asyncAction(mockStore.dispatch, mockGetState, mockBackend)
+      const action  = registrationActions.startRegistration()
+      action(mockStore.dispatch)
       expect(mockStore.getActions()).toMatchSnapshot()
     })
   })
 
   describe('createIdentity', () => {
     it('should attempt to create an identity', async () => {
+      MockDate.set(new Date(946681200000))
       const mockStore = configureStore([thunk])({})
 
       const {didDocument, mnemonic, genericSigningKey, ethereumKey} = data
@@ -117,9 +97,10 @@ describe('Registration action creators', () => {
         },
         encryptionLib: { encryptWithPass: jest.fn().mockReturnValue(cipher)},
         storageLib: {
-          addMasterKey: jest.fn(),
-          addDerivedKey: jest.fn(),
-          addPersona: jest.fn()
+          store: {
+            persona: jest.fn(),
+            derivedKey: jest.fn()
+          }
         },
       }
 
@@ -133,12 +114,13 @@ describe('Registration action creators', () => {
       expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
       expect(mockBackend.jolocomLib.identity.create.mock.calls).toMatchSnapshot()
       expect(mockBackend.encryptionLib.encryptWithPass.mock.calls).toMatchSnapshot()
-      expect(mockBackend.storageLib.addDerivedKey.mock.calls).toMatchSnapshot()
-      expect(mockBackend.storageLib.addPersona.mock.calls).toMatchSnapshot()
-      expect(mockBackend.storageLib.addMasterKey.mock.calls).toMatchSnapshot()
+      expect(mockBackend.storageLib.store.persona.mock.calls).toMatchSnapshot()
+      expect(mockBackend.storageLib.store.derivedKey.mock.calls).toMatchSnapshot()
       expect(mockBackend.ethereumLib.wifToEthereumKey.mock.calls).toMatchSnapshot()
       expect(mockBackend.ethereumLib.requestEther.mock.calls).toMatchSnapshot()
       expect(mockBackend.jolocomLib.identity.register.mock.calls).toMatchSnapshot()
+
+      MockDate.reset()
     })
 
     it('should display exception screen in case of error', async () => {

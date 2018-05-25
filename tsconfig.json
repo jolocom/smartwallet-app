@@ -6,6 +6,7 @@
     "outDir": "build",
     "sourceMap": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "jsx": "react-native",
     "lib": ["dom", "es2015", "es2016"],
     "allowSyntheticDefaultImports": true,
