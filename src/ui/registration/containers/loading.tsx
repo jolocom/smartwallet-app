@@ -80,7 +80,7 @@ export class LoadingContainer extends React.Component<Props, State> {
           <View style={styles.dotsContainer}>
             {[0,1,2,3].map((prop, key) => {
               const stageNumber = loading.loadingStages.indexOf(this.props.loadingMsg)
-              return <Icon name='circle' size={prop <= stageNumber ? 15 : 10} style={prop <= stageNumber ? styles.dotActive : styles.dotInactive} />
+              return <Icon name='circle' size={prop <= stageNumber ? 15 : 10} style={prop <= stageNumber ? styles.dotActive : styles.dotInactive} key={prop}/>
             })}
           </View>
           <View>
