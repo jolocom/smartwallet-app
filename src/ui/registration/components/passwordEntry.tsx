@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 import { Button } from 'react-native-material-ui'
-import { Container, Header, Block, CenteredText } from 'src/ui/structure'
+import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
@@ -19,15 +19,20 @@ interface Props {
   onBlurPassword: () => void
 }
 
+// TODO REFACTOR, reference stylesheet for fonts, no magic numbers
+// Use flex more
+
 const styles = StyleSheet.create({
   subHeader: {
     fontSize: 20,
     fontFamily: JolocomTheme.contentFontFamily,
+    fontWeight: '100',
     padding: '10%',
     color: JolocomTheme.primaryColorSand
   },
   infoPassword: {
     fontSize: 14,
+    fontWeight: '100',
     fontFamily: JolocomTheme.contentFontFamily,
     opacity: 0.6,
     padding: '10%',
@@ -37,11 +42,14 @@ const styles = StyleSheet.create({
     padding: '3%',
     color: JolocomTheme.primaryColorWhite,
     fontSize: 22,
+    fontWeight: '100',
     fontFamily: JolocomTheme.contentFontFamily,
     width: '80%',
   },
   textErrorField: {
+    fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorSandInactive,
+    fontWeight: '100',
     fontSize: 14
   },
   mainContainer: {
@@ -54,13 +62,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: 164,
     height: 48,
+    borderRadius: 4,
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
     fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: 22,
-    fontWeight: "100",
-    backgroundColor: JolocomTheme.primaryColorPurple
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100',
   }
 })
 
@@ -71,7 +80,6 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
   return (
     <Container style={ styles.mainContainer }>
       <Block style={ styles.nestedContainer } flex={ 0.4 }>
-        <Header title={ keyboardDrawn ? '' : 'Step 2' }/>
         <CenteredText
           style={ styles.subHeader }
           msg={ keyboardDrawn ? '' : 'Set a password to encrypt your data on the device' }
@@ -117,7 +125,7 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
       </Block>
       <Block flex={ 0.1 }>
         <Button
-          style={ !errorMsg ? { container: styles.buttonContainer, text: styles.buttonText } : { container: styles.buttonContainer, text: styles.buttonText } }
+          style={{ container: styles.buttonContainer, text: styles.buttonText }}
           onPress={ props.clickNext }
           raised
           upperCase={ false }

@@ -11,6 +11,7 @@ interface Props {
   readonly progress : number
 }
 
+// TODO FONT WEIGHT REFERENCE FROM STYLES
 const styles = StyleSheet.create({
   mainContainer:{
     backgroundColor: JolocomTheme.primaryColorBlack
@@ -24,6 +25,8 @@ const styles = StyleSheet.create({
     top: '20%',
     backgroundColor: JolocomTheme.primaryColorBlack,
     fontSize: JolocomTheme.headerFontSize,
+    fontFamily: JolocomTheme.contentFontFamily,
+    fontWeight: '100',
     color: JolocomTheme.primaryColorSand
   },
   buttonContainer: {
