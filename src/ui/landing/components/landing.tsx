@@ -4,9 +4,7 @@ import { Button } from 'react-native-material-ui'
 import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
-import {
-  Landing00
-} from 'src/resources'
+import { Landing00 } from 'src/resources'
 
 const Carousel = require('react-native-snap-carousel').default
 const Pagination = require('react-native-snap-carousel').Pagination
@@ -27,23 +25,21 @@ interface Slide {
 
 const viewWidth: number = Dimensions.get('window').width
 
+// TODO LINE HEIGHT
+// TODO No 45% margin for centereing
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: JolocomTheme.primaryColorBlack,
   },
-  carouselContainer: {
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   svgContainer: {
-    flex: 4/5,
-    marginTop: "10%",
+    marginTop: '10%',
     marginLeft: '45%',
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   carouselTextContainer: {
-    padding: '10%',
-    flex: 3/5,
+    paddingRight: '10%',
+    paddingLeft: '10%',
+    flex: 0.6,
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   activeDotStyle: {
@@ -60,39 +56,36 @@ const styles = StyleSheet.create({
   header: {
     color: JolocomTheme.primaryColorSand,
     fontFamily: JolocomTheme.contentFontFamily, 
-    fontSize: JolocomTheme.landingHeaderFontSize
-  },
-  headerBlock: {
-    paddingBottom: '5%'
-  }, 
-  subHeaderBlock: {
-    paddingTop: '7%'
+    fontSize: JolocomTheme.landingHeaderFontSize,
+    fontWeight: '100'
   },
   subHeader: {
+    fontWeight: '100',
     color: JolocomTheme.primaryColorSand,
     fontFamily: JolocomTheme.contentFontFamily, 
     opacity: 0.8,
     fontSize: JolocomTheme.labelFontSize,
-    lineHeight: 24
+    lineHeight: JolocomTheme.labelFontSize + 4
   },
   paginationBlock: {
-    flex: 1/6,
+    flex: 0.2,
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   buttonBlock: {
-    flex: 1/8,
+    flex: 0.1,
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   buttonContainer: {
-    height: 48,
-    width: 164,
+    height: '100%',
+    width: '50%',
     borderRadius: 4,
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
-    fontSize: JolocomTheme.headerFontSize 
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100'
   }
 })
 
@@ -120,10 +113,9 @@ const carouselInfo: Slide[] = [
 ]
 
 export class LandingComponent extends React.Component<Props, State> {
-  
-    state = {
-      activeSlide: 0
-    }
+  state = {
+    activeSlide: 0
+  }
 
   private renderItem = ({ item } : { item : Slide }) => {
     const { svgImage, title, infoText  } = item
@@ -132,13 +124,13 @@ export class LandingComponent extends React.Component<Props, State> {
         <Block style={ styles.svgContainer }>
         {svgImage}
         </Block>
-        <Block style={ styles.carouselTextContainer }>
-            <Block style={ styles.headerBlock }>   
-              <CenteredText style= { styles.header } msg={ title } />
-            </Block>
-            <Block style={ styles.subHeaderBlock }>
-              <CenteredText style={ styles.subHeader } msg={ infoText } />
-            </Block>
+        <Block style={ styles.carouselTextContainer } >
+          <Block flex={0.4}>
+            <CenteredText style= { styles.header } msg={ title } />
+          </Block>
+          <Block flex={0.6}>
+            <CenteredText style={ styles.subHeader } msg={ infoText } />
+          </Block>
         </Block>
       </Block>
     )
@@ -163,7 +155,6 @@ export class LandingComponent extends React.Component<Props, State> {
       <Container style={ styles.mainContainer }>
         <Block>
           <Carousel
-            style={ styles.carouselContainer }
             data={ carouselInfo }
             renderItem={ this.renderItem }
             lockScrollWhileSnapping

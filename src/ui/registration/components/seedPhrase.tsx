@@ -16,15 +16,15 @@ interface Props {
 const styles = StyleSheet.create({
   title: {
     color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.headerFontSize
+    fontSize: JolocomTheme.labelFontSize
   },
   phrase: {
     color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.headerFontSize
+    fontSize: JolocomTheme.labelFontSize
   },
   sideNoteGreen: {
     color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.headerFontSize
+    fontSize: JolocomTheme.labelFontSize
   }
 })
 

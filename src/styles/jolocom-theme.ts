@@ -1,5 +1,4 @@
 export const JolocomTheme = {
-
   primaryColorBlack: 'black',
   primaryColorSand: '#ffefdf',
   primaryColorSandInactive: "rgba(255, 239, 223, 0.38)",
