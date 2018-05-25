@@ -66,5 +66,19 @@ export const Routes = StackNavigator({
   PasswordEntry: { screen: PasswordEntry, navigationOptions },
   SeedPhrase: { screen: SeedPhrase, navigationOptions },
   Home: { screen: HomeRoutes },
+  Consent: { screen: Consent,
+    navigationOptions:{
+      headerTitle: 'Share claims',
+      headerTitleStyle: {
+        fontFamily: JolocomTheme.contentFontFamily,
+        fontWeight: "100",
+        fontSize: JolocomTheme.headerFontSize
+      },
+      headerStyle: {
+        backgroundColor: JolocomTheme.primaryColorBlack,
+      },
+      headerTintColor: JolocomTheme.primaryColorWhite
+    } 
+  },
   Exception: { screen: Exception, navigationOptions }
 })
