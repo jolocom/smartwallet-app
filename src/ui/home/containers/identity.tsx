@@ -1,7 +1,6 @@
 import React from 'react'
 import { IdentityComponent } from 'src/ui/home/components/identity'
 import { connect } from 'react-redux'
-import { AnyAction } from 'redux'
 import { RootState } from 'src/reducers/'
 
 interface ConnectProps { }
@@ -24,6 +23,8 @@ export class IdentityContainer extends React.Component<Props, State> {
     scanning: false
   }
 
+  componentDidMount() {
+  }
   private onUserNameChange= (userName: string) : void => {
     this.setState({ userName })
   }
@@ -72,7 +73,7 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
+const mapDispatchToProps = (dispatch: (action: Function) => void) => {
   return {
   }
 }
