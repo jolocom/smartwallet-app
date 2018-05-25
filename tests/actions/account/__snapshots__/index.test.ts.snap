@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Account action creators Should correctly handle an "no such table" error being thrown 1`] = `Array []`;
-
 exports[`Account action creators Should correctly handle an arbitrary error being thrown 1`] = `
 Array [
   Object {
