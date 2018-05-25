@@ -7,9 +7,10 @@ const { Checkbox, Button } = require('react-native-material-ui')
 import { Techguy } from 'src/resources'
 
 interface Props {
-  seedPhrase: string;
-  checked: boolean;
-  onCheck: () => void;
+  seedPhrase: string
+  checked: boolean
+  onCheck: () => void
+  handleButtonTap: () => void
 }
 
 const styles = StyleSheet.create({
@@ -89,6 +90,7 @@ export const SeedPhrase : React.SFC<Props> = props => {
       <Block flex={ 0.1 }>
         <Button
           disabled={ !props.checked }
+          onPress= { props.handleButtonTap }
           raised
           primary
           text='NEXT STEP'

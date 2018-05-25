@@ -29,15 +29,13 @@ export const checkIdentityExists = () => {
     const { storageLib } = backendMiddleware
 
     try {
-      const personas = await storageLib.getPersonas()
+      const personas = await storageLib.get.persona()
       if (!personas.length) {
         return
       }
 
       dispatch(setDid(personas[0].did))
-      dispatch(navigationActions.navigate({
-        routeName: routeList.Identity
-      }))
+      dispatch(navigationActions.navigate({ routeName: routeList.Identity }))
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
         return
