@@ -44,9 +44,8 @@ export class TextInputField extends React.Component<Props, State> {
   }
 
   render() {
-    const { fieldValue } = this.props
-    let labelText = fieldValue.length > 0 && !this.state.focused ?
-      '' : this.props.claimName
+    const { fieldValue, claimName, handleFieldInput } = this.props
+    const labelText = this.state.focused || !fieldValue ? claimName : ''
     return (
       <View style={ styles.inputContainer }>
         <TextField
@@ -58,7 +57,7 @@ export class TextInputField extends React.Component<Props, State> {
           textColor={ JolocomTheme.palette.primaryColorBlack }
           value={ fieldValue }
           onChangeText={ (fieldValue: string, field: string) => {
-            this.props.handleFieldInput(fieldValue, this.props.field)
+            handleFieldInput(fieldValue, this.props.field)
           } }
         />
       </View>
