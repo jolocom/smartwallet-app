@@ -105,6 +105,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
       release {
@@ -147,18 +148,24 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-svg')
+    compile project(':react-native-keychain')
+    compile project(':react-native-fetch-blob')
+    compile project(':react-native-camera')
+    implementation project(':react-native-svg')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-sqlite-storage')
     implementation project(':react-native-svg')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:23.0.1"
+    implementation "com.android.support:appcompat-v7:23.2.0"
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':react-native-keychain')
     implementation (project(':react-native-camera')) {
         exclude group: "com.google.android.gms"
-        compile 'com.android.support:exifinterface:25.+'
-        compile ('com.google.android.gms:play-services-vision:12.0.1') {
+        implementation 'com.android.support:exifinterface:25.+'
+        implementation ('com.google.android.gms:play-services-vision:12.0.1') {
             force = true
         }
     }

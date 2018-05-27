@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     height: 55,
     width: 55,
     borderRadius: 35,
-    backgroundColor: JolocomTheme.palette.primaryColor,
+    backgroundColor: JolocomTheme.primaryColorPurple,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -136,7 +136,7 @@ export class ClaimOverview extends React.Component<Props, State> {
             <Icon
               style={ styles.icon }
               size={ 30 }
-              name="qrcode-scan"
+              name='qrcode-scan'
               color="white"
             />
           </TouchableOpacity>

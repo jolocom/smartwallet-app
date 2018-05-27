@@ -1,42 +1,75 @@
 import React from 'react'
-import { StyleSheet, TextInput, } from 'react-native'
+import { StyleSheet, TextInput } from 'react-native'
 import { Button } from 'react-native-material-ui'
-import { Container, Header, Block, CenteredText } from 'src/ui/structure'
+import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
-  keyboardDrawn: boolean;
-  password: string;
-  confirmPassword: string;
-  onPasswordChange: (input:  string) => void;
-  onPasswordConfirmChange: (input:  string) => void;
-  clickNext: () => void;
+  lineColorPassword: string
+  lineColorRepeat: string
+  keyboardDrawn: boolean
+  password: string
+  confirmPassword: string
+  onPasswordChange: (input:  string) => void
+  onPasswordConfirmChange: (input:  string) => void
+  clickNext: () => void
+  onFocusRepeat: () => void
+  onBlurRepeat: () => void
+  onFocusPassword: () => void
+  onBlurPassword: () => void
 }
+
+// TODO REFACTOR, reference stylesheet for fonts, no magic numbers
+// Use flex more
 
 const styles = StyleSheet.create({
   subHeader: {
-    fontSize: 14,
-    color: JolocomTheme.textStyles.subheadline.color,
+    fontSize: 20,
+    fontFamily: JolocomTheme.contentFontFamily,
+    fontWeight: '100',
+    padding: '10%',
+    color: JolocomTheme.primaryColorSand
   },
   infoPassword: {
-    fontSize: 12,
-    color: JolocomTheme.textStyles.labelInputFields.color
+    fontSize: 14,
+    fontWeight: '100',
+    fontFamily: JolocomTheme.contentFontFamily,
+    opacity: 0.6,
+    padding: '10%',
+    color: JolocomTheme.primaryColorSand
   },
   textInputField: {
-    width: '80%'
+    padding: '3%',
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: 22,
+    fontWeight: '100',
+    fontFamily: JolocomTheme.contentFontFamily,
+    width: '80%',
   },
   textErrorField: {
-    color: 'red',
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: JolocomTheme.primaryColorSandInactive,
+    fontWeight: '100',
     fontSize: 14
   },
   mainContainer: {
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: JolocomTheme.primaryColorBlack
   },
   nestedContainer: {
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
   },
   buttonContainer: {
-    backgroundColor: JolocomTheme.palette.primaryColor
+    width: 164,
+    height: 48,
+    borderRadius: 4,
+    backgroundColor: JolocomTheme.primaryColorPurple
+  },
+  buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100',
   }
 })
 
@@ -47,35 +80,43 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
   return (
     <Container style={ styles.mainContainer }>
       <Block style={ styles.nestedContainer } flex={ 0.4 }>
-        <Header title={ keyboardDrawn ? '' : 'Please enter a secure password' }/>
         <CenteredText
           style={ styles.subHeader }
-          msg={ keyboardDrawn ? '' : 'The password is used to encrypt and protect your data' }
+          msg={ keyboardDrawn ? '' : 'Set a password to encrypt your data on the device' }
         />
         <CenteredText
           style={ styles.infoPassword }
-          msg={ 'Please use at least 8 characters, ' +
-            'no spaces, at least one uppercase letter and one number.' }
+          msg={ 'This password will be stored in your keychain. After setting it, please make sure you have passcode enabled.' }
         />
       </Block>
       <Block style={ styles.nestedContainer } flex={ 0.3 }>
         <TextInput
           style={ styles.textInputField }
-          placeholder={ 'Insert password' }
+          placeholder={ 'Password' }
           maxLength={ 40 }
           editable
           secureTextEntry
           keyboardType={ 'default' }
           onChangeText={ props.onPasswordChange }
+          onFocus={ props.onFocusPassword }
+          onBlur={ props.onBlurPassword }
+          placeholderTextColor={ JolocomTheme.primaryColorSandInactive }
+          selectionColor= { JolocomTheme.primaryColorPurple } 
+          underlineColorAndroid= { props.lineColorPassword }
         /> 
         <TextInput
           style={ styles.textInputField }
-          placeholder={ 'Confirm password' }
+          placeholder={ 'Repeat password' }
           maxLength={ 40 }
           editable
           secureTextEntry
           keyboardType={ 'default' }
           onChangeText={ props.onPasswordConfirmChange }
+          onFocus={ props.onFocusRepeat }
+          onBlur={ props.onBlurRepeat }
+          placeholderTextColor={ JolocomTheme.primaryColorSandInactive }
+          selectionColor= { JolocomTheme.primaryColorPurple }
+          underlineColorAndroid= { props.lineColorRepeat }
         />
         <CenteredText
           style={ styles.textErrorField }
@@ -84,10 +125,10 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
       </Block>
       <Block flex={ 0.1 }>
         <Button
-          style={ !errorMsg ? { container: styles.buttonContainer } : {} }
+          style={{ container: styles.buttonContainer, text: styles.buttonText }}
           onPress={ props.clickNext }
           raised
-          primary
+          upperCase={ false }
           disabled={ !!errorMsg }
           text="Continue"
         />

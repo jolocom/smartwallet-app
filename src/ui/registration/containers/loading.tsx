@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     marginBottom: '-10%'
   },
   container: {
-    backgroundColor: JolocomTheme.palette.primaryColorBlack,
+    backgroundColor: JolocomTheme.primaryColorBlack,
     height: '100%'
   },
   dotsContainer: {
@@ -43,19 +43,19 @@ const styles = StyleSheet.create({
   dotActive: {
     marginRight: 8,
     marginLeft: 8,
-    color: JolocomTheme.palette.primaryTextColorSand //TODO: add a glow
+    color: JolocomTheme.primaryColorSand
   },
   dotInactive: {
     marginRight: 5,
     marginLeft: 5,
-    color: JolocomTheme.palette.textColor_silverGrey
+    color: JolocomTheme.primaryColorGrey
   },
   text: {
-    color: JolocomTheme.palette.primaryTextColorSand,
+    color: JolocomTheme.primaryColorSand,
     fontSize: 20,
   },
   smallText: {
-    color: JolocomTheme.palette.primaryTextColorSand,
+    color: JolocomTheme.primaryColorSand,
     fontSize: 14
   }
 })
@@ -74,13 +74,13 @@ export class LoadingContainer extends React.Component<Props, State> {
           <CenteredText style={styles.text} msg={"to set up your identity"} />
         </Block>
         <Block>
-          <loaders.RippleLoader size={80} strokeWidth={4} color={JolocomTheme.palette.spinnerColor} />
+          <loaders.RippleLoader size={80} strokeWidth={4} color={JolocomTheme.primaryColorPurple} />
         </Block>
         <Block style={styles.loadingMsg}>
           <View style={styles.dotsContainer}>
             {[0,1,2,3].map((prop, key) => {
-              var stageNumber = loading.loadingStages.indexOf(this.props.loadingMsg)
-              return <Icon name='circle' size={prop <= stageNumber ? 15 : 10} style={prop <= stageNumber ? styles.dotActive : styles.dotInactive} />
+              const stageNumber = loading.loadingStages.indexOf(this.props.loadingMsg)
+              return <Icon name='circle' size={prop <= stageNumber ? 15 : 10} style={prop <= stageNumber ? styles.dotActive : styles.dotInactive} key={prop}/>
             })}
           </View>
           <View>

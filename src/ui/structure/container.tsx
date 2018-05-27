@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: JolocomTheme.palette.backgroundContainer,
+    backgroundColor: JolocomTheme.primaryColorGrey,
     height: '100%',
     width: '100%',
     padding: '5%'

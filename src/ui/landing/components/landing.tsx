@@ -1,19 +1,13 @@
 import React from 'react'
-import { StyleSheet, Dimensions, TextStyle } from 'react-native'
-const Carousel = require('react-native-snap-carousel').default
-const Pagination = require('react-native-snap-carousel').Pagination
+import { StyleSheet, Dimensions } from 'react-native'
 import { Button } from 'react-native-material-ui'
-import { Container, Block, CenteredText } from 'src/ui/structure'
+import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
-import {
-  Onboarding00,
-  Onboarding01,
-  Onboarding02,
-  Onboarding03,
-  Onboarding04,
-  Onboarding05
-} from 'src/resources'
+import { Landing00 } from 'src/resources'
+
+const Carousel = require('react-native-snap-carousel').default
+const Pagination = require('react-native-snap-carousel').Pagination
 
 interface State {
   activeSlide: number;
@@ -29,61 +23,116 @@ interface Slide {
   infoText: string;
 }
 
+const viewWidth: number = Dimensions.get('window').width
+
+// TODO LINE HEIGHT
+// TODO No 45% margin for centereing
+const styles = StyleSheet.create({
+  mainContainer: {
+    backgroundColor: JolocomTheme.primaryColorBlack,
+  },
+  svgContainer: {
+    marginTop: '10%',
+    marginLeft: '45%',
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  carouselTextContainer: {
+    paddingRight: '10%',
+    paddingLeft: '10%',
+    flex: 0.6,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  activeDotStyle: {
+    width: 8,
+    height: 8,
+    backgroundColor: JolocomTheme.dotColorActive
+  },
+  inactiveDotStyle: {
+    width: 4,
+    height: 4,
+    opacity: 0.6,
+    backgroundColor: JolocomTheme.dotColorInactive
+  },
+  header: {
+    color: JolocomTheme.primaryColorSand,
+    fontFamily: JolocomTheme.contentFontFamily, 
+    fontSize: JolocomTheme.landingHeaderFontSize,
+    fontWeight: '100'
+  },
+  subHeader: {
+    fontWeight: '100',
+    color: JolocomTheme.primaryColorSand,
+    fontFamily: JolocomTheme.contentFontFamily, 
+    opacity: 0.8,
+    fontSize: JolocomTheme.labelFontSize,
+    lineHeight: JolocomTheme.labelFontSize + 4
+  },
+  paginationBlock: {
+    flex: 0.2,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  buttonBlock: {
+    flex: 0.1,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  buttonContainer: {
+    height: '100%',
+    width: '50%',
+    borderRadius: 4,
+    backgroundColor: JolocomTheme.primaryColorPurple
+  },
+  buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100'
+  }
+})
+
 const carouselInfo: Slide[] = [
   {
-    svgImage: <Onboarding00 height={'100%'} width={'100%'} />,
-    title: '',
-    infoText: ''
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: 'Meet Jolocom Wallet',
+    infoText: 'It will help you to take back ownership of your digital self and control the usage of your private data when signing into services.'
   },
   {
-    svgImage: <Onboarding01 height={'70%'} width={'100%'} />,
-    title: 'Create an independent and secure digital identity.',
-    infoText: 'Collect your data at a secure place. It’s yours, so only you own it!'
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: 'Feature 1',
+    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
   },
   {
-    svgImage: <Onboarding02 height={'70%'} width={'100%'} />,
-    title: 'Have all your data at your fingertips.',
-    infoText: 'See all your data in one safe place. Pull the plug and your data is only yours.'
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: 'Feature 2',
+    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
   },
   {
-    svgImage: <Onboarding03 height={'70%'} width={'100%'} />,
-    title: 'Be aware of the information you share.',
-    infoText: 'See what you shared with whom. Have total control over your data.'
-  },
-  {
-    svgImage: <Onboarding04 height={'70%'} width={'100%'} />,
-    title: 'Your data is as safe as in your bank account.',
-    infoText: 'We use the latest encryption technology and blockchain to store your sensitive data.'
-  },
-  {
-    svgImage: <Onboarding05 height={'70%'} width={'100%'} />,
-    title: 'Security is hard to maintain, that is why the storage costs.',
-    infoText: 'The storage of your data is payed in ether. But only the change of data costs.'
+    svgImage: <Landing00 height={'100%'} width={'100%'} />,
+    title: 'Feature 3',
+    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
   }
 ]
 
-
-const viewWidth: number = Dimensions.get('window').width
-
 export class LandingComponent extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-
-    this.state = {
-      activeSlide: 0
-    }
+  state = {
+    activeSlide: 0
   }
 
-  private _renderItem = ({ item } : { item : Slide }) => {
+  private renderItem = ({ item } : { item : Slide }) => {
     const { svgImage, title, infoText  } = item
-    return(
-      <Container style={ this.styles.carouselContainer }>
+    return (
+      <Block>
+        <Block style={ styles.svgContainer }>
         {svgImage}
-        {title ? <Container style={ this.styles.carouselTextContainer }>
-          <CenteredText style= { this.styles.header } msg={ title } />
-          <CenteredText style={ this.styles.subHeader } msg={ infoText } />
-        </Container> : null}
-      </Container>
+        </Block>
+        <Block style={ styles.carouselTextContainer } >
+          <Block flex={0.4}>
+            <CenteredText style= { styles.header } msg={ title } />
+          </Block>
+          <Block flex={0.6}>
+            <CenteredText style={ styles.subHeader } msg={ infoText } />
+          </Block>
+        </Block>
+      </Block>
     )
   }
 
@@ -93,64 +142,21 @@ export class LandingComponent extends React.Component<Props, State> {
       <Pagination
         dotsLength={ carouselInfo.length }
         activeDotIndex={ activeSlide }
-        dotStyle={ this.styles.dotStyle }
-        inactiveDotStyle={ [this.styles.dotStyle, [{ backgroundColor: JolocomTheme.palette.backgroundDot }]] }
+        dotStyle={ styles.activeDotStyle }
+        inactiveDotStyle={ styles.inactiveDotStyle }
         inactiveDotOpacity={ 0.4 }
         inactiveDotScale={ 0.6 }
       />
     )
   }
-
-  private get styles() {
-    return StyleSheet.create({
-      carouselContainer: {
-        width: viewWidth
-      },
-      carouseSlide: {
-        flex: 1,
-        width: '100%'
-      },
-      carouselTextContainer: {
-        flex: 1,
-        justifyContent: 'space-around',
-        padding: '1%'
-      },
-      dotStyle: {
-        width: 7,
-        height: 7,
-        backgroundColor: JolocomTheme.palette.primaryColor
-      },
-      header: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: JolocomTheme.textStyles.headline.color,
-        fontSize: JolocomTheme.textStyles.headline.fontSize,
-        fontWeight: JolocomTheme.textStyles.headline.fontWeight
-      } as TextStyle,
-      subHeader: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: JolocomTheme.textStyles.subheadline.color
-      },
-      buttonContainer: {
-        backgroundColor: JolocomTheme.palette.primaryColor
-      }
-    })
-  }
-
-  // TODO This is here so we can invoke it from tests.
-  // might be replaced during integration tests.
-  private handleButtonTap = () => {
-    this.props.handleButtonTap()
-  }
-
+ 
   render() {
     return (
-      <Container>
-        <Block flex={ 0.8 }>
+      <Container style={ styles.mainContainer }>
+        <Block>
           <Carousel
             data={ carouselInfo }
-            renderItem={ this._renderItem }
+            renderItem={ this.renderItem }
             lockScrollWhileSnapping
             lockScrollTimeoutDuration={1000}
             loop
@@ -162,16 +168,20 @@ export class LandingComponent extends React.Component<Props, State> {
             }
           />
         </Block>
-        <Block flex={ 0.13 }>
+        <Block style={ styles.paginationBlock}>
           { this.renderPagination() }
         </Block>
-        <Block flex={ 0.07 }>
+        <Block style={ styles.buttonBlock}>
           <Button
-            onPress={ this.handleButtonTap }
-            style={{ container: this.styles.buttonContainer }}
             raised
-            primary
-            text="Create Your Identity" />
+            onPress={ this.props.handleButtonTap }
+            style={{ 
+              container: styles.buttonContainer, 
+              text: styles.buttonText 
+            }}
+            upperCase= { false }
+            text='Get started'
+          />
         </Block>
       </Container>
     )

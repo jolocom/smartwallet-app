@@ -1,183 +1,92 @@
-const { white, grey } = require('material-colors')
-
-const palette = {
-  primaryColor: '#942f51',
-  primary1Color: '#b3c90f',
-  primary2Color: '#b3c90f',
-  primary3Color: '#b3c90f',
-  accentColor: '#05050d',
-  accent1Color: '#942f51',
-  accent2Color: '#942f51',
-  accent3Color: '#942f51',
-  textColor: '#4b132b',
-  canvasColor: white,
-  borderColor: grey['300'],
-  disabledColor: '#9ba0aa',
-  primaryColorBlack: '#05050d',
+const primaryColors = {
+  primaryColorBlack: 'black',
   primaryColorSand: '#ffefdf',
+  primaryColorSandInactive: "rgba(255, 239, 223, 0.38)",
   primaryColorGrey: '#fafafa',
   primaryColorWhite: 'white',
-  backgroundContainer: '#f5f5f5',
-  backgroundCard: '#fafafa',
-  backgroundDot: '#545454',
-  primaryTextColorSand: '#ffefdf',
-  spinnerColor: '#89ffdebc',
+  primaryColorPurple:'#942f51',
 
-  // TODO: remove after ui refactor
-  textColor_grey: '#a4a4a3',
-  textColor_silverGrey: '#9ba0aa',
-  textColor_darkBrown75: '#633c38'
+  dotColorActive: "#ffdebc",
+  dotColorInactive: "#fffefc",
+
+  labelFontSize: 20,
+  headerFontSize: 22,
+  landingHeaderFontSize: 30,
+
+  contentFontFamily: 'TTCommons'
 }
 
-// dark: assumes dark background; light analog
 const textStyles = {
   dark: {
     appHeader: {
       fontSize: 22,
-      color: palette.primaryColorWhite
+      color: primaryColors.primaryColorWhite
     },
     tabHeader: {
       active: {
         fontSize: 20,
-        color: palette.primaryColorSand
+        color: primaryColors.primaryColorSand
       },
       inactive: {
         fontSize: 20,
-        color: palette.primaryColorGrey
+        color: primaryColors.primaryColorGrey
       }
     },
     labelInputField: {
       fontSize: 14,
-      color: palette.primaryColorGrey
+      color: primaryColors.primaryColorGrey
     },
     textInputField: {
       fontSize: 18,
-      color: palette.primaryColorWhite
+      color: primaryColors.primaryColorWhite
     },
     header: {
       fontSize: 34,
-      color: palette.primaryColorWhite
+      color: primaryColors.primaryColorWhite
     },
     subheader: {
       fontSize: 30,
-      color: palette.primaryColorSand
+      color: primaryColors.primaryColorSand
     },
     textL: {
       fontSize: 20,
-      color: palette.primaryColorSand
+      color: primaryColors.primaryColorSand
     },
     textM: {
       fontSize: 18,
-      color: palette.primaryColorSand
+      color: primaryColors.primaryColorSand
     },
     textS: {
       fontSize: 14,
-      color: palette.primaryColorSand
+      color: primaryColors.primaryColorSand
     }
   },
   light: {
     labelDisplayFieldEdit: {
       fontSize: 17,
-      color: palette.primaryColorBlack
+      color: primaryColors.primaryColorBlack
     },
     textDisplayFieldEdit: {
       fontSize: 22,
-      color: palette.primaryColor
+      color: primaryColors.primaryColorPurple
     },
     labelDisplayField: {
       fontSize: 17,
-      color: palette.primaryColorBlack,
+      color: primaryColors.primaryColorBlack,
       opacity: 0.4
     },
     textDisplayField: {
       fontSize: 22,
-      color: palette.primaryColorBlack
+      color: primaryColors.primaryColorBlack
     },
     subheader: {
       fontSize: 30,
-      color: palette.primaryColorBlack
+      color: primaryColors.primaryColorBlack
     }
-  },
-  // old styles TODO: remove when finished with refactor ui
-  headline: {
-     fontSize: 24,
-     fontStyle: 'normal',
-     fontWeight: '200',
-     color: palette.textColor_grey
-  },
-   subheadline: {
-     fontSize: 20,
-     fontStyle: 'normal',
-     fontWeight: '200',
-     color: palette.textColor_grey
-  },
-   sectionheader: {
-     fontSize: 20,
-     fontStyle: 'normal',
-     fontWeight: '400',
-     color: palette.textColor
-   },
-   labelInputFields: {
-     fontSize: 13,
-     fontStyle: 'normal',
-     fontWeight: '300',
-     color: palette.textColor_darkBrown75
-   },
-   inputFields: {
-     fontSize: 16,
-     fontStyle: 'normal',
-     fontWeight: '400',
-     color: palette.textColor_silverGrey
-   },
-   contentInputFields: {
-     fontSize: 16,
-     fontStyle: 'normal',
-     fontWeight: '400',
-     color: palette.textColor
-   },
-   textCopy: {
-     fontSize: 13,
-     fontStyle: 'normal',
-     fontWeight: '300',
-     color: palette.textColor_grey
-   },
-   labelButton: {
-     fontSize: '14px',
-     fontStyle: 'normal',
-     fontWeight: '500',
-     color: palette.accent1Color,
-     textTransform: 'uppercase'
-   },
-   screenHeader: {
-     fontSize: '20px',
-     fontStyle: 'normal',
-     fontWeight: '500',
-     color: palette.textColor
-   },
-   userName: {
-     fontSize: '28px',
-     fontStyle: 'normal',
-     fontWeight: '400',
-     color: palette.textColor
   }
 }
 
-const button = {
-    container: {
-      backgroundColor: palette.primaryColor,
-      borderRadius: 4,
-      margin: 0,
-      paddingLeft: 32,
-      paddingRight: 32,
-      paddingBottom: 16,
-      paddingTop: 12
-    }
-  }
-
-
 export const JolocomTheme = {
-  contentFontFamily: 'Roboto, sans-serif',
-  palette,
-  textStyles,
-  button
+  ...primaryColors,
+  textStyles
 }

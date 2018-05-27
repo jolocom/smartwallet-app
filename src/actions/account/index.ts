@@ -154,7 +154,7 @@ export const getClaimsForDid = () => {
     const claims = prepareClaimsForState(dummyClaims)
     dispatch({
         type: 'GET_CLAIMS_DID',
-        claims: claims
+        claims
     })
   }
 
@@ -182,7 +182,7 @@ const prepareClaimsForState = (claims: any) => {
     nestedClaims.splice(ix, 1)
 
     nestedClaims.map((nest) => {
-      let nestedInfo : any = {}
+      const nestedInfo : any = {}
       nestedInfo['claimField'] = nest
       nestedInfo['claimValue'] = claim.claim[nest]
       typeof claim.claim[nest] === 'string' ?

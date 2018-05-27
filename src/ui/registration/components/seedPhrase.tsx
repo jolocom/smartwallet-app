@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TextStyle } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
 
@@ -15,34 +15,36 @@ interface Props {
 
 const styles = StyleSheet.create({
   title: {
-    color: JolocomTheme.textStyles.subheadline.color,
-    fontWeight: JolocomTheme.textStyles.subheadline.fontWeight,
-    fontSize: JolocomTheme.textStyles.sectionheader.fontSize
-  } as TextStyle,
+    color: JolocomTheme.primaryColorSand,
+    fontSize: JolocomTheme.labelFontSize
+  },
   phrase: {
-    color: JolocomTheme.textStyles.sectionheader.color,
-    fontWeight: JolocomTheme.textStyles.sectionheader.fontWeight,
-    fontSize: JolocomTheme.textStyles.sectionheader.fontSize
-  } as TextStyle,
+    color: JolocomTheme.primaryColorSand,
+    fontSize: JolocomTheme.labelFontSize
+  },
   sideNoteGreen: {
-    color: JolocomTheme.palette.primary1Color,
-    fontSize: JolocomTheme.textStyles.textCopy.fontSize,
-  } as TextStyle
+    color: JolocomTheme.primaryColorSand,
+    fontSize: JolocomTheme.labelFontSize
+  }
 })
 
 const muiStyles = {
+  button: {
+    container: {
+      backgroundColor: JolocomTheme.primaryColorBlack
+    },
+  },
   checkbox: {
     label: {
       marginLeft: -5,
       padding: 0,
       position: 'relative',
       textAlign: 'left',
-      color: JolocomTheme.textStyles.textCopy.color,
-      fontSize: JolocomTheme.textStyles.textCopy.fontSize,
-      fontWeight: JolocomTheme.textStyles.textCopy.fontWeight
+      color: JolocomTheme.primaryColorPurple,
+      fontSize: JolocomTheme.labelFontSize,
     },
     icon: {
-      color: JolocomTheme.palette.primary1Color,
+      color: JolocomTheme.primaryColorSand
     }
   }
 }
