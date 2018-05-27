@@ -26,6 +26,7 @@ const iconMap : IIconMap = {
   telephone: <PhoneIcon />
 }
 
+// TODO FIX THIS
 const styles = StyleSheet.create({
   containerField: {
     width: '100%',
@@ -65,7 +66,7 @@ export const ClaimCard : React.SFC<Props> = (props) => {
   let content = []
 
   if (claimField === 'name' && claimValue !== undefined) {
-    let splitName = claimValue.split(' ')
+    const splitName = claimValue.split(' ')
     content.push({
       claimValue: splitName[0],
       claimField,

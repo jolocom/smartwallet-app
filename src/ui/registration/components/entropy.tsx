@@ -11,7 +11,11 @@ interface Props {
   readonly progress : number
 }
 
+// TODO FONT WEIGHT REFERENCE FROM STYLES
 const styles = StyleSheet.create({
+  mainContainer:{
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
   footerButton: {
     position: 'absolute',
     bottom: '5%'
@@ -19,10 +23,17 @@ const styles = StyleSheet.create({
   text: {
     position: 'absolute',
     top: '20%',
-    backgroundColor: JolocomTheme.palette.backgroundContainer,
-    fontSize: JolocomTheme.textStyles.headline.fontSize,
-    fontWeight: JolocomTheme.textStyles.headline.fontWeight,
-    color: JolocomTheme.textStyles.headline.color
+    backgroundColor: JolocomTheme.primaryColorBlack,
+    fontSize: JolocomTheme.headerFontSize,
+    fontFamily: JolocomTheme.contentFontFamily,
+    fontWeight: '100',
+    color: JolocomTheme.primaryColorSand
+  },
+  buttonContainer: {
+
+  },
+  buttonText:{
+
   }
 })
 
@@ -31,12 +42,11 @@ export const EntropyComponent : React.SFC<Props> = props => {
 
   const msg = progress === 0 ?
     'For security purposes, we need some randomness.' +
-    ' Please put your finger anywhere on the screen and draw' +
-    ' on it randomly.'
+    ' Please tap the screen and draw on it randomly' 
     : `${Math.trunc(progress * 100)} %`
 
   return (
-    <Container >
+    <Container style={ styles.mainContainer }>
       <CenteredText style={ styles.text } msg={ msg } />
       <Block>
         <MaskedImageComponent
@@ -45,9 +55,10 @@ export const EntropyComponent : React.SFC<Props> = props => {
       </Block>
       <View style={ styles.footerButton }>
         <Button
+          style={{ container: styles.buttonContainer, text: styles.buttonText }}
           disabled={ progress !== 1 }
           raised={ true }
-          text="NEXT STEP"
+          text="Continue"
           onPress={ submitEntropy }
         />
       </View>
