@@ -83,12 +83,11 @@ export class ClaimOverview extends React.Component<Props, State> {
   renderClaimCards = (category: string) : ReactNode => {
     const { openClaimDetails, claims } = this.props
     const categoryClaims = claims.savedClaims[category]
-
     return categoryClaims.map((claim: Claim) => {
-      // TODO: handle multiLine claims e.g. address for later
-      if (claim.multiLine) {
-        return
-      } else {
+      switch(claim.multiLine) {
+      case (true):
+        return // TODO: handle multiLine claims e.g. address for later
+      default:
         return (
           <ClaimCard
             key={ claim.claimField }
@@ -101,31 +100,21 @@ export class ClaimOverview extends React.Component<Props, State> {
   }
 
   render() {
-    const { savedClaims } = this.props.claims
-    const claimsCategories = Object.keys(savedClaims)
-    let content
-
-    if (this.props.claims.loading) {
-      // TODO: insert loading component
-      content = (
-        <View><Text>Loading</Text></View>
-      )
-    } else {
-      content = (
-        claimsCategories.map((category: string) => {
+    const { claims } = this.props
+    const claimsCategories = Object.keys(claims.savedClaims)
+    const content = claims.loading ? ( <View><Text>Loading</Text></View>) :
+      (claimsCategories.map((category: string) => {
           return (
             <View key={category}>
-              <View>
-                <View style={ styles.sectionContainer }>
-                  <Text style={ styles.sectionHeader }>{ categoryDisplayMap[category] }</Text>
-                </View>
-                { this.renderClaimCards(category) }
+              <View style={ styles.sectionContainer }>
+                <Text style={ styles.sectionHeader }>{ categoryDisplayMap[category] }</Text>
               </View>
+              { this.renderClaimCards(category) }
             </View>
-          )})
+          )
+        })
       )
-    }
-
+    
     return (
       <Container style={ styles.componentContainer }>
         <ScrollView style={ styles.scrollComponent }>

@@ -3,6 +3,7 @@ import { ListItem } from 'react-native-material-ui'
 import { StyleSheet, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Claim } from 'src/ui/home/components/claimOverview'
+import { ReactNode } from 'react'
 import {
   MoreIcon,
   AccessibilityIcon,
@@ -10,7 +11,10 @@ import {
   EmailIcon,
   PhoneIcon
 } from 'src/resources'
-import { ReactNode } from 'react'
+
+export interface ClaimSingle extends Claim {
+  claimValue: string
+}
 
 interface Props {
   openClaimDetails: (selectedType: string) => void
@@ -61,7 +65,6 @@ const styles = StyleSheet.create({
 export const ClaimCard : React.SFC<Props> = (props) => {
   const { claimValue, claimField } = props.claimItem
   const content = []
-
   if (claimValue && claimField === 'name') {
     const splitName = claimValue.split(' ')
     content.push({

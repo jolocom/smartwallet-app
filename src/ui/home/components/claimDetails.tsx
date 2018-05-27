@@ -3,11 +3,9 @@ import { Container, Block, CenteredText } from 'src/ui/structure'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Claim } from 'src/ui/home/components/claimOverview'
+import { ClaimSingle } from 'src/ui/home/components/claimCard'
 
-interface ClaimSingle extends Claim {
-  claimValue: string
-}
+
 
 interface Props {
   selectedClaim: ClaimSingle
