@@ -2,7 +2,7 @@ import React from 'react'
 import { ListItem } from 'react-native-material-ui'
 import { StyleSheet, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { IClaimUI } from 'src/ui/home/components/claimOverview'
+import { Claim } from 'src/ui/home/components/claimOverview'
 import {
   MoreIcon,
   AccessibilityIcon,
@@ -10,17 +10,14 @@ import {
   EmailIcon,
   PhoneIcon
 } from 'src/resources'
+import { ReactNode } from 'react'
 
 interface Props {
   openClaimDetails: (selectedType: string) => void
-  claimItem: IClaimUI
+  claimItem: Claim
 }
 
-interface IIconMap {
-  [key: string]: any
-}
-
-const iconMap : IIconMap = {
+const iconMap: {[key: string] : ReactNode} = {
   name: <NameIcon />,
   email: <EmailIcon />,
   telephone: <PhoneIcon />
@@ -63,9 +60,9 @@ const styles = StyleSheet.create({
 
 export const ClaimCard : React.SFC<Props> = (props) => {
   const { claimValue, claimField } = props.claimItem
-  let content = []
+  const content = []
 
-  if (claimField === 'name' && claimValue !== undefined) {
+  if (claimValue && claimField === 'name') {
     const splitName = claimValue.split(' ')
     content.push({
       claimValue: splitName[0],
@@ -87,17 +84,11 @@ export const ClaimCard : React.SFC<Props> = (props) => {
     })
   }
 
-  const renderLeftIcon = (claimField: string, showIcon: boolean) => {
-    if (!showIcon) {
-      return ''
-    } else if (iconMap[claimField] !== undefined) {
-      return iconMap[claimField]
-    } else if (iconMap[claimField] === undefined) {
-      return <AccessibilityIcon />
-    }
+  const renderLeftIcon = (claimField: string) => {
+    return iconMap[claimField] ? iconMap[claimField] : <AccessibilityIcon />  
   }
 
-  const renderCard = (claimVal: any, claimField: string, label: string, showIcon: boolean) => {
+  const renderCard = (claimVal: string, claimField: string, label: string, showIcon: boolean) => {
     const {
       labelDisplayFieldEdit,
       labelDisplayField,
@@ -125,9 +116,9 @@ export const ClaimCard : React.SFC<Props> = (props) => {
           '+ add' :
           claimVal
         }}
-        leftElement={ renderLeftIcon(claimField, showIcon) }
+        leftElement={ showIcon && renderLeftIcon(claimField) }
         onPress={() => {}}
-        rightElement={ claimVal !== undefined ? <MoreIcon /> : '' }
+        rightElement={ claimVal ? <MoreIcon /> : '' }
       />
     )
   }
@@ -143,7 +134,7 @@ export const ClaimCard : React.SFC<Props> = (props) => {
 
 const stringCapitalize = (myString : string) : string => {
   const matches = myString.match(/[A-Z]/g)
-  if (matches !== null) {
+  if (matches) {
     matches.map((match) => {
       const index = myString.indexOf(match)
       const tx = myString.slice(0, index) + " " + myString.slice(index)

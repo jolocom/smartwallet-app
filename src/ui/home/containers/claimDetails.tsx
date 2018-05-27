@@ -3,17 +3,19 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
+import { Claim } from 'src/ui/home/components/claimOverview'
+import { ClaimState } from 'src/reducers/account'
+import Immutable from 'immutable'
 
 interface ConnectProps {
-  claims: any
+  claims: ClaimState
   saveClaim: (claimVal: string, claimField: string) => void
 }
 
 interface Props extends ConnectProps {}
 
-// TODO: type
 interface State {
-  selectedClaim: any
+  selectedClaim: Claim | string
 }
 
 export class ClaimDetailsContainer extends React.Component<Props, State> {
@@ -24,16 +26,17 @@ state = {
 
 componentWillMount() {
   const { claims } = this.props
-  // TODO: type
   const { id, claimField } = claims.selected
-  for (let key in claims.savedClaims) {
-    claims.savedClaims[key].map((item: any, i: number) => {
+
+  for(const key of claims.savedClaims) {
+    claims.savedClaims[key].map((item: Claim) => {
       if(item.id === id && item.claimField === claimField) {
         this.setState({
           selectedClaim: item
         })
       }
     })
+  
   }
 }
 
@@ -48,8 +51,9 @@ render() {
 }
 
 const mapStateToProps = (state: RootState) => {
+  const claims = Immutable.fromJS(state.account.claims)
   return {
-    claims: state.account.claims.toObject()
+    claims: claims.toObject()
   }
 }
 

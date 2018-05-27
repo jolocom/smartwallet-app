@@ -5,18 +5,24 @@ import { Container, Block } from 'src/ui/structure'
 import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
+import { ClaimState } from 'src/reducers/account'
 
-export interface IClaimUI {
-  claimField: string
-  category: string
-  claimValue?: string
-  multiLine?: boolean
-  id?: string
+export interface Claim {
+  id: string
   type?: string
+  claimField: string
+  claimValue?: string | {}
+  multiLine?: boolean
+  category: string
+  [key: string]: Claim[keyof Claim]
+ }
+
+export interface Claims {
+  [key: string]: Claim[]
 }
 
 interface Props {
-  claims: any
+  claims: ClaimState
   scanning: boolean
   onScannerStart: () => void
   openClaimDetails: (selectedType : string) => void
@@ -25,11 +31,7 @@ interface Props {
 interface State {
 }
 
-interface IDefMap {
-  [key: string]: string
-}
-
-const categoryDisplayMap : IDefMap = {
+const categoryDisplayMap: {[key: string] : string} = {
   personal: 'Personal / general',
   contact: 'Contact',
   other: 'Miscellaneous'
@@ -78,11 +80,11 @@ const styles = StyleSheet.create({
 
 export class ClaimOverview extends React.Component<Props, State> {
 
-  renderClaimCards = (category: any) : ReactNode => {
+  renderClaimCards = (category: string) : ReactNode => {
     const { openClaimDetails, claims } = this.props
     const categoryClaims = claims.savedClaims[category]
 
-    return categoryClaims.map((claim: IClaimUI, i: number) => {
+    return categoryClaims.map((claim: Claim) => {
       // TODO: handle multiLine claims e.g. address for later
       if (claim.multiLine) {
         return
@@ -110,7 +112,7 @@ export class ClaimOverview extends React.Component<Props, State> {
       )
     } else {
       content = (
-        claimsCategories.map((category: any, i: number) => {
+        claimsCategories.map((category: string) => {
           return (
             <View key={category}>
               <View>

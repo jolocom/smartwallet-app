@@ -5,7 +5,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
   claimName: string
-  fieldValue: any
+  fieldValue: string
   field: string
   handleFieldInput: (fieldValue: string, field: string) => void
 }

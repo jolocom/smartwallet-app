@@ -7,12 +7,13 @@ import { RootState } from 'src/reducers/'
 import { accountActions, navigationActions } from 'src/actions'
 import { View } from 'react-native'
 import Immutable from 'immutable'
+import { ClaimState } from 'src/reducers/account'
 
 interface ConnectProps {
   openClaimDetails: () => void
   getClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
-  claims: any
+  claims: ClaimState
 }
 
 interface Props extends ConnectProps {}

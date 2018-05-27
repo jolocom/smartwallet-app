@@ -3,9 +3,14 @@ import { Container, Block, CenteredText } from 'src/ui/structure'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Claim } from 'src/ui/home/components/claimOverview'
+
+interface ClaimSingle extends Claim {
+  claimValue: string
+}
 
 interface Props {
-  selectedClaim: any
+  selectedClaim: ClaimSingle
   saveClaim: (claimVal: string, claimField: string) => void
 }
 
@@ -105,10 +110,12 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
 const prepareFieldLabel = (myString : string) : string => {
   const matches = myString.match(/[A-Z]/g)
-  !!matches && matches.map((match) => {
-    const index = myString.indexOf(match)
-    const tx = myString.slice(0, index) + " " + myString.slice(index)
-    myString = tx
-  })
+  if(matches) {
+    matches.map((match) => {
+      const index = myString.indexOf(match)
+      const tx = myString.slice(0, index) + " " + myString.slice(index)
+      myString = tx
+    })
+  }
   return myString[0].toUpperCase() + myString.slice(1)
 }
