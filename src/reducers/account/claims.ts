@@ -22,6 +22,8 @@ export const claims = (state = initialState, action: AnyAction): any => {
       return state.setIn(['loading'], action.loading)
     case 'GET_CLAIMS_DID':
       return state.setIn(['savedClaims'], action.claims).setIn(['loading'], false)
+    case 'SET_SELECTED':
+      return state.setIn(['selected'], action.selected)
     default:
       return state
   }

@@ -25,19 +25,16 @@ state = {
 }
 
 componentWillMount() {
-  const { claims } = this.props
-  const { id, claimField } = claims.selected
-
-  for(const key of claims.savedClaims) {
-    claims.savedClaims[key].map((item: Claim) => {
-      if(item.id === id && item.claimField === claimField) {
-        this.setState({
-          selectedClaim: item
-        })
+  const { selected, savedClaims } = this.props.claims
+  const { id, claimField } = selected
+  
+  Object.keys(savedClaims).map((key: string, index) => {
+    savedClaims[key].map((item: Claim) => {
+      if (item.id === id && item.claimField === claimField) {
+        this.setState({selectedClaim: item})
       }
     })
-  
-  }
+  })
 }
 
 render() {

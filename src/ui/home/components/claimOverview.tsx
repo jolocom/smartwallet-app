@@ -11,7 +11,7 @@ export interface Claim {
   id: string
   type?: string
   claimField: string
-  claimValue?: string | {}
+  claimValue?: string
   multiLine?: boolean
   category: string
   [key: string]: Claim[keyof Claim]
@@ -25,7 +25,7 @@ interface Props {
   claims: ClaimState
   scanning: boolean
   onScannerStart: () => void
-  openClaimDetails: (selectedType : string) => void
+  openClaimDetails: (id: string, claimField: string) => void
 }
 
 interface State {

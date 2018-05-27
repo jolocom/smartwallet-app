@@ -29,7 +29,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    // this.props.getClaimsForDid()
+    this.props.getClaimsForDid()
   }
 
   private openClaimDetails = (selectedType : string) : void => {
@@ -96,8 +96,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    openClaimDetails: () => {
-      dispatch(navigationActions.navigate({routeName: 'ClaimDetails'}))
+    openClaimDetails: (id:string, claimField: string) => {
+      dispatch(accountActions.openClaimDetails(id, claimField))
     },
     getClaimsForDid: () => {
       dispatch(accountActions.getClaimsForDid())

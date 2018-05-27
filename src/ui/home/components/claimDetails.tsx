@@ -3,12 +3,12 @@ import { Container, Block, CenteredText } from 'src/ui/structure'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { ClaimSingle } from 'src/ui/home/components/claimCard'
+import { Claim } from 'src/ui/home/components/claimOverview'
 
 
 
 interface Props {
-  selectedClaim: ClaimSingle
+  selectedClaim: Claim
   saveClaim: (claimVal: string, claimField: string) => void
 }
 

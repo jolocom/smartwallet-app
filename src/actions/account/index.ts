@@ -36,8 +36,22 @@ export const checkIdentityExists = () => {
   }
 }
 
+
+export const openClaimDetails = (id: string, claimField: string) => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch({
+      type: 'SET_SELECTED',
+      selected: {id, claimField}
+    })
+    dispatch(navigationActions.navigate({
+      routeName: routeList.ClaimDetails
+    }))
+  }
+}
+
 export const saveClaim = (claimVal: string, claimField: string) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
+    console.log('saveClaim action: ', claimVal, claimField)
     dispatch(navigationActions.navigate({
       routeName: routeList.Identity
     }))
@@ -63,7 +77,6 @@ export const getClaimsForDid = () => {
     })
   }
 }
-
 
 const dummyClaims: VerifiableCredential[] = [{
   '@context': [
