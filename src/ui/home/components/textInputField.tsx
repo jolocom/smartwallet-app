@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { TextField } from 'react-native-material-textfield'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+const ReactMUI = require('react-native-material-textfield')
 
 interface Props {
   claimName: string
@@ -48,7 +48,7 @@ export class TextInputField extends React.Component<Props, State> {
     const labelText = this.state.focused || !fieldValue ? claimName : ''
     return (
       <View style={ styles.inputContainer }>
-        <TextField
+        <ReactMUI.TextField
           onFocus={ () => this.handleFocus() }
           onBlur={ () => this.handleBlur() }
           label={ labelText }

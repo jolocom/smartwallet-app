@@ -4,16 +4,16 @@ import { ClaimDetails } from 'src/ui/home/components/claimDetails'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
-import { accountActions, navigationActions } from 'src/actions'
+import { accountActions } from 'src/actions'
 import { View } from 'react-native'
 import Immutable from 'immutable'
-import { ClaimState } from 'src/reducers/account'
+import { ClaimsState } from 'src/reducers/account'
 
 interface ConnectProps {
   openClaimDetails: () => void
   getClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
-  claims: ClaimState
+  claims: ClaimsState
 }
 
 interface Props extends ConnectProps {}
@@ -90,7 +90,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   const claims = Immutable.fromJS(state.account.claims)
   return {
-    claims: claims.toObject()
+    claims: claims.toJS()
   }
 }
 

@@ -3,9 +3,7 @@ import { Container, Block, CenteredText } from 'src/ui/structure'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Claim } from 'src/ui/home/components/claimOverview'
-
-
+import { Claim } from 'src/actions/account/helper'
 
 interface Props {
   selectedClaim: Claim
@@ -19,6 +17,7 @@ interface State {
 }
 
 export class ClaimDetailsComponent extends React.Component<Props, State> {
+  
   state = {
     line_1: '',
     line_2: '',

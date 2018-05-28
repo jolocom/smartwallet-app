@@ -3,25 +3,32 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
-import { Claim } from 'src/ui/home/components/claimOverview'
-import { ClaimState } from 'src/reducers/account'
+import { Claim } from 'src/actions/account/helper'
+import { ClaimsState } from 'src/reducers/account'
 import Immutable from 'immutable'
 
 interface ConnectProps {
-  claims: ClaimState
+  claims: ClaimsState
   saveClaim: (claimVal: string, claimField: string) => void
 }
 
 interface Props extends ConnectProps {}
 
 interface State {
-  selectedClaim: Claim | string
+  selectedClaim: Claim
 }
 
 export class ClaimDetailsContainer extends React.Component<Props, State> {
 
 state = {
-  selectedClaim: ''
+  selectedClaim: {
+    id: '',
+    type: '',
+    claimField: '',
+    claimValue: '',
+    multiLine: false,
+    category: ''
+  }
 }
 
 componentWillMount() {

@@ -1,9 +1,10 @@
 import { AnyAction } from 'redux'
-import { Map } from 'immutable'
+import Immutable from 'immutable'
+import { ClaimsState } from 'src/reducers/account'
 
-const initialState = Map({
+const initialState: ClaimsState = ({
   loading: false,
-  selected: {id: 'default1', claimField: 'name'},
+  selected: {id: '', claimField: ''},
   savedClaims: {
     personal: [{
       claimField: 'name',
@@ -16,7 +17,7 @@ const initialState = Map({
   }
 })
 
-export const claims = (state = initialState, action: AnyAction): any => {
+export const claims = (state = Immutable.fromJS(initialState), action: AnyAction): ClaimsState => {
   switch (action.type) {
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)

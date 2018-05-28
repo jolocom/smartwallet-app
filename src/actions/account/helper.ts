@@ -1,5 +1,19 @@
-import { Claim, Claims } from 'src/ui/home/components/claimOverview'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
+
+import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
+
+export interface Claim {
+  id: string
+  type?: string
+  claimField: string
+  claimValue?: string
+  multiLine?: boolean
+  category: string
+  [key: string]: Claim[keyof Claim]
+ }
+
+export interface Claims {
+  [key: string]: Claim[]
+}
 
 const categoryUIDefinition: {[key: string] : string} = {
   name: 'personal',
@@ -10,27 +24,22 @@ const categoryUIDefinition: {[key: string] : string} = {
   socialMedia: 'contact'
 }
 
-// TODO: check types from class
-export const prepareClaimsForState = (claims: VerifiableCredential[]) : Claims => {
+export const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) : Claims => {
   const preparedClaims : Claim[] = []
-  claims.map((claim: VerifiableCredential) => {
-    const singleClaim = {
-      id: claim.id,
-      type: claim.type[1]
-    }
-    
+  claims.map((claim: IVerifiableCredentialAttrs) => {
     const nestedClaims = Object.keys(claim.claim)
     nestedClaims.splice(nestedClaims.indexOf('id'), 1)
 
     nestedClaims.map((nClaim) => {
-      const nestedInfo = {
+      const cl: Claim = {
+        id: claim.id,
+        type: claim.type[1],
         claimField: nClaim,
         claimValue: claim.claim[nClaim],
         multiLine: typeof claim.claim[nClaim] === 'string' ? false : true,
         category: categoryUIDefinition[nClaim] ? categoryUIDefinition[nClaim] : 'other' 
       }
-
-      preparedClaims.push(Object.assign({}, singleClaim, nestedInfo))
+      preparedClaims.push(cl)
     })
   })
 
@@ -40,10 +49,10 @@ export const prepareClaimsForState = (claims: VerifiableCredential[]) : Claims =
 
 const arrayToObject = (claimsArray: Claim[], category: string) : Claims => {
   return claimsArray.reduce((accumulator: Claims , claimItem: Claim) : Claims => {
-    if (accumulator[claimItem[category]]) {
-      accumulator[claimItem[category]].push(claimItem)
+    if (accumulator[claimItem.category]) {
+      accumulator[claimItem.category].push(claimItem)
     } else {
-      accumulator[claimItem[category]] = [claimItem]
+      accumulator[claimItem.category] = [claimItem]
     }
     return accumulator
   }, {} )

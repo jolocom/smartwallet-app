@@ -5,24 +5,11 @@ import { Container, Block } from 'src/ui/structure'
 import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
-import { ClaimState } from 'src/reducers/account'
-
-export interface Claim {
-  id: string
-  type?: string
-  claimField: string
-  claimValue?: string
-  multiLine?: boolean
-  category: string
-  [key: string]: Claim[keyof Claim]
- }
-
-export interface Claims {
-  [key: string]: Claim[]
-}
+import { ClaimsState } from 'src/reducers/account'
+import { Claim } from 'src/actions/account/helper'
 
 interface Props {
-  claims: ClaimState
+  claims: ClaimsState
   scanning: boolean
   onScannerStart: () => void
   openClaimDetails: (id: string, claimField: string) => void

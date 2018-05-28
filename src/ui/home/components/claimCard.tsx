@@ -2,7 +2,7 @@ import React from 'react'
 import { ListItem } from 'react-native-material-ui'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Claim } from 'src/ui/home/components/claimOverview'
+import { Claim } from 'src/actions/account/helper'
 import { ReactNode } from 'react'
 import {
   MoreIcon,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
   const { claimValue, claimField, id } = claimItem
   const content = []
-  if (claimValue && claimField === 'name') {
+  if (claimValue && claimField === 'name' && typeof claimValue === 'string') {
     const splitName = claimValue.split(' ')
     content.push({
       claimValue: splitName[0],
@@ -96,7 +96,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
     )
   }
 
-  const renderCard = (claimVal: string, claimField: string, label: string, showIcon: boolean) : ReactNode => {
+  const renderCard = (claimVal: string | undefined, claimField: string, label: string, showIcon: boolean) : ReactNode => {
     const {
       labelDisplayFieldEdit,
       labelDisplayField,
@@ -120,7 +120,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
           rightElementContainer: styles.listItemRightElementContainer
         }}
         centerElement={{
-          primaryText: stringCapitalize(label),
+          primaryText: prepareLabel(label),
           secondaryText: claimVal ? claimVal : '+ add'
         }}
         leftElement={ showIcon ? renderLeftIcon(claimField) : '' }
@@ -139,7 +139,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
   )
 }
 
-const stringCapitalize = (myString : string) : string => {
+const prepareLabel = (myString : string) : string => {
   const matches = myString.match(/[A-Z]/g)
   if (matches) {
     matches.map((match) => {

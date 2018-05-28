@@ -2,9 +2,8 @@ import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
 import { prepareClaimsForState } from 'src/actions/account/helper'
-
+import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
 
 export const setDid = (did: string) => {
   return {
@@ -35,7 +34,6 @@ export const checkIdentityExists = () => {
     }
   }
 }
-
 
 export const openClaimDetails = (id: string, claimField: string) => {
   return (dispatch: Dispatch<AnyAction>) => {
@@ -78,7 +76,7 @@ export const getClaimsForDid = () => {
   }
 }
 
-const dummyClaims: VerifiableCredential[] = [{
+const dummyClaims: IVerifiableCredentialAttrs[] = [{
   '@context': [
     "https://w3id.org/identity/v1",
     "https://w3id.org/security/v1"
@@ -114,9 +112,9 @@ const dummyClaims: VerifiableCredential[] = [{
       "expires": "2020-01-07T01:02:03Z"
     }
   },
-   "signature": {
+   "proof": {
     "type": "LinkedDataSignature2015",
-    "created": "2016-06-21T03:43:29Z",
+    "created": "2010-01-07T01:02:03Z",
     "creator": "https://example.com/jdoe/keys/1",
       "domain": "json-ld.org",
       "nonce": "c168dfab",
@@ -136,11 +134,10 @@ const dummyClaims: VerifiableCredential[] = [{
       "id": "did:example:ebfeb1f712ebc6f1c276e12ec21",
       "email": "n@t.world",
     },
-     "signature": {
+     "proof": {
       "type": "LinkedDataSignature2015",
-      "created": "2016-06-21T03:43:29Z",
+      "created": "2010-01-07T01:02:03Z",
       "creator": "https://example.com/jdoe/keys/1",
-      "domain": "json-ld.org",
       "nonce": "c168dfab",
       "signatureValue": "jz4bEW2FBMDkANyEjiPnrIctucHQCIwxrtzBXt+rVGmYMEflHrOwf7FYLH60E3Oz54VwSSQCi9J4tXQIhv4SofT5opbcIUj7ji6QrC6c+a3YLjg8l/+/uFjhzsLelAO4gh2k0FJxM04ljH0GZGuXTzhRnqTzJTnYSVo72PC92NA="
     }
@@ -158,9 +155,9 @@ const dummyClaims: VerifiableCredential[] = [{
       "id": "did:example:ebfeb1f712ebc6f1c276e12ec21",
       "telephone": "000-111-333",
     },
-     "signature": {
+     "proof": {
       "type": "LinkedDataSignature2015",
-      "created": "2016-06-21T03:43:29Z",
+      "created": "2010-01-07T01:02:03Z",
       "creator": "https://example.com/jdoe/keys/1",
       "domain": "json-ld.org",
       "nonce": "c168dfab",
