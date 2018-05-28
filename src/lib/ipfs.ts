@@ -1,6 +1,5 @@
 import { IIpfsConnector } from 'jolocom-lib/js/ipfs/types'
 import { IDidDocumentAttrs } from 'jolocom-lib/js/identity/didDocument/types'
-
 const RNFetchBlob = require('react-native-fetch-blob').default
 
 export class IpfsLib implements IIpfsConnector {
@@ -8,7 +7,7 @@ export class IpfsLib implements IIpfsConnector {
   private ipfsHost!: string
 
   configure(config: {host: string, protocol: string, port: number}) : void {
-    this.ipfsHost = `${config.protocol}://${config.host}`
+    this.ipfsHost = `${config.protocol}://${config.host}:${config.port}`
   }
 
   async storeJSON(ddo: object, pin: boolean) : Promise<string> {
