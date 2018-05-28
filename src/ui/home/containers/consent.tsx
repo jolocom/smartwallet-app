@@ -9,20 +9,28 @@ interface ConnectProps { }
 interface Props extends ConnectProps {}
 
 interface State {
-    //TODO: typing for service Provider
-  serviceProvider: object
+  // serviceProvider: object
   requestedClaims: string[]
-    //TODO: needs an interface for checkboxlist which will accept filter as a method
-  checkboxList: any
+  checkboxList: SingleCheckBox[]
 }
 
-//TODO: requestedClaims interface
+export interface SingleCheckBox {
+  value: string
+  label: string
+  checked: boolean
+}
+
+//TODO: update the typings for service providers
+// export interface ServiceProvider {
+//   name: string
+//   metadata: string
+// }
 
 export class ConsentContainer extends React.Component<Props, State> {
 
   state = {
     //serviceProvider should be passed in
-    serviceProvider: { name: 'Jolocom', metadata: 'xyz'},
+    // serviceProvider: { name: 'Jolocom', metadata: 'xyz'},
     //requestedClaims should be passed in
     requestedClaims: ['name', 'email', 'passport'],
     checkboxList: [],
@@ -34,7 +42,7 @@ export class ConsentContainer extends React.Component<Props, State> {
 
   //TODO: set into redux action here?
   private mapRequestedClaimsToCheckboxes(requestedClaims: string[]) {
-    const checkboxList: any = []
+    const checkboxList: SingleCheckBox[] = []
     requestedClaims.forEach((claim: string) => {
       checkboxList.push(
         {
@@ -58,7 +66,7 @@ export class ConsentContainer extends React.Component<Props, State> {
   render() {
     return (
     <ConsentComponent
-      serviceProvider={ this.state.serviceProvider }
+      // serviceProvider={ this.state.serviceProvider }
       checkboxList={ this.state.checkboxList }
       handleSubmitClaims={ this.handleSubmitClaims }
       handleDenySubmit={ this.handleDenySubmit }
