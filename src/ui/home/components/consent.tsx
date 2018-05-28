@@ -3,13 +3,15 @@ import { Text, StyleSheet } from 'react-native'
 import { Button, Checkbox } from 'react-native-material-ui'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { SingleCheckBox, 
+  // ServiceProvider
+ } from 'src/ui/home/containers/consent'
 
 
 interface Props {
   //TODO: typing for service Provider
-  serviceProvider: any
-  //TODO: needs an interface for checkboxlist which will accept filter as a method
-  checkboxList: any 
+  // serviceProvider: ServiceProvider 
+  checkboxList: SingleCheckBox[] 
   handleSubmitClaims: () => void
   handleDenySubmit: () => void
 }
@@ -17,12 +19,6 @@ interface Props {
 interface State {
   checkboxList: object[]
   claimsProvided: boolean
-}
-
-interface SingleCheckBox {
-  value: string
-  label: string
-  checked: boolean
 }
 
 const styles = StyleSheet.create({
@@ -92,21 +88,21 @@ export class ConsentComponent extends React.Component<Props, State> {
     claimsProvided: false
   }
 
-  private renderServiceDetails() {
-    return (
-      <Block>
-        <Text style={ styles.serviceProviderName}>
-        { this.props.serviceProvider.name }
-        </Text>
-        <Text style={ styles.metadata }>
-        { this.props.serviceProvider.metadata }
-        </Text>
-      </Block>
-    )
-  }
+  // private renderServiceDetails() {
+  //   return (
+  //     <Block>
+  //       <Text style={ styles.serviceProviderName}>
+  //       { this.props.serviceProvider.name }
+  //       </Text>
+  //       <Text style={ styles.metadata }>
+  //       { this.props.serviceProvider.metadata }
+  //       </Text>
+  //     </Block>
+  //   )
+  // }
 
-  private renderRequestedClaimsList (checkboxList: any) {
-    return checkboxList.map( (checkbox: any, index: number) => {
+  private renderRequestedClaimsList (checkboxList: SingleCheckBox[] ) {
+    return checkboxList.map( (checkbox: SingleCheckBox, index: number) => {
       return (
         <Block key={index}>
           <Checkbox 
@@ -182,11 +178,11 @@ export class ConsentComponent extends React.Component<Props, State> {
     return (
         <Container>
 
-         { this.renderServiceDetails() }
+         {/* { this.renderServiceDetails() } */}
 
           <Block>
             <Text style={ styles.fixedText }>
-              is asking you to share the following claims:
+              This service is asking you to share the following claims:
             </Text>
           </Block>
 
