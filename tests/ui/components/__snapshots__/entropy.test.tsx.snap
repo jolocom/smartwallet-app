@@ -14,13 +14,9 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       Object {
         "backgroundColor": "black",
         "color": "#ffefdf",
-<<<<<<< HEAD
         "fontFamily": "TTCommons",
         "fontSize": 22,
         "fontWeight": "100",
-=======
-        "fontSize": 22,
->>>>>>> fix failing test in landing container
         "position": "absolute",
         "top": "20%",
       }
@@ -75,13 +71,9 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       Object {
         "backgroundColor": "black",
         "color": "#ffefdf",
-<<<<<<< HEAD
         "fontFamily": "TTCommons",
         "fontSize": 22,
         "fontWeight": "100",
-=======
-        "fontSize": 22,
->>>>>>> fix failing test in landing container
         "position": "absolute",
         "top": "20%",
       }
@@ -136,13 +128,9 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       Object {
         "backgroundColor": "black",
         "color": "#ffefdf",
-<<<<<<< HEAD
         "fontFamily": "TTCommons",
         "fontSize": 22,
         "fontWeight": "100",
-=======
-        "fontSize": 22,
->>>>>>> fix failing test in landing container
         "position": "absolute",
         "top": "20%",
       }
