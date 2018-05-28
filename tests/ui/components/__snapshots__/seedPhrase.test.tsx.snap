@@ -18,11 +18,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "color": "#ffefdf",
-<<<<<<< HEAD
           "fontSize": 20,
-=======
-          "fontSize": 22,
->>>>>>> fix failing test in landing container
         }
       }
     />
@@ -35,11 +31,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "color": "#ffefdf",
-<<<<<<< HEAD
           "fontSize": 20,
-=======
-          "fontSize": 22,
->>>>>>> fix failing test in landing container
         }
       }
     />
@@ -53,11 +45,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "color": "#ffefdf",
-<<<<<<< HEAD
           "fontSize": 20,
-=======
-          "fontSize": 22,
->>>>>>> fix failing test in landing container
         }
       }
     />
@@ -129,11 +117,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "color": "#ffefdf",
-<<<<<<< HEAD
           "fontSize": 20,
-=======
-          "fontSize": 22,
->>>>>>> fix failing test in landing container
         }
       }
     />
@@ -146,11 +130,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "color": "#ffefdf",
-<<<<<<< HEAD
           "fontSize": 20,
-=======
-          "fontSize": 22,
->>>>>>> fix failing test in landing container
         }
       }
     />
@@ -164,11 +144,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "color": "#ffefdf",
-<<<<<<< HEAD
           "fontSize": 20,
-=======
-          "fontSize": 22,
->>>>>>> fix failing test in landing container
         }
       }
     />
