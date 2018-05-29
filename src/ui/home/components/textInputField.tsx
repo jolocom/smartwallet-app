@@ -53,8 +53,8 @@ export class TextInputField extends React.Component<Props, State> {
           onBlur={ () => this.handleBlur() }
           label={ labelText }
           labelTextStyle={ styles.labelStyle }
-          tintColor={ JolocomTheme.palette.primaryColor }
-          textColor={ JolocomTheme.palette.primaryColorBlack }
+          tintColor={ JolocomTheme.primaryColorPurple }
+          textColor={ JolocomTheme.primaryColorBlack }
           value={ fieldValue }
           onChangeText={ (fieldValue: string, field: string) => {
             handleFieldInput(fieldValue, this.props.field)

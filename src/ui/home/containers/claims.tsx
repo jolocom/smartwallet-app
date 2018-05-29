@@ -1,6 +1,5 @@
 import React from 'react'
 import { ClaimOverview } from 'src/ui/home/components/claimOverview'
-import { ClaimDetails } from 'src/ui/home/components/claimDetails'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
@@ -10,7 +9,7 @@ import Immutable from 'immutable'
 import { ClaimsState } from 'src/reducers/account'
 
 interface ConnectProps {
-  openClaimDetails: () => void
+  openClaimDetails: (id: string) => void
   getClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
   claims: ClaimsState
@@ -30,19 +29,6 @@ export class ClaimsContainer extends React.Component<Props, State> {
 
   componentWillMount() {
     this.props.getClaimsForDid()
-  }
-
-  private openClaimDetails = (selectedType : string) : void => {
-    this.setState({
-      typeClaimDetails: selectedType
-    })
-    this.toggleClaimDetails()
-  }
-
-  private toggleClaimDetails = () : void => {
-    this.setState({
-      showClaimDetails: !this.state.showClaimDetails
-    })
   }
 
 // TODO: do I really need 3 func?
@@ -96,8 +82,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    openClaimDetails: (id:string, claimField: string) => {
-      dispatch(accountActions.openClaimDetails(id, claimField))
+    openClaimDetails: (id:string) => {
+      dispatch(accountActions.openClaimDetails(id))
     },
     getClaimsForDid: () => {
       dispatch(accountActions.getClaimsForDid())

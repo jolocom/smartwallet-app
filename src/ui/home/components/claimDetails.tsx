@@ -24,7 +24,8 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    const { claimField, claimValue } = this.props.selectedClaim
+    // TODO: adjust for multiline when enabled
+    const { claimField, claimValue } = this.props.selectedClaim.claim[0]
     if (claimValue && claimField === 'name') {
       const fullName = claimValue.split(' ')
       this.setState({
@@ -83,7 +84,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const { claimField } = this.props.selectedClaim
+    const { claimField } = this.props.selectedClaim.claim[0]
     const claimName = prepareFieldLabel(claimField)
     return (
       <Container>

@@ -13,7 +13,7 @@ import {
 } from 'src/resources'
 
 interface Props {
-  openClaimDetails: (id: string, claimField: string) => void
+  openClaimDetails: (id: string) => void
   claimItem: Claim
 }
 
@@ -63,7 +63,8 @@ const styles = StyleSheet.create({
 })
 
 export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
-  const { claimValue, claimField, id } = claimItem
+  const { id } = claimItem
+  const { claimValue, claimField } = claimItem.claim[0]
   const content = []
   if (claimValue && claimField === 'name' && typeof claimValue === 'string') {
     const splitName = claimValue.split(' ')
@@ -90,7 +91,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
     return (
       <TouchableOpacity
         style={ styles.moreMenu }
-        onPress={ () => openClaimDetails(id, claimField) }>
+        onPress={ () => openClaimDetails(id) }>
         <MoreIcon />
       </TouchableOpacity>
     )
@@ -124,7 +125,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
           secondaryText: claimVal ? claimVal : '+ add'
         }}
         leftElement={ showIcon ? renderLeftIcon(claimField) : '' }
-        onPress={ claimVal ? undefined : () =>  openClaimDetails(id, claimField)}
+        onPress={ claimVal ? undefined : () =>  openClaimDetails(id)}
         rightElement={ claimVal && showIcon ? renderMoreMenu() : '' }
       />
     )

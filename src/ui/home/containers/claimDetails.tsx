@@ -24,8 +24,8 @@ state = {
   selectedClaim: {
     id: '',
     type: '',
-    claimField: '',
-    claimValue: '',
+    issuer: '',
+    claim: [],
     multiLine: false,
     category: ''
   }
@@ -33,11 +33,10 @@ state = {
 
 componentWillMount() {
   const { selected, savedClaims } = this.props.claims
-  const { id, claimField } = selected
-  
+  const { id } = selected
   Object.keys(savedClaims).map((key: string, index) => {
     savedClaims[key].map((item: Claim) => {
-      if (item.id === id && item.claimField === claimField) {
+      if (item.id === id) {
         this.setState({selectedClaim: item})
       }
     })

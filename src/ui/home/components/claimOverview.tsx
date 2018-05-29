@@ -12,7 +12,7 @@ interface Props {
   claims: ClaimsState
   scanning: boolean
   onScannerStart: () => void
-  openClaimDetails: (id: string, claimField: string) => void
+  openClaimDetails: (id: string) => void
 }
 
 interface State {
@@ -77,7 +77,7 @@ export class ClaimOverview extends React.Component<Props, State> {
       default:
         return (
           <ClaimCard
-            key={ claim.claimField }
+            key={ claim.id }
             openClaimDetails={ openClaimDetails }
             claimItem={ claim }
           />

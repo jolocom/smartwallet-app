@@ -4,14 +4,21 @@ import { ClaimsState } from 'src/reducers/account'
 
 const initialState: ClaimsState = ({
   loading: false,
-  selected: {id: '', claimField: ''},
+  selected: {id: ''},
   savedClaims: {
     personal: [{
-      claimField: 'name',
+      id: 'default1',
+      claim: [{claimField: 'name'}],
       category: 'personal'
     }],
     contact: [{
-      claimField: 'email',
+      id: 'default2',
+      claim: [{claimField: 'email'}],
+      category: 'contact'
+    },
+    {
+      id: 'default3',
+      claim: [{claimField: 'telephone'}],
       category: 'contact'
     }]
   }

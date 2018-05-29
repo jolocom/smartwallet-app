@@ -11,7 +11,6 @@ export interface ClaimsState {
 
 interface SelectedState {
 	readonly id: string
-	readonly claimField: string
 }
 
 export interface DidState {
