@@ -5073,9 +5073,9 @@ jju@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/jju/-/jju-1.3.0.tgz#dadd9ef01924bc728b03f2f7979bdbd62f7a2aaa"
 
-jolocom-lib@0.7.8:
-  version "0.7.8"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-0.7.8.tgz#7f3b0ca6e67cde7ccdc32d7f0198d7e8ea390271"
+jolocom-lib@0.7.9:
+  version "0.7.9"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-0.7.9.tgz#6f3c48b41013acb9976bab77a576660fb1812b12"
   dependencies:
     bip39 "^2.5.0"
     bitcoinjs-lib "^3.3.2"
