@@ -57,7 +57,7 @@ render() {
 const mapStateToProps = (state: RootState) => {
   const claims = Immutable.fromJS(state.account.claims)
   return {
-    claims: claims.toObject()
+    claims: claims.toJS()
   }
 }
 
