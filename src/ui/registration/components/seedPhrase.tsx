@@ -3,8 +3,7 @@ import { StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
 
-const { Checkbox, Button } = require('react-native-material-ui')
-import { Landing00 } from 'src/resources'
+const { Button } = require('react-native-material-ui')
 
 interface Props {
   seedPhrase: string
@@ -14,88 +13,66 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.labelFontSize
+  container: {
+    backgroundColor: JolocomTheme.primaryColorBlack
   },
   phrase: {
-    color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.labelFontSize
+    paddingLeft: '3%',
+    paddingRight: '3%',
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: 34,
+    fontFamily: JolocomTheme.contentFontFamily,
+    lineHeight: 38
   },
-  sideNoteGreen: {
+  sideNote: {
+    paddingLeft: '5%',
+    paddingRight: '5%',
+    lineHeight: 26,
     color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.labelFontSize
+    fontSize: JolocomTheme.labelFontSize,
+    fontFamily: JolocomTheme.contentFontFamily
+  },
+  footerButton: {
+    position: 'absolute',
+    bottom: '5%'
+  },
+  buttonContainer: {
+    width: 225,
+    height: 50,
+    backgroundColor: JolocomTheme.primaryColorPurple
+  },
+  buttonText: {
+    fontWeight: '100',
+    fontSize: JolocomTheme.headerFontSize,
+    color: JolocomTheme.primaryColorWhite,
+    fontFamily: JolocomTheme.contentFontFamily
   }
 })
 
-const muiStyles = {
-  button: {
-    container: {
-      backgroundColor: JolocomTheme.primaryColorBlack
-    },
-  },
-  checkbox: {
-    label: {
-      marginLeft: -5,
-      padding: 0,
-      position: 'relative',
-      textAlign: 'left',
-      color: JolocomTheme.primaryColorPurple,
-      fontSize: JolocomTheme.labelFontSize,
-    },
-    icon: {
-      color: JolocomTheme.primaryColorSand
-    }
-  }
-}
-
 export const SeedPhrase : React.SFC<Props> = props => {
   return(
-    <Container>
-      <Block flex={ 0.1 }>
-        <Landing00 height={80} width={80} />
-      </Block>
+    <Container style={ styles.container } >
       <Block flex={ 0.1 }>
         <CenteredText
-          msg={ 'Your secure phrase is:' }
-          style={ styles.title }
+          style={ styles.sideNote }
+          msg={'Write these words down on an analog and secure place.'
+            + '\n Without these words, you cannot access your wallet again.'
+          }
         />
       </Block>
-      <Block flex={ 0.1 }>
+      <Block flex={ 0.6 }>
         <CenteredText
           style={ styles.phrase }
           msg={ props.seedPhrase }
         />
       </Block>
-      <Block flex={ 0.2 }>
-        <CenteredText
-          style={ styles.sideNoteGreen }
-          msg={'IMPORTANT \n Write these words down on an analog and' +
-            'secure place. Store it in at least two different places.' +
-            'Without these words you cannot access your wallet again.' +
-            'Anyone with these words can get access to your wallet. ' +
-            'Taking a screenshot is not secure.'
-          }
-        />
-      </Block>
-      <Block flex={ 0.1 }>
-        <Checkbox
-          style={ muiStyles.checkbox }
-          onCheck={ props.onCheck }
-          label='Yes, I have securely written down my phrase.'
-          checkedIcon='radio-button-checked'
-          uncheckedIcon='radio-button-unchecked'
-          value=''
-          checked={props.checked}
-        />
-      </Block>
-      <Block flex={ 0.1 }>
+      <Block style={ styles.footerButton }> 
         <Button
-          disabled={ !props.checked }
+          style={{ container: styles.buttonContainer, text: styles.buttonText }}
           onPress= { props.handleButtonTap }
           raised
-          primary
-          text='NEXT STEP'
+          upperCase= { false }
+          text='Yes, I wrote it down'
         />
       </Block>
     </Container>

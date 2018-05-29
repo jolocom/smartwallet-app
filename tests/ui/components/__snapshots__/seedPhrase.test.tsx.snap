@@ -1,86 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
-<Container>
-  <Block
-    flex={0.1}
-  >
-    <Landing00
-      height={80}
-      width={80}
-    />
-  </Block>
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+    }
+  }
+>
   <Block
     flex={0.1}
   >
     <CenteredText
-      msg="Your secure phrase is:"
+      msg="Write these words down on an analog and secure place.
+ Without these words, you cannot access your wallet again."
       style={
         Object {
           "color": "#ffefdf",
+          "fontFamily": "TTCommons",
           "fontSize": 20,
+          "lineHeight": 26,
+          "paddingLeft": "5%",
+          "paddingRight": "5%",
         }
       }
     />
   </Block>
   <Block
-    flex={0.1}
+    flex={0.6}
   >
     <CenteredText
       msg="mock seedPhrase"
       style={
         Object {
-          "color": "#ffefdf",
-          "fontSize": 20,
+          "color": "white",
+          "fontFamily": "TTCommons",
+          "fontSize": 34,
+          "lineHeight": 38,
+          "paddingLeft": "3%",
+          "paddingRight": "3%",
         }
       }
     />
   </Block>
   <Block
-    flex={0.2}
-  >
-    <CenteredText
-      msg="IMPORTANT 
- Write these words down on an analog andsecure place. Store it in at least two different places.Without these words you cannot access your wallet again.Anyone with these words can get access to your wallet. Taking a screenshot is not secure."
-      style={
-        Object {
-          "color": "#ffefdf",
-          "fontSize": 20,
-        }
+    style={
+      Object {
+        "bottom": "5%",
+        "position": "absolute",
       }
-    />
-  </Block>
-  <Block
-    flex={0.1}
-  >
-    <Checkbox
-      checked={true}
-      checkedIcon="radio-button-checked"
-      disabled={false}
-      label="Yes, I have securely written down my phrase."
-      onCheck={[Function]}
-      size={24}
-      style={
-        Object {
-          "icon": Object {
-            "color": "#ffefdf",
-          },
-          "label": Object {
-            "color": "#942f51",
-            "fontSize": 20,
-            "marginLeft": -5,
-            "padding": 0,
-            "position": "relative",
-            "textAlign": "left",
-          },
-        }
-      }
-      uncheckedIcon="radio-button-unchecked"
-      value=""
-    />
-  </Block>
-  <Block
-    flex={0.1}
+    }
   >
     <Button
       accent={false}
@@ -88,111 +57,108 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       icon={null}
       onLongPress={null}
       onPress={null}
-      primary={true}
+      primary={false}
       raised={true}
-      style={Object {}}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "height": 50,
+            "width": 225,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TTCommons",
+            "fontSize": 22,
+            "fontWeight": "100",
+          },
+        }
+      }
       testID={null}
-      text="NEXT STEP"
-      upperCase={true}
+      text="Yes, I wrote it down"
+      upperCase={false}
     />
   </Block>
 </Container>
 `;
 
 exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] = `
-<Container>
-  <Block
-    flex={0.1}
-  >
-    <Landing00
-      height={80}
-      width={80}
-    />
-  </Block>
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+    }
+  }
+>
   <Block
     flex={0.1}
   >
     <CenteredText
-      msg="Your secure phrase is:"
+      msg="Write these words down on an analog and secure place.
+ Without these words, you cannot access your wallet again."
       style={
         Object {
           "color": "#ffefdf",
+          "fontFamily": "TTCommons",
           "fontSize": 20,
+          "lineHeight": 26,
+          "paddingLeft": "5%",
+          "paddingRight": "5%",
         }
       }
     />
   </Block>
   <Block
-    flex={0.1}
+    flex={0.6}
   >
     <CenteredText
       msg="mock seedPhrase"
       style={
         Object {
-          "color": "#ffefdf",
-          "fontSize": 20,
+          "color": "white",
+          "fontFamily": "TTCommons",
+          "fontSize": 34,
+          "lineHeight": 38,
+          "paddingLeft": "3%",
+          "paddingRight": "3%",
         }
       }
     />
   </Block>
   <Block
-    flex={0.2}
-  >
-    <CenteredText
-      msg="IMPORTANT 
- Write these words down on an analog andsecure place. Store it in at least two different places.Without these words you cannot access your wallet again.Anyone with these words can get access to your wallet. Taking a screenshot is not secure."
-      style={
-        Object {
-          "color": "#ffefdf",
-          "fontSize": 20,
-        }
+    style={
+      Object {
+        "bottom": "5%",
+        "position": "absolute",
       }
-    />
-  </Block>
-  <Block
-    flex={0.1}
-  >
-    <Checkbox
-      checked={false}
-      checkedIcon="radio-button-checked"
-      disabled={false}
-      label="Yes, I have securely written down my phrase."
-      onCheck={[Function]}
-      size={24}
-      style={
-        Object {
-          "icon": Object {
-            "color": "#ffefdf",
-          },
-          "label": Object {
-            "color": "#942f51",
-            "fontSize": 20,
-            "marginLeft": -5,
-            "padding": 0,
-            "position": "relative",
-            "textAlign": "left",
-          },
-        }
-      }
-      uncheckedIcon="radio-button-unchecked"
-      value=""
-    />
-  </Block>
-  <Block
-    flex={0.1}
+    }
   >
     <Button
       accent={false}
-      disabled={true}
+      disabled={false}
       icon={null}
       onLongPress={null}
       onPress={null}
-      primary={true}
+      primary={false}
       raised={true}
-      style={Object {}}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "height": 50,
+            "width": 225,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TTCommons",
+            "fontSize": 22,
+            "fontWeight": "100",
+          },
+        }
+      }
       testID={null}
-      text="NEXT STEP"
-      upperCase={true}
+      text="Yes, I wrote it down"
+      upperCase={false}
     />
   </Block>
 </Container>
