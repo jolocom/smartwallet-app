@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorBlack
   },
   phrase: {
-    // backgroundColor: JolocomTheme.primaryColorGrey,
     paddingLeft: '3%',
     paddingRight: '3%',
     color: JolocomTheme.primaryColorWhite,
@@ -26,8 +25,6 @@ const styles = StyleSheet.create({
     lineHeight: 38
   },
   sideNote: {
-    backgroundColor: JolocomTheme.primaryColorPurple, 
-    marginTop: 0,
     paddingLeft: '5%',
     paddingRight: '5%',
     lineHeight: 26,
@@ -55,13 +52,15 @@ const styles = StyleSheet.create({
 export const SeedPhrase : React.SFC<Props> = props => {
   return(
     <Container style={ styles.container } >
-      <CenteredText
-        style={ styles.sideNote }
-        msg={'Write these words down on an analog and secure place.'
-          + '\n Without these words, you cannot access your wallet again.'
-        }
-      />
-      <Block flex={ 0.5 }>
+      <Block flex={ 0.1 }>
+        <CenteredText
+          style={ styles.sideNote }
+          msg={'Write these words down on an analog and secure place.'
+            + '\n Without these words, you cannot access your wallet again.'
+          }
+        />
+      </Block>
+      <Block flex={ 0.6 }>
         <CenteredText
           style={ styles.phrase }
           msg={ props.seedPhrase }

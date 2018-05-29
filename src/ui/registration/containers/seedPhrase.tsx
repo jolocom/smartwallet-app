@@ -25,7 +25,7 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
   }
 
   render() {
-    const mnemonic = 'the quick brown fox jumps over the lazy brown dog three words'
+    const { mnemonic } = this.props.navigation.state.params
     return <SeedPhraseComponent
       seedPhrase={ mnemonic }
       checked={ this.state.checked }
