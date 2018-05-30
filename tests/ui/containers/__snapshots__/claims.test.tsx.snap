@@ -11,7 +11,6 @@ exports[`Claims container correctly changes scanning to false when qr code scann
   <ClaimOverview
     claims={Object {}}
     onScannerStart={[Function]}
-    openClaimDetails={[Function]}
     scanning={false}
   />
 </Component>
@@ -28,7 +27,6 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
   <ClaimOverview
     claims={Object {}}
     onScannerStart={[Function]}
-    openClaimDetails={[Function]}
     scanning={false}
   />
 </Component>
@@ -45,7 +43,6 @@ exports[`Claims container mounts correctly and matches the snapshot 1`] = `
   <ClaimOverview
     claims={Object {}}
     onScannerStart={[Function]}
-    openClaimDetails={[Function]}
     scanning={false}
   />
 </Component>

@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`account reducer should handle the DID_SET action  1`] = `
+Object {
+  "claims": Immutable.Map {
+    "loading": false,
+    "selected": Immutable.Map {
+      "id": "",
+    },
+    "savedClaims": Immutable.Map {
+      "personal": Immutable.List [
+        Immutable.Map {
+          "id": "default1",
+          "claim": Immutable.List [
+            Immutable.Map {
+              "claimField": "name",
+            },
+          ],
+          "category": "personal",
+        },
+      ],
+      "contact": Immutable.List [
+        Immutable.Map {
+          "id": "default2",
+          "claim": Immutable.List [
+            Immutable.Map {
+              "claimField": "email",
+            },
+          ],
+          "category": "contact",
+        },
+        Immutable.Map {
+          "id": "default3",
+          "claim": Immutable.List [
+            Immutable.Map {
+              "claimField": "telephone",
+            },
+          ],
+          "category": "contact",
+        },
+      ],
+    },
+  },
+  "did": Immutable.Map {
+    "did": "mock did",
+  },
+}
+`;
+
+exports[`account reducer should initialize correctly 1`] = `
+Object {
+  "claims": Immutable.Map {
+    "loading": false,
+    "selected": Immutable.Map {
+      "id": "",
+    },
+    "savedClaims": Immutable.Map {
+      "personal": Immutable.List [
+        Immutable.Map {
+          "id": "default1",
+          "claim": Immutable.List [
+            Immutable.Map {
+              "claimField": "name",
+            },
+          ],
+          "category": "personal",
+        },
+      ],
+      "contact": Immutable.List [
+        Immutable.Map {
+          "id": "default2",
+          "claim": Immutable.List [
+            Immutable.Map {
+              "claimField": "email",
+            },
+          ],
+          "category": "contact",
+        },
+        Immutable.Map {
+          "id": "default3",
+          "claim": Immutable.List [
+            Immutable.Map {
+              "claimField": "telephone",
+            },
+          ],
+          "category": "contact",
+        },
+      ],
+    },
+  },
+  "did": Immutable.Map {
+    "did": "",
+  },
+}
+`;
