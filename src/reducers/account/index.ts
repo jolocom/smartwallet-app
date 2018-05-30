@@ -1,12 +1,24 @@
 import { combineReducers } from 'redux'
 import { did } from 'src/reducers/account/did'
 import { claims } from 'src/reducers/account/claims'
-import { Claims } from 'src/actions/account/helper'
+
+export interface Claim {
+  id: string
+  type?: string
+  value: any
+}
+
+export interface DecoratedClaims {
+  displayName: string
+  claims: Claim[]
+}
+
+type CategorizedClaims = Map<string, DecoratedClaims[]>
 
 export interface ClaimsState {
   readonly loading: boolean
-  readonly selected: SelectedState   
-  readonly savedClaims: Claims
+  readonly selected: SelectedState
+  readonly claims: CategorizedClaims
 }
 
 interface SelectedState {

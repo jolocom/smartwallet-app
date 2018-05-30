@@ -1,28 +1,44 @@
 import { AnyAction } from 'redux'
 import Immutable from 'immutable'
-import { ClaimsState } from 'src/reducers/account'
+import { ClaimsState, DecoratedClaims } from 'src/reducers/account'
 
-const initialState: ClaimsState = ({
+let categorizedClaims = new Map<string, DecoratedClaims[]>()
+categorizedClaims.set(
+  'personal',
+  [{
+    displayName: 'Name',
+    claims: [{
+      id: 'default1',
+      type: 'NameCredential',
+      value: 'name',
+    }],
+  }]
+)
+categorizedClaims.set(
+  'contact',
+  [{
+    displayName: 'E-mail',
+    claims: [{
+      id: 'default2',
+      type: 'email',
+      value: ''
+    }],
+  },
+  {
+    displayName: 'Phone',
+    claims: [{
+      id: 'default3',
+      type: 'phone',
+      value: ''
+    }],
+  }]
+)
+
+const initialState: ClaimsState = {
   loading: false,
   selected: {id: ''},
-  savedClaims: {
-    personal: [{
-      id: 'default1',
-      claim: [{claimField: 'name'}],
-      category: 'personal'
-    }],
-    contact: [{
-      id: 'default2',
-      claim: [{claimField: 'email'}],
-      category: 'contact'
-    },
-    {
-      id: 'default3',
-      claim: [{claimField: 'telephone'}],
-      category: 'contact'
-    }]
-  }
-})
+  claims: categorizedClaims
+}
 
 export const claims = (state = Immutable.fromJS(initialState), action: AnyAction): ClaimsState => {
   switch (action.type) {
