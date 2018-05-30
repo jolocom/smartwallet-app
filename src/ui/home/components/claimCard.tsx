@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 
 export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
   const { id } = claimItem
-  const { claimValue, claimField } = claimItem.claim[0]
+  const { claimValue, claimField } = claimItem
   const content = []
   if (claimValue && claimField === 'name' && typeof claimValue === 'string') {
     const splitName = claimValue.split(' ')
@@ -97,7 +97,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
     )
   }
 
-  const renderCard = (claimVal: string | undefined, claimField: string, label: string, showIcon: boolean) : ReactNode => {
+  const renderCard = (claimVal: string, claimField: string, label: string, showIcon: boolean) : ReactNode => {
     const {
       labelDisplayFieldEdit,
       labelDisplayField,
