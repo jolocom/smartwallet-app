@@ -40,7 +40,9 @@ export class Storage {
 
   get = {
     persona: this.getPersonas.bind(this),
-    verifiableCredential: this.getVCredential.bind(this)
+    verifiableCredential: this.getVCredential.bind(this),
+    attributesByType: this.getAttributesOfType.bind(this),
+    vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this)
   }
 
   constructor(config: ConnectionOptions) {
@@ -67,6 +69,34 @@ export class Storage {
       where: query,
       relations: ['claim', 'proof', 'subject']
     })
+
+    return entities.map(e => e.toVerifiableCredential())
+  }
+
+  private async getAttributesOfType(type: string[]): Promise<string[]> {
+    await this.createConnectionIfNeeded()
+    const localAttributes = await this.connection
+      .getRepository(CredentialEntity)
+      .createQueryBuilder('credential')
+      .leftJoinAndSelect('credential.verifiableCredential', 'verifiableCredential')
+      .where('verifiableCredential.type = :type', { type })
+      .groupBy('encryptedValue')
+      .select(['credential.encryptedValue'])
+      .getMany()
+
+    return localAttributes.map(attribute => attribute.encryptedValue)
+  }
+
+  private async getVCredentialsForAttribute(attribute: string) : Promise<VerifiableCredential[]> {
+    await this.createConnectionIfNeeded()
+    const entities = await this.connection
+      .getRepository(VerifiableCredentialEntity)
+      .createQueryBuilder('verifiableCredential')
+      .leftJoinAndSelect('verifiableCredential.claim', 'claim')
+      .leftJoinAndSelect('verifiableCredential.proof', 'proof')
+      .leftJoinAndSelect('verifiableCredential.subject', 'subject')
+      .where('claim.encryptedValue = :attribute', { attribute })
+      .getMany()
 
     return entities.map(e => e.toVerifiableCredential())
   }
