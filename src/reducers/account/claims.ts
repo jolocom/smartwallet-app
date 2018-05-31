@@ -7,9 +7,9 @@ categorizedClaims.set(
   'personal',
   [{
     displayName: 'Name',
+    type: ['Credential', 'ProofOfNameCredential'],
     claims: [{
       id: 'default1',
-      type: 'NameCredential',
       value: 'name',
     }],
   }]
@@ -18,17 +18,17 @@ categorizedClaims.set(
   'contact',
   [{
     displayName: 'E-mail',
+    type: ['Credential', 'ProofOfEmailCredential'],
     claims: [{
       id: 'default2',
-      type: 'email',
       value: ''
     }],
   },
   {
     displayName: 'Phone',
+    type: ['Credential', 'ProofOfPhoneCredential'],
     claims: [{
       id: 'default3',
-      type: 'phone',
       value: ''
     }],
   }]

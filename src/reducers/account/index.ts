@@ -4,12 +4,12 @@ import { claims } from 'src/reducers/account/claims'
 
 export interface Claim {
   id: string
-  type?: string
   value: any
 }
 
 export interface DecoratedClaims {
   displayName: string
+  type?: string[]
   claims: Claim[]
 }
 
