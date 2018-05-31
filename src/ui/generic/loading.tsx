@@ -3,7 +3,6 @@ import { Container, CenteredText } from 'src/ui/structure/'
 import { Dimensions, Image, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
-
 const image = require('src/resources/img/splashScreen.png')
 
 interface Props {}

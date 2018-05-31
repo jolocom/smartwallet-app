@@ -6,7 +6,7 @@ const initialState : LoadingState = {
   loading: true
 }
 
-export const loadingState = (state = Immutable.fromJS(initialState), action: AnyAction): string => {
+export const loading = (state = Immutable.fromJS(initialState), action: AnyAction): string => {
   switch (action.type) {
     case 'SET_LOADING':
       return state.setIn(['loading'], action.value)

@@ -35,7 +35,7 @@ export class LandingContainer extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const loading = Immutable.fromJS(state.account.loadingState)
+  const loading = Immutable.fromJS(state.account.loading)
   return {
     loading: loading.get('loading')
   }

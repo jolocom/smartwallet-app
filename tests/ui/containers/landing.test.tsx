@@ -46,7 +46,7 @@ describe('landing container', ()=> {
   it('correctly connects to redux', () => {
     const initialState = {
       account: {
-        loadingState: {
+        loading: {
           loading: true
         }
       } 
