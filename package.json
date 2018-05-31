@@ -38,8 +38,8 @@
     "ts-loader": "3.5.0",
     "tslib": "^1.7.1",
     "tslint": "^5.9.1",
-    "typescript": "^2.8.3",
     "typeorm": "^0.2.5",
+    "typescript": "^2.8.3",
     "yarn": "^1.5.1"
   },
   "scripts": {
@@ -115,7 +115,6 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "sjcl": "^1.0.7",
-    "squel": "^5.12.1",
     "sqlite3": "^4.0.0",
     "wif": "^2.0.6"
   },

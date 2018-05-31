@@ -22,6 +22,9 @@ Object {
   "did": Immutable.Map {
     "did": "mock did",
   },
+  "loading": Immutable.Map {
+    "loading": true,
+  },
 }
 `;
 
@@ -46,6 +49,9 @@ Object {
   },
   "did": Immutable.Map {
     "did": "",
+  },
+  "loading": Immutable.Map {
+    "loading": true,
   },
 }
 `;
