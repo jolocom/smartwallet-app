@@ -4,13 +4,15 @@ import { ClaimDetails } from 'src/ui/home/components/claimDetails'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
-import { accountActions } from 'src/actions'
+import { accountActions, ssoActions } from 'src/actions'
 import { View } from 'react-native'
 import Immutable from 'immutable'
 
+// TODO ANY
 interface ConnectProps {
   getClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
+  consumeCredentialRequest: (jwt: string) => void
   claims: any
 }
 
@@ -56,9 +58,10 @@ export class ClaimsContainer extends React.Component<Props, State> {
     this.setState({ scanning: false })
   }
 
-  // TODO Typings on E, event is not enough
-  private onScannerSuccess = (e : Event) : void => {
+  // TODO Typings on E
+  private onScannerSuccess = (e : any) : void => {
     this.setState({ scanning: false })
+    this.props.consumeCredentialRequest(e.data)
   }
 
   render() {
@@ -105,12 +108,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    getClaimsForDid: () => {
-      dispatch(accountActions.getClaimsForDid())
-    },
-    toggleLoading: (val: boolean) => {
-      dispatch(accountActions.toggleLoading(val))
-    }
+    getClaimsForDid: () => dispatch(accountActions.getClaimsForDid()),
+    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
+    consumeCredentialRequest: (jwt: string) => dispatch(ssoActions.consumeCredentialRequest(jwt))
   }
 }
 

@@ -1,6 +1,6 @@
 import { PrimaryColumn, Entity, Column, OneToMany, ManyToOne } from 'typeorm/browser'
 import { PersonaEntity, SignatureEntity, CredentialEntity } from 'src/lib/storage/entities'
-import { Exclude, Expose, plainToClass, classToPlain } from 'class-transformer'
+import { Exclude, Expose, Transform, plainToClass, classToPlain } from 'class-transformer'
 import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
 import { JolocomLib } from 'jolocom-lib'
 import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
@@ -17,6 +17,7 @@ export class VerifiableCredentialEntity {
   id!: string
 
   @Expose()
+  @Transform((value) => value.split(','), { toPlainOnly: true })
   @Column()
   type!: string
 

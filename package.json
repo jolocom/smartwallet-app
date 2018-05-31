@@ -92,7 +92,7 @@
     "browser-ipfs": "^0.0.6",
     "crypto-js": "^3.1.9-1",
     "ethereumjs-wallet": "^0.6.0",
-    "jolocom-lib": "0.7.9",
+    "jolocom-lib": "^0.7.18",
     "material-colors": "^1.2.5",
     "object.assign": "^4.1.0",
     "react": "16.2.0",
@@ -116,6 +116,7 @@
     "redux-thunk": "^2.2.0",
     "sjcl": "^1.0.7",
     "sqlite3": "^4.0.0",
+    "squel": "^5.12.1",
     "wif": "^2.0.6"
   },
   "rnpm": {
