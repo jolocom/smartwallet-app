@@ -3,6 +3,7 @@
 exports[`landing container correctly connects to redux 1`] = `
 Object {
   "checkIfAccountExists": [Function],
+  "loading": true,
   "startRegistration": [Function],
   "store": Object {
     "clearActions": [Function],
@@ -34,7 +35,9 @@ Object {
 }
 `;
 
-exports[`landing container mounts correctly and matches snapshot 1`] = `
+exports[`landing container mounts correctly and matches snapshot if loading 1`] = `<LoadingScreen />`;
+
+exports[`landing container mounts correctly and matches snapshot if loading is finished 1`] = `
 <LandingComponent
   handleButtonTap={[MockFunction]}
 />

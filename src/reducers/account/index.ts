@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { did } from 'src/reducers/account/did'
 import { claims } from 'src/reducers/account/claims'
-import { loading } from 'src/reducers/account/loading'
+import { loadingState } from 'src/reducers/account/loading'
 import { Map } from 'immutable'
 
 export interface DidState {
@@ -20,11 +20,11 @@ export interface LoadingState {
 export interface AccountState {
   did: DidState,
   claims: ClaimState,
-  loading: LoadingState
+  loadingState: LoadingState
 }
 
 export const accountReducer = combineReducers({
   did,
   claims,
-  loading
+  loadingState
 })
