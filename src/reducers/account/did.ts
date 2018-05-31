@@ -10,6 +10,8 @@ export const did = (state = Immutable.fromJS(initialState), action: AnyAction): 
   switch (action.type) {
     case 'DID_SET':
       return state.setIn(['did'], action.value)
+    case 'SET_LOADING':
+      return state.setIn(['loading'], action.value)
     default:
       return state
   }

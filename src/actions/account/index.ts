@@ -27,20 +27,21 @@ export const setDid = (did: string) => {
 export const checkIdentityExists = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { storageLib } = backendMiddleware
-
     try {
       const personas = await storageLib.get.persona()
       if (!personas.length) {
+        dispatch(genericActions.toggleLoadingScreen(false))
         return
       }
 
       dispatch(setDid(personas[0].did))
+      dispatch(genericActions.toggleLoadingScreen(false))
       dispatch(navigationActions.navigate({ routeName: routeList.Identity }))
+
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
         return
       }
-
       dispatch(genericActions.showErrorScreen(err))
     }
   }

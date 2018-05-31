@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import { Keyboard, EmitterSubscription } from 'react-native'
 import { registrationActions } from 'src/actions'
 import { PasswordEntryComponent } from 'src/ui/registration/components/passwordEntry'
-// import JolocomLib from 'jolocom-lib';
-import { JolocomTheme } from '../../../styles/jolocom-theme';
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface ConnectProps {
   savePassword: (password : string) => void
