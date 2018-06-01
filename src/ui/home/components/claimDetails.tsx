@@ -3,10 +3,10 @@ import { Container, Block, CenteredText } from 'src/ui/structure'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Claim } from 'src/actions/account/helper'
+import { DecoratedClaims } from 'src/reducers/account/'
 
 interface Props {
-  selectedClaim: Claim
+  selectedClaim: DecoratedClaims
   saveClaim: (claimVal: string, claimField: string) => void
 }
 
@@ -17,7 +17,6 @@ interface State {
 }
 
 export class ClaimDetailsComponent extends React.Component<Props, State> {
-  
   state = {
     line_1: '',
     line_2: '',
@@ -25,15 +24,16 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   componentWillMount() {
     // TODO: adjust for multiline when enabled
-    const { claimField, claimValue } = this.props.selectedClaim.claim[0]
-    if (claimValue && claimField === 'name') {
-      const fullName = claimValue.split(' ')
+    const { value } = this.props.selectedClaim.claims[0]
+    const claimField = 'field'//this.props.selectedClaim.type[1]
+    if (value && (claimField.toString() === 'ProofOfName')) {
+      const fullName = value.split(' ')
       this.setState({
         line_1: fullName[0],
         line_2: fullName[1] ? fullName[1] : ''
       })
-    } else if (claimValue) {
-      this.setState({ line_1: claimValue })
+    } else if (value) {
+      this.setState({ line_1: value })
     }
   }
 
@@ -42,8 +42,8 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   private onSubmit = (claimField: string) => {
-    const claimValue = (claimField === 'name') ? this.prepareNameClaim() : this.state.line_1
-    this.props.saveClaim(claimValue, claimField)
+    const value = (claimField === 'name') ? this.prepareNameClaim() : this.state.line_1
+    this.props.saveClaim(value, claimField)
   }
 
   private prepareNameClaim = () => {
@@ -84,15 +84,17 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const { claimField } = this.props.selectedClaim.claim[0]
-    const claimName = prepareFieldLabel(claimField)
+    if (this.props.selectedClaim.claims.length === 0) {
+      return
+    }
+    const claimField = this.props.selectedClaim.type[1]
     return (
       <Container>
         <Block>
           <CenteredText
             style={ JolocomTheme.textStyles.light.subheader }
-            msg={ claimName } />
-          { this.renderInputFields(claimName) }
+            msg={ claimField } />
+          { this.renderInputFields(claimField) }
         </Block>
         <Button
           disabled={ !this.state.line_1 }
@@ -104,16 +106,4 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       </Container>
     )
   }
-}
-
-const prepareFieldLabel = (myString : string) : string => {
-  const matches = myString.match(/[A-Z]/g)
-  if(matches) {
-    matches.map((match) => {
-      const index = myString.indexOf(match)
-      const tx = myString.slice(0, index) + " " + myString.slice(index)
-      myString = tx
-    })
-  }
-  return myString[0].toUpperCase() + myString.slice(1)
 }

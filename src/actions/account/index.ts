@@ -1,8 +1,10 @@
 import { AnyAction, Dispatch } from 'redux'
+import { JolocomLib } from 'jolocom-lib'
 import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
-import { prepareClaimsForUI } from 'src/actions/account/helper'
+import { DecoratedClaims } from 'src/reducers/account'
+import { categoryUIDefinition, Categories } from 'src/actions/account/categories'
 import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
 
 export const setDid = (did: string) => {
@@ -35,11 +37,11 @@ export const checkIdentityExists = () => {
   }
 }
 
-export const openClaimDetails = (id: string) => {
+export const openClaimDetails = (claim: DecoratedClaims) => {
   return (dispatch: Dispatch<AnyAction>) => {
     dispatch({
       type: 'SET_SELECTED',
-      selected: {id}
+      selected: claim
     })
     dispatch(navigationActions.navigate({
       routeName: routeList.ClaimDetails
@@ -68,7 +70,7 @@ export const getClaimsForDid = () => {
     const state = getState().account.claims.toJS()
     dispatch(toggleLoading(!state.loading))
 
-    const claims = prepareClaimsForUI(dummyC)
+    const claims = prepareClaimsForState(dummyC)
     dispatch({
         type: 'GET_CLAIMS_DID',
         claims
@@ -76,13 +78,45 @@ export const getClaimsForDid = () => {
   }
 }
 
-const dummyC : IVerifiableCredentialAttrs[]  = [
+const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
+  // TODO: Handle the category 'Other' for the claims that don't match any of predefined categories
+  let categorizedClaims = new Map<string, DecoratedClaims[]>()
+  const jolocomLib = new JolocomLib()
+  Object.keys(Categories).forEach(category => {
+    let claimsForCategory : DecoratedClaims[] = []
+    claims.forEach(claim => {
+      const VerifiableCredential = jolocomLib.credentials.createVerifiableCredential().fromJSON(claim)
+      const name = VerifiableCredential.getDisplayName()
+      const value = VerifiableCredential.getCredentialSection()[Object.keys(VerifiableCredential.getCredentialSection())[1]]
+      if (categoryUIDefinition[category.toString()].filter(type => areCredTypesEqual(claim.type, type))) {
+        claimsForCategory.push(
+          { displayName: name,
+            type: claim.type,
+            claims: [
+              { id: claim.id,
+                value: value }
+            ]
+          } as DecoratedClaims
+        )
+      }
+    })
+    categorizedClaims.set(category.toString(), claimsForCategory)
+  })
+  return categorizedClaims
+}
+
+const areCredTypesEqual = (first: string[], second: string[]): boolean => {
+  return first.every((el, index) => el === second[index])
+}
+
+const dummyC : any[]  = [
   {
     "@context": [
       "https://w3id.org/identity/v1","https://w3id.org/security/v1",
       "https://w3id.org/credentials/v1","http://schema.org"
     ],
     id: "claimId:a7e0aa7f5b1fe84c9552645c1fd50928ff8ae9f09580",
+    name: 'E-mail',
     issuer:"did:jolo:8f977e50b7e5cbdfeb53a03c812913b72978ca35c93571f85e862862bac8cdeb",
     type: ["Credential", "EmailCredential"],
     claim: {
@@ -104,8 +138,9 @@ const dummyC : IVerifiableCredentialAttrs[]  = [
       "https://w3id.org/credentials/v1","http://schema.org"
     ],
     id: "claimId:a7e0aa7f5b1fe84c9552645c1fd50928ff8ae9f09585",
+    name: 'Phone',
     issuer:"did:jolo:8f977e50b7e5cbdfeb53a03c812913b72978ca35c93571f85e862862bac8cdeb",
-    type: ["Credential", "TelephoneCredential"],
+    type: ["Credential", "PhoneCredential"],
     claim: {
       id: "did:jolo:test",
       telephone:"011-111"
@@ -125,6 +160,7 @@ const dummyC : IVerifiableCredentialAttrs[]  = [
       "https://w3id.org/credentials/v1","http://schema.org"
     ],
     id: "claimId:a7e0aa7f5b1fe84c9552645c1fd50928ff8ae9f09587",
+    name: 'Name',
     issuer:"did:jolo:8f977e50b7e5cbdfeb53a03c812913b72978ca35c93571f85e862862bac8cdeb",
     type: ["Credential", "NameCredential"],
     claim: {

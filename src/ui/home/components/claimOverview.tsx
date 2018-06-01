@@ -6,22 +6,17 @@ import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { ClaimsState } from 'src/reducers/account'
-import { Claim } from 'src/actions/account/helper'
+import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account/'
+import { Categories } from 'src/actions/account/categories'
 
 interface Props {
   claims: ClaimsState
   scanning: boolean
   onScannerStart: () => void
-  openClaimDetails: (id: string) => void
+  openClaimDetails: (claim: DecoratedClaims) => void
 }
 
 interface State {
-}
-
-const categoryDisplayMap: {[key: string] : string} = {
-  personal: 'Personal / general',
-  contact: 'Contact',
-  other: 'Miscellaneous'
 }
 
 const styles = StyleSheet.create({
@@ -69,39 +64,34 @@ export class ClaimOverview extends React.Component<Props, State> {
 
   renderClaimCards = (category: string) : ReactNode => {
     const { openClaimDetails, claims } = this.props
-    const categoryClaims = claims.savedClaims[category]
-    return categoryClaims.map((claim: Claim) => {
-      switch(claim.multiLine) {
-      case (true):
-        return // TODO: handle multiLine claims e.g. address for later
-      default:
+    const decoratedClaims: CategorizedClaims = claims.claims
+    const categoryClaims: DecoratedClaims[] = decoratedClaims.get[category]
+    return categoryClaims.map((claim: DecoratedClaims) => {
         return (
           <ClaimCard
-            key={ claim.id }
             openClaimDetails={ openClaimDetails }
             claimItem={ claim }
           />
         )
-      }
     })
   }
 
   render() {
     const { claims } = this.props
-    const claimsCategories = Object.keys(claims.savedClaims)
+    const claimsCategories = Object.keys(Categories)
     const content = claims.loading ? ( <View><Text>Loading</Text></View>) :
       (claimsCategories.map((category: string) => {
           return (
             <View key={category}>
               <View style={ styles.sectionContainer }>
-                <Text style={ styles.sectionHeader }>{ categoryDisplayMap[category] }</Text>
+                <Text style={ styles.sectionHeader }>{ category.toString() }</Text>
               </View>
               { this.renderClaimCards(category) }
             </View>
           )
         })
       )
-    
+
     return (
       <Container style={ styles.componentContainer }>
         <ScrollView style={ styles.scrollComponent }>

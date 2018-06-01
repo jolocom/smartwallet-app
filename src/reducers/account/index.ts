@@ -9,20 +9,16 @@ export interface Claim {
 
 export interface DecoratedClaims {
   displayName: string
-  type?: string[]
+  type: string[]
   claims: Claim[]
 }
 
-type CategorizedClaims = Map<string, DecoratedClaims[]>
+export type CategorizedClaims = Map<string, DecoratedClaims[]>
 
 export interface ClaimsState {
   readonly loading: boolean
-  readonly selected: SelectedState
+  readonly selected: DecoratedClaims
   readonly claims: CategorizedClaims
-}
-
-interface SelectedState {
-	readonly id: string
 }
 
 export interface DidState {

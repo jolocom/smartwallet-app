@@ -7,9 +7,10 @@ import { accountActions } from 'src/actions'
 import { View } from 'react-native'
 import Immutable from 'immutable'
 import { ClaimsState } from 'src/reducers/account'
+import { DecoratedClaims } from 'src/reducers/account/'
 
 interface ConnectProps {
-  openClaimDetails: (id: string) => void
+  openClaimDetails: (claim: DecoratedClaims) => void
   getClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
   claims: ClaimsState
@@ -22,7 +23,6 @@ interface State {
 }
 
 export class ClaimsContainer extends React.Component<Props, State> {
-
   state = {
     scanning: false  
   }
@@ -82,8 +82,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    openClaimDetails: (id:string) => {
-      dispatch(accountActions.openClaimDetails(id))
+    openClaimDetails: (claim: DecoratedClaims) => {
+      dispatch(accountActions.openClaimDetails(claim))
     },
     getClaimsForDid: () => {
       dispatch(accountActions.getClaimsForDid())

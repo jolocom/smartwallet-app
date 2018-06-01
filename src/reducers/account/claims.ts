@@ -36,7 +36,11 @@ categorizedClaims.set(
 
 const initialState: ClaimsState = {
   loading: false,
-  selected: {id: ''},
+  selected: {
+    displayName: '',
+    type: ['', ''],
+    claims: []
+  },
   claims: categorizedClaims
 }
 
