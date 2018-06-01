@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     top: '20%',
     backgroundColor: JolocomTheme.primaryColorBlack,
     fontSize: JolocomTheme.headerFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
     fontWeight: '100',
     color: JolocomTheme.primaryColorSand
   },

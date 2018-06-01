@@ -20,7 +20,6 @@ const primaryColors = {
 
   fontWeight: '100',
 
-  contentFontFamily: 'TTCommons'
 }
 
 const textStyles = {
