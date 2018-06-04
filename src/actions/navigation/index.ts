@@ -8,11 +8,11 @@ export const goBack = () => {
   return NavigationActions.back()
 }
 
-export const navigatorReset = (screen: NavigationNavigateActionPayload) => {
+export const navigatorReset = (newScreen: NavigationNavigateActionPayload) => {
   return NavigationActions.reset({
     index:0,
     actions: [navigate(
-      screen
+      newScreen
     )]
   })
 }
