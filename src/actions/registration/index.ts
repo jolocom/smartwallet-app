@@ -42,9 +42,7 @@ export const startRegistration = () => {
 
 export const finishRegistration = () => {
   return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(navigationActions.navigate({
-      routeName: routeList.Identity
-    }))
+    dispatch(navigationActions.navigatorReset())
   }
 }
 

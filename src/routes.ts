@@ -21,7 +21,6 @@ export const HomeRoutes = TabNavigator(
         },
         headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
         headerTintColor: JolocomTheme.primaryColorWhite,
-        headerBackImage: null
       }
     },
     Interactions: {
@@ -36,7 +35,6 @@ export const HomeRoutes = TabNavigator(
           backgroundColor: JolocomTheme.primaryColorBlack,
         },
         headerTintColor: JolocomTheme.primaryColorWhite,
-        headerBackImage: null
       }
     }
   },
