@@ -36,7 +36,9 @@ export const checkIdentityExists = () => {
 
       dispatch(setDid(personas[0].did))
       dispatch(genericActions.toggleLoadingScreen(false))
-      dispatch(navigationActions.navigate({ routeName: routeList.Identity }))
+      dispatch(navigationActions.navigatorReset( 
+        { routeName: routeList.Home }
+      ))
 
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
