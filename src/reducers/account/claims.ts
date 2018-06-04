@@ -4,7 +4,7 @@ import { ClaimsState, DecoratedClaims } from 'src/reducers/account'
 
 let categorizedClaims = new Map<string, DecoratedClaims[]>()
 categorizedClaims.set(
-  'personal',
+  'Personal',
   [{
     displayName: 'Name',
     type: ['Credential', 'ProofOfNameCredential'],
@@ -15,7 +15,7 @@ categorizedClaims.set(
   }]
 )
 categorizedClaims.set(
-  'contact',
+  'Contact',
   [{
     displayName: 'E-mail',
     type: ['Credential', 'ProofOfEmailCredential'],

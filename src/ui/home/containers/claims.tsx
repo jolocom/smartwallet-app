@@ -24,7 +24,7 @@ interface State {
 
 export class ClaimsContainer extends React.Component<Props, State> {
   state = {
-    scanning: false  
+    scanning: false
   }
 
   componentWillMount() {

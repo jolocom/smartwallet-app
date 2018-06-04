@@ -1,10 +1,9 @@
 export enum Categories {
   Personal,
-  Contact,
-  Other
+  Contact
 }
 
-export const categoryUIDefinition: {[key: string] : string[][]} = {
+export const categoryForType: {[key: string] : string[][]} = {
   'Contact': [
     ['Credential', 'ProofOfEmailCredential'],
     ['Credential', 'ProofOfMobilePhoneNumberCredential'],

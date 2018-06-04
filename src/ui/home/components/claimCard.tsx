@@ -18,9 +18,9 @@ interface Props {
 }
 
 const iconMap: {[key: string] : JSX.Element} = {
-  name: <NameIcon />,
-  email: <EmailIcon />,
-  telephone: <PhoneIcon />
+  'ProofOfNameCredentail': <NameIcon />,
+  'ProofOfEmailCredential': <EmailIcon />,
+  'ProofOfMobilePhoneNumberCredential': <PhoneIcon />
 }
 
 // TODO FIX THIS
@@ -64,24 +64,25 @@ const styles = StyleSheet.create({
 
 export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
   const claim = claimItem.claims[0]
-  const { value } = claim
-  const field = claimItem.displayName
+  const { value } = claim.value
+  const displayName = claimItem.displayName
+  const field = claimItem.type[1]
   const content = []
   if (value && field === 'name' && typeof value === 'string') {
     const splitName = value.split(' ')
     content.push({
       value: splitName[0],
       field,
-      label: 'firstName',
+      label: 'First Name',
       showIcon: true
     }, {
       value: splitName[1],
       field,
-      label: 'lastName',
+      label: 'Last Name',
       showIcon: false
     })
   } else {
-    content.push({value, field, label: field, showIcon: true})
+    content.push({value, field, label: displayName, showIcon: true})
   }
 
   const renderLeftIcon = (field: string) => {

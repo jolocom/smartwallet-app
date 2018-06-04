@@ -7,7 +7,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account/'
-import { Categories } from 'src/actions/account/categories'
+import { categoryForType } from 'src/actions/account/categories'
 
 interface Props {
   claims: ClaimsState
@@ -65,7 +65,10 @@ export class ClaimOverview extends React.Component<Props, State> {
   renderClaimCards = (category: string) : ReactNode => {
     const { openClaimDetails, claims } = this.props
     const decoratedClaims: CategorizedClaims = claims.claims
-    const categoryClaims: DecoratedClaims[] = decoratedClaims.get[category]
+
+    if (!decoratedClaims.has(category)) { return }
+    const categoryClaims: DecoratedClaims[] = decoratedClaims.get(category) || []
+
     return categoryClaims.map((claim: DecoratedClaims) => {
         return (
           <ClaimCard
@@ -78,7 +81,7 @@ export class ClaimOverview extends React.Component<Props, State> {
 
   render() {
     const { claims } = this.props
-    const claimsCategories = Object.keys(Categories)
+    const claimsCategories = Object.keys(categoryForType)
     const content = claims.loading ? ( <View><Text>Loading</Text></View>) :
       (claimsCategories.map((category: string) => {
           return (

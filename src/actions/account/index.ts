@@ -4,7 +4,7 @@ import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims } from 'src/reducers/account'
-import { categoryUIDefinition, Categories } from 'src/actions/account/categories'
+import { categoryForType } from 'src/actions/account/categories'
 import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
 
 export const setDid = (did: string) => {
@@ -82,13 +82,16 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
   // TODO: Handle the category 'Other' for the claims that don't match any of predefined categories
   let categorizedClaims = new Map<string, DecoratedClaims[]>()
   const jolocomLib = new JolocomLib()
-  Object.keys(Categories).forEach(category => {
+
+  Object.keys(categoryForType).forEach(category => {
     let claimsForCategory : DecoratedClaims[] = []
+
     claims.forEach(claim => {
       const VerifiableCredential = jolocomLib.credentials.createVerifiableCredential().fromJSON(claim)
       const name = VerifiableCredential.getDisplayName()
       const value = VerifiableCredential.getCredentialSection()[Object.keys(VerifiableCredential.getCredentialSection())[1]]
-      if (categoryUIDefinition[category.toString()].filter(type => areCredTypesEqual(claim.type, type))) {
+
+      if (categoryForType[category].find(t => areCredTypesEqual(claim.type, t)) || false) {
         claimsForCategory.push(
           { displayName: name,
             type: claim.type,
@@ -100,12 +103,14 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
         )
       }
     })
-    categorizedClaims.set(category.toString(), claimsForCategory)
+
+    categorizedClaims.set(category, claimsForCategory)
   })
   return categorizedClaims
 }
 
 const areCredTypesEqual = (first: string[], second: string[]): boolean => {
+  console.log(first, second)
   return first.every((el, index) => el === second[index])
 }
 
@@ -118,7 +123,7 @@ const dummyC : any[]  = [
     id: "claimId:a7e0aa7f5b1fe84c9552645c1fd50928ff8ae9f09580",
     name: 'E-mail',
     issuer:"did:jolo:8f977e50b7e5cbdfeb53a03c812913b72978ca35c93571f85e862862bac8cdeb",
-    type: ["Credential", "EmailCredential"],
+    type: ["Credential", "ProofOfEmailCredential"],
     claim: {
       id: "did:jolo:test",
       email:"test@gmx.de"
@@ -140,7 +145,7 @@ const dummyC : any[]  = [
     id: "claimId:a7e0aa7f5b1fe84c9552645c1fd50928ff8ae9f09585",
     name: 'Phone',
     issuer:"did:jolo:8f977e50b7e5cbdfeb53a03c812913b72978ca35c93571f85e862862bac8cdeb",
-    type: ["Credential", "PhoneCredential"],
+    type: ["Credential", "ProofOfMobilePhoneNumberCredential"],
     claim: {
       id: "did:jolo:test",
       telephone:"011-111"
@@ -162,7 +167,7 @@ const dummyC : any[]  = [
     id: "claimId:a7e0aa7f5b1fe84c9552645c1fd50928ff8ae9f09587",
     name: 'Name',
     issuer:"did:jolo:8f977e50b7e5cbdfeb53a03c812913b72978ca35c93571f85e862862bac8cdeb",
-    type: ["Credential", "NameCredential"],
+    type: ["Credential", "ProofOfNameCredential"],
     claim: {
       id: "did:jolo:test",
       name: "Bobby Fischer"
