@@ -11,8 +11,6 @@ export const goBack = () => {
 export const navigatorReset = (newScreen: NavigationNavigateActionPayload) => {
   return NavigationActions.reset({
     index:0,
-    actions: [navigate(
-      newScreen
-    )]
+    actions: [navigate(newScreen)]
   })
 }

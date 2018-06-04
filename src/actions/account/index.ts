@@ -37,7 +37,7 @@ export const checkIdentityExists = () => {
       dispatch(setDid(personas[0].did))
       dispatch(genericActions.toggleLoadingScreen(false))
       dispatch(navigationActions.navigatorReset( 
-        {routeName: routeList.Home }
+        { routeName: routeList.Home }
       ))
 
     } catch(err) {
