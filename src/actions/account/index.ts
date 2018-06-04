@@ -1,6 +1,7 @@
 import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
+import { routeList } from 'src/routeList'
 
 interface IDefMap {
   [key: string]: string
@@ -35,7 +36,9 @@ export const checkIdentityExists = () => {
 
       dispatch(setDid(personas[0].did))
       dispatch(genericActions.toggleLoadingScreen(false))
-      dispatch(navigationActions.navigatorReset())
+      dispatch(navigationActions.navigatorReset( 
+        {routeName: routeList.Home }
+      ))
 
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
