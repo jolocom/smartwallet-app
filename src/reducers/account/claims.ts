@@ -1,38 +1,33 @@
 import { AnyAction } from 'redux'
 import Immutable from 'immutable'
-import { ClaimsState, DecoratedClaims } from 'src/reducers/account'
+import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 
-let categorizedClaims = new Map<string, DecoratedClaims[]>()
-categorizedClaims.set(
-  'Personal',
-  [{
-    displayName: 'Name',
-    type: ['Credential', 'ProofOfNameCredential'],
-    claims: [{
-      id: 'default1',
-      value: 'name',
+let categorizedClaims: CategorizedClaims = {
+  'Personal' : [{
+      displayName: 'Name',
+      type: ['Credential', 'ProofOfNameCredential'],
+      claims: [{
+        id: 'default1',
+        value: 'name',
+      }],
     }],
-  }]
-)
-categorizedClaims.set(
-  'Contact',
-  [{
-    displayName: 'E-mail',
-    type: ['Credential', 'ProofOfEmailCredential'],
-    claims: [{
-      id: 'default2',
-      value: ''
-    }],
-  },
-  {
-    displayName: 'Phone',
-    type: ['Credential', 'ProofOfPhoneCredential'],
-    claims: [{
-      id: 'default3',
-      value: ''
-    }],
-  }]
-)
+  'Contact': [{
+      displayName: 'E-mail',
+      type: ['Credential', 'ProofOfEmailCredential'],
+      claims: [{
+        id: 'default2',
+        value: ''
+      }],
+    },
+    {
+      displayName: 'Phone',
+      type: ['Credential', 'ProofOfPhoneCredential'],
+      claims: [{
+        id: 'default3',
+        value: ''
+      }],
+    }]
+}
 
 const initialState: ClaimsState = {
   loading: false,

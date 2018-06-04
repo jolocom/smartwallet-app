@@ -13,7 +13,9 @@ export interface DecoratedClaims {
   claims: Claim[]
 }
 
-export type CategorizedClaims = Map<string, DecoratedClaims[]>
+export interface CategorizedClaims {
+  readonly [key: string]: DecoratedClaims[]
+}
 
 export interface ClaimsState {
   readonly loading: boolean
