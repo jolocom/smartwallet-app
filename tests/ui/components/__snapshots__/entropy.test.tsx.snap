@@ -45,13 +45,23 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       raised={true}
       style={
         Object {
-          "container": Object {},
-          "text": Object {},
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "width": 164,
+          },
+          "text": Object {
+            "color": "rgba(255,255,255, 0.4)",
+            "fontFamily": "TTCommons",
+            "fontSize": 22,
+            "fontWeight": "100",
+          },
         }
       }
       testID={null}
       text="Continue"
-      upperCase={true}
+      upperCase={false}
     />
   </Component>
 </Container>
@@ -102,13 +112,23 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       raised={true}
       style={
         Object {
-          "container": Object {},
-          "text": Object {},
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "width": 164,
+          },
+          "text": Object {
+            "color": "rgba(255,255,255, 0.4)",
+            "fontFamily": "TTCommons",
+            "fontSize": 22,
+            "fontWeight": "100",
+          },
         }
       }
       testID={null}
       text="Continue"
-      upperCase={true}
+      upperCase={false}
     />
   </Component>
 </Container>
@@ -159,13 +179,23 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       raised={true}
       style={
         Object {
-          "container": Object {},
-          "text": Object {},
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "width": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TTCommons",
+            "fontSize": 22,
+            "fontWeight": "100",
+          },
         }
       }
       testID={null}
       text="Continue"
-      upperCase={true}
+      upperCase={false}
     />
   </Component>
 </Container>
