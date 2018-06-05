@@ -89,7 +89,8 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
     claims.forEach(claim => {
       const VerifiableCredential = jolocomLib.credentials.createVerifiableCredential().fromJSON(claim)
       const name = VerifiableCredential.getDisplayName()
-      const value = VerifiableCredential.getCredentialSection()[Object.keys(VerifiableCredential.getCredentialSection())[1]]
+      const fieldName = Object.keys(VerifiableCredential.getCredentialSection())[1]
+      const value = VerifiableCredential.getCredentialSection()[fieldName]
 
       if (categoryForType[category].find(t => areCredTypesEqual(claim.type, t)) || false) {
         claimsForCategory.push(
@@ -97,6 +98,7 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
             type: claim.type,
             claims: [
               { id: claim.id,
+                name: fieldName,
                 value: value }
             ]
           } as DecoratedClaims
@@ -110,7 +112,6 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
 }
 
 const areCredTypesEqual = (first: string[], second: string[]): boolean => {
-  console.log(first, second)
   return first.every((el, index) => el === second[index])
 }
 
@@ -148,7 +149,7 @@ const dummyC : any[]  = [
     type: ["Credential", "ProofOfMobilePhoneNumberCredential"],
     claim: {
       id: "did:jolo:test",
-      telephone:"011-111"
+      phone:"011-111"
     },
     issued: "2018-05-29T11:05:40.282Z",
     proof: {

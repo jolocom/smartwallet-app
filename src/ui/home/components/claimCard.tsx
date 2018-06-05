@@ -18,7 +18,7 @@ interface Props {
 }
 
 const iconMap: {[key: string] : JSX.Element} = {
-  'ProofOfNameCredentail': <NameIcon />,
+  'ProofOfNameCredential': <NameIcon />,
   'ProofOfEmailCredential': <EmailIcon />,
   'ProofOfMobilePhoneNumberCredential': <PhoneIcon />
 }
@@ -64,25 +64,30 @@ const styles = StyleSheet.create({
 
 export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
   const claim = claimItem.claims[0]
-  const { value } = claim.value
+  const { value, fieldName } = claim.value
   const displayName = claimItem.displayName
-  const field = claimItem.type[1]
+  const type = claimItem.type[1]
   const content = []
-  if (value && field === 'name' && typeof value === 'string') {
+
+  // TODO: Extract multi line claim card to a separate component
+  if (value && fieldName === 'name' && typeof value === 'string') {
     const splitName = value.split(' ')
     content.push({
       value: splitName[0],
-      field,
+      fieldName,
+      type,
       label: 'First Name',
       showIcon: true
     }, {
       value: splitName[1],
-      field,
+      fieldName,
+      type,
       label: 'Last Name',
       showIcon: false
     })
   } else {
-    content.push({value, field, label: displayName, showIcon: true})
+    console.log(type)
+    content.push({value, fieldName, type, label: displayName, showIcon: true})
   }
 
   const renderLeftIcon = (field: string) => {
@@ -99,7 +104,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
     )
   }
 
-  const renderCard = (claimVal: string, field: string, label: string, showIcon: boolean) : ReactNode => {
+  const renderCard = (claimVal: string, fieldName: string, type: string, label: string, showIcon: boolean) : ReactNode => {
     const {
       labelDisplayFieldEdit,
       labelDisplayField,
@@ -126,7 +131,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
           primaryText: prepareLabel(label),
           secondaryText: claimVal ? claimVal : '+ add'
         }}
-        leftElement={ showIcon ? renderLeftIcon(field) : '' }
+        leftElement={ showIcon ? renderLeftIcon(type) : '' }
         onPress={ claimVal ? undefined : () =>  openClaimDetails(claimItem)}
         rightElement={ claimVal && showIcon ? renderMoreMenu() : '' }
       />
@@ -136,7 +141,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
   return(
     <View style={ styles.containerField }>
       { content.map((c) => {
-        return renderCard(c.value, c.field, c.label, c.showIcon)
+        return renderCard(c.value, c.fieldName, c.type, c.label, c.showIcon)
       }) }
     </View>
   )

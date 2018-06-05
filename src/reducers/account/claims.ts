@@ -8,6 +8,7 @@ let categorizedClaims: CategorizedClaims = {
       type: ['Credential', 'ProofOfNameCredential'],
       claims: [{
         id: 'default1',
+        name: 'name',
         value: 'name',
       }],
     }],
@@ -16,14 +17,16 @@ let categorizedClaims: CategorizedClaims = {
       type: ['Credential', 'ProofOfEmailCredential'],
       claims: [{
         id: 'default2',
+        name: 'email',
         value: ''
       }],
     },
     {
       displayName: 'Phone',
-      type: ['Credential', 'ProofOfPhoneCredential'],
+      type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
       claims: [{
         id: 'default3',
+        name: 'phone',
         value: ''
       }],
     }]

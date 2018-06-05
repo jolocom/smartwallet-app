@@ -28,7 +28,6 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     const claimField = this.props.selectedClaim.type[1]
     if (value && (claimField.toString() === 'ProofOfNameCredential')) {
       const fullName = value.split(' ')
-      console.log(fullName)
       this.setState({
         line_1: fullName[0],
         line_2: fullName[1] ? fullName[1] : ''
@@ -38,36 +37,36 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     }
   }
 
-  private handleFieldInput = (fieldValue: string, field: string) => {
-    this.setState({[field]: fieldValue})
+  private handleFieldInput = (fieldValue: string, fieldName: string) => {
+    this.setState({[fieldName]: fieldValue})
   }
 
-  private onSubmit = (claimField: string) => {
-    const value = (claimField === 'name') ? this.prepareNameClaim() : this.state.line_1
-    this.props.saveClaim(value, claimField)
+  private onSubmit = (fieldName: string) => {
+    const value = (fieldName === 'name') ? this.prepareNameValue() : this.state.line_1
+    this.props.saveClaim(value, fieldName)
   }
 
-  private prepareNameClaim = () => {
+  private prepareNameValue = () => {
     const { line_1, line_2 } = this.state
     return line_1 && line_2 ? line_1 + " " + line_2 : line_1 + line_2
   }
 
-  private renderInputFields = (claimName: string) => {
+  private renderInputFields = (displayName: string) => {
     const { line_1, line_2 } = this.state
-    switch(claimName) {
+    switch(displayName) {
       case ('Name'):
         return (
           <Block>
             <TextInputField
-              field={ 'line_1' }
+              fieldName={ 'line_1' }
               fieldValue={ line_1 }
-              claimName={ 'First Name' }
+              displayName={ 'First Name' }
               handleFieldInput={ this.handleFieldInput }
             />
             <TextInputField
-              field={ 'line_2' }
+              fieldName={ 'line_2' }
               fieldValue={ line_2 }
-              claimName={ 'Last Name' }
+              displayName={ 'Last Name' }
               handleFieldInput={ this.handleFieldInput }
             />
           </Block>
@@ -75,9 +74,9 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       default:
         return (
           <TextInputField
-            field={ 'line_1' }
+            fieldName={ 'line_1' }
             fieldValue={ line_1 }
-            claimName={ claimName }
+            displayName={ displayName }
             handleFieldInput={ this.handleFieldInput }
           />
         )

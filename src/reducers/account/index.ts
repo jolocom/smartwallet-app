@@ -4,6 +4,7 @@ import { claims } from 'src/reducers/account/claims'
 
 export interface Claim {
   id: string
+  name: string
   value: any
 }
 
