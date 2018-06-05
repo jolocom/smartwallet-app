@@ -30,10 +30,22 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorSand
   },
   buttonContainer: {
-
+    width: 164,
+    height: 48,
+    borderRadius: 4,
+    backgroundColor: JolocomTheme.primaryColorPurple
   },
-  buttonText:{
-
+  buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100',
+  },
+  buttonTextDisabled: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: 'rgba(255,255,255, 0.4)',
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100',
   }
 })
 
@@ -55,8 +67,9 @@ export const EntropyComponent : React.SFC<Props> = props => {
       </Block>
       <View style={ styles.footerButton }>
         <Button
-          style={{ container: styles.buttonContainer, text: styles.buttonText }}
+          style={ progress !== 1 ? { container: styles.buttonContainer, text: styles.buttonTextDisabled } : { container: styles.buttonContainer, text: styles.buttonText }}
           disabled={ progress !== 1 }
+          upperCase={ false }
           raised={ true }
           text="Continue"
           onPress={ submitEntropy }
