@@ -1,6 +1,0 @@
-export { default as SubMenuIcon } from './sub-menu-icon'
-export { default as AddServiceIcon } from './add-service-icon'
-export { default as ServiceIcon } from './service-icon'
-export { default as RequestedItem } from './requested-item'
-export { default as DisplayClaims } from './display-claims'
-export { default as SelectedItem } from './selected-item'
