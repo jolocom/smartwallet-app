@@ -141,8 +141,8 @@ export class ConsentComponent extends React.Component<Props, State> {
       </Block>
 
       <Block flex={0.4} style={{backgroundColor: 'white'}}>
-        <Text style={styles.serviceTitle}> {this.props.requester} </Text>
-        <Text style={styles.serviceMetadata}> {this.props.callbackURL} </Text>
+        <Text style={styles.serviceTitle}> {this.props.requester.substring(0,25)}... </Text>
+        <Text style={styles.serviceMetadata}> {this.props.callbackURL.substring(0,25)}... </Text>
       </Block>
 
       <Block flex={0.5}>
