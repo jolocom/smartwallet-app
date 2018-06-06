@@ -141,7 +141,6 @@ exports[`landing component matches the snapshot on render 1`] = `
           },
           "text": Object {
             "color": "white",
-            "fontFamily": "TTCommons",
             "fontSize": 22,
             "fontWeight": "100",
           },

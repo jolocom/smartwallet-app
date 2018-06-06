@@ -6,16 +6,34 @@ describe('ClaimsOverview component', ()=> {
   const COMMON_PROPS = {
     claims: {
       loading: false,
-      savedClaims: {
-        claimCategories: ['personal', 'contact'],
-        personal: [{
-          claimType: 'name',
-          category: 'personal'
-        }],
-        contact: [{
-          claimType: 'email',
-          category: 'contact'
-        }]
+      claims: {
+        'Personal' : [{
+            displayName: 'Name',
+            type: ['Credential', 'ProofOfNameCredential'],
+            claims: [{
+              id: 'default1',
+              name: 'name',
+              value: 'name',
+            }],
+          }],
+        'Contact': [{
+            displayName: 'E-mail',
+            type: ['Credential', 'ProofOfEmailCredential'],
+            claims: [{
+              id: 'default2',
+              name: 'email',
+              value: ''
+            }],
+          },
+          {
+            displayName: 'Phone',
+            type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
+            claims: [{
+              id: 'default3',
+              name: 'phone',
+              value: ''
+            }],
+          }]
       }
     },
     scanning: false,

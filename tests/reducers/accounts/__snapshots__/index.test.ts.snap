@@ -5,38 +5,58 @@ Object {
   "claims": Immutable.Map {
     "loading": false,
     "selected": Immutable.Map {
-      "id": "",
+      "displayName": "",
+      "type": Immutable.List [
+        "",
+        "",
+      ],
+      "claims": Immutable.List [],
     },
-    "savedClaims": Immutable.Map {
-      "personal": Immutable.List [
+    "claims": Immutable.Map {
+      "Personal": Immutable.List [
         Immutable.Map {
-          "id": "default1",
-          "claim": Immutable.List [
+          "displayName": "Name",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfNameCredential",
+          ],
+          "claims": Immutable.List [
             Immutable.Map {
-              "claimField": "name",
+              "id": "default1",
+              "name": "name",
+              "value": "name",
             },
           ],
-          "category": "personal",
         },
       ],
-      "contact": Immutable.List [
+      "Contact": Immutable.List [
         Immutable.Map {
-          "id": "default2",
-          "claim": Immutable.List [
+          "displayName": "E-mail",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfEmailCredential",
+          ],
+          "claims": Immutable.List [
             Immutable.Map {
-              "claimField": "email",
+              "id": "default2",
+              "name": "email",
+              "value": "",
             },
           ],
-          "category": "contact",
         },
         Immutable.Map {
-          "id": "default3",
-          "claim": Immutable.List [
+          "displayName": "Phone",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfMobilePhoneNumberCredential",
+          ],
+          "claims": Immutable.List [
             Immutable.Map {
-              "claimField": "telephone",
+              "id": "default3",
+              "name": "phone",
+              "value": "",
             },
           ],
-          "category": "contact",
         },
       ],
     },
@@ -52,38 +72,58 @@ Object {
   "claims": Immutable.Map {
     "loading": false,
     "selected": Immutable.Map {
-      "id": "",
+      "displayName": "",
+      "type": Immutable.List [
+        "",
+        "",
+      ],
+      "claims": Immutable.List [],
     },
-    "savedClaims": Immutable.Map {
-      "personal": Immutable.List [
+    "claims": Immutable.Map {
+      "Personal": Immutable.List [
         Immutable.Map {
-          "id": "default1",
-          "claim": Immutable.List [
+          "displayName": "Name",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfNameCredential",
+          ],
+          "claims": Immutable.List [
             Immutable.Map {
-              "claimField": "name",
+              "id": "default1",
+              "name": "name",
+              "value": "name",
             },
           ],
-          "category": "personal",
         },
       ],
-      "contact": Immutable.List [
+      "Contact": Immutable.List [
         Immutable.Map {
-          "id": "default2",
-          "claim": Immutable.List [
+          "displayName": "E-mail",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfEmailCredential",
+          ],
+          "claims": Immutable.List [
             Immutable.Map {
-              "claimField": "email",
+              "id": "default2",
+              "name": "email",
+              "value": "",
             },
           ],
-          "category": "contact",
         },
         Immutable.Map {
-          "id": "default3",
-          "claim": Immutable.List [
+          "displayName": "Phone",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfMobilePhoneNumberCredential",
+          ],
+          "claims": Immutable.List [
             Immutable.Map {
-              "claimField": "telephone",
+              "id": "default3",
+              "name": "phone",
+              "value": "",
             },
           ],
-          "category": "contact",
         },
       ],
     },
