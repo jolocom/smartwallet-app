@@ -5,6 +5,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   style={
     Object {
       "backgroundColor": "black",
+      "padding": 0,
     }
   }
 >
@@ -34,36 +35,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         "position": "absolute",
       }
     }
-  >
-    <Button
-      accent={false}
-      disabled={true}
-      icon={null}
-      onLongPress={null}
-      onPress={[Function]}
-      primary={false}
-      raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-            "borderRadius": 4,
-            "height": 48,
-            "width": 164,
-          },
-          "text": Object {
-            "color": "rgba(255,255,255, 0.4)",
-            "fontFamily": "TTCommons",
-            "fontSize": 22,
-            "fontWeight": "100",
-          },
-        }
-      }
-      testID={null}
-      text="Continue"
-      upperCase={false}
-    />
-  </Component>
+  />
 </Container>
 `;
 
@@ -72,6 +44,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   style={
     Object {
       "backgroundColor": "black",
+      "padding": 0,
     }
   }
 >
@@ -101,36 +74,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
         "position": "absolute",
       }
     }
-  >
-    <Button
-      accent={false}
-      disabled={true}
-      icon={null}
-      onLongPress={null}
-      onPress={[Function]}
-      primary={false}
-      raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-            "borderRadius": 4,
-            "height": 48,
-            "width": 164,
-          },
-          "text": Object {
-            "color": "rgba(255,255,255, 0.4)",
-            "fontFamily": "TTCommons",
-            "fontSize": 22,
-            "fontWeight": "100",
-          },
-        }
-      }
-      testID={null}
-      text="Continue"
-      upperCase={false}
-    />
-  </Component>
+  />
 </Container>
 `;
 
@@ -139,6 +83,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   style={
     Object {
       "backgroundColor": "black",
+      "padding": 0,
     }
   }
 >
