@@ -5,6 +5,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   style={
     Object {
       "backgroundColor": "black",
+      "padding": 0,
     }
   }
 >
@@ -17,6 +18,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         "fontFamily": "TTCommons",
         "fontSize": 22,
         "fontWeight": "100",
+        "marginHorizontal": "20%",
         "position": "absolute",
         "top": "20%",
       }
@@ -34,26 +36,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         "position": "absolute",
       }
     }
-  >
-    <Button
-      accent={false}
-      disabled={true}
-      icon={null}
-      onLongPress={null}
-      onPress={[Function]}
-      primary={false}
-      raised={true}
-      style={
-        Object {
-          "container": Object {},
-          "text": Object {},
-        }
-      }
-      testID={null}
-      text="Continue"
-      upperCase={true}
-    />
-  </Component>
+  />
 </Container>
 `;
 
@@ -62,6 +45,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   style={
     Object {
       "backgroundColor": "black",
+      "padding": 0,
     }
   }
 >
@@ -74,6 +58,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
         "fontFamily": "TTCommons",
         "fontSize": 22,
         "fontWeight": "100",
+        "marginHorizontal": "20%",
         "position": "absolute",
         "top": "20%",
       }
@@ -91,26 +76,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
         "position": "absolute",
       }
     }
-  >
-    <Button
-      accent={false}
-      disabled={true}
-      icon={null}
-      onLongPress={null}
-      onPress={[Function]}
-      primary={false}
-      raised={true}
-      style={
-        Object {
-          "container": Object {},
-          "text": Object {},
-        }
-      }
-      testID={null}
-      text="Continue"
-      upperCase={true}
-    />
-  </Component>
+  />
 </Container>
 `;
 
@@ -119,6 +85,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   style={
     Object {
       "backgroundColor": "black",
+      "padding": 0,
     }
   }
 >
@@ -131,6 +98,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
         "fontFamily": "TTCommons",
         "fontSize": 22,
         "fontWeight": "100",
+        "marginHorizontal": "20%",
         "position": "absolute",
         "top": "20%",
       }
@@ -159,13 +127,23 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       raised={true}
       style={
         Object {
-          "container": Object {},
-          "text": Object {},
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "width": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TTCommons",
+            "fontSize": 22,
+            "fontWeight": "100",
+          },
         }
       }
       testID={null}
       text="Continue"
-      upperCase={true}
+      upperCase={false}
     />
   </Component>
 </Container>
