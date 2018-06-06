@@ -5,7 +5,7 @@ import { EmailIcon, PhoneIcon, NameIcon } from 'src/resources'
 import { View, Text, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { AttributeCard } from 'src/ui/sso/components/ssoAttributeCard'
-import { areCredTypesEqual } from '../../../lib/util'
+import { areCredTypesEqual } from 'src/lib/util'
 
 interface Props {
   attributeType: string[]

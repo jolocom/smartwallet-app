@@ -1,11 +1,11 @@
 import { Dispatch, AnyAction } from 'redux'
-import { BackendMiddleware } from '../../backendMiddleware'
 import { CredentialRequest } from 'jolocom-lib/js/credentialRequest/'
 import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
-import { navigationActions } from '..'
-import { routeList } from '../../routeList'
 import { StateCredentialRequestSummary, StateAttributeSummary, StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
-import { showErrorScreen } from '../generic'
+import { BackendMiddleware } from 'src/backendMiddleware'
+import { navigationActions } from 'src/actions'
+import { routeList } from 'src/routeList'
+import { showErrorScreen } from 'src/actions/generic'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -100,7 +100,7 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
       })
 
       dispatch(clearCredentialRequest())
-      dispatch(navigationActions.navigate({ routeName: routeList.Identity }))
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Identity }))
     } catch(err) {
       dispatch(showErrorScreen(err))
     }

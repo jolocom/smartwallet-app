@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
-import { ssoActions } from '../../../actions'
+import { ssoActions } from 'src/actions'
 
 interface ConnectProps { }
 
