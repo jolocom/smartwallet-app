@@ -64,29 +64,33 @@ const styles = StyleSheet.create({
 
 export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
   const claim = claimItem.claims[0]
-  const { value, fieldName } = claim.value
+  const { value, name } = claim
   const displayName = claimItem.displayName
   const type = claimItem.type[1]
+
   const content = []
 
   // TODO: Extract multi line claim card to a separate component
-  if (value && fieldName === 'name' && typeof value === 'string') {
+  if (value && name === 'name' && typeof value === 'string') {
     const splitName = value.split(' ')
     content.push({
       value: splitName[0],
-      fieldName,
+      fieldName: name || '',
       type,
       label: 'First Name',
       showIcon: true
     }, {
       value: splitName[1],
-      fieldName,
+      fieldName: name || '',
       type,
       label: 'Last Name',
       showIcon: false
     })
   } else {
-    content.push({value, fieldName, type, label: displayName, showIcon: true})
+    debugger
+    console.log(value)
+    content.push({value: value || '', fieldName: name, type, label: displayName, showIcon: true})
+    console.log(content)
   }
 
   const renderLeftIcon = (field: string) => {
@@ -139,7 +143,8 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
 
   return(
     <View style={ styles.containerField }>
-      { content.map((c) => {
+      { content.map((c, index) => {
+        console.log(c.value + '    ' + c.fieldName)
         return renderCard(c.value, c.fieldName, c.type, c.label, c.showIcon)
       }) }
     </View>

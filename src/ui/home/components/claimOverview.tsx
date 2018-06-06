@@ -64,10 +64,9 @@ export class ClaimOverview extends React.Component<Props, State> {
   renderClaimCards = (category: string) : ReactNode => {
     const { openClaimDetails, claims } = this.props
     const decoratedClaims: CategorizedClaims = claims.claims
-
     const categoryClaims: DecoratedClaims[] = decoratedClaims[category] || []
 
-    return categoryClaims.map((claim: DecoratedClaims) => {
+    return categoryClaims.map((claim: DecoratedClaims, index) => {
         return (
           <ClaimCard
             openClaimDetails={ openClaimDetails }
