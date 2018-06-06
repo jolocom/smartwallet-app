@@ -8,7 +8,6 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: 'purple'
   },
   text: {
     fontFamily: JolocomTheme.contentFontFamily,
