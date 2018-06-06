@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   text: {
     position: 'absolute',
     top: '20%',
+    marginHorizontal: '20%',
     backgroundColor: JolocomTheme.primaryColorBlack,
     fontSize: JolocomTheme.headerFontSize,
     fontFamily: JolocomTheme.contentFontFamily,
