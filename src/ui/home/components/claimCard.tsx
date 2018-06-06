@@ -86,7 +86,6 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
       showIcon: false
     })
   } else {
-    console.log(type)
     content.push({value, fieldName, type, label: displayName, showIcon: true})
   }
 

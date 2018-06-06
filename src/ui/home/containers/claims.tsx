@@ -11,7 +11,7 @@ import { DecoratedClaims } from 'src/reducers/account/'
 
 interface ConnectProps {
   openClaimDetails: (claim: DecoratedClaims) => void
-  getClaimsForDid: () => void
+  setClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
   claims: ClaimsState
 }
@@ -28,7 +28,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    this.props.getClaimsForDid()
+    this.props.setClaimsForDid()
   }
 
 // TODO: do I really need 3 func?
@@ -85,8 +85,8 @@ const mapDispatchToProps = (dispatch: Function) => {
     openClaimDetails: (claim: DecoratedClaims) => {
       dispatch(accountActions.openClaimDetails(claim))
     },
-    getClaimsForDid: () => {
-      dispatch(accountActions.getClaimsForDid())
+    setClaimsForDid: () => {
+      dispatch(accountActions.setClaimsForDid())
     },
     toggleLoading: (val: boolean) => {
       dispatch(accountActions.toggleLoading(val))

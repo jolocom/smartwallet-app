@@ -3,7 +3,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
-import { DecoratedClaims } from 'src/reducers/account'
+import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { categoryForType } from 'src/actions/account/categories'
 import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
 
@@ -65,14 +65,15 @@ export const toggleLoading = (val: boolean) => {
   }
 }
 
-export const getClaimsForDid = () => {
+export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function) => {
     const state = getState().account.claims.toJS()
     dispatch(toggleLoading(!state.loading))
 
-    const claims = prepareClaimsForState(dummyC)
+    const claims = prepareClaimsForState(dummyC) as CategorizedClaims
+
     dispatch({
-        type: 'GET_CLAIMS_DID',
+        type: 'SET_CLAIMS_DID',
         claims
     })
   }
@@ -80,7 +81,7 @@ export const getClaimsForDid = () => {
 
 const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
   // TODO: Handle the category 'Other' for the claims that don't match any of predefined categories
-  let categorizedClaims = new Map<string, DecoratedClaims[]>()
+  let categorizedClaims = {}
   const jolocomLib = new JolocomLib()
 
   Object.keys(categoryForType).forEach(category => {
@@ -106,7 +107,7 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
       }
     })
 
-    categorizedClaims.set(category, claimsForCategory)
+    categorizedClaims[category] = claimsForCategory
   })
   return categorizedClaims
 }

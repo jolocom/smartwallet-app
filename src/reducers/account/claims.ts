@@ -46,8 +46,8 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
   switch (action.type) {
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)
-    case 'GET_CLAIMS_DID':
-      return state.setIn(['savedClaims'], action.claims).setIn(['loading'], false)
+    case 'SET_CLAIMS_DID':
+      return state.setIn(['claims'], action.claims).setIn(['loading'], false)
     case 'SET_SELECTED':
       return state.setIn(['selected'], action.selected)
     default:
