@@ -87,10 +87,7 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
       showIcon: false
     })
   } else {
-    debugger
-    console.log(value)
     content.push({value: value || '', fieldName: name, type, label: displayName, showIcon: true})
-    console.log(content)
   }
 
   const renderLeftIcon = (field: string) => {
@@ -144,7 +141,6 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
   return(
     <View style={ styles.containerField }>
       { content.map((c, index) => {
-        console.log(c.value + '    ' + c.fieldName)
         return renderCard(c.value, c.fieldName, c.type, c.label, c.showIcon)
       }) }
     </View>

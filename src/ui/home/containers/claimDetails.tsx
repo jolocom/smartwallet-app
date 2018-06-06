@@ -9,7 +9,7 @@ import Immutable from 'immutable'
 
 interface ConnectProps {
   claims: ClaimsState
-  saveClaim: (claimVal: string, claimField: string) => void
+  saveClaim: (claimsItem: DecoratedClaims) => void
 }
 
 interface Props extends ConnectProps {}
@@ -57,8 +57,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    saveClaim: (claimVal: string, claimField: string) => {
-      dispatch(accountActions.saveClaim(claimVal, claimField))
+    saveClaim: (claimsItem: DecoratedClaims) => {
+      dispatch(accountActions.saveClaim(claimsItem))
     }
   }
 }

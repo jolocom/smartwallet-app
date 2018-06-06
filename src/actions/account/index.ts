@@ -6,6 +6,7 @@ import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { categoryForType } from 'src/actions/account/categories'
 import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
+import { claimsMetadata } from 'jolocom-lib'
 
 export const setDid = (did: string) => {
   return {
@@ -49,9 +50,49 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
   }
 }
 
-export const saveClaim = (claimVal: string, claimField: string) => {
+export const saveClaim = (claimsItem: DecoratedClaims) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    console.log('saveClaim action: ', claimVal, claimField)
+    const state = getState()
+    const jolocomLib = new JolocomLib()
+    let newClaims = {}
+
+    newClaims = state.account.claims.toJS().claims
+
+    // TODO: change the key of claimsMetadata to be the type[1]
+    let claimsMetadataType = ''
+    switch(claimsItem.type[1]) {
+      case 'ProofOfNameCredential':
+        claimsMetadataType = 'name'
+      case 'ProofOfMobilePhoneNumberCredential':
+        claimsMetadataType = 'mobilePhoneNumber'
+      case 'ProofOfEmailCredential':
+        claimsMetadataType = 'emailAddress'
+    }
+
+    const credential = jolocomLib.credentials.createCredential(
+      claimsMetadata[claimsMetadataType],
+      claimsItem.claims[0].value,
+      state.account.did.toJS().did
+    )
+    console.log(credential)
+    // TODO: add signature
+
+    let category = ''
+    Object.keys(categoryForType).forEach(cat => {
+      if (typeInCategory(cat, claimsItem.type)) { category = cat }
+    })
+
+    newClaims[category].forEach((claim: DecoratedClaims) => {
+      if (areCredTypesEqual(claim.type, claimsItem.type)) {
+        newClaims[category].splice(claim)
+        newClaims[category].push(claimsItem as DecoratedClaims)
+      }
+    })
+
+    dispatch({
+      type: 'SET_CLAIMS_FOR_DID',
+      claims: newClaims
+    })
     dispatch(navigationActions.navigate({
       routeName: routeList.Identity
     }))
@@ -70,10 +111,11 @@ export const setClaimsForDid = () => {
     const state = getState().account.claims.toJS()
     dispatch(toggleLoading(!state.loading))
 
+    // TODO: Fetch claims from the DB
     const claims = prepareClaimsForState(dummyC) as CategorizedClaims
 
     dispatch({
-        type: 'SET_CLAIMS_DID',
+        type: 'SET_CLAIMS_FOR_DID',
         claims
     })
   }
@@ -88,12 +130,13 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
     let claimsForCategory : DecoratedClaims[] = []
 
     claims.forEach(claim => {
+      // TODO: clean up after using the DB and thus VerifiableCredential[] as a param of this method
       const VerifiableCredential = jolocomLib.credentials.createVerifiableCredential().fromJSON(claim)
       const name = VerifiableCredential.getDisplayName()
       const fieldName = Object.keys(VerifiableCredential.getCredentialSection())[1]
       const value = VerifiableCredential.getCredentialSection()[fieldName]
 
-      if (categoryForType[category].find(t => areCredTypesEqual(claim.type, t)) || false) {
+      if (typeInCategory(category, claim.type)) {
         claimsForCategory.push(
           { displayName: name,
             type: claim.type,
@@ -112,8 +155,14 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
   return categorizedClaims
 }
 
+// TODO: use the method from JolocomLib
 const areCredTypesEqual = (first: string[], second: string[]): boolean => {
   return first.every((el, index) => el === second[index])
+}
+
+const typeInCategory = (category: string, type: string[]): boolean => {
+  const found = categoryForType[category].find(t => areCredTypesEqual(type, t))
+  return (found && found.length > 0) || false
 }
 
 const dummyC : any[]  = [

@@ -7,7 +7,7 @@ import { DecoratedClaims } from 'src/reducers/account/'
 
 interface Props {
   selectedClaim: DecoratedClaims
-  saveClaim: (claimVal: string, claimField: string) => void
+  saveClaim: (claimsItem: DecoratedClaims) => void
 }
 
 interface State {
@@ -25,7 +25,6 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   componentWillMount() {
     // TODO: adjust for multiline when enabled
     const { value } = this.props.selectedClaim.claims[0]
-    debugger
     const claimField = this.props.selectedClaim.type[1]
     if (value && (claimField.toString() === 'ProofOfNameCredential')) {
       const fullName = value.split(' ')
@@ -42,9 +41,9 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     this.setState({[fieldName]: fieldValue})
   }
 
-  private onSubmit = (fieldName: string) => {
-    const value = (fieldName === 'name') ? this.prepareNameValue() : this.state.line_1
-    this.props.saveClaim(value, fieldName)
+  private onSubmit = (claimsItem: DecoratedClaims) => {
+    claimsItem.claims[0].value = (claimsItem.type[1] === 'ProofOfNameCredential') ? this.prepareNameValue() : this.state.line_1
+    this.props.saveClaim(claimsItem)
   }
 
   private prepareNameValue = () => {
@@ -88,7 +87,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     if (this.props.selectedClaim.claims.length === 0) {
       return
     }
-    const claimField = this.props.selectedClaim.type[1]
+    const claimField = this.props.selectedClaim.displayName
     return (
       <Container>
         <Block>
@@ -99,7 +98,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
         </Block>
         <Button
           disabled={ !this.state.line_1 }
-          onPress={ () => this.onSubmit(claimField) }
+          onPress={ () => this.onSubmit(this.props.selectedClaim) }
           raised
           primary
           text="Add claim"
