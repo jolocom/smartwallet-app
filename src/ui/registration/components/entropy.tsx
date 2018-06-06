@@ -14,7 +14,8 @@ interface Props {
 // TODO FONT WEIGHT REFERENCE FROM STYLES
 const styles = StyleSheet.create({
   mainContainer:{
-    backgroundColor: JolocomTheme.primaryColorBlack
+    backgroundColor: JolocomTheme.primaryColorBlack,
+    padding: 0
   },
   footerButton: {
     position: 'absolute',
@@ -40,12 +41,6 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
-  },
-  buttonTextDisabled: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(255,255,255, 0.4)',
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
   }
 })
 
@@ -66,14 +61,15 @@ export const EntropyComponent : React.SFC<Props> = props => {
         />
       </Block>
       <View style={ styles.footerButton }>
+      {progress === 1 ? 
         <Button
-          style={ progress !== 1 ? { container: styles.buttonContainer, text: styles.buttonTextDisabled } : { container: styles.buttonContainer, text: styles.buttonText }}
-          disabled={ progress !== 1 }
+          style={{ container: styles.buttonContainer, text: styles.buttonText }}
           upperCase={ false }
           raised={ true }
           text="Continue"
           onPress={ submitEntropy }
-        />
+        /> : null
+      }
       </View>
     </Container>
   )
