@@ -132,6 +132,10 @@ Array [
 exports[`Registration action creators createIdentity should display exception screen in case of error 1`] = `
 Array [
   Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Encrypting and storing data locally",
+  },
+  Object {
     "params": Object {
       "errorMessage": "Mock registration error",
       "stackTrace": "mock registration error stack trace",

@@ -32,7 +32,8 @@ const viewWidth: number = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    paddingTop: 0,
+    backgroundColor: '#05050d', 
     justifyContent: 'space-between',
     flexDirection: 'column',
     flex: 1
@@ -78,11 +79,11 @@ const styles = StyleSheet.create({
   },
   paginationBlock: {
     flex: 0.2,
-    backgroundColor: JolocomTheme.primaryColorBlack
+    backgroundColor: '#05050d' 
   },
   buttonBlock: {
     flex: 0.1,
-    backgroundColor: JolocomTheme.primaryColorBlack
+    backgroundColor: '#05050d' 
   },
   buttonContainer: {
     height: '100%',

@@ -4,6 +4,7 @@ import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception } from 'src/ui/generic/'
+import { Consent } from 'src/ui/sso'
 
 const navigationOptions = {
   header: null
@@ -16,7 +17,7 @@ const navOptScreenWCancel = {
 
 export const HomeRoutes = TabNavigator(
   {
-    Identity: {
+    Claims: {
       screen: Claims,
       navigationOptions: {
         tabBarLabel: 'My identity',

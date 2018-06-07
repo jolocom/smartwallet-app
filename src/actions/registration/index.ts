@@ -51,6 +51,8 @@ export const finishRegistration = () => {
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
+    dispatch(setLoadingMsg(loading.loadingStages[0]))
+
     try {
       const {
         didDocument,
@@ -59,7 +61,6 @@ export const createIdentity = (encodedEntropy: string) => {
         ethereumKey
       } = await jolocomLib.identity.create(encodedEntropy)
 
-      dispatch(setLoadingMsg(loading.loadingStages[0]))
 
       const password = await keyChainLib.getPassword()
       const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
