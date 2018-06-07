@@ -19,23 +19,20 @@ export const setDid = (did: string) => {
 export const checkIdentityExists = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { storageLib } = backendMiddleware
+
     try {
       const personas = await storageLib.get.persona()
       if (!personas.length) {
-        dispatch(genericActions.toggleLoadingScreen(false))
         return
       }
 
       dispatch(setDid(personas[0].did))
-      dispatch(genericActions.toggleLoadingScreen(false))
-      dispatch(navigationActions.navigatorReset( 
-        { routeName: routeList.Home }
-      ))
-
+      dispatch(navigationActions.navigate({ routeName: routeList.Identity }))
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
         return
       }
+
       dispatch(genericActions.showErrorScreen(err))
     }
   }
@@ -56,7 +53,7 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
 export const saveClaim = (claimsItem: DecoratedClaims) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const state = getState()
-    const jolocomLib = new JolocomLib()
+    const { jolocomLib, storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
     let newClaims = {}
 
     newClaims = state.account.claims.toJS().claims
@@ -77,20 +74,21 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
       claimsItem.claims[0].value,
       state.account.did.toJS().did
     )
-    console.log(credential)
-    // TODO: add signature
 
-    let category = ''
-    Object.keys(categoryForType).forEach(cat => {
-      if (typeInCategory(cat, claimsItem.type)) { category = cat }
+    const encryptionPass = await keyChainLib.getPassword()
+    const currentDid = getState().account.did.get('did')
+    const personaData = await storageLib.get.persona({did: currentDid})
+    const { encryptedWif } = personaData[0].controllingKey
+    const decryptedWif = encryptionLib.decryptWithPass({
+      cipher: encryptedWif,
+      pass: encryptionPass
     })
+    const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
 
-    newClaims[category].forEach((claim: DecoratedClaims) => {
-      if (areCredTypesEqual(claim.type, claimsItem.type)) {
-        newClaims[category].splice(claim)
-        newClaims[category].push(claimsItem as DecoratedClaims)
-      }
-    })
+    const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
+    const verifiableCredential = await wallet.signCredential(credential)
+
+    await storageLib.store.verifiableCredential(verifiableCredential)
 
     dispatch({
       type: 'SET_CLAIMS_FOR_DID',
