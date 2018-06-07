@@ -97,7 +97,7 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
       claims: newClaims
     })
     dispatch(navigationActions.navigate({
-      routeName: routeList.Identity
+      routeName: routeList.Claims
     }))
   }
 }
@@ -126,11 +126,11 @@ export const setClaimsForDid = () => {
 
 const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
   // TODO: Handle the category 'Other' for the claims that don't match any of predefined categories
-  let categorizedClaims = {}
+  const categorizedClaims = {}
   const jolocomLib = new JolocomLib()
 
   Object.keys(categoryForType).forEach(category => {
-    let claimsForCategory : DecoratedClaims[] = []
+    const claimsForCategory : DecoratedClaims[] = []
 
     claims.forEach(claim => {
       // TODO: clean up after using the DB and thus VerifiableCredential[] as a param of this method
@@ -146,7 +146,7 @@ const prepareClaimsForState = (claims: IVerifiableCredentialAttrs[]) => {
             claims: [
               { id: claim.id,
                 name: fieldName,
-                value: value }
+                value }
             ]
           } as DecoratedClaims
         )
