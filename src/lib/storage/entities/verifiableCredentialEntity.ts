@@ -41,10 +41,10 @@ export class VerifiableCredentialEntity {
   @ManyToOne(type => PersonaEntity)
   subject!: PersonaEntity
 
-  @OneToMany(type => SignatureEntity, sig => sig.verifiableCredential, { cascade: true })
+  @OneToMany(type => SignatureEntity, sig => sig.verifiableCredential, { cascade: true, onDelete: 'CASCADE' })
   proof!: SignatureEntity[]
 
-  @OneToMany(type => CredentialEntity, cred => cred.verifiableCredential, { cascade: true })
+  @OneToMany(type => CredentialEntity, cred => cred.verifiableCredential, { cascade: true, onDelete: 'CASCADE' })
   claim!: CredentialEntity[]
 
   static fromJSON(json: IVerifiableCredentialAttrs): VerifiableCredentialEntity {
