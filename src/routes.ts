@@ -12,7 +12,7 @@ const navigationOptions = {
 
 export const HomeRoutes = TabNavigator(
   {
-    Identity: {
+    Claims: {
       screen: Claims,
       navigationOptions: {
         tabBarLabel: 'My identity',
