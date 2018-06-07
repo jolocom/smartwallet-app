@@ -11,6 +11,7 @@ coverage/
 .gitattributes
 .watchmanconfig
 .DS_Store
+dist/
 
 # React Native Android
 android/.gradle
