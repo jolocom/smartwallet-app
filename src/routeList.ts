@@ -8,5 +8,6 @@ export const enum routeList {
   Home = 'Home',
   Claims= 'Claims',
   Interactions = 'Interactions',
-  Exception = 'Exception'
+  Exception = 'Exception',
+  ClaimDetails = "ClaimDetails"
 }

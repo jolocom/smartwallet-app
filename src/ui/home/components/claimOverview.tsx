@@ -5,34 +5,17 @@ import { Container, Block } from 'src/ui/structure'
 import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
-
-export interface IClaimUI {
-  claimField: string
-  category: string
-  claimValue?: string
-  multiLine?: boolean
-  id?: string
-  type?: string
-}
+import { ClaimsState } from 'src/reducers/account'
+import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account/'
 
 interface Props {
-  claims: any
+  claims: ClaimsState
   scanning: boolean
   onScannerStart: () => void
-  openClaimDetails: (selectedType : string) => void
+  openClaimDetails: (claim: DecoratedClaims) => void
 }
 
 interface State {
-}
-
-interface IDefMap {
-  [key: string]: string
-}
-
-const categoryDisplayMap : IDefMap = {
-  personal: 'Personal / general',
-  contact: 'Contact',
-  other: 'Miscellaneous'
 }
 
 const styles = StyleSheet.create({
@@ -78,51 +61,36 @@ const styles = StyleSheet.create({
 
 export class ClaimOverview extends React.Component<Props, State> {
 
-  renderClaimCards = (category: any) : ReactNode => {
+  renderClaimCards = (category: string) : ReactNode => {
     const { openClaimDetails, claims } = this.props
-    const categoryClaims = claims.savedClaims[category]
+    const decoratedClaims: CategorizedClaims = claims.claims
+    const categoryClaims: DecoratedClaims[] = decoratedClaims[category] || []
 
-    return categoryClaims.map((claim: IClaimUI, i: number) => {
-      // TODO: handle multiLine claims e.g. address for later
-      if (claim.multiLine) {
-        return
-      } else {
+    return categoryClaims.map((claim: DecoratedClaims, index) => {
         return (
           <ClaimCard
-            key={ claim.claimField }
             openClaimDetails={ openClaimDetails }
             claimItem={ claim }
           />
         )
-      }
     })
   }
 
   render() {
-    const { savedClaims } = this.props.claims
-    const claimsCategories = Object.keys(savedClaims)
-    let content
-
-    if (this.props.claims.loading) {
-      // TODO: insert loading component
-      content = (
-        <View><Text>Loading</Text></View>
-      )
-    } else {
-      content = (
-        claimsCategories.map((category: any, i: number) => {
+    const { claims } = this.props
+    const claimsCategories = Object.keys(claims.claims)
+    const content = claims.loading ? ( <View><Text>Loading</Text></View>) :
+      (claimsCategories.map((category: string) => {
           return (
             <View key={category}>
-              <View>
-                <View style={ styles.sectionContainer }>
-                  <Text style={ styles.sectionHeader }>{ categoryDisplayMap[category] }</Text>
-                </View>
-                { this.renderClaimCards(category) }
+              <View style={ styles.sectionContainer }>
+                <Text style={ styles.sectionHeader }>{ category.toString() }</Text>
               </View>
+              { this.renderClaimCards(category) }
             </View>
-          )})
+          )
+        })
       )
-    }
 
     return (
       <Container style={ styles.componentContainer }>

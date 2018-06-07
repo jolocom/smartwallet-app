@@ -1,52 +1,36 @@
 import React from 'react'
 import { ClaimOverview } from 'src/ui/home/components/claimOverview'
-import { ClaimDetails } from 'src/ui/home/components/claimDetails'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions, ssoActions } from 'src/actions'
 import { View } from 'react-native'
 import Immutable from 'immutable'
+import { ClaimsState } from 'src/reducers/account'
+import { DecoratedClaims } from 'src/reducers/account/'
 
 // TODO ANY
 interface ConnectProps {
-  getClaimsForDid: () => void
+  openClaimDetails: (claim: DecoratedClaims) => void
+  setClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
   consumeCredentialRequest: (jwt: string) => void
-  claims: any
+  claims: ClaimsState
 }
 
 interface Props extends ConnectProps {}
 
 interface State {
   scanning: boolean
-  showClaimDetails: boolean
-  typeClaimDetails: string
 }
 
 export class ClaimsContainer extends React.Component<Props, State> {
-
   state = {
-    scanning: false,
-    showClaimDetails: false,
-    typeClaimDetails: ''
+    scanning: false
   }
 
   componentWillMount() {
-    this.props.getClaimsForDid()
-  }
-
-  private openClaimDetails = (selectedType : string) : void => {
-    this.setState({
-      typeClaimDetails: selectedType
-    })
-    this.toggleClaimDetails()
-  }
-
-  private toggleClaimDetails = () : void => {
-    this.setState({
-      showClaimDetails: !this.state.showClaimDetails
-    })
+    this.props.setClaimsForDid()
   }
 
 // TODO: do I really need 3 func?
@@ -73,18 +57,11 @@ export class ClaimsContainer extends React.Component<Props, State> {
           onScannerCancel={this.onScannerCancel}
         />
       )
-    } else if(this.state.showClaimDetails) {
-      renderContent = (
-        <ClaimDetails
-          typeClaimDetails={ this.state.typeClaimDetails }
-          toggleClaimDetails={ this.toggleClaimDetails }
-        />
-      )
     } else {
       renderContent = (
         <ClaimOverview
           claims={this.props.claims}
-          openClaimDetails={ this.openClaimDetails }
+          openClaimDetails={ this.props.openClaimDetails }
           scanning={ this.state.scanning }
           onScannerStart={ this.onScannerStart }
          />
@@ -102,13 +79,14 @@ export class ClaimsContainer extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   const claims = Immutable.fromJS(state.account.claims)
   return {
-    claims: claims.toObject()
+    claims: claims.toJS()
   }
 }
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    getClaimsForDid: () => dispatch(accountActions.getClaimsForDid()),
+    openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
+    setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
     toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
     consumeCredentialRequest: (jwt: string) => dispatch(ssoActions.consumeCredentialRequest(jwt))
   }

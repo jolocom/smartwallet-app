@@ -1,8 +1,9 @@
 import React from 'react'
 import { ListItem } from 'react-native-material-ui'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { IClaimUI } from 'src/ui/home/components/claimOverview'
+import { DecoratedClaims } from 'src/reducers/account/'
+import { ReactNode } from 'react'
 import {
   MoreIcon,
   AccessibilityIcon,
@@ -12,18 +13,14 @@ import {
 } from 'src/resources'
 
 interface Props {
-  openClaimDetails: (selectedType: string) => void
-  claimItem: IClaimUI
+  openClaimDetails: (claim: DecoratedClaims) => void
+  claimItem: DecoratedClaims
 }
 
-interface IIconMap {
-  [key: string]: any
-}
-
-const iconMap : IIconMap = {
-  name: <NameIcon />,
-  email: <EmailIcon />,
-  telephone: <PhoneIcon />
+const iconMap: {[key: string] : JSX.Element} = {
+  'ProofOfNameCredential': <NameIcon />,
+  'ProofOfEmailCredential': <EmailIcon />,
+  'ProofOfMobilePhoneNumberCredential': <PhoneIcon />
 }
 
 // TODO FIX THIS
@@ -46,7 +43,7 @@ const styles = StyleSheet.create({
   },
   listItemRightElementContainer: {
     height: 24,
-    width: 12,
+    width: 24,
     marginTop: 16,
     marginRight: 16,
     marginBottom: 35
@@ -58,46 +55,56 @@ const styles = StyleSheet.create({
     paddingLeft: 54,
     marginLeft: 0,
     height: 79
+  },
+  moreMenu: {
+    width: '100%',
+    height: '100%'
   }
 })
 
-export const ClaimCard : React.SFC<Props> = (props) => {
-  const { claimValue, claimField } = props.claimItem
-  let content = []
+export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
+  const claim = claimItem.claims[0]
+  const { value, name } = claim
+  const displayName = claimItem.displayName
+  const type = claimItem.type[1]
 
-  if (claimField === 'name' && claimValue !== undefined) {
-    const splitName = claimValue.split(' ')
+  const content = []
+
+  // TODO: Extract multi line claim card to a separate component
+  if (value && name === 'name' && typeof value === 'string') {
+    const splitName = value.split(' ')
     content.push({
-      claimValue: splitName[0],
-      claimField,
-      label: 'firstName',
+      value: splitName[0],
+      fieldName: name || '',
+      type,
+      label: 'First Name',
       showIcon: true
     }, {
-      claimValue: splitName[1],
-      claimField,
-      label: 'lastName',
+      value: splitName[1],
+      fieldName: name || '',
+      type,
+      label: 'Last Name',
       showIcon: false
     })
   } else {
-    content.push({
-      claimValue,
-      claimField,
-      label: claimField,
-      showIcon: true
-    })
+    content.push({value: value || '', fieldName: name, type, label: displayName, showIcon: true})
   }
 
-  const renderLeftIcon = (claimField: string, showIcon: boolean) => {
-    if (!showIcon) {
-      return ''
-    } else if (iconMap[claimField] !== undefined) {
-      return iconMap[claimField]
-    } else if (iconMap[claimField] === undefined) {
-      return <AccessibilityIcon />
-    }
+  const renderLeftIcon = (field: string) => {
+    return iconMap[field] ? iconMap[field] : <AccessibilityIcon />  
   }
 
-  const renderCard = (claimVal: any, claimField: string, label: string, showIcon: boolean) => {
+  const renderMoreMenu = () => {
+    return (
+      <TouchableOpacity
+        style={ styles.moreMenu }
+        onPress={ () => openClaimDetails(claimItem) }>
+        <MoreIcon />
+      </TouchableOpacity>
+    )
+  }
+
+  const renderCard = (claimVal: string, fieldName: string, type: string, label: string, showIcon: boolean) : ReactNode => {
     const {
       labelDisplayFieldEdit,
       labelDisplayField,
@@ -105,14 +112,15 @@ export const ClaimCard : React.SFC<Props> = (props) => {
       textDisplayField
     } = JolocomTheme.textStyles.light
 
+
     return (
       <ListItem
         key={ label }
         style={{
           primaryTextContainer: styles.listItemPrimaryTextContainer,
-          primaryText: claimVal === undefined ? labelDisplayFieldEdit : labelDisplayField,
+          primaryText: claimVal ? labelDisplayField: labelDisplayFieldEdit,
           secondaryText: {
-            ...claimVal === undefined ? textDisplayFieldEdit : textDisplayField,
+            ...claimVal ? textDisplayField : textDisplayFieldEdit,
             lineHeight: 24
           },
           container: showIcon ? styles.listItemContainerOneLine : styles.listItemContainerTwoLines,
@@ -120,30 +128,28 @@ export const ClaimCard : React.SFC<Props> = (props) => {
           rightElementContainer: styles.listItemRightElementContainer
         }}
         centerElement={{
-          primaryText: stringCapitalize(label),
-          secondaryText: claimVal === undefined ?
-          '+ add' :
-          claimVal
+          primaryText: prepareLabel(label),
+          secondaryText: claimVal ? claimVal : '+ add'
         }}
-        leftElement={ renderLeftIcon(claimField, showIcon) }
-        onPress={() => {}}
-        rightElement={ claimVal !== undefined ? <MoreIcon /> : '' }
+        leftElement={ showIcon ? renderLeftIcon(type) : '' }
+        onPress={ claimVal ? undefined : () =>  openClaimDetails(claimItem)}
+        rightElement={ claimVal && showIcon ? renderMoreMenu() : '' }
       />
     )
   }
 
   return(
     <View style={ styles.containerField }>
-      { content.map((c) => {
-        return renderCard(c.claimValue, c.claimField, c.label, c.showIcon)
+      { content.map((c, index) => {
+        return renderCard(c.value, c.fieldName, c.type, c.label, c.showIcon)
       }) }
     </View>
   )
 }
 
-const stringCapitalize = (myString : string) : string => {
+const prepareLabel = (myString : string) : string => {
   const matches = myString.match(/[A-Z]/g)
-  if (matches !== null) {
+  if (matches) {
     matches.map((match) => {
       const index = myString.indexOf(match)
       const tx = myString.slice(0, index) + " " + myString.slice(index)

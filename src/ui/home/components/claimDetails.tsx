@@ -1,40 +1,109 @@
 import React from 'react'
-// import { TextInput } from 'react-native'
 import { Container, Block, CenteredText } from 'src/ui/structure'
-// import { TextField } from 'react-native-material-textfield'
+import { Button } from 'react-native-material-ui'
+import { TextInputField } from 'src/ui/home/components/textInputField'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { DecoratedClaims } from 'src/reducers/account/'
 
 interface Props {
-  typeClaimDetails: string
-  toggleClaimDetails: () => void
+  selectedClaim: DecoratedClaims
+  saveClaim: (claimsItem: DecoratedClaims) => void
 }
 
+interface State {
+  line_1: string
+  line_2: string
+  [key: string]: string
+}
 
+export class ClaimDetailsComponent extends React.Component<Props, State> {
+  state = {
+    line_1: '',
+    line_2: '',
+  }
 
+  componentWillMount() {
+    // TODO: adjust for multiline when enabled
+    const { value } = this.props.selectedClaim.claims[0]
+    const claimField = this.props.selectedClaim.type[1]
+    if (value && (claimField.toString() === 'ProofOfNameCredential')) {
+      const fullName = value.split(' ')
+      this.setState({
+        line_1: fullName[0],
+        line_2: fullName[1] ? fullName[1] : ''
+      })
+    } else if (value) {
+      this.setState({ line_1: value })
+    }
+  }
 
+  private handleFieldInput = (fieldValue: string, fieldName: string) => {
+    this.setState({[fieldName]: fieldValue})
+  }
 
-export const ClaimDetails : React.SFC<Props> = (props) => {
-  return (
-    <Container>
-      <Block>
-        <CenteredText
-          style={JolocomTheme.textStyles.light.subheader}
-          msg={props.typeClaimDetails} />
+  private onSubmit = (claimsItem: DecoratedClaims) => {
+    claimsItem.claims[0].value = (claimsItem.type[1] === 'ProofOfNameCredential') ? this.prepareNameValue() : this.state.line_1
+    this.props.saveClaim(claimsItem)
+  }
 
-      {/* <TextInput
-        placeholder={props.typeClaimDetails}
-        placeholderTextColor={'grey'}
-        style={{height: 40, width: 288}}
-      /> */}
+  private prepareNameValue = () => {
+    const { line_1, line_2 } = this.state
+    return line_1 && line_2 ? line_1 + " " + line_2 : line_1 + line_2
+  }
 
+  private renderInputFields = (displayName: string) => {
+    const { line_1, line_2 } = this.state
+    switch(displayName) {
+      case ('Name'):
+        return (
+          <Block>
+            <TextInputField
+              fieldName={ 'line_1' }
+              fieldValue={ line_1 }
+              displayName={ 'First Name' }
+              handleFieldInput={ this.handleFieldInput }
+            />
+            <TextInputField
+              fieldName={ 'line_2' }
+              fieldValue={ line_2 }
+              displayName={ 'Last Name' }
+              handleFieldInput={ this.handleFieldInput }
+            />
+          </Block>
+        )
+      default:
+        return (
+          <TextInputField
+            fieldName={ 'line_1' }
+            fieldValue={ line_1 }
+            displayName={ displayName }
+            handleFieldInput={ this.handleFieldInput }
+          />
+        )
+    }
+  }
 
-
-      {/* <Block>
-        <TextField
-          label='Phone number'
-          value={'test'} /> */}
-
-      </Block>
-    </Container>
-  )
+  render() {
+    if (this.props.selectedClaim.claims.length === 0) {
+      return
+    }
+    const claimField = this.props.selectedClaim.displayName
+    return (
+      <Container>
+        <Block>
+          <CenteredText
+            style={ JolocomTheme.textStyles.light.subheader }
+            msg={ claimField } />
+          { this.renderInputFields(claimField) }
+        </Block>
+        <Button
+          disabled={ !this.state.line_1 }
+          onPress={ () => this.onSubmit(this.props.selectedClaim) }
+          raised
+          primary
+          text="Add claim"
+        />
+      </Container>
+    )
+  }
 }

@@ -1,5 +1,5 @@
 import { StackNavigator, TabNavigator, TabBarTop} from 'react-navigation'
-import { Claims, Interactions } from 'src/ui/home/'
+import { Claims, Interactions, ClaimDetails, Consent } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
@@ -8,6 +8,11 @@ import { Consent } from 'src/ui/sso'
 
 const navigationOptions = {
   header: null
+}
+
+const navOptScreenWCancel = {
+  headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
+  headerBackImage: require('./resources/img/close.png')
 }
 
 export const HomeRoutes = TabNavigator(
@@ -81,5 +86,6 @@ export const Routes = StackNavigator({
       headerTintColor: JolocomTheme.primaryColorWhite
     } 
   },
-  Exception: { screen: Exception, navigationOptions }
+  Exception: { screen: Exception, navigationOptions },
+  ClaimDetails: { screen: ClaimDetails, navigationOptions: navOptScreenWCancel }
 })

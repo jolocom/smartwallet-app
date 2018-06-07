@@ -17,114 +17,114 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
     }
   >
     <Component
-      key="claimCategories"
+      key="Personal"
     >
-      <Component>
-        <Component
+      <Component
+        style={
+          Object {
+            "marginBottom": 8,
+            "marginLeft": 16,
+            "marginRight": 16,
+            "marginTop": 27,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
           style={
             Object {
-              "marginBottom": 8,
-              "marginLeft": 16,
-              "marginRight": 16,
-              "marginTop": 27,
+              "fontSize": 17,
+              "textAlign": "left",
             }
           }
         >
-          <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
-            style={
-              Object {
-                "fontSize": 17,
-                "textAlign": "left",
-              }
-            }
-          />
-        </Component>
-        <ClaimCard
-          claimItem="personal"
-        />
-        <ClaimCard
-          claimItem="contact"
-        />
+          Personal
+        </Text>
       </Component>
+      <ClaimCard
+        claimItem={
+          Object {
+            "claims": Array [
+              Object {
+                "id": "default1",
+                "name": "name",
+                "value": "name",
+              },
+            ],
+            "displayName": "Name",
+            "type": Array [
+              "Credential",
+              "ProofOfNameCredential",
+            ],
+          }
+        }
+      />
     </Component>
     <Component
-      key="personal"
+      key="Contact"
     >
-      <Component>
-        <Component
+      <Component
+        style={
+          Object {
+            "marginBottom": 8,
+            "marginLeft": 16,
+            "marginRight": 16,
+            "marginTop": 27,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
           style={
             Object {
-              "marginBottom": 8,
-              "marginLeft": 16,
-              "marginRight": 16,
-              "marginTop": 27,
+              "fontSize": 17,
+              "textAlign": "left",
             }
           }
         >
-          <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
-            style={
-              Object {
-                "fontSize": 17,
-                "textAlign": "left",
-              }
-            }
-          >
-            Personal / general
-          </Text>
-        </Component>
-        <ClaimCard
-          claimItem={
-            Object {
-              "category": "personal",
-              "claimType": "name",
-            }
-          }
-        />
+          Contact
+        </Text>
       </Component>
-    </Component>
-    <Component
-      key="contact"
-    >
-      <Component>
-        <Component
-          style={
-            Object {
-              "marginBottom": 8,
-              "marginLeft": 16,
-              "marginRight": 16,
-              "marginTop": 27,
-            }
-          }
-        >
-          <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
-            style={
+      <ClaimCard
+        claimItem={
+          Object {
+            "claims": Array [
               Object {
-                "fontSize": 17,
-                "textAlign": "left",
-              }
-            }
-          >
-            Contact
-          </Text>
-        </Component>
-        <ClaimCard
-          claimItem={
-            Object {
-              "category": "contact",
-              "claimType": "email",
-            }
+                "id": "default2",
+                "name": "email",
+                "value": "",
+              },
+            ],
+            "displayName": "E-mail",
+            "type": Array [
+              "Credential",
+              "ProofOfEmailCredential",
+            ],
           }
-        />
-      </Component>
+        }
+      />
+      <ClaimCard
+        claimItem={
+          Object {
+            "claims": Array [
+              Object {
+                "id": "default3",
+                "name": "phone",
+                "value": "",
+              },
+            ],
+            "displayName": "Phone",
+            "type": Array [
+              "Credential",
+              "ProofOfMobilePhoneNumberCredential",
+            ],
+          }
+        }
+      />
     </Component>
   </ScrollView>
   <Block

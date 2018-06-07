@@ -4,17 +4,59 @@ exports[`account reducer should handle the DID_SET action  1`] = `
 Object {
   "claims": Immutable.Map {
     "loading": false,
-    "savedClaims": Object {
-      "contact": Array [
-        Object {
-          "category": "contact",
-          "claimField": "email",
+    "selected": Immutable.Map {
+      "displayName": "",
+      "type": Immutable.List [
+        "",
+        "",
+      ],
+      "claims": Immutable.List [],
+    },
+    "claims": Immutable.Map {
+      "Personal": Immutable.List [
+        Immutable.Map {
+          "displayName": "Name",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfNameCredential",
+          ],
+          "claims": Immutable.List [
+            Immutable.Map {
+              "id": "default1",
+              "name": "name",
+              "value": "name",
+            },
+          ],
         },
       ],
-      "personal": Array [
-        Object {
-          "category": "personal",
-          "claimField": "name",
+      "Contact": Immutable.List [
+        Immutable.Map {
+          "displayName": "E-mail",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfEmailCredential",
+          ],
+          "claims": Immutable.List [
+            Immutable.Map {
+              "id": "default2",
+              "name": "email",
+              "value": "",
+            },
+          ],
+        },
+        Immutable.Map {
+          "displayName": "Phone",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfMobilePhoneNumberCredential",
+          ],
+          "claims": Immutable.List [
+            Immutable.Map {
+              "id": "default3",
+              "name": "phone",
+              "value": "",
+            },
+          ],
         },
       ],
     },
@@ -32,17 +74,59 @@ exports[`account reducer should initialize correctly 1`] = `
 Object {
   "claims": Immutable.Map {
     "loading": false,
-    "savedClaims": Object {
-      "contact": Array [
-        Object {
-          "category": "contact",
-          "claimField": "email",
+    "selected": Immutable.Map {
+      "displayName": "",
+      "type": Immutable.List [
+        "",
+        "",
+      ],
+      "claims": Immutable.List [],
+    },
+    "claims": Immutable.Map {
+      "Personal": Immutable.List [
+        Immutable.Map {
+          "displayName": "Name",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfNameCredential",
+          ],
+          "claims": Immutable.List [
+            Immutable.Map {
+              "id": "default1",
+              "name": "name",
+              "value": "name",
+            },
+          ],
         },
       ],
-      "personal": Array [
-        Object {
-          "category": "personal",
-          "claimField": "name",
+      "Contact": Immutable.List [
+        Immutable.Map {
+          "displayName": "E-mail",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfEmailCredential",
+          ],
+          "claims": Immutable.List [
+            Immutable.Map {
+              "id": "default2",
+              "name": "email",
+              "value": "",
+            },
+          ],
+        },
+        Immutable.Map {
+          "displayName": "Phone",
+          "type": Immutable.List [
+            "Credential",
+            "ProofOfMobilePhoneNumberCredential",
+          ],
+          "claims": Immutable.List [
+            Immutable.Map {
+              "id": "default3",
+              "name": "phone",
+              "value": "",
+            },
+          ],
         },
       ],
     },
