@@ -65,6 +65,12 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
+  },
+  buttonTextDisabled: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: 'rgba(255,255,255, 0.4)',
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100',
   }
 })
 
@@ -120,7 +126,7 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
       </Block>
       <Block flex={ 0.1 }>
         <Button
-          style={{ container: styles.buttonContainer, text: styles.buttonText }}
+          style={ !errorMsg ? { container: styles.buttonContainer, text: styles.buttonText } : { container: styles.buttonContainer, text: styles.buttonTextDisabled }}
           onPress={ props.clickNext }
           raised
           upperCase={ false }

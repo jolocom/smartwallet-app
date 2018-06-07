@@ -4,7 +4,12 @@ import { Button } from 'react-native-material-ui'
 import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
-import { Landing00 } from 'src/resources'
+import { 
+  Landing00,
+  Landing01,
+  Landing02,
+  Landing03
+} from 'src/resources'
 
 const Carousel = require('react-native-snap-carousel').default
 const Pagination = require('react-native-snap-carousel').Pagination
@@ -28,20 +33,15 @@ const viewWidth: number = Dimensions.get('window').width
 const styles = StyleSheet.create({
   mainContainerStyle: {
     backgroundColor: JolocomTheme.primaryColorBlack,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     flexDirection: 'column',
     flex: 1
   },
-  svgContainer: {
-    flex: 4/5,
-    marginTop: "10%",
-    marginLeft: '45%',
-    backgroundColor: JolocomTheme.primaryColorBlack
-  },
   carouselTextContainer: {
     padding: '10%',
-    flex: 3/5,
-    backgroundColor: JolocomTheme.primaryColorBlack
+    flex: 0.4,
+    marginTop: 'auto',
+    backgroundColor: 'transparent' 
   },
   activeDotStyle: {
     width: 8,
@@ -60,10 +60,12 @@ const styles = StyleSheet.create({
     fontWeight: '100'
   },
   headerBlock: {
-    paddingBottom: '5%'
+    marginBottom: 0 
+    // paddingBottom: '5%'
   }, 
   subHeaderBlock: {
-    paddingTop: '7%'
+    marginBottom: 0,
+    // paddingTop: '7%'
   },
   subHeader: {
     fontWeight: '100',
@@ -95,24 +97,24 @@ const styles = StyleSheet.create({
 
 const carouselInfo: Slide[] = [
   {
-    svgImage: <Landing00 height={'100%'} width={'100%'} />,
-    title: 'Meet Jolocom Wallet',
-    infoText: 'It will help you to take back ownership of your digital self and control the usage of your private data when signing into services.'
+    svgImage: <Landing00 />,
+    title: 'Your Jolocom Wallet',
+    infoText: 'Take back control of your digital self and protect your private data against unfair usage.'
   },
   {
-    svgImage: <Landing00 height={'100%'} width={'100%'} />,
-    title: 'Feature 1',
-    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
+    svgImage: <Landing01 height={'100%'} width={'100%'} />,
+    title: "It's easy",
+    infoText: 'Forget about long forms and registrations. Instantly access services without using your social media profiles.'
   },
   {
-    svgImage: <Landing00 height={'100%'} width={'100%'} />,
-    title: 'Feature 2',
-    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
+    svgImage: <Landing03 height={'100%'} width={'100%'} />,
+    title: 'Enhanced privacy',
+    infoText: 'Share only the information a service really needs. Protect your digital self against fraud.'
   },
   {
-    svgImage: <Landing00 height={'100%'} width={'100%'} />,
-    title: 'Feature 3',
-    infoText: 'Your (personal) ... one sentence pitch to wrap the main value'
+    svgImage: <Landing02 height={'100%'} width={'100%'} />,
+    title: 'Greater control',
+    infoText: 'Keep all your data with you in one place, available at any time. Track where you sign in to services.'
   }
 ]
 
@@ -125,9 +127,7 @@ export class LandingComponent extends React.Component<Props, State> {
     const { svgImage, title, infoText  } = item
     return (
       <Block>
-        <Block style={ styles.svgContainer }>
         {svgImage}
-        </Block>
         <Block style={ styles.carouselTextContainer }>
             <Block>   
               <CenteredText style= { styles.header } msg={ title } />

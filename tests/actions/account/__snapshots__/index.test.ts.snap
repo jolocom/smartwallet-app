@@ -13,7 +13,14 @@ Array [
 ]
 `;
 
-exports[`Account action creators Should correctly handle an empty personas table 1`] = `Array []`;
+exports[`Account action creators Should correctly handle an empty personas table 1`] = `
+Array [
+  Object {
+    "type": "SET_LOADING",
+    "value": false,
+  },
+]
+`;
 
 exports[`Account action creators Should correctly handle more existing user identites 1`] = `
 Array [
@@ -22,8 +29,19 @@ Array [
     "value": "did:jolo:first",
   },
   Object {
-    "routeName": "Identity",
-    "type": "Navigation/NAVIGATE",
+    "type": "SET_LOADING",
+    "value": false,
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
@@ -35,8 +53,19 @@ Array [
     "value": "did:jolo:mock",
   },
   Object {
-    "routeName": "Identity",
-    "type": "Navigation/NAVIGATE",
+    "type": "SET_LOADING",
+    "value": false,
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;

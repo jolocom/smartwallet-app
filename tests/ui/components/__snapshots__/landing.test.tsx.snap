@@ -7,7 +7,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       "backgroundColor": "black",
       "flex": 1,
       "flexDirection": "column",
-      "justifyContent": "space-evenly",
+      "justifyContent": "space-between",
     }
   }
 >
@@ -27,36 +27,33 @@ exports[`landing component matches the snapshot on render 1`] = `
       data={
         Array [
           Object {
-            "infoText": "It will help you to take back ownership of your digital self and control the usage of your private data when signing into services.",
-            "svgImage": <Landing00
-              height="100%"
-              width="100%"
-            />,
-            "title": "Meet Jolocom Wallet",
+            "infoText": "Take back control of your digital self and protect your private data against unfair usage.",
+            "svgImage": <Landing00 />,
+            "title": "Your Jolocom Wallet",
           },
           Object {
-            "infoText": "Your (personal) ... one sentence pitch to wrap the main value",
+            "infoText": "Forget about long forms and registrations. Instantly access services without using your social media profiles.",
             "svgImage": <Landing00
               height="100%"
               width="100%"
             />,
-            "title": "Feature 1",
+            "title": "It's easy",
           },
           Object {
-            "infoText": "Your (personal) ... one sentence pitch to wrap the main value",
+            "infoText": "Share only the information a service really needs. Protect your digital self against fraud.",
             "svgImage": <Landing00
               height="100%"
               width="100%"
             />,
-            "title": "Feature 2",
+            "title": "Enhanced privacy",
           },
           Object {
-            "infoText": "Your (personal) ... one sentence pitch to wrap the main value",
+            "infoText": "Keep all your data with you in one place, available at any time. Track where you sign in to services.",
             "svgImage": <Landing00
               height="100%"
               width="100%"
             />,
-            "title": "Feature 3",
+            "title": "Greater control",
           },
         ]
       }

@@ -1,3 +1,0 @@
---require mock-local-storage
---webpack-config ./webpack.config.test.js 
-./test/index.js 
