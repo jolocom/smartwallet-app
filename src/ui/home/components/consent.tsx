@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
 
   },
   denyShareText:{
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorPurple,
     fontWeight: '100'
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   shareClaimsText:{
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorSand,
     fontWeight: '100'
@@ -47,20 +49,24 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
   },
   disabledShareClaimsText:{
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.disabledButtonTextGrey,
     fontWeight: '100'
   },
   fixedText: {
     alignItems: 'center',
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorBlack
   },
   serviceProviderName: {
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorBlack
   },
   metadata: {
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: 14,
     color: JolocomTheme.primaryColorBlack
   },

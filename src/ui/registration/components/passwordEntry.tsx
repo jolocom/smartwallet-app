@@ -25,6 +25,7 @@ interface Props {
 const styles = StyleSheet.create({
   subHeader: {
     fontSize: 20,
+    fontFamily: JolocomTheme.contentFontFamily,
     fontWeight: '100',
     padding: '10%',
     color: JolocomTheme.primaryColorSand
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
   infoPassword: {
     fontSize: 14,
     fontWeight: '100',
+    fontFamily: JolocomTheme.contentFontFamily,
     opacity: 0.6,
     padding: '10%',
     color: JolocomTheme.primaryColorSand
@@ -41,9 +43,11 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorWhite,
     fontSize: 22,
     fontWeight: '100',
+    fontFamily: JolocomTheme.contentFontFamily,
     width: '80%',
   },
   textErrorField: {
+    fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorSandInactive,
     fontWeight: '100',
     fontSize: 14
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
