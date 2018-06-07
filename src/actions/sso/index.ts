@@ -100,7 +100,7 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
       })
 
       dispatch(clearCredentialRequest())
-      dispatch(navigationActions.navigatorReset({ routeName: routeList.Identity }))
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Claims }))
     } catch(err) {
       dispatch(showErrorScreen(err))
     }

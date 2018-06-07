@@ -27,7 +27,7 @@ export const checkIdentityExists = () => {
       }
 
       dispatch(setDid(personas[0].did))
-      dispatch(navigationActions.navigate({ routeName: routeList.Identity }))
+      dispatch(navigationActions.navigate({ routeName: routeList.Claims }))
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
         return
@@ -100,7 +100,7 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
       claims: newClaims
     })
     dispatch(navigationActions.navigate({
-      routeName: routeList.Identity
+      routeName: routeList.Claims
     }))
   }
 }
