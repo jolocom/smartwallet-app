@@ -3,6 +3,7 @@ package com.smartwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.horcrux.svg.SvgPackage;
 import com.oblador.keychain.KeychainPackage;
@@ -19,6 +20,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import org.pgsqlite.SQLitePluginPackage;
+import com.facebook.react.devsupport.DevInternalSettings;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new VectorIconsPackage(),
             new SvgPackage(),
             new KeychainPackage(),
@@ -58,6 +61,10 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    DevInternalSettings settings = (DevInternalSettings) getReactNativeHost().getReactInstanceManager().getDevSupportManager().getDevSettings();
+        if (settings != null) {
+            settings.setBundleDeltasEnabled(false);
+        } 
     SoLoader.init(this, /* native exopackage */ false);
   }
 }
