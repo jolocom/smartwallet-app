@@ -9,7 +9,7 @@ interface Props {}
 
 const styles = StyleSheet.create({
   loadingContainer: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: '#05050d',
   },
   loadingText: {
     position: 'absolute',
