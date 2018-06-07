@@ -73,8 +73,10 @@ import com.android.build.OutputFile
  */
 project.ext.react = [
     cliPath: "node_modules/haul/bin/cli.js",
+    extraPackagerArgs: ['--minify', 'false'],
     entryFile: "index.js"
 ]
+
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**

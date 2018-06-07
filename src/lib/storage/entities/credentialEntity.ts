@@ -1,4 +1,4 @@
-import { PrimaryColumn, ManyToOne, Entity, Column } from 'typeorm/browser'
+import { ManyToOne, Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm/browser'
 import { VerifiableCredentialEntity } from 'src/lib/storage/entities/verifiableCredentialEntity'
 import { Type, plainToClass } from 'class-transformer'
 import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
@@ -9,12 +9,16 @@ interface JsonAttributes {
 }
 
 @Entity('credentials')
+@Unique(['verifiableCredential', 'propertyName'])
 export class CredentialEntity {
+  @PrimaryGeneratedColumn()
+  id!: number
+
   @Type(() => VerifiableCredentialEntity)
-  @ManyToOne(type => VerifiableCredentialEntity, { primary: true })
+  @ManyToOne(type => VerifiableCredentialEntity, vCred => vCred.claim)
   verifiableCredential!: VerifiableCredentialEntity
 
-  @PrimaryColumn({ length: 50 })
+  @Column({ length: 50 })
   propertyName!: string
 
   @Column()
