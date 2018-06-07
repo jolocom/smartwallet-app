@@ -23,11 +23,15 @@ export const checkIdentityExists = () => {
     try {
       const personas = await storageLib.get.persona()
       if (!personas.length) {
+        dispatch(genericActions.toggleLoadingScreen(false))
         return
       }
 
       dispatch(setDid(personas[0].did))
-      dispatch(navigationActions.navigate({ routeName: routeList.Claims }))
+      dispatch(genericActions.toggleLoadingScreen(false))
+      dispatch(navigationActions.navigatorReset( 
+        { routeName: routeList.Home }
+      ))
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
         return
@@ -87,8 +91,6 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
 
     const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
     const verifiableCredential = await wallet.signCredential(credential)
-    console.log(verifiableCredential)
-    console.log(claimsItem.claims[0].id)
 
     if (claimsItem.claims[0].id) {
       await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
@@ -140,7 +142,6 @@ const prepareClaimsForState = (claims: VerifiableCredential[]) => {
       const name = claim.getDisplayName()
       const fieldName = Object.keys(claim.getCredentialSection())[1]
       const value = claim.getCredentialSection()[fieldName]
-      console.log(claim)
 
       if (typeInCategory(category, claim.getType())) {
         claimsForCategory.push(
@@ -172,7 +173,6 @@ const prepareClaimsForState = (claims: VerifiableCredential[]) => {
       categorizedClaims[category] = claimsForCategory
     }
   })
-  console.log(categorizedClaims)
   return categorizedClaims
 }
 

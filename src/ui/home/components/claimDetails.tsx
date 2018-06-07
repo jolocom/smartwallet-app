@@ -23,18 +23,6 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    // TODO: adjust for multiline when enabled
-    const { value } = this.props.selectedClaim.claims[0]
-    const claimField = this.props.selectedClaim.type[1]
-    if (value && (claimField.toString() === 'ProofOfNameCredential')) {
-      const fullName = value.split(' ')
-      this.setState({
-        line_1: fullName[0],
-        line_2: fullName[1] ? fullName[1] : ''
-      })
-    } else if (value) {
-      this.setState({ line_1: value })
-    }
   }
 
   private handleFieldInput = (fieldValue: string, fieldName: string) => {
