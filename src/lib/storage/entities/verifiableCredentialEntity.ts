@@ -38,7 +38,7 @@ export class VerifiableCredentialEntity {
   expiry!: Date
 
   @Expose()
-  @ManyToOne(type => PersonaEntity)
+  @ManyToOne(type => PersonaEntity, persona => persona.did)
   subject!: PersonaEntity
 
   @OneToMany(type => SignatureEntity, sig => sig.verifiableCredential, { cascade: true })
