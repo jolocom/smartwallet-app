@@ -134,7 +134,7 @@ const prepareClaimsForState = (claims: VerifiableCredential[]) => {
   const initialClaimsState = initialState
 
   Object.keys(categoryForType).forEach(category => {
-    let claimsForCategory : DecoratedClaims[] = []
+    const claimsForCategory : DecoratedClaims[] = []
 
     claims.forEach(claim => {
       const name = claim.getDisplayName()
@@ -149,7 +149,7 @@ const prepareClaimsForState = (claims: VerifiableCredential[]) => {
             claims: [
               { id: claim.getId(),
                 name: fieldName,
-                value: value }
+                value }
             ]
           } as DecoratedClaims
         )
