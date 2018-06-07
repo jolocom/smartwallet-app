@@ -7,8 +7,6 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  container: {
-  },
   text: {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: 30,
@@ -19,7 +17,7 @@ const styles = StyleSheet.create({
 export class InteractionsComponent extends React.Component<Props> {
   render() {
     return (
-      <Container style={ styles.container }>
+      <Container>
         <Block>
         <CenteredText
           msg='Coming Soon...' 
