@@ -4,10 +4,11 @@ exports[`landing component matches the snapshot on render 1`] = `
 <Container
   style={
     Object {
-      "backgroundColor": "black",
+      "backgroundColor": "#05050d",
       "flex": 1,
       "flexDirection": "column",
       "justifyContent": "space-between",
+      "paddingTop": 0,
     }
   }
 >
@@ -83,7 +84,7 @@ exports[`landing component matches the snapshot on render 1`] = `
   <Block
     style={
       Object {
-        "backgroundColor": "black",
+        "backgroundColor": "#05050d",
         "flex": 0.2,
       }
     }
@@ -115,7 +116,7 @@ exports[`landing component matches the snapshot on render 1`] = `
   <Block
     style={
       Object {
-        "backgroundColor": "black",
+        "backgroundColor": "#05050d",
         "flex": 0.1,
       }
     }
