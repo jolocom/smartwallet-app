@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     marginHorizontal: '20%',
     backgroundColor: JolocomTheme.primaryColorBlack,
     fontSize: JolocomTheme.headerFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
     fontWeight: '100',
     color: JolocomTheme.primaryColorSand
   },
@@ -38,7 +37,6 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
-    fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',

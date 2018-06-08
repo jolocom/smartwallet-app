@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: '5%',
     fontSize: 12,
-    fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorSand,
     opacity: 0.7
   }

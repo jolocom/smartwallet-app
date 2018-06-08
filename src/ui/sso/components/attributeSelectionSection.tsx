@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
   },
   attributeTitle: {
     ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-    fontFamily: JolocomTheme.contentFontFamily
   }
 })
 

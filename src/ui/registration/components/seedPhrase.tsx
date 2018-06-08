@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     paddingRight: '3%',
     color: JolocomTheme.primaryColorWhite,
     fontSize: 34,
-    fontFamily: JolocomTheme.contentFontFamily,
     lineHeight: 38
   },
   sideNote: {
@@ -30,7 +29,6 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     color: JolocomTheme.primaryColorSand,
     fontSize: JolocomTheme.labelFontSize,
-    fontFamily: JolocomTheme.contentFontFamily
   },
   footerButton: {
     position: 'absolute',
@@ -45,7 +43,6 @@ const styles = StyleSheet.create({
     fontWeight: '100',
     fontSize: JolocomTheme.headerFontSize,
     color: JolocomTheme.primaryColorWhite,
-    fontFamily: JolocomTheme.contentFontFamily
   }
 })
 

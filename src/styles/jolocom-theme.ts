@@ -19,8 +19,6 @@ const primaryColors = {
   landingHeaderFontSize: 30,
 
   fontWeight: '100',
-
-  contentFontFamily: 'TTCommons'
 }
 
 const textStyles = {

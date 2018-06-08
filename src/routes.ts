@@ -76,7 +76,6 @@ export const Routes = StackNavigator({
     navigationOptions:{
       headerTitle: 'Share claims',
       headerTitleStyle: {
-        fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: "100",
         fontSize: JolocomTheme.headerFontSize
       },
