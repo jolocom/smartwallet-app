@@ -18,7 +18,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
     }
     dense={false}
     divider={false}
-    key="First Name"
+    key="name"
     leftElement={<NameIcon />}
     numberOfLines={1}
     onLeftElementPress={null}
@@ -87,7 +87,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
     }
     dense={false}
     divider={false}
-    key="Last Name"
+    key="name"
     leftElement=""
     numberOfLines={1}
     onLeftElementPress={null}
@@ -157,7 +157,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
     }
     dense={false}
     divider={false}
-    key="First Name"
+    key="name"
     leftElement={<NameIcon />}
     numberOfLines={1}
     onLeftElementPress={null}
@@ -226,7 +226,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
     }
     dense={false}
     divider={false}
-    key="Last Name"
+    key="name"
     leftElement=""
     numberOfLines={1}
     onLeftElementPress={null}

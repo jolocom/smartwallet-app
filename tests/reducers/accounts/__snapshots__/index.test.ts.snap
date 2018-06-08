@@ -22,9 +22,9 @@ Object {
           ],
           "claims": Immutable.List [
             Immutable.Map {
-              "id": "default1",
+              "id": "",
               "name": "name",
-              "value": "name",
+              "value": "",
             },
           ],
         },
@@ -38,7 +38,7 @@ Object {
           ],
           "claims": Immutable.List [
             Immutable.Map {
-              "id": "default2",
+              "id": "",
               "name": "email",
               "value": "",
             },
@@ -52,7 +52,7 @@ Object {
           ],
           "claims": Immutable.List [
             Immutable.Map {
-              "id": "default3",
+              "id": "",
               "name": "phone",
               "value": "",
             },
@@ -92,9 +92,9 @@ Object {
           ],
           "claims": Immutable.List [
             Immutable.Map {
-              "id": "default1",
+              "id": "",
               "name": "name",
-              "value": "name",
+              "value": "",
             },
           ],
         },
@@ -108,7 +108,7 @@ Object {
           ],
           "claims": Immutable.List [
             Immutable.Map {
-              "id": "default2",
+              "id": "",
               "name": "email",
               "value": "",
             },
@@ -122,7 +122,7 @@ Object {
           ],
           "claims": Immutable.List [
             Immutable.Map {
-              "id": "default3",
+              "id": "",
               "name": "phone",
               "value": "",
             },
