@@ -4,22 +4,47 @@ import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
+import { StyleSheet } from 'react-native'
 
 interface Props {
   selectedClaim: DecoratedClaims
   saveClaim: (claimsItem: DecoratedClaims) => void
 }
 
+const styles = StyleSheet.create({
+  buttonContainer: {
+    width: 164,
+    height: 48,
+    borderRadius: 4,
+    backgroundColor: JolocomTheme.primaryColorPurple
+  },
+  buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100',
+  },
+  buttonTextDisabled: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: 'rgba(255,255,255, 0.4)',
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100',
+  }
+})
+
+// TODO Polish dynamic key
 interface State {
   line_1: string
   line_2: string
-  [key: string]: string
+  pending: boolean
+  [key: string]: string | boolean
 }
 
 export class ClaimDetailsComponent extends React.Component<Props, State> {
   state = {
     line_1: '',
     line_2: '',
+    pending: false
   }
 
   componentWillMount() {
@@ -43,7 +68,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   private onSubmit = (claimsItem: DecoratedClaims) => {
     claimsItem.claims[0].value = (claimsItem.type[1] === 'ProofOfNameCredential') ? this.prepareNameValue() : this.state.line_1
-    console.log(claimsItem)
+    this.setState({pending: true})
     this.props.saveClaim(claimsItem)
   }
 
@@ -100,19 +125,11 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
         </Block>
           <Button
             onPress={ () => this.onSubmit(this.props.selectedClaim) }
-            style={{
-              container: {
-                borderRadius: 4,
-                backgroundColor: JolocomTheme.primaryColorPurple
-              },
-              text: {
-                fontFamily: JolocomTheme.contentFontFamily,
-                color: JolocomTheme.primaryColorWhite,
-                fontSize: JolocomTheme.headerFontSize,
-                fontWeight: "100" 
-              }
-            }}
-            disabled={ !this.state.line_1 }
+            style={ (!this.state.line_1 || this.state.pending)
+              ? { container: styles.buttonContainer, text: styles.buttonTextDisabled}
+              : { container: styles.buttonContainer, text: styles.buttonText }
+            }
+            disabled={ !this.state.line_1 || this.state.pending }
             upperCase={false}
             text="Add claim"
         />
