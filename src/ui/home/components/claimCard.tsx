@@ -153,7 +153,7 @@ const prepareLabel = (myString : string) : string => {
   if (matches) {
     matches.map((match) => {
       const index = myString.indexOf(match)
-      const tx = myString.slice(0, index) + "," + myString.slice(index)
+      const tx = myString.slice(0, index) + " " + myString.slice(index)
       myString = tx
     })
   }
