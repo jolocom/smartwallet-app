@@ -99,7 +99,7 @@ android {
     buildToolsVersion "27.0.3"
 
     defaultConfig {
-        applicationId "com.smartwallet"
+        applicationId "com.jolocomwallet"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
