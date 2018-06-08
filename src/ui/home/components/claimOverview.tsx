@@ -1,12 +1,13 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { StyleSheet, TouchableOpacity, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Text, ScrollView } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account/'
+const loaders = require('react-native-indicator')
 
 interface Props {
   claims: ClaimsState
@@ -80,7 +81,9 @@ export class ClaimOverview extends React.Component<Props, State> {
   render() {
     const { claims } = this.props
     const claimsCategories = Object.keys(claims.claims)
-    const content = claims.loading ? ( <View><Text>Loading</Text></View>) :
+    const content = 
+    claims.loading ? 
+    <Block><loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} /></Block> : 
       (claimsCategories.map((category: string) => {
           return (
             <View key={category}>
@@ -95,8 +98,12 @@ export class ClaimOverview extends React.Component<Props, State> {
 
     return (
       <Container style={ styles.componentContainer }>
-        <ScrollView style={ styles.scrollComponent }>
-          { content }
+        <ScrollView 
+          style={ styles.scrollComponent } 
+          contentContainerStyle={ claims.loading ? 
+          { flexGrow: 1, justifyContent: 'space-around' } 
+          : {} }>
+            { content }
         </ScrollView>
         <Block style={ styles.actionButtonContainer }>
           <TouchableOpacity

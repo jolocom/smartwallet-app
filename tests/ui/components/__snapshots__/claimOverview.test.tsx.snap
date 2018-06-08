@@ -10,6 +10,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
   }
 >
   <ScrollView
+    contentContainerStyle={Object {}}
     style={
       Object {
         "width": "100%",
