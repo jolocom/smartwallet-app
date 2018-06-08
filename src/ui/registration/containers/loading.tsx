@@ -53,10 +53,12 @@ const styles = StyleSheet.create({
   text: {
     color: JolocomTheme.primaryColorSand,
     fontSize: 20,
+    fontFamily: JolocomTheme.contentFontFamily
   },
   smallText: {
     color: JolocomTheme.primaryColorSand,
-    fontSize: 14
+    fontSize: 14,
+    fontFamily: JolocomTheme.contentFontFamily
   }
 })
 
