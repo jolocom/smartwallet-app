@@ -65,7 +65,6 @@ export class ClaimOverview extends React.Component<Props, State> {
     const { openClaimDetails, claims } = this.props
     const decoratedClaims: CategorizedClaims = claims.claims
     const categoryClaims: DecoratedClaims[] = decoratedClaims[category] || []
-    console.log("category cl " + categoryClaims)
 
     return categoryClaims.map((claim: DecoratedClaims, index) => {
         return (
