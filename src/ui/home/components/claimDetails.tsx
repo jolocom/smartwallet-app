@@ -98,12 +98,23 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
             msg={ displayName } />
           { this.renderInputFields(fieldName, displayName) }
         </Block>
-        <Button
-          disabled={ !this.state.line_1 }
-          onPress={ () => this.onSubmit(this.props.selectedClaim) }
-          raised
-          primary
-          text="Add claim"
+          <Button
+            onPress={ () => this.onSubmit(this.props.selectedClaim) }
+            style={{
+              container: {
+                borderRadius: 4,
+                backgroundColor: JolocomTheme.primaryColorPurple
+              },
+              text: {
+                fontFamily: JolocomTheme.contentFontFamily,
+                color: JolocomTheme.primaryColorWhite,
+                fontSize: JolocomTheme.headerFontSize,
+                fontWeight: "100" 
+              }
+            }}
+            disabled={ !this.state.line_1 }
+            upperCase={false}
+            text="Add claim"
         />
       </Container>
     )
