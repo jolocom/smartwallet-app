@@ -28,21 +28,13 @@ export class ClaimDetailsContainer extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    const { selected, claims } = this.props.claims
-    Object.keys(claims).map((key: string, index) => {
-      claims[key].map((item: DecoratedClaims) => {
-        if (item.claims[0].id === selected.claims[0].id) {
-          this.setState({selectedClaim: item})
-        }
-      })
-    })
   }
 
   render() {
       return (
         <ClaimDetailsComponent
           saveClaim={ this.props.saveClaim }
-          selectedClaim={ this.state.selectedClaim }
+          selectedClaim={ this.props.claims.selected }
         />
       )
     }
