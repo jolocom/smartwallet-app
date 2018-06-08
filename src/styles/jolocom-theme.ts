@@ -71,24 +71,29 @@ const textStyles = {
   light: {
     labelDisplayFieldEdit: {
       fontSize: 17,
-      color: primaryColors.primaryColorBlack
+      color: primaryColors.primaryColorBlack,
+      fontFamily: primaryColors.contentFontFamily
     },
     textDisplayFieldEdit: {
       fontSize: 22,
-      color: primaryColors.primaryColorPurple
+      color: primaryColors.primaryColorPurple,
+      fontFamily: primaryColors.contentFontFamily
     },
     labelDisplayField: {
       fontSize: 17,
       color: primaryColors.primaryColorBlack,
-      opacity: 0.4
+      opacity: 0.4,
+      fontFamily: primaryColors.contentFontFamily
     },
     textDisplayField: {
       fontSize: 22,
-      color: primaryColors.primaryColorBlack
+      color: primaryColors.primaryColorBlack,
+      fontFamily: primaryColors.contentFontFamily
     },
     subheader: {
       fontSize: 30,
-      color: primaryColors.primaryColorBlack
+      color: primaryColors.primaryColorBlack,
+      fontFamily: primaryColors.contentFontFamily
     }
   }
 }

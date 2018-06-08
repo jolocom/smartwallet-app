@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
     width: '80%'
   },
   labelStyle: {
-    color: 'grey'
+    color: 'grey',
+    fontFamily: JolocomTheme.contentFontFamily
   }
 })
 
@@ -53,6 +54,7 @@ export class TextInputField extends React.Component<Props, State> {
           onBlur={ () => this.handleBlur() }
           label={ labelText }
           labelTextStyle={ styles.labelStyle }
+          style={{ fontFamily: JolocomTheme.contentFontFamily }}
           tintColor={ JolocomTheme.primaryColorPurple }
           textColor={ JolocomTheme.primaryColorBlack }
           value={ fieldValue }

@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     fontSize: 17,
-    textAlign: 'left'
+    textAlign: 'left',
+    fontFamily: JolocomTheme.contentFontFamily
   },
   componentContainer: {
     flex: 1,

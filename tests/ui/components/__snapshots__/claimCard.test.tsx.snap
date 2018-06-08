@@ -55,6 +55,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
         },
         "primaryText": Object {
           "color": "black",
+          "fontFamily": "TTCommons",
           "fontSize": 17,
           "opacity": 0.4,
         },
@@ -71,6 +72,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
         },
         "secondaryText": Object {
           "color": "black",
+          "fontFamily": "TTCommons",
           "fontSize": 22,
           "lineHeight": 24,
         },
@@ -113,6 +115,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
         },
         "primaryText": Object {
           "color": "black",
+          "fontFamily": "TTCommons",
           "fontSize": 17,
         },
         "primaryTextContainer": Object {
@@ -128,6 +131,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
         },
         "secondaryText": Object {
           "color": "#942f51",
+          "fontFamily": "TTCommons",
           "fontSize": 22,
           "lineHeight": 24,
         },
@@ -193,6 +197,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
         },
         "primaryText": Object {
           "color": "black",
+          "fontFamily": "TTCommons",
           "fontSize": 17,
           "opacity": 0.4,
         },
@@ -209,6 +214,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
         },
         "secondaryText": Object {
           "color": "black",
+          "fontFamily": "TTCommons",
           "fontSize": 22,
           "lineHeight": 24,
         },
@@ -251,6 +257,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
         },
         "primaryText": Object {
           "color": "black",
+          "fontFamily": "TTCommons",
           "fontSize": 17,
         },
         "primaryTextContainer": Object {
@@ -266,6 +273,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
         },
         "secondaryText": Object {
           "color": "#942f51",
+          "fontFamily": "TTCommons",
           "fontSize": 22,
           "lineHeight": 24,
         },

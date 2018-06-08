@@ -35,6 +35,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
           ellipsizeMode="tail"
           style={
             Object {
+              "fontFamily": "TTCommons",
               "fontSize": 17,
               "textAlign": "left",
             }
@@ -81,6 +82,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
           ellipsizeMode="tail"
           style={
             Object {
+              "fontFamily": "TTCommons",
               "fontSize": 17,
               "textAlign": "left",
             }
