@@ -13,151 +13,12 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
     centerElement={
       Object {
         "primaryText": " First  Name",
-        "secondaryText": "Natascha",
+        "secondaryText": "Natascha World",
       }
     }
     dense={false}
     divider={false}
-    key="name"
-    leftElement={<NameIcon />}
-    numberOfLines={1}
-    onLeftElementPress={null}
-    onLongPress={null}
-    onPress={null}
-    onPressValue={null}
-    onRightElementPress={null}
-    rightElement={
-      <TouchableOpacity
-        activeOpacity={0.2}
-        onPress={[Function]}
-        style={
-          Object {
-            "height": "100%",
-            "width": "100%",
-          }
-        }
-      >
-        <MoreIcon />
-      </TouchableOpacity>
-    }
-    style={
-      Object {
-        "container": Object {
-          "height": 79,
-        },
-        "leftElementContainer": Object {
-          "height": 24,
-          "marginBottom": 35,
-          "marginLeft": 16,
-          "marginRight": 30,
-          "marginTop": 20,
-          "width": 24,
-        },
-        "primaryText": Object {
-          "color": "black",
-          "fontSize": 17,
-          "opacity": 0.4,
-        },
-        "primaryTextContainer": Object {
-          "height": 21,
-          "top": -3,
-        },
-        "rightElementContainer": Object {
-          "height": 24,
-          "marginBottom": 35,
-          "marginRight": 16,
-          "marginTop": 16,
-          "width": 24,
-        },
-        "secondaryText": Object {
-          "color": "black",
-          "fontSize": 22,
-          "lineHeight": 24,
-        },
-      }
-    }
-    testID={null}
-  />
-  <ListItem
-    centerElement={
-      Object {
-        "primaryText": " Last  Name",
-        "secondaryText": "World",
-      }
-    }
-    dense={false}
-    divider={false}
-    key="name"
-    leftElement=""
-    numberOfLines={1}
-    onLeftElementPress={null}
-    onLongPress={null}
-    onPress={null}
-    onPressValue={null}
-    onRightElementPress={null}
-    rightElement=""
-    style={
-      Object {
-        "container": Object {
-          "height": 79,
-          "marginLeft": 0,
-          "paddingLeft": 54,
-        },
-        "leftElementContainer": Object {
-          "height": 24,
-          "marginBottom": 35,
-          "marginLeft": 16,
-          "marginRight": 30,
-          "marginTop": 20,
-          "width": 24,
-        },
-        "primaryText": Object {
-          "color": "black",
-          "fontSize": 17,
-          "opacity": 0.4,
-        },
-        "primaryTextContainer": Object {
-          "height": 21,
-          "top": -3,
-        },
-        "rightElementContainer": Object {
-          "height": 24,
-          "marginBottom": 35,
-          "marginRight": 16,
-          "marginTop": 16,
-          "width": 24,
-        },
-        "secondaryText": Object {
-          "color": "black",
-          "fontSize": 22,
-          "lineHeight": 24,
-        },
-      }
-    }
-    testID={null}
-  />
-</Component>
-`;
-
-exports[`ClaimCard component matches the snapshot on render 1`] = `
-<Component
-  style={
-    Object {
-      "marginBottom": 1,
-      "width": "100%",
-    }
-  }
->
-  <ListItem
-    centerElement={
-      Object {
-        "primaryText": " First  Name",
-        "secondaryText": "Kasia",
-      }
-    }
-    dense={false}
-    divider={false}
-    key="name"
+    key="namefirst"
     leftElement={<NameIcon />}
     numberOfLines={1}
     onLeftElementPress={null}
@@ -226,7 +87,145 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
     }
     dense={false}
     divider={false}
-    key="name"
+    key="namelast"
+    leftElement=""
+    numberOfLines={1}
+    onLeftElementPress={null}
+    onLongPress={null}
+    onPress={[Function]}
+    onPressValue={null}
+    onRightElementPress={null}
+    rightElement=""
+    style={
+      Object {
+        "container": Object {
+          "height": 79,
+          "marginLeft": 0,
+          "paddingLeft": 54,
+        },
+        "leftElementContainer": Object {
+          "height": 24,
+          "marginBottom": 35,
+          "marginLeft": 16,
+          "marginRight": 30,
+          "marginTop": 20,
+          "width": 24,
+        },
+        "primaryText": Object {
+          "color": "black",
+          "fontSize": 17,
+        },
+        "primaryTextContainer": Object {
+          "height": 21,
+          "top": -3,
+        },
+        "rightElementContainer": Object {
+          "height": 24,
+          "marginBottom": 35,
+          "marginRight": 16,
+          "marginTop": 16,
+          "width": 24,
+        },
+        "secondaryText": Object {
+          "color": "#942f51",
+          "fontSize": 22,
+          "lineHeight": 24,
+        },
+      }
+    }
+    testID={null}
+  />
+</Component>
+`;
+
+exports[`ClaimCard component matches the snapshot on render 1`] = `
+<Component
+  style={
+    Object {
+      "marginBottom": 1,
+      "width": "100%",
+    }
+  }
+>
+  <ListItem
+    centerElement={
+      Object {
+        "primaryText": " First  Name",
+        "secondaryText": "Kasia",
+      }
+    }
+    dense={false}
+    divider={false}
+    key="namefirst"
+    leftElement={<NameIcon />}
+    numberOfLines={1}
+    onLeftElementPress={null}
+    onLongPress={null}
+    onPress={null}
+    onPressValue={null}
+    onRightElementPress={null}
+    rightElement={
+      <TouchableOpacity
+        activeOpacity={0.2}
+        onPress={[Function]}
+        style={
+          Object {
+            "height": "100%",
+            "width": "100%",
+          }
+        }
+      >
+        <MoreIcon />
+      </TouchableOpacity>
+    }
+    style={
+      Object {
+        "container": Object {
+          "height": 79,
+        },
+        "leftElementContainer": Object {
+          "height": 24,
+          "marginBottom": 35,
+          "marginLeft": 16,
+          "marginRight": 30,
+          "marginTop": 20,
+          "width": 24,
+        },
+        "primaryText": Object {
+          "color": "black",
+          "fontSize": 17,
+          "opacity": 0.4,
+        },
+        "primaryTextContainer": Object {
+          "height": 21,
+          "top": -3,
+        },
+        "rightElementContainer": Object {
+          "height": 24,
+          "marginBottom": 35,
+          "marginRight": 16,
+          "marginTop": 16,
+          "width": 24,
+        },
+        "secondaryText": Object {
+          "color": "black",
+          "fontSize": 22,
+          "lineHeight": 24,
+        },
+      }
+    }
+    testID={null}
+  />
+  <ListItem
+    centerElement={
+      Object {
+        "primaryText": " Last  Name",
+        "secondaryText": "+ add",
+      }
+    }
+    dense={false}
+    divider={false}
+    key="namelast"
     leftElement=""
     numberOfLines={1}
     onLeftElementPress={null}
