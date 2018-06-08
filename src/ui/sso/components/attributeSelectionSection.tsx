@@ -86,6 +86,10 @@ export class AttributeSummary extends React.Component<Props, State>{
       displayName: 'Phone number:',
       AttributeIcon: PhoneIcon
     }, {
+      type: ['Credential', 'ProofOfNameCredential'],
+      displayName: 'Name:',
+      AttributeIcon: NameIcon
+    },{
       type: ['Default'],
       displayName: 'Credential:',
       AttributeIcon: NameIcon
