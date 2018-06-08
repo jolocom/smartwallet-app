@@ -80,7 +80,7 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
 
     const credential = jolocomLib.credentials.createCredential(
       claimsMetadata[claimsMetadataType],
-      claimsItem.claims[0].value,
+      claimsItem.claims[0].value.trim(),
       state.account.did.toJS().did
     )
 
@@ -97,7 +97,7 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
     const verifiableCredential = await wallet.signCredential(credential)
 
-    if (claimsItem.claims[0].id && claimsItem.claims[0].id != '') {
+    if (claimsItem.claims[0].id && claimsItem.claims[0].id !== '') {
       await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
     }
     await storageLib.store.verifiableCredential(verifiableCredential)
@@ -137,7 +137,7 @@ export const setClaimsForDid = () => {
 
 const prepareClaimsForState = (claims: VerifiableCredential[]) => {
   // TODO: Handle the category 'Other' for the claims that don't match any of predefined categories
-  let categorizedClaims = {}
+  const categorizedClaims = {}
   const initialClaimsState = initialState
 
   Object.keys(categoryForType).forEach(category => {

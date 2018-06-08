@@ -2,7 +2,7 @@ import { AnyAction } from 'redux'
 import Immutable from 'immutable'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 
-let categorizedClaims: CategorizedClaims = {
+const categorizedClaims: CategorizedClaims = {
   'Personal' : [{
       displayName: 'Name',
       type: ['Credential', 'ProofOfNameCredential'],
