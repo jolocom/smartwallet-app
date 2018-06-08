@@ -72,16 +72,16 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
 
   // TODO: Extract multi line claim card to a separate component
   if (value && name === 'name' && typeof value === 'string') {
-    const splitName = value.split(' ')
+    const splitName = value.split(',')
     content.push({
       value: splitName[0],
-      fieldName: name || '',
+      fieldName: name + 'first',
       type,
       label: 'First Name',
       showIcon: true
     }, {
       value: splitName[1],
-      fieldName: name || '',
+      fieldName: name + 'last',
       type,
       label: 'Last Name',
       showIcon: false
@@ -112,10 +112,11 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
       textDisplayField
     } = JolocomTheme.textStyles.light
 
+    console.log(claimItem)
 
     return (
       <ListItem
-        key={ label }
+        key={ fieldName }
         style={{
           primaryTextContainer: styles.listItemPrimaryTextContainer,
           primaryText: claimVal ? labelDisplayField: labelDisplayFieldEdit,

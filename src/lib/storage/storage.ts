@@ -45,6 +45,10 @@ export class Storage {
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this)
   }
 
+  delete = {
+    verifiableCredential: this.deleteVCred.bind(this)
+  }
+
   constructor(config: ConnectionOptions) {
     this.config = config
   }
@@ -132,5 +136,30 @@ export class Storage {
     verifiableCredential.claim = [credential]
 
     await this.connection.manager.save(verifiableCredential)
+  }
+
+  private async deleteVCred(id: string) : Promise<void> {
+    await this.createConnectionIfNeeded()
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(CredentialEntity)
+      .where('verifiableCredential = :id', { id: id})
+      .execute()
+
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(SignatureEntity)
+      .where('verifiableCredential = :id', { id: id})
+      .delete()
+      .execute()
+
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(VerifiableCredentialEntity)
+      .where('id = :id', { id: id})
+      .execute()
   }
 }

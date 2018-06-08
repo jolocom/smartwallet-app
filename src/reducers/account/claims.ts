@@ -2,21 +2,21 @@ import { AnyAction } from 'redux'
 import Immutable from 'immutable'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 
-let categorizedClaims: CategorizedClaims = {
+const categorizedClaims: CategorizedClaims = {
   'Personal' : [{
       displayName: 'Name',
       type: ['Credential', 'ProofOfNameCredential'],
       claims: [{
-        id: 'default1',
+        id: '',
         name: 'name',
-        value: 'name',
+        value: '',
       }],
     }],
   'Contact': [{
       displayName: 'E-mail',
       type: ['Credential', 'ProofOfEmailCredential'],
       claims: [{
-        id: 'default2',
+        id: '',
         name: 'email',
         value: ''
       }],
@@ -25,14 +25,14 @@ let categorizedClaims: CategorizedClaims = {
       displayName: 'Phone',
       type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
       claims: [{
-        id: 'default3',
+        id: '',
         name: 'phone',
         value: ''
       }],
     }]
 }
 
-const initialState: ClaimsState = {
+export const initialState: ClaimsState = {
   loading: false,
   selected: {
     displayName: '',
