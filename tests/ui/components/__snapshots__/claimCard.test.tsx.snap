@@ -130,7 +130,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
           "width": 24,
         },
         "secondaryText": Object {
-          "color": "black",
+          "color": "#942f51",
           "fontFamily": "TTCommons",
           "fontSize": 22,
           "lineHeight": 24,
