@@ -23,6 +23,18 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   componentWillMount() {
+    // TODO: adjust for multiline when enabled
+    const { value } = this.props.selectedClaim.claims[0]
+    const claimField = this.props.selectedClaim.type[1]
+    if (value && (claimField.toString() === 'ProofOfNameCredential')) {
+      const fullName = value.split(' ')
+      this.setState({
+        line_1: fullName[0],
+        line_2: fullName[1] ? fullName[1] : ''
+      })
+    } else if (value) {
+      this.setState({ line_1: value })
+    }
   }
 
   private handleFieldInput = (fieldValue: string, fieldName: string) => {
@@ -31,6 +43,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   private onSubmit = (claimsItem: DecoratedClaims) => {
     claimsItem.claims[0].value = (claimsItem.type[1] === 'ProofOfNameCredential') ? this.prepareNameValue() : this.state.line_1
+    console.log(claimsItem)
     this.props.saveClaim(claimsItem)
   }
 
@@ -39,7 +52,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     return line_1 && line_2 ? line_1 + " " + line_2 : line_1 + line_2
   }
 
-  private renderInputFields = (displayName: string) => {
+  private renderInputFields = (fieldName: string, displayName: string) => {
     const { line_1, line_2 } = this.state
     switch(displayName) {
       case ('Name'):
@@ -75,14 +88,15 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     if (this.props.selectedClaim.claims.length === 0) {
       return
     }
-    const claimField = this.props.selectedClaim.displayName
+    const displayName = this.props.selectedClaim.displayName
+    const fieldName = this.props.selectedClaim.claims[0].name
     return (
       <Container>
         <Block>
           <CenteredText
             style={ JolocomTheme.textStyles.light.subheader }
-            msg={ claimField } />
-          { this.renderInputFields(claimField) }
+            msg={ displayName } />
+          { this.renderInputFields(fieldName, displayName) }
         </Block>
         <Button
           disabled={ !this.state.line_1 }

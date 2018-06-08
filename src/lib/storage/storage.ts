@@ -140,6 +140,26 @@ export class Storage {
 
   private async deleteVCred(id: string) : Promise<void> {
     await this.createConnectionIfNeeded()
-    await this.connection.manager.delete(VerifiableCredentialEntity, id)
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(CredentialEntity)
+      .where('verifiableCredential = :id', { id: id})
+      .execute()
+
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(SignatureEntity)
+      .where('verifiableCredential = :id', { id: id})
+      .delete()
+      .execute()
+
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(VerifiableCredentialEntity)
+      .where('id = :id', { id: id})
+      .execute()
   }
 }

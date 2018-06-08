@@ -67,10 +67,15 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     switch(claimsItem.type[1]) {
       case 'ProofOfNameCredential':
         claimsMetadataType = 'name'
+        break
       case 'ProofOfMobilePhoneNumberCredential':
         claimsMetadataType = 'mobilePhoneNumber'
+        break
       case 'ProofOfEmailCredential':
         claimsMetadataType = 'emailAddress'
+        break
+      default:
+        break
     }
 
     const credential = jolocomLib.credentials.createCredential(
@@ -92,7 +97,7 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
     const verifiableCredential = await wallet.signCredential(credential)
 
-    if (claimsItem.claims[0].id) {
+    if (claimsItem.claims[0].id && claimsItem.claims[0].id != '') {
       await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
     }
     await storageLib.store.verifiableCredential(verifiableCredential)
@@ -166,7 +171,7 @@ const prepareClaimsForState = (claims: VerifiableCredential[]) => {
             count++
           }
         })
-        if(count === 0) {
+        if (count === 0) {
           claimsForCategory.push(claim)
         }
       })
