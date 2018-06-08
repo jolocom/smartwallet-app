@@ -106,7 +106,6 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
                 backgroundColor: JolocomTheme.primaryColorPurple
               },
               text: {
-                fontFamily: JolocomTheme.contentFontFamily,
                 color: JolocomTheme.primaryColorWhite,
                 fontSize: JolocomTheme.headerFontSize,
                 fontWeight: "100" 
