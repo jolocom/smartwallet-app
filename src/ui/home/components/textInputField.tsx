@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
     width: '80%'
   },
   labelStyle: {
-    color: 'grey'
+    color: 'grey',
+    fontFamily: JolocomTheme.contentFontFamily
   }
 })
 
