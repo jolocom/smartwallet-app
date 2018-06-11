@@ -16,7 +16,7 @@ export const savePassword = (password : string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) =>  {
     try {
       await backendMiddleware.keyChainLib.savePassword(password)
-      dispatch(navigationActions.navigate({ routeName: routeList.Entropy }))
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
     } catch (err) {
       dispatch(genericActions.showErrorScreen(err))
     }
@@ -25,7 +25,7 @@ export const savePassword = (password : string) => {
 
 export const submitEntropy = (encodedEntropy: string) => {
   return (dispatch : Dispatch<AnyAction>) => {
-    dispatch(navigationActions.navigate({
+    dispatch(navigationActions.navigatorReset({
       routeName: routeList.Loading,
       params: { encodedEntropy }
     }))
@@ -34,7 +34,7 @@ export const submitEntropy = (encodedEntropy: string) => {
 
 export const startRegistration = () => {
   return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(navigationActions.navigate({
+    dispatch(navigationActions.navigatorReset({
       routeName: routeList.PasswordEntry
     }))
   }
@@ -114,7 +114,7 @@ export const createIdentity = (encodedEntropy: string) => {
         ipfsHash
       })
 
-        dispatch(navigationActions.navigate({
+        dispatch(navigationActions.navigatorReset({
         routeName: routeList.SeedPhrase,
         params: { mnemonic }
       }))
