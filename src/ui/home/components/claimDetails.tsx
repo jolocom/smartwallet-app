@@ -42,6 +42,8 @@ const styles = StyleSheet.create({
 interface State {
   line_1: string
   line_2: string
+  errorMsg_1: string
+  errorMsg_2: string  
   pending: boolean
   [key: string]: string | boolean
 }
@@ -50,6 +52,8 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   state = {
     line_1: '',
     line_2: '',
+    errorMsg_1: '',
+    errorMsg_2: '',
     pending: false
   }
 
@@ -70,6 +74,27 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   private handleFieldInput = (fieldValue: string, fieldName: string) => {
     this.setState({[fieldName]: fieldValue})
+    this.validateInput(fieldValue, fieldName)
+  }
+
+  private validateInput = (fieldValue: string, fieldName: string) => {
+    const claimField = this.props.selectedClaim.type[1]
+    switch(claimField) {
+      case ('ProofOfNameCredential'):
+        this.validateNameInput(fieldValue, fieldName)
+        break
+      default: 
+        break
+    }
+  }
+
+  private validateNameInput = (fieldValue: string, fieldName: string) => {
+    const err = {
+      line_1: 'errorMsg_1',
+      line_2: 'errorMsg_2'
+    }
+    fieldValue.match(/^[A-Za-z]+$/) || fieldValue.length === 0 ? this.setState({[err[fieldName]]: ''}) :
+      this.setState({[err[fieldName]]: 'Only letters allowed'}) 
   }
 
   private onSubmit = (claimsItem: DecoratedClaims) => {
@@ -84,18 +109,20 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   private renderInputFields = (fieldName: string, displayName: string) => {
-    const { line_1, line_2 } = this.state
+    const { line_1, line_2, errorMsg_1, errorMsg_2 } = this.state
     switch(displayName) {
       case ('Name'):
         return (
           <Block>
             <TextInputField
+              errorMsg={ errorMsg_1 }
               fieldName={ 'line_1' }
               fieldValue={ line_1 }
               displayName={ 'First Name' }
               handleFieldInput={ this.handleFieldInput }
             />
             <TextInputField
+              errorMsg={ errorMsg_2 }
               fieldName={ 'line_2' }
               fieldValue={ line_2 }
               displayName={ 'Last Name' }
@@ -106,6 +133,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       default:
         return (
           <TextInputField
+            errorMsg={ errorMsg_1 }
             fieldName={ 'line_1' }
             fieldValue={ line_1 }
             displayName={ displayName }
@@ -121,6 +149,8 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     }
     const displayName = this.props.selectedClaim.displayName
     const fieldName = this.props.selectedClaim.claims[0].name
+    const { line_1, pending, errorMsg_1, errorMsg_2 } = this.state
+    const disabled = !line_1 || pending || !!errorMsg_1 || !!errorMsg_2
     return (
       <Container>
         <Block>
@@ -131,11 +161,11 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
         </Block>
           <Button
             onPress={ () => this.onSubmit(this.props.selectedClaim) }
-            style={ (!this.state.line_1 || this.state.pending)
+            style={ (disabled)
               ? { container: styles.buttonContainerDisabled, text: styles.buttonTextDisabled}
               : { container: styles.buttonContainer, text: styles.buttonText }
             }
-            disabled={ !this.state.line_1 || this.state.pending }
+            disabled={ disabled }
             upperCase={false}
             text='Add claim'
         />

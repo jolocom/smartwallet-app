@@ -7,12 +7,12 @@ interface Props {
   displayName: string
   fieldValue: string
   fieldName: string
+  errorMsg: string
   handleFieldInput: (fieldValue: string, fieldName: string) => void
 }
 
 interface State {
   focused: boolean
-  errorMsg: string
 }
 
 const styles = StyleSheet.create({
@@ -28,8 +28,7 @@ const styles = StyleSheet.create({
 
 export class TextInputField extends React.Component<Props, State> {
   state = {
-    focused: false,
-    errorMsg: ''
+    focused: false
   }
 
   private handleFocus = () => {
@@ -45,7 +44,7 @@ export class TextInputField extends React.Component<Props, State> {
   }
 
   render() {
-    const { fieldValue, displayName, handleFieldInput } = this.props
+    const { fieldValue, displayName, handleFieldInput, errorMsg } = this.props
     const labelText = this.state.focused || !fieldValue ? displayName : ''
     return (
       <View style={ styles.inputContainer }>
@@ -53,6 +52,7 @@ export class TextInputField extends React.Component<Props, State> {
           onFocus={ () => this.handleFocus() }
           onBlur={ () => this.handleBlur() }
           label={ labelText }
+          error={ errorMsg }
           labelTextStyle={ styles.labelStyle }
           style={{ fontFamily: JolocomTheme.contentFontFamily }}
           tintColor={ JolocomTheme.primaryColorPurple }
