@@ -53,6 +53,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     const claimField = this.props.selectedClaim.type[1]
     if (value && (claimField.toString() === 'ProofOfNameCredential')) {
       const fullName = value.split(',')
+      console.log('full name: ', fullName)
       this.setState({
         line_1: fullName[0],
         line_2: fullName[1] ? fullName[1] : ''
@@ -74,7 +75,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   private prepareNameValue = () => {
     const { line_1, line_2 } = this.state
-    return line_1 && line_2 ? line_1 + ", " + line_2 : line_1 + line_2
+    return line_1 && line_2 ? line_1 + "," + line_2 : line_1 + line_2
   }
 
   private renderInputFields = (fieldName: string, displayName: string) => {
