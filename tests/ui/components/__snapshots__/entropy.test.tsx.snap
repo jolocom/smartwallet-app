@@ -15,7 +15,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       Object {
         "backgroundColor": "black",
         "color": "#ffefdf",
-        "fontFamily": "TTCommons",
+        "fontFamily": "TT Commons",
         "fontSize": 22,
         "fontWeight": "100",
         "marginHorizontal": "20%",
@@ -55,7 +55,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       Object {
         "backgroundColor": "black",
         "color": "#ffefdf",
-        "fontFamily": "TTCommons",
+        "fontFamily": "TT Commons",
         "fontSize": 22,
         "fontWeight": "100",
         "marginHorizontal": "20%",
@@ -95,7 +95,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       Object {
         "backgroundColor": "black",
         "color": "#ffefdf",
-        "fontFamily": "TTCommons",
+        "fontFamily": "TT Commons",
         "fontSize": 22,
         "fontWeight": "100",
         "marginHorizontal": "20%",
@@ -135,7 +135,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
           },
           "text": Object {
             "color": "white",
-            "fontFamily": "TTCommons",
+            "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
           },

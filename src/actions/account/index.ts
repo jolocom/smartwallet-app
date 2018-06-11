@@ -106,8 +106,8 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
       type: 'SET_CLAIMS_FOR_DID',
       claims: newClaims
     })
-    dispatch(navigationActions.navigate({
-      routeName: routeList.Claims
+    dispatch(navigationActions.navigatorReset({
+      routeName: routeList.Home
     }))
   }
 }

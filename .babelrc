@@ -6,6 +6,9 @@
         ".xml",
         ".svg"
       ]
+    }],
+    ["react-native-platform-specific-extensions", {
+      "extensions": ["ts"]
     }]
   ]
 }

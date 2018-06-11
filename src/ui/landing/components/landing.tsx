@@ -62,11 +62,9 @@ const styles = StyleSheet.create({
   },
   headerBlock: {
     marginBottom: 0 
-    // paddingBottom: '5%'
   }, 
   subHeaderBlock: {
     marginBottom: 0,
-    // paddingTop: '7%'
   },
   subHeader: {
     fontWeight: '100',

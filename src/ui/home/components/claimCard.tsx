@@ -112,8 +112,6 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
       textDisplayField
     } = JolocomTheme.textStyles.light
 
-    console.log(claimItem)
-
     return (
       <ListItem
         key={ fieldName }

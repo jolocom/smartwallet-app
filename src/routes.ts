@@ -20,10 +20,12 @@ export const HomeRoutes = TabNavigator(
     Claims: {
       screen: Claims,
       navigationOptions: {
-        tabBarLabel: 'My identity',
-        headerTitle: 'Jolocom ID Wallet',
+        tabBarLabel: 'All claims',
+        headerTitle: 'My identity',
         headerTitleStyle: {
-          fontSize: JolocomTheme.labelFontSize 
+          fontSize: JolocomTheme.headerFontSize,
+          fontFamily: JolocomTheme.contentFontFamily,
+          fontWeight: '300'
         },
         headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
         headerTintColor: JolocomTheme.primaryColorWhite
@@ -32,10 +34,12 @@ export const HomeRoutes = TabNavigator(
     Interactions: {
       screen: Interactions,
       navigationOptions: {
-        tabBarLabel: 'Data history',
-        headerTitle: 'Jolocom ID Wallet',
+        tabBarLabel: 'Documents',
+        headerTitle: 'My identity',
         headerTitleStyle: {
-          fontSize: JolocomTheme.labelFontSize
+          fontSize: JolocomTheme.headerFontSize,
+          fontFamily: JolocomTheme.contentFontFamily,
+          fontWeight: '300'
         },
         headerStyle: {
           backgroundColor: JolocomTheme.primaryColorBlack,
@@ -50,6 +54,7 @@ export const HomeRoutes = TabNavigator(
       activeTintColor: JolocomTheme.primaryColorSand,
       inactiveTintColor: JolocomTheme.primaryColorGrey,
       labelStyle: {
+        fontFamily: JolocomTheme.contentFontFamily,
         fontSize: JolocomTheme.labelFontSize,
         textAlign: 'center'
       },

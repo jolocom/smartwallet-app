@@ -16,6 +16,7 @@ interface Props {
 }
 
 interface State {
+  pending: boolean
   requestedCredentials: Array<{
     type: string[]
     selectedCredential: StateVerificationSummary | undefined
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
 
 export class ConsentComponent extends React.Component<Props, State> {
   state: State = {
+    pending: false,
     requestedCredentials: this.props.requestedCredentials.map(cred => ({
       type: cred.type, 
       selectedCredential: undefined
@@ -93,7 +95,7 @@ export class ConsentComponent extends React.Component<Props, State> {
         credentials.push(request.selectedCredential)
       }
     })
-
+    this.setState({ pending: true })
     this.props.handleSubmitClaims(credentials)
   }
 
@@ -111,9 +113,9 @@ export class ConsentComponent extends React.Component<Props, State> {
           text='Deny'
         />
         <Button
-          disabled= { !submitAllowed }
+          disabled= { !submitAllowed || this.state.pending}
           onPress={ this.handleSubmitClaims }
-          style={ submitAllowed ? 
+          style={ submitAllowed && !this.state.pending ? 
             { 
               container: styles.shareClaimsContainer, 
               text: styles.shareClaimsText 

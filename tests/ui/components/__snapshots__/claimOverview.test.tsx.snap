@@ -10,6 +10,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
   }
 >
   <ScrollView
+    contentContainerStyle={Object {}}
     style={
       Object {
         "width": "100%",
@@ -35,6 +36,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
           ellipsizeMode="tail"
           style={
             Object {
+              "fontFamily": "TT Commons",
               "fontSize": 17,
               "textAlign": "left",
             }
@@ -81,6 +83,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
           ellipsizeMode="tail"
           style={
             Object {
+              "fontFamily": "TT Commons",
               "fontSize": 17,
               "textAlign": "left",
             }
