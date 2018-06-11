@@ -22,7 +22,7 @@ exports[`Exception screen component Renders correctly when error object is provi
       style={
         Object {
           "color": "black",
-          "fontFamily": "TTCommons",
+          "fontFamily": "TT Commons",
           "fontSize": 10,
         }
       }
@@ -62,7 +62,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
       style={
         Object {
           "color": "black",
-          "fontFamily": "TTCommons",
+          "fontFamily": "TT Commons",
           "fontSize": 10,
         }
       }
