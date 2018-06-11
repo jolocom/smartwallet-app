@@ -106,3 +106,10 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
     }
   }
 }
+
+export const cancelSSO = () => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(clearCredentialRequest())
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+  }
+}

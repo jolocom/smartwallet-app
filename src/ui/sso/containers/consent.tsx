@@ -10,6 +10,7 @@ interface ConnectProps { }
 interface Props extends ConnectProps {
   activeCredentialRequest: StateCredentialRequestSummary
   sendCredentialResponse: (creds: StateVerificationSummary[]) => void
+  cancelSSO: () => void
 }
 
 interface State {
@@ -17,12 +18,13 @@ interface State {
 }
 
 export class ConsentContainer extends React.Component<Props, State> {
+
   private handleSubmitClaims = (credentials: StateVerificationSummary[]) => {
     this.props.sendCredentialResponse(credentials)
   }
 
-  private handleDenySubmit() {
-    console.log('denied')
+  private handleDenySubmit = () => {
+    this.props.cancelSSO()
   }
 
   render() {
@@ -47,7 +49,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    sendCredentialResponse: (creds: StateVerificationSummary[]) => dispatch(ssoActions.sendCredentialResponse(creds))
+    sendCredentialResponse: (creds: StateVerificationSummary[]) => dispatch(ssoActions.sendCredentialResponse(creds)),
+    cancelSSO: () => dispatch(ssoActions.cancelSSO())
   }
 }
 
