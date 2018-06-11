@@ -3,10 +3,6 @@
 exports[`Registration action creators createIdentity should attempt to create an identity 1`] = `
 Array [
   Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Encrypting and storing data locally",
-  },
-  Object {
     "type": "DID_SET",
     "value": "did:jolo:mockdid",
   },
@@ -139,10 +135,6 @@ Array [
 exports[`Registration action creators createIdentity should display exception screen in case of error 1`] = `
 Array [
   Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Encrypting and storing data locally",
-  },
-  Object {
     "params": Object {
       "errorMessage": "Mock registration error",
       "stackTrace": "mock registration error stack trace",
@@ -203,9 +195,6 @@ Array [
   Object {
     "actions": Array [
       Object {
-        "params": Object {
-          "encodedEntropy": "mockEntropy",
-        },
         "routeName": "Loading",
         "type": "Navigation/NAVIGATE",
       },
@@ -213,6 +202,10 @@ Array [
     "index": 0,
     "key": undefined,
     "type": "Navigation/RESET",
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Encrypting and storing data locally",
   },
 ]
 `;
