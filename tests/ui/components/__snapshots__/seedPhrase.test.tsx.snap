@@ -17,7 +17,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "color": "#ffefdf",
-          "fontFamily": "TTCommons",
+          "fontFamily": "TT Commons",
           "fontSize": 20,
           "lineHeight": 26,
           "paddingLeft": "5%",
@@ -34,7 +34,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       style={
         Object {
           "color": "white",
-          "fontFamily": "TTCommons",
+          "fontFamily": "TT Commons",
           "fontSize": 34,
           "lineHeight": 38,
           "paddingLeft": "3%",
@@ -68,7 +68,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
           },
           "text": Object {
             "color": "white",
-            "fontFamily": "TTCommons",
+            "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
           },
@@ -99,7 +99,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "color": "#ffefdf",
-          "fontFamily": "TTCommons",
+          "fontFamily": "TT Commons",
           "fontSize": 20,
           "lineHeight": 26,
           "paddingLeft": "5%",
@@ -116,7 +116,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "color": "white",
-          "fontFamily": "TTCommons",
+          "fontFamily": "TT Commons",
           "fontSize": 34,
           "lineHeight": 38,
           "paddingLeft": "3%",
@@ -150,7 +150,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
           },
           "text": Object {
             "color": "white",
-            "fontFamily": "TTCommons",
+            "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
           },
