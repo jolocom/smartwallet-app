@@ -74,7 +74,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   private prepareNameValue = () => {
     const { line_1, line_2 } = this.state
-    return line_1 && line_2 ? line_1 + ", " + line_2 : line_1 + line_2
+    return line_1 && line_2 ? line_1 + "," + line_2 : line_1 + line_2
   }
 
   private renderInputFields = (fieldName: string, displayName: string) => {
