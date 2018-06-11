@@ -17,6 +17,7 @@
     "@types/react-test-renderer": "^16.0.0",
     "babel-inline-import-loader": "^0.0.5",
     "babel-plugin-inline-import": "^2.0.6",
+    "babel-plugin-react-native-platform-specific-extensions": "^1.1.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-react-native-stage-0": "^1.0.1",
