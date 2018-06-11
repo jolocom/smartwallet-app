@@ -18,6 +18,12 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: JolocomTheme.primaryColorPurple
   },
+  buttonContainerDisabled: {
+    width: 164,
+    height: 48,
+    borderRadius: 4,
+    backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
+  },
   buttonText: {
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
@@ -26,9 +32,9 @@ const styles = StyleSheet.create({
   },
   buttonTextDisabled: {
     fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(255,255,255, 0.4)',
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
+    fontSize: JolocomTheme.labelFontSize,
+    color: JolocomTheme.disabledButtonTextGrey,
+    fontWeight: '100'
   }
 })
 
@@ -126,12 +132,12 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
           <Button
             onPress={ () => this.onSubmit(this.props.selectedClaim) }
             style={ (!this.state.line_1 || this.state.pending)
-              ? { container: styles.buttonContainer, text: styles.buttonTextDisabled}
+              ? { container: styles.buttonContainerDisabled, text: styles.buttonTextDisabled}
               : { container: styles.buttonContainer, text: styles.buttonText }
             }
             disabled={ !this.state.line_1 || this.state.pending }
             upperCase={false}
-            text="Add claim"
+            text='Add claim'
         />
       </Container>
     )
