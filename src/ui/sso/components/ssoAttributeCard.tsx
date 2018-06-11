@@ -30,10 +30,10 @@ export const AttributeCard : React.SFC<AttributeCardProps> = props => {
       fontWeight: '100'
     }
   })
-
+  const attributeValue = props.attributeValue.replace(',', ' ')
   return <View style={styles.cardContainer}>
     <View>
-      <Text style={styles.attributeValue}> {props.attributeValue} </Text>
+      <Text style={styles.attributeValue}> {attributeValue} </Text>
       <Text> Self Signed </Text>
     </View>
     <IconToggle 
