@@ -16,7 +16,6 @@ export interface ConnectProps {
 }
 
 interface Props extends ConnectProps {
-  navigation: { state: { params: { encodedEntropy: string } } }
 }
 
 export interface State {
@@ -62,12 +61,8 @@ const styles = StyleSheet.create({
   }
 })
 
+// TODO SFC
 export class LoadingContainer extends React.Component<Props, State> {
-  componentDidMount() {
-    const { encodedEntropy } = this.props.navigation.state.params
-    this.props.createIdentity(encodedEntropy)
-  }
-
   render() {
     return (
       <Container style={styles.container} >
