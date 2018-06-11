@@ -42,13 +42,17 @@ export class AttributeSummary extends React.Component<Props, State>{
   // TODO When would no verifications / attribute info be available?
   private handleAttributeSelection = (attribute: string) => {
     const attributeInfo = this.props.attributes.find(attr => attr.value === attribute)
-
     if (!attributeInfo) {
       return
     }
 
     const availableVerifications = attributeInfo.verifications
     const { attributeType, handleAttributeSelection } = this.props
+
+    if (this.state.selectedAttribute === attribute) {
+      this.setState({selectedAttribute: ''})
+      return handleAttributeSelection(attributeType, '')
+    }
 
     switch (availableVerifications.length){
       case 0:

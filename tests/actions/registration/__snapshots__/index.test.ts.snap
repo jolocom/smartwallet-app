@@ -23,11 +23,18 @@ Array [
     "value": "Registering identity on Ethereum",
   },
   Object {
-    "params": Object {
-      "mnemonic": "all all all all all all all all all all all all",
-    },
-    "routeName": "SeedPhrase",
-    "type": "Navigation/NAVIGATE",
+    "actions": Array [
+      Object {
+        "params": Object {
+          "mnemonic": "all all all all all all all all all all all all",
+        },
+        "routeName": "SeedPhrase",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
@@ -149,8 +156,15 @@ Array [
 exports[`Registration action creators savePassword should attempt to save the password in the keychain 1`] = `
 Array [
   Object {
-    "routeName": "Entropy",
-    "type": "Navigation/NAVIGATE",
+    "actions": Array [
+      Object {
+        "routeName": "Entropy",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
@@ -171,8 +185,15 @@ Array [
 exports[`Registration action creators startRegistration should initiate the registration process 1`] = `
 Array [
   Object {
-    "routeName": "PasswordEntry",
-    "type": "Navigation/NAVIGATE",
+    "actions": Array [
+      Object {
+        "routeName": "PasswordEntry",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
@@ -180,11 +201,18 @@ Array [
 exports[`Registration action creators submitEntropy should correctly navigate to route and provide the entropy 1`] = `
 Array [
   Object {
-    "params": Object {
-      "encodedEntropy": "mockEntropy",
-    },
-    "routeName": "Loading",
-    "type": "Navigation/NAVIGATE",
+    "actions": Array [
+      Object {
+        "params": Object {
+          "encodedEntropy": "mockEntropy",
+        },
+        "routeName": "Loading",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
