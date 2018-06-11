@@ -7,7 +7,7 @@ interface DecodedWif {
 }
 
 export interface EthereumLibInterface {
-  requestEther: (address: string) => Promise<Response>
+  requestEther: (address: string) => Promise<void>
   wifToEthereumKey: (wifEncodedKey: string) => DecodedWif
 }
 
@@ -18,14 +18,19 @@ export class EthereumLib implements EthereumLibInterface  {
     this.fuelingEndpoint = fuelingEndpoint
   }
 
-  async requestEther(address: string) : Promise<Response> {
-    return fetch(this.fuelingEndpoint, {
+  async requestEther(address: string) {
+    const res = await fetch(this.fuelingEndpoint, {
       method: 'POST',
       body: JSON.stringify({ address }),
       headers: {
         'Content-Type': 'application/json'
       }
     })
+
+    if (!res.ok) {
+      const err = await res.text()
+      throw new Error(`FUELING: ${err}`)
+    }
   }
 
   wifToEthereumKey(wifEncodedKey: string) : DecodedWif {
