@@ -26,9 +26,14 @@ export const savePassword = (password : string) => {
 export const submitEntropy = (encodedEntropy: string) => {
   return (dispatch : Dispatch<AnyAction>) => {
     dispatch(navigationActions.navigatorReset({
-      routeName: routeList.Loading,
-      params: { encodedEntropy }
+      routeName: routeList.Loading
     }))
+
+    dispatch(setLoadingMsg(loading.loadingStages[0]))
+
+    setTimeout(() => {
+      dispatch(createIdentity(encodedEntropy))
+    }, 2000)
   } 
 }
 
@@ -51,7 +56,6 @@ export const finishRegistration = () => {
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
-    dispatch(setLoadingMsg(loading.loadingStages[0]))
 
     try {
       const {
