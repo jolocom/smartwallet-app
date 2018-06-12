@@ -24,6 +24,7 @@ export const AttributeCard : React.SFC<AttributeCardProps> = props => {
       marginBottom: '3%'
     },
     attributeValue: {
+      fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.headerFontSize,
       color: JolocomTheme.primaryColorBlack,
       fontWeight: '100'

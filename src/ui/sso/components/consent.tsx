@@ -25,12 +25,14 @@ interface State {
 
 const styles = StyleSheet.create({
   serviceTitle: {
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.headerFontSize,
     color: JolocomTheme.primaryColorBlack,
     fontWeight: '100'
   },
   serviceMetadata: {
     ...JolocomTheme.textStyles.light.labelDisplayField,
+    fontFamily: JolocomTheme.contentFontFamily
   },
   buttonBlock: {
     justifyContent: 'space-around',
@@ -38,6 +40,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorWhite
   },
   denyShareText:{
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorPurple,
     fontWeight: '100'
@@ -46,6 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   shareClaimsText:{
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorSand,
     fontWeight: '100'
@@ -54,11 +58,13 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
   },
   disabledShareClaimsText:{
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.disabledButtonTextGrey,
     fontWeight: '100'
   },
   fixedText: {
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorBlack,
     padding: '5%'

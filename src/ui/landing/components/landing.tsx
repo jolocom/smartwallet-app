@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   },
   header: {
     color: JolocomTheme.primaryColorSand,
+    fontFamily: JolocomTheme.contentFontFamily, 
     fontSize: JolocomTheme.landingHeaderFontSize,
     fontWeight: '100'
   },
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
   subHeader: {
     fontWeight: '100',
     color: JolocomTheme.primaryColorSand,
+    fontFamily: JolocomTheme.contentFontFamily, 
     opacity: 0.8,
     fontSize: JolocomTheme.labelFontSize,
     lineHeight: JolocomTheme.labelFontSize + 4
@@ -88,6 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: "100" 
