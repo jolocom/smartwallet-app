@@ -2,6 +2,10 @@
 
 Jolocom SmartWallet - An application to manage your digital identity.
 
+Interested in our vision? Take a look at our [whitepaper](https://jolocom.com/whitepaper/)
+
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jolocom/SmartWallet)
+
 Setup for development
 ---------------------
 
@@ -60,4 +64,4 @@ Documentation
 -------------
 Additional documentation can be found at our [wiki](https://github.com/jolocom/smartwallet-app/wiki).
 
-Copyright (C) 2014-2018  JOLOCOM UG
+Copyright (C) 2014-2018  JOLOCOM GmbH
