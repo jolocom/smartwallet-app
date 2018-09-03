@@ -16,12 +16,11 @@ interface Props {
   openClaimDetails: (claim: DecoratedClaims) => void
 }
 
-interface State {
-}
+interface State {}
 
 const styles = StyleSheet.create({
   icon: {
-    margin: "20%"
+    margin: '20%'
   },
   iconContainer: {
     height: 55,
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    elevation: 8,
+    elevation: 8
   },
   actionButtonContainer: {
     position: 'absolute',
@@ -63,58 +62,48 @@ const styles = StyleSheet.create({
 
 export class ClaimOverview extends React.Component<Props, State> {
 
-  renderClaimCards = (category: string) : ReactNode => {
+  private renderClaimCards = (category: string): ReactNode => {
     const { openClaimDetails, claims } = this.props
+
     const decoratedClaims: CategorizedClaims = claims.claims
     const categoryClaims: DecoratedClaims[] = decoratedClaims[category] || []
 
-    return categoryClaims.map((claim: DecoratedClaims, index) => {
-        return (
-          <ClaimCard
-            openClaimDetails={ openClaimDetails }
-            claimItem={ claim }
-          />
-        )
+    return categoryClaims.map((claim: DecoratedClaims) => {
+      return <ClaimCard openClaimDetails={openClaimDetails} claimItem={claim} />
     })
   }
 
   render() {
     const { claims } = this.props
     const claimsCategories = Object.keys(claims.claims)
-    const content = 
-    claims.loading ? 
-    <Block><loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} /></Block> : 
-      (claimsCategories.map((category: string) => {
-          return (
-            <View key={category}>
-              <View style={ styles.sectionContainer }>
-                <Text style={ styles.sectionHeader }>{ category.toString() }</Text>
-              </View>
-              { this.renderClaimCards(category) }
+    const content = claims.loading ? (
+      <Block>
+        <loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} />
+      </Block>
+    ) : (
+      claimsCategories.map((category: string) => {
+        return (
+          <View key={category}>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionHeader}>{category.toString()}</Text>
             </View>
-          )
-        })
-      )
+            {this.renderClaimCards(category)}
+          </View>
+        )
+      })
+    )
 
     return (
-      <Container style={ styles.componentContainer }>
-        <ScrollView 
-          style={ styles.scrollComponent } 
-          contentContainerStyle={ claims.loading ? 
-          { flexGrow: 1, justifyContent: 'space-around' } 
-          : {} }>
-            { content }
+      <Container style={styles.componentContainer}>
+        <ScrollView
+          style={styles.scrollComponent}
+          contentContainerStyle={claims.loading ? { flexGrow: 1, justifyContent: 'space-around' } : {}}
+        >
+          {content}
         </ScrollView>
-        <Block style={ styles.actionButtonContainer }>
-          <TouchableOpacity
-            style={ styles.iconContainer }
-            onPress={ this.props.onScannerStart }>
-            <Icon
-              style={ styles.icon }
-              size={ 30 }
-              name='qrcode-scan'
-              color="white"
-            />
+        <Block style={styles.actionButtonContainer}>
+          <TouchableOpacity style={styles.iconContainer} onPress={this.props.onScannerStart}>
+            <Icon style={styles.icon} size={30} name="qrcode-scan" color="white" />
           </TouchableOpacity>
         </Block>
       </Container>

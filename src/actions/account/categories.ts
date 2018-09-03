@@ -1,9 +1,4 @@
-export enum Categories {
-  Personal,
-  Contact
-}
-
-export const categoryForType: {[key: string] : string[][]} = {
+export const uiCategoryByCredentialType: {[key: string] : string[][]} = {
   'Contact': [
     ['Credential', 'ProofOfEmailCredential'],
     ['Credential', 'ProofOfMobilePhoneNumberCredential'],
