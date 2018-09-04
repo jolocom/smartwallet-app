@@ -4,6 +4,8 @@ import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
+import { JolocomLib } from 'jolocom-lib'
+import { generateMnemonic } from 'jolocom-lib/js/utils/keyDerivation'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -55,21 +57,36 @@ export const finishRegistration = () => {
 
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
-
+    const { ethereumLib,  encryptionLib, keyChainLib } = backendMiddleware
+    const seed = Buffer.from(encodedEntropy, 'hex')
+    console.log('create identity start: ', seed)
     try {
-      const {
-        didDocument,
-        mnemonic,
-        genericSigningKey,
-        ethereumKey
-      } = await jolocomLib.identity.create(encodedEntropy)
+      const identityManager = JolocomLib.identityManager.create(seed)
+     
+      const schema = identityManager.getSchema()
+      const identityKey = identityManager.deriveChildKey(schema.jolocomIdentityKey)
+      const ethereumKey = identityManager.deriveChildKey(schema.ethereumKey)
+      
+      const ethAddr = ethereumLib.privKeyToEthAddress(ethereumKey.privateKey)
+      
+      await ethereumLib.requestEther(ethAddr)
 
+      console.log('eth address: ', ethAddr)
+      
+      
+      
+      const registry = JolocomLib.registry.jolocom.create()
+      console.log('registry: ', registry)
+      
+      const identityWallet = await registry.create({
+        privateIdentityKey: identityKey.privateKey, 
+        privateEthereumKey: ethereumKey.privateKey
+      })
 
       const password = await keyChainLib.getPassword()
       const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
       const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
-      const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password })
+      const encGenWif = encryptionLib.encryptWithPass({ data: identityKey.wif, pass: password })
 
       const masterKeyData = {
         encryptedEntropy: encEntropy,
@@ -78,8 +95,8 @@ export const createIdentity = (encodedEntropy: string) => {
 
       const genericSigningKeyData = {
         encryptedWif: encGenWif,
-        path: genericSigningKey.path,
-        keyType: genericSigningKey.keyType,
+        path: identityKey.path,
+        keyType: identityKey.keyType,
         entropySource: masterKeyData
       }
 
@@ -89,36 +106,32 @@ export const createIdentity = (encodedEntropy: string) => {
         keyType: ethereumKey.keyType,
         entropySource: masterKeyData
       }
-
+      console.log('ethereum Data: ', ethereumKeyData)
       const personaData = {
-        did: didDocument.getDID(),
+        did: identityWallet.getIdentity().getDID(),
         controllingKey: genericSigningKeyData
       }
+      console.log('persona Data: ', personaData)
 
-      await storageLib.store.persona(personaData)
-      await storageLib.store.derivedKey(ethereumKeyData)
+      // await storageLib.store.persona(personaData)
+      // await storageLib.store.derivedKey(ethereumKeyData)
 
-      dispatch(setDid(didDocument.getDID()))
-      const {
-        privateKey: ethPrivKey,
-        address: ethAddr
-      } = ethereumLib.wifToEthereumKey(ethereumKey.wif)
+      dispatch(setDid(identityWallet.getIdentity().getDID()))
+     
+      // dispatch(setLoadingMsg(loading.loadingStages[1]))
+      
+      // dispatch(setLoadingMsg(loading.loadingStages[2]))
+     //  dispatch(setLoadingMsg('Registering identity on Ethereum'))
 
-      dispatch(setLoadingMsg(loading.loadingStages[1]))
-      const ipfsHash = await jolocomLib.identity.store(didDocument)
+      // await jolocomLib.identity.register({
+      //   ethereumKey: Buffer.from(ethPrivKey, 'hex'),
+      //   did: didDocument.getDID(),
+      //   ipfsHash
+      // })
 
-      dispatch(setLoadingMsg(loading.loadingStages[2]))
-      await ethereumLib.requestEther(ethAddr)
-
-      dispatch(setLoadingMsg('Registering identity on Ethereum'))
-
-        await jolocomLib.identity.register({
-        ethereumKey: Buffer.from(ethPrivKey, 'hex'),
-        did: didDocument.getDID(),
-        ipfsHash
-      })
-
-        dispatch(navigationActions.navigatorReset({
+      const mnemonic = generateMnemonic(seed)
+      
+      dispatch(navigationActions.navigatorReset({
         routeName: routeList.SeedPhrase,
         params: { mnemonic }
       }))
