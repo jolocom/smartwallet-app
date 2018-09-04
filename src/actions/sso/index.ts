@@ -33,8 +33,12 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
         const verifications: VerifiableCredential[] = await storageLib.get.vCredentialsByAttributeValue(value)
         const json = verifications.map(v => v.toJSON())
         const validVerifications = CR.applyConstraints(json)
+
+        const { did } = getState().account.did.toJS()
+
         const verificationSummaries = validVerifications.map(verification => ({
           id: verification.id,
+          selfSigned: verification.issuer === did,
           issuer: verification.issuer,
           expires: verification.expires
         }))
