@@ -22,7 +22,7 @@ export const AttributeCard : React.SFC<AttributeCardProps> = props => {
   // TODO For now we only look at the first verification on each attribute.
   const attributeValue = props.attributeValue.replace(',', ' ')
   const verification = props.attributeVerifications[0]
-  const issuer = verification.selfSigned ? 'Self Signed' : `Issuer: ${verification.issuer.substring(0, 25)}...`
+  const issuer = verification.selfSigned ? 'Self Signed' : `Issuer: ${verification.issuer.substring(0, 20)}...`
 
   const styles = StyleSheet.create({
     cardContainer: {
