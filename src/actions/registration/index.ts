@@ -6,6 +6,8 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { generateMnemonic } from 'jolocom-lib/js/utils/keyDerivation'
+import { IpfsCustomConnector } from 'src/lib/ipfs'
+import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -59,7 +61,7 @@ export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { ethereumLib,  encryptionLib, keyChainLib } = backendMiddleware
     const seed = Buffer.from(encodedEntropy, 'hex')
-    console.log('create identity start: ', seed)
+   
     try {
       const identityManager = JolocomLib.identityManager.create(seed)
      
@@ -71,12 +73,14 @@ export const createIdentity = (encodedEntropy: string) => {
       
       await ethereumLib.requestEther(ethAddr)
 
-      console.log('eth address: ', ethAddr)
-      
-      
-      
-      const registry = JolocomLib.registry.jolocom.create()
-      console.log('registry: ', registry)
+      const registry = JolocomLib.registry.jolocom.create({
+        ipfsConnector: new IpfsCustomConnector({
+          host: 'ipfs.jolocom.com',
+          port: 443,
+          protocol: 'https'
+         }),
+        ethereumConnector: jolocomEthereumResolver 
+      })
       
       const identityWallet = await registry.create({
         privateIdentityKey: identityKey.privateKey, 
