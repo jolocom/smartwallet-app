@@ -1,6 +1,6 @@
 import { claimsMetadata } from 'jolocom-lib'
 import { IClaimMetadata } from 'jolocom-lib/js/credentials/credential/types';
-import { uiCategoryByCredentialType } from '../actions/account/categories';
+import { uiCategoryByCredentialType, Categories } from '../actions/account/categories';
 
 export const areCredTypesEqual = (first: string[], second: string[]): boolean => {
   return first.every((el, index) => el === second[index])
@@ -25,5 +25,5 @@ export const getCredentialUiCategory = (type: string[]): string => {
     return credentialFitsDefinition
   })
 
-  return category || 'Other'
+  return category || Categories.Other
 }

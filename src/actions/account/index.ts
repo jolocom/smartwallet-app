@@ -56,15 +56,15 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const state = getState()
     const { jolocomLib, storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
-    const newClaims = state.account.claims.toJS().claims
+
     const credential = jolocomLib.credentials.createCredential(
       getClaimMetadataByCredentialType(claimsItem.type),
       claimsItem.claims[0].value.trim(),
       state.account.did.toJS().did
     )
 
-    const encryptionPass = await keyChainLib.getPassword()
     const currentDid = getState().account.did.get('did')
+    const encryptionPass = await keyChainLib.getPassword()
     const personaData = await storageLib.get.persona({ did: currentDid })
     const { encryptedWif } = personaData[0].controllingKey
     const decryptedWif = encryptionLib.decryptWithPass({
@@ -79,12 +79,10 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     if (claimsItem.claims[0].id) {
       await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
     }
+
     await storageLib.store.verifiableCredential(verifiableCredential)
 
-    dispatch({
-      type: 'SET_CLAIMS_FOR_DID',
-      claims: newClaims
-    })
+    await setClaimsForDid()
 
     dispatch(navigationActions.navigatorReset({
       routeName: routeList.Home
@@ -99,6 +97,7 @@ export const toggleLoading = (val: boolean) => {
   }
 }
 
+// Why is this named set and not get?
 export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const state = getState().account.claims.toJS()
@@ -126,7 +125,7 @@ const prepareClaimsForState = (credentials: VerifiableCredential[]) => {
       displayName: vCred.getDisplayName(),
       type: vCred.getType(),
       claims: [{
-        id: claimData.id,
+        id: vCred.getId(),
         name: claimFieldName,
         value: claimData[claimFieldName]
       }]

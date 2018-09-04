@@ -6,7 +6,10 @@ import { ClaimCard } from 'src/ui/home/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { ClaimsState } from 'src/reducers/account'
-import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account/'
+import { DecoratedClaims } from 'src/reducers/account/'
+import { defaultUiCategories, Categories } from '../../../actions/account/categories'
+import { initialState } from '../../../reducers/account/claims';
+import { areCredTypesEqual } from '../../../lib/util';
 const loaders = require('react-native-indicator')
 
 interface Props {
@@ -61,37 +64,9 @@ const styles = StyleSheet.create({
 })
 
 export class ClaimOverview extends React.Component<Props, State> {
-
-  private renderClaimCards = (category: string): ReactNode => {
-    const { openClaimDetails, claims } = this.props
-
-    const decoratedClaims: CategorizedClaims = claims.claims
-    const categoryClaims: DecoratedClaims[] = decoratedClaims[category] || []
-
-    return categoryClaims.map((claim: DecoratedClaims) => {
-      return <ClaimCard openClaimDetails={openClaimDetails} claimItem={claim} />
-    })
-  }
-
   render() {
     const { claims } = this.props
-    const claimsCategories = Object.keys(claims.claims)
-    const content = claims.loading ? (
-      <Block>
-        <loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} />
-      </Block>
-    ) : (
-      claimsCategories.map((category: string) => {
-        return (
-          <View key={category}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionHeader}>{category.toString()}</Text>
-            </View>
-            {this.renderClaimCards(category)}
-          </View>
-        )
-      })
-    )
+    const content = claims.loading ? this.renderLoadingScreen() : this.renderCategories(defaultUiCategories)
 
     return (
       <Container style={styles.componentContainer}>
@@ -101,12 +76,62 @@ export class ClaimOverview extends React.Component<Props, State> {
         >
           {content}
         </ScrollView>
+
         <Block style={styles.actionButtonContainer}>
           <TouchableOpacity style={styles.iconContainer} onPress={this.props.onScannerStart}>
             <Icon style={styles.icon} size={30} name="qrcode-scan" color="white" />
           </TouchableOpacity>
         </Block>
       </Container>
+    )
+  }
+
+  private renderCategories = (categories: string[]) => {
+    const toRender = categories.map(category => this.renderCategory(category))
+    return [...toRender, this.renderCategory(Categories.Other)]
+  }
+
+  private renderCategory = (category: string) => {
+    const credentialCards = this.renderCredentialsForCategory(category)
+
+    if (!credentialCards.length) {
+      return null
+    }
+
+    return (
+      <View key={category}>
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionHeader}>{category.toString()}</Text>
+        </View>
+        {credentialCards}
+      </View>
+    )
+  }
+
+  private renderCredentialsForCategory(category: string): ReactNode[] {
+    const { openClaimDetails, claims } = this.props
+
+    const decoratedClaims: DecoratedClaims[] = claims.decoratedCredentials[category] || []
+    const defaultEntriesForCategory = initialState.decoratedCredentials[category] || []
+
+    const missingEntries = defaultEntriesForCategory.filter(expectedEntryType =>
+      !decoratedClaims.find(credential => areCredTypesEqual(credential.type, expectedEntryType.type))
+    )
+
+    const placeholders = missingEntries.map(missingCred => <ClaimCard openClaimDetails={openClaimDetails} claimItem={missingCred} />)
+
+    const localCredentials = decoratedClaims.map((claim: DecoratedClaims) => {
+      return <ClaimCard openClaimDetails={openClaimDetails} claimItem={claim} />
+    })
+
+    return [...localCredentials, ...placeholders]
+  }
+
+  private renderLoadingScreen() {
+    return (
+      <Block>
+        <loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} />
+      </Block>
     )
   }
 }

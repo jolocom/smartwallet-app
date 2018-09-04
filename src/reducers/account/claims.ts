@@ -3,33 +3,33 @@ import Immutable from 'immutable'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 
 const categorizedClaims: CategorizedClaims = {
-  'Personal' : [{
-      displayName: 'Name',
-      type: ['Credential', 'ProofOfNameCredential'],
-      claims: [{
-        id: '',
-        name: 'name',
-        value: '',
-      }],
+  'Personal': [{
+    displayName: 'Name',
+    type: ['Credential', 'ProofOfNameCredential'],
+    claims: [{
+      id: '',
+      name: 'name',
+      value: '',
     }],
+  }],
   'Contact': [{
-      displayName: 'E-mail',
-      type: ['Credential', 'ProofOfEmailCredential'],
-      claims: [{
-        id: '',
-        name: 'email',
-        value: ''
-      }],
-    },
-    {
-      displayName: 'Phone',
-      type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
-      claims: [{
-        id: '',
-        name: 'phone',
-        value: ''
-      }],
-    }]
+    displayName: 'E-mail',
+    type: ['Credential', 'ProofOfEmailCredential'],
+    claims: [{
+      id: '',
+      name: 'email',
+      value: ''
+    }],
+  },
+  {
+    displayName: 'Phone',
+    type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
+    claims: [{
+      id: '',
+      name: 'phone',
+      value: ''
+    }],
+  }]
 }
 
 export const initialState: ClaimsState = {
@@ -39,7 +39,7 @@ export const initialState: ClaimsState = {
     type: ['', ''],
     claims: []
   },
-  claims: categorizedClaims
+  decoratedCredentials: categorizedClaims
 }
 
 export const claims = (state = Immutable.fromJS(initialState), action: AnyAction): ClaimsState => {
@@ -47,7 +47,7 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
-      return state.setIn(['claims'], action.claims).setIn(['loading'], false)
+      return state.setIn(['decoratedCredentials'], action.claims).setIn(['loading'], false)
     case 'SET_SELECTED':
       return state.setIn(['selected'], action.selected)
     default:
