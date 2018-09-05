@@ -23,7 +23,7 @@ export interface CategorizedClaims {
 export interface ClaimsState {
   readonly loading: boolean
   readonly selected: DecoratedClaims
-  readonly claims: CategorizedClaims
+  readonly decoratedCredentials: CategorizedClaims
 }
 
 export interface DidState {
@@ -34,6 +34,7 @@ export interface LoadingState {
   readonly loading: boolean
 }
 
+// TODO avoid state.account.did.did access patterns
 export interface AccountState {
   did: DidState,
   claims: ClaimsState,

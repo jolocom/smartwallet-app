@@ -18,53 +18,6 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
     }
   >
     <Component
-      key="Personal"
-    >
-      <Component
-        style={
-          Object {
-            "marginBottom": 8,
-            "marginLeft": 16,
-            "marginRight": 16,
-            "marginTop": 27,
-          }
-        }
-      >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-          style={
-            Object {
-              "fontFamily": "TT Commons",
-              "fontSize": 17,
-              "textAlign": "left",
-            }
-          }
-        >
-          Personal
-        </Text>
-      </Component>
-      <ClaimCard
-        claimItem={
-          Object {
-            "claims": Array [
-              Object {
-                "id": "default1",
-                "name": "name",
-                "value": "name",
-              },
-            ],
-            "displayName": "Name",
-            "type": Array [
-              "Credential",
-              "ProofOfNameCredential",
-            ],
-          }
-        }
-      />
-    </Component>
-    <Component
       key="Contact"
     >
       <Component
@@ -124,6 +77,100 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
             "type": Array [
               "Credential",
               "ProofOfMobilePhoneNumberCredential",
+            ],
+          }
+        }
+      />
+    </Component>
+    <Component
+      key="Personal"
+    >
+      <Component
+        style={
+          Object {
+            "marginBottom": 8,
+            "marginLeft": 16,
+            "marginRight": 16,
+            "marginTop": 27,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontFamily": "TT Commons",
+              "fontSize": 17,
+              "textAlign": "left",
+            }
+          }
+        >
+          Personal
+        </Text>
+      </Component>
+      <ClaimCard
+        claimItem={
+          Object {
+            "claims": Array [
+              Object {
+                "id": "default1",
+                "name": "name",
+                "value": "name",
+              },
+            ],
+            "displayName": "Name",
+            "type": Array [
+              "Credential",
+              "ProofOfNameCredential",
+            ],
+          }
+        }
+      />
+    </Component>
+    <Component
+      key="Other"
+    >
+      <Component
+        style={
+          Object {
+            "marginBottom": 8,
+            "marginLeft": 16,
+            "marginRight": 16,
+            "marginTop": 27,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontFamily": "TT Commons",
+              "fontSize": 17,
+              "textAlign": "left",
+            }
+          }
+        >
+          Other
+        </Text>
+      </Component>
+      <ClaimCard
+        claimItem={
+          Object {
+            "claims": Array [
+              Object {
+                "id": "default1",
+                "name": "Age",
+                "value": "50",
+              },
+            ],
+            "displayName": "Age",
+            "type": Array [
+              "Credential",
+              "ProofOfAge",
             ],
           }
         }
