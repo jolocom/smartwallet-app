@@ -1,4 +1,4 @@
-// Why is this in actions TODO
+// Why is this in actions >> TODO
 export const uiCategoryByCredentialType: {[key: string] : string[][]} = {
   'Contact': [
     ['Credential', 'ProofOfEmailCredential'],
