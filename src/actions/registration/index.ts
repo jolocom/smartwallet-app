@@ -61,7 +61,7 @@ export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { ethereumLib,  encryptionLib, keyChainLib, storageLib } = backendMiddleware
     const seed = Buffer.from(encodedEntropy, 'hex')
-    console.log('create identity: ', storageLib)
+    
     try {
       const identityManager = JolocomLib.identityManager.create(seed)
      
