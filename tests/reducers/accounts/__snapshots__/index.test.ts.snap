@@ -12,7 +12,7 @@ Object {
       ],
       "claims": Immutable.List [],
     },
-    "claims": Immutable.Map {
+    "decoratedCredentials": Immutable.Map {
       "Personal": Immutable.List [
         Immutable.Map {
           "displayName": "Name",
@@ -82,7 +82,7 @@ Object {
       ],
       "claims": Immutable.List [],
     },
-    "claims": Immutable.Map {
+    "decoratedCredentials": Immutable.Map {
       "Personal": Immutable.List [
         Immutable.Map {
           "displayName": "Name",

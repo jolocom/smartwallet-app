@@ -2,11 +2,20 @@ import React from 'react'
 import { ClaimOverview } from 'src/ui/home/components/claimOverview'
 import { shallow } from 'enzyme'
 
-describe('ClaimsOverview component', ()=> {
+describe.only('ClaimsOverview component', ()=> {
   const COMMON_PROPS = {
     claims: {
       loading: false,
-      claims: {
+      decoratedCredentials: {
+        'Other': [{
+            displayName: 'Age',
+            type: ['Credential', 'ProofOfAge'],
+            claims: [{
+              id: 'default1',
+              name: 'Age',
+              value: '50',
+            }],
+        }],
         'Personal' : [{
             displayName: 'Name',
             type: ['Credential', 'ProofOfNameCredential'],

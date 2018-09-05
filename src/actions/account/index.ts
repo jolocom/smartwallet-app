@@ -3,10 +3,8 @@ import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
-import { categoryForType } from 'src/actions/account/categories'
-import { claimsMetadata } from 'jolocom-lib'
 import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
-import { initialState } from 'src/reducers/account/claims'
+import { getClaimMetadataByCredentialType, getCredentialUiCategory } from '../../lib/util'
 
 export const setDid = (did: string) => {
   return {
@@ -55,38 +53,19 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
 }
 
 export const saveClaim = (claimsItem: DecoratedClaims) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const state = getState()
     const { jolocomLib, storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
-    let newClaims = {}
-
-    newClaims = state.account.claims.toJS().claims
-
-    // TODO: change the key of claimsMetadata to be the type[1]
-    let claimsMetadataType = ''
-    switch(claimsItem.type[1]) {
-      case 'ProofOfNameCredential':
-        claimsMetadataType = 'name'
-        break
-      case 'ProofOfMobilePhoneNumberCredential':
-        claimsMetadataType = 'mobilePhoneNumber'
-        break
-      case 'ProofOfEmailCredential':
-        claimsMetadataType = 'emailAddress'
-        break
-      default:
-        break
-    }
 
     const credential = jolocomLib.credentials.createCredential(
-      claimsMetadata[claimsMetadataType],
+      getClaimMetadataByCredentialType(claimsItem.type),
       claimsItem.claims[0].value.trim(),
       state.account.did.toJS().did
     )
 
-    const encryptionPass = await keyChainLib.getPassword()
     const currentDid = getState().account.did.get('did')
-    const personaData = await storageLib.get.persona({did: currentDid})
+    const encryptionPass = await keyChainLib.getPassword()
+    const personaData = await storageLib.get.persona({ did: currentDid })
     const { encryptedWif } = personaData[0].controllingKey
     const decryptedWif = encryptionLib.decryptWithPass({
       cipher: encryptedWif,
@@ -97,15 +76,14 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
     const verifiableCredential = await wallet.signCredential(credential)
 
-    if (claimsItem.claims[0].id && claimsItem.claims[0].id !== '') {
+    if (claimsItem.claims[0].id) {
       await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
     }
+
     await storageLib.store.verifiableCredential(verifiableCredential)
 
-    dispatch({
-      type: 'SET_CLAIMS_FOR_DID',
-      claims: newClaims
-    })
+    await setClaimsForDid()
+
     dispatch(navigationActions.navigatorReset({
       routeName: routeList.Home
     }))
@@ -119,6 +97,7 @@ export const toggleLoading = (val: boolean) => {
   }
 }
 
+// Why is this named set and not get?
 export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const state = getState().account.claims.toJS()
@@ -135,58 +114,33 @@ export const setClaimsForDid = () => {
   }
 }
 
-const prepareClaimsForState = (claims: VerifiableCredential[]) => {
-  // TODO: Handle the category 'Other' for the claims that don't match any of predefined categories
+const prepareClaimsForState = (credentials: VerifiableCredential[]) => {
   const categorizedClaims = {}
-  const initialClaimsState = initialState
 
-  Object.keys(categoryForType).forEach(category => {
-    const claimsForCategory : DecoratedClaims[] = []
+  const decoratedCredentials = credentials.map(vCred => {
+    const claimData = vCred.getCredentialSection()
+    const claimFieldName = Object.keys(claimData).filter(key => key !== 'id')[0]
 
-    claims.forEach(claim => {
-      const name = claim.getDisplayName()
-      const fieldName = Object.keys(claim.getCredentialSection())[1]
-      const value = claim.getCredentialSection()[fieldName]
-
-      if (typeInCategory(category, claim.getType())) {
-        claimsForCategory.push(
-          { displayName: name,
-            type: claim.getType(),
-            claims: [
-              { id: claim.getId(),
-                name: fieldName,
-                value }
-            ]
-          } as DecoratedClaims
-        )
-      }
-    })
-    if (claimsForCategory.length === 0) {
-      categorizedClaims[category] = initialClaimsState.claims[category]
-    } else {
-      initialClaimsState.claims[category].forEach(claim => {
-        let count = 0
-        claimsForCategory.forEach(dbClaim => {
-          if (areCredTypesEqual(claim.type, dbClaim.type)) {
-            count++
-          }
-        })
-        if (count === 0) {
-          claimsForCategory.push(claim)
-        }
-      })
-      categorizedClaims[category] = claimsForCategory
+    return {
+      displayName: vCred.getDisplayName(),
+      type: vCred.getType(),
+      claims: [{
+        id: vCred.getId(),
+        name: claimFieldName,
+        value: claimData[claimFieldName]
+      }]
     }
   })
+
+  decoratedCredentials.forEach(decoratedCred => {
+    const uiCategory = getCredentialUiCategory(decoratedCred.type)
+
+    try {
+      categorizedClaims[uiCategory].push(decoratedCred)
+    } catch (err) {
+      categorizedClaims[uiCategory] = [decoratedCred]
+    }
+  })
+
   return categorizedClaims
-}
-
-// TODO: use the method from JolocomLib
-const areCredTypesEqual = (first: string[], second: string[]): boolean => {
-  return first.every((el, index) => el === second[index])
-}
-
-const typeInCategory = (category: string, type: string[]): boolean => {
-  const found = categoryForType[category].find(t => areCredTypesEqual(type, t))
-  return (found && found.length > 0) || false
 }

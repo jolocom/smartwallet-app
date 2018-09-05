@@ -27,9 +27,6 @@ export class ClaimDetailsContainer extends React.Component<Props, State> {
     }
   }
 
-  componentWillMount() {
-  }
-
   render() {
       return (
         <ClaimDetailsComponent

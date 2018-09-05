@@ -11,6 +11,8 @@ import {
   EmailIcon,
   PhoneIcon
 } from 'src/resources'
+import { getCredentialUiCategory } from '../../../lib/util';
+import { Categories } from '../../../actions/account/categories';
 
 interface Props {
   openClaimDetails: (claim: DecoratedClaims) => void
@@ -63,29 +65,15 @@ const styles = StyleSheet.create({
 })
 
 export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
-  const claim = claimItem.claims[0]
-  const { value, name } = claim
-  const displayName = claimItem.displayName
+  const { value, name } = claimItem.claims[0]
+  const { displayName } = claimItem
   const type = claimItem.type[1]
 
   const content = []
 
   // TODO: Extract multi line claim card to a separate component
   if (value && name === 'name' && typeof value === 'string') {
-    const splitName = value.split(',')
-    content.push({
-      value: splitName[0],
-      fieldName: name + 'first',
-      type,
-      label: 'First Name',
-      showIcon: true
-    }, {
-      value: splitName[1],
-      fieldName: name + 'last',
-      type,
-      label: 'Last Name',
-      showIcon: false
-    })
+    content.push(...splitNameCredential(name, value, type))
   } else {
     content.push({value: value || '', fieldName: name, type, label: displayName, showIcon: true})
   }
@@ -112,6 +100,8 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
       textDisplayField
     } = JolocomTheme.textStyles.light
 
+    const isOtherCategory = getCredentialUiCategory(claimItem.type) === Categories.Other
+
     return (
       <ListItem
         key={ fieldName }
@@ -132,16 +122,16 @@ export const ClaimCard : React.SFC<Props> = ({openClaimDetails, claimItem}) => {
         }}
         leftElement={ showIcon ? renderLeftIcon(type) : '' }
         onPress={ claimVal ? undefined : () =>  openClaimDetails(claimItem)}
-        rightElement={ claimVal && showIcon ? renderMoreMenu() : '' }
+        rightElement={ claimVal && showIcon && !isOtherCategory ? renderMoreMenu() : '' }
       />
     )
   }
 
-  return(
-    <View style={ styles.containerField }>
-      { content.map((c, index) => {
+  return (
+    <View style={styles.containerField}>
+      {content.map(c => {
         return renderCard(c.value, c.fieldName, c.type, c.label, c.showIcon)
-      }) }
+      })}
     </View>
   )
 }
@@ -156,4 +146,21 @@ const prepareLabel = (myString : string) : string => {
     })
   }
   return myString[0].toUpperCase() + myString.slice(1)
+}
+
+const splitNameCredential = (fieldName: string, value: string, type: string) => {
+  const splitName = value.split(',')
+  return [{
+    value: splitName[0],
+    fieldName: fieldName + 'first',
+    type,
+    label: 'First Name',
+    showIcon: true
+  }, {
+    value: splitName[1],
+    fieldName: fieldName + 'last',
+    type,
+    label: 'Last Name',
+    showIcon: false
+  }]
 }
