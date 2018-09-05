@@ -8,6 +8,7 @@ export interface StateAttributeSummary {
 export interface StateVerificationSummary {
   id: string
   issuer: string
+  selfSigned: boolean
   expires: string | undefined
 }
 export interface StateTypeSummary {

@@ -34,6 +34,7 @@ export interface LoadingState {
   readonly loading: boolean
 }
 
+// TODO avoid state.account.did.did access patterns
 export interface AccountState {
   did: DidState,
   claims: ClaimsState,
