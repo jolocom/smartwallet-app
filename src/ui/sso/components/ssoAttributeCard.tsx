@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { IconToggle } from 'react-native-material-ui'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { StateVerificationSummary } from '../../../reducers/sso';
+import Icon from 'react-native-vector-icons/Ionicons'
 
 // TODO Self signed or not
 // TODO Generic group component as opposed to view for flex grouping
@@ -12,9 +14,16 @@ interface AttributeCardProps {
   onCheck: Function
   checked: boolean
   attributeValue: string
+  attributeVerifications: StateVerificationSummary[]
 }
 
 export const AttributeCard : React.SFC<AttributeCardProps> = props => {
+
+  // TODO For now we only look at the first verification on each attribute.
+  const attributeValue = props.attributeValue.replace(',', ' ')
+  const verification = props.attributeVerifications[0]
+  const issuer = verification.selfSigned ? 'Self Signed' : `Issuer: ${verification.issuer.substring(0, 20)}...`
+
   const styles = StyleSheet.create({
     cardContainer: {
       flexDirection: 'row', 
@@ -28,18 +37,27 @@ export const AttributeCard : React.SFC<AttributeCardProps> = props => {
       fontSize: JolocomTheme.headerFontSize,
       color: JolocomTheme.primaryColorBlack,
       fontWeight: '100'
+    },
+    issuerSection: {
+      fontFamily: JolocomTheme.contentFontFamily,
+      fontSize: 17,
+      color: verification.selfSigned ? '#a0a0a3' : '#28a52d',
+      marginTop: '2%',
+      fontWeight: '100'
     }
   })
-  const attributeValue = props.attributeValue.replace(',', ' ')
+
+  const {checked, onCheck} = props
+
   return <View style={styles.cardContainer}>
     <View>
       <Text style={styles.attributeValue}> {attributeValue} </Text>
-      <Text> Self Signed </Text>
+      <Text style={styles.issuerSection}> <Icon name='md-done-all' size={18} /> {issuer} </Text>
     </View>
     <IconToggle 
-      name={props.checked ? 'check-circle': 'fiber-manual-record'} 
-      onPress={() => props.onCheck(props.attributeValue)}
-      color={props.checked ? JolocomTheme.primaryColorPurple : JolocomTheme.disabledButtonBackgroundGrey}
+      name={checked ? 'check-circle': 'fiber-manual-record'} 
+      onPress={() => onCheck(props.attributeValue)}
+      color={checked ? JolocomTheme.primaryColorPurple : JolocomTheme.disabledButtonBackgroundGrey}
     />
   </View>
 }
