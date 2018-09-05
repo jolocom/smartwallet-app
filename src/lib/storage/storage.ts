@@ -8,7 +8,7 @@ import {
   SignatureEntity,
   CredentialEntity
 } from 'src/lib/storage/entities'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 interface PersonaAttributes {
   did: string
@@ -67,7 +67,7 @@ export class Storage {
     })
   }
 
-  private async getVCredential(query?: object) : Promise<VerifiableCredential[]> {
+  private async getVCredential(query?: object) : Promise<SignedCredential[]> {
     await this.createConnectionIfNeeded()
     const entities = await this.connection.manager.find(VerifiableCredentialEntity, {
       where: query,
@@ -91,7 +91,7 @@ export class Storage {
     return localAttributes.map(attribute => attribute.encryptedValue)
   }
 
-  private async getVCredentialsForAttribute(attribute: string) : Promise<VerifiableCredential[]> {
+  private async getVCredentialsForAttribute(attribute: string) : Promise<SignedCredential[]> {
     await this.createConnectionIfNeeded()
     const entities = await this.connection
       .getRepository(VerifiableCredentialEntity)
@@ -123,7 +123,7 @@ export class Storage {
     await this.connection.manager.save(derivedKey)
   }
 
-  private async storeVClaim(vCred: VerifiableCredential) : Promise<void> {
+  private async storeVClaim(vCred: SignedCredential) : Promise<void> {
     await this.createConnectionIfNeeded()
     const verifiableCredential = VerifiableCredentialEntity.fromVeriableCredential(vCred)
     const signature = SignatureEntity.fromLinkedDataSignature(vCred.getProofSection())
@@ -144,14 +144,14 @@ export class Storage {
       .createQueryBuilder()
       .delete()
       .from(CredentialEntity)
-      .where('verifiableCredential = :id', { id: id})
+      .where('verifiableCredential = :id', { id: id })
       .execute()
 
     await this.connection.manager
       .createQueryBuilder()
       .delete()
       .from(SignatureEntity)
-      .where('verifiableCredential = :id', { id: id})
+      .where('verifiableCredential = :id', { id: id })
       .delete()
       .execute()
 
@@ -159,7 +159,7 @@ export class Storage {
       .createQueryBuilder()
       .delete()
       .from(VerifiableCredentialEntity)
-      .where('id = :id', { id: id})
+      .where('id = :id', { id: id })
       .execute()
   }
 }

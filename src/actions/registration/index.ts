@@ -59,9 +59,9 @@ export const finishRegistration = () => {
 
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    const { ethereumLib,  encryptionLib, keyChainLib } = backendMiddleware
+    const { ethereumLib,  encryptionLib, keyChainLib, storageLib } = backendMiddleware
     const seed = Buffer.from(encodedEntropy, 'hex')
-   
+    console.log('create identity: ', storageLib)
     try {
       const identityManager = JolocomLib.identityManager.create(seed)
      
@@ -92,8 +92,9 @@ export const createIdentity = (encodedEntropy: string) => {
         keyType: ethereumKey.keyType,
         entropySource: masterKeyData
       }
-      console.log('ethereum Data: ', ethereumKeyData)
-      // await storageLib.store.derivedKey(ethereumKeyData)
+      
+      await storageLib.store.derivedKey(ethereumKeyData)
+     
       dispatch(setLoadingMsg(loading.loadingStages[1]))
      
       const ethAddr = ethereumLib.privKeyToEthAddress(ethereumKey.privateKey) 
@@ -119,8 +120,8 @@ export const createIdentity = (encodedEntropy: string) => {
         did: identityWallet.getIdentity().getDID(),
         controllingKey: genericSigningKeyData
       }
-      console.log('persona Data: ', personaData)
-      // await storageLib.store.persona(personaData)
+      
+      await storageLib.store.persona(personaData)
      
       dispatch(setDid(identityWallet.getIdentity().getDID()))
       dispatch(setLoadingMsg(loading.loadingStages[3]))
