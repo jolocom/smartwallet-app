@@ -26,7 +26,7 @@ const categorizedClaims: CategorizedClaims = {
     type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
     claims: [{
       id: '',
-      name: 'phone',
+      name: 'telephone',
       value: ''
     }],
   }]

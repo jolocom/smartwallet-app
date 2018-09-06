@@ -2,7 +2,7 @@ import { AnyAction, Dispatch } from 'redux'
 import { genericActions, navigationActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
-import { DecoratedClaims } from 'src/reducers/account'
+import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { getClaimMetadataByCredentialType, getCredentialUiCategory } from '../../lib/util'
 
@@ -44,7 +44,7 @@ export const checkIdentityExists = () => {
 export const setIdentityWallet = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { ethereumLib, keyChainLib, storageLib, encryptionLib } = backendMiddleware
-    console.log('setIdentityWallet')
+
     try {
       const did = getState().account.did.get('did')
       const encryptionPass = await keyChainLib.getPassword()
@@ -79,17 +79,17 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
 export const saveClaim = (claimsItem: DecoratedClaims) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { identityWallet, storageLib } = backendMiddleware
-  
+   
     const credential = identityWallet.create.credential({
       metadata: getClaimMetadataByCredentialType(claimsItem.type),
       claim: {
-        id: claimsItem.claims[0].id,
+        id: getState().account.did.get('did'),
         [claimsItem.claims[0].name]: claimsItem.claims[0].value
       }
     })
-  
+   
     const verifiableCredential = await identityWallet.sign.credential(credential)
-    console.log('verifiable credential: ', verifiableCredential)
+    
     if (claimsItem.claims[0].id) {
       await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
     }
