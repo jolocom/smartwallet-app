@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from 'redux'
-import { navigationActions, genericActions } from 'src/actions/'
+import { navigationActions, genericActions, accountActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
@@ -125,6 +125,7 @@ export const createIdentity = (encodedEntropy: string) => {
      
       dispatch(setDid(identityWallet.getIdentity().getDID()))
       dispatch(setLoadingMsg(loading.loadingStages[3]))
+      dispatch(accountActions.setIdentityWallet())
       dispatch(navigationActions.navigatorReset({
         routeName: routeList.SeedPhrase,
         params: { mnemonic: generateMnemonic(seed) }

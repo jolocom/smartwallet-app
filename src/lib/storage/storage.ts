@@ -124,6 +124,7 @@ export class Storage {
   }
 
   private async storeVClaim(vCred: SignedCredential) : Promise<void> {
+    console.log('store verifiable credential agent', vCred)
     await this.createConnectionIfNeeded()
     const verifiableCredential = VerifiableCredentialEntity.fromVeriableCredential(vCred)
     const signature = SignatureEntity.fromLinkedDataSignature(vCred.getProofSection())
