@@ -154,7 +154,7 @@ Array [
     at Object.entropyToMnemonic (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/bip39/index.js:98:34)
     at Object.generateMnemonic (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jolocom-lib/js/utils/keyDerivation.js:6:18)
     at IdentityManager.Object.<anonymous>.IdentityManager.deriveChildKey (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jolocom-lib/js/identityManager/identityManager.js:26:38)
-    at /home/natascha/Documents/dev/four/smartwallet-app/src/actions/registration/index.ts:68:43
+    at /home/natascha/Documents/dev/four/smartwallet-app/src/actions/registration/index.ts:69:43
     at step (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:133:27)
     at Object.next (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:114:57)
     at /home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:107:75
@@ -163,7 +163,7 @@ Array [
     at new Promise (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:66:3)
     at Object.__awaiter (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:103:16)
     at /home/natascha/Documents/dev/four/smartwallet-app/src/actions/registration/index.ts:61:106
-    at /home/natascha/Documents/dev/four/smartwallet-app/tests/actions/registration/index.test.ts:134:13
+    at /home/natascha/Documents/dev/four/smartwallet-app/tests/actions/registration/index.test.ts:133:13
     at step (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:133:27)
     at Object.next (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:114:57)
     at /home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:107:75
@@ -171,7 +171,7 @@ Array [
     at doResolve (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:200:13)
     at new Promise (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:66:3)
     at Object.__awaiter (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:103:16)
-    at Object.<anonymous> (/home/natascha/Documents/dev/four/smartwallet-app/tests/actions/registration/index.test.ts:117:60)
+    at Object.<anonymous> (/home/natascha/Documents/dev/four/smartwallet-app/tests/actions/registration/index.test.ts:116:60)
     at Object.asyncFn (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)
     at resolve (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:52:12)
     at new Promise (<anonymous>)
