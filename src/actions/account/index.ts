@@ -16,21 +16,20 @@ export const setDid = (did: string) => {
 // TODO Abstract parsing of error messages
 export const checkIdentityExists = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    // const { storageLib } = backendMiddleware
+    const { storageLib } = backendMiddleware
 
     try {
-      // const personas = await storageLib.get.persona()
-      // if (!personas.length) {
-      if(true) {
+      const personas = await storageLib.get.persona()
+      if (!personas.length) {
         dispatch(genericActions.toggleLoadingScreen(false))
         return
       }
-
-      // dispatch(setDid(personas[0].did))
-      // dispatch(genericActions.toggleLoadingScreen(false))
-      // dispatch(navigationActions.navigatorReset( 
-      //   { routeName: routeList.Home }
-      // ))
+     
+      dispatch(setDid(personas[0].did))
+      dispatch(genericActions.toggleLoadingScreen(false))
+      dispatch(navigationActions.navigatorReset( 
+        { routeName: routeList.Home }
+      ))
     } catch(err) {
       if (err.message.indexOf('no such table') === 0) {
         return
@@ -101,8 +100,8 @@ export const toggleLoading = (val: boolean) => {
 // Why is this named set and not get?
 export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const state = getState().account.claims.toJS()
-    dispatch(toggleLoading(!state.loading))
+    // const state = getState().account.claims.toJS()
+    // dispatch(toggleLoading(!state.loading))
     // const storageLib = backendMiddleware.storageLib
 
     // const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
