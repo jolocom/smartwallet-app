@@ -3,6 +3,7 @@ import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import data from './data/mockRegistrationData'
 const MockDate = require('mockdate')
+import { JolocomLib } from 'jolocom-lib'
 
 describe('Registration action creators', () => {
   describe('savePassword', () => {
@@ -67,30 +68,21 @@ describe('Registration action creators', () => {
   })
 
   describe('createIdentity', () => {
-    it('should attempt to create an identity', async () => {
+    it('should attempt to create an identity', async () => {     
       MockDate.set(new Date(946681200000))
+      
       const mockStore = configureStore([thunk])({})
+      const { getPasswordResult, cipher, entropy, identityWallet } = data
+  
+      JolocomLib.registry.jolocom.create = jest.fn().mockReturnValue({
+        create: () =>  identityWallet
+      })
 
-      const {didDocument, mnemonic, genericSigningKey, ethereumKey} = data
-      const mockCreationResults = {
-        didDocument,
-        mnemonic,
-        genericSigningKey,
-        ethereumKey
-      }
-
-      const {ipfsHash, decodedWif, getPasswordResult, cipher, entropy} = data
       const mockBackend = {
-        jolocomLib: {
-          identity: {
-            create: jest.fn().mockResolvedValue(mockCreationResults),
-            store: jest.fn().mockResolvedValue(ipfsHash),
-            register: jest.fn()
-          }
-        },
+        identityWallet,
         ethereumLib: {
-          wifToEthereumKey: jest.fn().mockReturnValue(decodedWif),
-          requestEther: jest.fn()
+          requestEther: jest.fn(),
+          privKeyToEthAddress: jest.fn().mockReturnValue('0x000test')
         },
         keyChainLib: {
           getPassword: jest.fn().mockResolvedValue(getPasswordResult)
@@ -105,20 +97,18 @@ describe('Registration action creators', () => {
       }
 
       const mockGetState = () => {}
-
+     
       const asyncAction = registrationActions.createIdentity(entropy)
       await asyncAction(mockStore.dispatch, mockGetState, mockBackend)
 
       expect(mockStore.getActions()).toMatchSnapshot()
 
       expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
-      expect(mockBackend.jolocomLib.identity.create.mock.calls).toMatchSnapshot()
       expect(mockBackend.encryptionLib.encryptWithPass.mock.calls).toMatchSnapshot()
       expect(mockBackend.storageLib.store.persona.mock.calls).toMatchSnapshot()
       expect(mockBackend.storageLib.store.derivedKey.mock.calls).toMatchSnapshot()
-      expect(mockBackend.ethereumLib.wifToEthereumKey.mock.calls).toMatchSnapshot()
+      expect(mockBackend.ethereumLib.privKeyToEthAddress.mock.calls).toMatchSnapshot()
       expect(mockBackend.ethereumLib.requestEther.mock.calls).toMatchSnapshot()
-      expect(mockBackend.jolocomLib.identity.register.mock.calls).toMatchSnapshot()
 
       MockDate.reset()
     })

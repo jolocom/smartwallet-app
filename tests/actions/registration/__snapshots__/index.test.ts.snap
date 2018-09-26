@@ -3,26 +3,26 @@
 exports[`Registration action creators createIdentity should attempt to create an identity 1`] = `
 Array [
   Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Fueling with ether",
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Registering decentralized identity",
+  },
+  Object {
     "type": "DID_SET",
     "value": "did:jolo:mockdid",
   },
   Object {
     "type": "SET_LOADING_MSG",
-    "value": "Storing data on IPFS",
-  },
-  Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Fueling with Ether",
-  },
-  Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Registering identity on Ethereum",
+    "value": "Preparing launch",
   },
   Object {
     "actions": Array [
       Object {
         "params": Object {
-          "mnemonic": "all all all all all all all all all all all all",
+          "mnemonic": "exhibit history avoid kit gaze pulse yellow portion hold lottery panda figure",
         },
         "routeName": "SeedPhrase",
         "type": "Navigation/NAVIGATE",
@@ -38,14 +38,6 @@ Array [
 exports[`Registration action creators createIdentity should attempt to create an identity 2`] = `
 Array [
   Array [
-    "4f8d84403d760b5b3fc5426c90827dab",
-  ],
-]
-`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `
-Array [
-  Array [
     Object {
       "data": "4f8d84403d760b5b3fc5426c90827dab",
       "pass": "secret",
@@ -53,20 +45,20 @@ Array [
   ],
   Array [
     Object {
-      "data": "Zm2Luz5JV2VCoSTPuUZtCgmA9rcZ2SY8umUJKzC5rtJAhUwMDQ6a",
+      "data": "Ky3KXReecYBMU9Z3DtT4eqSTNnmvLU2ZhNdhA73HLzJ5Vyem1Xw7",
       "pass": "secret",
     },
   ],
   Array [
     Object {
-      "data": "KzC5rtJAhUwMDQ6aZm2Luz5JV2VCoSTPuUZtCgmA9rcZ2SY8umUJ",
+      "data": "Kx91VxnTCKqtsQjJLv4TB6YDCnwaiKYwsgEXqk6TzTjijzyx5xEY",
       "pass": "secret",
     },
   ],
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `
 Array [
   Array [
     Object {
@@ -77,7 +69,7 @@ Array [
           "timestamp": 946681200000,
         },
         "keyType": "ECDSA secp256k1",
-        "path": "m/0/0",
+        "path": "m/73'/0'/0'/0",
       },
       "did": "did:jolo:mockdid",
     },
@@ -85,7 +77,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
 Array [
   Array [
     Object {
@@ -95,7 +87,51 @@ Array [
         "timestamp": 946681200000,
       },
       "keyType": "ECDSA secp256k1",
-      "path": "m/0/1",
+      "path": "m/44'/60'/0'/0/0",
+    },
+  ],
+]
+`;
+
+exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
+Array [
+  Array [
+    Object {
+      "data": Array [
+        54,
+        84,
+        85,
+        238,
+        93,
+        32,
+        99,
+        114,
+        226,
+        221,
+        36,
+        123,
+        122,
+        227,
+        246,
+        199,
+        45,
+        77,
+        141,
+        115,
+        59,
+        162,
+        196,
+        243,
+        225,
+        231,
+        162,
+        184,
+        203,
+        168,
+        66,
+        180,
+      ],
+      "type": "Buffer",
     },
   ],
 ]
@@ -104,30 +140,7 @@ Array [
 exports[`Registration action creators createIdentity should attempt to create an identity 6`] = `
 Array [
   Array [
-    "Zm2Luz5JV2VCoSTPuUZtCgmA9rcZ2SY8umUJKzC5rtJAhUwMDQ6a",
-  ],
-]
-`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 7`] = `
-Array [
-  Array [
-    "0x5000000000000000000000000000000000000000",
-  ],
-]
-`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 8`] = `
-Array [
-  Array [
-    Object {
-      "did": "did:jolo:mockdid",
-      "ethereumKey": Object {
-        "data": Array [],
-        "type": "Buffer",
-      },
-      "ipfsHash": "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG",
-    },
+    "0x000test",
   ],
 ]
 `;
@@ -136,8 +149,36 @@ exports[`Registration action creators createIdentity should display exception sc
 Array [
   Object {
     "params": Object {
-      "errorMessage": "Mock registration error",
-      "stackTrace": "mock registration error stack trace",
+      "errorMessage": "Invalid entropy",
+      "stackTrace": "TypeError: Invalid entropy
+    at Object.entropyToMnemonic (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/bip39/index.js:98:34)
+    at Object.generateMnemonic (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jolocom-lib/js/utils/keyDerivation.js:6:18)
+    at IdentityManager.Object.<anonymous>.IdentityManager.deriveChildKey (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jolocom-lib/js/identityManager/identityManager.js:26:38)
+    at /home/natascha/Documents/dev/four/smartwallet-app/src/actions/registration/index.ts:69:43
+    at step (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:133:27)
+    at Object.next (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:114:57)
+    at /home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:107:75
+    at tryCallTwo (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:45:5)
+    at doResolve (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:200:13)
+    at new Promise (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:66:3)
+    at Object.__awaiter (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:103:16)
+    at /home/natascha/Documents/dev/four/smartwallet-app/src/actions/registration/index.ts:61:106
+    at /home/natascha/Documents/dev/four/smartwallet-app/tests/actions/registration/index.test.ts:133:13
+    at step (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:133:27)
+    at Object.next (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:114:57)
+    at /home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:107:75
+    at tryCallTwo (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:45:5)
+    at doResolve (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:200:13)
+    at new Promise (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/promise/lib/core.js:66:3)
+    at Object.__awaiter (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/tslib/tslib.js:103:16)
+    at Object.<anonymous> (/home/natascha/Documents/dev/four/smartwallet-app/tests/actions/registration/index.test.ts:116:60)
+    at Object.asyncFn (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)
+    at resolve (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:52:12)
+    at new Promise (<anonymous>)
+    at mapper (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:39:19)
+    at promise.then (/home/natascha/Documents/dev/four/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:73:82)
+    at <anonymous>
+    at runMicrotasksCallback (internal/process/next_tick.js:121:5)",
     },
     "routeName": "Exception",
     "type": "Navigation/NAVIGATE",

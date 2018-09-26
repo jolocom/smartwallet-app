@@ -53,7 +53,7 @@ Object {
           "claims": Immutable.List [
             Immutable.Map {
               "id": "",
-              "name": "phone",
+              "name": "telephone",
               "value": "",
             },
           ],
@@ -123,7 +123,7 @@ Object {
           "claims": Immutable.List [
             Immutable.Map {
               "id": "",
-              "name": "phone",
+              "name": "telephone",
               "value": "",
             },
           ],
