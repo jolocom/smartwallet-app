@@ -47,7 +47,9 @@
     "android": "haul start --platform android",
     "ios": "haul start --platform ios",
     "test": "node node_modules/jest/bin/jest.js",
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/smartwallet/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'"
+    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/smartwallet/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "jest": {
     "setupFiles": [
@@ -121,11 +123,13 @@
     "sjcl": "^1.0.7",
     "sqlite3": "^4.0.0",
     "squel": "^5.12.1",
-    "wif": "^2.0.6"
+    "wif": "^2.0.6",
+    "snyk": "^1.88.0"
   },
   "rnpm": {
     "assets": [
       "./src/assets/fonts"
     ]
-  }
+  },
+  "snyk": true
 }
