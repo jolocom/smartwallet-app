@@ -2,6 +2,7 @@ import { ManyToOne, Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeo
 import { VerifiableCredentialEntity } from 'src/lib/storage/entities/verifiableCredentialEntity'
 import { Type, plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types';
 
 interface JsonAttributes {
   propertyName: string
@@ -32,11 +33,11 @@ export class CredentialEntity {
   static fromVerifiableCredential(vCred: SignedCredential): CredentialEntity {
     const credentialSection = vCred.getCredentialSection()
     const propertyName = Object.keys(credentialSection).find(k => k!=='id') as string
-    const encryptedValue = credentialSection[propertyName as string]
+    const encryptedValue = credentialSection[propertyName as string] as ClaimEntry
 
     return this.fromJSON({
-      propertyName ,
-      encryptedValue
+      propertyName,
+      encryptedValue: JSON.stringify(encryptedValue)
     })
   }
 }

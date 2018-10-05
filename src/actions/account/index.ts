@@ -79,11 +79,13 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
 export const saveClaim = (claimsItem: DecoratedClaims) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { identityWallet, storageLib } = backendMiddleware
-   
+    const did = getState().account.did.get('did')
+
     const credential = identityWallet.create.credential({
       metadata: getClaimMetadataByCredentialType(claimsItem.type),
+      subject: did,
       claim: {
-        id: getState().account.did.get('did'),
+        id: did,
         [claimsItem.claims[0].name]: claimsItem.claims[0].value
       }
     })
