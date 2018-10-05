@@ -4,40 +4,43 @@ import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 
 const categorizedClaims: CategorizedClaims = {
   'Personal': [{
-    displayName: 'Name',
-    type: ['Credential', 'ProofOfNameCredential'],
-    claims: [{
-      id: '',
-      name: 'name',
-      value: '',
-    }],
+    credentialType: 'Name',
+    claimData: {
+      firstName: '',
+      lastName: ''
+    },
+    id: '',
+    issuer: '',
+    subject: ''
   }],
   'Contact': [{
-    displayName: 'E-mail',
-    type: ['Credential', 'ProofOfEmailCredential'],
-    claims: [{
-      id: '',
-      name: 'email',
-      value: ''
-    }],
+    credentialType: 'E-mail',
+    claimData: {
+      email: ''
+    },
+    id: '',
+    issuer: '',
+    subject: ''
   },
   {
-    displayName: 'Phone',
-    type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
-    claims: [{
-      id: '',
-      name: 'phone',
-      value: ''
-    }],
+    credentialType: 'Phone',
+    claimData: {
+      phone: ''
+    },
+    id: '',
+    issuer: '',
+    subject: ''
   }]
 }
 
 export const initialState: ClaimsState = {
   loading: false,
   selected: {
-    displayName: '',
-    type: ['', ''],
-    claims: []
+    credentialType: '',
+    claimData: {},
+    id: '',
+    issuer: '',
+    subject: ''
   },
   decoratedCredentials: categorizedClaims
 }
