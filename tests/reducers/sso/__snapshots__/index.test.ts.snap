@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sso reducer should handle the CLEAR_CREDENTIAL_REQUEST action  1`] = `
+Object {
+  "activeCredentialRequest": undefined,
+}
+`;
+
+exports[`sso reducer should handle the SET_CREDENTIAL_REQUEST action  1`] = `
+Object {
+  "activeCredentialRequest": Object {
+    "callbackUrl": "http://example.com/myendpoint/",
+    "request": Array [
+      Object {
+        "constraints": Array [],
+        "type": Array [
+          "Credential",
+          "ProofOfEmailCredential",
+        ],
+      },
+    ],
+    "requester": "did:jolo:requester",
+  },
+}
+`;
+
+exports[`sso reducer should initialize correctly 1`] = `
+Object {
+  "activeCredentialRequest": Object {
+    "callbackURL": "",
+    "request": Array [],
+    "requester": "",
+  },
+}
+`;
