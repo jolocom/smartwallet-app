@@ -89,9 +89,9 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
         ...claimsItem.claimData
       }
     })
-   
+
     const verifiableCredential = await identityWallet.sign.credential(credential)
-    
+
     if (claimsItem.id) {
       await storageLib.delete.verifiableCredential(claimsItem.id)
     }

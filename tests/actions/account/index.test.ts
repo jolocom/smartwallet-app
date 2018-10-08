@@ -11,9 +11,11 @@ describe('Account action creators', () => {
         toJS: () => { return {
           loading: false,
           selected: {
-            displayName: '',
-            type: ['', ''],
-            claims: []
+            credentialType: '',
+            claimData: {},
+            id: '',
+            issuer: '',
+            subject: ''
           },
           decoratedCredentials: 'blah'
           }
@@ -113,12 +115,12 @@ describe('Account action creators', () => {
   it('should correctly save claim', async () => {
     const { identityWallet } = data
     const mockClaimsItem = {
-      displayName: 'E-mail',
-      type: ['Credential', 'ProofOfEmailCredential'],
-      claims: [{
-        name: 'email',
-        value: 'test@test'
-      }]
+      credentialType: 'Email',
+      claimData: {
+        email: 'test@test'
+      },
+      issuer: 'did:jolo:test',
+      subject: 'did:jolo:test'
     }
     const backendMiddleware = {
       storageLib: {
