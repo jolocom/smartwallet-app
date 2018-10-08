@@ -77,6 +77,52 @@ Array [
     "type": "SET_LOADING",
   },
   Object {
+    "params": Object {
+      "errorMessage": "gamma rays have flipped our bits!",
+      "stackTrace": undefined,
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+  Object {
+    "claims": Object {
+      "Contact": Array [
+        Object {
+          "claims": Array [
+            Object {
+              "id": "claimId:bf6486176e667",
+              "name": "email",
+              "value": "test@test.com",
+            },
+          ],
+          "displayName": "Email address",
+          "type": Array [
+            "Credential",
+            "ProofOfEmailCredential",
+          ],
+        },
+      ],
+    },
+    "type": "SET_CLAIMS_FOR_DID",
+  },
+]
+`;
+
+exports[`Account action creators Should correctly retrieve claims from device storage db on setClaimForDid 2`] = `
+Array [
+  Object {
+    "loading": true,
+    "type": "SET_LOADING",
+  },
+  Object {
+    "params": Object {
+      "errorMessage": "gamma rays have flipped our bits!",
+      "stackTrace": undefined,
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+  Object {
     "claims": Object {
       "Contact": Array [
         Object {
