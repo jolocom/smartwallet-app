@@ -10,8 +10,8 @@ describe('ClaimsOverview component', ()=> {
         'Personal' : [{
           credentialType: 'Name',
           claimData: {
-            firstName: 'Hello',
-            lastName: 'World'
+            givenName: 'Hello',
+            familyName: 'World'
           },
           id: 'claimTestId#1',
           issuer: 'did:jolo:test',
@@ -28,7 +28,7 @@ describe('ClaimsOverview component', ()=> {
         }, {
           credentialType: 'Phone',
           claimData: {
-            phone: '999111'
+            telephone: '999111'
           },
           id: 'claimTestId#3',
           issuer: 'did:jolo:test',
