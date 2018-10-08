@@ -3,19 +3,6 @@
 exports[`Registration action creators createIdentity should attempt to create an identity 1`] = `
 Array [
   Object {
-    "params": Object {
-      "errorMessage": "password could not be saved",
-      "stackTrace": "mock pass error stack",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
-  },
-]
-`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 2`] = `
-Array [
-  Object {
     "type": "SET_LOADING_MSG",
     "value": "Fueling with ether",
   },
@@ -48,7 +35,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 2`] = `
 Array [
   Array [
     Object {
@@ -71,7 +58,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `
 Array [
   Array [
     Object {
@@ -90,7 +77,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
 Array [
   Array [
     Object {
@@ -106,7 +93,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 6`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
 Array [
   Array [
     Object {
@@ -150,49 +137,11 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 7`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 6`] = `
 Array [
   Array [
     "0x000test",
   ],
-]
-`;
-
-exports[`Registration action creators createIdentity should display exception screen in case of error 1`] = `
-Array [
-  Object {
-    "params": Object {
-      "errorMessage": "Invalid entropy",
-      "stackTrace": "TypeError: Invalid entropy
-    at Object.entropyToMnemonic (/Users/jolocom/code/smartwallet-app/node_modules/bip39/index.js:98:34)
-    at Object.generateMnemonic (/Users/jolocom/code/smartwallet-app/node_modules/jolocom-lib/js/utils/keyDerivation.js:6:18)
-    at IdentityManager.Object.<anonymous>.IdentityManager.deriveChildKey (/Users/jolocom/code/smartwallet-app/node_modules/jolocom-lib/js/identityManager/identityManager.js:30:40)
-    at /Users/jolocom/code/smartwallet-app/src/actions/registration/index.ts:69:43
-    at step (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:133:27)
-    at Object.next (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:114:57)
-    at /Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:107:75
-    at new Promise (/Users/jolocom/code/smartwallet-app/node_modules/jsonld/dist/jsonld.js:10180:7)
-    at Object.__awaiter (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:103:16)
-    at /Users/jolocom/code/smartwallet-app/src/actions/registration/index.ts:61:106
-    at /Users/jolocom/code/smartwallet-app/tests/actions/registration/index.test.ts:133:13
-    at step (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:133:27)
-    at Object.next (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:114:57)
-    at /Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:107:75
-    at new Promise (/Users/jolocom/code/smartwallet-app/node_modules/jsonld/dist/jsonld.js:10180:7)
-    at Object.__awaiter (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:103:16)
-    at Object.<anonymous> (/Users/jolocom/code/smartwallet-app/tests/actions/registration/index.test.ts:116:60)
-    at Object.asyncFn (/Users/jolocom/code/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)
-    at resolve (/Users/jolocom/code/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:52:12)
-    at new Promise (<anonymous>)
-    at mapper (/Users/jolocom/code/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:39:19)
-    at promise.then (/Users/jolocom/code/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:73:82)
-    at <anonymous>
-    at runMicrotasksCallback (internal/process/next_tick.js:115:5)
-    at process._tickCallback (internal/process/next_tick.js:150:11)",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
-  },
 ]
 `;
 
@@ -208,19 +157,6 @@ Array [
     "index": 0,
     "key": undefined,
     "type": "Navigation/RESET",
-  },
-]
-`;
-
-exports[`Registration action creators savePassword should display exception screen in case of error 1`] = `
-Array [
-  Object {
-    "params": Object {
-      "errorMessage": "password could not be saved",
-      "stackTrace": "mock pass error stack",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
   },
 ]
 `;
