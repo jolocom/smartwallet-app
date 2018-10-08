@@ -1,9 +1,8 @@
 import { PrimaryColumn, Entity, Column, OneToMany, ManyToOne } from 'typeorm/browser'
 import { PersonaEntity, SignatureEntity, CredentialEntity } from 'src/lib/storage/entities'
 import { Exclude, Expose, Transform, plainToClass, classToPlain } from 'class-transformer'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
-import { JolocomLib } from 'jolocom-lib'
-import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
 
 @Exclude()
 @Entity('verifiable_credentials')
@@ -47,12 +46,12 @@ export class VerifiableCredentialEntity {
   @OneToMany(type => CredentialEntity, cred => cred.verifiableCredential, { cascade: true, onDelete: 'CASCADE' })
   claim!: CredentialEntity[]
 
-  static fromJSON(json: IVerifiableCredentialAttrs): VerifiableCredentialEntity {
+  static fromJSON(json: ISignedCredentialAttrs): VerifiableCredentialEntity {
     return plainToClass(VerifiableCredentialEntity, json)
   }
 
-  static fromVeriableCredential(vCred: VerifiableCredential): VerifiableCredentialEntity {
-    interface ExtendedInterface extends IVerifiableCredentialAttrs {
+  static fromVeriableCredential(vCred: SignedCredential): VerifiableCredentialEntity {
+    interface ExtendedInterface extends ISignedCredentialAttrs {
       subject: string
     }
 
@@ -64,9 +63,8 @@ export class VerifiableCredentialEntity {
   }
 
   // TODO handle decryption
-  toVerifiableCredential(): VerifiableCredential {
-    const jolocomLib = new JolocomLib()
-    const json = classToPlain(this) as IVerifiableCredentialAttrs
+  toVerifiableCredential(): SignedCredential {
+    const json = classToPlain(this) as ISignedCredentialAttrs
 
     const { propertyName, encryptedValue } = this.claim[0]
     const claim = {
@@ -82,7 +80,6 @@ export class VerifiableCredentialEntity {
       proof: this.proof[0]
     })
 
-    return jolocomLib.credentials.createVerifiableCredential()
-      .fromJSON(entityData)
+    return SignedCredential.fromJSON(entityData)
   }
 }

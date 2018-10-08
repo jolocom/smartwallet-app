@@ -8,6 +8,7 @@ interface DecodedWif {
 
 export interface EthereumLibInterface {
   requestEther: (address: string) => Promise<void>
+  privKeyToEthAddress: (privateKey: Buffer) => string
   wifToEthereumKey: (wifEncodedKey: string) => DecodedWif
 }
 
@@ -33,6 +34,12 @@ export class EthereumLib implements EthereumLibInterface  {
     }
   }
 
+  privKeyToEthAddress(privateKey: Buffer) : string {
+    const w = wallet.fromPrivateKey(privateKey)
+    return `0x${w.getAddress().toString('hex')}`
+  }
+
+  // TODO: remove
   wifToEthereumKey(wifEncodedKey: string) : DecodedWif {
     const { privateKey } = wif.decode(wifEncodedKey)
     const w = wallet.fromPrivateKey(privateKey)

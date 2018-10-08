@@ -6,8 +6,8 @@ const categorizedClaims: CategorizedClaims = {
   'Personal': [{
     credentialType: 'Name',
     claimData: {
-      firstName: '',
-      lastName: ''
+      givenName: '',
+      familyName: ''
     },
     id: '',
     issuer: '',
@@ -25,7 +25,7 @@ const categorizedClaims: CategorizedClaims = {
   {
     credentialType: 'Phone',
     claimData: {
-      phone: ''
+      telephone: ''
     },
     id: '',
     issuer: '',
