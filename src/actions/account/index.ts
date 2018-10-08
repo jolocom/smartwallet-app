@@ -82,11 +82,11 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     const did = getState().account.did.get('did')
 
     const credential = identityWallet.create.credential({
-      metadata: getClaimMetadataByCredentialType(claimsItem.type),
+      metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
       subject: did,
       claim: {
         id: did,
-        [claimsItem.claims[0].name]: claimsItem.claims[0].value
+        ...claimsItem.claimData
       }
     })
    
