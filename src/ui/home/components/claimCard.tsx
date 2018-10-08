@@ -12,7 +12,7 @@ import {
   PhoneIcon
 } from 'src/resources'
 import { getCredentialUiCategory } from '../../../lib/util';
-import { Categories } from '../../../actions/account/categories';
+import { Categories } from '../../../lib/categories';
 
 interface Props {
   openClaimDetails: (claim: DecoratedClaims) => void

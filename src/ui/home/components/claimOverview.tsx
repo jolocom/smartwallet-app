@@ -7,7 +7,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
-import { defaultUiCategories, Categories } from '../../../actions/account/categories'
+import { defaultUiCategories, Categories } from '../../../lib/categories'
 import { initialState } from '../../../reducers/account/claims';
 import { areCredTypesEqual } from '../../../lib/util';
 const loaders = require('react-native-indicator')

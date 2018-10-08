@@ -4,7 +4,7 @@ import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
-import { getClaimMetadataByCredentialType, getCredentialUiCategory } from '../../lib/util'
+import { getClaimMetadataByCredentialType, getCredentialUiCategory, getUiCredentialTypeByType } from '../../lib/util'
 
 export const setDid = (did: string) => {
   return {
@@ -13,7 +13,6 @@ export const setDid = (did: string) => {
   }
 }
 
-// TODO Abstract parsing of error messages
 export const checkIdentityExists = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
     const { storageLib } = backendMiddleware
@@ -57,9 +56,10 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     const state = getState()
     const { jolocomLib, storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
 
+    // TODO integrate according to new version and fix claim type matching
     const credential = jolocomLib.credentials.createCredential(
       getClaimMetadataByCredentialType(claimsItem.type),
-      claimsItem.claims[0].value.trim(),
+      claimsItem.claimData[0].value.trim(),
       state.account.did.toJS().did
     )
 
@@ -76,8 +76,8 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
     const verifiableCredential = await wallet.signCredential(credential)
 
-    if (claimsItem.claims[0].id) {
-      await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
+    if (claimsItem.id) {
+      await storageLib.delete.verifiableCredential(claimsItem.id)
     }
 
     await storageLib.store.verifiableCredential(verifiableCredential)
@@ -97,7 +97,6 @@ export const toggleLoading = (val: boolean) => {
   }
 }
 
-// Why is this named set and not get?
 export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const state = getState().account.claims.toJS()
@@ -119,21 +118,19 @@ const prepareClaimsForState = (credentials: VerifiableCredential[]) => {
 
   const decoratedCredentials = credentials.map(vCred => {
     const claimData = vCred.getCredentialSection()
-    const claimFieldName = Object.keys(claimData).filter(key => key !== 'id')[0]
+    delete claimData.id
 
     return {
-      displayName: vCred.getDisplayName(),
-      type: vCred.getType(),
-      claims: [{
-        id: vCred.getId(),
-        name: claimFieldName,
-        value: claimData[claimFieldName]
-      }]
+      credentialType: getUiCredentialTypeByType(vCred.getType()),
+      claimData,
+      id: vCred.getId(),
+      issuer: vCred.getIssuer(),
+      subject: vCred.getCredentialSection().id
     }
   })
 
   decoratedCredentials.forEach(decoratedCred => {
-    const uiCategory = getCredentialUiCategory(decoratedCred.type)
+    const uiCategory = getCredentialUiCategory(decoratedCred.credentialType)
 
     try {
       categorizedClaims[uiCategory].push(decoratedCred)
