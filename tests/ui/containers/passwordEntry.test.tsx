@@ -1,5 +1,5 @@
 import React from 'react'
-import { PasswordEntryContainer } from 'src/ui/registration/containers/passwordEntry.tsx'
+import { PasswordEntryContainer } from 'src/ui/registration/containers/passwordEntry'
 import { shallow } from 'enzyme'
 
 describe('passwordEntry container', ()=> {

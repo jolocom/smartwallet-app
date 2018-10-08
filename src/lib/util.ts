@@ -1,14 +1,13 @@
 import { claimsMetadata } from 'jolocom-lib'
-import { IClaimMetadata } from 'jolocom-lib/js/credentials/credential/types';
-import { uiCategoryByCredentialType, Categories, uiCredentialTypeByType } from './categories';
+import { uiCategoryByCredentialType, Categories, uiCredentialTypeByType } from './categories'
+import { BaseMetadata } from 'cred-types-jolocom-core'
 
 export const areCredTypesEqual = (first: string[], second: string[]): boolean => {
   return first.every((el, index) => el === second[index])
 }
 
-export const getClaimMetadataByCredentialType = (type: string[]) : IClaimMetadata => {
-  const relevantType = Object.keys(claimsMetadata)
-    .find(key => areCredTypesEqual(claimsMetadata[key].type, type))
+export const getClaimMetadataByCredentialType = (type: string[]) : BaseMetadata => {
+  const relevantType = Object.keys(claimsMetadata).find(key => areCredTypesEqual(claimsMetadata[key].type, type))
 
   if (!relevantType) {
     throw new Error("Unknown credential type, can't find metadata")

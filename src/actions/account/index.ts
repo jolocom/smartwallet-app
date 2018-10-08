@@ -1,9 +1,9 @@
 import { AnyAction, Dispatch } from 'redux'
-import { navigationActions, genericActions } from 'src/actions/'
+import { genericActions, navigationActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { getClaimMetadataByCredentialType, getCredentialUiCategory, getUiCredentialTypeByType } from '../../lib/util'
 
 export const setDid = (did: string) => {
@@ -14,7 +14,7 @@ export const setDid = (did: string) => {
 }
 
 export const checkIdentityExists = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
 
     try {
@@ -23,9 +23,11 @@ export const checkIdentityExists = () => {
         dispatch(genericActions.toggleLoadingScreen(false))
         return
       }
-
+     
       dispatch(setDid(personas[0].did))
       dispatch(genericActions.toggleLoadingScreen(false))
+      dispatch(setIdentityWallet())
+      
       dispatch(navigationActions.navigatorReset( 
         { routeName: routeList.Home }
       ))
@@ -38,6 +40,29 @@ export const checkIdentityExists = () => {
     }
   }
 }
+
+export const setIdentityWallet = () => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { ethereumLib, keyChainLib, storageLib, encryptionLib } = backendMiddleware
+
+    try {
+      const did = getState().account.did.get('did')
+      const encryptionPass = await keyChainLib.getPassword()
+      const personaData = await storageLib.get.persona({ did })
+      const { encryptedWif } = personaData[0].controllingKey
+      const decryptedWif = encryptionLib.decryptWithPass({
+        cipher: encryptedWif,
+        pass: encryptionPass
+      })
+     
+      const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
+      await backendMiddleware.setIdentityWallet(Buffer.from(privateKey, 'hex'))
+    } catch(err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
+  }  
+}
+
 
 export const openClaimDetails = (claim: DecoratedClaims) => {
   return (dispatch: Dispatch<AnyAction>) => {
@@ -53,29 +78,20 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
 
 export const saveClaim = (claimsItem: DecoratedClaims) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const state = getState()
-    const { jolocomLib, storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
+    const { identityWallet, storageLib } = backendMiddleware
+    const did = getState().account.did.get('did')
 
-    // TODO integrate according to new version and fix claim type matching
-    const credential = jolocomLib.credentials.createCredential(
-      getClaimMetadataByCredentialType(claimsItem.type),
-      claimsItem.claimData[0].value.trim(),
-      state.account.did.toJS().did
-    )
-
-    const currentDid = getState().account.did.get('did')
-    const encryptionPass = await keyChainLib.getPassword()
-    const personaData = await storageLib.get.persona({ did: currentDid })
-    const { encryptedWif } = personaData[0].controllingKey
-    const decryptedWif = encryptionLib.decryptWithPass({
-      cipher: encryptedWif,
-      pass: encryptionPass
+    const credential = identityWallet.create.credential({
+      metadata: getClaimMetadataByCredentialType(claimsItem.type),
+      subject: did,
+      claim: {
+        id: did,
+        [claimsItem.claims[0].name]: claimsItem.claims[0].value
+      }
     })
-    const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
-
-    const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
-    const verifiableCredential = await wallet.signCredential(credential)
-
+   
+    const verifiableCredential = await identityWallet.sign.credential(credential)
+    
     if (claimsItem.id) {
       await storageLib.delete.verifiableCredential(claimsItem.id)
     }
@@ -103,7 +119,7 @@ export const setClaimsForDid = () => {
     dispatch(toggleLoading(!state.loading))
     const storageLib = backendMiddleware.storageLib
 
-    const verifiableCredentials: VerifiableCredential[] = await storageLib.get.verifiableCredential()
+    const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
     const claims = prepareClaimsForState(verifiableCredentials) as CategorizedClaims
 
     dispatch({
@@ -113,7 +129,7 @@ export const setClaimsForDid = () => {
   }
 }
 
-const prepareClaimsForState = (credentials: VerifiableCredential[]) => {
+const prepareClaimsForState = (credentials: SignedCredential[]) => {
   const categorizedClaims = {}
 
   const decoratedCredentials = credentials.map(vCred => {
