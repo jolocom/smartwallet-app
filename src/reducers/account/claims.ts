@@ -36,11 +36,14 @@ const categorizedClaims: CategorizedClaims = {
 export const initialState: ClaimsState = {
   loading: false,
   selected: {
-    credentialType: '',
-    claimData: {},
-    id: '',
-    issuer: '',
-    subject: ''
+    credentialType: 'Name',
+    claimData: {
+      givenName: 'Nat',
+      familyName: 'Berg'
+    },
+    id: 'fakeID',
+    issuer: 'did:jolo:test',
+    subject: 'did:jolo:test'
   },
   decoratedCredentials: categorizedClaims
 }
@@ -53,6 +56,8 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
       return state.setIn(['decoratedCredentials'], action.claims).setIn(['loading'], false)
     case 'SET_SELECTED':
       return state.setIn(['selected'], action.selected)
+    case 'HANLDE_CLAIM_INPUT':
+      return state.setIn(['selected', 'claimData', action.fieldName], action.fieldValue)
     default:
       return state
   }
