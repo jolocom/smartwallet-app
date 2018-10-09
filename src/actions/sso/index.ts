@@ -26,7 +26,7 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
     const credentialRequest = JolocomLib.parse.interactionJSONWebToken.fromJSON(jwtEncodedCR)
     const requestedTypes = credentialRequest.getRequestedCredentialTypes()
 
-    const credentialRequests = await Promise.all<StateTypeSummary>(requestedTypes.map(async type => {
+    const credentialRequests = await Promise.all<StateTypeSummary>(requestedTypes.map(async (type: string[]) => {
       const values: string[] = await storageLib.get.attributesByType(type)
 
       const attributeSummaries = await Promise.all<StateAttributeSummary>(values.map(async value => {
@@ -36,11 +36,11 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
 
         const { did } = getState().account.did.toJS()
 
-        const verificationSummaries = validVerifications.map(verification => ({
-          id: verification.id,
-          selfSigned: verification.issuer === did,
-          issuer: verification.issuer,
-          expires: verification.expires
+        const verificationSummaries = validVerifications.map((verification: SignedCredential) => ({
+          id: verification.getId(),
+          selfSigned: verification.getIssuer() === did,
+          issuer: verification.getIssuer(),
+          expires: verification.getExpiryDate()
         }))
 
         return {
@@ -84,7 +84,7 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
     const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
 
     const registry = JolocomLib.registry.jolocom.create()
-    const wallet = registry.authenticate(Buffer.from(privateKey, 'hex'))
+    const wallet = await registry.authenticate(Buffer.from(privateKey, 'hex'))
 
     const credentials = await Promise.all(selectedCredentials.map(async cred => {
       const results = await storageLib.get.verifiableCredential({id: cred.id})
