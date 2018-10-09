@@ -35,7 +35,6 @@ export const checkIdentityExists = () => {
       if (err.message.indexOf('no such table') === 0) {
         return
       }
-
       dispatch(genericActions.showErrorScreen(err))
     }
   }
@@ -63,6 +62,13 @@ export const setIdentityWallet = () => {
   }  
 }
 
+export const handleClaimInput = (fieldValue: string, fieldName: string) => {
+  return {
+    type: 'HANLDE_CLAIM_INPUT',
+    fieldName,
+    fieldValue
+  }
+}
 
 export const openClaimDetails = (claim: DecoratedClaims) => {
   return (dispatch: Dispatch<AnyAction>) => {
@@ -76,11 +82,14 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
   }
 }
 
-export const saveClaim = (claimsItem: DecoratedClaims) => {
+export const saveClaim = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { identityWallet, storageLib } = backendMiddleware
     const did = getState().account.did.get('did')
+    const claimsItem = getState().account.claims.get('selected')
 
+    console.log('identity wallet: ', identityWallet)
+    
     const credential = identityWallet.create.credential({
       metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
       subject: did,
@@ -89,6 +98,22 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
         ...claimsItem.claimData
       }
     })
+    
+    try {
+      const verifiableCredential = await identityWallet.sign.credential(credential)
+
+      if (claimsItem.id) {
+        await storageLib.delete.verifiableCredential(claimsItem.id)
+      }
+
+      await storageLib.store.verifiableCredential(verifiableCredential)
+      await setClaimsForDid()
+      dispatch(navigationActions.navigatorReset({
+        routeName: routeList.Home
+      }))
+    } catch (err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
 
     const verifiableCredential = await identityWallet.sign.credential(credential)
 

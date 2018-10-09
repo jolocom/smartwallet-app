@@ -4,10 +4,8 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 const ReactMUI = require('react-native-material-textfield')
 
 interface Props {
-  displayName: string
   fieldValue: string
   fieldName: string
-  errorMsg: string
   handleFieldInput: (fieldValue: string, fieldName: string) => void
 }
 
@@ -44,22 +42,21 @@ export class TextInputField extends React.Component<Props, State> {
   }
 
   render() {
-    const { fieldValue, displayName, handleFieldInput, errorMsg } = this.props
-    const labelText = this.state.focused || !fieldValue ? displayName : ''
+    const { fieldValue, fieldName, handleFieldInput } = this.props
+    const labelText = this.state.focused || !fieldValue ? fieldName : ''
     return (
       <View style={ styles.inputContainer }>
         <ReactMUI.TextField
           onFocus={ () => this.handleFocus() }
           onBlur={ () => this.handleBlur() }
           label={ labelText }
-          error={ errorMsg }
           labelTextStyle={ styles.labelStyle }
           style={{ fontFamily: JolocomTheme.contentFontFamily }}
           tintColor={ JolocomTheme.primaryColorPurple }
           textColor={ JolocomTheme.primaryColorBlack }
           value={ fieldValue }
-          onChangeText={ (fieldValue: string, field: string) => {
-            handleFieldInput(fieldValue, this.props.fieldName)
+          onChangeText={ (fieldValue: string) => {
+            handleFieldInput(fieldValue, fieldName)
           } }
         />
       </View>

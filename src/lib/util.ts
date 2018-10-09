@@ -2,6 +2,10 @@ import { claimsMetadata } from 'jolocom-lib'
 import { uiCategoryByCredentialType, Categories, uiCredentialTypeByType } from './categories'
 import { BaseMetadata } from 'cred-types-jolocom-core'
 
+export const areCredTypesEqual = (first: string[], second: string[]): boolean => {
+  return first.every((el, index) => el === second[index])
+}
+
 export const getClaimMetadataByCredentialType = (type: string) : BaseMetadata => {
   const uiType = Object.keys(uiCredentialTypeByType)
     .find(item => uiCredentialTypeByType[item] === type)
