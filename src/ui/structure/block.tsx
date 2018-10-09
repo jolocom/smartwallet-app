@@ -21,6 +21,7 @@ interface Props {
 	flex?: number;
 	debug?: boolean;
   style?: ViewStyle;
+  onTouch?: () => void;
 }
 
 export const Block : React.SFC<Props> = (props) => {
@@ -34,7 +35,7 @@ export const Block : React.SFC<Props> = (props) => {
 	}
 
   return(
-    <View style={ style }>
+    <View onTouchEnd={props.onTouch} style={ style }>
       {props.children}
     </View>
   )

@@ -4,7 +4,6 @@ import { Block } from 'src/ui/structure'
 import { EmailIcon, PhoneIcon, NameIcon } from 'src/resources'
 import { View, Text, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { AttributeCard } from 'src/ui/sso/components/ssoAttributeCard'
 import { areCredTypesEqual } from 'src/lib/util'
 
 interface Props {
@@ -68,16 +67,16 @@ export class AttributeSummary extends React.Component<Props, State>{
     }
   }
 
-  private renderAvailableAttributes = (attributes: StateAttributeSummary[]) => {
-    return attributes.map(attribute =>
-      <AttributeCard
-        key={attribute.value}
-        attributeValue={attribute.value}
-        onCheck={this.handleAttributeSelection}
-        checked={attribute.value === this.state.selectedAttribute}
-      />
-    )
-  }
+  // private renderAvailableAttributes = (attributes: StateAttributeSummary[]) => {
+  //   return attributes.map(attribute =>
+  //     <ClaimCard
+  //       key={attribute.value}
+  //       attributeValue={attribute.value}
+  //       onCheck={this.handleAttributeSelection}
+  //       checked={attribute.value === this.state.selectedAttribute}
+  //     />
+  //   )
+  // }
 
   // TODO Use common function instead, perhaps move to util
   // TODO Better default value
@@ -116,7 +115,7 @@ export class AttributeSummary extends React.Component<Props, State>{
         </Block>
         <View style={{flex: 0.8}}>
           <Text style={styles.attributeTitle}> {displayName} </Text>
-          { this.renderAvailableAttributes(this.props.attributes) }
+          {/* { this.renderAvailableAttributes(this.props.attributes) } */}
         </View>
       </Block>
     )

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ClaimOverview } from 'src/ui/home/components/claimOverview'
+import { CredentialOverview } from '../components/credentialOverview'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
@@ -59,9 +59,10 @@ export class ClaimsContainer extends React.Component<Props, State> {
       )
     } else {
       renderContent = (
-        <ClaimOverview
-          claims={this.props.claims}
-          openClaimDetails={ this.props.openClaimDetails }
+        <CredentialOverview
+          claimsState={this.props.claims}
+          loading={this.props.claims.loading}
+          onEdit={ this.props.openClaimDetails }
           scanning={ this.state.scanning }
           onScannerStart={ this.onScannerStart }
          />
