@@ -11,7 +11,7 @@ interface Props {
   onScannerCancel: () => void
 }
 
-interface State {}
+interface State { }
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -19,13 +19,11 @@ const styles = StyleSheet.create({
   }
 })
 
-// TODO The Listener is never removed it seems
 export class QRcodeScanner extends React.Component<Props, State> {
   componentDidMount() {
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', () => {
         this.props.onScannerCancel()
-        return true
       })
     }
   }

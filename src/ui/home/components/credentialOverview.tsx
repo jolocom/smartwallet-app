@@ -7,14 +7,13 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
-import { QrScanEvent } from '../containers/types';
 const loaders = require('react-native-indicator')
 
 interface Props {
   claimsState: ClaimsState
   scanning: boolean
   loading: boolean
-  onScannerStart: (e: QrScanEvent) => void
+  onScannerStart: () => void
   onEdit: (claim: DecoratedClaims) => void
 }
 
@@ -79,16 +78,14 @@ export class CredentialOverview extends React.Component<Props, State> {
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
     return categorizedCredentials.map((claim: DecoratedClaims, index) => {
-      // TODO -> Move to util, merge with canonical function
-      const collapsible = ['Mobile Phone', 'Phone', 'E-mail', 'Email', 'Name'].indexOf(claim.credentialType) === -1
 
+      // TODO Don't use collapsible for 2 different things, rely on other func
       return (
         <CredentialCard
           openClaimDetails={onEdit}
           credentialItem={claim}
-          collapsible={collapsible}
-          // TODO Don't use collapsible for 2 different things
-          displayTitle={collapsible}
+          collapsible={collapsible(claim)}
+          displayTitle={collapsible(claim)}
         />
       )
     })
@@ -136,8 +133,10 @@ export class CredentialOverview extends React.Component<Props, State> {
   }
 }
 
+// TODO -> Move to util, merge with canonical function
 const renderLoadingScreen = () => {
   return <Block>
     <loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} />
   </Block>
 }
+const collapsible = (claim: DecoratedClaims) => ['Mobile Phone', 'Phone', 'E-mail', 'Email', 'Name'].indexOf(claim.credentialType) === -1
