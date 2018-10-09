@@ -58,7 +58,8 @@ export const setIdentityWallet = () => {
       const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
       await backendMiddleware.setIdentityWallet(Buffer.from(privateKey, 'hex'))
     } catch(err) {
-      dispatch(genericActions.showErrorScreen(err))
+      console.log(err)
+      // dispatch(genericActions.showErrorScreen(err))
     }
   }  
 }

@@ -5,15 +5,16 @@ import { Container, Block } from 'src/ui/structure'
 import { CredentialCard } from './credentialCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
-import { ClaimsState } from 'src/reducers/account'
+import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
+import { QrScanEvent } from '../containers/types';
 const loaders = require('react-native-indicator')
 
 interface Props {
   claimsState: ClaimsState
   scanning: boolean
   loading: boolean
-  onScannerStart: () => void
+  onScannerStart: (e: QrScanEvent) => void
   onEdit: (claim: DecoratedClaims) => void
 }
 
@@ -35,20 +36,11 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 8
   },
-  actionButtonContainer: {
-    position: 'absolute',
-    right: '3%',
-    bottom: '5%',
-    alignItems: 'flex-end'
-  },
+  actionButtonContainer: {},
   sectionHeader: {
     fontSize: 17,
     textAlign: 'left',
     fontFamily: JolocomTheme.contentFontFamily
-  },
-  componentContainer: {
-    flex: 1,
-    padding: 0
   },
   scrollComponent: {
     width: '100%'
@@ -61,83 +53,42 @@ const styles = StyleSheet.create({
   }
 })
 
-const mockClaims = {
-  Name: [
-    {
-      credentialType: 'Name',
-      claimData: {
-        firstName: 'Eugeniu',
-        lastName: 'Rusu'
-      },
-      id: '1234',
-      issuer: 'did:jolo:issuer',
-      subject: 'did:jolo:subject'
-    }
-  ],
-  Phone: [
-    {
-      credentialType: 'Phone',
-      claimData: {
-        telephone: '0123456'
-      },
-      id: '4321',
-      issuer: 'did:jolo:secondIssuer',
-      subject: 'did:jolo:secondSubject'
-    },
-    {
-      credentialType: 'Phone',
-      claimData: {
-        telelphone: '543221'
-      },
-      id: '00x1',
-      issuer: 'did:jolo:second',
-      subject: 'did:jolo:hek'
-    }
-  ],
-  Email: [
-    {
-      credentialType: 'Email',
-      claimData: {
-        email: 'eugeniu@jolocom.com'
-      },
-      id: '4321',
-      issuer: 'did:jolo:thirdIssuer',
-      subject: 'did:jolo:thirdSubject'
-    }
-  ],
-  Other: [
-    {
-      credentialType: 'Address',
-      claimData: {
-        street: 'Buchfinkweg',
-        house: '11a',
-        plz: '12351',
-        region: 'Berlin',
-        country: 'Germany'
-      },
-      id: '0x0x',
-      issuer: 'did:jolo:buch',
-      subject: 'did:jolo:something'
-    }
-  ]
-}
-
 export class CredentialOverview extends React.Component<Props, State> {
   renderCredentialCard = (category: string): ReactNode => {
-    const { onEdit } = this.props
+    const { onEdit, claimsState } = this.props
 
-    const decoratedCredentials = mockClaims
+    const decoratedCredentials: CategorizedClaims = {
+      ...claimsState.decoratedCredentials,
+      Other: [
+        {
+          credentialType: 'Postal address',
+          claimData: {
+            street: 'Buchfinkweg',
+            houseNr: '19',
+            plz: '123456',
+            area: 'Berlin',
+            country: 'Germany'
+          },
+          id: '0x01234',
+          issuer: 'did:jolo:extra',
+          subject: 'did:jolo:extrasubj'
+        }
+      ]
+    }
+
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
-    console.log(decoratedCredentials)
     return categorizedCredentials.map((claim: DecoratedClaims, index) => {
+      // TODO -> Move to util, merge with canonical function
+      const collapsible = ['Mobile Phone', 'Phone', 'E-mail', 'Email', 'Name'].indexOf(claim.credentialType) === -1
+
       return (
         <CredentialCard
           openClaimDetails={onEdit}
           credentialItem={claim}
-          displayTitle={false}
-          // TODO DYNAMIC
-          collapsible={true}
+          collapsible={collapsible}
+          // TODO Don't use collapsible for 2 different things
+          displayTitle={collapsible}
         />
       )
     })
@@ -145,34 +96,37 @@ export class CredentialOverview extends React.Component<Props, State> {
 
   render() {
     const { claimsState } = this.props
-    const claimsCategories = Object.keys(mockClaims)
+    const claimsCategories = [...Object.keys(claimsState.decoratedCredentials), 'Other']
 
-    const content = claimsState.loading ? (
-      <Block>
-        <loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} />
-      </Block>
-    ) : (
-      claimsCategories.map((category: string) => {
-        return (
-          <View key={category}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionHeader}>{category.toString()}</Text>
-            </View>
-            {this.renderCredentialCard(category)}
-          </View>
-        )
-      })
-    )
+    if (claimsState.loading) {
+      return renderLoadingScreen()
+    }
 
     return (
-      <Container style={styles.componentContainer}>
+      <Container style={{ flex: 1, padding: 0 }}>
         <ScrollView
           style={styles.scrollComponent}
           contentContainerStyle={claimsState.loading ? { flexGrow: 1, justifyContent: 'space-around' } : {}}
         >
-          {content}
+          {claimsCategories.map((category: string) => {
+            return (
+              <View key={category}>
+                <View style={styles.sectionContainer}>
+                  <Text style={styles.sectionHeader}>{category.toString()}</Text>
+                </View>
+                {this.renderCredentialCard(category)}
+              </View>
+            )
+          })}
         </ScrollView>
-        <Block style={styles.actionButtonContainer}>
+        <Block
+          style={{
+            position: 'absolute',
+            right: '3%',
+            bottom: '5%',
+            alignItems: 'flex-end'
+          }}
+        >
           <TouchableOpacity style={styles.iconContainer} onPress={this.props.onScannerStart}>
             <Icon style={styles.icon} size={30} name="qrcode-scan" color="white" />
           </TouchableOpacity>
@@ -180,4 +134,10 @@ export class CredentialOverview extends React.Component<Props, State> {
       </Container>
     )
   }
+}
+
+const renderLoadingScreen = () => {
+  return <Block>
+    <loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} />
+  </Block>
 }

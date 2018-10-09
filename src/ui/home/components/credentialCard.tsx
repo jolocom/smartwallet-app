@@ -9,10 +9,9 @@ import { ClaimCard } from 'src/ui/sso/components/claimCard'
 
 interface Props {
   openClaimDetails: (claim: DecoratedClaims) => void
+  credentialItem: DecoratedClaims
   collapsible: boolean
   displayTitle: boolean
-  // tODO
-  credentialItem: any
 }
 
 interface State {
@@ -79,11 +78,12 @@ export class CredentialCard extends React.Component<Props, State> {
   public render() {
     const { attributeSelectionContainer, attributeTitle } = this.getStyles()
     const { credentialItem } = this.props
+
     return (
       <Block onTouch={this.toggleCollapse} style={attributeSelectionContainer}>
         <Block flex={0.2}>{getIconByName(credentialItem.credentialType)}</Block>
         <View style={{ flex: 0.7, justifyContent: 'space-between' }}>
-          {this.props.displayTitle ? <Text style={attributeTitle}> {credentialItem.credentialType} </Text> : null}
+          {(this.props.displayTitle && !this.state.collapsed) ? <Text style={attributeTitle}> {credentialItem.credentialType} </Text> : null}
           {this.state.collapsed
             ? this.renderCollapsedClaim(credentialItem.claimData, credentialItem.credentialType)
             : this.renderClaim(credentialItem.claimData)}
@@ -99,7 +99,7 @@ const getIconByName = (name: string) => {
   const map = {
     Name: <NameIcon />,
     Email: <EmailIcon />,
-    Phone: <PhoneIcon />
+    'Mobile Phone': <PhoneIcon />
   }
   return map[name] || <AccessibilityIcon />
 }

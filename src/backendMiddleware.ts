@@ -22,6 +22,6 @@ export class BackendMiddleware {
 
   async setIdentityWallet(privKey: Buffer): Promise<void> {
     const registry = JolocomLib.registry.jolocom.create()
-    this.identityWallet = await registry.authenticate(privKey) 
+    this.identityWallet = await registry.authenticate(privKey)
   }
 }

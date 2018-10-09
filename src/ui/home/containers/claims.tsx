@@ -8,12 +8,11 @@ import { View } from 'react-native'
 import Immutable from 'immutable'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
+import { QrScanEvent } from './types'
 
-// TODO ANY
 interface ConnectProps {
-  openClaimDetails: (claim: DecoratedClaims) => void
   setClaimsForDid: () => void
-  toggleLoading: (val: boolean) => void
+  openClaimDetails: (claim: DecoratedClaims) => void
   consumeCredentialRequest: (jwt: string) => void
   claims: ClaimsState
 }
@@ -33,50 +32,39 @@ export class ClaimsContainer extends React.Component<Props, State> {
     this.props.setClaimsForDid()
   }
 
-// TODO: do I really need 3 func?
-  private onScannerStart = () : void => {
+  private onScannerStart = (): void => {
     this.setState({ scanning: true })
   }
 
-  private onScannerCancel = () : void => {
+  private onScannerCancel = (): void => {
     this.setState({ scanning: false })
   }
 
-  // TODO Typings on E
-  private onScannerSuccess = (e : any) : void => {
+  private onScannerSuccess = (e: QrScanEvent): void => {
     this.setState({ scanning: false })
     this.props.consumeCredentialRequest(e.data)
   }
 
   render() {
-    let renderContent
     if (this.state.scanning) {
-      renderContent = (
-        <QRcodeScanner
-          onScannerSuccess={this.onScannerSuccess}
-          onScannerCancel={this.onScannerCancel}
-        />
-      )
-    } else {
-      renderContent = (
-        <CredentialOverview
-          claimsState={this.props.claims}
-          loading={this.props.claims.loading}
-          onEdit={ this.props.openClaimDetails }
-          scanning={ this.state.scanning }
-          onScannerStart={ this.onScannerStart }
-         />
-      )
+      return <QRcodeScanner onScannerSuccess={this.onScannerSuccess} onScannerCancel={this.onScannerCancel} />
     }
 
     return (
-      <View style={{flex: 1}}>
-        { renderContent }
+      <View style={{ flex: 1 }}>
+        <CredentialOverview
+          claimsState={this.props.claims}
+          loading={this.props.claims.loading}
+          onEdit={this.props.openClaimDetails}
+          scanning={this.state.scanning}
+          onScannerStart={this.onScannerStart}
+        />
       </View>
     )
   }
 }
 
+// TODO nicer pattern for accessing state
 const mapStateToProps = (state: RootState) => {
   const claims = Immutable.fromJS(state.account.claims)
   return {
@@ -84,13 +72,13 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
-    setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
-    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
-    consumeCredentialRequest: (jwt: string) => dispatch(ssoActions.consumeCredentialRequest(jwt))
-  }
-}
+const mapDispatchToProps = (dispatch: Function) => ({
+  openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
+  setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
+  consumeCredentialRequest: (jwt: string) => dispatch(ssoActions.consumeCredentialRequest(jwt))
+})
 
-export const Claims = connect(mapStateToProps, mapDispatchToProps)(ClaimsContainer)
+export const Claims = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ClaimsContainer)
