@@ -1,12 +1,10 @@
 import { AnyAction, Dispatch } from 'redux'
-import { navigationActions, genericActions } from 'src/actions/'
+import { genericActions, navigationActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
-import { categoryForType } from 'src/actions/account/categories'
-import { claimsMetadata } from 'jolocom-lib'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
-import { initialState } from 'src/reducers/account/claims'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { getClaimMetadataByCredentialType, getCredentialUiCategory, getUiCredentialTypeByType } from '../../lib/util'
 
 export const setDid = (did: string) => {
   return {
@@ -15,9 +13,8 @@ export const setDid = (did: string) => {
   }
 }
 
-// TODO Abstract parsing of error messages
 export const checkIdentityExists = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
 
     try {
@@ -26,9 +23,11 @@ export const checkIdentityExists = () => {
         dispatch(genericActions.toggleLoadingScreen(false))
         return
       }
-
+     
       dispatch(setDid(personas[0].did))
       dispatch(genericActions.toggleLoadingScreen(false))
+      dispatch(setIdentityWallet())
+      
       dispatch(navigationActions.navigatorReset( 
         { routeName: routeList.Home }
       ))
@@ -41,6 +40,29 @@ export const checkIdentityExists = () => {
     }
   }
 }
+
+export const setIdentityWallet = () => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { ethereumLib, keyChainLib, storageLib, encryptionLib } = backendMiddleware
+
+    try {
+      const did = getState().account.did.get('did')
+      const encryptionPass = await keyChainLib.getPassword()
+      const personaData = await storageLib.get.persona({ did })
+      const { encryptedWif } = personaData[0].controllingKey
+      const decryptedWif = encryptionLib.decryptWithPass({
+        cipher: encryptedWif,
+        pass: encryptionPass
+      })
+     
+      const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
+      await backendMiddleware.setIdentityWallet(Buffer.from(privateKey, 'hex'))
+    } catch(err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
+  }  
+}
+
 
 export const openClaimDetails = (claim: DecoratedClaims) => {
   return (dispatch: Dispatch<AnyAction>) => {
@@ -55,57 +77,29 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
 }
 
 export const saveClaim = (claimsItem: DecoratedClaims) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    const state = getState()
-    const { jolocomLib, storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
-    let newClaims = {}
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { identityWallet, storageLib } = backendMiddleware
+    const did = getState().account.did.get('did')
 
-    newClaims = state.account.claims.toJS().claims
-
-    // TODO: change the key of claimsMetadata to be the type[1]
-    let claimsMetadataType = ''
-    switch(claimsItem.type[1]) {
-      case 'ProofOfNameCredential':
-        claimsMetadataType = 'name'
-        break
-      case 'ProofOfMobilePhoneNumberCredential':
-        claimsMetadataType = 'mobilePhoneNumber'
-        break
-      case 'ProofOfEmailCredential':
-        claimsMetadataType = 'emailAddress'
-        break
-      default:
-        break
-    }
-
-    const credential = jolocomLib.credentials.createCredential(
-      claimsMetadata[claimsMetadataType],
-      claimsItem.claims[0].value.trim(),
-      state.account.did.toJS().did
-    )
-
-    const encryptionPass = await keyChainLib.getPassword()
-    const currentDid = getState().account.did.get('did')
-    const personaData = await storageLib.get.persona({did: currentDid})
-    const { encryptedWif } = personaData[0].controllingKey
-    const decryptedWif = encryptionLib.decryptWithPass({
-      cipher: encryptedWif,
-      pass: encryptionPass
+    const credential = identityWallet.create.credential({
+      metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
+      subject: did,
+      claim: {
+        id: did,
+        ...claimsItem.claimData
+      }
     })
-    const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
 
-    const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
-    const verifiableCredential = await wallet.signCredential(credential)
+    const verifiableCredential = await identityWallet.sign.credential(credential)
 
-    if (claimsItem.claims[0].id && claimsItem.claims[0].id !== '') {
-      await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
+    if (claimsItem.id) {
+      await storageLib.delete.verifiableCredential(claimsItem.id)
     }
+
     await storageLib.store.verifiableCredential(verifiableCredential)
 
-    dispatch({
-      type: 'SET_CLAIMS_FOR_DID',
-      claims: newClaims
-    })
+    await setClaimsForDid()
+
     dispatch(navigationActions.navigatorReset({
       routeName: routeList.Home
     }))
@@ -125,7 +119,7 @@ export const setClaimsForDid = () => {
     dispatch(toggleLoading(!state.loading))
     const storageLib = backendMiddleware.storageLib
 
-    const verifiableCredentials: VerifiableCredential[] = await storageLib.get.verifiableCredential()
+    const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
     const claims = prepareClaimsForState(verifiableCredentials) as CategorizedClaims
 
     dispatch({
@@ -135,58 +129,31 @@ export const setClaimsForDid = () => {
   }
 }
 
-const prepareClaimsForState = (claims: VerifiableCredential[]) => {
-  // TODO: Handle the category 'Other' for the claims that don't match any of predefined categories
+const prepareClaimsForState = (credentials: SignedCredential[]) => {
   const categorizedClaims = {}
-  const initialClaimsState = initialState
 
-  Object.keys(categoryForType).forEach(category => {
-    const claimsForCategory : DecoratedClaims[] = []
+  const decoratedCredentials = credentials.map(vCred => {
+    const claimData = vCred.getCredentialSection()
+    delete claimData.id
 
-    claims.forEach(claim => {
-      const name = claim.getDisplayName()
-      const fieldName = Object.keys(claim.getCredentialSection())[1]
-      const value = claim.getCredentialSection()[fieldName]
-
-      if (typeInCategory(category, claim.getType())) {
-        claimsForCategory.push(
-          { displayName: name,
-            type: claim.getType(),
-            claims: [
-              { id: claim.getId(),
-                name: fieldName,
-                value }
-            ]
-          } as DecoratedClaims
-        )
-      }
-    })
-    if (claimsForCategory.length === 0) {
-      categorizedClaims[category] = initialClaimsState.claims[category]
-    } else {
-      initialClaimsState.claims[category].forEach(claim => {
-        let count = 0
-        claimsForCategory.forEach(dbClaim => {
-          if (areCredTypesEqual(claim.type, dbClaim.type)) {
-            count++
-          }
-        })
-        if (count === 0) {
-          claimsForCategory.push(claim)
-        }
-      })
-      categorizedClaims[category] = claimsForCategory
+    return {
+      credentialType: getUiCredentialTypeByType(vCred.getType()),
+      claimData,
+      id: vCred.getId(),
+      issuer: vCred.getIssuer(),
+      subject: vCred.getCredentialSection().id
     }
   })
+
+  decoratedCredentials.forEach(decoratedCred => {
+    const uiCategory = getCredentialUiCategory(decoratedCred.credentialType)
+
+    try {
+      categorizedClaims[uiCategory].push(decoratedCred)
+    } catch (err) {
+      categorizedClaims[uiCategory] = [decoratedCred]
+    }
+  })
+
   return categorizedClaims
-}
-
-// TODO: use the method from JolocomLib
-const areCredTypesEqual = (first: string[], second: string[]): boolean => {
-  return first.every((el, index) => el === second[index])
-}
-
-const typeInCategory = (category: string, type: string[]): boolean => {
-  const found = categoryForType[category].find(t => areCredTypesEqual(type, t))
-  return (found && found.length > 0) || false
 }

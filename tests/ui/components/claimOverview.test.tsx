@@ -6,40 +6,41 @@ describe('ClaimsOverview component', ()=> {
   const COMMON_PROPS = {
     claims: {
       loading: false,
-      claims: {
+      decoratedCredentials: {
         'Personal' : [{
-            displayName: 'Name',
-            type: ['Credential', 'ProofOfNameCredential'],
-            claims: [{
-              id: 'default1',
-              name: 'name',
-              value: 'name',
-            }],
-          }],
-        'Contact': [{
-            displayName: 'E-mail',
-            type: ['Credential', 'ProofOfEmailCredential'],
-            claims: [{
-              id: 'default2',
-              name: 'email',
-              value: ''
-            }],
+          credentialType: 'Name',
+          claimData: {
+            givenName: 'Hello',
+            familyName: 'World'
           },
-          {
-            displayName: 'Phone',
-            type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
-            claims: [{
-              id: 'default3',
-              name: 'phone',
-              value: ''
-            }],
-          }]
+          id: 'claimTestId#1',
+          issuer: 'did:jolo:test',
+          subject: 'did:jolo:test'
+        }],
+        'Contact': [{
+          credentialType: 'Email',
+          claimData: {
+            email: 'test@test.de'
+          },
+          id: 'claimTestId#2',
+          issuer: 'did:jolo:test',
+          subject: 'did:jolo:test'
+        }, {
+          credentialType: 'Phone',
+          claimData: {
+            telephone: '999111'
+          },
+          id: 'claimTestId#3',
+          issuer: 'did:jolo:test',
+          subject: 'did:jolo:test'
+        }]
       }
     },
     scanning: false,
     onScannerStart: () => null,
     openClaimsDetails: () => null,
   }
+
   it('matches the snapshot on render', () => {
 
     const rendered = shallow(<ClaimOverview {...COMMON_PROPS}/>)

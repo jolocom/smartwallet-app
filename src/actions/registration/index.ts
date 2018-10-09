@@ -1,9 +1,13 @@
 import { AnyAction, Dispatch } from 'redux'
-import { navigationActions, genericActions } from 'src/actions/'
+import { navigationActions, genericActions, accountActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
+import { JolocomLib } from 'jolocom-lib'
+import { generateMnemonic } from 'jolocom-lib/js/utils/keyDerivation'
+import { IpfsCustomConnector } from 'src/lib/ipfs'
+import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum'
 
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
@@ -55,21 +59,20 @@ export const finishRegistration = () => {
 
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    const { jolocomLib, ethereumLib, storageLib, encryptionLib, keyChainLib } = backendMiddleware
-
+    const { ethereumLib,  encryptionLib, keyChainLib, storageLib } = backendMiddleware
+    const seed = Buffer.from(encodedEntropy, 'hex')
+    
     try {
-      const {
-        didDocument,
-        mnemonic,
-        genericSigningKey,
-        ethereumKey
-      } = await jolocomLib.identity.create(encodedEntropy)
-
-
+      const identityManager = JolocomLib.identityManager.create(seed)
+     
+      const schema = identityManager.getSchema()
+      const identityKey = identityManager.deriveChildKey(schema.jolocomIdentityKey)
+      const ethereumKey = identityManager.deriveChildKey(schema.ethereumKey)
+      
       const password = await keyChainLib.getPassword()
       const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
       const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
-      const encGenWif = encryptionLib.encryptWithPass({ data: genericSigningKey.wif, pass: password })
+      const encGenWif = encryptionLib.encryptWithPass({ data: identityKey.wif, pass: password })
 
       const masterKeyData = {
         encryptedEntropy: encEntropy,
@@ -78,8 +81,8 @@ export const createIdentity = (encodedEntropy: string) => {
 
       const genericSigningKeyData = {
         encryptedWif: encGenWif,
-        path: genericSigningKey.path,
-        keyType: genericSigningKey.keyType,
+        path: identityKey.path,
+        keyType: identityKey.keyType,
         entropySource: masterKeyData
       }
 
@@ -89,38 +92,43 @@ export const createIdentity = (encodedEntropy: string) => {
         keyType: ethereumKey.keyType,
         entropySource: masterKeyData
       }
-
-      const personaData = {
-        did: didDocument.getDID(),
-        controllingKey: genericSigningKeyData
-      }
-
-      await storageLib.store.persona(personaData)
+      
       await storageLib.store.derivedKey(ethereumKeyData)
-
-      dispatch(setDid(didDocument.getDID()))
-      const {
-        privateKey: ethPrivKey,
-        address: ethAddr
-      } = ethereumLib.wifToEthereumKey(ethereumKey.wif)
-
+     
       dispatch(setLoadingMsg(loading.loadingStages[1]))
-      const ipfsHash = await jolocomLib.identity.store(didDocument)
-
-      dispatch(setLoadingMsg(loading.loadingStages[2]))
+     
+      const ethAddr = ethereumLib.privKeyToEthAddress(ethereumKey.privateKey) 
       await ethereumLib.requestEther(ethAddr)
 
-      dispatch(setLoadingMsg('Registering identity on Ethereum'))
-
-        await jolocomLib.identity.register({
-        ethereumKey: Buffer.from(ethPrivKey, 'hex'),
-        did: didDocument.getDID(),
-        ipfsHash
+      dispatch(setLoadingMsg(loading.loadingStages[2]))
+      
+      const registry = JolocomLib.registry.jolocom.create({
+        ipfsConnector: new IpfsCustomConnector({
+          host: 'ipfs.jolocom.com',
+          port: 443,
+          protocol: 'https'
+         }),
+        ethereumConnector: jolocomEthereumResolver 
       })
-
-        dispatch(navigationActions.navigatorReset({
+      
+      const identityWallet = await registry.create({
+        privateIdentityKey: identityKey.privateKey, 
+        privateEthereumKey: ethereumKey.privateKey
+      })
+     
+      const personaData = {
+        did: identityWallet.getIdentity().getDID(),
+        controllingKey: genericSigningKeyData
+      }
+      
+      await storageLib.store.persona(personaData)
+     
+      dispatch(setDid(identityWallet.getIdentity().getDID()))
+      dispatch(setLoadingMsg(loading.loadingStages[3]))
+      dispatch(accountActions.setIdentityWallet())
+      dispatch(navigationActions.navigatorReset({
         routeName: routeList.SeedPhrase,
-        params: { mnemonic }
+        params: { mnemonic: generateMnemonic(seed) }
       }))
     } catch (error) {
       return dispatch(genericActions.showErrorScreen(error))

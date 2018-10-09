@@ -3,43 +3,46 @@ import Immutable from 'immutable'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 
 const categorizedClaims: CategorizedClaims = {
-  'Personal' : [{
-      displayName: 'Name',
-      type: ['Credential', 'ProofOfNameCredential'],
-      claims: [{
-        id: '',
-        name: 'name',
-        value: '',
-      }],
-    }],
-  'Contact': [{
-      displayName: 'E-mail',
-      type: ['Credential', 'ProofOfEmailCredential'],
-      claims: [{
-        id: '',
-        name: 'email',
-        value: ''
-      }],
+  'Personal': [{
+    credentialType: 'Name',
+    claimData: {
+      givenName: '',
+      familyName: ''
     },
-    {
-      displayName: 'Phone',
-      type: ['Credential', 'ProofOfMobilePhoneNumberCredential'],
-      claims: [{
-        id: '',
-        name: 'phone',
-        value: ''
-      }],
-    }]
+    id: '',
+    issuer: '',
+    subject: ''
+  }],
+  'Contact': [{
+    credentialType: 'E-mail',
+    claimData: {
+      email: ''
+    },
+    id: '',
+    issuer: '',
+    subject: ''
+  },
+  {
+    credentialType: 'Phone',
+    claimData: {
+      telephone: ''
+    },
+    id: '',
+    issuer: '',
+    subject: ''
+  }]
 }
 
 export const initialState: ClaimsState = {
   loading: false,
   selected: {
-    displayName: '',
-    type: ['', ''],
-    claims: []
+    credentialType: '',
+    claimData: {},
+    id: '',
+    issuer: '',
+    subject: ''
   },
-  claims: categorizedClaims
+  decoratedCredentials: categorizedClaims
 }
 
 export const claims = (state = Immutable.fromJS(initialState), action: AnyAction): ClaimsState => {
@@ -47,7 +50,7 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
-      return state.setIn(['claims'], action.claims).setIn(['loading'], false)
+      return state.setIn(['decoratedCredentials'], action.claims).setIn(['loading'], false)
     case 'SET_SELECTED':
       return state.setIn(['selected'], action.selected)
     default:

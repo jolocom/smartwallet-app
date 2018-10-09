@@ -4,16 +4,16 @@ import { claims } from 'src/reducers/account/claims'
 import { loading } from 'src/reducers/account/loading'
 
 
-export interface Claim {
-  id: string
-  name: string
-  value: any
+export interface ClaimData {
+  [key: string]: string
 }
 
 export interface DecoratedClaims {
-  displayName: string
-  type: string[]
-  claims: Claim[]
+  credentialType: string
+  claimData: ClaimData
+  id: string
+  issuer: string
+  subject: string
 }
 
 export interface CategorizedClaims {
@@ -23,7 +23,7 @@ export interface CategorizedClaims {
 export interface ClaimsState {
   readonly loading: boolean
   readonly selected: DecoratedClaims
-  readonly claims: CategorizedClaims
+  readonly decoratedCredentials: CategorizedClaims
 }
 
 export interface DidState {
@@ -34,6 +34,7 @@ export interface LoadingState {
   readonly loading: boolean
 }
 
+// TODO avoid state.account.did.did access patterns
 export interface AccountState {
   did: DidState,
   claims: ClaimsState,

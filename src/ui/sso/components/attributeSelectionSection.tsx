@@ -67,6 +67,7 @@ export class AttributeSummary extends React.Component<Props, State>{
     }
   }
 
+<<<<<<< HEAD
   // private renderAvailableAttributes = (attributes: StateAttributeSummary[]) => {
   //   return attributes.map(attribute =>
   //     <ClaimCard
@@ -77,6 +78,19 @@ export class AttributeSummary extends React.Component<Props, State>{
   //     />
   //   )
   // }
+=======
+  private renderAvailableAttributes = (attributes: StateAttributeSummary[]) => {
+    return attributes.map(attribute =>
+      <AttributeCard
+        key={attribute.value}
+        attributeValue={attribute.value}
+        attributeVerifications={attribute.verifications}
+        onCheck={this.handleAttributeSelection}
+        checked={attribute.value === this.state.selectedAttribute}
+      />
+    )
+  }
+>>>>>>> feature/#1115-claims-state-update
 
   // TODO Use common function instead, perhaps move to util
   // TODO Better default value
