@@ -11,6 +11,7 @@ interface Props {
 
 interface State {
   focused: boolean
+  fieldNameDisplay: string
 }
 
 const styles = StyleSheet.create({
@@ -26,7 +27,16 @@ const styles = StyleSheet.create({
 
 export class TextInputField extends React.Component<Props, State> {
   state = {
-    focused: false
+    focused: false,
+    fieldNameDisplay: ''
+  }
+
+  // TODO remove all
+  UNSAFE_componentWillMount() {
+    const fn = this.props.fieldName.replace( /([A-Z])/g, ' $1')
+    this.setState({
+      fieldNameDisplay: fn.charAt(0).toUpperCase() + fn.slice(1)
+    })
   }
 
   private handleFocus = () => {
@@ -43,7 +53,8 @@ export class TextInputField extends React.Component<Props, State> {
 
   render() {
     const { fieldValue, fieldName, handleFieldInput } = this.props
-    const labelText = this.state.focused || !fieldValue ? fieldName : ''
+    const labelText = this.state.focused || !fieldValue ? this.state.fieldNameDisplay : ''
+    
     return (
       <View style={ styles.inputContainer }>
         <ReactMUI.TextField

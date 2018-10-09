@@ -1,12 +1,47 @@
 import React from 'react'
-import { Container, Block, CenteredText } from 'src/ui/structure'
-import { StyleSheet, Text } from 'react-native'
+import { ScrollContainer, Block, CenteredText } from 'src/ui/structure'
+import { StyleSheet, Keyboard, EmitterSubscription } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { ClaimData } from 'src/reducers/account'
 
+const styles = StyleSheet.create({
+  // TODO: fix
+  blockSpace: {
+    marginTop: 15,
+    marginBottom: 15
+  },
+  blockSpaceLast: {
+    marginTop: 15,
+    marginBottom: 30
+  },
+  buttonContainer: {
+    width: 164,
+    height: 48,
+    borderRadius: 4,
+    backgroundColor: JolocomTheme.primaryColorPurple
+  },
+  buttonContainerDisabled: {
+    width: 164,
+    height: 48,
+    borderRadius: 4,
+    backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
+  },
+  buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: '100',
+  },
+  buttonTextDisabled: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    fontSize: JolocomTheme.labelFontSize,
+    color: JolocomTheme.disabledButtonTextGrey,
+    fontWeight: '100'
+  }
+})
 
 interface Props {
   selectedClaim: DecoratedClaims
@@ -15,14 +50,45 @@ interface Props {
 }
 
 interface State {
+  pending: boolean
+  keyboardDrawn: boolean
 }
 
 export class ClaimDetailsComponent extends React.Component<Props, State> {
+  private kbShowListener!: EmitterSubscription
+  private kbHideListener!: EmitterSubscription
+
   state = {
-    pending: false
+    pending: false,
+    keyboardDrawn: false
+  }
+  
+  componentDidMount() {
+    this.setupListeners()
+  }
+  
+  componentWillUnmount() {
+    this.removeListeners()
   }
 
+  private setupListeners() : void {
+    this.kbShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => this.setState({ keyboardDrawn: true })
+    )
+
+    this.kbHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => this.setState({ keyboardDrawn: false })
+    )
+  }
+
+  private removeListeners() : void {
+    this.kbShowListener.remove()
+    this.kbHideListener.remove()
+  }
   private onSubmit = () => {
+    Keyboard.dismiss()
     this.setState({pending: true})
     this.props.saveClaim()
   }
@@ -35,6 +101,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     return Object.keys(claimData).map((item) => {
       return (
         <TextInputField
+          key={ item }
           fieldName={ item }
           fieldValue={ claimData[item]}
           handleFieldInput={ this.handleFieldInput }
@@ -50,22 +117,35 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   render() {
     const { credentialType, claimData } = this.props.selectedClaim
+    const showButtonWhileTyping = !this.state.keyboardDrawn || Object.keys(claimData).length < 3
+
     return (
-      <Container>
-        <Block>
+      <ScrollContainer>
+        <Block style={ styles.blockSpace }>
           <CenteredText
             style={ JolocomTheme.textStyles.light.subheader }
             msg={ credentialType }
           />
+        </Block>
+        <Block style={ styles.blockSpace }>
           { this.renderInputFields(claimData) }
         </Block>
-        <Button
-          onPress={ () => this.onSubmit() }
-          upperCase={ false }
-          text='Add claim'
-          disabled={ !!this.confirmationEligibilityCheck() }
-        />
-      </Container>
+        <Block style={ styles.blockSpaceLast }>
+        { (showButtonWhileTyping) 
+          ? <Button
+              onPress={ () => this.onSubmit() }
+              upperCase={ false }
+              text='Add claim'
+              style={ (!!this.confirmationEligibilityCheck())
+                ? { container: styles.buttonContainerDisabled, text: styles.buttonTextDisabled}
+                : { container: styles.buttonContainer, text: styles.buttonText }
+              }
+              disabled={ !!this.confirmationEligibilityCheck() } 
+            />
+        : null
+        } 
+        </Block>  
+      </ScrollContainer>
     )
   }
 }
