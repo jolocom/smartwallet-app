@@ -11,11 +11,13 @@ describe('Account action creators', () => {
         toJS: () => { return {
           loading: false,
           selected: {
-            credentialType: '',
-            claimData: {},
+            credentialType: 'Email',
+            claimData: {
+              email: 'test@test.com'
+            },
             id: '',
-            issuer: '',
-            subject: ''
+            issuer: 'did:jolo:test',
+            subject: 'did:jolo:test'
           },
           decoratedCredentials: 'blah'
           }
@@ -92,7 +94,6 @@ describe('Account action creators', () => {
   //   await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
   //   expect(mockStore.getActions()[1].params.errorMessage).toContain('gamma rays have flipped our bits!')
   // })
-
 
   it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
     const { identityWallet, mockVCred } = data

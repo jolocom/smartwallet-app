@@ -16,8 +16,8 @@ Object {
         Immutable.Map {
           "credentialType": "Name",
           "claimData": Immutable.Map {
-            "firstName": "",
-            "lastName": "",
+            "givenName": "",
+            "familyName": "",
           },
           "id": "",
           "issuer": "",
@@ -37,7 +37,7 @@ Object {
         Immutable.Map {
           "credentialType": "Phone",
           "claimData": Immutable.Map {
-            "phone": "",
+            "telephone": "",
           },
           "id": "",
           "issuer": "",
@@ -71,8 +71,8 @@ Object {
         Immutable.Map {
           "credentialType": "Name",
           "claimData": Immutable.Map {
-            "firstName": "",
-            "lastName": "",
+            "givenName": "",
+            "familyName": "",
           },
           "id": "",
           "issuer": "",
@@ -92,7 +92,7 @@ Object {
         Immutable.Map {
           "credentialType": "Phone",
           "claimData": Immutable.Map {
-            "phone": "",
+            "telephone": "",
           },
           "id": "",
           "issuer": "",

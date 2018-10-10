@@ -86,10 +86,8 @@ export const saveClaim = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { identityWallet, storageLib } = backendMiddleware
     const did = getState().account.did.get('did')
-    const claimsItem = getState().account.claims.get('selected')
+    const claimsItem = getState().account.claims.toJS().selected
 
-    console.log('identity wallet: ', identityWallet)
-    
     const credential = identityWallet.create.credential({
       metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
       subject: did,

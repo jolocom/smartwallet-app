@@ -36,14 +36,11 @@ const categorizedClaims: CategorizedClaims = {
 export const initialState: ClaimsState = {
   loading: false,
   selected: {
-    credentialType: 'Name',
-    claimData: {
-      givenName: 'Nat',
-      familyName: 'Berg'
-    },
-    id: 'fakeID',
-    issuer: 'did:jolo:test',
-    subject: 'did:jolo:test'
+    credentialType: '',
+    claimData: {},
+    id: '',
+    issuer: '',
+    subject: ''
   },
   decoratedCredentials: categorizedClaims
 }
