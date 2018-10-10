@@ -8,14 +8,13 @@ import { TextInputField } from 'src/ui/home/components/textInputField'
 import { ClaimData } from 'src/reducers/account'
 
 const styles = StyleSheet.create({
-  // TODO: fix
   blockSpace: {
-    marginTop: 15,
-    marginBottom: 15
+    marginTop: '5%',
+    marginBottom: '5%'
   },
   blockSpaceLast: {
-    marginTop: 15,
-    marginBottom: 30
+    marginTop: '5%',
+    marginBottom: '10%'
   },
   buttonContainer: {
     width: 164,

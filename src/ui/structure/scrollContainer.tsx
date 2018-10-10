@@ -5,15 +5,13 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 const styles = StyleSheet.create({
   contentContainer: {
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center'
   },
   container: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: JolocomTheme.primaryColorGrey,
-    height: '100%',
-    width: '100%',
     padding: '5%'
   }
 })
