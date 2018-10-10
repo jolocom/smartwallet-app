@@ -26,20 +26,7 @@ exports[`ClaimCard component matches the snapshot of a two line claim 1`] = `
     onPress={null}
     onPressValue={null}
     onRightElementPress={null}
-    rightElement={
-      <TouchableOpacity
-        activeOpacity={0.2}
-        onPress={[Function]}
-        style={
-          Object {
-            "height": "100%",
-            "width": "100%",
-          }
-        }
-      >
-        <MoreIcon />
-      </TouchableOpacity>
-    }
+    rightElement=""
     style={
       Object {
         "container": Object {
@@ -168,20 +155,7 @@ exports[`ClaimCard component matches the snapshot on render 1`] = `
     onPress={null}
     onPressValue={null}
     onRightElementPress={null}
-    rightElement={
-      <TouchableOpacity
-        activeOpacity={0.2}
-        onPress={[Function]}
-        style={
-          Object {
-            "height": "100%",
-            "width": "100%",
-          }
-        }
-      >
-        <MoreIcon />
-      </TouchableOpacity>
-    }
+    rightElement=""
     style={
       Object {
         "container": Object {

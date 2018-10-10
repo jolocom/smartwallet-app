@@ -1,4 +1,4 @@
-import { StackNavigator, TabNavigator, TabBarTop} from 'react-navigation'
+import { StackNavigator, TabBarTop, TabNavigator } from 'react-navigation'
 import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'

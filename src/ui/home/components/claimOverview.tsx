@@ -8,8 +8,7 @@ import { ReactNode } from 'react'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { defaultUiCategories, Categories } from '../../../lib/categories'
-import { initialState } from '../../../reducers/account/claims';
-import { areCredTypesEqual } from '../../../lib/util';
+import { initialState } from '../../../reducers/account/claims'
 const loaders = require('react-native-indicator')
 
 interface Props {
@@ -115,7 +114,7 @@ export class ClaimOverview extends React.Component<Props, State> {
     const defaultEntriesForCategory = initialState.decoratedCredentials[category] || []
 
     const missingEntries = defaultEntriesForCategory.filter(expectedEntryType =>
-      !decoratedClaims.find(credential => areCredTypesEqual(credential.type, expectedEntryType.type))
+      !decoratedClaims.find(credential => credential.credentialType === expectedEntryType.credentialType))
     )
 
     const placeholders = missingEntries.map(missingCred => <ClaimCard openClaimDetails={openClaimDetails} claimItem={missingCred} />)

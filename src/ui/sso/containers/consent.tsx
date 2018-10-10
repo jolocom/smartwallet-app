@@ -50,7 +50,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     sendCredentialResponse: (creds: StateVerificationSummary[]) => dispatch(ssoActions.sendCredentialResponse(creds)),
-    cancelSSO: () => dispatch(ssoActions.cancelSSO())
+    // cancelSSO: () => dispatch(ssoActions.cancelSSO())
   }
 }
 

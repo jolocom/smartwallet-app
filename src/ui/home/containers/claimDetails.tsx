@@ -3,34 +3,25 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
-import { DecoratedClaims } from 'src/reducers/account/'
 import { ClaimsState } from 'src/reducers/account'
 import Immutable from 'immutable'
 
 interface ConnectProps {
   claims: ClaimsState
-  saveClaim: (claimsItem: DecoratedClaims) => void
+  saveClaim: () => void
+  handleClaimInput: (fieldValue: string, fieldName: string) => void
 }
 
 interface Props extends ConnectProps {}
 
-interface State {
-  selectedClaim: DecoratedClaims
-}
+interface State {}
 
 export class ClaimDetailsContainer extends React.Component<Props, State> {
-  state = {
-    selectedClaim: {
-      displayName: '',
-      type: ['', ''],
-      claims: [],
-    }
-  }
-
   render() {
       return (
         <ClaimDetailsComponent
           saveClaim={ this.props.saveClaim }
+          handleClaimInput={ this.props.handleClaimInput }
           selectedClaim={ this.props.claims.selected }
         />
       )
@@ -46,8 +37,11 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    saveClaim: (claimsItem: DecoratedClaims) => {
-      dispatch(accountActions.saveClaim(claimsItem))
+    saveClaim: () => {
+      dispatch(accountActions.saveClaim())
+    },
+    handleClaimInput: (fieldValue: string, fieldName: string) => {
+      dispatch(accountActions.handleClaimInput(fieldValue, fieldName))
     }
   }
 }

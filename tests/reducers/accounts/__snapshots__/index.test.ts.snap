@@ -5,58 +5,43 @@ Object {
   "claims": Immutable.Map {
     "loading": false,
     "selected": Immutable.Map {
-      "displayName": "",
-      "type": Immutable.List [
-        "",
-        "",
-      ],
-      "claims": Immutable.List [],
+      "credentialType": "",
+      "claimData": Immutable.Map {},
+      "id": "",
+      "issuer": "",
+      "subject": "",
     },
     "decoratedCredentials": Immutable.Map {
       "Personal": Immutable.List [
         Immutable.Map {
-          "displayName": "Name",
-          "type": Immutable.List [
-            "Credential",
-            "ProofOfNameCredential",
-          ],
-          "claims": Immutable.List [
-            Immutable.Map {
-              "id": "",
-              "name": "name",
-              "value": "",
-            },
-          ],
+          "credentialType": "Name",
+          "claimData": Immutable.Map {
+            "givenName": "",
+            "familyName": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
         },
       ],
       "Contact": Immutable.List [
         Immutable.Map {
-          "displayName": "E-mail",
-          "type": Immutable.List [
-            "Credential",
-            "ProofOfEmailCredential",
-          ],
-          "claims": Immutable.List [
-            Immutable.Map {
-              "id": "",
-              "name": "email",
-              "value": "",
-            },
-          ],
+          "credentialType": "E-mail",
+          "claimData": Immutable.Map {
+            "email": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
         },
         Immutable.Map {
-          "displayName": "Phone",
-          "type": Immutable.List [
-            "Credential",
-            "ProofOfMobilePhoneNumberCredential",
-          ],
-          "claims": Immutable.List [
-            Immutable.Map {
-              "id": "",
-              "name": "phone",
-              "value": "",
-            },
-          ],
+          "credentialType": "Phone",
+          "claimData": Immutable.Map {
+            "telephone": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
         },
       ],
     },
@@ -75,58 +60,43 @@ Object {
   "claims": Immutable.Map {
     "loading": false,
     "selected": Immutable.Map {
-      "displayName": "",
-      "type": Immutable.List [
-        "",
-        "",
-      ],
-      "claims": Immutable.List [],
+      "credentialType": "",
+      "claimData": Immutable.Map {},
+      "id": "",
+      "issuer": "",
+      "subject": "",
     },
     "decoratedCredentials": Immutable.Map {
       "Personal": Immutable.List [
         Immutable.Map {
-          "displayName": "Name",
-          "type": Immutable.List [
-            "Credential",
-            "ProofOfNameCredential",
-          ],
-          "claims": Immutable.List [
-            Immutable.Map {
-              "id": "",
-              "name": "name",
-              "value": "",
-            },
-          ],
+          "credentialType": "Name",
+          "claimData": Immutable.Map {
+            "givenName": "",
+            "familyName": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
         },
       ],
       "Contact": Immutable.List [
         Immutable.Map {
-          "displayName": "E-mail",
-          "type": Immutable.List [
-            "Credential",
-            "ProofOfEmailCredential",
-          ],
-          "claims": Immutable.List [
-            Immutable.Map {
-              "id": "",
-              "name": "email",
-              "value": "",
-            },
-          ],
+          "credentialType": "E-mail",
+          "claimData": Immutable.Map {
+            "email": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
         },
         Immutable.Map {
-          "displayName": "Phone",
-          "type": Immutable.List [
-            "Credential",
-            "ProofOfMobilePhoneNumberCredential",
-          ],
-          "claims": Immutable.List [
-            Immutable.Map {
-              "id": "",
-              "name": "phone",
-              "value": "",
-            },
-          ],
+          "credentialType": "Phone",
+          "claimData": Immutable.Map {
+            "telephone": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
         },
       ],
     },

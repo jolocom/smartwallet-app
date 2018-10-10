@@ -1,18 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Account action creators Should correctly handle an arbitrary error being thrown 1`] = `
-Array [
-  Object {
-    "params": Object {
-      "errorMessage": "gamma rays have flipped our bits!",
-      "stackTrace": undefined,
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
-  },
-]
-`;
-
 exports[`Account action creators Should correctly handle an empty personas table 1`] = `
 Array [
   Object {
@@ -55,6 +42,58 @@ Array [
   Object {
     "type": "SET_LOADING",
     "value": false,
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
+]
+`;
+
+exports[`Account action creators Should correctly retrieve claims from device storage db on setClaimForDid 1`] = `
+Array [
+  Object {
+    "loading": true,
+    "type": "SET_LOADING",
+  },
+  Object {
+    "claims": Object {
+      "Contact": Array [
+        Object {
+          "claimData": Object {
+            "email": "test@test.com",
+          },
+          "credentialType": "Email",
+          "id": "claimId:bf6486176e667",
+          "issuer": "did:jolo:2ff3cb90a9cb8ddf9d6528a32e7a813ebe620d64db35e4b11e50d81a0cfee4c3",
+          "subject": undefined,
+        },
+      ],
+    },
+    "type": "SET_CLAIMS_FOR_DID",
+  },
+]
+`;
+
+exports[`Account action creators should correctly save claim 1`] = `
+Array [
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
   Object {
     "actions": Array [

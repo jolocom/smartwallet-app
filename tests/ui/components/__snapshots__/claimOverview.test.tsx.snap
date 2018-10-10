@@ -48,36 +48,39 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
       <ClaimCard
         claimItem={
           Object {
-            "claims": Array [
-              Object {
-                "id": "default2",
-                "name": "email",
-                "value": "",
-              },
-            ],
-            "displayName": "E-mail",
-            "type": Array [
-              "Credential",
-              "ProofOfEmailCredential",
-            ],
+            "claimData": Object {
+              "email": "test@test.de",
+            },
+            "credentialType": "Email",
+            "id": "claimTestId#2",
+            "issuer": "did:jolo:test",
+            "subject": "did:jolo:test",
           }
         }
       />
       <ClaimCard
         claimItem={
           Object {
-            "claims": Array [
-              Object {
-                "id": "default3",
-                "name": "phone",
-                "value": "",
-              },
-            ],
-            "displayName": "Phone",
-            "type": Array [
-              "Credential",
-              "ProofOfMobilePhoneNumberCredential",
-            ],
+            "claimData": Object {
+              "telephone": "999111",
+            },
+            "credentialType": "Phone",
+            "id": "claimTestId#3",
+            "issuer": "did:jolo:test",
+            "subject": "did:jolo:test",
+          }
+        }
+      />
+      <ClaimCard
+        claimItem={
+          Object {
+            "claimData": Object {
+              "email": "",
+            },
+            "credentialType": "E-mail",
+            "id": "",
+            "issuer": "",
+            "subject": "",
           }
         }
       />
@@ -113,65 +116,14 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
       <ClaimCard
         claimItem={
           Object {
-            "claims": Array [
-              Object {
-                "id": "default1",
-                "name": "name",
-                "value": "name",
-              },
-            ],
-            "displayName": "Name",
-            "type": Array [
-              "Credential",
-              "ProofOfNameCredential",
-            ],
-          }
-        }
-      />
-    </Component>
-    <Component
-      key="Other"
-    >
-      <Component
-        style={
-          Object {
-            "marginBottom": 8,
-            "marginLeft": 16,
-            "marginRight": 16,
-            "marginTop": 27,
-          }
-        }
-      >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-          style={
-            Object {
-              "fontFamily": "TT Commons",
-              "fontSize": 17,
-              "textAlign": "left",
-            }
-          }
-        >
-          Other
-        </Text>
-      </Component>
-      <ClaimCard
-        claimItem={
-          Object {
-            "claims": Array [
-              Object {
-                "id": "default1",
-                "name": "Age",
-                "value": "50",
-              },
-            ],
-            "displayName": "Age",
-            "type": Array [
-              "Credential",
-              "ProofOfAge",
-            ],
+            "claimData": Object {
+              "familyName": "World",
+              "givenName": "Hello",
+            },
+            "credentialType": "Name",
+            "id": "claimTestId#1",
+            "issuer": "did:jolo:test",
+            "subject": "did:jolo:test",
           }
         }
       />
