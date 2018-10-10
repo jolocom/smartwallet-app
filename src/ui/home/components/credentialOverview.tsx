@@ -1,6 +1,6 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { StyleSheet, TouchableOpacity, View, Text, ScrollView } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { CredentialCard } from './credentialCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
@@ -56,15 +56,18 @@ export class CredentialOverview extends React.Component<Props, State> {
     const { onEdit, claimsState } = this.props
 
     const decoratedCredentials: CategorizedClaims = addTestData(claimsState.decoratedCredentials) // DEV
+    // const decoratedCredentials: CategorizedClaims = claimsState.decoratedCredentials
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
     // TODO Don't use collapsible for 2 different things, rely on other func
-    return categorizedCredentials.map((claim: DecoratedClaims, index) => (
+    console.log(categorizedCredentials)
+    return categorizedCredentials.map((claim: DecoratedClaims) => (
       <CredentialCard
         openClaimDetails={onEdit}
         credentialItem={claim}
         collapsible={collapsible(claim)}
-        displayTitle={collapsible(claim)}
+        shouldDisplayTitle={collapsible(claim)}
+        empty={Object.keys(claim.claimData).every(key => !claim.claimData[key])}
       />
     ))
   }
@@ -77,17 +80,18 @@ export class CredentialOverview extends React.Component<Props, State> {
 
   render() {
     const { claimsState } = this.props
-    const claimsCategories = [...Object.keys(claimsState.decoratedCredentials), 'Other'] // Dev
+    const claimsCategories = [...Object.keys(claimsState.decoratedCredentials), 'Name', 'Email', 'Other'] // Dev
+    // const claimsCategories = Object.keys(claimsState.decoratedCredentials)
 
     if (claimsState.loading) {
       return renderLoadingScreen()
     }
 
     return (
-      <Container style={{ padding: 0 }}>
+      <Container style={{padding: 0}}>
         <ScrollView
           style={styles.scrollComponent}
-          contentContainerStyle={claimsState.loading || { flexGrow: 1, justifyContent: 'space-around' }}
+          contentContainerStyle={claimsState.loading ? { flexGrow: 1, justifyContent: 'space-around'}: {}}
         >
           {claimsCategories.map(this.renderCredentialCategory)}
         </ScrollView>
@@ -114,6 +118,39 @@ const collapsible = (claim: DecoratedClaims) =>
 
 const addTestData = (claims: CategorizedClaims): CategorizedClaims => ({
   ...claims,
+  Name: [
+    {
+      credentialType: 'Name',
+      claimData: {
+        firstName: 'Женя',
+        givenName: 'Русу'
+      },
+      issuer: '',
+      subject: '',
+      id: ''
+    },
+    {
+      credentialType: 'Name',
+      claimData: {
+        firstName: 'Eugeniu',
+        givenName: 'Rusu'
+      },
+      issuer: '',
+      subject: '',
+      id: ''
+    }
+  ],
+  Email: [
+    {
+      credentialType: 'Email',
+      claimData: {
+        email: ''
+      },
+      issuer: '',
+      subject: '',
+      id: ''
+    }
+  ],
   Other: [
     {
       credentialType: 'Postal address',
@@ -122,16 +159,9 @@ const addTestData = (claims: CategorizedClaims): CategorizedClaims => ({
         houseNr: '19',
         plz: '123456',
         area: 'Berlin',
-        country: 'Germany'
-      },
-      id: '0x01234',
-      issuer: 'did:jolo:extra',
-      subject: 'did:jolo:extrasubj'
-    },
-    {
-      credentialType: 'Age',
-      claimData: {
-        age: ''
+        country: 'Germany',
+        planet: 'Earth',
+        region: 'Botan'
       },
       id: '0x01234',
       issuer: 'did:jolo:extra',

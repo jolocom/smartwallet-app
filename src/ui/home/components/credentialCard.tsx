@@ -5,13 +5,14 @@ import { DecoratedClaims } from 'src/reducers/account/'
 import { MoreIcon, AccessibilityIcon, NameIcon, EmailIcon, PhoneIcon } from 'src/resources'
 import { Block } from '../../structure'
 import { prepareLabel } from 'src/lib/util'
-import { ClaimCard } from 'src/ui/sso/components/claimCard'
+import { ClaimCard, PlaceholderClaimCard } from 'src/ui/sso/components/claimCard'
 
 interface Props {
   openClaimDetails: (claim: DecoratedClaims) => void
   credentialItem: DecoratedClaims
+  empty: boolean
   collapsible: boolean
-  displayTitle: boolean
+  shouldDisplayTitle: boolean
 }
 
 interface State {
@@ -48,7 +49,7 @@ export class CredentialCard extends React.Component<Props, State> {
 
   private getStyles = () =>
     StyleSheet.create({
-      attributeSelectionContainer: {
+      container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
@@ -56,38 +57,52 @@ export class CredentialCard extends React.Component<Props, State> {
         paddingVertical: '5%',
         marginBottom: '1%'
       },
-      attributeTitle: {
+      title: {
         ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
         color: '#05050d',
-        opacity: 0.4,
+        marginBottom: 16, opacity: 0.4,
         fontFamily: JolocomTheme.contentFontFamily
       }
     })
 
-  private renderClaim = (claim: { [key: string]: string }) => 
-    Object.keys(claim).map(key => <ClaimCard key={key} primaryText={claim[key]} secondaryText={prepareLabel(key)} />)
+  private renderClaim = (credentialItem: DecoratedClaims) =>
+    this.props.empty ? (
+      <PlaceholderClaimCard
+        onEdit={() => this.props.openClaimDetails(credentialItem)}
+        credentialType={credentialItem.credentialType}
+      />
+    ) : (
+      Object.keys(credentialItem.claimData).map((key, idx, arr) => (
+        <ClaimCard
+          key={key}
+          primaryTextStyle={idx !== arr.length -1 ? {marginBottom: 16} : {}}
+          primaryText={credentialItem.claimData[key]}
+          secondaryText={prepareLabel(key)}
+        />
+      ))
+    )
 
-  private renderCollapsedClaim = (claimData: any, title: string) => {
+  private renderCollapsedClaim = (credentialItem: DecoratedClaims) => {
+    const { claimData, credentialType } = credentialItem
     const collapsedMessage = Object.keys(claimData).reduce((acc, current) => `${acc}${claimData[current]} `, '')
-    return <ClaimCard key={collapsedMessage} secondaryText={title} primaryText={collapsedMessage} />
+    return <ClaimCard key={collapsedMessage} secondaryText={credentialType} primaryText={collapsedMessage} />
   }
 
   public render() {
-    const { attributeSelectionContainer, attributeTitle } = this.getStyles()
-    const { credentialItem } = this.props
+    const { container, title } = this.getStyles()
+    const { credentialItem, empty, shouldDisplayTitle } = this.props
+    const { collapsed } = this.state
 
     return (
-      <Block onTouch={this.toggleCollapse} style={attributeSelectionContainer}>
+      <Block onTouch={this.toggleCollapse} style={container}>
         <Block flex={0.2}>{getIconByName(credentialItem.credentialType)}</Block>
-        <View style={{ flex: 0.7, justifyContent: 'space-between' }}>
-          {this.props.displayTitle && !this.state.collapsed ? (
-            <Text style={attributeTitle}> {credentialItem.credentialType} </Text>
+        <View style={{ flex: 0.7, justifyContent: 'space-between', flexGrow: 1 }}>
+          {shouldDisplayTitle && !collapsed ? (
+            <Text style={title}> {credentialItem.credentialType} </Text>
           ) : null}
-          {this.state.collapsed
-            ? this.renderCollapsedClaim(credentialItem.claimData, credentialItem.credentialType)
-            : this.renderClaim(credentialItem.claimData)}
+          {this.state.collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
-        <View style={{ flex: 0.1 }}>{this.renderMoreMenu()}</View>
+        {empty ? null : <View style={{ flex: 0.1 }}>{this.renderMoreMenu()}</View>}
       </Block>
     )
   }
