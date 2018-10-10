@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ClaimDetails container mounts correctly and matches the snapshot 1`] = `
+<ClaimDetailsComponent
+  handleClaimInput={[Function]}
+  saveClaim={[Function]}
+  selectedClaim={
+    Object {
+      "claimData": Object {
+        "email": "test@test.com",
+      },
+      "credentialType": "Email",
+    }
+  }
+/>
+`;

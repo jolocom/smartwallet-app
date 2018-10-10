@@ -3,7 +3,6 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
-import { DecoratedClaims } from 'src/reducers/account/'
 import { ClaimsState } from 'src/reducers/account'
 import Immutable from 'immutable'
 
@@ -15,9 +14,7 @@ interface ConnectProps {
 
 interface Props extends ConnectProps {}
 
-interface State {
-  selectedClaim: DecoratedClaims
-}
+interface State {}
 
 export class ClaimDetailsContainer extends React.Component<Props, State> {
   render() {

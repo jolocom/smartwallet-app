@@ -31,7 +31,7 @@ export class TextInputField extends React.Component<Props, State> {
     fieldNameDisplay: ''
   }
 
-  // TODO remove all
+  // TODO replace all componentWillMount calls
   UNSAFE_componentWillMount() {
     const fn = this.props.fieldName.replace( /([A-Z])/g, ' $1')
     this.setState({
