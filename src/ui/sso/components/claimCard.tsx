@@ -19,7 +19,7 @@ export const ClaimCard: React.SFC<AttributeCardProps> = props => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: '3%',
+      marginBottom: '3%'
     },
     primaryText: {
       fontFamily: JolocomTheme.contentFontFamily,
@@ -31,7 +31,7 @@ export const ClaimCard: React.SFC<AttributeCardProps> = props => {
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: 17,
       color: '#05050d',
-      opacity: .4
+      opacity: 0.4
     }
   })
 
@@ -39,10 +39,10 @@ export const ClaimCard: React.SFC<AttributeCardProps> = props => {
   return (
     <View style={styles.cardContainer}>
       <View>
-        {secondaryText ? (<Text style={styles.secondaryText}> {secondaryText} </Text>) : null}
+        {secondaryText ? <Text style={styles.secondaryText}> {secondaryText} </Text> : null}
         <Text style={styles.primaryText}> {primaryText} </Text>
       </View>
-      { rightIcon }
+      {rightIcon}
     </View>
   )
 }

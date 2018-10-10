@@ -64,11 +64,8 @@ export class CredentialCard extends React.Component<Props, State> {
       }
     })
 
-  private renderClaim = (claim: { [key: string]: string }) => {
-    return Object.keys(claim).map(key => (
-      <ClaimCard key={key} primaryText={claim[key]} secondaryText={prepareLabel(key)} />
-    ))
-  }
+  private renderClaim = (claim: { [key: string]: string }) => 
+    Object.keys(claim).map(key => <ClaimCard key={key} primaryText={claim[key]} secondaryText={prepareLabel(key)} />)
 
   private renderCollapsedClaim = (claimData: any, title: string) => {
     const collapsedMessage = Object.keys(claimData).reduce((acc, current) => `${acc}${claimData[current]} `, '')
@@ -83,7 +80,9 @@ export class CredentialCard extends React.Component<Props, State> {
       <Block onTouch={this.toggleCollapse} style={attributeSelectionContainer}>
         <Block flex={0.2}>{getIconByName(credentialItem.credentialType)}</Block>
         <View style={{ flex: 0.7, justifyContent: 'space-between' }}>
-          {(this.props.displayTitle && !this.state.collapsed) ? <Text style={attributeTitle}> {credentialItem.credentialType} </Text> : null}
+          {this.props.displayTitle && !this.state.collapsed ? (
+            <Text style={attributeTitle}> {credentialItem.credentialType} </Text>
+          ) : null}
           {this.state.collapsed
             ? this.renderCollapsedClaim(credentialItem.claimData, credentialItem.credentialType)
             : this.renderClaim(credentialItem.claimData)}
