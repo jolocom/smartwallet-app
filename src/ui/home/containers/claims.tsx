@@ -2,10 +2,8 @@ import React from 'react'
 import { CredentialOverview } from '../components/credentialOverview'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
-import { RootState } from 'src/reducers/'
 import { accountActions, ssoActions } from 'src/actions'
 import { View } from 'react-native'
-import Immutable from 'immutable'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { QrScanEvent } from './types'
@@ -64,11 +62,10 @@ export class ClaimsContainer extends React.Component<Props, State> {
   }
 }
 
-// TODO nicer pattern for accessing state
-const mapStateToProps = (state: RootState) => {
-  const claims = Immutable.fromJS(state.account.claims)
+// TODO nicer pattern for accessing state, perhaps immer or something easier to Type
+const mapStateToProps = (state: any) => {
   return {
-    claims: claims.toJS()
+    claims: state.account.claims.toJS()
   }
 }
 

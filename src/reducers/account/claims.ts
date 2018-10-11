@@ -3,34 +3,38 @@ import Immutable from 'immutable'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 
 const categorizedClaims: CategorizedClaims = {
-  'Personal': [{
-    credentialType: 'Name',
-    claimData: {
-      givenName: '',
-      familyName: ''
+  Personal: [
+    {
+      credentialType: 'Name',
+      claimData: {
+        givenName: '',
+        familyName: ''
+      },
+      id: '',
+      issuer: '',
+      subject: ''
+    }
+  ],
+  Contact: [
+    {
+      credentialType: 'Email',
+      claimData: {
+        email: ''
+      },
+      id: '',
+      issuer: '',
+      subject: ''
     },
-    id: '',
-    issuer: '',
-    subject: ''
-  }],
-  'Contact': [{
-    credentialType: 'Email',
-    claimData: {
-      email: ''
-    },
-    id: '',
-    issuer: '',
-    subject: ''
-  },
-  {
-    credentialType: 'Mobile Phone',
-    claimData: {
-      telephone: ''
-    },
-    id: '',
-    issuer: '',
-    subject: ''
-  }]
+    {
+      credentialType: 'Mobile Phone',
+      claimData: {
+        telephone: ''
+      },
+      id: '',
+      issuer: '',
+      subject: ''
+    }
+  ]
 }
 
 export const initialState: ClaimsState = {
@@ -50,7 +54,7 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
-      return state.mergeIn(['decoratedCredentials'], Immutable.fromJS(action.claims)).setIn(['loading'], false)
+      return state.mergeDeepIn(['decoratedCredentials'], Immutable.fromJS(action.claims)).setIn(['loading'], false)
     case 'SET_SELECTED':
       return state.setIn(['selected'], Immutable.fromJS(action.selected))
     case 'HANLDE_CLAIM_INPUT':

@@ -22,6 +22,7 @@ interface State {
 export class CredentialCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
+
     this.state = {
       collapsed: this.props.collapsible
     }
