@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { IconToggle } from 'react-native-material-ui'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { StateVerificationSummary } from '../../../reducers/sso';
+import { StateVerificationSummary } from 'src/reducers/sso'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 // TODO Self signed or not

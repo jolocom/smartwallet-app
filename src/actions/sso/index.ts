@@ -1,3 +1,4 @@
+import { CredentialRequest } from 'jolocom-lib/js/credentialRequest/';
 import { Dispatch, AnyAction } from 'redux'
 import { JolocomLib } from 'jolocom-lib'
 import { StateCredentialRequestSummary, StateVerificationSummary, StateTypeSummary, StateAttributeSummary } from 'src/reducers/sso' // StateAttributeSummary, StateTypeSummary,
@@ -23,29 +24,34 @@ export const clearCredentialRequest = () => {
 export const consumeCredentialRequest = (jwtEncodedCR: string) => {
   return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
-    const credentialRequest = JolocomLib.parse.interactionJSONWebToken.fromJSON(jwtEncodedCR)
+
+    const credentialRequest = await JolocomLib.parse.interactionJSONWebToken.decode(jwtEncodedCR)
     const requestedTypes = credentialRequest.getRequestedCredentialTypes()
 
     const credentialRequests = await Promise.all<StateTypeSummary>(requestedTypes.map(async (type: string[]) => {
       const values: string[] = await storageLib.get.attributesByType(type)
+      console.log(values, 'here are your values')
 
       const attributeSummaries = await Promise.all<StateAttributeSummary>(values.map(async value => {
-        const verifications: SignedCredential[] = await storageLib.get.vCredentialsByAttributeValue(value)
-        const json = verifications.map(v => v.toJSON())
-        const validVerifications = credentialRequest.applyConstraints(json)
+        const credentials: SignedCredential[] = await storageLib.get.vCredentialsByAttributeValue(value)
+        console.log('code tangle', credentials)
+        const json = credentials.map(v => v.toJSON())
+        const validCredentials = credentialRequest.applyConstraints(json)
+
+        console.log(validCredentials, 'validCreds')
 
         const { did } = getState().account.did.toJS()
 
-        const verificationSummaries = validVerifications.map((verification: SignedCredential) => ({
-          id: verification.getId(),
-          selfSigned: verification.getIssuer() === did,
-          issuer: verification.getIssuer(),
-          expires: verification.getExpiryDate()
+        const credentialSummaries = validCredentials.map((credential: SignedCredential) => ({
+          id: credential.getId(),
+          selfSigned: credential.getIssuer() === did,
+          issuer: credential.getIssuer(),
+          expires: credential.getExpiryDate()
         }))
 
         return {
           value,
-          verifications: verificationSummaries
+          verifications: credentialSummaries
         }
       }))
 
@@ -55,14 +61,14 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
       }
     }))
 
-    const summary = {
-      requester: credentialRequest.getRequester(),
-      callbackURL: credentialRequest.getCallbackURL(),
-      request: credentialRequests
-    }
+    // const summary = {
+    //   // requester: credentialRequest.getRequester(),
+    //   callbackURL: credentialRequest.getCallbackURL(),
+    //   request: credentialRequests
+    // }
 
-    dispatch(setCredentialRequest(summary))
-    dispatch(navigationActions.navigate({routeName: routeList.Consent}))
+    // dispatch(setCredentialRequest(summary))
+    // dispatch(navigationActions.navigate({routeName: routeList.Consent}))
   }
 }
 

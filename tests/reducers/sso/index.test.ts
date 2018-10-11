@@ -9,7 +9,7 @@ describe('sso reducer', ()=> {
   it('should handle the SET_CREDENTIAL_REQUEST action ', () => {
     expect(ssoReducer(undefined, actions.setCredentialRequest(
       {
-        requester: 'did:jolo:requester',
+        // requester: 'did:jolo:requester',
         callbackUrl: 'http://example.com/myendpoint/',
         request: [{
           type: ['Credential', 'ProofOfEmailCredential'],
