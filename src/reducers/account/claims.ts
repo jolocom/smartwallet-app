@@ -54,7 +54,8 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
-      return state.mergeDeepIn(['decoratedCredentials'], Immutable.fromJS(action.claims)).setIn(['loading'], false)
+      const newState = state.mergeDeepIn(['decoratedCredentials', 'Personal'], Immutable.fromJS(action.claims.Personal))
+      return newState.mergeDeepIn(['decoratedCredentials', 'Contact'], Immutable.fromJS(action.claims.Contact)).setIn(['loading'], false)
     case 'SET_SELECTED':
       return state.setIn(['selected'], Immutable.fromJS(action.selected))
     case 'HANLDE_CLAIM_INPUT':
