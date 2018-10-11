@@ -55,12 +55,10 @@ export class CredentialOverview extends React.Component<Props, State> {
   renderCredentialCard = (category: string): ReactNode => {
     const { onEdit, claimsState } = this.props
 
-    const decoratedCredentials: CategorizedClaims = addTestData(claimsState.decoratedCredentials) // DEV
-    // const decoratedCredentials: CategorizedClaims = claimsState.decoratedCredentials
+    const decoratedCredentials: CategorizedClaims = claimsState.decoratedCredentials
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
     // TODO Don't use collapsible for 2 different things, rely on other func
-    console.log(categorizedCredentials)
     return categorizedCredentials.map((claim: DecoratedClaims) => (
       <CredentialCard
         openClaimDetails={onEdit}
@@ -80,8 +78,7 @@ export class CredentialOverview extends React.Component<Props, State> {
 
   render() {
     const { claimsState } = this.props
-    const claimsCategories = [...Object.keys(claimsState.decoratedCredentials), 'Name', 'Email', 'Other'] // Dev
-    // const claimsCategories = Object.keys(claimsState.decoratedCredentials)
+    const claimsCategories = Object.keys(claimsState.decoratedCredentials)
 
     if (claimsState.loading) {
       return renderLoadingScreen()
@@ -113,59 +110,5 @@ const renderLoadingScreen = () => {
     </Block>
   )
 }
-const collapsible = (claim: DecoratedClaims) =>
-  ['Mobile Phone', 'Phone', 'E-mail', 'Email', 'Name'].indexOf(claim.credentialType) === -1
 
-const addTestData = (claims: CategorizedClaims): CategorizedClaims => ({
-  ...claims,
-  Name: [
-    {
-      credentialType: 'Name',
-      claimData: {
-        firstName: 'Женя',
-        givenName: 'Русу'
-      },
-      issuer: '',
-      subject: '',
-      id: ''
-    },
-    {
-      credentialType: 'Name',
-      claimData: {
-        firstName: 'Eugeniu',
-        givenName: 'Rusu'
-      },
-      issuer: '',
-      subject: '',
-      id: ''
-    }
-  ],
-  Email: [
-    {
-      credentialType: 'Email',
-      claimData: {
-        email: ''
-      },
-      issuer: '',
-      subject: '',
-      id: ''
-    }
-  ],
-  Other: [
-    {
-      credentialType: 'Postal address',
-      claimData: {
-        street: 'Buchfinkweg',
-        houseNr: '19',
-        plz: '123456',
-        area: 'Berlin',
-        country: 'Germany',
-        planet: 'Earth',
-        region: 'Botan'
-      },
-      id: '0x01234',
-      issuer: 'did:jolo:extra',
-      subject: 'did:jolo:extrasubj'
-    }
-  ]
-})
+const collapsible = (claim: DecoratedClaims) => ['Mobile Phone', 'Phone', 'E-mail', 'Email', 'Name'].indexOf(claim.credentialType) === -1 

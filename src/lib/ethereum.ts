@@ -20,18 +20,17 @@ export class EthereumLib implements EthereumLibInterface  {
   }
 
   async requestEther(address: string) {
-    const res = await fetch(this.fuelingEndpoint, {
+    return fetch(this.fuelingEndpoint, {
       method: 'POST',
       body: JSON.stringify({ address }),
       headers: {
         'Content-Type': 'application/json'
       }
+    }).then(res => {
+      if (!res.ok) {
+        throw new Error('Damn')
+      }
     })
-
-    if (!res.ok) {
-      const err = await res.text()
-      throw new Error(`FUELING: ${err}`)
-    }
   }
 
   privKeyToEthAddress(privateKey: Buffer) : string {

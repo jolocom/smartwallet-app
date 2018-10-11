@@ -95,5 +95,16 @@ Array [
     "key": undefined,
     "type": "Navigation/RESET",
   },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
 ]
 `;

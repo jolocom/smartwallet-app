@@ -62,7 +62,7 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
         claimItem={
           Object {
             "claimData": Object {
-              "phone": "999111",
+              "telephone": "999111",
             },
             "credentialType": "Phone",
             "id": "claimTestId#3",
@@ -117,8 +117,8 @@ exports[`ClaimsOverview component matches the snapshot on render 1`] = `
         claimItem={
           Object {
             "claimData": Object {
-              "firstName": "Hello",
-              "lastName": "World",
+              "familyName": "World",
+              "givenName": "Hello",
             },
             "credentialType": "Name",
             "id": "claimTestId#1",
