@@ -91,7 +91,8 @@ export const saveClaim = () => {
 
       const verifiableCredential = await identityWallet.create.signedCredential({
         metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
-        claim: { id: did, ...claimsItem.claimData }
+        claim: claimsItem.claimData,
+        subject: did
       })
 
       if (claimsItem.id) {
@@ -99,7 +100,6 @@ export const saveClaim = () => {
       }
 
       await storageLib.store.verifiableCredential(verifiableCredential)
-
       await setClaimsForDid()
 
       dispatch(
@@ -140,7 +140,7 @@ const prepareClaimsForState = (credentials: SignedCredential[]) => {
   const categorizedClaims = {}
 
   const decoratedCredentials = credentials.map(vCred => {
-    const claimData = vCred.getCredentialSection()
+    const claimData = {...vCred.getCredentialSection()}
     delete claimData.id
 
     return {

@@ -3,6 +3,8 @@ import { PersonaEntity, SignatureEntity, CredentialEntity } from 'src/lib/storag
 import { Exclude, Expose, Transform, plainToClass, classToPlain } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
+import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
+import { Credential } from 'jolocom-lib/js/credentials/credential/credential'
 
 @Exclude()
 @Entity('verifiable_credentials')
@@ -16,7 +18,7 @@ export class VerifiableCredentialEntity {
   id!: string
 
   @Expose()
-  @Transform((value) => value.split(','), { toPlainOnly: true })
+  @Transform(value => value.split(','), { toPlainOnly: true })
   @Column()
   type!: string
 
@@ -58,28 +60,29 @@ export class VerifiableCredentialEntity {
     const json = vCred.toJSON() as ExtendedInterface
     json.subject = vCred.getSubject()
 
-    const entity = this.fromJSON(json)
-    return entity
+    return this.fromJSON(json)
   }
 
   // TODO handle decryption
   toVerifiableCredential(): SignedCredential {
-    const json = classToPlain(this) as ISignedCredentialAttrs
+    const json = classToPlain(this) as any
 
-    const { propertyName, encryptedValue } = this.claim[0]
-    const claim = {
-      id: this.subject.did,
-      [propertyName]: encryptedValue
-    }
+    const parsedContext = json['@context'].toString().split(',')
 
-    const parsedContext = json["@context"].toString().split(',')
-
-    const entityData = Object.assign({}, json, {
-      claim,
+    const entityData = {
+      ...json, 
+      claim: convertClaimArrayToObject(this.claim, this.subject.did),
       '@context': parsedContext,
       proof: this.proof[0]
-    })
+    }
 
     return SignedCredential.fromJSON(entityData)
   }
+}
+
+const convertClaimArrayToObject = (claims: CredentialEntity[], did: string): IClaimSection => {
+  return claims.reduce((acc: IClaimSection, claim: CredentialEntity) => {
+    const { propertyName, propertyValue } = claim
+    return { ...acc, [propertyName]: propertyValue }
+  }, {id: did})
 }

@@ -14,7 +14,7 @@ const categorizedClaims: CategorizedClaims = {
     subject: ''
   }],
   'Contact': [{
-    credentialType: 'E-mail',
+    credentialType: 'Email',
     claimData: {
       email: ''
     },

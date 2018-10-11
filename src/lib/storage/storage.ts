@@ -88,7 +88,7 @@ export class Storage {
       .select(['credential.encryptedValue'])
       .getMany()
 
-    return localAttributes.map(attribute => attribute.encryptedValue)
+    return localAttributes.map(attribute => attribute.propertyValue)
   }
 
   private async getVCredentialsForAttribute(attribute: string) : Promise<SignedCredential[]> {
@@ -126,14 +126,16 @@ export class Storage {
   private async storeVClaim(vCred: SignedCredential) : Promise<void> {
     await this.createConnectionIfNeeded()
     const verifiableCredential = VerifiableCredentialEntity.fromVeriableCredential(vCred)
+
     const signature = SignatureEntity.fromLinkedDataSignature(vCred.getProofSection())
-    const credential = CredentialEntity.fromVerifiableCredential(vCred)
+
+    const claims = CredentialEntity.fromVerifiableCredential(vCred)
+    claims.forEach(claim => claim.verifiableCredential = verifiableCredential)
 
     signature.verifiableCredential = verifiableCredential
-    credential.verifiableCredential = verifiableCredential
 
     verifiableCredential.proof = [signature]
-    verifiableCredential.claim = [credential]
+    verifiableCredential.claim = claims
 
     await this.connection.manager.save(verifiableCredential)
   }

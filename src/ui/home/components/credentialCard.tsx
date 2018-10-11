@@ -112,7 +112,7 @@ export class CredentialCard extends React.Component<Props, State> {
 const getIconByName = (name: string) => {
   const map = {
     Name: <NameIcon />,
-    'E-mail': <EmailIcon />,
+    'Email': <EmailIcon />,
     'Mobile Phone': <PhoneIcon />
   }
   return map[name] || <AccessibilityIcon />
