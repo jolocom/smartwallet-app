@@ -23,15 +23,13 @@ export const checkIdentityExists = () => {
         dispatch(genericActions.toggleLoadingScreen(false))
         return
       }
-     
+
       dispatch(setDid(personas[0].did))
       dispatch(genericActions.toggleLoadingScreen(false))
       dispatch(setIdentityWallet())
-      
-      dispatch(navigationActions.navigatorReset( 
-        { routeName: routeList.Home }
-      ))
-    } catch(err) {
+
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+    } catch (err) {
       if (err.message.indexOf('no such table') === 0) {
         return
       }
@@ -53,14 +51,13 @@ export const setIdentityWallet = () => {
         cipher: encryptedWif,
         pass: encryptionPass
       })
-     
+
       const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
       await backendMiddleware.setIdentityWallet(Buffer.from(privateKey, 'hex'))
-    } catch(err) {
-      console.log(err)
-      // dispatch(genericActions.showErrorScreen(err))
+    } catch (err) {
+      dispatch(genericActions.showErrorScreen(err))
     }
-  }  
+  }
 }
 
 export const handleClaimInput = (fieldValue: string, fieldName: string) => {
@@ -77,56 +74,42 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
       type: 'SET_SELECTED',
       selected: claim
     })
-    dispatch(navigationActions.navigate({
-      routeName: routeList.ClaimDetails
-    }))
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.ClaimDetails
+      })
+    )
   }
 }
 
 export const saveClaim = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const { identityWallet, storageLib } = backendMiddleware
-    const did = getState().account.did.get('did')
-    const claimsItem = getState().account.claims.toJS().selected
-
-    const credential = identityWallet.create.credential({
-      metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
-      subject: did,
-      claim: {
-        id: did,
-        ...claimsItem.claimData
-      }
-    })
-
     try {
-      const verifiableCredential = await identityWallet.sign.credential(credential)
+      const { identityWallet, storageLib } = backendMiddleware
+      const did = getState().account.did.get('did')
+      const claimsItem = getState().account.claims.toJS().selected
+
+      const verifiableCredential = await identityWallet.create.signedCredential({
+        metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
+        claim: { id: did, ...claimsItem.claimData }
+      })
 
       if (claimsItem.id) {
         await storageLib.delete.verifiableCredential(claimsItem.id)
       }
 
       await storageLib.store.verifiableCredential(verifiableCredential)
+
       await setClaimsForDid()
-      dispatch(navigationActions.navigatorReset({
-        routeName: routeList.Home
-      }))
+
+      dispatch(
+        navigationActions.navigatorReset({
+          routeName: routeList.Home
+        })
+      )
     } catch (err) {
       dispatch(genericActions.showErrorScreen(err))
     }
-
-    const verifiableCredential = await identityWallet.sign.credential(credential)
-
-    if (claimsItem.id) {
-      await storageLib.delete.verifiableCredential(claimsItem.id)
-    }
-
-    await storageLib.store.verifiableCredential(verifiableCredential)
-
-    await setClaimsForDid()
-
-    dispatch(navigationActions.navigatorReset({
-      routeName: routeList.Home
-    }))
   }
 }
 
@@ -145,11 +128,10 @@ export const setClaimsForDid = () => {
 
     const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
     const claims = prepareClaimsForState(verifiableCredentials) as CategorizedClaims
-    console.log('FETCHING FETCHING CLAIMS', claims)
 
     dispatch({
-        type: 'SET_CLAIMS_FOR_DID',
-        claims
+      type: 'SET_CLAIMS_FOR_DID',
+      claims
     })
   }
 }

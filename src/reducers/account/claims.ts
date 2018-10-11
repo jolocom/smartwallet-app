@@ -23,7 +23,7 @@ const categorizedClaims: CategorizedClaims = {
     subject: ''
   },
   {
-    credentialType: 'Phone',
+    credentialType: 'Mobile Phone',
     claimData: {
       telephone: ''
     },
@@ -50,14 +50,11 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
-      return state.mergeIn(['decoratedCredentials'], action.claims).setIn(['loading'], false)
+      return state.mergeIn(['decoratedCredentials'], Immutable.fromJS(action.claims)).setIn(['loading'], false)
     case 'SET_SELECTED':
-      return state.setIn(['selected'], action.selected)
+      return state.setIn(['selected'], Immutable.fromJS(action.selected))
     case 'HANLDE_CLAIM_INPUT':
-      const current = state.toJS()
-      current.selected.claimData.telephone = action.fieldValue
-      return Immutable.fromJS(current)
-      // return state.setIn(['selected', 'claimData', action.fieldName], action.fieldValue)
+      return state.setIn(['selected', 'claimData', action.fieldName], action.fieldValue)
     default:
       return state
   }

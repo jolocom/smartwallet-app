@@ -113,7 +113,7 @@ const getIconByName = (name: string) => {
   const map = {
     Name: <NameIcon />,
     'E-mail': <EmailIcon />,
-    'Phone': <PhoneIcon />
+    'Mobile Phone': <PhoneIcon />
   }
   return map[name] || <AccessibilityIcon />
 }
