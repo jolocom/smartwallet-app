@@ -5930,10 +5930,10 @@ jju@^1.3.0:
   resolved "https://registry.yarnpkg.com/jju/-/jju-1.3.0.tgz#dadd9ef01924bc728b03f2f7979bdbd62f7a2aaa"
   integrity sha1-2t2e8BkkvHKLA/L3l5vb1i96Kqo=
 
-jolocom-lib@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.0.4.tgz#0e552a37140357234d19247294ba37f4f07b602a"
-  integrity sha512-cMIruvi5leGu2nV86THodahUOANk+Yzl6+qGXOdw0ke7ArH2NpUVVQ0LuozO1EGUjXZMYi/C2+h8Cz44OVSCBQ==
+jolocom-lib@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.0.5.tgz#f1f24953cc7260e53a82e9386d2702cb758f3a93"
+  integrity sha512-ZHjJ4FvJAx1O1OMyh/lP1GUNjceb8XSseebYwUUnAtwxQcpUxkzaJSrQb+4/aukfns1/pbJzEk3OIn2Fw5B7xg==
   dependencies:
     base64url "^3.0.0"
     bip39 "^2.5.0"
