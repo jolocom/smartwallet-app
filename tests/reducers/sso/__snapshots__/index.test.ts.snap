@@ -19,7 +19,7 @@ Object {
         ],
       },
     ],
-    "requester": "did:jolo:requester",
+    "requester": "did:jolo:mock",
   },
 }
 `;

@@ -164,28 +164,28 @@ Array [
     "params": Object {
       "errorMessage": "Invalid entropy",
       "stackTrace": "TypeError: Invalid entropy
-    at Object.entropyToMnemonic (/Users/jolocom/code/smartwallet-app/node_modules/bip39/index.js:98:34)
-    at Object.generateMnemonic (/Users/jolocom/code/smartwallet-app/node_modules/jolocom-lib/js/utils/keyDerivation.js:6:18)
-    at IdentityManager.Object.<anonymous>.IdentityManager.deriveChildKey (/Users/jolocom/code/smartwallet-app/node_modules/jolocom-lib/js/identityManager/identityManager.js:30:40)
-    at /Users/jolocom/code/smartwallet-app/src/actions/registration/index.ts:69:43
-    at step (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:133:27)
-    at Object.next (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:114:57)
-    at /Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:107:75
-    at new Promise (/Users/jolocom/code/smartwallet-app/node_modules/jsonld/dist/jsonld.js:10180:7)
-    at Object.__awaiter (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:103:16)
-    at /Users/jolocom/code/smartwallet-app/src/actions/registration/index.ts:61:106
-    at /Users/jolocom/code/smartwallet-app/tests/actions/registration/index.test.ts:133:13
-    at step (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:133:27)
-    at Object.next (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:114:57)
-    at /Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:107:75
-    at new Promise (/Users/jolocom/code/smartwallet-app/node_modules/jsonld/dist/jsonld.js:10180:7)
-    at Object.__awaiter (/Users/jolocom/code/smartwallet-app/node_modules/tslib/tslib.js:103:16)
-    at Object.<anonymous> (/Users/jolocom/code/smartwallet-app/tests/actions/registration/index.test.ts:116:60)
-    at Object.asyncFn (/Users/jolocom/code/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)
-    at resolve (/Users/jolocom/code/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:52:12)
+    at Object.entropyToMnemonic (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jolocom-lib/node_modules/bip39/index.js:98:34)
+    at Object.generateMnemonic (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jolocom-lib/ts/utils/keyDerivation.ts:17:16)
+    at IdentityManager.Object.<anonymous>.IdentityManager.deriveChildKey (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jolocom-lib/ts/identityManager/identityManager.ts:28:22)
+    at /Users/charly/Documents/Code/WORK/smartwallet-app/src/actions/registration/index.ts:69:43
+    at step (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/tslib/tslib.js:133:27)
+    at Object.next (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/tslib/tslib.js:114:57)
+    at /Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/tslib/tslib.js:107:75
+    at new Promise (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jolocom-lib/node_modules/jsonld/dist/jsonld.js:10180:7)
+    at Object.__awaiter (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/tslib/tslib.js:103:16)
+    at /Users/charly/Documents/Code/WORK/smartwallet-app/src/actions/registration/index.ts:61:106
+    at /Users/charly/Documents/Code/WORK/smartwallet-app/tests/actions/registration/index.test.ts:133:13
+    at step (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/tslib/tslib.js:133:27)
+    at Object.next (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/tslib/tslib.js:114:57)
+    at /Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/tslib/tslib.js:107:75
+    at new Promise (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jolocom-lib/node_modules/jsonld/dist/jsonld.js:10180:7)
+    at Object.__awaiter (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/tslib/tslib.js:103:16)
+    at Object.<anonymous> (/Users/charly/Documents/Code/WORK/smartwallet-app/tests/actions/registration/index.test.ts:116:60)
+    at Object.asyncFn (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jest-jasmine2/build/jasmine_async.js:82:37)
+    at resolve (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:52:12)
     at new Promise (<anonymous>)
-    at mapper (/Users/jolocom/code/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:39:19)
-    at promise.then (/Users/jolocom/code/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:73:82)
+    at mapper (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:39:19)
+    at promise.then (/Users/charly/Documents/Code/WORK/smartwallet-app/node_modules/jest-jasmine2/build/queue_runner.js:73:82)
     at <anonymous>
     at runMicrotasksCallback (internal/process/next_tick.js:115:5)
     at process._tickCallback (internal/process/next_tick.js:150:11)",
