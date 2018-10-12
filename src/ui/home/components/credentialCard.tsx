@@ -2,9 +2,9 @@ import React from 'react'
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
-import { MoreIcon, AccessibilityIcon, NameIcon, EmailIcon, PhoneIcon } from 'src/resources'
+import { MoreIcon } from 'src/resources'
 import { Block } from '../../structure'
-import { prepareLabel } from 'src/lib/util'
+import { prepareLabel, getCredentialIconByType } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard } from 'src/ui/sso/components/claimCard'
 
 interface Props {
@@ -93,10 +93,11 @@ export class CredentialCard extends React.Component<Props, State> {
     const { container, title } = this.getStyles()
     const { credentialItem, empty, shouldDisplayTitle } = this.props
     const { collapsed } = this.state
+    const CredentialIcon = getCredentialIconByType(credentialItem.credentialType)
 
     return (
       <Block onTouch={this.toggleCollapse} style={container}>
-        <Block flex={0.2}>{getIconByName(credentialItem.credentialType)}</Block>
+        <Block flex={0.2}><CredentialIcon/></Block>
         <View style={{ flex: 0.7, justifyContent: 'space-between', flexGrow: 1 }}>
           {shouldDisplayTitle && !collapsed ? (
             <Text style={title}> {credentialItem.credentialType} </Text>
@@ -107,14 +108,4 @@ export class CredentialCard extends React.Component<Props, State> {
       </Block>
     )
   }
-}
-
-// TODO Util map func
-const getIconByName = (name: string) => {
-  const map = {
-    Name: <NameIcon />,
-    'Email': <EmailIcon />,
-    'Mobile Phone': <PhoneIcon />
-  }
-  return map[name] || <AccessibilityIcon />
 }

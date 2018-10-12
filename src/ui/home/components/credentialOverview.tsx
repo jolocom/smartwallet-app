@@ -7,6 +7,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
+import { CredentialTypes } from 'src/lib/categories'
 const loaders = require('react-native-indicator')
 
 interface Props {
@@ -70,11 +71,10 @@ export class CredentialOverview extends React.Component<Props, State> {
     ))
   }
 
-  renderCredentialCategory = (category: string) => ([
+  renderCredentialCategory = (category: string) => [
     <Text style={styles.sectionHeader}>{category.toString()}</Text>,
     this.renderCredentialCard(category)
-  ])
-
+  ]
 
   render() {
     const { claimsState } = this.props
@@ -85,10 +85,10 @@ export class CredentialOverview extends React.Component<Props, State> {
     }
 
     return (
-      <Container style={{padding: 0}}>
+      <Container style={{ padding: 0 }}>
         <ScrollView
           style={styles.scrollComponent}
-          contentContainerStyle={claimsState.loading ? { flexGrow: 1, justifyContent: 'space-around'}: {}}
+          contentContainerStyle={claimsState.loading ? { flexGrow: 1, justifyContent: 'space-around' } : {}}
         >
           {claimsCategories.map(this.renderCredentialCategory)}
         </ScrollView>
@@ -102,7 +102,6 @@ export class CredentialOverview extends React.Component<Props, State> {
   }
 }
 
-// TODO -> Move to util, merge with canonical function
 const renderLoadingScreen = () => {
   return (
     <Block>
@@ -111,4 +110,14 @@ const renderLoadingScreen = () => {
   )
 }
 
-const collapsible = (claim: DecoratedClaims) => ['Mobile Phone', 'Phone', 'E-mail', 'Email', 'Name'].indexOf(claim.credentialType) === -1 
+const collapsible = (claim: DecoratedClaims) => {
+  const {credentialType, claimData} = claim
+
+  const isDefaultCredentialType = CredentialTypes[credentialType]
+
+  if(isDefaultCredentialType) {
+    return false
+  }
+
+  return Object.keys(claimData).filter(key => !!claimData[key]).length > 1
+}
