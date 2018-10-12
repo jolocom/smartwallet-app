@@ -5,6 +5,10 @@ module.exports = ({ platform }, { module, resolve }) => ({
   module: {
     ...module,
     rules: [{
+      test: /\.js/,
+      exclude: /node_modules\/(?!(base64url|jsonld|rdf-canonize)\/).*/,
+      loader: 'babel-loader'
+      },{
         test: /\.svg$/,
         exclude: /node_modules/,
         use: [
