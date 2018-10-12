@@ -49,6 +49,10 @@ const styles = StyleSheet.create({
   },
   scrollComponent: {
     width: '100%'
+  },
+  scrollComponentLoading: {
+    flexGrow: 1,
+    justifyContent: 'space-around'
   }
 })
 
@@ -77,23 +81,22 @@ export class CredentialOverview extends React.Component<Props, State> {
   ]
 
   render() {
-    const { claimsState } = this.props
-    const claimsCategories = Object.keys(claimsState.decoratedCredentials)
+    const { decoratedCredentials, loading } = this.props.claimsState
+    const { qrCodeButtonSection, scrollComponent, scrollComponentLoading, iconContainer } = styles
 
-    if (claimsState.loading) {
+    const claimCategories = Object.keys(decoratedCredentials)
+
+    if (loading) {
       return renderLoadingScreen()
     }
 
     return (
       <Container style={{ padding: 0 }}>
-        <ScrollView
-          style={styles.scrollComponent}
-          contentContainerStyle={claimsState.loading ? { flexGrow: 1, justifyContent: 'space-around' } : {}}
-        >
-          {claimsCategories.map(this.renderCredentialCategory)}
+        <ScrollView style={scrollComponent} contentContainerStyle={loading ? scrollComponentLoading : {}}>
+          {claimCategories.map(this.renderCredentialCategory)}
         </ScrollView>
-        <Block style={styles.qrCodeButtonSection}>
-          <TouchableOpacity style={styles.iconContainer} onPress={this.props.onScannerStart}>
+        <Block style={qrCodeButtonSection}>
+          <TouchableOpacity style={iconContainer} onPress={this.props.onScannerStart}>
             <Icon size={30} name="qrcode-scan" color="white" />
           </TouchableOpacity>
         </Block>
@@ -111,11 +114,11 @@ const renderLoadingScreen = () => {
 }
 
 const collapsible = (claim: DecoratedClaims) => {
-  const {credentialType, claimData} = claim
+  const { credentialType, claimData } = claim
 
   const isDefaultCredentialType = CredentialTypes[credentialType]
 
-  if(isDefaultCredentialType) {
+  if (isDefaultCredentialType) {
     return false
   }
 

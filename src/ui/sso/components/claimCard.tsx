@@ -2,8 +2,6 @@ import React, { ReactNode } from 'react'
 import { View, Text, StyleSheet, GestureResponderEvent, TextStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
-// TODO Self signed or not
-// TODO Generic group component as opposed to view for flex grouping
 // TODO Custom text component with size, font, color
 // TODO Make whole card clickable as opposed to icon
 // TODO Changes to the 'Container' custom component to allow horisontal flex
@@ -17,24 +15,26 @@ interface ClaimCardProps {
 
 export const ClaimCard: React.SFC<ClaimCardProps> = props => {
   const styles = StyleSheet.create({
-    primaryText: {
+    primaryTextDefault: {
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.headerFontSize,
       color: JolocomTheme.primaryColorBlack,
       fontWeight: '100'
     },
-    secondaryText: {
+    secondaryTextDefault: {
       fontSize: 17,
       opacity: 0.4
     }
   })
 
-  const { primaryText, secondaryText, rightIcon } = props
+  const { primaryText, secondaryText, rightIcon, primaryTextStyle, secondaryTextStyle } = props
+  const { primaryTextDefault, secondaryTextDefault } = styles
+
   return (
     <View>
       <View>
-        <Text style={[styles.primaryText, styles.secondaryText, props.secondaryTextStyle]}> {secondaryText} </Text>
-        <Text style={[styles.primaryText, props.primaryTextStyle]}> {primaryText} </Text>
+        <Text style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}>{secondaryText}</Text>
+        <Text style={[primaryTextDefault, primaryTextStyle]}>{primaryText}</Text>
       </View>
       {rightIcon}
     </View>
