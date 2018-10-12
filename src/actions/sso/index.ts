@@ -55,7 +55,7 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
     }))
 
     const summary = {
-      requester: 'did:jolo:mock',
+      requester: credentialRequest.iss,
       callbackURL: credentialRequest.getCallbackURL(),
       request: credentialRequests
     }
