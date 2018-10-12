@@ -24,17 +24,9 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
   return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
 
-
     const credentialRequest = await JolocomLib.parse.interactionJSONWebToken.decode(jwtEncodedCR)
 
     const requestedTypes = credentialRequest.getRequestedCredentialTypes()
-
-    const requestedCredentialsValues = await Promise.all(
-      requestedTypes.map(async (type: string[]) => {
-        return await storageLib.get.attributesByType(type)
-      })
-    )
-
 
     const credentialRequests = await Promise.all<StateTypeSummary>(requestedTypes.map(async (type: string[]) => {
       const values: string[] = await storageLib.get.attributesByType(type)
@@ -60,7 +52,6 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
         type,
         credentials: attributeSummaries
       }
-
     }))
 
     const summary = {
