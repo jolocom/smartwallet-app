@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux'
 import Immutable from 'immutable'
-import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
+import { ClaimsState, CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
 
 const categorizedClaims: CategorizedClaims = {
   Personal: [
@@ -54,8 +54,7 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
-      const newState = state.mergeDeepIn(['decoratedCredentials', 'Personal'], Immutable.fromJS(action.claims.Personal))
-      return newState.mergeDeepIn(['decoratedCredentials', 'Contact'], Immutable.fromJS(action.claims.Contact)).setIn(['loading'], false)
+      return state.set('decoratedCredentials', Immutable.fromJS(addDefaultValues(action.claims))).set('loading', false)
     case 'SET_SELECTED':
       return state.setIn(['selected'], Immutable.fromJS(action.selected))
     case 'HANLDE_CLAIM_INPUT':
@@ -63,4 +62,26 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     default:
       return state
   }
+}
+
+const addDefaultValues = (claims: CategorizedClaims) => {
+  return Object.keys(categorizedClaims).reduce((acc: CategorizedClaims, category: string) => {
+    return { ...acc, [category]: injectPlaceholdersIfNeeded(category, claims[category]) }
+  }, {})
+}
+
+const injectPlaceholdersIfNeeded = (category: string, claims: DecoratedClaims[]): DecoratedClaims[] => {
+  if (!claims || claims.length === 0) {
+    return categorizedClaims[category]
+  }
+
+  const missing = categorizedClaims[category].filter(
+    defaultClaim => !claims.some(claim => claim.credentialType === defaultClaim.credentialType)
+  )
+
+  if (missing) {
+    return [...missing, ...claims]
+  }
+
+  return claims
 }

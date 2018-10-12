@@ -4,12 +4,13 @@ import { Exclude, Expose, Transform, plainToClass, classToPlain } from 'class-tr
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
 import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
-import { Credential } from 'jolocom-lib/js/credentials/credential/credential'
 
 @Exclude()
 @Entity('verifiable_credentials')
 export class VerifiableCredentialEntity {
   @Expose()
+  @Transform(value => JSON.stringify(value), { toClassOnly: true })
+  @Transform(value => JSON.parse(value), { toPlainOnly: true })
   @Column()
   '@context'!: string
 
@@ -52,7 +53,8 @@ export class VerifiableCredentialEntity {
     return plainToClass(VerifiableCredentialEntity, json)
   }
 
-  static fromVeriableCredential(vCred: SignedCredential): VerifiableCredentialEntity {
+  // TODO typo
+  static fromVerifiableCredential(vCred: SignedCredential): VerifiableCredentialEntity {
     interface ExtendedInterface extends ISignedCredentialAttrs {
       subject: string
     }
@@ -66,13 +68,9 @@ export class VerifiableCredentialEntity {
   // TODO handle decryption
   toVerifiableCredential(): SignedCredential {
     const json = classToPlain(this) as any
-
-    const parsedContext = json['@context'].toString().split(',')
-
     const entityData = {
-      ...json, 
+      ...json,
       claim: convertClaimArrayToObject(this.claim, this.subject.did),
-      '@context': parsedContext,
       proof: this.proof[0]
     }
 
@@ -81,8 +79,11 @@ export class VerifiableCredentialEntity {
 }
 
 const convertClaimArrayToObject = (claims: CredentialEntity[], did: string): IClaimSection => {
-  return claims.reduce((acc: IClaimSection, claim: CredentialEntity) => {
-    const { propertyName, propertyValue } = claim
-    return { ...acc, [propertyName]: propertyValue }
-  }, {id: did})
+  return claims.reduce(
+    (acc: IClaimSection, claim: CredentialEntity) => {
+      const { propertyName, propertyValue } = claim
+      return { ...acc, [propertyName]: propertyValue }
+    },
+    { id: did }
+  )
 }
