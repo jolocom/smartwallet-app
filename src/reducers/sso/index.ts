@@ -9,7 +9,7 @@ export interface StateVerificationSummary {
   id: string
   issuer: string
   selfSigned: boolean
-  expires: string | undefined
+  expires: string | undefined | Date
 }
 export interface StateTypeSummary {
   type: string[]
@@ -18,7 +18,7 @@ export interface StateTypeSummary {
 
 export interface StateCredentialRequestSummary {
   readonly callbackURL: string
-  // readonly requester: string
+  readonly requester: string
   readonly request: StateTypeSummary[]
 }
 
@@ -28,7 +28,7 @@ export interface SsoState {
 
 const initialState: SsoState = {
   activeCredentialRequest: {
-    // requester: '',
+    requester: '',
     callbackURL: '',
     request: []
   }

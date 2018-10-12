@@ -1,4 +1,3 @@
-import { CredentialRequest } from 'jolocom-lib/js/credentialRequest/';
 import { Dispatch, AnyAction } from 'redux'
 import { JolocomLib } from 'jolocom-lib'
 import { StateCredentialRequestSummary, StateVerificationSummary, StateTypeSummary, StateAttributeSummary } from 'src/reducers/sso' // StateAttributeSummary, StateTypeSummary,
@@ -25,24 +24,26 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
   return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
 
+
     const credentialRequest = await JolocomLib.parse.interactionJSONWebToken.decode(jwtEncodedCR)
+
     const requestedTypes = credentialRequest.getRequestedCredentialTypes()
+
+    const requestedCredentialsValues = await Promise.all(
+      requestedTypes.map(async (type: string[]) => {
+        return await storageLib.get.attributesByType(type)
+      })
+    )
+
 
     const credentialRequests = await Promise.all<StateTypeSummary>(requestedTypes.map(async (type: string[]) => {
       const values: string[] = await storageLib.get.attributesByType(type)
-      console.log(values, 'here are your values')
-
       const attributeSummaries = await Promise.all<StateAttributeSummary>(values.map(async value => {
-        const credentials: SignedCredential[] = await storageLib.get.vCredentialsByAttributeValue(value)
-        console.log('code tangle', credentials)
-        const json = credentials.map(v => v.toJSON())
-        const validCredentials = credentialRequest.applyConstraints(json)
-
-        console.log(validCredentials, 'validCreds')
+        const attributes: SignedCredential[] = await storageLib.get.vCredentialsByAttributeValue(value)
 
         const { did } = getState().account.did.toJS()
 
-        const credentialSummaries = validCredentials.map((credential: SignedCredential) => ({
+        const credentialSummaries = attributes.map((credential: SignedCredential) => ({
           id: credential.getId(),
           selfSigned: credential.getIssuer() === did,
           issuer: credential.getIssuer(),
@@ -59,16 +60,17 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
         type,
         credentials: attributeSummaries
       }
+
     }))
 
-    // const summary = {
-    //   // requester: credentialRequest.getRequester(),
-    //   callbackURL: credentialRequest.getCallbackURL(),
-    //   request: credentialRequests
-    // }
+    const summary = {
+      requester: 'did:jolo:mock',
+      callbackURL: credentialRequest.getCallbackURL(),
+      request: credentialRequests
+    }
 
-    // dispatch(setCredentialRequest(summary))
-    // dispatch(navigationActions.navigate({routeName: routeList.Consent}))
+    dispatch(setCredentialRequest(summary))
+    dispatch(navigationActions.navigate({routeName: routeList.Consent}))
   }
 }
 
