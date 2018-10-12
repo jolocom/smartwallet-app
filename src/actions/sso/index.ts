@@ -107,18 +107,6 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
       }
     })
 
-    // const requestedCredentialsValues = await Promise.all(
-    //   requestedTypes.map(async (type: string[]) => {
-    //     return await storageLib.get.attributesByType(type)
-    //   })
-    // )
-
-    // const validSignedCredentials = await Promise.all(
-    //   requestedCredentialsValues.map(async (attribute: object) => {
-    //     return await storageLib.get.vCredentialsByAttributeValue(attribute)
-    //   })
-    // )
-
     const { callbackURL } = getState().sso.activeCredentialRequest
 
     // TODO Do we care about the response?
