@@ -8,7 +8,7 @@ import { AttributeSummary } from 'src/ui/sso/components/attributeSelectionSectio
 import { areCredTypesEqual } from 'src/lib/util'
 
 interface Props {
-  requester: string
+  // requester: string
   requestedCredentials: StateTypeSummary[]
   callbackURL: string
   handleSubmitClaims: (credentials: StateVerificationSummary[]) => void
@@ -143,7 +143,7 @@ export class ConsentComponent extends React.Component<Props, State> {
       </Block>
 
       <Block flex={0.4} style={{backgroundColor: 'white'}}>
-        <Text style={styles.serviceTitle}> {this.props.requester.substring(0,25)}... </Text>
+        {/* <Text style={styles.serviceTitle}> {this.props.requester.substring(0,25)}... </Text> */}
         <Text style={styles.serviceMetadata}> {this.props.callbackURL.substring(0,25)}... </Text>
       </Block>
 

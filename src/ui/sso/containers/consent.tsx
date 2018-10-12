@@ -28,10 +28,14 @@ export class ConsentContainer extends React.Component<Props, State> {
   }
 
   render() {
-    const { request, requester, callbackURL } = this.props.activeCredentialRequest
+    const {
+      request,
+      // requester,
+      callbackURL
+    } = this.props.activeCredentialRequest
     return (
     <ConsentComponent
-      requester={ requester }
+      // requester={ requester }
       callbackURL={ callbackURL }
       requestedCredentials={ request }
       handleSubmitClaims={ this.handleSubmitClaims }
