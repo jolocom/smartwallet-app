@@ -8,8 +8,8 @@ exports[`Claims container correctly changes scanning to false when qr code scann
     }
   }
 >
-  <ClaimOverview
-    claims={Object {}}
+  <CredentialOverview
+    claimsState={Object {}}
     onScannerStart={[Function]}
     scanning={false}
   />
@@ -24,8 +24,8 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
     }
   }
 >
-  <ClaimOverview
-    claims={Object {}}
+  <CredentialOverview
+    claimsState={Object {}}
     onScannerStart={[Function]}
     scanning={false}
   />
@@ -40,8 +40,8 @@ exports[`Claims container mounts correctly and matches the snapshot 1`] = `
     }
   }
 >
-  <ClaimOverview
-    claims={Object {}}
+  <CredentialOverview
+    claimsState={Object {}}
     onScannerStart={[Function]}
     scanning={false}
   />

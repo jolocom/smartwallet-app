@@ -26,7 +26,7 @@ Object {
       ],
       "Contact": Immutable.List [
         Immutable.Map {
-          "credentialType": "E-mail",
+          "credentialType": "Email",
           "claimData": Immutable.Map {
             "email": "",
           },
@@ -35,7 +35,7 @@ Object {
           "subject": "",
         },
         Immutable.Map {
-          "credentialType": "Phone",
+          "credentialType": "Mobile Phone",
           "claimData": Immutable.Map {
             "telephone": "",
           },
@@ -81,7 +81,7 @@ Object {
       ],
       "Contact": Immutable.List [
         Immutable.Map {
-          "credentialType": "E-mail",
+          "credentialType": "Email",
           "claimData": Immutable.Map {
             "email": "",
           },
@@ -90,7 +90,7 @@ Object {
           "subject": "",
         },
         Immutable.Map {
-          "credentialType": "Phone",
+          "credentialType": "Mobile Phone",
           "claimData": Immutable.Map {
             "telephone": "",
           },

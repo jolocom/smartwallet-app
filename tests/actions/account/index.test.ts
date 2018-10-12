@@ -80,21 +80,6 @@ describe('Account action creators', () => {
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  // it('Should correctly handle an arbitrary error being thrown', async () => {
-  //   const mockError = { message: 'gamma rays have flipped our bits!' }
-  //   const backendMiddleware = {
-  //     storageLib: {
-  //       get: {
-  //         persona: jest.fn().mockRejectedValue(mockError)
-  //       }
-  //     }
-  //   }
-
-  //   const action = accountActions.checkIdentityExists()
-  //   await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
-  //   expect(mockStore.getActions()[1].params.errorMessage).toContain('gamma rays have flipped our bits!')
-  // })
-
   it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
     const { identityWallet, mockVCred } = data
     
@@ -123,6 +108,7 @@ describe('Account action creators', () => {
       issuer: 'did:jolo:test',
       subject: 'did:jolo:test'
     }
+
     const backendMiddleware = {
       storageLib: {
         store: {
@@ -135,5 +121,5 @@ describe('Account action creators', () => {
     const action = accountActions.saveClaim(mockClaimsItem)
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
-  })  
+  })
 })

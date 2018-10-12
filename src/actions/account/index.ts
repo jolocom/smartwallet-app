@@ -123,6 +123,7 @@ export const toggleLoading = (val: boolean) => {
 export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const state = getState().account.claims.toJS()
+
     dispatch(toggleLoading(!state.loading))
     const storageLib = backendMiddleware.storageLib
 
