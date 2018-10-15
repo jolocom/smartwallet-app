@@ -53,7 +53,7 @@ export class CredentialCard extends React.Component<Props, State> {
         backgroundColor: JolocomTheme.primaryColorWhite,
         paddingVertical: '5%',
         marginBottom: '1%'
-      },
+      } as ViewStyle,
       defaultTitleStyle: {
         ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
         color: '#05050d',
@@ -141,7 +141,7 @@ export class CredentialCard extends React.Component<Props, State> {
     const notCollapsed = collapsible && !collapsed
 
     return (
-      <Block style={{ ...StyleSheet.flatten(defaultContainerStyle), ...containerStyle }}>
+      <Block style={[ StyleSheet.flatten(defaultContainerStyle), containerStyle || {} ]}>
         <View onTouchEnd={this.toggleCollapse} style={defaultLeftIconStyle}>
           {leftIcon}
         </View>
