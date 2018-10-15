@@ -24,11 +24,12 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
     },
     secondaryTextDefault: {
       fontSize: 17,
-      opacity: 0.4
+      opacity: 0.4,
     },
     containerDefault: {
       flex: 1,
       marginBottom: '5%',
+      justifyContent: 'flex-start'
     }
   })
 
@@ -36,7 +37,7 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
   const { primaryTextDefault, secondaryTextDefault, containerDefault } = styles
 
   return (
-    <View style={{display: 'flex', width: '100%', flexDirection: 'row'}}>
+    <View style={{display: 'flex', flexDirection: 'row'}}>
       <View style={[containerDefault, containerStyle]}>
         <Text style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}>{secondaryText}</Text>
         <Text style={[primaryTextDefault, primaryTextStyle]}>{primaryText}</Text>

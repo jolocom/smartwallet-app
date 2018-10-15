@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet, ScrollView, ViewStyle, TextStyle } from 'react-native'
+import { Text, StyleSheet, ScrollView, ViewStyle, TextStyle, View } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
@@ -154,11 +154,13 @@ export class ConsentComponent extends React.Component<Props, State> {
     const { type, verifications } = entry
 
     return (
-      <IconToggle
-        name={selected ? 'check-circle' : 'fiber-manual-record'}
-        onPress={() => this.handleAttributeSelect(type, verifications[0])}
-        color={checkboxColor}
-      />
+      <View style={{ justifyContent: 'center' }}>
+        <IconToggle
+          name={selected ? 'check-circle' : 'fiber-manual-record'}
+          onPress={() => this.handleAttributeSelect(type, verifications[0])}
+          color={checkboxColor}
+        />
+      </View>
     )
   }
 
@@ -197,7 +199,7 @@ export class ConsentComponent extends React.Component<Props, State> {
         claimRightIcon={this.renderRightIcon(selected, entry)}
         credentialItem={{
           credentialType: type,
-          claimData: { [values.join(' ')]: renderSelfSignedOrNot(verifications, did) }
+          claimData: { [values.map(v => v.trim()).join('\n')]: renderSelfSignedOrNot(verifications, did) }
         }}
       />
     )

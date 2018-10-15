@@ -65,9 +65,9 @@ export class CredentialOverview extends React.Component<Props, State> {
     const decoratedCredentials: CategorizedClaims = claimsState.decoratedCredentials
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
-    // TODO COLLAPSIBLE AND SHOW TITLE
     return categorizedCredentials.map((claim: DecoratedClaims) => (
       <CredentialCard
+        title={collapsible(claim) ? claim.credentialType : ''}
         handleInteraction={() => onEdit(claim)}
         credentialItem={claim}
         collapsible={collapsible(claim)}
@@ -120,6 +120,8 @@ const collapsible = (claim: DecoratedClaims) => {
 
   const isDefaultCredentialType = CredentialTypes[credentialType]
 
+  if (claim.credentialType === 'Email')
+    return true
   if (isDefaultCredentialType) {
     return false
   }

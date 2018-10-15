@@ -108,26 +108,28 @@ export class CredentialCard extends React.Component<Props, State> {
     return Object.keys(claimData).map((key, idx, arr) => {
       const lastElement = idx === arr.length - 1
 
-      return <ClaimCard
-        key={key}
-        rightIcon={this.props.claimRightIcon || null}
-        primaryTextStyle={claimCardStyle ? claimCardStyle.primaryText : {}}
-        secondaryTextStyle={claimCardStyle ? claimCardStyle.secondaryText : {}}
-        primaryText={claimData[key]}
-        secondaryText={prepareLabel(key)}
-        containerStyle={lastElement ? {marginBottom: 0} : {}}
-      />
+      return (
+        <ClaimCard
+          key={key}
+          rightIcon={this.props.claimRightIcon || null}
+          primaryTextStyle={claimCardStyle ? claimCardStyle.primaryText : {}}
+          secondaryTextStyle={claimCardStyle ? claimCardStyle.secondaryText : {}}
+          primaryText={claimData[key]}
+          secondaryText={prepareLabel(key)}
+          containerStyle={lastElement ? { marginBottom: 0 } : {}}
+        />
+      )
     })
   }
 
   private renderCollapsedClaim = (credentialItem: CredentialData) => {
     const { claimData, credentialType } = credentialItem
-    const collapsedMessage = Object.keys(claimData).reduce((acc, current) => `${acc}${claimData[current]} `, '')
+    const collapsedMessage = Object.keys(claimData).reduce((acc, current) => `${acc}${claimData[current]}\n`, '')
     return <ClaimCard key={collapsedMessage} secondaryText={credentialType} primaryText={collapsedMessage} />
   }
 
   public render() {
-    const { credentialItem, title, titleStyle, containerStyle, leftIcon } = this.props
+    const { collapsible, credentialItem, title, titleStyle, containerStyle, leftIcon } = this.props
     const { collapsed } = this.state
     const {
       defaultContainerStyle,
@@ -136,11 +138,17 @@ export class CredentialCard extends React.Component<Props, State> {
       defaultLeftIconStyle
     } = this.getStyles()
 
+    const notCollapsed = collapsible && !collapsed
+
     return (
-      <Block  style={{ ...StyleSheet.flatten(defaultContainerStyle), ...containerStyle }}>
-        <View onTouchEnd={this.toggleCollapse} style={defaultLeftIconStyle}>{leftIcon}</View>
+      <Block style={{ ...StyleSheet.flatten(defaultContainerStyle), ...containerStyle }}>
+        <View onTouchEnd={this.toggleCollapse} style={defaultLeftIconStyle}>
+          {leftIcon}
+        </View>
         <View onTouchEnd={this.toggleCollapse} style={defaultClaimSectionStyle}>
-          {title && !collapsed ? <Text style={[defaultTitleStyle, titleStyle]}> {title} </Text> : null}
+          {(notCollapsed || !collapsible) && title ? (
+            <Text style={[defaultTitleStyle, titleStyle]}>{title}</Text>
+          ) : null}
           {collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
         {this.renderIcon()}
