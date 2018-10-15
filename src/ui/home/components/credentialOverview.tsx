@@ -8,6 +8,8 @@ import { ReactNode } from 'react'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { CredentialTypes } from 'src/lib/categories'
+import { MoreIcon } from 'src/resources';
+import { getCredentialIconByType } from 'src/resources/util'
 const loaders = require('react-native-indicator')
 
 interface Props {
@@ -21,7 +23,7 @@ interface Props {
 interface State {}
 
 const styles = StyleSheet.create({
-  iconContainer: {
+  qrCodeIconContainer: {
     height: 55,
     width: 55,
     borderRadius: 35,
@@ -63,14 +65,14 @@ export class CredentialOverview extends React.Component<Props, State> {
     const decoratedCredentials: CategorizedClaims = claimsState.decoratedCredentials
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
-    // TODO Don't use collapsible for 2 different things, rely on other func
+    // TODO COLLAPSIBLE AND SHOW TITLE
     return categorizedCredentials.map((claim: DecoratedClaims) => (
       <CredentialCard
-        openClaimDetails={onEdit}
+        handleInteraction={() => onEdit(claim)}
         credentialItem={claim}
         collapsible={collapsible(claim)}
-        shouldDisplayTitle={collapsible(claim)}
-        empty={Object.keys(claim.claimData).every(key => !claim.claimData[key])}
+        rightIcon={<MoreIcon />}
+        leftIcon={getCredentialIconByType(claim.credentialType)}
       />
     ))
   }
@@ -82,7 +84,7 @@ export class CredentialOverview extends React.Component<Props, State> {
 
   render() {
     const { decoratedCredentials, loading } = this.props.claimsState
-    const { qrCodeButtonSection, scrollComponent, scrollComponentLoading, iconContainer } = styles
+    const { qrCodeButtonSection, scrollComponent, scrollComponentLoading, qrCodeIconContainer } = styles
 
     const claimCategories = Object.keys(decoratedCredentials)
 
@@ -95,8 +97,8 @@ export class CredentialOverview extends React.Component<Props, State> {
         <ScrollView style={scrollComponent} contentContainerStyle={loading ? scrollComponentLoading : {}}>
           {claimCategories.map(this.renderCredentialCategory)}
         </ScrollView>
-        <Block style={qrCodeButtonSection}>
-          <TouchableOpacity style={iconContainer} onPress={this.props.onScannerStart}>
+        <Block style={StyleSheet.flatten(qrCodeButtonSection)}>
+          <TouchableOpacity style={qrCodeIconContainer} onPress={this.props.onScannerStart}>
             <Icon size={30} name="qrcode-scan" color="white" />
           </TouchableOpacity>
         </Block>

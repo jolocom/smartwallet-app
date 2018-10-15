@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { RootState } from 'src/reducers/'
 import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
@@ -9,6 +8,7 @@ interface ConnectProps { }
 
 interface Props extends ConnectProps {
   activeCredentialRequest: StateCredentialRequestSummary
+  currentDid: string
   sendCredentialResponse: (creds: StateVerificationSummary[]) => void
   cancelSSO: () => void
 }
@@ -28,9 +28,8 @@ export class ConsentContainer extends React.Component<Props, State> {
   }
 
   render() {
-    console.log( this.props.activeCredentialRequest, 'credReq in consent screen')
     const {
-      request,
+      availableCredentials,
       requester,
       callbackURL
     } = this.props.activeCredentialRequest
@@ -38,7 +37,8 @@ export class ConsentContainer extends React.Component<Props, State> {
     <ConsentComponent
       requester={ requester }
       callbackURL={ callbackURL }
-      requestedCredentials={ request }
+      did={this.props.currentDid}
+      availableCredentials={ availableCredentials }
       handleSubmitClaims={ this.handleSubmitClaims }
       handleDenySubmit={ this.handleDenySubmit }
      />
@@ -46,16 +46,18 @@ export class ConsentContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: any) => {
   return {
-    activeCredentialRequest: state.sso.activeCredentialRequest
+    activeCredentialRequest: state.sso.activeCredentialRequest,
+    currentDid: state.account.did.toJS().did
   }
 }
 
+// TODO cancelSSO
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     sendCredentialResponse: (creds: StateVerificationSummary[]) => dispatch(ssoActions.sendCredentialResponse(creds)),
-    // cancelSSO: () => dispatch(ssoActions.cancelSSO())
+    cancelSSO: () => dispatch(ssoActions.cancelSSO())
   }
 }
 

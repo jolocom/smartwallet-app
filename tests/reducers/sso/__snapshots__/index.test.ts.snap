@@ -27,8 +27,8 @@ Object {
 exports[`sso reducer should initialize correctly 1`] = `
 Object {
   "activeCredentialRequest": Object {
+    "availableCredentials": Array [],
     "callbackURL": "",
-    "request": Array [],
     "requester": "",
   },
 }

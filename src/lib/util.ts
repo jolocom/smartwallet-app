@@ -1,7 +1,6 @@
 import { claimsMetadata } from 'jolocom-lib'
-import { uiCategoryByCredentialType, Categories, uiCredentialTypeByType, CredentialTypes } from './categories'
+import { uiCategoryByCredentialType, Categories, uiCredentialTypeByType } from './categories'
 import { BaseMetadata } from 'cred-types-jolocom-core'
-import { AccessibilityIcon, NameIcon, EmailIcon, PhoneIcon } from 'src/resources'
 
 export const getClaimMetadataByCredentialType = (type: string) : BaseMetadata => {
   const uiType = Object.keys(uiCredentialTypeByType)
@@ -15,16 +14,6 @@ export const getClaimMetadataByCredentialType = (type: string) : BaseMetadata =>
   }
 
   return claimsMetadata[relevantType]
-}
-
-export const getCredentialIconByType = (type: string) => {
-  const typeToIconMap = {
-    [CredentialTypes.Name]: NameIcon,
-    [CredentialTypes.Email]: EmailIcon,
-    [CredentialTypes.MobilePhone]: PhoneIcon
-  }
-
-  return typeToIconMap[type] || AccessibilityIcon
 }
 
 export const getUiCredentialTypeByType = (type: string[]): string => {
@@ -49,7 +38,7 @@ export const areCredTypesEqual = (first: string[], second: string[]): boolean =>
 
 export const prepareLabel = (label: string): string => {
   const words = label.split(/(?=[A-Z])/)
-  return words.length > 1 ? words.map(capitalize).join(' ') : capitalize(label)
+  return words.length > 1 ? words.map(capitalize).join(' ') : label
 }
 
 export const capitalize = (word: string): string => `${word[0].toUpperCase()}${word.slice(1)}`

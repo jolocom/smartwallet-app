@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { View, Text, StyleSheet, GestureResponderEvent, TextStyle } from 'react-native'
+import { View, Text, StyleSheet, GestureResponderEvent, TextStyle, ViewStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 // TODO Custom text component with size, font, color
@@ -11,6 +11,7 @@ interface ClaimCardProps {
   primaryText: string | ReactNode
   primaryTextStyle?: TextStyle
   secondaryTextStyle?: TextStyle
+  containerStyle?: ViewStyle
 }
 
 export const ClaimCard: React.SFC<ClaimCardProps> = props => {
@@ -24,15 +25,19 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
     secondaryTextDefault: {
       fontSize: 17,
       opacity: 0.4
+    },
+    containerDefault: {
+      flex: 1,
+      marginBottom: '5%',
     }
   })
 
-  const { primaryText, secondaryText, rightIcon, primaryTextStyle, secondaryTextStyle } = props
-  const { primaryTextDefault, secondaryTextDefault } = styles
+  const { primaryText, secondaryText, rightIcon, primaryTextStyle, secondaryTextStyle, containerStyle } = props
+  const { primaryTextDefault, secondaryTextDefault, containerDefault } = styles
 
   return (
-    <View>
-      <View>
+    <View style={{display: 'flex', width: '100%', flexDirection: 'row'}}>
+      <View style={[containerDefault, containerStyle]}>
         <Text style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}>{secondaryText}</Text>
         <Text style={[primaryTextDefault, primaryTextStyle]}>{primaryText}</Text>
       </View>

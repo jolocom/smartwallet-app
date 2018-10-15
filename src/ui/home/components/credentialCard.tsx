@@ -1,22 +1,36 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Text, TextStyle, GestureResponderEvent, ViewStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { DecoratedClaims } from 'src/reducers/account/'
-import { MoreIcon } from 'src/resources'
 import { Block } from '../../structure'
-import { prepareLabel, getCredentialIconByType } from 'src/lib/util'
+import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard } from 'src/ui/sso/components/claimCard'
+import { ReactNode } from 'react-redux'
 
 interface Props {
-  openClaimDetails: (claim: DecoratedClaims) => void
-  credentialItem: DecoratedClaims
-  empty: boolean
-  collapsible: boolean
-  shouldDisplayTitle: boolean
+  handleInteraction?: (event: GestureResponderEvent) => void
+  credentialItem: CredentialData
+  collapsible?: boolean
+  leftIcon: ReactNode
+  rightIcon?: ReactNode
+  rightIconStyle?: ViewStyle
+  claimRightIcon?: ReactNode
+  title?: string
+  titleStyle?: TextStyle
+  containerStyle?: ViewStyle
+  claimCardStyle?: {
+    primaryText?: TextStyle
+    secondaryText?: TextStyle
+  }
+}
+
+interface CredentialData {
+  credentialType: string
+  claimData: { [key: string]: string }
 }
 
 interface State {
   collapsed: boolean
+  blank: boolean
 }
 
 export class CredentialCard extends React.Component<Props, State> {
@@ -24,9 +38,42 @@ export class CredentialCard extends React.Component<Props, State> {
     super(props)
 
     this.state = {
-      collapsed: this.props.collapsible
+      collapsed: props.collapsible || false,
+      blank: Object.keys(props.credentialItem.claimData).every(key => !props.credentialItem.claimData[key])
     }
   }
+
+  private getStyles = () =>
+    StyleSheet.create({
+      defaultContainerStyle: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        height: '100%',
+        backgroundColor: JolocomTheme.primaryColorWhite,
+        paddingVertical: '5%',
+        marginBottom: '1%'
+      },
+      defaultTitleStyle: {
+        ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
+        color: '#05050d',
+        marginBottom: 16,
+        opacity: 0.4,
+        fontFamily: JolocomTheme.contentFontFamily
+      } as TextStyle,
+      defaultClaimSectionStyle: {
+        flex: 0.7,
+        justifyContent: 'space-between',
+        flexGrow: 1
+      },
+      defaultRightIconStyle: {
+        flex: 0.1
+      },
+      defaultLeftIconStyle: {
+        paddingLeft: '5%',
+        flex: 0.2
+      }
+    })
 
   private toggleCollapse = () => {
     if (this.props.collapsible) {
@@ -34,77 +81,69 @@ export class CredentialCard extends React.Component<Props, State> {
     }
   }
 
-  private renderMoreMenu() {
-    const { openClaimDetails, credentialItem } = this.props
+  private renderIcon() {
+    const { blank } = this.state
+    const { handleInteraction, rightIcon, rightIconStyle } = this.props
+    const { defaultRightIconStyle } = this.getStyles()
+
+    if (blank) return null
 
     return (
-      <TouchableOpacity
-        onPress={() => {
-          openClaimDetails(credentialItem)
-        }}
-      >
-        <MoreIcon />
-      </TouchableOpacity>
+      <View style={[defaultRightIconStyle, rightIconStyle]}>
+        <TouchableOpacity onPress={handleInteraction}>{rightIcon || null}</TouchableOpacity>
+      </View>
     )
   }
 
-  private getStyles = () =>
-    StyleSheet.create({
-      container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        backgroundColor: JolocomTheme.primaryColorWhite,
-        paddingVertical: '5%',
-        marginBottom: '1%'
-      },
-      title: {
-        ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-        color: '#05050d',
-        marginBottom: 16, opacity: 0.4,
-        fontFamily: JolocomTheme.contentFontFamily
-      }
-    })
+  private renderClaim = (credentialItem: CredentialData) => {
+    const { blank } = this.state
+    const { handleInteraction, claimCardStyle } = this.props
+    const { credentialType, claimData } = credentialItem
+    const onEdit = handleInteraction || (() => {})
 
-  private renderClaim = (credentialItem: DecoratedClaims) =>
-    this.props.empty ? (
-      <PlaceholderClaimCard
-        onEdit={() => this.props.openClaimDetails(credentialItem)}
-        credentialType={credentialItem.credentialType}
+    if (blank) {
+      return <PlaceholderClaimCard onEdit={onEdit} credentialType={credentialType} />
+    }
+
+    return Object.keys(claimData).map((key, idx, arr) => {
+      const lastElement = idx === arr.length - 1
+
+      return <ClaimCard
+        key={key}
+        rightIcon={this.props.claimRightIcon || null}
+        primaryTextStyle={claimCardStyle ? claimCardStyle.primaryText : {}}
+        secondaryTextStyle={claimCardStyle ? claimCardStyle.secondaryText : {}}
+        primaryText={claimData[key]}
+        secondaryText={prepareLabel(key)}
+        containerStyle={lastElement ? {marginBottom: 0} : {}}
       />
-    ) : (
-      Object.keys(credentialItem.claimData).map((key, idx, arr) => (
-        <ClaimCard
-          key={key}
-          primaryTextStyle={idx !== arr.length -1 ? {marginBottom: 16} : {}}
-          primaryText={credentialItem.claimData[key]}
-          secondaryText={prepareLabel(key)}
-        />
-      ))
-    )
+    })
+  }
 
-  private renderCollapsedClaim = (credentialItem: DecoratedClaims) => {
+  private renderCollapsedClaim = (credentialItem: CredentialData) => {
     const { claimData, credentialType } = credentialItem
     const collapsedMessage = Object.keys(claimData).reduce((acc, current) => `${acc}${claimData[current]} `, '')
     return <ClaimCard key={collapsedMessage} secondaryText={credentialType} primaryText={collapsedMessage} />
   }
 
   public render() {
-    const { container, title } = this.getStyles()
-    const { credentialItem, empty, shouldDisplayTitle } = this.props
+    const { credentialItem, title, titleStyle, containerStyle, leftIcon } = this.props
     const { collapsed } = this.state
-    const CredentialIcon = getCredentialIconByType(credentialItem.credentialType)
+    const {
+      defaultContainerStyle,
+      defaultTitleStyle,
+      defaultClaimSectionStyle,
+      defaultLeftIconStyle
+    } = this.getStyles()
 
     return (
-      <Block onTouch={this.toggleCollapse} style={container}>
-        <Block flex={0.2}><CredentialIcon/></Block>
-        <View style={{ flex: 0.7, justifyContent: 'space-between', flexGrow: 1 }}>
-          {shouldDisplayTitle && !collapsed ? (
-            <Text style={title}> {credentialItem.credentialType} </Text>
-          ) : null}
-          {this.state.collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
+      <Block  style={{ ...StyleSheet.flatten(defaultContainerStyle), ...containerStyle }}>
+        <View onTouchEnd={this.toggleCollapse} style={defaultLeftIconStyle}>{leftIcon}</View>
+        <View onTouchEnd={this.toggleCollapse} style={defaultClaimSectionStyle}>
+          {title && !collapsed ? <Text style={[defaultTitleStyle, titleStyle]}> {title} </Text> : null}
+          {collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
-        {empty ? null : <View style={{ flex: 0.1 }}>{this.renderMoreMenu()}</View>}
+        {this.renderIcon()}
       </Block>
     )
   }
