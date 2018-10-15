@@ -1,7 +1,6 @@
 import { AnyAction, Dispatch } from 'redux'
 import { genericActions, navigationActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { JolocomLib } from 'jolocom-lib'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -104,26 +103,6 @@ export const saveClaim = (claimsItem: DecoratedClaims) => {
     dispatch(navigationActions.navigatorReset({
       routeName: routeList.Home
     }))
-  }
-}
-
-export const receiveExternalCredential = (jwtEncodedCredential: string) => {
-  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-
-    const externalCredential = await JolocomLib.parse.interactionJSONWebToken.decode(jwtEncodedCredential)
-    const providedCredentials = externalCredential.getSignedCredentials()
-    const registry = JolocomLib.registry.jolocom.create()
-
-    const result = await providedCredentials.reduce(async (validity: boolean, credential: SignedCredential) => {
-      validity = await registry.validateSignature(credential)
-      return validity
-    }, false)
-
-    if (result) {
-      //dispatch receiveExternalCredentialUI consent screen with providedCredentials
-    } else {
-      //display error screen
-    }
   }
 }
 

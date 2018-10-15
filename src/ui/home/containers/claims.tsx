@@ -14,7 +14,7 @@ interface ConnectProps {
   openClaimDetails: (claim: DecoratedClaims) => void
   setClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
-  consumeCredentialRequest: (jwt: string) => void
+  parseJWT:(jwt: string) => void
   claims: ClaimsState
 }
 
@@ -45,7 +45,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
   // TODO Typings on E
   private onScannerSuccess = (e : any) : void => {
     this.setState({ scanning: false })
-    this.props.consumeCredentialRequest(e.data)
+    this.props.parseJWT(e.data)
   }
 
   render() {
@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch: Function) => {
     openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
     setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
     toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
-    consumeCredentialRequest: (jwt: string) => dispatch(ssoActions.consumeCredentialRequest(jwt))
+    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt))
   }
 }
 

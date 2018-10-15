@@ -6,6 +6,8 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
+import { CredentialRequest } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequest'
+import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/credentialsReceive/credentialsReceivePayload';
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -20,11 +22,41 @@ export const clearCredentialRequest = () => {
   }
 }
 
-export const consumeCredentialRequest = (jwtEncodedCR: string) => {
+export const parseJWT = (encodedJwt: string) =>{
+  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+
+    const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
+    if (returnedDecodedJwt instanceof CredentialRequest) {
+      dispatch(consumeCredentialRequest(returnedDecodedJwt))
+    }
+    if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
+      dispatch(receiveExternalCredential(returnedDecodedJwt))
+    }
+  }
+}
+
+export const receiveExternalCredential = (credReceive: CredentialsReceivePayload) => {
+  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+
+    const providedCredentials = credReceive.getSignedCredentials()
+    const registry = JolocomLib.registry.jolocom.create()
+
+    const result = await providedCredentials.reduce(async (validity: Promise<boolean>, credential: SignedCredential) => {
+      validity = registry.validateSignature(credential)
+      return await validity
+    }, Promise.resolve(false))
+
+    if (result) {
+      //dispatch receiveExternalCredentialUI consent screen with providedCredentials
+    } else {
+      //display error screen
+    }
+  }
+}
+
+export const consumeCredentialRequest = (credentialRequest: CredentialRequest) => {
   return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
-
-    const credentialRequest = await JolocomLib.parse.interactionJSONWebToken.decode(jwtEncodedCR)
 
     const requestedTypes = credentialRequest.getRequestedCredentialTypes()
 
