@@ -4,7 +4,7 @@ import { StateCredentialRequestSummary, StateVerificationSummary, StateTypeSumma
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
