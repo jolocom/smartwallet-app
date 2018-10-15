@@ -120,8 +120,6 @@ const collapsible = (claim: DecoratedClaims) => {
 
   const isDefaultCredentialType = CredentialTypes[credentialType]
 
-  if (claim.credentialType === 'Email')
-    return true
   if (isDefaultCredentialType) {
     return false
   }
