@@ -34,11 +34,10 @@ describe('generic block component', ()=> {
     })
 
     const rendered = renderer.render(
-      <Block style={ styles.block }>
+      <Block style={ styles.block } onTouch={() => {}}>
         null
       </Block>
     )
     expect(rendered).toMatchSnapshot()
   })
-
 })

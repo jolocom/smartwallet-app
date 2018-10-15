@@ -4,7 +4,7 @@ import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { getClaimMetadataByCredentialType, getCredentialUiCategory } from '../../lib/util'
+import { getClaimMetadataByCredentialType, getCredentialUiCategory, getUiCredentialTypeByType } from '../../lib/util'
 
 export const setDid = (did: string) => {
   return {
@@ -23,19 +23,16 @@ export const checkIdentityExists = () => {
         dispatch(genericActions.toggleLoadingScreen(false))
         return
       }
-     
+
       dispatch(setDid(personas[0].did))
       dispatch(genericActions.toggleLoadingScreen(false))
       dispatch(setIdentityWallet())
-      
-      dispatch(navigationActions.navigatorReset( 
-        { routeName: routeList.Home }
-      ))
-    } catch(err) {
+
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+    } catch (err) {
       if (err.message.indexOf('no such table') === 0) {
         return
       }
-
       dispatch(genericActions.showErrorScreen(err))
     }
   }
@@ -54,15 +51,22 @@ export const setIdentityWallet = () => {
         cipher: encryptedWif,
         pass: encryptionPass
       })
-     
+
       const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
       await backendMiddleware.setIdentityWallet(Buffer.from(privateKey, 'hex'))
-    } catch(err) {
+    } catch (err) {
       dispatch(genericActions.showErrorScreen(err))
     }
-  }  
+  }
 }
 
+export const handleClaimInput = (fieldValue: string, fieldName: string) => {
+  return {
+    type: 'HANLDE_CLAIM_INPUT',
+    fieldName,
+    fieldValue
+  }
+}
 
 export const openClaimDetails = (claim: DecoratedClaims) => {
   return (dispatch: Dispatch<AnyAction>) => {
@@ -70,39 +74,42 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
       type: 'SET_SELECTED',
       selected: claim
     })
-    dispatch(navigationActions.navigate({
-      routeName: routeList.ClaimDetails
-    }))
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.ClaimDetails
+      })
+    )
   }
 }
 
-export const saveClaim = (claimsItem: DecoratedClaims) => {
+export const saveClaim = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const { identityWallet, storageLib } = backendMiddleware
-    const did = getState().account.did.get('did')
+    try {
+      const { identityWallet, storageLib } = backendMiddleware
+      const did = getState().account.did.get('did')
+      const claimsItem = getState().account.claims.toJS().selected
 
-    const credential = identityWallet.create.credential({
-      metadata: getClaimMetadataByCredentialType(claimsItem.type),
-      subject: did,
-      claim: {
-        id: did,
-        [claimsItem.claims[0].name]: claimsItem.claims[0].value
+      const verifiableCredential = await identityWallet.create.signedCredential({
+        metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
+        claim: claimsItem.claimData,
+        subject: did
+      })
+
+      if (claimsItem.id) {
+        await storageLib.delete.verifiableCredential(claimsItem.id)
       }
-    })
-   
-    const verifiableCredential = await identityWallet.sign.credential(credential)
-    
-    if (claimsItem.claims[0].id) {
-      await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
+
+      await storageLib.store.verifiableCredential(verifiableCredential)
+      await setClaimsForDid()
+
+      dispatch(
+        navigationActions.navigatorReset({
+          routeName: routeList.Home
+        })
+      )
+    } catch (err) {
+      dispatch(genericActions.showErrorScreen(err))
     }
-
-    await storageLib.store.verifiableCredential(verifiableCredential)
-
-    await setClaimsForDid()
-
-    dispatch(navigationActions.navigatorReset({
-      routeName: routeList.Home
-    }))
   }
 }
 
@@ -116,6 +123,7 @@ export const toggleLoading = (val: boolean) => {
 export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const state = getState().account.claims.toJS()
+
     dispatch(toggleLoading(!state.loading))
     const storageLib = backendMiddleware.storageLib
 
@@ -123,8 +131,8 @@ export const setClaimsForDid = () => {
     const claims = prepareClaimsForState(verifiableCredentials) as CategorizedClaims
 
     dispatch({
-        type: 'SET_CLAIMS_FOR_DID',
-        claims
+      type: 'SET_CLAIMS_FOR_DID',
+      claims
     })
   }
 }
@@ -133,22 +141,20 @@ const prepareClaimsForState = (credentials: SignedCredential[]) => {
   const categorizedClaims = {}
 
   const decoratedCredentials = credentials.map(vCred => {
-    const claimData = vCred.getCredentialSection()
-    const claimFieldName = Object.keys(claimData).filter(key => key !== 'id')[0]
+    const claimData = {...vCred.getCredentialSection()}
+    delete claimData.id
 
     return {
-      displayName: vCred.getDisplayName(),
-      type: vCred.getType(),
-      claims: [{
-        id: vCred.getId(),
-        name: claimFieldName,
-        value: claimData[claimFieldName]
-      }]
+      credentialType: getUiCredentialTypeByType(vCred.getType()),
+      claimData,
+      id: vCred.getId(),
+      issuer: vCred.getIssuer(),
+      subject: vCred.getCredentialSection().id
     }
   })
 
   decoratedCredentials.forEach(decoratedCred => {
-    const uiCategory = getCredentialUiCategory(decoratedCred.type)
+    const uiCategory = getCredentialUiCategory(decoratedCred.credentialType)
 
     try {
       categorizedClaims[uiCategory].push(decoratedCred)

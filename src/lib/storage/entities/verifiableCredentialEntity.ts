@@ -3,11 +3,14 @@ import { PersonaEntity, SignatureEntity, CredentialEntity } from 'src/lib/storag
 import { Exclude, Expose, Transform, plainToClass, classToPlain } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
+import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
 
 @Exclude()
 @Entity('verifiable_credentials')
 export class VerifiableCredentialEntity {
   @Expose()
+  @Transform(value => JSON.stringify(value), { toClassOnly: true })
+  @Transform(value => JSON.parse(value), { toPlainOnly: true })
   @Column()
   '@context'!: string
 
@@ -16,7 +19,7 @@ export class VerifiableCredentialEntity {
   id!: string
 
   @Expose()
-  @Transform((value) => value.split(','), { toPlainOnly: true })
+  @Transform(value => value.split(','), { toPlainOnly: true })
   @Column()
   type!: string
 
@@ -50,7 +53,8 @@ export class VerifiableCredentialEntity {
     return plainToClass(VerifiableCredentialEntity, json)
   }
 
-  static fromVeriableCredential(vCred: SignedCredential): VerifiableCredentialEntity {
+  // TODO typo
+  static fromVerifiableCredential(vCred: SignedCredential): VerifiableCredentialEntity {
     interface ExtendedInterface extends ISignedCredentialAttrs {
       subject: string
     }
@@ -58,28 +62,28 @@ export class VerifiableCredentialEntity {
     const json = vCred.toJSON() as ExtendedInterface
     json.subject = vCred.getSubject()
 
-    const entity = this.fromJSON(json)
-    return entity
+    return this.fromJSON(json)
   }
 
   // TODO handle decryption
   toVerifiableCredential(): SignedCredential {
-    const json = classToPlain(this) as ISignedCredentialAttrs
-
-    const { propertyName, encryptedValue } = this.claim[0]
-    const claim = {
-      id: this.subject.did,
-      [propertyName]: encryptedValue
-    }
-
-    const parsedContext = json["@context"].toString().split(',')
-
-    const entityData = Object.assign({}, json, {
-      claim,
-      '@context': parsedContext,
+    const json = classToPlain(this) as any
+    const entityData = {
+      ...json,
+      claim: convertClaimArrayToObject(this.claim, this.subject.did),
       proof: this.proof[0]
-    })
+    }
 
     return SignedCredential.fromJSON(entityData)
   }
+}
+
+const convertClaimArrayToObject = (claims: CredentialEntity[], did: string): IClaimSection => {
+  return claims.reduce(
+    (acc: IClaimSection, claim: CredentialEntity) => {
+      const { propertyName, propertyValue } = claim
+      return { ...acc, [propertyName]: propertyValue }
+    },
+    { id: did }
+  )
 }

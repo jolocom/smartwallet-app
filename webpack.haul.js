@@ -4,25 +4,21 @@ module.exports = ({ platform }, { module, resolve }) => ({
   entry: `./index.js`,
   module: {
     ...module,
-    rules: [{
-      test: /\.js/,
-      exclude: /node_modules\/(?!(base64url|jsonld|rdf-canonize)\/).*/,
-      loader: 'babel-loader'
-      },{
+    rules: [
+      {
+        test: /\.js/,
+        exclude: /node_modules\/(?!(typeforce|base64url|jsonld|rdf-canonize)\/).*/,
+        loader: 'babel-loader'
+      },
+      {
         test: /\.svg$/,
         exclude: /node_modules/,
-        use: [
-          'babel-inline-import-loader',
-          'babel-loader'
-        ]
+        use: ['babel-inline-import-loader', 'babel-loader']
       },
       {
         test: /\.xml$/,
         exclude: /node_modules/,
-        use: [
-          'babel-inline-import-loader',
-          'babel-loader'
-        ]
+        use: ['babel-inline-import-loader', 'babel-loader']
       },
       {
         test: /\.tsx?$/,
@@ -36,7 +32,7 @@ module.exports = ({ platform }, { module, resolve }) => ({
     alias: {
       src: path.resolve(__dirname, 'src/'),
       react: path.join(__dirname, 'node_modules/react'),
-      'react-native': path.join(__dirname, 'node_modules/react-native'),
+      'react-native': path.join(__dirname, 'node_modules/react-native')
     },
     extensions: [
       '.ts',
@@ -48,4 +44,4 @@ module.exports = ({ platform }, { module, resolve }) => ({
       ...resolve.extensions
     ]
   }
-});
+})
