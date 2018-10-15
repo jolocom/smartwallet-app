@@ -31,10 +31,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
   }
 
   private onScannerStart = (): void => {
-    this.props.consumeCredentialRequest(
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJjcmVkZW50aWFsUmVxdWVzdCI6eyJjcmVkZW50aWFsUmVxdWlyZW1lbnRzIjpbeyJ0eXBlIjpbIkNyZWRlbnRpYWwiLCJQcm9vZk9mRW1haWxDcmVkZW50aWFsIl0sImNvbnN0cmFpbnRzIjp7ImFuZCI6W3siPT0iOlt0cnVlLHRydWVdfSx7Ij09IjpbdHJ1ZSx0cnVlXX1dfX0seyJ0eXBlIjpbIkNyZWRlbnRpYWwiLCJQcm9vZk9mTmFtZUNyZWRlbnRpYWwiXSwiY29uc3RyYWludHMiOnsiYW5kIjpbeyI9PSI6W3RydWUsdHJ1ZV19LHsiPT0iOlt0cnVlLHRydWVdfV19fV0sImNhbGxiYWNrVVJMIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwL2F1dGhlbnRpY2F0aW9uL2szZWJrIn0sInR5cCI6ImNyZWRlbnRpYWxSZXF1ZXN0IiwiaWF0IjoxNTM5MzQ5MjgwNjY1LCJpc3MiOiJkaWQ6am9sbzpiMzEwZDI5M2FlYWM4YTVjYTY4MDIzMmI5NjkwMWZlODU5ODhmZGUyODYwYTFhNWRiNjliNDk3NjI5MjNjYzg4I2tleXMtMSJ9.lOldsvAouqiEB7wQ0wNQCsoauYJrZcsMZLZnX0Nv3vj5dTNWbH1dD5ClcLQZqmF2rosFm5AKor5KwIaC7khs0A'
-    )
-    // this.setState({ scanning: true })
+    this.setState({ scanning: true })
   }
 
   private onScannerCancel = (): void => {

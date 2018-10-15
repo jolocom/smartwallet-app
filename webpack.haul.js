@@ -7,7 +7,7 @@ module.exports = ({ platform }, { module, resolve }) => ({
     rules: [
       {
         test: /\.js/,
-        exclude: /node_modules\/(?!(base64url|jsonld|rdf-canonize)\/).*/,
+        exclude: /node_modules\/(?!(typeforce|base64url|jsonld|rdf-canonize)\/).*/,
         loader: 'babel-loader'
       },
       {
