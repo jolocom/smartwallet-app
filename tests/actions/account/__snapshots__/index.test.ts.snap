@@ -67,18 +67,13 @@ Array [
     "claims": Object {
       "Contact": Array [
         Object {
-          "claims": Array [
-            Object {
-              "id": "claimId:bf6486176e667",
-              "name": "email",
-              "value": "test@test.com",
-            },
-          ],
-          "displayName": "Email address",
-          "type": Array [
-            "Credential",
-            "ProofOfEmailCredential",
-          ],
+          "claimData": Object {
+            "email": "test@test.com",
+          },
+          "credentialType": "Email",
+          "id": "claimId:bf6486176e667",
+          "issuer": "did:jolo:2ff3cb90a9cb8ddf9d6528a32e7a813ebe620d64db35e4b11e50d81a0cfee4c3",
+          "subject": "did:jolo:2ff3cb90a9cb8ddf9d6528a32e7a813ebe620d64db35e4b11e50d81a0cfee4c3",
         },
       ],
     },

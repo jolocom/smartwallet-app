@@ -16,8 +16,8 @@ export const setLoadingMsg = (loadingMsg: string) => {
   }
 }
 
-export const savePassword = (password : string) => {
-  return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) =>  {
+export const savePassword = (password: string) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     try {
       await backendMiddleware.keyChainLib.savePassword(password)
       dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
@@ -28,47 +28,49 @@ export const savePassword = (password : string) => {
 }
 
 export const submitEntropy = (encodedEntropy: string) => {
-  return (dispatch : Dispatch<AnyAction>) => {
-    dispatch(navigationActions.navigatorReset({
-      routeName: routeList.Loading
-    }))
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(
+      navigationActions.navigatorReset({
+        routeName: routeList.Loading
+      })
+    )
 
     dispatch(setLoadingMsg(loading.loadingStages[0]))
 
     setTimeout(() => {
       dispatch(createIdentity(encodedEntropy))
     }, 2000)
-  } 
+  }
 }
 
 export const startRegistration = () => {
   return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(navigationActions.navigatorReset({
-      routeName: routeList.PasswordEntry
-    }))
+    dispatch(
+      navigationActions.navigatorReset({
+        routeName: routeList.PasswordEntry
+      })
+    )
   }
 }
 
 export const finishRegistration = () => {
   return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(navigationActions.navigatorReset( 
-      {routeName: routeList.Home }
-    ))
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
   }
 }
 
 export const createIdentity = (encodedEntropy: string) => {
-  return async (dispatch : Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
-    const { ethereumLib,  encryptionLib, keyChainLib, storageLib } = backendMiddleware
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { ethereumLib, encryptionLib, keyChainLib, storageLib } = backendMiddleware
     const seed = Buffer.from(encodedEntropy, 'hex')
-    
+
     try {
       const identityManager = JolocomLib.identityManager.create(seed)
-     
+
       const schema = identityManager.getSchema()
       const identityKey = identityManager.deriveChildKey(schema.jolocomIdentityKey)
       const ethereumKey = identityManager.deriveChildKey(schema.ethereumKey)
-      
+
       const password = await keyChainLib.getPassword()
       const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
       const encEthWif = encryptionLib.encryptWithPass({ data: ethereumKey.wif, pass: password })
@@ -92,44 +94,46 @@ export const createIdentity = (encodedEntropy: string) => {
         keyType: ethereumKey.keyType,
         entropySource: masterKeyData
       }
-      
+
       await storageLib.store.derivedKey(ethereumKeyData)
-     
+
       dispatch(setLoadingMsg(loading.loadingStages[1]))
-     
-      const ethAddr = ethereumLib.privKeyToEthAddress(ethereumKey.privateKey) 
+
+      const ethAddr = ethereumLib.privKeyToEthAddress(ethereumKey.privateKey)
       await ethereumLib.requestEther(ethAddr)
 
       dispatch(setLoadingMsg(loading.loadingStages[2]))
-      
+
       const registry = JolocomLib.registry.jolocom.create({
         ipfsConnector: new IpfsCustomConnector({
           host: 'ipfs.jolocom.com',
           port: 443,
           protocol: 'https'
-         }),
-        ethereumConnector: jolocomEthereumResolver 
+        }),
+        ethereumConnector: jolocomEthereumResolver
       })
-      
+
       const identityWallet = await registry.create({
-        privateIdentityKey: identityKey.privateKey, 
+        privateIdentityKey: identityKey.privateKey,
         privateEthereumKey: ethereumKey.privateKey
       })
-     
+
       const personaData = {
         did: identityWallet.getIdentity().getDID(),
         controllingKey: genericSigningKeyData
       }
-      
+
       await storageLib.store.persona(personaData)
-     
+
       dispatch(setDid(identityWallet.getIdentity().getDID()))
       dispatch(setLoadingMsg(loading.loadingStages[3]))
       dispatch(accountActions.setIdentityWallet())
-      dispatch(navigationActions.navigatorReset({
-        routeName: routeList.SeedPhrase,
-        params: { mnemonic: generateMnemonic(seed) }
-      }))
+      dispatch(
+        navigationActions.navigatorReset({
+          routeName: routeList.SeedPhrase,
+          params: { mnemonic: generateMnemonic(seed) }
+        })
+      )
     } catch (error) {
       return dispatch(genericActions.showErrorScreen(error))
     }

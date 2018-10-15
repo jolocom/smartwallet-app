@@ -1,11 +1,14 @@
 import { Dispatch, AnyAction } from 'redux'
-// import { CredentialRequest } from 'jolocom-lib/js/credentialRequest/'
-// import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
-import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso' // StateAttributeSummary, StateTypeSummary,
+import { JolocomLib } from 'jolocom-lib'
+import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
-// import { showErrorScreen } from 'src/actions/generic'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { showErrorScreen } from 'src/actions/generic'
+import { getUiCredentialTypeByType } from 'src/lib/util'
+import { JSONWebToken } from 'jolocom-lib/js/interactionFlows/JSONWebToken'
+import { InteractionType } from 'jolocom-lib/js/interactionFlows/types'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -20,100 +23,115 @@ export const clearCredentialRequest = () => {
   }
 }
 
+interface AttributeSummary {
+  type: string[]
+  results: Array<{
+    verification: string
+    fieldName: string
+    values: string[]
+  }>
+}
+
 export const consumeCredentialRequest = (jwtEncodedCR: string) => {
-  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    // const { storageLib } = backendMiddleware
-    // const CR = new CredentialRequest().fromJWT(jwtEncodedCR)
-    // const requestedTypes = CR.getRequestedCredentialTypes()
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { storageLib } = backendMiddleware
+    const { did } = getState().account.did.toJS()
 
-    // const credentialRequests = await Promise.all<StateTypeSummary>(requestedTypes.map(async type => {
-    //   const values: string[] = await storageLib.get.attributesByType(type)
+    const credentialRequest = await JSONWebToken.decode(jwtEncodedCR)
+    const requestedTypes = credentialRequest.getRequestedCredentialTypes()
+    const attributesForType = await Promise.all<AttributeSummary>(requestedTypes.map(storageLib.get.attributesByType))
 
-    //   const attributeSummaries = await Promise.all<StateAttributeSummary>(values.map(async value => {
-    //     const verifications: VerifiableCredential[] = await storageLib.get.vCredentialsByAttributeValue(value)
-    //     const json = verifications.map(v => v.toJSON())
-    //     const validVerifications = CR.applyConstraints(json)
+    const populatedWithCredentials = await Promise.all(
+      attributesForType.map(async entry =>
+        Promise.all(
+          entry.results.map(async result => ({
+            type: getUiCredentialTypeByType(entry.type),
+            values: result.values,
+            verifications: await storageLib.get.verifiableCredential({ id: result.verification })
+          }))
+        )
+      )
+    )
 
-    //     const { did } = getState().account.did.toJS()
+    const abbreviated = populatedWithCredentials.map(attribute =>
+      attribute.map(entry => ({
+        ...entry,
+        verifications: entry.verifications.map((vCred: SignedCredential) => ({
+          id: vCred.getId(),
+          issuer: vCred.getIssuer(),
+          selfSigned: vCred.getSigner().did === did,
+          expires: vCred.getExpiryDate()
+        }))
+      }))
+    )
 
-    //     const verificationSummaries = validVerifications.map(verification => ({
-    //       id: verification.id,
-    //       selfSigned: verification.issuer === did,
-    //       issuer: verification.issuer,
-    //       expires: verification.expires
-    //     }))
+    const flattened = abbreviated.reduce((acc, val) => acc.concat(val))
 
-    //     return {
-    //       value,
-    //       verifications: verificationSummaries
-    //     }
-    //   }))
+    // TODO requestere shouldn't be optional
+    const summary = {
+      callbackURL: credentialRequest.getCallbackURL(),
+      requester: credentialRequest.iss as string,
+      availableCredentials: flattened
+    }
 
-    //   return {
-    //     type,
-    //     credentials: attributeSummaries
-    //   }
-    // }))
-
-    // const summary = {
-    //   requester: CR.getRequester(),
-    //   callbackURL: CR.getCallbackURL(),
-    //   request: credentialRequests
-    // }
-
-    // dispatch(setCredentialRequest(summary))
-    dispatch(navigationActions.navigate({routeName: routeList.Consent}))
+    dispatch(setCredentialRequest(summary))
+    dispatch(navigationActions.navigate({ routeName: routeList.Consent }))
   }
 }
 
 // TODO Decrypt when fetching from storage
 export const sendCredentialResponse = (selectedCredentials: StateVerificationSummary[]) => {
-  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-  //   const { jolocomLib, storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
 
-  //   const encryptionPass = await keyChainLib.getPassword()
-  //   const currentDid = getState().account.did.get('did')
-  //   const personaData = await storageLib.get.persona({did: currentDid})
-  //   const { encryptedWif } = personaData[0].controllingKey
+    const encryptionPass = await keyChainLib.getPassword()
+    const { did } = getState().account.did.toJS()
+    const { callbackURL } = getState().sso.activeCredentialRequest
 
-  //   const decryptedWif = encryptionLib.decryptWithPass({
-  //     cipher: encryptedWif,
-  //     pass: encryptionPass
-  //   })
+    const personaData = await storageLib.get.persona({ did })
 
-  //   const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
+    const { encryptedWif } = personaData[0].controllingKey
+    const decryptedWif = encryptionLib.decryptWithPass({
+      cipher: encryptedWif,
+      pass: encryptionPass
+    })
 
-  //   const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
+    const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
 
-  //   const credentials = await Promise.all(selectedCredentials.map(async cred => {
-  //     const results = await storageLib.get.verifiableCredential({id: cred.id})
-  //     return results[0]
-  //   }))
+    const registry = JolocomLib.registry.jolocom.create()
+    const wallet = await registry.authenticate(Buffer.from(privateKey, 'hex'))
 
-  //   const jsonForm = credentials.map(cred => cred.toJSON())
-  //   const credentialResponse = wallet.createCredentialResponse(jsonForm)
+    const credentials = await Promise.all(
+      selectedCredentials.map(async cred => (await storageLib.get.verifiableCredential({ id: cred.id }))[0])
+    )
 
-  //   const { callbackURL } = getState().sso.activeCredentialRequest
+    const jsonCredentials = credentials.map(cred => cred.toJSON())
+    const credentialResponse = await wallet.create.credentialResponseJSONWebToken({
+      typ: InteractionType.CredentialResponse,
+      credentialResponse: {
+        suppliedCredentials: jsonCredentials
+      }
+    })
 
-  //   // TODO Do we care about the response?
-  //   try {
-  //     await fetch(callbackURL, {
-  //       method: 'POST',
-  //       body: JSON.stringify({token: credentialResponse}),
-  //       headers: {'content-type': 'application/json'}
-  //     })
+    try {
+      await fetch(callbackURL, {
+        method: 'POST',
+        body: JSON.stringify({ token: credentialResponse.encode() }),
+        headers: { 'Content-Type': 'application/json' }
+      })
 
-  //     dispatch(clearCredentialRequest())
-  //     dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
-  //   } catch(err) {
-  //     dispatch(showErrorScreen(err))
-  //   }
-  // }
+      dispatch(clearCredentialRequest())
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+    } catch (err) {
+      // TODO better handling
+      dispatch(showErrorScreen(err))
+    }
+  }
 }
 
-// export const cancelSSO = () => {
-//   return (dispatch: Dispatch<AnyAction>) => {
-//     dispatch(clearCredentialRequest())
-//     dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
-//   }
+export const cancelSSO = () => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(clearCredentialRequest())
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+  }
 }
