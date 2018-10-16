@@ -37,7 +37,7 @@ export class VerifiableCredentialEntity {
 
   @Expose()
   @Column({ nullable: true })
-  expiry!: Date
+  expires!: Date
 
   @Expose()
   @ManyToOne(type => PersonaEntity, persona => persona.did)
