@@ -40,11 +40,19 @@ const categorizedClaims: CategorizedClaims = {
 export const initialState: ClaimsState = {
   loading: false,
   selected: {
-    credentialType: '',
-    claimData: {},
-    id: '',
-    issuer: '',
-    subject: ''
+    // TODO DEV
+    credentialType: 'ID Vard',
+    claimData: {
+      givenName: 'Natascha',
+      familyName: 'Berg',
+      birthPlace: 'Amsterdam',
+      birthDate: '01.01.1958',
+      identifier: 'BJH57VJDD',
+      nationality: 'avaloner'
+    },
+    id: 'fakeId#1',
+    issuer: 'did:joloc:avalongov112233',
+    subject: 'did:jolo:me'
   },
   decoratedCredentials: categorizedClaims
 }

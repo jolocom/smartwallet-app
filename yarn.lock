@@ -5291,9 +5291,9 @@ jju@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/jju/-/jju-1.3.0.tgz#dadd9ef01924bc728b03f2f7979bdbd62f7a2aaa"
 
-jolocom-lib@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.0.6.tgz#9d1ae260f43ac5a09a3cf2e7985ff1b90f7be256"
+jolocom-lib@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.0.9.tgz#6ca4eae9f81a72d7edfc9933c2eac8666ec76ab1"
   dependencies:
     base64url "^3.0.0"
     bip39 "^2.5.0"

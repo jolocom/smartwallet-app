@@ -14,6 +14,7 @@ export interface DecoratedClaims {
   id: string
   issuer: string
   subject: string
+  expires?: string
 }
 
 export interface CategorizedClaims {
