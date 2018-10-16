@@ -1,10 +1,12 @@
 import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import { Container } from 'src/ui/structure'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { StyleSheet, Text, TextStyle, ViewStyle, ScrollView, View, ReactNode } from 'react-native'
+import { Container, Block } from 'src/ui/structure'
 import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimCard } from 'src/ui/sso/components/claimCard'
-import { ReactNode } from 'react-redux'
+import { CredentialCard } from './credentialCard'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { prepareLabel } from 'src/lib/util'
+import { CredentialTopCard } from 'src/ui/home/components/credentialTopCard'
 
 interface Props {
   credentialToRender: DecoratedClaims
@@ -12,36 +14,70 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f5f5f5'
+    justifyContent: 'space-between',
+    backgroundColor: '#f5f5f5',
+    padding: 0
+  } as ViewStyle,
+  claimCard: {
+    paddingLeft: '20%',
+    backgroundColor: 'white',
+    paddingVertical: '5%'
   },
-  firstSection: {
-    flex: 0.3,
-    borderColor: JolocomTheme.secondaryColorSand,
-    borderRadius: 2,
-    backgroundColor: "purple"
-  },
-  firstSectionHeader: {
-    fontSize: JolocomTheme.landingHeaderFontSize,
-    color: JolocomTheme.primaryColorBlack
-  },
-  firstSectionSubheader: {
-    fontSize: JolocomTheme.headerFontSize,
-    color: JolocomTheme.secondaryColorGrey
-  }
+  sectionHeader: {
+    marginTop: '5%',
+    marginHorizontal: '5%',
+    height: 26,
+    fontSize: 17,
+    fontFamily: JolocomTheme.contentFontFamily,
+    alignSelf: 'flex-start'
+  } as TextStyle
 })
 
 export const CredentialDialogComponent: React.SFC<Props> = props => {
-  return <Container style={StyleSheet.flatten(styles.container)}> 
-    {renderFirstSection(props)}
-    <ClaimCard containerStyle={{backgroundColor: 'white'}} primaryText={'Name of issuer'} secondaryText={props.credentialToRender.issuer} />
-  </Container>
+  return (
+    <Container style={StyleSheet.flatten(styles.container)}>
+      <View style={{flex: 0.3, width: '100%', marginBottom: '5%'}}>
+        <CredentialTopCard
+          credentialName={props.credentialToRender.credentialType}
+          expiryDate={props.credentialToRender.expires}
+          />
+      </View>
+      <Block style={{flex: 0.2}}>
+        <Text style={styles.sectionHeader}> Issued by </Text>
+        <ClaimCard
+          containerStyle={StyleSheet.flatten(styles.claimCard)}
+          primaryTextStyle={{
+            fontSize: 17,
+            color: '#942f51'
+          }}
+          secondaryTextStyle={{
+            opacity: 1,
+            fontSize: 22
+          }}
+          primaryText={props.credentialToRender.issuer}
+          secondaryText={'Name of issuer'}
+        />
+      </Block>
+
+      <Block style={{flex: 0.4}}>
+        <Text style={styles.sectionHeader}> Document details/claims </Text>
+        <ScrollView style={{width: '100%'}}>
+          {renderClaims(props.credentialToRender)}
+        </ScrollView>
+      </Block>
+
+      <Block style={{flex: 0.1}}>{null}</Block>
+    </Container>
+  )
 }
 
-const renderFirstSection = (props: Props) : ReactNode => {
-  console.log(props, 'here are your props')
-  return <View style={styles.firstSection}>
-   <Text style={styles.firstSectionHeader}>{props.credentialToRender.credentialType}</Text>
-   <Text style={styles.firstSectionSubheader}>{props.credentialToRender.id}</Text>
-   {/* expiry date? */}
-  </View>
+const renderClaims = (toRender: DecoratedClaims) => {
+  const { claimData } = toRender
+  return Object.keys(claimData).map(field => (
+    <ClaimCard
+      containerStyle={{ paddingLeft: '20%', paddingVertical: '3%', backgroundColor: 'white', marginBottom: 1 }}
+      primaryText={claimData[field]}
+      secondaryText={prepareLabel(field)}
+    />
+  ))
 }

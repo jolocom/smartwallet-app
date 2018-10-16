@@ -47,8 +47,8 @@ export const initialState: ClaimsState = {
       familyName: 'Berg',
       birthPlace: 'Amsterdam',
       birthDate: '01.01.1958',
-      identifier: 'BJH57VJDD',
-      nationality: 'avaloner'
+      // identifier: 'BJH57VJDD',
+      // nationality: 'avaloner'
     },
     id: 'fakeId#1',
     issuer: 'did:joloc:avalongov112233',

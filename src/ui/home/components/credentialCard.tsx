@@ -11,6 +11,7 @@ interface Props {
   credentialItem: CredentialData
   collapsible?: boolean
   leftIcon: ReactNode
+  splitClaimCards?: boolean
   rightIcon?: ReactNode
   rightIconStyle?: ViewStyle
   claimRightIcon?: ReactNode
@@ -47,9 +48,9 @@ export class CredentialCard extends React.Component<Props, State> {
     StyleSheet.create({
       defaultContainerStyle: {
         flexDirection: 'row',
+        flexBasis: 'auto',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        height: '100%',
         backgroundColor: JolocomTheme.primaryColorWhite,
         paddingVertical: '5%',
         marginBottom: '1%'
@@ -97,7 +98,7 @@ export class CredentialCard extends React.Component<Props, State> {
 
   private renderClaim = (credentialItem: CredentialData) => {
     const { blank } = this.state
-    const { handleInteraction, claimCardStyle } = this.props
+    const { handleInteraction, claimCardStyle, splitClaimCards } = this.props
     const { credentialType, claimData } = credentialItem
     const onEdit = handleInteraction || (() => {})
 
@@ -141,7 +142,7 @@ export class CredentialCard extends React.Component<Props, State> {
     const notCollapsed = collapsible && !collapsed
 
     return (
-      <Block style={[ StyleSheet.flatten(defaultContainerStyle), containerStyle || {} ]}>
+      <View style={[StyleSheet.flatten(defaultContainerStyle), containerStyle || {}]}>
         <View onTouchEnd={this.toggleCollapse} style={defaultLeftIconStyle}>
           {leftIcon}
         </View>
@@ -152,7 +153,7 @@ export class CredentialCard extends React.Component<Props, State> {
           {collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
         {this.renderIcon()}
-      </Block>
+      </View>
     )
   }
 }
