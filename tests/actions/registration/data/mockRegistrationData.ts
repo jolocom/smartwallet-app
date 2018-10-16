@@ -36,7 +36,7 @@ export default {
       getDID: () => 'did:jolo:mockdid'
     } ,
     create: {
-      credential: () => 'mockCredential' 
+      signedCredential: () => 'mockCredential' 
     },
     sign: {
       credential: () => 'mockSignedCredential'

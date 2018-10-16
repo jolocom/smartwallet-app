@@ -4,16 +4,16 @@ import { claims } from 'src/reducers/account/claims'
 import { loading } from 'src/reducers/account/loading'
 
 
-export interface Claim {
-  id: string
-  name: string
-  value: any
+export interface ClaimData {
+  [key: string]: string
 }
 
 export interface DecoratedClaims {
-  displayName: string
-  type: string[]
-  claims: Claim[]
+  credentialType: string
+  claimData: ClaimData
+  id: string
+  issuer: string
+  subject: string
 }
 
 export interface CategorizedClaims {
