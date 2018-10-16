@@ -10,8 +10,9 @@ import { QrScanEvent } from './types'
 
 interface ConnectProps {
   setClaimsForDid: () => void
+  toggleLoading: (val: boolean) => void
+  parseJWT:(jwt: string) => void
   openClaimDetails: (claim: DecoratedClaims) => void
-  consumeCredentialRequest: (jwt: string) => void
   claims: ClaimsState
 }
 
@@ -40,7 +41,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
 
   private onScannerSuccess = (e: QrScanEvent): void => {
     this.setState({ scanning: false })
-    this.props.consumeCredentialRequest(e.data)
+    this.props.parseJWT(e.data)
   }
 
   render() {
@@ -69,11 +70,14 @@ const mapStateToProps = (state: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
-  setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
-  consumeCredentialRequest: (jwt: string) => dispatch(ssoActions.consumeCredentialRequest(jwt))
-})
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
+    setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
+    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
+    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt))
+  }
+}
 
 export const Claims = connect(
   mapStateToProps,

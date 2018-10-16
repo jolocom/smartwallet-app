@@ -6,6 +6,8 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
+import { CredentialRequest } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequest'
+import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/credentialsReceive/credentialsReceivePayload';
 import { getUiCredentialTypeByType } from 'src/lib/util'
 import { JSONWebToken } from 'jolocom-lib/js/interactionFlows/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionFlows/types'
@@ -23,6 +25,38 @@ export const clearCredentialRequest = () => {
   }
 }
 
+export const parseJWT = (encodedJwt: string) =>{
+  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+
+    const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
+    if (returnedDecodedJwt instanceof CredentialRequest) {
+      dispatch(consumeCredentialRequest(returnedDecodedJwt))
+    }
+    if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
+      dispatch(receiveExternalCredential(returnedDecodedJwt))
+    }
+  }
+}
+
+export const receiveExternalCredential = (credReceive: CredentialsReceivePayload) => {
+  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+
+    const providedCredentials = credReceive.getSignedCredentials()
+    const registry = JolocomLib.registry.jolocom.create()
+
+    const result = await providedCredentials.reduce(async (validity: Promise<boolean>, credential: SignedCredential) => {
+      validity = registry.validateSignature(credential)
+      return await validity
+    }, Promise.resolve(false))
+
+    if (result) {
+      //dispatch receiveExternalCredentialUI consent screen with providedCredentials
+    } else {
+      //display error screen
+    }
+  }
+}
+
 interface AttributeSummary {
   type: string[]
   results: Array<{
@@ -32,13 +66,12 @@ interface AttributeSummary {
   }>
 }
 
-export const consumeCredentialRequest = (jwtEncodedCR: string) => {
+export const consumeCredentialRequest = (decodedCredentialRequest: CredentialRequest) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
     const { did } = getState().account.did.toJS()
 
-    const credentialRequest = await JSONWebToken.decode(jwtEncodedCR)
-    const requestedTypes = credentialRequest.getRequestedCredentialTypes()
+    const requestedTypes = decodedCredentialRequest.getRequestedCredentialTypes()
     const attributesForType = await Promise.all<AttributeSummary>(requestedTypes.map(storageLib.get.attributesByType))
 
     const populatedWithCredentials = await Promise.all(
@@ -67,10 +100,10 @@ export const consumeCredentialRequest = (jwtEncodedCR: string) => {
 
     const flattened = abbreviated.reduce((acc, val) => acc.concat(val))
 
-    // TODO requestere shouldn't be optional
+    // TODO requester shouldn't be optional
     const summary = {
-      callbackURL: credentialRequest.getCallbackURL(),
-      requester: credentialRequest.iss as string,
+      callbackURL: decodedCredentialRequest.getCallbackURL(),
+      requester: decodedCredentialRequest.iss,
       availableCredentials: flattened
     }
 
