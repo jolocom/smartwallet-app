@@ -5,6 +5,7 @@ import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimCard } from 'src/ui/sso/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
+import { CredentialTopCard } from './credentialTopCard'
 
 interface Props {
   credentialToRender: DecoratedClaims
@@ -47,8 +48,13 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
   const { credentialToRender } = props
   return (
     <Container style={StyleSheet.flatten(styles.container)}>
-      <View style={{ flex: 0.4 }} />
-      <Block flex={0.2}>
+      <View style={{flex: 0.3, width: '100%', marginBottom: '5%'}}>
+        <CredentialTopCard
+          credentialName={props.credentialToRender.credentialType}
+          expiryDate={props.credentialToRender.expires}
+          />
+      </View>
+      <Block style={{flex: 0.2}}>
         <Text style={styles.sectionHeader}> Issued by </Text>
         <ClaimCard
           containerStyle={StyleSheet.flatten(styles.claimCard)}
@@ -64,7 +70,7 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
         <ScrollView style={scrollArea}>{renderClaims(credentialToRender)}</ScrollView>
       </Block>
 
-      <Block flex={0.1}>{null}</Block>
+      <Block style={{flex: 0.1}}>{null}</Block>
     </Container>
   )
 }
