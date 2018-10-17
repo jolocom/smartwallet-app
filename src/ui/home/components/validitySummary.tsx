@@ -10,13 +10,12 @@ interface Props {
 
 const styles = StyleSheet.create({
   defaultContainerStyle: {
+    flex: 0.5,
     flexDirection: 'row',
     flexBasis: 'auto',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: JolocomTheme.primaryColorWhite,
-    paddingVertical: '5%',
-    marginBottom: '6%'
   } as ViewStyle,
   defaultLeftIconStyle: {
     paddingLeft: '5%',

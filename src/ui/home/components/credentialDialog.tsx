@@ -3,7 +3,6 @@ import { StyleSheet, Text, TextStyle, ViewStyle, ScrollView, View, ReactNode } f
 import { Container, Block } from 'src/ui/structure'
 import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimCard } from 'src/ui/sso/components/claimCard'
-import { CredentialCard } from './credentialCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { CredentialTopCard } from 'src/ui/home/components/credentialTopCard'
