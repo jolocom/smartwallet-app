@@ -4,7 +4,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
-import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types';
+import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 
 interface Props {
   handleInteraction?: (event: GestureResponderEvent) => void
@@ -123,9 +123,14 @@ export class CredentialCard extends React.Component<Props, State> {
   }
 
   private renderCollapsedClaim = (credentialItem: CredentialData) => {
-    const { claimData, credentialType } = credentialItem
-    const collapsedMessage = Object.keys(claimData).reduce((acc, current) => `${acc}${claimData[current]}\n`, '')
-    return <ClaimCard key={collapsedMessage} secondaryText={credentialType} primaryText={collapsedMessage} />
+    const { claimData } = credentialItem
+    return Object.keys(claimData).map((key, index, arr) => (
+      <ClaimCard
+        key={key}
+        containerStyle={{ marginBottom: index === arr.length - 1 ? '5%' : 0 }}
+        primaryText={claimData[key]}
+      />
+    ))
   }
 
   public render() {

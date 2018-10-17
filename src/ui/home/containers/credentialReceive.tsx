@@ -39,7 +39,7 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
           denyText={'Deny'}
           handleConfirm={this.props.saveExternalCredentials}
           handleDeny={this.props.goBack}
-          disabled={true}
+          disabled={false}
         />
       </Container>
     )
