@@ -6,7 +6,7 @@ import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { IconToggle } from 'react-native-material-ui'
 import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
-import { ConsentAttributeCard, HeaderSection } from './claimCard'
+import { ConsentAttributeCard, HeaderSection, CollapsedCredentialCard } from './claimCard'
 
 interface Props {
   did: string
@@ -95,11 +95,11 @@ export class ConsentComponent extends React.Component<Props, State> {
   private renderFirstSection() {
     return (
       <Block flex={0.4}>
-        <Block flex={0.1}>{null}</Block>
+        <View flex={0.1} />
 
         <Block flex={0.4} style={{ backgroundColor: 'white' }}>
-          <Text style={styles.serviceTitle}> {this.props.requester.substring(0, 25)} </Text>
-          <Text style={styles.serviceMetadata}> {this.props.callbackURL.substring(0, 25)} </Text>
+          <Text style={styles.serviceTitle}> {`${this.props.requester.substring(0, 25)}...`} </Text>
+          <Text style={styles.serviceMetadata}> {`${this.props.callbackURL.substring(0, 25)}...`} </Text>
         </Block>
 
         <Block flex={0.5}>
@@ -114,13 +114,11 @@ export class ConsentComponent extends React.Component<Props, State> {
     const { type, verifications } = entry
 
     return (
-      <View style={{ flex: 0.2, justifyContent: 'center' }}>
-        <IconToggle
-          name={selected ? 'check-circle' : 'fiber-manual-record'}
-          onPress={() => this.handleAttributeSelect(type, verifications[0])}
-          color={checkboxColor}
-        />
-      </View>
+      <IconToggle
+        name={selected ? 'check-circle' : 'fiber-manual-record'}
+        onPress={() => this.handleAttributeSelect(type, verifications[0])}
+        color={checkboxColor}
+      />
     )
   }
 
@@ -137,26 +135,35 @@ export class ConsentComponent extends React.Component<Props, State> {
       {}
     )
 
-    return Object.keys(groupedByType).map(sectionType =>
-      groupedByType[sectionType].map((entry, idx, arr) => this.renderCredentialCards(entry, idx, arr))
-    )
+    return Object.keys(groupedByType).map(sectionType => (
+      <View>{groupedByType[sectionType].map((entry, idx, arr) => this.renderCredentialCards(entry, idx, arr))}</View>
+    ))
   }
 
   private renderCredentialCards(entry: StateTypeSummary, idx: number, arr: StateTypeSummary[]) {
+    const isFirst = idx === 0
+    const isLast = idx === arr.length - 1
     const { type, values, verifications } = entry
     const currentlySelected = this.state.selectedCredentials[type]
-    const selected = currentlySelected && currentlySelected.id === verifications[0].id
+    const isSelected = currentlySelected && currentlySelected.id === verifications[0].id
     const containsData = entry.values.length > 0
+    const headerSection = isFirst ? (
+      <HeaderSection containerStyle={{ paddingTop: '5%' }} title={`${type}:`} leftIcon={this.renderLeftIcon(type)} />
+    ) : null
 
-    return [
-      <HeaderSection title={`${type}:`} leftIcon={this.renderLeftIcon(type)} />,
-      <ConsentAttributeCard
-        rightIcon={containsData ? this.renderRightIcon(!!selected, entry) : null}
-        did={this.props.did}
-        values={values}
-        issuer={verifications.length ? verifications[0].issuer : ''}
-      />
-    ]
+    return (
+      <View>
+        {headerSection}
+        <ConsentAttributeCard
+          containerStyle={{ paddingLeft: '20%' }}
+          split={isLast}
+          rightIcon={containsData ? this.renderRightIcon(!!isSelected, entry) : null}
+          did={this.props.did}
+          values={values}
+          issuer={verifications.length ? verifications[0].issuer : ''}
+        />
+      </View>
+    )
   }
 
   // TODO No padding on containers by default

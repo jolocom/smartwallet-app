@@ -10,16 +10,18 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'space-between',
+    flexBasis: '100%',
     borderColor: JolocomTheme.secondaryColorSand,
+    backgroundColor: JolocomTheme.primaryColorWhite,
     borderStyle: 'solid',
     borderWidth: 1,
-    backgroundColor: "white",
-    margin: '8%',
-    paddingBottom: 20
+  },
+  innerContainer: {
+    margin: 16,
+    flex: 1,
+    justifyContent: 'space-between'
   },
   firstSectionHeader: {
-    margin: '6%',
     fontSize: JolocomTheme.landingHeaderFontSize,
     color: JolocomTheme.primaryColorBlack
   }
@@ -28,11 +30,10 @@ const styles = StyleSheet.create({
 export const CredentialTopCard: React.SFC<Props> = props => {
   return (
     <View style={styles.container}>
+      <View style={styles.innerContainer}>
       <Text style={styles.firstSectionHeader}>{props.credentialName}</Text>
-      { props.expiryDate ?
-      <ValiditySummary expiryDate={props.expiryDate} />
-      : null
-      }
+      { props.expiryDate ? <ValiditySummary expiryDate={props.expiryDate} /> : null }
+      </View>
     </View>
   )
 }

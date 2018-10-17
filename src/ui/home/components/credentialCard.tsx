@@ -1,8 +1,8 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity, Text, TextStyle, GestureResponderEvent, ViewStyle } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, TextStyle, GestureResponderEvent, ViewStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
-import { ClaimCard, PlaceholderClaimCard } from 'src/ui/sso/components/claimCard'
+import { ClaimCard, PlaceholderClaimCard, CollapsedCredentialCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
 import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 
@@ -12,10 +12,6 @@ interface Props {
   collapsible?: boolean
   leftIcon: ReactNode
   rightIcon?: ReactNode
-  rightIconStyle?: ViewStyle
-  claimRightIcon?: ReactNode
-  title?: string
-  titleStyle?: TextStyle
   containerStyle?: ViewStyle
   claimCardStyle?: {
     primaryText?: TextStyle
@@ -47,31 +43,9 @@ export class CredentialCard extends React.Component<Props, State> {
     StyleSheet.create({
       defaultContainerStyle: {
         flexDirection: 'row',
-        flexBasis: 'auto',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
         backgroundColor: JolocomTheme.primaryColorWhite,
         paddingVertical: '5%',
         marginBottom: '1%'
-      },
-      defaultTitleStyle: {
-        ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-        color: '#05050d',
-        marginBottom: 16,
-        opacity: 0.4,
-        fontFamily: JolocomTheme.contentFontFamily
-      },
-      defaultClaimSectionStyle: {
-        flex: 0.7,
-        justifyContent: 'space-between',
-        flexGrow: 1
-      },
-      defaultRightIconStyle: {
-        flex: 0.1
-      },
-      defaultLeftIconStyle: {
-        paddingLeft: '5%',
-        flex: 0.2
       }
     })
 
@@ -82,74 +56,46 @@ export class CredentialCard extends React.Component<Props, State> {
   }
 
   private renderIcon() {
-    const { blank } = this.state
-    const { handleInteraction, rightIcon, rightIconStyle } = this.props
-    const { defaultRightIconStyle } = this.getStyles()
-
-    if (blank) return null
-
+    const { handleInteraction, rightIcon } = this.props
     return (
-      <View style={[defaultRightIconStyle, rightIconStyle]}>
-        <TouchableOpacity onPress={handleInteraction}>{rightIcon || null}</TouchableOpacity>
-      </View>
+      <TouchableOpacity style={{ flex: 0.1 }} onPress={handleInteraction}>
+        {rightIcon || null}
+      </TouchableOpacity>
     )
   }
 
   private renderClaim = (credentialItem: CredentialData) => {
-    const { blank } = this.state
-    const { handleInteraction, claimCardStyle } = this.props
+    const { handleInteraction } = this.props
     const { credentialType, claimData } = credentialItem
     const onEdit = handleInteraction || (() => {})
 
-    if (blank) {
+    if (this.state.blank) {
       return <PlaceholderClaimCard onEdit={onEdit} credentialType={credentialType} />
     }
 
-    return Object.keys(claimData).map((key, idx, arr) => {
-      const lastElement = idx === arr.length - 1
-
-      return (
-        <ClaimCard
-          key={key}
-          rightIcon={this.props.claimRightIcon || null}
-          primaryTextStyle={claimCardStyle ? claimCardStyle.primaryText : {}}
-          secondaryTextStyle={claimCardStyle ? claimCardStyle.secondaryText : {}}
-          primaryText={claimData[key]}
-          secondaryText={prepareLabel(key)}
-          containerStyle={lastElement ? { marginBottom: 0 } : {}}
-        />
-      )
-    })
-  }
-
-  private renderCollapsedClaim = (credentialItem: CredentialData) => {
-    const { claimData } = credentialItem
-    return Object.keys(claimData).map((key, index, arr) => (
-      <ClaimCard
-        key={key}
-        containerStyle={{ marginBottom: index === arr.length - 1 ? '5%' : 0 }}
-        primaryText={claimData[key]}
-      />
+    return Object.keys(claimData).map(key => (
+      <ClaimCard key={key} primaryText={claimData[key]} secondaryText={prepareLabel(key)} />
     ))
   }
 
+  private renderCollapsedClaim = (credentialItem: CredentialData) => (
+    <CollapsedCredentialCard
+      title={credentialItem.credentialType}
+      values={Object.keys(credentialItem.claimData).map(k => credentialItem.claimData[k])}
+    />
+  )
+
   public render() {
-    const { credentialItem, title, titleStyle, containerStyle, leftIcon } = this.props
+    const { credentialItem, containerStyle, leftIcon } = this.props
     const { collapsed } = this.state
-    const {
-      defaultContainerStyle,
-      defaultTitleStyle,
-      defaultClaimSectionStyle,
-      defaultLeftIconStyle
-    } = this.getStyles()
+    const { defaultContainerStyle } = this.getStyles()
 
     return (
       <View style={[StyleSheet.flatten(defaultContainerStyle), containerStyle || {}]}>
-        <View onTouchEnd={this.toggleCollapse} style={defaultLeftIconStyle}>
+        <View flex={0.2} alignItems={'center'}>
           {leftIcon}
         </View>
-        <View onTouchEnd={this.toggleCollapse} style={defaultClaimSectionStyle}>
-          {title ? <Text style={[defaultTitleStyle, titleStyle]}>{title}</Text> : null}
+        <View onTouchEnd={this.toggleCollapse} flex={0.7}>
           {collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
         {this.renderIcon()}

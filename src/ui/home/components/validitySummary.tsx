@@ -1,42 +1,17 @@
 import React from 'react'
-import { StyleSheet, Text, View, ViewStyle } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Text } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { compareDates } from 'src/lib/util'
+import { compareDates } from 'src/lib/util'
 
 interface Props {
   expiryDate: Date
 }
 
-const styles = StyleSheet.create({
-  defaultContainerStyle: {
-    flexDirection: 'row',
-    flexBasis: 'auto',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    paddingVertical: '5%',
-    marginBottom: '6%'
-  } as ViewStyle,
-  defaultLeftIconStyle: {
-    paddingLeft: '5%',
-    flex: 0.2
-  }
-})
+export const ValiditySummary: React.SFC<Props> = props => (
+  <Text style={{ color: checkValidity(props.expiryDate) }}>
+    <Icon size={15} name="check-all" color={checkValidity(props.expiryDate)} />
+    {` Valid till ${props.expiryDate.toDateString()}`}
+  </Text>
+)
 
-export const ValiditySummary: React.SFC<Props> = props => {
-  const color = checkValidity(props.expiryDate)
-
-  return (
-    <View style={styles.defaultContainerStyle}>
-      <View style={styles.defaultLeftIconStyle}>
-        <Icon size={15} name="check-all" color={color} />
-      </View>
-      <Text style={{color}} >{`Valid till ${props.expiryDate.toDateString()}`}</Text>
-    </View>
-  )
-}
-
-const checkValidity = (date: Date): string => {
-  return compareDates(new Date(Date.now()), date) > 1 ? '#28a52d' : 'red'
-}
+const checkValidity = (date: Date): string => (compareDates(new Date(Date.now()), date) > 1 ? '#28a52d' : 'red')

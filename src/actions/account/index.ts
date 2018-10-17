@@ -196,7 +196,8 @@ export const convertToDecoratedClaim = (vCreds: SignedCredential[]) : DecoratedC
       claimData,
       id: vCred.getId(),
       issuer: vCred.getIssuer(),
-      subject: vCred.getCredentialSection().id || 'Not found'
+      subject: vCred.getCredentialSection().id || 'Not found',
+      expires: vCred.getExpiryDate() || undefined
     }
   })
 }
