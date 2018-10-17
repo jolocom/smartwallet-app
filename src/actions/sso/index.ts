@@ -7,9 +7,10 @@ import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
 import { CredentialRequest } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequest'
-import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/credentialsReceive/credentialsReceivePayload';
+import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/credentialsReceive/credentialsReceivePayload'
 import { getUiCredentialTypeByType } from 'src/lib/util'
 import { InteractionType } from 'jolocom-lib/js/interactionFlows/types'
+import { resetSelected } from '../account'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -24,9 +25,22 @@ export const clearCredentialRequest = () => {
   }
 }
 
-export const parseJWT = (encodedJwt: string) =>{
-  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+export const setReceivingCredential = (external: SignedCredential[]) => {
+  return {
+    type: 'SET_EXTERNAL',
+    external
+  }
+}
 
+export const resetReceivingCredential = () => {
+  return {
+    type: 'RESET_EXTERNAL'
+  }
+}
+
+
+export const parseJWT = (encodedJwt: string) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
     if (returnedDecodedJwt instanceof CredentialRequest) {
       dispatch(consumeCredentialRequest(returnedDecodedJwt))
@@ -38,20 +52,17 @@ export const parseJWT = (encodedJwt: string) =>{
 }
 
 export const receiveExternalCredential = (credReceive: CredentialsReceivePayload) => {
-  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const providedCredentials = credReceive.getSignedCredentials()
     const registry = JolocomLib.registry.jolocom.create()
 
-    const result = await providedCredentials.reduce(async (validity: Promise<boolean>, credential: SignedCredential) => {
-      validity = registry.validateSignature(credential)
-      return await validity
-    }, Promise.resolve(false))
+    const results = await Promise.all(providedCredentials.map(vcred => registry.validateSignature(vcred)))
 
-    if (result) {
-      //dispatch receiveExternalCredentialUI consent screen with providedCredentials
+    if (results.every(el => el === true)) {
+      dispatch(setReceivingCredential(providedCredentials))
+      dispatch(navigationActions.navigate({ routeName: routeList.CredentialDialog }))
     } else {
-      //display error screen
+      dispatch(showErrorScreen(new Error('Signature validation failed')))
     }
   }
 }
@@ -164,6 +175,13 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
 export const cancelSSO = () => {
   return (dispatch: Dispatch<AnyAction>) => {
     dispatch(clearCredentialRequest())
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+  }
+}
+
+export const cancelReceiving = () => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(resetSelected())
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
   }
 }

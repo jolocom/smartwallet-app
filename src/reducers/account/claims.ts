@@ -40,20 +40,13 @@ const categorizedClaims: CategorizedClaims = {
 export const initialState: ClaimsState = {
   loading: false,
   selected: {
-    // TODO DEV
-    credentialType: 'ID Vard',
-    claimData: {
-      givenName: 'Natascha',
-      familyName: 'Berg',
-      birthPlace: 'Amsterdam',
-      birthDate: '01.01.1958',
-      // identifier: 'BJH57VJDD',
-      // nationality: 'avaloner'
-    },
-    id: 'fakeId#1',
-    issuer: 'did:joloc:avalongov112233',
-    subject: 'did:jolo:me'
+    credentialType: '',
+    claimData: {},
+    id: '',
+    issuer: '',
+    subject: ''
   },
+  pendingExternal: [],
   decoratedCredentials: categorizedClaims
 }
 
@@ -63,8 +56,14 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
       return state.set('decoratedCredentials', Immutable.fromJS(addDefaultValues(action.claims))).set('loading', false)
+    case 'SET_EXTERNAL':
+      return state.set('pendingExternal', Immutable.fromJS(action.external))
+    case 'RESET_EXTERNAL':
+      return state.set('pendingExternal', Immutable.fromJS([]))
     case 'SET_SELECTED':
       return state.setIn(['selected'], Immutable.fromJS(action.selected))
+    case 'RESET_SELECTED':
+      return state.setIn(['selected'], initialState.selected)
     case 'HANLDE_CLAIM_INPUT':
       return state.setIn(['selected', 'claimData', action.fieldName], action.fieldValue)
     default:

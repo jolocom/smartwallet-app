@@ -5,7 +5,7 @@ import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
-import { CredentialDialog } from 'src/ui/home'
+import { CredentialReceive } from 'src/ui/home'
 
 const navigationOptions = {
   header: null
@@ -79,7 +79,19 @@ export const Routes = StackNavigator({
   SeedPhrase: { screen: SeedPhrase, navigationOptions },
   Home: { screen: HomeRoutes },
   // TODO Add title, color
-  CredentialDialog: { screen: CredentialDialog, navigationOptions },
+  CredentialDialog: {
+    screen: CredentialReceive,
+    navigationOptions: {
+      headerTitle: 'Receiving new credential',
+      headerTitleStyle: {
+        fontFamily: JolocomTheme.contentFontFamily,
+        fontWeight: '100',
+        fontSize: JolocomTheme.headerFontSize
+      },
+      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
+      headerTintColor: JolocomTheme.primaryColorWhite
+    }
+  },
   Consent: {
     screen: Consent,
     navigationOptions: {
@@ -89,9 +101,7 @@ export const Routes = StackNavigator({
         fontWeight: '100',
         fontSize: JolocomTheme.headerFontSize
       },
-      headerStyle: {
-        backgroundColor: JolocomTheme.primaryColorBlack
-      },
+      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
       headerTintColor: JolocomTheme.primaryColorWhite
     }
   },

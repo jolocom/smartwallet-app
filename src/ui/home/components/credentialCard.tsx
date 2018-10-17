@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity, Text, TextStyle, GestureResponderEvent, ViewStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Block } from '../../structure'
 import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
@@ -11,7 +10,6 @@ interface Props {
   credentialItem: CredentialData
   collapsible?: boolean
   leftIcon: ReactNode
-  splitClaimCards?: boolean
   rightIcon?: ReactNode
   rightIconStyle?: ViewStyle
   claimRightIcon?: ReactNode
@@ -54,14 +52,14 @@ export class CredentialCard extends React.Component<Props, State> {
         backgroundColor: JolocomTheme.primaryColorWhite,
         paddingVertical: '5%',
         marginBottom: '1%'
-      } as ViewStyle,
+      },
       defaultTitleStyle: {
         ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
         color: '#05050d',
         marginBottom: 16,
         opacity: 0.4,
         fontFamily: JolocomTheme.contentFontFamily
-      } as TextStyle,
+      },
       defaultClaimSectionStyle: {
         flex: 0.7,
         justifyContent: 'space-between',
@@ -98,7 +96,7 @@ export class CredentialCard extends React.Component<Props, State> {
 
   private renderClaim = (credentialItem: CredentialData) => {
     const { blank } = this.state
-    const { handleInteraction, claimCardStyle, splitClaimCards } = this.props
+    const { handleInteraction, claimCardStyle } = this.props
     const { credentialType, claimData } = credentialItem
     const onEdit = handleInteraction || (() => {})
 
