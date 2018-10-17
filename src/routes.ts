@@ -78,7 +78,6 @@ export const Routes = StackNavigator({
   PasswordEntry: { screen: PasswordEntry, navigationOptions },
   SeedPhrase: { screen: SeedPhrase, navigationOptions },
   Home: { screen: HomeRoutes },
-  // TODO Add title, color
   CredentialDialog: {
     screen: CredentialReceive,
     navigationOptions: {

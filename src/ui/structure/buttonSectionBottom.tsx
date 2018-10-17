@@ -19,7 +19,7 @@ export const ButtonSection: React.SFC<Props> = props => {
       flexDirection: 'row',
       backgroundColor: JolocomTheme.primaryColorWhite
     },
-    denyShareText: {
+    denyButtonText: {
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.labelFontSize,
       color: JolocomTheme.primaryColorPurple,
@@ -31,24 +31,33 @@ export const ButtonSection: React.SFC<Props> = props => {
       color: props.disabled ? JolocomTheme.disabledButtonTextGrey : JolocomTheme.primaryColorSand,
       fontWeight: '100'
     },
+    denyButton: {
+      width: '40%'
+    },
     confirmButton: {
-      backgroundColor: props.disabled ? JolocomTheme.disabledButtonBackGreny : JolocomTheme.primaryColorPurple
+      width: '40%',
+      backgroundColor: props.disabled ? JolocomTheme.disabledButtonBackgroundGrey : JolocomTheme.primaryColorPurple
     }
   })
 
   const { flatten } = StyleSheet
-  const { buttonBlock, denyShareText} = styles
+  const { buttonBlock, confirmButton, denyButton, denyButtonText, confirmButtonText } = styles
   const { disabled, denyText, handleConfirm, handleDeny, confirmText } = props
 
   return (
     <Block style={flatten(buttonBlock)} flex={0.1}>
-      <Button onPress={handleDeny} style={{ text: flatten(denyShareText) }} upperCase={false} text={denyText} />
+      <Button
+        onPress={handleDeny}
+        style={{ container: flatten(denyButton), text: flatten(denyButtonText) }}
+        upperCase={false}
+        text={denyText}
+      />
       <Button
         disabled={disabled}
         onPress={handleConfirm}
         style={{
-          container: flatten(styles.confirmButton),
-          text: flatten(styles.confirmButtonText)
+          container: flatten(confirmButton),
+          text: flatten(confirmButtonText)
         }}
         upperCase={false}
         text={confirmText}
