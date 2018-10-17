@@ -1,12 +1,12 @@
 import React from 'react'
-import { Text, StyleSheet, ScrollView, ViewStyle, TextStyle, View } from 'react-native'
+import { Text, ScrollView, TextStyle, View } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { CredentialCard } from 'src/ui/home/components/credentialCard'
-import { Button, IconToggle } from 'react-native-material-ui'
+import { IconToggle } from 'react-native-material-ui'
 import { getCredentialIconByType } from 'src/resources/util'
-import { RenderButtonSection } from 'src/ui/structure/buttonSectionBottom'
+import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 
 interface Props {
   did: string
@@ -35,35 +35,6 @@ const styles = {
     ...JolocomTheme.textStyles.light.labelDisplayField,
     fontFamily: JolocomTheme.contentFontFamily
   },
-  buttonBlock: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    backgroundColor: JolocomTheme.primaryColorWhite
-  } as ViewStyle,
-  denyShareText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.primaryColorPurple,
-    fontWeight: '100'
-  } as TextStyle,
-  shareClaimsContainer: {
-    backgroundColor: JolocomTheme.primaryColorPurple
-  } as ViewStyle,
-  shareClaimsText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.primaryColorSand,
-    fontWeight: '100'
-  } as TextStyle,
-  disabledShareClaimsContainer: {
-    backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
-  } as ViewStyle,
-  disabledShareClaimsText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.disabledButtonTextGrey,
-    fontWeight: '100'
-  } as TextStyle,
   fixedText: {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
@@ -106,7 +77,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     const buttonDisabled = !submitAllowed || this.state.pending
 
     return (
-      <RenderButtonSection
+      <ButtonSection
         disabled={buttonDisabled}
         confirmText={'Share claims'}
         denyText={'Deny'}

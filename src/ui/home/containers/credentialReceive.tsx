@@ -9,7 +9,7 @@ import { CredentialDialogComponent } from '../components/credentialDialog'
 import { Block, Container } from 'src/ui/structure'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { cancelReceiving } from 'src/actions/sso'
-import { RenderButtonSection } from 'src/ui/structure/buttonSectionBottom'
+import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 
 interface ConnectProps {
   externalCredentials: SignedCredential[]
@@ -34,7 +34,7 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
         <Block flex={0.9}>
           <CredentialDialogComponent credentialToRender={this.state.toRender} />
         </Block>
-        <RenderButtonSection
+        <ButtonSection
           confirmText={'Accept'}
           denyText={'Deny'}
           handleConfirm={this.props.saveExternalCredentials}
