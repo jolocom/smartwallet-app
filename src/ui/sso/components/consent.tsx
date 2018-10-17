@@ -6,6 +6,7 @@ import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { CredentialCard } from 'src/ui/home/components/credentialCard'
 import { Button, IconToggle } from 'react-native-material-ui'
 import { getCredentialIconByType } from 'src/resources/util'
+import { RenderButtonSection } from 'src/ui/structure/buttonSectionBottom'
 
 interface Props {
   did: string
@@ -99,36 +100,19 @@ export class ConsentComponent extends React.Component<Props, State> {
   }
 
   private renderButtons() {
-    const { handleDenySubmit } = this.props
     const { selectedCredentials } = this.state
 
     const submitAllowed = Object.keys(selectedCredentials).every(key => selectedCredentials[key] !== undefined)
     const buttonDisabled = !submitAllowed || this.state.pending
 
-    const { flatten } = StyleSheet
-    const {
-      denyShareText,
-      shareClaimsContainer,
-      shareClaimsText,
-      disabledShareClaimsContainer,
-      disabledShareClaimsText
-    } = styles
-
     return (
-      <Block style={styles.buttonBlock} flex={0.1}>
-        <Button onPress={handleDenySubmit} style={{ text: denyShareText }} upperCase={false} text="Deny" />
-        <Button
-          disabled={buttonDisabled}
-          onPress={() => this.handleSubmitClaims()}
-          style={
-            buttonDisabled
-              ? { container: flatten(disabledShareClaimsContainer), text: disabledShareClaimsText }
-              : { container: flatten(shareClaimsContainer), text: shareClaimsText }
-          }
-          upperCase={false}
-          text="Share claims"
-        />
-      </Block>
+      <RenderButtonSection
+        disabled={buttonDisabled}
+        confirmText={'Share claims'}
+        denyText={'Deny'}
+        handleConfirm={() => this.handleSubmitClaims()}
+        handleDeny={() => this.props.handleDenySubmit()}
+      />
     )
   }
 
