@@ -134,7 +134,7 @@ export class CredentialCard extends React.Component<Props, State> {
   }
 
   public render() {
-    const { collapsible, credentialItem, title, titleStyle, containerStyle, leftIcon } = this.props
+    const { credentialItem, title, titleStyle, containerStyle, leftIcon } = this.props
     const { collapsed } = this.state
     const {
       defaultContainerStyle,
@@ -143,17 +143,13 @@ export class CredentialCard extends React.Component<Props, State> {
       defaultLeftIconStyle
     } = this.getStyles()
 
-    const notCollapsed = collapsible && !collapsed
-
     return (
       <View style={[StyleSheet.flatten(defaultContainerStyle), containerStyle || {}]}>
         <View onTouchEnd={this.toggleCollapse} style={defaultLeftIconStyle}>
           {leftIcon}
         </View>
         <View onTouchEnd={this.toggleCollapse} style={defaultClaimSectionStyle}>
-          {(notCollapsed || !collapsible) && title ? (
-            <Text style={[defaultTitleStyle, titleStyle]}>{title}</Text>
-          ) : null}
+          {title ? <Text style={[defaultTitleStyle, titleStyle]}>{title}</Text> : null}
           {collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
         {this.renderIcon()}

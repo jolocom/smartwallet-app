@@ -3,10 +3,10 @@ import { Text, ScrollView, TextStyle, View } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
-import { CredentialCard } from 'src/ui/home/components/credentialCard'
 import { IconToggle } from 'react-native-material-ui'
 import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
+import { ConsentAttributeCard, HeaderSection } from './claimCard'
 
 interface Props {
   did: string
@@ -20,7 +20,7 @@ interface Props {
 interface State {
   pending: boolean
   selectedCredentials: {
-    [type: string]: StateVerificationSummary
+    [type: string]: StateVerificationSummary | undefined
   }
 }
 
@@ -60,14 +60,19 @@ export class ConsentComponent extends React.Component<Props, State> {
   }
 
   private handleAttributeSelect(type: string, selectedCredential: StateVerificationSummary) {
-    this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: selectedCredential } })
+    const selected = this.state.selectedCredentials[type]
+    if (selected && selected.id === selectedCredential.id) {
+      this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: undefined } })
+    } else {
+      this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: selectedCredential } })
+    }
   }
 
   private handleSubmitClaims = () => {
     const { selectedCredentials } = this.state
     const credentials = Object.keys(selectedCredentials).map(key => selectedCredentials[key])
     this.setState({ pending: true })
-    this.props.handleSubmitClaims(credentials)
+    this.props.handleSubmitClaims(credentials as StateVerificationSummary[])
   }
 
   private renderButtons() {
@@ -109,7 +114,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     const { type, verifications } = entry
 
     return (
-      <View style={{ justifyContent: 'center' }}>
+      <View style={{ flex: 0.2, justifyContent: 'center' }}>
         <IconToggle
           name={selected ? 'check-circle' : 'fiber-manual-record'}
           onPress={() => this.handleAttributeSelect(type, verifications[0])}
@@ -139,25 +144,19 @@ export class ConsentComponent extends React.Component<Props, State> {
 
   private renderCredentialCards(entry: StateTypeSummary, idx: number, arr: StateTypeSummary[]) {
     const { type, values, verifications } = entry
-    const { did } = this.props
     const currentlySelected = this.state.selectedCredentials[type]
     const selected = currentlySelected && currentlySelected.id === verifications[0].id
-    const title = idx === 0 ? `${type}:` : ''
+    const containsData = entry.values.length > 0
 
-    return (
-      <CredentialCard
-        title={title}
-        titleStyle={{ opacity: 1, fontSize: 17 }}
-        containerStyle={idx === arr.length - 1 ? {} : { marginBottom: 0, paddingBottom: 0 }}
-        leftIcon={idx === 0 ? this.renderLeftIcon(type) : null}
-        claimCardStyle={styles.claimCardText}
-        claimRightIcon={this.renderRightIcon(selected, entry)}
-        credentialItem={{
-          credentialType: type,
-          claimData: { [values.map(v => v.trim()).join('\n')]: renderSelfSignedOrNot(verifications, did) }
-        }}
+    return [
+      <HeaderSection title={`${type}:`} leftIcon={this.renderLeftIcon(type)} />,
+      <ConsentAttributeCard
+        rightIcon={containsData ? this.renderRightIcon(!!selected, entry) : null}
+        did={this.props.did}
+        values={values}
+        issuer={verifications.length ? verifications[0].issuer : ''}
       />
-    )
+    ]
   }
 
   // TODO No padding on containers by default
@@ -175,6 +174,3 @@ export class ConsentComponent extends React.Component<Props, State> {
     )
   }
 }
-
-const renderSelfSignedOrNot = (verifiactions: StateVerificationSummary[], did: string): string =>
-  verifiactions.every(verification => verification.issuer === did) ? 'Self-Signed' : 'External Issuer'

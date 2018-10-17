@@ -10,6 +10,7 @@ import { DecoratedClaims } from 'src/reducers/account/'
 import { CredentialTypes } from 'src/lib/categories'
 import { MoreIcon } from 'src/resources';
 import { getCredentialIconByType } from 'src/resources/util'
+import { prepareLabel } from 'src/lib/util'
 const loaders = require('react-native-indicator')
 
 interface Props {
@@ -67,11 +68,13 @@ export class CredentialOverview extends React.Component<Props, State> {
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
     return categorizedCredentials.map((claim: DecoratedClaims) => {
+      const captialized = Object.keys(claim.claimData).reduce((acc, curr) => ({...acc, [prepareLabel(curr)] : claim.claimData[curr]}), {})
       const selfSigned = claim.issuer === did
+
       return <CredentialCard
         title={collapsible(claim) ? claim.credentialType : ''}
         handleInteraction={() => onEdit(claim)}
-        credentialItem={claim}
+        credentialItem={{...claim, claimData: captialized}}
         collapsible={collapsible(claim)}
         rightIcon={selfSigned ? <MoreIcon /> : null}
         leftIcon={getCredentialIconByType(claim.credentialType)}

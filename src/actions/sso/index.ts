@@ -11,6 +11,7 @@ import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/crede
 import { getUiCredentialTypeByType } from 'src/lib/util'
 import { InteractionType } from 'jolocom-lib/js/interactionFlows/types'
 import { resetSelected } from '../account'
+import { CredentialRequestPayload } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequestPayload'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -38,11 +39,10 @@ export const resetReceivingCredential = () => {
   }
 }
 
-
 export const parseJWT = (encodedJwt: string) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
-    if (returnedDecodedJwt instanceof CredentialRequest) {
+    if (returnedDecodedJwt instanceof CredentialRequestPayload) {
       dispatch(consumeCredentialRequest(returnedDecodedJwt))
     }
     if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
@@ -76,7 +76,7 @@ interface AttributeSummary {
   }>
 }
 
-export const consumeCredentialRequest = (decodedCredentialRequest: CredentialRequest) => {
+export const consumeCredentialRequest = (decodedCredentialRequest: CredentialRequestPayload) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
     const { did } = getState().account.did.toJS()
@@ -85,15 +85,23 @@ export const consumeCredentialRequest = (decodedCredentialRequest: CredentialReq
     const attributesForType = await Promise.all<AttributeSummary>(requestedTypes.map(storageLib.get.attributesByType))
 
     const populatedWithCredentials = await Promise.all(
-      attributesForType.map(async entry =>
-        Promise.all(
-          entry.results.map(async result => ({
-            type: getUiCredentialTypeByType(entry.type),
-            values: result.values,
-            verifications: await storageLib.get.verifiableCredential({ id: result.verification })
-          }))
-        )
-      )
+      attributesForType.map(async entry => {
+        if (entry.results.length) {
+          return Promise.all(
+            entry.results.map(async result => ({
+              type: getUiCredentialTypeByType(entry.type),
+              values: result.values,
+              verifications: await storageLib.get.verifiableCredential({ id: result.verification })
+            }))
+          )
+        }
+
+        return [{
+          type: getUiCredentialTypeByType(entry.type),
+          values: [],
+          verifications: []
+        }]
+      })
     )
 
     const abbreviated = populatedWithCredentials.map(attribute =>
