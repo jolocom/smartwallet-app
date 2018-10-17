@@ -4,6 +4,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
+import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types';
 
 interface Props {
   handleInteraction?: (event: GestureResponderEvent) => void
@@ -24,7 +25,7 @@ interface Props {
 
 interface CredentialData {
   credentialType: string
-  claimData: { [key: string]: string }
+  claimData: ClaimEntry
 }
 
 interface State {

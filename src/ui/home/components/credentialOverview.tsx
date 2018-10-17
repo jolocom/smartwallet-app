@@ -18,6 +18,7 @@ interface Props {
   loading: boolean
   onScannerStart: () => void
   onEdit: (claim: DecoratedClaims) => void
+  did: string
 }
 
 interface State {}
@@ -60,21 +61,22 @@ const styles = StyleSheet.create({
 
 export class CredentialOverview extends React.Component<Props, State> {
   renderCredentialCard = (category: string): ReactNode => {
-    const { onEdit, claimsState } = this.props
+    const { onEdit, did, claimsState } = this.props
 
     const decoratedCredentials: CategorizedClaims = claimsState.decoratedCredentials
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
-    return categorizedCredentials.map((claim: DecoratedClaims) => (
-      <CredentialCard
+    return categorizedCredentials.map((claim: DecoratedClaims) => {
+      const selfSigned = claim.issuer === did
+      return <CredentialCard
         title={collapsible(claim) ? claim.credentialType : ''}
         handleInteraction={() => onEdit(claim)}
         credentialItem={claim}
         collapsible={collapsible(claim)}
-        rightIcon={<MoreIcon />}
+        rightIcon={selfSigned ? <MoreIcon /> : null}
         leftIcon={getCredentialIconByType(claim.credentialType)}
       />
-    ))
+    })
   }
 
   renderCredentialCategory = (category: string) => [

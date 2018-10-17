@@ -12,7 +12,7 @@ interface Props {
   disabled: boolean
 }
 
-export const renderButtonSection: React.SFC<Props> = props => {
+export const RenderButtonSection: React.SFC<Props> = props => {
   const styles = StyleSheet.create({
     buttonBlock: {
       justifyContent: 'space-around',
