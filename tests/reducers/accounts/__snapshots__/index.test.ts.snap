@@ -11,6 +11,7 @@ Object {
       "issuer": "",
       "subject": "",
     },
+    "pendingExternal": Immutable.List [],
     "decoratedCredentials": Immutable.Map {
       "Personal": Immutable.List [
         Immutable.Map {
@@ -66,6 +67,7 @@ Object {
       "issuer": "",
       "subject": "",
     },
+    "pendingExternal": Immutable.List [],
     "decoratedCredentials": Immutable.Map {
       "Personal": Immutable.List [
         Immutable.Map {
