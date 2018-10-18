@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ValiditySummary } from './validitySummary'
 
@@ -10,18 +10,18 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    flexBasis: '100%',
-    borderColor: JolocomTheme.secondaryColorSand,
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    borderStyle: 'solid',
-    borderWidth: 1,
-  },
-  innerContainer: {
-    margin: 16,
     flex: 1,
-    justifyContent: 'space-between'
-  },
+    borderColor: JolocomTheme.secondaryColorSand,
+    borderStyle: 'solid',
+    borderWidth: 2,
+    backgroundColor: "white",
+    marginTop: '8%',
+    marginLeft:'8%',
+    marginRight: '8%'
+  } as ViewStyle,
   firstSectionHeader: {
+    paddingLeft: '5%',
+    paddingTop: '5%',
     fontSize: JolocomTheme.landingHeaderFontSize,
     color: JolocomTheme.primaryColorBlack,
     flex: 0.3,
@@ -37,10 +37,12 @@ const styles = StyleSheet.create({
 export const CredentialTopCard: React.SFC<Props> = props => {
   return (
     <View style={styles.container}>
-      <View style={styles.innerContainer}>
       <Text style={styles.firstSectionHeader}>{props.credentialName}</Text>
-      { props.expiryDate ? <ValiditySummary expiryDate={props.expiryDate} /> : null }
-      </View>
-    </View>
+      <View style={styles.firstSectionSpacer}></View>
+      { props.expiryDate 
+        ? <ValiditySummary expiryDate={props.expiryDate} />
+        : <Text style={styles.firstSectionExpirySpacer}></Text>
+      }
+  </View>
   )
 }
