@@ -6,7 +6,7 @@ import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { IconToggle } from 'react-native-material-ui'
 import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
-import { ConsentAttributeCard, HeaderSection, CollapsedCredentialCard } from './claimCard'
+import { ConsentAttributeCard, HeaderSection } from './claimCard'
 
 interface Props {
   did: string

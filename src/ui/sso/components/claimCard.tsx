@@ -12,21 +12,22 @@ interface ClaimCardProps {
   primaryText: string | ReactNode
   primaryTextStyle?: TextStyle | RegisteredStyle<TextStyle>
   secondaryTextStyle?: TextStyle | RegisteredStyle<TextStyle>
-  containerStyle?: ViewStyle | RegisteredStyle<TextStyle>
+  containerStyle?: ViewStyle | RegisteredStyle<ViewStyle>
 }
 
 export const ClaimCard: React.SFC<ClaimCardProps> = props => {
+
   const styles = StyleSheet.create({
     primaryTextDefault: {
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.headerFontSize,
       color: JolocomTheme.primaryColorBlack,
       fontWeight: '100'
-    },
+    } as TextStyle,
     secondaryTextDefault: {
       fontSize: 17,
       opacity: 0.4
-    },
+    } as TextStyle,
     containerDefault: {
       flex: 0.8,
       marginBottom: '5%',

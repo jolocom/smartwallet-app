@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, ScrollView, View } from 'react-native'
+import { StyleSheet, Text, ScrollView, View, ViewStyle, TextStyle } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimCard } from 'src/ui/sso/components/claimCard'
@@ -16,25 +16,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: JolocomTheme.secondaryColorGrey,
     padding: 0
-  },
+  } as ViewStyle,
   claimCard: {
     paddingLeft: '15%',
     backgroundColor: JolocomTheme.primaryColorWhite,
-  },
+  } as ViewStyle,
   sectionHeader: {
     height: 26,
     fontSize: 17,
     fontFamily: JolocomTheme.contentFontFamily,
     alignSelf: 'flex-start'
-  },
+  } as TextStyle,
   primaryTextStyle: {
-    fontSize: JolocomTheme.textStyles.light.fontSize,
+    fontSize: JolocomTheme.textStyles.light.labelDisplayField.fontSize,
     color: JolocomTheme.primaryColorPurple
-  },
+  } as TextStyle,
   secondaryTextStyle: {
     opacity: 1,
     fontSize: JolocomTheme.headerFontSize
-  }
+  } as TextStyle
 })
 
 export const CredentialDialogComponent: React.SFC<Props> = props => {

@@ -4,11 +4,11 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard, CollapsedCredentialCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
-import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
+import { DecoratedClaims } from 'src/reducers/account'
 
 interface Props {
   handleInteraction?: (event: GestureResponderEvent) => void
-  credentialItem: CredentialData
+  credentialItem: DecoratedClaims
   collapsible?: boolean
   leftIcon: ReactNode
   rightIcon?: ReactNode
@@ -17,11 +17,6 @@ interface Props {
     primaryText?: TextStyle
     secondaryText?: TextStyle
   }
-}
-
-interface CredentialData {
-  credentialType: string
-  claimData: ClaimEntry
 }
 
 interface State {
@@ -64,7 +59,7 @@ export class CredentialCard extends React.Component<Props, State> {
     )
   }
 
-  private renderClaim = (credentialItem: CredentialData) => {
+  private renderClaim = (credentialItem: DecoratedClaims) => {
     const { handleInteraction } = this.props
     const { credentialType, claimData } = credentialItem
     const onEdit = handleInteraction || (() => {})
@@ -78,7 +73,7 @@ export class CredentialCard extends React.Component<Props, State> {
     ))
   }
 
-  private renderCollapsedClaim = (credentialItem: CredentialData) => (
+  private renderCollapsedClaim = (credentialItem: DecoratedClaims) => (
     <CollapsedCredentialCard
       title={credentialItem.credentialType}
       values={Object.keys(credentialItem.claimData).map(k => credentialItem.claimData[k])}

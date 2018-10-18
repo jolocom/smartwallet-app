@@ -68,7 +68,8 @@ export class CredentialOverview extends React.Component<Props, State> {
     const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
 
     return categorizedCredentials.map((claim: DecoratedClaims) => {
-      const captialized = Object.keys(claim.claimData).reduce((acc, curr) => ({...acc, [prepareLabel(curr)] : claim.claimData[curr]}), {})
+      const filteredKeys = Object.keys(claim.claimData).filter(el => el !== 'id')
+      const captialized = filteredKeys.reduce((acc, curr) => ({...acc, [prepareLabel(curr)] : claim.claimData[curr]}), {})
       const selfSigned = claim.issuer === did
 
       return <CredentialCard
