@@ -42,24 +42,49 @@ export default {
       credential: () => 'mockSignedCredential'
     }
   },
-  mockVCred: {
-    "@context": ["https://w3id.org/identity/v1", "https://identity.jolocom.com/terms", "https://w3id.org/security/v1", "https://w3id.org/credentials/v1", "http://schema.org"],
-    "claim": {
-      "id": "did:jolo:2ff3cb90a9cb8ddf9d6528a32e7a813ebe620d64db35e4b11e50d81a0cfee4c3",
-     "email": "test@test.com"
-    },
-    "expires": undefined,
-    "id": "claimId:bf6486176e667",
-    "issued": "Fri Sep 07 2018 15:38:43 GMT+0200 (CEST)",
-    "issuer": "did:jolo:2ff3cb90a9cb8ddf9d6528a32e7a813ebe620d64db35e4b11e50d81a0cfee4c3",
-    "name": "Email address",
-    "proof": {
-      "type": "EcdsaKoblitzSignature2016",
-      "created": "Fri Sep 07 2018 15:38:43 GMT+0200 (CEST)",
-      "creator": "did:jolo:2ff3cb90a9cb8ddf9d6528a32e7a813ebe620d64db35e4b11e50d81a0cfee4c3#keys-1",
-      "nonce": "4c239f99daf1e", 
-      "signatureValue": "R3fots62bFke8Wty6xOwgDdh5JyYwzMeuFIK6TPoTcNVpnLAxkdkNQspERWJmh5hg01eUY+ntLyEgBMFHNa5ug=="
-    },
-    "type": ["Credential", "ProofOfEmailCredential"]
+  testSignedCredentialDefault: {
+    '@context': [
+      {
+        id: '@id',
+        type: '@type',
+        cred: 'https://w3id.org/credentials#',
+        schema: 'http://schema.org/',
+        dc: 'http://purl.org/dc/terms/',
+        xsd: 'http://www.w3.org/2001/XMLSchema#',
+        sec: 'https://w3id.org/security#',
+        Credential: 'cred:Credential',
+        issuer: { '@id': 'cred:issuer', '@type': '@id' },
+        issued: { '@id': 'cred:issued', '@type': 'xsd:dateTime' },
+        claim: { '@id': 'cred:claim', '@type': '@id' },
+        credential: { '@id': 'cred:credential', '@type': '@id' },
+        expires: { '@id': 'sec:expiration', '@type': 'xsd:dateTime' },
+        proof: { '@id': 'sec:proof', '@type': '@id' },
+        EcdsaKoblitzSignature2016: 'sec:EcdsaKoblitzSignature2016',
+        created: { '@id': 'dc:created', '@type': 'xsd:dateTime' },
+        creator: { '@id': 'dc:creator', '@type': '@id' },
+        domain: 'sec:domain',
+        nonce: 'sec:nonce',
+        signatureValue: 'sec:signatureValue'
+      },
+      {
+        ProofOfEmailCredential: 'https://identity.jolocom.com/terms/ProofOfEmailCredential',
+        schema: 'http://schema.org/',
+        email: 'schema:email'
+      }
+    ],
+    id: 'claimId:61adc6e7b1448',
+    name: 'Email address',
+    issuer: 'did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88',
+    type: ['Credential', 'ProofOfEmailCredential'],
+    claim: { email: 'test@jolocom.com', id: 'did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88' },
+    issued: '2018-10-15T19:59:38.405Z',
+    expires: '2019-10-15T19:59:38.406Z',
+    proof: {
+      type: 'EcdsaKoblitzSignature2016',
+      created: '2018-10-15T19:59:38.406Z',
+      creator: 'did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88#keys-1',
+      nonce: 'c9c8bc35382ff',
+      signatureValue: 'XdEIMGeo+b3eJEb2I063iLwShhAbWQNiwPILRy5XtN0TgU/bUB2mATmYrWGGIJfNbUEwh+kMn/gAQLLXoqr17A=='
+    }
   }
 }

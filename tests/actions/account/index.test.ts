@@ -19,6 +19,7 @@ describe('Account action creators', () => {
             issuer: 'did:jolo:test',
             subject: 'did:jolo:test'
           },
+          pendingExternal: [],
           decoratedCredentials: 'blah'
           }
         }
@@ -81,13 +82,13 @@ describe('Account action creators', () => {
   })
 
   it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
-    const { identityWallet, mockVCred } = data
+    const { identityWallet, testSignedCredentialDefault } = data
     
     const backendMiddleware = {
       storageLib: {
         get: {
           verifiableCredential: jest.fn()
-            .mockResolvedValue([JolocomLib.parse.signedCredential.fromJSON(mockVCred)])
+            .mockResolvedValue([JolocomLib.parse.signedCredential.fromJSON(testSignedCredentialDefault)])
         }
       },
       identityWallet
