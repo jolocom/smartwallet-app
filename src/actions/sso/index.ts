@@ -9,7 +9,6 @@ import { showErrorScreen } from 'src/actions/generic'
 import { CredentialRequest } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequest'
 import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/credentialsReceive/credentialsReceivePayload';
 import { getUiCredentialTypeByType } from 'src/lib/util'
-import { JSONWebToken } from 'jolocom-lib/js/interactionFlows/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionFlows/types'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {

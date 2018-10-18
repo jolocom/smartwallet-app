@@ -99,6 +99,7 @@
     "react": "16.2.0",
     "react-native": "^0.55.3",
     "react-native-camera": "^1.1.1",
+    "react-native-deep-link": "^0.1.5",
     "react-native-fetch-blob": "^0.10.8",
     "react-native-indicator": "^0.7.0",
     "react-native-keychain": "^3.0.0-rc.3",

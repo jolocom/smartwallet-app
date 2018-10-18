@@ -6,6 +6,7 @@ import { AnyAction } from 'redux'
 import { Routes } from 'src/routes'
 import { RootState } from 'src/reducers/'
 import { navigationActions } from 'src/actions/'
+import withDeepLinking from './lib/withDeepLinking';
 
 const { createReduxBoundAddListener } = require('react-navigation-redux-helpers')
 
@@ -65,4 +66,4 @@ const mapDispatchToProps = (dispatch: Function) => {
   }
 }
 
-export const Navigator = connect(mapStateToProps, mapDispatchToProps)(NavigatorContainer)
+export const Navigator = connect(mapStateToProps, mapDispatchToProps)(withDeepLinking(NavigatorContainer))
