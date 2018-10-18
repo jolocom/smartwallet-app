@@ -33,9 +33,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
   }
 
   private onScannerStart = (): void => {
-    const data = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJjcmVkZW50aWFsUmVxdWVzdCI6eyJjcmVkZW50aWFsUmVxdWlyZW1lbnRzIjpbeyJ0eXBlIjpbIkNyZWRlbnRpYWwiLCJQcm9vZk9mRW1haWxDcmVkZW50aWFsIl0sImNvbnN0cmFpbnRzIjp7ImFuZCI6W3siPT0iOlt0cnVlLHRydWVdfSx7Ij09IjpbdHJ1ZSx0cnVlXX1dfX0seyJ0eXBlIjpbIkNyZWRlbnRpYWwiLCJQcm9vZk9mTmFtZUNyZWRlbnRpYWwiXSwiY29uc3RyYWludHMiOnsiYW5kIjpbeyI9PSI6W3RydWUsdHJ1ZV19LHsiPT0iOlt0cnVlLHRydWVdfV19fV0sImNhbGxiYWNrVVJMIjoiaHR0cHM6Ly9kZW1vLXNzby5qb2xvY29tLmNvbS9hdXRoZW50aWNhdGlvbi93dmtjayJ9LCJ0eXAiOiJjcmVkZW50aWFsUmVxdWVzdCIsImlhdCI6MTUzOTgxNDA0NTQ2NCwiaXNzIjoiZGlkOmpvbG86YjMxMGQyOTNhZWFjOGE1Y2E2ODAyMzJiOTY5MDFmZTg1OTg4ZmRlMjg2MGExYTVkYjY5YjQ5NzYyOTIzY2M4OCNrZXlzLTEifQ.G2c5hcpDI_5kWy_XQj2nuUwig0sybxSt9iSGqA3R26M5kGnGv_LsdairaY9TgP-j1Ocvc2YPImSRjvhabDJQbg'
-    this.props.parseJWT(data)
-    // this.setState({ scanning: true })
+    this.setState({ scanning: true })
   }
 
   private onScannerCancel = (): void => {
