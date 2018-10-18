@@ -1,12 +1,12 @@
 import React from 'react'
 import { addNavigationHelpers, NavigationEventSubscription, NavigationEventCallback } from 'react-navigation'
-import { connect } from 'react-redux'
+import { connect, Dispatch } from 'react-redux'
 import { BackHandler } from 'react-native'
 import { AnyAction } from 'redux'
 import { Routes } from 'src/routes'
 import { RootState } from 'src/reducers/'
 import { navigationActions } from 'src/actions/'
-import withDeepLinking from './lib/withDeepLinking';
+import { withDeepLinking } from 'src/lib/withDeepLinking'
 
 const { createReduxBoundAddListener } = require('react-navigation-redux-helpers')
 
@@ -60,10 +60,23 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => {
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     goBack: () => dispatch(navigationActions.goBack())
   }
 }
+const navigationWithDeepLinking = withDeepLinking(
+  class extends React.Component<Props> {
+    render() {
+      return (
+        <NavigatorContainer
+          dispatch={this.props.dispatch}
+          navigation={this.props.navigation}
+          goBack={this.props.goBack}
+         />
+      )
+    }
+  }
+)
 
-export const Navigator = connect(mapStateToProps, mapDispatchToProps)(withDeepLinking(NavigatorContainer))
+export const Navigator = connect(mapStateToProps, mapDispatchToProps)(navigationWithDeepLinking)
