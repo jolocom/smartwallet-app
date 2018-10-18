@@ -6,8 +6,8 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
-import { CredentialRequest } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequest'
-import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/credentialsReceive/credentialsReceivePayload';
+import { CredentialRequestPayload } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequestPayload'
+import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/credentialsReceive/credentialsReceivePayload'
 import { getUiCredentialTypeByType } from 'src/lib/util'
 import { InteractionType } from 'jolocom-lib/js/interactionFlows/types'
 
@@ -28,7 +28,8 @@ export const parseJWT = (encodedJwt: string) =>{
   return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
 
     const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
-    if (returnedDecodedJwt instanceof CredentialRequest) {
+    console.log(returnedDecodedJwt, 'decoded!!')
+    if (returnedDecodedJwt instanceof CredentialRequestPayload) {
       dispatch(consumeCredentialRequest(returnedDecodedJwt))
     }
     if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
@@ -65,12 +66,12 @@ interface AttributeSummary {
   }>
 }
 
-export const consumeCredentialRequest = (decodedCredentialRequest: CredentialRequest) => {
+export const consumeCredentialRequest = (decodedCredentialRequestPayload: CredentialRequestPayload) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
     const { did } = getState().account.did.toJS()
 
-    const requestedTypes = decodedCredentialRequest.getRequestedCredentialTypes()
+    const requestedTypes = decodedCredentialRequestPayload.getRequestedCredentialTypes()
     const attributesForType = await Promise.all<AttributeSummary>(requestedTypes.map(storageLib.get.attributesByType))
 
     const populatedWithCredentials = await Promise.all(
@@ -101,8 +102,8 @@ export const consumeCredentialRequest = (decodedCredentialRequest: CredentialReq
 
     // TODO requester shouldn't be optional
     const summary = {
-      callbackURL: decodedCredentialRequest.getCallbackURL(),
-      requester: decodedCredentialRequest.iss,
+      callbackURL: decodedCredentialRequestPayload.getCallbackURL(),
+      requester: decodedCredentialRequestPayload.iss,
       availableCredentials: flattened
     }
 
