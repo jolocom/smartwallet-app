@@ -90,7 +90,6 @@ export class Storage {
       .createQueryBuilder('credential')
       .leftJoinAndSelect('credential.verifiableCredential', 'verifiableCredential')
       .where('verifiableCredential.type = :type', { type })
-      .groupBy('propertyValue')
       .getMany()
 
     const results = this.groupAttributesByCredentialId(localAttributes).map(entry => ({

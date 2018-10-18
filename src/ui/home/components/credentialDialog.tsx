@@ -18,13 +18,10 @@ const styles = StyleSheet.create({
     padding: 0
   },
   claimCard: {
-    backgroundColor: JolocomTheme.primaryColorWhite,
     paddingLeft: '15%',
-    paddingVertical: '5%'
+    backgroundColor: JolocomTheme.primaryColorWhite,
   },
   sectionHeader: {
-    marginTop: '5%',
-    marginHorizontal: '5%',
     height: 26,
     fontSize: 17,
     fontFamily: JolocomTheme.contentFontFamily,
@@ -53,7 +50,7 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
       <Block flex={0.2}>
         <Text style={sectionHeader}> Issued by </Text>
         <ClaimCard
-          containerStyle={claimCard}
+          containerStyle={{ ...StyleSheet.flatten(claimCard), paddingVertical: 5 }}
           primaryTextStyle={primaryTextStyle}
           secondaryTextStyle={secondaryTextStyle}
           primaryText={`${issuer.substring(0, 30)}...`}
@@ -62,8 +59,10 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
       </Block>
 
       <Block flex={0.45}>
-        <Text style={sectionHeader}> Document details/claims </Text>
-        <ScrollView style={{ width: '100%' }}>{renderClaims(credentialToRender)}</ScrollView>
+        <Text style={{...StyleSheet.flatten(sectionHeader), marginTop: '5%'}}> Document details/claims </Text>
+        <ScrollView style={{ width: '100%' }}>
+        {renderClaims(credentialToRender)}
+        </ScrollView>
       </Block>
 
       <View flex={0.05} />
@@ -74,11 +73,16 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
 const renderClaims = (toRender: DecoratedClaims) => {
   const { claimData } = toRender
   return Object.keys(claimData).map(field => (
-    <ClaimCard
-      key={claimData[field]}
-      containerStyle={{ ...StyleSheet.flatten(styles.claimCard), marginBottom: 1 }}
-      primaryText={claimData[field]}
-      secondaryText={prepareLabel(field)}
-    />
+    <View style={{ marginBottom: 1 }}>
+      <ClaimCard
+        key={claimData[field]}
+        containerStyle={{
+          ...StyleSheet.flatten(styles.claimCard),
+          paddingVertical: 2
+        }}
+        primaryText={claimData[field]}
+        secondaryText={prepareLabel(field)}
+      />
+    </View>
   ))
 }

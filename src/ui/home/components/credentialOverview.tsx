@@ -72,7 +72,6 @@ export class CredentialOverview extends React.Component<Props, State> {
       const selfSigned = claim.issuer === did
 
       return <CredentialCard
-        title={collapsible(claim) ? claim.credentialType : ''}
         handleInteraction={() => onEdit(claim)}
         credentialItem={{...claim, claimData: captialized}}
         collapsible={collapsible(claim)}
