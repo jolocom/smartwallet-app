@@ -23,7 +23,14 @@ const styles = StyleSheet.create({
   },
   firstSectionHeader: {
     fontSize: JolocomTheme.landingHeaderFontSize,
-    color: JolocomTheme.primaryColorBlack
+    color: JolocomTheme.primaryColorBlack,
+    flex: 0.3,
+  },
+  firstSectionSpacer: {
+    flex: 0.3
+  },
+  firstSectionExpirySpacer: {
+    flex: 0.2
   }
 })
 
