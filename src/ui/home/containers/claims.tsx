@@ -11,8 +11,9 @@ import { QrScanEvent } from './types'
 interface ConnectProps {
   setClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
-  parseJWT:(jwt: string) => void
+  parseJWT: (jwt: string) => void
   openClaimDetails: (claim: DecoratedClaims) => void
+  did: string
   claims: ClaimsState
 }
 
@@ -52,6 +53,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
     return (
       <View style={{ flex: 1 }}>
         <CredentialOverview
+          did={this.props.did}
           claimsState={this.props.claims}
           loading={this.props.claims.loading}
           onEdit={this.props.openClaimDetails}
@@ -66,6 +68,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
 // TODO nicer pattern for accessing state, perhaps immer or something easier to Type
 const mapStateToProps = (state: any) => {
   return {
+    did: state.account.did.toJS().did,
     claims: state.account.claims.toJS()
   }
 }

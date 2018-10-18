@@ -6,8 +6,9 @@ export const enum routeList {
   Loading = 'Loading',
   SeedPhrase = 'SeedPhrase',
   Home = 'Home',
-  Claims= 'Claims',
+  Claims = 'Claims',
   Interactions = 'Interactions',
   Exception = 'Exception',
-  ClaimDetails = "ClaimDetails"
+  ClaimDetails = 'ClaimDetails',
+  CredentialDialog = 'CredentialDialog'
 }

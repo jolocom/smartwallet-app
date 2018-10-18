@@ -5,7 +5,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
-import { ClaimData } from 'src/reducers/account'
+import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 
 const styles = StyleSheet.create({
   blockSpace: {
@@ -97,7 +97,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     this.props.handleClaimInput(fieldValue, fieldName)
   }
 
-  private renderInputFields = (claimData: ClaimData) => {
+  private renderInputFields = (claimData: ClaimEntry) => {
     return Object.keys(claimData).map((item) => {
       return (
         <TextInputField

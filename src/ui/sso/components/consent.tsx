@@ -1,11 +1,12 @@
 import React from 'react'
-import { Text, StyleSheet, ScrollView, ViewStyle, TextStyle, View } from 'react-native'
+import { Text, ScrollView, TextStyle, View } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
-import { CredentialCard } from 'src/ui/home/components/credentialCard'
-import { Button, IconToggle } from 'react-native-material-ui'
+import { IconToggle } from 'react-native-material-ui'
 import { getCredentialIconByType } from 'src/resources/util'
+import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
+import { ConsentAttributeCard, HeaderSection } from './claimCard'
 
 interface Props {
   did: string
@@ -19,7 +20,7 @@ interface Props {
 interface State {
   pending: boolean
   selectedCredentials: {
-    [type: string]: StateVerificationSummary
+    [type: string]: StateVerificationSummary | undefined
   }
 }
 
@@ -34,35 +35,6 @@ const styles = {
     ...JolocomTheme.textStyles.light.labelDisplayField,
     fontFamily: JolocomTheme.contentFontFamily
   },
-  buttonBlock: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    backgroundColor: JolocomTheme.primaryColorWhite
-  } as ViewStyle,
-  denyShareText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.primaryColorPurple,
-    fontWeight: '100'
-  } as TextStyle,
-  shareClaimsContainer: {
-    backgroundColor: JolocomTheme.primaryColorPurple
-  } as ViewStyle,
-  shareClaimsText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.primaryColorSand,
-    fontWeight: '100'
-  } as TextStyle,
-  disabledShareClaimsContainer: {
-    backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
-  } as ViewStyle,
-  disabledShareClaimsText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.disabledButtonTextGrey,
-    fontWeight: '100'
-  } as TextStyle,
   fixedText: {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
@@ -88,58 +60,46 @@ export class ConsentComponent extends React.Component<Props, State> {
   }
 
   private handleAttributeSelect(type: string, selectedCredential: StateVerificationSummary) {
-    this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: selectedCredential } })
+    const selected = this.state.selectedCredentials[type]
+    if (selected && selected.id === selectedCredential.id) {
+      this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: undefined } })
+    } else {
+      this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: selectedCredential } })
+    }
   }
 
   private handleSubmitClaims = () => {
     const { selectedCredentials } = this.state
     const credentials = Object.keys(selectedCredentials).map(key => selectedCredentials[key])
     this.setState({ pending: true })
-    this.props.handleSubmitClaims(credentials)
+    this.props.handleSubmitClaims(credentials as StateVerificationSummary[])
   }
 
   private renderButtons() {
-    const { handleDenySubmit } = this.props
     const { selectedCredentials } = this.state
 
     const submitAllowed = Object.keys(selectedCredentials).every(key => selectedCredentials[key] !== undefined)
     const buttonDisabled = !submitAllowed || this.state.pending
 
-    const { flatten } = StyleSheet
-    const {
-      denyShareText,
-      shareClaimsContainer,
-      shareClaimsText,
-      disabledShareClaimsContainer,
-      disabledShareClaimsText
-    } = styles
-
     return (
-      <Block style={styles.buttonBlock} flex={0.1}>
-        <Button onPress={handleDenySubmit} style={{ text: denyShareText }} upperCase={false} text="Deny" />
-        <Button
-          disabled={buttonDisabled}
-          onPress={() => this.handleSubmitClaims()}
-          style={
-            buttonDisabled
-              ? { container: flatten(disabledShareClaimsContainer), text: disabledShareClaimsText }
-              : { container: flatten(shareClaimsContainer), text: shareClaimsText }
-          }
-          upperCase={false}
-          text="Share claims"
-        />
-      </Block>
+      <ButtonSection
+        disabled={buttonDisabled}
+        confirmText={'Share claims'}
+        denyText={'Deny'}
+        handleConfirm={() => this.handleSubmitClaims()}
+        handleDeny={() => this.props.handleDenySubmit()}
+      />
     )
   }
 
   private renderFirstSection() {
     return (
       <Block flex={0.4}>
-        <Block flex={0.1}>{null}</Block>
+        <View flex={0.1} />
 
         <Block flex={0.4} style={{ backgroundColor: 'white' }}>
-          <Text style={styles.serviceTitle}> {this.props.requester.substring(0, 25)} </Text>
-          <Text style={styles.serviceMetadata}> {this.props.callbackURL.substring(0, 25)} </Text>
+          <Text style={styles.serviceTitle}> {`${this.props.requester.substring(0, 25)}...`} </Text>
+          <Text style={styles.serviceMetadata}> {`${this.props.callbackURL.substring(0, 25)}...`} </Text>
         </Block>
 
         <Block flex={0.5}>
@@ -154,13 +114,11 @@ export class ConsentComponent extends React.Component<Props, State> {
     const { type, verifications } = entry
 
     return (
-      <View style={{ justifyContent: 'center' }}>
-        <IconToggle
-          name={selected ? 'check-circle' : 'fiber-manual-record'}
-          onPress={() => this.handleAttributeSelect(type, verifications[0])}
-          color={checkboxColor}
-        />
-      </View>
+      <IconToggle
+        name={selected ? 'check-circle' : 'fiber-manual-record'}
+        onPress={() => this.handleAttributeSelect(type, verifications[0])}
+        color={checkboxColor}
+      />
     )
   }
 
@@ -177,31 +135,34 @@ export class ConsentComponent extends React.Component<Props, State> {
       {}
     )
 
-    return Object.keys(groupedByType).map(sectionType =>
-      groupedByType[sectionType].map((entry, idx, arr) => this.renderCredentialCards(entry, idx, arr))
-    )
+    return Object.keys(groupedByType).map(sectionType => (
+      <View>{groupedByType[sectionType].map((entry, idx, arr) => this.renderCredentialCards(entry, idx, arr))}</View>
+    ))
   }
 
   private renderCredentialCards(entry: StateTypeSummary, idx: number, arr: StateTypeSummary[]) {
+    const isFirst = idx === 0
+    const isLast = idx === arr.length - 1
     const { type, values, verifications } = entry
-    const { did } = this.props
     const currentlySelected = this.state.selectedCredentials[type]
-    const selected = currentlySelected && currentlySelected.id === verifications[0].id
-    const title = idx === 0 ? `${type}:` : ''
+    const isSelected = currentlySelected && currentlySelected.id === verifications[0].id
+    const containsData = entry.values.length > 0
+    const headerSection = isFirst ? (
+      <HeaderSection containerStyle={{ paddingTop: '5%' }} title={`${type}:`} leftIcon={this.renderLeftIcon(type)} />
+    ) : null
 
     return (
-      <CredentialCard
-        title={title}
-        titleStyle={{ opacity: 1, fontSize: 17 }}
-        containerStyle={idx === arr.length - 1 ? {} : { marginBottom: 0, paddingBottom: 0 }}
-        leftIcon={idx === 0 ? this.renderLeftIcon(type) : null}
-        claimCardStyle={styles.claimCardText}
-        claimRightIcon={this.renderRightIcon(selected, entry)}
-        credentialItem={{
-          credentialType: type,
-          claimData: { [values.map(v => v.trim()).join('\n')]: renderSelfSignedOrNot(verifications, did) }
-        }}
-      />
+      <View>
+        {headerSection}
+        <ConsentAttributeCard
+          containerStyle={{ paddingLeft: '20%' }}
+          split={isLast}
+          rightIcon={containsData ? this.renderRightIcon(!!isSelected, entry) : null}
+          did={this.props.did}
+          values={values}
+          issuer={verifications.length ? verifications[0].issuer : ''}
+        />
+      </View>
     )
   }
 
@@ -220,6 +181,3 @@ export class ConsentComponent extends React.Component<Props, State> {
     )
   }
 }
-
-const renderSelfSignedOrNot = (verifiactions: StateVerificationSummary[], did: string): string =>
-  verifiactions.every(verification => verification.issuer === did) ? 'Self-Signed' : 'External Issuer'

@@ -38,7 +38,13 @@ export const areCredTypesEqual = (first: string[], second: string[]): boolean =>
 
 export const prepareLabel = (label: string): string => {
   const words = label.split(/(?=[A-Z])/)
-  return words.length > 1 ? words.map(capitalize).join(' ') : label
+  return words.length > 1 ? words.map(capitalize).join(' ') : capitalize(label)
 }
 
 export const capitalize = (word: string): string => `${word[0].toUpperCase()}${word.slice(1)}`
+
+export const compareDates = (date1: Date, date2: Date): number => {
+  return Math.floor(
+    (Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) / (1000 * 60 * 60 * 24)
+  )
+}
