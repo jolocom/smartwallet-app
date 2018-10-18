@@ -14,4 +14,5 @@ export default withDeepLinking = createDeepLinkingHandler([{
     routes: [{
         name: '/credentialRequest/:jwt',
         callback: handleCredentialRequestScreenDeepLink
+    }]
 }])
