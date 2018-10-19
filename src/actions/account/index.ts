@@ -50,7 +50,7 @@ export const checkIdentityExists = () => {
       dispatch(genericActions.toggleLoadingScreen(false))
       dispatch(setIdentityWallet())
 
-      dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Exception}))
     } catch (err) {
       if (err.message.indexOf('no such table') === 0) {
         return
