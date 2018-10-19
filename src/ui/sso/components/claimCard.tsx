@@ -16,7 +16,6 @@ interface ClaimCardProps {
 }
 
 export const ClaimCard: React.SFC<ClaimCardProps> = props => {
-
   const styles = StyleSheet.create({
     primaryTextDefault: {
       fontFamily: JolocomTheme.contentFontFamily,

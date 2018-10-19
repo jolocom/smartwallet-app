@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity, TextStyle, GestureResponderEvent, ViewStyle } from 'react-native'
+import { StyleSheet, View, TextStyle, GestureResponderEvent, ViewStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard, CollapsedCredentialCard } from 'src/ui/sso/components/claimCard'
@@ -50,15 +50,6 @@ export class CredentialCard extends React.Component<Props, State> {
     }
   }
 
-  private renderIcon() {
-    const { handleInteraction, rightIcon } = this.props
-    return (
-      <TouchableOpacity style={{ flex: 0.1 }} onPress={handleInteraction}>
-        {rightIcon || null}
-      </TouchableOpacity>
-    )
-  }
-
   private renderClaim = (credentialItem: DecoratedClaims) => {
     const { handleInteraction } = this.props
     const { credentialType, claimData } = credentialItem
@@ -81,7 +72,7 @@ export class CredentialCard extends React.Component<Props, State> {
   )
 
   public render() {
-    const { credentialItem, containerStyle, leftIcon } = this.props
+    const { credentialItem, containerStyle, leftIcon, rightIcon } = this.props
     const { collapsed } = this.state
     const { defaultContainerStyle } = this.getStyles()
 
@@ -90,10 +81,12 @@ export class CredentialCard extends React.Component<Props, State> {
         <View flex={0.2} alignItems={'center'}>
           {leftIcon}
         </View>
-        <View onTouchEnd={this.toggleCollapse} flex={0.7}>
+        <View onTouchEnd={this.toggleCollapse} flex={0.7} overflow={'scroll'}>
           {collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
-        {this.renderIcon()}
+        <View flex={0.1} onTouchEnd={this.props.handleInteraction}>
+          {rightIcon || null}
+        </View>
       </View>
     )
   }
