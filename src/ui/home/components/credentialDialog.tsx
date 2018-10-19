@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   claimCard: {
     paddingLeft: '15%',
-    backgroundColor: JolocomTheme.primaryColorWhite,
+    backgroundColor: JolocomTheme.primaryColorWhite
   } as ViewStyle,
   sectionHeader: {
     height: 26,
@@ -59,10 +59,8 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
       </Block>
 
       <Block flex={0.45}>
-        <Text style={{...StyleSheet.flatten(sectionHeader), marginTop: '5%'}}> Document details/claims </Text>
-        <ScrollView style={{ width: '100%' }}>
-        {renderClaims(credentialToRender)}
-        </ScrollView>
+        <Text style={{ ...StyleSheet.flatten(sectionHeader), marginTop: '5%' }}> Document details/claims </Text>
+        <ScrollView style={{ width: '100%' }}>{renderClaims(credentialToRender)}</ScrollView>
       </Block>
 
       <View flex={0.05} />
@@ -78,7 +76,7 @@ const renderClaims = (toRender: DecoratedClaims) => {
         key={claimData[field]}
         containerStyle={{
           ...StyleSheet.flatten(styles.claimCard),
-          paddingVertical: 2
+          paddingVertical: 5
         }}
         primaryText={claimData[field]}
         secondaryText={prepareLabel(field)}
