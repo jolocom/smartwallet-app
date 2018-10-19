@@ -8,7 +8,7 @@ import { ReactNode } from 'react'
 import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { CredentialTypes } from 'src/lib/categories'
-import { MoreIcon } from 'src/resources';
+import { MoreIcon } from 'src/resources'
 import { getCredentialIconByType } from 'src/resources/util'
 import { prepareLabel } from 'src/lib/util'
 const loaders = require('react-native-indicator')
@@ -69,23 +69,31 @@ export class CredentialOverview extends React.Component<Props, State> {
 
     return categorizedCredentials.map((claim: DecoratedClaims) => {
       const filteredKeys = Object.keys(claim.claimData).filter(el => el !== 'id')
-      const captialized = filteredKeys.reduce((acc, curr) => ({...acc, [prepareLabel(curr)] : claim.claimData[curr]}), {})
+      const captialized = filteredKeys.reduce(
+        (acc, curr) => ({ ...acc, [prepareLabel(curr)]: claim.claimData[curr] }),
+        {}
+      )
       const selfSigned = claim.issuer === did
 
-      return <CredentialCard
-        handleInteraction={() => onEdit(claim)}
-        credentialItem={{...claim, claimData: captialized}}
-        collapsible={collapsible(claim)}
-        rightIcon={selfSigned ? <MoreIcon /> : null}
-        leftIcon={getCredentialIconByType(claim.credentialType)}
-      />
+      return (
+        <CredentialCard
+          handleInteraction={() => onEdit(claim)}
+          credentialItem={{ ...claim, claimData: captialized }}
+          collapsible={collapsible(claim)}
+          rightIcon={selfSigned ? <MoreIcon /> : null}
+          leftIcon={getCredentialIconByType(claim.credentialType)}
+        />
+      )
     })
   }
 
-  renderCredentialCategory = (category: string) => [
-    <Text style={styles.sectionHeader}>{category.toString()}</Text>,
-    this.renderCredentialCard(category)
-  ]
+  renderCredentialCategory = (category: string) => {
+    if (!this.props.claimsState.decoratedCredentials[category].length) {
+      return null
+    }
+
+    return [<Text style={styles.sectionHeader}>{category.toString()}</Text>, this.renderCredentialCard(category)]
+  }
 
   render() {
     const { decoratedCredentials, loading } = this.props.claimsState
