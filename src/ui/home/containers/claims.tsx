@@ -7,6 +7,7 @@ import { View } from 'react-native'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { QrScanEvent } from './types'
+import { LoadingSpinner } from '../../generic'
 
 interface ConnectProps {
   setClaimsForDid: () => void
@@ -20,12 +21,14 @@ interface ConnectProps {
 interface Props extends ConnectProps {}
 
 interface State {
-  scanning: boolean
+  scanning: boolean,
+  loading: boolean
 }
 
 export class ClaimsContainer extends React.Component<Props, State> {
   state = {
-    scanning: false
+    scanning: false,
+    loading: false
   }
 
   componentWillMount() {
@@ -34,22 +37,29 @@ export class ClaimsContainer extends React.Component<Props, State> {
 
   private onScannerStart = (): void => {
     this.setState({ scanning: true })
+    this.setState({ loading: true })
   }
 
   private onScannerCancel = (): void => {
     this.setState({ scanning: false })
+    this.setState({ loading: false })
   }
 
   private onScannerSuccess = (e: QrScanEvent): void => {
     this.setState({ scanning: false })
     this.props.parseJWT(e.data)
+    this.setState({ loading: false })
   }
 
   render() {
     if (this.state.scanning) {
       return <QRcodeScanner onScannerSuccess={this.onScannerSuccess} onScannerCancel={this.onScannerCancel} />
     }
-
+    if ( this.state.loading || this.props.claims.loading ) {
+      return (
+        <LoadingSpinner />
+      )
+    }
     return (
       <View style={{ flex: 1 }}>
         <CredentialOverview
