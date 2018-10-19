@@ -22,7 +22,7 @@ export const savePassword = (password: string) => {
       await backendMiddleware.keyChainLib.savePassword(password)
       dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
     } catch (err) {
-      dispatch(genericActions.showErrorScreen(err))
+      dispatch(genericActions.showErrorScreen(err, 'registration'))
     }
   }
 }
@@ -135,7 +135,7 @@ export const createIdentity = (encodedEntropy: string) => {
         })
       )
     } catch (error) {
-      return dispatch(genericActions.showErrorScreen(error))
+      return dispatch(genericActions.showErrorScreen(error, 'registration'))
     }
   }
 }
