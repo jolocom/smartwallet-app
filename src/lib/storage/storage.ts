@@ -110,7 +110,7 @@ export class Storage {
     const findByCredId = (arrToSearch: ModifiedCredentialEntity[], value: ModifiedCredentialEntity) =>
       arrToSearch.findIndex(entry => entry.verifiableCredential.id === value.verifiableCredential.id)
 
-    return modifiedAttributes.reduce((acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity, idx) => {
+    return modifiedAttributes.reduce((acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity) => {
       const matchingIndex = findByCredId(acc, curr)
 
       if (matchingIndex >= 0) {

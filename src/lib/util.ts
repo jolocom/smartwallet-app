@@ -17,7 +17,7 @@ export const getClaimMetadataByCredentialType = (type: string) : BaseMetadata =>
 }
 
 export const getUiCredentialTypeByType = (type: string[]): string => {
-  return uiCredentialTypeByType[type[1]]
+  return uiCredentialTypeByType[type[1]] || prepareLabel(type[1])
 }
 
 export const getCredentialUiCategory = (type: string): string => {

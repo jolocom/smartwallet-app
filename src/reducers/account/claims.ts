@@ -34,7 +34,8 @@ const categorizedClaims: CategorizedClaims = {
       issuer: '',
       subject: ''
     }
-  ]
+  ],
+  Other: []
 }
 
 export const initialState: ClaimsState = {
@@ -55,6 +56,7 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     case 'SET_LOADING':
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
+      console.log(action.claims)
       return state.set('decoratedCredentials', Immutable.fromJS(addDefaultValues(action.claims))).set('loading', false)
     case 'SET_EXTERNAL':
       return state.set('pendingExternal', Immutable.fromJS(action.external))
