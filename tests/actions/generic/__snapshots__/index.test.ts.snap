@@ -3,10 +3,6 @@
 exports[`Generic action creators showErrorScreen should navigate to error screen and provide the message 1`] = `
 Array [
   Object {
-    "params": Object {
-      "errorMessage": "MOCK BAD ERROR",
-      "stackTrace": "MOCK STACK TRACE",
-    },
     "routeName": "Exception",
     "type": "Navigation/NAVIGATE",
   },
