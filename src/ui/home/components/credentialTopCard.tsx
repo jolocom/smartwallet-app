@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   firstSectionHeader: {
-    fontSize: JolocomTheme.landingHeaderFontSize,
+    fontSize: JolocomTheme.headerFontSize,
     color: JolocomTheme.primaryColorBlack
   }
 })
