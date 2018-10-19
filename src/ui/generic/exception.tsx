@@ -1,61 +1,101 @@
 import React from 'react'
-import { Container, CenteredText, Header, Block} from 'src/ui/structure/'
+import { RootState } from 'src/reducers/'
+import { connect } from 'react-redux'
+import { Container, Block} from 'src/ui/structure/'
+import { Button } from 'react-native-material-ui'
+import { registrationActions } from 'src/actions/'
 import { Text, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
-interface Props {
+
+interface ConnectProps {
+  startRegistration: () => void
+}
+interface Props extends ConnectProps {
   navigation: {
     state: {
-      params: {
-        errorMessage: string
-        errorText: string
-      }
+      // params: {
+      //   errorMessage: string
+      //   errorText: string
+      // }
     }
   }
 }
 
 const styles = StyleSheet.create({
   containerStyle: {
-    backgroundColor: JolocomTheme.primaryColorBlack
+    backgroundColor: JolocomTheme.primaryColorBlack,
+    display: 'flex'
+  },
+  textBlock: {
+    flex: 0.6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorTextHeader: {
+    textAlign: 'center',
+    color: JolocomTheme.primaryColorSand,
+    fontSize: 28,
+    fontFamily: JolocomTheme.contentFontFamily
   },
   errorText: {
     textAlign: 'center',
     color: JolocomTheme.primaryColorSand,
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: JolocomTheme.contentFontFamily
+  },
+  buttonBlock: {
+    flex: 0.1,
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  buttonContainer: {
+    height: '100%',
+    width: '50%',
+    borderRadius: 4,
+    backgroundColor: JolocomTheme.primaryColorPurple
+  },
+  buttonText: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: JolocomTheme.primaryColorWhite,
+    fontSize: JolocomTheme.headerFontSize,
+    fontWeight: "100"
   }
 })
 
-export const Exception : React.SFC<Props> = (props) => {
-  // const { errorMessage, stackTrace } = props.navigation.state.params
-  // const defaultErrorMessage = 'No further details are available :('
-  // const defaultStackTraceMsg = 'No stack trace available :('
-
-  // const abbreviatedErrMsg = errorMessage
-  //   ? `${errorMessage.substring(0, 100)}...`
-  //   : defaultErrorMessage
-  //   const abbreviatedStack = stackTrace
-  //     ? `${stackTrace.substring(0, 800)}...`
-  //     : defaultStackTraceMsg
+export const ExceptionComponent: React.SFC<Props> = (props) => {
+  console.log(props)
   const errorText = 'There was an error with your request.'
-  const errorText2 = 'Please try again.'
 
   return(
     <Container style={ styles.containerStyle }>
-      <Header title='Oops!'/>
-      <Block flex={ 0.2 }>
+      <Block style={ styles.textBlock }>
+        <Text style={ styles.errorTextHeader }>Oops!</Text>
         <Text style={ styles.errorText }> { errorText } </Text>
-        <Text style={ styles.errorText }> { errorText2 } </Text>
-        {/* <CenteredText msg={ errorTextHeader }/> */}
       </Block>
-      {/* <Block flex={ 0.4 }>
-        <Text style={ styles.stackTrace }>
-          { abbreviatedStack }
-        </Text>
-      </Block>
-      <Block flex={ 0.2 }>
-        <CenteredText msg='Please try to restart the application!' />
-      </Block> */}
+      <Block style={ styles.buttonBlock}>
+          <Button
+            raised
+            onPress={ props.startRegistration }
+            style={{
+              container: styles.buttonContainer,
+              text: styles.buttonText
+            }}
+            upperCase= { false }
+            text='Try again'
+          />
+        </Block>
     </Container>
   )
 }
+
+const mapStateToProps = (state: RootState) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    startRegistration: () => dispatch(registrationActions. startRegistration()),
+  }
+}
+
+export const Exception = connect(mapStateToProps, mapDispatchToProps)(ExceptionComponent)
