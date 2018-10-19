@@ -3,6 +3,9 @@
 exports[`Generic action creators showErrorScreen should navigate to error screen and provide the message 1`] = `
 Array [
   Object {
+    "params": Object {
+      "flag": "default",
+    },
     "routeName": "Exception",
     "type": "Navigation/NAVIGATE",
   },

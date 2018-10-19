@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Exception screen component Renders correctly 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+      "display": "flex",
+    }
+  }
+>
+  <Block
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 0.6,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "color": "#ffefdf",
+          "fontFamily": "TT Commons",
+          "fontSize": 28,
+          "textAlign": "center",
+        }
+      }
+    >
+      Oops!
+    </Text>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "color": "#ffefdf",
+          "fontFamily": "TT Commons",
+          "fontSize": 18,
+          "textAlign": "center",
+        }
+      }
+    >
+       
+      There was an error with your request.
+       
+    </Text>
+  </Block>
+  <Block
+    style={
+      Object {
+        "backgroundColor": "black",
+        "flex": 0.1,
+      }
+    }
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={null}
+      primary={false}
+      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": "100%",
+            "width": "50%",
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "100",
+          },
+        }
+      }
+      testID={null}
+      text="Try again"
+      upperCase={false}
+    />
+  </Block>
+</Container>
+`;

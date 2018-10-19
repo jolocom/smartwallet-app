@@ -9,10 +9,9 @@ describe('Exception screen component', () => {
     const props = {
       navigation: {
         state: {
-          // params: {
-          //   errorMessage: mockError.message,
-          //   stackTrace: mockError.stack
-          // }
+          params: {
+            flag: 'default'
+          }
         }
       }
     }

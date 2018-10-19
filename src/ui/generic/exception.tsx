@@ -3,21 +3,23 @@ import { RootState } from 'src/reducers/'
 import { connect } from 'react-redux'
 import { Container, Block} from 'src/ui/structure/'
 import { Button } from 'react-native-material-ui'
-import { registrationActions } from 'src/actions/'
+import { registrationActions, navigationActions } from 'src/actions/'
 import { Text, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { routeList } from 'src/routeList'
 
 
 interface ConnectProps {
   startRegistration: () => void
+  renderHome: () => void
 }
+
 interface Props extends ConnectProps {
   navigation: {
     state: {
-      // params: {
-      //   errorMessage: string
-      //   errorText: string
-      // }
+      params: {
+        flag: string
+      }
     }
   }
 }
@@ -63,7 +65,6 @@ const styles = StyleSheet.create({
 })
 
 export const ExceptionComponent: React.SFC<Props> = (props) => {
-
   const errorText = 'There was an error with your request.'
 
   return(
@@ -75,7 +76,11 @@ export const ExceptionComponent: React.SFC<Props> = (props) => {
       <Block style={ styles.buttonBlock}>
           <Button
             raised
-            onPress={ props.startRegistration }
+            onPress={
+              props.navigation.state.params.flag === 'registration'
+              ? props.startRegistration
+              : props.renderHome
+            }
             style={{
               container: styles.buttonContainer,
               text: styles.buttonText
@@ -95,6 +100,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     startRegistration: () => dispatch(registrationActions. startRegistration()),
+    renderHome: () => dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
   }
 }
 
