@@ -2,7 +2,7 @@ import { Dispatch, AnyAction } from 'redux'
 import { JolocomLib } from 'jolocom-lib'
 import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { navigationActions } from 'src/actions'
+import { navigationActions, accountActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
@@ -40,12 +40,19 @@ export const resetReceivingCredential = () => {
 
 export const parseJWT = (encodedJwt: string) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
-    if (returnedDecodedJwt instanceof CredentialRequestPayload) {
-      dispatch(consumeCredentialRequest(returnedDecodedJwt))
-    }
-    if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
-      dispatch(receiveExternalCredential(returnedDecodedJwt))
+    dispatch(accountActions.toggleLoading(true))
+
+    try {
+      const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
+      if (returnedDecodedJwt instanceof CredentialRequestPayload) {
+        dispatch(consumeCredentialRequest(returnedDecodedJwt))
+      }
+      if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
+        dispatch(receiveExternalCredential(returnedDecodedJwt))
+      }
+    } catch (err) {
+      dispatch(accountActions.toggleLoading(false))
+      dispatch(showErrorScreen(new Error('JWT Token parse failed')))
     }
   }
 }
@@ -59,8 +66,10 @@ export const receiveExternalCredential = (credReceive: CredentialsReceivePayload
 
     if (results.every(el => el === true)) {
       dispatch(setReceivingCredential(providedCredentials))
+      dispatch(accountActions.toggleLoading(false))
       dispatch(navigationActions.navigate({ routeName: routeList.CredentialDialog }))
     } else {
+      dispatch(accountActions.toggleLoading(false))
       dispatch(showErrorScreen(new Error('Signature validation failed')))
     }
   }
@@ -125,6 +134,7 @@ export const consumeCredentialRequest = (decodedCredentialRequest: CredentialReq
     }
 
     dispatch(setCredentialRequest(summary))
+    dispatch(accountActions.toggleLoading(false))
     dispatch(navigationActions.navigate({ routeName: routeList.Consent }))
   }
 }

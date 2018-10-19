@@ -7,7 +7,7 @@ import { View } from 'react-native'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { QrScanEvent } from './types'
-import { LoadingScreen } from '../../generic';
+import { LoadingScreen } from '../../generic'
 
 interface ConnectProps {
   setClaimsForDid: () => void
@@ -55,7 +55,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
     if (this.state.scanning) {
       return <QRcodeScanner onScannerSuccess={this.onScannerSuccess} onScannerCancel={this.onScannerCancel} />
     }
-    if ( this.state.loading ) {
+    if ( this.state.loading || this.props.claims.loading ) {
       return (
         <LoadingScreen/>
       )
