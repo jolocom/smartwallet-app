@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 })
 
 export const ExceptionComponent: React.SFC<Props> = (props) => {
-  console.log(props)
+
   const errorText = 'There was an error with your request.'
 
   return(
