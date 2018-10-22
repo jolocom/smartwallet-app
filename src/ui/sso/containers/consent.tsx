@@ -18,6 +18,9 @@ interface State {
 }
 
 export class ConsentContainer extends React.Component<Props, State> {
+  static navigationOptions = {
+    title: 'Consent',
+  }
 
   private handleSubmitClaims = (credentials: StateVerificationSummary[]) => {
     this.props.sendCredentialResponse(credentials)

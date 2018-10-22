@@ -22,7 +22,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   private panResponder!: PanResponderInstance
 
   state = {
-    currentPath: [],
+    currentPath: [''],
     limit: 15
   }
 
