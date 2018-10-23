@@ -57,9 +57,9 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   private handleNavigation = (url: string) => {
-    const route = url.replace(/.*?:\/\//g, '')
-    const params = (route.match(/\/([^\/]+)\/?$/) as string[])[1]
-    const routeName = route.split('/')[0]
+    const route: string = url.replace(/.*?:\/\//g, '')
+    const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ''
+    const routeName = route!.split('/')[0]
   
     if (routeName === 'consent') {
       this.props.parseJWT(params)
