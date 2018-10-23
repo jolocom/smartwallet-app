@@ -127,7 +127,7 @@ export const saveClaim = () => {
 // TODO Currently only rendering  / adding one
 export const saveExternalCredentials = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const {storageLib} = backendMiddleware
+    const { storageLib } = backendMiddleware
     const externalCredentials = getState().account.claims.toJS().pendingExternal
     const cred: SignedCredential = externalCredentials[0]
 
