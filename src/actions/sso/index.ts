@@ -11,6 +11,7 @@ import { getUiCredentialTypeByType } from 'src/lib/util'
 import { InteractionType } from 'jolocom-lib/js/interactionFlows/types'
 import { resetSelected } from '../account'
 import { CredentialRequestPayload } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequestPayload'
+import { CredentialOfferRequestPayload } from 'jolocom-lib/js/interactionFlows/credentialOfferRequest/credentialOfferRequestPayload'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -47,10 +48,40 @@ export const parseJWT = (encodedJwt: string) => {
       if (returnedDecodedJwt instanceof CredentialRequestPayload) {
         dispatch(consumeCredentialRequest(returnedDecodedJwt))
       }
+      if (returnedDecodedJwt instanceof CredentialOfferRequestPayload) {
+        dispatch(consumeCredentialOfferRequest(returnedDecodedJwt))
+      }
       if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
         dispatch(receiveExternalCredential(returnedDecodedJwt))
       }
     } catch (err) {
+      dispatch(accountActions.toggleLoading(false))
+      dispatch(showErrorScreen(new Error('JWT Token parse failed')))
+    }
+  }
+}
+
+export const consumeCredentialOfferRequest = (credOfferRequest: CredentialOfferRequestPayload) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    try { 
+      const credOfferResponse = await backendMiddleware.identityWallet.create.credentialOfferResponseJSONWebToken({
+        typ: 'credentialOfferResponse',
+        credentialOffer: {
+          challenge: credOfferRequest.getChallenge(),
+          callbackURL: credOfferRequest.getCallbackURL(),
+          instant: credOfferRequest.isInstant(),
+          requestedInput: {}
+        }
+      })
+
+      const res = await fetch(credOfferRequest.getCallbackURL(), {
+        method: 'POST',
+        body: JSON.stringify({ token: credOfferResponse.encode() }),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(body => body.json())
+    
+      dispatch(parseJWT(res.token))
+    } catch(err) {
       dispatch(accountActions.toggleLoading(false))
       dispatch(showErrorScreen(new Error('JWT Token parse failed')))
     }
