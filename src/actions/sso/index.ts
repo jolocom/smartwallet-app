@@ -2,7 +2,7 @@ import { Dispatch, AnyAction } from 'redux'
 import { JolocomLib } from 'jolocom-lib'
 import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { navigationActions } from 'src/actions'
+import { navigationActions, genericActions, accountActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
@@ -26,9 +26,22 @@ export const clearCredentialRequest = () => {
 
 export const parseJWT = (encodedJwt: string) =>{
   return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { storageLib } = backendMiddleware
 
+    try {
+      const personas = await storageLib.get.persona()
+      if (!personas.length) {
+        dispatch(genericActions.toggleLoadingScreen(false))
+        return
+      }
+
+    } catch (err) {
+      if (err.message.indexOf('no such table') === 0) {
+        return
+      }
+      dispatch(genericActions.showErrorScreen(err))
+    }
     const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
-    console.log(returnedDecodedJwt, 'decoded!!')
     if (returnedDecodedJwt instanceof CredentialRequestPayload) {
       dispatch(consumeCredentialRequest(returnedDecodedJwt))
     }

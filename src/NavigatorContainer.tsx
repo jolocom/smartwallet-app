@@ -57,7 +57,6 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   private handleNavigation = (url: string) => {
-    // TODO: Fix TS null check errors after enabling 'stri'ctNullC'hecks' in tsconfig
     const route = url.replace(/.*?:\/\//g, '')
     const params = (route.match(/\/([^\/]+)\/?$/) as string[])[1]
     const routeName = route.split('/')[0]
