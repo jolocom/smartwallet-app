@@ -34,10 +34,10 @@ export class NavigatorContainer extends React.Component<Props> {
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
     if (Platform.OS === 'android') {
       Linking.getInitialURL().then((url: string) => {
-        this.handleNavigation(url);
+        this.handleNavigation(url)
       })
     } else {
-      Linking.addEventListener('url', this.handleOpenURL);
+      Linking.addEventListener('url', this.handleOpenURL)
     }
   }
 
@@ -57,9 +57,9 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   private handleNavigation = (url: string) => {
-    // TODO: Fix TS null check errors after enabling 'strictNullChecks' in tsconfig 
+    // TODO: Fix TS null check errors after enabling 'stri'ctNullC'hecks' in tsconfig
     const route = url.replace(/.*?:\/\//g, '')
-    const params = route.match(/\/([^\/]+)\/?$/)[1]
+    const params = (route.match(/\/([^\/]+)\/?$/) as string[])[1]
     const routeName = route.split('/')[0]
   
     if (routeName === 'consent') {
