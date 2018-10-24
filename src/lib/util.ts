@@ -1,13 +1,13 @@
 import { claimsMetadata } from 'jolocom-lib'
-import { IClaimMetadata } from 'jolocom-lib/js/credentials/credential/types';
-import { uiCategoryByCredentialType, Categories } from '../actions/account/categories';
+import { uiCategoryByCredentialType, Categories, uiCredentialTypeByType } from './categories'
+import { BaseMetadata } from 'cred-types-jolocom-core'
 
-export const areCredTypesEqual = (first: string[], second: string[]): boolean => {
-  return first.every((el, index) => el === second[index])
-}
+export const getClaimMetadataByCredentialType = (type: string) : BaseMetadata => {
+  const uiType = Object.keys(uiCredentialTypeByType)
+    .find(item => uiCredentialTypeByType[item] === type)
 
-export const getClaimMetadataByCredentialType = (type: string[]) : IClaimMetadata => {
-  const relevantType = Object.keys(claimsMetadata).find(key => areCredTypesEqual(claimsMetadata[key].type, type))
+  const relevantType = Object.keys(claimsMetadata)
+    .find(key => claimsMetadata[key].type[1] === uiType)
 
   if (!relevantType) {
     throw new Error("Unknown credential type, can't find metadata")
@@ -16,14 +16,35 @@ export const getClaimMetadataByCredentialType = (type: string[]) : IClaimMetadat
   return claimsMetadata[relevantType]
 }
 
-export const getCredentialUiCategory = (type: string[]): string => {
+export const getUiCredentialTypeByType = (type: string[]): string => {
+  return uiCredentialTypeByType[type[1]] || prepareLabel(type[1])
+}
+
+export const getCredentialUiCategory = (type: string): string => {
   const uiCategories = Object.keys(uiCategoryByCredentialType)
 
   const category = uiCategories.find(uiCategory => {
     const categoryDefinition = uiCategoryByCredentialType[uiCategory]
-    const credentialFitsDefinition = categoryDefinition.some(entry => areCredTypesEqual(entry, type))
+    const credentialFitsDefinition = categoryDefinition.some(entry => entry === type)
     return credentialFitsDefinition
   })
 
   return category || Categories.Other
+}
+
+export const areCredTypesEqual = (first: string[], second: string[]): boolean => {
+  return first.every((el, index) => el === second[index])
+}
+
+export const prepareLabel = (label: string): string => {
+  const words = label.split(/(?=[A-Z])/)
+  return words.length > 1 ? words.map(capitalize).join(' ') : capitalize(label)
+}
+
+export const capitalize = (word: string): string => `${word[0].toUpperCase()}${word.slice(1)}`
+
+export const compareDates = (date1: Date, date2: Date): number => {
+  return Math.floor(
+    (Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) / (1000 * 60 * 60 * 24)
+  )
 }

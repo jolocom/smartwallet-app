@@ -20,11 +20,13 @@ interface Props {
   children: ReactNode;
 	flex?: number;
 	debug?: boolean;
-  style?: ViewStyle;
+  style?: ViewStyle | ViewStyle[];
+  onTouch?: () => void;
 }
 
 export const Block : React.SFC<Props> = (props) => {
-	const style = [styles.block, props.style]
+  const customStyle = Array.isArray(props.style) ? props.style : [props.style]
+	const style = [styles.block, ...customStyle]
 	if (props.debug) {
 		style.push(styles.debug)
 	}
@@ -34,7 +36,7 @@ export const Block : React.SFC<Props> = (props) => {
 	}
 
   return(
-    <View style={ style }>
+    <View onTouchEnd={props.onTouch} style={ style }>
       {props.children}
     </View>
   )

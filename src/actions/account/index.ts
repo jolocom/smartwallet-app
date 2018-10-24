@@ -1,10 +1,11 @@
 import { AnyAction, Dispatch } from 'redux'
-import { navigationActions, genericActions } from 'src/actions/'
+import { genericActions, navigationActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
-import { getClaimMetadataByCredentialType, getCredentialUiCategory } from '../../lib/util'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { getClaimMetadataByCredentialType, getCredentialUiCategory, getUiCredentialTypeByType } from '../../lib/util'
+import { cancelReceiving } from '../sso'
 
 export const setDid = (did: string) => {
   return {
@@ -13,9 +14,29 @@ export const setDid = (did: string) => {
   }
 }
 
-// TODO Abstract parsing of error messages
+export const setSelected = (claim : DecoratedClaims) => {
+  return {
+    type: 'SET_SELECTED',
+    selected: claim
+  }
+}
+
+export const resetSelected = () => {
+  return {
+    type: 'RESET_SELECTED'
+  }
+}
+
+export const handleClaimInput = (fieldValue: string, fieldName: string) => {
+  return {
+    type: 'HANLDE_CLAIM_INPUT',
+    fieldName,
+    fieldValue
+  }
+}
+
 export const checkIdentityExists = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware : BackendMiddleware) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
 
     try {
@@ -27,14 +48,35 @@ export const checkIdentityExists = () => {
 
       dispatch(setDid(personas[0].did))
       dispatch(genericActions.toggleLoadingScreen(false))
-      dispatch(navigationActions.navigatorReset( 
-        { routeName: routeList.Home }
-      ))
-    } catch(err) {
+      dispatch(setIdentityWallet())
+
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+    } catch (err) {
       if (err.message.indexOf('no such table') === 0) {
         return
       }
+      dispatch(genericActions.showErrorScreen(err))
+    }
+  }
+}
 
+export const setIdentityWallet = () => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { ethereumLib, keyChainLib, storageLib, encryptionLib } = backendMiddleware
+
+    try {
+      const did = getState().account.did.get('did')
+      const encryptionPass = await keyChainLib.getPassword()
+      const personaData = await storageLib.get.persona({ did })
+      const { encryptedWif } = personaData[0].controllingKey
+      const decryptedWif = encryptionLib.decryptWithPass({
+        cipher: encryptedWif,
+        pass: encryptionPass
+      })
+
+      const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
+      await backendMiddleware.setIdentityWallet(Buffer.from(privateKey, 'hex'))
+    } catch (err) {
       dispatch(genericActions.showErrorScreen(err))
     }
   }
@@ -42,51 +84,63 @@ export const checkIdentityExists = () => {
 
 export const openClaimDetails = (claim: DecoratedClaims) => {
   return (dispatch: Dispatch<AnyAction>) => {
-    dispatch({
-      type: 'SET_SELECTED',
-      selected: claim
-    })
-    dispatch(navigationActions.navigate({
-      routeName: routeList.ClaimDetails
-    }))
+    dispatch(setSelected(claim))
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.ClaimDetails
+      })
+    )
   }
 }
 
-export const saveClaim = (claimsItem: DecoratedClaims) => {
+export const saveClaim = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const state = getState()
-    const { jolocomLib, storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
+    try {
+      const { identityWallet, storageLib } = backendMiddleware
+      const did = getState().account.did.get('did')
+      const claimsItem = getState().account.claims.toJS().selected
 
-    const credential = jolocomLib.credentials.createCredential(
-      getClaimMetadataByCredentialType(claimsItem.type),
-      claimsItem.claims[0].value.trim(),
-      state.account.did.toJS().did
-    )
+      const verifiableCredential = await identityWallet.create.signedCredential({
+        metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
+        claim: claimsItem.claimData,
+        subject: did
+      })
 
-    const currentDid = getState().account.did.get('did')
-    const encryptionPass = await keyChainLib.getPassword()
-    const personaData = await storageLib.get.persona({ did: currentDid })
-    const { encryptedWif } = personaData[0].controllingKey
-    const decryptedWif = encryptionLib.decryptWithPass({
-      cipher: encryptedWif,
-      pass: encryptionPass
-    })
-    const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
+      if (claimsItem.id) {
+        await storageLib.delete.verifiableCredential(claimsItem.id)
+      }
 
-    const wallet = jolocomLib.wallet.fromPrivateKey(Buffer.from(privateKey, 'hex'))
-    const verifiableCredential = await wallet.signCredential(credential)
+      await storageLib.store.verifiableCredential(verifiableCredential)
+      await setClaimsForDid()
 
-    if (claimsItem.claims[0].id) {
-      await storageLib.delete.verifiableCredential(claimsItem.claims[0].id)
+      dispatch(
+        navigationActions.navigatorReset({
+          routeName: routeList.Home
+        })
+      )
+    } catch (err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
+  }
+}
+
+// TODO Currently only rendering  / adding one
+export const saveExternalCredentials = () => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { storageLib } = backendMiddleware
+    const externalCredentials = getState().account.claims.toJS().pendingExternal
+    const cred: SignedCredential = externalCredentials[0]
+
+    if (cred.getId()) {
+      await storageLib.delete.verifiableCredential(cred.getId())
     }
 
-    await storageLib.store.verifiableCredential(verifiableCredential)
-
-    await setClaimsForDid()
-
-    dispatch(navigationActions.navigatorReset({
-      routeName: routeList.Home
-    }))
+    try {
+      await storageLib.store.verifiableCredential(externalCredentials[0])
+      dispatch(cancelReceiving())
+    } catch (err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
   }
 }
 
@@ -97,43 +151,29 @@ export const toggleLoading = (val: boolean) => {
   }
 }
 
-// Why is this named set and not get?
 export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const state = getState().account.claims.toJS()
+
     dispatch(toggleLoading(!state.loading))
     const storageLib = backendMiddleware.storageLib
 
-    const verifiableCredentials: VerifiableCredential[] = await storageLib.get.verifiableCredential()
+    const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
     const claims = prepareClaimsForState(verifiableCredentials) as CategorizedClaims
 
     dispatch({
-        type: 'SET_CLAIMS_FOR_DID',
-        claims
+      type: 'SET_CLAIMS_FOR_DID',
+      claims
     })
   }
 }
 
-const prepareClaimsForState = (credentials: VerifiableCredential[]) => {
+const prepareClaimsForState = (credentials: SignedCredential[]) => {
   const categorizedClaims = {}
-
-  const decoratedCredentials = credentials.map(vCred => {
-    const claimData = vCred.getCredentialSection()
-    const claimFieldName = Object.keys(claimData).filter(key => key !== 'id')[0]
-
-    return {
-      displayName: vCred.getDisplayName(),
-      type: vCred.getType(),
-      claims: [{
-        id: vCred.getId(),
-        name: claimFieldName,
-        value: claimData[claimFieldName]
-      }]
-    }
-  })
+  const decoratedCredentials = convertToDecoratedClaim(credentials)
 
   decoratedCredentials.forEach(decoratedCred => {
-    const uiCategory = getCredentialUiCategory(decoratedCred.type)
+    const uiCategory = getCredentialUiCategory(decoratedCred.credentialType)
 
     try {
       categorizedClaims[uiCategory].push(decoratedCred)
@@ -143,4 +183,21 @@ const prepareClaimsForState = (credentials: VerifiableCredential[]) => {
   })
 
   return categorizedClaims
+}
+
+// TODO Util, make subject mandatory
+export const convertToDecoratedClaim = (vCreds: SignedCredential[]) : DecoratedClaims[] => {
+  return vCreds.map(vCred => {
+    const claimData = { ...vCred.getCredentialSection() }
+    delete claimData.id
+
+    return {
+      credentialType: getUiCredentialTypeByType(vCred.getType()),
+      claimData,
+      id: vCred.getId(),
+      issuer: vCred.getIssuer(),
+      subject: vCred.getCredentialSection().id || 'Not found',
+      expires: vCred.getExpiryDate() || undefined
+    }
+  })
 }

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "target": "es5",
+    "target": "esnext",
     "module": "es2015",
     "outDir": "build",
     "sourceMap": true,

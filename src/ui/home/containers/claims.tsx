@@ -1,85 +1,85 @@
 import React from 'react'
-import { ClaimOverview } from 'src/ui/home/components/claimOverview'
+import { CredentialOverview } from '../components/credentialOverview'
 import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
 import { connect } from 'react-redux'
-import { RootState } from 'src/reducers/'
 import { accountActions, ssoActions } from 'src/actions'
 import { View } from 'react-native'
-import Immutable from 'immutable'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
+import { QrScanEvent } from './types'
+import { LoadingSpinner } from '../../generic'
 
-// TODO ANY
 interface ConnectProps {
-  openClaimDetails: (claim: DecoratedClaims) => void
   setClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
-  consumeCredentialRequest: (jwt: string) => void
+  parseJWT: (jwt: string) => void
+  openClaimDetails: (claim: DecoratedClaims) => void
+  did: string
   claims: ClaimsState
 }
 
 interface Props extends ConnectProps {}
 
 interface State {
-  scanning: boolean
+  scanning: boolean,
+  loading: boolean
 }
 
 export class ClaimsContainer extends React.Component<Props, State> {
   state = {
-    scanning: false
+    scanning: false,
+    loading: false
   }
 
   componentWillMount() {
     this.props.setClaimsForDid()
   }
 
-// TODO: do I really need 3 func?
-  private onScannerStart = () : void => {
+  private onScannerStart = (): void => {
     this.setState({ scanning: true })
+    this.setState({ loading: true })
   }
 
-  private onScannerCancel = () : void => {
+  private onScannerCancel = (): void => {
     this.setState({ scanning: false })
+    this.setState({ loading: false })
   }
 
-  // TODO Typings on E
-  private onScannerSuccess = (e : any) : void => {
+  private onScannerSuccess = (e: QrScanEvent): void => {
     this.setState({ scanning: false })
-    this.props.consumeCredentialRequest(e.data)
+    this.props.parseJWT(e.data)
+    this.setState({ loading: false })
   }
 
   render() {
-    let renderContent
     if (this.state.scanning) {
-      renderContent = (
-        <QRcodeScanner
-          onScannerSuccess={this.onScannerSuccess}
-          onScannerCancel={this.onScannerCancel}
-        />
-      )
-    } else {
-      renderContent = (
-        <ClaimOverview
-          claims={this.props.claims}
-          openClaimDetails={ this.props.openClaimDetails }
-          scanning={ this.state.scanning }
-          onScannerStart={ this.onScannerStart }
-         />
+      return <QRcodeScanner onScannerSuccess={this.onScannerSuccess} onScannerCancel={this.onScannerCancel} />
+    }
+    if ( this.state.loading || this.props.claims.loading ) {
+      return (
+        <LoadingSpinner />
       )
     }
-
     return (
-      <View style={{flex: 1}}>
-        { renderContent }
+      <View style={{ flex: 1 }}>
+        <CredentialOverview
+          did={this.props.did}
+          claimsState={this.props.claims}
+          loading={this.props.claims.loading}
+          onEdit={this.props.openClaimDetails}
+          scanning={this.state.scanning}
+          onScannerStart={this.onScannerStart}
+        />
       </View>
     )
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  const claims = Immutable.fromJS(state.account.claims)
+// TODO nicer pattern for accessing state, perhaps immer or something easier to Type
+const mapStateToProps = (state: any) => {
   return {
-    claims: claims.toJS()
+    did: state.account.did.toJS().did,
+    claims: state.account.claims.toJS()
   }
 }
 
@@ -88,8 +88,11 @@ const mapDispatchToProps = (dispatch: Function) => {
     openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
     setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
     toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
-    consumeCredentialRequest: (jwt: string) => dispatch(ssoActions.consumeCredentialRequest(jwt))
+    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt))
   }
 }
 
-export const Claims = connect(mapStateToProps, mapDispatchToProps)(ClaimsContainer)
+export const Claims = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ClaimsContainer)

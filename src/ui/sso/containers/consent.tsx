@@ -1,24 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { RootState } from 'src/reducers/'
 import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 
-interface ConnectProps { }
+interface ConnectProps {}
 
 interface Props extends ConnectProps {
   activeCredentialRequest: StateCredentialRequestSummary
+  currentDid: string
   sendCredentialResponse: (creds: StateVerificationSummary[]) => void
   cancelSSO: () => void
 }
 
-interface State {
-
-}
+interface State {}
 
 export class ConsentContainer extends React.Component<Props, State> {
-
   private handleSubmitClaims = (credentials: StateVerificationSummary[]) => {
     this.props.sendCredentialResponse(credentials)
   }
@@ -28,22 +25,24 @@ export class ConsentContainer extends React.Component<Props, State> {
   }
 
   render() {
-    const { request, requester, callbackURL } = this.props.activeCredentialRequest
+    const { availableCredentials, requester, callbackURL } = this.props.activeCredentialRequest
     return (
-    <ConsentComponent
-      requester={ requester }
-      callbackURL={ callbackURL }
-      requestedCredentials={ request }
-      handleSubmitClaims={ this.handleSubmitClaims }
-      handleDenySubmit={ this.handleDenySubmit }
-     />
+      <ConsentComponent
+        requester={requester}
+        callbackURL={callbackURL}
+        did={this.props.currentDid}
+        availableCredentials={availableCredentials}
+        handleSubmitClaims={this.handleSubmitClaims}
+        handleDenySubmit={this.handleDenySubmit}
+      />
     )
   }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: any) => {
   return {
-    activeCredentialRequest: state.sso.activeCredentialRequest
+    activeCredentialRequest: state.sso.activeCredentialRequest,
+    currentDid: state.account.did.toJS().did
   }
 }
 
@@ -54,4 +53,7 @@ const mapDispatchToProps = (dispatch: Function) => {
   }
 }
 
-export const Consent = connect(mapStateToProps, mapDispatchToProps)(ConsentContainer)
+export const Consent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ConsentContainer)

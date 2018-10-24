@@ -1,18 +1,43 @@
 import { accountActions } from 'src/actions/'
 import configureStore from 'redux-mock-store'
+import data from '../registration/data/mockRegistrationData'
 import thunk from 'redux-thunk'
+import { JolocomLib } from 'jolocom-lib'
 
 describe('Account action creators', () => {
-  const mockStore = configureStore([thunk])({})
-  const mockGetState = () => {}
-
+  const initialState = {
+    account: {
+      claims: {
+        toJS: () => { return {
+          loading: false,
+          selected: {
+            credentialType: 'Email',
+            claimData: {
+              email: 'test@test.com'
+            },
+            id: '',
+            issuer: 'did:jolo:test',
+            subject: 'did:jolo:test'
+          },
+          pendingExternal: [],
+          decoratedCredentials: 'blah'
+          }
+        }
+      },
+      did: {
+        get: () => 'mock:did:test '
+      }
+    }
+  }
+  const mockStore = configureStore([thunk])(initialState)
+  
   beforeEach(() => {
     mockStore.clearActions()
   })
 
   it('Should correctly handle one existing user identity', async () => {
     const backendMiddleware = {
-      storageLib: {
+      storageLib: { 
         get: {
           persona: jest.fn().mockResolvedValue([{did: 'did:jolo:mock'}])
         }
@@ -20,7 +45,7 @@ describe('Account action creators', () => {
     }
 
     const action = accountActions.checkIdentityExists()
-    await action(mockStore.dispatch, mockGetState, backendMiddleware)
+    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
 
     expect(mockStore.getActions()).toMatchSnapshot()
   })
@@ -38,7 +63,7 @@ describe('Account action creators', () => {
     }
 
     const action = accountActions.checkIdentityExists()
-    await action(mockStore.dispatch, mockGetState, backendMiddleware)
+    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
@@ -52,26 +77,50 @@ describe('Account action creators', () => {
     }
 
     const action = accountActions.checkIdentityExists()
-    await action(mockStore.dispatch, mockGetState, backendMiddleware)
+    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it('Should correctly handle an arbitrary error being thrown', async () => {
-    const mockError = { message: 'gamma rays have flipped our bits!' }
+  it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
+    const { identityWallet, testSignedCredentialDefault } = data
+    
     const backendMiddleware = {
       storageLib: {
         get: {
-          persona: jest.fn().mockRejectedValue(mockError)
+          verifiableCredential: jest.fn()
+            .mockResolvedValue([JolocomLib.parse.signedCredential.fromJSON(testSignedCredentialDefault)])
         }
-      }
+      },
+      identityWallet
     }
 
-    const action = accountActions.checkIdentityExists()
-    await action(mockStore.dispatch, mockGetState, backendMiddleware)
+    const action = accountActions.setClaimsForDid()
+    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  // it('Should correctly retrieve claims from device storage db', () => {
-  //
-  // })
+  it('should correctly save claim', async () => {
+    const { identityWallet } = data
+    const mockClaimsItem = {
+      credentialType: 'Email',
+      claimData: {
+        email: 'test@test'
+      },
+      issuer: 'did:jolo:test',
+      subject: 'did:jolo:test'
+    }
+
+    const backendMiddleware = {
+      storageLib: {
+        store: {
+          verifiableCredential: jest.fn().mockResolvedValue([])
+        } 
+      },
+      identityWallet
+    }
+    
+    const action = accountActions.saveClaim(mockClaimsItem)
+    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
+    expect(mockStore.getActions()).toMatchSnapshot()
+  })
 })

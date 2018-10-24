@@ -1,14 +1,16 @@
 import { PrimaryColumn, Entity, Column, OneToMany, ManyToOne } from 'typeorm/browser'
 import { PersonaEntity, SignatureEntity, CredentialEntity } from 'src/lib/storage/entities'
 import { Exclude, Expose, Transform, plainToClass, classToPlain } from 'class-transformer'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
-import { JolocomLib } from 'jolocom-lib'
-import { IVerifiableCredentialAttrs } from 'jolocom-lib/js/credentials/verifiableCredential/types'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
+import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
 
 @Exclude()
 @Entity('verifiable_credentials')
 export class VerifiableCredentialEntity {
   @Expose()
+  @Transform(value => JSON.stringify(value), { toClassOnly: true })
+  @Transform(value => JSON.parse(value), { toPlainOnly: true })
   @Column()
   '@context'!: string
 
@@ -17,7 +19,7 @@ export class VerifiableCredentialEntity {
   id!: string
 
   @Expose()
-  @Transform((value) => value.split(','), { toPlainOnly: true })
+  @Transform(value => value.split(','), { toPlainOnly: true })
   @Column()
   type!: string
 
@@ -35,7 +37,7 @@ export class VerifiableCredentialEntity {
 
   @Expose()
   @Column({ nullable: true })
-  expiry!: Date
+  expires!: Date
 
   @Expose()
   @ManyToOne(type => PersonaEntity, persona => persona.did)
@@ -47,42 +49,41 @@ export class VerifiableCredentialEntity {
   @OneToMany(type => CredentialEntity, cred => cred.verifiableCredential, { cascade: true, onDelete: 'CASCADE' })
   claim!: CredentialEntity[]
 
-  static fromJSON(json: IVerifiableCredentialAttrs): VerifiableCredentialEntity {
+  static fromJSON(json: ISignedCredentialAttrs): VerifiableCredentialEntity {
     return plainToClass(VerifiableCredentialEntity, json)
   }
 
-  static fromVeriableCredential(vCred: VerifiableCredential): VerifiableCredentialEntity {
-    interface ExtendedInterface extends IVerifiableCredentialAttrs {
+  // TODO typo
+  static fromVerifiableCredential(vCred: SignedCredential): VerifiableCredentialEntity {
+    interface ExtendedInterface extends ISignedCredentialAttrs {
       subject: string
     }
 
     const json = vCred.toJSON() as ExtendedInterface
     json.subject = vCred.getSubject()
 
-    const entity = this.fromJSON(json)
-    return entity
+    return this.fromJSON(json)
   }
 
   // TODO handle decryption
-  toVerifiableCredential(): VerifiableCredential {
-    const jolocomLib = new JolocomLib()
-    const json = classToPlain(this) as IVerifiableCredentialAttrs
-
-    const { propertyName, encryptedValue } = this.claim[0]
-    const claim = {
-      id: this.subject.did,
-      [propertyName]: encryptedValue
+  toVerifiableCredential(): SignedCredential {
+    const json = classToPlain(this) as any
+    const entityData = {
+      ...json,
+      claim: convertClaimArrayToObject(this.claim, this.subject.did),
+      proof: this.proof[0]
     }
 
-    const parsedContext = json["@context"].toString().split(',')
-
-    const entityData = Object.assign({}, json, {
-      claim,
-      '@context': parsedContext,
-      proof: this.proof[0]
-    })
-
-    return jolocomLib.credentials.createVerifiableCredential()
-      .fromJSON(entityData)
+    return SignedCredential.fromJSON(entityData)
   }
+}
+
+const convertClaimArrayToObject = (claims: CredentialEntity[], did: string): IClaimSection => {
+  return claims.reduce(
+    (acc: IClaimSection, claim: CredentialEntity) => {
+      const { propertyName, propertyValue } = claim
+      return { ...acc, [propertyName]: propertyValue }
+    },
+    { id: did }
+  )
 }

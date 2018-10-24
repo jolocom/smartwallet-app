@@ -14,7 +14,6 @@ coverage/
 dist/
 
 # React Native Android
-android/.gradle
 android/.build
 android/.gradle
 
