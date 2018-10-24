@@ -1,30 +1,23 @@
 import React from 'react'
 import { NavigatorContainer } from 'src/NavigatorContainer'
 import { shallow } from 'enzyme'
+import { RootState } from 'src/reducers/'
+const { createReactNavigationReduxMiddleware } = require('react-navigation-redux-helpers')
 
 describe.only('NavigatorContainer', ()=> {
   it('mounts correctly and matches snapshot', () => {
     const parseJWT = jest.fn()
     const goBack = jest.fn()
 
-    const createReduxBoundAddListener = jest.genMockFromModule('createReduxBoundAddListener')
-    jest.mock('createReduxBoundAddListener')
+    createReactNavigationReduxMiddleware('root', (state : RootState) => state.navigation)
 
     const props = {
       parseJWT,
       goBack,
-      navigation: {
-        state: {}
-      }
+      navigation: { navigate: jest.fn() }
     }
 
     const rendered = shallow(<NavigatorContainer {...props}/>)
-    console.log(rendered, 'rendered')
-    // expect(rendered).toMatchSnapshot()
+    expect(rendered).toMatchSnapshot()
   })
-
-  //handle navigateBack
-
-  //test handleOpenURL and handleNavigation
-
 })
