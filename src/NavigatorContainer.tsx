@@ -12,7 +12,6 @@ const { createReduxBoundAddListener } = require('react-navigation-redux-helpers'
 interface ConnectProps {
   navigation: RootState["navigation"];
   goBack: () => void;
-  parseJWT: (jwt: string) => void;
 }
 
 interface OwnProps {
@@ -34,7 +33,7 @@ export class NavigatorContainer extends React.Component<Props> {
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
     if (Platform.OS === 'android') {
       Linking.getInitialURL().then((url: string) => {
-        this.handleNavigation(url)
+        navigationActions.handleDeepLink(url)
       })
     } else {
       Linking.addEventListener('url', this.handleOpenURL)
@@ -51,19 +50,8 @@ export class NavigatorContainer extends React.Component<Props> {
     return true
   }
 
-    
   private handleOpenURL = (event: any) => {
-    this.handleNavigation(event.url)
-  }
-
-  private handleNavigation = (url: string) => {
-    const route: string = url.replace(/.*?:\/\//g, '')
-    const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ''
-    const routeName = route!.split('/')[0]
-  
-    if (routeName === 'consent') {
-      this.props.parseJWT(params)
-    }
+    navigationActions.handleDeepLink(event.url)
   }
 
   render() {
@@ -85,8 +73,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    goBack: () => dispatch(navigationActions.goBack()),
-    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt))
+    goBack: () => dispatch(navigationActions.goBack())
   }
 }
 
