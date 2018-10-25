@@ -12,6 +12,7 @@ const { createReduxBoundAddListener } = require('react-navigation-redux-helpers'
 interface ConnectProps {
   navigation: RootState["navigation"];
   goBack: () => void;
+  handleDeepLink: (url: string) => void
 }
 
 interface OwnProps {
@@ -33,7 +34,7 @@ export class NavigatorContainer extends React.Component<Props> {
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
     if (Platform.OS === 'android') {
       Linking.getInitialURL().then((url: string) => {
-        navigationActions.handleDeepLink(url)
+        this.props.handleDeepLink(url)
       })
     } else {
       Linking.addEventListener('url', this.handleOpenURL)
@@ -51,7 +52,7 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   private handleOpenURL = (event: any) => {
-    navigationActions.handleDeepLink(event.url)
+    this.props.handleDeepLink(event.url)
   }
 
   render() {
@@ -73,7 +74,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    goBack: () => dispatch(navigationActions.goBack())
+    goBack: () => dispatch(navigationActions.goBack()),
+    handleDeepLink: (url: string) => dispatch(navigationActions.handleDeepLink(url))
   }
 }
 
