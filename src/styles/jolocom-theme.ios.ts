@@ -6,6 +6,9 @@ const primaryColors = {
   primaryColorWhite: 'white',
   primaryColorPurple:'#942f51',
 
+  secondaryColorGrey: "#f5f5f5",
+  secondaryColorSand: "#ffdebc",
+
   disabledButtonBackgroundGrey: '#ececec',
   disabledButtonTextGrey: '#5105050d',
 
