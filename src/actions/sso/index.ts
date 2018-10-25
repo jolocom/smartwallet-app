@@ -63,7 +63,7 @@ export const parseJWT = (encodedJwt: string) => {
 
 export const consumeCredentialOfferRequest = (credOfferRequest: CredentialOfferRequestPayload) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    try { 
+    try {
       const credOfferResponse = await backendMiddleware.identityWallet.create.credentialOfferResponseJSONWebToken({
         typ: 'credentialOfferResponse',
         credentialOffer: {
@@ -79,7 +79,7 @@ export const consumeCredentialOfferRequest = (credOfferRequest: CredentialOfferR
         body: JSON.stringify({ token: credOfferResponse.encode() }),
         headers: { 'Content-Type': 'application/json' }
       }).then(body => body.json())
-    
+
       dispatch(parseJWT(res.token))
     } catch(err) {
       dispatch(accountActions.toggleLoading(false))
@@ -122,7 +122,6 @@ export const consumeCredentialRequest = (decodedCredentialRequest: CredentialReq
 
     const requestedTypes = decodedCredentialRequest.getRequestedCredentialTypes()
     const attributesForType = await Promise.all<AttributeSummary>(requestedTypes.map(storageLib.get.attributesByType))
-
     const populatedWithCredentials = await Promise.all(
       attributesForType.map(async entry => {
         if (entry.results.length) {
@@ -174,6 +173,7 @@ export const consumeCredentialRequest = (decodedCredentialRequest: CredentialReq
 export const sendCredentialResponse = (selectedCredentials: StateVerificationSummary[]) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib, keyChainLib, encryptionLib, ethereumLib } = backendMiddleware
+    console.log(selectedCredentials, 'selectedCredentials')
 
     const encryptionPass = await keyChainLib.getPassword()
     const { did } = getState().account.did.toJS()
@@ -190,6 +190,9 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
     const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
 
     const registry = JolocomLib.registry.jolocom.create()
+    console.log(decryptedWif, 'decrypted Wif')
+    console.log( privateKey, 'private key')
+    console.log(registry, 'registry')
     const wallet = await registry.authenticate(Buffer.from(privateKey, 'hex'))
 
     const credentials = await Promise.all(
