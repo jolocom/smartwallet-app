@@ -5,7 +5,7 @@ import { BackHandler, Linking, Platform } from 'react-native'
 import { AnyAction } from 'redux'
 import { Routes } from 'src/routes'
 import { RootState } from 'src/reducers/'
-import { navigationActions, ssoActions } from 'src/actions/'
+import { navigationActions } from 'src/actions/'
 
 const { createReduxBoundAddListener } = require('react-navigation-redux-helpers')
 
