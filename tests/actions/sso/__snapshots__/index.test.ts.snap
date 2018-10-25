@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SSO action creators should be able to receive external credentials 1`] = `
+Array [
+  Object {
+    "external": Array [
+      Object {
+        "@context": Array [
+          Object {
+            "Credential": "cred:Credential",
+            "EcdsaKoblitzSignature2016": "sec:EcdsaKoblitzSignature2016",
+            "claim": Object {
+              "@id": "cred:claim",
+              "@type": "@id",
+            },
+            "created": Object {
+              "@id": "dc:created",
+              "@type": "xsd:dateTime",
+            },
+            "creator": Object {
+              "@id": "dc:creator",
+              "@type": "@id",
+            },
+            "cred": "https://w3id.org/credentials#",
+            "credential": Object {
+              "@id": "cred:credential",
+              "@type": "@id",
+            },
+            "dc": "http://purl.org/dc/terms/",
+            "domain": "sec:domain",
+            "expires": Object {
+              "@id": "sec:expiration",
+              "@type": "xsd:dateTime",
+            },
+            "id": "@id",
+            "issued": Object {
+              "@id": "cred:issued",
+              "@type": "xsd:dateTime",
+            },
+            "issuer": Object {
+              "@id": "cred:issuer",
+              "@type": "@id",
+            },
+            "nonce": "sec:nonce",
+            "proof": Object {
+              "@id": "sec:proof",
+              "@type": "@id",
+            },
+            "schema": "http://schema.org/",
+            "sec": "https://w3id.org/security#",
+            "signatureValue": "sec:signatureValue",
+            "type": "@type",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+          },
+          Object {
+            "ProofOfTinkererCredential": "https://identity.jolocom.com/terms/ProofOfTinkererCredential",
+          },
+        ],
+        "claim": Object {
+          "id": "did:jolo:5449f86ba2d4016169350a9766363d63a5326c0d2e8b922c2a75a803dd35d801",
+          "note": "Thank you for attending our session at Web3!",
+        },
+        "expires": "2019-10-24T16:51:49.972Z",
+        "id": "claimId:ac975ea8ccdf7",
+        "issued": "2018-10-24T16:51:49.972Z",
+        "issuer": "did:jolo:792b106ce93bc9e200f7812d33dbc3a367c57a0d5af11d0935eae1ca13c5c167",
+        "name": "Tinkerer",
+        "proof": Object {
+          "created": "2018-10-24T16:51:49.972Z",
+          "creator": "did:jolo:792b106ce93bc9e200f7812d33dbc3a367c57a0d5af11d0935eae1ca13c5c167#keys-1",
+          "nonce": "93fab1092d1e7",
+          "signatureValue": "kiowuS7ye6KFpeydfQM3oVicT2toiz65lb0DtR+gKoRhC4QLNCuBbcNR9zHJF9c3V2GeJ+/HqgzgQkMO+WOeQQ==",
+          "type": "EcdsaKoblitzSignature2016",
+        },
+        "type": Array [
+          "Credential",
+          "ProofOfTinkererCredential",
+        ],
+      },
+    ],
+    "type": "SET_EXTERNAL",
+  },
+  Object {
+    "loading": false,
+    "type": "SET_LOADING",
+  },
+  Object {
+    "routeName": "CredentialDialog",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`SSO action creators should correctly cancel submission of claims 1`] = `
+Array [
+  Object {
+    "type": "CLEAR_CREDENTIAL_REQUEST",
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
+]
+`;
+
+exports[`SSO action creators should correctly cancel/go back from an SSO action  1`] = `
+Array [
+  Object {
+    "type": "RESET_SELECTED",
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
+]
+`;
+
+exports[`SSO action creators should correctly consume Credential Requests 1`] = `
+Array [
+  Object {
+    "type": "SET_CREDENTIAL_REQUEST",
+    "value": Object {
+      "availableCredentials": Array [
+        Object {
+          "type": "Name",
+          "values": Array [
+            "test",
+            "test",
+          ],
+          "verifications": Array [
+            Object {
+              "expires": 2019-10-15T19:59:38.406Z,
+              "id": "claimId:61adc6e7b1448",
+              "issuer": "did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88",
+              "selfSigned": false,
+            },
+          ],
+        },
+      ],
+      "callbackURL": "http://192.168.43.98:9000/authentication/3ktcr",
+      "requester": "did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88#keys-1",
+    },
+  },
+  Object {
+    "loading": false,
+    "type": "SET_LOADING",
+  },
+  Object {
+    "routeName": "Consent",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
