@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { View, Text, StyleSheet, GestureResponderEvent, TextStyle, ViewStyle, RegisteredStyle } from 'react-native'
+import { View, Text, StyleSheet, GestureResponderEvent, TextStyle, ViewStyle, RegisteredStyle, TouchableOpacity } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -13,6 +13,7 @@ interface ClaimCardProps {
   primaryTextStyle?: TextStyle | RegisteredStyle<TextStyle>
   secondaryTextStyle?: TextStyle | RegisteredStyle<TextStyle>
   containerStyle?: ViewStyle | RegisteredStyle<ViewStyle>
+  handlePressed?: (e: GestureResponderEvent) => void
 }
 
 export const ClaimCard: React.SFC<ClaimCardProps> = props => {
@@ -36,15 +37,17 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
 
   const { primaryText, secondaryText, rightIcon, primaryTextStyle, secondaryTextStyle, containerStyle } = props
   const { primaryTextDefault, secondaryTextDefault, containerDefault } = styles
-
+  
   return (
-    <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'white' }}>
-      <View style={[containerDefault, containerStyle]}>
-        <Text style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}>{secondaryText}</Text>
-        <Text style={[primaryTextDefault, primaryTextStyle]}>{primaryText}</Text>
+    <TouchableOpacity onPress={props.handlePressed}>
+      <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'white' }}>
+        <View style={[containerDefault, containerStyle]}>
+          <Text style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}>{secondaryText}</Text>
+          <Text style={[primaryTextDefault, primaryTextStyle]}>{primaryText}</Text>
+        </View>
+        <View flex={0.2} >{rightIcon}</View>
       </View>
-      <View flex={0.2} >{rightIcon}</View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
@@ -56,10 +59,11 @@ interface EmptyClaimCardProps {
 export const PlaceholderClaimCard: React.SFC<EmptyClaimCardProps> = props => (
   <ClaimCard
     key={props.credentialType}
-    primaryText={<Text onPress={props.onEdit}>+ add</Text>}
+    primaryText='+ add'
     primaryTextStyle={{ color: JolocomTheme.primaryColorPurple }}
     secondaryText={<Text>{props.credentialType}</Text>}
     secondaryTextStyle={{ opacity: 1 }}
+    handlePressed={props.onEdit}
   />
 )
 

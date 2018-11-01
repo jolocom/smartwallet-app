@@ -40,4 +40,26 @@ describe('ClaimCard component', () => {
     const rendered = shallow(<CredentialCard {...props} />)
     expect(rendered).toMatchSnapshot()
   })
+
+  it('call the handleInteraction function when pressed', () => {
+    const props = {
+      credentialItem: {
+        credentialType: 'Name',
+        claimData: {
+          givenName: 'Test',
+          familyName: 'Running'
+        },
+        id: 'claim:id:1234',
+        issuer: 'did:issuer:ex',
+        subject: 'did:subject: ex'
+      },
+      handleInteraction: jest.fn(),
+      openClaimsDetails: () => null
+    }
+
+    const wrapper = shallow(<CredentialCard {...props} />)
+    wrapper.find('ClaimCard').first().props().handlePressed()
+    expect(props.handleInteraction).toHaveBeenCalled()
+
+  })
 })

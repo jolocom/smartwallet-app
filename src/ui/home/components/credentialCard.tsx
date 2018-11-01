@@ -60,7 +60,7 @@ export class CredentialCard extends React.Component<Props, State> {
     }
 
     return Object.keys(claimData).map(key => (
-      <ClaimCard key={key} primaryText={claimData[key]} secondaryText={prepareLabel(key)} />
+      <ClaimCard key={key} handlePressed={onEdit} primaryText={claimData[key]} secondaryText={prepareLabel(key)} />
     ))
   }
 
@@ -84,6 +84,7 @@ export class CredentialCard extends React.Component<Props, State> {
         <View onTouchEnd={this.toggleCollapse} flex={0.7} overflow={'scroll'}>
           {collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
+        {/* Wondering if the right icon should be removed since interaction will be moved to the card */}
         <View flex={0.1} onTouchEnd={this.props.handleInteraction}>
           {rightIcon || null}
         </View>
