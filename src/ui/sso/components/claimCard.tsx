@@ -1,10 +1,9 @@
 import React, { ReactNode } from 'react'
-import { View, Text, StyleSheet, GestureResponderEvent, TextStyle, ViewStyle, RegisteredStyle } from 'react-native'
+import { View, Text, StyleSheet, GestureResponderEvent, TextStyle, ViewStyle, RegisteredStyle, TouchableOpacity } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 // TODO Custom text component with size, font, color
-// TODO Make whole card clickable as opposed to icon
 // TODO Changes to the 'Container' custom component to allow horisontal flex
 interface ClaimCardProps {
   rightIcon?: ReactNode
@@ -13,6 +12,7 @@ interface ClaimCardProps {
   primaryTextStyle?: TextStyle | RegisteredStyle<TextStyle>
   secondaryTextStyle?: TextStyle | RegisteredStyle<TextStyle>
   containerStyle?: ViewStyle | RegisteredStyle<ViewStyle>
+  onEdit?: (e: GestureResponderEvent) => void
 }
 
 export const ClaimCard: React.SFC<ClaimCardProps> = props => {
@@ -34,17 +34,17 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
     }
   })
 
-  const { primaryText, secondaryText, rightIcon, primaryTextStyle, secondaryTextStyle, containerStyle } = props
+  const { primaryText, secondaryText, rightIcon, primaryTextStyle, secondaryTextStyle, containerStyle, onEdit } = props
   const { primaryTextDefault, secondaryTextDefault, containerDefault } = styles
 
   return (
-    <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'white' }}>
+    <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'white' }} onPress={onEdit}>
       <View style={[containerDefault, containerStyle]}>
         <Text style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}>{secondaryText}</Text>
         <Text style={[primaryTextDefault, primaryTextStyle]}>{primaryText}</Text>
       </View>
       <View flex={0.2} >{rightIcon}</View>
-    </View>
+    </TouchableOpacity >
   )
 }
 
@@ -115,7 +115,7 @@ export const ConsentAttributeCard: React.SFC<ConsentAttributeCardProps> = props 
           </Text>
         ) : null}
       </View>
-      <View style={{alignSelf: 'center'}}flex={0.2}>{rightIcon ? rightIcon : null}</View>
+      <View style={{ alignSelf: 'center' }} flex={0.2}>{rightIcon ? rightIcon : null}</View>
     </View>
   )
 }

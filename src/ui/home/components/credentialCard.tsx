@@ -60,7 +60,7 @@ export class CredentialCard extends React.Component<Props, State> {
     }
 
     return Object.keys(claimData).map(key => (
-      <ClaimCard key={key} primaryText={claimData[key]} secondaryText={prepareLabel(key)} />
+      <ClaimCard key={key} primaryText={claimData[key]} secondaryText={prepareLabel(key)}  onEdit={onEdit}/>
     ))
   }
 
