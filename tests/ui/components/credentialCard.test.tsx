@@ -1,5 +1,7 @@
 import React from 'react'
 import { CredentialCard } from 'src/ui/home/components/credentialCard'
+import { NameIcon } from 'src/resources'
+import renderer from 'react-test-renderer'
 import { shallow } from 'enzyme'
 
 describe('ClaimCard component', () => {
@@ -14,8 +16,9 @@ describe('ClaimCard component', () => {
         issuer: 'did:issuer:ex',
         subject: 'did:subject: ex'
       },
-
-      openClaimsDetails: () => null
+      
+      leftIcon: renderer.create(<NameIcon />),
+      handleInteraction: () => null
     }
     const rendered = shallow(<CredentialCard {...props} />)
     expect(rendered).toMatchSnapshot()
@@ -33,8 +36,8 @@ describe('ClaimCard component', () => {
         issuer: 'did:issuer:ex',
         subject: 'did:subject: ex'
       },
-
-      openClaimsDetails: () => null
+      leftIcon: renderer.create(<NameIcon />),
+      handleInteraction: () => null
     }
 
     const rendered = shallow(<CredentialCard {...props} />)
