@@ -6,6 +6,7 @@ import ssoData from './data/mockSSOData'
 import data from '../registration/data/mockRegistrationData'
 
 describe.only('SSO action creators', () => {
+  jest.setTimeout(30000);
   const initialState = {
     account: {
       did: {
@@ -128,7 +129,11 @@ describe.only('SSO action creators', () => {
 
     const { testSignedCredentialDefault } = data
     const { sampleStateVerificationSummary, sampleEncryptedWif, sampleDecryptedWif } = ssoData
-
+    global.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+        ok: true,
+        json: () => data
+      })
+    );
     const backendMiddleware = {
       keyChainLib: {
         getPassword: jest.fn().mockResolvedValue('testpassword'),
@@ -143,14 +148,17 @@ describe.only('SSO action creators', () => {
               did: 'did:jolo:first',
               controllingKey: sampleEncryptedWif
             }
-          ])
+          ]),
+          verifiableCredential: jest.fn()
+          .mockResolvedValue([JolocomLib.parse.signedCredential.fromJSON(testSignedCredentialDefault)])
         },
-        verifiableCredential: jest.fn()
-        .mockResolvedValue([JolocomLib.parse.signedCredential.fromJSON(testSignedCredentialDefault)])
       },
       ethereumLib: {
         wifToEthereumKey: jest.fn()
-        .mockReturnValue('a9b4cbc2e0cd25e8324ec8018e62219704531173ebbc7ad517bba8d3a9186142')
+        .mockReturnValue({
+          privateKey:'a9b4cbc2e0cd25e8324ec8018e62219704531173ebbc7ad517bba8d3a9186142',
+          address: "test"
+        })
       }
     }
     const actionSendCR = ssoActions.sendCredentialResponse(sampleStateVerificationSummary)

@@ -165,3 +165,22 @@ Array [
   },
 ]
 `;
+
+exports[`SSO action creators should correctly send a CredentialResponse 1`] = `
+Array [
+  Object {
+    "type": "CLEAR_CREDENTIAL_REQUEST",
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
+]
+`;
