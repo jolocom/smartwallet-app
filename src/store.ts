@@ -4,6 +4,7 @@ import { entityList } from 'src/lib/storage/entities'
 import { defaultConfig } from 'jolocom-lib/js/defaultConfig'
 import { RootState, rootReducer } from 'src/reducers'
 import { BackendMiddleware } from 'src/backendMiddleware'
+import { ConnectionOptions } from 'typeorm/browser';
 const { createReactNavigationReduxMiddleware } = require('react-navigation-redux-helpers')
 
 // TODO Break apart
@@ -17,7 +18,7 @@ const config = {
     logging: ['error', 'query', 'schema'],
     synchronize: true,
     entities: entityList
-  }
+  } as ConnectionOptions
 }
 
 createReactNavigationReduxMiddleware('root', (state : RootState) => state.navigation)
