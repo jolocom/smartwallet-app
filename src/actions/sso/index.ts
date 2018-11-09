@@ -27,21 +27,6 @@ export const clearCredentialRequest = () => {
 
 export const parseJWT = (encodedJwt: string) =>{
   return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const storageLib = backendMiddleware.storageLib
-
-    try {
-      const personas = await storageLib.get.persona()
-      if (!personas.length) {
-        dispatch(genericActions.toggleLoadingScreen(false))
-        return
-      }
-
-    } catch (err) {
-      if (err.message.indexOf('no such table') === 0) {
-        return
-      }
-      dispatch(genericActions.showErrorScreen(err))
-    }
     const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
     if (returnedDecodedJwt instanceof CredentialRequestPayload) {
       dispatch(consumeCredentialRequest(returnedDecodedJwt))
