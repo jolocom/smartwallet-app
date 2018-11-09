@@ -17,6 +17,11 @@ export const navigatorReset = (newScreen: NavigationNavigateActionPayload) => {
   })
 }
 
+/**
+ * The function that parses a deep link to get the route name and params
+ * It then matches the route name and dispatches a correcponding action
+ * @param url - a deep link string with the following schemat: appName://routeName/params
+ */
 export const handleDeepLink = (url: string) => {
   return (dispatch: Dispatch<AnyAction>) => {
     const route: string = url.replace(/.*?:\/\//g, '')

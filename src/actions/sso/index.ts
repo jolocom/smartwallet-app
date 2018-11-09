@@ -27,7 +27,7 @@ export const clearCredentialRequest = () => {
 
 export const parseJWT = (encodedJwt: string) =>{
   return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const { storageLib } = backendMiddleware
+    const storageLib = backendMiddleware.storageLib
 
     try {
       const personas = await storageLib.get.persona()
