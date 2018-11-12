@@ -9,6 +9,7 @@ import {
   CredentialEntity
 } from 'src/lib/storage/entities'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { StorageConfig } from 'src/lib/storage/types'
 
 interface PersonaAttributes {
   did: string
@@ -55,7 +56,7 @@ export class Storage {
     verifiableCredential: this.deleteVCred.bind(this)
   }
 
-  constructor(config: ConnectionOptions) {
+  constructor(config: StorageConfig) {
     this.config = config
   }
 

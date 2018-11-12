@@ -3,9 +3,9 @@ import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
 import { EthereumLib, EthereumLibInterface } from 'src/lib/ethereum'
 import { EncryptionLib, EncryptionLibInterface } from 'src/lib/crypto'
 import { Storage } from 'src/lib/storage/storage'
+import { StorageConfig } from 'src/lib/storage/types'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 
-// TODO Type config better
 export class BackendMiddleware {
   identityWallet!: IdentityWallet
   ethereumLib: EthereumLibInterface
@@ -13,10 +13,10 @@ export class BackendMiddleware {
   encryptionLib: EncryptionLibInterface
   keyChainLib: KeyChainInterface
 
-  constructor(config: { fuelingEndpoint: string, typeOrmConfig: any }) {
+  constructor(config: { fuelingEndpoint: string, typeOrmConfig: StorageConfig }) {
     this.ethereumLib = new EthereumLib(config.fuelingEndpoint)
-    this.storageLib = new Storage(config.typeOrmConfig),
-    this.encryptionLib = new EncryptionLib(),
+    this.storageLib = new Storage(config.typeOrmConfig)
+    this.encryptionLib = new EncryptionLib()
     this.keyChainLib = new KeyChain()
   }
 
