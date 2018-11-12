@@ -32,17 +32,20 @@ export class NavigatorContainer extends React.Component<Props> {
 
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
+    // If we are on Android, we immediately call the navigate method passing in the url
     if (Platform.OS === 'android') {
       Linking.getInitialURL().then((url: string) => {
         this.props.handleDeepLink(url)
       })
     } else {
+      // If we are on iOS, We add an event listener to call handleOpenUrl when an incoming link is detected.
       Linking.addEventListener('url', this.handleOpenURL)
     }
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.navigateBack)
+    // We delete the Linking listener on componentWillUnmount
     Linking.removeEventListener('url', this.handleOpenURL)
   }
 
@@ -51,6 +54,7 @@ export class NavigatorContainer extends React.Component<Props> {
     return true
   }
 
+  //When handleOpenURL is called, we pass the event url to the navigate method.
   private handleOpenURL = (event: any) => {
     this.props.handleDeepLink(event.url)
   }
