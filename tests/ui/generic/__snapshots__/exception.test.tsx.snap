@@ -1,19 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Exception screen component Renders correctly when error object is provided 1`] = `
-<Container>
-  <Header
-    title="CATASTROPHIC FAILURE"
-  />
+exports[`Exception screen component Renders correctly 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+      "display": "flex",
+    }
+  }
+>
   <Block
-    flex={0.2}
-  >
-    <CenteredText
-      msg="MOCK BAD ERROR..."
-    />
-  </Block>
-  <Block
-    flex={0.4}
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 0.6,
+        "justifyContent": "center",
+      }
+    }
   >
     <Text
       accessible={true}
@@ -21,60 +24,68 @@ exports[`Exception screen component Renders correctly when error object is provi
       ellipsizeMode="tail"
       style={
         Object {
-          "color": "black",
+          "color": "#ffefdf",
           "fontFamily": "TT Commons",
-          "fontSize": 10,
+          "fontSize": 28,
+          "textAlign": "center",
         }
       }
     >
-      MOCK STACK TRACE...
+      Oops!
     </Text>
-  </Block>
-  <Block
-    flex={0.2}
-  >
-    <CenteredText
-      msg="Please try to restart the application!"
-    />
-  </Block>
-</Container>
-`;
-
-exports[`Exception screen component Renders correctly when no error object is provided 1`] = `
-<Container>
-  <Header
-    title="CATASTROPHIC FAILURE"
-  />
-  <Block
-    flex={0.2}
-  >
-    <CenteredText
-      msg="No further details are available :("
-    />
-  </Block>
-  <Block
-    flex={0.4}
-  >
     <Text
       accessible={true}
       allowFontScaling={true}
       ellipsizeMode="tail"
       style={
         Object {
-          "color": "black",
+          "color": "#ffefdf",
           "fontFamily": "TT Commons",
-          "fontSize": 10,
+          "fontSize": 18,
+          "textAlign": "center",
         }
       }
     >
-      No stack trace available :(
+       
+      There was an error with your request.
+       
     </Text>
   </Block>
   <Block
-    flex={0.2}
+    style={
+      Object {
+        "backgroundColor": "black",
+        "flex": 0.1,
+      }
+    }
   >
-    <CenteredText
-      msg="Please try to restart the application!"
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={null}
+      primary={false}
+      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": "100%",
+            "width": "50%",
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "100",
+          },
+        }
+      }
+      testID={null}
+      text="Try again"
+      upperCase={false}
     />
   </Block>
 </Container>

@@ -6071,10 +6071,16 @@ jju@^1.3.0:
   resolved "https://registry.yarnpkg.com/jju/-/jju-1.3.0.tgz#dadd9ef01924bc728b03f2f7979bdbd62f7a2aaa"
   integrity sha1-2t2e8BkkvHKLA/L3l5vb1i96Kqo=
 
+<<<<<<< HEAD
 jolocom-lib@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.0.6.tgz#9d1ae260f43ac5a09a3cf2e7985ff1b90f7be256"
   integrity sha512-MtEgZ+aDgzwXXEFv6lSiovalMZNHh27xDMtGyWr1L8OovH9H31Z3ILELwNhStFGnHtxc29N8fghzpiwZNnEfeg==
+=======
+jolocom-lib@^2.0.13:
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.0.13.tgz#04e4e786c9679b2649aafd049bff13948772a7f3"
+>>>>>>> develop
   dependencies:
     base64url "^3.0.0"
     bip39 "^2.5.0"

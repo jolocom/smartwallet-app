@@ -34,7 +34,8 @@ const categorizedClaims: CategorizedClaims = {
       issuer: '',
       subject: ''
     }
-  ]
+  ],
+  Other: []
 }
 
 export const initialState: ClaimsState = {
@@ -46,6 +47,7 @@ export const initialState: ClaimsState = {
     issuer: '',
     subject: ''
   },
+  pendingExternal: [],
   decoratedCredentials: categorizedClaims
 }
 
@@ -55,8 +57,14 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
       return state.setIn(['loading'], action.loading)
     case 'SET_CLAIMS_FOR_DID':
       return state.set('decoratedCredentials', Immutable.fromJS(addDefaultValues(action.claims))).set('loading', false)
+    case 'SET_EXTERNAL':
+      return state.set('pendingExternal', Immutable.fromJS(action.external))
+    case 'RESET_EXTERNAL':
+      return state.set('pendingExternal', Immutable.fromJS([]))
     case 'SET_SELECTED':
       return state.setIn(['selected'], Immutable.fromJS(action.selected))
+    case 'RESET_SELECTED':
+      return state.setIn(['selected'], initialState.selected)
     case 'HANLDE_CLAIM_INPUT':
       return state.setIn(['selected', 'claimData', action.fieldName], action.fieldValue)
     default:

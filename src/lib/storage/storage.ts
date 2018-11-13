@@ -90,7 +90,6 @@ export class Storage {
       .createQueryBuilder('credential')
       .leftJoinAndSelect('credential.verifiableCredential', 'verifiableCredential')
       .where('verifiableCredential.type = :type', { type })
-      .groupBy('propertyValue')
       .getMany()
 
     const results = this.groupAttributesByCredentialId(localAttributes).map(entry => ({
@@ -111,7 +110,7 @@ export class Storage {
     const findByCredId = (arrToSearch: ModifiedCredentialEntity[], value: ModifiedCredentialEntity) =>
       arrToSearch.findIndex(entry => entry.verifiableCredential.id === value.verifiableCredential.id)
 
-    return modifiedAttributes.reduce((acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity, idx) => {
+    return modifiedAttributes.reduce((acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity) => {
       const matchingIndex = findByCredId(acc, curr)
 
       if (matchingIndex >= 0) {

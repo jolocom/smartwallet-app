@@ -3,14 +3,16 @@ import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { navigationActions } from 'src/actions'
+import { navigationActions, accountActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
-import { CredentialRequestPayload } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequestPayload'
 import { CredentialsReceivePayload } from 'jolocom-lib/js/interactionFlows/credentialsReceive/credentialsReceivePayload'
 import { getUiCredentialTypeByType } from 'src/lib/util'
 import { InteractionType } from 'jolocom-lib/js/interactionFlows/types'
+import { resetSelected } from '../account'
+import { CredentialRequestPayload } from 'jolocom-lib/js/interactionFlows/credentialRequest/credentialRequestPayload'
+import { CredentialOfferRequestPayload } from 'jolocom-lib/js/interactionFlows/credentialOfferRequest/credentialOfferRequestPayload'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -25,33 +27,82 @@ export const clearCredentialRequest = () => {
   }
 }
 
-export const parseJWT = (encodedJwt: string) =>{
-  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
-    if (returnedDecodedJwt instanceof CredentialRequestPayload) {
-      dispatch(consumeCredentialRequest(returnedDecodedJwt))
+export const setReceivingCredential = (external: SignedCredential[]) => {
+  return {
+    type: 'SET_EXTERNAL',
+    external
+  }
+}
+
+export const resetReceivingCredential = () => {
+  return {
+    type: 'RESET_EXTERNAL'
+  }
+}
+
+export const parseJWT = (encodedJwt: string) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    dispatch(accountActions.toggleLoading(true))
+
+    try {
+      const returnedDecodedJwt = await JolocomLib.parse.interactionJSONWebToken.decode(encodedJwt)
+      if (returnedDecodedJwt instanceof CredentialRequestPayload) {
+        dispatch(consumeCredentialRequest(returnedDecodedJwt))
+      }
+      if (returnedDecodedJwt instanceof CredentialOfferRequestPayload) {
+        dispatch(consumeCredentialOfferRequest(returnedDecodedJwt))
+      }
+      if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
+        dispatch(receiveExternalCredential(returnedDecodedJwt))
+      }
+    } catch (err) {
+      dispatch(accountActions.toggleLoading(false))
+      dispatch(showErrorScreen(new Error('JWT Token parse failed')))
     }
-    if (returnedDecodedJwt instanceof CredentialsReceivePayload) {
-      dispatch(receiveExternalCredential(returnedDecodedJwt))
+  }
+}
+
+export const consumeCredentialOfferRequest = (credOfferRequest: CredentialOfferRequestPayload) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    try { 
+      const credOfferResponse = await backendMiddleware.identityWallet.create.credentialOfferResponseJSONWebToken({
+        typ: 'credentialOfferResponse',
+        credentialOffer: {
+          challenge: credOfferRequest.getChallenge(),
+          callbackURL: credOfferRequest.getCallbackURL(),
+          instant: credOfferRequest.isInstant(),
+          requestedInput: {}
+        }
+      })
+
+      const res = await fetch(credOfferRequest.getCallbackURL(), {
+        method: 'POST',
+        body: JSON.stringify({ token: credOfferResponse.encode() }),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(body => body.json())
+    
+      dispatch(parseJWT(res.token))
+    } catch(err) {
+      dispatch(accountActions.toggleLoading(false))
+      dispatch(showErrorScreen(new Error('JWT Token parse failed')))
     }
   }
 }
 
 export const receiveExternalCredential = (credReceive: CredentialsReceivePayload) => {
-  return async(dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const providedCredentials = credReceive.getSignedCredentials()
     const registry = JolocomLib.registry.jolocom.create()
 
-    const result = await providedCredentials.reduce(async (validity: Promise<boolean>, credential: SignedCredential) => {
-      validity = registry.validateSignature(credential)
-      return await validity
-    }, Promise.resolve(false))
+    const results = await Promise.all(providedCredentials.map(vcred => registry.validateSignature(vcred)))
 
-    if (result) {
-      //dispatch receiveExternalCredentialUI consent screen with providedCredentials
+    if (results.every(el => el === true)) {
+      dispatch(setReceivingCredential(providedCredentials))
+      dispatch(accountActions.toggleLoading(false))
+      dispatch(navigationActions.navigate({ routeName: routeList.CredentialDialog }))
     } else {
-      //display error screen
+      dispatch(accountActions.toggleLoading(false))
+      dispatch(showErrorScreen(new Error('Signature validation failed')))
     }
   }
 }
@@ -65,24 +116,32 @@ interface AttributeSummary {
   }>
 }
 
-export const consumeCredentialRequest = (decodedCredentialRequestPayload: CredentialRequestPayload) => {
+export const consumeCredentialRequest = (decodedCredentialRequest: CredentialRequestPayload) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
     const { did } = getState().account.did.toJS()
 
-    const requestedTypes = decodedCredentialRequestPayload.getRequestedCredentialTypes()
+    const requestedTypes = decodedCredentialRequest.getRequestedCredentialTypes()
     const attributesForType = await Promise.all<AttributeSummary>(requestedTypes.map(storageLib.get.attributesByType))
 
     const populatedWithCredentials = await Promise.all(
-      attributesForType.map(async entry =>
-        Promise.all(
-          entry.results.map(async result => ({
-            type: getUiCredentialTypeByType(entry.type),
-            values: result.values,
-            verifications: await storageLib.get.verifiableCredential({ id: result.verification })
-          }))
-        )
-      )
+      attributesForType.map(async entry => {
+        if (entry.results.length) {
+          return Promise.all(
+            entry.results.map(async result => ({
+              type: getUiCredentialTypeByType(entry.type),
+              values: result.values,
+              verifications: await storageLib.get.verifiableCredential({ id: result.verification })
+            }))
+          )
+        }
+
+        return [{
+          type: getUiCredentialTypeByType(entry.type),
+          values: [],
+          verifications: []
+        }]
+      })
     )
 
     const abbreviated = populatedWithCredentials.map(attribute =>
@@ -101,12 +160,13 @@ export const consumeCredentialRequest = (decodedCredentialRequestPayload: Creden
 
     // TODO requester shouldn't be optional
     const summary = {
-      callbackURL: decodedCredentialRequestPayload.getCallbackURL(),
-      requester: decodedCredentialRequestPayload.iss,
+      callbackURL: decodedCredentialRequest.getCallbackURL(),
+      requester: decodedCredentialRequest.iss,
       availableCredentials: flattened
     }
 
     dispatch(setCredentialRequest(summary))
+    dispatch(accountActions.toggleLoading(false))
     dispatch(navigationActions.navigate({ routeName: routeList.Consent }))
   }
 }
@@ -169,6 +229,13 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
 export const cancelSSO = () => {
   return (dispatch: Dispatch<AnyAction>) => {
     dispatch(clearCredentialRequest())
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+  }
+}
+
+export const cancelReceiving = () => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(resetSelected())
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
   }
 }

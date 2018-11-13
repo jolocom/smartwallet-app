@@ -5,11 +5,33 @@ import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { getClaimMetadataByCredentialType, getCredentialUiCategory, getUiCredentialTypeByType } from '../../lib/util'
+import { cancelReceiving } from '../sso'
 
 export const setDid = (did: string) => {
   return {
     type: 'DID_SET',
     value: did
+  }
+}
+
+export const setSelected = (claim : DecoratedClaims) => {
+  return {
+    type: 'SET_SELECTED',
+    selected: claim
+  }
+}
+
+export const resetSelected = () => {
+  return {
+    type: 'RESET_SELECTED'
+  }
+}
+
+export const handleClaimInput = (fieldValue: string, fieldName: string) => {
+  return {
+    type: 'HANLDE_CLAIM_INPUT',
+    fieldName,
+    fieldValue
   }
 }
 
@@ -60,20 +82,9 @@ export const setIdentityWallet = () => {
   }
 }
 
-export const handleClaimInput = (fieldValue: string, fieldName: string) => {
-  return {
-    type: 'HANLDE_CLAIM_INPUT',
-    fieldName,
-    fieldValue
-  }
-}
-
 export const openClaimDetails = (claim: DecoratedClaims) => {
   return (dispatch: Dispatch<AnyAction>) => {
-    dispatch({
-      type: 'SET_SELECTED',
-      selected: claim
-    })
+    dispatch(setSelected(claim))
     dispatch(
       navigationActions.navigate({
         routeName: routeList.ClaimDetails
@@ -113,6 +124,26 @@ export const saveClaim = () => {
   }
 }
 
+// TODO Currently only rendering  / adding one
+export const saveExternalCredentials = () => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { storageLib } = backendMiddleware
+    const externalCredentials = getState().account.claims.toJS().pendingExternal
+    const cred: SignedCredential = externalCredentials[0]
+
+    if (cred.getId()) {
+      await storageLib.delete.verifiableCredential(cred.getId())
+    }
+
+    try {
+      await storageLib.store.verifiableCredential(externalCredentials[0])
+      dispatch(cancelReceiving())
+    } catch (err) {
+      dispatch(genericActions.showErrorScreen(err))
+    }
+  }
+}
+
 export const toggleLoading = (val: boolean) => {
   return {
     type: 'SET_LOADING',
@@ -139,19 +170,7 @@ export const setClaimsForDid = () => {
 
 const prepareClaimsForState = (credentials: SignedCredential[]) => {
   const categorizedClaims = {}
-
-  const decoratedCredentials = credentials.map(vCred => {
-    const claimData = {...vCred.getCredentialSection()}
-    delete claimData.id
-
-    return {
-      credentialType: getUiCredentialTypeByType(vCred.getType()),
-      claimData,
-      id: vCred.getId(),
-      issuer: vCred.getIssuer(),
-      subject: vCred.getCredentialSection().id
-    }
-  })
+  const decoratedCredentials = convertToDecoratedClaim(credentials)
 
   decoratedCredentials.forEach(decoratedCred => {
     const uiCategory = getCredentialUiCategory(decoratedCred.credentialType)
@@ -164,4 +183,21 @@ const prepareClaimsForState = (credentials: SignedCredential[]) => {
   })
 
   return categorizedClaims
+}
+
+// TODO Util, make subject mandatory
+export const convertToDecoratedClaim = (vCreds: SignedCredential[]) : DecoratedClaims[] => {
+  return vCreds.map(vCred => {
+    const claimData = { ...vCred.getCredentialSection() }
+    delete claimData.id
+
+    return {
+      credentialType: getUiCredentialTypeByType(vCred.getType()),
+      claimData,
+      id: vCred.getId(),
+      issuer: vCred.getIssuer(),
+      subject: vCred.getCredentialSection().id || 'Not found',
+      expires: vCred.getExpiryDate() || undefined
+    }
+  })
 }

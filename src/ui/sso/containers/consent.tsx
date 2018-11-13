@@ -4,7 +4,7 @@ import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/red
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 
-interface ConnectProps { }
+interface ConnectProps {}
 
 interface Props extends ConnectProps {
   activeCredentialRequest: StateCredentialRequestSummary
@@ -13,9 +13,7 @@ interface Props extends ConnectProps {
   cancelSSO: () => void
 }
 
-interface State {
-
-}
+interface State {}
 
 export class ConsentContainer extends React.Component<Props, State> {
   private handleSubmitClaims = (credentials: StateVerificationSummary[]) => {
@@ -27,20 +25,16 @@ export class ConsentContainer extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      availableCredentials,
-      requester,
-      callbackURL
-    } = this.props.activeCredentialRequest
+    const { availableCredentials, requester, callbackURL } = this.props.activeCredentialRequest
     return (
-    <ConsentComponent
-      requester={ requester }
-      callbackURL={ callbackURL }
-      did={this.props.currentDid}
-      availableCredentials={ availableCredentials }
-      handleSubmitClaims={ this.handleSubmitClaims }
-      handleDenySubmit={ this.handleDenySubmit }
-     />
+      <ConsentComponent
+        requester={requester}
+        callbackURL={callbackURL}
+        did={this.props.currentDid}
+        availableCredentials={availableCredentials}
+        handleSubmitClaims={this.handleSubmitClaims}
+        handleDenySubmit={this.handleDenySubmit}
+      />
     )
   }
 }
@@ -52,7 +46,6 @@ const mapStateToProps = (state: any) => {
   }
 }
 
-// TODO cancelSSO
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     sendCredentialResponse: (creds: StateVerificationSummary[]) => dispatch(ssoActions.sendCredentialResponse(creds)),
@@ -60,4 +53,7 @@ const mapDispatchToProps = (dispatch: Function) => {
   }
 }
 
-export const Consent = connect(mapStateToProps, mapDispatchToProps)(ConsentContainer)
+export const Consent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ConsentContainer)
