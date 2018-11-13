@@ -1,4 +1,5 @@
 import { Dispatch, AnyAction } from 'redux'
+import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { BackendMiddleware } from 'src/backendMiddleware'
@@ -205,11 +206,16 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
     })
 
     try {
-      await fetch(callbackURL, {
-        method: 'POST',
-        body: JSON.stringify({ token: credentialResponse.encode() }),
-        headers: { 'Content-Type': 'application/json' }
-      })
+      if(callbackURL.includes('http')) {
+        await fetch(callbackURL, {
+          method: 'POST',
+          body: JSON.stringify({ token: credentialResponse.encode() }),
+          headers: { 'Content-Type': 'application/json' }
+        })
+      } else {
+        const url = callbackURL + credentialResponse.encode()
+        Linking.openURL(url)
+      }
 
       dispatch(clearCredentialRequest())
       dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))

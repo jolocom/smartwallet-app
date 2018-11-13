@@ -1,4 +1,4 @@
-package com.smartwallet;
+package com.jolocomwallet;
 
 import android.app.Application;
 
