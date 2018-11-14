@@ -6,6 +6,7 @@ import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { getClaimMetadataByCredentialType, getCredentialUiCategory, getUiCredentialTypeByType } from '../../lib/util'
 import { cancelReceiving } from '../sso'
+import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 
 export const setDid = (did: string) => {
   return {
@@ -62,20 +63,17 @@ export const checkIdentityExists = () => {
 
 export const setIdentityWallet = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const { ethereumLib, keyChainLib, storageLib, encryptionLib } = backendMiddleware
+    const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
 
     try {
-      const did = getState().account.did.get('did')
-      const encryptionPass = await keyChainLib.getPassword()
-      const personaData = await storageLib.get.persona({ did })
-      const { encryptedWif } = personaData[0].controllingKey
-      const decryptedWif = encryptionLib.decryptWithPass({
-        cipher: encryptedWif,
-        pass: encryptionPass
+      const password = await keyChainLib.getPassword()
+      const decryptedSeed = encryptionLib.decryptWithPass({
+        cipher: await storageLib.get.encryptedSeed(),
+        pass: password
       })
-
-      const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
-      await backendMiddleware.setIdentityWallet(Buffer.from(privateKey, 'hex'))
+      // TODO: rework the seed param on lib
+      const userVault = new SoftwareKeyProvider(Buffer.from(decryptedSeed, 'hex'), password)
+      await backendMiddleware.setIdentityWallet(userVault, password)
     } catch (err) {
       dispatch(genericActions.showErrorScreen(err))
     }
@@ -95,16 +93,18 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
 
 export const saveClaim = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { identityWallet, storageLib, keyChainLib } = backendMiddleware
+
     try {
-      const { identityWallet, storageLib } = backendMiddleware
       const did = getState().account.did.get('did')
       const claimsItem = getState().account.claims.toJS().selected
+      const password = await keyChainLib.getPassword()
 
       const verifiableCredential = await identityWallet.create.signedCredential({
         metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
         claim: claimsItem.claimData,
         subject: did
-      })
+      }, password)
 
       if (claimsItem.id) {
         await storageLib.delete.verifiableCredential(claimsItem.id)
@@ -131,8 +131,8 @@ export const saveExternalCredentials = () => {
     const externalCredentials = getState().account.claims.toJS().pendingExternal
     const cred: SignedCredential = externalCredentials[0]
 
-    if (cred.getId()) {
-      await storageLib.delete.verifiableCredential(cred.getId())
+    if (cred.id) {
+      await storageLib.delete.verifiableCredential(cred.id)
     }
 
     try {
@@ -188,16 +188,16 @@ const prepareClaimsForState = (credentials: SignedCredential[]) => {
 // TODO Util, make subject mandatory
 export const convertToDecoratedClaim = (vCreds: SignedCredential[]) : DecoratedClaims[] => {
   return vCreds.map(vCred => {
-    const claimData = { ...vCred.getCredentialSection() }
+    const claimData = { ...vCred.claim }
     delete claimData.id
 
     return {
-      credentialType: getUiCredentialTypeByType(vCred.getType()),
+      credentialType: getUiCredentialTypeByType(vCred.type),
       claimData,
-      id: vCred.getId(),
-      issuer: vCred.getIssuer(),
-      subject: vCred.getCredentialSection().id || 'Not found',
-      expires: vCred.getExpiryDate() || undefined
+      id: vCred.id,
+      issuer: vCred.issuer,
+      subject: vCred.claim.id || 'Not found',
+      expires: vCred.expires || undefined
     }
   })
 }
