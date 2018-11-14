@@ -12,7 +12,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 
 interface PersonaAttributes {
   did: string
-  controllingKey: DerivedKeyAttributes
+  controllingKeyPath: string
 }
 
 interface DerivedKeyAttributes {
@@ -158,7 +158,7 @@ export class Storage {
     await this.createConnectionIfNeeded()
     const verifiableCredential = VerifiableCredentialEntity.fromVerifiableCredential(vCred)
 
-    const signature = SignatureEntity.fromLinkedDataSignature(vCred.getProofSection())
+    const signature = SignatureEntity.fromLinkedDataSignature(vCred.proof)
 
     const claims = CredentialEntity.fromVerifiableCredential(vCred)
     claims.forEach(claim => (claim.verifiableCredential = verifiableCredential))

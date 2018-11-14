@@ -31,7 +31,7 @@ export class CredentialEntity {
 
   // TODO Handle encryption
   static fromVerifiableCredential(vCred: SignedCredential): CredentialEntity[] {
-    const credentialSection = vCred.getCredentialSection()
+    const credentialSection = vCred.claim
     const presentClaims = Object.keys(credentialSection).find(k => k !== 'id')
 
     if (!presentClaims) {
