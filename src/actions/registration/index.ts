@@ -70,13 +70,14 @@ export const createIdentity = (encodedEntropy: string) => {
       const entropyData = {encryptedEntropy: encEntropy, timestamp: Date.now()}
       await storageLib.store.encryptedSeed(entropyData)
       const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
-      
+
       dispatch(setLoadingMsg(loading.loadingStages[1]))
 
       const ethAddr = ethereumLib.privKeyToEthAddress(userVault.getPrivateKey({
         encryptionPass: password,
         derivationPath: JolocomLib.KeyTypes.ethereumKey
       }))
+
       await ethereumLib.requestEther(ethAddr)
       
       dispatch(setLoadingMsg(loading.loadingStages[2]))
@@ -91,10 +92,12 @@ export const createIdentity = (encodedEntropy: string) => {
       })
 
       const identityWallet = await registry.create(userVault, password)
+
       const personaData = {
         did: identityWallet.identity.did,
         controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey
       }
+
       await storageLib.store.persona(personaData)
       dispatch(setDid(identityWallet.identity.did))
 

@@ -51,6 +51,7 @@ export const parseJWT = (encodedJwt: string) => {
     try {
       const returnedDecodedJwt = await JolocomLib.parse.interactionToken.fromJWT(encodedJwt)
       if (returnedDecodedJwt.interactionType === InteractionType.CredentialRequest) {
+        console.log('interaction type credential request')
         dispatch(consumeCredentialRequest(returnedDecodedJwt))
       }
       if (returnedDecodedJwt.interactionType === InteractionType.CredentialOffer) {
@@ -60,6 +61,7 @@ export const parseJWT = (encodedJwt: string) => {
         dispatch(receiveExternalCredential(returnedDecodedJwt))
       }
     } catch (err) {
+      console.log('error: ', err)
       dispatch(accountActions.toggleLoading(false))
       dispatch(showErrorScreen(new Error('JWT Token parse failed')))
     }

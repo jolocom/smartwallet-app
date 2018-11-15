@@ -60,10 +60,7 @@ export class Storage {
   // TODO: refactor needed on multiple personas
   private async getPersonas(query?: object): Promise<PersonaEntity[]> {
     await this.createConnectionIfNeeded()
-    return this.connection.manager.find(PersonaEntity, {
-      where: query,
-      relations: ['controllingKeyPath']
-    })
+    return this.connection.manager.find(PersonaEntity)
   }
 
   private async getVCredential(query?: object): Promise<SignedCredential[]> {
@@ -131,7 +128,8 @@ export class Storage {
 
   private async getEncryptedSeed(): Promise<string> {
     await this.createConnectionIfNeeded()
-    return this.connection.manager.find(MasterKeyEntity)[0].encryptedEntropy
+    const masterKeyEntity = await this.connection.manager.find(MasterKeyEntity)
+    return masterKeyEntity[0].encryptedEntropy
   }
 
   private async storePersonaFromJSON(args: PersonaAttributes): Promise<void> {

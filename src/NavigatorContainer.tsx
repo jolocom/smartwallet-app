@@ -35,7 +35,8 @@ export class NavigatorContainer extends React.Component<Props> {
     // If we are on Android, we immediately call the navigate method passing in the url
     if (Platform.OS === 'android') {
       Linking.getInitialURL().then((url: string) => {
-        this.props.handleDeepLink(url)
+        // tslint:disable-next-line: no-unused-expression
+        url && this.props.handleDeepLink(url)
       })
     } else {
       // If we are on iOS, We add an event listener to call handleOpenUrl when an incoming link is detected.
