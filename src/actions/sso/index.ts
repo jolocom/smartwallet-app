@@ -47,17 +47,18 @@ export const resetReceivingCredential = () => {
 export const parseJWT = (encodedJwt: string) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     dispatch(accountActions.toggleLoading(true))
+    console.log(encodedJwt)
 
     try {
       const returnedDecodedJwt = await JolocomLib.parse.interactionToken.fromJWT(encodedJwt)
       if (returnedDecodedJwt.interactionType === InteractionType.CredentialRequest) {
-        console.log('interaction type credential request')
         dispatch(consumeCredentialRequest(returnedDecodedJwt))
       }
       if (returnedDecodedJwt.interactionType === InteractionType.CredentialOffer) {
         dispatch(consumeCredentialOfferRequest(returnedDecodedJwt))
       }
       if (returnedDecodedJwt.interactionType === InteractionType.CredentialsReceive) {
+        console.log(returnedDecodedJwt)
         dispatch(receiveExternalCredential(returnedDecodedJwt))
       }
     } catch (err) {
@@ -85,11 +86,14 @@ export const consumeCredentialOfferRequest = (credOfferRequest: JSONWebToken<Cre
         credOfferRequest
       )
 
+
       const res = await fetch(credOfferRequest.interactionToken.callbackURL, {
         method: 'POST',
         body: JSON.stringify({ token: credOfferResponse.encode() }),
         headers: { 'Content-Type': 'application/json' }
       }).then(body => body.json())
+
+      console.log(res)
     
       dispatch(parseJWT(res.token))
     } catch(err) {
@@ -106,16 +110,19 @@ export const receiveExternalCredential = (credReceive: JSONWebToken<CredentialsR
     try {
       await identityWallet.validateJWT(credReceive)
     } catch (error) {
+      console.log(error)
       dispatch(showErrorScreen(new Error('Validation of external credential token failed')))
     }
       
       
     try {
+      console.log(credReceive)
       const providedCredentials = credReceive.interactionToken.signedCredentials
       const registry = JolocomLib.registries.jolocom.create()
 
       const results = await Promise.all(providedCredentials.map(async (vcred) => {
         const remoteIdentity = await registry.resolve(keyIdToDid(vcred.issuer))
+        console.log(remoteIdentity)
         return SoftwareKeyProvider
           .verifyDigestable(getIssuerPublicKey(vcred.issuer, remoteIdentity.didDocument), vcred)
       }))
@@ -191,7 +198,8 @@ export const consumeCredentialRequest = (decodedCredentialRequest: JSONWebToken<
       const summary = {
         callbackURL: decodedCredentialRequest.interactionToken.callbackURL,
         requester: decodedCredentialRequest.issuer,
-        availableCredentials: flattened
+        availableCredentials: flattened,
+        requestJWT: decodedCredentialRequest.encode()
       }
 
       dispatch(setCredentialRequest(summary))
@@ -221,17 +229,20 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
         derivationPath: KeyTypes.jolocomIdentityKey,
         encryptionPass: password
       })
+
       const credentials = await Promise.all(
         selectedCredentials.map(async cred => (await storageLib.get.verifiableCredential({ id: cred.id }))[0])
       )
   
       const jsonCredentials = credentials.map(cred => cred.toJSON())
+
+      const request = JolocomLib.parse.interactionToken.fromJWT(activeCredentialRequest.requestJWT)
       const credentialResponse = await wallet.create.interactionTokens.response.share({
           callbackURL: activeCredentialRequest.callbackURL,
           suppliedCredentials: jsonCredentials
         },
         password,
-        activeCredentialRequest
+        request
       )
 
       if(activeCredentialRequest.callbackURL.includes('http')) {
@@ -244,7 +255,6 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
         const url = activeCredentialRequest.callbackURL + credentialResponse.encode()
         Linking.openURL(url)
       }
-
       dispatch(clearCredentialRequest())
       dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
   
