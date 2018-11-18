@@ -14,7 +14,7 @@ import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/credentialOffe
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { getIssuerPublicKey, keyIdToDid } from 'jolocom-lib/js/utils/helper'
+import { getIssuerPublicKey } from 'jolocom-lib/js/utils/helper'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 
@@ -47,8 +47,6 @@ export const resetReceivingCredential = () => {
 export const parseJWT = (encodedJwt: string) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     dispatch(accountActions.toggleLoading(true))
-    console.log(encodedJwt)
-
     try {
       const returnedDecodedJwt = await JolocomLib.parse.interactionToken.fromJWT(encodedJwt)
       if (returnedDecodedJwt.interactionType === InteractionType.CredentialRequest) {
@@ -86,14 +84,12 @@ export const consumeCredentialOfferRequest = (credOfferRequest: JSONWebToken<Cre
         credOfferRequest
       )
 
-
       const res = await fetch(credOfferRequest.interactionToken.callbackURL, {
         method: 'POST',
         body: JSON.stringify({ token: credOfferResponse.encode() }),
         headers: { 'Content-Type': 'application/json' }
       }).then(body => body.json())
 
-      console.log(res)
     
       dispatch(parseJWT(res.token))
     } catch(err) {
@@ -116,15 +112,14 @@ export const receiveExternalCredential = (credReceive: JSONWebToken<CredentialsR
       
       
     try {
-      console.log(credReceive)
       const providedCredentials = credReceive.interactionToken.signedCredentials
       const registry = JolocomLib.registries.jolocom.create()
 
       const results = await Promise.all(providedCredentials.map(async (vcred) => {
-        const remoteIdentity = await registry.resolve(keyIdToDid(vcred.issuer))
+        const remoteIdentity = await registry.resolve(vcred.issuer)
         console.log(remoteIdentity)
         return SoftwareKeyProvider
-          .verifyDigestable(getIssuerPublicKey(vcred.issuer, remoteIdentity.didDocument), vcred)
+          .verifyDigestable(getIssuerPublicKey(vcred.signer.keyId, remoteIdentity.didDocument), vcred)
       }))
 
       if (results.every(el => el === true)) {
