@@ -1,4 +1,4 @@
-package com.smartwallet;
+package com.jolocomwallet;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen; 
@@ -17,6 +17,6 @@ public class MainActivity extends ReactActivity {
         super.onCreate(savedInstanceState);
     }
     protected String getMainComponentName() {
-        return "smartwallet";
+        return "jolocomwallet";
     }
 }

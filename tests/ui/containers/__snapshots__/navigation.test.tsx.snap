@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
+<NavigationContainer
+  navigation={
+    Object {
+      "addListener": [Function],
+      "dispatch": undefined,
+      "getParam": [Function],
+      "goBack": [Function],
+      "navigate": [Function],
+      "pop": [Function],
+      "popToTop": [Function],
+      "push": [Function],
+      "replace": [Function],
+      "setParams": [Function],
+      "state": Object {
+        "navigate": [MockFunction],
+      },
+    }
+  }
+/>
+`;
