@@ -5,48 +5,49 @@ import { BackHandler, Linking, Platform } from 'react-native'
 import { AnyAction } from 'redux'
 import { Routes } from 'src/routes'
 import { RootState } from 'src/reducers/'
-import { navigationActions } from 'src/actions/'
+import { navigationActions, accountActions } from 'src/actions/'
 
 const { createReduxBoundAddListener } = require('react-navigation-redux-helpers')
 
 interface ConnectProps {
-  navigation: RootState["navigation"];
-  goBack: () => void;
+  navigation: RootState['navigation']
+  goBack: () => void
   handleDeepLink: (url: string) => void
+  checkIfAccountExists: () => void
 }
 
 interface OwnProps {
-  dispatch: (action: AnyAction) => void;
+  dispatch: (action: AnyAction) => void
 }
 
 interface Props extends ConnectProps, OwnProps {}
 
 export class NavigatorContainer extends React.Component<Props> {
-  private addListener: (name: string, cb: NavigationEventCallback) =>
-    NavigationEventSubscription
+  private addListener: (name: string, cb: NavigationEventCallback) => NavigationEventSubscription
 
   constructor(props: Props) {
     super(props)
     this.addListener = createReduxBoundAddListener('root')
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
-    // If we are on Android, we immediately call the navigate method passing in the url
     if (Platform.OS === 'android') {
       Linking.getInitialURL().then((url: string) => {
-        // tslint:disable-next-line: no-unused-expression
-        url && this.props.handleDeepLink(url)
+        if (!url) {
+          this.props.checkIfAccountExists()
+        } else {
+          this.props.handleDeepLink(url)
+        }
       })
     } else {
-      // If we are on iOS, We add an event listener to call handleOpenUrl when an incoming link is detected.
+      // TOOD currently not fully finished
       Linking.addEventListener('url', this.handleOpenURL)
     }
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.navigateBack)
-    // We delete the Linking listener on componentWillUnmount
     Linking.removeEventListener('url', this.handleOpenURL)
   }
 
@@ -62,11 +63,13 @@ export class NavigatorContainer extends React.Component<Props> {
 
   render() {
     return (
-      <Routes navigation={addNavigationHelpers({
-        dispatch: this.props.dispatch,
-        state: this.props.navigation,
-        addListener: this.addListener
-      })}/>
+      <Routes
+        navigation={addNavigationHelpers({
+          dispatch: this.props.dispatch,
+          state: this.props.navigation,
+          addListener: this.addListener
+        })}
+      />
     )
   }
 }
@@ -80,8 +83,12 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     goBack: () => dispatch(navigationActions.goBack()),
-    handleDeepLink: (url: string) => dispatch(navigationActions.handleDeepLink(url))
+    handleDeepLink: (url: string) => dispatch(navigationActions.handleDeepLink(url)),
+    checkIfAccountExists: () => dispatch(accountActions.checkIdentityExists())
   }
 }
 
-export const Navigator = connect(mapStateToProps, mapDispatchToProps)(NavigatorContainer  )
+export const Navigator = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavigatorContainer)

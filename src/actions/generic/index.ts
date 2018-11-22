@@ -13,10 +13,3 @@ export const showErrorScreen = (error: Error, flag?: string) => {
     }))
   }
 }
-
-export const toggleLoadingScreen = (loading: boolean) => {
-  return{
-    type: 'SET_LOADING',
-    value: loading
-  }
-}

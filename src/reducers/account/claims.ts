@@ -53,8 +53,8 @@ export const initialState: ClaimsState = {
 
 export const claims = (state = Immutable.fromJS(initialState), action: AnyAction): ClaimsState => {
   switch (action.type) {
-    case 'SET_LOADING':
-      return state.setIn(['loading'], action.loading)
+    case 'TOGGLE_CLAIMS_LOADING':
+      return state.setIn(['loading'], action.value)
     case 'SET_CLAIMS_FOR_DID':
       return state.set('decoratedCredentials', Immutable.fromJS(addDefaultValues(action.claims))).set('loading', false)
     case 'SET_EXTERNAL':
