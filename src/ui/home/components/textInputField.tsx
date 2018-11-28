@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import I18n from 'src/locales/i18n';
 const ReactMUI = require('react-native-material-textfield')
 
 interface Props {
@@ -53,7 +54,7 @@ export class TextInputField extends React.Component<Props, State> {
 
   render() {
     const { fieldValue, fieldName, handleFieldInput } = this.props
-    const labelText = this.state.focused || !fieldValue ? this.state.fieldNameDisplay : ''
+    const labelText = this.state.focused || !fieldValue ? I18n.t(this.state.fieldNameDisplay) : ''
     
     return (
       <View style={ styles.inputContainer }>

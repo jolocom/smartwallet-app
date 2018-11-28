@@ -3,6 +3,7 @@ import { StyleSheet, TextInput } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import I18n from 'src/locales/i18n';
 
 interface Props {
   lineColorPassword: string
@@ -88,17 +89,17 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
       <Block style={ styles.nestedContainer } flex={ 0.4 }>
         <CenteredText
           style={ styles.subHeader }
-          msg={ keyboardDrawn ? '' : 'Set a password to encrypt your data on the device' }
+          msg={keyboardDrawn ? '' : I18n.t('Set a password to encrypt your data on the device') }
         />
         <CenteredText
           style={ styles.infoPassword }
-          msg={ 'This password will be stored in your keychain. After setting it, please make sure you have passcode enabled.' }
+          msg={ I18n.t('This password will be stored in your keychain. After setting it, please make sure you have passcode enabled.') }
         />
       </Block>
       <Block style={ styles.nestedContainer } flex={ 0.3 }>
         <TextInput
           style={ styles.textInputField }
-          placeholder={ 'Password' }
+          placeholder={ I18n.t('Password') }
           maxLength={ 40 }
           editable
           secureTextEntry
@@ -112,7 +113,7 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
         /> 
         <TextInput
           style={ styles.textInputField }
-          placeholder={ 'Repeat password' }
+          placeholder={ I18n.t('Repeat password') }
           maxLength={ 40 }
           editable
           secureTextEntry
@@ -136,7 +137,7 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
           raised
           upperCase={ false }
           disabled={ !!errorMsg }
-          text="Continue"
+          text={ I18n.t('Continue') }
         />
       </Block>
     </Container>

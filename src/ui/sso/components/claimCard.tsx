@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { View, Text, StyleSheet, GestureResponderEvent, TextStyle, ViewStyle, RegisteredStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import I18n from 'src/locales/i18n';
 
 // TODO Custom text component with size, font, color
 // TODO Make whole card clickable as opposed to icon
@@ -56,9 +57,9 @@ interface EmptyClaimCardProps {
 export const PlaceholderClaimCard: React.SFC<EmptyClaimCardProps> = props => (
   <ClaimCard
     key={props.credentialType}
-    primaryText={<Text onPress={props.onEdit}>+ add</Text>}
+    primaryText={<Text onPress={props.onEdit}>{ I18n.t('+ add') }</Text>}
     primaryTextStyle={{ color: JolocomTheme.primaryColorPurple }}
-    secondaryText={<Text>{props.credentialType}</Text>}
+    secondaryText={<Text>{I18n.t(props.credentialType)}</Text>}
     secondaryTextStyle={{ opacity: 1 }}
   />
 )
@@ -127,7 +128,7 @@ interface CollapsedCredentialProps {
 
 export const CollapsedCredentialCard: React.SFC<CollapsedCredentialProps> = props => (
   <View>
-    <Text> {props.title} </Text>
+    <Text> {I18n.t(props.title)} </Text>
     {props.values.map((value, idx, arr) => (
       <ClaimCard key={value} containerStyle={{ marginBottom: idx === arr.length - 1 ? '5%' : 0 }} primaryText={value} />
     ))}
