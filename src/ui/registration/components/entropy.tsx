@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Block, Container, CenteredText } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
+import I18n from 'src/locales/i18n';
 
 interface Props {
   addPoint: (x: number, y: number) => void
@@ -49,8 +50,8 @@ export const EntropyComponent : React.SFC<Props> = props => {
   const { progress, submitEntropy, addPoint } = props
 
   const msg = progress === 0 ?
-    'For security purposes, we need some randomness.' +
-    ' Please tap the screen and draw on it randomly' 
+    I18n.t('For security purposes, we need some randomness.') + ' ' +
+    I18n.t('Please tap the screen and draw on it randomly')
     : `${Math.trunc(progress * 100)} %`
 
   return (
@@ -67,7 +68,7 @@ export const EntropyComponent : React.SFC<Props> = props => {
           style={{ container: styles.buttonContainer, text: styles.buttonText }}
           upperCase={ false }
           raised={ true }
-          text="Continue"
+          text={ I18n.t('Continue')}
           onPress={ submitEntropy }
         /> : null
       }

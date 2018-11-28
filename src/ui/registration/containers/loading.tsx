@@ -8,6 +8,7 @@ import { RootState } from 'src/reducers/'
 import Immutable from 'immutable'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import I18n from 'src/locales/i18n';
 const loaders = require('react-native-indicator')
 
 export interface ConnectProps {
@@ -67,8 +68,8 @@ export class LoadingContainer extends React.Component<Props, State> {
     return (
       <Container style={styles.container} >
         <Block style={styles.label} >
-          <CenteredText style={styles.text} msg={"Give us a few moments"} />
-          <CenteredText style={styles.text} msg={"to set up your identity"} />
+          <CenteredText style={styles.text} msg={ I18n.t('Give us a few moments') } />
+          <CenteredText style={styles.text} msg={ I18n.t('to set up your identity') } />
         </Block>
         <Block>
           <loaders.RippleLoader size={80} strokeWidth={4} color={JolocomTheme.spinnerColor} />

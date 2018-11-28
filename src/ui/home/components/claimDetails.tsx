@@ -6,6 +6,7 @@ import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
+import I18n from 'src/locales/i18n';
 
 const styles = StyleSheet.create({
   blockSpace: {
@@ -124,7 +125,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
         <Block style={ styles.blockSpace }>
           <CenteredText
             style={ JolocomTheme.textStyles.light.subheader }
-            msg={ credentialType }
+            msg={ I18n.t(credentialType) }
           />
         </Block>
         <Block style={ styles.blockSpace }>
@@ -135,7 +136,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
           ? <Button
               onPress={ () => this.onSubmit() }
               upperCase={ false }
-              text='Add claim'
+              text={ I18n.t('Add claim') }
               style={ (!!this.confirmationEligibilityCheck())
                 ? { container: styles.buttonContainerDisabled, text: styles.buttonTextDisabled}
                 : { container: styles.buttonContainer, text: styles.buttonText }

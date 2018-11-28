@@ -7,6 +7,7 @@ import { IconToggle } from 'react-native-material-ui'
 import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { ConsentAttributeCard, HeaderSection } from './claimCard'
+import I18n from 'src/locales/i18n';
 
 interface Props {
   did: string
@@ -84,8 +85,8 @@ export class ConsentComponent extends React.Component<Props, State> {
     return (
       <ButtonSection
         disabled={buttonDisabled}
-        confirmText={'Share claims'}
-        denyText={'Deny'}
+        confirmText={ I18n.t('Share claims') }
+        denyText={ I18n.t('Deny') }
         handleConfirm={() => this.handleSubmitClaims()}
         handleDeny={() => this.props.handleDenySubmit()}
       />
@@ -103,7 +104,9 @@ export class ConsentComponent extends React.Component<Props, State> {
         </Block>
 
         <Block flex={0.5}>
-          <Text style={styles.fixedText}>This service is asking you to share the following claims:</Text>
+          <Text style={styles.fixedText}>
+            { I18n.t('This service is asking you to share the following claims') }:
+          </Text>
         </Block>
       </Block>
     )

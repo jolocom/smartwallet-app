@@ -6,6 +6,7 @@ import { ClaimCard } from 'src/ui/sso/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { CredentialTopCard } from './credentialTopCard'
+import I18n from 'src/locales/i18n';
 
 interface Props {
   credentialToRender: DecoratedClaims
@@ -54,12 +55,14 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
           primaryTextStyle={primaryTextStyle}
           secondaryTextStyle={secondaryTextStyle}
           primaryText={`${issuer.substring(0, 30)}...`}
-          secondaryText={'Name of issuer'}
+          secondaryText={ I18n.t('Name of issuer') }
         />
       </Block>
 
       <Block flex={0.45}>
-        <Text style={{ ...StyleSheet.flatten(sectionHeader), marginTop: '5%' }}> Document details/claims </Text>
+        <Text style={{ ...StyleSheet.flatten(sectionHeader), marginTop: '5%' }}>
+          {I18n.t('Document details/claims')}
+        </Text>
         <ScrollView style={{ width: '100%' }}>{renderClaims(credentialToRender)}</ScrollView>
       </Block>
 
