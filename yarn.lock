@@ -5187,6 +5187,11 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
+i18n-js@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-3.1.0.tgz#4ec474b2b7ba8175284a0003804c7bf713991919"
+  integrity sha512-xkpkBgf7anfmoRnJFdTqSQuv3phuP2DHEakWbNJUQMZxaLf146dcYWscOyN6wlG6R2WgS6AE7y664yiAaXXDwg==
+
 iconv-lite@0.4.19:
   version "0.4.19"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
@@ -8251,6 +8256,11 @@ react-native-keychain@^3.0.0-rc.3:
   version "3.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-3.0.0-rc.3.tgz#891ea07a564d1bf46b644bc615af21f15a04b12b"
   integrity sha512-ijWfHmxTPKnrHtPJiDbKW3D6lRH8O9wbCNEE3xlxEg1WZT+VhP6iiF+HUansNYuxL7Hh7k41GSFfvr3xumfmXA==
+
+react-native-languages@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-languages/-/react-native-languages-3.0.1.tgz#a35cf89e69e6722205d96cf418411444c328e6c2"
+  integrity sha512-D9L3WZLci0L/XZLhzKKiBisj17VQQvEW29FgaTJBV3gnITYy7uxdp0Zwi4xd+Rdus5r+cjWkoNKcGks6zMlZkA==
 
 react-native-material-design-styles@^0.2.6:
   version "0.2.7"

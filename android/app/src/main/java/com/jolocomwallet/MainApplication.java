@@ -3,8 +3,9 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.oblador.keychain.KeychainPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -37,13 +38,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new SplashScreenReactPackage(),
+            new RNLanguagesPackage(),
             new VectorIconsPackage(),
+            new SplashScreenReactPackage(),
             new SvgPackage(),
             new KeychainPackage(),
             new RNFetchBlobPackage(),
             new RNCameraPackage(),
-            new SQLitePluginPackage()
+            new SQLitePluginPackage(),
       );
     }
 

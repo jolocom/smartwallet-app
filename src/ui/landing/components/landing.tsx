@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { ReactNode } from 'react'
+import I18n from 'src/locales/i18n';
 import { 
   Landing00,
   Landing01,
@@ -100,22 +100,22 @@ const styles = StyleSheet.create({
 const carouselInfo: Slide[] = [
   {
     svgImage: <Landing00 />,
-    title: 'Your Jolocom Wallet',
+    title: I18n.t('Your Jolocom Wallet'),
     infoText: 'Take back control of your digital self and protect your private data against unfair usage.'
   },
   {
     svgImage: <Landing01 height={'100%'} width={'100%'} />,
-    title: "It's easy",
+    title: I18n.t("It's easy"),
     infoText: 'Forget about long forms and registrations. Instantly access services without using your social media profiles.'
   },
   {
     svgImage: <Landing03 height={'100%'} width={'100%'} />,
-    title: 'Enhanced privacy',
+    title: I18n.t('Enhanced privacy'),
     infoText: 'Share only the information a service really needs. Protect your digital self against fraud.'
   },
   {
     svgImage: <Landing02 height={'100%'} width={'100%'} />,
-    title: 'Greater control',
+    title: I18n.t('Greater control'),
     infoText: 'Keep all your data with you in one place, available at any time. Track where you sign in to services.'
   }
 ]
@@ -186,7 +186,7 @@ export class LandingComponent extends React.Component<Props, State> {
               text: styles.buttonText 
             }}
             upperCase= { false }
-            text='Get started'
+            text={I18n.t('Get started')}
           />
         </Block>
       </Container>

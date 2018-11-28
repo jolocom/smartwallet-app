@@ -150,12 +150,15 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-splash-screen')
+    compile project(':react-native-languages')
+    compile project(':react-native-i18n')
     compile project(':react-native-vector-icons')
+    compile project(':react-native-splash-screen')
     compile project(':react-native-svg')
     compile project(':react-native-keychain')
     compile project(':react-native-fetch-blob')
     compile project(':react-native-camera')
+    compile project(':react-native-languages')
     implementation project(':react-native-svg')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-sqlite-storage')
