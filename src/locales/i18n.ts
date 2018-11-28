@@ -6,7 +6,7 @@ import nl from './nl';
 
 I18n.locale = RNLanguages.language;
 I18n.fallbacks = true;
-I18n.missingTranslation = scope => scope;
+I18n.missingTranslation = (scope : String) => '[TRANSLATE] ' + scope;
 
 I18n.translations = {
   de,
