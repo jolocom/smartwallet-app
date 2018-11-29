@@ -21,7 +21,7 @@ export class InteractionsComponent extends React.Component<Props> {
       <Container>
         <Block>
         <CenteredText
-          msg={ I18n.t('Coming Soon...') }
+          msg={ I18n.t('Coming Soon') + '...' }
           style={ styles.text }
         />
         </Block>

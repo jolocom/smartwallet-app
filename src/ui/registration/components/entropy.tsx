@@ -50,7 +50,7 @@ export const EntropyComponent : React.SFC<Props> = props => {
   const { progress, submitEntropy, addPoint } = props
 
   const msg = progress === 0 ?
-    I18n.t('For security purposes, we need some randomness.') + ' ' +
+    I18n.t('For security purposes, we need some randomness') + '. ' +
     I18n.t('Please tap the screen and draw on it randomly')
     : `${Math.trunc(progress * 100)} %`
 

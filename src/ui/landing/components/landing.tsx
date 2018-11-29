@@ -101,22 +101,25 @@ const carouselInfo: Slide[] = [
   {
     svgImage: <Landing00 />,
     title: I18n.t('Your Jolocom Wallet'),
-    infoText: I18n.t('Take back control of your digital self and protect your private data against unfair usage.')
+    infoText: I18n.t('Take back control of your digital self and protect your private data against unfair usage') + '.'
   },
   {
     svgImage: <Landing01 height={'100%'} width={'100%'} />,
     title: I18n.t("It's easy"),
-    infoText: I18n.t('Forget about long forms and registrations. Instantly access services without using your social media profiles.')
+    infoText: I18n.t('Forget about long forms and registrations') + '.'
+      + I18n.t('Instantly access services without using your social media profiles') + '.'
   },
   {
     svgImage: <Landing03 height={'100%'} width={'100%'} />,
     title: I18n.t('Enhanced privacy'),
-    infoText: I18n.t('Share only the information a service really needs. Protect your digital self against fraud.')
+    infoText: I18n.t('Share only the information a service really needs') + '.'
+      + I18n.t('Protect your digital self against fraud') + '.'
   },
   {
     svgImage: <Landing02 height={'100%'} width={'100%'} />,
     title: I18n.t('Greater control'),
-    infoText: I18n.t('Keep all your data with you in one place, available at any time. Track where you sign in to services.')
+    infoText: I18n.t('Keep all your data with you in one place, available at any time') + '.'
+      + I18n.t('Track where you sign in to services') + '.'
   }
 ]
 

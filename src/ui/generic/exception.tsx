@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 })
 
 export const ExceptionComponent: React.SFC<Props> = (props) => {
-  const errorText = I18n.t('There was an error with your request.')
+  const errorText = I18n.t('There was an error with your request') + '.'
 
   return(
     <Container style={ styles.containerStyle }>

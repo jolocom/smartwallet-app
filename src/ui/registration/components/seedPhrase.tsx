@@ -56,8 +56,8 @@ export const SeedPhrase : React.SFC<Props> = props => {
       <Block flex={ 0.1 }>
         <CenteredText
           style={ styles.sideNote }
-          msg={I18n.t('Write these words down on an analog and secure place.')
-            + '\n' + I18n.t('Without these words, you cannot access your wallet again.')
+          msg={I18n.t('Write these words down on an analog and secure place')
+            + '.\n' + I18n.t('Without these words, you cannot access your wallet again') + '.'
           }
         />
       </Block>
