@@ -94,7 +94,7 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
         <CenteredText
           style={ styles.infoPassword }
           msg={
-            I18n.t('This password will be stored in your keychain') + '.'
+            I18n.t('This password will be stored in your keychain') + '. '
             + I18n.t('After setting it, please make sure you have passcode enabled') + '.'
           }
         />
