@@ -5,6 +5,7 @@ import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard, CollapsedCredentialCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
 import { DecoratedClaims } from 'src/reducers/account'
+import I18n from 'src/locales/i18n';
 
 interface Props {
   handleInteraction?: (event: GestureResponderEvent) => void
@@ -60,13 +61,17 @@ export class CredentialCard extends React.Component<Props, State> {
     }
 
     return Object.keys(claimData).map(key => (
-      <ClaimCard key={key} primaryText={claimData[key]} secondaryText={prepareLabel(key)} />
+      <ClaimCard
+        key={key}
+        primaryText={ I18n.t(claimData[key]) }
+        secondaryText={ I18n.t(prepareLabel(key)) }
+      />
     ))
   }
 
   private renderCollapsedClaim = (credentialItem: DecoratedClaims) => (
     <CollapsedCredentialCard
-      title={credentialItem.credentialType}
+      title={ I18n.t(credentialItem.credentialType) }
       values={Object.keys(credentialItem.claimData).map(k => credentialItem.claimData[k])}
     />
   )

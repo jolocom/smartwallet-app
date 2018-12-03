@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { View, Text, StyleSheet, GestureResponderEvent, TextStyle, ViewStyle, RegisteredStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import I18n from 'src/locales/i18n';
 
 // TODO Custom text component with size, font, color
 // TODO Make whole card clickable as opposed to icon
@@ -56,9 +57,9 @@ interface EmptyClaimCardProps {
 export const PlaceholderClaimCard: React.SFC<EmptyClaimCardProps> = props => (
   <ClaimCard
     key={props.credentialType}
-    primaryText={<Text onPress={props.onEdit}>+ add</Text>}
+    primaryText={<Text onPress={props.onEdit}>{ I18n.t('+ add') }</Text>}
     primaryTextStyle={{ color: JolocomTheme.primaryColorPurple }}
-    secondaryText={<Text>{props.credentialType}</Text>}
+    secondaryText={<Text>{I18n.t(props.credentialType)}</Text>}
     secondaryTextStyle={{ opacity: 1 }}
   />
 )
@@ -94,7 +95,7 @@ export const ConsentAttributeCard: React.SFC<ConsentAttributeCardProps> = props 
 
   const renderCards = (values: string[]) => {
     if (!values.length) {
-      return <ClaimCard primaryText={'No local claims'} />
+      return <ClaimCard primaryText={ I18n.t('No local claims') } />
     }
 
     return values.map(value => <ClaimCard primaryText={value} containerStyle={{ marginBottom: 0 }} />)
@@ -102,7 +103,7 @@ export const ConsentAttributeCard: React.SFC<ConsentAttributeCardProps> = props 
 
   const { values, issuer, did, rightIcon, containerStyle } = props
   const { container, innerContainer, verificationStatus } = styles
-  const verificationSummary = did === issuer ? ' Self-signed' : `${issuer.substring(0, 25)}...`
+  const verificationSummary = did === issuer ? ' ' + I18n.t('Self-signed') : `${issuer.substring(0, 25)}...`
 
   return (
     <View style={[container, containerStyle]}>
@@ -127,9 +128,13 @@ interface CollapsedCredentialProps {
 
 export const CollapsedCredentialCard: React.SFC<CollapsedCredentialProps> = props => (
   <View>
-    <Text> {props.title} </Text>
+    <Text> {I18n.t(props.title)} </Text>
     {props.values.map((value, idx, arr) => (
-      <ClaimCard key={value} containerStyle={{ marginBottom: idx === arr.length - 1 ? '5%' : 0 }} primaryText={value} />
+      <ClaimCard
+        key={value}
+        containerStyle={{ marginBottom: idx === arr.length - 1 ? '5%' : 0 }}
+        primaryText={ I18n.t(value) }
+      />
     ))}
   </View>
 )

@@ -6,6 +6,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
+import I18n from 'src/locales/i18n';
 
 const navigationOptions = {
   header: null
@@ -21,8 +22,8 @@ export const HomeRoutes = TabNavigator(
     Claims: {
       screen: Claims,
       navigationOptions: {
-        tabBarLabel: 'All claims',
-        headerTitle: 'My identity',
+        tabBarLabel: I18n.t('All claims'),
+        headerTitle: I18n.t('My identity'),
         headerTitleStyle: {
           fontSize: JolocomTheme.headerFontSize,
           fontFamily: JolocomTheme.contentFontFamily,
@@ -35,8 +36,8 @@ export const HomeRoutes = TabNavigator(
     Interactions: {
       screen: Interactions,
       navigationOptions: {
-        tabBarLabel: 'Documents',
-        headerTitle: 'My identity',
+        tabBarLabel: I18n.t('Documents'),
+        headerTitle: I18n.t('My identity'),
         headerTitleStyle: {
           fontSize: JolocomTheme.headerFontSize,
           fontFamily: JolocomTheme.contentFontFamily,
@@ -81,7 +82,7 @@ export const Routes = StackNavigator({
   CredentialDialog: {
     screen: CredentialReceive,
     navigationOptions: {
-      headerTitle: 'Receiving new credential',
+      headerTitle: I18n.t('Receiving new credential'),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: '100',
@@ -94,7 +95,7 @@ export const Routes = StackNavigator({
   Consent: {
     screen: Consent,
     navigationOptions: {
-      headerTitle: 'Share claims',
+      headerTitle: I18n.t('Share claims'),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: '100',
