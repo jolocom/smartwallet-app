@@ -32,7 +32,7 @@ export class SignatureEntity {
   }
 
   static fromLinkedDataSignature(lds: ILinkedDataSignature) {
-    const json = lds.toJSON()
+    const json = lds.toJSON() as ILinkedDataSignatureAttrs
     return this.fromJSON(json)
   }
 }

@@ -16,12 +16,13 @@ interface ConnectProps {
   openClaimDetails: (claim: DecoratedClaims) => void
   did: string
   claims: ClaimsState
+  loading: boolean
 }
 
 interface Props extends ConnectProps {}
 
 interface State {
-  scanning: boolean,
+  scanning: boolean
   loading: boolean
 }
 
@@ -55,10 +56,9 @@ export class ClaimsContainer extends React.Component<Props, State> {
     if (this.state.scanning) {
       return <QRcodeScanner onScannerSuccess={this.onScannerSuccess} onScannerCancel={this.onScannerCancel} />
     }
-    if ( this.state.loading || this.props.claims.loading ) {
-      return (
-        <LoadingSpinner />
-      )
+    
+    if (this.state.loading || this.props.loading || this.props.claims.loading) {
+      return <LoadingSpinner />
     }
     return (
       <View style={{ flex: 1 }}>
@@ -79,7 +79,8 @@ export class ClaimsContainer extends React.Component<Props, State> {
 const mapStateToProps = (state: any) => {
   return {
     did: state.account.did.toJS().did,
-    claims: state.account.claims.toJS()
+    claims: state.account.claims.toJS(),
+    loading: state.account.loading.toJS().loading
   }
 }
 

@@ -29,6 +29,7 @@ Object {
   "activeCredentialRequest": Object {
     "availableCredentials": Array [],
     "callbackURL": "",
+    "requestJWT": "",
     "requester": "",
   },
 }

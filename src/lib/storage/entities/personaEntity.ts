@@ -1,12 +1,9 @@
-import { PrimaryColumn, ManyToOne, Entity } from 'typeorm/browser'
-import { DerivedKeyEntity } from 'src/lib/storage/entities'
-import { Type } from 'class-transformer'
+import { PrimaryColumn, Entity, Column } from 'typeorm/browser'
 
 @Entity('personas')
-export class PersonaEntity {
-  @Type(() => DerivedKeyEntity)
-  @ManyToOne(type => DerivedKeyEntity, { cascade: true })
-  controllingKey!: DerivedKeyEntity
+export class PersonaEntity {  
+  @Column()
+  controllingKeyPath!: string
 
   @PrimaryColumn({ length: 75 })
   did!: string
