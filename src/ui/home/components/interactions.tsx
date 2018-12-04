@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
+import I18n from 'src/locales/i18n';
 
 interface Props {
 }
@@ -20,7 +21,7 @@ export class InteractionsComponent extends React.Component<Props> {
       <Container>
         <Block>
         <CenteredText
-          msg='Coming Soon...' 
+          msg={ I18n.t('Coming Soon') + '...' }
           style={ styles.text }
         />
         </Block>
