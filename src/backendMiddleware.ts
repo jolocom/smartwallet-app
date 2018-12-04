@@ -4,8 +4,8 @@ import { EthereumLib, EthereumLibInterface } from 'src/lib/ethereum'
 import { EncryptionLib, EncryptionLibInterface } from 'src/lib/crypto'
 import { Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
+import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider';
 
-// TODO Type config better
 export class BackendMiddleware {
   identityWallet!: IdentityWallet
   ethereumLib: EthereumLibInterface
@@ -20,8 +20,12 @@ export class BackendMiddleware {
     this.keyChainLib = new KeyChain()
   }
 
-  async setIdentityWallet(privKey: Buffer): Promise<void> {
-    const registry = JolocomLib.registry.jolocom.create()
-    this.identityWallet = await registry.authenticate(privKey)
+  async setIdentityWallet(userVault: SoftwareKeyProvider, pass: string): Promise<void> {
+    const { jolocomIdentityKey } = JolocomLib.KeyTypes
+    const registry = JolocomLib.registries.jolocom.create()
+    this.identityWallet = await registry.authenticate(userVault, {
+      encryptionPass: pass,
+      derivationPath: jolocomIdentityKey
+    })
   }
 }

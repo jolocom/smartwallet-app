@@ -2,7 +2,6 @@
 
 exports[`landing container correctly connects to redux 1`] = `
 Object {
-  "checkIfAccountExists": [Function],
   "loading": true,
   "startRegistration": [Function],
   "store": Object {

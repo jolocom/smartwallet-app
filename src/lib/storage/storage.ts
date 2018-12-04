@@ -2,7 +2,6 @@ import { createConnection, ConnectionOptions, Connection } from 'typeorm/browser
 import { plainToClass } from 'class-transformer'
 import {
   PersonaEntity,
-  DerivedKeyEntity,
   MasterKeyEntity,
   VerifiableCredentialEntity,
   SignatureEntity,
@@ -12,17 +11,10 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 
 interface PersonaAttributes {
   did: string
-  controllingKey: DerivedKeyAttributes
+  controllingKeyPath: string
 }
 
-interface DerivedKeyAttributes {
-  encryptedWif: string
-  path: string
-  entropySource: MasterKeyAttributes
-  keyType: string
-}
-
-interface MasterKeyAttributes {
+interface EncryptedSeedAttributes {
   encryptedEntropy: string
   timestamp: number
 }
@@ -40,15 +32,15 @@ export class Storage {
   store = {
     verifiableCredential: this.storeVClaim.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
-    masterKey: this.storeMasterKeyFromJSON.bind(this),
-    derivedKey: this.storeDerKeyFromJSON.bind(this)
+    encryptedSeed: this.storeEncryptedSeed.bind(this)
   }
 
   get = {
     persona: this.getPersonas.bind(this),
     verifiableCredential: this.getVCredential.bind(this),
     attributesByType: this.getAttributesByType.bind(this),
-    vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this)
+    vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
+    encryptedSeed: this.getEncryptedSeed.bind(this)
   }
 
   delete = {
@@ -65,12 +57,10 @@ export class Storage {
     }
   }
 
+  // TODO: refactor needed on multiple personas
   private async getPersonas(query?: object): Promise<PersonaEntity[]> {
     await this.createConnectionIfNeeded()
-    return this.connection.manager.find(PersonaEntity, {
-      where: query,
-      relations: ['controllingKey']
-    })
+    return this.connection.manager.find(PersonaEntity)
   }
 
   private async getVCredential(query?: object): Promise<SignedCredential[]> {
@@ -136,29 +126,29 @@ export class Storage {
     return entities.map(e => e.toVerifiableCredential())
   }
 
+  private async getEncryptedSeed(): Promise<string> {
+    await this.createConnectionIfNeeded()
+    const masterKeyEntity = await this.connection.manager.find(MasterKeyEntity)
+    return masterKeyEntity[0].encryptedEntropy
+  }
+
   private async storePersonaFromJSON(args: PersonaAttributes): Promise<void> {
     await this.createConnectionIfNeeded()
     const persona = plainToClass(PersonaEntity, args)
     await this.connection.manager.save(persona)
   }
-
-  private async storeMasterKeyFromJSON(args: MasterKeyAttributes): Promise<void> {
+  
+  private async storeEncryptedSeed(args: EncryptedSeedAttributes): Promise<void> {
     await this.createConnectionIfNeeded()
-    const masterKey = plainToClass(MasterKeyEntity, args)
-    await this.connection.manager.save(masterKey)
-  }
-
-  private async storeDerKeyFromJSON(args: DerivedKeyAttributes): Promise<void> {
-    await this.createConnectionIfNeeded()
-    const derivedKey = plainToClass(DerivedKeyEntity, args)
-    await this.connection.manager.save(derivedKey)
+    const encryptedSeed = plainToClass(MasterKeyEntity, args)
+    await this.connection.manager.save(encryptedSeed)
   }
 
   private async storeVClaim(vCred: SignedCredential): Promise<void> {
     await this.createConnectionIfNeeded()
     const verifiableCredential = VerifiableCredentialEntity.fromVerifiableCredential(vCred)
 
-    const signature = SignatureEntity.fromLinkedDataSignature(vCred.getProofSection())
+    const signature = SignatureEntity.fromLinkedDataSignature(vCred.proof)
 
     const claims = CredentialEntity.fromVerifiableCredential(vCred)
     claims.forEach(claim => (claim.verifiableCredential = verifiableCredential))
