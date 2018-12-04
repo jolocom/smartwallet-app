@@ -1,24 +1,23 @@
 import { AnyAction } from 'redux'
 
-export interface StateAttributeSummary {
-  value: string
-  verifications: StateVerificationSummary[]
-}
-
 export interface StateVerificationSummary {
   id: string
   issuer: string
-  expires: string | undefined
+  selfSigned: boolean
+  expires: string | undefined | Date
 }
+
 export interface StateTypeSummary {
-  type: string[]
-  credentials: StateAttributeSummary[]
+  type: string
+  values: string[]
+  verifications: StateVerificationSummary[]
 }
 
 export interface StateCredentialRequestSummary {
   readonly callbackURL: string
   readonly requester: string
-  readonly request: StateTypeSummary[]
+  readonly availableCredentials: StateTypeSummary[]
+  readonly requestJWT: string
 }
 
 export interface SsoState {
@@ -29,7 +28,8 @@ const initialState: SsoState = {
   activeCredentialRequest: {
     requester: '',
     callbackURL: '',
-    request: []
+    availableCredentials: [],
+    requestJWT: ''
   }
 }
 

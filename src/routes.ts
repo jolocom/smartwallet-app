@@ -1,10 +1,12 @@
-import { StackNavigator, TabNavigator, TabBarTop} from 'react-navigation'
+import { StackNavigator, TabBarTop, TabNavigator } from 'react-navigation'
 import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
+import { CredentialReceive } from 'src/ui/home'
+import I18n from 'src/locales/i18n';
 
 const navigationOptions = {
   header: null
@@ -20,8 +22,8 @@ export const HomeRoutes = TabNavigator(
     Claims: {
       screen: Claims,
       navigationOptions: {
-        tabBarLabel: 'All claims',
-        headerTitle: 'My identity',
+        tabBarLabel: I18n.t('All claims'),
+        headerTitle: I18n.t('My identity'),
         headerTitleStyle: {
           fontSize: JolocomTheme.headerFontSize,
           fontFamily: JolocomTheme.contentFontFamily,
@@ -34,15 +36,15 @@ export const HomeRoutes = TabNavigator(
     Interactions: {
       screen: Interactions,
       navigationOptions: {
-        tabBarLabel: 'Documents',
-        headerTitle: 'My identity',
+        tabBarLabel: I18n.t('Documents'),
+        headerTitle: I18n.t('My identity'),
         headerTitleStyle: {
           fontSize: JolocomTheme.headerFontSize,
           fontFamily: JolocomTheme.contentFontFamily,
           fontWeight: '300'
         },
         headerStyle: {
-          backgroundColor: JolocomTheme.primaryColorBlack,
+          backgroundColor: JolocomTheme.primaryColorBlack
         },
         headerTintColor: JolocomTheme.primaryColorWhite
       }
@@ -72,24 +74,36 @@ export const HomeRoutes = TabNavigator(
 
 export const Routes = StackNavigator({
   Landing: { screen: Landing, navigationOptions },
-  Entropy: { screen: Entropy, navigationOptions},
+  Entropy: { screen: Entropy, navigationOptions },
   Loading: { screen: Loading, navigationOptions },
   PasswordEntry: { screen: PasswordEntry, navigationOptions },
   SeedPhrase: { screen: SeedPhrase, navigationOptions },
   Home: { screen: HomeRoutes },
-  Consent: { screen: Consent,
-    navigationOptions:{
-      headerTitle: 'Share claims',
+  CredentialDialog: {
+    screen: CredentialReceive,
+    navigationOptions: {
+      headerTitle: I18n.t('Receiving new credential'),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: "100",
+        fontWeight: '100',
         fontSize: JolocomTheme.headerFontSize
       },
-      headerStyle: {
-        backgroundColor: JolocomTheme.primaryColorBlack,
-      },
+      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
       headerTintColor: JolocomTheme.primaryColorWhite
-    } 
+    }
+  },
+  Consent: {
+    screen: Consent,
+    navigationOptions: {
+      headerTitle: I18n.t('Share claims'),
+      headerTitleStyle: {
+        fontFamily: JolocomTheme.contentFontFamily,
+        fontWeight: '100',
+        fontSize: JolocomTheme.headerFontSize
+      },
+      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
+      headerTintColor: JolocomTheme.primaryColorWhite
+    }
   },
   Exception: { screen: Exception, navigationOptions },
   ClaimDetails: { screen: ClaimDetails, navigationOptions: navOptScreenWCancel }

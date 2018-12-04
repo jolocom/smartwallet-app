@@ -2,18 +2,16 @@ import { combineReducers } from 'redux'
 import { did } from 'src/reducers/account/did'
 import { claims } from 'src/reducers/account/claims'
 import { loading } from 'src/reducers/account/loading'
-
-
-export interface Claim {
-  id: string
-  name: string
-  value: any
-}
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 
 export interface DecoratedClaims {
-  displayName: string
-  type: string[]
-  claims: Claim[]
+  credentialType: string
+  claimData: ClaimEntry
+  id: string
+  issuer: string
+  subject: string
+  expires?: Date
 }
 
 export interface CategorizedClaims {
@@ -23,7 +21,8 @@ export interface CategorizedClaims {
 export interface ClaimsState {
   readonly loading: boolean
   readonly selected: DecoratedClaims
-  readonly claims: CategorizedClaims
+  readonly decoratedCredentials: CategorizedClaims
+  readonly pendingExternal: SignedCredential[]
 }
 
 export interface DidState {
@@ -34,6 +33,7 @@ export interface LoadingState {
   readonly loading: boolean
 }
 
+// TODO avoid state.account.did.did access patterns
 export interface AccountState {
   did: DidState,
   claims: ClaimsState,

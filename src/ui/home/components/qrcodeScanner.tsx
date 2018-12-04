@@ -3,15 +3,16 @@ import { Text, StyleSheet, Platform, BackHandler } from 'react-native'
 import { Container } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
+import { QrScanEvent } from '../containers/types'
+import I18n from 'src/locales/i18n';
 const QRScanner = require('react-native-qrcode-scanner').default
 
-// TODO Typings on E, Event is not enough
 interface Props {
-  onScannerSuccess: (e : Event) => void
+  onScannerSuccess: (e: QrScanEvent) => void
   onScannerCancel: () => void
 }
 
-interface State {}
+interface State { }
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -19,15 +20,17 @@ const styles = StyleSheet.create({
   }
 })
 
-// TODO The Listener is never removed it seems
 export class QRcodeScanner extends React.Component<Props, State> {
   componentDidMount() {
-    if (Platform.OS === "android") {
-      // TODO Return true?
+    if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', () => {
         this.props.onScannerCancel()
       })
     }
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.props.onScannerCancel)
   }
 
   render() {
@@ -35,17 +38,15 @@ export class QRcodeScanner extends React.Component<Props, State> {
     return (
       <Container>
         <QRScanner
-          onRead={(e : Event) => onScannerSuccess(e) }
-          topContent={
-            <Text>You can scan the qr code now!</Text>
-          }
-          bottomContent={
+          onRead={(e: QrScanEvent) => onScannerSuccess(e)}
+          topContent={<Text>{ I18n.t('You can scan the qr code now!') }</Text>}
+          bottomContent={(
             <Button
-              onPress={ () => onScannerCancel() }
+              onPress={() => onScannerCancel()}
               style={{ text: styles.buttonText }}
-              text="Cancel"
+              text={ I18n.t("Cancel")}
             />
-          }
+          )}
         />
       </Container>
     )

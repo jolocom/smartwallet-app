@@ -1,9 +1,10 @@
 {
-  "name": "smartwallet",
+  "name": "jolocomwallet",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
     "@types/enzyme": "^3.1.9",
+    "@types/i18n-js": "^3.0.1",
     "@types/jest": "^22.0.0",
     "@types/node": "^10.0.6",
     "@types/react": "^16.0.40",
@@ -40,7 +41,7 @@
     "tslib": "^1.7.1",
     "tslint": "^5.9.1",
     "typeorm": "^0.2.5",
-    "typescript": "^2.8.3",
+    "typescript": "^3.0.1",
     "yarn": "^1.5.1"
   },
   "scripts": {
@@ -90,10 +91,12 @@
     }
   },
   "dependencies": {
+    "bip39": "^2.5.0",
     "browser-ipfs": "^0.0.6",
     "crypto-js": "^3.1.9-1",
     "ethereumjs-wallet": "^0.6.0",
-    "jolocom-lib": "0.7.23",
+    "jolocom-lib": "^2.1.1",
+    "i18n-js": "^3.1.0",
     "material-colors": "^1.2.5",
     "object.assign": "^4.1.0",
     "react": "16.2.0",
@@ -102,6 +105,7 @@
     "react-native-fetch-blob": "^0.10.8",
     "react-native-indicator": "^0.7.0",
     "react-native-keychain": "^3.0.0-rc.3",
+    "react-native-languages": "^3.0.1",
     "react-native-material-textfield": "^0.12.0",
     "react-native-material-ui": "^1.22.2",
     "react-native-md-textinput": "^2.0.4",

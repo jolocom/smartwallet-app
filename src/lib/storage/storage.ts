@@ -1,30 +1,28 @@
 import { createConnection, ConnectionOptions, Connection } from 'typeorm/browser'
 import { plainToClass } from 'class-transformer'
-import { 
+import {
   PersonaEntity,
-  DerivedKeyEntity,
   MasterKeyEntity,
   VerifiableCredentialEntity,
   SignatureEntity,
   CredentialEntity
 } from 'src/lib/storage/entities'
-import { VerifiableCredential } from 'jolocom-lib/js/credentials/verifiableCredential'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 interface PersonaAttributes {
   did: string
-  controllingKey: DerivedKeyAttributes
+  controllingKeyPath: string
 }
 
-interface DerivedKeyAttributes {
-  encryptedWif: string
-  path: string
-  entropySource: MasterKeyAttributes
-  keyType: string
-}
-
-interface MasterKeyAttributes {
+interface EncryptedSeedAttributes {
   encryptedEntropy: string
   timestamp: number
+}
+
+interface ModifiedCredentialEntity {
+  propertyName: string
+  propertyValue: string[]
+  verifiableCredential: VerifiableCredentialEntity
 }
 
 export class Storage {
@@ -34,15 +32,15 @@ export class Storage {
   store = {
     verifiableCredential: this.storeVClaim.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
-    masterKey: this.storeMasterKeyFromJSON.bind(this),
-    derivedKey: this.storeDerKeyFromJSON.bind(this)
+    encryptedSeed: this.storeEncryptedSeed.bind(this)
   }
 
   get = {
     persona: this.getPersonas.bind(this),
     verifiableCredential: this.getVCredential.bind(this),
-    attributesByType: this.getAttributesOfType.bind(this),
-    vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this)
+    attributesByType: this.getAttributesByType.bind(this),
+    vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
+    encryptedSeed: this.getEncryptedSeed.bind(this)
   }
 
   delete = {
@@ -53,21 +51,19 @@ export class Storage {
     this.config = config
   }
 
-  private async createConnectionIfNeeded() : Promise<void> {
-    if (!this.connection) { 
+  private async createConnectionIfNeeded(): Promise<void> {
+    if (!this.connection) {
       this.connection = await createConnection(this.config)
     }
   }
 
-  private async getPersonas(query?: object) : Promise<PersonaEntity[]> {
+  // TODO: refactor needed on multiple personas
+  private async getPersonas(query?: object): Promise<PersonaEntity[]> {
     await this.createConnectionIfNeeded()
-    return this.connection.manager.find(PersonaEntity, {
-      where: query,
-      relations: ['controllingKey']
-    })
+    return this.connection.manager.find(PersonaEntity)
   }
 
-  private async getVCredential(query?: object) : Promise<VerifiableCredential[]> {
+  private async getVCredential(query?: object): Promise<SignedCredential[]> {
     await this.createConnectionIfNeeded()
     const entities = await this.connection.manager.find(VerifiableCredentialEntity, {
       where: query,
@@ -77,21 +73,46 @@ export class Storage {
     return entities.map(e => e.toVerifiableCredential())
   }
 
-  private async getAttributesOfType(type: string[]): Promise<string[]> {
+  private async getAttributesByType(type: string[]) {
     await this.createConnectionIfNeeded()
     const localAttributes = await this.connection
       .getRepository(CredentialEntity)
       .createQueryBuilder('credential')
       .leftJoinAndSelect('credential.verifiableCredential', 'verifiableCredential')
       .where('verifiableCredential.type = :type', { type })
-      .groupBy('encryptedValue')
-      .select(['credential.encryptedValue'])
       .getMany()
 
-    return localAttributes.map(attribute => attribute.encryptedValue)
+    const results = this.groupAttributesByCredentialId(localAttributes).map(entry => ({
+      verification: entry.verifiableCredential.id,
+      values: entry.propertyValue,
+      fieldName: entry.propertyName
+    }))
+
+    return { type, results }
   }
 
-  private async getVCredentialsForAttribute(attribute: string) : Promise<VerifiableCredential[]> {
+  // TODO rework
+  private groupAttributesByCredentialId(attributes: CredentialEntity[]): ModifiedCredentialEntity[] {
+    // Convert values to arrays for easier concatination later
+    const modifiedAttributes = attributes.map(attr => ({ ...attr, propertyValue: [attr.propertyValue] }))
+
+    // Helper function
+    const findByCredId = (arrToSearch: ModifiedCredentialEntity[], value: ModifiedCredentialEntity) =>
+      arrToSearch.findIndex(entry => entry.verifiableCredential.id === value.verifiableCredential.id)
+
+    return modifiedAttributes.reduce((acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity) => {
+      const matchingIndex = findByCredId(acc, curr)
+
+      if (matchingIndex >= 0) {
+        acc[matchingIndex].propertyValue = [...acc[matchingIndex].propertyValue, ...curr.propertyValue]
+        return acc
+      } else {
+        return [...acc, curr]
+      }
+    }, [])
+  }
+
+  private async getVCredentialsForAttribute(attribute: string): Promise<SignedCredential[]> {
     await this.createConnectionIfNeeded()
     const entities = await this.connection
       .getRepository(VerifiableCredentialEntity)
@@ -99,59 +120,61 @@ export class Storage {
       .leftJoinAndSelect('verifiableCredential.claim', 'claim')
       .leftJoinAndSelect('verifiableCredential.proof', 'proof')
       .leftJoinAndSelect('verifiableCredential.subject', 'subject')
-      .where('claim.encryptedValue = :attribute', { attribute })
+      .where('claim.propertyValue = :attribute', { attribute })
       .getMany()
 
     return entities.map(e => e.toVerifiableCredential())
   }
 
-  private async storePersonaFromJSON(args: PersonaAttributes) : Promise<void> {
+  private async getEncryptedSeed(): Promise<string> {
+    await this.createConnectionIfNeeded()
+    const masterKeyEntity = await this.connection.manager.find(MasterKeyEntity)
+    return masterKeyEntity[0].encryptedEntropy
+  }
+
+  private async storePersonaFromJSON(args: PersonaAttributes): Promise<void> {
     await this.createConnectionIfNeeded()
     const persona = plainToClass(PersonaEntity, args)
     await this.connection.manager.save(persona)
   }
-
-  private async storeMasterKeyFromJSON(args: MasterKeyAttributes) : Promise<void> {
+  
+  private async storeEncryptedSeed(args: EncryptedSeedAttributes): Promise<void> {
     await this.createConnectionIfNeeded()
-    const masterKey = plainToClass(MasterKeyEntity, args)
-    await this.connection.manager.save(masterKey)
+    const encryptedSeed = plainToClass(MasterKeyEntity, args)
+    await this.connection.manager.save(encryptedSeed)
   }
 
-  private async storeDerKeyFromJSON(args: DerivedKeyAttributes) : Promise<void> {
+  private async storeVClaim(vCred: SignedCredential): Promise<void> {
     await this.createConnectionIfNeeded()
-    const derivedKey = plainToClass(DerivedKeyEntity, args)
-    await this.connection.manager.save(derivedKey)
-  }
+    const verifiableCredential = VerifiableCredentialEntity.fromVerifiableCredential(vCred)
 
-  private async storeVClaim(vCred: VerifiableCredential) : Promise<void> {
-    await this.createConnectionIfNeeded()
-    const verifiableCredential = VerifiableCredentialEntity.fromVeriableCredential(vCred)
-    const signature = SignatureEntity.fromLinkedDataSignature(vCred.getProofSection())
-    const credential = CredentialEntity.fromVerifiableCredential(vCred)
+    const signature = SignatureEntity.fromLinkedDataSignature(vCred.proof)
+
+    const claims = CredentialEntity.fromVerifiableCredential(vCred)
+    claims.forEach(claim => (claim.verifiableCredential = verifiableCredential))
 
     signature.verifiableCredential = verifiableCredential
-    credential.verifiableCredential = verifiableCredential
 
     verifiableCredential.proof = [signature]
-    verifiableCredential.claim = [credential]
+    verifiableCredential.claim = claims
 
     await this.connection.manager.save(verifiableCredential)
   }
 
-  private async deleteVCred(id: string) : Promise<void> {
+  private async deleteVCred(id: string): Promise<void> {
     await this.createConnectionIfNeeded()
     await this.connection.manager
       .createQueryBuilder()
       .delete()
       .from(CredentialEntity)
-      .where('verifiableCredential = :id', { id: id})
+      .where('verifiableCredential = :id', { id: id })
       .execute()
 
     await this.connection.manager
       .createQueryBuilder()
       .delete()
       .from(SignatureEntity)
-      .where('verifiableCredential = :id', { id: id})
+      .where('verifiableCredential = :id', { id: id })
       .delete()
       .execute()
 
@@ -159,7 +182,7 @@ export class Storage {
       .createQueryBuilder()
       .delete()
       .from(VerifiableCredentialEntity)
-      .where('id = :id', { id: id})
+      .where('id = :id', { id: id })
       .execute()
   }
 }

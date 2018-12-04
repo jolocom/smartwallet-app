@@ -1,67 +1,40 @@
 import React from 'react'
-import { Text, StyleSheet, ScrollView } from 'react-native'
-import { Button, } from 'react-native-material-ui'
+import { Text, ScrollView, TextStyle, View } from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
-import { AttributeSummary } from 'src/ui/sso/components/attributeSelectionSection'
-import { areCredTypesEqual } from 'src/lib/util'
+import { IconToggle } from 'react-native-material-ui'
+import { getCredentialIconByType } from 'src/resources/util'
+import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
+import { ConsentAttributeCard, HeaderSection } from './claimCard'
+import I18n from 'src/locales/i18n';
 
 interface Props {
+  did: string
   requester: string
-  requestedCredentials: StateTypeSummary[]
   callbackURL: string
+  availableCredentials: StateTypeSummary[]
   handleSubmitClaims: (credentials: StateVerificationSummary[]) => void
   handleDenySubmit: () => void
 }
 
 interface State {
   pending: boolean
-  requestedCredentials: Array<{
-    type: string[]
-    selectedCredential: StateVerificationSummary | undefined
-  }>
+  selectedCredentials: {
+    [type: string]: StateVerificationSummary | undefined
+  }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   serviceTitle: {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.headerFontSize,
     color: JolocomTheme.primaryColorBlack,
     fontWeight: '100'
-  },
+  } as TextStyle,
   serviceMetadata: {
     ...JolocomTheme.textStyles.light.labelDisplayField,
     fontFamily: JolocomTheme.contentFontFamily
-  },
-  buttonBlock: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    backgroundColor: JolocomTheme.primaryColorWhite
-  },
-  denyShareText:{
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.primaryColorPurple,
-    fontWeight: '100'
-  },
-  shareClaimsContainer: {
-    backgroundColor: JolocomTheme.primaryColorPurple
-  },
-  shareClaimsText:{
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.primaryColorSand,
-    fontWeight: '100'
-  },
-  disabledShareClaimsContainer: {
-    backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
-  },
-  disabledShareClaimsText:{
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.disabledButtonTextGrey,
-    fontWeight: '100'
   },
   fixedText: {
     fontFamily: JolocomTheme.contentFontFamily,
@@ -69,102 +42,130 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorBlack,
     padding: '5%'
   },
-})
+  claimCardText: {
+    primaryText: {
+      fontSize: 17,
+      opacity: 0.4
+    },
+    secondaryText: {
+      fontSize: JolocomTheme.headerFontSize,
+      opacity: 1
+    }
+  }
+}
 
 export class ConsentComponent extends React.Component<Props, State> {
   state: State = {
     pending: false,
-    requestedCredentials: this.props.requestedCredentials.map(cred => ({
-      type: cred.type, 
-      selectedCredential: undefined
-    })),
+    selectedCredentials: this.props.availableCredentials.reduce((acc, curr) => ({ ...acc, [curr.type]: undefined }), {})
   }
 
-  private handleCredentialSelection(type: string[], selectedCredential: StateVerificationSummary) {
-    const newSelectionsState = this.state.requestedCredentials.map(credential => {
-      if (areCredTypesEqual(credential.type, type)) {
-        return {
-          type,
-          selectedCredential
-        }
-      }
-      return credential
-    })
-
-    this.setState({requestedCredentials: newSelectionsState})
+  private handleAttributeSelect(type: string, selectedCredential: StateVerificationSummary) {
+    const selected = this.state.selectedCredentials[type]
+    if (selected && selected.id === selectedCredential.id) {
+      this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: undefined } })
+    } else {
+      this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: selectedCredential } })
+    }
   }
 
   private handleSubmitClaims = () => {
-    const credentials: StateVerificationSummary[] = []
-    this.state.requestedCredentials.forEach(request => {
-      if (request.selectedCredential) {
-        credentials.push(request.selectedCredential)
-      }
-    })
+    const { selectedCredentials } = this.state
+    const credentials = Object.keys(selectedCredentials).map(key => selectedCredentials[key])
     this.setState({ pending: true })
-    this.props.handleSubmitClaims(credentials)
+    this.props.handleSubmitClaims(credentials as StateVerificationSummary[])
   }
 
-  private renderButtons () {
-    const { handleDenySubmit } = this.props
-    const { requestedCredentials } = this.state
-    const submitAllowed = requestedCredentials.every(requestedCred => !!requestedCred.selectedCredential)
+  private renderButtons() {
+    const { selectedCredentials } = this.state
+
+    const submitAllowed = Object.keys(selectedCredentials).every(key => selectedCredentials[key] !== undefined)
+    const buttonDisabled = !submitAllowed || this.state.pending
 
     return (
-      <Block style={ styles.buttonBlock } flex={0.1}>
-        <Button
-          onPress={ handleDenySubmit }
-          style={{ text: styles.denyShareText }}
-          upperCase={ false }
-          text='Deny'
-        />
-        <Button
-          disabled= { !submitAllowed || this.state.pending}
-          onPress={ this.handleSubmitClaims }
-          style={ submitAllowed && !this.state.pending ? 
-            { 
-              container: styles.shareClaimsContainer, 
-              text: styles.shareClaimsText 
-            } : {
-              container: styles.disabledShareClaimsContainer,
-              text:styles.disabledShareClaimsText
-            }}
-          upperCase= { false }
-          text='Share claims'
-        />
-      </Block>
-    ) 
+      <ButtonSection
+        disabled={buttonDisabled}
+        confirmText={ I18n.t('Share claims') }
+        denyText={ I18n.t('Deny') }
+        handleConfirm={() => this.handleSubmitClaims()}
+        handleDeny={() => this.props.handleDenySubmit()}
+      />
+    )
   }
 
   private renderFirstSection() {
-    return <Block flex={0.4} >
-      <Block flex={0.1}>
-        {null}
-      </Block>
+    return (
+      <Block flex={0.4}>
+        <View flex={0.1} />
 
-      <Block flex={0.4} style={{backgroundColor: 'white'}}>
-        <Text style={styles.serviceTitle}> {this.props.requester.substring(0,25)}... </Text>
-        <Text style={styles.serviceMetadata}> {this.props.callbackURL.substring(0,25)}... </Text>
-      </Block>
+        <Block flex={0.4} style={{ backgroundColor: 'white' }}>
+          <Text style={styles.serviceTitle}> {`${this.props.requester.substring(0, 25)}...`} </Text>
+          <Text style={styles.serviceMetadata}> {`${this.props.callbackURL.substring(0, 25)}...`} </Text>
+        </Block>
 
-      <Block flex={0.5}>
-        <Text style={ styles.fixedText }>
-          This service is asking you to share the following claims:
-        </Text>
+        <Block flex={0.5}>
+          <Text style={styles.fixedText}>
+            { I18n.t('This service is asking you to share the following claims') }:
+          </Text>
+        </Block>
       </Block>
-    </Block>
+    )
+  }
+
+  private renderRightIcon(selected: boolean, entry: StateTypeSummary) {
+    const checkboxColor = selected ? JolocomTheme.primaryColorPurple : JolocomTheme.disabledButtonBackgroundGrey
+    const { type, verifications } = entry
+
+    return (
+      <IconToggle
+        name={selected ? 'check-circle' : 'fiber-manual-record'}
+        onPress={() => this.handleAttributeSelect(type, verifications[0])}
+        color={checkboxColor}
+      />
+    )
+  }
+
+  private renderLeftIcon(type: string) {
+    return getCredentialIconByType(type)
   }
 
   private renderSelectionSections(sections: StateTypeSummary[]) {
-    return sections.map(section => 
-      <AttributeSummary
-        key={section.type.toString()}
-        attributeType={section.type}
-        attributes={section.credentials}
-        handleAttributeSelection={(type: string[], credential: StateVerificationSummary) => 
-          this.handleCredentialSelection(type, credential)
-        }
-      />
+    const groupedByType = sections.reduce<{ [key: string]: StateTypeSummary[] }>(
+      (acc, current) =>
+        acc[current.type]
+          ? { ...acc, [current.type]: [...acc[current.type], current] }
+          : { ...acc, [current.type]: [current] },
+      {}
+    )
+
+    return Object.keys(groupedByType).map(sectionType => (
+      <View>{groupedByType[sectionType].map((entry, idx, arr) => this.renderCredentialCards(entry, idx, arr))}</View>
+    ))
+  }
+
+  private renderCredentialCards(entry: StateTypeSummary, idx: number, arr: StateTypeSummary[]) {
+    const isFirst = idx === 0
+    const isLast = idx === arr.length - 1
+    const { type, values, verifications } = entry
+    const currentlySelected = this.state.selectedCredentials[type]
+    const isSelected = currentlySelected && currentlySelected.id === verifications[0].id
+    const containsData = entry.values.length > 0
+    const headerSection = isFirst ? (
+      <HeaderSection containerStyle={{ paddingTop: '5%' }} title={`${type}:`} leftIcon={this.renderLeftIcon(type)} />
+    ) : null
+
+    return (
+      <View>
+        {headerSection}
+        <ConsentAttributeCard
+          containerStyle={{ paddingLeft: '20%' }}
+          split={isLast}
+          rightIcon={containsData ? this.renderRightIcon(!!isSelected, entry) : null}
+          did={this.props.did}
+          values={values}
+          issuer={verifications.length ? verifications[0].issuer : ''}
+        />
+      </View>
     )
   }
 
@@ -172,13 +173,13 @@ export class ConsentComponent extends React.Component<Props, State> {
   render() {
     return (
       <Container style={{ padding: 0 }}>
-        { this.renderFirstSection() }
+        {this.renderFirstSection()}
         <Block flex={0.5}>
-          <ScrollView style={{width: '100%'}}>
-            { this.renderSelectionSections(this.props.requestedCredentials) }
+          <ScrollView style={{ width: '100%' }}>
+            {this.renderSelectionSections(this.props.availableCredentials)}
           </ScrollView>
         </Block>
-        { this.renderButtons() }
+        {this.renderButtons()}
       </Container>
     )
   }

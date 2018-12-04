@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navigation action creators handleDeepLink should not atttempt to parse if route was not correct 1`] = `
+Array [
+  Object {
+    "type": "SET_LOADING",
+    "value": true,
+  },
+]
+`;

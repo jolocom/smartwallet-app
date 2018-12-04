@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextInputField component matches the snapshot on render 1`] = `
+<Component
+  style={
+    Object {
+      "height": 72,
+      "width": "80%",
+    }
+  }
+>
+  <TextField
+    activeLineWidth={2}
+    animationDuration={225}
+    autoCapitalize="sentences"
+    baseColor="rgba(0, 0, 0, .38)"
+    disableFullscreenUI={true}
+    disabled={false}
+    disabledLineType="dotted"
+    disabledLineWidth={1}
+    editable={true}
+    errorColor="rgb(213, 0, 0)"
+    fontSize={16}
+    inputContainerPadding={8}
+    label=""
+    labelFontSize={12}
+    labelHeight={32}
+    labelPadding={4}
+    labelTextStyle={
+      Object {
+        "color": "grey",
+        "fontFamily": "TT Commons",
+      }
+    }
+    lineWidth={0.5}
+    onBlur={[Function]}
+    onChangeText={[Function]}
+    onFocus={[Function]}
+    style={
+      Object {
+        "fontFamily": "TT Commons",
+      }
+    }
+    textColor="black"
+    tintColor="#942f51"
+    titleFontSize={12}
+    underlineColorAndroid="transparent"
+    value="test@test.com"
+  />
+</Component>
+`;

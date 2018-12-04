@@ -2,6 +2,10 @@
 
 Jolocom SmartWallet - An application to manage your digital identity.
 
+Interested in our vision? Take a look at our [whitepaper](https://jolocom.io/wp-content/uploads/2018/07/Jolocom-Technical-WP-_-Self-Sovereign-and-Decentralised-Identity-By-Design-2018-03-09.pdf)
+
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jolocom/SmartWallet)
+
 Setup for development
 ---------------------
 

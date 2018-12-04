@@ -2,6 +2,7 @@
 
 exports[`generic block component matches snapshot with flex prop 1`] = `
 <Component
+  onTouchEnd={undefined}
   style={
     Array [
       Object {
@@ -23,6 +24,7 @@ exports[`generic block component matches snapshot with flex prop 1`] = `
 
 exports[`generic block component matches the snapshot with debug prop 1`] = `
 <Component
+  onTouchEnd={undefined}
   style={
     Array [
       Object {
@@ -46,6 +48,7 @@ exports[`generic block component matches the snapshot with debug prop 1`] = `
 
 exports[`generic block component matches the snapshot with no extra props 1`] = `
 <Component
+  onTouchEnd={undefined}
   style={
     Array [
       Object {
@@ -64,6 +67,7 @@ exports[`generic block component matches the snapshot with no extra props 1`] = 
 
 exports[`generic block component matches the snapshot with style prop 1`] = `
 <Component
+  onTouchEnd={[Function]}
   style={
     Array [
       Object {

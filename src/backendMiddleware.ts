@@ -1,23 +1,31 @@
 import { JolocomLib } from 'jolocom-lib'
+import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
 import { EthereumLib, EthereumLibInterface } from 'src/lib/ethereum'
 import { EncryptionLib, EncryptionLibInterface } from 'src/lib/crypto'
 import { Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
-import { ILibConfig } from 'jolocom-lib/js/types'
+import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider';
 
-// TODO Type config better
 export class BackendMiddleware {
-  jolocomLib: JolocomLib
+  identityWallet!: IdentityWallet
   ethereumLib: EthereumLibInterface
   storageLib: Storage
   encryptionLib: EncryptionLibInterface
   keyChainLib: KeyChainInterface
 
-  constructor(config: { jolocomLibConfig: ILibConfig, fuelingEndpoint: string, typeOrmConfig: any }) {
-    this.jolocomLib = new JolocomLib(config.jolocomLibConfig)
+  constructor(config: { fuelingEndpoint: string, typeOrmConfig: any }) {
     this.ethereumLib = new EthereumLib(config.fuelingEndpoint)
     this.storageLib = new Storage(config.typeOrmConfig),
     this.encryptionLib = new EncryptionLib(),
     this.keyChainLib = new KeyChain()
+  }
+
+  async setIdentityWallet(userVault: SoftwareKeyProvider, pass: string): Promise<void> {
+    const { jolocomIdentityKey } = JolocomLib.KeyTypes
+    const registry = JolocomLib.registries.jolocom.create()
+    this.identityWallet = await registry.authenticate(userVault, {
+      encryptionPass: pass,
+      derivationPath: jolocomIdentityKey
+    })
   }
 }

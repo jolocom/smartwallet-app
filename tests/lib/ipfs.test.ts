@@ -1,23 +1,12 @@
-import { IpfsLib } from 'src/lib/ipfs'
+import { IpfsCustomConnector } from 'src/lib/ipfs'
 
-jest.mock('react-native-fetch-blob', () => {
-  return {
-    default: {
-      DocumentDir: () => {},
-      polyfill: () => {},
-      fetch: jest.fn()
-    }
-  }
-})
-
-describe('Ipfs connector', () => {
+describe('Ipfs custom connector', () => {
   const BASE_URL = 'https://test.com:443'
 
   let ipfsLib
 
   beforeEach(() => {
-    ipfsLib = new IpfsLib()
-    ipfsLib.configure({
+    ipfsLib = new IpfsCustomConnector({
       host: 'test.com',
       protocol: 'https',
       port: 443
@@ -43,8 +32,8 @@ describe('Ipfs connector', () => {
       [{data: JSON.stringify(testJSON), name: 'ddo'}]
     ]
 
-    ipfsLib.storeJSON(testJSON, true)
-
+    ipfsLib.storeJSON({data: testJSON, pin: true})
+    
     expect(ipfsLib.nativeLib.fetch).toHaveBeenCalledTimes(1)
     expect(ipfsLib.nativeLib.fetch).toHaveBeenCalledWith(...expectedArgs)
   })

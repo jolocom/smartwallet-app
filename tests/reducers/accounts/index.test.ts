@@ -1,8 +1,4 @@
-import {
-  accountReducer as reducer,
-  AccountState
-} from 'src/reducers/account/'
-
+import { accountReducer as reducer } from 'src/reducers/account/'
 import { accountActions as actions} from 'src/actions/'
 
 describe('account reducer', ()=> {

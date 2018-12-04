@@ -11,14 +11,11 @@ describe('landing container', ()=> {
   it('mounts correctly and matches snapshot if loading', () => {
     const props = {
       startRegistration: jest.fn(),
-      checkIfAccountExists: jest.fn(),
       loading: true
     }
 
     const rendered = shallow(<LandingContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
-
-    expect(props.checkIfAccountExists).toHaveBeenCalledTimes(1)
     expect(props.startRegistration).not.toHaveBeenCalled()
     
     const childWrapper = rendered.find(LoadingScreen)
@@ -28,14 +25,11 @@ describe('landing container', ()=> {
   it('mounts correctly and matches snapshot if loading is finished', () => {
     const props = {
       startRegistration: jest.fn(),
-      checkIfAccountExists: jest.fn(),
       loading: false
     }
 
     const rendered = shallow(<LandingContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
-
-    expect(props.checkIfAccountExists).toHaveBeenCalledTimes(1)
     expect(props.startRegistration).not.toHaveBeenCalled()
 
     const childWrapper = rendered.find(LandingComponent).dive()

@@ -28,7 +28,7 @@ describe('Claims container', () => {
   it('correctly changes scanning to true when qr code scanner is started', () => {
     const onScannerStart = jest.fn()
 
-    const props = Object.assign({}, COMMON_PROPS {
+    const props = Object.assign({}, COMMON_PROPS, {
       setClaimsForDid: () => {},
       scanning: true
     })
@@ -39,7 +39,8 @@ describe('Claims container', () => {
 
   it('correctly changes scanning to false when qr code scanner is canceled', () => {
     const onScannerCancel = jest.fn()
-    const props = Object.assign({}, COMMON_PROPS {
+
+    const props = Object.assign({}, COMMON_PROPS, {
       setClaimsForDid: () => {},
       scanning: false
     })
@@ -47,7 +48,4 @@ describe('Claims container', () => {
     const rendered = shallow(<ClaimsContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
   })
-
-
-
 })
