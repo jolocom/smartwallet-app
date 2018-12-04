@@ -7,7 +7,6 @@ import { RootState } from 'src/reducers/'
 import Immutable from 'immutable'
 
 interface ConnectProps {
-  checkIfAccountExists: () => void
   startRegistration: () => void
   loading: boolean
 }

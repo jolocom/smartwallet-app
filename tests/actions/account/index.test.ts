@@ -81,46 +81,46 @@ describe('Account action creators', () => {
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
-    const { identityWallet, testSignedCredentialDefault } = data
+  // it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
+  //   const { identityWallet, testSignedCredentialDefault } = data
     
-    const backendMiddleware = {
-      storageLib: {
-        get: {
-          verifiableCredential: jest.fn()
-            .mockResolvedValue([JolocomLib.parse.signedCredential.fromJSON(testSignedCredentialDefault)])
-        }
-      },
-      identityWallet
-    }
+  //   const backendMiddleware = {
+  //     storageLib: {
+  //       get: {
+  //         verifiableCredential: jest.fn()
+  //           .mockResolvedValue([JolocomLib.parse.signedCredential.fromJSON(testSignedCredentialDefault)])
+  //       }
+  //     },
+  //     identityWallet
+  //   }
 
-    const action = accountActions.setClaimsForDid()
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
-    expect(mockStore.getActions()).toMatchSnapshot()
-  })
+  //   const action = accountActions.setClaimsForDid()
+  //   await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
+  //   expect(mockStore.getActions()).toMatchSnapshot()
+  // })
 
-  it('should correctly save claim', async () => {
-    const { identityWallet } = data
-    const mockClaimsItem = {
-      credentialType: 'Email',
-      claimData: {
-        email: 'test@test'
-      },
-      issuer: 'did:jolo:test',
-      subject: 'did:jolo:test'
-    }
+  // it('should correctly save claim', async () => {
+  //   const { identityWallet } = data
+  //   const mockClaimsItem = {
+  //     credentialType: 'Email',
+  //     claimData: {
+  //       email: 'test@test'
+  //     },
+  //     issuer: 'did:jolo:test',
+  //     subject: 'did:jolo:test'
+  //   }
 
-    const backendMiddleware = {
-      storageLib: {
-        store: {
-          verifiableCredential: jest.fn().mockResolvedValue([])
-        } 
-      },
-      identityWallet
-    }
+  //   const backendMiddleware = {
+  //     storageLib: {
+  //       store: {
+  //         verifiableCredential: jest.fn().mockResolvedValue([])
+  //       } 
+  //     },
+  //     identityWallet
+  //   }
     
-    const action = accountActions.saveClaim(mockClaimsItem)
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
-    expect(mockStore.getActions()).toMatchSnapshot()
-  })
+  //   const action = accountActions.saveClaim(mockClaimsItem)
+  //   await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
+  //   expect(mockStore.getActions()).toMatchSnapshot()
+  // })
 })
