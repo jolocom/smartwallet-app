@@ -17,6 +17,7 @@ export interface StateCredentialRequestSummary {
   readonly callbackURL: string
   readonly requester: string
   readonly availableCredentials: StateTypeSummary[]
+  readonly requestJWT: string
 }
 
 export interface SsoState {
@@ -27,7 +28,8 @@ const initialState: SsoState = {
   activeCredentialRequest: {
     requester: '',
     callbackURL: '',
-    availableCredentials: []
+    availableCredentials: [],
+    requestJWT: ''
   }
 }
 

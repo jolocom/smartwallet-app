@@ -60,7 +60,7 @@ export class VerifiableCredentialEntity {
     }
 
     const json = vCred.toJSON() as ExtendedInterface
-    json.subject = vCred.getSubject()
+    json.subject = vCred.subject
 
     return this.fromJSON(json)
   }

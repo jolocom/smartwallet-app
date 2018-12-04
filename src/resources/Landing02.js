@@ -1,6 +1,8 @@
 import React from 'react'
 import { ImageBackground } from 'react-native'
-const image = require('src/resources/img/02.jpg')
+import I18n from 'src/locales/i18n';
+const image = require(`src/resources/img/${I18n.locale}/02.jpg`)
+
 
 export default class Landing00 extends React.PureComponent {
   render() {

@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
+import I18n from 'src/locales/i18n';
 
 const { Button } = require('react-native-material-ui')
 
@@ -55,8 +56,8 @@ export const SeedPhrase : React.SFC<Props> = props => {
       <Block flex={ 0.1 }>
         <CenteredText
           style={ styles.sideNote }
-          msg={'Write these words down on an analog and secure place.'
-            + '\n Without these words, you cannot access your wallet again.'
+          msg={I18n.t('Write these words down on an analog and secure place')
+            + '.\n ' + I18n.t('Without these words, you cannot access your wallet again') + '.'
           }
         />
       </Block>
@@ -72,7 +73,7 @@ export const SeedPhrase : React.SFC<Props> = props => {
           onPress= { props.handleButtonTap }
           raised
           upperCase= { false }
-          text='Yes, I wrote it down'
+          text={ I18n.t('Yes, I wrote it down') }
         />
       </Block>
     </Container>

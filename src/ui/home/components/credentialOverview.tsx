@@ -11,6 +11,7 @@ import { CredentialTypes } from 'src/lib/categories'
 import { MoreIcon } from 'src/resources'
 import { getCredentialIconByType } from 'src/resources/util'
 import { prepareLabel } from 'src/lib/util'
+import I18n from 'src/locales/i18n';
 const loaders = require('react-native-indicator')
 
 interface Props {
@@ -92,7 +93,10 @@ export class CredentialOverview extends React.Component<Props, State> {
       return null
     }
 
-    return [<Text style={styles.sectionHeader}>{category.toString()}</Text>, this.renderCredentialCard(category)]
+    return [
+      <Text style={styles.sectionHeader}>{ I18n.t(category.toString()) }</Text>,
+      this.renderCredentialCard(category)
+    ]
   }
 
   render() {

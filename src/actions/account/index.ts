@@ -4,7 +4,12 @@ import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { getClaimMetadataByCredentialType, getCredentialUiCategory, getUiCredentialTypeByType } from '../../lib/util'
+import {
+  getClaimMetadataByCredentialType,
+  getCredentialUiCategory,
+  getUiCredentialTypeByType,
+  instantiateIdentityWallet
+} from '../../lib/util'
 import { cancelReceiving } from '../sso'
 
 export const setDid = (did: string) => {
@@ -14,7 +19,7 @@ export const setDid = (did: string) => {
   }
 }
 
-export const setSelected = (claim : DecoratedClaims) => {
+export const setSelected = (claim: DecoratedClaims) => {
   return {
     type: 'SET_SELECTED',
     selected: claim
@@ -35,6 +40,13 @@ export const handleClaimInput = (fieldValue: string, fieldName: string) => {
   }
 }
 
+export const toggleClaimsLoading = (value: boolean) => {
+  return {
+    type: 'TOGGLE_CLAIMS_LOADING',
+    value
+  }
+}
+
 export const checkIdentityExists = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { storageLib } = backendMiddleware
@@ -42,14 +54,14 @@ export const checkIdentityExists = () => {
     try {
       const personas = await storageLib.get.persona()
       if (!personas.length) {
-        dispatch(genericActions.toggleLoadingScreen(false))
+        dispatch(toggleLoading(false))
         return
       }
 
       dispatch(setDid(personas[0].did))
-      dispatch(genericActions.toggleLoadingScreen(false))
-      dispatch(setIdentityWallet())
+      await instantiateIdentityWallet(backendMiddleware)
 
+      dispatch(toggleLoading(false))
       dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
     } catch (err) {
       if (err.message.indexOf('no such table') === 0) {
@@ -62,20 +74,8 @@ export const checkIdentityExists = () => {
 
 export const setIdentityWallet = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const { ethereumLib, keyChainLib, storageLib, encryptionLib } = backendMiddleware
-
     try {
-      const did = getState().account.did.get('did')
-      const encryptionPass = await keyChainLib.getPassword()
-      const personaData = await storageLib.get.persona({ did })
-      const { encryptedWif } = personaData[0].controllingKey
-      const decryptedWif = encryptionLib.decryptWithPass({
-        cipher: encryptedWif,
-        pass: encryptionPass
-      })
-
-      const { privateKey } = ethereumLib.wifToEthereumKey(decryptedWif)
-      await backendMiddleware.setIdentityWallet(Buffer.from(privateKey, 'hex'))
+      await instantiateIdentityWallet(backendMiddleware)
     } catch (err) {
       dispatch(genericActions.showErrorScreen(err))
     }
@@ -95,16 +95,21 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
 
 export const saveClaim = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { identityWallet, storageLib, keyChainLib } = backendMiddleware
+
     try {
-      const { identityWallet, storageLib } = backendMiddleware
       const did = getState().account.did.get('did')
       const claimsItem = getState().account.claims.toJS().selected
+      const password = await keyChainLib.getPassword()
 
-      const verifiableCredential = await identityWallet.create.signedCredential({
-        metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
-        claim: claimsItem.claimData,
-        subject: did
-      })
+      const verifiableCredential = await identityWallet.create.signedCredential(
+        {
+          metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
+          claim: claimsItem.claimData,
+          subject: did
+        },
+        password
+      )
 
       if (claimsItem.id) {
         await storageLib.delete.verifiableCredential(claimsItem.id)
@@ -131,8 +136,8 @@ export const saveExternalCredentials = () => {
     const externalCredentials = getState().account.claims.toJS().pendingExternal
     const cred: SignedCredential = externalCredentials[0]
 
-    if (cred.getId()) {
-      await storageLib.delete.verifiableCredential(cred.getId())
+    if (cred.id) {
+      await storageLib.delete.verifiableCredential(cred.id)
     }
 
     try {
@@ -144,18 +149,16 @@ export const saveExternalCredentials = () => {
   }
 }
 
-export const toggleLoading = (val: boolean) => {
+export const toggleLoading = (value: boolean) => {
   return {
     type: 'SET_LOADING',
-    loading: val
+    value
   }
 }
 
 export const setClaimsForDid = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const state = getState().account.claims.toJS()
-
-    dispatch(toggleLoading(!state.loading))
+    dispatch(toggleClaimsLoading(true))
     const storageLib = backendMiddleware.storageLib
 
     const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
@@ -165,6 +168,8 @@ export const setClaimsForDid = () => {
       type: 'SET_CLAIMS_FOR_DID',
       claims
     })
+
+    dispatch(toggleClaimsLoading(false))
   }
 }
 
@@ -186,18 +191,18 @@ const prepareClaimsForState = (credentials: SignedCredential[]) => {
 }
 
 // TODO Util, make subject mandatory
-export const convertToDecoratedClaim = (vCreds: SignedCredential[]) : DecoratedClaims[] => {
+export const convertToDecoratedClaim = (vCreds: SignedCredential[]): DecoratedClaims[] => {
   return vCreds.map(vCred => {
-    const claimData = { ...vCred.getCredentialSection() }
+    const claimData = { ...vCred.claim }
     delete claimData.id
 
     return {
-      credentialType: getUiCredentialTypeByType(vCred.getType()),
+      credentialType: getUiCredentialTypeByType(vCred.type),
       claimData,
-      id: vCred.getId(),
-      issuer: vCred.getIssuer(),
-      subject: vCred.getCredentialSection().id || 'Not found',
-      expires: vCred.getExpiryDate() || undefined
+      id: vCred.id,
+      issuer: vCred.issuer,
+      subject: vCred.claim.id || 'Not found',
+      expires: vCred.expires || undefined
     }
   })
 }

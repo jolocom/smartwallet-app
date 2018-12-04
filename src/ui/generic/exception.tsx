@@ -7,6 +7,7 @@ import { registrationActions, navigationActions } from 'src/actions/'
 import { Text, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
+import I18n from 'src/locales/i18n';
 
 
 interface ConnectProps {
@@ -65,13 +66,13 @@ const styles = StyleSheet.create({
 })
 
 export const ExceptionComponent: React.SFC<Props> = (props) => {
-  const errorText = 'There was an error with your request.'
+  const errorText = I18n.t('There was an error with your request') + '.'
 
   return(
     <Container style={ styles.containerStyle }>
       <Block style={ styles.textBlock }>
-        <Text style={ styles.errorTextHeader }>Oops!</Text>
-        <Text style={ styles.errorText }> { errorText } </Text>
+        <Text style={ styles.errorTextHeader }>{ I18n.t('Oops!') }</Text>
+        <Text style={ styles.errorText }> { I18n.t(errorText) } </Text>
       </Block>
       <Block style={ styles.buttonBlock}>
           <Button
@@ -86,7 +87,7 @@ export const ExceptionComponent: React.SFC<Props> = (props) => {
               text: styles.buttonText
             }}
             upperCase= { false }
-            text='Try again'
+            text={ I18n.t('Try again') }
           />
         </Block>
     </Container>

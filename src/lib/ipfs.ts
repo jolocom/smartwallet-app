@@ -36,7 +36,8 @@ export class IpfsCustomConnector implements IIpfsConnector {
   }
 
   async removePinnedHash(hash: string): Promise<void> {
-    const endpoint = `${this.ipfsHost}/api/v0/pin/rm?arg=${hash}`
+    const resolutionGateway = 'https://ipfs.io/ipfs/'
+    const endpoint = `${resolutionGateway}/${hash}`
     const res = this.nativeLib.fetch('GET', endpoint)
 
     if (!res.ok) {
