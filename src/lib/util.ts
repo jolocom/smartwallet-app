@@ -60,6 +60,6 @@ export const instantiateIdentityWallet = async (backendMiddleware: BackendMiddle
   })
 
   // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-  const userVault = new JolocomLib.keyProvider(Buffer.from(decryptedSeed, 'hex'), password)
+  const userVault = new JolocomLib.KeyProvider(Buffer.from(decryptedSeed, 'hex'), password)
   return await backendMiddleware.setIdentityWallet(userVault, password)
 }
