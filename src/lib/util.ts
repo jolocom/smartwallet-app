@@ -1,13 +1,12 @@
-import { claimsMetadata } from 'jolocom-lib'
+import { claimsMetadata, JolocomLib } from 'jolocom-lib'
 import { uiCategoryByCredentialType, Categories, uiCredentialTypeByType } from './categories'
 import { BaseMetadata } from 'cred-types-jolocom-core'
+import { BackendMiddleware } from 'src/backendMiddleware'
 
-export const getClaimMetadataByCredentialType = (type: string) : BaseMetadata => {
-  const uiType = Object.keys(uiCredentialTypeByType)
-    .find(item => uiCredentialTypeByType[item] === type)
+export const getClaimMetadataByCredentialType = (type: string): BaseMetadata => {
+  const uiType = Object.keys(uiCredentialTypeByType).find(item => uiCredentialTypeByType[item] === type)
 
-  const relevantType = Object.keys(claimsMetadata)
-    .find(key => claimsMetadata[key].type[1] === uiType)
+  const relevantType = Object.keys(claimsMetadata).find(key => claimsMetadata[key].type[1] === uiType)
 
   if (!relevantType) {
     throw new Error("Unknown credential type, can't find metadata")
@@ -45,6 +44,22 @@ export const capitalize = (word: string): string => `${word[0].toUpperCase()}${w
 
 export const compareDates = (date1: Date, date2: Date): number => {
   return Math.floor(
-    (Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) / (1000 * 60 * 60 * 24)
+    (Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) -
+      Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate())) /
+      (1000 * 60 * 60 * 24)
   )
+}
+
+export const instantiateIdentityWallet = async (backendMiddleware: BackendMiddleware) => {
+  const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
+
+  const password = await keyChainLib.getPassword()
+  const decryptedSeed = encryptionLib.decryptWithPass({
+    cipher: await storageLib.get.encryptedSeed(),
+    pass: password
+  })
+
+  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
+  const userVault = new JolocomLib.KeyProvider(Buffer.from(decryptedSeed, 'hex'), password)
+  return await backendMiddleware.setIdentityWallet(userVault, password)
 }

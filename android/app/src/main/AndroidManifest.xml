@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.smartwallet"
+    package="com.jolocomwallet"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -24,10 +24,6 @@
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -35,8 +31,18 @@
           android:label="@string/app_name"
           android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
           android:windowSoftInputMode="adjustResize"
-          android:exported="true"
-        />
+          android:exported="true">
+          <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+          <intent-filter android:label="filter_react_native">
+            <data android:scheme="jolocomwallet" android:host="consent" />
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+           </intent-filter>
+        </activity>
 
     </application>
 

@@ -2,4 +2,4 @@ import { AppRegistry } from 'react-native';
 
 import App from 'src/App';
 
-AppRegistry.registerComponent('smartwallet', () => App);
+AppRegistry.registerComponent('jolocomwallet', () => App);
