@@ -41,8 +41,15 @@ export class NavigatorContainer extends React.Component<Props> {
         }
       })
     } else {
-      // TOOD currently not fully finished
       Linking.addEventListener('url', this.handleOpenURL)
+      // TODO: test with deep linking on ios
+      Linking.getInitialURL().then((url: string) => {
+        if (!url) {
+          this.props.checkIfAccountExists()
+        } else {
+          this.props.handleDeepLink(url)
+        }
+      })
     }
   }
 
