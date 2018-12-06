@@ -15,7 +15,7 @@ export const uiCredentialTypeByType: {[key: string]: string} = {
   'ProofOfEmailCredential': CredentialTypes.Email,
   'ProofOfMobilePhoneNumberCredential': CredentialTypes.MobilePhone,
   'ProofOfNameCredential': CredentialTypes.Name,
-  'ProofOfAddress': CredentialTypes.PostalAddress,
+  'ProofOfPostalAddressCredential': CredentialTypes.PostalAddress,
 }
 
 export const uiCategoryByCredentialType: {[key: string] : string[]} = {
