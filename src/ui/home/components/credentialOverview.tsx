@@ -78,6 +78,7 @@ export class CredentialOverview extends React.Component<Props, State> {
 
       return (
         <CredentialCard
+          key={claim.credentialType}
           handleInteraction={() => onEdit(claim)}
           credentialItem={{ ...claim, claimData: captialized }}
           collapsible={collapsible(claim)}
