@@ -17,6 +17,20 @@ const navOptScreenWCancel = {
   headerBackImage: require('./resources/img/close.png')
 }
 
+const headerTitleStyle = {
+  fontSize: JolocomTheme.headerFontSize,
+  fontFamily: JolocomTheme.contentFontFamily,
+  fontWeight: '300',
+}
+
+const commonNavigationOptions = {
+  headerTitleStyle,
+  headerStyle: {
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  headerTintColor: JolocomTheme.primaryColorWhite
+}
+
 export const HomeRoutes = TabNavigator(
   {
     Claims: {
@@ -24,13 +38,7 @@ export const HomeRoutes = TabNavigator(
       navigationOptions: {
         tabBarLabel: I18n.t('All claims'),
         headerTitle: I18n.t('My identity'),
-        headerTitleStyle: {
-          fontSize: JolocomTheme.headerFontSize,
-          fontFamily: JolocomTheme.contentFontFamily,
-          fontWeight: '300'
-        },
-        headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-        headerTintColor: JolocomTheme.primaryColorWhite
+        ...commonNavigationOptions,
       }
     },
     Interactions: {
@@ -38,15 +46,7 @@ export const HomeRoutes = TabNavigator(
       navigationOptions: {
         tabBarLabel: I18n.t('Documents'),
         headerTitle: I18n.t('My identity'),
-        headerTitleStyle: {
-          fontSize: JolocomTheme.headerFontSize,
-          fontFamily: JolocomTheme.contentFontFamily,
-          fontWeight: '300'
-        },
-        headerStyle: {
-          backgroundColor: JolocomTheme.primaryColorBlack
-        },
-        headerTintColor: JolocomTheme.primaryColorWhite
+        ...commonNavigationOptions,
       }
     }
   },
@@ -68,7 +68,7 @@ export const HomeRoutes = TabNavigator(
       }
     },
     tabBarComponent: TabBarTop,
-    tabBarPosition: 'bottom'
+    tabBarPosition: 'top'
   }
 )
 

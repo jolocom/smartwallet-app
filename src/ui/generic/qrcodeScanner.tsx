@@ -3,9 +3,12 @@ import { Text, StyleSheet, Platform, BackHandler } from 'react-native'
 import { Container } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
-import { QrScanEvent } from '../containers/types'
 import I18n from 'src/locales/i18n';
 const QRScanner = require('react-native-qrcode-scanner').default
+
+export type QrScanEvent = {
+  data: string
+}
 
 interface Props {
   onScannerSuccess: (e: QrScanEvent) => void
@@ -42,7 +45,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
           topContent={<Text>{ I18n.t('You can scan the qr code now!') }</Text>}
           bottomContent={(
             <Button
-              onPress={() => onScannerCancel()}
+              onPress={onScannerCancel}
               style={{ text: styles.buttonText }}
               text={ I18n.t("Cancel")}
             />
