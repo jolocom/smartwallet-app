@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LayoutWithNavigationBar component should display only loading spinner based on props 1`] = `<LoadingSpinner />`;
+
+exports[`LayoutWithNavigationBar component should display only loading spinner based on state 1`] = `<LoadingSpinner />`;
+
+exports[`LayoutWithNavigationBar component should display only qr code scanner based on state 1`] = `
+<QRcodeScanner
+  onScannerCancel={[Function]}
+  onScannerSuccess={[Function]}
+/>
+`;
+
+exports[`LayoutWithNavigationBar component should render children with qr code button in a navigation if no loading and scanning state 1`] = `
+<Component>
+  <Component
+    style={
+      Object {
+        "paddingBottom": 70,
+        "width": "100%",
+      }
+    }
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+    >
+      Sample test children
+    </Text>
+  </Component>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#fafafa",
+        "bottom": 0,
+        "height": 70,
+        "justifyContent": "space-around",
+        "position": "absolute",
+        "width": "100%",
+      }
+    }
+  >
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#942f51",
+          "borderRadius": 35,
+          "elevation": 8,
+          "height": 55,
+          "justifyContent": "center",
+          "shadowColor": "#000",
+          "shadowOffset": Object {
+            "height": 2,
+            "width": 0,
+          },
+          "shadowOpacity": 0.8,
+          "shadowRadius": 2,
+          "width": 55,
+        }
+      }
+    >
+      <Icon
+        allowFontScaling={false}
+        color="white"
+        name="qrcode-scan"
+        size={30}
+      />
+    </TouchableOpacity>
+  </Component>
+</Component>
+`;
