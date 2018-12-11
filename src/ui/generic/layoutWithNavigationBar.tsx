@@ -11,7 +11,7 @@ const NAVIGATION_HEIGHT = 70
 interface Props {
   onScannerSuccess: (jwt: string) => void,
   children: ReactNode,
-  loading: boolean,
+  loading?: boolean,
 }
 interface State {
   scanning: boolean,
