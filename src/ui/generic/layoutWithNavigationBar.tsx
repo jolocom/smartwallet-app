@@ -2,9 +2,11 @@ import React, { ReactNode } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 
 import { QRcodeScanner, QrScanEvent } from 'src/ui/generic/qrcodeScanner'
-import { LoadingSpinner } from './'
+import { LoadingSpinner } from '.'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+
+const NAVIGATION_HEIGHT = 70
 
 interface Props {
   onScannerSuccess: (jwt: string) => void,
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     bottom: 0,
-    height: 70,
+    height: NAVIGATION_HEIGHT,
     width: '100%',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -40,11 +42,12 @@ const styles = StyleSheet.create({
     elevation: 8
   },
   childrenContainer: {
-    width: '100%'
+    width: '100%',
+    paddingBottom: NAVIGATION_HEIGHT
   }
 }) 
 
-export class NavigationBar extends React.Component<Props, State> {
+export class LayoutWithNavigationBar extends React.Component<Props, State> {
   state = {
     scanning: false,
     loading: false,
