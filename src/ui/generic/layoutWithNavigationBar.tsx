@@ -6,7 +6,8 @@ import { LoadingSpinner } from '.'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-const NAVIGATION_HEIGHT = 70
+const NAVIGATION_HEIGHT = 82
+const NAVIGATION_CONTENT_HEIGHT = NAVIGATION_HEIGHT - 27
 
 interface Props {
   onScannerSuccess: (jwt: string) => void,
@@ -19,18 +20,44 @@ interface State {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  navigationWrapper: {
     position: 'absolute',
     bottom: 0,
     height: NAVIGATION_HEIGHT,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
     width: '100%',
+  },
+  navigationContent: {
+    height: NAVIGATION_CONTENT_HEIGHT,
+    backgroundColor: JolocomTheme.primaryColorGrey,
+    width: '100%',
+    flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: JolocomTheme.primaryColorGrey
+  },
+  navigationContentItem: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  contentLeft: {
+    marginRight: 36
+  },
+  contentRight: {
+    marginLeft: 36
+  },
+  childrenContainer: {
+    width: '100%',
+    paddingBottom: NAVIGATION_CONTENT_HEIGHT,
   },
   qrCodeButton: {
-    height: 55,
-    width: 55,
+    position: 'absolute',
+    bottom: 6,
+    height: 72,
+    width: 72,
     borderRadius: 35,
     backgroundColor: JolocomTheme.primaryColorPurple,
     alignItems: 'center',
@@ -39,12 +66,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    elevation: 8
+    elevation: 8,
   },
-  childrenContainer: {
-    width: '100%',
-    paddingBottom: NAVIGATION_HEIGHT
-  }
 }) 
 
 export class LayoutWithNavigationBar extends React.Component<Props, State> {
@@ -84,7 +107,14 @@ export class LayoutWithNavigationBar extends React.Component<Props, State> {
           {this.props.children}
         </View>
 
-        <View style={styles.container}>
+        <View style={styles.navigationWrapper}>
+          <View style={styles.navigationContent}>
+            <View style={[styles.navigationContentItem, styles.contentLeft]}>
+            </View>
+            <View style={[styles.navigationContentItem, styles.contentRight]}>
+            </View>
+          </View>
+          
           <TouchableOpacity style={styles.qrCodeButton} onPress={this.onScannerStart}>
             <Icon size={30} name="qrcode-scan" color="white" />
           </TouchableOpacity>
