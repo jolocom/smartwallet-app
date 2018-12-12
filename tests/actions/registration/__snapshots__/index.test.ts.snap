@@ -1,5 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Registration action creators createIdentity should attempt to create an identity 1`] = `
+Array [
+  Object {
+    "params": Object {
+      "flag": "registration",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Registration action creators createIdentity should attempt to create an identity 2`] = `
+Array [
+  Array [
+    Object {
+      "data": "4f8d84403d760b5b3fc5426c90827dab",
+      "pass": "secret",
+    },
+  ],
+]
+`;
+
+exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `Array []`;
+
+exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `Array []`;
+
+exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `Array []`;
+
+exports[`Registration action creators createIdentity should attempt to create an identity 6`] = `Array []`;
+
 exports[`Registration action creators savePassword should attempt to save the password in the keychain 1`] = `
 Array [
   Object {
