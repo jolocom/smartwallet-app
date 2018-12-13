@@ -12,7 +12,7 @@ import { Exception } from "src/ui/generic/"
 import { Consent } from "src/ui/sso"
 import { CredentialReceive } from "src/ui/home"
 import I18n from "src/locales/i18n"
-import { QRcodeScanner } from "./ui/home/components/qrcodeScanner"
+import { QRScannerContainer } from "./ui/home/components/qrcodeScanner"
 
 const navigationOptions = {
   header: null
@@ -117,7 +117,7 @@ export const Routes = StackNavigator({
     navigationOptions: navOptScreenWCancel
   },
   QRCodeScanner: {
-    screen: QRcodeScanner,
+    screen: QRScannerContainer,
     navigationOptions: navOptScreenWCancel
   }
 })

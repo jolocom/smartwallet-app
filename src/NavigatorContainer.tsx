@@ -69,13 +69,14 @@ export class NavigatorContainer extends React.Component<Props> {
 
   private navigateBack = () => {
     // return false if app exit is desired
-    if (
-      this.props.navigation.routes.length === 1 &&
-      this.props.navigation.routes[0].index === 0
-    ) {
-      return false
-    }
-    // console.log(this.props.navigation)
+    // if (
+    //   this.props.navigation.routes.length === 1 &&
+    //   this.props.navigation.routes[0].index === 0
+    // ) {
+    //   return false
+    // }
+
+    console.log(this.props.navigation)
     this.props.goBack()
     return true
   }

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export class QRcodeScanner extends React.Component<Props, State> {
+class QRcodeScanner extends React.Component<Props, State> {
   componentDidMount() {
     if (Platform.OS === "android") {
       BackHandler.addEventListener("hardwareBackPress", () => {
@@ -40,6 +40,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
 
   render() {
     const { onScannerSuccess, onScannerCancel } = this.props
+    console.log(this.props)
     return (
       <Container>
         <QRScanner
@@ -47,7 +48,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
           topContent={<Text>{I18n.t("You can scan the qr code now!")}</Text>}
           bottomContent={
             <Button
-              onPress={() => onScannerCancel()}
+              onPress={onScannerCancel}
               style={{ text: styles.buttonText }}
               text={I18n.t("Cancel")}
             />
@@ -66,11 +67,6 @@ const mapDispatchToProps = (dispatch: Function) => {
 }
 
 export const QRScannerContainer = connect(
-  () => {},
+  () => ({}),
   mapDispatchToProps
 )(QRcodeScanner)
-
-//// keep making this go
-// connect it properly
-// have a route in routelist
-// have correct navigation behaviour
