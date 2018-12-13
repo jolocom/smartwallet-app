@@ -1,19 +1,21 @@
-import React from 'react'
-import { CredentialOverview } from '../components/credentialOverview'
-import { QRcodeScanner } from 'src/ui/home/components/qrcodeScanner'
-import { connect } from 'react-redux'
-import { accountActions, ssoActions } from 'src/actions'
-import { View } from 'react-native'
-import { ClaimsState } from 'src/reducers/account'
-import { DecoratedClaims } from 'src/reducers/account/'
-import { QrScanEvent } from './types'
-import { LoadingSpinner } from '../../generic'
+import React from "react"
+import { CredentialOverview } from "../components/credentialOverview"
+import { QRcodeScanner } from "src/ui/home/components/qrcodeScanner"
+import { connect } from "react-redux"
+import { accountActions, ssoActions, navigationActions } from "src/actions"
+import { View } from "react-native"
+import { ClaimsState } from "src/reducers/account"
+import { DecoratedClaims } from "src/reducers/account/"
+import { QrScanEvent } from "./types"
+import { LoadingSpinner } from "../../generic"
+import { routeList } from "src/routeList"
 
 interface ConnectProps {
   setClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
   parseJWT: (jwt: string) => void
   openClaimDetails: (claim: DecoratedClaims) => void
+  openScanner: () => void
   did: string
   claims: ClaimsState
   loading: boolean
@@ -36,10 +38,7 @@ export class ClaimsContainer extends React.Component<Props, State> {
     this.props.setClaimsForDid()
   }
 
-  private onScannerStart = (): void => {
-    this.setState({ scanning: true })
-    this.setState({ loading: true })
-  }
+  private onScannerStart = (): void => {}
 
   private onScannerCancel = (): void => {
     this.setState({ scanning: false })
@@ -54,9 +53,14 @@ export class ClaimsContainer extends React.Component<Props, State> {
 
   render() {
     if (this.state.scanning) {
-      return <QRcodeScanner onScannerSuccess={this.onScannerSuccess} onScannerCancel={this.onScannerCancel} />
+      return (
+        <QRcodeScanner
+          onScannerSuccess={this.onScannerSuccess}
+          onScannerCancel={this.onScannerCancel}
+        />
+      )
     }
-    
+
     if (this.state.loading || this.props.loading || this.props.claims.loading) {
       return <LoadingSpinner />
     }
@@ -86,10 +90,16 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
+    openClaimDetails: (claim: DecoratedClaims) =>
+      dispatch(accountActions.openClaimDetails(claim)),
     setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
-    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
-    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt))
+    toggleLoading: (val: boolean) =>
+      dispatch(accountActions.toggleLoading(val)),
+    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
+    openScanner: () =>
+      dispatch(
+        navigationActions.navigate({ routeName: routeList.QRCodeScanner })
+      )
   }
 }
 

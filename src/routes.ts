@@ -1,12 +1,18 @@
-import { StackNavigator, TabBarTop, TabNavigator } from 'react-navigation'
-import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
-import { Landing } from 'src/ui/landing/'
-import { PasswordEntry, SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Exception } from 'src/ui/generic/'
-import { Consent } from 'src/ui/sso'
-import { CredentialReceive } from 'src/ui/home'
-import I18n from 'src/locales/i18n';
+import { StackNavigator, TabBarTop, TabNavigator } from "react-navigation"
+import { Claims, Interactions, ClaimDetails } from "src/ui/home/"
+import { Landing } from "src/ui/landing/"
+import {
+  PasswordEntry,
+  SeedPhrase,
+  Loading,
+  Entropy
+} from "src/ui/registration/"
+import { JolocomTheme } from "src/styles/jolocom-theme"
+import { Exception } from "src/ui/generic/"
+import { Consent } from "src/ui/sso"
+import { CredentialReceive } from "src/ui/home"
+import I18n from "src/locales/i18n"
+import { QRcodeScanner } from "./ui/home/components/qrcodeScanner"
 
 const navigationOptions = {
   header: null
@@ -14,7 +20,7 @@ const navigationOptions = {
 
 const navOptScreenWCancel = {
   headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: require('./resources/img/close.png')
+  headerBackImage: require("./resources/img/close.png")
 }
 
 export const HomeRoutes = TabNavigator(
@@ -22,12 +28,12 @@ export const HomeRoutes = TabNavigator(
     Claims: {
       screen: Claims,
       navigationOptions: {
-        tabBarLabel: I18n.t('All claims'),
-        headerTitle: I18n.t('My identity'),
+        tabBarLabel: I18n.t("All claims"),
+        headerTitle: I18n.t("My identity"),
         headerTitleStyle: {
           fontSize: JolocomTheme.headerFontSize,
           fontFamily: JolocomTheme.contentFontFamily,
-          fontWeight: '300'
+          fontWeight: "300"
         },
         headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
         headerTintColor: JolocomTheme.primaryColorWhite
@@ -36,12 +42,12 @@ export const HomeRoutes = TabNavigator(
     Interactions: {
       screen: Interactions,
       navigationOptions: {
-        tabBarLabel: I18n.t('Documents'),
-        headerTitle: I18n.t('My identity'),
+        tabBarLabel: I18n.t("Documents"),
+        headerTitle: I18n.t("My identity"),
         headerTitleStyle: {
           fontSize: JolocomTheme.headerFontSize,
           fontFamily: JolocomTheme.contentFontFamily,
-          fontWeight: '300'
+          fontWeight: "300"
         },
         headerStyle: {
           backgroundColor: JolocomTheme.primaryColorBlack
@@ -58,7 +64,7 @@ export const HomeRoutes = TabNavigator(
       labelStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
         fontSize: JolocomTheme.labelFontSize,
-        textAlign: 'center'
+        textAlign: "center"
       },
       style: {
         backgroundColor: JolocomTheme.primaryColorBlack
@@ -68,7 +74,7 @@ export const HomeRoutes = TabNavigator(
       }
     },
     tabBarComponent: TabBarTop,
-    tabBarPosition: 'bottom'
+    tabBarPosition: "bottom"
   }
 )
 
@@ -82,10 +88,10 @@ export const Routes = StackNavigator({
   CredentialDialog: {
     screen: CredentialReceive,
     navigationOptions: {
-      headerTitle: I18n.t('Receiving new credential'),
+      headerTitle: I18n.t("Receiving new credential"),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
+        fontWeight: "100",
         fontSize: JolocomTheme.headerFontSize
       },
       headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
@@ -95,10 +101,10 @@ export const Routes = StackNavigator({
   Consent: {
     screen: Consent,
     navigationOptions: {
-      headerTitle: I18n.t('Share claims'),
+      headerTitle: I18n.t("Share claims"),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
+        fontWeight: "100",
         fontSize: JolocomTheme.headerFontSize
       },
       headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
@@ -106,5 +112,12 @@ export const Routes = StackNavigator({
     }
   },
   Exception: { screen: Exception, navigationOptions },
-  ClaimDetails: { screen: ClaimDetails, navigationOptions: navOptScreenWCancel }
+  ClaimDetails: {
+    screen: ClaimDetails,
+    navigationOptions: navOptScreenWCancel
+  },
+  QRCodeScanner: {
+    screen: QRcodeScanner,
+    navigationOptions: navOptScreenWCancel
+  }
 })
