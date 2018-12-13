@@ -24,28 +24,4 @@ describe('Claims container', () => {
     expect(rendered).toMatchSnapshot()
     expect(setClaimsForDid).toHaveBeenCalledTimes(1)
     })
-
-  it('correctly changes scanning to true when qr code scanner is started', () => {
-    const onScannerStart = jest.fn()
-
-    const props = Object.assign({}, COMMON_PROPS, {
-      setClaimsForDid: () => {},
-      scanning: true
-    })
-
-    const rendered = shallow(<ClaimsContainer {...props}/>)
-    expect(rendered).toMatchSnapshot()
-  })
-
-  it('correctly changes scanning to false when qr code scanner is canceled', () => {
-    const onScannerCancel = jest.fn()
-
-    const props = Object.assign({}, COMMON_PROPS, {
-      setClaimsForDid: () => {},
-      scanning: false
-    })
-
-    const rendered = shallow(<ClaimsContainer {...props}/>)
-    expect(rendered).toMatchSnapshot()
-  })
 })
