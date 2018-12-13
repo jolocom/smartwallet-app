@@ -1,7 +1,7 @@
-import React from "react"
-import { QRcodeScanner } from "src/ui/home/components/qrcodeScanner"
-import { shallow } from "enzyme"
-import mockCamera from "../../__mocks__/react-native-camera"
+import React from 'react'
+import { QRcodeScanner } from 'src/ui/generic/qrcodeScanner'
+import { shallow } from 'enzyme'
+import mockCamera from '../../__mocks__/react-native-camera'
 
 describe("QRcodeScanner component", () => {
   jest.mock("react-native-camera", () => mockCamera)

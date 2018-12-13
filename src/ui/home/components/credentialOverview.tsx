@@ -1,23 +1,21 @@
-import React from "react"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { StyleSheet, TouchableOpacity, Text, ScrollView } from "react-native"
-import { Container, Block } from "src/ui/structure"
-import { CredentialCard } from "./credentialCard"
-import { JolocomTheme } from "src/styles/jolocom-theme"
-import { ReactNode } from "react"
-import { ClaimsState, CategorizedClaims } from "src/reducers/account"
-import { DecoratedClaims } from "src/reducers/account/"
-import { CredentialTypes } from "src/lib/categories"
-import { MoreIcon } from "src/resources"
-import { getCredentialIconByType } from "src/resources/util"
-import { prepareLabel } from "src/lib/util"
-import I18n from "src/locales/i18n"
-const loaders = require("react-native-indicator")
+import React from 'react'
+import { StyleSheet, Text, ScrollView } from 'react-native'
+import { Container, Block } from 'src/ui/structure'
+import { CredentialCard } from './credentialCard'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { ReactNode } from 'react'
+import { ClaimsState, CategorizedClaims } from 'src/reducers/account'
+import { DecoratedClaims } from 'src/reducers/account/'
+import { CredentialTypes } from 'src/lib/categories'
+import { MoreIcon } from 'src/resources'
+import { getCredentialIconByType } from 'src/resources/util'
+import { prepareLabel } from 'src/lib/util'
+import I18n from 'src/locales/i18n'
+const loaders = require('react-native-indicator')
 
 interface Props {
   claimsState: ClaimsState
   loading: boolean
-  onScannerStart: () => void
   onEdit: (claim: DecoratedClaims) => void
   did: string
 }
@@ -25,25 +23,6 @@ interface Props {
 interface State {}
 
 const styles = StyleSheet.create({
-  qrCodeIconContainer: {
-    height: 55,
-    width: 55,
-    borderRadius: 35,
-    backgroundColor: JolocomTheme.primaryColorPurple,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 8
-  },
-  qrCodeButtonSection: {
-    position: "absolute",
-    alignItems: "flex-end",
-    right: "3%",
-    bottom: "5%"
-  },
   sectionHeader: {
     marginTop: "5%",
     marginHorizontal: "5%",
@@ -84,6 +63,7 @@ export class CredentialOverview extends React.Component<Props, State> {
 
       return (
         <CredentialCard
+          key={claim.credentialType}
           handleInteraction={() => onEdit(claim)}
           credentialItem={{ ...claim, claimData: captialized }}
           collapsible={collapsible(claim)}
@@ -107,12 +87,7 @@ export class CredentialOverview extends React.Component<Props, State> {
 
   render() {
     const { decoratedCredentials, loading } = this.props.claimsState
-    const {
-      qrCodeButtonSection,
-      scrollComponent,
-      scrollComponentLoading,
-      qrCodeIconContainer
-    } = styles
+    const { scrollComponent, scrollComponentLoading } = styles
 
     const claimCategories = Object.keys(decoratedCredentials)
 
@@ -128,14 +103,6 @@ export class CredentialOverview extends React.Component<Props, State> {
         >
           {claimCategories.map(this.renderCredentialCategory)}
         </ScrollView>
-        <Block style={StyleSheet.flatten(qrCodeButtonSection)}>
-          <TouchableOpacity
-            style={qrCodeIconContainer}
-            onPress={this.props.onScannerStart}
-          >
-            <Icon size={30} name="qrcode-scan" color="white" />
-          </TouchableOpacity>
-        </Block>
       </Container>
     )
   }

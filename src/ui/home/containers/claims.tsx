@@ -1,18 +1,20 @@
-import React from "react"
-import { CredentialOverview } from "../components/credentialOverview"
-import { connect } from "react-redux"
-import { accountActions, navigationActions } from "src/actions"
-import { View } from "react-native"
-import { ClaimsState } from "src/reducers/account"
-import { DecoratedClaims } from "src/reducers/account/"
-import { LoadingSpinner } from "../../generic"
-import { routeList } from "src/routeList"
+import React from 'react'
+import { connect } from 'react-redux'
+import { View } from 'react-native'
+
+import { CredentialOverview } from '../components/credentialOverview'
+import { LayoutWithNavigationBar } from 'src/ui/generic'
+import { accountActions, ssoActions, navigationActions } from 'src/actions'
+import { ClaimsState } from 'src/reducers/account'
+import { DecoratedClaims } from 'src/reducers/account/'
+import { routeList } from 'src/routeList'
 
 interface ConnectProps {
   setClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
   openClaimDetails: (claim: DecoratedClaims) => void
   openScanner: () => void
+  parseJWT: (jwt: string) => void
   did: string
   claims: ClaimsState
   loading: boolean
@@ -20,26 +22,26 @@ interface ConnectProps {
 
 interface Props extends ConnectProps {}
 
-interface State {}
-
-export class ClaimsContainer extends React.Component<Props, State> {
+export class ClaimsContainer extends React.Component<Props> {
   componentWillMount() {
     this.props.setClaimsForDid()
   }
 
   render() {
-    if (this.props.loading || this.props.claims.loading) {
-      return <LoadingSpinner />
-    }
     return (
       <View style={{ flex: 1 }}>
-        <CredentialOverview
-          did={this.props.did}
-          claimsState={this.props.claims}
-          loading={this.props.claims.loading}
-          onEdit={this.props.openClaimDetails}
-          onScannerStart={this.props.openScanner}
-        />
+        <LayoutWithNavigationBar
+          openScanner={this.props.openScanner}
+          onScannerSuccess={this.props.parseJWT}
+          loading={!!this.props.claims.loading}
+        >
+          <CredentialOverview
+            did={this.props.did}
+            claimsState={this.props.claims}
+            loading={!!this.props.claims.loading}
+            onEdit={this.props.openClaimDetails}
+          />
+        </LayoutWithNavigationBar>
       </View>
     )
   }
@@ -56,15 +58,11 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    openClaimDetails: (claim: DecoratedClaims) =>
-      dispatch(accountActions.openClaimDetails(claim)),
+    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
+    openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
     setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
-    toggleLoading: (val: boolean) =>
-      dispatch(accountActions.toggleLoading(val)),
-    openScanner: () =>
-      dispatch(
-        navigationActions.navigate({ routeName: routeList.QRCodeScanner })
-      )
+    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
+    openScanner: () => dispatch( navigationActions.navigate({ routeName: routeList.QRCodeScanner }))
   }
 }
 

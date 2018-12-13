@@ -12,7 +12,7 @@ import { Exception } from "src/ui/generic/"
 import { Consent } from "src/ui/sso"
 import { CredentialReceive } from "src/ui/home"
 import I18n from "src/locales/i18n"
-import { QRScannerContainer } from "./ui/home/components/qrcodeScanner"
+import { QRScannerContainer } from "./ui/generic/qrcodeScanner"
 
 const navigationOptions = {
   header: null
@@ -23,36 +23,36 @@ const navOptScreenWCancel = {
   headerBackImage: require("./resources/img/close.png")
 }
 
+const headerTitleStyle = {
+  fontSize: JolocomTheme.headerFontSize,
+  fontFamily: JolocomTheme.contentFontFamily,
+  fontWeight: '300',
+}
+
+const commonNavigationOptions = {
+  headerTitleStyle,
+  headerStyle: {
+    backgroundColor: JolocomTheme.primaryColorBlack
+  },
+  headerTintColor: JolocomTheme.primaryColorWhite
+}
+
 export const HomeRoutes = TabNavigator(
   {
     Claims: {
       screen: Claims,
       navigationOptions: {
-        tabBarLabel: I18n.t("All claims"),
-        headerTitle: I18n.t("My identity"),
-        headerTitleStyle: {
-          fontSize: JolocomTheme.headerFontSize,
-          fontFamily: JolocomTheme.contentFontFamily,
-          fontWeight: "300"
-        },
-        headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-        headerTintColor: JolocomTheme.primaryColorWhite
+        tabBarLabel: I18n.t('All claims'),
+        headerTitle: I18n.t('My identity'),
+        ...commonNavigationOptions,
       }
     },
     Interactions: {
       screen: Interactions,
       navigationOptions: {
-        tabBarLabel: I18n.t("Documents"),
-        headerTitle: I18n.t("My identity"),
-        headerTitleStyle: {
-          fontSize: JolocomTheme.headerFontSize,
-          fontFamily: JolocomTheme.contentFontFamily,
-          fontWeight: "300"
-        },
-        headerStyle: {
-          backgroundColor: JolocomTheme.primaryColorBlack
-        },
-        headerTintColor: JolocomTheme.primaryColorWhite
+        tabBarLabel: I18n.t('Documents'),
+        headerTitle: I18n.t('My identity'),
+        ...commonNavigationOptions,
       }
     }
   },
@@ -74,8 +74,7 @@ export const HomeRoutes = TabNavigator(
       }
     },
     tabBarComponent: TabBarTop,
-    tabBarPosition: "bottom",
-    backBehavior: "initialRoute"
+    tabBarPosition: 'top'
   }
 )
 

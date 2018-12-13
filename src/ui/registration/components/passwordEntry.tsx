@@ -3,7 +3,7 @@ import { StyleSheet, TextInput } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 interface Props {
   lineColorPassword: string

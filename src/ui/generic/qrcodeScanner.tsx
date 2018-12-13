@@ -4,10 +4,14 @@ import { connect } from "react-redux"
 import { Container } from "src/ui/structure"
 import { JolocomTheme } from "src/styles/jolocom-theme"
 import { Button } from "react-native-material-ui"
-import { QrScanEvent } from "../containers/types"
+import { QrScanEvent } from "src/ui/generic/qrcodeScanner"
 import { ssoActions, navigationActions } from "src/actions"
 import I18n from "src/locales/i18n"
 const QRScanner = require("react-native-qrcode-scanner").default
+
+export type QrScanEvent = {
+  data: string
+}
 
 interface Props {
   onScannerSuccess: (e: QrScanEvent) => void

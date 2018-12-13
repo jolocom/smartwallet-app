@@ -14,7 +14,7 @@ describe('Claims container', () => {
   it('mounts correctly and matches the snapshot', () => {
     const setClaimsForDid = jest.fn()
 
-    const props = Object.assign({}, COMMON_PROPS {
+    const props = Object.assign({}, COMMON_PROPS, {
       setClaimsForDid
     })
 
@@ -26,8 +26,7 @@ describe('Claims container', () => {
 
   it('correctly changes scanning to true when qr code scanner is started', () => {
     const props = Object.assign({}, COMMON_PROPS, {
-      setClaimsForDid: () => {},
-      scanning: true
+      setClaimsForDid: () => {}
     })
 
     const rendered = shallow(<ClaimsContainer {...props}/>)

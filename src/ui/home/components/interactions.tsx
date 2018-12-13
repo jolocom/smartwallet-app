@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 interface Props {
 }

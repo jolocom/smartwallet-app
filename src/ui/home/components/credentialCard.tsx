@@ -5,7 +5,7 @@ import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard, CollapsedCredentialCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
 import { DecoratedClaims } from 'src/reducers/account'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 interface Props {
   handleInteraction?: (event: GestureResponderEvent) => void
@@ -76,7 +76,7 @@ export class CredentialCard extends React.Component<Props, State> {
     />
   )
 
-  public render() {
+  render() {
     const { credentialItem, containerStyle, leftIcon, rightIcon } = this.props
     const { collapsed } = this.state
     const { defaultContainerStyle } = this.getStyles()
