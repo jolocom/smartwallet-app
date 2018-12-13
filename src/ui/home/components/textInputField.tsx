@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 const ReactMUI = require('react-native-material-textfield')
 
 interface Props {

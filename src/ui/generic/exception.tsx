@@ -7,7 +7,7 @@ import { registrationActions, navigationActions } from 'src/actions/'
 import { Text, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 
 interface ConnectProps {

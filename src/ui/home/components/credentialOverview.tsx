@@ -10,7 +10,7 @@ import { CredentialTypes } from 'src/lib/categories'
 import { MoreIcon } from 'src/resources'
 import { getCredentialIconByType } from 'src/resources/util'
 import { prepareLabel } from 'src/lib/util'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 const loaders = require('react-native-indicator')
 
 interface Props {
@@ -24,18 +24,18 @@ interface State {}
 
 const styles = StyleSheet.create({
   sectionHeader: {
-    marginTop: '5%',
-    marginHorizontal: '5%',
+    marginTop: "5%",
+    marginHorizontal: "5%",
     height: 26,
     fontSize: 17,
     fontFamily: JolocomTheme.contentFontFamily
   },
   scrollComponent: {
-    width: '100%'
+    width: "100%"
   },
   scrollComponentLoading: {
     flexGrow: 1,
-    justifyContent: 'space-around'
+    justifyContent: "space-around"
   }
 })
 
@@ -43,13 +43,20 @@ export class CredentialOverview extends React.Component<Props, State> {
   renderCredentialCard = (category: string): ReactNode => {
     const { onEdit, did, claimsState } = this.props
 
-    const decoratedCredentials: CategorizedClaims = claimsState.decoratedCredentials
-    const categorizedCredentials: DecoratedClaims[] = decoratedCredentials[category] || []
+    const decoratedCredentials: CategorizedClaims =
+      claimsState.decoratedCredentials
+    const categorizedCredentials: DecoratedClaims[] =
+      decoratedCredentials[category] || []
 
     return categorizedCredentials.map((claim: DecoratedClaims) => {
-      const filteredKeys = Object.keys(claim.claimData).filter(el => el !== 'id')
+      const filteredKeys = Object.keys(claim.claimData).filter(
+        el => el !== "id"
+      )
       const captialized = filteredKeys.reduce(
-        (acc, curr) => ({ ...acc, [prepareLabel(curr)]: claim.claimData[curr] }),
+        (acc, curr) => ({
+          ...acc,
+          [prepareLabel(curr)]: claim.claimData[curr]
+        }),
         {}
       )
       const selfSigned = claim.issuer === did
@@ -73,7 +80,7 @@ export class CredentialOverview extends React.Component<Props, State> {
     }
 
     return [
-      <Text style={styles.sectionHeader}>{ I18n.t(category.toString()) }</Text>,
+      <Text style={styles.sectionHeader}>{I18n.t(category.toString())}</Text>,
       this.renderCredentialCard(category)
     ]
   }
@@ -104,7 +111,11 @@ export class CredentialOverview extends React.Component<Props, State> {
 const renderLoadingScreen = () => {
   return (
     <Block>
-      <loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} />
+      <loaders.RippleLoader
+        size={500}
+        strokeWidth={7}
+        color={JolocomTheme.primaryColorPurple}
+      />
     </Block>
   )
 }

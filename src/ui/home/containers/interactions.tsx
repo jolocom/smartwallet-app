@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 
 import { LayoutWithNavigationBar } from 'src/ui/generic'
 
-import { ssoActions } from 'src/actions'
+import {navigationActions, ssoActions} from 'src/actions'
 import { RootState } from 'src/reducers/'
+import {routeList} from '../../../routeList'
 
 interface ConnectProps {
+  openScanner: () => void
   parseJWT: (jwt: string) => void
   loading: boolean
 }
@@ -21,7 +23,9 @@ export class InteractionsContainer extends React.Component<Props, State> {
 
   render() {
     return (
-      <LayoutWithNavigationBar onScannerSuccess={this.props.parseJWT}>
+      <LayoutWithNavigationBar
+        openScanner={this.props.openScanner}
+        onScannerSuccess={this.props.parseJWT}>
         <InteractionsComponent />
       </LayoutWithNavigationBar>
     )
@@ -35,7 +39,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt))
+    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
+    openScanner: () => dispatch( navigationActions.navigate({ routeName: routeList.QRCodeScanner }))
   }
 }
 

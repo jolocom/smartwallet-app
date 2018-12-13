@@ -1,4 +1,4 @@
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 export const loadingStages = [
   I18n.t('Encrypting and storing data locally'),

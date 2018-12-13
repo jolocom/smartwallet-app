@@ -3,45 +3,20 @@ import { shallow } from 'enzyme'
 import { Text } from 'react-native'
 
 import { LayoutWithNavigationBar } from 'src/ui/generic'
-import { QRcodeScanner } from 'src/ui/generic/qrcodeScanner'
 import { LoadingSpinner } from 'src/ui/generic'
 
 
 describe('LayoutWithNavigationBar component', () => {
   const COMMON_PROPS = {
     onScannerSuccess: (jwt: string) => null,
+    openScanner: () => {},
     loading: false,
   }
 
-  it('should display only qr code scanner based on state', () => {
-    const layoutComponent = shallow((
-      <LayoutWithNavigationBar {...COMMON_PROPS}>
-        <Text>Sample test children</Text>
-      </LayoutWithNavigationBar>
-    ))
-    layoutComponent.setState({ scanning: true })
-
-    expect(layoutComponent.find(QRcodeScanner).length).toBe(1)
-    expect(layoutComponent.find(Text).length).toBe(0)
-    expect(layoutComponent).toMatchSnapshot()
-  })
-
-  it('should display only loading spinner based on state', () => {
-    const layoutComponent = shallow((
-      <LayoutWithNavigationBar {...COMMON_PROPS}>
-        <Text>Sample test children</Text>
-      </LayoutWithNavigationBar>
-    ))
-    layoutComponent.setState({ loading: true })
-
-    expect(layoutComponent.find(LoadingSpinner).length).toBe(1)
-    expect(layoutComponent.find(Text).length).toBe(0)
-    expect(layoutComponent).toMatchSnapshot()
-  })
-
   it('should display only loading spinner based on props', () => {
     const props = Object.assign({}, COMMON_PROPS, {
-      loading: true
+      loading: true,
+      openScanner: () => {}
     })
     const layoutComponent = shallow((
       <LayoutWithNavigationBar {...props}>
@@ -56,7 +31,7 @@ describe('LayoutWithNavigationBar component', () => {
 
   it('should render children with qr code button in a navigation if no loading and scanning state', () => {
     const layoutComponent = shallow((
-      <LayoutWithNavigationBar>
+      <LayoutWithNavigationBar onScannerSuccess={() => {}} openScanner={()=> {}}>
         <Text>Sample test children</Text>
       </LayoutWithNavigationBar>
     ))
