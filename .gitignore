@@ -12,6 +12,7 @@ coverage/
 .watchmanconfig
 .DS_Store
 dist/
+.idea
 
 # React Native Android
 android/.build

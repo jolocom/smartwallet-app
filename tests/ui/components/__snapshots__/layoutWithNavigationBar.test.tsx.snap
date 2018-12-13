@@ -2,15 +2,6 @@
 
 exports[`LayoutWithNavigationBar component should display only loading spinner based on props 1`] = `<LoadingSpinner />`;
 
-exports[`LayoutWithNavigationBar component should display only loading spinner based on state 1`] = `<LoadingSpinner />`;
-
-exports[`LayoutWithNavigationBar component should display only qr code scanner based on state 1`] = `
-<QRcodeScanner
-  onScannerCancel={[Function]}
-  onScannerSuccess={[Function]}
-/>
-`;
-
 exports[`LayoutWithNavigationBar component should render children with qr code button in a navigation if no loading and scanning state 1`] = `
 <Component>
   <Component
