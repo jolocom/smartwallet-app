@@ -33,7 +33,20 @@ const categorizedClaims: CategorizedClaims = {
       id: '',
       issuer: '',
       subject: ''
-    }
+    },
+    {
+      credentialType: 'Postal Address',
+      claimData: {
+        addressLine1: '',
+        addressLine2: '',
+        postalCode: '',
+        city: '',
+        country: ''
+      },
+      id: '',
+      issuer: '',
+      subject: ''
+    },
   ],
   Other: []
 }
