@@ -74,7 +74,8 @@ export const HomeRoutes = TabNavigator(
       }
     },
     tabBarComponent: TabBarTop,
-    tabBarPosition: "bottom"
+    tabBarPosition: "bottom",
+    backBehavior: "initialRoute"
   }
 )
 

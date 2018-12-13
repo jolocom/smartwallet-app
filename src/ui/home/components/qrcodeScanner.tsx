@@ -1,5 +1,5 @@
 import React from "react"
-import { Text, StyleSheet, Platform, BackHandler } from "react-native"
+import { Text, StyleSheet } from "react-native"
 import { connect } from "react-redux"
 import { Container } from "src/ui/structure"
 import { JolocomTheme } from "src/styles/jolocom-theme"
@@ -23,24 +23,8 @@ const styles = StyleSheet.create({
 })
 
 class QRcodeScanner extends React.Component<Props, State> {
-  componentDidMount() {
-    if (Platform.OS === "android") {
-      BackHandler.addEventListener("hardwareBackPress", () => {
-        this.props.onScannerCancel()
-      })
-    }
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener(
-      "hardwareBackPress",
-      this.props.onScannerCancel
-    )
-  }
-
   render() {
     const { onScannerSuccess, onScannerCancel } = this.props
-    console.log(this.props)
     return (
       <Container>
         <QRScanner
