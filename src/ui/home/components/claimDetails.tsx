@@ -112,8 +112,23 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   private confirmationEligibilityCheck = () => {
+    return !this.allDataCompleted || this.state.pending
+  }
+
+  get allDataCompleted() {  
     const { claimData } = this.props.selectedClaim
-    return Object.keys(claimData).find(c => claimData[c].length === 0) || this.state.pending
+    return Object.keys(claimData).every((c, idx, arr) => {
+      const fieldName = c.replace(/[0-9]/g, '')
+      const isMultiLineField = arr.some(field => field !== c && field.replace(/[0-9]/g, '') === fieldName)
+
+      if (isMultiLineField) {
+        const fieldsToCheck = arr.filter(field => field.includes(fieldName))
+
+        return fieldsToCheck.some(field => claimData[field].length > 0)
+      }
+
+      return claimData[c].length > 0
+    })
   }
 
   render() {
