@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   }
 })
 
-class QRcodeScanner extends React.Component<Props, State> {
+export class QRcodeScanner extends React.Component<Props, State> {
   render() {
     const { onScannerSuccess, onScannerCancel } = this.props
     return (
