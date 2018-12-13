@@ -1,9 +1,6 @@
 import React from 'react'
 import { InteractionsComponent } from 'src/ui/home/components/interactions'
 import { connect } from 'react-redux'
-
-import { LayoutWithNavigationBar } from 'src/ui/generic'
-
 import {navigationActions, ssoActions} from 'src/actions'
 import { RootState } from 'src/reducers/'
 import {routeList} from '../../../routeList'
@@ -23,11 +20,7 @@ export class InteractionsContainer extends React.Component<Props, State> {
 
   render() {
     return (
-      <LayoutWithNavigationBar
-        openScanner={this.props.openScanner}
-        onScannerSuccess={this.props.parseJWT}>
         <InteractionsComponent />
-      </LayoutWithNavigationBar>
     )
   }
 }

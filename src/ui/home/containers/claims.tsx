@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { View } from 'react-native'
 
 import { CredentialOverview } from '../components/credentialOverview'
-import { LayoutWithNavigationBar } from 'src/ui/generic'
 import { accountActions, ssoActions, navigationActions } from 'src/actions'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
@@ -30,18 +29,12 @@ export class ClaimsContainer extends React.Component<Props> {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <LayoutWithNavigationBar
-          openScanner={this.props.openScanner}
-          onScannerSuccess={this.props.parseJWT}
+        <CredentialOverview
+          did={this.props.did}
+          claimsState={this.props.claims}
           loading={!!this.props.claims.loading}
-        >
-          <CredentialOverview
-            did={this.props.did}
-            claimsState={this.props.claims}
-            loading={!!this.props.claims.loading}
-            onEdit={this.props.openClaimDetails}
-          />
-        </LayoutWithNavigationBar>
+          onEdit={this.props.openClaimDetails}
+        />
       </View>
     )
   }

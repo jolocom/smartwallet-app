@@ -4,7 +4,7 @@ import * as React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const NAVIGATION_HEIGHT = 82
-const NAVIGATION_CONTENT_HEIGHT = NAVIGATION_HEIGHT - 27
+const NAVIGATION_CONTENT_HEIGHT = NAVIGATION_HEIGHT - 32
 
 interface ActionBarProps {
   openScanner: () => void
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   navigationContent: {
     height: NAVIGATION_CONTENT_HEIGHT,
-    backgroundColor: JolocomTheme.primaryColorGrey,
+    backgroundColor: '#fafafa',
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
