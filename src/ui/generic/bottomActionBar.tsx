@@ -1,5 +1,5 @@
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import {JolocomTheme} from '../../styles/jolocom-theme'
+import {JolocomTheme} from 'src/styles/jolocom-theme'
 import * as React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
