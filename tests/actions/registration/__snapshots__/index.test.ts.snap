@@ -3,8 +3,38 @@
 exports[`Registration action creators createIdentity should attempt to create an identity 1`] = `
 Array [
   Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Fueling with ether",
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Registering decentralized identity",
+  },
+  Object {
+    "type": "DID_SET",
+    "value": undefined,
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Preparing launch",
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "params": Object {
+          "mnemonic": "exhibit history avoid kit gaze pulse yellow portion hold lottery panda figure",
+        },
+        "routeName": "SeedPhrase",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
+  Object {
     "params": Object {
-      "flag": "registration",
+      "flag": "default",
     },
     "routeName": "Exception",
     "type": "Navigation/NAVIGATE",
@@ -23,13 +53,70 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `Array []`;
+exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `
+Array [
+  Array [
+    Object {
+      "controllingKeyPath": "m/73'/0'/0'/0",
+      "did": undefined,
+    },
+  ],
+]
+`;
 
 exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `Array []`;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `Array []`;
+exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
+Array [
+  Array [
+    Object {
+      "data": Array [
+        68,
+        23,
+        109,
+        41,
+        59,
+        173,
+        101,
+        186,
+        150,
+        4,
+        91,
+        144,
+        235,
+        21,
+        247,
+        48,
+        189,
+        253,
+        62,
+        53,
+        19,
+        124,
+        17,
+        21,
+        116,
+        52,
+        197,
+        209,
+        90,
+        78,
+        254,
+        79,
+      ],
+      "type": "Buffer",
+    },
+  ],
+]
+`;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 6`] = `Array []`;
+exports[`Registration action creators createIdentity should attempt to create an identity 6`] = `
+Array [
+  Array [
+    "0x000test",
+  ],
+]
+`;
 
 exports[`Registration action creators savePassword should attempt to save the password in the keychain 1`] = `
 Array [
