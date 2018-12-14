@@ -1,10 +1,10 @@
-import { accountActions } from "src/actions/"
-import configureStore from "redux-mock-store"
-import data from "../registration/data/mockRegistrationData"
-import thunk from "redux-thunk"
-import { JolocomLib } from "jolocom-lib"
+import { accountActions } from 'src/actions/'
+import configureStore from 'redux-mock-store'
+import data from '../registration/data/mockRegistrationData'
+import thunk from 'redux-thunk'
+import { JolocomLib } from 'jolocom-lib'
 
-describe("Account action creators", () => {
+describe('Account action creators', () => {
   const initialState = {
     account: {
       claims: {
@@ -12,21 +12,21 @@ describe("Account action creators", () => {
           return {
             loading: false,
             selected: {
-              credentialType: "Email",
+              credentialType: 'Email',
               claimData: {
-                email: "test@test.com"
+                email: 'test@test.com'
               },
-              id: "",
-              issuer: "did:jolo:test",
-              subject: "did:jolo:test"
+              id: '',
+              issuer: 'did:jolo:test',
+              subject: 'did:jolo:test'
             },
             pendingExternal: [],
-            decoratedCredentials: "blah"
+            decoratedCredentials: 'blah'
           }
         }
       },
       did: {
-        get: () => "mock:did:test "
+        get: () => 'mock:did:test '
       }
     }
   }
@@ -36,13 +36,21 @@ describe("Account action creators", () => {
     mockStore.clearActions()
   })
 
-  it("Should correctly handle one existing user identity", async () => {
+  it('Should correctly handle one existing user identity', async () => {
     const backendMiddleware = {
       storageLib: {
         get: {
-          persona: jest.fn().mockResolvedValue([{ did: "did:jolo:mock" }])
+          persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:mock' }]),
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed')
         }
-      }
+      },
+      keyChainLib: {
+        getPassword: jest.fn().mockResolvedValue('sekrit')
+      },
+      encryptionLib: {
+        decryptWithPass: () => 'newSeed'
+      },
+      setIdentityWallet: jest.fn(() => Promise.resolve())
     }
 
     const action = accountActions.checkIdentityExists()
@@ -51,18 +59,26 @@ describe("Account action creators", () => {
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it("Should correctly handle more existing user identites", async () => {
+  it('Should correctly handle more existing user identites', async () => {
     const backendMiddleware = {
       storageLib: {
         get: {
           persona: jest
             .fn()
             .mockResolvedValue([
-              { did: "did:jolo:first" },
-              { did: "did:jolo:second" }
-            ])
+              { did: 'did:jolo:first' },
+              { did: 'did:jolo:second' }
+            ]),
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed')
         }
-      }
+      },
+      keyChainLib: {
+        getPassword: jest.fn().mockResolvedValue('sekrit')
+      },
+      encryptionLib: {
+        decryptWithPass: () => 'newSeed'
+      },
+      setIdentityWallet: jest.fn(() => Promise.resolve())
     }
 
     const action = accountActions.checkIdentityExists()
@@ -70,13 +86,21 @@ describe("Account action creators", () => {
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it("Should correctly handle an empty personas table", async () => {
+  it('Should correctly handle an empty personas table', async () => {
     const backendMiddleware = {
       storageLib: {
         get: {
-          persona: jest.fn().mockResolvedValue([])
+          persona: jest.fn().mockResolvedValue([]),
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed')
         }
-      }
+      },
+      keyChainLib: {
+        getPassword: jest.fn().mockResolvedValue('sekrit')
+      },
+      encryptionLib: {
+        decryptWithPass: () => 'newSeed'
+      },
+      setIdentityWallet: jest.fn(() => Promise.resolve())
     }
 
     const action = accountActions.checkIdentityExists()
@@ -84,7 +108,7 @@ describe("Account action creators", () => {
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it("Should correctly retrieve claims from device storage db on setClaimForDid", async () => {
+  it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
     const { identityWallet, testSignedCredentialDefault } = data
 
     const backendMiddleware = {
@@ -105,15 +129,15 @@ describe("Account action creators", () => {
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it("should correctly save claim", async () => {
+  it('should correctly save claim', async () => {
     const { identityWallet } = data
     const mockClaimsItem = {
-      credentialType: "Email",
+      credentialType: 'Email',
       claimData: {
-        email: "test@test"
+        email: 'test@test'
       },
-      issuer: "did:jolo:test",
-      subject: "did:jolo:test"
+      issuer: 'did:jolo:test',
+      subject: 'did:jolo:test'
     }
 
     const backendMiddleware = {

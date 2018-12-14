@@ -16,11 +16,19 @@ Array [
     "value": "did:jolo:first",
   },
   Object {
-    "params": Object {
-      "flag": "default",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
+    "type": "SET_LOADING",
+    "value": false,
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
@@ -32,11 +40,19 @@ Array [
     "value": "did:jolo:mock",
   },
   Object {
-    "params": Object {
-      "flag": "default",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
+    "type": "SET_LOADING",
+    "value": false,
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
