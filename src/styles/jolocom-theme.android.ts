@@ -2,7 +2,7 @@ const primaryColors = {
   primaryColorBlack: 'black',
   primaryColorSand: '#ffefdf',
   primaryColorSandInactive: "rgba(255, 239, 223, 0.38)",
-  primaryColorGrey: '#fafafa',
+  primaryColorGrey: '#f5f5f5',
   primaryColorWhite: 'white',
   primaryColorPurple:'#942f51',
 

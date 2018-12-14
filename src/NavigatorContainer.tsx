@@ -10,6 +10,8 @@ import { AnyAction } from "redux"
 import { Routes } from "src/routes"
 import { RootState } from "src/reducers/"
 import { navigationActions, accountActions } from "src/actions/"
+import {BottomActionBar} from './ui/generic/'
+import {routeList} from './routeList'
 
 const {
   createReduxBoundAddListener
@@ -17,6 +19,7 @@ const {
 
 interface ConnectProps {
   navigation: RootState["navigation"]
+  openScanner: () => void
   goBack: () => void
   handleDeepLink: (url: string) => void
   checkIfAccountExists: () => void
@@ -88,14 +91,19 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   render() {
+    const {routes, index} = this.props.navigation
+    const currentRoute = routes[index].routeName
     return (
-      <Routes
+      [<Routes
         navigation={addNavigationHelpers({
           dispatch: this.props.dispatch,
           state: this.props.navigation,
           addListener: this.addListener
         })}
-      />
+      />,
+        currentRoute === routeList.Home &&
+        <BottomActionBar openScanner={this.props.openScanner}/>
+      ]
     )
   }
 }
@@ -109,8 +117,8 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     goBack: () => dispatch(navigationActions.goBack()),
-    handleDeepLink: (url: string) =>
-      dispatch(navigationActions.handleDeepLink(url)),
+    handleDeepLink: (url: string) => dispatch(navigationActions.handleDeepLink(url)),
+    openScanner: () => dispatch( navigationActions.navigate({ routeName: routeList.QRCodeScanner })),
     checkIfAccountExists: () => dispatch(accountActions.checkIdentityExists())
   }
 }

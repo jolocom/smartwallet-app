@@ -8,14 +8,10 @@ exports[`Claims container correctly changes scanning to false when qr code scann
     }
   }
 >
-  <LayoutWithNavigationBar
+  <CredentialOverview
+    claimsState={Object {}}
     loading={false}
-  >
-    <CredentialOverview
-      claimsState={Object {}}
-      loading={false}
-    />
-  </LayoutWithNavigationBar>
+  />
 </Component>
 `;
 
@@ -27,14 +23,10 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
     }
   }
 >
-  <LayoutWithNavigationBar
+  <CredentialOverview
+    claimsState={Object {}}
     loading={false}
-  >
-    <CredentialOverview
-      claimsState={Object {}}
-      loading={false}
-    />
-  </LayoutWithNavigationBar>
+  />
 </Component>
 `;
 
@@ -46,13 +38,9 @@ exports[`Claims container mounts correctly and matches the snapshot 1`] = `
     }
   }
 >
-  <LayoutWithNavigationBar
+  <CredentialOverview
+    claimsState={Object {}}
     loading={false}
-  >
-    <CredentialOverview
-      claimsState={Object {}}
-      loading={false}
-    />
-  </LayoutWithNavigationBar>
+  />
 </Component>
 `;
