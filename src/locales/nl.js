@@ -50,8 +50,20 @@ export default {
     "Personal": "persoonlijk",
     "Name": "Naam",
     "Email": "E-mail",
-    "Mobile phone": "Mobiele telefoon",
+    "Mobile Phone": "Mobiele telefoon",
     "Given Name": "Gegeven naam",
     "Family Name": "Achternaam",
-    "Telephone": "Telefoon"
+    "Telephone": "Telefoon",
+    "Contact": "Contact",
+    "Postal Address": "Postadres",
+    "Address Line1": "Adres regel 1",
+    "Address Line2": "Adres lijn 2",
+    "Postal Code": "Postcode",
+    "City": "Stad",
+    "Country": "Land",
+    "At least one number needed": "Er is minimaal één nummer nodig",
+    "At least one uppercase letter needed": "Er is minimaal één hoofdletter nodig",
+    "Passwords do not match": "Wachtwoorden komen niet overeen",
+    "No spaces allowed": "Geen spaties toegestaan",
+    "At least 8 characters are required": "Ten minste 8 tekens zijn vereist"
 }
