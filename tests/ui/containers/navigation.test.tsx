@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 import { RootState } from 'src/reducers/'
 const { createReactNavigationReduxMiddleware } = require('react-navigation-redux-helpers')
 
-describe.only('NavigatorContainer', ()=> {
+describe('NavigatorContainer', ()=> {
   const COMMON_PROPS = {
     parseJWT: jest.fn(),
     goBack: jest.fn(),

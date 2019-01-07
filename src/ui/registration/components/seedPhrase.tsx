@@ -9,7 +9,6 @@ const { Button } = require('react-native-material-ui')
 interface Props {
   seedPhrase: string
   checked: boolean
-  onCheck: () => void
   handleButtonTap: () => void
 }
 
