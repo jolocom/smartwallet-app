@@ -23,7 +23,7 @@ export const savePassword = (password: string) => {
       await backendMiddleware.keyChainLib.savePassword(password)
       dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
     } catch (err) {
-      dispatch(genericActions.showErrorScreen(err, 'registration'))
+      dispatch(genericActions.showErrorScreen(err, routeList.Landing))
     }
   }
 }
@@ -104,14 +104,15 @@ export const createIdentity = (encodedEntropy: string) => {
       dispatch(setLoadingMsg(loading.loadingStages[3]))
   
       dispatch(accountActions.setIdentityWallet())
-      dispatch(
+      
+      return dispatch(
         navigationActions.navigatorReset({
           routeName: routeList.SeedPhrase,
           params: { mnemonic: bip39.entropyToMnemonic(encodedEntropy) }
         })
       )
     } catch (error) {
-      return dispatch(genericActions.showErrorScreen(error, 'registration'))
+      return dispatch(genericActions.showErrorScreen(error, routeList.Landing))
     }
   }
 }

@@ -3,7 +3,6 @@
 exports[`seedPhrase container mounts correctly and matches snapshot 1`] = `
 <SeedPhrase
   checked={false}
-  onCheck={[Function]}
   seedPhrase="mock seedPhrase"
 />
 `;

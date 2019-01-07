@@ -16,11 +16,19 @@ Array [
     "value": "did:jolo:first",
   },
   Object {
-    "params": Object {
-      "flag": "default",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
+    "type": "SET_LOADING",
+    "value": false,
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
@@ -32,11 +40,65 @@ Array [
     "value": "did:jolo:mock",
   },
   Object {
-    "params": Object {
-      "flag": "default",
+    "type": "SET_LOADING",
+    "value": false,
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
+]
+`;
+
+exports[`Account action creators Should correctly retrieve claims from device storage db on setClaimForDid 1`] = `
+Array [
+  Object {
+    "type": "TOGGLE_CLAIMS_LOADING",
+    "value": true,
+  },
+  Object {
+    "claims": Object {
+      "Contact": Array [
+        Object {
+          "claimData": Object {
+            "email": "test@jolocom.com",
+          },
+          "credentialType": "Email",
+          "expires": 2019-10-15T19:59:38.406Z,
+          "id": "claimId:61adc6e7b1448",
+          "issuer": "did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88",
+          "subject": "did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88",
+        },
+      ],
     },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
+    "type": "SET_CLAIMS_FOR_DID",
+  },
+  Object {
+    "type": "TOGGLE_CLAIMS_LOADING",
+    "value": false,
+  },
+]
+`;
+
+exports[`Account action creators should correctly save claim 1`] = `
+Array [
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;

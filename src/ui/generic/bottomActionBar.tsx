@@ -11,28 +11,19 @@ interface ActionBarProps {
 }
 
 const styles = StyleSheet.create({
-  navigationWrapper: {
-    position: 'absolute',
-    bottom: 0,
-    height: NAVIGATION_HEIGHT,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    width: '100%',
-  },
   navigationContent: {
     height: NAVIGATION_CONTENT_HEIGHT,
     backgroundColor: '#fafafa',
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   navigationContentItem: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   contentLeft: {
     marginRight: 36
@@ -53,24 +44,26 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    elevation: 8,
-  },
+    elevation: 8
+  }
 })
 
 export class BottomActionBar extends React.Component<ActionBarProps, {}> {
   render() {
-    return <View style={styles.navigationWrapper}>
-      <View style={styles.navigationContent}>
-        <View style={[styles.navigationContentItem, styles.contentLeft]}>
+    return (
+      <View display={'flex'} alignItems={'center'}>
+        <View style={styles.navigationContent}>
+          <View style={[styles.navigationContentItem, styles.contentLeft]} />
+          <View style={[styles.navigationContentItem, styles.contentRight]} />
         </View>
-        <View style={[styles.navigationContentItem, styles.contentRight]}>
-        </View>
-      </View>
 
-      <TouchableOpacity style={styles.qrCodeButton} onPress={this.props.openScanner}>
-        <Icon size={30} name="qrcode-scan" color="white" />
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.qrCodeButton}
+          onPress={this.props.openScanner}
+        >
+          <Icon size={30} name="qrcode-scan" color="white" />
+        </TouchableOpacity>
+      </View>
+    )
   }
 }
-
