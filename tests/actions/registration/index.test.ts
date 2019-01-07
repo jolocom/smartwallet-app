@@ -26,9 +26,7 @@ describe('Registration action creators', () => {
 
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledTimes(1)
-      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(
-        mockPass
-      )
+      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(mockPass)
     })
 
     it('should display exception screen in case of error', async () => {
@@ -45,7 +43,7 @@ describe('Registration action creators', () => {
       await asyncAction(mockStore.dispatch, mockGetState, mockMiddleware)
 
       expect(mockStore.getActions()[0].routeName).toContain('Exception')
-      expect(mockStore.getActions()[0].params.flag).toContain('registration')
+      expect(mockStore.getActions()[0].params.returnTo).toBe('Landing')
     })
   })
 
@@ -74,13 +72,7 @@ describe('Registration action creators', () => {
   describe('createIdentity', () => {
     it('should attempt to create an identity', async () => {
       MockDate.set(new Date(946681200000))
-
-      const mockStore = configureStore([thunk])({})
       const { getPasswordResult, cipher, entropy, identityWallet } = data
-
-      JolocomLib.registries.jolocom.create = jest.fn().mockReturnValue({
-        create: () => identityWallet
-      })
 
       const mockBackend = {
         identityWallet,
@@ -109,6 +101,11 @@ describe('Registration action creators', () => {
         setIdentityWallet: jest.fn(() => Promise.resolve())
       }
 
+      const mockStore = configureStore([thunk.withExtraArgument(mockBackend)])({})
+
+      JolocomLib.registries.jolocom.create = jest.fn().mockReturnValue({
+        create: () => identityWallet
+      })
       const mockGetState = () => {}
 
       const asyncAction = registrationActions.createIdentity(entropy)
@@ -116,17 +113,11 @@ describe('Registration action creators', () => {
 
       expect(mockStore.getActions()).toMatchSnapshot()
 
-      expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
-      expect(
-        mockBackend.encryptionLib.encryptWithPass.mock.calls
-      ).toMatchSnapshot()
+      expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(2)
+      expect(mockBackend.encryptionLib.encryptWithPass.mock.calls).toMatchSnapshot()
       expect(mockBackend.storageLib.store.persona.mock.calls).toMatchSnapshot()
-      expect(
-        mockBackend.storageLib.store.derivedKey.mock.calls
-      ).toMatchSnapshot()
-      expect(
-        mockBackend.ethereumLib.privKeyToEthAddress.mock.calls
-      ).toMatchSnapshot()
+      expect(mockBackend.storageLib.store.derivedKey.mock.calls).toMatchSnapshot()
+      expect(mockBackend.ethereumLib.privKeyToEthAddress.mock.calls).toMatchSnapshot()
       expect(mockBackend.ethereumLib.requestEther.mock.calls).toMatchSnapshot()
 
       MockDate.reset()
@@ -135,13 +126,8 @@ describe('Registration action creators', () => {
     it('should display exception screen in case of error', async () => {
       const mockEntropy = 'abcd'
       const mockBackend = {
-        jolocomLib: {
-          identity: {
-            create: jest.fn().mockRejectedValue({
-              message: 'Mock registration error',
-              stack: 'mock registration error stack trace'
-            })
-          }
+        keyChainLib: {
+          getPassword: jest.fn().mockRejectedValue('MockError')
         }
       }
 
@@ -152,7 +138,7 @@ describe('Registration action creators', () => {
       await asyncAction(mockStore.dispatch, mockGetState, mockBackend)
 
       expect(mockStore.getActions()[0].routeName).toContain('Exception')
-      expect(mockStore.getActions()[0].params.flag).toContain('registration')
+      expect(mockStore.getActions()[0].params.returnTo).toBe('Landing')
     })
   })
 })

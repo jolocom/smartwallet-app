@@ -32,13 +32,6 @@ Array [
     "key": undefined,
     "type": "Navigation/RESET",
   },
-  Object {
-    "params": Object {
-      "flag": "default",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
-  },
 ]
 `;
 

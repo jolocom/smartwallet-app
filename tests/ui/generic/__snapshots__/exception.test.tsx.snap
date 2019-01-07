@@ -64,7 +64,7 @@ exports[`Exception screen component Renders correctly 1`] = `
       disabled={false}
       icon={null}
       onLongPress={null}
-      onPress={null}
+      onPress={[Function]}
       primary={false}
       raised={true}
       style={
@@ -155,7 +155,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
       disabled={false}
       icon={null}
       onLongPress={null}
-      onPress={null}
+      onPress={[Function]}
       primary={false}
       raised={true}
       style={
