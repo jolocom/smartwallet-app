@@ -141,6 +141,9 @@ describe('Account action creators', () => {
     }
 
     const backendMiddleware = {
+      keyChainLib: {
+        getPassword: jest.fn().mockResolvedValue('sekrit')
+      },
       storageLib: {
         store: {
           verifiableCredential: jest.fn().mockResolvedValue([])

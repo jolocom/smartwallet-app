@@ -90,11 +90,15 @@ Array [
 exports[`Account action creators should correctly save claim 1`] = `
 Array [
   Object {
-    "params": Object {
-      "flag": "default",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;

@@ -1,11 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
-import { RootState } from 'src/reducers/'
 import { finishRegistration } from 'src/actions/registration'
 
-interface ConnectProps {
-}
+interface ConnectProps {}
 
 interface Props extends ConnectProps {
   navigation: { state: { params: { mnemonic: string } } }
@@ -13,7 +11,7 @@ interface Props extends ConnectProps {
 }
 
 interface State {
-  checked: boolean;
+  checked: boolean
 }
 
 export class SeedPhraseContainer extends React.Component<Props, State> {
@@ -26,25 +24,20 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
 
   render() {
     const { mnemonic } = this.props.navigation.state.params
-    return <SeedPhraseComponent
-      seedPhrase={ mnemonic }
-      checked={ this.state.checked }
-      onCheck={ this.handleCheckboxTap }
-      handleButtonTap={ this.props.finishRegistration }
-    />
-  }
-
-  private handleCheckboxTap = () => {
-    this.setState({ checked: !this.state.checked })
+    return (
+      <SeedPhraseComponent
+        seedPhrase={mnemonic}
+        checked={this.state.checked}
+        handleButtonTap={this.props.finishRegistration}
+      />
+    )
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return { }
-}
+const mapStateToProps = () => ({})
+const mapDispatchToProps = (dispatch: Function) => ({ finishRegistration: () => dispatch(finishRegistration()) })
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return { finishRegistration: () => dispatch(finishRegistration()) }
-}
-
-export const SeedPhrase = connect(mapStateToProps, mapDispatchToProps)(SeedPhraseContainer)
+export const SeedPhrase = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SeedPhraseContainer)
