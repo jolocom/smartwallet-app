@@ -53,5 +53,17 @@ export default {
     "Mobile phone": "Mobiltelefon",
     "Given Name": "Vorname",
     "Family Name": "Nachname",
-    "Telephone": "Telefon"
+    "Telephone": "Telefon",
+    "Contact": "",
+    "Postal Address": "",
+    "Address Line1": "",
+    "Address Line2": "",
+    "Postal Code": "",
+    "City": "Stadt",
+    "Country": "Land",
+    "At least one number needed": "",
+    "At least one uppercase letter needed": "",
+    "Passwords do not match": "",
+    "No spaces allowed": "",
+    "At least 8 characters are required": ""
 }
