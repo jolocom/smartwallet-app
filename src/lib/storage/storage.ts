@@ -167,14 +167,14 @@ export class Storage {
       .createQueryBuilder()
       .delete()
       .from(CredentialEntity)
-      .where('verifiableCredential = :id', { id: id })
+      .where('verifiableCredential = :id', { id })
       .execute()
 
     await this.connection.manager
       .createQueryBuilder()
       .delete()
       .from(SignatureEntity)
-      .where('verifiableCredential = :id', { id: id })
+      .where('verifiableCredential = :id', { id })
       .delete()
       .execute()
 
@@ -182,7 +182,7 @@ export class Storage {
       .createQueryBuilder()
       .delete()
       .from(VerifiableCredentialEntity)
-      .where('id = :id', { id: id })
+      .where('id = :id', { id })
       .execute()
   }
 }

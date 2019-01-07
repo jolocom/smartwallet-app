@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { View, Text, StyleSheet, GestureResponderEvent, TextStyle, ViewStyle, RegisteredStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 // TODO Custom text component with size, font, color
 // TODO Make whole card clickable as opposed to icon

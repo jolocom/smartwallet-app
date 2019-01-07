@@ -6,7 +6,7 @@ import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 const styles = StyleSheet.create({
   blockSpace: {
@@ -112,8 +112,23 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   private confirmationEligibilityCheck = () => {
+    return !this.allDataCompleted || this.state.pending
+  }
+
+  get allDataCompleted() {  
     const { claimData } = this.props.selectedClaim
-    return Object.keys(claimData).find(c => claimData[c].length === 0) || this.state.pending
+    return Object.keys(claimData).every((c, idx, arr) => {
+      const fieldName = c.replace(/[0-9]/g, '')
+      const isMultiLineField = arr.some(field => field !== c && field.replace(/[0-9]/g, '') === fieldName)
+
+      if (isMultiLineField) {
+        const fieldsToCheck = arr.filter(field => field.includes(fieldName))
+
+        return fieldsToCheck.some(field => claimData[field].length > 0)
+      }
+
+      return claimData[c].length > 0
+    })
   }
 
   render() {

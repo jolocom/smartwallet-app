@@ -36,7 +36,7 @@ export const areCredTypesEqual = (first: string[], second: string[]): boolean =>
 }
 
 export const prepareLabel = (label: string): string => {
-  const words = label.split(/(?=[A-Z])/)
+  const words = label.split(/(?=[A-Z0-9])/)
   return words.length > 1 ? words.map(capitalize).join(' ') : capitalize(label)
 }
 

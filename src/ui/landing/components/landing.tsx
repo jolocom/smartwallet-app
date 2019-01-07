@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 import { 
   Landing00,
   Landing01,

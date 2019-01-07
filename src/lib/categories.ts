@@ -1,7 +1,8 @@
 export enum CredentialTypes {
   Email = 'Email',
   MobilePhone = 'Mobile Phone',
-  Name = 'Name'
+  Name = 'Name',
+  PostalAddress = 'Postal Address',
 }
 
 export enum Categories {
@@ -14,12 +15,14 @@ export const uiCredentialTypeByType: {[key: string]: string} = {
   'ProofOfEmailCredential': CredentialTypes.Email,
   'ProofOfMobilePhoneNumberCredential': CredentialTypes.MobilePhone,
   'ProofOfNameCredential': CredentialTypes.Name,
+  'ProofOfPostalAddressCredential': CredentialTypes.PostalAddress,
 }
 
 export const uiCategoryByCredentialType: {[key: string] : string[]} = {
   'Contact': [
     CredentialTypes.Email,
     CredentialTypes.MobilePhone,
+    CredentialTypes.PostalAddress,
   ],
   'Personal': [
     CredentialTypes.Name

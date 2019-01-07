@@ -6,7 +6,7 @@ import { ClaimCard } from 'src/ui/sso/components/claimCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { CredentialTopCard } from './credentialTopCard'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 interface Props {
   credentialToRender: DecoratedClaims

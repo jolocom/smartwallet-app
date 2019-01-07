@@ -37,7 +37,6 @@ describe('CredentialsOverview component', ()=> {
       }
     },
     scanning: false,
-    onScannerStart: () => null,
     openClaimsDetails: () => null,
   }
 

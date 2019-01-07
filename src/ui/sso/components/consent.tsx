@@ -7,7 +7,7 @@ import { IconToggle } from 'react-native-material-ui'
 import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { ConsentAttributeCard, HeaderSection } from './claimCard'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 interface Props {
   did: string

@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container, Block, CenteredText } from 'src/ui/structure/'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 const { Button } = require('react-native-material-ui')
 
