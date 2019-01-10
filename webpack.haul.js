@@ -35,11 +35,11 @@ module.exports = ({ platform }, { module, resolve }) => ({
       'react-native': path.join(__dirname, 'node_modules/react-native')
     },
     extensions: [
+      `.${platform}.ts`,
+      `.${platform}.tsx`,
       '.ts',
       '.tsx',
-      `.${platform}.ts`,
       '.native.ts',
-      `.${platform}.tsx`,
       '.native.tsx',
       ...resolve.extensions
     ]

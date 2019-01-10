@@ -1,25 +1,23 @@
 import React from 'react'
-import { RootState } from 'src/reducers/'
 import { connect } from 'react-redux'
-import { Container, Block} from 'src/ui/structure/'
+import { Container, Block } from 'src/ui/structure/'
 import { Button } from 'react-native-material-ui'
-import { registrationActions, navigationActions } from 'src/actions/'
+import { navigationActions } from 'src/actions/'
 import { Text, StyleSheet } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
-import I18n from 'src/locales/i18n';
-
+import I18n from 'src/locales/i18n'
 
 interface ConnectProps {
-  startRegistration: () => void
-  renderHome: () => void
+  navigateBack: (routeName: routeList) => void
 }
 
 interface Props extends ConnectProps {
   navigation: {
     state: {
       params: {
-        flag: string
+        returnTo: routeList
+        error: Error
       }
     }
   }
@@ -33,7 +31,7 @@ const styles = StyleSheet.create({
   textBlock: {
     flex: 0.6,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   errorTextHeader: {
     textAlign: 'center',
@@ -61,48 +59,43 @@ const styles = StyleSheet.create({
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
-    fontWeight: "100"
+    fontWeight: '100'
   }
 })
 
-export const ExceptionComponent: React.SFC<Props> = (props) => {
+export const ExceptionComponent: React.SFC<Props> = props => {
   const errorText = I18n.t('There was an error with your request') + '.'
+  console.error(props.navigation.state.params.error)
 
-  return(
-    <Container style={ styles.containerStyle }>
-      <Block style={ styles.textBlock }>
-        <Text style={ styles.errorTextHeader }>{ I18n.t('Oops!') }</Text>
-        <Text style={ styles.errorText }> { I18n.t(errorText) } </Text>
+  return (
+    <Container style={styles.containerStyle}>
+      <Block style={styles.textBlock}>
+        <Text style={styles.errorTextHeader}>{I18n.t('Oops!')}</Text>
+        <Text style={styles.errorText}> {I18n.t(errorText)} </Text>
       </Block>
-      <Block style={ styles.buttonBlock}>
-          <Button
-            raised
-            onPress={
-              props.navigation.state.params.flag === 'registration'
-              ? props.startRegistration
-              : props.renderHome
-            }
-            style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText
-            }}
-            upperCase= { false }
-            text={ I18n.t('Try again') }
-          />
-        </Block>
+      <Block style={styles.buttonBlock}>
+        <Button
+          raised
+          onPress={() => props.navigateBack(props.navigation.state.params.returnTo)}
+          style={{
+            container: styles.buttonContainer,
+            text: styles.buttonText
+          }}
+          upperCase={false}
+          text={I18n.t('Try again')}
+        />
+      </Block>
     </Container>
   )
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {}
-}
+const mapStateToProps = () => ({})
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    startRegistration: () => dispatch(registrationActions. startRegistration()),
-    renderHome: () => dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
-  }
-}
+const mapDispatchToProps = (dispatch: Function) => ({
+  navigateBack: (routeName: routeList) => dispatch(navigationActions.navigatorReset({ routeName }))
+})
 
-export const Exception = connect(mapStateToProps, mapDispatchToProps)(ExceptionComponent)
+export const Exception = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ExceptionComponent)

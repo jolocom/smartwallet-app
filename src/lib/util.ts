@@ -36,7 +36,7 @@ export const areCredTypesEqual = (first: string[], second: string[]): boolean =>
 }
 
 export const prepareLabel = (label: string): string => {
-  const words = label.split(/(?=[A-Z])/)
+  const words = label.split(/(?=[A-Z0-9])/)
   return words.length > 1 ? words.map(capitalize).join(' ') : capitalize(label)
 }
 
@@ -60,6 +60,6 @@ export const instantiateIdentityWallet = async (backendMiddleware: BackendMiddle
   })
 
   // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-  const userVault = new JolocomLib.keyProvider(Buffer.from(decryptedSeed, 'hex'), password)
+  const userVault = new JolocomLib.KeyProvider(Buffer.from(decryptedSeed, 'hex'), password)
   return await backendMiddleware.setIdentityWallet(userVault, password)
 }

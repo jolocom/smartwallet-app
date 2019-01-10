@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Block, Container, CenteredText } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 interface Props {
   addPoint: (x: number, y: number) => void

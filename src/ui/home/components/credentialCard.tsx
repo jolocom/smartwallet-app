@@ -1,11 +1,10 @@
 import React from 'react'
 import { StyleSheet, View, TextStyle, GestureResponderEvent, ViewStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { prepareLabel } from 'src/lib/util'
 import { ClaimCard, PlaceholderClaimCard, CollapsedCredentialCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
 import { DecoratedClaims } from 'src/reducers/account'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 interface Props {
   handleInteraction?: (event: GestureResponderEvent) => void
@@ -64,7 +63,7 @@ export class CredentialCard extends React.Component<Props, State> {
       <ClaimCard
         key={key}
         primaryText={ I18n.t(claimData[key]) }
-        secondaryText={ I18n.t(prepareLabel(key)) }
+        secondaryText={ I18n.t(key) }
       />
     ))
   }
@@ -76,7 +75,7 @@ export class CredentialCard extends React.Component<Props, State> {
     />
   )
 
-  public render() {
+  render() {
     const { credentialItem, containerStyle, leftIcon, rightIcon } = this.props
     const { collapsed } = this.state
     const { defaultContainerStyle } = this.getStyles()

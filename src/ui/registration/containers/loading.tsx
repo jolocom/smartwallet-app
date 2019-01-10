@@ -8,7 +8,7 @@ import { RootState } from 'src/reducers/'
 import Immutable from 'immutable'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 const loaders = require('react-native-indicator')
 
 export interface ConnectProps {

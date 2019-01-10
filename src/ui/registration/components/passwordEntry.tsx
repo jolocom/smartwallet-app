@@ -3,7 +3,7 @@ import { StyleSheet, TextInput } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Container, Block, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import I18n from 'src/locales/i18n';
+import I18n from 'src/locales/i18n'
 
 interface Props {
   lineColorPassword: string
@@ -149,23 +149,23 @@ export const PasswordEntryComponent : React.SFC<Props> = props => {
 
 const validateInput = (password: string, confirmPassword: string) : string => {
   if (password.indexOf(' ') !== -1) {
-    return 'No spaces allowed'
+    return I18n.t('No spaces allowed')
   }
 
   if (!password.match((/[A-Z]/))) {
-    return 'At least one uppercase letter needed'
+    return I18n.t('At least one uppercase letter needed')
   }
 
   if (!password.match((/[0-9]/))) {
-    return 'At least one number needed'
+    return I18n.t('At least one number needed')
   }
 
   if (password !== confirmPassword) {
-    return 'Passwords do not match'
+    return I18n.t('Passwords do not match')
   }
 
   if (password.length < 8) {
-    return 'At least 8 characters are required'
+    return I18n.t('At least 8 characters are required')
   }
 
   return ''
