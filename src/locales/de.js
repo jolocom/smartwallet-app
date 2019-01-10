@@ -50,7 +50,7 @@ export default {
     "Personal": "Persönlich",
     "Name": "Name",
     "Email": "Email",
-    "Mobile phone": "Mobilnummer",
+    "Mobile Phone": "Mobilnummer",
     "Given Name": "Vorname",
     "Family Name": "Nachname",
     "Telephone": "Telefon",
