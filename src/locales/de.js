@@ -65,5 +65,6 @@ export default {
     "At least one uppercase letter needed": "Es wird mindestens ein Großbuchstabe benötigt",
     "Passwords do not match": "Die Passwörter stimmen nicht überein",
     "No spaces allowed": "Keine Leerzeichen erlaubt",
-    "At least 8 characters are required": "Es werden mindestens 8 Zeichen benötigt"
+    "At least 8 characters are required": "Es werden mindestens 8 Zeichen benötigt",
+    "Your Jolocom Wallet": "Deine Jolocom Wallet"
 }

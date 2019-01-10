@@ -65,5 +65,6 @@ export default {
     "At least one uppercase letter needed": "Minimaal één hoofdletter vereist",
     "Passwords do not match": "De wachtwoorden komen niet overeen",
     "No spaces allowed": "Spaties zijn niet toegestaan",
-    "At least 8 characters are required": "Minimaal 8 tekens gebruiken"
+    "At least 8 characters are required": "Minimaal 8 tekens gebruiken",
+    "Your Jolocom Wallet": "Uw Jolocom Wallet"
 }
