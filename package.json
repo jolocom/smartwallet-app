@@ -49,7 +49,7 @@
     "android": "haul start --platform android",
     "ios": "haul start --platform ios",
     "test": "node node_modules/jest/bin/jest.js",
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/smartwallet/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'"
+    "build:ios": "haul bundle --entry-file='index.js' --bundle-output='./ios/smartwallet/main.jsbundle' --dev=false --minify=false --platform='ios' --assets-dest='./ios'"
   },
   "jest": {
     "setupFiles": [
