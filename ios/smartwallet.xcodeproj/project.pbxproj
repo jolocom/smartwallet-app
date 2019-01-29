@@ -34,6 +34,7 @@
 		A663C3A774294306AF244F58 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1FB41C0889D4B1AA6D2C85B /* Zocial.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		C6B54F97EDFF42AEA9060D98 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6A5354BCB704D5B88B400C9 /* MaterialCommunityIcons.ttf */; };
+		D22E3F142200664100A2DC1A /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = D22E3EDE2200664100A2DC1A /* main.jsbundle */; };
 		DC28A69520B5BA6C005E7D99 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		DC61D19C2181D8BC00E86DBC /* RCTLinking.xcodeproj in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */; };
 		DC7F762F20A1DE3600D78681 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD3E78820A1DAF400FC3989 /* libART.a */; };
@@ -480,6 +481,7 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		BC3E135C43514D84BEBBE8C5 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		D1FB41C0889D4B1AA6D2C85B /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		D22E3EDE2200664100A2DC1A /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = smartwallet/main.jsbundle; sourceTree = "<group>"; };
 		DC7F75F720A1DE2000D78681 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		DCBEC41920CABE240099FD03 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		DCBEC4A020CE76AD0099FD03 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
@@ -635,6 +637,7 @@
 		13B07FAE1A68108700A75B9A /* wallet */ = {
 			isa = PBXGroup;
 			children = (
+				D22E3EDE2200664100A2DC1A /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -930,7 +933,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = SKJXB5T87Z;
+						DevelopmentTeam = 95S8NJ5S67;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1448,6 +1451,7 @@
 				C6B54F97EDFF42AEA9060D98 /* MaterialCommunityIcons.ttf in Resources */,
 				296C5B93DD624867B8F0966B /* MaterialIcons.ttf in Resources */,
 				EC1E857C61024F7B86A70672 /* Octicons.ttf in Resources */,
+				D22E3F142200664100A2DC1A /* main.jsbundle in Resources */,
 				28B670DA172F46598B3D5E4B /* SimpleLineIcons.ttf in Resources */,
 				A663C3A774294306AF244F58 /* Zocial.ttf in Resources */,
 			);
@@ -1592,7 +1596,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = SKJXB5T87Z;
+				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
@@ -1626,7 +1630,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SKJXB5T87Z;
+				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
@@ -1680,7 +1684,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: danielsiwek95@gmail.com (664N3VKGAE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Charles Cunningham (V9PT34QKDQ)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1734,7 +1738,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: danielsiwek95@gmail.com (664N3VKGAE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Charles Cunningham (V9PT34QKDQ)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
