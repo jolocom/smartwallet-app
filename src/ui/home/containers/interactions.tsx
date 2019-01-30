@@ -1,7 +1,7 @@
 import React from 'react'
 import { InteractionsComponent } from 'src/ui/home/components/interactions'
 import { connect } from 'react-redux'
-import {navigationActions, ssoActions} from 'src/actions'
+import {navigationActions, interactionHandlerActions} from 'src/actions'
 import { RootState } from 'src/reducers/'
 import {routeList} from '../../../routeList'
 
@@ -32,7 +32,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
+    parseJWT: (jwt: string) => dispatch(interactionHandlerActions.parseJWT(jwt)),
     openScanner: () => dispatch( navigationActions.navigate({ routeName: routeList.QRCodeScanner }))
   }
 }

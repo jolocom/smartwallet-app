@@ -3,7 +3,7 @@ import {
   NavigationNavigateActionPayload
 } from "react-navigation"
 import { AnyAction, Dispatch } from "redux"
-import { ssoActions } from "src/actions/"
+import { interactionHandlerActions } from "src/actions/"
 import { setDid, toggleLoading } from "../account"
 import { BackendMiddleware } from "src/backendMiddleware"
 import { instantiateIdentityWallet } from "src/lib/util"
@@ -49,7 +49,7 @@ export const handleDeepLink = (url: string) => {
 
       dispatch(setDid(personas[0].did))
       await instantiateIdentityWallet(backendMiddleware)
-      dispatch(ssoActions.parseJWT(params))
+      dispatch(interactionHandlerActions.parseJWT(params))
     }
   }
 }

@@ -1,19 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
-
 import { CredentialOverview } from '../components/credentialOverview'
-import { accountActions, ssoActions, navigationActions } from 'src/actions'
+import { accountActions } from 'src/actions'
 import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
-import { routeList } from 'src/routeList'
 
 interface ConnectProps {
   setClaimsForDid: () => void
   toggleLoading: (val: boolean) => void
   openClaimDetails: (claim: DecoratedClaims) => void
-  openScanner: () => void
-  parseJWT: (jwt: string) => void
   did: string
   claims: ClaimsState
   loading: boolean
@@ -51,11 +47,9 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
     openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
     setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
-    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
-    openScanner: () => dispatch( navigationActions.navigate({ routeName: routeList.QRCodeScanner }))
+    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val))
   }
 }
 
