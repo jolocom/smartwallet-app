@@ -2,7 +2,7 @@ import { Dispatch, AnyAction } from 'redux'
 import { JolocomLib } from 'jolocom-lib'
 import { showErrorScreen } from 'src/actions/generic'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { accountActions, ssoActions } from 'src/actions'
+import { accountActions, ssoActions, paymentActions } from 'src/actions'
 
 export const parseJWT = (encodedJwt: string) => {
   return async (dispatch: Dispatch<AnyAction>) => {
@@ -18,6 +18,9 @@ export const parseJWT = (encodedJwt: string) => {
       }
       if (returnedDecodedJwt.interactionType === InteractionType.CredentialsReceive) {
         dispatch(ssoActions.receiveExternalCredential(returnedDecodedJwt))
+      }
+      if (returnedDecodedJwt.interactionType === InteractionType.PaymentRequest) {
+        dispatch(paymentActions.consumePaymentRequest(returnedDecodedJwt))
       }
     } catch (err) {
       console.log('error: ', err)
