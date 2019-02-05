@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   carouselTextContainer: {
-    padding: '10%',
+    padding: viewWidth / 15,
     flex: 0.4,
     marginTop: 'auto',
     backgroundColor: 'transparent' 
