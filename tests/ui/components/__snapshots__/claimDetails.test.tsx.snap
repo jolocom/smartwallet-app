@@ -5,8 +5,8 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
   <Block
     style={
       Object {
-        "marginBottom": "5%",
-        "marginTop": "5%",
+        "marginBottom": 33.35,
+        "marginTop": 33.35,
       }
     }
   >
@@ -24,8 +24,8 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
   <Block
     style={
       Object {
-        "marginBottom": "5%",
-        "marginTop": "5%",
+        "marginBottom": 33.35,
+        "marginTop": 33.35,
       }
     }
   >
@@ -39,8 +39,8 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
   <Block
     style={
       Object {
-        "marginBottom": "10%",
-        "marginTop": "5%",
+        "marginBottom": 66.7,
+        "marginTop": 66.7,
       }
     }
   >
@@ -81,8 +81,8 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
   <Block
     style={
       Object {
-        "marginBottom": "5%",
-        "marginTop": "5%",
+        "marginBottom": 33.35,
+        "marginTop": 33.35,
       }
     }
   >
@@ -100,8 +100,8 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
   <Block
     style={
       Object {
-        "marginBottom": "5%",
-        "marginTop": "5%",
+        "marginBottom": 33.35,
+        "marginTop": 33.35,
       }
     }
   >
@@ -121,8 +121,8 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
   <Block
     style={
       Object {
-        "marginBottom": "10%",
-        "marginTop": "5%",
+        "marginBottom": 66.7,
+        "marginTop": 66.7,
       }
     }
   >
