@@ -28,7 +28,7 @@ export class EthereumLib implements EthereumLibInterface  {
       }
     }).then(res => {
       if (!res.ok) {
-        throw new Error('Damn')
+        throw new Error('Fueling with Ether not successfull')
       }
     })
   }

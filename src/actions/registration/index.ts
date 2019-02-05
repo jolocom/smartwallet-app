@@ -6,7 +6,7 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { IpfsCustomConnector } from 'src/lib/ipfs'
-import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
+import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/didConnector'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 const bip39 = require('bip39')
 
