@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollContainer, Block, CenteredText } from 'src/ui/structure'
-import { StyleSheet, Keyboard, EmitterSubscription } from 'react-native'
+import { StyleSheet, Keyboard, EmitterSubscription, Dimensions } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
@@ -8,14 +8,16 @@ import { TextInputField } from 'src/ui/home/components/textInputField'
 import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 import I18n from 'src/locales/i18n'
 
+const { height } = Dimensions.get('window')
+
 const styles = StyleSheet.create({
   blockSpace: {
-    marginTop: '5%',
-    marginBottom: '5%'
+    marginTop: height / 40,
+    marginBottom: height / 40
   },
   blockSpaceLast: {
-    marginTop: '5%',
-    marginBottom: '10%'
+    marginTop: height / 20,
+    marginBottom: height /20
   },
   buttonContainer: {
     width: 164,
