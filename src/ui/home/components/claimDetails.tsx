@@ -32,12 +32,14 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
   },
   buttonText: {
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
   },
   buttonTextDisabled: {
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.disabledButtonTextGrey,
