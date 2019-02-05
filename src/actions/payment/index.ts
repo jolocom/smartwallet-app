@@ -24,6 +24,13 @@ export const clearPaymentRequest = () => {
   }
 }
 
+export const cancelPaymentRequest = () => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(clearPaymentRequest())
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+  }
+}
+
 export const consumePaymentRequest = (paymentRequest: JSONWebToken<PaymentRequest>) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { identityWallet } = backendMiddleware
@@ -31,14 +38,16 @@ export const consumePaymentRequest = (paymentRequest: JSONWebToken<PaymentReques
     try {
       await identityWallet.validateJWT(paymentRequest)
 
-      // TODO: add the UI specific info here
       const summary = {
+        didRequester: paymentRequest.issuer, // TODO: replace with public profile data later
+        description: paymentRequest.interactionToken.description,
+        transactionDetails: paymentRequest.interactionToken.transactionDetails,
         requestJWT: paymentRequest.encode()
       }
 
       dispatch(setPaymentRequest(summary))
       dispatch(accountActions.toggleLoading(false))
-      // TODO: insert redirection to relevant screen
+      dispatch(navigationActions.navigate({ routeName: routeList.PaymentConsent }))
     } catch (err) {
       dispatch(accountActions.toggleLoading(false))
       dispatch(showErrorScreen(new Error('Consuming payment request failed.')))

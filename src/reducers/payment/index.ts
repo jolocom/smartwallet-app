@@ -1,7 +1,11 @@
 import { AnyAction } from 'redux'
+import { ITransactionDetailsPaymentRequest } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
 export interface PaymentStateSummary {
+  readonly transactionDetails:  ITransactionDetailsPaymentRequest
   readonly requestJWT: string
+  readonly description: string
+  readonly didRequester: string
 }
 
 export interface PaymentState {
@@ -10,11 +14,16 @@ export interface PaymentState {
 
 const initialState: PaymentState = {
   activePaymentRequest: {
-    requestJWT: ''
+    requestJWT: '',
+    transactionDetails: {
+      receiverAddress: '',
+      amountInEther: ''
+    },
+    description: '',
+    didRequester: ''
   }
 } 
 
-// TODO: consolidate logic with SSO reducer and rename to maybe interactions
 export const paymentReducer = (state = initialState, action: AnyAction ): PaymentState => {
   switch(action.type) {
     case 'SET_PAYMENT_REQUEST':
