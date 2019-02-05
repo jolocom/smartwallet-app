@@ -8,16 +8,16 @@ import { TextInputField } from 'src/ui/home/components/textInputField'
 import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 import I18n from 'src/locales/i18n'
 
-const { height } = Dimensions.get('window')
+const viewHeight: number = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   blockSpace: {
-    marginTop: height / 40,
-    marginBottom: height / 40
+    marginTop: viewHeight / 40,
+    marginBottom: viewHeight / 40
   },
   blockSpaceLast: {
-    marginTop: height / 20,
-    marginBottom: height /20
+    marginTop: viewHeight / 20,
+    marginBottom: viewHeight /20
   },
   buttonContainer: {
     width: 164,
