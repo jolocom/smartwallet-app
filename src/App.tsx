@@ -10,6 +10,10 @@ const assign = require('object.assign/implementation')
 
 Object.assign = assign
 
+/**
+ * EXPERIMENTAL VERSION - PAYMENTS
+ */
+
 // tslint:disable-next-line: no-default-export
 export default class App extends React.Component {
 
