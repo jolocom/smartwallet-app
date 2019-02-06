@@ -65,6 +65,7 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "paddingVertical": 15,
           },
         }
       }
@@ -147,6 +148,7 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "paddingVertical": 15,
           },
         }
       }

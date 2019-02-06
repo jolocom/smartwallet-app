@@ -138,6 +138,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "paddingVertical": 15,
           },
         }
       }

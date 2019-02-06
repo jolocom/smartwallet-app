@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   blockSpaceLast: {
     marginTop: viewHeight / 20,
-    marginBottom: viewHeight /20
+    marginBottom: viewHeight / 20
   },
   buttonContainer: {
     width: 164,
