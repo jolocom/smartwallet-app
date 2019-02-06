@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollContainer, Block, CenteredText } from 'src/ui/structure'
-import { StyleSheet, Keyboard, EmitterSubscription } from 'react-native'
+import { StyleSheet, Keyboard, EmitterSubscription, Dimensions } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
@@ -8,14 +8,16 @@ import { TextInputField } from 'src/ui/home/components/textInputField'
 import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 import I18n from 'src/locales/i18n'
 
+const viewHeight: number = Dimensions.get('window').height
+
 const styles = StyleSheet.create({
   blockSpace: {
-    marginTop: '5%',
-    marginBottom: '5%'
+    marginTop: viewHeight / 40,
+    marginBottom: viewHeight / 40
   },
   blockSpaceLast: {
-    marginTop: '5%',
-    marginBottom: '10%'
+    marginTop: viewHeight / 20,
+    marginBottom: viewHeight / 20
   },
   buttonContainer: {
     width: 164,
@@ -30,12 +32,14 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.disabledButtonBackgroundGrey
   },
   buttonText: {
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
   },
   buttonTextDisabled: {
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.disabledButtonTextGrey,

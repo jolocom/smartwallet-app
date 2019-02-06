@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'react-native-material-ui'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Dimensions } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Block, Container, CenteredText } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
@@ -11,6 +11,8 @@ interface Props {
   submitEntropy: () => void
   readonly progress : number
 }
+
+const viewWidth: number = Dimensions.get('window').width
 
 // TODO FONT WEIGHT REFERENCE FROM STYLES
 const styles = StyleSheet.create({
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
   text: {
     position: 'absolute',
     top: '20%',
-    marginHorizontal: '20%',
+    paddingHorizontal: viewWidth / 15,
     backgroundColor: JolocomTheme.primaryColorBlack,
     fontSize: JolocomTheme.headerFontSize,
     fontFamily: JolocomTheme.contentFontFamily,
@@ -39,6 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,

@@ -67,12 +67,14 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
   },
   buttonTextDisabled: {
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     color: 'rgba(255,255,255, 0.4)',
     fontSize: JolocomTheme.headerFontSize,

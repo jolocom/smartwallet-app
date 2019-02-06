@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   carouselTextContainer: {
-    padding: '10%',
+    padding: viewWidth / 15,
     flex: 0.4,
     marginTop: 'auto',
     backgroundColor: 'transparent' 
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,

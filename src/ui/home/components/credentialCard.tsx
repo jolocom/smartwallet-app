@@ -39,7 +39,7 @@ export class CredentialCard extends React.Component<Props, State> {
       defaultContainerStyle: {
         flexDirection: 'row',
         backgroundColor: JolocomTheme.primaryColorWhite,
-        paddingVertical: '5%',
+        paddingVertical: 12,
         marginBottom: '1%'
       }
     })

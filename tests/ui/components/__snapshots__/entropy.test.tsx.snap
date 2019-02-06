@@ -18,7 +18,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         "fontFamily": "TT Commons",
         "fontSize": 22,
         "fontWeight": "100",
-        "marginHorizontal": "20%",
+        "paddingHorizontal": 50,
         "position": "absolute",
         "top": "20%",
       }
@@ -58,7 +58,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
         "fontFamily": "TT Commons",
         "fontSize": 22,
         "fontWeight": "100",
-        "marginHorizontal": "20%",
+        "paddingHorizontal": 50,
         "position": "absolute",
         "top": "20%",
       }
@@ -98,7 +98,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
         "fontFamily": "TT Commons",
         "fontSize": 22,
         "fontWeight": "100",
-        "marginHorizontal": "20%",
+        "paddingHorizontal": 50,
         "position": "absolute",
         "top": "20%",
       }
@@ -138,6 +138,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "paddingVertical": 15,
           },
         }
       }
