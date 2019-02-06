@@ -49,4 +49,3 @@ export class EthereumLib implements EthereumLibInterface  {
     }
   }
 }
-

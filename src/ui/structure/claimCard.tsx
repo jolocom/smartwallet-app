@@ -22,7 +22,6 @@ interface ClaimCardWrapperProps {
 }
 
 export const ClaimCardWrapper: React.SFC<ClaimCardWrapperProps> = props => {
-  console.log('claim card wrapper icon: ', props.leftIcon)
   const styles = {
     defaultContainerStyle: {
       flexDirection: 'row',

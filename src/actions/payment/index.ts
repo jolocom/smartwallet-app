@@ -34,7 +34,7 @@ export const cancelPaymentRequest = () => {
 export const consumePaymentRequest = (paymentRequest: JSONWebToken<PaymentRequest>) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { identityWallet } = backendMiddleware
-
+    
     try {
       await identityWallet.validateJWT(paymentRequest)
 
@@ -50,39 +50,41 @@ export const consumePaymentRequest = (paymentRequest: JSONWebToken<PaymentReques
       dispatch(navigationActions.navigate({ routeName: routeList.PaymentConsent }))
     } catch (err) {
       dispatch(accountActions.toggleLoading(false))
-      dispatch(showErrorScreen(new Error('Consuming payment request failed.')))
+      dispatch(showErrorScreen(new Error('Consuming payment request failed.: ')))
     }
   }
 }
 
 export const sendPaymentResponse = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const { keyChainLib, identityWallet, storageLib } = backendMiddleware
+    const { keyChainLib, identityWallet, storageLib, encryptionLib } = backendMiddleware
     const { activePaymentRequest } = getState().payment
     const paymentRequest = JolocomLib.parse.interactionToken.fromJWT(activePaymentRequest.requestJWT)
 
     try {
       const password = await keyChainLib.getPassword()
-
       const ethAddress = publicKeyToAddress(identityWallet.getPublicKey({
         encryptionPass: password,
         derivationPath: JolocomLib.KeyTypes.ethereumKey
       }))
+      
       const tx = await jolocomEthTransactionConnector.createTransaction({
         ...paymentRequest.interactionToken.transactionDetails,
         senderAddress: ethAddress
       })
-
-      const encodedEntropy = await storageLib.get.encryptedSeed()
-      const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
+     
+      const decryptedSeed = encryptionLib.decryptWithPass({
+        cipher: await storageLib.get.encryptedSeed(),
+        pass: password
+      })
+      const userVault = new SoftwareKeyProvider(Buffer.from(decryptedSeed, 'hex'), password)
 
       tx.sign(userVault.getPrivateKey({
         encryptionPass: password,
         derivationPath: JolocomLib.KeyTypes.ethereumKey
       }))
-      tx.serialize()
-
-      const txReceipt = await jolocomEthTransactionConnector.sendSignedTransaction(tx)
+  
+      const txReceipt = await jolocomEthTransactionConnector.sendSignedTransaction(tx.serialize())
 
       const paymentResponseJWT = await identityWallet.create.interactionTokens.response.payment(
         { txHash: txReceipt.transactionHash },
