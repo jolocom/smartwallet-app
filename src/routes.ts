@@ -1,3 +1,4 @@
+
 import { StackNavigator, TabBarTop, TabNavigator } from "react-navigation"
 import { Claims, Interactions, ClaimDetails } from "src/ui/home/"
 import { Landing } from "src/ui/landing/"
@@ -20,7 +21,9 @@ const navigationOptions = {
 
 const navOptScreenWCancel = {
   headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: require("./resources/img/close.png")
+  headerBackImage: require('./resources/img/sand-ex.png'),
+  headerBackTitleStyle: { color: JolocomTheme.primaryColorSand },
+  headerTintColor: { color: JolocomTheme.primaryColorPurple }
 }
 
 const headerTitleStyle = {
