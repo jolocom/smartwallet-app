@@ -85,7 +85,7 @@ export const sendPaymentResponse = () => {
       }))
   
       const txReceipt = await jolocomEthTransactionConnector.sendSignedTransaction(tx.serialize())
-
+      
       const paymentResponseJWT = await identityWallet.create.interactionTokens.response.payment(
         { txHash: txReceipt.transactionHash },
         password,

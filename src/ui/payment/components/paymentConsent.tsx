@@ -51,7 +51,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
     return (
       <ButtonSection
         disabled={false}
-        confirmText={ I18n.t('Confirm') } // TODO: add to locale
+        confirmText={ I18n.t('Confirm') }
         denyText={ I18n.t('Deny') }
         handleConfirm={() => this.props.confirmPaymentRequest()}
         handleDeny={() => this.props.cancelPaymentRequest()}
@@ -75,18 +75,19 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
   }
 
   private renderTransactionDetails() {
+    const { receiverAddress } = this.props.transactionDetails
     // TODO: make render dynamic; for now only decription & receiver rendered
     return (
       <View style={{width: '100%', margin: 0, padding: 0}}>
       <SectionClaimCard
-        title={ I18n.t('For:') } // TODO: add to locale
+        title={ `${I18n.t('For')}:` }
         primaryText={this.props.description}
         leftIcon={ this.renderLeftIcon('Other') }
       />
       <SectionClaimCard
-        title={ I18n.t('To:') } // TODO: add to locale
-        primaryText={this.props.requester}
-        secondaryText={this.props.transactionDetails.receiverAddress}
+        title={ `${I18n.t('To')}:` }
+        primaryText={`${this.props.requester.substring(0, 17)}...`}
+        secondaryText={`Eth address: ${receiverAddress.substring(0, 13)}...`}
         leftIcon={ this.renderLeftIcon('Email') }
       />
       </View>

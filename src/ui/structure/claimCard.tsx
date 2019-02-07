@@ -110,13 +110,11 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
       }}
     >
       <View style={[containerDefault, containerStyle]}>
-        <Text
-          style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}
-        >
-          {secondaryText}
-        </Text>
         <Text style={[primaryTextDefault, primaryTextStyle]}>
           {primaryText}
+        </Text>
+        <Text style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}>
+          {secondaryText}
         </Text>
       </View>
       <View flex={0.2}>{rightIcon}</View>
