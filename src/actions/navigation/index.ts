@@ -7,6 +7,7 @@ import { interactionHandlerActions } from "src/actions/"
 import { setDid, toggleLoading } from "../account"
 import { BackendMiddleware } from "src/backendMiddleware"
 import { instantiateIdentityWallet } from "src/lib/util"
+import { showErrorScreen } from 'src/actions/generic'
 
 export const navigate = (options: NavigationNavigateActionPayload) => {
   return NavigationActions.navigate(options)
@@ -39,17 +40,23 @@ export const handleDeepLink = (url: string) => {
     const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ""
     const routeName = route!.split("/")[0]
 
-    if (routeName === "consent") {
-      const personas = await backendMiddleware.storageLib.get.persona()
+    const deepLinkingAutherizedRoutes = (routeName === "consent" || routeName === "paymentConsent")
 
-      if (!personas.length) {
-        dispatch(toggleLoading(false))
-        return
+    if (deepLinkingAutherizedRoutes) {
+      try {
+        const personas = await backendMiddleware.storageLib.get.persona()
+        
+        if (!personas.length) {
+          dispatch(toggleLoading(false))
+          return // TODO: better handling here
+        }
+  
+        dispatch(setDid(personas[0].did))
+        await instantiateIdentityWallet(backendMiddleware)
+        dispatch(interactionHandlerActions.parseJWT(params))
+      } catch (err) {
+        dispatch(showErrorScreen(new Error('Not able to process request from third party app')))
       }
-
-      dispatch(setDid(personas[0].did))
-      await instantiateIdentityWallet(backendMiddleware)
-      dispatch(interactionHandlerActions.parseJWT(params))
     }
   }
 }
