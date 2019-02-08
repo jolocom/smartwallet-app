@@ -115,7 +115,7 @@ export const Routes = StackNavigator({
   PaymentConsent: {
     screen: PaymentConsent,
     navigationOptions: {
-      headerTitle: I18n.t("Confirm Payment"),
+      headerTitle: I18n.t("Confirm payment"),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: "100",

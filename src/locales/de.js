@@ -70,5 +70,6 @@ export default {
     "To": "An",
     "For": "Für",
     "Confirm": "Bestätigen",
-    "Payment Method": "Bezahlmethode"
+    "Payment Method": "Bezahlmethode",
+    "Confirm payment": "Bezahlung Bestätigen"
 }

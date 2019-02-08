@@ -70,5 +70,6 @@ export default {
     "To": "Naar",
     "For": "Voor",
     "Confirm": "Bevestigen",
-    "Payment Method": "Betalingsmiddel"
+    "Payment Method": "Betalingsmiddel",
+    "Confirm payment": "Bevestig betaling"
 }
