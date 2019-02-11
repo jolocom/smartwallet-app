@@ -67,12 +67,12 @@ export const sendPaymentResponse = () => {
         encryptionPass: password,
         derivationPath: JolocomLib.KeyTypes.ethereumKey
       }))
-      
+
       const tx = await jolocomEthTransactionConnector.createTransaction({
         ...paymentRequest.interactionToken.transactionDetails,
         senderAddress: ethAddress
       })
-     
+
       const decryptedSeed = encryptionLib.decryptWithPass({
         cipher: await storageLib.get.encryptedSeed(),
         pass: password
@@ -85,9 +85,9 @@ export const sendPaymentResponse = () => {
       }))
   
       const txReceipt = await jolocomEthTransactionConnector.sendSignedTransaction(tx.serialize())
-      
+
       const paymentResponseJWT = await identityWallet.create.interactionTokens.response.payment(
-        { txHash: txReceipt.transactionHash },
+        { txHash: txReceipt.hash },
         password,
         paymentRequest
       )
