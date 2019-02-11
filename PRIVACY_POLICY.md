@@ -8,7 +8,11 @@ If you choose to use our Service, then you agree to the collection and use of in
 
 ### Information Collection and Use
 
-For a better experience, while using our Service, we may require you to provide us with certain personally identifiable information, including but not limited to email, phone number, sensitive permissions (access to camera for QR scanner). The information that we request is will be retained by us and used as described in this privacy policy.
+For a better experience, while using our Service, we may require you to provide us with certain personally identifiable information, including but not limited to email, phone number, sensitive permissions (access to camera for QR scanner). The information that we request will be retained only on your device and used as described in this privacy policy.
+
+### Data Retention and Deletion
+
+Any information provided to our service will be retained locally on the your device. If you wish to delete your data, deleting the app will suffice.
 
 ### Service Providers
 
