@@ -20,12 +20,14 @@ export const ButtonSection: React.SFC<Props> = props => {
       backgroundColor: JolocomTheme.primaryColorWhite
     },
     denyButtonText: {
+      paddingVertical: 10,
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.labelFontSize,
       color: JolocomTheme.primaryColorPurple,
       fontWeight: '100'
     },
     confirmButtonText: {
+      paddingVertical: 10,
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.labelFontSize,
       color: props.disabled ? JolocomTheme.disabledButtonTextGrey : JolocomTheme.primaryColorSand,
@@ -35,7 +37,8 @@ export const ButtonSection: React.SFC<Props> = props => {
       width: '40%'
     },
     confirmButton: {
-      width: '40%',
+      paddingHorizontal: 25,
+      borderRadius: 4,
       backgroundColor: props.disabled ? JolocomTheme.disabledButtonBackgroundGrey : JolocomTheme.primaryColorPurple
     }
   })

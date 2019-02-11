@@ -2,6 +2,11 @@
 
 exports[`NavigatorContainer correctly hides bottom action bar 1`] = `
 Array [
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />,
   <NavigationContainer
     navigation={
       Object {
@@ -33,6 +38,11 @@ Array [
 
 exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
 Array [
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />,
   <NavigationContainer
     navigation={
       Object {
