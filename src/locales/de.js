@@ -39,7 +39,7 @@ export default {
     "Repeat password": "Wiederhole das Passwort",
     "Write these words down on an analog and secure place": "Schreiben Sie diese Wörter an einem analogen und sicheren Ort auf",
     "Without these words, you cannot access your wallet again": "Ohne diese Wörter können Sie nicht mehr auf Ihr SmartWallet zugreifen",
-    "Yes, I wrote it down": "Ja, ich habe es aufgeschrieben",
+    "Yes, I wrote it down": "Erledigt",
     "Give us a few moments": "Nur einen Moment bitte",
     "to set up your identity": "Ihre Identität wird erstellt",
     "+ add": "+ adden",
