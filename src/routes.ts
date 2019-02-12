@@ -20,7 +20,7 @@ const navigationOptions = {
 
 const navOptScreenWCancel = {
   headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: require("./resources/img/close.png")
+  headerBackImage: require('./resources/img/close.png'),
 }
 
 const headerTitleStyle = {

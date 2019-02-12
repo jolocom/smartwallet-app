@@ -5,13 +5,13 @@ import {
   NavigationEventCallback
 } from "react-navigation"
 import { connect } from "react-redux"
-import { BackHandler, Linking, Platform } from "react-native"
+import { BackHandler, Linking, Platform, StatusBar } from "react-native"
 import { AnyAction } from "redux"
 import { Routes } from "src/routes"
 import { RootState } from "src/reducers/"
 import { navigationActions, accountActions } from "src/actions/"
-import {BottomActionBar} from './ui/generic/'
-import {routeList} from './routeList'
+import { BottomActionBar } from './ui/generic/'
+import { routeList } from './routeList'
 
 const {
   createReduxBoundAddListener
@@ -94,13 +94,15 @@ export class NavigatorContainer extends React.Component<Props> {
     const {routes, index} = this.props.navigation
     const currentRoute = routes[index].routeName
     return (
-      [<Routes
-        navigation={addNavigationHelpers({
-          dispatch: this.props.dispatch,
-          state: this.props.navigation,
-          addListener: this.addListener
-        })}
-      />,
+      [
+        <StatusBar barStyle="light-content" />,
+        <Routes
+          navigation={addNavigationHelpers({
+            dispatch: this.props.dispatch,
+            state: this.props.navigation,
+            addListener: this.addListener
+          })}
+        />,
         currentRoute === routeList.Home &&
         <BottomActionBar openScanner={this.props.openScanner}/>
       ]
