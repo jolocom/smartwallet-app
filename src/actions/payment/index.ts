@@ -92,16 +92,17 @@ export const sendPaymentResponse = () => {
         password,
         paymentRequest
       )
-      
+
+      const { callbackURL } = paymentRequest.interactionToken
       // TODO: introduce generic handling linking vs https
-      if (paymentRequest.callbackURL.includes('http')) {
-        await fetch(paymentRequest.interactionToken.callbackURL, {
+      if (callbackURL.includes('http')) {
+        await fetch(callbackURL, {
           method: 'POST',
           body: JSON.stringify({ token: paymentResponseJWT.encode() }),
           headers: { 'Content-Type': 'application/json' }
         })
       } else {
-        const url = paymentRequest.callbackURL + paymentResponseJWT.encode()
+        const url = callbackURL + paymentResponseJWT.encode()
         Linking.openURL(url)
       }
       
