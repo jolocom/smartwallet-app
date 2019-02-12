@@ -40,7 +40,7 @@ export const handleDeepLink = (url: string) => {
     const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ""
     const routeName = route!.split("/")[0]
 
-    const deepLinkingAutherizedRoutes = (routeName === "consent" || routeName === "paymentConsent")
+    const deepLinkingAutherizedRoutes = (routeName === "consent")
 
     if (deepLinkingAutherizedRoutes) {
       try {

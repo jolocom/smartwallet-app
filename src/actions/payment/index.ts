@@ -10,6 +10,7 @@ import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareP
 import { publicKeyToAddress } from  'jolocom-lib/js/utils/helper'
 import { PaymentStateSummary } from 'src/reducers/payment'
 import { routeList } from 'src/routeList'
+import { Linking } from 'react-native'
 
 export const setPaymentRequest = (request: PaymentStateSummary) => {
   return {
@@ -91,12 +92,18 @@ export const sendPaymentResponse = () => {
         password,
         paymentRequest
       )
-
-      await fetch(paymentRequest.interactionToken.callbackURL, {
-        method: 'POST',
-        body: JSON.stringify({ token: paymentResponseJWT.encode() }),
-        headers: { 'Content-Type': 'application/json' }
-      })
+      
+      // TODO: introduce generic handling linking vs https
+      if (paymentRequest.callbackURL.includes('http')) {
+        await fetch(paymentRequest.interactionToken.callbackURL, {
+          method: 'POST',
+          body: JSON.stringify({ token: paymentResponseJWT.encode() }),
+          headers: { 'Content-Type': 'application/json' }
+        })
+      } else {
+        const url = paymentRequest.callbackURL + paymentResponseJWT.encode()
+        Linking.openURL(url)
+      }
       
       dispatch(clearPaymentRequest())
       dispatch(accountActions.toggleLoading(false))
