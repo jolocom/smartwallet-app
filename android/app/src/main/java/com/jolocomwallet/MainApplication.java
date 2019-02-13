@@ -3,6 +3,7 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.ismaeld.RNBuildConfig.RNBuildConfigPackage;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -38,6 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNBuildConfigPackage(BuildConfig.class),
             new RNLanguagesPackage(),
             new VectorIconsPackage(),
             new SplashScreenReactPackage(),

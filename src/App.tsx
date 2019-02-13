@@ -5,6 +5,8 @@ import { store } from 'src/store'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import SplashScreen from 'react-native-splash-screen'
 
+
+const BuildConfig = require('react-native-build-config');
 const { ThemeProvider } = require ('react-native-material-ui')
 const assign = require('object.assign/implementation')
 
@@ -18,6 +20,7 @@ Object.assign = assign
 export default class App extends React.Component {
 
   componentDidMount() {
+    console.warn('Is r2bdemo: ' + BuildConfig.IS_R2BDEMO)
     SplashScreen.hide()
   }
 

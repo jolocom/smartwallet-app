@@ -98,6 +98,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "27.0.3"
 
+    flavorDimensions "default"
     defaultConfig {
         applicationId "com.jolocomwallet"
         minSdkVersion 16
@@ -128,10 +129,25 @@ android {
         }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+        }
+    }
+    productFlavors {
+        production{
+            dimension "default"
+        }
+        r2bdemo{
+            dimension "default"
+            buildConfigField "Boolean", "IS_R2BDEMO", "true"
+            applicationIdSuffix ".r2bdemo"
+            versionNameSuffix "-r2bdemo"
         }
     }
     // applicationVariants are e.g. debug, release
@@ -150,6 +166,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-build-config')
     compile project(':react-native-languages')
     compile project(':react-native-vector-icons')
     compile project(':react-native-splash-screen')
