@@ -35,7 +35,7 @@ export const cancelPaymentRequest = () => {
 export const consumePaymentRequest = (paymentRequest: JSONWebToken<PaymentRequest>) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { identityWallet } = backendMiddleware
-    
+
     try {
       await identityWallet.validateJWT(paymentRequest)
 
@@ -59,11 +59,13 @@ export const consumePaymentRequest = (paymentRequest: JSONWebToken<PaymentReques
 export const sendPaymentResponse = () => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { keyChainLib, identityWallet, storageLib, encryptionLib } = backendMiddleware
+
     const { activePaymentRequest } = getState().payment
     const paymentRequest = JolocomLib.parse.interactionToken.fromJWT(activePaymentRequest.requestJWT)
 
     try {
       const password = await keyChainLib.getPassword()
+
       const ethAddress = publicKeyToAddress(identityWallet.getPublicKey({
         encryptionPass: password,
         derivationPath: JolocomLib.KeyTypes.ethereumKey
@@ -78,6 +80,7 @@ export const sendPaymentResponse = () => {
         cipher: await storageLib.get.encryptedSeed(),
         pass: password
       })
+
       const userVault = new SoftwareKeyProvider(Buffer.from(decryptedSeed, 'hex'), password)
 
       tx.sign(userVault.getPrivateKey({
@@ -105,13 +108,59 @@ export const sendPaymentResponse = () => {
         const url = callbackURL + paymentResponseJWT.encode()
         Linking.openURL(url)
       }
-      
+
       dispatch(clearPaymentRequest())
       dispatch(accountActions.toggleLoading(false))
       dispatch(navigationActions.navigate({ routeName: routeList.Home }))
     } catch (err) {
       dispatch(accountActions.toggleLoading(false))
       dispatch(showErrorScreen(new Error('Creating and sending payment response failed.')))
+    }
+  }
+}
+
+export const consumeDemoPaymentRequest = (params: string) => {
+  return (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware ) => {
+    const decodedData = Buffer.from(params, 'base64').toString()
+    const data = JSON.parse(decodedData)
+
+    const summary = {
+      didRequester: data.issuer,
+      description: data.description,
+      transactionDetails: data.transactionDetails,
+      callbackURL: data.callbackURL,
+      requestJWT: ''
+    }
+
+    dispatch(setPaymentRequest(summary))
+    dispatch(accountActions.toggleLoading(false))
+    dispatch(navigationActions.navigate({ routeName: routeList.PaymentConsent }))
+  } 
+}
+
+export const sendDemoPaymentResponse = () => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { activePaymentRequest } = getState().payment
+    try {
+      const { callbackURL } = activePaymentRequest
+      
+      if (callbackURL.includes('http')) {
+        await fetch(callbackURL, {
+          method: 'POST',
+          body: JSON.stringify({ token: true }),
+          headers: { 'Content-Type': 'application/json' }
+        })
+      } else {
+        const url = callbackURL + Buffer.from(JSON.stringify({token: true})).toString('base64')
+        Linking.openURL(url)
+      }
+
+      dispatch(clearPaymentRequest())
+      dispatch(accountActions.toggleLoading(false))
+      dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+    } catch (err) {
+      dispatch(accountActions.toggleLoading(false))
+      dispatch(showErrorScreen(new Error('Creating and sending demo payment response failed.')))
     }
   }
 }

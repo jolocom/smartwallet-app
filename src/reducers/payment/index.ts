@@ -6,6 +6,7 @@ export interface PaymentStateSummary {
   readonly requestJWT: string
   readonly description: string
   readonly didRequester: string
+  readonly callbackURL?: string
 }
 
 export interface PaymentState {
