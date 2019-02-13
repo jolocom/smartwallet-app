@@ -14,7 +14,7 @@ Object {
 }
 `;
 
-exports[`payment reducer should handle the SET_CREDENTIAL_REQUEST action  1`] = `
+exports[`payment reducer should handle the SET_PAYMENT_REQUEST action  1`] = `
 Object {
   "activePaymentRequest": Object {
     "description": "This is a payment example",
