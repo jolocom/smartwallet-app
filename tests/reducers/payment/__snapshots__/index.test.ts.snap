@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`payment reducer should handle the CLEAR_PAYMENT_REQUEST action  1`] = `
+Object {
+  "activePaymentRequest": Object {
+    "description": "",
+    "didRequester": "",
+    "requestJWT": "",
+    "transactionDetails": Object {
+      "amountInEther": "",
+      "receiverAddress": "",
+    },
+  },
+}
+`;
+
+exports[`payment reducer should handle the SET_CREDENTIAL_REQUEST action  1`] = `
+Object {
+  "activePaymentRequest": Object {
+    "description": "This is a payment example",
+    "didRequester": "did:jolo:test",
+    "requestJWT": "zfghik.zfghj.rtdaftgz",
+    "transactionDetails": Object {
+      "amountInEther": "0.1",
+      "receiverAddress": "ethereumAddress",
+    },
+  },
+}
+`;
+
+exports[`payment reducer should initialize correctly 1`] = `
+Object {
+  "activePaymentRequest": Object {
+    "description": "",
+    "didRequester": "",
+    "requestJWT": "",
+    "transactionDetails": Object {
+      "amountInEther": "",
+      "receiverAddress": "",
+    },
+  },
+}
+`;
