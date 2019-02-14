@@ -69,7 +69,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
     return (
       <View style={styles.priceCard.container}>
         <Text style={styles.priceCard.price}>{ amountInEther }</Text>
-        <Text style={styles.priceCard.unit}>{ 'ETH' }</Text>
+        <Text style={styles.priceCard.unit}>{ 'ETH/min' }</Text>
       </View>
     )
   }
