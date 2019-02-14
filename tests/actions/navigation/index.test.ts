@@ -1,4 +1,4 @@
-import { navigationActions, ssoActions } from "../../../src/actions"
+import { navigationActions, interactionHandlerActions } from "../../../src/actions"
 
 import configureStore from "redux-mock-store"
 import thunk from "redux-thunk"
@@ -29,7 +29,7 @@ describe("Navigation action creators", () => {
         setIdentityWallet: jest.fn(() => Promise.resolve())
       }
       const parseJWTSpy = jest
-        .spyOn(ssoActions, "parseJWT")
+        .spyOn(interactionHandlerActions, "parseJWT")
         .mockImplementation(() => {
           return () => {}
         })
@@ -44,7 +44,7 @@ describe("Navigation action creators", () => {
 
     it("should not atttempt to parse if route was not correct", () => {
       const mockStore = configureStore([thunk])({})
-      const parseJWTSpy = jest.spyOn(ssoActions, "parseJWT")
+      const parseJWTSpy = jest.spyOn(interactionHandlerActions, "parseJWT")
       const action = navigationActions.handleDeepLink(
         "smartwallet://somethingElse/" + jwt
       )

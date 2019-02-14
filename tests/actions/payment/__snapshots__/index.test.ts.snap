@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Payment action creators Should correctly consume payment request 1`] = `
+Array [
+  Object {
+    "type": "SET_PAYMENT_REQUEST",
+    "value": Object {
+      "description": "Payment for monthly subscription to awesome service",
+      "didRequester": "did:jolo:54559e56598d657acfab5d9c5961eb8eeb09b543e4e9a4a7e34a9582dd148c25#keys-1",
+      "requestJWT": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpbnRlcmFjdGlvblRva2VuIjp7InRyYW5zYWN0aW9uRGV0YWlscyI6eyJyZWNlaXZlckFkZHJlc3MiOiIweDEwZWQwODU3ZmQ2ZDc1MmYyMDg5YTZiMGQzZmU3ZjAzOTJlMDQ2ZTAiLCJhbW91bnRJbkV0aGVyIjoiMC4wMSJ9LCJkZXNjcmlwdGlvbiI6IlBheW1lbnQgZm9yIG1vbnRobHkgc3Vic2NyaXB0aW9uIHRvIGF3ZXNvbWUgc2VydmljZSIsImNhbGxiYWNrVVJMIjoiaHR0cHM6Ly9hd2Vzb21lc2VydmljZS5jb20vcGF5bWVudC9wZW5kaW5nIn0sInR5cCI6InBheW1lbnRSZXF1ZXN0IiwiaWF0IjoxNTQ5OTgyMDc2MzU0LCJleHAiOjE1NDk5ODU2NzYzNTQsImlzcyI6ImRpZDpqb2xvOjU0NTU5ZTU2NTk4ZDY1N2FjZmFiNWQ5YzU5NjFlYjhlZWIwOWI1NDNlNGU5YTRhN2UzNGE5NTgyZGQxNDhjMjUja2V5cy0xIiwianRpIjoiODliYzg1Mjg3YThiOSJ9.af8d78e39a2ced5c4ccdd319b94b353c91381c1b5af49bfb4dabdc30aeed28bc37d5da4671bee52c46b3bce284927e05dafe9caa3ba6cd4208517bcfa922dbba",
+      "transactionDetails": Object {
+        "amountInEther": "0.01",
+        "receiverAddress": "0x10ed0857fd6d752f2089a6b0d3fe7f0392e046e0",
+      },
+    },
+  },
+  Object {
+    "type": "SET_LOADING",
+    "value": false,
+  },
+  Object {
+    "routeName": "PaymentConsent",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Payment action creators Should correctly handle payment response creation 1`] = `
+Array [
+  Object {
+    "type": "CLEAR_PAYMENT_REQUEST",
+  },
+  Object {
+    "type": "SET_LOADING",
+    "value": false,
+  },
+  Object {
+    "routeName": "Home",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;

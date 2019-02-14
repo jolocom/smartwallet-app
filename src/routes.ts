@@ -10,6 +10,7 @@ import {
 import { JolocomTheme } from "src/styles/jolocom-theme"
 import { Exception } from "src/ui/generic/"
 import { Consent } from "src/ui/sso"
+import { PaymentConsent } from "src/ui/payment"
 import { CredentialReceive } from "src/ui/home"
 import I18n from "src/locales/i18n"
 import { QRScannerContainer } from "./ui/generic/qrcodeScanner"
@@ -102,6 +103,19 @@ export const Routes = StackNavigator({
     screen: Consent,
     navigationOptions: {
       headerTitle: I18n.t("Share claims"),
+      headerTitleStyle: {
+        fontFamily: JolocomTheme.contentFontFamily,
+        fontWeight: "100",
+        fontSize: JolocomTheme.headerFontSize
+      },
+      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
+      headerTintColor: JolocomTheme.primaryColorWhite
+    }
+  },
+  PaymentConsent: {
+    screen: PaymentConsent,
+    navigationOptions: {
+      headerTitle: I18n.t("Confirm payment"),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: "100",

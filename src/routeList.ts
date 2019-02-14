@@ -11,5 +11,6 @@ export const enum routeList {
   Exception = "Exception",
   ClaimDetails = "ClaimDetails",
   CredentialDialog = "CredentialDialog",
-  QRCodeScanner = "QRCodeScanner"
+  QRCodeScanner = "QRCodeScanner",
+  PaymentConsent = "PaymentConsent"
 }

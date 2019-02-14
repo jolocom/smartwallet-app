@@ -3,12 +3,11 @@ import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { navigationActions, accountActions } from 'src/actions'
+import { navigationActions, accountActions, interactionHandlerActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
 import { getUiCredentialTypeByType } from 'src/lib/util'
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { resetSelected } from '../account'
 import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/credentialOffer'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
@@ -44,29 +43,6 @@ export const resetReceivingCredential = () => {
   }
 }
 
-export const parseJWT = (encodedJwt: string) => {
-  return async (dispatch: Dispatch<AnyAction>) => {
-    dispatch(accountActions.toggleLoading(true))
-    try {
-      const returnedDecodedJwt = await JolocomLib.parse.interactionToken.fromJWT(encodedJwt)
-      
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialRequest) {
-        dispatch(consumeCredentialRequest(returnedDecodedJwt))
-      }
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialOffer) {
-        dispatch(consumeCredentialOfferRequest(returnedDecodedJwt))
-      }
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialsReceive) {
-        dispatch(receiveExternalCredential(returnedDecodedJwt))
-      }
-    } catch (err) {
-      console.log('error: ', err)
-      dispatch(accountActions.toggleLoading(false))
-      dispatch(showErrorScreen(new Error('JWT Token parse failed')))
-    }
-  }
-}
-
 export const consumeCredentialOfferRequest = (credOfferRequest: JSONWebToken<CredentialOffer>) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { keyChainLib, identityWallet } = backendMiddleware
@@ -91,7 +67,7 @@ export const consumeCredentialOfferRequest = (credOfferRequest: JSONWebToken<Cre
         headers: { 'Content-Type': 'application/json' }
       }).then(body => body.json())
 
-      dispatch(parseJWT(res.token))
+      dispatch(interactionHandlerActions.parseJWT(res.token))
     } catch (err) {
       dispatch(accountActions.toggleLoading(false))
       dispatch(showErrorScreen(new Error('JWT Token parse failed')))

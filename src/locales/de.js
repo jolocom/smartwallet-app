@@ -66,5 +66,10 @@ export default {
     "Passwords do not match": "Die Passwörter stimmen nicht überein",
     "No spaces allowed": "Keine Leerzeichen erlaubt",
     "At least 8 characters are required": "Es werden mindestens 8 Zeichen benötigt",
-    "Your Jolocom Wallet": "Deine Jolocom Wallet"
+    "Your Jolocom Wallet": "Deine Jolocom Wallet",
+    "To": "An",
+    "For": "Für",
+    "Confirm": "Bestätigen",
+    "Payment Method": "Bezahlmethode",
+    "Confirm payment": "Bezahlung Bestätigen"
 }

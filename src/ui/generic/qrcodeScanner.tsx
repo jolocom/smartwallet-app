@@ -5,7 +5,7 @@ import { Container } from "src/ui/structure"
 import { JolocomTheme } from "src/styles/jolocom-theme"
 import { Button } from "react-native-material-ui"
 import { QrScanEvent } from "src/ui/generic/qrcodeScanner"
-import { ssoActions, navigationActions } from "src/actions"
+import { navigationActions, interactionHandlerActions } from "src/actions"
 import I18n from "src/locales/i18n"
 const QRScanner = require("react-native-qrcode-scanner").default
 
@@ -49,7 +49,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    onScannerSuccess: (e: QrScanEvent) => dispatch(ssoActions.parseJWT(e.data)),
+    onScannerSuccess: (e: QrScanEvent) => dispatch(interactionHandlerActions.parseJWT(e.data)),
     onScannerCancel: () => dispatch(navigationActions.goBack())
   }
 }

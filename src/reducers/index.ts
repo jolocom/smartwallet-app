@@ -4,12 +4,14 @@ import { registrationReducer, RegistrationState } from 'src/reducers/registratio
 import { navigationReducer } from 'src/reducers/navigation/'
 import { NavigationState } from 'react-navigation'
 import { ssoReducer, SsoState } from 'src/reducers/sso/'
+import { paymentReducer, PaymentState } from 'src/reducers/payment'
 
 export const rootReducer =  combineReducers({
   account: accountReducer,
   registration: registrationReducer,
   navigation: navigationReducer,
-  sso: ssoReducer
+  sso: ssoReducer,
+  payment: paymentReducer
 })
 
 export interface RootState {
@@ -17,4 +19,5 @@ export interface RootState {
   readonly registration: RegistrationState;
   readonly navigation: NavigationState;
   readonly sso: SsoState;
+  readonly payment: PaymentState
 }
