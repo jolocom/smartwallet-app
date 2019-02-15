@@ -110,7 +110,7 @@
     "object.assign": "^4.1.0",
     "react": "16.2.0",
     "react-native": "^0.55.3",
-    "react-native-build-config": "github:ismaeldcom/react-native-build-config",
+    "react-native-build-config": "https://github.com/jolocom/react-native-build-config",
     "react-native-camera": "^1.1.1",
     "react-native-fetch-blob": "^0.10.8",
     "react-native-indicator": "^0.7.0",
