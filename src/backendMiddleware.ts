@@ -24,9 +24,32 @@ export class BackendMiddleware {
   async setIdentityWallet(userVault: SoftwareKeyProvider, pass: string): Promise<void> {
     const { jolocomIdentityKey } = JolocomLib.KeyTypes
     const registry = JolocomLib.registries.jolocom.create()
-    this.identityWallet = await registry.authenticate(userVault, {
+    const keyArgs = {
       encryptionPass: pass,
-      derivationPath: jolocomIdentityKey
-    })
+      derivationPath: jolocomIdentityKey,
+      keyId: userVault.getPublicKey({
+        encryptionPass: pass,
+        derivationPath: jolocomIdentityKey
+      }).toString()
+    }
+
+    try {
+      this.identityWallet = await registry.authenticate(userVault, keyArgs)
+    } catch(err) {
+      console.log(err)
+    }
+
+    if (!this.identityWallet) {
+      const personas = await this.storageLib.get.persona()
+
+      if (!personas.length) {
+        const did = personas[0].did
+        this.identityWallet = new IdentityWallet({
+          vaultedKeyProvider: userVault,
+          identity: did,
+          publicKeyMetadata: keyArgs
+        })
+      }
+    }
   }
 }
