@@ -24,7 +24,6 @@ export class BackendMiddleware {
   }
 
   async setIdentityWallet(userVault: SoftwareKeyProvider, pass: string): Promise<void> {
-    console.log('start set')
     const { jolocomIdentityKey } = JolocomLib.KeyTypes
     const registry = JolocomLib.registries.jolocom.create()
     const pubKey = userVault.getPublicKey({
@@ -38,8 +37,6 @@ export class BackendMiddleware {
     }
 
     const personas = await this.storageLib.get.persona()
-    console.log(personas)
-    console.log(keyArgs)
 
     if (personas.length) {
       this.identityWallet = new IdentityWallet({
