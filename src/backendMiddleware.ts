@@ -6,6 +6,8 @@ import { Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 import { ConnectionOptions } from 'typeorm/browser'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
+import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
+import { Identity } from 'jolocom-lib/js/identity/identity'
 
 export class BackendMiddleware {
   identityWallet!: IdentityWallet
@@ -24,9 +26,34 @@ export class BackendMiddleware {
   async setIdentityWallet(userVault: SoftwareKeyProvider, pass: string): Promise<void> {
     const { jolocomIdentityKey } = JolocomLib.KeyTypes
     const registry = JolocomLib.registries.jolocom.create()
-    this.identityWallet = await registry.authenticate(userVault, {
+    const pubKey = userVault.getPublicKey({
       encryptionPass: pass,
       derivationPath: jolocomIdentityKey
     })
+    const keyArgs = {
+      encryptionPass: pass,
+      derivationPath: jolocomIdentityKey,
+      keyId: pubKey.toString('hex')
+    }
+
+    const personas = await this.storageLib.get.persona()
+
+    if (personas.length) {
+      this.identityWallet = new IdentityWallet({
+        vaultedKeyProvider: userVault,
+        identity: Identity.fromDidDocument({
+          didDocument: DidDocument.fromPublicKey(pubKey)
+        }),
+        publicKeyMetadata: keyArgs
+      })
+    } else {
+      try {
+        this.identityWallet = await registry.authenticate(userVault, keyArgs)
+      } catch(err) {
+        console.log(err)
+      }
+    }
+
+    console.warn(this.identityWallet)
   }
 }
