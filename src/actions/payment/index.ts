@@ -26,9 +26,20 @@ export const clearPaymentRequest = () => {
 }
 
 export const cancelPaymentRequest = () => {
-  return (dispatch: Dispatch<AnyAction>) => {
+  return (dispatch: Dispatch<AnyAction>, getState: Function) => {
+    const { callbackURL } = getState().payment.activePaymentRequest
     dispatch(clearPaymentRequest())
-    dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+
+    /**
+     * This needs to be cleaned up after demo
+     * TODO: consolidate routing back to callbackURL for deep linking for payment & sso
+     */
+    if (callbackURL.includes('http')) {
+      dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+    } else {
+      const url = callbackURL + Buffer.from(JSON.stringify({token: false})).toString('base64')
+      Linking.openURL(url)
+    }
   }
 }
 
