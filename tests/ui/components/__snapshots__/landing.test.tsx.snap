@@ -85,7 +85,7 @@ exports[`landing component matches the snapshot on render 1`] = `
     style={
       Object {
         "backgroundColor": "#05050d",
-        "flex": 0.2,
+        "flex": 0.15,
       }
     }
   >
