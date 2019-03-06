@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     padding: viewWidth / 15,
     flex: 0.4,
     marginTop: 'auto',
+    justifyContent: 'flex-end',
     backgroundColor: 'transparent' 
   },
   activeDotStyle: {
@@ -62,10 +63,10 @@ const styles = StyleSheet.create({
     fontWeight: '100'
   },
   headerBlock: {
-    marginBottom: 0 
+    
   }, 
   subHeaderBlock: {
-    marginBottom: 0,
+    flexGrow: 2
   },
   subHeader: {
     fontWeight: '100',
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     lineHeight: JolocomTheme.labelFontSize + 4
   },
   paginationBlock: {
-    flex: 0.2,
+    flex: 0.15,
     backgroundColor: '#05050d' 
   },
   buttonBlock: {
@@ -138,7 +139,7 @@ export class LandingComponent extends React.Component<Props, State> {
             <Block>   
               <CenteredText style= { styles.header } msg={ title } />
             </Block>
-            <Block>
+            <Block style={ styles.subHeaderBlock }>
               <CenteredText style={ styles.subHeader } msg={ infoText } />
             </Block>
         </Block>
