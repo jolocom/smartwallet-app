@@ -23,20 +23,24 @@ After cloning the smartwallet-app repository to a directory on your computer, en
 yarn install
 ```
 
-### Device Build
+### Debug build on a device or simulator
 
 #### Android
 
-Please set up an Android development environment. 
+Please set up an android development environment and install the required SDKs.
+Set the path to the SDK in ```android/local.properties``` and ```export``` it to the environment variable ```ANDROID_HOME```, if that was not already done.
 
 Then:
 
 ```bash
+# 1. Bundle app with haul and start development server.
+yarn bundle:android
+# 2a. Install and run app on a connected device or simulator in one go. Use a second shell for this.
+yarn install:android && yarn run:android
+# 2b. As alternative use:
 react-native run-android
-yarn android
 ```
-The first command will run and install a debug build on an attached Android device. A terminal window may pop up which starts a Metro Bundler, please stop this process.
-The second command will start the Haul bundler and serve the build on your device if both are running on the same network. If remote debugging is enabled, the debugger-ui will also be available here.
+In case you encounter connectivity errors to haul, restart it with the first command or start the app manually after haul.
 
 #### iOS
 
@@ -52,13 +56,14 @@ yarn ios
 The first command will run and install a debug build on an attached iOS device. A terminal window may pop up which starts a Metro Bundler, please stop this process.
 The second command will start the Haul bundler and serve the build on your device if both are running on the same network. If remote debugging is enabled, the debugger-ui will also be available here.
 
-#### Testing
+#### Testing and Cleaning
 
 Testing uses Jest. The following script enables watch and testing coverage display as well.
 
 ```bash
 yarn test --watch --coverage
 ```
+Use ```yarn run``` to display all scripts, e.g. for cleaning.
 
 Documentation
 -------------
