@@ -105,7 +105,7 @@
     "crypto-js": "^3.1.9-1",
     "ethereumjs-wallet": "^0.6.0",
     "i18n-js": "^3.1.0",
-    "jolocom-lib": "^2.2.4",
+    "jolocom-lib": "^2.2.9",
     "material-colors": "^1.2.5",
     "object.assign": "^4.1.0",
     "react": "16.2.0",
