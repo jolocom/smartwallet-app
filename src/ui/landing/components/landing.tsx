@@ -36,16 +36,16 @@ const styles = StyleSheet.create({
   mainContainerStyle: {
     paddingTop: 0,
     backgroundColor: '#05050d', 
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     flexDirection: 'column',
     flex: 1
   },
   carouselTextContainer: {
-    padding: viewWidth / 15,
+    paddingHorizontal: viewWidth / 18,
     flex: 0.4,
     marginTop: 'auto',
     justifyContent: 'flex-end',
-    backgroundColor: 'transparent' 
+    backgroundColor: 'transparent'
   },
   activeDotStyle: {
     width: 8,
@@ -64,19 +64,14 @@ const styles = StyleSheet.create({
     fontSize: headerFontSize,
     fontWeight: '100'
   },
-  headerBlock: {
-    
-  }, 
-  subHeaderBlock: {
-    flexGrow: 2
-  },
   subHeader: {
-    fontWeight: '100',
     color: JolocomTheme.primaryColorSand,
-    fontFamily: JolocomTheme.contentFontFamily, 
     opacity: 0.8,
+    fontFamily: JolocomTheme.contentFontFamily, 
     fontSize: labelFontSize,
-    lineHeight: labelFontSize + 4
+    fontWeight: '100',
+    lineHeight: labelFontSize + 4,
+    marginTop: 15
   },
   paginationBlock: {
     flex: 0.15,
@@ -140,12 +135,8 @@ export class LandingComponent extends React.Component<Props, State> {
       <Block>
         {svgImage}
         <Block style={ styles.carouselTextContainer }>
-            <Block>   
-              <CenteredText style= { styles.header } msg={ title } />
-            </Block>
-            <Block style={ styles.subHeaderBlock }>
-              <CenteredText style={ styles.subHeader } msg={ infoText } />
-            </Block>
+          <CenteredText style= { styles.header } msg={ title } />
+          <CenteredText style={ styles.subHeader } msg={ infoText } />
         </Block>
       </Block>
     )
