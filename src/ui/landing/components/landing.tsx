@@ -29,6 +29,8 @@ interface Slide {
 }
 
 const viewWidth: number = Dimensions.get('window').width
+const headerFontSize = viewWidth < 360 ? JolocomTheme.landingHeaderFontSizeSmall : JolocomTheme.landingHeaderFontSize
+const labelFontSize = viewWidth < 360 ? JolocomTheme.labelFontSizeSmall : JolocomTheme.labelFontSize
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
   header: {
     color: JolocomTheme.primaryColorSand,
     fontFamily: JolocomTheme.contentFontFamily, 
-    fontSize: JolocomTheme.landingHeaderFontSize,
+    fontSize: headerFontSize,
     fontWeight: '100'
   },
   headerBlock: {
@@ -73,8 +75,8 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorSand,
     fontFamily: JolocomTheme.contentFontFamily, 
     opacity: 0.8,
-    fontSize: JolocomTheme.labelFontSize,
-    lineHeight: JolocomTheme.labelFontSize + 4
+    fontSize: labelFontSize,
+    lineHeight: labelFontSize + 4
   },
   paginationBlock: {
     flex: 0.15,
