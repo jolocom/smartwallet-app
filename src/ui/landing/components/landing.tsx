@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#05050d' 
   },
   buttonContainer: {
-    height: '100%',
-    width: '50%',
+    height: 48,
+    minWidth: 164,
     borderRadius: 4,
     backgroundColor: JolocomTheme.primaryColorPurple
   },
@@ -95,7 +95,9 @@ const styles = StyleSheet.create({
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
-    fontWeight: "100" 
+    fontWeight: '100',
+    textAlign: 'center',
+    minWidth: 158,
   }
 })
 
@@ -179,10 +181,10 @@ export class LandingComponent extends React.Component<Props, State> {
             }
           />
         </Block>
-        <Block style={ styles.paginationBlock}>
+        <Block style={ styles.paginationBlock }>
           { this.renderPagination() }
         </Block>
-        <Block style={ styles.buttonBlock}>
+        <Block style={ styles.buttonBlock }>
           <Button
             raised
             onPress={ this.props.handleButtonTap }
