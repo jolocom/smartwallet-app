@@ -29,7 +29,7 @@
     "enzyme-to-json": "^3.3.3",
     "haul": "1.0.0-beta.14",
     "immutable": "^3.8.2",
-    "jest": "^22.4.3",
+    "jest": "^22.4.4",
     "material-colors": "^1.2.5",
     "mockdate": "^2.0.2",
     "prettier": "^1.15.3",
