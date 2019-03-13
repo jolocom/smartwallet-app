@@ -33,6 +33,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		A663C3A774294306AF244F58 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1FB41C0889D4B1AA6D2C85B /* Zocial.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
+		B4741A8A223031ED0095E7DF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4741A89223031ED0095E7DF /* Launch Screen.storyboard */; };
 		C6B54F97EDFF42AEA9060D98 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6A5354BCB704D5B88B400C9 /* MaterialCommunityIcons.ttf */; };
 		D22E3F142200664100A2DC1A /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = D22E3EDE2200664100A2DC1A /* main.jsbundle */; };
 		DC28A69520B5BA6C005E7D99 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -479,6 +480,7 @@
 		A3FE0722CB5C470F8E32AEAE /* libRNKeychain.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNKeychain.a; sourceTree = "<group>"; };
 		ABB65497EEEB4BDCAAACC6ED /* libRNCamera.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCamera.a; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
+		B4741A89223031ED0095E7DF /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		BC3E135C43514D84BEBBE8C5 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		D1FB41C0889D4B1AA6D2C85B /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		D22E3EDE2200664100A2DC1A /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = smartwallet/main.jsbundle; sourceTree = "<group>"; };
@@ -487,7 +489,6 @@
 		DCBEC4A020CE76AD0099FD03 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		DCCB597B20D02199002F3720 /* TTCommons.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TTCommons.otf; path = ../android/app/src/main/assets/fonts/TTCommons.otf; sourceTree = "<group>"; };
 		DCD3E78220A1DAF400FC3989 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
-		DCF0580220EB824D006145C1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E247948545D24BE58E811111 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		E4B7FA621F764080A23F67F9 /* RNCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; };
 		F63FBE24F3D049D885DF15AA /* RNKeychain.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNKeychain.xcodeproj; path = "../node_modules/react-native-keychain/RNKeychain.xcodeproj"; sourceTree = "<group>"; };
@@ -748,7 +749,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				DCF0580220EB824D006145C1 /* LaunchScreen.storyboard */,
+				B4741A89223031ED0095E7DF /* Launch Screen.storyboard */,
 				DCCB597B20D02199002F3720 /* TTCommons.otf */,
 				DCBEC4A020CE76AD0099FD03 /* assets */,
 				13B07FAE1A68108700A75B9A /* wallet */,
@@ -1449,6 +1450,7 @@
 				23238968F2BA48C4A9BB4AC4 /* Foundation.ttf in Resources */,
 				4BF187ACD94048C79892D747 /* Ionicons.ttf in Resources */,
 				C6B54F97EDFF42AEA9060D98 /* MaterialCommunityIcons.ttf in Resources */,
+				B4741A8A223031ED0095E7DF /* Launch Screen.storyboard in Resources */,
 				296C5B93DD624867B8F0966B /* MaterialIcons.ttf in Resources */,
 				EC1E857C61024F7B86A70672 /* Octicons.ttf in Resources */,
 				D22E3F142200664100A2DC1A /* main.jsbundle in Resources */,
@@ -1591,7 +1593,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1626,7 +1627,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
