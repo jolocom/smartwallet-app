@@ -33,6 +33,7 @@
     "material-colors": "^1.2.5",
     "mockdate": "^2.0.2",
     "prettier": "^1.15.3",
+    "prettier-tslint": "^0.4.2",
     "react-dom": "^16.3.0",
     "react-native-typescript-transformer": "^1.2.3",
     "react-test-renderer": "16.2.0",
@@ -57,7 +58,8 @@
     "clean:ios": "echo 'Cleaning for ios not implemented yet.'",
     "clean:all": "yarn run clean:ios && yarn run clean:android && yarn run clean:node",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/smartwallet/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
-    "test": "node node_modules/jest/bin/jest.js"
+    "test": "node node_modules/jest/bin/jest.js",
+    "format": "prettier-tslint fix '**/*.(ts|tsx)'"
   },
   "jest": {
     "setupFiles": [
