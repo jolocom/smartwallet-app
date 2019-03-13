@@ -1,6 +1,10 @@
 import { AnyAction } from 'redux'
 import Immutable from 'immutable'
-import { ClaimsState, CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
+import {
+  ClaimsState,
+  CategorizedClaims,
+  DecoratedClaims,
+} from 'src/reducers/account'
 
 const categorizedClaims: CategorizedClaims = {
   Personal: [
@@ -8,31 +12,31 @@ const categorizedClaims: CategorizedClaims = {
       credentialType: 'Name',
       claimData: {
         givenName: '',
-        familyName: ''
+        familyName: '',
       },
       id: '',
       issuer: '',
-      subject: ''
-    }
+      subject: '',
+    },
   ],
   Contact: [
     {
       credentialType: 'Email',
       claimData: {
-        email: ''
+        email: '',
       },
       id: '',
       issuer: '',
-      subject: ''
+      subject: '',
     },
     {
       credentialType: 'Mobile Phone',
       claimData: {
-        telephone: ''
+        telephone: '',
       },
       id: '',
       issuer: '',
-      subject: ''
+      subject: '',
     },
     {
       credentialType: 'Postal Address',
@@ -41,14 +45,14 @@ const categorizedClaims: CategorizedClaims = {
         addressLine2: '',
         postalCode: '',
         city: '',
-        country: ''
+        country: '',
       },
       id: '',
       issuer: '',
-      subject: ''
+      subject: '',
     },
   ],
-  Other: []
+  Other: [],
 }
 
 export const initialState: ClaimsState = {
@@ -58,18 +62,26 @@ export const initialState: ClaimsState = {
     claimData: {},
     id: '',
     issuer: '',
-    subject: ''
+    subject: '',
   },
   pendingExternal: [],
-  decoratedCredentials: categorizedClaims
+  decoratedCredentials: categorizedClaims,
 }
 
-export const claims = (state = Immutable.fromJS(initialState), action: AnyAction): ClaimsState => {
+export const claims = (
+  state = Immutable.fromJS(initialState),
+  action: AnyAction,
+): ClaimsState => {
   switch (action.type) {
     case 'TOGGLE_CLAIMS_LOADING':
       return state.setIn(['loading'], action.value)
     case 'SET_CLAIMS_FOR_DID':
-      return state.set('decoratedCredentials', Immutable.fromJS(addDefaultValues(action.claims))).set('loading', false)
+      return state
+        .set(
+          'decoratedCredentials',
+          Immutable.fromJS(addDefaultValues(action.claims)),
+        )
+        .set('loading', false)
     case 'SET_EXTERNAL':
       return state.set('pendingExternal', Immutable.fromJS(action.external))
     case 'RESET_EXTERNAL':
@@ -79,25 +91,40 @@ export const claims = (state = Immutable.fromJS(initialState), action: AnyAction
     case 'RESET_SELECTED':
       return state.setIn(['selected'], initialState.selected)
     case 'HANLDE_CLAIM_INPUT':
-      return state.setIn(['selected', 'claimData', action.fieldName], action.fieldValue)
+      return state.setIn(
+        ['selected', 'claimData', action.fieldName],
+        action.fieldValue,
+      )
     default:
       return state
   }
 }
 
 const addDefaultValues = (claims: CategorizedClaims) => {
-  return Object.keys(categorizedClaims).reduce((acc: CategorizedClaims, category: string) => {
-    return { ...acc, [category]: injectPlaceholdersIfNeeded(category, claims[category]) }
-  }, {})
+  return Object.keys(categorizedClaims).reduce(
+    (acc: CategorizedClaims, category: string) => {
+      return {
+        ...acc,
+        [category]: injectPlaceholdersIfNeeded(category, claims[category]),
+      }
+    },
+    {},
+  )
 }
 
-const injectPlaceholdersIfNeeded = (category: string, claims: DecoratedClaims[]): DecoratedClaims[] => {
+const injectPlaceholdersIfNeeded = (
+  category: string,
+  claims: DecoratedClaims[],
+): DecoratedClaims[] => {
   if (!claims || claims.length === 0) {
     return categorizedClaims[category]
   }
 
   const missing = categorizedClaims[category].filter(
-    defaultClaim => !claims.some(claim => claim.credentialType === defaultClaim.credentialType)
+    defaultClaim =>
+      !claims.some(
+        claim => claim.credentialType === defaultClaim.credentialType,
+      ),
   )
 
   if (missing) {

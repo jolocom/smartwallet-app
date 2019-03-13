@@ -45,21 +45,26 @@ const mapStateToProps = (state: any) => {
   return {
     did: state.account.did.toJS().did,
     claims: state.account.claims.toJS(),
-    loading: state.account.loading.toJS().loading
+    loading: state.account.loading.toJS().loading,
   }
 }
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
-    openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
+    openClaimDetails: (claim: DecoratedClaims) =>
+      dispatch(accountActions.openClaimDetails(claim)),
     setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
-    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
-    openScanner: () => dispatch( navigationActions.navigate({ routeName: routeList.QRCodeScanner }))
+    toggleLoading: (val: boolean) =>
+      dispatch(accountActions.toggleLoading(val)),
+    openScanner: () =>
+      dispatch(
+        navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
+      ),
   }
 }
 
 export const Claims = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ClaimsContainer)

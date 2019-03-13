@@ -1,24 +1,24 @@
-import React from "react"
+import React from 'react'
 import {
   addNavigationHelpers,
   NavigationEventSubscription,
-  NavigationEventCallback
-} from "react-navigation"
-import { connect } from "react-redux"
-import { BackHandler, Linking, Platform, StatusBar } from "react-native"
-import { AnyAction } from "redux"
-import { Routes } from "src/routes"
-import { RootState } from "src/reducers/"
-import { navigationActions, accountActions } from "src/actions/"
+  NavigationEventCallback,
+} from 'react-navigation'
+import { connect } from 'react-redux'
+import { BackHandler, Linking, Platform, StatusBar } from 'react-native'
+import { AnyAction } from 'redux'
+import { Routes } from 'src/routes'
+import { RootState } from 'src/reducers/'
+import { navigationActions, accountActions } from 'src/actions/'
 import { BottomActionBar } from './ui/generic/'
 import { routeList } from './routeList'
 
 const {
-  createReduxBoundAddListener
-} = require("react-navigation-redux-helpers")
+  createReduxBoundAddListener,
+} = require('react-navigation-redux-helpers')
 
 interface ConnectProps {
-  navigation: RootState["navigation"]
+  navigation: RootState['navigation']
   openScanner: () => void
   goBack: () => void
   handleDeepLink: (url: string) => void
@@ -34,17 +34,17 @@ interface Props extends ConnectProps, OwnProps {}
 export class NavigatorContainer extends React.Component<Props> {
   private addListener: (
     name: string,
-    cb: NavigationEventCallback
+    cb: NavigationEventCallback,
   ) => NavigationEventSubscription
 
   constructor(props: Props) {
     super(props)
-    this.addListener = createReduxBoundAddListener("root")
+    this.addListener = createReduxBoundAddListener('root')
   }
 
   UNSAFE_componentWillMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.navigateBack)
-    if (Platform.OS === "android") {
+    BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
+    if (Platform.OS === 'android') {
       Linking.getInitialURL().then((url: string) => {
         if (!url) {
           this.props.checkIfAccountExists()
@@ -53,7 +53,7 @@ export class NavigatorContainer extends React.Component<Props> {
         }
       })
     } else {
-      Linking.addEventListener("url", this.handleOpenURL)
+      Linking.addEventListener('url', this.handleOpenURL)
       // TODO: test with deep linking on ios
       Linking.getInitialURL().then((url: string) => {
         if (!url) {
@@ -66,8 +66,8 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this.navigateBack)
-    Linking.removeEventListener("url", this.handleOpenURL)
+    BackHandler.removeEventListener('hardwareBackPress', this.navigateBack)
+    Linking.removeEventListener('url', this.handleOpenURL)
   }
 
   private navigateBack = () => {
@@ -91,41 +91,44 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   render() {
-    const {routes, index} = this.props.navigation
+    const { routes, index } = this.props.navigation
     const currentRoute = routes[index].routeName
-    return (
-      [
-        <StatusBar barStyle="light-content" />,
-        <Routes
-          navigation={addNavigationHelpers({
-            dispatch: this.props.dispatch,
-            state: this.props.navigation,
-            addListener: this.addListener
-          })}
-        />,
-        currentRoute === routeList.Home &&
-        <BottomActionBar openScanner={this.props.openScanner}/>
-      ]
-    )
+    return [
+      <StatusBar barStyle="light-content" />,
+      <Routes
+        navigation={addNavigationHelpers({
+          dispatch: this.props.dispatch,
+          state: this.props.navigation,
+          addListener: this.addListener,
+        })}
+      />,
+      currentRoute === routeList.Home && (
+        <BottomActionBar openScanner={this.props.openScanner} />
+      ),
+    ]
   }
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    navigation: state.navigation
+    navigation: state.navigation,
   }
 }
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     goBack: () => dispatch(navigationActions.goBack()),
-    handleDeepLink: (url: string) => dispatch(navigationActions.handleDeepLink(url)),
-    openScanner: () => dispatch( navigationActions.navigate({ routeName: routeList.QRCodeScanner })),
-    checkIfAccountExists: () => dispatch(accountActions.checkIdentityExists())
+    handleDeepLink: (url: string) =>
+      dispatch(navigationActions.handleDeepLink(url)),
+    openScanner: () =>
+      dispatch(
+        navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
+      ),
+    checkIfAccountExists: () => dispatch(accountActions.checkIdentityExists()),
   }
 }
 
 export const Navigator = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(NavigatorContainer)

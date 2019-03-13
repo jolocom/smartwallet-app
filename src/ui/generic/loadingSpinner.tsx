@@ -9,13 +9,17 @@ interface Props {}
 const styles = StyleSheet.create({
   loadingContainer: {
     backgroundColor: 'white',
-  }
+  },
 })
 
-export const LoadingSpinner: React.SFC<Props> = (props) => {
-  return(
-    <Container style={ styles.loadingContainer }>
-      <loaders.RippleLoader size={120} strokeWidth={4} color={JolocomTheme.primaryColorPurple} />
+export const LoadingSpinner: React.SFC<Props> = props => {
+  return (
+    <Container style={styles.loadingContainer}>
+      <loaders.RippleLoader
+        size={120}
+        strokeWidth={4}
+        color={JolocomTheme.primaryColorPurple}
+      />
     </Container>
   )
 }

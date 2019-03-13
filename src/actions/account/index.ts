@@ -8,27 +8,27 @@ import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
-  instantiateIdentityWallet
+  instantiateIdentityWallet,
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
 
 export const setDid = (did: string) => {
   return {
     type: 'DID_SET',
-    value: did
+    value: did,
   }
 }
 
 export const setSelected = (claim: DecoratedClaims) => {
   return {
     type: 'SET_SELECTED',
-    selected: claim
+    selected: claim,
   }
 }
 
 export const resetSelected = () => {
   return {
-    type: 'RESET_SELECTED'
+    type: 'RESET_SELECTED',
   }
 }
 
@@ -36,19 +36,23 @@ export const handleClaimInput = (fieldValue: string, fieldName: string) => {
   return {
     type: 'HANLDE_CLAIM_INPUT',
     fieldName,
-    fieldValue
+    fieldValue,
   }
 }
 
 export const toggleClaimsLoading = (value: boolean) => {
   return {
     type: 'TOGGLE_CLAIMS_LOADING',
-    value
+    value,
   }
 }
 
 export const checkIdentityExists = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     const { storageLib } = backendMiddleware
 
     try {
@@ -73,7 +77,11 @@ export const checkIdentityExists = () => {
 }
 
 export const setIdentityWallet = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     try {
       await instantiateIdentityWallet(backendMiddleware)
     } catch (err) {
@@ -87,14 +95,18 @@ export const openClaimDetails = (claim: DecoratedClaims) => {
     dispatch(setSelected(claim))
     dispatch(
       navigationActions.navigate({
-        routeName: routeList.ClaimDetails
-      })
+        routeName: routeList.ClaimDetails,
+      }),
     )
   }
 }
 
 export const saveClaim = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     const { identityWallet, storageLib, keyChainLib } = backendMiddleware
 
     try {
@@ -106,9 +118,9 @@ export const saveClaim = () => {
         {
           metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
           claim: claimsItem.claimData,
-          subject: did
+          subject: did,
         },
-        password
+        password,
       )
 
       if (claimsItem.id) {
@@ -120,8 +132,8 @@ export const saveClaim = () => {
 
       dispatch(
         navigationActions.navigatorReset({
-          routeName: routeList.Home
-        })
+          routeName: routeList.Home,
+        }),
       )
     } catch (err) {
       dispatch(genericActions.showErrorScreen(err))
@@ -131,7 +143,11 @@ export const saveClaim = () => {
 
 // TODO Currently only rendering  / adding one
 export const saveExternalCredentials = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     const { storageLib } = backendMiddleware
     const externalCredentials = getState().account.claims.toJS().pendingExternal
     const cred: SignedCredential = externalCredentials[0]
@@ -152,21 +168,27 @@ export const saveExternalCredentials = () => {
 export const toggleLoading = (value: boolean) => {
   return {
     type: 'SET_LOADING',
-    value
+    value,
   }
 }
 
 export const setClaimsForDid = () => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     dispatch(toggleClaimsLoading(true))
     const storageLib = backendMiddleware.storageLib
 
     const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
-    const claims = prepareClaimsForState(verifiableCredentials) as CategorizedClaims
+    const claims = prepareClaimsForState(
+      verifiableCredentials,
+    ) as CategorizedClaims
 
     dispatch({
       type: 'SET_CLAIMS_FOR_DID',
-      claims
+      claims,
     })
 
     dispatch(toggleClaimsLoading(false))
@@ -191,7 +213,9 @@ const prepareClaimsForState = (credentials: SignedCredential[]) => {
 }
 
 // TODO Util, make subject mandatory
-export const convertToDecoratedClaim = (vCreds: SignedCredential[]): DecoratedClaims[] => {
+export const convertToDecoratedClaim = (
+  vCreds: SignedCredential[],
+): DecoratedClaims[] => {
   return vCreds.map(vCred => {
     const claimData = { ...vCred.claim }
     delete claimData.id
@@ -202,7 +226,7 @@ export const convertToDecoratedClaim = (vCreds: SignedCredential[]): DecoratedCl
       id: vCred.id,
       issuer: vCred.issuer,
       subject: vCred.claim.id || 'Not found',
-      expires: vCred.expires || undefined
+      expires: vCred.expires || undefined,
     }
   })
 }

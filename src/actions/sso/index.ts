@@ -1,7 +1,10 @@
 import { Dispatch, AnyAction } from 'redux'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
-import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
+import {
+  StateCredentialRequestSummary,
+  StateVerificationSummary,
+} from 'src/reducers/sso'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { navigationActions, accountActions } from 'src/actions'
 import { routeList } from 'src/routeList'
@@ -18,29 +21,31 @@ import { getIssuerPublicKey } from 'jolocom-lib/js/utils/helper'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 
-export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
+export const setCredentialRequest = (
+  request: StateCredentialRequestSummary,
+) => {
   return {
     type: 'SET_CREDENTIAL_REQUEST',
-    value: request
+    value: request,
   }
 }
 
 export const clearCredentialRequest = () => {
   return {
-    type: 'CLEAR_CREDENTIAL_REQUEST'
+    type: 'CLEAR_CREDENTIAL_REQUEST',
   }
 }
 
 export const setReceivingCredential = (external: SignedCredential[]) => {
   return {
     type: 'SET_EXTERNAL',
-    external
+    external,
   }
 }
 
 export const resetReceivingCredential = () => {
   return {
-    type: 'RESET_EXTERNAL'
+    type: 'RESET_EXTERNAL',
   }
 }
 
@@ -48,15 +53,24 @@ export const parseJWT = (encodedJwt: string) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(accountActions.toggleLoading(true))
     try {
-      const returnedDecodedJwt = await JolocomLib.parse.interactionToken.fromJWT(encodedJwt)
-      
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialRequest) {
+      const returnedDecodedJwt = await JolocomLib.parse.interactionToken.fromJWT(
+        encodedJwt,
+      )
+
+      if (
+        returnedDecodedJwt.interactionType === InteractionType.CredentialRequest
+      ) {
         dispatch(consumeCredentialRequest(returnedDecodedJwt))
       }
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialOffer) {
+      if (
+        returnedDecodedJwt.interactionType === InteractionType.CredentialOffer
+      ) {
         dispatch(consumeCredentialOfferRequest(returnedDecodedJwt))
       }
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialsReceive) {
+      if (
+        returnedDecodedJwt.interactionType ===
+        InteractionType.CredentialsReceive
+      ) {
         dispatch(receiveExternalCredential(returnedDecodedJwt))
       }
     } catch (err) {
@@ -67,8 +81,14 @@ export const parseJWT = (encodedJwt: string) => {
   }
 }
 
-export const consumeCredentialOfferRequest = (credOfferRequest: JSONWebToken<CredentialOffer>) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+export const consumeCredentialOfferRequest = (
+  credOfferRequest: JSONWebToken<CredentialOffer>,
+) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     const { keyChainLib, identityWallet } = backendMiddleware
 
     try {
@@ -79,16 +99,16 @@ export const consumeCredentialOfferRequest = (credOfferRequest: JSONWebToken<Cre
         {
           callbackURL: credOfferRequest.interactionToken.callbackURL,
           instant: credOfferRequest.interactionToken.instant,
-          requestedInput: {}
+          requestedInput: {},
         },
         password,
-        credOfferRequest
+        credOfferRequest,
       )
 
       const res = await fetch(credOfferRequest.interactionToken.callbackURL, {
         method: 'POST',
         body: JSON.stringify({ token: credOfferResponse.encode() }),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }).then(body => body.json())
 
       dispatch(parseJWT(res.token))
@@ -99,15 +119,25 @@ export const consumeCredentialOfferRequest = (credOfferRequest: JSONWebToken<Cre
   }
 }
 
-export const receiveExternalCredential = (credReceive: JSONWebToken<CredentialsReceive>) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+export const receiveExternalCredential = (
+  credReceive: JSONWebToken<CredentialsReceive>,
+) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     const { identityWallet } = backendMiddleware
 
     try {
       await identityWallet.validateJWT(credReceive)
     } catch (error) {
       console.log(error)
-      dispatch(showErrorScreen(new Error('Validation of external credential token failed')))
+      dispatch(
+        showErrorScreen(
+          new Error('Validation of external credential token failed'),
+        ),
+      )
     }
 
     try {
@@ -119,22 +149,28 @@ export const receiveExternalCredential = (credReceive: JSONWebToken<CredentialsR
           const remoteIdentity = await registry.resolve(vcred.issuer)
           return SoftwareKeyProvider.verifyDigestable(
             getIssuerPublicKey(vcred.signer.keyId, remoteIdentity.didDocument),
-            vcred
+            vcred,
           )
-        })
+        }),
       )
 
       if (results.every(el => el === true)) {
         dispatch(setReceivingCredential(providedCredentials))
         dispatch(accountActions.toggleLoading(false))
-        dispatch(navigationActions.navigate({ routeName: routeList.CredentialDialog }))
+        dispatch(
+          navigationActions.navigate({ routeName: routeList.CredentialDialog }),
+        )
       } else {
         dispatch(accountActions.toggleLoading(false))
         dispatch(showErrorScreen(new Error('Signature validation failed')))
       }
     } catch (error) {
       dispatch(accountActions.toggleLoading(false))
-      dispatch(showErrorScreen(new Error('Signature validation on external credential failed')))
+      dispatch(
+        showErrorScreen(
+          new Error('Signature validation on external credential failed'),
+        ),
+      )
     }
   }
 }
@@ -148,15 +184,24 @@ interface AttributeSummary {
   }>
 }
 
-export const consumeCredentialRequest = (decodedCredentialRequest: JSONWebToken<CredentialRequest>) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+export const consumeCredentialRequest = (
+  decodedCredentialRequest: JSONWebToken<CredentialRequest>,
+) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     const { storageLib, identityWallet } = backendMiddleware
     const { did } = getState().account.did.toJS()
 
     try {
       await identityWallet.validateJWT(decodedCredentialRequest)
-      const requestedTypes = decodedCredentialRequest.interactionToken.requestedCredentialTypes
-      const attributesForType = await Promise.all<AttributeSummary>(requestedTypes.map(storageLib.get.attributesByType))
+      const requestedTypes =
+        decodedCredentialRequest.interactionToken.requestedCredentialTypes
+      const attributesForType = await Promise.all<AttributeSummary>(
+        requestedTypes.map(storageLib.get.attributesByType),
+      )
 
       const populatedWithCredentials = await Promise.all(
         attributesForType.map(async entry => {
@@ -165,8 +210,10 @@ export const consumeCredentialRequest = (decodedCredentialRequest: JSONWebToken<
               entry.results.map(async result => ({
                 type: getUiCredentialTypeByType(entry.type),
                 values: result.values,
-                verifications: await storageLib.get.verifiableCredential({ id: result.verification })
-              }))
+                verifications: await storageLib.get.verifiableCredential({
+                  id: result.verification,
+                }),
+              })),
             )
           }
 
@@ -174,10 +221,10 @@ export const consumeCredentialRequest = (decodedCredentialRequest: JSONWebToken<
             {
               type: getUiCredentialTypeByType(entry.type),
               values: [],
-              verifications: []
-            }
+              verifications: [],
+            },
           ]
-        })
+        }),
       )
 
       const abbreviated = populatedWithCredentials.map(attribute =>
@@ -187,9 +234,9 @@ export const consumeCredentialRequest = (decodedCredentialRequest: JSONWebToken<
             id: vCred.id,
             issuer: vCred.issuer,
             selfSigned: vCred.signer.did === did,
-            expires: vCred.expires
-          }))
-        }))
+            expires: vCred.expires,
+          })),
+        })),
       )
       const flattened = abbreviated.reduce((acc, val) => acc.concat(val))
 
@@ -198,7 +245,7 @@ export const consumeCredentialRequest = (decodedCredentialRequest: JSONWebToken<
         callbackURL: decodedCredentialRequest.interactionToken.callbackURL,
         requester: decodedCredentialRequest.issuer,
         availableCredentials: flattened,
-        requestJWT: decodedCredentialRequest.encode()
+        requestJWT: decodedCredentialRequest.encode(),
       }
 
       dispatch(setCredentialRequest(summary))
@@ -206,13 +253,21 @@ export const consumeCredentialRequest = (decodedCredentialRequest: JSONWebToken<
       dispatch(navigationActions.navigate({ routeName: routeList.Consent }))
     } catch (error) {
       console.log(error)
-      dispatch(showErrorScreen(new Error('Consumption of credential request failed')))
+      dispatch(
+        showErrorScreen(new Error('Consumption of credential request failed')),
+      )
     }
   }
 }
 
-export const sendCredentialResponse = (selectedCredentials: StateVerificationSummary[]) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+export const sendCredentialResponse = (
+  selectedCredentials: StateVerificationSummary[],
+) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     const { storageLib, keyChainLib, encryptionLib } = backendMiddleware
     const { activeCredentialRequest } = getState().sso
 
@@ -221,46 +276,59 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
       const password = await keyChainLib.getPassword()
       const decryptedSeed = encryptionLib.decryptWithPass({
         cipher: await storageLib.get.encryptedSeed(),
-        pass: password
+        pass: password,
       })
-      const userVault = new SoftwareKeyProvider(Buffer.from(decryptedSeed, 'hex'), password)
+      const userVault = new SoftwareKeyProvider(
+        Buffer.from(decryptedSeed, 'hex'),
+        password,
+      )
 
       const wallet = await registry.authenticate(userVault, {
         derivationPath: KeyTypes.jolocomIdentityKey,
-        encryptionPass: password
+        encryptionPass: password,
       })
 
       const credentials = await Promise.all(
-        selectedCredentials.map(async cred => (await storageLib.get.verifiableCredential({ id: cred.id }))[0])
+        selectedCredentials.map(
+          async cred =>
+            (await storageLib.get.verifiableCredential({ id: cred.id }))[0],
+        ),
       )
 
       const jsonCredentials = credentials.map(cred => cred.toJSON())
 
-      const request = JolocomLib.parse.interactionToken.fromJWT(activeCredentialRequest.requestJWT)
+      const request = JolocomLib.parse.interactionToken.fromJWT(
+        activeCredentialRequest.requestJWT,
+      )
       const credentialResponse = await wallet.create.interactionTokens.response.share(
         {
           callbackURL: activeCredentialRequest.callbackURL,
-          suppliedCredentials: jsonCredentials
+          suppliedCredentials: jsonCredentials,
         },
         password,
-        request
+        request,
       )
 
       if (activeCredentialRequest.callbackURL.includes('http')) {
         await fetch(activeCredentialRequest.callbackURL, {
           method: 'POST',
           body: JSON.stringify({ token: credentialResponse.encode() }),
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         })
       } else {
-        const url = activeCredentialRequest.callbackURL + credentialResponse.encode()
+        const url =
+          activeCredentialRequest.callbackURL + credentialResponse.encode()
         Linking.openURL(url)
       }
       dispatch(clearCredentialRequest())
       dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
     } catch (error) {
       // TODO: better error message
-      dispatch(showErrorScreen(new Error('The credential response could not be created')))
+      dispatch(
+        showErrorScreen(
+          new Error('The credential response could not be created'),
+        ),
+      )
     }
   }
 }

@@ -6,4 +6,5 @@ export const MoreIcon = require('src/resources/svg/MoreIcon').default
 export const NameIcon = require('src/resources/svg/NameIcon').default
 export const EmailIcon = require('src/resources/svg/EmailIcon').default
 export const PhoneIcon = require('src/resources/svg/PhoneIcon').default
-export const AccessibilityIcon = require('src/resources/svg/AccessibilityIcon').default
+export const AccessibilityIcon = require('src/resources/svg/AccessibilityIcon')
+  .default

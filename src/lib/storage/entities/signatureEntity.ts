@@ -1,7 +1,16 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm/browser'
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm/browser'
 import { VerifiableCredentialEntity } from 'src/lib/storage/entities/verifiableCredentialEntity'
 import { plainToClass } from 'class-transformer'
-import { ILinkedDataSignature, ILinkedDataSignatureAttrs } from 'jolocom-lib/js/linkedDataSignature/types'
+import {
+  ILinkedDataSignature,
+  ILinkedDataSignatureAttrs,
+} from 'jolocom-lib/js/linkedDataSignature/types'
 
 @Entity('signatures')
 @Unique(['verifiableCredential', 'signatureValue'])

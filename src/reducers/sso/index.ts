@@ -29,12 +29,15 @@ const initialState: SsoState = {
     requester: '',
     callbackURL: '',
     availableCredentials: [],
-    requestJWT: ''
-  }
+    requestJWT: '',
+  },
 }
 
-export const ssoReducer = (state = initialState, action: AnyAction): SsoState => {
-  switch(action.type) {
+export const ssoReducer = (
+  state = initialState,
+  action: AnyAction,
+): SsoState => {
+  switch (action.type) {
     case 'SET_CREDENTIAL_REQUEST':
       return { activeCredentialRequest: action.value }
     case 'CLEAR_CREDENTIAL_REQUEST':

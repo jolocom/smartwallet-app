@@ -13,15 +13,21 @@ const bip39 = require('bip39')
 export const setLoadingMsg = (loadingMsg: string) => {
   return {
     type: 'SET_LOADING_MSG',
-    value: loadingMsg
+    value: loadingMsg,
   }
 }
 
 export const savePassword = (password: string) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
     try {
       await backendMiddleware.keyChainLib.savePassword(password)
-      dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
+      dispatch(
+        navigationActions.navigatorReset({ routeName: routeList.Entropy }),
+      )
     } catch (err) {
       dispatch(genericActions.showErrorScreen(err, routeList.Landing))
     }
@@ -32,8 +38,8 @@ export const submitEntropy = (encodedEntropy: string) => {
   return (dispatch: Dispatch<AnyAction>) => {
     dispatch(
       navigationActions.navigatorReset({
-        routeName: routeList.Loading
-      })
+        routeName: routeList.Loading,
+      }),
     )
 
     dispatch(setLoadingMsg(loading.loadingStages[0]))
@@ -48,8 +54,8 @@ export const startRegistration = () => {
   return (dispatch: Dispatch<AnyAction>) => {
     dispatch(
       navigationActions.navigatorReset({
-        routeName: routeList.PasswordEntry
-      })
+        routeName: routeList.PasswordEntry,
+      }),
     )
   }
 }
@@ -61,55 +67,75 @@ export const finishRegistration = () => {
 }
 
 export const createIdentity = (encodedEntropy: string) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    const { ethereumLib, encryptionLib, keyChainLib, storageLib } = backendMiddleware
-  
+  return async (
+    dispatch: Dispatch<AnyAction>,
+    getState: Function,
+    backendMiddleware: BackendMiddleware,
+  ) => {
+    const {
+      ethereumLib,
+      encryptionLib,
+      keyChainLib,
+      storageLib,
+    } = backendMiddleware
+
     try {
       const password = await keyChainLib.getPassword()
-      const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
-      const entropyData = {encryptedEntropy: encEntropy, timestamp: Date.now()}
+      const encEntropy = encryptionLib.encryptWithPass({
+        data: encodedEntropy,
+        pass: password,
+      })
+      const entropyData = {
+        encryptedEntropy: encEntropy,
+        timestamp: Date.now(),
+      }
       await storageLib.store.encryptedSeed(entropyData)
-      const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
+      const userVault = new SoftwareKeyProvider(
+        Buffer.from(encodedEntropy, 'hex'),
+        password,
+      )
 
       dispatch(setLoadingMsg(loading.loadingStages[1]))
 
-      const ethAddr = ethereumLib.privKeyToEthAddress(userVault.getPrivateKey({
-        encryptionPass: password,
-        derivationPath: JolocomLib.KeyTypes.ethereumKey
-      }))
+      const ethAddr = ethereumLib.privKeyToEthAddress(
+        userVault.getPrivateKey({
+          encryptionPass: password,
+          derivationPath: JolocomLib.KeyTypes.ethereumKey,
+        }),
+      )
 
       await ethereumLib.requestEther(ethAddr)
-      
+
       dispatch(setLoadingMsg(loading.loadingStages[2]))
 
       const registry = JolocomLib.registries.jolocom.create({
         ipfsConnector: new IpfsCustomConnector({
           host: 'ipfs.jolocom.com',
           port: 443,
-          protocol: 'https'
+          protocol: 'https',
         }),
-        ethereumConnector: jolocomEthereumResolver
+        ethereumConnector: jolocomEthereumResolver,
       })
 
       const identityWallet = await registry.create(userVault, password)
 
       const personaData = {
         did: identityWallet.identity.did,
-        controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey
+        controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
       }
 
       await storageLib.store.persona(personaData)
       dispatch(setDid(identityWallet.identity.did))
 
       dispatch(setLoadingMsg(loading.loadingStages[3]))
-  
+
       dispatch(accountActions.setIdentityWallet())
-      
+
       return dispatch(
         navigationActions.navigatorReset({
           routeName: routeList.SeedPhrase,
-          params: { mnemonic: bip39.entropyToMnemonic(encodedEntropy) }
-        })
+          params: { mnemonic: bip39.entropyToMnemonic(encodedEntropy) },
+        }),
       )
     } catch (error) {
       return dispatch(genericActions.showErrorScreen(error, routeList.Landing))

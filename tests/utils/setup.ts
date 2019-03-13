@@ -9,12 +9,12 @@ jest.mock('react-native-fetch-blob', () => {
     default: {
       DocumentDir: () => {},
       polyfill: () => {},
-      fetch: jest.fn()
-    }
+      fetch: jest.fn(),
+    },
   }
 })
 
 jest.mock('react-native-languages', () => ({
   language: 'en',
   languages: ['en'],
-}));
+}))

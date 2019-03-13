@@ -5,17 +5,17 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 describe('ClaimDetails component', () => {
   const COMMON_PROPS = {
     handleClaimInput: () => {},
-    saveClaim: () => {}
+    saveClaim: () => {},
   }
 
   it('matches the snapshot on render', () => {
-    const props = Object.assign({}, COMMON_PROPS {
+    const props = Object.assign({}, COMMON_PROPS, {
       selectedClaim: {
         credentialType: 'Email',
         claimData: {
-          email: 'test@test.com'
-        }
-      }
+          email: 'test@test.com',
+        },
+      },
     })
 
     const rendered = shallow(<ClaimDetailsComponent {...props} />)
@@ -23,14 +23,14 @@ describe('ClaimDetails component', () => {
   })
 
   it('matches the snapshot on render with multi-line claim', () => {
-    const props = Object.assign({}, COMMON_PROPS {
+    const props = Object.assign({}, COMMON_PROPS, {
       selectedClaim: {
         credentialType: 'Name',
         claimData: {
           givenName: 'natascha',
-          familyName: 'test'
-        }
-      }
+          familyName: 'test',
+        },
+      },
     })
 
     const rendered = shallow(<ClaimDetailsComponent {...props} />)
