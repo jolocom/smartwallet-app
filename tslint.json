@@ -1,4 +1,5 @@
 {
+  "extends": ["tslint-plugin-prettier"],
   "rules": {
     "array-type": [true, "array-simple"],
     "arrow-return-shorthand": true,
@@ -38,6 +39,7 @@
     "object-literal-shorthand": true,
     "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"],
     "prefer-const": true,
+    "prettier": true,
     "radix": true,
     "semicolon": [true, "never", "ignore-interfaces"],
     "switch-default": true,
