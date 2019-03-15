@@ -29,9 +29,7 @@ const headerFontSize =
     ? JolocomTheme.landingHeaderFontSizeSmall
     : JolocomTheme.landingHeaderFontSize
 const labelFontSize =
-  viewWidth < 360
-    ? JolocomTheme.labelFontSizeSmall
-    : JolocomTheme.labelFontSize
+  viewWidth < 360 ? JolocomTheme.labelFontSizeSmall : JolocomTheme.labelFontSize
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
@@ -63,7 +61,7 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorSand,
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: headerFontSize,
-    fontWeight: '100'
+    fontWeight: '100',
   },
   subHeader: {
     color: JolocomTheme.primaryColorSand,
@@ -72,15 +70,15 @@ const styles = StyleSheet.create({
     fontSize: labelFontSize,
     fontWeight: '100',
     lineHeight: labelFontSize + 4,
-    marginTop: 15
+    marginTop: 15,
   },
   paginationBlock: {
     flex: 0.15,
-    backgroundColor: '#05050d'
+    backgroundColor: '#05050d',
   },
   buttonBlock: {
     flex: 0.1,
-    backgroundColor: '#05050d'
+    backgroundColor: '#05050d',
   },
   buttonContainer: {
     height: 48,
@@ -95,8 +93,8 @@ const styles = StyleSheet.create({
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
     textAlign: 'center',
-    minWidth: 158
-  }
+    minWidth: 158,
+  },
 })
 
 const carouselInfo: Slide[] = [
