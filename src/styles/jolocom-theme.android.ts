@@ -21,6 +21,9 @@ const primaryColors = {
   headerFontSize: 22,
   landingHeaderFontSize: 30,
 
+  labelFontSizeSmall: 18,
+  landingHeaderFontSizeSmall: 28,
+
   fontWeight: '100',
 
   contentFontFamily: 'TTCommons',

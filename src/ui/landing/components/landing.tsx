@@ -24,17 +24,25 @@ interface Slide {
 }
 
 const viewWidth: number = Dimensions.get('window').width
+const headerFontSize =
+  viewWidth < 360
+    ? JolocomTheme.landingHeaderFontSizeSmall
+    : JolocomTheme.landingHeaderFontSize
+const labelFontSize =
+  viewWidth < 360
+    ? JolocomTheme.labelFontSizeSmall
+    : JolocomTheme.labelFontSize
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
     paddingTop: 0,
     backgroundColor: '#05050d',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     flexDirection: 'column',
     flex: 1,
   },
   carouselTextContainer: {
-    padding: viewWidth / 15,
+    paddingHorizontal: viewWidth / 18,
     flex: 0.4,
     marginTop: 'auto',
     justifyContent: 'flex-end',
@@ -54,32 +62,29 @@ const styles = StyleSheet.create({
   header: {
     color: JolocomTheme.primaryColorSand,
     fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.landingHeaderFontSize,
-    fontWeight: '100',
-  },
-  headerBlock: {},
-  subHeaderBlock: {
-    flexGrow: 2,
+    fontSize: headerFontSize,
+    fontWeight: '100'
   },
   subHeader: {
-    fontWeight: '100',
     color: JolocomTheme.primaryColorSand,
-    fontFamily: JolocomTheme.contentFontFamily,
     opacity: 0.8,
-    fontSize: JolocomTheme.labelFontSize,
-    lineHeight: JolocomTheme.labelFontSize + 4,
+    fontFamily: JolocomTheme.contentFontFamily,
+    fontSize: labelFontSize,
+    fontWeight: '100',
+    lineHeight: labelFontSize + 4,
+    marginTop: 15
   },
   paginationBlock: {
     flex: 0.15,
-    backgroundColor: '#05050d',
+    backgroundColor: '#05050d'
   },
   buttonBlock: {
     flex: 0.1,
-    backgroundColor: '#05050d',
+    backgroundColor: '#05050d'
   },
   buttonContainer: {
-    height: '100%',
-    width: '50%',
+    height: 48,
+    minWidth: 164,
     borderRadius: 4,
     backgroundColor: JolocomTheme.primaryColorPurple,
   },
@@ -89,7 +94,9 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
-  },
+    textAlign: 'center',
+    minWidth: 158
+  }
 })
 
 const carouselInfo: Slide[] = [
@@ -145,12 +152,8 @@ export class LandingComponent extends React.Component<Props, State> {
       <Block>
         {svgImage}
         <Block style={styles.carouselTextContainer}>
-          <Block>
-            <CenteredText style={styles.header} msg={title} />
-          </Block>
-          <Block style={styles.subHeaderBlock}>
-            <CenteredText style={styles.subHeader} msg={infoText} />
-          </Block>
+          <CenteredText style={styles.header} msg={title} />
+          <CenteredText style={styles.subHeader} msg={infoText} />
         </Block>
       </Block>
     )
