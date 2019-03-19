@@ -25,6 +25,8 @@ yarn install
 
 ### Debug build on a device or simulator
 
+Starting with version `1.2.0`, the Jolocom SmartWallet requires `Node.js v10+` to build. Versions prior to `1.2.0` require `Node.js v8`.
+
 #### Android
 
 Please set up an android development environment and install the required SDKs.
