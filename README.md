@@ -44,7 +44,6 @@ react-native run-android
 ```
 In case you encounter connectivity errors to haul, restart it with the first command or start the app manually after haul.
 
-
 #### iOS
 
 Please set up the appropriate XCode development environment.
