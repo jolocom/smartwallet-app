@@ -80,6 +80,7 @@ exports[`Exception screen component Renders correctly 1`] = `
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "paddingVertical": 20,
           },
         }
       }
@@ -171,6 +172,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "paddingVertical": 20,
           },
         }
       }

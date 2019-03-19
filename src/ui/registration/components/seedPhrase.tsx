@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
+    paddingVertical: 15,
     fontWeight: '100',
     fontSize: JolocomTheme.headerFontSize,
     color: JolocomTheme.primaryColorWhite,

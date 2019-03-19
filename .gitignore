@@ -21,6 +21,8 @@ android/.gradle
 # React Native IOS
 ios/main.jsbundle
 ios/main.jsbundle.map
+ios/smartwallet/main.jsbundle
+ios/smartwallet/main.jsbundle.map
 *.pbxuser
 xcuserdata/
 

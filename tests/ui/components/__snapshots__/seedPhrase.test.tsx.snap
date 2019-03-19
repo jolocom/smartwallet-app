@@ -71,6 +71,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "paddingVertical": 15,
           },
         }
       }
@@ -153,6 +154,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "paddingVertical": 15,
           },
         }
       }

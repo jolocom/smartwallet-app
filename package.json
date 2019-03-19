@@ -1,6 +1,6 @@
 {
   "name": "jolocomwallet",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "private": true,
   "devDependencies": {
     "@types/enzyme": "^3.1.9",
@@ -29,7 +29,7 @@
     "enzyme-to-json": "^3.3.3",
     "haul": "1.0.0-beta.14",
     "immutable": "^3.8.2",
-    "jest": "^22.4.3",
+    "jest": "^22.4.4",
     "material-colors": "^1.2.5",
     "mockdate": "^2.0.2",
     "prettier": "^1.15.3",
@@ -46,10 +46,18 @@
     "yarn": "^1.5.1"
   },
   "scripts": {
-    "android": "haul start --platform android",
-    "ios": "haul start --platform ios",
-    "test": "node node_modules/jest/bin/jest.js",
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/smartwallet/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'"
+    "bundle:android": "haul start --platform android",
+    "bundle:ios": "haul start --platform ios",
+    "install:android": "cd android && ./gradlew installDebug",
+    "install:ios": "echo 'Installing for ios not implemented yet.'",
+    "run:android": "adb shell am start -n com.jolocomwallet/com.jolocomwallet.MainActivity",
+    "run:ios": "echo 'Running for ios not implemented yet.'",
+    "clean:node": "rm -rf node_modules",
+    "clean:android": "cd android && ./gradlew clean",
+    "clean:ios": "echo 'Cleaning for ios not implemented yet.'",
+    "clean:all": "yarn run clean:ios && yarn run clean:android && yarn run clean:node",
+    "build:ios": "haul bundle --entry-file='index.js' --bundle-output='./ios/smartwallet/main.jsbundle' --minify=false --dev=false --platform='ios' --assets-dest='./ios'",
+    "test": "node node_modules/jest/bin/jest.js"
   },
   "jest": {
     "setupFiles": [
@@ -97,7 +105,7 @@
     "crypto-js": "^3.1.9-1",
     "ethereumjs-wallet": "^0.6.0",
     "i18n-js": "^3.1.0",
-    "jolocom-lib": "^2.2.4",
+    "jolocom-lib": "^2.3.0",
     "material-colors": "^1.2.5",
     "object.assign": "^4.1.0",
     "react": "16.2.0",

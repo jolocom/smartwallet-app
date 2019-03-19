@@ -7,7 +7,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       "backgroundColor": "#05050d",
       "flex": 1,
       "flexDirection": "column",
-      "justifyContent": "space-between",
+      "justifyContent": "flex-end",
       "paddingTop": 0,
     }
   }
@@ -85,7 +85,7 @@ exports[`landing component matches the snapshot on render 1`] = `
     style={
       Object {
         "backgroundColor": "#05050d",
-        "flex": 0.2,
+        "flex": 0.15,
       }
     }
   >
@@ -134,14 +134,17 @@ exports[`landing component matches the snapshot on render 1`] = `
           "container": Object {
             "backgroundColor": "#942f51",
             "borderRadius": 4,
-            "height": "100%",
-            "width": "50%",
+            "height": 48,
+            "minWidth": 164,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
+            "minWidth": 158,
+            "paddingVertical": 15,
+            "textAlign": "center",
           },
         }
       }

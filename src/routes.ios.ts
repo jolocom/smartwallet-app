@@ -1,5 +1,5 @@
 import { StackNavigator, TabBarTop, TabNavigator } from "react-navigation"
-import { Claims, Interactions, ClaimDetails } from "src/ui/home/"
+import { Claims, ClaimDetails } from "src/ui/home/"
 import { Landing } from "src/ui/landing/"
 import {
   PasswordEntry,
@@ -20,7 +20,9 @@ const navigationOptions = {
 
 const navOptScreenWCancel = {
   headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: require('./resources/img/close.png'),
+  headerBackImage: require('./resources/img/left-chevron.png'),
+  headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
+  headerTintColor: { color: JolocomTheme.primaryColorWhite }
 }
 
 const headerTitleStyle = {
@@ -43,14 +45,6 @@ export const HomeRoutes = TabNavigator(
       screen: Claims,
       navigationOptions: {
         tabBarLabel: I18n.t('All claims'),
-        headerTitle: I18n.t('My identity'),
-        ...commonNavigationOptions,
-      }
-    },
-    Interactions: {
-      screen: Interactions,
-      navigationOptions: {
-        tabBarLabel: I18n.t('Documents'),
         headerTitle: I18n.t('My identity'),
         ...commonNavigationOptions,
       }
