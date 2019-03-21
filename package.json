@@ -29,7 +29,6 @@
     "enzyme-to-json": "^3.3.3",
     "haul": "1.0.0-beta.14",
     "immutable": "^3.8.2",
-    "ios-deploy": "^1.9.4",
     "jest": "^22.4.4",
     "material-colors": "^1.2.5",
     "mockdate": "^2.0.2",
@@ -50,9 +49,9 @@
     "bundle:android": "haul start --platform android",
     "bundle:ios": "haul start --platform ios",
     "install:android": "cd android && ./gradlew installDebug",
-    "install:ios": "",
+    "install:ios": "yarn run:ios",
     "run:android": "adb shell am start -n com.jolocomwallet/com.jolocomwallet.MainActivity",
-    "run:ios": "echo 'Running for ios not implemented yet.'",
+    "run:ios": "react-native run-ios",
     "clean:node": "rm -rf node_modules",
     "clean:android": "cd android && ./gradlew clean",
     "clean:ios": "cd ios && xcodebuild clean",
@@ -86,7 +85,7 @@
       "node"
     ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
+      "\\.(jpg|jpeg|png|gif|eot|ot'|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
     },
     "preset": "react-native",
     "testMatch": [
