@@ -15,6 +15,7 @@ dist/
 .idea
 
 # React Native Android
+android/app/JoloSmartWallet.keystore
 android/.build
 android/.gradle
 
