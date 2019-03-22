@@ -16,6 +16,8 @@
     "@types/react-navigation": "^1.2.3",
     "@types/react-redux": "^5.0.15",
     "@types/react-test-renderer": "^16.0.0",
+    "@typescript-eslint/eslint-plugin": "^1.5.0",
+    "@typescript-eslint/parser": "^1.5.0",
     "babel-inline-import-loader": "^0.0.5",
     "babel-plugin-inline-import": "^2.0.6",
     "babel-plugin-react-native-platform-specific-extensions": "^1.1.0",
@@ -27,6 +29,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
+    "eslint": "^5.15.3",
     "haul": "1.0.0-beta.14",
     "immutable": "^3.8.2",
     "jest": "^22.4.4",
@@ -42,7 +45,7 @@
     "tslib": "^1.7.1",
     "tslint": "^5.9.1",
     "typeorm": "^0.2.5",
-    "typescript": "^3.0.1",
+    "typescript": "^3.3.4000",
     "yarn": "^1.5.1"
   },
   "scripts": {
