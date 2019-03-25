@@ -59,7 +59,8 @@
     "clean:ios": "echo 'Cleaning for ios not implemented yet.'",
     "clean:all": "yarn run clean:ios && yarn run clean:android && yarn run clean:node",
     "build:ios": "haul bundle --entry-file='index.js' --bundle-output='./ios/smartwallet/main.jsbundle' --minify=false --dev=false --platform='ios' --assets-dest='./ios'",
-    "test": "node node_modules/jest/bin/jest.js"
+    "test": "node node_modules/jest/bin/jest.js",
+    "lint": "eslint --fix --ext .ts --ext .tsx ."
   },
   "jest": {
     "setupFiles": [
