@@ -10,7 +10,7 @@ module.exports = {
   rules: {
     'arrow-body-style': ['warn', 'as-needed'],
     // curly braces for if, else etc.
-    'curly': ['error', 'multi'],
+    'curly': ['error', 'multi-line'],
     // replace `switch-default`
     'default-case': ['error'],
     // replace `triple-equals`
