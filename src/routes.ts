@@ -1,6 +1,7 @@
 import { StackNavigator, TabBarTop, TabNavigator } from "react-navigation"
 import { Claims, Interactions, ClaimDetails } from "src/ui/home/"
 import { Landing } from "src/ui/landing/"
+import { PaymentConsent } from "src/ui/payment"
 import {
   PasswordEntry,
   SeedPhrase,
@@ -110,6 +111,21 @@ export const Routes = StackNavigator({
       headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
       headerTintColor: JolocomTheme.primaryColorWhite
     }
+  },
+  PaymentConsent: {
+    screen: PaymentConsent,
+    navigationOptions: {
+      headerTitle: I18n.t("Confirm payment"),
+      headerTitleStyle: {
+        fontFamily: JolocomTheme.contentFontFamily,
+        fontWeight: "100",
+        fontSize: JolocomTheme.headerFontSize
+      },
+      headerStyle: {
+        backgroundColor: JolocomTheme.primaryColorBlack
+      },
+      headerTintColor: JolocomTheme.primaryColorWhite
+    },
   },
   Exception: { screen: Exception, navigationOptions },
   ClaimDetails: {
