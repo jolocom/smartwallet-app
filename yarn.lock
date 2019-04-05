@@ -4973,6 +4973,11 @@ invert-kv@^2.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
+ios-deploy@^1.9.4:
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/ios-deploy/-/ios-deploy-1.9.4.tgz#5aa6b198feabcf53f912639fc2d9e11b4923079d"
+  integrity sha512-pgyc19zgtwGrfx3GL8yV0c0dAPucTpJ0VZkuS3DcqxIZYC48+UW+tBTxI43u1ZDk17mop0ABLs1SkAy5SUQ6pQ==
+
 ipaddr.js@1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.6.0.tgz#e3fa357b773da619f26e95f049d055c72796f86b"
