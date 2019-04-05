@@ -17,6 +17,7 @@ import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRe
 import { getIssuerPublicKey } from 'jolocom-lib/js/utils/helper'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
+import { consumePaymentRequest } from './paymentRequest'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -25,9 +26,9 @@ export const setCredentialRequest = (request: StateCredentialRequestSummary) => 
   }
 }
 
-export const clearCredentialRequest = () => {
+export const clearInteractionRequest = () => {
   return {
-    type: 'CLEAR_CREDENTIAL_REQUEST'
+    type: 'CLEAR_INTERACTION_REQUEST'
   }
 }
 
@@ -58,6 +59,9 @@ export const parseJWT = (encodedJwt: string) => {
       }
       if (returnedDecodedJwt.interactionType === InteractionType.CredentialsReceive) {
         dispatch(receiveExternalCredential(returnedDecodedJwt))
+      }
+      if (returnedDecodedJwt.interactionType === InteractionType.PaymentRequest) {
+        dispatch(consumePaymentRequest(returnedDecodedJwt))
       }
     } catch (err) {
       console.log('error: ', err)
@@ -256,7 +260,7 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
         const url = activeCredentialRequest.callbackURL + credentialResponse.encode()
         Linking.openURL(url)
       }
-      dispatch(clearCredentialRequest())
+      dispatch(clearInteractionRequest())
       dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
     } catch (error) {
       // TODO: better error message
@@ -267,7 +271,7 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
 
 export const cancelSSO = () => {
   return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(clearCredentialRequest())
+    dispatch(clearInteractionRequest())
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
   }
 }

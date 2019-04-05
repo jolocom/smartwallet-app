@@ -1,32 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { PaymentConsentComponent } from '../components/PaymentConsent'
+import { StatePaymentRequestSummary } from 'src/reducers/sso';
+import { RootState } from 'src/reducers';
 
-// interface ConnectProps {}
+interface ConnectProps {}
 
-// interface Props extends ConnectProps {
-//   confirmPaymentRequest: () => void
-//   cancelPaymentRequest: () => void
-// }
+interface Props extends ConnectProps {
+  activePaymentRequest: StatePaymentRequestSummary
+  confirmPaymentRequest: () => void
+  cancelPaymentRequest: () => void
+}
 
 interface State {}
-
-const dummyTransactionDetails = {
-  description: 'Payment for monthly subscription to awesome service',
-  transactionOptions: {
-    value: 0.5e18, // 0.5 Ether in Wei
-    to: '0x10ed0857fd6d752f2089a6b0d3fe7f0392e046e0'
-  }
-}
 
 const dummyConfirmPaymentRequest = () => console.log('Payment confirmed.')
 const dummyCancelPaymentRequest = () => console.log('Payment cancelled.')
 
-export class PaymentConsentContainer extends React.Component<State> {
+export class PaymentConsentContainer extends React.Component<Props, State> {
   render() {
     return (
       <PaymentConsentComponent
-        transactionDetails={dummyTransactionDetails}
+        activePaymentRequest={this.props.activePaymentRequest}
         confirmPaymentRequest={dummyConfirmPaymentRequest}
         cancelPaymentRequest={dummyCancelPaymentRequest}
       />
@@ -34,14 +29,11 @@ export class PaymentConsentContainer extends React.Component<State> {
   }
 }
 
-// const mapStateToProps = (state: any) => {
-//   return {
-//     activePaymentRequest: state.payment.activePaymentRequest
-//   }
-// }
-// const mapStateToProps = (state: any) => {
-//   return {}
-// }
+const mapStateToProps = (state: RootState) => {
+  return {
+    activePaymentRequest: state.sso.activePaymentRequest
+  }
+}
 
 // const mapDispatchToProps = (dispatch: Function) => {
 //   return {
@@ -50,4 +42,4 @@ export class PaymentConsentContainer extends React.Component<State> {
 //   }
 // }
 
-export const PaymentConsent = connect()(PaymentConsentContainer)
+export const PaymentConsent = connect(mapStateToProps, {})(PaymentConsentContainer)

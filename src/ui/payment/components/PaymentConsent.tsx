@@ -6,15 +6,10 @@ import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { getCredentialIconByType } from 'src/resources/util'
 import { SectionClaimCard } from 'src/ui/structure/claimCard'
+import { StatePaymentRequestSummary } from 'src/reducers/sso';
 
 interface Props {
-  transactionDetails: {
-    description: string
-    transactionOptions: {
-      value: number
-      to: string
-    }
-  }
+  activePaymentRequest: StatePaymentRequestSummary
   cancelPaymentRequest: () => void
   confirmPaymentRequest: () => void
 }
@@ -66,12 +61,12 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
   }
 
   private renderPriceCard() {
-    let { value } = this.props.transactionDetails.transactionOptions
-    // convert value from wei to eth
-    value = value / 10e18
+    let { amount } = this.props.activePaymentRequest
+    // convert amount from wei to eth
+    amount = amount / 10e18
     return (
       <View style={styles.priceCard.container}>
-        <Text style={styles.priceCard.price}>{value}</Text>
+        <Text style={styles.priceCard.price}>{amount}</Text>
         <Text style={styles.priceCard.unit}>{'ETH'}</Text>
       </View>
     )
@@ -80,9 +75,8 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
   private renderTransactionDetails() {
     const {
       description,
-      transactionOptions: { to }
-    } = this.props.transactionDetails
-    const receiverName = 'example receiver address'
+      receiver: { did, address }
+    } = this.props.activePaymentRequest
     return (
       <View style={{ width: '100%', margin: 0, padding: 0 }}>
         <SectionClaimCard
@@ -92,8 +86,8 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
         />
         <SectionClaimCard
           title={`${I18n.t('To')}:`}
-          primaryText={`${receiverName.substring(0, 17)}...`}
-          secondaryText={`Eth address: ${to.substring(0, 13)}...`}
+          primaryText={`${did.substring(0, 17)}...`}
+          secondaryText={`Eth address: ${address.substring(0, 13)}...`}
           leftIcon={this.renderLeftIcon('Email')}
         />
       </View>
