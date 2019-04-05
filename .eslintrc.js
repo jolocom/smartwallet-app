@@ -16,11 +16,9 @@ module.exports = {
     'arrow-body-style': ['warn', 'as-needed'],
     // curly braces for if, else etc.
     'curly': ['error', 'multi-line'],
-    // replace `switch-default`
     'default-case': ['error'],
-    // replace `triple-equals`
     'eqeqeq': ['error', 'smart'],
-    // will normally include properties in prototype chain, require if
+    // for...in will normally include properties in prototype chain, require if
     'guard-for-in': ['error'],
     // I don't think we even use labels
     'no-extra-label': ['error'],
@@ -37,11 +35,9 @@ module.exports = {
     'no-var': ['error'],
     // this isn't a tslint thing, but have copied over
     'new-parens': ['error'],
-    // replacement for `object-literal-shorthand`
     'object-shorthand': ['error'],
     'prefer-arrow-callback': ['error'],
     'prefer-const': ['error'],
-    // instead of `semicolon`
     'semi': ['error', 'never'],
     'use-isnan': ['error'],
     '@typescript-eslint/array-type': ['error', 'array-simple'],
@@ -64,6 +60,7 @@ module.exports = {
     '@typescript-eslint/no-angle-bracket-type-assertion': ['error'],
     // lose out on typing benefits with any
     '@typescript-eslint/no-explicit-any': ['error'],
+    '@typescript-eslint/no-empty-interface': ['off'],
     '@typescript-eslint/no-inferrable-types': ['error'],
     // namespaces and modules are outdated, use ES6 style
     '@typescript-eslint/no-namespace': ['error'],
