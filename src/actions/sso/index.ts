@@ -260,8 +260,7 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
         const url = activeCredentialRequest.callbackURL + credentialResponse.encode()
         Linking.openURL(url)
       }
-      dispatch(clearInteractionRequest())
-      dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+      dispatch(cancelSSO())
     } catch (error) {
       // TODO: better error message
       dispatch(showErrorScreen(new Error('The credential response could not be created')))

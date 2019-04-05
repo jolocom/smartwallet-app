@@ -5,7 +5,8 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { PaymentRequest } from "jolocom-lib/js/interactionTokens/paymentRequest"
 import { StatePaymentRequestSummary } from 'src/reducers/sso'
-import { showErrorScreen } from '../generic'
+import { showErrorScreen } from 'src/actions/generic'
+// import { cancelSSO } from "src/actions/sso/index";
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => {
   return {
@@ -16,10 +17,10 @@ export const setPaymentRequest = (request: StatePaymentRequestSummary) => {
 
 export const consumePaymentRequest = (paymentRequest: JSONWebToken<PaymentRequest>) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    // const { identityWallet } = backendMiddleware
+    const { identityWallet } = backendMiddleware
 
     try {
-      // await identityWallet.validateJWT(paymentRequest)
+      await identityWallet.validateJWT(paymentRequest)
 
       const paymentDetails: StatePaymentRequestSummary = {
         receiver: {
@@ -37,3 +38,9 @@ export const consumePaymentRequest = (paymentRequest: JSONWebToken<PaymentReques
     }
   }
 }
+
+// export const cancelPaymentRequest = () => {
+//   return async (dispatch: Dispatch<AnyAction>) => {
+//     dispatch(cancelSSO())
+//   }
+// }
