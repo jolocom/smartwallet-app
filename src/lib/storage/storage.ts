@@ -1,11 +1,15 @@
-import { createConnection, ConnectionOptions, Connection } from 'typeorm/browser'
+import {
+  createConnection,
+  ConnectionOptions,
+  Connection,
+} from 'typeorm/browser'
 import { plainToClass } from 'class-transformer'
 import {
   PersonaEntity,
   MasterKeyEntity,
   VerifiableCredentialEntity,
   SignatureEntity,
-  CredentialEntity
+  CredentialEntity,
 } from 'src/lib/storage/entities'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
@@ -32,7 +36,7 @@ export class Storage {
   store = {
     verifiableCredential: this.storeVClaim.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
-    encryptedSeed: this.storeEncryptedSeed.bind(this)
+    encryptedSeed: this.storeEncryptedSeed.bind(this),
   }
 
   get = {
@@ -40,11 +44,11 @@ export class Storage {
     verifiableCredential: this.getVCredential.bind(this),
     attributesByType: this.getAttributesByType.bind(this),
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
-    encryptedSeed: this.getEncryptedSeed.bind(this)
+    encryptedSeed: this.getEncryptedSeed.bind(this),
   }
 
   delete = {
-    verifiableCredential: this.deleteVCred.bind(this)
+    verifiableCredential: this.deleteVCred.bind(this),
   }
 
   constructor(config: ConnectionOptions) {
@@ -65,10 +69,13 @@ export class Storage {
 
   private async getVCredential(query?: object): Promise<SignedCredential[]> {
     await this.createConnectionIfNeeded()
-    const entities = await this.connection.manager.find(VerifiableCredentialEntity, {
-      where: query,
-      relations: ['claim', 'proof', 'subject']
-    })
+    const entities = await this.connection.manager.find(
+      VerifiableCredentialEntity,
+      {
+        where: query,
+        relations: ['claim', 'proof', 'subject'],
+      },
+    )
 
     return entities.map(e => e.toVerifiableCredential())
   }
@@ -78,41 +85,65 @@ export class Storage {
     const localAttributes = await this.connection
       .getRepository(CredentialEntity)
       .createQueryBuilder('credential')
-      .leftJoinAndSelect('credential.verifiableCredential', 'verifiableCredential')
+      .leftJoinAndSelect(
+        'credential.verifiableCredential',
+        'verifiableCredential',
+      )
       .where('verifiableCredential.type = :type', { type })
       .getMany()
 
-    const results = this.groupAttributesByCredentialId(localAttributes).map(entry => ({
-      verification: entry.verifiableCredential.id,
-      values: entry.propertyValue,
-      fieldName: entry.propertyName
-    }))
+    const results = this.groupAttributesByCredentialId(localAttributes).map(
+      entry => ({
+        verification: entry.verifiableCredential.id,
+        values: entry.propertyValue,
+        fieldName: entry.propertyName,
+      }),
+    )
 
     return { type, results }
   }
 
   // TODO rework
-  private groupAttributesByCredentialId(attributes: CredentialEntity[]): ModifiedCredentialEntity[] {
+  private groupAttributesByCredentialId(
+    attributes: CredentialEntity[],
+  ): ModifiedCredentialEntity[] {
     // Convert values to arrays for easier concatination later
-    const modifiedAttributes = attributes.map(attr => ({ ...attr, propertyValue: [attr.propertyValue] }))
+    const modifiedAttributes = attributes.map(attr => ({
+      ...attr,
+      propertyValue: [attr.propertyValue],
+    }))
 
     // Helper function
-    const findByCredId = (arrToSearch: ModifiedCredentialEntity[], value: ModifiedCredentialEntity) =>
-      arrToSearch.findIndex(entry => entry.verifiableCredential.id === value.verifiableCredential.id)
+    const findByCredId = (
+      arrToSearch: ModifiedCredentialEntity[],
+      value: ModifiedCredentialEntity,
+    ) =>
+      arrToSearch.findIndex(
+        entry =>
+          entry.verifiableCredential.id === value.verifiableCredential.id,
+      )
 
-    return modifiedAttributes.reduce((acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity) => {
-      const matchingIndex = findByCredId(acc, curr)
+    return modifiedAttributes.reduce(
+      (acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity) => {
+        const matchingIndex = findByCredId(acc, curr)
 
-      if (matchingIndex >= 0) {
-        acc[matchingIndex].propertyValue = [...acc[matchingIndex].propertyValue, ...curr.propertyValue]
-        return acc
-      } else {
-        return [...acc, curr]
-      }
-    }, [])
+        if (matchingIndex >= 0) {
+          acc[matchingIndex].propertyValue = [
+            ...acc[matchingIndex].propertyValue,
+            ...curr.propertyValue,
+          ]
+          return acc
+        } else {
+          return [...acc, curr]
+        }
+      },
+      [],
+    )
   }
 
-  private async getVCredentialsForAttribute(attribute: string): Promise<SignedCredential[]> {
+  private async getVCredentialsForAttribute(
+    attribute: string,
+  ): Promise<SignedCredential[]> {
     await this.createConnectionIfNeeded()
     const entities = await this.connection
       .getRepository(VerifiableCredentialEntity)
@@ -137,8 +168,10 @@ export class Storage {
     const persona = plainToClass(PersonaEntity, args)
     await this.connection.manager.save(persona)
   }
-  
-  private async storeEncryptedSeed(args: EncryptedSeedAttributes): Promise<void> {
+
+  private async storeEncryptedSeed(
+    args: EncryptedSeedAttributes,
+  ): Promise<void> {
     await this.createConnectionIfNeeded()
     const encryptedSeed = plainToClass(MasterKeyEntity, args)
     await this.connection.manager.save(encryptedSeed)
@@ -146,7 +179,9 @@ export class Storage {
 
   private async storeVClaim(vCred: SignedCredential): Promise<void> {
     await this.createConnectionIfNeeded()
-    const verifiableCredential = VerifiableCredentialEntity.fromVerifiableCredential(vCred)
+    const verifiableCredential = VerifiableCredentialEntity.fromVerifiableCredential(
+      vCred,
+    )
 
     const signature = SignatureEntity.fromLinkedDataSignature(vCred.proof)
 

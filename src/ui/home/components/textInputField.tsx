@@ -18,58 +18,61 @@ interface State {
 const styles = StyleSheet.create({
   inputContainer: {
     height: 72,
-    width: '80%'
+    width: '80%',
   },
   labelStyle: {
     color: 'grey',
-    fontFamily: JolocomTheme.contentFontFamily
-  }
+    fontFamily: JolocomTheme.contentFontFamily,
+  },
 })
 
 export class TextInputField extends React.Component<Props, State> {
   state = {
     focused: false,
-    fieldNameDisplay: ''
+    fieldNameDisplay: '',
   }
 
   // TODO replace all componentWillMount calls
   UNSAFE_componentWillMount() {
-    const fn = this.props.fieldName.replace( /([A-Z])/g, ' $1')
+    const fn = this.props.fieldName.replace(/([A-Z])/g, ' $1')
     this.setState({
-      fieldNameDisplay: fn.charAt(0).toUpperCase() + fn.slice(1)
+      fieldNameDisplay: fn.charAt(0).toUpperCase() + fn.slice(1),
     })
   }
 
   private handleFocus = () => {
     this.setState({
-      focused: true
+      focused: true,
     })
   }
 
   private handleBlur = () => {
     this.setState({
-      focused: false
+      focused: false,
     })
   }
 
   render() {
     const { fieldValue, fieldName, handleFieldInput } = this.props
-    const labelText = this.state.focused || !fieldValue ? I18n.t(this.state.fieldNameDisplay) : ''
-    
+    const labelText =
+      this.state.focused || !fieldValue
+        ? I18n.t(this.state.fieldNameDisplay)
+        : ''
+
     return (
-      <View style={ styles.inputContainer }>
+      <View style={styles.inputContainer}>
         <ReactMUI.TextField
-          onFocus={ () => this.handleFocus() }
-          onBlur={ () => this.handleBlur() }
-          label={ labelText }
-          labelTextStyle={ styles.labelStyle }
+          onFocus={() => this.handleFocus()}
+          onBlur={() => this.handleBlur()}
+          label={labelText}
+          labelTextStyle={styles.labelStyle}
           style={{ fontFamily: JolocomTheme.contentFontFamily }}
-          tintColor={ JolocomTheme.primaryColorPurple }
-          textColor={ JolocomTheme.primaryColorBlack }
-          value={ fieldValue }
-          onChangeText={ (fieldValue: string) => {
+          tintColor={JolocomTheme.primaryColorPurple}
+          textColor={JolocomTheme.primaryColorBlack}
+          value={fieldValue}
+          onChangeText={(fieldValue: string) => {
             handleFieldInput(fieldValue, fieldName)
-          } }
+          }}
         />
       </View>
     )

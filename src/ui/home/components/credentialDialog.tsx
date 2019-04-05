@@ -1,5 +1,12 @@
 import React from 'react'
-import { StyleSheet, Text, ScrollView, View, ViewStyle, TextStyle } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  View,
+  ViewStyle,
+  TextStyle,
+} from 'react-native'
 import { Container, Block } from 'src/ui/structure'
 import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimCard } from 'src/ui/sso/components/claimCard'
@@ -16,46 +23,58 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'space-between',
     backgroundColor: JolocomTheme.secondaryColorGrey,
-    padding: 0
+    padding: 0,
   } as ViewStyle,
   claimCard: {
     paddingLeft: '15%',
-    backgroundColor: JolocomTheme.primaryColorWhite
+    backgroundColor: JolocomTheme.primaryColorWhite,
   } as ViewStyle,
   sectionHeader: {
     height: 26,
     fontSize: 17,
     fontFamily: JolocomTheme.contentFontFamily,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   } as TextStyle,
   primaryTextStyle: {
     fontSize: JolocomTheme.textStyles.light.labelDisplayField.fontSize,
-    color: JolocomTheme.primaryColorPurple
+    color: JolocomTheme.primaryColorPurple,
   } as TextStyle,
   secondaryTextStyle: {
     opacity: 1,
-    fontSize: JolocomTheme.headerFontSize
-  } as TextStyle
+    fontSize: JolocomTheme.headerFontSize,
+  } as TextStyle,
 })
 
 export const CredentialDialogComponent: React.SFC<Props> = props => {
-  const { primaryTextStyle, secondaryTextStyle, sectionHeader, claimCard, container } = styles
+  const {
+    primaryTextStyle,
+    secondaryTextStyle,
+    sectionHeader,
+    claimCard,
+    container,
+  } = styles
   const { credentialToRender } = props
   const { expires, credentialType, issuer } = credentialToRender
 
   return (
     <Container style={container}>
       <View style={{ padding: '5%', flex: 0.3, width: '95%' }}>
-        <CredentialTopCard credentialName={credentialType} expiryDate={expires} />
+        <CredentialTopCard
+          credentialName={credentialType}
+          expiryDate={expires}
+        />
       </View>
       <Block flex={0.2}>
         <Text style={sectionHeader}> Issued by </Text>
         <ClaimCard
-          containerStyle={{ ...StyleSheet.flatten(claimCard), paddingVertical: 5 }}
+          containerStyle={{
+            ...StyleSheet.flatten(claimCard),
+            paddingVertical: 5,
+          }}
           primaryTextStyle={primaryTextStyle}
           secondaryTextStyle={secondaryTextStyle}
           primaryText={`${issuer.substring(0, 30)}...`}
-          secondaryText={ I18n.t('Name of issuer') }
+          secondaryText={I18n.t('Name of issuer')}
         />
       </Block>
 
@@ -63,7 +82,9 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
         <Text style={{ ...StyleSheet.flatten(sectionHeader), marginTop: '5%' }}>
           {I18n.t('Document details/claims')}
         </Text>
-        <ScrollView style={{ width: '100%' }}>{renderClaims(credentialToRender)}</ScrollView>
+        <ScrollView style={{ width: '100%' }}>
+          {renderClaims(credentialToRender)}
+        </ScrollView>
       </Block>
 
       <View flex={0.05} />
@@ -79,7 +100,7 @@ const renderClaims = (toRender: DecoratedClaims) => {
         key={claimData[field]}
         containerStyle={{
           ...StyleSheet.flatten(styles.claimCard),
-          paddingVertical: 5
+          paddingVertical: 5,
         }}
         primaryText={claimData[field]}
         secondaryText={prepareLabel(field)}

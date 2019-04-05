@@ -4,10 +4,10 @@ import { EmailIcon, NameIcon, PhoneIcon, AccessibilityIcon } from '.'
 
 export const getCredentialIconByType = (type: string) => {
   const typeToIconMap = {
-    [CredentialTypes.Name]: <NameIcon/>,
-    [CredentialTypes.Email]: <EmailIcon/>,
-    [CredentialTypes.MobilePhone]: <PhoneIcon/>
+    [CredentialTypes.Name]: <NameIcon />,
+    [CredentialTypes.Email]: <EmailIcon />,
+    [CredentialTypes.MobilePhone]: <PhoneIcon />,
   }
 
-  return typeToIconMap[type] || <AccessibilityIcon/>
+  return typeToIconMap[type] || <AccessibilityIcon />
 }

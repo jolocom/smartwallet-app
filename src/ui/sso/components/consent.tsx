@@ -30,48 +30,66 @@ const styles = {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.headerFontSize,
     color: JolocomTheme.primaryColorBlack,
-    fontWeight: '100'
+    fontWeight: '100',
   } as TextStyle,
   serviceMetadata: {
     ...JolocomTheme.textStyles.light.labelDisplayField,
-    fontFamily: JolocomTheme.contentFontFamily
+    fontFamily: JolocomTheme.contentFontFamily,
   },
   fixedText: {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: JolocomTheme.labelFontSize,
     color: JolocomTheme.primaryColorBlack,
-    padding: '5%'
+    padding: '5%',
   },
   claimCardText: {
     primaryText: {
       fontSize: 17,
-      opacity: 0.4
+      opacity: 0.4,
     },
     secondaryText: {
       fontSize: JolocomTheme.headerFontSize,
-      opacity: 1
-    }
-  }
+      opacity: 1,
+    },
+  },
 }
 
 export class ConsentComponent extends React.Component<Props, State> {
   state: State = {
     pending: false,
-    selectedCredentials: this.props.availableCredentials.reduce((acc, curr) => ({ ...acc, [curr.type]: undefined }), {})
+    selectedCredentials: this.props.availableCredentials.reduce(
+      (acc, curr) => ({ ...acc, [curr.type]: undefined }),
+      {},
+    ),
   }
 
-  private handleAttributeSelect(type: string, selectedCredential: StateVerificationSummary) {
+  private handleAttributeSelect(
+    type: string,
+    selectedCredential: StateVerificationSummary,
+  ) {
     const selected = this.state.selectedCredentials[type]
     if (selected && selected.id === selectedCredential.id) {
-      this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: undefined } })
+      this.setState({
+        selectedCredentials: {
+          ...this.state.selectedCredentials,
+          [type]: undefined,
+        },
+      })
     } else {
-      this.setState({ selectedCredentials: { ...this.state.selectedCredentials, [type]: selectedCredential } })
+      this.setState({
+        selectedCredentials: {
+          ...this.state.selectedCredentials,
+          [type]: selectedCredential,
+        },
+      })
     }
   }
 
   private handleSubmitClaims = () => {
     const { selectedCredentials } = this.state
-    const credentials = Object.keys(selectedCredentials).map(key => selectedCredentials[key])
+    const credentials = Object.keys(selectedCredentials).map(
+      key => selectedCredentials[key],
+    )
     this.setState({ pending: true })
     this.props.handleSubmitClaims(credentials as StateVerificationSummary[])
   }
@@ -79,14 +97,16 @@ export class ConsentComponent extends React.Component<Props, State> {
   private renderButtons() {
     const { selectedCredentials } = this.state
 
-    const submitAllowed = Object.keys(selectedCredentials).every(key => selectedCredentials[key] !== undefined)
+    const submitAllowed = Object.keys(selectedCredentials).every(
+      key => selectedCredentials[key] !== undefined,
+    )
     const buttonDisabled = !submitAllowed || this.state.pending
 
     return (
       <ButtonSection
         disabled={buttonDisabled}
-        confirmText={ I18n.t('Share claims') }
-        denyText={ I18n.t('Deny') }
+        confirmText={I18n.t('Share claims')}
+        denyText={I18n.t('Deny')}
         handleConfirm={() => this.handleSubmitClaims()}
         handleDeny={() => this.props.handleDenySubmit()}
       />
@@ -99,13 +119,20 @@ export class ConsentComponent extends React.Component<Props, State> {
         <View flex={0.1} />
 
         <Block flex={0.4} style={{ backgroundColor: 'white' }}>
-          <Text style={styles.serviceTitle}> {`${this.props.requester.substring(0, 25)}...`} </Text>
-          <Text style={styles.serviceMetadata}> {`${this.props.callbackURL.substring(0, 25)}...`} </Text>
+          <Text style={styles.serviceTitle}>
+            {' '}
+            {`${this.props.requester.substring(0, 25)}...`}{' '}
+          </Text>
+          <Text style={styles.serviceMetadata}>
+            {' '}
+            {`${this.props.callbackURL.substring(0, 25)}...`}{' '}
+          </Text>
         </Block>
 
         <Block flex={0.5}>
           <Text style={styles.fixedText}>
-            { I18n.t('This service is asking you to share the following claims') }:
+            {I18n.t('This service is asking you to share the following claims')}
+            :
           </Text>
         </Block>
       </Block>
@@ -113,7 +140,9 @@ export class ConsentComponent extends React.Component<Props, State> {
   }
 
   private renderRightIcon(selected: boolean, entry: StateTypeSummary) {
-    const checkboxColor = selected ? JolocomTheme.primaryColorPurple : JolocomTheme.disabledButtonBackgroundGrey
+    const checkboxColor = selected
+      ? JolocomTheme.primaryColorPurple
+      : JolocomTheme.disabledButtonBackgroundGrey
     const { type, verifications } = entry
 
     return (
@@ -130,28 +159,43 @@ export class ConsentComponent extends React.Component<Props, State> {
   }
 
   private renderSelectionSections(sections: StateTypeSummary[]) {
-    const groupedByType = sections.reduce<{ [key: string]: StateTypeSummary[] }>(
+    const groupedByType = sections.reduce<{
+      [key: string]: StateTypeSummary[]
+    }>(
       (acc, current) =>
         acc[current.type]
           ? { ...acc, [current.type]: [...acc[current.type], current] }
           : { ...acc, [current.type]: [current] },
-      {}
+      {},
     )
 
     return Object.keys(groupedByType).map(sectionType => (
-      <View>{groupedByType[sectionType].map((entry, idx, arr) => this.renderCredentialCards(entry, idx, arr))}</View>
+      <View>
+        {groupedByType[sectionType].map((entry, idx, arr) =>
+          this.renderCredentialCards(entry, idx, arr),
+        )}
+      </View>
     ))
   }
 
-  private renderCredentialCards(entry: StateTypeSummary, idx: number, arr: StateTypeSummary[]) {
+  private renderCredentialCards(
+    entry: StateTypeSummary,
+    idx: number,
+    arr: StateTypeSummary[],
+  ) {
     const isFirst = idx === 0
     const isLast = idx === arr.length - 1
     const { type, values, verifications } = entry
     const currentlySelected = this.state.selectedCredentials[type]
-    const isSelected = currentlySelected && currentlySelected.id === verifications[0].id
+    const isSelected =
+      currentlySelected && currentlySelected.id === verifications[0].id
     const containsData = entry.values.length > 0
     const headerSection = isFirst ? (
-      <HeaderSection containerStyle={{ paddingTop: '5%' }} title={`${type}:`} leftIcon={this.renderLeftIcon(type)} />
+      <HeaderSection
+        containerStyle={{ paddingTop: '5%' }}
+        title={`${type}:`}
+        leftIcon={this.renderLeftIcon(type)}
+      />
     ) : null
 
     return (
@@ -160,7 +204,9 @@ export class ConsentComponent extends React.Component<Props, State> {
         <ConsentAttributeCard
           containerStyle={{ paddingLeft: '20%' }}
           split={isLast}
-          rightIcon={containsData ? this.renderRightIcon(!!isSelected, entry) : null}
+          rightIcon={
+            containsData ? this.renderRightIcon(!!isSelected, entry) : null
+          }
           did={this.props.did}
           values={values}
           issuer={verifications.length ? verifications[0].issuer : ''}

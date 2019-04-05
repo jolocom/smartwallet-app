@@ -8,27 +8,25 @@ describe('Account action creators', () => {
   const initialState = {
     account: {
       claims: {
-        toJS: () => {
-          return {
-            loading: false,
-            selected: {
-              credentialType: 'Email',
-              claimData: {
-                email: 'test@test.com'
-              },
-              id: '',
-              issuer: 'did:jolo:test',
-              subject: 'did:jolo:test'
+        toJS: () => ({
+          loading: false,
+          selected: {
+            credentialType: 'Email',
+            claimData: {
+              email: 'test@test.com',
             },
-            pendingExternal: [],
-            decoratedCredentials: 'blah'
-          }
-        }
+            id: '',
+            issuer: 'did:jolo:test',
+            subject: 'did:jolo:test',
+          },
+          pendingExternal: [],
+          decoratedCredentials: 'blah',
+        }),
       },
       did: {
-        get: () => 'mock:did:test '
-      }
-    }
+        get: () => 'mock:did:test ',
+      },
+    },
   }
   const mockStore = configureStore([thunk])(initialState)
 
@@ -41,16 +39,16 @@ describe('Account action creators', () => {
       storageLib: {
         get: {
           persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:mock' }]),
-          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed')
-        }
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+        },
       },
       keyChainLib: {
-        getPassword: jest.fn().mockResolvedValue('sekrit')
+        getPassword: jest.fn().mockResolvedValue('sekrit'),
       },
       encryptionLib: {
-        decryptWithPass: () => 'newSeed'
+        decryptWithPass: () => 'newSeed',
       },
-      setIdentityWallet: jest.fn(() => Promise.resolve())
+      setIdentityWallet: jest.fn(() => Promise.resolve()),
     }
 
     const action = accountActions.checkIdentityExists()
@@ -67,18 +65,18 @@ describe('Account action creators', () => {
             .fn()
             .mockResolvedValue([
               { did: 'did:jolo:first' },
-              { did: 'did:jolo:second' }
+              { did: 'did:jolo:second' },
             ]),
-          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed')
-        }
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+        },
       },
       keyChainLib: {
-        getPassword: jest.fn().mockResolvedValue('sekrit')
+        getPassword: jest.fn().mockResolvedValue('sekrit'),
       },
       encryptionLib: {
-        decryptWithPass: () => 'newSeed'
+        decryptWithPass: () => 'newSeed',
       },
-      setIdentityWallet: jest.fn(() => Promise.resolve())
+      setIdentityWallet: jest.fn(() => Promise.resolve()),
     }
 
     const action = accountActions.checkIdentityExists()
@@ -91,16 +89,16 @@ describe('Account action creators', () => {
       storageLib: {
         get: {
           persona: jest.fn().mockResolvedValue([]),
-          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed')
-        }
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+        },
       },
       keyChainLib: {
-        getPassword: jest.fn().mockResolvedValue('sekrit')
+        getPassword: jest.fn().mockResolvedValue('sekrit'),
       },
       encryptionLib: {
-        decryptWithPass: () => 'newSeed'
+        decryptWithPass: () => 'newSeed',
       },
-      setIdentityWallet: jest.fn(() => Promise.resolve())
+      setIdentityWallet: jest.fn(() => Promise.resolve()),
     }
 
     const action = accountActions.checkIdentityExists()
@@ -117,11 +115,11 @@ describe('Account action creators', () => {
           verifiableCredential: jest
             .fn()
             .mockResolvedValue([
-              JolocomLib.parse.signedCredential(testSignedCredentialDefault)
-            ])
-        }
+              JolocomLib.parse.signedCredential(testSignedCredentialDefault),
+            ]),
+        },
       },
-      identityWallet
+      identityWallet,
     }
 
     const action = accountActions.setClaimsForDid()
@@ -134,22 +132,22 @@ describe('Account action creators', () => {
     const mockClaimsItem = {
       credentialType: 'Email',
       claimData: {
-        email: 'test@test'
+        email: 'test@test',
       },
       issuer: 'did:jolo:test',
-      subject: 'did:jolo:test'
+      subject: 'did:jolo:test',
     }
 
     const backendMiddleware = {
       keyChainLib: {
-        getPassword: jest.fn().mockResolvedValue('sekrit')
+        getPassword: jest.fn().mockResolvedValue('sekrit'),
       },
       storageLib: {
         store: {
-          verifiableCredential: jest.fn().mockResolvedValue([])
-        }
+          verifiableCredential: jest.fn().mockResolvedValue([]),
+        },
       },
-      identityWallet
+      identityWallet,
     }
 
     const action = accountActions.saveClaim(mockClaimsItem)
