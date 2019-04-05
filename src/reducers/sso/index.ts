@@ -27,7 +27,8 @@ export type StatePaymentRequestSummary = {
   },
   callbackURL: string,
   amount: number,
-  description: string
+  description: string,
+  paymentRequest: string
 }
 
 export interface SsoState {
@@ -49,7 +50,8 @@ const initialState: SsoState = {
     },
     callbackURL: '',
     amount: 0,
-    description: ''
+    description: '',
+    paymentRequest: ''
   }
 }
 

@@ -44,13 +44,22 @@ const styles = {
 }
 
 export class PaymentConsentComponent extends React.Component<Props, State> {
+  state = {
+    pending: false
+  }
+
+  private handleConfirm = () => {
+    this.setState({ pending: true })
+    this.props.confirmPaymentRequest()
+  }
+
   private renderButtons() {
     return (
       <ButtonSection
-        disabled={false}
+        disabled={this.state.pending}
         confirmText={I18n.t('Confirm')}
         denyText={I18n.t('Deny')}
-        handleConfirm={() => this.props.confirmPaymentRequest()}
+        handleConfirm={this.handleConfirm}
         handleDeny={() => this.props.cancelPaymentRequest()}
       />
     )

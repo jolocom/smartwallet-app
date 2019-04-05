@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { PaymentConsentComponent } from '../components/PaymentConsent'
-import { StatePaymentRequestSummary } from 'src/reducers/sso';
-import { RootState } from 'src/reducers';
-import { cancelSSO } from 'src/actions/sso';
+import { StatePaymentRequestSummary } from 'src/reducers/sso'
+import { RootState } from 'src/reducers'
+import { cancelSSO } from 'src/actions/sso'
+import { sendPaymentResponse } from 'src/actions/sso/paymentRequest'
 
 interface ConnectProps {}
 
@@ -15,14 +16,12 @@ interface Props extends ConnectProps {
 
 interface State {}
 
-const dummyConfirmPaymentRequest = () => console.log('Payment confirmed.')
-
 export class PaymentConsentContainer extends React.Component<Props, State> {
   render() {
     return (
       <PaymentConsentComponent
         activePaymentRequest={this.props.activePaymentRequest}
-        confirmPaymentRequest={dummyConfirmPaymentRequest}
+        confirmPaymentRequest={this.props.confirmPaymentRequest}
         cancelPaymentRequest={this.props.cancelPaymentRequest}
       />
     )
@@ -37,7 +36,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-//     confirmPaymentRequest: () => dispatch(paymentActions.sendDemoPaymentResponse()),
+    confirmPaymentRequest: () => dispatch(sendPaymentResponse()),
     cancelPaymentRequest: () => dispatch(cancelSSO())
   }
 }
