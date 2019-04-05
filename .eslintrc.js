@@ -3,10 +3,15 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
     // allows imports
-    sourceType: 'module'
+    sourceType: 'module',
   },
   plugins: ['@typescript-eslint'],
-  // extends: ['plugin:@typescript-eslint/recommended'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    // turn on eslint-plugin-prettier and eslint-config-prettier
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
+  ],
   rules: {
     'arrow-body-style': ['warn', 'as-needed'],
     // curly braces for if, else etc.
@@ -17,8 +22,6 @@ module.exports = {
     'eqeqeq': ['error', 'smart'],
     // will normally include properties in prototype chain, require if
     'guard-for-in': ['error'],
-    // 2 spaces
-    'indent': ['error', 2],
     // I don't think we even use labels
     'no-extra-label': ['error'],
     // not sure about this, but replaces tslint's `no-arg` rule
@@ -43,14 +46,15 @@ module.exports = {
     'use-isnan': ['error'],
     '@typescript-eslint/array-type': ['error', 'array-simple'],
     '@typescript-eslint/ban-types': [
-      'error', {
-        'types': {
-          'Object': 'Use {} instead.',
-          'String': "Use 'string' instead.",
-          'Number': "Use 'number' instead.",
-          'Boolean': "Use 'boolean' instead.",
-        }
-      }
+      'error',
+      {
+        types: {
+          Object: 'Use {} instead.',
+          String: "Use 'string' instead.",
+          Number: "Use 'number' instead.",
+          Boolean: "Use 'boolean' instead.",
+        },
+      },
     ],
     // PascalCase for classes
     '@typescript-eslint/class-name-casing': ['error'],
@@ -65,6 +69,6 @@ module.exports = {
     '@typescript-eslint/no-namespace': ['error'],
     // use ES6-style imports instead
     '@typescript-eslint/no-triple-slash-reference': ['error'],
-    
-  }
+    '@typescript-eslint/no-var-requires': ['off']
+  },
 }
