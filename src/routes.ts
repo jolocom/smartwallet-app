@@ -5,7 +5,8 @@ import {
   PasswordEntry,
   SeedPhrase,
   Loading,
-  Entropy
+  Entropy,
+  RecoverIdentity
 } from "src/ui/registration/"
 import { JolocomTheme } from "src/styles/jolocom-theme"
 import { Exception } from "src/ui/generic/"
@@ -81,6 +82,7 @@ export const HomeRoutes = TabNavigator(
 export const Routes = StackNavigator({
   Landing: { screen: Landing, navigationOptions },
   Entropy: { screen: Entropy, navigationOptions },
+  RecoverIdentity: { screen: RecoverIdentity, navigationOptions },
   Loading: { screen: Loading, navigationOptions },
   PasswordEntry: { screen: PasswordEntry, navigationOptions },
   SeedPhrase: { screen: SeedPhrase, navigationOptions },

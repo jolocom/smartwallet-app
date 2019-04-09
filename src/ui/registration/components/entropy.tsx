@@ -9,7 +9,8 @@ import I18n from 'src/locales/i18n'
 interface Props {
   addPoint: (x: number, y: number) => void
   submitEntropy: () => void
-  readonly progress : number
+  recoverIdentity: () => void
+  readonly progress: number
 }
 
 const viewWidth: number = Dimensions.get('window').width
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
 })
 
 export const EntropyComponent : React.SFC<Props> = props => {
-  const { progress, submitEntropy, addPoint } = props
+  const { progress, submitEntropy, recoverIdentity, addPoint } = props
 
   const msg = progress === 0 ?
     I18n.t('For security purposes, we need some randomness') + '. ' +
@@ -66,15 +67,22 @@ export const EntropyComponent : React.SFC<Props> = props => {
         />
       </Block>
       <View style={ styles.footerButton }>
-      {progress === 1 ? 
+        {progress === 1 && (
+          <Button
+            style={ { container: styles.buttonContainer, text: styles.buttonText } }
+            upperCase={ false }
+            raised={ true }
+            text={ I18n.t('Continue') }
+            onPress={ submitEntropy }
+          />
+        )}
         <Button
-          style={{ container: styles.buttonContainer, text: styles.buttonText }}
+          style={ { container: styles.buttonContainer, text: styles.buttonText } }
           upperCase={ false }
           raised={ true }
-          text={ I18n.t('Continue')}
-          onPress={ submitEntropy }
-        /> : null
-      }
+          text={ I18n.t('Recover Identity') }
+          onPress={ recoverIdentity }
+        />
       </View>
     </Container>
   )

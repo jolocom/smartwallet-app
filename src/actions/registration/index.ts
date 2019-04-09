@@ -28,6 +28,16 @@ export const savePassword = (password: string) => {
   }
 }
 
+export const recoverIdentity = () => {
+  return ( dispatch: Dispatch<AnyAction>) => {
+    dispatch(
+      navigationActions.navigatorReset({
+        routeName: routeList.RecoverIdentity
+      })
+    )
+  }
+}
+
 export const submitEntropy = (encodedEntropy: string) => {
   return (dispatch: Dispatch<AnyAction>) => {
     dispatch(
