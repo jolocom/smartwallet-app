@@ -40,12 +40,6 @@ export const setReceivingCredential = (external: SignedCredential[]) => {
   }
 }
 
-export const resetReceivingCredential = () => {
-  return {
-    type: 'RESET_EXTERNAL'
-  }
-}
-
 export const parseJWT = (encodedJwt: string) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(accountActions.toggleLoading(true))
