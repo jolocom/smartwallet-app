@@ -49,7 +49,7 @@ export const sendPaymentResponse = () => {
     // add loading screen here
     try {
       const password = await backendMiddleware.keyChainLib.getPassword()
-      const decodedPaymentRequest = JolocomLib.parse.interactionToken.fromJWT(paymentRequest)
+      const decodedPaymentRequest = JolocomLib.parse.interactionToken.fromJWT<PaymentRequest>(paymentRequest)
       const txHash = await identityWallet.transactions.sendTransaction(decodedPaymentRequest.interactionToken, password)
       const response = await identityWallet.create.interactionTokens.response.payment({ txHash }, password, decodedPaymentRequest)
 

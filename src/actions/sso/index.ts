@@ -11,7 +11,8 @@ import { getUiCredentialTypeByType } from 'src/lib/util'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { resetSelected } from '../account'
 import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/credentialOffer'
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
+import {JSONWebToken} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { getIssuerPublicKey } from 'jolocom-lib/js/utils/helper'
@@ -50,23 +51,23 @@ export const parseJWT = (encodedJwt: string) => {
     dispatch(accountActions.toggleLoading(true))
     try {
       const returnedDecodedJwt = await JolocomLib.parse.interactionToken.fromJWT(encodedJwt)
-      
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialRequest) {
-        dispatch(consumeCredentialRequest(returnedDecodedJwt))
-      }
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialOffer) {
-        dispatch(consumeCredentialOfferRequest(returnedDecodedJwt))
-      }
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialsReceive) {
-        dispatch(receiveExternalCredential(returnedDecodedJwt))
-      }
-      if (returnedDecodedJwt.interactionType === InteractionType.PaymentRequest) {
-        dispatch(consumePaymentRequest(returnedDecodedJwt))
+
+      switch (returnedDecodedJwt.interactionType) {
+        case InteractionType.CredentialRequest:
+          return dispatch(consumeCredentialRequest(returnedDecodedJwt as JSONWebToken<CredentialRequest>))
+        case InteractionType.CredentialOffer:
+          return dispatch(consumeCredentialOfferRequest(returnedDecodedJwt as JSONWebToken<CredentialOffer>))
+        case InteractionType.CredentialsReceive:
+          return dispatch(receiveExternalCredential(returnedDecodedJwt as JSONWebToken<CredentialsReceive>))
+        case InteractionType.PaymentRequest:
+          return dispatch(consumePaymentRequest(returnedDecodedJwt as JSONWebToken<PaymentRequest>))
+        default:
+          return new Error('Unknown interaction type when parsing JWT')
       }
     } catch (err) {
       console.log('error: ', err)
       dispatch(accountActions.toggleLoading(false))
-      dispatch(showErrorScreen(new Error('JWT Token parse failed')))
+      dispatch(showErrorScreen(err))
     }
   }
 }
