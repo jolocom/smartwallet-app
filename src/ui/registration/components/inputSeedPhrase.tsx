@@ -8,6 +8,7 @@ import I18n from 'src/locales/i18n'
 interface Props {
   onSeedPhraseChange: (seedPhrase: string) => void,
   onSubmit: () => void,
+  errorMsg: string
 }
 
 const viewWidth: number = Dimensions.get('window').width
@@ -49,10 +50,16 @@ const styles = StyleSheet.create({
     fontFamily: JolocomTheme.contentFontFamily,
     width: '80%',
   },
+  textErrorField: {
+    fontFamily: JolocomTheme.contentFontFamily,
+    color: JolocomTheme.primaryColorSandInactive,
+    fontWeight: '100',
+    fontSize: 14
+  },
 })
 
-export const RecoverIdentityComponent: React.SFC<Props> = props => {
-  const { onSeedPhraseChange, onSubmit } = props
+export const InputSeedPhraseComponent: React.SFC<Props> = props => {
+  const { onSeedPhraseChange, onSubmit, errorMsg } = props
   return (
     <Container style={ styles.mainContainer }>
       <CenteredText
@@ -63,6 +70,10 @@ export const RecoverIdentityComponent: React.SFC<Props> = props => {
         style={styles.textInputField}
         onChangeText={ onSeedPhraseChange }
         underlineColorAndroid={JolocomTheme.primaryColorPurple}
+      />
+      <CenteredText
+        style={ styles.textErrorField }
+        msg={ errorMsg }
       />
       <Button
         style={{ container: styles.buttonContainer, text: styles.buttonText }}

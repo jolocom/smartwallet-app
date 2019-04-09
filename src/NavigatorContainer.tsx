@@ -95,8 +95,9 @@ export class NavigatorContainer extends React.Component<Props> {
     const currentRoute = routes[index].routeName
     return (
       [
-        <StatusBar barStyle="light-content" />,
+        <StatusBar key={0} barStyle="light-content" />,
         <Routes
+          key={1}
           navigation={addNavigationHelpers({
             dispatch: this.props.dispatch,
             state: this.props.navigation,
@@ -104,7 +105,7 @@ export class NavigatorContainer extends React.Component<Props> {
           })}
         />,
         currentRoute === routeList.Home &&
-        <BottomActionBar openScanner={this.props.openScanner}/>
+        <BottomActionBar key={2} openScanner={this.props.openScanner}/>
       ]
     )
   }

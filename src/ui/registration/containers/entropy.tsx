@@ -10,7 +10,7 @@ import {
 
 interface ConnectProps {
   submit: (encodedEntropy: string) => void
-  recoverIdentity: () => void
+  inputSeedPhrase: () => void
 }
 
 interface OwnProps { }
@@ -65,8 +65,8 @@ export class EntropyContainer extends React.Component<Props, State> {
     this.props.submit(this.state.encodedEntropy)
   }
 
-  private recoverIdentity = () : void => {
-    this.props.recoverIdentity()
+  private inputSeedPhrase = () : void => {
+    this.props.inputSeedPhrase()
   }
 
   render() {
@@ -75,7 +75,7 @@ export class EntropyContainer extends React.Component<Props, State> {
         addPoint={ this.addPoint }
         progress={ this.state.entropyProgress }
         submitEntropy={ this.submitEntropy }
-        recoverIdentity={ this.recoverIdentity }
+        recoverIdentity={ this.inputSeedPhrase }
       />
     )
   }
@@ -89,8 +89,8 @@ const mapDispatchToProps = (dispatch: (action: Function) => void) => {
   return {
     submit: (encodedEntropy: string) => 
       dispatch(registrationActions.submitEntropy(encodedEntropy)),
-    recoverIdentity : () =>
-      dispatch(registrationActions.recoverIdentity()),
+    inputSeedPhrase : () =>
+      dispatch(registrationActions.inputSeedPhrase()),
   }
 }
 

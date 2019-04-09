@@ -77,7 +77,7 @@ export class CredentialOverview extends React.Component<Props, State> {
     }
 
     return [
-      <Text style={styles.sectionHeader}>{I18n.t(category.toString())}</Text>,
+      <Text key={category} style={styles.sectionHeader}>{I18n.t(category.toString())}</Text>,
       this.renderCredentialCard(category)
     ]
   }

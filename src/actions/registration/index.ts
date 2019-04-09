@@ -8,6 +8,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { IpfsCustomConnector } from 'src/lib/ipfs'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
+import { KeyTypes } from "jolocom-lib/js/vaultedKeyProvider/types";
 const bip39 = require('bip39')
 
 export const setLoadingMsg = (loadingMsg: string) => {
@@ -28,11 +29,11 @@ export const savePassword = (password: string) => {
   }
 }
 
-export const recoverIdentity = () => {
+export const inputSeedPhrase = () => {
   return ( dispatch: Dispatch<AnyAction>) => {
     dispatch(
       navigationActions.navigatorReset({
-        routeName: routeList.RecoverIdentity
+        routeName: routeList.InputSeedPhrase
       })
     )
   }
@@ -54,6 +55,22 @@ export const submitEntropy = (encodedEntropy: string) => {
   }
 }
 
+export const submitSeedPhrase = (seedPhrase: string) => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    dispatch(
+      navigationActions.navigatorReset({
+        routeName: routeList.Loading
+      })
+    )
+
+    dispatch(setLoadingMsg(loading.loadingStages[0]))
+
+    setTimeout(() => {
+      dispatch(recoverIdentity(seedPhrase))
+    }, 2000)
+  }
+}
+
 export const startRegistration = () => {
   return (dispatch: Dispatch<AnyAction>) => {
     dispatch(
@@ -69,6 +86,64 @@ export const finishRegistration = () => {
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
   }
 }
+
+export const recoverIdentity = (seedPhrase: string) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
+    const { encryptionLib, keyChainLib, storageLib } = backendMiddleware
+
+    try {
+      const password = await keyChainLib.getPassword()
+      const encodedEntropy = bip39.mnemonicToEntropy(seedPhrase)
+
+      const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
+      const entropyData = {encryptedEntropy: encEntropy, timestamp: Date.now()}
+      await storageLib.store.encryptedSeed(entropyData)
+      const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
+
+      //TODO handle different LoadingStages in the UI
+      dispatch(setLoadingMsg(loading.loadingStages[1]))
+
+      const registry = JolocomLib.registries.jolocom.create({
+        ipfsConnector: new IpfsCustomConnector({
+          host: 'ipfs.jolocom.com',
+          port: 443,
+          protocol: 'https'
+        }),
+        ethereumConnector: jolocomEthereumResolver
+      })
+
+      const identityWallet = await registry.authenticate(userVault,
+        {
+          derivationPath: KeyTypes.jolocomIdentityKey,
+          encryptionPass: password
+        }
+      )
+
+      const personaData = {
+        did: identityWallet.identity.did,
+        controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey
+      }
+
+      await storageLib.store.persona(personaData)
+      console.log(identityWallet.identity.did)
+      dispatch(setDid(identityWallet.identity.did))
+
+      dispatch(setLoadingMsg(loading.loadingStages[3]))
+
+      await dispatch(accountActions.setIdentityWallet())
+
+      return dispatch(
+        navigationActions.navigatorReset({
+          routeName: routeList.Home,
+        })
+      )
+
+    } catch (error) {
+      return dispatch(genericActions.showErrorScreen(error, routeList.Landing))
+    }
+  }
+}
+
 
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
@@ -113,7 +188,7 @@ export const createIdentity = (encodedEntropy: string) => {
 
       dispatch(setLoadingMsg(loading.loadingStages[3]))
   
-      dispatch(accountActions.setIdentityWallet())
+      await dispatch(accountActions.setIdentityWallet())
       
       return dispatch(
         navigationActions.navigatorReset({
