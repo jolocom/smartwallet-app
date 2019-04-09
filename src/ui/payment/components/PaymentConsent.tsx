@@ -6,7 +6,8 @@ import { Container, Block } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { getCredentialIconByType } from 'src/resources/util'
 import { SectionClaimCard } from 'src/ui/structure/claimCard'
-import { StatePaymentRequestSummary } from 'src/reducers/sso';
+import { StatePaymentRequestSummary } from 'src/reducers/sso'
+import { formatEth } from 'src/utils/formatEth'
 
 interface Props {
   activePaymentRequest: StatePaymentRequestSummary
@@ -70,13 +71,12 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
   }
 
   private renderPriceCard() {
-    let { amount } = this.props.activePaymentRequest
-    // convert amount from wei to eth
-    amount = amount / 10e18
+    const { amount } = this.props.activePaymentRequest
+    const { formattedAmount, unit } = formatEth(amount)
     return (
       <View style={styles.priceCard.container}>
-        <Text style={styles.priceCard.price}>{amount}</Text>
-        <Text style={styles.priceCard.unit}>{'ETH'}</Text>
+        <Text style={styles.priceCard.price}>{formattedAmount}</Text>
+        <Text style={styles.priceCard.unit}>{unit}</Text>
       </View>
     )
   }
