@@ -115,6 +115,7 @@ export const Routes = StackNavigator({
   PaymentConsent: {
     screen: PaymentConsent,
     navigationOptions: {
+      headerBackImage: require('./resources/img/close.png'),
       headerTitle: I18n.t("Confirm payment"),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
