@@ -1,6 +1,22 @@
-import { PrimaryColumn, Entity, Column, OneToMany, ManyToOne } from 'typeorm/browser'
-import { PersonaEntity, SignatureEntity, CredentialEntity } from 'src/lib/storage/entities'
-import { Exclude, Expose, Transform, plainToClass, classToPlain } from 'class-transformer'
+import {
+  PrimaryColumn,
+  Entity,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm/browser'
+import {
+  PersonaEntity,
+  SignatureEntity,
+  CredentialEntity,
+} from 'src/lib/storage/entities'
+import {
+  Exclude,
+  Expose,
+  Transform,
+  plainToClass,
+  classToPlain,
+} from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
 import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
@@ -43,10 +59,16 @@ export class VerifiableCredentialEntity {
   @ManyToOne(type => PersonaEntity, persona => persona.did)
   subject!: PersonaEntity
 
-  @OneToMany(type => SignatureEntity, sig => sig.verifiableCredential, { cascade: true, onDelete: 'CASCADE' })
+  @OneToMany(type => SignatureEntity, sig => sig.verifiableCredential, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   proof!: SignatureEntity[]
 
-  @OneToMany(type => CredentialEntity, cred => cred.verifiableCredential, { cascade: true, onDelete: 'CASCADE' })
+  @OneToMany(type => CredentialEntity, cred => cred.verifiableCredential, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   claim!: CredentialEntity[]
 
   static fromJSON(json: ISignedCredentialAttrs): VerifiableCredentialEntity {
@@ -54,7 +76,9 @@ export class VerifiableCredentialEntity {
   }
 
   // TODO typo
-  static fromVerifiableCredential(vCred: SignedCredential): VerifiableCredentialEntity {
+  static fromVerifiableCredential(
+    vCred: SignedCredential,
+  ): VerifiableCredentialEntity {
     interface ExtendedInterface extends ISignedCredentialAttrs {
       subject: string
     }
@@ -71,19 +95,21 @@ export class VerifiableCredentialEntity {
     const entityData = {
       ...json,
       claim: convertClaimArrayToObject(this.claim, this.subject.did),
-      proof: this.proof[0]
+      proof: this.proof[0],
     }
 
     return SignedCredential.fromJSON(entityData)
   }
 }
 
-const convertClaimArrayToObject = (claims: CredentialEntity[], did: string): IClaimSection => {
-  return claims.reduce(
+const convertClaimArrayToObject = (
+  claims: CredentialEntity[],
+  did: string,
+): IClaimSection =>
+  claims.reduce(
     (acc: IClaimSection, claim: CredentialEntity) => {
       const { propertyName, propertyValue } = claim
       return { ...acc, [propertyName]: propertyValue }
     },
-    { id: did }
+    { id: did },
   )
-}

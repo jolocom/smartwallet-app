@@ -20,33 +20,33 @@ interface State {}
 const styles = {
   priceCard: {
     container: {
-      flexDirection: 'row'
+      flexDirection: 'row',
     } as ViewStyle,
     price: {
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.landingHeaderFontSize,
       color: JolocomTheme.primaryColorBlack,
       fontWeight: JolocomTheme.fontWeight,
-      paddingRight: '2%'
+      paddingRight: '2%',
     } as TextStyle,
     unit: {
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.labelFontSize,
-      alignSelf: 'center'
-    } as TextStyle
+      alignSelf: 'center',
+    } as TextStyle,
   },
   container: {
     padding: 0,
-    margin: 0
+    margin: 0,
   },
   middleBlock: {
-    justifyContent: 'flex-start'
-  } as ViewStyle
+    justifyContent: 'flex-start',
+  } as ViewStyle,
 }
 
 export class PaymentConsentComponent extends React.Component<Props, State> {
   state = {
-    pending: false
+    pending: false,
   }
 
   private handleConfirm = () => {
@@ -84,7 +84,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
   private renderTransactionDetails() {
     const {
       description,
-      receiver: { did, address }
+      receiver: { did, address },
     } = this.props.activePaymentRequest
     return (
       <View style={{ width: '100%', margin: 0, padding: 0 }}>

@@ -28,17 +28,16 @@ export class PaymentConsentContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    activePaymentRequest: state.sso.activePaymentRequest
-  }
-}
+const mapStateToProps = (state: RootState) => ({
+  activePaymentRequest: state.sso.activePaymentRequest,
+})
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    confirmPaymentRequest: () => dispatch(sendPaymentResponse()),
-    cancelPaymentRequest: () => dispatch(cancelSSO())
-  }
-}
+const mapDispatchToProps = (dispatch: Function) => ({
+  confirmPaymentRequest: () => dispatch(sendPaymentResponse()),
+  cancelPaymentRequest: () => dispatch(cancelSSO()),
+})
 
-export const PaymentConsent = connect(mapStateToProps, mapDispatchToProps)(PaymentConsentContainer)
+export const PaymentConsent = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PaymentConsentContainer)

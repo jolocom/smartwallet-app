@@ -10,5 +10,5 @@ export interface RegistrationState {
 }
 
 export const registrationReducer = combineReducers({
-  loading
+  loading,
 })

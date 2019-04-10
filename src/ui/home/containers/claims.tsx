@@ -41,25 +41,25 @@ export class ClaimsContainer extends React.Component<Props> {
 }
 
 // TODO nicer pattern for accessing state, perhaps immer or something easier to Type
-const mapStateToProps = (state: any) => {
-  return {
-    did: state.account.did.toJS().did,
-    claims: state.account.claims.toJS(),
-    loading: state.account.loading.toJS().loading
-  }
-}
+const mapStateToProps = (state: any) => ({
+  did: state.account.did.toJS().did,
+  claims: state.account.claims.toJS(),
+  loading: state.account.loading.toJS().loading,
+})
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
-    openClaimDetails: (claim: DecoratedClaims) => dispatch(accountActions.openClaimDetails(claim)),
-    setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
-    toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
-    openScanner: () => dispatch( navigationActions.navigate({ routeName: routeList.QRCodeScanner }))
-  }
-}
+const mapDispatchToProps = (dispatch: Function) => ({
+  parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
+  openClaimDetails: (claim: DecoratedClaims) =>
+    dispatch(accountActions.openClaimDetails(claim)),
+  setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
+  toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
+  openScanner: () =>
+    dispatch(
+      navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
+    ),
+})
 
 export const Claims = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ClaimsContainer)

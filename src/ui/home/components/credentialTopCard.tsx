@@ -14,26 +14,26 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorWhite,
     borderColor: JolocomTheme.secondaryColorSand,
     borderStyle: 'solid',
-    borderWidth: 1
+    borderWidth: 1,
   },
   innerContainer: {
     margin: 16,
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   firstSectionHeader: {
     fontSize: JolocomTheme.headerFontSize,
-    color: JolocomTheme.primaryColorBlack
-  }
+    color: JolocomTheme.primaryColorBlack,
+  },
 })
 
-export const CredentialTopCard: React.SFC<Props> = props => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        <Text style={styles.firstSectionHeader}>{props.credentialName}</Text>
-        {props.expiryDate ? <ValiditySummary expiryDate={props.expiryDate} /> : null}
-      </View>
+export const CredentialTopCard: React.SFC<Props> = props => (
+  <View style={styles.container}>
+    <View style={styles.innerContainer}>
+      <Text style={styles.firstSectionHeader}>{props.credentialName}</Text>
+      {props.expiryDate ? (
+        <ValiditySummary expiryDate={props.expiryDate} />
+      ) : null}
     </View>
-  )
-}
+  </View>
+)

@@ -20,14 +20,14 @@ export interface StateCredentialRequestSummary {
   readonly requestJWT: string
 }
 
-export type StatePaymentRequestSummary = {
+export interface StatePaymentRequestSummary {
   receiver: {
-    did: string,
+    did: string
     address: string
-  },
-  callbackURL: string,
-  amount: number,
-  description: string,
+  }
+  callbackURL: string
+  amount: number
+  description: string
   paymentRequest: string
 }
 
@@ -41,7 +41,7 @@ const initialState: SsoState = {
     requester: '',
     callbackURL: '',
     availableCredentials: [],
-    requestJWT: ''
+    requestJWT: '',
   },
   activePaymentRequest: {
     receiver: {
@@ -51,12 +51,15 @@ const initialState: SsoState = {
     callbackURL: '',
     amount: 0,
     description: '',
-    paymentRequest: ''
-  }
+    paymentRequest: '',
+  },
 }
 
-export const ssoReducer = (state = initialState, action: AnyAction): SsoState => {
-  switch(action.type) {
+export const ssoReducer = (
+  state = initialState,
+  action: AnyAction,
+): SsoState => {
+  switch (action.type) {
     case 'SET_CREDENTIAL_REQUEST':
       return { ...state, activeCredentialRequest: action.value }
     case 'SET_PAYMENT_REQUEST':

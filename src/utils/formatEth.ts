@@ -2,7 +2,9 @@
  * Converts a wei value to a more easily readable format
  * @param wei - The amount to format in wei.
  */
-export function formatEth(wei: number): { formattedAmount: number, unit: string } {
+export function formatEth(
+  wei: number,
+): { formattedAmount: number; unit: string } {
   let formattedAmount = wei
   let unit = 'WEI'
   if (wei >= 1e6 && wei < 1e15) {
