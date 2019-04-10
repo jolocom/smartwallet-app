@@ -11,12 +11,14 @@ import { getUiCredentialTypeByType } from 'src/lib/util'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { resetSelected } from '../account'
 import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/credentialOffer'
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
+import {JSONWebToken} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { getIssuerPublicKey } from 'jolocom-lib/js/utils/helper'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
+import { consumePaymentRequest } from './paymentRequest'
 
 export const setCredentialRequest = (request: StateCredentialRequestSummary) => {
   return {
@@ -25,9 +27,9 @@ export const setCredentialRequest = (request: StateCredentialRequestSummary) => 
   }
 }
 
-export const clearCredentialRequest = () => {
+export const clearInteractionRequest = () => {
   return {
-    type: 'CLEAR_CREDENTIAL_REQUEST'
+    type: 'CLEAR_INTERACTION_REQUEST'
   }
 }
 
@@ -38,31 +40,28 @@ export const setReceivingCredential = (external: SignedCredential[]) => {
   }
 }
 
-export const resetReceivingCredential = () => {
-  return {
-    type: 'RESET_EXTERNAL'
-  }
-}
-
 export const parseJWT = (encodedJwt: string) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(accountActions.toggleLoading(true))
     try {
       const returnedDecodedJwt = await JolocomLib.parse.interactionToken.fromJWT(encodedJwt)
-      
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialRequest) {
-        dispatch(consumeCredentialRequest(returnedDecodedJwt))
-      }
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialOffer) {
-        dispatch(consumeCredentialOfferRequest(returnedDecodedJwt))
-      }
-      if (returnedDecodedJwt.interactionType === InteractionType.CredentialsReceive) {
-        dispatch(receiveExternalCredential(returnedDecodedJwt))
+
+      switch (returnedDecodedJwt.interactionType) {
+        case InteractionType.CredentialRequest:
+          return dispatch(consumeCredentialRequest(returnedDecodedJwt as JSONWebToken<CredentialRequest>))
+        case InteractionType.CredentialOffer:
+          return dispatch(consumeCredentialOfferRequest(returnedDecodedJwt as JSONWebToken<CredentialOffer>))
+        case InteractionType.CredentialsReceive:
+          return dispatch(receiveExternalCredential(returnedDecodedJwt as JSONWebToken<CredentialsReceive>))
+        case InteractionType.PaymentRequest:
+          return dispatch(consumePaymentRequest(returnedDecodedJwt as JSONWebToken<PaymentRequest>))
+        default:
+          return new Error('Unknown interaction type when parsing JWT')
       }
     } catch (err) {
       console.log('error: ', err)
       dispatch(accountActions.toggleLoading(false))
-      dispatch(showErrorScreen(new Error('JWT Token parse failed')))
+      dispatch(showErrorScreen(err))
     }
   }
 }
@@ -256,8 +255,7 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
         const url = activeCredentialRequest.callbackURL + credentialResponse.encode()
         Linking.openURL(url)
       }
-      dispatch(clearCredentialRequest())
-      dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
+      dispatch(cancelSSO())
     } catch (error) {
       // TODO: better error message
       dispatch(showErrorScreen(new Error('The credential response could not be created')))
@@ -267,7 +265,7 @@ export const sendCredentialResponse = (selectedCredentials: StateVerificationSum
 
 export const cancelSSO = () => {
   return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(clearCredentialRequest())
+    dispatch(clearInteractionRequest())
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
   }
 }

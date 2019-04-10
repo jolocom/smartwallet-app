@@ -8,6 +8,8 @@ import { JolocomLib } from 'jolocom-lib'
 import { IpfsCustomConnector } from 'src/lib/ipfs'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
+import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
+import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
 const bip39 = require('bip39')
 
 export const setLoadingMsg = (loadingMsg: string) => {
@@ -88,7 +90,11 @@ export const createIdentity = (encodedEntropy: string) => {
           port: 443,
           protocol: 'https'
         }),
-        ethereumConnector: jolocomEthereumResolver
+        ethereumConnector: jolocomEthereumResolver,
+        contracts: {
+          adapter: jolocomContractsAdapter,
+          gateway: jolocomContractsGateway
+        }
       })
 
       const identityWallet = await registry.create(userVault, password)
