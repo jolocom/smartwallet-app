@@ -3,6 +3,16 @@
 exports[`sso reducer should handle the CLEAR_CREDENTIAL_REQUEST action  1`] = `
 Object {
   "activeCredentialRequest": undefined,
+  "activePaymentRequest": Object {
+    "amount": 0,
+    "callbackURL": "",
+    "description": "",
+    "paymentRequest": "",
+    "receiver": Object {
+      "address": "",
+      "did": "",
+    },
+  },
 }
 `;
 
@@ -21,6 +31,16 @@ Object {
     ],
     "requester": "did:jolo:mock",
   },
+  "activePaymentRequest": Object {
+    "amount": 0,
+    "callbackURL": "",
+    "description": "",
+    "paymentRequest": "",
+    "receiver": Object {
+      "address": "",
+      "did": "",
+    },
+  },
 }
 `;
 
@@ -31,6 +51,16 @@ Object {
     "callbackURL": "",
     "requestJWT": "",
     "requester": "",
+  },
+  "activePaymentRequest": Object {
+    "amount": 0,
+    "callbackURL": "",
+    "description": "",
+    "paymentRequest": "",
+    "receiver": Object {
+      "address": "",
+      "did": "",
+    },
   },
 }
 `;

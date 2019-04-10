@@ -14,19 +14,25 @@ export class BackendMiddleware {
   encryptionLib: EncryptionLibInterface
   keyChainLib: KeyChainInterface
 
-  constructor(config: { fuelingEndpoint: string, typeOrmConfig: ConnectionOptions }) {
+  constructor(config: {
+    fuelingEndpoint: string
+    typeOrmConfig: ConnectionOptions
+  }) {
     this.ethereumLib = new EthereumLib(config.fuelingEndpoint)
     this.storageLib = new Storage(config.typeOrmConfig)
     this.encryptionLib = new EncryptionLib()
     this.keyChainLib = new KeyChain()
   }
 
-  async setIdentityWallet(userVault: SoftwareKeyProvider, pass: string): Promise<void> {
+  async setIdentityWallet(
+    userVault: SoftwareKeyProvider,
+    pass: string,
+  ): Promise<void> {
     const { jolocomIdentityKey } = JolocomLib.KeyTypes
     const registry = JolocomLib.registries.jolocom.create()
     this.identityWallet = await registry.authenticate(userVault, {
       encryptionPass: pass,
-      derivationPath: jolocomIdentityKey
+      derivationPath: jolocomIdentityKey,
     })
   }
 }
