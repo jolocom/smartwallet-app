@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { loading } from 'src/reducers/registration/loading'
 
 export interface LoadingState {
-  readonly loadingMsg: string
+  readonly loadingStage: number
 }
 
 export interface RegistrationState {

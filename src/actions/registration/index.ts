@@ -2,19 +2,21 @@ import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions, accountActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
-import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { IpfsCustomConnector } from 'src/lib/ipfs'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { KeyTypes } from "jolocom-lib/js/vaultedKeyProvider/types";
-const bip39 = require('bip39')
+import { EncryptionLibInterface } from "../../lib/crypto";
+import { Storage } from 'src/lib/storage/storage'
+import { IdentityWallet } from "jolocom-lib/js/identityWallet/identityWallet";
+import bip39 from 'bip39';
+import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry';
 
-export const setLoadingMsg = (loadingMsg: string) => {
+export const setNextLoadingStage = () => {
   return {
-    type: 'SET_LOADING_MSG',
-    value: loadingMsg
+    type: 'SET_NEXT_LOADING_STAGE',
   }
 }
 
@@ -47,8 +49,6 @@ export const submitEntropy = (encodedEntropy: string) => {
       })
     )
 
-    dispatch(setLoadingMsg(loading.loadingStages[0]))
-
     setTimeout(() => {
       dispatch(createIdentity(encodedEntropy))
     }, 2000)
@@ -62,9 +62,7 @@ export const submitSeedPhrase = (seedPhrase: string) => {
         routeName: routeList.Loading
       })
     )
-
-    dispatch(setLoadingMsg(loading.loadingStages[0]))
-
+    
     setTimeout(() => {
       dispatch(recoverIdentity(seedPhrase))
     }, 2000)
@@ -95,22 +93,13 @@ export const recoverIdentity = (seedPhrase: string) => {
       const password = await keyChainLib.getPassword()
       const encodedEntropy = bip39.mnemonicToEntropy(seedPhrase)
 
-      const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
-      const entropyData = {encryptedEntropy: encEntropy, timestamp: Date.now()}
-      await storageLib.store.encryptedSeed(entropyData)
+      await storeEncryptedSeed(storageLib, encryptionLib, encodedEntropy, password)
+
       const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
 
-      //TODO handle different LoadingStages in the UI
-      dispatch(setLoadingMsg(loading.loadingStages[1]))
+      dispatch(setNextLoadingStage())
 
-      const registry = JolocomLib.registries.jolocom.create({
-        ipfsConnector: new IpfsCustomConnector({
-          host: 'ipfs.jolocom.com',
-          port: 443,
-          protocol: 'https'
-        }),
-        ethereumConnector: jolocomEthereumResolver
-      })
+      const registry = createJolocomRegistry()
 
       const identityWallet = await registry.authenticate(userVault,
         {
@@ -119,18 +108,7 @@ export const recoverIdentity = (seedPhrase: string) => {
         }
       )
 
-      const personaData = {
-        did: identityWallet.identity.did,
-        controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey
-      }
-
-      await storageLib.store.persona(personaData)
-      console.log(identityWallet.identity.did)
-      dispatch(setDid(identityWallet.identity.did))
-
-      dispatch(setLoadingMsg(loading.loadingStages[3]))
-
-      await dispatch(accountActions.setIdentityWallet())
+      await storeIdentityData(storageLib, dispatch, identityWallet)
 
       return dispatch(
         navigationActions.navigatorReset({
@@ -151,12 +129,11 @@ export const createIdentity = (encodedEntropy: string) => {
   
     try {
       const password = await keyChainLib.getPassword()
-      const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
-      const entropyData = {encryptedEntropy: encEntropy, timestamp: Date.now()}
-      await storageLib.store.encryptedSeed(entropyData)
+      await storeEncryptedSeed(storageLib, encryptionLib, encodedEntropy, password)
+      
       const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
 
-      dispatch(setLoadingMsg(loading.loadingStages[1]))
+      dispatch(setNextLoadingStage())
 
       const ethAddr = ethereumLib.privKeyToEthAddress(userVault.getPrivateKey({
         encryptionPass: password,
@@ -164,31 +141,14 @@ export const createIdentity = (encodedEntropy: string) => {
       }))
 
       await ethereumLib.requestEther(ethAddr)
-      
-      dispatch(setLoadingMsg(loading.loadingStages[2]))
 
-      const registry = JolocomLib.registries.jolocom.create({
-        ipfsConnector: new IpfsCustomConnector({
-          host: 'ipfs.jolocom.com',
-          port: 443,
-          protocol: 'https'
-        }),
-        ethereumConnector: jolocomEthereumResolver
-      })
+      dispatch(setNextLoadingStage())
+
+      const registry = createJolocomRegistry()
 
       const identityWallet = await registry.create(userVault, password)
 
-      const personaData = {
-        did: identityWallet.identity.did,
-        controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey
-      }
-
-      await storageLib.store.persona(personaData)
-      dispatch(setDid(identityWallet.identity.did))
-
-      dispatch(setLoadingMsg(loading.loadingStages[3]))
-  
-      await dispatch(accountActions.setIdentityWallet())
+      await storeIdentityData(storageLib, dispatch, identityWallet)
       
       return dispatch(
         navigationActions.navigatorReset({
@@ -200,4 +160,35 @@ export const createIdentity = (encodedEntropy: string) => {
       return dispatch(genericActions.showErrorScreen(error, routeList.Landing))
     }
   }
+}
+
+const storeEncryptedSeed = async (storageLib: Storage, encryptionLib: EncryptionLibInterface, encodedEntropy: string, password: string) => {
+  const encEntropy = encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password })
+  const entropyData = {encryptedEntropy: encEntropy, timestamp: Date.now()}
+  await storageLib.store.encryptedSeed(entropyData)
+}
+
+const storeIdentityData = async (storageLib: Storage, dispatch: Dispatch<AnyAction>, identityWallet: IdentityWallet ) => {
+  const personaData = {
+    did: identityWallet.identity.did,
+    controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey
+  }
+
+  await storageLib.store.persona(personaData)
+  dispatch(setDid(identityWallet.identity.did))
+
+  dispatch(setNextLoadingStage())
+
+  await dispatch(accountActions.setIdentityWallet())
+}
+
+const createJolocomRegistry = (): JolocomRegistry  =>{
+return JolocomLib.registries.jolocom.create({
+  ipfsConnector: new IpfsCustomConnector({
+    host: 'ipfs.jolocom.com',
+    port: 443,
+    protocol: 'https'
+  }),
+  ethereumConnector: jolocomEthereumResolver
+})
 }

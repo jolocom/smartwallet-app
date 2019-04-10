@@ -12,7 +12,7 @@ import I18n from 'src/locales/i18n'
 const loaders = require('react-native-indicator')
 
 export interface ConnectProps {
-  loadingMsg: string,
+  loadingStage: number,
   createIdentity: (encodedEntropy: string) => void
 }
 
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
 // TODO SFC
 export class LoadingContainer extends React.Component<Props, State> {
   render() {
+    const {loadingStage} = this.props;
     return (
       <Container style={styles.container} >
         <Block style={styles.label} >
@@ -76,13 +77,21 @@ export class LoadingContainer extends React.Component<Props, State> {
         </Block>
         <Block style={styles.loadingMsg}>
           <View style={styles.dotsContainer}>
-            {[0,1,2,3].map((prop, key) => {
-              const stageNumber = loading.loadingStages.indexOf(this.props.loadingMsg)
-              return <Icon name='circle' size={prop <= stageNumber ? 15 : 10} style={prop <= stageNumber ? styles.dotActive : styles.dotInactive} key={prop}/>
-            })}
+            {/*TODO replace loading stages in case of recovery*/}
+            {console.log(loadingStage)}
+            {loading.loadingStages.map((stage, key) => {
+              return (
+                <Icon
+                  name='circle'
+                  size={ key <= loadingStage ? 15 : 10 }
+                  style={ key <= loadingStage ? styles.dotActive : styles.dotInactive }
+                  key={ key }
+                />
+              )
+            }) }
           </View>
           <View>
-            <CenteredText style={styles.smallText} msg={this.props.loadingMsg} />
+            <CenteredText style={styles.smallText} msg={loading.loadingStages[loadingStage]} />
           </View>
         </Block>
       </Container>
@@ -93,7 +102,7 @@ export class LoadingContainer extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   const loading = Immutable.fromJS(state.registration.loading)
   return {
-    loadingMsg: loading.get('loadingMsg')
+    loadingStage: loading.get('loadingStage')
   }
 }
 
