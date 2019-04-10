@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loading component matches the snapshot on render 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+      "height": "100%",
+    }
+  }
+>
+  <Block
+    style={
+      Object {
+        "alignSelf": "flex-start",
+        "marginBottom": "10%",
+      }
+    }
+  >
+    <CenteredText
+      msg="Give us a few moments"
+      style={
+        Object {
+          "color": "#ffefdf",
+          "fontFamily": "TT Commons",
+          "fontSize": 20,
+        }
+      }
+    />
+    <CenteredText
+      msg="to set up your identity"
+      style={
+        Object {
+          "color": "#ffefdf",
+          "fontFamily": "TT Commons",
+          "fontSize": 20,
+        }
+      }
+    />
+  </Block>
+  <Block>
+    <RippleLoader
+      color="#89ffdebc"
+      size={80}
+      strokeWidth={4}
+    />
+  </Block>
+  <Block
+    style={
+      Object {
+        "alignSelf": "flex-end",
+        "marginBottom": "-10%",
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginBottom": 20,
+        }
+      }
+    >
+      <Icon
+        allowFontScaling={false}
+        key="0"
+        name="circle"
+        size={15}
+        style={
+          Object {
+            "color": "#ffefdf",
+            "marginLeft": 8,
+            "marginRight": 8,
+          }
+        }
+      />
+      <Icon
+        allowFontScaling={false}
+        key="1"
+        name="circle"
+        size={10}
+        style={
+          Object {
+            "color": "#fafafa",
+            "marginLeft": 5,
+            "marginRight": 5,
+          }
+        }
+      />
+      <Icon
+        allowFontScaling={false}
+        key="2"
+        name="circle"
+        size={10}
+        style={
+          Object {
+            "color": "#fafafa",
+            "marginLeft": 5,
+            "marginRight": 5,
+          }
+        }
+      />
+    </Component>
+    <Component>
+      <CenteredText
+        msg="Stage 1"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 14,
+          }
+        }
+      />
+    </Component>
+  </Block>
+</Container>
+`;

@@ -69,12 +69,14 @@ describe('Registration action creators', () => {
     })
   })
 
-  describe('createIdentity', () => {
-    it('should attempt to create an identity', async () => {
+  describe('createIdentity and recoverIdentity', () => {
+    const { getPasswordResult, cipher, entropy, mnemonic, identityWallet } = data
+    let mockBackend
+    beforeAll(() => {
       MockDate.set(new Date(946681200000))
-      const { getPasswordResult, cipher, entropy, identityWallet } = data
+      const { getPasswordResult, cipher, entropy, mnemonic, identityWallet } = data
 
-      const mockBackend = {
+      mockBackend = {
         identityWallet,
         ethereumLib: {
           requestEther: jest.fn(),
@@ -101,11 +103,19 @@ describe('Registration action creators', () => {
         setIdentityWallet: jest.fn(() => Promise.resolve())
       }
 
-      const mockStore = configureStore([thunk.withExtraArgument(mockBackend)])({})
-
       JolocomLib.registries.jolocom.create = jest.fn().mockReturnValue({
         create: () => identityWallet
       })
+    })
+    
+    afterEach(() => {
+      // clear call counter of mock functions
+      jest.clearAllMocks()
+    })
+
+    it('should attempt to create an identity', async () => {
+      const mockStore = configureStore([thunk.withExtraArgument(mockBackend)])({})
+
       const mockGetState = () => {}
 
       const asyncAction = registrationActions.createIdentity(entropy)
@@ -122,7 +132,24 @@ describe('Registration action creators', () => {
 
       MockDate.reset()
     })
+    it('should attempt to recover an identity', async () => {
+      
+      const mockStore = configureStore([thunk.withExtraArgument(mockBackend)])({})
 
+      const mockGetState = () => { }
+
+      const asyncAction = registrationActions.recoverIdentity(mnemonic)
+      await asyncAction(mockStore.dispatch, mockGetState, mockBackend)
+
+      expect(mockStore.getActions()).toMatchSnapshot()
+
+      expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
+      expect(mockBackend.encryptionLib.encryptWithPass.mock.calls).toMatchSnapshot()
+      expect(mockBackend.storageLib.store.persona.mock.calls).toMatchSnapshot()
+      expect(mockBackend.storageLib.store.derivedKey.mock.calls).toMatchSnapshot()
+
+      MockDate.reset()
+    })
     it('should display exception screen in case of error', async () => {
       const mockEntropy = 'abcd'
       const mockBackend = {

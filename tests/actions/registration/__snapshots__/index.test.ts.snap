@@ -1,22 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Registration action creators createIdentity should attempt to create an identity 1`] = `
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 1`] = `
 Array [
   Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Fueling with ether",
+    "type": "SET_NEXT_LOADING_STAGE",
   },
   Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Registering decentralized identity",
+    "type": "SET_NEXT_LOADING_STAGE",
   },
   Object {
     "type": "DID_SET",
     "value": undefined,
   },
   Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Preparing launch",
+    "type": "SET_NEXT_LOADING_STAGE",
   },
   Object {
     "actions": Array [
@@ -35,7 +32,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 2`] = `
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 2`] = `
 Array [
   Array [
     Object {
@@ -46,7 +43,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 3`] = `
 Array [
   Array [
     Object {
@@ -57,9 +54,9 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `Array []`;
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 4`] = `Array []`;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 5`] = `
 Array [
   Array [
     Object {
@@ -103,13 +100,44 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 6`] = `
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 6`] = `
 Array [
   Array [
     "0x000test",
   ],
 ]
 `;
+
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to recover an identity 1`] = `
+Array [
+  Object {
+    "type": "SET_NEXT_LOADING_STAGE",
+  },
+  Object {
+    "params": Object {
+      "error": [TypeError: registry.authenticate is not a function],
+      "returnTo": "Landing",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to recover an identity 2`] = `
+Array [
+  Array [
+    Object {
+      "data": "0660cc198330660cc198330660cc1983",
+      "pass": "secret",
+    },
+  ],
+]
+`;
+
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to recover an identity 3`] = `Array []`;
+
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to recover an identity 4`] = `Array []`;
 
 exports[`Registration action creators savePassword should attempt to save the password in the keychain 1`] = `
 Array [
