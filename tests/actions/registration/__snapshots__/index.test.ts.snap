@@ -185,8 +185,13 @@ Array [
     "type": "Navigation/RESET",
   },
   Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Encrypting and storing data locally",
+    "type": "SET_LOADING_STAGES",
+    "value": Array [
+      "Encrypting and storing data locally",
+      "Fueling with ether",
+      "Registering decentralized identity",
+      "Preparing launch",
+    ],
   },
 ]
 `;

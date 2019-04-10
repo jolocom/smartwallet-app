@@ -3,7 +3,8 @@
 exports[`registration reducer should initialize correctly 1`] = `
 Object {
   "loading": Immutable.Map {
-    "loadingMsg": "Loading",
+    "loadingStage": 0,
+    "loadingStages": Immutable.List [],
   },
 }
 `;
