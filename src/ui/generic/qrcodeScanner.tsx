@@ -31,23 +31,23 @@ const styles = StyleSheet.create({
 export class QRcodeScanner extends React.Component<Props, State> {
   render() {
     const { loading, onScannerSuccess, onScannerCancel } = this.props
-    if (loading) {
-      return <LoadingSpinner />
-    }
     return (
-      <Container>
-        <QRScanner
-          onRead={(e: QrScanEvent) => onScannerSuccess(e)}
-          topContent={<Text>{I18n.t('You can scan the qr code now!')}</Text>}
-          bottomContent={
-            <Button
-              onPress={onScannerCancel}
-              style={{ text: styles.buttonText }}
-              text={I18n.t('Cancel')}
-            />
-          }
-        />
-      </Container>
+      <React.Fragment>
+        {loading && <LoadingSpinner />}
+        <Container>
+          <QRScanner
+            onRead={(e: QrScanEvent) => onScannerSuccess(e)}
+            topContent={<Text>{I18n.t('You can scan the qr code now!')}</Text>}
+            bottomContent={
+              <Button
+                onPress={onScannerCancel}
+                style={{ text: styles.buttonText }}
+                text={I18n.t('Cancel')}
+              />
+            }
+          />
+        </Container>
+      </React.Fragment>
     )
   }
 }
