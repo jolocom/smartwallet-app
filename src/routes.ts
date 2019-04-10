@@ -14,6 +14,7 @@ import { Consent } from "src/ui/sso"
 import { CredentialReceive } from "src/ui/home"
 import I18n from "src/locales/i18n"
 import { QRScannerContainer } from "./ui/generic/qrcodeScanner"
+const closeIcon = require('./resources/img/close.png')
 
 const navigationOptions = {
   header: null
@@ -21,7 +22,7 @@ const navigationOptions = {
 
 const navOptScreenWCancel = {
   headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: require('./resources/img/close.png'),
+  headerBackImage: closeIcon,
 }
 
 const headerTitleStyle = {
@@ -115,9 +116,10 @@ export const Routes = StackNavigator({
   PaymentConsent: {
     screen: PaymentConsent,
     navigationOptions: {
-      headerBackImage: require('./resources/img/close.png'),
+      headerBackImage: closeIcon,
       headerTitle: I18n.t("Confirm payment"),
       headerTitleStyle: {
+        color: JolocomTheme.primaryColorWhite,
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: "100",
         fontSize: JolocomTheme.headerFontSize
@@ -125,7 +127,6 @@ export const Routes = StackNavigator({
       headerStyle: {
         backgroundColor: JolocomTheme.primaryColorBlack
       },
-      headerTintColor: JolocomTheme.primaryColorWhite
     },
   },
   Exception: { screen: Exception, navigationOptions },
