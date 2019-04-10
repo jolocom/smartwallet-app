@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { registrationActions } from 'src/actions'
-import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
 import Immutable from 'immutable'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
@@ -13,6 +12,7 @@ const loaders = require('react-native-indicator')
 
 export interface ConnectProps {
   loadingStage: number,
+  loadingStages: string[]
   createIdentity: (encodedEntropy: string) => void
 }
 
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 // TODO SFC
 export class LoadingContainer extends React.Component<Props, State> {
   render() {
-    const {loadingStage} = this.props;
+    const {loadingStage, loadingStages} = this.props;
     return (
       <Container style={styles.container} >
         <Block style={styles.label} >
@@ -77,9 +77,7 @@ export class LoadingContainer extends React.Component<Props, State> {
         </Block>
         <Block style={styles.loadingMsg}>
           <View style={styles.dotsContainer}>
-            {/*TODO replace loading stages in case of recovery*/}
-            {console.log(loadingStage)}
-            {loading.loadingStages.map((stage, key) => {
+            {loadingStages.map((stage, key) => {
               return (
                 <Icon
                   name='circle'
@@ -91,7 +89,7 @@ export class LoadingContainer extends React.Component<Props, State> {
             }) }
           </View>
           <View>
-            <CenteredText style={styles.smallText} msg={loading.loadingStages[loadingStage]} />
+            <CenteredText style={styles.smallText} msg={loadingStages[loadingStage]} />
           </View>
         </Block>
       </Container>
@@ -102,7 +100,8 @@ export class LoadingContainer extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   const loading = Immutable.fromJS(state.registration.loading)
   return {
-    loadingStage: loading.get('loadingStage')
+    loadingStage: loading.get('loadingStage'),
+    loadingStages: loading.get('loadingStages'),
   }
 }
 

@@ -13,10 +13,18 @@ import { Storage } from 'src/lib/storage/storage'
 import { IdentityWallet } from "jolocom-lib/js/identityWallet/identityWallet";
 import bip39 from 'bip39';
 import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry';
+import { createIdentityStages, recoverIdentityStages } from './loadingStages';
 
 export const setNextLoadingStage = () => {
   return {
     type: 'SET_NEXT_LOADING_STAGE',
+  }
+}
+
+export const setLoadingStages = (value: string[]) => {
+  return {
+    type: 'SET_LOADING_STAGES',
+    value: value,
   }
 }
 
@@ -48,6 +56,7 @@ export const submitEntropy = (encodedEntropy: string) => {
         routeName: routeList.Loading
       })
     )
+    dispatch(setLoadingStages(createIdentityStages))
 
     setTimeout(() => {
       dispatch(createIdentity(encodedEntropy))
@@ -62,7 +71,8 @@ export const submitSeedPhrase = (seedPhrase: string) => {
         routeName: routeList.Loading
       })
     )
-    
+    dispatch(setLoadingStages(recoverIdentityStages))
+
     setTimeout(() => {
       dispatch(recoverIdentity(seedPhrase))
     }, 2000)
