@@ -1,6 +1,7 @@
 import { StackNavigator, TabBarTop, TabNavigator } from "react-navigation"
 import { Claims, Interactions, ClaimDetails } from "src/ui/home/"
 import { Landing } from "src/ui/landing/"
+import { PaymentConsent } from "src/ui/payment"
 import {
   PasswordEntry,
   SeedPhrase,
@@ -13,6 +14,7 @@ import { Consent } from "src/ui/sso"
 import { CredentialReceive } from "src/ui/home"
 import I18n from "src/locales/i18n"
 import { QRScannerContainer } from "./ui/generic/qrcodeScanner"
+const closeIcon = require('./resources/img/close.png')
 
 const navigationOptions = {
   header: null
@@ -20,7 +22,7 @@ const navigationOptions = {
 
 const navOptScreenWCancel = {
   headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: require('./resources/img/close.png'),
+  headerBackImage: closeIcon,
 }
 
 const headerTitleStyle = {
@@ -110,6 +112,22 @@ export const Routes = StackNavigator({
       headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
       headerTintColor: JolocomTheme.primaryColorWhite
     }
+  },
+  PaymentConsent: {
+    screen: PaymentConsent,
+    navigationOptions: {
+      headerBackImage: closeIcon,
+      headerTitle: I18n.t("Confirm payment"),
+      headerTitleStyle: {
+        color: JolocomTheme.primaryColorWhite,
+        fontFamily: JolocomTheme.contentFontFamily,
+        fontWeight: "100",
+        fontSize: JolocomTheme.headerFontSize
+      },
+      headerStyle: {
+        backgroundColor: JolocomTheme.primaryColorBlack
+      },
+    },
   },
   Exception: { screen: Exception, navigationOptions },
   ClaimDetails: {
