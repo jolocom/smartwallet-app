@@ -9,7 +9,7 @@ describe('Ipfs custom connector', () => {
     ipfsLib = new IpfsCustomConnector({
       host: 'test.com',
       protocol: 'https',
-      port: 443
+      port: 443,
     })
 
     ipfsLib.nativeLib.fetch.mockClear()
@@ -22,18 +22,18 @@ describe('Ipfs custom connector', () => {
   it('should correctly attempt to store a JSON document', () => {
     const testJSON = {
       id: 'did:jolo:test',
-      publicKeySection: ['first']
+      publicKeySection: ['first'],
     }
 
     const expectedArgs = [
       'POST',
       'https://test.com:443/api/v0/add?pin=true',
-      {'Content-Type': 'multipart/form-data'},
-      [{data: JSON.stringify(testJSON), name: 'ddo'}]
+      { 'Content-Type': 'multipart/form-data' },
+      [{ data: JSON.stringify(testJSON), name: 'ddo' }],
     ]
 
-    ipfsLib.storeJSON({data: testJSON, pin: true})
-    
+    ipfsLib.storeJSON({ data: testJSON, pin: true })
+
     expect(ipfsLib.nativeLib.fetch).toHaveBeenCalledTimes(1)
     expect(ipfsLib.nativeLib.fetch).toHaveBeenCalledWith(...expectedArgs)
   })
@@ -42,7 +42,7 @@ describe('Ipfs custom connector', () => {
     const mockHash = 'mockIpfsHash'
     const expectedArgs = [
       'GET',
-      `https://test.com:443/api/v0/cat?arg=${mockHash}`
+      `https://test.com:443/api/v0/cat?arg=${mockHash}`,
     ]
 
     ipfsLib.catJSON(mockHash)

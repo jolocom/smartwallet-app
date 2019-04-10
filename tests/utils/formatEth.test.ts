@@ -5,19 +5,19 @@ describe('Ether formatting helper function', () => {
     small: 1984,
     topWeiLimit: 999999,
     withinGweiLimit: 2849331,
-    greaterThanGwei: 9281738291837261
+    greaterThanGwei: 9281738291837261,
   }
 
   it('formats up to 1e6 wei as wei', () => {
     const result = formatEth(testAmounts.small)
     expect(result).toMatchObject({
       formattedAmount: testAmounts.small,
-      unit: 'WEI'
+      unit: 'WEI',
     })
     const result2 = formatEth(testAmounts.topWeiLimit)
     expect(result2).toMatchObject({
       formattedAmount: testAmounts.topWeiLimit,
-      unit: 'WEI'
+      unit: 'WEI',
     })
   })
 
@@ -26,7 +26,7 @@ describe('Ether formatting helper function', () => {
     const formattedAmount = 0.002849331
     const expected = {
       formattedAmount,
-      unit: 'GWEI'
+      unit: 'GWEI',
     }
     expect(result).toMatchObject(expected)
   })
@@ -36,7 +36,7 @@ describe('Ether formatting helper function', () => {
     const formattedAmount = 0.009281738291837261
     const expected = {
       formattedAmount,
-      unit: 'ETH'
+      unit: 'ETH',
     }
     expect(result).toMatchObject(expected)
   })

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TextStyle,
   ViewStyle,
-  RegisteredStyle
+  RegisteredStyle,
 } from 'react-native'
 
 /**
@@ -27,25 +27,25 @@ export const ClaimCardWrapper: React.SFC<ClaimCardWrapperProps> = props => {
       flexDirection: 'row',
       paddingTop: '3%',
       justifyContent: 'space-between',
-      backgroundColor: JolocomTheme.primaryColorWhite
+      backgroundColor: JolocomTheme.primaryColorWhite,
     } as ViewStyle,
     defaultTitleStyle: {
       alignSelf: 'flex-start',
       ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
       color: '#05050d',
-      fontFamily: JolocomTheme.contentFontFamily
+      fontFamily: JolocomTheme.contentFontFamily,
     } as ViewStyle,
     defaultClaimSectionStyle: {
       flex: 0.65,
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     } as ViewStyle,
     defaultLeftIconStyle: {
       alignItems: 'center',
-      flex: 0.2
+      flex: 0.2,
     } as ViewStyle,
     defaultRightIconStyle: {
-      flex: 0.15
-    }
+      flex: 0.15,
+    },
   }
 
   return (
@@ -78,17 +78,17 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
       fontFamily: JolocomTheme.contentFontFamily,
       fontSize: JolocomTheme.headerFontSize,
       color: JolocomTheme.primaryColorBlack,
-      fontWeight: '100'
+      fontWeight: '100',
     } as TextStyle,
     secondaryTextDefault: {
       fontSize: 17,
-      opacity: 0.4
+      opacity: 0.4,
     } as TextStyle,
     containerDefault: {
       flex: 0.8,
       marginBottom: '5%',
-      justifyContent: 'center'
-    }
+      justifyContent: 'center',
+    },
   })
 
   const {
@@ -97,7 +97,7 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
     rightIcon,
     primaryTextStyle,
     secondaryTextStyle,
-    containerStyle
+    containerStyle,
   } = props
   const { primaryTextDefault, secondaryTextDefault, containerDefault } = styles
 
@@ -106,7 +106,7 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
       style={{
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
       }}
     >
       <View style={[containerDefault, containerStyle]}>
@@ -139,15 +139,15 @@ interface SectionClaimCardProps {
 export const SectionClaimCard: React.SFC<SectionClaimCardProps> = props => {
   const styles = StyleSheet.create({
     mainContainer: {
-      width: '100%'
+      width: '100%',
     },
     containerStyleClaimCardDefault: {
-      paddingLeft: '20%'
+      paddingLeft: '20%',
     },
     containerStyleWrapperDefault: {
       paddingTop: '5%',
-      marginTop: '1%'
-    }
+      marginTop: '1%',
+    },
   })
 
   return (

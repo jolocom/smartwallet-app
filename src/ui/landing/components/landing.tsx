@@ -10,17 +10,17 @@ const Carousel = require('react-native-snap-carousel').default
 const Pagination = require('react-native-snap-carousel').Pagination
 
 interface State {
-  activeSlide: number;
+  activeSlide: number
 }
 
 interface Props {
-  handleButtonTap: () => void;
+  handleButtonTap: () => void
 }
 
 interface Slide {
-  svgImage: ReactNode;
-  title: string;
-  infoText: string;
+  svgImage: ReactNode
+  title: string
+  infoText: string
 }
 
 const viewWidth: number = Dimensions.get('window').width
@@ -29,9 +29,7 @@ const headerFontSize =
     ? JolocomTheme.landingHeaderFontSizeSmall
     : JolocomTheme.landingHeaderFontSize
 const labelFontSize =
-  viewWidth < 360
-    ? JolocomTheme.labelFontSizeSmall
-    : JolocomTheme.labelFontSize
+  viewWidth < 360 ? JolocomTheme.labelFontSizeSmall : JolocomTheme.labelFontSize
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
@@ -39,31 +37,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#05050d',
     justifyContent: 'flex-end',
     flexDirection: 'column',
-    flex: 1
+    flex: 1,
   },
   carouselTextContainer: {
     paddingHorizontal: viewWidth / 18,
     flex: 0.4,
     marginTop: 'auto',
     justifyContent: 'flex-end',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   activeDotStyle: {
     width: 8,
     height: 8,
-    backgroundColor: JolocomTheme.dotColorActive
+    backgroundColor: JolocomTheme.dotColorActive,
   },
   inactiveDotStyle: {
     width: 4,
     height: 4,
     opacity: 0.6,
-    backgroundColor: JolocomTheme.dotColorInactive
+    backgroundColor: JolocomTheme.dotColorInactive,
   },
   header: {
     color: JolocomTheme.primaryColorSand,
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: headerFontSize,
-    fontWeight: '100'
+    fontWeight: '100',
   },
   subHeader: {
     color: JolocomTheme.primaryColorSand,
@@ -72,21 +70,21 @@ const styles = StyleSheet.create({
     fontSize: labelFontSize,
     fontWeight: '100',
     lineHeight: labelFontSize + 4,
-    marginTop: 15
+    marginTop: 15,
   },
   paginationBlock: {
     flex: 0.15,
-    backgroundColor: '#05050d'
+    backgroundColor: '#05050d',
   },
   buttonBlock: {
     flex: 0.1,
-    backgroundColor: '#05050d'
+    backgroundColor: '#05050d',
   },
   buttonContainer: {
     height: 48,
     minWidth: 164,
     borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple
+    backgroundColor: JolocomTheme.primaryColorPurple,
   },
   buttonText: {
     paddingVertical: 15,
@@ -95,8 +93,8 @@ const styles = StyleSheet.create({
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
     textAlign: 'center',
-    minWidth: 158
-  }
+    minWidth: 158,
+  },
 })
 
 const carouselInfo: Slide[] = [
@@ -105,8 +103,8 @@ const carouselInfo: Slide[] = [
     title: I18n.t('Your Jolocom Wallet'),
     infoText:
       I18n.t(
-        'Take back control of your digital self and protect your private data against unfair usage'
-      ) + '.'
+        'Take back control of your digital self and protect your private data against unfair usage',
+      ) + '.',
   },
   {
     svgImage: <Landing01 height={'100%'} width={'100%'} />,
@@ -115,9 +113,9 @@ const carouselInfo: Slide[] = [
       I18n.t('Forget about long forms and registrations') +
       '. ' +
       I18n.t(
-        'Instantly access services without using your social media profiles'
+        'Instantly access services without using your social media profiles',
       ) +
-      '.'
+      '.',
   },
   {
     svgImage: <Landing03 height={'100%'} width={'100%'} />,
@@ -126,24 +124,24 @@ const carouselInfo: Slide[] = [
       I18n.t('Share only the information a service really needs') +
       '. ' +
       I18n.t('Protect your digital self against fraud') +
-      '.'
+      '.',
   },
   {
     svgImage: <Landing02 height={'100%'} width={'100%'} />,
     title: I18n.t('Greater control'),
     infoText:
       I18n.t(
-        'Keep all your data with you in one place, available at any time'
+        'Keep all your data with you in one place, available at any time',
       ) +
       '. ' +
       I18n.t('Track where you sign in to services') +
-      '.'
-  }
+      '.',
+  },
 ]
 
 export class LandingComponent extends React.Component<Props, State> {
   state = {
-    activeSlide: 0
+    activeSlide: 0,
   }
 
   private renderItem = ({ item }: { item: Slide }) => {
@@ -198,7 +196,7 @@ export class LandingComponent extends React.Component<Props, State> {
             onPress={this.props.handleButtonTap}
             style={{
               container: styles.buttonContainer,
-              text: styles.buttonText
+              text: styles.buttonText,
             }}
             upperCase={false}
             text={I18n.t('Get started')}

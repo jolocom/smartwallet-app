@@ -1,5 +1,5 @@
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import {JolocomTheme} from 'src/styles/jolocom-theme'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 import * as React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -17,19 +17,19 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   navigationContentItem: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   contentLeft: {
-    marginRight: 36
+    marginRight: 36,
   },
   contentRight: {
-    marginLeft: 36
+    marginLeft: 36,
   },
   qrCodeButton: {
     position: 'absolute',
@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    elevation: 8
-  }
+    elevation: 8,
+  },
 })
 
 export class BottomActionBar extends React.Component<ActionBarProps, {}> {

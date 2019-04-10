@@ -35,13 +35,13 @@ export interface LoadingState {
 
 // TODO avoid state.account.did.did access patterns
 export interface AccountState {
-  did: DidState,
-  claims: ClaimsState,
+  did: DidState
+  claims: ClaimsState
   loading: LoadingState
 }
 
 export const accountReducer = combineReducers({
   did,
   claims,
-  loading
+  loading,
 })

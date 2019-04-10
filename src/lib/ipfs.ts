@@ -6,30 +6,38 @@ export class IpfsCustomConnector implements IIpfsConnector {
   private nativeLib = RNFetchBlob
   private ipfsHost!: string
 
-  constructor(config: {host: string, protocol: string, port: number}) {
+  constructor(config: { host: string; protocol: string; port: number }) {
     this.ipfsHost = `${config.protocol}://${config.host}:${config.port}`
   }
 
-  async storeJSON({data, pin} : {data: object, pin: boolean}) : Promise<string> {
+  async storeJSON({
+    data,
+    pin,
+  }: {
+    data: object
+    pin: boolean
+  }): Promise<string> {
     if (!data || typeof data !== 'object') {
       throw new Error(`JSON expected, received ${typeof data}`)
     }
-    
-    // TODO: clarify if we need formData 
+
+    // TODO: clarify if we need formData
     // const formData = new FormData()
     // formData.append('file', Buffer.from(JSON.stringify(data)))
 
     const endpoint = `${this.ipfsHost}/api/v0/add?pin=${pin}`
     const headers = { 'Content-Type': 'multipart/form-data' }
-    
-    const res = await this.nativeLib.fetch('POST', endpoint, headers, [{
-      name: 'ddo',
-      data: JSON.stringify(data)
-    }])
+
+    const res = await this.nativeLib.fetch('POST', endpoint, headers, [
+      {
+        name: 'ddo',
+        data: JSON.stringify(data),
+      },
+    ])
     return res.json().Hash
   }
 
-  async catJSON(hash: string) : Promise<IDidDocumentAttrs> {
+  async catJSON(hash: string): Promise<IDidDocumentAttrs> {
     const endpoint = `${this.ipfsHost}/api/v0/cat?arg=${hash}`
     const res = await this.nativeLib.fetch('GET', endpoint)
     return res.json()
@@ -41,26 +49,35 @@ export class IpfsCustomConnector implements IIpfsConnector {
     const res = this.nativeLib.fetch('GET', endpoint)
 
     if (!res.ok) {
-      throw new Error(`Removing pinned hash ${hash} failed, status code: ${res.status}`)
+      throw new Error(
+        `Removing pinned hash ${hash} failed, status code: ${res.status}`,
+      )
     }
-
   }
 
-  async createDagObject({data, pin}: {data: object, pin: boolean}): Promise<string> {
+  async createDagObject({
+    data,
+    pin,
+  }: {
+    data: object
+    pin: boolean
+  }): Promise<string> {
     if (!data || typeof data !== 'object') {
       throw new Error(`Object expected, received ${typeof data}`)
     }
 
     const formData = new FormData()
     formData.append('file', Buffer.from(JSON.stringify(data)))
-    
+
     const endpoint = `${this.ipfsHost}/api/v0/dag/put?pin=${pin}`
     const headers = { 'Content-Type': 'multipart/form-data' }
-    
-    const res = this.nativeLib.fetch('POST', endpoint, headers, [{
-      name: 'dag',
-      data: formData
-    }])
+
+    const res = this.nativeLib.fetch('POST', endpoint, headers, [
+      {
+        name: 'dag',
+        data: formData,
+      },
+    ])
 
     return res.json().Cid['/']
   }

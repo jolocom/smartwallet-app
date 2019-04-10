@@ -13,17 +13,12 @@ interface ConnectProps {
 
 interface Props extends ConnectProps {}
 
-
 export class LandingContainer extends React.Component<Props> {
   render() {
-    if ( this.props.loading ) {
-      return (
-        <LoadingScreen/>
-      )
+    if (this.props.loading) {
+      return <LoadingScreen />
     } else {
-      return (
-        <LandingComponent handleButtonTap={ this.props.startRegistration } />
-      ) 
+      return <LandingComponent handleButtonTap={this.props.startRegistration} />
     }
   }
 }
@@ -31,14 +26,15 @@ export class LandingContainer extends React.Component<Props> {
 const mapStateToProps = (state: RootState) => {
   const loading = Immutable.fromJS(state.account.loading)
   return {
-    loading: loading.get('loading')
+    loading: loading.get('loading'),
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    startRegistration: () => dispatch(registrationActions.startRegistration()),
-  }
-}
+const mapDispatchToProps = (dispatch: Function) => ({
+  startRegistration: () => dispatch(registrationActions.startRegistration()),
+})
 
-export const Landing = connect(mapStateToProps, mapDispatchToProps)(LandingContainer)
+export const Landing = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LandingContainer)

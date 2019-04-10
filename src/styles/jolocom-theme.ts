@@ -1,1 +1,1 @@
-export {JolocomTheme} from './jolocom-theme.android'
+export { JolocomTheme } from './jolocom-theme.android'

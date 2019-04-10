@@ -5,7 +5,9 @@ import { RootState, rootReducer } from 'src/reducers'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { ConnectionOptions } from 'typeorm/browser'
 
-const { createReactNavigationReduxMiddleware } = require('react-navigation-redux-helpers')
+const {
+  createReactNavigationReduxMiddleware,
+} = require('react-navigation-redux-helpers')
 
 const typeOrmConf: ConnectionOptions = {
   type: 'react-native',
@@ -13,19 +15,22 @@ const typeOrmConf: ConnectionOptions = {
   location: 'default',
   logging: ['error', 'query', 'schema'],
   synchronize: true,
-  entities: entityList
+  entities: entityList,
 }
 
 const config = {
   fuelingEndpoint: 'https://faucet.jolocom.com/request',
-  typeOrmConfig: typeOrmConf
+  typeOrmConfig: typeOrmConf,
 }
 
-createReactNavigationReduxMiddleware('root', (state: RootState) => state.navigation)
+createReactNavigationReduxMiddleware(
+  'root',
+  (state: RootState) => state.navigation,
+)
 const backendMiddleware = new BackendMiddleware(config)
 
 export const store = createStore(
   rootReducer,
   {},
-  applyMiddleware(thunk.withExtraArgument(backendMiddleware))
+  applyMiddleware(thunk.withExtraArgument(backendMiddleware)),
 )

@@ -26,42 +26,42 @@ interface Props extends ConnectProps {
 const styles = StyleSheet.create({
   containerStyle: {
     backgroundColor: JolocomTheme.primaryColorBlack,
-    display: 'flex'
+    display: 'flex',
   },
   textBlock: {
     flex: 0.6,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   errorTextHeader: {
     textAlign: 'center',
     color: JolocomTheme.primaryColorSand,
     fontSize: 28,
-    fontFamily: JolocomTheme.contentFontFamily
+    fontFamily: JolocomTheme.contentFontFamily,
   },
   errorText: {
     textAlign: 'center',
     color: JolocomTheme.primaryColorSand,
     fontSize: 18,
-    fontFamily: JolocomTheme.contentFontFamily
+    fontFamily: JolocomTheme.contentFontFamily,
   },
   buttonBlock: {
     flex: 0.1,
-    backgroundColor: JolocomTheme.primaryColorBlack
+    backgroundColor: JolocomTheme.primaryColorBlack,
   },
   buttonContainer: {
     height: '100%',
     width: '50%',
     borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple
+    backgroundColor: JolocomTheme.primaryColorPurple,
   },
   buttonText: {
     paddingVertical: 20,
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100'
-  }
+    fontWeight: '100',
+  },
 })
 
 export const ExceptionComponent: React.SFC<Props> = props => {
@@ -77,10 +77,12 @@ export const ExceptionComponent: React.SFC<Props> = props => {
       <Block style={styles.buttonBlock}>
         <Button
           raised
-          onPress={() => props.navigateBack(props.navigation.state.params.returnTo)}
+          onPress={() =>
+            props.navigateBack(props.navigation.state.params.returnTo)
+          }
           style={{
             container: styles.buttonContainer,
-            text: styles.buttonText
+            text: styles.buttonText,
           }}
           upperCase={false}
           text={I18n.t('Try again')}
@@ -93,10 +95,11 @@ export const ExceptionComponent: React.SFC<Props> = props => {
 const mapStateToProps = () => ({})
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  navigateBack: (routeName: routeList) => dispatch(navigationActions.navigatorReset({ routeName }))
+  navigateBack: (routeName: routeList) =>
+    dispatch(navigationActions.navigatorReset({ routeName })),
 })
 
 export const Exception = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ExceptionComponent)
