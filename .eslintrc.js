@@ -5,7 +5,7 @@ module.exports = {
     // allows imports
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'react'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     // turn on eslint-plugin-prettier and eslint-config-prettier
@@ -15,9 +15,9 @@ module.exports = {
   rules: {
     'arrow-body-style': ['warn', 'as-needed'],
     // curly braces for if, else etc.
-    'curly': ['error', 'multi-line'],
+    curly: ['error', 'multi-line'],
     'default-case': ['error'],
-    'eqeqeq': ['error', 'smart'],
+    eqeqeq: ['error', 'smart'],
     // for...in will normally include properties in prototype chain, require if
     'guard-for-in': ['error'],
     // I don't think we even use labels
@@ -38,7 +38,7 @@ module.exports = {
     'object-shorthand': ['error'],
     'prefer-arrow-callback': ['error'],
     'prefer-const': ['error'],
-    'semi': ['error', 'never'],
+    semi: ['error', 'never'],
     'use-isnan': ['error'],
     '@typescript-eslint/array-type': ['error', 'array-simple'],
     '@typescript-eslint/ban-types': [
@@ -52,6 +52,7 @@ module.exports = {
         },
       },
     ],
+    'react/jsx-uses-vars': ['warn'],
     // PascalCase for classes
     '@typescript-eslint/class-name-casing': ['error'],
     // don't prefix interface names with 'I'
@@ -66,6 +67,6 @@ module.exports = {
     '@typescript-eslint/no-namespace': ['error'],
     // use ES6-style imports instead
     '@typescript-eslint/no-triple-slash-reference': ['error'],
-    '@typescript-eslint/no-var-requires': ['off']
+    '@typescript-eslint/no-var-requires': ['off'],
   },
 }

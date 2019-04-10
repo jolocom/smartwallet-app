@@ -52,18 +52,14 @@ export class QRcodeScanner extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  return {
-    loading: state.account.loading.toJS().loading,
-  }
-}
+const mapStateToProps = (state: any) => ({
+  loading: state.account.loading.toJS().loading,
+})
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    onScannerSuccess: (e: QrScanEvent) => dispatch(ssoActions.parseJWT(e.data)),
-    onScannerCancel: () => dispatch(navigationActions.goBack()),
-  }
-}
+const mapDispatchToProps = (dispatch: Function) => ({
+  onScannerSuccess: (e: QrScanEvent) => dispatch(ssoActions.parseJWT(e.data)),
+  onScannerCancel: () => dispatch(navigationActions.goBack()),
+})
 
 export const QRScannerContainer = connect(
   mapStateToProps,
