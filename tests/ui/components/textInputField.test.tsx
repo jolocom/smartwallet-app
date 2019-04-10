@@ -7,7 +7,7 @@ describe('TextInputField component', () => {
     const props = {
       handleFieldInput: () => {},
       fieldValue: 'test@test.com',
-      fieldName: 'Email',
+      fieldName: 'Email'
     }
 
     const rendered = shallow(<TextInputField {...props} />)

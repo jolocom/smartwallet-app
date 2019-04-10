@@ -18,7 +18,7 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      checked: false,
+      checked: false
     }
   }
 
@@ -35,11 +35,9 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
 }
 
 const mapStateToProps = () => ({})
-const mapDispatchToProps = (dispatch: Function) => ({
-  finishRegistration: () => dispatch(finishRegistration()),
-})
+const mapDispatchToProps = (dispatch: Function) => ({ finishRegistration: () => dispatch(finishRegistration()) })
 
 export const SeedPhrase = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SeedPhraseContainer)

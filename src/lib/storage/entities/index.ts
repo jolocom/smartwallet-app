@@ -3,7 +3,7 @@ import {
   MasterKeyEntity,
   PersonaEntity,
   SignatureEntity,
-  VerifiableCredentialEntity,
+  VerifiableCredentialEntity
 } from '.'
 
 export { CredentialEntity } from './credentialEntity'
@@ -12,10 +12,4 @@ export { PersonaEntity } from './personaEntity'
 export { SignatureEntity } from './signatureEntity'
 export { VerifiableCredentialEntity } from './verifiableCredentialEntity'
 
-export const entityList = [
-  CredentialEntity,
-  MasterKeyEntity,
-  PersonaEntity,
-  SignatureEntity,
-  VerifiableCredentialEntity,
-]
+export const entityList = [ CredentialEntity, MasterKeyEntity, PersonaEntity, SignatureEntity, VerifiableCredentialEntity ]

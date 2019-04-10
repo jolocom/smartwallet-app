@@ -17,25 +17,28 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorSand,
-    opacity: 0.7,
-  },
+    opacity: 0.7
+  }
 })
 
-export const LoadingScreen: React.SFC<Props> = props => {
+export const LoadingScreen: React.SFC<Props> = (props) => {
+
   const viewWidth: number = Dimensions.get('window').width
   const viewHeight: number = Dimensions.get('window').height
 
-  return (
-    <Container style={styles.loadingContainer}>
+  return(
+    <Container style={ styles.loadingContainer }>
       <Image
-        source={image}
-        style={{
+        source= { image }
+        style= {{ 
           bottom: '15%',
-          width: viewWidth,
-          height: viewHeight / 2,
+          width: viewWidth, 
+          height: viewHeight/2
         }}
       />
-      <CenteredText style={styles.loadingText} msg={'POWERED BY JOLOCOM'} />
+      <CenteredText 
+        style= { styles.loadingText }
+        msg= { 'POWERED BY JOLOCOM' }/>
     </Container>
   )
 }

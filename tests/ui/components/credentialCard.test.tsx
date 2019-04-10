@@ -12,10 +12,10 @@ describe('ClaimCard component', () => {
         },
         id: 'claim:id:1234',
         issuer: 'did:issuer:ex',
-        subject: 'did:subject: ex',
+        subject: 'did:subject: ex'
       },
 
-      openClaimsDetails: () => null,
+      openClaimsDetails: () => null
     }
     const rendered = shallow(<CredentialCard {...props} />)
     expect(rendered).toMatchSnapshot()
@@ -27,14 +27,14 @@ describe('ClaimCard component', () => {
         credentialType: 'Name',
         claimData: {
           givenName: 'Test',
-          familyName: 'Running',
+          familyName: 'Running'
         },
         id: 'claim:id:1234',
         issuer: 'did:issuer:ex',
-        subject: 'did:subject: ex',
+        subject: 'did:subject: ex'
       },
 
-      openClaimsDetails: () => null,
+      openClaimsDetails: () => null
     }
 
     const rendered = shallow(<CredentialCard {...props} />)

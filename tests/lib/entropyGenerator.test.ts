@@ -26,12 +26,7 @@ describe('EntropyGenerator lib', () => {
   it('should correctly generate a randomString given a word count', () => {
     const mockRandomWords = jest.fn()
     const expectedEntropy = 'ef11ef7f00eb7b7dc7e2127f4a2a20e5'
-    mockRandomWords.mockReturnValue([
-      2146374127,
-      2105273088,
-      2131944135,
-      -450876854,
-    ])
+    mockRandomWords.mockReturnValue([2146374127, 2105273088, 2131944135, -450876854])
     Entropy.generator.randomWords = mockRandomWords
 
     expect(Entropy.generateRandomString(4)).toBe(expectedEntropy)

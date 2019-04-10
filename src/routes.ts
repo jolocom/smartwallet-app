@@ -1,21 +1,21 @@
-import { StackNavigator, TabBarTop, TabNavigator } from 'react-navigation'
-import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
-import { Landing } from 'src/ui/landing/'
+import { StackNavigator, TabBarTop, TabNavigator } from "react-navigation"
+import { Claims, Interactions, ClaimDetails } from "src/ui/home/"
+import { Landing } from "src/ui/landing/"
 import {
   PasswordEntry,
   SeedPhrase,
   Loading,
-  Entropy,
-} from 'src/ui/registration/'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Exception } from 'src/ui/generic/'
-import { Consent } from 'src/ui/sso'
-import { CredentialReceive } from 'src/ui/home'
-import I18n from 'src/locales/i18n'
-import { QRScannerContainer } from './ui/generic/qrcodeScanner'
+  Entropy
+} from "src/ui/registration/"
+import { JolocomTheme } from "src/styles/jolocom-theme"
+import { Exception } from "src/ui/generic/"
+import { Consent } from "src/ui/sso"
+import { CredentialReceive } from "src/ui/home"
+import I18n from "src/locales/i18n"
+import { QRScannerContainer } from "./ui/generic/qrcodeScanner"
 
 const navigationOptions = {
-  header: null,
+  header: null
 }
 
 const navOptScreenWCancel = {
@@ -32,9 +32,9 @@ const headerTitleStyle = {
 const commonNavigationOptions = {
   headerTitleStyle,
   headerStyle: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: JolocomTheme.primaryColorBlack
   },
-  headerTintColor: JolocomTheme.primaryColorWhite,
+  headerTintColor: JolocomTheme.primaryColorWhite
 }
 
 export const HomeRoutes = TabNavigator(
@@ -45,7 +45,7 @@ export const HomeRoutes = TabNavigator(
         tabBarLabel: I18n.t('All claims'),
         headerTitle: I18n.t('My identity'),
         ...commonNavigationOptions,
-      },
+      }
     },
     Interactions: {
       screen: Interactions,
@@ -53,8 +53,8 @@ export const HomeRoutes = TabNavigator(
         tabBarLabel: I18n.t('Documents'),
         headerTitle: I18n.t('My identity'),
         ...commonNavigationOptions,
-      },
-    },
+      }
+    }
   },
   {
     tabBarOptions: {
@@ -64,18 +64,18 @@ export const HomeRoutes = TabNavigator(
       labelStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
         fontSize: JolocomTheme.labelFontSize,
-        textAlign: 'center',
+        textAlign: "center"
       },
       style: {
-        backgroundColor: JolocomTheme.primaryColorBlack,
+        backgroundColor: JolocomTheme.primaryColorBlack
       },
       indicatorStyle: {
-        backgroundColor: JolocomTheme.primaryColorSand,
-      },
+        backgroundColor: JolocomTheme.primaryColorSand
+      }
     },
     tabBarComponent: TabBarTop,
-    tabBarPosition: 'top',
-  },
+    tabBarPosition: 'top'
+  }
 )
 
 export const Routes = StackNavigator({
@@ -88,36 +88,36 @@ export const Routes = StackNavigator({
   CredentialDialog: {
     screen: CredentialReceive,
     navigationOptions: {
-      headerTitle: I18n.t('Receiving new credential'),
+      headerTitle: I18n.t("Receiving new credential"),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
+        fontWeight: "100",
+        fontSize: JolocomTheme.headerFontSize
       },
       headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-      headerTintColor: JolocomTheme.primaryColorWhite,
-    },
+      headerTintColor: JolocomTheme.primaryColorWhite
+    }
   },
   Consent: {
     screen: Consent,
     navigationOptions: {
-      headerTitle: I18n.t('Share claims'),
+      headerTitle: I18n.t("Share claims"),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
+        fontWeight: "100",
+        fontSize: JolocomTheme.headerFontSize
       },
       headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-      headerTintColor: JolocomTheme.primaryColorWhite,
-    },
+      headerTintColor: JolocomTheme.primaryColorWhite
+    }
   },
   Exception: { screen: Exception, navigationOptions },
   ClaimDetails: {
     screen: ClaimDetails,
-    navigationOptions: navOptScreenWCancel,
+    navigationOptions: navOptScreenWCancel
   },
   QRCodeScanner: {
     screen: QRScannerContainer,
-    navigationOptions: navOptScreenWCancel,
-  },
+    navigationOptions: navOptScreenWCancel
+  }
 })

@@ -17,7 +17,7 @@ describe('KeyChain lib', () => {
     KC.nativeLib.setGenericPassword = mockSetGenericPassword
 
     await KC.savePassword('test')
-
+    
     expect(mockSetGenericPassword.mock.calls).toMatchSnapshot()
   })
 
@@ -30,35 +30,33 @@ describe('KeyChain lib', () => {
 
     try {
       await KC.savePassword('test')
-    } catch (err) {
+    } catch(err) {
       error = err
     }
 
     expect(error).toEqual(new Error('scary error'))
   })
 
-  it('should correctly retrieve password', async () => {
+  it('should correctly retrieve password', async() => {
     KC.nativeLib.getGenericPassword = jest.fn().mockReturnValue({
       username: 'JolocomSmartWallet',
-      password: 'test',
+      password: 'test'
     })
 
     const result = await KC.getPassword()
     expect(result).toEqual('test')
   })
 
-  it('should correctly return if password retrieval failed', async () => {
+  it('should correctly return if password retrieval failed', async() => {
     KC.nativeLib.getGenericPassword = jest.fn().mockReturnValue(false)
 
     let error
 
     try {
       await KC.getPassword()
-    } catch (err) {
+    } catch(err) {
       error = err
     }
-    expect(error).toEqual(
-      new Error('Password could not be retrieved from the keychain'),
-    )
+    expect(error).toEqual(new Error('Password could not be retrieved from the keychain'))
   })
 })

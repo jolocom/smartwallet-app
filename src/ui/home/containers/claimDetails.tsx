@@ -31,20 +31,22 @@ export class ClaimDetailsContainer extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   const claims = Immutable.fromJS(state.account.claims)
   return {
-    claims: claims.toJS(),
+    claims: claims.toJS()
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  saveClaim: () => {
-    dispatch(accountActions.saveClaim())
-  },
-  handleClaimInput: (fieldValue: string, fieldName: string) => {
-    dispatch(accountActions.handleClaimInput(fieldValue, fieldName))
-  },
-})
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    saveClaim: () => {
+      dispatch(accountActions.saveClaim())
+    },
+    handleClaimInput: (fieldValue: string, fieldName: string) => {
+      dispatch(accountActions.handleClaimInput(fieldValue, fieldName))
+    }
+  }
+}
 
 export const ClaimDetails = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ClaimDetailsContainer)

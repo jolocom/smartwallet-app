@@ -10,10 +10,10 @@ I18n.fallbacks = true
 I18n.missingTranslation = scope => scope
 I18n.translations = {
   de,
-  nl,
+  nl
 }
 
-export const getI18nImage = (fileName: string): File => {
+export const getI18nImage = (fileName: string) : File => {
   const locale = Object.keys(I18n.translations).includes(I18n.locale)
     ? I18n.locale
     : I18n.defaultLocale

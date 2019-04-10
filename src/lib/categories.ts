@@ -8,23 +8,25 @@ export enum CredentialTypes {
 export enum Categories {
   Personal = 'Personal',
   Contact = 'Contact',
-  Other = 'Other',
+  Other = 'Other'
 }
 
-export const uiCredentialTypeByType: { [key: string]: string } = {
-  ProofOfEmailCredential: CredentialTypes.Email,
-  ProofOfMobilePhoneNumberCredential: CredentialTypes.MobilePhone,
-  ProofOfNameCredential: CredentialTypes.Name,
-  ProofOfPostalAddressCredential: CredentialTypes.PostalAddress,
+export const uiCredentialTypeByType: {[key: string]: string} = {
+  'ProofOfEmailCredential': CredentialTypes.Email,
+  'ProofOfMobilePhoneNumberCredential': CredentialTypes.MobilePhone,
+  'ProofOfNameCredential': CredentialTypes.Name,
+  'ProofOfPostalAddressCredential': CredentialTypes.PostalAddress,
 }
 
-export const uiCategoryByCredentialType: { [key: string]: string[] } = {
-  Contact: [
+export const uiCategoryByCredentialType: {[key: string] : string[]} = {
+  'Contact': [
     CredentialTypes.Email,
     CredentialTypes.MobilePhone,
     CredentialTypes.PostalAddress,
   ],
-  Personal: [CredentialTypes.Name],
+  'Personal': [
+    CredentialTypes.Name
+  ]
 }
 
 export const defaultUiCategories = Object.keys(uiCategoryByCredentialType)

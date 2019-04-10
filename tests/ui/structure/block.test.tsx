@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native'
 
 const ShallowRenderer = require('react-test-renderer/shallow')
 
-describe('generic block component', () => {
+describe('generic block component', ()=> {
   it('matches the snapshot with no extra props', () => {
     const renderer = new ShallowRenderer()
     const rendered = renderer.render(<Block> null </Block>)
@@ -14,7 +14,7 @@ describe('generic block component', () => {
 
   it('matches snapshot with flex prop', () => {
     const renderer = new ShallowRenderer()
-    const rendered = renderer.render(<Block flex={0.1}> null </Block>)
+    const rendered = renderer.render(<Block flex={ 0.1 }> null </Block>)
     expect(rendered).toMatchSnapshot()
   })
 
@@ -29,14 +29,14 @@ describe('generic block component', () => {
     const styles = StyleSheet.create({
       block: {
         width: '30%',
-        backgroundColor: 'blue',
-      },
+        backgroundColor: 'blue'
+      }
     })
 
     const rendered = renderer.render(
-      <Block style={styles.block} onTouch={() => {}}>
+      <Block style={ styles.block } onTouch={() => {}}>
         null
-      </Block>,
+      </Block>
     )
     expect(rendered).toMatchSnapshot()
   })

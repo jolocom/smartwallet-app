@@ -2,15 +2,15 @@ import React from 'react'
 import { SeedPhrase } from 'src/ui/registration/components/seedPhrase'
 import { shallow } from 'enzyme'
 
-describe('seedPhrase component', () => {
+describe('seedPhrase component', ()=> {
   it('matches the snapshot with checkbox unchecked', () => {
     const props = {
       seedPhrase: 'mock seedPhrase',
       checked: false,
-      onCheck: () => null,
+      onCheck: () => null
     }
 
-    const rendered = shallow(<SeedPhrase {...props} />)
+    const rendered = shallow(<SeedPhrase {...props}/>)
     expect(rendered).toMatchSnapshot()
   })
 
@@ -18,9 +18,9 @@ describe('seedPhrase component', () => {
     const props = {
       seedPhrase: 'mock seedPhrase',
       checked: true,
-      onCheck: () => null,
+      onCheck: () => null
     }
-    const rendered = shallow(<SeedPhrase {...props} />)
+    const rendered = shallow(<SeedPhrase {...props}/>)
     expect(rendered).toMatchSnapshot()
   })
 })

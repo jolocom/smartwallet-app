@@ -9,20 +9,20 @@ import I18n from 'src/locales/i18n'
 interface Props {
   addPoint: (x: number, y: number) => void
   submitEntropy: () => void
-  readonly progress: number
+  readonly progress : number
 }
 
 const viewWidth: number = Dimensions.get('window').width
 
 // TODO FONT WEIGHT REFERENCE FROM STYLES
 const styles = StyleSheet.create({
-  mainContainer: {
+  mainContainer:{
     backgroundColor: JolocomTheme.primaryColorBlack,
-    padding: 0,
+    padding: 0
   },
   footerButton: {
     position: 'absolute',
-    bottom: '5%',
+    bottom: '5%'
   },
   text: {
     position: 'absolute',
@@ -32,13 +32,13 @@ const styles = StyleSheet.create({
     fontSize: JolocomTheme.headerFontSize,
     fontFamily: JolocomTheme.contentFontFamily,
     fontWeight: '100',
-    color: JolocomTheme.primaryColorSand,
+    color: JolocomTheme.primaryColorSand
   },
   buttonContainer: {
     width: 164,
     height: 48,
     borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple,
+    backgroundColor: JolocomTheme.primaryColorPurple
   },
   buttonText: {
     paddingVertical: 15,
@@ -46,38 +46,35 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
     fontWeight: '100',
-  },
+  }
 })
 
-export const EntropyComponent: React.SFC<Props> = props => {
+export const EntropyComponent : React.SFC<Props> = props => {
   const { progress, submitEntropy, addPoint } = props
 
-  const msg =
-    progress === 0
-      ? I18n.t('For security purposes, we need some randomness') +
-        '. ' +
-        I18n.t('Please tap the screen and draw on it randomly')
-      : `${Math.trunc(progress * 100)} %`
+  const msg = progress === 0 ?
+    I18n.t('For security purposes, we need some randomness') + '. ' +
+    I18n.t('Please tap the screen and draw on it randomly')
+    : `${Math.trunc(progress * 100)} %`
 
   return (
-    <Container style={styles.mainContainer}>
-      <CenteredText style={styles.text} msg={msg} />
+    <Container style={ styles.mainContainer }>
+      <CenteredText style={ styles.text } msg={ msg } />
       <Block>
-        <MaskedImageComponent addPoint={addPoint} />
+        <MaskedImageComponent
+          addPoint={ addPoint }
+        />
       </Block>
-      <View style={styles.footerButton}>
-        {progress === 1 ? (
-          <Button
-            style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText,
-            }}
-            upperCase={false}
-            raised={true}
-            text={I18n.t('Continue')}
-            onPress={submitEntropy}
-          />
-        ) : null}
+      <View style={ styles.footerButton }>
+      {progress === 1 ? 
+        <Button
+          style={{ container: styles.buttonContainer, text: styles.buttonText }}
+          upperCase={ false }
+          raised={ true }
+          text={ I18n.t('Continue')}
+          onPress={ submitEntropy }
+        /> : null
+      }
       </View>
     </Container>
   )

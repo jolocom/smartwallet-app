@@ -1,17 +1,7 @@
 import React from 'react'
-import {
-  StyleSheet,
-  View,
-  TextStyle,
-  GestureResponderEvent,
-  ViewStyle,
-} from 'react-native'
+import { StyleSheet, View, TextStyle, GestureResponderEvent, ViewStyle } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import {
-  ClaimCard,
-  PlaceholderClaimCard,
-  CollapsedCredentialCard,
-} from 'src/ui/sso/components/claimCard'
+import { ClaimCard, PlaceholderClaimCard, CollapsedCredentialCard } from 'src/ui/sso/components/claimCard'
 import { ReactNode } from 'react-redux'
 import { DecoratedClaims } from 'src/reducers/account'
 import I18n from 'src/locales/i18n'
@@ -40,9 +30,7 @@ export class CredentialCard extends React.Component<Props, State> {
 
     this.state = {
       collapsed: props.collapsible || false,
-      blank: Object.keys(props.credentialItem.claimData).every(
-        key => !props.credentialItem.claimData[key],
-      ),
+      blank: Object.keys(props.credentialItem.claimData).every(key => !props.credentialItem.claimData[key])
     }
   }
 
@@ -52,8 +40,8 @@ export class CredentialCard extends React.Component<Props, State> {
         flexDirection: 'row',
         backgroundColor: JolocomTheme.primaryColorWhite,
         paddingVertical: 12,
-        marginBottom: '1%',
-      },
+        marginBottom: '1%'
+      }
     })
 
   private toggleCollapse = () => {
@@ -68,26 +56,22 @@ export class CredentialCard extends React.Component<Props, State> {
     const onEdit = handleInteraction || (() => {})
 
     if (this.state.blank) {
-      return (
-        <PlaceholderClaimCard onEdit={onEdit} credentialType={credentialType} />
-      )
+      return <PlaceholderClaimCard onEdit={onEdit} credentialType={credentialType} />
     }
 
     return Object.keys(claimData).map(key => (
       <ClaimCard
         key={key}
-        primaryText={I18n.t(claimData[key])}
-        secondaryText={I18n.t(key)}
+        primaryText={ I18n.t(claimData[key]) }
+        secondaryText={ I18n.t(key) }
       />
     ))
   }
 
   private renderCollapsedClaim = (credentialItem: DecoratedClaims) => (
     <CollapsedCredentialCard
-      title={I18n.t(credentialItem.credentialType)}
-      values={Object.keys(credentialItem.claimData).map(
-        k => credentialItem.claimData[k],
-      )}
+      title={ I18n.t(credentialItem.credentialType) }
+      values={Object.keys(credentialItem.claimData).map(k => credentialItem.claimData[k])}
     />
   )
 
@@ -97,19 +81,12 @@ export class CredentialCard extends React.Component<Props, State> {
     const { defaultContainerStyle } = this.getStyles()
 
     return (
-      <View
-        style={[
-          StyleSheet.flatten(defaultContainerStyle),
-          containerStyle || {},
-        ]}
-      >
+      <View style={[StyleSheet.flatten(defaultContainerStyle), containerStyle || {}]}>
         <View flex={0.2} alignItems={'center'}>
           {leftIcon}
         </View>
         <View onTouchEnd={this.toggleCollapse} flex={0.7} overflow={'scroll'}>
-          {collapsed
-            ? this.renderCollapsedClaim(credentialItem)
-            : this.renderClaim(credentialItem)}
+          {collapsed ? this.renderCollapsedClaim(credentialItem) : this.renderClaim(credentialItem)}
         </View>
         <View flex={0.1} onTouchEnd={this.props.handleInteraction}>
           {rightIcon || null}

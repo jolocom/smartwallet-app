@@ -7,17 +7,17 @@ import { shallow } from 'enzyme'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
-describe('landing container', () => {
+describe('landing container', ()=> {
   it('mounts correctly and matches snapshot if loading', () => {
     const props = {
       startRegistration: jest.fn(),
-      loading: true,
+      loading: true
     }
 
-    const rendered = shallow(<LandingContainer {...props} />)
+    const rendered = shallow(<LandingContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
     expect(props.startRegistration).not.toHaveBeenCalled()
-
+    
     const childWrapper = rendered.find(LoadingScreen)
     expect(childWrapper).toHaveLength(1)
   })
@@ -25,10 +25,10 @@ describe('landing container', () => {
   it('mounts correctly and matches snapshot if loading is finished', () => {
     const props = {
       startRegistration: jest.fn(),
-      loading: false,
+      loading: false
     }
 
-    const rendered = shallow(<LandingContainer {...props} />)
+    const rendered = shallow(<LandingContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
     expect(props.startRegistration).not.toHaveBeenCalled()
 
@@ -41,15 +41,13 @@ describe('landing container', () => {
     const initialState = {
       account: {
         loading: {
-          loading: true,
-        },
-      },
+          loading: true
+        }
+      } 
     }
 
     const mockStore = configureStore([thunk])(initialState)
-    const rendered = shallow(<Landing store={mockStore} />).find(
-      LandingContainer,
-    )
+    const rendered = shallow(<Landing store={ mockStore }/>).find(LandingContainer)
     expect(rendered.props()).toMatchSnapshot()
   })
 })

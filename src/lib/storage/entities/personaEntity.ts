@@ -1,7 +1,7 @@
 import { PrimaryColumn, Entity, Column } from 'typeorm/browser'
 
 @Entity('personas')
-export class PersonaEntity {
+export class PersonaEntity {  
   @Column()
   controllingKeyPath!: string
 

@@ -1,9 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  StateCredentialRequestSummary,
-  StateVerificationSummary,
-} from 'src/reducers/sso'
+import { StateCredentialRequestSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 
@@ -28,11 +25,7 @@ export class ConsentContainer extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      availableCredentials,
-      requester,
-      callbackURL,
-    } = this.props.activeCredentialRequest
+    const { availableCredentials, requester, callbackURL } = this.props.activeCredentialRequest
     return (
       <ConsentComponent
         requester={requester}
@@ -46,18 +39,21 @@ export class ConsentContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
-  activeCredentialRequest: state.sso.activeCredentialRequest,
-  currentDid: state.account.did.toJS().did,
-})
+const mapStateToProps = (state: any) => {
+  return {
+    activeCredentialRequest: state.sso.activeCredentialRequest,
+    currentDid: state.account.did.toJS().did
+  }
+}
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  sendCredentialResponse: (creds: StateVerificationSummary[]) =>
-    dispatch(ssoActions.sendCredentialResponse(creds)),
-  cancelSSO: () => dispatch(ssoActions.cancelSSO()),
-})
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    sendCredentialResponse: (creds: StateVerificationSummary[]) => dispatch(ssoActions.sendCredentialResponse(creds)),
+    cancelSSO: () => dispatch(ssoActions.cancelSSO())
+  }
+}
 
 export const Consent = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ConsentContainer)

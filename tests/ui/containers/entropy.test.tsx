@@ -1,27 +1,25 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { EntropyContainer } from 'src/ui/registration/containers/entropy'
-import { EntropyGenerator } from 'src/lib/entropyGenerator'
+import { EntropyGenerator} from 'src/lib/entropyGenerator'
+
 
 describe('Entropy container', () => {
-  const props = {}
+    const props = {}
 
   it('mounts correctly and matches the snapshot', () => {
-    const rendered = shallow(<EntropyContainer {...props} />)
+    const rendered = shallow(<EntropyContainer {...props}/>)
     expect(rendered).toMatchSnapshot()
   })
 
   it('correctly creates an entropy generator upon component mount', () => {
-    const entropySpy = jest.spyOn(
-      EntropyContainer.prototype,
-      'setUpEntropyGenerator',
-    )
-    const rendered = shallow(<EntropyContainer {...props} />)
+    const entropySpy = jest.spyOn(EntropyContainer.prototype, 'setUpEntropyGenerator')
+    const rendered = shallow(<EntropyContainer {...props}/>)
     expect(entropySpy).toHaveBeenCalledTimes(1)
   })
 
   it('correctly handles added points with the entropy generator', () => {
-    const rendered = shallow(<EntropyContainer {...props} />)
+    const rendered = shallow(<EntropyContainer {...props}/>)
     const instance = rendered.instance()
 
     expect(rendered.state()).toMatchSnapshot()
@@ -35,16 +33,14 @@ describe('Entropy container', () => {
     expect(instance.entropyGenerator.getProgress).toHaveBeenCalledTimes(1)
     expect(instance.updateEntropyProgress).toHaveBeenCalledTimes(1)
     expect(instance.entropyGenerator.addFromDelta).toHaveBeenCalledTimes(2)
-    expect(instance.entropyGenerator.addFromDelta.mock.calls).toEqual([
-      [150],
-      [220],
-    ])
+    expect(instance.entropyGenerator.addFromDelta.mock.calls)
+      .toEqual([ [150], [220] ])
 
     expect(rendered.state()).toMatchSnapshot()
   })
 
   it('correctly triggers a random string generation when there is sufficient entropy', () => {
-    const rendered = shallow(<EntropyContainer {...props} />)
+    const rendered = shallow(<EntropyContainer {...props}/>)
     const instance = rendered.instance()
 
     expect(rendered.state()).toMatchSnapshot()
@@ -54,12 +50,12 @@ describe('Entropy container', () => {
 
     rendered.setState({ entropyProgress: 1 })
     instance.updateEntropyProgress()
-
+    
     expect(rendered.state()).toMatchSnapshot()
   })
 
   it('does not trigger a random string generation when there is not sufficient entropy', () => {
-    const rendered = shallow(<EntropyContainer {...props} />)
+    const rendered = shallow(<EntropyContainer {...props}/>)
     const instance = rendered.instance()
 
     expect(rendered.state()).toMatchSnapshot()
@@ -68,7 +64,7 @@ describe('Entropy container', () => {
     instance.entropyGenerator.generateRandomString = mockGenerateRandomString
     rendered.setState({ entropyProgress: 0.99 })
     instance.updateEntropyProgress()
-
+    
     expect(rendered.state()).toMatchSnapshot()
-  })
+  }) 
 })

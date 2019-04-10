@@ -9,5 +9,5 @@ export {
   registrationActions,
   navigationActions,
   genericActions,
-  ssoActions,
+  ssoActions
 }

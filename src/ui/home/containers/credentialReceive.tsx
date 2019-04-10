@@ -4,10 +4,7 @@ import { RootState } from 'src/reducers/'
 import { DecoratedClaims } from 'src/reducers/account'
 
 import Immutable from 'immutable'
-import {
-  convertToDecoratedClaim,
-  saveExternalCredentials,
-} from 'src/actions/account'
+import { convertToDecoratedClaim, saveExternalCredentials } from 'src/actions/account'
 import { CredentialDialogComponent } from '../components/credentialDialog'
 import { Block, Container } from 'src/ui/structure'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -28,7 +25,7 @@ interface State {
 
 export class CredentialsReceiveContainer extends React.Component<Props, State> {
   state = {
-    toRender: convertToDecoratedClaim(this.props.externalCredentials)[0],
+    toRender: convertToDecoratedClaim(this.props.externalCredentials)[0]
   }
 
   render() {
@@ -52,16 +49,18 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   const claims = Immutable.fromJS(state.account.claims)
   return {
-    externalCredentials: claims.toJS().pendingExternal,
+    externalCredentials: claims.toJS().pendingExternal
   }
 }
 
-const mapDispatchToProps = (dispatch: (action: Function) => void) => ({
-  saveExternalCredentials: () => dispatch(saveExternalCredentials()),
-  goBack: () => dispatch(cancelReceiving()),
-})
+const mapDispatchToProps = (dispatch: (action: Function) => void) => {
+  return {
+    saveExternalCredentials: () => dispatch(saveExternalCredentials()),
+    goBack: () => dispatch(cancelReceiving())
+  }
+}
 
 export const CredentialReceive = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(CredentialsReceiveContainer)

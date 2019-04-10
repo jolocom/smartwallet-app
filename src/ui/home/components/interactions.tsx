@@ -4,14 +4,15 @@ import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 
-interface Props {}
+interface Props {
+}
 
 const styles = StyleSheet.create({
   text: {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: 30,
-    color: JolocomTheme.primaryColorBlack,
-  },
+    color: JolocomTheme.primaryColorBlack
+  }
 })
 
 export class InteractionsComponent extends React.Component<Props> {
@@ -19,10 +20,10 @@ export class InteractionsComponent extends React.Component<Props> {
     return (
       <Container>
         <Block>
-          <CenteredText
-            msg={I18n.t('Coming Soon') + '...'}
-            style={styles.text}
-          />
+        <CenteredText
+          msg={ I18n.t('Coming Soon') + '...' }
+          style={ styles.text }
+        />
         </Block>
       </Container>
     )

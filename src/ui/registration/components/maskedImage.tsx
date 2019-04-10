@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  PanResponder,
-  PanResponderInstance,
-  GestureResponderEvent,
-} from 'react-native'
+import { PanResponder, PanResponderInstance, GestureResponderEvent } from 'react-native'
 import { Svg, Path } from 'react-native-svg'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
@@ -27,31 +23,31 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
   state = {
     currentPath: [],
-    limit: 15,
+    limit: 15
   }
 
   componentWillMount() {
     this.panResponder = this.getConfiguredPanResponder()
   }
 
-  private getConfiguredPanResponder(): PanResponderInstance {
+  private getConfiguredPanResponder() : PanResponderInstance {
     return PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderGrant: this.handleDrawStart,
-      onPanResponderMove: this.handleDraw,
+      onPanResponderMove: this.handleDraw
     })
   }
 
-  private handleDrawStart = (e: GestureResponderEvent): void => {
+  private handleDrawStart = (e: GestureResponderEvent)  : void => {
     const { locationX, locationY } = e.nativeEvent
     this.props.addPoint(locationX, locationY)
 
-    const point = { type: 'M', x: locationX, y: locationY }
+    const point = { type:'M', x: locationX, y: locationY }
     this.handleNewPoint(point)
   }
 
-  private handleDraw = (e: GestureResponderEvent): void => {
+  private handleDraw = (e: GestureResponderEvent) : void => {
     const { locationX, locationY } = e.nativeEvent
     this.props.addPoint(locationX, locationY)
 
@@ -59,7 +55,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
     this.handleNewPoint(point)
   }
 
-  private handleNewPoint(p: Point): void {
+  private handleNewPoint (p: Point) : void {
     const svgCoordinate = `${p.type}${p.x} ${p.y}`
     const newSvgPathCoords: string[] = this.state.currentPath.concat()
 
@@ -74,14 +70,18 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
   render() {
     return (
-      <Svg width="100%" height="100%" {...this.panResponder.panHandlers}>
+      <Svg
+        width='100%'
+        height='100%'
+        { ...this.panResponder.panHandlers }
+      >
         <Path
-          d={this.state.currentPath.join(' ')}
-          fill="none"
-          stroke={JolocomTheme.primaryColorSand}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={20}
+          d={ this.state.currentPath.join(' ') }
+          fill='none'
+          stroke={ JolocomTheme.primaryColorSand }
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          strokeWidth={ 20 }
         />
       </Svg>
     )
