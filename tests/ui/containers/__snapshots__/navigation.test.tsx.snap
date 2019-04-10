@@ -5,9 +5,11 @@ Array [
   <StatusBar
     animated={false}
     barStyle="light-content"
+    key="0"
     showHideTransition="fade"
   />,
   <NavigationContainer
+    key="1"
     navigation={
       Object {
         "addListener": [Function],
@@ -41,9 +43,11 @@ Array [
   <StatusBar
     animated={false}
     barStyle="light-content"
+    key="0"
     showHideTransition="fade"
   />,
   <NavigationContainer
+    key="1"
     navigation={
       Object {
         "addListener": [Function],
@@ -69,6 +73,7 @@ Array [
     }
   />,
   <BottomActionBar
+    key="2"
     openScanner={[MockFunction]}
   />,
 ]

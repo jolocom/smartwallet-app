@@ -58,6 +58,7 @@ exports[`Entropy container mounts correctly and matches the snapshot 1`] = `
 <EntropyComponent
   addPoint={[Function]}
   progress={0}
+  recoverIdentity={[Function]}
   submitEntropy={[Function]}
 />
 `;
