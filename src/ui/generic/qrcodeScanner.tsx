@@ -7,6 +7,7 @@ import { Button } from 'react-native-material-ui'
 import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
 import { ssoActions, navigationActions } from 'src/actions'
 import I18n from 'src/locales/i18n'
+import { LoadingSpinner } from './loadingSpinner'
 const QRScanner = require('react-native-qrcode-scanner').default
 
 export interface QrScanEvent {
@@ -14,6 +15,7 @@ export interface QrScanEvent {
 }
 
 interface Props {
+  loading: boolean
   onScannerSuccess: (e: QrScanEvent) => void
   onScannerCancel: () => void
 }
@@ -28,7 +30,10 @@ const styles = StyleSheet.create({
 
 export class QRcodeScanner extends React.Component<Props, State> {
   render() {
-    const { onScannerSuccess, onScannerCancel } = this.props
+    const { loading, onScannerSuccess, onScannerCancel } = this.props
+    if (loading) {
+      return <LoadingSpinner />
+    }
     return (
       <Container>
         <QRScanner
@@ -47,12 +52,20 @@ export class QRcodeScanner extends React.Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  onScannerSuccess: (e: QrScanEvent) => dispatch(ssoActions.parseJWT(e.data)),
-  onScannerCancel: () => dispatch(navigationActions.goBack()),
-})
+const mapStateToProps = (state: any) => {
+  return {
+    loading: state.account.loading.toJS().loading,
+  }
+}
+
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    onScannerSuccess: (e: QrScanEvent) => dispatch(ssoActions.parseJWT(e.data)),
+    onScannerCancel: () => dispatch(navigationActions.goBack()),
+  }
+}
 
 export const QRScannerContainer = connect(
-  () => ({}),
+  mapStateToProps,
   mapDispatchToProps,
 )(QRcodeScanner)
