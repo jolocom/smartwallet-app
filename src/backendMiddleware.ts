@@ -6,8 +6,8 @@ import { Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 import { ConnectionOptions } from 'typeorm/browser'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import {IRegistry} from 'jolocom-lib/js/registries/types'
-import {createJolocomRegistry} from 'jolocom-lib/js/registries/jolocomRegistry'
+import { IRegistry } from 'jolocom-lib/js/registries/types'
+import { createJolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 
 export class BackendMiddleware {
   identityWallet!: IdentityWallet
