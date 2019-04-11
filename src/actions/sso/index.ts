@@ -22,7 +22,6 @@ import { getIssuerPublicKey } from 'jolocom-lib/js/utils/helper'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 import { consumePaymentRequest } from './paymentRequest'
-import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 
 export const setCredentialRequest = (
   request: StateCredentialRequestSummary,
@@ -94,11 +93,10 @@ export const consumeCredentialOfferRequest = (
   const { keyChainLib, identityWallet, registry } = backendMiddleware
 
   try {
-    // TODO FIX THESE IN THE LIB
     await identityWallet.validateJWT(
       credOfferRequest,
       undefined,
-      registry as JolocomRegistry,
+      registry,
     )
 
     const password = await keyChainLib.getPassword()
@@ -138,7 +136,7 @@ export const receiveExternalCredential = (
     await identityWallet.validateJWT(
       credReceive,
       undefined,
-      registry as JolocomRegistry,
+      registry,
     )
   } catch (error) {
     console.log(error)
@@ -205,7 +203,7 @@ export const consumeCredentialRequest = (
     await identityWallet.validateJWT(
       decodedCredentialRequest,
       undefined,
-      registry as JolocomRegistry,
+      registry,
     )
     const requestedTypes =
       decodedCredentialRequest.interactionToken.requestedCredentialTypes
