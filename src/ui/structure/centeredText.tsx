@@ -1,11 +1,16 @@
 import React from 'react'
 import { StyleSheet, TextStyle, Text, StyleProp } from 'react-native'
 
-const styles = StyleSheet.create({
+interface CenteredTextStyles {
+  text: TextStyle
+}
+
+const styles = StyleSheet.create<CenteredTextStyles>({
   text: {
     width: '100%',
-    textAlign: 'center' as 'center',
+    textAlign: 'center',
     fontSize: 16,
+    borderBottomColor: 'green',
   },
 })
 
