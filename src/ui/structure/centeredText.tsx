@@ -10,7 +10,6 @@ const styles = StyleSheet.create<CenteredTextStyles>({
     width: '100%',
     textAlign: 'center',
     fontSize: 16,
-    borderBottomColor: 'green',
   },
 })
 
