@@ -5,6 +5,8 @@ import {
   Keyboard,
   EmitterSubscription,
   Dimensions,
+  ViewStyle,
+  TextStyle,
 } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
@@ -15,7 +17,16 @@ import I18n from 'src/locales/i18n'
 
 const viewHeight: number = Dimensions.get('window').height
 
-const styles = StyleSheet.create({
+interface ClaimDetailsStyles {
+  blockSpace: ViewStyle
+  blockSpaceLast: ViewStyle
+  buttonContainer: ViewStyle
+  buttonContainerDisabled: ViewStyle
+  buttonText: TextStyle
+  buttonTextDisabled: TextStyle
+}
+
+const styles = StyleSheet.create<ClaimDetailsStyles>({
   blockSpace: {
     marginTop: viewHeight / 40,
     marginBottom: viewHeight / 40,
