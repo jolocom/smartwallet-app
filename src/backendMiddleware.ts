@@ -8,6 +8,10 @@ import { ConnectionOptions } from 'typeorm/browser'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { IRegistry } from 'jolocom-lib/js/registries/types'
 import { createJolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
+import { IpfsCustomConnector } from './lib/ipfs'
+import {jolocomContractsAdapter} from 'jolocom-lib/js/contracts/contractsAdapter'
+import {jolocomEthereumResolver} from 'jolocom-lib/js/ethereum/ethereum'
+import {jolocomContractsGateway} from 'jolocom-lib/js/contracts/contractsGateway'
 
 export class BackendMiddleware {
   identityWallet!: IdentityWallet
@@ -25,7 +29,18 @@ export class BackendMiddleware {
     this.storageLib = new Storage(config.typeOrmConfig)
     this.encryptionLib = new EncryptionLib()
     this.keyChainLib = new KeyChain()
-    this.registry = createJolocomRegistry()
+    this.registry = createJolocomRegistry({
+      ipfsConnector: new IpfsCustomConnector({
+        host: 'ipfs.jolocom.com',
+        port: 443,
+        protocol: 'https',
+      }),
+      ethereumConnector: jolocomEthereumResolver,
+      contracts: {
+        adapter: jolocomContractsAdapter,
+        gateway: jolocomContractsGateway,
+      },
+    })
   }
 
   async setIdentityWallet(
