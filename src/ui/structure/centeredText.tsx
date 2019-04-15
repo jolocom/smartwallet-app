@@ -1,7 +1,11 @@
 import React from 'react'
-import { StyleSheet, TextStyle, Text } from 'react-native'
+import { StyleSheet, TextStyle, Text, StyleProp } from 'react-native'
 
-const styles = StyleSheet.create({
+interface CenteredTextStyles {
+  text: TextStyle
+}
+
+const styles = StyleSheet.create<CenteredTextStyles>({
   text: {
     width: '100%',
     textAlign: 'center',
@@ -11,7 +15,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   msg: string
-  style?: TextStyle
+  style?: StyleProp<TextStyle>
 }
 
 export const CenteredText: React.SFC<Props> = props => (

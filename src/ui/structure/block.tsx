@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native'
 import { ReactNode } from 'react'
 
 const styles = StyleSheet.create({
@@ -20,7 +20,7 @@ interface Props {
   children: ReactNode
   flex?: number
   debug?: boolean
-  style?: ViewStyle | ViewStyle[]
+  style?: StyleProp<ViewStyle>
   onTouch?: () => void
 }
 
