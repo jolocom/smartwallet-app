@@ -507,9 +507,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.4.tgz#1c586b991457cbb58fef51bc4e0cfcfa347714b5"
   integrity sha512-DT25xX/YgyPKiHFOpNuANIQIVvYEwCWXgK2jYYwqgaMrYE6+tq+DtmMwlD3drl6DJbUwtlIDnn0d7tIn/EbXBg==
 
-"@types/react-native-material-ui@^1.19.2":
-  version "1.19.3"
-  resolved "https://registry.yarnpkg.com/@types/react-native-material-ui/-/react-native-material-ui-1.19.3.tgz#9d4c732fa858179a5c3b57e9f7519e13e6698f05"
+"@types/react-native-material-ui@^1.31.1":
+  version "1.31.1"
+  resolved "https://registry.yarnpkg.com/@types/react-native-material-ui/-/react-native-material-ui-1.31.1.tgz#84ab5674038956103b3858d2d5877c47a69ed8d0"
+  integrity sha512-fsAH8s2K+dRUztMUTQqFRv22wz3PvB0nW6QS2WWVSZSU+H6dxlkqt4iCDXAB3HHSXl5bIVSofQwIEehaq37fVg==
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
@@ -5793,10 +5794,10 @@ jju@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/jju/-/jju-1.3.0.tgz#dadd9ef01924bc728b03f2f7979bdbd62f7a2aaa"
 
-jolocom-lib@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.4.0.tgz#7166e752cf27d241c632b1b2b3f017a36edaf8ff"
-  integrity sha512-BtZ5X5iuiuTYxwk5JKC+ovKITeIzl+Cvw4VeUGfD7NSZbL+38kJZ0J1Stpfk8YdDAHbjpxJlY7bn/MqQfBmDGw==
+jolocom-lib@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.4.2.tgz#775cadef5ef66b7ddb3e52a83e6855dc237a167b"
+  integrity sha512-1QAUBws4IS3FGe3qvB/N7PjxejyCEVkv/XkHvextE9qCdXnJj4mkcjuze0cx4sOe9kbiCznM7A/hHFrQTeaTzg==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"
