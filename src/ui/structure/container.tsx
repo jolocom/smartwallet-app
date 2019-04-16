@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle, RegisteredStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native'
 import { ReactNode } from 'react'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   children: ReactNode
-  style?: ViewStyle | RegisteredStyle<ViewStyle>
+  style?: StyleProp<ViewStyle>
 }
 
 export const Container: React.SFC<Props> = props => (

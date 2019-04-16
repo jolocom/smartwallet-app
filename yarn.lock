@@ -507,9 +507,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.4.tgz#1c586b991457cbb58fef51bc4e0cfcfa347714b5"
   integrity sha512-DT25xX/YgyPKiHFOpNuANIQIVvYEwCWXgK2jYYwqgaMrYE6+tq+DtmMwlD3drl6DJbUwtlIDnn0d7tIn/EbXBg==
 
-"@types/react-native-material-ui@^1.19.2":
-  version "1.19.3"
-  resolved "https://registry.yarnpkg.com/@types/react-native-material-ui/-/react-native-material-ui-1.19.3.tgz#9d4c732fa858179a5c3b57e9f7519e13e6698f05"
+"@types/react-native-material-ui@^1.31.1":
+  version "1.31.1"
+  resolved "https://registry.yarnpkg.com/@types/react-native-material-ui/-/react-native-material-ui-1.31.1.tgz#84ab5674038956103b3858d2d5877c47a69ed8d0"
+  integrity sha512-fsAH8s2K+dRUztMUTQqFRv22wz3PvB0nW6QS2WWVSZSU+H6dxlkqt4iCDXAB3HHSXl5bIVSofQwIEehaq37fVg==
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
