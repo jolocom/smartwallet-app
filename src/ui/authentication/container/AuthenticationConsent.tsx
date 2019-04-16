@@ -4,6 +4,7 @@ import { AuthenticationConsentComponent } from '../components/AuthenticationCons
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { RootState } from 'src/reducers'
 import { cancelSSO } from 'src/actions/sso'
+import { sendAuthenticationResponse } from 'src/actions/sso/authenticationRequest'
 
 interface ConnectProps {}
 
@@ -35,7 +36,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  confirmAuthenticationRequest: () => dispatch(),
+  confirmAuthenticationRequest: () => dispatch(sendAuthenticationResponse()),
   cancelAuthenticationRequest: () => dispatch(cancelSSO()),
 })
 

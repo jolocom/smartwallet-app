@@ -34,6 +34,7 @@ export interface StatePaymentRequestSummary {
 export interface StateAuthenticationRequestSummary {
   callbackURL: string
   did: string
+  requestJWT: string
 }
 
 export interface SsoState {
@@ -63,6 +64,7 @@ const initialState: SsoState = {
   activeAuthenticationRequest: {
     did: '',
     callbackURL: '',
+    requestJWT: '',
   },
 }
 
