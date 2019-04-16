@@ -14,6 +14,7 @@ import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from './ui/generic/qrcodeScanner'
+import { AuthenticationConsent } from './ui/authentication'
 const closeIcon = require('./resources/img/close.png')
 
 const navigationOptions = {
@@ -118,6 +119,22 @@ export const Routes = StackNavigator({
     navigationOptions: {
       headerBackImage: closeIcon,
       headerTitle: I18n.t('Confirm payment'),
+      headerTitleStyle: {
+        color: JolocomTheme.primaryColorWhite,
+        fontFamily: JolocomTheme.contentFontFamily,
+        fontWeight: '100',
+        fontSize: JolocomTheme.headerFontSize,
+      },
+      headerStyle: {
+        backgroundColor: JolocomTheme.primaryColorBlack,
+      },
+    },
+  },
+  AuthenticationConsent: {
+    screen: AuthenticationConsent,
+    navigationOptions: {
+      headerBackImage: closeIcon,
+      headerTitle: I18n.t('Accept request'),
       headerTitleStyle: {
         color: JolocomTheme.primaryColorWhite,
         fontFamily: JolocomTheme.contentFontFamily,
