@@ -52,6 +52,8 @@ describe('Account action creators', () => {
     }
 
     const action = accountActions.checkIdentityExists()
+
+    // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
 
     expect(mockStore.getActions()).toMatchSnapshot()
