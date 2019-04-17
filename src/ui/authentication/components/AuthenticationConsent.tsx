@@ -4,7 +4,6 @@ import { Text, StyleSheet, View, Image } from 'react-native'
 import I18n from 'src/locales/i18n'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { JolocomTheme } from 'src/styles/jolocom-theme.ios'
-const nameIcon = require('src/resources/svg/NameIcon.js')
 
 interface Props {
   activeAuthenticationRequest: StateAuthenticationRequestSummary
@@ -36,13 +35,13 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     flex: -1,
   },
-  requestContainer: {
+  authRequestContainer: {
     flex: 1,
     paddingHorizontal: '10%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  requestText: {
+  authRequestText: {
     ...JolocomTheme.textStyles.light.textDisplayField,
     textAlign: 'center',
     fontWeight: '300',
@@ -61,6 +60,46 @@ export class AuthenticationConsentComponent extends React.Component<
   private handleConfirm = () => {
     this.setState({ pending: true })
     this.props.confirmAuthenticationRequest()
+  }
+
+  private renderRequesterCard(requester: string, callbackURL: string) {
+    return (
+      <View style={styles.requesterContainer}>
+        <View style={styles.requesterIconContainer}>
+          <View style={styles.requesterIcon} />
+        </View>
+        <View style={styles.requesterTextContainer}>
+          <Text
+            style={JolocomTheme.textStyles.light.textDisplayField}
+            numberOfLines={1}
+          >
+            {requester}
+          </Text>
+          <Text
+            style={JolocomTheme.textStyles.light.labelDisplayField}
+            numberOfLines={1}
+          >
+            {callbackURL}
+          </Text>
+        </View>
+      </View>
+    )
+  }
+
+  private renderAuthRequest(description: string) {
+    return (
+      <View style={styles.authRequestContainer}>
+        <Text style={styles.authRequestText}>
+          {I18n.t('Would you like to')}
+        </Text>
+        <Text style={[styles.authRequestText, { fontSize: 42 }]}>
+          {description}
+        </Text>
+        <Text style={styles.authRequestText}>
+          {I18n.t('with your SmartWallet?')}
+        </Text>
+      </View>
+    )
   }
 
   private renderButtons() {
@@ -85,34 +124,8 @@ export class AuthenticationConsentComponent extends React.Component<
     } = this.props.activeAuthenticationRequest
     return (
       <View style={styles.container}>
-        <View style={styles.requesterContainer}>
-          <View style={styles.requesterIconContainer}>
-            <Image source={nameIcon} style={styles.requesterIcon} />
-          </View>
-          <View style={styles.requesterTextContainer}>
-            <Text
-              style={JolocomTheme.textStyles.light.textDisplayField}
-              numberOfLines={1}
-            >
-              {requester}
-            </Text>
-            <Text
-              style={JolocomTheme.textStyles.light.labelDisplayField}
-              numberOfLines={1}
-            >
-              {callbackURL}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.requestContainer}>
-          <Text style={styles.requestText}>{I18n.t('Would you like to')}</Text>
-          <Text style={[styles.requestText, { fontSize: 42 }]}>
-            {description}
-          </Text>
-          <Text style={styles.requestText}>
-            {I18n.t('with your SmartWallet?')}
-          </Text>
-        </View>
+        {this.renderRequesterCard(requester, callbackURL)}
+        {this.renderAuthRequest(description)}
         {this.renderButtons()}
       </View>
     )
