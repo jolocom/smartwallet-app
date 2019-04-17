@@ -134,7 +134,7 @@ export const Routes = StackNavigator({
     screen: AuthenticationConsent,
     navigationOptions: {
       headerBackImage: closeIcon,
-      headerTitle: I18n.t('Accept request'),
+      headerTitle: I18n.t('Authorization request'),
       headerTitleStyle: {
         color: JolocomTheme.primaryColorWhite,
         fontFamily: JolocomTheme.contentFontFamily,

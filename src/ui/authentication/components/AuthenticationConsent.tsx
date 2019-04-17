@@ -92,7 +92,11 @@ export class AuthenticationConsentComponent extends React.Component<
   }
 
   render() {
-    const { did, callbackURL } = this.props.activeAuthenticationRequest
+    const {
+      requester,
+      callbackURL,
+      description,
+    } = this.props.activeAuthenticationRequest
     return (
       <View style={styles.container}>
         <View style={styles.requesterContainer}>
@@ -104,7 +108,7 @@ export class AuthenticationConsentComponent extends React.Component<
               style={JolocomTheme.textStyles.light.textDisplayField}
               numberOfLines={1}
             >
-              {did}
+              {requester}
             </Text>
             <Text
               style={JolocomTheme.textStyles.light.labelDisplayField}
@@ -115,11 +119,13 @@ export class AuthenticationConsentComponent extends React.Component<
           </View>
         </View>
         <View style={styles.requestContainer}>
-          <Text style={styles.requestText}>Do you want to</Text>
+          <Text style={styles.requestText}>{I18n.t('Would you like to')}</Text>
           <Text style={[styles.requestText, { fontSize: 42 }]}>
-            [an action with 2 lines]
+            {description}
           </Text>
-          <Text style={styles.requestText}>with your SmartWallet?</Text>
+          <Text style={styles.requestText}>
+            {I18n.t('with your SmartWallet?')}
+          </Text>
         </View>
         {this.renderButtons()}
       </View>

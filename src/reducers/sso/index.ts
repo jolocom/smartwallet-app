@@ -33,7 +33,8 @@ export interface StatePaymentRequestSummary {
 
 export interface StateAuthenticationRequestSummary {
   callbackURL: string
-  did: string
+  requester: string
+  description: string
   requestJWT: string
 }
 
@@ -62,8 +63,9 @@ const initialState: SsoState = {
   },
   // add blank authentication request, which is did, public profile?
   activeAuthenticationRequest: {
-    did: '',
+    requester: '',
     callbackURL: '',
+    description: '',
     requestJWT: '',
   },
 }

@@ -130,7 +130,7 @@ export const Routes = StackNavigator({
     navigationOptions: {
       headerBackImage: backIcon,
       headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
-      headerTitle: I18n.t('Accept request'),
+      headerTitle: I18n.t('Authorization request'),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: '100',

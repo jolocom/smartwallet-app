@@ -28,8 +28,9 @@ export const consumeAuthenticationRequest = (
   try {
     await identityWallet.validateJWT(authenticationRequest)
     const authenticationDetails: StateAuthenticationRequestSummary = {
-      did: authenticationRequest.issuer,
+      requester: authenticationRequest.issuer,
       callbackURL: authenticationRequest.interactionToken.callbackURL,
+      description: authenticationRequest.interactionToken.description,
       requestJWT: authenticationRequest.encode(),
     }
     dispatch(setAuthenticationRequest(authenticationDetails))
