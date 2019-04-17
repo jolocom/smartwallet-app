@@ -40,10 +40,9 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
   },
-  requesterText: {
+  requesterTextContainer: {
     ...debug,
     marginLeft: 16,
-    // shrink text
     flex: -1,
   },
   requestContainer: {
@@ -81,7 +80,7 @@ export class AuthenticationConsentComponent extends React.Component<
     return (
       <ButtonSection
         disabled={this.state.pending}
-        confirmText={I18n.t('Confirm')}
+        confirmText={I18n.t('Authorize')}
         denyText={I18n.t('Deny')}
         handleConfirm={this.handleConfirm}
         handleDeny={() => this.props.cancelAuthenticationRequest()}
@@ -103,7 +102,7 @@ export class AuthenticationConsentComponent extends React.Component<
           <View style={styles.requesterIconContainer}>
             <Image source={nameIcon} style={styles.requesterIcon} />
           </View>
-          <View style={styles.requesterText}>
+          <View style={styles.requesterTextContainer}>
             <Text
               style={JolocomTheme.textStyles.light.textDisplayField}
               numberOfLines={1}
