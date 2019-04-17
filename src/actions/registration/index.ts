@@ -5,11 +5,7 @@ import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
-import { IpfsCustomConnector } from 'src/lib/ipfs'
-import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
-import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
 const bip39 = require('bip39')
 
 export const setLoadingMsg = (loadingMsg: string) => ({
@@ -68,6 +64,7 @@ export const createIdentity = (encodedEntropy: string) => async (
     encryptionLib,
     keyChainLib,
     storageLib,
+    registry
   } = backendMiddleware
 
   try {
@@ -91,24 +88,8 @@ export const createIdentity = (encodedEntropy: string) => async (
         derivationPath: JolocomLib.KeyTypes.ethereumKey,
       }),
     )
-
     await ethereumLib.requestEther(ethAddr)
-
     dispatch(setLoadingMsg(loading.loadingStages[2]))
-
-    const registry = JolocomLib.registries.jolocom.create({
-      ipfsConnector: new IpfsCustomConnector({
-        host: 'ipfs.jolocom.com',
-        port: 443,
-        protocol: 'https',
-      }),
-      ethereumConnector: jolocomEthereumResolver,
-      contracts: {
-        adapter: jolocomContractsAdapter,
-        gateway: jolocomContractsGateway,
-      },
-    })
-
     const identityWallet = await registry.create(userVault, password)
 
     const personaData = {
@@ -118,9 +99,7 @@ export const createIdentity = (encodedEntropy: string) => async (
 
     await storageLib.store.persona(personaData)
     dispatch(setDid(identityWallet.identity.did))
-
     dispatch(setLoadingMsg(loading.loadingStages[3]))
-
     dispatch(accountActions.setIdentityWallet())
 
     return dispatch(

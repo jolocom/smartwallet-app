@@ -98,10 +98,14 @@ export const consumeCredentialOfferRequest = (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const { keyChainLib, identityWallet } = backendMiddleware
+  const { keyChainLib, identityWallet, registry } = backendMiddleware
 
   try {
-    await identityWallet.validateJWT(credOfferRequest)
+    await identityWallet.validateJWT(
+      credOfferRequest,
+      undefined,
+      registry,
+    )
 
     const password = await keyChainLib.getPassword()
     const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
@@ -134,10 +138,14 @@ export const receiveExternalCredential = (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const { identityWallet } = backendMiddleware
+  const { identityWallet, registry } = backendMiddleware
 
   try {
-    await identityWallet.validateJWT(credReceive)
+    await identityWallet.validateJWT(
+      credReceive,
+      undefined,
+      registry,
+    )
   } catch (error) {
     console.log(error)
     dispatch(
@@ -149,7 +157,6 @@ export const receiveExternalCredential = (
 
   try {
     const providedCredentials = credReceive.interactionToken.signedCredentials
-    const registry = JolocomLib.registries.jolocom.create()
 
     const results = await Promise.all(
       providedCredentials.map(async vcred => {
@@ -197,11 +204,15 @@ export const consumeCredentialRequest = (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const { storageLib, identityWallet } = backendMiddleware
+  const { storageLib, identityWallet, registry } = backendMiddleware
   const { did } = getState().account.did.toJS()
 
   try {
-    await identityWallet.validateJWT(decodedCredentialRequest)
+    await identityWallet.validateJWT(
+      decodedCredentialRequest,
+      undefined,
+      registry,
+    )
     const requestedTypes =
       decodedCredentialRequest.interactionToken.requestedCredentialTypes
     const attributesForType = await Promise.all<AttributeSummary>(
@@ -271,11 +282,10 @@ export const sendCredentialResponse = (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const { storageLib, keyChainLib, encryptionLib } = backendMiddleware
+  const { storageLib, keyChainLib, encryptionLib, registry } = backendMiddleware
   const { activeCredentialRequest } = getState().sso
 
   try {
-    const registry = JolocomLib.registries.jolocom.create()
     const password = await keyChainLib.getPassword()
     const decryptedSeed = encryptionLib.decryptWithPass({
       cipher: await storageLib.get.encryptedSeed(),

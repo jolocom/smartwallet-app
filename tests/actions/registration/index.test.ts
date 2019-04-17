@@ -3,7 +3,6 @@ import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import data from './data/mockRegistrationData'
 const MockDate = require('mockdate')
-import { JolocomLib } from 'jolocom-lib'
 
 describe('Registration action creators', () => {
   describe('savePassword', () => {
@@ -100,6 +99,9 @@ describe('Registration action creators', () => {
             encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
           },
         },
+        registry: {
+          create: () => identityWallet,
+        },
         setIdentityWallet: jest.fn(() => Promise.resolve()),
       }
 
@@ -107,9 +109,6 @@ describe('Registration action creators', () => {
         {},
       )
 
-      JolocomLib.registries.jolocom.create = jest.fn().mockReturnValue({
-        create: () => identityWallet,
-      })
       const mockGetState = () => {}
 
       const asyncAction = registrationActions.createIdentity(entropy)

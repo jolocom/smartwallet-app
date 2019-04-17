@@ -8,7 +8,8 @@ import { StatePaymentRequestSummary } from 'src/reducers/sso'
 import { showErrorScreen } from 'src/actions/generic'
 import { JolocomLib } from 'jolocom-lib'
 import { Linking } from 'react-native'
-import { cancelSSO } from 'src/actions/sso/index'
+import { cancelSSO } from 'src/actions/sso'
+import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -22,10 +23,14 @@ export const consumePaymentRequest = (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const { identityWallet } = backendMiddleware
+  const { identityWallet, registry } = backendMiddleware
 
   try {
-    await identityWallet.validateJWT(paymentRequest)
+    await identityWallet.validateJWT(
+      paymentRequest,
+      undefined,
+      registry as JolocomRegistry,
+    )
 
     const paymentDetails: StatePaymentRequestSummary = {
       receiver: {
