@@ -50,7 +50,11 @@ export const sendAuthenticationResponse = () => async (
   backendMiddleware: BackendMiddleware,
 ) => {
   const { identityWallet } = backendMiddleware
-  const { callbackURL, requestJWT } = getState().sso.activeAuthenticationRequest
+  const {
+    callbackURL,
+    requestJWT,
+    description,
+  } = getState().sso.activeAuthenticationRequest
   try {
     const password = await backendMiddleware.keyChainLib.getPassword()
     const decodedAuthRequest = JolocomLib.parse.interactionToken.fromJWT<
@@ -58,7 +62,7 @@ export const sendAuthenticationResponse = () => async (
     >(requestJWT)
 
     const response = await identityWallet.create.interactionTokens.response.auth(
-      { callbackURL },
+      { callbackURL, description },
       password,
       decodedAuthRequest,
     )
