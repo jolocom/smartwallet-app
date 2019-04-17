@@ -3,7 +3,7 @@ import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
-import { JolocomTheme } from 'src/styles/jolocom-theme.ios'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
   activeAuthenticationRequest: StateAuthenticationRequestSummary
