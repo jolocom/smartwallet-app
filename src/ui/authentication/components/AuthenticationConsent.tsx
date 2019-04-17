@@ -1,11 +1,10 @@
 import React from 'react'
-// import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
+import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { Text, StyleSheet, View, Image } from 'react-native'
 import I18n from 'src/locales/i18n'
 // import { Block } from 'src/ui/structure'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { JolocomTheme } from 'src/styles/jolocom-theme.ios'
-import { Button } from 'react-native-material-ui'
 const nameIcon = require('src/resources/svg/NameIcon.js')
 
 interface Props {
@@ -22,7 +21,10 @@ const debug = {
 }
 
 const styles = StyleSheet.create({
-  requester: {
+  container: {
+    flex: 1,
+  },
+  requesterContainer: {
     ...debug,
     flexDirection: 'row',
     backgroundColor: JolocomTheme.primaryColorWhite,
@@ -38,7 +40,6 @@ const styles = StyleSheet.create({
     backgroundColor: JolocomTheme.primaryColorGrey,
     width: 42,
     height: 42,
-    color: JolocomTheme.primaryColorPurple,
   },
   requesterText: {
     ...debug,
@@ -46,8 +47,8 @@ const styles = StyleSheet.create({
   },
   requestContainer: {
     ...debug,
-    paddingHorizontal: '10%',
     flex: 1,
+    paddingHorizontal: '10%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -75,86 +76,24 @@ export class AuthenticationConsentComponent extends React.Component<
     this.props.confirmAuthenticationRequest()
   }
 
-  // private renderButtons() {
-  //   return (
-  //     <ButtonSection
-  //       disabled={this.state.pending}
-  //       confirmText={I18n.t('Confirm')}
-  //       denyText={I18n.t('Deny')}
-  //       handleConfirm={this.handleConfirm}
-  //       handleDeny={() => this.props.cancelAuthenticationRequest()}
-  //     />
-  //   )
-  // }
-
-  private renderButtonsNew = () => {
-    const buttonStyles = StyleSheet.create({
-      buttonContainer: {
-        borderTopWidth: 1,
-        borderColor: 'rgb(236, 236, 236)',
-        backgroundColor: JolocomTheme.primaryColorWhite,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-      },
-      confirmButton: {
-        paddingHorizontal: 25,
-        borderRadius: 4,
-        backgroundColor: this.state.pending
-          ? JolocomTheme.disabledButtonBackgroundGrey
-          : JolocomTheme.primaryColorPurple,
-      },
-      confirmButtonText: {
-        paddingVertical: 10,
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontSize: JolocomTheme.headerFontSize,
-        color: this.state.pending
-          ? JolocomTheme.disabledButtonTextGrey
-          : JolocomTheme.primaryColorSand,
-        fontWeight: '100',
-      },
-      denyButton: {
-        paddingHorizontal: 25,
-      },
-      denyButtonText: {
-        paddingVertical: 10,
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontSize: JolocomTheme.headerFontSize,
-        color: JolocomTheme.primaryColorPurple,
-        fontWeight: '100',
-      },
-    })
+  private renderButtons() {
     return (
-      <View style={buttonStyles.buttonContainer}>
-        <Button
-          onPress={() => this.props.cancelAuthenticationRequest()}
-          text={I18n.t('Deny')}
-          upperCase={false}
-          style={{
-            container: buttonStyles.denyButton,
-            text: buttonStyles.denyButtonText,
-          }}
-        />
-        <Button
-          disabled={this.state.pending}
-          onPress={this.handleConfirm}
-          text={I18n.t('Confirm')}
-          upperCase={false}
-          style={{
-            container: buttonStyles.confirmButton,
-            text: buttonStyles.confirmButtonText,
-          }}
-        />
-      </View>
+      <ButtonSection
+        disabled={this.state.pending}
+        confirmText={I18n.t('Confirm')}
+        denyText={I18n.t('Deny')}
+        handleConfirm={this.handleConfirm}
+        handleDeny={() => this.props.cancelAuthenticationRequest()}
+        resetDeny
+        verticalPadding={10}
+      />
     )
   }
 
   render() {
-    const { did } = this.props.activeAuthenticationRequest
     return (
-      <View style={{ flex: 1 }}>
-        <View style={styles.requester}>
+      <View style={styles.container}>
+        <View style={styles.requesterContainer}>
           <View style={styles.requesterIconContainer}>
             <Image source={nameIcon} style={styles.requesterIcon} />
           </View>
@@ -174,7 +113,7 @@ export class AuthenticationConsentComponent extends React.Component<
           </Text>
           <Text style={styles.requestText}>with your SmartWallet?</Text>
         </View>
-        {this.renderButtonsNew()}
+        {this.renderButtons()}
       </View>
     )
   }
