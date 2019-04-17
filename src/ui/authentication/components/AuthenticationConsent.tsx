@@ -2,7 +2,6 @@ import React from 'react'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { Text, StyleSheet, View, Image } from 'react-native'
 import I18n from 'src/locales/i18n'
-// import { Block } from 'src/ui/structure'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { JolocomTheme } from 'src/styles/jolocom-theme.ios'
 const nameIcon = require('src/resources/svg/NameIcon.js')
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 20,
     paddingHorizontal: 15,
-    marginTop: 20,
+    marginTop: 25,
   },
   requesterIconContainer: {
     ...debug,
@@ -44,6 +43,8 @@ const styles = StyleSheet.create({
   requesterText: {
     ...debug,
     marginLeft: 16,
+    // shrink text
+    flex: -1,
   },
   requestContainer: {
     ...debug,
@@ -91,6 +92,7 @@ export class AuthenticationConsentComponent extends React.Component<
   }
 
   render() {
+    const { did, callbackURL } = this.props.activeAuthenticationRequest
     return (
       <View style={styles.container}>
         <View style={styles.requesterContainer}>
@@ -98,11 +100,17 @@ export class AuthenticationConsentComponent extends React.Component<
             <Image source={nameIcon} style={styles.requesterIcon} />
           </View>
           <View style={styles.requesterText}>
-            <Text style={JolocomTheme.textStyles.light.textDisplayField}>
-              Name of Service
+            <Text
+              style={JolocomTheme.textStyles.light.textDisplayField}
+              numberOfLines={1}
+            >
+              {did}
             </Text>
-            <Text style={JolocomTheme.textStyles.light.labelDisplayField}>
-              demo-sso.jolocom.com
+            <Text
+              style={JolocomTheme.textStyles.light.labelDisplayField}
+              numberOfLines={1}
+            >
+              {callbackURL}
             </Text>
           </View>
         </View>
