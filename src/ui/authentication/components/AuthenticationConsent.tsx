@@ -14,17 +14,11 @@ interface Props {
 
 interface State {}
 
-const debug = {
-  // borderColor: 'red',
-  // borderWidth: 1,
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   requesterContainer: {
-    ...debug,
     flexDirection: 'row',
     backgroundColor: JolocomTheme.primaryColorWhite,
     width: '100%',
@@ -32,21 +26,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginTop: 25,
   },
-  requesterIconContainer: {
-    ...debug,
-  },
+  requesterIconContainer: {},
   requesterIcon: {
     backgroundColor: JolocomTheme.primaryColorGrey,
     width: 42,
     height: 42,
   },
   requesterTextContainer: {
-    ...debug,
     marginLeft: 16,
     flex: -1,
   },
   requestContainer: {
-    ...debug,
     flex: 1,
     paddingHorizontal: '10%',
     justifyContent: 'center',
@@ -57,9 +47,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '300',
     marginTop: 10,
-  },
-  buttonContainer: {
-    ...debug,
   },
 })
 
