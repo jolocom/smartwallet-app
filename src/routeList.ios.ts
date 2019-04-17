@@ -12,4 +12,5 @@ export const enum routeList {
   CredentialDialog = 'CredentialDialog',
   QRCodeScanner = 'QRCodeScanner',
   PaymentConsent = 'PaymentConsent',
+  AuthenticationConsent = 'AuthenticationConsent',
 }
