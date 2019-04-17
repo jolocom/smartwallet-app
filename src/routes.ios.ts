@@ -13,7 +13,9 @@ import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import I18n from 'src/locales/i18n'
-import { QRScannerContainer } from './ui/generic/qrcodeScanner'
+import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
+import { AuthenticationConsent } from 'src/ui/authentication'
+const backIcon = require('src/resources/img/left-chevron.png')
 
 const navigationOptions = {
   header: null,
@@ -21,7 +23,7 @@ const navigationOptions = {
 
 const navOptScreenWCancel = {
   headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: require('./resources/img/left-chevron.png'),
+  headerBackImage: backIcon,
   headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
   headerTintColor: { color: JolocomTheme.primaryColorWhite },
 }
@@ -109,9 +111,26 @@ export const Routes = StackNavigator({
   PaymentConsent: {
     screen: PaymentConsent,
     navigationOptions: {
-      headerBackImage: require('./resources/img/left-chevron.png'),
+      headerBackImage: backIcon,
       headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
       headerTitle: I18n.t('Confirm payment'),
+      headerTitleStyle: {
+        fontFamily: JolocomTheme.contentFontFamily,
+        fontWeight: '100',
+        fontSize: JolocomTheme.headerFontSize,
+      },
+      headerStyle: {
+        backgroundColor: JolocomTheme.primaryColorBlack,
+      },
+      headerTintColor: JolocomTheme.primaryColorWhite,
+    },
+  },
+  AuthenticationConsent: {
+    screen: AuthenticationConsent,
+    navigationOptions: {
+      headerBackImage: backIcon,
+      headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
+      headerTitle: I18n.t('Authorization request'),
       headerTitleStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: '100',

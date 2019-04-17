@@ -22,6 +22,8 @@ import { getIssuerPublicKey } from 'jolocom-lib/js/utils/helper'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 import { consumePaymentRequest } from './paymentRequest'
+import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
+import { consumeAuthenticationRequest } from './authenticationRequest'
 
 export const setCredentialRequest = (
   request: StateCredentialRequestSummary,
@@ -71,6 +73,12 @@ export const parseJWT = (encodedJwt: string) => async (
         return dispatch(
           consumePaymentRequest(returnedDecodedJwt as JSONWebToken<
             PaymentRequest
+          >),
+        )
+      case InteractionType.Authentication:
+        return dispatch(
+          consumeAuthenticationRequest(returnedDecodedJwt as JSONWebToken<
+            Authentication
           >),
         )
       default:

@@ -34,7 +34,11 @@ export const handleDeepLink = (url: string) => async (
   const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ''
   const routeName = route!.split('/')[0]
 
-  if (routeName === 'consent' || routeName === 'payment') {
+  if (
+    routeName === 'consent' ||
+    routeName === 'payment' ||
+    routeName === 'authenticate'
+  ) {
     const personas = await backendMiddleware.storageLib.get.persona()
 
     if (!personas.length) {

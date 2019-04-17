@@ -10,11 +10,14 @@ interface Props {
   handleConfirm: () => void
   handleDeny: () => void
   disabled: boolean
+  resetDeny?: boolean
+  verticalPadding?: number
 }
 
 export const ButtonSection: React.SFC<Props> = props => {
   const styles = StyleSheet.create({
     buttonBlock: {
+      paddingVertical: props.verticalPadding ? props.verticalPadding : 'auto',
       justifyContent: 'space-around',
       flexDirection: 'row',
       backgroundColor: JolocomTheme.primaryColorWhite,
@@ -36,7 +39,7 @@ export const ButtonSection: React.SFC<Props> = props => {
       fontWeight: '100',
     },
     denyButton: {
-      width: '40%',
+      width: props.resetDeny ? 'auto' : '40%',
     },
     confirmButton: {
       paddingHorizontal: 25,
