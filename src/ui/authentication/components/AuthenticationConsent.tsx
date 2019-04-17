@@ -1,6 +1,6 @@
 import React from 'react'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
-import { Text, StyleSheet, View, Image } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { JolocomTheme } from 'src/styles/jolocom-theme.ios'
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginTop: 25,
   },
-  requesterIconContainer: {},
   requesterIcon: {
     backgroundColor: JolocomTheme.primaryColorGrey,
     width: 42,
@@ -65,9 +64,7 @@ export class AuthenticationConsentComponent extends React.Component<
   private renderRequesterCard(requester: string, callbackURL: string) {
     return (
       <View style={styles.requesterContainer}>
-        <View style={styles.requesterIconContainer}>
-          <View style={styles.requesterIcon} />
-        </View>
+        <View style={styles.requesterIcon} />
         <View style={styles.requesterTextContainer}>
           <Text
             style={JolocomTheme.textStyles.light.textDisplayField}
