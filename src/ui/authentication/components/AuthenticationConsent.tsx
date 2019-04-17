@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
   authRequestContainer: {
     flex: 1,
     paddingHorizontal: '10%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: 35,
   },
   authRequestText: {
     ...JolocomTheme.textStyles.light.textDisplayField,
