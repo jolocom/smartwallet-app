@@ -12,7 +12,6 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
-import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 import I18n from 'src/locales/i18n'
 
 const viewHeight: number = Dimensions.get('window').height
@@ -116,15 +115,18 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     this.props.handleClaimInput(fieldValue, fieldName)
   }
 
-  private renderInputFields = (claimData: ClaimEntry) =>
-    Object.keys(claimData).map(item => (
+  private renderInputFields = (claim: DecoratedClaims) => {
+    const { claimData, keyboardType } = claim
+    return Object.keys(claimData).map(item => (
       <TextInputField
         key={item}
         fieldName={item}
         fieldValue={claimData[item]}
         handleFieldInput={this.handleFieldInput}
+        keyboardType={keyboardType}
       />
     ))
+  }
 
   private confirmationEligibilityCheck = () =>
     !this.allDataCompleted || this.state.pending
@@ -148,7 +150,10 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const { credentialType, claimData } = this.props.selectedClaim
+    const {
+      selectedClaim,
+      selectedClaim: { credentialType, claimData },
+    } = this.props
     const showButtonWhileTyping =
       !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
@@ -161,7 +166,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
           />
         </Block>
         <Block style={styles.blockSpace}>
-          {this.renderInputFields(claimData)}
+          {this.renderInputFields(selectedClaim)}
         </Block>
         <Block style={styles.blockSpaceLast}>
           {showButtonWhileTyping ? (
