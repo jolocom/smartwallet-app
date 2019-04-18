@@ -103,8 +103,6 @@ export const recoverIdentity = (seedPhrase: string) => {
       const password = await keyChainLib.getPassword()
       const encodedEntropy = bip39.mnemonicToEntropy(seedPhrase)
 
-      await storeEncryptedSeed(storageLib, encryptionLib, encodedEntropy, password)
-
       const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
 
       dispatch(setNextLoadingStage())
@@ -118,6 +116,7 @@ export const recoverIdentity = (seedPhrase: string) => {
         }
       )
 
+      await storeEncryptedSeed(storageLib, encryptionLib, encodedEntropy, password)
       await storeIdentityData(storageLib, dispatch, identityWallet)
 
       return dispatch(
@@ -139,7 +138,6 @@ export const createIdentity = (encodedEntropy: string) => {
   
     try {
       const password = await keyChainLib.getPassword()
-      await storeEncryptedSeed(storageLib, encryptionLib, encodedEntropy, password)
       
       const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
 
@@ -158,6 +156,7 @@ export const createIdentity = (encodedEntropy: string) => {
 
       const identityWallet = await registry.create(userVault, password)
 
+      await storeEncryptedSeed(storageLib, encryptionLib, encodedEntropy, password)
       await storeIdentityData(storageLib, dispatch, identityWallet)
       
       return dispatch(
