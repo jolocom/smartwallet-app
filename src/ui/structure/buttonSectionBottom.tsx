@@ -63,6 +63,7 @@ export const ButtonSection: React.SFC<Props> = props => {
   return (
     <Block style={flatten(buttonBlock)} flex={0.1}>
       <Button
+        disabled={disabled}
         onPress={handleDeny}
         style={{
           container: flatten(denyButton),
