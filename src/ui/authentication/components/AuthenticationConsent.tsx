@@ -104,6 +104,7 @@ export class AuthenticationConsentComponent extends React.Component<
     return (
       <ButtonSection
         disabled={this.state.pending}
+        denyDisabled={this.state.pending}
         confirmText={I18n.t('Authorize')}
         denyText={I18n.t('Deny')}
         handleConfirm={this.handleConfirm}
