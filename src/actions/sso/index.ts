@@ -263,6 +263,7 @@ export const consumeCredentialRequest = (
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Consent }))
   } catch (error) {
     console.log(error)
+    dispatch(accountActions.toggleLoading(false))
     dispatch(
       showErrorScreen(new Error('Consumption of credential request failed')),
     )
@@ -330,6 +331,8 @@ export const sendCredentialResponse = (
     dispatch(cancelSSO())
   } catch (error) {
     // TODO: better error message
+    console.log(error)
+    dispatch(accountActions.toggleLoading(false))
     dispatch(
       showErrorScreen(
         new Error('The credential response could not be created'),
@@ -340,6 +343,7 @@ export const sendCredentialResponse = (
 
 export const cancelSSO = () => (dispatch: Dispatch<AnyAction>) => {
   dispatch(clearInteractionRequest())
+  dispatch(accountActions.toggleLoading(false))
   dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
 }
 
