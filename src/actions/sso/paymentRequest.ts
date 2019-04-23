@@ -45,7 +45,7 @@ export const consumePaymentRequest = (
     }
     dispatch(setPaymentRequest(paymentDetails))
     dispatch(
-      navigationActions.navigate({ routeName: routeList.PaymentConsent }),
+      navigationActions.navigatorReset({ routeName: routeList.PaymentConsent }),
     )
   } catch (err) {
     dispatch(showErrorScreen(new Error('Consuming payment request failed.')))

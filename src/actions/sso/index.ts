@@ -101,11 +101,7 @@ export const consumeCredentialOfferRequest = (
   const { keyChainLib, identityWallet, registry } = backendMiddleware
 
   try {
-    await identityWallet.validateJWT(
-      credOfferRequest,
-      undefined,
-      registry,
-    )
+    await identityWallet.validateJWT(credOfferRequest, undefined, registry)
 
     const password = await keyChainLib.getPassword()
     const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
@@ -141,11 +137,7 @@ export const receiveExternalCredential = (
   const { identityWallet, registry } = backendMiddleware
 
   try {
-    await identityWallet.validateJWT(
-      credReceive,
-      undefined,
-      registry,
-    )
+    await identityWallet.validateJWT(credReceive, undefined, registry)
   } catch (error) {
     console.log(error)
     dispatch(
@@ -172,7 +164,9 @@ export const receiveExternalCredential = (
       dispatch(setReceivingCredential(providedCredentials))
       dispatch(accountActions.toggleLoading(false))
       dispatch(
-        navigationActions.navigate({ routeName: routeList.CredentialDialog }),
+        navigationActions.navigatorReset({
+          routeName: routeList.CredentialDialog,
+        }),
       )
     } else {
       dispatch(accountActions.toggleLoading(false))
@@ -266,7 +260,7 @@ export const consumeCredentialRequest = (
 
     dispatch(setCredentialRequest(summary))
     dispatch(accountActions.toggleLoading(false))
-    dispatch(navigationActions.navigate({ routeName: routeList.Consent }))
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Consent }))
   } catch (error) {
     console.log(error)
     dispatch(
