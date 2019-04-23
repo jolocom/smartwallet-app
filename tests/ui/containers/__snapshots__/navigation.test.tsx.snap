@@ -33,6 +33,7 @@ Array [
     }
   />,
   "",
+  "",
 ]
 `;
 
@@ -68,6 +69,7 @@ Array [
       }
     }
   />,
+  "",
   <BottomActionBar
     openScanner={[MockFunction]}
   />,
