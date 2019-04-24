@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Container, Block } from 'src/ui/structure/'
+import { Container } from 'src/ui/structure/'
 import { Button } from 'react-native-material-ui'
 import { navigationActions } from 'src/actions/'
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
 import I18n from 'src/locales/i18n'
@@ -23,40 +23,62 @@ interface Props extends ConnectProps {
   }
 }
 
+const debug = {
+  // borderColor: 'red',
+  // borderWidth: 1,
+}
+
 const styles = StyleSheet.create({
   containerStyle: {
     backgroundColor: JolocomTheme.primaryColorBlack,
-    display: 'flex',
+    justifyContent: 'space-around',
+  },
+  upperContainer: {
+    ...debug,
+    marginTop: 85,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  imagePlaceholder: {
+    backgroundColor: 'grey',
+    width: 160,
+    height: 160,
   },
   textBlock: {
-    flex: 0.6,
-    justifyContent: 'center',
+    ...debug,
+    marginTop: 20,
     alignItems: 'center',
   },
   errorTextHeader: {
     textAlign: 'center',
     color: JolocomTheme.primaryColorSand,
-    fontSize: 28,
+    fontSize: JolocomTheme.landingHeaderFontSize,
     fontFamily: JolocomTheme.contentFontFamily,
   },
   errorText: {
+    ...debug,
+    marginTop: 15,
     textAlign: 'center',
     color: JolocomTheme.primaryColorSand,
-    fontSize: 18,
+    fontSize: JolocomTheme.labelFontSize,
     fontFamily: JolocomTheme.contentFontFamily,
   },
   buttonBlock: {
-    flex: 0.1,
+    // flex: 0.1,
+    ...debug,
+    marginTop: 20,
     backgroundColor: JolocomTheme.primaryColorBlack,
   },
   buttonContainer: {
-    height: '100%',
-    width: '50%',
+    ...debug,
+    height: 48,
     borderRadius: 4,
     backgroundColor: JolocomTheme.primaryColorPurple,
   },
   buttonText: {
-    paddingVertical: 20,
+    ...debug,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorWhite,
     fontSize: JolocomTheme.headerFontSize,
@@ -65,16 +87,25 @@ const styles = StyleSheet.create({
 })
 
 export const ExceptionComponent: React.SFC<Props> = props => {
-  const errorText = I18n.t('There was an error with your request') + '.'
+  // const errorText = I18n.t('There was an error with your request') + '.'
+  const errorText = props.navigation.state.params.error.message
   console.error(props.navigation.state.params.error)
 
   return (
     <Container style={styles.containerStyle}>
-      <Block style={styles.textBlock}>
-        <Text style={styles.errorTextHeader}>{I18n.t('Oops!')}</Text>
-        <Text style={styles.errorText}> {I18n.t(errorText)} </Text>
-      </Block>
-      <Block style={styles.buttonBlock}>
+      <View style={styles.upperContainer}>
+        <View style={styles.imagePlaceholder} />
+        <View style={styles.textBlock}>
+          <Text style={styles.errorTextHeader}>{I18n.t('Damn!')}</Text>
+          {/* <Text style={styles.errorText}>{errorText}</Text> */}
+          <Text style={styles.errorText}>
+            An error message that is really, really, really long, but hopefully
+            only goes onto three lines and not four or five? These may be fairly
+            cryptic, kind of.
+          </Text>
+        </View>
+      </View>
+      <View style={styles.buttonBlock}>
         <Button
           raised
           onPress={() =>
@@ -85,9 +116,9 @@ export const ExceptionComponent: React.SFC<Props> = props => {
             text: styles.buttonText,
           }}
           upperCase={false}
-          text={I18n.t('Try again')}
+          text={I18n.t('Go back')}
         />
-      </Block>
+      </View>
     </Container>
   )
 }
