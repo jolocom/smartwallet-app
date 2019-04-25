@@ -108,7 +108,6 @@ export class AuthenticationConsentComponent extends React.Component<
         denyText={I18n.t('Deny')}
         handleConfirm={this.handleConfirm}
         handleDeny={() => this.props.cancelAuthenticationRequest()}
-        resetDeny
         verticalPadding={10}
       />
     )

@@ -10,7 +10,6 @@ interface Props {
   handleConfirm: () => void
   handleDeny: () => void
   disabled: boolean
-  resetDeny?: boolean
   verticalPadding?: number
 }
 
@@ -39,7 +38,7 @@ export const ButtonSection: React.SFC<Props> = props => {
       fontWeight: '100',
     },
     denyButton: {
-      width: props.resetDeny ? 'auto' : '40%',
+      width: 'auto',
     },
     confirmButton: {
       paddingHorizontal: 25,
