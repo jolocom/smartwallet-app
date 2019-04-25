@@ -8,6 +8,14 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
 import I18n from 'src/locales/i18n'
 
+const ERROR_MESSAGES = [I18n.t('Damn!'), I18n.t('Oh no.'), I18n.t('Uh oh.')]
+
+function getRandomErrorTitle() {
+  const length = ERROR_MESSAGES.length
+  const randomNum = Math.floor(Math.random() * length)
+  return ERROR_MESSAGES[randomNum]
+}
+
 interface ConnectProps {
   navigateBack: (routeName: routeList) => void
 }
@@ -46,7 +54,7 @@ const styles = StyleSheet.create({
   },
   textBlock: {
     ...debug,
-    marginTop: 20,
+    marginTop: 25,
     alignItems: 'center',
   },
   errorTextHeader: {
@@ -96,7 +104,7 @@ export const ExceptionComponent: React.SFC<Props> = props => {
       <View style={styles.upperContainer}>
         <View style={styles.imagePlaceholder} />
         <View style={styles.textBlock}>
-          <Text style={styles.errorTextHeader}>{I18n.t('Damn!')}</Text>
+          <Text style={styles.errorTextHeader}>{getRandomErrorTitle()}</Text>
           {/* <Text style={styles.errorText}>{errorText}</Text> */}
           <Text style={styles.errorText}>
             An error message that is really, really, really long, but hopefully
