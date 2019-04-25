@@ -8,6 +8,7 @@ interface Props {
   fieldValue: string
   fieldName: string
   handleFieldInput: (fieldValue: string, fieldName: string) => void
+  keyboardType?: string
 }
 
 interface State {
@@ -53,7 +54,7 @@ export class TextInputField extends React.Component<Props, State> {
   }
 
   render() {
-    const { fieldValue, fieldName, handleFieldInput } = this.props
+    const { fieldValue, fieldName, handleFieldInput, keyboardType } = this.props
     const labelText =
       this.state.focused || !fieldValue
         ? I18n.t(this.state.fieldNameDisplay)
@@ -73,6 +74,7 @@ export class TextInputField extends React.Component<Props, State> {
           onChangeText={(fieldValue: string) => {
             handleFieldInput(fieldValue, fieldName)
           }}
+          keyboardType={keyboardType}
         />
       </View>
     )

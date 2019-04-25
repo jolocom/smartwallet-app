@@ -12,6 +12,13 @@ export interface DecoratedClaims {
   issuer: string
   subject: string
   expires?: Date
+  keyboardType?:
+    | 'default'
+    | 'number-pad'
+    | 'decimal-pad'
+    | 'numeric'
+    | 'email-address'
+    | 'phone-pad'
 }
 
 export interface CategorizedClaims {
