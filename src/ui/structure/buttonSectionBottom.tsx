@@ -10,6 +10,7 @@ interface Props {
   handleConfirm: () => void
   handleDeny: () => void
   disabled: boolean
+  denyDisabled?: boolean
   resetDeny?: boolean
   verticalPadding?: number
 }
@@ -58,11 +59,19 @@ export const ButtonSection: React.SFC<Props> = props => {
     denyButtonText,
     confirmButtonText,
   } = styles
-  const { disabled, denyText, handleConfirm, handleDeny, confirmText } = props
+  const {
+    disabled,
+    denyDisabled,
+    denyText,
+    handleConfirm,
+    handleDeny,
+    confirmText,
+  } = props
 
   return (
     <Block style={flatten(buttonBlock)} flex={0.1}>
       <Button
+        disabled={denyDisabled}
         onPress={handleDeny}
         style={{
           container: flatten(denyButton),

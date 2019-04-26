@@ -171,7 +171,9 @@ export const receiveExternalCredential = (
       dispatch(setReceivingCredential(providedCredentials))
       dispatch(accountActions.toggleLoading(false))
       dispatch(
-        navigationActions.navigate({ routeName: routeList.CredentialDialog }),
+        navigationActions.navigatorReset({
+          routeName: routeList.CredentialDialog,
+        }),
       )
     } else {
       dispatch(accountActions.toggleLoading(false))
@@ -265,10 +267,11 @@ export const consumeCredentialRequest = (
 
     dispatch(setCredentialRequest(summary))
     dispatch(accountActions.toggleLoading(false))
-    dispatch(navigationActions.navigate({ routeName: routeList.Consent }))
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Consent }))
     dispatch(setDeepLinkLoading(false))
   } catch (error) {
     console.log(error)
+    dispatch(accountActions.toggleLoading(false))
     dispatch(
       showErrorScreen(new Error('Consumption of credential request failed')),
     )
@@ -336,6 +339,8 @@ export const sendCredentialResponse = (
     dispatch(cancelSSO())
   } catch (error) {
     // TODO: better error message
+    console.log(error)
+    dispatch(accountActions.toggleLoading(false))
     dispatch(
       showErrorScreen(
         new Error('The credential response could not be created'),
@@ -346,6 +351,7 @@ export const sendCredentialResponse = (
 
 export const cancelSSO = () => (dispatch: Dispatch<AnyAction>) => {
   dispatch(clearInteractionRequest())
+  dispatch(accountActions.toggleLoading(false))
   dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
 }
 
