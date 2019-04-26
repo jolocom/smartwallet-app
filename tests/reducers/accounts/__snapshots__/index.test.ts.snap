@@ -34,6 +34,7 @@ Object {
           "id": "",
           "issuer": "",
           "subject": "",
+          "keyboardType": "email-address",
         },
         Immutable.Map {
           "credentialType": "Mobile Phone",
@@ -43,6 +44,7 @@ Object {
           "id": "",
           "issuer": "",
           "subject": "",
+          "keyboardType": "phone-pad",
         },
         Immutable.Map {
           "credentialType": "Postal Address",
@@ -104,6 +106,7 @@ Object {
           "id": "",
           "issuer": "",
           "subject": "",
+          "keyboardType": "email-address",
         },
         Immutable.Map {
           "credentialType": "Mobile Phone",
@@ -113,6 +116,7 @@ Object {
           "id": "",
           "issuer": "",
           "subject": "",
+          "keyboardType": "phone-pad",
         },
         Immutable.Map {
           "credentialType": "Postal Address",

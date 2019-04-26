@@ -12,6 +12,7 @@ import { RootState } from 'src/reducers/'
 import { navigationActions, accountActions } from 'src/actions/'
 import { BottomActionBar } from './ui/generic/'
 import { routeList } from './routeList'
+import { LoadingSpinner } from 'src/ui/generic/loadingSpinner'
 
 const {
   createReduxBoundAddListener,
@@ -29,7 +30,9 @@ interface OwnProps {
   dispatch: (action: AnyAction) => void
 }
 
-interface Props extends ConnectProps, OwnProps {}
+interface Props extends ConnectProps, OwnProps {
+  deepLinkLoading: boolean
+}
 
 export class NavigatorContainer extends React.Component<Props> {
   private addListener: (
@@ -102,6 +105,7 @@ export class NavigatorContainer extends React.Component<Props> {
           addListener: this.addListener,
         })}
       />,
+      this.props.deepLinkLoading && <LoadingSpinner />,
       currentRoute === routeList.Home && (
         <BottomActionBar openScanner={this.props.openScanner} />
       ),
@@ -111,6 +115,7 @@ export class NavigatorContainer extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => ({
   navigation: state.navigation,
+  deepLinkLoading: state.sso.deepLinkLoading,
 })
 
 const mapDispatchToProps = (dispatch: Function) => ({

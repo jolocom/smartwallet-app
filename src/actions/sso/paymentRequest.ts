@@ -1,7 +1,7 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { Dispatch, AnyAction } from 'redux'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { navigationActions } from 'src/actions'
+import { navigationActions, ssoActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import { StatePaymentRequestSummary } from 'src/reducers/sso'
@@ -47,7 +47,9 @@ export const consumePaymentRequest = (
     dispatch(
       navigationActions.navigatorReset({ routeName: routeList.PaymentConsent }),
     )
+    dispatch(ssoActions.setDeepLinkLoading(false))
   } catch (err) {
+    dispatch(ssoActions.setDeepLinkLoading(false))
     dispatch(showErrorScreen(new Error('Consuming payment request failed.')))
   }
 }

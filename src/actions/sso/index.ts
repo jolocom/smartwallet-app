@@ -41,6 +41,11 @@ export const setReceivingCredential = (external: SignedCredential[]) => ({
   external,
 })
 
+export const setDeepLinkLoading = (value: boolean) => ({
+  type: 'SET_DEEP_LINK_LOADING',
+  value,
+})
+
 export const parseJWT = (encodedJwt: string) => async (
   dispatch: Dispatch<AnyAction>,
 ) => {
@@ -87,6 +92,7 @@ export const parseJWT = (encodedJwt: string) => async (
   } catch (err) {
     console.log('error: ', err)
     dispatch(accountActions.toggleLoading(false))
+    dispatch(setDeepLinkLoading(false))
     dispatch(showErrorScreen(err))
   }
 }
@@ -123,6 +129,7 @@ export const consumeCredentialOfferRequest = (
     dispatch(parseJWT(res.token))
   } catch (err) {
     dispatch(accountActions.toggleLoading(false))
+    dispatch(setDeepLinkLoading(false))
     dispatch(showErrorScreen(new Error('JWT Token parse failed')))
   }
 }
@@ -261,6 +268,7 @@ export const consumeCredentialRequest = (
     dispatch(setCredentialRequest(summary))
     dispatch(accountActions.toggleLoading(false))
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Consent }))
+    dispatch(setDeepLinkLoading(false))
   } catch (error) {
     console.log(error)
     dispatch(accountActions.toggleLoading(false))
