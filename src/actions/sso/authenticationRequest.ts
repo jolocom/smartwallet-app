@@ -1,7 +1,7 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { Dispatch, AnyAction } from 'redux'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { navigationActions } from 'src/actions'
+import { navigationActions, ssoActions } from 'src/actions'
 import { showErrorScreen } from 'src/actions/generic'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
@@ -39,8 +39,10 @@ export const consumeAuthenticationRequest = (
         routeName: routeList.AuthenticationConsent,
       }),
     )
+    dispatch(ssoActions.setDeepLinkLoading(false))
   } catch (err) {
     dispatch(showErrorScreen(new Error('Authentication request failed.')))
+    dispatch(ssoActions.setDeepLinkLoading(false))
   }
 }
 

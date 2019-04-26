@@ -58,6 +58,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
     return (
       <ButtonSection
         disabled={this.state.pending}
+        denyDisabled={this.state.pending}
         confirmText={I18n.t('Confirm')}
         denyText={I18n.t('Deny')}
         handleConfirm={this.handleConfirm}

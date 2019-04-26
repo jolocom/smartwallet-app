@@ -60,7 +60,6 @@ export const createIdentity = (encodedEntropy: string) => async (
   backendMiddleware: BackendMiddleware,
 ) => {
   const {
-    ethereumLib,
     encryptionLib,
     keyChainLib,
     storageLib,
@@ -82,13 +81,13 @@ export const createIdentity = (encodedEntropy: string) => async (
 
     dispatch(setLoadingMsg(loading.loadingStages[1]))
 
-    const ethAddr = ethereumLib.privKeyToEthAddress(
-      userVault.getPrivateKey({
+    await JolocomLib.util.fuelKeyWithEther(
+      userVault.getPublicKey({
         encryptionPass: password,
         derivationPath: JolocomLib.KeyTypes.ethereumKey,
       }),
     )
-    await ethereumLib.requestEther(ethAddr)
+
     dispatch(setLoadingMsg(loading.loadingStages[2]))
     const identityWallet = await registry.create(userVault, password)
 
