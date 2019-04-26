@@ -326,7 +326,7 @@ export const sendCredentialResponse = (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}${response.encode()}`)
+      return Linking.openURL(`${callbackURL}/${response.encode()}`)
       .then(() => dispatch(cancelSSO()))
     } else {
       return fetch(callbackURL, {
