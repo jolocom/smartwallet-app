@@ -28,6 +28,7 @@ const categorizedClaims: CategorizedClaims = {
       id: '',
       issuer: '',
       subject: '',
+      keyboardType: 'email-address',
     },
     {
       credentialType: 'Mobile Phone',
@@ -37,6 +38,7 @@ const categorizedClaims: CategorizedClaims = {
       id: '',
       issuer: '',
       subject: '',
+      keyboardType: 'phone-pad',
     },
     {
       credentialType: 'Postal Address',
