@@ -62,6 +62,7 @@ export const sendPaymentResponse = () => async (
   const { identityWallet } = backendMiddleware
   const {
     activePaymentRequest: { callbackURL, paymentRequest },
+    isDeepLinkInteraction
   } = getState().sso
   // add loading screen here
   try {
@@ -79,17 +80,16 @@ export const sendPaymentResponse = () => async (
       decodedPaymentRequest,
     )
 
-    if (callbackURL.includes('http')) {
-      await fetch(callbackURL, {
-        method: 'POST',
-        body: JSON.stringify({ token: response.encode() }),
-        headers: { 'Content-Type': 'application/json' },
-      })
+    if (isDeepLinkInteraction) {
+      return Linking.openURL(`${callbackURL}${response.encode()}`)
+      .then(() => dispatch(cancelSSO()))
     } else {
-      const url = callbackURL + response.encode()
-      Linking.openURL(url)
+      return fetch(callbackURL, {
+        method: 'POST',
+        body: JSON.stringify({token: response.encode()}),
+        headers: {'Content-Type': 'application/json'},
+      }).then(() => dispatch(cancelSSO()))
     }
-    dispatch(cancelSSO())
   } catch (err) {
     console.log(err)
     dispatch(showErrorScreen(new Error('Sending payment response failed.')))

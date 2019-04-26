@@ -286,7 +286,9 @@ export const sendCredentialResponse = (
   backendMiddleware: BackendMiddleware,
 ) => {
   const { storageLib, keyChainLib, encryptionLib, registry } = backendMiddleware
-  const { activeCredentialRequest } = getState().sso
+  const { activeCredentialRequest: {
+    callbackURL, requestJWT
+  }, isDeepLinkInteraction } = getState().sso
 
   try {
     const password = await keyChainLib.getPassword()
@@ -313,30 +315,26 @@ export const sendCredentialResponse = (
 
     const jsonCredentials = credentials.map(cred => cred.toJSON())
 
-    const request = JolocomLib.parse.interactionToken.fromJWT(
-      activeCredentialRequest.requestJWT,
-    )
-    const credentialResponse = await wallet.create.interactionTokens.response.share(
+    const request = JolocomLib.parse.interactionToken.fromJWT( requestJWT, )
+    const response = await wallet.create.interactionTokens.response.share(
       {
-        callbackURL: activeCredentialRequest.callbackURL,
+        callbackURL: callbackURL,
         suppliedCredentials: jsonCredentials,
       },
       password,
       request,
     )
 
-    if (activeCredentialRequest.callbackURL.includes('http')) {
-      await fetch(activeCredentialRequest.callbackURL, {
-        method: 'POST',
-        body: JSON.stringify({ token: credentialResponse.encode() }),
-        headers: { 'Content-Type': 'application/json' },
-      })
+    if (isDeepLinkInteraction) {
+      return Linking.openURL(`${callbackURL}${response.encode()}`)
+      .then(() => dispatch(cancelSSO()))
     } else {
-      const url =
-        activeCredentialRequest.callbackURL + credentialResponse.encode()
-      Linking.openURL(url)
+      return fetch(callbackURL, {
+        method: 'POST',
+        body: JSON.stringify({ token: response.encode() }),
+        headers: { 'Content-Type': 'application/json' },
+      }).then(() => dispatch(cancelSSO()))
     }
-    dispatch(cancelSSO())
   } catch (error) {
     // TODO: better error message
     console.log(error)
