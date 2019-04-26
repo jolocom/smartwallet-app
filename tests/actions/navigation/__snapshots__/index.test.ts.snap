@@ -7,6 +7,10 @@ Array [
     "value": true,
   },
   Object {
+    "type": "SET_DEEP_LINK_LOADING",
+    "value": true,
+  },
+  Object {
     "type": "DID_SET",
     "value": "did:jolo:mock",
   },
