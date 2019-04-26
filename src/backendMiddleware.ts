@@ -1,6 +1,5 @@
 import { JolocomLib } from 'jolocom-lib'
 import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
-import { EthereumLib, EthereumLibInterface } from 'src/lib/ethereum'
 import { EncryptionLib, EncryptionLibInterface } from 'src/lib/crypto'
 import { Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
@@ -15,7 +14,6 @@ import {jolocomContractsGateway} from 'jolocom-lib/js/contracts/contractsGateway
 
 export class BackendMiddleware {
   identityWallet!: IdentityWallet
-  ethereumLib: EthereumLibInterface
   storageLib: Storage
   encryptionLib: EncryptionLibInterface
   keyChainLib: KeyChainInterface
@@ -25,7 +23,6 @@ export class BackendMiddleware {
     fuelingEndpoint: string
     typeOrmConfig: ConnectionOptions
   }) {
-    this.ethereumLib = new EthereumLib(config.fuelingEndpoint)
     this.storageLib = new Storage(config.typeOrmConfig)
     this.encryptionLib = new EncryptionLib()
     this.keyChainLib = new KeyChain()

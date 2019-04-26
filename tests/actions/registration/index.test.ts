@@ -2,6 +2,8 @@ import { registrationActions } from 'src/actions'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import data from './data/mockRegistrationData'
+import { JolocomLib } from 'jolocom-lib';
+import { getJestConfig } from "ts-jest/dist/test-utils";
 const MockDate = require('mockdate')
 
 describe('Registration action creators', () => {
@@ -74,13 +76,9 @@ describe('Registration action creators', () => {
     it('should attempt to create an identity', async () => {
       MockDate.set(new Date(946681200000))
       const { getPasswordResult, cipher, entropy, identityWallet } = data
-
+      JolocomLib.util.fuelKeyWithEther = jest.fn();
       const mockBackend = {
         identityWallet,
-        ethereumLib: {
-          requestEther: jest.fn(),
-          privKeyToEthAddress: jest.fn().mockReturnValue('0x000test'),
-        },
         keyChainLib: {
           getPassword: jest.fn().mockResolvedValue(getPasswordResult),
         },
@@ -124,11 +122,7 @@ describe('Registration action creators', () => {
       expect(
         mockBackend.storageLib.store.derivedKey.mock.calls,
       ).toMatchSnapshot()
-      expect(
-        mockBackend.ethereumLib.privKeyToEthAddress.mock.calls,
-      ).toMatchSnapshot()
-      expect(mockBackend.ethereumLib.requestEther.mock.calls).toMatchSnapshot()
-
+      expect(JolocomLib.util.fuelKeyWithEther.mock.calls).toMatchSnapshot()
       MockDate.reset()
     })
 
