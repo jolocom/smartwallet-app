@@ -22,10 +22,10 @@ const navigationOptions = {
 }
 
 const navOptScreenWCancel = {
-  headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
+  headerStyle: { backgroundColor: JolocomTheme.primaryColorWhite },
   headerBackImage: backIcon,
-  headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
-  headerTintColor: { color: JolocomTheme.primaryColorWhite },
+  headerBackTitleStyle: { color: JolocomTheme.primaryColorPurple },
+  headerTintColor: JolocomTheme.primaryColorPurple,
 }
 
 const headerTitleStyle = {
@@ -37,9 +37,10 @@ const headerTitleStyle = {
 const commonNavigationOptions = {
   headerTitleStyle,
   headerStyle: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: JolocomTheme.primaryColorWhite,
+    borderBottomWidth: 0,
   },
-  headerTintColor: JolocomTheme.primaryColorWhite,
+  headerTintColor: JolocomTheme.primaryColorBlack,
 }
 
 export const HomeRoutes = TabNavigator(
@@ -56,7 +57,7 @@ export const HomeRoutes = TabNavigator(
   {
     tabBarOptions: {
       upperCaseLabel: false,
-      activeTintColor: JolocomTheme.primaryColorSand,
+      activeTintColor: JolocomTheme.primaryColorPurple,
       inactiveTintColor: JolocomTheme.primaryColorGrey,
       labelStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
@@ -64,10 +65,10 @@ export const HomeRoutes = TabNavigator(
         textAlign: 'center',
       },
       style: {
-        backgroundColor: JolocomTheme.primaryColorBlack,
+        backgroundColor: JolocomTheme.primaryColorWhite,
       },
       indicatorStyle: {
-        backgroundColor: JolocomTheme.primaryColorSand,
+        backgroundColor: JolocomTheme.primaryColorPurple,
       },
     },
     tabBarComponent: TabBarTop,
