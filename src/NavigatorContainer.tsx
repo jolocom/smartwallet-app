@@ -96,8 +96,19 @@ export class NavigatorContainer extends React.Component<Props> {
   render() {
     const { routes, index } = this.props.navigation
     const currentRoute = routes[index].routeName
+    const darkBackgroundPages = [
+      routeList.Landing,
+      routeList.PasswordEntry,
+      routeList.Entropy,
+      routeList.SeedPhrase,
+      routeList.Exception,
+      routeList.Loading,
+    ]
+    const barStyle = darkBackgroundPages.includes(currentRoute)
+      ? 'light-content'
+      : 'dark-content'
     return [
-      <StatusBar barStyle="light-content" />,
+      <StatusBar barStyle={barStyle} />,
       <Routes
         navigation={addNavigationHelpers({
           dispatch: this.props.dispatch,
