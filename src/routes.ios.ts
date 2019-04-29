@@ -87,26 +87,14 @@ export const Routes = StackNavigator({
     screen: CredentialReceive,
     navigationOptions: {
       headerTitle: I18n.t('Receiving new credential'),
-      headerTitleStyle: {
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
-      },
-      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-      headerTintColor: JolocomTheme.primaryColorWhite,
+      ...commonNavigationOptions,
     },
   },
   Consent: {
     screen: Consent,
     navigationOptions: {
       headerTitle: I18n.t('Share claims'),
-      headerTitleStyle: {
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
-      },
-      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-      headerTintColor: JolocomTheme.primaryColorWhite,
+      ...commonNavigationOptions,
     },
   },
   PaymentConsent: {
@@ -115,15 +103,7 @@ export const Routes = StackNavigator({
       headerBackImage: backIcon,
       headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
       headerTitle: I18n.t('Confirm payment'),
-      headerTitleStyle: {
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
-      },
-      headerStyle: {
-        backgroundColor: JolocomTheme.primaryColorBlack,
-      },
-      headerTintColor: JolocomTheme.primaryColorWhite,
+      ...commonNavigationOptions,
     },
   },
   AuthenticationConsent: {
@@ -132,15 +112,7 @@ export const Routes = StackNavigator({
       headerBackImage: backIcon,
       headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
       headerTitle: I18n.t('Authorization request'),
-      headerTitleStyle: {
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
-      },
-      headerStyle: {
-        backgroundColor: JolocomTheme.primaryColorBlack,
-      },
-      headerTintColor: JolocomTheme.primaryColorWhite,
+      ...commonNavigationOptions,
     },
   },
   Exception: { screen: Exception, navigationOptions },
