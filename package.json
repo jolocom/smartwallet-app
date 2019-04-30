@@ -142,7 +142,7 @@
     "react-navigation-redux-helpers": "^1.0.3",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0",
+    "redux-thunk": "^2.3.0",
     "sjcl": "^1.0.7",
     "sqlite3": "^4.0.0",
     "squel": "^5.12.1",

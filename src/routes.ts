@@ -1,6 +1,7 @@
 import { Platform } from 'react-native'
 import { StackNavigator, TabNavigator } from 'react-navigation'
-import { Claims, Interactions, Records, ClaimDetails } from 'src/ui/home/'
+import { Claims, Records, ClaimDetails } from 'src/ui/home/'
+import { Documents } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
 import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
@@ -12,6 +13,7 @@ import { Settings } from 'src/ui/settings'
 import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
+import { ExpiredDocumentsDetails } from './ui/documents/containers/expiredDocumentsDetails'
 import { routeList } from './routeList'
 
 import {
@@ -89,7 +91,7 @@ export const BottomNavRoutes = TabNavigator(
       }),
     },
     [routeList.Documents]: {
-      screen: Interactions,
+      screen: Documents,
       navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('Documents'),
@@ -191,6 +193,13 @@ export const Routes = StackNavigator({
   [routeList.ClaimDetails]: {
     screen: ClaimDetails,
     navigationOptions: () => navOptScreenWCancel,
+  },
+  [routeList.ExpiredDetails]: {
+    screen: ExpiredDocumentsDetails,
+    navigationOptions: () => ({
+      ...navOptScreenWCancel,
+      headerTitleStyle,
+    }),
   },
   [routeList.Exception]: { screen: Exception, navigationOptions },
 })
