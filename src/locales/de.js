@@ -29,8 +29,6 @@ export default {
     "Keep all your data with you in one place, available at any time": "Bewahren Sie alle Ihre Daten an einem Ort auf, jederzeit verfügbar",
     "Track where you sign in to services": "Verfolgen Sie Ihr Anmeldeverhalten",
     "Get started": "Loslegen",
-    "For security purposes, we need some randomness": "Aus Sicherheitsgründen brauchen wir zufällig erzeugte Daten",
-    "Please tap the screen and draw on it randomly": "Tippen Sie auf den Bildschirm und zeichnen Sie drauf los",
     "Continue": "Fortsetzen",
     "Write these words down on an analog and secure place": "Schreiben Sie diese Wörter an einem analogen und sicheren Ort auf",
     "Without these words, you cannot access your wallet again": "Ohne diese Wörter können Sie nicht mehr auf Ihr SmartWallet zugreifen",

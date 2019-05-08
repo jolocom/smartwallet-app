@@ -8,16 +8,6 @@ import { getJestConfig } from 'ts-jest/dist/test-utils'
 const MockDate = require('mockdate')
 
 describe('Registration action creators', () => {
-  describe('submitEntropy', () => {
-    it('should correctly navigate to route and provide the entropy', () => {
-      const action = registrationActions.submitEntropy('mockEntropy')
-      const mockStore = configureStore([thunk])({})
-
-      action(mockStore.dispatch)
-      expect(mockStore.getActions()).toMatchSnapshot()
-    })
-  })
-
   describe('startRegistration', () => {
     const mockGetState = () => {}
 
