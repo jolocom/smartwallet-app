@@ -6,7 +6,6 @@ import { AnyAction, Dispatch } from 'redux'
 import { ssoActions } from 'src/actions/'
 import { setDid, toggleLoading } from '../account'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { instantiateIdentityWallet } from 'src/lib/util'
 import { setDeepLinkLoading } from '../sso'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
@@ -33,7 +32,7 @@ export const handleDeepLink = (url: string) => async (
   dispatch(toggleLoading(true))
   const route: string = url.replace(/.*?:\/\//g, '')
   const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ''
-  const routeName = route!.split('/')[0]
+  const routeName = route.split('/')[0]
 
   if (
     routeName === 'consent' ||
@@ -49,7 +48,7 @@ export const handleDeepLink = (url: string) => async (
     }
 
     dispatch(setDid(personas[0].did))
-    await instantiateIdentityWallet(backendMiddleware)
+    // await instantiateIdentityWallet(backendMiddleware)
     dispatch(ssoActions.parseJWT(params))
   }
 }

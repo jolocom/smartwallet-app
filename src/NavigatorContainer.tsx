@@ -9,7 +9,7 @@ import { BackHandler, Linking, Platform, StatusBar } from 'react-native'
 import { AnyAction } from 'redux'
 import { Routes } from 'src/routes'
 import { RootState } from 'src/reducers/'
-import { navigationActions, accountActions } from 'src/actions/'
+import { navigationActions, accountActions, genericActions } from 'src/actions/'
 import { BottomActionBar } from './ui/generic/'
 import { routeList } from './routeList'
 import { LoadingSpinner } from 'src/ui/generic/loadingSpinner'
@@ -24,6 +24,7 @@ interface ConnectProps {
   goBack: () => void
   handleDeepLink: (url: string) => void
   checkIfAccountExists: () => void
+  initApp: () => Promise<void>
 }
 
 interface OwnProps {
@@ -45,7 +46,8 @@ export class NavigatorContainer extends React.Component<Props> {
     this.addListener = createReduxBoundAddListener('root')
   }
 
-  UNSAFE_componentWillMount() {
+  async UNSAFE_componentWillMount() {
+    await this.props.initApp()
     BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
     if (Platform.OS === 'android') {
       Linking.getInitialURL().then((url: string) => {
@@ -127,6 +129,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
       navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
     ),
   checkIfAccountExists: () => dispatch(accountActions.checkIdentityExists()),
+  initApp: async () => await dispatch(genericActions.initApp()),
 })
 
 export const Navigator = connect(

@@ -1,11 +1,10 @@
-import { claimsMetadata, JolocomLib } from 'jolocom-lib'
+import { claimsMetadata } from 'jolocom-lib'
 import {
   uiCategoryByCredentialType,
   Categories,
   uiCredentialTypeByType,
 } from './categories'
 import { BaseMetadata } from 'cred-types-jolocom-core'
-import { BackendMiddleware } from 'src/backendMiddleware'
 
 export const getClaimMetadataByCredentialType = (
   type: string,
@@ -59,22 +58,3 @@ export const compareDates = (date1: Date, date2: Date): number =>
       Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate())) /
       (1000 * 60 * 60 * 24),
   )
-
-export const instantiateIdentityWallet = async (
-  backendMiddleware: BackendMiddleware,
-) => {
-  const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
-
-  const password = await keyChainLib.getPassword()
-  const decryptedSeed = encryptionLib.decryptWithPass({
-    cipher: await storageLib.get.encryptedSeed(),
-    pass: password,
-  })
-
-  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-  const userVault = new JolocomLib.KeyProvider(
-    Buffer.from(decryptedSeed, 'hex'),
-    password,
-  )
-  return await backendMiddleware.setIdentityWallet(userVault, password)
-}

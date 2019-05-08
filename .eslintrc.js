@@ -68,5 +68,6 @@ module.exports = {
     // use ES6-style imports instead
     '@typescript-eslint/no-triple-slash-reference': ['error'],
     '@typescript-eslint/no-var-requires': ['off'],
+    '@typescript-eslint/no-use-before-define': ['off']
   },
 }

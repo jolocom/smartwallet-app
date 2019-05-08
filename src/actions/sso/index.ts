@@ -20,7 +20,6 @@ import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentials
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { getIssuerPublicKey } from 'jolocom-lib/js/utils/helper'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 import { consumePaymentRequest } from './paymentRequest'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { consumeAuthenticationRequest } from './authenticationRequest'
@@ -285,24 +284,11 @@ export const sendCredentialResponse = (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const { storageLib, keyChainLib, encryptionLib, registry } = backendMiddleware
+  const { storageLib, keyChainLib, identityWallet } = backendMiddleware
   const { activeCredentialRequest } = getState().sso
 
   try {
     const password = await keyChainLib.getPassword()
-    const decryptedSeed = encryptionLib.decryptWithPass({
-      cipher: await storageLib.get.encryptedSeed(),
-      pass: password,
-    })
-    const userVault = new SoftwareKeyProvider(
-      Buffer.from(decryptedSeed, 'hex'),
-      password,
-    )
-
-    const wallet = await registry.authenticate(userVault, {
-      derivationPath: KeyTypes.jolocomIdentityKey,
-      encryptionPass: password,
-    })
 
     const credentials = await Promise.all(
       selectedCredentials.map(
@@ -316,7 +302,7 @@ export const sendCredentialResponse = (
     const request = JolocomLib.parse.interactionToken.fromJWT(
       activeCredentialRequest.requestJWT,
     )
-    const credentialResponse = await wallet.create.interactionTokens.response.share(
+    const credentialResponse = await identityWallet.create.interactionTokens.response.share(
       {
         callbackURL: activeCredentialRequest.callbackURL,
         suppliedCredentials: jsonCredentials,

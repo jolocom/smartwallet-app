@@ -8,9 +8,9 @@ import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
-  instantiateIdentityWallet,
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
+import { JolocomLib } from 'jolocom-lib'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -42,17 +42,29 @@ export const checkIdentityExists = () => async (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const { storageLib } = backendMiddleware
-
   try {
-    const personas = await storageLib.get.persona()
-    if (!personas.length) {
+    const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
+    const encryptedEntropy = await storageLib.get.encryptedSeed()
+    if (!encryptedEntropy) {
       dispatch(toggleLoading(false))
+      dispatch(
+        navigationActions.navigatorReset({ routeName: routeList.Landing }),
+      )
       return
     }
-
-    dispatch(setDid(personas[0].did))
-    await instantiateIdentityWallet(backendMiddleware)
+    const password = await keyChainLib.getPassword()
+    const decryptedSeed = encryptionLib.decryptWithPass({
+      cipher: encryptedEntropy,
+      pass: password,
+    })
+    // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
+    const userVault = new JolocomLib.KeyProvider(
+      Buffer.from(decryptedSeed, 'hex'),
+      password,
+    )
+    await backendMiddleware.setIdentityWallet(userVault, password)
+    const identityWallet = backendMiddleware.identityWallet
+    dispatch(setDid(identityWallet.identity.did))
 
     dispatch(toggleLoading(false))
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
@@ -60,18 +72,6 @@ export const checkIdentityExists = () => async (
     if (err.message.indexOf('no such table') === 0) {
       return
     }
-    dispatch(genericActions.showErrorScreen(err))
-  }
-}
-
-export const setIdentityWallet = () => async (
-  dispatch: Dispatch<AnyAction>,
-  getState: Function,
-  backendMiddleware: BackendMiddleware,
-) => {
-  try {
-    await instantiateIdentityWallet(backendMiddleware)
-  } catch (err) {
     dispatch(genericActions.showErrorScreen(err))
   }
 }
