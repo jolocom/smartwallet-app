@@ -4,9 +4,10 @@ import {
 } from 'react-navigation'
 import { AnyAction, Dispatch } from 'redux'
 import { ssoActions } from 'src/actions/'
-import { setDid, toggleLoading } from '../account'
+import { toggleLoading } from '../account'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { setDeepLinkLoading } from '../sso'
+import { routeList } from 'src/routeList'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
   NavigationActions.navigate(options)
@@ -21,8 +22,8 @@ export const navigatorReset = (newScreen: NavigationNavigateActionPayload) =>
 
 /**
  * The function that parses a deep link to get the route name and params
- * It then matches the route name and dispatches a correcponding action
- * @param url - a deep link string with the following schemat: appName://routeName/params
+ * It then matches the route name and dispatches a corresponding action
+ * @param url - a deep link string with the following schema: appName://routeName/params
  */
 export const handleDeepLink = (url: string) => async (
   dispatch: Dispatch<AnyAction>,
@@ -39,16 +40,14 @@ export const handleDeepLink = (url: string) => async (
     routeName === 'payment' ||
     routeName === 'authenticate'
   ) {
-    dispatch(setDeepLinkLoading(true))
-    const personas = await backendMiddleware.storageLib.get.persona()
-
-    if (!personas.length) {
+    // The identityWallet is initialised before the deep link is handled.
+    if (!backendMiddleware.identityWallet) {
       dispatch(toggleLoading(false))
+      dispatch(navigatorReset({ routeName: routeList.Landing }))
       return
     }
 
-    dispatch(setDid(personas[0].did))
-    // await instantiateIdentityWallet(backendMiddleware)
+    dispatch(setDeepLinkLoading(true))
     dispatch(ssoActions.parseJWT(params))
   }
 }

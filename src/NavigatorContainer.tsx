@@ -5,7 +5,7 @@ import {
   NavigationEventCallback,
 } from 'react-navigation'
 import { connect } from 'react-redux'
-import { BackHandler, Linking, Platform, StatusBar } from 'react-native'
+import { BackHandler, Linking, StatusBar } from 'react-native'
 import { AnyAction } from 'redux'
 import { Routes } from 'src/routes'
 import { RootState } from 'src/reducers/'
@@ -46,28 +46,16 @@ export class NavigatorContainer extends React.Component<Props> {
     this.addListener = createReduxBoundAddListener('root')
   }
 
-  async UNSAFE_componentWillMount() {
+  async componentDidMount() {
     await this.props.initApp()
-    BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
-    if (Platform.OS === 'android') {
-      Linking.getInitialURL().then((url: string) => {
-        if (!url) {
-          this.props.checkIfAccountExists()
-        } else {
-          this.props.handleDeepLink(url)
-        }
-      })
-    } else {
-      Linking.addEventListener('url', this.handleOpenURL)
-      // TODO: test with deep linking on ios
-      Linking.getInitialURL().then((url: string) => {
-        if (!url) {
-          this.props.checkIfAccountExists()
-        } else {
-          this.props.handleDeepLink(url)
-        }
-      })
+    await this.props.checkIfAccountExists()
+    const url = await Linking.getInitialURL()
+    if (url) {
+      this.props.handleDeepLink(url)
     }
+
+    Linking.addEventListener('url', this.handleOpenURL)
+    BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
   }
 
   componentWillUnmount() {
