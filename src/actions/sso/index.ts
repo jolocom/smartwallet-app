@@ -318,7 +318,7 @@ export const sendCredentialResponse = (
     const request = JolocomLib.parse.interactionToken.fromJWT( requestJWT, )
     const response = await wallet.create.interactionTokens.response.share(
       {
-        callbackURL: callbackURL,
+        callbackURL,
         suppliedCredentials: jsonCredentials,
       },
       password,
