@@ -7,13 +7,16 @@ import {
 import { BaseMetadata } from 'cred-types-jolocom-core'
 import { BackendMiddleware } from 'src/backendMiddleware'
 
+import { NativeModules } from 'react-native'
+// this comes from 'react-native-randombytes'
+const { RNRandomBytes } = NativeModules
+
 export const getClaimMetadataByCredentialType = (
   type: string,
 ): BaseMetadata => {
   const uiType = Object.keys(uiCredentialTypeByType).find(
     item => uiCredentialTypeByType[item] === type,
   )
-
   const relevantType = Object.keys(claimsMetadata).find(
     key => claimsMetadata[key].type[1] === uiType,
   )
@@ -77,4 +80,15 @@ export const instantiateIdentityWallet = async (
     password,
   )
   return await backendMiddleware.setIdentityWallet(userVault, password)
+}
+
+export function generateSecureRandomBytesBase64(
+  length: number,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    RNRandomBytes.randomBytes(length, (err: string, bytesAsBase64: string) => {
+      if (err) reject(err)
+      else resolve(bytesAsBase64)
+    })
+  })
 }
