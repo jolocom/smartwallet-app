@@ -6,7 +6,7 @@ import { showErrorScreen } from 'src/actions/generic'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { routeList } from 'src/routeList'
-import { cancelSSO } from '.'
+import {cancelSSO, clearInteractionRequest} from '.'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 
@@ -83,6 +83,7 @@ export const sendAuthenticationResponse = () => async (
     }
   } catch (err) {
     console.log(err)
+    dispatch(clearInteractionRequest())
     dispatch(showErrorScreen(new Error('Sending payment response failed.')))
   }
 }

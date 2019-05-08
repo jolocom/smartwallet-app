@@ -8,7 +8,7 @@ import { StatePaymentRequestSummary } from 'src/reducers/sso'
 import { showErrorScreen } from 'src/actions/generic'
 import { JolocomLib } from 'jolocom-lib'
 import { Linking } from 'react-native'
-import { cancelSSO } from 'src/actions/sso'
+import {cancelSSO, clearInteractionRequest} from 'src/actions/sso'
 import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
@@ -92,6 +92,7 @@ export const sendPaymentResponse = () => async (
     }
   } catch (err) {
     console.log(err)
+    dispatch(clearInteractionRequest())
     dispatch(showErrorScreen(new Error('Sending payment response failed.')))
   }
 }
