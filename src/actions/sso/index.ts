@@ -41,6 +41,11 @@ export const setReceivingCredential = (external: SignedCredential[]) => ({
   external,
 })
 
+export const setDeepLinkLoading = (value: boolean) => ({
+  type: 'SET_DEEP_LINK_LOADING',
+  value,
+})
+
 export const parseJWT = (encodedJwt: string) => async (
   dispatch: Dispatch<AnyAction>,
 ) => {
@@ -87,6 +92,7 @@ export const parseJWT = (encodedJwt: string) => async (
   } catch (err) {
     console.log('error: ', err)
     dispatch(accountActions.toggleLoading(false))
+    dispatch(setDeepLinkLoading(false))
     dispatch(showErrorScreen(err))
   }
 }
@@ -101,11 +107,7 @@ export const consumeCredentialOfferRequest = (
   const { keyChainLib, identityWallet, registry } = backendMiddleware
 
   try {
-    await identityWallet.validateJWT(
-      credOfferRequest,
-      undefined,
-      registry,
-    )
+    await identityWallet.validateJWT(credOfferRequest, undefined, registry)
 
     const password = await keyChainLib.getPassword()
     const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
@@ -127,6 +129,7 @@ export const consumeCredentialOfferRequest = (
     dispatch(parseJWT(res.token))
   } catch (err) {
     dispatch(accountActions.toggleLoading(false))
+    dispatch(setDeepLinkLoading(false))
     dispatch(showErrorScreen(new Error('JWT Token parse failed')))
   }
 }
@@ -141,11 +144,7 @@ export const receiveExternalCredential = (
   const { identityWallet, registry } = backendMiddleware
 
   try {
-    await identityWallet.validateJWT(
-      credReceive,
-      undefined,
-      registry,
-    )
+    await identityWallet.validateJWT(credReceive, undefined, registry)
   } catch (error) {
     console.log(error)
     dispatch(
@@ -172,7 +171,9 @@ export const receiveExternalCredential = (
       dispatch(setReceivingCredential(providedCredentials))
       dispatch(accountActions.toggleLoading(false))
       dispatch(
-        navigationActions.navigate({ routeName: routeList.CredentialDialog }),
+        navigationActions.navigatorReset({
+          routeName: routeList.CredentialDialog,
+        }),
       )
     } else {
       dispatch(accountActions.toggleLoading(false))
@@ -266,9 +267,11 @@ export const consumeCredentialRequest = (
 
     dispatch(setCredentialRequest(summary))
     dispatch(accountActions.toggleLoading(false))
-    dispatch(navigationActions.navigate({ routeName: routeList.Consent }))
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Consent }))
+    dispatch(setDeepLinkLoading(false))
   } catch (error) {
     console.log(error)
+    dispatch(accountActions.toggleLoading(false))
     dispatch(
       showErrorScreen(new Error('Consumption of credential request failed')),
     )
@@ -336,6 +339,8 @@ export const sendCredentialResponse = (
     dispatch(cancelSSO())
   } catch (error) {
     // TODO: better error message
+    console.log(error)
+    dispatch(accountActions.toggleLoading(false))
     dispatch(
       showErrorScreen(
         new Error('The credential response could not be created'),
@@ -346,6 +351,7 @@ export const sendCredentialResponse = (
 
 export const cancelSSO = () => (dispatch: Dispatch<AnyAction>) => {
   dispatch(clearInteractionRequest())
+  dispatch(accountActions.toggleLoading(false))
   dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
 }
 
