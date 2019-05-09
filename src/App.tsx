@@ -8,6 +8,8 @@ const { ThemeProvider } = require('react-native-material-ui')
 const assign = require('object.assign/implementation')
 Object.assign = assign
 
+console.disableYellowBox = true
+
 const App = () => {
   const store = initStore()
   return (
