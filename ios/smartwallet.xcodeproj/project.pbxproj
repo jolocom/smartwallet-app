@@ -945,6 +945,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				de,
@@ -1622,6 +1623,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jolocom.wallet;
 				PRODUCT_NAME = smartwallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1655,6 +1657,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jolocom.wallet;
 				PRODUCT_NAME = smartwallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

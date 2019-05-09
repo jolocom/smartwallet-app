@@ -339,6 +339,7 @@ export const sendCredentialResponse = (
     }
   } catch (error) {
     // TODO: better error message
+    dispatch(clearInteractionRequest())
     console.log(error)
     dispatch(accountActions.toggleLoading(false))
     dispatch(
