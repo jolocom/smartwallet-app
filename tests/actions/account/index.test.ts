@@ -56,7 +56,7 @@ describe('Account action creators', () => {
 
     // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
-
+    expect(backendMiddleware.setIdentityWallet).toHaveBeenCalledTimes(1)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
