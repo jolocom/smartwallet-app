@@ -2,8 +2,8 @@ import { registrationActions } from 'src/actions'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import data from './data/mockRegistrationData'
-import { JolocomLib } from 'jolocom-lib';
-import { getJestConfig } from "ts-jest/dist/test-utils";
+import { JolocomLib } from 'jolocom-lib'
+import { getJestConfig } from 'ts-jest/dist/test-utils'
 const MockDate = require('mockdate')
 
 describe('Registration action creators', () => {
@@ -73,12 +73,24 @@ describe('Registration action creators', () => {
   })
 
   describe('createIdentity and recoverIdentity', () => {
-    const { getPasswordResult, cipher, entropy, mnemonic, identityWallet } = data
+    const {
+      getPasswordResult,
+      cipher,
+      entropy,
+      mnemonic,
+      identityWallet,
+    } = data
     let mockBackend
     beforeAll(() => {
       MockDate.set(new Date(946681200000))
-      const { getPasswordResult, cipher, entropy, mnemonic, identityWallet } = data
-      JolocomLib.util.fuelKeyWithEther = jest.fn();
+      const {
+        getPasswordResult,
+        cipher,
+        entropy,
+        mnemonic,
+        identityWallet,
+      } = data
+      JolocomLib.util.fuelKeyWithEther = jest.fn()
       mockBackend = {
         identityWallet,
         keyChainLib: {
@@ -91,7 +103,6 @@ describe('Registration action creators', () => {
         storageLib: {
           store: {
             persona: jest.fn(),
-            derivedKey: jest.fn(),
             encryptedSeed: jest.fn(),
           },
           get: {
@@ -101,6 +112,7 @@ describe('Registration action creators', () => {
         },
         registry: {
           create: () => identityWallet,
+          authenticate: () => identityWallet,
         },
         setIdentityWallet: jest.fn(() => Promise.resolve()),
       }
@@ -109,8 +121,9 @@ describe('Registration action creators', () => {
         // clear call counter of mock functions
         jest.clearAllMocks()
       })
-      it('should attempt to create an identity', async () => {
+    })
 
+    it('should attempt to create an identity', async () => {
       const mockStore = configureStore([thunk.withExtraArgument(mockBackend)])(
         {},
       )
@@ -127,27 +140,27 @@ describe('Registration action creators', () => {
         mockBackend.encryptionLib.encryptWithPass.mock.calls,
       ).toMatchSnapshot()
       expect(mockBackend.storageLib.store.persona.mock.calls).toMatchSnapshot()
-      expect(
-        mockBackend.storageLib.store.derivedKey.mock.calls,
-      ).toMatchSnapshot()
       expect(JolocomLib.util.fuelKeyWithEther.mock.calls).toMatchSnapshot()
       MockDate.reset()
     })
+
     it('should attempt to recover an identity', async () => {
+      const mockStore = configureStore([thunk.withExtraArgument(mockBackend)])(
+        {},
+      )
 
-      const mockStore = configureStore([thunk.withExtraArgument(mockBackend)])({})
-
-      const mockGetState = () => { }
+      const mockGetState = () => {}
 
       const asyncAction = registrationActions.recoverIdentity(mnemonic)
       await asyncAction(mockStore.dispatch, mockGetState, mockBackend)
 
       expect(mockStore.getActions()).toMatchSnapshot()
 
-      expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
-      expect(mockBackend.encryptionLib.encryptWithPass.mock.calls).toMatchSnapshot()
+      expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(2)
+      expect(
+        mockBackend.encryptionLib.encryptWithPass.mock.calls,
+      ).toMatchSnapshot()
       expect(mockBackend.storageLib.store.persona.mock.calls).toMatchSnapshot()
-      expect(mockBackend.storageLib.store.derivedKey.mock.calls).toMatchSnapshot()
 
       MockDate.reset()
     })

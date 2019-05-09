@@ -10,7 +10,7 @@ Array [
   },
   Object {
     "type": "DID_SET",
-    "value": undefined,
+    "value": "did:jolo:mockdid",
   },
   Object {
     "type": "SET_NEXT_LOADING_STAGE",
@@ -48,15 +48,13 @@ Array [
   Array [
     Object {
       "controllingKeyPath": "m/73'/0'/0'/0",
-      "did": undefined,
+      "did": "did:jolo:mockdid",
     },
   ],
 ]
 `;
 
-exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 4`] = `Array []`;
-
-exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 5`] = `
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 4`] = `
 Array [
   Array [
     Object {
@@ -101,26 +99,28 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity and recoverIdentity should attempt to create an identity 6`] = `
-Array [
-  Array [
-    "0x000test",
-  ],
-]
-`;
-
 exports[`Registration action creators createIdentity and recoverIdentity should attempt to recover an identity 1`] = `
 Array [
   Object {
     "type": "SET_NEXT_LOADING_STAGE",
   },
   Object {
-    "params": Object {
-      "error": [TypeError: registry.authenticate is not a function],
-      "returnTo": "Landing",
-    },
-    "routeName": "Exception",
-    "type": "Navigation/NAVIGATE",
+    "type": "DID_SET",
+    "value": "did:jolo:mockdid",
+  },
+  Object {
+    "type": "SET_NEXT_LOADING_STAGE",
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;
@@ -136,7 +136,16 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity and recoverIdentity should attempt to recover an identity 3`] = `Array []`;
+exports[`Registration action creators createIdentity and recoverIdentity should attempt to recover an identity 3`] = `
+Array [
+  Array [
+    Object {
+      "controllingKeyPath": "m/73'/0'/0'/0",
+      "did": "did:jolo:mockdid",
+    },
+  ],
+]
+`;
 
 exports[`Registration action creators createIdentity and recoverIdentity should attempt to recover an identity 4`] = `Array []`;
 
@@ -188,9 +197,9 @@ Array [
   Object {
     "type": "SET_LOADING_STAGES",
     "value": Array [
-      "Encrypting and storing data locally",
       "Fueling with ether",
       "Registering decentralized identity",
+      "Encrypting and storing data locally",
       "Preparing launch",
     ],
   },

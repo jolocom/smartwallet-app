@@ -64,7 +64,6 @@ export const instantiateIdentityWallet = async (
   backendMiddleware: BackendMiddleware,
 ) => {
   const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
-
   const password = await keyChainLib.getPassword()
   const decryptedSeed = encryptionLib.decryptWithPass({
     cipher: await storageLib.get.encryptedSeed(),
