@@ -4,7 +4,6 @@ import thunk from 'redux-thunk'
 import data from './data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import * as util from 'src/lib/util'
-import { getJestConfig } from 'ts-jest/dist/test-utils'
 const MockDate = require('mockdate')
 
 describe('Registration action creators', () => {
@@ -12,8 +11,8 @@ describe('Registration action creators', () => {
     const mockGetState = () => {}
 
     it('should save a password and initiate the registration process', async () => {
-      const randomPassword = 'hunter2'
-      util.generateSecureRandomBytesBase64 = () => randomPassword
+      const randomPassword = 'hunter0='
+      util.generateSecureRandomBytes = () => Buffer.from(randomPassword, 'base64')
       const mockStore = configureStore([thunk])({})
       const mockMiddleware = {
         keyChainLib: {
