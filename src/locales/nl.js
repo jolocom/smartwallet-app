@@ -32,11 +32,6 @@ export default {
     "For security purposes, we need some randomness": "Voor de veiligheid hebben we wat willekeur nodig",
     "Please tap the screen and draw on it randomly": "Tik op het scherm en teken er willekeurig op",
     "Continue": "Doorgaan",
-    "Set a password to encrypt your data on the device": "Gebruik een wachtwoord om uw gegevens op het apparaat te versleutelen",
-    "This password will be stored in your keychain": "Dit wachtwoord wordt opgeslagen in uw sleutelhanger",
-    "After setting it, please make sure you have passcode enabled": "Zorg er na het instellen voor, dat de toegangscode is ingeschakeld",
-    "Password": "Wachtwoord",
-    "Repeat password": "Herhaal wachtwoord",
     "Write these words down on an analog and secure place": "Schrijf deze woorden op een analoge en veilige plaats op",
     "Without these words, you cannot access your wallet again": "Zonder deze woorden heeft u geen toegang meer tot uw portefeuille",
     "Yes, I wrote it down": "Ja, ik heb het opgeschreven",
@@ -61,10 +56,5 @@ export default {
     "Postal Code": "Postcode",
     "City": "Stad",
     "Country": "Land",
-    "At least one number needed": "Minimaal één nummer vereist",
-    "At least one uppercase letter needed": "Minimaal één hoofdletter vereist",
-    "Passwords do not match": "De wachtwoorden komen niet overeen",
-    "No spaces allowed": "Spaties zijn niet toegestaan",
-    "At least 8 characters are required": "Minimaal 8 tekens gebruiken",
     "Your Jolocom Wallet": "Uw Jolocom Wallet"
 }

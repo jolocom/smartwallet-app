@@ -7,24 +7,12 @@ import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 const bip39 = require('bip39')
+import { generateSecureRandomBytes } from 'src/lib/util'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
   value: loadingMsg,
 })
-
-export const savePassword = (password: string) => async (
-  dispatch: Dispatch<AnyAction>,
-  getState: Function,
-  backendMiddleware: BackendMiddleware,
-) => {
-  try {
-    await backendMiddleware.keyChainLib.savePassword(password)
-    dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
-  } catch (err) {
-    dispatch(genericActions.showErrorScreen(err, routeList.Landing))
-  }
-}
 
 export const submitEntropy = (encodedEntropy: string) => (
   dispatch: Dispatch<AnyAction>,
@@ -42,12 +30,19 @@ export const submitEntropy = (encodedEntropy: string) => (
   }, 2000)
 }
 
-export const startRegistration = () => (dispatch: Dispatch<AnyAction>) => {
-  dispatch(
-    navigationActions.navigatorReset({
-      routeName: routeList.PasswordEntry,
-    }),
-  )
+export const startRegistration = () => async (
+  dispatch: Dispatch<AnyAction>,
+  getState: Function,
+  backendMiddleware: BackendMiddleware,
+) => {
+  try {
+    const randomPassword = await generateSecureRandomBytes(32)
+    await backendMiddleware.keyChainLib.savePassword(randomPassword.toString('base64'))
+
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
+  } catch (err) {
+    dispatch(genericActions.showErrorScreen(err, routeList.Landing))
+  }
 }
 
 export const finishRegistration = () => (dispatch: Dispatch<AnyAction>) => {
