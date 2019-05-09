@@ -8,12 +8,12 @@ describe('ClaimDetails container', () => {
       selected: {
         credentialType: 'Email',
         claimData: {
-          email: 'test@test.com'
-        }
-      }
+          email: 'test@test.com',
+        },
+      },
     },
     handleClaimInput: () => {},
-    saveClaim: () => {}
+    saveClaim: () => {},
   }
 
   it('mounts correctly and matches the snapshot', () => {

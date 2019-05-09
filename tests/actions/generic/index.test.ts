@@ -8,7 +8,7 @@ describe('Generic action creators', () => {
       const mockStore = configureStore([thunk])({})
       const mockError = {
         message: 'MOCK BAD ERROR',
-        stack: 'MOCK STACK TRACE'
+        stack: 'MOCK STACK TRACE',
       }
 
       const action = genericActions.showErrorScreen(mockError)

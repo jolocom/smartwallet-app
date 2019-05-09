@@ -35,6 +35,7 @@ Array [
     }
   />,
   "",
+  "",
 ]
 `;
 
@@ -72,6 +73,7 @@ Array [
       }
     }
   />,
+  "",
   <BottomActionBar
     key="2"
     openScanner={[MockFunction]}

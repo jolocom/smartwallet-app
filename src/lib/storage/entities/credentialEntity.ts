@@ -1,4 +1,10 @@
-import { ManyToOne, Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm/browser'
+import {
+  ManyToOne,
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm/browser'
 import { VerifiableCredentialEntity } from 'src/lib/storage/entities/verifiableCredentialEntity'
 import { Type, plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -38,11 +44,18 @@ export class CredentialEntity {
       throw new Error('Only entry in the claim is the id.')
     }
 
-    return convertClaimObjectToArray(credentialSection).map((el) => this.fromJSON(el))
+    return convertClaimObjectToArray(credentialSection).map(el =>
+      this.fromJSON(el),
+    )
   }
 }
 
-const convertClaimObjectToArray = (claimSection: IClaimSection): JsonAttributes[] =>
+const convertClaimObjectToArray = (
+  claimSection: IClaimSection,
+): JsonAttributes[] =>
   Object.keys(claimSection)
     .filter(key => key !== 'id')
-    .map(key => ({ propertyName: key, propertyValue: claimSection[key] as string }))
+    .map(key => ({
+      propertyName: key,
+      propertyValue: claimSection[key] as string,
+    }))

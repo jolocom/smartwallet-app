@@ -4,8 +4,6 @@ import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
-import { IpfsCustomConnector } from 'src/lib/ipfs'
-import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { KeyTypes } from "jolocom-lib/js/vaultedKeyProvider/types";
 import { EncryptionLibInterface } from "../../lib/crypto";
@@ -28,14 +26,16 @@ export const setLoadingStages = (value: string[]) => {
   }
 }
 
-export const savePassword = (password: string) => {
-  return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
-    try {
-      await backendMiddleware.keyChainLib.savePassword(password)
-      dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
-    } catch (err) {
-      dispatch(genericActions.showErrorScreen(err, routeList.Landing))
-    }
+export const savePassword = (password: string) => async (
+  dispatch: Dispatch<AnyAction>,
+  getState: Function,
+  backendMiddleware: BackendMiddleware,
+) => {
+  try {
+    await backendMiddleware.keyChainLib.savePassword(password)
+    dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
+  } catch (err) {
+    dispatch(genericActions.showErrorScreen(err, routeList.Landing))
   }
 }
 
@@ -49,19 +49,19 @@ export const inputSeedPhrase = () => {
   }
 }
 
-export const submitEntropy = (encodedEntropy: string) => {
-  return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(
-      navigationActions.navigatorReset({
-        routeName: routeList.Loading
-      })
+export const submitEntropy = (encodedEntropy: string) => (
+  dispatch: Dispatch<AnyAction>,
+) => {
+  dispatch(
+    navigationActions.navigatorReset({
+      routeName: routeList.Loading,
+    }),
     )
     dispatch(setLoadingStages(createIdentityStages))
 
-    setTimeout(() => {
-      dispatch(createIdentity(encodedEntropy))
-    }, 2000)
-  }
+  setTimeout(() => {
+    dispatch(createIdentity(encodedEntropy))
+  }, 2000)
 }
 
 export const submitSeedPhrase = (seedPhrase: string) => {
@@ -79,20 +79,16 @@ export const submitSeedPhrase = (seedPhrase: string) => {
   }
 }
 
-export const startRegistration = () => {
-  return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(
-      navigationActions.navigatorReset({
-        routeName: routeList.PasswordEntry
-      })
-    )
-  }
+export const startRegistration = () => (dispatch: Dispatch<AnyAction>) => {
+  dispatch(
+    navigationActions.navigatorReset({
+      routeName: routeList.PasswordEntry,
+    }),
+  )
 }
 
-export const finishRegistration = () => {
-  return (dispatch: Dispatch<AnyAction>) => {
-    dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
-  }
+export const finishRegistration = () => (dispatch: Dispatch<AnyAction>) => {
+  dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
 }
 
 export const recoverIdentity = (seedPhrase: string) => {
@@ -135,18 +131,20 @@ export const recoverIdentity = (seedPhrase: string) => {
 export const createIdentity = (encodedEntropy: string) => {
   return async (dispatch: Dispatch<AnyAction>, getState: Function, backendMiddleware: BackendMiddleware) => {
     const { ethereumLib, encryptionLib, keyChainLib, storageLib } = backendMiddleware
-  
+
     try {
       const password = await keyChainLib.getPassword()
-      
+
       const userVault = new SoftwareKeyProvider(Buffer.from(encodedEntropy, 'hex'), password)
 
-      dispatch(setNextLoadingStage())
+    dispatch(setNextLoadingStage())
 
-      const ethAddr = ethereumLib.privKeyToEthAddress(userVault.getPrivateKey({
+    await JolocomLib.util.fuelKeyWithEther(
+      userVault.getPublicKey({
         encryptionPass: password,
-        derivationPath: JolocomLib.KeyTypes.ethereumKey
-      }))
+        derivationPath: JolocomLib.KeyTypes.ethereumKey,
+      }),
+    )
 
       await ethereumLib.requestEther(ethAddr)
 

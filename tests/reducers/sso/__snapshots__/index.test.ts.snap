@@ -2,12 +2,35 @@
 
 exports[`sso reducer should handle the CLEAR_CREDENTIAL_REQUEST action  1`] = `
 Object {
+  "activeAuthenticationRequest": Object {
+    "callbackURL": "",
+    "description": "",
+    "requestJWT": "",
+    "requester": "",
+  },
   "activeCredentialRequest": undefined,
+  "activePaymentRequest": Object {
+    "amount": 0,
+    "callbackURL": "",
+    "description": "",
+    "paymentRequest": "",
+    "receiver": Object {
+      "address": "",
+      "did": "",
+    },
+  },
+  "deepLinkLoading": false,
 }
 `;
 
 exports[`sso reducer should handle the SET_CREDENTIAL_REQUEST action  1`] = `
 Object {
+  "activeAuthenticationRequest": Object {
+    "callbackURL": "",
+    "description": "",
+    "requestJWT": "",
+    "requester": "",
+  },
   "activeCredentialRequest": Object {
     "callbackUrl": "http://example.com/myendpoint/",
     "request": Array [
@@ -21,16 +44,44 @@ Object {
     ],
     "requester": "did:jolo:mock",
   },
+  "activePaymentRequest": Object {
+    "amount": 0,
+    "callbackURL": "",
+    "description": "",
+    "paymentRequest": "",
+    "receiver": Object {
+      "address": "",
+      "did": "",
+    },
+  },
+  "deepLinkLoading": false,
 }
 `;
 
 exports[`sso reducer should initialize correctly 1`] = `
 Object {
+  "activeAuthenticationRequest": Object {
+    "callbackURL": "",
+    "description": "",
+    "requestJWT": "",
+    "requester": "",
+  },
   "activeCredentialRequest": Object {
     "availableCredentials": Array [],
     "callbackURL": "",
     "requestJWT": "",
     "requester": "",
   },
+  "activePaymentRequest": Object {
+    "amount": 0,
+    "callbackURL": "",
+    "description": "",
+    "paymentRequest": "",
+    "receiver": Object {
+      "address": "",
+      "did": "",
+    },
+  },
+  "deepLinkLoading": false,
 }
 `;

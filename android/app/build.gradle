@@ -102,8 +102,8 @@ android {
         applicationId "com.jolocomwallet"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 11
-        versionName "1.2.0"
+        versionCode 15
+        versionName "1.4.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

@@ -28,33 +28,35 @@ const styles = StyleSheet.create({
     marginHorizontal: '5%',
     height: 26,
     fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily
+    fontFamily: JolocomTheme.contentFontFamily,
   },
   scrollComponent: {
-    width: '100%'
+    width: '100%',
   },
   scrollComponentLoading: {
     flexGrow: 1,
-    justifyContent: 'space-around'
-  }
+    justifyContent: 'space-around',
+  },
 })
 
 export class CredentialOverview extends React.Component<Props, State> {
   renderCredentialCard = (category: string): ReactNode => {
     const { onEdit, did, claimsState } = this.props
 
-    const categorizedCredentials = (claimsState.decoratedCredentials[category] || []).sort((a, b) =>
-      a.credentialType > b.credentialType ? 1 : -1
-    )
-    
+    const categorizedCredentials = (
+      claimsState.decoratedCredentials[category] || []
+    ).sort((a, b) => (a.credentialType > b.credentialType ? 1 : -1))
+
     return categorizedCredentials.map((claim: DecoratedClaims) => {
-      const filteredKeys = Object.keys(claim.claimData).filter(el => el !== 'id')
+      const filteredKeys = Object.keys(claim.claimData).filter(
+        el => el !== 'id',
+      )
       const captialized = filteredKeys.reduce(
         (acc, curr) => ({
           ...acc,
-          [prepareLabel(curr)]: claim.claimData[curr]
+          [prepareLabel(curr)]: claim.claimData[curr],
         }),
-        {}
+        {},
       )
       const selfSigned = claim.issuer === did
 
@@ -78,7 +80,7 @@ export class CredentialOverview extends React.Component<Props, State> {
 
     return [
       <Text key={category} style={styles.sectionHeader}>{I18n.t(category.toString())}</Text>,
-      this.renderCredentialCard(category)
+      this.renderCredentialCard(category),
     ]
   }
 
@@ -94,7 +96,10 @@ export class CredentialOverview extends React.Component<Props, State> {
 
     return (
       <Container style={{ padding: 0 }}>
-        <ScrollView style={scrollComponent} contentContainerStyle={loading ? scrollComponentLoading : {}}>
+        <ScrollView
+          style={scrollComponent}
+          contentContainerStyle={loading ? scrollComponentLoading : {}}
+        >
           {claimCategories.map(this.renderCredentialCategory)}
         </ScrollView>
       </Container>
@@ -102,13 +107,15 @@ export class CredentialOverview extends React.Component<Props, State> {
   }
 }
 
-const renderLoadingScreen = () => {
-  return (
-    <Block>
-      <loaders.RippleLoader size={500} strokeWidth={7} color={JolocomTheme.primaryColorPurple} />
-    </Block>
-  )
-}
+const renderLoadingScreen = () => (
+  <Block>
+    <loaders.RippleLoader
+      size={500}
+      strokeWidth={7}
+      color={JolocomTheme.primaryColorPurple}
+    />
+  </Block>
+)
 
 const collapsible = (claim: DecoratedClaims) => {
   const { credentialType, claimData } = claim

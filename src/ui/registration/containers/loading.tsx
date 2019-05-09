@@ -16,24 +16,22 @@ export interface ConnectProps {
   createIdentity: (encodedEntropy: string) => void
 }
 
-interface Props extends ConnectProps {
-}
+interface Props extends ConnectProps {}
 
-export interface State {
-}
+export interface State {}
 
 const styles = StyleSheet.create({
   label: {
     alignSelf: 'flex-start',
-    marginBottom: '10%'
+    marginBottom: '10%',
   },
   loadingMsg: {
     alignSelf: 'flex-end',
-    marginBottom: '-10%'
+    marginBottom: '-10%',
   },
   container: {
     backgroundColor: JolocomTheme.primaryColorBlack,
-    height: '100%'
+    height: '100%',
   },
   dotsContainer: {
     alignItems: 'center',
@@ -43,23 +41,23 @@ const styles = StyleSheet.create({
   dotActive: {
     marginRight: 8,
     marginLeft: 8,
-    color: JolocomTheme.primaryColorSand
+    color: JolocomTheme.primaryColorSand,
   },
   dotInactive: {
     marginRight: 5,
     marginLeft: 5,
-    color: JolocomTheme.primaryColorGrey
+    color: JolocomTheme.primaryColorGrey,
   },
   text: {
     color: JolocomTheme.primaryColorSand,
     fontSize: 20,
-    fontFamily: JolocomTheme.contentFontFamily
+    fontFamily: JolocomTheme.contentFontFamily,
   },
   smallText: {
     color: JolocomTheme.primaryColorSand,
     fontSize: 14,
-    fontFamily: JolocomTheme.contentFontFamily
-  }
+    fontFamily: JolocomTheme.contentFontFamily,
+  },
 })
 
 // TODO SFC
@@ -67,13 +65,23 @@ export class LoadingContainer extends React.Component<Props, State> {
   render() {
     const {loadingStage, loadingStages} = this.props;
     return (
-      <Container style={styles.container} >
-        <Block style={styles.label} >
-          <CenteredText style={styles.text} msg={ I18n.t('Give us a few moments') } />
-          <CenteredText style={styles.text} msg={ I18n.t('to set up your identity') } />
+      <Container style={styles.container}>
+        <Block style={styles.label}>
+          <CenteredText
+            style={styles.text}
+            msg={I18n.t('Give us a few moments')}
+          />
+          <CenteredText
+            style={styles.text}
+            msg={I18n.t('to set up your identity')}
+          />
         </Block>
         <Block>
-          <loaders.RippleLoader size={80} strokeWidth={4} color={JolocomTheme.spinnerColor} />
+          <loaders.RippleLoader
+            size={80}
+            strokeWidth={4}
+            color={JolocomTheme.spinnerColor}
+          />
         </Block>
         <Block style={styles.loadingMsg}>
           <View style={styles.dotsContainer}>
@@ -89,7 +97,10 @@ export class LoadingContainer extends React.Component<Props, State> {
             }) }
           </View>
           <View>
-            <CenteredText style={styles.smallText} msg={loadingStages[loadingStage]} />
+            <CenteredText
+              style={styles.smallText}
+              msg={loadingStages[loadingStage]}
+            />
           </View>
         </Block>
       </Container>
@@ -105,11 +116,12 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    createIdentity: (entropy: string) =>
-      dispatch(registrationActions.createIdentity(entropy))
-  }
-}
+const mapDispatchToProps = (dispatch: Function) => ({
+  createIdentity: (entropy: string) =>
+    dispatch(registrationActions.createIdentity(entropy)),
+})
 
-export const Loading = connect(mapStateToProps, mapDispatchToProps)(LoadingContainer)
+export const Loading = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LoadingContainer)

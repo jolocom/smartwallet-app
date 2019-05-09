@@ -7,7 +7,10 @@ const initialState : LoadingState = {
   loadingStages: [],
 }
 
-export const loading = (state = Immutable.fromJS(initialState), action: AnyAction): string => {
+export const loading = (
+  state = Immutable.fromJS(initialState),
+  action: AnyAction,
+): string => {
   switch (action.type) {
     case 'SET_NEXT_LOADING_STAGE':
       return state.setIn(['loadingStage'], state.getIn(['loadingStage']) + 1)

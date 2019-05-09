@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { registrationActions } from 'src/actions'
 import { EntropyComponent } from 'src/ui/registration/components/entropy'
 import { RootState } from 'src/reducers'
-import { 
+import {
   EntropyGeneratorInterface,
-  EntropyGenerator
+  EntropyGenerator,
 } from 'src/lib/entropyGenerator'
 
 interface ConnectProps {
@@ -13,7 +13,7 @@ interface ConnectProps {
   inputSeedPhrase: () => void
 }
 
-interface OwnProps { }
+interface OwnProps {}
 
 interface Props extends OwnProps, ConnectProps {}
 
@@ -25,31 +25,31 @@ interface State {
 }
 
 export class EntropyContainer extends React.Component<Props, State> {
-  private entropyGenerator! : EntropyGeneratorInterface
+  private entropyGenerator!: EntropyGeneratorInterface
 
   state = {
     isDrawn: false,
     encodedEntropy: '',
     entropyProgress: 0,
-    sufficientEntropy: false
+    sufficientEntropy: false,
   }
 
   componentDidMount() {
     this.entropyGenerator = this.setUpEntropyGenerator()
   }
 
-  private setUpEntropyGenerator() : EntropyGenerator {
+  private setUpEntropyGenerator(): EntropyGenerator {
     return new EntropyGenerator()
   }
 
-  private addPoint = (x: number, y: number) : void => {
+  private addPoint = (x: number, y: number): void => {
     this.entropyGenerator.addFromDelta(x)
     this.entropyGenerator.addFromDelta(y)
     this.setState({ entropyProgress: this.entropyGenerator.getProgress() })
     this.updateEntropyProgress()
   }
 
-  private updateEntropyProgress = () : void => {
+  private updateEntropyProgress = (): void => {
     if (!this.state.sufficientEntropy && this.state.entropyProgress === 1) {
       const encodedEntropy = this.generateRandomString()
       this.setState({ encodedEntropy })
@@ -57,11 +57,10 @@ export class EntropyContainer extends React.Component<Props, State> {
     }
   }
 
-  private generateRandomString = () : string => {
-    return this.entropyGenerator.generateRandomString(4)
-  }
+  private generateRandomString = (): string =>
+    this.entropyGenerator.generateRandomString(4)
 
-  private submitEntropy = () : void => {
+  private submitEntropy = (): void => {
     this.props.submit(this.state.encodedEntropy)
   }
 
@@ -72,26 +71,26 @@ export class EntropyContainer extends React.Component<Props, State> {
   render() {
     return (
       <EntropyComponent
-        addPoint={ this.addPoint }
-        progress={ this.state.entropyProgress }
-        submitEntropy={ this.submitEntropy }
+        addPoint={this.addPoint}
+        progress={this.state.entropyProgress}
+        submitEntropy={this.submitEntropy}
         recoverIdentity={ this.inputSeedPhrase }
       />
     )
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {}
-}
+const mapStateToProps = (state: RootState) => ({})
 
-const mapDispatchToProps = (dispatch: (action: Function) => void) => {
-  return {
-    submit: (encodedEntropy: string) => 
-      dispatch(registrationActions.submitEntropy(encodedEntropy)),
+const mapDispatchToProps = (dispatch: (action: Function) => void) => ({
+  submit: (encodedEntropy: string) =>
+    dispatch(registrationActions.submitEntropy(encodedEntropy)),
     inputSeedPhrase : () =>
       dispatch(registrationActions.inputSeedPhrase()),
   }
-}
+)
 
-export const Entropy = connect(mapStateToProps, mapDispatchToProps)(EntropyContainer)
+export const Entropy = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EntropyContainer)

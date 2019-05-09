@@ -14,4 +14,5 @@ export const ValiditySummary: React.SFC<Props> = props => (
   </Text>
 )
 
-const checkValidity = (date: Date): string => (compareDates(new Date(Date.now()), date) > 1 ? '#28a52d' : 'red')
+const checkValidity = (date: Date): string =>
+  compareDates(new Date(Date.now()), date) > 1 ? '#28a52d' : 'red'
