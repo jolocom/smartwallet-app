@@ -36,17 +36,13 @@ export const getCredentialUiCategory = (type: string): string => {
 
   const category = uiCategories.find(uiCategory => {
     const categoryDefinition = uiCategoryByCredentialType[uiCategory]
-    const credentialFitsDefinition = categoryDefinition.some(
+    return categoryDefinition.some(
       entry => entry === type,
     )
-    return credentialFitsDefinition
   })
 
   return category || Categories.Other
 }
-
-export const areCredTypesEqual = (first: string[], second: string[]): boolean =>
-  first.every((el, index) => el === second[index])
 
 export const prepareLabel = (label: string): string => {
   const words = label.split(/(?=[A-Z0-9])/)
@@ -82,13 +78,13 @@ export const instantiateIdentityWallet = async (
   return await backendMiddleware.setIdentityWallet(userVault, password)
 }
 
-export function generateSecureRandomBytesBase64(
+export function generateSecureRandomBytes(
   length: number,
-): Promise<string> {
+): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     RNRandomBytes.randomBytes(length, (err: string, bytesAsBase64: string) => {
       if (err) reject(err)
-      else resolve(bytesAsBase64)
+      else resolve(Buffer.from(bytesAsBase64, 'base64'))
     })
   })
 }

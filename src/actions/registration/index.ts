@@ -7,7 +7,7 @@ import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 const bip39 = require('bip39')
-import { generateSecureRandomBytesBase64 } from 'src/lib/util'
+import { generateSecureRandomBytes } from 'src/lib/util'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -36,8 +36,9 @@ export const startRegistration = () => async (
   backendMiddleware: BackendMiddleware,
 ) => {
   try {
-    const randomPassword = await generateSecureRandomBytesBase64(32)
-    await backendMiddleware.keyChainLib.savePassword(randomPassword)
+    const randomPassword = await generateSecureRandomBytes(32)
+    await backendMiddleware.keyChainLib.savePassword(randomPassword.toString('base64'))
+
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
   } catch (err) {
     dispatch(genericActions.showErrorScreen(err, routeList.Landing))
