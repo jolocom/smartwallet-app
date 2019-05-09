@@ -59,12 +59,7 @@ export const createIdentity = (encodedEntropy: string) => async (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const {
-    encryptionLib,
-    keyChainLib,
-    storageLib,
-    registry
-  } = backendMiddleware
+  const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
 
   try {
     const password = await keyChainLib.getPassword()

@@ -7,7 +7,7 @@ import { ssoActions } from 'src/actions/'
 import { setDid, toggleLoading } from '../account'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { instantiateIdentityWallet } from 'src/lib/util'
-import {setDeepLinkLoading, toggleDeepLinkFlag} from '../sso'
+import { setDeepLinkLoading, toggleDeepLinkFlag } from '../sso'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
   NavigationActions.navigate(options)

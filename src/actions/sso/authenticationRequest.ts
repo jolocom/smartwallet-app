@@ -72,8 +72,9 @@ export const sendAuthenticationResponse = () => async (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}/${response.encode()}`)
-      .then(() => dispatch(cancelSSO()))
+      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
+        dispatch(cancelSSO()),
+      )
     } else {
       return fetch(callbackURL, {
         method: 'POST',

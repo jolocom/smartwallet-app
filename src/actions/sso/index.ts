@@ -286,9 +286,10 @@ export const sendCredentialResponse = (
   backendMiddleware: BackendMiddleware,
 ) => {
   const { storageLib, keyChainLib, encryptionLib, registry } = backendMiddleware
-  const { activeCredentialRequest: {
-    callbackURL, requestJWT
-  }, isDeepLinkInteraction } = getState().sso
+  const {
+    activeCredentialRequest: { callbackURL, requestJWT },
+    isDeepLinkInteraction,
+  } = getState().sso
 
   try {
     const password = await keyChainLib.getPassword()
@@ -315,10 +316,10 @@ export const sendCredentialResponse = (
 
     const jsonCredentials = credentials.map(cred => cred.toJSON())
 
-    const request = JolocomLib.parse.interactionToken.fromJWT( requestJWT, )
+    const request = JolocomLib.parse.interactionToken.fromJWT(requestJWT)
     const response = await wallet.create.interactionTokens.response.share(
       {
-        callbackURL: callbackURL,
+        callbackURL,
         suppliedCredentials: jsonCredentials,
       },
       password,
@@ -326,8 +327,9 @@ export const sendCredentialResponse = (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}/${response.encode()}`)
-      .then(() => dispatch(cancelSSO()))
+      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
+        dispatch(cancelSSO()),
+      )
     } else {
       return fetch(callbackURL, {
         method: 'POST',

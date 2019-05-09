@@ -1,4 +1,4 @@
-type HttpAgent = {
+interface HttpAgent {
   getRequest<T>(endpoint: string): Promise<T>
   postRequest<T>(endpoint: string, headers: any, data: any): Promise<T>
   headRequest(endpoint: string): Promise<{ status: number }>
@@ -11,11 +11,10 @@ enum HttpMethods {
 }
 
 export const httpAgent: HttpAgent = {
-  getRequest: <T>(endpoint: string): Promise<T> => {
-    return fetch(endpoint, {
+  getRequest: <T>(endpoint: string): Promise<T> =>
+    fetch(endpoint, {
       method: HttpMethods.GET,
-    }).then(res => res.json())
-  },
+    }).then(res => res.json()),
   headRequest(endpoint: string) {
     return fetch(endpoint, {
       method: HttpMethods.HEAD,

@@ -62,7 +62,7 @@ export const sendPaymentResponse = () => async (
   const { identityWallet } = backendMiddleware
   const {
     activePaymentRequest: { callbackURL, paymentRequest },
-    isDeepLinkInteraction
+    isDeepLinkInteraction,
   } = getState().sso
   // add loading screen here
   try {
@@ -81,13 +81,14 @@ export const sendPaymentResponse = () => async (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}/${response.encode()}`)
-      .then(() => dispatch(cancelSSO()))
+      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
+        dispatch(cancelSSO()),
+      )
     } else {
       return fetch(callbackURL, {
         method: 'POST',
-        body: JSON.stringify({token: response.encode()}),
-        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ token: response.encode() }),
+        headers: { 'Content-Type': 'application/json' },
       }).then(() => dispatch(cancelSSO()))
     }
   } catch (err) {
