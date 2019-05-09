@@ -102,8 +102,8 @@ android {
         applicationId "com.jolocomwallet"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 14
-        versionName "1.4.0"
+        versionCode 15
+        versionName "1.4.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -151,6 +151,7 @@ android {
 
 dependencies {
     compile project(':react-native-languages')
+    compile project(':react-native-randombytes')
     compile project(':react-native-vector-icons')
     compile project(':react-native-splash-screen')
     compile project(':react-native-svg')
