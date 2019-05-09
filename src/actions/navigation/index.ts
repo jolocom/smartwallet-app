@@ -6,7 +6,8 @@ import { AnyAction, Dispatch } from 'redux'
 import { ssoActions } from 'src/actions/'
 import { toggleLoading } from '../account'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { setDeepLinkLoading } from '../sso'
+import { instantiateIdentityWallet } from 'src/lib/util'
+import { setDeepLinkLoading, toggleDeepLinkFlag } from '../sso'
 import { routeList } from 'src/routeList'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
@@ -47,6 +48,7 @@ export const handleDeepLink = (url: string) => async (
       return
     }
 
+    dispatch(toggleDeepLinkFlag(true))
     dispatch(setDeepLinkLoading(true))
     dispatch(ssoActions.parseJWT(params))
   }

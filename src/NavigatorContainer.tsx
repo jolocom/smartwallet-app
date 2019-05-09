@@ -65,17 +65,16 @@ export class NavigatorContainer extends React.Component<Props> {
 
   private navigateBack = () => {
     // return false if app exit is desired
+    const { navigation } = this.props
     if (
-      this.props.navigation.index === 0 &&
-      this.props.navigation.routes.length === 1 &&
-      this.props.navigation.routes[0].index === 0
+      navigation.index === 0 &&
+      navigation.routes.length === 1 &&
+      navigation.routes[0].index === 0
     ) {
       return false
     }
 
-    console.log(this.props.navigation)
-    this.props.goBack()
-    return true
+    return this.props.goBack()
   }
 
   //When handleOpenURL is called, we pass the event url to the navigate method.

@@ -126,6 +126,7 @@
     "react-native-material-textfield": "^0.12.0",
     "react-native-material-ui": "^1.22.2",
     "react-native-qrcode-scanner": "^1.0.1",
+    "react-native-randombytes": "^3.5.2",
     "react-native-snap-carousel": "^3.6.0",
     "react-native-splash-screen": "3.0.6",
     "react-native-sqlite-storage": "^3.3.4",

@@ -6,13 +6,16 @@ import {
 } from './categories'
 import { BaseMetadata } from 'cred-types-jolocom-core'
 
+import { NativeModules } from 'react-native'
+// this comes from 'react-native-randombytes'
+const { RNRandomBytes } = NativeModules
+
 export const getClaimMetadataByCredentialType = (
   type: string,
 ): BaseMetadata => {
   const uiType = Object.keys(uiCredentialTypeByType).find(
     item => uiCredentialTypeByType[item] === type,
   )
-
   const relevantType = Object.keys(claimsMetadata).find(
     key => claimsMetadata[key].type[1] === uiType,
   )
@@ -32,17 +35,13 @@ export const getCredentialUiCategory = (type: string): string => {
 
   const category = uiCategories.find(uiCategory => {
     const categoryDefinition = uiCategoryByCredentialType[uiCategory]
-    const credentialFitsDefinition = categoryDefinition.some(
+    return categoryDefinition.some(
       entry => entry === type,
     )
-    return credentialFitsDefinition
   })
 
   return category || Categories.Other
 }
-
-export const areCredTypesEqual = (first: string[], second: string[]): boolean =>
-  first.every((el, index) => el === second[index])
 
 export const prepareLabel = (label: string): string => {
   const words = label.split(/(?=[A-Z0-9])/)
@@ -58,3 +57,14 @@ export const compareDates = (date1: Date, date2: Date): number =>
       Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate())) /
       (1000 * 60 * 60 * 24),
   )
+
+export function generateSecureRandomBytes(
+  length: number,
+): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    RNRandomBytes.randomBytes(length, (err: string, bytesAsBase64: string) => {
+      if (err) reject(err)
+      else resolve(Buffer.from(bytesAsBase64, 'base64'))
+    })
+  })
+}
