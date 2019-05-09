@@ -12,7 +12,8 @@ describe('Registration action creators', () => {
 
     it('should save a password and initiate the registration process', async () => {
       const randomPassword = 'hunter0='
-      util.generateSecureRandomBytes = () => Buffer.from(randomPassword, 'base64')
+      util.generateSecureRandomBytes = () =>
+        Buffer.from(randomPassword, 'base64')
       const mockStore = configureStore([thunk])({})
       const mockMiddleware = {
         keyChainLib: {
@@ -23,7 +24,9 @@ describe('Registration action creators', () => {
       const asyncAction = registrationActions.startRegistration()
       await asyncAction(mockStore.dispatch, mockGetState, mockMiddleware)
       expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledTimes(1)
-      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(randomPassword)
+      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(
+        randomPassword,
+      )
       expect(mockStore.getActions()).toMatchSnapshot()
     })
 

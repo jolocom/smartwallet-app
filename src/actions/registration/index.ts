@@ -21,13 +21,15 @@ export const startRegistration = () => async (
 ) => {
   try {
     const randomPassword = await generateSecureRandomBytes(32)
-    const entropyBase64 = await generateSecureRandomBytes(16)
-    const encodedEntropy = entropyBase64.toString('hex')
-    await backendMiddleware.keyChainLib.savePassword(randomPassword.toString('base64'))
+    const entropy = await generateSecureRandomBytes(16)
+    const encodedEntropy = entropy.toString('hex')
+    await backendMiddleware.keyChainLib.savePassword(
+      randomPassword.toString('base64'),
+    )
     dispatch(
       navigationActions.navigatorReset({
         routeName: routeList.Loading,
-      })
+      }),
     )
     dispatch(setLoadingMsg(loading.loadingStages[0]))
 

@@ -36,9 +36,7 @@ export const getCredentialUiCategory = (type: string): string => {
 
   const category = uiCategories.find(uiCategory => {
     const categoryDefinition = uiCategoryByCredentialType[uiCategory]
-    return categoryDefinition.some(
-      entry => entry === type,
-    )
+    return categoryDefinition.some(entry => entry === type)
   })
 
   return category || Categories.Other
@@ -78,9 +76,7 @@ export const instantiateIdentityWallet = async (
   return await backendMiddleware.setIdentityWallet(userVault, password)
 }
 
-export function generateSecureRandomBytes(
-  length: number,
-): Promise<Buffer> {
+export function generateSecureRandomBytes(length: number): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     RNRandomBytes.randomBytes(length, (err: string, bytesAsBase64: string) => {
       if (err) reject(err)
