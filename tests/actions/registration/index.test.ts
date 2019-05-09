@@ -3,7 +3,9 @@ import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import data from './data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
+import { getJestConfig } from 'ts-jest/dist/test-utils'
 import * as util from 'src/lib/util'
+
 const MockDate = require('mockdate')
 
 describe('Registration action creators', () => {
