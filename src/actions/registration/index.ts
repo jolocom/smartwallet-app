@@ -32,12 +32,9 @@ export const startRegistration = () => async (
       }),
     )
     dispatch(setLoadingMsg(loading.loadingStages[0]))
-
-    setTimeout(() => {
-      dispatch(createIdentity(encodedEntropy))
-    }, 2000)
+    return dispatch(createIdentity(encodedEntropy))
   } catch (err) {
-    dispatch(genericActions.showErrorScreen(err, routeList.Landing))
+    return dispatch(genericActions.showErrorScreen(err, routeList.Landing))
   }
 }
 
