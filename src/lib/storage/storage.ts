@@ -1,17 +1,18 @@
 import {
-  createConnection,
-  ConnectionOptions,
   Connection,
+  ConnectionOptions,
+  createConnection,
 } from 'typeorm/browser'
 import { plainToClass } from 'class-transformer'
 import {
-  PersonaEntity,
-  MasterKeyEntity,
-  VerifiableCredentialEntity,
-  SignatureEntity,
   CredentialEntity,
+  MasterKeyEntity,
+  PersonaEntity,
+  SignatureEntity,
+  VerifiableCredentialEntity,
 } from 'src/lib/storage/entities'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { EncryptionLib } from '../crypto'
 
 interface PersonaAttributes {
   did: string
@@ -19,7 +20,7 @@ interface PersonaAttributes {
 }
 
 interface EncryptedSeedAttributes {
-  encryptedEntropy: string
+  entropy: string
   timestamp: number
 }
 
@@ -36,7 +37,7 @@ export class Storage {
   public store = {
     verifiableCredential: this.storeVClaim.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
-    encryptedSeed: this.storeEncryptedSeed.bind(this),
+    seedEncrypted: this.storeSeedEncrypted.bind(this),
   }
 
   public get = {
@@ -174,11 +175,19 @@ export class Storage {
     await this.connection.manager.save(persona)
   }
 
-  private async storeEncryptedSeed(
+  private async storeSeedEncrypted(
     args: EncryptedSeedAttributes,
+    password: string,
   ): Promise<void> {
     await this.createConnectionIfNeeded()
-    const encryptedSeed = plainToClass(MasterKeyEntity, args)
+    const encryptedEntropy = EncryptionLib.encryptWithPass({
+      data: args.entropy,
+      pass: password,
+    })
+    const encryptedSeed = plainToClass(MasterKeyEntity, {
+      entropy: encryptedEntropy,
+      timestamp: args.timestamp,
+    })
     await this.connection.manager.save(encryptedSeed)
   }
 

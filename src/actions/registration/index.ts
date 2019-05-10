@@ -37,7 +37,9 @@ export const startRegistration = () => async (
 ) => {
   try {
     const randomPassword = await generateSecureRandomBytes(32)
-    await backendMiddleware.keyChainLib.savePassword(randomPassword.toString('base64'))
+    await backendMiddleware.keyChainLib.savePassword(
+      randomPassword.toString('base64'),
+    )
 
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
   } catch (err) {
@@ -54,16 +56,13 @@ export const createIdentity = (encodedEntropy: string) => async (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
+  const { keyChainLib, storageLib, registry } = backendMiddleware
 
   try {
     const password = await keyChainLib.getPassword()
-    const encEntropy = encryptionLib.encryptWithPass({
-      data: encodedEntropy,
-      pass: password,
-    })
-    const entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
-    await storageLib.store.encryptedSeed(entropyData)
+
+    const entropyData = { entropy: encodedEntropy, timestamp: Date.now() }
+    await storageLib.store.seedEncrypted(entropyData, password)
     const userVault = new SoftwareKeyProvider(
       Buffer.from(encodedEntropy, 'hex'),
       password,

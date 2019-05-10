@@ -39,7 +39,7 @@ describe('Account action creators', () => {
       storageLib: {
         get: {
           persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:mock' }]),
-          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+          seedEncrypted: jest.fn().mockResolvedValue('johnnycryptoseed'),
         },
       },
       keyChainLib: {
@@ -70,7 +70,7 @@ describe('Account action creators', () => {
               { did: 'did:jolo:first' },
               { did: 'did:jolo:second' },
             ]),
-          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+          seedEncrypted: jest.fn().mockResolvedValue('johnnycryptoseed'),
         },
       },
       keyChainLib: {
@@ -94,7 +94,7 @@ describe('Account action creators', () => {
       storageLib: {
         get: {
           persona: jest.fn().mockResolvedValue([]),
-          encryptedSeed: jest.fn().mockResolvedValue(null),
+          seedEncrypted: jest.fn().mockResolvedValue(null),
         },
       },
     }

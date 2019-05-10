@@ -43,7 +43,7 @@ export const checkIdentityExists = () => async (
   backendMiddleware: BackendMiddleware,
 ) => {
   try {
-    const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
+    const { keyChainLib, storageLib } = backendMiddleware
     const encryptedEntropy = await storageLib.get.encryptedSeed()
     if (!encryptedEntropy) {
       dispatch(toggleLoading(false))
@@ -53,15 +53,9 @@ export const checkIdentityExists = () => async (
       return
     }
     const password = await keyChainLib.getPassword()
-    const decryptedSeed = encryptionLib.decryptWithPass({
-      cipher: encryptedEntropy,
-      pass: password,
-    })
-    // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-    const userVault = new JolocomLib.KeyProvider(
-      Buffer.from(decryptedSeed, 'hex'),
-      password,
-    )
+
+    // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad. Wait for PR in lib
+    const userVault = new JolocomLib.KeyProvider(Buffer.from(encryptedEntropy, 'hex'))
     await backendMiddleware.setIdentityWallet(userVault, password)
     const identityWallet = backendMiddleware.identityWallet
     dispatch(setDid(identityWallet.identity.did))
