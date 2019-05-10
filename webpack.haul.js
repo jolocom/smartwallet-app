@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = ({ platform }, { module, resolve }) => ({
-  entry: `./index.js`,
+  entry: `./index.ts`,
   module: {
     ...module,
     rules: [

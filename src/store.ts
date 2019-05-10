@@ -1,36 +1,24 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import { entityList } from 'src/lib/storage/entities'
 import { RootState, rootReducer } from 'src/reducers'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { ConnectionOptions } from 'typeorm/browser'
+import config from 'src/config'
+import { Store } from 'react-redux'
 
-const {
-  createReactNavigationReduxMiddleware,
-} = require('react-navigation-redux-helpers')
+export function initStore(): Store<{}> {
+  const {
+    createReactNavigationReduxMiddleware,
+  } = require('react-navigation-redux-helpers')
 
-const typeOrmConf: ConnectionOptions = {
-  type: 'react-native',
-  database: 'LocalSmartWalletData',
-  location: 'default',
-  logging: ['error', 'query', 'schema'],
-  synchronize: true,
-  entities: entityList,
+  createReactNavigationReduxMiddleware(
+    'root',
+    (state: RootState) => state.navigation,
+  )
+  const backendMiddleware = new BackendMiddleware(config)
+
+  return createStore(
+    rootReducer,
+    {},
+    applyMiddleware(thunk.withExtraArgument(backendMiddleware)),
+  )
 }
-
-const config = {
-  fuelingEndpoint: 'https://faucet.jolocom.com/request',
-  typeOrmConfig: typeOrmConf,
-}
-
-createReactNavigationReduxMiddleware(
-  'root',
-  (state: RootState) => state.navigation,
-)
-const backendMiddleware = new BackendMiddleware(config)
-
-export const store = createStore(
-  rootReducer,
-  {},
-  applyMiddleware(thunk.withExtraArgument(backendMiddleware)),
-)
