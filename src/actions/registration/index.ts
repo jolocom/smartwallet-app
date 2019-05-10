@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from 'redux'
-import { navigationActions, genericActions, accountActions } from 'src/actions/'
+import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
@@ -89,7 +89,7 @@ export const createIdentity = (encodedEntropy: string) => async (
     await storageLib.store.persona(personaData)
     dispatch(setDid(identityWallet.identity.did))
     dispatch(setLoadingMsg(loading.loadingStages[3]))
-    dispatch(accountActions.setIdentityWallet())
+    await backendMiddleware.setIdentityWallet(userVault, password)
 
     return dispatch(
       navigationActions.navigatorReset({

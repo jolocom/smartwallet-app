@@ -24,7 +24,7 @@ describe('Navigation action creators', () => {
         encryptionLib: {
           decryptWithPass: () => 'angelaMerkleTreeSeed',
         },
-        setIdentityWallet: jest.fn(() => Promise.resolve()),
+        identityWallet: jest.fn(),
       }
       const parseJWTSpy = jest
         .spyOn(ssoActions, 'parseJWT')
