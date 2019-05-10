@@ -17,6 +17,8 @@ interface Props {
 export const ButtonSection: React.SFC<Props> = props => {
   const styles = StyleSheet.create({
     buttonBlock: {
+      borderColor: '#ececec',
+      borderTopWidth: 1,
       paddingVertical: props.verticalPadding ? props.verticalPadding : 'auto',
       justifyContent: 'space-around',
       flexDirection: 'row',
