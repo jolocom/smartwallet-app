@@ -20,6 +20,7 @@ Object {
     },
   },
   "deepLinkLoading": false,
+  "isDeepLinkInteraction": false,
 }
 `;
 
@@ -55,6 +56,7 @@ Object {
     },
   },
   "deepLinkLoading": false,
+  "isDeepLinkInteraction": false,
 }
 `;
 
@@ -83,5 +85,6 @@ Object {
     },
   },
   "deepLinkLoading": false,
+  "isDeepLinkInteraction": false,
 }
 `;

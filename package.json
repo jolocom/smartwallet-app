@@ -1,6 +1,6 @@
 {
   "name": "jolocomwallet",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": true,
   "devDependencies": {
     "@types/enzyme": "^3.1.9",
@@ -126,6 +126,7 @@
     "react-native-material-ui": "^1.22.2",
     "react-native-md-textinput": "^2.0.4",
     "react-native-qrcode-scanner": "^1.0.1",
+    "react-native-randombytes": "^3.5.2",
     "react-native-remote-svg": "^1.2.0",
     "react-native-snap-carousel": "^3.6.0",
     "react-native-splash-screen": "3.0.6",

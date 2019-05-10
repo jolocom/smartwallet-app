@@ -6,7 +6,7 @@ import { showErrorScreen } from 'src/actions/generic'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { routeList } from 'src/routeList'
-import { cancelSSO } from '.'
+import { cancelSSO, clearInteractionRequest } from '.'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 
@@ -52,6 +52,8 @@ export const sendAuthenticationResponse = () => async (
   backendMiddleware: BackendMiddleware,
 ) => {
   const { identityWallet } = backendMiddleware
+  const { isDeepLinkInteraction } = getState().sso
+
   const {
     callbackURL,
     requestJWT,
@@ -69,19 +71,20 @@ export const sendAuthenticationResponse = () => async (
       decodedAuthRequest,
     )
 
-    if (callbackURL.includes('http')) {
-      await fetch(callbackURL, {
+    if (isDeepLinkInteraction) {
+      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
+        dispatch(cancelSSO()),
+      )
+    } else {
+      return fetch(callbackURL, {
         method: 'POST',
         body: JSON.stringify({ token: response.encode() }),
         headers: { 'Content-Type': 'application/json' },
-      })
-    } else {
-      const url = callbackURL + response.encode()
-      Linking.openURL(url)
+      }).then(() => dispatch(cancelSSO()))
     }
-    dispatch(cancelSSO())
   } catch (err) {
     console.log(err)
+    dispatch(clearInteractionRequest())
     dispatch(showErrorScreen(new Error('Sending payment response failed.')))
   }
 }
