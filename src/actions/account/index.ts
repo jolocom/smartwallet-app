@@ -11,6 +11,7 @@ import {
   instantiateIdentityWallet,
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -60,7 +61,7 @@ export const checkIdentityExists = () => async (
     if (err.message.indexOf('no such table') === 0) {
       return
     }
-    dispatch(genericActions.showErrorScreen(err))
+    dispatch(genericActions.showErrorScreen(new AppError(ErrorCode.CheckIdentityFailed, err)))
   }
 }
 
@@ -72,7 +73,7 @@ export const setIdentityWallet = () => async (
   try {
     await instantiateIdentityWallet(backendMiddleware)
   } catch (err) {
-    dispatch(genericActions.showErrorScreen(err))
+    dispatch(genericActions.showErrorScreen(new AppError(ErrorCode.IdentityWalletFailed, err)))
   }
 }
 
@@ -121,7 +122,7 @@ export const saveClaim = () => async (
       }),
     )
   } catch (err) {
-    dispatch(genericActions.showErrorScreen(err))
+    dispatch(genericActions.showErrorScreen(new AppError(ErrorCode.SaveClaimFailed, err)))
   }
 }
 
@@ -143,7 +144,7 @@ export const saveExternalCredentials = () => async (
     await storageLib.store.verifiableCredential(externalCredentials[0])
     dispatch(cancelReceiving())
   } catch (err) {
-    dispatch(genericActions.showErrorScreen(err))
+    dispatch(genericActions.showErrorScreen(new AppError(ErrorCode.SaveExternalCredentialFailed, err)))
   }
 }
 

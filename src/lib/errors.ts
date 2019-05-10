@@ -1,6 +1,12 @@
 export const enum ErrorCode {
   Unknown = 'Unknown',
 
+  // actions/account/index
+  CheckIdentityFailed = 'IDWallet',
+  IdentityWalletFailed = 'IDWallet',
+  SaveClaimFailed = 'SaveClaim',
+  SaveExternalCredentialFailed = 'SaveExtCred',
+
   // actions/sso/authenticationRequest
   AuthenticationRequestFailed = 'AuthReq',
   AuthenticationResponseFailed = 'AuthResp',
@@ -23,6 +29,11 @@ export const enum ErrorCode {
 // NOTE: these strings are localized, remember to update locale files
 const errorMessages: { [key in ErrorCode]: string } = {
   [ErrorCode.Unknown]: 'Unknown Error',
+
+  [ErrorCode.CheckIdentityFailed]: 'Unable to authenticate identity',
+  [ErrorCode.IdentityWalletFailed]: 'Identity Wallet could not be created',
+  [ErrorCode.SaveClaimFailed]: 'Could not save claim',
+  [ErrorCode.SaveExternalCredentialFailed]: 'Could not save external credential',
 
   [ErrorCode.AuthenticationRequestFailed]: 'Authentication request failed',
   [ErrorCode.AuthenticationResponseFailed]: 'Authentication response failed',
