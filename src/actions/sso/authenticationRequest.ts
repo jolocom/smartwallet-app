@@ -9,6 +9,7 @@ import { routeList } from 'src/routeList'
 import { cancelSSO, clearInteractionRequest } from '.'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const setAuthenticationRequest = (
   request: StateAuthenticationRequestSummary,
@@ -39,9 +40,11 @@ export const consumeAuthenticationRequest = (
         routeName: routeList.AuthenticationConsent,
       }),
     )
-    dispatch(ssoActions.setDeepLinkLoading(false))
   } catch (err) {
-    dispatch(showErrorScreen(new Error('Authentication request failed.')))
+    dispatch(
+      showErrorScreen(new AppError(ErrorCode.AuthenticationRequestFailed, err)),
+    )
+  } finally {
     dispatch(ssoActions.setDeepLinkLoading(false))
   }
 }
@@ -83,8 +86,11 @@ export const sendAuthenticationResponse = () => async (
       }).then(() => dispatch(cancelSSO()))
     }
   } catch (err) {
-    console.log(err)
     dispatch(clearInteractionRequest())
-    dispatch(showErrorScreen(new Error('Sending payment response failed.')))
+    dispatch(
+      showErrorScreen(
+        new AppError(ErrorCode.AuthenticationResponseFailed, err),
+      ),
+    )
   }
 }
