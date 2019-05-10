@@ -55,7 +55,12 @@ const styles = StyleSheet.create({
 
 const languages = ['EN', 'DE', 'NL']
 
-const LanguageCard = ({ languages }: { languages: string[] }) => (
+interface LanguageCardProps {
+  languages: string[]
+  selected: string
+}
+
+const LanguageCard: React.SFC<LanguageCardProps> = props => (
   <View style={[styles.card, styles.languageCard]}>
     <Icon style={{ marginRight: 18 }} size={24} name="translate" color="grey" />
     <View>
@@ -63,11 +68,32 @@ const LanguageCard = ({ languages }: { languages: string[] }) => (
         Language
       </Text>
       <View style={styles.languageOptions}>
-        {languages.map(language => (
-          <View style={styles.languageOption}>
-            <Text style={styles.languageOptionText}>{language}</Text>
-          </View>
-        ))}
+        {props.languages.map(language => {
+          const isCurrentLanguage = language === props.selected
+          return (
+            <View
+              // TODO: connect to selecting the language
+              onTouchEnd={() => console.log(`${language} selected`)}
+              style={[
+                styles.languageOption,
+                isCurrentLanguage && {
+                  backgroundColor: JolocomTheme.primaryColorPurple,
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.languageOptionText,
+                  isCurrentLanguage && {
+                    color: JolocomTheme.primaryColorSand,
+                  },
+                ]}
+              >
+                {language}
+              </Text>
+            </View>
+          )
+        })}
       </View>
     </View>
   </View>
@@ -75,12 +101,13 @@ const LanguageCard = ({ languages }: { languages: string[] }) => (
 
 const VERSION = '1.4.2'
 
-export const SettingsScreen: React.SFC = props => {
+export const SettingsScreen: React.SFC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
         <Text style={styles.sectionHeader}>Your preferences</Text>
-        <LanguageCard languages={languages} />
+        {/* SELECTED should be based on state from the database */}
+        <LanguageCard languages={languages} selected={languages[0]} />
       </View>
       <Text style={styles.versionNumber}>
         Jolocom SmartWallet version {VERSION}
