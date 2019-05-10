@@ -2,12 +2,12 @@ export const enum ErrorCode {
   Unknown = 'Unknown',
 
   // actions/sso/authenticationRequest
-  AuthenticationRequestFailed = 'AReq',
-  AuthenticationResponseFailed = 'AResp',
+  AuthenticationRequestFailed = 'AuthReq',
+  AuthenticationResponseFailed = 'AuthResp',
 
   // actions/sso/paymentRequest
-  PaymentRequestFailed = 'PReq',
-  PaymentResponseFailed = 'PResp',
+  PaymentRequestFailed = 'PayReq',
+  PaymentResponseFailed = 'PayResp',
 
   // actions/sso/index
   CredentialOfferFailed = 'CredOffer',
