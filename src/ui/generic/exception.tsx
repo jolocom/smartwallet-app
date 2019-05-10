@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import { Container } from 'src/ui/structure/'
 import { Button } from 'react-native-material-ui'
 import { navigationActions } from 'src/actions/'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, Image } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
 import I18n from 'src/locales/i18n'
+const errorImage = require('src/resources/img/error_image.png')
 
 const ERROR_MESSAGES = [I18n.t('Damn!'), I18n.t('Oh no.'), I18n.t('Uh oh.')]
 
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
   textBlock: {
     ...debug,
     marginTop: 25,
+    paddingHorizontal: 20,
     alignItems: 'center',
   },
   errorTextHeader: {
@@ -102,7 +104,7 @@ export const ExceptionComponent: React.SFC<Props> = props => {
   return (
     <Container style={styles.containerStyle}>
       <View style={styles.upperContainer}>
-        <View style={styles.imagePlaceholder} />
+        <Image source={errorImage} style={{ width: 160, height: 160 }} />
         <View style={styles.textBlock}>
           <Text style={styles.errorTextHeader}>{getRandomErrorTitle()}</Text>
           {/* <Text style={styles.errorText}>{errorText}</Text> */}
