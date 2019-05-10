@@ -2,8 +2,7 @@ export const enum ErrorCode {
   Unknown = 'Unknown',
 
   // actions/account/index
-  CheckIdentityFailed = 'IDWallet',
-  IdentityWalletFailed = 'IDWallet',
+  WalletInitFailed = 'WalletInit',
   SaveClaimFailed = 'SaveClaim',
   SaveExternalCredentialFailed = 'SaveExtCred',
 
@@ -30,8 +29,7 @@ export const enum ErrorCode {
 const errorMessages: { [key in ErrorCode]: string } = {
   [ErrorCode.Unknown]: 'Unknown Error',
 
-  [ErrorCode.CheckIdentityFailed]: 'Unable to authenticate identity',
-  [ErrorCode.IdentityWalletFailed]: 'Identity Wallet could not be created',
+  [ErrorCode.WalletInitFailed]: 'Unable to initialize wallet',
   [ErrorCode.SaveClaimFailed]: 'Could not save claim',
   [ErrorCode.SaveExternalCredentialFailed]: 'Could not save external credential',
 
