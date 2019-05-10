@@ -105,6 +105,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     return (
       <ButtonSection
         disabled={buttonDisabled}
+        denyDisabled={this.state.pending}
         confirmText={I18n.t('Share claims')}
         denyText={I18n.t('Deny')}
         handleConfirm={() => this.handleSubmitClaims()}

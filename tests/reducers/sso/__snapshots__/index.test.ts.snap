@@ -19,6 +19,8 @@ Object {
       "did": "",
     },
   },
+  "deepLinkLoading": false,
+  "isDeepLinkInteraction": false,
 }
 `;
 
@@ -53,6 +55,8 @@ Object {
       "did": "",
     },
   },
+  "deepLinkLoading": false,
+  "isDeepLinkInteraction": false,
 }
 `;
 
@@ -80,5 +84,7 @@ Object {
       "did": "",
     },
   },
+  "deepLinkLoading": false,
+  "isDeepLinkInteraction": false,
 }
 `;

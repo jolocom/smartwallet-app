@@ -7,6 +7,7 @@ import { ssoActions } from 'src/actions/'
 import { setDid, toggleLoading } from '../account'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { instantiateIdentityWallet } from 'src/lib/util'
+import { setDeepLinkLoading, toggleDeepLinkFlag } from '../sso'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
   NavigationActions.navigate(options)
@@ -39,6 +40,8 @@ export const handleDeepLink = (url: string) => async (
     routeName === 'payment' ||
     routeName === 'authenticate'
   ) {
+    dispatch(setDeepLinkLoading(true))
+    dispatch(toggleDeepLinkFlag(true))
     const personas = await backendMiddleware.storageLib.get.persona()
 
     if (!personas.length) {

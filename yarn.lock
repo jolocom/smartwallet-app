@@ -7911,6 +7911,13 @@ react-native-qrcode-scanner@^1.0.1:
     prop-types "^15.5.10"
     react-native-permissions "^1.1.1"
 
+react-native-randombytes@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-randombytes/-/react-native-randombytes-3.5.2.tgz#f23665b7cf1a3125d78d0d95df5d18c2ca9406a0"
+  dependencies:
+    buffer "^4.9.1"
+    sjcl "^1.0.3"
+
 react-native-remote-svg@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-remote-svg/-/react-native-remote-svg-1.2.0.tgz#0382d522913e01dc19025efe8e0f8b1a55692a55"
