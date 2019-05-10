@@ -7,12 +7,12 @@ export const enum ErrorCode {
   SaveExternalCredentialFailed = 'SaveExtCred',
 
   // actions/sso/authenticationRequest
-  AuthenticationRequestFailed = 'AuthReq',
-  AuthenticationResponseFailed = 'AuthResp',
+  AuthenticationRequestFailed = 'AuthRequest',
+  AuthenticationResponseFailed = 'AuthResponse',
 
   // actions/sso/paymentRequest
-  PaymentRequestFailed = 'PayReq',
-  PaymentResponseFailed = 'PayResp',
+  PaymentRequestFailed = 'PayRequest',
+  PaymentResponseFailed = 'PayResponse',
 
   // actions/sso/index
   CredentialOfferFailed = 'CredOffer',
