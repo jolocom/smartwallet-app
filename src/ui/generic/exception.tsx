@@ -7,6 +7,7 @@ import { Text, StyleSheet, View, Image } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
 import I18n from 'src/locales/i18n'
+import { AppError } from 'src/lib/errors'
 const errorImage = require('src/resources/img/error_image.png')
 
 const ERROR_MESSAGES = [I18n.t('Damn!'), I18n.t('Oh no.'), I18n.t('Uh oh.')]
@@ -26,7 +27,7 @@ interface Props extends ConnectProps {
     state: {
       params: {
         returnTo: routeList
-        error: Error
+        error: Error & AppError
       }
     }
   }
@@ -97,9 +98,12 @@ const styles = StyleSheet.create({
 })
 
 export const ExceptionComponent: React.SFC<Props> = props => {
-  // const errorText = I18n.t('There was an error with your request') + '.'
-  const errorText = props.navigation.state.params.error.message
-  console.error(props.navigation.state.params.error)
+  // TODO: display error code
+  const err = props.navigation.state.params.error
+  let errorText: string = err && err.message
+  if (!errorText) errorText = 'There was an error with your request'
+  errorText = I18n.t(errorText) + '.'
+  console.error(err && err.origError ? err.origError : err)
 
   return (
     <Container style={styles.containerStyle}>
@@ -107,12 +111,7 @@ export const ExceptionComponent: React.SFC<Props> = props => {
         <Image source={errorImage} style={{ width: 160, height: 160 }} />
         <View style={styles.textBlock}>
           <Text style={styles.errorTextHeader}>{getRandomErrorTitle()}</Text>
-          {/* <Text style={styles.errorText}>{errorText}</Text> */}
-          <Text style={styles.errorText}>
-            An error message that is really, really, really long, but hopefully
-            only goes onto three lines and not four or five? These may be fairly
-            cryptic, kind of.
-          </Text>
+          <Text style={styles.errorText}>{errorText}</Text>
         </View>
       </View>
       <View style={styles.buttonBlock}>

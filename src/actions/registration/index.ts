@@ -8,6 +8,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 const bip39 = require('bip39')
 import { generateSecureRandomBytes } from 'src/lib/util'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -98,6 +99,11 @@ export const createIdentity = (encodedEntropy: string) => async (
       }),
     )
   } catch (error) {
-    return dispatch(genericActions.showErrorScreen(error, routeList.Landing))
+    return dispatch(
+      genericActions.showErrorScreen(
+        new AppError(ErrorCode.RegistrationFailed, error),
+        routeList.Landing,
+      ),
+    )
   }
 }
