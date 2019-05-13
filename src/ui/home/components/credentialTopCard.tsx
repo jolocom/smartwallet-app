@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: JolocomTheme.primaryColorWhite,
     borderColor: JolocomTheme.secondaryColorSand,
-    borderStyle: 'solid',
+    borderStyle: 'solid' as 'solid',
     borderWidth: 1,
     padding: 16,
   },
@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
   },
 })
 
-export const CredentialTopCard: React.SFC<Props> = props => (
+export const CredentialTopCard: React.SFC<Props> = (props): JSX.Element => (
   <View style={styles.container}>
     <Text style={styles.firstSectionHeader}>{props.credentialName}</Text>
-    <View style={{ marginTop: 30 }}>
+    <View style={{ marginTop: 25 }}>
       {props.expiryDate ? (
         <ValiditySummary expiryDate={props.expiryDate} />
       ) : null}

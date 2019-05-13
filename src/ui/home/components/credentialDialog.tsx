@@ -22,9 +22,12 @@ const styles = StyleSheet.create({
   issuerContainer: {
     flexDirection: 'row',
     backgroundColor: JolocomTheme.primaryColorWhite,
-    paddingVertical: 20,
+    paddingVertical: 18,
     paddingLeft: 15,
     paddingRight: 30,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#ececec',
   },
   issuerIcon: {
     backgroundColor: JolocomTheme.primaryColorGrey,
@@ -33,12 +36,16 @@ const styles = StyleSheet.create({
   },
   issuerTextContainer: {
     marginLeft: 16,
-    flex: -1,
+  },
+  issuerText: {
+    fontSize: 17,
+    color: JolocomTheme.primaryColorPurple,
+    fontFamily: JolocomTheme.contentFontFamily,
   },
   sectionHeader: {
     fontSize: 17,
     fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(0, 0, 0, 0.38)',
+    color: 'rgba(0, 0, 0, 0.4)',
     marginBottom: 10,
     paddingLeft: 16,
     alignSelf: 'flex-start',
@@ -47,57 +54,50 @@ const styles = StyleSheet.create({
     marginTop: 30,
     flex: 1,
   },
+  claimsList: {
+    borderTopWidth: 1,
+    borderColor: '#ececec',
+  },
   claimCard: {
     backgroundColor: JolocomTheme.primaryColorWhite,
     paddingVertical: 15,
-    marginBottom: 1,
+    borderBottomWidth: 1,
+    borderColor: '#ececec',
   },
   claimCardTextContainer: {
-    paddingHorizontal: 25,
+    paddingHorizontal: 30,
+  },
+  claimCardTitle: {
+    color: 'rgba(0, 0, 0, 0.4)',
+    fontSize: 17,
+    fontFamily: JolocomTheme.contentFontFamily,
   },
 })
 
-const renderIssuerCard = (issuer: string) => {
-  return (
-    <View style={styles.issuerContainer}>
-      <View style={styles.issuerIcon} />
-      <View style={styles.issuerTextContainer}>
-        <Text
-          style={JolocomTheme.textStyles.light.textDisplayField}
-          numberOfLines={1}
-        >
-          {I18n.t('Name of issuer')}
-        </Text>
-        <Text
-          style={[
-            JolocomTheme.textStyles.light.labelDisplayField,
-            { color: JolocomTheme.primaryColorPurple, opacity: 1 },
-          ]}
-          numberOfLines={1}
-        >
-          {issuer}
-        </Text>
-      </View>
+const renderIssuerCard = (issuer: string): JSX.Element => (
+  <View style={styles.issuerContainer}>
+    {/* TODO: Add support for icon */}
+    <View style={styles.issuerTextContainer}>
+      <Text
+        style={JolocomTheme.textStyles.light.textDisplayField}
+        numberOfLines={1}
+      >
+        {I18n.t('Name of issuer')}
+      </Text>
+      <Text style={styles.issuerText} numberOfLines={1}>
+        {issuer}
+      </Text>
     </View>
-  )
-}
+  </View>
+)
 
-const renderClaims = (toRender: DecoratedClaims) => {
+const renderClaims = (toRender: DecoratedClaims): JSX.Element[] => {
   const { claimData } = toRender
   return Object.keys(claimData).map(field => (
     <View key={claimData[field]} style={styles.claimCard}>
       <View style={styles.claimCardTextContainer}>
-        <Text
-          style={JolocomTheme.textStyles.light.labelDisplayField}
-          numberOfLines={1}
-        >
-          {prepareLabel(field)}
-        </Text>
-        <Text
-          style={JolocomTheme.textStyles.light.textDisplayField}
-          numberOfLines={1}
-        >
-          {/* SHOULD THIS BE LIMITED TO 1 LINE? */}
+        <Text style={styles.claimCardTitle}>{prepareLabel(field)}</Text>
+        <Text style={JolocomTheme.textStyles.light.textDisplayField}>
           {claimData[field]}
         </Text>
       </View>
@@ -105,7 +105,9 @@ const renderClaims = (toRender: DecoratedClaims) => {
   ))
 }
 
-export const CredentialDialogComponent: React.SFC<Props> = props => {
+export const CredentialDialogComponent: React.SFC<Props> = (
+  props: Props,
+): JSX.Element => {
   const { credentialToRender } = props
   const { expires, credentialType, issuer } = credentialToRender
 
@@ -127,7 +129,9 @@ export const CredentialDialogComponent: React.SFC<Props> = props => {
         <Text style={styles.sectionHeader}>
           {I18n.t('Document details/claims')}
         </Text>
-        <ScrollView>{renderClaims(credentialToRender)}</ScrollView>
+        <ScrollView style={styles.claimsList}>
+          {renderClaims(credentialToRender)}
+        </ScrollView>
       </View>
     </View>
   )
