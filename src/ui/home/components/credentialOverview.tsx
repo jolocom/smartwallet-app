@@ -24,11 +24,12 @@ interface State {}
 
 const styles = StyleSheet.create({
   sectionHeader: {
-    marginTop: '5%',
-    marginHorizontal: '5%',
-    height: 26,
+    marginTop: 30,
+    marginBottom: 10,
+    paddingLeft: 16,
     fontSize: 17,
     fontFamily: JolocomTheme.contentFontFamily,
+    color: 'rgba(0, 0, 0, 0.38)',
   },
   scrollComponent: {
     width: '100%',

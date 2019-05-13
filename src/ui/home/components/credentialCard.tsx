@@ -52,7 +52,7 @@ export class CredentialCard extends React.Component<Props, State> {
         flexDirection: 'row',
         backgroundColor: JolocomTheme.primaryColorWhite,
         paddingVertical: 12,
-        marginBottom: '1%',
+        marginBottom: 1,
       },
     })
 
