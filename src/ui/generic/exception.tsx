@@ -1,22 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Container } from 'src/ui/structure/'
 import { Button } from 'react-native-material-ui'
 import { navigationActions } from 'src/actions/'
 import { Text, StyleSheet, View, Image } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
 import I18n from 'src/locales/i18n'
-import { AppError } from 'src/lib/errors'
+import { AppError, errorTitleMessages } from 'src/lib/errors'
+import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 const errorImage = require('src/resources/img/error_image.png')
-
-const ERROR_MESSAGES = [I18n.t('Damn!'), I18n.t('Oh no.'), I18n.t('Uh oh.')]
-
-function getRandomErrorTitle() {
-  const length = ERROR_MESSAGES.length
-  const randomNum = Math.floor(Math.random() * length)
-  return ERROR_MESSAGES[randomNum]
-}
 
 interface ConnectProps {
   navigateBack: (routeName: routeList) => void
@@ -33,18 +25,15 @@ interface Props extends ConnectProps {
   }
 }
 
-const debug = {
-  // borderColor: 'red',
-  // borderWidth: 1,
-}
-
 const styles = StyleSheet.create({
-  containerStyle: {
+  container: {
     backgroundColor: JolocomTheme.primaryColorBlack,
     justifyContent: 'space-around',
+    alignItems: 'center',
+    flex: 1,
+    padding: '5%',
   },
   upperContainer: {
-    ...debug,
     marginTop: 85,
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -55,7 +44,6 @@ const styles = StyleSheet.create({
     height: 160,
   },
   textBlock: {
-    ...debug,
     marginTop: 25,
     paddingHorizontal: 20,
     alignItems: 'center',
@@ -67,7 +55,6 @@ const styles = StyleSheet.create({
     fontFamily: JolocomTheme.contentFontFamily,
   },
   errorText: {
-    ...debug,
     marginTop: 15,
     textAlign: 'center',
     color: JolocomTheme.primaryColorSand,
@@ -75,19 +62,15 @@ const styles = StyleSheet.create({
     fontFamily: JolocomTheme.contentFontFamily,
   },
   buttonBlock: {
-    // flex: 0.1,
-    ...debug,
     marginTop: 20,
     backgroundColor: JolocomTheme.primaryColorBlack,
   },
   buttonContainer: {
-    ...debug,
     height: 48,
     borderRadius: 4,
     backgroundColor: JolocomTheme.primaryColorPurple,
   },
   buttonText: {
-    ...debug,
     paddingHorizontal: 15,
     paddingVertical: 15,
     fontFamily: JolocomTheme.contentFontFamily,
@@ -97,20 +80,21 @@ const styles = StyleSheet.create({
   },
 })
 
-export const ExceptionComponent: React.SFC<Props> = props => {
+export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
   // TODO: display error code
   const err = props.navigation.state.params.error
-  let errorText: string = err && err.message
-  if (!errorText) errorText = 'There was an error with your request'
+  let errorText = err ? err.message : 'There was an error with your request'
   errorText = I18n.t(errorText) + '.'
   console.error(err && err.origError ? err.origError : err)
 
   return (
-    <Container style={styles.containerStyle}>
+    <View style={styles.container}>
       <View style={styles.upperContainer}>
         <Image source={errorImage} style={{ width: 160, height: 160 }} />
         <View style={styles.textBlock}>
-          <Text style={styles.errorTextHeader}>{getRandomErrorTitle()}</Text>
+          <Text style={styles.errorTextHeader}>
+            {I18n.t(getRandomStringFromArray(errorTitleMessages))}
+          </Text>
           <Text style={styles.errorText}>{errorText}</Text>
         </View>
       </View>
@@ -128,13 +112,13 @@ export const ExceptionComponent: React.SFC<Props> = props => {
           text={I18n.t('Go back')}
         />
       </View>
-    </Container>
+    </View>
   )
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = (): {} => ({})
 
-const mapDispatchToProps = (dispatch: Function) => ({
+const mapDispatchToProps = (dispatch: Function): {} => ({
   navigateBack: (routeName: routeList) =>
     dispatch(navigationActions.navigatorReset({ routeName })),
 })
