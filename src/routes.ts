@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { StackNavigator, TabBarTop, TabNavigator } from 'react-navigation'
 import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
@@ -8,9 +9,12 @@ import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import I18n from 'src/locales/i18n'
-import { QRScannerContainer } from './ui/generic/qrcodeScanner'
-import { AuthenticationConsent } from './ui/authentication'
-const closeIcon = require('./resources/img/close.png')
+import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
+import { AuthenticationConsent } from 'src/ui/authentication'
+
+let headerBackImage = Platform.OS == 'android'
+  ? require('./resources/img/close.png')
+  : require('src/resources/img/left-chevron.png')
 
 const navigationOptions = {
   header: null,
@@ -18,7 +22,13 @@ const navigationOptions = {
 
 const navOptScreenWCancel = {
   headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: closeIcon,
+  headerBackImage,
+  ...Platform.select({
+    ios: {
+      headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
+      headerTintColor: { color: JolocomTheme.primaryColorWhite },
+    }
+  })
 }
 
 const headerTitleStyle = {
@@ -45,14 +55,18 @@ export const HomeRoutes = TabNavigator(
         ...commonNavigationOptions,
       },
     },
-    Interactions: {
-      screen: Interactions,
-      navigationOptions: {
-        tabBarLabel: I18n.t('Documents'),
-        headerTitle: I18n.t('My identity'),
-        ...commonNavigationOptions,
-      },
-    },
+    ...Platform.select({
+      android: {
+        Interactions: {
+          screen: Interactions,
+          navigationOptions: {
+            tabBarLabel: I18n.t('Documents'),
+            headerTitle: I18n.t('My identity'),
+            ...commonNavigationOptions,
+          },
+        }
+      }
+    })
   },
   {
     tabBarOptions: {
@@ -110,33 +124,53 @@ export const Routes = StackNavigator({
   PaymentConsent: {
     screen: PaymentConsent,
     navigationOptions: {
-      headerBackImage: closeIcon,
+      headerBackImage,
       headerTitle: I18n.t('Confirm payment'),
       headerTitleStyle: {
-        color: JolocomTheme.primaryColorWhite,
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: '100',
         fontSize: JolocomTheme.headerFontSize,
+        ...Platform.select({
+          android: {
+            color: JolocomTheme.primaryColorWhite,
+          }
+        })
       },
       headerStyle: {
         backgroundColor: JolocomTheme.primaryColorBlack,
       },
+      ...Platform.select({
+        ios: {
+          headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
+          headerTintColor: JolocomTheme.primaryColorWhite,
+        }
+      })
     },
   },
   AuthenticationConsent: {
     screen: AuthenticationConsent,
     navigationOptions: {
-      headerBackImage: closeIcon,
+      headerBackImage,
       headerTitle: I18n.t('Authorization request'),
       headerTitleStyle: {
-        color: JolocomTheme.primaryColorWhite,
         fontFamily: JolocomTheme.contentFontFamily,
         fontWeight: '100',
         fontSize: JolocomTheme.headerFontSize,
+        ...Platform.select({
+          android: {
+            color: JolocomTheme.primaryColorWhite,
+          }
+        })
       },
       headerStyle: {
         backgroundColor: JolocomTheme.primaryColorBlack,
       },
+      ...Platform.select({
+        ios: {
+          headerBackTitleStyle: { color: JolocomTheme.primaryColorWhite },
+          headerTintColor: JolocomTheme.primaryColorWhite,
+        }
+      })
     },
   },
   Exception: { screen: Exception, navigationOptions },
