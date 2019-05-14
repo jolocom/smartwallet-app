@@ -1,61 +1,86 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Exception screen component Renders correctly 1`] = `
-<Container
+<Component
   style={
     Object {
+      "alignItems": "center",
       "backgroundColor": "black",
-      "display": "flex",
+      "flex": 1,
+      "justifyContent": "space-around",
+      "padding": "5%",
     }
   }
 >
-  <Block
+  <Component
     style={
       Object {
         "alignItems": "center",
-        "flex": 0.6,
-        "justifyContent": "center",
+        "justifyContent": "space-around",
+        "marginTop": 85,
       }
     }
   >
-    <Text
-      accessible={true}
-      allowFontScaling={true}
-      ellipsizeMode="tail"
+    <Image
+      source={
+        Object {
+          "process": [Function],
+        }
+      }
       style={
         Object {
-          "color": "#ffefdf",
-          "fontFamily": "TT Commons",
-          "fontSize": 28,
-          "textAlign": "center",
+          "height": 160,
+          "width": 160,
+        }
+      }
+    />
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "marginTop": 25,
+          "paddingHorizontal": 20,
         }
       }
     >
-      Oops!
-    </Text>
-    <Text
-      accessible={true}
-      allowFontScaling={true}
-      ellipsizeMode="tail"
-      style={
-        Object {
-          "color": "#ffefdf",
-          "fontFamily": "TT Commons",
-          "fontSize": 18,
-          "textAlign": "center",
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 30,
+            "textAlign": "center",
+          }
         }
-      }
-    >
-       
-      There was an error with your request.
-       
-    </Text>
-  </Block>
-  <Block
+      >
+        Damn.
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 20,
+            "marginTop": 15,
+            "textAlign": "center",
+          }
+        }
+      >
+        There was an error with your request.
+      </Text>
+    </Component>
+  </Component>
+  <Component
     style={
       Object {
         "backgroundColor": "black",
-        "flex": 0.1,
+        "marginTop": 20,
       }
     }
   >
@@ -72,82 +97,107 @@ exports[`Exception screen component Renders correctly 1`] = `
           "container": Object {
             "backgroundColor": "#942f51",
             "borderRadius": 4,
-            "height": "100%",
-            "width": "50%",
+            "height": 48,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
-            "paddingVertical": 20,
+            "paddingHorizontal": 15,
+            "paddingVertical": 15,
           },
         }
       }
       testID={null}
-      text="Try again"
+      text="Go back"
       upperCase={false}
     />
-  </Block>
-</Container>
+  </Component>
+</Component>
 `;
 
 exports[`Exception screen component Renders correctly when no error object is provided 1`] = `
-<Container
+<Component
   style={
     Object {
+      "alignItems": "center",
       "backgroundColor": "black",
-      "display": "flex",
+      "flex": 1,
+      "justifyContent": "space-around",
+      "padding": "5%",
     }
   }
 >
-  <Block
+  <Component
     style={
       Object {
         "alignItems": "center",
-        "flex": 0.6,
-        "justifyContent": "center",
+        "justifyContent": "space-around",
+        "marginTop": 85,
       }
     }
   >
-    <Text
-      accessible={true}
-      allowFontScaling={true}
-      ellipsizeMode="tail"
+    <Image
+      source={
+        Object {
+          "process": [Function],
+        }
+      }
       style={
         Object {
-          "color": "#ffefdf",
-          "fontFamily": "TT Commons",
-          "fontSize": 28,
-          "textAlign": "center",
+          "height": 160,
+          "width": 160,
+        }
+      }
+    />
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "marginTop": 25,
+          "paddingHorizontal": 20,
         }
       }
     >
-      Oops!
-    </Text>
-    <Text
-      accessible={true}
-      allowFontScaling={true}
-      ellipsizeMode="tail"
-      style={
-        Object {
-          "color": "#ffefdf",
-          "fontFamily": "TT Commons",
-          "fontSize": 18,
-          "textAlign": "center",
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 30,
+            "textAlign": "center",
+          }
         }
-      }
-    >
-       
-      There was an error with your request.
-       
-    </Text>
-  </Block>
-  <Block
+      >
+        Uh oh.
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 20,
+            "marginTop": 15,
+            "textAlign": "center",
+          }
+        }
+      >
+        There was an error with your request.
+      </Text>
+    </Component>
+  </Component>
+  <Component
     style={
       Object {
         "backgroundColor": "black",
-        "flex": 0.1,
+        "marginTop": 20,
       }
     }
   >
@@ -164,22 +214,22 @@ exports[`Exception screen component Renders correctly when no error object is pr
           "container": Object {
             "backgroundColor": "#942f51",
             "borderRadius": 4,
-            "height": "100%",
-            "width": "50%",
+            "height": 48,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
             "fontWeight": "100",
-            "paddingVertical": 20,
+            "paddingHorizontal": 15,
+            "paddingVertical": 15,
           },
         }
       }
       testID={null}
-      text="Try again"
+      text="Go back"
       upperCase={false}
     />
-  </Block>
-</Container>
+  </Component>
+</Component>
 `;
