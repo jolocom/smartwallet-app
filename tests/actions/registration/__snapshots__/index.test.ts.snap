@@ -73,7 +73,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
+exports[`Registration action creators startRegistration should save a password and create an identity 4`] = `
 Array [
   Array [
     Object {
