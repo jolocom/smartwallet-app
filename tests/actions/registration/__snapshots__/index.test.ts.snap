@@ -1,7 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Registration action creators createIdentity should attempt to create an identity 1`] = `
+exports[`Registration action creators startRegistration should save a password and create an identity 1`] = `
 Array [
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Loading",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Encrypting and storing data locally",
+  },
   Object {
     "type": "SET_LOADING_MSG",
     "value": "Fueling with ether",
@@ -35,7 +50,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 2`] = `
+exports[`Registration action creators startRegistration should save a password and create an identity 2`] = `
 Array [
   Array [
     Object {
@@ -46,7 +61,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `
+exports[`Registration action creators startRegistration should save a password and create an identity 3`] = `
 Array [
   Array [
     Object {
@@ -57,9 +72,9 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `Array []`;
+exports[`Registration action creators startRegistration should save a password and create an identity 4`] = `Array []`;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
+exports[`Registration action creators startRegistration should save a password and create an identity 5`] = `
 Array [
   Array [
     Object {
@@ -101,41 +116,5 @@ Array [
       "type": "Buffer",
     },
   ],
-]
-`;
-
-exports[`Registration action creators startRegistration should save a password and initiate the registration process 1`] = `
-Array [
-  Object {
-    "actions": Array [
-      Object {
-        "routeName": "Entropy",
-        "type": "Navigation/NAVIGATE",
-      },
-    ],
-    "index": 0,
-    "key": undefined,
-    "type": "Navigation/RESET",
-  },
-]
-`;
-
-exports[`Registration action creators submitEntropy should correctly navigate to route and provide the entropy 1`] = `
-Array [
-  Object {
-    "actions": Array [
-      Object {
-        "routeName": "Loading",
-        "type": "Navigation/NAVIGATE",
-      },
-    ],
-    "index": 0,
-    "key": undefined,
-    "type": "Navigation/RESET",
-  },
-  Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Encrypting and storing data locally",
-  },
 ]
 `;
