@@ -56,25 +56,6 @@ export const compareDates = (date1: Date, date2: Date): number =>
       (1000 * 60 * 60 * 24),
   )
 
-export const instantiateIdentityWallet = async (
-  backendMiddleware: BackendMiddleware,
-) => {
-  const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
-
-  const password = await keyChainLib.getPassword()
-  const decryptedSeed = encryptionLib.decryptWithPass({
-    cipher: await storageLib.get.encryptedSeed(),
-    pass: password,
-  })
-
-  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-  const userVault = new JolocomLib.KeyProvider(
-    Buffer.from(decryptedSeed, 'hex'),
-    password,
-  )
-  return await backendMiddleware.setIdentityWallet(userVault, password)
-}
-
 export function generateSecureRandomBytes(length: number): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     RNRandomBytes.randomBytes(length, (err: string, bytesAsBase64: string) => {
