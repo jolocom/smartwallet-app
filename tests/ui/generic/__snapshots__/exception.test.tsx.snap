@@ -56,7 +56,7 @@ exports[`Exception screen component Renders correctly 1`] = `
           }
         }
       >
-        Damn.
+        Uh oh.
       </Text>
       <Text
         accessible={true}

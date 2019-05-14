@@ -23,6 +23,7 @@ interface Props extends ConnectProps {
       }
     }
   }
+  errorTitle?: string
 }
 
 const styles = StyleSheet.create({
@@ -83,6 +84,8 @@ const styles = StyleSheet.create({
 export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
   // TODO: display error code
   const err = props.navigation.state.params.error
+  const errorTitle =
+    props.errorTitle || getRandomStringFromArray(errorTitleMessages)
   let errorText = err ? err.message : 'There was an error with your request'
   errorText = I18n.t(errorText) + '.'
   console.error(err && err.origError ? err.origError : err)
@@ -92,9 +95,7 @@ export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
       <View style={styles.upperContainer}>
         <Image source={errorImage} style={{ width: 160, height: 160 }} />
         <View style={styles.textBlock}>
-          <Text style={styles.errorTextHeader}>
-            {I18n.t(getRandomStringFromArray(errorTitleMessages))}
-          </Text>
+          <Text style={styles.errorTextHeader}>{I18n.t(errorTitle)}</Text>
           <Text style={styles.errorText}>{errorText}</Text>
         </View>
       </View>
