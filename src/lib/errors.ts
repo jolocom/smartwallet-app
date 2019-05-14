@@ -1,13 +1,18 @@
 export const enum ErrorCode {
   Unknown = 'Unknown',
 
+  // actions/account/index
+  WalletInitFailed = 'WalletInit',
+  SaveClaimFailed = 'SaveClaim',
+  SaveExternalCredentialFailed = 'SaveExtCred',
+
   // actions/sso/authenticationRequest
-  AuthenticationRequestFailed = 'AuthReq',
-  AuthenticationResponseFailed = 'AuthResp',
+  AuthenticationRequestFailed = 'AuthRequest',
+  AuthenticationResponseFailed = 'AuthResponse',
 
   // actions/sso/paymentRequest
-  PaymentRequestFailed = 'PayReq',
-  PaymentResponseFailed = 'PayResp',
+  PaymentRequestFailed = 'PayRequest',
+  PaymentResponseFailed = 'PayResponse',
 
   // actions/sso/index
   CredentialOfferFailed = 'CredOffer',
@@ -23,6 +28,10 @@ export const enum ErrorCode {
 // NOTE: these strings are localized, remember to update locale files
 const errorMessages: { [key in ErrorCode]: string } = {
   [ErrorCode.Unknown]: 'Unknown Error',
+
+  [ErrorCode.WalletInitFailed]: 'Unable to initialize wallet',
+  [ErrorCode.SaveClaimFailed]: 'Could not save claim',
+  [ErrorCode.SaveExternalCredentialFailed]: 'Could not save external credential',
 
   [ErrorCode.AuthenticationRequestFailed]: 'Authentication request failed',
   [ErrorCode.AuthenticationResponseFailed]: 'Authentication response failed',
