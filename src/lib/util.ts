@@ -1,11 +1,10 @@
-import { claimsMetadata, JolocomLib } from 'jolocom-lib'
+import { claimsMetadata } from 'jolocom-lib'
 import {
   uiCategoryByCredentialType,
   Categories,
   uiCredentialTypeByType,
 } from './categories'
 import { BaseMetadata } from 'cred-types-jolocom-core'
-import { BackendMiddleware } from 'src/backendMiddleware'
 
 import { NativeModules } from 'react-native'
 // this comes from 'react-native-randombytes'

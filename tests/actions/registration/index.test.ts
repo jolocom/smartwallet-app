@@ -83,7 +83,7 @@ describe('Registration action creators', () => {
 
       expect(mockStore.getActions()).toMatchSnapshot()
 
-      expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(2)
+      expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
       expect(
         mockBackend.encryptionLib.encryptWithPass.mock.calls,
       ).toMatchSnapshot()

@@ -15,7 +15,7 @@
         "ts",
         "tsx"
       ],
-      "transformer": "node_modules/react-native-typescript-transformer/index.js"
+      "transformer": "node_modules/react-native-typescript-transformer/index.ts"
     }
   },
   "name": "smartwallet",
