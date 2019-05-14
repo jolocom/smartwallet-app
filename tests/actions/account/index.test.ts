@@ -39,14 +39,11 @@ describe('Account action creators', () => {
       storageLib: {
         get: {
           persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:mock' }]),
-          seedEncrypted: jest.fn().mockResolvedValue('johnnycryptoseed'),
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
         },
       },
       keyChainLib: {
         getPassword: jest.fn().mockResolvedValue('sekrit'),
-      },
-      encryptionLib: {
-        decryptWithPass: () => 'newSeed',
       },
       setIdentityWallet: jest.fn(() => Promise.resolve()),
       identityWallet: { identity: { did: 'did:jolo:mock' } },
@@ -70,14 +67,11 @@ describe('Account action creators', () => {
               { did: 'did:jolo:first' },
               { did: 'did:jolo:second' },
             ]),
-          seedEncrypted: jest.fn().mockResolvedValue('johnnycryptoseed'),
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
         },
       },
       keyChainLib: {
         getPassword: jest.fn().mockResolvedValue('sekrit'),
-      },
-      encryptionLib: {
-        decryptWithPass: () => 'newSeed',
       },
       identityWallet: { identity: { did: 'did:jolo:first' } },
       setIdentityWallet: jest.fn(() => Promise.resolve()),
@@ -94,7 +88,7 @@ describe('Account action creators', () => {
       storageLib: {
         get: {
           persona: jest.fn().mockResolvedValue([]),
-          seedEncrypted: jest.fn().mockResolvedValue(null),
+          encryptedSeed: jest.fn().mockResolvedValue(null),
         },
       },
     }

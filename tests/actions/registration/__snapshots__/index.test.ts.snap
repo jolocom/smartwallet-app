@@ -39,9 +39,10 @@ exports[`Registration action creators createIdentity should attempt to create an
 Array [
   Array [
     Object {
-      "data": "4f8d84403d760b5b3fc5426c90827dab",
-      "pass": "secret",
+      "entropy": "4f8d84403d760b5b3fc5426c90827dab",
+      "timestamp": 946681200000,
     },
+    "secret",
   ],
 ]
 `;
@@ -57,9 +58,7 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `Array []`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
 Array [
   Array [
     Object {

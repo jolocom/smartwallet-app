@@ -63,7 +63,7 @@ export const createIdentity = (encodedEntropy: string) => async (
 
     const entropyData = { entropy: encodedEntropy, timestamp: Date.now() }
     await storageLib.store.seedEncrypted(entropyData, password)
-    const userVault = new SoftwareKeyProvider(
+    const userVault = SoftwareKeyProvider.fromSeed(
       Buffer.from(encodedEntropy, 'hex'),
       password,
     )

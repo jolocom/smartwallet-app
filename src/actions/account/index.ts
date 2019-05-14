@@ -54,8 +54,9 @@ export const checkIdentityExists = () => async (
     }
     const password = await keyChainLib.getPassword()
 
-    // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad. Wait for PR in lib
-    const userVault = new JolocomLib.KeyProvider(Buffer.from(encryptedEntropy, 'hex'))
+    const userVault = new JolocomLib.KeyProvider(
+      Buffer.from(encryptedEntropy, 'hex'),
+    )
     await backendMiddleware.setIdentityWallet(userVault, password)
     const identityWallet = backendMiddleware.identityWallet
     dispatch(setDid(identityWallet.identity.did))

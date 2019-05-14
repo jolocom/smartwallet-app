@@ -64,26 +64,21 @@ describe('Registration action creators', () => {
   describe('createIdentity', () => {
     it('should attempt to create an identity', async () => {
       MockDate.set(new Date(946681200000))
-      const { getPasswordResult, cipher, entropy, identityWallet } = data
+      const { getPasswordResult, entropy, identityWallet } = data
       JolocomLib.util.fuelKeyWithEther = jest.fn()
       const mockBackend = {
         identityWallet,
         keyChainLib: {
           getPassword: jest.fn().mockResolvedValue(getPasswordResult),
         },
-        encryptionLib: {
-          encryptWithPass: jest.fn().mockReturnValue(cipher),
-          decryptWithPass: jest.fn().mockReturnValue(entropy),
-        },
         storageLib: {
           store: {
             persona: jest.fn(),
-            derivedKey: jest.fn(),
             seedEncrypted: jest.fn(),
           },
           get: {
             persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:first' }]),
-            seedEncrypted: jest.fn().mockResolvedValue('johnnycryptoseed'),
+            encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
           },
         },
         registry: {
@@ -105,12 +100,9 @@ describe('Registration action creators', () => {
 
       expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
       expect(
-        mockBackend.encryptionLib.encryptWithPass.mock.calls,
+        mockBackend.storageLib.store.seedEncrypted.mock.calls,
       ).toMatchSnapshot()
       expect(mockBackend.storageLib.store.persona.mock.calls).toMatchSnapshot()
-      expect(
-        mockBackend.storageLib.store.derivedKey.mock.calls,
-      ).toMatchSnapshot()
       expect(JolocomLib.util.fuelKeyWithEther.mock.calls).toMatchSnapshot()
       MockDate.reset()
     })
