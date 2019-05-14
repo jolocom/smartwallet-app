@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { settingsReducer, SettingsState } from 'src/reducers/settings/'
 import { accountReducer, AccountState } from 'src/reducers/account/'
 import {
   registrationReducer,
@@ -9,6 +10,7 @@ import { NavigationState } from 'react-navigation'
 import { ssoReducer, SsoState } from 'src/reducers/sso/'
 
 export const rootReducer = combineReducers({
+  settings: settingsReducer,
   account: accountReducer,
   registration: registrationReducer,
   navigation: navigationReducer,
@@ -16,6 +18,7 @@ export const rootReducer = combineReducers({
 })
 
 export interface RootState {
+  readonly settings: SettingsState
   readonly account: AccountState
   readonly registration: RegistrationState
   readonly navigation: NavigationState
