@@ -9,10 +9,10 @@ import {
   saveExternalCredentials,
 } from 'src/actions/account'
 import { CredentialDialogComponent } from '../components/credentialDialog'
-import { Block, Container } from 'src/ui/structure'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { cancelReceiving } from 'src/actions/sso'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
+import { View } from 'react-native'
 
 interface ConnectProps {
   externalCredentials: SignedCredential[]
@@ -33,10 +33,10 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
 
   render() {
     return (
-      <Container style={{ padding: 0, justifyContent: 'space-between' }}>
-        <Block flex={0.9}>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 0.9 }}>
           <CredentialDialogComponent credentialToRender={this.state.toRender} />
-        </Block>
+        </View>
         <ButtonSection
           confirmText={'Accept'}
           denyText={'Deny'}
@@ -44,7 +44,7 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
           handleDeny={this.props.goBack}
           disabled={false}
         />
-      </Container>
+      </View>
     )
   }
 }
