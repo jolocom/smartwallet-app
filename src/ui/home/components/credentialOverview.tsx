@@ -24,11 +24,12 @@ interface State {}
 
 const styles = StyleSheet.create({
   sectionHeader: {
-    marginTop: '5%',
-    marginHorizontal: '5%',
-    height: 26,
+    marginTop: 30,
+    marginBottom: 10,
+    paddingLeft: 16,
     fontSize: 17,
     fontFamily: JolocomTheme.contentFontFamily,
+    color: 'rgba(0, 0, 0, 0.38)',
   },
   scrollComponent: {
     width: '100%',
@@ -47,7 +48,7 @@ export class CredentialOverview extends React.Component<Props, State> {
       claimsState.decoratedCredentials[category] || []
     ).sort((a, b) => (a.credentialType > b.credentialType ? 1 : -1))
 
-    return categorizedCredentials.map((claim: DecoratedClaims) => {
+    return categorizedCredentials.map((claim: DecoratedClaims, index) => {
       const filteredKeys = Object.keys(claim.claimData).filter(
         el => el !== 'id',
       )
@@ -68,6 +69,7 @@ export class CredentialOverview extends React.Component<Props, State> {
           collapsible={collapsible(claim)}
           rightIcon={selfSigned ? <MoreIcon /> : null}
           leftIcon={getCredentialIconByType(claim.credentialType)}
+          containerStyle={index === 0 ? { borderTopWidth: 1 } : undefined}
         />
       )
     })

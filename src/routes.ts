@@ -2,7 +2,7 @@ import { StackNavigator, TabBarTop, TabNavigator } from 'react-navigation'
 import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
-import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
+import { SeedPhrase, Loading } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
@@ -78,7 +78,6 @@ export const HomeRoutes = TabNavigator(
 
 export const Routes = StackNavigator({
   Landing: { screen: Landing, navigationOptions },
-  Entropy: { screen: Entropy, navigationOptions },
   Loading: { screen: Loading, navigationOptions },
   SeedPhrase: { screen: SeedPhrase, navigationOptions },
   Home: { screen: HomeRoutes },

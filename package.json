@@ -1,6 +1,6 @@
 {
   "name": "jolocomwallet",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "private": true,
   "devDependencies": {
     "@types/enzyme": "^3.1.9",
@@ -138,7 +138,6 @@
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "sjcl": "^1.0.7",
     "sqlite3": "^4.0.0",
     "squel": "^5.12.1",
     "wif": "^2.0.6"

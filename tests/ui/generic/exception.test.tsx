@@ -13,6 +13,7 @@ describe('Exception screen component', () => {
           },
         },
       },
+      errorTitle: 'Uh oh.',
     }
 
     const rendered = shallow(<ExceptionComponent {...props} />)
@@ -29,6 +30,7 @@ describe('Exception screen component', () => {
           },
         },
       },
+      errorTitle: 'Uh oh.',
     }
 
     const rendered = shallow(<ExceptionComponent {...props} />)

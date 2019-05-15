@@ -23,6 +23,7 @@ import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareP
 import { consumePaymentRequest } from './paymentRequest'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { consumeAuthenticationRequest } from './authenticationRequest'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const setCredentialRequest = (
   request: StateCredentialRequestSummary,
@@ -89,10 +90,9 @@ export const parseJWT = (encodedJwt: string) => async (
         return new Error('Unknown interaction type when parsing JWT')
     }
   } catch (err) {
-    console.log('error: ', err)
     dispatch(accountActions.toggleLoading(false))
     dispatch(setDeepLinkLoading(false))
-    dispatch(showErrorScreen(err))
+    dispatch(showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)))
   }
 }
 
@@ -129,7 +129,9 @@ export const consumeCredentialOfferRequest = (
   } catch (err) {
     dispatch(accountActions.toggleLoading(false))
     dispatch(setDeepLinkLoading(false))
-    dispatch(showErrorScreen(new Error('JWT Token parse failed')))
+    dispatch(
+      showErrorScreen(new AppError(ErrorCode.CredentialOfferFailed, err)),
+    )
   }
 }
 
@@ -144,16 +146,6 @@ export const receiveExternalCredential = (
 
   try {
     await identityWallet.validateJWT(credReceive, undefined, registry)
-  } catch (error) {
-    console.log(error)
-    dispatch(
-      showErrorScreen(
-        new Error('Validation of external credential token failed'),
-      ),
-    )
-  }
-
-  try {
     const providedCredentials = credReceive.interactionToken.signedCredentials
 
     const results = await Promise.all(
@@ -166,25 +158,22 @@ export const receiveExternalCredential = (
       }),
     )
 
-    if (results.every(el => el === true)) {
-      dispatch(setReceivingCredential(providedCredentials))
-      dispatch(accountActions.toggleLoading(false))
-      dispatch(
-        navigationActions.navigatorReset({
-          routeName: routeList.CredentialDialog,
-        }),
-      )
-    } else {
-      dispatch(accountActions.toggleLoading(false))
-      dispatch(showErrorScreen(new Error('Signature validation failed')))
+    if (!results.every(el => el === true)) {
+      throw new Error('Signature validation failed')
     }
-  } catch (error) {
-    dispatch(accountActions.toggleLoading(false))
+
+    dispatch(setReceivingCredential(providedCredentials))
     dispatch(
-      showErrorScreen(
-        new Error('Signature validation on external credential failed'),
-      ),
+      navigationActions.navigatorReset({
+        routeName: routeList.CredentialDialog,
+      }),
     )
+  } catch (error) {
+    dispatch(
+      showErrorScreen(new AppError(ErrorCode.CredentialsReceiveFailed, error)),
+    )
+  } finally {
+    dispatch(accountActions.toggleLoading(false))
   }
 }
 
@@ -265,15 +254,14 @@ export const consumeCredentialRequest = (
     }
 
     dispatch(setCredentialRequest(summary))
-    dispatch(accountActions.toggleLoading(false))
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Consent }))
     dispatch(setDeepLinkLoading(false))
   } catch (error) {
-    console.log(error)
-    dispatch(accountActions.toggleLoading(false))
     dispatch(
-      showErrorScreen(new Error('Consumption of credential request failed')),
+      showErrorScreen(new AppError(ErrorCode.CredentialRequestFailed, error)),
     )
+  } finally {
+    dispatch(accountActions.toggleLoading(false))
   }
 }
 
@@ -324,14 +312,10 @@ export const sendCredentialResponse = (
       }).then(() => dispatch(cancelSSO()))
     }
   } catch (error) {
-    // TODO: better error message
     dispatch(clearInteractionRequest())
-    console.log(error)
     dispatch(accountActions.toggleLoading(false))
     dispatch(
-      showErrorScreen(
-        new Error('The credential response could not be created'),
-      ),
+      showErrorScreen(new AppError(ErrorCode.CredentialResponseFailed, error)),
     )
   }
 }
