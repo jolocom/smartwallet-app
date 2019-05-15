@@ -1,11 +1,10 @@
-import { claimsMetadata, JolocomLib } from 'jolocom-lib'
+import { claimsMetadata } from 'jolocom-lib'
 import {
   uiCategoryByCredentialType,
   Categories,
   uiCredentialTypeByType,
 } from './categories'
 import { BaseMetadata } from 'cred-types-jolocom-core'
-import { BackendMiddleware } from 'src/backendMiddleware'
 
 import { NativeModules } from 'react-native'
 // this comes from 'react-native-randombytes'
@@ -36,9 +35,7 @@ export const getCredentialUiCategory = (type: string): string => {
 
   const category = uiCategories.find(uiCategory => {
     const categoryDefinition = uiCategoryByCredentialType[uiCategory]
-    return categoryDefinition.some(
-      entry => entry === type,
-    )
+    return categoryDefinition.some(entry => entry === type)
   })
 
   return category || Categories.Other
@@ -59,28 +56,7 @@ export const compareDates = (date1: Date, date2: Date): number =>
       (1000 * 60 * 60 * 24),
   )
 
-export const instantiateIdentityWallet = async (
-  backendMiddleware: BackendMiddleware,
-) => {
-  const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
-
-  const password = await keyChainLib.getPassword()
-  const decryptedSeed = encryptionLib.decryptWithPass({
-    cipher: await storageLib.get.encryptedSeed(),
-    pass: password,
-  })
-
-  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-  const userVault = new JolocomLib.KeyProvider(
-    Buffer.from(decryptedSeed, 'hex'),
-    password,
-  )
-  return await backendMiddleware.setIdentityWallet(userVault, password)
-}
-
-export function generateSecureRandomBytes(
-  length: number,
-): Promise<Buffer> {
+export function generateSecureRandomBytes(length: number): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     RNRandomBytes.randomBytes(length, (err: string, bytesAsBase64: string) => {
       if (err) reject(err)

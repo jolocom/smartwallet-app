@@ -1,10 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Account action creators Should correctly handle an empty personas table 1`] = `
+exports[`Account action creators Should correctly handle an empty encrypted seed table 1`] = `
 Array [
   Object {
     "type": "SET_LOADING",
     "value": false,
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Landing",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
   },
 ]
 `;

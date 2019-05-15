@@ -13,13 +13,13 @@ import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
 
 export class BackendMiddleware {
-  identityWallet!: IdentityWallet
-  storageLib: Storage
-  encryptionLib: EncryptionLibInterface
-  keyChainLib: KeyChainInterface
-  registry: IRegistry
+  public identityWallet!: IdentityWallet
+  public storageLib: Storage
+  public encryptionLib: EncryptionLibInterface
+  public keyChainLib: KeyChainInterface
+  public registry: IRegistry
 
-  constructor(config: {
+  public constructor(config: {
     fuelingEndpoint: string
     typeOrmConfig: ConnectionOptions
   }) {
@@ -40,7 +40,11 @@ export class BackendMiddleware {
     })
   }
 
-  async setIdentityWallet(
+  public async initStorage(): Promise<void> {
+    await this.storageLib.initConnection()
+  }
+
+  public async setIdentityWallet(
     userVault: SoftwareKeyProvider,
     pass: string,
   ): Promise<void> {

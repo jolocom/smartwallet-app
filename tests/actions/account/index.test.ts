@@ -49,13 +49,14 @@ describe('Account action creators', () => {
         decryptWithPass: () => 'newSeed',
       },
       setIdentityWallet: jest.fn(() => Promise.resolve()),
+      identityWallet: { identity: { did: 'did:jolo:mock' } },
     }
 
     const action = accountActions.checkIdentityExists()
 
     // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
-
+    expect(backendMiddleware.setIdentityWallet).toHaveBeenCalledTimes(1)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
@@ -78,32 +79,28 @@ describe('Account action creators', () => {
       encryptionLib: {
         decryptWithPass: () => 'newSeed',
       },
+      identityWallet: { identity: { did: 'did:jolo:first' } },
       setIdentityWallet: jest.fn(() => Promise.resolve()),
     }
 
     const action = accountActions.checkIdentityExists()
+    // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it('Should correctly handle an empty personas table', async () => {
+  it('Should correctly handle an empty encrypted seed table', async () => {
     const backendMiddleware = {
       storageLib: {
         get: {
           persona: jest.fn().mockResolvedValue([]),
-          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+          encryptedSeed: jest.fn().mockResolvedValue(null),
         },
       },
-      keyChainLib: {
-        getPassword: jest.fn().mockResolvedValue('sekrit'),
-      },
-      encryptionLib: {
-        decryptWithPass: () => 'newSeed',
-      },
-      setIdentityWallet: jest.fn(() => Promise.resolve()),
     }
 
     const action = accountActions.checkIdentityExists()
+    // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
