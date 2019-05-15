@@ -8,27 +8,12 @@ import { JolocomLib } from 'jolocom-lib'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 const bip39 = require('bip39')
 import { generateSecureRandomBytes } from 'src/lib/util'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
   value: loadingMsg,
 })
-
-export const submitEntropy = (encodedEntropy: string) => (
-  dispatch: Dispatch<AnyAction>,
-) => {
-  dispatch(
-    navigationActions.navigatorReset({
-      routeName: routeList.Loading,
-    }),
-  )
-
-  dispatch(setLoadingMsg(loading.loadingStages[0]))
-
-  setTimeout(() => {
-    dispatch(createIdentity(encodedEntropy))
-  }, 2000)
-}
 
 export const startRegistration = () => async (
   dispatch: Dispatch<AnyAction>,
@@ -37,11 +22,20 @@ export const startRegistration = () => async (
 ) => {
   try {
     const randomPassword = await generateSecureRandomBytes(32)
-    await backendMiddleware.keyChainLib.savePassword(randomPassword.toString('base64'))
-
-    dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
+    const entropy = await generateSecureRandomBytes(16)
+    const encodedEntropy = entropy.toString('hex')
+    await backendMiddleware.keyChainLib.savePassword(
+      randomPassword.toString('base64'),
+    )
+    dispatch(
+      navigationActions.navigatorReset({
+        routeName: routeList.Loading,
+      }),
+    )
+    dispatch(setLoadingMsg(loading.loadingStages[0]))
+    return dispatch(createIdentity(encodedEntropy))
   } catch (err) {
-    dispatch(genericActions.showErrorScreen(err, routeList.Landing))
+    return dispatch(genericActions.showErrorScreen(err, routeList.Landing))
   }
 }
 
@@ -98,6 +92,11 @@ export const createIdentity = (encodedEntropy: string) => async (
       }),
     )
   } catch (error) {
-    return dispatch(genericActions.showErrorScreen(error, routeList.Landing))
+    return dispatch(
+      genericActions.showErrorScreen(
+        new AppError(ErrorCode.RegistrationFailed, error),
+        routeList.Landing,
+      ),
+    )
   }
 }

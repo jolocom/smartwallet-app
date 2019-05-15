@@ -35,9 +35,7 @@ export const getCredentialUiCategory = (type: string): string => {
 
   const category = uiCategories.find(uiCategory => {
     const categoryDefinition = uiCategoryByCredentialType[uiCategory]
-    return categoryDefinition.some(
-      entry => entry === type,
-    )
+    return categoryDefinition.some(entry => entry === type)
   })
 
   return category || Categories.Other
@@ -58,9 +56,7 @@ export const compareDates = (date1: Date, date2: Date): number =>
       (1000 * 60 * 60 * 24),
   )
 
-export function generateSecureRandomBytes(
-  length: number,
-): Promise<Buffer> {
+export function generateSecureRandomBytes(length: number): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     RNRandomBytes.randomBytes(length, (err: string, bytesAsBase64: string) => {
       if (err) reject(err)

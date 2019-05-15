@@ -10,6 +10,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { Linking } from 'react-native'
 import { cancelSSO, clearInteractionRequest } from 'src/actions/sso'
 import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -47,10 +48,10 @@ export const consumePaymentRequest = (
     dispatch(
       navigationActions.navigatorReset({ routeName: routeList.PaymentConsent }),
     )
-    dispatch(ssoActions.setDeepLinkLoading(false))
   } catch (err) {
+    dispatch(showErrorScreen(new AppError(ErrorCode.PaymentRequestFailed, err)))
+  } finally {
     dispatch(ssoActions.setDeepLinkLoading(false))
-    dispatch(showErrorScreen(new Error('Consuming payment request failed.')))
   }
 }
 
@@ -92,8 +93,9 @@ export const sendPaymentResponse = () => async (
       }).then(() => dispatch(cancelSSO()))
     }
   } catch (err) {
-    console.log(err)
     dispatch(clearInteractionRequest())
-    dispatch(showErrorScreen(new Error('Sending payment response failed.')))
+    dispatch(
+      showErrorScreen(new AppError(ErrorCode.PaymentResponseFailed, err)),
+    )
   }
 }
