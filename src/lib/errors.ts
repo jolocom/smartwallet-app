@@ -31,7 +31,8 @@ const errorMessages: { [key in ErrorCode]: string } = {
 
   [ErrorCode.WalletInitFailed]: 'Unable to initialize wallet',
   [ErrorCode.SaveClaimFailed]: 'Could not save claim',
-  [ErrorCode.SaveExternalCredentialFailed]: 'Could not save external credential',
+  [ErrorCode.SaveExternalCredentialFailed]:
+    'Could not save external credential',
 
   [ErrorCode.AuthenticationRequestFailed]: 'Authentication request failed',
   [ErrorCode.AuthenticationResponseFailed]: 'Authentication response failed',
@@ -57,3 +58,5 @@ export class AppError extends Error {
     this.origError = origError
   }
 }
+
+export const errorTitleMessages = ['Damn.', 'Oh no.', 'Uh oh.']
