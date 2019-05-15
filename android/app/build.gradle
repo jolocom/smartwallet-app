@@ -74,7 +74,7 @@ import com.android.build.OutputFile
 project.ext.react = [
     cliPath: "node_modules/haul/bin/cli.js",
     extraPackagerArgs: ['--minify', 'false'],
-    entryFile: "index.js"
+    entryFile: "index.ts"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -102,8 +102,8 @@ android {
         applicationId "com.jolocomwallet"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 15
-        versionName "1.4.1"
+        versionCode 16
+        versionName "1.5.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -151,6 +151,7 @@ android {
 
 dependencies {
     compile project(':react-native-languages')
+    compile project(':react-native-randombytes')
     compile project(':react-native-vector-icons')
     compile project(':react-native-splash-screen')
     compile project(':react-native-svg')

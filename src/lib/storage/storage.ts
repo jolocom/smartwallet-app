@@ -33,13 +33,13 @@ export class Storage {
   private connection!: Connection
   private config: ConnectionOptions
 
-  store = {
+  public store = {
     verifiableCredential: this.storeVClaim.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
     encryptedSeed: this.storeEncryptedSeed.bind(this),
   }
 
-  get = {
+  public get = {
     persona: this.getPersonas.bind(this),
     verifiableCredential: this.getVCredential.bind(this),
     attributesByType: this.getAttributesByType.bind(this),
@@ -47,11 +47,13 @@ export class Storage {
     encryptedSeed: this.getEncryptedSeed.bind(this),
   }
 
-  delete = {
+  public delete = {
     verifiableCredential: this.deleteVCred.bind(this),
   }
 
-  constructor(config: ConnectionOptions) {
+  public initConnection = this.createConnectionIfNeeded.bind(this)
+
+  public constructor(config: ConnectionOptions) {
     this.config = config
   }
 
@@ -157,10 +159,13 @@ export class Storage {
     return entities.map(e => e.toVerifiableCredential())
   }
 
-  private async getEncryptedSeed(): Promise<string> {
+  private async getEncryptedSeed(): Promise<string | null> {
     await this.createConnectionIfNeeded()
     const masterKeyEntity = await this.connection.manager.find(MasterKeyEntity)
-    return masterKeyEntity[0].encryptedEntropy
+    if (masterKeyEntity.length) {
+      return masterKeyEntity[0].encryptedEntropy
+    }
+    return null
   }
 
   private async storePersonaFromJSON(args: PersonaAttributes): Promise<void> {

@@ -11,8 +11,8 @@ Array [
     "value": true,
   },
   Object {
-    "type": "DID_SET",
-    "value": "did:jolo:mock",
+    "type": "SET_DEEP_LINK_FLAG",
+    "value": true,
   },
 ]
 `;

@@ -8,46 +8,60 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
     }
   }
 >
-  <Block
-    flex={0.1}
+  <Component
+    style={
+      Object {
+        "flex": 0.8,
+        "justifyContent": "center",
+        "marginTop": 20,
+      }
+    }
   >
-    <CenteredText
-      msg="Write these words down on an analog and secure place.
- Without these words, you cannot access your wallet again."
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
       style={
         Object {
           "color": "#ffefdf",
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "lineHeight": 26,
-          "paddingLeft": "5%",
-          "paddingRight": "5%",
+          "textAlign": "center",
         }
       }
-    />
-  </Block>
-  <Block
-    flex={0.6}
+    >
+      Write these words down on an analog and secure place. Without these words, you cannot access your wallet again.
+    </Text>
+  </Component>
+  <Component
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
   >
-    <CenteredText
-      msg="mock seedPhrase"
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
       style={
         Object {
           "color": "white",
           "fontFamily": "TT Commons",
           "fontSize": 34,
           "lineHeight": 38,
-          "paddingLeft": "3%",
-          "paddingRight": "3%",
+          "textAlign": "center",
         }
       }
-    />
-  </Block>
-  <Block
+    >
+      mock seedPhrase
+    </Text>
+  </Component>
+  <Component
     style={
       Object {
-        "bottom": "5%",
-        "position": "absolute",
+        "marginTop": "auto",
       }
     }
   >
@@ -63,8 +77,9 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
         Object {
           "container": Object {
             "backgroundColor": "#942f51",
-            "height": 50,
-            "width": 225,
+            "borderRadius": 4,
+            "height": 48,
+            "paddingHorizontal": 25,
           },
           "text": Object {
             "color": "white",
@@ -79,7 +94,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       text="Yes, I wrote it down"
       upperCase={false}
     />
-  </Block>
+  </Component>
 </Container>
 `;
 
@@ -91,46 +106,60 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
     }
   }
 >
-  <Block
-    flex={0.1}
+  <Component
+    style={
+      Object {
+        "flex": 0.8,
+        "justifyContent": "center",
+        "marginTop": 20,
+      }
+    }
   >
-    <CenteredText
-      msg="Write these words down on an analog and secure place.
- Without these words, you cannot access your wallet again."
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
       style={
         Object {
           "color": "#ffefdf",
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "lineHeight": 26,
-          "paddingLeft": "5%",
-          "paddingRight": "5%",
+          "textAlign": "center",
         }
       }
-    />
-  </Block>
-  <Block
-    flex={0.6}
+    >
+      Write these words down on an analog and secure place. Without these words, you cannot access your wallet again.
+    </Text>
+  </Component>
+  <Component
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
   >
-    <CenteredText
-      msg="mock seedPhrase"
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
       style={
         Object {
           "color": "white",
           "fontFamily": "TT Commons",
           "fontSize": 34,
           "lineHeight": 38,
-          "paddingLeft": "3%",
-          "paddingRight": "3%",
+          "textAlign": "center",
         }
       }
-    />
-  </Block>
-  <Block
+    >
+      mock seedPhrase
+    </Text>
+  </Component>
+  <Component
     style={
       Object {
-        "bottom": "5%",
-        "position": "absolute",
+        "marginTop": "auto",
       }
     }
   >
@@ -146,8 +175,9 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
         Object {
           "container": Object {
             "backgroundColor": "#942f51",
-            "height": 50,
-            "width": 225,
+            "borderRadius": 4,
+            "height": 48,
+            "paddingHorizontal": 25,
           },
           "text": Object {
             "color": "white",
@@ -162,6 +192,6 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       text="Yes, I wrote it down"
       upperCase={false}
     />
-  </Block>
+  </Component>
 </Container>
 `;

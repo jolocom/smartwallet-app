@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from 'redux'
-import { navigationActions, genericActions, accountActions } from 'src/actions/'
+import { navigationActions, genericActions } from 'src/actions/'
 import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
@@ -7,47 +7,36 @@ import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 const bip39 = require('bip39')
+import { generateSecureRandomBytes } from 'src/lib/util'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
   value: loadingMsg,
 })
 
-export const savePassword = (password: string) => async (
+export const startRegistration = () => async (
   dispatch: Dispatch<AnyAction>,
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
   try {
-    await backendMiddleware.keyChainLib.savePassword(password)
-    dispatch(navigationActions.navigatorReset({ routeName: routeList.Entropy }))
+    const randomPassword = await generateSecureRandomBytes(32)
+    const entropy = await generateSecureRandomBytes(16)
+    const encodedEntropy = entropy.toString('hex')
+    await backendMiddleware.keyChainLib.savePassword(
+      randomPassword.toString('base64'),
+    )
+    dispatch(
+      navigationActions.navigatorReset({
+        routeName: routeList.Loading,
+      }),
+    )
+    dispatch(setLoadingMsg(loading.loadingStages[0]))
+    return dispatch(createIdentity(encodedEntropy))
   } catch (err) {
-    dispatch(genericActions.showErrorScreen(err, routeList.Landing))
+    return dispatch(genericActions.showErrorScreen(err, routeList.Landing))
   }
-}
-
-export const submitEntropy = (encodedEntropy: string) => (
-  dispatch: Dispatch<AnyAction>,
-) => {
-  dispatch(
-    navigationActions.navigatorReset({
-      routeName: routeList.Loading,
-    }),
-  )
-
-  dispatch(setLoadingMsg(loading.loadingStages[0]))
-
-  setTimeout(() => {
-    dispatch(createIdentity(encodedEntropy))
-  }, 2000)
-}
-
-export const startRegistration = () => (dispatch: Dispatch<AnyAction>) => {
-  dispatch(
-    navigationActions.navigatorReset({
-      routeName: routeList.PasswordEntry,
-    }),
-  )
 }
 
 export const finishRegistration = () => (dispatch: Dispatch<AnyAction>) => {
@@ -59,12 +48,7 @@ export const createIdentity = (encodedEntropy: string) => async (
   getState: Function,
   backendMiddleware: BackendMiddleware,
 ) => {
-  const {
-    encryptionLib,
-    keyChainLib,
-    storageLib,
-    registry
-  } = backendMiddleware
+  const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
 
   try {
     const password = await keyChainLib.getPassword()
@@ -99,7 +83,7 @@ export const createIdentity = (encodedEntropy: string) => async (
     await storageLib.store.persona(personaData)
     dispatch(setDid(identityWallet.identity.did))
     dispatch(setLoadingMsg(loading.loadingStages[3]))
-    dispatch(accountActions.setIdentityWallet())
+    await backendMiddleware.setIdentityWallet(userVault, password)
 
     return dispatch(
       navigationActions.navigatorReset({
@@ -108,6 +92,11 @@ export const createIdentity = (encodedEntropy: string) => async (
       }),
     )
   } catch (error) {
-    return dispatch(genericActions.showErrorScreen(error, routeList.Landing))
+    return dispatch(
+      genericActions.showErrorScreen(
+        new AppError(ErrorCode.RegistrationFailed, error),
+        routeList.Landing,
+      ),
+    )
   }
 }
