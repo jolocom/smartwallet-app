@@ -48,7 +48,7 @@ exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
 <React.Fragment>
   <StatusBar
     animated={false}
-    barStyle="dark-content"
+    barStyle="default"
     showHideTransition="fade"
   />
   <withOrientation
