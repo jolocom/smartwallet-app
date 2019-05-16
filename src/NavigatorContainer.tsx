@@ -89,8 +89,6 @@ export class NavigatorContainer extends React.Component<Props> {
     const currentRoute = routes[index].routeName
     const darkBackgroundPages = [
       routeList.Landing,
-      routeList.PasswordEntry,
-      routeList.Entropy,
       routeList.SeedPhrase,
       routeList.Exception,
       routeList.Loading,
@@ -98,9 +96,7 @@ export class NavigatorContainer extends React.Component<Props> {
     const isDarkBackground = darkBackgroundPages.includes(currentRoute)
     return (
       <React.Fragment>
-        <StatusBar
-          barStyle={isDarkBackground ? 'light-content' : 'dark-content'}
-        />
+        <StatusBar barStyle={isDarkBackground ? 'light-content' : 'default'} />
         <SafeAreaView
           style={{
             flex: 1,
