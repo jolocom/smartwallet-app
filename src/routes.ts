@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { StackNavigator, TabBarTop, TabNavigator } from 'react-navigation'
 import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
@@ -8,17 +9,32 @@ import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import I18n from 'src/locales/i18n'
-import { QRScannerContainer } from './ui/generic/qrcodeScanner'
-import { AuthenticationConsent } from './ui/authentication'
-const closeIcon = require('./resources/img/close.png')
+import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
+import { AuthenticationConsent } from 'src/ui/authentication'
+
+const headerBackImage =
+  Platform.OS === 'android'
+    ? require('./resources/img/close.png')
+    : require('src/resources/img/left-chevron.png')
 
 const navigationOptions = {
   header: null,
 }
 
 const navOptScreenWCancel = {
-  headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-  headerBackImage: closeIcon,
+  headerStyle: {
+    backgroundColor:
+      Platform.OS === 'android'
+        ? JolocomTheme.primaryColorBlack
+        : JolocomTheme.primaryColorWhite,
+  },
+  headerBackImage,
+  ...Platform.select({
+    ios: {
+      headerBackTitleStyle: { color: JolocomTheme.primaryColorPurple },
+      headerTintColor: { color: JolocomTheme.primaryColorPurple },
+    },
+  }),
 }
 
 const headerTitleStyle = {
@@ -27,12 +43,23 @@ const headerTitleStyle = {
   fontWeight: '300',
 }
 
+const defaultHeaderBackgroundColor =
+  Platform.OS === 'android'
+    ? JolocomTheme.primaryColorBlack
+    : JolocomTheme.primaryColorWhite
+
+const defaultHeaderTintColor =
+  Platform.OS === 'android'
+    ? JolocomTheme.primaryColorWhite
+    : JolocomTheme.primaryColorPurple
+
 const commonNavigationOptions = {
   headerTitleStyle,
   headerStyle: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: defaultHeaderBackgroundColor,
+    borderBottomWidth: 0,
   },
-  headerTintColor: JolocomTheme.primaryColorWhite,
+  headerTintColor: defaultHeaderTintColor,
 }
 
 export const HomeRoutes = TabNavigator(
@@ -45,19 +72,26 @@ export const HomeRoutes = TabNavigator(
         ...commonNavigationOptions,
       },
     },
-    Interactions: {
-      screen: Interactions,
-      navigationOptions: {
-        tabBarLabel: I18n.t('Documents'),
-        headerTitle: I18n.t('My identity'),
-        ...commonNavigationOptions,
+    ...Platform.select({
+      android: {
+        Interactions: {
+          screen: Interactions,
+          navigationOptions: {
+            tabBarLabel: I18n.t('Documents'),
+            headerTitle: I18n.t('My identity'),
+            ...commonNavigationOptions,
+          },
+        },
       },
-    },
+    }),
   },
   {
     tabBarOptions: {
       upperCaseLabel: false,
-      activeTintColor: JolocomTheme.primaryColorSand,
+      activeTintColor:
+        Platform.OS === 'android'
+          ? JolocomTheme.primaryColorSand
+          : JolocomTheme.primaryColorPurple,
       inactiveTintColor: JolocomTheme.primaryColorGrey,
       labelStyle: {
         fontFamily: JolocomTheme.contentFontFamily,
@@ -65,10 +99,13 @@ export const HomeRoutes = TabNavigator(
         textAlign: 'center',
       },
       style: {
-        backgroundColor: JolocomTheme.primaryColorBlack,
+        backgroundColor: defaultHeaderBackgroundColor,
       },
       indicatorStyle: {
-        backgroundColor: JolocomTheme.primaryColorSand,
+        backgroundColor:
+          Platform.OS === 'android'
+            ? JolocomTheme.primaryColorSand
+            : JolocomTheme.primaryColorPurple,
       },
     },
     tabBarComponent: TabBarTop,
@@ -85,58 +122,30 @@ export const Routes = StackNavigator({
     screen: CredentialReceive,
     navigationOptions: {
       headerTitle: I18n.t('Receiving new credential'),
-      headerTitleStyle: {
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
-      },
-      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-      headerTintColor: JolocomTheme.primaryColorWhite,
+      ...commonNavigationOptions,
     },
   },
   Consent: {
     screen: Consent,
     navigationOptions: {
       headerTitle: I18n.t('Share claims'),
-      headerTitleStyle: {
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
-      },
-      headerStyle: { backgroundColor: JolocomTheme.primaryColorBlack },
-      headerTintColor: JolocomTheme.primaryColorWhite,
+      ...commonNavigationOptions,
     },
   },
   PaymentConsent: {
     screen: PaymentConsent,
     navigationOptions: {
-      headerBackImage: closeIcon,
+      headerBackImage,
       headerTitle: I18n.t('Confirm payment'),
-      headerTitleStyle: {
-        color: JolocomTheme.primaryColorWhite,
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
-      },
-      headerStyle: {
-        backgroundColor: JolocomTheme.primaryColorBlack,
-      },
+      ...commonNavigationOptions,
     },
   },
   AuthenticationConsent: {
     screen: AuthenticationConsent,
     navigationOptions: {
-      headerBackImage: closeIcon,
+      headerBackImage,
       headerTitle: I18n.t('Authorization request'),
-      headerTitleStyle: {
-        color: JolocomTheme.primaryColorWhite,
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontWeight: '100',
-        fontSize: JolocomTheme.headerFontSize,
-      },
-      headerStyle: {
-        backgroundColor: JolocomTheme.primaryColorBlack,
-      },
+      ...commonNavigationOptions,
     },
   },
   Exception: { screen: Exception, navigationOptions },
