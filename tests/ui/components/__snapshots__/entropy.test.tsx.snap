@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Entropy component matches the snapshot when drawn upon and insufficient entropy 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+      "padding": 0,
+    }
+  }
+>
+  <CenteredText
+    msg="50 %"
+    style={
+      Object {
+        "backgroundColor": "black",
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 22,
+        "fontWeight": "100",
+        "paddingHorizontal": 50,
+        "position": "absolute",
+        "top": "20%",
+      }
+    }
+  />
+  <Block>
+    <MaskedImageComponent
+      addPoint={[Function]}
+    />
+  </Block>
+  <Component
+    style={
+      Object {
+        "bottom": "5%",
+        "position": "absolute",
+      }
+    }
+  />
+</Container>
+`;
+
+exports[`Entropy component matches the snapshot when not drawn upon and insufficient entropy 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+      "padding": 0,
+    }
+  }
+>
+  <CenteredText
+    msg="For security purposes, we need some randomness. Please tap the screen and draw on it randomly"
+    style={
+      Object {
+        "backgroundColor": "black",
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 22,
+        "fontWeight": "100",
+        "paddingHorizontal": 50,
+        "position": "absolute",
+        "top": "20%",
+      }
+    }
+  />
+  <Block>
+    <MaskedImageComponent
+      addPoint={[Function]}
+    />
+  </Block>
+  <Component
+    style={
+      Object {
+        "bottom": "5%",
+        "position": "absolute",
+      }
+    }
+  />
+</Container>
+`;
+
+exports[`Entropy component matches the snapshot with when drawn upon and sufficient entropy 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "black",
+      "padding": 0,
+    }
+  }
+>
+  <CenteredText
+    msg="100 %"
+    style={
+      Object {
+        "backgroundColor": "black",
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 22,
+        "fontWeight": "100",
+        "paddingHorizontal": 50,
+        "position": "absolute",
+        "top": "20%",
+      }
+    }
+  />
+  <Block>
+    <MaskedImageComponent
+      addPoint={[Function]}
+    />
+  </Block>
+  <Component
+    style={
+      Object {
+        "bottom": "5%",
+        "position": "absolute",
+      }
+    }
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={[Function]}
+      primary={false}
+      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "width": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "100",
+            "paddingVertical": 15,
+          },
+        }
+      }
+      testID={null}
+      text="Continue"
+      upperCase={false}
+    />
+  </Component>
+</Container>
+`;

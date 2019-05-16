@@ -109,6 +109,22 @@ Array [
   Object {
     "actions": Array [
       Object {
+        "routeName": "Entropy",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": undefined,
+    "type": "Navigation/RESET",
+  },
+]
+`;
+
+exports[`Registration action creators submitEntropy should correctly navigate to route and provide the entropy 1`] = `
+Array [
+  Object {
+    "actions": Array [
+      Object {
         "routeName": "Loading",
         "type": "Navigation/NAVIGATE",
       },

@@ -1,6 +1,7 @@
 export const enum routeList {
   Landing = 'Landing',
   Consent = 'Consent',
+  Entropy = 'Entropy',
   Loading = 'Loading',
   SeedPhrase = 'SeedPhrase',
   Home = 'Home',

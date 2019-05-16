@@ -8680,9 +8680,9 @@ sjcl@^1.0.3:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/sjcl/-/sjcl-1.0.8.tgz#f2ec8d7dc1f0f21b069b8914a41a8f236b0e252a"
 
-sjcl@^1.0.3:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/sjcl/-/sjcl-1.0.8.tgz#f2ec8d7dc1f0f21b069b8914a41a8f236b0e252a"
+sjcl@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/sjcl/-/sjcl-1.0.7.tgz#32b365a50dc9bba26b88ba3c9df8ea34217d9f45"
 
 slash@^1.0.0:
   version "1.0.0"
