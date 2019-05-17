@@ -4,7 +4,7 @@ import {
   PanResponderInstance,
   GestureResponderEvent,
 } from 'react-native'
-import { Svg, Path } from 'react-native-svg'
+import { Svg, Path, Circle } from 'react-native-svg'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
@@ -12,22 +12,29 @@ interface Props {
 }
 
 interface State {
-  currentPath: string[]
-  limit: number
+  linesPts: number[]
+  prevX: number
+  prevY: number
+  curX: number
+  curY: number
+  pathD: string
+  circles: number[][]
 }
 
-interface Point {
-  type: string
-  x: number
-  y: number
-}
+const MIN_DISTANCE_SQ = 50
+const MAX_LINE_PTS = 150
 
 export class MaskedImageComponent extends React.Component<Props, State> {
   private panResponder!: PanResponderInstance
 
-  state = {
-    currentPath: [],
-    limit: 15,
+  state: State = {
+    linesPts: [],
+    prevX: 0,
+    prevY: 0,
+    curX: 0,
+    curY: 0,
+    pathD: '',
+    circles: [],
   }
 
   componentWillMount() {
@@ -44,45 +51,105 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   }
 
   private handleDrawStart = (e: GestureResponderEvent): void => {
-    const { locationX, locationY } = e.nativeEvent
-    this.props.addPoint(locationX, locationY)
+    const { locationX: x, locationY: y } = e.nativeEvent
+    this.props.addPoint(x, y)
 
-    const point = { type: 'M', x: locationX, y: locationY }
-    this.handleNewPoint(point)
+    this.setState({
+      curX: x,
+      curY: y,
+      prevX: x,
+      prevY: y,
+      pathD: this.state.pathD + `M${x},${y} `,
+    })
   }
 
   private handleDraw = (e: GestureResponderEvent): void => {
-    const { locationX, locationY } = e.nativeEvent
-    this.props.addPoint(locationX, locationY)
+    const { locationX: curX, locationY: curY } = e.nativeEvent
+    const { prevX, prevY, linesPts, circles, pathD } = this.state
 
-    const point = { type: 'L', x: locationX, y: locationY }
-    this.handleNewPoint(point)
+    this.props.addPoint(curX, curY)
+    const dist_sq = Math.abs(curX - prevX) + Math.abs(curY - prevY)
+
+    if (dist_sq > MIN_DISTANCE_SQ) {
+      for (let i = 0; i < linesPts.length; i += 4) {
+        const intsct = this.getIntersection(
+          linesPts[i],
+          linesPts[i + 1],
+          linesPts[i + 2],
+          linesPts[i + 3],
+          prevX,
+          prevY,
+          curX,
+          curY,
+        )
+        if (intsct) circles.push(intsct)
+      }
+      linesPts.push(prevX, prevY, curX, curY)
+      if (linesPts.length > MAX_LINE_PTS) linesPts.splice(0, 4)
+      this.setState({
+        curX,
+        curY,
+        prevX: curX,
+        prevY: curY,
+        pathD: pathD + `L${curX},${curY} `,
+        linesPts,
+        circles,
+      })
+    } else {
+      this.setState({
+        curX,
+        curY,
+      })
+    }
   }
 
-  private handleNewPoint(p: Point): void {
-    const svgCoordinate = `${p.type}${p.x} ${p.y}`
-    const newSvgPathCoords: string[] = this.state.currentPath.concat()
+  // returns [x, y] for the intersection of (a,b)->(c,d) with (p,q)->(r,s),
+  // or undefined if they don't intersect
+  private getIntersection(
+    a: number,
+    b: number,
+    c: number,
+    d: number,
+    p: number,
+    q: number,
+    r: number,
+    s: number,
+  ): number[] | undefined {
+    let det, gamma, lambda
+    det = (c - a) * (s - q) - (r - p) * (d - b)
+    if (det === 0) return
 
-    if (newSvgPathCoords.length === this.state.limit) {
-      newSvgPathCoords.shift()
-      newSvgPathCoords[0] = `M${newSvgPathCoords[0].substring(1)}`
+    lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det
+    gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det
+    if (0 < lambda && lambda < 1 && (0 < gamma && gamma < 1)) {
+      const x = a + lambda * (c - a)
+      const y = b + lambda * (d - b)
+      return [x, y]
     }
-
-    newSvgPathCoords.push(svgCoordinate)
-    this.setState({ currentPath: newSvgPathCoords })
+    return
   }
 
   render() {
     return (
       <Svg width="100%" height="100%" {...this.panResponder.panHandlers}>
         <Path
-          d={this.state.currentPath.join(' ')}
+          d={this.state.pathD + `L${this.state.curX},${this.state.curY}`}
           fill="none"
-          stroke={JolocomTheme.primaryColorSand}
+          stroke={JolocomTheme.primaryColorSandInactive}
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth={20}
+          strokeDasharray="1,4%"
+          strokeWidth="1%"
         />
+        {this.state.circles.map((c, i) => (
+          <Circle
+            key={i}
+            cx={c[0]}
+            cy={c[1]}
+            r={5}
+            fill={JolocomTheme.primaryColorSand}
+          />
+        ))}
       </Svg>
     )
   }

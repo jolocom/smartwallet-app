@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
     fontWeight: '100',
     color: JolocomTheme.primaryColorSand,
   },
+  bigFont: {
+    fontSize: JolocomTheme.headerFontSize * 2,
+  },
   buttonContainer: {
     width: 164,
     height: 48,
@@ -59,9 +62,14 @@ export const EntropyComponent: React.SFC<Props> = props => {
         I18n.t('Please tap the screen and draw on it randomly')
       : `${Math.trunc(progress * 100)} %`
 
+  const style =
+    progress === 0
+      ? styles.text
+      : [styles.text, styles.bigFont]
+
   return (
     <Container style={styles.mainContainer}>
-      <CenteredText style={styles.text} msg={msg} />
+      <CenteredText style={style} msg={msg} />
       <Block>
         <MaskedImageComponent addPoint={addPoint} />
       </Block>
