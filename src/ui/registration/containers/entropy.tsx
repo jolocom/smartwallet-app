@@ -7,6 +7,7 @@ import {
   EntropyGeneratorInterface,
   EntropyGenerator,
 } from 'src/lib/entropyGenerator'
+import { generateSecureRandomBytes } from 'src/lib/util'
 
 interface ConnectProps {
   submit: (encodedEntropy: string) => void
@@ -22,6 +23,9 @@ interface State {
   sufficientEntropy: boolean
   entropyProgress: number
 }
+
+// we are gonna collect some from the user and the rest from the OS
+const ENOUGH_ENTROPY_PROGRESS = 0.6
 
 export class EntropyContainer extends React.Component<Props, State> {
   private entropyGenerator!: EntropyGeneratorInterface
@@ -41,18 +45,21 @@ export class EntropyContainer extends React.Component<Props, State> {
     return new EntropyGenerator()
   }
 
-  private addPoint = (x: number, y: number): void => {
+  private addPoint = async (x: number, y: number): Promise<void> => {
+    if (this.state.sufficientEntropy) return
+
     this.entropyGenerator.addFromDelta(x)
     this.entropyGenerator.addFromDelta(y)
-    this.setState({ entropyProgress: this.entropyGenerator.getProgress() })
-    this.updateEntropyProgress()
-  }
+    const entropyProgress =
+      this.entropyGenerator.getProgress() / ENOUGH_ENTROPY_PROGRESS
+    this.setState({ entropyProgress })
 
-  private updateEntropyProgress = (): void => {
-    if (!this.state.sufficientEntropy && this.state.entropyProgress === 1) {
+    if (entropyProgress >= 1) {
+      this.setState({ sufficientEntropy: true, entropyProgress: 1 })
+      const moreEntropy = await generateSecureRandomBytes(1024)
+      moreEntropy.forEach(e => this.entropyGenerator.addFromDelta(e))
       const encodedEntropy = this.generateRandomString()
       this.setState({ encodedEntropy })
-      this.setState({ sufficientEntropy: true })
     }
   }
 
