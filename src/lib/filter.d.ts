@@ -5,7 +5,7 @@ export interface Transformation<T> {
 }
 
 export interface Ordering<T> {
-    (t1: T, t2: T): boolean
+    (t1: T, t2: T): number
 }
 
 export interface Filter<T> {
