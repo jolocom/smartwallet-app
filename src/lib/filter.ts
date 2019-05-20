@@ -3,10 +3,10 @@ import { Transformation,
          Filter,
          Ordering } from './filter.d';
 
-export const transform = <T>(list: T[], transformations: Transformation<T>[]): T[] =>
-    (transformations && transformations[0])
+export const transform = <T>(list: T[], [transformation, ...rest]: Transformation<T>[]): T[] =>
+    transformation
     ? list
-    : transform(transformations!.pop()(list), transformations);
+    : transform(transformation!(list), rest);
 
 export const filterToTransformation = <T>(filter: Filter<T>): Transformation<T> =>
     (list: T[]): T[] =>
