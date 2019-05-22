@@ -4,13 +4,11 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 const expiredFilter: Filter<SignedCredential> = cred =>
   cred.expires.valueOf() >= new Date().valueOf()
 
-const issuerFilter: (did: string) => Filter<SignedCredential> = (
-  issuerDid: string,
-) => cred => cred.issuer === issuerDid
+const issuerFilter = (issuerDid: string): Filter<SignedCredential> => cred =>
+  cred.issuer === issuerDid
 
-const typeFilter: (typ: string) => Filter<SignedCredential> = (
-  typ: string,
-) => cred => cred.type.includes(typ)
+const typeFilter = (typ: string): Filter<SignedCredential> => cred =>
+  cred.type.includes(typ)
 
 const mostRecentOrder: Ordering<SignedCredential> = (c1, c2) =>
   c1.issued.valueOf() - c2.issued.valueOf()
