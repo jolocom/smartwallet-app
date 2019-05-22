@@ -1,5 +1,5 @@
 import { Platform } from 'react-native'
-import { StackNavigator, TabBarTop, TabNavigator } from 'react-navigation'
+import { StackNavigator, TabNavigator } from 'react-navigation'
 import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
@@ -70,80 +70,37 @@ const commonNavigationOptions = {
   headerTintColor: defaultHeaderTintColor,
 }
 
-export const IdentityRoutes = TabNavigator(
+export const BottomNavRoutes = TabNavigator(
   {
     [routeList.Claims]: {
       screen: Claims,
       navigationOptions: {
-        tabBarLabel: I18n.t('All claims'),
-        headerTitle: I18n.t('My identity'),
         ...commonNavigationOptions,
-      },
-    },
-    ...Platform.select({
-      android: {
-        [routeList.Interactions]: {
-          screen: Interactions,
-          navigationOptions: {
-            tabBarLabel: I18n.t('Documents'),
-            headerTitle: I18n.t('My identity'),
-            ...commonNavigationOptions,
-          },
-        },
-      },
-    }),
-  },
-  {
-    tabBarOptions: {
-      upperCaseLabel: false,
-      activeTintColor:
-        Platform.OS === 'android'
-          ? JolocomTheme.primaryColorSand
-          : JolocomTheme.primaryColorPurple,
-      inactiveTintColor: JolocomTheme.primaryColorGrey,
-      labelStyle: {
-        fontFamily: JolocomTheme.contentFontFamily,
-        fontSize: JolocomTheme.labelFontSize,
-        textAlign: 'center',
-      },
-      style: {
-        backgroundColor: defaultHeaderBackgroundColor,
-      },
-      indicatorStyle: {
-        backgroundColor:
-          Platform.OS === 'android'
-            ? JolocomTheme.primaryColorSand
-            : JolocomTheme.primaryColorPurple,
-      },
-    },
-    tabBarComponent: TabBarTop,
-    tabBarPosition: 'top',
-  },
-)
-
-export const BottomNavRoutes = TabNavigator(
-  {
-    [routeList.Identity]: {
-      screen: IdentityRoutes,
-      navigationOptions: {
+        headerTitle: I18n.t('My identity'),
         tabBarIcon: IdentityMenuIcon,
       },
     },
     [routeList.Documents]: {
       screen: Interactions,
       navigationOptions: {
+        ...commonNavigationOptions,
+        headerTitle: I18n.t('Documents'),
         tabBarIcon: DocumentsMenuIcon,
       },
     },
     [routeList.Records]: {
       screen: Interactions,
       navigationOptions: {
+        ...commonNavigationOptions,
+        headerTitle: I18n.t('Records'),
         tabBarIcon: RecordsMenuIcon,
       },
     },
     [routeList.Settings]: {
       screen: Interactions,
       navigationOptions: {
+        ...commonNavigationOptions,
+        headerTitle: I18n.t('Settings'),
         tabBarIcon: SettingsMenuIcon,
       },
     },

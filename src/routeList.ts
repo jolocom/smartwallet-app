@@ -5,7 +5,6 @@ export enum routeList {
   SeedPhrase = 'SeedPhrase',
 
   Home = 'Home',
-  Identity = 'Identity',
   Claims = 'Claims',
   Interactions = 'Interactions',
   Documents = 'Documents',
