@@ -1,6 +1,9 @@
-import { Transformation, Filter, Ordering } from './filter.d'
+export type Ordering<T> = (t1: T, t2: T) => number
+export type Filter<T> = (t: T) => boolean
+type Transformation<T> = (list: T[]) => T[]
 
 /**
+ * @description - Builds one {@link Transformation} from an array {@link Ordering} or {@link Filter} functions
  * @param ts - List of functions used to order or filter the credential list
  * @returns - Function combining all order / filter operations passed in
  */

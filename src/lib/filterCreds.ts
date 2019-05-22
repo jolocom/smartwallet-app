@@ -1,25 +1,25 @@
-import { Ordering, Filter } from './filter.d'
-import { buildTransform } from './filter'
-
+import { buildTransform, Filter, Ordering } from './filter'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
-const expiredFilter: Filter<SignedCredential> = (cred: SignedCredential) =>
+const expiredFilter: Filter<SignedCredential> = cred =>
   cred.expires.valueOf() >= new Date().valueOf()
 
 const issuerFilter: (did: string) => Filter<SignedCredential> = (
   issuerDid: string,
-) => (cred: SignedCredential) => cred.issuer === issuerDid
+) => cred => cred.issuer === issuerDid
 
-const typeFilter: (typ: string) => Filter<SignedCredential> = (typ: string) => (
-  cred: SignedCredential,
-) => cred.type.includes(typ)
+const typeFilter: (typ: string) => Filter<SignedCredential> = (
+  typ: string,
+) => cred => cred.type.includes(typ)
 
-const mostRecentOrder: Ordering<SignedCredential> = (
-  c1: SignedCredential,
-  c2: SignedCredential,
-) => c1.issued.valueOf() - c2.issued.valueOf()
+const mostRecentOrder: Ordering<SignedCredential> = (c1, c2) =>
+  c1.issued.valueOf() - c2.issued.valueOf()
 
-// These are some basic filters, if required they can be removed and the filtering/ordering construction functions can be exposed instead
+/**
+ * @dev Some basic predefined filters, if required they can be removed
+ * and the filtering / ordering construction functions can be exposed instead
+ */
+
 export const filters = {
   filterByExpired: buildTransform<SignedCredential>([expiredFilter]),
   filterByIssuer: (did: string) =>
