@@ -85,8 +85,5 @@ exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
       }
     />
   </withOrientation>
-  <BottomActionBar
-    openScanner={[MockFunction]}
-  />
 </React.Fragment>
 `;
