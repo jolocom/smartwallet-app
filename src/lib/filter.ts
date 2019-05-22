@@ -1,20 +1,26 @@
 import { Transformation, Filter, Ordering } from './filter.d'
 
-export const buildTransform: <T>(
-  ts: [Filter<T> | Ordering<T>],
-) => Transformation<T> = <T>(
-  ts: [Filter<T> | Ordering<T>],
-): Transformation<T> => (list: T[]): T[] =>
+/**
+ * @param ts - List of functions used to order or filter the credential list
+ * @returns - Function combining all order / filter operations passed in
+ */
+
+export const buildTransform = <T>(ts: [Filter<T> | Ordering<T>]) => (
+  list: T[],
+): T[] =>
   ts
-    .map(
-      (t: Filter<T> | Ordering<T>): Transformation<T> =>
-        isFilter(t) ? filterToTransformation(t) : orderingToTransformation(t),
+    .map<Transformation<T>>(t =>
+      isFilter(t) ? filterToTransformation(t) : orderingToTransformation(t),
     )
-    .reduce(
-      (acc: Transformation<T>, curr: Transformation<T>) => (list: T[]) =>
-        curr(acc(list)),
+    .reduce<Transformation<T>>(
+      (acc, curr) => (list: T[]) => curr(acc(list)),
       identityTransformation,
     )(list)
+
+/**
+ * @dev func.length checks for the number of arguments in function signature
+ * @param func - The function to test
+ */
 
 const isFilter = <T>(func: Filter<T> | Ordering<T>): func is Filter<T> =>
   func.length === 1
