@@ -74,35 +74,35 @@ export const BottomNavRoutes = TabNavigator(
   {
     [routeList.Claims]: {
       screen: Claims,
-      navigationOptions: {
+      navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('My identity'),
         tabBarIcon: IdentityMenuIcon,
-      },
+      }),
     },
     [routeList.Documents]: {
       screen: Interactions,
-      navigationOptions: {
+      navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('Documents'),
         tabBarIcon: DocumentsMenuIcon,
-      },
+      }),
     },
     [routeList.Records]: {
       screen: Interactions,
-      navigationOptions: {
+      navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('Records'),
         tabBarIcon: RecordsMenuIcon,
-      },
+      }),
     },
     [routeList.Settings]: {
       screen: Interactions,
-      navigationOptions: {
+      navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('Settings'),
         tabBarIcon: SettingsMenuIcon,
-      },
+      }),
     },
   },
   {
@@ -140,45 +140,45 @@ export const Routes = StackNavigator({
   [routeList.Home]: { screen: BottomNavRoutes },
   [routeList.QRCodeScanner]: {
     screen: QRScannerContainer,
-    navigationOptions: {
+    navigationOptions: () => ({
       ...navOptScreenWCancel,
       headerTitle: I18n.t('You can scan the qr code now!')
-    }
+    })
   },
 
   [routeList.CredentialDialog]: {
     screen: CredentialReceive,
-    navigationOptions: {
+    navigationOptions: () => ({
       headerTitle: I18n.t('Receiving new credential'),
       ...commonNavigationOptions,
-    },
+    }),
   },
   [routeList.Consent]: {
     screen: Consent,
-    navigationOptions: {
+    navigationOptions: () => ({
       headerTitle: I18n.t('Share claims'),
       ...commonNavigationOptions,
-    },
+    }),
   },
   [routeList.PaymentConsent]: {
     screen: PaymentConsent,
-    navigationOptions: {
+    navigationOptions: () => ({
       headerBackImage,
       headerTitle: I18n.t('Confirm payment'),
       ...commonNavigationOptions,
-    },
+    }),
   },
   [routeList.AuthenticationConsent]: {
     screen: AuthenticationConsent,
-    navigationOptions: {
+    navigationOptions: () => ({
       headerBackImage,
       headerTitle: I18n.t('Authorization request'),
       ...commonNavigationOptions,
-    },
+    }),
   },
   [routeList.ClaimDetails]: {
     screen: ClaimDetails,
-    navigationOptions: navOptScreenWCancel,
+    navigationOptions: () => navOptScreenWCancel,
   },
   [routeList.Exception]: { screen: Exception, navigationOptions },
 })
