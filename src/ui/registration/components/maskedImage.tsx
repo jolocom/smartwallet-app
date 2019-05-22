@@ -97,7 +97,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
         pathD: pathD + `L${curX},${curY} `,
         linesPts,
       })
-      this._pathEl.setNativeProps({ d: this.state.pathD })
+      if (this._pathEl) this._pathEl.setNativeProps({ d: this.state.pathD })
     } else {
       Object.assign(this.state, {
         curX,

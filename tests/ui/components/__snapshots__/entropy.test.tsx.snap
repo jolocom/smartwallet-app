@@ -12,16 +12,21 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   <CenteredText
     msg="50 %"
     style={
-      Object {
-        "backgroundColor": "black",
-        "color": "#ffefdf",
-        "fontFamily": "TT Commons",
-        "fontSize": 22,
-        "fontWeight": "100",
-        "paddingHorizontal": 50,
-        "position": "absolute",
-        "top": "20%",
-      }
+      Array [
+        Object {
+          "backgroundColor": "black",
+          "color": "#ffefdf",
+          "fontFamily": "TT Commons",
+          "fontSize": 22,
+          "fontWeight": "100",
+          "paddingHorizontal": 50,
+          "position": "absolute",
+          "top": "20%",
+        },
+        Object {
+          "fontSize": 44,
+        },
+      ]
     }
   />
   <Block>
@@ -92,16 +97,21 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   <CenteredText
     msg="100 %"
     style={
-      Object {
-        "backgroundColor": "black",
-        "color": "#ffefdf",
-        "fontFamily": "TT Commons",
-        "fontSize": 22,
-        "fontWeight": "100",
-        "paddingHorizontal": 50,
-        "position": "absolute",
-        "top": "20%",
-      }
+      Array [
+        Object {
+          "backgroundColor": "black",
+          "color": "#ffefdf",
+          "fontFamily": "TT Commons",
+          "fontSize": 22,
+          "fontWeight": "100",
+          "paddingHorizontal": 50,
+          "position": "absolute",
+          "top": "20%",
+        },
+        Object {
+          "fontSize": 44,
+        },
+      ]
     }
   />
   <Block>

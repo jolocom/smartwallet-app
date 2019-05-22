@@ -12,7 +12,7 @@ Object {
 exports[`Entropy container correctly handles added points with the entropy generator 2`] = `
 Object {
   "encodedEntropy": "",
-  "entropyProgress": 1,
+  "entropyProgress": 1.6666666666666667,
   "isDrawn": false,
   "sufficientEntropy": false,
 }

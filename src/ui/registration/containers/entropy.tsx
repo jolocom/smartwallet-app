@@ -53,7 +53,11 @@ export class EntropyContainer extends React.Component<Props, State> {
     const entropyProgress =
       this.entropyGenerator.getProgress() / ENOUGH_ENTROPY_PROGRESS
     this.setState({ entropyProgress })
+    await this.updateEntropyProgress()
+  }
 
+  private updateEntropyProgress = async (): Promise<void> => {
+    const { entropyProgress } = this.state
     if (entropyProgress >= 1) {
       this.setState({ sufficientEntropy: true, entropyProgress: 1 })
       const moreEntropy = await generateSecureRandomBytes(1024)

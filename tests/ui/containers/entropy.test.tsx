@@ -2,6 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { EntropyContainer } from 'src/ui/registration/containers/entropy'
 import { EntropyGenerator } from 'src/lib/entropyGenerator'
+import * as util from 'src/lib/util'
 
 describe('Entropy container', () => {
   const props = {}
@@ -43,22 +44,24 @@ describe('Entropy container', () => {
     expect(rendered.state()).toMatchSnapshot()
   })
 
-  it('correctly triggers a random string generation when there is sufficient entropy', () => {
+  it('correctly triggers a random string generation when there is sufficient entropy', async () => {
+    util.generateSecureRandomBytes = () =>
+      Buffer.from('moreEntropy')
+
     const rendered = shallow(<EntropyContainer {...props} />)
     const instance = rendered.instance()
-
     expect(rendered.state()).toMatchSnapshot()
 
     const mockGenerateRandomString = jest.fn().mockReturnValue('randomString')
     instance.entropyGenerator.generateRandomString = mockGenerateRandomString
 
     rendered.setState({ entropyProgress: 1 })
-    instance.updateEntropyProgress()
+    await instance.updateEntropyProgress()
 
     expect(rendered.state()).toMatchSnapshot()
   })
 
-  it('does not trigger a random string generation when there is not sufficient entropy', () => {
+  it('does not trigger a random string generation when there is not sufficient entropy', async () => {
     const rendered = shallow(<EntropyContainer {...props} />)
     const instance = rendered.instance()
 
@@ -67,7 +70,7 @@ describe('Entropy container', () => {
     const mockGenerateRandomString = jest.fn().mockReturnValue('randomString')
     instance.entropyGenerator.generateRandomString = mockGenerateRandomString
     rendered.setState({ entropyProgress: 0.99 })
-    instance.updateEntropyProgress()
+    await instance.updateEntropyProgress()
 
     expect(rendered.state()).toMatchSnapshot()
   })
