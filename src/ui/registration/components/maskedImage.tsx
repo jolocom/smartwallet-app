@@ -26,6 +26,7 @@ const MAX_LINE_PTS = 150
 
 export class MaskedImageComponent extends React.Component<Props, State> {
   private panResponder!: PanResponderInstance
+  private _pathEl: any
 
   state: State = {
     linesPts: [],
@@ -51,21 +52,21 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   }
 
   private handleDrawStart = (e: GestureResponderEvent): void => {
-    const { locationX: x, locationY: y } = e.nativeEvent
-    this.props.addPoint(x, y)
+    const curX = Math.floor(e.nativeEvent.locationX), curY = Math.floor(e.nativeEvent.locationY)
+    this.props.addPoint(curX, curY)
 
     this.setState({
-      curX: x,
-      curY: y,
-      prevX: x,
-      prevY: y,
-      pathD: this.state.pathD + `M${x},${y} `,
+      curX,
+      curY,
+      prevX: curX,
+      prevY: curY,
+      pathD: this.state.pathD + `M${curX},${curY} `,
     })
   }
 
   private handleDraw = (e: GestureResponderEvent): void => {
-    const { locationX: curX, locationY: curY } = e.nativeEvent
     const { prevX, prevY, linesPts, circles, pathD } = this.state
+    const curX = Math.floor(e.nativeEvent.locationX), curY = Math.floor(e.nativeEvent.locationY)
 
     this.props.addPoint(curX, curY)
     const dist_sq = Math.abs(curX - prevX) + Math.abs(curY - prevY)
@@ -82,23 +83,29 @@ export class MaskedImageComponent extends React.Component<Props, State> {
           curX,
           curY,
         )
-        if (intsct) circles.push(intsct)
+        if (intsct) {
+          this.setState({ circles: circles.concat([intsct]) })
+        }
       }
       linesPts.push(prevX, prevY, curX, curY)
       if (linesPts.length > MAX_LINE_PTS) linesPts.splice(0, 4)
-      this.setState({
+      Object.assign(this.state, {
         curX,
         curY,
         prevX: curX,
         prevY: curY,
         pathD: pathD + `L${curX},${curY} `,
         linesPts,
-        circles,
       })
+      this._pathEl.setNativeProps({ d: this.state.pathD })
     } else {
-      this.setState({
+      Object.assign(this.state, {
         curX,
         curY,
+      })
+      // unsaved temporary line segment
+      this._pathEl.setNativeProps({
+        d: pathD + `L${curX},${curY} `
       })
     }
   }
@@ -129,11 +136,17 @@ export class MaskedImageComponent extends React.Component<Props, State> {
     return
   }
 
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    return nextState.circles.length != this.state.circles.length
+  }
+
   render() {
+    // {this.state.pathD + `L${this.state.curX},${this.state.curY}`}
     return (
       <Svg width="100%" height="100%" {...this.panResponder.panHandlers}>
         <Path
-          d={this.state.pathD + `L${this.state.curX},${this.state.curY}`}
+          ref={el => this._pathEl = el }
+          d=""
           fill="none"
           stroke={JolocomTheme.primaryColorSandInactive}
           strokeLinecap="round"
