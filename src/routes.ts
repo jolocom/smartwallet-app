@@ -11,6 +11,7 @@ import { CredentialReceive } from 'src/ui/home'
 import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
+import { routeList } from 'src/routeList'
 
 const headerBackImage =
   Platform.OS === 'android'
@@ -64,7 +65,7 @@ const commonNavigationOptions = {
 
 export const HomeRoutes = TabNavigator(
   {
-    Claims: {
+    [routeList.Claims]: {
       screen: Claims,
       navigationOptions: {
         tabBarLabel: I18n.t('All claims'),
@@ -74,7 +75,7 @@ export const HomeRoutes = TabNavigator(
     },
     ...Platform.select({
       android: {
-        Interactions: {
+        [routeList.Interactions]: {
           screen: Interactions,
           navigationOptions: {
             tabBarLabel: I18n.t('Documents'),
@@ -114,25 +115,25 @@ export const HomeRoutes = TabNavigator(
 )
 
 export const Routes = StackNavigator({
-  Landing: { screen: Landing, navigationOptions },
-  Loading: { screen: Loading, navigationOptions },
-  SeedPhrase: { screen: SeedPhrase, navigationOptions },
-  Home: { screen: HomeRoutes },
-  CredentialDialog: {
+  [routeList.Landing]: { screen: Landing, navigationOptions },
+  [routeList.Loading]: { screen: Loading, navigationOptions },
+  [routeList.SeedPhrase]: { screen: SeedPhrase, navigationOptions },
+  [routeList.Home]: { screen: HomeRoutes },
+  [routeList.CredentialDialog]: {
     screen: CredentialReceive,
     navigationOptions: {
       headerTitle: I18n.t('Receiving new credential'),
       ...commonNavigationOptions,
     },
   },
-  Consent: {
+  [routeList.Consent]: {
     screen: Consent,
     navigationOptions: {
       headerTitle: I18n.t('Share claims'),
       ...commonNavigationOptions,
     },
   },
-  PaymentConsent: {
+  [routeList.PaymentConsent]: {
     screen: PaymentConsent,
     navigationOptions: {
       headerBackImage,
@@ -140,7 +141,7 @@ export const Routes = StackNavigator({
       ...commonNavigationOptions,
     },
   },
-  AuthenticationConsent: {
+  [routeList.AuthenticationConsent]: {
     screen: AuthenticationConsent,
     navigationOptions: {
       headerBackImage,
@@ -148,12 +149,12 @@ export const Routes = StackNavigator({
       ...commonNavigationOptions,
     },
   },
-  Exception: { screen: Exception, navigationOptions },
-  ClaimDetails: {
+  [routeList.Exception]: { screen: Exception, navigationOptions },
+  [routeList.ClaimDetails]: {
     screen: ClaimDetails,
     navigationOptions: navOptScreenWCancel,
   },
-  QRCodeScanner: {
+  [routeList.QRCodeScanner]: {
     screen: QRScannerContainer,
     navigationOptions: navOptScreenWCancel,
   },
