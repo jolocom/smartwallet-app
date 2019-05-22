@@ -8,6 +8,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception, BottomNavBar } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
+import { Settings } from 'src/ui/settings'
 import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
@@ -97,7 +98,7 @@ export const BottomNavRoutes = TabNavigator(
       }),
     },
     [routeList.Settings]: {
-      screen: Interactions,
+      screen: Settings,
       navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('Settings'),

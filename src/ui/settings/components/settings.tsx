@@ -89,7 +89,7 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
                   },
                 ]}
               >
-                {locale}
+                {locale.toUpperCase()}
               </Text>
             </View>
           )
@@ -99,12 +99,11 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
   </View>
 )
 
-const VERSION = '1.4.2'
-
 interface SettingsScreenProps {
   locales: string[]
   settings: { [key: string]: any }
   setLocale: (key: string) => void
+  version: string
 }
 
 export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
@@ -118,7 +117,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
       />
     </View>
     <Text style={styles.versionNumber}>
-      Jolocom SmartWallet version {VERSION}
+      Jolocom SmartWallet version {props.version}
     </Text>
     <View />
   </View>

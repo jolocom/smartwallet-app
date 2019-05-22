@@ -1,1 +1,1 @@
-export { SettingsScreen } from './components/Settings'
+export { Settings } from './containers/settings'
