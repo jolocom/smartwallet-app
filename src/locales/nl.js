@@ -54,5 +54,12 @@ export default {
     "Postal Code": "Postcode",
     "City": "Stad",
     "Country": "Land",
-    "Your Jolocom Wallet": "Uw Jolocom Wallet"
+    "Your Jolocom Wallet": "Uw Jolocom Wallet",
+  /*
+    "Records": "",
+    "Settings": "",
+    "Your preferences": "",
+    "Language": "",
+    "version": "",
+  */
 }
