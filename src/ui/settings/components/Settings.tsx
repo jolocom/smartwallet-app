@@ -53,11 +53,10 @@ const styles = StyleSheet.create({
   },
 })
 
-const languages = ['EN', 'DE', 'NL']
-
 interface LanguageCardProps {
-  languages: string[]
+  locales: string[]
   selected: string
+  setLocale: (key: string) => void
 }
 
 const LanguageCard: React.SFC<LanguageCardProps> = props => (
@@ -68,12 +67,13 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
         Language
       </Text>
       <View style={styles.languageOptions}>
-        {props.languages.map(language => {
-          const isCurrentLanguage = language === props.selected
+        {props.locales.map(locale => {
+          const isCurrentLanguage = locale === props.selected
           return (
             <View
-              // TODO: connect to selecting the language
-              onTouchEnd={() => console.log(`${language} selected`)}
+              key={locale}
+              // TODO: connect to selecting the locale
+              onTouchEnd={() => props.setLocale(locale)}
               style={[
                 styles.languageOption,
                 isCurrentLanguage && {
@@ -89,7 +89,7 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
                   },
                 ]}
               >
-                {language}
+                {locale}
               </Text>
             </View>
           )
@@ -101,18 +101,25 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
 
 const VERSION = '1.4.2'
 
-export const SettingsScreen: React.SFC = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.topSection}>
-        <Text style={styles.sectionHeader}>Your preferences</Text>
-        {/* SELECTED should be based on state from the database */}
-        <LanguageCard languages={languages} selected={languages[0]} />
-      </View>
-      <Text style={styles.versionNumber}>
-        Jolocom SmartWallet version {VERSION}
-      </Text>
-      <View />
-    </View>
-  )
+interface SettingsScreenProps {
+  locales: string[]
+  settings: { [key: string]: any }
+  setLocale: (key: string) => void
 }
+
+export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
+  <View style={styles.container}>
+    <View style={styles.topSection}>
+      <Text style={styles.sectionHeader}>Your preferences</Text>
+      <LanguageCard
+        setLocale={props.setLocale}
+        locales={props.locales}
+        selected={props.settings.locale}
+      />
+    </View>
+    <Text style={styles.versionNumber}>
+      Jolocom SmartWallet version {VERSION}
+    </Text>
+    <View />
+  </View>
+)
