@@ -11,7 +11,7 @@ const typeFilter = (typ: string): Filter<SignedCredential> => cred =>
   cred.type.includes(typ)
 
 const mostRecentOrder: Ordering<SignedCredential> = (c1, c2) =>
-  c1.issued.valueOf() - c2.issued.valueOf()
+  c2.issued.valueOf() - c1.issued.valueOf()
 
 /**
  * @dev Some basic predefined filters, if required they can be removed
