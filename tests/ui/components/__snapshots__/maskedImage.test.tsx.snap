@@ -21,11 +21,102 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
   <Path
     d=""
     fill="none"
-    stroke="rgba(255, 239, 223, 0.38)"
-    strokeDasharray="1,4%"
+    key="0"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1%"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="1"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="2"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="3"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="4"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="5"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="6"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="7"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="8"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
+  />
+  <Path
+    d=""
+    fill="none"
+    key="9"
+    stroke="#FFDEBC"
+    strokeDasharray="1,10"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1"
   />
 </Svg>
 `;

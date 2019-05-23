@@ -5,7 +5,6 @@ import {
   GestureResponderEvent,
 } from 'react-native'
 import { Svg, Path, Circle, CircleProps } from 'react-native-svg'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
   disabled: boolean
@@ -19,17 +18,18 @@ interface State {
   prevY: number
   curX: number
   curY: number
-  pathD: string
+  pathDs: string[]
+  pathIdx: number
   circles: React.ReactElement<CircleProps>[]
   circlesN: number
 }
 
 const MIN_DISTANCE_SQ = 50
-const MAX_LINE_PTS = 120
+const MAX_LINE_PTS = 100
 
 export class MaskedImageComponent extends React.Component<Props, State> {
   private panResponder!: PanResponderInstance
-  private _pathEl: any
+  private _pathEls: any[]
 
   state: State = {
     linesPts: [],
@@ -38,9 +38,20 @@ export class MaskedImageComponent extends React.Component<Props, State> {
     prevY: 0,
     curX: 0,
     curY: 0,
-    pathD: '',
+    pathDs: [],
+    pathIdx: 0,
     circles: [],
     circlesN: 0,
+  }
+
+  constructor(props: Props) {
+    super(props)
+    // array is prefilled so that Path elements are rendered the first time
+    // around, as we then simply edit their d prop
+    this._pathEls = new Array(10)
+    for (let i = 0; i < this._pathEls.length; i++) {
+      this.state.pathDs.push('')
+    }
   }
 
   componentWillMount() {
@@ -66,14 +77,15 @@ export class MaskedImageComponent extends React.Component<Props, State> {
       curY,
       prevX: curX,
       prevY: curY,
-      pathD: this.state.pathD + `M${curX},${curY} `,
     })
+    this.state.pathDs[this.state.pathIdx] += `M${curX},${curY}`
   }
 
   private handleDraw = (e: GestureResponderEvent): void => {
     if (this.props.disabled) return
-    const { prevX, prevY, linesPts, circles, pathD } = this.state
+    const { prevX, prevY, linesPts, circles, pathDs } = this.state
     const curX = Math.floor(e.nativeEvent.locationX), curY = Math.floor(e.nativeEvent.locationY)
+    let pathIdx = this.state.pathIdx
 
     this.props.addPoint(curX, curY)
 
@@ -105,8 +117,8 @@ export class MaskedImageComponent extends React.Component<Props, State> {
               key={circles.length}
               cx={x}
               cy={y}
-              r="5"
-              fill={JolocomTheme.primaryColorSand}
+              r="4"
+              fill="#ffefdf"
             />
           )
           this.setState({ circlesN: this.state.circles.length })
@@ -119,6 +131,15 @@ export class MaskedImageComponent extends React.Component<Props, State> {
       // then add the new line and maintain the line list
       if (linesPts.length >= MAX_LINE_PTS) {
         let linesPtsIdx = this.state.linesPtsIdx
+        if (
+          pathIdx < pathDs.length-1 &&
+          (pathIdx == 0 || linesPtsIdx >= linesPts.length)
+        ) {
+          pathIdx++
+          pathDs[pathIdx] = `M${curX},${curY}`
+          this.state.pathIdx = pathIdx
+        }
+
         if (linesPtsIdx >= linesPts.length) linesPtsIdx = 0
         linesPts.splice(linesPtsIdx, 4, prevX, prevY, curX, curY)
         this.state.linesPtsIdx = linesPtsIdx + 4
@@ -126,18 +147,19 @@ export class MaskedImageComponent extends React.Component<Props, State> {
         linesPts.push(prevX, prevY, curX, curY)
       }
 
-
       // and finally update state
       Object.assign(this.state, {
         curX,
         curY,
         prevX: curX,
         prevY: curY,
-        pathD: pathD + `L${curX},${curY} `,
-        linesPts,
       })
+      pathDs[pathIdx] += `L${curX},${curY}`
+
       // update the SVG path without re-rendering
-      if (this._pathEl) this._pathEl.setNativeProps({ d: this.state.pathD })
+      if (this._pathEls[pathIdx]) {
+        this._pathEls[pathIdx].setNativeProps({ d: pathDs[pathIdx] })
+      }
     } else {
       // if the line segment was too short, we don't commit it to state but we
       // draw it anyway
@@ -146,9 +168,11 @@ export class MaskedImageComponent extends React.Component<Props, State> {
         curY,
       })
       // unsaved temporary line segment
-      this._pathEl.setNativeProps({
-        d: pathD + `L${curX},${curY} `
-      })
+      if (this._pathEls[pathIdx]) {
+        this._pathEls[pathIdx].setNativeProps({
+          d: pathDs[pathIdx] + `L${curX},${curY}`
+        })
+      }
     }
   }
 
@@ -161,16 +185,21 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   render() {
     return (
       <Svg width="100%" height="100%" {...this.panResponder.panHandlers}>
-        <Path
-          ref={el => this._pathEl = el }
-          d={this.state.pathD}
-          fill="none"
-          stroke={JolocomTheme.primaryColorSandInactive}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeDasharray="1,4%"
-          strokeWidth="1%"
-        />
+        {
+          this.state.pathDs.map((d, idx) => (
+            <Path
+              key={idx}
+              ref={el => this._pathEls[idx] = el }
+              d={d}
+              fill="none"
+              stroke="#FFDEBC"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="1,10"
+              strokeWidth="2"
+            />)
+          )
+        }
         { this.state.circles }
       </Svg>
     )

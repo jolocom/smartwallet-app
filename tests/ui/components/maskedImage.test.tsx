@@ -20,7 +20,7 @@ describe('MaskedImage component', () => {
   it('matches the snapshot with empty current path string', () => {
     const rendered = shallow(<MaskedImageComponent {...props} />)
     expect(rendered).toMatchSnapshot()
-    expect(rendered.state().pathD).toEqual('')
+    expect(rendered.state().pathDs[0]).toEqual('')
   })
 
   it('correctly handles a gesture start', () => {
@@ -37,7 +37,7 @@ describe('MaskedImage component', () => {
     const instance = rendered.instance()
 
     instance.handleDrawStart(mockNativeEvent)
-    expect(rendered.state().pathD).toEqual(`M${x},${y} `)
+    expect(rendered.state().pathDs[0]).toEqual(`M${x},${y}`)
   })
 
   it('correctly handles gesture continuation', () => {
@@ -55,6 +55,6 @@ describe('MaskedImage component', () => {
     const instance = rendered.instance()
 
     instance.handleDraw(mockNativeEvent)
-    expect(rendered.state().pathD).toEqual(`L${x},${y} `)
+    expect(rendered.state().pathDs[0]).toEqual(`L${x},${y}`)
   })
 })
