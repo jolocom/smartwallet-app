@@ -32,6 +32,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   <Block>
     <MaskedImageComponent
       addPoint={[Function]}
+      disabled={false}
     />
   </Block>
   <Component
@@ -72,6 +73,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   <Block>
     <MaskedImageComponent
       addPoint={[Function]}
+      disabled={false}
     />
   </Block>
   <Component
@@ -117,6 +119,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   <Block>
     <MaskedImageComponent
       addPoint={[Function]}
+      disabled={true}
     />
   </Block>
   <Component

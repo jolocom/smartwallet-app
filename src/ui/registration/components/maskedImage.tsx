@@ -8,6 +8,7 @@ import { Svg, Path, Circle, CircleProps } from 'react-native-svg'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
+  disabled: boolean
   addPoint: (x: number, y: number) => void
 }
 
@@ -24,7 +25,7 @@ interface State {
 }
 
 const MIN_DISTANCE_SQ = 50
-const MAX_LINE_PTS = 150
+const MAX_LINE_PTS = 120
 
 export class MaskedImageComponent extends React.Component<Props, State> {
   private panResponder!: PanResponderInstance
@@ -56,6 +57,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   }
 
   private handleDrawStart = (e: GestureResponderEvent): void => {
+    if (this.props.disabled) return
     const curX = Math.floor(e.nativeEvent.locationX), curY = Math.floor(e.nativeEvent.locationY)
     this.props.addPoint(curX, curY)
 
@@ -69,7 +71,8 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   }
 
   private handleDraw = (e: GestureResponderEvent): void => {
-    const { prevX, prevY, linesPts, linesPtsIdx, circles, pathD } = this.state
+    if (this.props.disabled) return
+    const { prevX, prevY, linesPts, circles, pathD } = this.state
     const curX = Math.floor(e.nativeEvent.locationX), curY = Math.floor(e.nativeEvent.locationY)
 
     this.props.addPoint(curX, curY)
@@ -115,8 +118,10 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
       // then add the new line and maintain the line list
       if (linesPts.length >= MAX_LINE_PTS) {
+        let linesPtsIdx = this.state.linesPtsIdx
+        if (linesPtsIdx >= linesPts.length) linesPtsIdx = 0
         linesPts.splice(linesPtsIdx, 4, prevX, prevY, curX, curY)
-        this.state.linesPtsIdx += 4
+        this.state.linesPtsIdx = linesPtsIdx + 4
       } else {
         linesPts.push(prevX, prevY, curX, curY)
       }

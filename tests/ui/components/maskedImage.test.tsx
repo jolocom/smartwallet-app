@@ -5,6 +5,7 @@ import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage
 describe('MaskedImage component', () => {
   const props = {
     addPoint: (x: number, y: number) => null,
+    disabled: false
   }
 
   it('correctly calls the function to configure PanResponder on component mount', () => {

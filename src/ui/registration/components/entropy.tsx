@@ -71,7 +71,7 @@ export const EntropyComponent: React.SFC<Props> = props => {
     <Container style={styles.mainContainer}>
       <CenteredText style={style} msg={msg} />
       <Block>
-        <MaskedImageComponent addPoint={addPoint} />
+        <MaskedImageComponent disabled={progress===1} addPoint={addPoint} />
       </Block>
       <View style={styles.footerButton}>
         {progress === 1 ? (
