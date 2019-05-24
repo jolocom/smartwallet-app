@@ -24,7 +24,7 @@ import {
 const headerBackImage =
   Platform.OS === 'android'
     ? require('./resources/img/close.png')
-    : require('src/resources/img/left-chevron.png')
+    : require('./resources/img/back-26.png')
 
 const navigationOptions = {
   header: null,
@@ -35,12 +35,14 @@ const navOptScreenWCancel = {
     backgroundColor:
       Platform.OS === 'android'
         ? JolocomTheme.primaryColorBlack
-        : JolocomTheme.primaryColorWhite,
+        : JolocomTheme.primaryColorGrey,
   },
   headerBackImage,
   ...Platform.select({
     ios: {
-      headerBackTitleStyle: { color: JolocomTheme.primaryColorPurple },
+      headerBackTitleStyle: {
+        color: JolocomTheme.primaryColorPurple,
+      },
       headerTintColor: { color: JolocomTheme.primaryColorPurple },
     },
   }),
