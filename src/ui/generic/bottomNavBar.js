@@ -29,9 +29,11 @@ import {
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 
+// <ALTERED> to use absolute imports
 import TabBarIcon from 'react-navigation/src/views/TabView/TabBarIcon';
 import NavigationActions from 'react-navigation/src/NavigationActions';
 import withOrientation from 'react-navigation/src/views/withOrientation';
+// </ALTERED>
 
 const majorVersion = parseInt(Platform.Version, 10);
 const isIos = Platform.OS === 'ios';

@@ -71,6 +71,10 @@ const commonNavigationOptions = {
   headerTintColor: defaultHeaderTintColor,
 }
 
+const bottomNavBarBackground = Platform.OS == 'android'
+  ? '#fafafa' // FIXME add to theme
+  : JolocomTheme.primaryColorBlack
+
 export const BottomNavRoutes = TabNavigator(
   {
     [routeList.Claims]: {
@@ -86,7 +90,10 @@ export const BottomNavRoutes = TabNavigator(
       navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('Documents'),
-        tabBarIcon: DocumentsMenuIcon,
+        tabBarIcon: (props: { tintColor: string, focused: boolean, fillColor?: string }) => {
+          props.fillColor = bottomNavBarBackground
+          return new DocumentsMenuIcon(props)
+        }
       }),
     },
     [routeList.Records]: {
@@ -122,16 +129,7 @@ export const BottomNavRoutes = TabNavigator(
       style: {
         height: 50,
         bottom: 0,
-        ...Platform.select({
-          android: {
-            // FIXME
-            backgroundColor: '#fafafa',
-          },
-          ios: {
-            // FIXME
-            backgroundColor: JolocomTheme.primaryColorBlack,
-          },
-        }),
+        backgroundColor: bottomNavBarBackground,
       },
     },
     tabBarComponent: BottomNavBar,
