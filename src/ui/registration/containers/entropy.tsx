@@ -62,7 +62,11 @@ export class EntropyContainer extends React.Component<Props, State> {
       this.setState({ sufficientEntropy: true, entropyProgress: 1 })
       while (this.entropyGenerator.getProgress() < 1) {
         const moreEntropy = await generateSecureRandomBytes(512)
-        moreEntropy.forEach(e => this.entropyGenerator.addFromDelta(e))
+        // NOTE do not use moreEntropy.forEach, Buffer API is inconsistent, it
+        // doesn't work in some envirtonments
+        for (let i = 0; i < moreEntropy.length; i++) {
+          this.entropyGenerator.addFromDelta(moreEntropy[i])
+        }
       }
       const encodedEntropy = this.generateRandomString()
       this.setState({ encodedEntropy })
