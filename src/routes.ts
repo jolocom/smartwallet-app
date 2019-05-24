@@ -3,7 +3,7 @@ import { StackNavigator, TabNavigator } from 'react-navigation'
 import { Claims, Interactions, Records, ClaimDetails } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
-import { SeedPhrase, Loading } from 'src/ui/registration/'
+import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception, BottomNavBar } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
@@ -146,6 +146,7 @@ export const BottomNavRoutes = TabNavigator(
 
 export const Routes = StackNavigator({
   [routeList.Landing]: { screen: Landing, navigationOptions },
+  [routeList.Entropy]: { screen: Entropy, navigationOptions },
   [routeList.Loading]: { screen: Loading, navigationOptions },
   [routeList.SeedPhrase]: { screen: SeedPhrase, navigationOptions },
 

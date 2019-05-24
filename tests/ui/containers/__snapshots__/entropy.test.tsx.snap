@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Entropy container correctly handles added points with the entropy generator 1`] = `
+Object {
+  "encodedEntropy": "",
+  "entropyProgress": 0,
+  "isDrawn": false,
+  "sufficientEntropy": false,
+}
+`;
+
+exports[`Entropy container correctly handles added points with the entropy generator 2`] = `
+Object {
+  "encodedEntropy": "",
+  "entropyProgress": 1.6666666666666667,
+  "isDrawn": false,
+  "sufficientEntropy": false,
+}
+`;
+
+exports[`Entropy container correctly triggers a random string generation when there is sufficient entropy 1`] = `
+Object {
+  "encodedEntropy": "",
+  "entropyProgress": 0,
+  "isDrawn": false,
+  "sufficientEntropy": false,
+}
+`;
+
+exports[`Entropy container correctly triggers a random string generation when there is sufficient entropy 2`] = `
+Object {
+  "encodedEntropy": "randomString",
+  "entropyProgress": 1,
+  "isDrawn": false,
+  "sufficientEntropy": true,
+}
+`;
+
+exports[`Entropy container does not trigger a random string generation when there is not sufficient entropy 1`] = `
+Object {
+  "encodedEntropy": "",
+  "entropyProgress": 0,
+  "isDrawn": false,
+  "sufficientEntropy": false,
+}
+`;
+
+exports[`Entropy container does not trigger a random string generation when there is not sufficient entropy 2`] = `
+Object {
+  "encodedEntropy": "",
+  "entropyProgress": 0.99,
+  "isDrawn": false,
+  "sufficientEntropy": false,
+}
+`;
+
+exports[`Entropy container mounts correctly and matches the snapshot 1`] = `
+<EntropyComponent
+  addPoint={[Function]}
+  progress={0}
+  submitEntropy={[Function]}
+/>
+`;

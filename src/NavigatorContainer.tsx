@@ -91,6 +91,7 @@ export class NavigatorContainer extends React.Component<Props> {
       routeList.SeedPhrase,
       routeList.Exception,
       routeList.Loading,
+      routeList.Entropy,
     ]
     const isDarkBackground = darkBackgroundPages.includes(currentRoute)
     return (
