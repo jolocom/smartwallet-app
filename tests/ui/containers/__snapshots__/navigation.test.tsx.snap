@@ -54,7 +54,7 @@ exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
   <withOrientation
     style={
       Object {
-        "backgroundColor": "white",
+        "backgroundColor": "#fafafa",
         "flex": 1,
       }
     }
