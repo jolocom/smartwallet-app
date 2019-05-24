@@ -101,7 +101,7 @@ export class NavigatorContainer extends React.Component<Props> {
             flex: 1,
             backgroundColor: isDarkBackground
               ? JolocomTheme.primaryColorBlack
-              : JolocomTheme.primaryColorWhite,
+              : JolocomTheme.primaryColorGrey,
           }}
         >
           <Routes

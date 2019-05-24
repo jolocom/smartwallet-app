@@ -55,12 +55,12 @@ const headerTitleStyle = {
 const defaultHeaderBackgroundColor =
   Platform.OS === 'android'
     ? JolocomTheme.primaryColorBlack
-    : JolocomTheme.primaryColorWhite
+    : JolocomTheme.primaryColorGrey
 
 const defaultHeaderTintColor =
   Platform.OS === 'android'
     ? JolocomTheme.primaryColorWhite
-    : JolocomTheme.primaryColorPurple
+    : JolocomTheme.primaryColorBlack
 
 const commonNavigationOptions = {
   headerTitleStyle,
@@ -115,7 +115,7 @@ export const BottomNavRoutes = TabNavigator(
         },
         ios: {
           activeTintColor: JolocomTheme.primaryColorWhite,
-          inactiveTintColor: JolocomTheme.primaryColorGrey,
+          inactiveTintColor: 'rgba(255, 255, 255, 0.5)',
         },
       }),
       showLabel: false,

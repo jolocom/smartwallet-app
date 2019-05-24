@@ -5,7 +5,6 @@ const SvgDocumentsMenuIcon = props => (
   <Svg width={28} height={28}>
     <G
       transform="translate(0 -2)"
-      fill="#FFF"
       stroke={props.tintColor}
       strokeWidth={1.6}
       fillRule="evenodd"
