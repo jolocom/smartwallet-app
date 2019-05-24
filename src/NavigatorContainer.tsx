@@ -3,7 +3,6 @@ import {
   addNavigationHelpers,
   NavigationEventSubscription,
   NavigationEventCallback,
-  SafeAreaView,
 } from 'react-navigation'
 import { connect } from 'react-redux'
 import { BackHandler, Linking, StatusBar } from 'react-native'
@@ -13,7 +12,6 @@ import { RootState } from 'src/reducers/'
 import { navigationActions, accountActions, genericActions } from 'src/actions/'
 import { routeList } from './routeList'
 import { LoadingSpinner } from 'src/ui/generic/loadingSpinner'
-import { JolocomTheme } from './styles/jolocom-theme'
 
 const {
   createReduxBoundAddListener,
@@ -97,23 +95,14 @@ export class NavigatorContainer extends React.Component<Props> {
     return (
       <React.Fragment>
         <StatusBar barStyle={isDarkBackground ? 'light-content' : 'default'} />
-        <SafeAreaView
-          style={{
-            flex: 1,
-            backgroundColor: isDarkBackground
-              ? JolocomTheme.primaryColorBlack
-              : JolocomTheme.primaryColorGrey,
-          }}
-        >
-          <Routes
-            navigation={addNavigationHelpers({
-              dispatch: this.props.dispatch,
-              state: this.props.navigation,
-              addListener: this.addListener,
-            })}
-          />
-          {this.props.deepLinkLoading && <LoadingSpinner />}
-        </SafeAreaView>
+        <Routes
+          navigation={addNavigationHelpers({
+            dispatch: this.props.dispatch,
+            state: this.props.navigation,
+            addListener: this.addListener,
+          })}
+        />
+        {this.props.deepLinkLoading && <LoadingSpinner />}
       </React.Fragment>
     )
   }

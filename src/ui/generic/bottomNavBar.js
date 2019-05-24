@@ -18,7 +18,7 @@ import { TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 // </ALTERED>
 
-import React from 'react';
+import React from 'react'
 import {
   Animated,
   TouchableWithoutFeedback,
@@ -26,19 +26,19 @@ import {
   View,
   Platform,
   Keyboard,
-} from 'react-native';
-import SafeAreaView from 'react-native-safe-area-view';
+} from 'react-native'
+import SafeAreaView from 'react-native-safe-area-view'
 
 // <ALTERED> to use absolute imports
-import TabBarIcon from 'react-navigation/src/views/TabView/TabBarIcon';
-import NavigationActions from 'react-navigation/src/NavigationActions';
-import withOrientation from 'react-navigation/src/views/withOrientation';
+import TabBarIcon from 'react-navigation/src/views/TabView/TabBarIcon'
+import NavigationActions from 'react-navigation/src/NavigationActions'
+import withOrientation from 'react-navigation/src/views/withOrientation'
 // </ALTERED>
 
-const majorVersion = parseInt(Platform.Version, 10);
-const isIos = Platform.OS === 'ios';
-const isIOS11 = majorVersion >= 11 && isIos;
-const defaultMaxTabBarItemWidth = 125;
+const majorVersion = parseInt(Platform.Version, 10)
+const isIos = Platform.OS === 'ios'
+const isIOS11 = majorVersion >= 11 && isIos
+const defaultMaxTabBarItemWidth = 125
 
 class TabBarBottom extends React.PureComponent {
   // See https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/UIKitUICatalog/UITabBar.html
@@ -51,7 +51,7 @@ class TabBarBottom extends React.PureComponent {
     showIcon: true,
     allowFontScaling: true,
     adaptive: isIOS11,
-  };
+  }
 
   _renderLabel = scene => {
     const {
@@ -64,24 +64,24 @@ class TabBarBottom extends React.PureComponent {
       showIcon,
       isLandscape,
       allowFontScaling,
-    } = this.props;
+    } = this.props
     if (showLabel === false) {
-      return null;
+      return null
     }
-    const { index } = scene;
-    const { routes } = navigation.state;
+    const { index } = scene
+    const { routes } = navigation.state
     // Prepend '-1', so there are always at least 2 items in inputRange
-    const inputRange = [-1, ...routes.map((x, i) => i)];
-    const outputRange = inputRange.map(
-      inputIndex => (inputIndex === index ? activeTintColor : inactiveTintColor)
-    );
+    const inputRange = [-1, ...routes.map((x, i) => i)]
+    const outputRange = inputRange.map(inputIndex =>
+      inputIndex === index ? activeTintColor : inactiveTintColor,
+    )
     const color = position.interpolate({
       inputRange,
       outputRange: outputRange,
-    });
+    })
 
-    const tintColor = scene.focused ? activeTintColor : inactiveTintColor;
-    const label = this.props.getLabel({ ...scene, tintColor });
+    const tintColor = scene.focused ? activeTintColor : inactiveTintColor
+    const label = this.props.getLabel({ ...scene, tintColor })
 
     if (typeof label === 'string') {
       return (
@@ -99,15 +99,15 @@ class TabBarBottom extends React.PureComponent {
         >
           {label}
         </Animated.Text>
-      );
+      )
     }
 
     if (typeof label === 'function') {
-      return label({ ...scene, tintColor });
+      return label({ ...scene, tintColor })
     }
 
-    return label;
-  };
+    return label
+  }
 
   _renderIcon = scene => {
     const {
@@ -118,12 +118,12 @@ class TabBarBottom extends React.PureComponent {
       renderIcon,
       showIcon,
       showLabel,
-    } = this.props;
+    } = this.props
     if (showIcon === false) {
-      return null;
+      return null
     }
 
-    const horizontal = this._shouldUseHorizontalTabs();
+    const horizontal = this._shouldUseHorizontalTabs()
 
     return (
       <TabBarIcon
@@ -139,90 +139,88 @@ class TabBarBottom extends React.PureComponent {
           showLabel !== false && !horizontal && styles.iconWithLabel,
         ]}
       />
-    );
-  };
+    )
+  }
 
   _renderTestIDProps = scene => {
     const testIDProps =
-      this.props.getTestIDProps && this.props.getTestIDProps(scene);
-    return testIDProps;
-  };
+      this.props.getTestIDProps && this.props.getTestIDProps(scene)
+    return testIDProps
+  }
 
   _tabItemMaxWidth() {
-    const { tabStyle, layout } = this.props;
-    let maxTabBarItemWidth;
+    const { tabStyle, layout } = this.props
+    let maxTabBarItemWidth
 
-    const flattenedTabStyle = StyleSheet.flatten(tabStyle);
+    const flattenedTabStyle = StyleSheet.flatten(tabStyle)
 
     if (flattenedTabStyle) {
       if (typeof flattenedTabStyle.width === 'number') {
-        maxTabBarItemWidth = flattenedTabStyle.width;
+        maxTabBarItemWidth = flattenedTabStyle.width
       } else if (
         typeof flattenedTabStyle.width === 'string' &&
         flattenedTabStyle.width.endsWith('%')
       ) {
-        const width = parseFloat(flattenedTabStyle.width);
+        const width = parseFloat(flattenedTabStyle.width)
         if (Number.isFinite(width)) {
-          maxTabBarItemWidth = layout.width * (width / 100);
+          maxTabBarItemWidth = layout.width * (width / 100)
         }
       } else if (typeof flattenedTabStyle.maxWidth === 'number') {
-        maxTabBarItemWidth = flattenedTabStyle.maxWidth;
+        maxTabBarItemWidth = flattenedTabStyle.maxWidth
       } else if (
         typeof flattenedTabStyle.maxWidth === 'string' &&
         flattenedTabStyle.width.endsWith('%')
       ) {
-        const width = parseFloat(flattenedTabStyle.maxWidth);
+        const width = parseFloat(flattenedTabStyle.maxWidth)
         if (Number.isFinite(width)) {
-          maxTabBarItemWidth = layout.width * (width / 100);
+          maxTabBarItemWidth = layout.width * (width / 100)
         }
       }
     }
 
     if (!maxTabBarItemWidth) {
-      maxTabBarItemWidth = defaultMaxTabBarItemWidth;
+      maxTabBarItemWidth = defaultMaxTabBarItemWidth
     }
 
-    return maxTabBarItemWidth;
+    return maxTabBarItemWidth
   }
 
   _shouldUseHorizontalTabs() {
-    const { routes } = this.props.navigation.state;
-    const { isLandscape, layout, adaptive, tabStyle } = this.props;
+    const { routes } = this.props.navigation.state
+    const { isLandscape, layout, adaptive, tabStyle } = this.props
 
     if (!adaptive) {
-      return false;
+      return false
     }
 
-    let tabBarWidth = layout.width;
+    let tabBarWidth = layout.width
     if (tabBarWidth === 0) {
-      return Platform.isPad;
+      return Platform.isPad
     }
 
     if (!Platform.isPad) {
-      return isLandscape;
+      return isLandscape
     } else {
-      const maxTabBarItemWidth = this._tabItemMaxWidth();
-      return routes.length * maxTabBarItemWidth <= tabBarWidth;
+      const maxTabBarItemWidth = this._tabItemMaxWidth()
+      return routes.length * maxTabBarItemWidth <= tabBarWidth
     }
   }
 
   _handleTabPress = index => {
-    const { jumpToIndex, navigation } = this.props;
-    const currentIndex = navigation.state.index;
+    const { jumpToIndex, navigation } = this.props
+    const currentIndex = navigation.state.index
 
     if (currentIndex === index) {
-      let childRoute = navigation.state.routes[index];
+      let childRoute = navigation.state.routes[index]
       if (childRoute.hasOwnProperty('index') && childRoute.index > 0) {
-        navigation.dispatch(
-          NavigationActions.popToTop({ key: childRoute.key })
-        );
+        navigation.dispatch(NavigationActions.popToTop({ key: childRoute.key }))
       } else {
         // TODO: do something to scroll to top
       }
     } else {
-      jumpToIndex(index);
+      jumpToIndex(index)
     }
-  };
+  }
 
   render() {
     const {
@@ -237,11 +235,11 @@ class TabBarBottom extends React.PureComponent {
       animateStyle,
       tabStyle,
       isLandscape,
-    } = this.props;
-    const { routes } = navigation.state;
-    const previousScene = routes[navigation.state.index];
+    } = this.props
+    const { routes } = navigation.state
+    const previousScene = routes[navigation.state.index]
     // Prepend '-1', so there are always at least 2 items in inputRange
-    const inputRange = [-1, ...routes.map((x, i) => i)];
+    const inputRange = [-1, ...routes.map((x, i) => i)]
 
     const tabBarStyle = [
       styles.tabBar,
@@ -249,10 +247,11 @@ class TabBarBottom extends React.PureComponent {
         ? styles.tabBarCompact
         : styles.tabBarRegular,
       style,
-    ];
+    ]
 
     // <ALTERED>
-    const openScanner = () => this.props.navigation.navigate(routeList.QRCodeScanner)
+    const openScanner = () =>
+      this.props.navigation.navigate(routeList.QRCodeScanner)
     const QRCodeButtonPlaceholder = (
       <View
         style={[
@@ -281,71 +280,70 @@ class TabBarBottom extends React.PureComponent {
           forceInset={{ bottom: 'always', top: 'never' }}
         >
           {routes.map((route, index) => {
-            const focused = index === navigation.state.index;
-            const scene = { route, index, focused };
-            const onPress = getOnPress(previousScene, scene);
-            const outputRange = inputRange.map(
-              inputIndex =>
-                inputIndex === index
-                  ? activeBackgroundColor
-                  : inactiveBackgroundColor
-            );
+            const focused = index === navigation.state.index
+            const scene = { route, index, focused }
+            const onPress = getOnPress(previousScene, scene)
+            const outputRange = inputRange.map(inputIndex =>
+              inputIndex === index
+                ? activeBackgroundColor
+                : inactiveBackgroundColor,
+            )
             const backgroundColor = position.interpolate({
               inputRange,
               outputRange: outputRange,
-            });
+            })
 
-            const justifyContent = this.props.showIcon ? 'flex-end' : 'center';
-            const extraProps = this._renderTestIDProps(scene) || {};
-            const { testID, accessibilityLabel } = extraProps;
+            const justifyContent = this.props.showIcon ? 'flex-end' : 'center'
+            const extraProps = this._renderTestIDProps(scene) || {}
+            const { testID, accessibilityLabel } = extraProps
 
             // <ALTERED>
             // added React.Fragment and QRCodeButtonPlaceholder
             // </ALTERED>
             return (
               <React.Fragment>
-              { QR_CODE_BUTTON_INDEX == index && QRCodeButtonPlaceholder }
-              <TouchableWithoutFeedback
-                key={route.key}
-                testID={testID}
-                accessibilityLabel={accessibilityLabel}
-                onPress={() =>
-                  onPress
-                    ? onPress({
-                        previousScene,
-                        scene,
-                        jumpToIndex,
-                        defaultHandler: this._handleTabPress,
-                      })
-                    : this._handleTabPress(index)
-                }
-              >
-                <Animated.View style={[styles.tab, { backgroundColor }]}>
-                  <View
-                    style={[
-                      styles.tab,
-                      this._shouldUseHorizontalTabs()
-                        ? styles.tabLandscape
-                        : styles.tabPortrait,
-                      tabStyle,
-                    ]}
-                  >
-                    {this._renderIcon(scene)}
-                    {this._renderLabel(scene)}
-                  </View>
-                </Animated.View>
-              </TouchableWithoutFeedback>
+                {QR_CODE_BUTTON_INDEX == index && QRCodeButtonPlaceholder}
+                <TouchableWithoutFeedback
+                  key={route.key}
+                  testID={testID}
+                  accessibilityLabel={accessibilityLabel}
+                  onPress={() =>
+                    onPress
+                      ? onPress({
+                          previousScene,
+                          scene,
+                          jumpToIndex,
+                          defaultHandler: this._handleTabPress,
+                        })
+                      : this._handleTabPress(index)
+                  }
+                >
+                  <Animated.View style={[styles.tab, { backgroundColor }]}>
+                    <View
+                      style={[
+                        styles.tab,
+                        this._shouldUseHorizontalTabs()
+                          ? styles.tabLandscape
+                          : styles.tabPortrait,
+                        tabStyle,
+                      ]}
+                    >
+                      {this._renderIcon(scene)}
+                      {this._renderLabel(scene)}
+                    </View>
+                  </Animated.View>
+                </TouchableWithoutFeedback>
               </React.Fragment>
-            );
+            )
           })}
         </SafeAreaView>
       </Animated.View>
-    );
+    )
   }
 }
 
-const DEFAULT_HEIGHT = 49;
-const COMPACT_HEIGHT = 29;
+const DEFAULT_HEIGHT = 49
+const COMPACT_HEIGHT = 29
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -396,7 +394,7 @@ const styles = StyleSheet.create({
   // <ALTERED>
   qrCodeButton: {
     position: 'absolute',
-    bottom: 6,
+    top: -COMPACT_HEIGHT,
     height: 72,
     width: 72,
     borderRadius: 36,
@@ -409,9 +407,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 8,
-    zIndex: 10
+    zIndex: 10,
   },
   // </ALTERED>
-});
+})
 
-export const BottomNavBar = withOrientation(TabBarBottom);
+export const BottomNavBar = withOrientation(TabBarBottom)
