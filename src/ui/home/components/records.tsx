@@ -9,8 +9,8 @@ interface Props {}
 const styles = StyleSheet.create({
   text: {
     fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: 30,
-    color: "#959595",
+    fontSize: 30, // FIXME
+    color: "#959595", // FIXME
   },
 })
 

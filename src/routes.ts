@@ -108,10 +108,16 @@ export const BottomNavRoutes = TabNavigator(
   },
   {
     tabBarOptions: {
-      // FIXME
-      activeTintColor: JolocomTheme.primaryColorPurple,
-      inactiveTintColor: '#9B9B9E', // FIXME
-
+      ...Platform.select({
+        android: {
+          activeTintColor: JolocomTheme.primaryColorPurple,
+          inactiveTintColor: '#9B9B9E', // FIXME
+        },
+        ios: {
+          activeTintColor: JolocomTheme.primaryColorWhite,
+          inactiveTintColor: JolocomTheme.primaryColorGrey
+        }
+      }),
       showLabel: false,
       style: {
         height: 50,
