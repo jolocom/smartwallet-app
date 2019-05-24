@@ -26,7 +26,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -36,7 +36,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -46,7 +46,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -56,7 +56,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -66,7 +66,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -76,7 +76,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -86,7 +86,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -96,7 +96,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -106,7 +106,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
   <Path
     d=""
@@ -116,7 +116,7 @@ exports[`MaskedImage component matches the snapshot with empty current path stri
     strokeDasharray="1,10"
     strokeLinecap="round"
     strokeLinejoin="round"
-    strokeWidth="1"
+    strokeWidth="2"
   />
 </Svg>
 `;
