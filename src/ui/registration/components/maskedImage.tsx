@@ -4,7 +4,7 @@ import {
   PanResponderInstance,
   GestureResponderEvent,
 } from 'react-native'
-import { Svg, Path, Circle, CircleProps } from 'react-native-svg'
+import { Svg, Path, Circle } from 'react-native-svg'
 
 interface Props {
   disabled: boolean
@@ -20,7 +20,7 @@ interface State {
   curY: number
   pathDs: string[]
   pathIdx: number
-  circles: React.ReactElement<CircleProps>[]
+  circles: number[][]
   circlesN: number
 }
 
@@ -112,16 +112,8 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
           // they intersect at (x, y)
           // so draw a circle at the intersection
-          this.state.circles.push(
-            <Circle
-              key={circles.length}
-              cx={x}
-              cy={y}
-              r="4"
-              fill="#ffefdf"
-            />
-          )
-          this.setState({ circlesN: this.state.circles.length })
+          circles.push([x, y])
+          this.setState({ circlesN: circles.length })
 
           // only 1 intersection per segment
           break
@@ -200,7 +192,17 @@ export class MaskedImageComponent extends React.Component<Props, State> {
             />)
           )
         }
-        { this.state.circles }
+        {
+          this.state.circles.map(([x, y], i) => (
+            <Circle
+              key={i}
+              cx={x}
+              cy={y}
+              r="4"
+              fill="#ffefdf"
+            />
+          ))
+        }
       </Svg>
     )
   }
