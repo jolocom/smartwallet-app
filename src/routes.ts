@@ -1,6 +1,6 @@
 import { Platform } from 'react-native'
 import { StackNavigator, TabNavigator } from 'react-navigation'
-import { Claims, Interactions, ClaimDetails } from 'src/ui/home/'
+import { Claims, Interactions, Records, ClaimDetails } from 'src/ui/home/'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
 import { SeedPhrase, Loading } from 'src/ui/registration/'
@@ -90,10 +90,10 @@ export const BottomNavRoutes = TabNavigator(
       }),
     },
     [routeList.Records]: {
-      screen: Interactions,
+      screen: Records,
       navigationOptions: () => ({
         ...commonNavigationOptions,
-        headerTitle: I18n.t('Records'),
+        headerTitle: I18n.t('Login records'),
         tabBarIcon: RecordsMenuIcon,
       }),
     },

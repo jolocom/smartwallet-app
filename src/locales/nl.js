@@ -56,7 +56,8 @@ export default {
     "Country": "Land",
     "Your Jolocom Wallet": "Uw Jolocom Wallet",
   /*
-    "Records": "",
+    "Login records": "",
+    "You haven't logged in to any services yet": "",
     "Settings": "",
     "Your preferences": "",
     "Language": "",
