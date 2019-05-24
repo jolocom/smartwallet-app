@@ -8,3 +8,7 @@ export const EmailIcon = require('src/resources/svg/EmailIcon').default
 export const PhoneIcon = require('src/resources/svg/PhoneIcon').default
 export const AccessibilityIcon = require('src/resources/svg/AccessibilityIcon')
   .default
+export const IdentityMenuIcon = require('./svg/IdentityMenuIcon').default
+export const DocumentsMenuIcon = require('./svg/DocumentsMenuIcon').default
+export const RecordsMenuIcon = require('./svg/RecordsMenuIcon').default
+export const SettingsMenuIcon = require('./svg/SettingsMenuIcon').default

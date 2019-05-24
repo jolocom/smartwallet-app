@@ -5,6 +5,7 @@ import {
 } from 'typeorm/browser'
 import { plainToClass } from 'class-transformer'
 import {
+  SettingEntity,
   PersonaEntity,
   MasterKeyEntity,
   VerifiableCredentialEntity,
@@ -34,12 +35,15 @@ export class Storage {
   private config: ConnectionOptions
 
   public store = {
-    verifiableCredential: this.storeVClaim.bind(this),
+    setting: this.saveSetting.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
+    verifiableCredential: this.storeVClaim.bind(this),
     encryptedSeed: this.storeEncryptedSeed.bind(this),
   }
 
   public get = {
+    settingsObject: this.getSettingsObject.bind(this),
+    setting: this.getSetting.bind(this),
     persona: this.getPersonas.bind(this),
     verifiableCredential: this.getVCredential.bind(this),
     attributesByType: this.getAttributesByType.bind(this),
@@ -61,6 +65,31 @@ export class Storage {
     if (!this.connection) {
       this.connection = await createConnection(this.config)
     }
+  }
+
+  private async getSettingsObject(): Promise<{ [key: string]: any }> {
+    await this.createConnectionIfNeeded()
+    const settingsList = await this.connection.manager.find(SettingEntity)
+    const settings = {}
+    settingsList.forEach(setting => {
+      settings[setting.key] = setting.value
+    })
+    return settings
+  }
+
+  private async getSetting(key: string): Promise<any> {
+    await this.createConnectionIfNeeded()
+    const setting = await this.connection.manager.findOne(SettingEntity, {
+      key,
+    })
+    if (setting) return setting.value
+  }
+
+  private async saveSetting(key: string, value: any): Promise<void> {
+    await this.createConnectionIfNeeded()
+    const repo = this.connection.getRepository(SettingEntity)
+    const setting = repo.create({ key, value })
+    await repo.save(setting)
   }
 
   // TODO: refactor needed on multiple personas

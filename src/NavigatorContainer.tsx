@@ -11,7 +11,6 @@ import { AnyAction } from 'redux'
 import { Routes } from 'src/routes'
 import { RootState } from 'src/reducers/'
 import { navigationActions, accountActions, genericActions } from 'src/actions/'
-import { BottomActionBar } from './ui/generic/'
 import { routeList } from './routeList'
 import { LoadingSpinner } from 'src/ui/generic/loadingSpinner'
 import { JolocomTheme } from './styles/jolocom-theme'
@@ -102,7 +101,7 @@ export class NavigatorContainer extends React.Component<Props> {
             flex: 1,
             backgroundColor: isDarkBackground
               ? JolocomTheme.primaryColorBlack
-              : JolocomTheme.primaryColorWhite,
+              : JolocomTheme.primaryColorGrey,
           }}
         >
           <Routes
@@ -114,9 +113,6 @@ export class NavigatorContainer extends React.Component<Props> {
           />
           {this.props.deepLinkLoading && <LoadingSpinner />}
         </SafeAreaView>
-        {currentRoute === routeList.Home && (
-          <BottomActionBar openScanner={this.props.openScanner} />
-        )}
       </React.Fragment>
     )
   }
