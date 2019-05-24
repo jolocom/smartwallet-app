@@ -60,8 +60,10 @@ export class EntropyContainer extends React.Component<Props, State> {
     const { entropyProgress } = this.state
     if (entropyProgress >= 1) {
       this.setState({ sufficientEntropy: true, entropyProgress: 1 })
-      const moreEntropy = await generateSecureRandomBytes(1024)
-      moreEntropy.forEach(e => this.entropyGenerator.addFromDelta(e))
+      while (this.entropyGenerator.getProgress() < 1) {
+        const moreEntropy = await generateSecureRandomBytes(512)
+        moreEntropy.forEach(e => this.entropyGenerator.addFromDelta(e))
+      }
       const encodedEntropy = this.generateRandomString()
       this.setState({ encodedEntropy })
     }

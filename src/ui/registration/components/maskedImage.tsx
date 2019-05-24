@@ -136,7 +136,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
           (pathIdx == 0 || linesPtsIdx >= linesPts.length)
         ) {
           pathIdx++
-          pathDs[pathIdx] = `M${curX},${curY}`
+          pathDs[pathIdx] = `M${prevX},${prevY}L${curX},${curY}`
           this.state.pathIdx = pathIdx
         }
 
