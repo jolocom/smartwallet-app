@@ -35,7 +35,7 @@ export const initApp = () => async (
   }
 }
 
-export const loadSettings = (settings: {[key: string]: any}) => ({
+export const loadSettings = (settings: { [key: string]: any }) => ({
   type: 'LOAD_SETTINGS',
   value: settings,
 })

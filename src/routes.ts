@@ -115,8 +115,8 @@ export const BottomNavRoutes = TabNavigator(
         },
         ios: {
           activeTintColor: JolocomTheme.primaryColorWhite,
-          inactiveTintColor: JolocomTheme.primaryColorGrey
-        }
+          inactiveTintColor: JolocomTheme.primaryColorGrey,
+        },
       }),
       showLabel: false,
       style: {
@@ -149,8 +149,8 @@ export const Routes = StackNavigator({
     screen: QRScannerContainer,
     navigationOptions: () => ({
       ...navOptScreenWCancel,
-      headerTitle: I18n.t('You can scan the qr code now!')
-    })
+      headerTitle: I18n.t('You can scan the qr code now!'),
+    }),
   },
 
   [routeList.CredentialDialog]: {

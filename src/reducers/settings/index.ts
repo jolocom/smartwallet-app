@@ -18,7 +18,7 @@ export const settingsReducer = (
     case 'SET_LOCALE':
       return {
         ...state,
-        locale: action.value
+        locale: action.value,
       }
     default:
       return state

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import VersionNumber from 'react-native-version-number';
+import VersionNumber from 'react-native-version-number'
 import { locales } from 'src/locales/i18n'
 
 import { SettingsScreen } from '../components/settings'

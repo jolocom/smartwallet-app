@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: 30, // FIXME
-    color: "#959595", // FIXME
+    color: '#959595', // FIXME
   },
 })
 

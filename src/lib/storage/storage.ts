@@ -67,7 +67,7 @@ export class Storage {
     }
   }
 
-  private async getSettingsObject(): Promise<{[key: string]: any}> {
+  private async getSettingsObject(): Promise<{ [key: string]: any }> {
     await this.createConnectionIfNeeded()
     const settingsList = await this.connection.manager.find(SettingEntity)
     const settings = {}
@@ -79,8 +79,9 @@ export class Storage {
 
   private async getSetting(key: string): Promise<any> {
     await this.createConnectionIfNeeded()
-    const setting = await this.connection.manager
-      .findOne(SettingEntity, { key })
+    const setting = await this.connection.manager.findOne(SettingEntity, {
+      key,
+    })
     if (setting) return setting.value
   }
 
