@@ -78,7 +78,7 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
               style={[
                 styles.languageOption,
                 isCurrentLanguage && {
-                  backgroundColor: JolocomTheme.primaryColorPurple,
+                  backgroundColor: JolocomTheme.primaryColorSand,
                 },
               ]}
             >
@@ -86,7 +86,7 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
                 style={[
                   styles.languageOptionText,
                   isCurrentLanguage && {
-                    color: JolocomTheme.primaryColorSand,
+                    color: JolocomTheme.primaryColorPurple,
                   },
                 ]}
               >
