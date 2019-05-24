@@ -8,7 +8,7 @@ type Transformation<T> = (list: T[]) => T[]
  * @returns - Function combining all order / filter operations passed in
  */
 
-export const buildTransform = <T>(ts: [Filter<T> | Ordering<T>]) => (
+export const buildTransform = <T>(ts: Array<Filter<T> | Ordering<T>>) => (
   list: T[],
 ): T[] =>
   ts

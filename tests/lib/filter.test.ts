@@ -29,4 +29,9 @@ describe('Filtering Credentials', () => {
             return current
         })
     })
+
+    it('should filter documents', () => {
+        const documents = types.slice(0, 2)
+        expect(filters.documentFilter(documents)(testCreds).every(cred => cred.type.some(t => documents.some(d => t === d)))
+    })
 })
