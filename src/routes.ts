@@ -71,9 +71,10 @@ const commonNavigationOptions = {
   headerTintColor: defaultHeaderTintColor,
 }
 
-const bottomNavBarBackground = Platform.OS == 'android'
-  ? '#fafafa' // FIXME add to theme
-  : JolocomTheme.primaryColorBlack
+const bottomNavBarBackground =
+  Platform.OS == 'android'
+    ? '#fafafa' // FIXME add to theme
+    : JolocomTheme.primaryColorBlack
 
 export const BottomNavRoutes = TabNavigator(
   {
@@ -90,10 +91,14 @@ export const BottomNavRoutes = TabNavigator(
       navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('Documents'),
-        tabBarIcon: (props: { tintColor: string, focused: boolean, fillColor?: string }) => {
+        tabBarIcon: (props: {
+          tintColor: string
+          focused: boolean
+          fillColor?: string
+        }) => {
           props.fillColor = bottomNavBarBackground
           return new DocumentsMenuIcon(props)
-        }
+        },
       }),
     },
     [routeList.Records]: {
@@ -147,7 +152,6 @@ export const Routes = StackNavigator({
     screen: QRScannerContainer,
     navigationOptions: () => ({
       ...navOptScreenWCancel,
-      headerTitle: I18n.t('You can scan the qr code now!'),
     }),
   },
 
