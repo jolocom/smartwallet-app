@@ -7,40 +7,31 @@ exports[`NavigatorContainer correctly hides bottom action bar 1`] = `
     barStyle="light-content"
     showHideTransition="fade"
   />
-  <withOrientation
-    style={
+  <NavigationContainer
+    navigation={
       Object {
-        "backgroundColor": "black",
-        "flex": 1,
+        "addListener": [Function],
+        "dispatch": [MockFunction],
+        "getParam": [Function],
+        "goBack": [Function],
+        "navigate": [Function],
+        "pop": [Function],
+        "popToTop": [Function],
+        "push": [Function],
+        "replace": [Function],
+        "setParams": [Function],
+        "state": Object {
+          "index": 0,
+          "navigate": [MockFunction],
+          "routes": Array [
+            Object {
+              "routeName": "Landing",
+            },
+          ],
+        },
       }
     }
-  >
-    <NavigationContainer
-      navigation={
-        Object {
-          "addListener": [Function],
-          "dispatch": [MockFunction],
-          "getParam": [Function],
-          "goBack": [Function],
-          "navigate": [Function],
-          "pop": [Function],
-          "popToTop": [Function],
-          "push": [Function],
-          "replace": [Function],
-          "setParams": [Function],
-          "state": Object {
-            "index": 0,
-            "navigate": [MockFunction],
-            "routes": Array [
-              Object {
-                "routeName": "Landing",
-              },
-            ],
-          },
-        }
-      }
-    />
-  </withOrientation>
+  />
 </React.Fragment>
 `;
 
@@ -51,42 +42,30 @@ exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
     barStyle="default"
     showHideTransition="fade"
   />
-  <withOrientation
-    style={
+  <NavigationContainer
+    navigation={
       Object {
-        "backgroundColor": "white",
-        "flex": 1,
+        "addListener": [Function],
+        "dispatch": [MockFunction],
+        "getParam": [Function],
+        "goBack": [Function],
+        "navigate": [Function],
+        "pop": [Function],
+        "popToTop": [Function],
+        "push": [Function],
+        "replace": [Function],
+        "setParams": [Function],
+        "state": Object {
+          "index": 0,
+          "navigate": [MockFunction],
+          "routes": Array [
+            Object {
+              "routeName": "Home",
+            },
+          ],
+        },
       }
     }
-  >
-    <NavigationContainer
-      navigation={
-        Object {
-          "addListener": [Function],
-          "dispatch": [MockFunction],
-          "getParam": [Function],
-          "goBack": [Function],
-          "navigate": [Function],
-          "pop": [Function],
-          "popToTop": [Function],
-          "push": [Function],
-          "replace": [Function],
-          "setParams": [Function],
-          "state": Object {
-            "index": 0,
-            "navigate": [MockFunction],
-            "routes": Array [
-              Object {
-                "routeName": "Home",
-              },
-            ],
-          },
-        }
-      }
-    />
-  </withOrientation>
-  <BottomActionBar
-    openScanner={[MockFunction]}
   />
 </React.Fragment>
 `;
