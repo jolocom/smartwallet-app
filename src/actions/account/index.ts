@@ -62,7 +62,7 @@ export const checkIdentityExists = () => async (
     if (!decryptedSeed) throw new Error('could not decrypt seed')
 
     // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-    const userVault = new JolocomLib.KeyProvider(
+    const userVault = JolocomLib.KeyProvider.fromSeed(
       Buffer.from(decryptedSeed, 'hex'),
       password,
     )
