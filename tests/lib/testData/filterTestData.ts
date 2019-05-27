@@ -1,4 +1,6 @@
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { DecoratedClaims } from 'src/reducers/account'
+import { getUiCredentialTypeByType } from 'src/lib/util'
 
 const lastYear = new Date()
 lastYear.setFullYear(lastYear.getFullYear() - 1)
@@ -35,3 +37,28 @@ export const testCreds: SignedCredential[] = flatten(
     ),
   ),
 )
+
+export const decoratedTypes = [
+  ['Credential', 'someCred'],
+  ['Credential', 'someOtherCred'],
+  ['Credential', 'anotherOne'],
+]
+
+export const getTestDecoratedClaims = (): DecoratedClaims[] => {
+  const claims = []
+  decoratedTypes.forEach(typ => {
+    const credentialType = getUiCredentialTypeByType(typ)
+    claims.push(
+      flatten(
+        expiryDates.map(expiryDate =>
+          issuers.map(issuer => ({
+            credentialType,
+            issuer,
+            expires: expiryDate,
+          })),
+        ),
+      ),
+    )
+  })
+  return flatten(claims)
+}
