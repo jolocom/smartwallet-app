@@ -15,6 +15,22 @@ export const setLoadingMsg = (loadingMsg: string) => ({
   value: loadingMsg,
 })
 
+export const submitEntropy = (encodedEntropy: string) => (
+  dispatch: Dispatch<AnyAction>,
+) => {
+  dispatch(
+    navigationActions.navigatorReset({
+      routeName: routeList.Loading,
+    }),
+  )
+
+  dispatch(setLoadingMsg(loading.loadingStages[0]))
+
+  setTimeout(() => {
+    dispatch(createIdentity(encodedEntropy))
+  }, 2000)
+}
+
 export const startRegistration = () => async (
   dispatch: Dispatch<AnyAction>,
   getState: Function,
@@ -22,18 +38,14 @@ export const startRegistration = () => async (
 ) => {
   try {
     const randomPassword = await generateSecureRandomBytes(32)
-    const entropy = await generateSecureRandomBytes(16)
-    const encodedEntropy = entropy.toString('hex')
     await backendMiddleware.keyChainLib.savePassword(
       randomPassword.toString('base64'),
     )
-    dispatch(
+    return dispatch(
       navigationActions.navigatorReset({
-        routeName: routeList.Loading,
+        routeName: routeList.Entropy,
       }),
     )
-    dispatch(setLoadingMsg(loading.loadingStages[0]))
-    return dispatch(createIdentity(encodedEntropy))
   } catch (err) {
     return dispatch(genericActions.showErrorScreen(err, routeList.Landing))
   }

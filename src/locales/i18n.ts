@@ -13,8 +13,10 @@ I18n.translations = {
   nl,
 }
 
+export const locales = ['en', 'de', 'nl']
+
 export const getI18nImage = (fileName: string): File => {
-  const locale = Object.keys(I18n.translations).includes(I18n.locale)
+  const locale = locales.includes(I18n.locale)
     ? I18n.locale
     : I18n.defaultLocale
 

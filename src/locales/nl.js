@@ -29,6 +29,8 @@ export default {
     "Keep all your data with you in one place, available at any time": "Bewaar al uw gegevens op één plaats, altijd beschikbaar",
     "Track where you sign in to services": "Volg bij welke services u zich aanmeldt",
     "Get started": "Begin",
+    "For security purposes, we need some randomness": "Voor de veiligheid hebben we wat willekeur nodig",
+    "Please tap the screen and draw on it randomly": "Tik op het scherm en teken er willekeurig op",
     "Continue": "Doorgaan",
     "Write these words down on an analog and secure place": "Schrijf deze woorden op een analoge en veilige plaats op",
     "Without these words, you cannot access your wallet again": "Zonder deze woorden heeft u geen toegang meer tot uw portefeuille",
@@ -54,5 +56,13 @@ export default {
     "Postal Code": "Postcode",
     "City": "Stad",
     "Country": "Land",
-    "Your Jolocom Wallet": "Uw Jolocom Wallet"
+    "Your Jolocom Wallet": "Uw Jolocom Wallet",
+  /*
+    "Login records": "",
+    "You haven't logged in to any services yet": "",
+    "Settings": "",
+    "Your preferences": "",
+    "Language": "",
+    "version": "",
+  */
 }

@@ -3,6 +3,7 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -39,6 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNVersionNumberPackage(),
             new RNLanguagesPackage(),
             new RandomBytesPackage(),
             new VectorIconsPackage(),
