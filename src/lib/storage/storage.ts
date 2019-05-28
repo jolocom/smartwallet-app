@@ -10,9 +10,14 @@ import {
   MasterKeyEntity,
   VerifiableCredentialEntity,
   SignatureEntity,
-  CredentialEntity,
+  CredentialEntity, CacheEntity
 } from 'src/lib/storage/entities'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import {
+  CredentialOfferMetadata,
+  CredentialOfferRenderInfo
+} from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import {type} from 'os'
 
 interface PersonaAttributes {
   did: string
@@ -39,6 +44,8 @@ export class Storage {
     persona: this.storePersonaFromJSON.bind(this),
     verifiableCredential: this.storeVClaim.bind(this),
     encryptedSeed: this.storeEncryptedSeed.bind(this),
+    credentialMetadata: (metadata: any) => this.createConnectionIfNeeded()
+    .then(() => storeCredentialMetadata(this.connection))
   }
 
   public get = {
@@ -49,10 +56,13 @@ export class Storage {
     attributesByType: this.getAttributesByType.bind(this),
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
     encryptedSeed: this.getEncryptedSeed.bind(this),
+    credentialMetadata: () => this.createConnectionIfNeeded()
+    .then(() => getMetadataForCredential(this.connection))
   }
 
   public delete = {
     verifiableCredential: this.deleteVCred.bind(this),
+    // credentialMetadata: this.deleteCredentialMetadata.bind(this)
   }
 
   public initConnection = this.createConnectionIfNeeded.bind(this)
@@ -254,4 +264,34 @@ export class Storage {
       .where('id = :id', { id })
       .execute()
   }
+}
+
+export type CredentialMetadataSummary = {
+  issuer: string,
+  type: string,
+  renderInfo: CredentialOfferRenderInfo,
+  metadata: CredentialOfferMetadata
+}
+
+const storeCredentialMetadata = (connection: Connection) => (credentialMetadata: CredentialMetadataSummary) => {
+  const cacheEntry = plainToClass(CacheEntity, credentialMetadata)
+
+  const { issuer, type } = credentialMetadata
+  cacheEntry.key = buildMetadataKey(issuer, type)
+
+  return connection.manager.save(cacheEntry)
+}
+
+const getMetadataForCredential = (connection: Connection) => async (credential: SignedCredential) => {
+  const entryKey = buildMetadataKey(credential.issuer, credential.type)
+  const [ entry ] = await connection.manager.findByIds(CacheEntity, [entryKey])
+  return entry
+}
+
+const buildMetadataKey = (issuer: string, credentialType: string | Array<string>) : string => {
+  if (typeof credentialType === 'string') {
+    return `${issuer}${type}`
+  }
+
+  return `${issuer}${credentialType[credentialType.length - 1]}`
 }

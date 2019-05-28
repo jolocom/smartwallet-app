@@ -1,6 +1,4 @@
-import { AnyAction, Dispatch } from 'redux'
 import { navigationActions, genericActions } from 'src/actions/'
-import { BackendMiddleware } from 'src/backendMiddleware'
 import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
@@ -8,6 +6,7 @@ import { JolocomLib } from 'jolocom-lib'
 const bip39 = require('bip39')
 import { generateSecureRandomBytes } from 'src/lib/util'
 import { AppError, ErrorCode } from 'src/lib/errors'
+import { ThunkAction } from '../../store'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -30,10 +29,10 @@ export const submitEntropy = (encodedEntropy: string) => (
   }, 2000)
 }
 
-export const startRegistration = () => async (
-  dispatch: Dispatch<AnyAction>,
-  getState: Function,
-  backendMiddleware: BackendMiddleware,
+export const startRegistration = (): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
 ) => {
   try {
     const randomPassword = await generateSecureRandomBytes(32)
@@ -50,14 +49,13 @@ export const startRegistration = () => async (
   }
 }
 
-export const finishRegistration = () => (dispatch: Dispatch<AnyAction>) => {
-  dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
-}
+export const finishRegistration = () =>
+  navigationActions.navigatorReset({ routeName: routeList.Home })
 
-export const createIdentity = (encodedEntropy: string) => async (
-  dispatch: Dispatch<AnyAction>,
-  getState: Function,
-  backendMiddleware: BackendMiddleware,
+export const createIdentity = (encodedEntropy: string): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
 ) => {
   const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
 
