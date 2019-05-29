@@ -17,11 +17,11 @@ interface ConnectProps {
 interface Props extends ConnectProps {}
 
 export class ClaimsContainer extends React.Component<Props> {
-  componentWillMount() {
+  public componentWillMount(): void {
     this.props.setClaimsForDid()
   }
 
-  render() {
+  public render(): JSX.Element {
     const { did, loading, claimsState, openClaimDetails } = this.props
     return (
       <View style={{ flex: 1 }}>

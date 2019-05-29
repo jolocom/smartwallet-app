@@ -13,9 +13,9 @@ export const setLoadingMsg = (loadingMsg: string) => ({
   value: loadingMsg,
 })
 
-export const submitEntropy = (encodedEntropy: string) => (
-  dispatch: Dispatch<AnyAction>,
-) => {
+export const submitEntropy = (
+  encodedEntropy: string,
+): ThunkAction => dispatch => {
   dispatch(
     navigationActions.navigatorReset({
       routeName: routeList.Loading,
