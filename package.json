@@ -36,7 +36,6 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "haul": "1.0.0-beta.14",
-    "immutable": "^3.8.2",
     "jest": "^22.4.4",
     "material-colors": "^1.2.5",
     "mockdate": "^2.0.2",
