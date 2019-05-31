@@ -14,9 +14,11 @@ import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { AppError, ErrorCode } from 'src/lib/errors'
-import { ThunkAction } from '../../store'
+import { ThunkDispatch} from '../../store'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { equals } from 'ramda'
+import {RootState} from '../../reducers'
+import {BackendMiddleware} from '../../backendMiddleware'
 
 export const setCredentialRequest = (
   request: StateCredentialRequestSummary,
@@ -25,9 +27,9 @@ export const setCredentialRequest = (
   value: request,
 })
 
-export const clearInteractionRequest = () => ({
+export const clearInteractionRequest = {
   type: 'CLEAR_INTERACTION_REQUEST',
-})
+}
 
 export const setReceivingCredential = (external: SignedCredential[]) => ({
   type: 'SET_EXTERNAL',
@@ -42,7 +44,7 @@ export const setDeepLinkLoading = (value: boolean) => ({
 export const receiveExternalCredential = (
   credReceive: JSONWebToken<CredentialsReceive>,
   credentialOfferMetadata?: Array<CredentialMetadataSummary>,
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+) => async (dispatch: ThunkDispatch, getState: () => RootState, backendMiddleware: BackendMiddleware) => {
   const { identityWallet, registry, storageLib } = backendMiddleware
 
   try {
@@ -50,7 +52,7 @@ export const receiveExternalCredential = (
     const providedCredentials = credReceive.interactionToken.signedCredentials
 
     const validationResults = await JolocomLib.util.validateDigestables(
-      providedCredentials,
+      providedCredentials
     )
 
     // TODO Error Code
@@ -65,17 +67,17 @@ export const receiveExternalCredential = (
     }
 
     dispatch(setReceivingCredential(providedCredentials))
-    dispatch(
+    return dispatch(
       navigationActions.navigatorReset({
         routeName: routeList.CredentialDialog,
       }),
     )
   } catch (error) {
-    dispatch(
+    return dispatch(
       showErrorScreen(new AppError(ErrorCode.CredentialsReceiveFailed, error)),
     )
   } finally {
-    dispatch(accountActions.toggleLoading(false))
+    return dispatch(accountActions.toggleLoading(false))
   }
 }
 
@@ -90,7 +92,7 @@ interface AttributeSummary {
 
 export const consumeCredentialRequest = (
   decodedCredentialRequest: JSONWebToken<CredentialRequest>,
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+) => async (dispatch: ThunkDispatch, getState: () => RootState, backendMiddleware: BackendMiddleware) => {
   const { storageLib, identityWallet, registry } = backendMiddleware
   const { did } = getState().account.did
 
@@ -152,20 +154,17 @@ export const consumeCredentialRequest = (
     }
 
     dispatch(setCredentialRequest(summary))
-    dispatch(navigationActions.navigatorReset({ routeName: routeList.Consent }))
-    dispatch(setDeepLinkLoading(false))
+    return dispatch(navigationActions.navigatorReset({ routeName: routeList.Consent }))
   } catch (error) {
-    dispatch(
+    return dispatch(
       showErrorScreen(new AppError(ErrorCode.CredentialRequestFailed, error)),
     )
-  } finally {
-    dispatch(accountActions.toggleLoading(false))
   }
 }
 
 export const sendCredentialResponse = (
   selectedCredentials: StateVerificationSummary[],
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+) => async (dispatch: ThunkDispatch, getState: () => RootState, backendMiddleware: BackendMiddleware) => {
   const { storageLib, keyChainLib, identityWallet } = backendMiddleware
   const {
     activeCredentialRequest: { callbackURL, requestJWT },
@@ -195,37 +194,37 @@ export const sendCredentialResponse = (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
-        dispatch(cancelSSO()),
+      return Linking.openURL(`${callbackURL}${response.encode()}`).then(() =>
+        dispatch(cancelSSO),
       )
     } else {
       return fetch(callbackURL, {
         method: 'POST',
         body: JSON.stringify({ token: response.encode() }),
         headers: { 'Content-Type': 'application/json' },
-      }).then(() => dispatch(cancelSSO()))
+      }).then(() => dispatch(cancelSSO))
     }
   } catch (error) {
-    dispatch(clearInteractionRequest())
-    dispatch(accountActions.toggleLoading(false))
-    dispatch(
-      showErrorScreen(new AppError(ErrorCode.CredentialResponseFailed, error)),
-    )
+    return dispatch(clearInteractionRequest)
   }
 }
 
-export const cancelSSO = (): ThunkAction => dispatch => {
-  dispatch(clearInteractionRequest())
+export const cancelSSO = (dispatch: ThunkDispatch) => {
+  dispatch(clearInteractionRequest)
   dispatch(accountActions.toggleLoading(false))
-  dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
-}
-
-export const cancelReceiving = (): ThunkAction => dispatch => {
-  dispatch(resetSelected())
   return dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
 }
 
-export const toggleDeepLinkFlag = (value: boolean) => ({
+export const cancelReceiving = (dispatch: ThunkDispatch) => {
+  dispatch(resetSelected())
+  return dispatch(
+    navigationActions.navigatorReset({ routeName: routeList.Home }),
+  )
+}
+
+export const toggleDeepLinkFlag = (
+  value: boolean,
+)=> ({
   type: 'SET_DEEP_LINK_FLAG',
   value,
 })
