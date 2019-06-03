@@ -3,12 +3,14 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
-import {ThunkDispatch} from '../../../store'
-import {withErrorHandling, withLoading} from '../../../actions/modifiers'
-import {showErrorScreen} from '../../../actions/generic'
-import {setDeepLinkLoading} from '../../../actions/sso'
+import { ThunkDispatch } from '../../../store'
+import { withErrorHandling, withLoading } from '../../../actions/modifiers'
+import { showErrorScreen } from '../../../actions/generic'
+import { setDeepLinkLoading } from '../../../actions/sso'
 
-interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -24,14 +26,19 @@ export class ClaimDetailsContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({account: {claims}}: RootState) => {
+const mapStateToProps = ({ account: { claims } }: RootState) => {
   return {
     claims,
   }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  saveClaim: () => dispatch(withLoading(setDeepLinkLoading)(withErrorHandling(showErrorScreen)(accountActions.saveClaim))),
+  saveClaim: () =>
+    dispatch(
+      withLoading(setDeepLinkLoading)(
+        withErrorHandling(showErrorScreen)(accountActions.saveClaim),
+      ),
+    ),
   handleClaimInput: (fieldValue: string, fieldName: string) => {
     dispatch(accountActions.handleClaimInput(fieldValue, fieldName))
   },

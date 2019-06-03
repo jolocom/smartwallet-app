@@ -1,22 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  StateCredentialRequestSummary,
-  StateVerificationSummary,
-} from 'src/reducers/sso'
+import { StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
-import {ThunkDispatch} from '../../../store'
-import {cancelSSO, sendCredentialResponse} from '../../../actions/sso'
+import { ThunkDispatch } from '../../../store'
+import { withErrorHandling, withLoading } from '../../../actions/modifiers'
+import { toggleClaimsLoading } from '../../../actions/account'
+import { showErrorScreen } from '../../../actions/generic'
 
-interface ConnectProps {}
-
-interface Props extends ConnectProps {
-  activeCredentialRequest: StateCredentialRequestSummary
-  currentDid: string
-  sendCredentialResponse: typeof sendCredentialResponse
-  cancelSSO: () => ReturnType<typeof cancelSSO>
-}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -54,7 +48,14 @@ const mapStateToProps = (state: any) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  sendCredentialResponse: ssoActions.sendCredentialResponse,
+  sendCredentialResponse: (credentials: StateVerificationSummary[]) =>
+    dispatch(
+      withLoading(toggleClaimsLoading)(
+        withErrorHandling(showErrorScreen)(
+          ssoActions.sendCredentialResponse(credentials),
+        ),
+      ),
+    ),
   cancelSSO: () => dispatch(ssoActions.cancelSSO),
 })
 
