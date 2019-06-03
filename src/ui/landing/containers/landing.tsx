@@ -8,13 +8,11 @@ import { withErrorHandling } from '../../../actions/modifiers'
 import { showErrorScreen } from '../../../actions/generic'
 import { AppError, ErrorCode } from '../../../lib/errors'
 import { routeList } from '../../../routeList'
+import { ThunkDispatch } from '../../../store'
 
-interface ConnectProps {
-  startRegistration: () => void
-  loading: boolean
-}
-
-interface Props extends ConnectProps {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 export class LandingContainer extends React.Component<Props> {
   render() {
@@ -36,7 +34,7 @@ const mapStateToProps = ({
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   startRegistration: () =>
     dispatch(
       withErrorHandling(

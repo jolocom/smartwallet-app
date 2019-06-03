@@ -5,11 +5,9 @@ import { locales } from 'src/locales/i18n'
 
 import { SettingsScreen } from '../components/settings'
 import { genericActions } from 'src/actions'
+import {ThunkDispatch} from '../../../store'
 
-interface Props {
-  settings: { [key: string]: any }
-  setLocale: (locale: string) => void
-}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 export class SettingsContainer extends React.Component<Props> {
   render() {
@@ -28,7 +26,7 @@ const mapStateToProps = (state: any) => ({
   settings: state.settings,
 })
 
-const mapDispatchToProps = (dispatch: Function) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) => dispatch(genericActions.setLocale(locale)),
 })
 

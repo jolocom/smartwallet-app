@@ -3,15 +3,13 @@ import { navigationActions, ssoActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import { StatePaymentRequestSummary } from 'src/reducers/sso'
-import { showErrorScreen } from 'src/actions/generic'
 import { JolocomLib } from 'jolocom-lib'
 import { Linking } from 'react-native'
 import { cancelSSO, clearInteractionRequest } from 'src/actions/sso'
 import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
-import { AppError, ErrorCode } from 'src/lib/errors'
-import { ThunkDispatch} from '../../store'
-import {RootState} from '../../reducers'
-import {BackendMiddleware} from '../../backendMiddleware'
+import { ThunkDispatch } from '../../store'
+import { RootState } from '../../reducers'
+import { BackendMiddleware } from '../../backendMiddleware'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -20,7 +18,11 @@ export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
 
 export const consumePaymentRequest = (
   paymentRequest: JSONWebToken<PaymentRequest>,
-) => async (dispatch: ThunkDispatch, getState: () => RootState, backendMiddleware: BackendMiddleware) => {
+) => async (
+  dispatch: ThunkDispatch,
+  getState: () => RootState,
+  backendMiddleware: BackendMiddleware,
+) => {
   const { identityWallet, registry } = backendMiddleware
 
   try {
@@ -45,10 +47,8 @@ export const consumePaymentRequest = (
     return dispatch(
       navigationActions.navigatorReset({ routeName: routeList.PaymentConsent }),
     )
-  } catch (err) {
-    return dispatch(showErrorScreen(new AppError(ErrorCode.PaymentRequestFailed, err)))
   } finally {
-    return dispatch(ssoActions.setDeepLinkLoading(false))
+    dispatch(ssoActions.setDeepLinkLoading(false))
   }
 }
 
@@ -90,10 +90,7 @@ export const sendPaymentResponse = async (
         headers: { 'Content-Type': 'application/json' },
       }).then(() => dispatch(cancelSSO))
     }
-  } catch (err) {
+  } finally {
     dispatch(clearInteractionRequest)
-    return dispatch(
-      showErrorScreen(new AppError(ErrorCode.PaymentResponseFailed, err)),
-    )
   }
 }

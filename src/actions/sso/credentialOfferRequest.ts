@@ -3,16 +3,17 @@ import { AppError, ErrorCode } from '../../lib/errors'
 import { showErrorScreen } from '../generic'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { receiveExternalCredential, setDeepLinkLoading } from './index'
-import { accountActions } from '../index'
-import { isNil, all, map, compose, isEmpty } from 'ramda'
+import { all, compose, isEmpty, isNil, map } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
-import { ThunkDispatch} from '../../store'
+import { ThunkDispatch } from '../../store'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
-import {keyIdToDid} from 'jolocom-lib/js/utils/helper'
-import {RootState} from '../../reducers'
-import {BackendMiddleware} from '../../backendMiddleware'
+import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
+import { RootState } from '../../reducers'
+import { BackendMiddleware } from '../../backendMiddleware'
+import { withErrorHandling, withLoading } from '../modifiers'
+import { toggleLoading} from '../account'
 
 export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -38,10 +39,10 @@ export const consumeCredentialOfferRequest = (
     const selectedMetadata = interactionToken.offeredTypes.map<
       CredentialMetadataSummary
     >(type => ({
-        issuer: keyIdToDid(credOfferRequest.issuer),
-        type,
-        renderInfo: interactionToken.getRenderInfoForType(type) || {},
-        metadata: interactionToken.getMetadataForType(type) || {}
+      issuer: keyIdToDid(credOfferRequest.issuer),
+      type,
+      renderInfo: interactionToken.getRenderInfoForType(type) || {},
+      metadata: interactionToken.getMetadataForType(type) || {},
     }))
 
     const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
@@ -61,14 +62,17 @@ export const consumeCredentialOfferRequest = (
     >(res.token)
 
     return dispatch(
-      receiveExternalCredential(credentialReceive, selectedMetadata),
+      withErrorHandling(
+        showErrorScreen,
+        err => new AppError(ErrorCode.CredentialsReceiveFailed, err),
+      )(
+        withLoading(toggleLoading)(
+          receiveExternalCredential(credentialReceive, selectedMetadata),
+        ),
+      ),
     )
-  } catch (err) {
-    dispatch(accountActions.toggleLoading(false))
+  } finally {
     dispatch(setDeepLinkLoading(false))
-    return dispatch(
-      showErrorScreen(new AppError(ErrorCode.CredentialOfferFailed, err)),
-    )
   }
 }
 

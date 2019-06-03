@@ -1,4 +1,4 @@
-import { genericActions, navigationActions } from 'src/actions/'
+import { navigationActions } from 'src/actions/'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -9,13 +9,14 @@ import {
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
 import { JolocomLib } from 'jolocom-lib'
-import { AppError, ErrorCode } from 'src/lib/errors'
-import {ThunkDispatch} from '../../store'
+import { ThunkDispatch as OriginalThunkDispatch} from 'redux-thunk'
 import { groupBy, zipWith, mergeRight } from 'ramda'
-import { compose } from 'redux'
+import {AnyAction, compose} from 'redux'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
-import {RootState} from '../../reducers'
-import {BackendMiddleware} from '../../backendMiddleware'
+import { RootState } from '../../reducers'
+import { BackendMiddleware } from '../../backendMiddleware'
+
+type ThunkDispatch = OriginalThunkDispatch <RootState, BackendMiddleware, AnyAction>
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -47,51 +48,50 @@ export const checkIdentityExists = async (
   getState: () => RootState,
   backendMiddleware: BackendMiddleware,
 ) => {
-  try {
-    const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
-    const encryptedEntropy = await storageLib.get.encryptedSeed()
-    if (!encryptedEntropy) {
-      dispatch(toggleLoading(false))
-      dispatch(
-        navigationActions.navigatorReset({ routeName: routeList.Landing }),
-      )
-      return
-    }
-    const password = await keyChainLib.getPassword()
-    const decryptedSeed = encryptionLib.decryptWithPass({
-      cipher: encryptedEntropy,
-      pass: password,
-    })
-
-    if (!decryptedSeed) throw new Error('could not decrypt seed')
-
-    // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-    const userVault = JolocomLib.KeyProvider.fromSeed(
-      Buffer.from(decryptedSeed, 'hex'),
-      password,
-    )
-    await backendMiddleware.setIdentityWallet(userVault, password)
-    const identityWallet = backendMiddleware.identityWallet
-    dispatch(setDid(identityWallet.identity.did))
-
-    dispatch(toggleLoading(false))
-    return dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
-  } catch (err) {
+  dispatch(toggleClaimsLoading(true))
+  const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
+  const encryptedEntropy = await storageLib.get.encryptedSeed().catch(err => {
+    // TODO Fix this
     if (err.message.indexOf('no such table') === 0) {
       return
     }
+  })
 
+  if (!encryptedEntropy) {
     return dispatch(
-      genericActions.showErrorScreen(
-        new AppError(ErrorCode.WalletInitFailed, err),
-      ),
+      navigationActions.navigatorReset({ routeName: routeList.Landing }),
     )
   }
+
+  const password = await keyChainLib.getPassword()
+
+  const decryptedSeed = encryptionLib.decryptWithPass({
+    cipher: encryptedEntropy,
+    pass: password,
+  })
+
+  if (!decryptedSeed) {
+    throw new Error('could not decrypt seed')
+  }
+
+  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
+  const userVault = JolocomLib.KeyProvider.fromSeed(
+    Buffer.from(decryptedSeed, 'hex'),
+    password,
+  )
+
+  await backendMiddleware.setIdentityWallet(userVault, password)
+  const identityWallet = backendMiddleware.identityWallet
+  dispatch(setDid(identityWallet.identity.did))
+
+  return dispatch(
+    navigationActions.navigatorReset({ routeName: routeList.Home }),
+  )
 }
 
-export const openClaimDetails = (
-  claim: DecoratedClaims,
-) => (dispatch: ThunkDispatch) => {
+export const openClaimDetails = (claim: DecoratedClaims) => (
+  dispatch: ThunkDispatch,
+) => {
   dispatch(setSelected(claim))
   return dispatch(
     navigationActions.navigate({
@@ -100,46 +100,39 @@ export const openClaimDetails = (
   )
 }
 
-export const saveClaim = () => async (
+export const saveClaim = async (
   dispatch: ThunkDispatch,
   getState: () => RootState,
   backendMiddleware: BackendMiddleware,
 ) => {
   const { identityWallet, storageLib, keyChainLib } = backendMiddleware
 
-  try {
-    const did = getState().account.did.did
-    const claimsItem = getState().account.claims.selected
-    const password = await keyChainLib.getPassword()
+  const did = getState().account.did.did
+  const claimsItem = getState().account.claims.selected
+  const password = await keyChainLib.getPassword()
 
-    const verifiableCredential = await identityWallet.create.signedCredential(
-      {
-        metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
-        claim: claimsItem.claimData,
-        subject: did,
-      },
-      password,
-    )
+  const verifiableCredential = await identityWallet.create.signedCredential(
+    {
+      metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
+      claim: claimsItem.claimData,
+      subject: did,
+    },
+    password,
+  )
 
-    if (claimsItem.id) {
-      await storageLib.delete.verifiableCredential(claimsItem.id)
-    }
-
-    await storageLib.store.verifiableCredential(verifiableCredential)
-    await setClaimsForDid()
-
-    return dispatch(
-      navigationActions.navigatorReset({
-        routeName: routeList.Home,
-      }),
-    )
-  } catch (err) {
-    return dispatch(
-      genericActions.showErrorScreen(
-        new AppError(ErrorCode.SaveClaimFailed, err),
-      ),
-    )
+  if (claimsItem.id) {
+    await storageLib.delete.verifiableCredential(claimsItem.id)
   }
+
+  await storageLib.store.verifiableCredential(verifiableCredential)
+
+  await dispatch(setClaimsForDid)
+
+  return dispatch(
+    navigationActions.navigatorReset({
+      routeName: routeList.Home,
+    }),
+  )
 }
 
 // TODO Currently only rendering  / adding one
@@ -165,7 +158,7 @@ export const toggleLoading = (value: boolean) => ({
   value,
 })
 
-export const setClaimsForDid = () => async (
+export const setClaimsForDid = async (
   dispatch: ThunkDispatch,
   getState: () => RootState,
   backendMiddleware: BackendMiddleware,

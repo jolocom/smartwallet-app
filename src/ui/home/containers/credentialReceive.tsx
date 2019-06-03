@@ -8,19 +8,13 @@ import {
   saveExternalCredentials,
 } from 'src/actions/account'
 import { CredentialDialogComponent } from '../components/credentialDialog'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import {cancelReceiving, cancelSSO} from 'src/actions/sso'
+import {cancelReceiving } from 'src/actions/sso'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { View } from 'react-native'
 import { ThunkDispatch} from '../../../store'
 
-interface ConnectProps {
-  externalCredentials: SignedCredential[]
-  saveExternalCredentials: () => ReturnType<typeof saveExternalCredentials>
-  goBack: () => ReturnType<typeof cancelSSO>
-}
 
-interface Props extends ConnectProps {}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 interface State {
   toRender: DecoratedClaims

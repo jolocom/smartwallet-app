@@ -3,15 +3,12 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
-import { ClaimsState } from 'src/reducers/account'
+import {ThunkDispatch} from '../../../store'
+import {withErrorHandling, withLoading} from '../../../actions/modifiers'
+import {showErrorScreen} from '../../../actions/generic'
+import {setDeepLinkLoading} from '../../../actions/sso'
 
-interface ConnectProps {
-  claims: ClaimsState
-  saveClaim: () => void
-  handleClaimInput: (fieldValue: string, fieldName: string) => void
-}
-
-interface Props extends ConnectProps {}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -33,10 +30,8 @@ const mapStateToProps = ({account: {claims}}: RootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  saveClaim: () => {
-    dispatch(accountActions.saveClaim())
-  },
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  saveClaim: () => dispatch(withLoading(setDeepLinkLoading)(withErrorHandling(showErrorScreen)(accountActions.saveClaim))),
   handleClaimInput: (fieldValue: string, fieldName: string) => {
     dispatch(accountActions.handleClaimInput(fieldValue, fieldName))
   },

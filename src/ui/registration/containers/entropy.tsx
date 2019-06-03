@@ -8,14 +8,11 @@ import {
   EntropyGenerator,
 } from 'src/lib/entropyGenerator'
 import { generateSecureRandomBytes } from 'src/lib/util'
+import {withErrorHandling} from '../../../actions/modifiers'
+import {showErrorScreen} from '../../../actions/generic'
+import {ThunkDispatch} from '../../../store'
 
-interface ConnectProps {
-  submit: (encodedEntropy: string) => void
-}
-
-interface OwnProps {}
-
-interface Props extends OwnProps, ConnectProps {}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 interface State {
   isDrawn: boolean
@@ -93,9 +90,9 @@ export class EntropyContainer extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => ({})
 
-const mapDispatchToProps = (dispatch: Function) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   submit: (encodedEntropy: string) =>
-    dispatch(registrationActions.submitEntropy(encodedEntropy)),
+    dispatch(withErrorHandling(showErrorScreen)(registrationActions.submitEntropy(encodedEntropy))),
 })
 
 export const Entropy = connect(

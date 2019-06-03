@@ -8,11 +8,7 @@ import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { showErrorScreen } from '../generic'
-import {
-  JSONWebToken,
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import {ThunkAction, ThunkDispatch} from '../../store'
+import {ThunkDispatch} from '../../store'
 import {RootState} from '../../reducers'
 import {BackendMiddleware} from '../../backendMiddleware'
 import {AppError, ErrorCode} from '../../lib/errors'
@@ -59,8 +55,7 @@ export const handleDeepLink = (
 
     dispatch(toggleDeepLinkFlag(true))
     const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
-    const handler: (arg: JSONWebToken<JWTEncodable>) => ThunkAction =
-      interactionHandlers[interactionToken.interactionType]
+    const handler = interactionHandlers[interactionToken.interactionType]
 
     // TODO What if absent?
     if (handler) {

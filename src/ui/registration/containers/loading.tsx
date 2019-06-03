@@ -2,17 +2,16 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { registrationActions } from 'src/actions'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
+import {ThunkDispatch} from '../../../store'
 const loaders = require('react-native-indicator')
 
 export interface ConnectProps {
   loadingMsg: string
-  createIdentity: (encodedEntropy: string) => void
 }
 
 interface Props extends ConnectProps {}
@@ -117,10 +116,7 @@ const mapStateToProps = ({registration: {loading: {loadingMsg}}}: RootState) => 
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  createIdentity: (entropy: string) =>
-    dispatch(registrationActions.createIdentity(entropy)),
-})
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({})
 
 export const Loading = connect(
   mapStateToProps,

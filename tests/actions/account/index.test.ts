@@ -52,7 +52,7 @@ describe('Account action creators', () => {
       identityWallet: { identity: { did: 'did:jolo:mock' } },
     }
 
-    const action = accountActions.checkIdentityExists()
+    const action = accountActions.checkIdentityExists
 
     // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
@@ -83,7 +83,7 @@ describe('Account action creators', () => {
       setIdentityWallet: jest.fn(() => Promise.resolve()),
     }
 
-    const action = accountActions.checkIdentityExists()
+    const action = accountActions.checkIdentityExists
     // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
@@ -99,7 +99,7 @@ describe('Account action creators', () => {
       },
     }
 
-    const action = accountActions.checkIdentityExists()
+    const action = accountActions.checkIdentityExists
     // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
@@ -128,14 +128,6 @@ describe('Account action creators', () => {
 
   it('should correctly save claim', async () => {
     const { identityWallet } = data
-    const mockClaimsItem = {
-      credentialType: 'Email',
-      claimData: {
-        email: 'test@test',
-      },
-      issuer: 'did:jolo:test',
-      subject: 'did:jolo:test',
-    }
 
     const backendMiddleware = {
       keyChainLib: {
@@ -149,7 +141,7 @@ describe('Account action creators', () => {
       identityWallet,
     }
 
-    const action = accountActions.saveClaim(mockClaimsItem)
+    const action = accountActions.saveClaim
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
   })

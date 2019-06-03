@@ -1,21 +1,19 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { navigationActions, ssoActions } from 'src/actions'
-import { showErrorScreen } from 'src/actions/generic'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { routeList } from 'src/routeList'
 import { cancelSSO, clearInteractionRequest } from '.'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
-import { AppError, ErrorCode } from 'src/lib/errors'
 import { ThunkDispatch } from '../../store'
 import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
-import {AnyAction} from 'redux'
+import { AnyAction } from 'redux'
 
 export const setAuthenticationRequest = (
   request: StateAuthenticationRequestSummary,
-) : AnyAction => ({
+): AnyAction => ({
   type: 'SET_AUTHENTICATION_REQUEST',
   value: request,
 })
@@ -42,12 +40,8 @@ export const consumeAuthenticationRequest = (
         routeName: routeList.AuthenticationConsent,
       }),
     )
-  } catch (err) {
-    return dispatch(
-      showErrorScreen(new AppError(ErrorCode.AuthenticationRequestFailed, err)),
-    )
   } finally {
-    return dispatch(ssoActions.setDeepLinkLoading(false))
+    dispatch(ssoActions.setDeepLinkLoading(false))
   }
 }
 
@@ -88,12 +82,7 @@ export const sendAuthenticationResponse = async (
     })
 
     return dispatch(cancelSSO)
-  } catch (err) {
+  } finally {
     dispatch(clearInteractionRequest)
-    return dispatch(
-      showErrorScreen(
-        new AppError(ErrorCode.AuthenticationResponseFailed, err),
-      ),
-    )
   }
 }

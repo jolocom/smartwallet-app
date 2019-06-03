@@ -3,21 +3,13 @@ import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { CredentialOverview } from '../components/credentialOverview'
 import { accountActions } from 'src/actions'
-import { ClaimsState } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { RootState } from '../../../reducers'
-import {toggleLoading} from '../../../actions/account'
 import {withLoading} from '../../../actions/modifiers'
+import {setDeepLinkLoading} from '../../../actions/sso'
+import {ThunkDispatch} from '../../../store'
 
-interface ConnectProps {
-  setClaimsForDid: () => void
-  openClaimDetails: (claim: DecoratedClaims) => void
-  did: string
-  claimsState: ClaimsState
-  loading: boolean
-}
-
-interface Props extends ConnectProps {}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 export class ClaimsContainer extends React.Component<Props> {
   public componentWillMount(): void {
@@ -47,10 +39,10 @@ const mapStateToProps = ({
   },
 }: RootState) => ({ did, claimsState, loading })
 
-const mapDispatchToProps = (dispatch: Function) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
-  setClaimsForDid: () => dispatch(withLoading(toggleLoading)(accountActions.setClaimsForDid())),
+  setClaimsForDid: () => dispatch(withLoading(setDeepLinkLoading)(accountActions.setClaimsForDid)),
 })
 
 export const Claims = connect(

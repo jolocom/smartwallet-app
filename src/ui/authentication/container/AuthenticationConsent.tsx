@@ -1,19 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AuthenticationConsentComponent } from '../components/AuthenticationConsent'
-import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { RootState } from 'src/reducers'
 import { cancelSSO } from 'src/actions/sso'
 import { sendAuthenticationResponse } from 'src/actions/sso/authenticationRequest'
 import {ThunkDispatch} from '../../../store'
+import {withErrorHandling} from '../../../actions/modifiers'
+import {showErrorScreen} from '../../../actions/generic'
 
-interface ConnectProps {}
-
-interface Props extends ConnectProps {
-  activeAuthenticationRequest: StateAuthenticationRequestSummary
-  confirmAuthenticationRequest: () => typeof sendAuthenticationResponse
-  cancelAuthenticationRequest: () => typeof cancelSSO
-}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -37,8 +32,8 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  confirmAuthenticationRequest: () => sendAuthenticationResponse,
-  cancelAuthenticationRequest: () => cancelSSO,
+  confirmAuthenticationRequest: () => dispatch(withErrorHandling(showErrorScreen)(sendAuthenticationResponse)),
+  cancelAuthenticationRequest: () => dispatch(cancelSSO),
 })
 
 export const AuthenticationConsent = connect(

@@ -11,34 +11,20 @@ import { navigationActions, accountActions, genericActions } from 'src/actions/'
 import { routeList } from './routeList'
 import { LoadingSpinner } from 'src/ui/generic/loadingSpinner'
 import { ThunkDispatch } from './store'
-import { goBack, handleDeepLink } from './actions/navigation'
-import {
-  checkIdentityExists,
-  toggleLoading,
-} from './actions/account'
+import { handleDeepLink } from './actions/navigation'
+import { toggleLoading } from './actions/account'
 import { Routes } from './routes'
 import { withErrorHandling, withLoading } from './actions/modifiers'
 import { showErrorScreen } from './actions/generic'
-import { compose } from 'ramda'
-
-interface OwnProps {
-  dispatch: ThunkDispatch
-}
 
 const {
   createReduxBoundAddListener,
 } = require('react-navigation-redux-helpers')
 
-interface ConnectProps {
-  navigation: RootState['navigation']
-  openScanner: () => ReturnType<typeof navigationActions.navigate>
-  goBack: () => typeof goBack
-  handleDeepLink: typeof handleDeepLink
-  checkIfAccountExists: () => ReturnType<typeof checkIdentityExists>
-  initApp: () => ReturnType<typeof genericActions.initApp>
-}
-
-interface Props extends ConnectProps, OwnProps {
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {
+  dispatch: ThunkDispatch
   deepLinkLoading: boolean
 }
 
@@ -123,20 +109,23 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   goBack: () => navigationActions.goBack,
-  handleDeepLink: (url: string) =>
+  handleDeepLink: async (url: string) =>
     dispatch(
-      compose(
-        () => handleDeepLink(url),
-        withLoading(toggleLoading),
-        withErrorHandling(showErrorScreen),
+      withLoading(toggleLoading)(
+        withErrorHandling(showErrorScreen)(handleDeepLink(url)),
       ),
-    ), // TODO Check
+    ),
   openScanner: () =>
     dispatch(
       navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
     ),
-  checkIfAccountExists: () => dispatch(accountActions.checkIdentityExists),
-  initApp: () => dispatch(withErrorHandling(showErrorScreen)(genericActions.initApp))
+  checkIfAccountExists: () =>
+    dispatch(
+      withLoading(toggleLoading)(
+        withErrorHandling(showErrorScreen)(accountActions.checkIdentityExists),
+      ),
+    ),
+  initApp: () => dispatch(genericActions.initApp),
 })
 
 export const Navigator = connect(

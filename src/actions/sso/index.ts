@@ -4,16 +4,14 @@ import {
   StateCredentialRequestSummary,
   StateVerificationSummary,
 } from 'src/reducers/sso'
-import { navigationActions, accountActions } from 'src/actions'
+import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { showErrorScreen } from 'src/actions/generic'
 import { getUiCredentialTypeByType } from 'src/lib/util'
 import { resetSelected } from '../account'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { AppError, ErrorCode } from 'src/lib/errors'
 import { ThunkDispatch } from '../../store'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { equals } from 'ramda'
@@ -52,38 +50,30 @@ export const receiveExternalCredential = (
 ) => {
   const { identityWallet, registry, storageLib } = backendMiddleware
 
-  try {
-    await identityWallet.validateJWT(credReceive, undefined, registry)
-    const providedCredentials = credReceive.interactionToken.signedCredentials
+  await identityWallet.validateJWT(credReceive, undefined, registry)
+  const providedCredentials = credReceive.interactionToken.signedCredentials
 
-    const validationResults = await JolocomLib.util.validateDigestables(
-      providedCredentials,
-    )
+  const validationResults = await JolocomLib.util.validateDigestables(
+    providedCredentials,
+  )
 
-    // TODO Error Code
-    if (validationResults.some(equals(false))) {
-      throw new Error('Invalid credentials received')
-    }
-
-    if (credentialOfferMetadata && credentialOfferMetadata.length) {
-      await Promise.all(
-        credentialOfferMetadata.map(storageLib.store.credentialMetadata),
-      )
-    }
-
-    dispatch(setReceivingCredential(providedCredentials))
-    return dispatch(
-      navigationActions.navigatorReset({
-        routeName: routeList.CredentialDialog,
-      }),
-    )
-  } catch (error) {
-    return dispatch(
-      showErrorScreen(new AppError(ErrorCode.CredentialsReceiveFailed, error)),
-    )
-  } finally {
-    return dispatch(accountActions.toggleLoading(false))
+  // TODO Error Code
+  if (validationResults.some(equals(false))) {
+    throw new Error('Invalid credentials received')
   }
+
+  if (credentialOfferMetadata && credentialOfferMetadata.length) {
+    await Promise.all(
+      credentialOfferMetadata.map(storageLib.store.credentialMetadata),
+    )
+  }
+
+  dispatch(setReceivingCredential(providedCredentials))
+  return dispatch(
+    navigationActions.navigatorReset({
+      routeName: routeList.CredentialDialog,
+    }),
+  )
 }
 
 interface AttributeSummary {
@@ -166,11 +156,6 @@ export const consumeCredentialRequest = (
     navigationActions.navigatorReset({ routeName: routeList.Consent }),
   )
 }
-// catch (error) {
-// return dispatch(
-//   showErrorScreen(new AppError(ErrorCode.CredentialRequestFailed, error)),
-// )
-// }
 
 export const sendCredentialResponse = (
   selectedCredentials: StateVerificationSummary[],
@@ -209,23 +194,23 @@ export const sendCredentialResponse = (
 
     if (isDeepLinkInteraction) {
       return Linking.openURL(`${callbackURL}${response.encode()}`).then(() =>
-        dispatch(cancelSSO),
+        dispatch(cancelSSO)
       )
     } else {
       return fetch(callbackURL, {
         method: 'POST',
         body: JSON.stringify({ token: response.encode() }),
         headers: { 'Content-Type': 'application/json' },
-      }).then(() => dispatch(cancelSSO))
+      })
     }
-  } catch (error) {
-    return dispatch(clearInteractionRequest)
+  } finally {
+    dispatch(cancelSSO)
+    dispatch(clearInteractionRequest)
   }
 }
 
 export const cancelSSO = (dispatch: ThunkDispatch) => {
   dispatch(clearInteractionRequest)
-  dispatch(accountActions.toggleLoading(false))
   return dispatch(
     navigationActions.navigatorReset({ routeName: routeList.Home }),
   )
