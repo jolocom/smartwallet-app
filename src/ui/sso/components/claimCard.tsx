@@ -11,6 +11,7 @@ import {
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import I18n from 'src/locales/i18n'
+import en from '../../../locales/en'
 
 // TODO Custom text component with size, font, color
 // TODO Make whole card clickable as opposed to icon
@@ -84,7 +85,7 @@ interface EmptyClaimCardProps {
 export const PlaceholderClaimCard: React.SFC<EmptyClaimCardProps> = props => (
   <ClaimCard
     key={props.credentialType}
-    primaryText={<Text onPress={props.onEdit}>{I18n.t('+ add')}</Text>}
+    primaryText={<Text onPress={props.onEdit}>+ {I18n.t(en.ADD)}</Text>}
     primaryTextStyle={{ color: JolocomTheme.primaryColorPurple }}
     secondaryText={<Text>{I18n.t(props.credentialType)}</Text>}
     secondaryTextStyle={{ opacity: 1 }}
@@ -124,7 +125,7 @@ export const ConsentAttributeCard: React.SFC<
 
   const renderCards = (values: string[]) => {
     if (!values.length) {
-      return <ClaimCard primaryText={I18n.t('No local claims')} />
+      return <ClaimCard primaryText={I18n.t(en.NO_LOCAL_CLAIMS)} />
     }
 
     return values.map(value => (
@@ -136,7 +137,7 @@ export const ConsentAttributeCard: React.SFC<
   const { container, innerContainer, verificationStatus } = styles
   const verificationSummary =
     did === issuer
-      ? ' ' + I18n.t('Self-signed')
+      ? ' ' + I18n.t(en.SELF_SIGNED)
       : `${issuer.substring(0, 25)}...`
 
   return (

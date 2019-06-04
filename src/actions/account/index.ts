@@ -11,7 +11,8 @@ import {
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
 import { JolocomLib } from 'jolocom-lib'
-import { AppError, ErrorCode } from 'src/lib/errors'
+import { AppError } from 'src/lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',

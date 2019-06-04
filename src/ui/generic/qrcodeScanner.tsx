@@ -8,6 +8,7 @@ import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
 import { ssoActions, navigationActions } from 'src/actions'
 import I18n from 'src/locales/i18n'
 import { LoadingSpinner } from './loadingSpinner'
+import en from '../../locales/en'
 const QRScanner = require('react-native-qrcode-scanner').default
 
 export interface QrScanEvent {
@@ -37,12 +38,12 @@ export class QRcodeScanner extends React.Component<Props, State> {
         <Container>
           <QRScanner
             onRead={(e: QrScanEvent) => onScannerSuccess(e)}
-            topContent={<Text>{I18n.t('You can scan the qr code now!')}</Text>}
+            topContent={<Text>{I18n.t(en.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>}
             bottomContent={
               <Button
                 onPress={onScannerCancel}
                 style={{ text: styles.buttonText }}
-                text={I18n.t('Cancel')}
+                text={I18n.t(en.CANCEL)}
               />
             }
           />

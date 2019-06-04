@@ -10,7 +10,8 @@ import { JolocomLib } from 'jolocom-lib'
 import { Linking } from 'react-native'
 import { cancelSSO, clearInteractionRequest } from 'src/actions/sso'
 import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
-import { AppError, ErrorCode } from 'src/lib/errors'
+import { AppError } from 'src/lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',

@@ -8,6 +8,7 @@ import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { ConsentAttributeCard, HeaderSection } from './claimCard'
 import I18n from 'src/locales/i18n'
+import en from '../../../locales/en'
 
 interface Props {
   did: string
@@ -106,8 +107,8 @@ export class ConsentComponent extends React.Component<Props, State> {
       <ButtonSection
         disabled={buttonDisabled}
         denyDisabled={this.state.pending}
-        confirmText={I18n.t('Share claims')}
-        denyText={I18n.t('Deny')}
+        confirmText={I18n.t(en.SHARE_CLAIMS)}
+        denyText={I18n.t(en.DENY)}
         handleConfirm={() => this.handleSubmitClaims()}
         handleDeny={() => this.props.handleDenySubmit()}
       />
@@ -132,7 +133,9 @@ export class ConsentComponent extends React.Component<Props, State> {
 
         <Block flex={0.5}>
           <Text style={styles.fixedText}>
-            {I18n.t('This service is asking you to share the following claims')}
+            {I18n.t(
+              en.THIS_SERVICE_IS_ASKING_YOU_TO_SHARE_THE_FOLLOWING_CLAIMS,
+            )}
             :
           </Text>
         </Block>

@@ -23,7 +23,8 @@ import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareP
 import { consumePaymentRequest } from './paymentRequest'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { consumeAuthenticationRequest } from './authenticationRequest'
-import { AppError, ErrorCode } from 'src/lib/errors'
+import { AppError } from 'src/lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export const setCredentialRequest = (
   request: StateCredentialRequestSummary,

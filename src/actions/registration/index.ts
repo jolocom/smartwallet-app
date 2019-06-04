@@ -8,7 +8,8 @@ import { JolocomLib } from 'jolocom-lib'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 const bip39 = require('bip39')
 import { generateSecureRandomBytes } from 'src/lib/util'
-import { AppError, ErrorCode } from 'src/lib/errors'
+import { AppError } from 'src/lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',

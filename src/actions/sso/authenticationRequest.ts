@@ -9,7 +9,8 @@ import { routeList } from 'src/routeList'
 import { cancelSSO, clearInteractionRequest } from '.'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
-import { AppError, ErrorCode } from 'src/lib/errors'
+import { AppError } from 'src/lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export const setAuthenticationRequest = (
   request: StateAuthenticationRequestSummary,
