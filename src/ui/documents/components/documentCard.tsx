@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
   cardBack: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain',
     position: 'absolute',
   },
   cardContent: {

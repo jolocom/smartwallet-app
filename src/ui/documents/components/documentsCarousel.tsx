@@ -5,11 +5,7 @@ import Carousel from 'react-native-snap-carousel'
 import { DecoratedClaims } from 'src/reducers/account'
 
 import { DocumentDetails } from './documentDetails'
-import {
-  DocumentCard,
-  DOCUMENT_CARD_WIDTH,
-} from './documentCard'
-
+import { DocumentCard, DOCUMENT_CARD_WIDTH } from './documentCard'
 
 interface DocumentsCarouselProps {
   activeIndex: number
@@ -25,7 +21,6 @@ export const DocumentsCarousel: React.SFC<DocumentsCarouselProps> = props => {
   const viewWidth: number = Dimensions.get('window').width
   const { documents, activeIndex, onActiveIndexChange } = props
 
-  console.log(documents)
   return (
     <React.Fragment>
       <Carousel

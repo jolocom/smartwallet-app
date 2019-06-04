@@ -44,7 +44,9 @@ const styles = StyleSheet.create({
 
 export const DocumentDetails: React.SFC<Props> = ({
   document,
-}): JSX.Element => {
+}) => {
+  if (!document) return null
+
   return (
     <View style={styles.container}>
       <Text style={styles.sectionHeader}>Issued by</Text>
