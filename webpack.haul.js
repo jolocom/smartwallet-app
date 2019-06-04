@@ -6,7 +6,7 @@ module.exports = ({ platform }, { module, resolve }) => ({
     ...module,
     rules: [
       {
-        test: /\.js/,
+        test: /\.js$/,
         exclude: /node_modules\/(?!(typeforce|asn1.js|jolocom-lib|base64url|jsonld|rdf-canonize|tiny-secp256k1|bip32)\/).*/,
         loader: 'babel-loader'
       },
@@ -41,6 +41,7 @@ module.exports = ({ platform }, { module, resolve }) => ({
       '.tsx',
       '.native.ts',
       '.native.tsx',
+      '.json',
       ...resolve.extensions
     ]
   }

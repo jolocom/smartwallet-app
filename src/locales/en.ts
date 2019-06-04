@@ -110,4 +110,3 @@ export default {
 
   [ErrorCode.RegistrationFailed]: 'Registration failed',
 }
-
