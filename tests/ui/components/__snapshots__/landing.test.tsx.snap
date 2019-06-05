@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`landing component matches the snapshot on render 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "#05050d",
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "flex-end",
+      "paddingTop": 0,
+    }
+  }
+>
+  <Block>
+    <Carousel
+      activeAnimationOptions={null}
+      activeAnimationType="timing"
+      activeSlideAlignment="center"
+      activeSlideOffset={20}
+      apparitionDelay={0}
+      autoplay={false}
+      autoplayDelay={5000}
+      autoplayInterval={3000}
+      callbackOffsetMargin={5}
+      containerCustomStyle={Object {}}
+      contentContainerCustomStyle={Object {}}
+      data={
+        Array [
+          Object {
+            "infoText": "Take back control of your digital self and protect your private data against unfair usage.",
+            "svgImage": <Landing00 />,
+            "title": "Your Jolocom Wallet",
+          },
+          Object {
+            "infoText": "Forget about long forms and registrations. Instantly access services without using your social media profiles.",
+            "svgImage": <Landing00
+              height="100%"
+              width="100%"
+            />,
+            "title": "It's easy",
+          },
+          Object {
+            "infoText": "Share only the information a service really needs. Protect your digital self against fraud.",
+            "svgImage": <Landing00
+              height="100%"
+              width="100%"
+            />,
+            "title": "Enhanced privacy",
+          },
+          Object {
+            "infoText": "Keep all your data with you in one place, available at any time. Track where you sign in to services.",
+            "svgImage": <Landing00
+              height="100%"
+              width="100%"
+            />,
+            "title": "Greater control",
+          },
+        ]
+      }
+      enableMomentum={false}
+      enableSnap={true}
+      firstItem={0}
+      hasParallaxImages={false}
+      inactiveSlideOpacity={0.7}
+      inactiveSlideScale={0.9}
+      inactiveSlideShift={0}
+      itemWidth={750}
+      layout="default"
+      lockScrollTimeoutDuration={1000}
+      lockScrollWhileSnapping={true}
+      loop={true}
+      loopClonesPerSide={3}
+      onSnapToItem={[Function]}
+      renderItem={[Function]}
+      shouldOptimizeUpdates={true}
+      slideStyle={Object {}}
+      sliderWidth={750}
+      swipeThreshold={20}
+      useScrollView={false}
+      vertical={false}
+    />
+  </Block>
+  <Block
+    style={
+      Object {
+        "backgroundColor": "#05050d",
+        "flex": 0.15,
+      }
+    }
+  >
+    <Pagination
+      activeDotIndex={0}
+      dotStyle={
+        Object {
+          "backgroundColor": "#ffdebc",
+          "height": 8,
+          "width": 8,
+        }
+      }
+      dotsLength={4}
+      inactiveDotOpacity={0.4}
+      inactiveDotScale={0.6}
+      inactiveDotStyle={
+        Object {
+          "backgroundColor": "#fffefc",
+          "height": 4,
+          "opacity": 0.6,
+          "width": 4,
+        }
+      }
+      tappableDots={false}
+      vertical={false}
+    />
+  </Block>
+  <Block
+    style={
+      Object {
+        "backgroundColor": "#05050d",
+        "flex": 0.1,
+      }
+    }
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={null}
+      primary={false}
+      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "minWidth": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "100",
+            "minWidth": 158,
+            "paddingVertical": 15,
+            "textAlign": "center",
+          },
+        }
+      }
+      testID={null}
+      text="Get started"
+      upperCase={false}
+    />
+  </Block>
+</Container>
+`;

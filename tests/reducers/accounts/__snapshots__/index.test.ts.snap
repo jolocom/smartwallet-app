@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`account reducer should handle the DID_SET action  1`] = `
+Object {
+  "claims": Immutable.Map {
+    "loading": false,
+    "selected": Immutable.Map {
+      "credentialType": "",
+      "claimData": Immutable.Map {},
+      "id": "",
+      "issuer": "",
+      "subject": "",
+    },
+    "pendingExternal": Immutable.List [],
+    "decoratedCredentials": Immutable.Map {
+      "Personal": Immutable.List [
+        Immutable.Map {
+          "credentialType": "Name",
+          "claimData": Immutable.Map {
+            "givenName": "",
+            "familyName": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
+        },
+      ],
+      "Contact": Immutable.List [
+        Immutable.Map {
+          "credentialType": "Email",
+          "claimData": Immutable.Map {
+            "email": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
+          "keyboardType": "email-address",
+        },
+        Immutable.Map {
+          "credentialType": "Mobile Phone",
+          "claimData": Immutable.Map {
+            "telephone": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
+          "keyboardType": "phone-pad",
+        },
+        Immutable.Map {
+          "credentialType": "Postal Address",
+          "claimData": Immutable.Map {
+            "addressLine1": "",
+            "addressLine2": "",
+            "postalCode": "",
+            "city": "",
+            "country": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
+        },
+      ],
+      "Other": Immutable.List [],
+    },
+  },
+  "did": Immutable.Map {
+    "did": "mock did",
+  },
+  "loading": Immutable.Map {
+    "loading": true,
+  },
+}
+`;
+
+exports[`account reducer should initialize correctly 1`] = `
+Object {
+  "claims": Immutable.Map {
+    "loading": false,
+    "selected": Immutable.Map {
+      "credentialType": "",
+      "claimData": Immutable.Map {},
+      "id": "",
+      "issuer": "",
+      "subject": "",
+    },
+    "pendingExternal": Immutable.List [],
+    "decoratedCredentials": Immutable.Map {
+      "Personal": Immutable.List [
+        Immutable.Map {
+          "credentialType": "Name",
+          "claimData": Immutable.Map {
+            "givenName": "",
+            "familyName": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
+        },
+      ],
+      "Contact": Immutable.List [
+        Immutable.Map {
+          "credentialType": "Email",
+          "claimData": Immutable.Map {
+            "email": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
+          "keyboardType": "email-address",
+        },
+        Immutable.Map {
+          "credentialType": "Mobile Phone",
+          "claimData": Immutable.Map {
+            "telephone": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
+          "keyboardType": "phone-pad",
+        },
+        Immutable.Map {
+          "credentialType": "Postal Address",
+          "claimData": Immutable.Map {
+            "addressLine1": "",
+            "addressLine2": "",
+            "postalCode": "",
+            "city": "",
+            "country": "",
+          },
+          "id": "",
+          "issuer": "",
+          "subject": "",
+        },
+      ],
+      "Other": Immutable.List [],
+    },
+  },
+  "did": Immutable.Map {
+    "did": "",
+  },
+  "loading": Immutable.Map {
+    "loading": true,
+  },
+}
+`;

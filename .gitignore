@@ -1,3 +1,16 @@
+# General
+.tern-project
+coverage/
+.flowconfig
+.buckconfig
+.gitattributes
+.watchmanconfig
+dist/
+
+#### Below is the default react native .gitignore ###
+############### DO NOT EDIT BELOW ###################
+
+#
 # OSX
 #
 .DS_Store

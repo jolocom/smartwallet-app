@@ -1,0 +1,161 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ClaimDetails component matches the snapshot on render 1`] = `
+<ScrollContainer>
+  <Block
+    style={
+      Object {
+        "marginBottom": 33.35,
+        "marginTop": 33.35,
+      }
+    }
+  >
+    <CenteredText
+      msg="Email"
+      style={
+        Object {
+          "color": "black",
+          "fontFamily": "TT Commons",
+          "fontSize": 30,
+        }
+      }
+    />
+  </Block>
+  <Block
+    style={
+      Object {
+        "marginBottom": 33.35,
+        "marginTop": 33.35,
+      }
+    }
+  >
+    <TextInputField
+      fieldName="email"
+      fieldValue="test@test.com"
+      handleFieldInput={[Function]}
+      key="email"
+    />
+  </Block>
+  <Block
+    style={
+      Object {
+        "marginBottom": 66.7,
+        "marginTop": 66.7,
+      }
+    }
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={[Function]}
+      primary={false}
+      raised={false}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "width": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "100",
+            "paddingVertical": 15,
+          },
+        }
+      }
+      testID={null}
+      text="Add claim"
+      upperCase={false}
+    />
+  </Block>
+</ScrollContainer>
+`;
+
+exports[`ClaimDetails component matches the snapshot on render with multi-line claim 1`] = `
+<ScrollContainer>
+  <Block
+    style={
+      Object {
+        "marginBottom": 33.35,
+        "marginTop": 33.35,
+      }
+    }
+  >
+    <CenteredText
+      msg="Name"
+      style={
+        Object {
+          "color": "black",
+          "fontFamily": "TT Commons",
+          "fontSize": 30,
+        }
+      }
+    />
+  </Block>
+  <Block
+    style={
+      Object {
+        "marginBottom": 33.35,
+        "marginTop": 33.35,
+      }
+    }
+  >
+    <TextInputField
+      fieldName="givenName"
+      fieldValue="natascha"
+      handleFieldInput={[Function]}
+      key="givenName"
+    />
+    <TextInputField
+      fieldName="familyName"
+      fieldValue="test"
+      handleFieldInput={[Function]}
+      key="familyName"
+    />
+  </Block>
+  <Block
+    style={
+      Object {
+        "marginBottom": 66.7,
+        "marginTop": 66.7,
+      }
+    }
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={[Function]}
+      primary={false}
+      raised={false}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+            "width": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "100",
+            "paddingVertical": 15,
+          },
+        }
+      }
+      testID={null}
+      text="Add claim"
+      upperCase={false}
+    />
+  </Block>
+</ScrollContainer>
+`;

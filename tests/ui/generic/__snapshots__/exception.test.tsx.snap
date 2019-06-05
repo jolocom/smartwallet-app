@@ -1,0 +1,235 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Exception screen component Renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "black",
+      "flex": 1,
+      "justifyContent": "space-around",
+      "padding": "5%",
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "space-around",
+        "marginTop": 85,
+      }
+    }
+  >
+    <Image
+      source={
+        Object {
+          "process": [Function],
+        }
+      }
+      style={
+        Object {
+          "height": 160,
+          "width": 160,
+        }
+      }
+    />
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "marginTop": 25,
+          "paddingHorizontal": 20,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 30,
+            "textAlign": "center",
+          }
+        }
+      >
+        Uh oh.
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 20,
+            "marginTop": 15,
+            "textAlign": "center",
+          }
+        }
+      >
+        There was an error with your request.
+      </Text>
+    </Component>
+  </Component>
+  <Component
+    style={
+      Object {
+        "backgroundColor": "black",
+        "marginTop": 20,
+      }
+    }
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={[Function]}
+      primary={false}
+      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "100",
+            "paddingHorizontal": 15,
+            "paddingVertical": 15,
+          },
+        }
+      }
+      testID={null}
+      text="Go back"
+      upperCase={false}
+    />
+  </Component>
+</Component>
+`;
+
+exports[`Exception screen component Renders correctly when no error object is provided 1`] = `
+<Component
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "black",
+      "flex": 1,
+      "justifyContent": "space-around",
+      "padding": "5%",
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "space-around",
+        "marginTop": 85,
+      }
+    }
+  >
+    <Image
+      source={
+        Object {
+          "process": [Function],
+        }
+      }
+      style={
+        Object {
+          "height": 160,
+          "width": 160,
+        }
+      }
+    />
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "marginTop": 25,
+          "paddingHorizontal": 20,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 30,
+            "textAlign": "center",
+          }
+        }
+      >
+        Uh oh.
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ffefdf",
+            "fontFamily": "TT Commons",
+            "fontSize": 20,
+            "marginTop": 15,
+            "textAlign": "center",
+          }
+        }
+      >
+        There was an error with your request.
+      </Text>
+    </Component>
+  </Component>
+  <Component
+    style={
+      Object {
+        "backgroundColor": "black",
+        "marginTop": 20,
+      }
+    }
+  >
+    <Button
+      accent={false}
+      disabled={false}
+      icon={null}
+      onLongPress={null}
+      onPress={[Function]}
+      primary={false}
+      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "backgroundColor": "#942f51",
+            "borderRadius": 4,
+            "height": 48,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "100",
+            "paddingHorizontal": 15,
+            "paddingVertical": 15,
+          },
+        }
+      }
+      testID={null}
+      text="Go back"
+      upperCase={false}
+    />
+  </Component>
+</Component>
+`;
