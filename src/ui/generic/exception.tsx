@@ -8,7 +8,7 @@ import { routeList } from 'src/routeList'
 import I18n from 'src/locales/i18n'
 import { AppError, errorTitleMessages } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
-import en from 'src/locales/en'
+import strings from 'src/locales/strings'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface ConnectProps {
@@ -87,7 +87,7 @@ export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
   const err = props.navigation.state.params.error
   const errorTitle =
     props.errorTitle || getRandomStringFromArray(errorTitleMessages)
-  let errorText = err ? err.message : en.THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST
+  let errorText = err ? err.message : strings.THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST
   errorText = I18n.t(errorText) + '.'
   console.error(err && err.origError ? err.origError : err)
 
@@ -111,7 +111,7 @@ export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
             text: styles.buttonText,
           }}
           upperCase={false}
-          text={I18n.t(en.GO_BACK)}
+          text={I18n.t(strings.GO_BACK)}
         />
       </View>
     </View>

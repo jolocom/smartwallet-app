@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Container } from 'src/ui/structure/'
 import I18n from 'src/locales/i18n'
-import en from '../../../locales/en'
+import strings from '../../../locales/strings'
 
 const { Button } = require('react-native-material-ui')
 
@@ -61,9 +61,9 @@ export const SeedPhrase: React.SFC<Props> = props => (
   <Container style={styles.container}>
     <View style={styles.noteSection}>
       <Text style={styles.note}>
-        {I18n.t(en.WRITE_THESE_WORDS_DOWN_ON_AN_ANALOG_AND_SECURE_PLACE) +
+        {I18n.t(strings.WRITE_THESE_WORDS_DOWN_ON_AN_ANALOG_AND_SECURE_PLACE) +
           '. ' +
-          I18n.t(en.WITHOUT_THESE_WORDS_YOU_CANNOT_ACCESS_YOUR_WALLET_AGAIN) +
+          I18n.t(strings.WITHOUT_THESE_WORDS_YOU_CANNOT_ACCESS_YOUR_WALLET_AGAIN) +
           '.'}
       </Text>
     </View>
@@ -76,7 +76,7 @@ export const SeedPhrase: React.SFC<Props> = props => (
         onPress={props.handleButtonTap}
         raised
         upperCase={false}
-        text={I18n.t(en.YES_I_WROTE_IT_DOWN)}
+        text={I18n.t(strings.YES_I_WROTE_IT_DOWN)}
       />
     </View>
   </Container>

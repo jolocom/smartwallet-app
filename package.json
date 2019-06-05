@@ -71,7 +71,7 @@
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native -d src/resources/svg/",
     "devtools": "react-devtools &",
-    "poeditor": "ts-node -O '{\"module\": \"commonjs\"}' ./src/locales/poeditorUtil.ts"
+    "terms": "ts-node -O '{\"module\": \"commonjs\"}' ./src/utils/generateTerms.ts"
   },
   "jest": {
     "setupFiles": [

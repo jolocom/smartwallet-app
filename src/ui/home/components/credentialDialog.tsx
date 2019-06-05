@@ -5,7 +5,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { CredentialTopCard } from './credentialTopCard'
 import I18n from 'src/locales/i18n'
-import en from '../../../locales/en'
+import strings from '../../../locales/strings'
 
 interface Props {
   credentialToRender: DecoratedClaims
@@ -83,7 +83,7 @@ const renderIssuerCard = (issuer: string): JSX.Element => (
         style={JolocomTheme.textStyles.light.textDisplayField}
         numberOfLines={1}
       >
-        {I18n.t(en.NAME_OF_ISSUER)}
+        {I18n.t(strings.NAME_OF_ISSUER)}
       </Text>
       <Text style={styles.issuerText} numberOfLines={1}>
         {issuer}
@@ -128,7 +128,7 @@ export const CredentialDialogComponent: React.SFC<Props> = (
 
       <View style={styles.claimsSection}>
         <Text style={styles.sectionHeader}>
-          {I18n.t(en.DOCUMENT_DETAILS_CLAIMS)}
+          {I18n.t(strings.DOCUMENT_DETAILS_CLAIMS)}
         </Text>
         <ScrollView style={styles.claimsList}>
           {renderClaims(credentialToRender)}

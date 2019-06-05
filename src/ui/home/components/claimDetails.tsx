@@ -13,7 +13,7 @@ import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import I18n from 'src/locales/i18n'
-import en from '../../../locales/en'
+import strings from '../../../locales/strings'
 
 const viewHeight: number = Dimensions.get('window').height
 
@@ -174,7 +174,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
             <Button
               onPress={() => this.onSubmit()}
               upperCase={false}
-              text={I18n.t(en.ADD_CLAIM)}
+              text={I18n.t(strings.ADD_CLAIM)}
               style={
                 !!this.confirmationEligibilityCheck()
                   ? {

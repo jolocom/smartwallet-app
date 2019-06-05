@@ -4,7 +4,7 @@ import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import en from '../../../locales/en'
+import strings from '../../../locales/strings'
 
 interface Props {
   activeAuthenticationRequest: StateAuthenticationRequestSummary
@@ -89,13 +89,13 @@ export class AuthenticationConsentComponent extends React.Component<
     return (
       <View style={styles.authRequestContainer}>
         <Text style={styles.authRequestText}>
-          {I18n.t(en.WOULD_YOU_LIKE_TO)}
+          {I18n.t(strings.WOULD_YOU_LIKE_TO)}
         </Text>
         <Text style={[styles.authRequestText, { fontSize: 42 }]}>
           {description}
         </Text>
         <Text style={styles.authRequestText}>
-          {I18n.t(en.WITH_YOUR_SMARTWALLET)}
+          {I18n.t(strings.WITH_YOUR_SMARTWALLET)}
         </Text>
       </View>
     )
@@ -106,8 +106,8 @@ export class AuthenticationConsentComponent extends React.Component<
       <ButtonSection
         disabled={this.state.pending}
         denyDisabled={this.state.pending}
-        confirmText={I18n.t(en.AUTHORIZE)}
-        denyText={I18n.t(en.DENY)}
+        confirmText={I18n.t(strings.AUTHORIZE)}
+        denyText={I18n.t(strings.DENY)}
         handleConfirm={this.handleConfirm}
         handleDeny={() => this.props.cancelAuthenticationRequest()}
         verticalPadding={10}

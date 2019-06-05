@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import en from '../../../locales/en'
+import strings from '../../../locales/strings'
 
 const styles = StyleSheet.create({
   container: {
@@ -66,7 +66,7 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
     <Icon style={{ marginRight: 18 }} size={24} name="translate" color="grey" />
     <View>
       <Text style={JolocomTheme.textStyles.light.labelDisplayFieldEdit}>
-        {I18n.t(en.LANGUAGE)}
+        {I18n.t(strings.LANGUAGE)}
       </Text>
       <View style={styles.languageOptions}>
         {props.locales.map(locale => {
@@ -111,7 +111,7 @@ interface SettingsScreenProps {
 export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
   <View style={styles.container}>
     <View style={styles.topSection}>
-      <Text style={styles.sectionHeader}>{I18n.t(en.YOUR_PREFERENCES)}</Text>
+      <Text style={styles.sectionHeader}>{I18n.t(strings.YOUR_PREFERENCES)}</Text>
       <LanguageCard
         setLocale={props.setLocale}
         locales={props.locales}
@@ -119,7 +119,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
       />
     </View>
     <Text style={styles.versionNumber}>
-      Jolocom SmartWallet {I18n.t(en.VERSION)} {props.version}
+      Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
     </Text>
     <View />
   </View>

@@ -9,7 +9,7 @@ import Immutable from 'immutable'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
-import en from '../../../locales/en'
+import strings from '../../../locales/strings'
 const loaders = require('react-native-indicator')
 
 export interface ConnectProps {
@@ -69,11 +69,11 @@ export class LoadingContainer extends React.Component<Props, State> {
         <Block style={styles.label}>
           <CenteredText
             style={styles.text}
-            msg={I18n.t(en.GIVE_US_A_FEW_MOMENTS)}
+            msg={I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}
           />
           <CenteredText
             style={styles.text}
-            msg={I18n.t(en.TO_SET_UP_YOUR_IDENTITY)}
+            msg={I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}
           />
         </Block>
         <Block>

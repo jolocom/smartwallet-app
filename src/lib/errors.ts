@@ -1,4 +1,4 @@
-import en from '../locales/en'
+import strings from '../locales/strings'
 import ErrorCode from './errorCodes'
 
 export class AppError extends Error {
@@ -6,10 +6,10 @@ export class AppError extends Error {
   public origError: any
 
   public constructor(code = ErrorCode.Unknown, origError?: any) {
-    super(en[code] || en[ErrorCode.Unknown])
+    super(strings[code] || strings[ErrorCode.Unknown])
     // this.code = code
     this.origError = origError
   }
 }
 
-export const errorTitleMessages = [en.DAMN, en.OH_NO, en.UH_OH]
+export const errorTitleMessages = [strings.DAMN, strings.OH_NO, strings.UH_OH]

@@ -13,7 +13,7 @@ import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
-import en from './locales/en'
+import strings from './locales/strings'
 
 import {
   IdentityMenuIcon,
@@ -85,7 +85,7 @@ export const BottomNavRoutes = TabNavigator(
       screen: Claims,
       navigationOptions: () => ({
         ...commonNavigationOptions,
-        headerTitle: I18n.t(en.MY_IDENTITY),
+        headerTitle: I18n.t(strings.MY_IDENTITY),
         tabBarIcon: IdentityMenuIcon,
       }),
     },
@@ -93,7 +93,7 @@ export const BottomNavRoutes = TabNavigator(
       screen: Interactions,
       navigationOptions: () => ({
         ...commonNavigationOptions,
-        headerTitle: I18n.t(en.DOCUMENTS),
+        headerTitle: I18n.t(strings.DOCUMENTS),
         tabBarIcon: (props: {
           tintColor: string
           focused: boolean
@@ -108,7 +108,7 @@ export const BottomNavRoutes = TabNavigator(
       screen: Records,
       navigationOptions: () => ({
         ...commonNavigationOptions,
-        headerTitle: I18n.t(en.LOGIN_RECORDS),
+        headerTitle: I18n.t(strings.LOGIN_RECORDS),
         tabBarIcon: RecordsMenuIcon,
       }),
     },
@@ -116,7 +116,7 @@ export const BottomNavRoutes = TabNavigator(
       screen: Settings,
       navigationOptions: () => ({
         ...commonNavigationOptions,
-        headerTitle: I18n.t(en.SETTINGS),
+        headerTitle: I18n.t(strings.SETTINGS),
         tabBarIcon: SettingsMenuIcon,
       }),
     },
@@ -162,14 +162,14 @@ export const Routes = StackNavigator({
   [routeList.CredentialDialog]: {
     screen: CredentialReceive,
     navigationOptions: () => ({
-      headerTitle: I18n.t(en.RECEIVING_NEW_CREDENTIAL),
+      headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
       ...commonNavigationOptions,
     }),
   },
   [routeList.Consent]: {
     screen: Consent,
     navigationOptions: () => ({
-      headerTitle: I18n.t(en.SHARE_CLAIMS),
+      headerTitle: I18n.t(strings.SHARE_CLAIMS),
       ...commonNavigationOptions,
     }),
   },
@@ -177,7 +177,7 @@ export const Routes = StackNavigator({
     screen: PaymentConsent,
     navigationOptions: () => ({
       headerBackImage,
-      headerTitle: I18n.t(en.CONFIRM_PAYMENT),
+      headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
       ...commonNavigationOptions,
     }),
   },
@@ -185,7 +185,7 @@ export const Routes = StackNavigator({
     screen: AuthenticationConsent,
     navigationOptions: () => ({
       headerBackImage,
-      headerTitle: I18n.t(en.AUTHORIZATION_REQUEST),
+      headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
       ...commonNavigationOptions,
     }),
   },

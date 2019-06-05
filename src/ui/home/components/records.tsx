@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
-import en from '../../../locales/en'
+import strings from '../../../locales/strings'
 
 interface Props {}
 
@@ -21,7 +21,7 @@ export class RecordsComponent extends React.Component<Props> {
       <Container>
         <Block>
           <CenteredText
-            msg={I18n.t(en.YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET) + '.'}
+            msg={I18n.t(strings.YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET) + '.'}
             style={styles.text}
           />
         </Block>
