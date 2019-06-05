@@ -4,7 +4,9 @@ import strings from '../locales/strings'
 import { writeFileSync } from 'fs'
 const en = {}
 
-Object.keys(strings).map(key => (en[strings[key]] = strings[key]))
+Object.keys(strings)
+  .sort()
+  .map(key => (en[strings[key]] = strings[key]))
 
 const path = __dirname + '/../locales/en.json'
 writeFileSync(path, JSON.stringify(en), { flag: 'w' })
