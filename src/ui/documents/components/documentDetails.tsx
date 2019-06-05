@@ -44,23 +44,24 @@ const styles = StyleSheet.create({
 
 export const DocumentDetails: React.SFC<Props> = ({
   document,
-}): JSX.Element => (
-  <View style={styles.container}>
-    <Text style={styles.sectionHeader}>Issued by</Text>
-    <IssuerCard issuer={document.issuer} />
-
-    <Text style={styles.sectionHeader}>Details</Text>
-    <View style={styles.claimsContainer}>
-      {Object.keys(document.claimData).map(key => (
-        <View key={key} style={styles.claimCard}>
-          <View style={styles.claimCardTextContainer}>
-            <Text style={styles.claimCardTitle}>{prepareLabel(key)}</Text>
-            <Text style={JolocomTheme.textStyles.light.textDisplayField}>
-              {document.claimData[key]}
-            </Text>
+}): JSX.Element => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.sectionHeader}>Issued by</Text>
+      {IssuerCard(document.issuer)}
+      <Text style={styles.sectionHeader}>Details</Text>
+      <View style={styles.claimsContainer}>
+        {Object.keys(document.claimData).map(key => (
+          <View key={key} style={styles.claimCard}>
+            <View style={styles.claimCardTextContainer}>
+              <Text style={styles.claimCardTitle}>{prepareLabel(key)}</Text>
+              <Text style={JolocomTheme.textStyles.light.textDisplayField}>
+                {document.claimData[key]}
+              </Text>
+            </View>
           </View>
-        </View>
-      ))}
+        ))}
+      </View>
     </View>
-  </View>
-)
+  )
+}

@@ -5,7 +5,7 @@ const expiredFilter: Filter<DecoratedClaims> = cred =>
   cred.expires ? cred.expires.valueOf() >= new Date().valueOf() : true
 
 const issuerFilter = (issuerDid: string): Filter<DecoratedClaims> => cred =>
-  cred.issuer === issuerDid
+  cred.issuer.did === issuerDid
 
 const typeFilter = (typ: string): Filter<DecoratedClaims> => cred =>
   cred.credentialType.includes(typ)

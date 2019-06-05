@@ -11,7 +11,9 @@ const initialState: DocumentsState = {
     credentialType: '',
     subject: '',
     id: '',
-    issuer: '',
+    issuer: {
+      did: ''
+    },
     expires: undefined,
     claimData: {
       type: '',

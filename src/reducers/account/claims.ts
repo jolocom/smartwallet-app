@@ -14,7 +14,9 @@ const categorizedClaims: CategorizedClaims = {
         familyName: '',
       },
       id: '',
-      issuer: '',
+      issuer: {
+        did: '',
+      },
       subject: '',
     },
   ],
@@ -25,7 +27,9 @@ const categorizedClaims: CategorizedClaims = {
         email: '',
       },
       id: '',
-      issuer: '',
+      issuer: {
+        did: '',
+      },
       subject: '',
       keyboardType: 'email-address',
     },
@@ -35,7 +39,9 @@ const categorizedClaims: CategorizedClaims = {
         telephone: '',
       },
       id: '',
-      issuer: '',
+      issuer: {
+        did: '',
+      },
       subject: '',
       keyboardType: 'phone-pad',
     },
@@ -49,10 +55,13 @@ const categorizedClaims: CategorizedClaims = {
         country: '',
       },
       id: '',
-      issuer: '',
+      issuer: {
+        did: '',
+      },
       subject: '',
     },
   ],
+  // /** @dev FOR TESTING */
   Other: [],
 }
 
@@ -62,10 +71,17 @@ export const initialState: ClaimsState = {
     credentialType: '',
     claimData: {},
     id: '',
-    issuer: '',
+    issuer: {
+      did: '',
+    },
     subject: '',
   },
-  pendingExternal: [],
+  pendingExternal: {
+    offeror: {
+      did: '',
+    },
+    offer: [],
+  },
   decoratedCredentials: categorizedClaims,
 }
 
@@ -79,9 +95,9 @@ export const claims = (
     case 'SET_CLAIMS_FOR_DID':
       return { ...state, decoratedCredentials: addDefaultValues(action.claims) }
     case 'SET_EXTERNAL':
-      return { ...state, pendingExternal: action.external }
+      return { ...state, pendingExternal: action.value }
     case 'RESET_EXTERNAL':
-      return { ...state, pendingExternal: [] } // TODO Remove in favor of calling set external with empty array
+      return { ...state, pendingExternal: initialState.pendingExternal } // TODO Remove in favor of calling set external with empty array
     case 'SET_SELECTED':
       return { ...state, selected: action.selected }
     case 'RESET_SELECTED':

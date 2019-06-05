@@ -5,9 +5,12 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
 import { CredentialTopCard } from './credentialTopCard'
 import I18n from 'src/locales/i18n'
+import { IssuerCard } from '../../documents/components/issuerCard'
+import {IdentitySummary} from '../../../actions/sso/types'
 
 interface Props {
   credentialToRender: DecoratedClaims
+  requester: IdentitySummary
 }
 
 const styles = StyleSheet.create({
@@ -74,23 +77,6 @@ const styles = StyleSheet.create({
   },
 })
 
-const renderIssuerCard = (issuer: string): JSX.Element => (
-  <View style={styles.issuerContainer}>
-    {/* TODO: Add support for icon */}
-    <View style={styles.issuerTextContainer}>
-      <Text
-        style={JolocomTheme.textStyles.light.textDisplayField}
-        numberOfLines={1}
-      >
-        {I18n.t('Name of issuer')}
-      </Text>
-      <Text style={styles.issuerText} numberOfLines={1}>
-        {issuer}
-      </Text>
-    </View>
-  </View>
-)
-
 const renderClaims = (toRender: DecoratedClaims): JSX.Element[] => {
   const { claimData } = toRender
   return Object.keys(claimData).map(field => (
@@ -108,8 +94,8 @@ const renderClaims = (toRender: DecoratedClaims): JSX.Element[] => {
 export const CredentialDialogComponent: React.SFC<Props> = (
   props: Props,
 ): JSX.Element => {
-  const { credentialToRender } = props
-  const { expires, credentialType, issuer } = credentialToRender
+  const { credentialToRender, requester } = props
+  const { expires, credentialType } = credentialToRender
 
   return (
     <View style={styles.container}>
@@ -122,7 +108,7 @@ export const CredentialDialogComponent: React.SFC<Props> = (
 
       <View style={styles.issuerSection}>
         <Text style={styles.sectionHeader}>Issued by </Text>
-        {renderIssuerCard(issuer)}
+        {IssuerCard(requester)}
       </View>
 
       <View style={styles.claimsSection}>

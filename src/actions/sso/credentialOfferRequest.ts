@@ -3,12 +3,11 @@ import { AppError, ErrorCode } from '../../lib/errors'
 import { showErrorScreen } from '../generic'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { receiveExternalCredential, setDeepLinkLoading } from './index'
-import { all, compose, isEmpty, isNil, map } from 'ramda'
+import { all, compose, isEmpty, isNil, map, mergeRight, omit } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { ThunkDispatch } from '../../store'
-import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
@@ -31,22 +30,35 @@ export const consumeCredentialOfferRequest = (
       throw new Error('Input requests are not yet supported on the wallet')
     }
 
-    const password = await keyChainLib.getPassword()
-    const selectedCredentials = interactionToken.offeredTypes.map(type => ({
+    const { did: offerorDid, publicProfile } = await registry.resolve(
+      keyIdToDid(credOfferRequest.issuer),
+    )
+
+    const parsedProfile = publicProfile
+      ? omit(['id', 'did'], publicProfile.toJSON().claim)
+      : {}
+
+    const offerorInfo = mergeRight(
+      { did: offerorDid },
+      { publicProfile: parsedProfile },
+    )
+    const selectedCredentialTypes = interactionToken.offeredTypes.map(type => ({
       type,
     }))
 
-    const selectedMetadata = interactionToken.offeredTypes.map<
-      CredentialMetadataSummary
-    >(type => ({
-      issuer: keyIdToDid(credOfferRequest.issuer),
+    const selectedMetadata = interactionToken.offeredTypes.map(type => ({
+      issuer: {
+        did: keyIdToDid(credOfferRequest.issuer)
+      },
       type,
       renderInfo: interactionToken.getRenderInfoForType(type) || {},
       metadata: interactionToken.getMetadataForType(type) || {},
     }))
 
+    const password = await keyChainLib.getPassword()
+
     const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
-      { callbackURL, selectedCredentials },
+      { callbackURL, selectedCredentials: selectedCredentialTypes },
       password,
       credOfferRequest,
     )
@@ -62,13 +74,11 @@ export const consumeCredentialOfferRequest = (
     >(res.token)
 
     return dispatch(
-      withErrorHandling(
-        showErrorScreen,
-        err => new AppError(ErrorCode.CredentialsReceiveFailed, err),
-      )(
-        withLoading(toggleLoading)(
-          receiveExternalCredential(credentialReceive, selectedMetadata),
-        ),
+      withLoading(toggleLoading)(
+        withErrorHandling(
+          showErrorScreen,
+          err => new AppError(ErrorCode.CredentialsReceiveFailed, err),
+        )(receiveExternalCredential(credentialReceive, offerorInfo, selectedMetadata)),
       ),
     )
   } finally {

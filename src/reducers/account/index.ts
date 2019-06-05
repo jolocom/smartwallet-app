@@ -2,19 +2,20 @@ import { combineReducers } from 'redux'
 import { did } from 'src/reducers/account/did'
 import { claims } from 'src/reducers/account/claims'
 import { loading } from 'src/reducers/account/loading'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { IdentitySummary } from '../../actions/sso/types'
 
 export interface DecoratedClaims {
   credentialType: string
   claimData: {
-    [key: string] : any /** @TODO Type correctly */
+    [key: string]: any /** @TODO Type correctly */
   }
   id: string
-  issuer: string
+  issuer: IdentitySummary
   subject: string
   expires?: Date
   renderInfo?: CredentialOfferRenderInfo
@@ -36,7 +37,13 @@ export interface ClaimsState {
   readonly loading: boolean
   readonly selected: DecoratedClaims
   readonly decoratedCredentials: CategorizedClaims
-  readonly pendingExternal: SignedCredential[]
+  readonly pendingExternal: {
+    offeror: IdentitySummary
+    offer: Array<{
+      credential: SignedCredential
+      decoratedClaim: DecoratedClaims
+    }>
+  }
 }
 
 export interface DidState {

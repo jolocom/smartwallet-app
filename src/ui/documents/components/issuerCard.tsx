@@ -1,7 +1,8 @@
 import React from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import { StyleSheet, Image } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import I18n from 'src/locales/i18n'
+import { ClaimCard } from '../../sso/components/claimCard'
+import { IdentitySummary } from '../../../actions/sso/types'
 
 const styles = StyleSheet.create({
   container: {
@@ -21,28 +22,49 @@ const styles = StyleSheet.create({
   textContainer: {
     marginLeft: 16,
   },
-  text: {
+  issuerName: JolocomTheme.textStyles.light.textDisplayField,
+  urlText: {
     fontSize: 17,
     color: JolocomTheme.primaryColorPurple,
     fontFamily: JolocomTheme.contentFontFamily,
   },
 })
 
-export const IssuerCard = ({ issuer }: { issuer: string }): JSX.Element => {
+export const IssuerCard = (issuer: IdentitySummary): JSX.Element => {
+  const {
+    image,
+    primaryText,
+    secondaryText,
+  } = convertToClaimCard(issuer)
   return (
-    <View style={styles.container}>
-      {/* TODO: Add support for icon */}
-      <View style={styles.textContainer}>
-        <Text
-          style={JolocomTheme.textStyles.light.textDisplayField}
-          numberOfLines={1}
-        >
-          {I18n.t('Name of issuer')}
-        </Text>
-        <Text style={styles.text} numberOfLines={1}>
-          {issuer}
-        </Text>
-      </View>
-    </View>
+    <ClaimCard
+      containerStyle={{
+        paddingVertical: '2%'
+      }
+      }
+      secondaryText={secondaryText}
+      secondaryTextStyle={styles.issuerName}
+      primaryText={primaryText}
+      primaryTextStyle={styles.urlText}
+      leftIcon={<Image source={{ uri: image }} style={styles.icon} />}
+    />
   )
+}
+
+const convertToClaimCard = ({ did, publicProfile }: IdentitySummary) => {
+  if (!publicProfile) {
+    return {
+      description: 'No description provided',
+      image: undefined,
+      primaryText: did && did.substr(0, 25) + '...' || 'TODO',
+      secondaryText: 'Service Name',
+    }
+  } else {
+    return {
+      primaryText: publicProfile.url,
+      secondaryText: publicProfile.name,
+      image: publicProfile.image,
+      description: publicProfile.description
+    }
+  }
 }

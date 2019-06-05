@@ -3,7 +3,7 @@ import {
   ConnectionOptions,
   Connection,
 } from 'typeorm/browser'
-import {plainToClass} from 'class-transformer'
+import { plainToClass } from 'class-transformer'
 import {
   SettingEntity,
   PersonaEntity,
@@ -18,6 +18,7 @@ import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { IdentitySummary } from '../../actions/sso/types'
 
 interface PersonaAttributes {
   did: string
@@ -48,6 +49,10 @@ export class Storage {
       this.createConnectionIfNeeded().then(() =>
         storeCredentialMetadata(this.connection)(metadata),
       ),
+    issuerProfile: (issuer: IdentitySummary) =>
+      this.createConnectionIfNeeded().then(() =>
+        storeIssuerProfile(this.connection)(issuer),
+      ),
   }
 
   public get = {
@@ -61,6 +66,10 @@ export class Storage {
     credentialMetadata: (credential: SignedCredential) =>
       this.createConnectionIfNeeded().then(() =>
         getMetadataForCredential(this.connection)(credential),
+      ),
+    publicProfile: (did: string) =>
+      this.createConnectionIfNeeded().then(() =>
+        getPublicProfile(this.connection)(did),
       ),
   }
 
@@ -270,11 +279,14 @@ export class Storage {
   }
 }
 
-export type CredentialMetadataSummary = {
-  issuer: string
+export interface CredentialMetadata {
   type: string
   renderInfo: CredentialOfferRenderInfo
   metadata: CredentialOfferMetadata
+}
+
+export interface CredentialMetadataSummary extends CredentialMetadata {
+  issuer: IdentitySummary
 }
 
 const storeCredentialMetadata = (connection: Connection) => (
@@ -283,8 +295,8 @@ const storeCredentialMetadata = (connection: Connection) => (
   const { issuer, type: credentialType } = credentialMetadata
 
   const cacheEntry = plainToClass(CacheEntity, {
-    key: buildMetadataKey(issuer, credentialType),
-    value: credentialMetadata,
+    key: buildMetadataKey(issuer.did, credentialType),
+    value: { ...credentialMetadata, issuer: credentialMetadata.issuer.did },
   })
 
   return connection.manager.save(cacheEntry)
@@ -293,14 +305,10 @@ const storeCredentialMetadata = (connection: Connection) => (
 const getMetadataForCredential = (connection: Connection) => async ({
   issuer,
   type: credentialType,
-}: SignedCredential) : Promise<CredentialMetadataSummary>=> {
+}: SignedCredential) => {
   const entryKey = buildMetadataKey(issuer, credentialType)
   const [entry] = await connection.manager.findByIds(CacheEntity, [entryKey])
-  if (!entry) {
-    return {} as CredentialMetadataSummary
-  }
-
-  return entry.value as any as CredentialMetadataSummary || {}
+  return (entry && entry.value) || {}
 }
 
 const buildMetadataKey = (
@@ -312,4 +320,19 @@ const buildMetadataKey = (
   }
 
   return `${issuer}${credentialType[credentialType.length - 1]}`
+}
+const storeIssuerProfile = (connection: Connection) => (
+  issuer: IdentitySummary,
+) => {
+  const cacheEntry = plainToClass(CacheEntity, {
+    key: issuer.did,
+    value: issuer,
+  })
+
+  return connection.manager.save(cacheEntry)
+}
+
+const getPublicProfile = (connection: Connection) => async (did: string) => {
+  const [issuerProfile] = await connection.manager.findByIds(CacheEntity, [did])
+  return (issuerProfile && issuerProfile.value) || { did }
 }

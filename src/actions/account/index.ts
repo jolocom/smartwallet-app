@@ -9,14 +9,19 @@ import {
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
 import { JolocomLib } from 'jolocom-lib'
-import { ThunkDispatch as OriginalThunkDispatch} from 'redux-thunk'
-import { groupBy, zipWith, mergeRight } from 'ramda'
-import {AnyAction, compose} from 'redux'
+import { ThunkDispatch as OriginalThunkDispatch } from 'redux-thunk'
+import { groupBy, zipWith, mergeRight, omit, uniq, map } from 'ramda'
+import { AnyAction, compose } from 'redux'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
+import { IdentitySummary } from '../sso/types'
 
-type ThunkDispatch = OriginalThunkDispatch <RootState, BackendMiddleware, AnyAction>
+type ThunkDispatch = OriginalThunkDispatch<
+  RootState,
+  BackendMiddleware,
+  AnyAction
+>
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -143,13 +148,16 @@ export const saveExternalCredentials = async (
 ) => {
   const { storageLib } = backendMiddleware
   const externalCredentials = getState().account.claims.pendingExternal
-  const cred: SignedCredential = externalCredentials[0]
 
-  if (cred.id) {
-    await storageLib.delete.verifiableCredential(cred.id)
+  if (!externalCredentials.offer .length) {
+    return dispatch(cancelReceiving)
   }
 
-  await storageLib.store.verifiableCredential(externalCredentials[0])
+  const cred: SignedCredential = externalCredentials.offer[0].credential
+
+  await storageLib.delete.verifiableCredential(cred.id)
+  await storageLib.store.verifiableCredential(cred)
+
   return dispatch(cancelReceiving)
 }
 
@@ -166,13 +174,21 @@ export const setClaimsForDid = async (
   const { storageLib } = backendMiddleware
 
   const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
-  const credentialMetadata: CredentialMetadataSummary[] = await Promise.all(
-    verifiableCredentials.map(storageLib.get.credentialMetadata),
+
+  const metadata = await Promise.all(
+    verifiableCredentials.map(el => storageLib.get.credentialMetadata(el)),
+  )
+
+  const issuers = uniq(verifiableCredentials.map(cred => cred.issuer))
+
+  const issuerMetadata = await Promise.all(
+    issuers.map(storageLib.get.publicProfile),
   )
 
   const claims = prepareClaimsForState(
     verifiableCredentials,
-    credentialMetadata,
+    metadata,
+    issuerMetadata,
   ) as CategorizedClaims
 
   return dispatch({
@@ -181,30 +197,48 @@ export const setClaimsForDid = async (
   })
 }
 
-const prepareClaimsForState = (
+export const prepareClaimsForState = (
   credentials: SignedCredential[],
-  credentialMetadata: CredentialMetadataSummary[],
+  credentialMetadata: Array<CredentialMetadataSummary | {}>,
+  issuerMetadata: Array<IdentitySummary | { did: string }>,
 ) =>
   compose(
     groupBy(getCredentialUiCategory),
     zipWith(mergeRight, credentialMetadata),
-    convertToDecoratedClaim,
+    map(addIssuerInfo(issuerMetadata)),
+    map(convertToDecoratedClaim),
   )(credentials)
 
-// TODO Util, make subject mandatory
-export const convertToDecoratedClaim = (
-  vCreds: SignedCredential[],
-): DecoratedClaims[] =>
-  vCreds.map(vCred => {
-    const claimData = { ...vCred.claim }
-    delete claimData.id
+export const addIssuerInfo = (
+  issuerProfiles: Array<{did: string} | IdentitySummary> | [],
+) => (claim: DecoratedClaims) => {
+  if (!issuerProfiles || !issuerProfiles.length) {
+    return claim
+  }
 
-    return {
-      credentialType: getUiCredentialTypeByType(vCred.type),
-      claimData,
-      id: vCred.id,
-      issuer: vCred.issuer,
-      subject: vCred.claim.id || 'Not found',
-      expires: vCred.expires || undefined,
-    }
-  })
+  const issuer = issuerProfiles.find(el => el.did === claim.issuer.did)
+
+  return issuer
+    ? {
+        ...claim,
+        issuer,
+      }
+    : claim
+}
+
+export const convertToDecoratedClaim = ({
+  claim,
+  type,
+  issuer,
+  id,
+  expires,
+}: SignedCredential): DecoratedClaims => ({
+  credentialType: getUiCredentialTypeByType(type),
+  issuer: {
+    did: issuer,
+  },
+  claimData: omit(['id'], claim),
+  id,
+  subject: claim.id,
+  expires: expires || undefined,
+})

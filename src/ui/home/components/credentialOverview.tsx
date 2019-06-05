@@ -49,6 +49,7 @@ export class CredentialOverview extends React.Component<Props, State> {
     let categorizedCredentials = (claimsToRender[category] || []).sort((a, b) =>
       a.credentialType > b.credentialType ? 1 : -1,
     )
+
     if (category === 'Other') {
       categorizedCredentials = getNonDocumentClaims(categorizedCredentials)
     }
@@ -64,7 +65,7 @@ export class CredentialOverview extends React.Component<Props, State> {
         toPairs
       )(claimData)
 
-      const selfSigned = issuer === did
+      const selfSigned = issuer.did === did
       return (
         <CredentialCard
           key={credentialType}
@@ -80,7 +81,7 @@ export class CredentialOverview extends React.Component<Props, State> {
   }
 
   private renderCredentialCategory = (category: string) => {
-    if (!this.props.claimsToRender[category].length) {
+    if (!getNonDocumentClaims(this.props.claimsToRender[category]).length) {
       return null
     }
 
