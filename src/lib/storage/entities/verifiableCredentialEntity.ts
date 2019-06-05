@@ -24,19 +24,18 @@ import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
 @Exclude()
 @Entity('verifiable_credentials')
 export class VerifiableCredentialEntity {
-  @Expose()
-  @Transform(value => JSON.stringify(value), { toClassOnly: true })
-  @Transform(value => JSON.parse(value), { toPlainOnly: true })
-  @Column()
-  '@context'!: string
+  // note: avoiding "@context" class property name because it chokes up
+  // @babel/plugin-proposal-decorators
+  @Expose({ name: '@context' })
+  @Column({ name: '@context', type: 'simple-json' })
+  _context!: any
 
   @Expose()
   @PrimaryColumn({ length: 50 })
   id!: string
 
   @Expose()
-  @Transform(value => value.split(','), { toPlainOnly: true })
-  @Column()
+  @Column({ type: 'simple-array' })
   type!: string
 
   @Expose()
