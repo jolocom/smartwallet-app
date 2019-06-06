@@ -5609,10 +5609,6 @@ immediate@^3.2.3:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.2.3.tgz#d140fa8f614659bd6541233097ddaac25cdd991c"
   integrity sha1-0UD6j2FGWb1lQSMwl92qwlzdmRw=
 
-immutable@^3.8.2:
-  version "3.8.2"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
-
 import-fresh@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-2.0.0.tgz#d81355c15612d386c61f9ddd3922d4304822a546"
@@ -6488,9 +6484,10 @@ jju@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/jju/-/jju-1.3.0.tgz#dadd9ef01924bc728b03f2f7979bdbd62f7a2aaa"
 
-"jolocom-lib@file:../../../../Jolocom-lib-2.4.3.tgz":
-  version "2.4.3"
-  resolved "file:../../../../Jolocom-lib-2.4.3.tgz#50d41229147efb6969a71989bedaa911c0410c24"
+jolocom-lib@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.5.0.tgz#c33f2d44a2d854de01d50849cfeb2f8ed54b1e9e"
+  integrity sha512-rAwdTdE0iVRaE/ee05l4FA2cbzSUutR7cSaVgnuOVqsF/B84lkuqOhFa6i+yZh9RXqpmxMw6IqlhULQ/C5PPiA==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"

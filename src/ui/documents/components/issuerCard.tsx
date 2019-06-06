@@ -3,6 +3,7 @@ import { StyleSheet, Image } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ClaimCard } from '../../sso/components/claimCard'
 import { IdentitySummary } from '../../../actions/sso/types'
+import {empty} from 'ramda'
 
 const styles = StyleSheet.create({
   container: {
@@ -52,7 +53,7 @@ export const IssuerCard = (issuer: IdentitySummary): JSX.Element => {
 }
 
 const convertToClaimCard = ({ did, publicProfile }: IdentitySummary) => {
-  if (!publicProfile) {
+  if (!publicProfile || empty(publicProfile)) {
     return {
       description: 'No description provided',
       image: undefined,

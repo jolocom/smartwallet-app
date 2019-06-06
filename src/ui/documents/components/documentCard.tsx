@@ -92,7 +92,7 @@ export const DocumentCard: React.SFC<DocumentCardProps> = ({
           numberOfLines={2}
           style={[styles.documentType, { color: text && text.color }]}
         >
-          {claimData.type}
+          {claimData.type || document.credentialType}
         </Text>
         <Text style={[styles.documentNumber, { color: text && text.color }]}>
           {claimData.documentNumber}

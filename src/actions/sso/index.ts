@@ -8,7 +8,7 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { getUiCredentialTypeByType } from 'src/lib/util'
-import { convertToDecoratedClaim, resetSelected } from '../account'
+import { convertToDecoratedClaim, resetSelected} from '../account'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
@@ -140,6 +140,7 @@ export const consumeCredentialRequest = (
     { did: issuerDid },
     { publicProfile: parsedProfile },
   )
+
 
   const {
     requestedCredentialTypes: requestedTypes,
