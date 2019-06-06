@@ -14,6 +14,7 @@ import I18n from 'src/locales/i18n'
 import { getNonDocumentClaims } from 'src/utils/filterDocuments'
 const loaders = require('react-native-indicator')
 import { compose, map, toPairs, fromPairs } from 'ramda'
+import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
 
 interface Props {
   claimsToRender: CategorizedClaims
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
   },
   scrollComponent: {
     width: '100%',
+    paddingBottom: SCROLL_PADDING_BOTTOM
   },
   scrollComponentLoading: {
     flexGrow: 1,
@@ -105,7 +107,7 @@ export class CredentialOverview extends React.Component<Props, State> {
       <Container style={{ padding: 0 }}>
         <ScrollView
           style={scrollComponent}
-          contentContainerStyle={loading ? scrollComponentLoading : {}}
+          contentContainerStyle={loading ? scrollComponentLoading : scrollComponent}
         >
           {claimCategories.map(this.renderCredentialCategory)}
         </ScrollView>
