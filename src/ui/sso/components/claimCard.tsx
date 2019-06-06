@@ -11,7 +11,7 @@ import {
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import I18n from 'src/locales/i18n'
-import {IdentitySummary} from '../../../actions/sso/types'
+import { IdentitySummary } from '../../../actions/sso/types'
 
 // TODO Custom text component with size, font, color
 // TODO Make whole card clickable as opposed to icon
@@ -81,10 +81,17 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
 }
 
 const renderIconIfPresent = (icon: ReactNode) =>
-  icon ? <View flex={0.2} style={{
-    justifyContent: 'center',
-    alignItems: 'center',
-  }}>{icon}</View> : null
+  icon ? (
+    <View
+      flex={0.2}
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {icon}
+    </View>
+  ) : null
 
 interface EmptyClaimCardProps {
   credentialType: string
@@ -128,7 +135,7 @@ export const ConsentAttributeCard: React.SFC<
     },
     verificationStatus: {
       color: props.issuer.did !== props.did ? '#28a52d' : '#05050d',
-      opacity: props.issuer.did === props.did? 0.4 : 1,
+      opacity: props.issuer.did === props.did ? 0.4 : 1,
     },
   })
 
@@ -144,10 +151,6 @@ export const ConsentAttributeCard: React.SFC<
 
   const { values, issuer, did, rightIcon, containerStyle } = props
   const { container, innerContainer, verificationStatus } = styles
-  const verificationSummary =
-    issuer.did === did
-      ? ' ' + I18n.t('Self-signed')
-      : `${issuer.did.substring(0, 25)}...`
 
   return (
     <View style={[container, containerStyle]}>
@@ -156,7 +159,9 @@ export const ConsentAttributeCard: React.SFC<
         {values.length > 0 ? (
           <Text style={verificationStatus}>
             <Icon size={15} name="check-all" />
-            {verificationSummary}
+            {did === issuer.did
+              ? ` ${I18n.t('Self-signed')}`
+              : `${issuer.did.substring(0, 25)}...`}
           </Text>
         ) : null}
       </View>

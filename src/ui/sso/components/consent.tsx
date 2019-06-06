@@ -182,6 +182,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     const isSelected =
       currentlySelected && currentlySelected.id === verifications[0].id
     const containsData = entry.values.length > 0
+
     const headerSection = isFirst ? (
       <HeaderSection
         containerStyle={{ paddingTop: '5%' }}
@@ -201,7 +202,7 @@ export class ConsentComponent extends React.Component<Props, State> {
           }
           did={this.props.did}
           values={values}
-          issuer={verifications[0].issuer}
+          issuer={(verifications[0] && verifications[0].issuer) || {}}
         />
       </View>
     )

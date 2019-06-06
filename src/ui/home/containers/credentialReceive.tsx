@@ -20,8 +20,6 @@ interface State {
 
 export class CredentialsReceiveContainer extends React.Component<Props, State> {
   render() {
-    console.log(this.props)
-    debugger
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.9 }}>
