@@ -41,7 +41,6 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  console.log(state)
   return {
     offer: state.account.claims.pendingExternal.offer[0].decoratedClaim,
     offeror: state.account.claims.pendingExternal.offeror,

@@ -68,8 +68,7 @@ export class DocumentsContainer extends React.Component<Props, State> {
 
   private getExpiredDocuments = (claims: DecoratedClaims[]) =>
     claims.filter(
-      document =>
-        document.expires && document.expires.valueOf() < new Date().valueOf(),
+      document => document.expires && document.expires.valueOf() < new Date().valueOf(),
     )
 
   private scrollToTop() {

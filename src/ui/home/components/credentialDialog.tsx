@@ -94,8 +94,6 @@ const renderClaims = (toRender: DecoratedClaims): JSX.Element[] => {
 export const CredentialDialogComponent: React.SFC<Props> = (
   props: Props,
 ): JSX.Element => {
-  console.log(props)
-  debugger
   const { credentialToRender, requester } = props
   const { expires, credentialType } = credentialToRender
 
