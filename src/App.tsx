@@ -5,13 +5,18 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { initStore } from './store'
 
 const { ThemeProvider } = require('react-native-material-ui')
-const assign = require('object.assign/implementation')
-Object.assign = assign
-
-console.disableYellowBox = true
+let store: ReturnType<typeof initStore>
 
 const App = () => {
-  const store = initStore()
+  // only init store once, or else Provider complains (especially on 'toggle
+  // inspector')
+  //
+  // but it needs to be done only when a new App is
+  // instantiated because otherwise the overrides at the top of index.ts will
+  // have not been excuted yet (while files are being imported) and initStore
+  // triggers creation of BackendMiddleware which needs those
+  if (!store) store =  initStore()
+
   return (
     <ThemeProvider uiTheme={JolocomTheme}>
       <Provider store={store}>
