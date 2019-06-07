@@ -5,20 +5,20 @@ import { BackendMiddleware } from 'src/backendMiddleware'
 import config from 'src/config'
 import { Store } from 'react-redux'
 
-export function initStore(): Store<{}> {
-  const {
-    createReactNavigationReduxMiddleware,
-  } = require('react-navigation-redux-helpers')
+import {
+  createReactNavigationReduxMiddleware,
+} from 'react-navigation-redux-helpers';
 
-  createReactNavigationReduxMiddleware(
-    'root',
-    (state: RootState) => state.navigation,
-  )
+export function initStore(): Store<any> {
   const backendMiddleware = new BackendMiddleware(config)
+
+  const navMiddleware = createReactNavigationReduxMiddleware(
+    (state: RootState) => state.navigation,
+  );
 
   return createStore(
     rootReducer,
     {},
-    applyMiddleware(thunk.withExtraArgument(backendMiddleware)),
+    applyMiddleware(thunk.withExtraArgument(backendMiddleware), navMiddleware),
   )
 }

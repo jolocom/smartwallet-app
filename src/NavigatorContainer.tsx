@@ -1,9 +1,4 @@
 import React from 'react'
-import {
-  addNavigationHelpers,
-  NavigationEventSubscription,
-  NavigationEventCallback,
-} from 'react-navigation'
 import { connect } from 'react-redux'
 import { BackHandler, Linking, StatusBar } from 'react-native'
 import { AnyAction } from 'redux'
@@ -13,36 +8,31 @@ import { navigationActions, accountActions, genericActions } from 'src/actions/'
 import { routeList } from './routeList'
 import { LoadingSpinner } from 'src/ui/generic/loadingSpinner'
 
-const {
-  createReduxBoundAddListener,
-} = require('react-navigation-redux-helpers')
+import { createReduxContainer } from 'react-navigation-redux-helpers';
 
-interface ConnectProps {
-  navigation: RootState['navigation']
-  openScanner: () => void
-  goBack: () => void
-  handleDeepLink: (url: string) => void
-  checkIfAccountExists: () => void
-  initApp: () => Promise<void>
-}
+import { useScreens } from 'react-native-screens';
+useScreens();
 
-interface OwnProps {
+interface Props extends ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {
+  deepLinkLoading: boolean
   dispatch: (action: AnyAction) => void
 }
 
-interface Props extends ConnectProps, OwnProps {
-  deepLinkLoading: boolean
-}
+const darkBackgroundPages: string[] = [
+  routeList.Landing,
+  routeList.SeedPhrase,
+  routeList.Exception,
+  routeList.Loading,
+  routeList.Entropy,
+]
+
+const AppNavigationContainer = connect(
+  (state: RootState) => ({ state: state.navigation })
+)(createReduxContainer(Routes))
 
 export class NavigatorContainer extends React.Component<Props> {
-  private addListener: (
-    name: string,
-    cb: NavigationEventCallback,
-  ) => NavigationEventSubscription
-
   constructor(props: Props) {
     super(props)
-    this.addListener = createReduxBoundAddListener('root')
   }
 
   async componentDidMount() {
@@ -64,11 +54,11 @@ export class NavigatorContainer extends React.Component<Props> {
 
   private navigateBack = () => {
     // return false if app exit is desired
-    const { navigation } = this.props
+    const { index, routes } = this.props.navigation
     if (
-      navigation.index === 0 &&
-      navigation.routes.length === 1 &&
-      navigation.routes[0].index === 0
+      index === 0 &&
+      routes.length === 1 &&
+      routes[0].index === 0
     ) {
       return false
     }
@@ -84,24 +74,11 @@ export class NavigatorContainer extends React.Component<Props> {
   render() {
     const { routes, index } = this.props.navigation
     const currentRoute = routes[index].routeName
-    const darkBackgroundPages = [
-      routeList.Landing,
-      routeList.SeedPhrase,
-      routeList.Exception,
-      routeList.Loading,
-      routeList.Entropy,
-    ]
     const isDarkBackground = darkBackgroundPages.includes(currentRoute)
     return (
       <React.Fragment>
         <StatusBar barStyle={isDarkBackground ? 'light-content' : 'default'} />
-        <Routes
-          navigation={addNavigationHelpers({
-            dispatch: this.props.dispatch,
-            state: this.props.navigation,
-            addListener: this.addListener,
-          })}
-        />
+        <AppNavigationContainer />
         {this.props.deepLinkLoading && <LoadingSpinner />}
       </React.Fragment>
     )

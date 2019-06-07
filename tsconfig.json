@@ -12,6 +12,7 @@
     "target": "esnext",
     "module": "es2015",
 
+    "resolveJsonModule": true,
     "suppressImplicitAnyIndexErrors": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

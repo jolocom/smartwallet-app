@@ -1,10 +1,12 @@
 package com.jolocomwallet;
 
-import com.facebook.react.ReactActivity;
+// overriden to use ReactFragmentActivity instead of ReactActivity for using
+// support from react-native-screens in react-navigation
+import com.facebook.react.ReactFragmentActivity;
 import org.devio.rn.splashscreen.SplashScreen;
 import android.os.Bundle;
 
-public class MainActivity extends ReactActivity {
+public class MainActivity extends ReactFragmentActivity {
 
     /**
      * Returns the name of the main component registered from JavaScript.

@@ -1,5 +1,6 @@
 import {
   NavigationActions,
+  StackActions,
   NavigationNavigateActionPayload,
 } from 'react-navigation'
 import { AnyAction, Dispatch } from 'redux'
@@ -15,7 +16,7 @@ export const navigate = (options: NavigationNavigateActionPayload) =>
 export const goBack = () => NavigationActions.back()
 
 export const navigatorReset = (newScreen: NavigationNavigateActionPayload) =>
-  NavigationActions.reset({
+  StackActions.reset({
     index: 0,
     actions: [navigate(newScreen)],
   })
