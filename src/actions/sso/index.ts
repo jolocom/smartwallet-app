@@ -82,8 +82,23 @@ export const receiveExternalCredential = (
     await storageLib.store.issuerProfile(offeror)
   }
 
+    // TODO change convertToDecoratedClaim to (metadata) => (cred): decoratedClaim
+    // the types of the cred metadata arrays where it is use differ too much to do it simply right now
   const asDecoratedCredentials = providedCredentials.map(
-    convertToDecoratedClaim,
+    (cred) => {
+      const md = credentialOfferMetadata
+        ? credentialOfferMetadata.filter(mds => cred.type.includes(mds.type))
+        : undefined
+
+      const renderInfo = md && md.length
+        ? md[0].renderInfo
+        : undefined
+
+      return {
+        ...convertToDecoratedClaim(cred),
+        renderInfo
+      }
+    }
   )
 
   dispatch(
