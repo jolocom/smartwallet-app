@@ -6,7 +6,7 @@ module.exports = ({ platform }, { module, resolve }) => ({
     ...module,
     rules: [
       {
-        test: /\.js/,
+        test: /\.jsx?$/,
         exclude: /node_modules\/(?!(typeforce|asn1.js|jolocom-lib|base64url|jsonld|rdf-canonize|tiny-secp256k1|bip32|bip39)\/).*/,
         loader: 'babel-loader'
       },
