@@ -3,7 +3,7 @@ import { StyleSheet, Text, ScrollView, View } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
-import { CredentialTopCard } from './credentialTopCard'
+import { DocumentCard } from '../../documents/components/documentCard'
 import I18n from 'src/locales/i18n'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import {IdentitySummary} from '../../../actions/sso/types'
@@ -95,14 +95,12 @@ export const CredentialDialogComponent: React.SFC<Props> = (
   props: Props,
 ): JSX.Element => {
   const { credentialToRender, requester } = props
-  const { expires, credentialType } = credentialToRender
 
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <CredentialTopCard
-          credentialName={credentialType}
-          expiryDate={expires}
+        <DocumentCard
+          document={credentialToRender}
         />
       </View>
 
