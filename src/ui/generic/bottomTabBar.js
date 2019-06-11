@@ -1,3 +1,24 @@
+/**
+ * NOTE: this is copied from react-navigation/src/views/TabView/TabBarBottom.js
+ *       and modified to add the QRButton at QR_CODE_BUTTON_INDEX
+ *
+ *       The class in react-navigation/src/views/TabView/TabBarBottom is not
+ *       exported, but instead it is wrapped using withOrientation (as below)
+ *       so the original class is captured in a closure and is inaccessible, so
+ *       had to be copied here.
+ *
+ *       Alterations to the original are marked with // <ALTERED></ALTERED>
+ */
+
+// <ALTERED>
+const QR_CODE_BUTTON_INDEX = 2
+const QR_CODE_BUTTON_RADIUS = 36
+import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { routeList } from 'src/routeList'
+import { TouchableOpacity } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+// </ALTERED>
+
 import React from 'react';
 import {
   Animated,
@@ -10,8 +31,10 @@ import {
 
 import { SafeAreaView } from '@react-navigation/native';
 
+// <ALTERED> to use absolute imports
 import CrossFadeIcon from 'react-navigation-tabs/src/views/CrossFadeIcon';
 import withDimensions from 'react-navigation-tabs/src/utils/withDimensions';
+// </ALTERED>
 
 export type TabBarOptions = {
   keyboardHidesTabBar: boolean,
@@ -290,7 +313,32 @@ class TabBarBottom extends React.Component<Props, State> {
       style,
     ];
 
+    // <ALTERED>
+    const openScanner = () =>
+      this.props.navigation.navigate(routeList.QRCodeScanner)
+    const QRCodeButtonPlaceholder = (
+      <View
+        style={[
+          styles.tab,
+          this._shouldUseHorizontalLabels()
+            ? styles.tabLandscape
+            : styles.tabPortrait,
+          tabStyle,
+        ]}
+        key="QRCodeButtonPlaceholder"
+        testID="QRCodeButtonPlaceholder"
+      />
+    )
+    const QRCodeButton = (
+      <TouchableOpacity style={styles.qrCodeButton} onPress={openScanner}>
+        <Icon size={30} name="qrcode-scan" color="white" />
+      </TouchableOpacity>
+    )
+    // </ALTERED>
+
     return (
+      <React.Fragment>
+      {/*<ALTERED>*/ QRCodeButton /*</ALTERED>*/}
       <Animated.View
         style={[
           styles.container,
@@ -342,31 +390,38 @@ class TabBarBottom extends React.Component<Props, State> {
               this.props.getButtonComponent({ route }) ||
               TouchableWithoutFeedbackWrapper;
 
+            // <ALTERED>
+            // added React.Fragment and QRCodeButtonPlaceholder
+            // </ALTERED>
             return (
-              <ButtonComponent
-                key={route.key}
-                onPress={() => onTabPress({ route })}
-                onLongPress={() => onTabLongPress({ route })}
-                testID={testID}
-                accessibilityLabel={accessibilityLabel}
-                accessibilityRole={accessibilityRole}
-                accessibilityStates={accessibilityStates}
-                style={[
-                  styles.tab,
-                  { backgroundColor },
-                  this._shouldUseHorizontalLabels()
-                    ? styles.tabLandscape
-                    : styles.tabPortrait,
-                  tabStyle,
-                ]}
-              >
-                {this._renderIcon(scene)}
-                {this._renderLabel(scene)}
-              </ButtonComponent>
+              <React.Fragment>
+                {QR_CODE_BUTTON_INDEX == index && QRCodeButtonPlaceholder}
+                <ButtonComponent
+                  key={route.key}
+                  onPress={() => onTabPress({ route })}
+                  onLongPress={() => onTabLongPress({ route })}
+                  testID={testID}
+                  accessibilityLabel={accessibilityLabel}
+                  accessibilityRole={accessibilityRole}
+                  accessibilityStates={accessibilityStates}
+                  style={[
+                    styles.tab,
+                    { backgroundColor },
+                    this._shouldUseHorizontalLabels()
+                      ? styles.tabLandscape
+                      : styles.tabPortrait,
+                    tabStyle,
+                  ]}
+                >
+                  {this._renderIcon(scene)}
+                  {this._renderLabel(scene)}
+                </ButtonComponent>
+              </React.Fragment>
             );
           })}
         </SafeAreaView>
       </Animated.View>
+      </React.Fragment>
     );
   }
 }
@@ -426,6 +481,25 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 15,
   },
+  // <ALTERED>
+  qrCodeButton: {
+    position: 'absolute',
+    bottom: QR_CODE_BUTTON_RADIUS - COMPACT_HEIGHT,
+    height: QR_CODE_BUTTON_RADIUS * 2,
+    width: QR_CODE_BUTTON_RADIUS * 2,
+    borderRadius: QR_CODE_BUTTON_RADIUS,
+    backgroundColor: JolocomTheme.primaryColorPurple,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 8,
+    zIndex: 10,
+  },
+  // </ALTERED>
 });
 
 export default withDimensions(TabBarBottom);
