@@ -1,10 +1,10 @@
 import React from 'react'
 import { Provider } from 'react-redux'
+import { ThemeContext, getTheme } from 'react-native-material-ui'
 import { Navigator } from 'src/NavigatorContainer'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { initStore } from './store'
 
-const { ThemeProvider } = require('react-native-material-ui')
 let store: ReturnType<typeof initStore>
 
 const App = () => {
@@ -18,11 +18,11 @@ const App = () => {
   if (!store) store =  initStore()
 
   return (
-    <ThemeProvider uiTheme={JolocomTheme}>
+    <ThemeContext.Provider value={getTheme(JolocomTheme)}>
       <Provider store={store}>
         <Navigator dispatch={store.dispatch} />
       </Provider>
-    </ThemeProvider>
+    </ThemeContext.Provider>
   )
 }
 
