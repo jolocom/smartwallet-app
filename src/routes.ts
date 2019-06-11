@@ -1,4 +1,6 @@
-import { Platform } from 'react-native'
+import { Platform, Image } from 'react-native'
+import { createElement } from 'react'
+
 import {
   createStackNavigator,
   createBottomTabNavigator,
@@ -27,10 +29,14 @@ import {
   SettingsMenuIcon,
 } from 'src/resources'
 
-const headerBackImage =
-  Platform.OS === 'android'
-    ? require('./resources/img/close.png')
-    : require('./resources/img/back-26.png')
+const headerBackImage = createElement(
+  Image,
+  {
+    source: Platform.OS === 'android'
+      ? require('./resources/img/close.png')
+      : require('./resources/img/back-26.png')
+  }
+)
 
 const noHeaderNavOpts = {
   header: null,
