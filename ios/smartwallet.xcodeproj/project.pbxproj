@@ -19,7 +19,6 @@
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		1922AC52303444AF9D7925A8 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77F057F262F14D45AA1DBBE8 /* libRNFetchBlob.a */; };
-		1F952E3C21AED8BA00D4D2E4 /* libRNLanguages.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F952E3421AED8A300D4D2E4 /* libRNLanguages.a */; };
 		1F952E4221AEE8DE00D4D2E4 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		23238968F2BA48C4A9BB4AC4 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 640439B9112A41768C633964 /* Foundation.ttf */; };
 		28B670DA172F46598B3D5E4B /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 853CE29A4ED949C79BF46AF4 /* SimpleLineIcons.ttf */; };
@@ -58,6 +57,7 @@
 		20EFEE5B2D3B4D4DAAE72EDF /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62A9EE4B2502444D92F4B80B /* libRNGestureHandler.a */; };
 		0037D758834F4885993B9EBB /* libRNScreens.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8E66F29783414694C18884 /* libRNScreens.a */; };
 		06E10705EBB9415CB61A49EB /* libRNReanimated.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B783D0C9BCCC436F991FA614 /* libRNReanimated.a */; };
+		5EC41CA652294507893A1976 /* libRNLocalize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34FD8E93A85B4F6BB9EEC73B /* libRNLocalize.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,20 +116,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
-		};
-		1F952E3321AED8A300D4D2E4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1F952E0021AED8A200D4D2E4 /* RNLanguages.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNLanguages;
-		};
-		1F952E3521AED8A300D4D2E4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1F952E0021AED8A200D4D2E4 /* RNLanguages.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28471D9B043800D4039D;
-			remoteInfo = "RNLanguages-tvOS";
 		};
 		2D16E6711FA4F8DC00B85C8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -479,7 +465,6 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = smartwallet/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = smartwallet/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		1F952E0021AED8A200D4D2E4 /* RNLanguages.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNLanguages.xcodeproj; path = "../node_modules/react-native-languages/ios/RNLanguages.xcodeproj"; sourceTree = "<group>"; };
 		1F952E3D21AED94300D4D2E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
 		1F952E3F21AED95400D4D2E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		1F952E4021AED99000D4D2E4 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = de; path = de.lproj/Info.plist; sourceTree = "<group>"; };
@@ -534,6 +519,8 @@
 		DB8E66F29783414694C18884 /* libRNScreens.a */ = {isa = PBXFileReference; name = "libRNScreens.a"; path = "libRNScreens.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		96D64D740BEE4200B51FA64E /* RNReanimated.xcodeproj */ = {isa = PBXFileReference; name = "RNReanimated.xcodeproj"; path = "../node_modules/react-native-reanimated/ios/RNReanimated.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		B783D0C9BCCC436F991FA614 /* libRNReanimated.a */ = {isa = PBXFileReference; name = "libRNReanimated.a"; path = "libRNReanimated.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		60531C07E910440D978648EF /* RNLocalize.xcodeproj */ = {isa = PBXFileReference; name = "RNLocalize.xcodeproj"; path = "../node_modules/react-native-localize/ios/RNLocalize.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		34FD8E93A85B4F6BB9EEC73B /* libRNLocalize.a */ = {isa = PBXFileReference; name = "libRNLocalize.a"; path = "libRNLocalize.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -551,7 +538,6 @@
 			files = (
 				1F952E4221AEE8DE00D4D2E4 /* libRCTWebSocket.a in Frameworks */,
 				DC61D19C2181D8BC00E86DBC /* RCTLinking.xcodeproj in Frameworks */,
-				1F952E3C21AED8BA00D4D2E4 /* libRNLanguages.a in Frameworks */,
 				DCBEC49F20CAD9670099FD03 /* libRNSVG.a in Frameworks */,
 				DCBEC45020CABE3B0099FD03 /* libSplashScreen.a in Frameworks */,
 				DC7F763020A2FE8E00D78681 /* libSQLite.a in Frameworks */,
@@ -577,6 +563,7 @@
 				20EFEE5B2D3B4D4DAAE72EDF /* libRNGestureHandler.a in Frameworks */,
 				0037D758834F4885993B9EBB /* libRNScreens.a in Frameworks */,
 				06E10705EBB9415CB61A49EB /* libRNReanimated.a in Frameworks */,
+				5EC41CA652294507893A1976 /* libRNLocalize.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -712,15 +699,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1F952E0121AED8A200D4D2E4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1F952E3421AED8A300D4D2E4 /* libRNLanguages.a */,
-				1F952E3621AED8A300D4D2E4 /* libRNLanguages-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -752,7 +730,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				1F952E0021AED8A200D4D2E4 /* RNLanguages.xcodeproj */,
 				DCBEC41920CABE240099FD03 /* SplashScreen.xcodeproj */,
 				DC7F75F720A1DE2000D78681 /* ART.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
@@ -778,6 +755,7 @@
 				8C9662E0835740DBBE16D693 /* RNGestureHandler.xcodeproj */,
 				57249C38A66E41F48A535BF7 /* RNScreens.xcodeproj */,
 				96D64D740BEE4200B51FA64E /* RNReanimated.xcodeproj */,
+				60531C07E910440D978648EF /* RNLocalize.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1089,10 +1067,6 @@
 					ProjectRef = F63FBE24F3D049D885DF15AA /* RNKeychain.xcodeproj */;
 				},
 				{
-					ProductGroup = 1F952E0121AED8A200D4D2E4 /* Products */;
-					ProjectRef = 1F952E0021AED8A200D4D2E4 /* RNLanguages.xcodeproj */;
-				},
-				{
 					ProductGroup = E748769E2284052800371548 /* Products */;
 					ProjectRef = CAF102D56DB146639EF6CC66 /* RNRandomBytes.xcodeproj */;
 				},
@@ -1173,13 +1147,6 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		1F952E3421AED8A300D4D2E4 /* libRNLanguages.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNLanguages.a;
-			remoteRef = 1F952E3321AED8A300D4D2E4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		1F952E3621AED8A300D4D2E4 /* libRNLanguages-tvOS.a */ = {
@@ -1643,16 +1610,13 @@
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-localize/ios",
 				);
 				INFOPLIST_FILE = smartwalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1688,16 +1652,13 @@
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-localize/ios",
 				);
 				INFOPLIST_FILE = smartwalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1734,6 +1695,7 @@
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-localize/ios",
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/../node_modules/react-native-splash-screen/ios";
 				INFOPLIST_FILE = smartwallet/Info.plist;
@@ -1773,6 +1735,7 @@
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-localize/ios",
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/../node_modules/react-native-splash-screen/ios";
 				INFOPLIST_FILE = smartwallet/Info.plist;

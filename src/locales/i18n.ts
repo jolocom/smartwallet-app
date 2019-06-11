@@ -1,10 +1,14 @@
-const RNLanguages = require('react-native-languages')
+// TODO
+// don't load all translations in memory, when we have a lot of translations
+// see
+// https://github.com/react-native-community/react-native-localize/blob/master/example/src/AsyncExample.js
+
+import * as RNLocalize from 'react-native-localize'
 import I18n from 'i18n-js'
 
 const de = require('./de').default
 const nl = require('./nl').default
 
-I18n.locale = RNLanguages.language.split('-')[0]
 I18n.defaultLocale = 'en'
 I18n.fallbacks = true
 I18n.missingTranslation = scope => scope
@@ -12,8 +16,12 @@ I18n.translations = {
   de,
   nl,
 }
-
 export const locales = ['en', 'de', 'nl']
+
+const fallback = { languageTag: 'en', isRTL: false }
+const { languageTag } = RNLocalize.findBestAvailableLanguage(locales) || fallback;
+I18n.locale = languageTag
+
 
 const localeSpecificImages = {
   en: {
@@ -33,7 +41,7 @@ const localeSpecificImages = {
   },
 }
 
-export const getI18nImage = (filename: string): File => {
+export const getI18nImage = (filename: string): string => {
   const locale = locales.includes(I18n.locale)
     ? I18n.locale
     : I18n.defaultLocale

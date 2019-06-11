@@ -151,6 +151,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-localize')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-screens')
     implementation project(':react-native-gesture-handler')
@@ -159,7 +160,6 @@ dependencies {
     implementation project(':react-native-svg')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-randombytes')
-    implementation project(':react-native-languages')
     implementation project(':react-native-keychain')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-camera')

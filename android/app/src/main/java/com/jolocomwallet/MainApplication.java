@@ -3,6 +3,7 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -11,7 +12,6 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.horcrux.svg.SvgPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
-import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.oblador.keychain.KeychainPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import org.reactnative.camera.RNCameraPackage;
@@ -36,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNLocalizePackage(),
             new ReanimatedPackage(),
             new RNScreensPackage(),
             new RNGestureHandlerPackage(),
@@ -44,7 +45,6 @@ public class MainApplication extends Application implements ReactApplication {
             new SvgPackage(),
             new SplashScreenReactPackage(),
             new RandomBytesPackage(),
-            new RNLanguagesPackage(),
             new KeychainPackage(),
             new RNFetchBlobPackage(),
             new RNCameraPackage(),
