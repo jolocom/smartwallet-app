@@ -21,6 +21,7 @@ import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
+import BottomTabBar from 'src/ui/generic/bottomTabBar'
 
 import {
   IdentityMenuIcon,
@@ -84,12 +85,12 @@ const commonNavigationOptions: NavigationScreenOptions = {
   headerTintColor: defaultHeaderTintColor,
 }
 
-const bottomNavBarBackground =
+const bottomTabBarBackground =
   Platform.OS == 'android'
     ? '#fafafa' // FIXME add to theme
     : JolocomTheme.primaryColorBlack
 
-export const BottomTabNavRoutes = {
+export const BottomTabBarRoutes = {
   [routeList.Claims]: {
     screen: Claims,
     title: 'My identity',
@@ -107,7 +108,7 @@ export const BottomTabNavRoutes = {
         focused: boolean
         fillColor?: string
       }) => {
-        props.fillColor = bottomNavBarBackground
+        props.fillColor = bottomTabBarBackground
         return new DocumentsMenuIcon(props)
       },
     }),
@@ -130,7 +131,7 @@ export const BottomTabNavRoutes = {
   },
 }
 
-const BottomTabNavigator = createBottomTabNavigator(BottomTabNavRoutes, {
+const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   tabBarOptions: {
     ...Platform.select({
       android: {
@@ -146,7 +147,7 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabNavRoutes, {
     style: {
       height: 50,
       bottom: 0,
-      backgroundColor: bottomNavBarBackground,
+      backgroundColor: bottomTabBarBackground,
     },
   },
   navigationOptions: (
@@ -155,10 +156,10 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabNavRoutes, {
     // proxy the route title as the headerTitle for this screen
     const nestedRouteName = navigation.state.routes[navigation.state.index].routeName
     return {
-      headerTitle: I18n.t(BottomTabNavRoutes[nestedRouteName].title)
+      headerTitle: I18n.t(BottomTabBarRoutes[nestedRouteName].title)
     }
   },
-  //tabBarComponent: BottomNavBar,
+  tabBarComponent: BottomTabBar,
   //tabBarPosition: 'bottom',
 })
 
