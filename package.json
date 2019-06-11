@@ -134,6 +134,7 @@
     "react-native-material-ui": "^1.22.2",
     "react-native-qrcode-scanner": "^1.0.1",
     "react-native-randombytes": "^3.5.2",
+    "react-native-reanimated": "^1.0.1",
     "react-native-screens": "^1.0.0-alpha.22",
     "react-native-snap-carousel": "^3.8.0",
     "react-native-splash-screen": "^3.2.0",
