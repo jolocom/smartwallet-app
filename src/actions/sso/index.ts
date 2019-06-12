@@ -301,9 +301,12 @@ export const sendCredentialResponse = (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
-        dispatch(cancelSSO()),
-      )
+      const link = `${callbackURL}/${response.encode()}`
+      if (await Linking.canOpenURL(link)) {
+        return Linking.openURL(link).then(() => dispatch(cancelSSO()))
+      } else {
+        throw new Error("Cant deep link to " + callbackURL)
+      }
     } else {
       return fetch(callbackURL, {
         method: 'POST',
