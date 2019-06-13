@@ -5,6 +5,10 @@ import data from './data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { getJestConfig } from 'ts-jest/dist/test-utils'
 import * as util from 'src/lib/util'
+import { withErrorHandling } from '../../../src/actions/modifiers'
+import { showErrorScreen } from '../../../src/actions/generic'
+import { AppError, ErrorCode } from '../../../src/lib/errors'
+import { routeList } from '../../../src/routeList'
 
 const MockDate = require('mockdate')
 
@@ -33,8 +37,12 @@ describe('Registration action creators', () => {
         },
       }
 
-      const asyncAction = registrationActions.startRegistration()
-      await asyncAction(mockStore.dispatch, mockGetState, mockMiddleware)
+      await registrationActions.startRegistration(
+        mockStore.dispatch,
+        mockGetState,
+        mockMiddleware,
+      )
+
       expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledTimes(1)
       expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(
         randomPassword,
@@ -53,8 +61,19 @@ describe('Registration action creators', () => {
         },
       }
 
-      const asyncAction = registrationActions.startRegistration()
-      await asyncAction(mockStore.dispatch, mockGetState, mockMiddleware)
+      await mockStore.dispatch(
+        withErrorHandling(
+          showErrorScreen,
+          (err: AppError) =>
+            new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
+        )(
+          registrationActions.startRegistration(
+            mockStore.dispatch,
+            mockGetState,
+            mockMiddleware,
+          ),
+        ),
+      )
 
       expect(mockStore.getActions()[0].routeName).toContain('Exception')
       expect(mockStore.getActions()[0].params.returnTo).toBe('Landing')
@@ -127,7 +146,14 @@ describe('Registration action creators', () => {
       const mockGetState = () => {}
 
       const asyncAction = registrationActions.createIdentity(mockEntropy)
-      await asyncAction(mockStore.dispatch, mockGetState, mockBackend)
+
+      await mockStore.dispatch(
+        withErrorHandling(
+          showErrorScreen,
+          (err: AppError) =>
+            new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
+        )(asyncAction(mockStore.dispatch, mockGetState, mockBackend)),
+      )
 
       expect(mockStore.getActions()[0].routeName).toContain('Exception')
       expect(mockStore.getActions()[0].params.returnTo).toBe('Landing')
