@@ -6,7 +6,7 @@ import { AnyAction, Dispatch } from 'redux'
 import { ssoActions } from 'src/actions/'
 import { toggleLoading } from '../account'
 import { BackendMiddleware } from 'src/backendMiddleware'
-import { setDeepLinkLoading, toggleDeepLinkFlag } from '../sso'
+import { setDeepLinkLoading } from '../sso'
 import { routeList } from 'src/routeList'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
@@ -48,7 +48,6 @@ export const handleDeepLink = (url: string) => async (
     }
 
     dispatch(setDeepLinkLoading(true))
-    dispatch(toggleDeepLinkFlag(true))
     dispatch(ssoActions.parseJWT(params))
   }
 }

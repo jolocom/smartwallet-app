@@ -336,8 +336,3 @@ export const cancelReceiving = () => (dispatch: Dispatch<AnyAction>) => {
   dispatch(resetSelected())
   dispatch(navigationActions.navigatorReset({ routeName: routeList.Home }))
 }
-
-export const toggleDeepLinkFlag = (value: boolean) => ({
-  type: 'SET_DEEP_LINK_FLAG',
-  value,
-})
