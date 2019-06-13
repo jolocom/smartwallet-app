@@ -11,6 +11,7 @@ import { Linking } from 'react-native'
 import { cancelSSO, clearInteractionRequest } from 'src/actions/sso'
 import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { AppError, ErrorCode } from 'src/lib/errors'
+import { isDeepLinkURL } from 'src/lib/util'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -63,7 +64,6 @@ export const sendPaymentResponse = () => async (
   const { identityWallet } = backendMiddleware
   const {
     activePaymentRequest: { callbackURL, paymentRequest },
-    isDeepLinkInteraction,
   } = getState().sso
   // add loading screen here
   try {
@@ -81,10 +81,13 @@ export const sendPaymentResponse = () => async (
       decodedPaymentRequest,
     )
 
-    if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
-        dispatch(cancelSSO()),
-      )
+    if (isDeepLinkURL(callbackURL)) {
+      const link = `${callbackURL}/${response.encode()}`
+      if (await Linking.canOpenURL(link)) {
+        return Linking.openURL(link).then(() => dispatch(cancelSSO()))
+      } else {
+        throw new Error("Cant deep link to " + callbackURL)
+      }
     } else {
       return fetch(callbackURL, {
         method: 'POST',

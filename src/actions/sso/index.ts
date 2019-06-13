@@ -304,7 +304,6 @@ export const sendCredentialResponse = (
     )
 
     if (isDeepLinkURL(callbackURL)) {
-      console.log(response.encode())
       const link = `${callbackURL}/${response.encode()}`
       if (await Linking.canOpenURL(link)) {
         return Linking.openURL(link).then(() => dispatch(cancelSSO()))

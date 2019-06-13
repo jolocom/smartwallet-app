@@ -10,6 +10,7 @@ import { cancelSSO, clearInteractionRequest } from '.'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 import { AppError, ErrorCode } from 'src/lib/errors'
+import { isDeepLinkURL } from 'src/lib/util'
 
 export const setAuthenticationRequest = (
   request: StateAuthenticationRequestSummary,
@@ -55,7 +56,6 @@ export const sendAuthenticationResponse = () => async (
   backendMiddleware: BackendMiddleware,
 ) => {
   const { identityWallet } = backendMiddleware
-  const { isDeepLinkInteraction } = getState().sso
 
   const {
     callbackURL,
@@ -74,7 +74,7 @@ export const sendAuthenticationResponse = () => async (
       decodedAuthRequest,
     )
 
-    if (isDeepLinkInteraction) {
+    if (isDeepLinkURL(callbackURL)) {
       const link = `${callbackURL}/${response.encode()}`
       if (await Linking.canOpenURL(link)) {
         return Linking.openURL(link).then(() => dispatch(cancelSSO()))
