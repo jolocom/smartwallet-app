@@ -10,7 +10,10 @@ import { navigationActions, accountActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { showErrorScreen } from 'src/actions/generic'
-import { getUiCredentialTypeByType } from 'src/lib/util'
+import {
+  getUiCredentialTypeByType,
+  isDeepLinkURL
+} from 'src/lib/util'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { resetSelected } from '../account'
 import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/credentialOffer'
@@ -275,8 +278,8 @@ export const sendCredentialResponse = (
   const { storageLib, keyChainLib, identityWallet } = backendMiddleware
   const {
     activeCredentialRequest: { callbackURL, requestJWT },
-    isDeepLinkInteraction,
   } = getState().sso
+
 
   try {
     const password = await keyChainLib.getPassword()
@@ -300,7 +303,8 @@ export const sendCredentialResponse = (
       request,
     )
 
-    if (isDeepLinkInteraction) {
+    if (isDeepLinkURL(callbackURL)) {
+      console.log(response.encode())
       const link = `${callbackURL}/${response.encode()}`
       if (await Linking.canOpenURL(link)) {
         return Linking.openURL(link).then(() => dispatch(cancelSSO()))

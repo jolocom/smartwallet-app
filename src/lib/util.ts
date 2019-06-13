@@ -64,3 +64,7 @@ export function generateSecureRandomBytes(length: number): Promise<Buffer> {
     })
   })
 }
+
+export function isDeepLinkURL(url: string): boolean {
+  return url.includes("://") && !(url.slice(0, 7) === "http://" || url.slice(0, 8) === "https://")
+}
