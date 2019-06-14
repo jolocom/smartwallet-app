@@ -4,9 +4,8 @@ import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import {ThunkDispatch} from '../../../store'
 
-interface ConnectProps {}
 
-interface Props extends ConnectProps {}
+interface Props extends ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 

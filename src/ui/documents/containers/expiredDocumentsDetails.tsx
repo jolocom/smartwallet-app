@@ -3,16 +3,8 @@ import { ExpiredDocumentsDetailsComponent } from 'src/ui/documents/components/ex
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { NavigationScreenProps } from 'react-navigation'
-import { DecoratedClaims } from 'src/reducers/account'
-import {ThunkDispatch} from '../../../store'
 
-interface ConnectProps {
-  selectedExpiredDocument: DecoratedClaims
-}
-
-interface Props extends ConnectProps {
-  documents: Document[]
-}
+interface Props extends ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -36,13 +28,10 @@ export class ExpiredDocumentsDetailsContainer extends React.Component<
   }
 }
 
-const mapStateToProps = (state: RootState): {} => ({
+const mapStateToProps = (state: RootState) => ({
   selectedExpiredDocument: state.documents.selectedExpiredDocument,
 })
 
-const mapDispatchToProps = (dispatch: ThunkDispatch): {} => ({})
-
 export const ExpiredDocumentsDetails = connect(
   mapStateToProps,
-  mapDispatchToProps,
 )(ExpiredDocumentsDetailsContainer)

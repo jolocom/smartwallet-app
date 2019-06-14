@@ -1,19 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { PaymentConsentComponent } from '../components/PaymentConsent'
-import { StatePaymentRequestSummary } from 'src/reducers/sso'
 import { RootState } from 'src/reducers'
 import { cancelSSO } from 'src/actions/sso'
 import { sendPaymentResponse } from 'src/actions/sso/paymentRequest'
-import {ThunkDispatch} from '../../../store'
+import { ThunkDispatch } from 'src/store'
 
-interface ConnectProps {}
-
-interface Props extends ConnectProps {
-  activePaymentRequest: StatePaymentRequestSummary
-  confirmPaymentRequest: () => ReturnType<typeof sendPaymentResponse>
-  cancelPaymentRequest: () => ReturnType<typeof cancelSSO>
-}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 

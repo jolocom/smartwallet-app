@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { StyleSheet, Animated, ScrollView } from 'react-native'
 
 import { openExpiredDetails } from 'src/actions/documents'
-import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
+import { DecoratedClaims } from 'src/reducers/account'
 import { RootState } from 'src/reducers'
 import { getDocumentClaims } from 'src/utils/filterDocuments'
 import { ThunkDispatch } from 'src/store'
@@ -16,12 +16,7 @@ import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 
-interface ConnectProps {
-  decoratedCredentials: CategorizedClaims
-  openExpiredDetails: typeof openExpiredDetails
-}
-
-interface Props extends ConnectProps {}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 interface State {
   activeDocumentIndex: number
@@ -147,11 +142,11 @@ const mapStateToProps = ({
   account: {
     claims: { decoratedCredentials },
   },
-}: RootState): {} => ({
+}: RootState) => ({
   decoratedCredentials,
 })
 
-const mapDispatchToProps = (dispatch: ThunkDispatch): {} => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openExpiredDetails: (doc: DecoratedClaims) =>
     dispatch(openExpiredDetails(doc)),
 })

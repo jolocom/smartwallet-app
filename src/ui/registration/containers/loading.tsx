@@ -7,14 +7,10 @@ import { RootState } from 'src/reducers/'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
-import {ThunkDispatch} from '../../../store'
+import { ThunkDispatch } from 'src/store'
 const loaders = require('react-native-indicator')
 
-export interface ConnectProps {
-  loadingMsg: string
-}
-
-interface Props extends ConnectProps {}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 export interface State {}
 

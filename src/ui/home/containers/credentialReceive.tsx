@@ -40,12 +40,10 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    offer: state.account.claims.pendingExternal.offer[0].decoratedClaim,
-    offeror: state.account.claims.pendingExternal.offeror,
-  }
-}
+const mapStateToProps = (state: RootState) => ({
+  offer: state.account.claims.pendingExternal.offer[0].decoratedClaim,
+  offeror: state.account.claims.pendingExternal.offeror,
+})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   saveExternalCredentials: () => dispatch(saveExternalCredentials),

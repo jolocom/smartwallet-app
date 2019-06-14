@@ -8,9 +8,9 @@ import {
   EntropyGenerator,
 } from 'src/lib/entropyGenerator'
 import { generateSecureRandomBytes } from 'src/lib/util'
-import {withErrorHandling} from '../../../actions/modifiers'
-import {showErrorScreen} from '../../../actions/generic'
-import {ThunkDispatch} from '../../../store'
+import { withErrorHandling } from 'src/actions/modifiers'
+import { showErrorScreen } from 'src/actions/generic'
+import { ThunkDispatch } from 'src/store'
 
 interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
