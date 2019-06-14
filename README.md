@@ -71,4 +71,4 @@ Documentation
 -------------
 Additional documentation can be found at our [wiki](https://github.com/jolocom/smartwallet-app/wiki).
 
-Copyright (C) 2014-2018  JOLOCOM GmbH
+Copyright (C) 2014-2019  JOLOCOM GmbH
