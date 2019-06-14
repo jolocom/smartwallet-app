@@ -116,13 +116,19 @@ describe('Account action creators', () => {
             .mockResolvedValue([
               JolocomLib.parse.signedCredential(testSignedCredentialDefault),
             ]),
+          credentialMetadata: jest.fn().mockResolvedValue({}),
+          publicProfile: jest.fn().mockResolvedValue({}),
         },
       },
       identityWallet,
     }
 
-    const action = accountActions.setClaimsForDid()
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
+    await accountActions.setClaimsForDid(
+      mockStore.dispatch,
+      mockStore.getState,
+      backendMiddleware,
+    )
+
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
