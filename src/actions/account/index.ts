@@ -149,7 +149,7 @@ export const saveExternalCredentials = async (
   const { storageLib } = backendMiddleware
   const externalCredentials = getState().account.claims.pendingExternal
 
-  if (!externalCredentials.offer .length) {
+  if (!externalCredentials.offer.length) {
     return dispatch(cancelReceiving)
   }
 
@@ -210,7 +210,7 @@ export const prepareClaimsForState = (
   )(credentials)
 
 export const addIssuerInfo = (
-  issuerProfiles: Array<{did: string} | IdentitySummary> | [],
+  issuerProfiles: Array<{ did: string } | IdentitySummary> | [],
 ) => (claim: DecoratedClaims) => {
   if (!issuerProfiles || !issuerProfiles.length) {
     return claim
@@ -226,6 +226,7 @@ export const addIssuerInfo = (
     : claim
 }
 
+/** @TODO Util, make subject mandatory (in lib) */
 export const convertToDecoratedClaim = ({
   claim,
   type,
@@ -239,6 +240,6 @@ export const convertToDecoratedClaim = ({
   },
   claimData: omit(['id'], claim),
   id,
-  subject: claim.id,
+  subject: claim.id || 'Not found',
   expires: expires || undefined,
 })
