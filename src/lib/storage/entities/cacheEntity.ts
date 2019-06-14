@@ -8,5 +8,5 @@ export class CacheEntity {
   key!: string
 
   @Column({ nullable: false, type: 'simple-json' })
-  value!: string
+  value!: any
 }
