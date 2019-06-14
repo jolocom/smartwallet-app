@@ -12,12 +12,9 @@ import { convertToDecoratedClaim, resetSelected} from '../account'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { ThunkDispatch } from '../../store'
+import { ThunkActionCreator, ThunkAction } from '../../store'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
-import { equals, mergeRight, omit } from 'ramda'
-import { RootState } from '../../reducers'
-import { BackendMiddleware } from '../../backendMiddleware'
-import { AnyAction } from 'redux'
+import { mergeRight, omit } from 'ramda'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { DecoratedClaims } from '../../reducers/account'
 import { IdentitySummary } from './types'
@@ -44,19 +41,19 @@ export const setReceivingCredential = (
   value: { offeror: requester, offer: external },
 })
 
-export const setDeepLinkLoading = (value: boolean): AnyAction => ({
+export const setDeepLinkLoading = (value: boolean) => ({
   type: 'SET_DEEP_LINK_LOADING',
   value,
 })
 
-export const receiveExternalCredential = (
+export const receiveExternalCredential: ThunkActionCreator = (
   credReceive: JSONWebToken<CredentialsReceive>,
   offeror: IdentitySummary,
   credentialOfferMetadata?: Array<CredentialMetadataSummary>,
 ) => async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   const { identityWallet, registry, storageLib } = backendMiddleware
 
@@ -68,7 +65,7 @@ export const receiveExternalCredential = (
   )
 
   // TODO Error Code
-  if (validationResults.some(equals(false))) {
+  if (validationResults.includes(false)) {
     throw new Error('Invalid credentials received')
   }
 
@@ -127,13 +124,9 @@ interface AttributeSummary {
   }>
 }
 
-export const consumeCredentialRequest = (
+export const consumeCredentialRequest: ThunkActionCreator = (
   decodedCredentialRequest: JSONWebToken<CredentialRequest>,
-) => async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
-) => {
+) => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, identityWallet, registry } = backendMiddleware
   const { did } = getState().account.did
 
@@ -219,13 +212,9 @@ export const consumeCredentialRequest = (
   )
 }
 
-export const sendCredentialResponse = (
+export const sendCredentialResponse: ThunkActionCreator = (
   selectedCredentials: StateVerificationSummary[],
-) => async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
-) => {
+) => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, keyChainLib, identityWallet } = backendMiddleware
   const {
     activeCredentialRequest: { callbackURL, requestJWT },
@@ -271,14 +260,14 @@ export const sendCredentialResponse = (
   }
 }
 
-export const cancelSSO = (dispatch: ThunkDispatch) => {
+export const cancelSSO: ThunkAction = dispatch => {
   dispatch(clearInteractionRequest)
   return dispatch(
     navigationActions.navigatorReset({ routeName: routeList.Home }),
   )
 }
 
-export const cancelReceiving = (dispatch: ThunkDispatch) => {
+export const cancelReceiving: ThunkAction = dispatch => {
   dispatch(resetSelected())
   return dispatch(
     navigationActions.navigatorReset({ routeName: routeList.Home }),

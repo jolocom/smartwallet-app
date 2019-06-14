@@ -9,19 +9,11 @@ import {
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
 import { JolocomLib } from 'jolocom-lib'
-import { ThunkDispatch as OriginalThunkDispatch } from 'redux-thunk'
+import { ThunkActionCreator, ThunkAction } from 'src/store'
 import { groupBy, zipWith, mergeRight, omit, uniq, map } from 'ramda'
-import { AnyAction, compose } from 'redux'
+import { compose } from 'redux'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
-import { RootState } from '../../reducers'
-import { BackendMiddleware } from '../../backendMiddleware'
 import { IdentitySummary } from '../sso/types'
-
-type ThunkDispatch = OriginalThunkDispatch<
-  RootState,
-  BackendMiddleware,
-  AnyAction
->
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -48,10 +40,10 @@ export const toggleClaimsLoading = (value: boolean) => ({
   value,
 })
 
-export const checkIdentityExists = async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const checkIdentityExists: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   dispatch(toggleClaimsLoading(true))
   const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
@@ -94,8 +86,8 @@ export const checkIdentityExists = async (
   )
 }
 
-export const openClaimDetails = (claim: DecoratedClaims) => (
-  dispatch: ThunkDispatch,
+export const openClaimDetails: ThunkActionCreator = (claim: DecoratedClaims) => (
+  dispatch
 ) => {
   dispatch(setSelected(claim))
   return dispatch(
@@ -105,10 +97,10 @@ export const openClaimDetails = (claim: DecoratedClaims) => (
   )
 }
 
-export const saveClaim = async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const saveClaim: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   const { identityWallet, storageLib, keyChainLib } = backendMiddleware
 
@@ -141,10 +133,10 @@ export const saveClaim = async (
 }
 
 // TODO Currently only rendering  / adding one
-export const saveExternalCredentials = async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const saveExternalCredentials: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   const { storageLib } = backendMiddleware
   const externalCredentials = getState().account.claims.pendingExternal
@@ -166,10 +158,10 @@ export const toggleLoading = (value: boolean) => ({
   value,
 })
 
-export const setClaimsForDid = async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const setClaimsForDid: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   const { storageLib } = backendMiddleware
 

@@ -8,10 +8,8 @@ import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { showErrorScreen } from '../generic'
-import {ThunkDispatch} from '../../store'
-import {RootState} from '../../reducers'
-import {BackendMiddleware} from '../../backendMiddleware'
-import {AppError, ErrorCode} from '../../lib/errors'
+import { ThunkActionCreator } from '../../store'
+import { AppError, ErrorCode } from '../../lib/errors'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
   NavigationActions.navigate(options)
@@ -31,13 +29,9 @@ export const navigatorReset = (
  * It then matches the route name and dispatches a corresponding action
  * @param url - a deep link string with the following schema: appName://routeName/params
  */
-export const handleDeepLink = (
-  url: string,
-) => (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
-) => {
+export const handleDeepLink: ThunkActionCreator = (
+  url: string
+) => (dispatch, getState, backendMiddleware) => {
   // TODO Fix
   const route: string = url.replace(/.*?:\/\//g, '')
   const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ''

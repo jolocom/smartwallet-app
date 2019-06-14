@@ -6,24 +6,21 @@ import { routeList } from 'src/routeList'
 import { cancelSSO, clearInteractionRequest } from '.'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
-import { ThunkDispatch } from '../../store'
-import { RootState } from '../../reducers'
-import { BackendMiddleware } from '../../backendMiddleware'
-import { AnyAction } from 'redux'
+import { ThunkAction, ThunkActionCreator } from '../../store'
 
 export const setAuthenticationRequest = (
   request: StateAuthenticationRequestSummary,
-): AnyAction => ({
+) => ({
   type: 'SET_AUTHENTICATION_REQUEST',
   value: request,
 })
 
-export const consumeAuthenticationRequest = (
+export const consumeAuthenticationRequest: ThunkActionCreator = (
   authenticationRequest: JSONWebToken<Authentication>,
 ) => async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   const { identityWallet } = backendMiddleware
   try {
@@ -45,10 +42,10 @@ export const consumeAuthenticationRequest = (
   }
 }
 
-export const sendAuthenticationResponse = async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const sendAuthenticationResponse: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   const { identityWallet } = backendMiddleware
   const { isDeepLinkInteraction } = getState().sso

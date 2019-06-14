@@ -7,19 +7,16 @@ import { all, compose, isEmpty, isNil, map, mergeRight, omit } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
-import { ThunkDispatch } from '../../store'
+import { ThunkActionCreator } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { RootState } from '../../reducers'
-import { BackendMiddleware } from '../../backendMiddleware'
 import { withErrorHandling, withLoading } from '../modifiers'
 import { toggleLoading} from '../account'
 
-export const consumeCredentialOfferRequest = (
+export const consumeCredentialOfferRequest: ThunkActionCreator = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
-) => async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  { keyChainLib, identityWallet, registry }: BackendMiddleware,
+) => async ( dispatch,
+  getState,
+  { keyChainLib, identityWallet, registry }
 ) => {
   try {
     await identityWallet.validateJWT(credOfferRequest, undefined, registry)

@@ -4,10 +4,8 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { generateSecureRandomBytes } from 'src/lib/util'
-import { ThunkDispatch } from '../../store'
-import { RootState } from '../../reducers'
-import { BackendMiddleware } from '../../backendMiddleware'
-import {navigatorReset} from '../navigation'
+import { ThunkAction, ThunkActionCreator } from '../../store'
+import { navigatorReset } from '../navigation'
 
 const bip39 = require('bip39')
 
@@ -16,8 +14,8 @@ export const setLoadingMsg = (loadingMsg: string) => ({
   value: loadingMsg,
 })
 
-export const submitEntropy = (encodedEntropy: string) => (
-  dispatch: ThunkDispatch,
+export const submitEntropy: ThunkActionCreator = (encodedEntropy: string) => (
+  dispatch
 ) => {
   dispatch(
     navigationActions.navigatorReset({
@@ -29,10 +27,10 @@ export const submitEntropy = (encodedEntropy: string) => (
   return dispatch(createIdentity(encodedEntropy))
 }
 
-export const startRegistration = async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const startRegistration: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
     const randomPassword = await generateSecureRandomBytes(32)
 
@@ -49,10 +47,10 @@ export const startRegistration = async (
 
 export const finishRegistration = navigatorReset({ routeName: routeList.Home })
 
-export const createIdentity = (encodedEntropy: string) => async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const createIdentity: ThunkActionCreator = (encodedEntropy: string) => async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
 

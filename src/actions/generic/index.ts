@@ -2,10 +2,8 @@ import {navigationActions} from 'src/actions/'
 import {routeList} from 'src/routeList'
 import SplashScreen from 'react-native-splash-screen'
 import I18n from 'src/locales/i18n'
-import {ThunkDispatch} from '../../store'
-import {RootState} from '../../reducers'
-import {BackendMiddleware} from '../../backendMiddleware'
-import {AppError, ErrorCode} from '../../lib/errors'
+import { ThunkAction, ThunkActionCreator } from 'src/store'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const showErrorScreen = (error: AppError) => {
   return navigationActions.navigate({
@@ -17,10 +15,10 @@ export const showErrorScreen = (error: AppError) => {
   })
 }
 
-export const initApp = async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const initApp: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   try {
     await backendMiddleware.initStorage()
@@ -46,10 +44,10 @@ export const loadSettings = (settings: { [key: string]: any }) => ({
   value: settings,
 })
 
-export const setLocale = (locale: string) => async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
+export const setLocale: ThunkActionCreator = (locale: string) => async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   await backendMiddleware.storageLib.store.setting('locale', locale)
   I18n.locale = locale

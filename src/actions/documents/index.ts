@@ -3,7 +3,7 @@ import { routeList } from 'src/routeList'
 import I18n from 'src/locales/i18n'
 import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimInterface } from 'cred-types-jolocom-core'
-import {ThunkDispatch} from '../../store'
+import { ThunkActionCreator } from 'src/store'
 
 export const SET_EXPIRED_DOC = 'SET_SELECTED_EXPIRED_DOCUMENT'
 export const CLEAR_EXPIRED_DOC = 'CLEAR_SELECTED_EXPIRED_DOCUMENT'
@@ -19,8 +19,8 @@ export const clearSelectedExpiredDocument = () => ({
   type: CLEAR_EXPIRED_DOC,
 })
 
-export const openExpiredDetails = (document: DecoratedClaims) => async (
-  dispatch: ThunkDispatch,
+export const openExpiredDetails: ThunkActionCreator = (document: DecoratedClaims) => async (
+  dispatch
 ) => {
   dispatch(setSelectedExpiredDocument(document))
   dispatch(
