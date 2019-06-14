@@ -8,20 +8,18 @@ describe('Account action creators', () => {
   const initialState = {
     account: {
       claims: {
-        toJS: () => ({
-          loading: false,
-          selected: {
-            credentialType: 'Email',
-            claimData: {
-              email: 'test@test.com',
-            },
-            id: '',
-            issuer: 'did:jolo:test',
-            subject: 'did:jolo:test',
+        loading: false,
+        selected: {
+          credentialType: 'Email',
+          claimData: {
+            email: 'test@test.com',
           },
-          pendingExternal: [],
-          decoratedCredentials: 'blah',
-        }),
+          id: '',
+          issuer: 'did:jolo:test',
+          subject: 'did:jolo:test',
+        },
+        pendingExternal: [],
+        decoratedCredentials: 'blah',
       },
       did: {
         get: () => 'mock:did:test ',
@@ -143,12 +141,24 @@ describe('Account action creators', () => {
         store: {
           verifiableCredential: jest.fn().mockResolvedValue([]),
         },
+        get: {
+          verifiableCredential: jest.fn().mockResolvedValue([]),
+          publicProfile: jest.fn().mockImplementation(() => {}),
+        },
       },
       identityWallet,
     }
 
+    const altMockStore = configureStore([
+      thunk.withExtraArgument(backendMiddleware),
+    ])(initialState)
+
     const action = accountActions.saveClaim
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
-    expect(mockStore.getActions()).toMatchSnapshot()
+    await action(
+      altMockStore.dispatch,
+      altMockStore.getState,
+      backendMiddleware,
+    )
+    expect(altMockStore.getActions()).toMatchSnapshot()
   })
 })

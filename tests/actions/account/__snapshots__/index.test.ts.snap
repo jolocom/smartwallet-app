@@ -95,6 +95,10 @@ Array [
 exports[`Account action creators should correctly save claim 1`] = `
 Array [
   Object {
+    "claims": Object {},
+    "type": "SET_CLAIMS_FOR_DID",
+  },
+  Object {
     "actions": Array [
       Object {
         "routeName": "Home",
