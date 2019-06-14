@@ -13,7 +13,6 @@ import { prepareLabel } from 'src/lib/util'
 import I18n from 'src/locales/i18n'
 import { getNonDocumentClaims } from 'src/utils/filterDocuments'
 const loaders = require('react-native-indicator')
-import { compose, map, toPairs, fromPairs } from 'ramda'
 import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
 
 interface Props {
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
   },
   scrollComponent: {
     width: '100%',
-    paddingBottom: SCROLL_PADDING_BOTTOM
+    paddingBottom: SCROLL_PADDING_BOTTOM,
   },
   scrollComponentLoading: {
     flexGrow: 1,
@@ -59,13 +58,10 @@ export class CredentialOverview extends React.Component<Props, State> {
     return categorizedCredentials.map((claim: DecoratedClaims, index) => {
       const { claimData, issuer, credentialType } = claim
 
-      const capitalizeFirst = ([key, value]: string[]) : string[] => [prepareLabel(key), value]
-
-      const capitalized = compose(
-        fromPairs,
-        map(capitalizeFirst),
-        toPairs
-      )(claimData)
+      const capitalized = Object.keys(claimData).reduce((acc, curr) => {
+        acc[prepareLabel(curr)] = claimData[curr]
+        return acc
+      }, {})
 
       const selfSigned = issuer.did === did
       return (
@@ -107,7 +103,9 @@ export class CredentialOverview extends React.Component<Props, State> {
       <Container style={{ padding: 0 }}>
         <ScrollView
           style={scrollComponent}
-          contentContainerStyle={loading ? scrollComponentLoading : scrollComponent}
+          contentContainerStyle={
+            loading ? scrollComponentLoading : scrollComponent
+          }
         >
           {claimCategories.map(this.renderCredentialCategory)}
         </ScrollView>
