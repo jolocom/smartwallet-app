@@ -1,22 +1,11 @@
-import { ActionCreator, AnyAction } from 'redux'
-import { ThunkDispatch } from '../store'
-import { ThunkAction as OriginalThunkAction } from 'redux-thunk'
+import { ActionCreator } from 'redux'
+import { AnyAction, ThunkAction } from 'src/store'
 import { AppError } from '../lib/errors'
-import { RootState } from '../reducers'
-import { BackendMiddleware } from '../backendMiddleware'
-import { NavigationAction } from 'react-navigation'
 
-type ThunkAction<R> = OriginalThunkAction<
-  R,
-  RootState,
-  BackendMiddleware,
-  AnyAction
->
-
-export const withLoading = <R extends AnyAction>(
-  loadingAction: ActionCreator<R>,
-) => <S>(wrappedAction: ThunkAction<S>) => {
-  return async function(dispatch: ThunkDispatch) {
+export const withLoading = (
+  loadingAction: ActionCreator<AnyAction>,
+) => (wrappedAction: ThunkAction): ThunkAction => {
+  return async dispatch => {
     try {
       dispatch(loadingAction(true))
       return await dispatch(wrappedAction)
@@ -26,11 +15,11 @@ export const withLoading = <R extends AnyAction>(
   }
 }
 
-export const withErrorHandling = <E extends AnyAction | NavigationAction>(
-  errorHandler: ActionCreator<E>,
+export const withErrorHandling = (
+  errorHandler: ActionCreator<AnyAction>,
   errorModifier: (error: AppError) => AppError = (error: AppError) => error,
-) => <S>(wrappedAction: ThunkAction<S>)  => {
-  return async function(dispatch: ThunkDispatch): Promise<S | E> {
+) => (wrappedAction: ThunkAction): ThunkAction => {
+  return async dispatch => {
     try {
       return await dispatch(wrappedAction)
     } catch (error) {
