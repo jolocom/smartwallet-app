@@ -8,9 +8,12 @@ lastYear.setFullYear(lastYear.getFullYear() - 1)
 const nextYear = new Date()
 nextYear.setFullYear(nextYear.getFullYear() + 1)
 
-export const expiryDates = [lastYear, nextYear]
+export const expiryDates = [lastYear, nextYear, nextYear]
 export const issuers = ['issuerA', 'issuerB', 'issuerC']
 export const types = ['someCred', 'someOtherCred', 'anotherOne']
+export const numCreds = expiryDates.length * issuers.length * types.length
+export const numExpiredCreds = numCreds / expiryDates.length
+export const numValidCreds = numExpiredCreds * 2
 
 const getRandomInt = (min: number, max: number): number => {
   min = Math.ceil(min)

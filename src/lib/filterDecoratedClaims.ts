@@ -1,8 +1,11 @@
 import { buildTransform, Filter } from './filter'
 import { DecoratedClaims } from 'src/reducers/account'
+import { complement } from 'ramda'
 
 const expiredFilter: Filter<DecoratedClaims> = cred =>
-  cred.expires ? cred.expires.valueOf() >= new Date().valueOf() : true
+  cred.expires ? cred.expires.valueOf() < new Date().valueOf() : true
+
+const validFilter: Filter<DecoratedClaims> = complement(expiredFilter)
 
 const issuerFilter = (issuerDid: string): Filter<DecoratedClaims> => cred =>
   cred.issuer.did === issuerDid
@@ -17,6 +20,7 @@ const typeFilter = (typ: string): Filter<DecoratedClaims> => cred =>
 
 export const filters = {
   filterByExpired: buildTransform([expiredFilter]),
+  filterByValid: buildTransform([validFilter]),
   filterByIssuer: (did: string) => buildTransform([issuerFilter(did)]),
   filterByType: (typ: string) => buildTransform([typeFilter(typ)]),
   documentFilter: (documentTypes: string[]) =>
