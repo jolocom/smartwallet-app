@@ -8,20 +8,18 @@ describe('Account action creators', () => {
   const initialState = {
     account: {
       claims: {
-        toJS: () => ({
-          loading: false,
-          selected: {
-            credentialType: 'Email',
-            claimData: {
-              email: 'test@test.com',
-            },
-            id: '',
-            issuer: 'did:jolo:test',
-            subject: 'did:jolo:test',
+        loading: false,
+        selected: {
+          credentialType: 'Email',
+          claimData: {
+            email: 'test@test.com',
           },
-          pendingExternal: [],
-          decoratedCredentials: 'blah',
-        }),
+          id: '',
+          issuer: 'did:jolo:test',
+          subject: 'did:jolo:test',
+        },
+        pendingExternal: [],
+        decoratedCredentials: 'blah',
       },
       did: {
         get: () => 'mock:did:test ',
@@ -52,7 +50,7 @@ describe('Account action creators', () => {
       identityWallet: { identity: { did: 'did:jolo:mock' } },
     }
 
-    const action = accountActions.checkIdentityExists()
+    const action = accountActions.checkIdentityExists
 
     // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
@@ -83,7 +81,7 @@ describe('Account action creators', () => {
       setIdentityWallet: jest.fn(() => Promise.resolve()),
     }
 
-    const action = accountActions.checkIdentityExists()
+    const action = accountActions.checkIdentityExists
     // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
@@ -99,7 +97,7 @@ describe('Account action creators', () => {
       },
     }
 
-    const action = accountActions.checkIdentityExists()
+    const action = accountActions.checkIdentityExists
     // @ts-ignore
     await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
     expect(mockStore.getActions()).toMatchSnapshot()
@@ -116,26 +114,24 @@ describe('Account action creators', () => {
             .mockResolvedValue([
               JolocomLib.parse.signedCredential(testSignedCredentialDefault),
             ]),
+          credentialMetadata: jest.fn().mockResolvedValue({}),
+          publicProfile: jest.fn().mockResolvedValue({}),
         },
       },
       identityWallet,
     }
 
-    const action = accountActions.setClaimsForDid()
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
+    await accountActions.setClaimsForDid(
+      mockStore.dispatch,
+      mockStore.getState,
+      backendMiddleware,
+    )
+
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
   it('should correctly save claim', async () => {
     const { identityWallet } = data
-    const mockClaimsItem = {
-      credentialType: 'Email',
-      claimData: {
-        email: 'test@test',
-      },
-      issuer: 'did:jolo:test',
-      subject: 'did:jolo:test',
-    }
 
     const backendMiddleware = {
       keyChainLib: {
@@ -145,12 +141,24 @@ describe('Account action creators', () => {
         store: {
           verifiableCredential: jest.fn().mockResolvedValue([]),
         },
+        get: {
+          verifiableCredential: jest.fn().mockResolvedValue([]),
+          publicProfile: jest.fn().mockImplementation(() => {}),
+        },
       },
       identityWallet,
     }
 
-    const action = accountActions.saveClaim(mockClaimsItem)
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
-    expect(mockStore.getActions()).toMatchSnapshot()
+    const altMockStore = configureStore([
+      thunk.withExtraArgument(backendMiddleware),
+    ])(initialState)
+
+    const action = accountActions.saveClaim
+    await action(
+      altMockStore.dispatch,
+      altMockStore.getState,
+      backendMiddleware,
+    )
+    expect(altMockStore.getActions()).toMatchSnapshot()
   })
 })

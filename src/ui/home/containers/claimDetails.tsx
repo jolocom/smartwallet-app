@@ -3,16 +3,14 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
-import { ClaimsState } from 'src/reducers/account'
-import Immutable from 'immutable'
+import { ThunkDispatch } from '../../../store'
+import { withErrorHandling, withLoading } from '../../../actions/modifiers'
+import { showErrorScreen } from '../../../actions/generic'
+import { setDeepLinkLoading } from '../../../actions/sso'
 
-interface ConnectProps {
-  claims: ClaimsState
-  saveClaim: () => void
-  handleClaimInput: (fieldValue: string, fieldName: string) => void
-}
-
-interface Props extends ConnectProps {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -28,17 +26,19 @@ export class ClaimDetailsContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  const claims = Immutable.fromJS(state.account.claims)
+const mapStateToProps = ({ account: { claims } }: RootState) => {
   return {
-    claims: claims.toJS(),
+    claims,
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  saveClaim: () => {
-    dispatch(accountActions.saveClaim())
-  },
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  saveClaim: () =>
+    dispatch(
+      withLoading(setDeepLinkLoading)(
+        withErrorHandling(showErrorScreen)(accountActions.saveClaim),
+      ),
+    ),
   handleClaimInput: (fieldValue: string, fieldName: string) => {
     dispatch(accountActions.handleClaimInput(fieldValue, fieldName))
   },

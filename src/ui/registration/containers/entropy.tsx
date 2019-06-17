@@ -8,14 +8,11 @@ import {
   EntropyGenerator,
 } from 'src/lib/entropyGenerator'
 import { generateSecureRandomBytes } from 'src/lib/util'
+import { withErrorHandling } from 'src/actions/modifiers'
+import { showErrorScreen } from 'src/actions/generic'
+import { ThunkDispatch } from 'src/store'
 
-interface ConnectProps {
-  submit: (encodedEntropy: string) => void
-}
-
-interface OwnProps {}
-
-interface Props extends OwnProps, ConnectProps {}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 interface State {
   isDrawn: boolean
@@ -30,14 +27,14 @@ const ENOUGH_ENTROPY_PROGRESS = 0.6
 export class EntropyContainer extends React.Component<Props, State> {
   private entropyGenerator!: EntropyGeneratorInterface
 
-  state = {
+  public state = {
     isDrawn: false,
     encodedEntropy: '',
     entropyProgress: 0,
     sufficientEntropy: false,
   }
 
-  componentDidMount() {
+  public componentDidMount(): void {
     this.entropyGenerator = this.setUpEntropyGenerator()
   }
 
@@ -80,7 +77,7 @@ export class EntropyContainer extends React.Component<Props, State> {
     this.props.submit(this.state.encodedEntropy)
   }
 
-  render() {
+  public render(): JSX.Element {
     return (
       <EntropyComponent
         addPoint={this.addPoint}
@@ -93,9 +90,9 @@ export class EntropyContainer extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => ({})
 
-const mapDispatchToProps = (dispatch: (action: Function) => void) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   submit: (encodedEntropy: string) =>
-    dispatch(registrationActions.submitEntropy(encodedEntropy)),
+    dispatch(withErrorHandling(showErrorScreen)(registrationActions.submitEntropy(encodedEntropy))),
 })
 
 export const Entropy = connect(

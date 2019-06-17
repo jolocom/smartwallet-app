@@ -4,17 +4,19 @@ import { Container, Block } from 'src/ui/structure'
 import { CredentialCard } from './credentialCard'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
-import { ClaimsState } from 'src/reducers/account'
+import { CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { CredentialTypes } from 'src/lib/categories'
 import { MoreIcon } from 'src/resources'
 import { getCredentialIconByType } from 'src/resources/util'
 import { prepareLabel } from 'src/lib/util'
 import I18n from 'src/locales/i18n'
+import { getNonDocumentClaims } from 'src/utils/filterDocuments'
 const loaders = require('react-native-indicator')
+import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
 
 interface Props {
-  claimsState: ClaimsState
+  claimsToRender: CategorizedClaims
   loading: boolean
   onEdit: (claim: DecoratedClaims) => void
   did: string
@@ -33,6 +35,7 @@ const styles = StyleSheet.create({
   },
   scrollComponent: {
     width: '100%',
+    paddingBottom: SCROLL_PADDING_BOTTOM,
   },
   scrollComponentLoading: {
     flexGrow: 1,
@@ -41,42 +44,42 @@ const styles = StyleSheet.create({
 })
 
 export class CredentialOverview extends React.Component<Props, State> {
-  renderCredentialCard = (category: string): ReactNode => {
-    const { onEdit, did, claimsState } = this.props
+  private renderCredentialCard = (category: string): ReactNode => {
+    const { onEdit, did, claimsToRender } = this.props
 
-    const categorizedCredentials = (
-      claimsState.decoratedCredentials[category] || []
-    ).sort((a, b) => (a.credentialType > b.credentialType ? 1 : -1))
+    let categorizedCredentials = (claimsToRender[category] || []).sort((a, b) =>
+      a.credentialType > b.credentialType ? 1 : -1,
+    )
+
+    if (category === 'Other') {
+      categorizedCredentials = getNonDocumentClaims(categorizedCredentials)
+    }
 
     return categorizedCredentials.map((claim: DecoratedClaims, index) => {
-      const filteredKeys = Object.keys(claim.claimData).filter(
-        el => el !== 'id',
-      )
-      const captialized = filteredKeys.reduce(
-        (acc, curr) => ({
-          ...acc,
-          [prepareLabel(curr)]: claim.claimData[curr],
-        }),
-        {},
-      )
-      const selfSigned = claim.issuer === did
+      const { claimData, issuer, credentialType } = claim
 
+      const capitalized = Object.keys(claimData).reduce((acc, curr) => {
+        acc[prepareLabel(curr)] = claimData[curr]
+        return acc
+      }, {})
+
+      const selfSigned = issuer.did === did
       return (
         <CredentialCard
-          key={claim.credentialType}
+          key={credentialType}
           handleInteraction={() => onEdit(claim)}
-          credentialItem={{ ...claim, claimData: captialized }}
+          credentialItem={{ ...claim, claimData: capitalized }}
           collapsible={collapsible(claim)}
           rightIcon={selfSigned ? <MoreIcon /> : null}
-          leftIcon={getCredentialIconByType(claim.credentialType)}
+          leftIcon={getCredentialIconByType(credentialType)}
           containerStyle={index === 0 ? { borderTopWidth: 1 } : undefined}
         />
       )
     })
   }
 
-  renderCredentialCategory = (category: string) => {
-    if (!this.props.claimsState.decoratedCredentials[category].length) {
+  private renderCredentialCategory = (category: string) => {
+    if (!getNonDocumentClaims(this.props.claimsToRender[category]).length) {
       return null
     }
 
@@ -86,11 +89,11 @@ export class CredentialOverview extends React.Component<Props, State> {
     ]
   }
 
-  render() {
-    const { decoratedCredentials, loading } = this.props.claimsState
+  public render(): JSX.Element {
+    const { claimsToRender, loading } = this.props
     const { scrollComponent, scrollComponentLoading } = styles
 
-    const claimCategories = Object.keys(decoratedCredentials)
+    const claimCategories = Object.keys(claimsToRender)
 
     if (loading) {
       return renderLoadingScreen()
@@ -100,7 +103,9 @@ export class CredentialOverview extends React.Component<Props, State> {
       <Container style={{ padding: 0 }}>
         <ScrollView
           style={scrollComponent}
-          contentContainerStyle={loading ? scrollComponentLoading : {}}
+          contentContainerStyle={
+            loading ? scrollComponentLoading : scrollComponent
+          }
         >
           {claimCategories.map(this.renderCredentialCategory)}
         </ScrollView>
@@ -109,7 +114,7 @@ export class CredentialOverview extends React.Component<Props, State> {
   }
 }
 
-const renderLoadingScreen = () => (
+const renderLoadingScreen = (): JSX.Element => (
   <Block>
     <loaders.RippleLoader
       size={500}
@@ -119,7 +124,7 @@ const renderLoadingScreen = () => (
   </Block>
 )
 
-const collapsible = (claim: DecoratedClaims) => {
+const collapsible = (claim: DecoratedClaims): boolean => {
   const { credentialType, claimData } = claim
 
   const isDefaultCredentialType = CredentialTypes[credentialType]

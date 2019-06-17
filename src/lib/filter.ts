@@ -8,9 +8,7 @@ type Transformation<T> = (list: T[]) => T[]
  * @returns - Function combining all order / filter operations passed in
  */
 
-export const buildTransform = <T>(ts: Array<Filter<T> | Ordering<T>>) => (
-  list: T[],
-): T[] =>
+export const buildTransform = <T>(ts: Array<Filter<T> | Ordering<T>>) =>
   ts
     .map<Transformation<T>>(t =>
       isFilter(t) ? filterToTransformation(t) : orderingToTransformation(t),
@@ -18,8 +16,7 @@ export const buildTransform = <T>(ts: Array<Filter<T> | Ordering<T>>) => (
     .reduce<Transformation<T>>(
       (acc, curr) => (list: T[]) => curr(acc(list)),
       identityTransformation,
-    )(list)
-
+    )
 /**
  * @dev func.length checks for the number of arguments in function signature
  * @param func - The function to test

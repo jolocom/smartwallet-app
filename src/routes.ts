@@ -1,6 +1,7 @@
 import { Platform } from 'react-native'
 import { StackNavigator, TabNavigator } from 'react-navigation'
-import { Claims, Interactions, Records, ClaimDetails } from 'src/ui/home/'
+import { Claims, Records, ClaimDetails } from 'src/ui/home/'
+import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
 import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
@@ -30,24 +31,6 @@ const navigationOptions = {
   header: null,
 }
 
-const navOptScreenWCancel = {
-  headerStyle: {
-    backgroundColor:
-      Platform.OS === 'android'
-        ? JolocomTheme.primaryColorBlack
-        : JolocomTheme.primaryColorGrey,
-  },
-  headerBackImage,
-  ...Platform.select({
-    ios: {
-      headerBackTitleStyle: {
-        color: JolocomTheme.primaryColorPurple,
-      },
-      headerTintColor: { color: JolocomTheme.primaryColorPurple },
-    },
-  }),
-}
-
 const headerTitleStyle = {
   fontSize: JolocomTheme.headerFontSize,
   fontFamily: JolocomTheme.contentFontFamily,
@@ -73,6 +56,24 @@ const commonNavigationOptions = {
   headerTintColor: defaultHeaderTintColor,
 }
 
+const navOptScreenWCancel = {
+  headerStyle: {
+    backgroundColor: defaultHeaderBackgroundColor,
+  },
+  headerTitleStyle: {
+    color: JolocomTheme.primaryColorWhite
+  },
+  headerBackImage,
+  ...Platform.select({
+    ios: {
+      headerBackTitleStyle: {
+        color: JolocomTheme.primaryColorPurple,
+      }
+    }
+  }),
+}
+
+
 const bottomNavBarBackground =
   Platform.OS == 'android'
     ? '#fafafa' // FIXME add to theme
@@ -89,7 +90,7 @@ export const BottomNavRoutes = TabNavigator(
       }),
     },
     [routeList.Documents]: {
-      screen: Interactions,
+      screen: Documents,
       navigationOptions: () => ({
         ...commonNavigationOptions,
         headerTitle: I18n.t('Documents'),
@@ -191,6 +192,13 @@ export const Routes = StackNavigator({
   [routeList.ClaimDetails]: {
     screen: ClaimDetails,
     navigationOptions: () => navOptScreenWCancel,
+  },
+  [routeList.DocumentDetails]: {
+    screen: DocumentDetails,
+    navigationOptions: {
+      ...navOptScreenWCancel,
+      headerTitleStyle,
+    },
   },
   [routeList.Exception]: { screen: Exception, navigationOptions },
 })

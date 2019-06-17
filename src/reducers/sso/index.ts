@@ -1,8 +1,9 @@
 import { AnyAction } from 'redux'
+import { IdentitySummary } from '../../actions/sso/types'
 
 export interface StateVerificationSummary {
   id: string
-  issuer: string
+  issuer: IdentitySummary
   selfSigned: boolean
   expires: string | undefined | Date
 }
@@ -15,7 +16,7 @@ export interface StateTypeSummary {
 
 export interface StateCredentialRequestSummary {
   readonly callbackURL: string
-  readonly requester: string
+  readonly requester: IdentitySummary
   readonly availableCredentials: StateTypeSummary[]
   readonly requestJWT: string
 }
@@ -48,7 +49,9 @@ export interface SsoState {
 
 const initialState: SsoState = {
   activeCredentialRequest: {
-    requester: '',
+    requester: {
+      did: ''
+    },
     callbackURL: '',
     availableCredentials: [],
     requestJWT: '',

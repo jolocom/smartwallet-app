@@ -2,12 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
 import { finishRegistration } from 'src/actions/registration'
+import {ThunkDispatch} from '../../../store'
 
-interface ConnectProps {}
 
-interface Props extends ConnectProps {
-  navigation: { state: { params: { mnemonic: string } } }
-  finishRegistration: () => void
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {
+  dispatch: ThunkDispatch
+  deepLinkLoading: boolean
+  navigation: {state: { params: any} } // TODO Type?
 }
 
 interface State {
@@ -35,8 +38,8 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
 }
 
 const mapStateToProps = () => ({})
-const mapDispatchToProps = (dispatch: Function) => ({
-  finishRegistration: () => dispatch(finishRegistration()),
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  finishRegistration: () => dispatch(finishRegistration),
 })
 
 export const SeedPhrase = connect(

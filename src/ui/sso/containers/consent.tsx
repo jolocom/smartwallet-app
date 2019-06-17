@@ -1,20 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  StateCredentialRequestSummary,
-  StateVerificationSummary,
-} from 'src/reducers/sso'
+import { StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
+import { ThunkDispatch } from '../../../store'
+import { withErrorHandling, withLoading } from '../../../actions/modifiers'
+import { toggleClaimsLoading } from '../../../actions/account'
+import { showErrorScreen } from '../../../actions/generic'
 
-interface ConnectProps {}
-
-interface Props extends ConnectProps {
-  activeCredentialRequest: StateCredentialRequestSummary
-  currentDid: string
-  sendCredentialResponse: (creds: StateVerificationSummary[]) => void
-  cancelSSO: () => void
-}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -48,13 +44,19 @@ export class ConsentContainer extends React.Component<Props, State> {
 
 const mapStateToProps = (state: any) => ({
   activeCredentialRequest: state.sso.activeCredentialRequest,
-  currentDid: state.account.did.toJS().did,
+  currentDid: state.account.did.did,
 })
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  sendCredentialResponse: (creds: StateVerificationSummary[]) =>
-    dispatch(ssoActions.sendCredentialResponse(creds)),
-  cancelSSO: () => dispatch(ssoActions.cancelSSO()),
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  sendCredentialResponse: (credentials: StateVerificationSummary[]) =>
+    dispatch(
+      withLoading(toggleClaimsLoading)(
+        withErrorHandling(showErrorScreen)(
+          ssoActions.sendCredentialResponse(credentials),
+        ),
+      ),
+    ),
+  cancelSSO: () => dispatch(ssoActions.cancelSSO),
 })
 
 export const Consent = connect(

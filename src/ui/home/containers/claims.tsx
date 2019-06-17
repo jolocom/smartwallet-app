@@ -1,62 +1,48 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
-
 import { CredentialOverview } from '../components/credentialOverview'
-import { accountActions, ssoActions, navigationActions } from 'src/actions'
-import { ClaimsState } from 'src/reducers/account'
+import { accountActions } from 'src/actions'
 import { DecoratedClaims } from 'src/reducers/account/'
-import { routeList } from 'src/routeList'
+import { RootState } from '../../../reducers'
+import {withLoading} from '../../../actions/modifiers'
+import {setDeepLinkLoading} from '../../../actions/sso'
+import {ThunkDispatch} from '../../../store'
 
-interface ConnectProps {
-  setClaimsForDid: () => void
-  toggleLoading: (val: boolean) => void
-  openClaimDetails: (claim: DecoratedClaims) => void
-  openScanner: () => void
-  parseJWT: (jwt: string) => void
-  did: string
-  claims: ClaimsState
-  loading: boolean
-}
-
-interface Props extends ConnectProps {}
+interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
 export class ClaimsContainer extends React.Component<Props> {
-  componentWillMount() {
+  public componentWillMount(): void {
     this.props.setClaimsForDid()
   }
 
-  render() {
+  public render(): JSX.Element {
+    const { did, loading, claimsState, openClaimDetails } = this.props
     return (
       <View style={{ flex: 1 }}>
         <CredentialOverview
-          did={this.props.did}
-          claimsState={this.props.claims}
-          loading={!!this.props.claims.loading}
-          onEdit={this.props.openClaimDetails}
+          did={did}
+          claimsToRender={claimsState.decoratedCredentials}
+          loading={!!loading}
+          onEdit={openClaimDetails}
         />
       </View>
     )
   }
 }
 
-// TODO nicer pattern for accessing state, perhaps immer or something easier to Type
-const mapStateToProps = (state: any) => ({
-  did: state.account.did.toJS().did,
-  claims: state.account.claims.toJS(),
-  loading: state.account.loading.toJS().loading,
-})
+const mapStateToProps = ({
+  account: {
+    did: { did },
+    claims: claimsState,
+    loading: { loading },
+  },
+}: RootState) => ({ did, claimsState, loading })
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  parseJWT: (jwt: string) => dispatch(ssoActions.parseJWT(jwt)),
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
-  setClaimsForDid: () => dispatch(accountActions.setClaimsForDid()),
-  toggleLoading: (val: boolean) => dispatch(accountActions.toggleLoading(val)),
-  openScanner: () =>
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
-    ),
+  setClaimsForDid: () => dispatch(withLoading(setDeepLinkLoading)(accountActions.setClaimsForDid)),
 })
 
 export const Claims = connect(
