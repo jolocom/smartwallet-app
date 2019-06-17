@@ -19,12 +19,10 @@ const mostRecentOrder: Ordering<SignedCredential> = (c1, c2) =>
  */
 
 export const filters = {
-  filterByExpired: buildTransform<SignedCredential>([expiredFilter]),
-  filterByIssuer: (did: string) =>
-    buildTransform<SignedCredential>([issuerFilter(did)]),
-  filterByType: (typ: string) =>
-    buildTransform<SignedCredential>([typeFilter(typ)]),
-  orderByRecent: buildTransform<SignedCredential>([mostRecentOrder]),
+  filterByExpired: buildTransform([expiredFilter]),
+  filterByIssuer: (did: string) => buildTransform([issuerFilter(did)]),
+  filterByType: (typ: string) => buildTransform([typeFilter(typ)]),
+  orderByRecent: buildTransform([mostRecentOrder]),
   documentFilter: (documentTypes: string[]) =>
-    buildTransform<SignedCredential>(documentTypes.map(typeFilter)),
+    buildTransform(documentTypes.map(typeFilter)),
 }

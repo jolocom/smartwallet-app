@@ -16,11 +16,9 @@ const typeFilter = (typ: string): Filter<DecoratedClaims> => cred =>
  */
 
 export const filters = {
-  filterByExpired: buildTransform<DecoratedClaims>([expiredFilter]),
-  filterByIssuer: (did: string) =>
-    buildTransform<DecoratedClaims>([issuerFilter(did)]),
-  filterByType: (typ: string) =>
-    buildTransform<DecoratedClaims>([typeFilter(typ)]),
+  filterByExpired: buildTransform([expiredFilter]),
+  filterByIssuer: (did: string) => buildTransform([issuerFilter(did)]),
+  filterByType: (typ: string) => buildTransform([typeFilter(typ)]),
   documentFilter: (documentTypes: string[]) =>
-    buildTransform<DecoratedClaims>(documentTypes.map(typeFilter)),
+    buildTransform(documentTypes.map(typeFilter)),
 }
