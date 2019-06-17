@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
 import { StackNavigator, TabNavigator } from 'react-navigation'
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
-import { Documents } from 'src/ui/documents'
+import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
 import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
@@ -13,7 +13,6 @@ import { Settings } from 'src/ui/settings'
 import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
-import { ExpiredDocumentsDetails } from './ui/documents/containers/expiredDocumentsDetails'
 import { routeList } from './routeList'
 
 import {
@@ -30,24 +29,6 @@ const headerBackImage =
 
 const navigationOptions = {
   header: null,
-}
-
-const navOptScreenWCancel = {
-  headerStyle: {
-    backgroundColor:
-      Platform.OS === 'android'
-        ? JolocomTheme.primaryColorBlack
-        : JolocomTheme.primaryColorGrey,
-  },
-  headerBackImage,
-  ...Platform.select({
-    ios: {
-      headerBackTitleStyle: {
-        color: JolocomTheme.primaryColorPurple,
-      },
-      headerTintColor: { color: JolocomTheme.primaryColorPurple },
-    },
-  }),
 }
 
 const headerTitleStyle = {
@@ -74,6 +55,24 @@ const commonNavigationOptions = {
   },
   headerTintColor: defaultHeaderTintColor,
 }
+
+const navOptScreenWCancel = {
+  headerStyle: {
+    backgroundColor: defaultHeaderBackgroundColor,
+  },
+  headerTitleStyle: {
+    color: JolocomTheme.primaryColorWhite
+  },
+  headerBackImage,
+  ...Platform.select({
+    ios: {
+      headerBackTitleStyle: {
+        color: JolocomTheme.primaryColorPurple,
+      }
+    }
+  }),
+}
+
 
 const bottomNavBarBackground =
   Platform.OS == 'android'
@@ -194,12 +193,12 @@ export const Routes = StackNavigator({
     screen: ClaimDetails,
     navigationOptions: () => navOptScreenWCancel,
   },
-  [routeList.ExpiredDetails]: {
-    screen: ExpiredDocumentsDetails,
-    navigationOptions: () => ({
+  [routeList.DocumentDetails]: {
+    screen: DocumentDetails,
+    navigationOptions: {
       ...navOptScreenWCancel,
       headerTitleStyle,
-    }),
+    },
   },
   [routeList.Exception]: { screen: Exception, navigationOptions },
 })

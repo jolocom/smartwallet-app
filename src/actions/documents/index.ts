@@ -1,36 +1,29 @@
 import { navigationActions } from '..'
 import { routeList } from 'src/routeList'
-import I18n from 'src/locales/i18n'
 import { DecoratedClaims } from 'src/reducers/account'
-import { ClaimInterface } from 'cred-types-jolocom-core'
 import { ThunkActionCreator } from 'src/store'
 
-export const SET_EXPIRED_DOC = 'SET_SELECTED_EXPIRED_DOCUMENT'
-export const CLEAR_EXPIRED_DOC = 'CLEAR_SELECTED_EXPIRED_DOCUMENT'
+export const SET_DOC_DETAIL = 'SET_SELECTED_DOCUMENT_DETAIL'
+export const CLEAR_DOC_DETAIL = 'CLEAR_SELECTED_DOCUMENT_DETAIL'
 
-export const setSelectedExpiredDocument = (
+export const setSelectedDocument = (
   document: DecoratedClaims,
 ) => ({
-  type: SET_EXPIRED_DOC,
+  type: SET_DOC_DETAIL,
   value: document,
 })
 
-export const clearSelectedExpiredDocument = () => ({
-  type: CLEAR_EXPIRED_DOC,
+export const clearSelectedDocument = () => ({
+  type: CLEAR_DOC_DETAIL,
 })
 
-export const openExpiredDetails: ThunkActionCreator = (document: DecoratedClaims) => async (
+export const openDocumentDetails: ThunkActionCreator = (document: DecoratedClaims) => async (
   dispatch
 ) => {
-  dispatch(setSelectedExpiredDocument(document))
+  dispatch(setSelectedDocument(document))
   dispatch(
     navigationActions.navigate({
-      routeName: routeList.ExpiredDetails,
-      params: {
-        headerTitle: `${I18n.t('[expired]')} ${
-          (document.claimData as ClaimInterface).type
-        }`,
-      },
+      routeName: routeList.DocumentDetails,
     }),
   )
 }

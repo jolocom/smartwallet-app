@@ -1,13 +1,13 @@
 import { AnyAction } from 'redux'
-import { SET_EXPIRED_DOC, CLEAR_EXPIRED_DOC } from 'src/actions/documents'
+import { SET_DOC_DETAIL,CLEAR_DOC_DETAIL } from 'src/actions/documents'
 import { DecoratedClaims } from '../account'
 
 export interface DocumentsState {
-  selectedExpiredDocument: DecoratedClaims
+  selectedDocument: DecoratedClaims
 }
 
 const initialState: DocumentsState = {
-  selectedExpiredDocument: {
+  selectedDocument: {
     credentialType: '',
     subject: '',
     id: '',
@@ -27,12 +27,12 @@ export const documentsReducer = (
   action: AnyAction,
 ): DocumentsState => {
   switch (action.type) {
-    case SET_EXPIRED_DOC:
-      return { ...state, selectedExpiredDocument: action.value }
-    case CLEAR_EXPIRED_DOC:
+    case SET_DOC_DETAIL:
+      return { ...state, selectedDocument: action.value }
+    case CLEAR_DOC_DETAIL:
       return {
         ...state,
-        selectedExpiredDocument: initialState.selectedExpiredDocument,
+        selectedDocument: initialState.selectedDocument,
       }
     default:
       return state

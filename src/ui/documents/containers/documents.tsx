@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, Animated, ScrollView } from 'react-native'
 
-import { openExpiredDetails } from 'src/actions/documents'
+import { openDocumentDetails } from 'src/actions/documents'
 import { DecoratedClaims } from 'src/reducers/account'
 import { RootState } from 'src/reducers'
 import { getDocumentClaims } from 'src/utils/filterDocuments'
@@ -11,6 +11,7 @@ import { Container, Block, CenteredText } from 'src/ui/structure'
 
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
+import { filters } from 'src/lib/filterDecoratedClaims'
 
 import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
@@ -56,16 +57,6 @@ export class DocumentsContainer extends React.Component<Props, State> {
     showingValid: true,
   }
 
-  private getValidDocuments = (claims: DecoratedClaims[]) =>
-    claims.filter(claim =>
-      claim.expires ? claim.expires.valueOf() >= new Date().valueOf() : true,
-    )
-
-  private getExpiredDocuments = (claims: DecoratedClaims[]) =>
-    claims.filter(
-      document => document.expires && document.expires.valueOf() < new Date().valueOf(),
-    )
-
   private scrollToTop() {
     if (this.ScrollViewRef) {
       this.ScrollViewRef.scrollTo({ x: 0, y: 0, animated: true })
@@ -86,19 +77,20 @@ export class DocumentsContainer extends React.Component<Props, State> {
   }
 
   public render() {
-    const { openExpiredDetails, decoratedCredentials } = this.props
+    const { openDocumentDetails, decoratedCredentials } = this.props
     const documents = getDocumentClaims(decoratedCredentials['Other'])
-    const expiredDocuments = this.getExpiredDocuments(documents)
-    const validDocuments = this.getValidDocuments(documents)
-    const isEmpty =
-      (this.state.showingValid ? validDocuments : expiredDocuments).length == 0
+    const docFilter =
+      (this.state.showingValid ? filters.filterByValid : filters.filterByExpired)
+    const displayedDocs = docFilter(documents)
+    const isEmpty = displayedDocs.length == 0
+    const otherIsEmpty = displayedDocs.length == documents.length
 
     return (
       <Animated.View style={styles.mainContainer}>
-        <DocumentViewToggle
+        {!otherIsEmpty && <DocumentViewToggle
           showingValid={this.state.showingValid}
           onTouch={this.handleToggle}
-        />
+        />}
         <ScrollView
           // scrollEventThrottle={16}
           // onScroll={Animated.event([
@@ -122,14 +114,14 @@ export class DocumentsContainer extends React.Component<Props, State> {
             </Container>
           ) : this.state.showingValid ? (
             <DocumentsCarousel
-              documents={validDocuments}
+              documents={displayedDocs}
               activeIndex={this.state.activeDocumentIndex}
               onActiveIndexChange={this.onActiveIndexChange.bind(this)}
             />
           ) : (
             <DocumentsList
-              documents={expiredDocuments}
-              onDocumentPress={openExpiredDetails}
+              documents={displayedDocs}
+              onDocumentPress={openDocumentDetails}
             />
           )}
         </ScrollView>
@@ -147,8 +139,8 @@ const mapStateToProps = ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  openExpiredDetails: (doc: DecoratedClaims) =>
-    dispatch(openExpiredDetails(doc)),
+  openDocumentDetails: (doc: DecoratedClaims) =>
+    dispatch(openDocumentDetails(doc)),
 })
 
 export const Documents = connect(
