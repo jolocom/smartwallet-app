@@ -6,8 +6,8 @@
 import * as RNLocalize from 'react-native-localize'
 import I18n from 'i18n-js'
 
-const de = require('./de').default
-const nl = require('./nl').default
+const de = require('./de.json')
+const nl = require('./nl.json')
 
 I18n.defaultLocale = 'en'
 I18n.fallbacks = true

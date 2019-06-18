@@ -20,7 +20,7 @@ const App = () => {
   return (
     <ThemeContext.Provider value={getTheme(JolocomTheme)}>
       <Provider store={store}>
-        <Navigator dispatch={store.dispatch}/>
+        <Navigator dispatch={store.dispatch} />
       </Provider>
     </ThemeContext.Provider>
   )

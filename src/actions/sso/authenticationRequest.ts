@@ -17,11 +17,7 @@ export const setAuthenticationRequest = (
 
 export const consumeAuthenticationRequest: ThunkActionCreator = (
   authenticationRequest: JSONWebToken<Authentication>,
-) => async (
-  dispatch,
-  getState,
-  backendMiddleware
-) => {
+) => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware
   try {
     await identityWallet.validateJWT(authenticationRequest)
@@ -45,7 +41,7 @@ export const consumeAuthenticationRequest: ThunkActionCreator = (
 export const sendAuthenticationResponse: ThunkAction = async (
   dispatch,
   getState,
-  backendMiddleware
+  backendMiddleware,
 ) => {
   const { identityWallet } = backendMiddleware
   const { isDeepLinkInteraction } = getState().sso

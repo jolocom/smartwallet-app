@@ -8,8 +8,9 @@ import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { ConsentAttributeCard, HeaderSection } from './claimCard'
 import I18n from 'src/locales/i18n'
-import {IdentitySummary} from '../../../actions/sso/types'
-import {IssuerCard} from '../../documents/components/issuerCard'
+import { IdentitySummary } from '../../../actions/sso/types'
+import { IssuerCard } from '../../documents/components/issuerCard'
+import strings from '../../../locales/strings'
 
 interface Props {
   did: string
@@ -108,8 +109,8 @@ export class ConsentComponent extends React.Component<Props, State> {
       <ButtonSection
         disabled={buttonDisabled}
         denyDisabled={this.state.pending}
-        confirmText={I18n.t('Share claims')}
-        denyText={I18n.t('Deny')}
+        confirmText={I18n.t(strings.SHARE_CLAIMS)}
+        denyText={I18n.t(strings.DENY)}
         handleConfirm={() => this.handleSubmitClaims()}
         handleDeny={() => this.props.handleDenySubmit()}
       />
@@ -123,7 +124,9 @@ export class ConsentComponent extends React.Component<Props, State> {
         {IssuerCard(this.props.requester)}
         <Block flex={0.5}>
           <Text style={styles.fixedText}>
-            {I18n.t('This service is asking you to share the following claims')}
+            {I18n.t(
+              strings.THIS_SERVICE_IS_ASKING_YOU_TO_SHARE_THE_FOLLOWING_CLAIMS,
+            )}
             :
           </Text>
         </Block>

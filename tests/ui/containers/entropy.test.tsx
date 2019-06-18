@@ -45,8 +45,7 @@ describe('Entropy container', () => {
   })
 
   it('correctly triggers a random string generation when there is sufficient entropy', async () => {
-    util.generateSecureRandomBytes = () =>
-      Buffer.from('moreEntropy')
+    util.generateSecureRandomBytes = () => Buffer.from('moreEntropy')
 
     const rendered = shallow(<EntropyContainer {...props} />)
     const instance = rendered.instance()

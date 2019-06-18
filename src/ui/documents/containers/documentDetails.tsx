@@ -7,8 +7,11 @@ import { RootState } from 'src/reducers/'
 import I18n from 'src/locales/i18n'
 import { DocumentCard } from '../components/documentCard'
 import { DocumentDetails as DocumentDetailsComponent } from '../components/documentDetails'
+import strings from '../../../locales/strings'
 
-interface Props extends ReturnType<typeof mapStateToProps>, NavigationScreenProps {}
+interface Props
+  extends ReturnType<typeof mapStateToProps>,
+    NavigationScreenProps {}
 
 interface State {}
 
@@ -23,10 +26,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export class DocumentDetailsContainer extends React.Component<
-  Props,
-  State
-> {
+export class DocumentDetailsContainer extends React.Component<Props, State> {
   public static navigationOptions = ({
     navigation,
     navigationOptions,
@@ -34,16 +34,18 @@ export class DocumentDetailsContainer extends React.Component<
     ...navigationOptions,
     // FIXME needs to be changed to this on update to react-navigation
     // headerTitle: navigation.getParam('headerTitle', ''),
-    headerTitle: navigation.state.params && navigation.state.params.headerTitle
+    headerTitle: navigation.state.params && navigation.state.params.headerTitle,
   })
 
   public componentWillMount() {
     const { document } = this.props
     // FIXME use filter from src/lib/filterDecoratedClaims
-    const isExpired = document.expires ? document.expires.valueOf() < new Date().valueOf() : true
+    const isExpired = document.expires
+      ? document.expires.valueOf() < new Date().valueOf()
+      : true
 
     let headerTitle = (document.claimData as ClaimInterface).type
-    if (isExpired) headerTitle = `[${I18n.t('expired')}] ${headerTitle}`
+    if (isExpired) headerTitle = `[${I18n.t(strings.EXPIRED)}] ${headerTitle}`
     this.props.navigation.setParams({ headerTitle })
   }
 
@@ -67,6 +69,6 @@ const mapStateToProps = (state: RootState) => ({
   document: state.documents.selectedDocument,
 })
 
-export const DocumentDetails = connect(
-  mapStateToProps,
-)(DocumentDetailsContainer)
+export const DocumentDetails = connect(mapStateToProps)(
+  DocumentDetailsContainer,
+)

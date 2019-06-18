@@ -28,11 +28,9 @@ const mapStateToProps = ({
   account: {
     loading: { loading },
   },
-}: RootState) => {
-  return {
-    loading,
-  }
-}
+}: RootState) => ({
+  loading,
+})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   startRegistration: () =>

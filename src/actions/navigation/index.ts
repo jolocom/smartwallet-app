@@ -30,9 +30,11 @@ export const navigatorReset = (
  * It then matches the route name and dispatches a corresponding action
  * @param url - a deep link string with the following schema: appName://routeName/params
  */
-export const handleDeepLink: ThunkActionCreator = (
-  url: string
-) => (dispatch, getState, backendMiddleware) => {
+export const handleDeepLink: ThunkActionCreator = (url: string) => (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
   // TODO Fix
   const route: string = url.replace(/.*?:\/\//g, '')
   const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ''
@@ -58,7 +60,11 @@ export const handleDeepLink: ThunkActionCreator = (
     }
 
     /** @TODO Use error code */
-    return dispatch(showErrorScreen(new AppError(ErrorCode.Unknown,new Error('No handler found'))))
+    return dispatch(
+      showErrorScreen(
+        new AppError(ErrorCode.Unknown, new Error('No handler found')),
+      ),
+    )
   }
 
   /** @TODO Better return */

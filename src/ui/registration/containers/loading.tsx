@@ -8,9 +8,12 @@ import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { ThunkDispatch } from 'src/store'
+import strings from '../../../locales/strings'
 const loaders = require('react-native-indicator')
 
-interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 export interface State {}
 
@@ -62,11 +65,11 @@ export class LoadingContainer extends React.Component<Props, State> {
         <Block style={styles.label}>
           <CenteredText
             style={styles.text}
-            msg={I18n.t('Give us a few moments')}
+            msg={I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}
           />
           <CenteredText
             style={styles.text}
-            msg={I18n.t('to set up your identity')}
+            msg={I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}
           />
         </Block>
         <Block>
@@ -106,11 +109,13 @@ export class LoadingContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({registration: {loading: {loadingMsg}}}: RootState) => {
-  return {
-    loadingMsg
-  }
-}
+const mapStateToProps = ({
+  registration: {
+    loading: { loadingMsg },
+  },
+}: RootState) => ({
+  loadingMsg,
+})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({})
 

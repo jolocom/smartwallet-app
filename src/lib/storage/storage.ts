@@ -313,7 +313,7 @@ const getMetadataForCredential = (connection: Connection) => async ({
 
 const buildMetadataKey = (
   issuer: string,
-  credentialType: string | Array<string>,
+  credentialType: string | string[],
 ): string => {
   if (typeof credentialType === 'string') {
     return `${issuer}${credentialType}`

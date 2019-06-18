@@ -20,7 +20,6 @@
     "importHelpers": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "noUnusedLocals": true,
     "baseUrl": ".",
     "paths": {

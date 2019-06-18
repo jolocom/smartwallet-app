@@ -12,7 +12,7 @@ export const loading = (
   switch (action.type) {
     case 'SET_LOADING_MSG':
       return {
-        loadingMsg: action.value
+        loadingMsg: action.value,
       }
     default:
       return state

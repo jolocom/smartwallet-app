@@ -26,11 +26,9 @@ export class ClaimDetailsContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ account: { claims } }: RootState) => {
-  return {
-    claims,
-  }
-}
+const mapStateToProps = ({ account: { claims } }: RootState) => ({
+  claims,
+})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   saveClaim: () =>

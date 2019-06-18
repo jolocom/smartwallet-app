@@ -23,6 +23,7 @@ import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
 import BottomTabBar from 'src/ui/generic/bottomTabBar'
+import strings from './locales/strings'
 
 import {
   IdentityMenuIcon,
@@ -79,15 +80,15 @@ const navOptScreenWCancel = {
     backgroundColor: defaultHeaderBackgroundColor,
   },
   headerTitleStyle: {
-    color: JolocomTheme.primaryColorWhite
+    color: JolocomTheme.primaryColorWhite,
   },
   headerBackImage,
   ...Platform.select({
     ios: {
       headerBackTitleStyle: {
         color: JolocomTheme.primaryColorPurple,
-      }
-    }
+      },
+    },
   }),
 }
 
@@ -99,15 +100,16 @@ const bottomTabBarBackground =
 export const BottomTabBarRoutes = {
   [routeList.Claims]: {
     screen: Claims,
-    title: 'My identity',
+    title: strings.MY_IDENTITY,
     navigationOptions: {
+      ...commonNavigationOptions,
       tabBarIcon: IdentityMenuIcon,
     }
   },
   [routeList.Documents]: {
     screen: Documents,
-    title: 'Documents',
-    navigationOptions: () => ({
+    title: strings.DOCUMENTS,
+    navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: (props: {
         tintColor: string
@@ -117,23 +119,23 @@ export const BottomTabBarRoutes = {
         props.fillColor = bottomTabBarBackground
         return new DocumentsMenuIcon(props)
       },
-    }),
+    },
   },
   [routeList.Records]: {
     screen: Records,
-    title: 'Login records',
-    navigationOptions: () => ({
+    title: strings.LOGIN_RECORDS,
+    navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: RecordsMenuIcon,
-    }),
+    },
   },
   [routeList.Settings]: {
     screen: Settings,
-    title: 'Settings',
-    navigationOptions: () => ({
+    title: strings.SETTINGS,
+    navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: SettingsMenuIcon,
-    }),
+    },
   },
 }
 
@@ -181,40 +183,38 @@ export const Routes = createStackNavigator({
 
   [routeList.QRCodeScanner]: {
     screen: QRScannerContainer,
-    navigationOptions: () => ({
-      ...navOptScreenWCancel,
-    }),
+    navigationOptions: navOptScreenWCancel,
   },
 
   [routeList.CredentialDialog]: {
     screen: CredentialReceive,
     navigationOptions: () => ({
-      headerTitle: I18n.t('Receiving new credential'),
+      headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
     }),
   },
   [routeList.Consent]: {
     screen: Consent,
     navigationOptions: () => ({
-      headerTitle: I18n.t('Share claims'),
+      headerTitle: I18n.t(strings.SHARE_CLAIMS),
     }),
   },
   [routeList.PaymentConsent]: {
     screen: PaymentConsent,
     navigationOptions: () => ({
       headerBackImage,
-      headerTitle: I18n.t('Confirm payment'),
+      headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
     }),
   },
   [routeList.AuthenticationConsent]: {
     screen: AuthenticationConsent,
     navigationOptions: () => ({
       headerBackImage,
-      headerTitle: I18n.t('Authorization request'),
+      headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
     }),
   },
   [routeList.ClaimDetails]: {
     screen: ClaimDetails,
-    navigationOptions: () => navOptScreenWCancel,
+    navigationOptions: navOptScreenWCancel,
   },
   [routeList.DocumentDetails]: {
     screen: DocumentDetails,

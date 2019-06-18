@@ -66,7 +66,8 @@
     "build:android": "haul bundle --entry-file='index.ts' --minify=true --dev=false --platform='android'",
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native -d src/resources/svg/",
-    "devtools": "react-devtools &"
+    "devtools": "react-devtools &",
+    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts"
   },
   "jest": {
     "setupFiles": [
