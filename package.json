@@ -20,7 +20,6 @@
     "@types/react-test-renderer": "^16.0.0",
     "@typescript-eslint/eslint-plugin": "^1.5.0",
     "@typescript-eslint/parser": "^1.5.0",
-    "axios": "^0.19.0",
     "babel-inline-import-loader": "^0.0.5",
     "babel-plugin-inline-import": "^2.0.6",
     "babel-plugin-react-native-platform-specific-extensions": "^1.1.0",
@@ -71,7 +70,7 @@
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native -d src/resources/svg/",
     "devtools": "react-devtools &",
-    "terms": "ts-node -O '{\"module\": \"commonjs\"}' ./src/utils/generateTerms.ts"
+    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts"
   },
   "jest": {
     "setupFiles": [
