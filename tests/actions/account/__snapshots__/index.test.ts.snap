@@ -3,10 +3,6 @@
 exports[`Account action creators Should correctly handle an empty encrypted seed table 1`] = `
 Array [
   Object {
-    "type": "TOGGLE_CLAIMS_LOADING",
-    "value": true,
-  },
-  Object {
     "actions": Array [
       Object {
         "routeName": "Landing",
@@ -22,10 +18,6 @@ Array [
 
 exports[`Account action creators Should correctly handle more existing user identites 1`] = `
 Array [
-  Object {
-    "type": "TOGGLE_CLAIMS_LOADING",
-    "value": true,
-  },
   Object {
     "type": "DID_SET",
     "value": "did:jolo:first",
@@ -46,10 +38,6 @@ Array [
 
 exports[`Account action creators Should correctly handle one existing user identity 1`] = `
 Array [
-  Object {
-    "type": "TOGGLE_CLAIMS_LOADING",
-    "value": true,
-  },
   Object {
     "type": "DID_SET",
     "value": "did:jolo:mock",
