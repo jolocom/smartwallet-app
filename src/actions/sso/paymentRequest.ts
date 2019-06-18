@@ -1,5 +1,5 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { navigationActions, ssoActions } from 'src/actions'
+import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import { StatePaymentRequestSummary } from 'src/reducers/sso'
@@ -25,31 +25,27 @@ export const consumePaymentRequest = (
 ) => {
   const { identityWallet, registry } = backendMiddleware
 
-  try {
-    await identityWallet.validateJWT(
-      paymentRequest,
-      undefined,
-      registry as JolocomRegistry,
-    )
+  await identityWallet.validateJWT(
+    paymentRequest,
+    undefined,
+    registry as JolocomRegistry,
+  )
 
-    const paymentDetails: StatePaymentRequestSummary = {
-      receiver: {
-        did: paymentRequest.issuer,
-        address: paymentRequest.interactionToken.transactionOptions
-          .to as string,
-      },
-      callbackURL: paymentRequest.interactionToken.callbackURL,
-      amount: paymentRequest.interactionToken.transactionOptions.value,
-      description: paymentRequest.interactionToken.description,
-      paymentRequest: paymentRequest.encode(),
-    }
-    dispatch(setPaymentRequest(paymentDetails))
-    return dispatch(
-      navigationActions.navigatorReset({ routeName: routeList.PaymentConsent }),
-    )
-  } finally {
-    dispatch(ssoActions.setDeepLinkLoading(false))
+  const paymentDetails: StatePaymentRequestSummary = {
+    receiver: {
+      did: paymentRequest.issuer,
+      address: paymentRequest.interactionToken.transactionOptions
+      .to as string,
+    },
+    callbackURL: paymentRequest.interactionToken.callbackURL,
+    amount: paymentRequest.interactionToken.transactionOptions.value,
+    description: paymentRequest.interactionToken.description,
+    paymentRequest: paymentRequest.encode(),
   }
+  dispatch(setPaymentRequest(paymentDetails))
+  return dispatch(
+    navigationActions.navigatorReset({ routeName: routeList.PaymentConsent }),
+  )
 }
 
 export const sendPaymentResponse = async (
