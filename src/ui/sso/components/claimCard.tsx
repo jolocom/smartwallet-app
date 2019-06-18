@@ -12,12 +12,14 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
+import { IdentitySummary } from '../../../actions/sso/types'
 
 // TODO Custom text component with size, font, color
 // TODO Make whole card clickable as opposed to icon
 // TODO Changes to the 'Container' custom component to allow horisontal flex
 interface ClaimCardProps {
   rightIcon?: ReactNode
+  leftIcon?: ReactNode
   secondaryText?: string | ReactNode
   primaryText: string | ReactNode
   primaryTextStyle?: TextStyle | RegisteredStyle<TextStyle>
@@ -48,6 +50,7 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
     primaryText,
     secondaryText,
     rightIcon,
+    leftIcon,
     primaryTextStyle,
     secondaryTextStyle,
     containerStyle,
@@ -62,6 +65,7 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
         backgroundColor: 'white',
       }}
     >
+      {renderIconIfPresent(leftIcon)}
       <View style={[containerDefault, containerStyle]}>
         <Text
           style={[primaryTextDefault, secondaryTextDefault, secondaryTextStyle]}
@@ -72,10 +76,23 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
           {primaryText}
         </Text>
       </View>
-      <View flex={0.2}>{rightIcon}</View>
+      {renderIconIfPresent(rightIcon)}
     </View>
   )
 }
+
+const renderIconIfPresent = (icon: ReactNode) =>
+  icon ? (
+    <View
+      flex={0.2}
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {icon}
+    </View>
+  ) : null
 
 interface EmptyClaimCardProps {
   credentialType: string
@@ -93,7 +110,7 @@ export const PlaceholderClaimCard: React.SFC<EmptyClaimCardProps> = props => (
 )
 
 interface ConsentAttributeCardProps {
-  issuer: string
+  issuer: IdentitySummary
   did: string
   split?: boolean
   values: string[]
@@ -118,8 +135,8 @@ export const ConsentAttributeCard: React.SFC<
       justifyContent: 'flex-start',
     },
     verificationStatus: {
-      color: props.issuer !== props.did ? '#28a52d' : '#05050d',
-      opacity: props.did === props.issuer ? 0.4 : 1,
+      color: props.issuer.did !== props.did ? '#28a52d' : '#05050d',
+      opacity: props.issuer.did === props.did ? 0.4 : 1,
     },
   })
 
@@ -135,10 +152,6 @@ export const ConsentAttributeCard: React.SFC<
 
   const { values, issuer, did, rightIcon, containerStyle } = props
   const { container, innerContainer, verificationStatus } = styles
-  const verificationSummary =
-    did === issuer
-      ? ' ' + I18n.t(strings.SELF_SIGNED)
-      : `${issuer.substring(0, 25)}...`
 
   return (
     <View style={[container, containerStyle]}>
@@ -147,7 +160,9 @@ export const ConsentAttributeCard: React.SFC<
         {values.length > 0 ? (
           <Text style={verificationStatus}>
             <Icon size={15} name="check-all" />
-            {verificationSummary}
+            {did === issuer.did
+              ? ` ${I18n.t(strings.SELF_SIGNED)}`
+              : `${issuer.did.substring(0, 25)}...`}
           </Text>
         ) : null}
       </View>

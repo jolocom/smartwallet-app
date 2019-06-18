@@ -72,7 +72,9 @@ Object {
     "availableCredentials": Array [],
     "callbackURL": "",
     "requestJWT": "",
-    "requester": "",
+    "requester": Object {
+      "did": "",
+    },
   },
   "activePaymentRequest": Object {
     "amount": 0,

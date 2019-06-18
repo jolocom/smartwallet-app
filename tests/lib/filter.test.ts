@@ -1,14 +1,29 @@
 import { filters } from './../../src/lib/filterCreds'
-import { testCreds, issuers, types, getTestDecoratedClaims, decoratedTypes } from './testData/filterTestData'
+import {
+  testCreds,
+  issuers,
+  types,
+  getTestDecoratedClaims,
+  decoratedTypes,
+  numExpiredCreds,
+  numValidCreds
+} from './testData/filterTestData'
 import * as filterDecoratedClaims from 'src/lib/filterDecoratedClaims'
 import { getUiCredentialTypeByType } from 'src/lib/util'
 
 describe('Filtering Credentials', () => {
   it('should filter expired creds', () => {
-    const now = new Date()
+    const now = (new Date()).valueOf()
     const filtered = filters.filterByExpired(testCreds)
-    expect(filtered.length).toEqual(testCreds.length / 2)
-    expect(filtered.every(cred => cred.expires.valueOf() > now.valueOf()))
+    expect(filtered.length).toEqual(numExpiredCreds)
+    expect(filtered.every(cred => cred.expires.valueOf() < now)).toBeTruthy()
+  })
+
+  it('should filter valid creds', () => {
+    const now = (new Date()).valueOf()
+    const filtered = filters.filterByValid(testCreds)
+    expect(filtered.length).toEqual(numValidCreds)
+    expect(filtered.every(cred => cred.expires.valueOf() >= now)).toBeTruthy()
   })
 
   it('should filter by issuer', () => {
@@ -52,10 +67,17 @@ describe('Filtering Decorated Claims', () => {
   const testDecoratedClaims = getTestDecoratedClaims()
 
   it('should filter expired decorated claims', () => {
-    const now = new Date()
+    const now = (new Date()).valueOf()
     const filtered = filterDecoratedClaims.filters.filterByExpired(testDecoratedClaims)
-    expect(filtered.length).toEqual(testDecoratedClaims.length / 2)
-    expect(filtered.every(claim => claim.expires.valueOf() > now.valueOf()))
+    expect(filtered.length).toEqual(numExpiredCreds)
+    expect(filtered.every(claim => claim.expires.valueOf() < now)).toBeTruthy()
+  })
+
+  it('should filter valid decorated claims', () => {
+    const now = (new Date()).valueOf()
+    const filtered = filterDecoratedClaims.filters.filterByValid(testDecoratedClaims)
+    expect(filtered.length).toEqual(numValidCreds)
+    expect(filtered.every(claim => claim.expires.valueOf() > now))
   })
 
   it('should filter by issuer', () => {

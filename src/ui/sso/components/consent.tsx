@@ -8,11 +8,13 @@ import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { ConsentAttributeCard, HeaderSection } from './claimCard'
 import I18n from 'src/locales/i18n'
+import {IdentitySummary} from '../../../actions/sso/types'
+import {IssuerCard} from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 
 interface Props {
   did: string
-  requester: string
+  requester: IdentitySummary
   callbackURL: string
   availableCredentials: StateTypeSummary[]
   handleSubmitClaims: (credentials: StateVerificationSummary[]) => void
@@ -119,18 +121,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     return (
       <Block flex={0.4}>
         <View flex={0.1} />
-
-        <Block flex={0.4} style={{ backgroundColor: 'white' }}>
-          <Text style={styles.serviceTitle}>
-            {' '}
-            {`${this.props.requester.substring(0, 25)}...`}{' '}
-          </Text>
-          <Text style={styles.serviceMetadata}>
-            {' '}
-            {`${this.props.callbackURL.substring(0, 25)}...`}{' '}
-          </Text>
-        </Block>
-
+        {IssuerCard(this.props.requester)}
         <Block flex={0.5}>
           <Text style={styles.fixedText}>
             {I18n.t(
@@ -194,6 +185,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     const isSelected =
       currentlySelected && currentlySelected.id === verifications[0].id
     const containsData = entry.values.length > 0
+
     const headerSection = isFirst ? (
       <HeaderSection
         containerStyle={{ paddingTop: '5%' }}
@@ -213,7 +205,7 @@ export class ConsentComponent extends React.Component<Props, State> {
           }
           did={this.props.did}
           values={values}
-          issuer={verifications.length ? verifications[0].issuer : ''}
+          issuer={(verifications[0] && verifications[0].issuer) || {}}
         />
       </View>
     )

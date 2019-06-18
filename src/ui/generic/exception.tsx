@@ -9,10 +9,11 @@ import I18n from 'src/locales/i18n'
 import { AppError, errorTitleMessages } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
+import {ThunkDispatch} from '../../store'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface ConnectProps {
-  navigateBack: (routeName: routeList) => void
+  navigateBack: (routeName: string) => ReturnType<typeof navigationActions.navigatorReset>
 }
 
 interface Props extends ConnectProps {
@@ -120,9 +121,8 @@ export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
 
 const mapStateToProps = (): {} => ({})
 
-const mapDispatchToProps = (dispatch: Function): {} => ({
-  navigateBack: (routeName: routeList) =>
-    dispatch(navigationActions.navigatorReset({ routeName })),
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  navigateBack: (routeName: string) => dispatch(navigationActions.navigatorReset({routeName})),
 })
 
 export const Exception = connect(

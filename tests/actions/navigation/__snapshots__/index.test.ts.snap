@@ -3,25 +3,18 @@
 exports[`Navigation action creators handleDeepLink should extract the route name and param from the URL 1`] = `
 Array [
   Object {
-    "type": "SET_LOADING",
-    "value": true,
-  },
-  Object {
-    "type": "SET_DEEP_LINK_LOADING",
-    "value": true,
-  },
-  Object {
     "type": "SET_DEEP_LINK_FLAG",
     "value": true,
+  },
+  Object {
+    "params": Object {
+      "error": [Error: Unknown Error],
+      "returnTo": "Home",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
   },
 ]
 `;
 
-exports[`Navigation action creators handleDeepLink should not atttempt to parse if route was not correct 1`] = `
-Array [
-  Object {
-    "type": "SET_LOADING",
-    "value": true,
-  },
-]
-`;
+exports[`Navigation action creators handleDeepLink should not atttempt to parse if route was not correct 1`] = `Array []`;

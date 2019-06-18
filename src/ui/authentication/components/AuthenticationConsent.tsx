@@ -8,8 +8,8 @@ import strings from '../../../locales/strings'
 
 interface Props {
   activeAuthenticationRequest: StateAuthenticationRequestSummary
-  cancelAuthenticationRequest: () => void
-  confirmAuthenticationRequest: () => void
+  confirmAuthenticationRequest: Function
+  cancelAuthenticationRequest: Function
 }
 
 interface State {}
@@ -60,7 +60,7 @@ export class AuthenticationConsentComponent extends React.Component<
 
   private handleConfirm = () => {
     this.setState({ pending: true })
-    this.props.confirmAuthenticationRequest()
+    return this.props.confirmAuthenticationRequest()
   }
 
   private renderRequesterCard(requester: string, callbackURL: string) {
@@ -109,7 +109,7 @@ export class AuthenticationConsentComponent extends React.Component<
         confirmText={I18n.t(strings.AUTHORIZE)}
         denyText={I18n.t(strings.DENY)}
         handleConfirm={this.handleConfirm}
-        handleDeny={() => this.props.cancelAuthenticationRequest()}
+        handleDeny={() => this.props.cancelAuthenticationRequest()} // TODO Does this get dispatched correctly?
         verticalPadding={10}
       />
     )

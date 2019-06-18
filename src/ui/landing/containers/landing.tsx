@@ -4,14 +4,15 @@ import { LoadingScreen } from 'src/ui/generic/'
 import { LandingComponent } from 'src/ui/landing/components/landing'
 import { registrationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
-import Immutable from 'immutable'
+import { withErrorHandling } from '../../../actions/modifiers'
+import { showErrorScreen } from '../../../actions/generic'
+import { AppError, ErrorCode } from '../../../lib/errors'
+import { routeList } from '../../../routeList'
+import { ThunkDispatch } from '../../../store'
 
-interface ConnectProps {
-  startRegistration: () => void
-  loading: boolean
-}
-
-interface Props extends ConnectProps {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 export class LandingContainer extends React.Component<Props> {
   render() {
@@ -23,15 +24,25 @@ export class LandingContainer extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  const loading = Immutable.fromJS(state.account.loading)
+const mapStateToProps = ({
+  account: {
+    loading: { loading },
+  },
+}: RootState) => {
   return {
-    loading: loading.get('loading'),
+    loading,
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  startRegistration: () => dispatch(registrationActions.startRegistration()),
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  startRegistration: () =>
+    dispatch(
+      withErrorHandling(
+        showErrorScreen,
+        (err: AppError) =>
+          new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
+      )(registrationActions.startRegistration),
+    ),
 })
 
 export const Landing = connect(

@@ -301,10 +301,9 @@ class TabBarBottom extends React.PureComponent {
             // added React.Fragment and QRCodeButtonPlaceholder
             // </ALTERED>
             return (
-              <React.Fragment>
+              <React.Fragment key={route.key}>
                 {QR_CODE_BUTTON_INDEX == index && QRCodeButtonPlaceholder}
                 <TouchableWithoutFeedback
-                  key={route.key}
                   testID={testID}
                   accessibilityLabel={accessibilityLabel}
                   onPress={() =>

@@ -3,12 +3,15 @@ import { StyleSheet, Text, ScrollView, View } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { prepareLabel } from 'src/lib/util'
-import { CredentialTopCard } from './credentialTopCard'
+import { DocumentCard } from '../../documents/components/documentCard'
 import I18n from 'src/locales/i18n'
+import { IssuerCard } from '../../documents/components/issuerCard'
+import {IdentitySummary} from '../../../actions/sso/types'
 import strings from '../../../locales/strings'
 
 interface Props {
   credentialToRender: DecoratedClaims
+  requester: IdentitySummary
 }
 
 const styles = StyleSheet.create({
@@ -75,23 +78,6 @@ const styles = StyleSheet.create({
   },
 })
 
-const renderIssuerCard = (issuer: string): JSX.Element => (
-  <View style={styles.issuerContainer}>
-    {/* TODO: Add support for icon */}
-    <View style={styles.issuerTextContainer}>
-      <Text
-        style={JolocomTheme.textStyles.light.textDisplayField}
-        numberOfLines={1}
-      >
-        {I18n.t(strings.NAME_OF_ISSUER)}
-      </Text>
-      <Text style={styles.issuerText} numberOfLines={1}>
-        {issuer}
-      </Text>
-    </View>
-  </View>
-)
-
 const renderClaims = (toRender: DecoratedClaims): JSX.Element[] => {
   const { claimData } = toRender
   return Object.keys(claimData).map(field => (
@@ -109,21 +95,19 @@ const renderClaims = (toRender: DecoratedClaims): JSX.Element[] => {
 export const CredentialDialogComponent: React.SFC<Props> = (
   props: Props,
 ): JSX.Element => {
-  const { credentialToRender } = props
-  const { expires, credentialType, issuer } = credentialToRender
+  const { credentialToRender, requester } = props
 
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <CredentialTopCard
-          credentialName={credentialType}
-          expiryDate={expires}
+        <DocumentCard
+          document={credentialToRender}
         />
       </View>
 
       <View style={styles.issuerSection}>
         <Text style={styles.sectionHeader}>Issued by </Text>
-        {renderIssuerCard(issuer)}
+        {IssuerCard(requester)}
       </View>
 
       <View style={styles.claimsSection}>

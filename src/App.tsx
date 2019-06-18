@@ -15,7 +15,7 @@ const App = () => {
   return (
     <ThemeProvider uiTheme={JolocomTheme}>
       <Provider store={store}>
-        <Navigator dispatch={store.dispatch} />
+        <Navigator dispatch={store.dispatch}/>
       </Provider>
     </ThemeProvider>
   )

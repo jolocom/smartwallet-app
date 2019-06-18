@@ -1,24 +1,24 @@
-import { navigationActions } from 'src/actions/'
-import { AnyAction, Dispatch } from 'redux'
-import { routeList } from 'src/routeList'
-import { BackendMiddleware } from '../../backendMiddleware'
+import {navigationActions} from 'src/actions/'
+import {routeList} from 'src/routeList'
 import SplashScreen from 'react-native-splash-screen'
 import I18n from 'src/locales/i18n'
+import { ThunkAction, ThunkActionCreator } from 'src/store'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
-export const showErrorScreen = (error: Error, returnTo = routeList.Home) => (
-  dispatch: Dispatch<AnyAction>,
-) =>
-  dispatch(
-    navigationActions.navigate({
-      routeName: routeList.Exception,
-      params: { returnTo, error },
-    }),
-  )
+export const showErrorScreen = (error: AppError) => {
+  return navigationActions.navigate({
+    routeName: routeList.Exception,
+    params: {
+      returnTo: error.navigateTo || routeList.Home,
+      error,
+    },
+  })
+}
 
-export const initApp = () => async (
-  dispatch: Dispatch<AnyAction>,
-  getState: Function,
-  backendMiddleware: BackendMiddleware,
+export const initApp: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   try {
     await backendMiddleware.initStorage()
@@ -28,10 +28,14 @@ export const initApp = () => async (
     if (storedSettings.locale) I18n.locale = storedSettings.locale
     else storedSettings.locale = I18n.locale
 
-    dispatch(loadSettings(storedSettings))
     SplashScreen.hide()
+    return dispatch(loadSettings(storedSettings))
   } catch (e) {
-    dispatch(showErrorScreen(e, routeList.Landing))
+    return dispatch(
+      showErrorScreen(
+        new AppError(ErrorCode.WalletInitFailed, e, routeList.Landing),
+      ),
+    )
   }
 }
 
@@ -40,14 +44,14 @@ export const loadSettings = (settings: { [key: string]: any }) => ({
   value: settings,
 })
 
-export const setLocale = (locale: string) => async (
-  dispatch: Dispatch<AnyAction>,
-  getState: Function,
-  backendMiddleware: BackendMiddleware,
+export const setLocale: ThunkActionCreator = (locale: string) => async (
+  dispatch,
+  getState,
+  backendMiddleware
 ) => {
   await backendMiddleware.storageLib.store.setting('locale', locale)
   I18n.locale = locale
-  dispatch({
+  return dispatch({
     type: 'SET_LOCALE',
     value: locale,
   })
