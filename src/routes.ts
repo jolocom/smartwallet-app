@@ -62,18 +62,17 @@ const navOptScreenWCancel = {
     backgroundColor: defaultHeaderBackgroundColor,
   },
   headerTitleStyle: {
-    color: JolocomTheme.primaryColorWhite
+    color: JolocomTheme.primaryColorWhite,
   },
   headerBackImage,
   ...Platform.select({
     ios: {
       headerBackTitleStyle: {
         color: JolocomTheme.primaryColorPurple,
-      }
-    }
+      },
+    },
   }),
 }
-
 
 const bottomNavBarBackground =
   Platform.OS == 'android'

@@ -5,7 +5,7 @@ import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage
 describe('MaskedImage component', () => {
   const props = {
     addPoint: (x: number, y: number) => null,
-    disabled: false
+    disabled: false,
   }
 
   it('correctly calls the function to configure PanResponder on component mount', () => {
@@ -24,8 +24,7 @@ describe('MaskedImage component', () => {
   })
 
   it('correctly handles a gesture start', () => {
-    const
-      x = 191,
+    const x = 191,
       y = 381,
       mockNativeEvent = {
         nativeEvent: {
@@ -41,8 +40,7 @@ describe('MaskedImage component', () => {
   })
 
   it('correctly handles gesture continuation', () => {
-    const
-      x = 188,
+    const x = 188,
       y = 381,
       mockNativeEvent = {
         nativeEvent: {

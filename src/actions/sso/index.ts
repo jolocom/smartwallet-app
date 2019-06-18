@@ -8,7 +8,7 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { getUiCredentialTypeByType } from 'src/lib/util'
-import { convertToDecoratedClaim, resetSelected} from '../account'
+import { convertToDecoratedClaim, resetSelected } from '../account'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
@@ -49,12 +49,8 @@ export const setDeepLinkLoading = (value: boolean) => ({
 export const receiveExternalCredential: ThunkActionCreator = (
   credReceive: JSONWebToken<CredentialsReceive>,
   offeror: IdentitySummary,
-  credentialOfferMetadata?: Array<CredentialMetadataSummary>,
-) => async (
-  dispatch,
-  getState,
-  backendMiddleware
-) => {
+  credentialOfferMetadata?: CredentialMetadataSummary[],
+) => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet, registry, storageLib } = backendMiddleware
 
   await identityWallet.validateJWT(credReceive, undefined, registry)
@@ -79,24 +75,20 @@ export const receiveExternalCredential: ThunkActionCreator = (
     await storageLib.store.issuerProfile(offeror)
   }
 
-    // TODO change convertToDecoratedClaim to (metadata) => (cred): decoratedClaim
-    // the types of the cred metadata arrays where it is use differ too much to do it simply right now
-  const asDecoratedCredentials = providedCredentials.map(
-    (cred) => {
-      const md = credentialOfferMetadata
-        ? credentialOfferMetadata.filter(mds => cred.type.includes(mds.type))
-        : undefined
+  // TODO change convertToDecoratedClaim to (metadata) => (cred): decoratedClaim
+  // the types of the cred metadata arrays where it is use differ too much to do it simply right now
+  const asDecoratedCredentials = providedCredentials.map(cred => {
+    const md = credentialOfferMetadata
+      ? credentialOfferMetadata.filter(mds => cred.type.includes(mds.type))
+      : undefined
 
-      const renderInfo = md && md.length
-        ? md[0].renderInfo
-        : undefined
+    const renderInfo = md && md.length ? md[0].renderInfo : undefined
 
-      return {
-        ...convertToDecoratedClaim(cred),
-        renderInfo
-      }
+    return {
+      ...convertToDecoratedClaim(cred),
+      renderInfo,
     }
-  )
+  })
 
   dispatch(
     setReceivingCredential(
@@ -148,7 +140,6 @@ export const consumeCredentialRequest: ThunkActionCreator = (
     { did: issuerDid },
     { publicProfile: parsedProfile },
   )
-
 
   const {
     requestedCredentialTypes: requestedTypes,

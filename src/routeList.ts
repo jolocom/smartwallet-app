@@ -20,5 +20,5 @@ export enum routeList {
   ClaimDetails = 'ClaimDetails',
   DocumentDetails = 'DocumentDetails',
 
-  Exception = 'Exception'
+  Exception = 'Exception',
 }

@@ -6,7 +6,7 @@ import { prepareLabel } from 'src/lib/util'
 import { DocumentCard } from '../../documents/components/documentCard'
 import I18n from 'src/locales/i18n'
 import { IssuerCard } from '../../documents/components/issuerCard'
-import {IdentitySummary} from '../../../actions/sso/types'
+import { IdentitySummary } from '../../../actions/sso/types'
 import strings from '../../../locales/strings'
 
 interface Props {
@@ -100,9 +100,7 @@ export const CredentialDialogComponent: React.SFC<Props> = (
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <DocumentCard
-          document={credentialToRender}
-        />
+        <DocumentCard document={credentialToRender} />
       </View>
 
       <View style={styles.issuerSection}>

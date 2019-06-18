@@ -5,11 +5,13 @@ import { CredentialOverview } from '../components/credentialOverview'
 import { accountActions } from 'src/actions'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { RootState } from '../../../reducers'
-import {withLoading} from '../../../actions/modifiers'
-import {setDeepLinkLoading} from '../../../actions/sso'
-import {ThunkDispatch} from '../../../store'
+import { withLoading } from '../../../actions/modifiers'
+import { setDeepLinkLoading } from '../../../actions/sso'
+import { ThunkDispatch } from '../../../store'
 
-interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 export class ClaimsContainer extends React.Component<Props> {
   public componentWillMount(): void {
@@ -42,7 +44,8 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
-  setClaimsForDid: () => dispatch(withLoading(setDeepLinkLoading)(accountActions.setClaimsForDid)),
+  setClaimsForDid: () =>
+    dispatch(withLoading(setDeepLinkLoading)(accountActions.setClaimsForDid)),
 })
 
 export const Claims = connect(

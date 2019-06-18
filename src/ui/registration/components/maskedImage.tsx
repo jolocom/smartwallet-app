@@ -69,7 +69,8 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
   private handleDrawStart = (e: GestureResponderEvent): void => {
     if (this.props.disabled) return
-    const curX = Math.floor(e.nativeEvent.locationX), curY = Math.floor(e.nativeEvent.locationY)
+    const curX = Math.floor(e.nativeEvent.locationX),
+      curY = Math.floor(e.nativeEvent.locationY)
     this.props.addPoint(curX, curY)
 
     this.setState({
@@ -84,7 +85,8 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   private handleDraw = (e: GestureResponderEvent): void => {
     if (this.props.disabled) return
     const { prevX, prevY, linesPts, circles, pathDs } = this.state
-    const curX = Math.floor(e.nativeEvent.locationX), curY = Math.floor(e.nativeEvent.locationY)
+    const curX = Math.floor(e.nativeEvent.locationX),
+      curY = Math.floor(e.nativeEvent.locationY)
     let pathIdx = this.state.pathIdx
 
     this.props.addPoint(curX, curY)
@@ -95,10 +97,14 @@ export class MaskedImageComponent extends React.Component<Props, State> {
       // check if it intersects with any previous segment
       for (let i = 0; i < linesPts.length; i += 4) {
         // get intersection
-        const
-          a = linesPts[i], b = linesPts[i+1],
-          c = linesPts[i+2], d = linesPts[i+3],
-          p = prevX, q = prevY, r = curX, s = curY
+        const a = linesPts[i],
+          b = linesPts[i + 1],
+          c = linesPts[i + 2],
+          d = linesPts[i + 3],
+          p = prevX,
+          q = prevY,
+          r = curX,
+          s = curY
 
         let det, gamma, lambda
         det = (c - a) * (s - q) - (r - p) * (d - b)
@@ -124,7 +130,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
       if (linesPts.length >= MAX_LINE_PTS) {
         let linesPtsIdx = this.state.linesPtsIdx
         if (
-          pathIdx < pathDs.length-1 &&
+          pathIdx < pathDs.length - 1 &&
           (pathIdx == 0 || linesPtsIdx >= linesPts.length)
         ) {
           pathIdx++
@@ -162,7 +168,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
       // unsaved temporary line segment
       if (this._pathEls[pathIdx]) {
         this._pathEls[pathIdx].setNativeProps({
-          d: pathDs[pathIdx] + `L${curX},${curY}`
+          d: pathDs[pathIdx] + `L${curX},${curY}`,
         })
       }
     }
@@ -177,32 +183,22 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   render() {
     return (
       <Svg width="100%" height="100%" {...this.panResponder.panHandlers}>
-        {
-          this.state.pathDs.map((d, idx) => (
-            <Path
-              key={idx}
-              ref={el => this._pathEls[idx] = el }
-              d={d}
-              fill="none"
-              stroke="#FFDEBC"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="1,10"
-              strokeWidth="2"
-            />)
-          )
-        }
-        {
-          this.state.circles.map(([x, y], i) => (
-            <Circle
-              key={i}
-              cx={x}
-              cy={y}
-              r="4"
-              fill="#ffefdf"
-            />
-          ))
-        }
+        {this.state.pathDs.map((d, idx) => (
+          <Path
+            key={idx}
+            ref={el => (this._pathEls[idx] = el)}
+            d={d}
+            fill="none"
+            stroke="#FFDEBC"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray="1,10"
+            strokeWidth="2"
+          />
+        ))}
+        {this.state.circles.map(([x, y], i) => (
+          <Circle key={i} cx={x} cy={y} r="4" fill="#ffefdf" />
+        ))}
       </Svg>
     )
   }

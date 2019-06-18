@@ -8,8 +8,8 @@ import { getCredentialIconByType } from 'src/resources/util'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { ConsentAttributeCard, HeaderSection } from './claimCard'
 import I18n from 'src/locales/i18n'
-import {IdentitySummary} from '../../../actions/sso/types'
-import {IssuerCard} from '../../documents/components/issuerCard'
+import { IdentitySummary } from '../../../actions/sso/types'
+import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 
 interface Props {

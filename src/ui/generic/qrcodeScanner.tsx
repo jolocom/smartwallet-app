@@ -50,7 +50,9 @@ export class QRcodeScanner extends React.Component<Props, State> {
         <Container>
           <QRScanner
             onRead={(e: QrScanEvent) => onScannerSuccess(e)}
-            topContent={<Text>{I18n.t(strings.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>}
+            topContent={
+              <Text>{I18n.t(strings.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>
+            }
             bottomContent={
               <Button
                 onPress={onScannerCancel}
@@ -81,9 +83,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       interactionToken = JolocomLib.parse.interactionToken.fromJWT(e.data)
     } catch (err) {
       return dispatch(
-        showErrorScreen(
-          new AppError(ErrorCode.ParseJWTFailed, err),
-        ),
+        showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)),
       )
     }
 

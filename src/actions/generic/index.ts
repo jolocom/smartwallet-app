@@ -6,15 +6,14 @@ import { ThunkAction, ThunkActionCreator } from 'src/store'
 import { AppError } from 'src/lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 
-export const showErrorScreen = (error: AppError) => {
-  return navigationActions.navigate({
+export const showErrorScreen = (error: AppError) =>
+  navigationActions.navigate({
     routeName: routeList.Exception,
     params: {
       returnTo: error.navigateTo || routeList.Home,
       error,
     },
   })
-}
 
 export const initApp: ThunkAction = async (
   dispatch,

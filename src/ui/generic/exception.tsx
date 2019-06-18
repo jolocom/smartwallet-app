@@ -9,11 +9,13 @@ import I18n from 'src/locales/i18n'
 import { AppError, errorTitleMessages } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
-import {ThunkDispatch} from '../../store'
+import { ThunkDispatch } from '../../store'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface ConnectProps {
-  navigateBack: (routeName: string) => ReturnType<typeof navigationActions.navigatorReset>
+  navigateBack: (
+    routeName: string,
+  ) => ReturnType<typeof navigationActions.navigatorReset>
 }
 
 interface Props extends ConnectProps {
@@ -88,7 +90,9 @@ export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
   const err = props.navigation.state.params.error
   const errorTitle =
     props.errorTitle || getRandomStringFromArray(errorTitleMessages)
-  let errorText = err ? err.message : strings.THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST
+  let errorText = err
+    ? err.message
+    : strings.THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST
   errorText = I18n.t(errorText) + '.'
   console.error(err && err.origError ? err.origError : err)
 
@@ -122,7 +126,8 @@ export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
 const mapStateToProps = (): {} => ({})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  navigateBack: (routeName: string) => dispatch(navigationActions.navigatorReset({routeName})),
+  navigateBack: (routeName: string) =>
+    dispatch(navigationActions.navigatorReset({ routeName })),
 })
 
 export const Exception = connect(

@@ -63,10 +63,7 @@ export const EntropyComponent: React.SFC<Props> = props => {
         I18n.t(strings.PLEASE_TAP_THE_SCREEN_AND_DRAW_ON_IT_RANDOMLY)
       : `${Math.trunc(progress * 100)} %`
 
-  const style =
-    progress === 0
-      ? styles.text
-      : [styles.text, styles.bigFont]
+  const style = progress === 0 ? styles.text : [styles.text, styles.bigFont]
 
   return (
     <Container style={styles.mainContainer}>

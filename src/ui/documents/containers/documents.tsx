@@ -18,7 +18,9 @@ import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
 
-interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 interface State {
   activeDocumentIndex: number
@@ -80,18 +82,21 @@ export class DocumentsContainer extends React.Component<Props, State> {
   public render() {
     const { openDocumentDetails, decoratedCredentials } = this.props
     const documents = getDocumentClaims(decoratedCredentials['Other'])
-    const docFilter =
-      (this.state.showingValid ? filters.filterByValid : filters.filterByExpired)
+    const docFilter = this.state.showingValid
+      ? filters.filterByValid
+      : filters.filterByExpired
     const displayedDocs = docFilter(documents)
     const isEmpty = displayedDocs.length == 0
     const otherIsEmpty = displayedDocs.length == documents.length
 
     return (
       <Animated.View style={styles.mainContainer}>
-        {!otherIsEmpty && <DocumentViewToggle
-          showingValid={this.state.showingValid}
-          onTouch={this.handleToggle}
-        />}
+        {!otherIsEmpty && (
+          <DocumentViewToggle
+            showingValid={this.state.showingValid}
+            onTouch={this.handleToggle}
+          />
+        )}
         <ScrollView
           // scrollEventThrottle={16}
           // onScroll={Animated.event([

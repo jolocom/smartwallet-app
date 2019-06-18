@@ -111,7 +111,9 @@ interface SettingsScreenProps {
 export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
   <View style={styles.container}>
     <View style={styles.topSection}>
-      <Text style={styles.sectionHeader}>{I18n.t(strings.YOUR_PREFERENCES)}</Text>
+      <Text style={styles.sectionHeader}>
+        {I18n.t(strings.YOUR_PREFERENCES)}
+      </Text>
       <LanguageCard
         setLocale={props.setLocale}
         locales={props.locales}

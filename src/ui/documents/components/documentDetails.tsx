@@ -42,9 +42,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export const DocumentDetails: React.SFC<Props> = ({
-  document,
-}) => {
+export const DocumentDetails: React.SFC<Props> = ({ document }) => {
   if (!document) return null
 
   return (

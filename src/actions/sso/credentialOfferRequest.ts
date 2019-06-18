@@ -10,15 +10,12 @@ import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentials
 import { ThunkActionCreator } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { withErrorHandling, withLoading } from '../modifiers'
-import { toggleLoading} from '../account'
+import { toggleLoading } from '../account'
 import ErrorCode from '../../lib/errorCodes'
 
 export const consumeCredentialOfferRequest: ThunkActionCreator = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
-) => async ( dispatch,
-  getState,
-  { keyChainLib, identityWallet, registry }
-) => {
+) => async (dispatch, getState, { keyChainLib, identityWallet, registry }) => {
   try {
     await identityWallet.validateJWT(credOfferRequest, undefined, registry)
     const { interactionToken } = credOfferRequest
@@ -46,7 +43,7 @@ export const consumeCredentialOfferRequest: ThunkActionCreator = (
 
     const selectedMetadata = interactionToken.offeredTypes.map(type => ({
       issuer: {
-        did: keyIdToDid(credOfferRequest.issuer)
+        did: keyIdToDid(credOfferRequest.issuer),
       },
       type,
       renderInfo: interactionToken.getRenderInfoForType(type) || {},
@@ -76,7 +73,13 @@ export const consumeCredentialOfferRequest: ThunkActionCreator = (
         withErrorHandling(
           showErrorScreen,
           err => new AppError(ErrorCode.CredentialsReceiveFailed, err),
-        )(receiveExternalCredential(credentialReceive, offerorInfo, selectedMetadata)),
+        )(
+          receiveExternalCredential(
+            credentialReceive,
+            offerorInfo,
+            selectedMetadata,
+          ),
+        ),
       ),
     )
   } finally {

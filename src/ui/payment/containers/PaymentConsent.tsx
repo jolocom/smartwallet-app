@@ -6,7 +6,9 @@ import { cancelSSO } from 'src/actions/sso'
 import { sendPaymentResponse } from 'src/actions/sso/paymentRequest'
 import { ThunkDispatch } from 'src/store'
 
-interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 

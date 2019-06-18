@@ -11,7 +11,9 @@ import { ThunkDispatch } from 'src/store'
 import strings from '../../../locales/strings'
 const loaders = require('react-native-indicator')
 
-interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 export interface State {}
 
@@ -107,11 +109,13 @@ export class LoadingContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({registration: {loading: {loadingMsg}}}: RootState) => {
-  return {
-    loadingMsg
-  }
-}
+const mapStateToProps = ({
+  registration: {
+    loading: { loadingMsg },
+  },
+}: RootState) => ({
+  loadingMsg,
+})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({})
 
