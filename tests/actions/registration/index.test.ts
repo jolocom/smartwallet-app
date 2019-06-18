@@ -7,8 +7,9 @@ import { getJestConfig } from 'ts-jest/dist/test-utils'
 import * as util from 'src/lib/util'
 import { withErrorHandling } from '../../../src/actions/modifiers'
 import { showErrorScreen } from '../../../src/actions/generic'
-import { AppError, ErrorCode } from '../../../src/lib/errors'
+import { AppError } from '../../../src/lib/errors'
 import { routeList } from '../../../src/routeList'
+import ErrorCode from '../../../src/lib/errorCodes'
 
 const MockDate = require('mockdate')
 
