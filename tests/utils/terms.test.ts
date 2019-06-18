@@ -7,7 +7,7 @@ describe('Terms', () => {
       expect(Object.keys(en).length).toBe(Object.keys(strings).length)
     } catch (e) {
       console.error('Please run "yarn terms" to synchronise the terms')
-      console.error(e.message)
+      throw e
     }
   })
 })
