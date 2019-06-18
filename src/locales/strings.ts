@@ -1,4 +1,4 @@
-import { ErrorCode } from '../lib/errors'
+import ErrorCode from '../lib/errorCodes'
 
 export default {
   YOUR_JOLOCOM_WALLET: 'Your Jolocom Wallet',
