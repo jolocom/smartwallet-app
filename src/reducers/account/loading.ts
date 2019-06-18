@@ -11,7 +11,7 @@ export const loading = (
 ): LoadingState => {
   switch (action.type) {
     case 'SET_LOADING':
-    return {loading: action.value}
+      return { loading: action.value }
     default:
       return state
   }

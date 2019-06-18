@@ -8,6 +8,7 @@ import { getCredentialIconByType } from 'src/resources/util'
 import { SectionClaimCard } from 'src/ui/structure/claimCard'
 import { StatePaymentRequestSummary } from 'src/reducers/sso'
 import { formatEth } from 'src/utils/formatEth'
+import strings from '../../../locales/strings'
 
 interface Props {
   activePaymentRequest: StatePaymentRequestSummary
@@ -59,8 +60,8 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
       <ButtonSection
         disabled={this.state.pending}
         denyDisabled={this.state.pending}
-        confirmText={I18n.t('Confirm')}
-        denyText={I18n.t('Deny')}
+        confirmText={I18n.t(strings.CONFIRM)}
+        denyText={I18n.t(strings.DENY)}
         handleConfirm={this.handleConfirm}
         handleDeny={() => this.props.cancelPaymentRequest()}
       />
@@ -90,12 +91,12 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
     return (
       <View style={{ width: '100%', margin: 0, padding: 0 }}>
         <SectionClaimCard
-          title={`${I18n.t('For')}:`}
+          title={`${I18n.t(strings.FOR)}:`}
           primaryText={description}
-          leftIcon={this.renderLeftIcon('Other')}
+          leftIcon={this.renderLeftIcon(I18n.t(strings.OTHER))}
         />
         <SectionClaimCard
-          title={`${I18n.t('To')}:`}
+          title={`${I18n.t(strings.TO)}:`}
           primaryText={`${did.substring(0, 17)}...`}
           secondaryText={`Eth address: ${address.substring(0, 13)}...`}
           leftIcon={this.renderLeftIcon('Email')}

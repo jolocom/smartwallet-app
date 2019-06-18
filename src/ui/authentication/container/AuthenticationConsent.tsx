@@ -4,11 +4,13 @@ import { AuthenticationConsentComponent } from '../components/AuthenticationCons
 import { RootState } from 'src/reducers'
 import { cancelSSO } from 'src/actions/sso'
 import { sendAuthenticationResponse } from 'src/actions/sso/authenticationRequest'
-import {ThunkDispatch} from '../../../store'
-import {withErrorHandling} from '../../../actions/modifiers'
-import {showErrorScreen} from '../../../actions/generic'
+import { ThunkDispatch } from '../../../store'
+import { withErrorHandling } from '../../../actions/modifiers'
+import { showErrorScreen } from '../../../actions/generic'
 
-interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -32,7 +34,8 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  confirmAuthenticationRequest: () => dispatch(withErrorHandling(showErrorScreen)(sendAuthenticationResponse)),
+  confirmAuthenticationRequest: () =>
+    dispatch(withErrorHandling(showErrorScreen)(sendAuthenticationResponse)),
   cancelAuthenticationRequest: () => dispatch(cancelSSO),
 })
 

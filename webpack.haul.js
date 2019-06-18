@@ -41,6 +41,7 @@ module.exports = ({ platform }, { module, resolve }) => ({
       '.tsx',
       '.native.ts',
       '.native.tsx',
+      '.json',
       ...resolve.extensions
     ]
   }

@@ -12,7 +12,9 @@ import { withErrorHandling } from 'src/actions/modifiers'
 import { showErrorScreen } from 'src/actions/generic'
 import { ThunkDispatch } from 'src/store'
 
-interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 interface State {
   isDrawn: boolean
@@ -92,7 +94,11 @@ const mapStateToProps = (state: RootState) => ({})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   submit: (encodedEntropy: string) =>
-    dispatch(withErrorHandling(showErrorScreen)(registrationActions.submitEntropy(encodedEntropy))),
+    dispatch(
+      withErrorHandling(showErrorScreen)(
+        registrationActions.submitEntropy(encodedEntropy),
+      ),
+    ),
 })
 
 export const Entropy = connect(

@@ -14,9 +14,9 @@ export const setLoadingMsg = (loadingMsg: string) => ({
   value: loadingMsg,
 })
 
-export const submitEntropy: ThunkActionCreator = (encodedEntropy: string) => (
-  dispatch
-) => {
+export const submitEntropy: ThunkActionCreator = (
+  encodedEntropy: string,
+) => dispatch => {
   dispatch(
     navigationActions.navigatorReset({
       routeName: routeList.Loading,
@@ -30,28 +30,26 @@ export const submitEntropy: ThunkActionCreator = (encodedEntropy: string) => (
 export const startRegistration: ThunkAction = async (
   dispatch,
   getState,
-  backendMiddleware
+  backendMiddleware,
 ) => {
-    const randomPassword = await generateSecureRandomBytes(32)
+  const randomPassword = await generateSecureRandomBytes(32)
 
-    await backendMiddleware.keyChainLib.savePassword(
-      randomPassword.toString('base64'),
-    )
+  await backendMiddleware.keyChainLib.savePassword(
+    randomPassword.toString('base64'),
+  )
 
-    return dispatch(
-      navigationActions.navigatorReset({
-        routeName: routeList.Entropy,
-      }),
-    )
+  return dispatch(
+    navigationActions.navigatorReset({
+      routeName: routeList.Entropy,
+    }),
+  )
 }
 
 export const finishRegistration = navigatorReset({ routeName: routeList.Home })
 
-export const createIdentity: ThunkActionCreator = (encodedEntropy: string) => async (
-  dispatch,
-  getState,
-  backendMiddleware
-) => {
+export const createIdentity: ThunkActionCreator = (
+  encodedEntropy: string,
+) => async (dispatch, getState, backendMiddleware) => {
   const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
 
   const password = await keyChainLib.getPassword()

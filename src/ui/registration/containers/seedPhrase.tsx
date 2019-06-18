@@ -2,15 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
 import { finishRegistration } from 'src/actions/registration'
-import {ThunkDispatch} from '../../../store'
-
+import { ThunkDispatch } from '../../../store'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     ReturnType<typeof mapStateToProps> {
   dispatch: ThunkDispatch
   deepLinkLoading: boolean
-  navigation: {state: { params: any} } // TODO Type?
+  navigation: { state: { params: any } } // TODO Type?
 }
 
 interface State {

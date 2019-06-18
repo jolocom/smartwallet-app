@@ -50,7 +50,7 @@ export interface SsoState {
 const initialState: SsoState = {
   activeCredentialRequest: {
     requester: {
-      did: ''
+      did: '',
     },
     callbackURL: '',
     availableCredentials: [],

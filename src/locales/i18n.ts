@@ -1,8 +1,8 @@
 const RNLanguages = require('react-native-languages')
 import I18n from 'i18n-js'
 
-const de = require('./de').default
-const nl = require('./nl').default
+const de = require('./de.json')
+const nl = require('./nl.json')
 
 I18n.locale = RNLanguages.language.split('-')[0]
 I18n.defaultLocale = 'en'

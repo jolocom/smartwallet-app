@@ -15,7 +15,7 @@ import {
 import { ReactNode } from 'react-redux'
 import { DecoratedClaims } from 'src/reducers/account'
 import I18n from 'src/locales/i18n'
-import {values, all, isEmpty} from 'ramda'
+import { values, all, isEmpty } from 'ramda'
 
 interface Props {
   handleInteraction?: (event: GestureResponderEvent) => void

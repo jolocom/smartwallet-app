@@ -9,7 +9,7 @@ type IssuerPublicProfileSummary = PublicProfileClaimMetadata['claimInterface']
 /**
  * @dev An identity summary is composed of a DID + all public info (currently public profile)
  */
-export type IdentitySummary = {
+export interface IdentitySummary {
   did: string
   publicProfile?: IssuerPublicProfileSummary
 }

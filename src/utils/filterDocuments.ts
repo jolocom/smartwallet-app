@@ -1,5 +1,5 @@
 import { DecoratedClaims } from 'src/reducers/account'
-import { compose, includes, or, equals, complement} from 'ramda'
+import { compose, includes, or, equals, complement } from 'ramda'
 
 const DOC_TYPES = [
   'IdCard',
@@ -18,5 +18,7 @@ const isDocument = ({ credentialType, renderInfo = {} }: DecoratedClaims) =>
     isIncludedIn(DOC_TYPES),
   )(credentialType)
 
-export const getDocumentClaims = (claims: DecoratedClaims[]) => claims.filter(isDocument)
-export const getNonDocumentClaims = (claims: DecoratedClaims[]) => claims.filter(complement(isDocument))
+export const getDocumentClaims = (claims: DecoratedClaims[]) =>
+  claims.filter(isDocument)
+export const getNonDocumentClaims = (claims: DecoratedClaims[]) =>
+  claims.filter(complement(isDocument))

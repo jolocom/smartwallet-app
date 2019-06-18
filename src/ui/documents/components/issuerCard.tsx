@@ -3,7 +3,7 @@ import { StyleSheet, Image } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ClaimCard } from '../../sso/components/claimCard'
 import { IdentitySummary } from '../../../actions/sso/types'
-import {isEmpty} from 'ramda'
+import { isEmpty } from 'ramda'
 
 const styles = StyleSheet.create({
   container: {
@@ -32,17 +32,12 @@ const styles = StyleSheet.create({
 })
 
 export const IssuerCard = (issuer: IdentitySummary): JSX.Element => {
-  const {
-    image,
-    primaryText,
-    secondaryText,
-  } = convertToClaimCard(issuer)
+  const { image, primaryText, secondaryText } = convertToClaimCard(issuer)
   return (
     <ClaimCard
       containerStyle={{
-        paddingVertical: '2%'
-      }
-      }
+        paddingVertical: '2%',
+      }}
       secondaryText={secondaryText}
       secondaryTextStyle={styles.issuerName}
       primaryText={primaryText}
@@ -57,7 +52,7 @@ const convertToClaimCard = ({ did, publicProfile }: IdentitySummary) => {
     return {
       description: 'No description provided',
       image: undefined,
-      primaryText: did && did.substr(0, 25) + '...' || 'TODO',
+      primaryText: (did && did.substr(0, 25) + '...') || 'TODO',
       secondaryText: 'Service Name',
     }
   } else {
@@ -65,7 +60,7 @@ const convertToClaimCard = ({ did, publicProfile }: IdentitySummary) => {
       primaryText: publicProfile.url,
       secondaryText: publicProfile.name,
       image: publicProfile.image,
-      description: publicProfile.description
+      description: publicProfile.description,
     }
   }
 }

@@ -43,7 +43,7 @@ export const toggleClaimsLoading = (value: boolean) => ({
 export const checkIdentityExists: ThunkAction = async (
   dispatch,
   getState,
-  backendMiddleware
+  backendMiddleware,
 ) => {
   dispatch(toggleClaimsLoading(true))
   const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
@@ -86,9 +86,9 @@ export const checkIdentityExists: ThunkAction = async (
   )
 }
 
-export const openClaimDetails: ThunkActionCreator = (claim: DecoratedClaims) => (
-  dispatch
-) => {
+export const openClaimDetails: ThunkActionCreator = (
+  claim: DecoratedClaims,
+) => dispatch => {
   dispatch(setSelected(claim))
   return dispatch(
     navigationActions.navigate({
@@ -100,7 +100,7 @@ export const openClaimDetails: ThunkActionCreator = (claim: DecoratedClaims) => 
 export const saveClaim: ThunkAction = async (
   dispatch,
   getState,
-  backendMiddleware
+  backendMiddleware,
 ) => {
   const { identityWallet, storageLib, keyChainLib } = backendMiddleware
 
@@ -136,7 +136,7 @@ export const saveClaim: ThunkAction = async (
 export const saveExternalCredentials: ThunkAction = async (
   dispatch,
   getState,
-  backendMiddleware
+  backendMiddleware,
 ) => {
   const { storageLib } = backendMiddleware
   const externalCredentials = getState().account.claims.pendingExternal
@@ -161,7 +161,7 @@ export const toggleLoading = (value: boolean) => ({
 export const setClaimsForDid: ThunkAction = async (
   dispatch,
   getState,
-  backendMiddleware
+  backendMiddleware,
 ) => {
   const { storageLib } = backendMiddleware
 

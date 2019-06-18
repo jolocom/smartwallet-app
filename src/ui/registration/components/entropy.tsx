@@ -5,6 +5,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Block, Container, CenteredText } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
+import strings from '../../../locales/strings'
 
 interface Props {
   addPoint: (x: number, y: number) => void
@@ -57,21 +58,18 @@ export const EntropyComponent: React.SFC<Props> = props => {
 
   const msg =
     progress === 0
-      ? I18n.t('For security purposes, we need some randomness') +
+      ? I18n.t(strings.FOR_SECURITY_PURPOSES_WE_NEED_SOME_RANDOMNESS) +
         '. ' +
-        I18n.t('Please tap the screen and draw on it randomly')
+        I18n.t(strings.PLEASE_TAP_THE_SCREEN_AND_DRAW_ON_IT_RANDOMLY)
       : `${Math.trunc(progress * 100)} %`
 
-  const style =
-    progress === 0
-      ? styles.text
-      : [styles.text, styles.bigFont]
+  const style = progress === 0 ? styles.text : [styles.text, styles.bigFont]
 
   return (
     <Container style={styles.mainContainer}>
       <CenteredText style={style} msg={msg} />
       <Block>
-        <MaskedImageComponent disabled={progress===1} addPoint={addPoint} />
+        <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
       </Block>
       <View style={styles.footerButton}>
         {progress === 1 ? (
@@ -82,7 +80,7 @@ export const EntropyComponent: React.SFC<Props> = props => {
             }}
             upperCase={false}
             raised={true}
-            text={I18n.t('Continue')}
+            text={I18n.t(strings.CONTINUE)}
             onPress={submitEntropy}
           />
         ) : null}

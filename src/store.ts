@@ -1,8 +1,12 @@
-import { createStore, applyMiddleware, AnyAction as OriginalAnyAction } from 'redux'
+import {
+  createStore,
+  applyMiddleware,
+  AnyAction as OriginalAnyAction,
+} from 'redux'
 import { NavigationAction } from 'react-navigation'
 import thunk, {
   ThunkDispatch as OriginalThunkDispatch,
-  ThunkAction as OriginalThunkAction
+  ThunkAction as OriginalThunkAction,
 } from 'redux-thunk'
 import { RootState, rootReducer } from 'src/reducers'
 import { BackendMiddleware } from 'src/backendMiddleware'
@@ -28,6 +32,14 @@ export function initStore(): Store<any> {
 }
 
 export type AnyAction = OriginalAnyAction | NavigationAction
-export type ThunkDispatch = OriginalThunkDispatch<RootState, BackendMiddleware, AnyAction>
-export type ThunkAction<R = AnyAction | Promise<AnyAction | void>> = OriginalThunkAction<R, RootState, BackendMiddleware, AnyAction>
-export type ThunkActionCreator<R = AnyAction | Promise<AnyAction | void>> = (...any: any[]) => ThunkAction<R>
+export type ThunkDispatch = OriginalThunkDispatch<
+  RootState,
+  BackendMiddleware,
+  AnyAction
+>
+export type ThunkAction<
+  R = AnyAction | Promise<AnyAction | void>
+> = OriginalThunkAction<R, RootState, BackendMiddleware, AnyAction>
+export type ThunkActionCreator<R = AnyAction | Promise<AnyAction | void>> = (
+  ...any: any[]
+) => ThunkAction<R>
