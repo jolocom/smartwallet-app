@@ -111,7 +111,7 @@ export const saveClaim: ThunkAction = async (
   const verifiableCredential = await identityWallet.create.signedCredential(
     {
       metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
-      claim: claimsItem.claimData,
+      claim: { ...claimsItem.claimData },
       subject: did,
     },
     password,
