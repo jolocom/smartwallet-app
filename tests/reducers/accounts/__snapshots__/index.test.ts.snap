@@ -2,71 +2,86 @@
 
 exports[`account reducer should handle the DID_SET action  1`] = `
 Object {
-  "claims": Immutable.Map {
-    "loading": false,
-    "selected": Immutable.Map {
-      "credentialType": "",
-      "claimData": Immutable.Map {},
-      "id": "",
-      "issuer": "",
-      "subject": "",
-    },
-    "pendingExternal": Immutable.List [],
-    "decoratedCredentials": Immutable.Map {
-      "Personal": Immutable.List [
-        Immutable.Map {
-          "credentialType": "Name",
-          "claimData": Immutable.Map {
-            "givenName": "",
-            "familyName": "",
-          },
-          "id": "",
-          "issuer": "",
-          "subject": "",
-        },
-      ],
-      "Contact": Immutable.List [
-        Immutable.Map {
-          "credentialType": "Email",
-          "claimData": Immutable.Map {
+  "claims": Object {
+    "decoratedCredentials": Object {
+      "Contact": Array [
+        Object {
+          "claimData": Object {
             "email": "",
           },
+          "credentialType": "Email",
           "id": "",
-          "issuer": "",
-          "subject": "",
+          "issuer": Object {
+            "did": "",
+          },
           "keyboardType": "email-address",
+          "subject": "",
         },
-        Immutable.Map {
-          "credentialType": "Mobile Phone",
-          "claimData": Immutable.Map {
+        Object {
+          "claimData": Object {
             "telephone": "",
           },
+          "credentialType": "Mobile Phone",
           "id": "",
-          "issuer": "",
-          "subject": "",
+          "issuer": Object {
+            "did": "",
+          },
           "keyboardType": "phone-pad",
+          "subject": "",
         },
-        Immutable.Map {
-          "credentialType": "Postal Address",
-          "claimData": Immutable.Map {
+        Object {
+          "claimData": Object {
             "addressLine1": "",
             "addressLine2": "",
-            "postalCode": "",
             "city": "",
             "country": "",
+            "postalCode": "",
           },
+          "credentialType": "Postal Address",
           "id": "",
-          "issuer": "",
+          "issuer": Object {
+            "did": "",
+          },
           "subject": "",
         },
       ],
-      "Other": Immutable.List [],
+      "Other": Array [],
+      "Personal": Array [
+        Object {
+          "claimData": Object {
+            "familyName": "",
+            "givenName": "",
+          },
+          "credentialType": "Name",
+          "id": "",
+          "issuer": Object {
+            "did": "",
+          },
+          "subject": "",
+        },
+      ],
+    },
+    "loading": false,
+    "pendingExternal": Object {
+      "offer": Array [],
+      "offeror": Object {
+        "did": "",
+      },
+    },
+    "selected": Object {
+      "claimData": Object {},
+      "credentialType": "",
+      "id": "",
+      "issuer": Object {
+        "did": "",
+      },
+      "subject": "",
     },
   },
-  "did": Immutable.Map {
+  "did": Object {
     "did": "mock did",
   },
-  "loading": Immutable.Map {
+  "loading": Object {
     "loading": true,
   },
 }
@@ -74,71 +89,86 @@ Object {
 
 exports[`account reducer should initialize correctly 1`] = `
 Object {
-  "claims": Immutable.Map {
-    "loading": false,
-    "selected": Immutable.Map {
-      "credentialType": "",
-      "claimData": Immutable.Map {},
-      "id": "",
-      "issuer": "",
-      "subject": "",
-    },
-    "pendingExternal": Immutable.List [],
-    "decoratedCredentials": Immutable.Map {
-      "Personal": Immutable.List [
-        Immutable.Map {
-          "credentialType": "Name",
-          "claimData": Immutable.Map {
-            "givenName": "",
-            "familyName": "",
-          },
-          "id": "",
-          "issuer": "",
-          "subject": "",
-        },
-      ],
-      "Contact": Immutable.List [
-        Immutable.Map {
-          "credentialType": "Email",
-          "claimData": Immutable.Map {
+  "claims": Object {
+    "decoratedCredentials": Object {
+      "Contact": Array [
+        Object {
+          "claimData": Object {
             "email": "",
           },
+          "credentialType": "Email",
           "id": "",
-          "issuer": "",
-          "subject": "",
+          "issuer": Object {
+            "did": "",
+          },
           "keyboardType": "email-address",
+          "subject": "",
         },
-        Immutable.Map {
-          "credentialType": "Mobile Phone",
-          "claimData": Immutable.Map {
+        Object {
+          "claimData": Object {
             "telephone": "",
           },
+          "credentialType": "Mobile Phone",
           "id": "",
-          "issuer": "",
-          "subject": "",
+          "issuer": Object {
+            "did": "",
+          },
           "keyboardType": "phone-pad",
+          "subject": "",
         },
-        Immutable.Map {
-          "credentialType": "Postal Address",
-          "claimData": Immutable.Map {
+        Object {
+          "claimData": Object {
             "addressLine1": "",
             "addressLine2": "",
-            "postalCode": "",
             "city": "",
             "country": "",
+            "postalCode": "",
           },
+          "credentialType": "Postal Address",
           "id": "",
-          "issuer": "",
+          "issuer": Object {
+            "did": "",
+          },
           "subject": "",
         },
       ],
-      "Other": Immutable.List [],
+      "Other": Array [],
+      "Personal": Array [
+        Object {
+          "claimData": Object {
+            "familyName": "",
+            "givenName": "",
+          },
+          "credentialType": "Name",
+          "id": "",
+          "issuer": Object {
+            "did": "",
+          },
+          "subject": "",
+        },
+      ],
+    },
+    "loading": false,
+    "pendingExternal": Object {
+      "offer": Array [],
+      "offeror": Object {
+        "did": "",
+      },
+    },
+    "selected": Object {
+      "claimData": Object {},
+      "credentialType": "",
+      "id": "",
+      "issuer": Object {
+        "did": "",
+      },
+      "subject": "",
     },
   },
-  "did": Immutable.Map {
+  "did": Object {
     "did": "",
   },
-  "loading": Immutable.Map {
+  "loading": Object {
     "loading": true,
   },
 }

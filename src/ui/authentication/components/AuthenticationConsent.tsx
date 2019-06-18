@@ -7,8 +7,8 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 
 interface Props {
   activeAuthenticationRequest: StateAuthenticationRequestSummary
-  cancelAuthenticationRequest: () => void
-  confirmAuthenticationRequest: () => void
+  confirmAuthenticationRequest: Function
+  cancelAuthenticationRequest: Function
 }
 
 interface State {}
@@ -59,7 +59,7 @@ export class AuthenticationConsentComponent extends React.Component<
 
   private handleConfirm = () => {
     this.setState({ pending: true })
-    this.props.confirmAuthenticationRequest()
+    return this.props.confirmAuthenticationRequest()
   }
 
   private renderRequesterCard(requester: string, callbackURL: string) {
@@ -108,7 +108,7 @@ export class AuthenticationConsentComponent extends React.Component<
         confirmText={I18n.t('Authorize')}
         denyText={I18n.t('Deny')}
         handleConfirm={this.handleConfirm}
-        handleDeny={() => this.props.cancelAuthenticationRequest()}
+        handleDeny={() => this.props.cancelAuthenticationRequest()} // TODO Does this get dispatched correctly?
         verticalPadding={10}
       />
     )

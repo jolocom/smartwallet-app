@@ -2,10 +2,10 @@ import React from 'react'
 import { RecordsComponent } from 'src/ui/home/components/records'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
+import {ThunkDispatch} from '../../../store'
 
-interface ConnectProps {}
 
-interface Props extends ConnectProps {}
+interface Props extends ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 
@@ -19,7 +19,7 @@ export class RecordsContainer extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => ({})
 
-const mapDispatchToProps = (dispatch: Function) => ({})
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({})
 
 export const Records = connect(
   mapStateToProps,

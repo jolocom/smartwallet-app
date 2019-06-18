@@ -394,10 +394,9 @@ class TabBarBottom extends React.Component<Props, State> {
             // added React.Fragment and QRCodeButtonPlaceholder
             // </ALTERED>
             return (
-              <React.Fragment>
+              <React.Fragment key={route.key}>
                 {QR_CODE_BUTTON_INDEX == index && QRCodeButtonPlaceholder}
                 <ButtonComponent
-                  key={route.key}
                   onPress={() => onTabPress({ route })}
                   onLongPress={() => onTabLongPress({ route })}
                   testID={testID}

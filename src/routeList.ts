@@ -18,6 +18,7 @@ export enum routeList {
   PaymentConsent = 'PaymentConsent',
   AuthenticationConsent = 'AuthenticationConsent',
   ClaimDetails = 'ClaimDetails',
+  DocumentDetails = 'DocumentDetails',
 
-  Exception = 'Exception',
+  Exception = 'Exception'
 }

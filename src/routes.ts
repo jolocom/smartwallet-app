@@ -8,7 +8,8 @@ import {
   NavigationRoute,
   NavigationScreenProp
 } from 'react-navigation'
-import { Claims, Interactions, Records, ClaimDetails } from 'src/ui/home/'
+import { Claims, Records, ClaimDetails } from 'src/ui/home/'
+import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
 import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
@@ -43,22 +44,10 @@ const noHeaderNavOpts = {
   header: null,
 }
 
-const navOptScreenWCancel = {
-  headerStyle: {
-    backgroundColor:
-      Platform.OS === 'android'
-        ? JolocomTheme.primaryColorBlack
-        : JolocomTheme.primaryColorGrey,
-  },
-  headerBackImage,
-  ...Platform.select({
-    ios: {
-      headerBackTitleStyle: {
-        color: JolocomTheme.primaryColorPurple,
-      },
-      headerTintColor: { color: JolocomTheme.primaryColorPurple },
-    },
-  }),
+const headerTitleStyle = {
+  fontSize: JolocomTheme.headerFontSize,
+  fontFamily: JolocomTheme.contentFontFamily,
+  fontWeight: '300',
 }
 
 const defaultHeaderBackgroundColor =
@@ -85,6 +74,23 @@ const commonNavigationOptions: NavigationScreenOptions = {
   headerTintColor: defaultHeaderTintColor,
 }
 
+const navOptScreenWCancel = {
+  headerStyle: {
+    backgroundColor: defaultHeaderBackgroundColor,
+  },
+  headerTitleStyle: {
+    color: JolocomTheme.primaryColorWhite
+  },
+  headerBackImage,
+  ...Platform.select({
+    ios: {
+      headerBackTitleStyle: {
+        color: JolocomTheme.primaryColorPurple,
+      }
+    }
+  }),
+}
+
 const bottomTabBarBackground =
   Platform.OS == 'android'
     ? '#fafafa' // FIXME add to theme
@@ -99,7 +105,7 @@ export const BottomTabBarRoutes = {
     }
   },
   [routeList.Documents]: {
-    screen: Interactions,
+    screen: Documents,
     title: 'Documents',
     navigationOptions: () => ({
       ...commonNavigationOptions,
@@ -172,6 +178,7 @@ export const Routes = createStackNavigator({
   [routeList.Home]: {
     screen: BottomTabNavigator
   },
+
   [routeList.QRCodeScanner]: {
     screen: QRScannerContainer,
     navigationOptions: () => ({
@@ -183,14 +190,12 @@ export const Routes = createStackNavigator({
     screen: CredentialReceive,
     navigationOptions: () => ({
       headerTitle: I18n.t('Receiving new credential'),
-      ...commonNavigationOptions,
     }),
   },
   [routeList.Consent]: {
     screen: Consent,
     navigationOptions: () => ({
       headerTitle: I18n.t('Share claims'),
-      ...commonNavigationOptions,
     }),
   },
   [routeList.PaymentConsent]: {
@@ -198,7 +203,6 @@ export const Routes = createStackNavigator({
     navigationOptions: () => ({
       headerBackImage,
       headerTitle: I18n.t('Confirm payment'),
-      ...commonNavigationOptions,
     }),
   },
   [routeList.AuthenticationConsent]: {
@@ -206,17 +210,20 @@ export const Routes = createStackNavigator({
     navigationOptions: () => ({
       headerBackImage,
       headerTitle: I18n.t('Authorization request'),
-      ...commonNavigationOptions,
     }),
   },
   [routeList.ClaimDetails]: {
     screen: ClaimDetails,
     navigationOptions: () => navOptScreenWCancel,
   },
+  [routeList.DocumentDetails]: {
+    screen: DocumentDetails,
+    navigationOptions: {
+      ...navOptScreenWCancel,
+      headerTitleStyle,
+    },
+  },
   [routeList.Exception]: { screen: Exception, navigationOptions: noHeaderNavOpts },
-},
-  {
+}, {
     defaultNavigationOptions: commonNavigationOptions
-  }
-
-)
+})

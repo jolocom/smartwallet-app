@@ -1,4 +1,5 @@
-import { navigationActions, ssoActions } from '../../../src/actions'
+import { navigationActions } from '../../../src/actions'
+import { JolocomLib } from 'jolocom-lib'
 
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -26,28 +27,31 @@ describe('Navigation action creators', () => {
         },
         identityWallet: jest.fn(),
       }
-      const parseJWTSpy = jest
-        .spyOn(ssoActions, 'parseJWT')
+      const parseInteractionTokenSpy = jest
+        .spyOn(JolocomLib.parse.interactionToken, 'fromJWT')
         .mockImplementation(() => () => {})
       const action = navigationActions.handleDeepLink(
         'smartwallet://consent/' + jwt,
       )
       await action(mockStore.dispatch, () => {}, mockBackendMiddleware)
       expect(mockStore.getActions()).toMatchSnapshot()
-      expect(parseJWTSpy).toHaveBeenCalledWith(jwt)
-      parseJWTSpy.mockReset()
+      expect(parseInteractionTokenSpy).toHaveBeenCalledWith(jwt)
+      parseInteractionTokenSpy.mockReset()
     })
 
     it('should not atttempt to parse if route was not correct', () => {
       const mockStore = configureStore([thunk])({})
-      const parseJWTSpy = jest.spyOn(ssoActions, 'parseJWT')
+      const parseInteractionTokenSpy = jest.spyOn(
+        JolocomLib.parse.interactionToken,
+        'fromJWT',
+      )
       const action = navigationActions.handleDeepLink(
         'smartwallet://somethingElse/' + jwt,
       )
 
       action(mockStore.dispatch)
       expect(mockStore.getActions()).toMatchSnapshot()
-      expect(parseJWTSpy).not.toHaveBeenCalled()
+      expect(parseInteractionTokenSpy).not.toHaveBeenCalled()
     })
   })
 })
