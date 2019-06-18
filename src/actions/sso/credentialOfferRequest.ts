@@ -1,5 +1,5 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { AppError } from '../../lib/errors'
+import { AppError, ErrorCode } from '../../lib/errors'
 import { showErrorScreen } from '../generic'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { receiveExternalCredential, setDeepLinkLoading } from './index'
@@ -11,7 +11,6 @@ import { ThunkActionCreator } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { withErrorHandling, withLoading } from '../modifiers'
 import { toggleLoading } from '../account'
-import ErrorCode from '../../lib/errorCodes'
 
 export const consumeCredentialOfferRequest: ThunkActionCreator = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,

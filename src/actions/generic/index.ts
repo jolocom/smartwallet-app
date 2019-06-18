@@ -3,8 +3,7 @@ import { routeList } from 'src/routeList'
 import SplashScreen from 'react-native-splash-screen'
 import I18n from 'src/locales/i18n'
 import { ThunkAction, ThunkActionCreator } from 'src/store'
-import { AppError } from 'src/lib/errors'
-import ErrorCode from '../../lib/errorCodes'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const showErrorScreen = (error: AppError) =>
   navigationActions.navigate({

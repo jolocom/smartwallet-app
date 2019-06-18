@@ -17,9 +17,8 @@ import { RootState } from '../../reducers'
 import { goBack } from '../../actions/navigation'
 import { withErrorHandling, withLoading } from '../../actions/modifiers'
 import { NavigationNavigateAction } from 'react-navigation'
-import { AppError } from '../../lib/errors'
+import { AppError, ErrorCode } from '../../lib/errors'
 import { toggleLoading } from '../../actions/account'
-import ErrorCode from '../../lib/errorCodes'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 

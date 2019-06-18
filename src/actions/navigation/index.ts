@@ -9,8 +9,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { showErrorScreen } from '../generic'
 import { ThunkActionCreator } from '../../store'
-import { AppError } from '../../lib/errors'
-import ErrorCode from '../../lib/errorCodes'
+import { AppError, ErrorCode } from '../../lib/errors'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
   NavigationActions.navigate(options)

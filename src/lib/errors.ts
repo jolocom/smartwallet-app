@@ -20,3 +20,4 @@ export class AppError extends Error {
 }
 
 export const errorTitleMessages = [strings.DAMN, strings.OH_NO, strings.UH_OH]
+export { ErrorCode }
