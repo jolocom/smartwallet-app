@@ -35,17 +35,11 @@ export const handleClaimInput = (fieldValue: string, fieldName: string) => ({
   fieldValue,
 })
 
-export const toggleClaimsLoading = (value: boolean) => ({
-  type: 'TOGGLE_CLAIMS_LOADING',
-  value,
-})
-
 export const checkIdentityExists: ThunkAction = async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
-  dispatch(toggleClaimsLoading(true))
   const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
   const encryptedEntropy = await storageLib.get.encryptedSeed().catch(err => {
     // TODO Fix this
