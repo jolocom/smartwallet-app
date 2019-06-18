@@ -7,6 +7,7 @@ import { RootState } from 'src/reducers/'
 import I18n from 'src/locales/i18n'
 import { DocumentCard } from '../components/documentCard'
 import { DocumentDetails as DocumentDetailsComponent } from '../components/documentDetails'
+import strings from '../../../locales/strings'
 
 interface Props extends ReturnType<typeof mapStateToProps>, NavigationScreenProps {}
 
@@ -43,7 +44,7 @@ export class DocumentDetailsContainer extends React.Component<
     const isExpired = document.expires ? document.expires.valueOf() < new Date().valueOf() : true
 
     let headerTitle = (document.claimData as ClaimInterface).type
-    if (isExpired) headerTitle = `[${I18n.t('expired')}] ${headerTitle}`
+    if (isExpired) headerTitle = `[${I18n.t(strings.EXPIRED)}] ${headerTitle}`
     this.props.navigation.setParams({ headerTitle })
   }
 

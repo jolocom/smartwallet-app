@@ -6,9 +6,10 @@ import { registrationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
 import { withErrorHandling } from '../../../actions/modifiers'
 import { showErrorScreen } from '../../../actions/generic'
-import { AppError, ErrorCode } from '../../../lib/errors'
+import { AppError } from '../../../lib/errors'
 import { routeList } from '../../../routeList'
 import { ThunkDispatch } from '../../../store'
+import ErrorCode from '../../../lib/errorCodes'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,

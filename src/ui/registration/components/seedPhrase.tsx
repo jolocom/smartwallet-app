@@ -63,7 +63,9 @@ export const SeedPhrase: React.SFC<Props> = props => (
       <Text style={styles.note}>
         {I18n.t(strings.WRITE_THESE_WORDS_DOWN_ON_AN_ANALOG_AND_SECURE_PLACE) +
           '. ' +
-          I18n.t(strings.WITHOUT_THESE_WORDS_YOU_CANNOT_ACCESS_YOUR_WALLET_AGAIN) +
+          I18n.t(
+            strings.WITHOUT_THESE_WORDS_YOU_CANNOT_ACCESS_YOUR_WALLET_AGAIN,
+          ) +
           '.'}
       </Text>
     </View>

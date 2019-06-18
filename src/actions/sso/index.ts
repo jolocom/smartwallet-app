@@ -18,7 +18,6 @@ import { mergeRight, omit } from 'ramda'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { DecoratedClaims } from '../../reducers/account'
 import { IdentitySummary } from './types'
-import ErrorCode from '../../lib/errorCodes'
 
 export const setCredentialRequest = (
   request: StateCredentialRequestSummary,

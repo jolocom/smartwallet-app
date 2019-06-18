@@ -16,6 +16,7 @@ import { filters } from 'src/lib/filterDecoratedClaims'
 import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
+import strings from '../../../locales/strings'
 
 interface Props extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {}
 
@@ -107,7 +108,7 @@ export class DocumentsContainer extends React.Component<Props, State> {
             <Container>
               <Block>
                 <CenteredText
-                  msg={I18n.t('No documents to see here') + '.'}
+                  msg={I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '.'}
                   style={styles.centeredText}
                 />
               </Block>

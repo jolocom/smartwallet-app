@@ -84,6 +84,8 @@ export default {
   EMAIL: 'Email',
   NAME: 'Name',
   PERSONAL: 'Personal',
+  NO_DOCUMENTS_TO_SEE_HERE: 'No documents to see here',
+  EXPIRED: 'expired',
 
   // Error Title:
   DAMN: 'Damn',
