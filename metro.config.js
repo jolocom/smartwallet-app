@@ -11,7 +11,8 @@ module.exports = {
       // Polyfills for node libraries
       "crypto": require.resolve("crypto-browserify"),
       "stream": require.resolve("stream-browserify"),
-      "vm": require.resolve("vm-browserify")
+      "vm": require.resolve("vm-browserify"),
+      "src": __dirname + '/src'
     }
   },
   transformer: {
