@@ -105,6 +105,7 @@ export const saveClaim: ThunkAction = async (
   const verifiableCredential = await identityWallet.create.signedCredential(
     {
       metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
+      // the library acts directly on the object passed in, so a copy should be made first
       claim: { ...claimsItem.claimData },
       subject: did,
     },
