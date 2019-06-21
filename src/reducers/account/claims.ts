@@ -66,7 +66,6 @@ const categorizedClaims: CategorizedClaims = {
 }
 
 export const initialState: ClaimsState = {
-  loading: false,
   selected: {
     credentialType: '',
     claimData: {},
@@ -90,8 +89,6 @@ export const claims = (
   action: AnyAction,
 ): ClaimsState => {
   switch (action.type) {
-    case 'TOGGLE_CLAIMS_LOADING':
-      return { ...state, loading: action.value }
     case 'SET_CLAIMS_FOR_DID':
       return { ...state, decoratedCredentials: addDefaultValues(action.claims) }
     case 'SET_EXTERNAL':

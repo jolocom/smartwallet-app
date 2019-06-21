@@ -45,6 +45,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
   setClaimsForDid: () =>
+  // FIXME XXX TODO
+  // NOTE: this uses setDeepLinkLoading because deep link loading is managed
+  // by NavigationContainer, which will be able to show a loading spinner
+  // The other loading spinner is INSIDE CredentialOverview, so not useable
     dispatch(withLoading(setDeepLinkLoading)(accountActions.setClaimsForDid)),
 })
 

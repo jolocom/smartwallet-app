@@ -35,17 +35,11 @@ export const handleClaimInput = (fieldValue: string, fieldName: string) => ({
   fieldValue,
 })
 
-export const toggleClaimsLoading = (value: boolean) => ({
-  type: 'TOGGLE_CLAIMS_LOADING',
-  value,
-})
-
 export const checkIdentityExists: ThunkAction = async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
-  dispatch(toggleClaimsLoading(true))
   const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
   const encryptedEntropy = await storageLib.get.encryptedSeed().catch(err => {
     // TODO Fix this
@@ -111,7 +105,8 @@ export const saveClaim: ThunkAction = async (
   const verifiableCredential = await identityWallet.create.signedCredential(
     {
       metadata: getClaimMetadataByCredentialType(claimsItem.credentialType),
-      claim: claimsItem.claimData,
+      // the library acts directly on the object passed in, so a copy should be made first
+      claim: { ...claimsItem.claimData },
       subject: did,
     },
     password,
