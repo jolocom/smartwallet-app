@@ -5,7 +5,7 @@ import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withErrorHandling, withLoading } from '../../../actions/modifiers'
-import { toggleClaimsLoading } from '../../../actions/account'
+import { toggleLoading } from '../../../actions/account'
 import { showErrorScreen } from '../../../actions/generic'
 
 interface Props
@@ -50,7 +50,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   sendCredentialResponse: (credentials: StateVerificationSummary[]) =>
     dispatch(
-      withLoading(toggleClaimsLoading)(
+      withLoading(toggleLoading)(
         withErrorHandling(showErrorScreen)(
           ssoActions.sendCredentialResponse(credentials),
         ),

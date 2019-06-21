@@ -4,12 +4,14 @@ import {
   NavigationResetAction,
 } from 'react-navigation'
 import { toggleDeepLinkFlag } from '../sso'
+import { setDeepLinkLoading } from 'src/actions/sso'
 import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { showErrorScreen } from '../generic'
 import { ThunkActionCreator } from '../../store'
 import { AppError, ErrorCode } from '../../lib/errors'
+import { withErrorHandling, withLoading } from 'src/actions/modifiers'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
   NavigationActions.navigate(options)
@@ -53,9 +55,12 @@ export const handleDeepLink: ThunkActionCreator = (url: string) => (
     const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
     const handler = interactionHandlers[interactionToken.interactionType]
 
-    // TODO What if absent?
     if (handler) {
-      return dispatch(handler(interactionToken))
+      return dispatch(
+        withLoading(setDeepLinkLoading)(
+          withErrorHandling(showErrorScreen)(handler(interactionToken)),
+        ),
+      )
     }
 
     /** @TODO Use error code */

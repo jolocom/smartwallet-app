@@ -1,5 +1,5 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { navigationActions, ssoActions } from 'src/actions'
+import { navigationActions } from 'src/actions'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { routeList } from 'src/routeList'
@@ -19,23 +19,19 @@ export const consumeAuthenticationRequest: ThunkActionCreator = (
   authenticationRequest: JSONWebToken<Authentication>,
 ) => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware
-  try {
-    await identityWallet.validateJWT(authenticationRequest)
-    const authenticationDetails: StateAuthenticationRequestSummary = {
-      requester: authenticationRequest.issuer,
-      callbackURL: authenticationRequest.interactionToken.callbackURL,
-      description: authenticationRequest.interactionToken.description,
-      requestJWT: authenticationRequest.encode(),
-    }
-    dispatch(setAuthenticationRequest(authenticationDetails))
-    return dispatch(
-      navigationActions.navigatorReset({
-        routeName: routeList.AuthenticationConsent,
-      }),
-    )
-  } finally {
-    dispatch(ssoActions.setDeepLinkLoading(false))
+  await identityWallet.validateJWT(authenticationRequest)
+  const authenticationDetails: StateAuthenticationRequestSummary = {
+    requester: authenticationRequest.issuer,
+    callbackURL: authenticationRequest.interactionToken.callbackURL,
+    description: authenticationRequest.interactionToken.description,
+    requestJWT: authenticationRequest.encode(),
   }
+  dispatch(setAuthenticationRequest(authenticationDetails))
+  return dispatch(
+    navigationActions.navigatorReset({
+      routeName: routeList.AuthenticationConsent,
+    }),
+  )
 }
 
 export const sendAuthenticationResponse: ThunkAction = async (
