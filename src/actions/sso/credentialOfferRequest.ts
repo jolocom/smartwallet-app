@@ -7,14 +7,15 @@ import { all, compose, isEmpty, isNil, map, mergeRight, omit } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
-import { ThunkActionCreator } from 'src/store'
+import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { withErrorHandling, withLoading } from '../modifiers'
 import { toggleLoading } from '../account'
 
-export const consumeCredentialOfferRequest: ThunkActionCreator = (
+export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
-) => async (dispatch, getState, { keyChainLib, identityWallet, registry }) => {
+  isDeepLinkInteraction: boolean = false
+): ThunkAction => async (dispatch, getState, { keyChainLib, identityWallet, registry }) => {
   await identityWallet.validateJWT(credOfferRequest, undefined, registry)
   const { interactionToken } = credOfferRequest
   const { callbackURL } = interactionToken
@@ -75,6 +76,7 @@ export const consumeCredentialOfferRequest: ThunkActionCreator = (
         receiveExternalCredential(
           credentialReceive,
           offerorInfo,
+          isDeepLinkInteraction,
           selectedMetadata,
         ),
       ),

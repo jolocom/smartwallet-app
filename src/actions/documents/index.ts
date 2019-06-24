@@ -1,7 +1,7 @@
 import { navigationActions } from '..'
 import { routeList } from 'src/routeList'
 import { DecoratedClaims } from 'src/reducers/account'
-import { ThunkActionCreator } from 'src/store'
+import { ThunkAction } from 'src/store'
 
 export const SET_DOC_DETAIL = 'SET_SELECTED_DOCUMENT_DETAIL'
 export const CLEAR_DOC_DETAIL = 'CLEAR_SELECTED_DOCUMENT_DETAIL'
@@ -15,9 +15,9 @@ export const clearSelectedDocument = () => ({
   type: CLEAR_DOC_DETAIL,
 })
 
-export const openDocumentDetails: ThunkActionCreator = (
+export const openDocumentDetails = (
   document: DecoratedClaims,
-) => async dispatch => {
+) : ThunkAction => async dispatch => {
   dispatch(setSelectedDocument(document))
   dispatch(
     navigationActions.navigate({

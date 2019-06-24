@@ -40,6 +40,3 @@ export type ThunkDispatch = OriginalThunkDispatch<
 export type ThunkAction<
   R = AnyAction | Promise<AnyAction | void>
 > = OriginalThunkAction<R, RootState, BackendMiddleware, AnyAction>
-export type ThunkActionCreator<R = AnyAction | Promise<AnyAction | void>> = (
-  ...any: any[]
-) => ThunkAction<R>

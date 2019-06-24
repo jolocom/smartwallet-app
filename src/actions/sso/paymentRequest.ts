@@ -10,6 +10,8 @@ import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { ThunkDispatch } from '../../store'
 import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
+import {AppError} from '../../lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -18,6 +20,7 @@ export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
 
 export const consumePaymentRequest = (
   paymentRequest: JSONWebToken<PaymentRequest>,
+  isDeepLinkInteraction: boolean = false
 ) => async (
   dispatch: ThunkDispatch,
   getState: () => RootState,
@@ -44,11 +47,11 @@ export const consumePaymentRequest = (
   }
   dispatch(setPaymentRequest(paymentDetails))
   return dispatch(
-    navigationActions.navigatorReset({ routeName: routeList.PaymentConsent }),
+    navigationActions.navigatorReset({ routeName: routeList.PaymentConsent, params: { isDeepLinkInteraction } }),
   )
 }
 
-export const sendPaymentResponse = async (
+export const sendPaymentResponse = (isDeepLinkInteraction: boolean) => async (
   dispatch: ThunkDispatch,
   getState: () => RootState,
   backendMiddleware: BackendMiddleware,
@@ -56,7 +59,6 @@ export const sendPaymentResponse = async (
   const { identityWallet } = backendMiddleware
   const {
     activePaymentRequest: { callbackURL, paymentRequest },
-    isDeepLinkInteraction,
   } = getState().sso
 
   // add loading screen here
@@ -76,7 +78,12 @@ export const sendPaymentResponse = async (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
+      const callback = `${callbackURL}/${response.encode()}`
+      if (await !Linking.canOpenURL(callback)) {
+        throw new AppError(ErrorCode.DeepLinkUrlNotFound)
+      }
+
+      return Linking.openURL(callback).then(() =>
         dispatch(cancelSSO),
       )
     } else {

@@ -9,7 +9,7 @@ import {
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
 import { JolocomLib } from 'jolocom-lib'
-import { ThunkActionCreator, ThunkAction } from 'src/store'
+import { ThunkAction } from 'src/store'
 import { groupBy, zipWith, mergeRight, omit, uniq, map } from 'ramda'
 import { compose } from 'redux'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
@@ -80,9 +80,9 @@ export const checkIdentityExists: ThunkAction = async (
   )
 }
 
-export const openClaimDetails: ThunkActionCreator = (
+export const openClaimDetails = (
   claim: DecoratedClaims,
-) => dispatch => {
+): ThunkAction => dispatch => {
   dispatch(setSelected(claim))
   return dispatch(
     navigationActions.navigate({
