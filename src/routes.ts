@@ -67,15 +67,13 @@ const navOptScreenWCancel = {
   headerBackImage,
   ...Platform.select({
     ios: {
-      headerBackTitleStyle: {
-        color: JolocomTheme.primaryColorPurple,
-      },
+      headerTintColor: JolocomTheme.primaryColorPurple,
     },
   }),
 }
 
 const bottomNavBarBackground =
-  Platform.OS == 'android'
+  Platform.OS === 'android'
     ? '#fafafa' // FIXME add to theme
     : JolocomTheme.primaryColorBlack
 

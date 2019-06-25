@@ -60,13 +60,13 @@ export class DocumentsContainer extends React.Component<Props, State> {
     showingValid: true,
   }
 
-  private scrollToTop() {
+  private scrollToTop(): void {
     if (this.ScrollViewRef) {
       this.ScrollViewRef.scrollTo({ x: 0, y: 0, animated: true })
     }
   }
 
-  private onActiveIndexChange(index: number) {
+  private onActiveIndexChange(index: number): void {
     this.setState({ activeDocumentIndex: index })
     this.scrollToTop()
   }
@@ -79,15 +79,15 @@ export class DocumentsContainer extends React.Component<Props, State> {
     this.scrollToTop()
   }
 
-  public render() {
+  public render(): JSX.Element {
     const { openDocumentDetails, decoratedCredentials } = this.props
     const documents = getDocumentClaims(decoratedCredentials['Other'])
     const docFilter = this.state.showingValid
       ? filters.filterByValid
       : filters.filterByExpired
     const displayedDocs = docFilter(documents)
-    const isEmpty = displayedDocs.length == 0
-    const otherIsEmpty = displayedDocs.length == documents.length
+    const isEmpty = displayedDocs.length === 0
+    const otherIsEmpty = displayedDocs.length === documents.length
 
     return (
       <Animated.View style={styles.mainContainer}>

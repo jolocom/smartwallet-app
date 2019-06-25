@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Dimensions } from 'react-native'
+import { Dimensions, View } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 
 import { DecoratedClaims } from 'src/reducers/account'
@@ -13,16 +13,18 @@ interface DocumentsCarouselProps {
   onActiveIndexChange: (index: number) => void
 }
 
-const renderItem = ({ item }: { item: DecoratedClaims }) => (
+const renderItem = ({ item }: { item: DecoratedClaims }): JSX.Element => (
   <DocumentCard document={item} />
 )
 
-export const DocumentsCarousel: React.SFC<DocumentsCarouselProps> = props => {
+export const DocumentsCarousel: React.SFC<DocumentsCarouselProps> = (
+  props,
+): JSX.Element => {
   const viewWidth: number = Dimensions.get('window').width
   const { documents, activeIndex, onActiveIndexChange } = props
 
   return (
-    <React.Fragment>
+    <View style={{ paddingTop: 10 }}>
       <Carousel
         data={documents}
         renderItem={renderItem}
@@ -33,6 +35,6 @@ export const DocumentsCarousel: React.SFC<DocumentsCarouselProps> = props => {
         onSnapToItem={onActiveIndexChange}
       />
       <DocumentDetails document={documents[activeIndex]} />
-    </React.Fragment>
+    </View>
   )
 }
