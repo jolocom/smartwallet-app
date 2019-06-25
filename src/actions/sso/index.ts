@@ -18,7 +18,7 @@ import { mergeRight, omit } from 'ramda'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { DecoratedClaims } from '../../reducers/account'
 import { IdentitySummary } from './types'
-import {AppError} from '../../lib/errors'
+import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 
 export const setCredentialRequest = (
@@ -107,8 +107,8 @@ export const receiveExternalCredential = (
     navigationActions.navigatorReset({
       routeName: routeList.CredentialDialog,
       params: {
-        isDeepLinkInteraction
-      }
+        isDeepLinkInteraction,
+      },
     }),
   )
 }
@@ -124,7 +124,7 @@ interface AttributeSummary {
 
 export const consumeCredentialRequest = (
   decodedCredentialRequest: JSONWebToken<CredentialRequest>,
-  isDeepLinkInteraction: boolean
+  isDeepLinkInteraction: boolean,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, identityWallet, registry } = backendMiddleware
   const { did } = getState().account.did
@@ -206,13 +206,16 @@ export const consumeCredentialRequest = (
 
   dispatch(setCredentialRequest(summary))
   return dispatch(
-    navigationActions.navigatorReset({ routeName: routeList.Consent, params: {isDeepLinkInteraction} }),
+    navigationActions.navigatorReset({
+      routeName: routeList.Consent,
+      params: { isDeepLinkInteraction },
+    }),
   )
 }
 
 export const sendCredentialResponse = (
   selectedCredentials: StateVerificationSummary[],
-  isDeepLinkInteraction: boolean = false
+  isDeepLinkInteraction: boolean = false,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, keyChainLib, identityWallet } = backendMiddleware
   const {
@@ -243,13 +246,11 @@ export const sendCredentialResponse = (
 
     if (isDeepLinkInteraction) {
       const callback = `${callbackURL}${response.encode()}`
-      if (await !Linking.canOpenURL(callback)) {
+      if (!(await Linking.canOpenURL(callback))) {
         throw new AppError(ErrorCode.DeepLinkUrlNotFound)
       }
 
-      return Linking.openURL(callback).then(() =>
-        dispatch(cancelSSO),
-      )
+      return Linking.openURL(callback).then(() => dispatch(cancelSSO))
     } else {
       return fetch(callbackURL, {
         method: 'POST',

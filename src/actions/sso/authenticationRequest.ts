@@ -1,13 +1,13 @@
-import {JSONWebToken} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import {navigationActions} from 'src/actions'
-import {Authentication} from 'jolocom-lib/js/interactionTokens/authentication'
-import {StateAuthenticationRequestSummary} from 'src/reducers/sso'
-import {routeList} from 'src/routeList'
-import {cancelSSO, clearInteractionRequest} from '.'
-import {Linking} from 'react-native'
-import {JolocomLib} from 'jolocom-lib'
-import {ThunkAction} from '../../store'
-import {AppError} from '../../lib/errors'
+import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { navigationActions } from 'src/actions'
+import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
+import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
+import { routeList } from 'src/routeList'
+import { cancelSSO, clearInteractionRequest } from '.'
+import { Linking } from 'react-native'
+import { JolocomLib } from 'jolocom-lib'
+import { ThunkAction } from '../../store'
+import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 
 export const setAuthenticationRequest = (
@@ -19,7 +19,7 @@ export const setAuthenticationRequest = (
 
 export const consumeAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
-  isDeepLinkInteraction: boolean = false
+  isDeepLinkInteraction: boolean = false,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware
   await identityWallet.validateJWT(authenticationRequest)
@@ -34,19 +34,15 @@ export const consumeAuthenticationRequest = (
     navigationActions.navigatorReset({
       routeName: routeList.AuthenticationConsent,
       params: {
-        isDeepLinkInteraction
-      }
+        isDeepLinkInteraction,
+      },
     }),
   )
 }
 
 export const sendAuthenticationResponse = (
-  isDeepLinkInteraction: boolean
-) : ThunkAction => async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
+  isDeepLinkInteraction: boolean,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware
 
   const {
@@ -68,12 +64,10 @@ export const sendAuthenticationResponse = (
 
     if (isDeepLinkInteraction) {
       const callback = `${callbackURL}/${response.encode()}`
-      if (!await Linking.canOpenURL(callback)) {
+      if (!(await Linking.canOpenURL(callback))) {
         throw new AppError(ErrorCode.DeepLinkUrlNotFound)
       }
-      return Linking.openURL(callback).then(() =>
-        dispatch(cancelSSO),
-      )
+      return Linking.openURL(callback).then(() => dispatch(cancelSSO))
     }
 
     await fetch(callbackURL, {

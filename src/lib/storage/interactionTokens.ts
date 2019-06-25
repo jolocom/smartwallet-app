@@ -16,22 +16,22 @@ import { consumePaymentRequest } from '../../actions/sso/paymentRequest'
 export const interactionHandlers = {
   [InteractionType.Authentication]: <T extends JSONWebToken<Authentication>>(
     interactionToken: T,
-    isDeepLinkInteraction: boolean
+    isDeepLinkInteraction: boolean,
   ) => consumeAuthenticationRequest(interactionToken, isDeepLinkInteraction),
   [InteractionType.CredentialRequest]: <
     T extends JSONWebToken<CredentialRequest>
   >(
     interactionToken: T,
-    isDeepLinkInteraction: boolean
+    isDeepLinkInteraction: boolean,
   ) => consumeCredentialRequest(interactionToken, isDeepLinkInteraction),
   [InteractionType.CredentialOfferRequest]: <
     T extends JSONWebToken<CredentialOfferRequest>
   >(
     interactionToken: T,
-    isDeepLinkInteraction: boolean
+    isDeepLinkInteraction: boolean,
   ) => consumeCredentialOfferRequest(interactionToken, isDeepLinkInteraction),
   [InteractionType.PaymentRequest]: <T extends JSONWebToken<PaymentRequest>>(
     interactionToken: T,
-    isDeepLinkInteraction: boolean
+    isDeepLinkInteraction: boolean,
   ) => consumePaymentRequest(interactionToken, isDeepLinkInteraction),
 }

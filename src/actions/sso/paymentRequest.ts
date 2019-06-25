@@ -10,7 +10,7 @@ import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { ThunkDispatch } from '../../store'
 import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
-import {AppError} from '../../lib/errors'
+import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
@@ -20,7 +20,7 @@ export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
 
 export const consumePaymentRequest = (
   paymentRequest: JSONWebToken<PaymentRequest>,
-  isDeepLinkInteraction: boolean = false
+  isDeepLinkInteraction: boolean = false,
 ) => async (
   dispatch: ThunkDispatch,
   getState: () => RootState,
@@ -37,8 +37,7 @@ export const consumePaymentRequest = (
   const paymentDetails: StatePaymentRequestSummary = {
     receiver: {
       did: paymentRequest.issuer,
-      address: paymentRequest.interactionToken.transactionOptions
-      .to as string,
+      address: paymentRequest.interactionToken.transactionOptions.to as string,
     },
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
@@ -47,7 +46,10 @@ export const consumePaymentRequest = (
   }
   dispatch(setPaymentRequest(paymentDetails))
   return dispatch(
-    navigationActions.navigatorReset({ routeName: routeList.PaymentConsent, params: { isDeepLinkInteraction } }),
+    navigationActions.navigatorReset({
+      routeName: routeList.PaymentConsent,
+      params: { isDeepLinkInteraction },
+    }),
   )
 }
 
@@ -79,13 +81,11 @@ export const sendPaymentResponse = (isDeepLinkInteraction: boolean) => async (
 
     if (isDeepLinkInteraction) {
       const callback = `${callbackURL}/${response.encode()}`
-      if (await !Linking.canOpenURL(callback)) {
+      if (!(await Linking.canOpenURL(callback))) {
         throw new AppError(ErrorCode.DeepLinkUrlNotFound)
       }
 
-      return Linking.openURL(callback).then(() =>
-        dispatch(cancelSSO),
-      )
+      return Linking.openURL(callback).then(() => dispatch(cancelSSO))
     } else {
       return fetch(callbackURL, {
         method: 'POST',

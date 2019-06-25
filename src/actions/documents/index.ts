@@ -17,7 +17,7 @@ export const clearSelectedDocument = () => ({
 
 export const openDocumentDetails = (
   document: DecoratedClaims,
-) : ThunkAction => async dispatch => {
+): ThunkAction => async dispatch => {
   dispatch(setSelectedDocument(document))
   dispatch(
     navigationActions.navigate({

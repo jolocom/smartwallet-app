@@ -10,7 +10,7 @@ import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { showErrorScreen } from '../generic'
 import { AppError, ErrorCode } from '../../lib/errors'
 import { withErrorHandling, withLoading } from 'src/actions/modifiers'
-import {ThunkAction} from '../../store'
+import { ThunkAction } from '../../store'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
   NavigationActions.navigate(options)

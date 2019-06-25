@@ -43,7 +43,7 @@ export const loadSettings = (settings: { [key: string]: any }) => ({
   value: settings,
 })
 
-export const setLocale = (locale: string) : ThunkAction => async (
+export const setLocale = (locale: string): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,

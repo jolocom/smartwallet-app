@@ -14,8 +14,12 @@ import { toggleLoading } from '../account'
 
 export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
-  isDeepLinkInteraction: boolean = false
-): ThunkAction => async (dispatch, getState, { keyChainLib, identityWallet, registry }) => {
+  isDeepLinkInteraction: boolean = false,
+): ThunkAction => async (
+  dispatch,
+  getState,
+  { keyChainLib, identityWallet, registry },
+) => {
   await identityWallet.validateJWT(credOfferRequest, undefined, registry)
   const { interactionToken } = credOfferRequest
   const { callbackURL } = interactionToken
@@ -65,7 +69,7 @@ export const consumeCredentialOfferRequest = (
 
   const credentialReceive = JolocomLib.parse.interactionToken.fromJWT<
     CredentialsReceive
-    >(res.token)
+  >(res.token)
 
   return dispatch(
     withLoading(toggleLoading)(

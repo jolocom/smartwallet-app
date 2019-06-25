@@ -16,7 +16,7 @@ export const setLoadingMsg = (loadingMsg: string) => ({
 
 export const submitEntropy = (
   encodedEntropy: string,
-) : ThunkAction => dispatch => {
+): ThunkAction => dispatch => {
   dispatch(
     navigationActions.navigatorReset({
       routeName: routeList.Loading,
@@ -47,9 +47,11 @@ export const startRegistration: ThunkAction = async (
 
 export const finishRegistration = navigatorReset({ routeName: routeList.Home })
 
-export const createIdentity = (
-  encodedEntropy: string,
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+export const createIdentity = (encodedEntropy: string): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
   const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
 
   const password = await keyChainLib.getPassword()
