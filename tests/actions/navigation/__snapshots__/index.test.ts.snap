@@ -3,10 +3,6 @@
 exports[`Navigation action creators handleDeepLink should extract the route name and param from the URL 1`] = `
 Array [
   Object {
-    "type": "SET_DEEP_LINK_FLAG",
-    "value": true,
-  },
-  Object {
     "params": Object {
       "error": [Error: Unknown Error],
       "returnTo": "Home",

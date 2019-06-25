@@ -6,7 +6,9 @@ import { routeList } from 'src/routeList'
 import { cancelSSO, clearInteractionRequest } from '.'
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
-import { ThunkAction, ThunkActionCreator } from '../../store'
+import { ThunkAction } from '../../store'
+import { AppError } from '../../lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export const setAuthenticationRequest = (
   request: StateAuthenticationRequestSummary,
@@ -15,9 +17,10 @@ export const setAuthenticationRequest = (
   value: request,
 })
 
-export const consumeAuthenticationRequest: ThunkActionCreator = (
+export const consumeAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
-) => async (dispatch, getState, backendMiddleware) => {
+  isDeepLinkInteraction: boolean = false,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware
   await identityWallet.validateJWT(authenticationRequest)
   const authenticationDetails: StateAuthenticationRequestSummary = {
@@ -30,17 +33,17 @@ export const consumeAuthenticationRequest: ThunkActionCreator = (
   return dispatch(
     navigationActions.navigatorReset({
       routeName: routeList.AuthenticationConsent,
+      params: {
+        isDeepLinkInteraction,
+      },
     }),
   )
 }
 
-export const sendAuthenticationResponse: ThunkAction = async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
+export const sendAuthenticationResponse = (
+  isDeepLinkInteraction: boolean,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware
-  const { isDeepLinkInteraction } = getState().sso
 
   const {
     callbackURL,
@@ -60,10 +63,13 @@ export const sendAuthenticationResponse: ThunkAction = async (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}/${response.encode()}`).then(() =>
-        dispatch(cancelSSO),
-      )
+      const callback = `${callbackURL}/${response.encode()}`
+      if (!(await Linking.canOpenURL(callback))) {
+        throw new AppError(ErrorCode.DeepLinkUrlNotFound)
+      }
+      return Linking.openURL(callback).then(() => dispatch(cancelSSO))
     }
+
     await fetch(callbackURL, {
       method: 'POST',
       body: JSON.stringify({ token: response.encode() }),
