@@ -3,15 +3,14 @@ import {
   NavigationNavigateActionPayload,
   NavigationResetAction,
 } from 'react-navigation'
-import { toggleDeepLinkFlag } from '../sso'
 import { setDeepLinkLoading } from 'src/actions/sso'
 import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { showErrorScreen } from '../generic'
-import { ThunkActionCreator } from '../../store'
 import { AppError, ErrorCode } from '../../lib/errors'
 import { withErrorHandling, withLoading } from 'src/actions/modifiers'
+import { ThunkAction } from '../../store'
 
 export const navigate = (options: NavigationNavigateActionPayload) =>
   NavigationActions.navigate(options)
@@ -31,7 +30,7 @@ export const navigatorReset = (
  * It then matches the route name and dispatches a corresponding action
  * @param url - a deep link string with the following schema: appName://routeName/params
  */
-export const handleDeepLink: ThunkActionCreator = (url: string) => (
+export const handleDeepLink = (url: string): ThunkAction => (
   dispatch,
   getState,
   backendMiddleware,
@@ -51,14 +50,13 @@ export const handleDeepLink: ThunkActionCreator = (url: string) => (
       return dispatch(navigatorReset({ routeName: routeList.Landing }))
     }
 
-    dispatch(toggleDeepLinkFlag(true))
     const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
     const handler = interactionHandlers[interactionToken.interactionType]
 
     if (handler) {
       return dispatch(
         withLoading(setDeepLinkLoading)(
-          withErrorHandling(showErrorScreen)(handler(interactionToken)),
+          withErrorHandling(showErrorScreen)(handler(interactionToken, true)),
         ),
       )
     }

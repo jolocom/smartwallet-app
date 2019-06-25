@@ -44,7 +44,6 @@ export interface SsoState {
   activePaymentRequest: StatePaymentRequestSummary
   activeAuthenticationRequest: StateAuthenticationRequestSummary
   deepLinkLoading: boolean
-  isDeepLinkInteraction: boolean
 }
 
 const initialState: SsoState = {
@@ -66,7 +65,6 @@ const initialState: SsoState = {
     description: '',
     paymentRequest: '',
   },
-  isDeepLinkInteraction: false,
   // add blank authentication request, which is did, public profile?
   activeAuthenticationRequest: {
     requester: '',
@@ -86,8 +84,6 @@ export const ssoReducer = (
       return { ...state, activeCredentialRequest: action.value }
     case 'SET_PAYMENT_REQUEST':
       return { ...state, activePaymentRequest: action.value }
-    case 'SET_DEEP_LINK_FLAG':
-      return { ...state, isDeepLinkInteraction: action.value }
     case 'SET_AUTHENTICATION_REQUEST':
       return { ...state, activeAuthenticationRequest: action.value }
     case 'SET_DEEP_LINK_LOADING':

@@ -110,5 +110,6 @@ export default {
   [ErrorCode.CredentialResponseFailed]: 'Credential response failed',
   [ErrorCode.ParseJWTFailed]: 'Could not parse JSONWebToken',
 
+  [ErrorCode.DeepLinkUrlNotFound]: 'Could not find receiving application',
   [ErrorCode.RegistrationFailed]: 'Registration failed',
 }

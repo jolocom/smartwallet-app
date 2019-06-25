@@ -2,7 +2,7 @@ import { navigationActions } from 'src/actions/'
 import { routeList } from 'src/routeList'
 import SplashScreen from 'react-native-splash-screen'
 import I18n from 'src/locales/i18n'
-import { ThunkAction, ThunkActionCreator } from 'src/store'
+import { ThunkAction } from 'src/store'
 import { AppError, ErrorCode } from 'src/lib/errors'
 
 export const showErrorScreen = (error: AppError) =>
@@ -43,7 +43,7 @@ export const loadSettings = (settings: { [key: string]: any }) => ({
   value: settings,
 })
 
-export const setLocale: ThunkActionCreator = (locale: string) => async (
+export const setLocale = (locale: string): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
