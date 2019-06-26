@@ -19,7 +19,7 @@ public class MainActivity extends ReactFragmentActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "JolocomWallet";
+        return "jolocomwallet";
     }
 
     @Override
