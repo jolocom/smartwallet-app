@@ -87,7 +87,10 @@
     "globals": {
       "window": true,
       "ts-jest": {
-        "babelConfig": true
+        "babelConfig": true,
+        "diagnostics": {
+          "warnOnly": true
+        }
       }
     },
     "moduleFileExtensions": [
@@ -101,6 +104,10 @@
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/assetsTransformer.js"
     },
+    "moduleDirectories": [
+      "node_modules",
+      "."
+    ],
     "preset": "react-native",
     "testMatch": [
       "**/tests/**/*.test.[tj]s?(x)"
