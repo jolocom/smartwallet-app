@@ -36,7 +36,7 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "haul": "1.0.0-beta.14",
-    "jest": "^22.4.4",
+    "jest": "^23.0.0",
     "material-colors": "^1.2.5",
     "mockdate": "^2.0.2",
     "prettier": "^1.15.3",
@@ -45,7 +45,7 @@
     "react-native-typescript-transformer": "^1.2.3",
     "react-test-renderer": "16.2.0",
     "redux-mock-store": "^1.5.1",
-    "ts-jest": "^22.0.4",
+    "ts-jest": "^23.0.0",
     "ts-loader": "3.5.0",
     "tslib": "^1.7.1",
     "typeorm": "^0.2.5",
@@ -85,7 +85,7 @@
     "globals": {
       "window": true,
       "ts-jest": {
-        "useBabelrc": true
+        "babelConfig": true
       }
     },
     "moduleFileExtensions": [
@@ -101,12 +101,11 @@
     },
     "preset": "react-native",
     "testMatch": [
-      "**/__tests__/**/*.[tj]s?(x)",
-      "**/?(*.)(spec|test).[tj]s?(x)"
+      "**/tests/**/*.test.[tj]s?(x)"
     ],
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/legacy/*"
+      "/node_modules/.*",
+      "/legacy/.*"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
