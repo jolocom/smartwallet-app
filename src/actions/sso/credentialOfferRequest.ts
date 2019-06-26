@@ -3,7 +3,7 @@ import { AppError, ErrorCode } from '../../lib/errors'
 import { showErrorScreen } from '../generic'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { receiveExternalCredential } from './index'
-import { all, compose, isEmpty, isNil, map, mergeRight, omit } from 'ramda'
+import { all, compose, isEmpty, isNil, map, mergeRight, omit, either } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
@@ -90,6 +90,6 @@ export const consumeCredentialOfferRequest = (
 
 const areRequirementsEmpty = (interactionToken: CredentialOfferRequest) =>
   compose(
-    all(isNil || isEmpty),
+    all(either(isNil, isEmpty)),
     map(interactionToken.getRequestedInputForType.bind(interactionToken)),
   )(interactionToken.offeredTypes)
