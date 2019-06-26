@@ -183,19 +183,22 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   render() {
     return (
       <Svg width="100%" height="100%" {...this.panResponder.panHandlers}>
-        {this.state.pathDs.map((d, idx) => (
-          <Path
-            key={idx}
-            ref={el => (this._pathEls[idx] = el)}
-            d={d}
-            fill="none"
-            stroke="#FFDEBC"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeDasharray="1,10"
-            strokeWidth="2"
-          />
-        ))}
+        {this.state.pathDs.map((d, idx) => {
+          if (!d) return null
+          return (
+            <Path
+              key={idx}
+              ref={el => (this._pathEls[idx] = el)}
+              d={d}
+              fill="none"
+              stroke="#FFDEBC"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="1,10"
+              strokeWidth="2"
+            />
+          )
+        })}
         {this.state.circles.map(([x, y], i) => (
           <Circle key={i} cx={x} cy={y} r="4" fill="#ffefdf" />
         ))}
