@@ -69,9 +69,17 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
   private handleDrawStart = (e: GestureResponderEvent): void => {
     if (this.props.disabled) return
+
+    const { pathDs, pathIdx } = this.state
+    // if the current pathD was empty and now not, we should rerender (because
+    // empty pathD value would have caused the path element to not have been
+    // rendered previously)
+    const shouldRerender = !pathDs[pathIdx]
     const curX = Math.floor(e.nativeEvent.locationX),
       curY = Math.floor(e.nativeEvent.locationY)
     this.props.addPoint(curX, curY)
+
+    pathDs[pathIdx] += `M${curX},${curY}`
 
     this.setState({
       curX,
@@ -79,7 +87,8 @@ export class MaskedImageComponent extends React.Component<Props, State> {
       prevX: curX,
       prevY: curY,
     })
-    this.state.pathDs[this.state.pathIdx] += `M${curX},${curY}`
+
+    if (shouldRerender) this.forceUpdate()
   }
 
   private handleDraw = (e: GestureResponderEvent): void => {
@@ -176,7 +185,8 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     // optimization: rerender only if circles change
-    // path is set dynamically
+    // path is set dynamically and doesn't require rerendering (if it wasn't
+    // empty before)
     return nextState.circlesN != this.state.circlesN
   }
 
