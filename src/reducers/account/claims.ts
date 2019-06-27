@@ -103,14 +103,17 @@ export const claims = (
     case 'RESET_SELECTED':
       return { ...state, selected: initialState.selected }
     case 'HANDLE_CLAIM_INPUT':
+      // NOTE: this is handled slightly differently so that we prevent the
+      // claimData keys from being re-ordered, as they are used to generate the
+      // fields in ui/home/components/claimDetails
+      const claimData = { ...state.selected.claimData }
+      claimData[action.fieldName] = action.fieldValue
+
       return {
         ...state,
         selected: {
           ...state.selected,
-          claimData: {
-            ...state.selected.claimData,
-            [action.fieldName]: action.fieldValue,
-          },
+          claimData
         },
       }
     default:
