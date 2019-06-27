@@ -63,7 +63,7 @@
     "clean:react": "rm -rf $TMP/react* $TMP/haste-map-metro* $TMP/metro-cache*",
     "clean:all": "yarn run clean:ios && yarn run clean:android && yarn run clean:react && yarn run clean:node",
     "build:ios": "react-native bundle --entry-file='index.ts' --bundle-output='./ios/smartwallet/main.jsbundle' --minify=false --dev=false --platform='ios' --assets-dest='./ios'",
-    "build:android": "haul bundle --entry-file='index.ts' --minify=true --dev=false --platform='android'",
+    "build:android": "react-native bundle --entry-file='index.ts' --minify=true --dev=false --platform='android'",
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native -d src/resources/svg/",
     "devtools": "react-devtools &",
