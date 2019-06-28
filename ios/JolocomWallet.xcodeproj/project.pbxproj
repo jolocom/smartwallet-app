@@ -58,6 +58,7 @@
 		B0482C073F644452BA591CD7 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E51C82FF984C3AAEB3745A /* libRNGestureHandler.a */; };
 		B4A807E322C62D0C008E672A /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = B4A807E222C62D0C008E672A /* TTCommons.otf */; };
 		B4A807ED22C6307F008E672A /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4A807EA22C6306C008E672A /* libART.a */; };
+		B4A807F522C631A5008E672A /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4A807F422C631A5008E672A /* libReactNativePermissions.a */; };
 		B6E1627C4B934D5AB4511F20 /* libRNLocalize-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCE5F13C0E6545B9916D609E /* libRNLocalize-tvOS.a */; };
 		B7281A5215F64821A15CCB7A /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 589CFA911D4E4F9D8087981A /* libRNGestureHandler-tvOS.a */; };
 		BE209C868D6A4706BAC36013 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8DD0CDB417254159B71087B0 /* Octicons.ttf */; };
@@ -557,6 +558,7 @@
 		B28F1DFBD3A6479C839B745E /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
 		B4A807E222C62D0C008E672A /* TTCommons.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TTCommons.otf; path = ../android/app/src/main/assets/fonts/TTCommons.otf; sourceTree = "<group>"; };
 		B4A807E422C6306C008E672A /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
+		B4A807F422C631A5008E672A /* libReactNativePermissions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReactNativePermissions.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6316A8E40AB4AAAB8430AC1 /* libRNCamera.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCamera.a; sourceTree = "<group>"; };
 		C5F745BB398A4FCCAC9BFCFD /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		C76AB0EC3DB8409284E3F553 /* libRNKeychain.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNKeychain.a; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4A807F522C631A5008E672A /* libReactNativePermissions.a in Frameworks */,
 				B4A807ED22C6307F008E672A /* libART.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
@@ -765,6 +768,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B4A807F422C631A5008E672A /* libReactNativePermissions.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
