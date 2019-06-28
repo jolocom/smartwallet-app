@@ -4,7 +4,7 @@ import {
   PanResponderInstance,
   GestureResponderEvent,
 } from 'react-native'
-import { Svg, Path, Circle } from 'react-native-svg'
+import { Svg, Path, Circle, Rect } from 'react-native-svg'
 
 interface Props {
   disabled: boolean
@@ -193,6 +193,7 @@ export class MaskedImageComponent extends React.Component<Props, State> {
   render() {
     return (
       <Svg width="100%" height="100%" {...this.panResponder.panHandlers}>
+        <Rect width="100%" height="100%" opacity="0.1"></Rect>
         {this.state.pathDs.map((d, idx) => {
           if (!d) return null
           return (
