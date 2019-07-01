@@ -1,6 +1,6 @@
 {
   "name": "jolocomwallet",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "private": true,
   "devDependencies": {
     "@svgr/cli": "^4.2.0",
@@ -126,13 +126,14 @@
     "crypto-js": "^3.1.9-1",
     "ethereumjs-wallet": "^0.6.0",
     "i18n-js": "^3.1.0",
-    "jolocom-lib": "^2.5.0",
+    "jolocom-lib": "^3.0.0",
     "material-colors": "^1.2.5",
     "object.assign": "^4.1.0",
     "ramda": "^0.26.1",
     "react": "16.2.0",
     "react-native": "^0.55.3",
     "react-native-camera": "^1.1.1",
+    "react-native-crypto": "^2.1.2",
     "react-native-fetch-blob": "^0.10.8",
     "react-native-indicator": "^0.7.0",
     "react-native-keychain": "^3.0.0-rc.3",
@@ -157,9 +158,6 @@
     "sqlite3": "^4.0.0",
     "squel": "^5.12.1",
     "wif": "^2.0.6"
-  },
-  "resolutions": {
-    "jolocom-lib/cred-types-jolocom-core": "0.0.10"
   },
   "rnpm": {
     "assets": [

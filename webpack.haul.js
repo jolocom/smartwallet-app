@@ -8,31 +8,33 @@ module.exports = ({ platform }, { module, resolve }) => ({
       {
         test: /\.jsx?$/,
         exclude: /node_modules\/(?!(typeforce|asn1.js|jolocom-lib|base64url|jsonld|rdf-canonize|tiny-secp256k1|bip32|bip39)\/).*/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
       },
       {
         test: /\.svg$/,
         exclude: /node_modules/,
-        use: ['babel-inline-import-loader', 'babel-loader']
+        use: ['babel-inline-import-loader', 'babel-loader'],
       },
       {
         test: /\.xml$/,
         exclude: /node_modules/,
-        use: ['babel-inline-import-loader', 'babel-loader']
+        use: ['babel-inline-import-loader', 'babel-loader'],
       },
       {
         test: /\.tsx?$/,
-        loader: 'babel-loader!ts-loader'
+        loader: 'babel-loader!ts-loader',
       },
-      ...module.rules
-    ]
+      ...module.rules,
+    ],
   },
   resolve: {
     ...resolve,
     alias: {
       src: path.resolve(__dirname, 'src/'),
       react: path.join(__dirname, 'node_modules/react'),
-      'react-native': path.join(__dirname, 'node_modules/react-native')
+      'react-native': path.join(__dirname, 'node_modules/react-native'),
+      crypto: path.join(__dirname, 'node_modules/react-native-crypto'),
+      'crypto-browserify': path.join(__dirname, 'node_modules/react-native-crypto'),
     },
     extensions: [
       `.${platform}.ts`,
@@ -42,7 +44,7 @@ module.exports = ({ platform }, { module, resolve }) => ({
       '.native.ts',
       '.native.tsx',
       '.json',
-      ...resolve.extensions
-    ]
-  }
+      ...resolve.extensions,
+    ],
+  },
 })
