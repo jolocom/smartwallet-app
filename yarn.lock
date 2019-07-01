@@ -3214,9 +3214,10 @@ create-react-class@^15.6.3:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-cred-types-jolocom-core@0.0.10, cred-types-jolocom-core@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/cred-types-jolocom-core/-/cred-types-jolocom-core-0.0.10.tgz#69dabc0fdb41a795fa6d63230d44a82d98e55dba"
+cred-types-jolocom-core@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/cred-types-jolocom-core/-/cred-types-jolocom-core-0.0.11.tgz#7cc8c23e511590fede0f9a072854f3892127e0ed"
+  integrity sha512-jnLdSo45XvMhPmecAve41GhYPRUqTIumCyjBa4rpUsTCsLSKR1LHq6XC0C9B0RKyk4S7/DZHjGc9q/WdkjVNCg==
 
 cross-spawn@^5.0.1, cross-spawn@^5.1.0:
   version "5.1.0"
@@ -6366,16 +6367,17 @@ jju@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/jju/-/jju-1.3.0.tgz#dadd9ef01924bc728b03f2f7979bdbd62f7a2aaa"
 
-jolocom-lib@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-2.5.0.tgz#c33f2d44a2d854de01d50849cfeb2f8ed54b1e9e"
+jolocom-lib@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-3.0.0.tgz#b1cf6ccce3f82b1a42268ec3eeb3ea904dbba79f"
+  integrity sha512-16a341jLO1uVmW6WHJIs292gYTourV0ZDVI+KnwZ+Tzi3p0mJM83tSZc+hNFm06gwKFnAycy/GO+uLSinpSgxA==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"
     bip39 "^3.0.1"
     class-transformer "^0.1.10"
     create-hash "^1.2.0"
-    cred-types-jolocom-core "^0.0.10"
+    cred-types-jolocom-core "^0.0.11"
     detect-node "^2.0.4"
     ethereumjs-tx "^1.3.7"
     ethereumjs-util "^6.1.0"
