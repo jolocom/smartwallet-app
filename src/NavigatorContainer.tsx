@@ -6,32 +6,25 @@ import {
 } from 'react-navigation'
 import { connect } from 'react-redux'
 import { BackHandler, Linking, StatusBar } from 'react-native'
-import { AnyAction } from 'redux'
-import { Routes } from 'src/routes'
 import { RootState } from 'src/reducers/'
 import { navigationActions, accountActions, genericActions } from 'src/actions/'
-import { BottomActionBar } from './ui/generic/'
 import { routeList } from './routeList'
 import { LoadingSpinner } from 'src/ui/generic/loadingSpinner'
+import { ThunkDispatch } from './store'
+import { handleDeepLink } from './actions/navigation'
+import { toggleLoading } from './actions/account'
+import { Routes } from './routes'
+import { withErrorHandling, withLoading } from './actions/modifiers'
+import { showErrorScreen } from './actions/generic'
 
 const {
   createReduxBoundAddListener,
 } = require('react-navigation-redux-helpers')
 
-interface ConnectProps {
-  navigation: RootState['navigation']
-  openScanner: () => void
-  goBack: () => void
-  handleDeepLink: (url: string) => void
-  checkIfAccountExists: () => void
-  initApp: () => Promise<void>
-}
-
-interface OwnProps {
-  dispatch: (action: AnyAction) => void
-}
-
-interface Props extends ConnectProps, OwnProps {
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {
+  dispatch: ThunkDispatch
   deepLinkLoading: boolean
 }
 
@@ -85,20 +78,27 @@ export class NavigatorContainer extends React.Component<Props> {
   render() {
     const { routes, index } = this.props.navigation
     const currentRoute = routes[index].routeName
-    return [
-      <StatusBar barStyle="light-content" />,
-      <Routes
-        navigation={addNavigationHelpers({
-          dispatch: this.props.dispatch,
-          state: this.props.navigation,
-          addListener: this.addListener,
-        })}
-      />,
-      this.props.deepLinkLoading && <LoadingSpinner />,
-      currentRoute === routeList.Home && (
-        <BottomActionBar openScanner={this.props.openScanner} />
-      ),
+    const darkBackgroundPages = [
+      routeList.Landing,
+      routeList.SeedPhrase,
+      routeList.Exception,
+      routeList.Loading,
+      routeList.Entropy,
     ]
+    const isDarkBackground = darkBackgroundPages.includes(currentRoute)
+    return (
+      <React.Fragment>
+        <StatusBar barStyle={isDarkBackground ? 'light-content' : 'default'} />
+        <Routes
+          navigation={addNavigationHelpers({
+            dispatch: this.props.dispatch,
+            state: this.props.navigation,
+            addListener: this.addListener,
+          })}
+        />
+        {this.props.deepLinkLoading && <LoadingSpinner />}
+      </React.Fragment>
+    )
   }
 }
 
@@ -107,16 +107,25 @@ const mapStateToProps = (state: RootState) => ({
   deepLinkLoading: state.sso.deepLinkLoading,
 })
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  goBack: () => dispatch(navigationActions.goBack()),
-  handleDeepLink: (url: string) =>
-    dispatch(navigationActions.handleDeepLink(url)),
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  goBack: () => navigationActions.goBack,
+  handleDeepLink: async (url: string) =>
+    dispatch(
+      withLoading(toggleLoading)(
+        withErrorHandling(showErrorScreen)(handleDeepLink(url)),
+      ),
+    ),
   openScanner: () =>
     dispatch(
       navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
     ),
-  checkIfAccountExists: () => dispatch(accountActions.checkIdentityExists()),
-  initApp: async () => await dispatch(genericActions.initApp()),
+  checkIfAccountExists: () =>
+    dispatch(
+      withLoading(toggleLoading)(
+        withErrorHandling(showErrorScreen)(accountActions.checkIdentityExists),
+      ),
+    ),
+  initApp: () => dispatch(genericActions.initApp),
 })
 
 export const Navigator = connect(

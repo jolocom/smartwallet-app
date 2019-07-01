@@ -1,5 +1,4 @@
 import { AnyAction } from 'redux'
-import Immutable from 'immutable'
 import {
   ClaimsState,
   CategorizedClaims,
@@ -15,7 +14,9 @@ const categorizedClaims: CategorizedClaims = {
         familyName: '',
       },
       id: '',
-      issuer: '',
+      issuer: {
+        did: '',
+      },
       subject: '',
     },
   ],
@@ -26,7 +27,9 @@ const categorizedClaims: CategorizedClaims = {
         email: '',
       },
       id: '',
-      issuer: '',
+      issuer: {
+        did: '',
+      },
       subject: '',
       keyboardType: 'email-address',
     },
@@ -36,7 +39,9 @@ const categorizedClaims: CategorizedClaims = {
         telephone: '',
       },
       id: '',
-      issuer: '',
+      issuer: {
+        did: '',
+      },
       subject: '',
       keyboardType: 'phone-pad',
     },
@@ -50,53 +55,61 @@ const categorizedClaims: CategorizedClaims = {
         country: '',
       },
       id: '',
-      issuer: '',
+      issuer: {
+        did: '',
+      },
       subject: '',
     },
   ],
+  // /** @dev FOR TESTING */
   Other: [],
 }
 
 export const initialState: ClaimsState = {
-  loading: false,
   selected: {
     credentialType: '',
     claimData: {},
     id: '',
-    issuer: '',
+    issuer: {
+      did: '',
+    },
     subject: '',
   },
-  pendingExternal: [],
+  pendingExternal: {
+    offeror: {
+      did: '',
+    },
+    offer: [],
+  },
   decoratedCredentials: categorizedClaims,
 }
 
 export const claims = (
-  state = Immutable.fromJS(initialState),
+  state = initialState,
   action: AnyAction,
 ): ClaimsState => {
   switch (action.type) {
-    case 'TOGGLE_CLAIMS_LOADING':
-      return state.setIn(['loading'], action.value)
     case 'SET_CLAIMS_FOR_DID':
-      return state
-        .set(
-          'decoratedCredentials',
-          Immutable.fromJS(addDefaultValues(action.claims)),
-        )
-        .set('loading', false)
+      return { ...state, decoratedCredentials: addDefaultValues(action.claims) }
     case 'SET_EXTERNAL':
-      return state.set('pendingExternal', Immutable.fromJS(action.external))
+      return { ...state, pendingExternal: action.value }
     case 'RESET_EXTERNAL':
-      return state.set('pendingExternal', Immutable.fromJS([]))
+      return { ...state, pendingExternal: initialState.pendingExternal } // TODO Remove in favor of calling set external with empty array
     case 'SET_SELECTED':
-      return state.setIn(['selected'], Immutable.fromJS(action.selected))
+      return { ...state, selected: action.selected }
     case 'RESET_SELECTED':
-      return state.setIn(['selected'], initialState.selected)
-    case 'HANLDE_CLAIM_INPUT':
-      return state.setIn(
-        ['selected', 'claimData', action.fieldName],
-        action.fieldValue,
-      )
+      return { ...state, selected: initialState.selected }
+    case 'HANDLE_CLAIM_INPUT':
+      return {
+        ...state,
+        selected: {
+          ...state.selected,
+          claimData: {
+            ...state.selected.claimData,
+            [action.fieldName]: action.fieldValue,
+          },
+        },
+      }
     default:
       return state
   }

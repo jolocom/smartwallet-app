@@ -3,10 +3,6 @@
 exports[`Account action creators Should correctly handle an empty encrypted seed table 1`] = `
 Array [
   Object {
-    "type": "SET_LOADING",
-    "value": false,
-  },
-  Object {
     "actions": Array [
       Object {
         "routeName": "Landing",
@@ -25,10 +21,6 @@ Array [
   Object {
     "type": "DID_SET",
     "value": "did:jolo:first",
-  },
-  Object {
-    "type": "SET_LOADING",
-    "value": false,
   },
   Object {
     "actions": Array [
@@ -51,10 +43,6 @@ Array [
     "value": "did:jolo:mock",
   },
   Object {
-    "type": "SET_LOADING",
-    "value": false,
-  },
-  Object {
     "actions": Array [
       Object {
         "routeName": "Home",
@@ -71,10 +59,6 @@ Array [
 exports[`Account action creators Should correctly retrieve claims from device storage db on setClaimForDid 1`] = `
 Array [
   Object {
-    "type": "TOGGLE_CLAIMS_LOADING",
-    "value": true,
-  },
-  Object {
     "claims": Object {
       "Contact": Array [
         Object {
@@ -84,22 +68,24 @@ Array [
           "credentialType": "Email",
           "expires": 2019-10-15T19:59:38.406Z,
           "id": "claimId:61adc6e7b1448",
-          "issuer": "did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88",
+          "issuer": Object {
+            "did": "did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88",
+          },
           "subject": "did:jolo:b310d293aeac8a5ca680232b96901fe85988fde2860a1a5db69b49762923cc88",
         },
       ],
     },
     "type": "SET_CLAIMS_FOR_DID",
   },
-  Object {
-    "type": "TOGGLE_CLAIMS_LOADING",
-    "value": false,
-  },
 ]
 `;
 
 exports[`Account action creators should correctly save claim 1`] = `
 Array [
+  Object {
+    "claims": Object {},
+    "type": "SET_CLAIMS_FOR_DID",
+  },
   Object {
     "actions": Array [
       Object {

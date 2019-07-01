@@ -20,7 +20,6 @@ Object {
     },
   },
   "deepLinkLoading": false,
-  "isDeepLinkInteraction": false,
 }
 `;
 
@@ -56,7 +55,6 @@ Object {
     },
   },
   "deepLinkLoading": false,
-  "isDeepLinkInteraction": false,
 }
 `;
 
@@ -72,7 +70,9 @@ Object {
     "availableCredentials": Array [],
     "callbackURL": "",
     "requestJWT": "",
-    "requester": "",
+    "requester": Object {
+      "did": "",
+    },
   },
   "activePaymentRequest": Object {
     "amount": 0,
@@ -85,6 +85,5 @@ Object {
     },
   },
   "deepLinkLoading": false,
-  "isDeepLinkInteraction": false,
 }
 `;

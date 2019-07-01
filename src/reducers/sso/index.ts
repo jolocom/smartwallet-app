@@ -1,8 +1,9 @@
 import { AnyAction } from 'redux'
+import { IdentitySummary } from '../../actions/sso/types'
 
 export interface StateVerificationSummary {
   id: string
-  issuer: string
+  issuer: IdentitySummary
   selfSigned: boolean
   expires: string | undefined | Date
 }
@@ -15,7 +16,7 @@ export interface StateTypeSummary {
 
 export interface StateCredentialRequestSummary {
   readonly callbackURL: string
-  readonly requester: string
+  readonly requester: IdentitySummary
   readonly availableCredentials: StateTypeSummary[]
   readonly requestJWT: string
 }
@@ -43,12 +44,13 @@ export interface SsoState {
   activePaymentRequest: StatePaymentRequestSummary
   activeAuthenticationRequest: StateAuthenticationRequestSummary
   deepLinkLoading: boolean
-  isDeepLinkInteraction: boolean
 }
 
 const initialState: SsoState = {
   activeCredentialRequest: {
-    requester: '',
+    requester: {
+      did: '',
+    },
     callbackURL: '',
     availableCredentials: [],
     requestJWT: '',
@@ -63,7 +65,6 @@ const initialState: SsoState = {
     description: '',
     paymentRequest: '',
   },
-  isDeepLinkInteraction: false,
   // add blank authentication request, which is did, public profile?
   activeAuthenticationRequest: {
     requester: '',
@@ -83,8 +84,6 @@ export const ssoReducer = (
       return { ...state, activeCredentialRequest: action.value }
     case 'SET_PAYMENT_REQUEST':
       return { ...state, activePaymentRequest: action.value }
-    case 'SET_DEEP_LINK_FLAG':
-      return { ...state, isDeepLinkInteraction: action.value }
     case 'SET_AUTHENTICATION_REQUEST':
       return { ...state, activeAuthenticationRequest: action.value }
     case 'SET_DEEP_LINK_LOADING':

@@ -1,26 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  StateCredentialRequestSummary,
-  StateVerificationSummary,
-} from 'src/reducers/sso'
+import { StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
+import { ThunkDispatch } from '../../../store'
+import { withErrorHandling, withLoading } from '../../../actions/modifiers'
+import { toggleLoading } from '../../../actions/account'
+import { showErrorScreen } from '../../../actions/generic'
+import {NavigationParams} from 'react-navigation'
 
-interface ConnectProps {}
-
-interface Props extends ConnectProps {
-  activeCredentialRequest: StateCredentialRequestSummary
-  currentDid: string
-  sendCredentialResponse: (creds: StateVerificationSummary[]) => void
-  cancelSSO: () => void
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {
+  navigation: { state: { params: NavigationParams } }
 }
 
 interface State {}
 
 export class ConsentContainer extends React.Component<Props, State> {
   private handleSubmitClaims = (credentials: StateVerificationSummary[]) => {
-    this.props.sendCredentialResponse(credentials)
+    this.props.sendCredentialResponse(credentials, this.props.navigation.state.params.isDeepLinkInteraction)
   }
 
   private handleDenySubmit = () => {
@@ -48,13 +47,19 @@ export class ConsentContainer extends React.Component<Props, State> {
 
 const mapStateToProps = (state: any) => ({
   activeCredentialRequest: state.sso.activeCredentialRequest,
-  currentDid: state.account.did.toJS().did,
+  currentDid: state.account.did.did,
 })
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  sendCredentialResponse: (creds: StateVerificationSummary[]) =>
-    dispatch(ssoActions.sendCredentialResponse(creds)),
-  cancelSSO: () => dispatch(ssoActions.cancelSSO()),
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  sendCredentialResponse: (credentials: StateVerificationSummary[], isDeepLinkInteraction: boolean) =>
+    dispatch(
+      withLoading(toggleLoading)(
+        withErrorHandling(showErrorScreen)(
+          ssoActions.sendCredentialResponse(credentials, isDeepLinkInteraction),
+        ),
+      ),
+    ),
+  cancelSSO: () => dispatch(ssoActions.cancelSSO),
 })
 
 export const Consent = connect(

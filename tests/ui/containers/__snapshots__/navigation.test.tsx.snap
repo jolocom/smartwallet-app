@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`NavigatorContainer correctly hides bottom action bar 1`] = `
-Array [
+<React.Fragment>
   <StatusBar
     animated={false}
     barStyle="light-content"
     showHideTransition="fade"
-  />,
+  />
   <NavigationContainer
     navigation={
       Object {
@@ -31,19 +31,17 @@ Array [
         },
       }
     }
-  />,
-  "",
-  "",
-]
+  />
+</React.Fragment>
 `;
 
 exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
-Array [
+<React.Fragment>
   <StatusBar
     animated={false}
-    barStyle="light-content"
+    barStyle="default"
     showHideTransition="fade"
-  />,
+  />
   <NavigationContainer
     navigation={
       Object {
@@ -68,10 +66,6 @@ Array [
         },
       }
     }
-  />,
-  "",
-  <BottomActionBar
-    openScanner={[MockFunction]}
-  />,
-]
+  />
+</React.Fragment>
 `;

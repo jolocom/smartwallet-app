@@ -1,8 +1,8 @@
 const RNLanguages = require('react-native-languages')
 import I18n from 'i18n-js'
 
-const de = require('./de').default
-const nl = require('./nl').default
+const de = require('./de.json')
+const nl = require('./nl.json')
 
 I18n.locale = RNLanguages.language.split('-')[0]
 I18n.defaultLocale = 'en'
@@ -13,8 +13,10 @@ I18n.translations = {
   nl,
 }
 
+export const locales = ['en', 'de', 'nl']
+
 export const getI18nImage = (fileName: string): File => {
-  const locale = Object.keys(I18n.translations).includes(I18n.locale)
+  const locale = locales.includes(I18n.locale)
     ? I18n.locale
     : I18n.defaultLocale
 

@@ -2,21 +2,18 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { registrationActions } from 'src/actions'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
-import Immutable from 'immutable'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
+import { ThunkDispatch } from 'src/store'
+import strings from '../../../locales/strings'
 const loaders = require('react-native-indicator')
 
-export interface ConnectProps {
-  loadingMsg: string
-  createIdentity: (encodedEntropy: string) => void
-}
-
-interface Props extends ConnectProps {}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 export interface State {}
 
@@ -68,11 +65,11 @@ export class LoadingContainer extends React.Component<Props, State> {
         <Block style={styles.label}>
           <CenteredText
             style={styles.text}
-            msg={I18n.t('Give us a few moments')}
+            msg={I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}
           />
           <CenteredText
             style={styles.text}
-            msg={I18n.t('to set up your identity')}
+            msg={I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}
           />
         </Block>
         <Block>
@@ -112,17 +109,15 @@ export class LoadingContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  const loading = Immutable.fromJS(state.registration.loading)
-  return {
-    loadingMsg: loading.get('loadingMsg'),
-  }
-}
-
-const mapDispatchToProps = (dispatch: Function) => ({
-  createIdentity: (entropy: string) =>
-    dispatch(registrationActions.createIdentity(entropy)),
+const mapStateToProps = ({
+  registration: {
+    loading: { loadingMsg },
+  },
+}: RootState) => ({
+  loadingMsg,
 })
+
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({})
 
 export const Loading = connect(
   mapStateToProps,

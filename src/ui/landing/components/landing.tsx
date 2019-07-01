@@ -5,6 +5,7 @@ import { Block, Container, CenteredText } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { Landing00, Landing01, Landing02, Landing03 } from 'src/resources'
+import strings from 'src/locales/strings'
 
 const Carousel = require('react-native-snap-carousel').default
 const Pagination = require('react-native-snap-carousel').Pagination
@@ -100,41 +101,41 @@ const styles = StyleSheet.create({
 const carouselInfo: Slide[] = [
   {
     svgImage: <Landing00 />,
-    title: I18n.t('Your Jolocom Wallet'),
+    title: I18n.t(strings.YOUR_JOLOCOM_WALLET),
     infoText:
       I18n.t(
-        'Take back control of your digital self and protect your private data against unfair usage',
+        strings.TAKE_BACK_CONTROL_OF_YOUR_DIGITAL_SELF_AND_PROTECT_YOUR_PRIVATE_DATA_AGAINST_UNFAIR_USAGE,
       ) + '.',
   },
   {
     svgImage: <Landing01 height={'100%'} width={'100%'} />,
-    title: I18n.t("It's easy"),
+    title: I18n.t(strings.ITS_EASY),
     infoText:
-      I18n.t('Forget about long forms and registrations') +
+      I18n.t(strings.FORGET_ABOUT_LONG_FORMS_AND_REGISTRATIONS) +
       '. ' +
       I18n.t(
-        'Instantly access services without using your social media profiles',
+        strings.INSTANTLY_ACCESS_SERVICES_WITHOUT_USING_YOUR_SOCIAL_MEDIA_PROFILES,
       ) +
       '.',
   },
   {
     svgImage: <Landing03 height={'100%'} width={'100%'} />,
-    title: I18n.t('Enhanced privacy'),
+    title: I18n.t(strings.ENHANCED_PRIVACY),
     infoText:
-      I18n.t('Share only the information a service really needs') +
+      I18n.t(strings.SHARE_ONLY_THE_INFORMATION_A_SERVICE_REALLY_NEEDS) +
       '. ' +
-      I18n.t('Protect your digital self against fraud') +
+      I18n.t(strings.PROTECT_YOUR_DIGITAL_SELF_AGAINST_FRAUD) +
       '.',
   },
   {
     svgImage: <Landing02 height={'100%'} width={'100%'} />,
-    title: I18n.t('Greater control'),
+    title: I18n.t(strings.GREATER_CONTROL),
     infoText:
       I18n.t(
-        'Keep all your data with you in one place, available at any time',
+        strings.KEEP_ALL_YOUR_DATA_WITH_YOU_IN_ONE_PLACE_AVAILABLE_AT_ANY_TIME,
       ) +
       '. ' +
-      I18n.t('Track where you sign in to services') +
+      I18n.t(strings.TRACK_WHERE_YOU_SIGN_IN_TO_SERVICES) +
       '.',
   },
 ]
@@ -199,7 +200,7 @@ export class LandingComponent extends React.Component<Props, State> {
               text: styles.buttonText,
             }}
             upperCase={false}
-            text={I18n.t('Get started')}
+            text={I18n.t(strings.GET_STARTED)}
           />
         </Block>
       </Container>
