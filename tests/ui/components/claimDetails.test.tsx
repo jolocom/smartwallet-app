@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { shallow } from 'enzyme'
 import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 
@@ -9,8 +9,11 @@ describe('ClaimDetails component', () => {
   }
 
   it('matches the snapshot on render', () => {
-    const props = Object.assign({}, COMMON_PROPS {
+    const props = Object.assign({}, COMMON_PROPS, {
       selectedClaim: {
+        id: '',
+        issuer: '',
+        subject: '',
         credentialType: 'Email',
         claimData: {
           email: 'test@test.com'
@@ -23,7 +26,7 @@ describe('ClaimDetails component', () => {
   })
 
   it('matches the snapshot on render with multi-line claim', () => {
-    const props = Object.assign({}, COMMON_PROPS {
+    const props = Object.assign({}, COMMON_PROPS, {
       selectedClaim: {
         credentialType: 'Name',
         claimData: {
