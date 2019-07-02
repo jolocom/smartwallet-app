@@ -6,6 +6,9 @@ enum ErrorCode {
   SaveClaimFailed = 'SaveClaim',
   SaveExternalCredentialFailed = 'SaveExtCred',
 
+  // actions/sso
+  DeepLinkUrlNotFound = 'DeepLinkUrlNotFound',
+
   // actions/sso/authenticationRequest
   AuthenticationRequestFailed = 'AuthRequest',
   AuthenticationResponseFailed = 'AuthResponse',

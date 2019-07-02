@@ -62,6 +62,7 @@ exports[`Exception screen component Renders correctly 1`] = `
         accessible={true}
         allowFontScaling={true}
         ellipsizeMode="tail"
+        numberOfLines={5}
         style={
           Object {
             "color": "#ffefdf",
@@ -179,6 +180,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
         accessible={true}
         allowFontScaling={true}
         ellipsizeMode="tail"
+        numberOfLines={5}
         style={
           Object {
             "color": "#ffefdf",

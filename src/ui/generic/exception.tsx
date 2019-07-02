@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
 export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
   // TODO: display error code
   const err = props.navigation.state.params.error
+  console.log(err)
   const errorTitle =
     props.errorTitle || getRandomStringFromArray(errorTitleMessages)
   let errorText = err
@@ -102,7 +103,7 @@ export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
         <Image source={errorImage} style={{ width: 160, height: 160 }} />
         <View style={styles.textBlock}>
           <Text style={styles.errorTextHeader}>{I18n.t(errorTitle) + '.'}</Text>
-          <Text style={styles.errorText}>{errorText}</Text>
+          <Text numberOfLines={5} style={styles.errorText}>{errorText}</Text>
         </View>
       </View>
       <View style={styles.buttonBlock}>

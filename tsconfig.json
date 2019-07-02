@@ -21,10 +21,11 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
-    "baseUrl": ".",
-    "paths": {
-      "src": ["./src/"]
-    }
+    "baseUrl": "."
   },
-  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"],
+  "include": [
+    "./src/**/*",
+    "./tests/**/*"
+  ],
 }

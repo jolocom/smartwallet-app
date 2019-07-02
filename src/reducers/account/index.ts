@@ -34,7 +34,6 @@ export interface CategorizedClaims {
 }
 
 export interface ClaimsState {
-  readonly loading: boolean
   readonly selected: DecoratedClaims
   readonly decoratedCredentials: CategorizedClaims
   readonly pendingExternal: {

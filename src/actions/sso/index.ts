@@ -12,12 +12,14 @@ import { convertToDecoratedClaim, resetSelected } from '../account'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { ThunkActionCreator, ThunkAction } from '../../store'
+import { ThunkAction } from '../../store'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { mergeRight, omit } from 'ramda'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { DecoratedClaims } from '../../reducers/account'
 import { IdentitySummary } from './types'
+import { AppError } from '../../lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export const setCredentialRequest = (
   request: StateCredentialRequestSummary,
@@ -46,11 +48,12 @@ export const setDeepLinkLoading = (value: boolean) => ({
   value,
 })
 
-export const receiveExternalCredential: ThunkActionCreator = (
+export const receiveExternalCredential = (
   credReceive: JSONWebToken<CredentialsReceive>,
   offeror: IdentitySummary,
+  isDeepLinkInteraction: boolean,
   credentialOfferMetadata?: CredentialMetadataSummary[],
-) => async (dispatch, getState, backendMiddleware) => {
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet, registry, storageLib } = backendMiddleware
 
   await identityWallet.validateJWT(credReceive, undefined, registry)
@@ -103,6 +106,9 @@ export const receiveExternalCredential: ThunkActionCreator = (
   return dispatch(
     navigationActions.navigatorReset({
       routeName: routeList.CredentialDialog,
+      params: {
+        isDeepLinkInteraction,
+      },
     }),
   )
 }
@@ -116,9 +122,10 @@ interface AttributeSummary {
   }>
 }
 
-export const consumeCredentialRequest: ThunkActionCreator = (
+export const consumeCredentialRequest = (
   decodedCredentialRequest: JSONWebToken<CredentialRequest>,
-) => async (dispatch, getState, backendMiddleware) => {
+  isDeepLinkInteraction: boolean,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, identityWallet, registry } = backendMiddleware
   const { did } = getState().account.did
 
@@ -199,17 +206,20 @@ export const consumeCredentialRequest: ThunkActionCreator = (
 
   dispatch(setCredentialRequest(summary))
   return dispatch(
-    navigationActions.navigatorReset({ routeName: routeList.Consent }),
+    navigationActions.navigatorReset({
+      routeName: routeList.Consent,
+      params: { isDeepLinkInteraction },
+    }),
   )
 }
 
-export const sendCredentialResponse: ThunkActionCreator = (
+export const sendCredentialResponse = (
   selectedCredentials: StateVerificationSummary[],
-) => async (dispatch, getState, backendMiddleware) => {
+  isDeepLinkInteraction: boolean = false,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, keyChainLib, identityWallet } = backendMiddleware
   const {
     activeCredentialRequest: { callbackURL, requestJWT },
-    isDeepLinkInteraction,
   } = getState().sso
 
   try {
@@ -235,9 +245,12 @@ export const sendCredentialResponse: ThunkActionCreator = (
     )
 
     if (isDeepLinkInteraction) {
-      return Linking.openURL(`${callbackURL}${response.encode()}`).then(() =>
-        dispatch(cancelSSO),
-      )
+      const callback = `${callbackURL}${response.encode()}`
+      if (!(await Linking.canOpenURL(callback))) {
+        throw new AppError(ErrorCode.DeepLinkUrlNotFound)
+      }
+
+      return Linking.openURL(callback).then(() => dispatch(cancelSSO))
     } else {
       return fetch(callbackURL, {
         method: 'POST',
@@ -264,8 +277,3 @@ export const cancelReceiving: ThunkAction = dispatch => {
     navigationActions.navigatorReset({ routeName: routeList.Home }),
   )
 }
-
-export const toggleDeepLinkFlag = (value: boolean) => ({
-  type: 'SET_DEEP_LINK_FLAG',
-  value,
-})

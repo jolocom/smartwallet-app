@@ -5,18 +5,21 @@ import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withErrorHandling, withLoading } from '../../../actions/modifiers'
-import { toggleClaimsLoading } from '../../../actions/account'
+import { toggleLoading } from '../../../actions/account'
 import { showErrorScreen } from '../../../actions/generic'
+import {NavigationParams} from 'react-navigation'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> {}
+    ReturnType<typeof mapStateToProps> {
+  navigation: { state: { params: NavigationParams } }
+}
 
 interface State {}
 
 export class ConsentContainer extends React.Component<Props, State> {
   private handleSubmitClaims = (credentials: StateVerificationSummary[]) => {
-    this.props.sendCredentialResponse(credentials)
+    this.props.sendCredentialResponse(credentials, this.props.navigation.state.params.isDeepLinkInteraction)
   }
 
   private handleDenySubmit = () => {
@@ -48,11 +51,11 @@ const mapStateToProps = (state: any) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  sendCredentialResponse: (credentials: StateVerificationSummary[]) =>
+  sendCredentialResponse: (credentials: StateVerificationSummary[], isDeepLinkInteraction: boolean) =>
     dispatch(
-      withLoading(toggleClaimsLoading)(
+      withLoading(toggleLoading)(
         withErrorHandling(showErrorScreen)(
-          ssoActions.sendCredentialResponse(credentials),
+          ssoActions.sendCredentialResponse(credentials, isDeepLinkInteraction),
         ),
       ),
     ),

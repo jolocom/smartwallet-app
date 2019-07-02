@@ -6,7 +6,7 @@ import { accountActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withErrorHandling, withLoading } from '../../../actions/modifiers'
 import { showErrorScreen } from '../../../actions/generic'
-import { setDeepLinkLoading } from '../../../actions/sso'
+import { toggleLoading } from 'src/actions/account'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -33,7 +33,7 @@ const mapStateToProps = ({ account: { claims } }: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   saveClaim: () =>
     dispatch(
-      withLoading(setDeepLinkLoading)(
+      withLoading(toggleLoading)(
         withErrorHandling(showErrorScreen)(accountActions.saveClaim),
       ),
     ),
