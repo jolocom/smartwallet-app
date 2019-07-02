@@ -337,90 +337,90 @@ class TabBarBottom extends React.Component<Props, State> {
     // </ALTERED>
 
     return (
-      <React.Fragment>
-      {/*<ALTERED>*/ QRCodeButton /*</ALTERED>*/}
-      <Animated.View
-        style={[
-          styles.container,
-          keyboardHidesTabBar
-            ? {
-                // When the keyboard is shown, slide down the tab bar
-                transform: [
-                  {
-                    translateY: this.state.visible.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [this.state.layout.height, 0],
-                    }),
-                  },
-                ],
-                // Absolutely position the tab bar so that the content is below it
-                // This is needed to avoid gap at bottom when the tab bar is hidden
-                position: this.state.keyboard ? 'absolute' : null,
-              }
-            : null,
-        ]}
-        pointerEvents={
-          keyboardHidesTabBar && this.state.keyboard ? 'none' : 'auto'
-        }
-        onLayout={this._handleLayout}
-      >
-        <SafeAreaView style={tabBarStyle} forceInset={safeAreaInset}>
-          {routes.map((route, index) => {
-            const focused = index === navigation.state.index;
-            const scene = { route, focused };
-            const accessibilityLabel = this.props.getAccessibilityLabel({
-              route,
-            });
+      <View style={{ position: 'relative' }}>
+        {/*<ALTERED>*/ QRCodeButton /*</ALTERED>*/}
+        <Animated.View
+          style={[
+            styles.container,
+            keyboardHidesTabBar
+              ? {
+                  // When the keyboard is shown, slide down the tab bar
+                  transform: [
+                    {
+                      translateY: this.state.visible.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [this.state.layout.height, 0],
+                      }),
+                    },
+                  ],
+                  // Absolutely position the tab bar so that the content is below it
+                  // This is needed to avoid gap at bottom when the tab bar is hidden
+                  position: this.state.keyboard ? 'absolute' : null,
+                }
+              : null,
+          ]}
+          pointerEvents={
+            keyboardHidesTabBar && this.state.keyboard ? 'none' : 'auto'
+          }
+          onLayout={this._handleLayout}
+        >
+          <SafeAreaView style={tabBarStyle} forceInset={safeAreaInset}>
+            {routes.map((route, index) => {
+              const focused = index === navigation.state.index;
+              const scene = { route, focused };
+              const accessibilityLabel = this.props.getAccessibilityLabel({
+                route,
+              });
 
-            const accessibilityRole = this.props.getAccessibilityRole({
-              route,
-            });
+              const accessibilityRole = this.props.getAccessibilityRole({
+                route,
+              });
 
-            const accessibilityStates = this.props.getAccessibilityStates(
-              scene
-            );
+              const accessibilityStates = this.props.getAccessibilityStates(
+                scene
+              );
 
-            const testID = this.props.getTestID({ route });
+              const testID = this.props.getTestID({ route });
 
-            const backgroundColor = focused
-              ? activeBackgroundColor
-              : inactiveBackgroundColor;
+              const backgroundColor = focused
+                ? activeBackgroundColor
+                : inactiveBackgroundColor;
 
-            const ButtonComponent =
-              this.props.getButtonComponent({ route }) ||
-              TouchableWithoutFeedbackWrapper;
+              const ButtonComponent =
+                this.props.getButtonComponent({ route }) ||
+                TouchableWithoutFeedbackWrapper;
 
-            // <ALTERED>
-            // added React.Fragment and QRCodeButtonPlaceholder
-            // </ALTERED>
-            return (
-              <React.Fragment key={route.key}>
-                {QR_CODE_BUTTON_INDEX == index && QRCodeButtonPlaceholder}
-                <ButtonComponent
-                  onPress={() => onTabPress({ route })}
-                  onLongPress={() => onTabLongPress({ route })}
-                  testID={testID}
-                  accessibilityLabel={accessibilityLabel}
-                  accessibilityRole={accessibilityRole}
-                  accessibilityStates={accessibilityStates}
-                  style={[
-                    styles.tab,
-                    { backgroundColor },
-                    this._shouldUseHorizontalLabels()
-                      ? styles.tabLandscape
-                      : styles.tabPortrait,
-                    tabStyle,
-                  ]}
-                >
-                  {this._renderIcon(scene)}
-                  {this._renderLabel(scene)}
-                </ButtonComponent>
-              </React.Fragment>
-            );
-          })}
-        </SafeAreaView>
-      </Animated.View>
-      </React.Fragment>
+              // <ALTERED>
+              // added React.Fragment and QRCodeButtonPlaceholder
+              // </ALTERED>
+              return (
+                <React.Fragment key={route.key}>
+                  {QR_CODE_BUTTON_INDEX == index && QRCodeButtonPlaceholder}
+                  <ButtonComponent
+                    onPress={() => onTabPress({ route })}
+                    onLongPress={() => onTabLongPress({ route })}
+                    testID={testID}
+                    accessibilityLabel={accessibilityLabel}
+                    accessibilityRole={accessibilityRole}
+                    accessibilityStates={accessibilityStates}
+                    style={[
+                      styles.tab,
+                      { backgroundColor },
+                      this._shouldUseHorizontalLabels()
+                        ? styles.tabLandscape
+                        : styles.tabPortrait,
+                      tabStyle,
+                    ]}
+                  >
+                    {this._renderIcon(scene)}
+                    {this._renderLabel(scene)}
+                  </ButtonComponent>
+                </React.Fragment>
+              );
+            })}
+          </SafeAreaView>
+        </Animated.View>
+      </View>
     );
   }
 }
@@ -483,7 +483,7 @@ const styles = StyleSheet.create({
   // <ALTERED>
   qrCodeButton: {
     position: 'absolute',
-    bottom: QR_CODE_BUTTON_RADIUS - COMPACT_HEIGHT,
+    top: -COMPACT_HEIGHT,
     height: QR_CODE_BUTTON_RADIUS * 2,
     width: QR_CODE_BUTTON_RADIUS * 2,
     borderRadius: QR_CODE_BUTTON_RADIUS,
