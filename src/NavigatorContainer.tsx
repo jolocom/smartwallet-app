@@ -19,6 +19,7 @@ import { showErrorScreen } from './actions/generic'
 
 const {
   createReduxBoundAddListener,
+  initializeListeners,
 } = require('react-navigation-redux-helpers')
 
 interface Props
@@ -40,6 +41,7 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   async componentDidMount() {
+    initializeListeners('root', this.props.navigation)
     await this.props.initApp()
     await this.props.checkIfAccountExists()
     const url = await Linking.getInitialURL()

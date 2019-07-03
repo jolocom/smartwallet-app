@@ -4,6 +4,8 @@ import {
   AnyAction as OriginalAnyAction,
 } from 'redux'
 import { NavigationAction } from 'react-navigation'
+import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers'
+
 import thunk, {
   ThunkDispatch as OriginalThunkDispatch,
   ThunkAction as OriginalThunkAction,
@@ -14,11 +16,7 @@ import config from 'src/config'
 import { Store } from 'react-redux'
 
 export function initStore(): Store<any> {
-  const {
-    createReactNavigationReduxMiddleware,
-  } = require('react-navigation-redux-helpers')
-
-  createReactNavigationReduxMiddleware(
+  const reactNavigationReduxMiddleware = createReactNavigationReduxMiddleware(
     'root',
     (state: RootState) => state.navigation,
   )
@@ -27,7 +25,7 @@ export function initStore(): Store<any> {
   return createStore(
     rootReducer,
     {},
-    applyMiddleware(thunk.withExtraArgument(backendMiddleware)),
+    applyMiddleware(thunk.withExtraArgument(backendMiddleware), reactNavigationReduxMiddleware),
   )
 }
 
