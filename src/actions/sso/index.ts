@@ -104,7 +104,7 @@ export const receiveExternalCredential = (
   )
 
   return dispatch(
-    navigationActions.navigatorReset({
+    navigationActions.navigate({
       routeName: routeList.CredentialDialog,
       params: {
         isDeepLinkInteraction,
@@ -206,7 +206,7 @@ export const consumeCredentialRequest = (
 
   dispatch(setCredentialRequest(summary))
   return dispatch(
-    navigationActions.navigatorReset({
+    navigationActions.navigate({
       routeName: routeList.Consent,
       params: { isDeepLinkInteraction },
     }),
@@ -266,14 +266,10 @@ export const sendCredentialResponse = (
 
 export const cancelSSO: ThunkAction = dispatch => {
   dispatch(clearInteractionRequest)
-  return dispatch(
-    navigationActions.navigatorReset({ routeName: routeList.Home }),
-  )
+  return dispatch(navigationActions.navigatorResetHome())
 }
 
 export const cancelReceiving: ThunkAction = dispatch => {
   dispatch(resetSelected())
-  return dispatch(
-    navigationActions.navigatorReset({ routeName: routeList.Home }),
-  )
+  return dispatch(navigationActions.navigatorResetHome())
 }

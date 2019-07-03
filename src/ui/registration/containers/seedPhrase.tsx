@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
-import { finishRegistration } from 'src/actions/registration'
+import { navigatorResetHome } from 'src/actions/navigation'
 import { ThunkDispatch } from '../../../store'
 
 interface Props
@@ -38,7 +38,7 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
 
 const mapStateToProps = () => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  finishRegistration: () => dispatch(finishRegistration),
+  finishRegistration: () => dispatch(navigatorResetHome()),
 })
 
 export const SeedPhrase = connect(

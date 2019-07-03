@@ -5,7 +5,6 @@ import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { generateSecureRandomBytes } from 'src/lib/util'
 import { ThunkAction } from '../../store'
-import { navigatorReset } from '../navigation'
 
 const bip39 = require('bip39')
 
@@ -39,13 +38,11 @@ export const startRegistration: ThunkAction = async (
   )
 
   return dispatch(
-    navigationActions.navigatorReset({
+    navigationActions.navigate({
       routeName: routeList.Entropy,
     }),
   )
 }
-
-export const finishRegistration = navigatorReset({ routeName: routeList.Home })
 
 export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
