@@ -108,7 +108,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  goBack: () => navigationActions.goBack,
+  goBack: () => dispatch(navigationActions.goBack),
   handleDeepLink: async (url: string) =>
     dispatch(
       withLoading(toggleLoading)(
