@@ -20,7 +20,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       activeSlideOffset={20}
       apparitionDelay={0}
       autoplay={false}
-      autoplayDelay={5000}
+      autoplayDelay={1000}
       autoplayInterval={3000}
       callbackOffsetMargin={5}
       containerCustomStyle={Object {}}
@@ -73,6 +73,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       loopClonesPerSide={3}
       onSnapToItem={[Function]}
       renderItem={[Function]}
+      scrollEnabled={true}
       shouldOptimizeUpdates={true}
       slideStyle={Object {}}
       sliderWidth={750}
@@ -121,13 +122,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       }
     }
   >
-    <Button
-      accent={false}
-      disabled={false}
-      icon={null}
-      onLongPress={null}
-      onPress={null}
-      primary={false}
+    <ThemedComponent
       raised={true}
       style={
         Object {
@@ -148,7 +143,6 @@ exports[`landing component matches the snapshot on render 1`] = `
           },
         }
       }
-      testID={null}
       text="Get started"
       upperCase={false}
     />

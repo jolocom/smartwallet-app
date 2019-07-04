@@ -1,18 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
-<React.Fragment>
+<Fragment>
   <Container>
     <QRCodeScanner
       bottomContent={
-        <Button
-          accent={false}
-          disabled={false}
-          icon={null}
-          onLongPress={null}
+        <ThemedComponent
           onPress={[Function]}
-          primary={false}
-          raised={false}
           style={
             Object {
               "text": Object {
@@ -20,16 +14,15 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
               },
             }
           }
-          testID={null}
           text="Cancel"
-          upperCase={true}
         />
       }
+      cameraProps={Object {}}
       cameraType="back"
       checkAndroid6Permissions={false}
       fadeIn={true}
       notAuthorizedView={
-        <Component
+        <View
           style={
             Object {
               "alignItems": "center",
@@ -39,9 +32,6 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontSize": 16,
@@ -51,11 +41,11 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
           >
             Camera not authorized
           </Text>
-        </Component>
+        </View>
       }
       onRead={[Function]}
       pendingAuthorizationView={
-        <Component
+        <View
           style={
             Object {
               "alignItems": "center",
@@ -65,9 +55,6 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontSize": 16,
@@ -77,7 +64,7 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
           >
             ...
           </Text>
-        </Component>
+        </View>
       }
       permissionDialogMessage="Need camera permission"
       permissionDialogTitle="Info"
@@ -85,15 +72,12 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
       reactivateTimeout={0}
       showMarker={false}
       topContent={
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           You can scan the qr code now!
         </Text>
       }
+      vibrate={true}
     />
   </Container>
-</React.Fragment>
+</Fragment>
 `;
