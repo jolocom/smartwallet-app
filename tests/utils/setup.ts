@@ -11,8 +11,3 @@ jest.mock('react-native-fetch-blob', () => ({
     fetch: jest.fn(),
   },
 }))
-
-jest.mock('react-native-languages', () => ({
-  language: 'en',
-  languages: ['en'],
-}))

@@ -1,12 +1,13 @@
 module.exports = {
   setupFiles: [
-    "./tests/utils/setup.ts"
+    "./tests/utils/setup.ts",
+    "./node_modules/react-native-gesture-handler/jestSetup.js"
   ],
   snapshotSerializers: [
     "enzyme-to-json/serializer"
   ],
   transformIgnorePatterns: [
-    "node_modules/(?!react-native|native-base|react-navigation|react-native-fabric)"
+    "node_modules/(?!react-native|native-base|@?react-navigation|react-native-fabric)"
   ],
   globals: {
     window: true,
