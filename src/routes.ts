@@ -32,14 +32,14 @@ import {
   SettingsMenuIcon,
 } from 'src/resources'
 
-const headerBackImage = createElement(
-  Image,
-  {
-    source: Platform.OS === 'android'
+
+const headerBackImage = createElement(Image, {
+  source:
+    Platform.OS === 'android'
       ? require('./resources/img/close.png')
-      : require('./resources/img/back-26.png')
-  }
-)
+      : require('./resources/img/back-26.png'),
+  resizeMode: 'center',
+})
 
 const noHeaderNavOpts = {
   header: null,
