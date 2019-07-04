@@ -106,9 +106,8 @@ export const receiveExternalCredential = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialDialog,
-      params: {
-        isDeepLinkInteraction,
-      },
+      params: { isDeepLinkInteraction, },
+      key: 'receiveExternalCredential',
     }),
   )
 }
@@ -209,6 +208,7 @@ export const consumeCredentialRequest = (
     navigationActions.navigate({
       routeName: routeList.Consent,
       params: { isDeepLinkInteraction },
+      key: 'credentialRequest',
     }),
   )
 }

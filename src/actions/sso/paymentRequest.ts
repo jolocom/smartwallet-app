@@ -49,6 +49,7 @@ export const consumePaymentRequest = (
     navigationActions.navigate({
       routeName: routeList.PaymentConsent,
       params: { isDeepLinkInteraction },
+      key: 'paymentRequest',
     }),
   )
 }
