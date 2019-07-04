@@ -32,7 +32,7 @@ interface Props {
   onScannerCancel: () => typeof goBack
 }
 
-interface State {}
+interface State { }
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -49,9 +49,8 @@ export class QRcodeScanner extends React.Component<Props, State> {
         <Container>
           <QRScanner
             onRead={(e: QrScanEvent) => onScannerSuccess(e)}
-            topContent={
-              <Text>{I18n.t(strings.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>
-            }
+            cameraStyle={{ overflow: 'hidden' }}
+            topContent={<Text>{I18n.t(strings.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>}
             bottomContent={
               <Button
                 onPress={onScannerCancel}
@@ -81,24 +80,18 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     try {
       interactionToken = JolocomLib.parse.interactionToken.fromJWT(e.data)
     } catch (err) {
-      return dispatch(
-        showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)),
-      )
+      return dispatch(showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)))
     }
 
     const handler = interactionHandlers[interactionToken.interactionType]
 
     return handler
       ? dispatch(
-          withLoading(setDeepLinkLoading)(
-            withErrorHandling(showErrorScreen)(handler(interactionToken)),
-          ),
-        )
-      : dispatch(
-          showErrorScreen(
-            new AppError(ErrorCode.Unknown, new Error('No handler found')),
-          ),
-        )
+        withLoading(setDeepLinkLoading)(
+          withErrorHandling(showErrorScreen)(handler(interactionToken)),
+        ),
+      )
+      : dispatch(showErrorScreen(new AppError(ErrorCode.Unknown, new Error('No handler found'))))
   },
   onScannerCancel: () => dispatch(navigationActions.goBack),
 })
