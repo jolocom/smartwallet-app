@@ -9,6 +9,19 @@ Object.assign = assign
 // the version
 process.version = 'v11.13.0'
 
+/**
+ * Object.setPrototypeOf polyfill because typeorm (and possibly others) use it
+ */
+
+// @ts-ignore
+if (!Object.setPrototypeOf) {
+  // @ts-ignore
+  Object.setPrototypeOf = function(obj, proto) {
+    obj.__proto__ = proto
+    return obj
+  }
+}
+
 // disable react-native warning boxes
 console.disableYellowBox = true
 
