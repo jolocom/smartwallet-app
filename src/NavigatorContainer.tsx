@@ -30,7 +30,7 @@ interface Props
 }
 
 export class NavigatorContainer extends React.Component<Props> {
-  private addListener: (
+  private readonly addListener: (
     name: string,
     cb: NavigationEventCallback,
   ) => NavigationEventSubscription
@@ -116,10 +116,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       withLoading(toggleLoading)(
         withErrorHandling(showErrorScreen)(handleDeepLink(url)),
       ),
-    ),
-  openScanner: () =>
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
     ),
   checkIfAccountExists: () =>
     dispatch(
