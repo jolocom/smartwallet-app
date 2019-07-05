@@ -38,7 +38,7 @@ const headerBackImage = createElement(Image, {
     Platform.OS === 'android'
       ? require('./resources/img/close.png')
       : require('./resources/img/back-26.png'),
-  resizeMode: 'center',
+  style: { width: 18, height: 18, margin: 4 }
 })
 
 const noHeaderNavOpts = {
