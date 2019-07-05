@@ -1,6 +1,5 @@
 import { JolocomLib } from 'jolocom-lib'
 import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
-import { EncryptionLib, EncryptionLibInterface } from 'src/lib/crypto'
 import { Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 import { ConnectionOptions } from 'typeorm/browser'
@@ -15,7 +14,6 @@ import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGatew
 export class BackendMiddleware {
   public identityWallet!: IdentityWallet
   public storageLib: Storage
-  public encryptionLib: EncryptionLibInterface
   public keyChainLib: KeyChainInterface
   public registry: IRegistry
 
@@ -24,7 +22,6 @@ export class BackendMiddleware {
     typeOrmConfig: ConnectionOptions
   }) {
     this.storageLib = new Storage(config.typeOrmConfig)
-    this.encryptionLib = new EncryptionLib()
     this.keyChainLib = new KeyChain()
     this.registry = createJolocomRegistry({
       ipfsConnector: new IpfsCustomConnector({

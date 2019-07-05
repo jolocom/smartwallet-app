@@ -43,9 +43,6 @@ describe('Account action creators', () => {
       keyChainLib: {
         getPassword: jest.fn().mockResolvedValue('sekrit'),
       },
-      encryptionLib: {
-        decryptWithPass: () => 'newSeed',
-      },
       setIdentityWallet: jest.fn(() => Promise.resolve()),
       identityWallet: { identity: { did: 'did:jolo:mock' } },
     }
@@ -73,9 +70,6 @@ describe('Account action creators', () => {
       },
       keyChainLib: {
         getPassword: jest.fn().mockResolvedValue('sekrit'),
-      },
-      encryptionLib: {
-        decryptWithPass: () => 'newSeed',
       },
       identityWallet: { identity: { did: 'did:jolo:first' } },
       setIdentityWallet: jest.fn(() => Promise.resolve()),

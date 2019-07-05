@@ -1,17 +1,17 @@
 import {
-  createConnection,
-  ConnectionOptions,
   Connection,
+  ConnectionOptions,
+  createConnection,
 } from 'typeorm/browser'
 import { plainToClass } from 'class-transformer'
 import {
   SettingEntity,
   PersonaEntity,
   MasterKeyEntity,
-  VerifiableCredentialEntity,
   SignatureEntity,
   CredentialEntity,
   CacheEntity,
+  VerifiableCredentialEntity,
 } from 'src/lib/storage/entities'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
@@ -19,6 +19,7 @@ import {
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '../../actions/sso/types'
+import { EncryptionLib } from '../crypto'
 
 interface PersonaAttributes {
   did: string
@@ -26,7 +27,7 @@ interface PersonaAttributes {
 }
 
 interface EncryptedSeedAttributes {
-  encryptedEntropy: string
+  entropy: string
   timestamp: number
 }
 
@@ -44,7 +45,7 @@ export class Storage {
     setting: this.saveSetting.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
     verifiableCredential: this.storeVClaim.bind(this),
-    encryptedSeed: this.storeEncryptedSeed.bind(this),
+    seedEncrypted: this.storeSeedEncrypted.bind(this),
     credentialMetadata: (metadata: CredentialMetadataSummary) =>
       this.createConnectionIfNeeded().then(() =>
         storeCredentialMetadata(this.connection)(metadata),
@@ -226,11 +227,19 @@ export class Storage {
     await this.connection.manager.save(persona)
   }
 
-  private async storeEncryptedSeed(
+  private async storeSeedEncrypted(
     args: EncryptedSeedAttributes,
+    password: string,
   ): Promise<void> {
     await this.createConnectionIfNeeded()
-    const encryptedSeed = plainToClass(MasterKeyEntity, args)
+    const encryptedEntropy = EncryptionLib.encryptWithPass({
+      data: args.entropy,
+      pass: password,
+    })
+    const encryptedSeed = plainToClass(MasterKeyEntity, {
+      encryptedEntropy,
+      timestamp: args.timestamp,
+    })
     await this.connection.manager.save(encryptedSeed)
   }
 

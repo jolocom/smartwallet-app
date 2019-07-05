@@ -16,7 +16,7 @@ describe('Navigation action creators', () => {
         storageLib: {
           get: {
             persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:mock' }]),
-            encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+            seedEncrypted: jest.fn().mockResolvedValue('johnnycryptoseed'),
           },
         },
         keyChainLib: {
