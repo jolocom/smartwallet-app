@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Claims container correctly changes scanning to false when qr code scanner is canceled 1`] = `
-<Component
+<View
   style={
     Object {
       "flex": 1,
@@ -12,11 +12,11 @@ exports[`Claims container correctly changes scanning to false when qr code scann
     claimsToRender={Object {}}
     loading={false}
   />
-</Component>
+</View>
 `;
 
 exports[`Claims container correctly changes scanning to true when qr code scanner is started 1`] = `
-<Component
+<View
   style={
     Object {
       "flex": 1,
@@ -27,11 +27,11 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
     claimsToRender={Object {}}
     loading={false}
   />
-</Component>
+</View>
 `;
 
 exports[`Claims container mounts correctly and matches the snapshot 1`] = `
-<Component
+<View
   style={
     Object {
       "flex": 1,
@@ -42,5 +42,5 @@ exports[`Claims container mounts correctly and matches the snapshot 1`] = `
     claimsToRender={Object {}}
     loading={false}
   />
-</Component>
+</View>
 `;

@@ -2,9 +2,6 @@
 
 exports[`generic centeredText component matches the snapshot with no extra props 1`] = `
 <Text
-  accessible={true}
-  allowFontScaling={true}
-  ellipsizeMode="tail"
   style={
     Array [
       Object {
@@ -22,9 +19,6 @@ exports[`generic centeredText component matches the snapshot with no extra props
 
 exports[`generic centeredText component matches the snapshot with style prop 1`] = `
 <Text
-  accessible={true}
-  allowFontScaling={true}
-  ellipsizeMode="tail"
   style={
     Array [
       Object {

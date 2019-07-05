@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Exception screen component Renders correctly 1`] = `
-<Component
+<View
   style={
     Object {
       "alignItems": "center",
@@ -12,7 +12,7 @@ exports[`Exception screen component Renders correctly 1`] = `
     }
   }
 >
-  <Component
+  <View
     style={
       Object {
         "alignItems": "center",
@@ -34,7 +34,7 @@ exports[`Exception screen component Renders correctly 1`] = `
         }
       }
     />
-    <Component
+    <View
       style={
         Object {
           "alignItems": "center",
@@ -44,9 +44,6 @@ exports[`Exception screen component Renders correctly 1`] = `
       }
     >
       <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
         style={
           Object {
             "color": "#ffefdf",
@@ -59,9 +56,6 @@ exports[`Exception screen component Renders correctly 1`] = `
         Uh oh.
       </Text>
       <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
         numberOfLines={5}
         style={
           Object {
@@ -75,9 +69,9 @@ exports[`Exception screen component Renders correctly 1`] = `
       >
         There was an error with your request.
       </Text>
-    </Component>
-  </Component>
-  <Component
+    </View>
+  </View>
+  <View
     style={
       Object {
         "backgroundColor": "black",
@@ -85,13 +79,8 @@ exports[`Exception screen component Renders correctly 1`] = `
       }
     }
   >
-    <Button
-      accent={false}
-      disabled={false}
-      icon={null}
-      onLongPress={null}
+    <ThemedComponent
       onPress={[Function]}
-      primary={false}
       raised={true}
       style={
         Object {
@@ -110,16 +99,15 @@ exports[`Exception screen component Renders correctly 1`] = `
           },
         }
       }
-      testID={null}
       text="Go back"
       upperCase={false}
     />
-  </Component>
-</Component>
+  </View>
+</View>
 `;
 
 exports[`Exception screen component Renders correctly when no error object is provided 1`] = `
-<Component
+<View
   style={
     Object {
       "alignItems": "center",
@@ -130,7 +118,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
     }
   }
 >
-  <Component
+  <View
     style={
       Object {
         "alignItems": "center",
@@ -152,7 +140,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
         }
       }
     />
-    <Component
+    <View
       style={
         Object {
           "alignItems": "center",
@@ -162,9 +150,6 @@ exports[`Exception screen component Renders correctly when no error object is pr
       }
     >
       <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
         style={
           Object {
             "color": "#ffefdf",
@@ -177,9 +162,6 @@ exports[`Exception screen component Renders correctly when no error object is pr
         Uh oh.
       </Text>
       <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
         numberOfLines={5}
         style={
           Object {
@@ -193,9 +175,9 @@ exports[`Exception screen component Renders correctly when no error object is pr
       >
         There was an error with your request.
       </Text>
-    </Component>
-  </Component>
-  <Component
+    </View>
+  </View>
+  <View
     style={
       Object {
         "backgroundColor": "black",
@@ -203,13 +185,8 @@ exports[`Exception screen component Renders correctly when no error object is pr
       }
     }
   >
-    <Button
-      accent={false}
-      disabled={false}
-      icon={null}
-      onLongPress={null}
+    <ThemedComponent
       onPress={[Function]}
-      primary={false}
       raised={true}
       style={
         Object {
@@ -228,10 +205,9 @@ exports[`Exception screen component Renders correctly when no error object is pr
           },
         }
       }
-      testID={null}
       text="Go back"
       upperCase={false}
     />
-  </Component>
-</Component>
+  </View>
+</View>
 `;

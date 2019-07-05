@@ -60,7 +60,7 @@ describe('Filtering Credentials', () => {
         .documentFilter(documents)(testCreds)
         .every(cred => cred.type.some(t => documents.some(d => t === d))),
     )
-  }
+  })
 })
 
 describe('Filtering Decorated Claims', () => {
@@ -85,7 +85,7 @@ describe('Filtering Decorated Claims', () => {
       expect(
         filterDecoratedClaims.filters
           .filterByIssuer(issuer)(testDecoratedClaims)
-          .every(claim => claim.issuer === issuer),
+          .every(claim => claim.issuer.did === issuer),
       )
     })
   })
