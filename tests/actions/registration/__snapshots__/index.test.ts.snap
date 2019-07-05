@@ -107,15 +107,8 @@ Array [
 exports[`Registration action creators startRegistration should save a password and initiate the registration process 1`] = `
 Array [
   Object {
-    "actions": Array [
-      Object {
-        "routeName": "Entropy",
-        "type": "Navigation/NAVIGATE",
-      },
-    ],
-    "index": 0,
-    "key": undefined,
-    "type": "Navigation/RESET",
+    "routeName": "Entropy",
+    "type": "Navigation/NAVIGATE",
   },
 ]
 `;

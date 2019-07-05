@@ -8808,9 +8808,10 @@ react-native@^0.55.3:
     xmldoc "^0.4.0"
     yargs "^9.0.0"
 
-react-navigation-redux-helpers@^1.0.3:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-navigation-redux-helpers/-/react-navigation-redux-helpers-1.0.6.tgz#427bd5a0d2bc3c4f5b6fd5c57fa4961b1ea45e1d"
+react-navigation-redux-helpers@^1.0.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-navigation-redux-helpers/-/react-navigation-redux-helpers-1.1.2.tgz#13013230ac74aa125a5505eefc005db3801f9e07"
+  integrity sha512-S4fihqxHQud2VcPjqmp4VzSNlkw2AG/lHxXn7gbnvHIDcXVsjVRMWQ1q5Yo/ulLTSDqcUfCR0D8Gifa2BU2b+A==
   dependencies:
     invariant "^2.2.2"
 

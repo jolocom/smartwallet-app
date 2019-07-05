@@ -32,12 +32,6 @@ const navigationOptions = {
   header: null,
 }
 
-const headerTitleStyle = {
-  fontSize: JolocomTheme.headerFontSize,
-  fontFamily: JolocomTheme.contentFontFamily,
-  fontWeight: '300',
-}
-
 const defaultHeaderBackgroundColor =
   Platform.OS === 'android'
     ? JolocomTheme.primaryColorBlack
@@ -48,22 +42,23 @@ const defaultHeaderTintColor =
     ? JolocomTheme.primaryColorWhite
     : JolocomTheme.primaryColorBlack
 
+const headerTitleStyle = {
+  fontSize: JolocomTheme.headerFontSize,
+  fontFamily: JolocomTheme.contentFontFamily,
+  fontWeight: '300',
+  color: defaultHeaderTintColor,
+}
+
 const commonNavigationOptions = {
   headerTitleStyle,
   headerStyle: {
     backgroundColor: defaultHeaderBackgroundColor,
     borderBottomWidth: 0,
   },
-  headerTintColor: defaultHeaderTintColor,
 }
 
 const navOptScreenWCancel = {
-  headerStyle: {
-    backgroundColor: defaultHeaderBackgroundColor,
-  },
-  headerTitleStyle: {
-    color: JolocomTheme.primaryColorWhite,
-  },
+  ...commonNavigationOptions,
   headerBackImage,
   ...Platform.select({
     ios: {
@@ -161,14 +156,14 @@ export const Routes = StackNavigator({
     screen: CredentialReceive,
     navigationOptions: () => ({
       headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
-      ...commonNavigationOptions,
+      ...navOptScreenWCancel,
     }),
   },
   [routeList.Consent]: {
     screen: Consent,
     navigationOptions: () => ({
       headerTitle: I18n.t(strings.SHARE_CLAIMS),
-      ...commonNavigationOptions,
+      ...navOptScreenWCancel,
     }),
   },
   [routeList.PaymentConsent]: {
@@ -176,7 +171,7 @@ export const Routes = StackNavigator({
     navigationOptions: () => ({
       headerBackImage,
       headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
-      ...commonNavigationOptions,
+      ...navOptScreenWCancel,
     }),
   },
   [routeList.AuthenticationConsent]: {
@@ -184,7 +179,7 @@ export const Routes = StackNavigator({
     navigationOptions: () => ({
       headerBackImage,
       headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
-      ...commonNavigationOptions,
+      ...navOptScreenWCancel,
     }),
   },
   [routeList.ClaimDetails]: {
@@ -195,7 +190,6 @@ export const Routes = StackNavigator({
     screen: DocumentDetails,
     navigationOptions: {
       ...navOptScreenWCancel,
-      headerTitleStyle,
     },
   },
   [routeList.Exception]: { screen: Exception, navigationOptions },

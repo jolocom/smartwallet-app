@@ -19,6 +19,7 @@ import { showErrorScreen } from './actions/generic'
 
 const {
   createReduxBoundAddListener,
+  initializeListeners,
 } = require('react-navigation-redux-helpers')
 
 interface Props
@@ -40,6 +41,7 @@ export class NavigatorContainer extends React.Component<Props> {
   }
 
   async componentDidMount() {
+    initializeListeners('root', this.props.navigation)
     await this.props.initApp()
     await this.props.checkIfAccountExists()
     const url = await Linking.getInitialURL()
@@ -108,7 +110,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  goBack: () => navigationActions.goBack,
+  goBack: () => dispatch(navigationActions.goBack),
   handleDeepLink: async (url: string) =>
     dispatch(
       withLoading(toggleLoading)(
