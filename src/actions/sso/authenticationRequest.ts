@@ -33,7 +33,7 @@ export const consumeAuthenticationRequest = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,
-      params: { isDeepLinkInteraction, },
+      params: { isDeepLinkInteraction },
       key: 'authenticationRequest',
     }),
   )
