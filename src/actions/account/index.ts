@@ -41,15 +41,16 @@ export const checkIdentityExists: ThunkAction = async (
   backendMiddleware,
 ) => {
   const { keyChainLib, storageLib } = backendMiddleware
-  const encryptedEntropy = await storageLib.get.encryptedSeed()
-  if (!encryptedEntropy) {
+  const password = await keyChainLib.getPassword()
+
+  const decryptedEntropy = await storageLib.get.decryptedSeed(password)
+  if (!decryptedEntropy) {
     dispatch(navigationActions.navigatorReset({ routeName: routeList.Landing }))
     return
   }
-  const password = await keyChainLib.getPassword()
-  console.error(encryptedEntropy)
-  const userVault = new JolocomLib.KeyProvider(
-    Buffer.from(encryptedEntropy, 'hex'),
+  const userVault = JolocomLib.KeyProvider.fromSeed(
+    Buffer.from(decryptedEntropy, 'hex'),
+    password,
   )
 
   await backendMiddleware.setIdentityWallet(userVault, password)

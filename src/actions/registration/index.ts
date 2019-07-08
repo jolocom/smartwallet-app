@@ -61,7 +61,6 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
     Buffer.from(encodedEntropy, 'hex'),
     password,
   )
-
   dispatch(setLoadingMsg(loading.loadingStages[1]))
 
   await JolocomLib.util.fuelKeyWithEther(

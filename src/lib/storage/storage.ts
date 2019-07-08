@@ -64,6 +64,7 @@ export class Storage {
     attributesByType: this.getAttributesByType.bind(this),
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
     encryptedSeed: this.getEncryptedSeed.bind(this),
+    decryptedSeed: this.getDecryptedSeed.bind(this),
     credentialMetadata: (credential: SignedCredential) =>
       this.createConnectionIfNeeded().then(() =>
         getMetadataForCredential(this.connection)(credential),
@@ -219,6 +220,17 @@ export class Storage {
       return masterKeyEntity[0].encryptedEntropy
     }
     return null
+  }
+
+  private async getDecryptedSeed(password: string): Promise<string | null> {
+    return this.get.encryptedSeed().then(encSeed =>
+      encSeed
+        ? EncryptionLib.decryptWithPass({
+            cipher: encSeed,
+            pass: password,
+          })
+        : null,
+    )
   }
 
   private async storePersonaFromJSON(args: PersonaAttributes): Promise<void> {
