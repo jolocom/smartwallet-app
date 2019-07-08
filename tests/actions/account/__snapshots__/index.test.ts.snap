@@ -16,26 +16,6 @@ Array [
 ]
 `;
 
-exports[`Account action creators Should correctly handle more existing user identites 1`] = `
-Array [
-  Object {
-    "type": "DID_SET",
-    "value": "did:jolo:first",
-  },
-  Object {
-    "actions": Array [
-      Object {
-        "routeName": "Home",
-        "type": "Navigation/NAVIGATE",
-      },
-    ],
-    "index": 0,
-    "key": undefined,
-    "type": "Navigation/RESET",
-  },
-]
-`;
-
 exports[`Account action creators Should correctly handle more existing user identities 1`] = `
 Array [
   Object {
@@ -60,7 +40,7 @@ exports[`Account action creators Should correctly handle one existing user ident
 Array [
   Object {
     "type": "DID_SET",
-    "value": "did:jolo:mock",
+    "value": "did:jolo:first",
   },
   Object {
     "actions": Array [
