@@ -39,7 +39,7 @@ exports[`Registration action creators createIdentity should attempt to create an
 Array [
   Array [
     Object {
-      "entropy": "4f8d84403d760b5b3fc5426c90827dab",
+      "encEntropy": "be9091bc777a9f2016aae08e4a8ec4edc9ea8c83251aac7077173489cb07def1",
       "timestamp": 946681200000,
     },
     "secret",
