@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
 export const ExceptionComponent: React.SFC<Props> = (props): JSX.Element => {
   // TODO: display error code
   const err = props.navigation.state.params.error
-  console.log(err)
   const errorTitle =
     props.errorTitle || getRandomStringFromArray(errorTitleMessages)
   let errorText = err
