@@ -55,8 +55,6 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   const { keyChainLib, storageLib, registry } = backendMiddleware
 
   const password = await keyChainLib.getPassword()
-
-  const entropyData = { entropy: encodedEntropy, timestamp: Date.now() }
   const userVault = JolocomLib.KeyProvider.fromSeed(
     Buffer.from(encodedEntropy, 'hex'),
     password,
@@ -82,7 +80,14 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setLoadingMsg(loading.loadingStages[3]))
   await backendMiddleware.setIdentityWallet(userVault, password)
 
-  await storageLib.store.seedEncrypted(entropyData, password)
+  await storageLib.store.seedEncrypted(
+    {
+      // @ts-ignore
+      encEntropy: userVault.encryptedSeed.toString('hex'),
+      timestamp: Date.now(),
+    },
+    password,
+  )
   await storageLib.store.persona(personaData)
 
   return dispatch(

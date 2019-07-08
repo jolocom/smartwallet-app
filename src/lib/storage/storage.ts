@@ -19,7 +19,6 @@ import {
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '../../actions/sso/types'
-import { EncryptionLib } from '../crypto'
 
 interface PersonaAttributes {
   did: string
@@ -27,7 +26,7 @@ interface PersonaAttributes {
 }
 
 interface EncryptedSeedAttributes {
-  entropy: string
+  encEntropy: string
   timestamp: number
 }
 
@@ -64,7 +63,6 @@ export class Storage {
     attributesByType: this.getAttributesByType.bind(this),
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
     encryptedSeed: this.getEncryptedSeed.bind(this),
-    decryptedSeed: this.getDecryptedSeed.bind(this),
     credentialMetadata: (credential: SignedCredential) =>
       this.createConnectionIfNeeded().then(() =>
         getMetadataForCredential(this.connection)(credential),
@@ -222,17 +220,6 @@ export class Storage {
     return null
   }
 
-  private async getDecryptedSeed(password: string): Promise<string | null> {
-    return this.get.encryptedSeed().then(encSeed =>
-      encSeed
-        ? EncryptionLib.decryptWithPass({
-            cipher: encSeed,
-            pass: password,
-          })
-        : null,
-    )
-  }
-
   private async storePersonaFromJSON(args: PersonaAttributes): Promise<void> {
     await this.createConnectionIfNeeded()
     const persona = plainToClass(PersonaEntity, args)
@@ -244,12 +231,8 @@ export class Storage {
     password: string,
   ): Promise<void> {
     await this.createConnectionIfNeeded()
-    const encryptedEntropy = EncryptionLib.encryptWithPass({
-      data: args.entropy,
-      pass: password,
-    })
     const encryptedSeed = plainToClass(MasterKeyEntity, {
-      encryptedEntropy,
+      encryptedEntropy: args.encEntropy,
       timestamp: args.timestamp,
     })
     await this.connection.manager.save(encryptedSeed)
