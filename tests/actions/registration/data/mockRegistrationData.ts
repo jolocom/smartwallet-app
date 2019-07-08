@@ -33,11 +33,11 @@ export default {
       ),
       id: 'mock1',
     },
-    identity: () => ({
-      did: () => 'did:jolo:mockdid',
-    }),
+    identity: {
+      did: 'did:jolo:mockdid',
+    },
     didDocument: {
-      did: () => 'did:jolo:mockdid',
+      did: 'did:jolo:mockdid',
     },
     create: {
       signedCredential: () => 'mockCredential',
