@@ -1,56 +1,82 @@
 import { navigationActions } from '../../../src/actions'
 import { JolocomLib } from 'jolocom-lib'
-
-import configureStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import {BackendMiddleware} from '../../../src/backendMiddleware'
+import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { InteractionType  } from 'jolocom-lib/js/interactionTokens/types'
+import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { createMockStore } from 'tests/utils'
 
 describe('Navigation action creators', () => {
   describe('handleDeepLink', () => {
-    const jwt =
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpbnRlcmFjdGlvblRva2VuIjp7'
+    const jwt = 'mockJWT'
+
+    const mockDid = 'did:jolo:mock'
+
+    const mockStore = createMockStore(
+      {
+        account: {
+          did: {
+            did: mockDid
+          }
+        }
+      },
+      {
+      storageLib: {
+        get: {
+          persona: jest.fn().mockResolvedValue([{ did: mockDid }]),
+          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+        },
+      },
+      keyChainLib: {
+        getPassword: jest.fn().mockResolvedValue('secret123'),
+      },
+      encryptionLib: {
+        decryptWithPass: () => 'angelaMerkleTreeSeed',
+      },
+      identityWallet: {
+        validateJWT: jest.fn().mockResolvedValue(true)
+      }
+    })
+
+    const parseInteractionTokenSpy = jest
+      .spyOn(JolocomLib.parse.interactionToken, 'fromJWT')
+
+    const interactionHandlersSpies = {};
+    Object.keys(interactionHandlers).forEach(typ => {
+      interactionHandlersSpies[typ] = jest
+        // @ts-ignore bleh
+        .spyOn(interactionHandlers, typ)
+        .mockReturnValue({ type: `MOCK_${typ}_INTERACTION_TOKEN_HANDLER` })
+    })
+
+    beforeEach(() => {
+      mockStore.reset()
+      parseInteractionTokenSpy.mockClear()
+    })
 
     // TODO: refactor test case to account for identity check when deeplinking
     it('should extract the route name and param from the URL', async () => {
-      const mockStore = configureStore([thunk])({})
-      const mockBackendMiddleware: BackendMiddleware = {
-        storageLib: {
-          get: {
-            persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:mock' }]),
-            encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
-          },
-        },
-        keyChainLib: {
-          getPassword: jest.fn().mockResolvedValue('secret123'),
-        },
-        encryptionLib: {
-          decryptWithPass: () => 'angelaMerkleTreeSeed',
-        },
-        identityWallet: jest.fn(),
-      }
-      const parseInteractionTokenSpy = jest
-        .spyOn(JolocomLib.parse.interactionToken, 'fromJWT')
-        .mockImplementation(jest.fn())
+      parseInteractionTokenSpy
+        .mockImplementation(jwt => {
+          const token = new JSONWebToken()
+          token.payload = { typ: InteractionType.CredentialRequest }
+          return token
+        })
+
       const action = navigationActions.handleDeepLink(
-        'smartwallet://consent/' + jwt,
+        'jolocomwallet://consent/' + jwt,
       )
-      await action(mockStore.dispatch, jest.fn(), mockBackendMiddleware)
+
+      await mockStore.dispatch(action)
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(parseInteractionTokenSpy).toHaveBeenCalledWith(jwt)
-      parseInteractionTokenSpy.mockReset()
     })
 
-    it('should not atttempt to parse if route was not correct', () => {
-      const mockStore = configureStore([thunk])({})
-      const parseInteractionTokenSpy = jest.spyOn(
-        JolocomLib.parse.interactionToken,
-        'fromJWT',
-      )
+    it('should not attempt to parse if route was not correct', async () => {
       const action = navigationActions.handleDeepLink(
-        'smartwallet://somethingElse/' + jwt,
+        'jolocomwallet://somethingElse/' + jwt,
       )
 
-      action(mockStore.dispatch)
+      await mockStore.dispatch(action)
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(parseInteractionTokenSpy).not.toHaveBeenCalled()
     })
