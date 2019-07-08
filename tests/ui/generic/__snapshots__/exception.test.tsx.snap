@@ -5,7 +5,7 @@ exports[`Exception screen component Renders correctly 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
       "flex": 1,
       "justifyContent": "space-around",
       "padding": "5%",
@@ -111,7 +111,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
       "flex": 1,
       "justifyContent": "space-around",
       "padding": "5%",
