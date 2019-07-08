@@ -41,7 +41,6 @@ export const checkIdentityExists: ThunkAction = async (
   backendMiddleware,
 ) => {
   const { keyChainLib, storageLib } = backendMiddleware
-  const password = await keyChainLib.getPassword()
 
   const encryptedEntropy = await storageLib.get.encryptedSeed()
   if (!encryptedEntropy) {
@@ -52,6 +51,7 @@ export const checkIdentityExists: ThunkAction = async (
     Buffer.from(encryptedEntropy, 'hex'),
   )
 
+  const password = await keyChainLib.getPassword()
   await backendMiddleware.setIdentityWallet(userVault, password)
   const identityWallet = backendMiddleware.identityWallet
   dispatch(setDid(identityWallet.identity.did))
