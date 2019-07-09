@@ -32,7 +32,7 @@ interface Props extends ConnectProps {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: 'rgb(5, 5, 13)',
     justifyContent: 'space-around',
     alignItems: 'center',
     flex: 1,

@@ -18,6 +18,11 @@ exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
         />
       }
       cameraProps={Object {}}
+      cameraStyle={
+        Object {
+          "overflow": "hidden",
+        }
+      }
       cameraType="back"
       checkAndroid6Permissions={false}
       fadeIn={true}
