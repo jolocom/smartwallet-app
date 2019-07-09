@@ -32,22 +32,15 @@ import {
   SettingsMenuIcon,
 } from 'src/resources'
 
-const headerBackImage = createElement(
-  Image,
-  Platform.OS === 'android'
-    ? {
-        source: require('./resources/img/close.png'),
-        style: {
-          height: 26,
-          width: 26,
-          padding: 4,
-        },
-      }
-    : {
-        source: require('./resources/img/back-26.png'),
-        resizeMode: 'center',
-      },
-)
+// only used on android
+const headerBackImage = createElement(Image, {
+  source: require('./resources/img/close.png'),
+  style: {
+    height: 26,
+    width: 26,
+    padding: 4,
+  },
+})
 
 const noHeaderNavOpts = {
   header: null,
@@ -90,8 +83,10 @@ const navOptScreenWCancel = {
   headerTitleStyle: {
     color: JolocomTheme.primaryColorWhite,
   },
-  headerBackImage,
   ...Platform.select({
+    android: {
+      headerBackImage,
+    },
     ios: {
       headerTintColor: JolocomTheme.primaryColorPurple,
     },
