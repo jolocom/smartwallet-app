@@ -18,10 +18,7 @@ useScreens();
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> {
-  dispatch: ThunkDispatch
-  deepLinkLoading: boolean
-}
+    ReturnType<typeof mapStateToProps> { }
 
 const darkBackgroundPages: string[] = [
   routeList.Landing,
