@@ -1,15 +1,15 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { ClaimsContainer } from 'src/ui/home/containers/claims'
+import {initialState} from '../../../src/reducers/account/claims'
 
 describe('Claims container', () => {
-  const COMMON_PROPS = {
-    showClaimsDetails: false,
-    typeClaimDetails: '',
-    claimsState: {
-      decoratedCredentials: {},
-    },
-    toggleLoading: () => {},
+  const COMMON_PROPS: ClaimsContainer['props'] = {
+    claimsState: initialState,
+    openClaimDetails: jest.fn(),
+    setClaimsForDid: jest.fn(),
+    loading: false,
+    did: ''
   }
 
   it('mounts correctly and matches the snapshot', () => {
@@ -35,8 +35,6 @@ describe('Claims container', () => {
   })
 
   it('correctly changes scanning to false when qr code scanner is canceled', () => {
-    const onScannerCancel = jest.fn()
-
     const props = Object.assign({}, COMMON_PROPS, {
       setClaimsForDid: () => {},
     })

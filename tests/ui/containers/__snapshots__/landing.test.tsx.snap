@@ -1,39 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`landing container correctly connects to redux 1`] = `
-Object {
-  "loading": true,
-  "startRegistration": [Function],
-  "store": Object {
-    "clearActions": [Function],
-    "dispatch": [Function],
-    "getActions": [Function],
-    "getState": [Function],
-    "replaceReducer": [Function],
-    "subscribe": [Function],
-  },
-  "storeSubscription": Subscription {
-    "listeners": Object {
-      "clear": [Function],
-      "get": [Function],
-      "notify": [Function],
-      "subscribe": [Function],
-    },
-    "onStateChange": [Function],
-    "parentSub": undefined,
-    "store": Object {
-      "clearActions": [Function],
-      "dispatch": [Function],
-      "getActions": [Function],
-      "getState": [Function],
-      "replaceReducer": [Function],
-      "subscribe": [Function],
-    },
-    "unsubscribe": [Function],
-  },
-}
-`;
-
 exports[`landing container mounts correctly and matches snapshot if loading 1`] = `<LoadingScreen />`;
 
 exports[`landing container mounts correctly and matches snapshot if loading is finished 1`] = `
