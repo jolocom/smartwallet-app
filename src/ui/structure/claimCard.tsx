@@ -119,7 +119,7 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
           {secondaryText}
         </Text>
       </View>
-      <View flex={0.2}>{rightIcon}</View>
+      <View style={{flex: 0.2}}>{rightIcon}</View>
     </View>
   )
 }

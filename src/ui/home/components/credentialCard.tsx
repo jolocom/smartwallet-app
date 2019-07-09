@@ -101,15 +101,15 @@ export class CredentialCard extends React.Component<Props, State> {
           containerStyle || {},
         ]}
       >
-        <View flex={0.2} alignItems={'center'}>
+        <View style={{flex: 0.2, alignItems: 'center'}}>
           {leftIcon}
         </View>
-        <View onTouchEnd={this.toggleCollapse} flex={0.7} overflow={'scroll'}>
+        <View onTouchEnd={this.toggleCollapse} style={{flex: 0.7, overflow: 'scroll'}}>
           {collapsed
             ? this.renderCollapsedClaim(credentialItem)
             : this.renderClaim(credentialItem)}
         </View>
-        <View flex={0.1} onTouchEnd={this.props.handleInteraction}>
+        <View style={{flex: 0.1}} onTouchEnd={this.props.handleInteraction}>
           {rightIcon || null}
         </View>
       </View>

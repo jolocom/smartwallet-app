@@ -84,8 +84,8 @@ export const ClaimCard: React.SFC<ClaimCardProps> = props => {
 const renderIconIfPresent = (icon: ReactNode) =>
   icon ? (
     <View
-      flex={0.2}
       style={{
+        flex: 0.2,
         justifyContent: 'center',
         alignItems: 'center',
       }}
@@ -166,7 +166,7 @@ export const ConsentAttributeCard: React.SFC<
           </Text>
         ) : null}
       </View>
-      <View style={{ alignSelf: 'center' }} flex={0.2}>
+      <View style={{ alignSelf: 'center', flex: 0.2 }}>
         {rightIcon ? rightIcon : null}
       </View>
     </View>
