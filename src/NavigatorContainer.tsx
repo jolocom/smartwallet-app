@@ -13,7 +13,6 @@ import { withErrorHandling, withLoading } from './actions/modifiers'
 import { showErrorScreen } from './actions/generic'
 
 import { createReduxContainer } from 'react-navigation-redux-helpers';
-
 import { useScreens } from 'react-native-screens';
 useScreens();
 
@@ -97,16 +96,12 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  goBack: () => navigationActions.goBack,
+  goBack: () => dispatch(navigationActions.goBack),
   handleDeepLink: async (url: string) =>
     dispatch(
       withLoading(toggleLoading)(
         withErrorHandling(showErrorScreen)(handleDeepLink(url)),
       ),
-    ),
-  openScanner: () =>
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.QRCodeScanner }),
     ),
   checkIfAccountExists: () =>
     dispatch(
@@ -116,7 +111,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     ),
   initApp: () => dispatch(genericActions.initApp),
 })
-
 export const Navigator = connect(
   mapStateToProps,
   mapDispatchToProps,

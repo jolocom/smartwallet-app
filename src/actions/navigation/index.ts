@@ -26,6 +26,8 @@ export const navigatorReset = (
     actions: [navigate(newScreen)],
   })
 
+export const navigatorResetHome = (): NavigationResetAction => navigatorReset({ routeName: routeList.Home })
+
 /**
  * The function that parses a deep link to get the route name and params
  * It then matches the route name and dispatches a corresponding action

@@ -75,9 +75,7 @@ export const checkIdentityExists: ThunkAction = async (
   const identityWallet = backendMiddleware.identityWallet
   dispatch(setDid(identityWallet.identity.did))
 
-  return dispatch(
-    navigationActions.navigatorReset({ routeName: routeList.Home }),
-  )
+  return dispatch(navigationActions.navigatorResetHome())
 }
 
 export const openClaimDetails = (
@@ -120,11 +118,7 @@ export const saveClaim: ThunkAction = async (
 
   await dispatch(setClaimsForDid)
 
-  return dispatch(
-    navigationActions.navigatorReset({
-      routeName: routeList.Home,
-    }),
-  )
+  return dispatch(navigationActions.navigatorResetHome())
 }
 
 // TODO Currently only rendering  / adding one

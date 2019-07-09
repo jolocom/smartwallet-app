@@ -12,10 +12,7 @@ module.exports = {
   globals: {
     window: true,
     "ts-jest": {
-      babelConfig: true,
-      diagnostics: {
-        warnOnly: true
-      }
+      babelConfig: true
     }
   },
   moduleFileExtensions: [

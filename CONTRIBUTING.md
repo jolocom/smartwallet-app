@@ -2,55 +2,46 @@ include CLA (ContributorLicenseAgreement)
 
 ## Branching Model
 
-inspired by http://nvie.com/posts/a-successful-git-branching-model/
+Inspired by [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/)
 
 ### Development
-- General development takes place on `develop` branch.
-- Features are branched off and merged back by the developer
-- Naming convention `feature/#{issue-id}-{name-of-feature}`
-- Merging back to `develop` may occur in form of a pull request requiring a code review.
-- Pull request is mandatory for external developers
-- at all times the tests on `develop` branch should pass. The developer that brakes the tests is responsible to resolve as soon as possible
 
-### Testing
-- When the developer has successfully tested his feature on `develop` branch (environment: `dev.littlesister.jolocom.com`) he can merge it to `testing` branch (environment: `test.littlesister.jolocom.com`) and assign the related issue to a tester.
-- The `testing` branch shall pass at all times
-- If the tester finds a bug he will reassign the issue to the original developer who will then fix it on the `testing` branch with a direct commit or as part of a feature branch
+- General development takes place on `develop` branch.
+- Features are branched off and merged back to `develop`.
+- Naming convention: `{issue-id}/{name-of-feature}`.
+  - e.g. `1333/loading_issues`
+- Merging back to `develop` occurs in the form of a pull request requiring a code review.
+- The tests on `develop` branch should pass at all times. A developer who makes test-breaking changes must resolve them as soon as possible.
 
 ### Release
-<!-- - When the sprint ends and stakeholder/product owner decide for release an seperate `release` branch is created and deployed (environment: `staging.wallet.jolocom.com`). -->
-- This branch is still open for minor changes (i.e. updating the changelog)
-- For release the `release` branch is merged into the `master` branch (environment: `littlesister.jolocom.com)
-- The commit on the master branch should be tagged.
-- Do not forget to merge back to `develop` branch
 
-### Production Bug
-- Bugs on `master` branch are fixed in a seperate `hotfix` branch.
-- Do not forget to merge back to `develop` branch
+- We create a release branch from `develop`
+- Naming convention: `release/{vSEM.VERSION.NUMBER}`.
+  - e.g. `release/v1.6.0`
+- This branch is still open for minor changes (e.g. bumping the version before release.)
+- For release the `release` branch is merged into the `master` branch.
+- The commit on the master branch should be tagged - this can be done through GitHub at the same time as officially creating a release at https://github.com/jolocom/smartwallet-app/releases
+- Don't forget to merge the release branch back into the `develop` branch.
+
+### Hotfixes for Production
+
+- Bugs on `master` branch are fixed in a separate `hotfix` branch that branches off master.
+- Naming convention: `hotfix/{name-of-fix}`.
+  - e.g `hotfix/version_alignment`
+- Don't forget to merge the hotfix branch back into the `develop` branch.
 
 
 ## Conventions
 
 ### Coding standards
 
-- We use standardsjs (http://standardjs.com/) with a couple of exceptions:
-  - Space after ES6 method names is not required `noSpaceRequired() {}`
-
-- Use ESlint for checking syntax consistency automatically.
-  - Preferably setup your editor to run ESlint on file save.
-  - Use a git pre-commit hook
-    1. Rename `.git/hooks/pre-commit.sample` to `pre-commit`
-    2. Replace contents by https://github.com/jolocom/little-sister/wiki/ESLint-pre-commit-hook
-
-### Documentation  
-- https://en.wikipedia.org/wiki/JSDoc
+- We use [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) to maintain a consistent style across the codebase.
+- ESLint and Prettier configuration files are included, as well as the prerequisite devDependencies in `package.json`.
+- Your text editor/IDE should have plugins for these two tools.
+- Your editor may also have the option to run Prettier formatting on save.
+- The `yarn format` script is provided to run ESLint and Prettier rules on the codebase, auto-fixing where possible.
 
 ### Commit messages
-  - title is short and references github issue #
-  - description is as descriptive as necessary so there is nothing unexpected introduced in commit
-### Issue description
-  - when and in which environment did the issue occur
-  - what was the expected behaviour
-  - what was the actual behaviour
-  - how to replicate
-  - any additional logs that may help debug (yes, maybe even screenshots)
+
+  - Title is short and references GitHub issue # if appropriate.
+  - Description is as descriptive as necessary so there is nothing unexpected introduced in the commit.

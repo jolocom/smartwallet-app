@@ -5,7 +5,6 @@ import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { generateSecureRandomBytes } from 'src/lib/util'
 import { ThunkAction } from '../../store'
-import { navigatorReset } from '../navigation'
 
 const bip39 = require('bip39')
 
@@ -39,13 +38,11 @@ export const startRegistration: ThunkAction = async (
   )
 
   return dispatch(
-    navigationActions.navigatorReset({
+    navigationActions.navigate({
       routeName: routeList.Entropy,
     }),
   )
 }
-
-export const finishRegistration = navigatorReset({ routeName: routeList.Home })
 
 export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
@@ -60,7 +57,6 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
     pass: password,
   })
   const entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
-  await storageLib.store.encryptedSeed(entropyData)
   const userVault = JolocomLib.KeyProvider.fromSeed(
     Buffer.from(encodedEntropy, 'hex'),
     password,
@@ -83,10 +79,12 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
     controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
   }
 
-  await storageLib.store.persona(personaData)
   dispatch(setDid(identityWallet.identity.did))
   dispatch(setLoadingMsg(loading.loadingStages[3]))
   await backendMiddleware.setIdentityWallet(userVault, password)
+
+  await storageLib.store.encryptedSeed(entropyData)
+  await storageLib.store.persona(personaData)
 
   return dispatch(
     navigationActions.navigatorReset({

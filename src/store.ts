@@ -4,6 +4,11 @@ import {
   AnyAction as OriginalAnyAction,
 } from 'redux'
 import { NavigationAction } from 'react-navigation'
+import {
+  createReactNavigationReduxMiddleware,
+} from 'react-navigation-redux-helpers';
+
+
 import thunk, {
   ThunkDispatch as OriginalThunkDispatch,
   ThunkAction as OriginalThunkAction,
@@ -13,15 +18,10 @@ import { BackendMiddleware } from 'src/backendMiddleware'
 import config from 'src/config'
 import { Store } from 'react-redux'
 
-import {
-  createReactNavigationReduxMiddleware,
-} from 'react-navigation-redux-helpers';
-
 export function initStore(): Store<any> {
   const backendMiddleware = new BackendMiddleware(config)
-
   const navMiddleware = createReactNavigationReduxMiddleware(
-    (state: RootState) => state.navigation,
+    (state: RootState) => state.navigation
   );
 
   return createStore(

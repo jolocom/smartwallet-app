@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`QRcodeScanner component matches the snapshot with back handler 1`] = `
+exports[`QRCodeScanner component matches the snapshot with back handler 1`] = `
 <Fragment>
   <Container>
     <QRCodeScanner
       bottomContent={
         <ThemedComponent
-          onPress={[Function]}
+          onPress={[MockFunction]}
           style={
             Object {
               "text": Object {

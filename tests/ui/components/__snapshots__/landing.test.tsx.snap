@@ -123,6 +123,7 @@ exports[`landing component matches the snapshot on render 1`] = `
     }
   >
     <ThemedComponent
+      onPress={[MockFunction]}
       raised={true}
       style={
         Object {

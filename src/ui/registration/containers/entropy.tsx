@@ -11,6 +11,8 @@ import { generateSecureRandomBytes } from 'src/lib/util'
 import { withErrorHandling } from 'src/actions/modifiers'
 import { showErrorScreen } from 'src/actions/generic'
 import { ThunkDispatch } from 'src/store'
+import { AppError, ErrorCode } from '../../../lib/errors'
+import { routeList } from 'src/routeList'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -95,9 +97,11 @@ const mapStateToProps = (state: RootState) => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   submit: (encodedEntropy: string) =>
     dispatch(
-      withErrorHandling(showErrorScreen)(
-        registrationActions.submitEntropy(encodedEntropy),
-      ),
+      withErrorHandling(
+        showErrorScreen,
+        (err: Error) =>
+          new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing)
+      )(registrationActions.submitEntropy(encodedEntropy)),
     ),
 })
 

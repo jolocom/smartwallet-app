@@ -12,7 +12,7 @@ Array [
   },
   Object {
     "type": "DID_SET",
-    "value": undefined,
+    "value": "did:jolo:mockdid",
   },
   Object {
     "type": "SET_LOADING_MSG",
@@ -51,7 +51,7 @@ Array [
   Array [
     Object {
       "controllingKeyPath": "m/73'/0'/0'/0",
-      "did": undefined,
+      "did": "did:jolo:mockdid",
     },
   ],
 ]
@@ -107,15 +107,8 @@ Array [
 exports[`Registration action creators startRegistration should save a password and initiate the registration process 1`] = `
 Array [
   Object {
-    "actions": Array [
-      Object {
-        "routeName": "Entropy",
-        "type": "Navigation/NAVIGATE",
-      },
-    ],
-    "index": 0,
-    "key": null,
-    "type": "Navigation/RESET",
+    "routeName": "Entropy",
+    "type": "Navigation/NAVIGATE",
   },
 ]
 `;

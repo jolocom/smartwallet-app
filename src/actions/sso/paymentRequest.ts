@@ -46,9 +46,10 @@ export const consumePaymentRequest = (
   }
   dispatch(setPaymentRequest(paymentDetails))
   return dispatch(
-    navigationActions.navigatorReset({
+    navigationActions.navigate({
       routeName: routeList.PaymentConsent,
       params: { isDeepLinkInteraction },
+      key: 'paymentRequest',
     }),
   )
 }

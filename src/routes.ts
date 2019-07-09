@@ -1,4 +1,4 @@
-import { Platform, Image } from 'react-native'
+import { Platform, Image, StyleProp, TextStyle } from 'react-native'
 import { createElement } from 'react'
 
 import {
@@ -46,12 +46,6 @@ const noHeaderNavOpts = {
   header: null,
 }
 
-const headerTitleStyle = {
-  fontSize: JolocomTheme.headerFontSize,
-  fontFamily: JolocomTheme.contentFontFamily,
-  fontWeight: '300',
-}
-
 const defaultHeaderBackgroundColor =
   Platform.OS === 'android'
     ? JolocomTheme.primaryColorBlack
@@ -62,27 +56,24 @@ const defaultHeaderTintColor =
     ? JolocomTheme.primaryColorWhite
     : JolocomTheme.primaryColorBlack
 
-const commonNavigationOptions: NavigationScreenOptions = {
-  headerTitleStyle: {
-    fontSize: JolocomTheme.headerFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontWeight: '300',
-  },
+const headerTitleStyle: StyleProp<TextStyle> = {
+  fontSize: JolocomTheme.headerFontSize,
+  fontFamily: JolocomTheme.contentFontFamily,
+  fontWeight: '300',
+  color: defaultHeaderTintColor,
+}
 
+const commonNavigationOptions: NavigationScreenOptions = {
+  headerTitleStyle,
   headerStyle: {
     backgroundColor: defaultHeaderBackgroundColor,
     borderBottomWidth: 0,
   },
-  headerTintColor: defaultHeaderTintColor,
 }
 
 const navOptScreenWCancel = {
-  headerStyle: {
-    backgroundColor: defaultHeaderBackgroundColor,
-  },
-  headerTitleStyle: {
-    color: JolocomTheme.primaryColorWhite,
-  },
+  ...commonNavigationOptions,
+  headerBackImage,
   ...Platform.select({
     android: {
       headerBackImage,

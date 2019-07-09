@@ -14,9 +14,8 @@ import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { ThunkDispatch } from '../../store'
 import { showErrorScreen } from '../../actions/generic'
 import { RootState } from '../../reducers'
-import { goBack } from '../../actions/navigation'
 import { withErrorHandling, withLoading } from '../../actions/modifiers'
-import { NavigationNavigateAction } from 'react-navigation'
+import { NavigationScreenProps } from 'react-navigation'
 import { AppError, ErrorCode } from '../../lib/errors'
 import { setDeepLinkLoading } from '../../actions/sso'
 
@@ -26,10 +25,10 @@ export interface QrScanEvent {
   data: string
 }
 
-interface Props {
-  loading: boolean
-  onScannerSuccess: (e: QrScanEvent) => Promise<NavigationNavigateAction>
-  onScannerCancel: () => typeof goBack
+interface Props
+  extends ReturnType<typeof mapStateToProps>,
+    ReturnType<typeof mapDispatchToProps>,
+    NavigationScreenProps {
 }
 
 interface State { }
@@ -41,6 +40,20 @@ const styles = StyleSheet.create({
 })
 
 export class QRcodeScanner extends React.Component<Props, State> {
+  private scanner: typeof QRScanner
+  private removeFocusListener: (() => void) | undefined
+
+  constructor(props: Props) {
+    super(props)
+    if (this.props.navigation) {
+      this.removeFocusListener = this.props.navigation.addListener('willFocus', () => this.scanner.reactivate()).remove
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.removeFocusListener) this.removeFocusListener()
+  }
+
   render() {
     const { loading, onScannerSuccess, onScannerCancel } = this.props
     return (
@@ -48,6 +61,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
         {loading && <LoadingSpinner />}
         <Container>
           <QRScanner
+            ref={(ref: React.Component) => this.scanner = ref}
             onRead={(e: QrScanEvent) => onScannerSuccess(e)}
             cameraStyle={{ overflow: 'hidden' }}
             topContent={<Text>{I18n.t(strings.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>}
