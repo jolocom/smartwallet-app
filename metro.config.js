@@ -9,12 +9,12 @@ module.exports = {
   resolver: {
     extraNodeModules: {
       // Polyfills for node libraries
-      "crypto": require.resolve("react-native-crypto"),
-      "crypto-browserify": require.resolve("react-native-crypto"),
-      "stream": require.resolve("stream-browserify"),
-      "vm": require.resolve("vm-browserify"),
-      "src": __dirname + '/src'
-    }
+      crypto: require.resolve('react-native-crypto'),
+      'crypto-browserify': require.resolve('react-native-crypto'),
+      stream: require.resolve('stream-browserify'),
+      vm: require.resolve('vm-browserify'),
+      src: __dirname + '/src',
+    },
   },
   transformer: {
     getTransformOptions: async () => ({
@@ -23,5 +23,18 @@ module.exports = {
         inlineRequires: true,
       },
     }),
+    minifierPath: 'metro-minify-terser',
+    minifierConfig: {
+      // https://www.npmjs.com/package/terser#mangle-options
+      ecma: 8,
+      keep_classnames: true,
+      keep_fnames: true,
+      module: true,
+      mangle: {
+        module: true,
+        keep_classnames: true,
+        keep_fnames: true,
+      },
+    },
   },
-};
+}
