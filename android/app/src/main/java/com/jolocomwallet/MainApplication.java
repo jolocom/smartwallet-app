@@ -3,12 +3,12 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.horcrux.svg.SvgPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
@@ -36,12 +36,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
             new RNLocalizePackage(),
             new ReanimatedPackage(),
             new RNScreensPackage(),
             new RNGestureHandlerPackage(),
             new RNVersionNumberPackage(),
-            new VectorIconsPackage(),
             new SvgPackage(),
             new SplashScreenReactPackage(),
             new RandomBytesPackage(),
