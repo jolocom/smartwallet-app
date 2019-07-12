@@ -14,7 +14,7 @@ export const withLoading = (loadingAction: ActionCreator<AnyAction>) => (
 }
 
 export const withErrorHandling = (
-  errorHandler: ActionCreator<AnyAction>,
+  errorHandler: ActionCreator<ThunkAction>,
   errorModifier: (error: AppError) => AppError = (error: AppError) => error,
 ) => (wrappedAction: ThunkAction): ThunkAction => async dispatch => {
   try {

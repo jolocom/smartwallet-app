@@ -8,17 +8,17 @@ import { LoadingSpinner } from 'src/ui/generic/loadingSpinner'
 import { ThunkDispatch } from './store'
 import { handleDeepLink } from './actions/navigation'
 import { toggleLoading } from './actions/account'
-import { Routes } from './routes'
+import { RoutesContainer } from './routes'
 import { withErrorHandling, withLoading } from './actions/modifiers'
 import { showErrorScreen } from './actions/generic'
 
-import { createReduxContainer } from 'react-navigation-redux-helpers';
-import { useScreens } from 'react-native-screens';
-useScreens();
+import { useScreens } from 'react-native-screens'
+import { NavigationActions } from 'react-navigation'
+useScreens()
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> { }
+    ReturnType<typeof mapStateToProps> {}
 
 const darkBackgroundPages: string[] = [
   routeList.Landing,
@@ -28,11 +28,9 @@ const darkBackgroundPages: string[] = [
   routeList.Entropy,
 ]
 
-const AppNavigationContainer = connect(
-  (state: RootState) => ({ state: state.navigation })
-)(createReduxContainer(Routes))
-
 export class NavigatorContainer extends React.Component<Props> {
+  private navigator: any
+
   constructor(props: Props) {
     super(props)
   }
@@ -56,31 +54,40 @@ export class NavigatorContainer extends React.Component<Props> {
 
   private navigateBack = () => {
     // return false if app exit is desired
-    const { index, routes } = this.props.navigation
-    if (
-      index === 0 &&
-      routes.length === 1 &&
-      routes[0].index === 0
-    ) {
+    if (!this.navigator) return
+    const { index, routes } = this.navigator.state.nav
+    if (index === 0 && routes.length === 1 && routes[0].index === 0) {
       return false
     }
 
-    return this.props.goBack()
+    this.navigator.dispatch(NavigationActions.back())
+
+    return true
   }
 
-  //When handleOpenURL is called, we pass the event url to the navigate method.
+  // When handleOpenURL is called, we pass the event url to the navigate method.
   private handleOpenURL = (event: any) => {
     this.props.handleDeepLink(event.url)
   }
 
+  private setNavigator(nav: any) {
+    if (!nav) return
+    this.navigator = nav
+    navigationActions.setTopLevelNavigator(this.navigator)
+  }
+
   render() {
-    const { routes, index } = this.props.navigation
-    const currentRoute = routes[index].routeName
-    const isDarkBackground = darkBackgroundPages.includes(currentRoute)
+    let isDarkBackground = false
+    if (this.navigator) {
+      const { routes, index } = this.navigator.state.nav
+      const currentRoute = routes[index].routeName
+      isDarkBackground = darkBackgroundPages.includes(currentRoute)
+    }
+
     return (
       <React.Fragment>
         <StatusBar barStyle={isDarkBackground ? 'light-content' : 'default'} />
-        <AppNavigationContainer />
+        <RoutesContainer ref={nav => this.setNavigator(nav)} />
         {this.props.deepLinkLoading && <LoadingSpinner />}
       </React.Fragment>
     )
@@ -88,12 +95,10 @@ export class NavigatorContainer extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  navigation: state.navigation,
   deepLinkLoading: state.sso.deepLinkLoading,
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  goBack: () => dispatch(navigationActions.goBack),
   handleDeepLink: async (url: string) =>
     dispatch(
       withLoading(toggleLoading)(

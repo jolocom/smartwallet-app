@@ -15,7 +15,7 @@ const App = () => {
   // instantiated because otherwise the overrides at the top of index.ts will
   // have not been excuted yet (while files are being imported) and initStore
   // triggers creation of BackendMiddleware which needs those
-  if (!store) store =  initStore()
+  if (!store) store = initStore()
 
   return (
     <ThemeContext.Provider value={getTheme(JolocomTheme)}>

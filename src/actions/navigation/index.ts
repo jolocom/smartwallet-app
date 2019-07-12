@@ -2,7 +2,7 @@ import {
   NavigationActions,
   StackActions,
   NavigationNavigateActionPayload,
-  NavigationResetAction,
+  NavigationContainer,
 } from 'react-navigation'
 import { setDeepLinkLoading } from 'src/actions/sso'
 import { routeList } from 'src/routeList'
@@ -13,20 +13,34 @@ import { AppError, ErrorCode } from '../../lib/errors'
 import { withErrorHandling, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from '../../store'
 
-export const navigate = (options: NavigationNavigateActionPayload) =>
-  NavigationActions.navigate(options)
+let topLevelNavigator: any
+export const setTopLevelNavigator = (nav: NavigationContainer) => {
+  topLevelNavigator = nav
+}
 
-export const goBack = NavigationActions.back()
-
+/**
+ * NOTE: navigate and navigatorReset are both async so that it does not have to
+ * return a value, since it actually is not a real action but rather a bridge into
+ * react-navigation state
+ */
+export const navigate = (
+  options: NavigationNavigateActionPayload,
+): ThunkAction => async () => {
+  topLevelNavigator.dispatch(NavigationActions.navigate(options))
+}
 export const navigatorReset = (
   newScreen: NavigationNavigateActionPayload,
-): NavigationResetAction =>
-  StackActions.reset({
-    index: 0,
-    actions: [navigate(newScreen)],
-  })
+): ThunkAction => async () => {
+  topLevelNavigator.dispatch(
+    StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate(newScreen)],
+    }),
+  )
+}
 
-export const navigatorResetHome = (): NavigationResetAction => navigatorReset({ routeName: routeList.Home })
+export const navigatorResetHome = (): ThunkAction => dispatch =>
+  dispatch(navigatorReset({ routeName: routeList.Home }))
 
 /**
  * The function that parses a deep link to get the route name and params
@@ -72,8 +86,9 @@ export const handleDeepLink = (url: string): ThunkAction => (
     )
   }
 
-  /** @TODO Better return */
-  return navigate({
-    routeName: routeList.Home,
-  })
+  return dispatch(
+    navigate({
+      routeName: routeList.Home,
+    }),
+  )
 }

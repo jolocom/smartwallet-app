@@ -7,6 +7,7 @@ import {
   NavigationScreenOptions,
   NavigationRoute,
   NavigationScreenProp,
+  createAppContainer,
 } from 'react-navigation'
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
@@ -240,3 +241,5 @@ export const Routes = createStackNavigator(
     defaultNavigationOptions: commonNavigationOptions,
   },
 )
+
+export const RoutesContainer = createAppContainer(Routes)
