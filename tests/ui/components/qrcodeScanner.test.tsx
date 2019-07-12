@@ -9,7 +9,7 @@ describe('QRCodeScanner component', () => {
       onScannerCancel: jest.fn(),
       loading: false,
       // @ts-ignore navigation param not needed
-      navigation: null
+      navigation: null,
     }
 
     const rendered = shallow(<QRcodeScanner {...props} />)

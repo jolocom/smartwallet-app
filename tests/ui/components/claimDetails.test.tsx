@@ -5,7 +5,7 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 describe('ClaimDetails component', () => {
   const COMMON_PROPS = {
     handleClaimInput: () => {},
-    saveClaim: () => {}
+    saveClaim: () => {},
   }
 
   it('matches the snapshot on render', () => {
@@ -16,9 +16,9 @@ describe('ClaimDetails component', () => {
         subject: '',
         credentialType: 'Email',
         claimData: {
-          email: 'test@test.com'
-        }
-      }
+          email: 'test@test.com',
+        },
+      },
     })
 
     const rendered = shallow(<ClaimDetailsComponent {...props} />)
@@ -34,9 +34,9 @@ describe('ClaimDetails component', () => {
         issuer: { did: '' },
         claimData: {
           givenName: 'natascha',
-          familyName: 'test'
-        }
-      }
+          familyName: 'test',
+        },
+      },
     })
 
     const rendered = shallow(<ClaimDetailsComponent {...props} />)

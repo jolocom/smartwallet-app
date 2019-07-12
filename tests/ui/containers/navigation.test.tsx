@@ -5,7 +5,6 @@ import { routeList } from 'src/routeList'
 
 describe('NavigatorContainer', () => {
   const COMMON_PROPS: Partial<NavigatorContainer['props']> = {
-    goBack: jest.fn(),
     deepLinkLoading: false,
     initApp: jest.fn(),
     handleDeepLink: jest.fn(),
@@ -22,24 +21,24 @@ describe('NavigatorContainer', () => {
     const props: NavigatorContainer['props'] = {
       ...COMMON_PROPS,
       // @ts-ignore
-      navigation
+      navigation,
     }
 
-    const rendered = shallow(<NavigatorContainer { ...props } />)
+    const rendered = shallow(<NavigatorContainer {...props} />)
     expect(rendered).toMatchSnapshot()
   })
 
   it('correctly hides bottom action bar', () => {
     const navigation = {
       index: 0,
-      routes: [{ routeName: routeList.Landing}],
+      routes: [{ routeName: routeList.Landing }],
       navigate: jest.fn(),
     }
 
     const landingPageProps: NavigatorContainer['props'] = {
       ...COMMON_PROPS,
       // @ts-ignore
-      navigation
+      navigation,
     }
 
     const rendered = shallow(<NavigatorContainer {...landingPageProps} />)

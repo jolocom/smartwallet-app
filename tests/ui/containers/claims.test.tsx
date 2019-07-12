@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { ClaimsContainer } from 'src/ui/home/containers/claims'
-import {initialState} from '../../../src/reducers/account/claims'
+import { initialState } from '../../../src/reducers/account/claims'
 
 describe('Claims container', () => {
   const COMMON_PROPS: ClaimsContainer['props'] = {
@@ -9,7 +9,7 @@ describe('Claims container', () => {
     openClaimDetails: jest.fn(),
     setClaimsForDid: jest.fn(),
     loading: false,
-    did: ''
+    did: '',
   }
 
   it('mounts correctly and matches the snapshot', () => {

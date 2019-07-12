@@ -32,9 +32,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
-    dispatch(
-      withLoading(toggleLoading)(genericActions.setLocale(locale)),
-    ),
+    dispatch(withLoading(toggleLoading)(genericActions.setLocale(locale))),
 })
 
 export const Settings = connect(

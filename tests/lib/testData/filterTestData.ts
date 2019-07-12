@@ -55,9 +55,10 @@ export const getTestDecoratedClaims = (): DecoratedClaims[] => {
       credentialType,
       id: '',
       subject: '',
-      claimData: {}
+      claimData: {},
     }
-    claims.push.apply(claims,
+    claims.push.apply(
+      claims,
       flatten(
         expiryDates.map(expiryDate =>
           issuers.map(issuer => ({
@@ -66,7 +67,7 @@ export const getTestDecoratedClaims = (): DecoratedClaims[] => {
             expires: expiryDate,
           })),
         ),
-      )
+      ),
     )
   })
   return claims
