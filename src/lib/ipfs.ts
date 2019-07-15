@@ -79,13 +79,13 @@ export class IpfsCustomConnector implements IIpfsConnector {
       },
     ])
 
-    return res.json().Cid['/']
+    return (await res).json().Cid['/']
   }
 
   async resolveIpldPath(pathToResolve: string): Promise<object> {
     const endpoint = `${this.ipfsHost}/api/v0/dag/get?arg=${pathToResolve}`
     const res = this.nativeLib.fetch('GET', endpoint)
 
-    return res.json()
+    return (await res).json()
   }
 }
