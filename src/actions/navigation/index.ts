@@ -19,24 +19,26 @@ export const setTopLevelNavigator = (nav: NavigationContainer) => {
 }
 
 /**
- * NOTE: navigate and navigatorReset are both async so that it does not have to
- * return a value, since it actually is not a real action but rather a bridge into
- * react-navigation state
+ * NOTE: navigate and navigatorReset both dispatch the navigation actions but
+ * the actions are not handled by our reducers. Dispatching is useful for testing
+ * (comparing snapshots of store actions) and it makes typescript happy
  */
 export const navigate = (
   options: NavigationNavigateActionPayload,
-): ThunkAction => async () => {
-  topLevelNavigator.dispatch(NavigationActions.navigate(options))
+): ThunkAction => dispatch => {
+  const action = NavigationActions.navigate(options)
+  topLevelNavigator && topLevelNavigator.dispatch(action)
+  return dispatch(action)
 }
 export const navigatorReset = (
   newScreen: NavigationNavigateActionPayload,
-): ThunkAction => async () => {
-  topLevelNavigator.dispatch(
-    StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate(newScreen)],
-    }),
-  )
+): ThunkAction => dispatch => {
+  const action = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate(newScreen)],
+  })
+  topLevelNavigator && topLevelNavigator.dispatch(action)
+  return dispatch(action)
 }
 
 export const navigatorResetHome = (): ThunkAction => dispatch =>
