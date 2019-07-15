@@ -99,7 +99,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  handleDeepLink: async (url: string) =>
+  handleDeepLink: (url: string) =>
     dispatch(
       withLoading(toggleLoading)(
         withErrorHandling(showErrorScreen)(handleDeepLink(url)),

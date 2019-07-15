@@ -79,18 +79,8 @@ export const handleDeepLink = (url: string): ThunkAction => (
         ),
       )
     }
-
-    /** @TODO Use error code */
-    return dispatch(
-      showErrorScreen(
-        new AppError(ErrorCode.Unknown, new Error('No handler found')),
-      ),
-    )
   }
 
-  return dispatch(
-    navigate({
-      routeName: routeList.Home,
-    }),
-  )
+  /** @TODO Use error code */
+  throw new AppError(ErrorCode.Unknown, new Error('Could not handle interaction token'))
 }

@@ -4,6 +4,7 @@ import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { createMockStore } from 'tests/utils'
+import { AppError } from 'src/lib/errors';
 
 describe('Navigation action creators', () => {
   describe('handleDeepLink', () => {
@@ -73,12 +74,12 @@ describe('Navigation action creators', () => {
       expect(parseInteractionTokenSpy).toHaveBeenCalledWith(jwt)
     })
 
-    it('should not attempt to parse if route was not correct', async () => {
+    it('should throw AppError if route was not correct', () => {
       const action = navigationActions.handleDeepLink(
         'jolocomwallet://somethingElse/' + jwt,
       )
 
-      await mockStore.dispatch(action)
+      expect(() => mockStore.dispatch(action)).toThrow(AppError)
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(parseInteractionTokenSpy).not.toHaveBeenCalled()
     })
