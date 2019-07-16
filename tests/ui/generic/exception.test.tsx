@@ -3,12 +3,13 @@ import { shallow } from 'enzyme'
 import { ExceptionComponent } from 'src/ui/generic/exception'
 import { routeList } from 'src/routeList'
 import { AppError } from 'src/lib/errors'
+import { createMockNavigationScreenProp } from 'tests/utils'
 
 describe('Exception screen component', () => {
   it('Renders correctly', () => {
     const props = {
       navigateBack: jest.fn(),
-      navigation: {
+      navigation: createMockNavigationScreenProp({
         state: {
           params: {
             returnTo: routeList.Home,
@@ -16,7 +17,7 @@ describe('Exception screen component', () => {
             flag: 'default',
           },
         },
-      },
+      }),
       errorTitle: 'Uh oh',
     }
 
@@ -27,7 +28,7 @@ describe('Exception screen component', () => {
   it('Renders correctly when no error object is provided', () => {
     const props = {
       navigateBack: jest.fn(),
-      navigation: {
+      navigation: createMockNavigationScreenProp({
         state: {
           params: {
             returnTo: routeList.Home,
@@ -35,7 +36,7 @@ describe('Exception screen component', () => {
             stackTrace: undefined,
           },
         },
-      },
+      }),
       errorTitle: 'Uh oh',
     }
 
