@@ -75,8 +75,12 @@ const styles = StyleSheet.create({
 })
 
 export class ExceptionComponent extends React.PureComponent<Props> {
-  goBack() {
-    this.props.navigation && this.props.navigation.goBack()
+  handlePress = () => {
+    const { navigation } = this.props
+    navigation &&
+      this.props.navigateBack(
+        navigation.state.params && navigation.state.params.returnTo,
+      )
   }
 
   render() {
@@ -112,7 +116,7 @@ export class ExceptionComponent extends React.PureComponent<Props> {
         <View style={styles.buttonBlock}>
           <Button
             raised
-            onPress={this.goBack.bind(this)}
+            onPress={this.handlePress}
             style={{
               container: styles.buttonContainer,
               text: styles.buttonText,
