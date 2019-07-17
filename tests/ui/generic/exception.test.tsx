@@ -32,7 +32,6 @@ describe('Exception screen component', () => {
         state: {
           params: {
             returnTo: routeList.Home,
-            error: new AppError(),
             stackTrace: undefined,
           },
         },
