@@ -2,14 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-native-material-ui'
 import { navigationActions } from 'src/actions/'
-import { Text, StyleSheet, View, Image } from 'react-native'
+import { Text, StyleSheet, View, Image, BackHandler } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { errorTitleMessages } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'
-import { NavigationScreenProps } from 'react-navigation'
+import { NavigationScreenProps, NavigationActions } from 'react-navigation'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -75,15 +75,39 @@ const styles = StyleSheet.create({
 })
 
 export class ExceptionComponent extends React.PureComponent<Props> {
-  handlePress = () => {
+  private onBackButtonPressAndroid = (): boolean => {
+    const backAction = NavigationActions.navigate({
+      routeName:
+        this.props.navigation.state.params &&
+        this.props.navigation.state.params.returnTo,
+    })
+    this.props.navigation.dispatch(backAction)
+    return true
+  }
+  public componentDidMount(): void {
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.onBackButtonPressAndroid,
+    )
+  }
+
+  public componentWillUnmount(): void {
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.onBackButtonPressAndroid,
+    )
+  }
+
+  private handlePress = (): void => {
     const { navigation } = this.props
-    navigation &&
+    if (navigation) {
       this.props.navigateBack(
         navigation.state.params && navigation.state.params.returnTo,
       )
+    }
   }
 
-  render() {
+  public render(): JSX.Element | null {
     const stateParams =
       this.props.navigation &&
       this.props.navigation.state &&
