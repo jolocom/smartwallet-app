@@ -73,7 +73,6 @@ const commonNavigationOptions: NavigationScreenOptions = {
 
 const navOptScreenWCancel = {
   ...commonNavigationOptions,
-  headerBackImage,
   ...Platform.select({
     android: {
       headerBackImage,
@@ -197,26 +196,28 @@ export const Routes = createStackNavigator(
     [routeList.CredentialDialog]: {
       screen: CredentialReceive,
       navigationOptions: () => ({
+        ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
       }),
     },
     [routeList.Consent]: {
       screen: Consent,
       navigationOptions: () => ({
+        ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.SHARE_CLAIMS),
       }),
     },
     [routeList.PaymentConsent]: {
       screen: PaymentConsent,
       navigationOptions: () => ({
-        headerBackImage,
+        ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
       }),
     },
     [routeList.AuthenticationConsent]: {
       screen: AuthenticationConsent,
       navigationOptions: () => ({
-        headerBackImage,
+        ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
       }),
     },
@@ -228,7 +229,6 @@ export const Routes = createStackNavigator(
       screen: DocumentDetails,
       navigationOptions: {
         ...navOptScreenWCancel,
-        headerTitleStyle,
       },
     },
     [routeList.Exception]: {
