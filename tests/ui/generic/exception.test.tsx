@@ -4,6 +4,7 @@ import { ExceptionComponent } from 'src/ui/generic/exception'
 import { routeList } from 'src/routeList'
 import { AppError } from 'src/lib/errors'
 import { createMockNavigationScreenProp } from 'tests/utils'
+import { Button } from 'react-native-material-ui'
 
 describe('Exception screen component', () => {
   it('Renders correctly', () => {
@@ -32,7 +33,6 @@ describe('Exception screen component', () => {
         state: {
           params: {
             returnTo: routeList.Home,
-            error: new AppError(),
             stackTrace: undefined,
           },
         },
@@ -42,5 +42,23 @@ describe('Exception screen component', () => {
 
     const rendered = shallow(<ExceptionComponent {...props} />)
     expect(rendered).toMatchSnapshot()
+  })
+
+  it('Goes back to the screen described in returnTo', () => {
+    const returnTo = routeList.QRCodeScanner
+    const props = {
+      navigateBack: jest.fn(),
+      navigation: createMockNavigationScreenProp({
+        state: {
+          params: {
+            returnTo,
+          },
+        },
+      }),
+    }
+
+    const rendered = shallow(<ExceptionComponent {...props} />)
+    rendered.find(Button).simulate('press')
+    expect(props.navigateBack).toHaveBeenCalledWith(returnTo)
   })
 })
