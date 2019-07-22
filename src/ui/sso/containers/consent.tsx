@@ -7,7 +7,7 @@ import { ThunkDispatch } from '../../../store'
 import { withErrorHandling, withLoading } from '../../../actions/modifiers'
 import { toggleLoading } from '../../../actions/account'
 import { showErrorScreen } from '../../../actions/generic'
-import {NavigationParams} from 'react-navigation'
+import { NavigationParams } from 'react-navigation'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -19,7 +19,10 @@ interface State {}
 
 export class ConsentContainer extends React.Component<Props, State> {
   private handleSubmitClaims = (credentials: StateVerificationSummary[]) => {
-    this.props.sendCredentialResponse(credentials, this.props.navigation.state.params.isDeepLinkInteraction)
+    this.props.sendCredentialResponse(
+      credentials,
+      this.props.navigation.state.params.isDeepLinkInteraction,
+    )
   }
 
   private handleDenySubmit = () => {
@@ -51,7 +54,10 @@ const mapStateToProps = (state: any) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  sendCredentialResponse: (credentials: StateVerificationSummary[], isDeepLinkInteraction: boolean) =>
+  sendCredentialResponse: (
+    credentials: StateVerificationSummary[],
+    isDeepLinkInteraction: boolean,
+  ) =>
     dispatch(
       withLoading(toggleLoading)(
         withErrorHandling(showErrorScreen)(

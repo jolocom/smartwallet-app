@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const constants = {
   Aspect: {},
@@ -9,17 +9,16 @@ const constants = {
   CaptureQuality: {},
   Orientation: {},
   FlashMode: {},
-  TorchMode: {}
-};
+  TorchMode: {},
+}
 
 class Camera extends React.Component {
-
   static constants = constants
   render() {
-    return null;
+    return null
   }
 }
 
-Camera.constants = constants;
+Camera.constants = constants
 
-export default Camera;
+export default Camera

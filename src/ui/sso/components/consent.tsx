@@ -120,7 +120,7 @@ export class ConsentComponent extends React.Component<Props, State> {
   private renderFirstSection() {
     return (
       <Block flex={0.4}>
-        <View style={{flex: 0.1}} />
+        <View style={{ flex: 0.1 }} />
         {IssuerCard(this.props.requester)}
         <Block flex={0.5}>
           <Text style={styles.fixedText}>

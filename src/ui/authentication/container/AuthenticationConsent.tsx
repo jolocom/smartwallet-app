@@ -7,7 +7,7 @@ import { sendAuthenticationResponse } from 'src/actions/sso/authenticationReques
 import { ThunkDispatch } from '../../../store'
 import { withErrorHandling } from '../../../actions/modifiers'
 import { showErrorScreen } from '../../../actions/generic'
-import {NavigationParams} from 'react-navigation'
+import { NavigationParams } from 'react-navigation'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -22,11 +22,13 @@ export class AuthenticationConsentContainer extends React.Component<
   State
 > {
   render() {
-    const {isDeepLinkInteraction} = this.props.navigation.state.params
+    const { isDeepLinkInteraction } = this.props.navigation.state.params
     return (
       <AuthenticationConsentComponent
         activeAuthenticationRequest={this.props.activeAuthenticationRequest}
-        confirmAuthenticationRequest={() => this.props.confirmAuthenticationRequest(isDeepLinkInteraction)}
+        confirmAuthenticationRequest={() =>
+          this.props.confirmAuthenticationRequest(isDeepLinkInteraction)
+        }
         cancelAuthenticationRequest={this.props.cancelAuthenticationRequest}
       />
     )
@@ -39,7 +41,11 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmAuthenticationRequest: (isDeepLinkInteraction: boolean) =>
-    dispatch(withErrorHandling(showErrorScreen)(sendAuthenticationResponse(isDeepLinkInteraction))),
+    dispatch(
+      withErrorHandling(showErrorScreen)(
+        sendAuthenticationResponse(isDeepLinkInteraction),
+      ),
+    ),
   cancelAuthenticationRequest: () => dispatch(cancelSSO),
 })
 
