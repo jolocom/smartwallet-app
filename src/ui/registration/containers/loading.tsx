@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, StatusBar } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
@@ -62,6 +62,7 @@ export class LoadingContainer extends React.Component<Props, State> {
   render() {
     return (
       <Container style={styles.container}>
+        <StatusBar barStyle="light-content" />
         <Block style={styles.label}>
           <CenteredText
             style={styles.text}

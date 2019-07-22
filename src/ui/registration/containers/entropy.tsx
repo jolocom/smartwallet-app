@@ -13,6 +13,7 @@ import { showErrorScreen } from 'src/actions/generic'
 import { ThunkDispatch } from 'src/store'
 import { AppError, ErrorCode } from '../../../lib/errors'
 import { routeList } from 'src/routeList'
+import { StatusBar } from 'react-native'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -83,11 +84,14 @@ export class EntropyContainer extends React.Component<Props, State> {
 
   public render(): JSX.Element {
     return (
-      <EntropyComponent
-        addPoint={this.addPoint}
-        progress={this.state.entropyProgress}
-        submitEntropy={this.submitEntropy}
-      />
+      <React.Fragment>
+        <StatusBar barStyle="light-content" />
+        <EntropyComponent
+          addPoint={this.addPoint}
+          progress={this.state.entropyProgress}
+          submitEntropy={this.submitEntropy}
+        />
+      </React.Fragment>
     )
   }
 }

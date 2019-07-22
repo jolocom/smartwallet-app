@@ -2,7 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-native-material-ui'
 import { navigationActions } from 'src/actions/'
-import { Text, StyleSheet, View, Image, BackHandler } from 'react-native'
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  BackHandler,
+  StatusBar,
+} from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { errorTitleMessages } from 'src/lib/errors'
@@ -121,6 +128,7 @@ export class ExceptionComponent extends React.PureComponent<Props> {
 
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
         <View style={styles.upperContainer}>
           <Image source={errorImage} style={{ width: 160, height: 160 }} />
           <View style={styles.textBlock}>

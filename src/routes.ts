@@ -8,10 +8,12 @@ import {
   NavigationRoute,
   NavigationScreenProp,
   createAppContainer,
+  createSwitchNavigator,
 } from 'react-navigation'
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
+import { LoadingScreen } from 'src/ui/generic/'
 import { PaymentConsent } from 'src/ui/payment'
 import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
@@ -167,7 +169,7 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   //tabBarPosition: 'bottom',
 })
 
-export const Routes = createStackNavigator(
+const AppStack = createStackNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
@@ -239,6 +241,20 @@ export const Routes = createStackNavigator(
   },
   {
     defaultNavigationOptions: commonNavigationOptions,
+  },
+)
+
+export const Routes = createSwitchNavigator(
+  {
+    AppInit: {
+      screen: LoadingScreen,
+      navigationOptions: noHeaderNavOpts,
+    },
+    App: AppStack,
+  },
+
+  {
+    initialRouteName: 'AppInit',
   },
 )
 
