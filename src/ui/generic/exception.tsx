@@ -9,7 +9,7 @@ import { errorTitleMessages } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'
-import { NavigationScreenProps, NavigationActions } from 'react-navigation'
+import { NavigationScreenProps } from 'react-navigation'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -76,12 +76,7 @@ const styles = StyleSheet.create({
 
 export class ExceptionComponent extends React.PureComponent<Props> {
   private onBackButtonPressAndroid = (): boolean => {
-    const backAction = NavigationActions.navigate({
-      routeName:
-        this.props.navigation.state.params &&
-        this.props.navigation.state.params.returnTo,
-    })
-    this.props.navigation.dispatch(backAction)
+    this.handlePress()
     return true
   }
   public componentDidMount(): void {
