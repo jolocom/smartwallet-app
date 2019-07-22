@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 describe('landing component', () => {
   it('matches the snapshot on render', () => {
     const props = {
-      handleButtonTap: jest.fn()
+      handleButtonTap: jest.fn(),
     }
 
     const rendered = shallow(<LandingComponent {...props} />)

@@ -19,25 +19,25 @@ I18n.translations = {
 export const locales = ['en', 'de', 'nl']
 
 const fallback = { languageTag: 'en', isRTL: false }
-const { languageTag } = RNLocalize.findBestAvailableLanguage(locales) || fallback;
+const { languageTag } =
+  RNLocalize.findBestAvailableLanguage(locales) || fallback
 I18n.locale = languageTag
-
 
 const localeSpecificImages = {
   en: {
-    "01.jpg": require('src/resources/img/en/01.jpg'),
-    "02.jpg": require('src/resources/img/en/02.jpg'),
-    "03.jpg": require('src/resources/img/en/03.jpg'),
+    '01.jpg': require('src/resources/img/en/01.jpg'),
+    '02.jpg': require('src/resources/img/en/02.jpg'),
+    '03.jpg': require('src/resources/img/en/03.jpg'),
   },
   de: {
-    "01.jpg": require('src/resources/img/de/01.jpg'),
-    "02.jpg": require('src/resources/img/de/02.jpg'),
-    "03.jpg": require('src/resources/img/de/03.jpg'),
+    '01.jpg': require('src/resources/img/de/01.jpg'),
+    '02.jpg': require('src/resources/img/de/02.jpg'),
+    '03.jpg': require('src/resources/img/de/03.jpg'),
   },
   nl: {
-    "01.jpg": require('src/resources/img/nl/01.jpg'),
-    "02.jpg": require('src/resources/img/nl/02.jpg'),
-    "03.jpg": require('src/resources/img/nl/03.jpg'),
+    '01.jpg': require('src/resources/img/nl/01.jpg'),
+    '02.jpg': require('src/resources/img/nl/02.jpg'),
+    '03.jpg': require('src/resources/img/nl/03.jpg'),
   },
 }
 

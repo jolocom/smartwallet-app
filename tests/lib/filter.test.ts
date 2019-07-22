@@ -6,21 +6,21 @@ import {
   getTestDecoratedClaims,
   decoratedTypes,
   numExpiredCreds,
-  numValidCreds
+  numValidCreds,
 } from './testData/filterTestData'
 import * as filterDecoratedClaims from 'src/lib/filterDecoratedClaims'
 import { getUiCredentialTypeByType } from 'src/lib/util'
 
 describe('Filtering Credentials', () => {
   it('should filter expired creds', () => {
-    const now = (new Date()).valueOf()
+    const now = new Date().valueOf()
     const filtered = filters.filterByExpired(testCreds)
     expect(filtered.length).toEqual(numExpiredCreds)
     expect(filtered.every(cred => cred.expires.valueOf() < now)).toBeTruthy()
   })
 
   it('should filter valid creds', () => {
-    const now = (new Date()).valueOf()
+    const now = new Date().valueOf()
     const filtered = filters.filterByValid(testCreds)
     expect(filtered.length).toEqual(numValidCreds)
     expect(filtered.every(cred => cred.expires.valueOf() >= now)).toBeTruthy()
@@ -67,17 +67,27 @@ describe('Filtering Decorated Claims', () => {
   const testDecoratedClaims = getTestDecoratedClaims()
 
   it('should filter expired decorated claims', () => {
-    const now = (new Date()).valueOf()
-    const filtered = filterDecoratedClaims.filters.filterByExpired(testDecoratedClaims)
+    const now = new Date().valueOf()
+    const filtered = filterDecoratedClaims.filters.filterByExpired(
+      testDecoratedClaims,
+    )
     expect(filtered.length).toEqual(numExpiredCreds)
-    expect(!!filtered.every(claim => !!claim.expires && claim.expires.valueOf() < now)).toBeTruthy()
+    expect(
+      !!filtered.every(
+        claim => !!claim.expires && claim.expires.valueOf() < now,
+      ),
+    ).toBeTruthy()
   })
 
   it('should filter valid decorated claims', () => {
-    const now = (new Date()).valueOf()
-    const filtered = filterDecoratedClaims.filters.filterByValid(testDecoratedClaims)
+    const now = new Date().valueOf()
+    const filtered = filterDecoratedClaims.filters.filterByValid(
+      testDecoratedClaims,
+    )
     expect(filtered.length).toEqual(numValidCreds)
-    expect(filtered.every(claim => !!claim.expires && claim.expires.valueOf() > now)).toBeTruthy()
+    expect(
+      filtered.every(claim => !!claim.expires && claim.expires.valueOf() > now),
+    ).toBeTruthy()
   })
 
   it('should filter by issuer', () => {

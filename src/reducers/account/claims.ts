@@ -110,7 +110,7 @@ export const claims = (
         ...state,
         selected: {
           ...state.selected,
-          claimData
+          claimData,
         },
       }
     default:

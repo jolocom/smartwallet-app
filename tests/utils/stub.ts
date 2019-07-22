@@ -1,9 +1,10 @@
 // NOTE: RecursivePartial implementation from https://stackoverflow.com/a/51365037
 export type RecursivePartial<T> = {
- [P in keyof T]?:
-    T[P] extends (infer U)[] ? RecursivePartial<U>[] :
-    T[P] extends object ? RecursivePartial<T[P]> :
-    T[P]
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<RecursivePartial<U>>
+    : T[P] extends object
+    ? RecursivePartial<T[P]>
+    : T[P]
 }
 
 // NOTE: this is based on https://github.com/gregbacchus/jest-auto-stub
@@ -17,7 +18,7 @@ export function stub<T extends {}>(base: RecursivePartial<T> = {}): T {
     get(target, prop) {
       prop = prop.toString()
       let ret
-      if (prop === "_clearMocks") {
+      if (prop === '_clearMocks') {
         ret = clearMocks
       } else if (prop in target) {
         ret = (target as any)[prop]

@@ -6,15 +6,17 @@ import * as util from 'src/lib/util'
 import { stub, reveal } from 'tests/utils'
 
 describe('Entropy container', () => {
-  const mockInstanceGenerator = (instance: EntropyContainer, progressValues = [0]) => {
+  const mockInstanceGenerator = (
+    instance: EntropyContainer,
+    progressValues = [0],
+  ) => {
     const getProgress = jest.fn().mockReturnValue(progressValues[0])
     // @ts-ignore private
-    const generatorMock = instance.entropyGenerator =
-      stub<EntropyGenerator>({
-        getProgress,
-        addFromDelta: jest.fn(),
-        generateRandomString: jest.fn().mockReturnValue('randomString')
-      })
+    const generatorMock = (instance.entropyGenerator = stub<EntropyGenerator>({
+      getProgress,
+      addFromDelta: jest.fn(),
+      generateRandomString: jest.fn().mockReturnValue('randomString'),
+    }))
 
     progressValues.forEach(v => getProgress.mockReturnValueOnce(v))
 
@@ -22,7 +24,7 @@ describe('Entropy container', () => {
   }
 
   const props = {
-    submit: jest.fn()
+    submit: jest.fn(),
   }
 
   it('mounts correctly and matches the snapshot', () => {
