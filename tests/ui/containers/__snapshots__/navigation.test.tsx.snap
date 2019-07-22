@@ -1,16 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NavigatorContainer correctly hides bottom action bar 1`] = `
-<Fragment>
-  <StatusBar
-    animated={false}
-    barStyle="light-content"
-    showHideTransition="fade"
-  />
-  <Connect(NavigatorReduxWrapper) />
-</Fragment>
-`;
-
 exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
 <Fragment>
   <StatusBar
@@ -18,6 +7,6 @@ exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
     barStyle="default"
     showHideTransition="fade"
   />
-  <Connect(NavigatorReduxWrapper) />
+  <NavigationContainer />
 </Fragment>
 `;

@@ -19,7 +19,9 @@ describe('MaskedImage component', () => {
   })
 
   it('matches the snapshot with empty current path string', () => {
-    const rendered = shallow<MaskedImageComponent>(<MaskedImageComponent {...props} />)
+    const rendered = shallow<MaskedImageComponent>(
+      <MaskedImageComponent {...props} />,
+    )
     expect(rendered).toMatchSnapshot()
     expect(rendered.state().pathDs[0]).toEqual('')
   })
@@ -33,7 +35,9 @@ describe('MaskedImage component', () => {
           locationY: y,
         },
       }
-    const rendered = shallow<MaskedImageComponent>(<MaskedImageComponent {...props} />)
+    const rendered = shallow<MaskedImageComponent>(
+      <MaskedImageComponent {...props} />,
+    )
     const instance = rendered.instance()
 
     // @ts-ignore because handleDrawStart is private
@@ -51,7 +55,9 @@ describe('MaskedImage component', () => {
         },
       }
 
-    const rendered = shallow<MaskedImageComponent>(<MaskedImageComponent {...props} />)
+    const rendered = shallow<MaskedImageComponent>(
+      <MaskedImageComponent {...props} />,
+    )
     const instance = rendered.instance()
 
     // @ts-ignore because handleDraw is private

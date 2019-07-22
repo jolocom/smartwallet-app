@@ -32,12 +32,7 @@ describe('EntropyGenerator lib', () => {
     const mockRandomWords = jest
       // @ts-ignore private
       .spyOn(Entropy.generator, 'randomWords')
-      .mockReturnValue([
-        2146374127,
-        2105273088,
-        2131944135,
-        -450876854,
-      ])
+      .mockReturnValue([2146374127, 2105273088, 2131944135, -450876854])
 
     expect(Entropy.generateRandomString(4)).toBe(expectedEntropy)
     expect(mockRandomWords).toBeCalledWith(4)

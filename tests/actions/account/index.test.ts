@@ -9,32 +9,32 @@ describe('Account action creators', () => {
   const initialState: { account: AccountState } = {
     account: {
       loading: {
-        loading: false
+        loading: false,
       },
       claims: {
         selected: {
           credentialType: 'Email',
-            claimData: {
+          claimData: {
             email: 'test@test.com',
           },
           id: '',
-            issuer: {
-            did: 'did:jolo:test'
+          issuer: {
+            did: 'did:jolo:test',
           },
           subject: 'did:jolo:test',
         },
         pendingExternal: {
           offer: [],
-            offeror: {
-            did: ''
-          }
+          offeror: {
+            did: '',
+          },
         },
         decoratedCredentials: {},
       },
       did: {
-        did: ''
-      }
-    }
+        did: '',
+      },
+    },
   }
 
   const mockMiddleware = {
@@ -48,19 +48,20 @@ describe('Account action creators', () => {
       getPassword: jest.fn().mockResolvedValue('sekrit'),
     },
     encryptionLib: {
-      decryptWithPass: jest.fn().mockReturnValue('newSeed')
+      decryptWithPass: jest.fn().mockReturnValue('newSeed'),
     },
     setIdentityWallet: jest.fn().mockResolvedValue(null),
     identityWallet: { identity: { did: 'did:jolo:first' } },
   }
-
 
   const mockStore = createMockStore(initialState, mockMiddleware)
 
   beforeEach(mockStore.reset)
 
   it('Should correctly handle one existing user identity', async () => {
-    mockMiddleware.storageLib.get.persona.mockResolvedValueOnce({ did: 'did:jolo:first' })
+    mockMiddleware.storageLib.get.persona.mockResolvedValueOnce({
+      did: 'did:jolo:first',
+    })
 
     await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockMiddleware.setIdentityWallet).toHaveBeenCalledTimes(1)
@@ -80,7 +81,9 @@ describe('Account action creators', () => {
     // NOTE: type issue, need to pass a promise into mockReturnValueOnce,
     // because now the type is set to Promise<T> as it is already pre-setup in
     // the mockMiddlerware
-    mockMiddleware.storageLib.get.encryptedSeed.mockReturnValueOnce(Promise.resolve(null))
+    mockMiddleware.storageLib.get.encryptedSeed.mockReturnValueOnce(
+      Promise.resolve(null),
+    )
 
     await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockStore.getActions()).toMatchSnapshot()

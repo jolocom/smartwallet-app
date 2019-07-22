@@ -173,7 +173,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
           }
         }
       >
-        Unknown Error.
+        There was an error with your request.
       </Text>
     </View>
   </View>
