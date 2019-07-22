@@ -74,7 +74,6 @@ const commonNavigationOptions: NavigationScreenOptions = {
 
 const navOptScreenWCancel = {
   ...commonNavigationOptions,
-  headerBackImage,
   ...Platform.select({
     android: {
       headerBackImage,
