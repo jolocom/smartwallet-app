@@ -2,7 +2,7 @@ import {
   NavigationActions,
   StackActions,
   NavigationNavigateActionPayload,
-  NavigationResetAction,
+  NavigationContainer,
 } from 'react-navigation'
 import { setDeepLinkLoading } from 'src/actions/sso'
 import { routeList } from 'src/routeList'
@@ -13,20 +13,36 @@ import { AppError, ErrorCode } from '../../lib/errors'
 import { withErrorHandling, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from '../../store'
 
-export const navigate = (options: NavigationNavigateActionPayload) =>
-  NavigationActions.navigate(options)
+let topLevelNavigator: any
+export const setTopLevelNavigator = (nav: NavigationContainer) => {
+  topLevelNavigator = nav
+}
 
-export const goBack = NavigationActions.back()
-
+/**
+ * NOTE: navigate and navigatorReset both dispatch the navigation actions but
+ * the actions are not handled by our reducers. Dispatching is useful for testing
+ * (comparing snapshots of store actions) and it makes typescript happy
+ */
+export const navigate = (
+  options: NavigationNavigateActionPayload,
+): ThunkAction => dispatch => {
+  const action = NavigationActions.navigate(options)
+  topLevelNavigator && topLevelNavigator.dispatch(action)
+  return dispatch(action)
+}
 export const navigatorReset = (
   newScreen: NavigationNavigateActionPayload,
-): NavigationResetAction =>
-  StackActions.reset({
+): ThunkAction => dispatch => {
+  const action = StackActions.reset({
     index: 0,
-    actions: [navigate(newScreen)],
+    actions: [NavigationActions.navigate(newScreen)],
   })
+  topLevelNavigator && topLevelNavigator.dispatch(action)
+  return dispatch(action)
+}
 
-export const navigatorResetHome = (): NavigationResetAction => navigatorReset({ routeName: routeList.Home })
+export const navigatorResetHome = (): ThunkAction => dispatch =>
+  dispatch(navigatorReset({ routeName: routeList.Home }))
 
 /**
  * The function that parses a deep link to get the route name and params
@@ -63,17 +79,8 @@ export const handleDeepLink = (url: string): ThunkAction => (
         ),
       )
     }
-
-    /** @TODO Use error code */
-    return dispatch(
-      showErrorScreen(
-        new AppError(ErrorCode.Unknown, new Error('No handler found')),
-      ),
-    )
   }
 
-  /** @TODO Better return */
-  return navigate({
-    routeName: routeList.Home,
-  })
+  /** @TODO Use error code */
+  throw new AppError(ErrorCode.Unknown, new Error('Could not handle interaction token'))
 }

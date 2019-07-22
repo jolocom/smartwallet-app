@@ -16,4 +16,4 @@ Array [
 ]
 `;
 
-exports[`Navigation action creators handleDeepLink should not attempt to parse if route was not correct 1`] = `Array []`;
+exports[`Navigation action creators handleDeepLink should throw AppError if route was not correct 1`] = `Array []`;

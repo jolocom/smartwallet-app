@@ -6,7 +6,7 @@ exports[`QRCodeScanner component matches the snapshot with back handler 1`] = `
     <QRCodeScanner
       bottomContent={
         <ThemedComponent
-          onPress={[MockFunction]}
+          onPress={[Function]}
           style={
             Object {
               "text": Object {
@@ -17,7 +17,11 @@ exports[`QRCodeScanner component matches the snapshot with back handler 1`] = `
           text="Cancel"
         />
       }
-      cameraProps={Object {}}
+      cameraProps={
+        Object {
+          "key": 1563187115089,
+        }
+      }
       cameraStyle={
         Object {
           "overflow": "hidden",
@@ -48,7 +52,7 @@ exports[`QRCodeScanner component matches the snapshot with back handler 1`] = `
           </Text>
         </View>
       }
-      onRead={[Function]}
+      onRead={[MockFunction]}
       pendingAuthorizationView={
         <View
           style={

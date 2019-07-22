@@ -1,9 +1,13 @@
 const CryptoJS = require('crypto-js')
 
 export interface EncryptionLibInterface {
-  decryptWithPass: (
-    { cipher, pass }: { cipher: string; pass: string },
-  ) => string
+  decryptWithPass: ({
+    cipher,
+    pass,
+  }: {
+    cipher: string
+    pass: string
+  }) => string
   encryptWithPass: ({ data, pass }: { data: string; pass: string }) => string
 }
 

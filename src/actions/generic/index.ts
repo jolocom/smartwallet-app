@@ -5,14 +5,16 @@ import I18n from 'src/locales/i18n'
 import { ThunkAction } from 'src/store'
 import { AppError, ErrorCode } from 'src/lib/errors'
 
-export const showErrorScreen = (error: AppError) =>
-  navigationActions.navigate({
-    routeName: routeList.Exception,
-    params: {
-      returnTo: error.navigateTo || routeList.Home,
-      error,
-    },
-  })
+export const showErrorScreen = (error: AppError): ThunkAction => dispatch =>
+  dispatch(
+    navigationActions.navigate({
+      routeName: routeList.Exception,
+      params: {
+        returnTo: error.navigateTo || routeList.Home,
+        error,
+      },
+    }),
+  )
 
 export const initApp: ThunkAction = async (
   dispatch,

@@ -1,6 +1,6 @@
 import { ssoReducer } from 'src/reducers/sso'
 import { ssoActions as actions } from 'src/actions/'
-import {initialState} from '../../../src/reducers/sso'
+import { initialState } from '../../../src/reducers/sso'
 
 describe('sso reducer', () => {
   it('should initialize correctly', () => {
@@ -17,12 +17,14 @@ describe('sso reducer', () => {
             did: 'did:jolo:mock',
           },
           callbackURL: 'http://example.com/myendpoint/',
-          availableCredentials: [{
-            type: 'Email',
-            verifications: [],
-            values: ['test@email.com']
-          }],
-          requestJWT: 'request_jwt'
+          availableCredentials: [
+            {
+              type: 'Email',
+              verifications: [],
+              values: ['test@email.com'],
+            },
+          ],
+          requestJWT: 'request_jwt',
         }),
       ),
     ).toMatchSnapshot()
