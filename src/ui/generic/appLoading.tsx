@@ -8,7 +8,7 @@ import { LoadingSpinner } from './loadingSpinner'
 interface Props extends ReturnType<typeof mapStateToProps> {}
 
 export const AppLoadingContainer: React.SFC<Props> = props =>
-  props.loading || props.loading2 ? (
+  props.loading ? (
     props.hasIdentity ? (
       <LoadingSpinner />
     ) : (
@@ -18,7 +18,6 @@ export const AppLoadingContainer: React.SFC<Props> = props =>
 
 const mapStateToProps = (state: RootState) => ({
   loading: state.account.loading,
-  loading2: state.sso.deepLinkLoading,
   hasIdentity: !!state.account.did.did,
 })
 

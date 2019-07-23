@@ -5,7 +5,6 @@ import {
   NavigationAction,
   NavigationContainerComponent,
 } from 'react-navigation'
-import { setDeepLinkLoading } from 'src/actions/sso'
 import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from '../../lib/storage/interactionTokens'
@@ -13,6 +12,7 @@ import { showErrorScreen } from '../generic'
 import { AppError, ErrorCode } from '../../lib/errors'
 import { withErrorHandling, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from '../../store'
+import { toggleLoading } from '../account'
 
 let deferredNavActions: NavigationAction[] = [],
   dispatchNavigationAction = (action: any) => {
@@ -81,7 +81,7 @@ export const handleDeepLink = (url: string): ThunkAction => (
 
     if (handler) {
       return dispatch(
-        withLoading(setDeepLinkLoading)(
+        withLoading(toggleLoading)(
           withErrorHandling(showErrorScreen)(handler(interactionToken, true)),
         ),
       )

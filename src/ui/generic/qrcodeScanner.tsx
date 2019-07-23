@@ -14,7 +14,7 @@ import { showErrorScreen } from '../../actions/generic'
 import { withErrorHandling, withLoading } from '../../actions/modifiers'
 import { NavigationScreenProps } from 'react-navigation'
 import { AppError, ErrorCode } from '../../lib/errors'
-import { setDeepLinkLoading } from '../../actions/sso'
+import { toggleLoading } from 'src/actions/account'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -106,7 +106,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 
     return handler
       ? dispatch(
-          withLoading(setDeepLinkLoading)(
+          withLoading(toggleLoading)(
             withErrorHandling(showErrorScreen)(handler(interactionToken)),
           ),
         )

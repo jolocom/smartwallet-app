@@ -43,11 +43,6 @@ export const setReceivingCredential = (
   value: { offeror: requester, offer: external },
 })
 
-export const setDeepLinkLoading = (value: boolean) => ({
-  type: 'SET_DEEP_LINK_LOADING',
-  value,
-})
-
 export const receiveExternalCredential = (
   credReceive: JSONWebToken<CredentialsReceive>,
   offeror: IdentitySummary,
