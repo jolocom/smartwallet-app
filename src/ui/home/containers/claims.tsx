@@ -19,13 +19,12 @@ export class ClaimsContainer extends React.Component<Props> {
   }
 
   public render(): JSX.Element {
-    const { did, loading, claimsState, openClaimDetails } = this.props
+    const { did, claimsState, openClaimDetails } = this.props
     return (
       <View style={{ flex: 1 }}>
         <CredentialOverview
           did={did}
           claimsToRender={claimsState.decoratedCredentials}
-          loading={!!loading}
           onEdit={openClaimDetails}
         />
       </View>
@@ -37,9 +36,8 @@ const mapStateToProps = ({
   account: {
     did: { did },
     claims: claimsState,
-    loading: { loading },
   },
-}: RootState) => ({ did, claimsState, loading })
+}: RootState) => ({ did, claimsState })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>

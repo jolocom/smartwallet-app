@@ -10,6 +10,7 @@ import { withLoading, withErrorHandling } from './actions/modifiers'
 import { toggleLoading } from './actions/account'
 import { RoutesContainer } from './routes'
 
+import { AppLoading } from './ui/generic/appLoading'
 import { useScreens } from 'react-native-screens'
 import { routeList } from './routeList'
 useScreens()
@@ -99,7 +100,10 @@ export default class App extends React.PureComponent<{}> {
         <StatusBar barStyle="default" />
         <ThemeContext.Provider value={getTheme(JolocomTheme)}>
           <Provider store={store}>
-            <RoutesContainer ref={nav => this.setNavigator(nav)} />
+            <React.Fragment>
+              <RoutesContainer ref={nav => this.setNavigator(nav)} />
+              <AppLoading />
+            </React.Fragment>
           </Provider>
         </ThemeContext.Provider>
       </React.Fragment>
