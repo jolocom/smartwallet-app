@@ -2,7 +2,8 @@ import {
   NavigationActions,
   StackActions,
   NavigationNavigateActionPayload,
-  NavigationContainer,
+  NavigationAction,
+  NavigationContainerComponent,
 } from 'react-navigation'
 import { setDeepLinkLoading } from 'src/actions/sso'
 import { routeList } from 'src/routeList'
@@ -13,9 +14,15 @@ import { AppError, ErrorCode } from '../../lib/errors'
 import { withErrorHandling, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from '../../store'
 
-let topLevelNavigator: any
-export const setTopLevelNavigator = (nav: NavigationContainer) => {
-  topLevelNavigator = nav
+let deferredNavActions: NavigationAction[] = [],
+  dispatchNavigationAction = (action: any) => {
+    deferredNavActions.push(action)
+  }
+
+export const setTopLevelNavigator = (nav: NavigationContainerComponent) => {
+  dispatchNavigationAction = nav.dispatch.bind(nav)
+  deferredNavActions.forEach(dispatchNavigationAction)
+  deferredNavActions.length = 0
 }
 
 /**
@@ -27,7 +34,7 @@ export const navigate = (
   options: NavigationNavigateActionPayload,
 ): ThunkAction => dispatch => {
   const action = NavigationActions.navigate(options)
-  topLevelNavigator && topLevelNavigator.dispatch(action)
+  dispatchNavigationAction(action)
   return dispatch(action)
 }
 export const navigatorReset = (
@@ -37,7 +44,7 @@ export const navigatorReset = (
     index: 0,
     actions: [NavigationActions.navigate(newScreen)],
   })
-  topLevelNavigator && topLevelNavigator.dispatch(action)
+  dispatchNavigationAction(action)
   return dispatch(action)
 }
 
@@ -82,5 +89,8 @@ export const handleDeepLink = (url: string): ThunkAction => (
   }
 
   /** @TODO Use error code */
-  throw new AppError(ErrorCode.Unknown, new Error('Could not handle interaction token'))
+  throw new AppError(
+    ErrorCode.Unknown,
+    new Error('Could not handle interaction token'),
+  )
 }
