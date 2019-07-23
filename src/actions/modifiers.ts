@@ -16,7 +16,10 @@ export const withLoading = (loadingAction: ActionCreator<AnyAction>) => (
     dispatch(loadingAction(true))
     return await dispatch(wrappedAction)
   } finally {
-    dispatch(loadingAction(false))
+    // NOTE: timeout is a hack to avoid flashing when navigating, as the new
+    // screen will have not been loaded yet but the AppLoading will be taken
+    // down, which will flash the old screen shortly
+    setTimeout(() => dispatch(loadingAction(false)), 100)
   }
 }
 
