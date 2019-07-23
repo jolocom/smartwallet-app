@@ -255,6 +255,7 @@ export const Routes = createSwitchNavigator(
 
   {
     initialRouteName: 'AppInit',
+    backBehavior: 'none',
   },
 )
 

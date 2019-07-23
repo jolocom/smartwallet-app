@@ -11,6 +11,7 @@ import { toggleLoading } from './actions/account'
 import { RoutesContainer } from './routes'
 
 import { useScreens } from 'react-native-screens'
+import { routeList } from './routeList'
 useScreens()
 
 let store: ReturnType<typeof initStore>
@@ -30,11 +31,21 @@ export default class App extends React.PureComponent<{}> {
     if (!store) store = initStore()
   }
 
-  private navigateBack() {
-    // return false if app exit is desired
+  /**
+   * should return false if app exit is desired
+   */
+  private navigateBack = () => {
     if (!this.navigator) return
-    const { index, routes } = this.navigator.state.nav
-    if (index === 0 && routes.length === 1 && routes[0].index === 0) {
+
+    let curState = this.navigator.state.nav
+    while (true) {
+      const { index, routes } = curState
+      if (index !== undefined && routes) curState = routes[index]
+      else break
+    }
+
+    if (curState.routeName === routeList.Claims) {
+      // if we are on the first tab, pressing back should close down the app
       return false
     }
 
