@@ -8,9 +8,7 @@ import { createMockStore } from 'tests/utils'
 describe('Account action creators', () => {
   const initialState: { account: AccountState } = {
     account: {
-      loading: {
-        loading: false,
-      },
+      loading: false,
       claims: {
         selected: {
           credentialType: 'Email',

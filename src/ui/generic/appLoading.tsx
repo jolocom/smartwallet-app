@@ -17,7 +17,7 @@ export const AppLoadingContainer: React.SFC<Props> = props =>
   ) : null
 
 const mapStateToProps = (state: RootState) => ({
-  loading: state.account.loading.loading,
+  loading: state.account.loading,
   loading2: state.sso.deepLinkLoading,
   hasIdentity: !!state.account.did.did,
 })
