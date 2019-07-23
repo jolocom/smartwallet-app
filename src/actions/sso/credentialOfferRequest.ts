@@ -19,7 +19,6 @@ import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentials
 import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { withErrorHandling, withLoading } from '../modifiers'
-import { toggleLoading } from '../account'
 
 export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -81,7 +80,7 @@ export const consumeCredentialOfferRequest = (
   >(res.token)
 
   return dispatch(
-    withLoading(toggleLoading)(
+    withLoading(
       withErrorHandling(
         showErrorScreen,
         err => new AppError(ErrorCode.CredentialsReceiveFailed, err),

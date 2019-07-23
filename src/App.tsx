@@ -7,7 +7,6 @@ import { genericActions, accountActions, navigationActions } from 'src/actions'
 import { Linking, BackHandler, StatusBar } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { withLoading, withErrorHandling } from './actions/modifiers'
-import { toggleLoading } from './actions/account'
 import { RoutesContainer } from './routes'
 
 import { AppLoading } from './ui/generic/appLoading'
@@ -62,7 +61,7 @@ export default class App extends React.PureComponent<{}> {
 
   private handleDeepLink(url: string) {
     store.dispatch(
-      withLoading(toggleLoading)(
+      withLoading(
         withErrorHandling(genericActions.showErrorScreen)(
           navigationActions.handleDeepLink(url),
         ),
@@ -79,7 +78,7 @@ export default class App extends React.PureComponent<{}> {
   async componentDidMount() {
     await store.dispatch(genericActions.initApp)
     await store.dispatch(
-      withLoading(accountActions.toggleLoading)(
+      withLoading(
         withErrorHandling(genericActions.showErrorScreen)(
           accountActions.checkIdentityExists,
         ),

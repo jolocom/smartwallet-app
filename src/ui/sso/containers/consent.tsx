@@ -5,7 +5,6 @@ import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withErrorHandling, withLoading } from '../../../actions/modifiers'
-import { toggleLoading } from '../../../actions/account'
 import { showErrorScreen } from '../../../actions/generic'
 import { NavigationParams } from 'react-navigation'
 
@@ -59,7 +58,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     isDeepLinkInteraction: boolean,
   ) =>
     dispatch(
-      withLoading(toggleLoading)(
+      withLoading(
         withErrorHandling(showErrorScreen)(
           ssoActions.sendCredentialResponse(credentials, isDeepLinkInteraction),
         ),

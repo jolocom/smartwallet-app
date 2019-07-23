@@ -12,7 +12,6 @@ import { showErrorScreen } from '../generic'
 import { AppError, ErrorCode } from '../../lib/errors'
 import { withErrorHandling, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from '../../store'
-import { toggleLoading } from '../account'
 
 let deferredNavActions: NavigationAction[] = [],
   dispatchNavigationAction = (action: any) => {
@@ -81,7 +80,7 @@ export const handleDeepLink = (url: string): ThunkAction => (
 
     if (handler) {
       return dispatch(
-        withLoading(toggleLoading)(
+        withLoading(
           withErrorHandling(showErrorScreen)(handler(interactionToken, true)),
         ),
       )
