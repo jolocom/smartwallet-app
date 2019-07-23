@@ -53,6 +53,7 @@ describe('Navigation action creators', () => {
     })
 
     beforeEach(() => {
+      jest.useFakeTimers()
       mockStore.reset()
       parseInteractionTokenSpy.mockClear()
     })
@@ -70,6 +71,7 @@ describe('Navigation action creators', () => {
       )
 
       await mockStore.dispatch(action)
+      jest.runAllTimers()
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(parseInteractionTokenSpy).toHaveBeenCalledWith(jwt)
     })
