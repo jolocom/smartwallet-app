@@ -1,9 +1,9 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import strings from '../../../locales/strings'
+import SettingsItem from './settingsItem'
 
 const styles = StyleSheet.create({
   container: {
@@ -17,15 +17,7 @@ const styles = StyleSheet.create({
     ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
     color: 'grey',
     marginLeft: 18,
-  },
-  card: {
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: 'rgb(236, 236, 236)',
-    flexDirection: 'row',
+    marginBottom: 10,
   },
   languageCard: {
     marginTop: 10,
@@ -55,52 +47,6 @@ const styles = StyleSheet.create({
   },
 })
 
-interface LanguageCardProps {
-  locales: string[]
-  selected: string
-  setLocale: (key: string) => void
-}
-
-const LanguageCard: React.SFC<LanguageCardProps> = props => (
-  <View style={[styles.card, styles.languageCard]}>
-    <Icon style={{ marginRight: 18 }} size={24} name="translate" color="grey" />
-    <View>
-      <Text style={JolocomTheme.textStyles.light.labelDisplayFieldEdit}>
-        {I18n.t(strings.LANGUAGE)}
-      </Text>
-      <View style={styles.languageOptions}>
-        {props.locales.map(locale => {
-          const isCurrentLanguage = locale === props.selected
-          return (
-            <View
-              key={locale}
-              // TODO: connect to selecting the locale
-              onTouchEnd={() => props.setLocale(locale)}
-              style={[
-                styles.languageOption,
-                isCurrentLanguage && {
-                  backgroundColor: JolocomTheme.primaryColorSand,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.languageOptionText,
-                  isCurrentLanguage && {
-                    color: JolocomTheme.primaryColorPurple,
-                  },
-                ]}
-              >
-                {locale.toUpperCase()}
-              </Text>
-            </View>
-          )
-        })}
-      </View>
-    </View>
-  </View>
-)
-
 interface SettingsScreenProps {
   locales: string[]
   settings: { [key: string]: any }
@@ -114,10 +60,55 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
       <Text style={styles.sectionHeader}>
         {I18n.t(strings.YOUR_PREFERENCES)}
       </Text>
-      <LanguageCard
-        setLocale={props.setLocale}
-        locales={props.locales}
-        selected={props.settings.locale}
+      <SettingsItem
+        title={'Settings'}
+        iconName={'translate'}
+        payload={
+          <View style={styles.languageOptions}>
+            {props.locales.map(locale => {
+              const isCurrentLanguage = locale === props.settings.locale
+              return (
+                <View
+                  key={locale}
+                  onTouchEnd={() => props.setLocale(locale)}
+                  style={[
+                    styles.languageOption,
+                    isCurrentLanguage && {
+                      backgroundColor: JolocomTheme.primaryColorSand,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.languageOptionText,
+                      isCurrentLanguage && {
+                        color: JolocomTheme.primaryColorPurple,
+                      },
+                    ]}
+                  >
+                    {locale.toUpperCase()}
+                  </Text>
+                </View>
+              )
+            })}
+          </View>
+        }
+      />
+    </View>
+    <View style={styles.topSection}>
+      <Text style={styles.sectionHeader}>Security</Text>
+      <SettingsItem
+        title={'Backup your Identity'}
+        description={
+          'Set up a secure phrase to recover your account in the future if your phone is stolen or is damaged.'
+        }
+        iconName={'flash'}
+        isMarked
+      />
+      <SettingsItem
+        title={'Delete Identity'}
+        description={'(coming soon)'}
+        iconName={'delete'}
       />
     </View>
     <Text style={styles.versionNumber}>

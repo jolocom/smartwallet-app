@@ -33,11 +33,7 @@ export const submitEntropy = (
 export const selectInitAction = (action: string): ThunkAction => dispatch => {
   switch (action) {
     case InitAction.CREATE: {
-      return dispatch(
-        navigationActions.navigate({
-          routeName: routeList.Entropy,
-        }),
-      )
+      return dispatch(startRegistration)
     }
     case InitAction.RECOVER: {
       // TODO open recover screen
