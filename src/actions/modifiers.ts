@@ -1,25 +1,26 @@
 import { ActionCreator } from 'redux'
-import { ThunkAction } from 'src/store'
+import { ThunkAction, AnyAction } from 'src/store'
 import { AppError } from '../lib/errors'
 import { toggleLoading } from './account'
 
 /**
- * Action modifier that wraps a {@link ThunkAction} with calls to {@link toggleLoading},
- * to show the AppLoading spinner while the action is being executed
+ * Curried function that wraps a {@link ThunkAction} with two calls to the provided loadingAction
+ * {@link ActionCreator} (called with "true" before the wrapped action is dispatched, and with "false" after)
+ * @param loadingAction - An action creator to create the actions to be dispatched before and after the wrappedAction-
  * @param wrappedAction - The thunkAction to be wrapped
- * @example dispatch(withLoading(saveClaims))
+ * @example dispatch(withLoading(toggleLoading)(saveClaims))
  */
-export const withLoading = (
+export const withLoadingHandler = (loadingAction: ActionCreator<AnyAction>) => (
   wrappedAction: ThunkAction,
 ): ThunkAction => async dispatch => {
   try {
-    dispatch(toggleLoading(true))
+    dispatch(loadingAction(true))
     return await dispatch(wrappedAction)
   } finally {
     // NOTE: timeout is a hack to avoid flashing when navigating, as the new
     // screen will have not been loaded yet but the AppLoading will be taken
     // down, which will flash the old screen shortly
-    setTimeout(() => dispatch(toggleLoading(false)), 100)
+    setTimeout(() => dispatch(loadingAction(false)), 100)
   }
 }
 
@@ -42,3 +43,5 @@ export const withErrorHandling = (
     return dispatch(errorHandler(errorModifier(error)))
   }
 }
+
+export const withLoading = withLoadingHandler(toggleLoading)
