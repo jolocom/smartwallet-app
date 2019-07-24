@@ -4,10 +4,6 @@ import { LoadingScreen } from 'src/ui/generic/'
 import { LandingComponent } from 'src/ui/landing/components/landing'
 import { registrationActions } from 'src/actions/'
 import { RootState } from 'src/reducers/'
-import { withErrorHandling } from '../../../actions/modifiers'
-import { showErrorScreen } from '../../../actions/generic'
-import { AppError, ErrorCode } from '../../../lib/errors'
-import { routeList } from '../../../routeList'
 import { ThunkDispatch } from '../../../store'
 
 interface Props
@@ -19,7 +15,7 @@ export class LandingContainer extends React.Component<Props> {
     if (this.props.loading) {
       return <LoadingScreen />
     } else {
-      return <LandingComponent handleButtonTap={this.props.startRegistration} />
+      return <LandingComponent handleButtonTap={this.props.openInitAction} />
     }
   }
 }
@@ -33,14 +29,7 @@ const mapStateToProps = ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  startRegistration: () =>
-    dispatch(
-      withErrorHandling(
-        showErrorScreen,
-        (err: AppError) =>
-          new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-      )(registrationActions.startRegistration),
-    ),
+  openInitAction: () => dispatch(registrationActions.openInitAction),
 })
 
 export const Landing = connect(

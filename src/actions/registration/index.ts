@@ -8,6 +8,10 @@ import { ThunkAction } from '../../store'
 
 const bip39 = require('bip39')
 
+export enum InitAction {
+  CREATE = 'create',
+  RECOVER = 'recover',
+}
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
   value: loadingMsg,
@@ -24,6 +28,42 @@ export const submitEntropy = (
 
   dispatch(setLoadingMsg(loading.loadingStages[0]))
   return dispatch(createIdentity(encodedEntropy))
+}
+
+export const selectInitAction = (action: string): ThunkAction => dispatch => {
+  switch (action) {
+    case InitAction.CREATE: {
+      return dispatch(
+        navigationActions.navigate({
+          routeName: routeList.Entropy,
+        }),
+      )
+    }
+    case InitAction.RECOVER: {
+      // TODO open recover screen
+      return dispatch(
+        navigationActions.navigate({
+          routeName: routeList.Entropy,
+        }),
+      )
+    }
+    default: {
+      console.error('Wrong Init Action')
+      return dispatch(
+        navigationActions.navigate({
+          routeName: routeList.Landing,
+        }),
+      )
+    }
+  }
+}
+
+export const openInitAction: ThunkAction = dispatch => {
+  return dispatch(
+    navigationActions.navigate({
+      routeName: routeList.InitAction,
+    }),
+  )
 }
 
 export const startRegistration: ThunkAction = async (

@@ -22,6 +22,7 @@ import {
   DocumentsMenuIcon,
   SettingsMenuIcon,
 } from 'src/resources'
+import { InitAction } from './ui/landing/containers/initAction'
 
 const headerBackImage =
   Platform.OS === 'android'
@@ -140,6 +141,7 @@ export const BottomNavRoutes = TabNavigator(
 
 export const Routes = StackNavigator({
   [routeList.Landing]: { screen: Landing, navigationOptions },
+  [routeList.InitAction]: { screen: InitAction, navigationOptions },
   [routeList.Entropy]: { screen: Entropy, navigationOptions },
   [routeList.Loading]: { screen: Loading, navigationOptions },
   [routeList.SeedPhrase]: { screen: SeedPhrase, navigationOptions },
