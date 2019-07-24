@@ -7,7 +7,7 @@ import { LoadingSpinner } from './loadingSpinner'
 
 interface Props extends ReturnType<typeof mapStateToProps> {}
 
-export const AppLoadingContainer: React.SFC<Props> = props =>
+export const AppLoadingContainer: React.FunctionComponent<Props> = props =>
   props.loading ? (
     props.hasIdentity ? (
       <LoadingSpinner />
