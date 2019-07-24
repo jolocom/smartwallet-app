@@ -37,15 +37,18 @@ export default class App extends React.PureComponent<{}> {
   private navigateBack = () => {
     if (!this.navigator) return
 
+    // walk down the route state tree until we get to the Home route,
+    // or to a leaf node
     let curState = this.navigator.state.nav
-    while (true) {
+    while (curState && curState.routeName !== routeList.Home) {
       const { index, routes } = curState
-      if (index !== undefined && routes) curState = routes[index]
-      else break
+      curState = index !== undefined && routes ? routes[index] : null
     }
+    // curState is now either the state for Home or null
 
-    if (curState.routeName === routeList.Claims) {
-      // if we are on the first tab, pressing back should close down the app
+    if (curState && curState.index === 0) {
+      // if it's Home, and we are on the first tab of the Home route,
+      // then pressing back should close down the app
       return false
     }
 
