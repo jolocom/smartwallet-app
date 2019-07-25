@@ -161,7 +161,7 @@ const mapStateToProps = (): {} => ({})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   navigateBack: (routeName: string) =>
-    dispatch(navigationActions.navigatorReset({ routeName })),
+    dispatch(navigationActions.navigate({ routeName })),
 })
 
 export const Exception = connect(

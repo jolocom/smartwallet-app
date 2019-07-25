@@ -253,7 +253,7 @@ const MainStack = createStackNavigator(
 
 export const Routes = createAnimatedSwitchNavigator(
   {
-    AppInit: {
+    [routeList.AppInit]: {
       screen: AppInit,
       navigationOptions: noHeaderNavOpts,
     },
