@@ -15,7 +15,7 @@ import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
-import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
+import { SeedPhrase, RegistrationProgress, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception /*BottomNavBar*/ } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
@@ -180,8 +180,8 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
       screen: Entropy,
       navigationOptions: noHeaderNavOpts,
     },
-    [routeList.Loading]: {
-      screen: Loading,
+    [routeList.RegistrationProgress]: {
+      screen: RegistrationProgress,
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.SeedPhrase]: {

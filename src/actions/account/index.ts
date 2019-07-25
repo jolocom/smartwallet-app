@@ -52,7 +52,9 @@ export const checkIdentityExists: ThunkAction = async (
     const isRegistering = getState().registration.loading.isRegistering
     if (isRegistering) {
       return dispatch(
-        navigationActions.navigate({ routeName: routeList.Loading })
+        navigationActions.navigate({
+          routeName: routeList.RegistrationProgress,
+        }),
       )
     } else {
       return dispatch(

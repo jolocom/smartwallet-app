@@ -1,1 +1,1 @@
-export { Loading } from './registration/containers/loading'
+export { RegistrationProgress } from './registration/containers/loading'

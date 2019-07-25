@@ -2,12 +2,12 @@
 export enum routeList {
   Landing = 'Landing',
   Entropy = 'Entropy',
+  RegistrationProgress = 'RegistrationProgress',
   Loading = 'Loading',
   SeedPhrase = 'SeedPhrase',
 
   Home = 'Home',
   Claims = 'Claims',
-  Interactions = 'Interactions',
   Documents = 'Documents',
   Records = 'Records',
   Settings = 'Settings',

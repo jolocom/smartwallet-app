@@ -23,7 +23,7 @@ export const submitEntropy = (
 ): ThunkAction => dispatch => {
   dispatch(
     navigationActions.navigate({
-      routeName: routeList.Loading,
+      routeName: routeList.RegistrationProgress,
     }),
   )
 
