@@ -51,6 +51,7 @@ interface SettingsScreenProps {
   locales: string[]
   settings: { [key: string]: any }
   setLocale: (key: string) => void
+  setupBackup: () => void
   version: string
 }
 
@@ -103,7 +104,8 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
           'Set up a secure phrase to recover your account in the future if your phone is stolen or is damaged.'
         }
         iconName={'flash'}
-        isMarked
+        isHighlighted
+        onTouchEnd={props.setupBackup}
       />
       <SettingsItem
         title={'Delete Identity'}

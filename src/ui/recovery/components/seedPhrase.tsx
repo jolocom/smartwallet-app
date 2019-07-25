@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Container } from 'src/ui/structure/'
+import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 
@@ -9,7 +9,6 @@ const { Button } = require('react-native-material-ui')
 
 interface Props {
   seedPhrase: string
-  checked: boolean
   handleButtonTap: () => void
 }
 
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export const SeedPhrase: React.SFC<Props> = props => (
+export const SeedPhrase: React.SFC<Props> = ({ seedPhrase , handleButtonTap }: Props) => (
   <Container style={styles.container}>
     <View style={styles.noteSection}>
       <Text style={styles.note}>
@@ -70,12 +69,12 @@ export const SeedPhrase: React.SFC<Props> = props => (
       </Text>
     </View>
     <View style={styles.phraseSection}>
-      <Text style={styles.seedPhrase}>{props.seedPhrase}</Text>
+      <Text style={styles.seedPhrase}>{seedPhrase}</Text>
     </View>
     <View style={styles.buttonSection}>
       <Button
         style={{ container: styles.buttonContainer, text: styles.buttonText }}
-        onPress={props.handleButtonTap}
+        onPress={handleButtonTap}
         raised
         upperCase={false}
         text={I18n.t(strings.YES_I_WROTE_IT_DOWN)}

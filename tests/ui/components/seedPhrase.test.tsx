@@ -1,5 +1,5 @@
 import React from 'react'
-import { SeedPhrase } from 'src/ui/registration/components/seedPhrase'
+import { SeedPhrase } from 'src/ui/recovery/components/seedPhrase'
 import { shallow } from 'enzyme'
 
 describe('seedPhrase component', () => {

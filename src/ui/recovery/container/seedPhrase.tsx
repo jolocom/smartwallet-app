@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
-import { navigatorResetHome } from 'src/actions/navigation'
+import { SeedPhrase as SeedPhraseComponent } from 'src/ui/recovery/components/seedPhrase'
 import { ThunkDispatch } from '../../../store'
+import { navigationActions } from '../../../actions'
+import { routeList } from '../../../routeList'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -10,25 +11,13 @@ interface Props
   navigation: { state: { params: any } } // TODO Type?
 }
 
-interface State {
-  checked: boolean
-}
-
-export class SeedPhraseContainer extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      checked: false,
-    }
-  }
-
-  render() {
+export class SeedPhraseContainer extends React.Component<Props> {
+  public render() {
     const { mnemonic } = this.props.navigation.state.params
     return (
       <SeedPhraseComponent
         seedPhrase={mnemonic}
-        checked={this.state.checked}
-        handleButtonTap={this.props.finishRegistration}
+        handleButtonTap={() => this.props.repeatSeedPhrase(mnemonic)}
       />
     )
   }
@@ -36,7 +25,13 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
 
 const mapStateToProps = () => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  finishRegistration: () => dispatch(navigatorResetHome()),
+  repeatSeedPhrase: (mnemonic: string) =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.RepeatSeedPhrase,
+        params: { mnemonic },
+      }),
+    ),
 })
 
 export const SeedPhrase = connect(

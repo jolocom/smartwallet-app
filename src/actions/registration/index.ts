@@ -5,8 +5,7 @@ import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { generateSecureRandomBytes } from 'src/lib/util'
 import { ThunkAction } from '../../store'
-
-const bip39 = require('bip39')
+import { navigatorResetHome } from '../navigation'
 
 export enum InitAction {
   CREATE = 'create',
@@ -122,10 +121,5 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   await storageLib.store.encryptedSeed(entropyData)
   await storageLib.store.persona(personaData)
 
-  return dispatch(
-    navigationActions.navigatorReset({
-      routeName: routeList.SeedPhrase,
-      params: { mnemonic: bip39.entropyToMnemonic(encodedEntropy) },
-    }),
-  )
+  return dispatch(navigatorResetHome)
 }

@@ -4,7 +4,6 @@ export enum routeList {
   InitAction = 'InitAction',
   Entropy = 'Entropy',
   Loading = 'Loading',
-  SeedPhrase = 'SeedPhrase',
 
   Home = 'Home',
   Claims = 'Claims',
@@ -20,6 +19,9 @@ export enum routeList {
   AuthenticationConsent = 'AuthenticationConsent',
   ClaimDetails = 'ClaimDetails',
   DocumentDetails = 'DocumentDetails',
+
+  RepeatSeedPhrase = 'RepeatSeedPhrase',
+  SeedPhrase = 'SeedPhrase',
 
   Exception = 'Exception',
 }

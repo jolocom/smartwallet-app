@@ -4,7 +4,7 @@ import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
-import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
+import { Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception, BottomNavBar } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
@@ -23,6 +23,8 @@ import {
   SettingsMenuIcon,
 } from 'src/resources'
 import { InitAction } from './ui/landing/containers/initAction'
+import { SeedPhrase } from './ui/recovery/container/seedPhrase'
+import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 
 const headerBackImage =
   Platform.OS === 'android'
@@ -144,7 +146,6 @@ export const Routes = StackNavigator({
   [routeList.InitAction]: { screen: InitAction, navigationOptions },
   [routeList.Entropy]: { screen: Entropy, navigationOptions },
   [routeList.Loading]: { screen: Loading, navigationOptions },
-  [routeList.SeedPhrase]: { screen: SeedPhrase, navigationOptions },
 
   [routeList.Home]: { screen: BottomNavRoutes },
   [routeList.QRCodeScanner]: {
@@ -194,5 +195,8 @@ export const Routes = StackNavigator({
       ...navOptScreenWCancel,
     },
   },
+
+  [routeList.SeedPhrase]: { screen: SeedPhrase, navigationOptions },
+  [routeList.RepeatSeedPhrase]: { screen: RepeatSeedPhrase, navigationOptions },
   [routeList.Exception]: { screen: Exception, navigationOptions },
 })

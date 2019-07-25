@@ -8,6 +8,7 @@ import { genericActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withLoading } from '../../../actions/modifiers'
 import { toggleLoading } from '../../../actions/account'
+import { showSeedPhrase } from '../../../actions/recovery/recovery'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -21,6 +22,7 @@ export class SettingsContainer extends React.Component<Props> {
         setLocale={this.props.setLocale}
         locales={locales}
         version={VersionNumber.appVersion}
+        setupBackup={this.props.setupBackup}
       />
     )
   }
@@ -32,9 +34,9 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
-    dispatch(
-      withLoading(toggleLoading)(genericActions.setLocale(locale)),
-    ),
+    dispatch(withLoading(toggleLoading)(genericActions.setLocale(locale))),
+  // TODO add error handling
+  setupBackup: () => dispatch(showSeedPhrase()),
 })
 
 export const Settings = connect(

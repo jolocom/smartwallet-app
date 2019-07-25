@@ -36,7 +36,8 @@ interface Props {
   description?: string
   iconName: string
   payload?: JSX.Element
-  isMarked?: boolean
+  isHighlighted?: boolean
+  onTouchEnd?: () => void
 }
 
 const SettingsItem: React.SFC<Props> = ({
@@ -44,14 +45,18 @@ const SettingsItem: React.SFC<Props> = ({
   title,
   description,
   iconName,
-  isMarked,
+  isHighlighted,
+  onTouchEnd,
 }: Props): JSX.Element => (
-  <View style={[styles.card, isMarked && styles.yellowBg]}>
+  <View
+    style={[styles.card, isHighlighted && styles.yellowBg]}
+    onTouchEnd={onTouchEnd}
+  >
     <Icon
       style={{ marginRight: 18 }}
       size={24}
       name={iconName}
-      color={isMarked ? 'white' : 'grey'}
+      color={isHighlighted ? 'white' : 'grey'}
     />
     <View>
       <Text
@@ -59,7 +64,7 @@ const SettingsItem: React.SFC<Props> = ({
           payload
             ? styles.headerTextWithPayload
             : styles.headerTextWithDescription,
-          isMarked && styles.whiteText,
+          isHighlighted && styles.whiteText,
         ]}
       >
         {title}
@@ -67,7 +72,7 @@ const SettingsItem: React.SFC<Props> = ({
       {payload ? (
         payload
       ) : (
-        <Text style={[styles.description, isMarked && styles.whiteText]}>
+        <Text style={[styles.description, isHighlighted && styles.whiteText]}>
           {description}
         </Text>
       )}
