@@ -8,8 +8,9 @@ import {
   NavigationRoute,
   NavigationScreenProp,
   createAppContainer,
-  createSwitchNavigator,
 } from 'react-navigation'
+import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
+
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
@@ -169,7 +170,7 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   //tabBarPosition: 'bottom',
 })
 
-const AppStack = createStackNavigator(
+const RegistrationScreens = createAnimatedSwitchNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
@@ -187,11 +188,17 @@ const AppStack = createStackNavigator(
       screen: SeedPhrase,
       navigationOptions: noHeaderNavOpts,
     },
+  },
+  {
+    initialRouteName: routeList.Landing,
+  }
+)
 
+const MainStack = createStackNavigator(
+  {
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
-
     [routeList.QRCodeScanner]: {
       screen: QRScannerContainer,
       navigationOptions: navOptScreenWCancel,
@@ -244,15 +251,15 @@ const AppStack = createStackNavigator(
   },
 )
 
-export const Routes = createSwitchNavigator(
+export const Routes = createAnimatedSwitchNavigator(
   {
     AppInit: {
       screen: AppInit,
       navigationOptions: noHeaderNavOpts,
     },
-    App: AppStack,
+    MainStack,
+    RegistrationScreens,
   },
-
   {
     initialRouteName: 'AppInit',
   },
