@@ -13,11 +13,16 @@ export const setLoadingMsg = (loadingMsg: string) => ({
   value: loadingMsg,
 })
 
+export const setIsRegistering = (value: boolean) => ({
+  type: 'SET_IS_REGISTERING',
+  value,
+})
+
 export const submitEntropy = (
   encodedEntropy: string,
 ): ThunkAction => dispatch => {
   dispatch(
-    navigationActions.navigatorReset({
+    navigationActions.navigate({
       routeName: routeList.Loading,
     }),
   )
@@ -49,6 +54,18 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
+  // This is a just-in-case thing.... maybe multiple button taps or something
+  const isRegistering = getState().registration.loading.isRegistering
+  if (isRegistering) {
+    return dispatch(
+      navigationActions.navigate({
+        routeName: routeList.RegistrationProgress,
+      }),
+    )
+  }
+
+  dispatch(setIsRegistering(true))
+
   const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
 
   const password = await keyChainLib.getPassword()
@@ -86,8 +103,10 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   await storageLib.store.encryptedSeed(entropyData)
   await storageLib.store.persona(personaData)
 
+  dispatch(setIsRegistering(false))
+
   return dispatch(
-    navigationActions.navigatorReset({
+    navigationActions.navigate({
       routeName: routeList.SeedPhrase,
       params: { mnemonic: bip39.entropyToMnemonic(encodedEntropy) },
     }),

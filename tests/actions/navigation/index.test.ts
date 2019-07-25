@@ -4,7 +4,7 @@ import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { createMockStore } from 'tests/utils'
-import { AppError } from 'src/lib/errors';
+import { AppError } from 'src/lib/errors'
 
 describe('Navigation action creators', () => {
   describe('handleDeepLink', () => {

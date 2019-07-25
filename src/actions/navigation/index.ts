@@ -36,6 +36,7 @@ export const navigate = (
   dispatchNavigationAction(action)
   return dispatch(action)
 }
+
 export const navigatorReset = (
   newScreen: NavigationNavigateActionPayload,
 ): ThunkAction => dispatch => {
@@ -72,6 +73,7 @@ export const handleDeepLink = (url: string): ThunkAction => (
   ) {
     // The identityWallet is initialised before the deep link is handled.
     if (!backendMiddleware.identityWallet) {
+      // FIXME WTF? does this happen?
       return dispatch(navigatorReset({ routeName: routeList.Landing }))
     }
 

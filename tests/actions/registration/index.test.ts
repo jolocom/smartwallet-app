@@ -7,6 +7,7 @@ import { showErrorScreen } from '../../../src/actions/generic'
 import { AppError, ErrorCode } from '../../../src/lib/errors'
 import { routeList } from '../../../src/routeList'
 import { createMockStore } from 'tests/utils'
+import { RootState } from 'src/reducers'
 
 const MockDate = require('mockdate')
 
@@ -109,7 +110,16 @@ describe('Registration action creators', () => {
         setIdentityWallet: jest.fn(() => Promise.resolve()),
       }
 
-      const mockStore = createMockStore({}, mockMiddleware)
+      const mockState: Partial<RootState> = {
+        registration: {
+          loading: {
+            loadingMsg: '',
+            isRegistering: false,
+          },
+        },
+      }
+
+      const mockStore = createMockStore(mockState, mockMiddleware)
 
       await mockStore.dispatch(registrationActions.createIdentity(entropy))
 
