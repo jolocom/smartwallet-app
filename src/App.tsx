@@ -3,15 +3,12 @@ import { Provider } from 'react-redux'
 import { ThemeContext, getTheme } from 'react-native-material-ui'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { initStore } from './store'
-import { genericActions, accountActions, navigationActions } from 'src/actions'
-import { Linking, BackHandler, StatusBar } from 'react-native'
-import { NavigationActions } from 'react-navigation'
-import { withLoading, withErrorHandling } from './actions/modifiers'
+import { navigationActions } from 'src/actions'
+import { StatusBar } from 'react-native'
 import { RoutesContainer } from './routes'
 
 import { AppLoading } from './ui/generic/appLoading'
 import { useScreens } from 'react-native-screens'
-import { routeList } from './routeList'
 useScreens()
 
 let store: ReturnType<typeof initStore>
@@ -31,69 +28,10 @@ export default class App extends React.PureComponent<{}> {
     if (!store) store = initStore()
   }
 
-  /**
-   * should return false if app exit is desired
-   */
-  private navigateBack = () => {
-    if (!this.navigator) return
-
-    // walk down the route state tree until we get to the Home route,
-    // or to a leaf node
-    let curState = this.navigator.state.nav
-    while (curState && curState.routeName !== routeList.Home) {
-      const { index, routes } = curState
-      curState = index !== undefined && routes ? routes[index] : null
-    }
-    // curState is now either the state for Home or null
-
-    if (curState && curState.index === 0) {
-      // if it's Home, and we are on the first tab of the Home route,
-      // then pressing back should close down the app
-      return false
-    }
-
-    this.navigator.dispatch(NavigationActions.back())
-
-    return true
-  }
-
-  // When handleOpenURL is called, we pass the event url to the navigate method.
-  private handleOpenURL(event: any) {
-    this.handleDeepLink(event.url)
-  }
-
-  private handleDeepLink(url: string) {
-    store.dispatch(
-      withLoading(
-        withErrorHandling(genericActions.showErrorScreen)(
-          navigationActions.handleDeepLink(url),
-        ),
-      ),
-    )
-  }
-
   private setNavigator(nav: any) {
     if (!nav) return
     this.navigator = nav
     navigationActions.setTopLevelNavigator(this.navigator)
-  }
-
-  async componentDidMount() {
-    await store.dispatch(genericActions.initApp)
-    await store.dispatch(
-      withLoading(
-        withErrorHandling(genericActions.showErrorScreen)(
-          accountActions.checkIdentityExists,
-        ),
-      ),
-    )
-    const url = await Linking.getInitialURL()
-    Linking.addEventListener('url', this.handleOpenURL)
-    BackHandler.addEventListener('hardwareBackPress', this.navigateBack)
-
-    if (url) {
-      this.handleDeepLink(url)
-    }
   }
 
   render() {

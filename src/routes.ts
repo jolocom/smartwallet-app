@@ -13,7 +13,6 @@ import {
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
-import { LoadingScreen } from 'src/ui/generic/'
 import { PaymentConsent } from 'src/ui/payment'
 import { SeedPhrase, Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
@@ -25,6 +24,7 @@ import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
+import { AppInit } from './ui/generic/appInit'
 import BottomTabBar from 'src/ui/generic/bottomTabBar'
 import strings from './locales/strings'
 
@@ -247,7 +247,7 @@ const AppStack = createStackNavigator(
 export const Routes = createSwitchNavigator(
   {
     AppInit: {
-      screen: LoadingScreen,
+      screen: AppInit,
       navigationOptions: noHeaderNavOpts,
     },
     App: AppStack,
@@ -255,7 +255,6 @@ export const Routes = createSwitchNavigator(
 
   {
     initialRouteName: 'AppInit',
-    backBehavior: 'none',
   },
 )
 
