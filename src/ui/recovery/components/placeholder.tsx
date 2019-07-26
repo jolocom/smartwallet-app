@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
-import { JolocomTheme } from '../../../styles/jolocom-theme.android'
+import { JolocomTheme } from 'src/styles/jolocom-theme'
 const styles = StyleSheet.create({
   selector: {
     width: 109,

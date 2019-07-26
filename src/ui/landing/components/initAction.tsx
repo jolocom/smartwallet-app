@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Block, CenteredText, Container } from '../../structure'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Button } from 'react-native-material-ui'
-import { JolocomTheme } from '../../../styles/jolocom-theme.android'
+import { JolocomTheme } from '../../../styles/jolocom-theme'
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 10,
-    fontFamily: 'TTCommons',
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: 28,
     fontWeight: 'normal',
     fontStyle: 'normal',
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     opacity: 0.75,
-    fontFamily: 'TTCommons',
+    fontFamily: JolocomTheme.contentFontFamily,
     fontSize: 18,
     fontWeight: 'normal',
     fontStyle: 'normal',
