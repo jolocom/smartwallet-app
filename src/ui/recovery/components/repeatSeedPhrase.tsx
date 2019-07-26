@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorSandInactive,
   },
   currentWord: {
-    alignSelf: 'center',
     color: JolocomTheme.primaryColorWhite,
   },
   buttonSection: {
@@ -82,6 +81,8 @@ const RepeatSeedPhraseComponent = ({
           {key}
         </Text>
       ))}
+      // Placeholder
+      <Text style={[styles.mnemonic, { color: 'black' }]}>I</Text>
     </View>
     <View style={{ flexDirection: 'row' }}>
       <View>

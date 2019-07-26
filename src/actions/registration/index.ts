@@ -121,5 +121,5 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   await storageLib.store.encryptedSeed(entropyData)
   await storageLib.store.persona(personaData)
 
-  return dispatch(navigatorResetHome)
+  return dispatch(navigatorResetHome())
 }

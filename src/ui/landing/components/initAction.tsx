@@ -101,8 +101,9 @@ const InitActionComponent = ({
 }: InitActionProps) => (
   <Container style={styles.mainContainerStyle}>
     <Block style={styles.selectorContainer}>
-      {options.map(option => (
+      {options.map((option, i) => (
         <TouchableOpacity
+          key={i}
           style={[
             styles.actionSelector,
             selectedItem === option.key && styles.selected,
