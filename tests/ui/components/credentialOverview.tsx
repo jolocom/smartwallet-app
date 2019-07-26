@@ -9,49 +9,49 @@ describe('CredentialsOverview component', () => {
     onEdit: jest.fn(),
     did: 'did:jolo:test',
     claimsToRender: {
-        Personal: [
-          {
-            credentialType: 'Name',
-            claimData: {
-              givenName: 'Hello',
-              familyName: 'World',
-            },
-            id: 'claimTestId#1',
-            issuer: {
-              did: 'did:jolo:test'
-            },
-            subject: 'did:jolo:test',
+      Personal: [
+        {
+          credentialType: 'Name',
+          claimData: {
+            givenName: 'Hello',
+            familyName: 'World',
           },
-        ],
-        Contact: [
-          {
-            credentialType: 'Email',
-            claimData: {
-              email: 'test@test.de',
-            },
-            id: 'claimTestId#2',
-            issuer: {
-              did: 'did:jolo:test',
-              publicProfile: {
-                image: 'https://test.com/image.png',
-                name: 'Test',
-                description: 'Test description'
-              }
-            },
-            subject: 'did:jolo:test',
+          id: 'claimTestId#1',
+          issuer: {
+            did: 'did:jolo:test',
           },
-          {
-            credentialType: 'Phone',
-            claimData: {
-              telephone: '999111',
-            },
-            id: 'claimTestId#3',
-            issuer: {
-              did: 'did:jolo:test'
-            },
-            subject: 'did:jolo:test',
+          subject: 'did:jolo:test',
+        },
+      ],
+      Contact: [
+        {
+          credentialType: 'Email',
+          claimData: {
+            email: 'test@test.de',
           },
-        ],
+          id: 'claimTestId#2',
+          issuer: {
+            did: 'did:jolo:test',
+            publicProfile: {
+              image: 'https://test.com/image.png',
+              name: 'Test',
+              description: 'Test description',
+            },
+          },
+          subject: 'did:jolo:test',
+        },
+        {
+          credentialType: 'Phone',
+          claimData: {
+            telephone: '999111',
+          },
+          id: 'claimTestId#3',
+          issuer: {
+            did: 'did:jolo:test',
+          },
+          subject: 'did:jolo:test',
+        },
+      ],
     },
   }
 

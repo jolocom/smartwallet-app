@@ -4,7 +4,7 @@ import {
   PanResponderInstance,
   GestureResponderEvent,
 } from 'react-native'
-import { Svg, Path, Circle } from 'react-native-svg'
+import { Svg, Path, Circle, Rect } from 'react-native-svg'
 
 interface Props {
   disabled: boolean
@@ -69,9 +69,17 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
   private handleDrawStart = (e: GestureResponderEvent): void => {
     if (this.props.disabled) return
+
+    const { pathDs, pathIdx } = this.state
+    // if the current pathD was empty and now not, we should rerender (because
+    // empty pathD value would have caused the path element to not have been
+    // rendered previously)
+    const shouldRerender = !pathDs[pathIdx]
     const curX = Math.floor(e.nativeEvent.locationX),
       curY = Math.floor(e.nativeEvent.locationY)
     this.props.addPoint(curX, curY)
+
+    pathDs[pathIdx] += `M${curX},${curY}`
 
     this.setState({
       curX,
@@ -79,7 +87,8 @@ export class MaskedImageComponent extends React.Component<Props, State> {
       prevX: curX,
       prevY: curY,
     })
-    this.state.pathDs[this.state.pathIdx] += `M${curX},${curY}`
+
+    if (shouldRerender) this.forceUpdate()
   }
 
   private handleDraw = (e: GestureResponderEvent): void => {
@@ -176,26 +185,31 @@ export class MaskedImageComponent extends React.Component<Props, State> {
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     // optimization: rerender only if circles change
-    // path is set dynamically
+    // path is set dynamically and doesn't require rerendering (if it wasn't
+    // empty before)
     return nextState.circlesN != this.state.circlesN
   }
 
   render() {
     return (
       <Svg width="100%" height="100%" {...this.panResponder.panHandlers}>
-        {this.state.pathDs.map((d, idx) => (
-          <Path
-            key={idx}
-            ref={el => (this._pathEls[idx] = el)}
-            d={d}
-            fill="none"
-            stroke="#FFDEBC"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeDasharray="1,10"
-            strokeWidth="2"
-          />
-        ))}
+        <Rect width="100%" height="100%" opacity="0.1"></Rect>
+        {this.state.pathDs.map((d, idx) => {
+          if (!d) return null
+          return (
+            <Path
+              key={idx}
+              ref={el => (this._pathEls[idx] = el)}
+              d={d}
+              fill="none"
+              stroke="#FFDEBC"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="1,10"
+              strokeWidth="2"
+            />
+          )
+        })}
         {this.state.circles.map(([x, y], i) => (
           <Circle key={i} cx={x} cy={y} r="4" fill="#ffefdf" />
         ))}

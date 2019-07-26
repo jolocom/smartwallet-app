@@ -1,24 +1,5 @@
 {
-  "expo": {
-    "name": "Smartwallet",
-    "version": "0.0.1",
-    "slug": "smartwallet-app-slug",
-    "sdkVersion": "25.0.0",
-    "android" : {
-      "package": "com.jolocom.smartwallet"
-    },
-    "ios": {
-      "bundleIdentifier": "com.jolocom.smartwallet"
-    },
-    "packagerOpts": {
-      "sourceExts": [
-        "ts",
-        "tsx"
-      ],
-      "transformer": "node_modules/react-native-typescript-transformer/index.ts"
-    }
-  },
-  "name": "smartwallet",
-  "displayName": "Smartwallet",
+  "name": "JolocomWallet",
+  "displayName": "Jolocom SmartWallet",
   "orientation": "portrait"
 }

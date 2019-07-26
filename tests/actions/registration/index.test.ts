@@ -41,8 +41,11 @@ describe('Registration action creators', () => {
     it('should save a password and initiate the registration process', async () => {
       const randomPassword = 'hunter0='
 
-      jest.spyOn(util, 'generateSecureRandomBytes')
-        .mockImplementation(() => Promise.resolve(Buffer.from(randomPassword, 'base64')))
+      jest
+        .spyOn(util, 'generateSecureRandomBytes')
+        .mockImplementation(() =>
+          Promise.resolve(Buffer.from(randomPassword, 'base64')),
+        )
 
       await mockStore.dispatch(registrationActions.startRegistration)
 
@@ -64,7 +67,7 @@ describe('Registration action creators', () => {
           showErrorScreen,
           (err: AppError) =>
             new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-        )(registrationActions.startRegistration)
+        )(registrationActions.startRegistration),
       )
 
       expect(mockStore.getActions()[0].routeName).toContain('Exception')
@@ -76,7 +79,9 @@ describe('Registration action creators', () => {
     it('should attempt to create an identity', async () => {
       MockDate.set(new Date(946681200000))
       const { getPasswordResult, cipher, entropy, identityWallet } = data
-      const fuelSpy = jest.spyOn(JolocomLib.util, 'fuelKeyWithEther').mockResolvedValueOnce(null)
+      const fuelSpy = jest
+        .spyOn(JolocomLib.util, 'fuelKeyWithEther')
+        .mockResolvedValueOnce(null)
 
       const mockMiddleware = {
         identityWallet,
@@ -114,7 +119,9 @@ describe('Registration action creators', () => {
       expect(
         mockMiddleware.encryptionLib.encryptWithPass.mock.calls,
       ).toMatchSnapshot()
-      expect(mockMiddleware.storageLib.store.persona.mock.calls).toMatchSnapshot()
+      expect(
+        mockMiddleware.storageLib.store.persona.mock.calls,
+      ).toMatchSnapshot()
       expect(
         mockMiddleware.storageLib.store.derivedKey.mock.calls,
       ).toMatchSnapshot()
@@ -137,7 +144,7 @@ describe('Registration action creators', () => {
           showErrorScreen,
           (err: AppError) =>
             new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-        )(asyncAction)
+        )(asyncAction),
       )
 
       const firstAction = mockStore.getActions()[0]

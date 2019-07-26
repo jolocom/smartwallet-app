@@ -3,12 +3,14 @@ import { shallow } from 'enzyme'
 import { ExceptionComponent } from 'src/ui/generic/exception'
 import { routeList } from 'src/routeList'
 import { AppError } from 'src/lib/errors'
+import { createMockNavigationScreenProp } from 'tests/utils'
+import { Button } from 'react-native-material-ui'
 
 describe('Exception screen component', () => {
   it('Renders correctly', () => {
     const props = {
       navigateBack: jest.fn(),
-      navigation: {
+      navigation: createMockNavigationScreenProp({
         state: {
           params: {
             returnTo: routeList.Home,
@@ -16,7 +18,7 @@ describe('Exception screen component', () => {
             flag: 'default',
           },
         },
-      },
+      }),
       errorTitle: 'Uh oh',
     }
 
@@ -27,19 +29,36 @@ describe('Exception screen component', () => {
   it('Renders correctly when no error object is provided', () => {
     const props = {
       navigateBack: jest.fn(),
-      navigation: {
+      navigation: createMockNavigationScreenProp({
         state: {
           params: {
             returnTo: routeList.Home,
-            error: new AppError(),
             stackTrace: undefined,
           },
         },
-      },
+      }),
       errorTitle: 'Uh oh',
     }
 
     const rendered = shallow(<ExceptionComponent {...props} />)
     expect(rendered).toMatchSnapshot()
+  })
+
+  it('Goes back to the screen described in returnTo', () => {
+    const returnTo = routeList.QRCodeScanner
+    const props = {
+      navigateBack: jest.fn(),
+      navigation: createMockNavigationScreenProp({
+        state: {
+          params: {
+            returnTo,
+          },
+        },
+      }),
+    }
+
+    const rendered = shallow(<ExceptionComponent {...props} />)
+    rendered.find(Button).simulate('press')
+    expect(props.navigateBack).toHaveBeenCalledWith(returnTo)
   })
 })

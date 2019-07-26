@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/registration/components/seedPhrase'
 import { navigatorResetHome } from 'src/actions/navigation'
 import { ThunkDispatch } from '../../../store'
+import { NavigationScreenProps } from 'react-navigation';
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> {
-  navigation: { state: { params: any } } // TODO Type?
+    ReturnType<typeof mapStateToProps>, NavigationScreenProps {
 }
 
 interface State {
@@ -23,7 +23,7 @@ export class SeedPhraseContainer extends React.Component<Props, State> {
   }
 
   render() {
-    const { mnemonic } = this.props.navigation.state.params
+    const mnemonic = this.props.navigation && this.props.navigation.getParam('mnemonic')
     return (
       <SeedPhraseComponent
         seedPhrase={mnemonic}

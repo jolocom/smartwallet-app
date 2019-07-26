@@ -1,71 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NavigatorContainer correctly hides bottom action bar 1`] = `
-<React.Fragment>
-  <StatusBar
-    animated={false}
-    barStyle="light-content"
-    showHideTransition="fade"
-  />
-  <NavigationContainer
-    navigation={
-      Object {
-        "addListener": [Function],
-        "dispatch": [MockFunction],
-        "getParam": [Function],
-        "goBack": [Function],
-        "navigate": [Function],
-        "pop": [Function],
-        "popToTop": [Function],
-        "push": [Function],
-        "replace": [Function],
-        "setParams": [Function],
-        "state": Object {
-          "index": 0,
-          "navigate": [MockFunction],
-          "routes": Array [
-            Object {
-              "routeName": "Landing",
-            },
-          ],
-        },
-      }
-    }
-  />
-</React.Fragment>
-`;
-
 exports[`NavigatorContainer mounts correctly and matches snapshot 1`] = `
-<React.Fragment>
+<Fragment>
   <StatusBar
     animated={false}
     barStyle="default"
     showHideTransition="fade"
   />
-  <NavigationContainer
-    navigation={
-      Object {
-        "addListener": [Function],
-        "dispatch": [MockFunction],
-        "getParam": [Function],
-        "goBack": [Function],
-        "navigate": [Function],
-        "pop": [Function],
-        "popToTop": [Function],
-        "push": [Function],
-        "replace": [Function],
-        "setParams": [Function],
-        "state": Object {
-          "index": 0,
-          "navigate": [MockFunction],
-          "routes": Array [
-            Object {
-              "routeName": "Home",
-            },
-          ],
-        },
-      }
-    }
-  />
-</React.Fragment>
+  <NavigationContainer />
+</Fragment>
 `;

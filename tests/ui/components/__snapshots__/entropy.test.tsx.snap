@@ -35,7 +35,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       disabled={false}
     />
   </Block>
-  <Component
+  <View
     style={
       Object {
         "bottom": "5%",
@@ -76,7 +76,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       disabled={false}
     />
   </Block>
-  <Component
+  <View
     style={
       Object {
         "bottom": "5%",
@@ -122,7 +122,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       disabled={true}
     />
   </Block>
-  <Component
+  <View
     style={
       Object {
         "bottom": "5%",
@@ -130,13 +130,8 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       }
     }
   >
-    <Button
-      accent={false}
-      disabled={false}
-      icon={null}
-      onLongPress={null}
+    <ThemedComponent
       onPress={[Function]}
-      primary={false}
       raised={true}
       style={
         Object {
@@ -155,10 +150,9 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
           },
         }
       }
-      testID={null}
       text="Continue"
       upperCase={false}
     />
-  </Component>
+  </View>
 </Container>
 `;

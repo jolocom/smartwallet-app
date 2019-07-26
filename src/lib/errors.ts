@@ -1,6 +1,7 @@
 import { routeList } from '../routeList'
 import strings from '../locales/strings'
 import ErrorCode from './errorCodes'
+export { ErrorCode }
 
 export class AppError extends Error {
   // private code: ErrorCode
@@ -20,4 +21,3 @@ export class AppError extends Error {
 }
 
 export const errorTitleMessages = [strings.DAMN, strings.OH_NO, strings.UH_OH]
-export { ErrorCode }
