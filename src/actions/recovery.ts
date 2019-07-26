@@ -1,7 +1,8 @@
-import { ThunkAction } from '../../store'
+import { ThunkAction } from '../store'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { navigationActions } from '../index'
-import { routeList } from '../../routeList'
+import { navigationActions } from './index'
+import { routeList } from '../routeList'
+import settingKeys from '../ui/settings/settingKeys'
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
@@ -26,4 +27,19 @@ export const showSeedPhrase = (): ThunkAction => async (
       params: { mnemonic },
     }),
   )
+}
+
+export const setSeedPhraseSaved = (): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  await backendMiddleware.storageLib.store.setting(
+    settingKeys.seedPhraseSaved,
+    true,
+  )
+  dispatch({
+    type: 'SET_SEED_PHRASE_SAVED',
+  })
+  return dispatch(navigationActions.navigatorResetHome())
 }

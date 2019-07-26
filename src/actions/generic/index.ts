@@ -4,6 +4,7 @@ import SplashScreen from 'react-native-splash-screen'
 import I18n from 'src/locales/i18n'
 import { ThunkAction } from 'src/store'
 import { AppError, ErrorCode } from 'src/lib/errors'
+import settingKeys from '../../ui/settings/settingKeys'
 
 export const showErrorScreen = (error: AppError): ThunkAction => dispatch =>
   dispatch(
@@ -24,7 +25,6 @@ export const initApp: ThunkAction = async (
   try {
     await backendMiddleware.initStorage()
     const storedSettings = await backendMiddleware.storageLib.get.settingsObject()
-
     // locale setup
     if (storedSettings.locale) I18n.locale = storedSettings.locale
     else storedSettings.locale = I18n.locale
@@ -50,7 +50,7 @@ export const setLocale = (locale: string): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  await backendMiddleware.storageLib.store.setting('locale', locale)
+  await backendMiddleware.storageLib.store.setting(settingKeys.locale, locale)
   I18n.locale = locale
   return dispatch({
     type: 'SET_LOCALE',

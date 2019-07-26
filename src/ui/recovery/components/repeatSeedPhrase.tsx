@@ -81,7 +81,7 @@ const RepeatSeedPhraseComponent = ({
           {key}
         </Text>
       ))}
-      // Placeholder
+      {/* Placeholder */}
       <Text style={[styles.mnemonic, { color: 'black' }]}>I</Text>
     </View>
     <View style={{ flexDirection: 'row' }}>

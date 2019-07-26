@@ -175,6 +175,10 @@ export const Routes = createStackNavigator(
       screen: Landing,
       navigationOptions: noHeaderNavOpts,
     },
+    [routeList.InitAction]: {
+      screen: InitAction,
+      navigationOptions: noHeaderNavOpts,
+    },
     [routeList.Entropy]: {
       screen: Entropy,
       navigationOptions: noHeaderNavOpts,

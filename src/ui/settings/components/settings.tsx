@@ -4,6 +4,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import SettingsItem from './settingsItem'
+import settingKeys from '../settingKeys'
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
 
 interface SettingsScreenProps {
   locales: string[]
-  settings: { [key: string]: any }
+  settings: { [key: string]: {} }
   setLocale: (key: string) => void
   setupBackup: () => void
   version: string
@@ -62,7 +63,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
         {I18n.t(strings.YOUR_PREFERENCES)}
       </Text>
       <SettingsItem
-        title={'Settings'}
+        title={'Language'}
         iconName={'translate'}
         payload={
           <View style={styles.languageOptions}>
@@ -104,13 +105,19 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
           'Set up a secure phrase to recover your account in the future if your phone is stolen or is damaged.'
         }
         iconName={'flash'}
-        isHighlighted
-        onTouchEnd={props.setupBackup}
+        isHighlighted={!props.settings[settingKeys.seedPhraseSaved]}
+        isDisabled={!!props.settings[settingKeys.seedPhraseSaved]}
+        onTouchEnd={
+          !props.settings[settingKeys.seedPhraseSaved]
+            ? props.setupBackup
+            : undefined
+        }
       />
       <SettingsItem
         title={'Delete Identity'}
         description={'(coming soon)'}
         iconName={'delete'}
+        isDisabled
       />
     </View>
     <Text style={styles.versionNumber}>

@@ -8,7 +8,7 @@ import { genericActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withLoading } from '../../../actions/modifiers'
 import { toggleLoading } from '../../../actions/account'
-import { showSeedPhrase } from '../../../actions/recovery/recovery'
+import { showSeedPhrase } from '../../../actions/recovery'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,

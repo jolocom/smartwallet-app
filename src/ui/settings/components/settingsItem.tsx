@@ -29,6 +29,9 @@ const styles = StyleSheet.create({
   whiteText: {
     color: JolocomTheme.primaryColorWhite,
   },
+  disabledText: {
+    color: '#9b9b9e',
+  },
 })
 
 interface Props {
@@ -37,6 +40,7 @@ interface Props {
   iconName: string
   payload?: JSX.Element
   isHighlighted?: boolean
+  isDisabled?: boolean
   onTouchEnd?: () => void
 }
 
@@ -46,6 +50,7 @@ const SettingsItem: React.SFC<Props> = ({
   description,
   iconName,
   isHighlighted,
+  isDisabled,
   onTouchEnd,
 }: Props): JSX.Element => (
   <View
@@ -65,6 +70,7 @@ const SettingsItem: React.SFC<Props> = ({
             ? styles.headerTextWithPayload
             : styles.headerTextWithDescription,
           isHighlighted && styles.whiteText,
+          isDisabled && styles.disabledText,
         ]}
       >
         {title}
@@ -72,7 +78,13 @@ const SettingsItem: React.SFC<Props> = ({
       {payload ? (
         payload
       ) : (
-        <Text style={[styles.description, isHighlighted && styles.whiteText]}>
+        <Text
+          style={[
+            styles.description,
+            isHighlighted && styles.whiteText,
+            isDisabled && styles.disabledText,
+          ]}
+        >
           {description}
         </Text>
       )}

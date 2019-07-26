@@ -1,8 +1,10 @@
 import * as React from 'react'
 import RepeatSeedPhraseComponent from '../components/repeatSeedPhrase'
 import { ThunkDispatch } from '../../../store'
-import { navigationActions } from '../../../actions'
+import { navigationActions, recoveryActions } from '../../../actions'
 import { connect } from 'react-redux'
+import { withLoading } from '../../../actions/modifiers'
+import { toggleLoading } from '../../../actions/account'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
   navigation: { state: { params: any } } // TODO Type?
@@ -51,7 +53,7 @@ class RepeatSeedPhraseContainer extends React.Component<Props, State> {
     })
 
     if (isCorrect) {
-      this.props.navigateHome()
+      this.props.setSeedPhraseSaved()
     } else {
       this.setState({
         sorting: {},
@@ -93,7 +95,8 @@ class RepeatSeedPhraseContainer extends React.Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   back: () => dispatch(navigationActions.goBack),
-  navigateHome: () => dispatch(navigationActions.navigatorResetHome()),
+  setSeedPhraseSaved: () =>
+    dispatch(withLoading(toggleLoading)(recoveryActions.setSeedPhraseSaved())),
 })
 
 export const RepeatSeedPhrase = connect(
