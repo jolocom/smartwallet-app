@@ -18,7 +18,6 @@ export class InitActionContainer extends React.Component<Props, State> {
   }
   private selectOption = (key: string): void => {
     this.setState({ selectedItem: key })
-    console.log(key)
   }
   render() {
     const { selectedItem } = this.state

@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { Container } from '../../structure'
 import { JolocomTheme } from '../../../styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
+import Placeholder from './placeholder'
 
 const styles = StyleSheet.create({
   container: {
@@ -10,7 +11,8 @@ const styles = StyleSheet.create({
   },
   noteSection: {
     marginTop: 20,
-    flex: 0.8,
+    marginBottom: 20,
+    margin: 50,
     justifyContent: 'center',
   },
   note: {
@@ -21,21 +23,17 @@ const styles = StyleSheet.create({
     fontFamily: JolocomTheme.contentFontFamily,
   },
   mnemonicContainer: {
-    flex: 1,
     flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
   mnemonic: {
     margin: 8,
-    color: JolocomTheme.primaryColorWhite,
+    fontSize: 34,
+    color: JolocomTheme.primaryColorSandInactive,
   },
-  selector: {
-    width: 109,
-    height: 32,
-    borderRadius: 4,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: '#942f51',
-    margin: 10,
+  currentWord: {
+    alignSelf: 'center',
+    color: JolocomTheme.primaryColorWhite,
   },
   buttonSection: {
     marginTop: 'auto',
@@ -76,35 +74,34 @@ const RepeatSeedPhraseComponent = ({
       <Text style={styles.note}>{note}</Text>
     </View>
     <View style={styles.mnemonicContainer}>
-      {randomWords.map(key => (
-        <Text style={styles.mnemonic}>{key}</Text>
+      {randomWords.map((key, i) => (
+        <Text
+          key={key}
+          style={[styles.mnemonic, i === 0 && styles.currentWord]}
+        >
+          {key}
+        </Text>
       ))}
     </View>
-    <View style={{ display: 'flex', flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row' }}>
       <View>
         {new Array(6).fill('').map((e, i) => (
-          <TouchableOpacity
+          <Placeholder
             key={i}
-            style={styles.selector}
-            onPress={() => selectPosition(i)}
-          >
-            <Text style={styles.note}>
-              {mnemonicSorting[i] ? mnemonicSorting[i] : i + 1}
-            </Text>
-          </TouchableOpacity>
+            i={i}
+            sorting={mnemonicSorting}
+            onPress={selectPosition}
+          />
         ))}
       </View>
       <View>
         {new Array(6).fill('').map((e, i) => (
-          <TouchableOpacity
+          <Placeholder
             key={i}
-            style={styles.selector}
-            onPress={() => selectPosition(i + 6)}
-          >
-            <Text style={styles.note}>
-              {mnemonicSorting[i + 6] ? mnemonicSorting[i + 6] : i + 7}
-            </Text>
-          </TouchableOpacity>
+            i={i + 6}
+            sorting={mnemonicSorting}
+            onPress={selectPosition}
+          />
         ))}
       </View>
     </View>

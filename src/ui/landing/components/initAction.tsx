@@ -6,24 +6,23 @@ import { JolocomTheme } from '../../../styles/jolocom-theme.android'
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
-    paddingTop: 0,
+    padding: 0,
     backgroundColor: '#05050d',
-    justifyContent: 'flex-end',
-    flexDirection: 'column',
-    flex: 1,
   },
   selectorContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'stretch',
+    margin: 50,
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
   },
   actionSelector: {
+    flex: 1,
     borderRadius: 6,
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: '#ffdebc',
-    margin: 20,
-    display: 'flex',
+    margin: 30,
+    paddingRight: 40,
+    paddingLeft: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -31,6 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#942F51',
   },
   title: {
+    marginBottom: 10,
     fontFamily: 'TTCommons',
     fontSize: 28,
     fontWeight: 'normal',
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     color: '#ffefdf',
   },
   buttonBlock: {
+    marginBottom: 30,
     flex: 0.1,
-    backgroundColor: '#05050d',
   },
   buttonContainer: {
     height: 48,
@@ -69,6 +69,9 @@ const styles = StyleSheet.create({
     fontWeight: '100',
     textAlign: 'center',
     minWidth: 158,
+  },
+  disabled: {
+    opacity: 0.5,
   },
 })
 
@@ -113,11 +116,12 @@ const InitActionComponent = ({
     </Block>
     <Block style={styles.buttonBlock}>
       <Button
+        disabled={!selectedItem}
         raised
         onPress={handleButtonTap}
         style={{
-          container: styles.buttonContainer,
-          text: styles.buttonText,
+          container: [styles.buttonContainer, !selectedItem && styles.disabled],
+          text: [styles.buttonText, !selectedItem && styles.disabled],
         }}
         upperCase={false}
         text={'Continue'}

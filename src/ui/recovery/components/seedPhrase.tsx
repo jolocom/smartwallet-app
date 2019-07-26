@@ -56,7 +56,10 @@ const styles = StyleSheet.create({
   },
 })
 
-export const SeedPhrase: React.SFC<Props> = ({ seedPhrase , handleButtonTap }: Props) => (
+export const SeedPhrase: React.SFC<Props> = ({
+  seedPhrase,
+  handleButtonTap,
+}: Props) => (
   <Container style={styles.container}>
     <View style={styles.noteSection}>
       <Text style={styles.note}>
