@@ -4,6 +4,8 @@ import { Container } from '../../structure'
 import { JolocomTheme } from '../../../styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
 import Placeholder from './placeholder'
+import strings from '../../../locales/strings'
+import * as I18n from 'i18n-js'
 
 const styles = StyleSheet.create({
   container: {
@@ -112,7 +114,11 @@ const RepeatSeedPhraseComponent = ({
         onPress={randomWords.length ? back : checkMnemonic}
         raised
         upperCase={false}
-        text={randomWords.length ? 'Show my phrase again' : 'Confirm and check'}
+        text={
+          randomWords.length
+            ? I18n.t(strings.SHOW_MY_PHRASE_AGAIN)
+            : I18n.t(strings.CONFIRM_AND_CHECK)
+        }
       />
     </View>
   </Container>

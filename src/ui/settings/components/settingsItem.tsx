@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     borderColor: '#ECECEC',
     flexDirection: 'row',
   },
+  textContainer: {
+    flex: 1,
+  },
   headerTextWithPayload: {
     ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
   },
@@ -55,7 +58,7 @@ const SettingsItem: React.SFC<Props> = ({
 }: Props): JSX.Element => (
   <View
     style={[styles.card, isHighlighted && styles.yellowBg]}
-    onTouchEnd={onTouchEnd}
+    onTouchEnd={!isDisabled ? onTouchEnd : undefined}
   >
     <Icon
       style={{ marginRight: 18 }}
@@ -63,7 +66,7 @@ const SettingsItem: React.SFC<Props> = ({
       name={iconName}
       color={isHighlighted ? 'white' : 'grey'}
     />
-    <View>
+    <View style={styles.textContainer}>
       <Text
         style={[
           payload

@@ -1,6 +1,49 @@
 import ErrorCode from '../lib/errorCodes'
 
+const settings = {
+  SETTINGS: 'Settings',
+  YOUR_PREFERENCES: 'Your preferences',
+  LANGUAGE: 'Language',
+  BACKUP_YOUR_IDENTITY: 'Backup your Identity',
+  YOUR_IDENTITY_IS_ALREADY_BACKED_UP: 'Your identity is already backed up',
+  SET_UP_A_SECURE_PHRASE_TO_RECOVER_YOUR_ACCOUNT_IN_THE_FUTURE_IF_YOUR_PHONE_IS_STOLEN_OR_IS_DAMAGED: 'Set up a secure phrase to recover your account in the future if your phone is stolen or is damaged.',
+  DELETE_IDENTITY: 'Delete Identity',
+  IF_YOU_HAVE_NOTED_DOWN_YOUR_PHRASE_PUT_THE_SIX_GIVEN_WORDS_ON_THEIR_RIGHT_PLACES: 'If you have noted down your phrase, put the six given words on their right places.',
+  SHOW_MY_PHRASE_AGAIN: 'Show my phrase again',
+  CONFIRM_AND_CHECK: 'Confirm and check',
+  THE_ORDER_WAS_NOT_CORRECT_TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE: 'The order was not correct. Try again with another six words from your secure phrase.',
+  VERSION: 'version',
+}
+const errorTitle = {
+  DAMN: 'Damn',
+  OH_NO: 'Oh no',
+  UH_OH: 'Uh oh',
+}
+const errorCodes = {
+  [ErrorCode.Unknown]: 'Unknown Error',
+  [ErrorCode.WalletInitFailed]: 'Unable to initialize wallet',
+  [ErrorCode.SaveClaimFailed]: 'Could not save claim',
+  [ErrorCode.SaveExternalCredentialFailed]:
+    'Could not save external credential',
+
+  [ErrorCode.AuthenticationRequestFailed]: 'Authentication request failed',
+  [ErrorCode.AuthenticationResponseFailed]: 'Authentication response failed',
+  [ErrorCode.PaymentRequestFailed]: 'Payment request failed',
+  [ErrorCode.PaymentResponseFailed]: 'Payment response failed',
+
+  [ErrorCode.CredentialOfferFailed]: 'Credential offer failed',
+  [ErrorCode.CredentialsReceiveFailed]: 'Could not receive credentials',
+  [ErrorCode.CredentialRequestFailed]: 'Credential request failed',
+  [ErrorCode.CredentialResponseFailed]: 'Credential response failed',
+  [ErrorCode.ParseJWTFailed]: 'Could not parse JSONWebToken',
+
+  [ErrorCode.DeepLinkUrlNotFound]: 'Could not find receiving application',
+  [ErrorCode.RegistrationFailed]: 'Registration failed',
+}
 export default {
+  ...settings,
+  ...errorTitle,
+  ...errorCodes,
   YOUR_JOLOCOM_WALLET: 'Your Jolocom Wallet',
   ALL_CLAIMS: 'All claims',
   MY_IDENTITY: 'My Identity',
@@ -10,7 +53,6 @@ export default {
   AUTHORIZATION_REQUEST: 'Authorization request',
   DOCUMENTS: 'Documents',
   LOGIN_RECORDS: 'Login records',
-  SETTINGS: 'Settings',
   ENCRYPTING_AND_STORING_DATA_LOCALLY: 'Encrypting and storing data locally',
   FUELING_WITH_ETHER: 'Fueling with ether',
   REGISTERING_DECENTRALIZED_IDENTITY: 'Registering decentralized identity',
@@ -59,9 +101,6 @@ export default {
   YES_I_WROTE_IT_DOWN: 'Yes, I wrote it down',
   GIVE_US_A_FEW_MOMENTS: 'Give us a few moments',
   TO_SET_UP_YOUR_IDENTITY: 'to set up your identity',
-  LANGUAGE: 'Language',
-  YOUR_PREFERENCES: 'Your preferences',
-  VERSION: 'version',
   ADD: 'add',
   NO_LOCAL_CLAIMS: 'No local claims',
   SELF_SIGNED: 'Self-signed',
@@ -86,30 +125,4 @@ export default {
   PERSONAL: 'Personal',
   NO_DOCUMENTS_TO_SEE_HERE: 'No documents to see here',
   EXPIRED: 'expired',
-
-  // Error Title:
-  DAMN: 'Damn',
-  OH_NO: 'Oh no',
-  UH_OH: 'Uh oh',
-
-  // Error Codes:
-  [ErrorCode.Unknown]: 'Unknown Error',
-  [ErrorCode.WalletInitFailed]: 'Unable to initialize wallet',
-  [ErrorCode.SaveClaimFailed]: 'Could not save claim',
-  [ErrorCode.SaveExternalCredentialFailed]:
-    'Could not save external credential',
-
-  [ErrorCode.AuthenticationRequestFailed]: 'Authentication request failed',
-  [ErrorCode.AuthenticationResponseFailed]: 'Authentication response failed',
-  [ErrorCode.PaymentRequestFailed]: 'Payment request failed',
-  [ErrorCode.PaymentResponseFailed]: 'Payment response failed',
-
-  [ErrorCode.CredentialOfferFailed]: 'Credential offer failed',
-  [ErrorCode.CredentialsReceiveFailed]: 'Could not receive credentials',
-  [ErrorCode.CredentialRequestFailed]: 'Credential request failed',
-  [ErrorCode.CredentialResponseFailed]: 'Credential response failed',
-  [ErrorCode.ParseJWTFailed]: 'Could not parse JSONWebToken',
-
-  [ErrorCode.DeepLinkUrlNotFound]: 'Could not find receiving application',
-  [ErrorCode.RegistrationFailed]: 'Registration failed',
 }

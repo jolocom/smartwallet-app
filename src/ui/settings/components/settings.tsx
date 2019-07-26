@@ -56,73 +56,76 @@ interface SettingsScreenProps {
   version: string
 }
 
-export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
-  <View style={styles.container}>
-    <View style={styles.topSection}>
-      <Text style={styles.sectionHeader}>
-        {I18n.t(strings.YOUR_PREFERENCES)}
-      </Text>
-      <SettingsItem
-        title={'Language'}
-        iconName={'translate'}
-        payload={
-          <View style={styles.languageOptions}>
-            {props.locales.map(locale => {
-              const isCurrentLanguage = locale === props.settings.locale
-              return (
-                <View
-                  key={locale}
-                  onTouchEnd={() => props.setLocale(locale)}
-                  style={[
-                    styles.languageOption,
-                    isCurrentLanguage && {
-                      backgroundColor: JolocomTheme.primaryColorSand,
-                    },
-                  ]}
-                >
-                  <Text
+export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
+  const seedPhraseSaved = props.settings[settingKeys.seedPhraseSaved] as boolean
+  return (
+    <View style={styles.container}>
+      <View style={styles.topSection}>
+        <Text style={styles.sectionHeader}>
+          {I18n.t(strings.YOUR_PREFERENCES)}
+        </Text>
+        <SettingsItem
+          title={I18n.translate(strings.LANGUAGE)}
+          iconName={'translate'}
+          payload={
+            <View style={styles.languageOptions}>
+              {props.locales.map(locale => {
+                const isCurrentLanguage = locale === props.settings.locale
+                return (
+                  <View
+                    key={locale}
+                    onTouchEnd={() => props.setLocale(locale)}
                     style={[
-                      styles.languageOptionText,
+                      styles.languageOption,
                       isCurrentLanguage && {
-                        color: JolocomTheme.primaryColorPurple,
+                        backgroundColor: JolocomTheme.primaryColorSand,
                       },
                     ]}
                   >
-                    {locale.toUpperCase()}
-                  </Text>
-                </View>
-              )
-            })}
-          </View>
-        }
-      />
+                    <Text
+                      style={[
+                        styles.languageOptionText,
+                        isCurrentLanguage && {
+                          color: JolocomTheme.primaryColorPurple,
+                        },
+                      ]}
+                    >
+                      {locale.toUpperCase()}
+                    </Text>
+                  </View>
+                )
+              })}
+            </View>
+          }
+        />
+      </View>
+      <View style={styles.topSection}>
+        <Text style={styles.sectionHeader}>Security</Text>
+        <SettingsItem
+          title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
+          iconName={'flash'}
+          description={
+            seedPhraseSaved
+              ? I18n.t(strings.YOUR_IDENTITY_IS_ALREADY_BACKED_UP)
+              : I18n.t(
+                  strings.SET_UP_A_SECURE_PHRASE_TO_RECOVER_YOUR_ACCOUNT_IN_THE_FUTURE_IF_YOUR_PHONE_IS_STOLEN_OR_IS_DAMAGED,
+                )
+          }
+          isHighlighted={!seedPhraseSaved}
+          // isDisabled={seedPhraseSaved}
+          onTouchEnd={props.setupBackup}
+        />
+        <SettingsItem
+          title={I18n.t(strings.DELETE_IDENTITY)}
+          description={'(coming soon)'}
+          iconName={'delete'}
+          isDisabled
+        />
+      </View>
+      <Text style={styles.versionNumber}>
+        Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
+      </Text>
+      <View />
     </View>
-    <View style={styles.topSection}>
-      <Text style={styles.sectionHeader}>Security</Text>
-      <SettingsItem
-        title={'Backup your Identity'}
-        description={
-          'Set up a secure phrase to recover your account in the future if your phone is stolen or is damaged.'
-        }
-        iconName={'flash'}
-        isHighlighted={!props.settings[settingKeys.seedPhraseSaved]}
-        isDisabled={!!props.settings[settingKeys.seedPhraseSaved]}
-        onTouchEnd={
-          !props.settings[settingKeys.seedPhraseSaved]
-            ? props.setupBackup
-            : undefined
-        }
-      />
-      <SettingsItem
-        title={'Delete Identity'}
-        description={'(coming soon)'}
-        iconName={'delete'}
-        isDisabled
-      />
-    </View>
-    <Text style={styles.versionNumber}>
-      Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
-    </Text>
-    <View />
-  </View>
-)
+  )
+}
