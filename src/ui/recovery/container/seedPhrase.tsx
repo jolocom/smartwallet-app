@@ -2,18 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { SeedPhrase as SeedPhraseComponent } from 'src/ui/recovery/components/seedPhrase'
 import { ThunkDispatch } from '../../../store'
+import { NavigationScreenProps } from 'react-navigation';
 import { navigationActions } from '../../../actions'
 import { routeList } from '../../../routeList'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> {
-  navigation: { state: { params: any } } // TODO Type?
+    ReturnType<typeof mapStateToProps>, NavigationScreenProps {
 }
 
 export class SeedPhraseContainer extends React.Component<Props> {
   public render() {
-    const { mnemonic } = this.props.navigation.state.params
+    const mnemonic = this.props.navigation && this.props.navigation.getParam('mnemonic')
     return (
       <SeedPhraseComponent
         seedPhrase={mnemonic}

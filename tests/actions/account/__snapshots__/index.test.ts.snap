@@ -10,7 +10,7 @@ Array [
       },
     ],
     "index": 0,
-    "key": undefined,
+    "key": null,
     "type": "Navigation/RESET",
   },
 ]
@@ -30,7 +30,7 @@ Array [
       },
     ],
     "index": 0,
-    "key": undefined,
+    "key": null,
     "type": "Navigation/RESET",
   },
 ]
@@ -50,7 +50,7 @@ Array [
       },
     ],
     "index": 0,
-    "key": undefined,
+    "key": null,
     "type": "Navigation/RESET",
   },
 ]
@@ -94,7 +94,7 @@ Array [
       },
     ],
     "index": 0,
-    "key": undefined,
+    "key": null,
     "type": "Navigation/RESET",
   },
 ]

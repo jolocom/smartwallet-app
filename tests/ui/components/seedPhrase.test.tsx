@@ -7,7 +7,7 @@ describe('seedPhrase component', () => {
     seedPhrase: 'mock seedPhrase',
     handleButtonTap: jest.fn(),
     onCheck: jest.fn(),
-    ...otherProps
+    ...otherProps,
   })
 
   it('matches the snapshot with checkbox unchecked', () => {

@@ -1,12 +1,21 @@
-import { Platform } from 'react-native'
-import { StackNavigator, TabNavigator } from 'react-navigation'
+import { Platform, Image, StyleProp, TextStyle } from 'react-native'
+import { createElement } from 'react'
+
+import {
+  createStackNavigator,
+  createBottomTabNavigator,
+  NavigationScreenOptions,
+  NavigationRoute,
+  NavigationScreenProp,
+  createAppContainer,
+} from 'react-navigation'
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
 import { Loading, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Exception, BottomNavBar } from 'src/ui/generic/'
+import { Exception /*BottomNavBar*/ } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import { Settings } from 'src/ui/settings'
@@ -14,6 +23,7 @@ import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
+import BottomTabBar from 'src/ui/generic/bottomTabBar'
 import strings from './locales/strings'
 
 import {
@@ -26,12 +36,17 @@ import { InitAction } from './ui/landing/containers/initAction'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 
-const headerBackImage =
-  Platform.OS === 'android'
-    ? require('./resources/img/close.png')
-    : require('./resources/img/back-26.png')
+// only used on android
+const headerBackImage = createElement(Image, {
+  source: require('./resources/img/close.png'),
+  style: {
+    height: 26,
+    width: 26,
+    padding: 4,
+  },
+})
 
-const navigationOptions = {
+const noHeaderNavOpts = {
   header: null,
 }
 
@@ -45,14 +60,14 @@ const defaultHeaderTintColor =
     ? JolocomTheme.primaryColorWhite
     : JolocomTheme.primaryColorBlack
 
-const headerTitleStyle = {
+const headerTitleStyle: StyleProp<TextStyle> = {
   fontSize: JolocomTheme.headerFontSize,
   fontFamily: JolocomTheme.contentFontFamily,
   fontWeight: '300',
   color: defaultHeaderTintColor,
 }
 
-const commonNavigationOptions = {
+const commonNavigationOptions: NavigationScreenOptions = {
   headerTitleStyle,
   headerStyle: {
     backgroundColor: defaultHeaderBackgroundColor,
@@ -62,141 +77,178 @@ const commonNavigationOptions = {
 
 const navOptScreenWCancel = {
   ...commonNavigationOptions,
-  headerBackImage,
   ...Platform.select({
+    android: {
+      headerBackImage,
+    },
     ios: {
       headerTintColor: JolocomTheme.primaryColorPurple,
     },
   }),
 }
 
-const bottomNavBarBackground =
-  Platform.OS === 'android'
+const bottomTabBarBackground =
+  Platform.OS == 'android'
     ? '#fafafa' // FIXME add to theme
     : JolocomTheme.primaryColorBlack
 
-export const BottomNavRoutes = TabNavigator(
+export const BottomTabBarRoutes = {
+  [routeList.Claims]: {
+    screen: Claims,
+    title: strings.MY_IDENTITY,
+    navigationOptions: {
+      ...commonNavigationOptions,
+      tabBarIcon: IdentityMenuIcon,
+    },
+  },
+  [routeList.Documents]: {
+    screen: Documents,
+    title: strings.DOCUMENTS,
+    navigationOptions: {
+      ...commonNavigationOptions,
+      tabBarIcon: (props: {
+        tintColor: string
+        focused: boolean
+        fillColor?: string
+      }) => {
+        props.fillColor = bottomTabBarBackground
+        return new DocumentsMenuIcon(props)
+      },
+    },
+  },
+  [routeList.Records]: {
+    screen: Records,
+    title: strings.LOGIN_RECORDS,
+    navigationOptions: {
+      ...commonNavigationOptions,
+      tabBarIcon: RecordsMenuIcon,
+    },
+  },
+  [routeList.Settings]: {
+    screen: Settings,
+    title: strings.SETTINGS,
+    navigationOptions: {
+      ...commonNavigationOptions,
+      tabBarIcon: SettingsMenuIcon,
+    },
+  },
+}
+
+const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
+  tabBarOptions: {
+    ...Platform.select({
+      android: {
+        activeTintColor: JolocomTheme.primaryColorPurple,
+        inactiveTintColor: '#9B9B9E', // FIXME
+      },
+      ios: {
+        activeTintColor: JolocomTheme.primaryColorWhite,
+        inactiveTintColor: 'rgba(255, 255, 255, 0.5)',
+      },
+    }),
+    showLabel: false,
+    style: {
+      height: 50,
+      bottom: 0,
+      backgroundColor: bottomTabBarBackground,
+    },
+  },
+  navigationOptions: ({
+    navigation,
+  }: {
+    navigation: NavigationScreenProp<NavigationRoute>
+  }) => {
+    // proxy the route title as the headerTitle for this screen
+    const nestedRouteName =
+      navigation.state.routes[navigation.state.index].routeName
+    return {
+      headerTitle: I18n.t(BottomTabBarRoutes[nestedRouteName].title),
+    }
+  },
+  tabBarComponent: BottomTabBar,
+  //tabBarPosition: 'bottom',
+})
+
+export const Routes = createStackNavigator(
   {
-    [routeList.Claims]: {
-      screen: Claims,
+    [routeList.Landing]: {
+      screen: Landing,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.Entropy]: {
+      screen: Entropy,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.Loading]: {
+      screen: Loading,
+      navigationOptions: noHeaderNavOpts,
+    },
+
+    [routeList.Home]: {
+      screen: BottomTabNavigator,
+    },
+
+    [routeList.QRCodeScanner]: {
+      screen: QRScannerContainer,
+      navigationOptions: navOptScreenWCancel,
+    },
+
+    [routeList.CredentialDialog]: {
+      screen: CredentialReceive,
       navigationOptions: () => ({
-        ...commonNavigationOptions,
-        headerTitle: I18n.t(strings.MY_IDENTITY),
-        tabBarIcon: IdentityMenuIcon,
+        ...navOptScreenWCancel,
+        headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
       }),
     },
-    [routeList.Documents]: {
-      screen: Documents,
+    [routeList.Consent]: {
+      screen: Consent,
       navigationOptions: () => ({
-        ...commonNavigationOptions,
-        headerTitle: I18n.t(strings.DOCUMENTS),
-        tabBarIcon: (props: {
-          tintColor: string
-          focused: boolean
-          fillColor?: string
-        }) => {
-          props.fillColor = bottomNavBarBackground
-          return new DocumentsMenuIcon(props)
-        },
+        ...navOptScreenWCancel,
+        headerTitle: I18n.t(strings.SHARE_CLAIMS),
       }),
     },
-    [routeList.Records]: {
-      screen: Records,
+    [routeList.PaymentConsent]: {
+      screen: PaymentConsent,
       navigationOptions: () => ({
-        ...commonNavigationOptions,
-        headerTitle: I18n.t(strings.LOGIN_RECORDS),
-        tabBarIcon: RecordsMenuIcon,
+        ...navOptScreenWCancel,
+        headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
       }),
     },
-    [routeList.Settings]: {
-      screen: Settings,
+    [routeList.AuthenticationConsent]: {
+      screen: AuthenticationConsent,
       navigationOptions: () => ({
-        ...commonNavigationOptions,
-        headerTitle: I18n.t(strings.SETTINGS),
-        tabBarIcon: SettingsMenuIcon,
+        ...navOptScreenWCancel,
+        headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
       }),
+    },
+    [routeList.ClaimDetails]: {
+      screen: ClaimDetails,
+      navigationOptions: navOptScreenWCancel,
+    },
+    [routeList.DocumentDetails]: {
+      screen: DocumentDetails,
+      navigationOptions: {
+        ...navOptScreenWCancel,
+      },
+    },
+
+    [routeList.SeedPhrase]: {
+      screen: SeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.RepeatSeedPhrase]: {
+      screen: RepeatSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
+
+    [routeList.Exception]: {
+      screen: Exception,
+      navigationOptions: noHeaderNavOpts,
     },
   },
   {
-    tabBarOptions: {
-      ...Platform.select({
-        android: {
-          activeTintColor: JolocomTheme.primaryColorPurple,
-          inactiveTintColor: '#9B9B9E', // FIXME
-        },
-        ios: {
-          activeTintColor: JolocomTheme.primaryColorWhite,
-          inactiveTintColor: 'rgba(255, 255, 255, 0.5)',
-        },
-      }),
-      showLabel: false,
-      style: {
-        height: 50,
-        bottom: 0,
-        backgroundColor: bottomNavBarBackground,
-      },
-    },
-    tabBarComponent: BottomNavBar,
-    tabBarPosition: 'bottom',
+    defaultNavigationOptions: commonNavigationOptions,
   },
 )
 
-export const Routes = StackNavigator({
-  [routeList.Landing]: { screen: Landing, navigationOptions },
-  [routeList.InitAction]: { screen: InitAction, navigationOptions },
-  [routeList.Entropy]: { screen: Entropy, navigationOptions },
-  [routeList.Loading]: { screen: Loading, navigationOptions },
-
-  [routeList.Home]: { screen: BottomNavRoutes },
-  [routeList.QRCodeScanner]: {
-    screen: QRScannerContainer,
-    navigationOptions: () => ({
-      ...navOptScreenWCancel,
-    }),
-  },
-
-  [routeList.CredentialDialog]: {
-    screen: CredentialReceive,
-    navigationOptions: () => ({
-      headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
-      ...navOptScreenWCancel,
-    }),
-  },
-  [routeList.Consent]: {
-    screen: Consent,
-    navigationOptions: () => ({
-      headerTitle: I18n.t(strings.SHARE_CLAIMS),
-      ...navOptScreenWCancel,
-    }),
-  },
-  [routeList.PaymentConsent]: {
-    screen: PaymentConsent,
-    navigationOptions: () => ({
-      headerBackImage,
-      headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
-      ...navOptScreenWCancel,
-    }),
-  },
-  [routeList.AuthenticationConsent]: {
-    screen: AuthenticationConsent,
-    navigationOptions: () => ({
-      headerBackImage,
-      headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
-      ...navOptScreenWCancel,
-    }),
-  },
-  [routeList.ClaimDetails]: {
-    screen: ClaimDetails,
-    navigationOptions: () => navOptScreenWCancel,
-  },
-  [routeList.DocumentDetails]: {
-    screen: DocumentDetails,
-    navigationOptions: {
-      ...navOptScreenWCancel,
-    },
-  },
-
-  [routeList.SeedPhrase]: { screen: SeedPhrase, navigationOptions },
-  [routeList.RepeatSeedPhrase]: { screen: RepeatSeedPhrase, navigationOptions },
-  [routeList.Exception]: { screen: Exception, navigationOptions },
-})
+export const RoutesContainer = createAppContainer(Routes)

@@ -35,8 +35,8 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(toggleLoading)(genericActions.setLocale(locale))),
-  // TODO add error handling
-  setupBackup: () => dispatch(showSeedPhrase()),
+    // TODO add error handling
+    setupBackup: () => dispatch(showSeedPhrase()),
 })
 
 export const Settings = connect(

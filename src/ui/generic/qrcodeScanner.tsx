@@ -5,7 +5,6 @@ import { Container } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
 import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
-import { navigationActions } from 'src/actions'
 import I18n from 'src/locales/i18n'
 import { LoadingSpinner } from './loadingSpinner'
 import strings from '../../locales/strings'
@@ -28,8 +27,7 @@ export interface QrScanEvent {
 interface Props
   extends ReturnType<typeof mapStateToProps>,
     ReturnType<typeof mapDispatchToProps>,
-    NavigationScreenProps {
-}
+    NavigationScreenProps {}
 
 interface State {}
 
@@ -46,7 +44,14 @@ export class QRcodeScanner extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     if (this.props.navigation) {
-      this.removeFocusListener = this.props.navigation.addListener('willFocus', () => this.scanner.reactivate()).remove
+      this.removeFocusListener = this.props.navigation.addListener(
+        'willFocus',
+        () => {
+          this.scanner.reactivate()
+          // NOTE: force an update to force remounting of the Camera
+          this.forceUpdate()
+        },
+      ).remove
     }
   }
 
@@ -54,21 +59,30 @@ export class QRcodeScanner extends React.Component<Props, State> {
     if (this.removeFocusListener) this.removeFocusListener()
   }
 
+  onScannerCancel() {
+    if (this.props.navigation) this.props.navigation.goBack()
+  }
+
   render() {
-    const { loading, onScannerSuccess, onScannerCancel } = this.props
+    const { loading, onScannerSuccess } = this.props
+    // NOTE: the key is used to invalidate the previously rendered component as
+    // we need to rerender and remount the camera to ensure it is properly setup
+    const cameraProps = { key: Date.now() }
     return (
       <React.Fragment>
         {loading && <LoadingSpinner />}
         <Container>
           <QRScanner
-            ref={(ref: React.Component) => this.scanner = ref}
-            onRead={(e: QrScanEvent) => onScannerSuccess(e)}
+            cameraProps={cameraProps}
+            ref={(ref: React.Component) => (this.scanner = ref)}
+            onRead={onScannerSuccess}
+            cameraStyle={{ overflow: 'hidden' }}
             topContent={
               <Text>{I18n.t(strings.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>
             }
             bottomContent={
               <Button
-                onPress={onScannerCancel}
+                onPress={this.onScannerCancel.bind(this)}
                 style={{ text: styles.buttonText }}
                 text={I18n.t(strings.CANCEL)}
               />
@@ -114,7 +128,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
           ),
         )
   },
-  onScannerCancel: () => dispatch(navigationActions.goBack),
 })
 
 export const QRScannerContainer = connect(

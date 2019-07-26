@@ -1,13 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, Animated, ScrollView } from 'react-native'
+import { StyleSheet, Animated, ScrollView, View, Text } from 'react-native'
 
 import { openDocumentDetails } from 'src/actions/documents'
 import { DecoratedClaims } from 'src/reducers/account'
 import { RootState } from 'src/reducers'
 import { getDocumentClaims } from 'src/utils/filterDocuments'
 import { ThunkDispatch } from 'src/store'
-import { Container, Block, CenteredText } from 'src/ui/structure'
 
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
@@ -45,10 +44,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  emptyDocumentsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
   centeredText: {
     fontFamily: JolocomTheme.contentFontFamily,
     fontSize: 30, // FIXME
     color: '#959595', // FIXME
+    textAlign: 'center',
   },
 })
 
@@ -108,16 +114,15 @@ export class DocumentsContainer extends React.Component<Props, State> {
           // ])}
           // to scroll to top upon changing card
           ref={ref => (this.ScrollViewRef = ref)}
+          contentContainerStyle={isEmpty && { flex: 1 }}
+          scrollEnabled={!isEmpty}
         >
           {isEmpty ? (
-            <Container>
-              <Block>
-                <CenteredText
-                  msg={I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '.'}
-                  style={styles.centeredText}
-                />
-              </Block>
-            </Container>
+            <View style={styles.emptyDocumentsContainer}>
+              <Text style={styles.centeredText}>
+                {I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '.'}
+              </Text>
+            </View>
           ) : this.state.showingValid ? (
             <DocumentsCarousel
               documents={displayedDocs}

@@ -44,14 +44,9 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
       }
     }
   >
-    <Button
-      accent={false}
+    <ThemedComponent
       disabled={false}
-      icon={null}
-      onLongPress={null}
       onPress={[Function]}
-      primary={false}
-      raised={false}
       style={
         Object {
           "container": Object {
@@ -69,7 +64,6 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
           },
         }
       }
-      testID={null}
       text="Add claim"
       upperCase={false}
     />
@@ -127,14 +121,9 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
       }
     }
   >
-    <Button
-      accent={false}
+    <ThemedComponent
       disabled={false}
-      icon={null}
-      onLongPress={null}
       onPress={[Function]}
-      primary={false}
-      raised={false}
       style={
         Object {
           "container": Object {
@@ -152,7 +141,6 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
           },
         }
       }
-      testID={null}
       text="Add claim"
       upperCase={false}
     />

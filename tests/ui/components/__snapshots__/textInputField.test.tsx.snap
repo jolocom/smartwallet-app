@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TextInputField component matches the snapshot on render 1`] = `
-<Component
+<View
   style={
     Object {
       "height": 72,
@@ -47,5 +47,5 @@ exports[`TextInputField component matches the snapshot on render 1`] = `
     underlineColorAndroid="transparent"
     value="test@test.com"
   />
-</Component>
+</View>
 `;
