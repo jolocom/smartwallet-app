@@ -71,7 +71,9 @@
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native -d src/resources/svg/",
     "devtools": "react-devtools &",
-    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts"
+    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "@react-navigation/core": "^3.4.2",
@@ -88,7 +90,7 @@
     "object.assign": "^4.1.0",
     "ramda": "^0.26.1",
     "react": "16.8.3",
-    "react-native": "0.59.8",
+    "react-native": "0.60.0",
     "react-native-camera": "^2.10.1",
     "react-native-crypto": "^2.1.2",
     "react-native-gesture-handler": "^1.3.0",
@@ -117,11 +119,13 @@
     "squel": "^5.12.1",
     "stream-browserify": "^2.0.2",
     "vm-browserify": "^1.1.0",
-    "wif": "^2.0.6"
+    "wif": "^2.0.6",
+    "snyk": "^1.199.2"
   },
   "rnpm": {
     "assets": [
       "./src/assets/fonts"
     ]
-  }
+  },
+  "snyk": true
 }
