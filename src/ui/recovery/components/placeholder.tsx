@@ -8,8 +8,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: '#942f51',
-    margin: 10,
+    borderColor: JolocomTheme.primaryColorPurple,
+    marginLeft: 16,
+    marginRight: 16,
+    marginBottom: 16,
   },
   text: {
     textAlign: 'center',
