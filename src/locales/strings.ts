@@ -54,6 +54,8 @@ const backup = {
   WITHOUT_THESE_WORDS_YOU_CANNOT_ACCESS_YOUR_WALLET_AGAIN:
     'Without these words, you cannot access your wallet again',
   YES_I_WROTE_IT_DOWN: 'Yes, I wrote it down',
+  ACCOUNT_IS_AT_RISK: 'Account is at risk.',
+  MAKE_IT_SECURE: 'Make it secure',
 }
 
 const errorTitle = {
