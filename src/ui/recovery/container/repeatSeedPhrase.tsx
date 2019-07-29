@@ -26,16 +26,16 @@ class RepeatSeedPhraseContainer extends React.Component<Props, State> {
       strings.IF_YOU_HAVE_NOTED_DOWN_YOUR_PHRASE_PUT_THE_SIX_GIVEN_WORDS_ON_THEIR_RIGHT_PLACES,
     ),
     sorting: {},
-    randomWords: [],
+    randomWords: [] as string[],
   }
 
   private selectPosition = (id: number) => {
     const { sorting, randomWords } = this.state
     if (sorting[id]) {
-      randomWords.unshift(sorting[id] as never)
+      randomWords.unshift(sorting[id])
       delete sorting[id]
     } else {
-      const currentWord: string = randomWords[0]
+      const currentWord = randomWords[0]
       randomWords.shift()
       sorting[id] = currentWord
     }
