@@ -1,13 +1,14 @@
 import * as React from 'react'
 import RepeatSeedPhraseComponent from '../components/repeatSeedPhrase'
 import { ThunkDispatch } from '../../../store'
-import { recoveryActions } from '../../../actions'
+import { navigationActions, recoveryActions } from '../../../actions'
 import { connect } from 'react-redux'
 import { withLoading } from '../../../actions/modifiers'
 import { toggleLoading } from '../../../actions/account'
 import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
 import { NavigationScreenProps } from 'react-navigation'
+import { routeList } from '../../../routeList'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -89,7 +90,9 @@ class RepeatSeedPhraseContainer extends React.Component<Props, State> {
         note={note}
         mnemonicSorting={sorting}
         randomWords={randomWords}
-        back={() => this.props.navigation.goBack()}
+        back={() =>
+          this.props.openSeedPhrase(this.props.navigation.getParam('mnemonic'))
+        }
         checkMnemonic={this.checkMnemonic}
         selectPosition={this.selectPosition}
       />
@@ -98,6 +101,13 @@ class RepeatSeedPhraseContainer extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  openSeedPhrase: (mnemonic: string) =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.SeedPhrase,
+        params: { mnemonic },
+      }),
+    ),
   setSeedPhraseSaved: () =>
     dispatch(withLoading(toggleLoading)(recoveryActions.setSeedPhraseSaved())),
 })
