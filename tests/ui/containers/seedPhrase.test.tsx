@@ -5,10 +5,10 @@ import { createMockNavigationScreenProp } from 'tests/utils'
 
 describe('seedPhrase container', () => {
   it('mounts correctly and matches snapshot', () => {
-    const finishRegistration = jest.fn()
+    const repeatSeedPhrase = jest.fn()
 
     const props: SeedPhraseContainer['props'] = {
-      finishRegistration,
+      repeatSeedPhrase,
       navigation: createMockNavigationScreenProp({
         state: {
           params: {

@@ -107,8 +107,6 @@ const RepeatSeedPhraseComponent: React.FC<RepeatSeedPhraseProps> = ({
                 {key}
               </Text>
             ))}
-            {/* PLACEHOLDER */}
-            <Text style={[styles.mnemonic, { color: 'black' }]}>I</Text>
           </View>
         </View>
         <View style={styles.wordOrderSection}>

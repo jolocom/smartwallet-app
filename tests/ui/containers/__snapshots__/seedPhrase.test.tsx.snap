@@ -2,8 +2,7 @@
 
 exports[`seedPhrase container mounts correctly and matches snapshot 1`] = `
 <SeedPhrase
-  checked={false}
-  handleButtonTap={[MockFunction]}
+  handleButtonTap={[Function]}
   seedPhrase="mock seedPhrase"
 />
 `;
