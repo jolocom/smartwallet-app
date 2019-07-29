@@ -28,7 +28,6 @@ export const initApp: ThunkAction = async (
     // locale setup
     if (storedSettings.locale) I18n.locale = storedSettings.locale
     else storedSettings.locale = I18n.locale
-
     SplashScreen.hide()
     return dispatch(loadSettings(storedSettings))
   } catch (e) {

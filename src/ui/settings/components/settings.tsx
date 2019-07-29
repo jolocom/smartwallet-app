@@ -112,7 +112,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
                 )
           }
           isHighlighted={!seedPhraseSaved}
-          // isDisabled={seedPhraseSaved}
+          isDisabled={seedPhraseSaved}
           onTouchEnd={props.setupBackup}
         />
         <SettingsItem

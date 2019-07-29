@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, Animated, ScrollView, View, Text } from 'react-native'
+import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 import { openDocumentDetails } from 'src/actions/documents'
 import { DecoratedClaims } from 'src/reducers/account'
@@ -16,6 +16,7 @@ import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
+import { BackupWarning } from '../../recovery/components/backupWarning'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -97,6 +98,7 @@ export class DocumentsContainer extends React.Component<Props, State> {
 
     return (
       <Animated.View style={styles.mainContainer}>
+        <BackupWarning />
         {!otherIsEmpty && (
           <DocumentViewToggle
             showingValid={this.state.showingValid}
@@ -120,7 +122,7 @@ export class DocumentsContainer extends React.Component<Props, State> {
           {isEmpty ? (
             <View style={styles.emptyDocumentsContainer}>
               <Text style={styles.centeredText}>
-                {I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '.'}
+                {I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '...'}
               </Text>
             </View>
           ) : this.state.showingValid ? (

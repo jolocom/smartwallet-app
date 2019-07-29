@@ -80,8 +80,7 @@ const navOptScreenWCancel = {
   ...Platform.select({
     android: {
       headerBackImage,
-    },
-    ios: {
+    },    ios: {
       headerTintColor: JolocomTheme.primaryColorPurple,
     },
   }),
