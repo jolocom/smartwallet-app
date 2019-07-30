@@ -3,6 +3,8 @@ import { Block, CenteredText, Container } from '../../structure'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { JolocomTheme } from '../../../styles/jolocom-theme'
+import * as I18n from 'i18n-js'
+import strings from '../../../locales/strings'
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
@@ -10,24 +12,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#05050d',
   },
   selectorContainer: {
-    margin: 50,
-    alignItems: 'stretch',
+    marginTop: 20,
+    alignItems: 'center',
     justifyContent: 'space-around',
   },
   actionSelector: {
-    flex: 1,
     borderRadius: 6,
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: '#ffdebc',
-    margin: 30,
-    paddingRight: 40,
-    paddingLeft: 40,
+    paddingHorizontal: 40,
+    paddingVertical: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
   selected: {
-    backgroundColor: '#942F51',
+    backgroundColor: 'rgba(148, 47, 81, 0.5)',
+    borderColor: '#942f51',
   },
   title: {
     marginBottom: 10,
@@ -83,13 +84,13 @@ interface InitActionProps {
 
 const options = [
   {
-    title: 'create new account',
-    subtitle: 'if it is your first experience of Jolocom SmartWallet',
+    title: strings.CREATE_NEW_ACCOUNT,
+    subtitle: strings.IF_IT_IS_YOUR_FIRST_EXPERIENCE_OF_JOLOCOM_SMARTWALLET,
     key: 'create',
   },
   {
-    title: 'recover your digital identity',
-    subtitle: 'if it is your first experience of Jolocom SmartWallet',
+    title: strings.RECOVER_YOUR_DIGITAL_IDENTITY,
+    subtitle: strings.IF_IT_IS_YOUR_FIRST_EXPERIENCE_OF_JOLOCOM_SMARTWALLET, //FIXME replace with correct text
     key: 'recover',
   },
 ]
@@ -110,8 +111,8 @@ const InitActionComponent = ({
           ]}
           onPress={() => selectOption(option.key)}
         >
-          <CenteredText msg={option.title} style={styles.title} />
-          <CenteredText msg={option.subtitle} style={styles.subtitle} />
+          <CenteredText msg={I18n.t(option.title)} style={styles.title} />
+          <CenteredText msg={I18n.t(option.subtitle)} style={styles.subtitle} />
         </TouchableOpacity>
       ))}
     </Block>

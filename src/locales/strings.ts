@@ -28,6 +28,10 @@ const registration = {
     'Please tap the screen and draw on it randomly',
   GIVE_US_A_FEW_MOMENTS: 'Give us a few moments',
   TO_SET_UP_YOUR_IDENTITY: 'to set up your identity',
+  CREATE_NEW_ACCOUNT: 'create\nnew account',
+  RECOVER_YOUR_DIGITAL_IDENTITY: 'recover your\ndigital identity',
+  IF_IT_IS_YOUR_FIRST_EXPERIENCE_OF_JOLOCOM_SMARTWALLET:
+    'if it is your first experience\nof Jolocom SmartWallet',
 }
 
 const settings = {
