@@ -20,7 +20,7 @@ interface State {
   randomWords: string[]
 }
 
-class RepeatSeedPhraseContainer extends React.Component<Props, State> {
+export class RepeatSeedPhraseContainer extends React.Component<Props, State> {
   public state = {
     note: I18n.t(
       strings.IF_YOU_HAVE_NOTED_DOWN_YOUR_PHRASE_PUT_THE_SIX_GIVEN_WORDS_ON_THEIR_RIGHT_PLACES,
@@ -70,16 +70,21 @@ class RepeatSeedPhraseContainer extends React.Component<Props, State> {
     }
   }
 
-  public componentDidMount(): void {
-    const randomWords = []
+  public getRandomWords(): string[] {
     const mnemonic = this.props.navigation.getParam('mnemonic')
+    const randomWords = []
     const mnemonicArray = mnemonic.split(' ')
-    while (randomWords.length < 6) {
+    while (mnemonicArray.length > 6 && randomWords.length < 6) {
       const random = Math.floor(Math.random() * mnemonicArray.length)
       if (randomWords.indexOf(mnemonicArray[random]) === -1) {
         randomWords.push(mnemonicArray[random])
       }
     }
+    return randomWords
+  }
+
+  public componentDidMount(): void {
+    const randomWords = this.getRandomWords()
     this.setState({ randomWords })
   }
 

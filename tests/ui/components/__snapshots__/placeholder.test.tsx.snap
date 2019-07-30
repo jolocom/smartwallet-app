@@ -1,0 +1,205 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`placeholder component matches the snapshot with sorting with being used 1`] = `
+<TouchableOpacity
+  activeOpacity={0.2}
+  onPress={[Function]}
+  style={
+    Object {
+      "borderColor": "#942f51",
+      "borderRadius": 4,
+      "borderStyle": "solid",
+      "borderWidth": 1,
+      "height": 32,
+      "marginBottom": 16,
+      "marginLeft": 16,
+      "marginRight": 16,
+      "width": 109,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 20,
+        "lineHeight": 26,
+        "textAlign": "center",
+      }
+    }
+  >
+    Seed
+  </Text>
+</TouchableOpacity>
+`;
+
+exports[`placeholder component matches the snapshot with sorting without being used 1`] = `
+<TouchableOpacity
+  activeOpacity={0.2}
+  onPress={[Function]}
+  style={
+    Object {
+      "borderColor": "#942f51",
+      "borderRadius": 4,
+      "borderStyle": "solid",
+      "borderWidth": 1,
+      "height": 32,
+      "marginBottom": 16,
+      "marginLeft": 16,
+      "marginRight": 16,
+      "width": 109,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 20,
+        "lineHeight": 26,
+        "textAlign": "center",
+      }
+    }
+  >
+    1.
+  </Text>
+</TouchableOpacity>
+`;
+
+exports[`placeholder component matches the snapshot without sorting 1`] = `
+<TouchableOpacity
+  activeOpacity={0.2}
+  onPress={[Function]}
+  style={
+    Object {
+      "borderColor": "#942f51",
+      "borderRadius": 4,
+      "borderStyle": "solid",
+      "borderWidth": 1,
+      "height": 32,
+      "marginBottom": 16,
+      "marginLeft": 16,
+      "marginRight": 16,
+      "width": 109,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 20,
+        "lineHeight": 26,
+        "textAlign": "center",
+      }
+    }
+  >
+    1.
+  </Text>
+</TouchableOpacity>
+`;
+
+exports[`seedPhrase component matches the snapshot with sorting with being used 1`] = `
+<TouchableOpacity
+  activeOpacity={0.2}
+  onPress={[Function]}
+  style={
+    Object {
+      "borderColor": "#942f51",
+      "borderRadius": 4,
+      "borderStyle": "solid",
+      "borderWidth": 1,
+      "height": 32,
+      "marginBottom": 16,
+      "marginLeft": 16,
+      "marginRight": 16,
+      "width": 109,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 20,
+        "lineHeight": 26,
+        "textAlign": "center",
+      }
+    }
+  >
+    Seed
+  </Text>
+</TouchableOpacity>
+`;
+
+exports[`seedPhrase component matches the snapshot with sorting without being used 1`] = `
+<TouchableOpacity
+  activeOpacity={0.2}
+  onPress={[Function]}
+  style={
+    Object {
+      "borderColor": "#942f51",
+      "borderRadius": 4,
+      "borderStyle": "solid",
+      "borderWidth": 1,
+      "height": 32,
+      "marginBottom": 16,
+      "marginLeft": 16,
+      "marginRight": 16,
+      "width": 109,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 20,
+        "lineHeight": 26,
+        "textAlign": "center",
+      }
+    }
+  >
+    1.
+  </Text>
+</TouchableOpacity>
+`;
+
+exports[`seedPhrase component matches the snapshot without sorting 1`] = `
+<TouchableOpacity
+  activeOpacity={0.2}
+  onPress={[Function]}
+  style={
+    Object {
+      "borderColor": "#942f51",
+      "borderRadius": 4,
+      "borderStyle": "solid",
+      "borderWidth": 1,
+      "height": 32,
+      "marginBottom": 16,
+      "marginLeft": 16,
+      "marginRight": 16,
+      "width": 109,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#ffefdf",
+        "fontFamily": "TT Commons",
+        "fontSize": 20,
+        "lineHeight": 26,
+        "textAlign": "center",
+      }
+    }
+  >
+    1.
+  </Text>
+</TouchableOpacity>
+`;
