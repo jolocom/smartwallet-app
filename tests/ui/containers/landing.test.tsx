@@ -6,13 +6,13 @@ import { shallow } from 'enzyme'
 describe('landing container', () => {
   it('mounts correctly and matches snapshot if loading', () => {
     const props = {
-      startRegistration: jest.fn(),
+      openInitAction: jest.fn(),
       loading: true,
     }
 
     const rendered = shallow(<LandingContainer {...props} />)
     expect(rendered).toMatchSnapshot()
-    expect(props.startRegistration).not.toHaveBeenCalled()
+    expect(props.openInitAction).not.toHaveBeenCalled()
 
     const childWrapper = rendered.find(LoadingScreen)
     expect(childWrapper).toHaveLength(1)
@@ -20,12 +20,12 @@ describe('landing container', () => {
 
   it('mounts correctly and matches snapshot if loading is finished', () => {
     const props: LandingContainer['props'] = {
-      startRegistration: jest.fn(),
+      openInitAction: jest.fn(),
       loading: false,
     }
 
     const rendered = shallow(<LandingContainer {...props} />)
     expect(rendered).toMatchSnapshot()
-    expect(props.startRegistration).not.toHaveBeenCalled()
+    expect(props.openInitAction).not.toHaveBeenCalled()
   })
 })

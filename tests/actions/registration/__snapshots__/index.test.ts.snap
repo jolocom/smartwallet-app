@@ -21,10 +21,7 @@ Array [
   Object {
     "actions": Array [
       Object {
-        "params": Object {
-          "mnemonic": "exhibit history avoid kit gaze pulse yellow portion hold lottery panda figure",
-        },
-        "routeName": "SeedPhrase",
+        "routeName": "Home",
         "type": "Navigation/NAVIGATE",
       },
     ],

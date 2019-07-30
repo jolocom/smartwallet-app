@@ -11,11 +11,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: JolocomTheme.primaryColorBlack,
   },
+  mainSection: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
   noteSection: {
     marginTop: 20,
-    marginBottom: 20,
-    margin: 50,
-    justifyContent: 'center',
   },
   note: {
     textAlign: 'center',
@@ -26,15 +28,28 @@ const styles = StyleSheet.create({
   },
   mnemonicContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    position: 'relative',
+    marginTop: 15,
+    height: 40,
+  },
+  mnemonicPhrase: {
+    position: 'absolute',
+    flexDirection: 'row',
   },
   mnemonic: {
-    margin: 8,
+    marginRight: 7,
     fontSize: 34,
+    fontFamily: JolocomTheme.contentFontFamily,
     color: JolocomTheme.primaryColorSandInactive,
   },
   currentWord: {
     color: JolocomTheme.primaryColorWhite,
+    position: 'relative',
+    alignSelf: 'center',
+  },
+  wordOrderSection: {
+    marginTop: 18,
+    flexDirection: 'row',
   },
   buttonSection: {
     marginTop: 'auto',
@@ -62,66 +77,76 @@ interface RepeatSeedPhraseProps {
   checkMnemonic: () => void
   selectPosition: (id: number) => void
 }
-const RepeatSeedPhraseComponent = ({
+const RepeatSeedPhraseComponent: React.FC<RepeatSeedPhraseProps> = ({
   note,
   mnemonicSorting,
   randomWords,
   back,
   checkMnemonic,
   selectPosition,
-}: RepeatSeedPhraseProps) => (
-  <Container style={styles.container}>
-    <View style={styles.noteSection}>
-      <Text style={styles.note}>{note}</Text>
-    </View>
-    <View style={styles.mnemonicContainer}>
-      {randomWords.map((key, i) => (
-        <Text
-          key={key}
-          style={[styles.mnemonic, i === 0 && styles.currentWord]}
-        >
-          {key}
-        </Text>
-      ))}
-      {/* Placeholder */}
-      <Text style={[styles.mnemonic, { color: 'black' }]}>I</Text>
-    </View>
-    <View style={{ flexDirection: 'row' }}>
-      <View>
-        {new Array(6).fill('').map((e, i) => (
-          <Placeholder
-            key={i}
-            i={i}
-            sorting={mnemonicSorting}
-            onPress={selectPosition}
-          />
-        ))}
+}): JSX.Element => {
+  // through trial and error, the average width of a character looks to be about 15 pixels
+  // to center the current word, we use half the length to position left of center
+  const leftShiftCurrentWord =
+    (randomWords && randomWords[0] && randomWords[0].length * 7.5) || 0
+  return (
+    <Container style={styles.container}>
+      <View style={styles.mainSection}>
+        <View style={styles.noteSection}>
+          <Text style={styles.note}>{note}</Text>
+        </View>
+        <View style={styles.mnemonicContainer}>
+          <View
+            style={[styles.mnemonicPhrase, { left: -leftShiftCurrentWord }]}
+          >
+            {randomWords.map((key, i) => (
+              <Text
+                key={key}
+                style={[styles.mnemonic, i === 0 && styles.currentWord]}
+              >
+                {key}
+              </Text>
+            ))}
+          </View>
+        </View>
+        <View style={styles.wordOrderSection}>
+          <View>
+            {new Array(6).fill('').map((e, i) => (
+              <Placeholder
+                key={i}
+                i={i}
+                sorting={mnemonicSorting}
+                onPress={selectPosition}
+              />
+            ))}
+          </View>
+          <View>
+            {new Array(6).fill('').map((e, i) => (
+              <Placeholder
+                key={i}
+                i={i + 6}
+                sorting={mnemonicSorting}
+                onPress={selectPosition}
+              />
+            ))}
+          </View>
+        </View>
       </View>
-      <View>
-        {new Array(6).fill('').map((e, i) => (
-          <Placeholder
-            key={i}
-            i={i + 6}
-            sorting={mnemonicSorting}
-            onPress={selectPosition}
-          />
-        ))}
+      <View style={styles.buttonSection}>
+        <Button
+          style={{ container: styles.buttonContainer, text: styles.buttonText }}
+          onPress={randomWords.length ? back : checkMnemonic}
+          raised
+          upperCase={false}
+          text={
+            randomWords.length
+              ? I18n.t(strings.SHOW_MY_PHRASE_AGAIN)
+              : I18n.t(strings.CONFIRM_AND_CHECK)
+          }
+        />
       </View>
-    </View>
-    <View style={styles.buttonSection}>
-      <Button
-        style={{ container: styles.buttonContainer, text: styles.buttonText }}
-        onPress={randomWords.length ? back : checkMnemonic}
-        raised
-        upperCase={false}
-        text={
-          randomWords.length
-            ? I18n.t(strings.SHOW_MY_PHRASE_AGAIN)
-            : I18n.t(strings.CONFIRM_AND_CHECK)
-        }
-      />
-    </View>
-  </Container>
-)
+    </Container>
+  )
+}
 
 export default RepeatSeedPhraseComponent
