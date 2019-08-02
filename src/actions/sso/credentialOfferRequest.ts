@@ -1,6 +1,5 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { AppError, ErrorCode } from '../../lib/errors'
-import { showErrorScreen } from '../generic'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { receiveExternalCredential } from './index'
 import {
@@ -18,8 +17,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { withErrorHandling, withLoading } from '../modifiers'
-import { toggleLoading } from '../account'
+import { withLoading, withErrorScreen } from '../modifiers'
 
 export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -81,17 +79,15 @@ export const consumeCredentialOfferRequest = (
   >(res.token)
 
   return dispatch(
-    withLoading(toggleLoading)(
-      withErrorHandling(
-        showErrorScreen,
-        err => new AppError(ErrorCode.CredentialsReceiveFailed, err),
-      )(
+    withLoading(
+      withErrorScreen(
         receiveExternalCredential(
           credentialReceive,
           offerorInfo,
           isDeepLinkInteraction,
           selectedMetadata,
         ),
+        err => new AppError(ErrorCode.CredentialsReceiveFailed, err),
       ),
     ),
   )

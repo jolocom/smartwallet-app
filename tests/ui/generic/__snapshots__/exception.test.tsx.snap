@@ -12,6 +12,11 @@ exports[`Exception screen component Renders correctly 1`] = `
     }
   }
 >
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />
   <View
     style={
       Object {
@@ -118,6 +123,11 @@ exports[`Exception screen component Renders correctly when no error object is pr
     }
   }
 >
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />
   <View
     style={
       Object {

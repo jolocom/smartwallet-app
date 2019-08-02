@@ -70,7 +70,6 @@ exports[`Claims container correctly changes scanning to false when qr code scann
       }
     }
     did=""
-    loading={false}
     onEdit={[MockFunction]}
   />
 </View>
@@ -146,7 +145,6 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
       }
     }
     did=""
-    loading={false}
     onEdit={[MockFunction]}
   />
 </View>
@@ -222,7 +220,6 @@ exports[`Claims container mounts correctly and matches the snapshot 1`] = `
       }
     }
     did=""
-    loading={false}
     onEdit={[MockFunction]}
   />
 </View>

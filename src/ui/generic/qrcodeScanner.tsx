@@ -6,17 +6,14 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
 import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
 import I18n from 'src/locales/i18n'
-import { LoadingSpinner } from './loadingSpinner'
-import strings from '../../locales/strings'
+import strings from 'src/locales/strings'
 import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from '../../lib/storage/interactionTokens'
-import { ThunkDispatch } from '../../store'
-import { showErrorScreen } from '../../actions/generic'
-import { RootState } from '../../reducers'
-import { withErrorHandling, withLoading } from '../../actions/modifiers'
+import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { ThunkDispatch } from 'src/store'
+import { showErrorScreen } from 'src/actions/generic'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { NavigationScreenProps } from 'react-navigation'
-import { AppError, ErrorCode } from '../../lib/errors'
-import { setDeepLinkLoading } from '../../actions/sso'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -25,8 +22,7 @@ export interface QrScanEvent {
 }
 
 interface Props
-  extends ReturnType<typeof mapStateToProps>,
-    ReturnType<typeof mapDispatchToProps>,
+  extends ReturnType<typeof mapDispatchToProps>,
     NavigationScreenProps {}
 
 interface State {}
@@ -64,13 +60,12 @@ export class QRcodeScanner extends React.Component<Props, State> {
   }
 
   render() {
-    const { loading, onScannerSuccess } = this.props
+    const { onScannerSuccess } = this.props
     // NOTE: the key is used to invalidate the previously rendered component as
     // we need to rerender and remount the camera to ensure it is properly setup
     const cameraProps = { key: Date.now() }
     return (
       <React.Fragment>
-        {loading && <LoadingSpinner />}
         <Container>
           <QRScanner
             cameraProps={cameraProps}
@@ -94,14 +89,6 @@ export class QRcodeScanner extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({
-  account: {
-    loading: { loading },
-  },
-}: RootState) => ({
-  loading,
-})
-
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onScannerSuccess: async (e: QrScanEvent) => {
     let interactionToken
@@ -117,11 +104,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     const handler = interactionHandlers[interactionToken.interactionType]
 
     return handler
-      ? dispatch(
-          withLoading(setDeepLinkLoading)(
-            withErrorHandling(showErrorScreen)(handler(interactionToken)),
-          ),
-        )
+      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
       : dispatch(
           showErrorScreen(
             new AppError(ErrorCode.Unknown, new Error('No handler found')),
@@ -131,6 +114,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 })
 
 export const QRScannerContainer = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(QRcodeScanner)

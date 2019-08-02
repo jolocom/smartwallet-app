@@ -49,9 +49,18 @@ export const checkIdentityExists: ThunkAction = async (
   })
 
   if (!encryptedEntropy) {
-    return dispatch(
-      navigationActions.navigatorReset({ routeName: routeList.Landing }),
-    )
+    const isRegistering = getState().registration.loading.isRegistering
+    if (isRegistering) {
+      return dispatch(
+        navigationActions.navigate({
+          routeName: routeList.RegistrationProgress,
+        }),
+      )
+    } else {
+      return dispatch(
+        navigationActions.navigate({ routeName: routeList.Landing }),
+      )
+    }
   }
 
   const password = await keyChainLib.getPassword()
@@ -75,7 +84,7 @@ export const checkIdentityExists: ThunkAction = async (
   const identityWallet = backendMiddleware.identityWallet
   dispatch(setDid(identityWallet.identity.did))
 
-  return dispatch(navigationActions.navigatorResetHome())
+  return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
 }
 
 export const openClaimDetails = (
