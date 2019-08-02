@@ -1,16 +1,20 @@
 import { accountActions } from 'src/actions/'
 import data from '../registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
-import { AccountState } from 'src/reducers/account'
+import { RootState } from 'src/reducers'
 
 import { createMockStore } from 'tests/utils'
 
 describe('Account action creators', () => {
-  const initialState: { account: AccountState } = {
-    account: {
+  const initialState: Partial<RootState> = {
+    registration: {
       loading: {
-        loading: false,
+        loadingMsg: '',
+        isRegistering: false,
       },
+    },
+    account: {
+      loading: false,
       claims: {
         selected: {
           credentialType: 'Email',

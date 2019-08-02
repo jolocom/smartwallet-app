@@ -1,8 +1,4 @@
-import {
-  createStore,
-  applyMiddleware,
-  AnyAction,
-} from 'redux'
+import { createStore, applyMiddleware, AnyAction, Store } from 'redux'
 
 import thunk, {
   ThunkDispatch as OriginalThunkDispatch,
@@ -10,18 +6,21 @@ import thunk, {
 } from 'redux-thunk'
 import { RootState, rootReducer } from 'src/reducers'
 import config from 'src/config'
-import { Store } from 'react-redux'
 
 import { BackendMiddleware } from './backendMiddleware'
 
-export function initStore(): Store<any> {
+export function initStore() {
   const backendMiddleware = new BackendMiddleware(config)
 
   return createStore(
     rootReducer,
     {},
     applyMiddleware(thunk.withExtraArgument(backendMiddleware)),
-  )
+  ) as StoreWithThunkDispatch
+}
+
+interface StoreWithThunkDispatch extends Store<RootState> {
+  dispatch: ThunkDispatch
 }
 
 export type AnyAction = AnyAction

@@ -2,11 +2,11 @@ import { registrationActions } from 'src/actions'
 import data from './data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import * as util from 'src/lib/util'
-import { withErrorHandling } from '../../../src/actions/modifiers'
-import { showErrorScreen } from '../../../src/actions/generic'
-import { AppError, ErrorCode } from '../../../src/lib/errors'
-import { routeList } from '../../../src/routeList'
+import { withErrorScreen } from 'src/actions/modifiers'
+import { AppError, ErrorCode } from 'src/lib/errors'
+import { routeList } from 'src/routeList'
 import { createMockStore } from 'tests/utils'
+import { RootState } from 'src/reducers'
 
 const MockDate = require('mockdate')
 
@@ -63,11 +63,11 @@ describe('Registration action creators', () => {
       })
 
       await mockStore.dispatch(
-        withErrorHandling(
-          showErrorScreen,
-          (err: AppError) =>
+        withErrorScreen(
+          registrationActions.startRegistration,
+          err =>
             new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-        )(registrationActions.startRegistration),
+        ),
       )
 
       expect(mockStore.getActions()[0].routeName).toContain('Exception')
@@ -109,7 +109,16 @@ describe('Registration action creators', () => {
         setIdentityWallet: jest.fn(() => Promise.resolve()),
       }
 
-      const mockStore = createMockStore({}, mockMiddleware)
+      const mockState: Partial<RootState> = {
+        registration: {
+          loading: {
+            loadingMsg: '',
+            isRegistering: false,
+          },
+        },
+      }
+
+      const mockStore = createMockStore(mockState, mockMiddleware)
 
       await mockStore.dispatch(registrationActions.createIdentity(entropy))
 
@@ -140,11 +149,11 @@ describe('Registration action creators', () => {
       const asyncAction = registrationActions.createIdentity(mockEntropy)
 
       await mockStore.dispatch(
-        withErrorHandling(
-          showErrorScreen,
-          (err: AppError) =>
+        withErrorScreen(
+          asyncAction,
+          err =>
             new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-        )(asyncAction),
+        ),
       )
 
       const firstAction = mockStore.getActions()[0]

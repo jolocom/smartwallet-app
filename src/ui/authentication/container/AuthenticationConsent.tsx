@@ -4,9 +4,8 @@ import { AuthenticationConsentComponent } from '../components/AuthenticationCons
 import { RootState } from 'src/reducers'
 import { cancelSSO } from 'src/actions/sso'
 import { sendAuthenticationResponse } from 'src/actions/sso/authenticationRequest'
-import { ThunkDispatch } from '../../../store'
-import { withErrorHandling } from '../../../actions/modifiers'
-import { showErrorScreen } from '../../../actions/generic'
+import { ThunkDispatch } from 'src/store'
+import { withErrorScreen } from 'src/actions/modifiers'
 import { NavigationParams } from 'react-navigation'
 
 interface Props
@@ -42,9 +41,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmAuthenticationRequest: (isDeepLinkInteraction: boolean) =>
     dispatch(
-      withErrorHandling(showErrorScreen)(
-        sendAuthenticationResponse(isDeepLinkInteraction),
-      ),
+      withErrorScreen(sendAuthenticationResponse(isDeepLinkInteraction)),
     ),
   cancelAuthenticationRequest: () => dispatch(cancelSSO),
 })

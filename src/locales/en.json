@@ -6,6 +6,7 @@
   "All claims": "All claims",
   "Authorization request": "Authorization request",
   "Authorize": "Authorize",
+  "Initialization failed": "Initialization failed",
   "Authentication request failed": "Authentication request failed",
   "Authentication response failed": "Authentication response failed",
   "Cancel": "Cancel",

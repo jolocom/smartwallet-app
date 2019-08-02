@@ -7,7 +7,6 @@ import { SettingsScreen } from '../components/settings'
 import { genericActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withLoading } from '../../../actions/modifiers'
-import { toggleLoading } from '../../../actions/account'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -32,7 +31,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
-    dispatch(withLoading(toggleLoading)(genericActions.setLocale(locale))),
+    dispatch(withLoading(genericActions.setLocale(locale))),
 })
 
 export const Settings = connect(

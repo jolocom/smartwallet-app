@@ -55,9 +55,16 @@ Object {
 `;
 
 exports[`Entropy container mounts correctly and matches the snapshot 1`] = `
-<EntropyComponent
-  addPoint={[Function]}
-  progress={0}
-  submitEntropy={[Function]}
-/>
+<Fragment>
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />
+  <EntropyComponent
+    addPoint={[Function]}
+    progress={0}
+    submitEntropy={[Function]}
+  />
+</Fragment>
 `;
