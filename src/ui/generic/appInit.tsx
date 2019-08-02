@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'src/store'
 import { navigationActions, accountActions, genericActions } from 'src/actions'
 import { Linking, Dimensions, Image, StyleSheet } from 'react-native'
-import { withLoading, withErrorHandling } from 'src/actions/modifiers'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { Container, CenteredText } from '../structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 const image = require('src/resources/img/splashScreen.png')
@@ -28,19 +28,7 @@ const styles = StyleSheet.create({
 export class AppInitContainer extends React.Component<Props> {
   constructor(props: Props) {
     super(props)
-    this.props
-      .initApp()
-      .then(() => this.props.checkIdentityExists())
-      .then(() => {
-        // FIXME: get rid of these after setting up deepLinking properly using
-        // react-navigation
-        Linking.addEventListener('url', event =>
-          this.props.handleDeepLink(event.url),
-        )
-        Linking.getInitialURL().then(url => {
-          if (url) this.props.handleDeepLink(url)
-        })
-      })
+    this.props.doAppInit()
   }
 
   render() {
@@ -64,16 +52,27 @@ export class AppInitContainer extends React.Component<Props> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  initApp: () => dispatch(genericActions.initApp),
-  checkIdentityExists: () => dispatch(accountActions.checkIdentityExists),
-  handleDeepLink: (url: string) =>
-    dispatch(
-      withLoading(
-        withErrorHandling(genericActions.showErrorScreen)(
-          navigationActions.handleDeepLink(url),
-        ),
-      ),
-    ),
+  doAppInit: async () => {
+    await dispatch(withErrorScreen(genericActions.initApp))
+    await dispatch(withErrorScreen(accountActions.checkIdentityExists))
+    const handleDeepLink = (url: string) =>
+      dispatch(
+        withLoading(
+          withErrorScreen(
+            navigationActions.handleDeepLink(url),
+          ),
+        )
+      )
+
+    // FIXME: get rid of these after setting up deepLinking properly using
+    // react-navigation
+    Linking.addEventListener('url', event =>
+      handleDeepLink(event.url),
+    )
+    Linking.getInitialURL().then(url => {
+      if (url) handleDeepLink(url)
+    })
+  },
 })
 
 export const AppInit = connect(

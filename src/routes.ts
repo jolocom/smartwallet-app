@@ -261,7 +261,7 @@ export const Routes = createAnimatedSwitchNavigator(
     RegistrationScreens,
   },
   {
-    initialRouteName: 'AppInit',
+    initialRouteName: routeList.AppInit,
   },
 )
 
