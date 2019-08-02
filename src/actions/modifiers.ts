@@ -2,6 +2,7 @@ import { ActionCreator } from 'redux'
 import { ThunkAction, AnyAction } from 'src/store'
 import { AppError } from '../lib/errors'
 import { toggleLoading } from './account'
+import { showErrorScreen } from './generic';
 
 /**
  * Curried function that wraps a {@link ThunkAction} with two calls to the provided loadingAction
@@ -24,6 +25,8 @@ export const withLoadingHandler = (loadingAction: ActionCreator<AnyAction>) => (
   }
 }
 
+type ErrorModifier = (error: AppError | Error) => AppError
+
 /**
  * Curried function that wraps a {@link ThunkAction} with the provided error handler to be dispatched on thrown error
  * @param errorHandler - An {@link ActionCreator} to be dispatched with the error if an error is thrown
@@ -35,13 +38,16 @@ export const withLoadingHandler = (loadingAction: ActionCreator<AnyAction>) => (
  */
 export const withErrorHandling = (
   errorHandler: ActionCreator<ThunkAction>,
-  errorModifier: (error: AppError) => AppError = (error: AppError) => error,
-) => (wrappedAction: ThunkAction): ThunkAction => async dispatch => {
+  errorModifier: ErrorModifier | undefined = undefined,
+) => (wrappedAction: ThunkAction, modifier: ErrorModifier | undefined = undefined): ThunkAction => async dispatch => {
+  modifier = modifier || errorModifier
   try {
     return await dispatch(wrappedAction)
   } catch (error) {
-    return dispatch(errorHandler(errorModifier(error)))
+    if (modifier) error = modifier(error)
+    return dispatch(errorHandler(error))
   }
 }
 
 export const withLoading = withLoadingHandler(toggleLoading)
+export const withErrorScreen = withErrorHandling(showErrorScreen)

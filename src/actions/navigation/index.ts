@@ -71,21 +71,19 @@ export const handleDeepLink = (url: string): ThunkAction => (
     routeName === 'payment' ||
     routeName === 'authenticate'
   ) {
-    // The identityWallet is initialised before the deep link is handled.
-    if (!backendMiddleware.identityWallet) {
-      // FIXME WTF? does this happen?
-      return dispatch(navigatorReset({ routeName: routeList.Landing }))
-    }
+    // The identityWallet is initialised before the deep link is handled. If it
+    // is not initialized, then we may not even have an identity.
+    if (backendMiddleware.identityWallet) {
+      const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
+      const handler = interactionHandlers[interactionToken.interactionType]
 
-    const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
-    const handler = interactionHandlers[interactionToken.interactionType]
-
-    if (handler) {
-      return dispatch(
-        withLoading(
-          withErrorHandling(showErrorScreen)(handler(interactionToken, true)),
-        ),
-      )
+      if (handler) {
+        return dispatch(
+          withLoading(
+            withErrorHandling(showErrorScreen)(handler(interactionToken, true)),
+          ),
+        )
+      }
     }
   }
 
