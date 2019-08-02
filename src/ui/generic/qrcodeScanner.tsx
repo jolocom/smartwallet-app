@@ -6,14 +6,14 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
 import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
 import I18n from 'src/locales/i18n'
-import strings from '../../locales/strings'
+import strings from 'src/locales/strings'
 import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from '../../lib/storage/interactionTokens'
-import { ThunkDispatch } from '../../store'
-import { showErrorScreen } from '../../actions/generic'
-import { withErrorHandling, withLoading } from '../../actions/modifiers'
+import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { ThunkDispatch } from 'src/store'
+import { showErrorScreen } from 'src/actions/generic'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { NavigationScreenProps } from 'react-navigation'
-import { AppError, ErrorCode } from '../../lib/errors'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -104,11 +104,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     const handler = interactionHandlers[interactionToken.interactionType]
 
     return handler
-      ? dispatch(
-          withLoading(
-            withErrorHandling(showErrorScreen)(handler(interactionToken)),
-          ),
-        )
+      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
       : dispatch(
           showErrorScreen(
             new AppError(ErrorCode.Unknown, new Error('No handler found')),

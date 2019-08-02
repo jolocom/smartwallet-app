@@ -6,8 +6,7 @@ import { cancelSSO } from 'src/actions/sso'
 import { sendPaymentResponse } from 'src/actions/sso/paymentRequest'
 import { ThunkDispatch } from 'src/store'
 import { NavigationParams } from 'react-navigation'
-import { withErrorHandling } from '../../../actions/modifiers'
-import { showErrorScreen } from '../../../actions/generic'
+import { withErrorScreen } from 'src/actions/modifiers'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -38,11 +37,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmPaymentRequest: (isDeepLinkInteraction: boolean) =>
-    dispatch(
-      withErrorHandling(showErrorScreen)(
-        sendPaymentResponse(isDeepLinkInteraction),
-      ),
-    ),
+    dispatch(withErrorScreen(sendPaymentResponse(isDeepLinkInteraction))),
   cancelPaymentRequest: () => dispatch(cancelSSO),
 })
 

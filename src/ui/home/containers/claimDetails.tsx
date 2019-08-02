@@ -3,9 +3,8 @@ import { ClaimDetailsComponent } from 'src/ui/home/components/claimDetails'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers/'
 import { accountActions } from 'src/actions'
-import { ThunkDispatch } from '../../../store'
-import { withErrorHandling, withLoading } from '../../../actions/modifiers'
-import { showErrorScreen } from '../../../actions/generic'
+import { ThunkDispatch } from 'src/store'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -31,9 +30,7 @@ const mapStateToProps = ({ account: { claims } }: RootState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   saveClaim: () =>
-    dispatch(
-      withLoading(withErrorHandling(showErrorScreen)(accountActions.saveClaim)),
-    ),
+    dispatch(withLoading(withErrorScreen(accountActions.saveClaim))),
   handleClaimInput: (fieldValue: string, fieldName: string) => {
     dispatch(accountActions.handleClaimInput(fieldValue, fieldName))
   },

@@ -2,11 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { LandingComponent } from 'src/ui/landing/components/landing'
 import { registrationActions } from 'src/actions/'
-import { withErrorHandling } from '../../../actions/modifiers'
-import { showErrorScreen } from '../../../actions/generic'
-import { AppError, ErrorCode } from '../../../lib/errors'
-import { routeList } from '../../../routeList'
-import { ThunkDispatch } from '../../../store'
+import { withErrorScreen } from 'src/actions/modifiers'
+import { AppError, ErrorCode } from 'src/lib/errors'
+import { routeList } from 'src/routeList'
+import { ThunkDispatch } from 'src/store'
 import { StatusBar } from 'react-native'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
@@ -25,11 +24,11 @@ export class LandingContainer extends React.Component<Props> {
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   startRegistration: () =>
     dispatch(
-      withErrorHandling(
-        showErrorScreen,
-        (err: AppError) =>
+      withErrorScreen(
+        registrationActions.startRegistration,
+        err =>
           new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-      )(registrationActions.startRegistration),
+      ),
     ),
 })
 

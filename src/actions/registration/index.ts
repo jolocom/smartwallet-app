@@ -4,7 +4,7 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { generateSecureRandomBytes } from 'src/lib/util'
-import { ThunkAction } from '../../store'
+import { ThunkAction } from 'src/store'
 
 const bip39 = require('bip39')
 

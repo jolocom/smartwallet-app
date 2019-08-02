@@ -2,7 +2,7 @@ import { ActionCreator } from 'redux'
 import { ThunkAction, AnyAction } from 'src/store'
 import { AppError } from '../lib/errors'
 import { toggleLoading } from './account'
-import { showErrorScreen } from './generic';
+import { showErrorScreen } from './generic'
 
 /**
  * Curried function that wraps a {@link ThunkAction} with two calls to the provided loadingAction
@@ -36,10 +36,13 @@ type ErrorModifier = (error: AppError | Error) => AppError
  * @dev The return value from this modifier can be passed to other modifiers, i.e. modifiers can be composed
  * e.g. dispatch(withLoading(toggleLoading)(withErrorHandling(showErrorScreen)(saveClaims)))
  */
-export const withErrorHandling = (
+export const withErrorHandler = (
   errorHandler: ActionCreator<ThunkAction>,
   errorModifier: ErrorModifier | undefined = undefined,
-) => (wrappedAction: ThunkAction, modifier: ErrorModifier | undefined = undefined): ThunkAction => async dispatch => {
+) => (
+  wrappedAction: ThunkAction,
+  modifier: ErrorModifier | undefined = undefined,
+): ThunkAction => async dispatch => {
   modifier = modifier || errorModifier
   try {
     return await dispatch(wrappedAction)
@@ -50,4 +53,4 @@ export const withErrorHandling = (
 }
 
 export const withLoading = withLoadingHandler(toggleLoading)
-export const withErrorScreen = withErrorHandling(showErrorScreen)
+export const withErrorScreen = withErrorHandler(showErrorScreen)
