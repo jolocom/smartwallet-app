@@ -2,7 +2,6 @@ import React from 'react'
 import { StyleSheet, Text, ScrollView } from 'react-native'
 import { Container } from 'src/ui/structure'
 import { CredentialCard } from './credentialCard'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
@@ -13,6 +12,7 @@ import { prepareLabel } from 'src/lib/util'
 import I18n from 'src/locales/i18n'
 import { getNonDocumentClaims } from 'src/utils/filterDocuments'
 import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
+import { Typography } from 'src/styles'
 
 interface Props {
   claimsToRender: CategorizedClaims
@@ -24,12 +24,10 @@ interface State {}
 
 const styles = StyleSheet.create({
   sectionHeader: {
+    ...Typography.sectionHeader,
     marginTop: 30,
     marginBottom: 10,
     paddingLeft: 16,
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(0, 0, 0, 0.38)',
   },
   scrollComponent: {
     width: '100%',

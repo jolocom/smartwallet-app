@@ -1,4 +1,5 @@
 import { Dimensions, Platform } from 'react-native'
+import { Colors } from '.'
 
 const initialViewportWidth = Dimensions.get('window').width
 // const initialViewportHeight = Dimensions.get('window').height
@@ -54,4 +55,10 @@ export const subMainText = {
 export const standardText = {
   ...baseFontStyles,
   fontSize: textLG,
+}
+
+export const sectionHeader = {
+  ...baseFontStyles,
+  fontSize: textXS,
+  color: Colors.black040,
 }
