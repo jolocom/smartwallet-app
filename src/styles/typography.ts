@@ -27,24 +27,17 @@ export const centeredText = {
 
 export const baseFontStyles = {
   fontFamily: fontMain,
-  // fontWeight doesn't do anything, but React Material Button uses a default
-  // that isn't supported by our font on Android (500) related
-  // https://github.com/xotahal/react-native-material-ui/issues/301#issuecomment-436681694
-  fontWeight: 'normal' as 'normal',
 }
 
-// it's unclear if fontWeight does anything
-// it may be best to use different names for the different weights
-// https://github.com/facebook/react-native/issues/19707
-// export const fontWeight = '100'
+/* PRESETS */
 
-// PRESETS
-
+// on 'dark screens' e.g. exception and landing, the main text
 export const mainText = {
   ...baseFontStyles,
   fontSize: textHeader,
 }
 
+// on 'dark screens' e.g. exception and landing, the smaller text
 export const subMainText = {
   ...baseFontStyles,
   fontSize: textSubheader,
@@ -57,6 +50,7 @@ export const standardText = {
   fontSize: textLG,
 }
 
+// e.g. Personal, Contact on credentialOverview
 export const sectionHeader = {
   ...baseFontStyles,
   fontSize: textXS,
