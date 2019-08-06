@@ -9,6 +9,7 @@ import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { ThunkDispatch } from 'src/store'
 import strings from '../../../locales/strings'
+import { Colors, Typography } from 'src/styles'
 const loaders = require('react-native-indicator')
 
 interface Props
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     marginBottom: '-10%',
   },
   container: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: Colors.blackMain,
     height: '100%',
   },
   dotsContainer: {
@@ -36,22 +37,21 @@ const styles = StyleSheet.create({
   dotActive: {
     marginRight: 8,
     marginLeft: 8,
-    color: JolocomTheme.primaryColorSand,
+    color: Colors.dotColorActive,
   },
   dotInactive: {
     marginRight: 5,
     marginLeft: 5,
-    color: JolocomTheme.primaryColorGrey,
+    color: Colors.dotColorInactive,
   },
   text: {
-    color: JolocomTheme.primaryColorSand,
-    fontSize: 20,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.subMainText,
+    color: Colors.sandLight,
   },
   smallText: {
-    color: JolocomTheme.primaryColorSand,
-    fontSize: 14,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXXS,
+    color: Colors.sandLight,
   },
 })
 
