@@ -5,7 +5,7 @@ import { Block, Container, CenteredText } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Typography, Colors } from 'src/styles'
+import { Typography, Colors, Buttons } from 'src/styles'
 
 interface Props {
   addPoint: (x: number, y: number) => void
@@ -15,7 +15,6 @@ interface Props {
 
 const viewWidth: number = Dimensions.get('window').width
 
-// TODO FONT WEIGHT REFERENCE FROM STYLES
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.blackMain,
@@ -36,15 +35,10 @@ const styles = StyleSheet.create({
     fontSize: Typography.text4XL,
   },
   buttonContainer: {
-    width: 164,
-    height: 48,
-    borderRadius: 4,
-    backgroundColor: Colors.purpleMain,
+    ...Buttons.buttonStandardContainer,
   },
   buttonText: {
-    ...Typography.standardText,
-    color: Colors.white,
-    paddingVertical: 15,
+    ...Buttons.buttonStandardText,
   },
 })
 

@@ -5,7 +5,7 @@ import { Block, Container, CenteredText } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import { Landing00, Landing01, Landing02, Landing03 } from 'src/resources'
 import strings from 'src/locales/strings'
-import { Typography, Colors } from 'src/styles'
+import { Typography, Colors, Buttons } from 'src/styles'
 
 const Carousel = require('react-native-snap-carousel').default
 const Pagination = require('react-native-snap-carousel').Pagination
@@ -68,17 +68,10 @@ const styles = StyleSheet.create({
     flex: 0.1,
   },
   buttonContainer: {
-    height: 48,
-    minWidth: 164,
-    borderRadius: 4,
-    backgroundColor: Colors.purpleMain,
+    ...Buttons.buttonStandardContainer,
   },
   buttonText: {
-    ...Typography.standardText,
-    color: Colors.white,
-    paddingVertical: 15,
-    textAlign: 'center',
-    minWidth: 158,
+    ...Buttons.buttonStandardText,
   },
 })
 
