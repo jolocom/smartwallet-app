@@ -8,9 +8,9 @@ const isSmallViewportWidth = initialViewportWidth < 360
 export const fontMain = Platform.OS === 'android' ? 'TTCommons' : 'TT Commons'
 export const baseFontStyles = {
   fontFamily: fontMain,
-  // fontWeight doesn't do anything, but React Material Button needs it on
-  // Android to display the font properly it seems
-  // https://github.com/xotahal/react-native-material-ui/issues/301 related
+  // fontWeight doesn't do anything, but React Material Button uses a default
+  // that isn't supported by our font on Android (500) related
+  // https://github.com/xotahal/react-native-material-ui/issues/301#issuecomment-436681694
   fontWeight: 'normal' as 'normal',
 }
 
