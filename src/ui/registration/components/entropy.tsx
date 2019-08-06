@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button } from 'react-native-material-ui'
 import { StyleSheet, View, Dimensions } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Block, Container, CenteredText } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
+import { Typography, Colors } from 'src/styles'
 
 interface Props {
   addPoint: (x: number, y: number) => void
@@ -18,7 +18,7 @@ const viewWidth: number = Dimensions.get('window').width
 // TODO FONT WEIGHT REFERENCE FROM STYLES
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: Colors.blackMain,
     padding: 0,
   },
   footerButton: {
@@ -26,30 +26,25 @@ const styles = StyleSheet.create({
     bottom: '5%',
   },
   text: {
+    ...Typography.subMainText,
+    color: Colors.sandLight,
     position: 'absolute',
     top: '20%',
     paddingHorizontal: viewWidth / 15,
-    backgroundColor: JolocomTheme.primaryColorBlack,
-    fontSize: JolocomTheme.headerFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontWeight: '100',
-    color: JolocomTheme.primaryColorSand,
   },
   bigFont: {
-    fontSize: JolocomTheme.headerFontSize * 2,
+    fontSize: Typography.text4XL,
   },
   buttonContainer: {
     width: 164,
     height: 48,
     borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple,
+    backgroundColor: Colors.purpleMain,
   },
   buttonText: {
+    ...Typography.standardText,
+    color: Colors.white,
     paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorWhite,
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
   },
 })
 
