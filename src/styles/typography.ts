@@ -6,6 +6,13 @@ const initialViewportWidth = Dimensions.get('window').width
 const isSmallViewportWidth = initialViewportWidth < 360
 
 export const fontMain = Platform.OS === 'android' ? 'TTCommons' : 'TT Commons'
+export const baseFontStyles = {
+  fontFamily: fontMain,
+  // fontWeight doesn't do anything, but React Material Button needs it on
+  // Android to display the font properly it seems
+  // https://github.com/xotahal/react-native-material-ui/issues/301 related
+  fontWeight: 'normal' as 'normal',
+}
 
 export const textXXS = 14
 export const textXS = 17
@@ -28,11 +35,18 @@ export const textSubheader = isSmallViewportWidth ? textSM : textMD
 // PRESETS
 
 export const mainText = {
+  ...baseFontStyles,
   fontSize: textHeader,
-  fontFamily: fontMain,
 }
 
 export const subMainText = {
+  ...baseFontStyles,
   fontSize: textSubheader,
-  fontFamily: fontMain,
+}
+
+// this is used for main information such as issuer name, claimCard's main info
+//  button text, iOS header
+export const standardText = {
+  ...baseFontStyles,
+  fontSize: textLG,
 }

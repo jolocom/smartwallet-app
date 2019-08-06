@@ -12,6 +12,7 @@ export const sand025 = 'rgba(255, 222, 188, 0.25)'
 export const sand090 = 'rgb(255, 222, 188, 0.9)'
 export const sandLight = 'rgb(255, 239, 223)'
 export const sandLight040 = 'rgba(255, 239, 223)'
+export const sandLight080 = 'rgba(255, 239, 223, 0.8)'
 export const purpleMain = 'rgb(148, 47, 81)'
 export const lightGreyLightest = 'rgb(250, 250, 250)'
 export const lightGreyLighter = 'rgb(245, 245, 245)'
@@ -29,7 +30,7 @@ export const greenFaded060 = 'rgb(233, 239, 221, 0.6)'
 
 export const mainBackground = blackMain
 export const dotColorActive = sand
-export const dotColorInactive = 'rgb(255, 254, 252)'
+export const dotColorInactive = 'rgba(255, 254, 252, 0.7)'
 export const spinnerColor = sand090
 export const disabledButtonBackground = lightGreyLighter
 export const disabledButtonText = blackMain050

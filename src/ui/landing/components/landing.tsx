@@ -2,10 +2,10 @@ import React, { ReactNode } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Block, Container, CenteredText } from 'src/ui/structure'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { Landing00, Landing01, Landing02, Landing03 } from 'src/resources'
 import strings from 'src/locales/strings'
+import { Typography, Colors } from 'src/styles'
 
 const Carousel = require('react-native-snap-carousel').default
 const Pagination = require('react-native-snap-carousel').Pagination
@@ -25,17 +25,11 @@ interface Slide {
 }
 
 const viewWidth: number = Dimensions.get('window').width
-const headerFontSize =
-  viewWidth < 360
-    ? JolocomTheme.landingHeaderFontSizeSmall
-    : JolocomTheme.landingHeaderFontSize
-const labelFontSize =
-  viewWidth < 360 ? JolocomTheme.labelFontSizeSmall : JolocomTheme.labelFontSize
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
     paddingTop: 0,
-    backgroundColor: '#05050d',
+    backgroundColor: Colors.blackMain,
     justifyContent: 'flex-end',
     flexDirection: 'column',
     flex: 1,
@@ -50,49 +44,39 @@ const styles = StyleSheet.create({
   activeDotStyle: {
     width: 8,
     height: 8,
-    backgroundColor: JolocomTheme.dotColorActive,
+    backgroundColor: Colors.dotColorActive,
   },
   inactiveDotStyle: {
     width: 4,
     height: 4,
-    opacity: 0.6,
-    backgroundColor: JolocomTheme.dotColorInactive,
+    backgroundColor: Colors.dotColorInactive,
   },
   header: {
-    color: JolocomTheme.primaryColorSand,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: headerFontSize,
-    fontWeight: '100',
+    ...Typography.mainText,
+    color: Colors.sandLight,
   },
   subHeader: {
-    color: JolocomTheme.primaryColorSand,
-    opacity: 0.8,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: labelFontSize,
-    fontWeight: '100',
-    lineHeight: labelFontSize + 4,
+    ...Typography.subMainText,
+    color: Colors.sandLight080,
+    lineHeight: Typography.textSubheader + 4,
     marginTop: 15,
   },
   paginationBlock: {
     flex: 0.15,
-    backgroundColor: '#05050d',
   },
   buttonBlock: {
     flex: 0.1,
-    backgroundColor: '#05050d',
   },
   buttonContainer: {
     height: 48,
     minWidth: 164,
     borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple,
+    backgroundColor: Colors.purpleMain,
   },
   buttonText: {
+    ...Typography.standardText,
+    color: Colors.white,
     paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorWhite,
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
     textAlign: 'center',
     minWidth: 158,
   },
