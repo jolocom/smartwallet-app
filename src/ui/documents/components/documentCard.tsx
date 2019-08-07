@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, StyleSheet, Text, Image, ImageBackground } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DocumentValiditySummary } from './documentValidity'
 import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimInterface } from 'cred-types-jolocom-core'
+import { Colors, Typography } from 'src/styles'
 
 export const DOCUMENT_CARD_HEIGHT = 176
 export const DOCUMENT_CARD_WIDTH = 276
@@ -15,8 +15,8 @@ interface DocumentCardProps {
 const styles = StyleSheet.create({
   card: {
     height: DOCUMENT_CARD_HEIGHT,
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    borderColor: 'rgba(0, 0, 0, 0.09)',
+    backgroundColor: Colors.white,
+    borderColor: Colors.black010,
     borderWidth: 2,
     borderRadius: 10,
     width: DOCUMENT_CARD_WIDTH,
@@ -32,15 +32,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   documentType: {
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXL,
     paddingHorizontal: 15,
-    fontSize: 28,
-    fontFamily: JolocomTheme.contentFontFamily,
   },
   documentNumber: {
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    color: Colors.black040,
     paddingHorizontal: 15,
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(5, 5, 13, 0.4)',
   },
   validityContainer: {
     flexDirection: 'row',
@@ -49,10 +49,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     paddingHorizontal: 15,
-  },
-  validityText: {
-    marginLeft: 5,
-    fontSize: 15,
   },
   icon: {
     marginLeft: 'auto',
@@ -70,12 +66,7 @@ export const DocumentCard: React.SFC<DocumentCardProps> = ({
   const claimData = document.claimData as ClaimInterface
 
   return (
-    <View
-      style={[
-        styles.card,
-        !background && { borderColor: 'rgb(255, 222, 188)' },
-      ]}
-    >
+    <View style={[styles.card, !background && { borderColor: Colors.sand }]}>
       <ImageBackground
         style={[
           styles.cardBack,
@@ -107,7 +98,9 @@ export const DocumentCard: React.SFC<DocumentCardProps> = ({
           {logo ? (
             <Image source={{ uri: logo.url }} style={styles.icon} />
           ) : (
-            <View style={[styles.icon, { backgroundColor: 'grey' }]} />
+            <View
+              style={[styles.icon, { backgroundColor: Colors.lightGrey }]}
+            />
           )}
         </View>
       </View>

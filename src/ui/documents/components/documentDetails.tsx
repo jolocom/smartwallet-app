@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { IssuerCard } from 'src/ui/documents/components/issuerCard'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account'
 import { prepareLabel } from 'src/lib/util'
+import { Typography, Colors } from 'src/styles'
 
 interface Props {
   document: DecoratedClaims
@@ -14,31 +14,32 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   sectionHeader: {
+    ...Typography.sectionHeader,
     marginTop: 20,
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(0,0,0,0.4)',
-    paddingHorizontal: 16,
     marginBottom: 10,
-    paddingLeft: 16,
+    paddingHorizontal: 16,
   },
   claimsContainer: {
+    borderColor: Colors.lightGrey,
     borderTopWidth: 1,
-    borderColor: '#ececec',
   },
   claimCard: {
-    backgroundColor: JolocomTheme.primaryColorWhite,
+    backgroundColor: Colors.white,
+    borderColor: Colors.lightGrey,
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderColor: '#ececec',
   },
   claimCardTextContainer: {
     paddingHorizontal: 30,
   },
   claimCardTitle: {
-    color: 'rgba(0, 0, 0, 0.4)',
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    color: Colors.blackMain040,
+  },
+  claimCardData: {
+    ...Typography.standardText,
+    color: Colors.blackMain,
   },
 })
 
@@ -55,7 +56,7 @@ export const DocumentDetails: React.SFC<Props> = ({ document }) => {
           <View key={key} style={styles.claimCard}>
             <View style={styles.claimCardTextContainer}>
               <Text style={styles.claimCardTitle}>{prepareLabel(key)}</Text>
-              <Text style={JolocomTheme.textStyles.light.textDisplayField}>
+              <Text style={styles.claimCardData}>
                 {document.claimData[key]}
               </Text>
             </View>
