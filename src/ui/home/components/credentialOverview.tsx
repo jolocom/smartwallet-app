@@ -12,7 +12,7 @@ import { prepareLabel } from 'src/lib/util'
 import I18n from 'src/locales/i18n'
 import { getNonDocumentClaims } from 'src/utils/filterDocuments'
 import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
-import { Typography } from 'src/styles'
+import { Typography, Colors } from 'src/styles'
 
 interface Props {
   claimsToRender: CategorizedClaims
@@ -23,6 +23,10 @@ interface Props {
 interface State {}
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 0,
+    backgroundColor: Colors.lightGreyLighter,
+  },
   sectionHeader: {
     ...Typography.sectionHeader,
     marginTop: 30,
@@ -88,7 +92,7 @@ export class CredentialOverview extends React.Component<Props, State> {
     const claimCategories = Object.keys(claimsToRender)
 
     return (
-      <Container style={{ padding: 0 }}>
+      <Container style={styles.container}>
         <ScrollView
           style={scrollComponent}
           contentContainerStyle={scrollComponent}
