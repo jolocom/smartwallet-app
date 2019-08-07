@@ -8,6 +8,7 @@
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/runtime": "^7.4.5",
     "@svgr/cli": "^4.2.0",
+    "@types/detox": "^12.8.3",
     "@types/enzyme": "^3.10.1",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/i18n-js": "^3.0.1",
@@ -30,6 +31,7 @@
     "babel-plugin-transform-typescript-metadata": "^0.2.2",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "class-transformer": "^0.1.9",
+    "detox": "^14.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
@@ -59,6 +61,8 @@
     "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "test": "jest",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
+    "e2e:android": "detox build -c android.debug && detox test -c android.debug",
+    "e2e:android:emu": "detox build -c android.emu.debug && detox test -c android.emu.debug",
     "run:ios": "react-native run-ios",
     "run:android": "react-native run-android --appIdSuffix debug",
     "run:android:staging": "react-native run-android --variant staging --appIdSuffix debugStaging",
@@ -75,6 +79,42 @@
     "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
     "typeorm:node": "ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
     "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts"
+  },
+  "detox": {
+    "configurations": {
+      "ios.sim.debug": {
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/JolocomWallet.app",
+        "build": "xcodebuild -project ios/JolocomWallet.xcodeproj -scheme JolocomWallet -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      },
+      "android.emu.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "name": "Nexus_5X_API_24"
+      },
+      "android.emu.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.emulator",
+        "name": "Nexus_5X_API_26"
+      },
+      "android.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.attached",
+        "name": "PL2GARB832801755"
+      },
+      "android.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.attached",
+        "name": "PL2GARB832801755"
+      }
+    },
+    "test-runner": "jest",
+    "runner-config": "e2e/jest.config.js"
   },
   "dependencies": {
     "@react-navigation/core": "^3.4.2",
