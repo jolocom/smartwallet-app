@@ -26,6 +26,7 @@ Interested in our vision? Take a look at our [whitepaper](https://jolocom.io/wp-
   - Look for the instructions under React Native CLI Quickstart.
 - Connect an Android device and enable USB debugging **OR** start an Android AVD emulator
 - Run `yarn run:android` to install the application and run it.
+  - NOTE: this will start a metro bundler server automatically, with stdout/stderr discarded. You can close this and run `yarn start` to manually start the bundler and receive more detailed output.
 
 ### iOS
 
@@ -37,6 +38,7 @@ Interested in our vision? Take a look at our [whitepaper](https://jolocom.io/wp-
   - This will default to an iPhone X emulator.
   - The device can be specified by adding `--simulator` and the device name.
     - e.g. `yarn run:ios --simulator "iPhone SE"`
+  - NOTE: this will start a metro bundler server automatically, with stdout/stderr discarded. You can close this and run `yarn start` to manually start the bundler and receive more detailed output.
 
 A debug build can also be built through Xcode.
 
