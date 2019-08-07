@@ -6,69 +6,56 @@ Interested in our vision? Take a look at our [whitepaper](https://jolocom.io/wp-
 
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jolocom/SmartWallet)
 
-Setup for development
----------------------
+## Prerequisites
 
-Setup requires Node.JS to be installed on your computer. If you do not have it please see:
-https://nodejs.org/en/download/
+- Set-up requires [Node.js](https://nodejs.org/en/download/) to be installed on your computer.
+  - Starting with version `1.2.0` of the Jolocom SmartWallet, `Node.js v10+` is required to build the project. Versions prior to `1.2.0` require `Node.js v8`.
+- We use [Yarn](https://yarnpkg.com) as our package manager.
 
 ## Installation
 
-Prerequisites:
-- [yarn](https://yarnpkg.com)
+1. Clone the smartwallet-app repository to your computer.
+2. `cd` into the directory and run `yarn` or `yarn install` from your terminal to install the required packages.
 
-After cloning the smartwallet-app repository to a directory on your computer, enter the directory and run the following command:
-
-```bash
-yarn install
-```
-
-### Debug build on a device or simulator
-
-Starting with version `1.2.0`, the Jolocom SmartWallet requires `Node.js v10+` to build. Versions prior to `1.2.0` require `Node.js v8`.
+### Running a debug version for development
 
 #### Android
 
-Please set up an android development environment and install the required SDKs.
-Set the path to the SDK in ```android/local.properties``` and ```export``` it to the environment variable ```ANDROID_HOME```, if that was not already done.
+- Please set up an Android development environment and install the required SDKs.
+  - The [Getting Started](https://facebook.github.io/react-native/docs/getting-started) guide for React Native may come in handy.
+  - Look for the instructions under React Native CLI Quickstart.
+- Connect an Android device and enable USB debugging **OR** start an Android AVD emulator
+- Run `yarn run:android` to install the application and run it.
+  - NOTE: this will start a metro bundler server automatically, with stdout/stderr discarded. You can close this and run `yarn start` to manually start the bundler and receive more detailed output.
 
-Then:
+### iOS
 
-```bash
-# 1. Bundle app with haul and start development server.
-yarn bundle:android
-# 2a. Install and run app on a connected device or simulator in one go. Use a second shell for this.
-yarn install:android && yarn run:android
-# 2b. As alternative use:
-react-native run-android
-```
-In case you encounter connectivity errors to haul, restart it with the first command or start the app manually after haul.
+- Please set up an appropriate Xcode development environment.
+  - The [Getting Started](https://facebook.github.io/react-native/docs/getting-started) guide for React Native may come in handy.
+  - Look for the instructions under React Native CLI Quickstart.
+- Run `yarn build:ios` to assemble the application bundle.
+- Run `yarn run:ios` to install and run the application in an emulator.
+  - This will default to an iPhone X emulator.
+  - The device can be specified by adding `--simulator` and the device name.
+    - e.g. `yarn run:ios --simulator "iPhone SE"`
+  - NOTE: this will start a metro bundler server automatically, with stdout/stderr discarded. You can close this and run `yarn start` to manually start the bundler and receive more detailed output.
 
-#### iOS
+A debug build can also be built through Xcode.
 
-Please set up the appropriate XCode development environment.
+Running a build on a physical device requires the appropriate code signing certificates.
 
-Then:
-
-```bash
-react-native run-ios --device
-yarn ios
-```
-
-The first command will run and install a debug build on an attached iOS device. A terminal window may pop up which starts a Metro Bundler, please stop this process.
-The second command will start the Haul bundler and serve the build on your device if both are running on the same network. If remote debugging is enabled, the debugger-ui will also be available here.
-
-#### Testing and Cleaning
+## Testing and Formatting
 
 Testing uses Jest. The following script enables watch and testing coverage display as well.
 
 ```bash
 yarn test --watch --coverage
 ```
-Use ```yarn run``` to display all scripts, e.g. for cleaning.
 
-Documentation
--------------
-Additional documentation can be found at our [wiki](https://github.com/jolocom/smartwallet-app/wiki).
+Use `yarn run` to display all scripts, e.g. for formatting.
 
-Copyright (C) 2014-2019  JOLOCOM GmbH
+- We use [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) to keep a consistent style across the codebase.
+  - There are plugins available for a range of IDEs and text editors; automatic formatting on save is also supported in some editors.
+- `yarn format` will format files automatically as much as possible.
+
+Copyright (C) 2014-2019 JOLOCOM GmbH
