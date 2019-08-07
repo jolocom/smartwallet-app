@@ -8,7 +8,7 @@ import {
   NavigationRoute,
   NavigationScreenProp,
   createAppContainer,
-  createSwitchNavigator
+  createSwitchNavigator,
 } from 'react-navigation'
 
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
@@ -16,7 +16,6 @@ import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
 import { SeedPhrase, RegistrationProgress, Entropy } from 'src/ui/registration/'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception /*BottomNavBar*/ } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
@@ -28,6 +27,7 @@ import { routeList } from './routeList'
 import { AppInit } from './ui/generic/appInit'
 import BottomTabBar from 'src/ui/generic/bottomTabBar'
 import strings from './locales/strings'
+import { Colors, Typography } from 'src/styles'
 
 import {
   IdentityMenuIcon,
@@ -50,27 +50,15 @@ const noHeaderNavOpts = {
   header: null,
 }
 
-const defaultHeaderBackgroundColor =
-  Platform.OS === 'android'
-    ? JolocomTheme.primaryColorBlack
-    : JolocomTheme.primaryColorGrey
-
-const defaultHeaderTintColor =
-  Platform.OS === 'android'
-    ? JolocomTheme.primaryColorWhite
-    : JolocomTheme.primaryColorBlack
-
 const headerTitleStyle: StyleProp<TextStyle> = {
-  fontSize: JolocomTheme.headerFontSize,
-  fontFamily: JolocomTheme.contentFontFamily,
-  fontWeight: '300',
-  color: defaultHeaderTintColor,
+  ...Typography.standardText,
+  color: Colors.navHeaderTintDefault,
 }
 
 const commonNavigationOptions: NavigationScreenOptions = {
   headerTitleStyle,
   headerStyle: {
-    backgroundColor: defaultHeaderBackgroundColor,
+    backgroundColor: Colors.navHeaderBgDefault,
     borderBottomWidth: 0,
   },
 }
@@ -82,15 +70,10 @@ const navOptScreenWCancel = {
       headerBackImage,
     },
     ios: {
-      headerTintColor: JolocomTheme.primaryColorPurple,
+      headerTintColor: Colors.purpleMain,
     },
   }),
 }
-
-const bottomTabBarBackground =
-  Platform.OS == 'android'
-    ? '#fafafa' // FIXME add to theme
-    : JolocomTheme.primaryColorBlack
 
 export const BottomTabBarRoutes = {
   [routeList.Claims]: {
@@ -111,7 +94,7 @@ export const BottomTabBarRoutes = {
         focused: boolean
         fillColor?: string
       }) => {
-        props.fillColor = bottomTabBarBackground
+        props.fillColor = Colors.bottomTabBarBg
         return new DocumentsMenuIcon(props)
       },
     },
@@ -138,19 +121,19 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   tabBarOptions: {
     ...Platform.select({
       android: {
-        activeTintColor: JolocomTheme.primaryColorPurple,
-        inactiveTintColor: '#9B9B9E', // FIXME
+        activeTintColor: Colors.purpleMain,
+        inactiveTintColor: Colors.greyLighter,
       },
       ios: {
-        activeTintColor: JolocomTheme.primaryColorWhite,
-        inactiveTintColor: 'rgba(255, 255, 255, 0.5)',
+        activeTintColor: Colors.white,
+        inactiveTintColor: Colors.white050,
       },
     }),
     showLabel: false,
     style: {
       height: 50,
       bottom: 0,
-      backgroundColor: bottomTabBarBackground,
+      backgroundColor: Colors.bottomTabBarBg,
     },
   },
   navigationOptions: ({
@@ -190,7 +173,7 @@ const RegistrationScreens = createSwitchNavigator(
   },
   {
     initialRouteName: routeList.Landing,
-  }
+  },
 )
 
 const MainStack = createStackNavigator(

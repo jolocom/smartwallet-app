@@ -1,9 +1,15 @@
+import { Platform } from 'react-native'
+
+const isAndroid = Platform.OS === 'android'
+
 // COLOR NAMES
 
 export const black = 'black' // rgb(0, 0, 0)
+export const black010 = 'rgba(0, 0, 0, 0.1)'
 export const black030 = 'rgba(0, 0, 0, 0.3)'
 export const black040 = 'rgba(0, 0, 0, 0.4)'
 export const white = 'white' // rgb(255, 255, 255)
+export const white050 = 'rgba(255, 255, 255, 0.5)'
 export const blackMain = 'rgb(5, 5, 13)'
 export const blackMain030 = 'rgba(5, 5, 13, 0.3)'
 export const blackMain040 = 'rgba(5, 5, 13, 0.4)'
@@ -25,7 +31,7 @@ export const grey = 'grey' // rgb(128, 128, 128)
 export const golden = 'rgb(241, 161, 7)'
 
 export const greenMain = 'rgb(40, 165, 45)'
-export const greenFaded060 = 'rgb(233, 239, 221, 0.6)'
+export const greenFaded060 = 'rgba(233, 239, 221, 0.6)'
 
 // PRESETS
 
@@ -37,3 +43,7 @@ export const disabledButtonBackground = lightGrey
 export const disabledButtonText = blackMain030
 export const backUpWarningBg = golden
 export const validTextValid = greenMain
+
+export const navHeaderTintDefault = isAndroid ? white : black
+export const navHeaderBgDefault = isAndroid ? black : lightGreyLighter
+export const bottomTabBarBg = isAndroid ? lightGreyLightest : blackMain
