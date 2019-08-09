@@ -8,14 +8,14 @@ import {
   NavigationRoute,
   NavigationScreenProp,
   createAppContainer,
-  createSwitchNavigator
+  createSwitchNavigator,
 } from 'react-navigation'
 
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
-import { SeedPhrase, RegistrationProgress, Entropy } from 'src/ui/registration/'
+import { RegistrationProgress, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception /*BottomNavBar*/ } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
@@ -36,8 +36,8 @@ import {
   SettingsMenuIcon,
 } from 'src/resources'
 import { InitAction } from './ui/landing/containers/initAction'
-import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
+import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -83,14 +83,15 @@ const navOptScreenWCancel = {
   ...Platform.select({
     android: {
       headerBackImage,
-    },    ios: {
+    },
+    ios: {
       headerTintColor: JolocomTheme.primaryColorPurple,
     },
   }),
 }
 
 const bottomTabBarBackground =
-  Platform.OS == 'android'
+  Platform.OS === 'android'
     ? '#fafafa' // FIXME add to theme
     : JolocomTheme.primaryColorBlack
 
@@ -192,7 +193,7 @@ const RegistrationScreens = createSwitchNavigator(
   },
   {
     initialRouteName: routeList.Landing,
-  }
+  },
 )
 
 const MainStack = createStackNavigator(

@@ -4,7 +4,6 @@ import { ThunkDispatch } from '../../../store'
 import { navigationActions, recoveryActions } from '../../../actions'
 import { connect } from 'react-redux'
 import { withLoading } from '../../../actions/modifiers'
-import { toggleLoading } from '../../../actions/account'
 import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
 import { NavigationScreenProps } from 'react-navigation'
@@ -114,7 +113,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       }),
     ),
   setSeedPhraseSaved: () =>
-    dispatch(withLoading(toggleLoading)(recoveryActions.setSeedPhraseSaved())),
+    dispatch(withLoading(recoveryActions.setSeedPhraseSaved())),
 })
 
 export const RepeatSeedPhrase = connect(

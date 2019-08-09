@@ -58,13 +58,12 @@ export const selectInitAction = (action: string): ThunkAction => dispatch => {
   }
 }
 
-export const openInitAction: ThunkAction = dispatch => {
-  return dispatch(
+export const openInitAction: ThunkAction = dispatch =>
+  dispatch(
     navigationActions.navigate({
       routeName: routeList.InitAction,
     }),
   )
-}
 
 export const startRegistration: ThunkAction = async (
   dispatch,
