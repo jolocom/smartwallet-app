@@ -5,6 +5,7 @@ import I18n from 'src/locales/i18n'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import strings from '../../../locales/strings'
+import { Colors, Typography } from 'src/styles'
 
 interface Props {
   activeAuthenticationRequest: StateAuthenticationRequestSummary
@@ -17,17 +18,17 @@ interface State {}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.backgroundLightMain,
   },
   requesterContainer: {
     flexDirection: 'row',
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    width: '100%',
+    backgroundColor: Colors.white,
     paddingVertical: 20,
     paddingHorizontal: 15,
     marginTop: 25,
   },
   requesterIcon: {
-    backgroundColor: JolocomTheme.primaryColorGrey,
+    backgroundColor: Colors.lightGrey,
     width: 42,
     height: 42,
   },
@@ -43,9 +44,9 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
   authRequestText: {
-    ...JolocomTheme.textStyles.light.textDisplayField,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textLG,
     textAlign: 'center',
-    fontWeight: '300',
     marginTop: 10,
   },
 })

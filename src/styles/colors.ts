@@ -35,7 +35,8 @@ export const greenFaded060 = 'rgba(233, 239, 221, 0.6)'
 
 // PRESETS
 
-export const mainBackground = blackMain
+export const backgroundDarkMain = blackMain
+export const backgroundLightMain = lightGreyLighter
 export const dotColorActive = sand
 export const dotColorInactive = 'rgba(255, 254, 252, 0.7)'
 export const spinnerColor = sand090
