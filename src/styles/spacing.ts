@@ -7,4 +7,5 @@ export enum Spacing {
   XL = 32,
   XXL = 48,
   '3XL' = 64,
+  '4XL' = 80,
 }
