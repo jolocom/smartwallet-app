@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { IssuerCard } from 'src/ui/documents/components/issuerCard'
 import { DecoratedClaims } from 'src/reducers/account'
 import { prepareLabel } from 'src/lib/util'
-import { Typography, Colors } from 'src/styles'
+import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props {
   document: DecoratedClaims
@@ -11,13 +11,13 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 50,
+    paddingBottom: Spacing.XXL,
   },
   sectionHeader: {
     ...Typography.sectionHeader,
-    marginTop: 20,
-    marginBottom: 10,
-    paddingHorizontal: 16,
+    marginTop: Spacing.LG,
+    marginBottom: Spacing.SM,
+    paddingHorizontal: Spacing.MD,
   },
   claimsContainer: {
     borderColor: Colors.lightGrey,
@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
   claimCard: {
     backgroundColor: Colors.white,
     borderColor: Colors.lightGrey,
-    paddingVertical: 15,
+    paddingVertical: Spacing.MD,
     borderBottomWidth: 1,
   },
   claimCardTextContainer: {
-    paddingHorizontal: 30,
+    paddingHorizontal: Spacing.XL,
   },
   claimCardTitle: {
     ...Typography.baseFontStyles,

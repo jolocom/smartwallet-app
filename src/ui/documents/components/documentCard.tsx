@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image, ImageBackground } from 'react-native'
 import { DocumentValiditySummary } from './documentValidity'
 import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimInterface } from 'cred-types-jolocom-core'
-import { Colors, Typography } from 'src/styles'
+import { Colors, Typography, Spacing } from 'src/styles'
 
 export const DOCUMENT_CARD_HEIGHT = 176
 export const DOCUMENT_CARD_WIDTH = 276
@@ -15,45 +15,45 @@ interface DocumentCardProps {
 const styles = StyleSheet.create({
   card: {
     height: DOCUMENT_CARD_HEIGHT,
+    width: DOCUMENT_CARD_WIDTH,
     backgroundColor: Colors.white,
     borderColor: Colors.black010,
     borderWidth: 2,
     borderRadius: 10,
-    width: DOCUMENT_CARD_WIDTH,
     overflow: 'hidden',
   },
   cardBack: {
+    position: 'absolute',
     width: '100%',
     height: '100%',
-    position: 'absolute',
   },
   cardContent: {
-    paddingVertical: 16,
     flex: 1,
+    paddingVertical: Spacing.MD,
   },
   documentType: {
     ...Typography.baseFontStyles,
     fontSize: Typography.textXL,
-    paddingHorizontal: 15,
+    paddingHorizontal: Spacing.MD,
   },
   documentNumber: {
     ...Typography.baseFontStyles,
     fontSize: Typography.textXS,
     color: Colors.black040,
-    paddingHorizontal: 15,
+    paddingHorizontal: Spacing.MD,
   },
   validityContainer: {
     flexDirection: 'row',
-    marginTop: 'auto',
     alignItems: 'center',
     width: '100%',
-    height: 50,
-    paddingHorizontal: 15,
+    height: 48,
+    paddingHorizontal: Spacing.MD,
+    marginTop: 'auto',
   },
   icon: {
+    width: 40,
+    height: 40,
     marginLeft: 'auto',
-    width: 42,
-    height: 42,
   },
 })
 

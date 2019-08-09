@@ -1,6 +1,4 @@
 export enum Spacing {
-  none = 0,
-  single = 1,
   XXS = 4,
   XS = 8,
   SM = 12,

@@ -11,8 +11,7 @@ import { getCredentialIconByType } from 'src/resources/util'
 import { prepareLabel } from 'src/lib/util'
 import I18n from 'src/locales/i18n'
 import { getNonDocumentClaims } from 'src/utils/filterDocuments'
-import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
-import { Typography, Colors } from 'src/styles'
+import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props {
   claimsToRender: CategorizedClaims
@@ -24,18 +23,18 @@ interface State {}
 
 const styles = StyleSheet.create({
   container: {
-    padding: 0,
     backgroundColor: Colors.lightGreyLighter,
+    padding: 0,
   },
   sectionHeader: {
     ...Typography.sectionHeader,
-    marginTop: 30,
-    marginBottom: 10,
-    paddingLeft: 16,
+    marginTop: Spacing.XL,
+    marginBottom: Spacing.SM,
+    paddingLeft: Spacing.MD,
   },
   scrollComponent: {
     width: '100%',
-    paddingBottom: SCROLL_PADDING_BOTTOM,
+    paddingBottom: Spacing.XL,
   },
 })
 

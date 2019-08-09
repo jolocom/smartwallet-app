@@ -15,7 +15,7 @@ import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
-import { Typography, Colors } from 'src/styles'
+import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -36,19 +36,19 @@ const APPBAR_HEIGHT = Platform.select({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: Colors.lightGreyLighter,
     flex: 1,
+    backgroundColor: Colors.lightGreyLighter,
   },
   topContainer: {
-    paddingVertical: 15,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: Spacing.MD,
   },
   emptyDocumentsContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: Spacing.MD,
   },
   emptyDocumentsText: {
     ...Typography.mainText,
