@@ -1,6 +1,8 @@
 import { ActionCreator } from 'redux'
-import { AnyAction, ThunkAction } from 'src/store'
+import { ThunkAction, AnyAction } from 'src/store'
 import { AppError } from '../lib/errors'
+import { toggleLoading } from './account'
+import { showErrorScreen } from './generic'
 
 /**
  * Curried function that wraps a {@link ThunkAction} with two calls to the provided loadingAction
@@ -9,16 +11,21 @@ import { AppError } from '../lib/errors'
  * @param wrappedAction - The thunkAction to be wrapped
  * @example dispatch(withLoading(toggleLoading)(saveClaims))
  */
-export const withLoading = (loadingAction: ActionCreator<AnyAction>) => (
+export const withLoadingHandler = (loadingAction: ActionCreator<AnyAction>) => (
   wrappedAction: ThunkAction,
 ): ThunkAction => async dispatch => {
   try {
     dispatch(loadingAction(true))
     return await dispatch(wrappedAction)
   } finally {
-    dispatch(loadingAction(false))
+    // NOTE: timeout is a hack to avoid flashing when navigating, as the new
+    // screen will have not been loaded yet but the AppLoading will be taken
+    // down, which will flash the old screen shortly
+    setTimeout(() => dispatch(loadingAction(false)), 100)
   }
 }
+
+type ErrorModifier = (error: AppError | Error) => AppError
 
 /**
  * Curried function that wraps a {@link ThunkAction} with the provided error handler to be dispatched on thrown error
@@ -29,13 +36,21 @@ export const withLoading = (loadingAction: ActionCreator<AnyAction>) => (
  * @dev The return value from this modifier can be passed to other modifiers, i.e. modifiers can be composed
  * e.g. dispatch(withLoading(toggleLoading)(withErrorHandling(showErrorScreen)(saveClaims)))
  */
-export const withErrorHandling = (
+export const withErrorHandler = (
   errorHandler: ActionCreator<ThunkAction>,
-  errorModifier: (error: AppError) => AppError = (error: AppError) => error,
-) => (wrappedAction: ThunkAction): ThunkAction => async dispatch => {
+  errorModifier: ErrorModifier | undefined = undefined,
+) => (
+  wrappedAction: ThunkAction,
+  modifier: ErrorModifier | undefined = undefined,
+): ThunkAction => async dispatch => {
+  modifier = modifier || errorModifier
   try {
     return await dispatch(wrappedAction)
   } catch (error) {
-    return dispatch(errorHandler(errorModifier(error)))
+    if (modifier) error = modifier(error)
+    return dispatch(errorHandler(error))
   }
 }
+
+export const withLoading = withLoadingHandler(toggleLoading)
+export const withErrorScreen = withErrorHandler(showErrorScreen)

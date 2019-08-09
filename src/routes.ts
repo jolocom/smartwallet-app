@@ -8,12 +8,14 @@ import {
   NavigationRoute,
   NavigationScreenProp,
   createAppContainer,
+  createSwitchNavigator
 } from 'react-navigation'
+
 import { Claims, Records, ClaimDetails } from 'src/ui/home/'
 import { Documents, DocumentDetails } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
-import { Loading, Entropy } from 'src/ui/registration/'
+import { SeedPhrase, RegistrationProgress, Entropy } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Exception /*BottomNavBar*/ } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
@@ -23,6 +25,7 @@ import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
+import { AppInit } from './ui/generic/appInit'
 import BottomTabBar from 'src/ui/generic/bottomTabBar'
 import strings from './locales/strings'
 
@@ -168,7 +171,7 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   //tabBarPosition: 'bottom',
 })
 
-export const Routes = createStackNavigator(
+const RegistrationScreens = createSwitchNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
@@ -182,15 +185,21 @@ export const Routes = createStackNavigator(
       screen: Entropy,
       navigationOptions: noHeaderNavOpts,
     },
-    [routeList.Loading]: {
-      screen: Loading,
+    [routeList.RegistrationProgress]: {
+      screen: RegistrationProgress,
       navigationOptions: noHeaderNavOpts,
     },
+  },
+  {
+    initialRouteName: routeList.Landing,
+  }
+)
 
+const MainStack = createStackNavigator(
+  {
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
-
     [routeList.QRCodeScanner]: {
       screen: QRScannerContainer,
       navigationOptions: navOptScreenWCancel,
@@ -251,6 +260,20 @@ export const Routes = createStackNavigator(
   },
   {
     defaultNavigationOptions: commonNavigationOptions,
+  },
+)
+
+export const Routes = createSwitchNavigator(
+  {
+    [routeList.AppInit]: {
+      screen: AppInit,
+      navigationOptions: noHeaderNavOpts,
+    },
+    MainStack,
+    RegistrationScreens,
+  },
+  {
+    initialRouteName: routeList.AppInit,
   },
 )
 

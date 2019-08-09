@@ -8,7 +8,6 @@ describe('Claims container', () => {
     claimsState: initialState,
     openClaimDetails: jest.fn(),
     setClaimsForDid: jest.fn(),
-    loading: false,
     did: '',
   }
 

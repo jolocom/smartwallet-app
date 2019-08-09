@@ -80,9 +80,7 @@ Object {
   "did": Object {
     "did": "mock did",
   },
-  "loading": Object {
-    "loading": true,
-  },
+  "loading": false,
 }
 `;
 
@@ -164,8 +162,6 @@ Object {
     },
   },
   "did": "",
-  "loading": Object {
-    "loading": true,
-  },
+  "loading": false,
 }
 `;

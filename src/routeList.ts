@@ -1,13 +1,15 @@
 // NOTE: don't use 'const' so that values are useable in both .js and .ts files
 export enum routeList {
+  AppInit = 'AppInit',
+
   Landing = 'Landing',
   InitAction = 'InitAction',
   Entropy = 'Entropy',
+  RegistrationProgress = 'RegistrationProgress',
   Loading = 'Loading',
 
   Home = 'Home',
   Claims = 'Claims',
-  Interactions = 'Interactions',
   Documents = 'Documents',
   Records = 'Records',
   Settings = 'Settings',

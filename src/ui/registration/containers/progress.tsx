@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, StatusBar } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
@@ -14,8 +14,6 @@ const loaders = require('react-native-indicator')
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     ReturnType<typeof mapStateToProps> {}
-
-export interface State {}
 
 const styles = StyleSheet.create({
   label: {
@@ -57,57 +55,50 @@ const styles = StyleSheet.create({
   },
 })
 
-// TODO SFC
-export class LoadingContainer extends React.Component<Props, State> {
-  render() {
-    return (
-      <Container style={styles.container}>
-        <Block style={styles.label}>
-          <CenteredText
-            style={styles.text}
-            msg={I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}
-          />
-          <CenteredText
-            style={styles.text}
-            msg={I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}
-          />
-        </Block>
-        <Block>
-          <loaders.RippleLoader
-            size={80}
-            strokeWidth={4}
-            color={JolocomTheme.spinnerColor}
-          />
-        </Block>
-        <Block style={styles.loadingMsg}>
-          <View style={styles.dotsContainer}>
-            {[0, 1, 2, 3].map((prop, key) => {
-              const stageNumber = loading.loadingStages.indexOf(
-                this.props.loadingMsg,
-              )
-              return (
-                <Icon
-                  name="circle"
-                  size={prop <= stageNumber ? 15 : 10}
-                  style={
-                    prop <= stageNumber ? styles.dotActive : styles.dotInactive
-                  }
-                  key={prop}
-                />
-              )
-            })}
-          </View>
-          <View>
-            <CenteredText
-              style={styles.smallText}
-              msg={this.props.loadingMsg}
+export const RegistrationProgressContainer: React.FunctionComponent<
+  Props
+> = props => (
+  <Container style={styles.container}>
+    <StatusBar barStyle="light-content" />
+    <Block style={styles.label}>
+      <CenteredText
+        style={styles.text}
+        msg={I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}
+      />
+      <CenteredText
+        style={styles.text}
+        msg={I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}
+      />
+    </Block>
+    <Block>
+      <loaders.RippleLoader
+        size={80}
+        strokeWidth={4}
+        color={JolocomTheme.spinnerColor}
+      />
+    </Block>
+    <Block style={styles.loadingMsg}>
+      <View style={styles.dotsContainer}>
+        {[0, 1, 2, 3].map((prop, key) => {
+          const stageNumber = loading.loadingStages.indexOf(props.loadingMsg)
+          return (
+            <Icon
+              name="circle"
+              size={prop <= stageNumber ? 15 : 10}
+              style={
+                prop <= stageNumber ? styles.dotActive : styles.dotInactive
+              }
+              key={prop}
             />
-          </View>
-        </Block>
-      </Container>
-    )
-  }
-}
+          )
+        })}
+      </View>
+      <View>
+        <CenteredText style={styles.smallText} msg={props.loadingMsg} />
+      </View>
+    </Block>
+  </Container>
+)
 
 const mapStateToProps = ({
   registration: {
@@ -119,7 +110,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({})
 
-export const Loading = connect(
+export const RegistrationProgress = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(LoadingContainer)
+)(RegistrationProgressContainer)

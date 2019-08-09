@@ -2,20 +2,25 @@ import {
   NavigationActions,
   StackActions,
   NavigationNavigateActionPayload,
-  NavigationContainer,
+  NavigationAction,
+  NavigationContainerComponent,
 } from 'react-navigation'
-import { setDeepLinkLoading } from 'src/actions/sso'
 import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from '../../lib/storage/interactionTokens'
-import { showErrorScreen } from '../generic'
-import { AppError, ErrorCode } from '../../lib/errors'
-import { withErrorHandling, withLoading } from 'src/actions/modifiers'
-import { ThunkAction } from '../../store'
+import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { AppError, ErrorCode } from 'src/lib/errors'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
+import { ThunkAction } from 'src/store'
 
-let topLevelNavigator: any
-export const setTopLevelNavigator = (nav: NavigationContainer) => {
-  topLevelNavigator = nav
+let deferredNavActions: NavigationAction[] = [],
+  dispatchNavigationAction = (action: any) => {
+    deferredNavActions.push(action)
+  }
+
+export const setTopLevelNavigator = (nav: NavigationContainerComponent) => {
+  dispatchNavigationAction = nav.dispatch.bind(nav)
+  deferredNavActions.forEach(dispatchNavigationAction)
+  deferredNavActions.length = 0
 }
 
 /**
@@ -27,9 +32,10 @@ export const navigate = (
   options: NavigationNavigateActionPayload,
 ): ThunkAction => dispatch => {
   const action = NavigationActions.navigate(options)
-  topLevelNavigator && topLevelNavigator.dispatch(action)
+  dispatchNavigationAction(action)
   return dispatch(action)
 }
+
 export const navigatorReset = (
   newScreen: NavigationNavigateActionPayload,
 ): ThunkAction => dispatch => {
@@ -37,7 +43,7 @@ export const navigatorReset = (
     index: 0,
     actions: [NavigationActions.navigate(newScreen)],
   })
-  topLevelNavigator && topLevelNavigator.dispatch(action)
+  dispatchNavigationAction(action)
   return dispatch(action)
 }
 
@@ -64,23 +70,25 @@ export const handleDeepLink = (url: string): ThunkAction => (
     routeName === 'payment' ||
     routeName === 'authenticate'
   ) {
-    // The identityWallet is initialised before the deep link is handled.
-    if (!backendMiddleware.identityWallet) {
-      return dispatch(navigatorReset({ routeName: routeList.Landing }))
-    }
+    // The identityWallet is initialised before the deep link is handled. If it
+    // is not initialized, then we may not even have an identity.
+    if (backendMiddleware.identityWallet) {
+      const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
+      const handler = interactionHandlers[interactionToken.interactionType]
 
-    const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
-    const handler = interactionHandlers[interactionToken.interactionType]
-
-    if (handler) {
-      return dispatch(
-        withLoading(setDeepLinkLoading)(
-          withErrorHandling(showErrorScreen)(handler(interactionToken, true)),
-        ),
-      )
+      if (handler) {
+        return dispatch(
+          withLoading(
+            withErrorScreen(handler(interactionToken, true)),
+          ),
+        )
+      }
     }
   }
 
   /** @TODO Use error code */
-  throw new AppError(ErrorCode.Unknown, new Error('Could not handle interaction token'))
+  throw new AppError(
+    ErrorCode.Unknown,
+    new Error('Could not handle interaction token'),
+  )
 }

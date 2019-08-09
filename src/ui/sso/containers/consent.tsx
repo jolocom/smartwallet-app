@@ -3,10 +3,8 @@ import { connect } from 'react-redux'
 import { StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
-import { ThunkDispatch } from '../../../store'
-import { withErrorHandling, withLoading } from '../../../actions/modifiers'
-import { toggleLoading } from '../../../actions/account'
-import { showErrorScreen } from '../../../actions/generic'
+import { ThunkDispatch } from 'src/store'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { NavigationParams } from 'react-navigation'
 
 interface Props
@@ -59,8 +57,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     isDeepLinkInteraction: boolean,
   ) =>
     dispatch(
-      withLoading(toggleLoading)(
-        withErrorHandling(showErrorScreen)(
+      withLoading(
+        withErrorScreen(
           ssoActions.sendCredentialResponse(credentials, isDeepLinkInteraction),
         ),
       ),

@@ -6,16 +6,23 @@ import { ThunkAction } from 'src/store'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import settingKeys from '../../ui/settings/settingKeys'
 
-export const showErrorScreen = (error: AppError): ThunkAction => dispatch =>
-  dispatch(
+export const showErrorScreen = (error: AppError | Error): ThunkAction => dispatch => {
+  // NOTE: AppError is a subclass of Error, so we don't use an 'instanceof'
+  // check
+  const appError: AppError = error.constructor === Error ?
+    new AppError(ErrorCode.Unknown, error) :
+    error as AppError
+
+  return dispatch(
     navigationActions.navigate({
       routeName: routeList.Exception,
       params: {
-        returnTo: error.navigateTo || routeList.Home,
-        error,
+        returnTo: appError.navigateTo,
+        error: appError,
       },
     }),
   )
+}
 
 export const initApp: ThunkAction = async (
   dispatch,

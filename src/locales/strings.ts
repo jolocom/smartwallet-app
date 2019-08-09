@@ -88,6 +88,7 @@ const errorCodes = {
 
   [ErrorCode.DeepLinkUrlNotFound]: 'Could not find receiving application',
   [ErrorCode.RegistrationFailed]: 'Registration failed',
+  [ErrorCode.AppInitFailed]: 'Initialization failed',
 }
 export default {
   ...registration,
