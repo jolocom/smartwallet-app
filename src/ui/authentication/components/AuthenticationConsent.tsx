@@ -5,7 +5,7 @@ import I18n from 'src/locales/i18n'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import strings from '../../../locales/strings'
-import { Colors, Typography } from 'src/styles'
+import { Colors, Typography, Spacing } from 'src/styles'
 
 interface Props {
   activeAuthenticationRequest: StateAuthenticationRequestSummary
@@ -23,31 +23,30 @@ const styles = StyleSheet.create({
   requesterContainer: {
     flexDirection: 'row',
     backgroundColor: Colors.white,
-    paddingVertical: 20,
-    paddingHorizontal: 15,
-    marginTop: 25,
+    padding: Spacing.MD,
+    marginTop: Spacing.LG,
   },
   requesterIcon: {
     backgroundColor: Colors.lightGrey,
-    width: 42,
-    height: 42,
+    width: 40,
+    height: 40,
   },
   requesterTextContainer: {
-    marginLeft: 16,
     flex: -1,
+    marginLeft: Spacing.MD,
   },
   authRequestContainer: {
     flex: 1,
     paddingHorizontal: '10%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 35,
+    marginTop: Spacing.XL,
   },
   authRequestText: {
     ...Typography.baseFontStyles,
+    ...Typography.centeredText,
     fontSize: Typography.textLG,
-    textAlign: 'center',
-    marginTop: 10,
+    marginTop: Spacing.SM,
   },
 })
 
