@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   smallText: {
     ...Typography.baseFontStyles,
-    fontSize: Typography.textXXS,
+    fontSize: Typography.text2XS,
     color: Colors.sandLight,
   },
 })

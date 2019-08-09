@@ -8,7 +8,8 @@ const isSmallViewportWidth = initialViewportWidth < 360
 
 export const fontMain = Platform.OS === 'android' ? 'TTCommons' : 'TT Commons'
 
-export const textXXS = 14
+export const text3XS = 12
+export const text2XS = 14
 export const textXS = 17
 export const textSM = 18
 export const textMD = 20
