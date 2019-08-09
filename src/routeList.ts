@@ -2,12 +2,17 @@
 export enum routeList {
   AppInit = 'AppInit',
 
+  // Registration
   Landing = 'Landing',
   InitAction = 'InitAction',
   Entropy = 'Entropy',
   RegistrationProgress = 'RegistrationProgress',
   Loading = 'Loading',
 
+  // Recovery
+  InputSeedPhrase = 'InputSeedPhrase',
+
+  // Bottom Nav Screens
   Home = 'Home',
   Claims = 'Claims',
   Documents = 'Documents',
@@ -15,6 +20,7 @@ export enum routeList {
   Settings = 'Settings',
   QRCodeScanner = 'QRCodeScanner',
 
+  // Interactions & Details
   CredentialDialog = 'CredentialDialog',
   Consent = 'Consent',
   PaymentConsent = 'PaymentConsent',
@@ -22,6 +28,7 @@ export enum routeList {
   ClaimDetails = 'ClaimDetails',
   DocumentDetails = 'DocumentDetails',
 
+  // Settings
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
 

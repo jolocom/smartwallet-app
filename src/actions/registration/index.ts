@@ -40,10 +40,9 @@ export const selectInitAction = (action: string): ThunkAction => dispatch => {
       return dispatch(startRegistration)
     }
     case InitAction.RECOVER: {
-      // TODO open recover screen
       return dispatch(
         navigationActions.navigate({
-          routeName: routeList.Entropy,
+          routeName: routeList.InputSeedPhrase,
         }),
       )
     }
