@@ -43,16 +43,40 @@ export const subMainText = {
   fontSize: textSubheader,
 }
 
-// this is used for main information such as issuer name, claimCard's main info
-//  button text, iOS header
+// this is used for button text, iOS header
 export const standardText = {
   ...baseFontStyles,
   fontSize: textLG,
 }
 
-// e.g. Personal, Contact on credentialOverview
+// used as the main text for cards like claimCards, issuerCard etc.
+export const cardMainText = {
+  ...baseFontStyles,
+  fontSize: textLG,
+  color: Colors.blackMain,
+}
+
+export const cardMainTextPurple = {
+  ...cardMainText,
+  color: Colors.purpleMain,
+}
+
+// used for the label, subtext of cards, callbackURL, address etc.
+export const cardSecondaryText = {
+  ...baseFontStyles,
+  fontSize: textXS,
+  color: Colors.blackMain040,
+}
+
+export const cardSecondaryTextBlack = {
+  ...cardSecondaryText,
+  color: Colors.blackMain,
+}
+
+// e.g. Personal, Contact on credentialOverview same as the above
+// cardSecondaryText
 export const sectionHeader = {
   ...baseFontStyles,
   fontSize: textXS,
-  color: Colors.black040,
+  color: Colors.blackMain040,
 }

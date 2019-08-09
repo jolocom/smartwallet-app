@@ -3,7 +3,6 @@ import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
 
@@ -68,16 +67,10 @@ export class AuthenticationConsentComponent extends React.Component<
       <View style={styles.requesterContainer}>
         <View style={styles.requesterIcon} />
         <View style={styles.requesterTextContainer}>
-          <Text
-            style={JolocomTheme.textStyles.light.textDisplayField}
-            numberOfLines={1}
-          >
+          <Text style={Typography.cardMainText} numberOfLines={1}>
             {requester}
           </Text>
-          <Text
-            style={JolocomTheme.textStyles.light.labelDisplayField}
-            numberOfLines={1}
-          >
+          <Text style={Typography.cardSecondaryText} numberOfLines={1}>
             {callbackURL}
           </Text>
         </View>
@@ -91,7 +84,9 @@ export class AuthenticationConsentComponent extends React.Component<
         <Text style={styles.authRequestText}>
           {I18n.t(strings.WOULD_YOU_LIKE_TO)}
         </Text>
-        <Text style={[styles.authRequestText, { fontSize: 42 }]}>
+        <Text
+          style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
+        >
           {description}
         </Text>
         <Text style={styles.authRequestText}>
