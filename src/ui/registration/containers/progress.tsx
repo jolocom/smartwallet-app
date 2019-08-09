@@ -5,11 +5,10 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { ThunkDispatch } from 'src/store'
 import strings from '../../../locales/strings'
-import { Colors, Typography } from 'src/styles'
+import { Colors, Typography, Spacing } from 'src/styles'
 const loaders = require('react-native-indicator')
 
 interface Props
@@ -32,16 +31,14 @@ const styles = StyleSheet.create({
   dotsContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: Spacing.LG,
   },
   dotActive: {
-    marginRight: 8,
-    marginLeft: 8,
+    marginHorizontal: Spacing.XS,
     color: Colors.dotColorActive,
   },
   dotInactive: {
-    marginRight: 5,
-    marginLeft: 5,
+    marginHorizontal: Spacing.SM,
     color: Colors.dotColorInactive,
   },
   text: {
@@ -74,7 +71,7 @@ export const RegistrationProgressContainer: React.FunctionComponent<
       <loaders.RippleLoader
         size={80}
         strokeWidth={4}
-        color={JolocomTheme.spinnerColor}
+        color={Colors.spinnerColor}
       />
     </Block>
     <Block style={styles.loadingMsg}>
