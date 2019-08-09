@@ -13,7 +13,6 @@
 // <ALTERED>
 const QR_CODE_BUTTON_INDEX = 2
 const QR_CODE_BUTTON_RADIUS = 36
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { routeList } from 'src/routeList'
 import { TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -34,6 +33,7 @@ import { SafeAreaView } from '@react-navigation/native';
 // <ALTERED> to use absolute imports
 import CrossFadeIcon from 'react-navigation-tabs/src/views/CrossFadeIcon';
 import withDimensions from 'react-navigation-tabs/src/utils/withDimensions';
+import { Colors } from 'src/styles';
 // </ALTERED>
 
 export type TabBarOptions = {
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
     height: QR_CODE_BUTTON_RADIUS * 2,
     width: QR_CODE_BUTTON_RADIUS * 2,
     borderRadius: QR_CODE_BUTTON_RADIUS,
-    backgroundColor: JolocomTheme.primaryColorPurple,
+    backgroundColor: Colors.purpleMain,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
