@@ -9,17 +9,17 @@ const isSmallViewportWidth = initialViewportWidth < 360
 export const fontMain = Platform.OS === 'android' ? 'TTCommons' : 'TT Commons'
 
 export const text3XS = 12
-export const text2XS = 14
+export const textXXS = 14
 export const textXS = 17
 export const textSM = 18
 export const textMD = 20
 export const textLG = 22
 export const textXL = 28
-export const text2XL = 30
+export const textXXL = 30
 export const text3XL = 34
 export const text4XL = 42
 
-export const textHeader = isSmallViewportWidth ? textXL : text2XL
+export const textHeader = isSmallViewportWidth ? textXL : textXXL
 export const textSubheader = isSmallViewportWidth ? textSM : textMD
 
 export const centeredText = {

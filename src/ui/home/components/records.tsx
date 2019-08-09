@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...Typography.baseFontStyles,
-    fontSize: Typography.text2XL,
+    fontSize: Typography.textXXL,
     textAlign: 'center',
     color: Colors.greyLight,
   },
