@@ -1,4 +1,4 @@
-import { Colors, Typography } from '.'
+import { Colors, Typography, Spacing } from '.'
 
 export const buttonStandardContainer = {
   minWidth: 164,
@@ -14,7 +14,9 @@ export const buttonStandardText = {
   // 2019-08-07: currently different fontWeights have no effect
   fontWeight: 'normal' as 'normal',
   color: Colors.white,
-  paddingVertical: 15,
+  // this is a hack, used because the lineHeight of our font causes it to be not
+  // centered vertically within the button
+  paddingVertical: Spacing.MD,
 }
 
 export const buttonDisabledStandardContainer = {
