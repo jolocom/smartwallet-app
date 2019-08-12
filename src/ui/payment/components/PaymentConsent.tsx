@@ -9,6 +9,7 @@ import { SectionClaimCard } from 'src/ui/structure/claimCard'
 import { StatePaymentRequestSummary } from 'src/reducers/sso'
 import { formatEth } from 'src/utils/formatEth'
 import strings from '../../../locales/strings'
+import { Colors } from 'src/styles'
 
 interface Props {
   activePaymentRequest: StatePaymentRequestSummary
@@ -37,8 +38,7 @@ const styles = {
     } as TextStyle,
   },
   container: {
-    padding: 0,
-    margin: 0,
+    backgroundColor: Colors.backgroundLightMain,
   },
   middleBlock: {
     justifyContent: 'flex-start',

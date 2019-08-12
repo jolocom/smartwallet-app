@@ -16,6 +16,7 @@ interface Props {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.blackMain,
+    padding: '5%',
   },
   noteSection: {
     marginTop: 20,

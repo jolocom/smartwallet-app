@@ -211,10 +211,9 @@ export class ConsentComponent extends React.Component<Props, State> {
     )
   }
 
-  // TODO No padding on containers by default
   render() {
     return (
-      <Container style={{ padding: 0 }}>
+      <Container>
         {this.renderFirstSection()}
         <Block flex={0.5}>
           <ScrollView style={{ width: '100%' }}>

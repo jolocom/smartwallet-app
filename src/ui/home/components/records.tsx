@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundLightMain,
   },
   text: {
-    ...Typography.baseFontStyles,
-    fontSize: Typography.textXXL,
+    ...Typography.mainText,
     textAlign: 'center',
     color: Colors.greyLight,
+    paddingHorizontal: '5%',
   },
 })
 

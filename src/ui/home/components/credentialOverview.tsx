@@ -24,7 +24,6 @@ interface State {}
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.lightGreyLighter,
-    padding: 0,
   },
   sectionHeader: {
     ...Typography.sectionHeader,

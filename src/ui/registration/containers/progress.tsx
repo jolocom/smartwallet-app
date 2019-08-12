@@ -16,6 +16,10 @@ interface Props
     ReturnType<typeof mapStateToProps> {}
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.blackMain,
+    padding: '5%',
+  },
   label: {
     alignSelf: 'flex-start',
     marginBottom: '10%',
@@ -23,10 +27,6 @@ const styles = StyleSheet.create({
   loadingMsg: {
     alignSelf: 'flex-end',
     marginBottom: '-10%',
-  },
-  container: {
-    backgroundColor: Colors.blackMain,
-    height: '100%',
   },
   dotsContainer: {
     alignItems: 'center',

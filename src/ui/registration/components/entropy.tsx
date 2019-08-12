@@ -18,7 +18,6 @@ const viewWidth: number = Dimensions.get('window').width
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.blackMain,
-    padding: 0,
   },
   footerButton: {
     position: 'absolute',

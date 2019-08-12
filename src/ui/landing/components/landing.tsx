@@ -28,10 +28,8 @@ const viewWidth: number = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   mainContainerStyle: {
-    paddingTop: 0,
     backgroundColor: Colors.blackMain,
-    justifyContent: 'flex-end',
-    flex: 1,
+    paddingBottom: '5%',
   },
   carouselTextContainer: {
     paddingHorizontal: viewWidth / 18,
