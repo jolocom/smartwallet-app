@@ -10,16 +10,18 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
       }
     }
   >
-    <CenteredText
-      msg="Email"
+    <Text
       style={
         Object {
-          "color": "black",
+          "color": "rgb(5, 5, 13)",
           "fontFamily": "TT Commons",
           "fontSize": 30,
+          "textAlign": "center",
         }
       }
-    />
+    >
+      Email
+    </Text>
   </Block>
   <Block
     style={
@@ -50,17 +52,17 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
       style={
         Object {
           "container": Object {
-            "backgroundColor": "#942f51",
+            "backgroundColor": "rgb(148, 47, 81)",
             "borderRadius": 4,
             "height": 48,
-            "width": 164,
+            "minWidth": 164,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
-            "fontWeight": "100",
-            "paddingVertical": 15,
+            "fontWeight": "normal",
+            "paddingVertical": 16,
           },
         }
       }
@@ -81,16 +83,18 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
       }
     }
   >
-    <CenteredText
-      msg="Name"
+    <Text
       style={
         Object {
-          "color": "black",
+          "color": "rgb(5, 5, 13)",
           "fontFamily": "TT Commons",
           "fontSize": 30,
+          "textAlign": "center",
         }
       }
-    />
+    >
+      Name
+    </Text>
   </Block>
   <Block
     style={
@@ -127,17 +131,17 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
       style={
         Object {
           "container": Object {
-            "backgroundColor": "#942f51",
+            "backgroundColor": "rgb(148, 47, 81)",
             "borderRadius": 4,
             "height": 48,
-            "width": 164,
+            "minWidth": 164,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
-            "fontWeight": "100",
-            "paddingVertical": 15,
+            "fontWeight": "normal",
+            "paddingVertical": 16,
           },
         }
       }

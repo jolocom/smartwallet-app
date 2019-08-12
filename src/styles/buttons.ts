@@ -1,4 +1,4 @@
-import { Colors, Typography, Spacing } from '.'
+import { Colors, Typography, Spacing } from 'src/styles'
 
 export const buttonStandardContainer = {
   minWidth: 164,
@@ -16,7 +16,9 @@ export const buttonStandardText = {
   color: Colors.white,
   // this is a hack, used because the lineHeight of our font causes it to be not
   // centered vertically within the button
-  paddingVertical: Spacing.MD,
+  // the 'as' is also a hack to get around a ts-jest issue with enums
+  // https://github.com/kulshekhar/ts-jest/issues/281
+  paddingVertical: 16 as Spacing.MD,
 }
 
 export const buttonDisabledStandardContainer = {
@@ -33,5 +35,5 @@ export const buttonConsentTextBase = {
   fontSize: Typography.textMD,
   fontFamily: Typography.fontMain,
   fontWeight: 'normal' as 'normal',
-  paddingVertical: Spacing.XS,
+  paddingVertical: 8 as Spacing.XS,
 }
