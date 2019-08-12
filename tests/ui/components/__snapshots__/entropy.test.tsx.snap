@@ -5,7 +5,6 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
-      "padding": 0,
     }
   }
 >
@@ -51,7 +50,6 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
-      "padding": 0,
     }
   }
 >
@@ -92,7 +90,6 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
-      "padding": 0,
     }
   }
 >

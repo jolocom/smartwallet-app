@@ -5,6 +5,7 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
+      "padding": "5%",
     }
   }
 >
@@ -91,6 +92,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
+      "padding": "5%",
     }
   }
 >
