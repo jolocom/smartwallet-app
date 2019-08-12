@@ -8,7 +8,7 @@ import I18n from 'src/locales/i18n'
 import { DocumentCard } from '../components/documentCard'
 import { DocumentDetails as DocumentDetailsComponent } from '../components/documentDetails'
 import strings from '../../../locales/strings'
-import { Colors } from 'src/styles'
+import { Colors, Spacing } from 'src/styles'
 
 interface Props
   extends ReturnType<typeof mapStateToProps>,
@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   documentCardContainer: {
-    paddingVertical: 15,
-    justifyContent: 'center',
+    paddingVertical: Spacing.MD,
     alignItems: 'center',
   },
 })
