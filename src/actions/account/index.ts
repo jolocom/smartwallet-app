@@ -40,8 +40,9 @@ export const checkIdentityExists: ThunkAction = async (
   getState,
   backendMiddleware,
 ) => {
-  const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
-  const encryptedEntropy = await storageLib.get.encryptedSeed().catch(err => {
+  const { keyChainLib, storageLib } = backendMiddleware
+  const encryptedEntropy = await storageLib.get.encryptedSeed()
+    .catch(err => {
     // TODO Fix this
     if (err.message.indexOf('no such table') === 0) {
       return
@@ -65,19 +66,8 @@ export const checkIdentityExists: ThunkAction = async (
 
   const password = await keyChainLib.getPassword()
 
-  const decryptedSeed = encryptionLib.decryptWithPass({
-    cipher: encryptedEntropy,
-    pass: password,
-  })
-
-  if (!decryptedSeed) {
-    throw new Error('could not decrypt seed')
-  }
-
-  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-  const userVault = JolocomLib.KeyProvider.fromSeed(
-    Buffer.from(decryptedSeed, 'hex'),
-    password,
+  const userVault = new JolocomLib.KeyProvider(
+    Buffer.from(encryptedEntropy, 'hex'),
   )
 
   await backendMiddleware.setIdentityWallet(userVault, password)

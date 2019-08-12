@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import InputSeedPhraseComponent from '../components/inputSeedPhrase'
 // @ts-ignore
-import { wordlists } from 'bip39'
+import { wordlists, validateMnemonic } from 'bip39'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { recoverIdentity } from '../../../actions/registration'
 
@@ -13,6 +13,7 @@ interface Props
 
 interface State {
   value: string
+  isValid: boolean
   wordList: string[]
 }
 function getLastWord(phrase: string): string {
@@ -27,6 +28,7 @@ function getLastWord(phrase: string): string {
 export class InputSeedPhraseContainer extends React.Component<Props, State> {
   public state = {
     value: '',
+    isValid: false,
     wordList: [] as string[],
   }
 
@@ -42,17 +44,20 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     }
     this.setState({
       value: text,
+      isValid: validateMnemonic(text),
       wordList: matches,
     })
   }
 
   private selectWord = (index: number): void => {
     const { wordList, value } = this.state
+    const newValue =
+      value.indexOf(' ') !== -1
+        ? value.slice(0, value.lastIndexOf(' ')) + ' ' + wordList[index] + ' '
+        : wordList[index] + ' '
     this.setState({
-      value:
-        value.indexOf(' ') !== -1
-          ? value.slice(0, value.lastIndexOf(' ')) + ' ' + wordList[index] + ' '
-          : wordList[index] + ' ',
+      value: newValue,
+      isValid: validateMnemonic(newValue),
       wordList: [],
     })
   }
@@ -60,6 +65,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     return (
       <InputSeedPhraseComponent
         value={this.state.value}
+        isValid={this.state.isValid}
         wordList={this.state.wordList}
         selectWord={this.selectWord}
         handleTextInput={this.handleSeedPhraseChange}

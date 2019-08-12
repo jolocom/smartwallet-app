@@ -40,17 +40,22 @@ const styles = StyleSheet.create({
     color: JolocomTheme.primaryColorWhite,
     fontFamily: JolocomTheme.contentFontFamily,
   },
+  disabled: {
+    opacity: 0.5,
+  },
 })
 interface InputSeedPhraseProps {
   handleButtonPress: () => void
   handleTextInput: (text: string) => void
   selectWord: (index: number) => void
   value: string
+  isValid: boolean
   wordList: string[]
 }
 
 const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
   value,
+  isValid,
   wordList,
   handleTextInput,
   selectWord,
@@ -90,10 +95,19 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
         </Text>
       ))}
     </View>
+    {isValid ? (
+      <Text style={styles.note}>Valid</Text>
+    ) : (
+      <Text style={styles.note}>Not Valid</Text>
+    )}
     <View style={styles.buttonSection}>
       <Button
-        style={{ container: styles.buttonContainer, text: styles.buttonText }}
-        onPress={handleButtonPress}
+        disabled={!isValid}
+        style={{
+          container: [styles.buttonContainer, !isValid && styles.disabled],
+          text: styles.buttonText,
+        }}
+        onPress={isValid ? handleButtonPress : undefined}
         raised
         upperCase={false}
         text={'Recover my Identity'}

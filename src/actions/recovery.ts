@@ -13,14 +13,11 @@ export const showSeedPhrase = (): ThunkAction => async (
   if (!encryptedSeed) {
     throw new Error('Can not retrieve Seed from database')
   }
-  // TODO create vault from encrypted Seed
-  const pass = await backendMiddleware.keyChainLib.getPassword()
-  const decrypt = backendMiddleware.encryptionLib.decryptWithPass({
-    cipher: encryptedSeed,
-    pass,
-  })
-  const vault = SoftwareKeyProvider.fromSeed(Buffer.from(decrypt, 'hex'), pass)
-  const mnemonic = vault.getMnemonic(pass)
+
+  const password = await backendMiddleware.keyChainLib.getPassword()
+  const vault = new SoftwareKeyProvider(Buffer.from(encryptedSeed, 'hex'))
+  // @ts-ignore
+  const mnemonic = vault.getMnemonic(password)
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.SeedPhrase,
