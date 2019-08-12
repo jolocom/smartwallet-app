@@ -6,7 +6,6 @@ exports[`landing component matches the snapshot on render 1`] = `
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
       "flex": 1,
-      "flexDirection": "column",
       "justifyContent": "flex-end",
       "paddingTop": 0,
     }
@@ -99,13 +98,13 @@ exports[`landing component matches the snapshot on render 1`] = `
         }
       }
       dotsLength={4}
-      inactiveDotOpacity={0.4}
-      inactiveDotScale={0.6}
+      inactiveDotOpacity={0.5}
+      inactiveDotScale={0.5}
       inactiveDotStyle={
         Object {
           "backgroundColor": "rgba(255, 254, 252, 0.7)",
-          "height": 4,
-          "width": 4,
+          "height": 8,
+          "width": 8,
         }
       }
       tappableDots={false}

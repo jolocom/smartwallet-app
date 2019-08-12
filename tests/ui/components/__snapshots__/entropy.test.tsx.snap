@@ -9,8 +9,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
     }
   }
 >
-  <CenteredText
-    msg="50 %"
+  <Text
     style={
       Array [
         Object {
@@ -19,6 +18,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
           "fontSize": 20,
           "paddingHorizontal": 50,
           "position": "absolute",
+          "textAlign": "center",
           "top": "20%",
         },
         Object {
@@ -26,7 +26,9 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         },
       ]
     }
-  />
+  >
+    50 %
+  </Text>
   <Block>
     <MaskedImageComponent
       addPoint={[Function]}
@@ -53,8 +55,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
     }
   }
 >
-  <CenteredText
-    msg="For security purposes, we need some randomness. Please tap the screen and draw on it randomly"
+  <Text
     style={
       Object {
         "color": "rgb(255, 239, 223)",
@@ -62,10 +63,13 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
         "fontSize": 20,
         "paddingHorizontal": 50,
         "position": "absolute",
+        "textAlign": "center",
         "top": "20%",
       }
     }
-  />
+  >
+    For security purposes, we need some randomness. Please tap the screen and draw on it randomly
+  </Text>
   <Block>
     <MaskedImageComponent
       addPoint={[Function]}
@@ -92,8 +96,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
     }
   }
 >
-  <CenteredText
-    msg="100 %"
+  <Text
     style={
       Array [
         Object {
@@ -102,6 +105,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
           "fontSize": 20,
           "paddingHorizontal": 50,
           "position": "absolute",
+          "textAlign": "center",
           "top": "20%",
         },
         Object {
@@ -109,7 +113,9 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
         },
       ]
     }
-  />
+  >
+    100 %
+  </Text>
   <Block>
     <MaskedImageComponent
       addPoint={[Function]}
