@@ -28,3 +28,10 @@ export const buttonDisabledStandardText = {
   ...buttonStandardText,
   color: Colors.disabledButtonText,
 }
+
+export const buttonConsentTextBase = {
+  fontSize: Typography.textMD,
+  fontFamily: Typography.fontMain,
+  fontWeight: 'normal' as 'normal',
+  paddingVertical: Spacing.XS,
+}
