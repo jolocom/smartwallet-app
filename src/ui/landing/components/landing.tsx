@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, Text } from 'react-native'
 import { Button } from 'react-native-material-ui'
-import { Block, Container, CenteredText } from 'src/ui/structure'
+import { Block, Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import { Landing00, Landing01, Landing02, Landing03 } from 'src/resources'
 import strings from 'src/locales/strings'
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     backgroundColor: Colors.blackMain,
     justifyContent: 'flex-end',
-    flexDirection: 'column',
     flex: 1,
   },
   carouselTextContainer: {
@@ -47,18 +46,20 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dotColorActive,
   },
   inactiveDotStyle: {
-    width: 4,
-    height: 4,
+    width: 8,
+    height: 8,
     backgroundColor: Colors.dotColorInactive,
   },
   header: {
     ...Typography.mainText,
+    textAlign: 'center',
     color: Colors.sandLight,
   },
   subHeader: {
     ...Typography.subMainText,
+    textAlign: 'center',
     color: Colors.sandLight080,
-    lineHeight: Typography.textSubheader + 4,
+    lineHeight: Typography.subMainText.fontSize + 4,
     marginTop: 15,
   },
   paginationBlock: {
@@ -128,8 +129,8 @@ export class LandingComponent extends React.Component<Props, State> {
       <Block>
         {svgImage}
         <Block style={styles.carouselTextContainer}>
-          <CenteredText style={styles.header} msg={title} />
-          <CenteredText style={styles.subHeader} msg={infoText} />
+          <Text style={styles.header}>{title}</Text>
+          <Text style={styles.subHeader}>{infoText}</Text>
         </Block>
       </Block>
     )
@@ -143,8 +144,7 @@ export class LandingComponent extends React.Component<Props, State> {
         activeDotIndex={activeSlide}
         dotStyle={styles.activeDotStyle}
         inactiveDotStyle={styles.inactiveDotStyle}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
+        inactiveDotScale={0.5}
       />
     )
   }

@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { View, StyleSheet, StatusBar } from 'react-native'
+import { View, StyleSheet, StatusBar, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
-import { Container, CenteredText, Block } from 'src/ui/structure/'
+import { Container, Block } from 'src/ui/structure/'
 import I18n from 'src/locales/i18n'
 import { ThunkDispatch } from 'src/store'
 import strings from '../../../locales/strings'
@@ -43,10 +43,12 @@ const styles = StyleSheet.create({
   },
   text: {
     ...Typography.subMainText,
+    textAlign: 'center',
     color: Colors.sandLight,
   },
   smallText: {
     ...Typography.baseFontStyles,
+    textAlign: 'center',
     fontSize: Typography.textXXS,
     color: Colors.sandLight,
   },
@@ -58,14 +60,8 @@ export const RegistrationProgressContainer: React.FunctionComponent<
   <Container style={styles.container}>
     <StatusBar barStyle="light-content" />
     <Block style={styles.label}>
-      <CenteredText
-        style={styles.text}
-        msg={I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}
-      />
-      <CenteredText
-        style={styles.text}
-        msg={I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}
-      />
+      <Text style={styles.text}>{I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}</Text>
+      <Text style={styles.text}>{I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}</Text>
     </Block>
     <Block>
       <loaders.RippleLoader
@@ -91,7 +87,7 @@ export const RegistrationProgressContainer: React.FunctionComponent<
         })}
       </View>
       <View>
-        <CenteredText style={styles.smallText} msg={props.loadingMsg} />
+        <Text style={styles.smallText}>{props.loadingMsg}</Text>
       </View>
     </Block>
   </Container>

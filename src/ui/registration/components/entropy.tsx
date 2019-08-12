@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'react-native-material-ui'
-import { StyleSheet, View, Dimensions } from 'react-native'
-import { Block, Container, CenteredText } from 'src/ui/structure/'
+import { StyleSheet, View, Dimensions, Text } from 'react-native'
+import { Block, Container } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...Typography.subMainText,
+    textAlign: 'center',
     color: Colors.sandLight,
     position: 'absolute',
     top: '20%',
@@ -52,11 +53,11 @@ export const EntropyComponent: React.SFC<Props> = props => {
         I18n.t(strings.PLEASE_TAP_THE_SCREEN_AND_DRAW_ON_IT_RANDOMLY)
       : `${Math.trunc(progress * 100)} %`
 
-  const style = progress === 0 ? styles.text : [styles.text, styles.bigFont]
+  const textStyle = progress === 0 ? styles.text : [styles.text, styles.bigFont]
 
   return (
     <Container style={styles.mainContainer}>
-      <CenteredText style={style} msg={msg} />
+      <Text style={textStyle}>{msg}</Text>
       <Block>
         <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
       </Block>
