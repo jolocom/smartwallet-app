@@ -52,6 +52,8 @@ const noHeaderNavOpts = {
 
 const headerTitleStyle: StyleProp<TextStyle> = {
   ...Typography.standardText,
+  // the default is 500, which is not supported on Android properly
+  fontWeight: 'normal',
   color: Colors.navHeaderTintDefault,
 }
 
