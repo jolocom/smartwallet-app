@@ -45,7 +45,47 @@ Object {
           "subject": "",
         },
       ],
-      "Other": Array [],
+      "Other": Array [
+        Object {
+          "claimData": Object {
+            "random": "thing",
+            "something": "else",
+          },
+          "credentialType": "IdCard",
+          "expires": 2019-08-10T00:00:00.000Z,
+          "id": "1",
+          "issuer": Object {
+            "did": "123",
+          },
+          "subject": "123",
+        },
+        Object {
+          "claimData": Object {
+            "random": "thing",
+            "something": "else",
+          },
+          "credentialType": "Passport",
+          "id": "2",
+          "issuer": Object {
+            "did": "123",
+          },
+          "subject": "123",
+        },
+        Object {
+          "claimData": Object {
+            "documentNumber": "12345",
+            "random": "thing",
+            "something": "else",
+          },
+          "credentialType": "IdCard",
+          "expires": 2019-07-04T00:00:00.000Z,
+          "id": "2",
+          "issuer": Object {
+            "did": "123",
+          },
+          "subject": "123",
+        },
+      ],
       "Personal": Array [
         Object {
           "claimData": Object {
@@ -129,7 +169,47 @@ Object {
           "subject": "",
         },
       ],
-      "Other": Array [],
+      "Other": Array [
+        Object {
+          "claimData": Object {
+            "random": "thing",
+            "something": "else",
+          },
+          "credentialType": "IdCard",
+          "expires": 2019-08-10T00:00:00.000Z,
+          "id": "1",
+          "issuer": Object {
+            "did": "123",
+          },
+          "subject": "123",
+        },
+        Object {
+          "claimData": Object {
+            "random": "thing",
+            "something": "else",
+          },
+          "credentialType": "Passport",
+          "id": "2",
+          "issuer": Object {
+            "did": "123",
+          },
+          "subject": "123",
+        },
+        Object {
+          "claimData": Object {
+            "documentNumber": "12345",
+            "random": "thing",
+            "something": "else",
+          },
+          "credentialType": "IdCard",
+          "expires": 2019-07-04T00:00:00.000Z,
+          "id": "2",
+          "issuer": Object {
+            "did": "123",
+          },
+          "subject": "123",
+        },
+      ],
       "Personal": Array [
         Object {
           "claimData": Object {

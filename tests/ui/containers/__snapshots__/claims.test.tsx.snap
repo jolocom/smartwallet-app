@@ -1,13 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Claims container correctly changes scanning to false when qr code scanner is canceled 1`] = `
-<View
-  style={
-    Object {
-      "flex": 1,
-    }
-  }
->
+<View>
   <CredentialOverview
     claimsToRender={
       Object {
@@ -52,7 +46,47 @@ exports[`Claims container correctly changes scanning to false when qr code scann
             "subject": "",
           },
         ],
-        "Other": Array [],
+        "Other": Array [
+          Object {
+            "claimData": Object {
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "IdCard",
+            "expires": 2019-08-10T00:00:00.000Z,
+            "id": "1",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+          Object {
+            "claimData": Object {
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "Passport",
+            "id": "2",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+          Object {
+            "claimData": Object {
+              "documentNumber": "12345",
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "IdCard",
+            "expires": 2019-07-04T00:00:00.000Z,
+            "id": "2",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+        ],
         "Personal": Array [
           Object {
             "claimData": Object {
@@ -76,13 +110,7 @@ exports[`Claims container correctly changes scanning to false when qr code scann
 `;
 
 exports[`Claims container correctly changes scanning to true when qr code scanner is started 1`] = `
-<View
-  style={
-    Object {
-      "flex": 1,
-    }
-  }
->
+<View>
   <CredentialOverview
     claimsToRender={
       Object {
@@ -127,7 +155,47 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
             "subject": "",
           },
         ],
-        "Other": Array [],
+        "Other": Array [
+          Object {
+            "claimData": Object {
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "IdCard",
+            "expires": 2019-08-10T00:00:00.000Z,
+            "id": "1",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+          Object {
+            "claimData": Object {
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "Passport",
+            "id": "2",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+          Object {
+            "claimData": Object {
+              "documentNumber": "12345",
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "IdCard",
+            "expires": 2019-07-04T00:00:00.000Z,
+            "id": "2",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+        ],
         "Personal": Array [
           Object {
             "claimData": Object {
@@ -151,13 +219,7 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
 `;
 
 exports[`Claims container mounts correctly and matches the snapshot 1`] = `
-<View
-  style={
-    Object {
-      "flex": 1,
-    }
-  }
->
+<View>
   <CredentialOverview
     claimsToRender={
       Object {
@@ -202,7 +264,47 @@ exports[`Claims container mounts correctly and matches the snapshot 1`] = `
             "subject": "",
           },
         ],
-        "Other": Array [],
+        "Other": Array [
+          Object {
+            "claimData": Object {
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "IdCard",
+            "expires": 2019-08-10T00:00:00.000Z,
+            "id": "1",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+          Object {
+            "claimData": Object {
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "Passport",
+            "id": "2",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+          Object {
+            "claimData": Object {
+              "documentNumber": "12345",
+              "random": "thing",
+              "something": "else",
+            },
+            "credentialType": "IdCard",
+            "expires": 2019-07-04T00:00:00.000Z,
+            "id": "2",
+            "issuer": Object {
+              "did": "123",
+            },
+            "subject": "123",
+          },
+        ],
         "Personal": Array [
           Object {
             "claimData": Object {

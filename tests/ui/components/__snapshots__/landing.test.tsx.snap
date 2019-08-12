@@ -4,7 +4,7 @@ exports[`landing component matches the snapshot on render 1`] = `
 <Container
   style={
     Object {
-      "backgroundColor": "#05050d",
+      "backgroundColor": "rgb(5, 5, 13)",
       "flex": 1,
       "flexDirection": "column",
       "justifyContent": "flex-end",
@@ -85,7 +85,6 @@ exports[`landing component matches the snapshot on render 1`] = `
   <Block
     style={
       Object {
-        "backgroundColor": "#05050d",
         "flex": 0.15,
       }
     }
@@ -94,7 +93,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       activeDotIndex={0}
       dotStyle={
         Object {
-          "backgroundColor": "#ffdebc",
+          "backgroundColor": "rgb(255, 222, 188)",
           "height": 8,
           "width": 8,
         }
@@ -104,9 +103,8 @@ exports[`landing component matches the snapshot on render 1`] = `
       inactiveDotScale={0.6}
       inactiveDotStyle={
         Object {
-          "backgroundColor": "#fffefc",
+          "backgroundColor": "rgba(255, 254, 252, 0.7)",
           "height": 4,
-          "opacity": 0.6,
           "width": 4,
         }
       }
@@ -117,7 +115,6 @@ exports[`landing component matches the snapshot on render 1`] = `
   <Block
     style={
       Object {
-        "backgroundColor": "#05050d",
         "flex": 0.1,
       }
     }
@@ -128,7 +125,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       style={
         Object {
           "container": Object {
-            "backgroundColor": "#942f51",
+            "backgroundColor": "rgb(148, 47, 81)",
             "borderRadius": 4,
             "height": 48,
             "minWidth": 164,
@@ -137,10 +134,8 @@ exports[`landing component matches the snapshot on render 1`] = `
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
-            "fontWeight": "100",
-            "minWidth": 158,
-            "paddingVertical": 15,
-            "textAlign": "center",
+            "fontWeight": "normal",
+            "paddingVertical": 16,
           },
         }
       }
