@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: 'white',
-    width: 200,
+    width: '90%',
   },
   buttonSection: {
     marginTop: 'auto',
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   },
 })
 interface InputSeedPhraseProps {
+  handleButtonPress: () => void
   handleTextInput: (text: string) => void
   selectWord: (index: number) => void
   value: string
@@ -53,6 +54,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
   wordList,
   handleTextInput,
   selectWord,
+  handleButtonPress,
 }) => (
   <Container style={styles.container}>
     <View style={styles.noteSection}>
@@ -64,6 +66,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
 
     <TextInput
       multiline
+      autoCapitalize={'none'}
       style={styles.textInput}
       value={value}
       onChangeText={handleTextInput}
@@ -90,7 +93,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
     <View style={styles.buttonSection}>
       <Button
         style={{ container: styles.buttonContainer, text: styles.buttonText }}
-        // onPress={handleButtonTap}
+        onPress={handleButtonPress}
         raised
         upperCase={false}
         text={'Recover my Identity'}

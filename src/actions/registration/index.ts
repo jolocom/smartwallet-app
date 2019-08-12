@@ -4,8 +4,10 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { generateSecureRandomBytes } from 'src/lib/util'
-import { ThunkAction } from 'src/store'
+import { AnyAction, ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
+import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
+import { setSeedPhraseSaved } from '../recovery'
 
 export enum InitAction {
   CREATE = 'create',
@@ -86,7 +88,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
-) => {
+): Promise<AnyAction | void> => {
   // This is a just-in-case thing.... maybe multiple button taps or something
   const isRegistering = getState().registration.loading.isRegistering
   if (isRegistering) {
@@ -99,14 +101,13 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
 
   dispatch(setIsRegistering(true))
 
-  const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
+  const { encryptionLib, keyChainLib, registry } = backendMiddleware
 
   const password = await keyChainLib.getPassword()
   const encEntropy = encryptionLib.encryptWithPass({
     data: encodedEntropy,
     pass: password,
   })
-  const entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
   const userVault = JolocomLib.KeyProvider.fromSeed(
     Buffer.from(encodedEntropy, 'hex'),
     password,
@@ -122,21 +123,48 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   )
 
   dispatch(setLoadingMsg(loading.loadingStages[2]))
-  const identityWallet = await registry.create(userVault, password)
+  backendMiddleware.identityWallet = await registry.create(userVault, password)
+  dispatch(setLoadingMsg(loading.loadingStages[3]))
+  await dispatch(storeIdentity(encEntropy))
 
+  dispatch(setIsRegistering(false))
+  return dispatch(navigatorResetHome())
+}
+
+export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+): Promise<AnyAction | void> => {
+  const { keyChainLib } = backendMiddleware
+
+  const password = (await generateSecureRandomBytes(32)).toString('base64')
+
+  await keyChainLib.savePassword(password)
+  const userVault = JolocomLib.KeyProvider.recoverKeyPair(
+    seedPhrase,
+    password,
+  ) as SoftwareKeyProvider
+  await backendMiddleware.setIdentityWallet(userVault, password)
+
+  await dispatch(storeIdentity(userVault['encryptedSeed'].toString('hex')))
+  await dispatch(setSeedPhraseSaved())
+  return dispatch(navigatorResetHome())
+}
+
+const storeIdentity = (encEntropy: string): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+): Promise<void> => {
+  const { storageLib } = backendMiddleware
+  dispatch(setDid(backendMiddleware.identityWallet.identity.did))
+  const entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
   const personaData = {
-    did: identityWallet.identity.did,
+    did: backendMiddleware.identityWallet.identity.did,
     controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
   }
 
-  dispatch(setDid(identityWallet.identity.did))
-  dispatch(setLoadingMsg(loading.loadingStages[3]))
-  await backendMiddleware.setIdentityWallet(userVault, password)
-
   await storageLib.store.encryptedSeed(entropyData)
   await storageLib.store.persona(personaData)
-
-  dispatch(setIsRegistering(false))
-
-  return dispatch(navigatorResetHome())
 }
