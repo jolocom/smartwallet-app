@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, StyleSheet, Text } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import strings from '../../../locales/strings'
