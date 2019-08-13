@@ -1,39 +1,36 @@
 import React from 'react'
-import { Block } from 'src/ui/structure'
 import {
   StyleSheet,
   Keyboard,
   EmitterSubscription,
-  Dimensions,
   ScrollView,
   Text,
+  View,
 } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Buttons, Typography, Colors } from 'src/styles'
-
-const viewHeight: number = Dimensions.get('window').height
+import { Buttons, Typography, Colors, Spacing } from 'src/styles'
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.backgroundLightMain,
-    paddingTop: '5%',
   },
   header: {
     ...Typography.centeredText,
     ...Typography.mainText,
     color: Colors.blackMain,
+    marginTop: Spacing.XL,
   },
-  blockSpace: {
-    marginTop: viewHeight / 40,
-    marginBottom: viewHeight / 40,
+  textInputArea: {
+    alignItems: 'center',
+    marginTop: Spacing.LG,
   },
-  blockSpaceLast: {
-    marginTop: viewHeight / 20,
-    marginBottom: viewHeight / 20,
+  buttonArea: {
+    alignItems: 'center',
+    marginVertical: Spacing.XXL,
   },
   buttonContainer: {
     ...Buttons.buttonStandardContainer,
@@ -146,13 +143,11 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
     return (
       <ScrollView style={styles.container}>
-        <Block style={styles.blockSpace}>
-          <Text style={styles.header}>{I18n.t(credentialType)}</Text>
-        </Block>
-        <Block style={styles.blockSpace}>
+        <Text style={styles.header}>{I18n.t(credentialType)}</Text>
+        <View style={styles.textInputArea}>
           {this.renderInputFields(selectedClaim)}
-        </Block>
-        <Block style={styles.blockSpaceLast}>
+        </View>
+        <View style={styles.buttonArea}>
           {showButtonWhileTyping ? (
             <Button
               onPress={() => this.onSubmit()}
@@ -172,7 +167,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
               disabled={!!this.confirmationEligibilityCheck()}
             />
           ) : null}
-        </Block>
+        </View>
       </ScrollView>
     )
   }
