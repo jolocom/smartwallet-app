@@ -4,7 +4,7 @@ import { View, StyleSheet, StatusBar, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
-import { Container, Block } from 'src/ui/structure/'
+import { Container } from 'src/ui/structure/'
 import I18n from 'src/locales/i18n'
 import { ThunkDispatch } from 'src/store'
 import strings from '../../../locales/strings'
@@ -18,16 +18,11 @@ interface Props
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.blackMain,
-    padding: '5%',
+    justifyContent: 'space-around',
   },
-  label: {
-    alignSelf: 'flex-start',
-    marginBottom: '10%',
-  },
-  loadingMsg: {
-    alignSelf: 'flex-end',
-    marginBottom: '-10%',
-  },
+  messageArea: {},
+  loadingArea: {},
+  progressArea: {},
   dotsContainer: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -59,18 +54,18 @@ export const RegistrationProgressContainer: React.FunctionComponent<
 > = props => (
   <Container style={styles.container}>
     <StatusBar barStyle="light-content" />
-    <Block style={styles.label}>
+    <View style={styles.messageArea}>
       <Text style={styles.text}>{I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}</Text>
       <Text style={styles.text}>{I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}</Text>
-    </Block>
-    <Block>
+    </View>
+    <View style={styles.loadingArea}>
       <loaders.RippleLoader
         size={80}
         strokeWidth={4}
         color={Colors.spinnerColor}
       />
-    </Block>
-    <Block style={styles.loadingMsg}>
+    </View>
+    <View style={styles.progressArea}>
       <View style={styles.dotsContainer}>
         {[0, 1, 2, 3].map((prop, key) => {
           const stageNumber = loading.loadingStages.indexOf(props.loadingMsg)
@@ -89,7 +84,7 @@ export const RegistrationProgressContainer: React.FunctionComponent<
       <View>
         <Text style={styles.smallText}>{props.loadingMsg}</Text>
       </View>
-    </Block>
+    </View>
   </Container>
 )
 
