@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'react-native-material-ui'
-import { StyleSheet, View, Dimensions, Text } from 'react-native'
-import { Block, Container } from 'src/ui/structure/'
+import { StyleSheet, View, Text } from 'react-native'
+import { Container } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
@@ -12,8 +12,6 @@ interface Props {
   submitEntropy: () => void
   readonly progress: number
 }
-
-const viewWidth: number = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -29,7 +27,7 @@ const styles = StyleSheet.create({
     color: Colors.sandLight,
     position: 'absolute',
     top: '20%',
-    paddingHorizontal: viewWidth / 15,
+    paddingHorizontal: '5%',
   },
   bigFont: {
     fontSize: Typography.text4XL,
@@ -57,9 +55,9 @@ export const EntropyComponent: React.SFC<Props> = props => {
   return (
     <Container style={styles.mainContainer}>
       <Text style={textStyle}>{msg}</Text>
-      <Block>
+      <View style={{ width: '100%' }}>
         <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
-      </Block>
+      </View>
       <View style={styles.footerButton}>
         {progress === 1 ? (
           <Button
