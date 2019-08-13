@@ -128,7 +128,7 @@ export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
 ): Promise<AnyAction | void> => {
   const password = (await generateSecureRandomBytes(32)).toString('base64')
 
-  // For some reason `validateMnemonic` returns false inside of `JolocomLib.KeyProvider.recoverKeyPair`
+  // validateMnemonic is using `String.normalize()` which does not work on the old JS Core of React Native
   const seed = Buffer.from(bip39.mnemonicToEntropy(seedPhrase), 'hex')
   const userVault = JolocomLib.KeyProvider.fromSeed(seed, password)
   await backendMiddleware.setIdentityWallet(userVault, password)

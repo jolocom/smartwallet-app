@@ -34,7 +34,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
 
   private handleSeedPhraseChange = (text: string): void => {
     const lastWord = getLastWord(text)
-    let matches = []
+    let matches = [] as string[]
 
     if (lastWord.length >= 3) {
       matches = wordlists.EN.filter(
