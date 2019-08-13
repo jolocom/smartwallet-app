@@ -1,10 +1,11 @@
 import React from 'react'
-import { ScrollContainer, Block } from 'src/ui/structure'
+import { Block } from 'src/ui/structure'
 import {
   StyleSheet,
   Keyboard,
   EmitterSubscription,
   Dimensions,
+  ScrollView,
   Text,
 } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account/'
@@ -17,6 +18,10 @@ import { Buttons, Typography, Colors } from 'src/styles'
 const viewHeight: number = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.backgroundLightMain,
+    paddingTop: '5%',
+  },
   header: {
     ...Typography.centeredText,
     ...Typography.mainText,
@@ -140,7 +145,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
     return (
-      <ScrollContainer>
+      <ScrollView style={styles.container}>
         <Block style={styles.blockSpace}>
           <Text style={styles.header}>{I18n.t(credentialType)}</Text>
         </Block>
@@ -168,7 +173,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
             />
           ) : null}
         </Block>
-      </ScrollContainer>
+      </ScrollView>
     )
   }
 }
