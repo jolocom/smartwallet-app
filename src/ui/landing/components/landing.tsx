@@ -1,14 +1,12 @@
-import React, { ReactNode } from 'react'
-import { StyleSheet, Dimensions, Text } from 'react-native'
+import React from 'react'
+import { StyleSheet, Dimensions, Text, View } from 'react-native'
 import { Button } from 'react-native-material-ui'
-import { Block, Container } from 'src/ui/structure'
+import Carousel, { Pagination } from 'react-native-snap-carousel'
+import { Container } from 'src/ui/structure'
+import { Typography, Colors, Buttons, Spacing } from 'src/styles'
 import I18n from 'src/locales/i18n'
-import { Landing00, Landing01, Landing02, Landing03 } from 'src/resources'
 import strings from 'src/locales/strings'
-import { Typography, Colors, Buttons } from 'src/styles'
-
-const Carousel = require('react-native-snap-carousel').default
-const Pagination = require('react-native-snap-carousel').Pagination
+import { landingSlides, Slide } from './landingSlides'
 
 interface State {
   activeSlide: number
@@ -18,25 +16,31 @@ interface Props {
   handleButtonTap: () => void
 }
 
-interface Slide {
-  svgImage: ReactNode
-  title: string
-  infoText: string
-}
-
 const viewWidth: number = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
-  mainContainerStyle: {
+  mainContainer: {
     backgroundColor: Colors.blackMain,
     paddingBottom: '5%',
   },
+  carouselSlide: {
+    flex: 1,
+  },
   carouselTextContainer: {
-    paddingHorizontal: viewWidth / 18,
-    flex: 0.4,
     marginTop: 'auto',
-    justifyContent: 'flex-end',
-    backgroundColor: 'transparent',
+    paddingHorizontal: '5%',
+  },
+  header: {
+    ...Typography.mainText,
+    textAlign: 'center',
+    color: Colors.sandLight,
+  },
+  message: {
+    ...Typography.subMainText,
+    textAlign: 'center',
+    color: Colors.sandLight080,
+    lineHeight: Typography.subMainText.fontSize + 4,
+    marginTop: Spacing.MD,
   },
   activeDotStyle: {
     width: 8,
@@ -48,22 +52,7 @@ const styles = StyleSheet.create({
     height: 8,
     backgroundColor: Colors.dotColorInactive,
   },
-  header: {
-    ...Typography.mainText,
-    textAlign: 'center',
-    color: Colors.sandLight,
-  },
-  subHeader: {
-    ...Typography.subMainText,
-    textAlign: 'center',
-    color: Colors.sandLight080,
-    lineHeight: Typography.subMainText.fontSize + 4,
-    marginTop: 15,
-  },
-  paginationBlock: {
-    flex: 0.15,
-  },
-  buttonBlock: {
+  buttonArea: {
     flex: 0.1,
   },
   buttonContainer: {
@@ -74,48 +63,6 @@ const styles = StyleSheet.create({
   },
 })
 
-const carouselInfo: Slide[] = [
-  {
-    svgImage: <Landing00 />,
-    title: I18n.t(strings.YOUR_JOLOCOM_WALLET),
-    infoText:
-      I18n.t(
-        strings.TAKE_BACK_CONTROL_OF_YOUR_DIGITAL_SELF_AND_PROTECT_YOUR_PRIVATE_DATA_AGAINST_UNFAIR_USAGE,
-      ) + '.',
-  },
-  {
-    svgImage: <Landing01 height={'100%'} width={'100%'} />,
-    title: I18n.t(strings.ITS_EASY),
-    infoText:
-      I18n.t(strings.FORGET_ABOUT_LONG_FORMS_AND_REGISTRATIONS) +
-      '. ' +
-      I18n.t(
-        strings.INSTANTLY_ACCESS_SERVICES_WITHOUT_USING_YOUR_SOCIAL_MEDIA_PROFILES,
-      ) +
-      '.',
-  },
-  {
-    svgImage: <Landing03 height={'100%'} width={'100%'} />,
-    title: I18n.t(strings.ENHANCED_PRIVACY),
-    infoText:
-      I18n.t(strings.SHARE_ONLY_THE_INFORMATION_A_SERVICE_REALLY_NEEDS) +
-      '. ' +
-      I18n.t(strings.PROTECT_YOUR_DIGITAL_SELF_AGAINST_FRAUD) +
-      '.',
-  },
-  {
-    svgImage: <Landing02 height={'100%'} width={'100%'} />,
-    title: I18n.t(strings.GREATER_CONTROL),
-    infoText:
-      I18n.t(
-        strings.KEEP_ALL_YOUR_DATA_WITH_YOU_IN_ONE_PLACE_AVAILABLE_AT_ANY_TIME,
-      ) +
-      '. ' +
-      I18n.t(strings.TRACK_WHERE_YOU_SIGN_IN_TO_SERVICES) +
-      '.',
-  },
-]
-
 export class LandingComponent extends React.Component<Props, State> {
   state = {
     activeSlide: 0,
@@ -124,49 +71,41 @@ export class LandingComponent extends React.Component<Props, State> {
   private renderItem = ({ item }: { item: Slide }) => {
     const { svgImage, title, infoText } = item
     return (
-      <Block>
+      <View style={styles.carouselSlide}>
         {svgImage}
-        <Block style={styles.carouselTextContainer}>
+        <View style={styles.carouselTextContainer}>
           <Text style={styles.header}>{title}</Text>
-          <Text style={styles.subHeader}>{infoText}</Text>
-        </Block>
-      </Block>
-    )
-  }
-
-  private renderPagination() {
-    const { activeSlide } = this.state
-    return (
-      <Pagination
-        dotsLength={carouselInfo.length}
-        activeDotIndex={activeSlide}
-        dotStyle={styles.activeDotStyle}
-        inactiveDotStyle={styles.inactiveDotStyle}
-        inactiveDotScale={0.5}
-      />
+          <Text style={styles.message}>{infoText}</Text>
+        </View>
+      </View>
     )
   }
 
   render() {
+    const { activeSlide } = this.state
     return (
-      <Container style={styles.mainContainerStyle}>
-        <Block>
-          <Carousel
-            data={carouselInfo}
-            renderItem={this.renderItem}
-            lockScrollWhileSnapping
-            lockScrollTimeoutDuration={1000}
-            loop
-            sliderWidth={viewWidth}
-            itemWidth={viewWidth}
-            layout={'default'}
-            onSnapToItem={(index: number) =>
-              this.setState({ activeSlide: index })
-            }
-          />
-        </Block>
-        <Block style={styles.paginationBlock}>{this.renderPagination()}</Block>
-        <Block style={styles.buttonBlock}>
+      <Container style={styles.mainContainer}>
+        <Carousel
+          data={landingSlides}
+          renderItem={this.renderItem}
+          lockScrollWhileSnapping
+          lockScrollTimeoutDuration={1000}
+          loop
+          sliderWidth={viewWidth}
+          itemWidth={viewWidth}
+          layout={'default'}
+          onSnapToItem={(index: number) =>
+            this.setState({ activeSlide: index })
+          }
+        />
+        <Pagination
+          dotsLength={landingSlides.length}
+          activeDotIndex={activeSlide}
+          dotStyle={styles.activeDotStyle}
+          inactiveDotStyle={styles.inactiveDotStyle}
+          inactiveDotScale={0.5}
+        />
+        <View style={styles.buttonArea}>
           <Button
             raised
             onPress={this.props.handleButtonTap}
@@ -177,7 +116,7 @@ export class LandingComponent extends React.Component<Props, State> {
             upperCase={false}
             text={I18n.t(strings.GET_STARTED)}
           />
-        </Block>
+        </View>
       </Container>
     )
   }
