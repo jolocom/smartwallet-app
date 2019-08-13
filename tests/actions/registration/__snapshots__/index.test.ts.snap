@@ -15,20 +15,27 @@ Array [
     "value": "Registering decentralized identity",
   },
   Object {
-    "type": "DID_SET",
-    "value": "did:jolo:mockdid",
-  },
-  Object {
     "type": "SET_LOADING_MSG",
     "value": "Preparing launch",
+  },
+  Object {
+    "type": "DID_SET",
+    "value": "did:jolo:mockid",
   },
   Object {
     "type": "SET_IS_REGISTERING",
     "value": false,
   },
   Object {
-    "routeName": "Home",
-    "type": "Navigation/NAVIGATE",
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": null,
+    "type": "Navigation/RESET",
   },
 ]
 `;
@@ -36,10 +43,7 @@ Array [
 exports[`Registration action creators createIdentity should attempt to create an identity 2`] = `
 Array [
   Array [
-    Object {
-      "data": "4f8d84403d760b5b3fc5426c90827dab",
-      "pass": "secret",
-    },
+    "hunter0=",
   ],
 ]
 `;
@@ -49,13 +53,22 @@ Array [
   Array [
     Object {
       "controllingKeyPath": "m/73'/0'/0'/0",
-      "did": "did:jolo:mockdid",
+      "did": "did:jolo:mockid",
     },
   ],
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `Array []`;
+exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
+Array [
+  Array [
+    Object {
+      "encryptedEntropy": "b77451145154d43d51ad3d31ead162749208ac14ac4aed7c1200970995e5eca5",
+      "timestamp": 946681200000,
+    },
+  ],
+]
+`;
 
 exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
 Array [
@@ -102,12 +115,56 @@ Array [
 ]
 `;
 
-exports[`Registration action creators startRegistration should save a password and initiate the registration process 1`] = `
+exports[`Registration action creators recoverIdentity should attempt tp recover an identity 1`] = `
 Array [
   Object {
-    "routeName": "Entropy",
-    "type": "Navigation/NAVIGATE",
+    "type": "DID_SET",
+    "value": "did:jolo:mockid",
   },
+  Object {
+    "type": "SET_SEED_PHRASE_SAVED",
+  },
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": null,
+    "type": "Navigation/RESET",
+  },
+]
+`;
+
+exports[`Registration action creators recoverIdentity should attempt tp recover an identity 2`] = `
+Array [
+  Array [
+    "hunter0=",
+  ],
+]
+`;
+
+exports[`Registration action creators recoverIdentity should attempt tp recover an identity 3`] = `
+Array [
+  Array [
+    Object {
+      "controllingKeyPath": "m/73'/0'/0'/0",
+      "did": "did:jolo:mockid",
+    },
+  ],
+]
+`;
+
+exports[`Registration action creators recoverIdentity should attempt tp recover an identity 4`] = `
+Array [
+  Array [
+    Object {
+      "encryptedEntropy": "8d9c0464aa694f4feb5fd13e21285353089da774efa662da4e3b1ae6a161f2ad",
+      "timestamp": 946681200000,
+    },
+  ],
 ]
 `;
 

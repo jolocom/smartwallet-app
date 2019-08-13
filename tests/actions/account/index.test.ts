@@ -54,8 +54,12 @@ describe('Account action creators', () => {
     encryptionLib: {
       decryptWithPass: jest.fn().mockReturnValue('newSeed'),
     },
-    setIdentityWallet: jest.fn().mockResolvedValue(null),
-    identityWallet: { identity: { did: 'did:jolo:first' } },
+    authenticate: jest.fn().mockResolvedValue(
+      // identityWallet
+      {
+        did: 'did:jolo:first',
+      },
+    ),
   }
 
   const mockStore = createMockStore(initialState, mockMiddleware)
@@ -68,7 +72,7 @@ describe('Account action creators', () => {
     })
 
     await mockStore.dispatch(accountActions.checkIdentityExists)
-    expect(mockMiddleware.setIdentityWallet).toHaveBeenCalledTimes(1)
+    expect(mockMiddleware.authenticate).toHaveBeenCalledTimes(1)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 

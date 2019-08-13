@@ -36,6 +36,7 @@ export default {
     identity: {
       did: 'did:jolo:mockdid',
     },
+    did: 'did:jolo:mockid',
     didDocument: {
       did: 'did:jolo:mockdid',
     },

@@ -12,12 +12,7 @@ const MockDate = require('mockdate')
 
 describe('Registration action creators', () => {
   describe('submitEntropy', () => {
-    const mockMiddleware = {
-      keyChainLib: {
-        savePassword: jest.fn(),
-      },
-    }
-    const mockStore = createMockStore({}, mockMiddleware)
+    const mockStore = createMockStore({}, {})
 
     beforeEach(mockStore.reset)
 
@@ -28,18 +23,59 @@ describe('Registration action creators', () => {
     })
   })
 
-  describe('startRegistration', () => {
-    const mockMiddleware = {
-      keyChainLib: {
-        savePassword: jest.fn(),
-      },
-    }
-    const mockStore = createMockStore({}, mockMiddleware)
-
-    beforeEach(mockStore.reset)
-
-    it('should save a password and initiate the registration process', async () => {
+  describe('recoverIdentity', () => {
+    it('should attempt tp recover an identity', async () => {
+      MockDate.set(new Date(946681200000))
+      const { identityWallet, mnemonic } = data
       const randomPassword = 'hunter0='
+      jest
+        .spyOn(util, 'generateSecureRandomBytes')
+        .mockImplementation(() =>
+          Promise.resolve(Buffer.from(randomPassword, 'base64')),
+        )
+
+      const mockMiddleware = {
+        identityWallet,
+        keyChainLib: {
+          savePassword: jest.fn(),
+        },
+        storageLib: {
+          store: {
+            persona: jest.fn(),
+            derivedKey: jest.fn(),
+            encryptedSeed: jest.fn(),
+            setting: jest.fn(),
+          },
+        },
+        authenticate: () => identityWallet,
+      }
+      const mockStore = createMockStore({}, mockMiddleware)
+
+      await mockStore.dispatch(registrationActions.recoverIdentity(mnemonic))
+      expect(mockStore.getActions()).toMatchSnapshot()
+
+      expect(
+        mockMiddleware.keyChainLib.savePassword.mock.calls,
+      ).toMatchSnapshot()
+      expect(
+        mockMiddleware.storageLib.store.persona.mock.calls,
+      ).toMatchSnapshot()
+
+      expect(
+        mockMiddleware.storageLib.store.encryptedSeed.mock.calls,
+      ).toMatchSnapshot()
+    })
+    MockDate.reset()
+  })
+
+  describe('createIdentity', () => {
+    it('should attempt to create an identity', async () => {
+      MockDate.set(new Date(946681200000))
+      const { entropy, identityWallet } = data
+      const randomPassword = 'hunter0='
+      const fuelSpy = jest
+        .spyOn(JolocomLib.util, 'fuelKeyWithEther')
+        .mockResolvedValueOnce(null)
 
       jest
         .spyOn(util, 'generateSecureRandomBytes')
@@ -47,66 +83,20 @@ describe('Registration action creators', () => {
           Promise.resolve(Buffer.from(randomPassword, 'base64')),
         )
 
-      await mockStore.dispatch(registrationActions.startRegistration)
-
-      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledTimes(1)
-      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(
-        randomPassword,
-      )
-      expect(mockStore.getActions()).toMatchSnapshot()
-    })
-
-    it('should display exception screen in case of error', async () => {
-      mockMiddleware.keyChainLib.savePassword.mockRejectedValueOnce({
-        message: 'password could not be saved',
-        stack: 'mock start registration error stack',
-      })
-
-      await mockStore.dispatch(
-        withErrorScreen(
-          registrationActions.startRegistration,
-          err =>
-            new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-        ),
-      )
-
-      expect(mockStore.getActions()[0].routeName).toContain('Exception')
-      expect(mockStore.getActions()[0].params.returnTo).toBe('Landing')
-    })
-  })
-
-  describe('createIdentity', () => {
-    it('should attempt to create an identity', async () => {
-      MockDate.set(new Date(946681200000))
-      const { getPasswordResult, cipher, entropy, identityWallet } = data
-      const fuelSpy = jest
-        .spyOn(JolocomLib.util, 'fuelKeyWithEther')
-        .mockResolvedValueOnce(null)
-
       const mockMiddleware = {
         identityWallet,
         keyChainLib: {
-          getPassword: jest.fn().mockResolvedValue(getPasswordResult),
-        },
-        encryptionLib: {
-          encryptWithPass: jest.fn().mockReturnValue(cipher),
-          decryptWithPass: jest.fn().mockReturnValue(entropy),
+          savePassword: jest.fn(),
         },
         storageLib: {
           store: {
             persona: jest.fn(),
-            derivedKey: jest.fn(),
             encryptedSeed: jest.fn(),
-          },
-          get: {
-            persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:first' }]),
-            encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
           },
         },
         registry: {
           create: () => identityWallet,
         },
-        setIdentityWallet: jest.fn(() => Promise.resolve()),
       }
 
       const mockState: Partial<RootState> = {
@@ -123,17 +113,17 @@ describe('Registration action creators', () => {
       await mockStore.dispatch(registrationActions.createIdentity(entropy))
 
       expect(mockStore.getActions()).toMatchSnapshot()
-
-      expect(mockMiddleware.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
       expect(
-        mockMiddleware.encryptionLib.encryptWithPass.mock.calls,
+        mockMiddleware.keyChainLib.savePassword.mock.calls,
       ).toMatchSnapshot()
       expect(
         mockMiddleware.storageLib.store.persona.mock.calls,
       ).toMatchSnapshot()
+
       expect(
-        mockMiddleware.storageLib.store.derivedKey.mock.calls,
+        mockMiddleware.storageLib.store.encryptedSeed.mock.calls,
       ).toMatchSnapshot()
+
       expect(fuelSpy.mock.calls).toMatchSnapshot()
       MockDate.reset()
     })
@@ -146,11 +136,10 @@ describe('Registration action creators', () => {
         },
       }
       const mockStore = createMockStore({}, mockMiddleware)
-      const asyncAction = registrationActions.createIdentity(mockEntropy)
 
       await mockStore.dispatch(
         withErrorScreen(
-          asyncAction,
+          registrationActions.createIdentity(mockEntropy),
           err =>
             new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
         ),

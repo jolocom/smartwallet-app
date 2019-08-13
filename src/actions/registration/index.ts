@@ -41,7 +41,11 @@ export const submitEntropy = (
 export const selectInitAction = (action: string): ThunkAction => dispatch => {
   switch (action) {
     case InitAction.CREATE: {
-      return dispatch(startRegistration)
+      return dispatch(
+        navigationActions.navigate({
+          routeName: routeList.Entropy,
+        }),
+      )
     }
     case InitAction.RECOVER: {
       return dispatch(
@@ -67,14 +71,6 @@ export const openInitAction: ThunkAction = dispatch =>
       routeName: routeList.InitAction,
     }),
   )
-
-export const startRegistration: ThunkAction = async dispatch => {
-  return dispatch(
-    navigationActions.navigate({
-      routeName: routeList.Entropy,
-    }),
-  )
-}
 
 export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
@@ -151,9 +147,8 @@ export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
     ),
   )
 
-  // The user already knows his seed phrase
-  await dispatch(setSeedPhraseSaved())
-  return dispatch(navigatorResetHome())
+  // The user already knows his seed phrase, will perform reset navigate HOME
+  return dispatch(setSeedPhraseSaved())
 }
 
 const storeIdentity = (
