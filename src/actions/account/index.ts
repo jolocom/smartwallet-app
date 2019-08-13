@@ -70,7 +70,10 @@ export const checkIdentityExists: ThunkAction = async (
   )
 
   // TODO refactor to create identityWallet in offline mode
-  const identityWallet = await backendMiddleware.authenticate(userVault, password)
+  const identityWallet = await backendMiddleware.authenticate(
+    userVault,
+    password,
+  )
   backendMiddleware.identityWallet = identityWallet
   dispatch(setDid(identityWallet.did))
 
