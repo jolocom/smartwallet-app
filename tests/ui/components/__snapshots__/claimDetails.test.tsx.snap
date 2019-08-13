@@ -1,7 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ClaimDetails component matches the snapshot on render 1`] = `
-<ScrollContainer>
+<ScrollViewMock
+  style={
+    Object {
+      "backgroundColor": "rgb(245, 245, 245)",
+      "paddingTop": "5%",
+    }
+  }
+>
   <Block
     style={
       Object {
@@ -70,11 +77,18 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
       upperCase={false}
     />
   </Block>
-</ScrollContainer>
+</ScrollViewMock>
 `;
 
 exports[`ClaimDetails component matches the snapshot on render with multi-line claim 1`] = `
-<ScrollContainer>
+<ScrollViewMock
+  style={
+    Object {
+      "backgroundColor": "rgb(245, 245, 245)",
+      "paddingTop": "5%",
+    }
+  }
+>
   <Block
     style={
       Object {
@@ -149,5 +163,5 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
       upperCase={false}
     />
   </Block>
-</ScrollContainer>
+</ScrollViewMock>
 `;
