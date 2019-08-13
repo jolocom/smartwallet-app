@@ -44,12 +44,12 @@ export class BackendMiddleware {
     await this.storageLib.initConnection()
   }
 
-  public async setIdentityWallet(
+  public async authenticate(
     userVault: SoftwareKeyProvider,
     pass: string,
-  ): Promise<void> {
+  ): Promise<IdentityWallet> {
     const { jolocomIdentityKey } = JolocomLib.KeyTypes
-    this.identityWallet = await this.registry.authenticate(userVault, {
+    return await this.registry.authenticate(userVault, {
       encryptionPass: pass,
       derivationPath: jolocomIdentityKey,
     })

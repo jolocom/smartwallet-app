@@ -41,8 +41,7 @@ export const checkIdentityExists: ThunkAction = async (
   backendMiddleware,
 ) => {
   const { keyChainLib, storageLib } = backendMiddleware
-  const encryptedEntropy = await storageLib.get.encryptedSeed()
-    .catch(err => {
+  const encryptedEntropy = await storageLib.get.encryptedSeed().catch(err => {
     // TODO Fix this
     if (err.message.indexOf('no such table') === 0) {
       return
@@ -70,9 +69,10 @@ export const checkIdentityExists: ThunkAction = async (
     Buffer.from(encryptedEntropy, 'hex'),
   )
 
-  await backendMiddleware.setIdentityWallet(userVault, password)
-  const identityWallet = backendMiddleware.identityWallet
-  dispatch(setDid(identityWallet.identity.did))
+  // TODO refactor to create identityWallet in offline mode
+  const identityWallet = await backendMiddleware.authenticate(userVault, password)
+  backendMiddleware.identityWallet = identityWallet
+  dispatch(setDid(identityWallet.did))
 
   return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
 }
@@ -95,7 +95,7 @@ export const saveClaim: ThunkAction = async (
 ) => {
   const { identityWallet, storageLib, keyChainLib } = backendMiddleware
 
-  const did = getState().account.did.did
+  const did = identityWallet.did
   const claimsItem = getState().account.claims.selected
   const password = await keyChainLib.getPassword()
 

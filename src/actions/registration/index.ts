@@ -9,6 +9,7 @@ import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
 // @ts-ignore
 import bip39 from 'bip39'
+import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
 
 export enum InitAction {
   CREATE = 'create',
@@ -111,10 +112,15 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   )
 
   dispatch(setLoadingMsg(loading.loadingStages[2]))
-  backendMiddleware.identityWallet = await registry.create(userVault, password)
+  const identityWallet = await registry.create(userVault, password)
   dispatch(setLoadingMsg(loading.loadingStages[3]))
   await dispatch(
-    storeIdentity(userVault['encryptedSeed'].toString('hex'), password),
+    storeIdentity(
+      identityWallet,
+      // TODO refactor with new lib version
+      userVault['encryptedSeed'].toString('hex'),
+      password,
+    ),
   )
 
   dispatch(setIsRegistering(false))
@@ -131,10 +137,18 @@ export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
   // validateMnemonic is using `String.normalize()` which does not work on the old JS Core of React Native
   const seed = Buffer.from(bip39.mnemonicToEntropy(seedPhrase), 'hex')
   const userVault = JolocomLib.KeyProvider.fromSeed(seed, password)
-  await backendMiddleware.setIdentityWallet(userVault, password)
+  const identityWallet = await backendMiddleware.authenticate(
+    userVault,
+    password,
+  )
 
   await dispatch(
-    storeIdentity(userVault['encryptedSeed'].toString('hex'), password),
+    storeIdentity(
+      identityWallet,
+      // TODO refactor with new lib version
+      userVault['encryptedSeed'].toString('hex'),
+      password,
+    ),
   )
 
   // The user already knows his seed phrase
@@ -143,6 +157,7 @@ export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
 }
 
 const storeIdentity = (
+  identityWallet: IdentityWallet,
   encEntropy: string,
   password: string,
 ): ThunkAction => async (
@@ -151,10 +166,11 @@ const storeIdentity = (
   backendMiddleware,
 ): Promise<void> => {
   const { storageLib, keyChainLib } = backendMiddleware
-  dispatch(setDid(backendMiddleware.identityWallet.identity.did))
+  backendMiddleware.identityWallet = identityWallet
+  dispatch(setDid(identityWallet.did))
   const entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
   const personaData = {
-    did: backendMiddleware.identityWallet.identity.did,
+    did: identityWallet.did,
     controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
   }
 
