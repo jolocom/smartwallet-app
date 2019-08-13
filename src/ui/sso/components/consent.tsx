@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   topSection: {
-    flex: 0.4,
+    flex: 0.3,
     marginTop: Spacing.XL,
   },
   messageContainer: {
@@ -45,6 +45,13 @@ const styles = StyleSheet.create({
   message: {
     ...Typography.subMainText,
     color: Colors.blackMain,
+  },
+  claimsSection: {
+    marginTop: Spacing.MD,
+    flex: 0.6,
+  },
+  buttonSection: {
+    flex: 0.1,
   },
 })
 
@@ -205,12 +212,12 @@ export class ConsentComponent extends React.Component<Props, State> {
     return (
       <Container style={styles.container}>
         {this.renderFirstSection()}
-        <View style={{ flex: 0.5 }}>
+        <View style={styles.claimsSection}>
           <ScrollView style={{ width: '100%' }}>
             {this.renderSelectionSections(this.props.availableCredentials)}
           </ScrollView>
         </View>
-        <View style={{ flex: 0.1 }}>{this.renderButtons()}</View>
+        <View style={styles.buttonSection}>{this.renderButtons()}</View>
       </Container>
     )
   }
