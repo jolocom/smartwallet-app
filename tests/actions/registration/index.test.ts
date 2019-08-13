@@ -64,8 +64,32 @@ describe('Registration action creators', () => {
       expect(
         mockMiddleware.storageLib.store.encryptedSeed.mock.calls,
       ).toMatchSnapshot()
+      MockDate.reset()
     })
-    MockDate.reset()
+
+    it('should show error screen if DID is not anchored', async () => {
+      const { mnemonic } = data
+      const mockMiddleware = {
+        authenticate: jest.fn().mockRejectedValue('MockError'),
+      }
+      const mockStore = createMockStore({}, mockMiddleware)
+
+      await mockStore.dispatch(
+        withErrorScreen(
+          registrationActions.recoverIdentity(mnemonic),
+          err =>
+            new AppError(
+              ErrorCode.IdentityNotAnchored,
+              err,
+              routeList.InputSeedPhrase,
+            ),
+        ),
+      )
+
+      const firstAction = mockStore.getActions()[0]
+      expect(firstAction.routeName).toContain('Exception')
+      expect(firstAction.params.returnTo).toBe('InputSeedPhrase')
+    })
   })
 
   describe('createIdentity', () => {

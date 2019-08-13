@@ -11,6 +11,8 @@ import { IpfsCustomConnector } from './lib/ipfs'
 import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
+import { AppError } from './lib/errors'
+import ErrorCode from './lib/errorCodes'
 
 export class BackendMiddleware {
   public identityWallet!: IdentityWallet
@@ -49,9 +51,13 @@ export class BackendMiddleware {
     pass: string,
   ): Promise<IdentityWallet> {
     const { jolocomIdentityKey } = JolocomLib.KeyTypes
-    return await this.registry.authenticate(userVault, {
-      encryptionPass: pass,
-      derivationPath: jolocomIdentityKey,
-    })
+    try {
+      return await this.registry.authenticate(userVault, {
+        encryptionPass: pass,
+        derivationPath: jolocomIdentityKey,
+      })
+    } catch (err) {
+      throw new AppError(ErrorCode.IdentityNotAnchored, err)
+    }
   }
 }

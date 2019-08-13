@@ -21,6 +21,7 @@ enum ErrorCode {
   ParseJWTFailed = 'ParseJWT',
   // actions/registration
   RegistrationFailed = 'Registration',
+  IdentityNotAnchored = 'IdentityNotAnchored',
 
   // ui/generic/appInit
   AppInitFailed = 'AppInitFailed',

@@ -3,9 +3,12 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import InputSeedPhraseComponent from '../components/inputSeedPhrase'
 // @ts-ignore
-import { wordlists, validateMnemonic } from 'bip39'
+import { validateMnemonic, wordlists } from 'bip39'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { recoverIdentity } from '../../../actions/registration'
+import { AppError } from '../../../lib/errors'
+import { routeList } from '../../../routeList'
+import ErrorCode from '../../../lib/errorCodes'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -78,7 +81,15 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
 const mapStateToProps = () => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   recoverIdentity: (seedPhrase: string) =>
-    dispatch(withErrorScreen(withLoading(recoverIdentity(seedPhrase)))),
+    dispatch(
+      withErrorScreen(withLoading(recoverIdentity(seedPhrase)), err => {
+        if (err instanceof AppError) {
+          err.navigateTo = routeList.InputSeedPhrase
+          return err
+        }
+        return new AppError(ErrorCode.Unknown, err)
+      }),
+    ),
 })
 
 export const InputSeedPhrase = connect(
