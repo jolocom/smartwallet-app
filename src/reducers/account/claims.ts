@@ -4,6 +4,7 @@ import {
   CategorizedClaims,
   DecoratedClaims,
 } from 'src/reducers/account'
+import { HAS_EXTERNAL_CREDENTIALS } from '../../actions/account/actionTypes'
 
 const categorizedClaims: CategorizedClaims = {
   Personal: [
@@ -82,6 +83,7 @@ export const initialState: ClaimsState = {
     offer: [],
   },
   decoratedCredentials: categorizedClaims,
+  hasExternalCredentials: false,
 }
 
 export const claims = (
@@ -91,6 +93,8 @@ export const claims = (
   switch (action.type) {
     case 'SET_CLAIMS_FOR_DID':
       return { ...state, decoratedCredentials: addDefaultValues(action.claims) }
+    case HAS_EXTERNAL_CREDENTIALS:
+      return { ...state, hasExternalCredentials: action.value }
     case 'SET_EXTERNAL':
       return { ...state, pendingExternal: action.value }
     case 'RESET_EXTERNAL':

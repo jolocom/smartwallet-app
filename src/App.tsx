@@ -6,7 +6,6 @@ import { initStore } from './store'
 import { navigationActions } from 'src/actions'
 import { StatusBar } from 'react-native'
 import { RoutesContainer } from './routes'
-
 import { AppLoading } from './ui/generic/appLoading'
 import { useScreens } from 'react-native-screens'
 useScreens()
