@@ -16,7 +16,7 @@ export const buttonStandardText = {
   color: Colors.white,
   // this is a hack, used because the lineHeight of our font causes it to be not
   // centered vertically within the button
-  paddingVertical: Spacing.MD,
+  paddingVertical: 16 as Spacing.MD,
 }
 
 export const buttonDisabledStandardContainer = {
@@ -33,5 +33,11 @@ export const buttonConsentTextBase = {
   fontSize: Typography.textMD,
   fontFamily: Typography.fontMain,
   fontWeight: 'normal' as 'normal',
-  paddingVertical: Spacing.XS,
+  /**
+   * @TODO fix this hack. There is an issue with ts-jest and enums.
+   * https://github.com/kulshekhar/ts-jest/issues/281
+   * Instead of using 'as', we should have a way of linking this value to the
+   * spacing file. Right now the spacing doesn't contribute to this styling.
+   */
+  paddingVertical: 8 as Spacing.XS,
 }

@@ -4,7 +4,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
 <Container
   style={
     Object {
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
       "padding": 0,
     }
   }
@@ -14,17 +14,15 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
     style={
       Array [
         Object {
-          "backgroundColor": "black",
-          "color": "#ffefdf",
+          "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
-          "fontSize": 22,
-          "fontWeight": "100",
+          "fontSize": 20,
           "paddingHorizontal": 50,
           "position": "absolute",
           "top": "20%",
         },
         Object {
-          "fontSize": 44,
+          "fontSize": 42,
         },
       ]
     }
@@ -50,7 +48,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
 <Container
   style={
     Object {
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
       "padding": 0,
     }
   }
@@ -59,11 +57,9 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
     msg="For security purposes, we need some randomness. Please tap the screen and draw on it randomly"
     style={
       Object {
-        "backgroundColor": "black",
-        "color": "#ffefdf",
+        "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
-        "fontSize": 22,
-        "fontWeight": "100",
+        "fontSize": 20,
         "paddingHorizontal": 50,
         "position": "absolute",
         "top": "20%",
@@ -91,7 +87,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
 <Container
   style={
     Object {
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
       "padding": 0,
     }
   }
@@ -101,17 +97,15 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
     style={
       Array [
         Object {
-          "backgroundColor": "black",
-          "color": "#ffefdf",
+          "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
-          "fontSize": 22,
-          "fontWeight": "100",
+          "fontSize": 20,
           "paddingHorizontal": 50,
           "position": "absolute",
           "top": "20%",
         },
         Object {
-          "fontSize": 44,
+          "fontSize": 42,
         },
       ]
     }
@@ -136,17 +130,17 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       style={
         Object {
           "container": Object {
-            "backgroundColor": "#942f51",
+            "backgroundColor": "rgb(148, 47, 81)",
             "borderRadius": 4,
             "height": 48,
-            "width": 164,
+            "minWidth": 164,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
-            "fontWeight": "100",
-            "paddingVertical": 15,
+            "fontWeight": "normal",
+            "paddingVertical": 16,
           },
         }
       }
