@@ -59,26 +59,9 @@ exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       onPress={[MockFunction]}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "rgb(148, 47, 81)",
-            "borderRadius": 4,
-            "height": 48,
-            "minWidth": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "normal",
-            "paddingVertical": 16,
-          },
-        }
-      }
       text="Yes, I wrote it down"
       upperCase={false}
     />
@@ -145,26 +128,9 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       onPress={[MockFunction]}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "rgb(148, 47, 81)",
-            "borderRadius": 4,
-            "height": 48,
-            "minWidth": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "normal",
-            "paddingVertical": 16,
-          },
-        }
-      }
       text="Yes, I wrote it down"
       upperCase={false}
     />
