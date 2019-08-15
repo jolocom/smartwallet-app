@@ -7,9 +7,8 @@ import { generateSecureRandomBytes } from 'src/lib/util'
 import { AnyAction, ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
-// @ts-ignore
-import bip39 from 'bip39'
 import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
+import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 
 export enum InitAction {
   CREATE = 'create',
@@ -130,9 +129,10 @@ export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
 ): Promise<AnyAction | void> => {
   const password = (await generateSecureRandomBytes(32)).toString('base64')
 
-  // validateMnemonic is using `String.normalize()` which does not work on the old JS Core of React Native
-  const seed = Buffer.from(bip39.mnemonicToEntropy(seedPhrase), 'hex')
-  const userVault = JolocomLib.KeyProvider.fromSeed(seed, password)
+  const userVault = JolocomLib.KeyProvider.recoverKeyPair(
+    seedPhrase,
+    password,
+  ) as SoftwareKeyProvider
 
   const identityWallet = await backendMiddleware.authenticate(
     userVault,

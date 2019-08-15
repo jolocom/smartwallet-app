@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import InputSeedPhraseComponent from '../components/inputSeedPhrase'
-// @ts-ignore
 import { validateMnemonic, wordlists } from 'bip39'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { recoverIdentity } from '../../../actions/registration'
