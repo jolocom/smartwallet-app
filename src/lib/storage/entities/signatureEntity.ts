@@ -4,8 +4,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
-} from 'typeorm/browser'
-import { VerifiableCredentialEntity } from 'src/lib/storage/entities/verifiableCredentialEntity'
+} from 'typeorm/'
+import { VerifiableCredentialEntity } from './verifiableCredentialEntity'
 import { plainToClass } from 'class-transformer'
 import {
   ILinkedDataSignature,

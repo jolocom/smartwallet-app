@@ -10,7 +10,7 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
-    "module": "es2015",
+    "module": "commonjs",
 
     "resolveJsonModule": true,
     "suppressImplicitAnyIndexErrors": true,
