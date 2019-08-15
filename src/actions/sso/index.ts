@@ -240,7 +240,10 @@ export const sendCredentialResponse = (
     )
 
     if (isDeepLinkInteraction) {
-      const callback = `${callbackURL}${response.encode()}`
+      const callback = `${callbackURL}${
+        callbackURL.endsWith('/') ? '' : '/'
+      }${response.encode()}`
+
       if (!(await Linking.canOpenURL(callback))) {
         throw new AppError(ErrorCode.DeepLinkUrlNotFound)
       }
