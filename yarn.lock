@@ -6105,9 +6105,10 @@ jolocom-lib-stax-connector@^0.4.0:
     ethereumjs-tx "^1.3.7"
     ethereumjs-util "^6.1.0"
 
-jolocom-lib@../jolocom-lib/jolocom-lib-3.0.0.tgz:
-  version "3.0.0"
-  resolved "../jolocom-lib/jolocom-lib-3.0.0.tgz#d30091d4a3acf79f1cca08a760dddf9cd1ad7b54"
+jolocom-lib@^4.0.0-beta.0:
+  version "4.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.0.0-beta.0.tgz#ee096f02c570fad67d6ef6c54ae5b208db76f674"
+  integrity sha512-T15O3PEtas9QN80B43w/9qZACSrllhsLcNcXIfPa+PB/xYKHZipXnPvyt4lTDqGy5v1zocsJ4vApZx1iIiRIWA==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"

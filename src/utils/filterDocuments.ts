@@ -7,6 +7,7 @@ const DOC_TYPES = [
   'DrivingLicense',
   'Certificate',
   'EventTicket',
+  'ProofOfDrivingLicenseCredential',
 ]
 
 const isIncludedIn = <T>(list: T[]) => (element: T) => includes(element, list)

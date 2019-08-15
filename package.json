@@ -83,7 +83,7 @@
     "ethereumjs-wallet": "^0.6.0",
     "events": "^3.0.0",
     "i18n-js": "^3.1.0",
-    "jolocom-lib": "../jolocom-lib/jolocom-lib-3.0.0.tgz",
+    "jolocom-lib": "^4.0.0-beta.0",
     "jolocom-lib-stax-connector": "^0.4.0",
     "material-colors": "^1.2.5",
     "object.assign": "^4.1.0",
