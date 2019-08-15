@@ -1,5 +1,6 @@
 import { DecoratedClaims } from 'src/reducers/account'
-import { compose, includes, or, equals, complement } from 'ramda'
+import { complement, compose, equals, includes, or } from 'ramda'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
 const DOC_TYPES = [
   'IdCard',
@@ -7,15 +8,14 @@ const DOC_TYPES = [
   'DrivingLicense',
   'Certificate',
   'EventTicket',
-  'ProofOfDrivingLicenseCredential',
+  'Proof Of Driving License Credential',
 ]
 
 const isIncludedIn = <T>(list: T[]) => (element: T) => includes(element, list)
 
 const isDocument = ({ credentialType, renderInfo = {} }: DecoratedClaims) =>
   compose(
-    // @ts-ignore
-    or(equals(renderInfo.renderAs, 'document')),
+    or(equals(renderInfo.renderAs, CredentialRenderTypes.document)),
     isIncludedIn(DOC_TYPES),
   )(credentialType)
 
