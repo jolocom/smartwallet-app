@@ -7,6 +7,7 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/runtime": "^7.4.5",
+    "@storybook/react-native": "^5.2.0-beta.30",
     "@svgr/cli": "^4.2.0",
     "@types/enzyme": "^3.10.1",
     "@types/enzyme-adapter-react-16": "^1.0.5",
@@ -71,7 +72,8 @@
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native -d src/resources/svg/",
     "devtools": "react-devtools &",
-    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts"
+    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
+    "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
     "@react-navigation/core": "^3.4.2",

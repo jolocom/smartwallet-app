@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import I18n from 'src/locales/i18n'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import strings from '../../../locales/strings'
@@ -115,6 +115,7 @@ interface SettingsScreenProps {
   settings: { [key: string]: any }
   setLocale: (key: string) => void
   version: string
+  openStorybook: () => void
 }
 
 export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
@@ -128,6 +129,9 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
         locales={props.locales}
         selected={props.settings.locale}
       />
+      <TouchableOpacity style={styles.card} onPress={props.openStorybook}>
+        <Text style={Typography.cardMainText}>Storybook</Text>
+      </TouchableOpacity>
     </View>
     <Text style={styles.versionNumber}>
       Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}

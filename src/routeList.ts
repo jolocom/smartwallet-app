@@ -23,4 +23,5 @@ export enum routeList {
   DocumentDetails = 'DocumentDetails',
 
   Exception = 'Exception',
+  Storybook = 'Storybook',
 }
