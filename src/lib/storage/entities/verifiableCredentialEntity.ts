@@ -5,7 +5,6 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm/browser'
-
 import { Exclude, Expose, plainToClass, classToPlain } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
