@@ -1,7 +1,8 @@
 import { entityList } from './src/lib/storage/entities'
 import { Initial1565886000404 } from './src/lib/storage/migration/1565886000404-initial'
+import { ConnectionOptions } from 'typeorm/browser'
 
-export default {
+const typeOrmConfig: ConnectionOptions = {
   type: 'react-native',
   database: 'LocalSmartWalletData',
   location: 'default',
@@ -14,3 +15,5 @@ export default {
     migrationsDir: 'src/lib/storage/migration',
   },
 }
+
+export default typeOrmConfig
