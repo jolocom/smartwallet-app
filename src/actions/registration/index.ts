@@ -5,6 +5,13 @@ import { setDid } from 'src/actions/account'
 import { JolocomLib } from 'jolocom-lib'
 import { generateSecureRandomBytes } from 'src/lib/util'
 import { ThunkAction } from 'src/store'
+import {
+  awaitPaymentTxConfirmation,
+  fuelAddress,
+} from 'jolocom-lib-stax-connector/js/utils'
+import { publicKeyToAddress } from 'jolocom-lib/js/utils/helper'
+import { httpAgent } from '../../lib/http'
+import { staxEndpoint } from '../../backendMiddleware'
 
 const bip39 = require('bip39')
 
@@ -73,6 +80,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
     data: encodedEntropy,
     pass: password,
   })
+
   const entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
   const userVault = JolocomLib.KeyProvider.fromSeed(
     Buffer.from(encodedEntropy, 'hex'),
@@ -80,6 +88,24 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   )
 
   dispatch(setLoadingMsg(loading.loadingStages[1]))
+
+  const fuelingTxHash = await fuelAddress(
+    `${staxEndpoint}/payment/fueling`,
+    publicKeyToAddress(
+      userVault.getPublicKey({
+        encryptionPass: password,
+        derivationPath: JolocomLib.KeyTypes.ethereumKey,
+      }),
+    ),
+    httpAgent,
+    10e18,
+  )
+
+  await awaitPaymentTxConfirmation(
+    `${staxEndpoint}/payment`,
+    fuelingTxHash,
+    httpAgent,
+  )
 
   await JolocomLib.util.fuelKeyWithEther(
     userVault.getPublicKey({

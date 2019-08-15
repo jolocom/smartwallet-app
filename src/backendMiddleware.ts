@@ -8,9 +8,25 @@ import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareP
 import { IRegistry } from 'jolocom-lib/js/registries/types'
 import { createJolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { IpfsCustomConnector } from './lib/ipfs'
-import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
+import { ContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
-import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
+import {
+  createJolocomResolver,
+  createValidatingResolver,
+  MultiResolver,
+  validatingJolocomResolver,
+} from 'jolocom-lib/js/resolver'
+import {
+  getStaxConfiguredContractsConnector, getStaxConfiguredContractsGateway,
+  getStaxConfiguredStorageConnector,
+} from 'jolocom-lib-stax-connector'
+import { noValidation } from 'jolocom-lib/js/validation/validation'
+import { httpAgent } from './lib/http'
+import { publicKeyToDID, sha256 } from 'jolocom-lib/js/utils/crypto'
+
+export const staxEndpoint = ''
+const staxContractAddress = ''
+const staxChainId = 0
 
 export class BackendMiddleware {
   public identityWallet!: IdentityWallet
@@ -18,6 +34,15 @@ export class BackendMiddleware {
   public encryptionLib: EncryptionLibInterface
   public keyChainLib: KeyChainInterface
   public registry: IRegistry
+  public resolver: MultiResolver
+
+  /**
+   * TODO:
+   *  - Anchroing on Jolocom (using jolocom resolver)
+   *  - Pass custom multi-resolver
+   *  - Payments / contracts are configured for staX
+   *  - Request ether for payments part of this perhaps
+   */
 
   public constructor(config: {
     fuelingEndpoint: string
@@ -26,6 +51,27 @@ export class BackendMiddleware {
     this.storageLib = new Storage(config.typeOrmConfig)
     this.encryptionLib = new EncryptionLib()
     this.keyChainLib = new KeyChain()
+
+    const staxEthConnector = getStaxConfiguredContractsConnector(
+      staxEndpoint,
+      staxContractAddress,
+      httpAgent,
+    )
+    const staxIpfsConnector = getStaxConfiguredStorageConnector(
+      staxEndpoint,
+      httpAgent,
+    )
+
+    publicKeyToDID('stax')(sha256)
+
+    this.resolver = new MultiResolver({
+      jolo: validatingJolocomResolver,
+      stax: createValidatingResolver(
+        createJolocomResolver(staxEthConnector, staxIpfsConnector),
+        noValidation,
+      ),
+    })
+
     this.registry = createJolocomRegistry({
       ipfsConnector: new IpfsCustomConnector({
         host: 'ipfs.jolocom.com',
@@ -34,9 +80,14 @@ export class BackendMiddleware {
       }),
       ethereumConnector: jolocomEthereumResolver,
       contracts: {
-        adapter: jolocomContractsAdapter,
-        gateway: jolocomContractsGateway,
+        adapter: new ContractsAdapter(staxChainId),
+        gateway: getStaxConfiguredContractsGateway(
+          staxEndpoint,
+          staxChainId,
+          httpAgent,
+        ),
       },
+      didResolver: validatingJolocomResolver,
     })
   }
 

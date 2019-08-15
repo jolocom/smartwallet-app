@@ -18,6 +18,9 @@ import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentials
 import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { withLoading, withErrorScreen } from '../modifiers'
+import { getMethodPrefixFromDid } from 'jolocom-lib/js/utils/crypto'
+import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
+import { Identity } from 'jolocom-lib/js/identity/identity'
 
 export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -25,9 +28,9 @@ export const consumeCredentialOfferRequest = (
 ): ThunkAction => async (
   dispatch,
   getState,
-  { keyChainLib, identityWallet, registry },
+  { keyChainLib, identityWallet, registry, resolver },
 ) => {
-  await identityWallet.validateJWT(credOfferRequest, undefined, registry)
+  await identityWallet.validateJWT(credOfferRequest, undefined, resolver)
   const { interactionToken } = credOfferRequest
   const { callbackURL } = interactionToken
 
@@ -35,7 +38,18 @@ export const consumeCredentialOfferRequest = (
     throw new Error('Input requests are not yet supported on the wallet')
   }
 
-  const { did: offerorDid, publicProfile } = await registry.resolve(
+  // TODO
+  const resolveFn =
+    getMethodPrefixFromDid(keyIdToDid(credOfferRequest.issuer)) === 'jolo'
+      ? (did: string) => registry.resolve(did)
+      : (did: string) =>
+          resolver.resolve(did).then(didDoc =>
+            Identity.fromDidDocument({
+              didDocument: DidDocument.fromJSON(didDoc),
+            }),
+          )
+
+  const { did: offerorDid, publicProfile } = await resolveFn(
     keyIdToDid(credOfferRequest.issuer),
   )
 

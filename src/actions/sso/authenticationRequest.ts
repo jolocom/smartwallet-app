@@ -21,8 +21,8 @@ export const consumeAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
   isDeepLinkInteraction: boolean = false,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { identityWallet } = backendMiddleware
-  await identityWallet.validateJWT(authenticationRequest)
+  const { identityWallet, resolver } = backendMiddleware
+  await identityWallet.validateJWT(authenticationRequest, undefined, resolver)
   const authenticationDetails: StateAuthenticationRequestSummary = {
     requester: authenticationRequest.issuer,
     callbackURL: authenticationRequest.interactionToken.callbackURL,

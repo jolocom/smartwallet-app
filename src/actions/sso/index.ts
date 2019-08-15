@@ -49,12 +49,12 @@ export const receiveExternalCredential = (
   isDeepLinkInteraction: boolean,
   credentialOfferMetadata?: CredentialMetadataSummary[],
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { identityWallet, registry, storageLib } = backendMiddleware
+  const { identityWallet, resolver, storageLib } = backendMiddleware
 
-  await identityWallet.validateJWT(credReceive, undefined, registry)
+  await identityWallet.validateJWT(credReceive, undefined, resolver)
   const providedCredentials = credReceive.interactionToken.signedCredentials
 
-  const validationResults = await JolocomLib.util.validateDigestables(
+  const validationResults = await JolocomLib.util.validateDigestibles(
     providedCredentials,
   )
 
@@ -120,13 +120,13 @@ export const consumeCredentialRequest = (
   decodedCredentialRequest: JSONWebToken<CredentialRequest>,
   isDeepLinkInteraction: boolean,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { storageLib, identityWallet, registry } = backendMiddleware
+  const { storageLib, identityWallet, registry, resolver } = backendMiddleware
   const { did } = getState().account.did
 
   await identityWallet.validateJWT(
     decodedCredentialRequest,
     undefined,
-    registry,
+    resolver,
   )
 
   const { did: issuerDid, publicProfile } = await registry.resolve(

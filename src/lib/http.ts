@@ -18,13 +18,17 @@ export const httpAgent: HttpAgent = {
   headRequest(endpoint: string) {
     return fetch(endpoint, {
       method: HttpMethods.HEAD,
-    }).then(res => res.json())
+    }).then(res => {
+      return res
+    })
   },
   postRequest<T>(endpoint: string, headers: any = {}, data: any): Promise<T> {
     return fetch(endpoint, {
       method: HttpMethods.POST,
       headers,
       body: typeof data === 'string' ? data : JSON.stringify(data),
-    }).then(res => res.json())
+    }).then(res => {
+      return res.json()
+    })
   },
 }
