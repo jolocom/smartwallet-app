@@ -71,8 +71,7 @@
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native -d src/resources/svg/",
     "devtools": "react-devtools &",
-    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
-    "typeorm": "ts-node -O '{\"module\": \"commonjs\"}' ./node_modules/.bin/typeorm"
+    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts"
   },
   "dependencies": {
     "@react-navigation/core": "^3.4.2",
