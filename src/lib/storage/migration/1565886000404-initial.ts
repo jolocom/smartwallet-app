@@ -2,6 +2,14 @@ import { MigrationInterface, QueryRunner } from 'typeorm'
 
 export class Initial1565886000404 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
+    const dbState = await queryRunner.query(
+      `SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%';`,
+    )
+    if (dbState.length > 2) {
+      // default tables are migration and android_metadata
+      // if there are more than these tables we assume that the Database is already initialized
+      return
+    }
     await queryRunner.query(
       `CREATE TABLE "cache" ("key" varchar PRIMARY KEY NOT NULL, "value" text NOT NULL)`,
     )
