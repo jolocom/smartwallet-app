@@ -4,7 +4,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
-} from 'typeorm/'
+} from 'typeorm/browser'
 import { VerifiableCredentialEntity } from './verifiableCredentialEntity'
 import { plainToClass } from 'class-transformer'
 import {

@@ -1,8 +1,8 @@
 import { entityList } from './src/lib/storage/entities'
 import { Initial1565886000404 } from './src/lib/storage/migration/1565886000404-initial'
 
-module.exports = {
-  type: 'sqlite',
+export default {
+  type: 'react-native',
   database: 'LocalSmartWalletData',
   location: 'default',
   logging: ['error', 'query', 'schema'],

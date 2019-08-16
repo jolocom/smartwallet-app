@@ -2,7 +2,7 @@ import {
   createConnection,
   ConnectionOptions,
   Connection,
-} from 'typeorm'
+} from 'typeorm/browser'
 import { plainToClass } from 'class-transformer'
 import {
   SettingEntity,
@@ -88,6 +88,8 @@ export class Storage {
     if (!this.connection) {
       this.connection = await createConnection(this.config)
     }
+    const test = await this.connection.driver.createSchemaBuilder().log()
+    console.log('Tester', test)
   }
 
   private async getSettingsObject(): Promise<{ [key: string]: any }> {

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm'
+import { MigrationInterface, QueryRunner } from 'typeorm/browser'
 
 export class Initial1565886000404 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {

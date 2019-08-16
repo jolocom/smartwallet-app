@@ -1,4 +1,10 @@
-import { PrimaryColumn, Entity, Column, OneToMany, ManyToOne } from 'typeorm'
+import {
+  PrimaryColumn,
+  Entity,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm/browser'
 
 import { Exclude, Expose, plainToClass, classToPlain } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'

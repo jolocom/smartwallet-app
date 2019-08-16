@@ -4,7 +4,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   Unique,
-} from 'typeorm'
+} from 'typeorm/browser'
 
 import { Type, plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'

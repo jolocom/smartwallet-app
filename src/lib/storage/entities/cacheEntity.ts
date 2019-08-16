@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm'
+import { Entity, Column, PrimaryColumn } from 'typeorm/browser'
 import { Expose } from 'class-transformer'
 
 @Entity('cache')
