@@ -85,18 +85,16 @@ export const checkIdentityExists: ThunkAction = async (
     const identity = Identity.fromDidDocument({ didDocument })
 
     // TODO Simplify constructor
-    backendMiddleware.setIdentityWallet(
-      new IdentityWallet({
-        identity,
-        vaultedKeyProvider: userVault,
-        publicKeyMetadata: {
-          derivationPath: KeyTypes.jolocomIdentityKey,
-          keyId: identity.publicKeySection[0].id,
-        },
-        contractsAdapter: registry.contractsAdapter,
-        contractsGateway: registry.contractsGateway,
-      }),
-    )
+    backendMiddleware.identityWallet = new IdentityWallet({
+      identity,
+      vaultedKeyProvider: userVault,
+      publicKeyMetadata: {
+        derivationPath: KeyTypes.jolocomIdentityKey,
+        keyId: identity.publicKeySection[0].id,
+      },
+      contractsAdapter: registry.contractsAdapter,
+      contractsGateway: registry.contractsGateway,
+    })
   } else {
     await backendMiddleware.authenticateAndSetIdentityWallet(
       userVault,

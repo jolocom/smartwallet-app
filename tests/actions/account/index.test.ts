@@ -62,9 +62,8 @@ describe('Account action creators', () => {
     encryptionLib: {
       decryptWithPass: jest.fn().mockReturnValue('a'.repeat(64)),
     },
-    setIdentityWallet: jest.fn().mockResolvedValue(null),
     authenticateAndSetIdentityWallet: jest.fn().mockResolvedValue(null),
-    identityWallet: { identity: { did: 'did:jolo:first' } },
+    identityWallet: { identity: { did: 'did:jolo:first', didDocument: {} } },
   }
 
   //@ts-ignore
@@ -82,6 +81,7 @@ describe('Account action creators', () => {
 
   it('Should correctly handle existing user identity if cached', async () => {
     const mockDidDoc = DidDocument.fromJSON({
+      id: 'did:jolo:first',
       publicKey: [
         //@ts-ignore
         {
@@ -97,7 +97,13 @@ describe('Account action creators', () => {
 
     await mockStore.dispatch(accountActions.checkIdentityExists)
 
-    expect(mockMiddleware.setIdentityWallet).toHaveBeenCalledTimes(1)
+    expect(
+      mockMiddleware.authenticateAndSetIdentityWallet,
+    ).not.toHaveBeenCalled()
+
+    expect(mockMiddleware.identityWallet.identity.didDocument).toStrictEqual(
+      mockDidDoc,
+    )
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 

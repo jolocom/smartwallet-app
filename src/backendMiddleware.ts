@@ -43,10 +43,6 @@ export class BackendMiddleware {
     await this.storageLib.initConnection()
   }
 
-  public setIdentityWallet(identityWallet: IdentityWallet) {
-    this.identityWallet = identityWallet
-  }
-
   public async authenticateAndSetIdentityWallet(
     userVault: SoftwareKeyProvider,
     encryptionPass: string,
