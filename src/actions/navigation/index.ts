@@ -84,6 +84,7 @@ export const handleDeepLink = (url: string): ThunkAction => (
       return dispatch(
         withLoading(withErrorScreen(handler(interactionToken, true))),
       )
+
     }
   }
 
