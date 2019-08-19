@@ -4,6 +4,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
 
 import { createMockStore } from 'tests/utils'
+import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
@@ -42,32 +43,60 @@ describe('Account action creators', () => {
   }
 
   const mockMiddleware = {
+    registry: {
+      contractsAdapter: jest.fn(),
+      contractsGateway: jest.fn(),
+    },
     storageLib: {
       get: {
-        persona: jest.fn(),
-        encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+        persona: jest.fn().mockResolvedValue({
+          did: 'did:jolo:first',
+        }),
+        encryptedSeed: jest.fn().mockResolvedValue('mockencryptedvalue'),
+        didDoc: jest.fn().mockResolvedValue(undefined),
       },
     },
     keyChainLib: {
-      getPassword: jest.fn().mockResolvedValue('sekrit'),
+      getPassword: jest.fn().mockResolvedValue('secret'),
     },
     encryptionLib: {
-      decryptWithPass: jest.fn().mockReturnValue('newSeed'),
+      decryptWithPass: jest.fn().mockReturnValue('a'.repeat(64)),
     },
     setIdentityWallet: jest.fn().mockResolvedValue(null),
+    authenticateAndSetIdentityWallet: jest.fn().mockResolvedValue(null),
     identityWallet: { identity: { did: 'did:jolo:first' } },
   }
 
+  //@ts-ignore
   const mockStore = createMockStore(initialState, mockMiddleware)
 
   beforeEach(mockStore.reset)
 
-  it('Should correctly handle one existing user identity', async () => {
-    mockMiddleware.storageLib.get.persona.mockResolvedValueOnce({
-      did: 'did:jolo:first',
+  it('Should correctly handle existing user identity if not cached', async () => {
+    await mockStore.dispatch(accountActions.checkIdentityExists)
+    expect(
+      mockMiddleware.authenticateAndSetIdentityWallet,
+    ).toHaveBeenCalledTimes(1)
+    expect(mockStore.getActions()).toMatchSnapshot()
+  })
+
+  it('Should correctly handle existing user identity if cached', async () => {
+    const mockDidDoc = DidDocument.fromJSON({
+      publicKey: [
+        //@ts-ignore
+        {
+          publicKeyHex: '0xabc',
+          id: 'did:jolo:first#123',
+        },
+      ],
     })
 
+    mockStore.backendMiddleware.storageLib.get.didDoc = jest
+      .fn()
+      .mockResolvedValue(mockDidDoc)
+
     await mockStore.dispatch(accountActions.checkIdentityExists)
+
     expect(mockMiddleware.setIdentityWallet).toHaveBeenCalledTimes(1)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
@@ -82,13 +111,7 @@ describe('Account action creators', () => {
 
   it('Should correctly handle an empty encrypted seed table', async () => {
     mockMiddleware.storageLib.get.persona.mockResolvedValueOnce([])
-    // NOTE: type issue, need to pass a promise into mockReturnValueOnce,
-    // because now the type is set to Promise<T> as it is already pre-setup in
-    // the mockMiddlerware
-    mockMiddleware.storageLib.get.encryptedSeed.mockReturnValueOnce(
-      Promise.resolve(null),
-    )
-
+    mockMiddleware.storageLib.get.encryptedSeed.mockReturnValueOnce(null)
     await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
