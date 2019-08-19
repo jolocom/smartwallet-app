@@ -8,6 +8,7 @@ import { recoverIdentity } from '../../../actions/registration'
 import { AppError } from '../../../lib/errors'
 import { routeList } from '../../../routeList'
 import ErrorCode from '../../../lib/errorCodes'
+import { StatusBar } from 'react-native'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -46,7 +47,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     }
     this.setState({
       value: text,
-      isValid: validateMnemonic(text),
+      isValid: validateMnemonic(text.trim()),
       wordList: matches,
     })
   }
@@ -65,14 +66,17 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
   }
   public render(): JSX.Element {
     return (
-      <InputSeedPhraseComponent
-        value={this.state.value}
-        isValid={this.state.isValid}
-        wordList={this.state.wordList}
-        selectWord={this.selectWord}
-        handleTextInput={this.handleSeedPhraseChange}
-        handleButtonPress={() => this.props.recoverIdentity(this.state.value)}
-      />
+      <React.Fragment>
+        <StatusBar />
+        <InputSeedPhraseComponent
+          value={this.state.value}
+          isValid={this.state.isValid}
+          wordList={this.state.wordList}
+          selectWord={this.selectWord}
+          handleTextInput={this.handleSeedPhraseChange}
+          handleButtonPress={() => this.props.recoverIdentity(this.state.value)}
+        />
+      </React.Fragment>
     )
   }
 }
