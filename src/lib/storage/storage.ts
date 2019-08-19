@@ -308,7 +308,9 @@ const cacheDIDDoc = (connection: Connection) => (doc: DidDocument) => {
   return connection.manager.save(cacheEntry)
 }
 
-const getCachedDIDDoc = (connection: Connection) => async (did: string) : Promise<DidDocument | {}> => {
+const getCachedDIDDoc = (connection: Connection) => async (
+  did: string,
+): Promise<DidDocument | undefined> => {
   // TODO Change to did?
   const [entry] = await connection.manager.findByIds(CacheEntity, [
     `didCache:${did}`,
@@ -317,7 +319,7 @@ const getCachedDIDDoc = (connection: Connection) => async (did: string) : Promis
   try {
     return DidDocument.fromJSON(entry.value)
   } catch (err) {
-    return {}
+    return undefined
   }
 }
 

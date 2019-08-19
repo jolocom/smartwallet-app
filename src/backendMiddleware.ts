@@ -44,14 +44,22 @@ export class BackendMiddleware {
     await this.storageLib.initConnection()
   }
 
-  public async setIdentityWallet(
+  public setIdentityWallet(identityWallet: IdentityWallet) {
+    this.identityWallet = identityWallet
+  }
+
+  public async authenticateAndSetIdentityWallet(
     userVault: SoftwareKeyProvider,
-    pass: string,
+    encryptionPass: string,
+    storageLib: Storage,
   ): Promise<void> {
-    const { jolocomIdentityKey } = JolocomLib.KeyTypes
+    const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
+
     this.identityWallet = await this.registry.authenticate(userVault, {
-      encryptionPass: pass,
-      derivationPath: jolocomIdentityKey,
+      encryptionPass,
+      derivationPath,
     })
+
+    await storageLib.store.didDoc(this.identityWallet.didDocument)
   }
 }

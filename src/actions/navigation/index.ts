@@ -13,7 +13,7 @@ import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
 
 let deferredNavActions: NavigationAction[] = [],
-  dispatchNavigationAction = (action: any) => {
+  dispatchNavigationAction = (action: NavigationAction) => {
     deferredNavActions.push(action)
   }
 
@@ -78,9 +78,7 @@ export const handleDeepLink = (url: string): ThunkAction => (
 
       if (handler) {
         return dispatch(
-          withLoading(
-            withErrorScreen(handler(interactionToken, true)),
-          ),
+          withLoading(withErrorScreen(handler(interactionToken, true))),
         )
       }
     }
