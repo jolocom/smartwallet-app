@@ -5,8 +5,7 @@ import { Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 import { ConnectionOptions } from 'typeorm/browser'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { IRegistry } from 'jolocom-lib/js/registries/types'
-import { createJolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
+import { createJolocomRegistry, JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { IpfsCustomConnector } from './lib/ipfs'
 import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
@@ -17,7 +16,7 @@ export class BackendMiddleware {
   public storageLib: Storage
   public encryptionLib: EncryptionLibInterface
   public keyChainLib: KeyChainInterface
-  public registry: IRegistry
+  public registry: JolocomRegistry
 
   public constructor(config: {
     fuelingEndpoint: string

@@ -18,8 +18,6 @@ import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
 import { Identity } from 'jolocom-lib/js/identity/identity'
-import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
-import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -46,7 +44,7 @@ export const checkIdentityExists: ThunkAction = async (
   getState,
   backendMiddleware,
 ) => {
-  const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
+  const { keyChainLib, storageLib, encryptionLib, registry } = backendMiddleware
   const encryptedEntropy = await storageLib.get.encryptedSeed()
 
   if (!encryptedEntropy) {
@@ -84,11 +82,9 @@ export const checkIdentityExists: ThunkAction = async (
   const didDocument = await storageLib.get.didDoc(publicKeyToDID(userPubKey))
 
   if (didDocument) {
-    /**
-     * TODO contractsAdapter and contractsGateway need to be the same as the
-     *  ones defined in backendMiddleware.ts. Fix by simplifying IW constructor
-     */
     const identity = Identity.fromDidDocument({ didDocument })
+
+    // TODO Simplify constructor
     backendMiddleware.setIdentityWallet(
       new IdentityWallet({
         identity,
@@ -97,8 +93,8 @@ export const checkIdentityExists: ThunkAction = async (
           derivationPath: KeyTypes.jolocomIdentityKey,
           keyId: identity.publicKeySection[0].id,
         },
-        contractsAdapter: jolocomContractsAdapter,
-        contractsGateway: jolocomContractsGateway,
+        contractsAdapter: registry.contractsAdapter,
+        contractsGateway: registry.contractsGateway,
       }),
     )
   } else {
