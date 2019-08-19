@@ -1,6 +1,6 @@
 import { navigationActions } from 'src/actions/'
 import { routeList } from 'src/routeList'
-import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
+import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
   getClaimMetadataByCredentialType,
@@ -10,7 +10,7 @@ import {
 import { cancelReceiving } from '../sso'
 import { JolocomLib } from 'jolocom-lib'
 import { ThunkAction } from 'src/store'
-import { groupBy, zipWith, mergeRight, omit, uniq, map } from 'ramda'
+import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
@@ -41,26 +41,16 @@ export const checkIdentityExists: ThunkAction = async (
   backendMiddleware,
 ) => {
   const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
-  const encryptedEntropy = await storageLib.get.encryptedSeed().catch(err => {
-    // TODO Fix this
-    if (err.message.indexOf('no such table') === 0) {
-      return
-    }
-  })
+  const encryptedEntropy = await storageLib.get.encryptedSeed()
 
   if (!encryptedEntropy) {
     const isRegistering = getState().registration.loading.isRegistering
-    if (isRegistering) {
-      return dispatch(
-        navigationActions.navigate({
-          routeName: routeList.RegistrationProgress,
-        }),
-      )
-    } else {
-      return dispatch(
-        navigationActions.navigate({ routeName: routeList.Landing }),
-      )
-    }
+
+    const routeName = isRegistering
+      ? routeList.RegistrationProgress
+      : routeList.Landing
+
+    return dispatch(navigationActions.navigate({ routeName }))
   }
 
   const password = await keyChainLib.getPassword()
