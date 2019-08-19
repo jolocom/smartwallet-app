@@ -105,8 +105,8 @@ export const checkIdentityExists: ThunkAction = async (
     )
   }
 
-  const identityWallet = backendMiddleware.identityWallet
-  dispatch(setDid(identityWallet.identity.did))
+  const userDid = backendMiddleware.identityWallet.identity.did
+  dispatch(setDid(userDid))
 
   return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
 }
