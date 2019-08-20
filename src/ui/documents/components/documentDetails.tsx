@@ -49,7 +49,7 @@ export const DocumentDetails: React.SFC<Props> = ({ document }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.sectionHeader}>Issued by</Text>
-      {IssuerCard(document.issuer)}
+      <IssuerCard issuer={document.issuer} />
       <Text style={styles.sectionHeader}>Details</Text>
       <View style={styles.claimsContainer}>
         {Object.keys(document.claimData).map(key => (

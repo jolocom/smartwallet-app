@@ -1,66 +1,66 @@
 import React from 'react'
-import { StyleSheet, Image } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { ClaimCard } from '../../sso/components/claimCard'
+import { StyleSheet, Image, View, Text } from 'react-native'
 import { IdentitySummary } from '../../../actions/sso/types'
-import { isEmpty } from 'ramda'
+import { Colors, Spacing, Typography } from 'src/styles'
+import { CardWrapper } from 'src/ui/structure'
+
+interface Props {
+  issuer: IdentitySummary
+}
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    paddingVertical: 18,
-    paddingLeft: 15,
-    paddingRight: 30,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#ececec',
   },
   icon: {
-    width: 42,
-    height: 42,
+    width: 40,
+    height: 40,
   },
-  textContainer: {
-    marginLeft: 16,
+  issuerTextContainer: {
+    // needed so the text overflow turns into ellipsis
+    flex: 1,
+    marginLeft: Spacing.MD,
   },
-  issuerName: JolocomTheme.textStyles.light.textDisplayField,
+  nameText: {
+    ...Typography.cardMainText,
+  },
   urlText: {
-    fontSize: 17,
-    color: JolocomTheme.primaryColorPurple,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.cardSecondaryText,
+    color: Colors.purpleMain,
   },
 })
 
-export const IssuerCard = (issuer: IdentitySummary): JSX.Element => {
-  const { image, primaryText, secondaryText } = convertToClaimCard(issuer)
-  return (
-    <ClaimCard
-      containerStyle={{
-        paddingVertical: '2%',
-      }}
-      secondaryText={secondaryText}
-      secondaryTextStyle={styles.issuerName}
-      primaryText={primaryText}
-      primaryTextStyle={styles.urlText}
-      leftIcon={<Image source={{ uri: image }} style={styles.icon} />}
-    />
-  )
-}
+export const IssuerCard: React.FC<Props> = props => {
+  const {
+    issuer,
+    issuer: { publicProfile },
+  } = props
+  // set up defaults
+  let name = 'Service Name',
+    // Description was included before, but we aren't using it
+    // description = 'No description provided',
+    image = undefined,
+    url = issuer.did as string | undefined
 
-const convertToClaimCard = ({ did, publicProfile }: IdentitySummary) => {
-  if (!publicProfile || isEmpty(publicProfile)) {
-    return {
-      description: 'No description provided',
-      image: undefined,
-      primaryText: (did && did.substr(0, 25) + '...') || 'TODO',
-      secondaryText: 'Service Name',
-    }
-  } else {
-    return {
-      primaryText: publicProfile.url,
-      secondaryText: publicProfile.name,
-      image: publicProfile.image,
-      description: publicProfile.description,
-    }
+  if (publicProfile) {
+    name = publicProfile.name
+    // description = publicProfile.description
+    image = publicProfile.image
+    url = publicProfile.url
   }
+
+  return (
+    <CardWrapper style={styles.container}>
+      {image && <Image source={{ uri: image }} style={styles.icon} />}
+      <View style={styles.issuerTextContainer}>
+        <Text style={styles.nameText} numberOfLines={1}>
+          {name}
+        </Text>
+        <Text style={styles.urlText} numberOfLines={1}>
+          {url}
+        </Text>
+      </View>
+    </CardWrapper>
+  )
 }

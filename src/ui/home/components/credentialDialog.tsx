@@ -80,7 +80,9 @@ export const CredentialDialogComponent: React.SFC<Props> = (
 
       <View style={styles.issuerSection}>
         <Text style={styles.sectionHeader}>Issued by </Text>
-        {IssuerCard(requester)}
+        {/*  Is the issuer always the same as the document issuer here?  
+             If so we can use credentialToRender.issuer */}
+        <IssuerCard issuer={requester} />
       </View>
 
       <View style={styles.claimsSection}>

@@ -97,7 +97,7 @@ export class ConsentComponent extends React.Component<Props, State> {
 
   public render(): JSX.Element {
     const { selectedCredentials } = this.state
-    const { availableCredentials } = this.props
+    const { availableCredentials, requester } = this.props
 
     // group credentials by type so they can be rendered in sections
     const groupedByType: {
@@ -118,7 +118,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     return (
       <Container style={styles.container}>
         <View style={styles.topSection}>
-          {IssuerCard(this.props.requester)}
+          <IssuerCard issuer={requester} />
           <View style={styles.messageContainer}>
             <Text style={styles.message}>
               {I18n.t(
