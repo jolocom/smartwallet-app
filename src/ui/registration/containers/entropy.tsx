@@ -1,4 +1,5 @@
-import { skipEntropyCollection } from 'src/config'
+import { SKIP_ENTROPY_COLLECTION } from 'src/env'
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { registrationActions } from 'src/actions'
@@ -11,7 +12,7 @@ import {
 import { generateSecureRandomBytes } from 'src/lib/util'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { ThunkDispatch } from 'src/store'
-import { AppError, ErrorCode } from '../../../lib/errors'
+import { AppError, ErrorCode } from 'src/lib/errors'
 import { routeList } from 'src/routeList'
 import { StatusBar } from 'react-native'
 
@@ -59,8 +60,9 @@ export class EntropyContainer extends React.Component<Props, State> {
   }
 
   private updateEntropyProgress = async (): Promise<void> => {
-    const entropyProgress = skipEntropyCollection ? 1 : this.state.entropyProgress
-
+    const entropyProgress = SKIP_ENTROPY_COLLECTION
+      ? 1
+      : this.state.entropyProgress
     if (entropyProgress >= 1) {
       this.setState({ sufficientEntropy: true, entropyProgress: 1 })
       while (this.entropyGenerator.getProgress() < 1) {

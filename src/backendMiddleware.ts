@@ -11,7 +11,7 @@ import { IpfsCustomConnector } from './lib/ipfs'
 import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
-import { skipIdentityRegisteration } from './config';
+import { SKIP_IDENTITY_REGISTRATION } from './env'
 
 export class BackendMiddleware {
   public identityWallet!: IdentityWallet
@@ -41,8 +41,9 @@ export class BackendMiddleware {
         gateway: jolocomContractsGateway,
       },
     })
-    if (skipIdentityRegisteration) {
-      this.registry.commit = this.fuelKeyWithEther = async (arg: any) => undefined
+    if (SKIP_IDENTITY_REGISTRATION) {
+      this.registry.commit = this.fuelKeyWithEther = async (arg: any) =>
+        undefined
       this.setIdentityWallet = async function(
         userVault: SoftwareKeyProvider,
         pass: string,
