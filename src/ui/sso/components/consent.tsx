@@ -46,6 +46,11 @@ const styles = StyleSheet.create({
   claimsSection: {
     marginTop: Spacing.MD,
     flex: 0.6,
+    borderTopWidth: 1,
+    borderColor: Colors.lightGrey,
+  },
+  credentialSection: {
+    marginBottom: Spacing.MD,
   },
   buttonSection: {
     flex: 0.1,
@@ -133,13 +138,17 @@ export class ConsentComponent extends React.Component<Props, State> {
         <View style={styles.claimsSection}>
           <ScrollView style={{ width: '100%' }}>
             {Object.keys(groupedByType).map(sectionType => (
-              <CredentialSection
-                did={this.props.did}
-                sectionType={sectionType}
-                credentials={groupedByType[sectionType]}
-                selectedCredential={this.state.selectedCredentials[sectionType]}
-                onPress={this.handleClaimSelect}
-              />
+              <View style={styles.credentialSection}>
+                <CredentialSection
+                  did={this.props.did}
+                  sectionType={sectionType}
+                  credentials={groupedByType[sectionType]}
+                  selectedCredential={
+                    this.state.selectedCredentials[sectionType]
+                  }
+                  onPress={this.handleClaimSelect}
+                />
+              </View>
             ))}
           </ScrollView>
         </View>

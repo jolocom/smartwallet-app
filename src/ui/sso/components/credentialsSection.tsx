@@ -10,6 +10,7 @@ import { CheckboxCredential } from './checkboxCredential'
 
 const styles = StyleSheet.create({
   card: {
+    borderTopWidth: 1,
     borderBottomWidth: 1,
   },
   leftIconSection: {
