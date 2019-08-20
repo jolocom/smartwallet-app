@@ -8,9 +8,9 @@ import { stub, reveal } from 'tests/utils'
 describe('Entropy container', () => {
   const mockInstanceGenerator = (
     instance: EntropyContainer,
-    progressValues = [0],
+    progressValues: number[] | null = null,
   ) => {
-    const getProgress = jest.fn().mockReturnValue(progressValues[0])
+    const getProgress = jest.fn()
     // @ts-ignore private
     const generatorMock = (instance.entropyGenerator = stub<EntropyGenerator>({
       getProgress,
@@ -18,7 +18,14 @@ describe('Entropy container', () => {
       generateRandomString: jest.fn().mockReturnValue('randomString'),
     }))
 
-    progressValues.forEach(v => getProgress.mockReturnValueOnce(v))
+    if (progressValues) {
+      getProgress.mockReturnValue(progressValues[0])
+      progressValues.forEach(v => getProgress.mockReturnValueOnce(v))
+    } else {
+      getProgress.mockImplementation(() => {
+        throw new Error("shouldn't get here!")
+      })
+    }
 
     return generatorMock
   }
@@ -45,7 +52,7 @@ describe('Entropy container', () => {
   it('correctly handles added points with the entropy generator', () => {
     const rendered = shallow(<EntropyContainer {...props} />)
     const instance = rendered.instance() as EntropyContainer
-    const generatorMock = mockInstanceGenerator(instance)
+    const generatorMock = mockInstanceGenerator(instance, [0])
 
     expect(rendered.state()).toMatchSnapshot()
 
