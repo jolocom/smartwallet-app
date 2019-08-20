@@ -87,7 +87,6 @@ export class ConsentComponent extends React.Component<Props, State> {
 
   private handleSubmitClaims = (): void => {
     const { selectedCredentials } = this.state
-    // get the selectedCredentials
     const credentials: StateVerificationSummary[] = Object.keys(
       selectedCredentials,
     ).map(key => selectedCredentials[key])
@@ -96,49 +95,20 @@ export class ConsentComponent extends React.Component<Props, State> {
     this.props.handleSubmitClaims(credentials)
   }
 
-  private renderFirstSection(): JSX.Element {
-    return (
-      <View style={styles.topSection}>
-        {IssuerCard(this.props.requester)}
-        <View style={styles.messageContainer}>
-          <Text style={styles.message}>
-            {I18n.t(
-              strings.THIS_SERVICE_IS_ASKING_YOU_TO_SHARE_THE_FOLLOWING_CLAIMS,
-            )}
-            :
-          </Text>
-        </View>
-      </View>
-    )
-  }
+  public render(): JSX.Element {
+    const { selectedCredentials } = this.state
+    const { availableCredentials } = this.props
 
-  private renderCredentialSections(
-    credentials: StateTypeSummary[],
-  ): JSX.Element[] {
+    // group credentials by type so they can be rendered in sections
     const groupedByType: {
       [key: string]: StateTypeSummary[]
-    } = credentials.reduce(
+    } = availableCredentials.reduce(
       (acc, current) =>
         acc[current.type]
           ? { ...acc, [current.type]: [...acc[current.type], current] }
           : { ...acc, [current.type]: [current] },
       {},
     )
-
-    // creates a section for each type with the availableCredentials
-    return Object.keys(groupedByType).map(sectionType => (
-      <CredentialSection
-        did={this.props.did}
-        sectionType={sectionType}
-        credentials={groupedByType[sectionType]}
-        selectedCredential={this.state.selectedCredentials[sectionType]}
-        onPress={this.handleClaimSelect}
-      />
-    ))
-  }
-
-  public render(): JSX.Element {
-    const { selectedCredentials } = this.state
 
     const submitAllowed = Object.keys(selectedCredentials).every(
       key => selectedCredentials[key] !== undefined,
@@ -147,12 +117,33 @@ export class ConsentComponent extends React.Component<Props, State> {
 
     return (
       <Container style={styles.container}>
-        {this.renderFirstSection()}
+        <View style={styles.topSection}>
+          {IssuerCard(this.props.requester)}
+          <View style={styles.messageContainer}>
+            <Text style={styles.message}>
+              {I18n.t(
+                strings.THIS_SERVICE_IS_ASKING_YOU_TO_SHARE_THE_FOLLOWING_CLAIMS,
+              )}
+              :
+            </Text>
+          </View>
+        </View>
+
+        {/* claims to share, grouped in sections by type by type */}
         <View style={styles.claimsSection}>
           <ScrollView style={{ width: '100%' }}>
-            {this.renderCredentialSections(this.props.availableCredentials)}
+            {Object.keys(groupedByType).map(sectionType => (
+              <CredentialSection
+                did={this.props.did}
+                sectionType={sectionType}
+                credentials={groupedByType[sectionType]}
+                selectedCredential={this.state.selectedCredentials[sectionType]}
+                onPress={this.handleClaimSelect}
+              />
+            ))}
           </ScrollView>
         </View>
+
         <View style={styles.buttonSection}>
           <ButtonSection
             disabled={buttonDisabled}
