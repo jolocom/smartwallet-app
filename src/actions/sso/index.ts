@@ -20,6 +20,9 @@ import { DecoratedClaims } from '../../reducers/account'
 import { IdentitySummary } from './types'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
+import { Identity } from 'jolocom-lib/js/identity/identity'
+import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
+import { getMethodPrefixFromDid } from 'jolocom-lib/js/utils/crypto'
 
 export const setCredentialRequest = (
   request: StateCredentialRequestSummary,
@@ -129,7 +132,19 @@ export const consumeCredentialRequest = (
     resolver,
   )
 
-  const { did: issuerDid, publicProfile } = await registry.resolve(
+  // TODO
+  const resolveFn =
+    getMethodPrefixFromDid(keyIdToDid(decodedCredentialRequest.issuer)) ===
+    'jolo'
+      ? (did: string) => registry.resolve(did)
+      : (did: string) =>
+          resolver.resolve(did).then(didDoc =>
+            Identity.fromDidDocument({
+              didDocument: DidDocument.fromJSON(didDoc),
+            }),
+          )
+
+  const { did: issuerDid, publicProfile } = await resolveFn(
     keyIdToDid(decodedCredentialRequest.issuer),
   )
 
