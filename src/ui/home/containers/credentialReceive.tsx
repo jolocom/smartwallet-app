@@ -9,6 +9,7 @@ import { cancelReceiving } from 'src/actions/sso'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { View } from 'react-native'
 import { ThunkDispatch } from '../../../store'
+import { demoData } from '../../../../demoDocuments'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -24,8 +25,8 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.9 }}>
           <CredentialDialogComponent
-            requester={this.props.offeror}
-            credentialToRender={this.props.offer}
+            requester={demoData[0].issuer}
+            credentialToRender={demoData[0]}
           />
         </View>
         <View style={{ flex: 0.1 }}>
@@ -43,7 +44,7 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  offer: state.account.claims.pendingExternal.offer[0].decoratedClaim,
+  // offer: state.account.claims.pendingExternal.offer[0].decoratedClaim,
   offeror: state.account.claims.pendingExternal.offeror,
 })
 
