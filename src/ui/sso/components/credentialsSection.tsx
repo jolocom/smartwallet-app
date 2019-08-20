@@ -12,7 +12,11 @@ const styles = StyleSheet.create({
   card: {
     borderBottomWidth: 1,
   },
+  leftIconSection: {
+    paddingHorizontal: Spacing.XS,
+  },
   credentialsArea: {
+    flex: 1,
     marginLeft: Spacing.LG,
   },
   noClaimsText: {
@@ -32,10 +36,10 @@ interface CredentialSectionProps {
 export const CredentialSection: React.FC<CredentialSectionProps> = props => {
   const { sectionType, did, credentials, selectedCredential, onPress } = props
   return (
-    <CardWrapper
-      leftIcon={getCredentialIconByType(sectionType)}
-      style={styles.card}
-    >
+    <CardWrapper style={styles.card}>
+      <View style={styles.leftIconSection}>
+        {getCredentialIconByType(sectionType)}
+      </View>
       <View style={styles.credentialsArea}>
         {/* Title for the section */}
         <Text style={Typography.cardSecondaryTextBlack}>{sectionType}:</Text>
