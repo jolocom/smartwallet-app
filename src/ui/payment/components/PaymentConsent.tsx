@@ -8,7 +8,7 @@ import { StatePaymentRequestSummary } from 'src/reducers/sso'
 import { formatEth } from 'src/utils/formatEth'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
-import { WrappedCard } from 'src/ui/structure'
+import { PaymentConsentCard } from './paymentConsentCard'
 
 interface Props {
   activePaymentRequest: StatePaymentRequestSummary
@@ -65,38 +65,36 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
     return getCredentialIconByType(type)
   }
 
-  private renderTransactionDetails(): JSX.Element {
+  public render(): JSX.Element {
     const {
+      amount,
       description,
       receiver: { did, address },
     } = this.props.activePaymentRequest
-    return (
-      <View style={styles.cardContainer}>
-        <WrappedCard
-          leftIcon={this.renderLeftIcon(I18n.t(strings.EMAIL))}
-          title={`${I18n.t(strings.TO)}:`}
-          primaryText={did}
-          secondaryText={`Eth address: ${address}`}
-        />
-        <WrappedCard
-          leftIcon={this.renderLeftIcon(I18n.t(strings.OTHER))}
-          title={`${I18n.t(strings.FOR)}:`}
-          primaryText={description}
-        />
-      </View>
-    )
-  }
-
-  public render(): JSX.Element {
-    const { amount } = this.props.activePaymentRequest
     const { formattedAmount, unit } = formatEth(amount)
+
     return (
       <Container style={styles.container}>
         <View style={styles.priceContainer}>
           <Text style={styles.priceAmount}>{formattedAmount}</Text>
           <Text style={styles.priceUnit}>{unit}</Text>
         </View>
-        {this.renderTransactionDetails()}
+
+        {/* Who the payment goes to and what the payment is for */}
+        <View style={styles.cardContainer}>
+          <PaymentConsentCard
+            leftIcon={this.renderLeftIcon(I18n.t(strings.EMAIL))}
+            title={`${I18n.t(strings.TO)}:`}
+            primaryText={did}
+            secondaryText={`Eth address: ${address}`}
+          />
+          <PaymentConsentCard
+            leftIcon={this.renderLeftIcon(I18n.t(strings.OTHER))}
+            title={`${I18n.t(strings.FOR)}:`}
+            primaryText={description}
+          />
+        </View>
+
         <View style={styles.buttonContainer}>
           <ButtonSection
             disabled={this.state.pending}

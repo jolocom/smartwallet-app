@@ -1,25 +1,12 @@
 import React, { ReactNode } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
-import { Spacing, Colors, Typography } from '../../styles'
-
-/**
- * |------------------------------------------------------|
- * | left  |             title                            |
- * | Icon  |----------------------------------------------|
- * |       |                                              |
- * |       |            primaryText                       |
- * |       |           (secondaryText)                    |
- * |       |                                              |
- * |       |                                              |
- * |-------|----------------------------------------------|
- */
+import { Spacing, Typography } from 'src/styles'
+import { CardWrapper } from 'src/ui/structure'
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: 'row',
-    paddingVertical: Spacing.MD,
-    backgroundColor: Colors.white,
-    borderColor: Colors.lightGrey,
+    // prevent the cards from filling the space
+    flex: 0,
     borderBottomWidth: 1,
   },
   leftIconSection: {
@@ -34,15 +21,15 @@ const styles = StyleSheet.create({
   },
 })
 
-interface WrappedCardProps {
+interface Props {
   leftIcon?: ReactNode
   title: string
   primaryText: string
   secondaryText?: string
 }
 
-export const WrappedCard: React.FC<WrappedCardProps> = (props): JSX.Element => (
-  <View style={styles.card}>
+export const PaymentConsentCard: React.FC<Props> = (props): JSX.Element => (
+  <CardWrapper style={styles.card}>
     {props.leftIcon && (
       <View style={styles.leftIconSection}>{props.leftIcon}</View>
     )}
@@ -57,5 +44,5 @@ export const WrappedCard: React.FC<WrappedCardProps> = (props): JSX.Element => (
         </Text>
       )}
     </View>
-  </View>
+  </CardWrapper>
 )
