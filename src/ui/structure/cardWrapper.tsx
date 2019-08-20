@@ -1,53 +1,40 @@
 import React, { ReactNode } from 'react'
-import { View, StyleSheet, Text } from 'react-native'
-import { Spacing, Colors, Typography } from '../../styles'
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import { Spacing, Colors } from '../../styles'
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
     flexDirection: 'row',
     padding: Spacing.MD,
     backgroundColor: Colors.white,
     borderColor: Colors.lightGrey,
-    borderBottomWidth: 1,
   },
   leftIconSection: {
     paddingHorizontal: Spacing.XS,
   },
-  rightSection: {
+  mainSection: {
     flex: 1,
-    marginLeft: Spacing.LG,
-  },
-  mainInfo: {
-    ...Typography.cardMainText,
-    marginTop: Spacing.SM,
   },
 })
 
-/**
- * |------------------------------------------------------|
- * | left  |             title                            |
- * | Icon  |----------------------------------------------|
- * |       |                                              |
- * |       |            children                          |
- * |       |                                              |
- * |       |                                              |
- * |       |                                              |
- * |-------|----------------------------------------------|
- */
-
 interface CardWrapperProps {
   leftIcon?: ReactNode
-  title: string
+  style?: StyleProp<ViewStyle>
 }
 
+/**
+ * CardWrapper is the base building block of most cards.
+ *
+ * It provides top and bottom padding, and a border color, but is generally
+ * unopinionated. Currently accepts an optional leftIcon prop, but this may change.
+ */
+
 export const CardWrapper: React.FC<CardWrapperProps> = (props): JSX.Element => (
-  <View style={styles.card}>
+  <View style={[styles.card, props.style]}>
     {props.leftIcon && (
       <View style={styles.leftIconSection}>{props.leftIcon}</View>
     )}
-    <View style={styles.rightSection}>
-      <Text style={Typography.cardSecondaryTextBlack}>{props.title}:</Text>
-      {props.children}
-    </View>
+    <View style={styles.mainSection}>{props.children}</View>
   </View>
 )
