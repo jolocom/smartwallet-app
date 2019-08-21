@@ -8,7 +8,7 @@ import { IdentitySummary } from '../../../actions/sso/types'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 import { Typography, Colors, Spacing } from 'src/styles'
-import { CredentialSection } from './credentialsSection'
+import { CredentialSectionCard } from './credentialsSectionCard'
 
 interface Props {
   did: string
@@ -139,7 +139,7 @@ export class ConsentComponent extends React.Component<Props, State> {
           <ScrollView style={{ width: '100%' }}>
             {Object.keys(groupedByType).map(sectionType => (
               <View style={styles.credentialSection}>
-                <CredentialSection
+                <CredentialSectionCard
                   did={this.props.did}
                   sectionType={sectionType}
                   credentials={groupedByType[sectionType]}

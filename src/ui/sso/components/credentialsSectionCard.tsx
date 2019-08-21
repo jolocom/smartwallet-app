@@ -34,7 +34,14 @@ interface CredentialSectionProps {
   onPress: (type: string, newSelected: StateVerificationSummary) => void
 }
 
-export const CredentialSection: React.FC<CredentialSectionProps> = props => {
+/**
+ * CredentialSectionCard takes credentials that have been sorted into a group and
+ * render the credentials wrapped in a card. The card displays an icon and title
+ * for the group.
+ */
+export const CredentialSectionCard: React.FC<
+  CredentialSectionProps
+> = props => {
   const { sectionType, did, credentials, selectedCredential, onPress } = props
   return (
     <CardWrapper style={styles.card}>

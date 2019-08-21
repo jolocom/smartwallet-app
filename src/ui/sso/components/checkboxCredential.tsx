@@ -41,6 +41,13 @@ interface CheckboxCredentialProps {
   onPress: () => void
 }
 
+/**
+ * CheckboxCredential takes a credential and displays the values of its claims
+ * (without titles) with a checkbox for selection. This is used as part of the
+ * CredentialSectionCard component on the share credentials (consent) interaction
+ * screen.
+ */
+
 export const CheckboxCredential: React.FC<CheckboxCredentialProps> = props => {
   const { credential, did, issuer, isSelected, onPress } = props
   const { values } = credential
