@@ -7,10 +7,6 @@ import { generateSecureRandomBytes } from 'src/lib/util'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
 
-export enum InitAction {
-  CREATE = 'create',
-  RECOVER = 'recover',
-}
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
   value: loadingMsg,
@@ -34,55 +30,6 @@ export const submitEntropy = (
   return dispatch(createIdentity(encodedEntropy))
 }
 
-export const selectInitAction = (action: string): ThunkAction => dispatch => {
-  switch (action) {
-    case InitAction.CREATE: {
-      return dispatch(startRegistration)
-    }
-    case InitAction.RECOVER: {
-      // TODO open recover screen
-      return dispatch(
-        navigationActions.navigate({
-          routeName: routeList.Entropy,
-        }),
-      )
-    }
-    default: {
-      console.error('Wrong Init Action')
-      return dispatch(
-        navigationActions.navigate({
-          routeName: routeList.Landing,
-        }),
-      )
-    }
-  }
-}
-
-export const openInitAction: ThunkAction = dispatch =>
-  dispatch(
-    navigationActions.navigate({
-      routeName: routeList.InitAction,
-    }),
-  )
-
-export const startRegistration: ThunkAction = async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  const randomPassword = await generateSecureRandomBytes(32)
-
-  await backendMiddleware.keyChainLib.savePassword(
-    randomPassword.toString('base64'),
-  )
-
-  return dispatch(
-    navigationActions.navigate({
-      routeName: routeList.Entropy,
-    }),
-  )
-}
-
 export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
   getState,
@@ -101,8 +48,8 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setIsRegistering(true))
 
   const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
+  const password = (await generateSecureRandomBytes(32)).toString('base64')
 
-  const password = await keyChainLib.getPassword()
   const encEntropy = encryptionLib.encryptWithPass({
     data: encodedEntropy,
     pass: password,
@@ -134,6 +81,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setLoadingMsg(loading.loadingStages[3]))
   await backendMiddleware.setIdentityWallet(userVault, password)
 
+  await keyChainLib.savePassword(password)
   await storageLib.store.encryptedSeed(entropyData)
   await storageLib.store.persona(personaData)
 

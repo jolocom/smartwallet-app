@@ -1,23 +1,23 @@
-import { Platform, Image, StyleProp, TextStyle } from 'react-native'
+import { Image, Platform, StyleProp, TextStyle } from 'react-native'
 import { createElement } from 'react'
 
 import {
-  createStackNavigator,
-  createBottomTabNavigator,
-  NavigationScreenOptions,
-  NavigationRoute,
-  NavigationScreenProp,
   createAppContainer,
+  createBottomTabNavigator,
+  createStackNavigator,
   createSwitchNavigator,
+  NavigationRoute,
+  NavigationScreenOptions,
+  NavigationScreenProp,
 } from 'react-navigation'
 
-import { Claims, Records, ClaimDetails } from 'src/ui/home/'
-import { Documents, DocumentDetails } from 'src/ui/documents'
+import { ClaimDetails, Claims, Records } from 'src/ui/home/'
+import { DocumentDetails, Documents } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
-import { RegistrationProgress, Entropy } from 'src/ui/registration/'
+import { Entropy, RegistrationProgress } from 'src/ui/registration/'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Exception /*BottomNavBar*/ } from 'src/ui/generic/'
+import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import { Settings } from 'src/ui/settings'
@@ -30,12 +30,11 @@ import BottomTabBar from 'src/ui/generic/bottomTabBar'
 import strings from './locales/strings'
 
 import {
+  DocumentsMenuIcon,
   IdentityMenuIcon,
   RecordsMenuIcon,
-  DocumentsMenuIcon,
   SettingsMenuIcon,
 } from 'src/resources'
-import { InitAction } from './ui/landing/containers/initAction'
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 
@@ -176,10 +175,6 @@ const RegistrationScreens = createSwitchNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
-      navigationOptions: noHeaderNavOpts,
-    },
-    [routeList.InitAction]: {
-      screen: InitAction,
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.Entropy]: {

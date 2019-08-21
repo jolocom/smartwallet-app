@@ -5,6 +5,7 @@ import { ThunkDispatch } from '../../../store'
 import { NavigationScreenProps } from 'react-navigation'
 import { navigationActions } from '../../../actions'
 import { routeList } from '../../../routeList'
+import { StatusBar } from 'react-native'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -16,10 +17,17 @@ export class SeedPhraseContainer extends React.Component<Props> {
     const mnemonic =
       this.props.navigation && this.props.navigation.getParam('mnemonic')
     return (
-      <SeedPhraseComponent
-        seedPhrase={mnemonic}
-        handleButtonTap={() => this.props.repeatSeedPhrase(mnemonic)}
-      />
+      <React.Fragment>
+        <StatusBar
+          animated={false}
+          barStyle="light-content"
+          showHideTransition="fade"
+        />
+        <SeedPhraseComponent
+          seedPhrase={mnemonic}
+          handleButtonTap={() => this.props.repeatSeedPhrase(mnemonic)}
+        />
+      </React.Fragment>
     )
   }
 }

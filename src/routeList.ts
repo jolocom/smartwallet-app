@@ -3,7 +3,6 @@ export enum routeList {
   AppInit = 'AppInit',
 
   Landing = 'Landing',
-  InitAction = 'InitAction',
   Entropy = 'Entropy',
   RegistrationProgress = 'RegistrationProgress',
   Loading = 'Loading',
