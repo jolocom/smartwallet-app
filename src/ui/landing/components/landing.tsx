@@ -15,7 +15,8 @@ interface State {
 }
 
 interface Props {
-  handleButtonTap: () => void
+  handleGetStarted: () => void
+  handleRecover: () => void
 }
 
 interface Slide {
@@ -78,10 +79,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#05050d',
   },
   buttonBlock: {
-    flex: 0.1,
+    flex: 0.3,
     backgroundColor: '#05050d',
   },
   buttonContainer: {
+    marginTop: 5,
     height: 48,
     minWidth: 164,
     borderRadius: 4,
@@ -194,13 +196,23 @@ export class LandingComponent extends React.Component<Props, State> {
         <Block style={styles.buttonBlock}>
           <Button
             raised
-            onPress={this.props.handleButtonTap}
+            onPress={this.props.handleGetStarted}
             style={{
               container: styles.buttonContainer,
               text: styles.buttonText,
             }}
             upperCase={false}
             text={I18n.t(strings.GET_STARTED)}
+          />
+          <Button
+            raised
+            onPress={this.props.handleRecover}
+            style={{
+              container: styles.buttonContainer,
+              text: styles.buttonText,
+            }}
+            upperCase={false}
+            text={'Recover Identity'}
           />
         </Block>
       </Container>
