@@ -51,16 +51,18 @@ export const DocumentDetails: React.SFC<Props> = ({ document }) => {
       {IssuerCard(document.issuer)}
       <Text style={styles.sectionHeader}>Details</Text>
       <View style={styles.claimsContainer}>
-        {Object.keys(document.claimData).map(key => (
-          <View key={key} style={styles.claimCard}>
-            <View style={styles.claimCardTextContainer}>
-              <Text style={styles.claimCardTitle}>{prepareLabel(key)}</Text>
-              <Text style={JolocomTheme.textStyles.light.textDisplayField}>
-                {document.claimData[key]}
-              </Text>
+        {Object.keys(document.claimData).map(key =>
+          document.claimData[key] ? (
+            <View key={key} style={styles.claimCard}>
+              <View style={styles.claimCardTextContainer}>
+                <Text style={styles.claimCardTitle}>{prepareLabel(key)}</Text>
+                <Text style={JolocomTheme.textStyles.light.textDisplayField}>
+                  {document.claimData[key]}
+                </Text>
+              </View>
             </View>
-          </View>
-        ))}
+          ) : null,
+        )}
       </View>
     </View>
   )

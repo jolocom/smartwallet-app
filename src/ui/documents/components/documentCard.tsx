@@ -107,7 +107,7 @@ export const DocumentCard: React.SFC<DocumentCardProps> = ({
           {logo ? (
             <Image source={{ uri: logo.url }} style={styles.icon} />
           ) : (
-            <View style={[styles.icon, { backgroundColor: 'grey' }]} />
+            <View style={[styles.icon, { backgroundColor: 'white' }]} />
           )}
         </View>
       </View>
