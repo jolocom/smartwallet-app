@@ -2,7 +2,6 @@ import { accountActions } from 'src/actions/'
 import data from '../registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
-
 import { createMockStore } from 'tests/utils'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
 
@@ -42,10 +41,16 @@ describe('Account action creators', () => {
     },
   }
 
+  const mockIdentityWallet = {
+    identity: { did: 'did:jolo:first', didDocument: {} },
+    didDocument: {},
+  }
+
   const mockMiddleware = {
     registry: {
       contractsAdapter: jest.fn(),
       contractsGateway: jest.fn(),
+      authenticate: jest.fn().mockResolvedValue(mockIdentityWallet),
     },
     storageLib: {
       get: {
@@ -55,6 +60,9 @@ describe('Account action creators', () => {
         encryptedSeed: jest.fn().mockResolvedValue('mockencryptedvalue'),
         didDoc: jest.fn().mockResolvedValue(undefined),
       },
+      store: {
+        didDoc: jest.fn().mockResolvedValue(undefined),
+      },
     },
     keyChainLib: {
       getPassword: jest.fn().mockResolvedValue('secret'),
@@ -62,8 +70,7 @@ describe('Account action creators', () => {
     encryptionLib: {
       decryptWithPass: jest.fn().mockReturnValue('a'.repeat(64)),
     },
-    authenticateAndSetIdentityWallet: jest.fn().mockResolvedValue(null),
-    identityWallet: { identity: { did: 'did:jolo:first', didDocument: {} } },
+    identityWallet: mockIdentityWallet,
   }
 
   //@ts-ignore
@@ -73,10 +80,13 @@ describe('Account action creators', () => {
 
   it('Should correctly handle existing user identity if not cached', async () => {
     await mockStore.dispatch(accountActions.checkIdentityExists)
-    expect(
-      mockMiddleware.authenticateAndSetIdentityWallet,
-    ).toHaveBeenCalledTimes(1)
+    expect(mockMiddleware.registry.authenticate).toHaveBeenCalledTimes(1)
+    expect(mockMiddleware.storageLib.store.didDoc).toHaveBeenCalledWith(
+      mockMiddleware.identityWallet.identity.didDocument,
+    )
+
     expect(mockStore.getActions()).toMatchSnapshot()
+    mockMiddleware.registry.authenticate.mockReset()
   })
 
   it('Should correctly handle existing user identity if cached', async () => {
@@ -96,11 +106,7 @@ describe('Account action creators', () => {
       .mockResolvedValue(mockDidDoc)
 
     await mockStore.dispatch(accountActions.checkIdentityExists)
-
-    expect(
-      mockMiddleware.authenticateAndSetIdentityWallet,
-    ).not.toHaveBeenCalled()
-
+    expect(mockMiddleware.registry.authenticate).not.toHaveBeenCalled()
     expect(mockMiddleware.identityWallet.identity.didDocument).toStrictEqual(
       mockDidDoc,
     )
