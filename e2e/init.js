@@ -10,15 +10,20 @@ const adb = new ADB()
 jest.setTimeout(120000)
 jasmine.getEnv().addReporter(adapter)
 
-// This takes care of generating status logs on a per-spec basis. By default, jest only reports at file-level.
-// This is strictly optional.
+// This takes care of generating status logs on a per-spec basis. By default,
+// jest only reports at file-level.  This is strictly optional.
 jasmine.getEnv().addReporter(specReporter)
 
 beforeAll(async () => {
   const configs = detoxConfig.configurations
+
+  // TODO figure out iOS configs
   const newConfigs = detoxConfig.configurations = {
     'ios.sim.debug': configs['ios.sim.debug']
   }
+
+  // detox device configurations are generated dynamically here after querying
+  // ADB for android devices and emulator, instead of hardcoding in package.json
 
   try {
     const devices = await adb.devices()
