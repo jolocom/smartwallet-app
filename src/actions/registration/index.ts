@@ -99,11 +99,8 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setDid(identityWallet.identity.did))
   dispatch(setLoadingMsg(loading.loadingStages[3]))
 
-  await backendMiddleware.authenticateAndSetIdentityWallet(
-    userVault,
-    password,
-    storageLib,
-  )
+  await storageLib.store.didDoc(identityWallet.didDocument)
+  backendMiddleware.identityWallet = identityWallet
 
   await storageLib.store.encryptedSeed(entropyData)
   await storageLib.store.persona(personaData)

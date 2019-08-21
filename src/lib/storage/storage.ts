@@ -300,7 +300,6 @@ export interface CredentialMetadataSummary extends CredentialMetadata {
 
 const cacheDIDDoc = (connection: Connection) => (doc: DidDocument) => {
   const cacheEntry = plainToClass(CacheEntity, {
-    // TODO Change to did?
     key: `didCache:${doc.did}`,
     value: doc.toJSON(),
   })
@@ -311,7 +310,6 @@ const cacheDIDDoc = (connection: Connection) => (doc: DidDocument) => {
 const getCachedDIDDoc = (connection: Connection) => async (
   did: string,
 ): Promise<DidDocument | undefined> => {
-  // TODO Change to did?
   const [entry] = await connection.manager.findByIds(CacheEntity, [
     `didCache:${did}`,
   ])

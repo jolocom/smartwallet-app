@@ -42,19 +42,4 @@ export class BackendMiddleware {
   public async initStorage(): Promise<void> {
     await this.storageLib.initConnection()
   }
-
-  public async authenticateAndSetIdentityWallet(
-    userVault: SoftwareKeyProvider,
-    encryptionPass: string,
-    storageLib: Storage,
-  ): Promise<void> {
-    const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
-
-    this.identityWallet = await this.registry.authenticate(userVault, {
-      encryptionPass,
-      derivationPath,
-    })
-
-    await storageLib.store.didDoc(this.identityWallet.didDocument)
-  }
 }

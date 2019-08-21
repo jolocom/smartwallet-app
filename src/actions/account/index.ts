@@ -96,11 +96,14 @@ export const checkIdentityExists: ThunkAction = async (
       contractsGateway: registry.contractsGateway,
     })
   } else {
-    await backendMiddleware.authenticateAndSetIdentityWallet(
-      userVault,
+    const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
+    const identityWallet = await registry.authenticate(userVault, {
       encryptionPass,
-      storageLib,
-    )
+      derivationPath,
+    })
+
+    backendMiddleware.identityWallet = identityWallet
+    await storageLib.store.didDoc(identityWallet.didDocument)
   }
 
   const userDid = backendMiddleware.identityWallet.identity.did
