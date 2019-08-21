@@ -9,8 +9,6 @@ import {
   NavigationRoute,
   NavigationScreenOptions,
   NavigationScreenProp,
-  createAppContainer,
-  createSwitchNavigator,
 } from 'react-navigation'
 
 import { ClaimDetails, Claims, Records } from 'src/ui/home/'
@@ -39,6 +37,7 @@ import {
 } from 'src/resources'
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
+import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -177,6 +176,10 @@ const RegistrationScreens = createSwitchNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.InputSeedPhrase]: {
+      screen: InputSeedPhrase,
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.Entropy]: {
