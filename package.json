@@ -55,7 +55,7 @@
     "yarn": "^1.16.0"
   },
   "scripts": {
-    "start": "adb reverse tcp:8081 tcp:8081 && node node_modules/react-native/local-cli/cli.js start",
+    "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "test": "jest",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "run:ios": "react-native run-ios",
@@ -65,7 +65,7 @@
     "clean:android": "cd android && ./gradlew clean",
     "clean:ios": "cd ios && xcodebuild clean",
     "clean:react": "rm -rf $TMP/react* $TMP/haste-map-metro* $TMP/metro-cache*",
-    "clean:all": "yarn run clean:ios && yarn run clean:android && yarn run clean:react && yarn run clean:node",
+    "clean:all": "yarn run clean:ios & yarn run clean:android && yarn run clean:react && yarn run clean:node",
     "build:ios": "react-native bundle --entry-file='index.ts' --bundle-output='./ios/JolocomWallet/main.jsbundle' --minify=false --dev=false --platform='ios' --assets-dest='./ios'",
     "build:android": "react-native bundle --entry-file='index.ts' --minify=true --dev=false --platform='android'",
     "format": "eslint --fix --ext .ts --ext .tsx .",
