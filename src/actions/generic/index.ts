@@ -9,12 +9,10 @@ import settingKeys from '../../ui/settings/settingKeys'
 export const showErrorScreen = (
   error: AppError | Error,
 ): ThunkAction => dispatch => {
-  // NOTE: AppError is a subclass of Error, so we don't use an 'instanceof'
-  // check
   const appError: AppError =
-    error.constructor === Error
-      ? new AppError(ErrorCode.Unknown, error)
-      : (error as AppError)
+    error.constructor === AppError
+      ? (error as AppError)
+      : new AppError(ErrorCode.Unknown, error)
 
   return dispatch(
     navigationActions.navigate({

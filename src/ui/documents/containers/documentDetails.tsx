@@ -8,6 +8,7 @@ import I18n from 'src/locales/i18n'
 import { DocumentCard } from '../components/documentCard'
 import { DocumentDetails as DocumentDetailsComponent } from '../components/documentDetails'
 import strings from '../../../locales/strings'
+import { JolocomTheme } from 'src/styles/jolocom-theme.ios'
 
 interface Props
   extends ReturnType<typeof mapStateToProps>,
@@ -18,6 +19,7 @@ interface State {}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: JolocomTheme.primaryColorGrey,
   },
   documentCardContainer: {
     paddingVertical: 15,

@@ -118,13 +118,15 @@ export class ExceptionComponent extends React.PureComponent<Props> {
 
     // TODO: display error code
     const err = stateParams.error
+    const origError = err && err.origError
+    const origErrorMessage = origError && origError.message
     const errorTitle =
       this.props.errorTitle || getRandomStringFromArray(errorTitleMessages)
     let errorText = err
       ? err.message
       : strings.THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST
     errorText = I18n.t(errorText) + '.'
-    console.error(err && err.origError ? err.origError : err)
+    console.error(origError || err)
 
     return (
       <View style={styles.container}>
@@ -138,6 +140,11 @@ export class ExceptionComponent extends React.PureComponent<Props> {
             <Text numberOfLines={5} style={styles.errorText}>
               {errorText}
             </Text>
+            {origErrorMessage && (
+              <Text numberOfLines={5} style={styles.errorText}>
+                {origErrorMessage}
+              </Text>
+            )}
           </View>
         </View>
         <View style={styles.buttonBlock}>
