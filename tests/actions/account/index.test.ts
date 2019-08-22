@@ -2,8 +2,9 @@ import { accountActions } from 'src/actions/'
 import data from '../registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
-import { createMockStore } from 'tests/utils'
+import { createMockStore, stub } from 'tests/utils'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
+import { IContractsAdapter, IContractsGateway } from 'jolocom-lib/js/contracts/types';
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
@@ -48,8 +49,8 @@ describe('Account action creators', () => {
 
   const mockMiddleware = {
     registry: {
-      contractsAdapter: jest.fn(),
-      contractsGateway: jest.fn(),
+      contractsAdapter: stub<IContractsAdapter>(),
+      contractsGateway: stub<IContractsGateway>(),
       authenticate: jest.fn().mockResolvedValue(mockIdentityWallet),
     },
     storageLib: {
@@ -73,7 +74,6 @@ describe('Account action creators', () => {
     identityWallet: mockIdentityWallet,
   }
 
-  //@ts-ignore
   const mockStore = createMockStore(initialState, mockMiddleware)
 
   beforeEach(mockStore.reset)
@@ -86,6 +86,10 @@ describe('Account action creators', () => {
     )
 
     expect(mockStore.getActions()).toMatchSnapshot()
+
+    // TODO(@mnzaki)
+    // mockStore.reset() should handle this, probably by storing references to
+    // all jest.fn that are part of mockMiddleware, on stub creation
     mockMiddleware.registry.authenticate.mockReset()
   })
 
