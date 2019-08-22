@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import { Typography, Spacing } from 'src/styles'
 import I18n from 'src/locales/i18n'
 import { DecoratedClaims } from 'src/reducers/account'
@@ -8,6 +8,7 @@ import { values, all, isEmpty } from 'ramda'
 import { CredentialCard } from './credentialCard'
 import { CollapsibleCredentialCard } from './collapsibleCredentialCard'
 import { PlaceholderCredentialCard } from './placeholderCredentialCard'
+import { getCredentialIconByType } from 'src/resources/util'
 
 interface Props {
   category: string
@@ -23,18 +24,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.SM,
     paddingLeft: Spacing.MD,
   },
-  card: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-  },
   leftIconSection: {
     paddingHorizontal: Spacing.XS,
   },
-  claimsArea: {
-    flex: 1,
-    marginLeft: Spacing.LG,
-  },
-  rightIconArea: {},
 })
 
 /**
@@ -56,13 +48,21 @@ export const CredentialCategory: React.FC<Props> = props => {
       <Text style={styles.sectionHeader}>{I18n.t(category)}</Text>
 
       {credentialsSortedByType.map(credential => {
-        const { claimData } = credential
+        const { claimData, credentialType } = credential
         const isBlank = all(isEmpty, values(claimData))
+
+        const leftIcon = (
+          <View style={styles.leftIconSection}>
+            {getCredentialIconByType(credentialType)}
+          </View>
+        )
+
         if (isBlank) {
           return (
             <PlaceholderCredentialCard
               credential={credential}
               onPress={() => onEdit(credential)}
+              leftIcon={leftIcon}
             />
           )
         }
@@ -73,6 +73,7 @@ export const CredentialCategory: React.FC<Props> = props => {
               did={did}
               credential={credential}
               onPress={() => onEdit(credential)}
+              leftIcon={leftIcon}
             />
           )
         }
@@ -81,6 +82,7 @@ export const CredentialCategory: React.FC<Props> = props => {
             did={did}
             credential={credential}
             onPress={() => onEdit(credential)}
+            leftIcon={leftIcon}
           />
         )
       })}

@@ -4,14 +4,15 @@ import { DecoratedClaims } from 'src/reducers/account'
 import I18n from 'src/locales/i18n'
 import { CardWrapper } from 'src/ui/structure'
 import { Spacing, Typography } from 'src/styles'
-import { getCredentialIconByType } from 'src/resources/util'
 import MoreIcon from 'src/resources/svg/MoreIcon'
 import { prepareLabel } from 'src/lib/util'
+import { credentialStyles } from './sharedConstants'
 
 interface Props {
   onPress?: () => void
   did: string
   credential: DecoratedClaims
+  leftIcon: React.ReactNode
 }
 
 const styles = StyleSheet.create({
@@ -19,14 +20,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
   },
-  leftIconSection: {
-    paddingHorizontal: Spacing.XS,
+  claimLabel: {
+    ...Typography.cardSecondaryText,
   },
-  claimsArea: {
-    flex: 1,
-    marginLeft: Spacing.LG,
+  claimText: {
+    ...Typography.cardMainText,
+    marginBottom: Spacing.XXS,
   },
-  rightIconArea: {},
 })
 
 /**
@@ -35,31 +35,26 @@ const styles = StyleSheet.create({
  */
 export const CredentialCard: React.FC<Props> = props => {
   const {
-    credential: { credentialType, claimData, issuer },
+    credential: { claimData, issuer },
     did,
     onPress,
+    leftIcon,
   } = props
   const selfSigned = issuer.did === did
 
   return (
     <CardWrapper style={styles.card}>
-      <View style={styles.leftIconSection}>
-        {getCredentialIconByType(credentialType)}
-      </View>
-      <View style={styles.claimsArea}>
+      {leftIcon && leftIcon}
+      <View style={credentialStyles.claimsArea}>
         {Object.keys(claimData).map(key => (
-          <View style={{ marginTop: Spacing.XXS }} key={key}>
-            <Text style={{ ...Typography.cardSecondaryText }}>
-              {prepareLabel(I18n.t(key))}
-            </Text>
-            <Text style={{ ...Typography.cardMainText }}>
-              {I18n.t(claimData[key])}
-            </Text>
-          </View>
+          <React.Fragment key={key}>
+            <Text style={styles.claimLabel}>{prepareLabel(I18n.t(key))}</Text>
+            <Text style={styles.claimText}>{I18n.t(claimData[key])}</Text>
+          </React.Fragment>
         ))}
       </View>
       {selfSigned && (
-        <View style={styles.rightIconArea} onTouchEnd={onPress}>
+        <View style={credentialStyles.rightIconArea} onTouchEnd={onPress}>
           <MoreIcon />
         </View>
       )}

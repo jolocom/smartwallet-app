@@ -1,30 +1,23 @@
 import React from 'react'
 import { CardWrapper } from 'src/ui/structure'
 import { View, StyleSheet, Text } from 'react-native'
-import { getCredentialIconByType } from 'src/resources/util'
-import { Spacing, Typography } from 'src/styles'
+import { Typography } from 'src/styles'
 import { DecoratedClaims } from 'src/reducers/account'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
+import { credentialStyles } from './sharedConstants'
 
 const styles = StyleSheet.create({
   card: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
   },
-  leftIconSection: {
-    paddingHorizontal: Spacing.XS,
-  },
-  claimsArea: {
-    flex: 1,
-    marginLeft: Spacing.LG,
-  },
-  rightIconArea: {},
 })
 
 interface Props {
-  credential: DecoratedClaims
   onPress: () => void
+  credential: DecoratedClaims
+  leftIcon: React.ReactNode
 }
 
 /**
@@ -35,13 +28,12 @@ export const PlaceholderCredentialCard: React.FC<Props> = props => {
   const {
     credential: { credentialType },
     onPress,
+    leftIcon,
   } = props
   return (
     <CardWrapper style={styles.card}>
-      <View style={styles.leftIconSection}>
-        {getCredentialIconByType(credentialType)}
-      </View>
-      <View style={styles.claimsArea}>
+      {leftIcon && leftIcon}
+      <View style={credentialStyles.claimsArea}>
         <Text style={Typography.cardSecondaryTextBlack}>
           {I18n.t(credentialType)}
         </Text>
