@@ -1,33 +1,36 @@
 import React from 'react'
-import { ScrollContainer, Block, JolocomButton } from 'src/ui/structure'
+import { JolocomButton } from 'src/ui/structure'
 import {
   StyleSheet,
   Keyboard,
   EmitterSubscription,
-  Dimensions,
+  ScrollView,
   Text,
+  View,
 } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Buttons, Typography, Colors } from 'src/styles'
-
-const viewHeight: number = Dimensions.get('window').height
+import { Buttons, Typography, Colors, Spacing } from 'src/styles'
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.backgroundLightMain,
+  },
   header: {
     ...Typography.centeredText,
     ...Typography.mainText,
     color: Colors.blackMain,
+    marginTop: Spacing.XL,
   },
-  blockSpace: {
-    marginTop: viewHeight / 40,
-    marginBottom: viewHeight / 40,
+  textInputArea: {
+    alignItems: 'center',
+    marginTop: Spacing.LG,
   },
-  blockSpaceLast: {
-    marginTop: viewHeight / 20,
-    marginBottom: viewHeight / 20,
+  buttonArea: {
+    alignItems: 'center',
+    marginVertical: Spacing.XXL,
   },
   buttonContainer: {
     ...Buttons.buttonStandardContainer,
@@ -139,14 +142,12 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
     return (
-      <ScrollContainer>
-        <Block style={styles.blockSpace}>
-          <Text style={styles.header}>{I18n.t(credentialType)}</Text>
-        </Block>
-        <Block style={styles.blockSpace}>
+      <ScrollView style={styles.container}>
+        <Text style={styles.header}>{I18n.t(credentialType)}</Text>
+        <View style={styles.textInputArea}>
           {this.renderInputFields(selectedClaim)}
-        </Block>
-        <Block style={styles.blockSpaceLast}>
+        </View>
+        <View style={styles.buttonArea}>
           {showButtonWhileTyping ? (
             <JolocomButton
               onPress={() => this.onSubmit()}
@@ -155,8 +156,8 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
               disabled={!!this.confirmationEligibilityCheck()}
             />
           ) : null}
-        </Block>
-      </ScrollContainer>
+        </View>
+      </ScrollView>
     )
   }
 }

@@ -1,14 +1,14 @@
 import React from 'react'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
-import { View, Text, TextStyle, ViewStyle } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import I18n from 'src/locales/i18n'
-import { Container, Block } from 'src/ui/structure'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Container } from 'src/ui/structure'
 import { getCredentialIconByType } from 'src/resources/util'
 import { SectionClaimCard } from 'src/ui/structure/claimCard'
 import { StatePaymentRequestSummary } from 'src/reducers/sso'
 import { formatEth } from 'src/utils/formatEth'
 import strings from '../../../locales/strings'
+import { Colors, Typography, Spacing } from 'src/styles'
 
 interface Props {
   activePaymentRequest: StatePaymentRequestSummary
@@ -18,32 +18,34 @@ interface Props {
 
 interface State {}
 
-const styles = {
-  priceCard: {
-    container: {
-      flexDirection: 'row',
-    } as ViewStyle,
-    price: {
-      fontFamily: JolocomTheme.contentFontFamily,
-      fontSize: JolocomTheme.landingHeaderFontSize,
-      color: JolocomTheme.primaryColorBlack,
-      fontWeight: JolocomTheme.fontWeight,
-      paddingRight: '2%',
-    } as TextStyle,
-    unit: {
-      fontFamily: JolocomTheme.contentFontFamily,
-      fontSize: JolocomTheme.labelFontSize,
-      alignSelf: 'center',
-    } as TextStyle,
-  },
+const styles = StyleSheet.create({
   container: {
-    padding: 0,
-    margin: 0,
+    alignItems: 'stretch',
+    backgroundColor: Colors.backgroundLightMain,
   },
-  middleBlock: {
-    justifyContent: 'flex-start',
-  } as ViewStyle,
-}
+  priceContainer: {
+    flex: 0.3,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  priceAmount: {
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXXL,
+    color: Colors.blackMain,
+  },
+  priceUnit: {
+    ...Typography.baseFontStyles,
+    marginLeft: Spacing.XS,
+    fontSize: Typography.textMD,
+  },
+  cardContainer: {
+    flex: 0.6,
+  },
+  buttonContainer: {
+    flex: 0.1,
+  },
+})
 
 export class PaymentConsentComponent extends React.Component<Props, State> {
   state = {
@@ -55,32 +57,8 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
     this.props.confirmPaymentRequest()
   }
 
-  private renderButtons() {
-    return (
-      <ButtonSection
-        disabled={this.state.pending}
-        denyDisabled={this.state.pending}
-        confirmText={I18n.t(strings.CONFIRM)}
-        denyText={I18n.t(strings.DENY)}
-        handleConfirm={this.handleConfirm}
-        handleDeny={() => this.props.cancelPaymentRequest()}
-      />
-    )
-  }
-
   private renderLeftIcon(type: string) {
     return getCredentialIconByType(type)
-  }
-
-  private renderPriceCard() {
-    const { amount } = this.props.activePaymentRequest
-    const { formattedAmount, unit } = formatEth(amount)
-    return (
-      <View style={styles.priceCard.container}>
-        <Text style={styles.priceCard.price}>{formattedAmount}</Text>
-        <Text style={styles.priceCard.unit}>{unit}</Text>
-      </View>
-    )
   }
 
   private renderTransactionDetails() {
@@ -89,7 +67,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
       receiver: { did, address },
     } = this.props.activePaymentRequest
     return (
-      <View style={{ width: '100%', margin: 0, padding: 0 }}>
+      <View style={styles.cardContainer}>
         <SectionClaimCard
           title={`${I18n.t(strings.FOR)}:`}
           primaryText={description}
@@ -106,13 +84,25 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
   }
 
   render() {
+    const { amount } = this.props.activePaymentRequest
+    const { formattedAmount, unit } = formatEth(amount)
     return (
       <Container style={styles.container}>
-        <Block flex={0.3}>{this.renderPriceCard()}</Block>
-        <Block flex={0.6} style={styles.middleBlock}>
-          {this.renderTransactionDetails()}
-        </Block>
-        {this.renderButtons()}
+        <View style={styles.priceContainer}>
+          <Text style={styles.priceAmount}>{formattedAmount}</Text>
+          <Text style={styles.priceUnit}>{unit}</Text>
+        </View>
+        {this.renderTransactionDetails()}
+        <View style={styles.buttonContainer}>
+          <ButtonSection
+            disabled={this.state.pending}
+            denyDisabled={this.state.pending}
+            confirmText={I18n.t(strings.CONFIRM)}
+            denyText={I18n.t(strings.DENY)}
+            handleConfirm={this.handleConfirm}
+            handleDeny={() => this.props.cancelPaymentRequest()}
+          />
+        </View>
       </Container>
     )
   }

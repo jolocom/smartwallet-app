@@ -1,6 +1,5 @@
 import React from 'react'
-import { Block } from '.'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-material-ui'
 import { Colors, Buttons, Spacing } from 'src/styles'
 
@@ -17,12 +16,14 @@ interface Props {
 export const ButtonSection: React.FC<Props> = props => {
   const styles = StyleSheet.create({
     buttonBlock: {
+      flex: 1,
       borderColor: Colors.lightGrey,
       borderTopWidth: 1,
-      paddingVertical: props.verticalPadding ? props.verticalPadding : 'auto',
-      justifyContent: 'space-around',
-      flexDirection: 'row',
       backgroundColor: Colors.white,
+      paddingVertical: props.verticalPadding ? props.verticalPadding : 'auto',
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
     },
     denyButtonText: {
       ...Buttons.buttonConsentTextBase,
@@ -52,7 +53,7 @@ export const ButtonSection: React.FC<Props> = props => {
   } = props
 
   return (
-    <Block style={styles.buttonBlock} flex={0.1}>
+    <View style={styles.buttonBlock}>
       <Button
         disabled={denyDisabled}
         onPress={handleDeny}
@@ -73,6 +74,6 @@ export const ButtonSection: React.FC<Props> = props => {
         upperCase={false}
         text={confirmText}
       />
-    </Block>
+    </View>
   )
 }
