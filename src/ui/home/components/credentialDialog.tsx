@@ -1,13 +1,10 @@
 import React from 'react'
-import { StyleSheet, Text, ScrollView, View } from 'react-native'
+import { StyleSheet, ScrollView, View } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account'
-import { prepareLabel } from 'src/lib/util'
 import { DocumentCard } from '../../documents/components/documentCard'
-import I18n from 'src/locales/i18n'
-import { IssuerCard } from '../../documents/components/issuerCard'
 import { IdentitySummary } from '../../../actions/sso/types'
-import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
+import { DocumentDetails as DocumentDetailsComponent } from 'src/ui/documents/components/documentDetails'
 
 interface Props {
   credentialToRender: DecoratedClaims
@@ -55,22 +52,10 @@ const styles = StyleSheet.create({
   },
 })
 
-const renderClaims = (toRender: DecoratedClaims): JSX.Element[] => {
-  const { claimData } = toRender
-  return Object.keys(claimData).map(field => (
-    <View key={claimData[field]} style={styles.claimCard}>
-      <View style={styles.claimCardTextContainer}>
-        <Text style={styles.claimCardTitle}>{prepareLabel(field)}</Text>
-        <Text style={styles.claimCardMainText}>{claimData[field]}</Text>
-      </View>
-    </View>
-  ))
-}
-
 export const CredentialDialogComponent: React.SFC<Props> = (
   props: Props,
 ): JSX.Element => {
-  const { credentialToRender, requester } = props
+  const { credentialToRender } = props
 
   return (
     <View style={styles.container}>
@@ -78,19 +63,9 @@ export const CredentialDialogComponent: React.SFC<Props> = (
         <DocumentCard document={credentialToRender} />
       </View>
 
-      <View style={styles.issuerSection}>
-        <Text style={styles.sectionHeader}>Issued by </Text>
-        {IssuerCard(requester)}
-      </View>
-
-      <View style={styles.claimsSection}>
-        <Text style={styles.sectionHeader}>
-          {I18n.t(strings.DOCUMENT_DETAILS_CLAIMS)}
-        </Text>
-        <ScrollView style={styles.claimsList}>
-          {renderClaims(credentialToRender)}
-        </ScrollView>
-      </View>
+      <ScrollView>
+        <DocumentDetailsComponent document={credentialToRender} />
+      </ScrollView>
     </View>
   )
 }
