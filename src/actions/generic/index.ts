@@ -5,12 +5,13 @@ import I18n from 'src/locales/i18n'
 import { ThunkAction } from 'src/store'
 import { AppError, ErrorCode } from 'src/lib/errors'
 
-export const showErrorScreen = (error: AppError | Error): ThunkAction => dispatch => {
-  // NOTE: AppError is a subclass of Error, so we don't use an 'instanceof'
-  // check
-  const appError: AppError = error.constructor === Error ?
-    new AppError(ErrorCode.Unknown, error) :
-    error as AppError
+export const showErrorScreen = (
+  error: AppError | Error,
+): ThunkAction => dispatch => {
+  const appError: AppError =
+    error.constructor === AppError
+      ? (error as AppError)
+      : new AppError(ErrorCode.Unknown, error)
 
   return dispatch(
     navigationActions.navigate({
