@@ -44,26 +44,9 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       disabled={false}
       onPress={[Function]}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "rgb(148, 47, 81)",
-            "borderRadius": 4,
-            "height": 48,
-            "minWidth": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "normal",
-            "paddingVertical": 16,
-          },
-        }
-      }
       text="Add claim"
       upperCase={false}
     />
@@ -121,26 +104,9 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       disabled={false}
       onPress={[Function]}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "rgb(148, 47, 81)",
-            "borderRadius": 4,
-            "height": 48,
-            "minWidth": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "normal",
-            "paddingVertical": 16,
-          },
-        }
-      }
       text="Add claim"
       upperCase={false}
     />

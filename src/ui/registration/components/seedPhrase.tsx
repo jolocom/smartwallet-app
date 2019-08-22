@@ -1,11 +1,9 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { Container } from 'src/ui/structure/'
+import { Container, JolocomButton } from 'src/ui/structure/'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Colors, Typography, Buttons } from 'src/styles'
-
-const { Button } = require('react-native-material-ui')
+import { Colors, Typography } from 'src/styles'
 
 interface Props {
   seedPhrase: string
@@ -42,12 +40,6 @@ const styles = StyleSheet.create({
   buttonSection: {
     marginTop: 'auto',
   },
-  buttonContainer: {
-    ...Buttons.buttonStandardContainer,
-  },
-  buttonText: {
-    ...Buttons.buttonStandardText,
-  },
 })
 
 export const SeedPhrase: React.SFC<Props> = props => (
@@ -66,8 +58,7 @@ export const SeedPhrase: React.SFC<Props> = props => (
       <Text style={styles.seedPhrase}>{props.seedPhrase}</Text>
     </View>
     <View style={styles.buttonSection}>
-      <Button
-        style={{ container: styles.buttonContainer, text: styles.buttonText }}
+      <JolocomButton
         onPress={props.handleButtonTap}
         raised
         upperCase={false}

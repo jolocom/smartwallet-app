@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-native-material-ui'
 import { navigationActions } from 'src/actions/'
 import {
   Text,
@@ -16,7 +15,8 @@ import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'
 import { NavigationScreenProps } from 'react-navigation'
-import { Colors, Spacing, Typography, Buttons } from 'src/styles'
+import { Colors, Spacing, Typography } from 'src/styles'
+import { JolocomButton } from '../structure'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -127,13 +127,9 @@ export class ExceptionComponent extends React.PureComponent<Props> {
           </View>
         </View>
         <View style={styles.buttonBlock}>
-          <Button
+          <JolocomButton
             raised
             onPress={this.handlePress}
-            style={{
-              container: Buttons.buttonStandardContainer,
-              text: Buttons.buttonStandardText,
-            }}
             upperCase={false}
             text={I18n.t(strings.GO_BACK)}
           />
