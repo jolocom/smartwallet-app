@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: 'white',
-    width: '90%',
+    width: '50%',
   },
   buttonSection: {
     marginTop: 'auto',
@@ -47,36 +47,68 @@ const styles = StyleSheet.create({
 interface InputSeedPhraseProps {
   handleButtonPress: () => void
   handleTextInput: (text: string) => void
-  selectWord: (index: number) => void
-  value: string
+  selectWord: (word: string) => void
+  openKeyboard: (ref: TextInput) => void
+  handleDoneButton: () => void
+  mnemonic: string[]
+  currentWord: string
   isValid: boolean
   wordList: string[]
 }
 
 const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
-  value,
-  isValid,
+  currentWord,
   wordList,
+  isValid,
+  mnemonic,
   handleTextInput,
   selectWord,
   handleButtonPress,
+  openKeyboard,
+  handleDoneButton,
 }) => (
   <Container style={styles.container}>
     <View style={styles.noteSection}>
       <Text style={styles.note}>
-        Please input the 12 words phrase that was displayed to you when you set
-        up your backup.
+        {' '}
+        {mnemonic.length === 0
+          ? 'Please input the 12 words phrase that was displayed to you when you setup your backup.'
+          : mnemonic.length + '/12'}
       </Text>
     </View>
-
-    <TextInput
-      multiline
-      autoCapitalize={'none'}
-      style={styles.textInput}
-      value={value}
-      onChangeText={handleTextInput}
-      underlineColorAndroid={JolocomTheme.primaryColorPurple}
-    />
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'row',
+        width: '100%',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+      }}
+    >
+      {mnemonic.map((word: string) => (
+        <Text style={[styles.note, { margin: 2 }]}>{word}</Text>
+      ))}
+    </View>
+    {
+      //@ts-ignore textAlign is missing in the typings of TextInput
+      <TextInput
+        textAlign={'center'}
+        ref={openKeyboard}
+        autoFocus
+        autoCapitalize={'none'}
+        style={styles.textInput}
+        value={currentWord}
+        onChangeText={handleTextInput}
+        underlineColorAndroid={JolocomTheme.primaryColorPurple}
+        returnKeyLabel={'Done'}
+        returnKeyType={'next'}
+        blurOnSubmit={false}
+        onSubmitEditing={handleDoneButton}
+      />
+    }
+    {wordList.length === 0 && currentWord.length > 2 && (
+      <Text style={{ color: 'white' }}>Wrong Word</Text>
+    )}
     <View
       style={{
         flex: 1,
@@ -89,7 +121,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
         <Text
           key={i}
           style={[styles.note, { margin: 8 }]}
-          onPress={() => selectWord(i)}
+          onPress={() => selectWord(wordList[i])}
         >
           {word}
         </Text>
