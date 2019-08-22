@@ -9,8 +9,6 @@ import {
   NavigationRoute,
   NavigationScreenOptions,
   NavigationScreenProp,
-  createAppContainer,
-  createSwitchNavigator,
 } from 'react-navigation'
 
 import { ClaimDetails, Claims, Records } from 'src/ui/home/'
