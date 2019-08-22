@@ -145,26 +145,9 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       onPress={[Function]}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "rgb(148, 47, 81)",
-            "borderRadius": 4,
-            "height": 48,
-            "minWidth": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "normal",
-            "paddingVertical": 16,
-          },
-        }
-      }
       text="Continue"
       upperCase={false}
     />

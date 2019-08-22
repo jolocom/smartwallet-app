@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-native-material-ui'
 import { navigationActions } from 'src/actions/'
 import {
   Text,
@@ -16,7 +15,8 @@ import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'
 import { NavigationScreenProps } from 'react-navigation'
-import { Colors, Spacing, Typography, Buttons } from 'src/styles'
+import { Colors, Spacing, Typography } from 'src/styles'
+import { JolocomButton } from '../structure'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -97,13 +97,15 @@ export class ExceptionComponent extends React.PureComponent<Props> {
 
     // TODO: display error code
     const err = stateParams.error
+    const origError = err && err.origError
+    const origErrorMessage = origError && origError.message
     const errorTitle =
       this.props.errorTitle || getRandomStringFromArray(errorTitleMessages)
     let errorText = err
       ? err.message
       : strings.THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST
     errorText = I18n.t(errorText) + '.'
-    console.error(err && err.origError ? err.origError : err)
+    console.error(origError || err)
 
     return (
       <View style={styles.container}>
@@ -117,16 +119,17 @@ export class ExceptionComponent extends React.PureComponent<Props> {
             <Text numberOfLines={5} style={styles.errorText}>
               {errorText}
             </Text>
+            {origErrorMessage && (
+              <Text numberOfLines={5} style={styles.errorText}>
+                {origErrorMessage}
+              </Text>
+            )}
           </View>
         </View>
         <View style={styles.buttonBlock}>
-          <Button
+          <JolocomButton
             raised
             onPress={this.handlePress}
-            style={{
-              container: Buttons.buttonStandardContainer,
-              text: Buttons.buttonStandardText,
-            }}
             upperCase={false}
             text={I18n.t(strings.GO_BACK)}
           />

@@ -1,12 +1,11 @@
 import React from 'react'
-import { StyleSheet, Dimensions, Text, View } from 'react-native'
-import { Button } from 'react-native-material-ui'
-import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { Container } from 'src/ui/structure'
-import { Typography, Colors, Buttons, Spacing } from 'src/styles'
+import { StyleSheet, Dimensions, View, Text } from 'react-native'
+import { Container, JolocomButton } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { landingSlides, Slide } from './landingSlides'
+import Carousel, { Pagination } from 'react-native-snap-carousel'
+import { Typography, Colors, Spacing } from 'src/styles'
 
 interface State {
   activeSlide: number
@@ -55,16 +54,10 @@ const styles = StyleSheet.create({
   buttonArea: {
     flex: 0.1,
   },
-  buttonContainer: {
-    ...Buttons.buttonStandardContainer,
-  },
-  buttonText: {
-    ...Buttons.buttonStandardText,
-  },
 })
 
 export class LandingComponent extends React.Component<Props, State> {
-  state = {
+  public state = {
     activeSlide: 0,
   }
 
@@ -81,7 +74,7 @@ export class LandingComponent extends React.Component<Props, State> {
     )
   }
 
-  render() {
+  public render() {
     const { activeSlide } = this.state
     return (
       <Container style={styles.mainContainer}>
@@ -106,13 +99,9 @@ export class LandingComponent extends React.Component<Props, State> {
           inactiveDotScale={0.5}
         />
         <View style={styles.buttonArea}>
-          <Button
+          <JolocomButton
             raised
             onPress={this.props.handleButtonTap}
-            style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText,
-            }}
             upperCase={false}
             text={I18n.t(strings.GET_STARTED)}
           />

@@ -1,11 +1,10 @@
 import React from 'react'
-import { Button } from 'react-native-material-ui'
 import { StyleSheet, View, Text } from 'react-native'
-import { Container } from 'src/ui/structure/'
+import { Container, JolocomButton } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Typography, Colors, Buttons } from 'src/styles'
+import { Typography, Colors } from 'src/styles'
 
 interface Props {
   addPoint: (x: number, y: number) => void
@@ -32,12 +31,6 @@ const styles = StyleSheet.create({
   bigFont: {
     fontSize: Typography.text4XL,
   },
-  buttonContainer: {
-    ...Buttons.buttonStandardContainer,
-  },
-  buttonText: {
-    ...Buttons.buttonStandardText,
-  },
 })
 
 export const EntropyComponent: React.SFC<Props> = props => {
@@ -60,11 +53,7 @@ export const EntropyComponent: React.SFC<Props> = props => {
       </View>
       <View style={styles.footerButton}>
         {progress === 1 ? (
-          <Button
-            style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText,
-            }}
+          <JolocomButton
             upperCase={false}
             raised={true}
             text={I18n.t(strings.CONTINUE)}
