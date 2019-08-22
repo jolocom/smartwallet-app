@@ -1,119 +1,68 @@
 import React from 'react'
-import {
-  StyleSheet,
-  View,
-  TextStyle,
-  GestureResponderEvent,
-  ViewStyle,
-} from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import {
-  ClaimCard,
-  PlaceholderClaimCard,
-  CollapsedCredentialCard,
-} from 'src/ui/sso/components/claimCard'
-import { ReactNode } from 'react-redux'
+import { StyleSheet, View, Text } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account'
 import I18n from 'src/locales/i18n'
-import { values, all, isEmpty } from 'ramda'
+import { CardWrapper } from 'src/ui/structure'
+import { Spacing, Typography } from 'src/styles'
+import { getCredentialIconByType } from 'src/resources/util'
+import MoreIcon from 'src/resources/svg/MoreIcon'
+import { prepareLabel } from 'src/lib/util'
 
 interface Props {
-  handleInteraction?: (event: GestureResponderEvent) => void
-  credentialItem: DecoratedClaims
-  collapsible?: boolean
-  leftIcon: ReactNode
-  rightIcon?: ReactNode
-  containerStyle?: ViewStyle
-  claimCardStyle?: {
-    primaryText?: TextStyle
-    secondaryText?: TextStyle
-  }
+  onPress?: () => void
+  did: string
+  credential: DecoratedClaims
 }
 
-interface State {
-  collapsed: boolean
-}
+const styles = StyleSheet.create({
+  card: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+  },
+  leftIconSection: {
+    paddingHorizontal: Spacing.XS,
+  },
+  claimsArea: {
+    flex: 1,
+    marginLeft: Spacing.LG,
+  },
+  rightIconArea: {},
+})
 
-export class CredentialCard extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
+/**
+ * CredentialCard renders a credential with its labels and values for each of its
+ * claims.
+ */
+export const CredentialCard: React.FC<Props> = props => {
+  const {
+    credential: { credentialType, claimData, issuer },
+    did,
+    onPress,
+  } = props
+  const selfSigned = issuer.did === did
 
-    this.state = {
-      collapsed: props.collapsible || false,
-    }
-  }
-
-  private getStyles = () =>
-    StyleSheet.create({
-      defaultContainerStyle: {
-        flexDirection: 'row',
-        backgroundColor: JolocomTheme.primaryColorWhite,
-        paddingVertical: 12,
-        borderBottomWidth: 1,
-        borderColor: 'rgb(236, 236, 236)',
-      },
-    })
-
-  private toggleCollapse = () => {
-    if (this.props.collapsible) {
-      this.setState({ collapsed: !this.state.collapsed })
-    }
-  }
-
-  private renderClaim = (credentialItem: DecoratedClaims) => {
-    const { handleInteraction } = this.props
-    const { credentialType, claimData } = credentialItem
-    const onEdit = handleInteraction || (() => {})
-
-    const isBlank = all(isEmpty, values(claimData))
-    if (isBlank) {
-      return (
-        <PlaceholderClaimCard onEdit={onEdit} credentialType={credentialType} />
-      )
-    }
-    return Object.keys(claimData).map(key => (
-      <ClaimCard
-        key={key}
-        primaryText={I18n.t(claimData[key])}
-        secondaryText={I18n.t(key)}
-      />
-    ))
-  }
-
-  private renderCollapsedClaim = (credentialItem: DecoratedClaims) => (
-    <CollapsedCredentialCard
-      title={I18n.t(credentialItem.credentialType)}
-      values={Object.keys(credentialItem.claimData).map(
-        k => credentialItem.claimData[k],
-      )}
-    />
-  )
-
-  render() {
-    const { credentialItem, containerStyle, leftIcon, rightIcon } = this.props
-    const { collapsed } = this.state
-    const { defaultContainerStyle } = this.getStyles()
-
-    return (
-      <View
-        style={[
-          StyleSheet.flatten(defaultContainerStyle),
-          containerStyle || {},
-        ]}
-      >
-        <View style={{ flex: 0.2, alignItems: 'center' }}>{leftIcon}</View>
-        <View
-          onTouchEnd={this.toggleCollapse}
-          style={{ flex: 0.7, overflow: 'scroll' }}
-        >
-          {collapsed
-            ? this.renderCollapsedClaim(credentialItem)
-            : this.renderClaim(credentialItem)}
-        </View>
-        <View style={{ flex: 0.1 }} onTouchEnd={this.props.handleInteraction}>
-          {rightIcon || null}
-        </View>
+  return (
+    <CardWrapper style={styles.card}>
+      <View style={styles.leftIconSection}>
+        {getCredentialIconByType(credentialType)}
       </View>
-    )
-  }
+      <View style={styles.claimsArea}>
+        {Object.keys(claimData).map(key => (
+          <View style={{ marginTop: Spacing.XXS }} key={key}>
+            <Text style={{ ...Typography.cardSecondaryText }}>
+              {prepareLabel(I18n.t(key))}
+            </Text>
+            <Text style={{ ...Typography.cardMainText }}>
+              {I18n.t(claimData[key])}
+            </Text>
+          </View>
+        ))}
+      </View>
+      {selfSigned && (
+        <View style={styles.rightIconArea} onTouchEnd={onPress}>
+          <MoreIcon />
+        </View>
+      )}
+    </CardWrapper>
+  )
 }
