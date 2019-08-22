@@ -1,32 +1,27 @@
 import React from 'react'
-import { ScrollContainer, Block, CenteredText } from 'src/ui/structure'
+import { ScrollContainer, Block } from 'src/ui/structure'
 import {
   StyleSheet,
   Keyboard,
   EmitterSubscription,
   Dimensions,
-  ViewStyle,
-  TextStyle,
+  Text,
 } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
+import { Buttons, Typography, Colors } from 'src/styles'
 
 const viewHeight: number = Dimensions.get('window').height
 
-interface ClaimDetailsStyles {
-  blockSpace: ViewStyle
-  blockSpaceLast: ViewStyle
-  buttonContainer: ViewStyle
-  buttonContainerDisabled: ViewStyle
-  buttonText: TextStyle
-  buttonTextDisabled: TextStyle
-}
-
-const styles = StyleSheet.create<ClaimDetailsStyles>({
+const styles = StyleSheet.create({
+  header: {
+    ...Typography.centeredText,
+    ...Typography.mainText,
+    color: Colors.blackMain,
+  },
   blockSpace: {
     marginTop: viewHeight / 40,
     marginBottom: viewHeight / 40,
@@ -36,30 +31,16 @@ const styles = StyleSheet.create<ClaimDetailsStyles>({
     marginBottom: viewHeight / 20,
   },
   buttonContainer: {
-    width: 164,
-    height: 48,
-    borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple,
+    ...Buttons.buttonStandardContainer,
   },
   buttonContainerDisabled: {
-    width: 164,
-    height: 48,
-    borderRadius: 4,
-    backgroundColor: JolocomTheme.disabledButtonBackgroundGrey,
+    ...Buttons.buttonDisabledStandardContainer,
   },
   buttonText: {
-    paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorWhite,
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
+    ...Buttons.buttonStandardText,
   },
   buttonTextDisabled: {
-    paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.disabledButtonTextGrey,
-    fontWeight: '100',
+    ...Buttons.buttonDisabledStandardText,
   },
 })
 
@@ -161,10 +142,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     return (
       <ScrollContainer>
         <Block style={styles.blockSpace}>
-          <CenteredText
-            style={JolocomTheme.textStyles.light.subheader}
-            msg={I18n.t(credentialType)}
-          />
+          <Text style={styles.header}>{I18n.t(credentialType)}</Text>
         </Block>
         <Block style={styles.blockSpace}>
           {this.renderInputFields(selectedClaim)}

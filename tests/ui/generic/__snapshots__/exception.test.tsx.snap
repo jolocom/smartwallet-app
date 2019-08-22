@@ -22,7 +22,7 @@ exports[`Exception screen component Renders correctly 1`] = `
       Object {
         "alignItems": "center",
         "justifyContent": "space-around",
-        "marginTop": 85,
+        "marginTop": 80,
       }
     }
   >
@@ -43,15 +43,15 @@ exports[`Exception screen component Renders correctly 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "marginTop": 25,
-          "paddingHorizontal": 20,
+          "marginTop": 24,
+          "paddingHorizontal": 16,
         }
       }
     >
       <Text
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
             "fontSize": 30,
             "textAlign": "center",
@@ -64,10 +64,10 @@ exports[`Exception screen component Renders correctly 1`] = `
         numberOfLines={5}
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
             "fontSize": 20,
-            "marginTop": 15,
+            "marginTop": 16,
             "textAlign": "center",
           }
         }
@@ -79,8 +79,7 @@ exports[`Exception screen component Renders correctly 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "black",
-        "marginTop": 20,
+        "marginTop": 24,
       }
     }
   >
@@ -90,17 +89,17 @@ exports[`Exception screen component Renders correctly 1`] = `
       style={
         Object {
           "container": Object {
-            "backgroundColor": "#942f51",
+            "backgroundColor": "rgb(148, 47, 81)",
             "borderRadius": 4,
             "height": 48,
+            "minWidth": 164,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
-            "fontWeight": "100",
-            "paddingHorizontal": 15,
-            "paddingVertical": 15,
+            "fontWeight": "normal",
+            "paddingVertical": 16,
           },
         }
       }
@@ -133,7 +132,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
       Object {
         "alignItems": "center",
         "justifyContent": "space-around",
-        "marginTop": 85,
+        "marginTop": 80,
       }
     }
   >
@@ -154,15 +153,15 @@ exports[`Exception screen component Renders correctly when no error object is pr
       style={
         Object {
           "alignItems": "center",
-          "marginTop": 25,
-          "paddingHorizontal": 20,
+          "marginTop": 24,
+          "paddingHorizontal": 16,
         }
       }
     >
       <Text
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
             "fontSize": 30,
             "textAlign": "center",
@@ -175,10 +174,10 @@ exports[`Exception screen component Renders correctly when no error object is pr
         numberOfLines={5}
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
             "fontSize": 20,
-            "marginTop": 15,
+            "marginTop": 16,
             "textAlign": "center",
           }
         }
@@ -190,8 +189,7 @@ exports[`Exception screen component Renders correctly when no error object is pr
   <View
     style={
       Object {
-        "backgroundColor": "black",
-        "marginTop": 20,
+        "marginTop": 24,
       }
     }
   >
@@ -201,17 +199,17 @@ exports[`Exception screen component Renders correctly when no error object is pr
       style={
         Object {
           "container": Object {
-            "backgroundColor": "#942f51",
+            "backgroundColor": "rgb(148, 47, 81)",
             "borderRadius": 4,
             "height": 48,
+            "minWidth": 164,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
-            "fontWeight": "100",
-            "paddingHorizontal": 15,
-            "paddingVertical": 15,
+            "fontWeight": "normal",
+            "paddingVertical": 16,
           },
         }
       }

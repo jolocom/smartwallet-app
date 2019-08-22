@@ -1,57 +1,63 @@
 import React from 'react'
 import { View, StyleSheet, Text } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import strings from '../../../locales/strings'
+import { Colors, Spacing, Typography } from 'src/styles'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: JolocomTheme.primaryColorGrey,
+    backgroundColor: Colors.backgroundLightMain,
   },
   topSection: {
-    paddingTop: 30,
+    paddingTop: Spacing.XL,
   },
   sectionHeader: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-    color: 'grey',
-    marginLeft: 18,
+    ...Typography.sectionHeader,
+    marginLeft: Spacing.MD,
   },
   card: {
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-    backgroundColor: 'white',
+    flexDirection: 'row',
+    padding: Spacing.MD,
+    backgroundColor: Colors.white,
+    borderColor: Colors.lightGrey,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: 'rgb(236, 236, 236)',
-    flexDirection: 'row',
+  },
+  cardLabel: {
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    color: Colors.blackMain,
   },
   languageCard: {
-    marginTop: 10,
+    marginTop: Spacing.SM,
   },
   languageSelect: {},
   languageOptions: {
-    marginTop: 10,
     flexDirection: 'row',
+    marginTop: Spacing.SM,
   },
   languageOption: {
-    paddingHorizontal: 18,
-    paddingTop: 10,
-    paddingBottom: 7,
     justifyContent: 'center',
-    backgroundColor: 'rgb(242, 242, 242)',
+    backgroundColor: Colors.lightGreyLight,
     borderRadius: 4,
-    marginRight: 20,
+    paddingHorizontal: Spacing.MD,
+    paddingTop: Spacing.XS,
+    paddingBottom: Spacing.XXS,
+    marginRight: Spacing.MD,
   },
   languageOptionText: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    color: Colors.blackMain,
   },
   versionNumber: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-    opacity: 0.4,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
     textAlign: 'center',
-    marginTop: 30,
+    color: Colors.blackMain040,
+    marginTop: Spacing.XL,
   },
 })
 
@@ -61,13 +67,16 @@ interface LanguageCardProps {
   setLocale: (key: string) => void
 }
 
-const LanguageCard: React.SFC<LanguageCardProps> = props => (
+const LanguageCard: React.FC<LanguageCardProps> = props => (
   <View style={[styles.card, styles.languageCard]}>
-    <Icon style={{ marginRight: 18 }} size={24} name="translate" color="grey" />
+    <Icon
+      style={{ marginRight: Spacing.MD }}
+      size={24}
+      name="translate"
+      color="grey"
+    />
     <View>
-      <Text style={JolocomTheme.textStyles.light.labelDisplayFieldEdit}>
-        {I18n.t(strings.LANGUAGE)}
-      </Text>
+      <Text style={styles.cardLabel}>{I18n.t(strings.LANGUAGE)}</Text>
       <View style={styles.languageOptions}>
         {props.locales.map(locale => {
           const isCurrentLanguage = locale === props.selected
@@ -79,7 +88,7 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
               style={[
                 styles.languageOption,
                 isCurrentLanguage && {
-                  backgroundColor: JolocomTheme.primaryColorSand,
+                  backgroundColor: Colors.sandLight,
                 },
               ]}
             >
@@ -87,7 +96,7 @@ const LanguageCard: React.SFC<LanguageCardProps> = props => (
                 style={[
                   styles.languageOptionText,
                   isCurrentLanguage && {
-                    color: JolocomTheme.primaryColorPurple,
+                    color: Colors.purpleMain,
                   },
                 ]}
               >
