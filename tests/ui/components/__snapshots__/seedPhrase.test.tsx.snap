@@ -4,7 +4,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
 <Container
   style={
     Object {
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
     }
   }
 >
@@ -20,10 +20,10 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
     <Text
       style={
         Object {
-          "color": "#ffefdf",
+          "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
           "fontSize": 20,
-          "lineHeight": 26,
+          "lineHeight": 22,
           "textAlign": "center",
         }
       }
@@ -65,17 +65,17 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       style={
         Object {
           "container": Object {
-            "backgroundColor": "#942f51",
+            "backgroundColor": "rgb(148, 47, 81)",
             "borderRadius": 4,
             "height": 48,
-            "paddingHorizontal": 25,
+            "minWidth": 164,
           },
           "text": Object {
             "color": "white",
             "fontFamily": "TT Commons",
             "fontSize": 22,
-            "fontWeight": "100",
-            "paddingVertical": 15,
+            "fontWeight": "normal",
+            "paddingVertical": 16,
           },
         }
       }

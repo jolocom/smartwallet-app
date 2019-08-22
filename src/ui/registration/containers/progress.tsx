@@ -5,10 +5,10 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
 import { Container, CenteredText, Block } from 'src/ui/structure/'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { ThunkDispatch } from 'src/store'
 import strings from '../../../locales/strings'
+import { Colors, Typography, Spacing } from 'src/styles'
 const loaders = require('react-native-indicator')
 
 interface Props
@@ -25,33 +25,30 @@ const styles = StyleSheet.create({
     marginBottom: '-10%',
   },
   container: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: Colors.blackMain,
     height: '100%',
   },
   dotsContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: Spacing.LG,
   },
   dotActive: {
-    marginRight: 8,
-    marginLeft: 8,
-    color: JolocomTheme.primaryColorSand,
+    marginHorizontal: Spacing.XS,
+    color: Colors.dotColorActive,
   },
   dotInactive: {
-    marginRight: 5,
-    marginLeft: 5,
-    color: JolocomTheme.primaryColorGrey,
+    marginHorizontal: Spacing.SM,
+    color: Colors.dotColorInactive,
   },
   text: {
-    color: JolocomTheme.primaryColorSand,
-    fontSize: 20,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.subMainText,
+    color: Colors.sandLight,
   },
   smallText: {
-    color: JolocomTheme.primaryColorSand,
-    fontSize: 14,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXXS,
+    color: Colors.sandLight,
   },
 })
 
@@ -74,7 +71,7 @@ export const RegistrationProgressContainer: React.FunctionComponent<
       <loaders.RippleLoader
         size={80}
         strokeWidth={4}
-        color={JolocomTheme.spinnerColor}
+        color={Colors.spinnerColor}
       />
     </Block>
     <Block style={styles.loadingMsg}>

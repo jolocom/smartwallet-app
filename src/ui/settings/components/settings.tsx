@@ -1,50 +1,53 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
+import { Colors, Spacing, Typography } from 'src/styles'
 import SettingsItem from './settingsItem'
 import settingKeys from '../settingKeys'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: JolocomTheme.primaryColorGrey,
+    backgroundColor: Colors.backgroundLightMain,
   },
   topSection: {
-    paddingTop: 30,
+    paddingTop: Spacing.XL,
   },
   sectionHeader: {
     ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-    color: 'grey',
+    color: Colors.lightGrey,
     marginLeft: 18,
     marginBottom: 10,
   },
   languageCard: {
-    marginTop: 10,
+    marginTop: Spacing.SM,
   },
   languageSelect: {},
   languageOptions: {
-    marginTop: 10,
     flexDirection: 'row',
+    marginTop: Spacing.SM,
   },
   languageOption: {
-    paddingHorizontal: 18,
-    paddingTop: 10,
-    paddingBottom: 7,
     justifyContent: 'center',
-    backgroundColor: 'rgb(242, 242, 242)',
+    backgroundColor: Colors.lightGreyLight,
     borderRadius: 4,
-    marginRight: 20,
+    paddingHorizontal: Spacing.MD,
+    paddingTop: Spacing.XS,
+    paddingBottom: Spacing.XXS,
+    marginRight: Spacing.MD,
   },
   languageOptionText: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    color: Colors.blackMain,
   },
   versionNumber: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-    opacity: 0.4,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
     textAlign: 'center',
-    marginTop: 30,
+    color: Colors.blackMain040,
+    marginTop: Spacing.XL,
   },
 })
 

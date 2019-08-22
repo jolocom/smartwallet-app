@@ -10,7 +10,7 @@ exports[`QRCodeScanner component matches the snapshot with back handler 1`] = `
           style={
             Object {
               "text": Object {
-                "color": "black",
+                "color": "rgb(5, 5, 13)",
               },
             }
           }

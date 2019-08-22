@@ -21,7 +21,7 @@ export class ClaimsContainer extends React.Component<Props> {
   public render(): JSX.Element {
     const { did, claimsState, openClaimDetails } = this.props
     return (
-      <View style={{ flex: 1 }}>
+      <View>
         <BackupWarning />
         <CredentialOverview
           did={did}
