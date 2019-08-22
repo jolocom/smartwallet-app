@@ -6,10 +6,11 @@ import { Button } from 'react-native-material-ui'
 import Placeholder from './placeholder'
 import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
+import { Colors, Spacing, Typography } from '../../../styles'
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: Colors.backgroundDarkMain,
   },
   mainSection: {
     justifyContent: 'center',
@@ -17,14 +18,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noteSection: {
-    marginTop: 20,
+    marginTop: Spacing.LG,
   },
   note: {
     textAlign: 'center',
-    lineHeight: 26,
-    color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.labelFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
+    color: Colors.sand,
+    ...Typography.mainText,
   },
   mnemonicContainer: {
     flexDirection: 'row',

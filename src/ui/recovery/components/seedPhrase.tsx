@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native'
 import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Colors, Typography, Buttons } from 'src/styles'
+import { Colors, Typography, Buttons, Spacing } from 'src/styles'
 
 const { Button } = require('react-native-material-ui')
 
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blackMain,
   },
   noteSection: {
-    marginTop: 20,
+    marginTop: Spacing.LG,
     flex: 0.8,
     justifyContent: 'center',
   },

@@ -5,6 +5,7 @@ import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
 import SettingsItem from './settingsItem'
 import settingKeys from '../settingKeys'
+import { JolocomTheme } from '../../../styles/jolocom-theme'
 
 const styles = StyleSheet.create({
   container: {
@@ -15,10 +16,10 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.XL,
   },
   sectionHeader: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
+    ...Typography.sectionHeader,
     color: Colors.lightGrey,
-    marginLeft: 18,
-    marginBottom: 10,
+    marginLeft: Spacing.MD,
+    marginBottom: Spacing.XS,
   },
   languageCard: {
     marginTop: Spacing.SM,
