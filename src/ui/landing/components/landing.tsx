@@ -1,11 +1,10 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import { Button } from 'react-native-material-ui'
-import { Block, Container, CenteredText } from 'src/ui/structure'
+import { Block, Container, CenteredText, JolocomButton } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import { Landing00, Landing01, Landing02, Landing03 } from 'src/resources'
 import strings from 'src/locales/strings'
-import { Typography, Colors, Buttons } from 'src/styles'
+import { Typography, Colors } from 'src/styles'
 
 const Carousel = require('react-native-snap-carousel').default
 const Pagination = require('react-native-snap-carousel').Pagination
@@ -66,12 +65,6 @@ const styles = StyleSheet.create({
   },
   buttonBlock: {
     flex: 0.1,
-  },
-  buttonContainer: {
-    ...Buttons.buttonStandardContainer,
-  },
-  buttonText: {
-    ...Buttons.buttonStandardText,
   },
 })
 
@@ -169,13 +162,9 @@ export class LandingComponent extends React.Component<Props, State> {
         </Block>
         <Block style={styles.paginationBlock}>{this.renderPagination()}</Block>
         <Block style={styles.buttonBlock}>
-          <Button
+          <JolocomButton
             raised
             onPress={this.props.handleButtonTap}
-            style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText,
-            }}
             upperCase={false}
             text={I18n.t(strings.GET_STARTED)}
           />

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollContainer, Block } from 'src/ui/structure'
+import { ScrollContainer, Block, JolocomButton } from 'src/ui/structure'
 import {
   StyleSheet,
   Keyboard,
@@ -8,7 +8,6 @@ import {
   Text,
 } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account/'
-import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
@@ -149,21 +148,10 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
         </Block>
         <Block style={styles.blockSpaceLast}>
           {showButtonWhileTyping ? (
-            <Button
+            <JolocomButton
               onPress={() => this.onSubmit()}
               upperCase={false}
               text={I18n.t(strings.ADD_CLAIM)}
-              style={
-                !!this.confirmationEligibilityCheck()
-                  ? {
-                      container: styles.buttonContainerDisabled,
-                      text: styles.buttonTextDisabled,
-                    }
-                  : {
-                      container: styles.buttonContainer,
-                      text: styles.buttonText,
-                    }
-              }
               disabled={!!this.confirmationEligibilityCheck()}
             />
           ) : null}
