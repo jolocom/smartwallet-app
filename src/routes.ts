@@ -1,22 +1,22 @@
-import { Platform, Image, StyleProp, TextStyle } from 'react-native'
+import { Image, Platform, StyleProp, TextStyle } from 'react-native'
 import { createElement } from 'react'
 
 import {
-  createStackNavigator,
-  createBottomTabNavigator,
-  NavigationScreenOptions,
-  NavigationRoute,
-  NavigationScreenProp,
   createAppContainer,
+  createBottomTabNavigator,
+  createStackNavigator,
   createSwitchNavigator,
+  NavigationRoute,
+  NavigationScreenOptions,
+  NavigationScreenProp,
 } from 'react-navigation'
 
-import { Claims, Records, ClaimDetails } from 'src/ui/home/'
-import { Documents, DocumentDetails } from 'src/ui/documents'
+import { ClaimDetails, Claims, Records } from 'src/ui/home/'
+import { DocumentDetails, Documents } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
-import { SeedPhrase, RegistrationProgress, Entropy } from 'src/ui/registration/'
-import { Exception /*BottomNavBar*/ } from 'src/ui/generic/'
+import { Entropy, RegistrationProgress } from 'src/ui/registration/'
+import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import { Settings } from 'src/ui/settings'
@@ -30,11 +30,13 @@ import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
 
 import {
+  DocumentsMenuIcon,
   IdentityMenuIcon,
   RecordsMenuIcon,
-  DocumentsMenuIcon,
   SettingsMenuIcon,
 } from 'src/resources'
+import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
+import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -168,10 +170,6 @@ const RegistrationScreens = createSwitchNavigator(
       screen: RegistrationProgress,
       navigationOptions: noHeaderNavOpts,
     },
-    [routeList.SeedPhrase]: {
-      screen: SeedPhrase,
-      navigationOptions: noHeaderNavOpts,
-    },
   },
   {
     initialRouteName: routeList.Landing,
@@ -226,6 +224,16 @@ const MainStack = createStackNavigator(
         ...navOptScreenWCancel,
       },
     },
+
+    [routeList.SeedPhrase]: {
+      screen: SeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.RepeatSeedPhrase]: {
+      screen: RepeatSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
+
     [routeList.Exception]: {
       screen: Exception,
       navigationOptions: noHeaderNavOpts,

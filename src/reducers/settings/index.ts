@@ -2,10 +2,12 @@ import { AnyAction } from 'redux'
 
 export interface SettingsState {
   readonly locale: string
+  readonly seedPhraseSaved: boolean
 }
 
 const initialState: SettingsState = {
   locale: '',
+  seedPhraseSaved: false,
 }
 
 export const settingsReducer = (
@@ -19,6 +21,11 @@ export const settingsReducer = (
       return {
         ...state,
         locale: action.value,
+      }
+    case 'SET_SEED_PHRASE_SAVED':
+      return {
+        ...state,
+        seedPhraseSaved: true,
       }
     default:
       return state

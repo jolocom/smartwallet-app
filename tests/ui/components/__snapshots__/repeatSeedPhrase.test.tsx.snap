@@ -1,0 +1,461 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "rgb(5, 5, 13)",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "marginHorizontal": 24,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "rgb(255, 239, 223)",
+            "fontFamily": "TT Commons",
+            "fontSize": 18,
+            "lineHeight": 23,
+            "textAlign": "center",
+          }
+        }
+      >
+        some note to let the user know what to do
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "height": 40,
+          "marginTop": 16,
+          "position": "relative",
+        }
+      }
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "flexDirection": "row",
+              "position": "absolute",
+            },
+            Object {
+              "left": -0,
+            },
+          ]
+        }
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "marginTop": 18,
+        }
+      }
+    >
+      <View>
+        <Placeholder
+          i={0}
+          key="0"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={1}
+          key="1"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={2}
+          key="2"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={3}
+          key="3"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={4}
+          key="4"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={5}
+          key="5"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+      </View>
+      <View>
+        <Placeholder
+          i={6}
+          key="0"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={7}
+          key="1"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={8}
+          key="2"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={9}
+          key="3"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={10}
+          key="4"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+        <Placeholder
+          i={11}
+          key="5"
+          onPress={[MockFunction]}
+          sorting={
+            Object {
+              "1": "Mock",
+              "3": "Seed",
+              "9": "Phrase",
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "marginBottom": 30,
+        "marginTop": "auto",
+      }
+    }
+  >
+    <JolocomButton
+      onPress={[MockFunction]}
+      raised={true}
+      text="[missing \\"en.Confirm and check\\" translation]"
+      upperCase={false}
+    />
+  </View>
+</Container>
+`;
+
+exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
+<Container
+  style={
+    Object {
+      "backgroundColor": "rgb(5, 5, 13)",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "marginHorizontal": 24,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "rgb(255, 239, 223)",
+            "fontFamily": "TT Commons",
+            "fontSize": 18,
+            "lineHeight": 23,
+            "textAlign": "center",
+          }
+        }
+      >
+        some note to let the user know what to do
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "height": 40,
+          "marginTop": 16,
+          "position": "relative",
+        }
+      }
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "flexDirection": "row",
+              "position": "absolute",
+            },
+            Object {
+              "left": -30,
+            },
+          ]
+        }
+      >
+        <Text
+          key="Mock"
+          style={
+            Array [
+              Object {
+                "color": "rgba(255, 255, 255, 0.5)",
+                "fontFamily": "TT Commons",
+                "fontSize": 34,
+                "lineHeight": 38,
+                "marginRight": 8,
+              },
+              Object {
+                "alignSelf": "center",
+                "color": "white",
+                "position": "relative",
+              },
+            ]
+          }
+        >
+          Mock
+        </Text>
+        <Text
+          key="Seed"
+          style={
+            Array [
+              Object {
+                "color": "rgba(255, 255, 255, 0.5)",
+                "fontFamily": "TT Commons",
+                "fontSize": 34,
+                "lineHeight": 38,
+                "marginRight": 8,
+              },
+              false,
+            ]
+          }
+        >
+          Seed
+        </Text>
+        <Text
+          key="Phrase"
+          style={
+            Array [
+              Object {
+                "color": "rgba(255, 255, 255, 0.5)",
+                "fontFamily": "TT Commons",
+                "fontSize": 34,
+                "lineHeight": 38,
+                "marginRight": 8,
+              },
+              false,
+            ]
+          }
+        >
+          Phrase
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "marginTop": 18,
+        }
+      }
+    >
+      <View>
+        <Placeholder
+          i={0}
+          key="0"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={1}
+          key="1"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={2}
+          key="2"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={3}
+          key="3"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={4}
+          key="4"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={5}
+          key="5"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+      </View>
+      <View>
+        <Placeholder
+          i={6}
+          key="0"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={7}
+          key="1"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={8}
+          key="2"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={9}
+          key="3"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={10}
+          key="4"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+        <Placeholder
+          i={11}
+          key="5"
+          onPress={[MockFunction]}
+          sorting={Object {}}
+        />
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "marginBottom": 30,
+        "marginTop": "auto",
+      }
+    }
+  >
+    <JolocomButton
+      onPress={[MockFunction]}
+      raised={true}
+      text="[missing \\"en.Show my phrase again\\" translation]"
+      upperCase={false}
+    />
+  </View>
+</Container>
+`;
