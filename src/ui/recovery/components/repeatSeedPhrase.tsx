@@ -18,17 +18,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noteSection: {
-    marginTop: Spacing.LG,
+    marginHorizontal: Spacing.LG,
   },
   note: {
-    textAlign: 'center',
-    color: Colors.sand,
-    ...Typography.mainText,
+    ...Typography.centeredText,
+    ...Typography.noteText,
   },
   mnemonicContainer: {
     flexDirection: 'row',
     position: 'relative',
-    marginTop: 15,
+    marginTop: Spacing.MD,
     height: 40,
   },
   mnemonicPhrase: {
@@ -36,13 +35,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   mnemonic: {
-    marginRight: 7,
-    fontSize: 34,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorSandInactive,
+    ...Typography.largeText,
+    color: Colors.white050,
+    marginRight: Spacing.XS,
   },
   currentWord: {
-    color: JolocomTheme.primaryColorWhite,
+    color: Colors.white,
     position: 'relative',
     alignSelf: 'center',
   },

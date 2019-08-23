@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     ...Typography.sectionHeader,
-    color: Colors.lightGrey,
     marginLeft: Spacing.MD,
     marginBottom: Spacing.XS,
   },
@@ -34,8 +33,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightGreyLight,
     borderRadius: 4,
     paddingHorizontal: Spacing.MD,
-    paddingTop: Spacing.XS,
-    paddingBottom: Spacing.XXS,
+    paddingVertical: Spacing.XS,
     marginRight: Spacing.MD,
   },
   languageOptionText: {

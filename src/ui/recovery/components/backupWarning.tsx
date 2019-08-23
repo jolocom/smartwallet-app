@@ -8,6 +8,7 @@ import { RootState } from '../../../reducers'
 import { default as IonIcon } from 'react-native-vector-icons/Ionicons'
 import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
+import { Colors, Spacing, Typography } from '../../../styles'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -20,18 +21,19 @@ interface State {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f1a107',
+    backgroundColor: Colors.golden,
     flexDirection: 'row',
-    padding: 10,
+    padding: Spacing.SM,
     alignItems: 'center',
     justifyContent: 'center',
   },
   icon: {
-    marginRight: 10,
+    marginRight: Spacing.SM,
   },
   text: {
-    fontSize: 17,
-    color: 'white',
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textSM,
+    color: Colors.white,
   },
   underline: {
     textDecorationLine: 'underline',

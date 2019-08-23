@@ -22,20 +22,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   note: {
-    ...Typography.subMainText,
+    ...Typography.noteText,
     ...Typography.centeredText,
-    lineHeight: Typography.subMainText.fontSize + 2,
-    color: Colors.sandLight,
   },
   phraseSection: {
     flex: 1,
   },
   seedPhrase: {
-    ...Typography.baseFontStyles,
+    ...Typography.largeText,
     ...Typography.centeredText,
-    fontSize: Typography.text3XL,
-    lineHeight: Typography.text3XL + 4,
-    color: Colors.white,
   },
   buttonSection: {
     marginTop: 'auto',
