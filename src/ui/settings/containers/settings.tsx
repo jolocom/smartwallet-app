@@ -6,7 +6,7 @@ import { locales } from 'src/locales/i18n'
 import { SettingsScreen } from '../components/settings'
 import { genericActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
-import { withLoading } from '../../../actions/modifiers'
+import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { showSeedPhrase } from '../../../actions/recovery'
 
 interface Props
@@ -34,8 +34,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
-  // TODO add error handling
-  setupBackup: () => dispatch(showSeedPhrase()),
+  setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
 })
 
 export const Settings = connect(

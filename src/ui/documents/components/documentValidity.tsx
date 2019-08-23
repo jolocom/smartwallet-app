@@ -2,7 +2,7 @@ import React from 'react'
 import { compareDates } from 'src/lib/util'
 import { Text, Image, View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Spacing, Typography } from 'src/styles'
 const expiredIcon = require('src/resources/img/expired.png')
 
 interface Props {
@@ -16,15 +16,13 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
   },
   validityText: {
-    marginLeft: 5,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: 17,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    marginLeft: Spacing.XXS,
   },
 })
 
-// TODO: Refactor home/components/validitySummary.tsx so we just use one
-
-export const DocumentValiditySummary: React.SFC<Props> = (
+export const DocumentValiditySummary: React.FC<Props> = (
   props,
 ): JSX.Element => {
   const isValid = compareDates(new Date(Date.now()), props.expires) > 1

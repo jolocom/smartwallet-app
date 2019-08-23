@@ -2,7 +2,6 @@ import React from 'react'
 import { StyleSheet, Text, ScrollView } from 'react-native'
 import { Container } from 'src/ui/structure'
 import { CredentialCard } from './credentialCard'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { ReactNode } from 'react'
 import { CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
@@ -12,7 +11,7 @@ import { getCredentialIconByType } from 'src/resources/util'
 import { prepareLabel } from 'src/lib/util'
 import I18n from 'src/locales/i18n'
 import { getNonDocumentClaims } from 'src/utils/filterDocuments'
-import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
+import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props {
   claimsToRender: CategorizedClaims
@@ -23,17 +22,18 @@ interface Props {
 interface State {}
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.lightGreyLighter,
+  },
   sectionHeader: {
-    marginTop: 30,
-    marginBottom: 10,
-    paddingLeft: 16,
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(0, 0, 0, 0.38)',
+    ...Typography.sectionHeader,
+    marginTop: Spacing.XL,
+    marginBottom: Spacing.SM,
+    paddingLeft: Spacing.MD,
   },
   scrollComponent: {
     width: '100%',
-    paddingBottom: SCROLL_PADDING_BOTTOM,
+    paddingBottom: Spacing.XL,
   },
 })
 
@@ -90,7 +90,7 @@ export class CredentialOverview extends React.Component<Props, State> {
     const claimCategories = Object.keys(claimsToRender)
 
     return (
-      <Container style={{ padding: 0 }}>
+      <Container style={styles.container}>
         <ScrollView
           style={scrollComponent}
           contentContainerStyle={scrollComponent}

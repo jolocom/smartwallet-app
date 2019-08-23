@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text, ScrollView, TextStyle, View } from 'react-native'
-import { Container, Block } from 'src/ui/structure'
+import { Text, ScrollView, View, StyleSheet } from 'react-native'
+import { Container } from 'src/ui/structure'
 import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
 import { IconToggle } from 'react-native-material-ui'
@@ -11,6 +11,7 @@ import I18n from 'src/locales/i18n'
 import { IdentitySummary } from '../../../actions/sso/types'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
+import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props {
   did: string
@@ -28,34 +29,31 @@ interface State {
   }
 }
 
-const styles = {
-  serviceTitle: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.headerFontSize,
-    color: JolocomTheme.primaryColorBlack,
-    fontWeight: '100',
-  } as TextStyle,
-  serviceMetadata: {
-    ...JolocomTheme.textStyles.light.labelDisplayField,
-    fontFamily: JolocomTheme.contentFontFamily,
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.backgroundLightMain,
+    alignItems: 'stretch',
   },
-  fixedText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.primaryColorBlack,
-    padding: '5%',
+  topSection: {
+    flex: 0.3,
+    marginTop: Spacing.XL,
   },
-  claimCardText: {
-    primaryText: {
-      fontSize: 17,
-      opacity: 0.4,
-    },
-    secondaryText: {
-      fontSize: JolocomTheme.headerFontSize,
-      opacity: 1,
-    },
+  messageContainer: {
+    marginTop: Spacing.LG,
+    paddingHorizontal: '5%',
   },
-}
+  message: {
+    ...Typography.subMainText,
+    color: Colors.blackMain,
+  },
+  claimsSection: {
+    marginTop: Spacing.MD,
+    flex: 0.6,
+  },
+  buttonSection: {
+    flex: 0.1,
+  },
+})
 
 export class ConsentComponent extends React.Component<Props, State> {
   state: State = {
@@ -119,18 +117,17 @@ export class ConsentComponent extends React.Component<Props, State> {
 
   private renderFirstSection() {
     return (
-      <Block flex={0.4}>
-        <View style={{ flex: 0.1 }} />
+      <View style={styles.topSection}>
         {IssuerCard(this.props.requester)}
-        <Block flex={0.5}>
-          <Text style={styles.fixedText}>
+        <View style={styles.messageContainer}>
+          <Text style={styles.message}>
             {I18n.t(
               strings.THIS_SERVICE_IS_ASKING_YOU_TO_SHARE_THE_FOLLOWING_CLAIMS,
             )}
             :
           </Text>
-        </Block>
-      </Block>
+        </View>
+      </View>
     )
   }
 
@@ -211,17 +208,16 @@ export class ConsentComponent extends React.Component<Props, State> {
     )
   }
 
-  // TODO No padding on containers by default
   render() {
     return (
-      <Container style={{ padding: 0 }}>
+      <Container style={styles.container}>
         {this.renderFirstSection()}
-        <Block flex={0.5}>
+        <View style={styles.claimsSection}>
           <ScrollView style={{ width: '100%' }}>
             {this.renderSelectionSections(this.props.availableCredentials)}
           </ScrollView>
-        </Block>
-        {this.renderButtons()}
+        </View>
+        <View style={styles.buttonSection}>{this.renderButtons()}</View>
       </Container>
     )
   }

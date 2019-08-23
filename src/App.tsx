@@ -1,7 +1,5 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ThemeContext, getTheme } from 'react-native-material-ui'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { initStore } from './store'
 import { navigationActions } from 'src/actions'
 import { StatusBar } from 'react-native'
@@ -37,14 +35,12 @@ export default class App extends React.PureComponent<{}> {
     return (
       <React.Fragment>
         <StatusBar barStyle="default" />
-        <ThemeContext.Provider value={getTheme(JolocomTheme)}>
-          <Provider store={store}>
-            <React.Fragment>
-              <RoutesContainer ref={nav => this.setNavigator(nav)} />
-              <AppLoading />
-            </React.Fragment>
-          </Provider>
-        </ThemeContext.Provider>
+        <Provider store={store}>
+          <React.Fragment>
+            <RoutesContainer ref={nav => this.setNavigator(nav)} />
+            <AppLoading />
+          </React.Fragment>
+        </Provider>
       </React.Fragment>
     )
   }

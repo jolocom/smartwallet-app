@@ -8,7 +8,6 @@ import { RootState } from 'src/reducers'
 import { getDocumentClaims } from 'src/utils/filterDocuments'
 import { ThunkDispatch } from 'src/store'
 
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { filters } from 'src/lib/filterDecoratedClaims'
 
@@ -17,6 +16,7 @@ import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
 import { BackupWarning } from '../../recovery/components/backupWarning'
+import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -38,24 +38,23 @@ const APPBAR_HEIGHT = Platform.select({
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: JolocomTheme.primaryColorGrey,
+    backgroundColor: Colors.lightGreyLighter,
   },
   topContainer: {
-    paddingVertical: 15,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: Spacing.MD,
   },
   emptyDocumentsContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: Spacing.MD,
   },
-  centeredText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: 30, // FIXME
-    color: '#959595', // FIXME
-    textAlign: 'center',
+  emptyDocumentsText: {
+    ...Typography.mainText,
+    ...Typography.centeredText,
+    color: Colors.greyLight,
   },
 })
 
@@ -121,7 +120,7 @@ export class DocumentsContainer extends React.Component<Props, State> {
         >
           {isEmpty ? (
             <View style={styles.emptyDocumentsContainer}>
-              <Text style={styles.centeredText}>
+              <Text style={styles.emptyDocumentsText}>
                 {I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '...'}
               </Text>
             </View>

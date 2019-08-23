@@ -1,65 +1,48 @@
 import React from 'react'
-import { ScrollContainer, Block, CenteredText } from 'src/ui/structure'
+import { JolocomButton } from 'src/ui/structure'
 import {
   StyleSheet,
   Keyboard,
   EmitterSubscription,
-  Dimensions,
-  ViewStyle,
-  TextStyle,
+  ScrollView,
+  Text,
+  View,
 } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account/'
-import { Button } from 'react-native-material-ui'
 import { TextInputField } from 'src/ui/home/components/textInputField'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
+import { Buttons, Typography, Colors, Spacing } from 'src/styles'
 
-const viewHeight: number = Dimensions.get('window').height
-
-interface ClaimDetailsStyles {
-  blockSpace: ViewStyle
-  blockSpaceLast: ViewStyle
-  buttonContainer: ViewStyle
-  buttonContainerDisabled: ViewStyle
-  buttonText: TextStyle
-  buttonTextDisabled: TextStyle
-}
-
-const styles = StyleSheet.create<ClaimDetailsStyles>({
-  blockSpace: {
-    marginTop: viewHeight / 40,
-    marginBottom: viewHeight / 40,
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.backgroundLightMain,
   },
-  blockSpaceLast: {
-    marginTop: viewHeight / 20,
-    marginBottom: viewHeight / 20,
+  header: {
+    ...Typography.centeredText,
+    ...Typography.mainText,
+    color: Colors.blackMain,
+    marginTop: Spacing.XL,
+  },
+  textInputArea: {
+    alignItems: 'center',
+    marginTop: Spacing.LG,
+  },
+  buttonArea: {
+    alignItems: 'center',
+    marginVertical: Spacing.XXL,
   },
   buttonContainer: {
-    width: 164,
-    height: 48,
-    borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple,
+    ...Buttons.buttonStandardContainer,
   },
   buttonContainerDisabled: {
-    width: 164,
-    height: 48,
-    borderRadius: 4,
-    backgroundColor: JolocomTheme.disabledButtonBackgroundGrey,
+    ...Buttons.buttonDisabledStandardContainer,
   },
   buttonText: {
-    paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorWhite,
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
+    ...Buttons.buttonStandardText,
   },
   buttonTextDisabled: {
-    paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: JolocomTheme.labelFontSize,
-    color: JolocomTheme.disabledButtonTextGrey,
-    fontWeight: '100',
+    ...Buttons.buttonDisabledStandardText,
   },
 })
 
@@ -159,38 +142,22 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
     return (
-      <ScrollContainer>
-        <Block style={styles.blockSpace}>
-          <CenteredText
-            style={JolocomTheme.textStyles.light.subheader}
-            msg={I18n.t(credentialType)}
-          />
-        </Block>
-        <Block style={styles.blockSpace}>
+      <ScrollView style={styles.container}>
+        <Text style={styles.header}>{I18n.t(credentialType)}</Text>
+        <View style={styles.textInputArea}>
           {this.renderInputFields(selectedClaim)}
-        </Block>
-        <Block style={styles.blockSpaceLast}>
+        </View>
+        <View style={styles.buttonArea}>
           {showButtonWhileTyping ? (
-            <Button
+            <JolocomButton
               onPress={() => this.onSubmit()}
               upperCase={false}
               text={I18n.t(strings.ADD_CLAIM)}
-              style={
-                !!this.confirmationEligibilityCheck()
-                  ? {
-                      container: styles.buttonContainerDisabled,
-                      text: styles.buttonTextDisabled,
-                    }
-                  : {
-                      container: styles.buttonContainer,
-                      text: styles.buttonText,
-                    }
-              }
               disabled={!!this.confirmationEligibilityCheck()}
             />
           ) : null}
-        </Block>
-      </ScrollContainer>
+        </View>
+      </ScrollView>
     )
   }
 }

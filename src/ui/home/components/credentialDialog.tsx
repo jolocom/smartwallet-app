@@ -1,10 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, ScrollView, View } from 'react-native'
+import { StyleSheet, ScrollView, View } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { prepareLabel } from 'src/lib/util'
 import { DocumentCard } from '../../documents/components/documentCard'
 import { IdentitySummary } from '../../../actions/sso/types'
+import { Colors, Spacing, Typography } from 'src/styles'
 import { DocumentDetails as DocumentDetailsComponent } from 'src/ui/documents/components/documentDetails'
 
 interface Props {
@@ -15,85 +14,48 @@ interface Props {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: JolocomTheme.secondaryColorGrey,
+    backgroundColor: Colors.lightGreyLighter,
   },
   topSection: {
-    padding: 30,
+    paddingVertical: Spacing.MD,
+    alignItems: 'center',
   },
   issuerSection: {},
-  issuerContainer: {
-    flexDirection: 'row',
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    paddingVertical: 18,
-    paddingLeft: 15,
-    paddingRight: 30,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#ececec',
-  },
-  issuerIcon: {
-    backgroundColor: JolocomTheme.primaryColorGrey,
-    width: 42,
-    height: 42,
-  },
-  issuerTextContainer: {
-    marginLeft: 16,
-  },
-  issuerText: {
-    fontSize: 17,
-    color: JolocomTheme.primaryColorPurple,
-    fontFamily: JolocomTheme.contentFontFamily,
-  },
   sectionHeader: {
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(0, 0, 0, 0.4)',
-    marginBottom: 10,
-    paddingLeft: 16,
-    alignSelf: 'flex-start',
+    ...Typography.sectionHeader,
+    marginTop: Spacing.LG,
+    marginBottom: Spacing.SM,
+    paddingHorizontal: Spacing.MD,
   },
   claimsSection: {
-    marginTop: 30,
+    // needed to make the ScrollView work properly
     flex: 1,
   },
   claimsList: {
     borderTopWidth: 1,
-    borderColor: '#ececec',
+    borderColor: Colors.lightGrey,
   },
   claimCard: {
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    paddingVertical: 15,
+    backgroundColor: Colors.white,
+    paddingVertical: Spacing.MD,
     borderBottomWidth: 1,
-    borderColor: '#ececec',
+    borderColor: Colors.lightGrey,
   },
   claimCardTextContainer: {
-    paddingHorizontal: 30,
+    paddingHorizontal: Spacing.XL,
   },
   claimCardTitle: {
-    color: 'rgba(0, 0, 0, 0.4)',
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.cardSecondaryText,
+  },
+  claimCardMainText: {
+    ...Typography.cardMainText,
   },
 })
-
-const renderClaims = (toRender: DecoratedClaims): JSX.Element[] => {
-  const { claimData } = toRender
-  return Object.keys(claimData).map(field => (
-    <View key={claimData[field]} style={styles.claimCard}>
-      <View style={styles.claimCardTextContainer}>
-        <Text style={styles.claimCardTitle}>{prepareLabel(field)}</Text>
-        <Text style={JolocomTheme.textStyles.light.textDisplayField}>
-          {claimData[field]}
-        </Text>
-      </View>
-    </View>
-  ))
-}
 
 export const CredentialDialogComponent: React.SFC<Props> = (
   props: Props,
 ): JSX.Element => {
-  const { credentialToRender, requester } = props
+  const { credentialToRender } = props
 
   return (
     <View style={styles.container}>
