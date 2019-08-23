@@ -19,12 +19,14 @@ interface State {
   mnemonic: string[]
   isValid: boolean
   wordList: string[]
+  validWord: boolean
 }
 
 export class InputSeedPhraseContainer extends React.Component<Props, State> {
   private textInput: TextInput | undefined
   public state = {
     currentWord: '',
+    validWord: false,
     isValid: false,
     wordList: [] as string[],
     mnemonic: [] as string[],
@@ -36,21 +38,14 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
 
   private handleSeedPhraseChange = (text: string): void => {
     let matches = [] as string[]
-
     if (text.length >= 2) {
       matches = wordlists.EN.filter((word: string): boolean =>
         word.startsWith(text.trim()),
       )
     }
-    if (matches.length === 1) {
-      this.selectWord(matches[0])
-      return
-    }
-    if (text.endsWith(' ') && wordlists.EN.find(e => e === text.trim())) {
-      this.selectWord(text.trim())
-      return
-    }
+
     this.setState({
+      validWord: matches.includes(text),
       currentWord: text,
       wordList: matches.slice(0, 10),
     })
@@ -58,27 +53,39 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
 
   private onDoneButton = () => {
     const { wordList, currentWord } = this.state
-    if (wordList.find(e => e === currentWord.trim())) {
-      this.selectWord(currentWord.trim())
+    const matchingWord = wordList.find(e => e === currentWord.trim())
+    if (matchingWord) {
+      this.selectWord(matchingWord)
+    } else if (wordList.length === 1) {
+      this.selectWord(wordList[0])
     }
   }
+
   private selectWord = (word: string): void => {
     const { mnemonic } = this.state
     mnemonic.push(word)
+    const mnemonicValid =
+      mnemonic.length === 12 && validateMnemonic(mnemonic.join(' '))
+    if (mnemonicValid && this.textInput) {
+      this.textInput.blur()
+    }
     this.setState({
       currentWord: '',
+      validWord: false,
       mnemonic,
-      isValid: mnemonic.length === 12 && validateMnemonic(mnemonic.join(' ')),
+      isValid: mnemonicValid,
       wordList: [],
     })
   }
+
   public render(): JSX.Element {
-    const { currentWord, mnemonic, isValid, wordList } = this.state
+    const { currentWord, validWord, mnemonic, isValid, wordList } = this.state
     return (
       <React.Fragment>
         <StatusBar />
         <InputSeedPhraseComponent
           currentWord={currentWord}
+          validWord={validWord}
           mnemonic={mnemonic}
           isValid={isValid}
           wordList={wordList}

@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { Container } from '../../structure'
 import { JolocomTheme } from '../../../styles/jolocom-theme.android'
 import { Button } from 'react-native-material-ui'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 const styles = StyleSheet.create({
   container: {
@@ -54,12 +55,14 @@ interface InputSeedPhraseProps {
   currentWord: string
   isValid: boolean
   wordList: string[]
+  validWord: boolean
 }
 
 const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
   currentWord,
   wordList,
   isValid,
+  validWord,
   mnemonic,
   handleTextInput,
   selectWord,
@@ -89,23 +92,31 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
         <Text style={[styles.note, { margin: 2 }]}>{word}</Text>
       ))}
     </View>
-    {
-      //@ts-ignore textAlign is missing in the typings of TextInput
-      <TextInput
-        textAlign={'center'}
-        ref={openKeyboard}
-        autoFocus
-        autoCapitalize={'none'}
-        style={styles.textInput}
-        value={currentWord}
-        onChangeText={handleTextInput}
-        underlineColorAndroid={JolocomTheme.primaryColorPurple}
-        returnKeyLabel={'Done'}
-        returnKeyType={'next'}
-        blurOnSubmit={false}
-        onSubmitEditing={handleDoneButton}
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {
+        //@ts-ignore textAlign is missing in the typings of TextInput
+        <TextInput
+          textAlign={'center'}
+          ref={openKeyboard}
+          autoFocus
+          autoCapitalize={'none'}
+          style={styles.textInput}
+          value={currentWord}
+          onChangeText={handleTextInput}
+          underlineColorAndroid={JolocomTheme.primaryColorPurple}
+          returnKeyLabel={'Done'}
+          returnKeyType={'next'}
+          blurOnSubmit={false}
+          onSubmitEditing={handleDoneButton}
+        />
+      }
+      <Icon
+        name={'check-circle'}
+        size={24}
+        style={{ color: validWord ? 'green' : 'black' }}
       />
-    }
+    </View>
+    <Text style={{ color: 'white' }}>Press enter when you think its done</Text>
     {wordList.length === 0 && currentWord.length > 2 && (
       <Text style={{ color: 'white' }}>Wrong Word</Text>
     )}
@@ -117,34 +128,35 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
         flexWrap: 'wrap',
       }}
     >
-      {wordList.map((word, i) => (
-        <Text
-          key={i}
-          style={[styles.note, { margin: 8 }]}
-          onPress={() => selectWord(wordList[i])}
-        >
-          {word}
-        </Text>
-      ))}
+      {!validWord &&
+        wordList.map((word, i) => (
+          <Text
+            key={i}
+            style={[styles.note, { margin: 8 }]}
+            onPress={() => selectWord(wordList[i])}
+          >
+            {word}
+          </Text>
+        ))}
     </View>
-    {isValid ? (
-      <Text style={styles.note}>Valid</Text>
-    ) : (
-      <Text style={styles.note}>Not Valid</Text>
+    {isValid && (
+      <React.Fragment>
+        <Text style={styles.note}>Valid</Text>
+        <View style={styles.buttonSection}>
+          <Button
+            disabled={!isValid}
+            style={{
+              container: [styles.buttonContainer, !isValid && styles.disabled],
+              text: styles.buttonText,
+            }}
+            onPress={isValid ? handleButtonPress : undefined}
+            raised
+            upperCase={false}
+            text={'Recover my Identity'}
+          />
+        </View>
+      </React.Fragment>
     )}
-    <View style={styles.buttonSection}>
-      <Button
-        disabled={!isValid}
-        style={{
-          container: [styles.buttonContainer, !isValid && styles.disabled],
-          text: styles.buttonText,
-        }}
-        onPress={isValid ? handleButtonPress : undefined}
-        raised
-        upperCase={false}
-        text={'Recover my Identity'}
-      />
-    </View>
   </Container>
 )
 
