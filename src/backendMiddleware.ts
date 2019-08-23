@@ -36,7 +36,6 @@ export class BackendError extends Error {
 export class BackendMiddleware {
   private _identityWallet!: IdentityWallet
   private _keyProvider!: SoftwareKeyProvider
-  private _entropyData!: { encryptedEntropy: string; timestamp: number }
 
   public storageLib: Storage
   public encryptionLib: EncryptionLibInterface
@@ -78,22 +77,15 @@ export class BackendMiddleware {
     throw new BackendError(ErrorCodes.NoKeyProvider)
   }
 
-  public get entropyData(): BackendMiddleware['_entropyData'] {
-    if (this._entropyData) return this._entropyData
-    throw new BackendError(ErrorCodes.NoEntropy)
-  }
-
   public async prepareIdentityWallet(): Promise<IdentityWallet> {
     if (this._identityWallet) return this._identityWallet
 
     const encryptedEntropy = await this.storageLib.get.encryptedSeed()
     if (!encryptedEntropy) throw new BackendError(ErrorCodes.NoEntropy)
-
-    this._entropyData = { encryptedEntropy, timestamp: Date.now() }
     const encryptionPass = await this.keyChainLib.getPassword()
 
     const decryptedSeed = this.encryptionLib.decryptWithPass({
-      cipher: this._entropyData.encryptedEntropy,
+      cipher: encryptedEntropy,
       pass: encryptionPass,
     })
 
@@ -145,14 +137,8 @@ export class BackendMiddleware {
     }
   }
 
-  public async setEntropy(encodedEntropy: string): Promise<void> {
+  public async createKeyProvider(encodedEntropy: string): Promise<void> {
     const password = (await generateSecureRandomBytes(32)).toString('base64')
-    const encEntropy = this.encryptionLib.encryptWithPass({
-      data: encodedEntropy,
-      pass: password,
-    })
-    this._entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
-
     // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
     this._keyProvider = JolocomLib.KeyProvider.fromSeed(
       Buffer.from(encodedEntropy, 'hex'),
@@ -182,8 +168,16 @@ export class BackendMiddleware {
       controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
     }
     await this.storageLib.store.persona(personaData)
+
+    const encryptedSeedData = {
+      // TODO: change to keyProvider.encryptedSeed when the library is updated
+      // with a public getter for the encryptedSeed
+      encryptedEntropy: this.keyProvider['encryptedSeed'].toString('base64'),
+      timestamp: Date.now()
+    }
+    await this.storageLib.store.encryptedSeed(encryptedSeedData)
+
     await this.storageLib.store.didDoc(this._identityWallet.didDocument)
-    await this.storageLib.store.encryptedSeed(this._entropyData)
     await this.keyChainLib.savePassword(password)
 
     return this._identityWallet.identity

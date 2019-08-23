@@ -1,16 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`BackendMiddleware Identity Creation should create a keyProvider on setEntropy 1`] = `
-Array [
-  Array [
-    Object {
-      "data": "4f8d84403d760b5b3fc5426c90827dab",
-      "pass": "hunter0=",
-    },
-  ],
-]
-`;
-
 exports[`BackendMiddleware Identity Creation should fuelKeyWithEther 1`] = `
 Array [
   Array [

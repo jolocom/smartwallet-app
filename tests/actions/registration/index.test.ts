@@ -45,7 +45,7 @@ describe('Registration action creators', () => {
 
       await mockStore.dispatch(registrationActions.createIdentity(data.entropy))
 
-      expect(middlewareStub.setEntropy).toHaveBeenCalledWith(data.entropy)
+      expect(middlewareStub.createKeyProvider).toHaveBeenCalledWith(data.entropy)
       expect(middlewareStub.fuelKeyWithEther).toHaveBeenCalled()
       expect(middlewareStub.createIdentity).toHaveBeenCalled()
       expect(mockStore.getActions()).toMatchSnapshot()

@@ -46,7 +46,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setIsRegistering(true))
 
   dispatch(setLoadingMsg(loading.loadingStages[0]))
-  await backendMiddleware.setEntropy(encodedEntropy)
+  await backendMiddleware.createKeyProvider(encodedEntropy)
 
   dispatch(setLoadingMsg(loading.loadingStages[1]))
   await backendMiddleware.fuelKeyWithEther()

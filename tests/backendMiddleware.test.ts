@@ -18,7 +18,6 @@ describe('BackendMiddleware', () => {
   const keyChainLib = stub<BackendMiddleware['keyChainLib']>({
     getPassword: jest.fn().mockResolvedValue(getPasswordResult)
   })
-  const encryptWithPass = jest.fn().mockReturnValue(cipher)
   const decryptWithPass = jest.fn().mockReturnValue(entropy)
   const storageLib = {
     store: stub<BackendMiddleware['storageLib']['store']>(),
@@ -32,7 +31,7 @@ describe('BackendMiddleware', () => {
     const backendMiddleware = new BackendMiddleware(mockBackendMiddlewareConfig)
     Object.assign(backendMiddleware, {
       keyChainLib,
-      encryptionLib: { encryptWithPass, decryptWithPass },
+      encryptionLib: { decryptWithPass },
       storageLib,
       registry,
     })
@@ -128,14 +127,10 @@ describe('BackendMiddleware', () => {
       )
     })
 
-    it('should create a keyProvider on setEntropy', async () => {
-      encryptWithPass.mockClear()
-
-      await backendMiddleware.setEntropy(entropy)
-
-      expect(encryptWithPass.mock.calls).toMatchSnapshot()
-      expect(backendMiddleware.entropyData).toMatchObject(entropyData)
+    it('should createKeyProvider', async () => {
+      await backendMiddleware.createKeyProvider(entropy)
       expect(() => backendMiddleware.keyProvider).not.toThrow()
+      expect(backendMiddleware.keyProvider['encryptedSeed'].toString('base64')).toMatch(cipher)
     })
 
     it('should not store anything before the identity is registered', () => {
