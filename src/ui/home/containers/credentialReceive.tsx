@@ -28,13 +28,15 @@ export class CredentialsReceiveContainer extends React.Component<Props, State> {
             credentialToRender={this.props.offer}
           />
         </View>
-        <ButtonSection
-          confirmText={'Accept'}
-          denyText={'Deny'}
-          handleConfirm={this.props.saveExternalCredentials}
-          handleDeny={this.props.goBack}
-          disabled={false}
-        />
+        <View style={{ flex: 0.1 }}>
+          <ButtonSection
+            confirmText={'Accept'}
+            denyText={'Deny'}
+            handleConfirm={this.props.saveExternalCredentials}
+            handleDeny={this.props.goBack}
+            disabled={false}
+          />
+        </View>
       </View>
     )
   }

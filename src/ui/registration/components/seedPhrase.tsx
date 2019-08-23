@@ -1,11 +1,9 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Container } from 'src/ui/structure/'
+import { Container, JolocomButton } from 'src/ui/structure/'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-
-const { Button } = require('react-native-material-ui')
+import { Colors, Typography } from 'src/styles'
 
 interface Props {
   seedPhrase: string
@@ -15,7 +13,8 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: Colors.blackMain,
+    padding: '5%',
   },
   noteSection: {
     marginTop: 20,
@@ -23,37 +22,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   note: {
-    textAlign: 'center',
-    lineHeight: 26,
-    color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.labelFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.subMainText,
+    ...Typography.centeredText,
+    lineHeight: Typography.subMainText.fontSize + 2,
+    color: Colors.sandLight,
   },
   phraseSection: {
     flex: 1,
   },
   seedPhrase: {
-    textAlign: 'center',
-    color: JolocomTheme.primaryColorWhite,
-    fontSize: 34,
-    fontFamily: JolocomTheme.contentFontFamily,
-    lineHeight: 38,
+    ...Typography.baseFontStyles,
+    ...Typography.centeredText,
+    fontSize: Typography.text3XL,
+    lineHeight: Typography.text3XL + 4,
+    color: Colors.white,
   },
   buttonSection: {
     marginTop: 'auto',
-  },
-  buttonContainer: {
-    borderRadius: 4,
-    height: 48,
-    paddingHorizontal: 25,
-    backgroundColor: JolocomTheme.primaryColorPurple,
-  },
-  buttonText: {
-    paddingVertical: 15,
-    fontWeight: '100',
-    fontSize: JolocomTheme.headerFontSize,
-    color: JolocomTheme.primaryColorWhite,
-    fontFamily: JolocomTheme.contentFontFamily,
   },
 })
 
@@ -73,8 +58,7 @@ export const SeedPhrase: React.SFC<Props> = props => (
       <Text style={styles.seedPhrase}>{props.seedPhrase}</Text>
     </View>
     <View style={styles.buttonSection}>
-      <Button
-        style={{ container: styles.buttonContainer, text: styles.buttonText }}
+      <JolocomButton
         onPress={props.handleButtonTap}
         raised
         upperCase={false}

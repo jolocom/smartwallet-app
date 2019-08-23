@@ -3,27 +3,27 @@ import { connect } from 'react-redux'
 
 import { ThunkDispatch } from 'src/store'
 import { navigationActions, accountActions, genericActions } from 'src/actions'
-import { Linking, Dimensions, Image, StyleSheet } from 'react-native'
+import { Linking, Dimensions, Image, StyleSheet, Text } from 'react-native'
 import { withLoading, withErrorHandler } from 'src/actions/modifiers'
-import { Container, CenteredText } from '../structure'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Container } from '../structure'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
+import { Typography, Colors } from 'src/styles'
 const image = require('src/resources/img/splashScreen.png')
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
 
 const styles = StyleSheet.create({
   loadingContainer: {
-    backgroundColor: '#05050d',
+    backgroundColor: Colors.blackMain,
   },
   loadingText: {
     position: 'absolute',
     bottom: '5%',
-    fontSize: 12,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorSand,
-    opacity: 0.7,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.text3XS,
+    color: Colors.sandLight070,
+    textAlign: 'center',
   },
 })
 
@@ -47,7 +47,7 @@ export class AppInitContainer extends React.Component<Props> {
             height: viewHeight / 2,
           }}
         />
-        <CenteredText style={styles.loadingText} msg={'POWERED BY JOLOCOM'} />
+        <Text style={styles.loadingText}>POWERED BY JOLOCOM</Text>
       </Container>
     )
   }

@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-native-material-ui'
 import { navigationActions } from 'src/actions/'
 import {
   Text,
@@ -10,13 +9,14 @@ import {
   BackHandler,
   StatusBar,
 } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { errorTitleMessages } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'
 import { NavigationScreenProps } from 'react-navigation'
+import { Colors, Spacing, Typography } from 'src/styles'
+import { JolocomButton } from '../structure'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -28,56 +28,35 @@ interface Props
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgb(5, 5, 13)',
+    backgroundColor: Colors.blackMain,
+    flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    flex: 1,
     padding: '5%',
   },
   upperContainer: {
-    marginTop: 85,
-    alignItems: 'center',
     justifyContent: 'space-around',
-  },
-  imagePlaceholder: {
-    backgroundColor: 'grey',
-    width: 160,
-    height: 160,
+    alignItems: 'center',
+    marginTop: Spacing['4XL'],
   },
   textBlock: {
-    marginTop: 25,
-    paddingHorizontal: 20,
+    marginTop: Spacing.LG,
+    paddingHorizontal: Spacing.MD,
     alignItems: 'center',
   },
   errorTextHeader: {
+    ...Typography.mainText,
     textAlign: 'center',
-    color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.landingHeaderFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
+    color: Colors.sandLight,
   },
   errorText: {
-    marginTop: 15,
+    ...Typography.subMainText,
     textAlign: 'center',
-    color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.labelFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
+    color: Colors.sandLight,
+    marginTop: Spacing.MD,
   },
   buttonBlock: {
-    marginTop: 20,
-    backgroundColor: JolocomTheme.primaryColorBlack,
-  },
-  buttonContainer: {
-    height: 48,
-    borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple,
-  },
-  buttonText: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorWhite,
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
+    marginTop: Spacing.LG,
   },
 })
 
@@ -148,13 +127,9 @@ export class ExceptionComponent extends React.PureComponent<Props> {
           </View>
         </View>
         <View style={styles.buttonBlock}>
-          <Button
+          <JolocomButton
             raised
             onPress={this.handlePress}
-            style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText,
-            }}
             upperCase={false}
             text={I18n.t(strings.GO_BACK)}
           />

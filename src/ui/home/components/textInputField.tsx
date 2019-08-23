@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
+import { Colors, Typography } from 'src/styles'
 const ReactMUI = require('react-native-material-textfield')
 
 interface Props {
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   labelStyle: {
-    color: 'grey',
-    fontFamily: JolocomTheme.contentFontFamily,
+    color: Colors.grey,
+    fontFamily: Typography.fontMain,
   },
 })
 
@@ -67,9 +67,9 @@ export class TextInputField extends React.Component<Props, State> {
           onBlur={() => this.handleBlur()}
           label={labelText}
           labelTextStyle={styles.labelStyle}
-          style={{ fontFamily: JolocomTheme.contentFontFamily }}
-          tintColor={JolocomTheme.primaryColorPurple}
-          textColor={JolocomTheme.primaryColorBlack}
+          style={{ fontFamily: Typography.fontMain }}
+          tintColor={Colors.purpleMain}
+          textColor={Colors.blackMain}
           value={fieldValue}
           onChangeText={(fieldValue: string) => {
             handleFieldInput(fieldValue, fieldName)
