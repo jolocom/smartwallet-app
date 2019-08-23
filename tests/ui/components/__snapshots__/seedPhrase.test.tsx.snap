@@ -14,7 +14,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       Object {
         "flex": 0.8,
         "justifyContent": "center",
-        "marginTop": 20,
+        "marginTop": 24,
       }
     }
   >
@@ -23,8 +23,8 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
         Object {
           "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
-          "fontSize": 20,
-          "lineHeight": 22,
+          "fontSize": 18,
+          "lineHeight": 23,
           "textAlign": "center",
         }
       }

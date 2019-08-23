@@ -4,7 +4,7 @@ exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
 <Container
   style={
     Object {
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
     }
   }
 >
@@ -20,17 +20,17 @@ exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
     <View
       style={
         Object {
-          "marginTop": 20,
+          "marginHorizontal": 24,
         }
       }
     >
       <Text
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
-            "fontSize": 20,
-            "lineHeight": 26,
+            "fontSize": 18,
+            "lineHeight": 23,
             "textAlign": "center",
           }
         }
@@ -43,7 +43,7 @@ exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
         Object {
           "flexDirection": "row",
           "height": 40,
-          "marginTop": 15,
+          "marginTop": 16,
           "position": "relative",
         }
       }
@@ -223,30 +223,14 @@ exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
   <View
     style={
       Object {
+        "marginBottom": 30,
         "marginTop": "auto",
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       onPress={[MockFunction]}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-            "borderRadius": 4,
-            "height": 48,
-            "paddingHorizontal": 25,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "100",
-            "paddingVertical": 15,
-          },
-        }
-      }
       text="[missing \\"en.Confirm and check\\" translation]"
       upperCase={false}
     />
@@ -258,7 +242,7 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
 <Container
   style={
     Object {
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
     }
   }
 >
@@ -274,17 +258,17 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
     <View
       style={
         Object {
-          "marginTop": 20,
+          "marginHorizontal": 24,
         }
       }
     >
       <Text
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
-            "fontSize": 20,
-            "lineHeight": 26,
+            "fontSize": 18,
+            "lineHeight": 23,
             "textAlign": "center",
           }
         }
@@ -297,7 +281,7 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
         Object {
           "flexDirection": "row",
           "height": 40,
-          "marginTop": 15,
+          "marginTop": 16,
           "position": "relative",
         }
       }
@@ -320,10 +304,11 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
           style={
             Array [
               Object {
-                "color": "rgba(255, 239, 223, 0.38)",
+                "color": "rgba(255, 255, 255, 0.5)",
                 "fontFamily": "TT Commons",
                 "fontSize": 34,
-                "marginRight": 7,
+                "lineHeight": 38,
+                "marginRight": 8,
               },
               Object {
                 "alignSelf": "center",
@@ -340,10 +325,11 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
           style={
             Array [
               Object {
-                "color": "rgba(255, 239, 223, 0.38)",
+                "color": "rgba(255, 255, 255, 0.5)",
                 "fontFamily": "TT Commons",
                 "fontSize": 34,
-                "marginRight": 7,
+                "lineHeight": 38,
+                "marginRight": 8,
               },
               false,
             ]
@@ -356,10 +342,11 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
           style={
             Array [
               Object {
-                "color": "rgba(255, 239, 223, 0.38)",
+                "color": "rgba(255, 255, 255, 0.5)",
                 "fontFamily": "TT Commons",
                 "fontSize": 34,
-                "marginRight": 7,
+                "lineHeight": 38,
+                "marginRight": 8,
               },
               false,
             ]
@@ -458,30 +445,14 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
   <View
     style={
       Object {
+        "marginBottom": 30,
         "marginTop": "auto",
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       onPress={[MockFunction]}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-            "borderRadius": 4,
-            "height": 48,
-            "paddingHorizontal": 25,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "100",
-            "paddingVertical": 15,
-          },
-        }
-      }
       text="[missing \\"en.Show my phrase again\\" translation]"
       upperCase={false}
     />
