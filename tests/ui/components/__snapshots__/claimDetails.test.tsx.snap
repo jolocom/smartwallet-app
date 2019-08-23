@@ -1,33 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ClaimDetails component matches the snapshot on render 1`] = `
-<ScrollContainer>
-  <Block
+<ScrollViewMock
+  style={
+    Object {
+      "backgroundColor": "rgb(245, 245, 245)",
+    }
+  }
+>
+  <Text
     style={
       Object {
-        "marginBottom": 33.35,
-        "marginTop": 33.35,
+        "color": "rgb(5, 5, 13)",
+        "fontFamily": "TT Commons",
+        "fontSize": 30,
+        "marginTop": 32,
+        "textAlign": "center",
       }
     }
   >
-    <Text
-      style={
-        Object {
-          "color": "rgb(5, 5, 13)",
-          "fontFamily": "TT Commons",
-          "fontSize": 30,
-          "textAlign": "center",
-        }
-      }
-    >
-      Email
-    </Text>
-  </Block>
-  <Block
+    Email
+  </Text>
+  <View
     style={
       Object {
-        "marginBottom": 33.35,
-        "marginTop": 33.35,
+        "alignItems": "center",
+        "marginTop": 24,
       }
     }
   >
@@ -37,70 +35,51 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
       handleFieldInput={[Function]}
       key="email"
     />
-  </Block>
-  <Block
+  </View>
+  <View
     style={
       Object {
-        "marginBottom": 66.7,
-        "marginTop": 66.7,
+        "alignItems": "center",
+        "marginVertical": 48,
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       disabled={false}
       onPress={[Function]}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "rgb(148, 47, 81)",
-            "borderRadius": 4,
-            "height": 48,
-            "minWidth": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "normal",
-            "paddingVertical": 16,
-          },
-        }
-      }
       text="Add claim"
       upperCase={false}
     />
-  </Block>
-</ScrollContainer>
+  </View>
+</ScrollViewMock>
 `;
 
 exports[`ClaimDetails component matches the snapshot on render with multi-line claim 1`] = `
-<ScrollContainer>
-  <Block
+<ScrollViewMock
+  style={
+    Object {
+      "backgroundColor": "rgb(245, 245, 245)",
+    }
+  }
+>
+  <Text
     style={
       Object {
-        "marginBottom": 33.35,
-        "marginTop": 33.35,
+        "color": "rgb(5, 5, 13)",
+        "fontFamily": "TT Commons",
+        "fontSize": 30,
+        "marginTop": 32,
+        "textAlign": "center",
       }
     }
   >
-    <Text
-      style={
-        Object {
-          "color": "rgb(5, 5, 13)",
-          "fontFamily": "TT Commons",
-          "fontSize": 30,
-          "textAlign": "center",
-        }
-      }
-    >
-      Name
-    </Text>
-  </Block>
-  <Block
+    Name
+  </Text>
+  <View
     style={
       Object {
-        "marginBottom": 33.35,
-        "marginTop": 33.35,
+        "alignItems": "center",
+        "marginTop": 24,
       }
     }
   >
@@ -116,38 +95,21 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
       handleFieldInput={[Function]}
       key="familyName"
     />
-  </Block>
-  <Block
+  </View>
+  <View
     style={
       Object {
-        "marginBottom": 66.7,
-        "marginTop": 66.7,
+        "alignItems": "center",
+        "marginVertical": 48,
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       disabled={false}
       onPress={[Function]}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "rgb(148, 47, 81)",
-            "borderRadius": 4,
-            "height": 48,
-            "minWidth": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "normal",
-            "paddingVertical": 16,
-          },
-        }
-      }
       text="Add claim"
       upperCase={false}
     />
-  </Block>
-</ScrollContainer>
+  </View>
+</ScrollViewMock>
 `;

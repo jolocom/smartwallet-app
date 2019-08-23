@@ -5,20 +5,19 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
-      "padding": 0,
     }
   }
 >
-  <CenteredText
-    msg="50 %"
+  <Text
     style={
       Array [
         Object {
           "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
           "fontSize": 20,
-          "paddingHorizontal": 50,
+          "paddingHorizontal": "5%",
           "position": "absolute",
+          "textAlign": "center",
           "top": "20%",
         },
         Object {
@@ -26,13 +25,21 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         },
       ]
     }
-  />
-  <Block>
+  >
+    50 %
+  </Text>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={false}
     />
-  </Block>
+  </View>
   <View
     style={
       Object {
@@ -49,29 +56,36 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
-      "padding": 0,
     }
   }
 >
-  <CenteredText
-    msg="For security purposes, we need some randomness. Please tap the screen and draw on it randomly"
+  <Text
     style={
       Object {
         "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
         "fontSize": 20,
-        "paddingHorizontal": 50,
+        "paddingHorizontal": "5%",
         "position": "absolute",
+        "textAlign": "center",
         "top": "20%",
       }
     }
-  />
-  <Block>
+  >
+    For security purposes, we need some randomness. Please tap the screen and draw on it randomly
+  </Text>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={false}
     />
-  </Block>
+  </View>
   <View
     style={
       Object {
@@ -88,20 +102,19 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
-      "padding": 0,
     }
   }
 >
-  <CenteredText
-    msg="100 %"
+  <Text
     style={
       Array [
         Object {
           "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
           "fontSize": 20,
-          "paddingHorizontal": 50,
+          "paddingHorizontal": "5%",
           "position": "absolute",
+          "textAlign": "center",
           "top": "20%",
         },
         Object {
@@ -109,13 +122,21 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
         },
       ]
     }
-  />
-  <Block>
+  >
+    100 %
+  </Text>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={true}
     />
-  </Block>
+  </View>
   <View
     style={
       Object {
@@ -124,26 +145,9 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       onPress={[Function]}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "rgb(148, 47, 81)",
-            "borderRadius": 4,
-            "height": 48,
-            "minWidth": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "normal",
-            "paddingVertical": 16,
-          },
-        }
-      }
       text="Continue"
       upperCase={false}
     />

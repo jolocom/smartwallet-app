@@ -17,9 +17,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   text: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: textXXL,
-    color: Colors.lightGrey,
+    ...Typography.mainText,
+    textAlign: 'center',
+    color: Colors.greyLight,
+    paddingHorizontal: '5%',
   },
 })
 

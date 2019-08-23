@@ -4,7 +4,7 @@ import { ExceptionComponent } from 'src/ui/generic/exception'
 import { routeList } from 'src/routeList'
 import { AppError } from 'src/lib/errors'
 import { createMockNavigationScreenProp } from 'tests/utils'
-import { Button } from 'react-native-material-ui'
+import { JolocomButton } from 'src/ui/structure'
 
 describe('Exception screen component', () => {
   it('Renders correctly', () => {
@@ -58,7 +58,7 @@ describe('Exception screen component', () => {
     }
 
     const rendered = shallow(<ExceptionComponent {...props} />)
-    rendered.find(Button).simulate('press')
+    rendered.find(JolocomButton).simulate('press')
     expect(props.navigateBack).toHaveBeenCalledWith(returnTo)
   })
 })
