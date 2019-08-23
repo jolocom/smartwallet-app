@@ -43,6 +43,7 @@ export interface ClaimsState {
       decoratedClaim: DecoratedClaims
     }>
   }
+  readonly hasExternalCredentials: boolean
 }
 
 export interface DidState {

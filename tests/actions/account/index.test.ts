@@ -35,6 +35,7 @@ describe('Account action creators', () => {
           },
         },
         decoratedCredentials: {},
+        hasExternalCredentials: false,
       },
       did: {
         did: '',

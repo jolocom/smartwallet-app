@@ -1,13 +1,12 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { Container, JolocomButton } from 'src/ui/structure/'
+import { Container, JolocomButton } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Colors, Typography } from 'src/styles'
+import { Colors, Typography, Spacing } from 'src/styles'
 
 interface Props {
   seedPhrase: string
-  checked: boolean
   handleButtonTap: () => void
 }
 
@@ -17,32 +16,30 @@ const styles = StyleSheet.create({
     padding: '5%',
   },
   noteSection: {
-    marginTop: 20,
+    marginTop: Spacing.LG,
     flex: 0.8,
     justifyContent: 'center',
   },
   note: {
-    ...Typography.subMainText,
+    ...Typography.noteText,
     ...Typography.centeredText,
-    lineHeight: Typography.subMainText.fontSize + 2,
-    color: Colors.sandLight,
   },
   phraseSection: {
     flex: 1,
   },
   seedPhrase: {
-    ...Typography.baseFontStyles,
+    ...Typography.largeText,
     ...Typography.centeredText,
-    fontSize: Typography.text3XL,
-    lineHeight: Typography.text3XL + 4,
-    color: Colors.white,
   },
   buttonSection: {
     marginTop: 'auto',
   },
 })
 
-export const SeedPhrase: React.SFC<Props> = props => (
+export const SeedPhrase: React.SFC<Props> = ({
+  seedPhrase,
+  handleButtonTap,
+}: Props) => (
   <Container style={styles.container}>
     <View style={styles.noteSection}>
       <Text style={styles.note}>
@@ -55,11 +52,11 @@ export const SeedPhrase: React.SFC<Props> = props => (
       </Text>
     </View>
     <View style={styles.phraseSection}>
-      <Text style={styles.seedPhrase}>{props.seedPhrase}</Text>
+      <Text style={styles.seedPhrase}>{seedPhrase}</Text>
     </View>
     <View style={styles.buttonSection}>
       <JolocomButton
-        onPress={props.handleButtonTap}
+        onPress={handleButtonTap}
         raised
         upperCase={false}
         text={I18n.t(strings.YES_I_WROTE_IT_DOWN)}

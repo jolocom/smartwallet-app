@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`repeatedPhrase container mounts correctly and matches snapshot 1`] = `
+<RepeatSeedPhraseComponent
+  back={[Function]}
+  checkMnemonic={[Function]}
+  mnemonicSorting={Object {}}
+  note="If you have noted down your phrase, put the six given words on their right places."
+  randomWords={
+    Array [
+      "mock",
+      "seed",
+      "Phrase",
+      "of",
+      "at",
+      "least",
+    ]
+  }
+  selectPosition={[Function]}
+/>
+`;

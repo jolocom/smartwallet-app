@@ -1,15 +1,20 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
-import { Container } from 'src/ui/structure'
+import { StyleSheet } from 'react-native'
+import { Block, CenteredText, Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Typography, Colors } from 'src/styles'
+import { BackupWarning } from '../../recovery/components/backupWarning'
+import { textXXL } from '../../../styles/typography'
+import { JolocomTheme } from '../../../styles/jolocom-theme'
+import { Colors } from '../../../styles'
 
 interface Props {}
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.backgroundLightMain,
+    padding: 0,
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
   },
   text: {
     ...Typography.mainText,
@@ -20,12 +25,16 @@ const styles = StyleSheet.create({
 })
 
 export class RecordsComponent extends React.Component<Props> {
-  render() {
+  public render(): JSX.Element {
     return (
       <Container style={styles.container}>
-        <Text style={styles.text}>
-          {I18n.t(strings.YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET) + '.'}
-        </Text>
+        <BackupWarning />
+        <Block>
+          <CenteredText
+            msg={I18n.t(strings.YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET) + '.'}
+            style={styles.text}
+          />
+        </Block>
       </Container>
     )
   }

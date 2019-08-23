@@ -18,6 +18,8 @@ import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
 import { Identity } from 'jolocom-lib/js/identity/identity'
+import { Not } from 'typeorm'
+import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -181,6 +183,21 @@ export const toggleLoading = (value: boolean) => ({
   value,
 })
 
+export const hasExternalCredentials: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  const { storageLib, identityWallet } = backendMiddleware
+  const externalCredentials = await storageLib.get.verifiableCredential({
+    issuer: Not(identityWallet.did),
+  })
+
+  return dispatch({
+    type: HAS_EXTERNAL_CREDENTIALS,
+    value: externalCredentials.length !== 0,
+  })
+}
 export const setClaimsForDid: ThunkAction = async (
   dispatch,
   getState,

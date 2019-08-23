@@ -6,7 +6,8 @@ import { locales } from 'src/locales/i18n'
 import { SettingsScreen } from '../components/settings'
 import { genericActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
-import { withLoading } from '../../../actions/modifiers'
+import { withErrorScreen, withLoading } from '../../../actions/modifiers'
+import { showSeedPhrase } from '../../../actions/recovery'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -20,6 +21,7 @@ export class SettingsContainer extends React.Component<Props> {
         setLocale={this.props.setLocale}
         locales={locales}
         version={VersionNumber.appVersion}
+        setupBackup={this.props.setupBackup}
       />
     )
   }
@@ -32,6 +34,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
+  setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
 })
 
 export const Settings = connect(
