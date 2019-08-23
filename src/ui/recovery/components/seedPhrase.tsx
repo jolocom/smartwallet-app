@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native'
 import { Container, JolocomButton } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Colors, Typography, Buttons, Spacing } from 'src/styles'
+import { Colors, Typography, Spacing } from 'src/styles'
 
 interface Props {
   seedPhrase: string

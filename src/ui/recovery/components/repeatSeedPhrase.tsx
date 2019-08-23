@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Container } from '../../structure'
-import { JolocomTheme } from '../../../styles/jolocom-theme'
-import { Button } from 'react-native-material-ui'
+import { Container, JolocomButton } from '../../structure'
 import Placeholder from './placeholder'
 import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
@@ -50,19 +48,7 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     marginTop: 'auto',
-  },
-  buttonContainer: {
-    borderRadius: 4,
-    height: 48,
-    paddingHorizontal: 25,
-    backgroundColor: JolocomTheme.primaryColorPurple,
-  },
-  buttonText: {
-    paddingVertical: 15,
-    fontWeight: '100',
-    fontSize: JolocomTheme.headerFontSize,
-    color: JolocomTheme.primaryColorWhite,
-    fontFamily: JolocomTheme.contentFontFamily,
+    marginBottom: 30,
   },
 })
 
@@ -130,8 +116,7 @@ const RepeatSeedPhraseComponent: React.FC<RepeatSeedPhraseProps> = ({
         </View>
       </View>
       <View style={styles.buttonSection}>
-        <Button
-          style={{ container: styles.buttonContainer, text: styles.buttonText }}
+        <JolocomButton
           onPress={randomWords.length ? back : checkMnemonic}
           raised
           upperCase={false}
