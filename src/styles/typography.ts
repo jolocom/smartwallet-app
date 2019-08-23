@@ -81,3 +81,17 @@ export const sectionHeader = {
   fontSize: textXS,
   color: Colors.blackMain040,
 }
+
+export const noteText = {
+  ...baseFontStyles,
+  fontSize: textSM,
+  color: Colors.sandLight,
+  lineHeight: 23,
+}
+
+export const largeText = {
+  ...baseFontStyles,
+  fontSize: text3XL,
+  color: Colors.white,
+  lineHeight: text3XL + 4,
+}

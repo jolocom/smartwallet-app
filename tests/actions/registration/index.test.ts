@@ -28,53 +28,6 @@ describe('Registration action creators', () => {
     })
   })
 
-  describe('startRegistration', () => {
-    const mockMiddleware = {
-      keyChainLib: {
-        savePassword: jest.fn(),
-      },
-    }
-    const mockStore = createMockStore({}, mockMiddleware)
-
-    beforeEach(mockStore.reset)
-
-    it('should save a password and initiate the registration process', async () => {
-      const randomPassword = 'hunter0='
-
-      jest
-        .spyOn(util, 'generateSecureRandomBytes')
-        .mockImplementation(() =>
-          Promise.resolve(Buffer.from(randomPassword, 'base64')),
-        )
-
-      await mockStore.dispatch(registrationActions.startRegistration)
-
-      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledTimes(1)
-      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(
-        randomPassword,
-      )
-      expect(mockStore.getActions()).toMatchSnapshot()
-    })
-
-    it('should display exception screen in case of error', async () => {
-      mockMiddleware.keyChainLib.savePassword.mockRejectedValueOnce({
-        message: 'password could not be saved',
-        stack: 'mock start registration error stack',
-      })
-
-      await mockStore.dispatch(
-        withErrorScreen(
-          registrationActions.startRegistration,
-          err =>
-            new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-        ),
-      )
-
-      expect(mockStore.getActions()[0].routeName).toContain('Exception')
-      expect(mockStore.getActions()[0].params.returnTo).toBe('Landing')
-    })
-  })
-
   describe('createIdentity', () => {
     it('should attempt to create an identity', async () => {
       MockDate.set(new Date(946681200000))
@@ -82,11 +35,17 @@ describe('Registration action creators', () => {
       const fuelSpy = jest
         .spyOn(JolocomLib.util, 'fuelKeyWithEther')
         .mockResolvedValueOnce(null)
-
+      const randomPassword = 'hunter0='
+      jest
+        .spyOn(util, 'generateSecureRandomBytes')
+        .mockImplementation(() =>
+          Promise.resolve(Buffer.from(randomPassword, 'base64')),
+        )
       const mockMiddleware = {
         identityWallet,
         keyChainLib: {
           getPassword: jest.fn().mockResolvedValue(getPasswordResult),
+          savePassword: jest.fn(),
         },
         encryptionLib: {
           encryptWithPass: jest.fn().mockReturnValue(cipher),
@@ -124,7 +83,10 @@ describe('Registration action creators', () => {
 
       expect(mockStore.getActions()).toMatchSnapshot()
 
-      expect(mockMiddleware.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
+      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledTimes(1)
+      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(
+        randomPassword,
+      )
       expect(
         mockMiddleware.encryptionLib.encryptWithPass.mock.calls,
       ).toMatchSnapshot()

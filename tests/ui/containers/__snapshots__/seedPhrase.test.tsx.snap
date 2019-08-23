@@ -8,8 +8,7 @@ exports[`seedPhrase container mounts correctly and matches snapshot 1`] = `
     showHideTransition="fade"
   />
   <SeedPhrase
-    checked={false}
-    handleButtonTap={[MockFunction]}
+    handleButtonTap={[Function]}
     seedPhrase="mock seedPhrase"
   />
 </Fragment>

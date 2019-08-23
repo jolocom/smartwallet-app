@@ -6,7 +6,6 @@ export enum routeList {
   Entropy = 'Entropy',
   RegistrationProgress = 'RegistrationProgress',
   Loading = 'Loading',
-  SeedPhrase = 'SeedPhrase',
 
   Home = 'Home',
   Claims = 'Claims',
@@ -21,6 +20,9 @@ export enum routeList {
   AuthenticationConsent = 'AuthenticationConsent',
   ClaimDetails = 'ClaimDetails',
   DocumentDetails = 'DocumentDetails',
+
+  RepeatSeedPhrase = 'RepeatSeedPhrase',
+  SeedPhrase = 'SeedPhrase',
 
   Exception = 'Exception',
 }
