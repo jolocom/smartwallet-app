@@ -84,6 +84,9 @@ export class LandingComponent extends React.Component<Props, State> {
           lockScrollWhileSnapping
           lockScrollTimeoutDuration={1000}
           loop
+          autoplay={true}
+          autoplayDelay={5000}
+          autoplayInterval={5000}
           sliderWidth={viewWidth}
           itemWidth={viewWidth}
           layout={'default'}
