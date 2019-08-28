@@ -4,13 +4,9 @@ import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { landingSlides, Slide } from './landingSlides'
-import Carousel, { Pagination } from 'react-native-snap-carousel'
+import Carousel from 'react-native-snap-carousel'
 import { Typography, Colors, Spacing, Buttons } from 'src/styles'
 import { Button } from 'react-native-material-ui'
-
-interface State {
-  activeSlide: number
-}
 
 interface Props {
   handleButtonTap: () => void
@@ -79,11 +75,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export class LandingComponent extends React.Component<Props, State> {
-  public state = {
-    activeSlide: 0,
-  }
-
+export class LandingComponent extends React.Component<Props> {
   private renderItem = ({ item }: { item: Slide }) => {
     const { bgImage, title, infoText } = item
     return (
@@ -98,7 +90,6 @@ export class LandingComponent extends React.Component<Props, State> {
   }
 
   public render() {
-    const { activeSlide } = this.state
     return (
       <Container style={styles.mainContainer}>
         <Carousel
@@ -107,22 +98,14 @@ export class LandingComponent extends React.Component<Props, State> {
           lockScrollWhileSnapping
           lockScrollTimeoutDuration={1000}
           loop
+          autoplay
+          autoplayDelay={5000}
+          autoplayInterval={5000}
           sliderWidth={viewWidth}
           itemWidth={viewWidth}
           layout={'default'}
-          onSnapToItem={(index: number) =>
-            this.setState({ activeSlide: index })
-          }
         />
         <View style={styles.bottomSection}>
-          <Pagination
-            containerStyle={{}}
-            dotsLength={landingSlides.length}
-            activeDotIndex={activeSlide}
-            dotStyle={styles.activeDotStyle}
-            inactiveDotStyle={styles.inactiveDotStyle}
-            inactiveDotScale={0.5}
-          />
           <Button
             onPress={this.props.handleButtonTap}
             style={{
