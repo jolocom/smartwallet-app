@@ -65,3 +65,16 @@ Array [
   },
 ]
 `;
+
+exports[`Account action creators should display exception screen in case of error 1`] = `
+Array [
+  Object {
+    "params": Object {
+      "error": [Error: Unknown Error],
+      "returnTo": "AppInit",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
