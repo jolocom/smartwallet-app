@@ -4,14 +4,14 @@ import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 
 export interface Slide {
-  svgImage: ReactNode
+  bgImage: ReactNode
   title: string
   infoText: string
 }
 
 export const landingSlides: Slide[] = [
   {
-    svgImage: <Landing00 />,
+    bgImage: <Landing00 />,
     title: I18n.t(strings.YOUR_JOLOCOM_WALLET),
     infoText:
       I18n.t(
@@ -19,7 +19,7 @@ export const landingSlides: Slide[] = [
       ) + '.',
   },
   {
-    svgImage: <Landing01 />,
+    bgImage: <Landing01 />,
     title: I18n.t(strings.ITS_EASY),
     infoText:
       I18n.t(strings.FORGET_ABOUT_LONG_FORMS_AND_REGISTRATIONS) +
@@ -30,7 +30,7 @@ export const landingSlides: Slide[] = [
       '.',
   },
   {
-    svgImage: <Landing03 />,
+    bgImage: <Landing03 />,
     title: I18n.t(strings.ENHANCED_PRIVACY),
     infoText:
       I18n.t(strings.SHARE_ONLY_THE_INFORMATION_A_SERVICE_REALLY_NEEDS) +
@@ -39,7 +39,7 @@ export const landingSlides: Slide[] = [
       '.',
   },
   {
-    svgImage: <Landing02 />,
+    bgImage: <Landing02 />,
     title: I18n.t(strings.GREATER_CONTROL),
     infoText:
       I18n.t(

@@ -1,11 +1,12 @@
 import React from 'react'
 import { StyleSheet, Dimensions, View, Text } from 'react-native'
-import { Container, JolocomButton } from 'src/ui/structure'
+import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { landingSlides, Slide } from './landingSlides'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { Typography, Colors, Spacing } from 'src/styles'
+import { Typography, Colors, Spacing, Buttons } from 'src/styles'
+import { Button } from 'react-native-material-ui'
 
 interface State {
   activeSlide: number
@@ -15,18 +16,20 @@ interface Props {
   handleButtonTap: () => void
 }
 
-const viewWidth: number = Dimensions.get('window').width
+const viewWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.blackMain,
-    paddingBottom: '5%',
   },
   carouselSlide: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
   },
   carouselTextContainer: {
-    marginTop: 'auto',
+    marginTop: viewWidth > 360 ? Spacing['4XL'] : Spacing.XXL,
+    position: 'absolute',
     paddingHorizontal: '5%',
   },
   header: {
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.sandLight080,
     lineHeight: Typography.subMainText.fontSize + 4,
-    marginTop: Spacing.MD,
+    marginTop: Spacing.SM,
   },
   activeDotStyle: {
     width: 8,
@@ -51,8 +54,28 @@ const styles = StyleSheet.create({
     height: 8,
     backgroundColor: Colors.dotColorInactive,
   },
-  buttonArea: {
-    flex: 0.1,
+  bottomSection: {
+    position: 'absolute',
+    width: '85%',
+    bottom: '5%',
+    alignItems: 'center',
+  },
+  mainButtonContainer: {
+    ...Buttons.buttonStandardContainer,
+    alignSelf: 'stretch',
+  },
+  mainButtonText: {
+    ...Buttons.buttonStandardText,
+  },
+  recoverButtonContainer: {
+    ...Buttons.buttonStandardContainer,
+    backgroundColor: 'transparent',
+    marginTop: Spacing.XS,
+    alignSelf: 'stretch',
+  },
+  recoverButtonText: {
+    ...Buttons.buttonStandardText,
+    fontSize: Typography.textSM,
   },
 })
 
@@ -62,10 +85,10 @@ export class LandingComponent extends React.Component<Props, State> {
   }
 
   private renderItem = ({ item }: { item: Slide }) => {
-    const { svgImage, title, infoText } = item
+    const { bgImage, title, infoText } = item
     return (
       <View style={styles.carouselSlide}>
-        {svgImage}
+        {bgImage}
         <View style={styles.carouselTextContainer}>
           <Text style={styles.header}>{title}</Text>
           <Text style={styles.message}>{infoText}</Text>
@@ -91,19 +114,31 @@ export class LandingComponent extends React.Component<Props, State> {
             this.setState({ activeSlide: index })
           }
         />
-        <Pagination
-          dotsLength={landingSlides.length}
-          activeDotIndex={activeSlide}
-          dotStyle={styles.activeDotStyle}
-          inactiveDotStyle={styles.inactiveDotStyle}
-          inactiveDotScale={0.5}
-        />
-        <View style={styles.buttonArea}>
-          <JolocomButton
-            raised
+        <View style={styles.bottomSection}>
+          <Pagination
+            containerStyle={{}}
+            dotsLength={landingSlides.length}
+            activeDotIndex={activeSlide}
+            dotStyle={styles.activeDotStyle}
+            inactiveDotStyle={styles.inactiveDotStyle}
+            inactiveDotScale={0.5}
+          />
+          <Button
             onPress={this.props.handleButtonTap}
-            upperCase={false}
+            style={{
+              container: styles.mainButtonContainer,
+              text: styles.mainButtonText,
+            }}
             text={I18n.t(strings.GET_STARTED)}
+            upperCase={false}
+          />
+          <Button
+            style={{
+              container: styles.recoverButtonContainer,
+              text: styles.recoverButtonText,
+            }}
+            text={'Recover identity'}
+            upperCase={false}
           />
         </View>
       </Container>
