@@ -101,7 +101,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   submit: (encodedEntropy: string) =>
     dispatch(
       withErrorScreen(
-        registrationActions.submitEntropy(encodedEntropy),
+        registrationActions.createIdentity(encodedEntropy),
         err =>
           new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
       ),

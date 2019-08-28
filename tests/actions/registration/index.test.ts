@@ -7,42 +7,39 @@ import { createMockStore, reveal } from 'tests/utils'
 import { RootState } from 'src/reducers'
 
 describe('Registration action creators', () => {
-  describe('submitEntropy', () => {
+  describe('createIdentity', () => {
     const mockMiddleware = {
-      keyChainLib: {
-        savePassword: jest.fn(),
+      createIdentity: jest
+        .fn()
+        .mockResolvedValue(data.identityWallet.identity),
+    }
+    const mockState: Partial<RootState> = {
+      registration: {
+        loading: {
+          loadingMsg: '',
+          isRegistering: false,
+        },
       },
     }
-    const mockStore = createMockStore({}, mockMiddleware)
+
+    const mockStore = createMockStore(mockState, mockMiddleware)
+    const middlewareStub = reveal(mockStore.backendMiddleware)
 
     beforeEach(mockStore.reset)
 
-    it('should correctly navigate to route and provide the entropy', () => {
-      const action = registrationActions.submitEntropy('mockEntropy')
-      mockStore.dispatch(action)
-      expect(mockStore.getActions()).toMatchSnapshot()
-    })
-  })
-
-  describe('createIdentity', () => {
-    it('should attempt to create an identity', async () => {
-      const mockMiddleware = {
-        createIdentity: jest
-          .fn()
-          .mockResolvedValue(data.identityWallet.identity),
-      }
-      const mockState: Partial<RootState> = {
+    it('should not attempt to create an identity if registration is in progress', async () => {
+      const altMockStore = createMockStore({
         registration: {
           loading: {
-            loadingMsg: '',
-            isRegistering: false,
-          },
-        },
-      }
+            isRegistering: true
+          }
+        }
+      })
+      await altMockStore.dispatch(registrationActions.createIdentity(data.entropy))
+      expect(altMockStore.getActions()).toMatchSnapshot()
+    })
 
-      const mockStore = createMockStore(mockState, mockMiddleware)
-      const middlewareStub = reveal(mockStore.backendMiddleware)
-
+    it('should attempt to create an identity', async () => {
       await mockStore.dispatch(registrationActions.createIdentity(data.entropy))
 
       expect(middlewareStub.createKeyProvider).toHaveBeenCalledWith(data.entropy)
@@ -52,14 +49,8 @@ describe('Registration action creators', () => {
     })
 
     it('should display exception screen in case of error', async () => {
-      const mockEntropy = 'abcd'
-      const mockMiddleware = {
-        keyChainLib: {
-          getPassword: jest.fn().mockRejectedValue('MockError'),
-        },
-      }
-      const mockStore = createMockStore({}, mockMiddleware)
-      const asyncAction = registrationActions.createIdentity(mockEntropy)
+      mockMiddleware.createIdentity.mockRejectedValueOnce('MockError')
+      const asyncAction = registrationActions.createIdentity(data.entropy)
 
       await mockStore.dispatch(
         withErrorScreen(
@@ -69,9 +60,7 @@ describe('Registration action creators', () => {
         ),
       )
 
-      const firstAction = mockStore.getActions()[0]
-      expect(firstAction.routeName).toContain('Exception')
-      expect(firstAction.params.returnTo).toBe('Landing')
+      expect(mockStore.getActions()).toMatchSnapshot()
     })
   })
 })

@@ -15,33 +15,19 @@ export const setIsRegistering = (value: boolean) => ({
   value,
 })
 
-export const submitEntropy = (
-  encodedEntropy: string,
-): ThunkAction => dispatch => {
+export const createIdentity = (encodedEntropy: string): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
   dispatch(
     navigationActions.navigate({
       routeName: routeList.RegistrationProgress,
     }),
   )
 
-  return dispatch(createIdentity(encodedEntropy))
-}
-
-export const createIdentity = (encodedEntropy: string): ThunkAction => async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  // This is a just-in-case check.... maybe multiple button taps or a redraw or
-  // something
   const isRegistering = getState().registration.loading.isRegistering
-  if (isRegistering) {
-    return dispatch(
-      navigationActions.navigate({
-        routeName: routeList.RegistrationProgress,
-      }),
-    )
-  }
+  if (isRegistering) return
 
   dispatch(setIsRegistering(true))
 
