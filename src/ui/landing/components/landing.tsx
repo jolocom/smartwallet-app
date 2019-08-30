@@ -129,6 +129,8 @@ export class LandingComponent extends React.Component<Props> {
           itemWidth={viewWidth}
           layout={'default'}
           scrollInterpolator={this.scrollInterpolator}
+          /** @TODO Fix typing? */
+          // @ts-ignore
           slideInterpolatedStyle={this.animatedStyles}
         />
         <View style={styles.bottomSection}>
