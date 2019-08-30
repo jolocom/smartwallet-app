@@ -1,10 +1,13 @@
 import React from 'react'
-import { StyleSheet, Dimensions, View, Text } from 'react-native'
+import { StyleSheet, Dimensions, View, Text, Animated } from 'react-native'
 import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { landingSlides, Slide } from './landingSlides'
-import Carousel from 'react-native-snap-carousel'
+import Carousel, {
+  CarouselProps,
+  getInputRangeFromIndexes,
+} from 'react-native-snap-carousel'
 import { Typography, Colors, Spacing, Buttons } from 'src/styles'
 import { Button } from 'react-native-material-ui'
 
@@ -76,6 +79,27 @@ const styles = StyleSheet.create({
 })
 
 export class LandingComponent extends React.Component<Props> {
+  // https://github.com/archriss/react-native-snap-carousel/blob/master/doc/CUSTOM_INTERPOLATIONS.md
+  // 0 is the current slide, and we want there to be an animated fade in/out
+  private scrollInterpolator(index: number, carouselProps: CarouselProps<any>) {
+    const range = [1, 0, -1]
+    const inputRange = getInputRangeFromIndexes(range, index, carouselProps)
+    return { inputRange, outputRange: range }
+  }
+
+  private animatedStyles(
+    index: number,
+    animatedValue: Animated.AnimatedValue,
+    carouselProps: CarouselProps<any>,
+  ) {
+    return {
+      opacity: animatedValue.interpolate({
+        inputRange: [-1, 0, 1],
+        outputRange: [-1.5, 1, -1.5],
+      }),
+    }
+  }
+
   private renderItem = ({ item }: { item: Slide }) => {
     const { bgImage, title, infoText } = item
     return (
@@ -104,6 +128,8 @@ export class LandingComponent extends React.Component<Props> {
           sliderWidth={viewWidth}
           itemWidth={viewWidth}
           layout={'default'}
+          scrollInterpolator={this.scrollInterpolator}
+          slideInterpolatedStyle={this.animatedStyles}
         />
         <View style={styles.bottomSection}>
           <Button
