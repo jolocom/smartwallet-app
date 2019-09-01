@@ -118,6 +118,11 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
           onTouchEnd={props.setupBackup}
         />
         <SettingsItem
+          title={'Social Recovery'}
+          iconName={'flash'}
+          description={'Enable your friends to help you in case of recovery'}
+        />
+        <SettingsItem
           title={I18n.t(strings.DELETE_IDENTITY)}
           description={'(coming soon)'}
           iconName={'delete'}
