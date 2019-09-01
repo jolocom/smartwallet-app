@@ -1,15 +1,14 @@
 import * as React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Container } from '../../structure'
-import { JolocomTheme } from '../../../styles/jolocom-theme'
-import { Button } from 'react-native-material-ui'
+import { Container, JolocomButton } from '../../structure'
 import Placeholder from './placeholder'
 import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
+import { Colors, Spacing, Typography } from '../../../styles'
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: Colors.backgroundDarkMain,
   },
   mainSection: {
     justifyContent: 'center',
@@ -17,19 +16,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noteSection: {
-    marginTop: 20,
+    marginHorizontal: Spacing.LG,
   },
   note: {
-    textAlign: 'center',
-    lineHeight: 26,
-    color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.labelFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.centeredText,
+    ...Typography.noteText,
   },
   mnemonicContainer: {
     flexDirection: 'row',
     position: 'relative',
-    marginTop: 15,
+    marginTop: Spacing.MD,
     height: 40,
   },
   mnemonicPhrase: {
@@ -37,13 +33,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   mnemonic: {
-    marginRight: 7,
-    fontSize: 34,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorSandInactive,
+    ...Typography.largeText,
+    color: Colors.white050,
+    marginRight: Spacing.XS,
   },
   currentWord: {
-    color: JolocomTheme.primaryColorWhite,
+    color: Colors.white,
     position: 'relative',
     alignSelf: 'center',
   },
@@ -53,19 +48,7 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     marginTop: 'auto',
-  },
-  buttonContainer: {
-    borderRadius: 4,
-    height: 48,
-    paddingHorizontal: 25,
-    backgroundColor: JolocomTheme.primaryColorPurple,
-  },
-  buttonText: {
-    paddingVertical: 15,
-    fontWeight: '100',
-    fontSize: JolocomTheme.headerFontSize,
-    color: JolocomTheme.primaryColorWhite,
-    fontFamily: JolocomTheme.contentFontFamily,
+    marginBottom: 30,
   },
 })
 
@@ -133,8 +116,7 @@ const RepeatSeedPhraseComponent: React.FC<RepeatSeedPhraseProps> = ({
         </View>
       </View>
       <View style={styles.buttonSection}>
-        <Button
-          style={{ container: styles.buttonContainer, text: styles.buttonText }}
+        <JolocomButton
           onPress={randomWords.length ? back : checkMnemonic}
           raised
           upperCase={false}

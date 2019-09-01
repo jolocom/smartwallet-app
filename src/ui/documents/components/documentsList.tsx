@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native'
 import { DocumentCard } from './documentCard'
 //import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { DecoratedClaims } from 'src/reducers/account'
-import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
+import { Spacing } from 'src/styles'
 
 interface DocumentsListProps {
   onDocumentPress?: (document: DecoratedClaims) => void
@@ -12,11 +12,11 @@ interface DocumentsListProps {
 
 const styles = StyleSheet.create({
   documentContainer: {
-    paddingTop: 15,
-    paddingBottom: SCROLL_PADDING_BOTTOM,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: Spacing.MD,
+    paddingBottom: Spacing.XL,
   },
 })
 

@@ -2,7 +2,6 @@ import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { Container } from 'src/ui/structure'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
 import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
 import I18n from 'src/locales/i18n'
@@ -14,6 +13,7 @@ import { showErrorScreen } from 'src/actions/generic'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { NavigationScreenProps } from 'react-navigation'
 import { AppError, ErrorCode } from 'src/lib/errors'
+import { Colors } from 'src/styles'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -28,8 +28,11 @@ interface Props
 interface State {}
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.backgroundLightMain,
+  },
   buttonText: {
-    color: JolocomTheme.primaryColorBlack,
+    color: Colors.blackMain,
   },
 })
 
@@ -66,7 +69,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
     const cameraProps = { key: Date.now() }
     return (
       <React.Fragment>
-        <Container>
+        <Container style={styles.container}>
           <QRScanner
             cameraProps={cameraProps}
             ref={(ref: React.Component) => (this.scanner = ref)}

@@ -2,12 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
 import { ThunkDispatch } from 'src/store'
-import { navigationActions } from '../../../actions'
+import { accountActions, navigationActions } from '../../../actions'
 import { routeList } from '../../../routeList'
 import { RootState } from '../../../reducers'
 import { default as IonIcon } from 'react-native-vector-icons/Ionicons'
 import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
+import { Colors, Spacing, Typography } from '../../../styles'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -20,18 +21,19 @@ interface State {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f1a107',
+    backgroundColor: Colors.golden,
     flexDirection: 'row',
-    padding: 10,
+    padding: Spacing.SM,
     alignItems: 'center',
     justifyContent: 'center',
   },
   icon: {
-    marginRight: 10,
+    marginRight: Spacing.SM,
   },
   text: {
-    fontSize: 17,
-    color: 'white',
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textSM,
+    color: Colors.white,
   },
   underline: {
     textDecorationLine: 'underline',
@@ -42,10 +44,15 @@ const styles = StyleSheet.create({
 })
 
 export class BackupWarningComponent extends React.Component<Props, State> {
+  public componentDidMount(): void {
+    this.props.getExternalCredentials()
+  }
+
   public render(): JSX.Element | null {
-    if (!this.props.seedPhraseSaved) {
+    const { seedPhraseSaved, hasExternalCredentials, openSettings } = this.props
+    if (!seedPhraseSaved && hasExternalCredentials) {
       return (
-        <View style={styles.container} onTouchEnd={this.props.openSettings}>
+        <View style={styles.container} onTouchEnd={openSettings}>
           <IonIcon
             style={styles.icon}
             size={25}
@@ -73,11 +80,15 @@ export class BackupWarningComponent extends React.Component<Props, State> {
 
 const mapStateToProps = ({
   settings: { seedPhraseSaved: seedPhraseSaved },
-}: RootState) => ({ seedPhraseSaved })
+  account: {
+    claims: { hasExternalCredentials: hasExternalCredentials },
+  },
+}: RootState) => ({ seedPhraseSaved, hasExternalCredentials })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openSettings: () =>
     dispatch(navigationActions.navigate({ routeName: routeList.Settings })),
+  getExternalCredentials: () => dispatch(accountActions.hasExternalCredentials),
 })
 
 export const BackupWarning = connect(

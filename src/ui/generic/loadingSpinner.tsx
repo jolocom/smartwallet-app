@@ -1,13 +1,12 @@
 import React from 'react'
 import { Container } from 'src/ui/structure/'
 import { StyleSheet } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Colors } from 'src/styles'
 const loaders = require('react-native-indicator')
 
 const styles = StyleSheet.create({
   loadingContainer: {
-    backgroundColor: 'white',
-    padding: 0,
+    backgroundColor: Colors.white,
     position: 'absolute',
     // to cover things such as the qr code scanner
     zIndex: 1,
@@ -33,7 +32,7 @@ export class LoadingSpinner extends React.PureComponent {
           key={Date.now()}
           size={120}
           strokeWidth={4}
-          color={JolocomTheme.primaryColorPurple}
+          color={Colors.purpleMain}
         />
       </Container>
     )

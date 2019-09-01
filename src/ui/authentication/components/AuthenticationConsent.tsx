@@ -3,8 +3,8 @@ import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import strings from '../../../locales/strings'
+import { Colors, Typography, Spacing } from 'src/styles'
 
 interface Props {
   activeAuthenticationRequest: StateAuthenticationRequestSummary
@@ -17,36 +17,35 @@ interface State {}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.backgroundLightMain,
   },
   requesterContainer: {
     flexDirection: 'row',
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    width: '100%',
-    paddingVertical: 20,
-    paddingHorizontal: 15,
-    marginTop: 25,
+    backgroundColor: Colors.white,
+    padding: Spacing.MD,
+    marginTop: Spacing.LG,
   },
   requesterIcon: {
-    backgroundColor: JolocomTheme.primaryColorGrey,
-    width: 42,
-    height: 42,
+    backgroundColor: Colors.lightGrey,
+    width: 40,
+    height: 40,
   },
   requesterTextContainer: {
-    marginLeft: 16,
     flex: -1,
+    marginLeft: Spacing.MD,
   },
   authRequestContainer: {
     flex: 1,
     paddingHorizontal: '10%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 35,
+    marginTop: Spacing.XL,
   },
   authRequestText: {
-    ...JolocomTheme.textStyles.light.textDisplayField,
-    textAlign: 'center',
-    fontWeight: '300',
-    marginTop: 10,
+    ...Typography.baseFontStyles,
+    ...Typography.centeredText,
+    fontSize: Typography.textLG,
+    marginTop: Spacing.SM,
   },
 })
 
@@ -68,16 +67,10 @@ export class AuthenticationConsentComponent extends React.Component<
       <View style={styles.requesterContainer}>
         <View style={styles.requesterIcon} />
         <View style={styles.requesterTextContainer}>
-          <Text
-            style={JolocomTheme.textStyles.light.textDisplayField}
-            numberOfLines={1}
-          >
+          <Text style={Typography.cardMainText} numberOfLines={1}>
             {requester}
           </Text>
-          <Text
-            style={JolocomTheme.textStyles.light.labelDisplayField}
-            numberOfLines={1}
-          >
+          <Text style={Typography.cardSecondaryText} numberOfLines={1}>
             {callbackURL}
           </Text>
         </View>
@@ -91,7 +84,9 @@ export class AuthenticationConsentComponent extends React.Component<
         <Text style={styles.authRequestText}>
           {I18n.t(strings.WOULD_YOU_LIKE_TO)}
         </Text>
-        <Text style={[styles.authRequestText, { fontSize: 42 }]}>
+        <Text
+          style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
+        >
           {description}
         </Text>
         <Text style={styles.authRequestText}>

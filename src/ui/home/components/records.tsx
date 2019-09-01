@@ -1,10 +1,12 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Block, CenteredText, Container } from 'src/ui/structure'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { BackupWarning } from '../../recovery/components/backupWarning'
+import { textXXL } from '../../../styles/typography'
+import { JolocomTheme } from '../../../styles/jolocom-theme'
+import { Colors } from '../../../styles'
 
 interface Props {}
 
@@ -15,9 +17,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   text: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: 30, // FIXME
-    color: '#959595', // FIXME
+    ...Typography.mainText,
+    textAlign: 'center',
+    color: Colors.greyLight,
+    paddingHorizontal: '5%',
   },
 })
 

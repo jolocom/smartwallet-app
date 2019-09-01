@@ -2,7 +2,13 @@
 
 exports[`QRCodeScanner component matches the snapshot with back handler 1`] = `
 <Fragment>
-  <Container>
+  <Container
+    style={
+      Object {
+        "backgroundColor": "rgb(245, 245, 245)",
+      }
+    }
+  >
     <QRCodeScanner
       bottomContent={
         <ThemedComponent
@@ -10,7 +16,7 @@ exports[`QRCodeScanner component matches the snapshot with back handler 1`] = `
           style={
             Object {
               "text": Object {
-                "color": "black",
+                "color": "rgb(5, 5, 13)",
               },
             }
           }

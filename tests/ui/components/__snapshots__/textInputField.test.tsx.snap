@@ -41,8 +41,8 @@ exports[`TextInputField component matches the snapshot on render 1`] = `
         "fontFamily": "TT Commons",
       }
     }
-    textColor="black"
-    tintColor="#942f51"
+    textColor="rgb(5, 5, 13)"
+    tintColor="rgb(148, 47, 81)"
     titleFontSize={12}
     underlineColorAndroid="transparent"
     value="test@test.com"

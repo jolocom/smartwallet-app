@@ -136,6 +136,12 @@ const storeIdentity = (
     controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
   }
 
+  dispatch(setDid(identityWallet.identity.did))
+  dispatch(setLoadingMsg(loading.loadingStages[3]))
+
+  await storageLib.store.didDoc(identityWallet.didDocument)
+  backendMiddleware.identityWallet = identityWallet
+
   await keyChainLib.savePassword(password)
   await storageLib.store.encryptedSeed(entropyData)
   await storageLib.store.persona(personaData)

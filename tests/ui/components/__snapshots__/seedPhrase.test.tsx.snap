@@ -4,7 +4,8 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
 <Container
   style={
     Object {
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
+      "padding": "5%",
     }
   }
 >
@@ -13,17 +14,17 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       Object {
         "flex": 0.8,
         "justifyContent": "center",
-        "marginTop": 20,
+        "marginTop": 24,
       }
     }
   >
     <Text
       style={
         Object {
-          "color": "#ffefdf",
+          "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
-          "fontSize": 20,
-          "lineHeight": 26,
+          "fontSize": 18,
+          "lineHeight": 23,
           "textAlign": "center",
         }
       }
@@ -59,26 +60,9 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       }
     }
   >
-    <ThemedComponent
+    <JolocomButton
       onPress={[MockFunction]}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-            "borderRadius": 4,
-            "height": 48,
-            "paddingHorizontal": 25,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "100",
-            "paddingVertical": 15,
-          },
-        }
-      }
       text="Yes, I wrote it down"
       upperCase={false}
     />
