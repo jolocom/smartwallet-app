@@ -145,6 +145,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
             textAlign={'center'}
             ref={openKeyboard}
             autoCapitalize={'none'}
+            autoCorrect={false}
             style={[
               styles.textInput,
               wordState === WordState.wrong ? styles.error : styles.correct,
