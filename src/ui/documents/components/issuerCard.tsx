@@ -3,6 +3,7 @@ import { StyleSheet, Image, View, Text } from 'react-native'
 import { IdentitySummary } from '../../../actions/sso/types'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { CardWrapper } from 'src/ui/structure'
+import isEmpty from 'ramda/es/isEmpty'
 
 interface Props {
   issuer: IdentitySummary
@@ -43,7 +44,7 @@ export const IssuerCard: React.FC<Props> = props => {
     image = undefined,
     url = issuer.did as string | undefined
 
-  if (publicProfile) {
+  if (publicProfile && !isEmpty(publicProfile)) {
     name = publicProfile.name
     // description = publicProfile.description
     image = publicProfile.image
