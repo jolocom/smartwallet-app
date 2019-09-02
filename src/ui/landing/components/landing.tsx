@@ -1,11 +1,11 @@
 import React from 'react'
-import { StyleSheet, Dimensions, View, Text } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Container, JolocomButton } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { landingSlides, Slide } from './landingSlides'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { Typography, Colors, Spacing } from 'src/styles'
+import { Colors, Spacing, Typography } from 'src/styles'
 
 interface State {
   activeSlide: number
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dotColorInactive,
   },
   buttonArea: {
-    flex: 0.1,
+    flex: 0.2,
   },
 })
 
@@ -106,15 +106,9 @@ export class LandingComponent extends React.Component<Props, State> {
             upperCase={false}
             text={I18n.t(strings.GET_STARTED)}
           />
-          <Button
-            raised
-            onPress={this.props.handleRecover}
-            style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText,
-            }}
-            upperCase={false}
+          <JolocomButton
             text={'Recover Identity'}
+            onPress={this.props.handleRecover}
           />
         </View>
       </Container>

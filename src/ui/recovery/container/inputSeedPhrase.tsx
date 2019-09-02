@@ -20,6 +20,7 @@ interface State {
   isValid: boolean
   wordList: string[]
   validWord: boolean
+  markedWord: number
 }
 
 export class InputSeedPhraseContainer extends React.Component<Props, State> {
@@ -30,13 +31,14 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     isValid: false,
     wordList: [] as string[],
     mnemonic: [] as string[],
+    markedWord: 0, // editing first word
   }
 
   public componentDidMount(): void {
     if (this.textInput) this.textInput.focus()
   }
 
-  private handleSeedPhraseChange = (text: string): void => {
+  private handleTextChange = (text: string): void => {
     let matches = [] as string[]
     if (text.length >= 2) {
       matches = wordlists.EN.filter((word: string): boolean =>
@@ -62,8 +64,9 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
   }
 
   private selectWord = (word: string): void => {
-    const { mnemonic } = this.state
-    mnemonic.push(word)
+    const { mnemonic, markedWord } = this.state
+    const isLastWord = markedWord === mnemonic.length
+    mnemonic[markedWord] = word
     const mnemonicValid =
       mnemonic.length === 12 && validateMnemonic(mnemonic.join(' '))
     if (mnemonicValid && this.textInput) {
@@ -73,13 +76,52 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
       currentWord: '',
       validWord: false,
       mnemonic,
+      markedWord: isLastWord ? mnemonic.length : markedWord,
       isValid: mnemonicValid,
       wordList: [],
     })
   }
+  private previousWord = () => {
+    const { markedWord, mnemonic, currentWord } = this.state
+    let next = markedWord
+    let inputValue = currentWord
+    if (inputValue && currentWord !== mnemonic[markedWord]) inputValue = ''
+    else {
+      next = markedWord !== 0 ? markedWord - 1 : 0
+      inputValue = next === mnemonic.length ? '' : mnemonic[next]
+    }
+    this.setState({
+      currentWord: inputValue,
+      markedWord: next,
+    })
+    this.handleTextChange(inputValue)
+  }
+
+  private nextWord = () => {
+    const { markedWord, mnemonic, currentWord } = this.state
+    let next = markedWord
+    let inputValue = currentWord
+    if (inputValue && currentWord !== mnemonic[markedWord]) inputValue = ''
+    else {
+      next = markedWord !== mnemonic.length ? markedWord + 1 : mnemonic.length
+      inputValue = next === mnemonic.length ? '' : mnemonic[next]
+    }
+    this.setState({
+      currentWord: inputValue,
+      markedWord: next,
+    })
+    this.handleTextChange(inputValue)
+  }
 
   public render(): JSX.Element {
-    const { currentWord, validWord, mnemonic, isValid, wordList } = this.state
+    const {
+      currentWord,
+      validWord,
+      mnemonic,
+      isValid,
+      wordList,
+      markedWord,
+    } = this.state
     return (
       <React.Fragment>
         <StatusBar />
@@ -90,12 +132,15 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
           isValid={isValid}
           wordList={wordList}
           selectWord={this.selectWord}
-          handleTextInput={this.handleSeedPhraseChange}
+          handleTextInput={this.handleTextChange}
           handleButtonPress={() => this.props.recoverIdentity(currentWord)}
           openKeyboard={ref => {
             this.textInput = ref
           }}
           handleDoneButton={this.onDoneButton}
+          handleNextWord={this.nextWord}
+          handlePreviousWord={this.previousWord}
+          markedWord={markedWord}
         />
       </React.Fragment>
     )
