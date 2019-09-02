@@ -68,6 +68,7 @@ export class AuthenticationConsentComponent extends React.Component<
     return this.props.confirmAuthenticationRequest()
   }
 
+  /** @TODO replace this with the issuerCard, pass in an IdentitySummary and parse it */
   private renderRequesterCard(requester: string, callbackURL: string) {
     return (
       <View style={styles.requesterContainer}>
@@ -84,24 +85,6 @@ export class AuthenticationConsentComponent extends React.Component<
     )
   }
 
-  private renderAuthRequest(description: string) {
-    return (
-      <View style={styles.authRequestContainer}>
-        <Text style={styles.authRequestText}>
-          {I18n.t(strings.WOULD_YOU_LIKE_TO)}
-        </Text>
-        <Text
-          style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
-        >
-          {description}
-        </Text>
-        <Text style={styles.authRequestText}>
-          {I18n.t(strings.WITH_YOUR_SMARTWALLET)}
-        </Text>
-      </View>
-    )
-  }
-
   public render() {
     const {
       requester,
@@ -112,7 +95,19 @@ export class AuthenticationConsentComponent extends React.Component<
       <View style={styles.container}>
         <View style={styles.topSection}>
           {this.renderRequesterCard(requester, callbackURL)}
-          {this.renderAuthRequest(description)}
+          <View style={styles.authRequestContainer}>
+            <Text style={styles.authRequestText}>
+              {I18n.t(strings.WOULD_YOU_LIKE_TO)}
+            </Text>
+            <Text
+              style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
+            >
+              {description}
+            </Text>
+            <Text style={styles.authRequestText}>
+              {I18n.t(strings.WITH_YOUR_SMARTWALLET)}
+            </Text>
+          </View>
         </View>
         <View style={styles.buttonSection}>
           <ButtonSection
