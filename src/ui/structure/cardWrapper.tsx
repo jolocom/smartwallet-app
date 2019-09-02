@@ -4,7 +4,6 @@ import { Spacing, Colors } from '../../styles'
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
     flexDirection: 'row',
     padding: Spacing.MD,
     backgroundColor: Colors.white,
