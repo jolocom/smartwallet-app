@@ -9,6 +9,14 @@ import { AppError } from '../../../lib/errors'
 import { routeList } from '../../../routeList'
 import ErrorCode from '../../../lib/errorCodes'
 import { StatusBar, TextInput } from 'react-native'
+import { timeout } from '../../../utils/asyncTimeout'
+
+export enum WordState {
+  editing,
+  loading,
+  valid,
+  wrong,
+}
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -21,6 +29,7 @@ interface State {
   wordList: string[]
   validWord: boolean
   markedWord: number
+  wordState: WordState
 }
 
 export class InputSeedPhraseContainer extends React.Component<Props, State> {
@@ -32,10 +41,11 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     wordList: [] as string[],
     mnemonic: [] as string[],
     markedWord: 0, // editing first word
+    wordState: WordState.editing,
   }
 
   public componentDidMount(): void {
-    if (this.textInput) this.textInput.focus()
+    // if (this.textInput) this.textInput.focus()
   }
 
   private handleTextChange = (text: string): void => {
@@ -53,13 +63,24 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     })
   }
 
-  private onDoneButton = () => {
+  private onDoneButton = async () => {
     const { wordList, currentWord } = this.state
+    this.setState({
+      wordState: WordState.loading,
+    })
+    await timeout(500)
     const matchingWord = wordList.find(e => e === currentWord.trim())
+
     if (matchingWord) {
+      this.setState({
+        wordState: WordState.valid,
+      })
+      await timeout(500)
       this.selectWord(matchingWord)
-    } else if (wordList.length === 1) {
-      this.selectWord(wordList[0])
+    } else {
+      this.setState({
+        wordState: WordState.wrong,
+      })
     }
   }
 
@@ -73,12 +94,13 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
       this.textInput.blur()
     }
     this.setState({
-      currentWord: '',
+      currentWord: isLastWord ? '' : word,
       validWord: false,
       mnemonic,
       markedWord: isLastWord ? mnemonic.length : markedWord,
       isValid: mnemonicValid,
       wordList: [],
+      wordState: WordState.editing,
     })
   }
   private previousWord = () => {
@@ -121,6 +143,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
       isValid,
       wordList,
       markedWord,
+      wordState,
     } = this.state
     return (
       <React.Fragment>
@@ -141,6 +164,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
           handleNextWord={this.nextWord}
           handlePreviousWord={this.previousWord}
           markedWord={markedWord}
+          wordState={wordState}
         />
       </React.Fragment>
     )

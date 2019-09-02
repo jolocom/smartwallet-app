@@ -9,27 +9,51 @@ import {
 } from '../../../styles/buttons'
 import { largeText, noteText } from '../../../styles/typography'
 import { Colors } from '../../../styles'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import {
+  CheckMarkIcon,
+  NextIcon,
+  PreviousIcon,
+  SpinningIcon,
+} from '../../../resources'
+import { WordState } from '../container/inputSeedPhrase'
+import Rotation from '../../animation/Rotation'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'flex-start',
     backgroundColor: JolocomTheme.primaryColorBlack,
   },
   header: {
     ...largeText,
     color: 'white',
-    margin: 20,
+    marginTop: 32,
+  },
+  mnemonicSection: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 150,
+    flexWrap: 'wrap',
+    marginTop: 16,
+    justifyContent: 'center',
   },
   note: {
     ...noteText,
     textAlign: 'center',
     lineHeight: 26,
-    margin: 22,
+    marginHorizontal: 50,
   },
-  mnemonicSection: {},
+  mnemonicWord: {
+    ...noteText,
+    margin: 2,
+    fontSize: 24,
+  },
+  inputSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   textInput: {
-    width: '70%',
+    width: '50%',
     fontSize: 38,
   },
   correct: {
@@ -38,8 +62,19 @@ const styles = StyleSheet.create({
   error: {
     color: Colors.purpleMain,
   },
-  disabled: {
-    opacity: 0.5,
+  wordListWrapper: {
+    flexDirection: 'row',
+    position: 'relative',
+    height: 40,
+    width: '100%',
+  },
+  wordListSection: {
+    position: 'absolute',
+    flexDirection: 'row',
+    left: 0,
+    flexWrap: 'nowrap',
+    width: '100%',
+    // margin: 12,
   },
 })
 interface InputSeedPhraseProps {
@@ -56,13 +91,14 @@ interface InputSeedPhraseProps {
   markedWord: number
   handleNextWord: () => void
   handlePreviousWord: () => void
+  wordState: WordState
 }
 const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
   currentWord,
   markedWord,
   wordList,
   isValid,
-  validWord,
+  wordState,
   mnemonic,
   handleTextInput,
   selectWord,
@@ -72,7 +108,6 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
   handleNextWord,
   handlePreviousWord,
 }) => {
-  const canBeValid = wordList.length > 0 || currentWord.length < 2
   const isPreviousEnabled = markedWord > 0 || currentWord.length > 0
   const isNextEnabled = markedWord < mnemonic.length
   return (
@@ -80,15 +115,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
       <Text style={styles.header}>
         {mnemonic.length === 0 ? 'Recovery' : mnemonic.length + '/12 completed'}
       </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          width: '100%',
-          height: 150,
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}
-      >
+      <View style={styles.mnemonicSection}>
         {mnemonic.length === 0 ? (
           <Text style={styles.note}>
             Start writing your seed-phrase and it will appears here word by word
@@ -97,8 +124,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           mnemonic.map((word: string, i: number) => (
             <Text
               style={[
-                styles.note,
-                { margin: 2, fontSize: 30 },
+                styles.mnemonicWord,
                 markedWord === i && { color: Colors.purpleMain },
               ]}
             >
@@ -107,27 +133,24 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           ))
         )}
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Icon
-          name={'arrow-left'}
-          color={isPreviousEnabled ? 'white' : 'black'}
-          size={25}
-          onPress={isPreviousEnabled ? handlePreviousWord : undefined}
-        />
+      <View style={styles.inputSection}>
+        <View style={{ width: 30 }}>
+          {isPreviousEnabled && <PreviousIcon onPress={handlePreviousWord} />}
+        </View>
+        {/*Placeholder to center text input*/}
+        <View style={{ width: 29 }} />
         {
           //@ts-ignore textAlign is missing in the typings of TextInput
           <TextInput
             textAlign={'center'}
             ref={openKeyboard}
-            autoFocus
             autoCapitalize={'none'}
             style={[
               styles.textInput,
-              canBeValid ? styles.correct : styles.error,
+              wordState === WordState.wrong ? styles.error : styles.correct,
             ]}
             value={currentWord}
             onChangeText={handleTextInput}
-            underlineColorAndroid={Colors.sandLight}
             returnKeyLabel={'Done'}
             returnKeyType={'next'}
             selectionColor={Colors.purpleMain}
@@ -135,37 +158,34 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
             onSubmitEditing={handleDoneButton}
           />
         }
-        <Icon
-          name={'arrow-right'}
-          color={isNextEnabled ? 'white' : 'black'}
-          size={25}
-          onPress={isNextEnabled ? handleNextWord : undefined}
-        />
+        <View style={{ marginRight: 10, width: 19 }}>
+          {wordState === WordState.loading && (
+            <Rotation>
+              <SpinningIcon styles={{ backgroundColor: 'blue' }} />
+            </Rotation>
+          )}
+          {wordState === WordState.valid && <CheckMarkIcon />}
+        </View>
+        <View style={{ width: 30 }}>
+          {isNextEnabled && <NextIcon onPress={handleNextWord} />}
+        </View>
       </View>
-      <Text style={{ color: 'white', fontSize: 18 }}>
-        {wordList.length > 0 && 'Choose the right word or press enter'}
-        {!canBeValid && 'The word is not correct, check for typos'}
-        {''}
-      </Text>
       <View
         style={{
-          flexDirection: 'row',
-          position: 'relative',
-          height: 40,
-          width: '100%',
+          backgroundColor: Colors.sandLight,
+          width: '90%',
+          height: 2,
+          marginBottom: 3,
         }}
-      >
-        <View
-          style={{
-            position: 'absolute',
-            flexDirection: 'row',
-            left: 0,
-            flexWrap: 'nowrap',
-            width: '100%',
-            // margin: 12,
-          }}
-        >
-          {canBeValid &&
+      />
+      <Text style={{ color: 'white', fontSize: 18 }}>
+        {wordState === WordState.wrong
+          ? 'The word is not correct, check for typos'
+          : wordList.length > 0 && 'Choose the right word or press enter'}
+      </Text>
+      <View style={styles.wordListWrapper}>
+        <View style={styles.wordListSection}>
+          {currentWord.length > 1 &&
             wordList.map((word, i) => (
               <Button
                 key={i}
@@ -185,17 +205,16 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
         </View>
       </View>
       {isValid && (
-        <React.Fragment>
-          <Text style={styles.note}>Valid</Text>
-          <JolocomButton
-            disabled={!isValid}
-            onPress={isValid ? handleButtonPress : undefined}
-            raised
-            upperCase={false}
-            text={'Recover my Identity'}
-          />
-        </React.Fragment>
+        <JolocomButton
+          disabled={!isValid}
+          onPress={isValid ? handleButtonPress : undefined}
+          raised
+          upperCase={false}
+          text={'Recover my Identity'}
+        />
       )}
+      <View style={{ flex: 2 }} />
+      <JolocomButton text={'Back to signup'} />
     </Container>
   )
 }
