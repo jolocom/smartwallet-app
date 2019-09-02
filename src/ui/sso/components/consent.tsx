@@ -66,10 +66,10 @@ export class ConsentComponent extends React.Component<Props, State> {
     ),
   }
 
-  private handleClaimSelect(
+  private handleClaimSelect = (
     type: string,
     selectedCredential: StateVerificationSummary,
-  ): void {
+  ) => {
     const selected = this.state.selectedCredentials[type]
     if (selected && selected.id === selectedCredential.id) {
       // deselect if selected claim is pressed
