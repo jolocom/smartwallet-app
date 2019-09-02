@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.MD,
   },
   rightSection: {
+    flex: 1,
     paddingHorizontal: Spacing.MD,
   },
   mainInfo: {
