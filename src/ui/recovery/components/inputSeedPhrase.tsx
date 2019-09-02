@@ -8,7 +8,7 @@ import {
   buttonStandardText,
 } from '../../../styles/buttons'
 import { largeText, noteText } from '../../../styles/typography'
-import { Colors } from '../../../styles'
+import { Colors, Spacing, Typography } from '../../../styles'
 import {
   CheckMarkIcon,
   NextIcon,
@@ -26,15 +26,15 @@ const styles = StyleSheet.create({
   },
   header: {
     ...largeText,
-    color: 'white',
-    marginTop: 32,
+    color: Colors.sandLight,
+    marginTop: Spacing.XL,
   },
   mnemonicSection: {
     flexDirection: 'row',
     width: '100%',
     height: 150,
     flexWrap: 'wrap',
-    marginTop: 16,
+    marginTop: Spacing.XS,
     justifyContent: 'center',
   },
   note: {
@@ -54,13 +54,23 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: '50%',
-    fontSize: 38,
+    fontSize: Typography.textXXL,
   },
   correct: {
     color: 'white',
   },
   error: {
     color: Colors.purpleMain,
+  },
+  divider: {
+    backgroundColor: Colors.sandLight,
+    width: '80%',
+    height: 2,
+  },
+  hint: {
+    fontSize: Typography.textXS,
+    color: Colors.white,
+    marginTop: 3,
   },
   wordListWrapper: {
     flexDirection: 'row',
@@ -171,15 +181,8 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           {isNextEnabled && <NextIcon onPress={handleNextWord} />}
         </View>
       </View>
-      <View
-        style={{
-          backgroundColor: Colors.sandLight,
-          width: '90%',
-          height: 2,
-          marginBottom: 3,
-        }}
-      />
-      <Text style={{ color: 'white', fontSize: 18 }}>
+      <View style={styles.divider} />
+      <Text style={styles.hint}>
         {wordState === WordState.wrong
           ? 'The word is not correct, check for typos'
           : wordList.length > 0 && 'Choose the right word or press enter'}
@@ -199,7 +202,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                     minWidth: 0,
                     margin: 6,
                   },
-                  text: { ...buttonStandardText },
+                  text: { ...buttonStandardText, fontSize: Typography.textLG },
                 }}
               />
             ))}
