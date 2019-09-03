@@ -47,6 +47,7 @@ export class SocialRecoveryContainer extends React.Component<Props, State> {
           modalOpen={modalOpen}
           selectedShard={selectedShard}
           toggleModal={this.toggleModal}
+          openReceivedShards={this.props.openReceivedShards}
         />
       </React.Fragment>
     )
@@ -55,11 +56,10 @@ export class SocialRecoveryContainer extends React.Component<Props, State> {
 
 const mapStateToProps = () => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  repeatSeedPhrase: (mnemonic: string) =>
+  openReceivedShards: () =>
     dispatch(
       navigationActions.navigate({
-        routeName: routeList.RepeatSeedPhrase,
-        params: { mnemonic },
+        routeName: routeList.ReceivedShards,
       }),
     ),
 })

@@ -10,6 +10,7 @@ interface Props {
   modalOpen: boolean
   selectedShard: string
   toggleModal: (shardId?: number) => void
+  openReceivedShards: () => void
 }
 
 const styles = StyleSheet.create({
@@ -43,6 +44,7 @@ export const SocialRecoveryComponent: React.FunctionComponent<Props> = ({
   modalOpen,
   selectedShard,
   toggleModal,
+  openReceivedShards,
 }) => (
   <Container style={styles.container}>
     <Text style={styles.header}>Distribute Shards</Text>
@@ -59,8 +61,9 @@ export const SocialRecoveryComponent: React.FunctionComponent<Props> = ({
       selectedShard={selectedShard}
       closeModal={toggleModal}
     />
-    <TouchableHighlight>
-      <Text style={[styles.note, { marginTop: 300 }]}>Help a Friend</Text>
+    <View style={{ flex: 2 }} />
+    <TouchableHighlight style={{ padding: 20 }} onPress={openReceivedShards}>
+      <Text style={[styles.note]}>Help a Friend</Text>
     </TouchableHighlight>
   </Container>
 )

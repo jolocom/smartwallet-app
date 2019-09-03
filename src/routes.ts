@@ -38,6 +38,7 @@ import {
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { SocialRecovery } from './ui/recovery/container/socialRecovery'
+import { ReceivedShards } from './ui/recovery/container/receivedShards'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -236,6 +237,10 @@ const MainStack = createStackNavigator(
     },
     [routeList.SocialRecovery]: {
       screen: SocialRecovery,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.ReceivedShards]: {
+      screen: ReceivedShards,
       navigationOptions: noHeaderNavOpts,
     },
 
