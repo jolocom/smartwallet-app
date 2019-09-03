@@ -22,7 +22,11 @@ export interface LabeledShard {
 }
 
 const shards: LabeledShard[] = [
-  { label: 'Max', value: 'ajsdgjasgdjasgdjsmgajsdgjasgd' },
+  {
+    label: 'Max',
+    value:
+      'ajsdgjasgdjasgdjsmgajsdgjahdsgadgshafdjasfhdfahdfahsdfazusfa66dafd6saftuai6fd6rauradfzurfzuaruzf6rasu6drf6uasrfuz6asrfz6sgd',
+  },
   {
     label: 'Peter',
     value: 'ajsdgjasgdjasgdjsmgajsdgjasgakjsdgaugdkjasgdjgasdg',
