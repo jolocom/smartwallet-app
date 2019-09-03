@@ -21,8 +21,9 @@ export enum routeList {
   ClaimDetails = 'ClaimDetails',
   DocumentDetails = 'DocumentDetails',
 
-  RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
+  RepeatSeedPhrase = 'RepeatSeedPhrase',
+  SocialRecovery = 'SocialRecovery',
 
   Exception = 'Exception',
 }

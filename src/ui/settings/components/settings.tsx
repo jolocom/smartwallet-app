@@ -56,10 +56,18 @@ interface SettingsScreenProps {
   setLocale: (key: string) => void
   setupBackup: () => void
   version: string
+  setupSocialRecovery: () => void
 }
 
-export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
-  const seedPhraseSaved = props.settings[settingKeys.seedPhraseSaved] as boolean
+export const SettingsScreen: React.FunctionComponent<SettingsScreenProps> = ({
+  settings,
+  locales,
+  version,
+  setLocale,
+  setupBackup,
+  setupSocialRecovery
+}) => {
+  const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
@@ -71,12 +79,12 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
           iconName={'translate'}
           payload={
             <View style={styles.languageOptions}>
-              {props.locales.map(locale => {
-                const isCurrentLanguage = locale === props.settings.locale
+              {locales.map(locale => {
+                const isCurrentLanguage = locale === settings.locale
                 return (
                   <View
                     key={locale}
-                    onTouchEnd={() => props.setLocale(locale)}
+                    onTouchEnd={() => setLocale(locale)}
                     style={[
                       styles.languageOption,
                       isCurrentLanguage && {
@@ -115,12 +123,13 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
           }
           isHighlighted={!seedPhraseSaved}
           isDisabled={seedPhraseSaved}
-          onTouchEnd={props.setupBackup}
+          onTouchEnd={setupBackup}
         />
         <SettingsItem
           title={'Social Recovery'}
-          iconName={'flash'}
+          iconName={'account-multiple'}
           description={'Enable your friends to help you in case of recovery'}
+          onTouchEnd={setupSocialRecovery}
         />
         <SettingsItem
           title={I18n.t(strings.DELETE_IDENTITY)}
@@ -130,7 +139,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
         />
       </View>
       <Text style={styles.versionNumber}>
-        Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
+        Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}
       </Text>
       <View />
     </View>

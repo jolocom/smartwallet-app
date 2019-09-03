@@ -37,6 +37,7 @@ import {
 } from 'src/resources'
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
+import { SocialRecovery } from './ui/recovery/container/socialRecovery'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -231,6 +232,10 @@ const MainStack = createStackNavigator(
     },
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.SocialRecovery]: {
+      screen: SocialRecovery,
       navigationOptions: noHeaderNavOpts,
     },
 
