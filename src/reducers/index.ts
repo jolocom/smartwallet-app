@@ -7,6 +7,7 @@ import {
 } from 'src/reducers/registration/'
 import { ssoReducer, SsoState } from 'src/reducers/sso/'
 import { documentsReducer, DocumentsState } from './documents'
+import { recoveryReducer, RecoveryState } from './recovery'
 
 export const rootReducer = combineReducers({
   settings: settingsReducer,
@@ -14,6 +15,7 @@ export const rootReducer = combineReducers({
   registration: registrationReducer,
   sso: ssoReducer,
   documents: documentsReducer,
+  recovery: recoveryReducer,
 })
 
 export interface RootState {
@@ -22,4 +24,5 @@ export interface RootState {
   readonly registration: RegistrationState
   readonly sso: SsoState
   readonly documents: DocumentsState
+  readonly recovery: RecoveryState
 }

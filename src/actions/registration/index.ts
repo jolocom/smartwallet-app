@@ -47,18 +47,18 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
 
   dispatch(setIsRegistering(true))
 
-  const { encryptionLib, keyChainLib, storageLib, registry } = backendMiddleware
+  const { keyChainLib, storageLib, registry } = backendMiddleware
   const password = (await generateSecureRandomBytes(32)).toString('base64')
 
-  const encEntropy = encryptionLib.encryptWithPass({
-    data: encodedEntropy,
-    pass: password,
-  })
-  const entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
   const userVault = JolocomLib.KeyProvider.fromSeed(
     Buffer.from(encodedEntropy, 'hex'),
     password,
   )
+
+  const entropyData = {
+    encryptedEntropy: userVault.encryptedSeed,
+    timestamp: Date.now(),
+  }
 
   dispatch(setLoadingMsg(loading.loadingStages[1]))
 

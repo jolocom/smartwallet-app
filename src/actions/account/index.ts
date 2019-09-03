@@ -46,7 +46,7 @@ export const checkIdentityExists: ThunkAction = async (
   getState,
   backendMiddleware,
 ) => {
-  const { keyChainLib, storageLib, encryptionLib, registry } = backendMiddleware
+  const { keyChainLib, storageLib, registry } = backendMiddleware
   const encryptedEntropy = await storageLib.get.encryptedSeed()
 
   if (!encryptedEntropy) {
@@ -60,20 +60,9 @@ export const checkIdentityExists: ThunkAction = async (
   }
 
   const encryptionPass = await keyChainLib.getPassword()
-
-  const decryptedSeed = encryptionLib.decryptWithPass({
-    cipher: encryptedEntropy,
-    pass: encryptionPass,
-  })
-
-  if (!decryptedSeed) {
-    throw new Error('could not decrypt seed')
-  }
-
-  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-  const userVault = JolocomLib.KeyProvider.fromSeed(
-    Buffer.from(decryptedSeed, 'hex'),
-    encryptionPass,
+  console.log(encryptedEntropy)
+  const userVault = new JolocomLib.KeyProvider(
+    Buffer.from(encryptedEntropy, 'hex'),
   )
 
   const userPubKey = userVault.getPublicKey({

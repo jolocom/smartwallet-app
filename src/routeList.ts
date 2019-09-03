@@ -25,6 +25,7 @@ export enum routeList {
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SocialRecovery = 'SocialRecovery',
   ReceivedShards = 'ReceivedShards',
+  AcceptShard = 'AcceptShard',
 
   Exception = 'Exception',
 }

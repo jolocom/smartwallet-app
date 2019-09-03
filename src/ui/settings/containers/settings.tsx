@@ -4,11 +4,10 @@ import VersionNumber from 'react-native-version-number'
 import { locales } from 'src/locales/i18n'
 
 import { SettingsScreen } from '../components/settings'
-import { genericActions, navigationActions } from 'src/actions'
+import { genericActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
-import { showSeedPhrase } from '../../../actions/recovery'
-import { routeList } from '../../../routeList'
+import { openSocialRecovery, showSeedPhrase } from '../../../actions/recovery'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -38,10 +37,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
-  setupSocialRecovery: () =>
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.SocialRecovery }),
-    ),
+  setupSocialRecovery: () => dispatch(withLoading(openSocialRecovery())),
 })
 
 export const Settings = connect(

@@ -49,6 +49,7 @@ export const ReceivedShardsComponent: React.FunctionComponent<Props> = ({
     </Text>
     {shards.map((shard, i) => (
       <TouchableHighlight
+        key={i}
         style={{ width: '100%' }}
         onPress={() => toggleModal(i)}
       >

@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal, Text, TouchableHighlight, View } from 'react-native'
 import { Container } from 'src/ui/structure'
 import QRCode from 'react-native-qrcode-svg'
-import { blackMain, white } from '../../../styles/colors'
+import { white } from '../../../styles/colors'
 import { LabeledShard } from '../container/receivedShards'
 
 interface Props {
@@ -25,9 +25,9 @@ export const ShardModal: React.FunctionComponent<Props> = ({
       <Container>
         <View
           style={{
-            backgroundColor: blackMain,
-            height: '60%',
-            width: '70%',
+            backgroundColor: white,
+            height: '70%',
+            width: '80%',
             justifyContent: 'center',
             alignItems: 'center',
             borderColor: white,
@@ -35,24 +35,26 @@ export const ShardModal: React.FunctionComponent<Props> = ({
             borderRadius: 5,
           }}
         >
-          <Text style={{ color: 'white', marginBottom: 20 }}>
+          <Text style={{ marginBottom: 20 }}>
             {typeof selectedShard === 'string'
               ? 'Ask a Friend to scan this QR-Code!'
               : `Share this with ${selectedShard.label}`}
           </Text>
           <QRCode
-            size={200}
+            backgroundColor={'white'}
+            size={250}
             value={
-              typeof selectedShard == 'string'
+              'shard:' +
+              (typeof selectedShard == 'string'
                 ? selectedShard
-                : selectedShard.value
+                : selectedShard.value)
             }
           />
           <TouchableHighlight
             style={{ marginTop: 50, padding: 20 }}
             onPress={() => closeModal()}
           >
-            <Text style={{ color: white }}>Dismiss</Text>
+            <Text>Dismiss</Text>
           </TouchableHighlight>
         </View>
       </Container>

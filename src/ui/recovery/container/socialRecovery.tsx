@@ -6,6 +6,7 @@ import { navigationActions } from '../../../actions'
 import { routeList } from '../../../routeList'
 import { StatusBar } from 'react-native'
 import { SocialRecoveryComponent } from '../components/socialRecovery'
+import { RootState } from '../../../reducers'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -17,10 +18,6 @@ interface State {
   selectedShard: string
 }
 
-const shrads = [
-  'kashdlkasgdaldkhaöksdhasködhaödshöaskhdaökashdkashdas',
-  'aksljdgalsjgfluehuvagwk jdgajkcefcahgfckacjkdgaksjdsg',
-]
 export class SocialRecoveryContainer extends React.Component<Props, State> {
   public state = {
     modalOpen: false,
@@ -30,7 +27,7 @@ export class SocialRecoveryContainer extends React.Component<Props, State> {
   private toggleModal = (shardId?: number) => {
     this.setState({
       modalOpen: !this.state.modalOpen,
-      selectedShard: shardId !== undefined ? shrads[shardId] : '',
+      selectedShard: shardId !== undefined ? this.props.shards[shardId] : '',
     })
   }
   public render() {
@@ -43,7 +40,7 @@ export class SocialRecoveryContainer extends React.Component<Props, State> {
           showHideTransition="fade"
         />
         <SocialRecoveryComponent
-          shards={shrads}
+          shards={this.props.shards}
           modalOpen={modalOpen}
           selectedShard={selectedShard}
           toggleModal={this.toggleModal}
@@ -54,7 +51,9 @@ export class SocialRecoveryContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = (state: RootState) => ({
+  shards: state.recovery.ownShards,
+})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openReceivedShards: () =>
     dispatch(

@@ -20,6 +20,8 @@ import {
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '../../actions/sso/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
+import { LabeledShard } from '../../ui/recovery/container/receivedShards'
+import { ShardEntity } from './entities/shardEntity'
 
 interface PersonaAttributes {
   did: string
@@ -42,6 +44,7 @@ export class Storage {
   private config: ConnectionOptions
 
   public store = {
+    shard: this.saveShard.bind(this),
     setting: this.saveSetting.bind(this),
     persona: this.storePersonaFromJSON.bind(this),
     verifiableCredential: this.storeVClaim.bind(this),
@@ -61,6 +64,7 @@ export class Storage {
   }
 
   public get = {
+    shards: this.getShards.bind(this),
     settingsObject: this.getSettingsObject.bind(this),
     setting: this.getSetting.bind(this),
     persona: this.getPersonas.bind(this),
@@ -97,6 +101,25 @@ export class Storage {
     if (!this.connection) {
       this.connection = await createConnection(this.config)
     }
+  }
+
+  private async getShards(label?: string): Promise<LabeledShard[]> {
+    await this.createConnectionIfNeeded()
+    const options = label
+      ? {
+          where: { label },
+        }
+      : undefined
+    const shards = await this.connection.manager.find(ShardEntity, options)
+    console.log(shards)
+    return shards
+  }
+
+  private async saveShard(shard: LabeledShard): Promise<void> {
+    await this.createConnectionIfNeeded()
+    const repo = this.connection.getRepository(ShardEntity)
+    const shardObj = repo.create(shard)
+    await repo.save(shardObj)
   }
 
   private async getSettingsObject(): Promise<{ [key: string]: any }> {

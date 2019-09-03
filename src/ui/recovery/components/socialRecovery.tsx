@@ -49,11 +49,10 @@ export const SocialRecoveryComponent: React.FunctionComponent<Props> = ({
   <Container style={styles.container}>
     <Text style={styles.header}>Distribute Shards</Text>
     {shards.map((shard, i) => (
-      <View style={{ width: '100%' }} onTouchEnd={() => toggleModal(i)}>
+      <View key={i} style={{ width: '100%' }} onTouchEnd={() => toggleModal(i)}>
         <View style={{ width: '100%', height: 1, backgroundColor: 'white' }} />
-        <Text
-          style={[styles.note, { margin: 20 }]}
-        >{`Shard ${i} - Tap to share`}</Text>
+        <Text style={[styles.note, { margin: 20 }]}>{`Shard ${i +
+          1} - Tap to share`}</Text>
       </View>
     ))}
     <ShardModal

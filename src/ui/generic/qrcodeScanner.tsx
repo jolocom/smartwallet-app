@@ -14,6 +14,7 @@ import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { NavigationScreenProps } from 'react-navigation'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { Colors } from 'src/styles'
+import { handelReceiveShard } from '../../actions/recovery'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -95,7 +96,11 @@ export class QRcodeScanner extends React.Component<Props, State> {
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onScannerSuccess: async (e: QrScanEvent) => {
     let interactionToken
-
+    const shardPrefix = 'shard:'
+    if (e.data.startsWith(shardPrefix)) {
+      interactionToken = e.data.slice(shardPrefix.length)
+      return dispatch(handelReceiveShard(interactionToken))
+    }
     try {
       interactionToken = JolocomLib.parse.interactionToken.fromJWT(e.data)
     } catch (err) {

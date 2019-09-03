@@ -5,6 +5,7 @@ import { PersonaEntity } from './personaEntity'
 import { SignatureEntity } from './signatureEntity'
 import { VerifiableCredentialEntity } from './verifiableCredentialEntity'
 import { CacheEntity } from './cacheEntity'
+import { ShardEntity } from './shardEntity'
 
 export {
   SettingEntity,
@@ -24,4 +25,5 @@ export const entityList = [
   SignatureEntity,
   VerifiableCredentialEntity,
   CacheEntity,
+  ShardEntity,
 ]
