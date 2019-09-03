@@ -5,6 +5,7 @@ import { NavigationScreenProps } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { ReceivedShardsComponent } from '../components/receivedShards'
 import { ShardModal } from '../components/shardModal'
+import { RootState } from '../../../reducers'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -21,17 +22,6 @@ export interface LabeledShard {
   value: string
 }
 
-const shards: LabeledShard[] = [
-  {
-    label: 'Max',
-    value:
-      'ajsdgjasgdjasgdjsmgajsdgjahdsgadgshafdjasfhdfahdfahsdfazusfa66dafd6saftuai6fd6rauradfzurfzuaruzf6rasu6drf6uasrfuz6asrfz6sgd',
-  },
-  {
-    label: 'Peter',
-    value: 'ajsdgjasgdjasgdjsmgajsdgjasgakjsdgaugdkjasgdjgasdg',
-  },
-]
 export class ReceivedShardsContainer extends React.Component<Props, State> {
   public state = {
     modalOpen: false,
@@ -41,11 +31,13 @@ export class ReceivedShardsContainer extends React.Component<Props, State> {
   private toggleModal = (shardId?: number) => {
     this.setState({
       modalOpen: !this.state.modalOpen,
-      selectedShard: shardId !== undefined ? shards[shardId] : undefined,
+      selectedShard:
+        shardId !== undefined ? this.props.shards[shardId] : undefined,
     })
   }
 
   public render() {
+    console.log(this.props.shards)
     const { modalOpen, selectedShard } = this.state
     return (
       <React.Fragment>
@@ -56,7 +48,7 @@ export class ReceivedShardsContainer extends React.Component<Props, State> {
         />
         <ReceivedShardsComponent
           toggleModal={this.toggleModal}
-          shards={shards}
+          shards={this.props.shards}
         />
         {selectedShard && (
           <ShardModal
@@ -71,7 +63,9 @@ export class ReceivedShardsContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = (state: RootState) => ({
+  shards: state.recovery.receivedShards,
+})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({})
 
 export const ReceivedShards = connect(

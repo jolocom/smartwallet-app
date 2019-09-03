@@ -22,11 +22,10 @@ export const recoveryReducer = (
         ...state,
         ownShards: action.value,
       }
-    case ActionTypes.ADD_RECEIVED_SHARD:
-      const shards = state.receivedShards + action.value
+    case ActionTypes.SET_RECEIVED_SHARDS:
       return {
         ...state,
-        receivedShards: shards,
+        receivedShards: action.value,
       }
     default:
       return state

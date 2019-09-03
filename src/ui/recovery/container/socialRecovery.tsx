@@ -2,11 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import { NavigationScreenProps } from 'react-navigation'
-import { navigationActions } from '../../../actions'
-import { routeList } from '../../../routeList'
 import { StatusBar } from 'react-native'
 import { SocialRecoveryComponent } from '../components/socialRecovery'
 import { RootState } from '../../../reducers'
+import { openReceivedShards } from '../../../actions/recovery'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -55,12 +54,7 @@ const mapStateToProps = (state: RootState) => ({
   shards: state.recovery.ownShards,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  openReceivedShards: () =>
-    dispatch(
-      navigationActions.navigate({
-        routeName: routeList.ReceivedShards,
-      }),
-    ),
+  openReceivedShards: () => dispatch(openReceivedShards()),
 })
 
 export const SocialRecovery = connect(

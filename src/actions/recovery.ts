@@ -9,7 +9,7 @@ import { OWN_SHARD_LABEL } from '../lib/storage/entities/shardEntity'
 
 export enum ActionTypes {
   SET_OWN_SHARDS = 'SET_OWN_SHARDS',
-  ADD_RECEIVED_SHARD = 'ADD_RECEIVED_SHARD',
+  SET_RECEIVED_SHARDS = 'ADD_RECEIVED_SHARDS',
 }
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
@@ -120,4 +120,18 @@ export const saveReceivedShard = (
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   await backendMiddleware.storageLib.store.shard({ label, value: shard })
   return dispatch(navigationActions.navigatorResetHome())
+}
+
+export const openReceivedShards = (): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  const allShards = await backendMiddleware.storageLib.get.shards()
+  dispatch({
+    type: ActionTypes.SET_RECEIVED_SHARDS,
+    value: allShards.filter(shard => shard.label !== OWN_SHARD_LABEL),
+  })
+
+  dispatch(navigationActions.navigate({routeName: routeList.ReceivedShards}))
 }
