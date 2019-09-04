@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AuthenticationConsentComponent } from '../components/AuthenticationConsent'
+import { AuthenticationConsentComponent } from '../components/authenticationConsent'
 import { RootState } from 'src/reducers'
 import { cancelSSO } from 'src/actions/sso'
 import { sendAuthenticationResponse } from 'src/actions/sso/authenticationRequest'

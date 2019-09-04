@@ -19,7 +19,7 @@ interface State {
 }
 
 export class CredentialsReceiveContainer extends React.Component<Props, State> {
-  render() {
+  public render() {
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 0.9 }}>
