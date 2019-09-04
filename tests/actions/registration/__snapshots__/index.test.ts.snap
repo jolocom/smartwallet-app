@@ -3,8 +3,16 @@
 exports[`Registration action creators createIdentity should attempt to create an identity 1`] = `
 Array [
   Object {
+    "routeName": "RegistrationProgress",
+    "type": "Navigation/NAVIGATE",
+  },
+  Object {
     "type": "SET_IS_REGISTERING",
     "value": true,
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Encrypting and storing data locally",
   },
   Object {
     "type": "SET_LOADING_MSG",
@@ -15,12 +23,12 @@ Array [
     "value": "Registering decentralized identity",
   },
   Object {
-    "type": "SET_LOADING_MSG",
-    "value": "Preparing launch",
-  },
-  Object {
     "type": "DID_SET",
     "value": "did:jolo:mockdid",
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Preparing launch",
   },
   Object {
     "type": "SET_IS_REGISTERING",
@@ -40,82 +48,44 @@ Array [
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 2`] = `
-Array [
-  Array [
-    Object {
-      "controllingKeyPath": "m/73'/0'/0'/0",
-      "did": "did:jolo:mockdid",
-    },
-  ],
-]
-`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 3`] = `
-Array [
-  Array [
-    Object {
-      "encryptedEntropy": "b77451145154d43d51ad3d31ead162749208ac14ac4aed7c1200970995e5eca5",
-      "timestamp": 946681200000,
-    },
-  ],
-]
-`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
-Array [
-  Array [
-    Object {
-      "data": Array [
-        2,
-        190,
-        222,
-        236,
-        223,
-        239,
-        223,
-        32,
-        17,
-        81,
-        201,
-        162,
-        78,
-        254,
-        96,
-        10,
-        97,
-        136,
-        138,
-        150,
-        254,
-        179,
-        2,
-        244,
-        3,
-        231,
-        162,
-        235,
-        71,
-        152,
-        56,
-        126,
-        92,
-      ],
-      "type": "Buffer",
-    },
-  ],
-]
-`;
-
-exports[`Registration action creators submitEntropy should correctly navigate to route and provide the entropy 1`] = `
+exports[`Registration action creators createIdentity should display exception screen in case of error 1`] = `
 Array [
   Object {
     "routeName": "RegistrationProgress",
     "type": "Navigation/NAVIGATE",
   },
   Object {
+    "type": "SET_IS_REGISTERING",
+    "value": true,
+  },
+  Object {
     "type": "SET_LOADING_MSG",
     "value": "Encrypting and storing data locally",
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Fueling with ether",
+  },
+  Object {
+    "type": "SET_LOADING_MSG",
+    "value": "Registering decentralized identity",
+  },
+  Object {
+    "params": Object {
+      "error": [Error: Registration failed],
+      "returnTo": "Landing",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Registration action creators createIdentity should not attempt to create an identity if registration is in progress 1`] = `
+Array [
+  Object {
+    "routeName": "RegistrationProgress",
+    "type": "Navigation/NAVIGATE",
   },
 ]
 `;

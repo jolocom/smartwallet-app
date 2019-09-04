@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { PaymentConsentComponent } from '../components/PaymentConsent'
+import { PaymentConsentComponent } from '../components/paymentConsent'
 import { RootState } from 'src/reducers'
 import { cancelSSO } from 'src/actions/sso'
 import { sendPaymentResponse } from 'src/actions/sso/paymentRequest'

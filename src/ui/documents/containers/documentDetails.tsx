@@ -6,7 +6,7 @@ import { ClaimInterface } from 'cred-types-jolocom-core'
 import { RootState } from 'src/reducers/'
 import I18n from 'src/locales/i18n'
 import { DocumentCard } from '../components/documentCard'
-import { DocumentDetails as DocumentDetailsComponent } from '../components/documentDetails'
+import { DocumentDetailsComponent } from '../components/documentDetails'
 import strings from '../../../locales/strings'
 import { Colors, Spacing } from 'src/styles'
 

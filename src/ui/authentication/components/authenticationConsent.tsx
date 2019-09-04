@@ -19,6 +19,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.backgroundLightMain,
   },
+  topSection: {
+    flex: 0.9,
+  },
   requesterContainer: {
     flexDirection: 'row',
     backgroundColor: Colors.white,
@@ -47,13 +50,16 @@ const styles = StyleSheet.create({
     fontSize: Typography.textLG,
     marginTop: Spacing.SM,
   },
+  buttonSection: {
+    flex: 0.1,
+  },
 })
 
 export class AuthenticationConsentComponent extends React.Component<
   Props,
   State
 > {
-  state = {
+  public state = {
     pending: false,
   }
 
@@ -62,6 +68,7 @@ export class AuthenticationConsentComponent extends React.Component<
     return this.props.confirmAuthenticationRequest()
   }
 
+  /** @TODO replace this with the issuerCard, pass in an IdentitySummary and parse it */
   private renderRequesterCard(requester: string, callbackURL: string) {
     return (
       <View style={styles.requesterContainer}>
@@ -78,39 +85,7 @@ export class AuthenticationConsentComponent extends React.Component<
     )
   }
 
-  private renderAuthRequest(description: string) {
-    return (
-      <View style={styles.authRequestContainer}>
-        <Text style={styles.authRequestText}>
-          {I18n.t(strings.WOULD_YOU_LIKE_TO)}
-        </Text>
-        <Text
-          style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
-        >
-          {description}
-        </Text>
-        <Text style={styles.authRequestText}>
-          {I18n.t(strings.WITH_YOUR_SMARTWALLET)}
-        </Text>
-      </View>
-    )
-  }
-
-  private renderButtons() {
-    return (
-      <ButtonSection
-        disabled={this.state.pending}
-        denyDisabled={this.state.pending}
-        confirmText={I18n.t(strings.AUTHORIZE)}
-        denyText={I18n.t(strings.DENY)}
-        handleConfirm={this.handleConfirm}
-        handleDeny={() => this.props.cancelAuthenticationRequest()} // TODO Does this get dispatched correctly?
-        verticalPadding={10}
-      />
-    )
-  }
-
-  render() {
+  public render() {
     const {
       requester,
       callbackURL,
@@ -118,9 +93,32 @@ export class AuthenticationConsentComponent extends React.Component<
     } = this.props.activeAuthenticationRequest
     return (
       <View style={styles.container}>
-        {this.renderRequesterCard(requester, callbackURL)}
-        {this.renderAuthRequest(description)}
-        {this.renderButtons()}
+        <View style={styles.topSection}>
+          {this.renderRequesterCard(requester, callbackURL)}
+          <View style={styles.authRequestContainer}>
+            <Text style={styles.authRequestText}>
+              {I18n.t(strings.WOULD_YOU_LIKE_TO)}
+            </Text>
+            <Text
+              style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
+            >
+              {description}
+            </Text>
+            <Text style={styles.authRequestText}>
+              {I18n.t(strings.WITH_YOUR_SMARTWALLET)}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.buttonSection}>
+          <ButtonSection
+            disabled={this.state.pending}
+            denyDisabled={this.state.pending}
+            confirmText={I18n.t(strings.AUTHORIZE)}
+            denyText={I18n.t(strings.DENY)}
+            handleConfirm={this.handleConfirm}
+            handleDeny={() => this.props.cancelAuthenticationRequest()}
+          />
+        </View>
       </View>
     )
   }
