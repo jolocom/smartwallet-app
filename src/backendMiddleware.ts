@@ -12,11 +12,11 @@ import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapt
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
 import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
 import { JolocomLib } from 'jolocom-lib'
-import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { generateSecureRandomBytes } from './lib/util';
+import { generateSecureRandomBytes } from './lib/util'
+import { mnemonicToEntropy } from 'bip39'
 
 export enum ErrorCodes {
   NoEntropy = 'NoEntropy',
@@ -26,9 +26,9 @@ export enum ErrorCodes {
 }
 
 export class BackendError extends Error {
-  static codes = ErrorCodes
+  public static codes = ErrorCodes
 
-  constructor(code: ErrorCodes) {
+  public constructor(code: ErrorCodes) {
     super(code)
   }
 }
@@ -98,9 +98,10 @@ export class BackendMiddleware {
       Buffer.from(decryptedSeed, 'hex'),
       encryptionPass,
     )
+    const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
 
     const userPubKey = this._keyProvider.getPublicKey({
-      derivationPath: KeyTypes.jolocomIdentityKey,
+      derivationPath,
       encryptionPass,
     })
 
@@ -116,14 +117,13 @@ export class BackendMiddleware {
         identity,
         vaultedKeyProvider: this._keyProvider,
         publicKeyMetadata: {
-          derivationPath: KeyTypes.jolocomIdentityKey,
+          derivationPath,
           keyId: identity.publicKeySection[0].id,
         },
         contractsAdapter: this.registry.contractsAdapter,
         contractsGateway: this.registry.contractsGateway,
       }))
     } else {
-      const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
       const identityWallet = await this.registry.authenticate(
         this._keyProvider,
         {
@@ -135,6 +135,24 @@ export class BackendMiddleware {
       await this.storageLib.store.didDoc(identityWallet.didDocument)
       return (this._identityWallet = identityWallet)
     }
+  }
+  public async recoverIdentity(mnemonic: string): Promise<Identity> {
+    const password = (await generateSecureRandomBytes(32)).toString('base64')
+    //TODO: change to use key provider recovery method
+    const entropy = mnemonicToEntropy(mnemonic)
+    this._keyProvider = JolocomLib.KeyProvider.fromSeed(
+      Buffer.from(entropy, 'hex'),
+      password,
+    )
+    const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
+
+    const identityWallet = await this.registry.authenticate(this._keyProvider, {
+      encryptionPass: password,
+      derivationPath,
+    })
+    this._identityWallet = identityWallet
+    await this.storeIdentityData(password)
+    return identityWallet.identity
   }
 
   public async createKeyProvider(encodedEntropy: string): Promise<void> {
@@ -162,24 +180,25 @@ export class BackendMiddleware {
       this.keyProvider,
       password,
     )
+    await this.storeIdentityData(password)
+    return this._identityWallet.identity
+  }
 
+  private async storeIdentityData(password: string): Promise<void> {
     const personaData = {
       did: this._identityWallet.identity.did,
       controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
     }
     await this.storageLib.store.persona(personaData)
-
     const encryptedSeedData = {
       // TODO: change to keyProvider.encryptedSeed when the library is updated
       // with a public getter for the encryptedSeed
       encryptedEntropy: this.keyProvider['encryptedSeed'].toString('base64'),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }
     await this.storageLib.store.encryptedSeed(encryptedSeedData)
 
     await this.storageLib.store.didDoc(this._identityWallet.didDocument)
     await this.keyChainLib.savePassword(password)
-
-    return this._identityWallet.identity
   }
 }

@@ -4,11 +4,6 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
-import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
-import { setSeedPhraseSaved } from '../recovery'
-import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { AnyAction } from 'redux'
-import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -24,7 +19,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
-): Promise<AnyAction | void> => {
+) => {
   dispatch(
     navigationActions.navigate({
       routeName: routeList.RegistrationProgress,
@@ -44,19 +39,21 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
 
   dispatch(setLoadingMsg(loading.loadingStages[2]))
   const identity = await backendMiddleware.createIdentity()
-  dispatch(setLoadingMsg(loading.loadingStages[3]))
-  await dispatch(
-    storeIdentity(
-      identityWallet,
-      // TODO refactor with new lib version
-      userVault['encryptedSeed'].toString('hex'),
-      password,
-    ),
-  )
 
+  dispatch(setDid(identity.did))
+  dispatch(setLoadingMsg(loading.loadingStages[3]))
   dispatch(setIsRegistering(false))
+
   return dispatch(navigatorResetHome())
 }
+
+export const recoverIdentity = (mnemonic: string): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  dispatch(setIsRegistering(true))
+  const identity = await backendMiddleware.recoverIdentity(mnemonic)
 
   dispatch(setDid(identity.did))
   dispatch(setLoadingMsg(loading.loadingStages[3]))
