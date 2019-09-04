@@ -18,13 +18,13 @@ export default {
     path: 'm/0/1',
     keyType: 'ECDSA secp256k1',
   },
-  getPasswordResult: 'secret',
+  getPasswordResult: 'hunter0=',
   decodedWif: {
     privateKey:
       '0x0000000000000000000000000000000000000000000000000000000000000000',
     address: '0x5000000000000000000000000000000000000000',
   },
-  cipher: 'U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=',
+  cipher: 't3RRFFFU1D1RrT0x6tFidJIIrBSsSu18EgCXCZXl7KU=',
   identityWallet: {
     privateIdentityKey: {
       key: Buffer.from(
