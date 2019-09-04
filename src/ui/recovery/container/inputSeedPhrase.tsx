@@ -27,7 +27,6 @@ interface State {
   mnemonic: string[]
   isMnemonicValid: boolean
   suggestions: string[]
-  validWord: boolean
   markedWord: number
   inputState: WordState
 }
@@ -36,7 +35,6 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
   private textInput: TextInput | undefined
   public state = {
     inputValue: '',
-    validWord: false,
     isMnemonicValid: false,
     suggestions: [] as string[],
     mnemonic: [] as string[],
@@ -55,7 +53,6 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     }
 
     this.setState({
-      validWord: matches.includes(text),
       inputValue: text,
       suggestions: matches.slice(0, 10),
     })
@@ -93,7 +90,6 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     }
     this.setState({
       inputValue: isLastWord ? '' : word,
-      validWord: false,
       mnemonic,
       markedWord: isLastWord ? mnemonic.length : markedWord,
       isMnemonicValid: mnemonicValid,
@@ -130,7 +126,6 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
   public render(): JSX.Element {
     const {
       inputValue,
-      validWord,
       mnemonic,
       isMnemonicValid,
       suggestions,
@@ -143,7 +138,6 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
         <StatusBar />
         <InputSeedPhraseComponent
           inputValue={inputValue}
-          validWord={validWord}
           mnemonic={mnemonic}
           isMnemonicValid={isMnemonicValid}
           suggestions={suggestions}

@@ -106,7 +106,6 @@ interface InputSeedPhraseProps {
   inputValue: string
   isMnemonicValid: boolean
   suggestions: string[]
-  validWord: boolean
   markedWord: number
   handleNextWord: () => void
   handlePreviousWord: () => void
