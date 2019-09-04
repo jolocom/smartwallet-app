@@ -52,7 +52,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
 
   dispatch(setIsRegistering(true))
 
-  const { registry } = backendMiddleware
+  const { registry, encryptionLib } = backendMiddleware
 
   const password = (await generateSecureRandomBytes(32)).toString('base64')
 
@@ -76,8 +76,9 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   await dispatch(
     storeIdentity(
       identityWallet,
+      encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password }),
       // TODO refactor with new lib version
-      userVault['encryptedSeed'].toString('hex'),
+      // userVault['encryptedSeed'].toString('hex'),
       password,
     ),
   )
@@ -108,6 +109,7 @@ export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
   await dispatch(
     storeIdentity(
       identityWallet,
+
       // TODO refactor with new lib version
       userVault['encryptedSeed'].toString('hex'),
       password,
