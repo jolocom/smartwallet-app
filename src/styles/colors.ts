@@ -33,7 +33,7 @@ export const golden = 'rgb(241, 161, 7)'
 
 export const greenMain = 'rgb(40, 165, 45)'
 export const greenFaded060 = 'rgba(233, 239, 221, 0.6)'
-
+export const mint = 'rgb(89, 167, 145)'
 // PRESETS
 
 export const backgroundDarkMain = blackMain

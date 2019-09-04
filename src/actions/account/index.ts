@@ -48,7 +48,6 @@ export const checkIdentityExists: ThunkAction = async (
 ) => {
   const { keyChainLib, storageLib, encryptionLib, registry } = backendMiddleware
   const encryptedEntropy = await storageLib.get.encryptedSeed()
-
   if (!encryptedEntropy) {
     const isRegistering = getState().registration.loading.isRegistering
 

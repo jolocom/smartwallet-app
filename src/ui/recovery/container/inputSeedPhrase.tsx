@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import InputSeedPhraseComponent from '../components/inputSeedPhrase'
 import { validateMnemonic, wordlists } from 'bip39'
-import { withErrorScreen, withLoading } from '../../../actions/modifiers'
+import { withErrorScreen } from '../../../actions/modifiers'
 import { recoverIdentity } from '../../../actions/registration'
-import { AppError } from '../../../lib/errors'
 import { routeList } from '../../../routeList'
-import ErrorCode from '../../../lib/errorCodes'
 import { StatusBar, TextInput } from 'react-native'
 import { timeout } from '../../../utils/asyncTimeout'
+import { navigationActions } from '../../../actions'
+import { RootState } from '../../../reducers'
 
 export enum WordState {
   editing,
@@ -145,6 +145,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
       markedWord,
       wordState,
     } = this.state
+    console.log(this.props.isLoading)
     return (
       <React.Fragment>
         <StatusBar />
@@ -156,7 +157,9 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
           wordList={wordList}
           selectWord={this.selectWord}
           handleTextInput={this.handleTextChange}
-          handleButtonPress={() => this.props.recoverIdentity(currentWord)}
+          handleButtonPress={() =>
+            this.props.recoverIdentity(mnemonic.join(' '))
+          }
           openKeyboard={ref => {
             this.textInput = ref
           }}
@@ -165,24 +168,22 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
           handlePreviousWord={this.previousWord}
           markedWord={markedWord}
           wordState={wordState}
+          handleBackButton={this.props.goBack}
+          isLoading={this.props.isLoading}
         />
       </React.Fragment>
     )
   }
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = (state: RootState) => ({
+  isLoading: state.registration.loading.isRegistering,
+})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   recoverIdentity: (seedPhrase: string) =>
-    dispatch(
-      withErrorScreen(withLoading(recoverIdentity(seedPhrase)), err => {
-        if (err instanceof AppError) {
-          err.navigateTo = routeList.InputSeedPhrase
-          return err
-        }
-        return new AppError(ErrorCode.Unknown, err)
-      }),
-    ),
+    dispatch(withErrorScreen(recoverIdentity(seedPhrase))),
+  goBack: () =>
+    dispatch(navigationActions.navigate({ routeName: routeList.Landing })),
 })
 
 export const InputSeedPhrase = connect(

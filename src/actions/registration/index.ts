@@ -92,7 +92,7 @@ export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
   backendMiddleware,
 ): Promise<AnyAction | void> => {
   const password = (await generateSecureRandomBytes(32)).toString('base64')
-
+  dispatch(setIsRegistering(true))
   const userVault = JolocomLib.KeyProvider.recoverKeyPair(
     seedPhrase,
     password,
@@ -115,7 +115,9 @@ export const recoverIdentity = (seedPhrase: string): ThunkAction => async (
   )
 
   // The user already knows his seed phrase, will perform reset navigate HOME
-  return dispatch(setSeedPhraseSaved())
+  dispatch(setIsRegistering(false))
+  dispatch(setSeedPhraseSaved())
+  return dispatch(navigationActions.navigatorResetHome())
 }
 
 const storeIdentity = (

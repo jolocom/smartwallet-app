@@ -38,8 +38,7 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
     settingKeys.seedPhraseSaved,
     true,
   )
-  dispatch({
+  return dispatch({
     type: 'SET_SEED_PHRASE_SAVED',
   })
-  return dispatch(navigationActions.navigatorResetHome())
 }
