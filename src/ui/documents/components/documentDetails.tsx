@@ -4,6 +4,8 @@ import { IssuerCard } from 'src/ui/documents/components/issuerCard'
 import { DecoratedClaims } from 'src/reducers/account'
 import { prepareLabel } from 'src/lib/util'
 import { Typography, Colors, Spacing } from 'src/styles'
+import I18n from 'src/locales/i18n'
+import strings from 'src/locales/strings'
 
 interface Props {
   document: DecoratedClaims
@@ -43,14 +45,16 @@ const styles = StyleSheet.create({
   },
 })
 
-export const DocumentDetails: React.SFC<Props> = ({ document }) => {
+export const DocumentDetailsComponent: React.FC<Props> = ({ document }) => {
   if (!document) return null
 
   return (
     <View style={styles.container}>
       <Text style={styles.sectionHeader}>Issued by</Text>
-      {IssuerCard(document.issuer)}
-      <Text style={styles.sectionHeader}>Details</Text>
+      <IssuerCard issuer={document.issuer} />
+      <Text style={styles.sectionHeader}>
+        {I18n.t(strings.DOCUMENT_DETAILS_CLAIMS)}
+      </Text>
       <View style={styles.claimsContainer}>
         {Object.keys(document.claimData).map(key =>
           document.claimData[key] ? (
