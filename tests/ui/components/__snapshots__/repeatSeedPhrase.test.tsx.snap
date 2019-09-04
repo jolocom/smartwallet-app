@@ -29,7 +29,7 @@ exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
           Object {
             "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
-            "fontSize": 18,
+            "fontSize": 20,
             "lineHeight": 23,
             "textAlign": "center",
           }
@@ -267,7 +267,7 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
           Object {
             "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
-            "fontSize": 18,
+            "fontSize": 20,
             "lineHeight": 23,
             "textAlign": "center",
           }

@@ -93,7 +93,7 @@ exports[`landing component matches the snapshot on render 1`] = `
   <View
     style={
       Object {
-        "flex": 0.1,
+        "flex": 0.2,
       }
     }
   >
@@ -102,6 +102,10 @@ exports[`landing component matches the snapshot on render 1`] = `
       raised={true}
       text="Get started"
       upperCase={false}
+    />
+    <JolocomButton
+      onPress={[MockFunction]}
+      text="Recover Identity"
     />
   </View>
 </Container>

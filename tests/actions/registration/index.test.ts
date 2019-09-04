@@ -54,7 +54,6 @@ describe('Registration action creators', () => {
         storageLib: {
           store: {
             persona: jest.fn(),
-            derivedKey: jest.fn(),
             encryptedSeed: jest.fn(),
             didDoc: jest.fn(),
           },
@@ -90,13 +89,10 @@ describe('Registration action creators', () => {
         randomPassword,
       )
       expect(
-        mockMiddleware.encryptionLib.encryptWithPass.mock.calls,
-      ).toMatchSnapshot()
-      expect(
         mockMiddleware.storageLib.store.persona.mock.calls,
       ).toMatchSnapshot()
       expect(
-        mockMiddleware.storageLib.store.derivedKey.mock.calls,
+        mockMiddleware.storageLib.store.encryptedSeed.mock.calls,
       ).toMatchSnapshot()
       expect(fuelSpy.mock.calls).toMatchSnapshot()
       MockDate.reset()

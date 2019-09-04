@@ -59,7 +59,7 @@ describe('Account action creators', () => {
         persona: jest.fn().mockResolvedValue({
           did: 'did:jolo:first',
         }),
-        encryptedSeed: jest.fn().mockResolvedValue('mockencryptedvalue'),
+        encryptedSeed: jest.fn().mockResolvedValue('b77451145154d43d51ad3d31ead162749208ac14ac4aed7c1200970995e5eca5'),
         didDoc: jest.fn().mockResolvedValue(undefined),
       },
       store: {
@@ -67,7 +67,7 @@ describe('Account action creators', () => {
       },
     },
     keyChainLib: {
-      getPassword: jest.fn().mockResolvedValue('secret'),
+      getPassword: jest.fn().mockResolvedValue('hunter0='),
     },
     encryptionLib: {
       decryptWithPass: jest.fn().mockReturnValue('a'.repeat(64)),

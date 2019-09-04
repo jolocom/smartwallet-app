@@ -15,12 +15,12 @@ Array [
     "value": "Registering decentralized identity",
   },
   Object {
-    "type": "DID_SET",
-    "value": "did:jolo:mockdid",
-  },
-  Object {
     "type": "SET_LOADING_MSG",
     "value": "Preparing launch",
+  },
+  Object {
+    "type": "DID_SET",
+    "value": "did:jolo:mockdid",
   },
   Object {
     "type": "SET_IS_REGISTERING",
@@ -44,8 +44,8 @@ exports[`Registration action creators createIdentity should attempt to create an
 Array [
   Array [
     Object {
-      "data": "4f8d84403d760b5b3fc5426c90827dab",
-      "pass": "hunter0=",
+      "controllingKeyPath": "m/73'/0'/0'/0",
+      "did": "did:jolo:mockdid",
     },
   ],
 ]
@@ -55,16 +55,14 @@ exports[`Registration action creators createIdentity should attempt to create an
 Array [
   Array [
     Object {
-      "controllingKeyPath": "m/73'/0'/0'/0",
-      "did": "did:jolo:mockdid",
+      "encryptedEntropy": "b77451145154d43d51ad3d31ead162749208ac14ac4aed7c1200970995e5eca5",
+      "timestamp": 946681200000,
     },
   ],
 ]
 `;
 
-exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `Array []`;
-
-exports[`Registration action creators createIdentity should attempt to create an identity 5`] = `
+exports[`Registration action creators createIdentity should attempt to create an identity 4`] = `
 Array [
   Array [
     Object {

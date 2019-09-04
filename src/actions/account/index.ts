@@ -60,7 +60,6 @@ export const checkIdentityExists: ThunkAction = async (
 
   const encryptionPass = await keyChainLib.getPassword()
 
-  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
   const userVault = new JolocomLib.KeyProvider(
     Buffer.from(encryptedEntropy, 'hex'),
   )

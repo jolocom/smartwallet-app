@@ -52,7 +52,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
 
   dispatch(setIsRegistering(true))
 
-  const { registry, encryptionLib } = backendMiddleware
+  const { registry } = backendMiddleware
 
   const password = (await generateSecureRandomBytes(32)).toString('base64')
 
@@ -76,9 +76,8 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   await dispatch(
     storeIdentity(
       identityWallet,
-      encryptionLib.encryptWithPass({ data: encodedEntropy, pass: password }),
       // TODO refactor with new lib version
-      // userVault['encryptedSeed'].toString('hex'),
+      userVault['encryptedSeed'].toString('hex'),
       password,
     ),
   )
@@ -133,16 +132,13 @@ const storeIdentity = (
 ): Promise<void> => {
   const { storageLib, keyChainLib } = backendMiddleware
   backendMiddleware.identityWallet = identityWallet
-  dispatch(setDid(identityWallet.did))
   const entropyData = { encryptedEntropy: encEntropy, timestamp: Date.now() }
   const personaData = {
-    did: identityWallet.did,
+    did: identityWallet.didDocument.did,
     controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
   }
 
-  dispatch(setDid(identityWallet.identity.did))
-  dispatch(setLoadingMsg(loading.loadingStages[3]))
-
+  dispatch(setDid(identityWallet.didDocument.did))
   await storageLib.store.didDoc(identityWallet.didDocument)
   backendMiddleware.identityWallet = identityWallet
 

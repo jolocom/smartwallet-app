@@ -93,8 +93,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 30,
     width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 })
 interface InputSeedPhraseProps {
@@ -235,6 +233,8 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                         ...buttonStandardContainer,
                         minWidth: 0,
                         margin: 6,
+                        height: 40,
+                        backgroundColor: Colors.purpleMain050,
                       },
                       text: {
                         ...buttonStandardText,
@@ -255,12 +255,11 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                 raised
                 upperCase={false}
                 text={'Restore account'}
-                style={{ container: { margin: 10 } }}
               />
             )}
             <TransparentButton
               onPress={handleBackButton}
-              style={{ width: 300, height: 56 }}
+              style={{ marginHorizontal: 30, paddingVertical: 10 }}
               text={'Back to signup'}
             />
           </View>
