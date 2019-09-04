@@ -23,32 +23,30 @@ interface Props
     ReturnType<typeof mapStateToProps> {}
 
 interface State {
-  currentWord: string
+  inputValue: string
   mnemonic: string[]
-  isValid: boolean
-  wordList: string[]
+  isMnemonicValid: boolean
+  suggestions: string[]
   validWord: boolean
   markedWord: number
-  wordState: WordState
+  inputState: WordState
 }
 
 export class InputSeedPhraseContainer extends React.Component<Props, State> {
   private textInput: TextInput | undefined
   public state = {
-    currentWord: '',
+    inputValue: '',
     validWord: false,
-    isValid: false,
-    wordList: [] as string[],
+    isMnemonicValid: false,
+    suggestions: [] as string[],
     mnemonic: [] as string[],
     markedWord: 0, // editing first word
-    wordState: WordState.editing,
+    inputState: WordState.editing,
   }
 
-  public componentDidMount(): void {
-    // if (this.textInput) this.textInput.focus()
-  }
+  public componentDidMount(): void {}
 
-  private handleTextChange = (text: string): void => {
+  private handleInputChange = (text: string): void => {
     let matches = [] as string[]
     if (text.length >= 2) {
       matches = wordlists.EN.filter((word: string): boolean =>
@@ -58,28 +56,28 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
 
     this.setState({
       validWord: matches.includes(text),
-      currentWord: text,
-      wordList: matches.slice(0, 10),
+      inputValue: text,
+      suggestions: matches.slice(0, 10),
     })
   }
 
   private onDoneButton = async () => {
-    const { wordList, currentWord } = this.state
+    const { suggestions, inputValue } = this.state
     this.setState({
-      wordState: WordState.loading,
+      inputState: WordState.loading,
     })
     await timeout(500)
-    const matchingWord = wordList.find(e => e === currentWord.trim())
+    const matchingWord = suggestions.find(e => e === inputValue.trim())
 
     if (matchingWord) {
       this.setState({
-        wordState: WordState.valid,
+        inputState: WordState.valid,
       })
       await timeout(500)
       this.selectWord(matchingWord)
     } else {
       this.setState({
-        wordState: WordState.wrong,
+        inputState: WordState.wrong,
       })
     }
   }
@@ -94,80 +92,74 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
       this.textInput.blur()
     }
     this.setState({
-      currentWord: isLastWord ? '' : word,
+      inputValue: isLastWord ? '' : word,
       validWord: false,
       mnemonic,
       markedWord: isLastWord ? mnemonic.length : markedWord,
-      isValid: mnemonicValid,
-      wordList: [],
-      wordState: WordState.editing,
+      isMnemonicValid: mnemonicValid,
+      suggestions: [],
+      inputState: WordState.editing,
     })
-  }
-  private previousWord = () => {
-    const { markedWord, mnemonic, currentWord } = this.state
-    let next = markedWord
-    let inputValue = currentWord
-    if (inputValue && currentWord !== mnemonic[markedWord]) inputValue = ''
-    else {
-      next = markedWord !== 0 ? markedWord - 1 : 0
-      inputValue = next === mnemonic.length ? '' : mnemonic[next]
-    }
-    this.setState({
-      currentWord: inputValue,
-      markedWord: next,
-    })
-    this.handleTextChange(inputValue)
   }
 
-  private nextWord = () => {
-    const { markedWord, mnemonic, currentWord } = this.state
-    let next = markedWord
-    let inputValue = currentWord
-    if (inputValue && currentWord !== mnemonic[markedWord]) inputValue = ''
+  private changeMarkedWord(next: boolean) {
+    const { markedWord, mnemonic, inputValue } = this.state
+
+    let nextWord = markedWord
+    let newValue = inputValue
+    if (newValue && newValue !== mnemonic[markedWord]) newValue = ''
     else {
-      next = markedWord !== mnemonic.length ? markedWord + 1 : mnemonic.length
-      inputValue = next === mnemonic.length ? '' : mnemonic[next]
+      if (next) {
+        nextWord =
+          markedWord !== mnemonic.length ? markedWord + 1 : mnemonic.length
+      } else {
+        nextWord = markedWord !== 0 ? markedWord - 1 : 0
+      }
+      newValue = nextWord === mnemonic.length ? '' : mnemonic[nextWord]
     }
     this.setState({
-      currentWord: inputValue,
-      markedWord: next,
+      inputValue: newValue,
+      markedWord: nextWord,
     })
-    this.handleTextChange(inputValue)
+    this.handleInputChange(newValue)
   }
+
+  private nextWord = () => this.changeMarkedWord(true)
+  private previousWord = () => this.changeMarkedWord(false)
 
   public render(): JSX.Element {
     const {
-      currentWord,
+      inputValue,
       validWord,
       mnemonic,
-      isValid,
-      wordList,
+      isMnemonicValid,
+      suggestions,
       markedWord,
-      wordState,
+      inputState,
     } = this.state
-    console.log(this.props.isLoading)
+
     return (
       <React.Fragment>
         <StatusBar />
         <InputSeedPhraseComponent
-          currentWord={currentWord}
+          inputValue={inputValue}
           validWord={validWord}
           mnemonic={mnemonic}
-          isValid={isValid}
-          wordList={wordList}
+          isMnemonicValid={isMnemonicValid}
+          suggestions={suggestions}
+          markedWord={markedWord}
+          inputState={inputState}
           selectWord={this.selectWord}
-          handleTextInput={this.handleTextChange}
+          handleTextInput={this.handleInputChange}
           handleButtonPress={() =>
             this.props.recoverIdentity(mnemonic.join(' '))
           }
-          openKeyboard={ref => {
+          inputRef={ref => {
             this.textInput = ref
           }}
           handleDoneButton={this.onDoneButton}
           handleNextWord={this.nextWord}
           handlePreviousWord={this.previousWord}
-          markedWord={markedWord}
-          wordState={wordState}
           handleBackButton={this.props.goBack}
           isLoading={this.props.isLoading}
         />

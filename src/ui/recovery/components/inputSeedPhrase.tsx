@@ -101,38 +101,38 @@ interface InputSeedPhraseProps {
   handleButtonPress: () => void
   handleTextInput: (text: string) => void
   selectWord: (word: string) => void
-  openKeyboard: (ref: TextInput) => void
+  inputRef: (ref: TextInput) => void
   handleDoneButton: () => void
   handleBackButton: () => void
   mnemonic: string[]
-  currentWord: string
-  isValid: boolean
-  wordList: string[]
+  inputValue: string
+  isMnemonicValid: boolean
+  suggestions: string[]
   validWord: boolean
   markedWord: number
   handleNextWord: () => void
   handlePreviousWord: () => void
-  wordState: WordState
+  inputState: WordState
   isLoading: boolean
 }
 const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
-  currentWord,
+  inputValue,
   markedWord,
-  wordList,
-  isValid,
-  wordState,
+  suggestions,
+  isMnemonicValid,
+  inputState,
   mnemonic,
   handleTextInput,
   selectWord,
   handleButtonPress,
-  openKeyboard,
+  inputRef,
   handleDoneButton,
   handleNextWord,
   handlePreviousWord,
   handleBackButton,
   isLoading,
 }) => {
-  const isPreviousEnabled = markedWord > 0 || currentWord.length > 0
+  const isPreviousEnabled = markedWord > 0 || inputValue.length > 0
   const isNextEnabled = markedWord < mnemonic.length
   let headerText
   if (isLoading) {
@@ -182,14 +182,16 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
               //@ts-ignore textAlign is missing in the typings of TextInput
               <TextInput
                 textAlign={'center'}
-                ref={openKeyboard}
+                ref={inputRef}
                 autoCapitalize={'none'}
                 autoCorrect={false}
                 style={[
                   styles.textInput,
-                  wordState === WordState.wrong ? styles.error : styles.correct,
+                  inputState === WordState.wrong
+                    ? styles.error
+                    : styles.correct,
                 ]}
-                value={currentWord}
+                value={inputValue}
                 placeholder={mnemonic.length === 0 ? 'Your first word' : ''}
                 placeholderTextColor={Colors.white050}
                 onChangeText={handleTextInput}
@@ -201,12 +203,12 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
               />
             }
             <View style={{ marginRight: 10, width: 19 }}>
-              {wordState === WordState.loading && (
+              {inputState === WordState.loading && (
                 <Rotation>
-                  <SpinningIcon styles={{ backgroundColor: 'blue' }} />
+                  <SpinningIcon />
                 </Rotation>
               )}
-              {wordState === WordState.valid && <CheckMarkIcon />}
+              {inputState === WordState.valid && <CheckMarkIcon />}
             </View>
             <View style={{ width: 30 }}>
               {isNextEnabled && <NextIcon onPress={handleNextWord} />}
@@ -214,18 +216,19 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           </View>
           <View style={styles.divider} />
           <Text style={styles.hint}>
-            {wordState === WordState.wrong
+            {inputState === WordState.wrong
               ? 'The word is not correct, check for typos'
-              : wordList.length > 0 && 'Choose the right word or press enter'}
+              : suggestions.length > 0 &&
+                'Choose the right word or press enter'}
           </Text>
           <View style={styles.wordListWrapper}>
             <View style={styles.wordListSection}>
-              {currentWord.length > 1 &&
-                wordList.map((word, i) => (
+              {inputValue.length > 1 &&
+                suggestions.map((word, i) => (
                   <Button
                     key={i}
                     text={word}
-                    onPress={() => selectWord(wordList[i])}
+                    onPress={() => selectWord(suggestions[i])}
                     upperCase={false}
                     style={{
                       container: {
@@ -245,10 +248,10 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
 
           <View style={{ flex: 2 }} />
           <View style={styles.buttonSection}>
-            {isValid && (
+            {isMnemonicValid && (
               <JolocomButton
-                disabled={!isValid}
-                onPress={isValid ? handleButtonPress : undefined}
+                disabled={!isMnemonicValid}
+                onPress={isMnemonicValid ? handleButtonPress : undefined}
                 raised
                 upperCase={false}
                 text={'Restore account'}
