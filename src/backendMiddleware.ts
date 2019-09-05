@@ -162,6 +162,7 @@ export class BackendMiddleware {
       Buffer.from(encodedEntropy, 'hex'),
       password,
     )
+    await this.keyChainLib.savePassword(password)
   }
 
   public async fuelKeyWithEther(): Promise<void> {
@@ -199,6 +200,5 @@ export class BackendMiddleware {
     await this.storageLib.store.encryptedSeed(encryptedSeedData)
 
     await this.storageLib.store.didDoc(this._identityWallet.didDocument)
-    await this.keyChainLib.savePassword(password)
   }
 }
