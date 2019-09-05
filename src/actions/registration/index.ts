@@ -54,12 +54,16 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   backendMiddleware,
 ) => {
   dispatch(setIsRegistering(true))
-  const identity = await backendMiddleware.recoverIdentity(mnemonic)
+  let identity
+  try {
+    identity = await backendMiddleware.recoverIdentity(mnemonic)
+  } catch (e) {
+    return dispatch(setIsRegistering(false))
+  }
 
   dispatch(setDid(identity.did))
-  dispatch(setLoadingMsg(loading.loadingStages[3]))
   dispatch(setSeedPhraseSaved())
-  dispatch(setIsRegistering(false))
 
+  dispatch(setIsRegistering(false))
   return dispatch(navigatorResetHome())
 }
