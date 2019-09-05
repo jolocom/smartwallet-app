@@ -184,7 +184,6 @@ export class BackendMiddleware {
       timestamp: Date.now(),
     }
     await this.storageLib.store.encryptedSeed(encryptedSeedData)
-    console.log(encryptedSeedData.encryptedEntropy)
     await this.storageLib.store.didDoc(this._identityWallet.didDocument)
   }
 }

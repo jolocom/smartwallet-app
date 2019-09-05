@@ -47,6 +47,11 @@ describe('BackendMiddleware', () => {
   describe('prepareIdentityWallet', () => {
     const backendMiddleware = createBackendMiddleware()
 
+    beforeEach(() => {
+      stub.clearMocks(registry)
+      stub.clearMocks(storageLib.get)
+      stub.clearMocks(storageLib.store)
+    })
     it('should throw NoEntropy if there is no stored entropy', async () => {
       reveal(storageLib.get).encryptedSeed.mockResolvedValueOnce(null)
       const walletPromise = backendMiddleware.prepareIdentityWallet()
@@ -73,8 +78,6 @@ describe('BackendMiddleware', () => {
     })
 
     it('should use cached identity if available', async () => {
-      stub.clearMocks(registry)
-      stub.clearMocks(storageLib.store)
       reveal(storageLib.get).didDoc.mockResolvedValueOnce(
         identityWallet.didDocument,
       )
@@ -129,7 +132,7 @@ describe('BackendMiddleware', () => {
       await backendMiddleware.createKeyProvider(entropy)
       expect(() => backendMiddleware.keyProvider).not.toThrow()
       expect(
-        backendMiddleware.keyProvider['encryptedSeed'].toString('base64'),
+        backendMiddleware.keyProvider['encryptedSeed'].toString('hex'),
       ).toMatch(cipher)
     })
 
