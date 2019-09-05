@@ -5,7 +5,10 @@ import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { SocialRecovery } from 'jolocom-lib/js/recovery/socialRecovery'
 import { mnemonicToEntropy } from 'bip39'
-import { OWN_SHARD_LABEL } from '../lib/storage/entities/shardEntity'
+import {
+  OWN_SHARD_LABEL,
+  ShardEntity,
+} from '../lib/storage/entities/shardEntity'
 
 export enum ActionTypes {
   SET_OWN_SHARDS = 'SET_OWN_SHARDS',
@@ -45,7 +48,7 @@ export const openSocialRecovery = (): ThunkAction => async (
   const shards = await storageLib.get.shards(OWN_SHARD_LABEL)
   dispatch({
     type: ActionTypes.SET_OWN_SHARDS,
-    value: shards.map(s => s.value),
+    value: shards,
   })
   dispatch(navigationActions.navigate({ routeName: routeList.SocialRecovery }))
 }
@@ -83,6 +86,9 @@ export const initSocialRecovery = (): ThunkAction => async (
     settingKeys.shardsCreated,
     true,
   )
+  dispatch({
+    type: 'SET_SHARDS_CREATED',
+  })
 }
 
 export const setSeedPhraseSaved = (): ThunkAction => async (
@@ -105,7 +111,6 @@ export const handelReceiveShard = (shard: string): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  console.log(shard)
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.AcceptShard,
@@ -133,5 +138,18 @@ export const openReceivedShards = (): ThunkAction => async (
     value: allShards.filter(shard => shard.label !== OWN_SHARD_LABEL),
   })
 
-  dispatch(navigationActions.navigate({routeName: routeList.ReceivedShards}))
+  dispatch(navigationActions.navigate({ routeName: routeList.ReceivedShards }))
+}
+
+export const deleteShard = (shard: ShardEntity): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  await backendMiddleware.storageLib.delete.shard(shard)
+  const shards = await backendMiddleware.storageLib.get.shards(OWN_SHARD_LABEL)
+  dispatch({
+    type: ActionTypes.SET_OWN_SHARDS,
+    value: shards,
+  })
 }

@@ -3,18 +3,23 @@ import { Modal, Text, TouchableHighlight, View } from 'react-native'
 import { Container } from 'src/ui/structure'
 import QRCode from 'react-native-qrcode-svg'
 import { white } from '../../../styles/colors'
-import { LabeledShard } from '../container/receivedShards'
+import { Colors } from '../../../styles'
+import { ShardEntity } from '../../../lib/storage/entities/shardEntity'
 
 interface Props {
   modalOpen: boolean
-  selectedShard: string | LabeledShard
+  selectedShard: ShardEntity
   closeModal: () => void
+  deleteShard?: () => void
+  isOwnShard?: boolean
 }
 
 export const ShardModal: React.FunctionComponent<Props> = ({
   modalOpen,
   selectedShard,
   closeModal,
+  deleteShard,
+  isOwnShard,
 }) => (
   <Modal
     animationType="fade"
@@ -26,7 +31,7 @@ export const ShardModal: React.FunctionComponent<Props> = ({
         <View
           style={{
             backgroundColor: white,
-            height: '70%',
+            height: '80%',
             width: '80%',
             justifyContent: 'center',
             alignItems: 'center',
@@ -36,25 +41,36 @@ export const ShardModal: React.FunctionComponent<Props> = ({
           }}
         >
           <Text style={{ marginBottom: 20 }}>
-            {typeof selectedShard === 'string'
+            {isOwnShard
               ? 'Ask a Friend to scan this QR-Code!'
               : `Share this with ${selectedShard.label}`}
           </Text>
           <QRCode
             backgroundColor={'white'}
             size={250}
-            value={
-              'shard:' +
-              (typeof selectedShard == 'string'
-                ? selectedShard
-                : selectedShard.value)
-            }
+            value={'shard:' + selectedShard.value}
           />
+          {isOwnShard && (
+            <TouchableHighlight
+              style={{
+                marginTop: 50,
+                padding: 15,
+                backgroundColor: Colors.purpleMain,
+                borderRadius: 5,
+              }}
+              onPress={() => {
+                if (deleteShard) deleteShard()
+                return closeModal()
+              }}
+            >
+              <Text>{'Sharing Complete (Delete shard)'}</Text>
+            </TouchableHighlight>
+          )}
           <TouchableHighlight
-            style={{ marginTop: 50, padding: 20 }}
+            style={{ marginTop: 5, padding: 15 }}
             onPress={() => closeModal()}
           >
-            <Text>Dismiss</Text>
+            <Text>{'Dismiss'}</Text>
           </TouchableHighlight>
         </View>
       </Container>

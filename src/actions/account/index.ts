@@ -60,7 +60,6 @@ export const checkIdentityExists: ThunkAction = async (
   }
 
   const encryptionPass = await keyChainLib.getPassword()
-  console.log(encryptedEntropy)
   const userVault = new JolocomLib.KeyProvider(
     Buffer.from(encryptedEntropy, 'hex'),
   )

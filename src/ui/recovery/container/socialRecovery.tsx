@@ -5,7 +5,8 @@ import { NavigationScreenProps } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { SocialRecoveryComponent } from '../components/socialRecovery'
 import { RootState } from '../../../reducers'
-import { openReceivedShards } from '../../../actions/recovery'
+import { deleteShard, openReceivedShards } from '../../../actions/recovery'
+import { ShardEntity } from '../../../lib/storage/entities/shardEntity'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -14,21 +15,23 @@ interface Props
 
 interface State {
   modalOpen: boolean
-  selectedShard: string
+  selectedShard?: ShardEntity
 }
 
 export class SocialRecoveryContainer extends React.Component<Props, State> {
   public state = {
     modalOpen: false,
-    selectedShard: '',
+    selectedShard: undefined,
   }
 
   private toggleModal = (shardId?: number) => {
     this.setState({
       modalOpen: !this.state.modalOpen,
-      selectedShard: shardId !== undefined ? this.props.shards[shardId] : '',
+      selectedShard:
+        shardId !== undefined ? this.props.shards[shardId] : undefined,
     })
   }
+
   public render() {
     const { modalOpen, selectedShard } = this.state
     return (
@@ -42,8 +45,10 @@ export class SocialRecoveryContainer extends React.Component<Props, State> {
           shards={this.props.shards}
           modalOpen={modalOpen}
           selectedShard={selectedShard}
+          shardsCreated={this.props.shardsCreated}
           toggleModal={this.toggleModal}
           openReceivedShards={this.props.openReceivedShards}
+          deleteShard={this.props.deleteShard}
         />
       </React.Fragment>
     )
@@ -52,9 +57,11 @@ export class SocialRecoveryContainer extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => ({
   shards: state.recovery.ownShards,
+  shardsCreated: state.settings.shardsCreated,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openReceivedShards: () => dispatch(openReceivedShards()),
+  deleteShard: (shard: ShardEntity) => dispatch(deleteShard(shard)),
 })
 
 export const SocialRecovery = connect(

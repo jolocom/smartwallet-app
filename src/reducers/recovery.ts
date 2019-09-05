@@ -1,10 +1,10 @@
 import { AnyAction } from 'redux'
-import { LabeledShard } from '../ui/recovery/container/receivedShards'
 import { ActionTypes } from '../actions/recovery'
+import { ShardEntity } from '../lib/storage/entities/shardEntity'
 
 export interface RecoveryState {
-  readonly ownShards: string[]
-  readonly receivedShards: LabeledShard[]
+  readonly ownShards: ShardEntity[]
+  readonly receivedShards: ShardEntity[]
 }
 
 const initialState: RecoveryState = {

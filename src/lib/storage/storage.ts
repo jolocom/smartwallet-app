@@ -20,7 +20,6 @@ import {
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '../../actions/sso/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
-import { LabeledShard } from '../../ui/recovery/container/receivedShards'
 import { ShardEntity } from './entities/shardEntity'
 
 interface PersonaAttributes {
@@ -88,6 +87,7 @@ export class Storage {
 
   public delete = {
     verifiableCredential: this.deleteVCred.bind(this),
+    shard: this.deleteShard.bind(this),
     // credentialMetadata: this.deleteCredentialMetadata.bind(this)
   }
 
@@ -103,7 +103,7 @@ export class Storage {
     }
   }
 
-  private async getShards(label?: string): Promise<LabeledShard[]> {
+  private async getShards(label?: string): Promise<ShardEntity[]> {
     await this.createConnectionIfNeeded()
     const options = label
       ? {
@@ -111,15 +111,20 @@ export class Storage {
         }
       : undefined
     const shards = await this.connection.manager.find(ShardEntity, options)
-    console.log(shards)
     return shards
   }
 
-  private async saveShard(shard: LabeledShard): Promise<void> {
+  private async saveShard(shard: Partial<ShardEntity>): Promise<void> {
     await this.createConnectionIfNeeded()
     const repo = this.connection.getRepository(ShardEntity)
     const shardObj = repo.create(shard)
     await repo.save(shardObj)
+  }
+
+  private async deleteShard(shard: ShardEntity): Promise<void> {
+    await this.createConnectionIfNeeded()
+    const repo = this.connection.getRepository(ShardEntity)
+    await repo.delete(shard)
   }
 
   private async getSettingsObject(): Promise<{ [key: string]: any }> {

@@ -6,6 +6,7 @@ import { StatusBar } from 'react-native'
 import { ReceivedShardsComponent } from '../components/receivedShards'
 import { ShardModal } from '../components/shardModal'
 import { RootState } from '../../../reducers'
+import { ShardEntity } from '../../../lib/storage/entities/shardEntity'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -14,12 +15,7 @@ interface Props
 
 interface State {
   modalOpen: boolean
-  selectedShard?: LabeledShard
-}
-
-export interface LabeledShard {
-  label: string
-  value: string
+  selectedShard?: ShardEntity
 }
 
 export class ReceivedShardsContainer extends React.Component<Props, State> {
