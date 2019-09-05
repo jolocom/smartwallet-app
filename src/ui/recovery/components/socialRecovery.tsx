@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   header: {
     ...largeText,
-    margin: Spacing.XXL,
+    margin: Spacing.XL,
   },
   note: {
     ...Typography.noteText,

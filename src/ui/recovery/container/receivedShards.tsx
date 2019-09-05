@@ -37,7 +37,6 @@ export class ReceivedShardsContainer extends React.Component<Props, State> {
   }
 
   public render() {
-    console.log(this.props.shards)
     const { modalOpen, selectedShard } = this.state
     return (
       <React.Fragment>

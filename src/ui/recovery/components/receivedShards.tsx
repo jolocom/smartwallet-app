@@ -44,24 +44,30 @@ export const ReceivedShardsComponent: React.FunctionComponent<Props> = ({
   <Container style={styles.container}>
     <Text style={styles.header}>Received Shards</Text>
     <Text style={styles.note}>
-      Share shards with friends in case they need to recovery their identity.
-      Make sure to share these shards only with them.
+      Share this shards with friends in case they need to recovery their
+      identity. Make sure to share these shards only with them.
     </Text>
-    {shards.map((shard, i) => (
-      <TouchableHighlight
-        key={i}
-        style={{ width: '100%' }}
-        onPress={() => toggleModal(i)}
-      >
-        <React.Fragment>
-          <View
-            style={{ width: '100%', height: 1, backgroundColor: 'white' }}
-          />
-          <Text
-            style={[styles.note, { margin: 20 }]}
-          >{`Shard of ${shard.label} - Tap to share`}</Text>
-        </React.Fragment>
-      </TouchableHighlight>
-    ))}
+    {shards.length !== 0 ? (
+      shards.map((shard, i) => (
+        <TouchableHighlight
+          key={i}
+          style={{ width: '100%' }}
+          onPress={() => toggleModal(i)}
+        >
+          <React.Fragment>
+            <View
+              style={{ width: '100%', height: 1, backgroundColor: 'white' }}
+            />
+            <Text
+              style={[styles.note, { margin: 20 }]}
+            >{`Shard of ${shard.label} - Tap to share`}</Text>
+          </React.Fragment>
+        </TouchableHighlight>
+      ))
+    ) : (
+      <Text style={[styles.note, { fontSize: 25 }]}>
+        No received shards yet.
+      </Text>
+    )}
   </Container>
 )
