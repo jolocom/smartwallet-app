@@ -4,6 +4,7 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
+import { setSeedPhraseSaved } from '../recovery'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -57,6 +58,7 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
 
   dispatch(setDid(identity.did))
   dispatch(setLoadingMsg(loading.loadingStages[3]))
+  dispatch(setSeedPhraseSaved())
   dispatch(setIsRegistering(false))
 
   return dispatch(navigatorResetHome())

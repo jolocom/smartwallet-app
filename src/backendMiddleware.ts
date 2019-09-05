@@ -16,7 +16,6 @@ import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from './lib/util'
-import { mnemonicToEntropy } from 'bip39'
 
 export enum ErrorCodes {
   NoEntropy = 'NoEntropy',
@@ -84,19 +83,8 @@ export class BackendMiddleware {
     if (!encryptedEntropy) throw new BackendError(ErrorCodes.NoEntropy)
     const encryptionPass = await this.keyChainLib.getPassword()
 
-    const decryptedSeed = this.encryptionLib.decryptWithPass({
-      cipher: encryptedEntropy,
-      pass: encryptionPass,
-    })
-
-    if (!decryptedSeed) {
-      throw new BackendError(ErrorCodes.DecryptionFailed)
-    }
-
-    // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-    this._keyProvider = JolocomLib.KeyProvider.fromSeed(
-      Buffer.from(decryptedSeed, 'hex'),
-      encryptionPass,
+    this._keyProvider = new JolocomLib.KeyProvider(
+      Buffer.from(encryptedEntropy, 'hex'),
     )
     const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
 
@@ -138,12 +126,10 @@ export class BackendMiddleware {
   }
   public async recoverIdentity(mnemonic: string): Promise<Identity> {
     const password = (await generateSecureRandomBytes(32)).toString('base64')
-    //TODO: change to use key provider recovery method
-    const entropy = mnemonicToEntropy(mnemonic)
-    this._keyProvider = JolocomLib.KeyProvider.fromSeed(
-      Buffer.from(entropy, 'hex'),
+    this._keyProvider = JolocomLib.KeyProvider.recoverKeyPair(
+      mnemonic,
       password,
-    )
+    ) as SoftwareKeyProvider
     const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
 
     const identityWallet = await this.registry.authenticate(this._keyProvider, {
@@ -151,13 +137,13 @@ export class BackendMiddleware {
       derivationPath,
     })
     this._identityWallet = identityWallet
-    await this.storeIdentityData(password)
+    await this.keyChainLib.savePassword(password)
+    await this.storeIdentityData()
     return identityWallet.identity
   }
 
   public async createKeyProvider(encodedEntropy: string): Promise<void> {
     const password = (await generateSecureRandomBytes(32)).toString('base64')
-    // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
     this._keyProvider = JolocomLib.KeyProvider.fromSeed(
       Buffer.from(encodedEntropy, 'hex'),
       password,
@@ -181,11 +167,11 @@ export class BackendMiddleware {
       this.keyProvider,
       password,
     )
-    await this.storeIdentityData(password)
+    await this.storeIdentityData()
     return this._identityWallet.identity
   }
 
-  private async storeIdentityData(password: string): Promise<void> {
+  private async storeIdentityData(): Promise<void> {
     const personaData = {
       did: this._identityWallet.identity.did,
       controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
@@ -194,7 +180,7 @@ export class BackendMiddleware {
     const encryptedSeedData = {
       // TODO: change to keyProvider.encryptedSeed when the library is updated
       // with a public getter for the encryptedSeed
-      encryptedEntropy: this.keyProvider['encryptedSeed'].toString('base64'),
+      encryptedEntropy: this.keyProvider['encryptedSeed'].toString('hex'),
       timestamp: Date.now(),
     }
     await this.storageLib.store.encryptedSeed(encryptedSeedData)
