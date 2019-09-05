@@ -49,6 +49,7 @@
     "redux-mock-store": "^1.5.1",
     "ts-jest": "^24.0.2",
     "ts-loader": "3.5.0",
+    "tsconfig-paths": "^3.8.0",
     "tslib": "^1.7.1",
     "typeorm": "^0.2.5",
     "typescript": "^3.5.1",
