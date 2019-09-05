@@ -91,7 +91,7 @@ export const noteText = {
 
 export const largeText = {
   ...baseFontStyles,
-  fontSize: text3XL,
+  fontSize: textXXL,
   color: Colors.white,
   lineHeight: text3XL + 4,
 }

@@ -34,17 +34,17 @@ const styles = StyleSheet.create({
   },
   mnemonicSection: {
     flexDirection: 'row',
-    width: '100%',
-    height: 150,
+    height: 130,
     flexWrap: 'wrap',
     marginTop: Spacing.XS,
     justifyContent: 'center',
+    marginHorizontal: Spacing.XL,
   },
   note: {
     ...noteText,
     textAlign: 'center',
     lineHeight: 26,
-    marginHorizontal: 50,
+    // marginHorizontal: Spacing.XL,
   },
   mnemonicWord: {
     ...noteText,
@@ -52,13 +52,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   inputSection: {
-    marginHorizontal: 20,
+    marginHorizontal: Spacing.XL,
     flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
   textInput: {
     flex: 1,
-    fontSize: Typography.textXXL,
+    fontSize: Typography.textLG,
   },
   correct: {
     color: 'white',
@@ -68,15 +69,16 @@ const styles = StyleSheet.create({
   },
   divider: {
     backgroundColor: Colors.sandLight,
-    width: '80%',
-    height: 2,
+    marginHorizontal: Spacing.XL,
+    height: 1,
   },
   hint: {
     fontSize: Typography.textXS,
-    color: Colors.white,
+    color: Colors.white080,
     marginTop: 3,
   },
   wordListWrapper: {
+    marginTop: Spacing.LG,
     flexDirection: 'row',
     position: 'relative',
     height: 40,
@@ -189,8 +191,8 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                     : styles.correct,
                 ]}
                 value={inputValue}
-                placeholder={mnemonic.length === 0 ? 'Your first word' : ''}
-                placeholderTextColor={Colors.white050}
+                placeholder={mnemonic.length === 0 ? 'Tap here' : ''}
+                placeholderTextColor={Colors.white040}
                 onChangeText={handleTextInput}
                 returnKeyLabel={'Done'}
                 returnKeyType={'next'}
@@ -211,7 +213,9 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
               {isNextEnabled && <NextIcon onPress={handleNextWord} />}
             </View>
           </View>
-          <View style={styles.divider} />
+          <View style={{ width: '100%' }}>
+            <View style={styles.divider} />
+          </View>
           <Text style={styles.hint}>
             {inputState === WordState.wrong
               ? 'The word is not correct, check for typos'
@@ -231,13 +235,14 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                       container: {
                         ...buttonStandardContainer,
                         minWidth: 0,
-                        margin: 6,
+                        margin: Spacing.XXS,
                         height: 40,
-                        backgroundColor: Colors.purpleMain050,
+                        backgroundColor: Colors.purpleMain040,
                       },
                       text: {
                         ...buttonStandardText,
-                        fontSize: Typography.textLG,
+                        color: Colors.sandLight,
+                        fontSize: Typography.textMD,
                       },
                     }}
                   />
