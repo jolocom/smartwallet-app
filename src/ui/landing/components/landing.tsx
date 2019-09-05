@@ -136,7 +136,7 @@ export class LandingComponent extends React.Component<Props> {
         />
         <View style={styles.bottomSection}>
           <Button
-            onPress={this.props.handleButtonTap}
+            onPress={this.props.handleGetStarted}
             style={{
               container: styles.mainButtonContainer,
               text: styles.mainButtonText,
@@ -145,6 +145,7 @@ export class LandingComponent extends React.Component<Props> {
             upperCase={false}
           />
           <Button
+            onPress={this.props.handleRecover}
             style={{
               container: styles.recoverButtonContainer,
               text: styles.recoverButtonText,
