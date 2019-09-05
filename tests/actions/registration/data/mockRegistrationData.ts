@@ -24,7 +24,7 @@ export default {
       '0x0000000000000000000000000000000000000000000000000000000000000000',
     address: '0x5000000000000000000000000000000000000000',
   },
-  cipher: 't3RRFFFU1D1RrT0x6tFidJIIrBSsSu18EgCXCZXl7KU=',
+  cipher: 'b77451145154d43d51ad3d31ead162749208ac14ac4aed7c1200970995e5eca5',
   identityWallet: {
     privateIdentityKey: {
       key: Buffer.from(

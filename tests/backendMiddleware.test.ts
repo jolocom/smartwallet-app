@@ -16,7 +16,7 @@ const mockBackendMiddlewareConfig = {
 describe('BackendMiddleware', () => {
   const { getPasswordResult, cipher, entropy, identityWallet } = data
   const keyChainLib = stub<BackendMiddleware['keyChainLib']>({
-    getPassword: jest.fn().mockResolvedValue(getPasswordResult)
+    getPassword: jest.fn().mockResolvedValue(getPasswordResult),
   })
   const decryptWithPass = jest.fn().mockReturnValue(entropy)
   const storageLib = {
@@ -56,9 +56,7 @@ describe('BackendMiddleware', () => {
     it('should throw DecryptionFailed if decryption fails', async () => {
       decryptWithPass.mockReturnValueOnce(null)
       const walletPromise = backendMiddleware.prepareIdentityWallet()
-      return expect(walletPromise).rejects.toThrow(
-        BackendError.codes.DecryptionFailed,
-      )
+      return expect(walletPromise).rejects.toThrowError()
     })
 
     it('should authenticate and cache the identity if not cached', async () => {
@@ -130,7 +128,9 @@ describe('BackendMiddleware', () => {
     it('should createKeyProvider', async () => {
       await backendMiddleware.createKeyProvider(entropy)
       expect(() => backendMiddleware.keyProvider).not.toThrow()
-      expect(backendMiddleware.keyProvider['encryptedSeed'].toString('base64')).toMatch(cipher)
+      expect(
+        backendMiddleware.keyProvider['encryptedSeed'].toString('base64'),
+      ).toMatch(cipher)
     })
 
     it('should not store anything before the identity is registered', () => {
@@ -165,9 +165,7 @@ describe('BackendMiddleware', () => {
         controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
       })
       expect(keyChainLib.savePassword).toHaveBeenCalledTimes(1)
-      expect(keyChainLib.savePassword).toHaveBeenCalledWith(
-        getPasswordResult,
-      )
+      expect(keyChainLib.savePassword).toHaveBeenCalledWith(getPasswordResult)
 
       expect(storageLib.store.encryptedSeed).toHaveBeenCalledWith(entropyData)
     })

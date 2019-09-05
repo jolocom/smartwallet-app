@@ -306,7 +306,7 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
               Object {
                 "color": "rgba(255, 255, 255, 0.5)",
                 "fontFamily": "TT Commons",
-                "fontSize": 34,
+                "fontSize": 30,
                 "lineHeight": 38,
                 "marginRight": 8,
               },
@@ -327,7 +327,7 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
               Object {
                 "color": "rgba(255, 255, 255, 0.5)",
                 "fontFamily": "TT Commons",
-                "fontSize": 34,
+                "fontSize": 30,
                 "lineHeight": 38,
                 "marginRight": 8,
               },
@@ -344,7 +344,7 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
               Object {
                 "color": "rgba(255, 255, 255, 0.5)",
                 "fontFamily": "TT Commons",
-                "fontSize": 34,
+                "fontSize": 30,
                 "lineHeight": 38,
                 "marginRight": 8,
               },

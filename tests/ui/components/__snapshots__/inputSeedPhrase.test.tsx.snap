@@ -18,7 +18,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
       Object {
         "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
-        "fontSize": 34,
+        "fontSize": 30,
         "lineHeight": 38,
         "marginTop": 32,
       }
@@ -31,10 +31,10 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
       Object {
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "height": 150,
+        "height": 130,
         "justifyContent": "center",
+        "marginHorizontal": 32,
         "marginTop": 8,
-        "width": "100%",
       }
     }
   >
@@ -45,7 +45,6 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "lineHeight": 26,
-          "marginHorizontal": 50,
           "textAlign": "center",
         }
       }
@@ -58,7 +57,8 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
       Object {
         "alignItems": "center",
         "flexDirection": "row",
-        "marginHorizontal": 20,
+        "justifyContent": "space-around",
+        "marginHorizontal": 32,
       }
     }
   >
@@ -83,8 +83,8 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
       blurOnSubmit={false}
       onChangeText={[MockFunction]}
       onSubmitEditing={[MockFunction]}
-      placeholder="Your first word"
-      placeholderTextColor="rgba(255, 255, 255, 0.5)"
+      placeholder="Tap here"
+      placeholderTextColor="rgba(255, 255, 255, 0.4)"
       rejectResponderTermination={true}
       returnKeyLabel="Done"
       returnKeyType="next"
@@ -93,7 +93,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
         Array [
           Object {
             "flex": 1,
-            "fontSize": 30,
+            "fontSize": 22,
           },
           Object {
             "color": "white",
@@ -123,16 +123,24 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "rgb(255, 239, 223)",
-        "height": 2,
-        "width": "80%",
+        "width": "100%",
       }
     }
-  />
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgb(255, 239, 223)",
+          "height": 1,
+          "marginHorizontal": 32,
+        }
+      }
+    />
+  </View>
   <Text
     style={
       Object {
-        "color": "white",
+        "color": "rgba(255, 255, 255, 0.8)",
         "fontSize": 16,
         "marginTop": 3,
       }
@@ -143,6 +151,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
       Object {
         "flexDirection": "row",
         "height": 40,
+        "marginTop": 24,
         "position": "relative",
         "width": "100%",
       }
@@ -210,7 +219,7 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
       Object {
         "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
-        "fontSize": 34,
+        "fontSize": 30,
         "lineHeight": 38,
         "marginTop": 32,
       }
@@ -223,10 +232,10 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
       Object {
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "height": 150,
+        "height": 130,
         "justifyContent": "center",
+        "marginHorizontal": 32,
         "marginTop": 8,
-        "width": "100%",
       }
     }
   >
@@ -237,7 +246,6 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "lineHeight": 26,
-          "marginHorizontal": 50,
           "textAlign": "center",
         }
       }
@@ -278,7 +286,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
       Object {
         "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
-        "fontSize": 34,
+        "fontSize": 30,
         "lineHeight": 38,
         "marginTop": 32,
       }
@@ -291,10 +299,10 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
       Object {
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "height": 150,
+        "height": 130,
         "justifyContent": "center",
+        "marginHorizontal": 32,
         "marginTop": 8,
-        "width": "100%",
       }
     }
   >
@@ -305,7 +313,6 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "lineHeight": 26,
-          "marginHorizontal": 50,
           "textAlign": "center",
         }
       }
@@ -318,7 +325,8 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
       Object {
         "alignItems": "center",
         "flexDirection": "row",
-        "marginHorizontal": 20,
+        "justifyContent": "space-around",
+        "marginHorizontal": 32,
       }
     }
   >
@@ -347,8 +355,8 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
       blurOnSubmit={false}
       onChangeText={[MockFunction]}
       onSubmitEditing={[MockFunction]}
-      placeholder="Your first word"
-      placeholderTextColor="rgba(255, 255, 255, 0.5)"
+      placeholder="Tap here"
+      placeholderTextColor="rgba(255, 255, 255, 0.4)"
       rejectResponderTermination={true}
       returnKeyLabel="Done"
       returnKeyType="next"
@@ -357,7 +365,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
         Array [
           Object {
             "flex": 1,
-            "fontSize": 30,
+            "fontSize": 22,
           },
           Object {
             "color": "white",
@@ -387,16 +395,24 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "rgb(255, 239, 223)",
-        "height": 2,
-        "width": "80%",
+        "width": "100%",
       }
     }
-  />
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgb(255, 239, 223)",
+          "height": 1,
+          "marginHorizontal": 32,
+        }
+      }
+    />
+  </View>
   <Text
     style={
       Object {
-        "color": "white",
+        "color": "rgba(255, 255, 255, 0.8)",
         "fontSize": 16,
         "marginTop": 3,
       }
@@ -409,6 +425,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
       Object {
         "flexDirection": "row",
         "height": 40,
+        "marginTop": 24,
         "position": "relative",
         "width": "100%",
       }
@@ -431,16 +448,16 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
         style={
           Object {
             "container": Object {
-              "backgroundColor": "rgba(148, 47, 81, 0.5)",
+              "backgroundColor": "rgba(148, 47, 81, 0.4)",
               "borderRadius": 4,
               "height": 40,
-              "margin": 6,
+              "margin": 4,
               "minWidth": 0,
             },
             "text": Object {
-              "color": "white",
+              "color": "rgb(255, 239, 223)",
               "fontFamily": "TT Commons",
-              "fontSize": 22,
+              "fontSize": 20,
               "fontWeight": "normal",
               "paddingVertical": 16,
             },
@@ -455,16 +472,16 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
         style={
           Object {
             "container": Object {
-              "backgroundColor": "rgba(148, 47, 81, 0.5)",
+              "backgroundColor": "rgba(148, 47, 81, 0.4)",
               "borderRadius": 4,
               "height": 40,
-              "margin": 6,
+              "margin": 4,
               "minWidth": 0,
             },
             "text": Object {
-              "color": "white",
+              "color": "rgb(255, 239, 223)",
               "fontFamily": "TT Commons",
-              "fontSize": 22,
+              "fontSize": 20,
               "fontWeight": "normal",
               "paddingVertical": 16,
             },
