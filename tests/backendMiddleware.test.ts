@@ -1,6 +1,6 @@
 import * as util from 'src/lib/util'
-import { BackendMiddleware, BackendError } from 'src/backendMiddleware'
-import { stub, reveal } from './utils'
+import { BackendError, BackendMiddleware } from 'src/backendMiddleware'
+import { reveal, stub } from './utils'
 import { ConnectionOptions } from 'typeorm/browser'
 import data from 'tests/actions/registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
@@ -160,6 +160,46 @@ describe('BackendMiddleware', () => {
         backendMiddleware.keyProvider,
         getPasswordResult,
       )
+      expect(storageLib.store.didDoc).toHaveBeenCalledWith(
+        identityWallet.didDocument,
+      )
+      expect(storageLib.store.persona).toHaveBeenCalledWith({
+        did: identity.did,
+        controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
+      })
+      expect(keyChainLib.savePassword).toHaveBeenCalledTimes(1)
+      expect(keyChainLib.savePassword).toHaveBeenCalledWith(getPasswordResult)
+
+      expect(storageLib.store.encryptedSeed).toHaveBeenCalledWith(entropyData)
+    })
+  })
+
+  describe('Identity Recovery', () => {
+    const backendMiddleware = createBackendMiddleware()
+    let entropyData: { encryptedEntropy: string; timestamp: number }
+
+    beforeAll(() => {
+      MockDate.set(new Date(946681200000))
+      entropyData = {
+        encryptedEntropy: cipher,
+        timestamp: Date.now(),
+      }
+      stub.clearMocks(keyChainLib)
+    })
+
+    afterAll(() => MockDate.reset())
+
+    it('should recover the identity', async () => {
+      reveal(registry).authenticate.mockResolvedValue(identityWallet)
+      const identity = await backendMiddleware.recoverIdentity(
+        'exhibit history avoid kit gaze pulse yellow portion hold lottery panda figure',
+      )
+
+      expect(registry.authenticate).toHaveBeenCalledWith(
+        backendMiddleware.keyProvider,
+        { derivationPath: "m/73'/0'/0'/0", encryptionPass: getPasswordResult },
+      )
+
       expect(storageLib.store.didDoc).toHaveBeenCalledWith(
         identityWallet.didDocument,
       )
