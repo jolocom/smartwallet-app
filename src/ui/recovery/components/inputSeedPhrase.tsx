@@ -20,6 +20,8 @@ import Rotation from '../../animation/Rotation'
 import { TransparentButton } from '../../structure/transparentButton'
 // @ts-ignore
 import { RippleLoader } from 'react-native-indicator'
+import strings from '../../../locales/strings'
+import I18n from 'i18n-js'
 
 const styles = StyleSheet.create({
   container: {
@@ -44,7 +46,6 @@ const styles = StyleSheet.create({
     ...noteText,
     textAlign: 'center',
     lineHeight: 26,
-    // marginHorizontal: Spacing.XL,
   },
   mnemonicWord: {
     ...noteText,
@@ -135,11 +136,11 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
   const isNextEnabled = markedWord < mnemonic.length
   let headerText
   if (isLoading) {
-    headerText = 'Full phrase verification'
+    headerText = I18n.t(strings.FULL_PHRASE_VERIFICATION)
   } else if (mnemonic.length === 0) {
-    headerText = 'Recovery'
+    headerText = I18n.t(strings.RECOVERY)
   } else {
-    headerText = mnemonic.length + '/12 completed'
+    headerText = mnemonic.length + '/12 ' + I18n.t(strings.COMPLETED)
   }
   return (
     <Container
@@ -191,10 +192,12 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                     : styles.correct,
                 ]}
                 value={inputValue}
-                placeholder={mnemonic.length === 0 ? 'Tap here' : ''}
+                placeholder={
+                  mnemonic.length === 0 ? I18n.t(strings.TAP_HERE) : ''
+                }
                 placeholderTextColor={Colors.white040}
                 onChangeText={handleTextInput}
-                returnKeyLabel={'Done'}
+                returnKeyLabel={I18n.t(strings.DONE)}
                 returnKeyType={'next'}
                 selectionColor={Colors.purpleMain}
                 blurOnSubmit={false}
@@ -218,9 +221,9 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           </View>
           <Text style={styles.hint}>
             {inputState === WordState.wrong
-              ? 'The word is not correct, check for typos'
+              ? I18n.t(strings.THE_WORD_IS_NOT_CORRECT_CHECK_FOR_TYPOS)
               : suggestions.length > 0 &&
-                'Choose the right word or press enter'}
+                I18n.t(strings.CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER)}
           </Text>
           <View style={styles.wordListWrapper}>
             <View style={styles.wordListSection}>
@@ -258,7 +261,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                 onPress={isMnemonicValid ? handleButtonPress : undefined}
                 raised
                 upperCase={false}
-                text={'Restore account'}
+                text={I18n.t(strings.RESTORE_ACCOUNT)}
                 style={{
                   container: {
                     marginHorizontal: 30,
@@ -271,7 +274,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
             <TransparentButton
               onPress={handleBackButton}
               style={{ marginHorizontal: 30, paddingVertical: 10 }}
-              text={'Back to signup'}
+              text={I18n.t(strings.BACK_TO_SIGNUP)}
             />
           </View>
         </React.Fragment>
