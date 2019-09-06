@@ -5,126 +5,126 @@ exports[`landing component matches the snapshot on render 1`] = `
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
-      "flex": 1,
-      "flexDirection": "column",
-      "justifyContent": "flex-end",
-      "paddingTop": 0,
     }
   }
 >
-  <Block>
-    <Carousel
-      activeAnimationOptions={null}
-      activeAnimationType="timing"
-      activeSlideAlignment="center"
-      activeSlideOffset={20}
-      apparitionDelay={0}
-      autoplay={false}
-      autoplayDelay={1000}
-      autoplayInterval={3000}
-      callbackOffsetMargin={5}
-      containerCustomStyle={Object {}}
-      contentContainerCustomStyle={Object {}}
-      data={
-        Array [
-          Object {
-            "infoText": "Take back control of your digital self and protect your private data against unfair usage.",
-            "svgImage": <Landing00 />,
-            "title": "Your Jolocom Wallet",
-          },
-          Object {
-            "infoText": "Forget about long forms and registrations. Instantly access services without using your social media profiles.",
-            "svgImage": <Landing00
-              height="100%"
-              width="100%"
-            />,
-            "title": "It's easy",
-          },
-          Object {
-            "infoText": "Share only the information a service really needs. Protect your digital self against fraud.",
-            "svgImage": <Landing00
-              height="100%"
-              width="100%"
-            />,
-            "title": "Enhanced privacy",
-          },
-          Object {
-            "infoText": "Keep all your data with you in one place, available at any time. Track where you sign in to services.",
-            "svgImage": <Landing00
-              height="100%"
-              width="100%"
-            />,
-            "title": "Greater control",
-          },
-        ]
-      }
-      enableMomentum={false}
-      enableSnap={true}
-      firstItem={0}
-      hasParallaxImages={false}
-      inactiveSlideOpacity={0.7}
-      inactiveSlideScale={0.9}
-      inactiveSlideShift={0}
-      itemWidth={750}
-      layout="default"
-      lockScrollTimeoutDuration={1000}
-      lockScrollWhileSnapping={true}
-      loop={true}
-      loopClonesPerSide={3}
-      onSnapToItem={[Function]}
-      renderItem={[Function]}
-      scrollEnabled={true}
-      shouldOptimizeUpdates={true}
-      slideStyle={Object {}}
-      sliderWidth={750}
-      swipeThreshold={20}
-      useScrollView={false}
-      vertical={false}
-    />
-  </Block>
-  <Block
+  <Carousel
+    activeAnimationOptions={null}
+    activeAnimationType="timing"
+    activeSlideAlignment="center"
+    activeSlideOffset={20}
+    apparitionDelay={0}
+    autoplay={true}
+    autoplayDelay={5000}
+    autoplayInterval={5000}
+    callbackOffsetMargin={5}
+    containerCustomStyle={Object {}}
+    contentContainerCustomStyle={Object {}}
+    data={
+      Array [
+        Object {
+          "bgImage": <Landing00 />,
+          "infoText": "Take back control of your digital self and protect your private data against unfair usage.",
+          "title": "Your Jolocom Wallet",
+        },
+        Object {
+          "bgImage": <Landing01 />,
+          "infoText": "Forget about long forms and registrations. Instantly access services without using your social media profiles.",
+          "title": "It's easy",
+        },
+        Object {
+          "bgImage": <Landing03 />,
+          "infoText": "Share only the information a service really needs. Protect your digital self against fraud.",
+          "title": "Enhanced privacy",
+        },
+        Object {
+          "bgImage": <Landing02 />,
+          "infoText": "Keep all your data with you in one place, available at any time. Track where you sign in to services.",
+          "title": "Greater control",
+        },
+      ]
+    }
+    enableMomentum={false}
+    enableSnap={true}
+    firstItem={0}
+    hasParallaxImages={false}
+    inactiveSlideOpacity={0.7}
+    inactiveSlideScale={0.9}
+    inactiveSlideShift={0}
+    itemWidth={750}
+    layout="default"
+    lockScrollTimeoutDuration={1000}
+    lockScrollWhileSnapping={true}
+    loop={true}
+    loopClonesPerSide={3}
+    renderItem={[Function]}
+    scrollEnabled={true}
+    scrollInterpolator={[Function]}
+    shouldOptimizeUpdates={true}
+    slideInterpolatedStyle={[Function]}
+    slideStyle={Object {}}
+    sliderWidth={750}
+    swipeThreshold={20}
+    useScrollView={false}
+    vertical={false}
+  />
+  <View
     style={
       Object {
-        "flex": 0.15,
+        "alignItems": "center",
+        "bottom": "5%",
+        "position": "absolute",
+        "width": "85%",
       }
     }
   >
-    <Pagination
-      activeDotIndex={0}
-      dotStyle={
-        Object {
-          "backgroundColor": "rgb(255, 222, 188)",
-          "height": 8,
-          "width": 8,
-        }
-      }
-      dotsLength={4}
-      inactiveDotOpacity={0.4}
-      inactiveDotScale={0.6}
-      inactiveDotStyle={
-        Object {
-          "backgroundColor": "rgba(255, 254, 252, 0.7)",
-          "height": 4,
-          "width": 4,
-        }
-      }
-      tappableDots={false}
-      vertical={false}
-    />
-  </Block>
-  <Block
-    style={
-      Object {
-        "flex": 0.1,
-      }
-    }
-  >
-    <JolocomButton
+    <ThemedComponent
       onPress={[MockFunction]}
-      raised={true}
+      style={
+        Object {
+          "container": Object {
+            "alignSelf": "stretch",
+            "backgroundColor": "rgb(148, 47, 81)",
+            "borderRadius": 4,
+            "height": 48,
+            "minWidth": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 22,
+            "fontWeight": "normal",
+            "paddingVertical": 16,
+          },
+        }
+      }
       text="Get started"
       upperCase={false}
     />
-  </Block>
+    <ThemedComponent
+      onPress={[MockFunction]}
+      style={
+        Object {
+          "container": Object {
+            "alignSelf": "stretch",
+            "backgroundColor": "transparent",
+            "borderRadius": 4,
+            "height": 48,
+            "marginTop": 8,
+            "minWidth": 164,
+          },
+          "text": Object {
+            "color": "white",
+            "fontFamily": "TT Commons",
+            "fontSize": 18,
+            "fontWeight": "normal",
+            "paddingVertical": 16,
+          },
+        }
+      }
+      text="Recover identity"
+      upperCase={false}
+    />
+  </View>
 </Container>
 `;

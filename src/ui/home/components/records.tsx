@@ -1,32 +1,39 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
+import { BackupWarning } from '../../recovery/components/backupWarning'
 import { Typography, Colors } from 'src/styles'
 
 interface Props {}
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.backgroundLightMain,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    backgroundColor: Colors.lightGreyLighter,
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
-    ...Typography.baseFontStyles,
-    fontSize: Typography.textXXL,
+    ...Typography.mainText,
     textAlign: 'center',
     color: Colors.greyLight,
+    paddingHorizontal: '5%',
   },
 })
 
-export class RecordsComponent extends React.Component<Props> {
-  render() {
-    return (
-      <Container style={styles.container}>
-        <Text style={styles.text}>
-          {I18n.t(strings.YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET) + '.'}
-        </Text>
-      </Container>
-    )
-  }
-}
+export const RecordsComponent: React.FC<Props> = () => (
+  <Container style={styles.container}>
+    <BackupWarning />
+    <View style={styles.innerContainer}>
+      <Text style={styles.text}>
+        {I18n.t(strings.YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET) + '.'}
+      </Text>
+    </View>
+  </Container>
+)

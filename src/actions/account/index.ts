@@ -1,6 +1,6 @@
 import { navigationActions } from 'src/actions/'
 import { routeList } from 'src/routeList'
-import { DecoratedClaims, CategorizedClaims } from 'src/reducers/account'
+import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
   getClaimMetadataByCredentialType,
@@ -8,12 +8,14 @@ import {
   getUiCredentialTypeByType,
 } from '../../lib/util'
 import { cancelReceiving } from '../sso'
-import { JolocomLib } from 'jolocom-lib'
 import { ThunkAction } from 'src/store'
-import { groupBy, zipWith, mergeRight, omit, uniq, map } from 'ramda'
+import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
+import { Not } from 'typeorm'
+import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
+import { BackendError } from 'src/backendMiddleware'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -40,51 +42,26 @@ export const checkIdentityExists: ThunkAction = async (
   getState,
   backendMiddleware,
 ) => {
-  const { keyChainLib, storageLib, encryptionLib } = backendMiddleware
-  const encryptedEntropy = await storageLib.get.encryptedSeed().catch(err => {
-    // TODO Fix this
-    if (err.message.indexOf('no such table') === 0) {
-      return
-    }
-  })
+  try {
+    const identityWallet = await backendMiddleware.prepareIdentityWallet()
+    const userDid = identityWallet.identity.did
+    dispatch(setDid(userDid))
+    return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+  } catch (err) {
+    if (!(err instanceof BackendError)) throw err
 
-  if (!encryptedEntropy) {
-    const isRegistering = getState().registration.loading.isRegistering
-    if (isRegistering) {
-      return dispatch(
-        navigationActions.navigate({
-          routeName: routeList.RegistrationProgress,
-        }),
-      )
-    } else {
-      return dispatch(
-        navigationActions.navigate({ routeName: routeList.Landing }),
-      )
+    if (err.message === BackendError.codes.NoEntropy) {
+      // No seed in database, user must register
+      // But check if a registration was already in progress
+      const isRegistering = getState().registration.loading.isRegistering
+
+      const routeName = isRegistering
+        ? routeList.RegistrationProgress
+        : routeList.Landing
+
+      return dispatch(navigationActions.navigate({ routeName }))
     }
   }
-
-  const password = await keyChainLib.getPassword()
-
-  const decryptedSeed = encryptionLib.decryptWithPass({
-    cipher: encryptedEntropy,
-    pass: password,
-  })
-
-  if (!decryptedSeed) {
-    throw new Error('could not decrypt seed')
-  }
-
-  // TODO: rework the seed param on lib, currently cleartext seed is being passed around. Bad.
-  const userVault = JolocomLib.KeyProvider.fromSeed(
-    Buffer.from(decryptedSeed, 'hex'),
-    password,
-  )
-
-  await backendMiddleware.setIdentityWallet(userVault, password)
-  const identityWallet = backendMiddleware.identityWallet
-  dispatch(setDid(identityWallet.identity.did))
-
-  return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
 }
 
 export const openClaimDetails = (
@@ -156,6 +133,21 @@ export const toggleLoading = (value: boolean) => ({
   value,
 })
 
+export const hasExternalCredentials: ThunkAction = async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  const { storageLib, identityWallet } = backendMiddleware
+  const externalCredentials = await storageLib.get.verifiableCredential({
+    issuer: Not(identityWallet.did),
+  })
+
+  return dispatch({
+    type: HAS_EXTERNAL_CREDENTIALS,
+    value: externalCredentials.length !== 0,
+  })
+}
 export const setClaimsForDid: ThunkAction = async (
   dispatch,
   getState,

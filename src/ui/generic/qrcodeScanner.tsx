@@ -28,6 +28,9 @@ interface Props
 interface State {}
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.backgroundLightMain,
+  },
   buttonText: {
     color: Colors.blackMain,
   },
@@ -66,7 +69,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
     const cameraProps = { key: Date.now() }
     return (
       <React.Fragment>
-        <Container>
+        <Container style={styles.container}>
           <QRScanner
             cameraProps={cameraProps}
             ref={(ref: React.Component) => (this.scanner = ref)}

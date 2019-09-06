@@ -10,7 +10,7 @@ export const fontMain = Platform.OS === 'android' ? 'TTCommons' : 'TT Commons'
 
 export const text3XS = 12
 export const textXXS = 14
-export const textXS = 17
+export const textXS = 16
 export const textSM = 18
 export const textMD = 20
 export const textLG = 22
@@ -80,4 +80,18 @@ export const sectionHeader = {
   ...baseFontStyles,
   fontSize: textXS,
   color: Colors.blackMain040,
+}
+
+export const noteText = {
+  ...baseFontStyles,
+  fontSize: textMD,
+  color: Colors.sandLight,
+  lineHeight: 23,
+}
+
+export const largeText = {
+  ...baseFontStyles,
+  fontSize: textXXL,
+  color: Colors.white,
+  lineHeight: text3XL + 4,
 }

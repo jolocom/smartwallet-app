@@ -1,79 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`seedPhrase component matches the snapshot with checkbox checked 1`] = `
-<Container
-  style={
-    Object {
-      "backgroundColor": "rgb(5, 5, 13)",
-    }
-  }
->
-  <View
-    style={
-      Object {
-        "flex": 0.8,
-        "justifyContent": "center",
-        "marginTop": 20,
-      }
-    }
-  >
-    <Text
-      style={
-        Object {
-          "color": "rgb(255, 239, 223)",
-          "fontFamily": "TT Commons",
-          "fontSize": 20,
-          "lineHeight": 22,
-          "textAlign": "center",
-        }
-      }
-    >
-      Write these words down on an analog and secure place. Without these words, you cannot access your wallet again.
-    </Text>
-  </View>
-  <View
-    style={
-      Object {
-        "flex": 1,
-      }
-    }
-  >
-    <Text
-      style={
-        Object {
-          "color": "white",
-          "fontFamily": "TT Commons",
-          "fontSize": 34,
-          "lineHeight": 38,
-          "textAlign": "center",
-        }
-      }
-    >
-      mock seedPhrase
-    </Text>
-  </View>
-  <View
-    style={
-      Object {
-        "marginTop": "auto",
-      }
-    }
-  >
-    <JolocomButton
-      onPress={[MockFunction]}
-      raised={true}
-      text="Yes, I wrote it down"
-      upperCase={false}
-    />
-  </View>
-</Container>
-`;
-
 exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] = `
 <Container
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
+      "padding": "5%",
     }
   }
 >
@@ -82,7 +14,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       Object {
         "flex": 0.8,
         "justifyContent": "center",
-        "marginTop": 20,
+        "marginTop": 24,
       }
     }
   >
@@ -92,7 +24,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
           "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
           "fontSize": 20,
-          "lineHeight": 22,
+          "lineHeight": 23,
           "textAlign": "center",
         }
       }
@@ -112,7 +44,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
         Object {
           "color": "white",
           "fontFamily": "TT Commons",
-          "fontSize": 34,
+          "fontSize": 30,
           "lineHeight": 38,
           "textAlign": "center",
         }

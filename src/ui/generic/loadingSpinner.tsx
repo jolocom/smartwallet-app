@@ -6,8 +6,7 @@ const loaders = require('react-native-indicator')
 
 const styles = StyleSheet.create({
   loadingContainer: {
-    backgroundColor: 'white',
-    padding: 0,
+    backgroundColor: Colors.white,
     position: 'absolute',
     // to cover things such as the qr code scanner
     zIndex: 1,

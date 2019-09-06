@@ -2,8 +2,9 @@ import { accountActions } from 'src/actions/'
 import data from '../registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
-
 import { createMockStore } from 'tests/utils'
+import { BackendError } from 'src/backendMiddleware'
+import { withErrorScreen } from 'src/actions/modifiers';
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
@@ -34,6 +35,7 @@ describe('Account action creators', () => {
           },
         },
         decoratedCredentials: {},
+        hasExternalCredentials: false,
       },
       did: {
         did: '',
@@ -41,59 +43,45 @@ describe('Account action creators', () => {
     },
   }
 
+  const mockIdentityWallet = {
+    identity: { did: 'did:jolo:first', didDocument: {} },
+    didDocument: {},
+  }
+
   const mockMiddleware = {
-    storageLib: {
-      get: {
-        persona: jest.fn(),
-        encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
-      },
-    },
-    keyChainLib: {
-      getPassword: jest.fn().mockResolvedValue('sekrit'),
-    },
-    encryptionLib: {
-      decryptWithPass: jest.fn().mockReturnValue('newSeed'),
-    },
-    setIdentityWallet: jest.fn().mockResolvedValue(null),
-    identityWallet: { identity: { did: 'did:jolo:first' } },
+    prepareIdentityWallet: jest.fn().mockResolvedValue(mockIdentityWallet),
   }
 
   const mockStore = createMockStore(initialState, mockMiddleware)
 
   beforeEach(mockStore.reset)
 
-  it('Should correctly handle one existing user identity', async () => {
-    mockMiddleware.storageLib.get.persona.mockResolvedValueOnce({
-      did: 'did:jolo:first',
-    })
-
-    await mockStore.dispatch(accountActions.checkIdentityExists)
-    expect(mockMiddleware.setIdentityWallet).toHaveBeenCalledTimes(1)
-    expect(mockStore.getActions()).toMatchSnapshot()
-  })
-
-  it('Should correctly handle more existing user identities', async () => {
-    mockMiddleware.storageLib.get.persona.mockResolvedValueOnce([
-      { did: 'did:jolo:first' },
-    ])
+  it('should correctly handle stored encrypted seed', async () => {
     await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it('Should correctly handle an empty encrypted seed table', async () => {
-    mockMiddleware.storageLib.get.persona.mockResolvedValueOnce([])
-    // NOTE: type issue, need to pass a promise into mockReturnValueOnce,
-    // because now the type is set to Promise<T> as it is already pre-setup in
-    // the mockMiddlerware
-    mockMiddleware.storageLib.get.encryptedSeed.mockReturnValueOnce(
-      Promise.resolve(null),
+  it('should correctly handle an empty encrypted seed table', async () => {
+    mockMiddleware.prepareIdentityWallet.mockRejectedValue(
+      new BackendError(BackendError.codes.NoEntropy),
     )
-
     await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
+  it('should display exception screen in case of error', async () => {
+    mockMiddleware.prepareIdentityWallet.mockRejectedValue(
+      new Error('everything is WRONG')
+    )
+    await mockStore.dispatch(
+      withErrorScreen(
+        accountActions.checkIdentityExists,
+      ),
+    )
+    expect(mockStore.getActions()).toMatchSnapshot()
+  })
+
+  it('should correctly retrieve claims from device storage db on setClaimForDid', async () => {
     const { identityWallet, testSignedCredentialDefault } = data
 
     const backendMiddleware = {

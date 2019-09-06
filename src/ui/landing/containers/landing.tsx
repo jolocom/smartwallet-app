@@ -1,34 +1,39 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { LandingComponent } from 'src/ui/landing/components/landing'
-import { registrationActions } from 'src/actions/'
-import { withErrorScreen } from 'src/actions/modifiers'
-import { AppError, ErrorCode } from 'src/lib/errors'
-import { routeList } from 'src/routeList'
+import { navigationActions } from 'src/actions/'
 import { ThunkDispatch } from 'src/store'
 import { StatusBar } from 'react-native'
+import { routeList } from '../../../routeList'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
 
 export class LandingContainer extends React.Component<Props> {
-  render() {
+  public render(): JSX.Element {
     return (
       <React.Fragment>
         <StatusBar barStyle="light-content" />
-        <LandingComponent handleButtonTap={this.props.startRegistration} />
+        <LandingComponent
+          handleGetStarted={this.props.getStarted}
+          handleRecover={this.props.recoverIdentity}
+        />
       </React.Fragment>
     )
   }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  startRegistration: () =>
+  getStarted: () =>
     dispatch(
-      withErrorScreen(
-        registrationActions.startRegistration,
-        err =>
-          new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-      ),
+      navigationActions.navigate({
+        routeName: routeList.Entropy,
+      }),
+    ),
+  recoverIdentity: () =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.InputSeedPhrase,
+      }),
     ),
 })
 

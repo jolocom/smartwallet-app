@@ -1,6 +1,3 @@
-export { Block } from './block'
 export { Container } from './container'
-export { CenteredText } from './centeredText'
-export { Header } from './header'
-export { ScrollContainer } from './scrollContainer'
+export { CardWrapper } from './cardWrapper'
 export { JolocomButton } from './jolocomButton'

@@ -6,8 +6,9 @@ import { locales } from 'src/locales/i18n'
 import { SettingsScreen } from '../components/settings'
 import { genericActions, navigationActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
-import { withLoading } from '../../../actions/modifiers'
 import { routeList } from 'src/routeList'
+import { withErrorScreen, withLoading } from '../../../actions/modifiers'
+import { showSeedPhrase } from '../../../actions/recovery'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -22,6 +23,7 @@ export class SettingsContainer extends React.Component<Props> {
         locales={locales}
         version={VersionNumber.appVersion}
         openStorybook={this.props.openStorybook}
+        setupBackup={this.props.setupBackup}
       />
     )
   }
@@ -40,6 +42,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
         routeName: routeList.Storybook,
       }),
     ),
+  setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
 })
 
 export const Settings = connect(

@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import I18n from 'src/locales/i18n'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
+import SettingsItem from './settingsItem'
+import settingKeys from '../settingKeys'
+import { JolocomTheme } from '../../../styles/jolocom-theme'
 
 const styles = StyleSheet.create({
   container: {
@@ -16,19 +18,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     ...Typography.sectionHeader,
     marginLeft: Spacing.MD,
-  },
-  card: {
-    flexDirection: 'row',
-    padding: Spacing.MD,
-    backgroundColor: Colors.white,
-    borderColor: Colors.lightGrey,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-  },
-  cardLabel: {
-    ...Typography.baseFontStyles,
-    fontSize: Typography.textXS,
-    color: Colors.blackMain,
+    marginBottom: Spacing.XS,
   },
   languageCard: {
     marginTop: Spacing.SM,
@@ -43,8 +33,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightGreyLight,
     borderRadius: 4,
     paddingHorizontal: Spacing.MD,
-    paddingTop: Spacing.XS,
-    paddingBottom: Spacing.XXS,
+    paddingVertical: Spacing.XS,
     marginRight: Spacing.MD,
   },
   languageOptionText: {
@@ -61,81 +50,90 @@ const styles = StyleSheet.create({
   },
 })
 
-interface LanguageCardProps {
-  locales: string[]
-  selected: string
-  setLocale: (key: string) => void
-}
-
-const LanguageCard: React.FC<LanguageCardProps> = props => (
-  <View style={[styles.card, styles.languageCard]}>
-    <Icon
-      style={{ marginRight: Spacing.MD }}
-      size={24}
-      name="translate"
-      color="grey"
-    />
-    <View>
-      <Text style={styles.cardLabel}>{I18n.t(strings.LANGUAGE)}</Text>
-      <View style={styles.languageOptions}>
-        {props.locales.map(locale => {
-          const isCurrentLanguage = locale === props.selected
-          return (
-            <View
-              key={locale}
-              // TODO: connect to selecting the locale
-              onTouchEnd={() => props.setLocale(locale)}
-              style={[
-                styles.languageOption,
-                isCurrentLanguage && {
-                  backgroundColor: Colors.sandLight,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.languageOptionText,
-                  isCurrentLanguage && {
-                    color: Colors.purpleMain,
-                  },
-                ]}
-              >
-                {locale.toUpperCase()}
-              </Text>
-            </View>
-          )
-        })}
-      </View>
-    </View>
-  </View>
-)
-
 interface SettingsScreenProps {
   locales: string[]
-  settings: { [key: string]: any }
+  settings: { [key: string]: {} }
   setLocale: (key: string) => void
+  setupBackup: () => void
   version: string
   openStorybook: () => void
 }
 
-export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
-  <View style={styles.container}>
-    <View style={styles.topSection}>
-      <Text style={styles.sectionHeader}>
-        {I18n.t(strings.YOUR_PREFERENCES)}
+export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
+  const seedPhraseSaved = props.settings[settingKeys.seedPhraseSaved] as boolean
+  return (
+    <View style={styles.container}>
+      <View style={styles.topSection}>
+        <Text style={styles.sectionHeader}>
+          {I18n.t(strings.YOUR_PREFERENCES)}
+        </Text>
+        <SettingsItem
+          title={I18n.translate(strings.LANGUAGE)}
+          iconName={'translate'}
+          payload={
+            <View style={styles.languageOptions}>
+              {props.locales.map(locale => {
+                const isCurrentLanguage = locale === props.settings.locale
+                return (
+                  <View
+                    key={locale}
+                    onTouchEnd={() => props.setLocale(locale)}
+                    style={[
+                      styles.languageOption,
+                      isCurrentLanguage && {
+                        backgroundColor: JolocomTheme.primaryColorSand,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.languageOptionText,
+                        isCurrentLanguage && {
+                          color: JolocomTheme.primaryColorPurple,
+                        },
+                      ]}
+                    >
+                      {locale.toUpperCase()}
+                    </Text>
+                  </View>
+                )
+              })}
+            </View>
+          }
+        />
+      </View>
+      <View style={styles.topSection}>
+        <Text style={styles.sectionHeader}>Security</Text>
+        <SettingsItem
+          title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
+          iconName={'flash'}
+          description={
+            seedPhraseSaved
+              ? I18n.t(strings.YOUR_IDENTITY_IS_ALREADY_BACKED_UP)
+              : I18n.t(
+                  strings.SET_UP_A_SECURE_PHRASE_TO_RECOVER_YOUR_ACCOUNT_IN_THE_FUTURE_IF_YOUR_PHONE_IS_STOLEN_OR_IS_DAMAGED,
+                )
+          }
+          isHighlighted={!seedPhraseSaved}
+          isDisabled={seedPhraseSaved}
+          onTouchEnd={props.setupBackup}
+        />
+        <SettingsItem
+          title={I18n.t(strings.DELETE_IDENTITY)}
+          description={'(coming soon)'}
+          iconName={'delete'}
+          isDisabled
+        />
+      </View>
+      <Text style={styles.versionNumber}>
+        Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
       </Text>
-      <LanguageCard
-        setLocale={props.setLocale}
-        locales={props.locales}
-        selected={props.settings.locale}
+      <SettingsItem
+        iconName={'book-open-page-variant'}
+        title={'Storybook'}
+        onTouchEnd={props.openStorybook}
       />
-      <TouchableOpacity style={styles.card} onPress={props.openStorybook}>
-        <Text style={Typography.cardMainText}>Storybook</Text>
-      </TouchableOpacity>
+      <View />
     </View>
-    <Text style={styles.versionNumber}>
-      Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
-    </Text>
-    <View />
-  </View>
-)
+  )
+}

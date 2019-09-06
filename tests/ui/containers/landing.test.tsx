@@ -5,11 +5,12 @@ import { shallow } from 'enzyme'
 describe('landing container', () => {
   it('mounts correctly and matches snapshot', () => {
     const props: LandingContainer['props'] = {
-      startRegistration: jest.fn(),
+      getStarted: jest.fn(),
+      recoverIdentity: jest.fn(),
     }
 
     const rendered = shallow(<LandingContainer {...props} />)
     expect(rendered).toMatchSnapshot()
-    expect(props.startRegistration).not.toHaveBeenCalled()
+    expect(props.getStarted).not.toHaveBeenCalled()
   })
 })

@@ -56,7 +56,7 @@
     "yarn": "^1.16.0"
   },
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "test": "jest",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "run:ios": "react-native run-ios",
@@ -66,11 +66,11 @@
     "clean:android": "cd android && ./gradlew clean",
     "clean:ios": "cd ios && xcodebuild clean",
     "clean:react": "rm -rf $TMP/react* $TMP/haste-map-metro* $TMP/metro-cache*",
-    "clean:all": "yarn run clean:ios && yarn run clean:android && yarn run clean:react && yarn run clean:node",
+    "clean:all": "yarn run clean:ios & yarn run clean:android && yarn run clean:react && yarn run clean:node",
     "build:ios": "react-native bundle --entry-file='index.ts' --bundle-output='./ios/JolocomWallet/main.jsbundle' --minify=false --dev=false --platform='ios' --assets-dest='./ios'",
     "build:android": "react-native bundle --entry-file='index.ts' --minify=true --dev=false --platform='android'",
     "format": "eslint --fix --ext .ts --ext .tsx .",
-    "icon": "svgr --native -d src/resources/svg/",
+    "icon": "svgr --native --out-dir src/resources/svg/",
     "devtools": "react-devtools &",
     "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
     "storybook": "start-storybook -p 6006"
@@ -78,7 +78,7 @@
   "dependencies": {
     "@react-navigation/core": "^3.4.2",
     "assert": "^2.0.0",
-    "bip39": "^2.5.0",
+    "bip39": "^3.0.2",
     "browser-ipfs": "^0.0.6",
     "crypto-browserify": "^3.12.0",
     "crypto-js": "^3.1.9-1",
@@ -118,6 +118,7 @@
     "sqlite3": "^4.0.0",
     "squel": "^5.12.1",
     "stream-browserify": "^2.0.2",
+    "unorm": "^1.6.0",
     "vm-browserify": "^1.1.0",
     "wif": "^2.0.6"
   },

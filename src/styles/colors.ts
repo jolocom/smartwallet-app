@@ -10,6 +10,8 @@ export const black030 = 'rgba(0, 0, 0, 0.3)'
 export const black040 = 'rgba(0, 0, 0, 0.4)'
 export const white = 'white' // rgb(255, 255, 255)
 export const white050 = 'rgba(255, 255, 255, 0.5)'
+export const white040 = 'rgba(255, 255, 255, 0.4)'
+export const white080 = 'rgba(255, 255, 255, 0.8)'
 export const blackMain = 'rgb(5, 5, 13)'
 export const blackMain030 = 'rgba(5, 5, 13, 0.3)'
 export const blackMain040 = 'rgba(5, 5, 13, 0.4)'
@@ -22,6 +24,7 @@ export const sandLight040 = 'rgba(255, 239, 223)'
 export const sandLight070 = 'rgba(255, 239, 223, 0.7)'
 export const sandLight080 = 'rgba(255, 239, 223, 0.8)'
 export const purpleMain = 'rgb(148, 47, 81)'
+export const purpleMain040 = 'rgba(148, 47, 81, 0.4)'
 export const lightGreyLightest = 'rgb(250, 250, 250)'
 export const lightGreyLighter = 'rgb(245, 245, 245)'
 export const lightGreyLight = 'rgb(242, 242, 242)'
@@ -33,7 +36,7 @@ export const golden = 'rgb(241, 161, 7)'
 
 export const greenMain = 'rgb(40, 165, 45)'
 export const greenFaded060 = 'rgba(233, 239, 221, 0.6)'
-
+export const mint = 'rgb(89, 167, 145)'
 // PRESETS
 
 export const backgroundDarkMain = blackMain

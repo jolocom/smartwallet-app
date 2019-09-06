@@ -1,1 +1,1 @@
-export { PaymentConsent } from 'src/ui/payment/containers/PaymentConsent'
+export { PaymentConsent } from 'src/ui/payment/containers/paymentConsent'
