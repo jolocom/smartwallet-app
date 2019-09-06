@@ -1,32 +1,34 @@
 import React from 'react'
-import { StyleSheet, Dimensions, View, Text } from 'react-native'
-import { Container, JolocomButton } from 'src/ui/structure'
+import { StyleSheet, Dimensions, View, Text, Animated } from 'react-native'
+import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { landingSlides, Slide } from './landingSlides'
-import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { Typography, Colors, Spacing } from 'src/styles'
-
-interface State {
-  activeSlide: number
-}
+import Carousel, {
+  CarouselProps,
+  getInputRangeFromIndexes,
+} from 'react-native-snap-carousel'
+import { Typography, Colors, Spacing, Buttons } from 'src/styles'
+import { Button } from 'react-native-material-ui'
 
 interface Props {
   handleButtonTap: () => void
 }
 
-const viewWidth: number = Dimensions.get('window').width
+const viewWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.blackMain,
-    paddingBottom: '5%',
   },
   carouselSlide: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
   },
   carouselTextContainer: {
-    marginTop: 'auto',
+    marginTop: viewWidth > 360 ? Spacing['4XL'] : Spacing.XXL,
+    position: 'absolute',
     paddingHorizontal: '5%',
   },
   header: {
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.sandLight080,
     lineHeight: Typography.subMainText.fontSize + 4,
-    marginTop: Spacing.MD,
+    marginTop: Spacing.SM,
   },
   activeDotStyle: {
     width: 8,
@@ -51,21 +53,58 @@ const styles = StyleSheet.create({
     height: 8,
     backgroundColor: Colors.dotColorInactive,
   },
-  buttonArea: {
-    flex: 0.1,
+  bottomSection: {
+    position: 'absolute',
+    width: '85%',
+    bottom: '5%',
+    alignItems: 'center',
+  },
+  mainButtonContainer: {
+    ...Buttons.buttonStandardContainer,
+    alignSelf: 'stretch',
+  },
+  mainButtonText: {
+    ...Buttons.buttonStandardText,
+  },
+  recoverButtonContainer: {
+    ...Buttons.buttonStandardContainer,
+    backgroundColor: 'transparent',
+    marginTop: Spacing.XS,
+    alignSelf: 'stretch',
+  },
+  recoverButtonText: {
+    ...Buttons.buttonStandardText,
+    fontSize: Typography.textSM,
   },
 })
 
-export class LandingComponent extends React.Component<Props, State> {
-  public state = {
-    activeSlide: 0,
+export class LandingComponent extends React.Component<Props> {
+  // https://github.com/archriss/react-native-snap-carousel/blob/master/doc/CUSTOM_INTERPOLATIONS.md
+  // 0 is the current slide, and we want there to be an animated fade in/out
+  private scrollInterpolator(index: number, carouselProps: CarouselProps<any>) {
+    const range = [1, 0, -1]
+    const inputRange = getInputRangeFromIndexes(range, index, carouselProps)
+    return { inputRange, outputRange: range }
+  }
+
+  private animatedStyles(
+    index: number,
+    animatedValue: Animated.AnimatedValue,
+    carouselProps: CarouselProps<any>,
+  ) {
+    return {
+      opacity: animatedValue.interpolate({
+        inputRange: [-1, 0, 1],
+        outputRange: [-1.5, 1, -1.5],
+      }),
+    }
   }
 
   private renderItem = ({ item }: { item: Slide }) => {
-    const { svgImage, title, infoText } = item
+    const { bgImage, title, infoText } = item
     return (
       <View style={styles.carouselSlide}>
-        {svgImage}
+        {bgImage}
         <View style={styles.carouselTextContainer}>
           <Text style={styles.header}>{title}</Text>
           <Text style={styles.message}>{infoText}</Text>
@@ -75,7 +114,6 @@ export class LandingComponent extends React.Component<Props, State> {
   }
 
   public render() {
-    const { activeSlide } = this.state
     return (
       <Container style={styles.mainContainer}>
         <Carousel
@@ -84,26 +122,34 @@ export class LandingComponent extends React.Component<Props, State> {
           lockScrollWhileSnapping
           lockScrollTimeoutDuration={1000}
           loop
+          autoplay
+          autoplayDelay={5000}
+          autoplayInterval={5000}
           sliderWidth={viewWidth}
           itemWidth={viewWidth}
           layout={'default'}
-          onSnapToItem={(index: number) =>
-            this.setState({ activeSlide: index })
-          }
+          scrollInterpolator={this.scrollInterpolator}
+          /** @TODO Fix typing? */
+          // @ts-ignore
+          slideInterpolatedStyle={this.animatedStyles}
         />
-        <Pagination
-          dotsLength={landingSlides.length}
-          activeDotIndex={activeSlide}
-          dotStyle={styles.activeDotStyle}
-          inactiveDotStyle={styles.inactiveDotStyle}
-          inactiveDotScale={0.5}
-        />
-        <View style={styles.buttonArea}>
-          <JolocomButton
-            raised
+        <View style={styles.bottomSection}>
+          <Button
             onPress={this.props.handleButtonTap}
-            upperCase={false}
+            style={{
+              container: styles.mainButtonContainer,
+              text: styles.mainButtonText,
+            }}
             text={I18n.t(strings.GET_STARTED)}
+            upperCase={false}
+          />
+          <Button
+            style={{
+              container: styles.recoverButtonContainer,
+              text: styles.recoverButtonText,
+            }}
+            text={'Recover identity'}
+            upperCase={false}
           />
         </View>
       </Container>
