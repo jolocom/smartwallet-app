@@ -8,7 +8,8 @@ exports[`landing container mounts correctly and matches snapshot 1`] = `
     showHideTransition="fade"
   />
   <LandingComponent
-    handleButtonTap={[MockFunction]}
+    handleGetStarted={[MockFunction]}
+    handleRecover={[MockFunction]}
   />
 </Fragment>
 `;
