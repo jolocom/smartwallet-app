@@ -36,6 +36,7 @@ const CryptoJS = {
 export default CryptoJS
 
 import { randomBytes, createDecipheriv, createHash } from 'crypto'
+import { JolocomLib } from 'jolocom-lib';
 
 /**
  * This function emulates CryptoJS.format.OpenSSL.parse (cipher-core.js)
@@ -137,4 +138,11 @@ export function AESDecrypt(cipherText: string, pass: string) {
   const decipher = createDecipheriv('aes-256-cbc', key, iv)
 
   return Buffer.concat([decipher.update(cipherTextBuffer), decipher.final()])
+}
+
+export function reencryptWithJolocomLib(cipherTextBase64: string, password: string) {
+  const seed = CryptoJS.AES.decrypt(cipherTextBase64, password)
+  const keyProvider = JolocomLib.KeyProvider.fromSeed(seed, password)
+  // @ts-ignore this is private
+  return keyProvider.encryptedSeed.toString('hex')
 }
