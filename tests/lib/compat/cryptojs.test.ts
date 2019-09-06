@@ -9,7 +9,8 @@
  *
  */
 
-import compatCryptoJS from 'src/lib/compat/cryptojs'
+import compatCryptoJS, { reencryptWithJolocomLib } from 'src/lib/compat/cryptojs'
+import { JolocomLib } from 'jolocom-lib';
 
 let CryptoJS: any
 try {
@@ -19,13 +20,32 @@ try {
 }
 
 describe('CryptoJS compat utility', () => {
-  it('should decrypt stored encrypted entropy', () => {
+  describe('without crypto-js', () => {
     const seed = 'entropykeyboardcat'
     const pass = 'verysecret'
     // const encrypted = CryptoJS.AES.encrypt(seed, pass).toString()
     const encrypted = 'U2FsdGVkX1+/bGyDmfBVRnCX0IKAT9qO4Y5kfAJzPbTTU5wtXevRFDciYvM/pVTz'
 
-    expect(compatCryptoJS.AES.decrypt(encrypted, pass)).toEqual(Buffer.from(seed))
+    it('should decrypt stored encrypted entropy', () => {
+      expect(compatCryptoJS.AES.decrypt(encrypted, pass)).toEqual(Buffer.from(seed))
+    })
+
+    it('should reencrypt with jolocom-lib', () => {
+      const keyProviderFromSeed = JolocomLib.KeyProvider.fromSeed(Buffer.from(seed), pass)
+
+      const reencrypted = reencryptWithJolocomLib(encrypted, pass)
+      const keyProvider = new JolocomLib.KeyProvider(Buffer.from(reencrypted, 'hex'))
+      const derivationArgs = {
+        derivationPath: JolocomLib.KeyTypes.jolocomIdentityKey,
+        encryptionPass: pass
+      }
+
+      expect(
+        keyProvider.getPublicKey(derivationArgs)
+      ).toEqual(
+        keyProviderFromSeed.getPublicKey(derivationArgs)
+      )
+    })
   })
 
   if (!CryptoJS) return
