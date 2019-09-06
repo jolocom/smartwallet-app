@@ -5,7 +5,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
   style={
     Array [
       Object {
-        "backgroundColor": "black",
+        "backgroundColor": "rgb(5, 5, 13)",
         "flex": 1,
         "justifyContent": "flex-start",
       },
@@ -204,7 +204,7 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
   style={
     Array [
       Object {
-        "backgroundColor": "black",
+        "backgroundColor": "rgb(5, 5, 13)",
         "flex": 1,
         "justifyContent": "flex-start",
       },
@@ -273,7 +273,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
   style={
     Array [
       Object {
-        "backgroundColor": "black",
+        "backgroundColor": "rgb(5, 5, 13)",
         "flex": 1,
         "justifyContent": "flex-start",
       },
