@@ -1,4 +1,4 @@
-const sjcl = require('sjcl')
+import * as sjcl from "sjcl"
 
 export interface EntropyGeneratorInterface {
   addFromDelta: (d: number) => void
@@ -6,7 +6,7 @@ export interface EntropyGeneratorInterface {
   generateRandomString: (wordCount: number) => string
 }
 
-export class EntropyGenerator implements EntropyGenerator {
+export class EntropyGenerator implements EntropyGeneratorInterface {
   private generator = new sjcl.prng(10)
 
   addFromDelta(d: number): void {

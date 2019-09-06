@@ -26,7 +26,7 @@ interface State {
 }
 
 // we are gonna collect some from the user and the rest from the OS
-const ENOUGH_ENTROPY_PROGRESS = 0.6
+const ENOUGH_ENTROPY_PROGRESS = 0.3
 
 export class EntropyContainer extends React.Component<Props, State> {
   private entropyGenerator!: EntropyGeneratorInterface
@@ -42,7 +42,7 @@ export class EntropyContainer extends React.Component<Props, State> {
     this.entropyGenerator = this.setUpEntropyGenerator()
   }
 
-  private setUpEntropyGenerator(): EntropyGenerator {
+  private setUpEntropyGenerator(): EntropyGeneratorInterface {
     return new EntropyGenerator()
   }
 
