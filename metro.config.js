@@ -36,6 +36,5 @@ module.exports = {
         keep_fnames: true,
       },
     },
-    assetPlugins: ['react-native-svg-asset-plugin'],
   },
 }
