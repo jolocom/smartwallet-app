@@ -5,7 +5,6 @@ import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Typography, Colors } from 'src/styles'
-const image = require('src/resources/img/splashScreen.png')
 
 interface Props {
   addPoint: (x: number, y: number) => void
@@ -64,7 +63,7 @@ export const EntropyComponent: React.SFC<Props> = props => {
       <View style={{ width: '100%' }}>
         {
           progress === 0
-          ? <Animated.Image style={{ opacity }} source={image} />
+          ? <Animated.Image style={{ opacity }} source={require('src/resources/img/hand.svg')} />
           : <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
         }
       </View>

@@ -46,6 +46,7 @@
     "prettier": "^1.15.3",
     "react-devtools": "^3.6.2",
     "react-dom": "^16.3.0",
+    "react-native-svg-asset-plugin": "^0.2.0",
     "react-test-renderer": "16.8.3",
     "redux-mock-store": "^1.5.1",
     "ts-jest": "^24.0.2",
