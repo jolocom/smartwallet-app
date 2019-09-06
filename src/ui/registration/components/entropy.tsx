@@ -8,7 +8,6 @@ import { Typography, Colors } from 'src/styles'
 
 interface Props {
   addPoint: (x: number, y: number) => void
-  submitEntropy: () => void
   readonly progress: number
 }
 
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
 })
 
 export const EntropyComponent: React.SFC<Props> = props => {
-  const { progress, submitEntropy, addPoint } = props
+  const { progress, addPoint } = props
 
   const msg =
     progress === 0
@@ -50,16 +49,6 @@ export const EntropyComponent: React.SFC<Props> = props => {
       <Text style={textStyle}>{msg}</Text>
       <View style={{ width: '100%' }}>
         <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
-      </View>
-      <View style={styles.footerButton}>
-        {progress === 1 ? (
-          <JolocomButton
-            upperCase={false}
-            raised={true}
-            text={I18n.t(strings.CONTINUE)}
-            onPress={submitEntropy}
-          />
-        ) : null}
       </View>
     </Container>
   )
