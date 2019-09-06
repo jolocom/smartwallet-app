@@ -3,8 +3,8 @@ import { StyleSheet, ScrollView, View } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account'
 import { DocumentCard } from '../../documents/components/documentCard'
 import { IdentitySummary } from '../../../actions/sso/types'
-import { Colors, Spacing, Typography } from 'src/styles'
-import { DocumentDetails as DocumentDetailsComponent } from 'src/ui/documents/components/documentDetails'
+import { Colors, Spacing } from 'src/styles'
+import { DocumentDetailsComponent } from 'src/ui/documents/components/documentDetails'
 
 interface Props {
   credentialToRender: DecoratedClaims
@@ -20,39 +20,9 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.MD,
     alignItems: 'center',
   },
-  issuerSection: {},
-  sectionHeader: {
-    ...Typography.sectionHeader,
-    marginTop: Spacing.LG,
-    marginBottom: Spacing.SM,
-    paddingHorizontal: Spacing.MD,
-  },
-  claimsSection: {
-    // needed to make the ScrollView work properly
-    flex: 1,
-  },
-  claimsList: {
-    borderTopWidth: 1,
-    borderColor: Colors.lightGrey,
-  },
-  claimCard: {
-    backgroundColor: Colors.white,
-    paddingVertical: Spacing.MD,
-    borderBottomWidth: 1,
-    borderColor: Colors.lightGrey,
-  },
-  claimCardTextContainer: {
-    paddingHorizontal: Spacing.XL,
-  },
-  claimCardTitle: {
-    ...Typography.cardSecondaryText,
-  },
-  claimCardMainText: {
-    ...Typography.cardMainText,
-  },
 })
 
-export const CredentialDialogComponent: React.SFC<Props> = (
+export const CredentialDialogComponent: React.FC<Props> = (
   props: Props,
 ): JSX.Element => {
   const { credentialToRender } = props
