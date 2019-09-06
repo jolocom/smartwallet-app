@@ -15,7 +15,7 @@ import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
-import { BackupWarning } from '../../recovery/components/backupWarning'
+import { BackupWarning } from '../../recovery/seedPhrase/components/backupWarning'
 import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props

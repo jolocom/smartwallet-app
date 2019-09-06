@@ -1,13 +1,13 @@
 import * as React from 'react'
 import RepeatSeedPhraseComponent from '../components/repeatSeedPhrase'
-import { ThunkDispatch } from '../../../store'
-import { navigationActions, recoveryActions } from '../../../actions'
+import { ThunkDispatch } from '../../../../store'
+import { navigationActions, recoveryActions } from '../../../../actions'
 import { connect } from 'react-redux'
-import { withLoading } from '../../../actions/modifiers'
-import strings from '../../../locales/strings'
+import { withLoading } from '../../../../actions/modifiers'
+import strings from '../../../../locales/strings'
 import * as I18n from 'i18n-js'
 import { NavigationScreenProps } from 'react-navigation'
-import { routeList } from '../../../routeList'
+import { routeList } from '../../../../routeList'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,

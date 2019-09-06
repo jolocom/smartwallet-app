@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Placeholder from '../../../src/ui/recovery/components/placeholder'
+import Placeholder from '../../../src/ui/recovery/seedPhrase/components/placeholder'
 
 describe('placeholder component', () => {
   const makeProps = (otherProps: {}) => ({

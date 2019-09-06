@@ -2,11 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import { Container } from 'src/ui/structure'
 import { Colors, Spacing, Typography } from 'src/styles'
-import { largeText } from '../../../styles/typography'
-import { LabeledShard } from '../container/receivedShards'
+import { largeText } from '../../../../styles/typography'
+import { ShardEntity } from '../../../../lib/storage/entities/shardEntity'
 
 interface Props {
-  shards: LabeledShard[]
+  shards: ShardEntity[]
   toggleModal: (shardId: number) => void
 }
 

@@ -2,9 +2,9 @@ import React from 'react'
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import { Container } from 'src/ui/structure'
 import { Colors, Spacing, Typography } from 'src/styles'
-import { largeText } from '../../../styles/typography'
+import { largeText } from '../../../../styles/typography'
 import { ShardModal } from './shardModal'
-import { ShardEntity } from '../../../lib/storage/entities/shardEntity'
+import { ShardEntity } from '../../../../lib/storage/entities/shardEntity'
 
 interface Props {
   shards: ShardEntity[]

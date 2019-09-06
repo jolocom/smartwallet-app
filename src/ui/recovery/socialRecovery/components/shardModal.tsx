@@ -2,9 +2,9 @@ import React from 'react'
 import { Modal, Text, TouchableHighlight, View } from 'react-native'
 import { Container } from 'src/ui/structure'
 import QRCode from 'react-native-qrcode-svg'
-import { white } from '../../../styles/colors'
-import { Colors } from '../../../styles'
-import { ShardEntity } from '../../../lib/storage/entities/shardEntity'
+import { white } from '../../../../styles/colors'
+import { Colors } from '../../../../styles'
+import { ShardEntity } from '../../../../lib/storage/entities/shardEntity'
 
 interface Props {
   modalOpen: boolean
@@ -25,7 +25,7 @@ export const ShardModal: React.FunctionComponent<Props> = ({
     animationType="fade"
     transparent={true}
     visible={!!selectedShard && modalOpen}
-  >
+    >
     <View style={{ marginTop: 22 }}>
       <Container>
         <View

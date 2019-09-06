@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Container, JolocomButton } from '../../structure'
+import { Container, JolocomButton } from '../../../structure'
 import Placeholder from './placeholder'
-import strings from '../../../locales/strings'
+import strings from '../../../../locales/strings'
 import * as I18n from 'i18n-js'
-import { Colors, Spacing, Typography } from '../../../styles'
+import { Colors, Spacing, Typography } from '../../../../styles'
 
 const styles = StyleSheet.create({
   container: {

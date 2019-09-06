@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ThunkDispatch } from '../../../store'
+import { ThunkDispatch } from '../../../../store'
 import { NavigationScreenProps } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { ReceivedShardsComponent } from '../components/receivedShards'
 import { ShardModal } from '../components/shardModal'
-import { RootState } from '../../../reducers'
-import { ShardEntity } from '../../../lib/storage/entities/shardEntity'
+import { RootState } from '../../../../reducers'
+import { ShardEntity } from '../../../../lib/storage/entities/shardEntity'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,

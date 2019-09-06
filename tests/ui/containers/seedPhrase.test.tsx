@@ -1,5 +1,5 @@
 import React from 'react'
-import { SeedPhraseContainer } from 'src/ui/recovery/container/seedPhrase'
+import { SeedPhraseContainer } from 'src/ui/recovery/seedPhrase/container/seedPhrase'
 import { shallow } from 'enzyme'
 import { createMockNavigationScreenProp } from 'tests/utils'
 

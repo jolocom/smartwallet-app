@@ -2,13 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
 import { ThunkDispatch } from 'src/store'
-import { accountActions, navigationActions } from '../../../actions'
-import { routeList } from '../../../routeList'
-import { RootState } from '../../../reducers'
+import { accountActions, navigationActions } from '../../../../actions'
+import { routeList } from '../../../../routeList'
+import { RootState } from '../../../../reducers'
 import { default as IonIcon } from 'react-native-vector-icons/Ionicons'
-import strings from '../../../locales/strings'
+import strings from '../../../../locales/strings'
 import * as I18n from 'i18n-js'
-import { Colors, Spacing, Typography } from '../../../styles'
+import { Colors, Spacing, Typography } from '../../../../styles'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,

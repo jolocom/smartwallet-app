@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import RepeatSeedPhraseComponent from '../../../src/ui/recovery/components/repeatSeedPhrase'
+import RepeatSeedPhraseComponent from '../../../src/ui/recovery/seedPhrase/components/repeatSeedPhrase'
 
 describe('repeatSeedPhrase component', () => {
   const makeProps = (otherProps: {}) => ({

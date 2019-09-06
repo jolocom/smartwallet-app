@@ -13,6 +13,7 @@ import { Button } from 'react-native-material-ui'
 
 interface Props {
   handleButtonTap: () => void
+  handleRecovery: () => void
 }
 
 const viewWidth = Dimensions.get('window').width
@@ -144,6 +145,7 @@ export class LandingComponent extends React.Component<Props> {
             upperCase={false}
           />
           <Button
+            onPress={this.props.handleRecovery}
             style={{
               container: styles.recoverButtonContainer,
               text: styles.recoverButtonText,

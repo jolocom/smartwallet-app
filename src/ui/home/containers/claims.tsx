@@ -7,7 +7,7 @@ import { DecoratedClaims } from 'src/reducers/account/'
 import { RootState } from '../../../reducers'
 import { withLoading } from '../../../actions/modifiers'
 import { ThunkDispatch } from '../../../store'
-import { BackupWarning } from '../../recovery/components/backupWarning'
+import { BackupWarning } from '../../recovery/seedPhrase/components/backupWarning'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,

@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ThunkDispatch } from '../../../store'
+import { ThunkDispatch } from '../../../../store'
 import { NavigationScreenProps } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { AcceptShardComponent } from '../components/acceptShard'
-import { saveReceivedShard } from '../../../actions/recovery'
+import { saveReceivedShard } from '../../../../actions/recovery'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,

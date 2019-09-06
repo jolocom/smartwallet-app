@@ -4,11 +4,13 @@ import { navigationActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { SocialRecovery } from 'jolocom-lib/js/recovery/socialRecovery'
+// @ts-ignore
 import { mnemonicToEntropy } from 'bip39'
 import {
   OWN_SHARD_LABEL,
   ShardEntity,
 } from '../lib/storage/entities/shardEntity'
+import { navigatorResetHome } from './navigation'
 
 export enum ActionTypes {
   SET_OWN_SHARDS = 'SET_OWN_SHARDS',
@@ -119,6 +121,33 @@ export const handelReceiveShard = (shard: string): ThunkAction => async (
   )
 }
 
+export const storeShard = (shard: string): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  await backendMiddleware.storageLib.store.shard({
+    value: shard,
+    label: OWN_SHARD_LABEL,
+  })
+  await dispatch(loadOwnShards())
+}
+
+export const loadOwnShards = (): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  const ownShards = await backendMiddleware.storageLib.get.shards(
+    OWN_SHARD_LABEL,
+  )
+
+  return dispatch({
+    type: ActionTypes.SET_OWN_SHARDS,
+    value: ownShards,
+  })
+}
+
 export const saveReceivedShard = (
   shard: string,
   label: string,
@@ -152,4 +181,23 @@ export const deleteShard = (shard: ShardEntity): ThunkAction => async (
     type: ActionTypes.SET_OWN_SHARDS,
     value: shards,
   })
+}
+
+export const recoverIdentity = (
+  entropy: string,
+  did: string,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+  await backendMiddleware.createKeyProvider(entropy)
+  await backendMiddleware.recoverFromShards(did)
+  await backendMiddleware.storageLib.store.setting(
+    settingKeys.shardsCreated,
+    true,
+  )
+  for (const shard of getState().recovery.ownShards) {
+    await backendMiddleware.storageLib.delete.shard(shard)
+  }
+  dispatch({
+    type: 'SET_SHARDS_CREATED',
+  })
+  return dispatch(navigatorResetHome())
 }

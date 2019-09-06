@@ -2,8 +2,8 @@ import React from 'react'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { Colors, Spacing, Typography } from 'src/styles'
-import { largeText } from '../../../styles/typography'
-import { grey, purpleMain } from '../../../styles/colors'
+import { largeText } from '../../../../styles/typography'
+import { grey, purpleMain } from '../../../../styles/colors'
 
 interface Props {
   label: string

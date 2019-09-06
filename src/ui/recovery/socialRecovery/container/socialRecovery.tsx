@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ThunkDispatch } from '../../../store'
+import { ThunkDispatch } from '../../../../store'
 import { NavigationScreenProps } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { SocialRecoveryComponent } from '../components/socialRecovery'
-import { RootState } from '../../../reducers'
-import { deleteShard, openReceivedShards } from '../../../actions/recovery'
-import { ShardEntity } from '../../../lib/storage/entities/shardEntity'
+import { RootState } from '../../../../reducers'
+import { deleteShard, openReceivedShards } from '../../../../actions/recovery'
+import { ShardEntity } from '../../../../lib/storage/entities/shardEntity'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,

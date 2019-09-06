@@ -13,7 +13,7 @@ export class LandingContainer extends React.Component<Props> {
     return (
       <React.Fragment>
         <StatusBar barStyle="light-content" />
-        <LandingComponent handleButtonTap={this.props.getStarted} />
+        <LandingComponent handleButtonTap={this.props.getStarted} handleRecovery={this.props.socialRecovery} />
       </React.Fragment>
     )
   }
@@ -24,6 +24,12 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(
       navigationActions.navigate({
         routeName: routeList.Entropy,
+      }),
+    ),
+  socialRecovery: () =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.CollectShards,
       }),
     ),
 })

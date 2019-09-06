@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { BackupWarning } from '../../recovery/components/backupWarning'
+import { BackupWarning } from '../../recovery/seedPhrase/components/backupWarning'
 import { Typography, Colors } from 'src/styles'
 
 interface Props {}

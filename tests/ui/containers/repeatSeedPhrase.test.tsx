@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { createMockNavigationScreenProp } from 'tests/utils'
-import { RepeatSeedPhraseContainer } from '../../../src/ui/recovery/container/repeatSeedPhrase'
+import { RepeatSeedPhraseContainer } from '../../../src/ui/recovery/seedPhrase/container/repeatSeedPhrase'
 
 const mockSeedPhrase = 'mock seed Phrase of at least six words or more'
 describe('repeatedPhrase container', () => {

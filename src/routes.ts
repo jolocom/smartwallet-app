@@ -35,11 +35,12 @@ import {
   RecordsMenuIcon,
   SettingsMenuIcon,
 } from 'src/resources'
-import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
-import { SeedPhrase } from './ui/recovery/container/seedPhrase'
-import { SocialRecovery } from './ui/recovery/container/socialRecovery'
-import { ReceivedShards } from './ui/recovery/container/receivedShards'
-import { AcceptShard } from './ui/recovery/container/acceptShard'
+import { RepeatSeedPhrase } from './ui/recovery/seedPhrase/container/repeatSeedPhrase'
+import { SeedPhrase } from './ui/recovery/seedPhrase/container/seedPhrase'
+import { SocialRecovery } from './ui/recovery/socialRecovery/container/socialRecovery'
+import { ReceivedShards } from './ui/recovery/socialRecovery/container/receivedShards'
+import { AcceptShard } from './ui/recovery/socialRecovery/container/acceptShard'
+import { CollectShards } from './ui/recovery/socialRecovery/container/collectShards'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -163,6 +164,10 @@ const RegistrationScreens = createSwitchNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.CollectShards]: {
+      screen: CollectShards,
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.Entropy]: {

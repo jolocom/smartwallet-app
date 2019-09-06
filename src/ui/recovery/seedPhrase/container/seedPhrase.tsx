@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { SeedPhrase as SeedPhraseComponent } from 'src/ui/recovery/components/seedPhrase'
-import { ThunkDispatch } from '../../../store'
+import { SeedPhrase as SeedPhraseComponent } from 'src/ui/recovery/seedPhrase/components/seedPhrase'
+import { ThunkDispatch } from '../../../../store'
 import { NavigationScreenProps } from 'react-navigation'
-import { navigationActions } from '../../../actions'
-import { routeList } from '../../../routeList'
+import { navigationActions } from '../../../../actions'
+import { routeList } from '../../../../routeList'
 import { StatusBar } from 'react-native'
 
 interface Props

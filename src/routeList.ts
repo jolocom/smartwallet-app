@@ -26,6 +26,7 @@ export enum routeList {
   SocialRecovery = 'SocialRecovery',
   ReceivedShards = 'ReceivedShards',
   AcceptShard = 'AcceptShard',
+  CollectShards = 'CollectShards',
 
   Exception = 'Exception',
 }
