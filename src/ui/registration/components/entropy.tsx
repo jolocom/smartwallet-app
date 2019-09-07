@@ -55,9 +55,10 @@ export const EntropyComponent: React.SFC<Props> = props => {
       <View style={styles.contentView}>
         {
           progress === 0
-          ? <HandAnimationComponent />
-          : <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
+          ? <View style={{position: 'absolute'}}><HandAnimationComponent /></View>
+          : null
         }
+        <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />      
       </View>
     </Container>
   )
