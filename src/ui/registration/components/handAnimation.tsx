@@ -32,17 +32,12 @@ const usePulse = (pulseTiming: (val: Animated.Value) => Animated.CompositeAnimat
   return pulseValue
 }
 
-const handTiming = (val: Animated.Value) =>
-  Animated.sequence([
-    Animated.timing(val, { toValue: 1 }),
-    Animated.timing(val, { toValue: 0 })
-  ])
+const makePulseTiming = (values: number[]) => (val: Animated.Value) =>
+  Animated.sequence(values.map(value => Animated.timing(val, {toValue: value})))
 
-const splashTiming = (val: Animated.Value) =>
-  Animated.sequence([
-    Animated.timing(val, {toValue: 1}),
-    Animated.timing(val, {toValue: 0})
-  ])
+const handTiming = makePulseTiming([1, 1, 1, 1, 1, 0])
+
+const splashTiming = makePulseTiming([1, 0, 1, 0, 1, 0])
 
 export const HandAnimationComponent: React.SFC<Props> = _ => {
   
