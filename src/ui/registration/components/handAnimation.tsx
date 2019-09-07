@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, { useRef, useEffect } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
 import { HandIcon, SplashIcon } from 'src/resources/index'
 
@@ -19,37 +19,37 @@ const styles = StyleSheet.create({
   },
 })
 
-const usePulse = (pulseTiming: (val: Animated.Value) => Animated.CompositeAnimation) => {
-  const pulseValue = useRef(new Animated.Value(0)).current
+export const usePulseForBoth = () => {
+  const handPV = useRef(new Animated.Value(0)).current
+  const splashPV = useRef(new Animated.Value(0)).current
 
-  const pulse = () => pulseTiming(pulseValue).start(pulse)
+  const pulse = () => Animated.parallel([
+    Animated.sequence(
+      [1, 0, 1, 0, 0, 1, 0].map(n => Animated.timing(splashPV, {toValue: n}))
+    ),
+    Animated.sequence(
+      [1, 1, 1, 0, 0, 1, 1].map(n => Animated.timing(handPV, {toValue: n}))
+    )
+  ]).start(pulse)
 
   useEffect(() => {
     const timeout = setTimeout(pulse, 0)
     return () => clearTimeout(timeout)
   })
 
-  return pulseValue
+  return {handPV, splashPV}
 }
 
-const makePulseTiming = (values: number[]) => (val: Animated.Value) =>
-  Animated.sequence(values.map(value => Animated.timing(val, {toValue: value})))
-
-const handTiming = makePulseTiming([1, 1, 1, 1, 1, 0])
-
-const splashTiming = makePulseTiming([1, 0, 1, 0, 1, 0])
-
 export const HandAnimationComponent: React.SFC<Props> = _ => {
-  
-  const handOpacity = usePulse(handTiming)
-  const splashOpacity = usePulse(splashTiming)
+
+  const { handPV, splashPV } = usePulseForBoth()
 
   return (
     <View>
-      <Animated.View style={{ opacity: splashOpacity, ...styles.splashPosition }}>
+      <Animated.View style={{ opacity: splashPV, ...styles.splashPosition }}>
         <SplashIcon />
       </Animated.View>
-      <Animated.View style={{ opacity: handOpacity, ...styles.handPosition }}>
+      <Animated.View style={{ opacity: handPV, ...styles.handPosition }}>
         <HandIcon />
       </Animated.View>
     </View>
