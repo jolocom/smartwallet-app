@@ -31,6 +31,11 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   <View
     style={
       Object {
+        "alignItems": "center",
+        "flex": 1,
+        "flexDirection": "column",
+        "height": "100%",
+        "justifyContent": "center",
         "width": "100%",
       }
     }
@@ -40,14 +45,6 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       disabled={false}
     />
   </View>
-  <View
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  />
 </Container>
 `;
 
@@ -77,23 +74,29 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   <View
     style={
       Object {
+        "alignItems": "center",
+        "flex": 1,
+        "flexDirection": "column",
+        "height": "100%",
+        "justifyContent": "center",
         "width": "100%",
       }
     }
   >
+    <View
+      style={
+        Object {
+          "position": "absolute",
+        }
+      }
+    >
+      <HandAnimationComponent />
+    </View>
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={false}
     />
   </View>
-  <View
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  />
 </Container>
 `;
 
@@ -128,6 +131,11 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   <View
     style={
       Object {
+        "alignItems": "center",
+        "flex": 1,
+        "flexDirection": "column",
+        "height": "100%",
+        "justifyContent": "center",
         "width": "100%",
       }
     }
@@ -135,21 +143,6 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={true}
-    />
-  </View>
-  <View
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  >
-    <JolocomButton
-      onPress={[Function]}
-      raised={true}
-      text="Continue"
-      upperCase={false}
     />
   </View>
 </Container>
