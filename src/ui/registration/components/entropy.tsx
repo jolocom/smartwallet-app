@@ -27,6 +27,14 @@ const styles = StyleSheet.create({
   bigFont: {
     fontSize: Typography.text4XL,
   },
+  contentView: {
+    width: '100%',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  }
 })
 
 export const EntropyComponent: React.SFC<Props> = props => {
@@ -44,7 +52,7 @@ export const EntropyComponent: React.SFC<Props> = props => {
   return (
     <Container style={styles.mainContainer}>
       <Text style={textStyle}>{msg}</Text>
-      <View style={{ width: '100%' }}>
+      <View style={styles.contentView}>
         {
           progress === 0
           ? <HandAnimationComponent />

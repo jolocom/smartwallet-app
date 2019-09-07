@@ -7,13 +7,11 @@ interface Props {
 
 const styles = StyleSheet.create({
   handPosition: {
-    position: 'absolute',
     // TODO change to be % based
-    top: 11,
+    top: -29,
     left: 8
   },
   splashPosition: {
-    position: 'absolute',
     top: 0,
     left: 0
   },
@@ -40,7 +38,7 @@ export const usePulseForBoth = () => {
   return {handPV, splashPV}
 }
 
-export const HandAnimationComponent: React.SFC<Props> = _ => {
+export const HandAnimationComponent: React.SFC<Props> = props => {
 
   const { handPV, splashPV } = usePulseForBoth()
 
