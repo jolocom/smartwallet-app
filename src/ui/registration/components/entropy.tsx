@@ -1,11 +1,11 @@
 import React, {useEffect, useRef} from 'react'
 import { StyleSheet, View, Text, Animated } from 'react-native'
-import { Container, JolocomButton } from 'src/ui/structure/'
+import { Container } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Typography, Colors } from 'src/styles'
-const image = require('src/resources/img/splashScreen.png')
+import { HandIcon, SplashIcon } from 'src/resources/index'
 
 interface Props {
   addPoint: (x: number, y: number) => void
@@ -29,25 +29,36 @@ const styles = StyleSheet.create({
   },
 })
 
-const usePulse = () => {
-  const opacity = useRef(new Animated.Value(0)).current
-  
-  const pulse = () => Animated.sequence([
-    Animated.timing(opacity, { toValue: 1 }),
-    Animated.timing(opacity, { toValue: 0 })
-  ]).start(pulse)
+const usePulse = (pulseTiming: (val: Animated.Value) => Animated.CompositeAnimation) => {
+  const pulseValue = useRef(new Animated.Value(0)).current
+
+  const pulse = () => pulseTiming(pulseValue).start(pulse)
 
   useEffect(() => {
     const timeout = setTimeout(pulse, 0)
     return () => clearTimeout(timeout)
   })
 
-  return opacity
+  return pulseValue
 }
+
+const handTiming = (val: Animated.Value) =>
+  Animated.sequence([
+    Animated.timing(val, { toValue: 1 }),
+    Animated.timing(val, { toValue: 0 })
+  ])
+
+const splashTiming = (val: Animated.Value) =>
+  Animated.sequence([
+    Animated.timing(val, {toValue: 1}),
+    Animated.timing(val, {toValue: 0})
+  ])
 
 export const EntropyComponent: React.SFC<Props> = props => {
   const { progress, addPoint } = props
-  const opacity = usePulse()
+  
+  const handOpacity = usePulse(handTiming)
+  const splashOpacity = usePulse(splashTiming)
 
   const msg =
     progress === 0
@@ -64,7 +75,14 @@ export const EntropyComponent: React.SFC<Props> = props => {
       <View style={{ width: '100%' }}>
         {
           progress === 0
-          ? <Animated.Image style={{ opacity }} source={image} />
+          ? <View>
+              <Animated.View style={{ splashOpacity }}>
+                <SplashIcon />
+              </Animated.View>
+              <Animated.View style={{ handOpacity }}>
+                <HandIcon />
+              </Animated.View>
+            </View>
           : <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
         }
       </View>
