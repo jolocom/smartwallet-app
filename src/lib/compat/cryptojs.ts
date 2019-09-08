@@ -90,19 +90,18 @@ function EvpKDFCompute(password: string, salt: Buffer, cfg: { keySize: number })
   // var iterations = cfg.iterations;
 
   // Initial values
-  let derivedKey, block
+  let derivedKey!: Buffer, block
 
   // Generate key
   for (let k = 0; k < keySize; k++) {
     const hasher = newHasher()
     if (block) hasher.update(block)
-    // @ts-ignore
-    block = hasher.update(password).update(salt).digest('buffer')
+    block = hasher.update(password).update(salt).digest()
 
     // This code is from crypto-js, but iterations is always 1 in our use case
     //// Iterations
     //for (var i = 1; i < iterations; i++) {
-    //  block = newHasher().update(block).digest('buffer');
+    //  block = newHasher().update(block).digest();
     //}
 
     derivedKey =
@@ -111,7 +110,7 @@ function EvpKDFCompute(password: string, salt: Buffer, cfg: { keySize: number })
       : block
   }
 
-  return derivedKey.slice(0, keySize * 4);
+  return derivedKey.slice(0, keySize * 4)
 }
 
 /**
