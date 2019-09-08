@@ -44,9 +44,10 @@ import { JolocomLib } from 'jolocom-lib';
  */
 function OpenSSLFormatterParse(cipherTextBase64: string) {
   let salt, cipherText = Buffer.from(cipherTextBase64, 'base64')
-  // Test for salt
+  // Test for salt.
+  // If the first 8 bytes are the ASCII "Salted__", then cipherText is salted.
   if (cipherText.readUInt32BE(0*4) == 0x53616c74 && cipherText.readUInt32BE(1*4) == 0x65645f5f) {
-    // Extract salt, 64 bytes, word  2 and word 3
+    // Extract salt, 8 bytes, third and fourth words
     // NOTE: slice is byte addressed
     salt = cipherText.slice(2 * 4, 4 * 4)
     // Remove salt from ciphertext
@@ -68,7 +69,7 @@ function OpenSSLKdfExecute(password: string, keySize: number, ivSize: number, sa
   }
 
   // Derive key and IV
-  var key = EvpKDFCompute(password, salt, { keySize: keySize + ivSize, iterations: 1 });
+  var key = EvpKDFCompute(password, salt, { keySize: keySize + ivSize });
 
   // Separate key and IV
   var iv = key.slice(keySize * 4)
@@ -80,12 +81,13 @@ function OpenSSLKdfExecute(password: string, keySize: number, ivSize: number, sa
 /**
  * This function emulates CryptoJS.algo.EvpKDF.compute
  */
-function EvpKDFCompute(password: string, salt: Buffer, cfg: { keySize: number, iterations: number }) {
+function EvpKDFCompute(password: string, salt: Buffer, cfg: { keySize: number }) {
   // Init hasher
   const newHasher = () => createHash('md5')
 
   var keySize = cfg.keySize;
-  var iterations = cfg.iterations;
+  // skipped
+  // var iterations = cfg.iterations;
 
   // Initial values
   let derivedKey, block
@@ -97,11 +99,11 @@ function EvpKDFCompute(password: string, salt: Buffer, cfg: { keySize: number, i
     // @ts-ignore
     block = hasher.update(password).update(salt).digest('buffer')
 
-    // Iterations
-    for (var i = 1; i < iterations; i++) {
-      // @ts-ignore
-      block = newHasher().update(block).digest('buffer');
-    }
+    // This code is from crypto-js, but iterations is always 1 in our use case
+    //// Iterations
+    //for (var i = 1; i < iterations; i++) {
+    //  block = newHasher().update(block).digest('buffer');
+    //}
 
     derivedKey =
       derivedKey
@@ -143,6 +145,7 @@ export function AESDecrypt(cipherText: string, pass: string) {
 export function reencryptWithJolocomLib(cipherTextBase64: string, password: string) {
   const seed = CryptoJS.AES.decrypt(cipherTextBase64, password)
   const keyProvider = JolocomLib.KeyProvider.fromSeed(seed, password)
-  // @ts-ignore this is private
+  // TODO remove this ts-ignore once encryptedSeed is public
+  // @ts-ignore
   return keyProvider.encryptedSeed.toString('hex')
 }
