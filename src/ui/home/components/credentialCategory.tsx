@@ -66,19 +66,13 @@ export const CredentialCategory: React.FC<Props> = props => {
             />
           )
         }
-        const collapsible = isCollapsible(credential)
-        if (collapsible) {
-          return (
-            <CollapsibleCredentialCard
-              did={did}
-              credential={credential}
-              onPress={() => onEdit(credential)}
-              leftIcon={leftIcon}
-            />
-          )
-        }
+
+        const CredentialCardToRender = isCollapsible(credential)
+          ? CollapsibleCredentialCard
+          : CredentialCard
+
         return (
-          <CredentialCard
+          <CredentialCardToRender
             did={did}
             credential={credential}
             onPress={() => onEdit(credential)}

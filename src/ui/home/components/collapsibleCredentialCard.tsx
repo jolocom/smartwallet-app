@@ -35,23 +35,18 @@ export class CollapsibleCredentialCard extends React.Component<Props, State> {
     const { collapsed } = this.state
     const { did, credential, onPress, leftIcon } = this.props
 
+    const CredentialCardToRender = collapsed
+      ? CollapsedCredentialCard
+      : CredentialCard
+
     return (
       <View onTouchEnd={this.handleTouch}>
-        {collapsed ? (
-          <CollapsedCredentialCard
-            did={did}
-            credential={credential}
-            onPress={onPress}
-            leftIcon={leftIcon}
-          />
-        ) : (
-          <CredentialCard
-            did={did}
-            credential={credential}
-            onPress={onPress}
-            leftIcon={leftIcon}
-          />
-        )}
+        <CredentialCardToRender
+          did={did}
+          credential={credential}
+          onPress={onPress}
+          leftIcon={leftIcon}
+        />
       </View>
     )
   }
