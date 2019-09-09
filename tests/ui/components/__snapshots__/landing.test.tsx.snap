@@ -102,6 +102,7 @@ exports[`landing component matches the snapshot on render 1`] = `
       upperCase={false}
     />
     <ThemedComponent
+      onPress={[MockFunction]}
       style={
         Object {
           "container": Object {

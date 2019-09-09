@@ -6,6 +6,7 @@ describe('landing container', () => {
   it('mounts correctly and matches snapshot', () => {
     const props: LandingContainer['props'] = {
       getStarted: jest.fn(),
+      recoverIdentity: jest.fn(),
     }
 
     const rendered = shallow(<LandingContainer {...props} />)

@@ -1,6 +1,6 @@
 import * as util from 'src/lib/util'
-import { BackendMiddleware, BackendError } from 'src/backendMiddleware'
-import { stub, reveal } from './utils'
+import { BackendError, BackendMiddleware } from 'src/backendMiddleware'
+import { reveal, stub } from './utils'
 import { ConnectionOptions } from 'typeorm/browser'
 import data from 'tests/actions/registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
@@ -16,7 +16,7 @@ const mockBackendMiddlewareConfig = {
 describe('BackendMiddleware', () => {
   const { getPasswordResult, cipher, entropy, identityWallet } = data
   const keyChainLib = stub<BackendMiddleware['keyChainLib']>({
-    getPassword: jest.fn().mockResolvedValue(getPasswordResult)
+    getPassword: jest.fn().mockResolvedValue(getPasswordResult),
   })
   const decryptWithPass = jest.fn().mockReturnValue(entropy)
   const storageLib = {
@@ -47,6 +47,11 @@ describe('BackendMiddleware', () => {
   describe('prepareIdentityWallet', () => {
     const backendMiddleware = createBackendMiddleware()
 
+    beforeEach(() => {
+      stub.clearMocks(registry)
+      stub.clearMocks(storageLib.get)
+      stub.clearMocks(storageLib.store)
+    })
     it('should throw NoEntropy if there is no stored entropy', async () => {
       reveal(storageLib.get).encryptedSeed.mockResolvedValueOnce(null)
       const walletPromise = backendMiddleware.prepareIdentityWallet()
@@ -56,9 +61,7 @@ describe('BackendMiddleware', () => {
     it('should throw DecryptionFailed if decryption fails', async () => {
       decryptWithPass.mockReturnValueOnce(null)
       const walletPromise = backendMiddleware.prepareIdentityWallet()
-      return expect(walletPromise).rejects.toThrow(
-        BackendError.codes.DecryptionFailed,
-      )
+      return expect(walletPromise).rejects.toThrowError()
     })
 
     it('should authenticate and cache the identity if not cached', async () => {
@@ -75,8 +78,6 @@ describe('BackendMiddleware', () => {
     })
 
     it('should use cached identity if available', async () => {
-      stub.clearMocks(registry)
-      stub.clearMocks(storageLib.store)
       reveal(storageLib.get).didDoc.mockResolvedValueOnce(
         identityWallet.didDocument,
       )
@@ -130,7 +131,9 @@ describe('BackendMiddleware', () => {
     it('should createKeyProvider', async () => {
       await backendMiddleware.createKeyProvider(entropy)
       expect(() => backendMiddleware.keyProvider).not.toThrow()
-      expect(backendMiddleware.keyProvider['encryptedSeed'].toString('base64')).toMatch(cipher)
+      expect(
+        backendMiddleware.keyProvider['encryptedSeed'].toString('hex'),
+      ).toMatch(cipher)
     })
 
     it('should not store anything before the identity is registered', () => {
@@ -165,9 +168,47 @@ describe('BackendMiddleware', () => {
         controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
       })
       expect(keyChainLib.savePassword).toHaveBeenCalledTimes(1)
-      expect(keyChainLib.savePassword).toHaveBeenCalledWith(
-        getPasswordResult,
+      expect(keyChainLib.savePassword).toHaveBeenCalledWith(getPasswordResult)
+
+      expect(storageLib.store.encryptedSeed).toHaveBeenCalledWith(entropyData)
+    })
+  })
+
+  describe('Identity Recovery', () => {
+    const backendMiddleware = createBackendMiddleware()
+    let entropyData: { encryptedEntropy: string; timestamp: number }
+
+    beforeAll(() => {
+      MockDate.set(new Date(946681200000))
+      entropyData = {
+        encryptedEntropy: cipher,
+        timestamp: Date.now(),
+      }
+      stub.clearMocks(keyChainLib)
+    })
+
+    afterAll(() => MockDate.reset())
+
+    it('should recover the identity', async () => {
+      reveal(registry).authenticate.mockResolvedValue(identityWallet)
+      const identity = await backendMiddleware.recoverIdentity(
+        'exhibit history avoid kit gaze pulse yellow portion hold lottery panda figure',
       )
+
+      expect(registry.authenticate).toHaveBeenCalledWith(
+        backendMiddleware.keyProvider,
+        { derivationPath: "m/73'/0'/0'/0", encryptionPass: getPasswordResult },
+      )
+
+      expect(storageLib.store.didDoc).toHaveBeenCalledWith(
+        identityWallet.didDocument,
+      )
+      expect(storageLib.store.persona).toHaveBeenCalledWith({
+        did: identity.did,
+        controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
+      })
+      expect(keyChainLib.savePassword).toHaveBeenCalledTimes(1)
+      expect(keyChainLib.savePassword).toHaveBeenCalledWith(getPasswordResult)
 
       expect(storageLib.store.encryptedSeed).toHaveBeenCalledWith(entropyData)
     })

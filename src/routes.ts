@@ -35,6 +35,9 @@ import {
   RecordsMenuIcon,
   SettingsMenuIcon,
 } from 'src/resources'
+import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
+import { SeedPhrase } from './ui/recovery/container/seedPhrase'
+import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { RepeatSeedPhrase } from './ui/recovery/seedPhrase/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/seedPhrase/container/seedPhrase'
 import { SocialRecovery } from './ui/recovery/socialRecovery/container/socialRecovery'
@@ -164,6 +167,10 @@ const RegistrationScreens = createSwitchNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.InputSeedPhrase]: {
+      screen: InputSeedPhrase,
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.CollectShards]: {

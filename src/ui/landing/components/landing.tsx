@@ -12,8 +12,8 @@ import { Typography, Colors, Spacing, Buttons } from 'src/styles'
 import { Button } from 'react-native-material-ui'
 
 interface Props {
-  handleButtonTap: () => void
-  handleRecovery: () => void
+  handleGetStarted: () => void
+  handleRecover: () => void
 }
 
 const viewWidth = Dimensions.get('window').width
@@ -136,7 +136,7 @@ export class LandingComponent extends React.Component<Props> {
         />
         <View style={styles.bottomSection}>
           <Button
-            onPress={this.props.handleButtonTap}
+            onPress={this.props.handleGetStarted}
             style={{
               container: styles.mainButtonContainer,
               text: styles.mainButtonText,
@@ -145,7 +145,7 @@ export class LandingComponent extends React.Component<Props> {
             upperCase={false}
           />
           <Button
-            onPress={this.props.handleRecovery}
+            onPress={this.props.handleRecover}
             style={{
               container: styles.recoverButtonContainer,
               text: styles.recoverButtonText,

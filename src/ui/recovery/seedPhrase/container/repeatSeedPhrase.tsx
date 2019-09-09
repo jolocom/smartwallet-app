@@ -112,8 +112,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
         params: { mnemonic },
       }),
     ),
-  setSeedPhraseSaved: () =>
-    dispatch(withLoading(recoveryActions.setSeedPhraseSaved())),
+  setSeedPhraseSaved: () => {
+    dispatch(withLoading(recoveryActions.setSeedPhraseSaved()))
+    return dispatch(navigationActions.navigatorResetHome())
+  },
 })
 
 export const RepeatSeedPhrase = connect(
