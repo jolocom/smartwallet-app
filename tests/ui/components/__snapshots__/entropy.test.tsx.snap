@@ -28,15 +28,11 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   >
     50 %
   </Text>
-  <View
+  <Container
     style={
       Object {
-        "alignItems": "center",
         "flex": 1,
         "flexDirection": "column",
-        "height": "100%",
-        "justifyContent": "center",
-        "width": "100%",
       }
     }
   >
@@ -44,7 +40,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       addPoint={[Function]}
       disabled={false}
     />
-  </View>
+  </Container>
 </Container>
 `;
 
@@ -71,15 +67,11 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   >
     For security purposes, we need some randomness. Please tap the screen and draw on it randomly
   </Text>
-  <View
+  <Container
     style={
       Object {
-        "alignItems": "center",
         "flex": 1,
         "flexDirection": "column",
-        "height": "100%",
-        "justifyContent": "center",
-        "width": "100%",
       }
     }
   >
@@ -96,7 +88,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       addPoint={[Function]}
       disabled={false}
     />
-  </View>
+  </Container>
 </Container>
 `;
 
@@ -128,15 +120,11 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   >
     100 %
   </Text>
-  <View
+  <Container
     style={
       Object {
-        "alignItems": "center",
         "flex": 1,
         "flexDirection": "column",
-        "height": "100%",
-        "justifyContent": "center",
-        "width": "100%",
       }
     }
   >
@@ -144,6 +132,6 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       addPoint={[Function]}
       disabled={true}
     />
-  </View>
+  </Container>
 </Container>
 `;
