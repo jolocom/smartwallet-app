@@ -6,3 +6,8 @@ export const landingBackground = {
 export const landingBackgroundImage = {
   resizeMode: 'cover',
 }
+
+export const debug = {
+  borderWidth: 1,
+  borderColor: 'rgba(242, 38, 19, 0.7)',
+}
