@@ -30,7 +30,6 @@ export enum routeList {
   // Settings
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
-  RepeatSeedPhrase = 'RepeatSeedPhrase',
   SocialRecovery = 'SocialRecovery',
   ReceivedShards = 'ReceivedShards',
   AcceptShard = 'AcceptShard',

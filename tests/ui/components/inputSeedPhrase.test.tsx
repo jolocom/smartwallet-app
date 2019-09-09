@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import InputSeedPhraseComponent from '../../../src/ui/recovery/components/inputSeedPhrase'
-import { WordState } from '../../../src/ui/recovery/container/inputSeedPhrase'
+import InputSeedPhraseComponent from '../../../src/ui/recovery/seedPhrase/components/inputSeedPhrase'
+import { WordState } from '../../../src/ui/recovery/seedPhrase/container/inputSeedPhrase'
 
 describe('inputSeedPhrase component', () => {
   const makeProps = (

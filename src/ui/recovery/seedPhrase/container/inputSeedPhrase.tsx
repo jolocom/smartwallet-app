@@ -1,15 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ThunkDispatch } from '../../../store'
+import { ThunkDispatch } from '../../../../store'
 import InputSeedPhraseComponent from '../components/inputSeedPhrase'
 import { validateMnemonic, wordlists } from 'bip39'
-import { withErrorScreen } from '../../../actions/modifiers'
-import { recoverIdentity } from '../../../actions/registration'
-import { routeList } from '../../../routeList'
+import { withErrorScreen } from '../../../../actions/modifiers'
+import { recoverIdentity } from '../../../../actions/registration'
+import { routeList } from '../../../../routeList'
 import { StatusBar, TextInput } from 'react-native'
-import { timeout } from '../../../utils/asyncTimeout'
-import { navigationActions } from '../../../actions'
-import { RootState } from '../../../reducers'
+import { timeout } from '../../../../utils/asyncTimeout'
+import { navigationActions } from '../../../../actions'
+import { RootState } from '../../../../reducers'
 
 export enum WordState {
   editing,

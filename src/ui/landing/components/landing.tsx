@@ -14,6 +14,7 @@ import { Button } from 'react-native-material-ui'
 interface Props {
   handleGetStarted: () => void
   handleRecover: () => void
+  socialRecovery: () => void
 }
 
 const viewWidth = Dimensions.get('window').width
@@ -150,7 +151,16 @@ export class LandingComponent extends React.Component<Props> {
               container: styles.recoverButtonContainer,
               text: styles.recoverButtonText,
             }}
-            text={'Recover identity'}
+            text={'Seed Phrase Recovery'}
+            upperCase={false}
+          />
+          <Button
+            onPress={this.props.socialRecovery}
+            style={{
+              container: styles.recoverButtonContainer,
+              text: styles.recoverButtonText,
+            }}
+            text={'Social Recovery'}
             upperCase={false}
           />
         </View>

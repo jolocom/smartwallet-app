@@ -1,26 +1,26 @@
 import * as React from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import { Container } from '../../structure'
-import { JolocomTheme } from '../../../styles/jolocom-theme.android'
+import { Container } from '../../../structure'
+import { JolocomTheme } from '../../../../styles/jolocom-theme.android'
 import { Button } from 'react-native-material-ui'
 import {
   buttonStandardContainer,
   buttonStandardText,
-} from '../../../styles/buttons'
-import { largeText, noteText } from '../../../styles/typography'
-import { Colors, Spacing, Typography } from '../../../styles'
+} from '../../../../styles/buttons'
+import { largeText, noteText } from '../../../../styles/typography'
+import { Colors, Spacing, Typography } from '../../../../styles'
 import {
   CheckMarkIcon,
   NextIcon,
   PreviousIcon,
   SpinningIcon,
-} from '../../../resources'
+} from '../../../../resources'
 import { WordState } from '../container/inputSeedPhrase'
-import Rotation from '../../animation/Rotation'
-import { TransparentButton } from '../../structure/transparentButton'
+import Rotation from '../../../animation/Rotation'
+import { TransparentButton } from '../../../structure/transparentButton'
 // @ts-ignore
 import { RippleLoader } from 'react-native-indicator'
-import strings from '../../../locales/strings'
+import strings from '../../../../locales/strings'
 import I18n from 'i18n-js'
 
 const styles = StyleSheet.create({

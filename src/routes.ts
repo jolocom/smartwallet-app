@@ -35,9 +35,7 @@ import {
   RecordsMenuIcon,
   SettingsMenuIcon,
 } from 'src/resources'
-import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
-import { SeedPhrase } from './ui/recovery/container/seedPhrase'
-import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
+import { InputSeedPhrase } from './ui/recovery/seedPhrase/container/inputSeedPhrase'
 import { RepeatSeedPhrase } from './ui/recovery/seedPhrase/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/seedPhrase/container/seedPhrase'
 import { SocialRecovery } from './ui/recovery/socialRecovery/container/socialRecovery'

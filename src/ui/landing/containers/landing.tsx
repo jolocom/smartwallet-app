@@ -16,6 +16,7 @@ export class LandingContainer extends React.Component<Props> {
         <LandingComponent
           handleGetStarted={this.props.getStarted}
           handleRecover={this.props.recoverIdentity}
+          socialRecovery={this.props.socialRecovery}
         />
       </React.Fragment>
     )
