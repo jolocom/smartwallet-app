@@ -21,17 +21,17 @@ try {
 
 describe('CryptoJS compat utility', () => {
   describe('without crypto-js', () => {
-    const seed = 'entropykeyboardcat'
-    const pass = 'verysecret'
+    const seed = 'aa5cc59f97f97263c65b87b0bbbd0bfc'
+    const pass = '20acTjPsC8vl9sSV1p8OMJrtEP85HK8B1MLIyiQdmRs='
     // const encrypted = CryptoJS.AES.encrypt(seed, pass).toString()
-    const encrypted = 'U2FsdGVkX1+/bGyDmfBVRnCX0IKAT9qO4Y5kfAJzPbTTU5wtXevRFDciYvM/pVTz'
+    const encrypted = "U2FsdGVkX18wk967sMVeGqhyPYZYDvMnr0HXKWd6VBbpunae+T5KGQdwFaTM8EL070ZKz2maesBjXYvJ6/LW7Q=="
 
     it('should decrypt stored encrypted entropy', () => {
-      expect(compatCryptoJS.AES.decrypt(encrypted, pass)).toEqual(Buffer.from(seed))
+      expect(compatCryptoJS.AES.decrypt(encrypted, pass).toString()).toEqual(seed)
     })
 
     it('should reencrypt with jolocom-lib', () => {
-      const keyProviderFromSeed = JolocomLib.KeyProvider.fromSeed(Buffer.from(seed), pass)
+      const keyProviderFromSeed = JolocomLib.KeyProvider.fromSeed(Buffer.from(seed, 'hex'), pass)
 
       const reencrypted = reencryptWithJolocomLib(encrypted, pass)
       const keyProvider = new JolocomLib.KeyProvider(Buffer.from(reencrypted, 'hex'))
@@ -95,10 +95,8 @@ describe('CryptoJS compat utility', () => {
   })
 
   it('should decrypt like CryptoJS.AES.decrypt', () => {
-    const message = 'hello'
-    const pass = 'secret'
-
-    const cipher = walletEncrypt(message, pass)
+    const pass = '20acTjPsC8vl9sSV1p8OMJrtEP85HK8B1MLIyiQdmRs='
+    const cipher = "U2FsdGVkX18wk967sMVeGqhyPYZYDvMnr0HXKWd6VBbpunae+T5KGQdwFaTM8EL070ZKz2maesBjXYvJ6/LW7Q=="
 
     const decrypted = CryptoJS.AES.decrypt(cipher, pass)
     const compatDecrypted = compatCryptoJS.AES.decrypt(cipher, pass)
