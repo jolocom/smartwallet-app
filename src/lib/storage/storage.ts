@@ -39,6 +39,7 @@ interface ModifiedCredentialEntity {
 
 export class Storage {
   private connection!: Connection
+  private connectionPromise!: Promise<Connection> | null
   private config: ConnectionOptions
 
   public store = {
@@ -93,10 +94,15 @@ export class Storage {
     this.config = config
   }
 
-  private async createConnectionIfNeeded(): Promise<void> {
-    if (!this.connection) {
-      this.connection = await createConnection(this.config)
-    }
+  private async createConnectionIfNeeded(): Promise<Connection> {
+    if (this.connectionPromise) return this.connectionPromise
+    return this.connectionPromise = createConnection(this.config).then(conn => {
+      this.connection = conn
+      return conn
+    }).catch(err => {
+      this.connectionPromise = null
+      throw err
+    })
   }
 
   private async getSettingsObject(): Promise<{ [key: string]: any }> {
