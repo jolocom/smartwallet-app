@@ -142,7 +142,10 @@ export function AESDecrypt(cipherText: string, pass: string) {
 }
 
 export function reencryptWithJolocomLib(cipherTextBase64: string, password: string) {
-  const seed = CryptoJS.AES.decrypt(cipherTextBase64, password)
+  // NOTE: seed is encrypted as a hex representation, so we convert toString
+  // (ascii) and then parse as hex
+  const encodedSeed = CryptoJS.AES.decrypt(cipherTextBase64, password).toString()
+  const seed = Buffer.from(encodedSeed, 'hex')
   const keyProvider = JolocomLib.KeyProvider.fromSeed(seed, password)
   // TODO remove this ts-ignore once encryptedSeed is public
   // @ts-ignore
