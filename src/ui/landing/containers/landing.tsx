@@ -13,7 +13,10 @@ export class LandingContainer extends React.Component<Props> {
     return (
       <React.Fragment>
         <StatusBar barStyle="light-content" />
-        <LandingComponent handleButtonTap={this.props.getStarted} />
+        <LandingComponent
+          handleGetStarted={this.props.getStarted}
+          handleRecover={this.props.recoverIdentity}
+        />
       </React.Fragment>
     )
   }
@@ -24,6 +27,12 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(
       navigationActions.navigate({
         routeName: routeList.Entropy,
+      }),
+    ),
+  recoverIdentity: () =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.InputSeedPhrase,
       }),
     ),
 })
