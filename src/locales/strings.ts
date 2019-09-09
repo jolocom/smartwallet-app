@@ -60,6 +60,16 @@ const backup = {
   YES_I_WROTE_IT_DOWN: 'Yes, I wrote it down',
   ACCOUNT_IS_AT_RISK: 'Account is at risk.',
   MAKE_IT_SECURE: 'Make it secure',
+  FULL_PHRASE_VERIFICATION: 'Full phrase verification',
+  RECOVERY: 'Recovery',
+  COMPLETED: 'completed',
+  TAP_HERE: 'Tap here',
+  DONE: 'Done',
+  THE_WORD_IS_NOT_CORRECT_CHECK_FOR_TYPOS:
+    'The word is not correct, check for typos',
+  CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER: 'Choose the right word or press enter',
+  RESTORE_ACCOUNT: 'Restore account',
+  BACK_TO_SIGNUP: 'Back to signup',
 }
 
 const errorTitle = {

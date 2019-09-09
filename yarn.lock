@@ -1173,6 +1173,11 @@
   dependencies:
     "@types/jest-diff" "*"
 
+"@types/json5@^0.0.29":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
+  integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
+
 "@types/node@*":
   version "12.0.8"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.8.tgz#551466be11b2adc3f3d47156758f610bd9f6b1d8"
@@ -2010,7 +2015,7 @@ bip32@^1.0.2:
     typeforce "^1.11.5"
     wif "^2.0.6"
 
-bip39@^2.2.0, bip39@^2.5.0:
+bip39@^2.2.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/bip39/-/bip39-2.6.0.tgz#9e3a720b42ec8b3fbe4038f1e445317b6a99321c"
   integrity sha512-RrnQRG2EgEoqO24ea+Q/fftuPUZLmrEM3qNhhGsA3PbaXaCW791LTzPuVyx/VprXQcTbPJ3K3UeTna8ZnVl2sg==
@@ -2021,7 +2026,7 @@ bip39@^2.2.0, bip39@^2.5.0:
     safe-buffer "^5.0.1"
     unorm "^1.3.3"
 
-bip39@^3.0.1:
+bip39@^3.0.1, bip39@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/bip39/-/bip39-3.0.2.tgz#2baf42ff3071fc9ddd5103de92e8f80d9257ee32"
   integrity sha512-J4E1r2N0tUylTKt07ibXvhpT2c5pyAFgvuA5q1H9uDy6dEGpjV8jmymh3MTYJDLCNbIVClSB9FbND49I6N24MQ==
@@ -2577,10 +2582,15 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-class-transformer@^0.1.10, class-transformer@^0.1.9:
+class-transformer@^0.1.9:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.1.10.tgz#350f168ebb4c1f87edb18b98dd973681fc20fff7"
   integrity sha512-QiNdUxEvTBiUtc0KiapGVHhgaqGQVEhOfL9UEBnb9xRfcwmDJT5ijIDwcwJUTwXaT/kGvZZB4JCGsiuR5adX6g==
+
+class-transformer@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.2.3.tgz#598c92ca71dcca73f91ccb875d74a3847ccfa32d"
+  integrity sha512-qsP+0xoavpOlJHuYsQJsN58HXSl8Jvveo+T37rEvCEeRfMWoytAyR0Ua/YsFgpM6AZYZ/og2PJwArwzJl1aXtQ==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -3226,6 +3236,11 @@ deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
+
+deepmerge@^2.0.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
+  integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
 
 deferred-leveldown@~1.2.1:
   version "1.2.2"
@@ -6082,15 +6097,15 @@ jest@^24.8.0:
     import-local "^2.0.0"
     jest-cli "^24.8.0"
 
-jolocom-lib@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-3.0.0.tgz#b1cf6ccce3f82b1a42268ec3eeb3ea904dbba79f"
-  integrity sha512-16a341jLO1uVmW6WHJIs292gYTourV0ZDVI+KnwZ+Tzi3p0mJM83tSZc+hNFm06gwKFnAycy/GO+uLSinpSgxA==
+jolocom-lib@^4.0.0-beta.0:
+  version "4.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.0.0-beta.0.tgz#ee096f02c570fad67d6ef6c54ae5b208db76f674"
+  integrity sha512-T15O3PEtas9QN80B43w/9qZACSrllhsLcNcXIfPa+PB/xYKHZipXnPvyt4lTDqGy5v1zocsJ4vApZx1iIiRIWA==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"
     bip39 "^3.0.1"
-    class-transformer "^0.1.10"
+    class-transformer "^0.2.3"
     create-hash "^1.2.0"
     cred-types-jolocom-core "^0.0.11"
     detect-node "^2.0.4"
@@ -6100,7 +6115,7 @@ jolocom-lib@^3.0.0:
     form-data "^2.3.3"
     jolocom-registry-contract "^0.1.7"
     json-logic-js "^1.2.2"
-    jsonld "^1.5.3"
+    jsonld "^1.6.1"
     jsontokens "^1.0.0"
     node-fetch "^2.3.0"
     qrcode "^1.3.3"
@@ -6262,10 +6277,10 @@ jsonify@~0.0.0:
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
   integrity sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM=
 
-jsonld@^1.5.3:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/jsonld/-/jsonld-1.6.2.tgz#d81620dccf75fd7bc7501709eeec5da77ecc45e9"
-  integrity sha512-eMzFHqhF2kPMrMUjw8+Lz9IF1QkrxTOIfVndkP/OpuoZs31VdDtfDs8mLa5EOC/ROdemFTQGLdYPZbRtmMe2Yw==
+jsonld@^1.6.1:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/jsonld/-/jsonld-1.7.0.tgz#6a2b20836628a0a4bd4393a20e72ed41418b2a73"
+  integrity sha512-vqdw1px6pjim4k7dQir6CyxmkVhoClmwZPM/rw3r5KZZv/zDRBvYEpR0u/NTnuwfe9xHKUIGlVTq3PRJTvLRHQ==
   dependencies:
     rdf-canonize "^1.0.2"
     request "^2.88.0"
@@ -10581,6 +10596,17 @@ ts-node@^4.1.0:
     v8flags "^3.0.0"
     yn "^2.0.0"
 
+tsconfig-paths@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.8.0.tgz#4e34202d5b41958f269cf56b01ed95b853d59f72"
+  integrity sha512-zZEYFo4sjORK8W58ENkRn9s+HmQFkkwydDG7My5s/fnfr2YYCaiyXe/HBUcIgU8epEKOXwiahOO+KZYjiXlWyQ==
+  dependencies:
+    "@types/json5" "^0.0.29"
+    deepmerge "^2.0.1"
+    json5 "^1.0.1"
+    minimist "^1.2.0"
+    strip-bom "^3.0.0"
+
 tsconfig@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/tsconfig/-/tsconfig-7.0.0.tgz#84538875a4dc216e5c4a5432b3a4dec3d54e91b7"
@@ -10805,6 +10831,11 @@ unorm@^1.3.3:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/unorm/-/unorm-1.5.0.tgz#01fa9b76f1c60f7916834605c032aa8962c3f00a"
   integrity sha512-sMfSWoiRaXXeDZSXC+YRZ23H4xchQpwxjpw1tmfR+kgbBCaOgln4NI0LXejJIhnBuKINrB3WRn+ZI8IWssirVw==
+
+unorm@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/unorm/-/unorm-1.6.0.tgz#029b289661fba714f1a9af439eb51d9b16c205af"
+  integrity sha512-b2/KCUlYZUeA7JFUuRJZPUtr4gZvBh7tavtv4fvk4+KV9pfGiR6CQAQAWl49ZpR3ts2dk4FYkP7EIgDJoiOLDA==
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"

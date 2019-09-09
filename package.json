@@ -50,6 +50,7 @@
     "redux-mock-store": "^1.5.1",
     "ts-jest": "^24.0.2",
     "ts-loader": "3.5.0",
+    "tsconfig-paths": "^3.8.0",
     "tslib": "^1.7.1",
     "typeorm": "^0.2.5",
     "typescript": "^3.5.1",
@@ -70,14 +71,16 @@
     "build:ios": "react-native bundle --entry-file='index.ts' --bundle-output='./ios/JolocomWallet/main.jsbundle' --minify=false --dev=false --platform='ios' --assets-dest='./ios'",
     "build:android": "react-native bundle --entry-file='index.ts' --minify=true --dev=false --platform='android'",
     "format": "eslint --fix --ext .ts --ext .tsx .",
-    "icon": "svgr --native -d src/resources/svg/",
+    "icon": "svgr --native --out-dir src/resources/svg/",
     "devtools": "react-devtools &",
-    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts"
+    "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
+    "typeorm:node": "ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
+    "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts"
   },
   "dependencies": {
     "@react-navigation/core": "^3.4.2",
     "assert": "^2.0.0",
-    "bip39": "^2.5.0",
+    "bip39": "^3.0.2",
     "browser-ipfs": "^0.0.6",
     "crypto-browserify": "^3.12.0",
     "crypto-js": "^3.1.9-1",
@@ -117,6 +120,7 @@
     "sqlite3": "^4.0.0",
     "squel": "^5.12.1",
     "stream-browserify": "^2.0.2",
+    "unorm": "^1.6.0",
     "vm-browserify": "^1.1.0",
     "wif": "^2.0.6"
   },

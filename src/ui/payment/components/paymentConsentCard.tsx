@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
-  leftIcon?: ReactNode
+  leftIcon: ReactNode
   title: string
   primaryText: string
   secondaryText?: string

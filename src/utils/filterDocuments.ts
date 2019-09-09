@@ -7,10 +7,14 @@ const DOC_TYPES = [
   'DrivingLicense',
   'Certificate',
   'EventTicket',
+  'Proof Of Driving License Credential',
 ]
 
 const isIncludedIn = <T>(list: T[]) => (element: T) => includes(element, list)
 
+/** @TODO Housekeeping - We should compare against DOC_TYPES using the `type`
+ *    of a credential instead of the `credentialType` (which is formatted for render)
+ */
 const isDocument = ({ credentialType, renderInfo = {} }: DecoratedClaims) =>
   compose(
     // @ts-ignore

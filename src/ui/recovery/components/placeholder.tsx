@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Colors, Typography } from 'src/styles'
 const styles = StyleSheet.create({
   selector: {
     width: 109,
@@ -8,17 +8,17 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: JolocomTheme.primaryColorPurple,
+    borderColor: Colors.purpleMain,
     marginLeft: 16,
     marginRight: 16,
     marginBottom: 16,
   },
   text: {
+    ...Typography.baseFontStyles,
     textAlign: 'center',
     lineHeight: 26,
-    color: JolocomTheme.primaryColorSand,
-    fontSize: JolocomTheme.labelFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
+    color: Colors.sandLight,
+    fontSize: Typography.textMD,
   },
 })
 

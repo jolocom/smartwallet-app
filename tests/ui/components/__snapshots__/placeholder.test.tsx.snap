@@ -6,7 +6,7 @@ exports[`placeholder component matches the snapshot with sorting with being used
   onPress={[Function]}
   style={
     Object {
-      "borderColor": "#942f51",
+      "borderColor": "rgb(148, 47, 81)",
       "borderRadius": 4,
       "borderStyle": "solid",
       "borderWidth": 1,
@@ -21,7 +21,7 @@ exports[`placeholder component matches the snapshot with sorting with being used
   <Text
     style={
       Object {
-        "color": "#ffefdf",
+        "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
         "fontSize": 20,
         "lineHeight": 26,
@@ -40,7 +40,7 @@ exports[`placeholder component matches the snapshot with sorting without being u
   onPress={[Function]}
   style={
     Object {
-      "borderColor": "#942f51",
+      "borderColor": "rgb(148, 47, 81)",
       "borderRadius": 4,
       "borderStyle": "solid",
       "borderWidth": 1,
@@ -55,7 +55,7 @@ exports[`placeholder component matches the snapshot with sorting without being u
   <Text
     style={
       Object {
-        "color": "#ffefdf",
+        "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
         "fontSize": 20,
         "lineHeight": 26,
@@ -74,7 +74,7 @@ exports[`placeholder component matches the snapshot without sorting 1`] = `
   onPress={[Function]}
   style={
     Object {
-      "borderColor": "#942f51",
+      "borderColor": "rgb(148, 47, 81)",
       "borderRadius": 4,
       "borderStyle": "solid",
       "borderWidth": 1,
@@ -89,7 +89,7 @@ exports[`placeholder component matches the snapshot without sorting 1`] = `
   <Text
     style={
       Object {
-        "color": "#ffefdf",
+        "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
         "fontSize": 20,
         "lineHeight": 26,

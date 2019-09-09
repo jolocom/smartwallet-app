@@ -15,11 +15,7 @@ export const showSeedPhrase = (): ThunkAction => async (
   }
   // TODO create vault from encrypted Seed
   const pass = await backendMiddleware.keyChainLib.getPassword()
-  const decrypt = backendMiddleware.encryptionLib.decryptWithPass({
-    cipher: encryptedSeed,
-    pass,
-  })
-  const vault = SoftwareKeyProvider.fromSeed(Buffer.from(decrypt, 'hex'), pass)
+  const vault = new SoftwareKeyProvider(Buffer.from(encryptedSeed, 'hex'))
   const mnemonic = vault.getMnemonic(pass)
   return dispatch(
     navigationActions.navigate({
@@ -38,8 +34,7 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
     settingKeys.seedPhraseSaved,
     true,
   )
-  dispatch({
+  return dispatch({
     type: 'SET_SEED_PHRASE_SAVED',
   })
-  return dispatch(navigationActions.navigatorResetHome())
 }

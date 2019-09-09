@@ -13,3 +13,7 @@ export const RecordsMenuIcon = require('./svg/RecordsMenuIcon').default
 export const SettingsMenuIcon = require('./svg/SettingsMenuIcon').default
 export const HandIcon = require('./svg/HandIcon').default
 export const SplashIcon = require('./svg/SplashIcon').default
+export const CheckMarkIcon = require('./svg/CheckmarkIcon').default
+export const NextIcon = require('./svg/NextIcon').default
+export const PreviousIcon = require('./svg/PreviousIcon').default
+export const SpinningIcon = require('./svg/SpinningIcon').default
