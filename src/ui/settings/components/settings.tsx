@@ -5,7 +5,6 @@ import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
 import SettingsItem from './settingsItem'
 import settingKeys from '../settingKeys'
-import { JolocomTheme } from '../../../styles/jolocom-theme'
 
 const styles = StyleSheet.create({
   container: {
@@ -80,7 +79,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
                     style={[
                       styles.languageOption,
                       isCurrentLanguage && {
-                        backgroundColor: JolocomTheme.primaryColorSand,
+                        backgroundColor: Colors.sandLight,
                       },
                     ]}
                   >
@@ -88,7 +87,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
                       style={[
                         styles.languageOptionText,
                         isCurrentLanguage && {
-                          color: JolocomTheme.primaryColorPurple,
+                          color: Colors.purpleMain,
                         },
                       ]}
                     >

@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 describe('ClaimCard component', () => {
   it('matches the snapshot on render', () => {
     const props = {
-      credentialItem: {
+      credential: {
         credentialType: 'Name',
         claimData: {
           familyName: 'Running',
@@ -16,8 +16,8 @@ describe('ClaimCard component', () => {
         },
         subject: 'did:subject:ex',
       },
-
       leftIcon: null,
+      did: 'test0123',
 
       openClaimsDetails: () => null,
     }
@@ -27,7 +27,7 @@ describe('ClaimCard component', () => {
 
   it('matches the snapshot of a two line claim', () => {
     const props = {
-      credentialItem: {
+      credential: {
         credentialType: 'Name',
         claimData: {
           givenName: 'Test',
@@ -40,6 +40,7 @@ describe('ClaimCard component', () => {
         subject: 'did:subject: ex',
       },
       leftIcon: null,
+      did: 'test0123',
       openClaimsDetails: () => null,
     }
 
