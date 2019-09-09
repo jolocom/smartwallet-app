@@ -7,6 +7,44 @@
 import { MigrationInterface, QueryRunner } from 'typeorm/browser'
 import { reencryptWithJolocomLib } from 'src/lib/compat/cryptojs'
 
+export class ReencryptSeed1567674609659 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<any> {
+    const entries = await queryRunner.query(
+      'SELECT encryptedEntropy FROM master_keys;',
+    )
+
+    if (!entries.length) return
+
+    // note we don't try to get a password if there is nothing to re-encrypt
+    const password = await getPassword()
+
+    await Promise.all(
+      entries.map((obj: any) => {
+        const encryptedEntropy = obj.encryptedEntropy
+        // encryptedEntropy is base64 encoded in the latest release (1.6.0), but is
+        // hex encoded on the current develop branch (unreleased), and also
+        // doesn't need re-encryption if it was created by code in the current
+        // develop (already not using crypto-js)
+        const reencrypted =
+          encryptedEntropy.replace(/[0-9a-f]+/, '') != '' ?
+          reencryptWithJolocomLib(encryptedEntropy, password) :
+          encryptedEntropy
+
+        return queryRunner.query(
+          `UPDATE master_keys ` +
+          `SET encryptedEntropy = '${reencrypted}' ` +
+          `WHERE encryptedEntropy = '${encryptedEntropy}'`
+        )
+      })
+    )
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<any> {
+    throw new Error("There's no going back")
+    // because why?
+  }
+}
+
 async function getPassword(): Promise<string> {
   // At the time of writing this file, the encryption password is stored in
   // react-native-keychain and accessesed through src/lib/keychain.ts, but code
@@ -35,35 +73,5 @@ async function getPassword(): Promise<string> {
       )
     }
     return password
-  }
-}
-
-export class ReencryptSeed1567674609659 implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<any> {
-    const entries = await queryRunner.query(
-      'SELECT encryptedEntropy FROM master_keys;',
-    )
-
-    if (!entries.length) return
-
-    // note we don't try to get a password if there is nothing to re-encrypt
-    const password = await getPassword()
-
-    await Promise.all(
-      entries.map((obj: any) => {
-        const encryptedEntropy = obj.encryptedEntropy
-        const reencrypted = reencryptWithJolocomLib(encryptedEntropy, password)
-        return queryRunner.query(
-          `UPDATE master_keys ` +
-          `SET encryptedEntropy = '${reencrypted}'` +
-          `WHERE encryptedEntropy = '${encryptedEntropy}'`
-        )
-      })
-    )
-  }
-
-  public async down(queryRunner: QueryRunner): Promise<any> {
-    throw new Error("There's no going back")
-    // because why?
   }
 }
