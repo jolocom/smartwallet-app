@@ -27,39 +27,35 @@ const styles = StyleSheet.create({
   bigFont: {
     fontSize: Typography.text4XL,
   },
-  contentView: {
-    width: '100%',
+  contentContainer: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  }
+  },
 })
 
-export const EntropyComponent: React.SFC<Props> = props => {
+export const EntropyComponent: React.FC<Props> = props => {
   const { progress, addPoint } = props
-  
+
   const msg =
     progress === 0
-    ? I18n.t(strings.FOR_SECURITY_PURPOSES_WE_NEED_SOME_RANDOMNESS) +
-      '. ' +
-      I18n.t(strings.PLEASE_TAP_THE_SCREEN_AND_DRAW_ON_IT_RANDOMLY)
-    : `${Math.trunc(progress * 100)} %`
+      ? I18n.t(strings.FOR_SECURITY_PURPOSES_WE_NEED_SOME_RANDOMNESS) +
+        '. ' +
+        I18n.t(strings.PLEASE_TAP_THE_SCREEN_AND_DRAW_ON_IT_RANDOMLY)
+      : `${Math.trunc(progress * 100)} %`
 
   const textStyle = progress === 0 ? styles.text : [styles.text, styles.bigFont]
 
   return (
     <Container style={styles.mainContainer}>
       <Text style={textStyle}>{msg}</Text>
-      <View style={styles.contentView}>
-        {
-          progress === 0
-          ? <View style={{position: 'absolute'}}><HandAnimationComponent /></View>
-          : null
-        }
-        <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />      
-      </View>
+      <Container style={styles.contentContainer}>
+        {progress === 0 ? (
+          <View style={{ position: 'absolute' }}>
+            <HandAnimationComponent />
+          </View>
+        ) : null}
+        <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
+      </Container>
     </Container>
   )
 }
