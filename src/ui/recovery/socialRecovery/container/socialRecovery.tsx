@@ -5,7 +5,7 @@ import { NavigationScreenProps } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { SocialRecoveryComponent } from '../components/socialRecovery'
 import { RootState } from '../../../../reducers'
-import { deleteShard, openReceivedShards } from '../../../../actions/recovery'
+import { deleteShard, loadOwnShards, openReceivedShards } from '../../../../actions/recovery'
 import { ShardEntity } from '../../../../lib/storage/entities/shardEntity'
 
 interface Props
@@ -22,6 +22,10 @@ export class SocialRecoveryContainer extends React.Component<Props, State> {
   public state = {
     modalOpen: false,
     selectedShard: undefined,
+  }
+
+  public componentDidMount(): void {
+    this.props.loadShards()
   }
 
   private toggleModal = (shardId?: number) => {
@@ -61,6 +65,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openReceivedShards: () => dispatch(openReceivedShards()),
+  loadShards: () => dispatch(loadOwnShards()),
   deleteShard: (shard: ShardEntity) => dispatch(deleteShard(shard)),
 })
 

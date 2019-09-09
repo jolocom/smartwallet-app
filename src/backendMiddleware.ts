@@ -16,6 +16,7 @@ import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from './lib/util'
+import { KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 
 export enum ErrorCodes {
   NoEntropy = 'NoEntropy',

@@ -10,6 +10,7 @@ export enum routeList {
 
   // Recovery
   InputSeedPhrase = 'InputSeedPhrase',
+  CollectShards = 'CollectShards',
 
   // Bottom Nav Screens
   Home = 'Home',
@@ -30,10 +31,10 @@ export enum routeList {
   // Settings
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
+  InitSocialRecovery = 'InitSocialRecovery',
   SocialRecovery = 'SocialRecovery',
   ReceivedShards = 'ReceivedShards',
   AcceptShard = 'AcceptShard',
-  CollectShards = 'CollectShards',
 
   Exception = 'Exception',
 }

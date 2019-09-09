@@ -37,25 +37,7 @@ export const showSeedPhrase = (): ThunkAction => async (
   )
 }
 
-export const openSocialRecovery = (): ThunkAction => async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  const { storageLib } = backendMiddleware
-  const isInitialized = await storageLib.get.setting(settingKeys.shardsCreated)
-  if (!isInitialized) {
-    await dispatch(initSocialRecovery())
-  }
-  const shards = await storageLib.get.shards(OWN_SHARD_LABEL)
-  dispatch({
-    type: ActionTypes.SET_OWN_SHARDS,
-    value: shards,
-  })
-  dispatch(navigationActions.navigate({ routeName: routeList.SocialRecovery }))
-}
-
-export const initSocialRecovery = (): ThunkAction => async (
+export const initSocialRecovery = (amount: number, threshold: number): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
@@ -73,11 +55,12 @@ export const initSocialRecovery = (): ThunkAction => async (
 
   const password = await keyChainLib.getPassword()
   const vault = new SoftwareKeyProvider(Buffer.from(encryptedSeed, 'hex'))
-  const entropy = mnemonicToEntropy(vault.getMnemonic(password))
+  //@ts-ignore
+  const entropy = SoftwareKeyProvider.decrypt(SoftwareKeyProvider.normalizePassword(password), vault._encryptedSeed, vault._iv)
   /**
    * END HACK
    */
-  const shards = SocialRecovery.createShards(identityWallet.did, entropy, 5, 3)
+  const shards = SocialRecovery.createShards(identityWallet.did, entropy, amount, threshold)
   for (const shard of shards) {
     await storageLib.store.shard({
       label: OWN_SHARD_LABEL,
@@ -91,6 +74,7 @@ export const initSocialRecovery = (): ThunkAction => async (
   dispatch({
     type: 'SET_SHARDS_CREATED',
   })
+  dispatch(navigationActions.navigatorReset({ routeName: routeList.SocialRecovery }))
 }
 
 export const setSeedPhraseSaved = (): ThunkAction => async (

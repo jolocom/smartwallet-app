@@ -4,10 +4,12 @@ import VersionNumber from 'react-native-version-number'
 import { locales } from 'src/locales/i18n'
 
 import { SettingsScreen } from '../components/settings'
-import { genericActions } from 'src/actions'
+import { genericActions, navigationActions } from 'src/actions'
 import { ThunkDispatch } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
-import { openSocialRecovery, showSeedPhrase } from '../../../actions/recovery'
+import { showSeedPhrase } from '../../../actions/recovery'
+import settingKeys from '../settingKeys'
+import { routeList } from '../../../routeList'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -15,7 +17,7 @@ interface Props
 
 export class SettingsContainer extends React.Component<Props> {
   public render() {
-    const { settings, setLocale, setupBackup, setupSocialRecovery } = this.props
+    const { settings, setLocale, setupBackup, socialRecovery } = this.props
     return (
       <SettingsScreen
         settings={settings}
@@ -23,7 +25,9 @@ export class SettingsContainer extends React.Component<Props> {
         locales={locales}
         version={VersionNumber.appVersion}
         setupBackup={setupBackup}
-        setupSocialRecovery={setupSocialRecovery}
+        setupSocialRecovery={() =>
+          socialRecovery(this.props.settings[settingKeys.shardsCreated])
+        }
       />
     )
   }
@@ -37,7 +41,12 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
-  setupSocialRecovery: () => dispatch(withLoading(openSocialRecovery())),
+  socialRecovery: (shardsCreated: boolean) =>
+    dispatch(navigationActions.navigate({
+      routeName: shardsCreated
+        ? routeList.SocialRecovery
+        : routeList.InitSocialRecovery,
+    })),
 })
 
 export const Settings = connect(

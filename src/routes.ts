@@ -42,6 +42,7 @@ import { SocialRecovery } from './ui/recovery/socialRecovery/container/socialRec
 import { ReceivedShards } from './ui/recovery/socialRecovery/container/receivedShards'
 import { AcceptShard } from './ui/recovery/socialRecovery/container/acceptShard'
 import { CollectShards } from './ui/recovery/socialRecovery/container/collectShards'
+import { InitSocialRecovery } from './ui/recovery/socialRecovery/container/initSocialRecovery'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -244,6 +245,10 @@ const MainStack = createStackNavigator(
     },
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.InitSocialRecovery]: {
+      screen: InitSocialRecovery,
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.SocialRecovery]: {
