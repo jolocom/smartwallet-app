@@ -68,7 +68,7 @@
     "clean:react": "rm -rf $TMP/react* $TMP/haste-map-metro* $TMP/metro-cache*",
     "clean:all": "yarn run clean:ios & yarn run clean:android && yarn run clean:react && yarn run clean:node",
     "build:ios": "react-native bundle --entry-file='index.ts' --bundle-output='./ios/JolocomWallet/main.jsbundle' --minify=false --dev=false --platform='ios' --assets-dest='./ios'",
-    "build:android": "react-native bundle --entry-file='index.ts' --minify=true --dev=false --platform='android'",
+    "build:android": "react-native bundle --entry-file='index.ts' --bundle-output='./android/app/src/main/assets/index.android.bundle' --minify=true --dev=false --platform='android' --assets-dest='./android/app/src/main/res'",
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native --out-dir src/resources/svg/",
     "devtools": "react-devtools &",
