@@ -124,7 +124,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
             }
             isHighlighted={!seedPhraseSaved}
             isDisabled={seedPhraseSaved}
-            onTouchEnd={props.setupBackup}
+            onPress={props.setupBackup}
           />
           <SettingsItem
             title={I18n.t(strings.DELETE_IDENTITY)}
