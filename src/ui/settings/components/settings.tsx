@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.backgroundLightMain,
   },
-  topSection: {
+  section: {
     paddingTop: Spacing.XL,
   },
   sectionHeader: {
@@ -62,7 +62,14 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
   const seedPhraseSaved = props.settings[settingKeys.seedPhraseSaved] as boolean
   return (
     <View style={styles.container}>
-      <View style={styles.topSection}>
+      {process.env.NODE_ENV === 'development' && (
+        <SettingsItem
+          iconName={'book-open-page-variant'}
+          title={'Storybook'}
+          onTouchEnd={props.openStorybook}
+        />
+      )}
+      <View style={styles.section}>
         <Text style={styles.sectionHeader}>
           {I18n.t(strings.YOUR_PREFERENCES)}
         </Text>
@@ -101,7 +108,7 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
           }
         />
       </View>
-      <View style={styles.topSection}>
+      <View style={styles.section}>
         <Text style={styles.sectionHeader}>Security</Text>
         <SettingsItem
           title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
@@ -127,11 +134,6 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
       <Text style={styles.versionNumber}>
         Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
       </Text>
-      <SettingsItem
-        iconName={'book-open-page-variant'}
-        title={'Storybook'}
-        onTouchEnd={props.openStorybook}
-      />
       <View />
     </View>
   )
