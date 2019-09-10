@@ -29,11 +29,17 @@ const completePublicProfileSummary: IdentitySummary = {
 
 storiesOf('IssuerCard', module)
   .add('with no public profile', () => (
-    <Container>{IssuerCard(noPublicProfileSummary)}</Container>
+    <Container>
+      <IssuerCard issuer={noPublicProfileSummary} />
+    </Container>
   ))
   .add('with a public profile', () => (
-    <Container>{IssuerCard(publicProfileSummary)}</Container>
+    <Container>
+      <IssuerCard issuer={publicProfileSummary} />
+    </Container>
   ))
   .add('complete public profile', () => (
-    <Container>{IssuerCard(completePublicProfileSummary)}</Container>
+    <Container>
+      <IssuerCard issuer={completePublicProfileSummary} />
+    </Container>
   ))
