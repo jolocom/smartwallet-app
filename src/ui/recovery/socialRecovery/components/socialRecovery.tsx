@@ -64,7 +64,7 @@ export const SocialRecoveryComponent: React.FunctionComponent<Props> = ({
           <View
             style={{ width: '100%', height: 1, backgroundColor: 'white' }}
           />
-          <Text style={[styles.note, { margin: 20 }]}>{`Shard ${i +
+          <Text style={[styles.note, { margin: 20 }]}>{`Shard ${shard.id +
             1} - Tap to share`}</Text>
         </View>
       ))}

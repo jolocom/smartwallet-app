@@ -4,8 +4,6 @@ import { navigationActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { SocialRecovery } from 'jolocom-lib/js/recovery/socialRecovery'
-// @ts-ignore
-import { mnemonicToEntropy } from 'bip39'
 import {
   OWN_SHARD_LABEL,
   ShardEntity,

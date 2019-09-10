@@ -38,7 +38,7 @@ export class CollectShardsContainer extends React.Component<Props, State> {
   }
 
   private handleScanResult = async (e: Event) => {
-    const shardPrefix = 'shard:'
+    const shardPrefix = 'collect-shard:'
     //@ts-ignore
     const data = e.data
     const shardData = data.slice(shardPrefix.length)

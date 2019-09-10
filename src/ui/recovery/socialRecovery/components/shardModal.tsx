@@ -25,7 +25,7 @@ export const ShardModal: React.FunctionComponent<Props> = ({
     animationType="fade"
     transparent={true}
     visible={!!selectedShard && modalOpen}
-    >
+  >
     <View style={{ marginTop: 22 }}>
       <Container>
         <View
@@ -48,7 +48,10 @@ export const ShardModal: React.FunctionComponent<Props> = ({
           <QRCode
             backgroundColor={'white'}
             size={250}
-            value={'shard:' + selectedShard.value}
+            value={
+              (isOwnShard ? 'share-shard:' : 'collect-shard:') +
+              selectedShard.value
+            }
           />
           {isOwnShard && (
             <TouchableHighlight

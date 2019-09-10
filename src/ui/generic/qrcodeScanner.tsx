@@ -96,7 +96,7 @@ export class QRcodeScanner extends React.Component<Props, State> {
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onScannerSuccess: async (e: QrScanEvent) => {
     let interactionToken
-    const shardPrefix = 'shard:'
+    const shardPrefix = 'share-shard:'
     if (e.data.startsWith(shardPrefix)) {
       interactionToken = e.data.slice(shardPrefix.length)
       return dispatch(handelReceiveShard(interactionToken))
