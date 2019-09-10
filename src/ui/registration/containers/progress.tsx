@@ -22,7 +22,9 @@ const styles = StyleSheet.create({
   },
   messageArea: {},
   loadingArea: {},
-  progressArea: {},
+  progressArea: {
+    alignItems: 'center',
+  },
   dotsContainer: {
     alignItems: 'center',
     flexDirection: 'row',

@@ -50,6 +50,7 @@
     "redux-mock-store": "^1.5.1",
     "ts-jest": "^24.0.2",
     "ts-loader": "3.5.0",
+    "tsconfig-paths": "^3.8.0",
     "tslib": "^1.7.1",
     "typeorm": "^0.2.5",
     "typescript": "^3.5.1",
@@ -73,7 +74,9 @@
     "icon": "svgr --native --out-dir src/resources/svg/",
     "devtools": "react-devtools &",
     "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "start-storybook -p 6006",
+    "typeorm:node": "ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
+    "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts"
   },
   "dependencies": {
     "@react-navigation/core": "^3.4.2",

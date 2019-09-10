@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { Typography, Colors } from 'src/styles'
 
 const styles = StyleSheet.create({
   card: {
@@ -10,30 +10,35 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#ECECEC',
+    borderColor: Colors.lightGrey,
     flexDirection: 'row',
   },
   textContainer: {
     flex: 1,
   },
   headerTextWithPayload: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
+    ...Typography.baseFontStyles,
+    color: Colors.blackMain,
+    fontSize: Typography.textXS,
   },
   headerTextWithDescription: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-    fontSize: 22,
+    ...Typography.baseFontStyles,
+    color: Colors.blackMain,
+    fontSize: Typography.textLG,
   },
   description: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
+    ...Typography.baseFontStyles,
+    color: Colors.blackMain,
+    fontSize: Typography.textXS,
   },
   yellowBg: {
-    backgroundColor: '#f1a107',
+    backgroundColor: Colors.backUpWarningBg,
   },
   whiteText: {
-    color: JolocomTheme.primaryColorWhite,
+    color: Colors.white,
   },
   disabledText: {
-    color: '#9b9b9e',
+    color: Colors.greyLighter,
   },
 })
 
