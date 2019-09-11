@@ -6,7 +6,7 @@ interface Props {}
 
 const styles = StyleSheet.create({
   handPosition: {
-    // TODO change to be % based
+    // these values are to place the finger of the hand inside the 'splash'
     top: -29,
     left: 8,
   },
