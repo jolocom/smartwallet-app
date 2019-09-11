@@ -1218,10 +1218,10 @@
   resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.26.9.tgz#f0bbba59c04de9d29aaa1d1c0daedefc7244bb68"
   integrity sha512-yozsk6sXE29kP/mzLCgZ6RFSwx2pD41ZgW1m4rk3meKyj4mw77ISxnu5Knc1tLaKQd2ocdd7Y0daCG678olPfw==
 
-"@types/react-native-material-ui@^1.31.1":
-  version "1.31.1"
-  resolved "https://registry.yarnpkg.com/@types/react-native-material-ui/-/react-native-material-ui-1.31.1.tgz#84ab5674038956103b3858d2d5877c47a69ed8d0"
-  integrity sha512-fsAH8s2K+dRUztMUTQqFRv22wz3PvB0nW6QS2WWVSZSU+H6dxlkqt4iCDXAB3HHSXl5bIVSofQwIEehaq37fVg==
+"@types/react-native-material-ui@^1.32.0":
+  version "1.32.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-material-ui/-/react-native-material-ui-1.32.0.tgz#5aa02184a1b91e9bdf20f531dea3d156edf9bbad"
+  integrity sha512-CW0GHfr0fvvYFJrPqvNud9rFushP0t5k5iYfpW8lQIUPjHV9731JRUbN/dY1iBrlZKiK0UP4PyztuTgkIWsMMg==
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
