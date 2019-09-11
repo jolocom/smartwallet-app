@@ -7,6 +7,7 @@ import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { IconToggle } from 'react-native-material-ui'
+import { reject, isEmpty } from 'ramda'
 
 const styles = StyleSheet.create({
   container: {
@@ -57,7 +58,7 @@ export const CheckboxCredential: React.FC<CheckboxCredentialProps> = props => {
   return (
     <View style={styles.container}>
       <View style={styles.claimArea}>
-        {values.map(value => (
+        {reject(isEmpty, values).map(value => (
           <Text style={styles.claimText}>{value}</Text>
         ))}
         <View style={styles.issuerStatusContainer}>

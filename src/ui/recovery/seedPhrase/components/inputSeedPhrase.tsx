@@ -1,36 +1,30 @@
 import * as React from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import { Container } from '../../../structure'
-import { JolocomTheme } from '../../../../styles/jolocom-theme.android'
+import { Container } from '../../structure'
 import { Button } from 'react-native-material-ui'
-import {
-  buttonStandardContainer,
-  buttonStandardText,
-} from '../../../../styles/buttons'
-import { largeText, noteText } from '../../../../styles/typography'
-import { Colors, Spacing, Typography } from '../../../../styles'
+import { Colors, Spacing, Typography, Buttons } from 'src/styles'
 import {
   CheckMarkIcon,
   NextIcon,
   PreviousIcon,
   SpinningIcon,
-} from '../../../../resources'
+} from 'src/resources'
 import { WordState } from '../container/inputSeedPhrase'
-import Rotation from '../../../animation/Rotation'
-import { TransparentButton } from '../../../structure/transparentButton'
+import Rotation from '../../animation/Rotation'
+import { TransparentButton } from '../../structure/transparentButton'
 // @ts-ignore
 import { RippleLoader } from 'react-native-indicator'
-import strings from '../../../../locales/strings'
+import strings from '../../../locales/strings'
 import I18n from 'i18n-js'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: JolocomTheme.primaryColorBlack,
+    backgroundColor: Colors.backgroundDarkMain,
   },
   header: {
-    ...largeText,
+    ...Typography.largeText,
     color: Colors.sandLight,
     marginTop: Spacing.XL,
   },
@@ -43,12 +37,12 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.XL,
   },
   note: {
-    ...noteText,
+    ...Typography.noteText,
     textAlign: 'center',
     lineHeight: 26,
   },
   mnemonicWord: {
-    ...noteText,
+    ...Typography.noteText,
     margin: 2,
     fontSize: 24,
   },
@@ -236,14 +230,14 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                     upperCase={false}
                     style={{
                       container: {
-                        ...buttonStandardContainer,
+                        ...Buttons.buttonStandardContainer,
                         minWidth: 0,
                         margin: Spacing.XXS,
                         height: 40,
                         backgroundColor: Colors.purpleMain040,
                       },
                       text: {
-                        ...buttonStandardText,
+                        ...Buttons.buttonStandardText,
                         color: Colors.sandLight,
                         fontSize: Typography.textMD,
                       },
@@ -265,9 +259,9 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                 style={{
                   container: {
                     marginHorizontal: 30,
-                    ...buttonStandardContainer,
+                    ...Buttons.buttonStandardContainer,
                   },
-                  text: buttonStandardText,
+                  text: Buttons.buttonStandardText,
                 }}
               />
             )}

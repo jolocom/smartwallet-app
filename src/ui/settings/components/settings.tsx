@@ -1,16 +1,21 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
 import SettingsItem from './settingsItem'
 import settingKeys from '../settingKeys'
-import { JolocomTheme } from '../../../styles/jolocom-theme'
+import { Container } from 'src/ui/structure'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: Colors.backgroundLightMain,
+  },
+  scrollComponent: {
+    width: '100%',
+  },
+  scrollComponentContainer: {
+    paddingBottom: Spacing.XXL,
   },
   topSection: {
     paddingTop: Spacing.XL,
@@ -69,64 +74,68 @@ export const SettingsScreen: React.FunctionComponent<SettingsScreenProps> = ({
 }) => {
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
-    <View style={styles.container}>
-      <View style={styles.topSection}>
-        <Text style={styles.sectionHeader}>
-          {I18n.t(strings.YOUR_PREFERENCES)}
-        </Text>
-        <SettingsItem
-          title={I18n.translate(strings.LANGUAGE)}
-          iconName={'translate'}
-          payload={
-            <View style={styles.languageOptions}>
-              {locales.map(locale => {
-                const isCurrentLanguage = locale === settings.locale
-                return (
-                  <View
-                    key={locale}
-                    onTouchEnd={() => setLocale(locale)}
-                    style={[
-                      styles.languageOption,
-                      isCurrentLanguage && {
-                        backgroundColor: JolocomTheme.primaryColorSand,
-                      },
-                    ]}
-                  >
-                    <Text
+    <Container style={styles.container}>
+      <ScrollView
+        style={styles.scrollComponent}
+        contentContainerStyle={styles.scrollComponentContainer}
+      >
+        <View style={styles.topSection}>
+          <Text style={styles.sectionHeader}>
+            {I18n.t(strings.YOUR_PREFERENCES)}
+          </Text>
+          <SettingsItem
+            title={I18n.translate(strings.LANGUAGE)}
+            iconName={'translate'}
+            payload={
+              <View style={styles.languageOptions}>
+                {locales.map(locale => {
+                  const isCurrentLanguage = locale === settings.locale
+                  return (
+                    <View
+                      key={locale}
+                      onTouchEnd={() => setLocale(locale)}
                       style={[
-                        styles.languageOptionText,
+                        styles.languageOption,
                         isCurrentLanguage && {
-                          color: JolocomTheme.primaryColorPurple,
+                          backgroundColor: Colors.sandLight,
                         },
                       ]}
                     >
-                      {locale.toUpperCase()}
-                    </Text>
-                  </View>
-                )
-              })}
-            </View>
-          }
-        />
-      </View>
-      <View style={styles.topSection}>
-        <Text style={styles.sectionHeader}>Security</Text>
-        <SettingsItem
-          title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
-          iconName={'flash'}
-          description={
-            seedPhraseSaved
-              ? I18n.t(strings.YOUR_IDENTITY_IS_ALREADY_BACKED_UP)
-              : I18n.t(
-                  strings.SET_UP_A_SECURE_PHRASE_TO_RECOVER_YOUR_ACCOUNT_IN_THE_FUTURE_IF_YOUR_PHONE_IS_STOLEN_OR_IS_DAMAGED,
-                )
-          }
-          isHighlighted={!seedPhraseSaved}
-          isDisabled={seedPhraseSaved}
-          onTouchEnd={setupBackup}
-        />
-        <SettingsItem
-          title={'Social Recovery'}
+                      <Text
+                        style={[
+                          styles.languageOptionText,
+                          isCurrentLanguage && {
+                            color: Colors.purpleMain,
+                          },
+                        ]}
+                      >
+                        {locale.toUpperCase()}
+                      </Text>
+                    </View>
+                  )
+                })}
+              </View>
+            }
+          />
+        </View>
+        <View style={styles.topSection}>
+          <Text style={styles.sectionHeader}>Security</Text>
+          <SettingsItem
+            title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
+            iconName={'flash'}
+            description={
+              seedPhraseSaved
+                ? I18n.t(strings.YOUR_IDENTITY_IS_ALREADY_BACKED_UP)
+                : I18n.t(
+                    strings.SET_UP_A_SECURE_PHRASE_TO_RECOVER_YOUR_ACCOUNT_IN_THE_FUTURE_IF_YOUR_PHONE_IS_STOLEN_OR_IS_DAMAGED,
+                  )
+            }
+            isHighlighted={!seedPhraseSaved}
+            isDisabled={seedPhraseSaved}
+            onPress={setupBackup}
+          />
+          <SettingsItem
+            title={'Social Recovery'}
           iconName={'account-multiple'}
           description={'Enable your friends to help you in case of recovery'}
           onTouchEnd={setupSocialRecovery}
@@ -140,8 +149,9 @@ export const SettingsScreen: React.FunctionComponent<SettingsScreenProps> = ({
       </View>
       <Text style={styles.versionNumber}>
         Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}
-      </Text>
-      <View />
-    </View>
+        </Text>
+        <View />
+      </ScrollView>
+    </Container>
   )
 }
