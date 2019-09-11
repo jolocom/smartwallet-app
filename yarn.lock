@@ -1109,10 +1109,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/detox@^12.8.3":
-  version "12.8.3"
-  resolved "https://registry.yarnpkg.com/@types/detox/-/detox-12.8.3.tgz#6734e83efad500cc4033af131ea65616284985be"
-  integrity sha512-Bx9DBmVousynqSre3X/zJFKNPhFwBgZYI3eKhPZMLrE3pVcEnyULu6Ld3s5w4ZvJz9zsDrSRiWMDj9259FD1+Q==
+"@types/detox@^12.8.4":
+  version "12.8.4"
+  resolved "https://registry.yarnpkg.com/@types/detox/-/detox-12.8.4.tgz#afd9999b0de62938d261577ccc8f5e0617bcc028"
+  integrity sha512-ZqjfETBta4Ku31qeOBzk+/YwXPmbDBNDASFnzTmOpWoCAQJusSNpw4v7Taw0zGtFW55GgLwOYEVGb1Rxt7MtnQ==
 
 "@types/enzyme-adapter-react-16@^1.0.5":
   version "1.0.5"
@@ -3361,10 +3361,10 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
   integrity sha512-ZIzRpLJrOj7jjP2miAtgqIfmzbxa4ZOr5jJc601zklsfEx9oTzmmj2nVpIPRpNlRTIh8lc1kyViIY7BWSGNmKw==
 
-detox@^14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-14.0.0.tgz#8ba821e5fe3bf343f18fba948052dacc1cc2044c"
-  integrity sha512-nR/LcrnIDm8zFnAYf7rlF3gwYHEytwsUrhjofyahE3i9HE3MtbFvezcK0vT7MV3QxWMZsd71TIImybu9tqK31A==
+detox@^14.2.0:
+  version "14.2.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-14.2.0.tgz#14a34daef00819422b4efd422fb2f2dde570388e"
+  integrity sha512-Yn2QXFecEhwA8Dx31JauyFT8WJ4qiyfB+44x0Vc0Ozv7Xf9dp5IcQ6XJNBVfLZ9S1idP3ULkQhvUGtAwYbP1Lw==
   dependencies:
     "@babel/core" "^7.4.5"
     bunyan "^1.8.12"
@@ -3383,6 +3383,7 @@ detox@^14.0.0:
     tail "^2.0.0"
     telnet-client "0.15.3"
     tempfile "^2.0.0"
+    which "^1.3.1"
     ws "^3.3.1"
     yargs "^13.0.0"
     yargs-parser "^13.0.0"
@@ -11594,7 +11595,7 @@ which-module@^2.0.0:
   resolved "https://registry.yarnpkg.com/which-module/-/which-module-2.0.0.tgz#d9ef07dce77b9902b8a3a8fa4b31c3e3f7e6e87a"
   integrity sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho=
 
-which@^1.2.9:
+which@^1.2.9, which@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/which/-/which-1.3.1.tgz#a45043d54f5805316da8d62f9f50918d3da70b0a"
   integrity sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==
