@@ -27,7 +27,7 @@ interface State {
 
 // we are gonna collect some from the user and the rest from the OS
 const ENOUGH_ENTROPY_PROGRESS = 0.3
-const POST_COLLECTION_WAIT_TIME = 1000
+const POST_COLLECTION_WAIT_TIME = 300
 
 export class EntropyContainer extends React.Component<Props, State> {
   private entropyGenerator!: EntropyGeneratorInterface
