@@ -70,7 +70,7 @@ export const SettingsScreen: React.FunctionComponent<SettingsScreenProps> = ({
   version,
   setLocale,
   setupBackup,
-  setupSocialRecovery
+  setupSocialRecovery,
 }) => {
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
@@ -136,19 +136,19 @@ export const SettingsScreen: React.FunctionComponent<SettingsScreenProps> = ({
           />
           <SettingsItem
             title={'Social Recovery'}
-          iconName={'account-multiple'}
-          description={'Enable your friends to help you in case of recovery'}
-          onTouchEnd={setupSocialRecovery}
-        />
-        <SettingsItem
-          title={I18n.t(strings.DELETE_IDENTITY)}
-          description={'(coming soon)'}
-          iconName={'delete'}
-          isDisabled
-        />
-      </View>
-      <Text style={styles.versionNumber}>
-        Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}
+            iconName={'account-multiple'}
+            description={'Enable your friends to help you in case of recovery'}
+            onPress={setupSocialRecovery}
+          />
+          <SettingsItem
+            title={I18n.t(strings.DELETE_IDENTITY)}
+            description={'(coming soon)'}
+            iconName={'delete'}
+            isDisabled
+          />
+        </View>
+        <Text style={styles.versionNumber}>
+          Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}
         </Text>
         <View />
       </ScrollView>

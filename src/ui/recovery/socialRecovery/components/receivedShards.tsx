@@ -42,7 +42,7 @@ export const ReceivedShardsComponent: React.FunctionComponent<Props> = ({
   toggleModal,
 }) => (
   <Container style={styles.container}>
-    <Text style={styles.header}>Received Shards</Text>
+    <Text style={styles.header}>Received Parts</Text>
     <Text style={styles.note}>
       Share this parts with friends in case they need to recovery their
       identity. Make sure to share these parts only with them.
@@ -66,7 +66,7 @@ export const ReceivedShardsComponent: React.FunctionComponent<Props> = ({
       ))
     ) : (
       <Text style={[styles.note, { fontSize: 25 }]}>
-        No received shards yet.
+        No received parts yet.
       </Text>
     )}
   </Container>

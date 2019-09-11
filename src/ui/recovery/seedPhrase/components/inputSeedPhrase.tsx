@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import { Container } from '../../structure'
 import { Button } from 'react-native-material-ui'
 import { Colors, Spacing, Typography, Buttons } from 'src/styles'
 import {
@@ -10,12 +9,13 @@ import {
   SpinningIcon,
 } from 'src/resources'
 import { WordState } from '../container/inputSeedPhrase'
-import Rotation from '../../animation/Rotation'
-import { TransparentButton } from '../../structure/transparentButton'
 // @ts-ignore
 import { RippleLoader } from 'react-native-indicator'
-import strings from '../../../locales/strings'
 import I18n from 'i18n-js'
+import strings from '../../../../locales/strings'
+import { Container } from '../../../structure'
+import Rotation from '../../../animation/Rotation'
+import { TransparentButton } from '../../../structure/transparentButton'
 
 const styles = StyleSheet.create({
   container: {

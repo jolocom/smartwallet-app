@@ -67,7 +67,7 @@ export const CollectShardsComponent: React.FunctionComponent<Props> = ({
 }) => {
   return (
     <Container style={styles.container}>
-      <Text style={styles.header}>Collect Shards</Text>
+      <Text style={styles.header}>Collect Parts</Text>
       {shards.map((shard, i) => (
         <View key={i} style={{ width: '100%' }}>
           <View
@@ -79,10 +79,10 @@ export const CollectShardsComponent: React.FunctionComponent<Props> = ({
       ))}
       {shards.length === 0 && (
         <Text style={styles.note}>
-          Start recollecting your shards by using the camera
+          Start recollecting your parts by using the camera
         </Text>
       )}
-      <Text style={styles.note}>Your identity will be recovered as soon as you collected enough shards</Text>
+      <Text style={styles.note}>Your identity will be recovered as soon as you collected enough parts</Text>
       <View style={{ flex: 2 }} />
       <TouchableOpacity style={styles.qrCodeButton} onPress={openCamera}>
         <Icon size={30} name="qrcode-scan" color="white" />
