@@ -66,7 +66,7 @@ export const ShardModal: React.FunctionComponent<Props> = ({
                 return closeModal()
               }}
             >
-              <Text>{'Sharing Complete (Delete shard)'}</Text>
+              <Text>{'Sharing Complete (Delete this part)'}</Text>
             </TouchableHighlight>
           )}
           <TouchableHighlight

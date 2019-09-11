@@ -54,7 +54,7 @@ export const SocialRecoveryComponent: React.FunctionComponent<Props> = ({
   const setupCompleted = shardsCreated && shards.length === 0
   return (
     <Container style={styles.container}>
-      <Text style={styles.header}>Distribute Shards</Text>
+      <Text style={styles.header}>Distribute Parts</Text>
       {shards.map((shard, i) => (
         <View
           key={i}
@@ -64,8 +64,7 @@ export const SocialRecoveryComponent: React.FunctionComponent<Props> = ({
           <View
             style={{ width: '100%', height: 1, backgroundColor: 'white' }}
           />
-          <Text style={[styles.note, { margin: 20 }]}>{`Shard ${shard.id +
-            1} - Tap to share`}</Text>
+          <Text style={[styles.note, { margin: 20 }]}>{`Part ${shard.id} - Tap to share`}</Text>
         </View>
       ))}
       {setupCompleted && (

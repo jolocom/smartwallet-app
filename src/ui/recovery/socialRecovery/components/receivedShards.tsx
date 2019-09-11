@@ -44,8 +44,8 @@ export const ReceivedShardsComponent: React.FunctionComponent<Props> = ({
   <Container style={styles.container}>
     <Text style={styles.header}>Received Shards</Text>
     <Text style={styles.note}>
-      Share this shards with friends in case they need to recovery their
-      identity. Make sure to share these shards only with them.
+      Share this parts with friends in case they need to recovery their
+      identity. Make sure to share these parts only with them.
     </Text>
     {shards.length !== 0 ? (
       shards.map((shard, i) => (
@@ -60,7 +60,7 @@ export const ReceivedShardsComponent: React.FunctionComponent<Props> = ({
             />
             <Text
               style={[styles.note, { margin: 20 }]}
-            >{`Shard of ${shard.label} - Tap to share`}</Text>
+            >{`Recovery part of ${shard.label} - Tap to share`}</Text>
           </React.Fragment>
         </TouchableHighlight>
       ))

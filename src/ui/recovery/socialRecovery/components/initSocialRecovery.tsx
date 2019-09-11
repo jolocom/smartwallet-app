@@ -52,7 +52,7 @@ const textInput = (
       width: '60%',
     }}
   >
-    <Text style={{ color: white }}>{label + ':'}</Text>
+    <Text style={{ color: sandLight }}>{label + ':'}</Text>
     {
       // @ts-ignore
       <TextInput
@@ -76,16 +76,19 @@ export const InitSocialRecoveryComponent: React.FunctionComponent<Props> = ({
 }) => {
   return (
     <Container style={styles.container}>
-      <Text style={styles.header}>Initialize Social Recovery</Text>
+      <Text style={styles.header}>Social Recovery</Text>
       <Text style={styles.note}>
-        Your Identity will be sharded into several shards. You need to share
-        this shards with your friends. In case of recovery you need to collect
-        only a part of the shards you distributed before. The threshold defines
-        how many shards are needed to recovery your identity. We suggest to
-        create 5 shards with a threshold of 3.
+        We will create recovery parts that you can share with your friends. In
+        case of recovery you can recollect this parts to recover your identity.
+        To increase the fault tolerance of the system not all parts are required
+        for recovery.
       </Text>
-      {textInput(amountOfShards, 'Amount of shards', onAmountChange)}
-      {textInput(threshold, 'Threshold', onThresholdChange)}
+      <Text style={[styles.note, { marginBottom: 20 }]}>
+        We recommend to create at least 5 parts with 3 parts required for
+        recovery.
+      </Text>
+      {textInput(amountOfShards, 'Overall amount of parts', onAmountChange)}
+      {textInput(threshold, 'Parts required to recover', onThresholdChange)}
 
       <View style={{ flex: 2 }} />
       <JolocomButton text={'Initialize'} onPress={shardEntropy} />
