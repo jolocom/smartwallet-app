@@ -30,9 +30,6 @@ describe('Navigation action creators', () => {
         keyChainLib: {
           getPassword: jest.fn().mockResolvedValue('secret123'),
         },
-        encryptionLib: {
-          decryptWithPass: () => 'angelaMerkleTreeSeed',
-        },
         identityWallet: {
           validateJWT: jest.fn().mockResolvedValue(true),
         },
