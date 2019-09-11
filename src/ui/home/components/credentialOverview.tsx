@@ -25,21 +25,22 @@ const styles = StyleSheet.create({
   },
   scrollComponent: {
     width: '100%',
-    paddingBottom: Spacing.XL,
+  },
+  scrollComponentContainer: {
+    paddingBottom: Spacing['3XL'],
   },
 })
 
 export const CredentialOverview: React.FC<Props> = props => {
   const { claimsToRender, did, onEdit } = props
-  const { scrollComponent } = styles
 
   const claimCategories = Object.keys(claimsToRender)
 
   return (
     <Container style={styles.container}>
       <ScrollView
-        style={scrollComponent}
-        contentContainerStyle={scrollComponent}
+        style={styles.scrollComponent}
+        contentContainerStyle={styles.scrollComponentContainer}
       >
         {claimCategories.map(category => {
           // we render documents on their own screen
