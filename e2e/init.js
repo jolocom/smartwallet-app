@@ -39,7 +39,14 @@ beforeAll(async () => {
   } catch(err) {
     console.error("Could not find android device/emulator", err)
   }
-  await detox.init(detoxConfig)
+  try {
+    await detox.init(detoxConfig)
+  } catch (err) {
+    // when detox init fails we should really stop the tests otherwise we get a
+    // bunch of unrelated and misleading errors
+    console.error('Detox init failed!', err)
+    process.exit(1)
+  }
 });
 
 beforeEach(async () => {
