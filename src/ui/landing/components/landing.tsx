@@ -118,6 +118,7 @@ export class LandingComponent extends React.Component<Props> {
     return (
       <Container style={styles.mainContainer}>
         <Carousel
+          testID="landingCarousel"
           data={landingSlides}
           renderItem={this.renderItem}
           lockScrollWhileSnapping
@@ -136,6 +137,7 @@ export class LandingComponent extends React.Component<Props> {
         />
         <View style={styles.bottomSection}>
           <Button
+            testID="getStarted"
             onPress={this.props.handleGetStarted}
             style={{
               container: styles.mainButtonContainer,
@@ -145,6 +147,7 @@ export class LandingComponent extends React.Component<Props> {
             upperCase={false}
           />
           <Button
+            testID="recoverIdentity"
             onPress={this.props.handleRecover}
             style={{
               container: styles.recoverButtonContainer,
