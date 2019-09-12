@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { Colors, Typography } from 'src/styles'
 
 export interface DocumentViewToggleProps {
   showingValid: boolean
@@ -10,7 +10,7 @@ export interface DocumentViewToggleProps {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10,
+    paddingTop: 10,
     paddingHorizontal: 15,
   },
   bar: {
@@ -22,26 +22,19 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   barValid: {
-    backgroundColor: 'rgba(233, 239, 221, 0.57)',
+    backgroundColor: Colors.greenFaded060,
   },
   barExpired: {
-    backgroundColor: 'rgba(255, 222, 188, 0.25)',
+    backgroundColor: Colors.sand025,
   },
   icon: {
-    color: 'rgba(5, 5, 13, 0.48)',
-    marginRight: 8,
-  },
-  iconExpired: {
-    color: 'rgba(5, 5, 13, 0.48)',
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontWeight: 'bold',
+    color: Colors.blackMain050,
     marginRight: 8,
   },
   text: {
-    color: 'rgba(5, 5, 13, 0.48)',
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    color: Colors.blackMain050,
   },
   underline: {
     textDecorationLine: 'underline',

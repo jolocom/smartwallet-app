@@ -1,23 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Exception screen component Renders correctly 1`] = `
-<Component
+<View
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
       "flex": 1,
       "justifyContent": "space-around",
       "padding": "5%",
     }
   }
 >
-  <Component
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />
+  <View
     style={
       Object {
         "alignItems": "center",
         "justifyContent": "space-around",
-        "marginTop": 85,
+        "marginTop": 80,
       }
     }
   >
@@ -34,22 +39,19 @@ exports[`Exception screen component Renders correctly 1`] = `
         }
       }
     />
-    <Component
+    <View
       style={
         Object {
           "alignItems": "center",
-          "marginTop": 25,
-          "paddingHorizontal": 20,
+          "marginTop": 24,
+          "paddingHorizontal": 16,
         }
       }
     >
       <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
             "fontSize": 30,
             "textAlign": "center",
@@ -59,82 +61,61 @@ exports[`Exception screen component Renders correctly 1`] = `
         Uh oh.
       </Text>
       <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
+        numberOfLines={5}
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
             "fontSize": 20,
-            "marginTop": 15,
+            "marginTop": 16,
             "textAlign": "center",
           }
         }
       >
-        There was an error with your request.
+        Unknown Error.
       </Text>
-    </Component>
-  </Component>
-  <Component
+    </View>
+  </View>
+  <View
     style={
       Object {
-        "backgroundColor": "black",
-        "marginTop": 20,
+        "marginTop": 24,
       }
     }
   >
-    <Button
-      accent={false}
-      disabled={false}
-      icon={null}
-      onLongPress={null}
+    <JolocomButton
       onPress={[Function]}
-      primary={false}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-            "borderRadius": 4,
-            "height": 48,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "100",
-            "paddingHorizontal": 15,
-            "paddingVertical": 15,
-          },
-        }
-      }
-      testID={null}
       text="Go back"
       upperCase={false}
     />
-  </Component>
-</Component>
+  </View>
+</View>
 `;
 
 exports[`Exception screen component Renders correctly when no error object is provided 1`] = `
-<Component
+<View
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "black",
+      "backgroundColor": "rgb(5, 5, 13)",
       "flex": 1,
       "justifyContent": "space-around",
       "padding": "5%",
     }
   }
 >
-  <Component
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />
+  <View
     style={
       Object {
         "alignItems": "center",
         "justifyContent": "space-around",
-        "marginTop": 85,
+        "marginTop": 80,
       }
     }
   >
@@ -151,22 +132,19 @@ exports[`Exception screen component Renders correctly when no error object is pr
         }
       }
     />
-    <Component
+    <View
       style={
         Object {
           "alignItems": "center",
-          "marginTop": 25,
-          "paddingHorizontal": 20,
+          "marginTop": 24,
+          "paddingHorizontal": 16,
         }
       }
     >
       <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
             "fontSize": 30,
             "textAlign": "center",
@@ -176,60 +154,34 @@ exports[`Exception screen component Renders correctly when no error object is pr
         Uh oh.
       </Text>
       <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
+        numberOfLines={5}
         style={
           Object {
-            "color": "#ffefdf",
+            "color": "rgb(255, 239, 223)",
             "fontFamily": "TT Commons",
             "fontSize": 20,
-            "marginTop": 15,
+            "marginTop": 16,
             "textAlign": "center",
           }
         }
       >
         There was an error with your request.
       </Text>
-    </Component>
-  </Component>
-  <Component
+    </View>
+  </View>
+  <View
     style={
       Object {
-        "backgroundColor": "black",
-        "marginTop": 20,
+        "marginTop": 24,
       }
     }
   >
-    <Button
-      accent={false}
-      disabled={false}
-      icon={null}
-      onLongPress={null}
+    <JolocomButton
       onPress={[Function]}
-      primary={false}
       raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-            "borderRadius": 4,
-            "height": 48,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "100",
-            "paddingHorizontal": 15,
-            "paddingVertical": 15,
-          },
-        }
-      }
-      testID={null}
       text="Go back"
       upperCase={false}
     />
-  </Component>
-</Component>
+  </View>
+</View>
 `;

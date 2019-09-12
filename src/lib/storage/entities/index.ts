@@ -1,4 +1,12 @@
-import {
+import { SettingEntity } from './settingEntity'
+import { CredentialEntity } from './credentialEntity'
+import { MasterKeyEntity } from './masterKeyEntity'
+import { PersonaEntity } from './personaEntity'
+import { SignatureEntity } from './signatureEntity'
+import { VerifiableCredentialEntity } from './verifiableCredentialEntity'
+import { CacheEntity } from './cacheEntity'
+
+export {
   SettingEntity,
   CredentialEntity,
   MasterKeyEntity,
@@ -6,15 +14,7 @@ import {
   SignatureEntity,
   VerifiableCredentialEntity,
   CacheEntity,
-} from '.'
-
-export { SettingEntity } from './settingEntity'
-export { CredentialEntity } from './credentialEntity'
-export { MasterKeyEntity } from './masterKeyEntity'
-export { PersonaEntity } from './personaEntity'
-export { SignatureEntity } from './signatureEntity'
-export { VerifiableCredentialEntity } from './verifiableCredentialEntity'
-export { CacheEntity } from './cacheEntity'
+}
 
 export const entityList = [
   SettingEntity,

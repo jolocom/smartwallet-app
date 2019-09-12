@@ -4,7 +4,8 @@ import Adapter from 'enzyme-adapter-react-16'
 // React 16 Enzyme adapter
 Enzyme.configure({ adapter: new Adapter() })
 
-jest.mock('react-native-fetch-blob', () => ({
+jest.mock('rn-fetch-blob', () => ({
+  __esModule: true,
   default: {
     DocumentDir: () => {},
     polyfill: () => {},
@@ -12,7 +13,7 @@ jest.mock('react-native-fetch-blob', () => ({
   },
 }))
 
-jest.mock('react-native-languages', () => ({
-  language: 'en',
-  languages: ['en'],
+jest.mock('src/lib/storage/storage', () => ({
+  __esModule: true,
+  Storage: jest.fn(),
 }))

@@ -1,3 +1,5 @@
+import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
+
 export default {
   entropy: '4f8d84403d760b5b3fc5426c90827dab',
   didDocument: {
@@ -16,13 +18,13 @@ export default {
     path: 'm/0/1',
     keyType: 'ECDSA secp256k1',
   },
-  getPasswordResult: 'secret',
+  getPasswordResult: 'hunter0=',
   decodedWif: {
     privateKey:
       '0x0000000000000000000000000000000000000000000000000000000000000000',
     address: '0x5000000000000000000000000000000000000000',
   },
-  cipher: 'U2FsdGVkX19kQYx6vN6GahoZ9mbabreviated+=',
+  cipher: 'b77451145154d43d51ad3d31ead162749208ac14ac4aed7c1200970995e5eca5',
   identityWallet: {
     privateIdentityKey: {
       key: Buffer.from(
@@ -31,11 +33,11 @@ export default {
       ),
       id: 'mock1',
     },
-    identity: () => ({
-      did: () => 'did:jolo:mockdid',
-    }),
+    identity: {
+      did: 'did:jolo:mockdid',
+    },
     didDocument: {
-      did: () => 'did:jolo:mockdid',
+      did: 'did:jolo:mockdid',
     },
     create: {
       signedCredential: () => 'mockCredential',
@@ -96,5 +98,5 @@ export default {
       signatureValue:
         'XdEIMGeo+b3eJEb2I063iLwShhAbWQNiwPILRy5XtN0TgU/bUB2mATmYrWGGIJfNbUEwh+kMn/gAQLLXoqr17A==',
     },
-  },
+  } as ISignedCredentialAttrs,
 }

@@ -1,8 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`seedPhrase container mounts correctly and matches snapshot 1`] = `
-<SeedPhrase
-  checked={false}
-  seedPhrase="mock seedPhrase"
-/>
+<Fragment>
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />
+  <SeedPhrase
+    handleButtonTap={[Function]}
+    seedPhrase="mock seedPhrase"
+  />
+</Fragment>
 `;

@@ -34,7 +34,6 @@ export interface CategorizedClaims {
 }
 
 export interface ClaimsState {
-  readonly loading: boolean
   readonly selected: DecoratedClaims
   readonly decoratedCredentials: CategorizedClaims
   readonly pendingExternal: {
@@ -44,15 +43,14 @@ export interface ClaimsState {
       decoratedClaim: DecoratedClaims
     }>
   }
+  readonly hasExternalCredentials: boolean
 }
 
 export interface DidState {
   readonly did: string
 }
 
-export interface LoadingState {
-  readonly loading: boolean
-}
+export type LoadingState = boolean
 
 // TODO avoid state.account.did.did access patterns
 export interface AccountState {

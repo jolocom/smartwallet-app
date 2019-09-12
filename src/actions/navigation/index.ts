@@ -1,35 +1,61 @@
 import {
   NavigationActions,
+  StackActions,
   NavigationNavigateActionPayload,
-  NavigationResetAction,
+  NavigationAction,
+  NavigationContainerComponent,
 } from 'react-navigation'
-import { toggleDeepLinkFlag } from '../sso'
 import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from '../../lib/storage/interactionTokens'
-import { showErrorScreen } from '../generic'
-import { ThunkActionCreator } from '../../store'
-import { AppError, ErrorCode } from '../../lib/errors'
+import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { AppError, ErrorCode } from 'src/lib/errors'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
+import { ThunkAction } from 'src/store'
 
-export const navigate = (options: NavigationNavigateActionPayload) =>
-  NavigationActions.navigate(options)
+let deferredNavActions: NavigationAction[] = [],
+  dispatchNavigationAction = (action: NavigationAction) => {
+    deferredNavActions.push(action)
+  }
 
-export const goBack = NavigationActions.back()
+export const setTopLevelNavigator = (nav: NavigationContainerComponent) => {
+  dispatchNavigationAction = nav.dispatch.bind(nav)
+  deferredNavActions.forEach(dispatchNavigationAction)
+  deferredNavActions.length = 0
+}
+
+/**
+ * NOTE: navigate and navigatorReset both dispatch the navigation actions but
+ * the actions are not handled by our reducers. Dispatching is useful for testing
+ * (comparing snapshots of store actions) and it makes typescript happy
+ */
+export const navigate = (
+  options: NavigationNavigateActionPayload,
+): ThunkAction => dispatch => {
+  const action = NavigationActions.navigate(options)
+  dispatchNavigationAction(action)
+  return dispatch(action)
+}
 
 export const navigatorReset = (
   newScreen: NavigationNavigateActionPayload,
-): NavigationResetAction =>
-  NavigationActions.reset({
+): ThunkAction => dispatch => {
+  const action = StackActions.reset({
     index: 0,
-    actions: [navigate(newScreen)],
+    actions: [NavigationActions.navigate(newScreen)],
   })
+  dispatchNavigationAction(action)
+  return dispatch(action)
+}
+
+export const navigatorResetHome = (): ThunkAction => dispatch =>
+  dispatch(navigatorReset({ routeName: routeList.Home }))
 
 /**
  * The function that parses a deep link to get the route name and params
  * It then matches the route name and dispatches a corresponding action
  * @param url - a deep link string with the following schema: appName://routeName/params
  */
-export const handleDeepLink: ThunkActionCreator = (url: string) => (
+export const handleDeepLink = (url: string): ThunkAction => (
   dispatch,
   getState,
   backendMiddleware,
@@ -39,35 +65,32 @@ export const handleDeepLink: ThunkActionCreator = (url: string) => (
   const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ''
   const routeName = route.split('/')[0]
 
-  if (
-    routeName === 'consent' ||
-    routeName === 'payment' ||
-    routeName === 'authenticate'
-  ) {
-    // The identityWallet is initialised before the deep link is handled.
-    if (!backendMiddleware.identityWallet) {
-      return dispatch(navigatorReset({ routeName: routeList.Landing }))
-    }
-
-    dispatch(toggleDeepLinkFlag(true))
-    const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
-    const handler = interactionHandlers[interactionToken.interactionType]
-
-    // TODO What if absent?
-    if (handler) {
-      return dispatch(handler(interactionToken))
-    }
-
-    /** @TODO Use error code */
+  // The identityWallet is initialised before the deep link is handled. If it
+  // is not initialized, then we may not even have an identity.
+  if (!backendMiddleware.identityWallet) {
     return dispatch(
-      showErrorScreen(
-        new AppError(ErrorCode.Unknown, new Error('No handler found')),
-      ),
+      navigate({
+        routeName: routeList.Landing,
+      }),
     )
   }
 
-  /** @TODO Better return */
-  return navigate({
-    routeName: routeList.Home,
-  })
+  const supportedRoutes = ['consent', 'payment', 'authenticate']
+  if (supportedRoutes.includes(routeName)) {
+    const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
+    const handler = interactionHandlers[interactionToken.interactionType]
+
+    if (handler) {
+      return dispatch(
+        withLoading(withErrorScreen(handler(interactionToken, true))),
+      )
+
+    }
+  }
+
+  /** @TODO Use error code */
+  throw new AppError(
+    ErrorCode.ParseJWTFailed,
+    new Error('Could not handle interaction token'),
+  )
 }

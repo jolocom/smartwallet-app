@@ -2,23 +2,18 @@ import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { Container } from 'src/ui/structure'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { Button } from 'react-native-material-ui'
 import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
-import { navigationActions } from 'src/actions'
 import I18n from 'src/locales/i18n'
-import { LoadingSpinner } from './loadingSpinner'
-import strings from '../../locales/strings'
+import strings from 'src/locales/strings'
 import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from '../../lib/storage/interactionTokens'
-import { ThunkDispatch } from '../../store'
-import { showErrorScreen } from '../../actions/generic'
-import { RootState } from '../../reducers'
-import { goBack } from '../../actions/navigation'
-import { withErrorHandling, withLoading } from '../../actions/modifiers'
-import { NavigationNavigateAction } from 'react-navigation'
-import { AppError, ErrorCode } from '../../lib/errors'
-import { toggleLoading } from '../../actions/account'
+import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { ThunkDispatch } from 'src/store'
+import { showErrorScreen } from 'src/actions/generic'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
+import { NavigationScreenProps } from 'react-navigation'
+import { AppError, ErrorCode } from 'src/lib/errors'
+import { Colors } from 'src/styles'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -26,35 +21,66 @@ export interface QrScanEvent {
   data: string
 }
 
-interface Props {
-  loading: boolean
-  onScannerSuccess: (e: QrScanEvent) => Promise<NavigationNavigateAction>
-  onScannerCancel: () => typeof goBack
-}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    NavigationScreenProps {}
 
 interface State {}
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.backgroundLightMain,
+  },
   buttonText: {
-    color: JolocomTheme.primaryColorBlack,
+    color: Colors.blackMain,
   },
 })
 
 export class QRcodeScanner extends React.Component<Props, State> {
+  private scanner: typeof QRScanner
+  private removeFocusListener: (() => void) | undefined
+
+  constructor(props: Props) {
+    super(props)
+    if (this.props.navigation) {
+      this.removeFocusListener = this.props.navigation.addListener(
+        'willFocus',
+        () => {
+          this.scanner.reactivate()
+          // NOTE: force an update to force remounting of the Camera
+          this.forceUpdate()
+        },
+      ).remove
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.removeFocusListener) this.removeFocusListener()
+  }
+
+  onScannerCancel() {
+    if (this.props.navigation) this.props.navigation.goBack()
+  }
+
   render() {
-    const { loading, onScannerSuccess, onScannerCancel } = this.props
+    const { onScannerSuccess } = this.props
+    // NOTE: the key is used to invalidate the previously rendered component as
+    // we need to rerender and remount the camera to ensure it is properly setup
+    const cameraProps = { key: Date.now() }
     return (
       <React.Fragment>
-        {loading && <LoadingSpinner />}
-        <Container>
+        <Container style={styles.container}>
           <QRScanner
-            onRead={(e: QrScanEvent) => onScannerSuccess(e)}
+            cameraProps={cameraProps}
+            ref={(ref: React.Component) => (this.scanner = ref)}
+            onRead={onScannerSuccess}
+            cameraStyle={{ overflow: 'hidden' }}
             topContent={
               <Text>{I18n.t(strings.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>
             }
             bottomContent={
               <Button
-                onPress={onScannerCancel}
+                onPress={this.onScannerCancel.bind(this)}
                 style={{ text: styles.buttonText }}
                 text={I18n.t(strings.CANCEL)}
               />
@@ -65,14 +91,6 @@ export class QRcodeScanner extends React.Component<Props, State> {
     )
   }
 }
-
-const mapStateToProps = ({
-  account: {
-    loading: { loading },
-  },
-}: RootState) => ({
-  loading,
-})
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onScannerSuccess: async (e: QrScanEvent) => {
@@ -89,21 +107,16 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     const handler = interactionHandlers[interactionToken.interactionType]
 
     return handler
-      ? dispatch(
-          withLoading(toggleLoading)(
-            withErrorHandling(showErrorScreen)(handler(interactionToken)),
-          ),
-        )
+      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
       : dispatch(
           showErrorScreen(
             new AppError(ErrorCode.Unknown, new Error('No handler found')),
           ),
         )
   },
-  onScannerCancel: () => dispatch(navigationActions.goBack),
 })
 
 export const QRScannerContainer = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(QRcodeScanner)

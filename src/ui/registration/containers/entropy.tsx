@@ -8,9 +8,11 @@ import {
   EntropyGenerator,
 } from 'src/lib/entropyGenerator'
 import { generateSecureRandomBytes } from 'src/lib/util'
-import { withErrorHandling } from 'src/actions/modifiers'
-import { showErrorScreen } from 'src/actions/generic'
+import { withErrorScreen } from 'src/actions/modifiers'
 import { ThunkDispatch } from 'src/store'
+import { AppError, ErrorCode } from '../../../lib/errors'
+import { routeList } from 'src/routeList'
+import { StatusBar } from 'react-native'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -24,7 +26,8 @@ interface State {
 }
 
 // we are gonna collect some from the user and the rest from the OS
-const ENOUGH_ENTROPY_PROGRESS = 0.6
+const ENOUGH_ENTROPY_PROGRESS = 0.3
+const POST_COLLECTION_WAIT_TIME = 300
 
 export class EntropyContainer extends React.Component<Props, State> {
   private entropyGenerator!: EntropyGeneratorInterface
@@ -40,7 +43,7 @@ export class EntropyContainer extends React.Component<Props, State> {
     this.entropyGenerator = this.setUpEntropyGenerator()
   }
 
-  private setUpEntropyGenerator(): EntropyGenerator {
+  private setUpEntropyGenerator(): EntropyGeneratorInterface {
     return new EntropyGenerator()
   }
 
@@ -69,6 +72,7 @@ export class EntropyContainer extends React.Component<Props, State> {
       }
       const encodedEntropy = this.generateRandomString()
       this.setState({ encodedEntropy })
+      setTimeout(this.submitEntropy, POST_COLLECTION_WAIT_TIME)
     }
   }
 
@@ -81,11 +85,13 @@ export class EntropyContainer extends React.Component<Props, State> {
 
   public render(): JSX.Element {
     return (
-      <EntropyComponent
-        addPoint={this.addPoint}
-        progress={this.state.entropyProgress}
-        submitEntropy={this.submitEntropy}
-      />
+      <React.Fragment>
+        <StatusBar barStyle="light-content" />
+        <EntropyComponent
+          addPoint={this.addPoint}
+          progress={this.state.entropyProgress}
+        />
+      </React.Fragment>
     )
   }
 }
@@ -95,8 +101,10 @@ const mapStateToProps = (state: RootState) => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   submit: (encodedEntropy: string) =>
     dispatch(
-      withErrorHandling(showErrorScreen)(
-        registrationActions.submitEntropy(encodedEntropy),
+      withErrorScreen(
+        registrationActions.createIdentity(encodedEntropy),
+        err =>
+          new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
       ),
     ),
 })

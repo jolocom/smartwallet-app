@@ -1,55 +1,84 @@
 import { navigationActions } from '../../../src/actions'
 import { JolocomLib } from 'jolocom-lib'
-
-import configureStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { createMockStore } from 'tests/utils'
+import { AppError } from 'src/lib/errors'
 
 describe('Navigation action creators', () => {
   describe('handleDeepLink', () => {
-    const jwt =
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpbnRlcmFjdGlvblRva2VuIjp7'
+    const jwt = 'mockJWT'
 
-    // TODO: refactor test case to account for identity check when deeplinking
-    it('should extract the route name and param from the URL', async () => {
-      const mockStore = configureStore([thunk])({})
-      const mockBackendMiddleware = {
+    const mockDid = 'did:jolo:mock'
+
+    const mockStore = createMockStore(
+      {
+        account: {
+          did: {
+            did: mockDid,
+          },
+        },
+      },
+      {
         storageLib: {
           get: {
-            persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:mock' }]),
+            persona: jest.fn().mockResolvedValue([{ did: mockDid }]),
             encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
           },
         },
         keyChainLib: {
           getPassword: jest.fn().mockResolvedValue('secret123'),
         },
-        encryptionLib: {
-          decryptWithPass: () => 'angelaMerkleTreeSeed',
+        identityWallet: {
+          validateJWT: jest.fn().mockResolvedValue(true),
         },
-        identityWallet: jest.fn(),
-      }
-      const parseInteractionTokenSpy = jest
-        .spyOn(JolocomLib.parse.interactionToken, 'fromJWT')
-        .mockImplementation(() => () => {})
-      const action = navigationActions.handleDeepLink(
-        'smartwallet://consent/' + jwt,
-      )
-      await action(mockStore.dispatch, () => {}, mockBackendMiddleware)
-      expect(mockStore.getActions()).toMatchSnapshot()
-      expect(parseInteractionTokenSpy).toHaveBeenCalledWith(jwt)
-      parseInteractionTokenSpy.mockReset()
+      },
+    )
+
+    const parseInteractionTokenSpy = jest.spyOn(
+      JolocomLib.parse.interactionToken,
+      'fromJWT',
+    )
+
+    const interactionHandlersSpies = {}
+    Object.keys(interactionHandlers).forEach(typ => {
+      interactionHandlersSpies[typ] = jest
+        // @ts-ignore bleh
+        .spyOn(interactionHandlers, typ)
+        .mockReturnValue({ type: `MOCK_${typ}_INTERACTION_TOKEN_HANDLER` })
     })
 
-    it('should not atttempt to parse if route was not correct', () => {
-      const mockStore = configureStore([thunk])({})
-      const parseInteractionTokenSpy = jest.spyOn(
-        JolocomLib.parse.interactionToken,
-        'fromJWT',
-      )
+    beforeEach(() => {
+      jest.useFakeTimers()
+      mockStore.reset()
+      parseInteractionTokenSpy.mockClear()
+    })
+
+    // TODO: refactor test case to account for identity check when deeplinking
+    it('should extract the route name and param from the URL', async () => {
+      parseInteractionTokenSpy.mockImplementation(jwt => {
+        const token = new JSONWebToken()
+        token.payload = { typ: InteractionType.CredentialRequest }
+        return token
+      })
+
       const action = navigationActions.handleDeepLink(
-        'smartwallet://somethingElse/' + jwt,
+        'jolocomwallet://consent/' + jwt,
       )
 
-      action(mockStore.dispatch)
+      await mockStore.dispatch(action)
+      jest.runAllTimers()
+      expect(mockStore.getActions()).toMatchSnapshot()
+      expect(parseInteractionTokenSpy).toHaveBeenCalledWith(jwt)
+    })
+
+    it('should throw AppError if route was not correct', () => {
+      const action = navigationActions.handleDeepLink(
+        'jolocomwallet://somethingElse/' + jwt,
+      )
+
+      expect(() => mockStore.dispatch(action)).toThrow(AppError)
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(parseInteractionTokenSpy).not.toHaveBeenCalled()
     })

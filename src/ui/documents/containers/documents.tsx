@@ -1,15 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, Animated, ScrollView } from 'react-native'
+import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 import { openDocumentDetails } from 'src/actions/documents'
 import { DecoratedClaims } from 'src/reducers/account'
 import { RootState } from 'src/reducers'
 import { getDocumentClaims } from 'src/utils/filterDocuments'
 import { ThunkDispatch } from 'src/store'
-import { Container, Block, CenteredText } from 'src/ui/structure'
 
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import I18n from 'src/locales/i18n'
 import { filters } from 'src/lib/filterDecoratedClaims'
 
@@ -17,6 +15,8 @@ import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
+import { BackupWarning } from '../../recovery/components/backupWarning'
+import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -38,17 +38,23 @@ const APPBAR_HEIGHT = Platform.select({
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: JolocomTheme.primaryColorGrey,
+    backgroundColor: Colors.lightGreyLighter,
   },
   topContainer: {
-    paddingVertical: 15,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: Spacing.MD,
   },
-  centeredText: {
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: 30, // FIXME
-    color: '#959595', // FIXME
+  emptyDocumentsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.MD,
+  },
+  emptyDocumentsText: {
+    ...Typography.mainText,
+    ...Typography.centeredText,
+    color: Colors.greyLight,
   },
 })
 
@@ -60,13 +66,13 @@ export class DocumentsContainer extends React.Component<Props, State> {
     showingValid: true,
   }
 
-  private scrollToTop() {
+  private scrollToTop(): void {
     if (this.ScrollViewRef) {
       this.ScrollViewRef.scrollTo({ x: 0, y: 0, animated: true })
     }
   }
 
-  private onActiveIndexChange(index: number) {
+  private onActiveIndexChange(index: number): void {
     this.setState({ activeDocumentIndex: index })
     this.scrollToTop()
   }
@@ -79,18 +85,19 @@ export class DocumentsContainer extends React.Component<Props, State> {
     this.scrollToTop()
   }
 
-  public render() {
+  public render(): JSX.Element {
     const { openDocumentDetails, decoratedCredentials } = this.props
     const documents = getDocumentClaims(decoratedCredentials['Other'])
     const docFilter = this.state.showingValid
       ? filters.filterByValid
       : filters.filterByExpired
     const displayedDocs = docFilter(documents)
-    const isEmpty = displayedDocs.length == 0
-    const otherIsEmpty = displayedDocs.length == documents.length
+    const isEmpty = displayedDocs.length === 0
+    const otherIsEmpty = displayedDocs.length === documents.length
 
     return (
       <Animated.View style={styles.mainContainer}>
+        <BackupWarning />
         {!otherIsEmpty && (
           <DocumentViewToggle
             showingValid={this.state.showingValid}
@@ -108,16 +115,15 @@ export class DocumentsContainer extends React.Component<Props, State> {
           // ])}
           // to scroll to top upon changing card
           ref={ref => (this.ScrollViewRef = ref)}
+          contentContainerStyle={isEmpty && { flex: 1 }}
+          scrollEnabled={!isEmpty}
         >
           {isEmpty ? (
-            <Container>
-              <Block>
-                <CenteredText
-                  msg={I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '.'}
-                  style={styles.centeredText}
-                />
-              </Block>
-            </Container>
+            <View style={styles.emptyDocumentsContainer}>
+              <Text style={styles.emptyDocumentsText}>
+                {I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '...'}
+              </Text>
+            </View>
           ) : this.state.showingValid ? (
             <DocumentsCarousel
               documents={displayedDocs}

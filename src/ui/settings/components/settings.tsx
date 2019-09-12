@@ -1,128 +1,143 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import I18n from 'src/locales/i18n'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import strings from '../../../locales/strings'
+import { Colors, Spacing, Typography } from 'src/styles'
+import SettingsItem from './settingsItem'
+import settingKeys from '../settingKeys'
+import { Container } from 'src/ui/structure'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: JolocomTheme.primaryColorGrey,
+    backgroundColor: Colors.backgroundLightMain,
+  },
+  scrollComponent: {
+    width: '100%',
+  },
+  scrollComponentContainer: {
+    paddingBottom: Spacing.XXL,
   },
   topSection: {
-    paddingTop: 30,
+    paddingTop: Spacing.XL,
   },
   sectionHeader: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-    color: 'grey',
-    marginLeft: 18,
-  },
-  card: {
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: 'rgb(236, 236, 236)',
-    flexDirection: 'row',
+    ...Typography.sectionHeader,
+    marginLeft: Spacing.MD,
+    marginBottom: Spacing.XS,
   },
   languageCard: {
-    marginTop: 10,
+    marginTop: Spacing.SM,
   },
   languageSelect: {},
   languageOptions: {
-    marginTop: 10,
     flexDirection: 'row',
+    marginTop: Spacing.SM,
   },
   languageOption: {
-    paddingHorizontal: 18,
-    paddingTop: 10,
-    paddingBottom: 7,
     justifyContent: 'center',
-    backgroundColor: 'rgb(242, 242, 242)',
+    backgroundColor: Colors.lightGreyLight,
     borderRadius: 4,
-    marginRight: 20,
+    paddingHorizontal: Spacing.MD,
+    paddingVertical: Spacing.XS,
+    marginRight: Spacing.MD,
   },
   languageOptionText: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    color: Colors.blackMain,
   },
   versionNumber: {
-    ...JolocomTheme.textStyles.light.labelDisplayFieldEdit,
-    opacity: 0.4,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
     textAlign: 'center',
-    marginTop: 30,
+    color: Colors.blackMain040,
+    marginTop: Spacing.XL,
   },
 })
 
-interface LanguageCardProps {
-  locales: string[]
-  selected: string
-  setLocale: (key: string) => void
-}
-
-const LanguageCard: React.SFC<LanguageCardProps> = props => (
-  <View style={[styles.card, styles.languageCard]}>
-    <Icon style={{ marginRight: 18 }} size={24} name="translate" color="grey" />
-    <View>
-      <Text style={JolocomTheme.textStyles.light.labelDisplayFieldEdit}>
-        {I18n.t(strings.LANGUAGE)}
-      </Text>
-      <View style={styles.languageOptions}>
-        {props.locales.map(locale => {
-          const isCurrentLanguage = locale === props.selected
-          return (
-            <View
-              key={locale}
-              // TODO: connect to selecting the locale
-              onTouchEnd={() => props.setLocale(locale)}
-              style={[
-                styles.languageOption,
-                isCurrentLanguage && {
-                  backgroundColor: JolocomTheme.primaryColorSand,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.languageOptionText,
-                  isCurrentLanguage && {
-                    color: JolocomTheme.primaryColorPurple,
-                  },
-                ]}
-              >
-                {locale.toUpperCase()}
-              </Text>
-            </View>
-          )
-        })}
-      </View>
-    </View>
-  </View>
-)
-
 interface SettingsScreenProps {
   locales: string[]
-  settings: { [key: string]: any }
+  settings: { [key: string]: {} }
   setLocale: (key: string) => void
+  setupBackup: () => void
   version: string
 }
 
-export const SettingsScreen: React.SFC<SettingsScreenProps> = props => (
-  <View style={styles.container}>
-    <View style={styles.topSection}>
-      <Text style={styles.sectionHeader}>
-        {I18n.t(strings.YOUR_PREFERENCES)}
-      </Text>
-      <LanguageCard
-        setLocale={props.setLocale}
-        locales={props.locales}
-        selected={props.settings.locale}
-      />
-    </View>
-    <Text style={styles.versionNumber}>
-      Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
-    </Text>
-    <View />
-  </View>
-)
+export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
+  const seedPhraseSaved = props.settings[settingKeys.seedPhraseSaved] as boolean
+  return (
+    <Container style={styles.container}>
+      <ScrollView
+        style={styles.scrollComponent}
+        contentContainerStyle={styles.scrollComponentContainer}
+      >
+        <View style={styles.topSection}>
+          <Text style={styles.sectionHeader}>
+            {I18n.t(strings.YOUR_PREFERENCES)}
+          </Text>
+          <SettingsItem
+            title={I18n.translate(strings.LANGUAGE)}
+            iconName={'translate'}
+            payload={
+              <View style={styles.languageOptions}>
+                {props.locales.map(locale => {
+                  const isCurrentLanguage = locale === props.settings.locale
+                  return (
+                    <View
+                      key={locale}
+                      onTouchEnd={() => props.setLocale(locale)}
+                      style={[
+                        styles.languageOption,
+                        isCurrentLanguage && {
+                          backgroundColor: Colors.sandLight,
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.languageOptionText,
+                          isCurrentLanguage && {
+                            color: Colors.purpleMain,
+                          },
+                        ]}
+                      >
+                        {locale.toUpperCase()}
+                      </Text>
+                    </View>
+                  )
+                })}
+              </View>
+            }
+          />
+        </View>
+        <View style={styles.topSection}>
+          <Text style={styles.sectionHeader}>Security</Text>
+          <SettingsItem
+            title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
+            iconName={'flash'}
+            description={
+              seedPhraseSaved
+                ? I18n.t(strings.YOUR_IDENTITY_IS_ALREADY_BACKED_UP)
+                : I18n.t(
+                    strings.SET_UP_A_SECURE_PHRASE_TO_RECOVER_YOUR_ACCOUNT_IN_THE_FUTURE_IF_YOUR_PHONE_IS_STOLEN_OR_IS_DAMAGED,
+                  )
+            }
+            isHighlighted={!seedPhraseSaved}
+            isDisabled={seedPhraseSaved}
+            onPress={props.setupBackup}
+          />
+          <SettingsItem
+            title={I18n.t(strings.DELETE_IDENTITY)}
+            description={'(coming soon)'}
+            iconName={'delete'}
+            isDisabled
+          />
+        </View>
+        <Text style={styles.versionNumber}>
+          Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
+        </Text>
+        <View />
+      </ScrollView>
+    </Container>
+  )
+}

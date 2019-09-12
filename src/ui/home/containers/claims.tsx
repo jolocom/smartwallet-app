@@ -6,8 +6,8 @@ import { accountActions } from 'src/actions'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { RootState } from '../../../reducers'
 import { withLoading } from '../../../actions/modifiers'
-import { setDeepLinkLoading } from '../../../actions/sso'
 import { ThunkDispatch } from '../../../store'
+import { BackupWarning } from '../../recovery/components/backupWarning'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -19,13 +19,13 @@ export class ClaimsContainer extends React.Component<Props> {
   }
 
   public render(): JSX.Element {
-    const { did, loading, claimsState, openClaimDetails } = this.props
+    const { did, claimsState, openClaimDetails } = this.props
     return (
       <View style={{ flex: 1 }}>
+        <BackupWarning />
         <CredentialOverview
           did={did}
           claimsToRender={claimsState.decoratedCredentials}
-          loading={!!loading}
           onEdit={openClaimDetails}
         />
       </View>
@@ -37,15 +37,13 @@ const mapStateToProps = ({
   account: {
     did: { did },
     claims: claimsState,
-    loading: { loading },
   },
-}: RootState) => ({ did, claimsState, loading })
+}: RootState) => ({ did, claimsState })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
-  setClaimsForDid: () =>
-    dispatch(withLoading(setDeepLinkLoading)(accountActions.setClaimsForDid)),
+  setClaimsForDid: () => dispatch(withLoading(accountActions.setClaimsForDid)),
 })
 
 export const Claims = connect(

@@ -61,7 +61,7 @@ Object {
         },
       ],
     },
-    "loading": false,
+    "hasExternalCredentials": false,
     "pendingExternal": Object {
       "offer": Array [],
       "offeror": Object {
@@ -81,9 +81,7 @@ Object {
   "did": Object {
     "did": "mock did",
   },
-  "loading": Object {
-    "loading": true,
-  },
+  "loading": false,
 }
 `;
 
@@ -148,7 +146,7 @@ Object {
         },
       ],
     },
-    "loading": false,
+    "hasExternalCredentials": false,
     "pendingExternal": Object {
       "offer": Array [],
       "offeror": Object {
@@ -165,11 +163,7 @@ Object {
       "subject": "",
     },
   },
-  "did": Object {
-    "did": "",
-  },
-  "loading": Object {
-    "loading": true,
-  },
+  "did": "",
+  "loading": false,
 }
 `;

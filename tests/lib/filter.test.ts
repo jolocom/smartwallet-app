@@ -6,21 +6,21 @@ import {
   getTestDecoratedClaims,
   decoratedTypes,
   numExpiredCreds,
-  numValidCreds
+  numValidCreds,
 } from './testData/filterTestData'
 import * as filterDecoratedClaims from 'src/lib/filterDecoratedClaims'
 import { getUiCredentialTypeByType } from 'src/lib/util'
 
 describe('Filtering Credentials', () => {
   it('should filter expired creds', () => {
-    const now = (new Date()).valueOf()
+    const now = new Date().valueOf()
     const filtered = filters.filterByExpired(testCreds)
     expect(filtered.length).toEqual(numExpiredCreds)
     expect(filtered.every(cred => cred.expires.valueOf() < now)).toBeTruthy()
   })
 
   it('should filter valid creds', () => {
-    const now = (new Date()).valueOf()
+    const now = new Date().valueOf()
     const filtered = filters.filterByValid(testCreds)
     expect(filtered.length).toEqual(numValidCreds)
     expect(filtered.every(cred => cred.expires.valueOf() >= now)).toBeTruthy()
@@ -32,7 +32,7 @@ describe('Filtering Credentials', () => {
         filters
           .filterByIssuer(issuer)(testCreds)
           .every(cred => cred.issuer === issuer),
-      )
+      ).toBeTruthy()
     })
   })
 
@@ -42,7 +42,7 @@ describe('Filtering Credentials', () => {
         filters
           .filterByType(typ)(testCreds)
           .every(cred => cred.type.some(t => t === typ)),
-      )
+      ).toBeTruthy()
     })
   })
 
@@ -59,25 +59,35 @@ describe('Filtering Credentials', () => {
       filters
         .documentFilter(documents)(testCreds)
         .every(cred => cred.type.some(t => documents.some(d => t === d))),
-    )
-  }
+    ).toBeTruthy()
+  })
 })
 
 describe('Filtering Decorated Claims', () => {
   const testDecoratedClaims = getTestDecoratedClaims()
 
   it('should filter expired decorated claims', () => {
-    const now = (new Date()).valueOf()
-    const filtered = filterDecoratedClaims.filters.filterByExpired(testDecoratedClaims)
+    const now = new Date().valueOf()
+    const filtered = filterDecoratedClaims.filters.filterByExpired(
+      testDecoratedClaims,
+    )
     expect(filtered.length).toEqual(numExpiredCreds)
-    expect(filtered.every(claim => claim.expires.valueOf() < now)).toBeTruthy()
+    expect(
+      !!filtered.every(
+        claim => !!claim.expires && claim.expires.valueOf() < now,
+      ),
+    ).toBeTruthy()
   })
 
   it('should filter valid decorated claims', () => {
-    const now = (new Date()).valueOf()
-    const filtered = filterDecoratedClaims.filters.filterByValid(testDecoratedClaims)
+    const now = new Date().valueOf()
+    const filtered = filterDecoratedClaims.filters.filterByValid(
+      testDecoratedClaims,
+    )
     expect(filtered.length).toEqual(numValidCreds)
-    expect(filtered.every(claim => claim.expires.valueOf() > now))
+    expect(
+      filtered.every(claim => !!claim.expires && claim.expires.valueOf() > now),
+    ).toBeTruthy()
   })
 
   it('should filter by issuer', () => {
@@ -85,8 +95,8 @@ describe('Filtering Decorated Claims', () => {
       expect(
         filterDecoratedClaims.filters
           .filterByIssuer(issuer)(testDecoratedClaims)
-          .every(claim => claim.issuer === issuer),
-      )
+          .every(claim => claim.issuer.did === issuer),
+      ).toBeTruthy()
     })
   })
 
@@ -97,7 +107,7 @@ describe('Filtering Decorated Claims', () => {
         filterDecoratedClaims.filters
           .filterByType(credentialType)(testDecoratedClaims)
           .every(claim => claim.credentialType === credentialType),
-      )
+      ).toBeTruthy()
     })
   })
 })

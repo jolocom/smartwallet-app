@@ -4,45 +4,43 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
 <Container
   style={
     Object {
-      "backgroundColor": "black",
-      "padding": 0,
+      "backgroundColor": "rgb(5, 5, 13)",
     }
   }
 >
-  <CenteredText
-    msg="50 %"
+  <Text
     style={
       Array [
         Object {
-          "backgroundColor": "black",
-          "color": "#ffefdf",
+          "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
-          "fontSize": 22,
-          "fontWeight": "100",
-          "paddingHorizontal": 50,
+          "fontSize": 20,
+          "paddingHorizontal": "5%",
           "position": "absolute",
+          "textAlign": "center",
           "top": "20%",
         },
         Object {
-          "fontSize": 44,
+          "fontSize": 42,
         },
       ]
     }
-  />
-  <Block>
+  >
+    50 %
+  </Text>
+  <Container
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "column",
+      }
+    }
+  >
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={false}
     />
-  </Block>
-  <Component
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  />
+  </Container>
 </Container>
 `;
 
@@ -50,40 +48,47 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
 <Container
   style={
     Object {
-      "backgroundColor": "black",
-      "padding": 0,
+      "backgroundColor": "rgb(5, 5, 13)",
     }
   }
 >
-  <CenteredText
-    msg="For security purposes, we need some randomness. Please tap the screen and draw on it randomly"
+  <Text
     style={
       Object {
-        "backgroundColor": "black",
-        "color": "#ffefdf",
+        "color": "rgb(255, 239, 223)",
         "fontFamily": "TT Commons",
-        "fontSize": 22,
-        "fontWeight": "100",
-        "paddingHorizontal": 50,
+        "fontSize": 20,
+        "paddingHorizontal": "5%",
         "position": "absolute",
+        "textAlign": "center",
         "top": "20%",
       }
     }
-  />
-  <Block>
+  >
+    For security purposes, we need some randomness. Please tap the screen and draw on it randomly
+  </Text>
+  <Container
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "column",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "position": "absolute",
+        }
+      }
+    >
+      <HandAnimationComponent />
+    </View>
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={false}
     />
-  </Block>
-  <Component
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  />
+  </Container>
 </Container>
 `;
 
@@ -91,74 +96,42 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
 <Container
   style={
     Object {
-      "backgroundColor": "black",
-      "padding": 0,
+      "backgroundColor": "rgb(5, 5, 13)",
     }
   }
 >
-  <CenteredText
-    msg="100 %"
+  <Text
     style={
       Array [
         Object {
-          "backgroundColor": "black",
-          "color": "#ffefdf",
+          "color": "rgb(255, 239, 223)",
           "fontFamily": "TT Commons",
-          "fontSize": 22,
-          "fontWeight": "100",
-          "paddingHorizontal": 50,
+          "fontSize": 20,
+          "paddingHorizontal": "5%",
           "position": "absolute",
+          "textAlign": "center",
           "top": "20%",
         },
         Object {
-          "fontSize": 44,
+          "fontSize": 42,
         },
       ]
     }
-  />
-  <Block>
+  >
+    100 %
+  </Text>
+  <Container
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "column",
+      }
+    }
+  >
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={true}
     />
-  </Block>
-  <Component
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  >
-    <Button
-      accent={false}
-      disabled={false}
-      icon={null}
-      onLongPress={null}
-      onPress={[Function]}
-      primary={false}
-      raised={true}
-      style={
-        Object {
-          "container": Object {
-            "backgroundColor": "#942f51",
-            "borderRadius": 4,
-            "height": 48,
-            "width": 164,
-          },
-          "text": Object {
-            "color": "white",
-            "fontFamily": "TT Commons",
-            "fontSize": 22,
-            "fontWeight": "100",
-            "paddingVertical": 15,
-          },
-        }
-      }
-      testID={null}
-      text="Continue"
-      upperCase={false}
-    />
-  </Component>
+  </Container>
 </Container>
 `;

@@ -19,6 +19,7 @@ import {
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '../../actions/sso/types'
+import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
 
 interface PersonaAttributes {
   did: string
@@ -38,6 +39,7 @@ interface ModifiedCredentialEntity {
 
 export class Storage {
   private connection!: Connection
+  private connectionPromise!: Promise<Connection> | null
   private config: ConnectionOptions
 
   public store = {
@@ -52,6 +54,10 @@ export class Storage {
     issuerProfile: (issuer: IdentitySummary) =>
       this.createConnectionIfNeeded().then(() =>
         storeIssuerProfile(this.connection)(issuer),
+      ),
+    didDoc: (doc: DidDocument) =>
+      this.createConnectionIfNeeded().then(() =>
+        cacheDIDDoc(this.connection)(doc),
       ),
   }
 
@@ -71,6 +77,10 @@ export class Storage {
       this.createConnectionIfNeeded().then(() =>
         getPublicProfile(this.connection)(did),
       ),
+    didDoc: (did: string) =>
+      this.createConnectionIfNeeded().then(() =>
+        getCachedDIDDoc(this.connection)(did),
+      ),
   }
 
   public delete = {
@@ -84,10 +94,15 @@ export class Storage {
     this.config = config
   }
 
-  private async createConnectionIfNeeded(): Promise<void> {
-    if (!this.connection) {
-      this.connection = await createConnection(this.config)
-    }
+  private async createConnectionIfNeeded(): Promise<Connection> {
+    if (this.connectionPromise) return this.connectionPromise
+    return this.connectionPromise = createConnection(this.config).then(conn => {
+      this.connection = conn
+      return conn
+    }).catch(err => {
+      this.connectionPromise = null
+      throw err
+    })
   }
 
   private async getSettingsObject(): Promise<{ [key: string]: any }> {
@@ -287,6 +302,29 @@ export interface CredentialMetadata {
 
 export interface CredentialMetadataSummary extends CredentialMetadata {
   issuer: IdentitySummary
+}
+
+const cacheDIDDoc = (connection: Connection) => (doc: DidDocument) => {
+  const cacheEntry = plainToClass(CacheEntity, {
+    key: `didCache:${doc.did}`,
+    value: doc.toJSON(),
+  })
+
+  return connection.manager.save(cacheEntry)
+}
+
+const getCachedDIDDoc = (connection: Connection) => async (
+  did: string,
+): Promise<DidDocument | undefined> => {
+  const [entry] = await connection.manager.findByIds(CacheEntity, [
+    `didCache:${did}`,
+  ])
+
+  try {
+    return DidDocument.fromJSON(entry.value)
+  } catch (err) {
+    return undefined
+  }
 }
 
 const storeCredentialMetadata = (connection: Connection) => (

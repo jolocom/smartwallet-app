@@ -1,9 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { IssuerCard } from 'src/ui/documents/components/issuerCard'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
 import { DecoratedClaims } from 'src/reducers/account'
 import { prepareLabel } from 'src/lib/util'
+import { Typography, Colors, Spacing } from 'src/styles'
+import I18n from 'src/locales/i18n'
+import strings from 'src/locales/strings'
 
 interface Props {
   document: DecoratedClaims
@@ -11,56 +13,61 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 50,
+    paddingBottom: Spacing.XXL,
   },
   sectionHeader: {
-    marginTop: 20,
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(0,0,0,0.4)',
-    paddingHorizontal: 16,
-    marginBottom: 10,
-    paddingLeft: 16,
+    ...Typography.sectionHeader,
+    marginTop: Spacing.LG,
+    marginBottom: Spacing.SM,
+    paddingHorizontal: Spacing.MD,
   },
   claimsContainer: {
+    borderColor: Colors.lightGrey,
     borderTopWidth: 1,
-    borderColor: '#ececec',
   },
   claimCard: {
-    backgroundColor: JolocomTheme.primaryColorWhite,
-    paddingVertical: 15,
+    backgroundColor: Colors.white,
+    borderColor: Colors.lightGrey,
+    paddingVertical: Spacing.MD,
     borderBottomWidth: 1,
-    borderColor: '#ececec',
   },
   claimCardTextContainer: {
-    paddingHorizontal: 30,
+    paddingHorizontal: Spacing.XL,
   },
   claimCardTitle: {
-    color: 'rgba(0, 0, 0, 0.4)',
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
+    ...Typography.baseFontStyles,
+    fontSize: Typography.textXS,
+    color: Colors.blackMain040,
+  },
+  claimCardData: {
+    ...Typography.standardText,
+    color: Colors.blackMain,
   },
 })
 
-export const DocumentDetails: React.SFC<Props> = ({ document }) => {
+export const DocumentDetailsComponent: React.FC<Props> = ({ document }) => {
   if (!document) return null
 
   return (
     <View style={styles.container}>
       <Text style={styles.sectionHeader}>Issued by</Text>
-      {IssuerCard(document.issuer)}
-      <Text style={styles.sectionHeader}>Details</Text>
+      <IssuerCard issuer={document.issuer} />
+      <Text style={styles.sectionHeader}>
+        {I18n.t(strings.DOCUMENT_DETAILS_CLAIMS)}
+      </Text>
       <View style={styles.claimsContainer}>
-        {Object.keys(document.claimData).map(key => (
-          <View key={key} style={styles.claimCard}>
-            <View style={styles.claimCardTextContainer}>
-              <Text style={styles.claimCardTitle}>{prepareLabel(key)}</Text>
-              <Text style={JolocomTheme.textStyles.light.textDisplayField}>
-                {document.claimData[key]}
-              </Text>
+        {Object.keys(document.claimData).map(key =>
+          document.claimData[key] ? (
+            <View key={key} style={styles.claimCard}>
+              <View style={styles.claimCardTextContainer}>
+                <Text style={styles.claimCardTitle}>{prepareLabel(key)}</Text>
+                <Text style={styles.claimCardData}>
+                  {document.claimData[key]}
+                </Text>
+              </View>
             </View>
-          </View>
-        ))}
+          ) : null,
+        )}
       </View>
     </View>
   )
