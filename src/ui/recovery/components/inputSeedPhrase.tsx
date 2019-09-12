@@ -144,9 +144,9 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
       ]}
     >
       <Text style={styles.header}>{headerText}</Text>
-      <View style={styles.mnemonicSection}>
+      <View testID="seedPhraseMsg" style={styles.mnemonicSection}>
         {mnemonic.length === 0 ? (
-          <Text style={styles.note}>
+          <Text testID="recoveryMsg" style={styles.note}>
             Start writing your seed-phrase and it will appears here word by word
           </Text>
         ) : (
@@ -175,6 +175,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
             {
               //@ts-ignore textAlign is missing in the typings of TextInput
               <TextInput
+                testID="seedWordFld"
                 textAlign={'center'}
                 ref={inputRef}
                 autoCapitalize={'none'}
@@ -220,10 +221,11 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                 I18n.t(strings.CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER)}
           </Text>
           <View style={styles.wordListWrapper}>
-            <View style={styles.wordListSection}>
+            <View testID="seedWordSuggestions" style={styles.wordListSection}>
               {inputValue.length > 1 &&
                 suggestions.map((word, i) => (
                   <Button
+                    testID={"seedSuggestion" + i}
                     key={i}
                     text={word}
                     onPress={() => selectWord(suggestions[i])}
@@ -251,6 +253,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           <View style={styles.buttonSection}>
             {isMnemonicValid && (
               <Button
+                testID="restoreAccount"
                 disabled={!isMnemonicValid}
                 onPress={isMnemonicValid ? handleButtonPress : undefined}
                 raised
