@@ -47,8 +47,8 @@ export const EntropyComponent: React.SFC<Props> = props => {
 
   return (
     <Container style={styles.mainContainer}>
-      <Text style={textStyle}>{msg}</Text>
-      <View style={{ width: '100%' }}>
+      <Text testID="entropyMsg" style={textStyle}>{msg}</Text>
+      <View testID="scratchArea" style={{ width: '100%' }}>
         <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
       </View>
       <View style={styles.footerButton}>
