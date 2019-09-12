@@ -39,6 +39,7 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "fs-extra": "^8.1.0",
     "jest": "^24.8.0",
     "material-colors": "^1.2.5",
     "metro-minify-terser": "^0.55.0",
