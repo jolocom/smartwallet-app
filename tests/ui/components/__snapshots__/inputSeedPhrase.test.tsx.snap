@@ -37,6 +37,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
         "marginTop": 8,
       }
     }
+    testID="seedPhraseMsg"
   >
     <Text
       style={
@@ -48,6 +49,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           "textAlign": "center",
         }
       }
+      testID="recoveryMsg"
     >
       Start writing your seed-phrase and it will appears here word by word
     </Text>
@@ -100,6 +102,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           },
         ]
       }
+      testID="seedWordFld"
       textAlign="center"
       underlineColorAndroid="transparent"
       value=""
@@ -167,6 +170,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           "width": "100%",
         }
       }
+      testID="seedWordSuggestions"
     />
   </View>
   <View
@@ -238,6 +242,7 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
         "marginTop": 8,
       }
     }
+    testID="seedPhraseMsg"
   >
     <Text
       style={
@@ -249,6 +254,7 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
           "textAlign": "center",
         }
       }
+      testID="recoveryMsg"
     >
       Start writing your seed-phrase and it will appears here word by word
     </Text>
@@ -305,6 +311,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
         "marginTop": 8,
       }
     }
+    testID="seedPhraseMsg"
   >
     <Text
       style={
@@ -316,6 +323,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           "textAlign": "center",
         }
       }
+      testID="recoveryMsg"
     >
       Start writing your seed-phrase and it will appears here word by word
     </Text>
@@ -372,6 +380,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           },
         ]
       }
+      testID="seedWordFld"
       textAlign="center"
       underlineColorAndroid="transparent"
       value="in"
@@ -441,6 +450,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           "width": "100%",
         }
       }
+      testID="seedWordSuggestions"
     >
       <ThemedComponent
         key="0"
@@ -463,6 +473,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
             },
           }
         }
+        testID="seedSuggestion0"
         text="insert"
         upperCase={false}
       />
@@ -487,6 +498,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
             },
           }
         }
+        testID="seedSuggestion1"
         text="input"
         upperCase={false}
       />
