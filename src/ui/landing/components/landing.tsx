@@ -153,7 +153,7 @@ export class LandingComponent extends React.Component<Props> {
               container: styles.recoverButtonContainer,
               text: styles.recoverButtonText,
             }}
-            text={'Recover identity'}
+            text={I18n.t(strings.RECOVER_IDENTITY)}
             upperCase={false}
           />
         </View>
