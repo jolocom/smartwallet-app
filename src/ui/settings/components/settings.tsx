@@ -126,12 +126,12 @@ export const SettingsScreen: React.SFC<SettingsScreenProps> = props => {
             isDisabled={seedPhraseSaved}
             onPress={props.setupBackup}
           />
-          <SettingsItem
-            title={I18n.t(strings.DELETE_IDENTITY)}
-            description={'(coming soon)'}
-            iconName={'delete'}
-            isDisabled
-          />
+          {/*<SettingsItem*/}
+          {/*  title={I18n.t(strings.DELETE_IDENTITY)}*/}
+          {/*  description={'(coming soon)'}*/}
+          {/*  iconName={'delete'}*/}
+          {/*  isDisabled*/}
+          {/*/>*/}
         </View>
         <Text style={styles.versionNumber}>
           Jolocom SmartWallet {I18n.t(strings.VERSION)} {props.version}
