@@ -3,6 +3,7 @@
 exports[`registration reducer should initialize correctly 1`] = `
 Object {
   "loading": Object {
+    "isRegistering": false,
     "loadingMsg": "Loading",
   },
 }

@@ -1,25 +1,16 @@
 import React from 'react'
-import { SeedPhrase } from 'src/ui/registration/components/seedPhrase'
+import { SeedPhrase } from 'src/ui/recovery/components/seedPhrase'
 import { shallow } from 'enzyme'
 
 describe('seedPhrase component', () => {
-  it('matches the snapshot with checkbox unchecked', () => {
-    const props = {
-      seedPhrase: 'mock seedPhrase',
-      checked: false,
-      onCheck: () => null,
-    }
-
-    const rendered = shallow(<SeedPhrase {...props} />)
-    expect(rendered).toMatchSnapshot()
+  const makeProps = () => ({
+    seedPhrase: 'mock seedPhrase',
+    handleButtonTap: jest.fn(),
+    onCheck: jest.fn(),
   })
 
-  it('matches the snapshot with checkbox checked', () => {
-    const props = {
-      seedPhrase: 'mock seedPhrase',
-      checked: true,
-      onCheck: () => null,
-    }
+  it('matches the snapshot with checkbox unchecked', () => {
+    const props = makeProps()
     const rendered = shallow(<SeedPhrase {...props} />)
     expect(rendered).toMatchSnapshot()
   })

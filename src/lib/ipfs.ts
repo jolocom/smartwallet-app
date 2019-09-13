@@ -1,6 +1,6 @@
 import { IIpfsConnector } from 'jolocom-lib/js/ipfs/types'
 import { IDidDocumentAttrs } from 'jolocom-lib/js/identity/didDocument/types'
-const RNFetchBlob = require('react-native-fetch-blob').default
+import RNFetchBlob from 'rn-fetch-blob'
 
 export class IpfsCustomConnector implements IIpfsConnector {
   private nativeLib = RNFetchBlob
@@ -46,11 +46,11 @@ export class IpfsCustomConnector implements IIpfsConnector {
   async removePinnedHash(hash: string): Promise<void> {
     const resolutionGateway = 'https://ipfs.io/ipfs/'
     const endpoint = `${resolutionGateway}/${hash}`
-    const res = this.nativeLib.fetch('GET', endpoint)
+    const res = await this.nativeLib.fetch('GET', endpoint)
 
-    if (!res.ok) {
+    if (res.respInfo.status !== 200) {
       throw new Error(
-        `Removing pinned hash ${hash} failed, status code: ${res.status}`,
+        `Removing pinned hash ${hash} failed, status code: ${res.respInfo.status}`,
       )
     }
   }
@@ -79,13 +79,13 @@ export class IpfsCustomConnector implements IIpfsConnector {
       },
     ])
 
-    return res.json().Cid['/']
+    return (await res).json().Cid['/']
   }
 
   async resolveIpldPath(pathToResolve: string): Promise<object> {
     const endpoint = `${this.ipfsHost}/api/v0/dag/get?arg=${pathToResolve}`
     const res = this.nativeLib.fetch('GET', endpoint)
 
-    return res.json()
+    return (await res).json()
   }
 }

@@ -4,6 +4,7 @@ import {
   CategorizedClaims,
   DecoratedClaims,
 } from 'src/reducers/account'
+import { HAS_EXTERNAL_CREDENTIALS } from '../../actions/account/actionTypes'
 
 const categorizedClaims: CategorizedClaims = {
   Personal: [
@@ -82,6 +83,7 @@ export const initialState: ClaimsState = {
     offer: [],
   },
   decoratedCredentials: categorizedClaims,
+  hasExternalCredentials: false,
 }
 
 export const claims = (
@@ -91,6 +93,8 @@ export const claims = (
   switch (action.type) {
     case 'SET_CLAIMS_FOR_DID':
       return { ...state, decoratedCredentials: addDefaultValues(action.claims) }
+    case HAS_EXTERNAL_CREDENTIALS:
+      return { ...state, hasExternalCredentials: action.value }
     case 'SET_EXTERNAL':
       return { ...state, pendingExternal: action.value }
     case 'RESET_EXTERNAL':
@@ -100,14 +104,17 @@ export const claims = (
     case 'RESET_SELECTED':
       return { ...state, selected: initialState.selected }
     case 'HANDLE_CLAIM_INPUT':
+      // NOTE: this is handled slightly differently so that we prevent the
+      // claimData keys from being re-ordered, as they are used to generate the
+      // fields in ui/home/components/claimDetails
+      const claimData = { ...state.selected.claimData }
+      claimData[action.fieldName] = action.fieldValue
+
       return {
         ...state,
         selected: {
           ...state.selected,
-          claimData: {
-            ...state.selected.claimData,
-            [action.fieldName]: action.fieldValue,
-          },
+          claimData,
         },
       }
     default:

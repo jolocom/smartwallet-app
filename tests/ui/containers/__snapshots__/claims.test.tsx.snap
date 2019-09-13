@@ -1,46 +1,229 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Claims container correctly changes scanning to false when qr code scanner is canceled 1`] = `
-<Component
+<View
   style={
     Object {
       "flex": 1,
     }
   }
 >
+  <Connect(BackupWarningComponent) />
   <CredentialOverview
-    claimsToRender={Object {}}
-    loading={false}
+    claimsToRender={
+      Object {
+        "Contact": Array [
+          Object {
+            "claimData": Object {
+              "email": "",
+            },
+            "credentialType": "Email",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "keyboardType": "email-address",
+            "subject": "",
+          },
+          Object {
+            "claimData": Object {
+              "telephone": "",
+            },
+            "credentialType": "Mobile Phone",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "keyboardType": "phone-pad",
+            "subject": "",
+          },
+          Object {
+            "claimData": Object {
+              "addressLine1": "",
+              "addressLine2": "",
+              "city": "",
+              "country": "",
+              "postalCode": "",
+            },
+            "credentialType": "Postal Address",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "subject": "",
+          },
+        ],
+        "Other": Array [],
+        "Personal": Array [
+          Object {
+            "claimData": Object {
+              "familyName": "",
+              "givenName": "",
+            },
+            "credentialType": "Name",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "subject": "",
+          },
+        ],
+      }
+    }
+    did=""
+    onEdit={[MockFunction]}
   />
-</Component>
+</View>
 `;
 
 exports[`Claims container correctly changes scanning to true when qr code scanner is started 1`] = `
-<Component
+<View
   style={
     Object {
       "flex": 1,
     }
   }
 >
+  <Connect(BackupWarningComponent) />
   <CredentialOverview
-    claimsToRender={Object {}}
-    loading={false}
+    claimsToRender={
+      Object {
+        "Contact": Array [
+          Object {
+            "claimData": Object {
+              "email": "",
+            },
+            "credentialType": "Email",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "keyboardType": "email-address",
+            "subject": "",
+          },
+          Object {
+            "claimData": Object {
+              "telephone": "",
+            },
+            "credentialType": "Mobile Phone",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "keyboardType": "phone-pad",
+            "subject": "",
+          },
+          Object {
+            "claimData": Object {
+              "addressLine1": "",
+              "addressLine2": "",
+              "city": "",
+              "country": "",
+              "postalCode": "",
+            },
+            "credentialType": "Postal Address",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "subject": "",
+          },
+        ],
+        "Other": Array [],
+        "Personal": Array [
+          Object {
+            "claimData": Object {
+              "familyName": "",
+              "givenName": "",
+            },
+            "credentialType": "Name",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "subject": "",
+          },
+        ],
+      }
+    }
+    did=""
+    onEdit={[MockFunction]}
   />
-</Component>
+</View>
 `;
 
 exports[`Claims container mounts correctly and matches the snapshot 1`] = `
-<Component
+<View
   style={
     Object {
       "flex": 1,
     }
   }
 >
+  <Connect(BackupWarningComponent) />
   <CredentialOverview
-    claimsToRender={Object {}}
-    loading={false}
+    claimsToRender={
+      Object {
+        "Contact": Array [
+          Object {
+            "claimData": Object {
+              "email": "",
+            },
+            "credentialType": "Email",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "keyboardType": "email-address",
+            "subject": "",
+          },
+          Object {
+            "claimData": Object {
+              "telephone": "",
+            },
+            "credentialType": "Mobile Phone",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "keyboardType": "phone-pad",
+            "subject": "",
+          },
+          Object {
+            "claimData": Object {
+              "addressLine1": "",
+              "addressLine2": "",
+              "city": "",
+              "country": "",
+              "postalCode": "",
+            },
+            "credentialType": "Postal Address",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "subject": "",
+          },
+        ],
+        "Other": Array [],
+        "Personal": Array [
+          Object {
+            "claimData": Object {
+              "familyName": "",
+              "givenName": "",
+            },
+            "credentialType": "Name",
+            "id": "",
+            "issuer": Object {
+              "did": "",
+            },
+            "subject": "",
+          },
+        ],
+      }
+    }
+    did=""
+    onEdit={[MockFunction]}
   />
-</Component>
+</View>
 `;

@@ -1,62 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Account action creators Should correctly handle an empty encrypted seed table 1`] = `
+exports[`Account action creators should correctly handle an empty encrypted seed table 1`] = `
 Array [
   Object {
-    "actions": Array [
-      Object {
-        "routeName": "Landing",
-        "type": "Navigation/NAVIGATE",
-      },
-    ],
-    "index": 0,
-    "key": undefined,
-    "type": "Navigation/RESET",
+    "routeName": "Landing",
+    "type": "Navigation/NAVIGATE",
   },
 ]
 `;
 
-exports[`Account action creators Should correctly handle more existing user identites 1`] = `
+exports[`Account action creators should correctly handle stored encrypted seed 1`] = `
 Array [
   Object {
     "type": "DID_SET",
     "value": "did:jolo:first",
   },
   Object {
-    "actions": Array [
-      Object {
-        "routeName": "Home",
-        "type": "Navigation/NAVIGATE",
-      },
-    ],
-    "index": 0,
-    "key": undefined,
-    "type": "Navigation/RESET",
+    "routeName": "Home",
+    "type": "Navigation/NAVIGATE",
   },
 ]
 `;
 
-exports[`Account action creators Should correctly handle one existing user identity 1`] = `
-Array [
-  Object {
-    "type": "DID_SET",
-    "value": "did:jolo:mock",
-  },
-  Object {
-    "actions": Array [
-      Object {
-        "routeName": "Home",
-        "type": "Navigation/NAVIGATE",
-      },
-    ],
-    "index": 0,
-    "key": undefined,
-    "type": "Navigation/RESET",
-  },
-]
-`;
-
-exports[`Account action creators Should correctly retrieve claims from device storage db on setClaimForDid 1`] = `
+exports[`Account action creators should correctly retrieve claims from device storage db on setClaimForDid 1`] = `
 Array [
   Object {
     "claims": Object {
@@ -94,8 +60,21 @@ Array [
       },
     ],
     "index": 0,
-    "key": undefined,
+    "key": null,
     "type": "Navigation/RESET",
+  },
+]
+`;
+
+exports[`Account action creators should display exception screen in case of error 1`] = `
+Array [
+  Object {
+    "params": Object {
+      "error": [Error: Unknown Error],
+      "returnTo": "AppInit",
+    },
+    "routeName": "Exception",
+    "type": "Navigation/NAVIGATE",
   },
 ]
 `;

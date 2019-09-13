@@ -43,10 +43,9 @@ export interface SsoState {
   activeCredentialRequest: StateCredentialRequestSummary
   activePaymentRequest: StatePaymentRequestSummary
   activeAuthenticationRequest: StateAuthenticationRequestSummary
-  deepLinkLoading: boolean
 }
 
-const initialState: SsoState = {
+export const initialState: SsoState = {
   activeCredentialRequest: {
     requester: {
       did: '',
@@ -72,7 +71,6 @@ const initialState: SsoState = {
     description: '',
     requestJWT: '',
   },
-  deepLinkLoading: false,
 }
 
 export const ssoReducer = (
@@ -86,8 +84,6 @@ export const ssoReducer = (
       return { ...state, activePaymentRequest: action.value }
     case 'SET_AUTHENTICATION_REQUEST':
       return { ...state, activeAuthenticationRequest: action.value }
-    case 'SET_DEEP_LINK_LOADING':
-      return { ...state, deepLinkLoading: action.value }
     case 'CLEAR_INTERACTION_REQUEST':
       return initialState
     default:

@@ -2,8 +2,8 @@
 
 exports[`ClaimDetails container mounts correctly and matches the snapshot 1`] = `
 <ClaimDetailsComponent
-  handleClaimInput={[Function]}
-  saveClaim={[Function]}
+  handleClaimInput={[MockFunction]}
+  saveClaim={[MockFunction]}
   selectedClaim={
     Object {
       "claimData": Object {

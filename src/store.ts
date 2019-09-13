@@ -1,37 +1,29 @@
-import {
-  createStore,
-  applyMiddleware,
-  AnyAction as OriginalAnyAction,
-} from 'redux'
-import { NavigationAction } from 'react-navigation'
+import { createStore, applyMiddleware, AnyAction, Store } from 'redux'
+
 import thunk, {
   ThunkDispatch as OriginalThunkDispatch,
   ThunkAction as OriginalThunkAction,
 } from 'redux-thunk'
 import { RootState, rootReducer } from 'src/reducers'
-import { BackendMiddleware } from 'src/backendMiddleware'
 import config from 'src/config'
-import { Store } from 'react-redux'
 
-export function initStore(): Store<any> {
-  const {
-    createReactNavigationReduxMiddleware,
-  } = require('react-navigation-redux-helpers')
+import { BackendMiddleware } from './backendMiddleware'
 
-  createReactNavigationReduxMiddleware(
-    'root',
-    (state: RootState) => state.navigation,
-  )
+export function initStore() {
   const backendMiddleware = new BackendMiddleware(config)
 
   return createStore(
     rootReducer,
     {},
     applyMiddleware(thunk.withExtraArgument(backendMiddleware)),
-  )
+  ) as StoreWithThunkDispatch
 }
 
-export type AnyAction = OriginalAnyAction | NavigationAction
+interface StoreWithThunkDispatch extends Store<RootState> {
+  dispatch: ThunkDispatch
+}
+
+export type AnyAction = AnyAction
 export type ThunkDispatch = OriginalThunkDispatch<
   RootState,
   BackendMiddleware,

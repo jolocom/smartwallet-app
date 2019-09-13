@@ -1,3 +1,3 @@
 export {
   AuthenticationConsent,
-} from 'src/ui/authentication/container/AuthenticationConsent'
+} from 'src/ui/authentication/container/authenticationConsent'

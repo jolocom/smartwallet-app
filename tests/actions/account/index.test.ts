@@ -1,109 +1,87 @@
 import { accountActions } from 'src/actions/'
-import configureStore from 'redux-mock-store'
 import data from '../registration/data/mockRegistrationData'
-import thunk from 'redux-thunk'
 import { JolocomLib } from 'jolocom-lib'
+import { RootState } from 'src/reducers'
+import { createMockStore } from 'tests/utils'
+import { BackendError } from 'src/backendMiddleware'
+import { withErrorScreen } from 'src/actions/modifiers';
 
 describe('Account action creators', () => {
-  const initialState = {
+  const initialState: Partial<RootState> = {
+    registration: {
+      loading: {
+        loadingMsg: '',
+        isRegistering: false,
+      },
+    },
     account: {
+      loading: false,
       claims: {
-        loading: false,
         selected: {
           credentialType: 'Email',
           claimData: {
             email: 'test@test.com',
           },
           id: '',
-          issuer: 'did:jolo:test',
+          issuer: {
+            did: 'did:jolo:test',
+          },
           subject: 'did:jolo:test',
         },
-        pendingExternal: [],
-        decoratedCredentials: 'blah',
+        pendingExternal: {
+          offer: [],
+          offeror: {
+            did: '',
+          },
+        },
+        decoratedCredentials: {},
+        hasExternalCredentials: false,
       },
       did: {
-        get: () => 'mock:did:test ',
+        did: '',
       },
     },
   }
-  const mockStore = configureStore([thunk])(initialState)
 
-  beforeEach(() => {
-    mockStore.clearActions()
-  })
+  const mockIdentityWallet = {
+    identity: { did: 'did:jolo:first', didDocument: {} },
+    didDocument: {},
+  }
 
-  it('Should correctly handle one existing user identity', async () => {
-    const backendMiddleware = {
-      storageLib: {
-        get: {
-          persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:mock' }]),
-          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
-        },
-      },
-      keyChainLib: {
-        getPassword: jest.fn().mockResolvedValue('sekrit'),
-      },
-      encryptionLib: {
-        decryptWithPass: () => 'newSeed',
-      },
-      setIdentityWallet: jest.fn(() => Promise.resolve()),
-      identityWallet: { identity: { did: 'did:jolo:mock' } },
-    }
+  const mockMiddleware = {
+    prepareIdentityWallet: jest.fn().mockResolvedValue(mockIdentityWallet),
+  }
 
-    const action = accountActions.checkIdentityExists
+  const mockStore = createMockStore(initialState, mockMiddleware)
 
-    // @ts-ignore
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
-    expect(backendMiddleware.setIdentityWallet).toHaveBeenCalledTimes(1)
+  beforeEach(mockStore.reset)
+
+  it('should correctly handle stored encrypted seed', async () => {
+    await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it('Should correctly handle more existing user identites', async () => {
-    const backendMiddleware = {
-      storageLib: {
-        get: {
-          persona: jest
-            .fn()
-            .mockResolvedValue([
-              { did: 'did:jolo:first' },
-              { did: 'did:jolo:second' },
-            ]),
-          encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
-        },
-      },
-      keyChainLib: {
-        getPassword: jest.fn().mockResolvedValue('sekrit'),
-      },
-      encryptionLib: {
-        decryptWithPass: () => 'newSeed',
-      },
-      identityWallet: { identity: { did: 'did:jolo:first' } },
-      setIdentityWallet: jest.fn(() => Promise.resolve()),
-    }
-
-    const action = accountActions.checkIdentityExists
-    // @ts-ignore
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
+  it('should correctly handle an empty encrypted seed table', async () => {
+    mockMiddleware.prepareIdentityWallet.mockRejectedValue(
+      new BackendError(BackendError.codes.NoEntropy),
+    )
+    await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it('Should correctly handle an empty encrypted seed table', async () => {
-    const backendMiddleware = {
-      storageLib: {
-        get: {
-          persona: jest.fn().mockResolvedValue([]),
-          encryptedSeed: jest.fn().mockResolvedValue(null),
-        },
-      },
-    }
-
-    const action = accountActions.checkIdentityExists
-    // @ts-ignore
-    await action(mockStore.dispatch, mockStore.getState, backendMiddleware)
+  it('should display exception screen in case of error', async () => {
+    mockMiddleware.prepareIdentityWallet.mockRejectedValue(
+      new Error('everything is WRONG')
+    )
+    await mockStore.dispatch(
+      withErrorScreen(
+        accountActions.checkIdentityExists,
+      ),
+    )
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
-  it('Should correctly retrieve claims from device storage db on setClaimForDid', async () => {
+  it('should correctly retrieve claims from device storage db on setClaimForDid', async () => {
     const { identityWallet, testSignedCredentialDefault } = data
 
     const backendMiddleware = {
@@ -121,13 +99,10 @@ describe('Account action creators', () => {
       identityWallet,
     }
 
-    await accountActions.setClaimsForDid(
-      mockStore.dispatch,
-      mockStore.getState,
-      backendMiddleware,
-    )
+    const altMockStore = createMockStore(initialState, backendMiddleware)
 
-    expect(mockStore.getActions()).toMatchSnapshot()
+    await altMockStore.dispatch(accountActions.setClaimsForDid)
+    expect(altMockStore.getActions()).toMatchSnapshot()
   })
 
   it('should correctly save claim', async () => {
@@ -143,22 +118,15 @@ describe('Account action creators', () => {
         },
         get: {
           verifiableCredential: jest.fn().mockResolvedValue([]),
-          publicProfile: jest.fn().mockImplementation(() => {}),
+          publicProfile: jest.fn().mockReturnValue({}),
         },
       },
       identityWallet,
     }
 
-    const altMockStore = configureStore([
-      thunk.withExtraArgument(backendMiddleware),
-    ])(initialState)
+    const altMockStore = createMockStore(initialState, backendMiddleware)
 
-    const action = accountActions.saveClaim
-    await action(
-      altMockStore.dispatch,
-      altMockStore.getState,
-      backendMiddleware,
-    )
+    await altMockStore.dispatch(accountActions.saveClaim)
     expect(altMockStore.getActions()).toMatchSnapshot()
   })
 })

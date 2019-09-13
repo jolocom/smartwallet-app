@@ -1,35 +1,75 @@
 # General
-bower_components/
-node_modules/
-build/
 .tern-project
-.expo/
-package-lock.json
 coverage/
 .flowconfig
 .buckconfig
 .gitattributes
 .watchmanconfig
-.DS_Store
 dist/
-.idea
+db.sqlite3
 
-# React Native Android
-android/app/JoloSmartWallet.keystore
-android/.build
-android/.gradle
+#### Below is the default react native .gitignore ###
+############### DO NOT EDIT BELOW ###################
 
-# React Native IOS
-ios/main.jsbundle
-ios/main.jsbundle.map
-ios/smartwallet/main.jsbundle
-ios/smartwallet/main.jsbundle.map
+#
+# OSX
+#
+.DS_Store
+
+# Xcode
+#
+build/
 *.pbxuser
-xcuserdata/
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
 
-# Haul
-haul-debug.log
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
 
-# Editors
+# Visual Studio Code
+#
 .vscode/
+
+# node.js
+#
+node_modules/
+npm-debug.log
 yarn-error.log
+
+# BUCK
+buck-out/
+\.buckd/
+*.keystore
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle
+/LocalSmartWalletData

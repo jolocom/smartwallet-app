@@ -1,162 +1,66 @@
 import { registrationActions } from 'src/actions'
-import configureStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import data from './data/mockRegistrationData'
-import { JolocomLib } from 'jolocom-lib'
-import { getJestConfig } from 'ts-jest/dist/test-utils'
-import * as util from 'src/lib/util'
-import { withErrorHandling } from '../../../src/actions/modifiers'
-import { showErrorScreen } from '../../../src/actions/generic'
-import { AppError, ErrorCode } from '../../../src/lib/errors'
-import { routeList } from '../../../src/routeList'
-
-const MockDate = require('mockdate')
+import { withErrorScreen } from 'src/actions/modifiers'
+import { AppError, ErrorCode } from 'src/lib/errors'
+import { routeList } from 'src/routeList'
+import { createMockStore, reveal } from 'tests/utils'
+import { RootState } from 'src/reducers'
 
 describe('Registration action creators', () => {
-  describe('submitEntropy', () => {
-    it('should correctly navigate to route and provide the entropy', () => {
-      const action = registrationActions.submitEntropy('mockEntropy')
-      const mockStore = configureStore([thunk])({})
-
-      action(mockStore.dispatch)
-      expect(mockStore.getActions()).toMatchSnapshot()
-    })
-  })
-
-  describe('startRegistration', () => {
-    const mockGetState = () => {}
-
-    it('should save a password and initiate the registration process', async () => {
-      const randomPassword = 'hunter0='
-      util.generateSecureRandomBytes = () =>
-        Buffer.from(randomPassword, 'base64')
-      const mockStore = configureStore([thunk])({})
-      const mockMiddleware = {
-        keyChainLib: {
-          savePassword: jest.fn(),
+  describe('createIdentity', () => {
+    const mockMiddleware = {
+      createIdentity: jest
+        .fn()
+        .mockResolvedValue(data.identityWallet.identity),
+    }
+    const mockState: Partial<RootState> = {
+      registration: {
+        loading: {
+          loadingMsg: '',
+          isRegistering: false,
         },
-      }
+      },
+    }
 
-      await registrationActions.startRegistration(
-        mockStore.dispatch,
-        mockGetState,
-        mockMiddleware,
-      )
+    const mockStore = createMockStore(mockState, mockMiddleware)
+    const middlewareStub = reveal(mockStore.backendMiddleware)
 
-      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledTimes(1)
-      expect(mockMiddleware.keyChainLib.savePassword).toHaveBeenCalledWith(
-        randomPassword,
-      )
+    beforeEach(mockStore.reset)
+
+    it('should not attempt to create an identity if registration is in progress', async () => {
+      const altMockStore = createMockStore({
+        registration: {
+          loading: {
+            isRegistering: true
+          }
+        }
+      })
+      await altMockStore.dispatch(registrationActions.createIdentity(data.entropy))
+      expect(altMockStore.getActions()).toMatchSnapshot()
+    })
+
+    it('should attempt to create an identity', async () => {
+      await mockStore.dispatch(registrationActions.createIdentity(data.entropy))
+
+      expect(middlewareStub.createKeyProvider).toHaveBeenCalledWith(data.entropy)
+      expect(middlewareStub.fuelKeyWithEther).toHaveBeenCalled()
+      expect(middlewareStub.createIdentity).toHaveBeenCalled()
       expect(mockStore.getActions()).toMatchSnapshot()
     })
 
     it('should display exception screen in case of error', async () => {
-      const mockStore = configureStore([thunk])({})
-      const mockMiddleware = {
-        keyChainLib: {
-          savePassword: jest.fn().mockRejectedValue({
-            message: 'password could not be saved',
-            stack: 'mock start registration error stack',
-          }),
-        },
-      }
+      mockMiddleware.createIdentity.mockRejectedValueOnce('MockError')
+      const asyncAction = registrationActions.createIdentity(data.entropy)
 
       await mockStore.dispatch(
-        withErrorHandling(
-          showErrorScreen,
-          (err: AppError) =>
+        withErrorScreen(
+          asyncAction,
+          err =>
             new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-        )(
-          registrationActions.startRegistration(
-            mockStore.dispatch,
-            mockGetState,
-            mockMiddleware,
-          ),
         ),
       )
 
-      expect(mockStore.getActions()[0].routeName).toContain('Exception')
-      expect(mockStore.getActions()[0].params.returnTo).toBe('Landing')
-    })
-  })
-
-  describe('createIdentity', () => {
-    it('should attempt to create an identity', async () => {
-      MockDate.set(new Date(946681200000))
-      const { getPasswordResult, cipher, entropy, identityWallet } = data
-      JolocomLib.util.fuelKeyWithEther = jest.fn()
-      const mockBackend = {
-        identityWallet,
-        keyChainLib: {
-          getPassword: jest.fn().mockResolvedValue(getPasswordResult),
-        },
-        encryptionLib: {
-          encryptWithPass: jest.fn().mockReturnValue(cipher),
-          decryptWithPass: jest.fn().mockReturnValue(entropy),
-        },
-        storageLib: {
-          store: {
-            persona: jest.fn(),
-            derivedKey: jest.fn(),
-            encryptedSeed: jest.fn(),
-          },
-          get: {
-            persona: jest.fn().mockResolvedValue([{ did: 'did:jolo:first' }]),
-            encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
-          },
-        },
-        registry: {
-          create: () => identityWallet,
-        },
-        setIdentityWallet: jest.fn(() => Promise.resolve()),
-      }
-
-      const mockStore = configureStore([thunk.withExtraArgument(mockBackend)])(
-        {},
-      )
-
-      const mockGetState = () => {}
-
-      const asyncAction = registrationActions.createIdentity(entropy)
-      await asyncAction(mockStore.dispatch, mockGetState, mockBackend)
-
       expect(mockStore.getActions()).toMatchSnapshot()
-
-      expect(mockBackend.keyChainLib.getPassword).toHaveBeenCalledTimes(1)
-      expect(
-        mockBackend.encryptionLib.encryptWithPass.mock.calls,
-      ).toMatchSnapshot()
-      expect(mockBackend.storageLib.store.persona.mock.calls).toMatchSnapshot()
-      expect(
-        mockBackend.storageLib.store.derivedKey.mock.calls,
-      ).toMatchSnapshot()
-      expect(JolocomLib.util.fuelKeyWithEther.mock.calls).toMatchSnapshot()
-      MockDate.reset()
-    })
-
-    it('should display exception screen in case of error', async () => {
-      const mockEntropy = 'abcd'
-      const mockBackend = {
-        keyChainLib: {
-          getPassword: jest.fn().mockRejectedValue('MockError'),
-        },
-      }
-
-      const mockStore = configureStore([thunk])({})
-      const mockGetState = () => {}
-
-      const asyncAction = registrationActions.createIdentity(mockEntropy)
-
-      await mockStore.dispatch(
-        withErrorHandling(
-          showErrorScreen,
-          (err: AppError) =>
-            new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
-        )(asyncAction(mockStore.dispatch, mockGetState, mockBackend)),
-      )
-
-      expect(mockStore.getActions()[0].routeName).toContain('Exception')
-      expect(mockStore.getActions()[0].params.returnTo).toBe('Landing')
     })
   })
 })

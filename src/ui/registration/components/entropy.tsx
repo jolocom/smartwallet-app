@@ -1,60 +1,40 @@
 import React from 'react'
-import { Button } from 'react-native-material-ui'
-import { StyleSheet, View, Dimensions } from 'react-native'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Block, Container, CenteredText } from 'src/ui/structure/'
+import { StyleSheet, View, Text } from 'react-native'
+import { Container } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
+import { Typography, Colors } from 'src/styles'
+import { HandAnimationComponent } from './handAnimation'
 
 interface Props {
   addPoint: (x: number, y: number) => void
-  submitEntropy: () => void
   readonly progress: number
 }
 
-const viewWidth: number = Dimensions.get('window').width
-
-// TODO FONT WEIGHT REFERENCE FROM STYLES
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: JolocomTheme.primaryColorBlack,
-    padding: 0,
-  },
-  footerButton: {
-    position: 'absolute',
-    bottom: '5%',
+    backgroundColor: Colors.blackMain,
   },
   text: {
+    ...Typography.subMainText,
+    textAlign: 'center',
+    color: Colors.sandLight,
     position: 'absolute',
     top: '20%',
-    paddingHorizontal: viewWidth / 15,
-    backgroundColor: JolocomTheme.primaryColorBlack,
-    fontSize: JolocomTheme.headerFontSize,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontWeight: '100',
-    color: JolocomTheme.primaryColorSand,
+    paddingHorizontal: '5%',
   },
   bigFont: {
-    fontSize: JolocomTheme.headerFontSize * 2,
+    fontSize: Typography.text4XL,
   },
-  buttonContainer: {
-    width: 164,
-    height: 48,
-    borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple,
-  },
-  buttonText: {
-    paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorWhite,
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
+  contentContainer: {
+    flex: 1,
+    flexDirection: 'column',
   },
 })
 
-export const EntropyComponent: React.SFC<Props> = props => {
-  const { progress, submitEntropy, addPoint } = props
+export const EntropyComponent: React.FC<Props> = props => {
+  const { progress, addPoint } = props
 
   const msg =
     progress === 0
@@ -63,28 +43,19 @@ export const EntropyComponent: React.SFC<Props> = props => {
         I18n.t(strings.PLEASE_TAP_THE_SCREEN_AND_DRAW_ON_IT_RANDOMLY)
       : `${Math.trunc(progress * 100)} %`
 
-  const style = progress === 0 ? styles.text : [styles.text, styles.bigFont]
+  const textStyle = progress === 0 ? styles.text : [styles.text, styles.bigFont]
 
   return (
     <Container style={styles.mainContainer}>
-      <CenteredText style={style} msg={msg} />
-      <Block>
-        <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
-      </Block>
-      <View style={styles.footerButton}>
-        {progress === 1 ? (
-          <Button
-            style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText,
-            }}
-            upperCase={false}
-            raised={true}
-            text={I18n.t(strings.CONTINUE)}
-            onPress={submitEntropy}
-          />
+      <Text style={textStyle}>{msg}</Text>
+      <Container style={styles.contentContainer}>
+        {progress === 0 ? (
+          <View style={{ position: 'absolute' }}>
+            <HandAnimationComponent />
+          </View>
         ) : null}
-      </View>
+        <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
+      </Container>
     </Container>
   )
 }

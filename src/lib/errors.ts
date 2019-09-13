@@ -1,6 +1,7 @@
 import { routeList } from '../routeList'
 import strings from '../locales/strings'
 import ErrorCode from './errorCodes'
+export { ErrorCode }
 
 export class AppError extends Error {
   // private code: ErrorCode
@@ -10,7 +11,7 @@ export class AppError extends Error {
   public constructor(
     code = ErrorCode.Unknown,
     origError?: any,
-    navigateTo: routeList = routeList.Home,
+    navigateTo: routeList = routeList.AppInit,
   ) {
     super(strings[code] || strings[ErrorCode.Unknown])
     // this.code = code
@@ -20,4 +21,3 @@ export class AppError extends Error {
 }
 
 export const errorTitleMessages = [strings.DAMN, strings.OH_NO, strings.UH_OH]
-export { ErrorCode }

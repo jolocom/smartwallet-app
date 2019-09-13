@@ -31,11 +31,10 @@ export const consumeAuthenticationRequest = (
   }
   dispatch(setAuthenticationRequest(authenticationDetails))
   return dispatch(
-    navigationActions.navigatorReset({
+    navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,
-      params: {
-        isDeepLinkInteraction,
-      },
+      params: { isDeepLinkInteraction },
+      key: 'authenticationRequest',
     }),
   )
 }

@@ -12,7 +12,7 @@ Object {
 exports[`Entropy container correctly handles added points with the entropy generator 2`] = `
 Object {
   "encodedEntropy": "",
-  "entropyProgress": 1.6666666666666667,
+  "entropyProgress": 0,
   "isDrawn": false,
   "sufficientEntropy": false,
 }
@@ -55,9 +55,15 @@ Object {
 `;
 
 exports[`Entropy container mounts correctly and matches the snapshot 1`] = `
-<EntropyComponent
-  addPoint={[Function]}
-  progress={0}
-  submitEntropy={[Function]}
-/>
+<Fragment>
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />
+  <EntropyComponent
+    addPoint={[Function]}
+    progress={0}
+  />
+</Fragment>
 `;

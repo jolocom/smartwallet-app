@@ -1,8 +1,7 @@
 import React from 'react'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { Block } from '.'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-material-ui'
+import { Colors, Buttons, Spacing } from 'src/styles'
 
 interface Props {
   confirmText: string
@@ -14,52 +13,36 @@ interface Props {
   verticalPadding?: number
 }
 
-export const ButtonSection: React.SFC<Props> = props => {
+export const ButtonSection: React.FC<Props> = props => {
   const styles = StyleSheet.create({
     buttonBlock: {
-      borderColor: '#ececec',
+      flex: 1,
+      borderColor: Colors.lightGrey,
       borderTopWidth: 1,
+      backgroundColor: Colors.white,
       paddingVertical: props.verticalPadding ? props.verticalPadding : 'auto',
-      justifyContent: 'space-around',
       flexDirection: 'row',
-      backgroundColor: JolocomTheme.primaryColorWhite,
+      justifyContent: 'space-around',
+      alignItems: 'center',
     },
     denyButtonText: {
-      paddingVertical: 10,
-      fontFamily: JolocomTheme.contentFontFamily,
-      fontSize: JolocomTheme.labelFontSize,
-      color: JolocomTheme.primaryColorPurple,
-      fontWeight: '100',
+      ...Buttons.buttonConsentTextBase,
+      color: Colors.purpleMain,
     },
     confirmButtonText: {
-      paddingVertical: 10,
-      fontFamily: JolocomTheme.contentFontFamily,
-      fontSize: JolocomTheme.labelFontSize,
-      color: props.disabled
-        ? JolocomTheme.disabledButtonTextGrey
-        : JolocomTheme.primaryColorSand,
-      fontWeight: '100',
+      ...Buttons.buttonConsentTextBase,
+      color: props.disabled ? Colors.blackMain050 : Colors.sandLight,
     },
     denyButton: {
       width: 'auto',
     },
     confirmButton: {
-      paddingHorizontal: 25,
+      paddingHorizontal: Spacing.LG,
       borderRadius: 4,
-      backgroundColor: props.disabled
-        ? JolocomTheme.disabledButtonBackgroundGrey
-        : JolocomTheme.primaryColorPurple,
+      backgroundColor: props.disabled ? Colors.lightGrey : Colors.purpleMain,
     },
   })
 
-  const { flatten } = StyleSheet
-  const {
-    buttonBlock,
-    confirmButton,
-    denyButton,
-    denyButtonText,
-    confirmButtonText,
-  } = styles
   const {
     disabled,
     denyDisabled,
@@ -70,13 +53,13 @@ export const ButtonSection: React.SFC<Props> = props => {
   } = props
 
   return (
-    <Block style={flatten(buttonBlock)} flex={0.1}>
+    <View style={styles.buttonBlock}>
       <Button
         disabled={denyDisabled}
         onPress={handleDeny}
         style={{
-          container: flatten(denyButton),
-          text: flatten(denyButtonText),
+          container: styles.denyButton,
+          text: styles.denyButtonText,
         }}
         upperCase={false}
         text={denyText}
@@ -85,12 +68,12 @@ export const ButtonSection: React.SFC<Props> = props => {
         disabled={disabled}
         onPress={handleConfirm}
         style={{
-          container: flatten(confirmButton),
-          text: flatten(confirmButtonText),
+          container: styles.confirmButton,
+          text: styles.confirmButtonText,
         }}
         upperCase={false}
         text={confirmText}
       />
-    </Block>
+    </View>
   )
 }

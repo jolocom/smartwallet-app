@@ -1,208 +1,159 @@
-import React, { ReactNode } from 'react'
-import { StyleSheet, Dimensions } from 'react-native'
-import { Button } from 'react-native-material-ui'
-import { Block, Container, CenteredText } from 'src/ui/structure'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
+import React from 'react'
+import { StyleSheet, Dimensions, View, Text, Animated } from 'react-native'
+import { Container } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
-import { Landing00, Landing01, Landing02, Landing03 } from 'src/resources'
 import strings from 'src/locales/strings'
-
-const Carousel = require('react-native-snap-carousel').default
-const Pagination = require('react-native-snap-carousel').Pagination
-
-interface State {
-  activeSlide: number
-}
+import { landingSlides, Slide } from './landingSlides'
+import Carousel, {
+  CarouselProps,
+  getInputRangeFromIndexes,
+} from 'react-native-snap-carousel'
+import { Typography, Colors, Spacing, Buttons } from 'src/styles'
+import { Button } from 'react-native-material-ui'
 
 interface Props {
-  handleButtonTap: () => void
+  handleGetStarted: () => void
+  handleRecover: () => void
 }
 
-interface Slide {
-  svgImage: ReactNode
-  title: string
-  infoText: string
-}
-
-const viewWidth: number = Dimensions.get('window').width
-const headerFontSize =
-  viewWidth < 360
-    ? JolocomTheme.landingHeaderFontSizeSmall
-    : JolocomTheme.landingHeaderFontSize
-const labelFontSize =
-  viewWidth < 360 ? JolocomTheme.labelFontSizeSmall : JolocomTheme.labelFontSize
+const viewWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
-  mainContainerStyle: {
-    paddingTop: 0,
-    backgroundColor: '#05050d',
-    justifyContent: 'flex-end',
-    flexDirection: 'column',
-    flex: 1,
+  mainContainer: {
+    backgroundColor: Colors.blackMain,
+  },
+  carouselSlide: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
   },
   carouselTextContainer: {
-    paddingHorizontal: viewWidth / 18,
-    flex: 0.4,
-    marginTop: 'auto',
-    justifyContent: 'flex-end',
-    backgroundColor: 'transparent',
+    marginTop: viewWidth > 360 ? Spacing['4XL'] : Spacing.XXL,
+    position: 'absolute',
+    paddingHorizontal: '5%',
+  },
+  header: {
+    ...Typography.mainText,
+    textAlign: 'center',
+    color: Colors.sandLight,
+  },
+  message: {
+    ...Typography.subMainText,
+    textAlign: 'center',
+    color: Colors.sandLight080,
+    lineHeight: Typography.subMainText.fontSize + 4,
+    marginTop: Spacing.SM,
   },
   activeDotStyle: {
     width: 8,
     height: 8,
-    backgroundColor: JolocomTheme.dotColorActive,
+    backgroundColor: Colors.dotColorActive,
   },
   inactiveDotStyle: {
-    width: 4,
-    height: 4,
-    opacity: 0.6,
-    backgroundColor: JolocomTheme.dotColorInactive,
+    width: 8,
+    height: 8,
+    backgroundColor: Colors.dotColorInactive,
   },
-  header: {
-    color: JolocomTheme.primaryColorSand,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: headerFontSize,
-    fontWeight: '100',
+  bottomSection: {
+    position: 'absolute',
+    width: '85%',
+    bottom: '5%',
+    alignItems: 'center',
   },
-  subHeader: {
-    color: JolocomTheme.primaryColorSand,
-    opacity: 0.8,
-    fontFamily: JolocomTheme.contentFontFamily,
-    fontSize: labelFontSize,
-    fontWeight: '100',
-    lineHeight: labelFontSize + 4,
-    marginTop: 15,
+  mainButtonContainer: {
+    ...Buttons.buttonStandardContainer,
+    alignSelf: 'stretch',
   },
-  paginationBlock: {
-    flex: 0.15,
-    backgroundColor: '#05050d',
+  mainButtonText: {
+    ...Buttons.buttonStandardText,
   },
-  buttonBlock: {
-    flex: 0.1,
-    backgroundColor: '#05050d',
+  recoverButtonContainer: {
+    ...Buttons.buttonStandardContainer,
+    backgroundColor: 'transparent',
+    marginTop: Spacing.XS,
+    alignSelf: 'stretch',
   },
-  buttonContainer: {
-    height: 48,
-    minWidth: 164,
-    borderRadius: 4,
-    backgroundColor: JolocomTheme.primaryColorPurple,
-  },
-  buttonText: {
-    paddingVertical: 15,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: JolocomTheme.primaryColorWhite,
-    fontSize: JolocomTheme.headerFontSize,
-    fontWeight: '100',
-    textAlign: 'center',
-    minWidth: 158,
+  recoverButtonText: {
+    ...Buttons.buttonStandardText,
+    fontSize: Typography.textSM,
   },
 })
 
-const carouselInfo: Slide[] = [
-  {
-    svgImage: <Landing00 />,
-    title: I18n.t(strings.YOUR_JOLOCOM_WALLET),
-    infoText:
-      I18n.t(
-        strings.TAKE_BACK_CONTROL_OF_YOUR_DIGITAL_SELF_AND_PROTECT_YOUR_PRIVATE_DATA_AGAINST_UNFAIR_USAGE,
-      ) + '.',
-  },
-  {
-    svgImage: <Landing01 height={'100%'} width={'100%'} />,
-    title: I18n.t(strings.ITS_EASY),
-    infoText:
-      I18n.t(strings.FORGET_ABOUT_LONG_FORMS_AND_REGISTRATIONS) +
-      '. ' +
-      I18n.t(
-        strings.INSTANTLY_ACCESS_SERVICES_WITHOUT_USING_YOUR_SOCIAL_MEDIA_PROFILES,
-      ) +
-      '.',
-  },
-  {
-    svgImage: <Landing03 height={'100%'} width={'100%'} />,
-    title: I18n.t(strings.ENHANCED_PRIVACY),
-    infoText:
-      I18n.t(strings.SHARE_ONLY_THE_INFORMATION_A_SERVICE_REALLY_NEEDS) +
-      '. ' +
-      I18n.t(strings.PROTECT_YOUR_DIGITAL_SELF_AGAINST_FRAUD) +
-      '.',
-  },
-  {
-    svgImage: <Landing02 height={'100%'} width={'100%'} />,
-    title: I18n.t(strings.GREATER_CONTROL),
-    infoText:
-      I18n.t(
-        strings.KEEP_ALL_YOUR_DATA_WITH_YOU_IN_ONE_PLACE_AVAILABLE_AT_ANY_TIME,
-      ) +
-      '. ' +
-      I18n.t(strings.TRACK_WHERE_YOU_SIGN_IN_TO_SERVICES) +
-      '.',
-  },
-]
+export class LandingComponent extends React.Component<Props> {
+  // https://github.com/archriss/react-native-snap-carousel/blob/master/doc/CUSTOM_INTERPOLATIONS.md
+  // 0 is the current slide, and we want there to be an animated fade in/out
+  private scrollInterpolator(index: number, carouselProps: CarouselProps<any>) {
+    const range = [1, 0, -1]
+    const inputRange = getInputRangeFromIndexes(range, index, carouselProps)
+    return { inputRange, outputRange: range }
+  }
 
-export class LandingComponent extends React.Component<Props, State> {
-  state = {
-    activeSlide: 0,
+  private animatedStyles(
+    index: number,
+    animatedValue: Animated.AnimatedValue,
+    carouselProps: CarouselProps<any>,
+  ) {
+    return {
+      opacity: animatedValue.interpolate({
+        inputRange: [-1, 0, 1],
+        outputRange: [-1.5, 1, -1.5],
+      }),
+    }
   }
 
   private renderItem = ({ item }: { item: Slide }) => {
-    const { svgImage, title, infoText } = item
+    const { bgImage, title, infoText } = item
     return (
-      <Block>
-        {svgImage}
-        <Block style={styles.carouselTextContainer}>
-          <CenteredText style={styles.header} msg={title} />
-          <CenteredText style={styles.subHeader} msg={infoText} />
-        </Block>
-      </Block>
+      <View style={styles.carouselSlide}>
+        {bgImage}
+        <View style={styles.carouselTextContainer}>
+          <Text style={styles.header}>{title}</Text>
+          <Text style={styles.message}>{infoText}</Text>
+        </View>
+      </View>
     )
   }
 
-  private renderPagination() {
-    const { activeSlide } = this.state
+  public render() {
     return (
-      <Pagination
-        dotsLength={carouselInfo.length}
-        activeDotIndex={activeSlide}
-        dotStyle={styles.activeDotStyle}
-        inactiveDotStyle={styles.inactiveDotStyle}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-      />
-    )
-  }
-
-  render() {
-    return (
-      <Container style={styles.mainContainerStyle}>
-        <Block>
-          <Carousel
-            data={carouselInfo}
-            renderItem={this.renderItem}
-            lockScrollWhileSnapping
-            lockScrollTimeoutDuration={1000}
-            loop
-            sliderWidth={viewWidth}
-            itemWidth={viewWidth}
-            layout={'default'}
-            onSnapToItem={(index: number) =>
-              this.setState({ activeSlide: index })
-            }
-          />
-        </Block>
-        <Block style={styles.paginationBlock}>{this.renderPagination()}</Block>
-        <Block style={styles.buttonBlock}>
+      <Container style={styles.mainContainer}>
+        <Carousel
+          data={landingSlides}
+          renderItem={this.renderItem}
+          lockScrollWhileSnapping
+          lockScrollTimeoutDuration={1000}
+          loop
+          autoplay
+          autoplayDelay={5000}
+          autoplayInterval={5000}
+          sliderWidth={viewWidth}
+          itemWidth={viewWidth}
+          layout={'default'}
+          scrollInterpolator={this.scrollInterpolator}
+          /** @TODO Fix typing? */
+          // @ts-ignore
+          slideInterpolatedStyle={this.animatedStyles}
+        />
+        <View style={styles.bottomSection}>
           <Button
-            raised
-            onPress={this.props.handleButtonTap}
+            onPress={this.props.handleGetStarted}
             style={{
-              container: styles.buttonContainer,
-              text: styles.buttonText,
+              container: styles.mainButtonContainer,
+              text: styles.mainButtonText,
             }}
-            upperCase={false}
             text={I18n.t(strings.GET_STARTED)}
+            upperCase={false}
           />
-        </Block>
+          <Button
+            onPress={this.props.handleRecover}
+            style={{
+              container: styles.recoverButtonContainer,
+              text: styles.recoverButtonText,
+            }}
+            text={I18n.t(strings.RECOVER_IDENTITY)}
+            upperCase={false}
+          />
+        </View>
       </Container>
     )
   }

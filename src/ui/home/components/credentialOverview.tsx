@@ -1,137 +1,62 @@
 import React from 'react'
-import { StyleSheet, Text, ScrollView } from 'react-native'
-import { Container, Block } from 'src/ui/structure'
-import { CredentialCard } from './credentialCard'
-import { JolocomTheme } from 'src/styles/jolocom-theme'
-import { ReactNode } from 'react'
+import { StyleSheet, ScrollView } from 'react-native'
+import { Container } from 'src/ui/structure'
 import { CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
-import { CredentialTypes } from 'src/lib/categories'
-import { MoreIcon } from 'src/resources'
-import { getCredentialIconByType } from 'src/resources/util'
-import { prepareLabel } from 'src/lib/util'
-import I18n from 'src/locales/i18n'
 import { getNonDocumentClaims } from 'src/utils/filterDocuments'
-const loaders = require('react-native-indicator')
-import { SCROLL_PADDING_BOTTOM } from 'src/ui/generic'
+import { Typography, Colors, Spacing } from 'src/styles'
+import { CredentialCategory } from './credentialCategory'
 
 interface Props {
   claimsToRender: CategorizedClaims
-  loading: boolean
   onEdit: (claim: DecoratedClaims) => void
   did: string
 }
 
-interface State {}
-
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.lightGreyLighter,
+  },
   sectionHeader: {
-    marginTop: 30,
-    marginBottom: 10,
-    paddingLeft: 16,
-    fontSize: 17,
-    fontFamily: JolocomTheme.contentFontFamily,
-    color: 'rgba(0, 0, 0, 0.38)',
+    ...Typography.sectionHeader,
+    marginTop: Spacing.XL,
+    marginBottom: Spacing.SM,
+    paddingLeft: Spacing.MD,
   },
   scrollComponent: {
     width: '100%',
-    paddingBottom: SCROLL_PADDING_BOTTOM,
   },
-  scrollComponentLoading: {
-    flexGrow: 1,
-    justifyContent: 'space-around',
+  scrollComponentContainer: {
+    paddingBottom: Spacing['3XL'],
   },
 })
 
-export class CredentialOverview extends React.Component<Props, State> {
-  private renderCredentialCard = (category: string): ReactNode => {
-    const { onEdit, did, claimsToRender } = this.props
+export const CredentialOverview: React.FC<Props> = props => {
+  const { claimsToRender, did, onEdit } = props
 
-    let categorizedCredentials = (claimsToRender[category] || []).sort((a, b) =>
-      a.credentialType > b.credentialType ? 1 : -1,
-    )
+  const claimCategories = Object.keys(claimsToRender)
 
-    if (category === 'Other') {
-      categorizedCredentials = getNonDocumentClaims(categorizedCredentials)
-    }
-
-    return categorizedCredentials.map((claim: DecoratedClaims, index) => {
-      const { claimData, issuer, credentialType } = claim
-
-      const capitalized = Object.keys(claimData).reduce((acc, curr) => {
-        acc[prepareLabel(curr)] = claimData[curr]
-        return acc
-      }, {})
-
-      const selfSigned = issuer.did === did
-      return (
-        <CredentialCard
-          key={credentialType}
-          handleInteraction={() => onEdit(claim)}
-          credentialItem={{ ...claim, claimData: capitalized }}
-          collapsible={collapsible(claim)}
-          rightIcon={selfSigned ? <MoreIcon /> : null}
-          leftIcon={getCredentialIconByType(credentialType)}
-          containerStyle={index === 0 ? { borderTopWidth: 1 } : undefined}
-        />
-      )
-    })
-  }
-
-  private renderCredentialCategory = (category: string) => {
-    if (!getNonDocumentClaims(this.props.claimsToRender[category]).length) {
-      return null
-    }
-
-    return [
-      <Text style={styles.sectionHeader}>{I18n.t(category.toString())}</Text>,
-      this.renderCredentialCard(category),
-    ]
-  }
-
-  public render(): JSX.Element {
-    const { claimsToRender, loading } = this.props
-    const { scrollComponent, scrollComponentLoading } = styles
-
-    const claimCategories = Object.keys(claimsToRender)
-
-    if (loading) {
-      return renderLoadingScreen()
-    }
-
-    return (
-      <Container style={{ padding: 0 }}>
-        <ScrollView
-          style={scrollComponent}
-          contentContainerStyle={
-            loading ? scrollComponentLoading : scrollComponent
-          }
-        >
-          {claimCategories.map(this.renderCredentialCategory)}
-        </ScrollView>
-      </Container>
-    )
-  }
-}
-
-const renderLoadingScreen = (): JSX.Element => (
-  <Block>
-    <loaders.RippleLoader
-      size={500}
-      strokeWidth={7}
-      color={JolocomTheme.primaryColorPurple}
-    />
-  </Block>
-)
-
-const collapsible = (claim: DecoratedClaims): boolean => {
-  const { credentialType, claimData } = claim
-
-  const isDefaultCredentialType = CredentialTypes[credentialType]
-
-  if (isDefaultCredentialType) {
-    return false
-  }
-
-  return Object.keys(claimData).filter(key => !!claimData[key]).length > 1
+  return (
+    <Container style={styles.container}>
+      <ScrollView
+        style={styles.scrollComponent}
+        contentContainerStyle={styles.scrollComponentContainer}
+      >
+        {claimCategories.map(category => {
+          // we render documents on their own screen
+          const nonDocumentClaims = getNonDocumentClaims(
+            claimsToRender[category],
+          )
+          return nonDocumentClaims.length > 0 ? (
+            <CredentialCategory
+              category={category}
+              credentials={nonDocumentClaims}
+              did={did}
+              onEdit={onEdit}
+            />
+          ) : null
+        })}
+      </ScrollView>
+    </Container>
+  )
 }
