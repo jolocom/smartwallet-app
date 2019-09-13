@@ -28,10 +28,11 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   >
     50 %
   </Text>
-  <View
+  <Container
     style={
       Object {
-        "width": "100%",
+        "flex": 1,
+        "flexDirection": "column",
       }
     }
   >
@@ -39,15 +40,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       addPoint={[Function]}
       disabled={false}
     />
-  </View>
-  <View
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  />
+  </Container>
 </Container>
 `;
 
@@ -74,26 +67,28 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   >
     For security purposes, we need some randomness. Please tap the screen and draw on it randomly
   </Text>
-  <View
+  <Container
     style={
       Object {
-        "width": "100%",
+        "flex": 1,
+        "flexDirection": "column",
       }
     }
   >
+    <View
+      style={
+        Object {
+          "position": "absolute",
+        }
+      }
+    >
+      <HandAnimationComponent />
+    </View>
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={false}
     />
-  </View>
-  <View
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  />
+  </Container>
 </Container>
 `;
 
@@ -125,10 +120,11 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   >
     100 %
   </Text>
-  <View
+  <Container
     style={
       Object {
-        "width": "100%",
+        "flex": 1,
+        "flexDirection": "column",
       }
     }
   >
@@ -136,21 +132,6 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       addPoint={[Function]}
       disabled={true}
     />
-  </View>
-  <View
-    style={
-      Object {
-        "bottom": "5%",
-        "position": "absolute",
-      }
-    }
-  >
-    <JolocomButton
-      onPress={[Function]}
-      raised={true}
-      text="Continue"
-      upperCase={false}
-    />
-  </View>
+  </Container>
 </Container>
 `;
