@@ -1,15 +1,14 @@
 import { expect } from 'detox'
 
-// https://github.com/wix/Detox/blob/master/docs/APIRef.Matchers.md#bytypenativeviewtype
-const nativeTypesNames = ['Text', 'Image']
-const buildTypeMap = (typeNameBuilder: (typeName: string) => string): {[k: string]: string} => {
-  let ret = {}
-  nativeTypesNames.forEach(typeName => ret[typeName] = typeNameBuilder(typeName))
-  return ret
+export const getNativeType = (typeName: string) => {
+  // NOTE: we can only access 'device' after detox.init
+
+  // type names are platform dependent based on:
+  // https://github.com/wix/Detox/blob/master/docs/APIRef.Matchers.md#bytypenativeviewtype
+  return device.getPlatform() == 'android' ?
+    `android.widget.${typeName}View` :
+    `RCT${typeName}View`
 }
-export const nativeTypes = device.getPlatform() == 'android' ?
-  buildTypeMap(typeName => `android.widget.${typeName}View`) :
-  buildTypeMap(typeName => `RCT${typeName}View`)
 
 /**
  * @async
@@ -23,7 +22,7 @@ export const nativeTypes = device.getPlatform() == 'android' ?
  * @returns visibleText all text visible inside the element with testID
  */
 export const readVisibleText = async (testID: string, index: number | undefined = undefined): Promise<string> => {
-  let el = element(by.id(testID).and(by.type(nativeTypes.Text)))
+  let el = element(by.id(testID).and(by.type(getNativeType('Text'))))
   if (index !== undefined) {
     //console.error('with index', index)
     el = el.atIndex(index)
@@ -32,7 +31,7 @@ export const readVisibleText = async (testID: string, index: number | undefined 
     await expect(el).toBeVisible()
   } catch (err) {
     // try looking for a text child
-    el = element(by.type(nativeTypes.Text).withAncestor(by.id(testID)))
+    el = element(by.type(getNativeType('Text')).withAncestor(by.id(testID)))
     if (index !== undefined) {
       //console.error('with index with text child', index)
       el = el.atIndex(index)
