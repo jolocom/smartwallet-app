@@ -22,6 +22,7 @@ const registration = {
     'Keep all your data with you in one place, available at any time',
   TRACK_WHERE_YOU_SIGN_IN_TO_SERVICES: 'Track where you sign in to services',
   GET_STARTED: 'Get started',
+  RECOVER_IDENTITY: 'Recover identity',
   FOR_SECURITY_PURPOSES_WE_NEED_SOME_RANDOMNESS:
     'For security purposes, we need some randomness',
   PLEASE_TAP_THE_SCREEN_AND_DRAW_ON_IT_RANDOMLY:
@@ -41,14 +42,15 @@ const settings = {
   BACKUP_YOUR_IDENTITY: 'Backup your Identity',
   YOUR_IDENTITY_IS_ALREADY_BACKED_UP: 'Your identity is already backed up',
   SET_UP_A_SECURE_PHRASE_TO_RECOVER_YOUR_ACCOUNT_IN_THE_FUTURE_IF_YOUR_PHONE_IS_STOLEN_OR_IS_DAMAGED:
-    'Set up a secure phrase to recover your account in the future if your phone is stolen or is damaged.',
+    'Set up a secure phrase to recover your account in the future if your phone is stolen or is damaged',
   DELETE_IDENTITY: 'Delete Identity',
   IF_YOU_HAVE_NOTED_DOWN_YOUR_PHRASE_PUT_THE_SIX_GIVEN_WORDS_ON_THEIR_RIGHT_PLACES:
-    'If you have noted down your phrase, put the six given words on their right places.',
+    'If you have noted down your phrase, put the six given words on their right places',
   SHOW_MY_PHRASE_AGAIN: 'Show my phrase again',
   CONFIRM_AND_CHECK: 'Confirm and check',
-  THE_ORDER_WAS_NOT_CORRECT_TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE:
-    'The order was not correct. Try again with another six words from your secure phrase.',
+  THE_ORDER_WAS_NOT_CORRECT:
+    'The order was not correct',
+  TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE: 'Try again with another six words from your secure phrase',
   VERSION: 'version',
 }
 
@@ -58,7 +60,7 @@ const backup = {
   WITHOUT_THESE_WORDS_YOU_CANNOT_ACCESS_YOUR_WALLET_AGAIN:
     'Without these words, you cannot access your wallet again',
   YES_I_WROTE_IT_DOWN: 'Yes, I wrote it down',
-  ACCOUNT_IS_AT_RISK: 'Account is at risk.',
+  ACCOUNT_IS_AT_RISK: 'Account is at risk',
   MAKE_IT_SECURE: 'Make it secure',
   FULL_PHRASE_VERIFICATION: 'Full phrase verification',
   RECOVERY: 'Recovery',
@@ -70,6 +72,7 @@ const backup = {
   CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER: 'Choose the right word or press enter',
   RESTORE_ACCOUNT: 'Restore account',
   BACK_TO_SIGNUP: 'Back to signup',
+  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEARS_HERE_WORD_BY_WORD: 'Start writing your seed-phrase and it will appears here word by word',
 }
 
 const errorTitle = {
