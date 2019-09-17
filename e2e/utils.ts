@@ -10,6 +10,39 @@ export const getNativeType = (typeName: string) => {
     `RCT${typeName}View`
 }
 
+export const getDetoxConfig = async () => {
+  const detoxConfig = require('../package.json').detox
+  const ADB = require('detox/src/devices/android/ADB')
+  const adb = new ADB()
+  const configs = detoxConfig.configurations
+
+  // TODO figure out iOS configs
+  const newConfigs = detoxConfig.configurations = {
+    'ios.sim.debug': configs['ios.sim.debug']
+  }
+
+  // detox device configurations are generated dynamically here after querying
+  // ADB for android devices and emulator, instead of hardcoding in package.json
+
+  try {
+    const devices = await adb.devices()
+    devices.forEach((device: any) => {
+      const key = 'android' + (device.type == 'emulator' ? '.emu' : '')
+      const releaseTypes = ['debug', 'release']
+      releaseTypes.forEach(releaseType => {
+        const configKey = `${key}.${releaseType}`
+        newConfigs[configKey] = configs[configKey]
+        newConfigs[configKey].name = device.name
+      })
+    })
+  } catch(err) {
+    console.error("Could not find android device/emulator")
+    throw err
+  }
+
+  return detoxConfig
+}
+
 /**
  * @async
  * @desc Returns the visible text from the element with testID
