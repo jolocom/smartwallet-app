@@ -1,9 +1,9 @@
-name: CI
+name: PoEditor - Import terms
 
-on: [push]
-#  push:
-#    branches:
-#    - develop
+on:
+  push:
+    branches:
+    - develop
 
 jobs:
   build:
