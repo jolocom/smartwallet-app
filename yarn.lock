@@ -3366,6 +3366,32 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
   integrity sha512-ZIzRpLJrOj7jjP2miAtgqIfmzbxa4ZOr5jJc601zklsfEx9oTzmmj2nVpIPRpNlRTIh8lc1kyViIY7BWSGNmKw==
 
+detox@jolocom/Detox.git#detox-v9000.0.1-gitpkg:
+  version "9000.0.1"
+  resolved "https://codeload.github.com/jolocom/Detox/tar.gz/36d82b8f0cb0ce902b88234839b4947594f5fcac"
+  dependencies:
+    "@babel/core" "^7.4.5"
+    bunyan "^1.8.12"
+    bunyan-debug-stream "^1.1.0"
+    chalk "^2.4.2"
+    child-process-promise "^2.2.0"
+    fs-extra "^4.0.2"
+    funpermaproxy "^1.0.1"
+    get-port "^2.1.0"
+    ini "^1.3.4"
+    lodash "^4.17.5"
+    minimist "^1.2.0"
+    proper-lockfile "^3.0.2"
+    sanitize-filename "^1.6.1"
+    shell-utils "^1.0.9"
+    tail "^2.0.0"
+    telnet-client "0.15.3"
+    tempfile "^2.0.0"
+    which "^1.3.1"
+    ws "^3.3.1"
+    yargs "^13.0.0"
+    yargs-parser "^13.0.0"
+
 detox@mnzaki/Detox.git#detox-v9000.0.1-gitpkg:
   version "9000.0.1"
   resolved "https://codeload.github.com/mnzaki/Detox/tar.gz/36d82b8f0cb0ce902b88234839b4947594f5fcac"
