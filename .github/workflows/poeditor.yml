@@ -1,0 +1,14 @@
+name: CI
+
+on: [push]
+#  push:
+#    branches:
+#    - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Import terms to PoEditor
+        run: curl https://api.poeditor.com/webhooks/cd01443b8c
