@@ -14,6 +14,8 @@ import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { mergeRight, omit } from 'ramda'
+import { Identity } from 'jolocom-lib/js/identity/identity'
+import { IdentitySummary, IssuerPublicProfileSummary } from './types'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -36,25 +38,40 @@ export const consumePaymentRequest = (
     registry as JolocomRegistry,
   )
 
-  const { did: offerorDid, publicProfile } = await registry.resolve(
+  const parsePublicProfile = (identity: Identity) => {
+    const { did, publicProfile } = identity
+
+    if (publicProfile) {
+      const { id, ...parsedProfile } = publicProfile.claim
+      return {
+        did: did,
+        publicProfile: parsedProfile as IssuerPublicProfileSummary
+      }
+    }
+
+    return {
+      did: did,
+      publicProfile: {
+        name: 'Service Name',
+        url: did,
+        description: "",
+        image: undefined,
+      }
+    }
+  }
+
+  const identity = await registry.resolve(
     keyIdToDid(paymentRequest.issuer),
   )
 
-  const parsedProfile = publicProfile
-    ? omit(['id', 'did'], publicProfile.toJSON().claim)
-    : {}
-
-  const requesterInfo = mergeRight(
-    { did: offerorDid },
-    { publicProfile: parsedProfile },
-  )
+  const requesterSummary = parsePublicProfile(identity)
 
   const paymentDetails: StatePaymentRequestSummary = {
     receiver: {
       did: paymentRequest.issuer,
       address: paymentRequest.interactionToken.transactionOptions.to as string,
     },
-    requester: requesterInfo,
+    requester: requesterSummary,
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
     description: paymentRequest.interactionToken.description,

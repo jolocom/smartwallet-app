@@ -26,7 +26,7 @@ export const consumeAuthenticationRequest = (
   const { identityWallet, registry } = backendMiddleware
   await identityWallet.validateJWT(authenticationRequest)
   const { did: requesterDid, publicProfile } = await registry.resolve(
-    keyIdToDid(authenticationRequest.issuer)
+    keyIdToDid(authenticationRequest.issuer),
   )
 
   const parsedProfile = publicProfile
