@@ -38,6 +38,7 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "husky": "^3.0.5",
     "jest": "^24.8.0",
     "material-colors": "^1.2.5",
     "metro-minify-terser": "^0.55.0",
@@ -76,6 +77,10 @@
     "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
     "typeorm:node": "ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
     "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts"
+  },
+  "husky": {
+    "hooks": {
+    }
   },
   "dependencies": {
     "@react-navigation/core": "^3.4.2",
