@@ -1,24 +1,20 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { Container, JolocomButton } from 'src/ui/structure/'
+import { Container } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Typography, Colors } from 'src/styles'
+import { HandAnimationComponent } from './handAnimation'
 
 interface Props {
   addPoint: (x: number, y: number) => void
-  submitEntropy: () => void
   readonly progress: number
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.blackMain,
-  },
-  footerButton: {
-    position: 'absolute',
-    bottom: '5%',
   },
   text: {
     ...Typography.subMainText,
@@ -31,10 +27,14 @@ const styles = StyleSheet.create({
   bigFont: {
     fontSize: Typography.text4XL,
   },
+  contentContainer: {
+    flex: 1,
+    flexDirection: 'column',
+  },
 })
 
-export const EntropyComponent: React.SFC<Props> = props => {
-  const { progress, submitEntropy, addPoint } = props
+export const EntropyComponent: React.FC<Props> = props => {
+  const { progress, addPoint } = props
 
   const msg =
     progress === 0
@@ -48,19 +48,14 @@ export const EntropyComponent: React.SFC<Props> = props => {
   return (
     <Container style={styles.mainContainer}>
       <Text style={textStyle}>{msg}</Text>
-      <View style={{ width: '100%' }}>
-        <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
-      </View>
-      <View style={styles.footerButton}>
-        {progress === 1 ? (
-          <JolocomButton
-            upperCase={false}
-            raised={true}
-            text={I18n.t(strings.CONTINUE)}
-            onPress={submitEntropy}
-          />
+      <Container style={styles.contentContainer}>
+        {progress === 0 ? (
+          <View style={{ position: 'absolute' }}>
+            <HandAnimationComponent />
+          </View>
         ) : null}
-      </View>
+        <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
+      </Container>
     </Container>
   )
 }

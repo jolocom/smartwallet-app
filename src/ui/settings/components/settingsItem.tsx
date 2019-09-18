@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Typography, Colors } from 'src/styles'
 
@@ -49,55 +49,54 @@ interface Props {
   payload?: JSX.Element
   isHighlighted?: boolean
   isDisabled?: boolean
-  onTouchEnd?: () => void
+  onPress?: () => void
 }
 
-const SettingsItem: React.SFC<Props> = ({
+const SettingsItem: React.FC<Props> = ({
   payload,
   title,
   description,
   iconName,
   isHighlighted,
   isDisabled,
-  onTouchEnd,
-}: Props): JSX.Element => (
-  <View
-    style={[styles.card, isHighlighted && styles.yellowBg]}
-    onTouchEnd={!isDisabled ? onTouchEnd : undefined}
-  >
-    <Icon
-      style={{ marginRight: 18 }}
-      size={24}
-      name={iconName}
-      color={isHighlighted ? 'white' : 'grey'}
-    />
-    <View style={styles.textContainer}>
-      <Text
-        style={[
-          payload
-            ? styles.headerTextWithPayload
-            : styles.headerTextWithDescription,
-          isHighlighted && styles.whiteText,
-          isDisabled && styles.disabledText,
-        ]}
-      >
-        {title}
-      </Text>
-      {payload ? (
-        payload
-      ) : (
+  onPress,
+}) => (
+  <TouchableWithoutFeedback onPress={!isDisabled ? onPress : undefined}>
+    <View style={[styles.card, isHighlighted && styles.yellowBg]}>
+      <Icon
+        style={{ marginRight: 18 }}
+        size={24}
+        name={iconName}
+        color={isHighlighted ? 'white' : 'grey'}
+      />
+      <View style={styles.textContainer}>
         <Text
           style={[
-            styles.description,
+            payload
+              ? styles.headerTextWithPayload
+              : styles.headerTextWithDescription,
             isHighlighted && styles.whiteText,
             isDisabled && styles.disabledText,
           ]}
         >
-          {description}
+          {title}
         </Text>
-      )}
+        {payload ? (
+          payload
+        ) : (
+          <Text
+            style={[
+              styles.description,
+              isHighlighted && styles.whiteText,
+              isDisabled && styles.disabledText,
+            ]}
+          >
+            {description}
+          </Text>
+        )}
+      </View>
     </View>
-  </View>
+  </TouchableWithoutFeedback>
 )
 
 export default SettingsItem

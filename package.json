@@ -1,6 +1,6 @@
 {
   "name": "jolocomwallet",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "private": true,
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -23,6 +23,7 @@
     "@types/react-redux": "^5.0.15",
     "@types/react-test-renderer": "^16.8.1",
     "@types/redux-mock-store": "^1.0.1",
+    "@types/sjcl": "^1.0.28",
     "@typescript-eslint/eslint-plugin": "^1.5.0",
     "@typescript-eslint/parser": "^1.5.0",
     "babel-jest": "^24.8.0",
@@ -68,7 +69,7 @@
     "clean:react": "rm -rf $TMP/react* $TMP/haste-map-metro* $TMP/metro-cache*",
     "clean:all": "yarn run clean:ios & yarn run clean:android && yarn run clean:react && yarn run clean:node",
     "build:ios": "react-native bundle --entry-file='index.ts' --bundle-output='./ios/JolocomWallet/main.jsbundle' --minify=false --dev=false --platform='ios' --assets-dest='./ios'",
-    "build:android": "react-native bundle --entry-file='index.ts' --minify=true --dev=false --platform='android'",
+    "build:android": "react-native bundle --entry-file='index.ts' --bundle-output='./android/app/src/main/assets/index.android.bundle' --minify=true --dev=false --platform='android' --assets-dest='./android/app/src/main/res'",
     "format": "eslint --fix --ext .ts --ext .tsx .",
     "icon": "svgr --native --out-dir src/resources/svg/",
     "devtools": "react-devtools &",
@@ -82,7 +83,6 @@
     "bip39": "^3.0.2",
     "browser-ipfs": "^0.0.6",
     "crypto-browserify": "^3.12.0",
-    "crypto-js": "^3.1.9-1",
     "ethereumjs-wallet": "^0.6.0",
     "events": "^3.0.0",
     "i18n-js": "^3.1.0",

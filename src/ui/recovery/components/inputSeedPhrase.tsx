@@ -147,7 +147,9 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
       <View style={styles.mnemonicSection}>
         {mnemonic.length === 0 ? (
           <Text style={styles.note}>
-            Start writing your seed-phrase and it will appears here word by word
+            {I18n.t(
+              strings.START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEARS_HERE_WORD_BY_WORD,
+            )}
           </Text>
         ) : (
           mnemonic.map((word: string, i: number) => (

@@ -1,4 +1,4 @@
-const sjcl = require('sjcl')
+import * as sjcl from 'sjcl'
 
 export interface EntropyGeneratorInterface {
   addFromDelta: (d: number) => void
@@ -6,7 +6,7 @@ export interface EntropyGeneratorInterface {
   generateRandomString: (wordCount: number) => string
 }
 
-export class EntropyGenerator implements EntropyGenerator {
+export class EntropyGenerator implements EntropyGeneratorInterface {
   private generator = new sjcl.prng(10)
 
   addFromDelta(d: number): void {
@@ -17,8 +17,13 @@ export class EntropyGenerator implements EntropyGenerator {
     return this.generator.getProgress()
   }
 
+  /**
+   * Once the generator is ready, it can be used to generate a random buffer
+   * @param wordCount - Amount of random words to generate (1 word - 4 bytes)
+   * @returns Hex string encoding wordCount * 4 bytes random bytes
+   */
+
   generateRandomString(wordCount: number): string {
-    // returns an array of length wordCount filled with random 4 byte words.
     const intArray = new Int32Array(this.generator.randomWords(wordCount))
     const buf = Buffer.from(intArray.buffer)
     return buf.toString('hex')

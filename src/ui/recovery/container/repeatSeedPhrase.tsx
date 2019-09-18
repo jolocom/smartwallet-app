@@ -62,9 +62,9 @@ export class RepeatSeedPhraseContainer extends React.Component<Props, State> {
       this.setState({
         sorting: {},
         randomWords: Object.keys(sorting).map(key => sorting[key]),
-        note: I18n.t(
-          strings.THE_ORDER_WAS_NOT_CORRECT_TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE,
-        ),
+        note: `${I18n.t(strings.THE_ORDER_WAS_NOT_CORRECT)}. ${
+          strings.TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE
+        }.`,
       })
     }
   }
