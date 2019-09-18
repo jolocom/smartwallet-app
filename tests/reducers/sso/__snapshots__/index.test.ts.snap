@@ -6,7 +6,9 @@ Object {
     "callbackURL": "",
     "description": "",
     "requestJWT": "",
-    "requester": "",
+    "requester": Object {
+      "did": "",
+    },
   },
   "activeCredentialRequest": Object {
     "availableCredentials": Array [],
@@ -38,7 +40,9 @@ Object {
     "callbackURL": "",
     "description": "",
     "requestJWT": "",
-    "requester": "",
+    "requester": Object {
+      "did": "",
+    },
   },
   "activeCredentialRequest": Object {
     "availableCredentials": Array [
@@ -78,7 +82,9 @@ Object {
     "callbackURL": "",
     "description": "",
     "requestJWT": "",
-    "requester": "",
+    "requester": Object {
+      "did": "",
+    },
   },
   "activeCredentialRequest": Object {
     "availableCredentials": Array [],

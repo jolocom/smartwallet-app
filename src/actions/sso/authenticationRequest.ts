@@ -8,7 +8,9 @@ import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 import { ThunkAction } from '../../store'
 import { AppError } from '../../lib/errors'
+import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import ErrorCode from '../../lib/errorCodes'
+import { omit, mergeRight } from 'ramda'
 
 export const setAuthenticationRequest = (
   request: StateAuthenticationRequestSummary,
@@ -21,10 +23,23 @@ export const consumeAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
   isDeepLinkInteraction: boolean = false,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { identityWallet } = backendMiddleware
+  const { identityWallet, registry } = backendMiddleware
   await identityWallet.validateJWT(authenticationRequest)
+  const { did: requesterDid, publicProfile } = await registry.resolve(
+    keyIdToDid(authenticationRequest.issuer)
+  )
+
+  const parsedProfile = publicProfile
+    ? omit(['id'], publicProfile.toJSON().claim)
+    : {}
+
+  const requesterSummary = mergeRight(
+    { did: requesterDid },
+    { publicProfile: parsedProfile },
+  )
+
   const authenticationDetails: StateAuthenticationRequestSummary = {
-    requester: authenticationRequest.issuer,
+    requester: requesterSummary,
     callbackURL: authenticationRequest.interactionToken.callbackURL,
     description: authenticationRequest.interactionToken.description,
     requestJWT: authenticationRequest.encode(),

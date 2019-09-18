@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Image, View, Text } from 'react-native'
+import { StyleSheet, Image, View, Text, ViewStyle } from 'react-native'
 import { IdentitySummary } from '../../../actions/sso/types'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { CardWrapper } from 'src/ui/structure'
@@ -7,6 +7,7 @@ import isEmpty from 'ramda/es/isEmpty'
 
 interface Props {
   issuer: IdentitySummary
+  style?: ViewStyle
 }
 
 const styles = StyleSheet.create({
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
 export const IssuerCard: React.FC<Props> = props => {
   const {
     issuer,
+    style: propsStyle,
     issuer: { publicProfile },
   } = props
   // set up defaults
@@ -52,7 +54,7 @@ export const IssuerCard: React.FC<Props> = props => {
   }
 
   return (
-    <CardWrapper style={styles.container}>
+    <CardWrapper style={[styles.container, propsStyle]}>
       {image && <Image source={{ uri: image }} style={styles.icon} />}
       <View style={styles.issuerTextContainer}>
         <Text style={styles.nameText} numberOfLines={1}>
