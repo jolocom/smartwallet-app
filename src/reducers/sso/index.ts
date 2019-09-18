@@ -26,6 +26,7 @@ export interface StatePaymentRequestSummary {
     did: string
     address: string
   }
+  requester: IdentitySummary
   callbackURL: string
   amount: number
   description: string
@@ -58,6 +59,9 @@ export const initialState: SsoState = {
     receiver: {
       did: '',
       address: '',
+    },
+    requester: {
+      did: '',
     },
     callbackURL: '',
     amount: 0,

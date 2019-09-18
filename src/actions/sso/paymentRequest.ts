@@ -12,6 +12,8 @@ import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
+import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
+import { mergeRight, omit } from 'ramda'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -34,11 +36,25 @@ export const consumePaymentRequest = (
     registry as JolocomRegistry,
   )
 
+  const { did: offerorDid, publicProfile } = await registry.resolve(
+    keyIdToDid(paymentRequest.issuer),
+  )
+
+  const parsedProfile = publicProfile
+    ? omit(['id', 'did'], publicProfile.toJSON().claim)
+    : {}
+
+  const requesterInfo = mergeRight(
+    { did: offerorDid },
+    { publicProfile: parsedProfile },
+  )
+
   const paymentDetails: StatePaymentRequestSummary = {
     receiver: {
       did: paymentRequest.issuer,
       address: paymentRequest.interactionToken.transactionOptions.to as string,
     },
+    requester: requesterInfo,
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
     description: paymentRequest.interactionToken.description,
