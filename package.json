@@ -31,6 +31,8 @@
     "babel-plugin-transform-typescript-metadata": "^0.2.2",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "class-transformer": "^0.1.9",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "3.0.2",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
@@ -81,7 +83,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "precise-commits"
+      "pre-commit": "precise-commits",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
   "dependencies": {
@@ -134,5 +137,10 @@
     "assets": [
       "./src/assets/fonts"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
