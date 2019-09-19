@@ -49,7 +49,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
         }
       }
     >
-      Start writing your seed-phrase and it will appears here word by word
+      Start writing your seed-phrase and it will appear here word by word
     </Text>
   </View>
   <View
@@ -94,6 +94,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           Object {
             "flex": 1,
             "fontSize": 22,
+            "paddingVertical": 7,
           },
           Object {
             "color": "white",
@@ -250,7 +251,7 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
         }
       }
     >
-      Start writing your seed-phrase and it will appears here word by word
+      Start writing your seed-phrase and it will appear here word by word
     </Text>
   </View>
   <RippleLoader
@@ -317,7 +318,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
         }
       }
     >
-      Start writing your seed-phrase and it will appears here word by word
+      Start writing your seed-phrase and it will appear here word by word
     </Text>
   </View>
   <View
@@ -366,6 +367,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           Object {
             "flex": 1,
             "fontSize": 22,
+            "paddingVertical": 7,
           },
           Object {
             "color": "white",
@@ -459,7 +461,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
               "fontFamily": "TT Commons",
               "fontSize": 20,
               "fontWeight": "normal",
-              "paddingVertical": 16,
+              "paddingVertical": 12,
             },
           }
         }
@@ -483,7 +485,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
               "fontFamily": "TT Commons",
               "fontSize": 20,
               "fontWeight": "normal",
-              "paddingVertical": 16,
+              "paddingVertical": 12,
             },
           }
         }
