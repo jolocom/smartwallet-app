@@ -10,7 +10,7 @@ import { ThunkAction } from '../../store'
 import { AppError } from '../../lib/errors'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import ErrorCode from '../../lib/errorCodes'
-import { omit, mergeRight } from 'ramda'
+import { parsePublicProfile } from './utils'
 
 export const setAuthenticationRequest = (
   request: StateAuthenticationRequestSummary,
@@ -25,18 +25,11 @@ export const consumeAuthenticationRequest = (
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet, registry } = backendMiddleware
   await identityWallet.validateJWT(authenticationRequest)
-  const { did: requesterDid, publicProfile } = await registry.resolve(
+  const requester = await registry.resolve(
     keyIdToDid(authenticationRequest.issuer),
   )
 
-  const parsedProfile = publicProfile
-    ? omit(['id'], publicProfile.toJSON().claim)
-    : {}
-
-  const requesterSummary = mergeRight(
-    { did: requesterDid },
-    { publicProfile: parsedProfile },
-  )
+  const requesterSummary = parsePublicProfile(requester)
 
   const authenticationDetails: StateAuthenticationRequestSummary = {
     requester: requesterSummary,

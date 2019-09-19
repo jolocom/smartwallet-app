@@ -58,10 +58,7 @@ export class AuthenticationConsentComponent extends React.Component<
   }
 
   public render() {
-    const {
-      requester,
-      description,
-    } = this.props.activeAuthenticationRequest
+    const { requester, description } = this.props.activeAuthenticationRequest
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>

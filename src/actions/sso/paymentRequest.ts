@@ -13,9 +13,7 @@ import { BackendMiddleware } from '../../backendMiddleware'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { mergeRight, omit } from 'ramda'
-import { Identity } from 'jolocom-lib/js/identity/identity'
-import { IdentitySummary, IssuerPublicProfileSummary } from './types'
+import { parsePublicProfile } from './utils'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -38,33 +36,9 @@ export const consumePaymentRequest = (
     registry as JolocomRegistry,
   )
 
-  const parsePublicProfile = (identity: Identity) => {
-    const { did, publicProfile } = identity
+  const requester = await registry.resolve(keyIdToDid(paymentRequest.issuer))
 
-    if (publicProfile) {
-      const { id, ...parsedProfile } = publicProfile.claim
-      return {
-        did: did,
-        publicProfile: parsedProfile as IssuerPublicProfileSummary
-      }
-    }
-
-    return {
-      did: did,
-      publicProfile: {
-        name: 'Service Name',
-        url: did,
-        description: "",
-        image: undefined,
-      }
-    }
-  }
-
-  const identity = await registry.resolve(
-    keyIdToDid(paymentRequest.issuer),
-  )
-
-  const requesterSummary = parsePublicProfile(identity)
+  const requesterSummary = parsePublicProfile(requester)
 
   const paymentDetails: StatePaymentRequestSummary = {
     receiver: {

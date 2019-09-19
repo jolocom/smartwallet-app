@@ -1,12 +1,8 @@
 import React from 'react'
 import { StyleSheet, Image, View, Text, ViewStyle } from 'react-native'
-import {
-  IdentitySummary,
-  IssuerPublicProfileSummary,
-} from '../../../actions/sso/types'
+import { IdentitySummary } from '../../../actions/sso/types'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { CardWrapper } from 'src/ui/structure'
-import isEmpty from 'ramda/es/isEmpty'
 
 interface Props {
   issuer: IdentitySummary
@@ -37,23 +33,18 @@ const styles = StyleSheet.create({
 })
 
 export const IssuerCard: React.FC<Props> = props => {
-  const { style: propsStyle, issuer } = props
+  const {
+    style: propsStyle,
+    issuer: { publicProfile: issuerPublicProfile, did: issuerDid },
+  } = props
 
-  const publicProfile = (issuer.publicProfile || {}) as Partial<
-    NonNullable<IssuerPublicProfileSummary>
-  >
-
-  const { name, image, url } = publicProfile
-
-  /*
-  let name, image, url
-  if (publicProfile) {
-    name = publicProfile.name
-    image = publicProfile.image
-    url = publicProfile.url
+  const publicProfile = issuerPublicProfile || {
+    name: 'Service Name',
+    url: issuerDid,
+    description: '',
   }
 
-   */
+  const { name, image, url } = publicProfile
 
   return (
     <CardWrapper style={[styles.container, propsStyle]}>
