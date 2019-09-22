@@ -96,13 +96,15 @@ export class Storage {
 
   private async createConnectionIfNeeded(): Promise<Connection> {
     if (this.connectionPromise) return this.connectionPromise
-    return this.connectionPromise = createConnection(this.config).then(conn => {
-      this.connection = conn
-      return conn
-    }).catch(err => {
-      this.connectionPromise = null
-      throw err
-    })
+    return (this.connectionPromise = createConnection(this.config)
+      .then(conn => {
+        this.connection = conn
+        return conn
+      })
+      .catch(err => {
+        this.connectionPromise = null
+        throw err
+      }))
   }
 
   private async getSettingsObject(): Promise<{ [key: string]: any }> {
@@ -370,7 +372,9 @@ const storeIssuerProfile = (connection: Connection) => (
   return connection.manager.save(cacheEntry)
 }
 
-const getPublicProfile = (connection: Connection) => async (did: string) => {
+const getPublicProfile = (connection: Connection) => async (
+  did: string,
+): Promise<IdentitySummary> => {
   const [issuerProfile] = await connection.manager.findByIds(CacheEntity, [did])
   return (issuerProfile && issuerProfile.value) || { did }
 }

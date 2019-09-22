@@ -12,6 +12,8 @@ import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
+import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
+import { generateIdentitySummary } from './utils'
 
 export const setPaymentRequest = (request: StatePaymentRequestSummary) => ({
   type: 'SET_PAYMENT_REQUEST',
@@ -34,11 +36,16 @@ export const consumePaymentRequest = (
     registry as JolocomRegistry,
   )
 
+  const requester = await registry.resolve(keyIdToDid(paymentRequest.issuer))
+
+  const requesterSummary = generateIdentitySummary(requester)
+
   const paymentDetails: StatePaymentRequestSummary = {
     receiver: {
       did: paymentRequest.issuer,
       address: paymentRequest.interactionToken.transactionOptions.to as string,
     },
+    requester: requesterSummary,
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
     description: paymentRequest.interactionToken.description,

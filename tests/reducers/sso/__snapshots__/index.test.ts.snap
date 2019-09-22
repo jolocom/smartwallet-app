@@ -6,7 +6,9 @@ Object {
     "callbackURL": "",
     "description": "",
     "requestJWT": "",
-    "requester": "",
+    "requester": Object {
+      "did": "",
+    },
   },
   "activeCredentialRequest": Object {
     "availableCredentials": Array [],
@@ -25,6 +27,9 @@ Object {
       "address": "",
       "did": "",
     },
+    "requester": Object {
+      "did": "",
+    },
   },
 }
 `;
@@ -35,7 +40,9 @@ Object {
     "callbackURL": "",
     "description": "",
     "requestJWT": "",
-    "requester": "",
+    "requester": Object {
+      "did": "",
+    },
   },
   "activeCredentialRequest": Object {
     "availableCredentials": Array [
@@ -62,6 +69,9 @@ Object {
       "address": "",
       "did": "",
     },
+    "requester": Object {
+      "did": "",
+    },
   },
 }
 `;
@@ -72,7 +82,9 @@ Object {
     "callbackURL": "",
     "description": "",
     "requestJWT": "",
-    "requester": "",
+    "requester": Object {
+      "did": "",
+    },
   },
   "activeCredentialRequest": Object {
     "availableCredentials": Array [],
@@ -89,6 +101,9 @@ Object {
     "paymentRequest": "",
     "receiver": Object {
       "address": "",
+      "did": "",
+    },
+    "requester": Object {
       "did": "",
     },
   },
