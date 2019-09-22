@@ -53,7 +53,7 @@ describe('lib/storage', () => {
     })
     describe('Helper functions', () => {
       it('Should correctly group credentials by credential id', () => {
-        const credentialEnittyTemplate = {
+        const credentialEntityTemplate = {
           propertyName: 'givenName',
           propertyValue: 'Mark',
           id: 0,
@@ -63,14 +63,14 @@ describe('lib/storage', () => {
         }
 
         const mockCredential: CredentialEntity[] = [
-          credentialEnittyTemplate,
+          credentialEntityTemplate,
           {
-            ...credentialEnittyTemplate,
+            ...credentialEntityTemplate,
             propertyName: 'familyName',
             propertyValue: 'Musterman',
           },
           {
-            ...credentialEnittyTemplate,
+            ...credentialEntityTemplate,
             propertyName: 'email',
             propertyValue: 'test@example.com',
             verifiableCredential: {

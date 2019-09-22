@@ -15,14 +15,14 @@ export const groupAttributesByCredentialId = (
   /** @dev We get a number of credential entities. Each contains one claim. We first
    * group all entities part of the same credential together (i.e. given name, family name)
    */
-  const groupeByCredential = Object.values(
+  const groupedByCredential = Object.values(
     groupBy(
       (credential: CredentialEntity) => credential.verifiableCredential.id,
       credentials,
     ),
   )
 
-  return groupeByCredential.map(credentials => {
+  return groupedByCredential.map(credentials => {
     return {
       ...credentials[0],
       propertyValue: credentials.map(cred => cred.propertyValue),
