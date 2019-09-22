@@ -20,6 +20,7 @@ import {
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '../../actions/sso/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
+import { groupAttributesByCredentialId } from './utils'
 
 interface PersonaAttributes {
   did: string
@@ -29,12 +30,6 @@ interface PersonaAttributes {
 interface EncryptedSeedAttributes {
   encryptedEntropy: string
   timestamp: number
-}
-
-interface ModifiedCredentialEntity {
-  propertyName: string
-  propertyValue: string[]
-  verifiableCredential: VerifiableCredentialEntity
 }
 
 export class Storage {
@@ -163,7 +158,7 @@ export class Storage {
       .where('verifiableCredential.type = :type', { type })
       .getMany()
 
-    const results = this.groupAttributesByCredentialId(localAttributes).map(
+    const results = groupAttributesByCredentialId(localAttributes).map(
       entry => ({
         verification: entry.verifiableCredential.id,
         values: entry.propertyValue,
@@ -172,44 +167,6 @@ export class Storage {
     )
 
     return { type, results }
-  }
-
-  // TODO rework
-  private groupAttributesByCredentialId(
-    attributes: CredentialEntity[],
-  ): ModifiedCredentialEntity[] {
-    // Convert values to arrays for easier concatination later
-    const modifiedAttributes = attributes.map(attr => ({
-      ...attr,
-      propertyValue: [attr.propertyValue],
-    }))
-
-    // Helper function
-    const findByCredId = (
-      arrToSearch: ModifiedCredentialEntity[],
-      value: ModifiedCredentialEntity,
-    ) =>
-      arrToSearch.findIndex(
-        entry =>
-          entry.verifiableCredential.id === value.verifiableCredential.id,
-      )
-
-    return modifiedAttributes.reduce(
-      (acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity) => {
-        const matchingIndex = findByCredId(acc, curr)
-
-        if (matchingIndex >= 0) {
-          acc[matchingIndex].propertyValue = [
-            ...acc[matchingIndex].propertyValue,
-            ...curr.propertyValue,
-          ]
-          return acc
-        } else {
-          return [...acc, curr]
-        }
-      },
-      [],
-    )
   }
 
   private async getVCredentialsForAttribute(
