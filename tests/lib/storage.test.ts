@@ -53,45 +53,44 @@ describe('lib/storage', () => {
     })
     describe('Helper functions', () => {
       it('Should correctly group credentials by credential id', () => {
+        const credentialEnittyTemplate = {
+          propertyName: 'givenName',
+          propertyValue: 'Mark',
+          id: 0,
+          verifiableCredential: {
+            id: '00',
+          } as VerifiableCredentialEntity,
+        }
+
         const mockCredential: CredentialEntity[] = [
+          credentialEnittyTemplate,
           {
+            ...credentialEnittyTemplate,
+            propertyName: 'familyName',
+            propertyValue: 'Musterman',
+          },
+          {
+            ...credentialEnittyTemplate,
             propertyName: 'email',
             propertyValue: 'test@example.com',
-            id: 5,
             verifiableCredential: {
               id: '01',
-            } as VerifiableCredentialEntity,
-          },
-          {
-            id: 6,
-            propertyName: 'givenName',
-            propertyValue: 'Mark',
-            verifiableCredential: {
-              id: '02',
-            } as VerifiableCredentialEntity,
-          },
-          {
-            id: 7,
-            propertyName: 'familyName',
-            propertyValue: 'Mustermann',
-            verifiableCredential: {
-              id: '02',
             } as VerifiableCredentialEntity,
           },
         ]
 
         expect(groupAttributesByCredentialId(mockCredential)).toStrictEqual([
           {
-            propertyName: 'email',
-            propertyValue: ['test@example.com'],
-            id: 5,
-            verifiableCredential: { id: '01' },
+            id: 0,
+            propertyName: 'givenName',
+            propertyValue: ['Mark', 'Musterman'],
+            verifiableCredential: { id: '00' },
           },
           {
-            id: 6,
-            propertyName: 'givenName',
-            propertyValue: ['Mark', 'Mustermann'],
-            verifiableCredential: { id: '02' },
+            propertyName: 'email',
+            propertyValue: ['test@example.com'],
+            id: 0,
+            verifiableCredential: { id: '01' },
           },
         ])
       })

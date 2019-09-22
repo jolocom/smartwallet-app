@@ -1,11 +1,5 @@
 import { groupBy } from 'ramda'
-import { CredentialEntity, VerifiableCredentialEntity } from './entities'
-
-interface ModifiedCredentialEntity {
-  propertyName: string
-  propertyValue: string[]
-  verifiableCredential: VerifiableCredentialEntity
-}
+import { CredentialEntity } from './entities'
 
 /**
  * Given an array of Credential Entities, will attempt to group them by
@@ -17,7 +11,7 @@ interface ModifiedCredentialEntity {
 
 export const groupAttributesByCredentialId = (
   credentials: CredentialEntity[],
-): ModifiedCredentialEntity[] => {
+) => {
   /** @dev We get a number of credential entities. Each contains one claim. We first
    * group all entities part of the same credential together (i.e. given name, family name)
    */
@@ -28,7 +22,7 @@ export const groupAttributesByCredentialId = (
     ),
   )
 
-  return groupeByCredential.map<ModifiedCredentialEntity>(credentials => {
+  return groupeByCredential.map(credentials => {
     return {
       ...credentials[0],
       propertyValue: credentials.map(cred => cred.propertyValue),
