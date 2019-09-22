@@ -158,7 +158,6 @@ export class Storage {
       .where('verifiableCredential.type = :type', { type })
       .getMany()
 
-    // Multiple credentials of the same type, i.e. ['Credential', 'ProofOfNameCredential']
     const results = groupAttributesByCredentialId(localAttributes).map(
       entry => ({
         verification: entry.verifiableCredential.id,

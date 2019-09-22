@@ -1,9 +1,5 @@
-// TODO rework
-// Multiple credentials of the same type, i.e. ['Credential', 'ProofOfNameCredential']
-import {
-  CredentialEntity,
-  VerifiableCredentialEntity,
-} from './entities'
+import { groupBy } from 'ramda'
+import { CredentialEntity, VerifiableCredentialEntity } from './entities'
 
 interface ModifiedCredentialEntity {
   propertyName: string
@@ -11,40 +7,31 @@ interface ModifiedCredentialEntity {
   verifiableCredential: VerifiableCredentialEntity
 }
 
+/**
+ * Given an array of Credential Entities, will attempt to group them by
+ * the credential they are part of, and return a sumarry, contain a key name
+ * and an array of aggregated values
+ * @param credentials - Credential Entities to group. If all claims are part of different
+ * credentials, the array is returned unmodified
+ */
+
 export const groupAttributesByCredentialId = (
   credentials: CredentialEntity[],
 ): ModifiedCredentialEntity[] => {
-  // Convert values to arrays for easier concatination later
-  const modifiedAttributes = credentials.map(credential => ({
-    ...credential,
-    propertyValue: [credential.propertyValue], // "eugeniu@jolocom.com" -> ["eugeniu@jolocom.com"]
-  }))
-
-  // Helper function
-  const findByCredId = (
-    arrToSearch: ModifiedCredentialEntity[],
-    value: ModifiedCredentialEntity,
-  ) =>
-    arrToSearch.findIndex(
-      entry => entry.verifiableCredential.id === value.verifiableCredential.id,
-    )
-
-  debugger
-  return modifiedAttributes.reduce(
-    (acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity) => {
-      const matchingIndex = findByCredId(acc, curr)
-
-      // This seems to be a hack, uniting individual claims from the credential back together
-      if (matchingIndex >= 0) {
-        acc[matchingIndex].propertyValue = [
-          ...acc[matchingIndex].propertyValue,
-          ...curr.propertyValue,
-        ]
-        return acc
-      } else {
-        return [...acc, curr]
-      }
-    },
-    [],
+  /** @dev We get a number of credential entities. Each contains one claim. We first
+   * group all entities part of the same credential together (i.e. given name, family name)
+   */
+  const groupeByCredential = Object.values(
+    groupBy(
+      (credential: CredentialEntity) => credential.verifiableCredential.id,
+      credentials,
+    ),
   )
+
+  return groupeByCredential.map<ModifiedCredentialEntity>(credentials => {
+    return {
+      ...credentials[0],
+      propertyValue: credentials.map(cred => cred.propertyValue),
+    }
+  })
 }
