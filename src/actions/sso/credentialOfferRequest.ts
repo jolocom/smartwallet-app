@@ -9,7 +9,7 @@ import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentials
 import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { withLoading, withErrorScreen } from '../modifiers'
-import { parsePublicProfile } from './utils'
+import { generateIdentitySummary } from './utils'
 
 export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -29,7 +29,7 @@ export const consumeCredentialOfferRequest = (
 
   const requester = await registry.resolve(keyIdToDid(credOfferRequest.issuer))
 
-  const requesterSummary = parsePublicProfile(requester)
+  const requesterSummary = generateIdentitySummary(requester)
 
   const selectedCredentialTypes = interactionToken.offeredTypes.map(type => ({
     type,
