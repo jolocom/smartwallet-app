@@ -42,3 +42,13 @@ export function initErrorReporting() {
     },
   })
 }
+
+export function reportError(err: AppError | Error) {
+  Sentry.withScope(scope => {
+    if (err instanceof AppError && err.origError) {
+      scope.setExtra('AppError', err.message)
+      err = err.origError
+    }
+    Sentry.captureException(err)
+  })
+}

@@ -123,6 +123,8 @@ export default {
   AUTHORIZE: 'Authorize',
   DENY: 'Deny',
   GO_BACK: 'Go back',
+  SEND_ERROR_REPORT: 'Send error report',
+  ERROR_REPORT_SENT: 'Error report sent',
   YOU_CAN_SCAN_THE_QR_CODE_NOW: 'You can scan the qr code now!',
   CANCEL: 'Cancel',
   ADD_CLAIM: 'Add claim',
