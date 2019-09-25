@@ -6,16 +6,18 @@ import { sendAuthenticationResponse } from 'src/actions/sso/authenticationReques
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { AuthenticationRequestSummary } from '../../../actions/sso/types'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
+
+interface AuthenticationNavigationParams {
+  isDeepLinkInteraction: boolean
+  authenticationDetails: AuthenticationRequestSummary
+}
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
-  navigation: {
-    state: {
-      params: {
-        isDeepLinkInteraction: boolean
-        authenticationDetails: AuthenticationRequestSummary
-      }
-    }
-  }
+  navigation: NavigationScreenProp<
+    NavigationState,
+    AuthenticationNavigationParams
+  >
 }
 
 export const AuthenticationConsentContainer = (props: Props) => {

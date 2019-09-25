@@ -6,16 +6,14 @@ import { sendPaymentResponse } from 'src/actions/sso/paymentRequest'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { PaymentRequestSummary } from '../../../actions/sso/types'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
+interface PaymentNavigationParams {
+  isDeepLinkInteraction: boolean
+  paymentDetails: PaymentRequestSummary
+}
 interface Props extends ReturnType<typeof mapDispatchToProps> {
-  navigation: {
-    state: {
-      params: {
-        isDeepLinkInteraction: boolean
-        paymentDetails: PaymentRequestSummary
-      }
-    }
-  }
+  navigation: NavigationScreenProp<NavigationState, PaymentNavigationParams>
 }
 
 export const PaymentConsentContainer = (props: Props) => {

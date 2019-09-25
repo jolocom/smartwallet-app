@@ -8,18 +8,20 @@ import {
   CredentialRequestSummary,
   CredentialVerificationSummary,
 } from '../../../actions/sso/types'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
+
+interface CredentialRequestNavigationParams {
+  isDeepLinkInteraction: boolean
+  credentialRequestDetails: CredentialRequestSummary
+}
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     ReturnType<typeof mapStateToProps> {
-  navigation: {
-    state: {
-      params: {
-        isDeepLinkInteraction: boolean
-        credentialRequestDetails: CredentialRequestSummary
-      }
-    }
-  }
+  navigation: NavigationScreenProp<
+    NavigationState,
+    CredentialRequestNavigationParams
+  >
 }
 
 const ConsentContainer = (props: Props) => {

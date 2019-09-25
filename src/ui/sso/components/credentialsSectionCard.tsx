@@ -6,7 +6,10 @@ import { Spacing, Typography } from 'src/styles'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { CheckboxCredential } from './checkboxCredential'
-import { CredentialTypeSummary, CredentialVerificationSummary } from '../../../actions/sso/types'
+import {
+  CredentialTypeSummary,
+  CredentialVerificationSummary,
+} from '../../../actions/sso/types'
 
 const styles = StyleSheet.create({
   card: {
