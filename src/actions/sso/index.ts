@@ -260,7 +260,6 @@ export const sendCredentialResponse = (
 }
 
 export const cancelSSO: ThunkAction = dispatch => {
-  dispatch(clearInteractionRequest)
   return dispatch(navigationActions.navigatorResetHome())
 }
 

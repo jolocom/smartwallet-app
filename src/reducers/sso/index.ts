@@ -33,17 +33,9 @@ export interface StatePaymentRequestSummary {
   paymentRequest: string
 }
 
-export interface StateAuthenticationRequestSummary {
-  callbackURL: string
-  requester: IdentitySummary
-  description: string
-  requestJWT: string
-}
-
 export interface SsoState {
   activeCredentialRequest: StateCredentialRequestSummary
   activePaymentRequest: StatePaymentRequestSummary
-  activeAuthenticationRequest: StateAuthenticationRequestSummary
 }
 
 export const initialState: SsoState = {
@@ -68,15 +60,6 @@ export const initialState: SsoState = {
     description: '',
     paymentRequest: '',
   },
-  // add blank authentication request, which is did, public profile?
-  activeAuthenticationRequest: {
-    requester: {
-      did: '',
-    },
-    callbackURL: '',
-    description: '',
-    requestJWT: '',
-  },
 }
 
 export const ssoReducer = (
@@ -88,8 +71,6 @@ export const ssoReducer = (
       return { ...state, activeCredentialRequest: action.value }
     case 'SET_PAYMENT_REQUEST':
       return { ...state, activePaymentRequest: action.value }
-    case 'SET_AUTHENTICATION_REQUEST':
-      return { ...state, activeAuthenticationRequest: action.value }
     case 'CLEAR_INTERACTION_REQUEST':
       return initialState
     default:

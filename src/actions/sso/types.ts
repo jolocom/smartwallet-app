@@ -13,3 +13,10 @@ export interface IdentitySummary {
   did: string
   publicProfile?: IssuerPublicProfileSummary
 }
+
+export interface AuthenticationRequestSummary {
+  callbackURL: string
+  requester: IdentitySummary
+  description: string
+  requestJWT: string
+}
