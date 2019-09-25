@@ -2,8 +2,7 @@ import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { Spacing, Typography, Colors } from 'src/styles'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { IdentitySummary } from 'src/actions/sso/types'
-import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
+import { CredentialTypeSummary, CredentialVerificationSummary, IdentitySummary } from 'src/actions/sso/types'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { IconToggle } from 'react-native-material-ui'
@@ -34,8 +33,8 @@ const styles = StyleSheet.create({
 })
 
 interface CheckboxCredentialProps {
-  credential: StateTypeSummary
-  selectedCredential: StateVerificationSummary | undefined
+  credential: CredentialTypeSummary
+  selectedCredential: CredentialVerificationSummary | undefined
   did: string
   isSelected: boolean
   issuer: IdentitySummary

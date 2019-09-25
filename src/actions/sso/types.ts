@@ -32,3 +32,23 @@ export interface PaymentRequestSummary {
   description: string
   paymentRequest: string
 }
+
+export interface CredentialRequestSummary {
+  readonly callbackURL: string
+  readonly requester: IdentitySummary
+  readonly availableCredentials: CredentialTypeSummary[]
+  readonly requestJWT: string
+}
+
+export interface CredentialTypeSummary {
+  type: string
+  values: string[]
+  verifications: CredentialVerificationSummary[]
+}
+
+export interface CredentialVerificationSummary {
+  id: string
+  issuer: IdentitySummary
+  selfSigned: boolean
+  expires: string | undefined | Date
+}
