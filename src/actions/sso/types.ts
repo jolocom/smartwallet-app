@@ -20,3 +20,15 @@ export interface AuthenticationRequestSummary {
   description: string
   requestJWT: string
 }
+
+export interface PaymentRequestSummary {
+  receiver: {
+    did: string
+    address: string
+  }
+  requester: IdentitySummary
+  callbackURL: string
+  amount: number
+  description: string
+  paymentRequest: string
+}
