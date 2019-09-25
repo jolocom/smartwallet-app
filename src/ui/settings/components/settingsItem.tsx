@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Typography, Colors } from 'src/styles'
+import { ReactNode } from 'react-redux'
 
 const styles = StyleSheet.create({
   card: {
@@ -42,8 +43,9 @@ const styles = StyleSheet.create({
   },
 })
 
-interface Props {
+export interface SettingItemProps {
   title: string
+  children?: ReactNode
   description?: string
   iconName: string
   payload?: JSX.Element
@@ -52,8 +54,8 @@ interface Props {
   onPress?: () => void
 }
 
-const SettingsItem: React.FC<Props> = ({
-  payload,
+const SettingsItem: React.FC<SettingItemProps> = ({
+  children,
   title,
   description,
   iconName,
@@ -72,7 +74,7 @@ const SettingsItem: React.FC<Props> = ({
       <View style={styles.textContainer}>
         <Text
           style={[
-            payload
+            children
               ? styles.headerTextWithPayload
               : styles.headerTextWithDescription,
             isHighlighted && styles.whiteText,
@@ -81,8 +83,8 @@ const SettingsItem: React.FC<Props> = ({
         >
           {title}
         </Text>
-        {payload ? (
-          payload
+        {children ? (
+          children
         ) : (
           <Text
             style={[

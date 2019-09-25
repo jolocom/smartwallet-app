@@ -38,6 +38,7 @@ const registration = {
 const settings = {
   SETTINGS: 'Settings',
   YOUR_PREFERENCES: 'Your preferences',
+  SECURITY: 'Security',
   LANGUAGE: 'Language',
   BACKUP_YOUR_IDENTITY: 'Backup your Identity',
   YOUR_IDENTITY_IS_ALREADY_BACKED_UP: 'Your identity is already backed up',
