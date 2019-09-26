@@ -69,6 +69,7 @@
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "e2e:android": "detox build -c android.debug && detox test -c android.debug",
     "e2e:android:emu": "detox build -c android.emu.debug && detox test -c android.emu.debug",
+    "e2e:ios:sim": "detox build -c ios.sim.debug && detox test -c ios.sim.debug",
     "run:ios": "react-native run-ios",
     "run:android": "react-native run-android --appIdSuffix debug",
     "run:android:staging": "react-native run-android --variant staging --appIdSuffix debugStaging",
