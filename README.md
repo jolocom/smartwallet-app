@@ -44,15 +44,29 @@ A debug build can also be built through Xcode.
 
 Running a build on a physical device requires the appropriate code signing certificates.
 
-## Testing and Formatting
+## Testing
 
-Testing uses Jest. The following script enables watch and testing coverage display as well.
+We use Jest for unit tests, and [detox](https://github.com/wix/Detox) + Jest for end-to-end tests.
 
+To run unit tests, with watch and testing coverage display enabled:
 ```bash
 yarn test --watch --coverage
 ```
 
-Use `yarn run` to display all scripts, e.g. for formatting.
+To run e2e tests, first make sure to start a bundling server using `yarn start`
+
+To run e2e tests on device:
+```bash
+yarn e2e:android
+```
+
+To run e2e tests on emulator/simulator:
+```bash
+yarn e2e:android:emu
+yarn e2e:ios:sim
+```
+
+## Code Style and Formatting
 
 - We use [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) to keep a consistent style across the codebase.
   - There are plugins available for a range of IDEs and text editors; automatic formatting on save is also supported in some editors.
