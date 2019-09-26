@@ -52,7 +52,7 @@ export interface SettingItemProps {
   onPress?: () => void
 }
 
-const SettingsItem: React.FC<SettingItemProps> = props => {
+const SettingItem: React.FC<SettingItemProps> = props => {
   const {
     title,
     description,
@@ -101,4 +101,4 @@ const SettingsItem: React.FC<SettingItemProps> = props => {
   )
 }
 
-export default SettingsItem
+export default SettingItem

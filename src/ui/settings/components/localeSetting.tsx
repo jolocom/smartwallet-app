@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { Colors, Spacing, Typography } from '../../../styles'
 import React from 'react'
-import SettingsItem from './settingsItem'
-import I18n from '../../../locales/i18n'
-import strings from '../../../locales/strings'
 
 const styles = StyleSheet.create({
   languageOptions: {
@@ -63,24 +60,19 @@ const LocaleCard = (props: CardProps) => {
   )
 }
 
-export const LocaleSettingComponent: React.FC<ComponentProps> = props => {
+export const LocaleSetting: React.FC<ComponentProps> = props => {
   const { currentLocale, setLocale } = props
   return (
-    <SettingsItem
-      title={I18n.translate(strings.LANGUAGE)}
-      iconName={'translate'}
-    >
-      <View style={styles.languageOptions}>
-        {props.locales.map(locale => {
-          return (
-            <LocaleCard
-              locale={locale}
-              setLocale={setLocale}
-              currentLocale={currentLocale}
-            />
-          )
-        })}
-      </View>
-    </SettingsItem>
+    <View style={styles.languageOptions}>
+      {props.locales.map(locale => {
+        return (
+          <LocaleCard
+            locale={locale}
+            setLocale={setLocale}
+            currentLocale={currentLocale}
+          />
+        )
+      })}
+    </View>
   )
 }
