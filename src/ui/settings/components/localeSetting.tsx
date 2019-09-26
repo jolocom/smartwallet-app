@@ -22,55 +22,40 @@ const styles = StyleSheet.create({
   },
 })
 
-interface ComponentProps {
+interface Props {
   locales: string[]
   currentLocale: string
   setLocale: (key: string) => void
 }
 
-interface CardProps extends Omit<ComponentProps, 'locales'> {
-  locale: string
-}
-
-const LocaleCard = (props: CardProps) => {
-  const { locale, setLocale } = props
-  const isCurrentLanguage = locale === props.currentLocale
-  return (
-    <View
-      key={locale}
-      onTouchEnd={() => setLocale(locale)}
-      style={[
-        styles.languageOption,
-        isCurrentLanguage && {
-          backgroundColor: Colors.sandLight,
-        },
-      ]}
-    >
-      <Text
-        style={[
-          styles.languageOptionText,
-          isCurrentLanguage && {
-            color: Colors.purpleMain,
-          },
-        ]}
-      >
-        {locale.toUpperCase()}
-      </Text>
-    </View>
-  )
-}
-
-export const LocaleSetting: React.FC<ComponentProps> = props => {
+export const LocaleSetting: React.FC<Props> = props => {
   const { currentLocale, setLocale } = props
   return (
     <View style={styles.languageOptions}>
       {props.locales.map(locale => {
+        const isCurrentLanguage = locale === currentLocale
         return (
-          <LocaleCard
-            locale={locale}
-            setLocale={setLocale}
-            currentLocale={currentLocale}
-          />
+          <View
+            key={locale}
+            onTouchEnd={() => setLocale(locale)}
+            style={[
+              styles.languageOption,
+              isCurrentLanguage && {
+                backgroundColor: Colors.sandLight,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.languageOptionText,
+                isCurrentLanguage && {
+                  color: Colors.purpleMain,
+                },
+              ]}
+            >
+              {locale.toUpperCase()}
+            </Text>
+          </View>
         )
       })}
     </View>
