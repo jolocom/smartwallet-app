@@ -52,16 +52,11 @@ export const SettingsContainer: React.FC<Props> = props => {
         contentContainerStyle={styles.scrollComponentContainer}
       >
         <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
-          <SettingItem
-            title={I18n.translate(strings.LANGUAGE)}
-            iconName={'translate'}
-          >
-            <LocaleSetting
-              locales={locales}
-              currentLocale={currentLocale}
-              setLocale={setLocale}
-            />
-          </SettingItem>
+          <LocaleSetting
+            locales={locales}
+            currentLocale={currentLocale}
+            setLocale={setLocale}
+          />
         </SettingSection>
         <SettingSection title={I18n.t(strings.SECURITY)}>
           <SettingItem

@@ -1,6 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { Colors, Spacing, Typography } from '../../../styles'
 import React from 'react'
+import SettingItem from './settingItem'
+import I18n from '../../../locales/i18n'
+import strings from '../../../locales/strings'
 
 const styles = StyleSheet.create({
   languageOptions: {
@@ -31,33 +34,38 @@ interface Props {
 export const LocaleSetting: React.FC<Props> = props => {
   const { currentLocale, setLocale } = props
   return (
-    <View style={styles.languageOptions}>
-      {props.locales.map(locale => {
-        const isCurrentLanguage = locale === currentLocale
-        return (
-          <View
-            key={locale}
-            onTouchEnd={() => setLocale(locale)}
-            style={[
-              styles.languageOption,
-              isCurrentLanguage && {
-                backgroundColor: Colors.sandLight,
-              },
-            ]}
-          >
-            <Text
+    <SettingItem
+      title={I18n.translate(strings.LANGUAGE)}
+      iconName={'translate'}
+    >
+      <View style={styles.languageOptions}>
+        {props.locales.map(locale => {
+          const isCurrentLanguage = locale === currentLocale
+          return (
+            <View
+              key={locale}
+              onTouchEnd={() => setLocale(locale)}
               style={[
-                styles.languageOptionText,
+                styles.languageOption,
                 isCurrentLanguage && {
-                  color: Colors.purpleMain,
+                  backgroundColor: Colors.sandLight,
                 },
               ]}
             >
-              {locale.toUpperCase()}
-            </Text>
-          </View>
-        )
-      })}
-    </View>
+              <Text
+                style={[
+                  styles.languageOptionText,
+                  isCurrentLanguage && {
+                    color: Colors.purpleMain,
+                  },
+                ]}
+              >
+                {locale.toUpperCase()}
+              </Text>
+            </View>
+          )
+        })}
+      </View>
+    </SettingItem>
   )
 }
