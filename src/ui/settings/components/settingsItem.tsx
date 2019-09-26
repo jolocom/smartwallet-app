@@ -2,7 +2,6 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Typography, Colors } from 'src/styles'
-import { ReactNode } from 'react-redux'
 
 const styles = StyleSheet.create({
   card: {
@@ -45,7 +44,6 @@ const styles = StyleSheet.create({
 
 export interface SettingItemProps {
   title: string
-  children?: ReactNode
   description?: string
   iconName: string
   payload?: JSX.Element
@@ -54,51 +52,53 @@ export interface SettingItemProps {
   onPress?: () => void
 }
 
-const SettingsItem: React.FC<SettingItemProps> = ({
-  children,
-  title,
-  description,
-  iconName,
-  isHighlighted,
-  isDisabled,
-  onPress,
-}) => (
-  <TouchableWithoutFeedback onPress={!isDisabled ? onPress : undefined}>
-    <View style={[styles.card, isHighlighted && styles.yellowBg]}>
-      <Icon
-        style={{ marginRight: 18 }}
-        size={24}
-        name={iconName}
-        color={isHighlighted ? 'white' : 'grey'}
-      />
-      <View style={styles.textContainer}>
-        <Text
-          style={[
-            children
-              ? styles.headerTextWithPayload
-              : styles.headerTextWithDescription,
-            isHighlighted && styles.whiteText,
-            isDisabled && styles.disabledText,
-          ]}
-        >
-          {title}
-        </Text>
-        {children ? (
-          children
-        ) : (
+const SettingsItem: React.FC<SettingItemProps> = props => {
+  const {
+    title,
+    description,
+    iconName,
+    isHighlighted,
+    isDisabled,
+    onPress,
+  } = props
+  return (
+    <TouchableWithoutFeedback onPress={!isDisabled ? onPress : undefined}>
+      <View style={[styles.card, isHighlighted && styles.yellowBg]}>
+        <Icon
+          style={{ marginRight: 18 }}
+          size={24}
+          name={iconName}
+          color={isHighlighted ? 'white' : 'grey'}
+        />
+        <View style={styles.textContainer}>
           <Text
             style={[
-              styles.description,
+              props.children
+                ? styles.headerTextWithPayload
+                : styles.headerTextWithDescription,
               isHighlighted && styles.whiteText,
               isDisabled && styles.disabledText,
             ]}
           >
-            {description}
+            {title}
           </Text>
-        )}
+          {props.children ? (
+            props.children
+          ) : (
+            <Text
+              style={[
+                styles.description,
+                isHighlighted && styles.whiteText,
+                isDisabled && styles.disabledText,
+              ]}
+            >
+              {description}
+            </Text>
+          )}
+        </View>
       </View>
-    </View>
-  </TouchableWithoutFeedback>
-)
+    </TouchableWithoutFeedback>
+  )
+}
 
 export default SettingsItem
