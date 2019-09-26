@@ -31,6 +31,8 @@
     "babel-plugin-transform-typescript-metadata": "^0.2.2",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "class-transformer": "^0.1.9",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "3.0.2",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
@@ -38,12 +40,14 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "husky": "^3.0.5",
     "jest": "^24.8.0",
     "material-colors": "^1.2.5",
     "metro-minify-terser": "^0.55.0",
     "metro-react-native-babel-preset": "^0.54.1",
     "mockdate": "^2.0.2",
-    "prettier": "^1.15.3",
+    "precise-commits": "^1.0.2",
+    "prettier": "^1.18.2",
     "react-devtools": "^3.6.2",
     "react-dom": "^16.3.0",
     "react-test-renderer": "16.8.3",
@@ -76,6 +80,12 @@
     "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
     "typeorm:node": "ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
     "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "precise-commits; node bin/precommit.js",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
   },
   "dependencies": {
     "@react-navigation/core": "^3.4.2",
@@ -127,5 +137,10 @@
     "assets": [
       "./src/assets/fonts"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

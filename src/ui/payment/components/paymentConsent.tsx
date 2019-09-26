@@ -9,6 +9,7 @@ import { formatEth } from 'src/utils/formatEth'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
 import { PaymentConsentCard } from './paymentConsentCard'
+import { IssuerCard } from '../../documents/components/issuerCard'
 
 interface Props {
   activePaymentRequest: StatePaymentRequestSummary
@@ -70,6 +71,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
       amount,
       description,
       receiver: { did, address },
+      requester,
     } = this.props.activePaymentRequest
     const { formattedAmount, unit } = formatEth(amount)
 
@@ -82,6 +84,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
 
         {/* Who the payment goes to and what the payment is for */}
         <View style={styles.cardContainer}>
+          <IssuerCard issuer={requester} />
           <PaymentConsentCard
             leftIcon={this.renderLeftIcon(I18n.t(strings.EMAIL))}
             title={`${I18n.t(strings.TO)}:`}

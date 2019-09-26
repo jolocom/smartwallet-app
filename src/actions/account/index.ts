@@ -182,7 +182,7 @@ export const setClaimsForDid: ThunkAction = async (
 export const prepareClaimsForState = (
   credentials: SignedCredential[],
   credentialMetadata: Array<CredentialMetadataSummary | {}>,
-  issuerMetadata: Array<IdentitySummary | { did: string }>,
+  issuerMetadata: IdentitySummary[],
 ) =>
   compose(
     groupBy(getCredentialUiCategory),
@@ -191,9 +191,9 @@ export const prepareClaimsForState = (
     map(convertToDecoratedClaim),
   )(credentials)
 
-export const addIssuerInfo = (
-  issuerProfiles: Array<{ did: string } | IdentitySummary> | [],
-) => (claim: DecoratedClaims) => {
+export const addIssuerInfo = (issuerProfiles: IdentitySummary[]) => (
+  claim: DecoratedClaims,
+) => {
   if (!issuerProfiles || !issuerProfiles.length) {
     return claim
   }
@@ -212,13 +212,13 @@ export const addIssuerInfo = (
 export const convertToDecoratedClaim = ({
   claim,
   type,
-  issuer,
+  issuer: issuerDid,
   id,
   expires,
 }: SignedCredential): DecoratedClaims => ({
   credentialType: getUiCredentialTypeByType(type),
   issuer: {
-    did: issuer,
+    did: issuerDid,
   },
   claimData: omit(['id'], claim),
   id,
