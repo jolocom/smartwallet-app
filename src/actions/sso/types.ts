@@ -33,7 +33,7 @@ export interface PaymentRequestSummary extends RequestSummary {
   description: string
 }
 
-export interface CredentialRequestSummary {
+export interface CredentialRequestSummary extends RequestSummary {
   availableCredentials: CredentialTypeSummary[]
 }
 
