@@ -1,3 +1,12 @@
+/**
+ * NOTE: This config is used by the Storage class (src/lib/storage/storage) but
+ * `migrations` and `entities` are replaced with lists of actual migration and
+ * entity classes.
+ *
+ * New migrations and entities should be added to `migration/index.ts` and
+ * `entities/index.ts` respectively
+ *
+ */
 export default {
   type: 'react-native',
   database: 'LocalSmartWalletData',
