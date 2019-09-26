@@ -41,7 +41,12 @@
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG
+  // FOR SIMULATOR DEVELOPMENT
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+
+  // FOR DEVICE DEVELOPMENT
+  // the string below needs to be where your metro server is running
+  // return [NSURL URLWithString:@"https://73c05e9e.ngrok.io/index.bundle?platform=ios"];
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
