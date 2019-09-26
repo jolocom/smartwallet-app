@@ -44,7 +44,7 @@ export const consumePaymentRequest = (
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
     description: paymentRequest.interactionToken.description,
-    paymentRequest: paymentRequest.encode(),
+    requestJWT: paymentRequest.encode(),
   }
   return dispatch(
     navigationActions.navigate({
@@ -64,13 +64,13 @@ export const sendPaymentResponse = (
   backendMiddleware: BackendMiddleware,
 ) => {
   const { identityWallet } = backendMiddleware
-  const { callbackURL, paymentRequest } = paymentDetails
+  const { callbackURL, requestJWT } = paymentDetails
 
   // add loading screen here
   const password = await backendMiddleware.keyChainLib.getPassword()
   const decodedPaymentRequest = JolocomLib.parse.interactionToken.fromJWT<
     PaymentRequest
-  >(paymentRequest)
+  >(requestJWT)
   const txHash = await identityWallet.transactions.sendTransaction(
     decodedPaymentRequest.interactionToken,
     password,

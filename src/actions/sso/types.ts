@@ -14,30 +14,27 @@ export interface IdentitySummary {
   publicProfile?: IssuerPublicProfileSummary
 }
 
-export interface AuthenticationRequestSummary {
+export interface RequestSummary {
   callbackURL: string
   requester: IdentitySummary
-  description: string
   requestJWT: string
 }
 
-export interface PaymentRequestSummary {
+export interface AuthenticationRequestSummary extends RequestSummary {
+  description: string
+}
+
+export interface PaymentRequestSummary extends RequestSummary {
   receiver: {
     did: string
     address: string
   }
-  requester: IdentitySummary
-  callbackURL: string
   amount: number
   description: string
-  paymentRequest: string
 }
 
 export interface CredentialRequestSummary {
-  readonly callbackURL: string
-  readonly requester: IdentitySummary
-  readonly availableCredentials: CredentialTypeSummary[]
-  readonly requestJWT: string
+  availableCredentials: CredentialTypeSummary[]
 }
 
 export interface CredentialTypeSummary {
