@@ -23,7 +23,7 @@ export const SettingSection: React.FC<Props> = props => {
   return (
     <View style={styles.topSection}>
       <Text style={styles.sectionHeader}>{props.title}</Text>
-      {props.children ? props.children : null}
+      {props.children}
     </View>
   )
 }
