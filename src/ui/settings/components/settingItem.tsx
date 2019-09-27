@@ -16,15 +16,13 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
   },
-  headerTextWithPayload: {
-    ...Typography.baseFontStyles,
-    color: Colors.blackMain,
-    fontSize: Typography.textXS,
-  },
-  headerTextWithDescription: {
+  headerText: {
     ...Typography.baseFontStyles,
     color: Colors.blackMain,
     fontSize: Typography.textLG,
+  },
+  headerTextWithChildren: {
+    fontSize: Typography.textXS,
   },
   description: {
     ...Typography.baseFontStyles,
@@ -46,59 +44,53 @@ export interface SettingItemProps {
   title: string
   description?: string
   iconName: string
-  payload?: JSX.Element
   isHighlighted?: boolean
   isDisabled?: boolean
   onPress?: () => void
 }
 
-const SettingItem: React.FC<SettingItemProps> = props => {
-  const {
-    title,
-    description,
-    iconName,
-    isHighlighted,
-    isDisabled,
-    onPress,
-  } = props
-  return (
-    <TouchableWithoutFeedback onPress={!isDisabled ? onPress : undefined}>
-      <View style={[styles.card, isHighlighted && styles.yellowBg]}>
-        <Icon
-          style={{ marginRight: 18 }}
-          size={24}
-          name={iconName}
-          color={isHighlighted ? 'white' : 'grey'}
-        />
-        <View style={styles.textContainer}>
+const SettingItem: React.FC<SettingItemProps> = ({
+  children,
+  title,
+  description,
+  iconName,
+  isHighlighted,
+  isDisabled,
+  onPress,
+}) => (
+  <TouchableWithoutFeedback onPress={!isDisabled ? onPress : undefined}>
+    <View style={[styles.card, isHighlighted && styles.yellowBg]}>
+      <Icon
+        style={{ marginRight: 18 }}
+        size={24}
+        name={iconName}
+        color={isHighlighted ? 'white' : 'grey'}
+      />
+      <View style={styles.textContainer}>
+        <Text
+          style={[
+            styles.headerText,
+            !!children && styles.headerTextWithChildren,
+            isHighlighted && styles.whiteText,
+            isDisabled && styles.disabledText,
+          ]}
+        >
+          {title}
+        </Text>
+        {children || (
           <Text
             style={[
-              props.children
-                ? styles.headerTextWithPayload
-                : styles.headerTextWithDescription,
+              styles.description,
               isHighlighted && styles.whiteText,
               isDisabled && styles.disabledText,
             ]}
           >
-            {title}
+            {description}
           </Text>
-          {props.children ? (
-            props.children
-          ) : (
-            <Text
-              style={[
-                styles.description,
-                isHighlighted && styles.whiteText,
-                isDisabled && styles.disabledText,
-              ]}
-            >
-              {description}
-            </Text>
-          )}
-        </View>
+        )}
       </View>
-    </TouchableWithoutFeedback>
-  )
-}
+    </View>
+  </TouchableWithoutFeedback>
+)
 
 export default SettingItem
