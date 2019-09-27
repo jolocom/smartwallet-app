@@ -20,7 +20,6 @@ import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import { Settings } from 'src/ui/settings'
-import { StorybookScreen } from 'src/ui/storybook'
 import I18n from 'src/locales/i18n'
 import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
 import { AuthenticationConsent } from 'src/ui/authentication'
@@ -244,10 +243,12 @@ const MainStack = createStackNavigator(
       screen: Exception,
       navigationOptions: noHeaderNavOpts,
     },
-    [routeList.Storybook]: {
-      screen: StorybookScreen,
-      navigationOptions: navOptScreenWCancel,
-    },
+    ...(__DEV__ && {
+      [routeList.Storybook]: {
+        screen: require('src/ui/storybook').StorybookScreen,
+        navigationOptions: navOptScreenWCancel,
+      },
+    }),
   },
   {
     defaultNavigationOptions: commonNavigationOptions,
