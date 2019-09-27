@@ -72,7 +72,7 @@ const backup = {
   CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER: 'Choose the right word or press enter',
   RESTORE_ACCOUNT: 'Restore account',
   BACK_TO_SIGNUP: 'Back to signup',
-  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEARS_HERE_WORD_BY_WORD: 'Start writing your seed-phrase and it will appears here word by word',
+  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD: 'Start writing your seed-phrase and it will appear here word by word',
 }
 
 const errorTitle = {
