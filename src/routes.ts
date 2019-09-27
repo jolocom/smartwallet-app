@@ -243,6 +243,12 @@ const MainStack = createStackNavigator(
       screen: Exception,
       navigationOptions: noHeaderNavOpts,
     },
+    ...(__DEV__ && {
+      [routeList.Storybook]: {
+        screen: require('src/ui/storybook').StorybookScreen,
+        navigationOptions: navOptScreenWCancel,
+      },
+    }),
   },
   {
     defaultNavigationOptions: commonNavigationOptions,

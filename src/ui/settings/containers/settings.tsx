@@ -9,8 +9,9 @@ import { Container } from 'src/ui/structure'
 import { SettingSection } from '../components/settingSection'
 import { RootState } from '../../../reducers'
 import { ThunkDispatch } from '../../../store'
+import { routeList } from 'src/routeList'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
-import { genericActions } from '../../../actions'
+import { genericActions, navigationActions } from '../../../actions'
 import { connect } from 'react-redux'
 import { LocaleSetting } from '../components/localeSetting'
 import SettingItem from '../components/settingItem'
@@ -41,7 +42,7 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const { setLocale, settings, setupBackup } = props
+  const { setLocale, settings, setupBackup, openStorybook } = props
   const version = VersionNumber.appVersion
   const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
@@ -51,6 +52,15 @@ export const SettingsContainer: React.FC<Props> = props => {
         style={styles.scrollComponent}
         contentContainerStyle={styles.scrollComponentContainer}
       >
+      {__DEV__ && (
+        <SettingSection title={"Dev"}>
+          <SettingItem
+            iconName={'book-open-page-variant'}
+            title={'Storybook'}
+            onPress={openStorybook}
+          />
+        </SettingSection>
+      )}
         <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
           <LocaleSetting
             locales={locales}
@@ -98,6 +108,12 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
+  openStorybook: () =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.Storybook,
+      }),
+    ),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
 })
 
