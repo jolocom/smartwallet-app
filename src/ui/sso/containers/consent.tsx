@@ -1,65 +1,84 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StateVerificationSummary } from 'src/reducers/sso'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
-import { NavigationParams } from 'react-navigation'
+import {
+  CredentialRequestSummary,
+  CredentialVerificationSummary,
+} from '../../../actions/sso/types'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
+
+interface CredentialRequestNavigationParams {
+  isDeepLinkInteraction: boolean
+  credentialRequestDetails: CredentialRequestSummary
+}
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     ReturnType<typeof mapStateToProps> {
-  navigation: { state: { params: NavigationParams } }
+  navigation: NavigationScreenProp<
+    NavigationState,
+    CredentialRequestNavigationParams
+  >
 }
 
-interface State {}
+const ConsentContainer = (props: Props) => {
+  const {
+    currentDid,
+    sendCredentialResponse,
+    cancelSSO,
+    navigation: {
+      state: {
+        params: { isDeepLinkInteraction, credentialRequestDetails },
+      },
+    },
+  } = props
 
-export class ConsentContainer extends React.Component<Props, State> {
-  private handleSubmitClaims = (credentials: StateVerificationSummary[]) => {
-    this.props.sendCredentialResponse(
+  const handleSubmitClaims = (credentials: CredentialVerificationSummary[]) => {
+    sendCredentialResponse(
       credentials,
-      this.props.navigation.state.params.isDeepLinkInteraction,
+      credentialRequestDetails,
+      isDeepLinkInteraction,
     )
   }
 
-  private handleDenySubmit = () => {
-    this.props.cancelSSO()
-  }
-
-  render() {
-    const {
-      availableCredentials,
-      requester,
-      callbackURL,
-    } = this.props.activeCredentialRequest
-    return (
-      <ConsentComponent
-        requester={requester}
-        callbackURL={callbackURL}
-        did={this.props.currentDid}
-        availableCredentials={availableCredentials}
-        handleSubmitClaims={this.handleSubmitClaims}
-        handleDenySubmit={this.handleDenySubmit}
-      />
-    )
-  }
+  const {
+    availableCredentials,
+    requester,
+    callbackURL,
+  } = credentialRequestDetails
+  return (
+    <ConsentComponent
+      requester={requester}
+      callbackURL={callbackURL}
+      did={currentDid}
+      availableCredentials={availableCredentials}
+      handleSubmitClaims={handleSubmitClaims}
+      handleDenySubmit={cancelSSO}
+    />
+  )
 }
 
 const mapStateToProps = (state: any) => ({
-  activeCredentialRequest: state.sso.activeCredentialRequest,
   currentDid: state.account.did.did,
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   sendCredentialResponse: (
-    credentials: StateVerificationSummary[],
+    credentials: CredentialVerificationSummary[],
+    credentialRequestDetails: CredentialRequestSummary,
     isDeepLinkInteraction: boolean,
   ) =>
     dispatch(
       withLoading(
         withErrorScreen(
-          ssoActions.sendCredentialResponse(credentials, isDeepLinkInteraction),
+          ssoActions.sendCredentialResponse(
+            credentials,
+            credentialRequestDetails,
+            isDeepLinkInteraction,
+          ),
         ),
       ),
     ),
