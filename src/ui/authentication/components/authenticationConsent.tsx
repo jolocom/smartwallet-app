@@ -2,13 +2,13 @@ import React from 'react'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
-import { StateAuthenticationRequestSummary } from 'src/reducers/sso'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
 import { IssuerCard } from '../../documents/components/issuerCard'
+import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 
 interface Props {
-  activeAuthenticationRequest: StateAuthenticationRequestSummary
+  authenticationDetails: AuthenticationRequestSummary
   confirmAuthenticationRequest: Function
   cancelAuthenticationRequest: Function
 }
@@ -58,7 +58,7 @@ export class AuthenticationConsentComponent extends React.Component<
   }
 
   public render() {
-    const { requester, description } = this.props.activeAuthenticationRequest
+    const { requester, description } = this.props.authenticationDetails
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>

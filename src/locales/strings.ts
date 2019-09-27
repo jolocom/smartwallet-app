@@ -38,6 +38,7 @@ const registration = {
 const settings = {
   SETTINGS: 'Settings',
   YOUR_PREFERENCES: 'Your preferences',
+  SECURITY: 'Security',
   LANGUAGE: 'Language',
   BACKUP_YOUR_IDENTITY: 'Backup your Identity',
   YOUR_IDENTITY_IS_ALREADY_BACKED_UP: 'Your identity is already backed up',
@@ -48,9 +49,9 @@ const settings = {
     'If you have noted down your phrase, put the six given words on their right places',
   SHOW_MY_PHRASE_AGAIN: 'Show my phrase again',
   CONFIRM_AND_CHECK: 'Confirm and check',
-  THE_ORDER_WAS_NOT_CORRECT:
-    'The order was not correct',
-  TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE: 'Try again with another six words from your secure phrase',
+  THE_ORDER_WAS_NOT_CORRECT: 'The order was not correct',
+  TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE:
+    'Try again with another six words from your secure phrase',
   VERSION: 'version',
 }
 
@@ -72,7 +73,7 @@ const backup = {
   CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER: 'Choose the right word or press enter',
   RESTORE_ACCOUNT: 'Restore account',
   BACK_TO_SIGNUP: 'Back to signup',
-  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEARS_HERE_WORD_BY_WORD: 'Start writing your seed-phrase and it will appears here word by word',
+  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD: 'Start writing your seed-phrase and it will appear here word by word',
 }
 
 const errorTitle = {

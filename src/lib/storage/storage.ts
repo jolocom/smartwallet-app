@@ -5,6 +5,7 @@ import {
 } from 'typeorm/browser'
 import { plainToClass } from 'class-transformer'
 import {
+  entityList,
   SettingEntity,
   PersonaEntity,
   MasterKeyEntity,
@@ -21,6 +22,8 @@ import {
 import { IdentitySummary } from '../../actions/sso/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
 import { groupAttributesByCredentialId } from './utils'
+
+import migrationsList from './migration'
 
 interface PersonaAttributes {
   did: string
@@ -86,7 +89,11 @@ export class Storage {
   public initConnection = this.createConnectionIfNeeded.bind(this)
 
   public constructor(config: ConnectionOptions) {
-    this.config = config
+    this.config = {
+      ...config,
+      entities: entityList,
+      migrations: migrationsList,
+    }
   }
 
   private async createConnectionIfNeeded(): Promise<Connection> {

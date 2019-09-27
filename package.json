@@ -7,6 +7,7 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/runtime": "^7.4.5",
+    "@storybook/react-native": "^5.2.0-beta.30",
     "@svgr/cli": "^4.2.0",
     "@types/detox": "^12.8.4",
     "@types/enzyme": "^3.10.1",
@@ -84,6 +85,7 @@
     "icon": "svgr --native --out-dir src/resources/svg/",
     "devtools": "react-devtools &",
     "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
+    "storybook": "start-storybook -p 6006",
     "typeorm:node": "ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
     "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts"
   },

@@ -31,5 +31,9 @@ export enum routeList {
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
 
+  // General
   Exception = 'Exception',
+
+  // Dev only
+  Storybook = 'Storybook',
 }
