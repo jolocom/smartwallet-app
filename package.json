@@ -9,6 +9,7 @@
     "@babel/runtime": "^7.4.5",
     "@storybook/react-native": "^5.2.0-beta.30",
     "@svgr/cli": "^4.2.0",
+    "@types/detox": "^12.8.4",
     "@types/enzyme": "^3.10.1",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/i18n-js": "^3.0.1",
@@ -17,7 +18,7 @@
     "@types/ramda": "^0.26.8",
     "@types/react": "^16.8.19",
     "@types/react-native": "^0.57.60",
-    "@types/react-native-material-ui": "^1.31.1",
+    "@types/react-native-material-ui": "^1.32.0",
     "@types/react-native-snap-carousel": "^3.6.0",
     "@types/react-native-sqlite-storage": "^3.3.0",
     "@types/react-native-vector-icons": "^4.6.0",
@@ -34,6 +35,7 @@
     "class-transformer": "^0.1.9",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "3.0.2",
+    "detox": "jolocom/Detox.git#detox-v9000.0.1-gitpkg",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
@@ -41,6 +43,7 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "fs-extra": "^8.1.0",
     "husky": "^3.0.5",
     "jest": "^24.8.0",
     "material-colors": "^1.2.5",
@@ -65,6 +68,9 @@
     "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "test": "jest",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
+    "e2e:android": "detox build -c android.debug && detox test -c android.debug",
+    "e2e:android:emu": "detox build -c android.emu.debug && detox test -c android.emu.debug",
+    "e2e:ios:sim": "detox build -c ios.sim.debug && detox test -c ios.sim.debug",
     "run:ios": "react-native run-ios",
     "run:android": "react-native run-android --appIdSuffix debug",
     "run:android:staging": "react-native run-android --variant staging --appIdSuffix debugStaging",
@@ -82,6 +88,42 @@
     "storybook": "start-storybook -p 6006",
     "typeorm:node": "ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
     "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts"
+  },
+  "detox": {
+    "configurations": {
+      "ios.sim.debug": {
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/JolocomWallet.app",
+        "build": "xcodebuild -project ios/JolocomWallet.xcodeproj -scheme JolocomWallet -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      },
+      "android.emu.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "name": "dynamic"
+      },
+      "android.emu.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.emulator",
+        "name": "dynamic"
+      },
+      "android.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.attached",
+        "name": "dynamic"
+      },
+      "android.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.attached",
+        "name": "dynamic"
+      }
+    },
+    "test-runner": "jest",
+    "runner-config": "e2e/jest.config.js"
   },
   "husky": {
     "hooks": {

@@ -65,6 +65,7 @@ exports[`landing component matches the snapshot on render 1`] = `
     slideStyle={Object {}}
     sliderWidth={750}
     swipeThreshold={20}
+    testID="landingCarousel"
     useScrollView={false}
     vertical={false}
   />
@@ -98,6 +99,7 @@ exports[`landing component matches the snapshot on render 1`] = `
           },
         }
       }
+      testID="getStarted"
       text="Get started"
       upperCase={false}
     />
@@ -122,6 +124,7 @@ exports[`landing component matches the snapshot on render 1`] = `
           },
         }
       }
+      testID="recoverIdentity"
       text="Recover identity"
       upperCase={false}
     />

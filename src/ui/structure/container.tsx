@@ -19,10 +19,11 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
+  testID?: string
   children: ReactNode
   style?: StyleProp<ViewStyle>
 }
 
 export const Container: React.FC<Props> = props => (
-  <View style={[styles.container, props.style]}>{props.children}</View>
+  <View testID={props.testID} style={[styles.container, props.style]}>{props.children}</View>
 )

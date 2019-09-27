@@ -60,7 +60,7 @@ export const RegistrationProgressContainer: React.FunctionComponent<
       <Text style={styles.text}>{I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}</Text>
       <Text style={styles.text}>{I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}</Text>
     </View>
-    <View style={styles.loadingArea}>
+    <View testID="progressLoader" style={styles.loadingArea}>
       <loaders.RippleLoader
         size={80}
         strokeWidth={4}
@@ -83,7 +83,7 @@ export const RegistrationProgressContainer: React.FunctionComponent<
           )
         })}
       </View>
-      <View>
+      <View testID="progressMsg">
         <Text style={styles.smallText}>{props.loadingMsg}</Text>
       </View>
     </View>
