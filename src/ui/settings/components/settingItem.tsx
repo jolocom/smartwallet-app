@@ -16,15 +16,13 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
   },
-  headerTextWithPayload: {
-    ...Typography.baseFontStyles,
-    color: Colors.blackMain,
-    fontSize: Typography.textXS,
-  },
-  headerTextWithDescription: {
+  headerText: {
     ...Typography.baseFontStyles,
     color: Colors.blackMain,
     fontSize: Typography.textLG,
+  },
+  headerTextWithChildren: {
+    fontSize: Typography.textXS,
   },
   description: {
     ...Typography.baseFontStyles,
@@ -42,18 +40,17 @@ const styles = StyleSheet.create({
   },
 })
 
-interface Props {
+export interface SettingItemProps {
   title: string
   description?: string
   iconName: string
-  payload?: JSX.Element
   isHighlighted?: boolean
   isDisabled?: boolean
   onPress?: () => void
 }
 
-const SettingsItem: React.FC<Props> = ({
-  payload,
+const SettingItem: React.FC<SettingItemProps> = ({
+  children,
   title,
   description,
   iconName,
@@ -72,18 +69,15 @@ const SettingsItem: React.FC<Props> = ({
       <View style={styles.textContainer}>
         <Text
           style={[
-            payload
-              ? styles.headerTextWithPayload
-              : styles.headerTextWithDescription,
+            styles.headerText,
+            !!children && styles.headerTextWithChildren,
             isHighlighted && styles.whiteText,
             isDisabled && styles.disabledText,
           ]}
         >
           {title}
         </Text>
-        {payload ? (
-          payload
-        ) : (
+        {children || (
           <Text
             style={[
               styles.description,
@@ -99,4 +93,4 @@ const SettingsItem: React.FC<Props> = ({
   </TouchableWithoutFeedback>
 )
 
-export default SettingsItem
+export default SettingItem

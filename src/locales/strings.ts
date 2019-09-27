@@ -38,6 +38,7 @@ const registration = {
 const settings = {
   SETTINGS: 'Settings',
   YOUR_PREFERENCES: 'Your preferences',
+  SECURITY: 'Security',
   LANGUAGE: 'Language',
   BACKUP_YOUR_IDENTITY: 'Backup your Identity',
   YOUR_IDENTITY_IS_ALREADY_BACKED_UP: 'Your identity is already backed up',
@@ -48,9 +49,9 @@ const settings = {
     'If you have noted down your phrase, put the six given words on their right places',
   SHOW_MY_PHRASE_AGAIN: 'Show my phrase again',
   CONFIRM_AND_CHECK: 'Confirm and check',
-  THE_ORDER_WAS_NOT_CORRECT:
-    'The order was not correct',
-  TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE: 'Try again with another six words from your secure phrase',
+  THE_ORDER_WAS_NOT_CORRECT: 'The order was not correct',
+  TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE:
+    'Try again with another six words from your secure phrase',
   VERSION: 'version',
 }
 
