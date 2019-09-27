@@ -5,6 +5,7 @@ import {
 } from 'typeorm/browser'
 import { plainToClass } from 'class-transformer'
 import {
+  entityList,
   SettingEntity,
   PersonaEntity,
   MasterKeyEntity,
@@ -20,6 +21,9 @@ import {
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '../../actions/sso/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
+import { groupAttributesByCredentialId } from './utils'
+
+import migrationsList from './migration'
 
 interface PersonaAttributes {
   did: string
@@ -31,14 +35,9 @@ interface EncryptedSeedAttributes {
   timestamp: number
 }
 
-interface ModifiedCredentialEntity {
-  propertyName: string
-  propertyValue: string[]
-  verifiableCredential: VerifiableCredentialEntity
-}
-
 export class Storage {
   private connection!: Connection
+  private connectionPromise!: Promise<Connection> | null
   private config: ConnectionOptions
 
   public store = {
@@ -90,13 +89,24 @@ export class Storage {
   public initConnection = this.createConnectionIfNeeded.bind(this)
 
   public constructor(config: ConnectionOptions) {
-    this.config = config
+    this.config = {
+      ...config,
+      entities: entityList,
+      migrations: migrationsList,
+    }
   }
 
-  private async createConnectionIfNeeded(): Promise<void> {
-    if (!this.connection) {
-      this.connection = await createConnection(this.config)
-    }
+  private async createConnectionIfNeeded(): Promise<Connection> {
+    if (this.connectionPromise) return this.connectionPromise
+    return (this.connectionPromise = createConnection(this.config)
+      .then(conn => {
+        this.connection = conn
+        return conn
+      })
+      .catch(err => {
+        this.connectionPromise = null
+        throw err
+      }))
   }
 
   private async getSettingsObject(): Promise<{ [key: string]: any }> {
@@ -155,7 +165,7 @@ export class Storage {
       .where('verifiableCredential.type = :type', { type })
       .getMany()
 
-    const results = this.groupAttributesByCredentialId(localAttributes).map(
+    const results = groupAttributesByCredentialId(localAttributes).map(
       entry => ({
         verification: entry.verifiableCredential.id,
         values: entry.propertyValue,
@@ -164,44 +174,6 @@ export class Storage {
     )
 
     return { type, results }
-  }
-
-  // TODO rework
-  private groupAttributesByCredentialId(
-    attributes: CredentialEntity[],
-  ): ModifiedCredentialEntity[] {
-    // Convert values to arrays for easier concatination later
-    const modifiedAttributes = attributes.map(attr => ({
-      ...attr,
-      propertyValue: [attr.propertyValue],
-    }))
-
-    // Helper function
-    const findByCredId = (
-      arrToSearch: ModifiedCredentialEntity[],
-      value: ModifiedCredentialEntity,
-    ) =>
-      arrToSearch.findIndex(
-        entry =>
-          entry.verifiableCredential.id === value.verifiableCredential.id,
-      )
-
-    return modifiedAttributes.reduce(
-      (acc: ModifiedCredentialEntity[], curr: ModifiedCredentialEntity) => {
-        const matchingIndex = findByCredId(acc, curr)
-
-        if (matchingIndex >= 0) {
-          acc[matchingIndex].propertyValue = [
-            ...acc[matchingIndex].propertyValue,
-            ...curr.propertyValue,
-          ]
-          return acc
-        } else {
-          return [...acc, curr]
-        }
-      },
-      [],
-    )
   }
 
   private async getVCredentialsForAttribute(
@@ -364,7 +336,9 @@ const storeIssuerProfile = (connection: Connection) => (
   return connection.manager.save(cacheEntry)
 }
 
-const getPublicProfile = (connection: Connection) => async (did: string) => {
+const getPublicProfile = (connection: Connection) => async (
+  did: string,
+): Promise<IdentitySummary> => {
   const [issuerProfile] = await connection.manager.findByIds(CacheEntity, [did])
   return (issuerProfile && issuerProfile.value) || { did }
 }

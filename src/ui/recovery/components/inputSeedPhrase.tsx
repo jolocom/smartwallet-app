@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, TextInput, View, Platform } from 'react-native'
 import { Container } from '../../structure'
 import { Button } from 'react-native-material-ui'
 import { Colors, Spacing, Typography, Buttons } from 'src/styles'
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     fontSize: Typography.textLG,
+    paddingVertical: 7,
   },
   correct: {
     color: 'white',
@@ -147,7 +148,9 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
       <View style={styles.mnemonicSection}>
         {mnemonic.length === 0 ? (
           <Text style={styles.note}>
-            Start writing your seed-phrase and it will appears here word by word
+            {I18n.t(
+              strings.START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD,
+            )}
           </Text>
         ) : (
           mnemonic.map((word: string, i: number) => (
@@ -240,6 +243,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                         ...Buttons.buttonStandardText,
                         color: Colors.sandLight,
                         fontSize: Typography.textMD,
+                        paddingVertical: Platform.OS === 'ios' ? 12 : 0,
                       },
                     }}
                   />

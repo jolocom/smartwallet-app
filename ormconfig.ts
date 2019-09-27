@@ -1,13 +1,19 @@
-import { entityList } from './src/lib/storage/entities'
-import { Initial1565886000404 } from './src/lib/storage/migration/1565886000404-initial'
-
+/**
+ * NOTE: This config is used by the Storage class (src/lib/storage/storage) but
+ * `migrations` and `entities` are replaced with lists of actual migration and
+ * entity classes.
+ *
+ * New migrations and entities should be added to `migration/index.ts` and
+ * `entities/index.ts` respectively
+ *
+ */
 export default {
   type: 'react-native',
   database: 'LocalSmartWalletData',
   location: 'default',
   logging: ['error', 'query', 'schema'],
-  entities: entityList,
-  migrations: [Initial1565886000404],
+  entities: './src/lib/storage/entities/',
+  migrations: './src/lib/storage/migration/',
   migrationsRun: true,
   synchronize: false,
   cli: {

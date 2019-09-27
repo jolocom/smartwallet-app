@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Typography, Colors } from 'src/styles'
 
@@ -16,15 +16,13 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
   },
-  headerTextWithPayload: {
-    ...Typography.baseFontStyles,
-    color: Colors.blackMain,
-    fontSize: Typography.textXS,
-  },
-  headerTextWithDescription: {
+  headerText: {
     ...Typography.baseFontStyles,
     color: Colors.blackMain,
     fontSize: Typography.textLG,
+  },
+  headerTextWithChildren: {
+    fontSize: Typography.textXS,
   },
   description: {
     ...Typography.baseFontStyles,
@@ -42,62 +40,57 @@ const styles = StyleSheet.create({
   },
 })
 
-interface Props {
+export interface SettingItemProps {
   title: string
   description?: string
   iconName: string
-  payload?: JSX.Element
   isHighlighted?: boolean
   isDisabled?: boolean
-  onTouchEnd?: () => void
+  onPress?: () => void
 }
 
-const SettingsItem: React.SFC<Props> = ({
-  payload,
+const SettingItem: React.FC<SettingItemProps> = ({
+  children,
   title,
   description,
   iconName,
   isHighlighted,
   isDisabled,
-  onTouchEnd,
-}: Props): JSX.Element => (
-  <View
-    style={[styles.card, isHighlighted && styles.yellowBg]}
-    onTouchEnd={!isDisabled ? onTouchEnd : undefined}
-  >
-    <Icon
-      style={{ marginRight: 18 }}
-      size={24}
-      name={iconName}
-      color={isHighlighted ? 'white' : 'grey'}
-    />
-    <View style={styles.textContainer}>
-      <Text
-        style={[
-          payload
-            ? styles.headerTextWithPayload
-            : styles.headerTextWithDescription,
-          isHighlighted && styles.whiteText,
-          isDisabled && styles.disabledText,
-        ]}
-      >
-        {title}
-      </Text>
-      {payload ? (
-        payload
-      ) : (
+  onPress,
+}) => (
+  <TouchableWithoutFeedback onPress={!isDisabled ? onPress : undefined}>
+    <View style={[styles.card, isHighlighted && styles.yellowBg]}>
+      <Icon
+        style={{ marginRight: 18 }}
+        size={24}
+        name={iconName}
+        color={isHighlighted ? 'white' : 'grey'}
+      />
+      <View style={styles.textContainer}>
         <Text
           style={[
-            styles.description,
+            styles.headerText,
+            !!children && styles.headerTextWithChildren,
             isHighlighted && styles.whiteText,
             isDisabled && styles.disabledText,
           ]}
         >
-          {description}
+          {title}
         </Text>
-      )}
+        {children || (
+          <Text
+            style={[
+              styles.description,
+              isHighlighted && styles.whiteText,
+              isDisabled && styles.disabledText,
+            ]}
+          >
+            {description}
+          </Text>
+        )}
+      </View>
     </View>
-  </View>
+  </TouchableWithoutFeedback>
 )
 
-export default SettingsItem
+export default SettingItem

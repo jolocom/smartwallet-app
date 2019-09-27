@@ -4,14 +4,15 @@ import { View, Text, StyleSheet } from 'react-native'
 import I18n from 'src/locales/i18n'
 import { Container } from 'src/ui/structure'
 import { getCredentialIconByType } from 'src/resources/util'
-import { StatePaymentRequestSummary } from 'src/reducers/sso'
 import { formatEth } from 'src/utils/formatEth'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
 import { PaymentConsentCard } from './paymentConsentCard'
+import { IssuerCard } from '../../documents/components/issuerCard'
+import { PaymentRequestSummary } from '../../../actions/sso/types'
 
 interface Props {
-  activePaymentRequest: StatePaymentRequestSummary
+  paymentDetails: PaymentRequestSummary
   cancelPaymentRequest: () => void
   confirmPaymentRequest: () => void
 }
@@ -70,7 +71,8 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
       amount,
       description,
       receiver: { did, address },
-    } = this.props.activePaymentRequest
+      requester,
+    } = this.props.paymentDetails
     const { formattedAmount, unit } = formatEth(amount)
 
     return (
@@ -82,6 +84,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
 
         {/* Who the payment goes to and what the payment is for */}
         <View style={styles.cardContainer}>
+          <IssuerCard issuer={requester} />
           <PaymentConsentCard
             leftIcon={this.renderLeftIcon(I18n.t(strings.EMAIL))}
             title={`${I18n.t(strings.TO)}:`}
