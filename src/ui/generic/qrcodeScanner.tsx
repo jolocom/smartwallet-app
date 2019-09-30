@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import { connect } from 'react-redux'
 import { Container } from 'src/ui/structure'
 import { Button } from 'react-native-material-ui'
@@ -27,12 +27,42 @@ interface Props
 
 interface State {}
 
+const SCREEN_HEIGHT = Dimensions.get('window').height
+const SCREEN_WIDTH = Dimensions.get('window').width
+
+const overlayColor = 'rgba(0,0,0,0.65)'
+const overlayMargin = 44
+const rectDimensions = SCREEN_WIDTH - overlayMargin * 2
+const rectBorderWidth = 2
+const rectBorderColor = 'white'
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.backgroundLightMain,
+    backgroundColor: 'transparent',
+    flex: 1,
   },
-  buttonText: {
-    color: Colors.blackMain,
+  rectangle: {
+    height: rectDimensions,
+    width: rectDimensions,
+    borderRadius: 5,
+    borderWidth: rectBorderWidth,
+    borderColor: rectBorderColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  verticalOverlay: {
+    flex: 1,
+    backgroundColor: overlayColor,
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  horizontalOverlay: {
+    height: rectDimensions,
+    width: SCREEN_WIDTH,
+    backgroundColor: overlayColor,
   },
 })
 
@@ -71,21 +101,19 @@ export class QRcodeScanner extends React.Component<Props, State> {
       <React.Fragment>
         <Container style={styles.container}>
           <QRScanner
+            containerStyle={{ position: 'absolute', top: 0 }}
             cameraProps={cameraProps}
             ref={(ref: React.Component) => (this.scanner = ref)}
             onRead={onScannerSuccess}
-            cameraStyle={{ overflow: 'hidden' }}
-            topContent={
-              <Text>{I18n.t(strings.YOU_CAN_SCAN_THE_QR_CODE_NOW)}</Text>
-            }
-            bottomContent={
-              <Button
-                onPress={this.onScannerCancel.bind(this)}
-                style={{ text: styles.buttonText }}
-                text={I18n.t(strings.CANCEL)}
-              />
-            }
+            cameraStyle={{ height: SCREEN_HEIGHT }}
           />
+          <View style={styles.verticalOverlay} />
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.horizontalOverlay} />
+            <View style={styles.rectangle} />
+            <View style={styles.horizontalOverlay} />
+          </View>
+          <View style={styles.verticalOverlay} />
         </Container>
       </React.Fragment>
     )
