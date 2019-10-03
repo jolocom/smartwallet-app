@@ -6,6 +6,7 @@ import {
   NavigationContainerComponent,
 } from 'react-navigation'
 import { routeList } from 'src/routeList'
+import { Routes } from 'src/routes'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { AppError, ErrorCode } from 'src/lib/errors'
@@ -15,10 +16,11 @@ import { ThunkAction } from 'src/store'
 let deferredNavActions: NavigationAction[] = [],
   dispatchNavigationAction = (action: NavigationAction) => {
     deferredNavActions.push(action)
-  }
+  }, navigator: NavigationContainerComponent
 
 export const setTopLevelNavigator = (nav: NavigationContainerComponent) => {
   dispatchNavigationAction = nav.dispatch.bind(nav)
+  navigator = nav
   deferredNavActions.forEach(dispatchNavigationAction)
   deferredNavActions.length = 0
 }
@@ -37,12 +39,35 @@ export const navigate = (
 }
 
 export const navigatorReset = (
-  newScreen: NavigationNavigateActionPayload,
+  newScreen?: NavigationNavigateActionPayload
 ): ThunkAction => dispatch => {
-  const action = StackActions.reset({
+  let action
+  if (newScreen) {
+    action = NavigationActions.navigate(newScreen)
+  } else {
+    // @ts-ignore
+    const navState = navigator.state.nav
+
+    const { path, params } = Routes.router.getPathAndParamsForState(navState)
+    action = Routes.router.getActionForPathAndParams(path, params)
+
+    // getActionForPathAndParams is typed to potentially return null, but we are
+    // using it on the current state itself, so this should "never" happen
+    if (!action) throw new Error('impossible')
+
+    // since the top level router is a SwitchRouter,
+    // the first action will be to navigate to MainStack, but we are using a
+    // StackReset action which will be caught by MainStack, so we can just pass
+    // in the nested Navigate action
+    // @ts-ignore
+    action = action.action
+  }
+
+  action = StackActions.reset({
     index: 0,
-    actions: [NavigationActions.navigate(newScreen)],
+    actions: [action],
   })
+
   dispatchNavigationAction(action)
   return dispatch(action)
 }
