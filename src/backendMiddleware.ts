@@ -77,8 +77,22 @@ export class BackendMiddleware {
     if (this._identityWallet) return this._identityWallet
 
     const encryptedEntropy = await this.storageLib.get.encryptedSeed()
-    if (!encryptedEntropy) throw new BackendError(ErrorCodes.NoEntropy)
-    const encryptionPass = await this.keyChainLib.getPassword()
+    let encryptionPass
+    try {
+      encryptionPass = await this.keyChainLib.getPassword()
+    } catch (e) {
+      // This may fail if the application was uninstalled and reinstalled, as
+      // the android keystore is cleared on uninstall, but the database may
+      // still remain.
+      // FIXME: Sentry.captureException(e)
+    }
+
+    if (!encryptedEntropy || !encryptionPass) {
+      // if we can't decrypt the encryptedEntropy, then delete it
+      if (encryptedEntropy)
+        this.storageLib.delete.encryptedSeed(encryptedEntropy)
+      throw new BackendError(ErrorCodes.NoEntropy)
+    }
 
     this._keyProvider = new JolocomLib.KeyProvider(
       Buffer.from(encryptedEntropy, 'hex'),
