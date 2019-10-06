@@ -6,7 +6,6 @@ import {
   NavigationContainerComponent,
 } from 'react-navigation'
 import { routeList } from 'src/routeList'
-import { Routes } from 'src/routes'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { AppError, ErrorCode } from 'src/lib/errors'
@@ -47,9 +46,12 @@ export const navigatorReset = (
   } else {
     // @ts-ignore
     const navState = navigator.state.nav
-
-    const { path, params } = Routes.router.getPathAndParamsForState(navState)
-    action = Routes.router.getActionForPathAndParams(path, params)
+    // @ts-ignore
+    const navRouter = navigator._navigation.router
+    if (navRouter) {
+      const { path, params } = navRouter.getPathAndParamsForState(navState)
+      action = navRouter.getActionForPathAndParams(path, params)
+    }
 
     // getActionForPathAndParams is typed to potentially return null, but we are
     // using it on the current state itself, so this should "never" happen
