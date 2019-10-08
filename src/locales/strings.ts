@@ -73,7 +73,8 @@ const backup = {
   CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER: 'Choose the right word or press enter',
   RESTORE_ACCOUNT: 'Restore account',
   BACK_TO_SIGNUP: 'Back to signup',
-  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD: 'Start writing your seed-phrase and it will appear here word by word',
+  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD:
+    'Start writing your seed-phrase and it will appear here word by word',
 }
 
 const errorTitle = {
@@ -124,7 +125,13 @@ export default {
   AUTHORIZE: 'Authorize',
   DENY: 'Deny',
   GO_BACK: 'Go back',
-  YOU_CAN_SCAN_THE_QR_CODE_NOW: 'You can scan the qr code now!',
+  ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE:
+    "It's all automatic, just place your phone above the code",
+  SCAN: 'Scan',
+  SCAN_QR: 'Scan QR',
+  ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS:
+    'Enable access so you can start taking photos and videos',
+  ENABLE_CAMERA_ACCESS: 'Enable Camera Access',
   CANCEL: 'Cancel',
   ADD_CLAIM: 'Add claim',
   NAME_OF_ISSUER: 'Name of issuer',

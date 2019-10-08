@@ -8,6 +8,7 @@ export const black = 'black' // rgb(0, 0, 0)
 export const black010 = 'rgba(0, 0, 0, 0.1)'
 export const black030 = 'rgba(0, 0, 0, 0.3)'
 export const black040 = 'rgba(0, 0, 0, 0.4)'
+export const black065 = 'rgba(0, 0, 0, 0.65)'
 export const white = 'white' // rgb(255, 255, 255)
 export const white050 = 'rgba(255, 255, 255, 0.5)'
 export const white040 = 'rgba(255, 255, 255, 0.4)'
