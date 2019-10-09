@@ -16,7 +16,8 @@ interface State {
   devices: {
     [id: string]: string | null
   }
-  connected: SerialConnection | null
+    connected: SerialConnection | null,
+    rx: string
 }
 
 const styles = StyleSheet.create({
@@ -38,6 +39,7 @@ export class BLECodeScanner extends React.Component<Props, State> {
     this.state = {
       devices: {},
       connected: null,
+        rx: ""
     }
     this.ble = new BleManager()
     this.ble.startDeviceScan(null, null, (error, device) => {
@@ -86,7 +88,11 @@ export class BLECodeScanner extends React.Component<Props, State> {
                     this.ble
                       .connectToDevice(item.id, { requestMTU: 512 })
                       .then(device => openSerialConnection(device))
-                      .then(serial => this.setState({ connected: serial }))
+                           .then(serial => {
+                               this.setState({ connected: serial })
+                               serial.listen((line) => this.setState({rx: this.state.rx + line}))
+                           }
+                                )
                   }
                 />
               )}
@@ -95,10 +101,9 @@ export class BLECodeScanner extends React.Component<Props, State> {
         </React.Fragment>
       )
     } else {
-      const c = this.state.connected
       return (
         <React.Fragment>
-          <Text>henlo</Text>
+          <Text>this.state.rx</Text>
         </React.Fragment>
       )
     }
