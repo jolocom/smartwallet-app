@@ -6,17 +6,17 @@ import { ThunkDispatch } from 'src/store'
 import { NavigationScreenProps } from 'react-navigation'
 import { Colors } from 'src/styles'
 import { BleManager, Device } from 'react-native-ble-plx'
-
+import { openSerialConnection, SerialConnection } from 'src/lib/ble'
 
 interface Props
     extends ReturnType<typeof mapDispatchToProps>,
     NavigationScreenProps { }
 
 interface State {
-    devices: {
-        [id: string]: Device
-    },
-    connected: Device | null
+  devices: {
+    [id: string]: string
+  }
+  connected: SerialConnection | null
 }
 
 const styles = StyleSheet.create({
