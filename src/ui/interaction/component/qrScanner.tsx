@@ -1,14 +1,13 @@
 import React from 'react'
 import {
-  StyleSheet,
-  Text,
-  Platform,
-  View,
-  Dimensions,
-  TouchableHighlight,
   AppState,
   AppStateStatus,
-  PermissionStatus,
+  Dimensions,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
 } from 'react-native'
 import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
 import { NavigationScreenProps } from 'react-navigation'
@@ -25,10 +24,14 @@ import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { RNCamera } from 'react-native-camera'
 import { TorchOffIcon, TorchOnIcon } from '../../../resources'
-import { PermissionsAndroid } from 'react-native'
-import AndroidOpenSettings from 'react-native-android-open-settings'
 
-const QRScanner = require('react-native-qrcode-scanner').default
+// NOTE: used jetify -r to convert the lib back from AndroidX
+import RNPermissions, {
+  PERMISSIONS,
+  PermissionStatus,
+  RESULTS,
+  openSettings,
+} from 'react-native-permissions'
 
 export interface QrScanEvent {
   data: string
@@ -45,6 +48,9 @@ interface State {
   isCamera: boolean
 }
 
+const QRScanner = require('react-native-qrcode-scanner').default
+
+const IS_IOS = Platform.OS === 'ios'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 const MARKER_SIZE = SCREEN_WIDTH * 0.75
@@ -135,7 +141,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
       // NOTE: the key is used to invalidate the previously rendered component as
       // we need to rerender and remount the camera to ensure it is properly setup
       key: Date.now(),
-      permission: PermissionsAndroid.RESULTS.DENIED,
+      permission: RESULTS.DENIED,
       isCamera: false,
     }
   }
@@ -148,7 +154,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
       this.removeFocusListener = this.props.navigation.addListener(
         'willFocus',
         () => {
-          if (permission === PermissionsAndroid.RESULTS.GRANTED) {
+          if (permission === RESULTS.GRANTED) {
             this.scanner.reactivate()
             // NOTE: the re-render and the re-mount should only fire during the willFocus event
             this.setState({ key: Date.now() })
@@ -165,14 +171,16 @@ export class QRCodeScanner extends React.Component<Props, State> {
   }
 
   private requestCameraPermission = async () => {
-    const permission = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-    )
+    let permission: PermissionStatus
+    if (IS_IOS) {
+      permission = await RNPermissions.request(PERMISSIONS.IOS.CAMERA)
+    } else {
+      permission = await RNPermissions.request(PERMISSIONS.ANDROID.CAMERA)
+    }
 
     this.setState({
       permission,
     })
-
     return permission
   }
 
@@ -197,13 +205,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
   }
 
   private openSettings = () => {
-    if (Platform.OS === 'ios') {
-      // navigate to iOS settings through DeepLink
-    } else {
-      this.promiseOpenSettings(AndroidOpenSettings.appDetailsSettings).then(
-        this.requestCameraPermission,
-      )
-    }
+    this.promiseOpenSettings(openSettings).then(this.requestCameraPermission)
   }
 
   private onTorchChange = (state: boolean) => {
@@ -276,10 +278,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
           <Text
             style={styles.permissionButton}
             onPress={async () => {
-              if (
-                this.state.permission ===
-                PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN
-              ) {
+              if (this.state.permission === RESULTS.BLOCKED) {
                 this.openSettings()
               } else {
                 await this.requestCameraPermission()
@@ -294,7 +293,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
   }
 
   public render() {
-    return this.state.permission === PermissionsAndroid.RESULTS.GRANTED
+    return this.state.permission === RESULTS.GRANTED
       ? this.renderCamera()
       : this.renderNoPermissionView()
   }
