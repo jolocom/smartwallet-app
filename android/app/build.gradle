@@ -165,7 +165,8 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-permissions')
+    implementation project(':react-native-android-open-settings')
+    implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-vector-icons')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-localize')

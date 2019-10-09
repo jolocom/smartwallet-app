@@ -24,14 +24,11 @@ import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { RNCamera } from 'react-native-camera'
 import { TorchOffIcon, TorchOnIcon } from '../../../resources'
-
-// NOTE: used jetify -r to convert the lib back from AndroidX
-import RNPermissions, {
-  PERMISSIONS,
-  PermissionStatus,
-  RESULTS,
-  openSettings,
-} from 'react-native-permissions'
+/* NOTE: When using the latest react-native-permissions version, remove this dependency,
+ since there is already a cross-platform openSettings method */
+import { appDetailsSettings } from 'react-native-android-open-settings'
+// NOTE: using v1.2.1. When upgrading to RN60, use the latest version.
+import Permissions, { Status } from 'react-native-permissions'
 
 export interface QrScanEvent {
   data: string
@@ -44,11 +41,24 @@ interface Props extends NavigationScreenProps {
 interface State {
   isTorch: boolean
   key: number
-  permission: PermissionStatus
+  permission: Status
   isCamera: boolean
 }
 
+interface PermissionResults {
+  AUTHORIZED: Status
+  DENIED: Status
+  RESTRICTED: Status
+}
+
 const QRScanner = require('react-native-qrcode-scanner').default
+
+const CAMERA_PERMISSION = 'camera'
+const RESULTS: PermissionResults = {
+  AUTHORIZED: 'authorized',
+  DENIED: 'denied',
+  RESTRICTED: 'restricted',
+}
 
 const IS_IOS = Platform.OS === 'ios'
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -154,7 +164,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
       this.removeFocusListener = this.props.navigation.addListener(
         'willFocus',
         () => {
-          if (permission === RESULTS.GRANTED) {
+          if (permission === RESULTS.AUTHORIZED) {
             this.scanner.reactivate()
             // NOTE: the re-render and the re-mount should only fire during the willFocus event
             this.setState({ key: Date.now() })
@@ -171,12 +181,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
   }
 
   private requestCameraPermission = async () => {
-    let permission: PermissionStatus
-    if (IS_IOS) {
-      permission = await RNPermissions.request(PERMISSIONS.IOS.CAMERA)
-    } else {
-      permission = await RNPermissions.request(PERMISSIONS.ANDROID.CAMERA)
-    }
+    const permission = await Permissions.request(CAMERA_PERMISSION)
 
     this.setState({
       permission,
@@ -205,7 +210,15 @@ export class QRCodeScanner extends React.Component<Props, State> {
   }
 
   private openSettings = () => {
-    this.promiseOpenSettings(openSettings).then(this.requestCameraPermission)
+    if (IS_IOS) {
+      this.promiseOpenSettings(Permissions.openSettings).then(
+        this.requestCameraPermission,
+      )
+    } else {
+      this.promiseOpenSettings(appDetailsSettings).then(
+        this.requestCameraPermission,
+      )
+    }
   }
 
   private onTorchChange = (state: boolean) => {
@@ -278,7 +291,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
           <Text
             style={styles.permissionButton}
             onPress={async () => {
-              if (this.state.permission === RESULTS.BLOCKED) {
+              if (this.state.permission === RESULTS.RESTRICTED) {
                 this.openSettings()
               } else {
                 await this.requestCameraPermission()
@@ -293,7 +306,7 @@ export class QRCodeScanner extends React.Component<Props, State> {
   }
 
   public render() {
-    return this.state.permission === RESULTS.GRANTED
+    return this.state.permission === RESULTS.AUTHORIZED
       ? this.renderCamera()
       : this.renderNoPermissionView()
   }
