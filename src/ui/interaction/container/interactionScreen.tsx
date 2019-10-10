@@ -8,7 +8,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native'
-import { QRCodeScanner } from '../component/qrScanner'
+import { ScannerContainer } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { white } from '../../../styles/colors'
 import { ThunkDispatch } from '../../../store'
@@ -74,14 +74,14 @@ const InteractionContainer = (props: Props) => (
   <React.Fragment>
     <StatusBar hidden />
     <Container style={{ backgroundColor: Colors.blackMain }}>
-      {IS_IOS ? (
+      {IS_IOS && (
         <TouchableOpacity
           onPress={props.navigateHome}
           style={styles.closeButton}
         >
           <CloseIcon />
         </TouchableOpacity>
-      ) : null}
+      )}
       <View style={styles.topWrapper}>
         <View style={styles.buttonWrapper}>
           <View style={styles.iconWrapper}>
@@ -93,7 +93,7 @@ const InteractionContainer = (props: Props) => (
         </View>
         <View style={{ flex: 0.25 }} />
       </View>
-      <QRCodeScanner
+      <ScannerContainer
         navigation={props.navigation}
         onScannerSuccess={props.onScannerSuccess}
       />
