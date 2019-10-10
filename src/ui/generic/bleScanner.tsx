@@ -5,8 +5,8 @@ import { Container, JolocomButton } from 'src/ui/structure'
 import { ThunkDispatch } from 'src/store'
 import { NavigationScreenProps } from 'react-navigation'
 import { Colors } from 'src/styles'
-import { BleManager, Device } from 'react-native-ble-plx'
-import { openSerialConnection, SerialConnection } from 'src/lib/ble'
+import { BleManager } from 'react-native-ble-plx'
+import { openSerialConnection, SerialConnection, BleSerialConnectionConfig } from 'src/lib/ble'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -14,10 +14,16 @@ interface Props
 
 interface State {
   devices: {
-    [id: string]: string | null
+    [id: string]: string
   }
-    connected: SerialConnection | null,
-    rx: string
+  connected: SerialConnection | null,
+  rx: string
+}
+
+const serialUUIDs: BleSerialConnectionConfig = {
+  serviceUUID: "6e400001-b5a3-f393-e0a9-e50e24dcca9e",
+  rxUUID: "6e400002-b5a3-f393-e0a9-e50e24dcca9e",
+  txUUID: "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 }
 
 const styles = StyleSheet.create({
@@ -42,10 +48,10 @@ export class BLECodeScanner extends React.Component<Props, State> {
         rx: ""
     }
     this.ble = new BleManager()
-    this.ble.startDeviceScan(null, null, (error, device) => {
+    this.ble.startDeviceScan([serialUUIDs.serviceUUID], null, (error, device) => {
       if (error) console.log(error.toString())
 
-      if (device) {
+      if (device && device.name) {
         this.setState({
           devices: {
             ...this.state.devices,
@@ -58,10 +64,10 @@ export class BLECodeScanner extends React.Component<Props, State> {
 
   componentWillUnmount() {
     if (this.removeFocusListener) this.removeFocusListener()
-    this.ble.destroy()
     this.state.connected
       ? this.state.connected.close()
       : null
+    this.ble.destroy()
   }
 
   onScannerCancel() {
@@ -70,7 +76,6 @@ export class BLECodeScanner extends React.Component<Props, State> {
 
   render() {
     // const { onScannerSuccess } = this.props
-
     if (!this.state.connected) {
       const devices = this.state.devices
       return (
@@ -83,16 +88,19 @@ export class BLECodeScanner extends React.Component<Props, State> {
               }))}
               renderItem={({ item }) => (
                 <JolocomButton
-                  text={item.name || 'rando'}
+                  text={item.name}
                   onPress={async () =>
                     this.ble
                       .connectToDevice(item.id, { requestMTU: 512 })
-                      .then(device => openSerialConnection(device))
-                           .then(serial => {
-                               this.setState({ connected: serial })
-                               serial.listen((line) => this.setState({rx: this.state.rx + line}))
-                           }
-                                )
+                      .then(device => device.discoverAllServicesAndCharacteristics())
+                      .then(device => openSerialConnection(device, serialUUIDs))
+                      .then(serial => {
+                        this.ble.stopDeviceScan()
+                        this.setState({ connected: serial })
+                        serial.listen(line =>
+                                      this.setState({ rx: this.state.rx + Buffer.from(line, "Base64").toString("ascii") }),
+                        )
+                      })
                   }
                 />
               )}
@@ -103,7 +111,7 @@ export class BLECodeScanner extends React.Component<Props, State> {
     } else {
       return (
         <React.Fragment>
-          <Text>this.state.rx</Text>
+          <Text>{this.state.rx}</Text>
         </React.Fragment>
       )
     }

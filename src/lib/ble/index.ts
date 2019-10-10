@@ -11,31 +11,30 @@ import { reject } from 'q';
 // close screen (navigate to consent screen)
 // write ?
 
-type BleSerialConnectionConfig = {
-    prefixUUID: string,
-    suffixUUID: string,
+export type BleSerialConnectionConfig = {
+    serviceUUID: string,
+    rxUUID: string,
+    txUUID: string,
 }
 
-// type Device = {}
-
-type SerialConnection = {
+export type SerialConnection = {
     write: (toWrite: string) => Promise<any>,
     listen: (callback: (line: string) => void) => Subscription,
     close: () => Promise<{}>
 }
 
-export const openSerialConnection = (d: Device, uuid: BleSerialConnectionConfig = {
-    prefixUUID: "6e40000",
-    suffixUUID: "-b5a3-f393-e0a9-e50e24dcca9e"
-}): Promise<SerialConnection> => d.isConnected().then(connected => connected
+export const openSerialConnection = (
+    d: Device,
+    serialUUIDs: BleSerialConnectionConfig
+): Promise<SerialConnection> => d.isConnected().then(connected => connected
     ? {
         write: (toWrite: string) => d.writeCharacteristicWithResponseForService(
-            uuid.prefixUUID + "1" + uuid.suffixUUID,
-            uuid.prefixUUID + "3" + uuid.suffixUUID,
+            serialUUIDs.serviceUUID,
+            serialUUIDs.rxUUID,
             toWrite),
         listen: (callback: (line: string) => void) => d.monitorCharacteristicForService(
-            uuid.prefixUUID + "1" + uuid.suffixUUID,
-            uuid.prefixUUID + "2" + uuid.suffixUUID,
+            serialUUIDs.serviceUUID,
+            serialUUIDs.txUUID,
             (error, characteristic) => {
                 if (characteristic && characteristic.value) {
                     callback(characteristic.value)
@@ -56,8 +55,7 @@ export const openSerialConnection = (d: Device, uuid: BleSerialConnectionConfig 
 // 1. a function which takes a callback and calls it with every new recieve
 // 2. a function to send
 
-type ConnectionManager = {
-    scanForDevices: (uuids: string[]) => Promise<(Device: ) => string>[],
-    establishConnection: (device: Device) => Promise<SerialConnection>
-}
-
+// type ConnectionManager = {
+    // scanForDevices: (uuids: string[]) => Promise<(Device: ) => string>[],
+    // establishConnection: (device: Device) => Promise<SerialConnection>
+// }
