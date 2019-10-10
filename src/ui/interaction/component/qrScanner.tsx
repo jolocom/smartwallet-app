@@ -9,7 +9,6 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native'
-import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { Colors, Spacing } from '../../../styles'
 import { black065, white } from '../../../styles/colors'
@@ -29,10 +28,7 @@ import { TorchOffIcon, TorchOnIcon } from '../../../resources'
 import { appDetailsSettings } from 'react-native-android-open-settings'
 // NOTE: using v1.2.1. When upgrading to RN60, use the latest version.
 import Permissions, { Status } from 'react-native-permissions'
-
-export interface QrScanEvent {
-  data: string
-}
+import { QrScanEvent } from '../container/interactionScreen'
 
 interface Props extends NavigationScreenProps {
   onScannerSuccess: (e: QrScanEvent) => void

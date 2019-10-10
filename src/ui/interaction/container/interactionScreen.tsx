@@ -8,7 +8,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native'
-import { QRCodeScanner, QrScanEvent } from '../component/qrScanner'
+import { QRCodeScanner } from '../component/qrScanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { white } from '../../../styles/colors'
 import { ThunkDispatch } from '../../../store'
@@ -24,6 +24,10 @@ import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { Colors } from '../../../styles'
 import { navigatorResetHome } from '../../../actions/navigation'
+
+export interface QrScanEvent {
+  data: string
+}
 
 const IS_IOS = Platform.OS === 'ios'
 
