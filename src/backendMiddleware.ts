@@ -83,14 +83,17 @@ export class BackendMiddleware {
     } catch (e) {
       // This may fail if the application was uninstalled and reinstalled, as
       // the android keystore is cleared on uninstall, but the database may
-      // still remain.
+      // still remain, due to having been auto backed up!
       // FIXME: Sentry.captureException(e)
     }
 
+    if (encryptedEntropy && !encryptionPass) {
+      // if we can't decrypt the encryptedEntropy, then reset the database
+      console.warn('DROPPING OLD DB')
+      await this.storageLib.resetDatabase()
+    }
+
     if (!encryptedEntropy || !encryptionPass) {
-      // if we can't decrypt the encryptedEntropy, then delete it
-      if (encryptedEntropy)
-        this.storageLib.delete.encryptedSeed(encryptedEntropy)
       throw new BackendError(ErrorCodes.NoEntropy)
     }
 
