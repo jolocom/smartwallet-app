@@ -34,6 +34,7 @@ export const greyLighter = 'rgb(155, 155, 158)'
 export const greyLight = 'rgb(149, 149, 149)'
 export const grey = 'grey' // rgb(128, 128, 128)
 export const golden = 'rgb(241, 161, 7)'
+export const nativeBlue = 'rgb(10, 132, 255)'
 
 export const greenMain = 'rgb(40, 165, 45)'
 export const greenFaded060 = 'rgba(233, 239, 221, 0.6)'

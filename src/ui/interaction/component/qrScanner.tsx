@@ -23,10 +23,10 @@ import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { RNCamera } from 'react-native-camera'
 import { TorchOffIcon, TorchOnIcon } from '../../../resources'
-/* NOTE: When using the latest react-native-permissions version, remove this dependency,
+/* TODO: When using the latest react-native-permissions version, remove this dependency,
  since there is already a cross-platform openSettings method */
 import { appDetailsSettings } from 'react-native-android-open-settings'
-// NOTE: using v1.2.1. When upgrading to RN60, use the latest version.
+// TODO: using v1.2.1. When upgrading to RN60, use the latest version.
 import Permissions, { Status } from 'react-native-permissions'
 import { QrScanEvent } from '../container/interactionScreen'
 
@@ -116,14 +116,22 @@ const styles = StyleSheet.create({
     fontSize: textSM,
     paddingTop: Spacing.XS,
     paddingHorizontal: Spacing.XXL,
+    marginBottom: Spacing.XXL,
     fontFamily: fontMain,
     lineHeight: 24,
     ...centeredText,
   },
-  permissionButton: {
+  androidPermissionButton: {
     color: Colors.white,
     fontSize: textXS,
     textDecorationLine: 'underline',
+    fontFamily: fontMain,
+    lineHeight: 20,
+    ...centeredText,
+  },
+  iosPermissionButton: {
+    color: Colors.nativeBlue,
+    fontSize: textXS,
     fontFamily: fontMain,
     lineHeight: 20,
     ...centeredText,
@@ -187,8 +195,8 @@ export class QRCodeScanner extends React.Component<Props, State> {
 
   // detect when the focus is back on the app screen after navigating
   // to settings, in order to check if the permissions changed
-  private promiseOpenSettings = (cb: () => void) => {
-    return new Promise((resolve, reject) => {
+  private promiseOpenSettings = (cb: () => void) =>
+    new Promise((resolve, reject) => {
       const listener = (state: AppStateStatus) => {
         if (state === 'active') {
           AppState.removeEventListener('change', listener)
@@ -203,7 +211,6 @@ export class QRCodeScanner extends React.Component<Props, State> {
         reject(e)
       }
     })
-  }
 
   private openSettings = () => {
     if (IS_IOS) {
@@ -272,34 +279,37 @@ export class QRCodeScanner extends React.Component<Props, State> {
     )
   }
 
-  private renderNoPermissionView = () => {
-    return (
-      <React.Fragment>
-        <View style={styles.notAuthorizedOverlay}>
-          <Text style={styles.scanText}>{I18n.t(strings.SCAN_QR)}</Text>
-          <Text style={styles.notAuthorizedDescription}>
-            {I18n.t(
-              strings.ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS,
-            )}
-          </Text>
-        </View>
-        <View style={styles.notAuthorizedOverlay}>
-          <Text
-            style={styles.permissionButton}
-            onPress={async () => {
+  private renderNoPermissionView = () => (
+    <React.Fragment>
+      <View style={styles.notAuthorizedOverlay}>
+        <Text style={styles.scanText}>{I18n.t(strings.SCAN_QR)}</Text>
+        <Text style={styles.notAuthorizedDescription}>
+          {I18n.t(
+            strings.ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS,
+          )}
+        </Text>
+        <Text
+          style={
+            IS_IOS ? styles.iosPermissionButton : styles.androidPermissionButton
+          }
+          onPress={async () => {
+            if (IS_IOS) {
+              this.openSettings()
+            } else {
               if (this.state.permission === RESULTS.RESTRICTED) {
                 this.openSettings()
               } else {
                 await this.requestCameraPermission()
               }
-            }}
-          >
-            {I18n.t(strings.ENABLE_CAMERA_ACCESS)}
-          </Text>
-        </View>
-      </React.Fragment>
-    )
-  }
+            }
+          }}
+        >
+          {I18n.t(strings.ENABLE_CAMERA_ACCESS)}
+        </Text>
+      </View>
+      <View style={styles.notAuthorizedOverlay} />
+    </React.Fragment>
+  )
 
   public render() {
     return this.state.permission === RESULTS.AUTHORIZED
