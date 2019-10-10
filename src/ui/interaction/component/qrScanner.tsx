@@ -28,10 +28,10 @@ import { TorchOffIcon, TorchOnIcon } from '../../../resources'
 import { appDetailsSettings } from 'react-native-android-open-settings'
 // TODO: using v1.2.1. When upgrading to RN60, use the latest version.
 import Permissions, { Status } from 'react-native-permissions'
-import { QrScanEvent } from '../container/interactionScreen'
+import QRScanner, { Event } from 'react-native-qrcode-scanner'
 
 interface Props extends NavigationScreenProps {
-  onScannerSuccess: (e: QrScanEvent) => void
+  onScannerSuccess: (jwt: string) => void
 }
 
 interface State {
@@ -46,8 +46,6 @@ interface PermissionResults {
   DENIED: Status
   RESTRICTED: Status
 }
-
-const QRScanner = require('react-native-qrcode-scanner').default
 
 const CAMERA_PERMISSION = 'camera'
 const RESULTS: PermissionResults = {
@@ -145,7 +143,7 @@ const styles = StyleSheet.create({
 })
 
 export class QRCodeScanner extends React.Component<Props, State> {
-  private scanner: typeof QRScanner
+  private scanner!: QRScanner
   private removeFocusListener: (() => void) | undefined
 
   public constructor(props: Props) {
@@ -239,18 +237,21 @@ export class QRCodeScanner extends React.Component<Props, State> {
         ? RNCamera.Constants.FlashMode.torch
         : RNCamera.Constants.FlashMode.off,
     }
+
     return (
       <React.Fragment>
         {/* NOTE: The QRScanner is positioned as absolute to
          allow the interaction menu on top of it */}
         {this.state.isCamera ? (
           <QRScanner
+            //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
             containerStyle={{ position: 'absolute' }}
             cameraProps={cameraProps}
-            ref={(ref: React.Component) => (this.scanner = ref)}
+            ref={(ref: QRScanner) => (this.scanner = ref)}
             fadeIn
-            onRead={onScannerSuccess}
-            cameraStyle={{ height: SCREEN_HEIGHT }}
+            onRead={(e: Event) => onScannerSuccess(e.data)}
+            //@ts-ignore
+            cameraStyle={StyleSheet.create({ height: SCREEN_HEIGHT })}
           />
         ) : null}
         <View style={{ flexDirection: 'row' }}>

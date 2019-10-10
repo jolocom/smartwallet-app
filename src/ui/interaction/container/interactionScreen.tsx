@@ -25,10 +25,6 @@ import strings from 'src/locales/strings'
 import { Colors } from '../../../styles'
 import { navigatorResetHome } from '../../../actions/navigation'
 
-export interface QrScanEvent {
-  data: string
-}
-
 const IS_IOS = Platform.OS === 'ios'
 
 const styles = StyleSheet.create({
@@ -106,11 +102,11 @@ const InteractionContainer = (props: Props) => (
 )
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  onScannerSuccess: async (e: QrScanEvent) => {
+  onScannerSuccess: async (jwt: string) => {
     let interactionToken
 
     try {
-      interactionToken = JolocomLib.parse.interactionToken.fromJWT(e.data)
+      interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
     } catch (err) {
       return dispatch(
         showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)),
