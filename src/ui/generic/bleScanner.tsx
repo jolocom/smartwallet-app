@@ -7,6 +7,11 @@ import { NavigationScreenProps } from 'react-navigation'
 import { Colors } from 'src/styles'
 import { BleManager } from 'react-native-ble-plx'
 import { openSerialConnection, SerialConnection, BleSerialConnectionConfig } from 'src/lib/ble'
+import { showErrorScreen } from 'src/actions/generic';
+import { JolocomLib } from 'jolocom-lib';
+import { AppError, ErrorCode } from 'src/lib/errors';
+import { interactionHandlers } from 'src/lib/storage/interactionTokens';
+import { withLoading, withErrorScreen } from 'src/actions/modifiers';
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -36,7 +41,6 @@ const styles = StyleSheet.create({
 })
 
 export class BLECodeScanner extends React.Component<Props, State> {
-  // private scanner: typeof QRScanner
   private removeFocusListener: (() => void) | undefined
   private ble: BleManager
 
@@ -45,7 +49,7 @@ export class BLECodeScanner extends React.Component<Props, State> {
     this.state = {
       devices: {},
       connected: null,
-        rx: ""
+      rx: '',
     }
     this.ble = new BleManager()
     this.ble.startDeviceScan([serialUUIDs.serviceUUID], null, (error, device) => {
@@ -75,7 +79,11 @@ export class BLECodeScanner extends React.Component<Props, State> {
   }
 
   render() {
-    // const { onScannerSuccess } = this.props
+    const rx = this.state.rx;
+    if (rx[-1] === '\n') {
+      this.props.onScannerSuccess(rx);
+    }
+
     if (!this.state.connected) {
       const devices = this.state.devices
       return (
@@ -98,7 +106,7 @@ export class BLECodeScanner extends React.Component<Props, State> {
                         this.ble.stopDeviceScan()
                         this.setState({ connected: serial })
                         serial.listen(line =>
-                                      this.setState({ rx: this.state.rx + Buffer.from(line, "Base64").toString("ascii") }),
+                          this.setState({ rx: this.state.rx + Buffer.from(line, "Base64").toString("ascii") })
                         )
                       })
                   }
@@ -119,24 +127,24 @@ export class BLECodeScanner extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  // onScannerSuccess: async (e: QrScanEvent) => {
-  // let interactionToken
-  // try {
-  // interactionToken = JolocomLib.parse.interactionToken.fromJWT(e.data)
-  // } catch (err) {
-  // return dispatch(
-  // showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)),
-  // )
-  // }
-  // const handler = interactionHandlers[interactionToken.interactionType]
-  // return handler
-  // ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
-  // : dispatch(
-  // showErrorScreen(
-  // new AppError(ErrorCode.Unknown, new Error('No handler found')),
-  // ),
-  // )
-  // },
+  onScannerSuccess: async (e: string) => {
+    let interactionToken
+    try {
+      interactionToken = JolocomLib.parse.interactionToken.fromJWT(e)
+    } catch (err) {
+      return dispatch(
+        showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)),
+      )
+    }
+    const handler = interactionHandlers[interactionToken.interactionType]
+    return handler
+      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
+      : dispatch(
+        showErrorScreen(
+          new AppError(ErrorCode.Unknown, new Error('No handler found')),
+        ),
+      )
+  },
 })
 
 export const BLEScannerContainer = connect(
