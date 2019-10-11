@@ -94,6 +94,12 @@ export class BackendMiddleware {
     }
 
     if (!encryptedEntropy || !encryptionPass) {
+      // If either encryptedEntropy or encryptionPass was missing, we throw
+      // NoEntropy to signal that we cannot prepare an identityWallet instance due
+      // to lack of a seed.
+      // Note that the case of having an encryptionPass but no encryptedEntropy
+      // is an uncommon edge case, but may potentially happen due to errors/bugs
+      // etc
       throw new BackendError(ErrorCodes.NoEntropy)
     }
 
