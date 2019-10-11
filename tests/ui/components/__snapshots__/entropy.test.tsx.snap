@@ -25,6 +25,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         },
       ]
     }
+    testID="entropyMsg"
   >
     50 %
   </Text>
@@ -35,6 +36,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         "flexDirection": "column",
       }
     }
+    testID="scratchArea"
   >
     <MaskedImageComponent
       addPoint={[Function]}
@@ -64,6 +66,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
         "top": "20%",
       }
     }
+    testID="entropyMsg"
   >
     For security purposes, we need some randomness. Please tap the screen and draw on it randomly
   </Text>
@@ -74,6 +77,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
         "flexDirection": "column",
       }
     }
+    testID="scratchArea"
   >
     <View
       style={
@@ -117,6 +121,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
         },
       ]
     }
+    testID="entropyMsg"
   >
     100 %
   </Text>
@@ -127,6 +132,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
         "flexDirection": "column",
       }
     }
+    testID="scratchArea"
   >
     <MaskedImageComponent
       addPoint={[Function]}

@@ -47,8 +47,8 @@ export const EntropyComponent: React.FC<Props> = props => {
 
   return (
     <Container style={styles.mainContainer}>
-      <Text style={textStyle}>{msg}</Text>
-      <Container style={styles.contentContainer}>
+      <Text testID="entropyMsg" style={textStyle}>{msg}</Text>
+      <Container testID="scratchArea" style={styles.contentContainer}>
         {progress === 0 ? (
           <View style={{ position: 'absolute' }}>
             <HandAnimationComponent />
