@@ -83,7 +83,6 @@ export class Storage {
 
   public delete = {
     verifiableCredential: this.deleteVCred.bind(this),
-    encryptedSeed: this.deleteEncryptedSeed.bind(this),
     // credentialMetadata: this.deleteCredentialMetadata.bind(this)
   }
 
@@ -222,15 +221,6 @@ export class Storage {
     await this.createConnectionIfNeeded()
     const encryptedSeed = plainToClass(MasterKeyEntity, args)
     await this.connection.manager.save(encryptedSeed)
-  }
-
-  private async deleteEncryptedSeed(encryptedEntropy: string): Promise<void> {
-    await this.createConnectionIfNeeded()
-    await this.connection.manager.createQueryBuilder()
-      .delete()
-      .from(MasterKeyEntity)
-      .where("encryptedEntropy = :encryptedEntropy", { encryptedEntropy })
-      .execute()
   }
 
   private async storeVClaim(vCred: SignedCredential): Promise<void> {
