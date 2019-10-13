@@ -12,8 +12,8 @@ export default {
   database: 'LocalSmartWalletData',
   location: 'default',
   logging: ['error', 'query', 'schema'],
-  entities: './src/lib/storage/entities/',
-  migrations: './src/lib/storage/migration/',
+  entities: ['./src/lib/storage/entities/*.ts'],
+  migrations: ['./src/lib/storage/migration/*.ts'],
   migrationsRun: true,
   synchronize: false,
   cli: {
