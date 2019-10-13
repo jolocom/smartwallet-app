@@ -6,14 +6,15 @@ import { StatusBar } from 'react-native'
 import { RoutesContainer } from './routes'
 import { AppLoading } from './ui/generic/appLoading'
 import { useScreens } from 'react-native-screens'
+import { NavigationContainerComponent } from 'react-navigation'
 useScreens()
 
 let store: ReturnType<typeof initStore>
 
 export default class App extends React.PureComponent<{}> {
-  private navigator: any
+  private navigator!: NavigationContainerComponent
 
-  constructor(props: {}) {
+  public constructor(props: {}) {
     super(props)
     // only init store once, or else Provider complains (especially on 'toggle
     // inspector')
@@ -25,13 +26,13 @@ export default class App extends React.PureComponent<{}> {
     if (!store) store = initStore()
   }
 
-  private setNavigator(nav: any) {
+  private setNavigator(nav: NavigationContainerComponent | null) {
     if (!nav) return
     this.navigator = nav
     navigationActions.setTopLevelNavigator(this.navigator)
   }
 
-  render() {
+  public render() {
     return (
       <React.Fragment>
         <StatusBar barStyle="default" />
