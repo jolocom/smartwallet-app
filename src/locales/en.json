@@ -36,6 +36,8 @@
   "Done": "Done",
   "Could not find receiving application": "Could not find receiving application",
   "Email": "Email",
+  "Enable access so you can start taking photos and videos": "Enable access so you can start taking photos and videos",
+  "Enable Camera Access": "Enable Camera Access",
   "Encrypting and storing data locally": "Encrypting and storing data locally",
   "Enhanced privacy": "Enhanced privacy",
   "expired": "expired",
@@ -84,6 +86,7 @@
   "Restore account": "Restore account",
   "Registration failed": "Registration failed",
   "Scan": "Scan",
+  "Scan QR": "Scan QR",
   "Security": "Security",
   "Self-signed": "Self-signed",
   "Settings": "Settings",
@@ -117,6 +120,5 @@
   "Your identity is already backed up": "Your identity is already backed up",
   "Your Jolocom Wallet": "Your Jolocom Wallet",
   "Your preferences": "Your preferences",
-  "You can scan the qr code now!": "You can scan the qr code now!",
   "You haven't logged in to any services yet": "You haven't logged in to any services yet"
 }

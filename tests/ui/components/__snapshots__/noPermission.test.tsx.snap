@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`No scanner permission component matches the snapshot on initial render 1`] = `
+<Fragment>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0.65)",
+        "flex": 1,
+        "height": "100%",
+        "justifyContent": "center",
+        "width": "100%",
+        "zIndex": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "rgb(255, 239, 223)",
+          "fontFamily": "TT Commons",
+          "fontSize": 28,
+          "textAlign": "center",
+        }
+      }
+    >
+      Scan QR
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "rgba(255, 239, 223, 0.8)",
+          "fontFamily": "TT Commons",
+          "fontSize": 18,
+          "lineHeight": 24,
+          "marginBottom": 48,
+          "paddingHorizontal": 48,
+          "paddingTop": 8,
+          "textAlign": "center",
+        }
+      }
+    >
+      Enable access so you can start taking photos and videos
+    </Text>
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[MockFunction]}
+      style={
+        Object {
+          "padding": 10,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "rgb(10, 132, 255)",
+            "fontFamily": "TT Commons",
+            "fontSize": 16,
+            "lineHeight": 20,
+            "textAlign": "center",
+            "textDecorationLine": "none",
+          }
+        }
+      >
+        Enable Camera Access
+      </Text>
+    </TouchableOpacity>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0.65)",
+        "flex": 1,
+        "height": "100%",
+        "justifyContent": "center",
+        "width": "100%",
+        "zIndex": 1,
+      }
+    }
+  />
+</Fragment>
+`;

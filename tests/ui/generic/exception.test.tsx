@@ -45,7 +45,7 @@ describe('Exception screen component', () => {
   })
 
   it('Goes back to the screen described in returnTo', () => {
-    const returnTo = routeList.QRCodeScanner
+    const returnTo = routeList.InteractionScreen
     const props = {
       navigateBack: jest.fn(),
       navigation: createMockNavigationScreenProp({
