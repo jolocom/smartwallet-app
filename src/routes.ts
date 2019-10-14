@@ -186,7 +186,7 @@ const MainStack = createStackNavigator(
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
-    [routeList.QRCodeScanner]: {
+    [routeList.InteractionScreen]: {
       screen: InteractionScreen,
       navigationOptions: noHeaderNavOpts,
     },

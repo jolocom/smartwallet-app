@@ -95,14 +95,11 @@ export class ScannerComponent extends React.Component<Props, State> {
       this.removeFocusListener = this.props.navigation.addListener(
         'willFocus',
         () => {
-          if(this.state.isCameraReady) {
+          if (this.state.isCameraReady) {
             this.scanner.reactivate()
             // NOTE: the re-render and the re-mount should only fire during the willFocus event
             this.setState({ reRenderKey: Date.now() })
-            // NOTE: force an update to force remounting of the Camera
-            this.forceUpdate()
           }
-
         },
       ).remove
     }

@@ -1,9 +1,15 @@
 import React, { FC } from 'react'
-import { PlatformOSType, StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing } from '../../../styles'
-import { centeredText, fontMain, textSM, textXL, textXS } from '../../../styles/typography'
+import {
+  centeredText,
+  fontMain,
+  textSM,
+  textXL,
+  textXS,
+} from '../../../styles/typography'
 
 const styles = StyleSheet.create({
   notAuthorizedOverlay: {
@@ -31,30 +37,28 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     ...centeredText,
   },
-  androidPermissionButton: {
-    color: Colors.white,
-    fontSize: textXS,
-    textDecorationLine: 'underline',
-    fontFamily: fontMain,
-    lineHeight: 20,
-    ...centeredText,
-  },
-  iosPermissionButton: {
-    color: Colors.nativeBlue,
+  permissionButton: {
     fontSize: textXS,
     fontFamily: fontMain,
     lineHeight: 20,
+    color: Platform.select({
+      android: Colors.white,
+      ios: Colors.nativeIosBlue,
+    }),
+    textDecorationLine: Platform.select({
+      android: 'underline',
+      ios: 'none',
+    }),
     ...centeredText,
   },
 })
 
 interface Props {
   onPressEnable: () => void
-  platform: PlatformOSType
 }
 
 export const NoPermissionComponent: FC<Props> = (props: Props) => {
-  return(
+  return (
     <React.Fragment>
       <View style={styles.notAuthorizedOverlay}>
         <Text style={styles.scanText}>{I18n.t(strings.SCAN_QR)}</Text>
@@ -63,12 +67,7 @@ export const NoPermissionComponent: FC<Props> = (props: Props) => {
             strings.ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS,
           )}
         </Text>
-        <Text
-          style={
-            props.platform === 'ios' ? styles.iosPermissionButton : styles.androidPermissionButton
-          }
-          onPress={props.onPressEnable}
-        >
+        <Text style={styles.permissionButton} onPress={props.onPressEnable}>
           {I18n.t(strings.ENABLE_CAMERA_ACCESS)}
         </Text>
       </View>

@@ -48,34 +48,40 @@ export class ScannerContainer extends React.Component<Props, State> {
     return permission
   }
 
-  // detect when the focus is back on the app screen after navigating
-  // to settings, in order to check if the permissions changed
-  private promiseOpenSettings = (cb: () => void) =>
-    new Promise((resolve, reject) => {
-      const listener = (state: AppStateStatus) => {
-        if (state === 'active') {
-          AppState.removeEventListener('change', listener)
-          resolve()
-        }
-      }
-      AppState.addEventListener('change', listener)
-      try {
-        cb()
-      } catch (e) {
-        AppState.removeEventListener('change', listener)
-        reject(e)
-      }
-    })
-
+  /*
+   * detect when the focus is back on the app screen after navigating
+   * to settings, in order to check if the permissions changed
+   */
   private openSettings = () => {
+    const listener = async (state: AppStateStatus) => {
+      if (state === 'active') {
+        AppState.removeEventListener('change', listener)
+        await this.requestCameraPermission()
+      }
+    }
+
+    AppState.addEventListener('change', listener)
+
+    try {
+      const openPlatformSettings = Platform.select({
+        ios: Permissions.openSettings,
+        android: appDetailsSettings,
+      })
+      openPlatformSettings()
+    } catch (e) {
+      AppState.removeEventListener('change', listener)
+    }
+  }
+
+  private onEnablePermission = async () => {
     if (IS_IOS) {
-      this.promiseOpenSettings(Permissions.openSettings).then(
-        this.requestCameraPermission,
-      )
+      this.openSettings()
     } else {
-      this.promiseOpenSettings(appDetailsSettings).then(
-        this.requestCameraPermission,
-      )
+      if (this.state.permission === RESULTS.RESTRICTED) {
+        this.openSettings()
+      } else {
+        await this.requestCameraPermission()
+      }
     }
   }
 
@@ -87,20 +93,7 @@ export class ScannerContainer extends React.Component<Props, State> {
         navigation={navigation}
       />
     ) : (
-      <NoPermissionComponent
-        platform={Platform.OS}
-        onPressEnable={async () => {
-          if (IS_IOS) {
-            this.openSettings()
-          } else {
-            if (this.state.permission === RESULTS.RESTRICTED) {
-              this.openSettings()
-            } else {
-              await this.requestCameraPermission()
-            }
-          }
-        }}
-      />
+      <NoPermissionComponent onPressEnable={this.onEnablePermission} />
     )
   }
 }
