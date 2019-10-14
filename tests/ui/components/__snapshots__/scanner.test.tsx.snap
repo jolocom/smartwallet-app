@@ -1,0 +1,277 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QR Code component correctly changes torch button when icon is released 1`] = `
+<Fragment>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.65)",
+          "height": 562.5,
+          "width": 750,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "borderColor": "white",
+          "borderRadius": 2,
+          "borderWidth": 2,
+          "height": 562.5,
+          "justifyContent": "center",
+          "width": 562.5,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.65)",
+          "height": 562.5,
+          "width": 750,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0.65)",
+        "flex": 1,
+        "height": "100%",
+        "justifyContent": "space-between",
+        "paddingBottom": "6%",
+        "width": "100%",
+        "zIndex": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "rgb(255, 239, 223)",
+          "fontFamily": "TT Commons",
+          "fontSize": 18,
+          "lineHeight": 20,
+          "marginTop": 12,
+          "paddingHorizontal": 64,
+          "textAlign": "center",
+        }
+      }
+    >
+      It's all automatic, just place your phone above the code
+    </Text>
+    <TouchableHighlight
+      activeOpacity={1}
+      delayPressOut={100}
+      onPressIn={[Function]}
+      onPressOut={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 80,
+          "justifyContent": "center",
+          "width": 80,
+        }
+      }
+      underlayColor="transparent"
+    >
+      <SvgTorchOffIcon />
+    </TouchableHighlight>
+  </View>
+</Fragment>
+`;
+
+exports[`QR Code component correctly changes torch button while icon is touched 1`] = `
+<Fragment>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.65)",
+          "height": 562.5,
+          "width": 750,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "borderColor": "white",
+          "borderRadius": 2,
+          "borderWidth": 2,
+          "height": 562.5,
+          "justifyContent": "center",
+          "width": 562.5,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.65)",
+          "height": 562.5,
+          "width": 750,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0.65)",
+        "flex": 1,
+        "height": "100%",
+        "justifyContent": "space-between",
+        "paddingBottom": "6%",
+        "width": "100%",
+        "zIndex": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "rgb(255, 239, 223)",
+          "fontFamily": "TT Commons",
+          "fontSize": 18,
+          "lineHeight": 20,
+          "marginTop": 12,
+          "paddingHorizontal": 64,
+          "textAlign": "center",
+        }
+      }
+    >
+      It's all automatic, just place your phone above the code
+    </Text>
+    <TouchableHighlight
+      activeOpacity={1}
+      delayPressOut={100}
+      onPressIn={[Function]}
+      onPressOut={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 80,
+          "justifyContent": "center",
+          "width": 80,
+        }
+      }
+      underlayColor="transparent"
+    >
+      <SvgTorchOnIcon />
+    </TouchableHighlight>
+  </View>
+</Fragment>
+`;
+
+exports[`QR Code component matches the snapshot on initial render 1`] = `
+<Fragment>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.65)",
+          "height": 562.5,
+          "width": 750,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "transparent",
+          "borderColor": "white",
+          "borderRadius": 2,
+          "borderWidth": 2,
+          "height": 562.5,
+          "justifyContent": "center",
+          "width": 562.5,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.65)",
+          "height": 562.5,
+          "width": 750,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0.65)",
+        "flex": 1,
+        "height": "100%",
+        "justifyContent": "space-between",
+        "paddingBottom": "6%",
+        "width": "100%",
+        "zIndex": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "rgb(255, 239, 223)",
+          "fontFamily": "TT Commons",
+          "fontSize": 18,
+          "lineHeight": 20,
+          "marginTop": 12,
+          "paddingHorizontal": 64,
+          "textAlign": "center",
+        }
+      }
+    >
+      It's all automatic, just place your phone above the code
+    </Text>
+    <TouchableHighlight
+      activeOpacity={1}
+      delayPressOut={100}
+      onPressIn={[Function]}
+      onPressOut={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 80,
+          "justifyContent": "center",
+          "width": 80,
+        }
+      }
+      underlayColor="transparent"
+    >
+      <SvgTorchOffIcon />
+    </TouchableHighlight>
+  </View>
+</Fragment>
+`;
