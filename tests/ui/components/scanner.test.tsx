@@ -5,7 +5,7 @@ import { TouchableHighlight } from 'react-native'
 import QRScanner, { Event } from 'react-native-qrcode-scanner'
 import { stub } from '../../utils'
 
-describe.only('QR Code component', () => {
+describe('QR Code component', () => {
   const props = {
     onScannerSuccess: jest.fn(),
   }
@@ -36,14 +36,14 @@ describe.only('QR Code component', () => {
     expect(QRComponent).toMatchSnapshot()
   })
 
-  it('should correctly whatever', () => {
-    const mockEvent = stub<Event>({ data: 'hello' })
+  it('should correctly render the QRScanner and call onRead', () => {
+    const mockEvent = stub<Event>({ data: 'test-jwt' })
 
     QRComponent.setState({ isCameraReady: true })
     QRComponent.find(QRScanner)
       .props()
       .onRead(mockEvent)
 
-    expect(props.onScannerSuccess).toHaveBeenCalledWith('hello')
+    expect(props.onScannerSuccess).toHaveBeenCalledWith('test-jwt')
   })
 })

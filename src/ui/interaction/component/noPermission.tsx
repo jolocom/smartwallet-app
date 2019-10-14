@@ -1,5 +1,11 @@
 import React, { FC } from 'react'
-import { Platform, StyleSheet, Text, View } from 'react-native'
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing } from '../../../styles'
@@ -37,7 +43,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     ...centeredText,
   },
-  permissionButton: {
+  enableButtonText: {
     fontSize: textXS,
     fontFamily: fontMain,
     lineHeight: 20,
@@ -50,6 +56,9 @@ const styles = StyleSheet.create({
       ios: 'none',
     }),
     ...centeredText,
+  },
+  enableButtonWrapper: {
+    padding: 10,
   },
 })
 
@@ -67,9 +76,14 @@ export const NoPermissionComponent: FC<Props> = (props: Props) => {
             strings.ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS,
           )}
         </Text>
-        <Text style={styles.permissionButton} onPress={props.onPressEnable}>
-          {I18n.t(strings.ENABLE_CAMERA_ACCESS)}
-        </Text>
+        <TouchableOpacity
+          style={styles.enableButtonWrapper}
+          onPress={props.onPressEnable}
+        >
+          <Text style={styles.enableButtonText}>
+            {I18n.t(strings.ENABLE_CAMERA_ACCESS)}
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.notAuthorizedOverlay} />
     </React.Fragment>
