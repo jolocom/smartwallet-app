@@ -18,6 +18,7 @@ import {
   centeredText,
   fontLight,
   textSubheader,
+  textSubheaderLineHeight,
 } from '../../../styles/typography'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -51,16 +52,21 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     marginTop: Spacing.MD,
-    color: Colors.sandLight,
+    color: Colors.white,
     fontSize: textSubheader,
     width: MARKER_SIZE,
     fontFamily: fontLight,
-    lineHeight: 22,
+    lineHeight: textSubheaderLineHeight,
     ...centeredText,
   },
+  torchWrapper: {
+    flex: 1,
+    alignItems: 'center', 
+    justifyContent: 'center', 
+  },
   torch: {
-    width: 80,
-    height: 80,
+    width: 69,
+    height: 69,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -149,15 +155,13 @@ export class ScannerComponent extends React.Component<Props, State> {
           <View style={styles.horizontalOverlay} />
         </View>
         <View style={styles.bottomOverlay}>
-          <View style={{ flex: 1 }}>
             <Text style={styles.descriptionText}>
               {I18n.t(
                 strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE,
               )}
             </Text>
-          </View>
           <View
-            style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}
+            style={styles.torchWrapper}
           >
             <TouchableHighlight
               onPressIn={() => this.onTorchChange(true)}

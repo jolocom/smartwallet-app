@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black065,
     flex: 0.7,
     alignItems: 'flex-end',
-    zIndex: 2,
+    zIndex: 1,
   },
   iconWrapper: {
     width: 60,

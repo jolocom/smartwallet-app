@@ -3,7 +3,7 @@ import Svg, { G, Path, Circle } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: title, desc */
 
 const SvgTorchOnIcon = props => (
-  <Svg width="69px" height="69px" viewBox="0 0 69 69" {...props}>
+  <Svg width="100%" height="100%" viewBox="0 0 69 69" {...props}>
     <G
       id="iconset-/-lighter-on"
       stroke="none"
