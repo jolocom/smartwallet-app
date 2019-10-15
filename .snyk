@@ -1,0 +1,8 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - '@sentry/react-native > @sentry/wizard > @sentry/cli > https-proxy-agent':
+        patched: '2019-10-15T04:30:08.240Z'

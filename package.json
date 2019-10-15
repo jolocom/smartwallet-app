@@ -87,7 +87,9 @@
     "terms": "ts-node -O '{\"module\": \"commonjs\"}' bin/generateTerms.ts",
     "storybook": "start-storybook -p 6006",
     "typeorm:node": "ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
-    "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts"
+    "typeorm:repl": "TYPEORM_REPL=1 ts-node -O '{\"module\": \"commonjs\"}' -r ./bin/typeormNode.ts",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "detox": {
     "configurations": {
@@ -176,7 +178,8 @@
     "stream-browserify": "^2.0.2",
     "unorm": "^1.6.0",
     "vm-browserify": "^1.1.0",
-    "wif": "^2.0.6"
+    "wif": "^2.0.6",
+    "snyk": "^1.235.0"
   },
   "rnpm": {
     "assets": [
@@ -187,5 +190,6 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "snyk": true
 }
