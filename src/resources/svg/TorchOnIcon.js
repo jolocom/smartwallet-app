@@ -1,5 +1,5 @@
 import React from 'react'
-import Svg, { G, Path, Circle } from 'react-native-svg'
+import Svg, { G, Path, Circle, Rect } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: title, desc */
 
 const SvgTorchOnIcon = props => (
