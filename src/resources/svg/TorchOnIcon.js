@@ -3,7 +3,15 @@ import Svg, { G, Path, Circle } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: title, desc */
 
 const SvgTorchOnIcon = props => (
-  <Svg width="100%" height="100%" viewBox="0 0 69 69" {...props}>
+  <Svg
+    width="69px"
+    height="69px"
+    viewBox="0 0 69 69"
+    style={{
+      background: '#000000',
+    }}
+    {...props}
+  >
     <G
       id="iconset-/-lighter-on"
       stroke="none"
@@ -11,10 +19,11 @@ const SvgTorchOnIcon = props => (
       fill="none"
       fillRule="evenodd"
     >
-      <G id="Group-2" transform="translate(3.000000, 3.000000)">
+      <Rect fill="#000000" x={0} y={0} width={69} height={69} />
+      <G id="Group-2" transform="translate(1.000000, 1.000000)">
         <G
           id="003-flashlight"
-          transform="translate(13.120001, 13.120001)"
+          transform="translate(15.120001, 15.120001)"
           fillRule="nonzero"
         >
           <Path
@@ -51,11 +60,11 @@ const SvgTorchOnIcon = props => (
         <Circle
           id="Oval"
           stroke="#FFFFFF"
-          strokeWidth={1.34999996}
+          strokeWidth={1.47000003}
           opacity={0.8}
-          cx={31}
-          cy={31}
-          r={31}
+          cx={33.5}
+          cy={33.5}
+          r={33.5}
         />
       </G>
     </G>
