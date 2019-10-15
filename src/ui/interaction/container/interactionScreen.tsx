@@ -2,7 +2,6 @@ import React from 'react'
 import { Container } from '../../structure'
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   Platform,
@@ -18,10 +17,8 @@ import { AppError, ErrorCode } from '../../../lib/errors'
 import { interactionHandlers } from '../../../lib/storage/interactionTokens'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { connect } from 'react-redux'
-import { CloseIcon, ScanEnabledIcon } from '../../../resources'
-import { fontMain, text3XS } from '../../../styles/typography'
-import I18n from 'src/locales/i18n'
-import strings from 'src/locales/strings'
+import { CloseIcon } from '../../../resources'
+import { fontMain, textXXS } from '../../../styles/typography'
 import { Colors } from '../../../styles'
 import { navigatorResetHome } from '../../../actions/navigation'
 
@@ -36,20 +33,20 @@ const styles = StyleSheet.create({
   },
   topWrapper: {
     backgroundColor: Colors.black065,
-    flex: 1,
+    flex: 0.7,
     alignItems: 'flex-end',
-    zIndex: 1,
+    zIndex: 2,
   },
   iconWrapper: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     justifyContent: 'space-between',
     alignItems: 'center',
     flex: 1,
   },
   text: {
     fontFamily: fontMain,
-    fontSize: text3XS,
+    fontSize: textXXS,
     color: white,
     position: 'absolute',
     bottom: 0,
@@ -85,10 +82,12 @@ const InteractionContainer = (props: Props) => (
       <View style={styles.topWrapper}>
         <View style={styles.buttonWrapper}>
           <View style={styles.iconWrapper}>
+            {/* NOTE: uncomment when implementing bluetooth functionality
             <ScanEnabledIcon />
             <Text style={styles.text}>
               {I18n.t(strings.SCAN.toUpperCase())}
             </Text>
+          */}
           </View>
         </View>
         <View style={{ flex: 0.25 }} />

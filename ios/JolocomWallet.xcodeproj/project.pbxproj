@@ -80,6 +80,7 @@
 		26A7C4C99A8F4905A2398B42 /* libRNVectorIcons-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 17E01FBBDE5E4C44A29FD4CC /* libRNVectorIcons-tvOS.a */; };
 		715D8480D35E4A449C21FDA9 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC43EF73F7D44A6A2082E07 /* libRNFetchBlob.a */; };
 		548DE2FFB1B1460DAA815945 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA95207DCBAD473B80F3CB2F /* libRNCAsyncStorage.a */; };
+		56AECB07651F49EEACC5EEE7 /* TypeType - TT Commons Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 996EDB964E064038862DA9F2 /* TypeType - TT Commons Light.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -585,6 +586,7 @@
 		CBC43EF73F7D44A6A2082E07 /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		E08BB4E5814242C9B8FDDB52 /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		EA95207DCBAD473B80F3CB2F /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		996EDB964E064038862DA9F2 /* TypeType - TT Commons Light.otf */ = {isa = PBXFileReference; name = "TypeType - TT Commons Light.otf"; path = "../src/assets/fonts/TypeType - TT Commons Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -902,6 +904,7 @@
 				994DC1ADF50C441DB495C5E6 /* Octicons.ttf */,
 				DED3210B5E434C8C9074A984 /* SimpleLineIcons.ttf */,
 				0C03F830DD4448148A98E92F /* Zocial.ttf */,
+				996EDB964E064038862DA9F2 /* TypeType - TT Commons Light.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1714,6 +1717,7 @@
 				4F1BAB24DB464323B584B00C /* Octicons.ttf in Resources */,
 				5D6019F8DBAD40B691F4C7E5 /* SimpleLineIcons.ttf in Resources */,
 				9E0B45E70C344BEFB85DD1BC /* Zocial.ttf in Resources */,
+				56AECB07651F49EEACC5EEE7 /* TypeType - TT Commons Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

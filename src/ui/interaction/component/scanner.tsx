@@ -14,7 +14,11 @@ import strings from '../../../locales/strings'
 import { TorchOffIcon, TorchOnIcon } from '../../../resources'
 import { black065, white } from '../../../styles/colors'
 import { Colors, Spacing } from '../../../styles'
-import { centeredText, fontMain, textSM } from '../../../styles/typography'
+import {
+  centeredText,
+  fontLight,
+  textSubheader,
+} from '../../../styles/typography'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
@@ -39,7 +43,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1,
     justifyContent: 'space-between',
-    paddingBottom: '6%',
   },
   horizontalOverlay: {
     height: MARKER_SIZE,
@@ -47,12 +50,12 @@ const styles = StyleSheet.create({
     backgroundColor: black065,
   },
   descriptionText: {
-    marginTop: Spacing.SM,
+    marginTop: Spacing.MD,
     color: Colors.sandLight,
-    fontSize: textSM,
-    paddingHorizontal: Spacing['3XL'],
-    fontFamily: fontMain,
-    lineHeight: 20,
+    fontSize: textSubheader,
+    width: MARKER_SIZE,
+    fontFamily: fontLight,
+    lineHeight: 22,
     ...centeredText,
   },
   torch: {
@@ -146,20 +149,26 @@ export class ScannerComponent extends React.Component<Props, State> {
           <View style={styles.horizontalOverlay} />
         </View>
         <View style={styles.bottomOverlay}>
-          <Text style={styles.descriptionText}>
-            {I18n.t(
-              strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE,
-            )}
-          </Text>
-          <TouchableHighlight
-            onPressIn={() => this.onTorchChange(true)}
-            onPressOut={() => this.onTorchChange(false)}
-            activeOpacity={1}
-            underlayColor={'transparent'}
-            style={styles.torch}
+          <View style={{ flex: 1 }}>
+            <Text style={styles.descriptionText}>
+              {I18n.t(
+                strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE,
+              )}
+            </Text>
+          </View>
+          <View
+            style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}
           >
-            {this.state.isTorch ? <TorchOnIcon /> : <TorchOffIcon />}
-          </TouchableHighlight>
+            <TouchableHighlight
+              onPressIn={() => this.onTorchChange(true)}
+              onPressOut={() => this.onTorchChange(false)}
+              activeOpacity={1}
+              underlayColor={'transparent'}
+              style={styles.torch}
+            >
+              {this.state.isTorch ? <TorchOnIcon /> : <TorchOffIcon />}
+            </TouchableHighlight>
+          </View>
         </View>
       </React.Fragment>
     )
