@@ -2,6 +2,7 @@
 
 exports[`ClaimDetails component matches the snapshot on render 1`] = `
 <ScrollViewMock
+  keyboardShouldPersistTaps="handled"
   style={
     Object {
       "backgroundColor": "rgb(245, 245, 245)",
@@ -56,6 +57,7 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
 
 exports[`ClaimDetails component matches the snapshot on render with multi-line claim 1`] = `
 <ScrollViewMock
+  keyboardShouldPersistTaps="handled"
   style={
     Object {
       "backgroundColor": "rgb(245, 245, 245)",
