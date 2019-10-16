@@ -11,12 +11,10 @@ interface Props {
   keyboardType?: string
 }
 
-interface State {
-  focused: boolean
-  fieldNameDisplay: string
-}
-
 const styles = StyleSheet.create({
+  fieldStyle: {
+    fontFamily: Typography.fontMain,
+  },
   inputContainer: {
     height: 72,
     width: '80%',
@@ -27,56 +25,28 @@ const styles = StyleSheet.create({
   },
 })
 
-export class TextInputField extends React.Component<Props, State> {
-  state = {
-    focused: false,
-    fieldNameDisplay: '',
-  }
+const humanize = (attrName: string) => {
+  const text = attrName.replace(/([A-Z])/g, ' $1')
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
 
-  // TODO replace all componentWillMount calls
-  UNSAFE_componentWillMount() {
-    const fn = this.props.fieldName.replace(/([A-Z])/g, ' $1')
-    this.setState({
-      fieldNameDisplay: fn.charAt(0).toUpperCase() + fn.slice(1),
-    })
-  }
-
-  private handleFocus = () => {
-    this.setState({
-      focused: true,
-    })
-  }
-
-  private handleBlur = () => {
-    this.setState({
-      focused: false,
-    })
-  }
-
-  render() {
-    const { fieldValue, fieldName, handleFieldInput, keyboardType } = this.props
-    const labelText =
-      this.state.focused || !fieldValue
-        ? I18n.t(this.state.fieldNameDisplay)
-        : ''
-
-    return (
-      <View style={styles.inputContainer}>
-        <ReactMUI.TextField
-          onFocus={() => this.handleFocus()}
-          onBlur={() => this.handleBlur()}
-          label={labelText}
-          labelTextStyle={styles.labelStyle}
-          style={{ fontFamily: Typography.fontMain }}
-          tintColor={Colors.purpleMain}
-          textColor={Colors.blackMain}
-          value={fieldValue}
-          onChangeText={(fieldValue: string) => {
-            handleFieldInput(fieldValue, fieldName)
-          }}
-          keyboardType={keyboardType}
-        />
-      </View>
-    )
-  }
+export const TextInputField: React.FC<Props> = (props: Props) => {
+  const { fieldValue, fieldName, handleFieldInput, keyboardType } = props
+  const labelText = I18n.t(humanize(fieldName))
+  return (
+    <View style={styles.inputContainer}>
+      <ReactMUI.TextField
+        label={labelText}
+        labelTextStyle={styles.labelStyle}
+        style={styles.fieldStyle}
+        tintColor={Colors.purpleMain}
+        textColor={Colors.blackMain}
+        value={fieldValue}
+        onChangeText={(fieldValue: string) => {
+          handleFieldInput(fieldValue, fieldName)
+        }}
+        keyboardType={keyboardType}
+      />
+    </View>
+  )
 }
