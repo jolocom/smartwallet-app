@@ -9816,10 +9816,10 @@ react-native-material-design-styles@^0.2.6:
   resolved "https://registry.yarnpkg.com/react-native-material-design-styles/-/react-native-material-design-styles-0.2.7.tgz#428560ef4d0659db1163c9f9b5476d886ed22d57"
   integrity sha512-dEtVROG1zqso3fiElJulOU+8/HwWh2TVIyDICrddlyAuDt5dpowelLpmamkRW1CV8VHRdHY5ZhxGWUOiPvROgw==
 
-react-native-material-textfield@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/react-native-material-textfield/-/react-native-material-textfield-0.12.0.tgz#3fba19d76ab89f67052c81e082152fc243d82a3f"
-  integrity sha1-P7oZ12q4n2cFLIHgghUvwkPYKj8=
+react-native-material-textfield@^0.14.1:
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/react-native-material-textfield/-/react-native-material-textfield-0.14.1.tgz#88967d0ee598ed71e25af465925472bbe1928916"
+  integrity sha512-ISF7eH1kpaBQpiUkdMXEwi8h1lQ9tbjTPrJRUvEBDYL/wiE0wgMg58LD14MiTk1hK8GDjg2robsWerVigsO5gA==
   dependencies:
     prop-types "^15.5.9"
 
