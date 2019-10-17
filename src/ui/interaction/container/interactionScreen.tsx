@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   topWrapper: {
     backgroundColor: Colors.black065,
-    flex: 0.7,
+    flex: 1,
     alignItems: 'flex-end',
     zIndex: 1,
   },

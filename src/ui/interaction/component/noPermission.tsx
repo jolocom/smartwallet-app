@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Dimensions,
   View,
 } from 'react-native'
 import I18n from '../../../locales/i18n'
@@ -16,32 +17,47 @@ import {
   textXL,
   textXS,
 } from '../../../styles/typography'
+import { debug } from '../../../styles/presets'
+
+const toScreenAbsolute = (ratio: number) =>
+  ratio * Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   notAuthorizedOverlay: {
-    flex: 1,
-    backgroundColor: Colors.black065,
+    flex: 2,
     height: '100%',
     width: '100%',
     alignItems: 'center',
     zIndex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    ...debug,
   },
   scanText: {
     color: Colors.sandLight,
     fontSize: textXL,
     fontFamily: fontMain,
     ...centeredText,
+    ...debug,
   },
   notAuthorizedDescription: {
     color: Colors.sandLight080,
     fontSize: textSM,
-    paddingTop: Spacing.XS,
-    paddingHorizontal: Spacing.XXL,
-    marginBottom: Spacing.XXL,
+    width: 260,
+    marginTop: Spacing.XS,
     fontFamily: fontMain,
     lineHeight: 24,
     ...centeredText,
+    ...debug,
+  },
+  enableButtonWrapper: {
+    marginTop: toScreenAbsolute(0.26),
+    /*
+    marginTop: Platform.select({
+      android: toScreenAbsolute(0.26),
+      ios: toScreenAbsolute(0.12),
+    }),
+     */
+    ...debug,
   },
   enableButtonText: {
     fontSize: textXS,
@@ -56,9 +72,6 @@ const styles = StyleSheet.create({
       ios: 'none',
     }),
     ...centeredText,
-  },
-  enableButtonWrapper: {
-    padding: 10,
   },
 })
 
@@ -85,7 +98,6 @@ export const NoPermissionComponent: FC<Props> = (props: Props) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.notAuthorizedOverlay} />
     </React.Fragment>
   )
 }
