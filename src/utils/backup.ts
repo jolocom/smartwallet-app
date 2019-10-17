@@ -2,30 +2,45 @@ import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareP
 // @ts-ignore
 import eccrypto from 'eccrypto'
 import { ICredentialAttrs } from 'jolocom-lib/js/credentials/credential/types'
+import { IKeyDerivationArgs } from 'jolocom-lib/js/vaultedKeyProvider/types'
 
 export interface BackupFile {
-  key: string
+  keys: EncryptedKey[]
   data: string
+}
+
+export interface EncryptedKey {
+  pubKey: string
+  cipher: string
 }
 
 export async function createBackup(
   did: string,
   credentials: ICredentialAttrs[],
-  publicKey: Buffer,
+  vault: SoftwareKeyProvider,
+  derivationArgs: IKeyDerivationArgs,
 ): Promise<string> {
   const data = {
     did,
     credentials,
+    // TODO add more data here like e.g. interaction data
   }
-  const password = SoftwareKeyProvider.getRandom(128)
+  const publicKey = vault.getPublicKey(derivationArgs)
+
+  const symKey = SoftwareKeyProvider.getRandom(128)
   // @ts-ignore private
   const encryptedData: Buffer = SoftwareKeyProvider.encrypt(
-    password,
+    symKey,
     JSON.stringify(data),
   )
-  const encryptedKey = await eccrypto.encrypt(publicKey, Buffer.from(password))
+  const encryptedKey = await eccrypto.encrypt(publicKey, Buffer.from(symKey))
   const backupFile: BackupFile = {
-    key: stringifyEncryptedData(encryptedKey),
+    keys: [
+      {
+        cipher: stringifyEncryptedData(encryptedKey),
+        pubKey: publicKey.toString('hex'),
+      },
+    ],
     data: encryptedData.toString('hex'),
   }
   return JSON.stringify(backupFile)
@@ -33,11 +48,19 @@ export async function createBackup(
 
 export async function decryptBackup(
   backupFile: BackupFile,
-  privateKey: Buffer,
+  vault: SoftwareKeyProvider,
+  derivationArg: IKeyDerivationArgs,
 ): Promise<string> {
+  const publicKey = vault.getPublicKey(derivationArg)
+  const privateKey = vault.getPrivateKey(derivationArg)
+  // find encrypted key
+  const encryptedKey = backupFile.keys.find(
+    key => key.pubKey === publicKey.toString('hex'),
+  )
+  if (!encryptedKey) throw new Error('Not encrypted for these keys')
   const key = await eccrypto.decrypt(
     privateKey,
-    parseEncryptedData(backupFile.key),
+    parseEncryptedData(encryptedKey.cipher),
   )
   // @ts-ignore private
   return SoftwareKeyProvider.decrypt(
@@ -52,21 +75,16 @@ function stringifyEncryptedData(data: {
   ciphertext: Buffer
   mac: Buffer
 }): string {
-  const array = [
-    data.iv.toString('hex'),
-    data.ephemPublicKey.toString('hex'),
-    data.ciphertext.toString('hex'),
-    data.mac.toString('hex'),
-  ]
-  return array.join('::')
+  let hexData = {}
+  Object.keys(data).forEach(key => (hexData[key] = data[key].toString('hex')))
+  return JSON.stringify(hexData)
 }
 
 function parseEncryptedData(data: string): object {
-  const array = data.split('::')
-  return {
-    iv: Buffer.from(array[0], 'hex'),
-    ephemPublicKey: Buffer.from(array[1], 'hex'),
-    ciphertext: Buffer.from(array[2], 'hex'),
-    mac: Buffer.from(array[3], 'hex'),
-  }
+  const hexData = JSON.parse(data)
+  let bufferData = {}
+  Object.keys(hexData).forEach(
+    key => (bufferData[key] = Buffer.from(hexData[key], 'hex')),
+  )
+  return bufferData
 }
