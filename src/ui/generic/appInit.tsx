@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-
 import { ThunkDispatch } from 'src/store'
-import { navigationActions, accountActions, genericActions } from 'src/actions'
-import { Linking, Dimensions, Image, StyleSheet, Text } from 'react-native'
-import { withLoading, withErrorHandler } from 'src/actions/modifiers'
+import { accountActions, genericActions } from 'src/actions'
+import { Dimensions, Image, StyleSheet, Text } from 'react-native'
+import { withErrorHandler } from 'src/actions/modifiers'
 import { Container } from '../structure'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
@@ -28,12 +27,12 @@ const styles = StyleSheet.create({
 })
 
 export class AppInitContainer extends React.Component<Props> {
-  constructor(props: Props) {
+  public constructor(props: Props) {
     super(props)
     this.props.doAppInit()
   }
 
-  render() {
+  public render() {
     const viewWidth: number = Dimensions.get('window').width
     const viewHeight: number = Dimensions.get('window').height
 
@@ -61,17 +60,18 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     )
     await dispatch(withErrorScreen(genericActions.initApp))
     await dispatch(withErrorScreen(accountActions.checkIdentityExists))
-    const handleDeepLink = (url: string) =>
-      dispatch(
-        withLoading(withErrorScreen(navigationActions.handleDeepLink(url))),
-      )
 
-    // FIXME: get rid of these after setting up deepLinking properly using
-    // react-navigation
-    Linking.addEventListener('url', event => handleDeepLink(event.url))
-    Linking.getInitialURL().then(url => {
-      if (url) handleDeepLink(url)
-    })
+    // const handleDeepLink = (url: string) =>
+    //   dispatch(
+    //     withLoading(withErrorScreen(navigationActions.handleDeepLink(url))),
+    //   )
+    //
+    // // FIXME: get rid of these after setting up deepLinking properly using
+    // // react-navigation
+    // Linking.addEventListener('url', event => handleDeepLink(event.url))
+    // Linking.getInitialURL().then(url => {
+    //   if (url) handleDeepLink(url)
+    // })
   },
 })
 

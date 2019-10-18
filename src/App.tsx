@@ -38,7 +38,10 @@ export default class App extends React.PureComponent<{}> {
         <StatusBar barStyle="default" />
         <Provider store={store}>
           <React.Fragment>
-            <RoutesContainer ref={nav => this.setNavigator(nav)} />
+            <RoutesContainer
+              uriPrefix={'jolocomwallet://'}
+              ref={nav => this.setNavigator(nav)}
+            />
             <AppLoading />
           </React.Fragment>
         </Provider>

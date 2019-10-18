@@ -211,6 +211,7 @@ const MainStack = createStackNavigator(
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
       }),
+      path: 'payment/:jwt',
     },
     [routeList.AuthenticationConsent]: {
       screen: AuthenticationConsent,
@@ -263,7 +264,10 @@ export const Routes = createSwitchNavigator(
       screen: AppInit,
       navigationOptions: noHeaderNavOpts,
     },
-    [routeList.Main]: MainStack,
+    [routeList.Main]: {
+      screen: MainStack,
+      path: '',
+    },
     [routeList.Registration]: RegistrationScreens,
   },
   {
