@@ -38,6 +38,7 @@ import {
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
+import { TestWrapperContainer } from './ui/payment/containers/paymentConsent'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -206,7 +207,7 @@ const MainStack = createStackNavigator(
       }),
     },
     [routeList.PaymentConsent]: {
-      screen: PaymentConsent,
+      screen: TestWrapperContainer(PaymentConsent),
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.CONFIRM_PAYMENT),

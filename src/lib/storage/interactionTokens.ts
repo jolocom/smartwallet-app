@@ -8,6 +8,7 @@ import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credent
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import { consumePaymentRequest } from '../../actions/sso/paymentRequest'
+import { IdentitySummary } from '../../actions/sso/types'
 /**
  * @param Metadata should not need to be passed to credential receive because it comes from cred Offer
  * Furthermore, this only needs to be defined for requests
@@ -32,6 +33,6 @@ export const interactionHandlers = {
   ) => consumeCredentialOfferRequest(interactionToken, isDeepLinkInteraction),
   [InteractionType.PaymentRequest]: <T extends JSONWebToken<PaymentRequest>>(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumePaymentRequest(interactionToken, isDeepLinkInteraction),
+    requesterSummary: IdentitySummary,
+  ) => consumePaymentRequest(interactionToken, requesterSummary),
 }

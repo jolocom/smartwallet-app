@@ -12,8 +12,9 @@ import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { AppError, ErrorCode } from 'src/lib/errors'
-import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
+import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
+import { generateIdentitySummary } from '../sso/utils'
 
 const deferredNavActions: NavigationAction[] = []
 let dispatchNavigationAction = (action: NavigationAction) => {
@@ -93,16 +94,12 @@ export const navigatorResetHome = (): ThunkAction => dispatch =>
  * It then matches the route name and dispatches a corresponding action
  * @param url - a deep link string with the following schema: appName://routeName/params
  */
-export const handleDeepLink = (url: string): ThunkAction => (
+export const handleDeepLink = (jwt: string): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
   // TODO Fix
-  const route: string = url.replace(/.*?:\/\//g, '')
-  const params: string = (route.match(/\/([^\/]+)\/?$/) as string[])[1] || ''
-  const routeName = route.split('/')[0]
-
   // The identityWallet is initialised before the deep link is handled. If it
   // is not initialized, then we may not even have an identity.
   if (!backendMiddleware.identityWallet) {
@@ -113,21 +110,26 @@ export const handleDeepLink = (url: string): ThunkAction => (
     )
   }
 
-  const supportedRoutes = ['consent', 'payment', 'authenticate']
-  if (supportedRoutes.includes(routeName)) {
-    const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
-    const handler = interactionHandlers[interactionToken.interactionType]
+  const interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
+  const issuer = await backendMiddleware.registry.resolve(
+    keyIdToDid(interactionToken.issuer),
+  )
+  const handler = interactionHandlers[interactionToken.interactionType]
 
-    if (handler) {
-      return dispatch(
-        withLoading(withErrorScreen(handler(interactionToken, true))),
-      )
-    }
+  if (!handler) {
+    throw new AppError(
+      ErrorCode.ParseJWTFailed,
+      new Error('Could not handle interaction token'),
+    )
   }
 
-  /** @TODO Use error code */
-  throw new AppError(
-    ErrorCode.ParseJWTFailed,
-    new Error('Could not handle interaction token'),
+  const payReqSummary = await handler(
+    interactionToken,
+    generateIdentitySummary(issuer),
   )
+
+  console.log(payReqSummary)
+  // return dispatch(
+  //   withLoading(withErrorScreen(handler(interactionToken, true))),
+  // )
 }

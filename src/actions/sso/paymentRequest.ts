@@ -1,58 +1,30 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { navigationActions } from 'src/actions'
-import { routeList } from 'src/routeList'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import { JolocomLib } from 'jolocom-lib'
 import { Linking } from 'react-native'
 import { cancelSSO } from 'src/actions/sso'
-import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { ThunkDispatch } from '../../store'
 import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
-import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { generateIdentitySummary } from './utils'
-import { PaymentRequestSummary } from './types'
+import { IdentitySummary, PaymentRequestSummary } from './types'
 
 export const consumePaymentRequest = (
   paymentRequest: JSONWebToken<PaymentRequest>,
-  isDeepLinkInteraction: boolean = false,
-) => async (
-  dispatch: ThunkDispatch,
-  getState: () => RootState,
-  backendMiddleware: BackendMiddleware,
-) => {
-  const { identityWallet, registry } = backendMiddleware
-
-  await identityWallet.validateJWT(
-    paymentRequest,
-    undefined,
-    registry as JolocomRegistry,
-  )
-
-  const requester = await registry.resolve(keyIdToDid(paymentRequest.issuer))
-
-  const requesterSummary = generateIdentitySummary(requester)
-
-  const paymentDetails: PaymentRequestSummary = {
+  requester: IdentitySummary,
+): PaymentRequestSummary => {
+  return {
     receiver: {
       did: paymentRequest.issuer,
       address: paymentRequest.interactionToken.transactionOptions.to as string,
     },
-    requester: requesterSummary,
+    requester,
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
     description: paymentRequest.interactionToken.description,
     requestJWT: paymentRequest.encode(),
   }
-  return dispatch(
-    navigationActions.navigate({
-      routeName: routeList.PaymentConsent,
-      params: { isDeepLinkInteraction, paymentDetails },
-      key: 'paymentRequest',
-    }),
-  )
 }
 
 export const sendPaymentResponse = (
@@ -96,3 +68,42 @@ export const sendPaymentResponse = (
     }).then(() => dispatch(cancelSSO))
   }
 }
+// export const consumePaymentRequest = (
+//   paymentRequest: JSONWebToken<PaymentRequest>,
+//   isDeepLinkInteraction: boolean = false,
+// ) => async (
+//   dispatch: ThunkDispatch,
+//   getState: () => RootState,
+//   backendMiddleware: BackendMiddleware,
+// ) => {
+//   const { identityWallet, registry } = backendMiddleware
+//
+//   await identityWallet.validateJWT(
+//     paymentRequest,
+//     undefined,
+//     registry as JolocomRegistry,
+//   )
+//
+//   const requester = await registry.resolve(keyIdToDid(paymentRequest.issuer))
+//
+//   const requesterSummary = generateIdentitySummary(requester)
+//
+//   const paymentDetails: PaymentRequestSummary = {
+//     receiver: {
+//       did: paymentRequest.issuer,
+//       address: paymentRequest.interactionToken.transactionOptions.to as string,
+//     },
+//     requester: requesterSummary,
+//     callbackURL: paymentRequest.interactionToken.callbackURL,
+//     amount: paymentRequest.interactionToken.transactionOptions.value,
+//     description: paymentRequest.interactionToken.description,
+//     requestJWT: paymentRequest.encode(),
+//   }
+//   return dispatch(
+//     navigationActions.navigate({
+//       routeName: routeList.PaymentConsent,
+//       params: { isDeepLinkInteraction, paymentDetails },
+//       key: 'paymentRequest',
+//     }),
+//   )
+// }
