@@ -219,6 +219,7 @@ const MainStack = createStackNavigator(
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
       }),
+      path: 'authenticate/:jwt',
     },
     [routeList.ClaimDetails]: {
       screen: ClaimDetails,

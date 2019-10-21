@@ -7,10 +7,11 @@ import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { withConsentSummary } from '../../generic/consentWithSummaryHOC'
 
 interface AuthenticationNavigationParams {
   isDeepLinkInteraction: boolean
-  authenticationDetails: AuthenticationRequestSummary
+  jwt: string
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -18,26 +19,25 @@ interface Props extends ReturnType<typeof mapDispatchToProps> {
     NavigationState,
     AuthenticationNavigationParams
   >
+  interactionDetails: AuthenticationRequestSummary
 }
 
 export const AuthenticationConsentContainer = (props: Props) => {
   const {
+    interactionDetails,
     confirmAuthenticationRequest,
     cancelAuthenticationRequest,
     navigation: {
       state: {
-        params: { isDeepLinkInteraction, authenticationDetails },
+        params: { isDeepLinkInteraction },
       },
     },
   } = props
   return (
     <AuthenticationConsentComponent
-      authenticationDetails={authenticationDetails}
+      authenticationDetails={interactionDetails}
       confirmAuthenticationRequest={() =>
-        confirmAuthenticationRequest(
-          isDeepLinkInteraction,
-          authenticationDetails,
-        )
+        confirmAuthenticationRequest(isDeepLinkInteraction, interactionDetails)
       }
       cancelAuthenticationRequest={cancelAuthenticationRequest}
     />
@@ -60,7 +60,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   cancelAuthenticationRequest: () => dispatch(cancelSSO),
 })
 
-export const AuthenticationConsent = connect(
-  null,
-  mapDispatchToProps,
-)(AuthenticationConsentContainer)
+export const AuthenticationConsent = withConsentSummary(
+  connect(
+    null,
+    mapDispatchToProps,
+  )(AuthenticationConsentContainer),
+)

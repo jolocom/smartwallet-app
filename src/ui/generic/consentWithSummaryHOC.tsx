@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(withErrorScreen(withLoading(consumeInteractionToken(jwt)))),
 })
 
-export const withDeepLinkSummary = compose(
+export const withConsentSummary = compose(
   connect(
     null,
     mapDispatchToProps,
