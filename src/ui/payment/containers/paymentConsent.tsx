@@ -13,14 +13,12 @@ interface PaymentNavigationParams {
   isDeepLinkInteraction: boolean
   jwt: string
 }
-interface Props<T> extends ReturnType<typeof mapDispatchToProps> {
+interface Props extends ReturnType<typeof mapDispatchToProps> {
   navigation: NavigationScreenProp<NavigationState, PaymentNavigationParams>
-  interactionDetails: T
+  interactionDetails: PaymentRequestSummary
 }
 
-export const PaymentConsentContainer = (
-  props: Props<PaymentRequestSummary>,
-) => {
+export const PaymentConsentContainer = (props: Props) => {
   const {
     interactionDetails,
     confirmPaymentRequest,

@@ -7,13 +7,14 @@ import { QrScanEvent } from 'src/ui/generic/qrcodeScanner'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { ThunkDispatch } from 'src/store'
 import { showErrorScreen } from 'src/actions/generic'
-import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { NavigationScreenProps } from 'react-navigation'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { Colors } from 'src/styles'
+import { navigationActions } from '../../actions'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import { routeList } from '../../routeList'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -38,9 +39,9 @@ const styles = StyleSheet.create({
 
 export class QRcodeScanner extends React.Component<Props, State> {
   private scanner: typeof QRScanner
-  private removeFocusListener: (() => void) | undefined
+  private readonly removeFocusListener: (() => void) | undefined
 
-  constructor(props: Props) {
+  public constructor(props: Props) {
     super(props)
     if (this.props.navigation) {
       this.removeFocusListener = this.props.navigation.addListener(
@@ -54,15 +55,15 @@ export class QRcodeScanner extends React.Component<Props, State> {
     }
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     if (this.removeFocusListener) this.removeFocusListener()
   }
 
-  onScannerCancel() {
+  public onScannerCancel() {
     if (this.props.navigation) this.props.navigation.goBack()
   }
 
-  render() {
+  public render() {
     const { onScannerSuccess } = this.props
     // NOTE: the key is used to invalidate the previously rendered component as
     // we need to rerender and remount the camera to ensure it is properly setup
@@ -93,26 +94,30 @@ export class QRcodeScanner extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  onScannerSuccess: async (e: QrScanEvent) => {
-    let interactionToken
-
+  onScannerSuccess: async ({ data }: QrScanEvent) => {
     try {
-      interactionToken = JolocomLib.parse.interactionToken.fromJWT(e.data)
+      const { interactionType } = JolocomLib.parse.interactionToken.fromJWT(
+        data,
+      )
+
+      const navigationMap = {
+        [InteractionType.PaymentRequest]: routeList.PaymentConsent,
+      }
+
+      dispatch(
+        navigationActions.navigate({
+          routeName: navigationMap[interactionType],
+          params: {
+            jwt: data,
+            isDeepLinkInteraction: false,
+          },
+        }),
+      )
     } catch (err) {
       return dispatch(
         showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)),
       )
     }
-
-    const handler = interactionHandlers[interactionToken.interactionType]
-
-    return handler
-      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
-      : dispatch(
-          showErrorScreen(
-            new AppError(ErrorCode.Unknown, new Error('No handler found')),
-          ),
-        )
   },
 })
 
