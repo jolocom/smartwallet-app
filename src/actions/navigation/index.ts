@@ -92,7 +92,7 @@ export const navigatorResetHome = (): ThunkAction => dispatch =>
 /**
  * The function that parses a deep link to get the route name and params
  * It then matches the route name and dispatches a corresponding action
- * @param url - a deep link string with the following schema: appName://routeName/params
+ * @param jwt
  */
 export const handleDeepLink = (jwt: string): ThunkAction => async (
   dispatch,
@@ -123,13 +123,5 @@ export const handleDeepLink = (jwt: string): ThunkAction => async (
     )
   }
 
-  const payReqSummary = await handler(
-    interactionToken,
-    generateIdentitySummary(issuer),
-  )
-
-  console.log(payReqSummary)
-  // return dispatch(
-  //   withLoading(withErrorScreen(handler(interactionToken, true))),
-  // )
+  return handler(interactionToken, generateIdentitySummary(issuer))
 }
