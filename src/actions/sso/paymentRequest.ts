@@ -10,22 +10,20 @@ import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 import { IdentitySummary, PaymentRequestSummary } from './types'
 
-export const consumePaymentRequest = (
+export const formatPaymentRequest = (
   paymentRequest: JSONWebToken<PaymentRequest>,
   requester: IdentitySummary,
-): PaymentRequestSummary => {
-  return {
-    receiver: {
-      did: paymentRequest.issuer,
-      address: paymentRequest.interactionToken.transactionOptions.to as string,
-    },
-    requester,
-    callbackURL: paymentRequest.interactionToken.callbackURL,
-    amount: paymentRequest.interactionToken.transactionOptions.value,
-    description: paymentRequest.interactionToken.description,
-    requestJWT: paymentRequest.encode(),
-  }
-}
+): PaymentRequestSummary => ({
+  receiver: {
+    did: paymentRequest.issuer,
+    address: paymentRequest.interactionToken.transactionOptions.to as string,
+  },
+  requester,
+  callbackURL: paymentRequest.interactionToken.callbackURL,
+  amount: paymentRequest.interactionToken.transactionOptions.value,
+  description: paymentRequest.interactionToken.description,
+  requestJWT: paymentRequest.encode(),
+})
 
 export const sendPaymentResponse = (
   isDeepLinkInteraction: boolean,
@@ -68,42 +66,3 @@ export const sendPaymentResponse = (
     }).then(() => dispatch(cancelSSO))
   }
 }
-// export const consumePaymentRequest = (
-//   paymentRequest: JSONWebToken<PaymentRequest>,
-//   isDeepLinkInteraction: boolean = false,
-// ) => async (
-//   dispatch: ThunkDispatch,
-//   getState: () => RootState,
-//   backendMiddleware: BackendMiddleware,
-// ) => {
-//   const { identityWallet, registry } = backendMiddleware
-//
-//   await identityWallet.validateJWT(
-//     paymentRequest,
-//     undefined,
-//     registry as JolocomRegistry,
-//   )
-//
-//   const requester = await registry.resolve(keyIdToDid(paymentRequest.issuer))
-//
-//   const requesterSummary = generateIdentitySummary(requester)
-//
-//   const paymentDetails: PaymentRequestSummary = {
-//     receiver: {
-//       did: paymentRequest.issuer,
-//       address: paymentRequest.interactionToken.transactionOptions.to as string,
-//     },
-//     requester: requesterSummary,
-//     callbackURL: paymentRequest.interactionToken.callbackURL,
-//     amount: paymentRequest.interactionToken.transactionOptions.value,
-//     description: paymentRequest.interactionToken.description,
-//     requestJWT: paymentRequest.encode(),
-//   }
-//   return dispatch(
-//     navigationActions.navigate({
-//       routeName: routeList.PaymentConsent,
-//       params: { isDeepLinkInteraction, paymentDetails },
-//       key: 'paymentRequest',
-//     }),
-//   )
-// }

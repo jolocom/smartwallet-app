@@ -38,8 +38,6 @@ import {
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
-import { withDeepLinkSummary } from './ui/generic/consentWithSummaryHOC'
-import { connectedWrapper } from './ui/payment/containers/paymentConsent'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -208,7 +206,7 @@ const MainStack = createStackNavigator(
       }),
     },
     [routeList.PaymentConsent]: {
-      screen: withDeepLinkSummary(PaymentConsent),
+      screen: PaymentConsent,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.CONFIRM_PAYMENT),

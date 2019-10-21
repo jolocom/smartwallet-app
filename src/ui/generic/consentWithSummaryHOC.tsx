@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { PaymentRequestSummary } from '../../actions/sso/types'
 import { ThunkDispatch } from '../../store'
 import { withErrorScreen, withLoading } from '../../actions/modifiers'
-import { handleDeepLink } from '../../actions/navigation'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
+import { consumeInteractionToken } from '../../actions/sso/consumeInteractionToken'
 
 interface PaymentNavigationParams {
-  isDeepLinkInteraction: boolean
-  paymentDetails: PaymentRequestSummary
+  jwt: string
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -25,8 +23,8 @@ const ConsentWithSummaryHOC = <T extends Props>(
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    props.getSummary(jwt).then((profile: any) => {
-      setProfile(profile)
+    props.getSummary(jwt).then((summary: any) => {
+      setProfile(summary)
       setDone(true)
     })
   }, [])
@@ -35,9 +33,8 @@ const ConsentWithSummaryHOC = <T extends Props>(
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  getSummary: (jwt: string) => {
-    return dispatch(withErrorScreen(withLoading(handleDeepLink(jwt))))
-  },
+  getSummary: (jwt: string) =>
+    dispatch(withErrorScreen(withLoading(consumeInteractionToken(jwt)))),
 })
 
 export const withDeepLinkSummary = compose(
