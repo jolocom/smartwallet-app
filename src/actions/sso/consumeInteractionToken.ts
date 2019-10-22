@@ -49,26 +49,26 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
     )
   }
 
-  let assembledCredentials
-  if (requestToken.interactionType === InteractionType.CredentialRequest) {
-    const { did } = getState().account.did
-    const {
-      requestedCredentialTypes: requestedTypes,
-    } = requestToken.interactionToken as CredentialRequest
-    assembledCredentials = await assembleCredentials(
-      storageLib,
-      did,
-      requestedTypes,
-    )
-  } else if (
-    requestToken.interactionType === InteractionType.CredentialOfferRequest
-  ) {
-    assembledCredentials = await assembleCredentialOffer(
-      backendMiddleware,
-      requestToken as JSONWebToken<CredentialOfferRequest>,
-      issuerSummary,
-    )
+  const additionalCredentials = {
+    [InteractionType.CredentialRequest]: async () => {
+      const { did } = getState().account.did
+      const {
+        requestedCredentialTypes: requestedTypes,
+      } = requestToken.interactionToken as CredentialRequest
+      return await assembleCredentials(storageLib, did, requestedTypes)
+    },
+    [InteractionType.CredentialOfferRequest]: async () => {
+      return await assembleCredentialOffer(
+        backendMiddleware,
+        requestToken as JSONWebToken<CredentialOfferRequest>,
+        issuerSummary,
+      )
+    },
   }
 
-  return handler(requestToken, issuerSummary, assembledCredentials)
+  return handler(
+    requestToken,
+    issuerSummary,
+    await additionalCredentials[requestToken.interactionType](),
+  )
 }
