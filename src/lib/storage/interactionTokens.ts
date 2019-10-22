@@ -1,6 +1,9 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { consumeCredentialRequest } from '../../actions/sso'
+import {
+  AssembledCredential,
+  consumeCredentialRequest,
+} from '../../actions/sso'
 import { consumeAuthenticationRequest } from '../../actions/sso/authenticationRequest'
 import { consumeCredentialOfferRequest } from '../../actions/sso/credentialOfferRequest'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
@@ -17,14 +20,20 @@ import { IdentitySummary } from '../../actions/sso/types'
 export const interactionHandlers = {
   [InteractionType.Authentication]: <T extends JSONWebToken<Authentication>>(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumeAuthenticationRequest(interactionToken, isDeepLinkInteraction),
+    requesterSummary: IdentitySummary,
+  ) => consumeAuthenticationRequest(interactionToken, requesterSummary),
   [InteractionType.CredentialRequest]: <
     T extends JSONWebToken<CredentialRequest>
   >(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumeCredentialRequest(interactionToken, isDeepLinkInteraction),
+    requesterSummary: IdentitySummary,
+    assembledCredentials: AssembledCredential[],
+  ) =>
+    consumeCredentialRequest(
+      interactionToken,
+      requesterSummary,
+      assembledCredentials,
+    ),
   [InteractionType.CredentialOfferRequest]: <
     T extends JSONWebToken<CredentialOfferRequest>
   >(

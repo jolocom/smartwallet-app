@@ -102,6 +102,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 
       const navigationMap = {
         [InteractionType.PaymentRequest]: routeList.PaymentConsent,
+        [InteractionType.Authentication]: routeList.AuthenticationConsent,
+        [InteractionType.CredentialRequest]: routeList.Consent,
       }
 
       dispatch(

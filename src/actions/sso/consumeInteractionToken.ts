@@ -6,6 +6,9 @@ import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { AppError, ErrorCode } from '../../lib/errors'
 import { generateIdentitySummary } from './utils'
 import { navigate } from '../navigation'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import { assembleCredentials } from './index'
+import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 
 /**
  * The function parses the interaction token and returns the respective request summary
@@ -14,12 +17,12 @@ import { navigate } from '../navigation'
 export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   dispatch,
   getState,
-  backendMiddleware,
+  { identityWallet, registry, storageLib },
 ) => {
   // TODO Fix
   // The identityWallet is initialised before the deep link is handled. If it
   // is not initialized, then we may not even have an identity.
-  if (!backendMiddleware.identityWallet) {
+  if (!identityWallet) {
     return dispatch(
       navigate({
         routeName: routeList.Landing,
@@ -27,11 +30,11 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
     )
   }
 
-  const interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
-  const issuer = await backendMiddleware.registry.resolve(
-    keyIdToDid(interactionToken.issuer),
-  )
-  const handler = interactionHandlers[interactionToken.interactionType]
+  const requestToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
+  await identityWallet.validateJWT(requestToken, undefined, registry)
+
+  const issuer = await registry.resolve(keyIdToDid(requestToken.issuer))
+  const handler = interactionHandlers[requestToken.interactionType]
 
   if (!handler) {
     throw new AppError(
@@ -40,5 +43,22 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
     )
   }
 
-  return handler(interactionToken, generateIdentitySummary(issuer))
+  let assembledCredentials
+  if (requestToken.interactionType === InteractionType.CredentialRequest) {
+    const { did } = getState().account.did
+    const {
+      requestedCredentialTypes: requestedTypes,
+    } = requestToken.interactionToken as CredentialRequest
+    assembledCredentials = await assembleCredentials(
+      storageLib,
+      did,
+      requestedTypes,
+    )
+  }
+
+  return handler(
+    requestToken,
+    generateIdentitySummary(issuer),
+    assembledCredentials,
+  )
 }

@@ -9,10 +9,11 @@ import {
   CredentialVerificationSummary,
 } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { withConsentSummary } from '../../generic/consentWithSummaryHOC'
 
 interface CredentialRequestNavigationParams {
   isDeepLinkInteraction: boolean
-  credentialRequestDetails: CredentialRequestSummary
+  jwt: string
 }
 
 interface Props
@@ -22,16 +23,18 @@ interface Props
     NavigationState,
     CredentialRequestNavigationParams
   >
+  interactionDetails: CredentialRequestSummary
 }
 
 const ConsentContainer = (props: Props) => {
   const {
+    interactionDetails,
     currentDid,
     sendCredentialResponse,
     cancelSSO,
     navigation: {
       state: {
-        params: { isDeepLinkInteraction, credentialRequestDetails },
+        params: { isDeepLinkInteraction },
       },
     },
   } = props
@@ -39,16 +42,12 @@ const ConsentContainer = (props: Props) => {
   const handleSubmitClaims = (credentials: CredentialVerificationSummary[]) => {
     sendCredentialResponse(
       credentials,
-      credentialRequestDetails,
+      interactionDetails,
       isDeepLinkInteraction,
     )
   }
 
-  const {
-    availableCredentials,
-    requester,
-    callbackURL,
-  } = credentialRequestDetails
+  const { availableCredentials, requester, callbackURL } = interactionDetails
   return (
     <ConsentComponent
       requester={requester}
@@ -85,7 +84,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   cancelSSO: () => dispatch(ssoActions.cancelSSO),
 })
 
-export const Consent = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ConsentContainer)
+export const Consent = withConsentSummary(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(ConsentContainer),
+)

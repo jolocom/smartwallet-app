@@ -9,8 +9,7 @@ import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { ThunkAction } from '../../store'
-import { CredentialMetadataSummary } from '../../lib/storage/storage'
-import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
+import { CredentialMetadataSummary, Storage } from '../../lib/storage/storage'
 import { DecoratedClaims } from '../../reducers/account'
 import {
   CredentialRequestSummary,
@@ -19,7 +18,6 @@ import {
 } from './types'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
-import { generateIdentitySummary } from './utils'
 
 export const setReceivingCredential = (
   requester: IdentitySummary,
@@ -105,29 +103,24 @@ interface AttributeSummary {
   }>
 }
 
-export const consumeCredentialRequest = (
-  decodedCredentialRequest: JSONWebToken<CredentialRequest>,
-  isDeepLinkInteraction: boolean,
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { storageLib, identityWallet, registry } = backendMiddleware
-  const { did } = getState().account.did
+export interface AssembledCredential {
+  verifications: Array<{
+    id: string
+    issuer: {
+      did: string
+    }
+    selfSigned: boolean
+    expires: Date
+  }>
+  type: string
+  values: string[]
+}
 
-  await identityWallet.validateJWT(
-    decodedCredentialRequest,
-    undefined,
-    registry,
-  )
-
-  const requester = await registry.resolve(
-    keyIdToDid(decodedCredentialRequest.issuer),
-  )
-
-  const requesterSummary = generateIdentitySummary(requester)
-
-  const {
-    requestedCredentialTypes: requestedTypes,
-  } = decodedCredentialRequest.interactionToken
-
+export const assembleCredentials = async (
+  storageLib: Storage,
+  did: string,
+  requestedTypes: string[][],
+): Promise<AssembledCredential[]> => {
   const attributesForType = await Promise.all<AttributeSummary>(
     requestedTypes.map(storageLib.get.attributesByType),
   )
@@ -170,23 +163,20 @@ export const consumeCredentialRequest = (
     })),
   )
 
-  const flattened = abbreviated.reduce((acc, val) => acc.concat(val))
+  return abbreviated.reduce((acc, val) => acc.concat(val))
+}
 
-  // TODO requester shouldn't be optional
-  const credentialRequestDetails = {
+export const consumeCredentialRequest = (
+  decodedCredentialRequest: JSONWebToken<CredentialRequest>,
+  requester: IdentitySummary,
+  assembledCredentials: AssembledCredential[],
+): CredentialRequestSummary => {
+  return {
     callbackURL: decodedCredentialRequest.interactionToken.callbackURL,
-    requester: requesterSummary,
-    availableCredentials: flattened,
+    requester,
+    availableCredentials: assembledCredentials,
     requestJWT: decodedCredentialRequest.encode(),
   }
-
-  return dispatch(
-    navigationActions.navigate({
-      routeName: routeList.Consent,
-      params: { isDeepLinkInteraction, credentialRequestDetails },
-      key: 'credentialRequest',
-    }),
-  )
 }
 
 export const sendCredentialResponse = (

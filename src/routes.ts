@@ -204,6 +204,7 @@ const MainStack = createStackNavigator(
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.SHARE_CLAIMS),
       }),
+      path: 'consent/:jwt',
     },
     [routeList.PaymentConsent]: {
       screen: PaymentConsent,
