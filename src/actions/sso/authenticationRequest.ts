@@ -8,7 +8,7 @@ import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 import { AuthenticationRequestSummary, IdentitySummary } from './types'
 
-export const consumeAuthenticationRequest = (
+export const formatAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
   requester: IdentitySummary,
 ): AuthenticationRequestSummary => ({

@@ -1,39 +1,48 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { AppError, ErrorCode } from '../../lib/errors'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { receiveExternalCredential } from './index'
-import { all, compose, isEmpty, isNil, map, either } from 'ramda'
+import { all, compose, either, isEmpty, isNil, map } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
-import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { withLoading, withErrorScreen } from '../modifiers'
-import { generateIdentitySummary } from './utils'
+import { BackendMiddleware } from '../../backendMiddleware'
+import { convertToDecoratedClaim } from '../account'
+import {
+  CredentialReceiveSummary,
+  ExternalCredentialSummary,
+  IdentitySummary,
+} from './types'
 
 export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
-  isDeepLinkInteraction: boolean = false,
-): ThunkAction => async (
-  dispatch,
-  getState,
-  { keyChainLib, identityWallet, registry },
-) => {
-  await identityWallet.validateJWT(credOfferRequest, undefined, registry)
+  requesterSummary: IdentitySummary,
+  receivedCredentials: ExternalCredentialSummary[],
+): CredentialReceiveSummary => ({
+  requestJWT: credOfferRequest.encode(),
+  requester: requesterSummary,
+  external: receivedCredentials,
+})
+
+export const assembleCredentialOffer = async (
+  backendMiddleware: BackendMiddleware,
+  credOfferRequest: JSONWebToken<CredentialOfferRequest>,
+  requester: IdentitySummary,
+): Promise<ExternalCredentialSummary[]> => {
+  const {
+    keyChainLib,
+    identityWallet,
+    registry,
+    storageLib,
+  } = backendMiddleware
   const { interactionToken } = credOfferRequest
   const { callbackURL } = interactionToken
+  const selectedCredentialTypes = interactionToken.offeredTypes.map(type => ({
+    type,
+  }))
 
   if (!areRequirementsEmpty(interactionToken)) {
     throw new Error('Input requests are not yet supported on the wallet')
   }
-
-  const requester = await registry.resolve(keyIdToDid(credOfferRequest.issuer))
-
-  const requesterSummary = generateIdentitySummary(requester)
-
-  const selectedCredentialTypes = interactionToken.offeredTypes.map(type => ({
-    type,
-  }))
 
   const selectedMetadata = interactionToken.offeredTypes.map(type => ({
     issuer: {
@@ -47,7 +56,10 @@ export const consumeCredentialOfferRequest = (
   const password = await keyChainLib.getPassword()
 
   const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
-    { callbackURL, selectedCredentials: selectedCredentialTypes },
+    {
+      callbackURL,
+      selectedCredentials: selectedCredentialTypes,
+    },
     password,
     credOfferRequest,
   )
@@ -62,19 +74,47 @@ export const consumeCredentialOfferRequest = (
     CredentialsReceive
   >(res.token)
 
-  return dispatch(
-    withLoading(
-      withErrorScreen(
-        receiveExternalCredential(
-          credentialReceive,
-          requesterSummary,
-          isDeepLinkInteraction,
-          selectedMetadata,
-        ),
-        err => new AppError(ErrorCode.CredentialsReceiveFailed, err),
-      ),
-    ),
+  await identityWallet.validateJWT(credentialReceive, undefined, registry)
+
+  const providedCredentials =
+    credentialReceive.interactionToken.signedCredentials
+
+  const validationResults = await JolocomLib.util.validateDigestables(
+    providedCredentials,
   )
+
+  // TODO Error Code
+  if (validationResults.includes(false)) {
+    throw new Error('Invalid credentials received')
+  }
+
+  if (selectedMetadata) {
+    await Promise.all(selectedMetadata.map(storageLib.store.credentialMetadata))
+  }
+
+  if (requester) {
+    await storageLib.store.issuerProfile(requester)
+  }
+
+  // TODO change convertToDecoratedClaim to (metadata) => (cred): decoratedClaim
+  // the types of the cred metadata arrays where it is use differ too much to do it simply right now
+  const asDecoratedCredentials = providedCredentials.map(cred => {
+    const md = selectedMetadata
+      ? selectedMetadata.filter(mds => cred.type.includes(mds.type))
+      : undefined
+
+    const renderInfo = md && md.length ? md[0].renderInfo : undefined
+
+    return {
+      ...convertToDecoratedClaim(cred),
+      renderInfo,
+    }
+  })
+
+  return providedCredentials.map((cred, i) => ({
+    credential: cred,
+    decoratedClaim: asDecoratedCredentials[i],
+  }))
 }
 
 const areRequirementsEmpty = (interactionToken: CredentialOfferRequest) =>

@@ -9,6 +9,9 @@ import { navigate } from '../navigation'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { assembleCredentials } from './index'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
+import { assembleCredentialOffer } from './credentialOfferRequest'
+import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 
 /**
  * The function parses the interaction token and returns the respective request summary
@@ -17,8 +20,9 @@ import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRe
 export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   dispatch,
   getState,
-  { identityWallet, registry, storageLib },
+  backendMiddleware,
 ) => {
+  const { identityWallet, registry, storageLib } = backendMiddleware
   // TODO Fix
   // The identityWallet is initialised before the deep link is handled. If it
   // is not initialized, then we may not even have an identity.
@@ -34,6 +38,8 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   await identityWallet.validateJWT(requestToken, undefined, registry)
 
   const issuer = await registry.resolve(keyIdToDid(requestToken.issuer))
+  const issuerSummary = generateIdentitySummary(issuer)
+
   const handler = interactionHandlers[requestToken.interactionType]
 
   if (!handler) {
@@ -54,11 +60,15 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
       did,
       requestedTypes,
     )
+  } else if (
+    requestToken.interactionType === InteractionType.CredentialOfferRequest
+  ) {
+    assembledCredentials = await assembleCredentialOffer(
+      backendMiddleware,
+      requestToken as JSONWebToken<CredentialOfferRequest>,
+      issuerSummary,
+    )
   }
 
-  return handler(
-    requestToken,
-    generateIdentitySummary(issuer),
-    assembledCredentials,
-  )
+  return handler(requestToken, issuerSummary, assembledCredentials)
 }

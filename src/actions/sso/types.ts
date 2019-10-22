@@ -1,4 +1,6 @@
 import { PublicProfileClaimMetadata } from 'cred-types-jolocom-core/types'
+import { DecoratedClaims } from '../../reducers/account'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 /**
  * @dev Simply using all claims required by the public profile
@@ -15,16 +17,17 @@ export interface IdentitySummary {
 }
 
 export interface RequestSummary {
-  callbackURL: string
   requester: IdentitySummary
   requestJWT: string
 }
 
 export interface AuthenticationRequestSummary extends RequestSummary {
   description: string
+  callbackURL: string
 }
 
 export interface PaymentRequestSummary extends RequestSummary {
+  callbackURL: string
   receiver: {
     did: string
     address: string
@@ -33,7 +36,17 @@ export interface PaymentRequestSummary extends RequestSummary {
   description: string
 }
 
+export interface CredentialReceiveSummary extends RequestSummary {
+  external: ExternalCredentialSummary[]
+}
+
+export interface ExternalCredentialSummary {
+  decoratedClaim: DecoratedClaims
+  credential: SignedCredential
+}
+
 export interface CredentialRequestSummary extends RequestSummary {
+  callbackURL: string
   availableCredentials: CredentialTypeSummary[]
 }
 
