@@ -106,6 +106,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
         [InteractionType.CredentialRequest]: routeList.Consent,
       }
 
+      if (!navigationMap[interactionType]) {
+        return dispatch(showErrorScreen(new AppError(ErrorCode.ParseJWTFailed)))
+      }
+
       dispatch(
         navigationActions.navigate({
           routeName: navigationMap[interactionType],
@@ -113,6 +117,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
             jwt: data,
             isDeepLinkInteraction: false,
           },
+          key: 'qrCodeScanner',
         }),
       )
     } catch (err) {
