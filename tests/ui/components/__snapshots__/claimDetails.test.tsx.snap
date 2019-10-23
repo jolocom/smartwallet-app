@@ -31,6 +31,7 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
     }
   >
     <TextInputField
+      autoFocus={true}
       fieldName="email"
       fieldValue="test@test.com"
       handleFieldInput={[Function]}
@@ -86,12 +87,14 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
     }
   >
     <TextInputField
+      autoFocus={true}
       fieldName="givenName"
       fieldValue="natascha"
       handleFieldInput={[Function]}
       key="givenName"
     />
     <TextInputField
+      autoFocus={false}
       fieldName="familyName"
       fieldValue="test"
       handleFieldInput={[Function]}
