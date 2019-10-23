@@ -1,15 +1,5 @@
-import { BleManager, Device, Service, Characteristic, Subscription } from 'react-native-ble-plx';
+import { Device, Subscription, BleManager } from 'react-native-ble-plx';
 import { reject } from 'q';
-
-// need a way to delay response without breaking connection
-
-// open screen
-// start scanning
-// choose connection
-// open connection
-// read
-// close screen (navigate to consent screen)
-// write ?
 
 export type BleSerialConnectionConfig = {
     serviceUUID: string,
@@ -20,10 +10,10 @@ export type BleSerialConnectionConfig = {
 export type SerialConnection = {
     write: (toWrite: string) => Promise<any>,
     listen: (callback: (line: string) => void) => Subscription,
-    close: () => Promise<{}>
+    close: () => Promise<void>
 }
 
-export const openSerialConnection = (
+export const openSerialConnection = (manager: BleManager) => (
     d: Device,
     serialUUIDs: BleSerialConnectionConfig
 ): Promise<SerialConnection> => d.isConnected().then(connected => connected
@@ -41,7 +31,7 @@ export const openSerialConnection = (
                 }
             }
         ),
-        close: () => d.cancelConnection()
+        close: () => d.cancelConnection().then(_ => manager.destroy())
     }
     : reject("Device Not Connected"))
 

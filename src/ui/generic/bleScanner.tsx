@@ -71,7 +71,6 @@ export class BLECodeScanner extends React.Component<Props, State> {
     this.state.connected
       ? this.state.connected.close()
       : null
-    this.ble.destroy()
   }
 
   onScannerCancel() {
@@ -100,8 +99,12 @@ export class BLECodeScanner extends React.Component<Props, State> {
                   onPress={async () =>
                     this.ble
                       .connectToDevice(item.id, { requestMTU: 512 })
-                      .then(device => device.discoverAllServicesAndCharacteristics())
-                      .then(device => openSerialConnection(device, serialUUIDs))
+                      .then(device =>
+                        device.discoverAllServicesAndCharacteristics(),
+                      )
+                      .then(device =>
+                        openSerialConnection(this.ble)(device, serialUUIDs),
+                      )
                       .then(serial => {
                         this.ble.stopDeviceScan()
                         this.setState({ connected: serial })
