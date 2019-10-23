@@ -31,7 +31,7 @@ export const openSerialConnection = (
         write: (toWrite: string) => d.writeCharacteristicWithResponseForService(
             serialUUIDs.serviceUUID,
             serialUUIDs.rxUUID,
-            toWrite),
+            toWrite).catch(console.log),
         listen: (callback: (line: string) => void) => d.monitorCharacteristicForService(
             serialUUIDs.serviceUUID,
             serialUUIDs.txUUID,

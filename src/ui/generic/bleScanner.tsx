@@ -7,11 +7,11 @@ import { NavigationScreenProps } from 'react-navigation'
 import { Colors } from 'src/styles'
 import { BleManager } from 'react-native-ble-plx'
 import { openSerialConnection, SerialConnection, BleSerialConnectionConfig } from 'src/lib/ble'
-import { showErrorScreen } from 'src/actions/generic';
-import { JolocomLib } from 'jolocom-lib';
-import { AppError, ErrorCode } from 'src/lib/errors';
-import { interactionHandlers } from 'src/lib/storage/interactionTokens';
-import { withLoading, withErrorScreen } from 'src/actions/modifiers';
+import { showErrorScreen } from 'src/actions/generic'
+import { JolocomLib } from 'jolocom-lib'
+import { AppError, ErrorCode } from 'src/lib/errors'
+import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -79,9 +79,9 @@ export class BLECodeScanner extends React.Component<Props, State> {
   }
 
   render() {
-    const rx = this.state.rx;
-    if (rx[-1] === '\n') {
-      this.props.onScannerSuccess(rx);
+    const rx = this.state.rx
+    if (rx[rx.length - 1] === '\n') {
+      this.props.onScannerSuccess(rx)
     }
 
     if (!this.state.connected) {
@@ -106,7 +106,11 @@ export class BLECodeScanner extends React.Component<Props, State> {
                         this.ble.stopDeviceScan()
                         this.setState({ connected: serial })
                         serial.listen(line =>
-                          this.setState({ rx: this.state.rx + Buffer.from(line, "Base64").toString("ascii") })
+                          this.setState({
+                            rx:
+                              this.state.rx +
+                              Buffer.from(line, 'Base64').toString('ascii'),
+                          }),
                         )
                       })
                   }
@@ -128,6 +132,7 @@ export class BLECodeScanner extends React.Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onScannerSuccess: async (e: string) => {
+    console.log(e)
     let interactionToken
     try {
       interactionToken = JolocomLib.parse.interactionToken.fromJWT(e)
@@ -140,10 +145,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     return handler
       ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
       : dispatch(
-        showErrorScreen(
-          new AppError(ErrorCode.Unknown, new Error('No handler found')),
-        ),
-      )
+          showErrorScreen(
+            new AppError(ErrorCode.Unknown, new Error('No handler found')),
+          ),
+        )
   },
 })
 
