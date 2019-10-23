@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Dimensions,
   View,
 } from 'react-native'
 import I18n from '../../../locales/i18n'
@@ -12,6 +11,7 @@ import strings from '../../../locales/strings'
 import { Colors, Spacing } from '../../../styles'
 import {
   centeredText,
+  fontLight,
   fontMain,
   textSM,
   textXL,
@@ -19,14 +19,8 @@ import {
 } from '../../../styles/typography'
 import { debug } from '../../../styles/presets'
 
-const toScreenAbsolute = (ratio: number) =>
-  ratio * Dimensions.get('window').height
-
 const styles = StyleSheet.create({
   notAuthorizedOverlay: {
-    flex: 2,
-    height: '100%',
-    width: '100%',
     alignItems: 'center',
     zIndex: 1,
     justifyContent: 'flex-start',
@@ -40,23 +34,17 @@ const styles = StyleSheet.create({
     ...debug,
   },
   notAuthorizedDescription: {
-    color: Colors.sandLight080,
+    color: Colors.white,
     fontSize: textSM,
     width: 260,
     marginTop: Spacing.XS,
-    fontFamily: fontMain,
+    fontFamily: fontLight,
     lineHeight: 24,
     ...centeredText,
     ...debug,
   },
   enableButtonWrapper: {
-    marginTop: toScreenAbsolute(0.26),
-    /*
-    marginTop: Platform.select({
-      android: toScreenAbsolute(0.26),
-      ios: toScreenAbsolute(0.12),
-    }),
-     */
+    marginTop: Spacing.XXL,
     ...debug,
   },
   enableButtonText: {
@@ -64,7 +52,7 @@ const styles = StyleSheet.create({
     fontFamily: fontMain,
     lineHeight: 20,
     color: Platform.select({
-      android: Colors.white,
+      android: Colors.pink,
       ios: Colors.nativeIosBlue,
     }),
     textDecorationLine: Platform.select({
@@ -94,7 +82,10 @@ export const NoPermissionComponent: FC<Props> = (props: Props) => {
           onPress={props.onPressEnable}
         >
           <Text style={styles.enableButtonText}>
-            {I18n.t(strings.ENABLE_CAMERA_ACCESS)}
+            {Platform.select({
+              android: I18n.t(strings.ENABLE_CAMERA_ACCESS),
+              ios: I18n.t(strings.START_PROCESS),
+            })}
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,12 +1,6 @@
 import React from 'react'
 import { Container } from '../../structure'
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Platform,
-  StatusBar,
-} from 'react-native'
+import { StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native'
 import { ScannerContainer } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { white } from '../../../styles/colors'
@@ -25,18 +19,6 @@ import { navigatorResetHome } from '../../../actions/navigation'
 const IS_IOS = Platform.OS === 'ios'
 
 const styles = StyleSheet.create({
-  buttonWrapper: {
-    flex: 0.75,
-    justifyContent: 'space-around',
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-  },
-  topWrapper: {
-    backgroundColor: Colors.black065,
-    flex: 1,
-    alignItems: 'flex-end',
-    zIndex: 1,
-  },
   iconWrapper: {
     width: 60,
     height: 60,
@@ -70,7 +52,7 @@ interface Props
 const InteractionContainer = (props: Props) => (
   <React.Fragment>
     <StatusBar hidden />
-    <Container style={{ backgroundColor: Colors.blackMain }}>
+    <Container style={{ backgroundColor: Colors.greyDark }}>
       {IS_IOS && (
         <TouchableOpacity
           onPress={props.navigateHome}
@@ -79,19 +61,6 @@ const InteractionContainer = (props: Props) => (
           <CloseIcon />
         </TouchableOpacity>
       )}
-      <View style={styles.topWrapper}>
-        <View style={styles.buttonWrapper}>
-          <View style={styles.iconWrapper}>
-            {/* NOTE: uncomment when implementing bluetooth functionality
-            <ScanEnabledIcon />
-            <Text style={styles.text}>
-              {I18n.t(strings.SCAN.toUpperCase())}
-            </Text>
-          */}
-          </View>
-        </View>
-        <View style={{ flex: 0.25 }} />
-      </View>
       <ScannerContainer
         navigation={props.navigation}
         onScannerSuccess={props.onScannerSuccess}

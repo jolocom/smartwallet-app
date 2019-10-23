@@ -20,11 +20,12 @@ import {
   textSubheader,
   textSubheaderLineHeight,
 } from '../../../styles/typography'
+import { debug } from '../../../styles/presets'
+import { BP } from '../../../styles/breakpoints'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 const MARKER_SIZE = SCREEN_WIDTH * 0.75
-
 const styles = StyleSheet.create({
   rectangle: {
     height: MARKER_SIZE,
@@ -36,6 +37,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'transparent',
   },
+  topOverlay: {
+    backgroundColor: Colors.black065,
+    width: '100%',
+    height: 184,
+    ...debug,
+  },
   bottomOverlay: {
     flex: 1,
     backgroundColor: Colors.black065,
@@ -44,11 +51,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1,
     justifyContent: 'space-between',
+    ...debug,
   },
   horizontalOverlay: {
     height: MARKER_SIZE,
     width: SCREEN_WIDTH,
     backgroundColor: black065,
+    ...debug,
   },
   descriptionText: {
     marginTop: Spacing.MD,
@@ -58,17 +67,24 @@ const styles = StyleSheet.create({
     fontFamily: fontLight,
     lineHeight: textSubheaderLineHeight,
     ...centeredText,
+    ...debug,
   },
   torchWrapper: {
     flex: 1,
-    alignItems: 'center', 
-    justifyContent: 'center', 
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   torch: {
     width: 69,
     height: 69,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: BP({
+      large: 60,
+      medium: 40,
+      small: 20,
+    }),
+    ...debug,
   },
 })
 
@@ -148,31 +164,27 @@ export class ScannerComponent extends React.Component<Props, State> {
             cameraStyle={StyleSheet.create({ height: SCREEN_HEIGHT })}
           />
         )}
-
+        <View style={styles.topOverlay} />
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.horizontalOverlay} />
           <View style={styles.rectangle} />
           <View style={styles.horizontalOverlay} />
         </View>
         <View style={styles.bottomOverlay}>
-            <Text style={styles.descriptionText}>
-              {I18n.t(
-                strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE,
-              )}
-            </Text>
-          <View
-            style={styles.torchWrapper}
+          <Text style={styles.descriptionText}>
+            {I18n.t(
+              strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE,
+            )}
+          </Text>
+          <TouchableHighlight
+            onPressIn={() => this.onTorchChange(true)}
+            onPressOut={() => this.onTorchChange(false)}
+            activeOpacity={1}
+            underlayColor={'transparent'}
+            style={styles.torch}
           >
-            <TouchableHighlight
-              onPressIn={() => this.onTorchChange(true)}
-              onPressOut={() => this.onTorchChange(false)}
-              activeOpacity={1}
-              underlayColor={'transparent'}
-              style={styles.torch}
-            >
-              {this.state.isTorch ? <TorchOnIcon /> : <TorchOffIcon />}
-            </TouchableHighlight>
-          </View>
+            {this.state.isTorch ? <TorchOnIcon /> : <TorchOffIcon />}
+          </TouchableHighlight>
         </View>
       </React.Fragment>
     )
