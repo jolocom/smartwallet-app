@@ -38,8 +38,9 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   await identityWallet.validateJWT(requestToken, undefined, registry)
 
   const issuer = await registry.resolve(keyIdToDid(requestToken.issuer))
-  const issuerSummary = generateIdentitySummary(issuer)
+  const requesterSummary = generateIdentitySummary(issuer)
 
+  // TODO Change to formatter
   const handler = interactionHandlers[requestToken.interactionType]
 
   if (!handler) {
@@ -50,25 +51,24 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   }
 
   const additionalCredentials = {
-    [InteractionType.CredentialRequest]: async () => {
-      const { did } = getState().account.did
-      const {
-        requestedCredentialTypes: requestedTypes,
-      } = requestToken.interactionToken as CredentialRequest
-      return await assembleCredentials(storageLib, did, requestedTypes)
-    },
-    [InteractionType.CredentialOfferRequest]: async () => {
-      return await assembleCredentialOffer(
+    [InteractionType.CredentialRequest]: () =>
+      assembleCredentials(
+        storageLib,
+        getState().account.did.did,
+        (requestToken.interactionToken as CredentialRequest)
+          .requestedCredentialTypes,
+      ),
+    [InteractionType.CredentialOfferRequest]: () =>
+      assembleCredentialOffer(
         backendMiddleware,
         requestToken as JSONWebToken<CredentialOfferRequest>,
-        issuerSummary,
-      )
-    },
+        requesterSummary,
+      ),
   }
 
   return handler(
     requestToken,
-    issuerSummary,
+    requesterSummary,
     await additionalCredentials[requestToken.interactionType](),
   )
 }

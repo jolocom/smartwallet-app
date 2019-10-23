@@ -13,7 +13,7 @@ import {
   IdentitySummary,
 } from './types'
 
-export const consumeCredentialOfferRequest = (
+export const formatCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
   requesterSummary: IdentitySummary,
   receivedCredentials: ExternalCredentialSummary[],

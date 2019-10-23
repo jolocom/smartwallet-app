@@ -1,11 +1,8 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import {
-  AssembledCredential,
-  consumeCredentialRequest,
-} from '../../actions/sso'
+import { AssembledCredential, formatCredentialRequest } from '../../actions/sso'
 import { formatAuthenticationRequest } from '../../actions/sso/authenticationRequest'
-import { consumeCredentialOfferRequest } from '../../actions/sso/credentialOfferRequest'
+import { formatCredentialOfferRequest } from '../../actions/sso/credentialOfferRequest'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
@@ -32,7 +29,7 @@ export const interactionHandlers = {
     requesterSummary: IdentitySummary,
     assembledCredentials: AssembledCredential[],
   ) =>
-    consumeCredentialRequest(
+    formatCredentialRequest(
       interactionToken,
       requesterSummary,
       assembledCredentials,
@@ -44,7 +41,7 @@ export const interactionHandlers = {
     requesterSummary: IdentitySummary,
     receivedCredentials: ExternalCredentialSummary[],
   ) =>
-    consumeCredentialOfferRequest(
+    formatCredentialOfferRequest(
       interactionToken,
       requesterSummary,
       receivedCredentials,

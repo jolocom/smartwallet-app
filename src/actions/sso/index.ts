@@ -88,7 +88,7 @@ export const assembleCredentials = async (
   return abbreviated.reduce((acc, val) => acc.concat(val))
 }
 
-export const consumeCredentialRequest = (
+export const formatCredentialRequest = (
   decodedCredentialRequest: JSONWebToken<CredentialRequest>,
   requester: IdentitySummary,
   assembledCredentials: AssembledCredential[],
