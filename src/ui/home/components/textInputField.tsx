@@ -5,6 +5,7 @@ import { Colors, Typography } from 'src/styles'
 const ReactMUI = require('react-native-material-textfield')
 
 interface Props {
+  autoFocus?: boolean
   fieldValue: string
   fieldName: string
   handleFieldInput: (fieldValue: string, fieldName: string) => void
@@ -31,11 +32,18 @@ const humanize = (attrName: string) => {
 }
 
 export const TextInputField: React.FC<Props> = (props: Props) => {
-  const { fieldValue, fieldName, handleFieldInput, keyboardType } = props
+  const {
+    fieldValue,
+    fieldName,
+    handleFieldInput,
+    keyboardType,
+    autoFocus,
+  } = props
   const labelText = I18n.t(humanize(fieldName))
   return (
     <View style={styles.inputContainer}>
       <ReactMUI.TextField
+        autoFocus={autoFocus}
         label={labelText}
         labelTextStyle={styles.labelStyle}
         style={styles.fieldStyle}
