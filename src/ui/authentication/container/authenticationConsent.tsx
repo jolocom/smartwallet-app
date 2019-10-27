@@ -7,9 +7,10 @@ import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
 
 interface AuthenticationNavigationParams {
-  isDeepLinkInteraction: boolean
+  send: (token: JSONWebToken<JWTEncodable>) => Promise<any>,
   authenticationDetails: AuthenticationRequestSummary
 }
 
@@ -26,7 +27,7 @@ export const AuthenticationConsentContainer = (props: Props) => {
     cancelAuthenticationRequest,
     navigation: {
       state: {
-        params: { isDeepLinkInteraction, authenticationDetails },
+        params: { send, authenticationDetails },
       },
     },
   } = props
@@ -35,7 +36,7 @@ export const AuthenticationConsentContainer = (props: Props) => {
       authenticationDetails={authenticationDetails}
       confirmAuthenticationRequest={() =>
         confirmAuthenticationRequest(
-          isDeepLinkInteraction,
+          send,
           authenticationDetails,
         )
       }
@@ -46,13 +47,13 @@ export const AuthenticationConsentContainer = (props: Props) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmAuthenticationRequest: (
-    isDeepLinkInteraction: boolean,
-    authenticationDetails: AuthenticationRequestSummary,
+    send: (token: JSONWebToken<JWTEncodable>) => Promise<any>,
+    authenticationDetails: AuthenticationRequestSummary
   ) =>
     dispatch(
       withErrorScreen(
         sendAuthenticationResponse(
-          isDeepLinkInteraction,
+          send,
           authenticationDetails,
         ),
       ),

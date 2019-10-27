@@ -136,7 +136,9 @@ export class BLECodeScanner extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-    onScannerSuccess: (send: (token: JSONWebToken<JWTEncodable>) => Promise<any>) => async (e: string) => {
+  onScannerSuccess: (
+    send: (token: JSONWebToken<JWTEncodable>) => Promise<any>,
+  ) => async (e: string) => {
     console.log(e)
     let interactionToken
     try {
