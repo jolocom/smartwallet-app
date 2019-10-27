@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 
 // TODO Is this running?
 describe('CredentialsOverview component', () => {
-  const COMMON_PROPS: CredentialOverview['props'] = {
+  const COMMON_PROPS: typeof CredentialOverview['props'] = {
     loading: false,
     onEdit: jest.fn(),
     did: 'did:jolo:test',

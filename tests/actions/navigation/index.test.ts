@@ -2,7 +2,7 @@ import { navigationActions } from '../../../src/actions'
 import { JolocomLib } from 'jolocom-lib'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { requestFormatter } from 'src/lib/storage/interactionTokens'
 import { createMockStore } from 'tests/utils'
 import { AppError } from 'src/lib/errors'
 
@@ -42,10 +42,10 @@ describe('Navigation action creators', () => {
     )
 
     const interactionHandlersSpies = {}
-    Object.keys(interactionHandlers).forEach(typ => {
+    Object.keys(requestFormatter).forEach(typ => {
       interactionHandlersSpies[typ] = jest
         // @ts-ignore bleh
-        .spyOn(interactionHandlers, typ)
+        .spyOn(requestFormatter, typ)
         .mockReturnValue({ type: `MOCK_${typ}_INTERACTION_TOKEN_HANDLER` })
     })
 

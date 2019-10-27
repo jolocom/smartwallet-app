@@ -1,1 +1,1 @@
-export { Consent } from 'src/ui/sso/containers/consent'
+export { ShareConsent } from 'src/ui/sso/containers/shareConsent'

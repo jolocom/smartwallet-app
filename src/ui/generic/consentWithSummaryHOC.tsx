@@ -4,7 +4,8 @@ import { ThunkDispatch } from '../../store'
 import { withErrorScreen, withLoading } from '../../actions/modifiers'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { consumeInteractionToken } from '../../actions/sso/consumeInteractionToken'
+import { RequestSummary } from '../../actions/sso/types'
+import { consumeInteractionRequest } from '../../actions/sso'
 
 interface PaymentNavigationParams {
   jwt: string
@@ -14,27 +15,30 @@ interface Props extends ReturnType<typeof mapDispatchToProps> {
   navigation: NavigationScreenProp<NavigationState, PaymentNavigationParams>
 }
 
-const ConsentWithSummaryHOC = <T extends Props>(
-  ConsentContainer: React.ComponentClass<T>,
-) => (props: T) => {
-  const [isDone, setDone] = useState(false)
-  const [profile, setProfile] = useState()
+interface ConsentContainerProps<T extends RequestSummary> {
+  interactionRequest: T
+}
+
+const ConsentWithSummaryHOC = <T extends RequestSummary>(
+  ConsentContainer: React.ComponentClass<ConsentContainerProps<T>>,
+) => (props: Props) => {
   const { jwt } = props.navigation.state.params
+  const [parsedInteractionToken, setParsedInteractionToken] = useState<T>()
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    props.getSummary(jwt).then((summary: any) => {
-      setProfile(summary)
-      setDone(true)
+    props.consumeInteractionRequest(jwt).then((summary: T) => {
+      setParsedInteractionToken(summary)
     })
   }, [])
 
-  return isDone && <ConsentContainer {...props} interactionDetails={profile} />
+  return parsedInteractionToken ? (
+    <ConsentContainer interactionRequest={parsedInteractionToken} />
+  ) : null
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  getSummary: (jwt: string) =>
-    dispatch(withErrorScreen(withLoading(consumeInteractionToken(jwt)))),
+  consumeInteractionRequest: (jwt: string) =>
+    dispatch(withErrorScreen(withLoading(consumeInteractionRequest(jwt)))),
 })
 
 export const withConsentSummary = compose(

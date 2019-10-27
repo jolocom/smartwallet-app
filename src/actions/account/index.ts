@@ -12,7 +12,7 @@ import { ThunkAction } from 'src/store'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
-import { IdentitySummary } from '../sso/types'
+import {  IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from 'src/backendMiddleware'
@@ -108,22 +108,15 @@ export const saveClaim: ThunkAction = async (
 }
 
 // TODO Currently only rendering  / adding one
-export const saveExternalCredentials: ThunkAction = async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
+export const saveCredentialsWithMetadata = (
+  credential: SignedCredential,
+  metadata: CredentialMetadataSummary,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib } = backendMiddleware
-  const externalCredentials = getState().account.claims.pendingExternal
 
-  if (!externalCredentials.offer.length) {
-    return dispatch(cancelReceiving)
-  }
-
-  const cred: SignedCredential = externalCredentials.offer[0].credential
-
-  await storageLib.delete.verifiableCredential(cred.id)
-  await storageLib.store.verifiableCredential(cred)
+  await storageLib.delete.verifiableCredential(credential.id)
+  await storageLib.store.verifiableCredential(credential)
+  await storageLib.store.credentialMetadata(metadata)
 
   return dispatch(cancelReceiving)
 }

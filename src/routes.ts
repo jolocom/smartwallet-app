@@ -17,7 +17,7 @@ import { Landing } from 'src/ui/landing/'
 import { PaymentConsent } from 'src/ui/payment'
 import { Entropy, RegistrationProgress } from 'src/ui/registration/'
 import { Exception } from 'src/ui/generic/'
-import { Consent } from 'src/ui/sso'
+import { ShareConsent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import { Settings } from 'src/ui/settings'
 import I18n from 'src/locales/i18n'
@@ -199,7 +199,7 @@ const MainStack = createStackNavigator(
       }),
     },
     [routeList.Consent]: {
-      screen: Consent,
+      screen: ShareConsent,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.SHARE_CLAIMS),

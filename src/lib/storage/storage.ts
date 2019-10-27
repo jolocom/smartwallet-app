@@ -268,13 +268,10 @@ export class Storage {
   }
 }
 
-export interface CredentialMetadata {
+export interface CredentialMetadataSummary {
   type: string
   renderInfo: CredentialOfferRenderInfo
   metadata: CredentialOfferMetadata
-}
-
-export interface CredentialMetadataSummary extends CredentialMetadata {
   issuer: IdentitySummary
 }
 

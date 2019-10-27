@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { cancelSSO } from 'src/actions/sso'
-import { sendPaymentResponse } from 'src/actions/sso/paymentRequest'
+import { prepareAndSendPaymentResponse } from 'src/actions/sso/paymentRequest'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { PaymentRequestSummary } from '../../../actions/sso/types'
@@ -47,7 +47,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   ) =>
     dispatch(
       withErrorScreen(
-        sendPaymentResponse(isDeepLinkInteraction, paymentDetails),
+        prepareAndSendPaymentResponse(isDeepLinkInteraction, paymentDetails),
       ),
     ),
   cancelPaymentRequest: () => dispatch(cancelSSO),

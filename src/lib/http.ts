@@ -1,4 +1,4 @@
-interface HttpAgent {
+export interface HttpAgent {
   getRequest<T>(endpoint: string): Promise<T>
   postRequest<T>(endpoint: string, headers: any, data: any): Promise<T>
   headRequest(endpoint: string): Promise<{ status: number }>
