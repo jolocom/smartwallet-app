@@ -12,7 +12,7 @@ export interface SerialConnection {
   write: (toWrite: string) => Promise<any>
   listen: (callback: (line: string) => void) => Subscription
   close: () => Promise<void>,
-  respond: (token: JSONWebToken<JWTEncodable>) => Promise<boolean>
+  respond: (token: JSONWebToken<JWTEncodable>) => Promise<any>
 }
 
 export const openSerialConnection = (manager: BleManager) => (
@@ -38,7 +38,7 @@ export const openSerialConnection = (manager: BleManager) => (
             serialUUIDs.serviceUUID,
             serialUUIDs.rxUUID,
             token.encode()
-        ).then(value => true || d.cancelConnection().then(_ => manager.destroy()))
+        ).then(value => d.cancelConnection().then(_ => manager.destroy()))
     }
     : reject("Device Not Connected"))
 
