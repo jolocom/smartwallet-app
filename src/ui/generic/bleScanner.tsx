@@ -12,6 +12,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
+import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -79,8 +80,9 @@ export class BLECodeScanner extends React.Component<Props, State> {
 
   render() {
     const rx = this.state.rx
-    if (rx[rx.length - 1] === '\n') {
-      this.props.onScannerSuccess(rx)
+    if (rx[rx.length - 1] === '\n' && this.state.connected) {
+      const connection = this.state.connected
+      this.props.onScannerSuccess(connection.respond)(rx)
     }
 
     if (!this.state.connected) {
@@ -134,7 +136,7 @@ export class BLECodeScanner extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  onScannerSuccess: async (e: string) => {
+    onScannerSuccess: (send: (token: JSONWebToken<JWTEncodable>) => Promise<any>) => async (e: string) => {
     console.log(e)
     let interactionToken
     try {

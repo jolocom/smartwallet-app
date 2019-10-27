@@ -16,8 +16,8 @@ import { consumePaymentRequest } from '../../actions/sso/paymentRequest'
 export const interactionHandlers = {
   [InteractionType.Authentication]: <T extends JSONWebToken<Authentication>>(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumeAuthenticationRequest(interactionToken, isDeepLinkInteraction),
+    send: (token: JSONWebToken<Authentication>) => Promise<any>,
+  ) => consumeAuthenticationRequest(interactionToken, send),
   [InteractionType.CredentialRequest]: <
     T extends JSONWebToken<CredentialRequest>
   >(
