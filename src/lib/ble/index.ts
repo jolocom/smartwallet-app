@@ -1,5 +1,6 @@
 import { Device, Subscription, BleManager } from 'react-native-ble-plx';
 import { reject } from 'q';
+import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
 
 export type BleSerialConnectionConfig = {
     serviceUUID: string,
@@ -8,9 +9,10 @@ export type BleSerialConnectionConfig = {
 }
 
 export interface SerialConnection {
-    write: (toWrite: string) => Promise<any>,
-    listen: (callback: (line: string) => void) => Subscription,
-    close: () => Promise<void>
+  write: (toWrite: string) => Promise<any>
+  listen: (callback: (line: string) => void) => Subscription
+  close: () => Promise<void>,
+  respond: (token: JSONWebToken<JWTEncodable>) => Promise<boolean>
 }
 
 export const openSerialConnection = (manager: BleManager) => (
@@ -31,7 +33,12 @@ export const openSerialConnection = (manager: BleManager) => (
                 }
             }
         ),
-        close: () => d.cancelConnection().then(_ => manager.destroy())
+        close: () => d.cancelConnection().then(_ => manager.destroy()),
+        respond: (token: JSONWebToken<JWTEncodable>) => d.writeCharacteristicWithResponseForService(
+            serialUUIDs.serviceUUID,
+            serialUUIDs.rxUUID,
+            token.encode()
+        ).then(value => true || d.cancelConnection().then(_ => manager.destroy()))
     }
     : reject("Device Not Connected"))
 
