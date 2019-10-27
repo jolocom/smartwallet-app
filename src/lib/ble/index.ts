@@ -7,7 +7,7 @@ export type BleSerialConnectionConfig = {
     txUUID: string,
 }
 
-export type SerialConnection = {
+export interface SerialConnection {
     write: (toWrite: string) => Promise<any>,
     listen: (callback: (line: string) => void) => Subscription,
     close: () => Promise<void>
