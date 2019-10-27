@@ -42,17 +42,3 @@ export const openSerialConnection = (manager: BleManager) => (
     }
     : reject("Device Not Connected"))
 
-// two steps:
-// 1. present a list of connections (narrowing by uuids)
-
-// function for showing list of connections
-// connection menu as a function which takes a selection and returns a serial port
-//
-// serial port as:
-// 1. a function which takes a callback and calls it with every new recieve
-// 2. a function to send
-
-// type ConnectionManager = {
-    // scanForDevices: (uuids: string[]) => Promise<(Device: ) => string>[],
-    // establishConnection: (device: Device) => Promise<SerialConnection>
-// }
