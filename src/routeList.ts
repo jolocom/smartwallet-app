@@ -1,8 +1,10 @@
 // NOTE: don't use 'const' so that values are useable in both .js and .ts files
 export enum routeList {
   AppInit = 'AppInit',
+  Main = 'Main',
 
   // Registration
+  Registration = 'Registration',
   Landing = 'Landing',
   Entropy = 'Entropy',
   RegistrationProgress = 'RegistrationProgress',

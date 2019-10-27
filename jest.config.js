@@ -7,7 +7,7 @@ module.exports = {
     "enzyme-to-json/serializer"
   ],
   transformIgnorePatterns: [
-    "node_modules/(?!react-native|native-base|@?react-navigation|react-native-fabric|typeorm)"
+    "node_modules/(?!react-native|native-base|@?react-navigation|react-native-fabric|typeorm|@sentry)"
   ],
   globals: {
     "ts-jest": {

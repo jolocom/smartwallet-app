@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.polidea.reactnativeble.BlePackage;
+import io.sentry.RNSentryPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.swmansion.reanimated.ReanimatedPackage;
@@ -38,6 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new BlePackage(),
+            new RNSentryPackage(),
             new VectorIconsPackage(),
             new RNLocalizePackage(),
             new ReanimatedPackage(),
