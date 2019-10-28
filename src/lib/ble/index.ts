@@ -17,10 +17,9 @@ export interface SerialConnection {
 const waitForToken = (delimiter: string) =>
   (callback: (jwt: string) => void) =>
     function*(received: string) {
-      while (!received.includes(delimiter, -1)) {
-        console.log(`received: ${received}`)
+      do {
         received += yield
-      }
+      } while (!received.includes(delimiter, -1))
       callback(received.slice(0, received.indexOf(delimiter)))
     }
 
@@ -34,17 +33,18 @@ export const openSerialConnection = (manager: BleManager) => (
 
       const b = waitForToken('\n')(
         onRxDispatch(
-          (token: JSONWebToken<JWTEncodable>) => d.writeCharacteristicWithResponseForService(
-            serialUUIDs.serviceUUID,
-            serialUUIDs.rxUUID,
-            'henlo\n')//token.encode() + '\n')
-            .then(value => d.cancelConnection())
-            .then(_ => manager.destroy())
+          (token: JSONWebToken<JWTEncodable>) => {
+            return d.writeCharacteristicWithResponseForService(
+              serialUUIDs.serviceUUID,
+              serialUUIDs.rxUUID,
+              Buffer.from(token.encode() + '\n', 'ascii').toString('base64'))
+              .then(value => d.cancelConnection())
+              .then(_ => manager.destroy()).catch(err => console.error(err.message))
+          }
         )
-      )(await d.readCharacteristicForService(
-        serialUUIDs.serviceUUID,
-        serialUUIDs.txUUID
-      ).then(ch => ch.value && Buffer.from(ch.value, 'base64').toString('ascii')) || '')
+      )('')
+
+      b.next('')
 
       d.monitorCharacteristicForService(
         serialUUIDs.serviceUUID,
@@ -53,8 +53,7 @@ export const openSerialConnection = (manager: BleManager) => (
           if (err) console.log(err)
           if (characteristic && characteristic.value)
             b.next(Buffer.from(characteristic.value, 'base64').toString('ascii'))
-        }
-      )
+        })
 
       return {
         write: (toWrite: string) => d.writeCharacteristicWithResponseForService(

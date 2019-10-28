@@ -6,10 +6,7 @@ import { ThunkDispatch } from 'src/store'
 import { NavigationScreenProps } from 'react-navigation'
 import { Colors } from 'src/styles'
 import { BleManager } from 'react-native-ble-plx'
-import {
-  openSerialConnection,
-  BleSerialConnectionConfig,
-} from 'src/lib/ble'
+import { openSerialConnection, BleSerialConnectionConfig } from 'src/lib/ble'
 import { showErrorScreen } from 'src/actions/generic'
 import { JolocomLib } from 'jolocom-lib'
 import { AppError, ErrorCode } from 'src/lib/errors'
@@ -102,7 +99,9 @@ export class BLECodeScanner extends React.Component<Props, State> {
                       return device.discoverAllServicesAndCharacteristics()
                     })
                     .then(device =>
-                      openSerialConnection(this.ble)(device, serialUUIDs)(this.props.onScannerSuccess),
+                      openSerialConnection(this.ble)(device, serialUUIDs)(
+                        this.props.onScannerSuccess,
+                      ),
                     )
                     .then(serial => {
                       console.log('connected')
@@ -132,12 +131,12 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     }
     const handler = interactionHandlers[interactionToken.interactionType]
     return handler
-      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
+      ? dispatch(withLoading(withErrorScreen(handler(interactionToken, send))))
       : dispatch(
-        showErrorScreen(
-          new AppError(ErrorCode.Unknown, new Error('No handler found')),
-        ),
-      )
+          showErrorScreen(
+            new AppError(ErrorCode.Unknown, new Error('No handler found')),
+          ),
+        )
   },
 })
 
