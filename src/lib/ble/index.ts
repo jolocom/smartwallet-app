@@ -37,14 +37,15 @@ export const openSerialConnection = (manager: BleManager) => (
 
       const b = waitForToken('\n')(
         onRxDispatch(
-          (token: JSONWebToken<JWTEncodable>) => {
-            return d.writeCharacteristicWithResponseForService(
+          (token: JSONWebToken<JWTEncodable>) => writeAll(200)(
+            (toWrite: string) => d.writeCharacteristicWithResponseForService(
               serialUUIDs.serviceUUID,
               serialUUIDs.rxUUID,
-              Buffer.from(token.encode() + '\n', 'ascii').toString('base64'))
-              .then(value => d.cancelConnection())
-              .then(_ => manager.destroy()).catch(err => console.error(err.message))
-          }
+              toWrite
+            ).then(_ => {})
+          )(
+              Buffer.from(token.encode() + '\n', 'ascii').toString('base64')
+          )
         )
       )('')
 
