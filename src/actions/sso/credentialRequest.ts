@@ -1,19 +1,17 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
+import { unnest } from 'ramda'
 import {
   CredentialRequestSummary,
   CredentialTypeSummary,
   CredentialVerificationSummary,
   IdentitySummary,
 } from './types'
-import { ThunkAction } from '../../store'
-import { JolocomLib } from 'jolocom-lib'
-import { Linking } from 'react-native'
-import { AppError } from '../../lib/errors'
-import ErrorCode from '../../lib/errorCodes'
-import { assembleRequestSummary, cancelSSO } from './index'
+import { assembleRequestSummary } from './index'
 import { getUiCredentialTypeByType } from '../../lib/util'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { Storage } from '../../lib/storage/storage'
+import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
 
 /**
  * Given an credential request JWT will return a {@link CredentialRequestSummary}
@@ -32,55 +30,25 @@ export const credentialRequestSummary = (
 })
 
 /**
- * Given a list of selected credentials
- * @param selectedCredentials
- * @param credentialRequestDetails
- * @param isDeepLinkInteraction
+ * @TODO - This function should not exist, instead we should have a more flexible
+ *   api on the storage side.
+ * Given a list of {@link CredentialVerificationSummary}, will use the provided
+ * database adapter to fetch the listed credentials based on IDs
+ * @param selectedCredentials - list of credentials to be fetched
+ * @param storageLib - instance of a database adapter
  */
 
-export const prepareAndSendCredentialResponse = (
+export const fetchCredentialsFromDatabase = async (
   selectedCredentials: CredentialVerificationSummary[],
-  credentialRequestDetails: CredentialRequestSummary,
-  isDeepLinkInteraction: boolean = false,
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { storageLib, keyChainLib, identityWallet } = backendMiddleware
-  const { callbackURL, requestJWT } = credentialRequestDetails
+  storageLib: Storage,
+): Promise<ISignedCredentialAttrs[]> => {
+  const toFetch = selectedCredentials.map(({ id }) => ({ id }))
 
-  const password = await keyChainLib.getPassword()
-  const request = JolocomLib.parse.interactionToken.fromJWT(requestJWT)
-
-  const credentials = await Promise.all(
-    selectedCredentials.map(
-      async cred =>
-        (await storageLib.get.verifiableCredential({ id: cred.id }))[0],
-    ),
+  const signedCredentials = await Promise.all(
+    toFetch.map(storageLib.get.verifiableCredential),
   )
 
-  const jsonCredentials = credentials.map(cred => cred.toJSON())
-
-  const response = await identityWallet.create.interactionTokens.response.share(
-    {
-      callbackURL,
-      suppliedCredentials: jsonCredentials,
-    },
-    password,
-    request,
-  )
-
-  if (isDeepLinkInteraction) {
-    const callback = `${callbackURL}${response.encode()}`
-    if (!(await Linking.canOpenURL(callback))) {
-      throw new AppError(ErrorCode.DeepLinkUrlNotFound)
-    }
-
-    return Linking.openURL(callback).then(() => dispatch(cancelSSO))
-  }
-  await fetch(callbackURL, {
-    method: 'POST',
-    body: JSON.stringify({ token: response.encode() }),
-    headers: { 'Content-Type': 'application/json' },
-  })
-  dispatch(cancelSSO)
+  return unnest(signedCredentials).map(c => c.toJSON())
 }
 
 interface AttributeSummary {
@@ -96,43 +64,38 @@ interface AttributeSummary {
  * Given an array of credential types, returns them from the database.
  * In a specifically formatted way
  * @param requestedTypes
+ * @param storageLib
+ * @param did
  * @returns - Array of type credential type summaries
  */
 
-export const fetchMatchingCredentials = (
+export const fetchMatchingCredentials = async (
   requestedTypes: string[][],
-): ThunkAction => async (
-  dispatch,
-  getState,
-  backendMiddleware,
+  storageLib: Storage,
+  did: string,
 ): Promise<CredentialTypeSummary[]> => {
-  const { storageLib } = backendMiddleware
-  const { did } = getState().account.did
   const attributesForType = await Promise.all<AttributeSummary>(
     requestedTypes.map(storageLib.get.attributesByType),
   )
 
   const populatedWithCredentials = await Promise.all(
-    attributesForType.map(async entry => {
-      if (entry.results.length) {
-        return Promise.all(
-          entry.results.map(async result => ({
-            type: getUiCredentialTypeByType(entry.type),
-            values: result.values,
-            verifications: await storageLib.get.verifiableCredential({
-              id: result.verification,
-            }),
-          })),
-        )
+    attributesForType.map(async ({ results, type }) => {
+      if (!results.length) {
+        return [
+          {
+            type: getUiCredentialTypeByType(type),
+            values: [],
+            verifications: [],
+          },
+        ]
       }
-
-      return [
-        {
-          type: getUiCredentialTypeByType(entry.type),
-          values: [],
-          verifications: [],
-        },
-      ]
+      return Promise.all(
+        results.map(async ({ values, verification: id }) => ({
+          type: getUiCredentialTypeByType(type),
+          values,
+          verifications: await storageLib.get.verifiableCredential({ id }),
+        })),
+      )
     }),
   )
 

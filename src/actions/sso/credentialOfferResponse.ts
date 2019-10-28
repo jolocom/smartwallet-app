@@ -9,8 +9,6 @@ import { all, either, isEmpty, isNil } from 'ramda'
 // const validateCredentialReceive = async (
 //   credentialReceive: JSONWebToken<CredentialsReceive>,
 // ) => {
-//   // // TODO Handler? I.e. recursive?
-//
 //   const providedCredentials =
 //     credentialReceive.interactionToken.signedCredentials
 //

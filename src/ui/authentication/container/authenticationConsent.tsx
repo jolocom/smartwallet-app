@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AuthenticationConsentComponent } from '../components/authenticationConsent'
-import { cancelSSO } from 'src/actions/sso'
-import { prepareAndSendAuthenticationResponse } from 'src/actions/sso/authenticationRequest'
+import { cancelSSO, sendInteractionToken } from 'src/actions/sso'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { AuthenticationRequestSummary } from '../../../actions/sso/types'
@@ -29,14 +28,25 @@ const AuthenticationConsentContainer = ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmAuthenticationRequest: (
     isDeepLinkInteraction: boolean,
-    authenticationDetails: AuthenticationRequestSummary,
+    { callbackURL, description, request }: AuthenticationRequestSummary,
   ) =>
     dispatch(
       withErrorScreen(
-        prepareAndSendAuthenticationResponse(
-          isDeepLinkInteraction,
-          authenticationDetails,
-        ),
+        async (dispatch, getState, { identityWallet, keyChainLib }) => {
+          const authResponse = await identityWallet.create.interactionTokens.response.auth(
+            {
+              callbackURL,
+              description,
+            },
+            await keyChainLib.getPassword(),
+            request,
+          )
+
+          return sendInteractionToken(
+            isDeepLinkInteraction,
+            authResponse,
+          ).finally(() => dispatch(cancelSSO()))
+        },
       ),
     ),
   cancelAuthenticationRequest: () => dispatch(cancelSSO),

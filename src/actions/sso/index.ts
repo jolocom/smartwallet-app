@@ -14,6 +14,7 @@ import { routeList } from '../../routeList'
 import { requestFormatter } from '../../lib/storage/interactionTokens'
 import { navigate } from '../navigation'
 import ErrorCode from '../../lib/errorCodes'
+import { Linking } from 'react-native'
 
 /**
  * The function parses the interaction token and returns the respective request summary
@@ -66,11 +67,37 @@ export const assembleRequestSummary = (
   requester,
 })
 
-export const cancelSSO: ThunkAction = dispatch => {
-  return dispatch(navigationActions.navigatorResetHome())
-}
+export const cancelSSO = navigationActions.navigatorResetHome
 
 export const cancelReceiving: ThunkAction = dispatch => {
   dispatch(resetSelected())
   return dispatch(navigationActions.navigatorResetHome())
+}
+
+/**
+ * Sends an encoded interaction response, either via HTTP or a deep link,
+ * depending on the isDeepLinkInteraction flag
+ * @note Will be deprecated
+ * @param isDeepLinkInteraction
+ * @param response
+ */
+
+export const sendInteractionToken = async (
+  isDeepLinkInteraction: boolean,
+  response: JSONWebToken<JWTEncodable>,
+) => {
+  const callbackURL = response.interactionToken.callbackURL
+  if (isDeepLinkInteraction) {
+    const callback = `${callbackURL}/${response.encode()}`
+    if (!(await Linking.canOpenURL(callback))) {
+      throw new AppError(ErrorCode.DeepLinkUrlNotFound)
+    }
+    return Linking.openURL(callback)
+  }
+
+  await fetch(callbackURL, {
+    method: 'POST',
+    body: JSON.stringify({ token: response.encode() }),
+    headers: { 'Content-Type': 'application/json' },
+  })
 }

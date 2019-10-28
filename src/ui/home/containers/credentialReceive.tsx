@@ -15,7 +15,6 @@ import { withConsentSummary } from '../../generic/consentWithSummaryHOC'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { httpAgent } from '../../../lib/http'
-import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/credentialOfferResponse'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from '../../../lib/storage/storage'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
@@ -120,11 +119,11 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       withErrorScreen(
         withLoading(
           async (dispatch, getState, { identityWallet, keyChainLib }) => {
-            const credOfferResponse = (await identityWallet.create.interactionTokens.response.offer(
+            const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
               prepareCredentialOfferResponse(credentialOffer),
               await keyChainLib.getPassword(),
               credentialOffer.request,
-            )) as JSONWebToken<CredentialOfferResponse>
+            )
 
             const { token } = await httpAgent.postRequest<{ token: string }>(
               credentialOffer.request.interactionToken.callbackURL,

@@ -15,8 +15,9 @@ import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRe
 import { RootState } from '../../../reducers'
 import {
   fetchMatchingCredentials,
-  prepareAndSendCredentialResponse,
+  fetchCredentialsFromDatabase,
 } from '../../../actions/sso/credentialRequest'
+import { cancelSSO, sendInteractionToken } from '../../../actions/sso'
 
 // TODO INJECT SENDER
 
@@ -53,6 +54,7 @@ const ShareConsentContainer = ({
       did={currentDid}
       availableCredentials={availableCredentials}
       handleSubmitClaims={(selected: CredentialVerificationSummary[]) =>
+        // TODO - PASS
         sendCredentialResponse(selected, interactionRequest, false)
       }
       handleDenySubmit={cancelSSO}
@@ -67,12 +69,15 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   prepareCredentialResponse: (
     interactionRequest: JSONWebToken<CredentialRequest>,
+    did: string,
   ) =>
     dispatch(
       withLoading(
-        withErrorScreen(
+        withErrorScreen((dispatch, getState, { storageLib }) =>
           fetchMatchingCredentials(
             interactionRequest.interactionToken.requestedCredentialTypes,
+            storageLib,
+            did,
           ),
         ),
       ),
@@ -85,11 +90,28 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(
       withLoading(
         withErrorScreen(
-          prepareAndSendCredentialResponse(
-            credentials,
-            credentialRequestDetails,
-            isDeepLinkInteraction,
-          ),
+          async (
+            dispatch,
+            getState,
+            { identityWallet, storageLib, keyChainLib },
+          ) => {
+            const credentialResponse = await identityWallet.create.interactionTokens.response.share(
+              {
+                callbackURL: credentialRequestDetails.callbackURL,
+                suppliedCredentials: await fetchCredentialsFromDatabase(
+                  credentials,
+                  storageLib,
+                ),
+              },
+              await keyChainLib.getPassword(),
+              credentialRequestDetails.request,
+            )
+
+            return sendInteractionToken(
+              isDeepLinkInteraction,
+              credentialResponse,
+            ).finally(() => dispatch(cancelSSO()))
+          },
         ),
       ),
     ),
