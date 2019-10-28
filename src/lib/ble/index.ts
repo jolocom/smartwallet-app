@@ -7,10 +7,6 @@ export type BleSerialConnectionConfig = {
   txUUID: string,
 }
 
-export interface SerialConnection {
-  write: (toWrite: string) => Promise<any>
-}
-
 // a generator function to be passed in to the listen function as the callback
 // This function will reduce together a token until delimiter and then call a callback function
 // with the result
@@ -54,11 +50,4 @@ export const openSerialConnection = (manager: BleManager) => (
           if (characteristic && characteristic.value)
             b.next(Buffer.from(characteristic.value, 'base64').toString('ascii'))
         })
-
-      return {
-        write: (toWrite: string) => d.writeCharacteristicWithResponseForService(
-          serialUUIDs.serviceUUID,
-          serialUUIDs.rxUUID,
-          toWrite).catch(console.error)
-      }
     })
