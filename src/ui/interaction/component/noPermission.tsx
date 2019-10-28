@@ -24,14 +24,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1,
     justifyContent: 'flex-start',
-    ...debug,
   },
   scanText: {
     color: Colors.sandLight,
     fontSize: textXL,
     fontFamily: fontMain,
     ...centeredText,
-    ...debug,
   },
   notAuthorizedDescription: {
     color: Colors.white,
@@ -41,11 +39,9 @@ const styles = StyleSheet.create({
     fontFamily: fontLight,
     lineHeight: 24,
     ...centeredText,
-    ...debug,
   },
   enableButtonWrapper: {
     marginTop: Spacing.XXL,
-    ...debug,
   },
   enableButtonText: {
     fontSize: textXS,

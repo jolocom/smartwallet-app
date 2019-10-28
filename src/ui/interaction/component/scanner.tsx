@@ -20,12 +20,12 @@ import {
   textSubheader,
   textSubheaderLineHeight,
 } from '../../../styles/typography'
-import { debug } from '../../../styles/presets'
 import { BP } from '../../../styles/breakpoints'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 const MARKER_SIZE = SCREEN_WIDTH * 0.75
+
 const styles = StyleSheet.create({
   rectangle: {
     height: MARKER_SIZE,
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
       medium: 175,
       large: 185,
     }),
-    ...debug,
   },
   bottomOverlay: {
     flex: 1,
@@ -55,13 +54,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1,
     justifyContent: 'space-between',
-    ...debug,
   },
   horizontalOverlay: {
     height: MARKER_SIZE,
     width: SCREEN_WIDTH,
     backgroundColor: black065,
-    ...debug,
   },
   descriptionText: {
     marginTop: Spacing.MD,
@@ -71,7 +68,6 @@ const styles = StyleSheet.create({
     fontFamily: fontLight,
     lineHeight: textSubheaderLineHeight,
     ...centeredText,
-    ...debug,
   },
   torchWrapper: {
     flex: 1,
@@ -88,12 +84,12 @@ const styles = StyleSheet.create({
       medium: 40,
       small: 20,
     }),
-    ...debug,
   },
 })
 
 interface Props extends NavigationScreenProps {
   onScannerSuccess: (jwt: string) => void
+  isCameraAllowed: boolean
 }
 
 interface State {
@@ -156,7 +152,7 @@ export class ScannerComponent extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        {this.state.isCameraReady && (
+        {(this.state.isCameraReady && this.props.isCameraAllowed) && (
           <QRScanner
             //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
             containerStyle={{ position: 'absolute' }}

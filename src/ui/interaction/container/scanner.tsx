@@ -15,13 +15,13 @@ interface Props extends NavigationScreenProps {
 
 interface State {
   permission: Status
+  isCameraAllowed: boolean
 }
 
 const CAMERA_PERMISSION = 'camera'
 
 enum RESULTS {
   AUTHORIZED = 'authorized',
-  DENIED = 'denied',
   RESTRICTED = 'restricted',
 }
 
@@ -31,7 +31,8 @@ export class ScannerContainer extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props)
     this.state = {
-      permission: RESULTS.DENIED,
+      permission: RESULTS.AUTHORIZED,
+      isCameraAllowed: false
     }
   }
 
@@ -41,11 +42,10 @@ export class ScannerContainer extends React.Component<Props, State> {
 
   private requestCameraPermission = async () => {
     const permission = await Permissions.request(CAMERA_PERMISSION)
-
     this.setState({
       permission,
+      isCameraAllowed: permission === RESULTS.AUTHORIZED
     })
-    return permission
   }
 
   /*
@@ -89,6 +89,7 @@ export class ScannerContainer extends React.Component<Props, State> {
     const { onScannerSuccess, navigation } = this.props
     return this.state.permission === RESULTS.AUTHORIZED ? (
       <ScannerComponent
+        isCameraAllowed={this.state.isCameraAllowed}
         onScannerSuccess={onScannerSuccess}
         navigation={navigation}
       />
