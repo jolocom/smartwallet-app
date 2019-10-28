@@ -15,6 +15,7 @@ import { Colors } from 'src/styles'
 import { navigationActions } from '../../actions'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { routeList } from '../../routeList'
+import { sendViaHTTP } from '../../actions/sso'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -116,7 +117,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
           routeName: navigationMap[interactionType],
           params: {
             jwt: data,
-            isDeepLinkInteraction: false,
+            send: sendViaHTTP,
           },
           key: 'qrCodeScanner',
         }),

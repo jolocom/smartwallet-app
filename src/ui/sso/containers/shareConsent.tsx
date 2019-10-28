@@ -10,14 +10,17 @@ import {
   CredentialVerificationSummary,
 } from '../../../actions/sso/types'
 import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import {
+  JSONWebToken,
+  JWTEncodable,
+} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { RootState } from '../../../reducers'
 import {
   fetchMatchingCredentials,
   fetchCredentialsFromDatabase,
 } from '../../../actions/sso/credentialRequest'
-import { cancelSSO, sendInteractionToken } from '../../../actions/sso'
+import { InteractionTokenSender } from '../../../actions/sso'
 
 // TODO INJECT SENDER
 
@@ -25,13 +28,15 @@ interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     ReturnType<typeof mapStateToProps> {
   interactionRequest: CredentialRequestSummary
+  sendResponse: InteractionTokenSender
 }
 
 const ShareConsentContainer = ({
   interactionRequest,
   prepareCredentialResponse,
+  sendResponse,
   currentDid,
-  sendCredentialResponse,
+  generateAndSendCredentialResponse,
   cancelSSO,
 }: Props) => {
   const [availableCredentials, setAvailableCredentials] = useState<
@@ -40,7 +45,7 @@ const ShareConsentContainer = ({
   const { requester, request, callbackURL } = interactionRequest
 
   useEffect(() => {
-    prepareCredentialResponse(request as JSONWebToken<CredentialRequest>).then(
+    prepareCredentialResponse(request, currentDid).then(
       (availableCredentials: CredentialTypeSummary[]) => {
         setAvailableCredentials(availableCredentials)
       },
@@ -54,8 +59,11 @@ const ShareConsentContainer = ({
       did={currentDid}
       availableCredentials={availableCredentials}
       handleSubmitClaims={(selected: CredentialVerificationSummary[]) =>
-        // TODO - PASS
-        sendCredentialResponse(selected, interactionRequest, false)
+        generateAndSendCredentialResponse(
+          selected,
+          interactionRequest,
+          sendResponse,
+        )
       }
       handleDenySubmit={cancelSSO}
     />
@@ -68,24 +76,26 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   prepareCredentialResponse: (
-    interactionRequest: JSONWebToken<CredentialRequest>,
+    interactionRequest: JSONWebToken<JWTEncodable>,
     did: string,
   ) =>
     dispatch(
       withLoading(
-        withErrorScreen((dispatch, getState, { storageLib }) =>
-          fetchMatchingCredentials(
-            interactionRequest.interactionToken.requestedCredentialTypes,
+        withErrorScreen((dispatch, getState, { storageLib }) => {
+          const interactionToken = interactionRequest.interactionToken as CredentialRequest
+
+          return fetchMatchingCredentials(
+            interactionToken.requestedCredentialTypes,
             storageLib,
             did,
-          ),
-        ),
+          )
+        }),
       ),
     ),
-  sendCredentialResponse: (
+  generateAndSendCredentialResponse: (
     credentials: CredentialVerificationSummary[],
     credentialRequestDetails: CredentialRequestSummary,
-    isDeepLinkInteraction: boolean,
+    sendResponse: InteractionTokenSender,
   ) =>
     dispatch(
       withLoading(
@@ -94,24 +104,20 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
             dispatch,
             getState,
             { identityWallet, storageLib, keyChainLib },
-          ) => {
-            const credentialResponse = await identityWallet.create.interactionTokens.response.share(
-              {
-                callbackURL: credentialRequestDetails.callbackURL,
-                suppliedCredentials: await fetchCredentialsFromDatabase(
-                  credentials,
-                  storageLib,
-                ),
-              },
-              await keyChainLib.getPassword(),
-              credentialRequestDetails.request,
-            )
-
-            return sendInteractionToken(
-              isDeepLinkInteraction,
-              credentialResponse,
-            ).finally(() => dispatch(cancelSSO()))
-          },
+          ) =>
+            sendResponse(
+              await identityWallet.create.interactionTokens.response.share(
+                {
+                  callbackURL: credentialRequestDetails.callbackURL,
+                  suppliedCredentials: await fetchCredentialsFromDatabase(
+                    credentials,
+                    storageLib,
+                  ),
+                },
+                await keyChainLib.getPassword(),
+                credentialRequestDetails.request,
+              ),
+            ),
         ),
       ),
     ),

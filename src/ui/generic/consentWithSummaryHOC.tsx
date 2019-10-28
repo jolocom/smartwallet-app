@@ -5,10 +5,19 @@ import { withErrorScreen, withLoading } from '../../actions/modifiers'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { RequestSummary } from '../../actions/sso/types'
-import { consumeInteractionRequest } from '../../actions/sso'
+import {
+  cancelSSO,
+  consumeInteractionRequest,
+  InteractionTokenSender,
+} from '../../actions/sso'
+import {
+  JSONWebToken,
+  JWTEncodable,
+} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 
 interface PaymentNavigationParams {
   jwt: string
+  send: InteractionTokenSender
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -17,6 +26,7 @@ interface Props extends ReturnType<typeof mapDispatchToProps> {
 
 interface ConsentContainerProps<T extends RequestSummary> {
   interactionRequest: T
+  sendResponse: (interactionToken: JSONWebToken<JWTEncodable>) => Promise<void>
 }
 
 const ConsentWithSummaryHOC = <T extends RequestSummary>(
@@ -32,11 +42,20 @@ const ConsentWithSummaryHOC = <T extends RequestSummary>(
   }, [])
 
   return parsedInteractionToken ? (
-    <ConsentContainer interactionRequest={parsedInteractionToken} />
+    <ConsentContainer
+      interactionRequest={parsedInteractionToken}
+      sendResponse={(token: JSONWebToken<JWTEncodable>) =>
+        props.sendInteractionToken(token, props.navigation.state.params.send)
+      }
+    />
   ) : null
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  sendInteractionToken: async (
+    token: JSONWebToken<JWTEncodable>,
+    send: InteractionTokenSender,
+  ) => send(token).finally(() => dispatch(cancelSSO())),
   consumeInteractionRequest: (jwt: string) =>
     dispatch(withErrorScreen(withLoading(consumeInteractionRequest(jwt)))),
 })

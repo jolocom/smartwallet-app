@@ -74,29 +74,34 @@ export const cancelReceiving: ThunkAction = dispatch => {
   return dispatch(navigationActions.navigatorResetHome())
 }
 
+export type InteractionTokenSender = (
+  interactionResponse: JSONWebToken<JWTEncodable>,
+) => Promise<void>
+
 /**
  * @TODO CallbackURL should be present on all interaction requests at least
- * Sends an encoded interaction response, either via HTTP or a deep link,
- * depending on the isDeepLinkInteraction flag
- * @note Will be deprecated
- * @param isDeepLinkInteraction
- * @param response
+ * Sends an encoded interaction response via HTTP
+ * @param response - Interaction response to be sent
  */
 
-export const sendInteractionToken = async (
-  isDeepLinkInteraction: boolean,
-  response: JSONWebToken<JWTEncodable>,
-) => {
+export const sendViaDeepLink = async (response: JSONWebToken<JWTEncodable>) => {
   const callbackURL = response.interactionToken.callbackURL
-  if (isDeepLinkInteraction) {
-    const callback = `${callbackURL}/${response.encode()}`
-    if (!(await Linking.canOpenURL(callback))) {
-      throw new AppError(ErrorCode.DeepLinkUrlNotFound)
-    }
-    return Linking.openURL(callback)
+  const callback = `${callbackURL}/${response.encode()}`
+  if (!(await Linking.canOpenURL(callback))) {
+    throw new AppError(ErrorCode.DeepLinkUrlNotFound)
   }
+  return Linking.openURL(callback)
+}
 
-  await fetch(callbackURL, {
+/**
+ * @TODO CallbackURL should be present on all interaction requests at least
+ * Sends an encoded interaction response via a deep link
+ * @param response - Interaction response to be sent
+ */
+
+export const sendViaHTTP = async (response: JSONWebToken<JWTEncodable>) => {
+  const callbackURL = response.interactionToken.callbackURL
+  return fetch(callbackURL, {
     method: 'POST',
     body: JSON.stringify({ token: response.encode() }),
     headers: { 'Content-Type': 'application/json' },

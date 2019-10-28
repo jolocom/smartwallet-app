@@ -9,7 +9,7 @@ import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 
 interface Props {
   authenticationDetails: AuthenticationRequestSummary
-  confirmAuthenticationRequest: Function
+  generateAndSendAuthenticationResponse: Function
   cancelAuthenticationRequest: Function
 }
 
@@ -54,7 +54,7 @@ export class AuthenticationConsentComponent extends React.Component<
 
   private handleConfirm = () => {
     this.setState({ pending: true })
-    return this.props.confirmAuthenticationRequest()
+    return this.props.generateAndSendAuthenticationResponse()
   }
 
   public render() {

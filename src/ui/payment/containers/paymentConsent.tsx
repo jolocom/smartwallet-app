@@ -1,21 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { cancelSSO, sendInteractionToken } from 'src/actions/sso'
+import { cancelSSO, InteractionTokenSender } from 'src/actions/sso'
 import { sendFundsAndAssemblePaymentResponse } from 'src/actions/sso/paymentRequest'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { PaymentRequestSummary } from '../../../actions/sso/types'
-import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { PaymentConsentComponent } from '../components/paymentConsent'
 import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
 
-interface PaymentNavigationParams {
-  isDeepLinkInteraction: boolean
-  jwt: string
-}
 interface Props extends ReturnType<typeof mapDispatchToProps> {
-  navigation: NavigationScreenProp<NavigationState, PaymentNavigationParams>
   interactionDetails: PaymentRequestSummary
+  sendResponse: InteractionTokenSender
 }
 
 export const PaymentConsentContainer = (props: Props) => {
@@ -23,17 +18,13 @@ export const PaymentConsentContainer = (props: Props) => {
     interactionDetails,
     confirmPaymentRequest,
     cancelPaymentRequest,
-    navigation: {
-      state: {
-        params: { isDeepLinkInteraction },
-      },
-    },
+    sendResponse,
   } = props
   return (
     <PaymentConsentComponent
       paymentDetails={interactionDetails}
       confirmPaymentRequest={() =>
-        confirmPaymentRequest(isDeepLinkInteraction, interactionDetails)
+        confirmPaymentRequest(interactionDetails, sendResponse)
       }
       cancelPaymentRequest={cancelPaymentRequest}
     />
@@ -42,22 +33,19 @@ export const PaymentConsentContainer = (props: Props) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmPaymentRequest: (
-    isDeepLinkInteraction: boolean,
     paymentDetails: PaymentRequestSummary,
+    sendResponse: InteractionTokenSender,
   ) =>
     dispatch(
       withErrorScreen(
-        async (dispatch, getState, { identityWallet, keyChainLib }) => {
-          const response = await sendFundsAndAssemblePaymentResponse(
-            paymentDetails,
-            identityWallet,
-            await keyChainLib.getPassword(),
-          )
-
-          return sendInteractionToken(isDeepLinkInteraction, response).finally(
-            () => dispatch(cancelSSO()),
-          )
-        },
+        async (dispatch, getState, { identityWallet, keyChainLib }) =>
+          sendResponse(
+            await sendFundsAndAssemblePaymentResponse(
+              paymentDetails,
+              identityWallet,
+              await keyChainLib.getPassword(),
+            ),
+          ),
       ),
     ),
   cancelPaymentRequest: () => dispatch(cancelSSO),

@@ -1,6 +1,5 @@
 import { Image, Platform, StyleProp, TextStyle } from 'react-native'
 import { createElement } from 'react'
-
 import {
   createAppContainer,
   createBottomTabNavigator,
@@ -10,7 +9,6 @@ import {
   NavigationScreenOptions,
   NavigationScreenProp,
 } from 'react-navigation'
-
 import { ClaimDetails, Claims, Records } from 'src/ui/home/'
 import { DocumentDetails, Documents } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
@@ -38,6 +36,7 @@ import {
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
+import { sendViaDeepLink as send } from './actions/sso'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -196,6 +195,7 @@ const MainStack = createStackNavigator(
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
+        params: { send },
       }),
     },
     [routeList.Consent]: {
@@ -205,6 +205,7 @@ const MainStack = createStackNavigator(
         headerTitle: I18n.t(strings.SHARE_CLAIMS),
       }),
       path: 'consent/:jwt',
+      params: { send },
     },
     [routeList.PaymentConsent]: {
       screen: PaymentConsent,
@@ -213,6 +214,7 @@ const MainStack = createStackNavigator(
         headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
       }),
       path: 'payment/:jwt',
+      params: { send },
     },
     [routeList.AuthenticationConsent]: {
       screen: AuthenticationConsent,
@@ -221,6 +223,7 @@ const MainStack = createStackNavigator(
         headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
       }),
       path: 'authenticate/:jwt',
+      params: { send },
     },
     [routeList.ClaimDetails]: {
       screen: ClaimDetails,
@@ -232,7 +235,6 @@ const MainStack = createStackNavigator(
         ...navOptScreenWCancel,
       },
     },
-
     [routeList.SeedPhrase]: {
       screen: SeedPhrase,
       navigationOptions: noHeaderNavOpts,
