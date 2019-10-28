@@ -1,5 +1,4 @@
-import { Device, Subscription, BleManager } from 'react-native-ble-plx';
-import { reject } from 'q';
+import { Device, BleManager } from 'react-native-ble-plx';
 import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
 
 export type BleSerialConnectionConfig = {
@@ -14,6 +13,19 @@ export interface SerialConnection {
   close: () => Promise<void>,
   respond: (token: JSONWebToken<JWTEncodable>) => Promise<any>
 }
+
+// a generator function to be passed in to the listen function as the callback
+// This function will reduce together a token until delimiter and then call a callback function
+// with the result
+const waitForToken = (delimiter: string) =>
+    (callback: (jwt: string) => void) =>
+        function*(received: string) {
+            while (!received.includes(delimiter, -1)) {
+                console.log(`received: ${received}`)
+                received += yield
+            }
+            callback(received.slice(0, received.indexOf(delimiter)))
+        }
 
 export const openSerialConnection = (manager: BleManager) => (
     d: Device,
