@@ -10,7 +10,6 @@ import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { View } from 'react-native'
 import { ThunkDispatch } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
-import { CredentialOfferSummary } from '../../../actions/sso/types'
 import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
@@ -20,6 +19,7 @@ import { CredentialMetadataSummary } from '../../../lib/storage/storage'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { prepareCredentialOfferResponse } from '../../../actions/sso/credentialOfferResponse'
+import { CredentialOfferSummary } from '../../../utils/interactionRequests/types'
 
 const extractCredentialMetadata = ({
   interactionToken,

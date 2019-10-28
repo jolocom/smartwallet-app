@@ -4,8 +4,8 @@ import { AuthenticationConsentComponent } from '../components/authenticationCons
 import { cancelSSO, InteractionTokenSender } from 'src/actions/sso'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
-import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
+import { AuthenticationRequestSummary } from '../../../utils/interactionRequests/types'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
   interactionRequest: AuthenticationRequestSummary

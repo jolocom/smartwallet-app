@@ -4,7 +4,6 @@ import { ThunkDispatch } from '../../store'
 import { withErrorScreen, withLoading } from '../../actions/modifiers'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { RequestSummary } from '../../actions/sso/types'
 import {
   cancelSSO,
   consumeInteractionRequest,
@@ -14,6 +13,7 @@ import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { RequestSummary } from '../../utils/interactionRequests/types'
 
 interface PaymentNavigationParams {
   jwt: string

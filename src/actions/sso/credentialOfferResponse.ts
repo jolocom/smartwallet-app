@@ -1,32 +1,8 @@
-import {
-  JSONWebToken,
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { assembleRequestSummary } from './index'
-import {
-  CredentialOfferSummary,
-  CredentialReceiveSummary,
-  IdentitySummary,
-} from './types'
+import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferResponseAttrs } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { all, either, isEmpty, isNil } from 'ramda'
-
-/**
- * Given an credential receive JWT will return a {@link CredentialReceiveSummary}
- * to be used by the {@link CredentialReceive} container.
- * @param interactionRequest - the interaction token received from the counterparty
- * @param requester - a summary of the requester's identity
- * @returns a parsed credential receive summary
- */
-
-export const credReceiveSummary = (
-  interactionRequest: JSONWebToken<JWTEncodable>,
-  requester: IdentitySummary,
-): CredentialReceiveSummary => ({
-  ...assembleRequestSummary(interactionRequest, requester),
-  callbackURL: interactionRequest.interactionToken.callbackURL,
-})
+import { CredentialOfferSummary } from '../../utils/interactionRequests/types'
 
 /**
  * Given an {@link CredentialOfferSummary}, generates the attributes ({@link CredentialOfferResponseAttrs})

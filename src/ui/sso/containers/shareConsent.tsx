@@ -4,11 +4,6 @@ import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen, withLoading } from 'src/actions/modifiers'
-import {
-  CredentialRequestSummary,
-  CredentialTypeSummary,
-  CredentialVerificationSummary,
-} from '../../../actions/sso/types'
 import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
 import {
   JSONWebToken,
@@ -21,6 +16,11 @@ import {
   fetchCredentialsFromDatabase,
 } from '../../../actions/sso/credentialRequest'
 import { InteractionTokenSender } from '../../../actions/sso'
+import {
+  CredentialRequestSummary,
+  CredentialTypeSummary,
+  CredentialVerificationSummary,
+} from '../../../utils/interactionRequests/types'
 
 // TODO INJECT SENDER
 

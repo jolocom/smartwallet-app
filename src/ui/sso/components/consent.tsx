@@ -3,15 +3,15 @@ import { Text, ScrollView, View, StyleSheet } from 'react-native'
 import { Container } from 'src/ui/structure'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import I18n from 'src/locales/i18n'
-import {
-  CredentialTypeSummary,
-  CredentialVerificationSummary,
-  IdentitySummary,
-} from '../../../actions/sso/types'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 import { Typography, Colors, Spacing } from 'src/styles'
 import { CredentialSectionCard } from './credentialsSectionCard'
+import { IdentitySummary } from '../../../actions/sso/types'
+import {
+  CredentialTypeSummary,
+  CredentialVerificationSummary,
+} from '../../../utils/interactionRequests/types'
 
 interface Props {
   did: string

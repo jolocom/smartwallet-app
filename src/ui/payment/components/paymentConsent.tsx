@@ -9,7 +9,7 @@ import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
 import { PaymentConsentCard } from './paymentConsentCard'
 import { IssuerCard } from '../../documents/components/issuerCard'
-import { PaymentRequestSummary } from '../../../actions/sso/types'
+import { PaymentRequestSummary } from '../../../utils/interactionRequests/types'
 
 interface Props {
   paymentDetails: PaymentRequestSummary

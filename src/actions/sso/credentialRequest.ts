@@ -1,33 +1,12 @@
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { unnest } from 'ramda'
-import {
-  CredentialRequestSummary,
-  CredentialTypeSummary,
-  CredentialVerificationSummary,
-  IdentitySummary,
-} from './types'
-import { assembleRequestSummary } from './index'
 import { getUiCredentialTypeByType } from '../../lib/util'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { Storage } from '../../lib/storage/storage'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
-
-/**
- * Given an credential request JWT will return a {@link CredentialRequestSummary}
- * to be used by the {@link ShareConsentContainer}.
- * @param credentialRequest - the interaction token received from the counterparty
- * @param requester - a summary of the requester's identity
- * @returns a parsed credential request summary
- */
-
-export const credentialRequestSummary = (
-  credentialRequest: JSONWebToken<CredentialRequest>,
-  requester: IdentitySummary,
-): CredentialRequestSummary => ({
-  callbackURL: credentialRequest.interactionToken.callbackURL,
-  ...assembleRequestSummary(credentialRequest, requester),
-})
+import {
+  CredentialTypeSummary,
+  CredentialVerificationSummary,
+} from '../../utils/interactionRequests/types'
 
 /**
  * @TODO - This function should not exist, instead we should have a more flexible

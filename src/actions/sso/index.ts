@@ -5,16 +5,17 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { ThunkAction } from '../../store'
-import { IdentitySummary, RequestSummary } from './types'
+import { IdentitySummary } from './types'
 import { AppError } from '../../lib/errors'
 import { generateIdentitySummary } from './utils'
 import { JolocomLib } from 'jolocom-lib'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { routeList } from '../../routeList'
-import { requestFormatter } from '../../lib/storage/interactionTokens'
 import { navigate } from '../navigation'
 import ErrorCode from '../../lib/errorCodes'
 import { Linking } from 'react-native'
+import { requestFormatter } from '../../utils/interactionRequests'
+import { RequestSummary } from '../../utils/interactionRequests/types'
 
 /**
  * The function parses the interaction token and returns the respective request summary

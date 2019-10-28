@@ -1,30 +1,6 @@
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
-import { assembleRequestSummary } from 'src/actions/sso'
-import { IdentitySummary, PaymentRequestSummary } from './types'
 import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
-
-/**
- * Given an authentication request JWT will return a {@link PaymentRequestSummary}
- * to be used by the {@link PaymentConsentContainer}.
- * @param paymentRequest - the interaction token received from the counterparty
- * @param requester - a summary of the requester's identity
- * @returns a parsed payment request summary
- */
-
-export const paymentRequestSummary = (
-  paymentRequest: JSONWebToken<PaymentRequest>,
-  requester: IdentitySummary,
-): PaymentRequestSummary => ({
-  receiver: {
-    did: paymentRequest.issuer,
-    address: paymentRequest.interactionToken.transactionOptions.to as string,
-  },
-  callbackURL: paymentRequest.interactionToken.callbackURL,
-  amount: paymentRequest.interactionToken.transactionOptions.value,
-  description: paymentRequest.interactionToken.description,
-  ...assembleRequestSummary(paymentRequest, requester),
-})
+import { PaymentRequestSummary } from '../../utils/interactionRequests/types'
 
 /**
  * Given an {@link PaymentRequestSummary}, uses the provided {@link IdentityWallet} to make

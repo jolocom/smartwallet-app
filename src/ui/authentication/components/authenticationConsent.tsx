@@ -5,7 +5,7 @@ import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
 import { IssuerCard } from '../../documents/components/issuerCard'
-import { AuthenticationRequestSummary } from '../../../actions/sso/types'
+import { AuthenticationRequestSummary } from '../../../utils/interactionRequests/types'
 
 interface Props {
   authenticationDetails: AuthenticationRequestSummary

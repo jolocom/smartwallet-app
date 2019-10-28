@@ -9,7 +9,7 @@ import { CheckboxCredential } from './checkboxCredential'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from '../../../actions/sso/types'
+} from '../../../utils/interactionRequests/types'
 
 const styles = StyleSheet.create({
   card: {

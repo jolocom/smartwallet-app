@@ -4,9 +4,9 @@ import { cancelSSO, InteractionTokenSender } from 'src/actions/sso'
 import { sendFundsAndAssemblePaymentResponse } from 'src/actions/sso/paymentRequest'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
-import { PaymentRequestSummary } from '../../../actions/sso/types'
 import { PaymentConsentComponent } from '../components/paymentConsent'
 import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
+import { PaymentRequestSummary } from '../../../utils/interactionRequests/types'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
   interactionDetails: PaymentRequestSummary
