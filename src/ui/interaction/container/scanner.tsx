@@ -32,7 +32,7 @@ export class ScannerContainer extends React.Component<Props, State> {
     super(props)
     this.state = {
       permission: RESULTS.AUTHORIZED,
-      isCameraAllowed: false
+      isCameraAllowed: false,
     }
   }
 
@@ -44,7 +44,7 @@ export class ScannerContainer extends React.Component<Props, State> {
     const permission = await Permissions.request(CAMERA_PERMISSION)
     this.setState({
       permission,
-      isCameraAllowed: permission === RESULTS.AUTHORIZED
+      isCameraAllowed: permission === RESULTS.AUTHORIZED,
     })
   }
 

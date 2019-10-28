@@ -6,11 +6,7 @@ exports[`No scanner permission component matches the snapshot on initial render 
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "rgba(0, 0, 0, 0.65)",
-        "flex": 1,
-        "height": "100%",
-        "justifyContent": "center",
-        "width": "100%",
+        "justifyContent": "flex-start",
         "zIndex": 1,
       }
     }
@@ -30,14 +26,13 @@ exports[`No scanner permission component matches the snapshot on initial render 
     <Text
       style={
         Object {
-          "color": "rgba(255, 239, 223, 0.8)",
-          "fontFamily": "TT Commons",
+          "color": "white",
+          "fontFamily": "TTCommons-Light",
           "fontSize": 18,
           "lineHeight": 24,
-          "marginBottom": 48,
-          "paddingHorizontal": 48,
-          "paddingTop": 8,
+          "marginTop": 8,
           "textAlign": "center",
+          "width": 260,
         }
       }
     >
@@ -48,7 +43,7 @@ exports[`No scanner permission component matches the snapshot on initial render 
       onPress={[MockFunction]}
       style={
         Object {
-          "padding": 10,
+          "marginTop": 48,
         }
       }
     >
@@ -64,22 +59,9 @@ exports[`No scanner permission component matches the snapshot on initial render 
           }
         }
       >
-        Enable Camera Access
+        Start Process
       </Text>
     </TouchableOpacity>
   </View>
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "rgba(0, 0, 0, 0.65)",
-        "flex": 1,
-        "height": "100%",
-        "justifyContent": "center",
-        "width": "100%",
-        "zIndex": 1,
-      }
-    }
-  />
 </Fragment>
 `;

@@ -17,7 +17,6 @@ import {
   textXL,
   textXS,
 } from '../../../styles/typography'
-import { debug } from '../../../styles/presets'
 
 const styles = StyleSheet.create({
   notAuthorizedOverlay: {

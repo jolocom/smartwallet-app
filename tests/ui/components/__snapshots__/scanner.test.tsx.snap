@@ -5,6 +5,15 @@ exports[`QR Code component correctly changes torch button when icon is released 
   <View
     style={
       Object {
+        "backgroundColor": "rgba(0, 0, 0, 0.65)",
+        "height": 185,
+        "width": "100%",
+      }
+    }
+  />
+  <View
+    style={
+      Object {
         "flexDirection": "row",
       }
     }
@@ -58,11 +67,10 @@ exports[`QR Code component correctly changes torch button when icon is released 
     <Text
       style={
         Object {
-          "color": "rgb(255, 239, 223)",
-          "flex": 1,
+          "color": "white",
           "fontFamily": "TTCommons-Light",
           "fontSize": 20,
-          "lineHeight": 22,
+          "lineHeight": 24,
           "marginTop": 16,
           "textAlign": "center",
           "width": 562.5,
@@ -71,33 +79,24 @@ exports[`QR Code component correctly changes torch button when icon is released 
     >
       It's all automatic, just place your phone above the code
     </Text>
-    <View
+    <TouchableHighlight
+      activeOpacity={1}
+      delayPressOut={100}
+      onPressIn={[Function]}
+      onPressOut={[Function]}
       style={
         Object {
           "alignItems": "center",
-          "flex": 1,
+          "height": 69,
           "justifyContent": "center",
+          "marginBottom": 60,
+          "width": 69,
         }
       }
+      underlayColor="transparent"
     >
-      <TouchableHighlight
-        activeOpacity={1}
-        delayPressOut={100}
-        onPressIn={[Function]}
-        onPressOut={[Function]}
-        style={
-          Object {
-            "alignItems": "center",
-            "height": 80,
-            "justifyContent": "center",
-            "width": 80,
-          }
-        }
-        underlayColor="transparent"
-      >
-        <SvgTorchOffIcon />
-      </TouchableHighlight>
-    </View>
+      <SvgTorchOffIcon />
+    </TouchableHighlight>
   </View>
 </Fragment>
 `;
@@ -107,6 +106,15 @@ exports[`QR Code component correctly changes torch button while icon is touched 
   <View
     style={
       Object {
+        "backgroundColor": "rgba(0, 0, 0, 0.65)",
+        "height": 185,
+        "width": "100%",
+      }
+    }
+  />
+  <View
+    style={
+      Object {
         "flexDirection": "row",
       }
     }
@@ -160,11 +168,10 @@ exports[`QR Code component correctly changes torch button while icon is touched 
     <Text
       style={
         Object {
-          "color": "rgb(255, 239, 223)",
-          "flex": 1,
+          "color": "white",
           "fontFamily": "TTCommons-Light",
           "fontSize": 20,
-          "lineHeight": 22,
+          "lineHeight": 24,
           "marginTop": 16,
           "textAlign": "center",
           "width": 562.5,
@@ -173,33 +180,24 @@ exports[`QR Code component correctly changes torch button while icon is touched 
     >
       It's all automatic, just place your phone above the code
     </Text>
-    <View
+    <TouchableHighlight
+      activeOpacity={1}
+      delayPressOut={100}
+      onPressIn={[Function]}
+      onPressOut={[Function]}
       style={
         Object {
           "alignItems": "center",
-          "flex": 1,
+          "height": 69,
           "justifyContent": "center",
+          "marginBottom": 60,
+          "width": 69,
         }
       }
+      underlayColor="transparent"
     >
-      <TouchableHighlight
-        activeOpacity={1}
-        delayPressOut={100}
-        onPressIn={[Function]}
-        onPressOut={[Function]}
-        style={
-          Object {
-            "alignItems": "center",
-            "height": 80,
-            "justifyContent": "center",
-            "width": 80,
-          }
-        }
-        underlayColor="transparent"
-      >
-        <SvgTorchOnIcon />
-      </TouchableHighlight>
-    </View>
+      <SvgTorchOnIcon />
+    </TouchableHighlight>
   </View>
 </Fragment>
 `;
@@ -209,6 +207,15 @@ exports[`QR Code component matches the snapshot on initial render 1`] = `
   <View
     style={
       Object {
+        "backgroundColor": "rgba(0, 0, 0, 0.65)",
+        "height": 185,
+        "width": "100%",
+      }
+    }
+  />
+  <View
+    style={
+      Object {
         "flexDirection": "row",
       }
     }
@@ -262,11 +269,10 @@ exports[`QR Code component matches the snapshot on initial render 1`] = `
     <Text
       style={
         Object {
-          "color": "rgb(255, 239, 223)",
-          "flex": 1,
+          "color": "white",
           "fontFamily": "TTCommons-Light",
           "fontSize": 20,
-          "lineHeight": 22,
+          "lineHeight": 24,
           "marginTop": 16,
           "textAlign": "center",
           "width": 562.5,
@@ -275,33 +281,24 @@ exports[`QR Code component matches the snapshot on initial render 1`] = `
     >
       It's all automatic, just place your phone above the code
     </Text>
-    <View
+    <TouchableHighlight
+      activeOpacity={1}
+      delayPressOut={100}
+      onPressIn={[Function]}
+      onPressOut={[Function]}
       style={
         Object {
           "alignItems": "center",
-          "flex": 1,
+          "height": 69,
           "justifyContent": "center",
+          "marginBottom": 60,
+          "width": 69,
         }
       }
+      underlayColor="transparent"
     >
-      <TouchableHighlight
-        activeOpacity={1}
-        delayPressOut={100}
-        onPressIn={[Function]}
-        onPressOut={[Function]}
-        style={
-          Object {
-            "alignItems": "center",
-            "height": 80,
-            "justifyContent": "center",
-            "width": 80,
-          }
-        }
-        underlayColor="transparent"
-      >
-        <SvgTorchOffIcon />
-      </TouchableHighlight>
-    </View>
+      <SvgTorchOffIcon />
+    </TouchableHighlight>
   </View>
 </Fragment>
 `;

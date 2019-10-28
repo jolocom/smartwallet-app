@@ -152,7 +152,7 @@ export class ScannerComponent extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        {(this.state.isCameraReady && this.props.isCameraAllowed) && (
+        {this.state.isCameraReady && this.props.isCameraAllowed && (
           <QRScanner
             //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
             containerStyle={{ position: 'absolute' }}

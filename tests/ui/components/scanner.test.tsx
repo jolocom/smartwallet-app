@@ -8,6 +8,7 @@ import { stub } from '../../utils'
 describe('QR Code component', () => {
   const props = {
     onScannerSuccess: jest.fn(),
+    isCameraAllowed: true,
   }
 
   //@ts-ignore
