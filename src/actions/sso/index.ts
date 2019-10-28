@@ -64,7 +64,6 @@ export const assembleRequestSummary = (
   requester: IdentitySummary,
 ): RequestSummary => ({
   request: interactionToken,
-  requestJWT: interactionToken.encode(),
   requester,
 })
 
