@@ -20,43 +20,48 @@ const waitForToken = (delimiter: string) =>
     }
 
 // a higher order function to send data in ~200b blocks
-const writeAll = (size: number) =>
-  (write: (toWrite: string) => Promise<void>) =>
-    async (toWrite: string) =>
-      write(toWrite.slice(0, size)).then(_ => {
-        if (toWrite.length > size) writeAll(size)(write)(toWrite.slice(size))
-      })
+const writeAll = (
+  size: number
+) => (
+  write: (toWrite: string) => Promise<void>
+) => async (
+  toWrite: string
+) => write(toWrite.slice(0, size)).then(_ => {
+  if (toWrite.length > size) writeAll(size)(write)(toWrite.slice(size))
+})
 
-export const openSerialConnection = (manager: BleManager) => (
+export const openSerialConnection = (
+  manager: BleManager
+) => (
   d: Device,
   serialUUIDs: BleSerialConnectionConfig
-) => (onRxDispatch: (send: (token: JSONWebToken<JWTEncodable>) => Promise<any>) =>
-  (e: string) => Promise<any>) =>
-    d.isConnected().then(async connected => {
-      if (!connected) throw new Error("Device not connected")
+) => (
+  onRxDispatch: (send: (token: JSONWebToken<JWTEncodable>) => Promise<any>) => (e: string) => Promise<any>
+) => d.isConnected().then(async connected => {
+  if (!connected) throw new Error("Device not connected")
 
-      const b = waitForToken('\n')(
-        onRxDispatch(
-          (token: JSONWebToken<JWTEncodable>) => writeAll(200)(
-            (toWrite: string) => d.writeCharacteristicWithResponseForService(
-              serialUUIDs.serviceUUID,
-              serialUUIDs.rxUUID,
-              toWrite
-            ).then(_ => {})
-          )(
-              Buffer.from(token.encode() + '\n', 'ascii').toString('base64')
-          )
-        )
-      )('')
+  const b = waitForToken('\n')(
+    onRxDispatch(
+      (token: JSONWebToken<JWTEncodable>) => writeAll(200)(
+        (toWrite: string) => d.writeCharacteristicWithResponseForService(
+          serialUUIDs.serviceUUID,
+          serialUUIDs.rxUUID,
+          toWrite
+        ).then(_ => { })
+      )(
+        Buffer.from(token.encode() + '\n', 'ascii').toString('base64')
+      )
+    )
+  )('')
 
-      b.next('')
+  b.next('')
 
-      d.monitorCharacteristicForService(
-        serialUUIDs.serviceUUID,
-        serialUUIDs.txUUID,
-        (err, characteristic) => {
-          if (err) console.log(err)
-          if (characteristic && characteristic.value)
-            b.next(Buffer.from(characteristic.value, 'base64').toString('ascii'))
-        })
+  d.monitorCharacteristicForService(
+    serialUUIDs.serviceUUID,
+    serialUUIDs.txUUID,
+    (err, characteristic) => {
+      if (err) console.log(err)
+      if (characteristic && characteristic.value)
+        b.next(Buffer.from(characteristic.value, 'base64').toString('ascii'))
     })
+})
