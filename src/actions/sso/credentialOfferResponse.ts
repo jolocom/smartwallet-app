@@ -1,35 +1,32 @@
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import {
+  JSONWebToken,
+  JWTEncodable,
+} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { assembleRequestSummary } from './index'
-import { CredentialOfferSummary } from './types'
+import {
+  CredentialOfferSummary,
+  CredentialReceiveSummary,
+  IdentitySummary,
+} from './types'
 import { CredentialOfferResponseAttrs } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { all, either, isEmpty, isNil } from 'ramda'
 
-// TODO Return bool?
-// const validateCredentialReceive = async (
-//   credentialReceive: JSONWebToken<CredentialsReceive>,
-// ) => {
-//   const providedCredentials =
-//     credentialReceive.interactionToken.signedCredentials
-//
-//   const validationResults = await JolocomLib.util.validateDigestables(
-//     providedCredentials,
-//   )
-//
-//   // TODO Error Code
-//   if (validationResults.includes(false)) {
-//     throw new Error('Invalid credentials received')
-//   }
-// }
-
 /**
- * Given an credential receive JWT will return a {@link CredentialOfferSummary}
- * to be used by the {@link ReceiveConsentContainer}.
- * @param credential receive - the interaction token received from the counterparty
+ * Given an credential receive JWT will return a {@link CredentialReceiveSummary}
+ * to be used by the {@link CredentialReceive} container.
+ * @param interactionRequest - the interaction token received from the counterparty
  * @param requester - a summary of the requester's identity
  * @returns a parsed credential receive summary
  */
-export const credReceiveSummary = assembleRequestSummary
+
+export const credReceiveSummary = (
+  interactionRequest: JSONWebToken<JWTEncodable>,
+  requester: IdentitySummary,
+): CredentialReceiveSummary => ({
+  ...assembleRequestSummary(interactionRequest, requester),
+  callbackURL: interactionRequest.interactionToken.callbackURL,
+})
 
 /**
  * Given an {@link CredentialOfferSummary}, generates the attributes ({@link CredentialOfferResponseAttrs})

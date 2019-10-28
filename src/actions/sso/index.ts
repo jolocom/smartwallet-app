@@ -75,6 +75,7 @@ export const cancelReceiving: ThunkAction = dispatch => {
 }
 
 /**
+ * @TODO CallbackURL should be present on all interaction requests at least
  * Sends an encoded interaction response, either via HTTP or a deep link,
  * depending on the isDeepLinkInteraction flag
  * @note Will be deprecated

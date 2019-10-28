@@ -7,7 +7,7 @@ import { withErrorScreen } from 'src/actions/modifiers'
 import { PaymentRequestSummary } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { PaymentConsentComponent } from '../components/paymentConsent'
-import { withConsentSummary } from '../../generic/consentWithSummaryHOC'
+import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
 
 interface PaymentNavigationParams {
   isDeepLinkInteraction: boolean
@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   cancelPaymentRequest: () => dispatch(cancelSSO),
 })
 
-export const PaymentConsent = withConsentSummary(
+export const PaymentConsent = withInteractionRequestValidation(
   connect(
     null,
     mapDispatchToProps,

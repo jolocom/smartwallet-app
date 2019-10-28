@@ -41,7 +41,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(withErrorScreen(withLoading(consumeInteractionRequest(jwt)))),
 })
 
-export const withConsentSummary = compose(
+export const withInteractionRequestValidation = compose(
   connect(
     null,
     mapDispatchToProps,

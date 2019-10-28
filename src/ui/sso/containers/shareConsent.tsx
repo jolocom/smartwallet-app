@@ -9,7 +9,7 @@ import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
 } from '../../../actions/sso/types'
-import { withConsentSummary } from '../../generic/consentWithSummaryHOC'
+import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { RootState } from '../../../reducers'
@@ -118,8 +118,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   cancelSSO: () => dispatch(ssoActions.cancelSSO),
 })
 
-// TODO RENAME withConsentSummary to withInteractionTokenValidation or something like that.
-export const ShareConsent = withConsentSummary(
+export const ShareConsent = withInteractionRequestValidation(
   connect(
     mapStateToProps,
     mapDispatchToProps,

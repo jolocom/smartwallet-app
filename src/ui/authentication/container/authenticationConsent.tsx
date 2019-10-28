@@ -5,7 +5,7 @@ import { cancelSSO, sendInteractionToken } from 'src/actions/sso'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { AuthenticationRequestSummary } from '../../../actions/sso/types'
-import { withConsentSummary } from '../../generic/consentWithSummaryHOC'
+import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
   interactionRequest: AuthenticationRequestSummary
@@ -52,7 +52,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   cancelAuthenticationRequest: () => dispatch(cancelSSO),
 })
 
-export const AuthenticationConsent = withConsentSummary(
+export const AuthenticationConsent = withInteractionRequestValidation(
   connect(
     null,
     mapDispatchToProps,

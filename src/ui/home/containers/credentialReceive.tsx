@@ -11,7 +11,7 @@ import { View } from 'react-native'
 import { ThunkDispatch } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { CredentialOfferSummary } from '../../../actions/sso/types'
-import { withConsentSummary } from '../../generic/consentWithSummaryHOC'
+import { withInteractionRequestValidation } from '../../generic/consentWithSummaryHOC'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { httpAgent } from '../../../lib/http'
@@ -70,6 +70,7 @@ const CredentialReceiveContainer = ({
   }>()
 
   useEffect(() => {
+    // TODO request needs to be typed correctly
     prepareAndSendOfferResponse(interactionRequest).then(({ request }) => {
       const metadata = extractCredentialMetadata(credOffer)
       const credentials = (request as JSONWebToken<CredentialsReceive>)
@@ -126,7 +127,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
             )
 
             const { token } = await httpAgent.postRequest<{ token: string }>(
-              credentialOffer.request.interactionToken.callbackURL,
+              credentialOffer.callbackURL,
               { 'Content-Type': 'application/json' },
               { token: credOfferResponse.encode() },
             )
@@ -149,7 +150,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   goBack: () => dispatch(withLoading(cancelReceiving)),
 })
 
-export const CredentialReceive = withConsentSummary(
+export const CredentialReceive = withInteractionRequestValidation(
   connect(
     null,
     mapDispatchToProps,

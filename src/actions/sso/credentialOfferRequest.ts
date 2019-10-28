@@ -16,4 +16,5 @@ export const credentialOfferSummary = (
   requester: IdentitySummary,
 ): CredentialOfferSummary => ({
   ...assembleRequestSummary(credOfferRequest, requester),
+  callbackURL: credOfferRequest.interactionToken.callbackURL,
 })

@@ -1,6 +1,4 @@
 import { PublicProfileClaimMetadata } from 'cred-types-jolocom-core/types'
-import { DecoratedClaims } from '../../reducers/account'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
   JSONWebToken,
   JWTEncodable,
@@ -42,13 +40,11 @@ export interface PaymentRequestSummary extends RequestSummary {
   description: string
 }
 
-export interface CredentialOfferSummary extends RequestSummary {}
-
-// TODO REMOVE?
-export interface ExternalCredentialSummary {
-  decoratedClaim: DecoratedClaims
-  credential: SignedCredential
+export interface CredentialOfferSummary extends RequestSummary {
+  callbackURL: string
 }
+
+export interface CredentialReceiveSummary extends CredentialOfferSummary {}
 
 export interface CredentialRequestSummary extends RequestSummary {
   callbackURL: string
