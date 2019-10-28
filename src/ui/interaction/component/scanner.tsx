@@ -40,7 +40,11 @@ const styles = StyleSheet.create({
   topOverlay: {
     backgroundColor: Colors.black065,
     width: '100%',
-    height: 184,
+    height: BP({
+      small: 165,
+      medium: 175,
+      large: 185,
+    }),
     ...debug,
   },
   bottomOverlay: {

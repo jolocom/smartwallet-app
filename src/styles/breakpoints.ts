@@ -26,10 +26,17 @@ interface StyleValues {
 const getScreenSize = (): ScreenSize => {
   const { width, height } = Dimensions.get('window')
   const screenSize = { width, height }
+  console.log(screenSize)
 
-  if (screenSize >= breakpoints.large) {
+  if (
+    screenSize.width >= breakpoints.large.width &&
+    screenSize.height >= breakpoints.large.height
+  ) {
     return ScreenSize.large
-  } else if (screenSize >= breakpoints.medium) {
+  } else if (
+    screenSize.width >= breakpoints.medium.width &&
+    screenSize.height >= breakpoints.medium.height
+  ) {
     return ScreenSize.medium
   } else {
     return ScreenSize.small
