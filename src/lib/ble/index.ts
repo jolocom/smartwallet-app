@@ -19,6 +19,14 @@ const waitForToken = (delimiter: string) =>
       callback(received.slice(0, received.indexOf(delimiter)))
     }
 
+// a higher order function to send data in ~200b blocks
+const writeAll = (size: number) =>
+  (write: (toWrite: string) => Promise<void>) =>
+    async (toWrite: string) =>
+      write(toWrite.slice(0, size)).then(_ => {
+        if (toWrite.length > size) writeAll(size)(write)(toWrite.slice(size))
+      })
+
 export const openSerialConnection = (manager: BleManager) => (
   d: Device,
   serialUUIDs: BleSerialConnectionConfig
