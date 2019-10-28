@@ -96,6 +96,14 @@ export class Storage {
     }
   }
 
+  public async resetDatabase() {
+    await this.createConnectionIfNeeded()
+    await this.connection.dropDatabase()
+    await this.connection.close()
+    this.connectionPromise = null
+    await this.createConnectionIfNeeded()
+  }
+
   private async createConnectionIfNeeded(): Promise<Connection> {
     if (this.connectionPromise) return this.connectionPromise
     return (this.connectionPromise = createConnection(this.config)

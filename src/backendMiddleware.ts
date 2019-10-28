@@ -77,8 +77,31 @@ export class BackendMiddleware {
     if (this._identityWallet) return this._identityWallet
 
     const encryptedEntropy = await this.storageLib.get.encryptedSeed()
-    if (!encryptedEntropy) throw new BackendError(ErrorCodes.NoEntropy)
-    const encryptionPass = await this.keyChainLib.getPassword()
+    let encryptionPass
+    try {
+      encryptionPass = await this.keyChainLib.getPassword()
+    } catch (e) {
+      // This may fail if the application was uninstalled and reinstalled, as
+      // the android keystore is cleared on uninstall, but the database may
+      // still remain, due to having been auto backed up!
+      // FIXME: Sentry.captureException(e)
+    }
+
+    if (encryptedEntropy && !encryptionPass) {
+      // if we can't decrypt the encryptedEntropy, then reset the database
+      console.warn('DROPPING OLD DB')
+      await this.storageLib.resetDatabase()
+    }
+
+    if (!encryptedEntropy || !encryptionPass) {
+      // If either encryptedEntropy or encryptionPass was missing, we throw
+      // NoEntropy to signal that we cannot prepare an identityWallet instance due
+      // to lack of a seed.
+      // Note that the case of having an encryptionPass but no encryptedEntropy
+      // is an uncommon edge case, but may potentially happen due to errors/bugs
+      // etc
+      throw new BackendError(ErrorCodes.NoEntropy)
+    }
 
     this._keyProvider = new JolocomLib.KeyProvider(
       Buffer.from(encryptedEntropy, 'hex'),

@@ -255,14 +255,16 @@ const MainStack = createStackNavigator(
   },
 )
 
+// NOTE: navigatorReset in actions/navigation assumes that there is only 1
+// StackRouter child at the top level
 export const Routes = createSwitchNavigator(
   {
     [routeList.AppInit]: {
       screen: AppInit,
       navigationOptions: noHeaderNavOpts,
     },
-    MainStack,
-    RegistrationScreens,
+    [routeList.Main]: MainStack,
+    [routeList.Registration]: RegistrationScreens,
   },
   {
     initialRouteName: routeList.AppInit,

@@ -79,6 +79,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -165,8 +166,10 @@ android {
 }
 
 dependencies {
+
     implementation project(':react-native-android-open-settings')
     implementation project(':@react-native-community_async-storage')
+    implementation project(':@sentry_react-native')
     implementation project(':react-native-vector-icons')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-localize')

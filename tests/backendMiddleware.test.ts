@@ -24,6 +24,7 @@ describe('BackendMiddleware', () => {
     get: stub<BackendMiddleware['storageLib']['get']>({
       encryptedSeed: jest.fn().mockResolvedValue(cipher),
     }),
+    resetDatabase: jest.fn()
   }
   const registry = stub<IRegistry>()
 
@@ -52,10 +53,26 @@ describe('BackendMiddleware', () => {
       stub.clearMocks(storageLib.get)
       stub.clearMocks(storageLib.store)
     })
-    it('should throw NoEntropy if there is no stored entropy', async () => {
+    it('should throw NoEntropy if there is no encryptedEnntropy, regardless of encryptionPass', async () => {
+      // no encryptedEntropy, no encryptionPass
       reveal(storageLib.get).encryptedSeed.mockResolvedValueOnce(null)
+      reveal(keyChainLib).getPassword.mockRejectedValueOnce(new Error())
+      let walletPromise = backendMiddleware.prepareIdentityWallet()
+      await expect(walletPromise).rejects.toThrow(BackendError.codes.NoEntropy)
+
+      // no encryptedEntropy, yes encryptionPass
+      reveal(storageLib.get).encryptedSeed.mockResolvedValueOnce(null)
+      walletPromise = backendMiddleware.prepareIdentityWallet()
+      await expect(walletPromise).rejects.toThrow(BackendError.codes.NoEntropy)
+      await expect(storageLib.resetDatabase).not.toHaveBeenCalled()
+    })
+
+    it('should clear database and throw NoEntropy if there is no encryptionPass but there is encryptedEntropy', async () => {
+      reveal(keyChainLib).getPassword.mockRejectedValueOnce(new Error())
       const walletPromise = backendMiddleware.prepareIdentityWallet()
-      return expect(walletPromise).rejects.toThrow(BackendError.codes.NoEntropy)
+      return expect(walletPromise).rejects.toThrow(BackendError.codes.NoEntropy).then(() => {
+        return expect(storageLib.resetDatabase).toHaveBeenCalled()
+      })
     })
 
     it('should throw DecryptionFailed if decryption fails', async () => {
