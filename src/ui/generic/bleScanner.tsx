@@ -101,11 +101,8 @@ export class BLECodeScanner extends React.Component<Props, State> {
                     .then(device =>
                       openSerialConnection(this.ble)(device, serialUUIDs)(
                         this.props.onScannerSuccess,
-                      ),
+                      )
                     )
-                    .then(serial => {
-                      console.log('connected')
-                    })
                 }
               />
             )}
@@ -120,7 +117,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onScannerSuccess: (
     send: (token: JSONWebToken<JWTEncodable>) => Promise<any>,
   ) => async (e: string) => {
-    console.log(`dispatching: ${e}`)
     let interactionToken
     try {
       interactionToken = JolocomLib.parse.interactionToken.fromJWT(e)
