@@ -10,14 +10,18 @@ export type BleSerialConnectionConfig = {
 // a generator function to be passed in to the listen function as the callback
 // This function will reduce together a token until delimiter and then call a callback function
 // with the result
-const waitForToken = (delimiter: string) =>
-  (callback: (jwt: string) => void) =>
-    function*(received: string) {
-      do {
-        received += yield
-      } while (!received.includes(delimiter, -1))
-      callback(received.slice(0, received.indexOf(delimiter)))
-    }
+const waitForToken = (
+  delimiter: string
+) => (
+  callback: (jwt: string) => void
+) => function*(
+  received: string
+) {
+  do {
+    received += yield
+  } while (!received.includes(delimiter, -1))
+    callback(received.slice(0, received.indexOf(delimiter)))
+}
 
 // a higher order function to send data in ~200b blocks
 const writeAll = (
