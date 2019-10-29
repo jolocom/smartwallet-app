@@ -1,4 +1,4 @@
-import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { navigationActions } from 'src/actions'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { routeList } from 'src/routeList'
@@ -14,7 +14,7 @@ import { AuthenticationRequestSummary } from './types'
 
 export const consumeAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
-    send: (token: JSONWebToken<Authentication>) => Promise<any>,
+  isDeepLinkInteraction: boolean = false,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet, registry } = backendMiddleware
   await identityWallet.validateJWT(authenticationRequest)
@@ -33,14 +33,14 @@ export const consumeAuthenticationRequest = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,
-      params: { send, authenticationDetails },
+      params: { isDeepLinkInteraction, authenticationDetails },
       key: 'authenticationRequest',
     }),
   )
 }
 
 export const sendAuthenticationResponse = (
-  send: (token: JSONWebToken<JWTEncodable>) => Promise<any>,
+  isDeepLinkInteraction: boolean,
   authenticationDetails: AuthenticationRequestSummary,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware
@@ -57,7 +57,19 @@ export const sendAuthenticationResponse = (
     decodedAuthRequest,
   )
 
-  await send(response)
+  if (isDeepLinkInteraction) {
+    const callback = `${callbackURL}/${response.encode()}`
+    if (!(await Linking.canOpenURL(callback))) {
+      throw new AppError(ErrorCode.DeepLinkUrlNotFound)
+    }
+    return Linking.openURL(callback).then(() => dispatch(cancelSSO))
+  }
+
+  await fetch(callbackURL, {
+    method: 'POST',
+    body: JSON.stringify({ token: response.encode() }),
+    headers: { 'Content-Type': 'application/json' },
+  })
 
   return dispatch(cancelSSO)
 }
