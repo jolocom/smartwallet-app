@@ -26,9 +26,10 @@ const writeAll = (
   write: (toWrite: string) => Promise<void>
 ) => async (
   toWrite: string
-) => write(toWrite.slice(0, size)).then(_ => {
-  if (toWrite.length > size) writeAll(size)(write)(toWrite.slice(size))
-})
+) => write(toWrite.slice(0, size))
+  .then(async _ => {
+    if (toWrite.length > size) await writeAll(size)(write)(toWrite.slice(size))
+  })
 
 export const openSerialConnection = (
   manager: BleManager
@@ -42,7 +43,9 @@ export const openSerialConnection = (
 
   const b = waitForToken('\n')(
     onRxDispatch(
-      (token: JSONWebToken<JWTEncodable>) => writeAll(200)(
+      (token: JSONWebToken<JWTEncodable>) => writeAll(
+        200
+      )(
         (toWrite: string) => d.writeCharacteristicWithResponseForService(
           serialUUIDs.serviceUUID,
           serialUUIDs.rxUUID,
@@ -51,6 +54,7 @@ export const openSerialConnection = (
       )(
         Buffer.from(token.encode() + '\n', 'ascii').toString('base64')
       )
+        .then(_ => d.cancelConnection())
     )
   )('')
 
