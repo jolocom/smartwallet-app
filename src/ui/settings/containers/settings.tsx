@@ -1,6 +1,5 @@
 import React from 'react'
 import VersionNumber from 'react-native-version-number'
-
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import I18n, { locales } from 'src/locales/i18n'
 import strings from '../../../locales/strings'
@@ -52,15 +51,15 @@ export const SettingsContainer: React.FC<Props> = props => {
         style={styles.scrollComponent}
         contentContainerStyle={styles.scrollComponentContainer}
       >
-      {__DEV__ && (
-        <SettingSection title={"Dev"}>
-          <SettingItem
-            iconName={'book-open-page-variant'}
-            title={'Storybook'}
-            onPress={openStorybook}
-          />
-        </SettingSection>
-      )}
+        {__DEV__ && (
+          <SettingSection title={'Dev'}>
+            <SettingItem
+              iconName={'book-open-page-variant'}
+              title={'Storybook'}
+              onPress={openStorybook}
+            />
+          </SettingSection>
+        )}
         <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
           <LocaleSetting
             locales={locales}
