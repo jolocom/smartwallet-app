@@ -53,16 +53,18 @@ type Dismissible =
       autoDismissMs?: never
     }
 
-/* The payload is either a message, or an error, but never both.
+/* The payload is either a message if the type is warning or info, or an error if the type is error.
  * See https://stackoverflow.com/q/51412872
  */
 
 type NotificationPayload =
   | {
+      type: NotificationType.warning | NotificationType.info
       message: NotificationMessage
       error?: never
     }
   | {
+      type: NotificationType.error
       message?: never
       error: AppError
     }
