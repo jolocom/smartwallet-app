@@ -1,14 +1,16 @@
 import {
   CLEAR_NOTIFICATIONS,
-  InfoNotification,
-  Notification,
-  NotificationMessage,
-  NotificationSeverity,
-  NotificationTypes,
   REMOVE_NOTIFICATION,
   SCHEDULE_NOTIFICATION,
 } from '../../reducers/notifications'
 import { randomBytes } from 'crypto'
+import {
+  Notification,
+  NotificationMessage,
+  NotificationScope,
+  NotificationSeverity,
+  NotificationType,
+} from '../../reducers/notifications/types'
 
 export const removeNotification = (notification: Notification) => ({
   type: REMOVE_NOTIFICATION,
@@ -26,14 +28,14 @@ export const clearAllNotifications = () => ({
 
 export const infoNotification = (
   message: NotificationMessage,
-  severity: NotificationSeverity = NotificationSeverity.medium,
-): InfoNotification => ({
+): Notification => ({
   uid: randomBytes(4).toString('hex'), // TODO abstract
-  type: NotificationTypes.info,
+  type: NotificationType.info,
   message,
-  severity,
+  severity: NotificationSeverity.medium,
+  scope: NotificationScope.global,
   dismissible: true,
-  autoDismissMs: 5000,
-  onClose: removeNotification,
-  onConfirm: removeNotification,
+  autoDismissMs: 3000,
+  handleConfirm: removeNotification,
+  handleDismiss: removeNotification,
 })

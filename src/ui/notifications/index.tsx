@@ -1,49 +1,29 @@
 import React from 'react'
 import { RootState } from '../../reducers'
 import { connect } from 'react-redux'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
+import { ThunkDispatch } from '../../store'
+import { TopBarNotification } from './topBarNotification'
 import {
   Notification,
-  NotificationSeverity,
-} from '../../reducers/notifications'
-import { ThunkDispatch } from '../../store'
-import { AnyAction } from 'redux'
+  NotificationScope,
+} from '../../reducers/notifications/types'
 
 interface WithNotificationsProps
   extends ReturnType<typeof mapStateToProps>,
     ReturnType<typeof mapDispatchToProps> {}
-
-interface NotificationConsumer {
-  notification: Notification
-  onClose: (notification: Notification) => AnyAction
-  onConfirm: (notification: Notification) => AnyAction
-}
-
-export const NotificationContainer: React.FC<NotificationConsumer> = ({
-  notification,
-  onClose,
-  onConfirm,
-}: NotificationConsumer) => {
-  setTimeout(() => {
-    onClose(notification)
-  }, notification.autoDismissMs)
-  return (
-    <View onTouchEnd={() => onConfirm(notification)}>
-      <Text> {JSON.stringify(notification)}</Text>
-    </View>
-  )
-}
 
 /**
  * @type P - The props of the wrapped component / container
  * @param WrappedComponent
  * @constructor
  */
-export const WithNotificationSupport = <P extends object>(
+export const WithTopBarNotificationHOC = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ): React.ComponentType<P & WithNotificationsProps> => ({
   notifications,
-  dispatchHandler,
+  handleConfirm,
+  handleDismiss,
   ...rest
 }: WithNotificationsProps & P) => {
   const notification = notifications[0]
@@ -55,33 +35,34 @@ export const WithNotificationSupport = <P extends object>(
       }}
     >
       {notification && (
-        <NotificationContainer
+        <TopBarNotification
           notification={notification}
-          onClose={dispatchHandler(notification.onClose)}
-          onConfirm={dispatchHandler(notification.onConfirm)}
+          handleConfirm={handleConfirm}
+          handleDismiss={handleDismiss}
         />
       )}
       <WrappedComponent {...(rest as P)} />
     </View>
   )
 }
-// Only highest severity notifications are rendered here
+// Only global notifications are rendered here
 const mapStateToProps = (state: RootState) => ({
   notifications: state.notifications.filter(
-    ({ severity }) => severity === NotificationSeverity.high,
+    ({ scope }) => scope === NotificationScope.global,
   ),
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  dispatchHandler: (handler: (notification: Notification) => AnyAction) => (
-    notification: Notification,
-  ) => dispatch(handler(notification)),
+  handleConfirm: (notification: Notification) =>
+    dispatch(notification.handleConfirm(notification)),
+  handleDismiss: (notification: Notification) =>
+    dispatch(notification.handleDismiss(notification)),
 })
 
-export const withNotificationSupport = <T extends object>(
+export const withTopBarNotifications = <T extends object>(
   toWrap: React.ComponentType<T>,
 ) =>
   connect(
     mapStateToProps,
     mapDispatchToProps,
-  )(WithNotificationSupport(toWrap))
+  )(WithTopBarNotificationHOC(toWrap))
