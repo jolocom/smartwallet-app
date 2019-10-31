@@ -29,8 +29,8 @@ export interface Notification {
   severity: NotificationSeverity
   dismissible: boolean
   autoDismissMs?: number // TODO Component
-  onClose: Function
-  onConfirm: Function
+  onClose: (notification: Notification) => AnyAction
+  onConfirm: (notification: Notification) => AnyAction
 }
 
 export interface InfoNotification extends Notification {

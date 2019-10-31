@@ -2,7 +2,10 @@ import React from 'react'
 import { RootState } from '../../reducers'
 import { connect } from 'react-redux'
 import { Text, View } from 'react-native'
-import { Notification } from '../../reducers/notifications'
+import {
+  Notification,
+  NotificationSeverity,
+} from '../../reducers/notifications'
 import { ThunkDispatch } from '../../store'
 import { AnyAction } from 'redux'
 
@@ -10,23 +13,25 @@ interface WithNotificationsProps
   extends ReturnType<typeof mapStateToProps>,
     ReturnType<typeof mapDispatchToProps> {}
 
-interface NotificationProps {
+interface NotificationConsumer {
   notification: Notification
-  removeFromQueue: (toRemove: Notification) => AnyAction
+  onClose: (notification: Notification) => AnyAction
+  onConfirm: (notification: Notification) => AnyAction
 }
 
-export const NotificationContainer: React.FC<NotificationProps> = ({
+export const NotificationContainer: React.FC<NotificationConsumer> = ({
   notification,
-  removeFromQueue,
-}: NotificationProps) => {
-  console.log('NOTIFICATION =', notification)
-  if (notification) {
-    setTimeout(() => {
-      removeFromQueue(notification)
-    }, 5000)
-    return <Text> {JSON.stringify(notification)}</Text>
-  }
-  return <View />
+  onClose,
+  onConfirm,
+}: NotificationConsumer) => {
+  setTimeout(() => {
+    onClose(notification)
+  }, notification.autoDismissMs)
+  return (
+    <View onTouchEnd={() => onConfirm(notification)}>
+      <Text> {JSON.stringify(notification)}</Text>
+    </View>
+  )
 }
 
 /**
@@ -38,30 +43,39 @@ export const WithNotificationSupport = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ): React.ComponentType<P & WithNotificationsProps> => ({
   notifications,
-  scheduleNotificationRemoval,
+  dispatchHandler,
   ...rest
-}: WithNotificationsProps & P) => (
-  <View
-    style={{
-      height: '100%',
-      width: '100%',
-    }}
-  >
-    <NotificationContainer
-      notification={notifications[0]}
-      removeFromQueue={scheduleNotificationRemoval}
-    />
-    <WrappedComponent {...(rest as P)} />
-  </View>
-)
-
+}: WithNotificationsProps & P) => {
+  const notification = notifications[0]
+  return (
+    <View
+      style={{
+        height: '100%',
+        width: '100%',
+      }}
+    >
+      {notification && (
+        <NotificationContainer
+          notification={notification}
+          onClose={dispatchHandler(notification.onClose)}
+          onConfirm={dispatchHandler(notification.onConfirm)}
+        />
+      )}
+      <WrappedComponent {...(rest as P)} />
+    </View>
+  )
+}
+// Only highest severity notifications are rendered here
 const mapStateToProps = (state: RootState) => ({
-  notifications: state.notifications,
+  notifications: state.notifications.filter(
+    ({ severity }) => severity === NotificationSeverity.high,
+  ),
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  scheduleNotificationRemoval: (notification: Notification) =>
-    dispatch(notification.onClose(notification)),
+  dispatchHandler: (handler: (notification: Notification) => AnyAction) => (
+    notification: Notification,
+  ) => dispatch(handler(notification)),
 })
 
 export const withNotificationSupport = <T extends object>(

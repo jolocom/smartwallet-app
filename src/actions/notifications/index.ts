@@ -33,6 +33,7 @@ export const infoNotification = (
   message,
   severity,
   dismissible: true,
+  autoDismissMs: 5000,
   onClose: removeNotification,
   onConfirm: removeNotification,
 })
