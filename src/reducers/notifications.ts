@@ -1,29 +1,43 @@
 import { AnyAction } from 'redux'
+import { reject } from 'ramda'
 
-enum NotificationTypes {
+export const SCHEDULE_NOTIFICATION = 'SCHEDULE_NOTIFICATION'
+export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION'
+export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS'
+
+export enum NotificationTypes {
   error, // Errors, i.e. rendered full screen or in top banner with CTA
   info, // Info, i.e. credential saved correctly. Rendered in top banner with CTA
   success, // TODO Needed? How is this different from info?
   warning, // TODO Needed? How is this different from info?
 }
 
-enum Severity {
+export enum NotificationSeverity {
   low, // Perhaps handled in components? I.e. skipped by the top level notifications handler
   medium, // Normal
   high, // FULL Screen for errors, colored action buttons for other notifications
 }
 
-interface Notification {
-  uid: string // Needed?
+export interface NotificationMessage {
+  title: string
+  message: string
+}
+
+export interface Notification {
+  uid: string
   type: NotificationTypes
-  severity: Severity
+  severity: NotificationSeverity
   dismissible: boolean
   autoDismissMs?: number // TODO Component
   onClose: Function
   onConfirm: Function
 }
 
-type NotificationsState = Notification[]
+export interface InfoNotification extends Notification {
+  message: NotificationMessage
+}
+
+export type NotificationsState = Notification[]
 const initialState: NotificationsState = []
 
 export const notificationsReducer = (
@@ -31,9 +45,15 @@ export const notificationsReducer = (
   action: AnyAction,
 ): NotificationsState => {
   switch (action.type) {
-    case 'SCHEDULE_NOTIFICATION':
+    case SCHEDULE_NOTIFICATION:
+      console.log(state)
       return [...state, action.value]
-    case 'CLEAR_NOTIFICATIONS':
+    case REMOVE_NOTIFICATION:
+      return reject(
+        notification => notification.uid === action.value.uid,
+        state,
+      )
+    case CLEAR_NOTIFICATIONS:
       return initialState
     default:
       return state
