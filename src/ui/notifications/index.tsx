@@ -14,11 +14,13 @@ interface WithNotificationsProps
     ReturnType<typeof mapDispatchToProps> {}
 
 /**
- * @type P - The props of the wrapped component / container
- * @param WrappedComponent
- * @constructor
+ * Reference implementation of a Notification Manager HOC. It will subscribe to the redux state to receive notifications,
+ * and after filtering them, will render a {@link TopBarNotification} for each of them.
+ * @typeparam P - The props of the wrapped component / container
+ * @param WrappedComponent - Notification bars will render in the top part of the wrapped component passed here
  */
-export const WithTopBarNotificationHOC = <P extends object>(
+
+const WithTopBarNotificationHOC = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ): React.ComponentType<P & WithNotificationsProps> => ({
   notifications,
