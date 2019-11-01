@@ -16,7 +16,6 @@ export const notificationsReducer = (
 ): NotificationsState => {
   switch (action.type) {
     case SCHEDULE_NOTIFICATION:
-      console.log(state)
       return [...state, action.value]
     case REMOVE_NOTIFICATION:
       return reject(
