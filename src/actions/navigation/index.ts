@@ -14,6 +14,8 @@ import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
+import { respond } from 'src/lib/deeplink'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types';
 
 const deferredNavActions: NavigationAction[] = []
 let dispatchNavigationAction = (action: NavigationAction) => {
@@ -118,10 +120,11 @@ export const handleDeepLink = (url: string): ThunkAction => (
     const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
     const handler = interactionHandlers[interactionToken.interactionType]
 
+
     if (handler) {
-      return dispatch(
-        withLoading(withErrorScreen(handler(interactionToken, true))),
-      )
+      return interactionToken.interactionType === InteractionType.CredentialOfferRequest
+        ? dispatch(withLoading(withErrorScreen(handler(interactionToken, true))))
+        : dispatch(withLoading(withErrorScreen(handler(interactionToken, respond))))
     }
   }
 

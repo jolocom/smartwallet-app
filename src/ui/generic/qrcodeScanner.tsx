@@ -14,6 +14,8 @@ import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { NavigationScreenProps } from 'react-navigation'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { Colors } from 'src/styles'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types';
+import { respond } from 'src/lib/http'
 
 const QRScanner = require('react-native-qrcode-scanner').default
 
@@ -106,13 +108,13 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 
     const handler = interactionHandlers[interactionToken.interactionType]
 
-    return handler
-      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
-      : dispatch(
-          showErrorScreen(
-            new AppError(ErrorCode.Unknown, new Error('No handler found')),
-          ),
-        )
+    if (handler) {
+      return interactionToken.interactionType === InteractionType.CredentialOfferRequest
+          ? dispatch(withLoading(withErrorScreen(handler(interactionToken, false))))
+          : dispatch(withLoading(withErrorScreen(handler(interactionToken, respond))))
+    } else {
+      return dispatch(showErrorScreen(new AppError(ErrorCode.Unknown, new Error('No handler found'))))
+    }
   },
 })
 

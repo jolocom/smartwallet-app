@@ -12,7 +12,8 @@ import { JolocomLib } from 'jolocom-lib'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
-import { SendFn } from 'src/lib/types'
+import { SendResponse } from 'src/lib/transportLayers'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types';
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -112,7 +113,7 @@ export class BLECodeScanner extends React.Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onScannerSuccess: (
-    send: SendFn,
+    send: SendResponse,
   ) => async (e: string) => {
     let interactionToken
     try {
@@ -123,7 +124,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       )
     }
     const handler = interactionHandlers[interactionToken.interactionType]
-    return handler
+    return handler && interactionToken.interactionType !== InteractionType.CredentialOfferRequest
       ? dispatch(withLoading(withErrorScreen(handler(interactionToken, send))))
       : dispatch(
           showErrorScreen(
