@@ -3,21 +3,19 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import { JolocomLib } from 'jolocom-lib'
-import { Linking } from 'react-native'
 import { cancelSSO } from 'src/actions/sso'
 import { JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { ThunkDispatch } from '../../store'
 import { RootState } from '../../reducers'
 import { BackendMiddleware } from '../../backendMiddleware'
-import { AppError } from '../../lib/errors'
-import ErrorCode from '../../lib/errorCodes'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { generateIdentitySummary } from './utils'
 import { PaymentRequestSummary } from './types'
+import { SendResponse } from 'src/lib/transportLayers';
 
 export const consumePaymentRequest = (
   paymentRequest: JSONWebToken<PaymentRequest>,
-  isDeepLinkInteraction: boolean = false,
+  send: SendResponse,
 ) => async (
   dispatch: ThunkDispatch,
   getState: () => RootState,
@@ -49,14 +47,14 @@ export const consumePaymentRequest = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.PaymentConsent,
-      params: { isDeepLinkInteraction, paymentDetails },
+      params: { send, paymentDetails },
       key: 'paymentRequest',
     }),
   )
 }
 
 export const sendPaymentResponse = (
-  isDeepLinkInteraction: boolean,
+  send: SendResponse,
   paymentDetails: PaymentRequestSummary,
 ) => async (
   dispatch: ThunkDispatch,
@@ -64,13 +62,15 @@ export const sendPaymentResponse = (
   backendMiddleware: BackendMiddleware,
 ) => {
   const { identityWallet } = backendMiddleware
-  const { callbackURL, requestJWT } = paymentDetails
+  const { requestJWT } = paymentDetails
 
   // add loading screen here
   const password = await backendMiddleware.keyChainLib.getPassword()
+    
   const decodedPaymentRequest = JolocomLib.parse.interactionToken.fromJWT<
     PaymentRequest
   >(requestJWT)
+
   const txHash = await identityWallet.transactions.sendTransaction(
     decodedPaymentRequest.interactionToken,
     password,
@@ -81,18 +81,7 @@ export const sendPaymentResponse = (
     decodedPaymentRequest,
   )
 
-  if (isDeepLinkInteraction) {
-    const callback = `${callbackURL}/${response.encode()}`
-    if (!(await Linking.canOpenURL(callback))) {
-      throw new AppError(ErrorCode.DeepLinkUrlNotFound)
-    }
+  await send(response, decodedPaymentRequest.interactionToken.callbackURL)
 
-    return Linking.openURL(callback).then(() => dispatch(cancelSSO))
-  } else {
-    return fetch(callbackURL, {
-      method: 'POST',
-      body: JSON.stringify({ token: response.encode() }),
-      headers: { 'Content-Type': 'application/json' },
-    }).then(() => dispatch(cancelSSO))
-  }
+  dispatch(cancelSSO)
 }

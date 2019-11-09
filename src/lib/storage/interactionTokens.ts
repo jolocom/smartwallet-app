@@ -31,6 +31,6 @@ export const interactionHandlers = {
   ) => consumeCredentialOfferRequest(interactionToken, isDeepLinkInteraction),
   [InteractionType.PaymentRequest]: <T extends JSONWebToken<PaymentRequest>>(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumePaymentRequest(interactionToken, isDeepLinkInteraction),
+    send: SendResponse,
+  ) => consumePaymentRequest(interactionToken, send),
 }
