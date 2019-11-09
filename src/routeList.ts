@@ -20,6 +20,7 @@ export enum routeList {
   Records = 'Records',
   Settings = 'Settings',
   QRCodeScanner = 'QRCodeScanner',
+  BleScanner = 'BleScanner',
 
   // Interactions & Details
   CredentialDialog = 'CredentialDialog',
