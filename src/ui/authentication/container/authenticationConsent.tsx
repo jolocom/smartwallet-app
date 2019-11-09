@@ -7,10 +7,10 @@ import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { SendFn } from 'src/lib/types'
+import { SendResponse } from 'src/lib/transportLayers'
 
 interface AuthenticationNavigationParams {
-  send: SendFn,
+  send: SendResponse,
   authenticationDetails: AuthenticationRequestSummary
 }
 
@@ -47,7 +47,7 @@ export const AuthenticationConsentContainer = (props: Props) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmAuthenticationRequest: (
-    send: SendFn,
+    send: SendResponse,
     authenticationDetails: AuthenticationRequestSummary
   ) =>
     dispatch(

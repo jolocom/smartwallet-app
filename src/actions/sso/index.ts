@@ -17,7 +17,7 @@ import {
   IdentitySummary,
 } from './types'
 import { generateIdentitySummary } from './utils'
-import { SendFn } from 'src/lib/types'
+import { SendResponse } from 'src/lib/transportLayers'
 
 export const setReceivingCredential = (
   requester: IdentitySummary,
@@ -105,7 +105,7 @@ interface AttributeSummary {
 
 export const consumeCredentialRequest = (
   decodedCredentialRequest: JSONWebToken<CredentialRequest>,
-  send: SendFn,
+  send: SendResponse,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, identityWallet, registry } = backendMiddleware
   const { did } = getState().account.did
@@ -190,7 +190,7 @@ export const consumeCredentialRequest = (
 export const sendCredentialResponse = (
   selectedCredentials: CredentialVerificationSummary[],
   credentialRequestDetails: CredentialRequestSummary,
-  send: SendFn,
+  send: SendResponse,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, keyChainLib, identityWallet } = backendMiddleware
   const { callbackURL, requestJWT } = credentialRequestDetails
@@ -216,7 +216,7 @@ export const sendCredentialResponse = (
     request,
   )
 
-  await send(response)
+  await send(response, request.interactionToken.callbackURL)
 
   dispatch(cancelSSO)
 }

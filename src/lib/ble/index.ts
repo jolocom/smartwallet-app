@@ -1,6 +1,6 @@
 import { Device, BleManager } from 'react-native-ble-plx';
 import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
-import { SendFn } from './../types'
+import { SendResponse } from 'src/lib/transportLayers'
 
 export type BleSerialConnectionConfig = {
   serviceUUID: string,
@@ -42,7 +42,7 @@ export const openSerialConnection = (
   d: Device,
   serialUUIDs: BleSerialConnectionConfig
 ) => (
-  onRxDispatch: (send: SendFn) => (e: string) => Promise<any>
+  onRxDispatch: (send: SendResponse) => (e: string) => Promise<any>
 ) => d.isConnected().then(async connected => {
   if (!connected) throw new Error("Device not connected")
 
@@ -60,6 +60,9 @@ export const openSerialConnection = (
         Buffer.from(token.encode() + '\n', 'ascii').toString('base64')
       )
         .then(_ => d.cancelConnection())
+        .then(d => true)
+        .catch(err => false)
+        // .finally(() => manager.destroy())
     )
   )('')
 

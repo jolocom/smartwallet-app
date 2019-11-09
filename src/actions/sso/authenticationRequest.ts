@@ -8,7 +8,7 @@ import { ThunkAction } from '../../store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { generateIdentitySummary } from './utils'
 import { AuthenticationRequestSummary } from './types'
-import { SendFn } from '../../lib/types'
+import { SendResponse } from 'src/lib/transportLayers'
 
 export const consumeAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
@@ -38,7 +38,7 @@ export const consumeAuthenticationRequest = (
 }
 
 export const sendAuthenticationResponse = (
-  send: SendFn,
+  send: SendResponse,
   authenticationDetails: AuthenticationRequestSummary,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware
@@ -55,7 +55,7 @@ export const sendAuthenticationResponse = (
     decodedAuthRequest,
   )
 
-  await send(response)
+  await send(response, decodedAuthRequest.interactionToken.callbackURL)
 
   return dispatch(cancelSSO)
 }

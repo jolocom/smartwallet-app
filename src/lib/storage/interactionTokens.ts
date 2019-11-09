@@ -8,7 +8,7 @@ import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credent
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import { consumePaymentRequest } from '../../actions/sso/paymentRequest'
-import { SendFn } from '../types';
+import { SendResponse } from 'src/lib/transportLayers'
 /**
  * @param Metadata should not need to be passed to credential receive because it comes from cred Offer
  * Furthermore, this only needs to be defined for requests
@@ -17,11 +17,11 @@ import { SendFn } from '../types';
 export const interactionHandlers = {
   [InteractionType.Authentication]: <T extends JSONWebToken<Authentication>>(
     interactionToken: T,
-    send: SendFn,
+    send: SendResponse,
   ) => consumeAuthenticationRequest(interactionToken, send),
   [InteractionType.CredentialRequest]: <T extends JSONWebToken<CredentialRequest>>(
     interactionToken: T,
-    send: SendFn,
+    send: SendResponse,
   ) => consumeCredentialRequest(interactionToken, send),
   [InteractionType.CredentialOfferRequest]: <
     T extends JSONWebToken<CredentialOfferRequest>
