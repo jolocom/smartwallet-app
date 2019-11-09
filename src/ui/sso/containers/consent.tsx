@@ -9,9 +9,10 @@ import {
   CredentialVerificationSummary,
 } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { SendFn } from 'src/lib/types'
 
 interface CredentialRequestNavigationParams {
-  isDeepLinkInteraction: boolean
+  send: SendFn,
   credentialRequestDetails: CredentialRequestSummary
 }
 
@@ -31,7 +32,7 @@ const ConsentContainer = (props: Props) => {
     cancelSSO,
     navigation: {
       state: {
-        params: { isDeepLinkInteraction, credentialRequestDetails },
+        params: { send, credentialRequestDetails },
       },
     },
   } = props
@@ -40,7 +41,7 @@ const ConsentContainer = (props: Props) => {
     sendCredentialResponse(
       credentials,
       credentialRequestDetails,
-      isDeepLinkInteraction,
+      send,
     )
   }
 
@@ -69,7 +70,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   sendCredentialResponse: (
     credentials: CredentialVerificationSummary[],
     credentialRequestDetails: CredentialRequestSummary,
-    isDeepLinkInteraction: boolean,
+    send: Pick<CredentialRequestNavigationParams, "send">,
   ) =>
     dispatch(
       withLoading(
@@ -77,7 +78,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
           ssoActions.sendCredentialResponse(
             credentials,
             credentialRequestDetails,
-            isDeepLinkInteraction,
+            send,
           ),
         ),
       ),

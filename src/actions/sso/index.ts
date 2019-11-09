@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
@@ -17,9 +16,8 @@ import {
   CredentialVerificationSummary,
   IdentitySummary,
 } from './types'
-import { AppError } from '../../lib/errors'
-import ErrorCode from '../../lib/errorCodes'
 import { generateIdentitySummary } from './utils'
+import { SendFn } from 'src/lib/types'
 
 export const setReceivingCredential = (
   requester: IdentitySummary,
@@ -107,7 +105,7 @@ interface AttributeSummary {
 
 export const consumeCredentialRequest = (
   decodedCredentialRequest: JSONWebToken<CredentialRequest>,
-  isDeepLinkInteraction: boolean,
+  send: SendFn,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, identityWallet, registry } = backendMiddleware
   const { did } = getState().account.did
@@ -183,7 +181,7 @@ export const consumeCredentialRequest = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.Consent,
-      params: { isDeepLinkInteraction, credentialRequestDetails },
+      params: { send, credentialRequestDetails },
       key: 'credentialRequest',
     }),
   )
@@ -192,13 +190,13 @@ export const consumeCredentialRequest = (
 export const sendCredentialResponse = (
   selectedCredentials: CredentialVerificationSummary[],
   credentialRequestDetails: CredentialRequestSummary,
-  isDeepLinkInteraction: boolean = false,
+  send: SendFn,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, keyChainLib, identityWallet } = backendMiddleware
   const { callbackURL, requestJWT } = credentialRequestDetails
 
   const password = await keyChainLib.getPassword()
-  const request = JolocomLib.parse.interactionToken.fromJWT(requestJWT)
+  const request = JolocomLib.parse.interactionToken.fromJWT<CredentialRequest>(requestJWT)
 
   const credentials = await Promise.all(
     selectedCredentials.map(
@@ -218,19 +216,8 @@ export const sendCredentialResponse = (
     request,
   )
 
-  if (isDeepLinkInteraction) {
-    const callback = `${callbackURL}${response.encode()}`
-    if (!(await Linking.canOpenURL(callback))) {
-      throw new AppError(ErrorCode.DeepLinkUrlNotFound)
-    }
+  await send(response)
 
-    return Linking.openURL(callback).then(() => dispatch(cancelSSO))
-  }
-  await fetch(callbackURL, {
-    method: 'POST',
-    body: JSON.stringify({ token: response.encode() }),
-    headers: { 'Content-Type': 'application/json' },
-  })
   dispatch(cancelSSO)
 }
 
