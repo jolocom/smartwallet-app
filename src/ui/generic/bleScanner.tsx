@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export class BLECodeScanner extends React.Component<Props, State> {
+class BLECodeScanner extends React.Component<Props, State> {
   private removeFocusListener: (() => void) | undefined
   private ble: BleManager
 

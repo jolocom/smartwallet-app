@@ -9,10 +9,10 @@ import {
   CredentialVerificationSummary,
 } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { SendFn } from 'src/lib/types'
+import { SendResponse } from 'src/lib/transportLayers'
 
 interface CredentialRequestNavigationParams {
-  send: SendFn,
+  send: SendResponse,
   credentialRequestDetails: CredentialRequestSummary
 }
 

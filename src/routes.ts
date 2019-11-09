@@ -38,7 +38,7 @@ import {
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
-import { BLECodeScanner } from './ui/generic/bleScanner';
+import { BLEScannerContainer } from './ui/generic/bleScanner';
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -106,7 +106,7 @@ export const BottomTabBarRoutes = {
     },
   },
   [routeList.BleScanner]: {
-    screen: BLECodeScanner,
+    screen: BLEScannerContainer,
     title: "BLE",
     navigationOptions: {
       ...commonNavigationOptions,
