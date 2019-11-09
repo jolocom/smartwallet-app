@@ -1,16 +1,14 @@
-import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { navigationActions } from 'src/actions'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { routeList } from 'src/routeList'
 import { cancelSSO } from '.'
-import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
 import { ThunkAction } from '../../store'
-import { AppError } from '../../lib/errors'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import ErrorCode from '../../lib/errorCodes'
 import { generateIdentitySummary } from './utils'
 import { AuthenticationRequestSummary } from './types'
+import { SendFn } from '../../lib/types'
 
 export const consumeAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
@@ -40,7 +38,7 @@ export const consumeAuthenticationRequest = (
 }
 
 export const sendAuthenticationResponse = (
-  send: (token: JSONWebToken<JWTEncodable>) => Promise<any>,
+  send: SendFn,
   authenticationDetails: AuthenticationRequestSummary,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { identityWallet } = backendMiddleware

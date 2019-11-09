@@ -7,10 +7,10 @@ import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
+import { SendFn } from 'src/lib/types'
 
 interface AuthenticationNavigationParams {
-  send: (token: JSONWebToken<JWTEncodable>) => Promise<any>,
+  send: SendFn,
   authenticationDetails: AuthenticationRequestSummary
 }
 
@@ -47,7 +47,7 @@ export const AuthenticationConsentContainer = (props: Props) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmAuthenticationRequest: (
-    send: (token: JSONWebToken<JWTEncodable>) => Promise<any>,
+    send: SendFn,
     authenticationDetails: AuthenticationRequestSummary
   ) =>
     dispatch(
