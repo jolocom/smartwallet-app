@@ -36,7 +36,7 @@
 	<key>CFBundleVersion</key>
 	<string>2</string>
 	<key>LSApplicationCategoryType</key>
-	<string/>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -58,6 +58,8 @@
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Required by a dependency, not used by us</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Used for BLE Interactions</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Required by a dependency, not used by us</string>
 	<key>NSCalendarsUsageDescription</key>
