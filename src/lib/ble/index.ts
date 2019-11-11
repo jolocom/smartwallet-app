@@ -49,7 +49,7 @@ export const openSerialConnection = (
   const b = waitForToken('\n')(
     onRxDispatch(
       (token: JSONWebToken<JWTEncodable>) => writeAll(
-        200
+        d.mtu
       )(
         (toWrite: string) => d.writeCharacteristicWithResponseForService(
           serialUUIDs.serviceUUID,

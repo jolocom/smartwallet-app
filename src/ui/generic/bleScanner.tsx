@@ -50,22 +50,29 @@ class BLECodeScanner extends React.Component<Props, State> {
       devices: {},
     }
     this.ble = new BleManager()
-    this.ble.startDeviceScan(
-      [serialUUIDs.serviceUUID],
-      null,
-      (error, device) => {
-        if (error) console.log(error.toString())
 
-        if (device && device.name) {
-          this.setState({
-            devices: {
-              ...this.state.devices,
-              [device.id]: device.name,
-            },
-          })
-        }
-      },
-    )
+  }
+
+  componentWillMount() {
+    const sub = this.ble.onStateChange(state => {
+      if (state === 'PoweredOn') {
+        sub.remove()
+        this.ble.startDeviceScan(
+          [serialUUIDs.serviceUUID],
+          null,
+          (error, device) => {
+            if (device && device.name) {
+              this.setState({
+                devices: {
+                  ...this.state.devices,
+                  [device.id]: device.name,
+                },
+              })
+            }
+          },
+        )
+      }
+    }, true)
   }
 
   componentWillUnmount() {
