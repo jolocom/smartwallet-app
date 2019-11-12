@@ -35,6 +35,7 @@ const writeAll = (
   .then(async _ => {
     if (toWrite.length > size) await writeAll(size)(write)(toWrite.slice(size))
   })
+  .catch(err => console.error(err.toString()))
 
 export const openSerialConnection = (
   manager: BleManager
@@ -49,7 +50,7 @@ export const openSerialConnection = (
   const b = waitForToken('\n')(
     onRxDispatch(
       (token: JSONWebToken<JWTEncodable>) => writeAll(
-        d.mtu
+        d.mtu - 3
       )(
         (toWrite: string) => d.writeCharacteristicWithResponseForService(
           serialUUIDs.serviceUUID,
