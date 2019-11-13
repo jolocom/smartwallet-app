@@ -50,7 +50,10 @@ export const openSerialConnection = (
   const b = waitForToken('\n')(
     onRxDispatch(
       (token: JSONWebToken<JWTEncodable>) => writeAll(
-        d.mtu - 3
+        // ensure the mtu is rounded to the nearest 3 to have 0 padding in the base64 encoded packets
+        // iOS uses a buffer implementation which requires correct padding, this lets us send blocks
+        // on iOS properly
+        d.mtu - (d.mtu % 3) - 3
       )(
         (toWrite: string) => d.writeCharacteristicWithResponseForService(
           serialUUIDs.serviceUUID,
