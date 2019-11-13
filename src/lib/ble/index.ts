@@ -1,6 +1,7 @@
 import { Device, BleManager } from 'react-native-ble-plx';
 import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
 import { SendResponse } from 'src/lib/transportLayers'
+import { Platform } from 'react-native'
 
 export type BleSerialConnectionConfig = {
   serviceUUID: string,
@@ -53,7 +54,9 @@ export const openSerialConnection = (
         // ensure the mtu is rounded to the nearest 3 to have 0 padding in the base64 encoded packets
         // iOS uses a buffer implementation which requires correct padding, this lets us send blocks
         // on iOS properly
-        d.mtu - (d.mtu % 3) - 3
+        Platform.OS === 'ios'
+          ? d.mtu - (d.mtu % 3) - 3
+          : d.mtu - 3
       )(
         (toWrite: string) => d.writeCharacteristicWithResponseForService(
           serialUUIDs.serviceUUID,
