@@ -4,11 +4,16 @@ import { Notification } from './types'
 
 export const SCHEDULE_NOTIFICATION = 'SCHEDULE_NOTIFICATION'
 export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION'
+export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION'
 export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS'
 
-export type NotificationsState = Notification[]
+export type NotificationsState = {
+  queue: Notification[],
+  active?: Notification | null,
+  activeExpiry?: number
+}
 
-const initialState: NotificationsState = []
+const initialState: NotificationsState = { queue: [], active: null }
 
 export const notificationsReducer = (
   state = initialState,
@@ -16,12 +21,21 @@ export const notificationsReducer = (
 ): NotificationsState => {
   switch (action.type) {
     case SCHEDULE_NOTIFICATION:
-      return [...state, action.value]
+      return { ...state, queue: [action.value, ...state.queue] }
     case REMOVE_NOTIFICATION:
-      return reject(
-        notification => notification.uid === action.value.uid,
-        state,
-      )
+      return {
+        ...state,
+        queue: reject(
+          notification => notification.uid === action.value.uid,
+          state.queue,
+        )
+      }
+    case SET_ACTIVE_NOTIFICATION:
+      return {
+        ...state,
+        active: action.notification,
+        activeExpiry: action.expiry
+      }
     case CLEAR_NOTIFICATIONS:
       return initialState
     default:
