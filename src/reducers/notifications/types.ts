@@ -20,22 +20,9 @@ export enum NotificationSeverity {
   high = 'high',
 }
 
-/**
- * This allows for some notifications to be handled locally, in a component, in some unique way
- * local - the notification won't be picked up by the main application notification handler (which would have
- * resulted in a top banner notification), and can instead be handled by another component
- * global - the notification will be processed by the main application handler. A top banner will render,
- * after which the notification will be removed from the queue
- */
-
-export enum NotificationScope {
-  local = 'local',
-  global = 'global',
-}
-
 export interface NotificationMessage {
   title: string
-  message: string
+  message?: string
 }
 
 /* A notification either is dismissible and has a delay specified, or isn't dismissible and
@@ -60,12 +47,10 @@ type Dismissible =
 type NotificationPayload =
   | {
       type: NotificationType.warning | NotificationType.info
-      message: NotificationMessage
       error?: never
-    }
+    } & NotificationMessage
   | {
       type: NotificationType.error
-      message?: never
       error: AppError
     }
 
@@ -73,7 +58,6 @@ interface BaseNotification {
   uid: string
   type: NotificationType
   severity: NotificationSeverity
-  scope: NotificationScope
 }
 
 /**

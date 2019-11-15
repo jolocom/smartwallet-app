@@ -7,7 +7,6 @@ import { randomBytes } from 'crypto'
 import {
   Notification,
   NotificationMessage,
-  NotificationScope,
   NotificationSeverity,
   NotificationType,
 } from '../../reducers/notifications/types'
@@ -27,13 +26,13 @@ export const clearAllNotifications = () => ({
 })
 
 export const infoNotification = (
-  message: NotificationMessage,
+  info: NotificationMessage,
 ): Notification => ({
   uid: randomBytes(4).toString('hex'), // TODO abstract
   type: NotificationType.info,
-  message,
+  title: info.title,
+  message: info.message,
   severity: NotificationSeverity.medium,
-  scope: NotificationScope.global,
   dismissible: true,
   autoDismissMs: 3000,
   handleConfirm: removeNotification,
