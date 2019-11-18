@@ -19,7 +19,7 @@ export const removeNotification = (notification: Notification) => ({
 })
 
 export const setActiveNotification = (
-  notification?: Notification | null,
+  notification: Notification | null,
   expiry?: number,
 ) => ({
   type: SET_ACTIVE_NOTIFICATION,
@@ -73,14 +73,15 @@ const updateNotificationsState: ThunkAction = (dispatch, getState) => {
   const isActiveExpired = !active || (active.dismissible && activeExpiry && (curTs >= activeExpiry))
   const isActiveSticky = active && !active.dismissible
 
-  let next, expiry
+  let next = null,
+    expiry
+
+  // unqueue the active notification if it is expired
+  if (isActiveExpired && active) dispatch(removeNotification(active))
 
   // we only attempt to find a next notification if the active one is
   // expired or sticky (non-dismissible)
   if ((isActiveExpired || isActiveSticky) && queue.length) {
-    // unqueue the active notification if it is expired
-    if (active) dispatch(removeNotification(active))
-
     // find the next dissmissible notification, or otherwise take the first in
     // queue. Note that this means we do not support showing two non-dismissible
     // notifications
