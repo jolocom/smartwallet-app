@@ -38,6 +38,7 @@ import {
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
+import { ErrorReporting } from './ui/generic/errorReporting'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -241,6 +242,10 @@ const MainStack = createStackNavigator(
 
     [routeList.Exception]: {
       screen: Exception,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.ErrorReporting]: {
+      screen: ErrorReporting,
       navigationOptions: noHeaderNavOpts,
     },
     ...(__DEV__ && {

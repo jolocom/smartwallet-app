@@ -17,6 +17,7 @@ import { ThunkDispatch } from '../../store'
 import { NavigationScreenProps } from 'react-navigation'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { JolocomButton } from '../structure'
+import { routeList } from '../../routeList'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -62,13 +63,13 @@ const styles = StyleSheet.create({
   buttonBlock: {
     marginTop: Spacing.LG,
     flex: 1,
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
   },
 })
 
 export class ExceptionComponent extends React.Component<Props, State> {
   state: State = {
-    reportSent: false
+    reportSent: false,
   }
 
   private onBackButtonPressAndroid = (): boolean => {
@@ -126,9 +127,9 @@ export class ExceptionComponent extends React.Component<Props, State> {
     errorText = I18n.t(errorText) + '.'
     console.error(origError || err)
 
-    const reportBtnMsg = this.state.reportSent ?
-      strings.ERROR_REPORT_SENT :
-      strings.SEND_ERROR_REPORT
+    const reportBtnMsg = this.state.reportSent
+      ? strings.ERROR_REPORT_SENT
+      : strings.SEND_ERROR_REPORT
 
     return (
       <View style={styles.container}>
@@ -156,15 +157,16 @@ export class ExceptionComponent extends React.Component<Props, State> {
             upperCase={false}
             text={I18n.t(strings.GO_BACK)}
           />
-          { err &&
+          {err && (
             <JolocomButton
               raised
-              onPress={this.handleTapReport}
+              //onPress={this.handleTapReport}
+              onPress={() => this.props.navigateReporting(err)}
               upperCase={false}
               disabled={this.state.reportSent}
               text={I18n.t(reportBtnMsg)}
             />
-          }
+          )}
         </View>
       </View>
     )
@@ -176,6 +178,13 @@ const mapStateToProps = (): {} => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   navigateBack: (routeName: string) =>
     dispatch(navigationActions.navigate({ routeName })),
+  navigateReporting: (error: AppError | Error | undefined) =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.ErrorReporting,
+        params: { error },
+      }),
+    ),
 })
 
 export const Exception = connect(
