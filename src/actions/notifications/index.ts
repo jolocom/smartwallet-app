@@ -9,7 +9,6 @@ import {
 import {
   Notification,
   NotificationMessage,
-  NotificationSeverity,
   NotificationType,
 } from 'src/reducers/notifications/types'
 
@@ -53,11 +52,10 @@ export const clearAllNotifications = (): ThunkAction => dispatch => {
 }
 
 export const infoNotification = (info: NotificationMessage): Notification => ({
-  uid: randomBytes(4).toString('hex'), // TODO abstract
+  id: randomBytes(4).toString('hex'), // TODO abstract
   type: NotificationType.info,
   title: info.title,
   message: info.message,
-  severity: NotificationSeverity.medium,
   dismissible: true,
   autoDismissMs: 3000,
   handleConfirm: removeNotification,
@@ -69,8 +67,8 @@ export const infoNotification = (info: NotificationMessage): Notification => ({
 let nextUpdateTimeout: ReturnType<typeof setTimeout> | null = null
 const updateNotificationsState: ThunkAction = (dispatch, getState) => {
   const curTs = Date.now()
-  const { queue, active, activeExpiry } = getState().notifications
-  const isActiveExpired = !active || (active.dismissible && activeExpiry && (curTs >= activeExpiry))
+  const { queue, active, activeExpiryTs } = getState().notifications
+  const isActiveExpired = !active || (active.dismissible && activeExpiryTs && (curTs >= activeExpiryTs))
   const isActiveSticky = active && !active.dismissible
 
   let next = null,

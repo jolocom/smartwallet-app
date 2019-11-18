@@ -10,7 +10,7 @@ export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS'
 export type NotificationsState = {
   queue: Notification[],
   active?: Notification | null,
-  activeExpiry?: number
+  activeExpiryTs?: number
 }
 
 const initialState: NotificationsState = { queue: [], active: null }
@@ -34,7 +34,7 @@ export const notificationsReducer = (
       return {
         ...state,
         active: action.notification,
-        activeExpiry: action.expiry
+        activeExpiryTs: action.expiry
       }
     case CLEAR_NOTIFICATIONS:
       return initialState

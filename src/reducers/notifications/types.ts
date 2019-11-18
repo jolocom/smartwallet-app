@@ -7,19 +7,6 @@ export enum NotificationType {
   warning = 'warning',
 }
 
-/**
- * Depending on the notification severity, it might be rendered differently on the UI. For example:
- * low - simple top notification banner
- * medium - top notification banner with accent colors on title and action button
- * high - full screen overlay with call to action
- */
-
-export enum NotificationSeverity {
-  low = 'low',
-  medium = 'medium',
-  high = 'high',
-}
-
 export interface NotificationMessage {
   title: string
   message?: string
