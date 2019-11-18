@@ -78,13 +78,12 @@ const updateNotificationsState: ThunkAction = (dispatch, getState) => {
   const curTs = Date.now()
   const { queue, active, activeExpiry } = getState().notifications
   const isActiveExpired = !active || (active.dismissible && activeExpiry && (curTs >= activeExpiry))
-  const isActiveSticky = !active || !active.dismissible
+  const isActiveSticky = active && !active.dismissible
 
-  let next
+  let next, expiry
 
   // we only attempt to find a next notification if the active one is
   // expired or sticky (non-dismissible)
-  console.log('queueueue lenght', queue.length, queue)
   if ((isActiveExpired || isActiveSticky) && queue.length) {
     // unqueue the active notification if it is expired
     if (active) dispatch(removeNotification(active))
@@ -96,19 +95,19 @@ const updateNotificationsState: ThunkAction = (dispatch, getState) => {
     next = queue[idx > -1 ? idx : 0]
   }
 
-  const expiry = next && next.dismissible && next.autoDismissMs
-    ? curTs + next.autoDismissMs
-    : undefined
-
   if (next && next.dismissible && next.autoDismissMs) {
-    // this should normally never be the case.... but
-    if (nextUpdateTimeout) clearTimeout(nextUpdateTimeout)
+    if (nextUpdateTimeout) {
+      // this should normally never be the case.... but
+      clearTimeout(nextUpdateTimeout)
+    }
 
     nextUpdateTimeout = setTimeout(() => {
       nextUpdateTimeout = null
       dispatch(updateNotificationsState)
-    // expiry + 5 for good taste
+      // +5 for good taste
     }, next.autoDismissMs + 5)
+
+    expiry = curTs + next.autoDismissMs
   }
 
   return dispatch(setActiveNotification(next, expiry))
