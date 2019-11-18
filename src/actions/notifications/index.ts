@@ -1,17 +1,17 @@
+import { randomBytes } from 'crypto'
+import { ThunkAction } from 'src/store'
 import {
   CLEAR_NOTIFICATIONS,
   REMOVE_NOTIFICATION,
   SET_ACTIVE_NOTIFICATION,
   SCHEDULE_NOTIFICATION,
-} from '../../reducers/notifications'
-import { randomBytes } from 'crypto'
+} from 'src/reducers/notifications'
 import {
   Notification,
   NotificationMessage,
   NotificationSeverity,
   NotificationType,
-} from '../../reducers/notifications/types'
-import { ThunkAction } from 'src/store'
+} from 'src/reducers/notifications/types'
 
 export const removeNotification = (notification: Notification) => ({
   type: REMOVE_NOTIFICATION,
@@ -39,7 +39,7 @@ export const clearActiveNotification: ThunkAction = (dispatch, getState) => {
 
 export const scheduleNotification = (
   notification: Notification,
-): ThunkAction => (dispatch, getState) => {
+): ThunkAction => dispatch => {
   dispatch({
     type: SCHEDULE_NOTIFICATION,
     value: notification,
@@ -47,19 +47,12 @@ export const scheduleNotification = (
   return dispatch(updateNotificationsState)
 }
 
-export const clearAllNotifications = (): ThunkAction => (
-  dispatch,
-  getState,
-) => {
-  dispatch({
-    type: CLEAR_NOTIFICATIONS,
-  })
+export const clearAllNotifications = (): ThunkAction => dispatch => {
+  dispatch({ type: CLEAR_NOTIFICATIONS })
   return dispatch(updateNotificationsState)
 }
 
-export const infoNotification = (
-  info: NotificationMessage,
-): Notification => ({
+export const infoNotification = (info: NotificationMessage): Notification => ({
   uid: randomBytes(4).toString('hex'), // TODO abstract
   type: NotificationType.info,
   title: info.title,
