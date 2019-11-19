@@ -13,7 +13,11 @@ export type NotificationsState = {
   activeExpiryTs?: number
 }
 
-const initialState: NotificationsState = { queue: [], active: null }
+const initialState: NotificationsState = {
+  queue: [],
+  active: null,
+  activeExpiryTs: 0,
+}
 
 export const notificationsReducer = (
   state = initialState,
@@ -30,11 +34,15 @@ export const notificationsReducer = (
       )
       // if it is the active notification, then mark it expired
       let { active, activeExpiryTs } = state
-      if (active && active.id == action.value.id) activeExpiryTs = 0
+      if (active && active.id == action.value.id) {
+        active = null
+        activeExpiryTs = 0
+      }
 
       return {
         ...state,
         queue,
+        active,
         activeExpiryTs,
       }
     case SET_ACTIVE_NOTIFICATION:
