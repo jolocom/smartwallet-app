@@ -10,7 +10,7 @@ import {
   StatusBar,
 } from 'react-native'
 import I18n from 'src/locales/i18n'
-import { errorTitleMessages, AppError, reportError } from 'src/lib/errors'
+import { errorTitleMessages, AppError } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'
@@ -68,10 +68,6 @@ const styles = StyleSheet.create({
 })
 
 export class ExceptionComponent extends React.Component<Props, State> {
-  state: State = {
-    reportSent: false,
-  }
-
   private onBackButtonPressAndroid = (): boolean => {
     this.handleTapBack()
     return true
@@ -99,13 +95,6 @@ export class ExceptionComponent extends React.Component<Props, State> {
     }
   }
 
-  private handleTapReport = (): void => {
-    const err = this.getError()
-    if (!err) return
-    reportError(err)
-    this.setState({ reportSent: true })
-  }
-
   private getError = (): AppError | Error | undefined => {
     const stateParams =
       this.props.navigation &&
@@ -126,10 +115,6 @@ export class ExceptionComponent extends React.Component<Props, State> {
       : strings.THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST
     errorText = I18n.t(errorText) + '.'
     console.error(origError || err)
-
-    const reportBtnMsg = this.state.reportSent
-      ? strings.ERROR_REPORT_SENT
-      : strings.SEND_ERROR_REPORT
 
     return (
       <View style={styles.container}>
@@ -160,11 +145,9 @@ export class ExceptionComponent extends React.Component<Props, State> {
           {err && (
             <JolocomButton
               raised
-              //onPress={this.handleTapReport}
               onPress={() => this.props.navigateReporting(err)}
               upperCase={false}
-              disabled={this.state.reportSent}
-              text={I18n.t(reportBtnMsg)}
+              text={I18n.t(strings.SEND_ERROR_REPORT)}
             />
           )}
         </View>

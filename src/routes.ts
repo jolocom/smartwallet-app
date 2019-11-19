@@ -38,7 +38,7 @@ import {
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
-import { ErrorReporting } from './ui/generic/errorReporting'
+import { ErrorReporting } from './ui/errors/containers/errorReporting'
 
 // only used on android
 const headerBackImage = createElement(Image, {

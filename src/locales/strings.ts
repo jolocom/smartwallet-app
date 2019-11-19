@@ -73,13 +73,29 @@ const backup = {
   CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER: 'Choose the right word or press enter',
   RESTORE_ACCOUNT: 'Restore account',
   BACK_TO_SIGNUP: 'Back to signup',
-  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD: 'Start writing your seed-phrase and it will appear here word by word',
+  START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD:
+    'Start writing your seed-phrase and it will appear here word by word',
 }
 
 const errorTitle = {
   DAMN: 'Damn',
   OH_NO: 'Oh no',
   UH_OH: 'Uh oh',
+}
+
+const errorReporting = {
+  CHOOSE_THE_ISSUE: 'Choose the issue',
+  CHOOSE_RELATED: 'Choose related',
+  CAN_YOU_BE_MORE_SPECIFIC: 'Can you be more specific?',
+  IF_THE_PROBLEM_IS_NOT_LISTED_THIS_IS_THE_BEST_PLACE_TO_DESCRIBE_IT:
+    'If the problem is not listed, this is the best place to describe it.',
+  TAP_TO_WRITE: 'Tap to write...',
+  NEED_TO_TALK_TO_US: 'Need to talk to us?',
+  LEAVE_US_YOUR_EMAIL_AND_NUMBER: 'Leave us your email or number...',
+  WE_DO_NOT_STORE_ANY_DATA_AND_DO_NOT_SPAM_ANY_USER_INFORMATION_WILL_BE_DELETED_IMMEDIATELY_AFTER_SOLVING_THE_PROBLEM:
+    'We do not store data and do not spam, any user information will be deleted immediately after solving the problem',
+  SOMETHING_ELSE: 'Something else?',
+  SUBMIT_REPORT: 'Submit report',
 }
 
 const errorCodes = {
@@ -104,12 +120,14 @@ const errorCodes = {
   [ErrorCode.RegistrationFailed]: 'Registration failed',
   [ErrorCode.AppInitFailed]: 'Initialization failed',
 }
+
 export default {
   ...registration,
   ...settings,
   ...backup,
   ...errorTitle,
   ...errorCodes,
+  ...errorReporting,
   YOUR_JOLOCOM_WALLET: 'Your Jolocom Wallet',
   ALL_CLAIMS: 'All claims',
   MY_IDENTITY: 'My Identity',

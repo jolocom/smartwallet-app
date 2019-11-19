@@ -43,12 +43,29 @@ export function initErrorReporting() {
   })
 }
 
-export function reportError(err: AppError | Error) {
+export interface UserReport {
+  userError: string | undefined
+  userDescription: string
+  userContact: string
+}
+
+interface ErrorReport extends UserReport {
+  error: AppError | Error
+}
+
+export function reportError(report: ErrorReport) {
+  console.log(report)
   Sentry.withScope(scope => {
-    if (err instanceof AppError && err.origError) {
-      scope.setExtra('AppError', err.message)
-      err = err.origError
+    if (report.error instanceof AppError && report.error.origError) {
+      scope.setExtras({
+        AppError: report.error.message,
+        UserError: report.userError,
+        UserDescription: report.userDescription,
+        UserContact: report.userContact,
+      })
+      console.log(scope)
+      report.error = report.error.origError
     }
-    Sentry.captureException(err)
+    Sentry.captureException(report.error)
   })
 }

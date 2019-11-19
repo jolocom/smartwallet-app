@@ -1,23 +1,11 @@
 import React, { useState } from 'react'
+import { Container } from '../../structure'
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import I18n from '../../../locales/i18n'
+import strings from '../../../locales/strings'
+import { debug } from '../../../styles/presets'
+import ModalDropdown from 'react-native-modal-dropdown'
 import {
-  StyleSheet,
-  View,
-  Text,
-  Picker,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native'
-import { Container, JolocomButton } from '../structure'
-import { connect } from 'react-redux'
-import {
-  NavigationScreenProp,
-  NavigationState,
-  ScrollView,
-} from 'react-navigation'
-import { AppError } from '../../lib/errors'
-import {
-  black030,
-  golden,
   overflowBlack,
   purpleMain,
   sandLight006,
@@ -25,12 +13,24 @@ import {
   white,
   white021,
   white040,
-} from '../../styles/colors'
-import { fontMain } from '../../styles/typography'
-import ModalDropdown from 'react-native-modal-dropdown'
-import { debug } from '../../styles/presets'
-import { TextInputField } from '../home/components/textInputField'
+} from '../../../styles/colors'
 import { Button } from 'react-native-material-ui'
+import { fontMain } from '../../../styles/typography'
+import { UserReport } from '../../../lib/errors'
+import { EmojiButton } from './emojiButton'
+
+const greyBorderStyle = {
+  backgroundColor: sandLight006,
+  borderColor: white021,
+  borderWidth: 1,
+  borderRadius: 8,
+}
+
+const defaultText = {
+  fontFamily: fontMain,
+  fontSize: 20,
+  color: white,
+}
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -49,21 +49,15 @@ const styles = StyleSheet.create({
     fontSize: 28,
   },
   sectionDescription: {
+    ...defaultText,
     marginTop: 20,
-    fontFamily: fontMain,
-    color: white,
     fontSize: 16,
   },
   pickerWrapper: {
-    paddingLeft: 20,
-    backgroundColor: sandLight006,
+    ...greyBorderStyle,
+    paddingLeft: 10,
     height: 50,
     width: '100%',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: white021,
-    color: white,
-    fontFamily: fontMain,
     justifyContent: 'center',
   },
   pickerIconWrapper: {
@@ -75,39 +69,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pickerDropDown: {
+    ...greyBorderStyle,
     backgroundColor: overflowBlack,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: white021,
   },
   inputText: {
-    fontFamily: fontMain,
-    fontSize: 20,
-    color: white,
+    ...defaultText,
     padding: 10,
   },
   inputBlock: {
+    ...greyBorderStyle,
+    ...defaultText,
     height: 90,
     maxWidth: '100%',
-    backgroundColor: sandLight006,
     marginTop: 16,
-    borderColor: white021,
-    borderWidth: 1,
-    borderRadius: 8,
     paddingHorizontal: 20,
-    color: white,
-    fontSize: 20,
-    fontFamily: fontMain,
     paddingTop: 13,
     flexWrap: 'wrap',
   },
   inputLine: {
+    ...defaultText,
     width: '100%',
     borderBottomColor: white,
     borderBottomWidth: 1,
-    color: white,
-    fontFamily: fontMain,
-    fontSize: 20,
     marginTop: 28,
   },
   emojiWrapper: {
@@ -124,33 +107,62 @@ const styles = StyleSheet.create({
     borderColor: white,
     borderRadius: 50,
   },
+  buttonContainer: {
+    borderRadius: 8,
+    marginTop: 45,
+    marginBottom: 36,
+    marginHorizontal: 20,
+    maxWidth: '100%',
+    height: 56,
+    backgroundColor: purpleMain,
+  },
+  buttonText: {
+    ...defaultText,
+    fontWeight: 'normal',
+  },
 })
 
-interface PaymentNavigationParams {
-  error: AppError | Error | undefined
+interface PositionStyle {
+  left?: number
+  right?: number
+  width?: number
+  top?: number
 }
 
 interface Props {
-  navigation: NavigationScreenProp<NavigationState, PaymentNavigationParams>
+  onSubmit: (userReport: UserReport) => void
 }
 
-const ErrorReportingContainer = (props: Props) => {
-  //console.log(props.navigation.state.params.error)
+export const ErrorReportingComponent = (props: Props) => {
+  const { onSubmit } = props
+
   const [pickedIssue, setIssue] = useState<string>()
+  const [description, setDescription] = useState<string>('')
   const [contact, setContact] = useState<string>('')
 
+  const emojiList = ['💩', '😘', '🤦‍♀', '👿']
   const issueList = [
     'No internet connection',
     'A random crash',
     'It behaves in a weird way',
     'Please help!!1!',
+    'It behaves in a weird way',
+    'Please help!!1!',
   ]
+
+  const userReport = {
+    userError: pickedIssue,
+    userDescription: description,
+    userContact: contact,
+  }
 
   return (
     <Container style={styles.wrapper}>
       <ScrollView>
         <View style={styles.sectionWrapper}>
-          <Text style={styles.sectionTitle}>Choose the issue</Text>
+          <Text style={styles.sectionTitle}>
+            {I18n.t(strings.CHOOSE_THE_ISSUE)}
+          </Text>
           <View style={{ marginTop: 20 }}>
             <View style={styles.pickerIconWrapper}>
               <View style={{ width: 15, height: 15, ...debug }} />
@@ -159,9 +171,9 @@ const ErrorReportingContainer = (props: Props) => {
               options={issueList}
               style={styles.pickerWrapper}
               textStyle={styles.inputText}
-              defaultValue={'Choose related'}
+              defaultValue={I18n.t(strings.CHOOSE_RELATED)}
               renderSeparator={() => null}
-              dropdownTextHighlightStyle={{ color: golden }}
+              dropdownTextHighlightStyle={{ color: purpleMain }}
               animated={true}
               dropdownStyle={styles.pickerDropDown}
               dropdownTextStyle={{
@@ -169,13 +181,11 @@ const ErrorReportingContainer = (props: Props) => {
                 backgroundColor: 'transparent',
                 paddingLeft: 20,
                 height: 50,
-                borderRadius: 8,
               }}
-              // NOTE the type of position doesn't include the top property for some reason
-              adjustFrame={position => ({
+              adjustFrame={(position: PositionStyle) => ({
                 left: 20,
                 right: 20,
-                top: position.top + 20,
+                top: position.top && position.top + 20,
                 height: 'auto',
               })}
               onSelect={(_index, value) => setIssue(value)}
@@ -183,75 +193,60 @@ const ErrorReportingContainer = (props: Props) => {
           </View>
         </View>
         <View style={styles.sectionWrapper}>
-          <Text style={styles.sectionTitle}>Can you be more specific?</Text>
+          <Text style={styles.sectionTitle}>
+            {I18n.t(strings.CAN_YOU_BE_MORE_SPECIFIC)}
+          </Text>
           <Text style={styles.sectionDescription}>
-            If the problem is not listed, this is the best place to describe it.
+            {I18n.t(
+              strings.IF_THE_PROBLEM_IS_NOT_LISTED_THIS_IS_THE_BEST_PLACE_TO_DESCRIBE_IT,
+            )}
           </Text>
           <TextInput
             style={styles.inputBlock}
+            onChangeText={text => setDescription(text)}
             placeholderTextColor={white021}
             numberOfLines={3}
             textAlignVertical={'top'}
             multiline={true}
-            placeholder={'Tap to write...'}
+            placeholder={I18n.t(strings.TAP_TO_WRITE)}
           />
         </View>
         <View style={styles.sectionWrapper}>
-          <Text style={styles.sectionTitle}>Need to talk to us?</Text>
+          <Text style={styles.sectionTitle}>
+            {I18n.t(strings.NEED_TO_TALK_TO_US)}
+          </Text>
           <TextInput
-            placeholder={'Leave us your email or number...'}
+            onChangeText={text => setContact(text)}
+            placeholder={I18n.t(strings.LEAVE_US_YOUR_EMAIL_AND_NUMBER)}
             placeholderTextColor={white040}
-            style={{
-              width: '100%',
-              borderBottomColor: white,
-              borderBottomWidth: 1,
-              color: white,
-              fontFamily: fontMain,
-              fontSize: 20,
-              marginTop: 28,
-            }}
+            style={styles.inputLine}
           />
           <Text style={styles.sectionDescription}>
-            We do not store data and do not spam, any user information will be
-            deleted immediately after solving the problem
+            {I18n.t(
+              strings.WE_DO_NOT_STORE_ANY_DATA_AND_DO_NOT_SPAM_ANY_USER_INFORMATION_WILL_BE_DELETED_IMMEDIATELY_AFTER_SOLVING_THE_PROBLEM,
+            )}
           </Text>
         </View>
         <View style={styles.sectionWrapper}>
-          <Text style={styles.sectionTitle}>Something else?</Text>
+          <Text style={styles.sectionTitle}>
+            {I18n.t(strings.SOMETHING_ELSE)}
+          </Text>
           <View style={styles.emojiWrapper}>
-            <TouchableOpacity style={styles.emojiButton}></TouchableOpacity>
-            <TouchableOpacity style={styles.emojiButton}></TouchableOpacity>
-            <TouchableOpacity style={styles.emojiButton}></TouchableOpacity>
-            <TouchableOpacity style={styles.emojiButton}></TouchableOpacity>
+            {emojiList.map(emoji => (
+              <EmojiButton emoji={emoji} />
+            ))}
           </View>
         </View>
         <Button
-          text={'Submit report'}
+          text={I18n.t(strings.SUBMIT_REPORT)}
+          onPress={() => onSubmit(userReport)}
           upperCase={false}
           style={{
-            container: {
-              borderRadius: 8,
-              marginTop: 45,
-              marginBottom: 36,
-              marginHorizontal: 20,
-              maxWidth: '100%',
-              height: 56,
-              backgroundColor: purpleMain,
-            },
-            text: {
-              fontFamily: fontMain,
-              color: white,
-              fontSize: 20,
-              fontWeight: 'normal',
-            },
+            container: styles.buttonContainer,
+            text: styles.buttonText,
           }}
         />
       </ScrollView>
     </Container>
   )
 }
-
-export const ErrorReporting = connect(
-  null,
-  null,
-)(ErrorReportingContainer)
