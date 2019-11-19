@@ -12,11 +12,6 @@ import {
   NotificationType,
 } from 'src/reducers/notifications/types'
 
-export const removeNotification = (notification: Notification) => ({
-  type: REMOVE_NOTIFICATION,
-  value: notification,
-})
-
 export const setActiveNotification = (
   notification: Notification | null,
   expiry?: number,
@@ -26,15 +21,10 @@ export const setActiveNotification = (
   expiry,
 })
 
-export const clearActiveNotification: ThunkAction = (dispatch, getState) => {
-  const { active } = getState().notifications
-  if (active) dispatch(removeNotification(active))
-  dispatch({
-    type: SET_ACTIVE_NOTIFICATION,
-    notification: null,
-  })
-  return dispatch(updateNotificationsState)
-}
+const removeNotification = (notif: Notification) => ({
+  type: REMOVE_NOTIFICATION,
+  value: notif,
+})
 
 export const scheduleNotification = (
   notification: Notification,
