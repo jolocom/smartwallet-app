@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import {
+  View,
   ScrollView,
   StyleSheet,
   Switch,
   Text,
   TextInput,
-  View,
+  TouchableOpacity,
 } from 'react-native'
 // @ts-ignore
 import ModalDropdown from 'react-native-modal-dropdown'
-import { Button } from 'react-native-material-ui'
 
 import I18n from '../../../locales/i18n'
 import { Container } from '../../structure'
@@ -30,6 +30,7 @@ import { fontMain } from '../../../styles/typography'
 import { UserReport } from '../../../lib/errors'
 import { EmojiButton } from './emojiButton'
 import { DropdownIcon } from '../../../resources'
+import LinearGradient from 'react-native-linear-gradient'
 
 const greyBorderStyle = {
   //backgroundColor: sandLight006,
@@ -128,7 +129,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     maxWidth: '100%',
     height: 56,
-    backgroundColor: purpleMain,
   },
   buttonText: {
     ...defaultText,
@@ -291,15 +291,28 @@ export const ErrorReportingComponent = (props: Props) => {
             ))}
           </View>
         </View>
-        <Button
-          text={I18n.t(strings.SUBMIT_REPORT)}
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          activeOpacity={0.8}
           onPress={() => onSubmit(userReport)}
-          upperCase={false}
-          style={{
-            container: styles.buttonContainer,
-            text: styles.buttonText,
-          }}
-        />
+        >
+          <LinearGradient
+            colors={['rgb(145, 25, 66)', 'rgb(210, 45, 105)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{
+              borderRadius: 8,
+              width: '100%',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {I18n.t(strings.SUBMIT_REPORT)}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </ScrollView>
     </Container>
   )
