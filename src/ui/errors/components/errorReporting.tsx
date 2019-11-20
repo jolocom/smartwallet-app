@@ -3,7 +3,6 @@ import { Container } from '../../structure'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
-import { debug } from '../../../styles/presets'
 import ModalDropdown from 'react-native-modal-dropdown'
 import {
   overflowBlack,
@@ -18,6 +17,7 @@ import { Button } from 'react-native-material-ui'
 import { fontMain } from '../../../styles/typography'
 import { UserReport } from '../../../lib/errors'
 import { EmojiButton } from './emojiButton'
+import { DropdownIcon } from '../../../resources'
 
 const greyBorderStyle = {
   backgroundColor: sandLight006,
@@ -165,7 +165,7 @@ export const ErrorReportingComponent = (props: Props) => {
           </Text>
           <View style={{ marginTop: 20 }}>
             <View style={styles.pickerIconWrapper}>
-              <View style={{ width: 15, height: 15, ...debug }} />
+              <DropdownIcon />
             </View>
             <ModalDropdown
               options={issueList}
