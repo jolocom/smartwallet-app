@@ -25,16 +25,16 @@ export const notificationsReducer = (
 ): NotificationsState => {
   switch (action.type) {
     case SCHEDULE_NOTIFICATION:
-      return { ...state, queue: [...state.queue, action.value] }
+      return { ...state, queue: [...state.queue, action.notification] }
     case REMOVE_NOTIFICATION:
       // remove it from the queue
       const queue = reject(
-        notification => notification.id === action.value.id,
+        notification => notification.id === action.notification.id,
         state.queue,
       )
       // if it is the active notification, then mark it expired
       let { active, activeExpiryTs } = state
-      if (active && active.id == action.value.id) {
+      if (active && active.id == action.notification.id) {
         active = null
         activeExpiryTs = 0
       }

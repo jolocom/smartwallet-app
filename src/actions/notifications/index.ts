@@ -26,17 +26,17 @@ export const scheduleNotification = (
 ): ThunkAction => dispatch => {
   dispatch({
     type: SCHEDULE_NOTIFICATION,
-    value: notification,
+    notification,
   })
   return dispatch(updateNotificationsState)
 }
 
 export const removeNotification = (
-  notif: Notification,
+  notification: Notification,
 ): ThunkAction => dispatch => {
   dispatch({
     type: REMOVE_NOTIFICATION,
-    value: notif,
+    notification,
   })
   return dispatch(updateNotificationsState)
 }
