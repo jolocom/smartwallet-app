@@ -1,26 +1,39 @@
 import React, { useState } from 'react'
-import { Container } from '../../structure'
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import I18n from '../../../locales/i18n'
-import strings from '../../../locales/strings'
-import ModalDropdown from 'react-native-modal-dropdown'
 import {
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from 'react-native'
+// @ts-ignore
+import ModalDropdown from 'react-native-modal-dropdown'
+import { Button } from 'react-native-material-ui'
+
+import I18n from '../../../locales/i18n'
+import { Container } from '../../structure'
+import strings from '../../../locales/strings'
+import {
+  baseBlack,
+  black040,
+  darkGrey,
   overflowBlack,
   purpleMain,
-  sandLight006,
   sandLight080,
   white,
   white021,
   white040,
+  white050,
 } from '../../../styles/colors'
-import { Button } from 'react-native-material-ui'
 import { fontMain } from '../../../styles/typography'
 import { UserReport } from '../../../lib/errors'
 import { EmojiButton } from './emojiButton'
 import { DropdownIcon } from '../../../resources'
 
 const greyBorderStyle = {
-  backgroundColor: sandLight006,
+  //backgroundColor: sandLight006,
+  backgroundColor: black040,
   borderColor: white021,
   borderWidth: 1,
   borderRadius: 8,
@@ -34,7 +47,7 @@ const defaultText = {
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: overflowBlack,
+    backgroundColor: baseBlack,
     justifyContent: 'flex-start',
   },
   sectionWrapper: {
@@ -50,8 +63,9 @@ const styles = StyleSheet.create({
   },
   sectionDescription: {
     ...defaultText,
-    marginTop: 20,
     fontSize: 16,
+    letterSpacing: 0.11,
+    lineHeight: 20,
   },
   pickerWrapper: {
     ...greyBorderStyle,
@@ -139,6 +153,7 @@ export const ErrorReportingComponent = (props: Props) => {
   const [pickedIssue, setIssue] = useState<string>()
   const [description, setDescription] = useState<string>('')
   const [contact, setContact] = useState<string>('')
+  const [logToggle, setToggle] = useState<boolean>(false)
 
   const emojiList = ['💩', '😘', '🤦‍♀', '👿']
   const issueList = [
@@ -196,7 +211,7 @@ export const ErrorReportingComponent = (props: Props) => {
           <Text style={styles.sectionTitle}>
             {I18n.t(strings.CAN_YOU_BE_MORE_SPECIFIC)}
           </Text>
-          <Text style={styles.sectionDescription}>
+          <Text style={{ ...styles.sectionDescription, marginTop: 16 }}>
             {I18n.t(
               strings.IF_THE_PROBLEM_IS_NOT_LISTED_THIS_IS_THE_BEST_PLACE_TO_DESCRIBE_IT,
             )}
@@ -210,6 +225,45 @@ export const ErrorReportingComponent = (props: Props) => {
             multiline={true}
             placeholder={I18n.t(strings.TAP_TO_WRITE)}
           />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 20,
+            }}
+          >
+            <View
+              style={{
+                width: 70,
+                height: 'auto',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}
+            >
+              <Switch
+                value={logToggle}
+                trackColor={{
+                  false: darkGrey,
+                  true: darkGrey,
+                }}
+                thumbTintColor={logToggle ? purpleMain : 'rgb(12, 12, 12)'}
+                onValueChange={value => setToggle(value)}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.sectionDescription}>Include your logs</Text>
+              <Text
+                style={{
+                  ...styles.sectionDescription,
+                  color: white050,
+                  marginTop: 4,
+                }}
+              >
+                This includes some private metadata info (file sizes, but not
+                names or contents) but it will help developers fix bugs more
+                quickly.
+              </Text>
+            </View>
+          </View>
         </View>
         <View style={styles.sectionWrapper}>
           <Text style={styles.sectionTitle}>
@@ -221,7 +275,7 @@ export const ErrorReportingComponent = (props: Props) => {
             placeholderTextColor={white040}
             style={styles.inputLine}
           />
-          <Text style={styles.sectionDescription}>
+          <Text style={{ ...styles.sectionDescription, marginTop: 12 }}>
             {I18n.t(
               strings.WE_DO_NOT_STORE_ANY_DATA_AND_DO_NOT_SPAM_ANY_USER_INFORMATION_WILL_BE_DELETED_IMMEDIATELY_AFTER_SOLVING_THE_PROBLEM,
             )}

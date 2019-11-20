@@ -9,6 +9,7 @@ export const black010 = 'rgba(0, 0, 0, 0.1)'
 export const black030 = 'rgba(0, 0, 0, 0.3)'
 export const black040 = 'rgba(0, 0, 0, 0.4)'
 export const overflowBlack = 'rgb(11, 3, 13)'
+export const baseBlack = 'rgb(33, 30, 34)'
 export const white = 'white' // rgb(255, 255, 255)
 export const white021 = 'rgba(255, 255, 255, 0.21)'
 export const white050 = 'rgba(255, 255, 255, 0.5)'
@@ -35,6 +36,7 @@ export const lightGrey = 'rgb(236, 236, 236)'
 export const greyLighter = 'rgb(155, 155, 158)'
 export const greyLight = 'rgb(149, 149, 149)'
 export const grey = 'grey' // rgb(128, 128, 128)
+export const darkGrey = 'rgb(55, 53, 55)'
 export const golden = 'rgb(241, 161, 7)'
 
 export const greenMain = 'rgb(40, 165, 45)'

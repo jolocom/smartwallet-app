@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react-native'
 import VersionNumber from 'react-native-version-number'
-import { sentry_dsn } from 'src/config'
+import { sentryDSN } from 'src/config'
 import { routeList } from '../routeList'
 import strings from '../locales/strings'
 import ErrorCode from './errorCodes'
@@ -27,7 +27,7 @@ export const errorTitleMessages = [strings.DAMN, strings.OH_NO, strings.UH_OH]
 
 export function initErrorReporting() {
   Sentry.init({
-    dsn: sentry_dsn,
+    dsn: sentryDSN,
     release: `${VersionNumber.bundleIdentifier}@${VersionNumber.appVersion}`,
 
     // disable automatic reporting of errors/rejections without user consent

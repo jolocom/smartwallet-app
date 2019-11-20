@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, Text } from 'react-native'
-import { black, white } from '../../../styles/colors'
+import { black, sandLight006, white } from '../../../styles/colors'
 
 const styles = StyleSheet.create({
   emojiButton: {
@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: sandLight006,
   },
   emoji: {
     fontSize: 23,
