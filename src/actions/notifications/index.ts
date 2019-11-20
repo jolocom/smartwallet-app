@@ -21,17 +21,22 @@ export const setActiveNotification = (
   expiry,
 })
 
-const removeNotification = (notif: Notification) => ({
-  type: REMOVE_NOTIFICATION,
-  value: notif,
-})
-
 export const scheduleNotification = (
   notification: Notification,
 ): ThunkAction => dispatch => {
   dispatch({
     type: SCHEDULE_NOTIFICATION,
     value: notification,
+  })
+  return dispatch(updateNotificationsState)
+}
+
+export const removeNotification = (
+  notif: Notification,
+): ThunkAction => dispatch => {
+  dispatch({
+    type: REMOVE_NOTIFICATION,
+    value: notif,
   })
   return dispatch(updateNotificationsState)
 }
@@ -52,45 +57,70 @@ export const infoNotification = (info: NotificationMessage): Notification => ({
   handleDismiss: removeNotification,
 })
 
-// NOTE: these are internal to the notifications action system on purpose
-// they should not be exported
+/**
+ * NOTE
+ * These are internal to the notifications action system on purpose
+ * to reduce complexity on consumer side. They should not be exported.
+ *
+ * In a perfect case scenario, we should never need to manually call for an
+ * update action.
+ */
+
 let nextUpdateTimeout: ReturnType<typeof setTimeout> | null = null
-const updateNotificationsState: ThunkAction = (dispatch, getState) => {
+let updateInProgress = false
+// ThunkActions must always return an AnyAction, unless they are async
+// This is async just so it can some times return nothing (when there is another
+// update already running, as a side-effect of some change), to avoid recursion.
+const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
+  if (updateInProgress) return
+  updateInProgress = true
+  let ret
+
   const curTs = Date.now()
-  const { queue, active, activeExpiryTs } = getState().notifications
+  const { active, activeExpiryTs } = getState().notifications
   const isActiveExpired = !active || (active.dismissible && activeExpiryTs && (curTs >= activeExpiryTs))
   const isActiveSticky = active && !active.dismissible
 
-  let next = null,
-    expiry
+  let next = null, nextExpiry
 
   // unqueue the active notification if it is expired
   if (isActiveExpired && active) dispatch(removeNotification(active))
 
   // we only attempt to find a next notification if the active one is
   // expired or sticky (non-dismissible)
-  if ((isActiveExpired || isActiveSticky) && queue.length) {
-    // find the next dissmissible notification, or otherwise take the first in
-    // queue. Note that this means we do not support showing two non-dismissible
-    // notifications
-    const idx = queue.findIndex(notification => notification.dismissible)
-    next = queue[idx > -1 ? idx : 0]
-  }
-
-  if (next && next.dismissible && next.autoDismissMs) {
-    if (nextUpdateTimeout) {
-      // this should normally never be the case.... but
-      clearTimeout(nextUpdateTimeout)
+  if (isActiveExpired || isActiveSticky) {
+    const { queue } = getState().notifications
+    if (queue.length) {
+      // find the next dissmissible notification, or otherwise take the first in
+      // queue. Note that this means we do not support showing two non-dismissible
+      // notifications
+      const idx = queue.findIndex(notification => notification.dismissible)
+      next = queue[idx > -1 ? idx : 0]
     }
-
-    nextUpdateTimeout = setTimeout(() => {
-      nextUpdateTimeout = null
-      dispatch(updateNotificationsState)
-      // +5 for good taste
-    }, next.autoDismissMs + 5)
-
-    expiry = curTs + next.autoDismissMs
+  } else if (active) {
+    // active notification should not be changed
+    next = active
   }
 
-  return dispatch(setActiveNotification(next, expiry))
+  // if there's a next and it is not the already active notification
+  if (next && next != active) {
+    // if next should be automatically dismissed, setup a timeout for it
+    if (next.dismissible && next.autoDismissMs) {
+      if (nextUpdateTimeout) {
+        // this should normally never be the case.... but
+        clearTimeout(nextUpdateTimeout)
+      }
+      nextUpdateTimeout = setTimeout(() => {
+        nextUpdateTimeout = null
+        dispatch(updateNotificationsState)
+        // +5 for good taste
+      }, next.autoDismissMs + 5)
+
+      nextExpiry = curTs + next.autoDismissMs
+    }
+    ret = dispatch(setActiveNotification(next, nextExpiry))
+  }
+
+  updateInProgress = false
+  return ret
 }
