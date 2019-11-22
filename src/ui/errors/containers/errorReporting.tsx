@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import {
-  AppError,
-  reportError,
-} from '../../../lib/errors'
+import { AppError, reportError } from '../../../lib/errors'
 import { ThunkDispatch } from '../../../store'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
 import { Container } from '../../structure'
-import { styles } from '../components/styles'
+import { styles } from '../styles'
 import { ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
 import { DescriptionSection } from '../components/descriptionSection'
@@ -91,7 +88,7 @@ const ErrorReportingContainer = (props: Props) => {
           onPress={onSubmitReport}
           containerStyle={{
             marginTop: 45,
-            marginBottom: 36,
+            marginBottom: 66,
           }}
           text={I18n.t(strings.SUBMIT_REPORT)}
         />

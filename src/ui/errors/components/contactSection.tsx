@@ -1,5 +1,5 @@
 import { Text, TextInput, View } from 'react-native'
-import { styles } from './styles'
+import { styles } from '../styles'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import React from 'react'

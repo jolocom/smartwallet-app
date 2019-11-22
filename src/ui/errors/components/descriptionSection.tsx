@@ -1,5 +1,5 @@
 import { Text, TextInput, View } from 'react-native'
-import { styles } from './styles'
+import { styles } from '../styles'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { ToggleSwitch } from '../../structure/toggleSwitch'
@@ -63,6 +63,7 @@ export const DescriptionSection = (props: Props) => {
               styles.gradientOnEnd.color,
             ]}
             offGradient={[styles.gradientOff.color, styles.gradientOff.color]}
+            trackColor={styles.trackColor.color}
           />
         </View>
         <View style={{ flex: 1 }}>

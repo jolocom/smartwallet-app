@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import { darkGrey } from '../../styles/colors'
 
 const styles = StyleSheet.create({
   track: {
@@ -8,7 +9,14 @@ const styles = StyleSheet.create({
     width: 45,
     height: 30,
     borderRadius: 45,
-    backgroundColor: 'rgb(55, 53, 55)',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2.5,
+    elevation: 2,
   },
   toggle: {
     alignItems: 'center',
@@ -18,14 +26,6 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.5,
-    elevation: 3,
   },
   gradientWrapper: {
     width: '100%',
@@ -40,10 +40,18 @@ interface Props {
   onToggle: () => void
   onGradient?: string[]
   offGradient?: string[]
+  trackColor: string
 }
 
 export const ToggleSwitch = (props: Props) => {
-  const { defaultState, onToggle, value, onGradient, offGradient } = props
+  const {
+    defaultState,
+    onToggle,
+    value,
+    onGradient,
+    offGradient,
+    trackColor,
+  } = props
 
   const onGradientColors = onGradient || [
     'rgb(145, 25, 66)',
@@ -53,6 +61,7 @@ export const ToggleSwitch = (props: Props) => {
     'rgb(12, 12, 12)',
     'rgb(12, 12, 12)',
   ]
+  const trackBackgroundColor = trackColor || darkGrey
 
   const offPosition = 2
   const onPosition = 17
@@ -79,7 +88,7 @@ export const ToggleSwitch = (props: Props) => {
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.8}
-      style={styles.track}
+      style={{ ...styles.track, backgroundColor: trackBackgroundColor }}
     >
       <Animated.View
         style={{

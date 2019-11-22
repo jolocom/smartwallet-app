@@ -61,3 +61,10 @@ export const validTextValid = greenMain
 export const navHeaderTintDefault = isAndroid ? white : black
 export const navHeaderBgDefault = isAndroid ? black : lightGreyLighter
 export const bottomTabBarBg = isAndroid ? lightGreyLightest : blackMain
+
+// INTERMEDIATE VERSION COLORS
+export const iBackgroundWhite = 'rgb(245, 245, 245)'
+export const iTextBlack = 'rgb(48, 48, 48)'
+export const iGrey = 'rgb(224, 224, 224)'
+export const iLightGrey = 'rgb(208, 208, 208)'
+export const iJoloColor = 'rgb(149, 46, 83)'

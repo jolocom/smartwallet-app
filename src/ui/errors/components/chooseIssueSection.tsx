@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { styles } from './styles'
+import { styles } from '../styles'
 import strings from '../../../locales/strings'
 import { DropdownIcon } from '../../../resources'
 import ModalDropdown from 'react-native-modal-dropdown'
@@ -35,7 +35,7 @@ export const ChooseIssueSection = (props: Props) => {
   ]
 
   return (
-    <View style={styles.sectionWrapper}>
+    <View style={{ ...styles.sectionWrapper, marginTop: 35 }}>
       <Text style={styles.sectionTitle}>
         {I18n.t(strings.CHOOSE_THE_ISSUE)}
       </Text>
@@ -63,14 +63,14 @@ export const ChooseIssueSection = (props: Props) => {
             ...styles.inputText,
             ...(!pickedIssue ? styles.unselectedText : styles.defaultText),
           }}
-          defaultValue={I18n.t(strings.CHOOSE_RELATED)}
-          renderSeparator={() => null}
           dropdownTextHighlightStyle={styles.selectedText}
           dropdownStyle={styles.pickerDropDown}
           dropdownTextStyle={{
             ...styles.inputText,
             ...styles.pickerDropdownText,
           }}
+          defaultValue={I18n.t(strings.CHOOSE_RELATED)}
+          renderSeparator={() => null}
           adjustFrame={(position: PositionStyle) => ({
             left: 20,
             right: 20,
