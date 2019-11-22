@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import {
   View,
   ScrollView,
-  StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -14,133 +12,34 @@ import ModalDropdown from 'react-native-modal-dropdown'
 import I18n from '../../../locales/i18n'
 import { Container } from '../../structure'
 import strings from '../../../locales/strings'
-import {
-  baseBlack,
-  black040,
-  darkGrey,
-  overflowBlack,
-  purpleMain,
-  sandLight080,
-  white,
-  white021,
-  white040,
-  white050,
-} from '../../../styles/colors'
-import { fontMain } from '../../../styles/typography'
+import { joloColor, white, white021, white050 } from '../../../styles/colors'
 import { UserReport } from '../../../lib/errors'
 import { EmojiButton } from './emojiButton'
 import { DropdownIcon } from '../../../resources'
 import LinearGradient from 'react-native-linear-gradient'
-
-const greyBorderStyle = {
-  //backgroundColor: sandLight006,
-  backgroundColor: black040,
-  borderColor: white021,
-  borderWidth: 1,
-  borderRadius: 8,
-}
-
-const defaultText = {
-  fontFamily: fontMain,
-  fontSize: 20,
-  color: white,
-}
-
-const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: baseBlack,
-    justifyContent: 'flex-start',
-  },
-  sectionWrapper: {
-    width: '100%',
-    height: 'auto',
-    paddingHorizontal: 20,
-    marginTop: 50,
-  },
-  sectionTitle: {
-    fontFamily: fontMain,
-    color: sandLight080,
-    fontSize: 28,
-  },
-  sectionDescription: {
-    ...defaultText,
-    fontSize: 16,
-    letterSpacing: 0.11,
-    lineHeight: 20,
-  },
-  pickerWrapper: {
-    ...greyBorderStyle,
-    paddingLeft: 10,
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-  },
-  pickerIconWrapper: {
-    position: 'absolute',
-    width: 50,
-    height: 50,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pickerDropDown: {
-    ...greyBorderStyle,
-    backgroundColor: overflowBlack,
-  },
-  inputText: {
-    ...defaultText,
-    padding: 10,
-  },
-  inputBlock: {
-    ...greyBorderStyle,
-    ...defaultText,
-    height: 90,
-    maxWidth: '100%',
-    marginTop: 16,
-    paddingHorizontal: 20,
-    paddingTop: 13,
-    flexWrap: 'wrap',
-  },
-  inputLine: {
-    ...defaultText,
-    width: '100%',
-    borderBottomColor: white,
-    borderBottomWidth: 1,
-    marginTop: 28,
-  },
-  emojiWrapper: {
-    maxWidth: '100%',
-    height: 'auto',
-    marginTop: 27,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  emojiButton: {
-    width: 60,
-    height: 60,
-    borderWidth: 1,
-    borderColor: white,
-    borderRadius: 50,
-  },
-  buttonContainer: {
-    borderRadius: 8,
-    marginTop: 45,
-    marginBottom: 36,
-    marginHorizontal: 20,
-    maxWidth: '100%',
-    height: 56,
-  },
-  buttonText: {
-    ...defaultText,
-    fontWeight: 'normal',
-  },
-})
+import { ToggleSwitch } from '../../generic/toggleSwitch'
+import { styles } from './styles'
 
 interface PositionStyle {
   left?: number
   right?: number
   width?: number
   top?: number
+}
+
+enum Inputs {
+  None,
+  Dropdown,
+  Description,
+  Contact,
+}
+
+enum Emoji {
+  Empty = '',
+  Shit = '💩',
+  Kiss = '😘',
+  Facepalm = '🤦‍♀',
+  Devil = '👿',
 }
 
 interface Props {
@@ -153,9 +52,11 @@ export const ErrorReportingComponent = (props: Props) => {
   const [pickedIssue, setIssue] = useState<string>()
   const [description, setDescription] = useState<string>('')
   const [contact, setContact] = useState<string>('')
-  const [logToggle, setToggle] = useState<boolean>(false)
+  const [currentInput, setInput] = useState<Inputs>(Inputs.None)
+  const [toggleState, setToggle] = useState<boolean>(false)
+  const [selectedEmoji, setEmoji] = useState<Emoji>(Emoji.Empty)
 
-  const emojiList = ['💩', '😘', '🤦‍♀', '👿']
+  const emojiList = [Emoji.Shit, Emoji.Kiss, Emoji.Facepalm, Emoji.Devil]
   const issueList = [
     'No internet connection',
     'A random crash',
@@ -180,30 +81,54 @@ export const ErrorReportingComponent = (props: Props) => {
           </Text>
           <View style={{ marginTop: 20 }}>
             <View style={styles.pickerIconWrapper}>
-              <DropdownIcon />
+              <DropdownIcon
+                style={{
+                  zIndex: 2,
+                  transform:
+                    currentInput === Inputs.Dropdown
+                      ? [{ rotate: '180deg' }]
+                      : [{ rotate: '360deg' }],
+                }}
+              />
             </View>
             <ModalDropdown
               options={issueList}
-              style={styles.pickerWrapper}
-              textStyle={styles.inputText}
+              style={{
+                ...styles.pickerWrapper,
+                borderColor:
+                  currentInput === Inputs.Dropdown ? joloColor : white021,
+              }}
+              textStyle={{
+                ...styles.inputText,
+                color: !pickedIssue ? white050 : white,
+              }}
               defaultValue={I18n.t(strings.CHOOSE_RELATED)}
               renderSeparator={() => null}
-              dropdownTextHighlightStyle={{ color: purpleMain }}
-              animated={true}
+              dropdownTextHighlightStyle={{ color: joloColor }}
               dropdownStyle={styles.pickerDropDown}
               dropdownTextStyle={{
                 ...styles.inputText,
                 backgroundColor: 'transparent',
                 paddingLeft: 20,
-                height: 50,
+                height: 46,
               }}
               adjustFrame={(position: PositionStyle) => ({
                 left: 20,
                 right: 20,
-                top: position.top && position.top + 20,
+                top: position.top && position.top + 15,
                 height: 'auto',
               })}
-              onSelect={(_index, value) => setIssue(value)}
+              onSelect={(_index, value) => {
+                setIssue(value)
+              }}
+              onDropdownWillShow={() => {
+                setInput(Inputs.Dropdown)
+                return true
+              }}
+              onDropdownWillHide={() => {
+                setInput(Inputs.None)
+                return true
+              }}
             />
           </View>
         </View>
@@ -217,13 +142,19 @@ export const ErrorReportingComponent = (props: Props) => {
             )}
           </Text>
           <TextInput
-            style={styles.inputBlock}
+            style={{
+              ...styles.inputBlock,
+              borderColor:
+                currentInput === Inputs.Description ? joloColor : white021,
+            }}
             onChangeText={text => setDescription(text)}
-            placeholderTextColor={white021}
+            placeholderTextColor={white050}
             numberOfLines={3}
             textAlignVertical={'top'}
             multiline={true}
             placeholder={I18n.t(strings.TAP_TO_WRITE)}
+            onFocus={() => setInput(Inputs.Description)}
+            onBlur={() => setInput(Inputs.None)}
           />
           <View
             style={{
@@ -239,14 +170,10 @@ export const ErrorReportingComponent = (props: Props) => {
                 justifyContent: 'center',
               }}
             >
-              <Switch
-                value={logToggle}
-                trackColor={{
-                  false: darkGrey,
-                  true: darkGrey,
-                }}
-                thumbTintColor={logToggle ? purpleMain : 'rgb(12, 12, 12)'}
-                onValueChange={value => setToggle(value)}
+              <ToggleSwitch
+                value={toggleState}
+                onToggle={() => setToggle(!toggleState)}
+                defaultState={false}
               />
             </View>
             <View style={{ flex: 1 }}>
@@ -272,8 +199,14 @@ export const ErrorReportingComponent = (props: Props) => {
           <TextInput
             onChangeText={text => setContact(text)}
             placeholder={I18n.t(strings.LEAVE_US_YOUR_EMAIL_AND_NUMBER)}
-            placeholderTextColor={white040}
-            style={styles.inputLine}
+            placeholderTextColor={white050}
+            style={{
+              ...styles.inputLine,
+              borderBottomColor:
+                currentInput === Inputs.Contact ? joloColor : white,
+            }}
+            onFocus={() => setInput(Inputs.Contact)}
+            onBlur={() => setInput(Inputs.None)}
           />
           <Text style={{ ...styles.sectionDescription, marginTop: 12 }}>
             {I18n.t(
@@ -287,7 +220,11 @@ export const ErrorReportingComponent = (props: Props) => {
           </Text>
           <View style={styles.emojiWrapper}>
             {emojiList.map(emoji => (
-              <EmojiButton emoji={emoji} />
+              <EmojiButton
+                onPress={() => setEmoji(emoji)}
+                selected={selectedEmoji}
+                emoji={emoji}
+              />
             ))}
           </View>
         </View>
