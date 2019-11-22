@@ -50,11 +50,10 @@ export interface UserReport {
 }
 
 interface ErrorReport extends UserReport {
-  error: AppError | Error
+  error: AppError | Error | undefined
 }
 
 export function reportError(report: ErrorReport) {
-  console.log(report)
   Sentry.withScope(scope => {
     if (report.error instanceof AppError && report.error.origError) {
       scope.setExtras({

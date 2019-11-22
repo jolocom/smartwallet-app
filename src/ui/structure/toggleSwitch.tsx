@@ -27,19 +27,32 @@ const styles = StyleSheet.create({
     shadowRadius: 2.5,
     elevation: 3,
   },
+  gradientWrapper: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 13,
+  },
 })
 
 interface Props {
   value: boolean
   defaultState: boolean
   onToggle: () => void
+  onGradient?: string[]
+  offGradient?: string[]
 }
 
 export const ToggleSwitch = (props: Props) => {
-  const { defaultState, onToggle, value } = props
+  const { defaultState, onToggle, value, onGradient, offGradient } = props
 
-  const onGradient = ['rgb(145, 25, 66)', 'rgb(210, 45, 105)']
-  const offGradient = ['rgb(12, 12, 12)', 'rgb(12, 12, 12)']
+  const onGradientColors = onGradient || [
+    'rgb(145, 25, 66)',
+    'rgb(210, 45, 105)',
+  ]
+  const offGradientColors = offGradient || [
+    'rgb(12, 12, 12)',
+    'rgb(12, 12, 12)',
+  ]
 
   const offPosition = 2
   const onPosition = 17
@@ -75,11 +88,11 @@ export const ToggleSwitch = (props: Props) => {
         }}
       >
         <LinearGradient
-          style={{ width: '100%', height: '100%', borderRadius: 13 }}
+          style={styles.gradientWrapper}
           locations={[0, 6]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          colors={propValue ? onGradient : offGradient}
+          colors={propValue ? onGradientColors : offGradientColors}
         />
       </Animated.View>
     </TouchableOpacity>
