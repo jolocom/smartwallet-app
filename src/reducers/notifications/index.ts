@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux'
 import { reject } from 'ramda'
-import { Notification } from './types'
+import { Notification } from 'src/lib/notifications'
 
 export const SCHEDULE_NOTIFICATION = 'SCHEDULE_NOTIFICATION'
 export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION'

@@ -1,16 +1,12 @@
-import { randomBytes } from 'crypto'
 import { ThunkAction } from 'src/store'
+import { Notification } from 'src/lib/notifications'
 import {
   CLEAR_NOTIFICATIONS,
   REMOVE_NOTIFICATION,
   SET_ACTIVE_NOTIFICATION,
   SCHEDULE_NOTIFICATION,
 } from 'src/reducers/notifications'
-import {
-  Notification,
-  NotificationMessage,
-  NotificationType,
-} from 'src/reducers/notifications/types'
+
 
 export const setActiveNotification = (
   notification: Notification | null,
@@ -46,16 +42,6 @@ export const clearAllNotifications = (): ThunkAction => dispatch => {
   return dispatch(updateNotificationsState)
 }
 
-export const infoNotification = (info: NotificationMessage): Notification => ({
-  id: randomBytes(4).toString('hex'), // TODO abstract
-  type: NotificationType.info,
-  title: info.title,
-  message: info.message,
-  dismissible: true,
-  autoDismissMs: 3000,
-  handleConfirm: removeNotification,
-  handleDismiss: removeNotification,
-})
 
 /**
  * NOTE
