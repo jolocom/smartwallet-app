@@ -7,28 +7,27 @@ interface NotificationMessage {
 }
 
 /**
- * A notification is either dismissible, with an optional delay and onDismiss
- * callback, or isn't dismissible
+ * A notification is either dismissible or not
+ * if it is dismissible it can also optionally have
+ * - a label (for the dismiss button)
+ * - a timeout (to auto-dismiss)
+ * - a callback
  */
 
-type NotificationDismissal =
-  | {
-      dismissible: true
-      autoDismissMs?: number
-      onDismiss?: (...args: any) => void
-    }
-  | {
-      dismissible?: false
-      autoDismissMs?: never
-      onDismiss?: never
-    }
+type NotificationDismiss = {
+  dismiss?: boolean | {
+    label?: string,
+    timeout?: number,
+    onDismiss?: (...args: any) => void
+  },
+}
 
 /**
  * A notification may have a call to action button,
  * with a label and an onInteract callback
  */
-type NotificationInteraction = {
-  callToAction?: {
+type NotificationInteract = {
+  interact?: {
     label: string
     onInteract: (...args: any) => void | boolean | Promise<void | boolean>
   }
@@ -49,36 +48,27 @@ type NotificationPayload =
       error: AppError
     }
 
-interface BaseNotification {
+interface NotificationBase {
   id: string
   type: NotificationType
 }
 
-type PartialNotification = Partial<BaseNotification> &
-  NotificationInteraction &
-  NotificationDismissal
+type PartialNotification = Partial<NotificationBase> &
+  NotificationInteract &
+  NotificationDismiss
 
 const createNotificationFactory = (
-  template: PartialNotification & Omit<BaseNotification, 'id'>,
-) => {
-  return (
-    overrides: PartialNotification & NotificationMessage,
-  ): Notification => {
-    const notif: Notification = {
-      id: randomBytes(4).toString('hex'), // TODO abstract
-      ...(template as Notification),
-      ...overrides,
-    } as Notification
+  template: PartialNotification & Omit<NotificationBase, 'id'>,
+) => (overrides: PartialNotification & NotificationMessage): Notification =>
+  ({
+    id: randomBytes(4).toString('hex'), // TODO abstract
+    ...(template as Notification),
+    ...overrides,
+  } as Notification)
 
-    if (overrides.autoDismissMs) notif.dismissible = true
-
-    return notif
-  }
-}
-
-export type Notification = BaseNotification &
-  NotificationInteraction &
-  NotificationDismissal &
+export type Notification = NotificationBase &
+  NotificationInteract &
+  NotificationDismiss &
   NotificationPayload
 
 export enum NotificationType {
@@ -89,11 +79,12 @@ export enum NotificationType {
 
 export const createInfoNotification = createNotificationFactory({
   type: NotificationType.info,
-  dismissible: true,
-  autoDismissMs: 3000,
+  dismiss: {
+    timeout: 3000,
+  },
 })
 
 export const createStickyNotification = createNotificationFactory({
   type: NotificationType.info,
-  dismissible: false,
+  dismiss: false,
 })

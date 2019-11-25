@@ -1,10 +1,10 @@
 import { ThunkAction } from 'src/store'
 import { Notification } from 'src/lib/notifications'
 import {
-  CLEAR_NOTIFICATIONS,
-  REMOVE_NOTIFICATION,
   SET_ACTIVE_NOTIFICATION,
   SCHEDULE_NOTIFICATION,
+  REMOVE_NOTIFICATION,
+  CLEAR_NOTIFICATIONS,
 } from 'src/reducers/notifications'
 
 
@@ -37,11 +37,30 @@ export const removeNotification = (
   return dispatch(updateNotificationsState)
 }
 
+export const invokeInteract = (
+  notif: Notification,
+): ThunkAction => async dispatch => {
+  let keepNotification = false
+  const { interact } = notif
+  if (interact && interact.onInteract) {
+    keepNotification = (await interact.onInteract()) === true
+  }
+  if (!keepNotification) return dispatch(removeNotification(notif))
+}
+
+export const invokeDismiss = (
+  notif: Notification,
+): ThunkAction => async dispatch => {
+  const { dismiss } = notif
+  if (dismiss && typeof dismiss === 'object' && dismiss.onDismiss)
+    await dismiss.onDismiss()
+  return dispatch(removeNotification(notif))
+}
+
 export const clearAllNotifications = (): ThunkAction => dispatch => {
   dispatch({ type: CLEAR_NOTIFICATIONS })
   return dispatch(updateNotificationsState)
 }
-
 
 /**
  * NOTE
@@ -64,13 +83,14 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
 
   const curTs = Date.now()
   const { active, activeExpiryTs } = getState().notifications
-  const isActiveExpired = !active || (active.dismissible && activeExpiryTs && (curTs >= activeExpiryTs))
-  const isActiveSticky = active && !active.dismissible
+  const isActiveExpired =
+    !active || (active.dismiss && activeExpiryTs && curTs >= activeExpiryTs)
+  const isActiveSticky = active && !active.dismiss
 
   let next = null, nextExpiry
 
   // unqueue the active notification if it is expired
-  if (isActiveExpired && active) dispatch(removeNotification(active))
+  if (active && isActiveExpired) dispatch(removeNotification(active))
 
   // we only attempt to find a next notification if the active one is
   // expired or sticky (non-dismissible)
@@ -80,7 +100,7 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
       // find the next dissmissible notification, or otherwise take the first in
       // queue. Note that this means we do not support showing two non-dismissible
       // notifications
-      const idx = queue.findIndex(notification => notification.dismissible)
+      const idx = queue.findIndex(notification => !!notification.dismiss)
       next = queue[idx > -1 ? idx : 0]
     }
   } else if (active) {
@@ -91,7 +111,11 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
   // if there's a next and it is not the already active notification
   if (next && next != active) {
     // if next should be automatically dismissed, setup a timeout for it
-    if (next.dismissible && next.autoDismissMs) {
+    if (
+      next.dismiss &&
+      typeof next.dismiss === 'object' &&
+      next.dismiss.timeout
+    ) {
       if (nextUpdateTimeout) {
         // this should normally never be the case.... but
         clearTimeout(nextUpdateTimeout)
@@ -100,9 +124,9 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
         nextUpdateTimeout = null
         dispatch(updateNotificationsState)
         // +5 for good taste
-      }, next.autoDismissMs + 5)
+      }, next.dismiss.timeout + 5)
 
-      nextExpiry = curTs + next.autoDismissMs
+      nextExpiry = curTs + next.dismiss.timeout
     }
     ret = dispatch(setActiveNotification(next, nextExpiry))
   }
