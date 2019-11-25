@@ -132,6 +132,8 @@ export default {
   ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS:
     'Enable access so you can start taking photos and videos',
   ENABLE_CAMERA_ACCESS: 'Enable Camera Access',
+  LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE:
+    "Looks like we can't provide this service",
   START_PROCESS: 'Start Process',
   SEND_ERROR_REPORT: 'Send error report',
   ERROR_REPORT_SENT: 'Error report sent',

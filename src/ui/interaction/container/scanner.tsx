@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppState, AppStateStatus, Platform } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 /* TODO: When using the latest react-native-permissions version, remove this dependency,
@@ -8,14 +8,14 @@ import { appDetailsSettings } from 'react-native-android-open-settings'
 import Permissions, { Status } from 'react-native-permissions'
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
+import { JolocomLib } from 'jolocom-lib'
+import {
+  JSONWebToken,
+  JWTEncodable,
+} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 
 interface Props extends NavigationScreenProps {
-  onScannerSuccess: (jwt: string) => void
-}
-
-interface State {
-  permission: Status
-  isCameraAllowed: boolean
+  onScannerSuccess: (interactionToken: JSONWebToken<JWTEncodable>) => void
 }
 
 const CAMERA_PERMISSION = 'camera'
@@ -27,36 +27,29 @@ enum RESULTS {
 
 const IS_IOS = Platform.OS === 'ios'
 
-export class ScannerContainer extends React.Component<Props, State> {
-  public constructor(props: Props) {
-    super(props)
-    this.state = {
-      permission: RESULTS.AUTHORIZED,
-      isCameraAllowed: false,
-    }
-  }
+export const ScannerContainer = (props: Props) => {
+  const [permission, setPermission] = useState<Status>(RESULTS.AUTHORIZED)
+  const [isCameraAllowed, allowCamera] = useState<boolean>(false)
 
-  public async componentDidMount(): Promise<void> {
-    await this.requestCameraPermission()
-  }
+  useEffect(() => {
+    requestCameraPermission()
+  }, [])
 
-  private requestCameraPermission = async () => {
+  const requestCameraPermission = async () => {
     const permission = await Permissions.request(CAMERA_PERMISSION)
-    this.setState({
-      permission,
-      isCameraAllowed: permission === RESULTS.AUTHORIZED,
-    })
+    setPermission(permission)
+    allowCamera(permission === RESULTS.AUTHORIZED)
   }
 
   /*
    * detect when the focus is back on the app screen after navigating
    * to settings, in order to check if the permissions changed
    */
-  private openSettings = () => {
+  const openSettings = () => {
     const listener = async (state: AppStateStatus) => {
       if (state === 'active') {
         AppState.removeEventListener('change', listener)
-        await this.requestCameraPermission()
+        await requestCameraPermission()
       }
     }
 
@@ -73,28 +66,37 @@ export class ScannerContainer extends React.Component<Props, State> {
     }
   }
 
-  private onEnablePermission = async () => {
+  const onEnablePermission = async () => {
     if (IS_IOS) {
-      this.openSettings()
+      openSettings()
     } else {
-      if (this.state.permission === RESULTS.RESTRICTED) {
-        this.openSettings()
+      if (permission === RESULTS.RESTRICTED) {
+        openSettings()
       } else {
-        await this.requestCameraPermission()
+        await requestCameraPermission()
       }
     }
   }
 
-  public render() {
-    const { onScannerSuccess, navigation } = this.props
-    return this.state.permission === RESULTS.AUTHORIZED ? (
-      <ScannerComponent
-        isCameraAllowed={this.state.isCameraAllowed}
-        onScannerSuccess={onScannerSuccess}
-        navigation={navigation}
-      />
-    ) : (
-      <NoPermissionComponent onPressEnable={this.onEnablePermission} />
-    )
+  const parseJWT = (jwt: string) => {
+    let interactionToken: JSONWebToken<JWTEncodable>
+    try {
+      interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
+    } catch (e) {
+      return false
+    }
+    onScannerSuccess(interactionToken)
+    return true
   }
+
+  const { onScannerSuccess, navigation } = props
+  return permission === RESULTS.AUTHORIZED ? (
+    <ScannerComponent
+      isCameraAllowed={isCameraAllowed}
+      parseJWT={parseJWT}
+      navigation={navigation}
+    />
+  ) : (
+    <NoPermissionComponent onPressEnable={onEnablePermission} />
+  )
 }

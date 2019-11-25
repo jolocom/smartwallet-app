@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import QRScanner, { Event } from 'react-native-qrcode-scanner'
-import { NavigationScreenProps } from 'react-navigation'
+import {
+  NavigationEventSubscription,
+  NavigationScreenProps,
+} from 'react-navigation'
 import { RNCamera } from 'react-native-camera'
 import {
   Dimensions,
@@ -8,6 +11,7 @@ import {
   Text,
   TouchableHighlight,
   View,
+  Animated,
 } from 'react-native'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
@@ -32,7 +36,6 @@ const styles = StyleSheet.create({
     width: MARKER_SIZE,
     borderRadius: 2,
     borderWidth: 2,
-    borderColor: white,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
@@ -88,105 +91,139 @@ const styles = StyleSheet.create({
 })
 
 interface Props extends NavigationScreenProps {
-  onScannerSuccess: (jwt: string) => void
+  parseJWT: (jwt: string) => boolean
   isCameraAllowed: boolean
 }
 
-interface State {
-  isTorch: boolean
-  reRenderKey: number
-  isCameraReady: boolean
-}
+export const ScannerComponent = (props: Props) => {
+  const { parseJWT, navigation, isCameraAllowed } = props
 
-export class ScannerComponent extends React.Component<Props, State> {
-  private scanner!: QRScanner
-  private removeFocusListener: (() => void) | undefined
+  const [isTorch, setTorch] = useState<boolean>(false)
+  const [reRenderKey, setRenderKey] = useState<number>(Date.now())
+  const [isCameraReady, setCameraReady] = useState<boolean>(false)
+  const [isError, setError] = useState<boolean>(false)
+  const [colorAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
+  const [textAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
 
-  public constructor(props: Props) {
-    super(props)
-    this.state = {
-      isTorch: false,
-      // NOTE: the key is used to invalidate the previously rendered component as
-      // we need to rerender and remount the camera to ensure it is properly setup
-      reRenderKey: Date.now(),
-      isCameraReady: false,
+  const backgroundColorConfig = colorAnimationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['transparent', 'rgba(243, 198, 28, 0.4)'],
+  })
+
+  const cameraSettings = {
+    key: reRenderKey,
+    captureAudio: false,
+    flashMode: isTorch
+      ? RNCamera.Constants.FlashMode.torch
+      : RNCamera.Constants.FlashMode.off,
+  }
+
+  useEffect(() => {
+    setTimeout(() => setCameraReady(true), 200)
+
+    let focusListener: NavigationEventSubscription
+    if (navigation) {
+      focusListener = navigation.addListener('willFocus', () => {
+        // NOTE: the re-render and the re-mount should only fire during the willFocus event
+        setRenderKey(Date.now())
+      })
+    }
+    return () => focusListener.remove()
+  }, [])
+
+  const onScan = (e: Event) => {
+    const isParsed = parseJWT(e.data)
+    if (!isParsed) {
+      setError(true)
+      Animated.parallel([animateColor(), animateText()]).start(() => {
+        setError(false)
+      })
     }
   }
 
-  public async componentDidMount(): Promise<void> {
-    // NOTE: timeout the rendering of the camera to avoid the screen stuttering
-    setTimeout(() => this.setState({ isCameraReady: true }), 200)
-    if (this.props.navigation) {
-      this.removeFocusListener = this.props.navigation.addListener(
-        'willFocus',
-        () => {
-          if (this.state.isCameraReady) {
-            this.scanner.reactivate()
-            // NOTE: the re-render and the re-mount should only fire during the willFocus event
-            this.setState({ reRenderKey: Date.now() })
-          }
-        },
-      ).remove
-    }
-  }
+  const animateColor = () =>
+    Animated.sequence([
+      Animated.timing(colorAnimationValue, {
+        toValue: 1,
+        duration: 300,
+      }),
+      Animated.timing(colorAnimationValue, {
+        toValue: 0,
+        delay: 400,
+        duration: 300,
+      }),
+    ])
 
-  public componentWillUnmount(): void {
-    if (this.removeFocusListener) this.removeFocusListener()
-  }
+  const animateText = () =>
+    Animated.sequence([
+      Animated.timing(textAnimationValue, {
+        toValue: 1,
+        duration: 200,
+      }),
+      Animated.timing(textAnimationValue, {
+        toValue: 0,
+        delay: 700,
+        duration: 500,
+      }),
+    ])
 
-  private onTorchChange = (state: boolean) => {
-    this.setState({
-      isTorch: state,
-    })
-  }
-
-  public render() {
-    const { onScannerSuccess } = this.props
-    const cameraProps = {
-      key: this.state.reRenderKey,
-      captureAudio: false,
-      flashMode: this.state.isTorch
-        ? RNCamera.Constants.FlashMode.torch
-        : RNCamera.Constants.FlashMode.off,
-    }
-
-    return (
-      <React.Fragment>
-        {this.state.isCameraReady && this.props.isCameraAllowed && (
-          <QRScanner
-            //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
-            containerStyle={{ position: 'absolute' }}
-            cameraProps={cameraProps}
-            ref={(ref: QRScanner) => (this.scanner = ref)}
-            fadeIn
-            onRead={(e: Event) => onScannerSuccess(e.data)}
-            //@ts-ignore
-            cameraStyle={StyleSheet.create({ height: SCREEN_HEIGHT })}
-          />
-        )}
-        <View style={styles.topOverlay} />
-        <View style={{ flexDirection: 'row' }}>
-          <View style={styles.horizontalOverlay} />
-          <View style={styles.rectangle} />
-          <View style={styles.horizontalOverlay} />
-        </View>
-        <View style={styles.bottomOverlay}>
+  return (
+    <React.Fragment>
+      {isCameraReady && isCameraAllowed && (
+        <QRScanner
+          //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
+          containerStyle={{ position: 'absolute' }}
+          cameraProps={cameraSettings}
+          reactivate={true}
+          reactivateTimeout={3000}
+          fadeIn
+          onRead={onScan}
+          //@ts-ignore
+          cameraStyle={StyleSheet.create({ height: SCREEN_HEIGHT })}
+        />
+      )}
+      <View style={styles.topOverlay} />
+      <View style={{ flexDirection: 'row' }}>
+        <View style={styles.horizontalOverlay} />
+        <Animated.View
+          style={[
+            styles.rectangle,
+            {
+              backgroundColor: backgroundColorConfig,
+              borderColor: isError ? 'rgb(243, 198, 28)' : white,
+            },
+          ]}
+        />
+        <View style={styles.horizontalOverlay} />
+      </View>
+      <View style={styles.bottomOverlay}>
+        {isError ? (
+          <Animated.Text
+            style={[
+              { ...styles.descriptionText, color: 'rgb(243, 198, 28)' },
+              { opacity: textAnimationValue },
+            ]}
+          >
+            {I18n.t(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)}
+          </Animated.Text>
+        ) : (
           <Text style={styles.descriptionText}>
             {I18n.t(
               strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE,
             )}
           </Text>
-          <TouchableHighlight
-            onPressIn={() => this.onTorchChange(true)}
-            onPressOut={() => this.onTorchChange(false)}
-            activeOpacity={1}
-            underlayColor={'transparent'}
-            style={styles.torch}
-          >
-            {this.state.isTorch ? <TorchOnIcon /> : <TorchOffIcon />}
-          </TouchableHighlight>
-        </View>
-      </React.Fragment>
-    )
-  }
+        )}
+        <TouchableHighlight
+          onPressIn={() => setTorch(true)}
+          onPressOut={() => setTorch(false)}
+          activeOpacity={1}
+          underlayColor={'transparent'}
+          style={styles.torch}
+        >
+          {isTorch ? <TorchOnIcon /> : <TorchOffIcon />}
+        </TouchableHighlight>
+      </View>
+    </React.Fragment>
+  )
 }
+
