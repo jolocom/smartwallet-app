@@ -155,7 +155,23 @@ const finalStyles = StyleSheet.create({
     fontSize: 23,
     color: Colors.black,
   },
-
+  navigationWrapper: {
+    width: '100%',
+    height: 50,
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  navigationButton: {
+    height: 40,
+    paddingHorizontal: BP({
+      small: 16,
+      medium: 20,
+      large: 20,
+    }),
+    justifyContent: 'center',
+  },
   // NOTE inline colors for switching between the intermediate and final versions
   highlightBorder: {
     borderColor: Colors.joloColor,
@@ -311,6 +327,23 @@ const intermediateStyles = StyleSheet.create({
   emoji: {
     fontSize: 23,
     color: Colors.black,
+  },
+  navigationWrapper: {
+    width: '100%',
+    height: 50,
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  navigationButton: {
+    height: 40,
+    paddingHorizontal: BP({
+      small: 16,
+      medium: 20,
+      large: 20,
+    }),
+    justifyContent: 'center',
   },
 
   // NOTE inline colors for switching between the intermediate and final versions

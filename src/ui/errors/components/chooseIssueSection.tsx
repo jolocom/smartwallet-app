@@ -6,6 +6,8 @@ import { DropdownIcon } from '../../../resources'
 import ModalDropdown from 'react-native-modal-dropdown'
 import { Inputs } from '../containers/errorReporting'
 import I18n from 'src/locales/i18n'
+import { isFinalStyle } from '../../../styles/config'
+import SvgDropdownIconBlack from '../../../resources/svg/DropdownIconBlack'
 
 interface PositionStyle {
   left?: number
@@ -38,15 +40,27 @@ export const ChooseIssueSection = (props: Props) => {
     <React.Fragment>
       <View style={{ marginTop: 20 }}>
         <View style={styles.pickerIconWrapper}>
-          <DropdownIcon
-            style={{
-              zIndex: 2,
-              transform:
-                currentInput === Inputs.Dropdown
-                  ? [{ rotate: '180deg' }]
-                  : [{ rotate: '360deg' }],
-            }}
-          />
+          {isFinalStyle ? (
+            <DropdownIcon
+              style={{
+                zIndex: 2,
+                transform:
+                  currentInput === Inputs.Dropdown
+                    ? [{ rotate: '180deg' }]
+                    : [{ rotate: '360deg' }],
+              }}
+            />
+          ) : (
+            <SvgDropdownIconBlack
+              style={{
+                zIndex: 2,
+                transform:
+                  currentInput === Inputs.Dropdown
+                    ? [{ rotate: '180deg' }]
+                    : [{ rotate: '360deg' }],
+              }}
+            />
+          )}
         </View>
         <ModalDropdown
           options={issueList}

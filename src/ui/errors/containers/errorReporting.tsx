@@ -8,7 +8,7 @@ import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
 import { Container } from '../../structure'
 import { styles } from '../styles'
-import { Platform, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
 import { DescriptionSection } from '../components/descriptionSection'
 import { ContactSection } from '../components/contactSection'
@@ -16,9 +16,11 @@ import { GradientButton } from '../../structure/gradientButton'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { SectionWrapper } from '../components/sectionWrapper'
-import { BP } from '../../../styles/breakpoints'
+import { NavigationSection } from '../components/navigationSection'
+
 interface PaymentNavigationParams {
-  error: AppError | Error | undefined
+  error?: AppError | Error
+  previousScreen: routeList
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -42,6 +44,23 @@ const ErrorReportingContainer = (props: Props) => {
   const [toggleState, setToggle] = useState<boolean>(false)
   const [selectedEmoji, setEmoji] = useState<Emoji>(Emoji.Empty)
 
+  // NOTE send previous screen as props, since not all
+  // error reports will have error objects
+
+  // const { previousScreen } = navigation.state.params
+  // const isBackButton = previousScreen === routeList.Settings
+  const isBackButton = false
+
+  // NOTE error reports can show up without an error, hence a navigation prop (navigateTo) would be better than in the error object
+  const navigateBack = () => {
+    const { error } = props.navigation.state.params
+    if (error instanceof AppError) {
+      navigateToScreen(error.navigateTo)
+    } else {
+      navigateToScreen(routeList.AppInit)
+    }
+  }
+
   const onSubmitReport = () => {
     const { error } = props.navigation.state.params
 
@@ -53,29 +72,20 @@ const ErrorReportingContainer = (props: Props) => {
 
     if (navigation && error) {
       reportError({ ...userReport, error })
-      if (error instanceof AppError) {
-        navigateToScreen(error.navigateTo)
-      } else {
-        navigateToScreen(routeList.AppInit)
-      }
+      navigateBack()
     }
   }
 
   return (
     <Container style={styles.wrapper}>
+      <NavigationSection
+        onNavigation={navigateBack}
+        isBackButton={isBackButton}
+      />
       <ScrollView>
         <SectionWrapper
           title={I18n.t(strings.CHOOSE_THE_ISSUE)}
-          style={{
-            marginTop: Platform.select({
-              ios: BP({
-                small: 69,
-                medium: 69,
-                large: 79,
-              }),
-              android: 56,
-            }),
-          }}
+          style={{ marginTop: 14 }}
         >
           <ChooseIssueSection
             currentInput={currentInput}
