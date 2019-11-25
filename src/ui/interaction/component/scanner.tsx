@@ -93,14 +93,22 @@ const styles = StyleSheet.create({
 interface Props extends NavigationScreenProps {
   parseJWT: (jwt: string) => boolean
   isCameraAllowed: boolean
+  isCameraReady: boolean
+  isTorchPressed: boolean
+  onPressTorch: (state: boolean) => void
+  reRenderKey: number
 }
 
 export const ScannerComponent = (props: Props) => {
-  const { parseJWT, navigation, isCameraAllowed } = props
+  const {
+    parseJWT,
+    isCameraAllowed,
+    isCameraReady,
+    isTorchPressed,
+    onPressTorch,
+    reRenderKey,
+  } = props
 
-  const [isTorch, setTorch] = useState<boolean>(false)
-  const [reRenderKey, setRenderKey] = useState<number>(Date.now())
-  const [isCameraReady, setCameraReady] = useState<boolean>(false)
   const [isError, setError] = useState<boolean>(false)
   const [colorAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
   const [textAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
@@ -113,27 +121,13 @@ export const ScannerComponent = (props: Props) => {
   const cameraSettings = {
     key: reRenderKey,
     captureAudio: false,
-    flashMode: isTorch
+    flashMode: isTorchPressed
       ? RNCamera.Constants.FlashMode.torch
       : RNCamera.Constants.FlashMode.off,
   }
 
-  useEffect(() => {
-    setTimeout(() => setCameraReady(true), 200)
-
-    let focusListener: NavigationEventSubscription
-    if (navigation) {
-      focusListener = navigation.addListener('willFocus', () => {
-        // NOTE: the re-render and the re-mount should only fire during the willFocus event
-        setRenderKey(Date.now())
-      })
-    }
-    return () => focusListener.remove()
-  }, [])
-
   const onScan = (e: Event) => {
-    const isParsed = parseJWT(e.data)
-    if (!isParsed) {
+    if (!parseJWT(e.data)) {
       setError(true)
       Animated.parallel([animateColor(), animateText()]).start(() => {
         setError(false)
@@ -227,13 +221,13 @@ export const ScannerComponent = (props: Props) => {
           </Text>
         )}
         <TouchableHighlight
-          onPressIn={() => setTorch(true)}
-          onPressOut={() => setTorch(false)}
+          onPressIn={() => onPressTorch(true)}
+          onPressOut={() => onPressTorch(false)}
           activeOpacity={1}
           underlayColor={'transparent'}
           style={styles.torch}
         >
-          {isTorch ? <TorchOnIcon /> : <TorchOffIcon />}
+          {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
         </TouchableHighlight>
       </View>
     </React.Fragment>
