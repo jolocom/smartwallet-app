@@ -13,6 +13,8 @@ export const overflowBlack = 'rgb(11, 3, 13)'
 export const mediumBlack = 'rgb(16, 15, 17)'
 export const baseBlack = 'rgb(33, 30, 34)'
 export const borderGrey = 'rgb(62, 62, 62)'
+export const black065 = 'rgba(0, 0, 0, 0.65)'
+export const greyDark = 'rgb(36, 36, 36)'
 export const white = 'white' // rgb(255, 255, 255)
 export const white021 = 'rgba(255, 255, 255, 0.21)'
 export const white050 = 'rgba(255, 255, 255, 0.5)'
@@ -42,6 +44,8 @@ export const greyLight = 'rgb(149, 149, 149)'
 export const grey = 'grey' // rgb(128, 128, 128)
 export const darkGrey = 'rgb(55, 53, 55)'
 export const golden = 'rgb(241, 161, 7)'
+export const nativeIosBlue = 'rgb(10, 132, 255)'
+export const pink = 'rgb(197, 41, 105)'
 
 export const greenMain = 'rgb(40, 165, 45)'
 export const greenFaded060 = 'rgba(233, 239, 221, 0.6)'

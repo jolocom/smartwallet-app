@@ -19,7 +19,7 @@ export enum routeList {
   Documents = 'Documents',
   Records = 'Records',
   Settings = 'Settings',
-  QRCodeScanner = 'QRCodeScanner',
+  InteractionScreen = 'InteractionScreen',
 
   // Interactions & Details
   CredentialDialog = 'CredentialDialog',

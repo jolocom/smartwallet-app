@@ -152,6 +152,14 @@ export default {
   AUTHORIZE: 'Authorize',
   DENY: 'Deny',
   GO_BACK: 'Go back',
+  ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE:
+    "It's all automatic, just place your phone above the code",
+  SCAN: 'Scan',
+  SCAN_QR: 'Scan QR',
+  ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS:
+    'Enable access so you can start taking photos and videos',
+  ENABLE_CAMERA_ACCESS: 'Enable Camera Access',
+  START_PROCESS: 'Start Process',
   SEND_ERROR_REPORT: 'Send error report',
   ERROR_REPORT_SENT: 'Error report sent',
   YOU_CAN_SCAN_THE_QR_CODE_NOW: 'You can scan the qr code now!',

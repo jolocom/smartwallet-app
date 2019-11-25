@@ -3,6 +3,9 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+
+import com.levelasquez.androidopensettings.AndroidOpenSettingsPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import io.sentry.RNSentryPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
@@ -38,6 +41,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AndroidOpenSettingsPackage(),
+            new AsyncStoragePackage(),
             new RNSentryPackage(),
             new VectorIconsPackage(),
             new RNLocalizePackage(),

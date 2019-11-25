@@ -21,7 +21,7 @@ import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import { Settings } from 'src/ui/settings'
 import I18n from 'src/locales/i18n'
-import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
+import { InteractionScreen } from 'src/ui/interaction/container/interactionScreen'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
 import { AppInit } from './ui/generic/appInit'
@@ -187,9 +187,9 @@ const MainStack = createStackNavigator(
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
-    [routeList.QRCodeScanner]: {
-      screen: QRScannerContainer,
-      navigationOptions: navOptScreenWCancel,
+    [routeList.InteractionScreen]: {
+      screen: InteractionScreen,
+      navigationOptions: noHeaderNavOpts,
     },
 
     [routeList.CredentialDialog]: {
