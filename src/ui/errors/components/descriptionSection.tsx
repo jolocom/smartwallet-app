@@ -26,10 +26,7 @@ export const DescriptionSection = (props: Props) => {
   } = props
 
   return (
-    <View style={styles.sectionWrapper}>
-      <Text style={styles.sectionTitle}>
-        {I18n.t(strings.CAN_YOU_BE_MORE_SPECIFIC)}
-      </Text>
+    <React.Fragment>
       <Text style={{ ...styles.sectionDescription, marginTop: 16 }}>
         {I18n.t(
           strings.IF_THE_PROBLEM_IS_NOT_LISTED_THIS_IS_THE_BEST_PLACE_TO_DESCRIBE_IT,
@@ -57,7 +54,7 @@ export const DescriptionSection = (props: Props) => {
           <ToggleSwitch
             value={toggleState}
             onToggle={() => setToggle(!toggleState)}
-            defaultState={false}
+            initialState={false}
             onGradient={[
               styles.gradientOnStart.color,
               styles.gradientOnEnd.color,
@@ -83,6 +80,6 @@ export const DescriptionSection = (props: Props) => {
           </Text>
         </View>
       </View>
-    </View>
+    </React.Fragment>
   )
 }

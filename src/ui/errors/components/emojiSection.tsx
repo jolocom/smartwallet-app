@@ -1,7 +1,5 @@
 import { Text, View } from 'react-native'
 import { styles } from '../styles'
-import I18n from '../../../locales/i18n'
-import strings from '../../../locales/strings'
 import React from 'react'
 
 interface Props {
@@ -21,8 +19,7 @@ export const EmojiSection = (props: Props) => {
   const { selectedEmoji, setEmoji } = props
   const emojiList = [Emoji.Shit, Emoji.Kiss, Emoji.Facepalm, Emoji.Devil]
   return (
-    <View style={styles.sectionWrapper}>
-      <Text style={styles.sectionTitle}>{I18n.t(strings.SOMETHING_ELSE)}</Text>
+    <React.Fragment>
       <View style={styles.emojiWrapper}>
         {emojiList.map(emoji => (
           <EmojiButton
@@ -32,7 +29,7 @@ export const EmojiSection = (props: Props) => {
           />
         ))}
       </View>
-    </View>
+    </React.Fragment>
   )
 }
 

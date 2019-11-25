@@ -15,6 +15,7 @@ import { ContactSection } from '../components/contactSection'
 import { GradientButton } from '../../structure/gradientButton'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
+import { SectionWrapper } from '../components/sectionWrapper'
 interface PaymentNavigationParams {
   error: AppError | Error | undefined
 }
@@ -48,7 +49,6 @@ const ErrorReportingContainer = (props: Props) => {
       userDescription: description,
       userContact: contact,
     }
-    console.log(userReport)
 
     if (navigation && error) {
       reportError({ ...userReport, error })
@@ -63,27 +63,38 @@ const ErrorReportingContainer = (props: Props) => {
   return (
     <Container style={styles.wrapper}>
       <ScrollView>
-        <ChooseIssueSection
-          currentInput={currentInput}
-          pickedIssue={pickedIssue}
-          onIssuePick={setIssue}
-          setInput={setInput}
-        />
-        <DescriptionSection
-          currentInput={currentInput}
-          setInput={setInput}
-          setDescription={setDescription}
-          toggleState={toggleState}
-          setToggle={setToggle}
-          description={description}
-        />
-        <ContactSection
-          onContactInput={setContact}
-          currentInput={currentInput}
-          setInput={setInput}
-          contactValue={contact}
-        />
-        <EmojiSection selectedEmoji={selectedEmoji} setEmoji={setEmoji} />
+        <SectionWrapper
+          title={I18n.t(strings.CHOOSE_THE_ISSUE)}
+          style={{ marginTop: 35 }}
+        >
+          <ChooseIssueSection
+            currentInput={currentInput}
+            pickedIssue={pickedIssue}
+            onIssuePick={setIssue}
+            setInput={setInput}
+          />
+        </SectionWrapper>
+        <SectionWrapper title={I18n.t(strings.CAN_YOU_BE_MORE_SPECIFIC)}>
+          <DescriptionSection
+            currentInput={currentInput}
+            setInput={setInput}
+            setDescription={setDescription}
+            toggleState={toggleState}
+            setToggle={setToggle}
+            description={description}
+          />
+        </SectionWrapper>
+        <SectionWrapper title={I18n.t(strings.NEED_TO_TALK_TO_US)}>
+          <ContactSection
+            onContactInput={setContact}
+            currentInput={currentInput}
+            setInput={setInput}
+            contactValue={contact}
+          />
+        </SectionWrapper>
+        <SectionWrapper title={I18n.t(strings.SOMETHING_ELSE)}>
+          <EmojiSection selectedEmoji={selectedEmoji} setEmoji={setEmoji} />
+        </SectionWrapper>
         <GradientButton
           onPress={onSubmitReport}
           containerStyle={{

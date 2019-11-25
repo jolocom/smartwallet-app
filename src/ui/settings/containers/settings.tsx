@@ -52,15 +52,15 @@ export const SettingsContainer: React.FC<Props> = props => {
         style={styles.scrollComponent}
         contentContainerStyle={styles.scrollComponentContainer}
       >
-      {__DEV__ && (
-        <SettingSection title={"Dev"}>
-          <SettingItem
-            iconName={'book-open-page-variant'}
-            title={'Storybook'}
-            onPress={openStorybook}
-          />
-        </SettingSection>
-      )}
+        {__DEV__ && (
+          <SettingSection title={'Dev'}>
+            <SettingItem
+              iconName={'book-open-page-variant'}
+              title={'Storybook'}
+              onPress={openStorybook}
+            />
+          </SettingSection>
+        )}
         <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
           <LocaleSetting
             locales={locales}

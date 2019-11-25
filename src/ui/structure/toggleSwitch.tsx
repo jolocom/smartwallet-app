@@ -9,19 +9,10 @@ const styles = StyleSheet.create({
     width: 45,
     height: 30,
     borderRadius: 45,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.5,
-    elevation: 2,
   },
   toggle: {
     alignItems: 'center',
     justifyContent: 'center',
-    //margin: 4,
     position: 'absolute',
     width: 26,
     height: 26,
@@ -36,7 +27,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   value: boolean
-  defaultState: boolean
+  initialState: boolean
   onToggle: () => void
   onGradient?: string[]
   offGradient?: string[]
@@ -45,7 +36,7 @@ interface Props {
 
 export const ToggleSwitch = (props: Props) => {
   const {
-    defaultState,
+    initialState,
     onToggle,
     value,
     onGradient,
@@ -65,9 +56,9 @@ export const ToggleSwitch = (props: Props) => {
 
   const offPosition = 2
   const onPosition = 17
-  const initialPosition = defaultState ? onPosition : offPosition
+  const initialPosition = initialState ? onPosition : offPosition
 
-  const [propValue, setValue] = useState<boolean>(defaultState)
+  const [propValue, setValue] = useState<boolean>(initialState)
   const [positionValue] = useState<Animated.Value>(
     new Animated.Value(initialPosition),
   )

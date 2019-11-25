@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { styles } from '../styles'
 import strings from '../../../locales/strings'
 import { DropdownIcon } from '../../../resources'
@@ -35,10 +35,7 @@ export const ChooseIssueSection = (props: Props) => {
   ]
 
   return (
-    <View style={{ ...styles.sectionWrapper, marginTop: 35 }}>
-      <Text style={styles.sectionTitle}>
-        {I18n.t(strings.CHOOSE_THE_ISSUE)}
-      </Text>
+    <React.Fragment>
       <View style={{ marginTop: 20 }}>
         <View style={styles.pickerIconWrapper}>
           <DropdownIcon
@@ -90,6 +87,6 @@ export const ChooseIssueSection = (props: Props) => {
           }}
         />
       </View>
-    </View>
+    </React.Fragment>
   )
 }

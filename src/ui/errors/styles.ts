@@ -88,7 +88,8 @@ const finalStyles = StyleSheet.create({
     width: '100%',
     borderBottomColor: Colors.white,
     borderBottomWidth: 1,
-    marginTop: 28,
+    marginTop: 16,
+    paddingVertical: 12,
   },
   switchSection: {
     flexDirection: 'row',
@@ -175,7 +176,6 @@ const intermediateStyles = StyleSheet.create({
   sectionTitle: {
     fontFamily: fontMain,
     color: Colors.baseBlack,
-    fontWeight: '500',
     fontSize: 30,
     lineHeight: 34,
   },
@@ -238,7 +238,8 @@ const intermediateStyles = StyleSheet.create({
     width: '100%',
     borderBottomColor: Colors.darkGrey,
     borderBottomWidth: 1,
-    marginTop: 28,
+    marginTop: 16,
+    paddingVertical: 12,
   },
   switchSection: {
     flexDirection: 'row',
@@ -286,7 +287,7 @@ const intermediateStyles = StyleSheet.create({
   },
   defaultBorder: {
     borderColor: Colors.iGrey,
-    borderBottomColor: Colors.blackMain,
+    borderBottomColor: Colors.iInputBlack,
   },
   selectedText: {
     color: Colors.iJoloColor,
@@ -311,4 +312,4 @@ const intermediateStyles = StyleSheet.create({
   },
 })
 
-export const styles = isFinalStyle() ? finalStyles : intermediateStyles
+export const styles = isFinalStyle ? finalStyles : intermediateStyles
