@@ -6,7 +6,8 @@ export const MoreIcon = require('src/resources/svg/MoreIcon').default
 export const NameIcon = require('src/resources/svg/NameIcon').default
 export const EmailIcon = require('src/resources/svg/EmailIcon').default
 export const PhoneIcon = require('src/resources/svg/PhoneIcon').default
-export const AccessibilityIcon = require('src/resources/svg/AccessibilityIcon').default
+export const AccessibilityIcon = require('src/resources/svg/AccessibilityIcon')
+  .default
 export const IdentityMenuIcon = require('./svg/IdentityMenuIcon').default
 export const DocumentsMenuIcon = require('./svg/DocumentsMenuIcon').default
 export const RecordsMenuIcon = require('./svg/RecordsMenuIcon').default
@@ -24,6 +25,7 @@ export const ScanDisabledIcon = require('./svg/ScanDisabledIcon').default
 export const TorchOffIcon = require('./svg/TorchOffIcon').default
 export const TorchOnIcon = require('./svg/TorchOnIcon').default
 export const CloseIcon = require('./svg/CloseIcon').default
-export const CrossIconIntermediary = require('./svg/CrossIconIntermediary').default
-export const BackIconIntermediary = require('./svg/BackIconIntermediary').default
-
+export const CrossIconIntermediary = require('./svg/CrossIconIntermediary')
+  .default
+export const BackIconIntermediary = require('./svg/BackIconIntermediary')
+  .default

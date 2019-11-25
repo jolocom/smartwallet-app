@@ -25,5 +25,7 @@ interface Props {
 }
 
 export const Container: React.FC<Props> = props => (
-  <SafeAreaView testID={props.testID} style={[styles.container, props.style]}>{props.children}</SafeAreaView>
+  <SafeAreaView testID={props.testID} style={[styles.container, props.style]}>
+    {props.children}
+  </SafeAreaView>
 )
