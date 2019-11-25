@@ -172,18 +172,26 @@ export const ScannerComponent = (props: Props) => {
       {isCameraReady && isCameraAllowed && (
         <QRScanner
           //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
-          containerStyle={{ position: 'absolute' }}
+          containerStyle={{
+            position: 'absolute',
+          }}
           cameraProps={cameraSettings}
           reactivate={true}
           reactivateTimeout={3000}
           fadeIn
           onRead={onScan}
-          //@ts-ignore
-          cameraStyle={StyleSheet.create({ height: SCREEN_HEIGHT })}
+          cameraStyle={StyleSheet.create({
+            //@ts-ignore
+            height: SCREEN_HEIGHT,
+          })}
         />
       )}
       <View style={styles.topOverlay} />
-      <View style={{ flexDirection: 'row' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+        }}
+      >
         <View style={styles.horizontalOverlay} />
         <Animated.View
           style={[
@@ -200,8 +208,13 @@ export const ScannerComponent = (props: Props) => {
         {isError ? (
           <Animated.Text
             style={[
-              { ...styles.descriptionText, color: 'rgb(243, 198, 28)' },
-              { opacity: textAnimationValue },
+              {
+                ...styles.descriptionText,
+                color: 'rgb(243, 198, 28)',
+              },
+              {
+                opacity: textAnimationValue,
+              },
             ]}
           >
             {I18n.t(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)}
@@ -226,4 +239,3 @@ export const ScannerComponent = (props: Props) => {
     </React.Fragment>
   )
 }
-
