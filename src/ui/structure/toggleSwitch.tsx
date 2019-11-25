@@ -89,7 +89,8 @@ export const ToggleSwitch = (props: Props) => {
       >
         <LinearGradient
           style={styles.gradientWrapper}
-          locations={[0, 6]}
+          //NOTE locations prop breaks the gradient on iOS
+          //locations={[0, 6]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           colors={propValue ? onGradientColors : offGradientColors}
