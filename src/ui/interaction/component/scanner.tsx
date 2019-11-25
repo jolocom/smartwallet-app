@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import QRScanner, { Event } from 'react-native-qrcode-scanner'
-import {
-  NavigationEventSubscription,
-  NavigationScreenProps,
-} from 'react-navigation'
+import { NavigationScreenProps } from 'react-navigation'
 import { RNCamera } from 'react-native-camera'
 import {
   Dimensions,

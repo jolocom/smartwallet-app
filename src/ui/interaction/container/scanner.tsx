@@ -46,9 +46,9 @@ export const ScannerContainer = (props: Props) => {
       })
     }
 
-    setTimeout(() => {
-      requestCameraPermission().then(() => setCameraReady(true))
-    }, 200)
+    requestCameraPermission().then(() => {
+      setTimeout(() => setCameraReady(true), 200)
+    })
 
     return () => focusListener.remove()
   }, [])
