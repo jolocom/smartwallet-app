@@ -1,7 +1,8 @@
 import { fontMain } from '../../styles/typography'
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import { isFinalStyle } from '../../styles/config'
 import { Colors } from '../../styles'
+import { BP } from '../../styles/breakpoints'
 
 const borderStyle = {
   borderWidth: 1,
@@ -21,7 +22,11 @@ const finalStyles = StyleSheet.create({
   sectionWrapper: {
     width: '100%',
     height: 'auto',
-    paddingHorizontal: 20,
+    paddingHorizontal: BP({
+      small: 16,
+      medium: 20,
+      large: 20,
+    }),
     marginTop: 50,
   },
   sectionTitle: {
@@ -43,7 +48,10 @@ const finalStyles = StyleSheet.create({
     paddingLeft: 10,
     height: 50,
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: Platform.select({
+      android: 'center',
+      ios: 'flex-end',
+    }),
   },
   pickerIconWrapper: {
     position: 'absolute',
@@ -63,6 +71,10 @@ const finalStyles = StyleSheet.create({
     backgroundColor: 'transparent',
     paddingLeft: 20,
     height: 46,
+    paddingTop: Platform.select({
+      ios: 14,
+      android: 0,
+    }),
   },
   inputText: {
     ...defaultText,
@@ -109,8 +121,22 @@ const finalStyles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   emojiButton: {
-    width: 60,
-    height: 60,
+    width: Platform.select({
+      ios: BP({
+        small: 59,
+        medium: 66,
+        large: 66,
+      }),
+      android: 60,
+    }),
+    height: Platform.select({
+      ios: BP({
+        small: 59,
+        medium: 66,
+        large: 66,
+      }),
+      android: 60,
+    }),
     borderWidth: 1,
     borderColor: Colors.borderGrey,
     borderRadius: 50,
@@ -193,7 +219,10 @@ const intermediateStyles = StyleSheet.create({
     paddingLeft: 10,
     height: 50,
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: Platform.select({
+      android: 'center',
+      ios: 'flex-end',
+    }),
   },
   pickerIconWrapper: {
     position: 'absolute',
@@ -213,6 +242,10 @@ const intermediateStyles = StyleSheet.create({
     backgroundColor: 'transparent',
     paddingLeft: 20,
     height: 46,
+    paddingTop: Platform.select({
+      ios: 14,
+      android: 0,
+    }),
   },
   inputText: {
     ...defaultText,

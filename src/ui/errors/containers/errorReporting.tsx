@@ -8,7 +8,7 @@ import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
 import { Container } from '../../structure'
 import { styles } from '../styles'
-import { ScrollView } from 'react-native'
+import { Platform, ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
 import { DescriptionSection } from '../components/descriptionSection'
 import { ContactSection } from '../components/contactSection'
@@ -16,6 +16,7 @@ import { GradientButton } from '../../structure/gradientButton'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { SectionWrapper } from '../components/sectionWrapper'
+import { BP } from '../../../styles/breakpoints'
 interface PaymentNavigationParams {
   error: AppError | Error | undefined
 }
@@ -65,7 +66,16 @@ const ErrorReportingContainer = (props: Props) => {
       <ScrollView>
         <SectionWrapper
           title={I18n.t(strings.CHOOSE_THE_ISSUE)}
-          style={{ marginTop: 35 }}
+          style={{
+            marginTop: Platform.select({
+              ios: BP({
+                small: 69,
+                medium: 69,
+                large: 79,
+              }),
+              android: 56,
+            }),
+          }}
         >
           <ChooseIssueSection
             currentInput={currentInput}
@@ -100,6 +110,7 @@ const ErrorReportingContainer = (props: Props) => {
           containerStyle={{
             marginTop: 45,
             marginBottom: 66,
+            marginHorizontal: 20,
           }}
           text={I18n.t(strings.SUBMIT_REPORT)}
         />

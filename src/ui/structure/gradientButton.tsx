@@ -1,5 +1,11 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native'
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { fontMain } from '../../styles/typography'
 import { white } from '../../styles/colors'
@@ -7,7 +13,6 @@ import { white } from '../../styles/colors'
 const styles = StyleSheet.create({
   buttonContainer: {
     borderRadius: 8,
-    marginHorizontal: 20,
     maxWidth: '100%',
     height: 56,
   },
@@ -16,6 +21,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: white,
     fontWeight: 'normal',
+    paddingTop: Platform.select({
+      ios: 5,
+      android: 0,
+    }),
   },
 })
 
