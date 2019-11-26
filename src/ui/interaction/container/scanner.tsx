@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppState, AppStateStatus, Platform } from 'react-native'
+import { Animated, AppState, AppStateStatus, Platform } from 'react-native'
 import {
   NavigationEventSubscription,
   NavigationScreenProps,
@@ -31,11 +31,16 @@ enum RESULTS {
 const IS_IOS = Platform.OS === 'ios'
 
 export const ScannerContainer = (props: Props) => {
+  const { onScannerSuccess, navigation } = props
+
   const [reRenderKey, setRenderKey] = useState<number>(Date.now())
   const [permission, setPermission] = useState<Status>(RESULTS.AUTHORIZED)
   const [isCameraAllowed, allowCamera] = useState<boolean>(false)
   const [isCameraReady, setCameraReady] = useState<boolean>(false)
   const [isTorch, setTorch] = useState<boolean>(false)
+  const [isError, setError] = useState<boolean>(false)
+  const [colorAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
+  const [textAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
 
   useEffect(() => {
     let focusListener: NavigationEventSubscription
@@ -59,10 +64,6 @@ export const ScannerContainer = (props: Props) => {
     allowCamera(permission === RESULTS.AUTHORIZED)
   }
 
-  /*
-   * detect when the focus is back on the app screen after navigating
-   * to settings, in order to check if the permissions changed
-   */
   const openSettings = () => {
     const listener = async (state: AppStateStatus) => {
       if (state === 'active') {
@@ -96,28 +97,58 @@ export const ScannerContainer = (props: Props) => {
     }
   }
 
-  const parseJWT = (jwt: string) => {
-    let interactionToken: JSONWebToken<JWTEncodable>
-    try {
-      interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
-    } catch (e) {
-      return false
-    }
-    onScannerSuccess(interactionToken)
-    return true
-  }
+  const animateColor = () =>
+    Animated.sequence([
+      Animated.timing(colorAnimationValue, {
+        toValue: 1,
+        duration: 300,
+      }),
+      Animated.timing(colorAnimationValue, {
+        toValue: 0,
+        delay: 400,
+        duration: 300,
+      }),
+    ])
 
-  const { onScannerSuccess, navigation } = props
+  const animateText = () =>
+    Animated.sequence([
+      Animated.timing(textAnimationValue, {
+        toValue: 1,
+        duration: 200,
+      }),
+      Animated.timing(textAnimationValue, {
+        toValue: 0,
+        delay: 700,
+        duration: 500,
+      }),
+    ])
+
+  const parseJWT = (jwt: string) => {
+    try {
+      const interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
+      onScannerSuccess(interactionToken)
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        setError(true)
+        Animated.parallel([animateColor(), animateText()]).start(() => {
+          setError(false)
+        })
+      }
+    }
+  }
 
   return permission === RESULTS.AUTHORIZED ? (
     <ScannerComponent
       reRenderKey={reRenderKey}
       isCameraAllowed={isCameraAllowed}
-      parseJWT={parseJWT}
+      onScan={parseJWT}
       navigation={navigation}
       isCameraReady={isCameraReady}
       isTorchPressed={isTorch}
       onPressTorch={(state: boolean) => setTorch(state)}
+      isError={isError}
+      colorAnimationValue={colorAnimationValue}
+      textAnimationValue={textAnimationValue}
     />
   ) : (
     <NoPermissionComponent onPressEnable={onEnablePermission} />

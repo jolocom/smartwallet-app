@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import QRScanner, { Event } from 'react-native-qrcode-scanner'
+import React from 'react'
+import QRScanner from 'react-native-qrcode-scanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { RNCamera } from 'react-native-camera'
 import {
@@ -88,27 +88,29 @@ const styles = StyleSheet.create({
 })
 
 interface Props extends NavigationScreenProps {
-  parseJWT: (jwt: string) => boolean
+  onScan: (jwt: string) => void
   isCameraAllowed: boolean
   isCameraReady: boolean
   isTorchPressed: boolean
   onPressTorch: (state: boolean) => void
   reRenderKey: number
+  isError: boolean
+  colorAnimationValue: Animated.Value
+  textAnimationValue: Animated.Value
 }
 
 export const ScannerComponent = (props: Props) => {
   const {
-    parseJWT,
+    onScan,
+    isError,
     isCameraAllowed,
     isCameraReady,
     isTorchPressed,
     onPressTorch,
     reRenderKey,
+    colorAnimationValue,
+    textAnimationValue,
   } = props
-
-  const [isError, setError] = useState<boolean>(false)
-  const [colorAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
-  const [textAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
 
   const backgroundColorConfig = colorAnimationValue.interpolate({
     inputRange: [0, 1],
@@ -123,41 +125,6 @@ export const ScannerComponent = (props: Props) => {
       : RNCamera.Constants.FlashMode.off,
   }
 
-  const onScan = (e: Event) => {
-    if (!parseJWT(e.data)) {
-      setError(true)
-      Animated.parallel([animateColor(), animateText()]).start(() => {
-        setError(false)
-      })
-    }
-  }
-
-  const animateColor = () =>
-    Animated.sequence([
-      Animated.timing(colorAnimationValue, {
-        toValue: 1,
-        duration: 300,
-      }),
-      Animated.timing(colorAnimationValue, {
-        toValue: 0,
-        delay: 400,
-        duration: 300,
-      }),
-    ])
-
-  const animateText = () =>
-    Animated.sequence([
-      Animated.timing(textAnimationValue, {
-        toValue: 1,
-        duration: 200,
-      }),
-      Animated.timing(textAnimationValue, {
-        toValue: 0,
-        delay: 700,
-        duration: 500,
-      }),
-    ])
-
   return (
     <React.Fragment>
       {isCameraReady && isCameraAllowed && (
@@ -170,7 +137,7 @@ export const ScannerComponent = (props: Props) => {
           reactivate={true}
           reactivateTimeout={3000}
           fadeIn
-          onRead={onScan}
+          onRead={e => onScan(e.data)}
           cameraStyle={StyleSheet.create({
             //@ts-ignore
             height: SCREEN_HEIGHT,
