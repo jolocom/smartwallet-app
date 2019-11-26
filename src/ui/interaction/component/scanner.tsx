@@ -89,8 +89,6 @@ const styles = StyleSheet.create({
 
 interface Props extends NavigationScreenProps {
   onScan: (jwt: string) => void
-  isCameraAllowed: boolean
-  isCameraReady: boolean
   isTorchPressed: boolean
   onPressTorch: (state: boolean) => void
   reRenderKey: number
@@ -103,8 +101,6 @@ export const ScannerComponent = (props: Props) => {
   const {
     onScan,
     isError,
-    isCameraAllowed,
-    isCameraReady,
     isTorchPressed,
     onPressTorch,
     reRenderKey,
@@ -127,23 +123,21 @@ export const ScannerComponent = (props: Props) => {
 
   return (
     <React.Fragment>
-      {isCameraReady && isCameraAllowed && (
-        <QRScanner
-          //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
-          containerStyle={{
-            position: 'absolute',
-          }}
-          cameraProps={cameraSettings}
-          reactivate={true}
-          reactivateTimeout={3000}
-          fadeIn
-          onRead={e => onScan(e.data)}
-          cameraStyle={StyleSheet.create({
-            //@ts-ignore
-            height: SCREEN_HEIGHT,
-          })}
-        />
-      )}
+      <QRScanner
+        //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
+        containerStyle={{
+          position: 'absolute',
+        }}
+        cameraProps={cameraSettings}
+        reactivate={true}
+        reactivateTimeout={3000}
+        fadeIn
+        onRead={e => onScan(e.data)}
+        cameraStyle={StyleSheet.create({
+          //@ts-ignore
+          height: SCREEN_HEIGHT,
+        })}
+      />
       <View style={styles.topOverlay} />
       <View
         style={{

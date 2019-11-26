@@ -35,7 +35,6 @@ export const ScannerContainer = (props: Props) => {
 
   const [reRenderKey, setRenderKey] = useState<number>(Date.now())
   const [permission, setPermission] = useState<Status>(RESULTS.AUTHORIZED)
-  const [isCameraAllowed, allowCamera] = useState<boolean>(false)
   const [isCameraReady, setCameraReady] = useState<boolean>(false)
   const [isTorch, setTorch] = useState<boolean>(false)
   const [isError, setError] = useState<boolean>(false)
@@ -61,7 +60,6 @@ export const ScannerContainer = (props: Props) => {
   const requestCameraPermission = async () => {
     const permission = await Permissions.request(CAMERA_PERMISSION)
     setPermission(permission)
-    allowCamera(permission === RESULTS.AUTHORIZED)
   }
 
   const openSettings = () => {
@@ -138,18 +136,18 @@ export const ScannerContainer = (props: Props) => {
   }
 
   return permission === RESULTS.AUTHORIZED ? (
-    <ScannerComponent
-      reRenderKey={reRenderKey}
-      isCameraAllowed={isCameraAllowed}
-      onScan={parseJWT}
-      navigation={navigation}
-      isCameraReady={isCameraReady}
-      isTorchPressed={isTorch}
-      onPressTorch={(state: boolean) => setTorch(state)}
-      isError={isError}
-      colorAnimationValue={colorAnimationValue}
-      textAnimationValue={textAnimationValue}
-    />
+    isCameraReady && (
+      <ScannerComponent
+        reRenderKey={reRenderKey}
+        onScan={parseJWT}
+        navigation={navigation}
+        isTorchPressed={isTorch}
+        onPressTorch={(state: boolean) => setTorch(state)}
+        isError={isError}
+        colorAnimationValue={colorAnimationValue}
+        textAnimationValue={textAnimationValue}
+      />
+    )
   ) : (
     <NoPermissionComponent onPressEnable={onEnablePermission} />
   )
