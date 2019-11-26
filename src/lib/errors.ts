@@ -34,13 +34,10 @@ export function initErrorReporting() {
     integrations: (defaultIntegrations: any[]) =>
       defaultIntegrations.filter(i => i.name !== 'ReactNativeErrorHandlers'),
 
-    // remove user id
-    // @TODO make this configurable from settings
     beforeSend: (event: any) => {
-      if (event.user) delete event.user
       if (!event.extra.sendPrivateData) {
         delete event.contexts.device
-        // delete event.contexts.os
+        delete event.contexts.os
         // delete event.contexts.app
       }
       delete event.extra.sendPrivateData

@@ -37,7 +37,7 @@ export enum Inputs {
 const ErrorReportingContainer = (props: Props) => {
   const { navigateToScreen, navigation } = props
 
-  const [pickedIssue, setIssue] = useState<string>()
+  const [pickedIssue, setIssue] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [contact, setContact] = useState<string>('')
   const [currentInput, setInput] = useState<Inputs>(Inputs.None)
