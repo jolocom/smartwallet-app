@@ -38,6 +38,12 @@ export function initErrorReporting() {
     // @TODO make this configurable from settings
     beforeSend: (event: any) => {
       if (event.user) delete event.user
+      if (!event.extra.sendPrivateData) {
+        delete event.contexts.device
+        // delete event.contexts.os
+        // delete event.contexts.app
+      }
+      delete event.extra.sendPrivateData
       return event
     },
   })
@@ -47,6 +53,7 @@ export interface UserReport {
   userError: string | undefined
   userDescription: string
   userContact: string
+  sendPrivateData: boolean
 }
 
 interface ErrorReport extends UserReport {
@@ -61,8 +68,8 @@ export function reportError(report: ErrorReport) {
         UserError: report.userError,
         UserDescription: report.userDescription,
         UserContact: report.userContact,
+        sendPrivateData: report.sendPrivateData,
       })
-      console.log(scope)
       report.error = report.error.origError
     }
     Sentry.captureException(report.error)

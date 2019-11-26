@@ -68,6 +68,7 @@ const ErrorReportingContainer = (props: Props) => {
       userError: pickedIssue,
       userDescription: description,
       userContact: contact,
+      sendPrivateData: toggleState,
     }
 
     if (navigation && error) {
