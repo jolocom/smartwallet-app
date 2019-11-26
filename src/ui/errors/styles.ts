@@ -175,10 +175,14 @@ const finalStyles = StyleSheet.create({
   // NOTE inline colors for switching between the intermediate and final versions
   highlightBorder: {
     borderColor: Colors.joloColor,
+  },
+  highlightBottomBorder: {
     borderBottomColor: Colors.joloColor,
   },
   defaultBorder: {
     borderColor: Colors.white021,
+  },
+  defaultBottomBorder: {
     borderBottomColor: Colors.white021,
   },
   selectedText: {
@@ -212,7 +216,11 @@ const intermediateStyles = StyleSheet.create({
   sectionWrapper: {
     width: '100%',
     height: 'auto',
-    paddingHorizontal: 20,
+    paddingHorizontal: BP({
+      small: 16,
+      medium: 20,
+      large: 20,
+    }),
     marginTop: 50,
   },
   sectionTitle: {
@@ -349,10 +357,14 @@ const intermediateStyles = StyleSheet.create({
   // NOTE inline colors for switching between the intermediate and final versions
   highlightBorder: {
     borderColor: Colors.iJoloColor,
+  },
+  highlightBottomBorder: {
     borderBottomColor: Colors.iJoloColor,
   },
   defaultBorder: {
     borderColor: Colors.iGrey,
+  },
+  defaultBottomBorder: {
     borderBottomColor: Colors.iInputBlack,
   },
   selectedText: {

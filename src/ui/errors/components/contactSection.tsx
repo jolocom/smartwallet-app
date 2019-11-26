@@ -24,8 +24,8 @@ export const ContactSection = (props: Props) => {
         style={{
           ...styles.inputLine,
           ...(currentInput === Inputs.Contact
-            ? styles.highlightBorder
-            : styles.defaultBorder),
+            ? styles.highlightBottomBorder
+            : styles.defaultBottomBorder),
         }}
         onFocus={() => setInput(Inputs.Contact)}
         onBlur={() => setInput(Inputs.None)}
