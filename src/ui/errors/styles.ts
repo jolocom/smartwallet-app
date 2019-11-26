@@ -32,7 +32,11 @@ const finalStyles = StyleSheet.create({
   sectionTitle: {
     fontFamily: fontMain,
     color: Colors.sandLight080,
-    fontSize: 28,
+    fontSize: BP({
+      small: 26,
+      medium: 28,
+      large: 28,
+    }),
   },
   sectionDescription: {
     ...defaultText,
@@ -226,7 +230,11 @@ const intermediateStyles = StyleSheet.create({
   sectionTitle: {
     fontFamily: fontMain,
     color: Colors.baseBlack,
-    fontSize: 30,
+    fontSize: BP({
+      small: 26,
+      medium: 30,
+      large: 30,
+    }),
     lineHeight: 34,
   },
   sectionDescription: {
