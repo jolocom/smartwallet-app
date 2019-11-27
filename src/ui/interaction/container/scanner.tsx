@@ -116,7 +116,7 @@ export const ScannerContainer = (props: Props) => {
       }),
       Animated.timing(textAnimationValue, {
         toValue: 0,
-        delay: 700,
+        delay: 1200,
         duration: 500,
       }),
     ])
@@ -140,7 +140,6 @@ export const ScannerContainer = (props: Props) => {
       <ScannerComponent
         reRenderKey={reRenderKey}
         onScan={parseJWT}
-        navigation={navigation}
         isTorchPressed={isTorch}
         onPressTorch={(state: boolean) => setTorch(state)}
         isError={isError}
