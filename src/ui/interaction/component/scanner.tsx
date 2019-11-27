@@ -1,6 +1,5 @@
 import React from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
-import { NavigationScreenProps } from 'react-navigation'
 import { RNCamera } from 'react-native-camera'
 import {
   Dimensions,
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   },
 })
 
-interface Props extends NavigationScreenProps {
+interface Props {
   onScan: (jwt: string) => void
   isTorchPressed: boolean
   onPressTorch: (state: boolean) => void
