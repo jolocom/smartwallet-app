@@ -6,7 +6,6 @@ import { DropdownIcon } from '../../../resources'
 import ModalDropdown from 'react-native-modal-dropdown'
 import { Inputs } from '../containers/errorReporting'
 import I18n from 'src/locales/i18n'
-import { debug } from '../../../styles/presets'
 
 interface PositionStyle {
   left?: number
