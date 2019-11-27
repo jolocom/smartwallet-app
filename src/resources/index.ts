@@ -19,13 +19,10 @@ export const NextIcon = require('./svg/NextIcon').default
 export const PreviousIcon = require('./svg/PreviousIcon').default
 export const SpinningIcon = require('./svg/SpinningIcon').default
 export const DropdownIcon = require('./svg/DropdownIcon').default
-export const DropdownIconBlack = require('./svg/DropdownIconBlack').default
 export const ScanEnabledIcon = require('./svg/ScanEnabledIcon').default
 export const ScanDisabledIcon = require('./svg/ScanDisabledIcon').default
 export const TorchOffIcon = require('./svg/TorchOffIcon').default
 export const TorchOnIcon = require('./svg/TorchOnIcon').default
 export const CloseIcon = require('./svg/CloseIcon').default
-export const CrossIconIntermediary = require('./svg/CrossIconIntermediary')
-  .default
-export const BackIconIntermediary = require('./svg/BackIconIntermediary')
-  .default
+export const CrossIcon = require('./svg/CrossIcon').default
+export const BackIcon = require('./svg/BackIcon').default

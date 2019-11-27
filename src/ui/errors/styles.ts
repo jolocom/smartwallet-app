@@ -59,11 +59,11 @@ const finalStyles = StyleSheet.create({
   },
   pickerIconWrapper: {
     position: 'absolute',
-    width: 50,
-    height: 50,
-    right: 0,
+    height: '100%',
+    right: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 2,
   },
   pickerDropDown: {
     ...borderStyle,
@@ -265,11 +265,11 @@ const intermediateStyles = StyleSheet.create({
   },
   pickerIconWrapper: {
     position: 'absolute',
-    width: 50,
-    height: 50,
-    right: 0,
+    height: '100%',
+    right: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 2,
   },
   pickerDropDown: {
     ...borderStyle,

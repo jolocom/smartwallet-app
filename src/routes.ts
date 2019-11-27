@@ -185,7 +185,8 @@ const RegistrationScreens = createSwitchNavigator(
 const MainStack = createStackNavigator(
   {
     [routeList.Home]: {
-      screen: BottomTabNavigator,
+      //screen: BottomTabNavigator,
+      screen: ErrorReporting,
     },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
