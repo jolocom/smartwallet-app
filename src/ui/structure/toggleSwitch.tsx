@@ -35,14 +35,7 @@ interface Props {
 }
 
 export const ToggleSwitch = (props: Props) => {
-  const {
-    initialState,
-    onToggle,
-    value,
-    onGradient,
-    offGradient,
-    trackColor,
-  } = props
+  const { onToggle, value, onGradient, offGradient, trackColor } = props
 
   const onGradientColors = onGradient || [
     'rgb(145, 25, 66)',
@@ -56,19 +49,16 @@ export const ToggleSwitch = (props: Props) => {
 
   const offPosition = 2
   const onPosition = 17
-  const initialPosition = initialState ? onPosition : offPosition
+  const switchPosition = value ? onPosition : offPosition
 
-  const [propValue, setValue] = useState<boolean>(initialState)
   const [positionValue] = useState<Animated.Value>(
-    new Animated.Value(initialPosition),
+    new Animated.Value(switchPosition),
   )
-
-  useEffect(() => setValue(value), [value])
 
   const onPress = () => {
     Animated.sequence([
       Animated.timing(positionValue, {
-        toValue: !propValue ? onPosition : offPosition,
+        toValue: !value ? onPosition : offPosition,
         duration: 300,
       }),
     ]).start()
@@ -93,7 +83,7 @@ export const ToggleSwitch = (props: Props) => {
           //locations={[0, 6]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          colors={propValue ? onGradientColors : offGradientColors}
+          colors={value ? onGradientColors : offGradientColors}
         />
       </Animated.View>
     </TouchableOpacity>
