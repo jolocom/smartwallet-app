@@ -96,7 +96,7 @@ const errorReporting = {
   CAN_YOU_BE_MORE_SPECIFIC: 'Can you be more specific?',
   IF_THE_PROBLEM_IS_NOT_LISTED_THIS_IS_THE_BEST_PLACE_TO_DESCRIBE_IT:
     'If the problem is not listed, this is the best place to describe it.',
-  TAP_TO_WRITE: 'Tap to write...',
+  YOUR_MESSAGE_HERE: 'Your message here...',
   NEED_TO_TALK_TO_US: 'Need to talk to us?',
   LEAVE_US_YOUR_EMAIL_AND_NUMBER: 'Leave us your email or number...',
   WE_DO_NOT_STORE_ANY_DATA_AND_DO_NOT_SPAM_ANY_USER_INFORMATION_WILL_BE_DELETED_IMMEDIATELY_AFTER_SOLVING_THE_PROBLEM:

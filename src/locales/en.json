@@ -118,7 +118,6 @@
   "Could not save external credential": "Could not save external credential",
   "Take back control of your digital self and protect your private data against unfair usage": "Take back control of your digital self and protect your private data against unfair usage",
   "Tap here": "Tap here",
-  "Tap to write...": "Tap to write...",
   "Telephone": "Telephone",
   "There was an error with your request": "There was an error with your request",
   "The order was not correct": "The order was not correct",
@@ -141,6 +140,7 @@
   "Yes, I wrote it down": "Yes, I wrote it down",
   "Your identity is already backed up": "Your identity is already backed up",
   "Your Jolocom Wallet": "Your Jolocom Wallet",
+  "Your message here...": "Your message here...",
   "Your preferences": "Your preferences",
   "You can scan the qr code now!": "You can scan the qr code now!",
   "You haven't logged in to any services yet": "You haven't logged in to any services yet"

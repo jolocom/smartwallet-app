@@ -45,7 +45,7 @@ export const DescriptionSection = (props: Props) => {
         numberOfLines={3}
         textAlignVertical={'top'}
         multiline={true}
-        placeholder={I18n.t(strings.TAP_TO_WRITE)}
+        placeholder={I18n.t(strings.YOUR_MESSAGE_HERE)}
         onFocus={() => setInput(Inputs.Description)}
         onBlur={() => setInput(Inputs.None)}
       />

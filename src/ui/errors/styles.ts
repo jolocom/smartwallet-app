@@ -156,7 +156,14 @@ const finalStyles = StyleSheet.create({
     opacity: 0.5,
   },
   emoji: {
-    fontSize: 23,
+    fontSize: Platform.select({
+      ios: BP({
+        small: 28,
+        medium: 31,
+        large: 31,
+      }),
+      android: 23,
+    }),
     color: Colors.black,
   },
   navigationWrapper: {
@@ -324,8 +331,22 @@ const intermediateStyles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   emojiButton: {
-    width: 60,
-    height: 60,
+    width: Platform.select({
+      ios: BP({
+        small: 59,
+        medium: 66,
+        large: 66,
+      }),
+      android: 60,
+    }),
+    height: Platform.select({
+      ios: BP({
+        small: 59,
+        medium: 66,
+        large: 66,
+      }),
+      android: 60,
+    }),
     borderWidth: 1,
     borderColor: Colors.iLightGrey,
     borderRadius: 50,
@@ -341,7 +362,14 @@ const intermediateStyles = StyleSheet.create({
     opacity: 0.5,
   },
   emoji: {
-    fontSize: 23,
+    fontSize: Platform.select({
+      ios: BP({
+        small: 28,
+        medium: 31,
+        large: 31,
+      }),
+      android: 23,
+    }),
     color: Colors.black,
   },
   navigationWrapper: {

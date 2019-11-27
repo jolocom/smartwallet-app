@@ -23,7 +23,7 @@ exports[`DescriptionSection Component matches the snapshot on initial render 1`]
     onBlur={[Function]}
     onChangeText={[Function]}
     onFocus={[Function]}
-    placeholder="Tap to write..."
+    placeholder="Your message here..."
     placeholderTextColor="rgba(0, 0, 0, 0.5)"
     rejectResponderTermination={true}
     style={
@@ -145,7 +145,7 @@ exports[`DescriptionSection Component renders the input with selected border 1`]
     onBlur={[Function]}
     onChangeText={[Function]}
     onFocus={[Function]}
-    placeholder="Tap to write..."
+    placeholder="Your message here..."
     placeholderTextColor="rgba(0, 0, 0, 0.5)"
     rejectResponderTermination={true}
     style={
