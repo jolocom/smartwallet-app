@@ -315,7 +315,7 @@ class TabBarBottom extends React.Component<Props, State> {
 
     // <ALTERED>
     const openScanner = () =>
-      this.props.navigation.navigate(routeList.QRCodeScanner)
+      this.props.navigation.navigate(routeList.InteractionScreen)
     const QRCodeButtonPlaceholder = (
       <View
         style={[

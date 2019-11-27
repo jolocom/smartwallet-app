@@ -8,6 +8,8 @@ export const black = 'black' // rgb(0, 0, 0)
 export const black010 = 'rgba(0, 0, 0, 0.1)'
 export const black030 = 'rgba(0, 0, 0, 0.3)'
 export const black040 = 'rgba(0, 0, 0, 0.4)'
+export const black065 = 'rgba(0, 0, 0, 0.65)'
+export const greyDark = 'rgb(36, 36, 36)'
 export const white = 'white' // rgb(255, 255, 255)
 export const white050 = 'rgba(255, 255, 255, 0.5)'
 export const white040 = 'rgba(255, 255, 255, 0.4)'
@@ -33,6 +35,8 @@ export const greyLighter = 'rgb(155, 155, 158)'
 export const greyLight = 'rgb(149, 149, 149)'
 export const grey = 'grey' // rgb(128, 128, 128)
 export const golden = 'rgb(241, 161, 7)'
+export const nativeIosBlue = 'rgb(10, 132, 255)'
+export const pink = 'rgb(197, 41, 105)'
 
 export const greenMain = 'rgb(40, 165, 45)'
 export const greenFaded060 = 'rgba(233, 239, 221, 0.6)'
