@@ -92,7 +92,6 @@ exports[`Exception screen component Renders correctly 1`] = `
       upperCase={false}
     />
     <JolocomButton
-      disabled={false}
       onPress={[Function]}
       raised={true}
       text="Send error report"
