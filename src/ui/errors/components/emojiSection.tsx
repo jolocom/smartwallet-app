@@ -21,8 +21,9 @@ export const EmojiSection = (props: Props) => {
   return (
     <React.Fragment>
       <View style={styles.emojiWrapper}>
-        {emojiList.map(emoji => (
+        {emojiList.map((emoji, key) => (
           <EmojiButton
+            key={key}
             onPress={() => setEmoji(emoji)}
             selected={selectedEmoji}
             emoji={emoji}
@@ -39,7 +40,7 @@ interface ButtonProps {
   onPress: () => void
 }
 
-const EmojiButton = (props: ButtonProps) => {
+export const EmojiButton = (props: ButtonProps) => {
   const { emoji, selected, onPress } = props
   const isSelected = selected === emoji
   const defaultState = selected === ''

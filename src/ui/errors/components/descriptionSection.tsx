@@ -54,7 +54,6 @@ export const DescriptionSection = (props: Props) => {
           <ToggleSwitch
             value={toggleState}
             onToggle={() => setToggle(!toggleState)}
-            initialState={false}
             onGradient={[
               styles.gradientOnStart.color,
               styles.gradientOnEnd.color,

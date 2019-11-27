@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { darkGrey } from '../../styles/colors'
@@ -27,11 +27,10 @@ const styles = StyleSheet.create({
 
 interface Props {
   value: boolean
-  initialState: boolean
   onToggle: () => void
   onGradient?: string[]
   offGradient?: string[]
-  trackColor: string
+  trackColor?: string
 }
 
 export const ToggleSwitch = (props: Props) => {
