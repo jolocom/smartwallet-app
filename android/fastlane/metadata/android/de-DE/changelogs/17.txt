@@ -1,0 +1,12 @@
+### Updates
+- Upgrade jolocom-lib to v3.0
+- New credential flow
+- Caching entity (only used for credential metadata at the moment)
+- Documents screens (valid, expired)
+- New iOS colour scheme
+- Update translations #1323
+- New and improved entropy screen #1317
+- Bottom navigation bar #1315
+- Add Settings screen and language switcher #1315
+- Improve deep link behaviour #1328
+- Assorted bug fixes

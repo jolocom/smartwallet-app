@@ -1,0 +1,3 @@
+Small UI inconsistencies across the registration steps addressed.  
+Updated the used version of the Jolocom-Lib to v2.3.0.  
+Optimizations to the build process for Android.

@@ -1,0 +1,10 @@
+* Remove Password Screen (#1295)
+* Remove Entropy Screen (#1294)
+* Improve Error Screen information (#1289
+* Improve Error handling (#1304)
+* Fix Credential Cutoff on IOS, improve presentation of credentials (#1308)
+* Fix Seed Phrase Cutoff (#1299)
+* Improve App Initialisation procedure (#1298)
+
+More in depth information, including the corresponding issues, can be found on Github:
+https://github.com/jolocom/smartwallet-app/releases
