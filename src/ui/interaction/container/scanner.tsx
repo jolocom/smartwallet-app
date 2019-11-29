@@ -32,17 +32,16 @@ const IS_IOS = Platform.OS === 'ios'
 
 export const ScannerContainer = (props: Props) => {
   const { onScannerSuccess, navigation } = props
-
-  const [reRenderKey, setRenderKey] = useState<number>(Date.now())
-  const [permission, setPermission] = useState<Status>(RESULTS.AUTHORIZED)
-  const [isCameraReady, setCameraReady] = useState<boolean>(false)
-  const [isTorch, setTorch] = useState<boolean>(false)
-  const [isError, setError] = useState<boolean>(false)
-  const [colorAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
-  const [textAnimationValue] = useState<Animated.Value>(new Animated.Value(0))
+  const [reRenderKey, setRenderKey] = useState(Date.now())
+  const [permission, setPermission] = useState<Status>(RESULTS.RESTRICTED)
+  const [isCameraReady, setCameraReady] = useState(false)
+  const [isTorch, setTorch] = useState(false)
+  const [isError, setError] = useState(false)
+  const [colorAnimationValue] = useState(new Animated.Value(0))
+  const [textAnimationValue] = useState(new Animated.Value(0))
 
   useEffect(() => {
-    let focusListener: NavigationEventSubscription
+    let focusListener!: NavigationEventSubscription
     if (navigation) {
       focusListener = navigation.addListener('willFocus', () => {
         // NOTE: the re-render and the re-mount should only fire during the willFocus event
@@ -54,7 +53,7 @@ export const ScannerContainer = (props: Props) => {
       setTimeout(() => setCameraReady(true), 200)
     })
 
-    return () => focusListener.remove()
+    return focusListener.remove
   }, [])
 
   const requestCameraPermission = async () => {
