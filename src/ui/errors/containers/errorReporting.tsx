@@ -37,12 +37,12 @@ export enum Inputs {
 const ErrorReportingContainer = (props: Props) => {
   const { navigateToScreen, navigation } = props
 
-  const [pickedIssue, setIssue] = useState<string>('')
-  const [description, setDescription] = useState<string>('')
-  const [contact, setContact] = useState<string>('')
-  const [currentInput, setInput] = useState<Inputs>(Inputs.None)
-  const [toggleState, setToggle] = useState<boolean>(false)
-  const [selectedEmoji, setEmoji] = useState<Emoji>(Emoji.Empty)
+  const [pickedIssue, setIssue] = useState('')
+  const [description, setDescription] = useState('')
+  const [contact, setContact] = useState('')
+  const [currentInput, setInput] = useState(Inputs.None)
+  const [toggleState, setToggle] = useState(false)
+  const [selectedEmoji, setEmoji] = useState(Emoji.Empty)
 
   // NOTE send previous screen as props, since not all
   // error reports will have error objects

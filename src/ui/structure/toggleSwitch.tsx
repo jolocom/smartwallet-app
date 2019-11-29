@@ -50,14 +50,12 @@ export const ToggleSwitch = (props: Props) => {
   const onPosition = 17
   const switchPosition = value ? onPosition : offPosition
 
-  const [positionValue] = useState<Animated.Value>(
-    new Animated.Value(switchPosition),
-  )
+  const [positionValue] = useState(new Animated.Value(switchPosition))
 
   const onPress = () => {
     Animated.sequence([
       Animated.timing(positionValue, {
-        toValue: !value ? onPosition : offPosition,
+        toValue: value ? offPosition : onPosition,
         duration: 300,
       }),
     ]).start()

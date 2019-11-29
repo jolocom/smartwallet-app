@@ -18,6 +18,4 @@ jest.mock('src/lib/storage/storage', () => ({
   Storage: jest.fn(),
 }))
 
-jest.mock('@react-native-community/async-storage')
-
 jest.mock('deprecated-react-native-listview')

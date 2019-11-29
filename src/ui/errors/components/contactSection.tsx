@@ -17,7 +17,7 @@ export const ContactSection = (props: Props) => {
   return (
     <React.Fragment>
       <TextInput
-        onChangeText={text => onContactInput(text)}
+        onChangeText={onContactInput}
         value={contactValue}
         placeholder={I18n.t(strings.LEAVE_US_YOUR_EMAIL_AND_NUMBER)}
         placeholderTextColor={styles.unselectedText.color}
