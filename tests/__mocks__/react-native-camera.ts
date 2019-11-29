@@ -10,6 +10,7 @@ const constants = {
   Orientation: {},
   FlashMode: {
     off: 'off',
+    torch: 'torch',
     flash: 'flash',
   },
   TorchMode: {},

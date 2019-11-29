@@ -5,7 +5,6 @@ import { ScannerContainer } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { white } from '../../../styles/colors'
 import { ThunkDispatch } from '../../../store'
-import { JolocomLib } from 'jolocom-lib'
 import { showErrorScreen } from '../../../actions/generic'
 import { AppError, ErrorCode } from '../../../lib/errors'
 import { interactionHandlers } from '../../../lib/storage/interactionTokens'
@@ -15,6 +14,10 @@ import { CloseIcon } from '../../../resources'
 import { fontMain, textXXS } from '../../../styles/typography'
 import { Colors } from '../../../styles'
 import { navigatorResetHome } from '../../../actions/navigation'
+import {
+  JSONWebToken,
+  JWTEncodable,
+} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -70,17 +73,7 @@ const InteractionContainer = (props: Props) => (
 )
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  onScannerSuccess: async (jwt: string) => {
-    let interactionToken
-
-    try {
-      interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
-    } catch (err) {
-      return dispatch(
-        showErrorScreen(new AppError(ErrorCode.ParseJWTFailed, err)),
-      )
-    }
-
+  onScannerSuccess: async (interactionToken: JSONWebToken<JWTEncodable>) => {
     const handler = interactionHandlers[interactionToken.interactionType]
 
     return handler
