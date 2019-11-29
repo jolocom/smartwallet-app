@@ -6,7 +6,7 @@ exports[`Scanner component correctly changes torch button while icon is touched 
     cameraProps={
       Object {
         "captureAudio": false,
-        "flashMode": undefined,
+        "flashMode": "torch",
         "key": 4,
       }
     }

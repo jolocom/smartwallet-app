@@ -17,5 +17,3 @@ jest.mock('src/lib/storage/storage', () => ({
   __esModule: true,
   Storage: jest.fn(),
 }))
-
-jest.mock('@react-native-community/async-storage')
