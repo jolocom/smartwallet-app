@@ -25,7 +25,8 @@ export const EmojiSection = (props: Props) => {
           <EmojiButton
             key={key}
             onPress={() => setEmoji(emoji)}
-            selected={selectedEmoji}
+            isSelected={emoji === selectedEmoji}
+            areAnySelected={emoji !== Emoji.Empty}
             emoji={emoji}
           />
         ))}
@@ -36,20 +37,19 @@ export const EmojiSection = (props: Props) => {
 
 interface ButtonProps {
   emoji: Emoji
-  selected: Emoji
+  isSelected: boolean
+  areAnySelected: boolean
   onPress: () => void
 }
 
 export const EmojiButton = (props: ButtonProps) => {
-  const { emoji, selected, onPress } = props
-  const isSelected = selected === emoji
-  const defaultState = selected === ''
+  const { emoji, isSelected, areAnySelected, onPress } = props
 
   return (
     <View
       style={{
         ...styles.emojiButton,
-        ...(!defaultState &&
+        ...(areAnySelected &&
           (isSelected ? styles.selectedEmoji : styles.unselectedEmoji)),
       }}
       onTouchEnd={onPress}

@@ -9,7 +9,7 @@ export { ErrorCode }
 export class AppError extends Error {
   // private code: ErrorCode
   public origError: any
-  navigateTo: routeList
+  public navigateTo: routeList
 
   public constructor(
     code = ErrorCode.Unknown,
@@ -31,17 +31,27 @@ export function initErrorReporting() {
     release: `${VersionNumber.bundleIdentifier}@${VersionNumber.appVersion}`,
 
     // disable automatic reporting of errors/rejections without user consent
-    integrations: (defaultIntegrations: any[]) =>
+    integrations: defaultIntegrations =>
       defaultIntegrations.filter(i => i.name !== 'ReactNativeErrorHandlers'),
 
-    beforeSend: (event: any) => {
-      if (!event.extra.sendPrivateData) {
-        delete event.contexts.device
-        delete event.contexts.os
-        // delete event.contexts.app
+    /**
+     * @param event
+     * @dev TODO Decide if event.contexts.app should be stripped
+     */
+
+    beforeSend: event => {
+      const { extra, contexts } = event
+
+      if (extra && contexts) {
+        if (!extra.sendPrivateData) {
+          delete contexts.device
+          delete contexts.os
+        }
+
+        delete extra.sendPrivateData
       }
-      delete event.extra.sendPrivateData
-      return event
+
+      return { ...event, contexts, extra }
     },
   })
 }

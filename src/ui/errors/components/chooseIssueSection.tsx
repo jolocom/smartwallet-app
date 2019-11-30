@@ -41,9 +41,7 @@ export const ChooseIssueSection = (props: Props) => {
           <DropdownIcon
             style={{
               transform:
-                currentInput === Inputs.Dropdown
-                  ? [{ rotate: '180deg' }]
-                  : [{ rotate: '360deg' }],
+                currentInput === Inputs.Dropdown ? [{ rotate: '180deg' }] : [],
             }}
           />
         </View>

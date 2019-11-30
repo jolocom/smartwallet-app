@@ -51,7 +51,8 @@ const ErrorReportingContainer = (props: Props) => {
   // const isBackButton = previousScreen === routeList.Settings
   const isBackButton = false
 
-  // NOTE error reports can show up without an error, hence a navigation prop (navigateTo) would be better than in the error object
+  // NOTE error reports can show up without an error,
+  // hence a navigation prop (navigateTo) would be better than in the error object
   const navigateBack = () => {
     const { error } = props.navigation.state.params
     if (error instanceof AppError) {

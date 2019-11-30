@@ -17,7 +17,7 @@ const breakpoints = {
   },
 }
 
-interface StyleValues<T> {
+interface StyleValues<T extends string | number> {
   [ScreenSize.small]: T
   [ScreenSize.medium]: T
   [ScreenSize.large]: T
@@ -42,7 +42,7 @@ const getScreenSize = (): ScreenSize => {
   }
 }
 
-export const BP = <T>(values: StyleValues<T>): T => {
+export const BP = <T extends string | number>(values: StyleValues<T>): T => {
   const size = getScreenSize()
   return values[size]
 }
