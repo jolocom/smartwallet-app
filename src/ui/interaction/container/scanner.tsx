@@ -1,6 +1,9 @@
-import React from 'react'
-import { AppState, AppStateStatus, Platform } from 'react-native'
-import { NavigationScreenProps } from 'react-navigation'
+import React, { useEffect, useState } from 'react'
+import { Animated, AppState, AppStateStatus, Platform } from 'react-native'
+import {
+  NavigationEventSubscription,
+  NavigationScreenProps,
+} from 'react-navigation'
 /* TODO: When using the latest react-native-permissions version, remove this dependency,
  since there is already a cross-platform openSettings method */
 import { appDetailsSettings } from 'react-native-android-open-settings'
@@ -8,14 +11,14 @@ import { appDetailsSettings } from 'react-native-android-open-settings'
 import Permissions, { Status } from 'react-native-permissions'
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
+import { JolocomLib } from 'jolocom-lib'
+import {
+  JSONWebToken,
+  JWTEncodable,
+} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 
 interface Props extends NavigationScreenProps {
-  onScannerSuccess: (jwt: string) => void
-}
-
-interface State {
-  permission: Status
-  isCameraAllowed: boolean
+  onScannerSuccess: (interactionToken: JSONWebToken<JWTEncodable>) => void
 }
 
 const CAMERA_PERMISSION = 'camera'
@@ -27,36 +30,42 @@ enum RESULTS {
 
 const IS_IOS = Platform.OS === 'ios'
 
-export class ScannerContainer extends React.Component<Props, State> {
-  public constructor(props: Props) {
-    super(props)
-    this.state = {
-      permission: RESULTS.AUTHORIZED,
-      isCameraAllowed: false,
+export const ScannerContainer = (props: Props) => {
+  const { onScannerSuccess, navigation } = props
+  const [reRenderKey, setRenderKey] = useState(Date.now())
+  const [permission, setPermission] = useState<Status>(RESULTS.RESTRICTED)
+  const [isCameraReady, setCameraReady] = useState(false)
+  const [isTorch, setTorch] = useState(false)
+  const [isError, setError] = useState(false)
+  const [colorAnimationValue] = useState(new Animated.Value(0))
+  const [textAnimationValue] = useState(new Animated.Value(0))
+
+  useEffect(() => {
+    let focusListener!: NavigationEventSubscription
+    if (navigation) {
+      focusListener = navigation.addListener('willFocus', () => {
+        // NOTE: the re-render and the re-mount should only fire during the willFocus event
+        setRenderKey(Date.now())
+      })
     }
-  }
 
-  public async componentDidMount(): Promise<void> {
-    await this.requestCameraPermission()
-  }
-
-  private requestCameraPermission = async () => {
-    const permission = await Permissions.request(CAMERA_PERMISSION)
-    this.setState({
-      permission,
-      isCameraAllowed: permission === RESULTS.AUTHORIZED,
+    requestCameraPermission().then(() => {
+      setTimeout(() => setCameraReady(true), 200)
     })
+
+    return focusListener.remove
+  }, [])
+
+  const requestCameraPermission = async () => {
+    const permission = await Permissions.request(CAMERA_PERMISSION)
+    setPermission(permission)
   }
 
-  /*
-   * detect when the focus is back on the app screen after navigating
-   * to settings, in order to check if the permissions changed
-   */
-  private openSettings = () => {
+  const openSettings = () => {
     const listener = async (state: AppStateStatus) => {
       if (state === 'active') {
         AppState.removeEventListener('change', listener)
-        await this.requestCameraPermission()
+        await requestCameraPermission()
       }
     }
 
@@ -73,28 +82,71 @@ export class ScannerContainer extends React.Component<Props, State> {
     }
   }
 
-  private onEnablePermission = async () => {
+  const onEnablePermission = async () => {
     if (IS_IOS) {
-      this.openSettings()
+      openSettings()
     } else {
-      if (this.state.permission === RESULTS.RESTRICTED) {
-        this.openSettings()
+      if (permission === RESULTS.RESTRICTED) {
+        openSettings()
       } else {
-        await this.requestCameraPermission()
+        await requestCameraPermission()
       }
     }
   }
 
-  public render() {
-    const { onScannerSuccess, navigation } = this.props
-    return this.state.permission === RESULTS.AUTHORIZED ? (
-      <ScannerComponent
-        isCameraAllowed={this.state.isCameraAllowed}
-        onScannerSuccess={onScannerSuccess}
-        navigation={navigation}
-      />
-    ) : (
-      <NoPermissionComponent onPressEnable={this.onEnablePermission} />
-    )
+  const animateColor = () =>
+    Animated.sequence([
+      Animated.timing(colorAnimationValue, {
+        toValue: 1,
+        duration: 300,
+      }),
+      Animated.timing(colorAnimationValue, {
+        toValue: 0,
+        delay: 400,
+        duration: 300,
+      }),
+    ])
+
+  const animateText = () =>
+    Animated.sequence([
+      Animated.timing(textAnimationValue, {
+        toValue: 1,
+        duration: 200,
+      }),
+      Animated.timing(textAnimationValue, {
+        toValue: 0,
+        delay: 1200,
+        duration: 500,
+      }),
+    ])
+
+  const parseJWT = (jwt: string) => {
+    try {
+      const interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
+      onScannerSuccess(interactionToken)
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        setError(true)
+        Animated.parallel([animateColor(), animateText()]).start(() => {
+          setError(false)
+        })
+      }
+    }
   }
+
+  return permission === RESULTS.AUTHORIZED ? (
+    isCameraReady && (
+      <ScannerComponent
+        reRenderKey={reRenderKey}
+        onScan={parseJWT}
+        isTorchPressed={isTorch}
+        onPressTorch={(state: boolean) => setTorch(state)}
+        isError={isError}
+        colorAnimationValue={colorAnimationValue}
+        textAnimationValue={textAnimationValue}
+      />
+    )
+  ) : (
+    <NoPermissionComponent onPressEnable={onEnablePermission} />
+  )
 }
