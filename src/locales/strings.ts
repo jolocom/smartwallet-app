@@ -83,6 +83,31 @@ const errorTitle = {
   UH_OH: 'Uh oh',
 }
 
+const errorReporting = {
+  CHOOSE_THE_ISSUE: 'Choose the issue',
+  NO_INTERNET_CONNECTION: 'No internet connection',
+  CRASH: 'Crash',
+  CANT_LOGIN: "Can't login",
+  BACKUP_IS_EMPTY: 'Backup is empty',
+  CANT_REACH_SOME_ELEMENTS: "Can't reach some elements",
+  IM_JUST_ANNOYING: "I'm just annoying",
+  OTHER_REASON: 'Other reason',
+  CHOOSE_RELATED: 'Choose related',
+  CAN_YOU_BE_MORE_SPECIFIC: 'Can you be more specific?',
+  IF_THE_PROBLEM_IS_NOT_LISTED_THIS_IS_THE_BEST_PLACE_TO_DESCRIBE_IT:
+    'If the problem is not listed, this is the best place to describe it.',
+  YOUR_MESSAGE_HERE: 'Your message here...',
+  NEED_TO_TALK_TO_US: 'Need to talk to us?',
+  LEAVE_US_YOUR_EMAIL_AND_NUMBER: 'Leave us your email or number...',
+  WE_DO_NOT_STORE_ANY_DATA_AND_DO_NOT_SPAM_ANY_USER_INFORMATION_WILL_BE_DELETED_IMMEDIATELY_AFTER_SOLVING_THE_PROBLEM:
+    'We do not store data and do not spam, any user information will be deleted immediately after solving the problem',
+  SOMETHING_ELSE: 'Something else?',
+  INCLUDE_YOUR_LOGS: 'Include your logs',
+  THIS_INCLUDES_SOME_PRIVATE_METADATA_INFO_FILESIZES_BUT_NOT_NAMES_OR_CONTENTS_BUT_IT_WILL_HELP_DEVELOPERS_FIX_BUGS_MORE_QUICKLY:
+    'This includes some private metadata info (file sizes, but not names or contents) but it will help developers fix bugs more quickly.',
+  SUBMIT_REPORT: 'Submit report',
+}
+
 const errorCodes = {
   [ErrorCode.Unknown]: 'Unknown Error',
   [ErrorCode.WalletInitFailed]: 'Unable to initialize wallet',
@@ -105,12 +130,14 @@ const errorCodes = {
   [ErrorCode.RegistrationFailed]: 'Registration failed',
   [ErrorCode.AppInitFailed]: 'Initialization failed',
 }
+
 export default {
   ...registration,
   ...settings,
   ...backup,
   ...errorTitle,
   ...errorCodes,
+  ...errorReporting,
   YOUR_JOLOCOM_WALLET: 'Your Jolocom Wallet',
   ALL_CLAIMS: 'All claims',
   MY_IDENTITY: 'My Identity',

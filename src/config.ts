@@ -6,5 +6,5 @@ export default {
   typeOrmConfig: typeOrmConf as ConnectionOptions,
 }
 
-export const sentry_dsn =
+export const sentryDSN =
   'https://016af10b32ed45608bceec9a6f44478b@sentry.io/1757722'

@@ -17,3 +17,5 @@ jest.mock('src/lib/storage/storage', () => ({
   __esModule: true,
   Storage: jest.fn(),
 }))
+
+jest.mock('deprecated-react-native-listview')
