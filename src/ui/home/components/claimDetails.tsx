@@ -151,9 +151,8 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
           {showButtonWhileTyping ? (
             <JolocomButton
               onPress={() => this.onSubmit()}
-              upperCase={false}
               text={I18n.t(strings.ADD_CLAIM)}
-              disabled={!!this.confirmationEligibilityCheck()}
+              disabled={this.confirmationEligibilityCheck()}
             />
           ) : null}
         </View>

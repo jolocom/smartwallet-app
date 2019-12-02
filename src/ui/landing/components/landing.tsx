@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Dimensions, View, Text, Animated } from 'react-native'
-import { Container } from 'src/ui/structure'
+import { Container, JolocomButton } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { landingSlides, Slide } from './landingSlides'
@@ -9,7 +9,6 @@ import Carousel, {
   getInputRangeFromIndexes,
 } from 'react-native-snap-carousel'
 import { Typography, Colors, Spacing, Buttons } from 'src/styles'
-import { Button } from 'react-native-material-ui'
 
 interface Props {
   handleGetStarted: () => void
@@ -136,25 +135,22 @@ export class LandingComponent extends React.Component<Props> {
           slideInterpolatedStyle={this.animatedStyles}
         />
         <View style={styles.bottomSection}>
-          <Button
-            testID="getStarted"
+          <JolocomButton
             onPress={this.props.handleGetStarted}
-            style={{
-              container: styles.mainButtonContainer,
-              text: styles.mainButtonText,
-            }}
             text={I18n.t(strings.GET_STARTED)}
-            upperCase={false}
+            testID="getStarted"
+            containerStyle={{ width: '100%', height: 56 }}
           />
-          <Button
-            testID="recoverIdentity"
+          <JolocomButton
             onPress={this.props.handleRecover}
-            style={{
-              container: styles.recoverButtonContainer,
-              text: styles.recoverButtonText,
-            }}
             text={I18n.t(strings.RECOVER_IDENTITY)}
-            upperCase={false}
+            testID="recoverIdentity"
+            transparent={true}
+            containerStyle={{
+              width: '100%',
+              marginTop: 12,
+              height: 48,
+            }}
           />
         </View>
       </Container>

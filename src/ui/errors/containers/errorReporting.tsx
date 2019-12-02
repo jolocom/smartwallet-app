@@ -6,17 +6,17 @@ import { ThunkDispatch } from '../../../store'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
-import { Container } from '../../structure'
+import { Container, JolocomButton } from '../../structure'
 import { styles } from '../styles'
 import { ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
 import { DescriptionSection } from '../components/descriptionSection'
 import { ContactSection } from '../components/contactSection'
-import { GradientButton } from '../../structure/gradientButton'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { SectionWrapper } from '../components/sectionWrapper'
 import { NavigationSection } from '../components/navigationSection'
+import { BP } from '../../../styles/breakpoints'
 
 interface PaymentNavigationParams {
   error?: AppError | Error
@@ -117,12 +117,17 @@ const ErrorReportingContainer = (props: Props) => {
         <SectionWrapper title={I18n.t(strings.SOMETHING_ELSE)}>
           <EmojiSection selectedEmoji={selectedEmoji} setEmoji={setEmoji} />
         </SectionWrapper>
-        <GradientButton
+        <JolocomButton
           onPress={onSubmitReport}
           containerStyle={{
             marginTop: 45,
             marginBottom: 66,
-            marginHorizontal: 20,
+            height: 56,
+            marginHorizontal: BP({
+              small: 16,
+              medium: 20,
+              large: 20,
+            }),
           }}
           text={I18n.t(strings.SUBMIT_REPORT)}
         />
