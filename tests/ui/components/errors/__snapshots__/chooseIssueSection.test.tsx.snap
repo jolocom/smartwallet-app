@@ -24,11 +24,7 @@ exports[`ChooseIssueSection Component matches the snapshot on initial render 1`]
       <DropdownIcon
         style={
           Object {
-            "transform": Array [
-              Object {
-                "rotate": "360deg",
-              },
-            ],
+            "transform": Array [],
           }
         }
       />
@@ -41,8 +37,8 @@ exports[`ChooseIssueSection Component matches the snapshot on initial render 1`]
       disabled={false}
       dropdownStyle={
         Object {
-          "backgroundColor": "black",
-          "borderColor": "rgba(255, 255, 255, 0.21)",
+          "backgroundColor": "white",
+          "borderColor": "rgb(224, 224, 224)",
           "borderRadius": 8,
           "borderWidth": 1,
           "paddingVertical": 10,
@@ -50,13 +46,13 @@ exports[`ChooseIssueSection Component matches the snapshot on initial render 1`]
       }
       dropdownTextHighlightStyle={
         Object {
-          "color": "rgb(197, 41, 105)",
+          "color": "rgb(149, 46, 83)",
         }
       }
       dropdownTextStyle={
         Object {
           "backgroundColor": "transparent",
-          "color": "white",
+          "color": "black",
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "height": 46,
@@ -85,8 +81,8 @@ exports[`ChooseIssueSection Component matches the snapshot on initial render 1`]
       showsVerticalScrollIndicator={true}
       style={
         Object {
-          "backgroundColor": "rgb(16, 15, 17)",
-          "borderColor": "rgba(255, 255, 255, 0.21)",
+          "backgroundColor": "white",
+          "borderColor": "rgb(224, 224, 224)",
           "borderRadius": 8,
           "borderWidth": 1,
           "height": 50,
@@ -97,7 +93,7 @@ exports[`ChooseIssueSection Component matches the snapshot on initial render 1`]
       }
       textStyle={
         Object {
-          "color": "rgba(255, 255, 255, 0.5)",
+          "color": "rgba(0, 0, 0, 0.5)",
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "padding": 10,
@@ -149,8 +145,8 @@ exports[`ChooseIssueSection Component renders the dropdown with selected border 
       disabled={false}
       dropdownStyle={
         Object {
-          "backgroundColor": "black",
-          "borderColor": "rgba(255, 255, 255, 0.21)",
+          "backgroundColor": "white",
+          "borderColor": "rgb(224, 224, 224)",
           "borderRadius": 8,
           "borderWidth": 1,
           "paddingVertical": 10,
@@ -158,13 +154,13 @@ exports[`ChooseIssueSection Component renders the dropdown with selected border 
       }
       dropdownTextHighlightStyle={
         Object {
-          "color": "rgb(197, 41, 105)",
+          "color": "rgb(149, 46, 83)",
         }
       }
       dropdownTextStyle={
         Object {
           "backgroundColor": "transparent",
-          "color": "white",
+          "color": "black",
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "height": 46,
@@ -193,8 +189,8 @@ exports[`ChooseIssueSection Component renders the dropdown with selected border 
       showsVerticalScrollIndicator={true}
       style={
         Object {
-          "backgroundColor": "rgb(16, 15, 17)",
-          "borderColor": "rgb(197, 41, 105)",
+          "backgroundColor": "white",
+          "borderColor": "rgb(149, 46, 83)",
           "borderRadius": 8,
           "borderWidth": 1,
           "height": 50,
@@ -205,7 +201,7 @@ exports[`ChooseIssueSection Component renders the dropdown with selected border 
       }
       textStyle={
         Object {
-          "color": "rgba(255, 255, 255, 0.5)",
+          "color": "rgba(0, 0, 0, 0.5)",
           "fontFamily": "TT Commons",
           "fontSize": 20,
           "padding": 10,

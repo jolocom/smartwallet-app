@@ -14,28 +14,32 @@ exports[`EmojiSection Component matches the snapshot on initial render 1`] = `
     }
   >
     <EmojiButton
+      areAnySelected={true}
       emoji="💩"
+      isSelected={false}
       key="0"
       onPress={[Function]}
-      selected=""
     />
     <EmojiButton
+      areAnySelected={true}
       emoji="😘"
+      isSelected={false}
       key="1"
       onPress={[Function]}
-      selected=""
     />
     <EmojiButton
+      areAnySelected={true}
       emoji="🤦‍♀"
+      isSelected={false}
       key="2"
       onPress={[Function]}
-      selected=""
     />
     <EmojiButton
+      areAnySelected={true}
       emoji="👿"
+      isSelected={false}
       key="3"
       onPress={[Function]}
-      selected=""
     />
   </View>
 </Fragment>
@@ -47,8 +51,8 @@ exports[`EmojiSection Component matches the snapshot to initial EmojiButton rend
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "rgba(0, 0, 0, 0.5)",
-      "borderColor": "rgb(62, 62, 62)",
+      "backgroundColor": "white",
+      "borderColor": "rgb(208, 208, 208)",
       "borderRadius": 50,
       "borderWidth": 1,
       "height": 66,
@@ -76,8 +80,8 @@ exports[`EmojiSection Component renders selected emoji button 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "rgba(0, 0, 0, 0.5)",
-      "borderColor": "rgb(197, 41, 105)",
+      "backgroundColor": "white",
+      "borderColor": "rgb(149, 46, 83)",
       "borderRadius": 50,
       "borderWidth": 1,
       "height": 66,
@@ -113,28 +117,32 @@ exports[`EmojiSection Component renders the emojis when one is selected 1`] = `
     }
   >
     <EmojiButton
+      areAnySelected={true}
       emoji="💩"
+      isSelected={true}
       key="0"
       onPress={[Function]}
-      selected="💩"
     />
     <EmojiButton
+      areAnySelected={true}
       emoji="😘"
+      isSelected={false}
       key="1"
       onPress={[Function]}
-      selected="💩"
     />
     <EmojiButton
+      areAnySelected={true}
       emoji="🤦‍♀"
+      isSelected={false}
       key="2"
       onPress={[Function]}
-      selected="💩"
     />
     <EmojiButton
+      areAnySelected={true}
       emoji="👿"
+      isSelected={false}
       key="3"
       onPress={[Function]}
-      selected="💩"
     />
   </View>
 </Fragment>

@@ -17,9 +17,10 @@ exports[`SectionWrapper Component matches the snapshot on initial render 1`] = `
   <Text
     style={
       Object {
-        "color": "rgba(255, 239, 223, 0.8)",
+        "color": "rgb(33, 30, 34)",
         "fontFamily": "TT Commons",
-        "fontSize": 28,
+        "fontSize": 30,
+        "lineHeight": 34,
       }
     }
   >

@@ -5,16 +5,16 @@ exports[`ContactSection Component matches the snapshot on initial render 1`] = `
   <TextInput
     allowFontScaling={true}
     onBlur={[Function]}
-    onChangeText={[Function]}
+    onChangeText={[MockFunction]}
     onFocus={[Function]}
     placeholder="Leave us your email or number..."
-    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+    placeholderTextColor="rgba(0, 0, 0, 0.5)"
     rejectResponderTermination={true}
     style={
       Object {
-        "borderBottomColor": "rgba(255, 255, 255, 0.21)",
+        "borderBottomColor": "#838383",
         "borderBottomWidth": 1,
-        "color": "white",
+        "color": "black",
         "fontFamily": "TT Commons",
         "fontSize": 20,
         "marginTop": 16,
@@ -28,7 +28,7 @@ exports[`ContactSection Component matches the snapshot on initial render 1`] = `
   <Text
     style={
       Object {
-        "color": "white",
+        "color": "rgb(48, 48, 48)",
         "fontFamily": "TT Commons",
         "fontSize": 16,
         "letterSpacing": 0.11,
@@ -47,16 +47,16 @@ exports[`ContactSection Component renders the input with selected border 1`] = `
   <TextInput
     allowFontScaling={true}
     onBlur={[Function]}
-    onChangeText={[Function]}
+    onChangeText={[MockFunction]}
     onFocus={[Function]}
     placeholder="Leave us your email or number..."
-    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+    placeholderTextColor="rgba(0, 0, 0, 0.5)"
     rejectResponderTermination={true}
     style={
       Object {
-        "borderBottomColor": "rgba(255, 255, 255, 0.21)",
+        "borderBottomColor": "#838383",
         "borderBottomWidth": 1,
-        "color": "white",
+        "color": "black",
         "fontFamily": "TT Commons",
         "fontSize": 20,
         "marginTop": 16,
@@ -70,7 +70,7 @@ exports[`ContactSection Component renders the input with selected border 1`] = `
   <Text
     style={
       Object {
-        "color": "white",
+        "color": "rgb(48, 48, 48)",
         "fontFamily": "TT Commons",
         "fontSize": 16,
         "letterSpacing": 0.11,

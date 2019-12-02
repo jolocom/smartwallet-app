@@ -15,8 +15,9 @@ describe('EmojiSection Component', () => {
 
   const defaultButtonProps = {
     emoji: Emoji.Shit,
-    selected: Emoji.Empty,
+    isSelected: false,
     onPress: jest.fn(),
+    areAnySelected: false,
   }
 
   it('matches the snapshot on initial render', () => {
@@ -36,7 +37,11 @@ describe('EmojiSection Component', () => {
   })
 
   it('renders selected emoji button', () => {
-    const props = { ...defaultButtonProps, selected: Emoji.Shit }
+    const props = {
+      ...defaultButtonProps,
+      isSelected: true,
+      areAnySelected: true,
+    }
     const component = shallow(<EmojiButton {...props} />)
     expect(component).toMatchSnapshot()
   })
