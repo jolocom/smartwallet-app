@@ -39,6 +39,7 @@ import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
+import { BottomBarComponent } from './ui/bottomBarComponent'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -139,7 +140,7 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
     style: {
       height: 50,
       bottom: 0,
-      backgroundColor: Colors.bottomTabBarBg,
+      //backgroundColor: Colors.bottomTabBarBg,
     },
   },
   navigationOptions: ({
@@ -154,7 +155,8 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
       headerTitle: I18n.t(BottomTabBarRoutes[nestedRouteName].title),
     }
   },
-  tabBarComponent: BottomTabBar,
+  //tabBarComponent: BottomTabBar,
+  tabBarComponent: BottomBarComponent,
   //tabBarPosition: 'bottom',
 })
 
