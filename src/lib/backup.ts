@@ -11,25 +11,15 @@ export async function backupData(
   userData: any,
   softwareKeyProvider: SoftwareKeyProvider,
   password: string,
-) {
+): Promise<void> {
   const derivationArgs: IKeyDerivationArgs = {
     derivationPath: KeyTypes.jolocomIdentityKey,
     encryptionPass: password,
   }
   const auth = generateAuthenticationData(softwareKeyProvider, password)
-  //TODO encrypt userData
-  const data = {
-    keys: [
-      {
-        pubKey: softwareKeyProvider
-          .getPublicKey(derivationArgs)
-          .toString('hex'),
-        cipher: 'encryptedKey',
-      },
-    ],
-    data: 'hexData',
-  }
-  return await fetch(BACKUP_SERVER_URI + '/store-backup', {
+  const data = await softwareKeyProvider.encryptHybrid(userData, derivationArgs)
+
+  await fetch(BACKUP_SERVER_URI + '/store-backup', {
     method: 'POST',
     body: JSON.stringify({ auth: auth, data: data }),
     headers: { 'Content-Type': 'application/json' },
@@ -40,6 +30,10 @@ export async function fetchBackup(
   softwareKeyProvider: SoftwareKeyProvider,
   password: string,
 ) {
+  const derivationArgs: IKeyDerivationArgs = {
+    derivationPath: KeyTypes.jolocomIdentityKey,
+    encryptionPass: password,
+  }
   const auth = generateAuthenticationData(softwareKeyProvider, password)
 
   const response = await fetch(BACKUP_SERVER_URI + '/get-backup', {
@@ -49,7 +43,9 @@ export async function fetchBackup(
   })
   const body = await response.json()
   if (response.status === 404) return null
-  else if (response.status === 200) return body
+  else if (response.status === 200) {
+    return await softwareKeyProvider.decryptHybrid(body, derivationArgs)
+  }
 
   throw new Error(`Unexpected Response (${response.status}): ${body}`)
 }
