@@ -66,7 +66,6 @@
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B0482C073F644452BA591CD7 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E51C82FF984C3AAEB3745A /* libRNGestureHandler.a */; };
 		B0E821B3835247E3A445A5B4 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC9AFAC42ADC4D81AB9C3208 /* Feather.ttf */; };
-		B465E63E22CE15E500F87457 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = B465E63D22CE15E400F87457 /* main.jsbundle */; };
 		B465E65822CE17D100F87457 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = B465E65722CE17D000F87457 /* assets */; };
 		B465E66522CE1D3F00F87457 /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B465E66422CE1D2500F87457 /* libReactNativePermissions.a */; };
 		B4A807E322C62D0C008E672A /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = B4A807E222C62D0C008E672A /* TTCommons.otf */; };
@@ -499,6 +498,41 @@
 			remoteGlobalIDString = 323A12871E5F266B004975B8;
 			remoteInfo = "ART-tvOS";
 		};
+		D2107A67239565E3006420C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 82B3FE84BBEF41E68075A469 /* RNVectorIcons.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5DBEB1501B18CEA900B34395;
+			remoteInfo = RNVectorIcons;
+		};
+		D2107A69239565E3006420C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 82B3FE84BBEF41E68075A469 /* RNVectorIcons.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A39873CE1EA65EE60051E01A;
+			remoteInfo = "RNVectorIcons-tvOS";
+		};
+		D2107A72239565E3006420C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AA6A09A3F7143629F79D502 /* RNFetchBlob.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A15C300E1CD25C330074CB35;
+			remoteInfo = RNFetchBlob;
+		};
+		D2107A79239565E3006420C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8AD74061DE7F4244B417F098 /* RNSentry.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNSentry;
+		};
+		D2107A7B239565E3006420C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8AD74061DE7F4244B417F098 /* RNSentry.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 274692C321B4414400BF91A8;
+			remoteInfo = "RNSentry-tvOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -559,7 +593,6 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B242209373CE45FCB5EE9B17 /* RNScreens.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNScreens.xcodeproj; path = "../node_modules/react-native-screens/ios/RNScreens.xcodeproj"; sourceTree = "<group>"; };
 		B28F1DFBD3A6479C839B745E /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
-		B465E63D22CE15E400F87457 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = JolocomWallet/main.jsbundle; sourceTree = "<group>"; };
 		B465E65722CE17D000F87457 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = "../../smartwallet-app/ios/assets"; sourceTree = "<group>"; };
 		B465E65F22CE1D2500F87457 /* ReactNativePermissions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativePermissions.xcodeproj; path = "../node_modules/react-native-permissions/ios/ReactNativePermissions.xcodeproj"; sourceTree = "<group>"; };
 		B4A807E222C62D0C008E672A /* TTCommons.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TTCommons.otf; path = ../android/app/src/main/assets/fonts/TTCommons.otf; sourceTree = "<group>"; };
@@ -754,7 +787,6 @@
 		13B07FAE1A68108700A75B9A /* JolocomWallet */ = {
 			isa = PBXGroup;
 			children = (
-				B465E63D22CE15E400F87457 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -1062,6 +1094,32 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D2107A2E239565E2006420C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2107A68239565E3006420C8 /* libRNVectorIcons.a */,
+				D2107A6A239565E3006420C8 /* libRNVectorIcons-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D2107A6F239565E3006420C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2107A73239565E3006420C8 /* libRNFetchBlob.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D2107A75239565E3006420C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2107A7A239565E3006420C8 /* libRNSentry.a */,
+				D2107A7C239565E3006420C8 /* libRNSentry-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1091,7 +1149,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				DED95667E2244A948EC68EE5 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -1153,6 +1210,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 95S8NJ5S67;
 						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -1242,6 +1300,10 @@
 					ProjectRef = 4C65CC91E4AE44FC9E37B2DD /* RNCamera.xcodeproj */;
 				},
 				{
+					ProductGroup = D2107A6F239565E3006420C8 /* Products */;
+					ProjectRef = 1AA6A09A3F7143629F79D502 /* RNFetchBlob.xcodeproj */;
+				},
+				{
 					ProductGroup = B4A807B922C62C72008E672A /* Products */;
 					ProjectRef = 7D582D7D495D4D87A9131799 /* RNGestureHandler.xcodeproj */;
 				},
@@ -1266,8 +1328,16 @@
 					ProjectRef = B242209373CE45FCB5EE9B17 /* RNScreens.xcodeproj */;
 				},
 				{
+					ProductGroup = D2107A75239565E3006420C8 /* Products */;
+					ProjectRef = 8AD74061DE7F4244B417F098 /* RNSentry.xcodeproj */;
+				},
+				{
 					ProductGroup = B4A807C622C62C72008E672A /* Products */;
 					ProjectRef = 86E27CD17DA84E60AF8C2394 /* RNSVG.xcodeproj */;
+				},
+				{
+					ProductGroup = D2107A2E239565E2006420C8 /* Products */;
+					ProjectRef = 82B3FE84BBEF41E68075A469 /* RNVectorIcons.xcodeproj */;
 				},
 				{
 					ProductGroup = B4A8079322C62C72008E672A /* Products */;
@@ -1692,6 +1762,41 @@
 			remoteRef = B4A807EB22C6306C008E672A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		D2107A68239565E3006420C8 /* libRNVectorIcons.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNVectorIcons.a;
+			remoteRef = D2107A67239565E3006420C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D2107A6A239565E3006420C8 /* libRNVectorIcons-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNVectorIcons-tvOS.a";
+			remoteRef = D2107A69239565E3006420C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D2107A73239565E3006420C8 /* libRNFetchBlob.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFetchBlob.a;
+			remoteRef = D2107A72239565E3006420C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D2107A7A239565E3006420C8 /* libRNSentry.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSentry.a;
+			remoteRef = D2107A79239565E3006420C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D2107A7C239565E3006420C8 /* libRNSentry-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNSentry-tvOS.a";
+			remoteRef = D2107A7B239565E3006420C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1710,7 +1815,6 @@
 				B4A8080F22C6394C008E672A /* Launch Screen.storyboard in Resources */,
 				B4A807E322C62D0C008E672A /* TTCommons.otf in Resources */,
 				B465E65822CE17D100F87457 /* assets in Resources */,
-				B465E63E22CE15E500F87457 /* main.jsbundle in Resources */,
 				5089B098C24E4A2E8DC40E18 /* AntDesign.ttf in Resources */,
 				3E527DB531E64FC48B752D9B /* Entypo.ttf in Resources */,
 				36EA89C6DAA34980A68F3AE9 /* EvilIcons.ttf in Resources */,
@@ -1760,7 +1864,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=$(which node)\n\n../node_modules/react-native/scripts/react-native-xcode.sh index.ts\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1775,20 +1879,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		DED95667E2244A948EC68EE5 /* Upload Debug Symbols to Sentry */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Upload Debug Symbols to Sentry";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\n../node_modules/@sentry/cli/bin/sentry-cli upload-dsym";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1953,12 +2043,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Don't Code Sign";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
@@ -1985,7 +2075,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jolocom.wallet;
 				PRODUCT_NAME = JolocomWallet;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.jolocom.wallet";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1994,11 +2084,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
@@ -2025,7 +2115,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jolocom.wallet;
 				PRODUCT_NAME = JolocomWallet;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.jolocom.wallet";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
