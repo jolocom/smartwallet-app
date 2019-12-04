@@ -35,6 +35,7 @@ export enum routeList {
 
   // General
   Exception = 'Exception',
+  ErrorReporting = 'ErrorReporting',
 
   // Dev only
   Storybook = 'Storybook',
