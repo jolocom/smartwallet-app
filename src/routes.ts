@@ -21,7 +21,7 @@ import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import { Settings } from 'src/ui/settings'
 import I18n from 'src/locales/i18n'
-import { QRScannerContainer } from 'src/ui/generic/qrcodeScanner'
+import { InteractionScreen } from 'src/ui/interaction/container/interactionScreen'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
 import { AppInit } from './ui/generic/appInit'
@@ -38,6 +38,7 @@ import {
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
+import { ErrorReporting } from './ui/errors/containers/errorReporting'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -186,9 +187,9 @@ const MainStack = createStackNavigator(
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
-    [routeList.QRCodeScanner]: {
-      screen: QRScannerContainer,
-      navigationOptions: navOptScreenWCancel,
+    [routeList.InteractionScreen]: {
+      screen: InteractionScreen,
+      navigationOptions: noHeaderNavOpts,
     },
 
     [routeList.CredentialDialog]: {
@@ -241,6 +242,10 @@ const MainStack = createStackNavigator(
 
     [routeList.Exception]: {
       screen: Exception,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.ErrorReporting]: {
+      screen: ErrorReporting,
       navigationOptions: noHeaderNavOpts,
     },
     ...(__DEV__ && {

@@ -1,0 +1,213 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChooseIssueSection Component matches the snapshot on initial render 1`] = `
+<Fragment>
+  <View
+    style={
+      Object {
+        "marginTop": 20,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "height": "100%",
+          "justifyContent": "center",
+          "position": "absolute",
+          "right": 20,
+          "zIndex": 2,
+        }
+      }
+    >
+      <DropdownIcon
+        style={
+          Object {
+            "transform": Array [],
+          }
+        }
+      />
+    </View>
+    <ModalDropdown
+      adjustFrame={[Function]}
+      animated={true}
+      defaultIndex={-1}
+      defaultValue="Choose related"
+      disabled={false}
+      dropdownStyle={
+        Object {
+          "backgroundColor": "white",
+          "borderColor": "rgb(224, 224, 224)",
+          "borderRadius": 8,
+          "borderWidth": 1,
+          "paddingVertical": 10,
+        }
+      }
+      dropdownTextHighlightStyle={
+        Object {
+          "color": "rgb(149, 46, 83)",
+        }
+      }
+      dropdownTextStyle={
+        Object {
+          "backgroundColor": "transparent",
+          "color": "black",
+          "fontFamily": "TT Commons",
+          "fontSize": 20,
+          "height": 46,
+          "padding": 10,
+          "paddingLeft": 20,
+          "paddingTop": 14,
+        }
+      }
+      keyboardShouldPersistTaps="never"
+      onDropdownWillHide={[Function]}
+      onDropdownWillShow={[Function]}
+      onSelect={[Function]}
+      options={
+        Array [
+          "No internet connection",
+          "Crash",
+          "Can't login",
+          "Backup is empty",
+          "Can't reach some elements",
+          "I'm just annoying",
+          "Other reason",
+        ]
+      }
+      renderSeparator={[Function]}
+      scrollEnabled={true}
+      showsVerticalScrollIndicator={true}
+      style={
+        Object {
+          "backgroundColor": "white",
+          "borderColor": "rgb(224, 224, 224)",
+          "borderRadius": 8,
+          "borderWidth": 1,
+          "height": 50,
+          "justifyContent": "flex-end",
+          "paddingLeft": 10,
+          "width": "100%",
+        }
+      }
+      textStyle={
+        Object {
+          "color": "rgba(0, 0, 0, 0.5)",
+          "fontFamily": "TT Commons",
+          "fontSize": 20,
+          "padding": 10,
+        }
+      }
+    />
+  </View>
+</Fragment>
+`;
+
+exports[`ChooseIssueSection Component renders the dropdown with selected border 1`] = `
+<Fragment>
+  <View
+    style={
+      Object {
+        "marginTop": 20,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "height": "100%",
+          "justifyContent": "center",
+          "position": "absolute",
+          "right": 20,
+          "zIndex": 2,
+        }
+      }
+    >
+      <DropdownIcon
+        style={
+          Object {
+            "transform": Array [
+              Object {
+                "rotate": "180deg",
+              },
+            ],
+          }
+        }
+      />
+    </View>
+    <ModalDropdown
+      adjustFrame={[Function]}
+      animated={true}
+      defaultIndex={-1}
+      defaultValue="Choose related"
+      disabled={false}
+      dropdownStyle={
+        Object {
+          "backgroundColor": "white",
+          "borderColor": "rgb(224, 224, 224)",
+          "borderRadius": 8,
+          "borderWidth": 1,
+          "paddingVertical": 10,
+        }
+      }
+      dropdownTextHighlightStyle={
+        Object {
+          "color": "rgb(149, 46, 83)",
+        }
+      }
+      dropdownTextStyle={
+        Object {
+          "backgroundColor": "transparent",
+          "color": "black",
+          "fontFamily": "TT Commons",
+          "fontSize": 20,
+          "height": 46,
+          "padding": 10,
+          "paddingLeft": 20,
+          "paddingTop": 14,
+        }
+      }
+      keyboardShouldPersistTaps="never"
+      onDropdownWillHide={[Function]}
+      onDropdownWillShow={[Function]}
+      onSelect={[Function]}
+      options={
+        Array [
+          "No internet connection",
+          "Crash",
+          "Can't login",
+          "Backup is empty",
+          "Can't reach some elements",
+          "I'm just annoying",
+          "Other reason",
+        ]
+      }
+      renderSeparator={[Function]}
+      scrollEnabled={true}
+      showsVerticalScrollIndicator={true}
+      style={
+        Object {
+          "backgroundColor": "white",
+          "borderColor": "rgb(149, 46, 83)",
+          "borderRadius": 8,
+          "borderWidth": 1,
+          "height": 50,
+          "justifyContent": "flex-end",
+          "paddingLeft": 10,
+          "width": "100%",
+        }
+      }
+      textStyle={
+        Object {
+          "color": "rgba(0, 0, 0, 0.5)",
+          "fontFamily": "TT Commons",
+          "fontSize": 20,
+          "padding": 10,
+        }
+      }
+    />
+  </View>
+</Fragment>
+`;
