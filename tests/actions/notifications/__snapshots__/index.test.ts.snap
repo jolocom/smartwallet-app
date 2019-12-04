@@ -302,6 +302,60 @@ Array [
 ]
 `;
 
+exports[`Notifications Actions invokeInteract should keep the notification if onInteract returns true 3`] = `
+Array [
+  Object {
+    "notification": Object {
+      "dismiss": false,
+      "id": "1",
+      "interact": Object {
+        "label": "DO IT",
+        "onInteract": [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": true,
+            },
+          ],
+        },
+      },
+      "message": "sup",
+      "title": "hello",
+      "type": "info",
+    },
+    "type": "SCHEDULE_NOTIFICATION",
+  },
+  Object {
+    "expiry": undefined,
+    "notification": Object {
+      "dismiss": false,
+      "id": "1",
+      "interact": Object {
+        "label": "DO IT",
+        "onInteract": [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": true,
+            },
+          ],
+        },
+      },
+      "message": "sup",
+      "title": "hello",
+      "type": "info",
+    },
+    "type": "SET_ACTIVE_NOTIFICATION",
+  },
+]
+`;
+
 exports[`Notifications Actions removeNotification should remove the notification from the queue 1`] = `
 Array [
   Object {

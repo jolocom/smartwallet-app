@@ -179,6 +179,7 @@ describe('Notifications Actions', () => {
       mockStore.dispatch(invokeInteract(sticky))
       expect(mockStore.getActions()).toMatchSnapshot()
       jest.runAllTimers()
+      expect(mockStore.getActions()).toMatchSnapshot()
       expect(onInteract).toHaveBeenCalledTimes(1)
     })
   })
