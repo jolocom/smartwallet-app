@@ -22,24 +22,37 @@ platform :android do
   end
 
   desc "Submit a new Beta Build to Play Store"
-  lane :beta do
-    store_password = prompt(text: "Signing Store Password: ", secure_text: true)
-    key_password = prompt(text: "Alias Key Password: ", secure_text: true)
-    releaseFilePath = File.join(Dir.pwd, "..", "JoloSmartWallet.keystore")
-    gradle(task: 'clean')
-    gradle(
+  lane :beta do  desc "Submit a new Beta Build to Play Store"
+    sh("git clone git@infra.jolocom.io:android-secrets")
+    password = prompt(
+      text: "password: ",
+      secure_text: true
+    )
+    sh("openssl enc -aes-256-cbc -d -in ./android-secrets/secrets.enc -out secrets.json -k #{password}", log: false)
+    sh("openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out key.json -k #{password}", log: false)
+    secrets = load_json(json_path: "./android-secrets/secrets.json")
+    releaseFilePath = File.join(Dir.pwd, "..", "android-secrets", "JoloSmartWallet.keystore")
+    build_android_app(task: 'clean')
+    build_android_app(
       task: 'assemble',
       build_type: 'Release',
       print_command: false,
       properties: {
         "android.injected.signing.store.file" => releaseFilePath,
-        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.store.password" => secrets["keystorePassword"],
         "android.injected.signing.key.alias" => "JoloSmartWallet",
-        "android.injected.signing.key.password" => key_password,
+        "android.injected.signing.key.password" => secrets["keystorePassword"],
       }
+    )
+    sentry_upload_dsym(
+      auth_token: secrets["sentryAuth"],
+      org_slug: 'jolocom',
+      project_slug: 'smartwallet',
     )
     upload_to_play_store(
       track: 'internal'
     )
+    sh("rm secrets.json")
+    sh("rm key.json")
   end
 end
