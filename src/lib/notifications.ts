@@ -25,6 +25,8 @@ type NotificationDismiss = {
 /**
  * A notification may have a call to action button,
  * with a label and an onInteract callback
+ * It is not possible to simply specify a boolean, because if an interaction is
+ * expected then a callback and label are required.
  */
 type NotificationInteract = {
   interact?: {

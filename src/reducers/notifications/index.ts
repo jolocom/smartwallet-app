@@ -9,7 +9,7 @@ export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS'
 
 export type NotificationsState = {
   queue: Notification[]
-  active?: Notification | null
+  active: Notification | null
   activeExpiryTs?: number
 }
 

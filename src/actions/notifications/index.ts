@@ -52,8 +52,9 @@ export const invokeDismiss = (
   notif: Notification,
 ): ThunkAction => async dispatch => {
   const { dismiss } = notif
-  if (dismiss && typeof dismiss === 'object' && dismiss.onDismiss)
+  if (typeof dismiss === 'object' && dismiss.onDismiss) {
     await dismiss.onDismiss()
+  }
   return dispatch(removeNotification(notif))
 }
 
@@ -71,7 +72,7 @@ export const clearAllNotifications = (): ThunkAction => dispatch => {
  * update action.
  */
 
-let nextUpdateTimeout: ReturnType<typeof setTimeout> | null = null
+let nextUpdateTimeout: number | null = null
 let updateInProgress = false
 // ThunkActions must always return an AnyAction, unless they are async
 // This is async just so it can some times return nothing (when there is another
@@ -100,8 +101,7 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
       // find the next dissmissible notification, or otherwise take the first in
       // queue. Note that this means we do not support showing two non-dismissible
       // notifications
-      const idx = queue.findIndex(notification => !!notification.dismiss)
-      next = queue[idx > -1 ? idx : 0]
+      next = queue.find(notification => !!notification.dismiss) || queue[0]
     }
   } else if (active) {
     // active notification should not be changed
