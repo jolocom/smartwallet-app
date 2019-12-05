@@ -5,6 +5,7 @@ import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
+import { BackupData } from '../../lib/backup'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -67,7 +68,7 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
   return
 }
 
-export const recoverIdentity = (backup?: object): ThunkAction => async (
+export const recoverIdentity = (backup?: BackupData): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,

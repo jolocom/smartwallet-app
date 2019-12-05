@@ -2,10 +2,7 @@ import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
 import { Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 import { ConnectionOptions } from 'typeorm/browser'
-import {
-  createJolocomRegistry,
-  JolocomRegistry,
-} from 'jolocom-lib/js/registries/jolocomRegistry'
+import { createJolocomRegistry, JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { IpfsCustomConnector } from './lib/ipfs'
 import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
@@ -15,7 +12,8 @@ import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from './lib/util'
-import { fetchBackup } from './lib/backup'
+import { BackupData, backupData, fetchBackup } from './lib/backup'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 export enum ErrorCodes {
   NoEntropy = 'NoEntropy',
@@ -146,6 +144,11 @@ export class BackendMiddleware {
     }
   }
 
+  public async backupData(data: BackupData): Promise<void> {
+    const password = await this.keyChainLib.getPassword()
+    return backupData(data, this._keyProvider, password)
+  }
+
   public async recoverSeed(seedPhrase: string): Promise<void> {
     const password = (await generateSecureRandomBytes(32)).toString('base64')
     this._keyProvider = JolocomLib.KeyProvider.recoverKeyPair(
@@ -155,29 +158,43 @@ export class BackendMiddleware {
     await this.keyChainLib.savePassword(password)
   }
 
-  public async fetchBackup(): Promise<object | undefined> {
+  public async fetchBackup(): Promise<BackupData | undefined> {
     const password = await this.keyChainLib.getPassword()
     return fetchBackup(this._keyProvider, password)
   }
 
-  public async recoverData(data: object): Promise<string | undefined> {
-    if (data['credentials']) {
-      for (let i = 0; i < data['credentials'].length; i++) {
-        await this.storageLib.store.verifiableCredential(data['credentials'][i])
+  public async recoverData(data: BackupData): Promise<string | undefined> {
+
+    // FIXME Hack because of weird foreign key in database (credential.subject <--> persona.did)
+    const personaData = {
+      did: data.did,
+      controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
+    }
+    await this.storageLib.store.persona(personaData)
+    // end hack
+
+    if (data.credentials) {
+      for (let i = 0; i < data.credentials.length; i++) {
+        const credential = SignedCredential.fromJSON(data.credentials[i])
+        await this.storageLib.store.verifiableCredential(credential)
       }
     }
-    if (data['did']) return data['did']
-    return // throw new Error('Missing DID in backup') - Uncomment this
+    if (data.did) return data.did
+    return // throw new Error('Missing DID in backup') - Uncomment this when requiring a DID in the backup
   }
 
   public async recoverIdentity(did?: string): Promise<Identity> {
     const password = await this.keyChainLib.getPassword()
     const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
 
-    const identityWallet = await this.registry.authenticate(this._keyProvider, {
-      encryptionPass: password,
-      derivationPath,
-    })
+    const identityWallet = await this.registry.authenticate(
+      this._keyProvider,
+      {
+        encryptionPass: password,
+        derivationPath,
+      },
+      did,
+    )
     this._identityWallet = identityWallet
     await this.storeIdentityData()
     return identityWallet.identity
