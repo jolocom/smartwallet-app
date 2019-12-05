@@ -41,13 +41,13 @@ export async function fetchBackup(
     body: JSON.stringify({ auth: auth }),
     headers: { 'Content-Type': 'application/json' },
   })
-  const body = await response.json()
-  if (response.status === 404) return null
+
+  if (response.status === 404) return
   else if (response.status === 200) {
+    const body = await response.json()
     return await softwareKeyProvider.decryptHybrid(body, derivationArgs)
   }
-
-  throw new Error(`Unexpected Response (${response.status}): ${body}`)
+  throw new Error(`Unexpected Response (${response.status})`)
 }
 
 function generateAuthenticationData(

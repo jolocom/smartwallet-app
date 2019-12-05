@@ -48,22 +48,36 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   return dispatch(navigatorResetHome())
 }
 
-export const recoverIdentity = (mnemonic: string): ThunkAction => async (
+export const recoverSeed = (mnemonic: string): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
   dispatch(setIsRegistering(true))
-  let identity
   try {
-    identity = await backendMiddleware.recoverIdentity(mnemonic)
+    await backendMiddleware.recoverSeed(mnemonic)
   } catch (e) {
     return dispatch(setIsRegistering(false))
   }
 
+  const backup = await backendMiddleware.fetchBackup()
+  return dispatch(recoverIdentity(backup))
+
+  // TODO ask user for backup if nothing is stored in the cloud
+  return
+}
+
+export const recoverIdentity = (backup?: object): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+
+  const did = backup ? await backendMiddleware.recoverData(backup) : undefined
+  const identity = await backendMiddleware.recoverIdentity(did)
+
   dispatch(setDid(identity.did))
   dispatch(setSeedPhraseSaved())
-
   dispatch(setIsRegistering(false))
   return dispatch(navigatorResetHome())
 }

@@ -15,6 +15,7 @@ import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from './lib/util'
+import { fetchBackup } from './lib/backup'
 
 export enum ErrorCodes {
   NoEntropy = 'NoEntropy',
@@ -144,12 +145,33 @@ export class BackendMiddleware {
       return (this._identityWallet = identityWallet)
     }
   }
-  public async recoverIdentity(mnemonic: string): Promise<Identity> {
+
+  public async recoverSeed(seedPhrase: string): Promise<void> {
     const password = (await generateSecureRandomBytes(32)).toString('base64')
     this._keyProvider = JolocomLib.KeyProvider.recoverKeyPair(
-      mnemonic,
+      seedPhrase,
       password,
-    ) as SoftwareKeyProvider
+    )
+    await this.keyChainLib.savePassword(password)
+  }
+
+  public async fetchBackup(): Promise<object | undefined> {
+    const password = await this.keyChainLib.getPassword()
+    return fetchBackup(this._keyProvider, password)
+  }
+
+  public async recoverData(data: object): Promise<string | undefined> {
+    if (data['credentials']) {
+      for (let i = 0; i < data['credentials'].length; i++) {
+        await this.storageLib.store.verifiableCredential(data['credentials'][i])
+      }
+    }
+    if (data['did']) return data['did']
+    return // throw new Error('Missing DID in backup') - Uncomment this
+  }
+
+  public async recoverIdentity(did?: string): Promise<Identity> {
+    const password = await this.keyChainLib.getPassword()
     const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
 
     const identityWallet = await this.registry.authenticate(this._keyProvider, {
@@ -157,7 +179,6 @@ export class BackendMiddleware {
       derivationPath,
     })
     this._identityWallet = identityWallet
-    await this.keyChainLib.savePassword(password)
     await this.storeIdentityData()
     return identityWallet.identity
   }

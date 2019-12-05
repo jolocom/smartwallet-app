@@ -4,7 +4,7 @@ import { ThunkDispatch } from '../../../store'
 import InputSeedPhraseComponent from '../components/inputSeedPhrase'
 import { validateMnemonic, wordlists } from 'bip39'
 import { withErrorScreen } from '../../../actions/modifiers'
-import { recoverIdentity } from '../../../actions/registration'
+import { recoverSeed } from '../../../actions/registration'
 import { routeList } from '../../../routeList'
 import { StatusBar, TextInput } from 'react-native'
 import { timeout } from '../../../utils/asyncTimeout'
@@ -167,7 +167,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   recoverIdentity: (seedPhrase: string) =>
-    dispatch(withErrorScreen(recoverIdentity(seedPhrase))),
+    dispatch(withErrorScreen(recoverSeed(seedPhrase))),
   goBack: () =>
     dispatch(navigationActions.navigate({ routeName: routeList.Landing })),
 })

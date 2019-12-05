@@ -4174,10 +4174,9 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-eccrypto@^1.1.2:
+eccrypto@rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88:
   version "1.1.2"
-  resolved "https://registry.yarnpkg.com/eccrypto/-/eccrypto-1.1.2.tgz#7962402f923044d25a802d7369447b0a563873b1"
-  integrity sha512-4z/uF18h2TFdqqtFSUvlwRD9epzmeEEUZ4nVMv3ox+jy+V7AxU9s3nLoEDDbptTUlkAbAp5bPfhaS7H4naoFqg==
+  resolved "https://codeload.github.com/rootstock/eccrypto/tar.gz/485e11f163093fb6e0d5263fa46ed5075dedfe88"
   dependencies:
     acorn "7.1.0"
     elliptic "6.5.1"
@@ -7067,10 +7066,9 @@ jest@^24.8.0:
     import-local "^2.0.0"
     jest-cli "^24.8.0"
 
-jolocom-lib@^4.0.0:
+"jolocom-lib@file:../jolocom-lib/jolocom-lib-4.0.1.tgz":
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.0.0.tgz#ff215f346dd05dbf92524c94be1219caadb8c95b"
-  integrity sha512-aK5zCNaPpw76JiTPVUe6wQ8cUDkA54z5toc80SkSonAL6BUvkdtYdH+mo8xyF05lHikyz3kwhQHP+NcG1C3dEw==
+  resolved "file:../jolocom-lib/jolocom-lib-4.0.1.tgz#353309bdddc4594337023af1c80e463797be40e0"
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"
@@ -7079,7 +7077,7 @@ jolocom-lib@^4.0.0:
     create-hash "^1.2.0"
     cred-types-jolocom-core "^0.0.11"
     detect-node "^2.0.4"
-    eccrypto "^1.1.2"
+    eccrypto rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88
     ethereumjs-tx "^1.3.7"
     ethereumjs-util "^6.1.0"
     ethers "^4.0.27"
