@@ -25,21 +25,20 @@ import { InteractionScreen } from 'src/ui/interaction/container/interactionScree
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
 import { AppInit } from './ui/generic/appInit'
-import BottomTabBar from 'src/ui/generic/bottomTabBar'
 import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
 
 import {
-  DocumentsMenuIcon,
-  IdentityMenuIcon,
-  RecordsMenuIcon,
-  SettingsMenuIcon,
+  DocsIcon,
+  HistoryIcon,
+  IdentityIcon,
+  SettingsIcon,
 } from 'src/resources'
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
-import { BottomBarComponent } from './ui/bottomBarComponent'
+import { BottomBar } from './ui/navigation/container/bottomBar'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -85,10 +84,10 @@ const navOptScreenWCancel = {
 export const BottomTabBarRoutes = {
   [routeList.Claims]: {
     screen: Claims,
-    title: strings.MY_IDENTITY,
+    title: strings.IDENTITY,
     navigationOptions: {
       ...commonNavigationOptions,
-      tabBarIcon: IdentityMenuIcon,
+      tabBarIcon: IdentityIcon,
     },
   },
   [routeList.Documents]: {
@@ -96,22 +95,15 @@ export const BottomTabBarRoutes = {
     title: strings.DOCUMENTS,
     navigationOptions: {
       ...commonNavigationOptions,
-      tabBarIcon: (props: {
-        tintColor: string
-        focused: boolean
-        fillColor?: string
-      }) => {
-        props.fillColor = Colors.bottomTabBarBg
-        return new DocumentsMenuIcon(props)
-      },
+      tabBarIcon: DocsIcon,
     },
   },
   [routeList.Records]: {
     screen: Records,
-    title: strings.LOGIN_RECORDS,
+    title: strings.HISTORY,
     navigationOptions: {
       ...commonNavigationOptions,
-      tabBarIcon: RecordsMenuIcon,
+      tabBarIcon: HistoryIcon,
     },
   },
   [routeList.Settings]: {
@@ -119,30 +111,12 @@ export const BottomTabBarRoutes = {
     title: strings.SETTINGS,
     navigationOptions: {
       ...commonNavigationOptions,
-      tabBarIcon: SettingsMenuIcon,
+      tabBarIcon: SettingsIcon,
     },
   },
 }
 
 const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
-  tabBarOptions: {
-    ...Platform.select({
-      android: {
-        activeTintColor: Colors.purpleMain,
-        inactiveTintColor: Colors.greyLighter,
-      },
-      ios: {
-        activeTintColor: Colors.white,
-        inactiveTintColor: Colors.white050,
-      },
-    }),
-    showLabel: false,
-    style: {
-      height: 50,
-      bottom: 0,
-      //backgroundColor: Colors.bottomTabBarBg,
-    },
-  },
   navigationOptions: ({
     navigation,
   }: {
@@ -155,9 +129,7 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
       headerTitle: I18n.t(BottomTabBarRoutes[nestedRouteName].title),
     }
   },
-  //tabBarComponent: BottomTabBar,
-  tabBarComponent: BottomBarComponent,
-  //tabBarPosition: 'bottom',
+  tabBarComponent: BottomBar,
 })
 
 const RegistrationScreens = createSwitchNavigator(
@@ -258,7 +230,7 @@ const MainStack = createStackNavigator(
     }),
   },
   {
-    defaultNavigationOptions: commonNavigationOptions,
+    defaultNavigationOptions: noHeaderNavOpts,
   },
 )
 
