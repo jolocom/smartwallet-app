@@ -1,8 +1,11 @@
 import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
-import { Storage } from 'src/lib/storage/storage'
+import { CredentialMetadataSummary, Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 import { ConnectionOptions } from 'typeorm/browser'
-import { createJolocomRegistry, JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
+import {
+  createJolocomRegistry,
+  JolocomRegistry,
+} from 'jolocom-lib/js/registries/jolocomRegistry'
 import { IpfsCustomConnector } from './lib/ipfs'
 import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
@@ -14,6 +17,7 @@ import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareP
 import { generateSecureRandomBytes } from './lib/util'
 import { BackupData, backupData, fetchBackup } from './lib/backup'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { isEmpty } from 'ramda'
 
 export enum ErrorCodes {
   NoEntropy = 'NoEntropy',
@@ -144,7 +148,24 @@ export class BackendMiddleware {
     }
   }
 
-  public async backupData(data: BackupData): Promise<void> {
+  public async backupData(): Promise<void> {
+    const credentials = await this.storageLib.get.verifiableCredential()
+    const credentialMetadata = [] as CredentialMetadataSummary[]
+    for (const cred of credentials) {
+      const metadata = await this.storageLib.get.credentialMetadata(cred)
+      if (!isEmpty(metadata)) {
+        metadata.issuer = await this.storageLib.get.publicProfile(
+          metadata.issuer,
+        )
+        credentialMetadata.push(metadata)
+      }
+    }
+    const data: BackupData = {
+      did: this._identityWallet.did,
+      credentials: credentials.map(cred => cred.toJSON()),
+      credentialMetadata,
+    }
+
     const password = await this.keyChainLib.getPassword()
     return backupData(data, this._keyProvider, password)
   }
@@ -164,7 +185,6 @@ export class BackendMiddleware {
   }
 
   public async recoverData(data: BackupData): Promise<string | undefined> {
-
     // FIXME Hack because of weird foreign key in database (credential.subject <--> persona.did)
     const personaData = {
       did: data.did,
@@ -177,6 +197,13 @@ export class BackendMiddleware {
       for (let i = 0; i < data.credentials.length; i++) {
         const credential = SignedCredential.fromJSON(data.credentials[i])
         await this.storageLib.store.verifiableCredential(credential)
+      }
+    }
+    if (data.credentialMetadata) {
+      for (const metadata of data.credentialMetadata) {
+        if (metadata) {
+          await this.storageLib.store.credentialMetadata(metadata)
+        }
       }
     }
     if (data.did) return data.did

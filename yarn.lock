@@ -4174,7 +4174,7 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-eccrypto@rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88:
+"eccrypto@github:rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88":
   version "1.1.2"
   resolved "https://codeload.github.com/rootstock/eccrypto/tar.gz/485e11f163093fb6e0d5263fa46ed5075dedfe88"
   dependencies:
@@ -7066,9 +7066,10 @@ jest@^24.8.0:
     import-local "^2.0.0"
     jest-cli "^24.8.0"
 
-"jolocom-lib@file:../jolocom-lib/jolocom-lib-4.0.1.tgz":
-  version "4.0.0"
-  resolved "file:../jolocom-lib/jolocom-lib-4.0.1.tgz#353309bdddc4594337023af1c80e463797be40e0"
+jolocom-lib@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.0.1.tgz#6a7ff5817e44463f9e7cb60ee104f00bc66f775a"
+  integrity sha512-Uv5Bnr6U6ql6HToPT7DSgKjLjEbzzWCerTs3Up3UzJKU/64RMTyI6vFSxjRW0maF4Aq3QPv4Bz96iQqFKcOkgA==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"

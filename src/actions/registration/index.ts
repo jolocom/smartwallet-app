@@ -4,8 +4,9 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
-import { setSeedPhraseSaved } from '../recovery'
+import { backupData, setSeedPhraseSaved } from '../recovery'
 import { BackupData } from '../../lib/backup'
+import { withLoading } from '../modifiers'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -73,12 +74,12 @@ export const recoverIdentity = (backup?: BackupData): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-
   const did = backup ? await backendMiddleware.recoverData(backup) : undefined
   const identity = await backendMiddleware.recoverIdentity(did)
 
   dispatch(setDid(identity.did))
   dispatch(setSeedPhraseSaved())
+  dispatch(withLoading(backupData()))
   dispatch(setIsRegistering(false))
   return dispatch(navigatorResetHome())
 }

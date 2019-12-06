@@ -30,11 +30,6 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  const data = {
-    did: getState().account.did.did,
-    credentials: (await backendMiddleware.storageLib.get.verifiableCredential()).map(cred => cred.toJSON())
-  }
-  await backendMiddleware.backupData(data)
   await backendMiddleware.storageLib.store.setting(
     settingKeys.seedPhraseSaved,
     true,
@@ -42,4 +37,13 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
   return dispatch({
     type: 'SET_SEED_PHRASE_SAVED',
   })
+}
+
+export const backupData = (): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  // TODO check if user wants that
+  await backendMiddleware.backupData()
 }

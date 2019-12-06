@@ -5,12 +5,14 @@ import {
 } from 'jolocom-lib/js/vaultedKeyProvider/types'
 import * as crypto from 'crypto'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
+import { CredentialMetadataSummary } from './storage/storage'
 
 export const BACKUP_SERVER_URI = 'https://backup.jolocom.io'
 
 export interface BackupData {
-  did: string,
+  did: string
   credentials: ISignedCredentialAttrs[]
+  credentialMetadata: CredentialMetadataSummary[]
 }
 
 export async function backupData(
@@ -27,7 +29,7 @@ export async function backupData(
 
   await fetch(BACKUP_SERVER_URI + '/store-backup', {
     method: 'POST',
-    body: JSON.stringify({ auth: auth, data: data }),
+    body: JSON.stringify({ auth, data }),
     headers: { 'Content-Type': 'application/json' },
   })
 }
@@ -35,7 +37,7 @@ export async function backupData(
 export async function fetchBackup(
   softwareKeyProvider: SoftwareKeyProvider,
   password: string,
-): Promise<BackupData| undefined> {
+): Promise<BackupData | undefined> {
   const derivationArgs: IKeyDerivationArgs = {
     derivationPath: KeyTypes.jolocomIdentityKey,
     encryptionPass: password,
@@ -44,14 +46,17 @@ export async function fetchBackup(
 
   const response = await fetch(BACKUP_SERVER_URI + '/get-backup', {
     method: 'POST',
-    body: JSON.stringify({ auth: auth }),
+    body: JSON.stringify({ auth }),
     headers: { 'Content-Type': 'application/json' },
   })
 
   if (response.status === 404) return
   else if (response.status === 200) {
     const body = await response.json()
-    return await softwareKeyProvider.decryptHybrid(body, derivationArgs) as BackupData
+    return (await softwareKeyProvider.decryptHybrid(
+      body,
+      derivationArgs,
+    )) as BackupData
   }
   throw new Error(`Unexpected Response (${response.status})`)
 }
@@ -73,7 +78,7 @@ function generateAuthenticationData(
 
   return {
     pubKey: softwareKeyProvider.getPublicKey(derivationArgs).toString('hex'),
-    date: date,
+    date,
     sig: sig.toString('hex'),
   }
 }
