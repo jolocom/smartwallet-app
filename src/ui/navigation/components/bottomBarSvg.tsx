@@ -2,7 +2,7 @@ import React from 'react'
 import { Dimensions } from 'react-native'
 import Svg, { G, Mask, Path, Polygon } from 'react-native-svg'
 
-const scaleSVGPath = (path: string, factor: number) => {
+export const scaleSVGPath = (path: string, factor: number) => {
   const coordArray = path.split(' ')
   const isLastZ = coordArray[coordArray.length - 1][0] === 'Z'
   if (isLastZ) coordArray.pop()
@@ -33,7 +33,7 @@ export const SVGBar = () => {
   const { width } = Dimensions.get('window')
   const origWidth = 414
   const origHeight = 110
-  const scaleFactor = (width / origWidth)
+  const scaleFactor = width / origWidth
   // const origPath =
   //   'M414,38.2468806 L414,109.427911 L414,109.427911 L0,110.544855 L0,38.2468806 C-2.53876144e-15,17.5163202 16.8054396,0.710880602 37.536,0.710880602 L163.503362,0.710880602 L163.503362,0.710880602 C161.782566,5.63732363 160.846285,10.9383896 160.846285,16.4607145 C160.846285,42.5558923 181.753319,63.710216 207.543594,63.710216 C233.333869,63.710216 254.240903,42.5558923 254.240903,16.4607145 C254.240903,10.9383896 253.304622,5.63732363 251.583826,0.710880602 L376.423017,0.710880602 C397.153577,0.710880602 414,17.5163202 414,38.2468806 Z'
   const origPath =

@@ -117,6 +117,10 @@ export const BottomTabBarRoutes = {
 }
 
 const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
+  tabBarOptions: {
+    activeTintColor: Colors.white,
+    inactiveTintColor: Colors.gray151,
+  },
   navigationOptions: ({
     navigation,
   }: {

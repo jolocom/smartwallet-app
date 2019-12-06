@@ -1,8 +1,10 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   View,
-  AccessibilityRole, AccessibilityState,
+  Dimensions,
+  AccessibilityRole,
+  AccessibilityState,
 } from 'react-native'
 import { BottomTabBarProps, TabScene, SafeAreaView } from 'react-navigation'
 import { SVGBar } from '../components/bottomBarSvg'
@@ -14,25 +16,26 @@ import { ThunkDispatch } from '../../../store'
 import { navigationActions } from '../../../actions'
 import { withLoading } from '../../../actions/modifiers'
 
+const { width } = Dimensions.get('window')
+const BAR_HEIGHT = (width / 414) * 70
+
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
     width: '100%',
-    bottom: 67 - 110,
-    //bottom: '-6%'
+    bottom: BAR_HEIGHT - 110,
   },
   buttonWrapper: {
     position: 'absolute',
     width: '100%',
     top: 0,
     bottom: 0,
-    height: 67,
+    height: BAR_HEIGHT,
     zIndex: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-
 })
 
 interface Props
@@ -58,8 +61,11 @@ const BottomBarContainer = (props: Props) => {
     getAccessibilityStates,
     navigateInteraction,
     safeAreaInset,
+    activeTintColor,
+    inactiveTintColor,
   } = props
   const { routes, index } = navigation.state
+  const colors = { activeTintColor, inactiveTintColor }
 
   return (
     <SafeAreaView style={styles.wrapper} forceInset={safeAreaInset}>
@@ -80,12 +86,12 @@ const BottomBarContainer = (props: Props) => {
               {i === 2 && <View style={{ flex: 1 }} />}
               <TabButton
                 testID={testID}
-                focused={focused}
-                route={route}
-                renderIcon={(scene: TabScene) => renderIcon(scene)}
+                scene={scene}
+                renderIcon={renderIcon}
                 onTabPress={() => onTabPress(scene)}
                 label={label}
                 accessibility={accessibility}
+                colors={colors}
               />
             </React.Fragment>
           )

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   gradient: {
     flex: 1,

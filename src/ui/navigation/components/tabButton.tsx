@@ -1,9 +1,12 @@
-import { NavigationRoute, TabScene } from 'react-navigation'
+import { TabScene } from 'react-navigation'
 import React from 'react'
-import { Colors } from '../../../styles'
-// @ts-ignore
-import CrossFadeIcon from 'react-navigation-tabs/src/views/CrossFadeIcon'
-import { AccessibilityRole, AccessibilityState, Animated, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  AccessibilityRole,
+  AccessibilityState,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import { fontLight } from '../../../styles/typography'
 
 const styles = StyleSheet.create({
@@ -12,35 +15,43 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     fontSize: 12,
     fontFamily: fontLight,
-    marginTop: 15,
-    marginBottom: '16%',
+    marginTop: 5,
   },
   button: {
     zIndex: 4,
     flex: 1,
     height: '100%',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
 interface Props {
   testID: string
-  focused: boolean
-  route: NavigationRoute
+  scene: TabScene
   renderIcon: (scene: TabScene) => React.ReactNode
   onTabPress: () => void
   label: string
   accessibility: {
-    label: string,
-    role: AccessibilityRole,
-    states: AccessibilityState[],
+    label: string
+    role: AccessibilityRole
+    states: AccessibilityState[]
+  }
+  colors: {
+    activeTintColor: string
+    inactiveTintColor: string
   }
 }
 export const TabButton = (props: Props) => {
-  const { focused, route, renderIcon, onTabPress, label, testID, accessibility } = props
-
-  const activeOpacity = focused ? 1 : 0
-  const inactiveOpacity = focused ? 0 : 1
+  const {
+    scene,
+    renderIcon,
+    onTabPress,
+    label,
+    testID,
+    accessibility,
+    colors,
+  } = props
 
   return (
     <TouchableOpacity
@@ -52,25 +63,27 @@ export const TabButton = (props: Props) => {
       accessibilityRole={accessibility.role}
       accessibilityStates={accessibility.states}
     >
-      <CrossFadeIcon
-        route={route}
-        activeOpacity={activeOpacity}
-        inactiveOpacity={inactiveOpacity}
-        activeTintColor={Colors.white}
-        inactiveTintColor={Colors.gray151}
-        horizontal={false}
-        renderIcon={renderIcon}
-      />
-      <Animated.Text
+      {renderIcon({
+        ...scene,
+        tintColor: scene.focused
+          ? colors.activeTintColor
+          : colors.inactiveTintColor,
+      })}
+
+      <Text
         numberOfLines={1}
         style={[
           styles.label,
-          { color: focused ? Colors.white : Colors.white050 },
+          {
+            color: scene.focused
+              ? colors.activeTintColor
+              : colors.inactiveTintColor,
+          },
         ]}
         allowFontScaling={true}
       >
         {label}
-      </Animated.Text>
+      </Text>
     </TouchableOpacity>
   )
 }
