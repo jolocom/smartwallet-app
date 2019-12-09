@@ -111,11 +111,7 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
   // if there's a next and it is not the already active notification
   if (next && next != active) {
     // if next should be automatically dismissed, setup a timeout for it
-    if (
-      next.dismiss &&
-      typeof next.dismiss === 'object' &&
-      next.dismiss.timeout
-    ) {
+    if (next.dismiss && next.dismiss.timeout) {
       if (nextUpdateTimeout) {
         // this should normally never be the case.... but
         clearTimeout(nextUpdateTimeout)

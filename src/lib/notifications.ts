@@ -15,7 +15,7 @@ interface NotificationMessage {
  */
 
 type NotificationDismiss = {
-  dismiss?: boolean | {
+  dismiss?: false | {
     label?: string,
     timeout?: number,
     onDismiss?: (...args: any) => void
