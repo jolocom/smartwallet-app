@@ -6,14 +6,20 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native'
 import { fontLight } from '../../../styles/typography'
+import { BP } from '../../../styles/breakpoints'
 
 const styles = StyleSheet.create({
   label: {
     textAlign: 'center',
     backgroundColor: 'transparent',
-    fontSize: 12,
+    fontSize: BP({
+      small: 10,
+      medium: 12,
+      large: 13,
+    }),
     fontFamily: fontLight,
     marginTop: 5,
   },
@@ -42,6 +48,7 @@ interface Props {
     inactiveTintColor: string
   }
 }
+
 export const TabButton = (props: Props) => {
   const {
     scene,
@@ -53,6 +60,12 @@ export const TabButton = (props: Props) => {
     colors,
   } = props
 
+  const iconSize = BP({
+    small: 18,
+    medium: 21,
+    large: 23,
+  })
+
   return (
     <TouchableOpacity
       testID={testID}
@@ -63,13 +76,14 @@ export const TabButton = (props: Props) => {
       accessibilityRole={accessibility.role}
       accessibilityStates={accessibility.states}
     >
-      {renderIcon({
-        ...scene,
-        tintColor: scene.focused
-          ? colors.activeTintColor
-          : colors.inactiveTintColor,
-      })}
-
+      <View style={{ width: iconSize, height: iconSize }}>
+        {renderIcon({
+          ...scene,
+          tintColor: scene.focused
+            ? colors.activeTintColor
+            : colors.inactiveTintColor,
+        })}
+      </View>
       <Text
         numberOfLines={1}
         style={[
