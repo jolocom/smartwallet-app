@@ -31,18 +31,27 @@ platform :android do
   end
 
   lane :get_secrets do
-    sh("git clone git@infra.jolocom.io:android-secrets")
+    begin
+      sh("git clone git@infra.jolocom.io:android-secrets")
+    rescue
+      puts "secrets already present"
+    end
     password = prompt(
       text: "password: ",
       secure_text: true
     )
-    sh("openssl enc -aes-256-cbc -d -in ./android-secrets/secrets.enc -out secrets.json -k #{password}", log: false)
-    sh("openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out key.json -k #{password}", log: false)
+    sh(
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/secrets.enc -out secrets.json -k #{password}",
+      log: false
+    )
+    sh(
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out key.json -k #{password}",
+      log: false
+    )
     load_json(json_path: "./android-secrets/secrets.json")
   end
 
   lane :build do |options|
-    secrets = get_secrets
     releaseFilePath = File.join(Dir.pwd, "..", "android-secrets", "JoloSmartWallet.keystore")
     build_android_app(task: 'clean')
     if options[:local]
@@ -52,6 +61,7 @@ platform :android do
         print_command: false,
       )
     else
+      secrets = get_secrets
       build_android_app(
         task: 'assemble',
         build_type: 'Release',

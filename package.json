@@ -82,7 +82,7 @@
     "clean:react": "rm -rf $TMP/react* $TMP/haste-map-metro* $TMP/metro-cache*",
     "clean:all": "yarn run clean:ios & yarn run clean:android && yarn run clean:react && yarn run clean:node",
     "build:ios": "cd ios && bundle exec fastlane build",
-    "build:android": "cd android && bundle exec fastlane build",
+    "build:android": "cd android && bundle exec fastlane build local:true",
     "beta:ios": "cd ios && bundle exec fastlane beta",
     "beta:android": "cd android && bundle exec fastlane beta",
     "release:ios": "cd ios && bundle exec fastlane release",
