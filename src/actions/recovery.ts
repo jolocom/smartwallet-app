@@ -60,6 +60,5 @@ export const backupData = (): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  if(getState().settings.autoBackup)
-    await backendMiddleware.backupData()
+  if (getState().settings.autoBackup) await backendMiddleware.backupData()
 }

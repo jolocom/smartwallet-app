@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux'
 
 export const SETTINGS = {
-  LOAD_SETTINGS : 'LOAD_SETTINGS',
+  LOAD_SETTINGS: 'LOAD_SETTINGS',
   SET_LOCALE: 'SET_LOCALE',
   SET_SEED_PHRASE_SAVED: 'SET_SEED_PHRASE_SAVED',
   SET_AUTO_BACKUP: 'SET_AUTO_BACKUP',
@@ -9,8 +9,8 @@ export const SETTINGS = {
 
 export interface SettingsState {
   readonly locale: string
-  readonly seedPhraseSaved: boolean,
-  readonly autoBackup: boolean,
+  readonly seedPhraseSaved: boolean
+  readonly autoBackup: boolean
 }
 
 const initialState: SettingsState = {

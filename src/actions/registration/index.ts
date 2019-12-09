@@ -74,8 +74,10 @@ export const recoverIdentity = (backup?: BackupData): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  const did = backup ? await backendMiddleware.recoverData(backup) : undefined
-  const identity = await backendMiddleware.recoverIdentity(did)
+  const identity = await backendMiddleware.recoverIdentity(
+    backup ? backup.did : undefined,
+  )
+  if (backup) await backendMiddleware.recoverData(backup)
 
   dispatch(setDid(identity.did))
   dispatch(setSeedPhraseSaved())

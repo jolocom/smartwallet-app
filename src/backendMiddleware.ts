@@ -184,15 +184,11 @@ export class BackendMiddleware {
     return fetchBackup(this._keyProvider, password)
   }
 
-  public async recoverData(data: BackupData): Promise<string | undefined> {
-    // FIXME Hack because of weird foreign key in database (credential.subject <--> persona.did)
-    const personaData = {
-      did: data.did,
-      controllingKeyPath: JolocomLib.KeyTypes.jolocomIdentityKey,
-    }
-    await this.storageLib.store.persona(personaData)
-    // end hack
+  public async recoverData(data: BackupData): Promise<void> {
+    if (!data.did)
+      throw new Error('Missing DID in backup')
 
+    // Persona is already stored in recoverIdentity (needed to store credentials because of a foreignKey from credentials to persona.did
     if (data.credentials) {
       for (let i = 0; i < data.credentials.length; i++) {
         const credential = SignedCredential.fromJSON(data.credentials[i])
@@ -206,8 +202,6 @@ export class BackendMiddleware {
         }
       }
     }
-    if (data.did) return data.did
-    return // throw new Error('Missing DID in backup') - Uncomment this when requiring a DID in the backup
   }
 
   public async recoverIdentity(did?: string): Promise<Identity> {
