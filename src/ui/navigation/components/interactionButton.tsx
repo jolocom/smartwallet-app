@@ -14,11 +14,6 @@ const { width } = Dimensions.get('window')
 const styles = StyleSheet.create({
   circle: {
     borderRadius: 35,
-    position: 'absolute',
-  },
-  button: {
-    width: '100%',
-    height: '100%',
   },
   gradient: {
     flex: 1,
@@ -39,11 +34,12 @@ const ORIG_SIZE = 414
 const SCREEN_SIZE_MODIFIER = width / ORIG_SIZE
 const BUTTON_SIZE_MODIFIER = 0.175
 const BUTTON_OFFSET_MODIFIER = 16 / ORIG_SIZE
+
 const BUTTON_SIZE = BUTTON_SIZE_MODIFIER * width
-const BUTTON_VERTICAL_ALIGN = -Math.floor(
-  BUTTON_SIZE / 2 - width * BUTTON_OFFSET_MODIFIER,
+const BUTTON_VERTICAL_ALIGN = -(
+  BUTTON_SIZE / 2 -
+  width * BUTTON_OFFSET_MODIFIER
 )
-const BUTTON_HORIZ_ALIGN = Math.ceil((width - BUTTON_SIZE) / 2)
 
 export const InteractionButton = (props: Props) => {
   const { navigateScanner } = props
@@ -63,31 +59,32 @@ export const InteractionButton = (props: Props) => {
   }
 
   return (
-    <Animated.View
-      style={{
-        ...styles.circle,
-        width: BUTTON_SIZE,
-        height: BUTTON_SIZE,
-        left: BUTTON_HORIZ_ALIGN,
-        top: BUTTON_VERTICAL_ALIGN,
-        zIndex: 2,
-        transform: [{ scale: scaleAnimationValue }],
-      }}
-    >
-      <TouchableOpacity
-        onPress={onScannerStart}
-        activeOpacity={1}
-        style={styles.button}
+    <View style={{ position: 'absolute', width: '100%', alignItems: 'center' }}>
+      <Animated.View
+        style={{
+          ...styles.circle,
+          width: BUTTON_SIZE,
+          height: BUTTON_SIZE,
+          top: BUTTON_VERTICAL_ALIGN,
+          zIndex: 2,
+          transform: [{ scale: scaleAnimationValue }],
+        }}
       >
-        <LinearGradient
-          style={styles.gradient}
-          colors={['rgb(210, 45, 105)', 'rgb(145, 25, 66)']}
+        <TouchableOpacity
+          onPress={onScannerStart}
+          activeOpacity={1}
+          style={{ flex: 1 }}
         >
-          <View style={{ transform: [{ scale: SCREEN_SIZE_MODIFIER }] }}>
-            <ScanIcon />
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
-    </Animated.View>
+          <LinearGradient
+            style={styles.gradient}
+            colors={['rgb(210, 45, 105)', 'rgb(145, 25, 66)']}
+          >
+            <View style={{ transform: [{ scale: SCREEN_SIZE_MODIFIER }] }}>
+              <ScanIcon />
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
   )
 }
