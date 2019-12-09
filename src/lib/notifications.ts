@@ -63,7 +63,7 @@ const createNotificationFactory = (
   template: PartialNotification & Omit<NotificationBase, 'id'>,
 ) => (overrides: PartialNotification & NotificationMessage): Notification =>
   ({
-    id: randomBytes(4).toString('hex'), // TODO abstract
+    id: randomBytes(4).toString('hex'),
     ...(template as Notification),
     ...overrides,
   } as Notification)
