@@ -17,7 +17,7 @@ import { navigationActions } from '../../../actions'
 import { withLoading } from '../../../actions/modifiers'
 
 const { width } = Dimensions.get('window')
-const BAR_HEIGHT = (width / 414) * 70
+const BAR_HEIGHT = (width / 414) * 80
 
 const styles = StyleSheet.create({
   wrapper: {

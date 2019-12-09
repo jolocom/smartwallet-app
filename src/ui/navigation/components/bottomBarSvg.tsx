@@ -47,19 +47,13 @@ export const SVGBar = () => {
       height={origHeight}
       viewBox={`0 0 ${origWidth} ${origHeight}`}
     >
-      <G id="Symbols" fill="none" fillRule="evenodd">
-        <G id="balck_bckg">
-          <Mask id="mask-2" fill="white">
-            <Path d={scaledPath} id="path-1" />
-          </Mask>
-          <G id="Clip-86" />
-          <Polygon
-            id="Fill-85"
-            fill="#0B030D"
-            mask="url(#mask-2)"
-            points={scaledPoints}
-          />
-        </G>
+      <G
+        transform={{ scale: scaleFactor }}
+        id="Symbols"
+        fill="none"
+        fillRule="evenodd"
+      >
+        <Path d={origPath} fill={'#0B030D'} id="path-1" />
       </G>
     </Svg>
   )
