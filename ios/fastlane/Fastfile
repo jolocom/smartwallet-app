@@ -16,20 +16,43 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
-#    increment_build_number(xcodeproj: "JolocomWallet.xcodeproj")
+
+  lane :build do
     match(type: 'appstore')
     build_ios_app(
-      scheme: "JolocomWallet",
+      sheme: "JolocomWallet",
       export_method: 'app-store',
       include_bitcode: false,
     )
+  end
+
+  lane :upload do |options|
     sentry_upload_dsym(
       auth_token: '',
       org_slug: 'jolocom',
       project_slug: 'smartwallet',
     )
-    upload_to_testflight
+    case options[:target]
+    when "release"
+      upload_to_app_store
+    when "beta"
+      upload_to_testflight
+    end
+  end
+
+  desc "Submit a new beta build to TestFlight"
+  lane :beta do
+    ensure_git_branch(branch: 'master')
+    increment_build_number(xcodeproj: "JolocomWallet.xcodeproj")
+    build
+    upload(target: "beta")
+  end
+
+  desc "Submit a new release build to the App Store"
+  lane :release do
+    ensure_git_branch(branch: 'master')
+    increment_build_number(xcodeproj: "JolocomWallet.xcodeproj")
+    build
+    upload(target: "release")
   end
 end
