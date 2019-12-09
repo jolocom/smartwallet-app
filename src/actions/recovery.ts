@@ -3,6 +3,7 @@ import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareP
 import { navigationActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
+import { SETTINGS } from '../reducers/settings'
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
@@ -35,7 +36,22 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
     true,
   )
   return dispatch({
-    type: 'SET_SEED_PHRASE_SAVED',
+    type: SETTINGS.SET_SEED_PHRASE_SAVED,
+  })
+}
+
+export const setAutoBackup = (isEnabled: boolean): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  await backendMiddleware.storageLib.store.setting(
+    settingKeys.autoBackup,
+    isEnabled,
+  )
+  return dispatch({
+    type: SETTINGS.SET_AUTO_BACKUP,
+    value: isEnabled,
   })
 }
 
@@ -44,6 +60,6 @@ export const backupData = (): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  // TODO check if user wants that
-  await backendMiddleware.backupData()
+  if(getState().settings.autoBackup)
+    await backendMiddleware.backupData()
 }
