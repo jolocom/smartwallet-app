@@ -77,19 +77,6 @@ export const removeNotification = (
   return dispatch(updateNotificationsState)
 }
 
-/**
- * @description Set the active notification and the timestamp at which it will
- *              expire
- */
-export const setActiveNotification = (
-  notification: Notification | null,
-  expiry?: number,
-) => ({
-  type: SET_ACTIVE_NOTIFICATION,
-  notification,
-  expiry,
-})
-
 
 /**
  * NOTE
@@ -99,6 +86,19 @@ export const setActiveNotification = (
  * In a perfect case scenario, we should never need to manually call for an
  * update action.
  */
+
+/**
+ * @description Set the active notification and the timestamp at which it will
+ *              expire
+ */
+const setActiveNotification = (
+  notification: Notification | null,
+  expiry?: number,
+) => ({
+  type: SET_ACTIVE_NOTIFICATION,
+  notification,
+  expiry,
+})
 
 let nextUpdateTimeout: number | null = null
 let updateInProgress = false
