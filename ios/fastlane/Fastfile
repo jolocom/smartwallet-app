@@ -40,9 +40,18 @@ platform :ios do
     end
   end
 
+  desc "Install a release build on an iOS devide"
+  lane :staging do
+    build
+    install_on_device(
+      skip_wifi: true
+    )
+  end
+
   desc "Submit a new beta build to TestFlight"
   lane :beta do
     ensure_git_branch(branch: 'master')
+    ensure_git_status_clean
     increment_build_number(xcodeproj: "JolocomWallet.xcodeproj")
     build
     upload(target: "beta")
@@ -51,6 +60,7 @@ platform :ios do
   desc "Submit a new release build to the App Store"
   lane :release do
     ensure_git_branch(branch: 'master')
+    ensure_git_status_clean
     increment_build_number(xcodeproj: "JolocomWallet.xcodeproj")
     build
     upload(target: "release")

@@ -18,3 +18,8 @@ fastlane/test_output
 
 # Fastlane builds
 builds/*
+
+# secrets
+fastlane/android-secrets*
+fastlane/key.json
+fastlane/secrets.json

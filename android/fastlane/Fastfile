@@ -41,21 +41,29 @@ platform :android do
     load_json(json_path: "./android-secrets/secrets.json")
   end
 
-  lane :build do
+  lane :build do |options|
     secrets = get_secrets
     releaseFilePath = File.join(Dir.pwd, "..", "android-secrets", "JoloSmartWallet.keystore")
     build_android_app(task: 'clean')
-    build_android_app(
-      task: 'assemble',
-      build_type: 'Release',
-      print_command: false,
-      properties: {
-        "android.injected.signing.store.file" => releaseFilePath,
-        "android.injected.signing.store.password" => secrets["keystorePassword"],
-        "android.injected.signing.key.alias" => "JoloSmartWallet",
-        "android.injected.signing.key.password" => secrets["keystorePassword"],
-      }
-    )
+    if options[:local]
+      build_android_app(
+        task: 'assemble',
+        build_type: 'Release',
+        print_command: false,
+      )
+    else
+      build_android_app(
+        task: 'assemble',
+        build_type: 'Release',
+        print_command: false,
+        properties: {
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => secrets["keystorePassword"],
+          "android.injected.signing.key.alias" => "JoloSmartWallet",
+          "android.injected.signing.key.password" => secrets["keystorePassword"],
+        }
+      )
+    end
   end
 
   lane :upload do |options|
@@ -72,9 +80,18 @@ platform :android do
     end
   end
 
+  desc "Install a build on an Android device"
+  lane :staging do
+    build(local: true)
+    adb(
+      command: 'install'
+    )
+  end
+
   desc "Submit a new Beta Build to Play Store"
   lane :beta do
     ensure_git_branch(branch: 'master')
+    ensure_git_status_clean
     build
     upload(target: 'beta')
   end
@@ -82,6 +99,7 @@ platform :android do
   desc "Submit a new Release build to Play Store"
   lane :release do
     ensure_git_branch(branch: 'master')
+    ensure_git_status_clean
     build
     upload(target: 'release')
   end
