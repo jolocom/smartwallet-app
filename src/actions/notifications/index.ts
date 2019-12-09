@@ -7,16 +7,10 @@ import {
   CLEAR_NOTIFICATIONS,
 } from 'src/reducers/notifications'
 
-
-export const setActiveNotification = (
-  notification: Notification | null,
-  expiry?: number,
-) => ({
-  type: SET_ACTIVE_NOTIFICATION,
-  notification,
-  expiry,
-})
-
+/**
+ * @description Add a notification to the queue, to be displayed at an
+ *              appropriate time in the future, or right away if possible
+ */
 export const scheduleNotification = (
   notification: Notification,
 ): ThunkAction => dispatch => {
@@ -27,16 +21,11 @@ export const scheduleNotification = (
   return dispatch(updateNotificationsState)
 }
 
-export const removeNotification = (
-  notification: Notification,
-): ThunkAction => dispatch => {
-  dispatch({
-    type: REMOVE_NOTIFICATION,
-    notification,
-  })
-  return dispatch(updateNotificationsState)
-}
-
+/**
+ * @description Invoke the notification interact callback and remove it from
+ *              queue and active. Should be dispatched on interaction with the
+ *              notification's "call to action" button
+ */
 export const invokeInteract = (
   notif: Notification,
 ): ThunkAction => async dispatch => {
@@ -48,6 +37,11 @@ export const invokeInteract = (
   if (!keepNotification) return dispatch(removeNotification(notif))
 }
 
+/**
+ * @description Invoke the notification dismiss callback and remove it from
+ *              queue and active. Should be dispatched on interaction with the
+ *              notification's "dismiss" button
+ */
 export const invokeDismiss = (
   notif: Notification,
 ): ThunkAction => async dispatch => {
@@ -58,10 +52,44 @@ export const invokeDismiss = (
   return dispatch(removeNotification(notif))
 }
 
+/**
+ * @description Clear all notifications from queue and from active
+ */
 export const clearAllNotifications = (): ThunkAction => dispatch => {
   dispatch({ type: CLEAR_NOTIFICATIONS })
   return dispatch(updateNotificationsState)
 }
+
+/**
+ * @description Remove a notification from queue, and remove from active if it
+ *              is the current active one.
+ *              Should generally not need to be dispatched directly, but is
+ *              exported for testing purposes.
+ *              No callbacks are invoked.
+ */
+export const removeNotification = (
+  notification: Notification,
+): ThunkAction => dispatch => {
+  dispatch({
+    type: REMOVE_NOTIFICATION,
+    notification,
+  })
+  return dispatch(updateNotificationsState)
+}
+
+/**
+ * @description Set the active notification and the timestamp at which it will
+ *              expire
+ */
+export const setActiveNotification = (
+  notification: Notification | null,
+  expiry?: number,
+) => ({
+  type: SET_ACTIVE_NOTIFICATION,
+  notification,
+  expiry,
+})
+
 
 /**
  * NOTE
