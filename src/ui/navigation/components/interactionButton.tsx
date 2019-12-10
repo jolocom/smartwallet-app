@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { ScanIcon } from '../../../resources'
@@ -14,12 +15,27 @@ const { width } = Dimensions.get('window')
 const styles = StyleSheet.create({
   circle: {
     borderRadius: 35,
+    // NOTE zIndex behaves differently on iOS and android
+    zIndex: Platform.select({
+      ios: undefined,
+      android: 3,
+    }),
   },
   gradient: {
     flex: 1,
     borderRadius: 35,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonWrapper: {
+    position: 'absolute',
+    width: '100%',
+    alignItems: 'center',
+    height: 0,
+    zIndex: Platform.select({
+      ios: 3,
+      android: undefined,
+    }),
   },
 })
 
@@ -59,14 +75,13 @@ export const InteractionButton = (props: Props) => {
   }
 
   return (
-    <View style={{ position: 'absolute', width: '100%', alignItems: 'center' }}>
+    <View style={styles.buttonWrapper}>
       <Animated.View
         style={{
           ...styles.circle,
           width: BUTTON_SIZE,
           height: BUTTON_SIZE,
           top: BUTTON_VERTICAL_ALIGN,
-          zIndex: 2,
           transform: [{ scale: scaleAnimationValue }],
         }}
       >

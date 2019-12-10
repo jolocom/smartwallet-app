@@ -17,15 +17,18 @@ import { navigationActions } from '../../../actions'
 import { withLoading } from '../../../actions/modifiers'
 
 const { width } = Dimensions.get('window')
+
 const SCREEN_PROPORTION = width / 414
-const BAR_HEIGHT = SCREEN_PROPORTION * 83
+const BAR_HEIGHT = SCREEN_PROPORTION * 80
 const SVG_BAR_HEIGHT = SCREEN_PROPORTION * 110
+const BAR_EXTRA_SAFE_HEIGHT = 30
 
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
     width: '100%',
-    bottom: BAR_HEIGHT - SVG_BAR_HEIGHT,
+    bottom: BAR_HEIGHT - SVG_BAR_HEIGHT - BAR_EXTRA_SAFE_HEIGHT,
+    height: SVG_BAR_HEIGHT + BAR_EXTRA_SAFE_HEIGHT,
   },
   buttonWrapper: {
     position: 'absolute',
@@ -37,6 +40,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  safeView: {
+    width: '100%',
+    height: BAR_EXTRA_SAFE_HEIGHT,
+    backgroundColor: '#0B030D',
+    marginTop: -4,
   },
 })
 
@@ -102,6 +111,7 @@ const BottomBarContainer = (props: Props) => {
       <InteractionButton navigateScanner={navigateInteraction} />
       {/* NOTE: the *1.01 is removing the white space between the bar and screen edges */}
       <BottomBarSVG scaledHeight={SVG_BAR_HEIGHT * 1.01} />
+      <View style={styles.safeView} />
     </SafeAreaView>
   )
 }
