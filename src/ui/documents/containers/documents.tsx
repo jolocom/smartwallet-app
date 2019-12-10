@@ -38,7 +38,6 @@ const APPBAR_HEIGHT = Platform.select({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
     backgroundColor: Colors.lightGreyLighter,
   },
   topContainer: {
@@ -97,8 +96,8 @@ export class DocumentsContainer extends React.Component<Props, State> {
     const otherIsEmpty = displayedDocs.length === documents.length
 
     return (
-      <Container>
-        <Animated.View style={styles.mainContainer}>
+      <Container style={styles.mainContainer}>
+        <Animated.View style={{ flex: 1 }}>
           <BackupWarning />
           {!otherIsEmpty && (
             <DocumentViewToggle
