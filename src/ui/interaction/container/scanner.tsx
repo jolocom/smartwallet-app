@@ -135,7 +135,7 @@ export const ScannerContainer = (props: Props) => {
   }
 
   return permission === RESULTS.AUTHORIZED ? (
-    isCameraReady && (
+    isCameraReady ? (
       <ScannerComponent
         reRenderKey={reRenderKey}
         onScan={parseJWT}
@@ -145,7 +145,7 @@ export const ScannerContainer = (props: Props) => {
         colorAnimationValue={colorAnimationValue}
         textAnimationValue={textAnimationValue}
       />
-    )
+    ) : null
   ) : (
     <NoPermissionComponent onPressEnable={onEnablePermission} />
   )

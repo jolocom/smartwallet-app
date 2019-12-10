@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {
   Animated,
-  Dimensions,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -9,8 +8,6 @@ import {
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { ScanIcon } from '../../../resources'
-
-const { width } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   circle: {
@@ -41,24 +38,17 @@ const styles = StyleSheet.create({
 
 interface Props {
   navigateScanner: () => void
+  buttonSize: number
+  topMargin: number
+  scale: number
 }
 
 /**
  * NOTE: scaling down the button proportionally to the SVG bar and aligning it
  */
-const ORIG_SIZE = 414
-const SCREEN_SIZE_MODIFIER = width / ORIG_SIZE
-const BUTTON_SIZE_MODIFIER = 0.175
-const BUTTON_OFFSET_MODIFIER = 16 / ORIG_SIZE
-
-const BUTTON_SIZE = BUTTON_SIZE_MODIFIER * width
-const BUTTON_VERTICAL_ALIGN = -(
-  BUTTON_SIZE / 2 -
-  width * BUTTON_OFFSET_MODIFIER
-)
 
 export const InteractionButton = (props: Props) => {
-  const { navigateScanner } = props
+  const { navigateScanner, buttonSize, topMargin, scale } = props
   const [scaleAnimationValue] = useState(new Animated.Value(1))
 
   const onScannerStart = () => {
@@ -79,9 +69,9 @@ export const InteractionButton = (props: Props) => {
       <Animated.View
         style={{
           ...styles.circle,
-          width: BUTTON_SIZE,
-          height: BUTTON_SIZE,
-          top: BUTTON_VERTICAL_ALIGN,
+          width: buttonSize,
+          height: buttonSize,
+          top: topMargin,
           transform: [{ scale: scaleAnimationValue }],
         }}
       >
@@ -94,7 +84,7 @@ export const InteractionButton = (props: Props) => {
             style={styles.gradient}
             colors={['rgb(210, 45, 105)', 'rgb(145, 25, 66)']}
           >
-            <View style={{ transform: [{ scale: SCREEN_SIZE_MODIFIER }] }}>
+            <View style={{ transform: [{ scale }] }}>
               <ScanIcon />
             </View>
           </LinearGradient>
