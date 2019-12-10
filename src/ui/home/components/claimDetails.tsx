@@ -1,5 +1,5 @@
 import React from 'react'
-import { JolocomButton } from 'src/ui/structure'
+import { Container, JolocomButton } from 'src/ui/structure'
 import {
   StyleSheet,
   Keyboard,
@@ -17,6 +17,9 @@ import { Buttons, Typography, Colors, Spacing } from 'src/styles'
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.backgroundLightMain,
+  },
+  scroll: {
+    width: '100%',
   },
   header: {
     ...Typography.centeredText,
@@ -142,22 +145,24 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
     return (
-      <ScrollView style={styles.container}>
-        <Text style={styles.header}>{I18n.t(credentialType)}</Text>
-        <View style={styles.textInputArea}>
-          {this.renderInputFields(selectedClaim)}
-        </View>
-        <View style={styles.buttonArea}>
-          {showButtonWhileTyping ? (
-            <JolocomButton
-              onPress={() => this.onSubmit()}
-              upperCase={false}
-              text={I18n.t(strings.ADD_CLAIM)}
-              disabled={!!this.confirmationEligibilityCheck()}
-            />
-          ) : null}
-        </View>
-      </ScrollView>
+      <Container style={styles.container}>
+        <ScrollView style={styles.scroll}>
+          <Text style={styles.header}>{I18n.t(credentialType)}</Text>
+          <View style={styles.textInputArea}>
+            {this.renderInputFields(selectedClaim)}
+          </View>
+          <View style={styles.buttonArea}>
+            {showButtonWhileTyping ? (
+              <JolocomButton
+                onPress={() => this.onSubmit()}
+                upperCase={false}
+                text={I18n.t(strings.ADD_CLAIM)}
+                disabled={!!this.confirmationEligibilityCheck()}
+              />
+            ) : null}
+          </View>
+        </ScrollView>
+      </Container>
     )
   }
 }
