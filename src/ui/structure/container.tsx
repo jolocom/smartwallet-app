@@ -1,5 +1,11 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, ViewStyle, StyleProp, SafeAreaView } from 'react-native'
+import {
+  StyleSheet,
+  ViewStyle,
+  StyleProp,
+  SafeAreaView,
+  View,
+} from 'react-native'
 
 /**
  * Container
@@ -22,10 +28,18 @@ interface Props {
   testID?: string
   children: ReactNode
   style?: StyleProp<ViewStyle>
+  safeArea?: boolean
 }
 
-export const Container: React.FC<Props> = props => (
-  <SafeAreaView testID={props.testID} style={[styles.container, props.style]}>
-    {props.children}
-  </SafeAreaView>
-)
+export const Container: React.FC<Props> = props => {
+  const ContainerView = !!props.safeArea ? View : SafeAreaView
+
+  return (
+    <ContainerView
+      testID={props.testID}
+      style={[styles.container, props.style]}
+    >
+      {props.children}
+    </ContainerView>
+  )
+}
