@@ -19,6 +19,7 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import { navigationActions } from '../../../actions'
 import { withLoading } from '../../../actions/modifiers'
+import { Colors } from '../../../styles'
 
 const { width } = Dimensions.get('window')
 
@@ -204,7 +205,10 @@ const BottomBarContainer = (props: Props) => {
         navigateScanner={navigateInteraction}
       />
       {/* NOTE: the *1.01 is removing the white space between the bar and screen edges */}
-      <BottomBarSVG scaledHeight={BAR_HEIGHT * 1.01} />
+      <BottomBarSVG
+        scaledHeight={BAR_HEIGHT * 1.01}
+        color={Colors.bottomTabBarBg}
+      />
       <View style={styles.safeView} />
     </AnimatedSafeAreaView>
   )
