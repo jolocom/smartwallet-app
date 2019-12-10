@@ -32,7 +32,7 @@ interface Props {
 }
 
 export const Container: React.FC<Props> = props => {
-  const ContainerView = !!props.safeArea ? View : SafeAreaView
+  const ContainerView = props.safeArea === false ? View : SafeAreaView
 
   return (
     <ContainerView

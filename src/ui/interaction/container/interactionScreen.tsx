@@ -55,7 +55,7 @@ interface Props
 const InteractionContainer = (props: Props) => (
   <React.Fragment>
     <StatusBar hidden />
-    <Container style={{ backgroundColor: Colors.greyDark }}>
+    <Container safeArea={false} style={{ backgroundColor: Colors.greyDark }}>
       {IS_IOS && (
         <TouchableOpacity
           onPress={props.navigateHome}
