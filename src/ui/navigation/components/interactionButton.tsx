@@ -52,16 +52,16 @@ export const InteractionButton = (props: Props) => {
   const [scaleAnimationValue] = useState(new Animated.Value(1))
 
   const onScannerStart = () => {
-    Animated.timing(scaleAnimationValue, {
-      duration: 80,
-      toValue: 0.8,
-    }).start(() => {
-      navigateScanner()
+    Animated.sequence([
       Animated.timing(scaleAnimationValue, {
         duration: 80,
+        toValue: 0.9,
+      }),
+      Animated.timing(scaleAnimationValue, {
+        duration: 60,
         toValue: 1,
-      }).start()
-    })
+      }),
+    ]).start(navigateScanner)
   }
 
   return (

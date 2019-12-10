@@ -8,6 +8,7 @@ import {
   Animated,
   Platform,
   Keyboard,
+  EmitterSubscription,
 } from 'react-native'
 import { BottomTabBarProps, TabScene, SafeAreaView } from 'react-navigation'
 import { BottomBarSVG } from '../components/bottomBarSvg'
@@ -112,24 +113,44 @@ const BottomBarContainer = (props: Props) => {
 
     const blurListener = navigation.addListener('willBlur', animateHiding)
     const focusListener = navigation.addListener('didFocus', animateAppear)
-    if (Platform.OS === 'ios') {
-      Keyboard.addListener('keyboardWillShow', animateAppear)
-      Keyboard.addListener('keyboardWillHide', animateHiding)
+
+    const isIOS = Platform.OS === 'ios'
+
+    let keyboardShowListener: EmitterSubscription,
+      keyboardHideListener: EmitterSubscription
+
+    if (isIOS) {
+      keyboardShowListener = Keyboard.addListener(
+        'keyboardWillShow',
+        animateAppear,
+      )
+      keyboardHideListener = Keyboard.addListener(
+        'keyboardWillHide',
+        animateHiding,
+      )
     } else {
-      Keyboard.addListener('keyboardDidShow', animateAppear)
-      Keyboard.addListener('keyboardDidHide', animateHiding)
+      keyboardShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        animateAppear,
+      )
+      keyboardHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        animateHiding,
+      )
     }
 
     return () => {
       blurListener.remove()
       focusListener.remove()
-      Keyboard.removeAllListeners()
+      keyboardShowListener.remove()
+      keyboardHideListener.remove()
     }
   }, [])
 
   const animateHiding = () => {
     Animated.timing(AnimatedHiding, {
-      toValue: VISIBLE_BAR_HEIGHT - VERTICAL_OFFSET,
+      // NOTE: to account for screens that use SafeAreaView
+      toValue: BAR_HEIGHT - 2 * VERTICAL_OFFSET,
       duration: 400,
       useNativeDriver: true,
     }).start()
