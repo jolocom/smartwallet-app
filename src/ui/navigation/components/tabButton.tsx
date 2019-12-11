@@ -62,7 +62,7 @@ export const TabButton = (props: Props) => {
 
   const iconSize = BP({
     small: 18,
-    medium: 21,
+    medium: 20,
     large: 21,
   })
 
