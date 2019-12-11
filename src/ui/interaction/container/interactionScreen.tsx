@@ -61,6 +61,15 @@ interface Props
 const InteractionContainer = (props: Props) => {
   const [AnimatedOpacity] = useState(new Animated.Value(0))
   const [isStatusBar, setStatusBar] = useState(true)
+
+  /*
+   * NOTE: (Android only) When navigating to the @InteractionScreen, the homepage
+   * (together with the @BottomBar) jumps about 20px up and disrupts
+   * the navigation transition. This happens due to the hiding of the
+   * @StatusBar. One workaround is delaying it, but the "flicker" is still
+   * noticeable.
+   */
+
   useEffect(() => {
     Animated.timing(AnimatedOpacity, {
       toValue: 1,

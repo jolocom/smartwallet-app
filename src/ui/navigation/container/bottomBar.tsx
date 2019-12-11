@@ -44,10 +44,8 @@ const BUTTON_SIZE_MODIFIER = 0.175
 const BUTTON_SIZE = BUTTON_SIZE_MODIFIER * width
 // Original distance from the center of the button to the top of the bar (vertical offset)
 const ORIGINAL_VERTICAL_OFFSET = 16
-const VERTICAL_OFFSET = -(
-  BUTTON_SIZE / 2 -
-  width * (ORIGINAL_VERTICAL_OFFSET / ORIG_BAR_WIDTH)
-)
+const VERTICAL_OFFSET =
+  BUTTON_SIZE / 2 - width * (ORIGINAL_VERTICAL_OFFSET / ORIG_BAR_WIDTH)
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -66,6 +64,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 10,
   },
   safeView: {
     width: '100%',
@@ -187,7 +186,9 @@ const BottomBarContainer = (props: Props) => {
 
           return (
             <React.Fragment key={route.key}>
-              {i === 2 && <View style={{ flex: 1 }} />}
+              {i === 2 && (
+                <View style={{ width: BUTTON_SIZE + VERTICAL_OFFSET }} />
+              )}
               <TabButton
                 testID={testID}
                 scene={scene}

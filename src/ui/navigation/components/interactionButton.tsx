@@ -71,7 +71,7 @@ export const InteractionButton = (props: Props) => {
           ...styles.circle,
           width: buttonSize,
           height: buttonSize,
-          top: topMargin,
+          top: -topMargin,
           transform: [{ scale: scaleAnimationValue }],
         }}
       >
