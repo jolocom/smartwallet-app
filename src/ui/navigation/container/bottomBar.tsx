@@ -18,7 +18,6 @@ import { InteractionButton } from '../components/interactionButton'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import { navigationActions } from '../../../actions'
-import { withLoading } from '../../../actions/modifiers'
 import { Colors } from '../../../styles'
 
 const { width } = Dimensions.get('window')
@@ -112,40 +111,44 @@ const BottomBarContainer = (props: Props) => {
   useEffect(() => {
     AnimatedHiding.setValue(0)
 
-    const blurListener = navigation.addListener('willBlur', animateHiding)
-    const focusListener = navigation.addListener('didFocus', animateAppear)
+    if (navigation) {
+      const blurListener = navigation.addListener('willBlur', animateHiding)
+      const focusListener = navigation.addListener('didFocus', animateAppear)
 
-    const isIOS = Platform.OS === 'ios'
+      const isIOS = Platform.OS === 'ios'
 
-    let keyboardShowListener: EmitterSubscription,
-      keyboardHideListener: EmitterSubscription
+      let keyboardShowListener: EmitterSubscription,
+        keyboardHideListener: EmitterSubscription
 
-    if (isIOS) {
-      keyboardShowListener = Keyboard.addListener(
-        'keyboardWillShow',
-        animateAppear,
-      )
-      keyboardHideListener = Keyboard.addListener(
-        'keyboardWillHide',
-        animateHiding,
-      )
-    } else {
-      keyboardShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        animateAppear,
-      )
-      keyboardHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        animateHiding,
-      )
+      if (isIOS) {
+        keyboardShowListener = Keyboard.addListener(
+          'keyboardWillShow',
+          animateAppear,
+        )
+        keyboardHideListener = Keyboard.addListener(
+          'keyboardWillHide',
+          animateHiding,
+        )
+      } else {
+        keyboardShowListener = Keyboard.addListener(
+          'keyboardDidShow',
+          animateAppear,
+        )
+        keyboardHideListener = Keyboard.addListener(
+          'keyboardDidHide',
+          animateHiding,
+        )
+      }
+
+      return () => {
+        blurListener.remove()
+        focusListener.remove()
+        keyboardShowListener.remove()
+        keyboardHideListener.remove()
+      }
     }
 
-    return () => {
-      blurListener.remove()
-      focusListener.remove()
-      keyboardShowListener.remove()
-      keyboardHideListener.remove()
-    }
+    return
   }, [])
 
   const animateHiding = () => {
@@ -217,9 +220,7 @@ const BottomBarContainer = (props: Props) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   navigateInteraction: () =>
     dispatch(
-      withLoading(
-        navigationActions.navigate({ routeName: routeList.InteractionScreen }),
-      ),
+      navigationActions.navigate({ routeName: routeList.InteractionScreen }),
     ),
 })
 
