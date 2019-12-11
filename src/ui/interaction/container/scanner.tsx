@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, AppState, AppStateStatus, Platform } from 'react-native'
+import {
+  Animated,
+  AppState,
+  AppStateStatus,
+  Platform,
+  View,
+} from 'react-native'
 import {
   NavigationEventSubscription,
   NavigationScreenProps,
@@ -16,6 +22,7 @@ import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { Colors } from '../../../styles'
 
 interface Props extends NavigationScreenProps {
   onScannerSuccess: (interactionToken: JSONWebToken<JWTEncodable>) => void
@@ -145,7 +152,15 @@ export const ScannerContainer = (props: Props) => {
         colorAnimationValue={colorAnimationValue}
         textAnimationValue={textAnimationValue}
       />
-    ) : null
+    ) : (
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          backgroundColor: Colors.black065,
+        }}
+      />
+    )
   ) : (
     <NoPermissionComponent onPressEnable={onEnablePermission} />
   )
