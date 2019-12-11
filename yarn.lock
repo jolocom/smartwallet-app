@@ -4174,7 +4174,7 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-"eccrypto@github:rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88":
+eccrypto@rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88:
   version "1.1.2"
   resolved "https://codeload.github.com/rootstock/eccrypto/tar.gz/485e11f163093fb6e0d5263fa46ed5075dedfe88"
   dependencies:

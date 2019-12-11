@@ -15,7 +15,7 @@ import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from './lib/util'
-import { BackupData, backupData, fetchBackup } from './lib/backup'
+import { BackupData, backupData, deleteBackup, fetchBackup } from './lib/backup'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { isEmpty } from 'ramda'
 
@@ -170,6 +170,11 @@ export class BackendMiddleware {
     return backupData(data, this._keyProvider, password)
   }
 
+  public async deleteBackup(): Promise<void> {
+    const password = await this.keyChainLib.getPassword()
+    return deleteBackup(this._keyProvider, password)
+  }
+
   public async recoverSeed(seedPhrase: string): Promise<void> {
     const password = (await generateSecureRandomBytes(32)).toString('base64')
     this._keyProvider = JolocomLib.KeyProvider.recoverKeyPair(
@@ -185,8 +190,7 @@ export class BackendMiddleware {
   }
 
   public async recoverData(data: BackupData): Promise<void> {
-    if (!data.did)
-      throw new Error('Missing DID in backup')
+    if (!data.did) throw new Error('Missing DID in backup')
 
     // Persona is already stored in recoverIdentity (needed to store credentials because of a foreignKey from credentials to persona.did
     if (data.credentials) {

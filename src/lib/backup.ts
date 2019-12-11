@@ -61,6 +61,20 @@ export async function fetchBackup(
   throw new Error(`Unexpected Response (${response.status})`)
 }
 
+export async function deleteBackup(
+  softwareKeyProvider: SoftwareKeyProvider,
+  password: string,
+): Promise<void> {
+  const auth = generateAuthenticationData(softwareKeyProvider, password)
+  const response = await fetch(BACKUP_SERVER_URI + '/delete-backup', {
+    method: 'POST',
+    body: JSON.stringify({ auth }),
+    headers: { 'Content-Type': 'application/json' },
+  })
+  if (response.status === 200) return
+  else console.warn(response.status, response.statusText)
+}
+
 function generateAuthenticationData(
   softwareKeyProvider: SoftwareKeyProvider,
   password: string,

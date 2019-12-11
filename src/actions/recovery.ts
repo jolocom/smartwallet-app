@@ -45,6 +45,7 @@ export const setAutoBackup = (isEnabled: boolean): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
+  if (isEnabled) await backendMiddleware.backupData()
   await backendMiddleware.storageLib.store.setting(
     settingKeys.autoBackup,
     isEnabled,
@@ -53,6 +54,15 @@ export const setAutoBackup = (isEnabled: boolean): ThunkAction => async (
     type: SETTINGS.SET_AUTO_BACKUP,
     value: isEnabled,
   })
+}
+
+export const disableAndRemoveBackup = (): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) =>{
+  dispatch(setAutoBackup(false))
+  await backendMiddleware.deleteBackup()
 }
 
 export const backupData = (): ThunkAction => async (
