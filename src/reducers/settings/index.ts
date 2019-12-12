@@ -5,12 +5,14 @@ export const SETTINGS = {
   SET_LOCALE: 'SET_LOCALE',
   SET_SEED_PHRASE_SAVED: 'SET_SEED_PHRASE_SAVED',
   SET_AUTO_BACKUP: 'SET_AUTO_BACKUP',
+  SET_LAST_BACKUP: 'SET_LAST_BACKUP',
 }
 
 export interface SettingsState {
   readonly locale: string
   readonly seedPhraseSaved: boolean
   readonly autoBackup: boolean
+  readonly lastBackup?: string
 }
 
 const initialState: SettingsState = {
@@ -40,6 +42,11 @@ export const settingsReducer = (
       return {
         ...state,
         autoBackup: action.value,
+      }
+    case SETTINGS.SET_LAST_BACKUP:
+      return {
+        ...state,
+        lastBackup: action.value,
       }
     default:
       return state

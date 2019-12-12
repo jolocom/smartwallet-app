@@ -45,7 +45,7 @@ export const setAutoBackup = (isEnabled: boolean): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  if (isEnabled) await backendMiddleware.backupData()
+  if (isEnabled) await dispatch(backupData(isEnabled))
   await backendMiddleware.storageLib.store.setting(
     settingKeys.autoBackup,
     isEnabled,
@@ -53,6 +53,22 @@ export const setAutoBackup = (isEnabled: boolean): ThunkAction => async (
   return dispatch({
     type: SETTINGS.SET_AUTO_BACKUP,
     value: isEnabled,
+  })
+}
+
+export const setLastBackup = (): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  const currDate = new Date().toISOString()
+  await backendMiddleware.storageLib.store.setting(
+    settingKeys.lastBackup,
+    currDate,
+  )
+  return dispatch({
+    type: SETTINGS.SET_AUTO_BACKUP,
+    value: currDate,
   })
 }
 
@@ -65,10 +81,12 @@ export const disableAndRemoveBackup = (): ThunkAction => async (
   await backendMiddleware.deleteBackup()
 }
 
-export const backupData = (): ThunkAction => async (
+export const backupData = (isEnabled?: boolean): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
-  if (getState().settings.autoBackup) await backendMiddleware.backupData()
+  if (getState().settings.autoBackup || isEnabled)
+    await backendMiddleware.backupData()
+  dispatch(setLastBackup())
 }

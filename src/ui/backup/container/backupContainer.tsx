@@ -67,7 +67,7 @@ export class BackupContainer extends React.Component<Props, State> {
   }
 
   public render() {
-    const { isAutoBackupEnabled, navigation } = this.props
+    const { isAutoBackupEnabled, lastBackup, navigation } = this.props
     const { isLoading } = this.state
     return (
       <BackupComponent
@@ -76,6 +76,7 @@ export class BackupContainer extends React.Component<Props, State> {
         isAutoBackupEnabled={isAutoBackupEnabled}
         enableAutoBackup={this.enableAutoBackup}
         goBack={() => navigation.pop()}
+        lastBackup={lastBackup}
       />
     )
   }
@@ -83,6 +84,7 @@ export class BackupContainer extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => ({
   isAutoBackupEnabled: state.settings.autoBackup,
+  lastBackup: state.settings.lastBackup,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   enableAutoBackup: async () => await dispatch(setAutoBackup(true)),

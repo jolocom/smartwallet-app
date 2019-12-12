@@ -12,6 +12,7 @@ interface Props {
   enableAutoBackup: () => void
   onDisableAutoBackup: () => void
   goBack: () => void
+  lastBackup?: string
 }
 
 const styles = StyleSheet.create({
@@ -77,6 +78,7 @@ const BackupComponent: React.FC<Props> = ({
   onDisableAutoBackup,
   isAutoBackupEnabled,
   goBack,
+  lastBackup,
 }) => {
   return (
     <Container style={styles.container}>
@@ -114,8 +116,10 @@ const BackupComponent: React.FC<Props> = ({
                 onPress={onDisableAutoBackup}
                 disabled={isLoading}
               />
-              <Text style={styles.info}>Last backup {'18/07/2020'}</Text>
-              {/*  TODO change date*/}
+              <Text style={styles.info}>
+                {lastBackup &&
+                  `Last backup ${new Date(lastBackup).toLocaleDateString()}`}
+              </Text>
             </React.Fragment>
           ) : (
             <React.Fragment>
