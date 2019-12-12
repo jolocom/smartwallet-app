@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware, AnyAction, Store } from 'redux'
+import { createStore, applyMiddleware, AnyAction } from 'redux'
 
 import thunk, {
   ThunkDispatch as OriginalThunkDispatch,
@@ -12,18 +12,20 @@ import { BackendMiddleware } from './backendMiddleware'
 export function initStore() {
   const backendMiddleware = new BackendMiddleware(config)
 
+  /*
+   * The {} as RootState type assertion:
+   * The second argument, "preloadedState" is mandatory, and typed as RootState.
+   * We provide an empty object. The store will have the correct default state
+   * after all reducers initialise.
+   */
+
   return createStore(
     rootReducer,
-    {},
+    {} as RootState,
     applyMiddleware(thunk.withExtraArgument(backendMiddleware)),
-  ) as StoreWithThunkDispatch
+  )
 }
 
-interface StoreWithThunkDispatch extends Store<RootState> {
-  dispatch: ThunkDispatch
-}
-
-export type AnyAction = AnyAction
 export type ThunkDispatch = OriginalThunkDispatch<
   RootState,
   BackendMiddleware,
