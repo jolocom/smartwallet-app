@@ -101,8 +101,9 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   private renderInputFields = (claim: DecoratedClaims) => {
     const { claimData, keyboardType } = claim
-    return Object.keys(claimData).map(item => (
+    return Object.keys(claimData).map((item, idx) => (
       <TextInputField
+        autoFocus={idx == 0}
         key={item}
         fieldName={item}
         fieldValue={claimData[item]}
@@ -142,7 +143,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView keyboardShouldPersistTaps="handled" style={styles.container}>
         <Text style={styles.header}>{I18n.t(credentialType)}</Text>
         <View style={styles.textInputArea}>
           {this.renderInputFields(selectedClaim)}
