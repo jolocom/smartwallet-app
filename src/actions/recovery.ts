@@ -60,7 +60,7 @@ export const disableAndRemoveBackup = (): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
-) =>{
+) => {
   dispatch(setAutoBackup(false))
   await backendMiddleware.deleteBackup()
 }

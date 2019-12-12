@@ -32,6 +32,7 @@ export enum routeList {
   // Settings
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
+  Backup = 'Backup',
 
   // General
   Exception = 'Exception',

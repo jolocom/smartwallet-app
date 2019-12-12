@@ -3,6 +3,7 @@ import {
   Platform,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   ViewStyle,
 } from 'react-native'
@@ -32,10 +33,11 @@ interface Props {
   onPress: () => void
   text: string
   containerStyle?: ViewStyle
+  textStyle? : TextStyle
 }
 
 export const GradientButton = (props: Props) => {
-  const { onPress, containerStyle, text } = props
+  const { onPress, containerStyle, text, textStyle } = props
   return (
     <TouchableOpacity
       style={{ ...styles.buttonContainer, ...containerStyle }}
@@ -54,7 +56,7 @@ export const GradientButton = (props: Props) => {
           justifyContent: 'center',
         }}
       >
-        <Text style={styles.buttonText}>{text}</Text>
+        <Text style={{ ...styles.buttonText, ...textStyle }}>{text}</Text>
       </LinearGradient>
     </TouchableOpacity>
   )

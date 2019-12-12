@@ -39,6 +39,7 @@ import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
+import { Backup } from './ui/backup/container/backupContainer'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -237,6 +238,10 @@ const MainStack = createStackNavigator(
     },
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.Backup]: {
+      screen: Backup,
       navigationOptions: noHeaderNavOpts,
     },
 

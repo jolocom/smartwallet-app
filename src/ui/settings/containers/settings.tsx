@@ -41,7 +41,14 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const { setLocale, settings, setupBackup, openStorybook } = props
+  const {
+    setLocale,
+    settings,
+    setupBackup,
+    openStorybook,
+    editBackup,
+    openErrorScreen,
+  } = props
   const version = VersionNumber.appVersion
   const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
@@ -57,6 +64,12 @@ export const SettingsContainer: React.FC<Props> = props => {
               iconName={'book-open-page-variant'}
               title={'Storybook'}
               onPress={openStorybook}
+            />
+            <SettingItem
+              title={'Error report Test'}
+              description={'Exception Screen'}
+              iconName={'alert'}
+              onPress={openErrorScreen}
             />
           </SettingSection>
         )}
@@ -82,14 +95,13 @@ export const SettingsContainer: React.FC<Props> = props => {
             isDisabled={seedPhraseSaved}
             onPress={setupBackup}
           />
-          {/*
-          <SettingsItem
-            title={I18n.t(strings.DELETE_IDENTITY)}
-            description={'(coming soon)'}
+
+          <SettingItem
+            title={'Backup'}
+            description={'Securely backup your data'}
             iconName={'delete'}
-            isDisabled
+            onPress={editBackup}
           />
-          */}
         </SettingSection>
         <Text style={styles.versionNumber}>
           Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}
@@ -114,6 +126,21 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       }),
     ),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
+  editBackup: () =>
+    dispatch(
+      withErrorScreen(
+        navigationActions.navigate({
+          routeName: routeList.Backup,
+        }),
+      ),
+    ),
+  openErrorScreen: () =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.Exception,
+        params: { error: new Error('Hello') },
+      }),
+    ),
 })
 
 export const Settings = connect(
