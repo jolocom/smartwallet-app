@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 
 /**
- * Container
+ * Wrapper
  *
  * The main use for this component is to have a full height and width component
  * that can be used in different components. It should be minimal in its style
@@ -16,7 +16,7 @@ import {
  */
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
@@ -31,15 +31,12 @@ interface Props {
   safeArea?: boolean
 }
 
-export const Container: React.FC<Props> = props => {
-  const ContainerView = props.safeArea === false ? View : SafeAreaView
+export const Wrapper: React.FC<Props> = props => {
+  const WrapperView = props.safeArea === false ? View : SafeAreaView
 
   return (
-    <ContainerView
-      testID={props.testID}
-      style={[styles.container, props.style]}
-    >
+    <WrapperView testID={props.testID} style={[styles.wrapper, props.style]}>
       {props.children}
-    </ContainerView>
+    </WrapperView>
   )
 }

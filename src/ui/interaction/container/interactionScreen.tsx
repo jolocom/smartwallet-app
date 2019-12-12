@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container } from '../../structure'
+import { Wrapper } from '../../structure'
 import { StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native'
 import { ScannerContainer } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
@@ -55,7 +55,7 @@ interface Props
 const InteractionContainer = (props: Props) => (
   <React.Fragment>
     <StatusBar hidden />
-    <Container safeArea={false} style={{ backgroundColor: Colors.greyDark }}>
+    <Wrapper safeArea={false} style={{ backgroundColor: Colors.greyDark }}>
       {IS_IOS && (
         <TouchableOpacity
           onPress={props.navigateHome}
@@ -68,7 +68,7 @@ const InteractionContainer = (props: Props) => (
         navigation={props.navigation}
         onScannerSuccess={props.onScannerSuccess}
       />
-    </Container>
+    </Wrapper>
   </React.Fragment>
 )
 

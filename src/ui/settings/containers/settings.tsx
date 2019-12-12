@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import I18n, { locales } from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
-import { Container } from 'src/ui/structure'
+import { Wrapper } from 'src/ui/structure'
 import { SettingSection } from '../components/settingSection'
 import { RootState } from '../../../reducers'
 import { ThunkDispatch } from '../../../store'
@@ -47,7 +47,7 @@ export const SettingsContainer: React.FC<Props> = props => {
   const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
-    <Container style={styles.container}>
+    <Wrapper style={styles.container}>
       <ScrollView
         style={styles.scrollComponent}
         contentContainerStyle={styles.scrollComponentContainer}
@@ -97,7 +97,7 @@ export const SettingsContainer: React.FC<Props> = props => {
         </Text>
         <View />
       </ScrollView>
-    </Container>
+    </Wrapper>
   )
 }
 

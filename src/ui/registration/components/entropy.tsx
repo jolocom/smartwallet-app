@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { Container } from 'src/ui/structure/'
+import { Wrapper } from 'src/ui/structure/'
 import { MaskedImageComponent } from 'src/ui/registration/components/maskedImage'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
@@ -46,16 +46,16 @@ export const EntropyComponent: React.FC<Props> = props => {
   const textStyle = progress === 0 ? styles.text : [styles.text, styles.bigFont]
 
   return (
-    <Container style={styles.mainContainer}>
+    <Wrapper style={styles.mainContainer}>
       <Text testID="entropyMsg" style={textStyle}>{msg}</Text>
-      <Container testID="scratchArea" style={styles.contentContainer}>
+      <Wrapper testID="scratchArea" style={styles.contentContainer}>
         {progress === 0 ? (
           <View style={{ position: 'absolute' }}>
             <HandAnimationComponent />
           </View>
         ) : null}
         <MaskedImageComponent disabled={progress === 1} addPoint={addPoint} />
-      </Container>
-    </Container>
+      </Wrapper>
+    </Wrapper>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { Container, JolocomButton } from 'src/ui/structure'
+import { Wrapper, JolocomButton } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
@@ -40,7 +40,7 @@ export const SeedPhrase: React.SFC<Props> = ({
   seedPhrase,
   handleButtonTap,
 }: Props) => (
-  <Container style={styles.container}>
+  <Wrapper style={styles.container}>
     <View style={styles.noteSection}>
       <Text style={styles.note}>
         {I18n.t(strings.WRITE_THESE_WORDS_DOWN_ON_AN_ANALOG_AND_SECURE_PLACE) +
@@ -62,5 +62,5 @@ export const SeedPhrase: React.SFC<Props> = ({
         text={I18n.t(strings.YES_I_WROTE_IT_DOWN)}
       />
     </View>
-  </Container>
+  </Wrapper>
 )

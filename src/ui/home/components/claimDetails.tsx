@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, JolocomButton } from 'src/ui/structure'
+import { Wrapper, JolocomButton } from 'src/ui/structure'
 import {
   StyleSheet,
   Keyboard,
@@ -145,7 +145,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
     return (
-      <Container style={styles.container}>
+      <Wrapper style={styles.container}>
         <ScrollView style={styles.scroll}>
           <Text style={styles.header}>{I18n.t(credentialType)}</Text>
           <View style={styles.textInputArea}>
@@ -162,7 +162,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
             ) : null}
           </View>
         </ScrollView>
-      </Container>
+      </Wrapper>
     )
   }
 }

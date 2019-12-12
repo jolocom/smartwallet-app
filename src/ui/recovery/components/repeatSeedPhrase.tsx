@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Container, JolocomButton } from '../../structure'
+import { Wrapper, JolocomButton } from '../../structure'
 import Placeholder from './placeholder'
 import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
@@ -73,7 +73,7 @@ const RepeatSeedPhraseComponent: React.FC<RepeatSeedPhraseProps> = ({
   const leftShiftCurrentWord =
     (randomWords && randomWords[0] && randomWords[0].length * 7.5) || 0
   return (
-    <Container style={styles.container}>
+    <Wrapper style={styles.container}>
       <View style={styles.mainSection}>
         <View style={styles.noteSection}>
           <Text style={styles.note}>{note}</Text>
@@ -127,7 +127,7 @@ const RepeatSeedPhraseComponent: React.FC<RepeatSeedPhraseProps> = ({
           }
         />
       </View>
-    </Container>
+    </Wrapper>
   )
 }
 

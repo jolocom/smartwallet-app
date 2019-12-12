@@ -6,7 +6,7 @@ import { ThunkDispatch } from '../../../store'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
-import { Container } from '../../structure'
+import { Wrapper } from '../../structure'
 import { styles } from '../styles'
 import { ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
@@ -79,7 +79,7 @@ const ErrorReportingContainer = (props: Props) => {
   }
 
   return (
-    <Container style={styles.wrapper}>
+    <Wrapper style={styles.wrapper}>
       <NavigationSection
         onNavigation={navigateBack}
         isBackButton={isBackButton}
@@ -127,7 +127,7 @@ const ErrorReportingContainer = (props: Props) => {
           text={I18n.t(strings.SUBMIT_REPORT)}
         />
       </ScrollView>
-    </Container>
+    </Wrapper>
   )
 }
 

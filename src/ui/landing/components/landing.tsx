@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Dimensions, View, Text, Animated } from 'react-native'
-import { Container } from 'src/ui/structure'
+import { Wrapper } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { landingSlides, Slide } from './landingSlides'
@@ -116,7 +116,7 @@ export class LandingComponent extends React.Component<Props> {
 
   public render() {
     return (
-      <Container style={styles.mainContainer}>
+      <Wrapper style={styles.mainContainer}>
         <Carousel
           testID="landingCarousel"
           data={landingSlides}
@@ -157,7 +157,7 @@ export class LandingComponent extends React.Component<Props> {
             upperCase={false}
           />
         </View>
-      </Container>
+      </Wrapper>
     )
   }
 }
