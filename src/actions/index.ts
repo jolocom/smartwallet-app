@@ -4,6 +4,7 @@ import * as navigationActions from 'src/actions/navigation/'
 import * as genericActions from 'src/actions/generic/'
 import * as ssoActions from 'src/actions/sso/'
 import * as recoveryActions from 'src/actions/recovery'
+import * as notificationsActions from 'src/actions/notifications'
 
 export {
   accountActions,
@@ -12,4 +13,5 @@ export {
   genericActions,
   ssoActions,
   recoveryActions,
+  notificationsActions,
 }
