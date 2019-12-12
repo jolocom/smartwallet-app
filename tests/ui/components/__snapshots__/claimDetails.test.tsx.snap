@@ -48,7 +48,6 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
       disabled={false}
       onPress={[Function]}
       text="Add claim"
-      upperCase={false}
     />
   </View>
 </ScrollViewMock>
@@ -108,7 +107,6 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
       disabled={false}
       onPress={[Function]}
       text="Add claim"
-      upperCase={false}
     />
   </View>
 </ScrollViewMock>

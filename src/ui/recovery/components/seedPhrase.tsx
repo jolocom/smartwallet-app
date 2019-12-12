@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     marginTop: 'auto',
+    marginBottom: 30,
   },
 })
 
