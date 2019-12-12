@@ -9,64 +9,72 @@ import {
 } from '../../../actions/recovery'
 import { timeout } from '../../../utils/asyncTimeout'
 import { NavigationScreenProps } from 'react-navigation'
+import { Alert } from 'react-native'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     ReturnType<typeof mapStateToProps>,
     NavigationScreenProps {}
 
-export type ModalType = 'auto-backup' | 'delete-backup' | 'prepare'
 interface State {
-  isModalOpen: boolean
   isLoading: boolean
-  modalType: ModalType
 }
 
 export class BackupContainer extends React.Component<Props, State> {
   state = {
-    isModalOpen: false,
     isLoading: false,
-    modalType: 'auto-backup' as ModalType,
   }
-  private toggleModal = (isLoading: boolean, modalType?: ModalType) => {
-    console.log('toggleModal')
-    this.setState({
-      isModalOpen: !this.state.isModalOpen,
-      isLoading: isLoading,
-      modalType: modalType || 'auto-backup',
-    })
+
+  private toggleLoading = () => {
+    this.setState({ isLoading: !this.state.isLoading })
   }
 
   private enableAutoBackup = async () => {
-    this.toggleModal(true, 'auto-backup')
-    await timeout(1500)
-    await this.props.enableAutoBackup()
-    this.toggleModal(false)
+    this.toggleLoading()
+    await timeout(500)
+    try {
+      await this.props.enableAutoBackup()
+    } catch (e) {
+      // TODO show notification
+      console.warn(e)
+    } finally {
+      this.toggleLoading()
+    }
   }
 
-  private toggleDeleteModal = async () => {
-    this.toggleModal(false, 'delete-backup')
+  private onDisableAutoBackup = async () => {
+    Alert.alert(
+      'Are you sure?',
+      'By disabling this function you will erase all information from our server',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'OK', style: 'default', onPress: this.disableAutoBackup },
+      ],
+    )
   }
 
   private disableAutoBackup = async () => {
-    this.setState({ isLoading: true })
-    await timeout(1000)
-    await this.props.disableAutoBackupAndDelete()
-    this.toggleModal(true, 'delete-backup')
+    this.toggleLoading()
+    await timeout(500)
+    try {
+      await this.props.disableAutoBackupAndDelete()
+    } catch (e) {
+      // TODO show notification
+      console.warn(e)
+    } finally {
+      this.toggleLoading()
+    }
   }
 
   public render() {
     const { isAutoBackupEnabled, navigation } = this.props
-    const { isLoading, modalType, isModalOpen } = this.state
+    const { isLoading } = this.state
     return (
       <BackupComponent
-        modalType={modalType}
         isLoading={isLoading}
-        isModalOpen={isModalOpen}
-        toggleDeleteModal={this.toggleDeleteModal}
+        onDisableAutoBackup={this.onDisableAutoBackup}
         isAutoBackupEnabled={isAutoBackupEnabled}
         enableAutoBackup={this.enableAutoBackup}
-        disableAutoBackupAndDelete={this.disableAutoBackup}
         goBack={() => navigation.pop()}
       />
     )

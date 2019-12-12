@@ -33,21 +33,27 @@ interface Props {
   onPress: () => void
   text: string
   containerStyle?: ViewStyle
-  textStyle? : TextStyle
+  textStyle?: TextStyle
+  disabled?: boolean
 }
 
 export const GradientButton = (props: Props) => {
-  const { onPress, containerStyle, text, textStyle } = props
+  const { onPress, containerStyle, text, textStyle, disabled } = props
   return (
     <TouchableOpacity
       style={{ ...styles.buttonContainer, ...containerStyle }}
       activeOpacity={0.8}
       onPress={onPress}
+      disabled={disabled}
     >
       <LinearGradient
-        colors={['rgb(145, 25, 66)', 'rgb(210, 45, 105)']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
+        colors={
+          !disabled
+            ? ['rgb(145, 25, 66)', 'rgb(210, 45, 105)']
+            : ['rgb(73, 9, 35)', 'rgb(123, 18, 53)', 'rgb(123, 18, 53)']
+        }
+        start={!disabled ? { x: 0, y: 0 } : { x: 0, y: 0 }}
+        end={!disabled ? { x: 1, y: 0 } : { x: 0, y: 0.3 }}
         style={{
           borderRadius: 8,
           width: '100%',

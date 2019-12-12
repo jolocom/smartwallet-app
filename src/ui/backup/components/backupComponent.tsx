@@ -4,22 +4,14 @@ import { Container } from '../../structure'
 import { Colors } from '../../../styles'
 import { fontMain } from '../../../styles/typography'
 import { GradientButton } from '../../structure/gradientButton'
-import { TransparentButton } from '../../structure/transparentButton'
-import { LoadingModal } from './loadingModal'
-import { ModalType } from '../container/backupContainer'
 import { NavigationSection } from '../../structure/navigationSection'
-import { UploadBackup } from './uploadBackup'
-import { DeleteConsent } from './deleteConsent'
 
 interface Props {
   isLoading: boolean
   isAutoBackupEnabled: boolean
   enableAutoBackup: () => void
-  toggleDeleteModal: () => void
-  disableAutoBackupAndDelete: () => void
-  modalType: ModalType
+  onDisableAutoBackup: () => void
   goBack: () => void
-  isModalOpen: boolean
 }
 
 const styles = StyleSheet.create({
@@ -82,12 +74,9 @@ const styles = StyleSheet.create({
 const BackupComponent: React.FC<Props> = ({
   isLoading,
   enableAutoBackup,
-  disableAutoBackupAndDelete,
-  toggleDeleteModal,
+  onDisableAutoBackup,
   isAutoBackupEnabled,
-  modalType,
   goBack,
-  isModalOpen,
 }) => {
   return (
     <Container style={styles.container}>
@@ -96,19 +85,6 @@ const BackupComponent: React.FC<Props> = ({
         isBackButton={true}
         isDark={true}
       />
-      <LoadingModal
-        isVisible={isModalOpen}
-        close={!isLoading ? toggleDeleteModal : undefined}
-      >
-        {modalType === 'auto-backup' && <UploadBackup />}
-        {modalType === 'delete-backup' && (
-          <DeleteConsent
-            isLoading={isLoading}
-            onCancel={toggleDeleteModal}
-            onAgree={disableAutoBackupAndDelete}
-          />
-        )}
-      </LoadingModal>
       <ScrollView style={styles.scrollView}>
         <Text style={styles.title}>Backup options</Text>
 
@@ -119,7 +95,7 @@ const BackupComponent: React.FC<Props> = ({
         {/*    device. Make sure to keep your backups up-to-date and stored*/}
         {/*    somewhere safe*/}
         {/*  </Text>*/}
-        {/*  <GradientButton containerStyle={styles.button} onPress={() => {}} text={'Export file'} />*/}
+        {/*  <GradientButton containerStyle={styles.buttonContainer} textStyle={styles.buttonText} onPress={() => {}} text={'Export file'} disabled={true} />*/}
         {/*</View>*/}
 
         <View style={styles.section}>
@@ -131,10 +107,12 @@ const BackupComponent: React.FC<Props> = ({
           </Text>
           {isAutoBackupEnabled ? (
             <React.Fragment>
-              <TransparentButton
-                style={{ ...styles.buttonContainer }}
-                text={'Disable auto-backup'}
-                onPress={toggleDeleteModal}
+              <GradientButton
+                containerStyle={styles.buttonContainer}
+                textStyle={styles.buttonText}
+                text={isLoading ? 'Deleting backup...' : 'Disable auto-backup'}
+                onPress={onDisableAutoBackup}
+                disabled={isLoading}
               />
               <Text style={styles.info}>Last backup {'18/07/2020'}</Text>
               {/*  TODO change date*/}
@@ -143,9 +121,12 @@ const BackupComponent: React.FC<Props> = ({
             <React.Fragment>
               <GradientButton
                 containerStyle={styles.buttonContainer}
-                onPress={enableAutoBackup}
-                text={'Use backup service'}
                 textStyle={styles.buttonText}
+                onPress={enableAutoBackup}
+                text={
+                  isLoading ? 'Synchronization started…' : 'Use backup service'
+                }
+                disabled={isLoading}
               />
               <Text style={styles.warning}>
                 By clicking here i agreed backing up my data on Jolocom’s
