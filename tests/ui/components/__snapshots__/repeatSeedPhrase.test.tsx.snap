@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
-<Container
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
@@ -235,11 +235,11 @@ exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
       upperCase={false}
     />
   </View>
-</Container>
+</Wrapper>
 `;
 
 exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
-<Container
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
@@ -457,5 +457,5 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
       upperCase={false}
     />
   </View>
-</Container>
+</Wrapper>
 `;

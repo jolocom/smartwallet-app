@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Entropy component matches the snapshot when drawn upon and insufficient entropy 1`] = `
-<Container
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
@@ -29,7 +29,7 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
   >
     50 %
   </Text>
-  <Container
+  <Wrapper
     style={
       Object {
         "flex": 1,
@@ -42,12 +42,12 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
       addPoint={[Function]}
       disabled={false}
     />
-  </Container>
-</Container>
+  </Wrapper>
+</Wrapper>
 `;
 
 exports[`Entropy component matches the snapshot when not drawn upon and insufficient entropy 1`] = `
-<Container
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
@@ -70,7 +70,7 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
   >
     For security purposes, we need some randomness. Please tap the screen and draw on it randomly
   </Text>
-  <Container
+  <Wrapper
     style={
       Object {
         "flex": 1,
@@ -92,12 +92,12 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       addPoint={[Function]}
       disabled={false}
     />
-  </Container>
-</Container>
+  </Wrapper>
+</Wrapper>
 `;
 
 exports[`Entropy component matches the snapshot with when drawn upon and sufficient entropy 1`] = `
-<Container
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
@@ -125,7 +125,7 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
   >
     100 %
   </Text>
-  <Container
+  <Wrapper
     style={
       Object {
         "flex": 1,
@@ -138,6 +138,6 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
       addPoint={[Function]}
       disabled={true}
     />
-  </Container>
-</Container>
+  </Wrapper>
+</Wrapper>
 `;

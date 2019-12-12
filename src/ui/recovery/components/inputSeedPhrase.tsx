@@ -228,7 +228,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
               {inputValue.length > 1 &&
                 suggestions.map((word, i) => (
                   <Button
-                    testID={"seedSuggestion" + i}
+                    testID={'seedSuggestion' + i}
                     key={i}
                     text={word}
                     onPress={() => selectWord(suggestions[i])}
