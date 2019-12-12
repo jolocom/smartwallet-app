@@ -1,5 +1,5 @@
-import { ActionCreator } from 'redux'
-import { ThunkAction, AnyAction } from 'src/store'
+import { ActionCreator, AnyAction } from 'redux'
+import { ThunkAction } from 'src/store'
 import { AppError } from '../lib/errors'
 import { toggleLoading } from './account'
 import { showErrorScreen } from './generic'
