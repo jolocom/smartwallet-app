@@ -36,7 +36,6 @@ export const ScannerContainer = (props: Props) => {
   const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<Status>(RESULTS.RESTRICTED)
   const [isCameraReady, setCameraReady] = useState(false)
-  const [isTorch, setTorch] = useState(false)
   const [isError, setError] = useState(false)
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
@@ -155,8 +154,6 @@ export const ScannerContainer = (props: Props) => {
       <ScannerComponent
         reRenderKey={reRenderKey}
         onScan={onScan}
-        isTorchPressed={isTorch}
-        onPressTorch={(state: boolean) => setTorch(state)}
         isError={isError}
         colorAnimationValue={colorAnimationValue}
         textAnimationValue={textAnimationValue}

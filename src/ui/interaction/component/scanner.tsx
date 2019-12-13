@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import {
@@ -88,8 +88,6 @@ const styles = StyleSheet.create({
 
 interface Props {
   onScan: (jwt: string) => Promise<void>
-  isTorchPressed: boolean
-  onPressTorch: (state: boolean) => void
   reRenderKey: number
   isError: boolean
   colorAnimationValue: Animated.Value
@@ -100,12 +98,12 @@ export const ScannerComponent = (props: Props) => {
   const {
     onScan,
     isError,
-    isTorchPressed,
-    onPressTorch,
     reRenderKey,
     colorAnimationValue,
     textAnimationValue,
   } = props
+
+  const [isTorchPressed, setTorchPressed] = useState(false)
 
   const backgroundColorConfig = colorAnimationValue.interpolate({
     inputRange: [0, 1],
@@ -178,8 +176,8 @@ export const ScannerComponent = (props: Props) => {
           </Text>
         )}
         <TouchableHighlight
-          onPressIn={() => onPressTorch(true)}
-          onPressOut={() => onPressTorch(false)}
+          onPressIn={() => setTorchPressed(true)}
+          onPressOut={() => setTorchPressed(false)}
           activeOpacity={1}
           underlayColor={'transparent'}
           style={styles.torch}
