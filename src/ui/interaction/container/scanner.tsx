@@ -43,7 +43,7 @@ export const ScannerContainer = (props: Props) => {
   const [textAnimationValue] = useState(new Animated.Value(0))
 
   useEffect(() => {
-    let focusListener!: NavigationEventSubscription
+    let focusListener
     if (navigation) {
       focusListener = navigation.addListener('willFocus', () => {
         // NOTE: the re-render and the re-mount should only fire during the willFocus event
@@ -55,7 +55,7 @@ export const ScannerContainer = (props: Props) => {
       setTimeout(() => setCameraReady(true), 200)
     })
 
-    return focusListener.remove
+    return focusListener && focusListener.remove
   }, [])
 
   const requestCameraPermission = async () => {
