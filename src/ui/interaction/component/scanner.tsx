@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
 interface Props {
   onScan: (jwt: string) => Promise<void>
   reRenderKey: number
-  isError: boolean
   colorAnimationValue: Animated.Value
   textAnimationValue: Animated.Value
 }
@@ -97,18 +96,55 @@ interface Props {
 export const ScannerComponent = (props: Props) => {
   const {
     onScan,
-    isError,
     reRenderKey,
     colorAnimationValue,
     textAnimationValue,
   } = props
 
+  const [isError, setError] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
+
+  const animateColor = () =>
+    Animated.sequence([
+      Animated.timing(colorAnimationValue, {
+        toValue: 1,
+        duration: 300,
+      }),
+      Animated.timing(colorAnimationValue, {
+        toValue: 0,
+        delay: 400,
+        duration: 300,
+      }),
+    ])
+
+  const animateText = () =>
+    Animated.sequence([
+      Animated.timing(textAnimationValue, {
+        toValue: 1,
+        duration: 200,
+      }),
+      Animated.timing(textAnimationValue, {
+        toValue: 0,
+        delay: 1200,
+        duration: 500,
+      }),
+    ])
 
   const backgroundColorConfig = colorAnimationValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['transparent', 'rgba(243, 198, 28, 0.4)'],
   })
+
+  const onRead = (event: { data: string }) => {
+    return onScan(event.data).catch(err => {
+      // TODO: use different message based on error code
+      //       after fixing up error codes
+      setError(true)
+      Animated.parallel([animateColor(), animateText()]).start(() => {
+        setError(false)
+      })
+    })
+  }
 
   const cameraSettings = {
     key: reRenderKey,
@@ -129,7 +165,7 @@ export const ScannerComponent = (props: Props) => {
         reactivate={true}
         reactivateTimeout={3000}
         fadeIn
-        onRead={async e => await onScan(e.data)}
+        onRead={onRead}
         cameraStyle={StyleSheet.create({
           //@ts-ignore
           height: SCREEN_HEIGHT,

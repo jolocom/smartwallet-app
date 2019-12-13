@@ -10,6 +10,9 @@ import { CloseIcon } from '../../../resources'
 import { fontMain, textXXS } from '../../../styles/typography'
 import { Colors } from '../../../styles'
 import { navigatorResetHome } from '../../../actions/navigation'
+import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken'
+import { ErrorCode, AppError } from 'src/lib/errors'
+import { showErrorScreen } from 'src/actions/generic'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -56,13 +59,40 @@ const InteractionContainer = (props: Props) => (
           <CloseIcon />
         </TouchableOpacity>
       )}
-      <Scanner navigation={props.navigation} />
+      <Scanner
+        consumeToken={props.consumeToken}
+        navigation={props.navigation}
+      />
     </Container>
   </React.Fragment>
 )
 
+// TODO: move these ErrorCodes to lib as LibError or something
+// in the App we should have just the errors that match user experience
+const localNotificationErrors = [
+  // AppError: "Wrong QR"
+  ErrorCode.ParseJWTFailed,
+
+  // AppError: "Wrong Data"
+  ErrorCode.WrongDID,
+  ErrorCode.WrongNonce,
+  ErrorCode.InvalidSignature,
+  ErrorCode.TokenExpired,
+]
+
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   navigateHome: () => dispatch(navigatorResetHome()),
+  consumeToken: async (jwt: string) => {
+    try {
+      return dispatch(consumeInteractionToken(jwt))
+    } catch (e) {
+      if (localNotificationErrors.includes(e.message)) {
+        throw e
+      } else {
+        return dispatch(showErrorScreen(new AppError(ErrorCode.Unknown, e)))
+      }
+    }
+  },
 })
 
 export const InteractionScreen = connect(

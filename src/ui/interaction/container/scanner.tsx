@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
 import { Animated, AppState, AppStateStatus, Platform } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 /**
@@ -10,16 +9,12 @@ import { appDetailsSettings } from 'react-native-android-open-settings'
 // TODO: using v1.2.1. When upgrading to RN60, use the latest version.
 import Permissions, { Status } from 'react-native-permissions'
 
-import { ThunkDispatch } from 'src/store'
-import { AppError, ErrorCode } from 'src/lib/errors'
-import { showErrorScreen } from 'src/actions/generic'
-import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken'
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
 
-interface Props
-  extends NavigationScreenProps,
-    ReturnType<typeof mapDispatchToProps> {}
+interface Props extends NavigationScreenProps {
+  consumeToken: (jwt: string) => Promise<any>
+}
 
 const CAMERA_PERMISSION = 'camera'
 
@@ -31,12 +26,11 @@ enum RESULTS {
 const IS_IOS = Platform.OS === 'ios'
 
 export const ScannerContainer = (props: Props) => {
-  const { consumeToken, showError, navigation } = props
+  const { consumeToken, navigation } = props
 
   const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<Status>(RESULTS.RESTRICTED)
   const [isCameraReady, setCameraReady] = useState(false)
-  const [isError, setError] = useState(false)
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
 
@@ -94,67 +88,11 @@ export const ScannerContainer = (props: Props) => {
     }
   }
 
-  const animateColor = () =>
-    Animated.sequence([
-      Animated.timing(colorAnimationValue, {
-        toValue: 1,
-        duration: 300,
-      }),
-      Animated.timing(colorAnimationValue, {
-        toValue: 0,
-        delay: 400,
-        duration: 300,
-      }),
-    ])
-
-  const animateText = () =>
-    Animated.sequence([
-      Animated.timing(textAnimationValue, {
-        toValue: 1,
-        duration: 200,
-      }),
-      Animated.timing(textAnimationValue, {
-        toValue: 0,
-        delay: 1200,
-        duration: 500,
-      }),
-    ])
-
-  const startLocalNotification = () => {
-    setError(true)
-    Animated.parallel([animateColor(), animateText()]).start(() => {
-      setError(false)
-    })
-  }
-
-  const onScan = async (jwt: string) => {
-    try {
-      await consumeToken(jwt)
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        startLocalNotification()
-      } else if (e.message === 'Token expired') {
-        showError(ErrorCode.TokenExpired, e)
-      } else if (e.message === 'Signature on token is invalid') {
-        showError(ErrorCode.InvalidSignature, e)
-      } else if (
-        e.message === 'You are not the intended audience of received token'
-      ) {
-        showError(ErrorCode.WrongDID, e)
-      } else if (e.message === 'The token nonce does not match the request') {
-        showError(ErrorCode.WrongNonce, e)
-      } else {
-        showError(ErrorCode.Unknown, e)
-      }
-    }
-  }
-
   return permission === RESULTS.AUTHORIZED ? (
     isCameraReady ? (
       <ScannerComponent
         reRenderKey={reRenderKey}
-        onScan={onScan}
-        isError={isError}
+        onScan={consumeToken}
         colorAnimationValue={colorAnimationValue}
         textAnimationValue={textAnimationValue}
       />
@@ -164,13 +102,4 @@ export const ScannerContainer = (props: Props) => {
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  consumeToken: (jwt: string) => dispatch(consumeInteractionToken(jwt)),
-  showError: (errorCode: ErrorCode, e: Error) =>
-    dispatch(showErrorScreen(new AppError(errorCode, e))),
-})
-
-export const Scanner = connect(
-  null,
-  mapDispatchToProps,
-)(ScannerContainer)
+export const Scanner = ScannerContainer
