@@ -127,6 +127,10 @@ const errorCodes = {
   [ErrorCode.ParseJWTFailed]: 'Could not parse JSONWebToken',
 
   [ErrorCode.DeepLinkUrlNotFound]: 'Could not find receiving application',
+  [ErrorCode.TokenExpired]: 'The lifetime of the token has expired',
+  [ErrorCode.InvalidSignature]: 'Signature on token is invalid',
+  [ErrorCode.WrongDID]: 'You are not the intended audience of received token',
+  [ErrorCode.WrongNonce]: 'The token nonce does not match the request',
   [ErrorCode.RegistrationFailed]: 'Registration failed',
   [ErrorCode.AppInitFailed]: 'Initialization failed',
 }

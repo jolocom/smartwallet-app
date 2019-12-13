@@ -7,6 +7,10 @@ enum ErrorCode {
   SaveExternalCredentialFailed = 'SaveExtCred',
   // actions/sso
   DeepLinkUrlNotFound = 'DeepLinkUrlNotFound',
+  TokenExpired = 'TokenExpired',
+  InvalidSignature = 'InvalidSignature',
+  WrongDID = 'WrongDID',
+  WrongNonce = 'WrongNonce',
   // actions/sso/authenticationRequest
   AuthenticationRequestFailed = 'AuthRequest',
   AuthenticationResponseFailed = 'AuthResponse',

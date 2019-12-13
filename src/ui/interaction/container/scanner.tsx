@@ -11,17 +11,12 @@ import { appDetailsSettings } from 'react-native-android-open-settings'
 import Permissions, { Status } from 'react-native-permissions'
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
-import { JolocomLib } from 'jolocom-lib'
-import {
-  JSONWebToken,
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { ThunkDispatch } from '../../../store'
-import { interactionHandlers } from '../../../lib/storage/interactionTokens'
-import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { showErrorScreen } from '../../../actions/generic'
-import { AppError, ErrorCode } from '../../../lib/errors'
+import { AppError } from '../../../lib/errors'
 import { connect } from 'react-redux'
+import ErrorCode from '../../../lib/errorCodes'
+import { consumeInteractionToken } from '../../../actions/sso/consumeInteractionToken'
 
 interface Props
   extends NavigationScreenProps,
@@ -37,7 +32,8 @@ enum RESULTS {
 const IS_IOS = Platform.OS === 'ios'
 
 export const ScannerContainer = (props: Props) => {
-  const { onScannerSuccess, navigation } = props
+  const { consumeToken, showError, navigation } = props
+
   const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<Status>(RESULTS.RESTRICTED)
   const [isCameraReady, setCameraReady] = useState(false)
@@ -126,16 +122,31 @@ export const ScannerContainer = (props: Props) => {
       }),
     ])
 
-  const parseJWT = async (jwt: string) => {
+  const startLocalNotification = () => {
+    setError(true)
+    Animated.parallel([animateColor(), animateText()]).start(() => {
+      setError(false)
+    })
+  }
+
+  const onScan = async (jwt: string) => {
     try {
-      const interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
-      await onScannerSuccess(interactionToken)
+      await consumeToken(jwt)
     } catch (e) {
       if (e instanceof SyntaxError) {
-        setError(true)
-        Animated.parallel([animateColor(), animateText()]).start(() => {
-          setError(false)
-        })
+        startLocalNotification()
+      } else if (e.message === 'Token expired') {
+        showError(ErrorCode.TokenExpired, e)
+      } else if (e.message === 'Signature on token is invalid') {
+        showError(ErrorCode.InvalidSignature, e)
+      } else if (
+        e.message === 'You are not the intended audience of received token'
+      ) {
+        showError(ErrorCode.WrongDID, e)
+      } else if (e.message === 'The token nonce does not match the request') {
+        showError(ErrorCode.WrongNonce, e)
+      } else {
+        showError(ErrorCode.Unknown, e)
       }
     }
   }
@@ -144,7 +155,7 @@ export const ScannerContainer = (props: Props) => {
     isCameraReady ? (
       <ScannerComponent
         reRenderKey={reRenderKey}
-        onScan={parseJWT}
+        onScan={onScan}
         isTorchPressed={isTorch}
         onPressTorch={(state: boolean) => setTorch(state)}
         isError={isError}
@@ -158,17 +169,9 @@ export const ScannerContainer = (props: Props) => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  onScannerSuccess: async (interactionToken: JSONWebToken<JWTEncodable>) => {
-    const handler = interactionHandlers[interactionToken.interactionType]
-
-    return handler
-      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
-      : dispatch(
-          showErrorScreen(
-            new AppError(ErrorCode.Unknown, new Error('No handler found')),
-          ),
-        )
-  },
+  consumeToken: (jwt: string) => dispatch(consumeInteractionToken(jwt)),
+  showError: (errorCode: ErrorCode, e: Error) =>
+    dispatch(showErrorScreen(new AppError(errorCode, e))),
 })
 
 export const Scanner = connect(
