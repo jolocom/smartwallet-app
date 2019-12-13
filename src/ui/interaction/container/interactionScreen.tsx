@@ -1,23 +1,15 @@
 import React from 'react'
 import { Container } from '../../structure'
 import { StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native'
-import { ScannerContainer } from './scanner'
+import { Scanner } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { white } from '../../../styles/colors'
 import { ThunkDispatch } from '../../../store'
-import { showErrorScreen } from '../../../actions/generic'
-import { AppError, ErrorCode } from '../../../lib/errors'
-import { interactionHandlers } from '../../../lib/storage/interactionTokens'
-import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { connect } from 'react-redux'
 import { CloseIcon } from '../../../resources'
 import { fontMain, textXXS } from '../../../styles/typography'
 import { Colors } from '../../../styles'
 import { navigatorResetHome } from '../../../actions/navigation'
-import {
-  JSONWebToken,
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -64,26 +56,12 @@ const InteractionContainer = (props: Props) => (
           <CloseIcon />
         </TouchableOpacity>
       )}
-      <ScannerContainer
-        navigation={props.navigation}
-        onScannerSuccess={props.onScannerSuccess}
-      />
+      <Scanner navigation={props.navigation} />
     </Container>
   </React.Fragment>
 )
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  onScannerSuccess: async (interactionToken: JSONWebToken<JWTEncodable>) => {
-    const handler = interactionHandlers[interactionToken.interactionType]
-
-    return handler
-      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
-      : dispatch(
-          showErrorScreen(
-            new AppError(ErrorCode.Unknown, new Error('No handler found')),
-          ),
-        )
-  },
   navigateHome: () => dispatch(navigatorResetHome()),
 })
 

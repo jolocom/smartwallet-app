@@ -16,10 +16,16 @@ import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { ThunkDispatch } from '../../../store'
+import { interactionHandlers } from '../../../lib/storage/interactionTokens'
+import { withErrorScreen, withLoading } from '../../../actions/modifiers'
+import { showErrorScreen } from '../../../actions/generic'
+import { AppError, ErrorCode } from '../../../lib/errors'
+import { connect } from 'react-redux'
 
-interface Props extends NavigationScreenProps {
-  onScannerSuccess: (interactionToken: JSONWebToken<JWTEncodable>) => void
-}
+interface Props
+  extends NavigationScreenProps,
+    ReturnType<typeof mapDispatchToProps> {}
 
 const CAMERA_PERMISSION = 'camera'
 
@@ -120,10 +126,10 @@ export const ScannerContainer = (props: Props) => {
       }),
     ])
 
-  const parseJWT = (jwt: string) => {
+  const parseJWT = async (jwt: string) => {
     try {
       const interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
-      onScannerSuccess(interactionToken)
+      await onScannerSuccess(interactionToken)
     } catch (e) {
       if (e instanceof SyntaxError) {
         setError(true)
@@ -135,7 +141,7 @@ export const ScannerContainer = (props: Props) => {
   }
 
   return permission === RESULTS.AUTHORIZED ? (
-    isCameraReady && (
+    isCameraReady ? (
       <ScannerComponent
         reRenderKey={reRenderKey}
         onScan={parseJWT}
@@ -145,8 +151,27 @@ export const ScannerContainer = (props: Props) => {
         colorAnimationValue={colorAnimationValue}
         textAnimationValue={textAnimationValue}
       />
-    )
+    ) : null
   ) : (
     <NoPermissionComponent onPressEnable={onEnablePermission} />
   )
 }
+
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  onScannerSuccess: async (interactionToken: JSONWebToken<JWTEncodable>) => {
+    const handler = interactionHandlers[interactionToken.interactionType]
+
+    return handler
+      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
+      : dispatch(
+          showErrorScreen(
+            new AppError(ErrorCode.Unknown, new Error('No handler found')),
+          ),
+        )
+  },
+})
+
+export const Scanner = connect(
+  null,
+  mapDispatchToProps,
+)(ScannerContainer)

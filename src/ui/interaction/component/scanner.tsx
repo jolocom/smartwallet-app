@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
-  onScan: (jwt: string) => void
+  onScan: (jwt: string) => Promise<void>
   isTorchPressed: boolean
   onPressTorch: (state: boolean) => void
   reRenderKey: number
@@ -131,7 +131,7 @@ export const ScannerComponent = (props: Props) => {
         reactivate={true}
         reactivateTimeout={3000}
         fadeIn
-        onRead={e => onScan(e.data)}
+        onRead={async e => await onScan(e.data)}
         cameraStyle={StyleSheet.create({
           //@ts-ignore
           height: SCREEN_HEIGHT,
