@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 import { Animated, AppState, AppStateStatus, Platform } from 'react-native'
-import {
-  NavigationEventSubscription,
-  NavigationScreenProps,
-} from 'react-navigation'
-/* TODO: When using the latest react-native-permissions version, remove this dependency,
- since there is already a cross-platform openSettings method */
+import { NavigationScreenProps } from 'react-navigation'
+/**
+ * TODO: When using the latest react-native-permissions version, remove this
+ * dependency, since there is already a cross-platform openSettings method
+ */
 import { appDetailsSettings } from 'react-native-android-open-settings'
 // TODO: using v1.2.1. When upgrading to RN60, use the latest version.
 import Permissions, { Status } from 'react-native-permissions'
+
+import { ThunkDispatch } from 'src/store'
+import { AppError, ErrorCode } from 'src/lib/errors'
+import { showErrorScreen } from 'src/actions/generic'
+import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken'
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
-import { ThunkDispatch } from '../../../store'
-import { showErrorScreen } from '../../../actions/generic'
-import { AppError } from '../../../lib/errors'
-import { connect } from 'react-redux'
-import ErrorCode from '../../../lib/errorCodes'
-import { consumeInteractionToken } from '../../../actions/sso/consumeInteractionToken'
 
 interface Props
   extends NavigationScreenProps,
