@@ -11,22 +11,22 @@ const styles = StyleSheet.create({
   title: {
     // TODO: replace with TTCommons Medium
     fontFamily: fontMain,
-    height: 20,
-    fontSize: 20,
+    height: 18,
+    fontSize: 18,
     marginHorizontal: 20,
-    marginTop: 24,
+    marginTop: 20,
   },
   message: {
     fontFamily: fontMain,
-    fontSize: 16,
+    fontSize: 14,
     color: white,
     marginHorizontal: 20,
-    marginTop: 12,
+    marginTop: 9,
   },
   buttonWrapper: {
     height: 30,
     marginHorizontal: 20,
-    marginTop: 18,
+    marginTop: 14,
     marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',

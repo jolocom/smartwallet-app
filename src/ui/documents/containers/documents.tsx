@@ -15,7 +15,6 @@ import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
-import { BackupWarning } from '../../recovery/components/backupWarning'
 import { Typography, Colors, Spacing } from 'src/styles'
 
 interface Props
@@ -97,7 +96,6 @@ export class DocumentsContainer extends React.Component<Props, State> {
 
     return (
       <Animated.View style={styles.mainContainer}>
-        <BackupWarning />
         {!otherIsEmpty && (
           <DocumentViewToggle
             showingValid={this.state.showingValid}

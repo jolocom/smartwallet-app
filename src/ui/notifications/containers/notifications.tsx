@@ -24,7 +24,7 @@ export const NotificationContainer = (props: Props) => {
   const { activeNotification, onDismiss, onInteract } = props
 
   const [notification, setNotification] = useState<INotification>()
-  const notificationHeight = notification && !notification.dismiss ? 130 : 172
+  const notificationHeight = notification && !notification.dismiss ? 94 : 136
   const [animatedValue] = useState<Animated.Value>(
     new Animated.Value(-notificationHeight),
   )
