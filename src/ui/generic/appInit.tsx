@@ -9,6 +9,7 @@ import { Container } from '../structure'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
 import { Typography, Colors } from 'src/styles'
+import { checkRecoverySetup } from '../../actions/notifications/checkRecoverySetup'
 const image = require('src/resources/img/splashScreen.png')
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
@@ -61,6 +62,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     )
     await dispatch(withErrorScreen(genericActions.initApp))
     await dispatch(withErrorScreen(accountActions.checkIdentityExists))
+    await dispatch(withErrorScreen(checkRecoverySetup))
     const handleDeepLink = (url: string) =>
       dispatch(
         withLoading(withErrorScreen(navigationActions.handleDeepLink(url))),
