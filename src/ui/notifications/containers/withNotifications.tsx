@@ -4,7 +4,7 @@ import { Notification } from './notifications'
 export const withNotifications = <P extends object>(
   Component: React.ComponentType<P>,
 ) =>
-  class WithLoading extends React.Component<P> {
+  class NotificationsHOC extends React.Component<P> {
     public render() {
       return (
         <React.Fragment>
