@@ -6,12 +6,14 @@ import {
   RegistrationState,
 } from 'src/reducers/registration/'
 import { documentsReducer, DocumentsState } from './documents'
+import { notificationsReducer, NotificationsState } from './notifications'
 
-export const rootReducer = combineReducers({
+export const rootReducer = combineReducers<RootState>({
   settings: settingsReducer,
   account: accountReducer,
   registration: registrationReducer,
   documents: documentsReducer,
+  notifications: notificationsReducer,
 })
 
 export interface RootState {
@@ -19,4 +21,5 @@ export interface RootState {
   readonly account: AccountState
   readonly registration: RegistrationState
   readonly documents: DocumentsState
+  readonly notifications: NotificationsState
 }

@@ -42,13 +42,14 @@ export const CredentialOverview: React.FC<Props> = props => {
         style={styles.scrollComponent}
         contentContainerStyle={styles.scrollComponentContainer}
       >
-        {claimCategories.map(category => {
+        {claimCategories.map((category, i) => {
           // we render documents on their own screen
           const nonDocumentClaims = getNonDocumentClaims(
             claimsToRender[category],
           )
           return nonDocumentClaims.length > 0 ? (
             <CredentialCategory
+              key={i}
               category={category}
               credentials={nonDocumentClaims}
               did={did}

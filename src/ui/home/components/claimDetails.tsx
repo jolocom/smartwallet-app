@@ -104,8 +104,9 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
   private renderInputFields = (claim: DecoratedClaims) => {
     const { claimData, keyboardType } = claim
-    return Object.keys(claimData).map(item => (
+    return Object.keys(claimData).map((item, idx) => (
       <TextInputField
+        autoFocus={idx == 0}
         key={item}
         fieldName={item}
         fieldValue={claimData[item]}
