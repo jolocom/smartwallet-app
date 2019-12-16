@@ -9,7 +9,7 @@ import {
 import {
   createInfoNotification,
   createStickyNotification,
-  Notification,
+  INotification,
 } from 'src/lib/notifications'
 
 jest.useFakeTimers()
@@ -24,7 +24,7 @@ describe('Notifications Actions', () => {
     curId = 1
   })
 
-  const newSticky = (notif: Partial<Notification> = {}) =>
+  const newSticky = (notif: Partial<INotification> = {}) =>
     createStickyNotification({
       id: getId().toString(),
       title: 'hello',

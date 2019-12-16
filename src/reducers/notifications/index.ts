@@ -1,15 +1,15 @@
 import { AnyAction } from 'redux'
 import { reject } from 'ramda'
-import { Notification } from 'src/lib/notifications'
+import { INotification } from 'src/lib/notifications'
 
 export const SCHEDULE_NOTIFICATION = 'SCHEDULE_NOTIFICATION'
 export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION'
 export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION'
 export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS'
 
-export type NotificationsState = {
-  queue: Notification[]
-  active: Notification | null
+export interface NotificationsState {
+  queue: INotification[]
+  active: INotification | null
   activeExpiryTs?: number
 }
 
@@ -34,7 +34,7 @@ export const notificationsReducer = (
       )
       // if it is the active notification, then mark it expired
       let { active, activeExpiryTs } = state
-      if (active && active.id == action.notification.id) {
+      if (active && active.id === action.notification.id) {
         active = null
         activeExpiryTs = 0
       }

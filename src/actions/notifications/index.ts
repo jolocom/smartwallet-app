@@ -1,5 +1,5 @@
 import { ThunkAction } from 'src/store'
-import { Notification } from 'src/lib/notifications'
+import { INotification } from 'src/lib/notifications'
 import {
   SET_ACTIVE_NOTIFICATION,
   SCHEDULE_NOTIFICATION,
@@ -12,7 +12,7 @@ import {
  *              appropriate time in the future, or right away if possible
  */
 export const scheduleNotification = (
-  notification: Notification,
+  notification: INotification,
 ): ThunkAction => dispatch => {
   dispatch({
     type: SCHEDULE_NOTIFICATION,
@@ -27,7 +27,7 @@ export const scheduleNotification = (
  *              notification's "call to action" button
  */
 export const invokeInteract = (
-  notif: Notification,
+  notif: INotification,
 ): ThunkAction => async dispatch => {
   let keepNotification = false
   const { interact } = notif
@@ -43,7 +43,7 @@ export const invokeInteract = (
  *              notification's "dismiss" button
  */
 export const invokeDismiss = (
-  notif: Notification,
+  notif: INotification,
 ): ThunkAction => async dispatch => {
   const { dismiss } = notif
   if (typeof dismiss === 'object' && dismiss.onDismiss) {
@@ -68,7 +68,7 @@ export const clearAllNotifications = (): ThunkAction => dispatch => {
  *              No callbacks are invoked.
  */
 export const removeNotification = (
-  notification: Notification,
+  notification: INotification,
 ): ThunkAction => dispatch => {
   dispatch({
     type: REMOVE_NOTIFICATION,
@@ -76,7 +76,6 @@ export const removeNotification = (
   })
   return dispatch(updateNotificationsState)
 }
-
 
 /**
  * NOTE
@@ -92,7 +91,7 @@ export const removeNotification = (
  *              expire
  */
 const setActiveNotification = (
-  notification: Notification | null,
+  notification: INotification | null,
   expiry?: number,
 ) => ({
   type: SET_ACTIVE_NOTIFICATION,
@@ -116,7 +115,8 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
     !active || (active.dismiss && activeExpiryTs && curTs >= activeExpiryTs)
   const isActiveSticky = active && !active.dismiss
 
-  let next = null, nextExpiry
+  let next = null,
+    nextExpiry
 
   // unqueue the active notification if it is expired
   if (active && isActiveExpired) dispatch(removeNotification(active))
@@ -137,7 +137,7 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
   }
 
   // if there's a next and it is not the already active notification
-  if (next && next != active) {
+  if (next && next !== active) {
     // if next should be automatically dismissed, setup a timeout for it
     if (next.dismiss && next.dismiss.timeout) {
       if (nextUpdateTimeout) {

@@ -14,12 +14,14 @@ interface NotificationMessage {
  * - a callback
  */
 
-type NotificationDismiss = {
-  dismiss?: false | {
-    label?: string,
-    timeout?: number,
-    onDismiss?: (...args: any) => void
-  },
+interface NotificationDismiss {
+  dismiss?:
+    | false
+    | {
+        label?: string
+        timeout?: number
+        onDismiss?: (...args: any) => void
+      }
 }
 
 /**
@@ -28,7 +30,7 @@ type NotificationDismiss = {
  * It is not possible to simply specify a boolean, because if an interaction is
  * expected then a callback and label are required.
  */
-type NotificationInteract = {
+interface NotificationInteract {
   interact?: {
     label: string
     onInteract: (...args: any) => void | boolean | Promise<void | boolean>
@@ -61,14 +63,14 @@ type PartialNotification = Partial<NotificationBase> &
 
 const createNotificationFactory = (
   template: PartialNotification & Omit<NotificationBase, 'id'>,
-) => (overrides: PartialNotification & NotificationMessage): Notification =>
+) => (overrides: PartialNotification & NotificationMessage): INotification =>
   ({
     id: randomBytes(4).toString('hex'),
-    ...(template as Notification),
+    ...(template as INotification),
     ...overrides,
-  } as Notification)
+  } as INotification)
 
-export type Notification = NotificationBase &
+export type INotification = NotificationBase &
   NotificationInteract &
   NotificationDismiss &
   NotificationPayload
