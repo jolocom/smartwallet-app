@@ -5,8 +5,13 @@ import { showErrorScreen } from '../generic'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 import { ThunkAction } from '../../store'
+import {
+  JSONWebToken,
+  JWTEncodable,
+} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 
-const callHandler = handler => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const callHandler = (handler: () => ThunkAction) => {
   try {
     return handler()
   } catch (e) {
@@ -27,7 +32,8 @@ const callHandler = handler => {
 export const consumeInteractionToken = (
   jwt: string,
 ): ThunkAction => async dispatch => {
-  let interactionToken
+  let interactionToken: JSONWebToken<JWTEncodable>
+
   try {
     interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
   } catch (e) {

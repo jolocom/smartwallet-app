@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, AppState, AppStateStatus, Platform } from 'react-native'
+import {  AppState, AppStateStatus, Platform } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 /**
  * TODO: When using the latest react-native-permissions version, remove this
@@ -31,8 +31,6 @@ export const ScannerContainer = (props: Props) => {
   const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<Status>(RESULTS.RESTRICTED)
   const [isCameraReady, setCameraReady] = useState(false)
-  const [colorAnimationValue] = useState(new Animated.Value(0))
-  const [textAnimationValue] = useState(new Animated.Value(0))
 
   useEffect(() => {
     let focusListener
@@ -93,8 +91,6 @@ export const ScannerContainer = (props: Props) => {
       <ScannerComponent
         reRenderKey={reRenderKey}
         onScan={consumeToken}
-        colorAnimationValue={colorAnimationValue}
-        textAnimationValue={textAnimationValue}
       />
     ) : null
   ) : (

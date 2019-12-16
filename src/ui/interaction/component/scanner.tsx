@@ -21,6 +21,7 @@ import {
   textSubheaderLineHeight,
 } from '../../../styles/typography'
 import { BP } from '../../../styles/breakpoints'
+import ErrorCode from '../../../lib/errorCodes'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
@@ -89,20 +90,16 @@ const styles = StyleSheet.create({
 interface Props {
   onScan: (jwt: string) => Promise<void>
   reRenderKey: number
-  colorAnimationValue: Animated.Value
-  textAnimationValue: Animated.Value
 }
 
 export const ScannerComponent = (props: Props) => {
-  const {
-    onScan,
-    reRenderKey,
-    colorAnimationValue,
-    textAnimationValue,
-  } = props
+  const { onScan, reRenderKey } = props
 
-  const [isError, setError] = useState(false)
+  const [isError, setError] = useState()
+  const [errorText, setErrorText] = useState()
   const [isTorchPressed, setTorchPressed] = useState(false)
+  const [colorAnimationValue] = useState(new Animated.Value(0))
+  const [textAnimationValue] = useState(new Animated.Value(0))
 
   const animateColor = () =>
     Animated.sequence([
@@ -140,6 +137,11 @@ export const ScannerComponent = (props: Props) => {
       // TODO: use different message based on error code
       //       after fixing up error codes
       setError(true)
+      if (err.code === ErrorCode.ParseJWTFailed) {
+        setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
+      } else {
+        setErrorText(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)
+      }
       Animated.parallel([animateColor(), animateText()]).start(() => {
         setError(false)
       })
@@ -202,7 +204,7 @@ export const ScannerComponent = (props: Props) => {
               },
             ]}
           >
-            {I18n.t(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)}
+            {I18n.t(errorText)}
           </Animated.Text>
         ) : (
           <Text style={styles.descriptionText}>

@@ -10,14 +10,16 @@ export class AppError extends Error {
   // private code: ErrorCode
   public origError: any
   public navigateTo: routeList
+  public code: ErrorCode
 
   public constructor(
     code = ErrorCode.Unknown,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     origError?: any,
     navigateTo: routeList = routeList.AppInit,
   ) {
     super(strings[code] || strings[ErrorCode.Unknown])
-    // this.code = code
+    this.code = code
     this.origError = origError
     this.navigateTo = navigateTo
   }

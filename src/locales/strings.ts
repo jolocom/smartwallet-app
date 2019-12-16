@@ -164,7 +164,8 @@ export default {
     'Enable access so you can start taking photos and videos',
   ENABLE_CAMERA_ACCESS: 'Enable Camera Access',
   LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE:
-    "Looks like we can't provide this service",
+    "Looks like we can't provide this service.",
+  IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN: 'Is this the right QR code? Try again.',
   START_PROCESS: 'Start Process',
   SEND_ERROR_REPORT: 'Send error report',
   ERROR_REPORT_SENT: 'Error report sent',
