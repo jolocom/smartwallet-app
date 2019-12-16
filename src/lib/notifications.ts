@@ -88,6 +88,13 @@ export const createInfoNotification = createNotificationFactory({
   },
 })
 
+export const createWarningNotification = createNotificationFactory({
+  type: NotificationType.warning,
+  dismiss: {
+    timeout: 3000,
+  },
+})
+
 export const createStickyNotification = createNotificationFactory({
   type: NotificationType.info,
   dismiss: false,

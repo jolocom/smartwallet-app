@@ -3,7 +3,7 @@ import { NotificationComponent } from '../components/notifications'
 import { Animated, StyleSheet } from 'react-native'
 import { RootState } from '../../../reducers'
 import { connect } from 'react-redux'
-import { INotification, NotificationType } from '../../../lib/notifications'
+import { INotification } from '../../../lib/notifications'
 import { ThunkDispatch } from '../../../store'
 import { invokeDismiss, invokeInteract } from '../../../actions/notifications'
 
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 2,
     width: '100%',
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: 'rgba(0,0,0,0.9)',
   },
 })
 
@@ -24,8 +24,7 @@ export const NotificationContainer = (props: Props) => {
   const { activeNotification, onDismiss, onInteract } = props
 
   const [notification, setNotification] = useState<INotification>()
-  const notificationHeight =
-    notification && notification.type === NotificationType.info ? 150 : 192
+  const notificationHeight = notification && !notification.dismiss ? 130 : 172
   const [animatedValue] = useState<Animated.Value>(
     new Animated.Value(-notificationHeight),
   )
@@ -44,31 +43,17 @@ export const NotificationContainer = (props: Props) => {
     }
   }, [activeNotification])
 
-  const showNotification = () => {
-    return Animated.timing(animatedValue, {
+  const showNotification = () =>
+    Animated.timing(animatedValue, {
       toValue: 0,
       duration: 300,
     })
-  }
 
-  const hideNotification = () => {
-    return Animated.timing(animatedValue, {
+  const hideNotification = () =>
+    Animated.timing(animatedValue, {
       toValue: -notificationHeight,
       duration: 300,
     })
-  }
-
-  const onPressDismiss = () => {
-    hideNotification()
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    onDismiss(notification!)
-  }
-
-  const onPressInteract = () => {
-    hideNotification()
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    onInteract(notification!)
-  }
 
   return (
     <Animated.View
@@ -80,8 +65,8 @@ export const NotificationContainer = (props: Props) => {
     >
       {notification && (
         <NotificationComponent
-          onPressDismiss={onPressDismiss}
-          onPressInteract={onPressInteract}
+          onPressDismiss={() => notification && onDismiss(notification)}
+          onPressInteract={() => notification && onInteract(notification)}
           notification={notification}
         />
       )}

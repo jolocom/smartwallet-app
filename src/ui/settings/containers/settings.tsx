@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import VersionNumber from 'react-native-version-number'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import I18n, { locales } from 'src/locales/i18n'
