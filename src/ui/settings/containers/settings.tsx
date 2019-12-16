@@ -1,6 +1,6 @@
 import React from 'react'
 import VersionNumber from 'react-native-version-number'
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import I18n, { locales } from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
@@ -138,7 +138,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(
       navigationActions.navigate({
         routeName: routeList.Exception,
-        params: { error: new Error('Hello') },
+        params: { error: new Error('Test Error') },
       }),
     ),
 })
