@@ -8,7 +8,6 @@ import {
   Animated,
   Platform,
   Keyboard,
-  EmitterSubscription,
 } from 'react-native'
 import { BottomTabBarProps, TabScene, SafeAreaView } from 'react-navigation'
 import { BottomBarSVG } from '../components/bottomBarSvg'
@@ -114,30 +113,21 @@ const BottomBarContainer = (props: Props) => {
       const blurListener = navigation.addListener('willBlur', animateHiding)
       const focusListener = navigation.addListener('didFocus', animateAppear)
 
-      const isIOS = Platform.OS === 'ios'
+      const keyboardShowListener = Keyboard.addListener(
+        Platform.select({
+          ios: 'keyboardWillShow',
+          android: 'keyboardDidShow',
+        }),
+        animateAppear,
+      )
 
-      let keyboardShowListener: EmitterSubscription,
-        keyboardHideListener: EmitterSubscription
-
-      if (isIOS) {
-        keyboardShowListener = Keyboard.addListener(
-          'keyboardWillShow',
-          animateAppear,
-        )
-        keyboardHideListener = Keyboard.addListener(
-          'keyboardWillHide',
-          animateHiding,
-        )
-      } else {
-        keyboardShowListener = Keyboard.addListener(
-          'keyboardDidShow',
-          animateAppear,
-        )
-        keyboardHideListener = Keyboard.addListener(
-          'keyboardDidHide',
-          animateHiding,
-        )
-      }
+      const keyboardHideListener = Keyboard.addListener(
+        Platform.select({
+          ios: 'keyboardWillHide',
+          android: 'keyboardDidHide',
+        }),
+        animateHiding,
+      )
 
       return () => {
         blurListener.remove()
