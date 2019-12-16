@@ -22,7 +22,7 @@ platform :android do
   end
 
   before_all do |lane, options|
-    ensure_git_status_clean
+    ensure_bundle_exec
   end
 
   after_all do |lane, options|
@@ -48,7 +48,7 @@ platform :android do
       "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out key.json -k #{password}",
       log: false
     )
-    load_json(json_path: "./android-secrets/secrets.json")
+    load_json(json_path: "./fastlane/secrets.json")
   end
 
   lane :build do |options|
@@ -100,8 +100,6 @@ platform :android do
 
   desc "Submit a new Beta Build to Play Store"
   lane :beta do
-    ensure_git_branch(branch: 'master')
-    ensure_git_status_clean
     build
     upload(target: 'beta')
   end
