@@ -16,7 +16,9 @@ import { LocaleSetting } from '../components/localeSetting'
 import SettingItem from '../components/settingItem'
 import settingKeys from '../settingKeys'
 import { showSeedPhrase } from '../../../actions/recovery'
-
+import Share from 'react-native-share'
+import DocumentPicker from 'react-native-document-picker'
+import { readFile } from 'react-native-fs'
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.backgroundLightMain,
@@ -71,6 +73,28 @@ export const SettingsContainer: React.FC<Props> = props => {
               iconName={'alert'}
               onPress={openErrorScreen}
             />
+            <SettingItem
+              title={'Test Share'}
+              description={'Export backup file test'}
+              iconName={'share'}
+              onPress={() =>
+                Share.open({
+                  filename: 'jolocom-backup',
+                  url:
+                    'data:text/plain;base64,ewogIGtleXM6IFtdLAogIGRhdGE6ICJ0ZXN0Igp9',
+                })
+              }
+            />
+            <SettingItem
+              title={'Test Import'}
+              iconName={'import'}
+              description={'Import backup file test'}
+              onPress={() => {
+                DocumentPicker.pick({ type: [DocumentPicker.types.plainText] })
+                  .then(res => readFile(res.uri))
+                  .then(console.log)
+              }}
+            />
           </SettingSection>
         )}
         <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
@@ -95,7 +119,6 @@ export const SettingsContainer: React.FC<Props> = props => {
             isDisabled={seedPhraseSaved}
             onPress={setupBackup}
           />
-
           <SettingItem
             title={'Backup'}
             description={'Securely backup your data'}
