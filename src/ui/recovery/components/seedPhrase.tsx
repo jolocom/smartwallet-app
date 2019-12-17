@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     marginTop: 'auto',
+    marginBottom: 30,
   },
 })
 
@@ -57,8 +58,6 @@ export const SeedPhrase: React.SFC<Props> = ({
     <View style={styles.buttonSection}>
       <JolocomButton
         onPress={handleButtonTap}
-        raised
-        upperCase={false}
         text={I18n.t(strings.YES_I_WROTE_IT_DOWN)}
       />
     </View>
