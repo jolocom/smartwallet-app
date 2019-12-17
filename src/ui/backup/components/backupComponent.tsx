@@ -11,6 +11,7 @@ interface Props {
   isAutoBackupEnabled: boolean
   enableAutoBackup: () => void
   onDisableAutoBackup: () => void
+  exportBackup: () => void
   goBack: () => void
   lastBackup?: string
 }
@@ -76,6 +77,7 @@ const BackupComponent: React.FC<Props> = ({
   isLoading,
   enableAutoBackup,
   onDisableAutoBackup,
+  exportBackup,
   isAutoBackupEnabled,
   goBack,
   lastBackup,
@@ -90,15 +92,25 @@ const BackupComponent: React.FC<Props> = ({
       <ScrollView style={styles.scrollView}>
         <Text style={styles.title}>Backup options</Text>
 
-        {/*<View style={styles.section}>*/}
-        {/*  <Text style={styles.subtitle}>Backup data on your own</Text>*/}
-        {/*  <Text style={styles.description}>*/}
-        {/*    Download an encrypted copy of the data in your SmartWallet to your*/}
-        {/*    device. Make sure to keep your backups up-to-date and stored*/}
-        {/*    somewhere safe*/}
-        {/*  </Text>*/}
-        {/*  <GradientButton containerStyle={styles.buttonContainer} textStyle={styles.buttonText} onPress={() => {}} text={'Export file'} disabled={true} />*/}
-        {/*</View>*/}
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>Backup data on your own</Text>
+          <Text style={styles.description}>
+            Download an encrypted copy of the data in your SmartWallet to your
+            device. Make sure to keep your backups up-to-date and stored
+            somewhere safe
+          </Text>
+          <GradientButton
+            containerStyle={styles.buttonContainer}
+            textStyle={styles.buttonText}
+            onPress={exportBackup}
+            text={'Export file'}
+          />
+          {lastBackup && (
+            <Text style={styles.info}>
+              {`Last backup ${new Date(lastBackup).toLocaleDateString()}`}
+            </Text>
+          )}
+        </View>
 
         <View style={styles.section}>
           <Text style={styles.subtitle}>Jolocom backup service</Text>
@@ -116,10 +128,11 @@ const BackupComponent: React.FC<Props> = ({
                 onPress={onDisableAutoBackup}
                 disabled={isLoading}
               />
-              <Text style={styles.info}>
-                {lastBackup &&
-                  `Last backup ${new Date(lastBackup).toLocaleDateString()}`}
-              </Text>
+              {lastBackup && (
+                <Text style={styles.info}>
+                  {`Last backup ${new Date(lastBackup).toLocaleDateString()}`}
+                </Text>
+              )}
             </React.Fragment>
           ) : (
             <React.Fragment>

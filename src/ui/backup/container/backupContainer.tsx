@@ -6,10 +6,12 @@ import { RootState } from '../../../reducers'
 import {
   disableAndRemoveBackup,
   setAutoBackup,
+  setLastBackup,
 } from '../../../actions/recovery'
 import { timeout } from '../../../utils/asyncTimeout'
 import { NavigationScreenProps } from 'react-navigation'
 import { Alert } from 'react-native'
+import Share from 'react-native-share'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -66,6 +68,18 @@ export class BackupContainer extends React.Component<Props, State> {
     }
   }
 
+  private exportBackup = async () => {
+    const data = { keys: [], data: 'test' }
+    const res = await Share.open({
+      filename: 'jolocom-backup',
+      url: `data:text/plain;base64,${JSON.stringify(data)}`,
+      failOnCancel: false, // otherwise it throws an error if the user dismissed
+    })
+    if (!res.dismissedAction) {
+      this.props.setLastBackup()
+    }
+  }
+
   public render() {
     const { isAutoBackupEnabled, lastBackup, navigation } = this.props
     const { isLoading } = this.state
@@ -74,6 +88,7 @@ export class BackupContainer extends React.Component<Props, State> {
         isLoading={isLoading}
         onDisableAutoBackup={this.onDisableAutoBackup}
         isAutoBackupEnabled={isAutoBackupEnabled}
+        exportBackup={this.exportBackup}
         enableAutoBackup={this.enableAutoBackup}
         goBack={() => navigation.pop()}
         lastBackup={lastBackup}
@@ -89,6 +104,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   enableAutoBackup: async () => await dispatch(setAutoBackup(true)),
   disableAutoBackupAndDelete: () => dispatch(disableAndRemoveBackup()),
+  setLastBackup: () => dispatch(setLastBackup()),
 })
 
 export const Backup = connect(
