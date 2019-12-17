@@ -1,8 +1,5 @@
-import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import {
-  IKeyDerivationArgs,
-  KeyTypes,
-} from 'jolocom-lib/js/vaultedKeyProvider/types'
+import { EncryptedData, SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
+import { IKeyDerivationArgs, KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
 import * as crypto from 'crypto'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
 import { CredentialMetadataSummary } from './storage/storage'
@@ -37,11 +34,7 @@ export async function backupData(
 export async function fetchBackup(
   softwareKeyProvider: SoftwareKeyProvider,
   password: string,
-): Promise<BackupData | undefined> {
-  const derivationArgs: IKeyDerivationArgs = {
-    derivationPath: KeyTypes.jolocomIdentityKey,
-    encryptionPass: password,
-  }
+): Promise<EncryptedData | undefined> {
   const auth = generateAuthenticationData(softwareKeyProvider, password)
 
   const response = await fetch(BACKUP_SERVER_URI + '/get-backup', {
@@ -52,11 +45,7 @@ export async function fetchBackup(
 
   if (response.status === 404) return
   else if (response.status === 200) {
-    const body = await response.json()
-    return (await softwareKeyProvider.decryptHybrid(
-      body,
-      derivationArgs,
-    )) as BackupData
+    return (await response.json()) as EncryptedData
   }
   throw new Error(`Unexpected Response (${response.status})`)
 }

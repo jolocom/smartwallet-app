@@ -42,8 +42,6 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     inputState: WordState.editing,
   }
 
-  public componentDidMount(): void {}
-
   private handleInputChange = (text: string): void => {
     let matches = [] as string[]
     if (text.length >= 2) {

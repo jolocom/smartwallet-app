@@ -41,6 +41,7 @@ import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
 import { Backup } from './ui/backup/container/backupContainer'
 import { BackupOffer } from './ui/backup/container/backupOfferContainer'
+import { ImportBackup } from './ui/recovery/container/importBackup'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -168,6 +169,10 @@ const RegistrationScreens = createSwitchNavigator(
     },
     [routeList.InputSeedPhrase]: {
       screen: InputSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.ImportBackup]: {
+      screen: ImportBackup,
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.Entropy]: {

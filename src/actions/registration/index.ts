@@ -5,8 +5,8 @@ import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
 import { backupData, setSeedPhraseSaved } from '../recovery'
-import { BackupData } from '../../lib/backup'
 import { withLoading } from '../modifiers'
+import { EncryptedData } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -63,17 +63,19 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
   }
 
   const backup = await backendMiddleware.fetchBackup()
-  return dispatch(recoverIdentity(backup))
+  if (backup) return dispatch(recoverIdentity(backup))
 
-  // TODO ask user for backup if nothing is stored in the cloud
-  return
+  return dispatch(
+    navigationActions.navigate({ routeName: routeList.ImportBackup }),
+  )
 }
 
-export const recoverIdentity = (backup?: BackupData): ThunkAction => async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
+export const recoverIdentity = (
+  encryptedBackup: EncryptedData,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+  const backup = encryptedBackup
+    ? await backendMiddleware.decryptBackup(encryptedBackup)
+    : undefined
   const identity = await backendMiddleware.recoverIdentity(
     backup ? backup.did : undefined,
   )

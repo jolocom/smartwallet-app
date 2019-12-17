@@ -2,10 +2,7 @@ import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
 import { CredentialMetadataSummary, Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 import { ConnectionOptions } from 'typeorm/browser'
-import {
-  createJolocomRegistry,
-  JolocomRegistry,
-} from 'jolocom-lib/js/registries/jolocomRegistry'
+import { createJolocomRegistry, JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { IpfsCustomConnector } from './lib/ipfs'
 import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
@@ -13,7 +10,7 @@ import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGatew
 import { JolocomLib } from 'jolocom-lib'
 import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
-import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
+import { EncryptedData, SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from './lib/util'
 import { BackupData, backupData, deleteBackup, fetchBackup } from './lib/backup'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -184,9 +181,19 @@ export class BackendMiddleware {
     await this.keyChainLib.savePassword(password)
   }
 
-  public async fetchBackup(): Promise<BackupData | undefined> {
+  public async decryptBackup(
+    encryptedBackup: EncryptedData,
+  ): Promise<BackupData> {
     const password = await this.keyChainLib.getPassword()
-    return fetchBackup(this._keyProvider, password)
+    const backup = await this._keyProvider.decryptHybrid(encryptedBackup, {
+      encryptionPass: password,
+      derivationPath: JolocomLib.KeyTypes.jolocomIdentityKey,
+    })
+    return backup as BackupData
+  }
+  public async fetchBackup(): Promise<EncryptedData | undefined> {
+    const password = await this.keyChainLib.getPassword()
+    return await fetchBackup(this._keyProvider, password)
   }
 
   public async recoverData(data: BackupData): Promise<void> {

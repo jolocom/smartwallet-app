@@ -12,6 +12,7 @@ export enum routeList {
 
   // Recovery
   InputSeedPhrase = 'InputSeedPhrase',
+  ImportBackup = 'ImportBackup',
 
   // Bottom Nav Screens
   Home = 'Home',
