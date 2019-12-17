@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NotificationComponent } from '../components/notifications'
 import { Animated, StyleSheet } from 'react-native'
-import { RootState } from '../../../reducers'
 import { connect } from 'react-redux'
 import { INotification } from '../../../lib/notifications'
 import { ThunkDispatch } from '../../../store'
@@ -16,9 +15,9 @@ const styles = StyleSheet.create({
   },
 })
 
-interface Props
-  extends ReturnType<typeof mapStateToProps>,
-    ReturnType<typeof mapDispatchToProps> {}
+interface Props extends ReturnType<typeof mapDispatchToProps> {
+  activeNotification: INotification | null
+}
 
 export const NotificationContainer = (props: Props) => {
   const { activeNotification, onDismiss, onInteract } = props
@@ -74,10 +73,6 @@ export const NotificationContainer = (props: Props) => {
   )
 }
 
-const mapStateToProps = (state: RootState) => ({
-  activeNotification: state.notifications.active,
-})
-
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onDismiss: (notification: INotification) =>
     dispatch(invokeDismiss(notification)),
@@ -86,6 +81,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 })
 
 export const Notification = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(NotificationContainer)

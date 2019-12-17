@@ -9,20 +9,19 @@ interface Props
   extends NavigationScreenProps,
     ReturnType<typeof mapStateToProps> {}
 
-const withNotificationsHOC = <P extends object>(
+const withStickyHOC = <P extends object>(
   Component: React.ComponentType<Props>,
 ) =>
-  class NotificationsHOC extends React.Component<Props> {
+  class StickyHOC extends React.Component<Props> {
     public render() {
       const { activeNotification } = this.props
+      console.log(activeNotification)
       const isSticky =
         activeNotification && activeNotification.dismiss === false
       return (
         <React.Fragment>
           <Component {...(this.props as Props)} />
-          {!isSticky && (
-            <Notification activeNotification={activeNotification} />
-          )}
+          {isSticky && <Notification activeNotification={activeNotification} />}
         </React.Fragment>
       )
     }
@@ -32,10 +31,10 @@ const mapStateToProps = (state: RootState) => ({
   activeNotification: state.notifications.active,
 })
 
-export const withNotification = compose(
+export const withSticky = compose(
   connect(
     mapStateToProps,
     null,
   ),
-  withNotificationsHOC,
+  withStickyHOC,
 )
