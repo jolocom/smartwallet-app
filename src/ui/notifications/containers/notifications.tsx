@@ -12,6 +12,8 @@ const styles = StyleSheet.create({
     zIndex: 2,
     width: '100%',
     backgroundColor: 'rgba(0,0,0,0.9)',
+    paddingBottom: 18,
+    paddingTop: 20,
   },
 })
 
@@ -23,7 +25,7 @@ export const NotificationContainer = (props: Props) => {
   const { activeNotification, onDismiss, onInteract } = props
 
   const [notification, setNotification] = useState<INotification>()
-  const notificationHeight = notification && !notification.dismiss ? 94 : 136
+  const notificationHeight = notification && !notification.dismiss ? 92 : 130
   const [animatedValue] = useState<Animated.Value>(
     new Animated.Value(-notificationHeight),
   )
@@ -56,6 +58,7 @@ export const NotificationContainer = (props: Props) => {
 
   return (
     <Animated.View
+      onTouchEnd={() => notification && onInteract(notification)}
       style={{
         ...styles.wrapper,
         top: animatedValue,

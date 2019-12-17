@@ -62,7 +62,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     )
     await dispatch(withErrorScreen(genericActions.initApp))
     await dispatch(withErrorScreen(accountActions.checkIdentityExists))
-    await dispatch(withErrorScreen(checkRecoverySetup))
+    await dispatch(checkRecoverySetup)
     const handleDeepLink = (url: string) =>
       dispatch(
         withLoading(withErrorScreen(navigationActions.handleDeepLink(url))),

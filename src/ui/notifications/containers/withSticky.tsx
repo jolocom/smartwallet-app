@@ -15,7 +15,6 @@ const withStickyHOC = <P extends object>(
   class StickyHOC extends React.Component<Props> {
     public render() {
       const { activeNotification } = this.props
-      console.log(activeNotification)
       const isSticky =
         activeNotification && activeNotification.dismiss === false
       return (

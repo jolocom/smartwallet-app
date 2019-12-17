@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     height: 18,
     fontSize: 18,
     marginHorizontal: 20,
-    marginTop: 20,
   },
   message: {
     fontFamily: fontMain,
@@ -27,7 +26,6 @@ const styles = StyleSheet.create({
     height: 30,
     marginHorizontal: 20,
     marginTop: 14,
-    marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -53,6 +51,7 @@ export const NotificationComponent: React.FC<Props> = ({
 }) => {
   const isSticky = notification.dismiss === false
   const isButtonSection = notification.dismiss || notification.interact
+
   return (
     <React.Fragment>
       <Text
@@ -67,7 +66,7 @@ export const NotificationComponent: React.FC<Props> = ({
       <Text style={{ ...styles.message, ...(isSticky && styles.centeredText) }}>
         {notification.type !== NotificationType.error && notification.message}
       </Text>
-      {isButtonSection && (
+      {!isSticky && isButtonSection && (
         <View style={styles.buttonWrapper}>
           {!isSticky ? (
             <TouchableOpacity
