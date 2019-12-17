@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     marginTop: 9,
   },
   buttonWrapper: {
-    height: 30,
     marginHorizontal: 20,
     marginTop: 14,
     flexDirection: 'row',

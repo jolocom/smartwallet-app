@@ -67,8 +67,8 @@ export const NotificationContainer = (props: Props) => {
     >
       {notification && (
         <NotificationComponent
-          onPressDismiss={() => notification && onDismiss(notification)}
-          onPressInteract={() => notification && onInteract(notification)}
+          onPressDismiss={() => onDismiss(notification)}
+          onPressInteract={() => onInteract(notification)}
           notification={notification}
         />
       )}

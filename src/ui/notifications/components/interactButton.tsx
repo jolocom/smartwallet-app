@@ -6,12 +6,12 @@ import { fontMain } from '../../../styles/typography'
 
 const styles = StyleSheet.create({
   wrapper: {
-    minWidth: 90,
-    height: 30,
+    //minWidth: 67,
+    height: 27,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 17,
   },
   buttonText: {
     // TODO change to TTCommons-Bold
