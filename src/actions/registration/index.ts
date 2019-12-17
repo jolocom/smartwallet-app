@@ -4,7 +4,7 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
-import { backupData, setSeedPhraseSaved } from '../recovery'
+import { autoBackupData, setSeedPhraseSaved } from '../recovery'
 import { withLoading } from '../modifiers'
 import { EncryptedData } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 
@@ -56,8 +56,9 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
   backendMiddleware,
 ) => {
   dispatch(setIsRegistering(true))
+  let pubKey
   try {
-    await backendMiddleware.recoverSeed(mnemonic)
+    pubKey = await backendMiddleware.recoverSeed(mnemonic)
   } catch (e) {
     return dispatch(setIsRegistering(false))
   }
@@ -66,7 +67,10 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
   if (backup) return dispatch(recoverIdentity(backup))
 
   return dispatch(
-    navigationActions.navigate({ routeName: routeList.ImportBackup }),
+    navigationActions.navigate({
+      routeName: routeList.ImportBackup,
+      params: { pubKey },
+    }),
   )
 }
 
@@ -83,7 +87,7 @@ export const recoverIdentity = (
 
   dispatch(setDid(identity.did))
   dispatch(setSeedPhraseSaved())
-  dispatch(withLoading(backupData()))
+  dispatch(withLoading(autoBackupData()))
   dispatch(setIsRegistering(false))
   return dispatch(navigatorResetHome())
 }

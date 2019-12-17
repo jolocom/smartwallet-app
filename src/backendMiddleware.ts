@@ -2,7 +2,10 @@ import { IdentityWallet } from 'jolocom-lib/js/identityWallet/identityWallet'
 import { CredentialMetadataSummary, Storage } from 'src/lib/storage/storage'
 import { KeyChain, KeyChainInterface } from 'src/lib/keychain'
 import { ConnectionOptions } from 'typeorm/browser'
-import { createJolocomRegistry, JolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
+import {
+  createJolocomRegistry,
+  JolocomRegistry,
+} from 'jolocom-lib/js/registries/jolocomRegistry'
 import { IpfsCustomConnector } from './lib/ipfs'
 import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
 import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
@@ -10,7 +13,10 @@ import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGatew
 import { JolocomLib } from 'jolocom-lib'
 import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
-import { EncryptedData, SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
+import {
+  EncryptedData,
+  SoftwareKeyProvider,
+} from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from './lib/util'
 import { BackupData, backupData, deleteBackup, fetchBackup } from './lib/backup'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -145,7 +151,9 @@ export class BackendMiddleware {
     }
   }
 
-  public async backupData(): Promise<void> {
+  public async backupData(
+    shouldUpload: boolean,
+  ): Promise<void | EncryptedData> {
     const credentials = await this.storageLib.get.verifiableCredential()
     const credentialMetadata = [] as CredentialMetadataSummary[]
     for (const cred of credentials) {
@@ -164,7 +172,7 @@ export class BackendMiddleware {
     }
 
     const password = await this.keyChainLib.getPassword()
-    return backupData(data, this._keyProvider, password)
+    return backupData(data, this._keyProvider, password, shouldUpload)
   }
 
   public async deleteBackup(): Promise<void> {
@@ -172,13 +180,19 @@ export class BackendMiddleware {
     return deleteBackup(this._keyProvider, password)
   }
 
-  public async recoverSeed(seedPhrase: string): Promise<void> {
+  public async recoverSeed(seedPhrase: string): Promise<string> {
     const password = (await generateSecureRandomBytes(32)).toString('base64')
     this._keyProvider = JolocomLib.KeyProvider.recoverKeyPair(
       seedPhrase,
       password,
     )
     await this.keyChainLib.savePassword(password)
+    return this._keyProvider
+      .getPublicKey({
+        derivationPath: JolocomLib.KeyTypes.jolocomIdentityKey,
+        encryptionPass: password,
+      })
+      .toString('hex')
   }
 
   public async decryptBackup(

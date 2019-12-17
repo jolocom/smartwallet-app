@@ -104,6 +104,7 @@ const BackupComponent: React.FC<Props> = ({
             textStyle={styles.buttonText}
             onPress={exportBackup}
             text={'Export file'}
+            disabled={isLoading}
           />
           {lastBackup && (
             <Text style={styles.info}>

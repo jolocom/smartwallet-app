@@ -4,6 +4,8 @@ import { navigationActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { SETTINGS } from '../reducers/settings'
+import Share from 'react-native-share'
+import { toBase64 } from '../lib/util'
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
@@ -45,7 +47,7 @@ export const setAutoBackup = (isEnabled: boolean): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  if (isEnabled) await dispatch(backupData(isEnabled))
+  if (isEnabled) await dispatch(autoBackupData(isEnabled))
   await backendMiddleware.storageLib.store.setting(
     settingKeys.autoBackup,
     isEnabled,
@@ -81,12 +83,26 @@ export const disableAndRemoveBackup = (): ThunkAction => async (
   await backendMiddleware.deleteBackup()
 }
 
-export const backupData = (isEnabled?: boolean): ThunkAction => async (
+export const manualBackup = (): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  const encryptedBackup = await backendMiddleware.backupData(false)
+  await Share.open({
+    filename: 'jolocom-backup',
+    url: `data:text/plain;base64,${toBase64(JSON.stringify(encryptedBackup))}`,
+  })
+  // in case something throws (e.g. upload fails, user dismissed) this code will not be reached
+  dispatch(setLastBackup())
+}
+
+export const autoBackupData = (isEnabled?: boolean): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
   if (getState().settings.autoBackup || isEnabled)
-    await backendMiddleware.backupData()
+    await backendMiddleware.backupData(true)
   dispatch(setLastBackup())
 }

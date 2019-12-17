@@ -11,11 +11,12 @@ import {
 import { Text } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { readFile } from 'react-native-fs'
-import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
+import { NavigationScreenProps } from 'react-navigation'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> {}
+    ReturnType<typeof mapStateToProps>,
+    NavigationScreenProps {}
 
 interface State {
   error: string
@@ -40,17 +41,18 @@ export class ImportBackupContainer extends React.Component<Props, State> {
     importedData: string,
   ): EncryptedData | undefined => {
     try {
+      if (
+        !this.props.navigation.state.params ||
+        !this.props.navigation.state.params.pubKey
+      )
+        throw new Error('Missing navigation props') // this is mainly for typescript
+      const pubKey = this.props.navigation.state.params.pubKey
       const encryptedBackup = JSON.parse(importedData)
       const publicKeys = encryptedBackup['keys'].map(
         (e: EncryptedKey) => e.pubKey,
       )
       // check if a publicKey is matching the current identity
-      if (
-        publicKeys.find(
-          (key: string) =>
-            publicKeyToDID(Buffer.from(key, 'hex')) === this.props.did,
-        )
-      ) {
+      if (publicKeys.find((key: string) => key === pubKey)) {
         return encryptedBackup
       }
       this.setError('Wrong backup file, not related to the recovered identity')

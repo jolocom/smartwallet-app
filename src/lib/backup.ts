@@ -1,5 +1,11 @@
-import { EncryptedData, SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { IKeyDerivationArgs, KeyTypes } from 'jolocom-lib/js/vaultedKeyProvider/types'
+import {
+  EncryptedData,
+  SoftwareKeyProvider,
+} from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
+import {
+  IKeyDerivationArgs,
+  KeyTypes,
+} from 'jolocom-lib/js/vaultedKeyProvider/types'
 import * as crypto from 'crypto'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
 import { CredentialMetadataSummary } from './storage/storage'
@@ -16,19 +22,21 @@ export async function backupData(
   userData: BackupData,
   softwareKeyProvider: SoftwareKeyProvider,
   password: string,
-): Promise<void> {
+  shouldUpload: boolean,
+): Promise<void | EncryptedData> {
   const derivationArgs: IKeyDerivationArgs = {
     derivationPath: KeyTypes.jolocomIdentityKey,
     encryptionPass: password,
   }
   const auth = generateAuthenticationData(softwareKeyProvider, password)
   const data = await softwareKeyProvider.encryptHybrid(userData, derivationArgs)
-
-  await fetch(BACKUP_SERVER_URI + '/store-backup', {
-    method: 'POST',
-    body: JSON.stringify({ auth, data }),
-    headers: { 'Content-Type': 'application/json' },
-  })
+  if (shouldUpload)
+    await fetch(BACKUP_SERVER_URI + '/store-backup', {
+      method: 'POST',
+      body: JSON.stringify({ auth, data }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+  else return data
 }
 
 export async function fetchBackup(

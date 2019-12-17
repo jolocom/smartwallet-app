@@ -16,7 +16,7 @@ import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from 'src/backendMiddleware'
-import { backupData } from '../recovery'
+import { autoBackupData } from '../recovery'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -104,7 +104,7 @@ export const saveClaim: ThunkAction = async (
   await storageLib.store.verifiableCredential(verifiableCredential)
 
   await dispatch(setClaimsForDid)
-  dispatch(backupData())
+  dispatch(autoBackupData())
   return dispatch(navigationActions.navigatorResetHome())
 }
 
@@ -126,7 +126,7 @@ export const saveExternalCredentials: ThunkAction = async (
   await storageLib.delete.verifiableCredential(cred.id)
   await storageLib.store.verifiableCredential(cred)
 
-  dispatch(backupData())
+  dispatch(autoBackupData())
   return dispatch(cancelReceiving)
 }
 
