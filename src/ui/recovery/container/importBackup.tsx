@@ -35,6 +35,7 @@ export class ImportBackupContainer extends React.Component<Props, State> {
 
     const encryptedBackup = this.validateImport(importedData)
     if (encryptedBackup) {
+      // we can not set the last backup date, because this is not part of the backup
       this.props.recoverIdentity(encryptedBackup)
     }
   }
@@ -62,6 +63,7 @@ export class ImportBackupContainer extends React.Component<Props, State> {
       this.setError('Wrong backup file, not related to the recovered identity')
       return
     } catch (e) {
+      // e.g. json parsing error if file was a random text file
       this.setError(e.message)
       return
     }

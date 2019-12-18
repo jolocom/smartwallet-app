@@ -46,17 +46,19 @@ export const setAutoBackup = (
   isEnabled: boolean,
   shouldUpload: boolean = true,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  if (isEnabled && shouldUpload) await dispatch(autoBackupData(isEnabled))
   await backendMiddleware.storageLib.store.setting(
     settingKeys.autoBackup,
     isEnabled,
   )
-  return dispatch({
+  await dispatch({
     type: SETTINGS.SET_AUTO_BACKUP,
     value: isEnabled,
   })
+  // initial backup creation and upload (after store is updated)
+  if (isEnabled && shouldUpload) await dispatch(autoBackupData())
 }
 
+// if no value is provided the current date-time is used
 export const setLastBackup = (value?: string): ThunkAction => async (
   dispatch,
   getState,
@@ -89,20 +91,22 @@ export const manualBackup = (): ThunkAction => async (
   backendMiddleware,
 ) => {
   const encryptedBackup = await backendMiddleware.backupData(false)
+
+  // throws if user dismissed the share dialog (sharing is assumed to be successful
+  // as soon as an app is selected --> not always "really" successful)
   await Share.open({
-    filename: 'jolocom-backup', // not working currently, will work with react-native-share >2.0.0 https://github.com/react-native-community/react-native-share/pull/565
+    filename: 'jolocom-backup', // not working currently, will work with react-native-share >=2.0.0 https://github.com/react-native-community/react-native-share/pull/565
     url: `data:text/plain;base64,${toBase64(JSON.stringify(encryptedBackup))}`,
   })
   // in case something throws (e.g. upload fails, user dismissed) this code will not be reached
   dispatch(setLastBackup())
 }
 
-export const autoBackupData = (isEnabled?: boolean): ThunkAction => async (
+export const autoBackupData = (): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
-  if (getState().settings.autoBackup || isEnabled)
-    await backendMiddleware.backupData(true)
+  if (getState().settings.autoBackup) await backendMiddleware.backupData(true)
   dispatch(setLastBackup())
 }
