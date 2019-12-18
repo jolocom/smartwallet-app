@@ -180,12 +180,13 @@ export class BackendMiddleware {
     return deleteBackup(this._keyProvider, password)
   }
 
-  public async recoverSeed(seedPhrase: string): Promise<string> {
+  public async recoverKeyProvider(seedPhrase: string): Promise<string> {
     const password = (await generateSecureRandomBytes(32)).toString('base64')
     this._keyProvider = JolocomLib.KeyProvider.recoverKeyPair(
       seedPhrase,
       password,
     )
+    // if the recovery process fails, the password in the keychain will be overwritten in the next try
     await this.keyChainLib.savePassword(password)
     return this._keyProvider
       .getPublicKey({

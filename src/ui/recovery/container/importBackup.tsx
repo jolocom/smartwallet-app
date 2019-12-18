@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { recoverIdentity } from '../../../actions/registration'
-import { RootState } from '../../../reducers'
 import {
   EncryptedData,
   EncryptedKey,
@@ -21,14 +20,17 @@ interface Props
 interface State {
   error: string
 }
+
 export class ImportBackupContainer extends React.Component<Props, State> {
   public state = {
     error: '',
   }
   private getBackupFile = async () => {
+    // open dialog/ file manager to select backup file
     const res = await DocumentPicker.pick({
       type: [DocumentPicker.types.plainText],
     })
+    // read selected file
     const importedData = await readFile(res.uri)
 
     const encryptedBackup = this.validateImport(importedData)
@@ -44,8 +46,10 @@ export class ImportBackupContainer extends React.Component<Props, State> {
       if (
         !this.props.navigation.state.params ||
         !this.props.navigation.state.params.pubKey
-      )
-        throw new Error('Missing navigation props') // this is mainly for typescript
+      ) {
+        console.error('Missing "pubKey" parameter in navigation props!')
+        return // this is mainly here to keep typescript happy
+      }
       const pubKey = this.props.navigation.state.params.pubKey
       const encryptedBackup = JSON.parse(importedData)
       const publicKeys = encryptedBackup['keys'].map(
@@ -80,9 +84,7 @@ export class ImportBackupContainer extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => ({
-  did: state.account.did.did,
-})
+const mapStateToProps = () => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   recoverIdentity: (encryptedBackup?: EncryptedData) =>
     dispatch(withLoading(withErrorScreen(recoverIdentity(encryptedBackup)))),

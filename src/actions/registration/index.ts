@@ -49,7 +49,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   return dispatch(navigatorResetHome())
 }
 
-export const recoverSeed = (mnemonic: string): ThunkAction => async (
+export const recoverFromSeedPhrase = (mnemonic: string): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
@@ -57,7 +57,7 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
   dispatch(setIsRegistering(true))
   let pubKey
   try {
-    pubKey = await backendMiddleware.recoverSeed(mnemonic)
+    pubKey = await backendMiddleware.recoverKeyProvider(mnemonic)
   } catch (e) {
     return dispatch(setIsRegistering(false))
   }
@@ -69,6 +69,7 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
   }
 
   // No backup found, user needs to import manually
+  // public key is needed to validate if the imported backup belongs to the recovered identity
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.ImportBackup,
@@ -80,6 +81,7 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
 export const recoverIdentity = (
   encryptedBackup?: EncryptedData,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+  // the backup should be validated before to avoid decryption failures at this point
   const backup = encryptedBackup
     ? await backendMiddleware.decryptBackup(encryptedBackup)
     : undefined
@@ -88,8 +90,8 @@ export const recoverIdentity = (
   )
   if (backup) await backendMiddleware.recoverData(backup)
 
-  dispatch(setDid(identity.did))
-  dispatch(setSeedPhraseSaved())
-  dispatch(setIsRegistering(false))
+  await dispatch(setDid(identity.did))
+  await dispatch(setSeedPhraseSaved())
+  await dispatch(setIsRegistering(false))
   return dispatch(navigatorResetHome())
 }
