@@ -4,8 +4,7 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
-import { autoBackupData, setSeedPhraseSaved } from '../recovery'
-import { withLoading } from '../modifiers'
+import { setAutoBackup, setSeedPhraseSaved } from '../recovery'
 import { EncryptedData } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
@@ -64,8 +63,12 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
   }
 
   const backup = await backendMiddleware.fetchBackup()
-  if (backup) return dispatch(recoverIdentity(backup))
+  if (backup) {
+    dispatch(setAutoBackup(true, false))
+    return dispatch(recoverIdentity(backup))
+  }
 
+  // No backup found, user needs to import manually
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.ImportBackup,
@@ -87,7 +90,6 @@ export const recoverIdentity = (
 
   dispatch(setDid(identity.did))
   dispatch(setSeedPhraseSaved())
-  dispatch(withLoading(autoBackupData()))
   dispatch(setIsRegistering(false))
   return dispatch(navigatorResetHome())
 }

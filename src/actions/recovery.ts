@@ -42,12 +42,11 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
   })
 }
 
-export const setAutoBackup = (isEnabled: boolean): ThunkAction => async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  if (isEnabled) await dispatch(autoBackupData(isEnabled))
+export const setAutoBackup = (
+  isEnabled: boolean,
+  shouldUpload: boolean = true,
+): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+  if (isEnabled && shouldUpload) await dispatch(autoBackupData(isEnabled))
   await backendMiddleware.storageLib.store.setting(
     settingKeys.autoBackup,
     isEnabled,
@@ -69,7 +68,7 @@ export const setLastBackup = (): ThunkAction => async (
     currDate,
   )
   return dispatch({
-    type: SETTINGS.SET_AUTO_BACKUP,
+    type: SETTINGS.SET_LAST_BACKUP,
     value: currDate,
   })
 }
@@ -79,7 +78,7 @@ export const disableAndRemoveBackup = (): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  dispatch(setAutoBackup(false))
+  dispatch(setAutoBackup(false, false))
   await backendMiddleware.deleteBackup()
 }
 
