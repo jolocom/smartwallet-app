@@ -28,11 +28,11 @@ interface Props {
   testID?: string
   children: ReactNode
   style?: StyleProp<ViewStyle>
-  safeArea?: boolean
+  withoutSafeArea?: boolean
 }
 
 export const Wrapper: React.FC<Props> = props => {
-  const WrapperView = props.safeArea === false ? View : SafeAreaView
+  const WrapperView = props.withoutSafeArea ? View : SafeAreaView
 
   return (
     <WrapperView testID={props.testID} style={[styles.wrapper, props.style]}>
