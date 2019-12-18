@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
-import { setAutoBackup } from '../../../actions/recovery'
+import { manualBackup, setAutoBackup } from '../../../actions/recovery'
 import { NavigationScreenProps } from 'react-navigation'
 import BackupOfferComponent from '../components/backupOfferComponent'
 import { navigationActions } from '../../../actions'
@@ -14,10 +14,18 @@ interface Props
     NavigationScreenProps {}
 
 export class BackupOfferContainer extends React.Component<Props> {
+  private manualBackup = async () => {
+    await this.props.manualBackup()
+    this.props.close()
+  }
   public render() {
     const { close, enableAutoBackup } = this.props
     return (
-      <BackupOfferComponent close={close} enableAutoBackup={enableAutoBackup} />
+      <BackupOfferComponent
+        close={close}
+        enableAutoBackup={enableAutoBackup}
+        manualBackup={this.manualBackup}
+      />
     )
   }
 }
@@ -29,6 +37,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => {
       await dispatch(withLoading(setAutoBackup(true)))
       dispatch(navigationActions.navigate({ routeName: routeList.Settings }))
     },
+    manualBackup: async () => await dispatch(manualBackup()),
     close: () =>
       dispatch(navigationActions.navigate({ routeName: routeList.Settings })),
   }

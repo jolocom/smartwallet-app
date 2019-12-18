@@ -8,6 +8,7 @@ import { GradientButton } from '../../structure/gradientButton'
 interface Props {
   enableAutoBackup: () => void
   close: () => void
+  manualBackup: () => void
 }
 
 const styles = StyleSheet.create({
@@ -57,7 +58,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 })
-const BackupOfferComponent: React.FC<Props> = ({ close, enableAutoBackup }) => {
+const BackupOfferComponent: React.FC<Props> = ({
+  close,
+  enableAutoBackup,
+  manualBackup,
+}) => {
   return (
     <Container style={styles.container}>
       <NavigationSection
@@ -79,8 +84,7 @@ const BackupOfferComponent: React.FC<Props> = ({ close, enableAutoBackup }) => {
           By clicking here i agreed backing up my data on Jolocom’s central
           server and i know that it is not viewable by anyone
         </Text>
-        {/*TODO add onPress*/}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={manualBackup}>
           <Text style={styles.textButton}>Keep it manually</Text>
         </TouchableOpacity>
       </View>
