@@ -57,12 +57,12 @@ export const setAutoBackup = (
   })
 }
 
-export const setLastBackup = (): ThunkAction => async (
+export const setLastBackup = (value?: string): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
-  const currDate = new Date().toISOString()
+  const currDate = value === undefined ? new Date().toISOString() : value
   await backendMiddleware.storageLib.store.setting(
     settingKeys.lastBackup,
     currDate,
@@ -79,6 +79,7 @@ export const disableAndRemoveBackup = (): ThunkAction => async (
   backendMiddleware,
 ) => {
   dispatch(setAutoBackup(false, false))
+  dispatch(setLastBackup(''))
   await backendMiddleware.deleteBackup()
 }
 

@@ -99,6 +99,7 @@ const BackupComponent: React.FC<Props> = ({
             device. Make sure to keep your backups up-to-date and stored
             somewhere safe
           </Text>
+          {/* VS: I think this option should be disabled if auto backup is enabled*/}
           <GradientButton
             containerStyle={styles.buttonContainer}
             textStyle={styles.buttonText}
@@ -106,7 +107,7 @@ const BackupComponent: React.FC<Props> = ({
             text={'Export file'}
             disabled={isLoading}
           />
-          {lastBackup && (
+          {!isAutoBackupEnabled && !!lastBackup && (
             <Text style={styles.info}>
               {`Last backup ${new Date(lastBackup).toLocaleDateString()}`}
             </Text>
@@ -129,7 +130,7 @@ const BackupComponent: React.FC<Props> = ({
                 onPress={onDisableAutoBackup}
                 disabled={isLoading}
               />
-              {lastBackup && (
+              {!!lastBackup && (
                 <Text style={styles.info}>
                   {`Last backup ${new Date(lastBackup).toLocaleDateString()}`}
                 </Text>

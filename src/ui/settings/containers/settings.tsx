@@ -100,6 +100,7 @@ export const SettingsContainer: React.FC<Props> = props => {
             description={'Securely backup your data'}
             iconName={'delete'}
             onPress={editBackup}
+            isDisabled={!seedPhraseSaved}
           />
         </SettingSection>
         <Text style={styles.versionNumber}>
