@@ -461,14 +461,13 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           Object {
             "container": Object {
               "backgroundColor": "rgba(148, 47, 81, 0.4)",
-              "borderRadius": 4,
+              "borderRadius": 8,
               "height": 40,
               "margin": 4,
               "minWidth": 0,
             },
             "text": Object {
               "color": "rgb(255, 239, 223)",
-              "fontFamily": "TT Commons",
               "fontSize": 20,
               "fontWeight": "normal",
               "paddingVertical": 12,
@@ -486,14 +485,13 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           Object {
             "container": Object {
               "backgroundColor": "rgba(148, 47, 81, 0.4)",
-              "borderRadius": 4,
+              "borderRadius": 8,
               "height": 40,
               "margin": 4,
               "minWidth": 0,
             },
             "text": Object {
               "color": "rgb(255, 239, 223)",
-              "fontFamily": "TT Commons",
               "fontSize": 20,
               "fontWeight": "normal",
               "paddingVertical": 12,

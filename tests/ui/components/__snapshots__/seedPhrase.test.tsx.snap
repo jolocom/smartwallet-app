@@ -56,15 +56,14 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
   <View
     style={
       Object {
+        "marginBottom": 30,
         "marginTop": "auto",
       }
     }
   >
     <JolocomButton
       onPress={[MockFunction]}
-      raised={true}
       text="Yes, I wrote it down"
-      upperCase={false}
     />
   </View>
 </Wrapper>
