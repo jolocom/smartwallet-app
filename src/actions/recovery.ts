@@ -90,7 +90,7 @@ export const manualBackup = (): ThunkAction => async (
 ) => {
   const encryptedBackup = await backendMiddleware.backupData(false)
   await Share.open({
-    filename: 'jolocom-backup',
+    filename: 'jolocom-backup', // not working currently, will work with react-native-share >2.0.0 https://github.com/react-native-community/react-native-share/pull/565
     url: `data:text/plain;base64,${toBase64(JSON.stringify(encryptedBackup))}`,
   })
   // in case something throws (e.g. upload fails, user dismissed) this code will not be reached

@@ -224,6 +224,7 @@ export class BackendMiddleware {
       for (const metadata of data.credentialMetadata) {
         if (metadata) {
           await this.storageLib.store.credentialMetadata(metadata)
+          await this.storageLib.store.issuerProfile(metadata.issuer)
         }
       }
     }
