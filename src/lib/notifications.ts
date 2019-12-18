@@ -42,15 +42,10 @@ interface NotificationInteract {
  * if the type is error.
  */
 
-type NotificationPayload =
-  | {
-      type: NotificationType.warning | NotificationType.info
-      error?: never
-    } & NotificationMessage
-  | {
-      type: NotificationType.error
-      error: AppError
-    }
+type NotificationPayload = {
+  type: NotificationType.warning | NotificationType.info
+  error?: AppError
+} & NotificationMessage
 
 interface NotificationBase {
   id: string

@@ -41,7 +41,7 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const { setLocale, settings, setupBackup, openStorybook } = props
+  const { setLocale, settings, setupBackup, navigate } = props
   const version = VersionNumber.appVersion
   const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
@@ -56,7 +56,13 @@ export const SettingsContainer: React.FC<Props> = props => {
             <SettingItem
               iconName={'book-open-page-variant'}
               title={'Storybook'}
-              onPress={openStorybook}
+              onPress={() => navigate(routeList.Storybook)}
+            />
+            <SettingItem
+              title={'Notification Scheduler'}
+              description={'Mock notifications for debugging'}
+              onPress={() => navigate(routeList.NotificationScheduler)}
+              iconName={'bell-ring'}
             />
           </SettingSection>
         )}
@@ -107,10 +113,10 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
-  openStorybook: () =>
+  navigate: (route: routeList) =>
     dispatch(
       navigationActions.navigate({
-        routeName: routeList.Storybook,
+        routeName: route,
       }),
     ),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),

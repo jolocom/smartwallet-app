@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { fontMain } from '../../../styles/typography'
 import { white, yellowError } from '../../../styles/colors'
-import { INotification, NotificationType } from '../../../lib/notifications'
+import { INotification } from '../../../lib/notifications'
 import { InteractButton } from './interactButton'
 import { CrossNotificationIcon } from '../../../resources'
 import { AnyAction } from 'redux'
@@ -48,7 +48,7 @@ export const NotificationComponent: React.FC<Props> = ({
   onPressDismiss,
   onPressInteract,
 }) => {
-  const isSticky = notification.dismiss === false
+  const isSticky = notification.dismiss && !notification.dismiss.timeout
   const isButtonSection = notification.dismiss || notification.interact
 
   return (
@@ -60,14 +60,14 @@ export const NotificationComponent: React.FC<Props> = ({
           color: isSticky ? yellowError : white,
         }}
       >
-        {notification.type !== NotificationType.error && notification.title}
+        {notification.title}
       </Text>
       <Text style={{ ...styles.message, ...(isSticky && styles.centeredText) }}>
-        {notification.type !== NotificationType.error && notification.message}
+        {notification.message}
       </Text>
       {!isSticky && isButtonSection && (
         <View style={styles.buttonWrapper}>
-          {!isSticky ? (
+          {!notification.dismiss ? (
             <TouchableOpacity
               onPress={onPressDismiss}
               style={styles.dismissButton}

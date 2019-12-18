@@ -41,6 +41,7 @@ import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
 import { withNotification } from './ui/notifications/containers/withNotifications'
 import { withSticky } from './ui/notifications/containers/withSticky'
+import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -253,6 +254,10 @@ const MainStack = createStackNavigator(
       [routeList.Storybook]: {
         screen: require('src/ui/storybook').StorybookScreen,
         navigationOptions: navOptScreenWCancel,
+      },
+      [routeList.NotificationScheduler]: {
+        screen: withNotification(withSticky(NotificationScheduler)),
+        navigationOptions: noHeaderNavOpts,
       },
     }),
   },
