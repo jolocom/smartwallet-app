@@ -9,6 +9,7 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
   }
 >
   <ScrollViewMock
+    keyboardShouldPersistTaps="handled"
     style={
       Object {
         "width": "100%",
@@ -72,6 +73,7 @@ exports[`ClaimDetails component matches the snapshot on render with multi-line c
   }
 >
   <ScrollViewMock
+    keyboardShouldPersistTaps="handled"
     style={
       Object {
         "width": "100%",

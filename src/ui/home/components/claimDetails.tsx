@@ -147,7 +147,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
     return (
       <Wrapper style={styles.container}>
-        <ScrollView style={styles.scroll}>
+        <ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>
           <Text style={styles.header}>{I18n.t(credentialType)}</Text>
           <View style={styles.textInputArea}>
             {this.renderInputFields(selectedClaim)}
