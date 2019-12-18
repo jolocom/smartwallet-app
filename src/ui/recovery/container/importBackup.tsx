@@ -8,10 +8,10 @@ import {
   EncryptedData,
   EncryptedKey,
 } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { Text } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { readFile } from 'react-native-fs'
 import { NavigationScreenProps } from 'react-navigation'
+import ImportBackupComponent from '../components/importBackup'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -71,10 +71,11 @@ export class ImportBackupContainer extends React.Component<Props, State> {
     const { error } = this.state
 
     return (
-      <React.Fragment>
-        <Text onPress={this.getBackupFile}>Import Backup</Text>
-        <Text>{error}</Text>
-      </React.Fragment>
+      <ImportBackupComponent
+        importBackup={this.getBackupFile}
+        skip={() => this.props.recoverIdentity()}
+        error={error}
+      />
     )
   }
 }
@@ -83,7 +84,7 @@ const mapStateToProps = (state: RootState) => ({
   did: state.account.did.did,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  recoverIdentity: (encryptedBackup: EncryptedData) =>
+  recoverIdentity: (encryptedBackup?: EncryptedData) =>
     dispatch(withLoading(withErrorScreen(recoverIdentity(encryptedBackup)))),
 })
 

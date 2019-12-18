@@ -78,7 +78,7 @@ export const recoverSeed = (mnemonic: string): ThunkAction => async (
 }
 
 export const recoverIdentity = (
-  encryptedBackup: EncryptedData,
+  encryptedBackup?: EncryptedData,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const backup = encryptedBackup
     ? await backendMiddleware.decryptBackup(encryptedBackup)
