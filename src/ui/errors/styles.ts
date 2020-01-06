@@ -3,7 +3,7 @@ import { Platform, StyleSheet } from 'react-native'
 import { isFinalStyle } from '../../styles/config'
 import { Colors } from '../../styles'
 import { BP } from '../../styles/breakpoints'
-import * as R from 'ramda'
+import { mergeDeepLeft } from 'ramda'
 
 const borderStyle = {
   borderWidth: 1,
@@ -306,4 +306,4 @@ const intermediateStyles = StyleSheet.create({
 
 export const styles = isFinalStyle
   ? finalStyles
-  : R.mergeDeepLeft(intermediateStyles, finalStyles)
+  : mergeDeepLeft(intermediateStyles, finalStyles)

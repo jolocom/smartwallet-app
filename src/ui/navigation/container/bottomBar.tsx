@@ -23,28 +23,30 @@ const { width } = Dimensions.get('window')
 
 /* Calculation of the bottom bar size and position relative to the original SVG */
 
-// Width and height of the bottom bar original svg
-const ORIG_BAR_WIDTH = 414
-const ORIG_BAR_HEIGHT = 110
+// Width and height of the total bottom bar original svg
+const SVG_BAR_WIDTH = 414
+const SVG_BAR_HEIGHT = 110
 // The visible height of the original bar svg (the difference is the SafeView
 // for iOS devices newer than iPhone X
 const VISIBLE_ORIGINAL_BAR_HEIGHT = 80
-const SCREEN_PROPORTION = width / ORIG_BAR_WIDTH
+const SCALING_FACTOR = width / SVG_BAR_WIDTH
 // Scaled down height of the original visible bar
-const VISIBLE_BAR_HEIGHT = SCREEN_PROPORTION * VISIBLE_ORIGINAL_BAR_HEIGHT
-// Scaled down height of the whole original bar
-const BAR_HEIGHT = SCREEN_PROPORTION * ORIG_BAR_HEIGHT
+const VISIBLE_BAR_HEIGHT = SCALING_FACTOR * VISIBLE_ORIGINAL_BAR_HEIGHT
+// Scaled down height of the whole original bar. The 1.01 multiplier is removing
+// the white space between the bar and screen edges
+const BAR_HEIGHT = SCALING_FACTOR * SVG_BAR_HEIGHT * 1.01
 // Additional "SafeView" for extra large devices e.g. iPhone 11 Pro Max
 const BAR_EXTRA_SAFE_HEIGHT = 30
 
 /* Calculation of button size and position proportionally to the original bar */
+
 // Ratio of the original button size relative to the original bar width
 const BUTTON_SIZE_MODIFIER = 0.175
 const BUTTON_SIZE = BUTTON_SIZE_MODIFIER * width
 // Original distance from the center of the button to the top of the bar (vertical offset)
 const ORIGINAL_VERTICAL_OFFSET = 16
 const VERTICAL_OFFSET =
-  BUTTON_SIZE / 2 - width * (ORIGINAL_VERTICAL_OFFSET / ORIG_BAR_WIDTH)
+  BUTTON_SIZE / 2 - width * (ORIGINAL_VERTICAL_OFFSET / SVG_BAR_WIDTH)
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -162,7 +164,7 @@ const BottomBarContainer = (props: Props) => {
       style={[styles.wrapper, { transform: [{ translateY: AnimatedHiding }] }]}
       forceInset={safeAreaInset}
     >
-      <View style={[styles.buttonWrapper]}>
+      <View style={styles.buttonWrapper}>
         {routes.map((route, i) => {
           const focused = i === index
           const scene = { route, index, focused }
@@ -195,12 +197,11 @@ const BottomBarContainer = (props: Props) => {
       <InteractionButton
         topMargin={VERTICAL_OFFSET}
         buttonSize={BUTTON_SIZE}
-        scale={SCREEN_PROPORTION}
+        scale={SCALING_FACTOR}
         navigateScanner={navigateInteraction}
       />
-      {/* NOTE: the *1.01 is removing the white space between the bar and screen edges */}
       <BottomBarSVG
-        scaledHeight={BAR_HEIGHT * 1.01}
+        scaledHeight={BAR_HEIGHT}
         color={Colors.bottomTabBarBg}
       />
       <View style={styles.safeView} />
