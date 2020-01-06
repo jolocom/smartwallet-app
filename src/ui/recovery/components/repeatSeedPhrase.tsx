@@ -7,8 +7,11 @@ import * as I18n from 'i18n-js'
 import { Colors, Spacing, Typography } from '../../../styles'
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     backgroundColor: Colors.backgroundDarkMain,
+  },
+  container: {
+    padding: '5%',
   },
   mainSection: {
     justifyContent: 'center',
@@ -48,7 +51,6 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     marginTop: 'auto',
-    marginBottom: 30,
   },
 })
 
@@ -73,57 +75,60 @@ const RepeatSeedPhraseComponent: React.FC<RepeatSeedPhraseProps> = ({
   const leftShiftCurrentWord =
     (randomWords && randomWords[0] && randomWords[0].length * 7.5) || 0
   return (
-    <Wrapper style={styles.container}>
-      <View style={styles.mainSection}>
-        <View style={styles.noteSection}>
-          <Text style={styles.note}>{note}</Text>
-        </View>
-        <View style={styles.mnemonicContainer}>
-          <View
-            style={[styles.mnemonicPhrase, { left: -leftShiftCurrentWord }]}
-          >
-            {randomWords.map((key, i) => (
-              <Text
-                key={key}
-                style={[styles.mnemonic, i === 0 && styles.currentWord]}
-              >
-                {key}
-              </Text>
-            ))}
+    <Wrapper style={styles.wrapper}>
+      <View style={styles.container}>
+        <View style={styles.mainSection}>
+          <View style={styles.noteSection}>
+            <Text style={styles.note}>{note}</Text>
+          </View>
+          <View style={styles.mnemonicContainer}>
+            <View
+              style={[styles.mnemonicPhrase, { left: -leftShiftCurrentWord }]}
+            >
+              {randomWords.map((key, i) => (
+                <Text
+                  key={key}
+                  style={[styles.mnemonic, i === 0 && styles.currentWord]}
+                >
+                  {key}
+                </Text>
+              ))}
+            </View>
+          </View>
+          <View style={styles.wordOrderSection}>
+            <View>
+              {new Array(6).fill('').map((e, i) => (
+                <Placeholder
+                  key={i}
+                  i={i}
+                  sorting={mnemonicSorting}
+                  onPress={selectPosition}
+                />
+              ))}
+            </View>
+            <View>
+              {new Array(6).fill('').map((e, i) => (
+                <Placeholder
+                  key={i}
+                  i={i + 6}
+                  sorting={mnemonicSorting}
+                  onPress={selectPosition}
+                />
+              ))}
+            </View>
           </View>
         </View>
-        <View style={styles.wordOrderSection}>
-          <View>
-            {new Array(6).fill('').map((e, i) => (
-              <Placeholder
-                key={i}
-                i={i}
-                sorting={mnemonicSorting}
-                onPress={selectPosition}
-              />
-            ))}
-          </View>
-          <View>
-            {new Array(6).fill('').map((e, i) => (
-              <Placeholder
-                key={i}
-                i={i + 6}
-                sorting={mnemonicSorting}
-                onPress={selectPosition}
-              />
-            ))}
-          </View>
+        <View style={styles.buttonSection}>
+          <JolocomButton
+            onPress={randomWords.length ? back : checkMnemonic}
+            containerStyle={{ height: 56 }}
+            text={
+              randomWords.length
+                ? I18n.t(strings.SHOW_MY_PHRASE_AGAIN)
+                : I18n.t(strings.CONFIRM_AND_CHECK)
+            }
+          />
         </View>
-      </View>
-      <View style={styles.buttonSection}>
-        <JolocomButton
-          onPress={randomWords.length ? back : checkMnemonic}
-          text={
-            randomWords.length
-              ? I18n.t(strings.SHOW_MY_PHRASE_AGAIN)
-              : I18n.t(strings.CONFIRM_AND_CHECK)
-          }
-        />
       </View>
     </Wrapper>
   )

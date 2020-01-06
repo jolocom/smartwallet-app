@@ -13,6 +13,9 @@ import {
  * The main use for this component is to have a full height and width component
  * that can be used in different components. It should be minimal in its style
  * so as to be reusable without constant overriding of its defaults.
+ *
+ * NOTE: If the wrapper is used with SafeAreaView, the padding style prop passed to
+ * it will be ignored on iOS. https://github.com/facebook/react-native/issues/22211
  */
 
 const styles = StyleSheet.create({
