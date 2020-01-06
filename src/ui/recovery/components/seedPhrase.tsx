@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blackMain,
   },
   container: {
-    padding: '5%',
+    paddingHorizontal: '5%',
   },
   noteSection: {
     marginTop: Spacing.LG,
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     marginTop: 'auto',
+    marginBottom: 30,
   },
 })
 

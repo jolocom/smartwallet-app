@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundDarkMain,
   },
   container: {
-    padding: '5%',
+    paddingHorizontal: '5%',
   },
   mainSection: {
     justifyContent: 'center',
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     marginTop: 'auto',
+    marginBottom: 30,
   },
 })
 
