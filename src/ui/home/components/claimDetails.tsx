@@ -106,7 +106,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     const { claimData, keyboardType } = claim
     return Object.keys(claimData).map((item, idx) => (
       <TextInputField
-        autoFocus={idx == 0}
+        autoFocus={idx === 0}
         key={item}
         fieldName={item}
         fieldValue={claimData[item]}
@@ -156,7 +156,6 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
             {showButtonWhileTyping ? (
               <JolocomButton
                 onPress={() => this.onSubmit()}
-                upperCase={false}
                 text={I18n.t(strings.ADD_CLAIM)}
                 disabled={!!this.confirmationEligibilityCheck()}
               />
