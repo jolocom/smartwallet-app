@@ -14,7 +14,7 @@ interface NotificationMessage {
  * - a callback
  */
 
-interface NotificationDismiss {
+export interface NotificationDismiss {
   dismiss?:
     | false
     | {

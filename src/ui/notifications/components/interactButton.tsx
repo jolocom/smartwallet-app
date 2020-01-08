@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   wrapper: {
     //minWidth: 67,
     height: 27,
-    borderRadius: 12,
+    borderRadius: 6.4,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 17,

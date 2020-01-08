@@ -1,30 +1,55 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { fontMain } from '../../../styles/typography'
 import { white, yellowError } from '../../../styles/colors'
 import { INotification } from '../../../lib/notifications'
 import { InteractButton } from './interactButton'
 import { CrossNotificationIcon } from '../../../resources'
 import { AnyAction } from 'redux'
+import { BP } from '../../../styles/breakpoints'
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    paddingBottom: BP({
+      small: 11,
+      medium: 11,
+      large: 15,
+    }),
+  },
   title: {
     // TODO: replace with TTCommons Medium
     fontFamily: fontMain,
-    height: 18,
-    fontSize: 18,
+    fontSize: BP({
+      small: 16,
+      medium: 16,
+      large: 18,
+    }),
+    marginTop: BP({
+      small: 12,
+      medium: 16,
+      large: 20,
+    }),
     marginHorizontal: 20,
   },
   message: {
     fontFamily: fontMain,
-    fontSize: 14,
+    fontSize: BP({
+      small: 12,
+      medium: 12,
+      large: 14,
+    }),
     color: white,
     marginHorizontal: 20,
-    marginTop: 9,
+    marginTop: 8,
   },
   buttonWrapper: {
     marginHorizontal: 20,
-    marginTop: 14,
+    marginTop: BP({
+      large: 15,
+      medium: 12,
+      small: 12,
+    }),
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -52,7 +77,7 @@ export const NotificationComponent: React.FC<Props> = ({
   const isButtonSection = notification.dismiss || notification.interact
 
   return (
-    <React.Fragment>
+    <SafeAreaView style={styles.wrapper}>
       <Text
         style={{
           ...styles.title,
@@ -67,7 +92,7 @@ export const NotificationComponent: React.FC<Props> = ({
       </Text>
       {!isSticky && isButtonSection && (
         <View style={styles.buttonWrapper}>
-          {!notification.dismiss ? (
+          {notification.dismiss ? (
             <TouchableOpacity
               onPress={onPressDismiss}
               style={styles.dismissButton}
@@ -88,6 +113,6 @@ export const NotificationComponent: React.FC<Props> = ({
           )}
         </View>
       )}
-    </React.Fragment>
+    </SafeAreaView>
   )
 }

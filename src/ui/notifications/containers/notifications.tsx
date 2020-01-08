@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { NotificationComponent } from '../components/notifications'
-import { Animated, SafeAreaView, StyleSheet } from 'react-native'
+import { Animated, SafeAreaView, StatusBar, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { INotification } from '../../../lib/notifications'
 import { ThunkDispatch } from '../../../store'
@@ -9,9 +9,8 @@ import { invokeDismiss, invokeInteract } from '../../../actions/notifications'
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
-    zIndex: 2,
+    zIndex: 999,
     width: '100%',
-    backgroundColor: 'rgba(0,0,0,0.9)',
   },
 })
 
@@ -47,12 +46,14 @@ export const NotificationContainer = (props: Props) => {
     Animated.timing(animatedValue, {
       toValue: 0,
       duration: 300,
+      useNativeDriver: true,
     })
 
   const hideNotification = () =>
     Animated.timing(animatedValue, {
       toValue: -notificationHeight,
       duration: 300,
+      useNativeDriver: true,
     })
 
   const onLayout = (e: any) => {

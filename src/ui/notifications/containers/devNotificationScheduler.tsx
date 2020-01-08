@@ -5,7 +5,7 @@ import {
   createInfoNotification,
   createWarningNotification,
   INotification,
-  NotificationPayload,
+  NotificationDismiss,
   NotificationType,
 } from '../../../lib/notifications'
 import { scheduleNotification } from '../../../actions/notifications'
@@ -44,18 +44,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   notification: {
-    marginTop: 10,
     width: '100%',
-    backgroundColor: 'rgba(0,0,0,0.9)',
-    paddingBottom: 18,
-    paddingTop: 20,
   },
 })
-
-export type InteractiveNotification = {
-  interact: boolean
-  dismiss: boolean
-} & NotificationPayload
 
 interface Props
   extends NavigationScreenProps,
@@ -72,10 +63,12 @@ const DevNotificationScheduler = (props: Props) => {
   const [warning, setWarning] = useState(false)
   const [sticky, setSticky] = useState(false)
 
-  const defaultNotification: NotificationPayload = {
+  const defaultDismiss: NotificationDismiss = { dismiss: false }
+  const defaultNotification = {
     type: NotificationType.info,
     title: 'Default Notification',
     message: 'An example of a notification that does nothing exceptional',
+    ...defaultDismiss,
   }
 
   const creator = warning ? createWarningNotification : createInfoNotification
@@ -89,7 +82,14 @@ const DevNotificationScheduler = (props: Props) => {
         onInteract: () => false,
       },
     }),
-    ...(dismiss && { dismiss: false }),
+    ...(dismiss
+      ? { dismiss: false }
+      : {
+          dismiss: {
+            timeout: 3000,
+            onDismiss: () => false,
+          },
+        }),
     ...(sticky && { dismiss: {} }),
   })
 
