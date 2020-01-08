@@ -40,6 +40,8 @@ import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
 
+import { NotificationFilter } from './lib/notifications'
+
 // only used on android
 const headerBackImage = createElement(Image, {
   source: require('./resources/img/close.png'),
@@ -87,6 +89,7 @@ export const BottomTabBarRoutes = {
     title: strings.MY_IDENTITY,
     navigationOptions: {
       ...commonNavigationOptions,
+      notifications: NotificationFilter.all,
       tabBarIcon: IdentityMenuIcon,
     },
   },
@@ -95,6 +98,7 @@ export const BottomTabBarRoutes = {
     title: strings.DOCUMENTS,
     navigationOptions: {
       ...commonNavigationOptions,
+      notifications: NotificationFilter.all,
       tabBarIcon: (props: {
         tintColor: string
         focused: boolean
@@ -268,8 +272,16 @@ export const Routes = createSwitchNavigator(
       screen: AppInit,
       navigationOptions: noHeaderNavOpts,
     },
-    [routeList.Main]: MainStack,
-    [routeList.Registration]: RegistrationScreens,
+    [routeList.Main]: {
+      screen: MainStack,
+      navigationOptions: {
+        notifications: NotificationFilter.onlyDismissible
+      }
+    },
+    [routeList.Registration]: {
+      screen: RegistrationScreens,
+      notifications: NotificationFilter.none
+    }
   },
   {
     initialRouteName: routeList.AppInit,
