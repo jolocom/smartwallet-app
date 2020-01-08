@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { NotificationComponent } from '../components/notifications'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, SafeAreaView, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { INotification } from '../../../lib/notifications'
 import { ThunkDispatch } from '../../../store'
@@ -12,8 +12,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
     width: '100%',
     backgroundColor: 'rgba(0,0,0,0.9)',
-    paddingBottom: 18,
-    paddingTop: 20,
   },
 })
 
@@ -25,7 +23,7 @@ export const NotificationContainer = (props: Props) => {
   const { activeNotification, onDismiss, onInteract } = props
 
   const [notification, setNotification] = useState<INotification>()
-  const notificationHeight = notification && !notification.dismiss ? 92 : 130
+  const [notificationHeight, setNotificationHeight] = useState(100)
   const [animatedValue] = useState<Animated.Value>(
     new Animated.Value(-notificationHeight),
   )
@@ -37,6 +35,7 @@ export const NotificationContainer = (props: Props) => {
     } else if (!activeNotification) {
       hideNotification().start()
     } else if (notification && activeNotification.id !== notification.id) {
+      //check this
       hideNotification().start(() => {
         setNotification(activeNotification)
         showNotification().start()
@@ -56,13 +55,18 @@ export const NotificationContainer = (props: Props) => {
       duration: 300,
     })
 
+  const onLayout = (e: any) => {
+    const { height } = e.nativeEvent.layout
+    setNotificationHeight(height)
+  }
+
   return (
     <Animated.View
       onTouchEnd={() => notification && onInteract(notification)}
+      onLayout={onLayout}
       style={{
         ...styles.wrapper,
-        top: animatedValue,
-        height: notificationHeight,
+        transform: [{ translateY: animatedValue }],
       }}
     >
       {notification && (
