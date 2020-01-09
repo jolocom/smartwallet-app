@@ -70,6 +70,13 @@ export type INotification = NotificationBase &
   NotificationDismiss &
   NotificationPayload
 
+
+export enum NotificationFilter {
+  none,
+  all,
+  onlyDismissible,
+}
+
 export enum NotificationType {
   error = 'error',
   info = 'info',

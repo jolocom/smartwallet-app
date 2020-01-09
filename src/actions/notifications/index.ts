@@ -1,10 +1,11 @@
 import { ThunkAction } from 'src/store'
-import { INotification } from 'src/lib/notifications'
+import { Notification, NotificationFilter } from 'src/lib/notifications'
 import {
   SET_ACTIVE_NOTIFICATION,
   SCHEDULE_NOTIFICATION,
   REMOVE_NOTIFICATION,
   CLEAR_NOTIFICATIONS,
+  SET_ACTIVE_FILTER,
 } from 'src/reducers/notifications'
 
 /**
@@ -12,7 +13,7 @@ import {
  *              appropriate time in the future, or right away if possible
  */
 export const scheduleNotification = (
-  notification: INotification,
+  notification: Notification,
 ): ThunkAction => dispatch => {
   dispatch({
     type: SCHEDULE_NOTIFICATION,
@@ -25,9 +26,12 @@ export const scheduleNotification = (
  * @description Invoke the notification interact callback and remove it from
  *              queue and active. Should be dispatched on interaction with the
  *              notification's "call to action" button
+ *
+ *              If the callback returns true, the notification will not be
+ *              removed from queue
  */
 export const invokeInteract = (
-  notif: INotification,
+  notif: Notification,
 ): ThunkAction => async dispatch => {
   let keepNotification = false
   const { interact } = notif
@@ -43,7 +47,7 @@ export const invokeInteract = (
  *              notification's "dismiss" button
  */
 export const invokeDismiss = (
-  notif: INotification,
+  notif: Notification,
 ): ThunkAction => async dispatch => {
   const { dismiss } = notif
   if (typeof dismiss === 'object' && dismiss.onDismiss) {
@@ -68,11 +72,28 @@ export const clearAllNotifications = (): ThunkAction => dispatch => {
  *              No callbacks are invoked.
  */
 export const removeNotification = (
-  notification: INotification,
+  notification: Notification,
 ): ThunkAction => dispatch => {
   dispatch({
     type: REMOVE_NOTIFICATION,
     notification,
+  })
+  return dispatch(updateNotificationsState)
+}
+
+
+/**
+ * @description Set the active notification filter
+ *              see NotificationFilter in src/lib/notifications
+ *              only notifications matching the filter will be considered for
+ *              the "active" notification
+ */
+export const setActiveNotificationFilter = (
+  filter: NotificationFilter,
+): ThunkAction => dispatch => {
+  dispatch({
+    type: SET_ACTIVE_FILTER,
+    value: filter,
   })
   return dispatch(updateNotificationsState)
 }
@@ -91,7 +112,7 @@ export const removeNotification = (
  *              expire
  */
 const setActiveNotification = (
-  notification: INotification | null,
+  notification: Notification | null,
   expiry?: number,
 ) => ({
   type: SET_ACTIVE_NOTIFICATION,
@@ -124,7 +145,10 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
   // we only attempt to find a next notification if the active one is
   // expired or sticky (non-dismissible)
   if (isActiveExpired || isActiveSticky) {
-    const { queue } = getState().notifications
+    const { queue: fullQueue, activeFilter } = getState().notifications
+    const queue = fullQueue.filter(
+      notificationMatchesFilter.bind(null, activeFilter),
+    )
     if (queue.length) {
       // find the next dissmissible notification, or otherwise take the first in
       // queue. Note that this means we do not support showing two non-dismissible
@@ -157,4 +181,18 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
 
   updateInProgress = false
   return ret
+}
+
+const notificationMatchesFilter = (
+  filter: NotificationFilter,
+  notif: Notification,
+): boolean => {
+  switch (filter) {
+    case NotificationFilter.all:
+      return true
+    case NotificationFilter.onlyDismissible:
+      return !!notif.dismiss
+    default:
+      return false
+  }
 }

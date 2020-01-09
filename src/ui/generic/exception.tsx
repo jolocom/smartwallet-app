@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   buttonBlock: {
     marginTop: Spacing.LG,
-    flex: 1,
+    flex: 0.8,
     justifyContent: 'space-evenly',
   },
 })
@@ -137,16 +137,12 @@ export class ExceptionComponent extends React.Component<Props, State> {
         </View>
         <View style={styles.buttonBlock}>
           <JolocomButton
-            raised
             onPress={this.handleTapBack}
-            upperCase={false}
             text={I18n.t(strings.GO_BACK)}
           />
           {err && (
             <JolocomButton
-              raised
               onPress={() => this.props.navigateReporting(err)}
-              upperCase={false}
               text={I18n.t(strings.SEND_ERROR_REPORT)}
             />
           )}

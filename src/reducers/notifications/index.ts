@@ -1,22 +1,25 @@
 import { AnyAction } from 'redux'
 import { reject } from 'ramda'
-import { INotification } from 'src/lib/notifications'
+import { Notification, NotificationFilter } from 'src/lib/notifications'
 
 export const SCHEDULE_NOTIFICATION = 'SCHEDULE_NOTIFICATION'
 export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION'
 export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION'
 export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS'
+export const SET_ACTIVE_FILTER = 'SET_ACTIVE_FILTER'
 
 export interface NotificationsState {
   queue: INotification[]
   active: INotification | null
   activeExpiryTs?: number
+  activeFilter: NotificationFilter
 }
 
 const initialState: NotificationsState = {
   queue: [],
   active: null,
   activeExpiryTs: 0,
+  activeFilter: NotificationFilter.all,
 }
 
 export const notificationsReducer = (
@@ -53,6 +56,12 @@ export const notificationsReducer = (
       }
     case CLEAR_NOTIFICATIONS:
       return initialState
+    case SET_ACTIVE_FILTER:
+      if (state.activeFilter === action.value) return state
+      return {
+        ...state,
+        activeFilter: action.valu,
+      }
     default:
       return state
   }
