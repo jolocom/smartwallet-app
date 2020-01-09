@@ -1,22 +1,24 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NotificationComponent } from '../components/notifications'
-import { Animated, SafeAreaView, StatusBar, StyleSheet } from 'react-native'
+import { Animated, LayoutChangeEvent, StatusBar, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { INotification } from '../../../lib/notifications'
 import { ThunkDispatch } from '../../../store'
 import { invokeDismiss, invokeInteract } from '../../../actions/notifications'
+import GestureRecognizer from 'react-native-swipe-gestures'
+import { RootState } from '../../../reducers'
 
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
-    zIndex: 999,
+    zIndex: 10,
     width: '100%',
   },
 })
 
-interface Props extends ReturnType<typeof mapDispatchToProps> {
-  activeNotification: INotification | null
-}
+interface Props
+  extends ReturnType<typeof mapDispatchToProps>,
+    ReturnType<typeof mapStateToProps> {}
 
 export const NotificationContainer = (props: Props) => {
   const { activeNotification, onDismiss, onInteract } = props
@@ -26,59 +28,79 @@ export const NotificationContainer = (props: Props) => {
   const [animatedValue] = useState<Animated.Value>(
     new Animated.Value(-notificationHeight),
   )
+  const isSticky = notification && !notification.dismiss
 
   useEffect(() => {
     if (!notification && activeNotification) {
       setNotification(activeNotification)
       showNotification().start()
-    } else if (!activeNotification) {
-      hideNotification().start()
-    } else if (notification && activeNotification.id !== notification.id) {
+    } else if (notification && !activeNotification) {
+      hideNotification().start(() => {
+        setNotification(undefined)
+        setNotificationHeight(100)
+      })
+    } else if (
+      activeNotification &&
+      notification &&
+      activeNotification.id !== notification.id
+    ) {
       //check this
       hideNotification().start(() => {
+        setNotificationHeight(100)
         setNotification(activeNotification)
         showNotification().start()
       })
     }
-  }, [activeNotification])
+  }, [activeNotification, notification])
 
-  const showNotification = () =>
-    Animated.timing(animatedValue, {
+  const showNotification = () => {
+    StatusBar.setBarStyle('light-content')
+    return Animated.timing(animatedValue, {
       toValue: 0,
       duration: 300,
       useNativeDriver: true,
     })
+  }
 
-  const hideNotification = () =>
-    Animated.timing(animatedValue, {
+  const hideNotification = () => {
+    StatusBar.setBarStyle('default')
+    return Animated.timing(animatedValue, {
       toValue: -notificationHeight,
       duration: 300,
       useNativeDriver: true,
     })
+  }
 
-  const onLayout = (e: any) => {
+  const onLayout = (e: LayoutChangeEvent) => {
     const { height } = e.nativeEvent.layout
     setNotificationHeight(height)
   }
 
-  return (
+  const onSwipe = (gestureName: string) => {
+    if (notification && !isSticky && gestureName !== 'SWIPE_DOWN') {
+      console.log('swiped')
+      onDismiss(notification)
+    }
+  }
+
+  return notification ? (
     <Animated.View
-      onTouchEnd={() => notification && onInteract(notification)}
       onLayout={onLayout}
       style={{
         ...styles.wrapper,
         transform: [{ translateY: animatedValue }],
       }}
     >
-      {notification && (
+      <GestureRecognizer onSwipe={onSwipe}>
         <NotificationComponent
           onPressDismiss={() => onDismiss(notification)}
           onPressInteract={() => onInteract(notification)}
           notification={notification}
+          isSticky={isSticky}
         />
-      )}
+      </GestureRecognizer>
     </Animated.View>
-  )
+  ) : null
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
@@ -88,7 +110,11 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(invokeInteract(notification)),
 })
 
+const mapStateToProps = (state: RootState) => ({
+  activeNotification: state.notifications.active,
+})
+
 export const Notification = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(NotificationContainer)

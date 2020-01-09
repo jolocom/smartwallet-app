@@ -39,8 +39,6 @@ import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
-import { withNotification } from './ui/notifications/containers/withNotifications'
-import { withSticky } from './ui/notifications/containers/withSticky'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
 
 // only used on android
@@ -86,7 +84,7 @@ const navOptScreenWCancel = {
 
 export const BottomTabBarRoutes = {
   [routeList.Claims]: {
-    screen: withNotification(withSticky(Claims)),
+    screen: Claims,
     title: strings.MY_IDENTITY,
     navigationOptions: {
       ...commonNavigationOptions,
@@ -94,7 +92,7 @@ export const BottomTabBarRoutes = {
     },
   },
   [routeList.Documents]: {
-    screen: withNotification(withSticky(Documents)),
+    screen: Documents,
     title: strings.DOCUMENTS,
     navigationOptions: {
       ...commonNavigationOptions,
@@ -109,7 +107,7 @@ export const BottomTabBarRoutes = {
     },
   },
   [routeList.Records]: {
-    screen: withNotification(Records),
+    screen: Records,
     title: strings.LOGIN_RECORDS,
     navigationOptions: {
       ...commonNavigationOptions,
@@ -117,7 +115,7 @@ export const BottomTabBarRoutes = {
     },
   },
   [routeList.Settings]: {
-    screen: withNotification(Settings),
+    screen: Settings,
     title: strings.SETTINGS,
     navigationOptions: {
       ...commonNavigationOptions,
@@ -191,44 +189,44 @@ const MainStack = createStackNavigator(
       screen: BottomTabNavigator,
     },
     [routeList.InteractionScreen]: {
-      screen: withNotification(InteractionScreen),
+      screen: InteractionScreen,
       navigationOptions: noHeaderNavOpts,
     },
 
     [routeList.CredentialDialog]: {
-      screen: withNotification(CredentialReceive),
+      screen: CredentialReceive,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
       }),
     },
     [routeList.Consent]: {
-      screen: withNotification(Consent),
+      screen: Consent,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.SHARE_CLAIMS),
       }),
     },
     [routeList.PaymentConsent]: {
-      screen: withNotification(PaymentConsent),
+      screen: PaymentConsent,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
       }),
     },
     [routeList.AuthenticationConsent]: {
-      screen: withNotification(AuthenticationConsent),
+      screen: AuthenticationConsent,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
       }),
     },
     [routeList.ClaimDetails]: {
-      screen: withNotification(ClaimDetails),
+      screen: ClaimDetails,
       navigationOptions: navOptScreenWCancel,
     },
     [routeList.DocumentDetails]: {
-      screen: withNotification(DocumentDetails),
+      screen: DocumentDetails,
       navigationOptions: {
         ...navOptScreenWCancel,
       },
@@ -256,7 +254,7 @@ const MainStack = createStackNavigator(
         navigationOptions: navOptScreenWCancel,
       },
       [routeList.NotificationScheduler]: {
-        screen: withNotification(withSticky(NotificationScheduler)),
+        screen: NotificationScheduler,
         navigationOptions: noHeaderNavOpts,
       },
     }),

@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 17,
+    zIndex: 11,
   },
   buttonText: {
     // TODO change to TTCommons-Bold

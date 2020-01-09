@@ -1,16 +1,23 @@
 import React from 'react'
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import { fontMain } from '../../../styles/typography'
 import { white, yellowError } from '../../../styles/colors'
 import { INotification } from '../../../lib/notifications'
 import { InteractButton } from './interactButton'
-import { CrossNotificationIcon } from '../../../resources'
 import { AnyAction } from 'redux'
 import { BP } from '../../../styles/breakpoints'
 
 const styles = StyleSheet.create({
-  wrapper: {
+  safeArea: {
     backgroundColor: 'rgba(0,0,0,0.9)',
+  },
+  wrapper: {
     paddingBottom: BP({
       small: 11,
       medium: 11,
@@ -51,7 +58,7 @@ const styles = StyleSheet.create({
       small: 12,
     }),
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   dismissButton: {
     alignItems: 'center',
@@ -66,53 +73,49 @@ interface Props {
   notification: INotification
   onPressDismiss: () => void | boolean | AnyAction | Promise<void | AnyAction>
   onPressInteract: () => void | boolean | AnyAction | Promise<void | AnyAction>
+  isSticky: boolean | undefined
 }
 
 export const NotificationComponent: React.FC<Props> = ({
   notification,
-  onPressDismiss,
   onPressInteract,
+  isSticky,
 }) => {
-  const isSticky = notification.dismiss && !notification.dismiss.timeout
-  const isButtonSection = notification.dismiss || notification.interact
-
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <Text
-        style={{
-          ...styles.title,
-          ...(isSticky && styles.centeredText),
-          color: isSticky ? yellowError : white,
-        }}
+    <SafeAreaView style={styles.safeArea}>
+      <TouchableOpacity
+        activeOpacity={isSticky ? 0.7 : 1}
+        style={styles.wrapper}
+        {...(isSticky && { onPress: onPressInteract })}
       >
-        {notification.title}
-      </Text>
-      <Text style={{ ...styles.message, ...(isSticky && styles.centeredText) }}>
-        {notification.message}
-      </Text>
-      {!isSticky && isButtonSection && (
-        <View style={styles.buttonWrapper}>
-          {notification.dismiss ? (
-            <TouchableOpacity
-              onPress={onPressDismiss}
-              style={styles.dismissButton}
-            >
-              <CrossNotificationIcon />
-            </TouchableOpacity>
-          ) : (
-            <View />
-          )}
-          {notification.interact ? (
-            <InteractButton
-              onPress={onPressInteract}
-              label={notification.interact.label}
-              notificationType={notification.type}
-            />
-          ) : (
-            <View />
-          )}
-        </View>
-      )}
+        <Text
+          style={{
+            ...styles.title,
+            ...(isSticky && styles.centeredText),
+            color: isSticky ? yellowError : white,
+          }}
+        >
+          {notification.title}
+        </Text>
+        <Text
+          style={{ ...styles.message, ...(isSticky && styles.centeredText) }}
+        >
+          {notification.message}
+        </Text>
+        {!isSticky && notification.interact && (
+          <View style={styles.buttonWrapper}>
+            {notification.interact ? (
+              <InteractButton
+                onPress={onPressInteract}
+                label={notification.interact.label}
+                notificationType={notification.type}
+              />
+            ) : (
+              <View />
+            )}
+          </View>
+        )}
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }

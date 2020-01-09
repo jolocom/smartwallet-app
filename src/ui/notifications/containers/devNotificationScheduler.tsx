@@ -3,9 +3,9 @@ import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { ThunkDispatch } from '../../../store'
 import {
   createInfoNotification,
+  createStickyNotification,
   createWarningNotification,
   INotification,
-  NotificationDismiss,
   NotificationType,
 } from '../../../lib/notifications'
 import { scheduleNotification } from '../../../actions/notifications'
@@ -21,6 +21,7 @@ import { ToggleSwitch } from '../../structure/toggleSwitch'
 
 const styles = StyleSheet.create({
   topSection: {
+    paddingTop: '10%',
     flex: 0.9,
     width: '100%',
     justifyContent: 'flex-start',
@@ -59,19 +60,20 @@ const DevNotificationScheduler = (props: Props) => {
   const [title, setTitle] = useState<string>('')
   const [message, setMessage] = useState<string>('')
   const [interact, setInteract] = useState(false)
-  const [dismiss, setDismiss] = useState(true)
   const [warning, setWarning] = useState(false)
   const [sticky, setSticky] = useState(false)
 
-  const defaultDismiss: NotificationDismiss = { dismiss: false }
   const defaultNotification = {
     type: NotificationType.info,
     title: 'Default Notification',
     message: 'An example of a notification that does nothing exceptional',
-    ...defaultDismiss,
   }
 
-  const creator = warning ? createWarningNotification : createInfoNotification
+  const creator = sticky
+    ? createStickyNotification
+    : warning
+    ? createWarningNotification
+    : createInfoNotification
 
   const assembledNotification = creator({
     title,
@@ -82,15 +84,12 @@ const DevNotificationScheduler = (props: Props) => {
         onInteract: () => false,
       },
     }),
-    ...(dismiss
-      ? { dismiss: false }
-      : {
-          dismiss: {
-            timeout: 3000,
-            onDismiss: () => false,
-          },
-        }),
-    ...(sticky && { dismiss: {} }),
+    ...(sticky && {
+      interact: {
+        label: 'none',
+        onInteract: () => false,
+      },
+    }),
   })
 
   const onPress = () => {
@@ -149,13 +148,6 @@ const DevNotificationScheduler = (props: Props) => {
             <Text style={styles.configText}>{'Interact'}</Text>
           </View>
           <View style={styles.config}>
-            <ToggleSwitch
-              value={dismiss}
-              onToggle={() => setDismiss(!dismiss)}
-            />
-            <Text style={styles.configText}>{'Dismiss'}</Text>
-          </View>
-          <View style={styles.config}>
             <ToggleSwitch value={sticky} onToggle={() => setSticky(!sticky)} />
             <Text style={styles.configText}>{'Sticky'}</Text>
           </View>
@@ -172,6 +164,7 @@ const DevNotificationScheduler = (props: Props) => {
             notification={assembledNotification}
             onPressDismiss={() => false}
             onPressInteract={() => false}
+            isSticky={!assembledNotification.dismiss}
           />
         </View>
         <View
