@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { fontMain } from '../../../styles/typography'
 import { white, yellowError } from '../../../styles/colors'
-import { INotification } from '../../../lib/notifications'
+import { Notification } from '../../../lib/notifications'
 import { InteractButton } from './interactButton'
 import { AnyAction } from 'redux'
 import { BP } from '../../../styles/breakpoints'
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
-  notification: INotification
+  notification: Notification
   onPressDismiss: () => void | boolean | AnyAction | Promise<void | AnyAction>
   onPressInteract: () => void | boolean | AnyAction | Promise<void | AnyAction>
   isSticky: boolean | undefined

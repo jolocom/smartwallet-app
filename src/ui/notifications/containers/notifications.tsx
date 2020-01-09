@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { NotificationComponent } from '../components/notifications'
 import { Animated, LayoutChangeEvent, StatusBar, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import { INotification } from '../../../lib/notifications'
+import { Notification } from '../../../lib/notifications'
 import { ThunkDispatch } from '../../../store'
 import { invokeDismiss, invokeInteract } from '../../../actions/notifications'
 import GestureRecognizer from 'react-native-swipe-gestures'
@@ -23,7 +23,7 @@ interface Props
 export const NotificationContainer = (props: Props) => {
   const { activeNotification, onDismiss, onInteract } = props
 
-  const [notification, setNotification] = useState<INotification>()
+  const [notification, setNotification] = useState<Notification>()
   const [notificationHeight, setNotificationHeight] = useState(100)
   const [animatedValue] = useState<Animated.Value>(
     new Animated.Value(-notificationHeight),
@@ -31,6 +31,7 @@ export const NotificationContainer = (props: Props) => {
   const isSticky = notification && !notification.dismiss
 
   useEffect(() => {
+    console.log(activeNotification)
     if (!notification && activeNotification) {
       setNotification(activeNotification)
       showNotification().start()
@@ -104,9 +105,9 @@ export const NotificationContainer = (props: Props) => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  onDismiss: (notification: INotification) =>
+  onDismiss: (notification: Notification) =>
     dispatch(invokeDismiss(notification)),
-  onInteract: (notification: INotification) =>
+  onInteract: (notification: Notification) =>
     dispatch(invokeInteract(notification)),
 })
 
@@ -114,7 +115,7 @@ const mapStateToProps = (state: RootState) => ({
   activeNotification: state.notifications.active,
 })
 
-export const Notification = connect(
+export const Notifications = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(NotificationContainer)

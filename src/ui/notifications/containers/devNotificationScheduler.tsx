@@ -5,7 +5,7 @@ import {
   createInfoNotification,
   createStickyNotification,
   createWarningNotification,
-  INotification,
+  Notification,
   NotificationType,
 } from '../../../lib/notifications'
 import { scheduleNotification } from '../../../actions/notifications'
@@ -188,7 +188,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  showNotification: (notification: INotification) =>
+  showNotification: (notification: Notification) =>
     dispatch(scheduleNotification(notification)),
 })
 

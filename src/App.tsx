@@ -7,10 +7,10 @@ import { RoutesContainer } from './routes'
 import { AppLoading } from './ui/generic/appLoading'
 import { useScreens } from 'react-native-screens'
 import { NavigationContainerComponent } from 'react-navigation'
-import { Notification } from './ui/notifications/containers/notifications'
+import { Notifications } from './ui/notifications/containers/notifications'
 useScreens()
 
-let store: ReturnType<typeof initStore>
+export let store: ReturnType<typeof initStore>
 
 export default class App extends React.PureComponent<{}> {
   private navigator!: NavigationContainerComponent
@@ -40,7 +40,7 @@ export default class App extends React.PureComponent<{}> {
         <Provider store={store}>
           <React.Fragment>
             <RoutesContainer ref={nav => this.setNavigator(nav)} />
-            <Notification />
+            <Notifications />
             <AppLoading />
           </React.Fragment>
         </Provider>

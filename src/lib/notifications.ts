@@ -58,14 +58,14 @@ type PartialNotification = Partial<NotificationBase> &
 
 const createNotificationFactory = (
   template: PartialNotification & Omit<NotificationBase, 'id'>,
-) => (overrides: PartialNotification & NotificationMessage): INotification =>
+) => (overrides: PartialNotification & NotificationMessage): Notification =>
   ({
     id: randomBytes(4).toString('hex'),
-    ...(template as INotification),
+    ...(template as Notification),
     ...overrides,
-  } as INotification)
+  } as Notification)
 
-export type INotification = NotificationBase &
+export type Notification = NotificationBase &
   NotificationInteract &
   NotificationDismiss &
   NotificationPayload

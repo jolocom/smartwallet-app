@@ -9,8 +9,8 @@ export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS'
 export const SET_ACTIVE_FILTER = 'SET_ACTIVE_FILTER'
 
 export interface NotificationsState {
-  queue: INotification[]
-  active: INotification | null
+  queue: Notification[]
+  active: Notification | null
   activeExpiryTs?: number
   activeFilter: NotificationFilter
 }
