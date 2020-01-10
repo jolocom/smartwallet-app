@@ -10,7 +10,15 @@ import { NavigationContainerComponent } from 'react-navigation'
 import { Notifications } from './ui/notifications/containers/notifications'
 useScreens()
 
-export let store: ReturnType<typeof initStore>
+/**
+ * NOTE: this is *not* exported on purpose
+ * Other parts of the app should generally *not* access the store directly, but
+ * rather through being connect()ed through redux
+ *
+ * If you think you need to export this, then something else probably needs
+ * better architecture.
+ */
+let store: ReturnType<typeof initStore>
 
 export default class App extends React.PureComponent<{}> {
   private navigator!: NavigationContainerComponent
