@@ -6,8 +6,13 @@ import { StatusBar } from 'react-native'
 import { RoutesContainer } from './routes'
 import { AppLoading } from './ui/generic/appLoading'
 import { useScreens } from 'react-native-screens'
-import { NavigationContainerComponent } from 'react-navigation'
+import {
+  NavigationContainerComponent,
+  NavigationState,
+  NavigationAction,
+} from 'react-navigation'
 import { Notifications } from './ui/notifications/containers/notifications'
+import { setActiveNotificationFilter } from './actions/notifications'
 useScreens()
 
 /**
@@ -35,6 +40,25 @@ export default class App extends React.PureComponent<{}> {
     if (!store) store = initStore()
   }
 
+  public handleNavigationChange(prevState: NavigationState, newState: NavigationState, action: NavigationAction) {
+    // @ts-ignore
+    let navigation = this.navigator._navigation
+    let curState = newState, navigationOptions
+
+    while (curState.routes) {
+      // @ts-ignore
+      curState = curState.routes[curState.index]
+      const childNav = navigation.getChildNavigation(curState.key)
+      navigationOptions = navigation.router.getScreenOptions(childNav)
+      navigation = childNav
+    }
+
+    if (navigationOptions.notifications) {
+      // @ts-ignore
+      store.dispatch(setActiveNotificationFilter(navigationOptions.notifications))
+    }
+  }
+
   private setNavigator(nav: NavigationContainerComponent | null) {
     if (!nav) return
     this.navigator = nav
@@ -47,7 +71,9 @@ export default class App extends React.PureComponent<{}> {
         <StatusBar barStyle="default" />
         <Provider store={store}>
           <React.Fragment>
-            <RoutesContainer ref={nav => this.setNavigator(nav)} />
+            <RoutesContainer
+              onNavigationStateChange={this.handleNavigationChange.bind(this)}
+              ref={nav => this.setNavigator(nav)} />
             <Notifications />
             <AppLoading />
           </React.Fragment>

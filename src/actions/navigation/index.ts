@@ -14,7 +14,6 @@ import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
-import { setActiveNotificationFilter } from '../notifications'
 
 const deferredNavActions: NavigationAction[] = []
 let dispatchNavigationAction = (action: NavigationAction) => {
@@ -40,22 +39,6 @@ export const navigate = (
   const action = NavigationActions.navigate(options)
 
   dispatchNavigationAction(action)
-
-  // @ts-ignore
-  let navi = navigator._navigation
-  let curState = navi.state, screenOpts, notifConfig
-
-  while (curState.routes) {
-    curState = curState.routes[curState.index]
-    const childNavi = navi.getChildNavigation(curState.key)
-    screenOpts = navi.router.getScreenOptions(childNavi)
-    navi = childNavi
-    if (screenOpts.notifications !== undefined) {
-      notifConfig = screenOpts.notifications
-    }
-  }
-
-  if (notifConfig) dispatch(setActiveNotificationFilter(notifConfig))
   return dispatch(action)
 }
 
