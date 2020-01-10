@@ -259,7 +259,10 @@ const MainStack = createStackNavigator(
       },
       [routeList.NotificationScheduler]: {
         screen: NotificationScheduler,
-        navigationOptions: noHeaderNavOpts,
+        navigationOptions: {
+          ...noHeaderNavOpts,
+          notifications: NotificationFilter.onlyDismissible,
+        },
       },
     }),
   },
