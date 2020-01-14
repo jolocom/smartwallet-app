@@ -27,18 +27,29 @@ export const scheduleNotification = (
  *              queue and active. Should be dispatched on interaction with the
  *              notification's "call to action" button
  *
- *              If the callback returns true, the notification will not be
- *              removed from queue
  */
 export const invokeInteract = (
-  notif: Notification,
+  notification: Notification,
 ): ThunkAction => async dispatch => {
   let keepNotification = false
-  const { interact } = notif
+  const { interact } = notification
   if (interact && interact.onInteract) {
-    keepNotification = (await interact.onInteract()) === true
+    /** NOTE @mnzaki
+     * onInteract callback can't be async because using await causes updateNotificationState
+     * to sometimes null the activeNotification, which causes the notifications container
+     * to flicker the animation, because another hide animation is already in progress
+     *
+     * TO FIX IT: wait for animations to finish before starting new animations in
+     *            the container
+     */
+
+    //keepNotification = (await interact.onInteract()) === true
+    keepNotification = interact.onInteract() === true
   }
-  if (!keepNotification) return dispatch(removeNotification(notif))
+
+  if (!keepNotification) {
+    return dispatch(removeNotification(notification))
+  }
 }
 
 /**
@@ -47,13 +58,19 @@ export const invokeInteract = (
  *              notification's "dismiss" button
  */
 export const invokeDismiss = (
-  notif: Notification,
-): ThunkAction => async dispatch => {
-  const { dismiss } = notif
+  notification: Notification,
+): ThunkAction => dispatch => {
+  const { dismiss } = notification
   if (typeof dismiss === 'object' && dismiss.onDismiss) {
-    await dismiss.onDismiss()
+    /** NOTE @mnzaki
+     * onDismiss can't be async because of issue similar to invokeInteract
+     * see NOTE in invokeInteract
+     */
+    // await dismiss.onDismiss()
+    dismiss.onDismiss()
   }
-  return dispatch(removeNotification(notif))
+
+  return dispatch(removeNotification(notification))
 }
 
 /**
@@ -65,22 +82,29 @@ export const clearAllNotifications = (): ThunkAction => dispatch => {
 }
 
 /**
- * @description Remove a notification from queue, and remove from active if it
- *              is the current active one.
+ * @description Remove a notification from queue
  *              Should generally not need to be dispatched directly, but is
  *              exported for testing purposes.
  *              No callbacks are invoked.
  */
 export const removeNotification = (
   notification: Notification,
-): ThunkAction => dispatch => {
+  clearActive = true,
+): ThunkAction => (dispatch, getState) => {
   dispatch({
     type: REMOVE_NOTIFICATION,
     notification,
   })
+
+  if (clearActive) {
+    const { active } = getState().notifications
+    if (active && active.id === notification.id) {
+      dispatch(clearActiveNotification())
+    }
+  }
+
   return dispatch(updateNotificationsState)
 }
-
 
 /**
  * @description Set the active notification filter
@@ -139,8 +163,10 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
   let next = null,
     nextExpiry
 
-  // unqueue the active notification if it is expired
-  if (active && isActiveExpired) dispatch(removeNotification(active))
+  // un-queue the active notification if it is expired
+  if (active && isActiveExpired) {
+    dispatch(removeNotification(active, false))
+  }
 
   // we only attempt to find a next notification if the active one is
   // expired or sticky (non-dismissible)
@@ -150,10 +176,12 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
       notificationMatchesFilter.bind(null, activeFilter),
     )
     if (queue.length) {
-      // find the next dissmissible notification, or otherwise take the first in
+      // find the next dismissible notification, or otherwise take the first in
       // queue. Note that this means we do not support showing two non-dismissible
       // notifications
       next = queue.find(notification => !!notification.dismiss) || queue[0]
+    } else if (active) {
+      ret = dispatch(clearActiveNotification())
     }
   } else if (active) {
     // active notification should not be changed
@@ -183,15 +211,17 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
   return ret
 }
 
+const clearActiveNotification = () => setActiveNotification(null, 0)
+
 const notificationMatchesFilter = (
   filter: NotificationFilter,
-  notif: Notification,
+  notification: Notification,
 ): boolean => {
   switch (filter) {
     case NotificationFilter.all:
       return true
     case NotificationFilter.onlyDismissible:
-      return !!notif.dismiss
+      return !!notification.dismiss
     default:
       return false
   }
