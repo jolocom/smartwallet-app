@@ -3,6 +3,7 @@ import { NotificationComponent } from '../components/notifications'
 import {
   Animated,
   LayoutChangeEvent,
+  PanResponderGestureState,
   StatusBar,
   StyleSheet,
 } from 'react-native'
@@ -28,10 +29,14 @@ interface Props
 export const NotificationContainer = (props: Props) => {
   const { activeNotification, onDismiss, onInteract } = props
 
+  const [buttonWidth, setButtonWidth] = useState(0)
   const [notification, setNotification] = useState<Notification>()
-  const [notificationHeight, setNotificationHeight] = useState(100)
+  const [notificationDimensions, setNotificationDimensions] = useState({
+    width: 300,
+    height: 100,
+  })
   const [animatedValue] = useState<Animated.Value>(
-    new Animated.Value(-notificationHeight),
+    new Animated.Value(-notificationDimensions.height),
   )
   const isSticky = notification && !notification.dismiss
 
@@ -76,19 +81,31 @@ export const NotificationContainer = (props: Props) => {
   const hideNotification = () => {
     StatusBar.setBarStyle('default')
     return Animated.timing(animatedValue, {
-      toValue: -notificationHeight,
+      toValue: -notificationDimensions.height,
       duration: 300,
       useNativeDriver: true,
     })
   }
 
   const onLayout = (e: LayoutChangeEvent) => {
-    const { height } = e.nativeEvent.layout
-    setNotificationHeight(height)
+    const { height, width } = e.nativeEvent.layout
+    setNotificationDimensions({ width, height })
   }
 
-  const onSwipe = (gestureName: string) => {
-    if (notification && !isSticky && gestureName !== 'SWIPE_DOWN') {
+  const onButtonLayout = (e: LayoutChangeEvent) => {
+    const { width } = e.nativeEvent.layout
+    setButtonWidth(width)
+  }
+
+  const onSwipe = (gestureName: string, state: PanResponderGestureState) => {
+    const isSwipeUp = state.dy < 0 && Math.abs(state.dx) < 110
+    // NOTE: disables swiping on the side of the interaction button.
+    const buttonMargin = notificationDimensions.width - buttonWidth
+    const isButtonAreaSwipe =
+      notification && notification.interact && buttonMargin < state.x0
+    const shouldSwipe = isSwipeUp && !isSticky && !isButtonAreaSwipe
+
+    if (notification && shouldSwipe) {
       onDismiss(notification)
     }
   }
@@ -101,20 +118,11 @@ export const NotificationContainer = (props: Props) => {
         transform: [{ translateY: animatedValue }],
       }}
     >
-      <GestureRecognizer
-        config={{
-          velocityThreshold: 0.3,
-          directionalOffsetThreshold: 80,
-          // @ts-ignore
-          // NOTE: when the this commit will be in the next release, the ts-ignore can be removed
-          // https://github.com/glepur/react-native-swipe-gestures/commit/c864dafcba347b90b6fd4971daa37fb84f6f042a#diff-b52768974e6bc0faccb7d4b75b162c99
-          gestureIsClickThreshold: 40,
-        }}
-        onSwipe={onSwipe}
-      >
+      <GestureRecognizer onSwipe={onSwipe}>
         <NotificationComponent
           onPressDismiss={() => onDismiss(notification)}
           onPressInteract={() => onInteract(notification)}
+          onButtonLayout={onButtonLayout}
           notification={notification}
           isSticky={isSticky}
         />

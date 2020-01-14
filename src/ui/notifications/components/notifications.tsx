@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  LayoutChangeEvent,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -68,12 +69,14 @@ interface Props {
   onPressDismiss: () => void | boolean | AnyAction | Promise<void | AnyAction>
   onPressInteract: () => void | boolean | AnyAction | Promise<void | AnyAction>
   isSticky: boolean | undefined
+  onButtonLayout?: (event: LayoutChangeEvent) => void
 }
 
 export const NotificationComponent: React.FC<Props> = ({
   notification,
   onPressInteract,
   isSticky,
+  onButtonLayout,
 }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -105,6 +108,7 @@ export const NotificationComponent: React.FC<Props> = ({
                 onPress={onPressInteract}
                 label={notification.interact.label}
                 notificationType={notification.type}
+                onLayout={onButtonLayout}
               />
             )}
           </View>
