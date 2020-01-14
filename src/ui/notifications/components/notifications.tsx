@@ -8,9 +8,8 @@ import {
   View,
 } from 'react-native'
 import { fontMain } from '../../../styles/typography'
-import { white, yellowError } from '../../../styles/colors'
-import { Notification } from '../../../lib/notifications'
-import { InteractButton } from './interactButton'
+import { black, white, yellowError } from '../../../styles/colors'
+import { Notification, NotificationType } from '../../../lib/notifications'
 import { AnyAction } from 'redux'
 import { BP } from '../../../styles/breakpoints'
 
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 8,
   },
-  buttonWrapper: {
+  buttonSection: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
@@ -61,6 +60,36 @@ const styles = StyleSheet.create({
   },
   centeredText: {
     textAlign: 'center',
+  },
+  buttonWrapper: {
+    paddingHorizontal: 20,
+    paddingVertical: BP({
+      large: 15,
+      medium: 12,
+      small: 12,
+    }),
+    minWidth: 100,
+  },
+  button: {
+    height: 27,
+    borderRadius: 6.4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 17,
+  },
+  buttonText: {
+    // TODO change to TTCommons-Bold
+    fontFamily: fontMain,
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  warningButton: {
+    backgroundColor: '#f3c61c',
+  },
+  infoButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: white,
   },
 })
 
@@ -78,6 +107,8 @@ export const NotificationComponent: React.FC<Props> = ({
   isSticky,
   onButtonLayout,
 }) => {
+  const isWarning = notification.type === NotificationType.warning
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <TouchableOpacity
@@ -102,14 +133,29 @@ export const NotificationComponent: React.FC<Props> = ({
           {notification.message}
         </Text>
         {!isSticky && notification.interact && (
-          <View style={styles.buttonWrapper}>
+          <View style={styles.buttonSection}>
             {notification.interact && (
-              <InteractButton
-                onPress={onPressInteract}
-                label={notification.interact.label}
-                notificationType={notification.type}
+              <TouchableOpacity
                 onLayout={onButtonLayout}
-              />
+                style={styles.buttonWrapper}
+                onPress={onPressInteract}
+              >
+                <View
+                  style={{
+                    ...styles.button,
+                    ...(isWarning ? styles.warningButton : styles.infoButton),
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.buttonText,
+                      color: isWarning ? black : white,
+                    }}
+                  >
+                    {notification.interact.label}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             )}
           </View>
         )}
