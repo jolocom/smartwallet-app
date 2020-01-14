@@ -1,15 +1,17 @@
 import MockDate from 'mockdate'
 import { createMockStoreWithReducers } from 'tests/utils'
 import {
-  scheduleNotification,
-  invokeInteract,
   invokeDismiss,
+  invokeInteract,
   removeNotification,
+  scheduleNotification,
+  setActiveNotificationFilter,
 } from 'src/actions/notifications'
 import {
   createInfoNotification,
   createStickyNotification,
   Notification,
+  NotificationFilter,
 } from 'src/lib/notifications'
 
 jest.useFakeTimers()
@@ -32,11 +34,12 @@ describe('Notifications Actions', () => {
       ...notif,
     })
 
-  const newSlidy = () =>
+  const newSlidy = (notif: Partial<Notification> = {}) =>
     createInfoNotification({
       id: getId().toString(),
       title: 'hello',
       message: 'sup',
+      ...notif,
     })
 
   describe('scheduleNotification', () => {
@@ -117,6 +120,15 @@ describe('Notifications Actions', () => {
       jest.runAllTimers()
       expect(mockStore.getActions()).toMatchSnapshot()
     })
+
+    it('should null the active notification when it is filtered out from the queue', () => {
+      const sticky = newSticky()
+
+      mockStore.dispatch(scheduleNotification(sticky))
+      mockStore.dispatch(setActiveNotificationFilter(NotificationFilter.none))
+      expect(mockStore.getActions()).toMatchSnapshot()
+      expect(mockStore.getState().notifications).toMatchSnapshot()
+    })
   })
 
   describe('invokeDismiss', () => {
@@ -138,6 +150,23 @@ describe('Notifications Actions', () => {
       jest.runAllTimers()
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(onDismiss).toHaveBeenCalledTimes(1)
+    })
+
+    it('should call onDismiss callback and replace the notification with the next one from queue', () => {
+      const onDismiss = jest.fn()
+      const sticky = newSticky({
+        dismiss: { onDismiss },
+      })
+      const slidy = newSlidy()
+
+      mockStore.dispatch(scheduleNotification(sticky))
+      MockDate.set(timeout / 2)
+      mockStore.dispatch(scheduleNotification(slidy))
+      expect(mockStore.getActions()).toMatchSnapshot()
+      mockStore.dispatch(invokeDismiss(sticky))
+      expect(mockStore.getActions()).toMatchSnapshot()
+      jest.runAllTimers()
+      expect(mockStore.getState().notifications).toMatchSnapshot()
     })
   })
 
@@ -163,6 +192,26 @@ describe('Notifications Actions', () => {
       jest.runAllTimers()
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(onInteract).toHaveBeenCalledTimes(1)
+    })
+
+    it('should call onInteract callback and replace the notification with the next one from queue', () => {
+      const onInteract = jest.fn()
+      const sticky = newSticky({
+        interact: {
+          label: 'CLICK',
+          onInteract,
+        },
+      })
+      const slidy = newSlidy()
+
+      mockStore.dispatch(scheduleNotification(sticky))
+      MockDate.set(timeout / 2)
+      mockStore.dispatch(scheduleNotification(slidy))
+      expect(mockStore.getActions()).toMatchSnapshot()
+      mockStore.dispatch(invokeInteract(sticky))
+      expect(mockStore.getActions()).toMatchSnapshot()
+      jest.runAllTimers()
+      expect(mockStore.getState().notifications).toMatchSnapshot()
     })
 
     it('should keep the notification if onInteract returns true', () => {
