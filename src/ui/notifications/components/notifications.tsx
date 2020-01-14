@@ -17,10 +17,10 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: 'rgba(0,0,0,0.9)',
   },
-  wrapper: {
+  bottomPadding: {
     paddingBottom: BP({
-      small: 11,
-      medium: 11,
+      small: 12,
+      medium: 12,
       large: 15,
     }),
   },
@@ -51,12 +51,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   buttonWrapper: {
-    marginHorizontal: 20,
-    marginTop: BP({
-      large: 15,
-      medium: 12,
-      small: 12,
-    }),
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
@@ -85,7 +79,9 @@ export const NotificationComponent: React.FC<Props> = ({
     <SafeAreaView style={styles.safeArea}>
       <TouchableOpacity
         activeOpacity={isSticky ? 0.7 : 1}
-        style={styles.wrapper}
+        {...((isSticky || !notification.interact) && {
+          style: styles.bottomPadding,
+        })}
         {...(isSticky && { onPress: onPressInteract })}
       >
         <Text
@@ -104,14 +100,12 @@ export const NotificationComponent: React.FC<Props> = ({
         </Text>
         {!isSticky && notification.interact && (
           <View style={styles.buttonWrapper}>
-            {notification.interact ? (
+            {notification.interact && (
               <InteractButton
                 onPress={onPressInteract}
                 label={notification.interact.label}
                 notificationType={notification.type}
               />
-            ) : (
-              <View />
             )}
           </View>
         )}

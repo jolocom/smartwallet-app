@@ -101,7 +101,17 @@ export const NotificationContainer = (props: Props) => {
         transform: [{ translateY: animatedValue }],
       }}
     >
-      <GestureRecognizer onSwipe={onSwipe}>
+      <GestureRecognizer
+        config={{
+          velocityThreshold: 0.3,
+          directionalOffsetThreshold: 80,
+          // @ts-ignore
+          // NOTE: when the this commit will be in the next release, the ts-ignore can be removed
+          // https://github.com/glepur/react-native-swipe-gestures/commit/c864dafcba347b90b6fd4971daa37fb84f6f042a#diff-b52768974e6bc0faccb7d4b75b162c99
+          gestureIsClickThreshold: 40,
+        }}
+        onSwipe={onSwipe}
+      >
         <NotificationComponent
           onPressDismiss={() => onDismiss(notification)}
           onPressInteract={() => onInteract(notification)}
