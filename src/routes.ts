@@ -115,6 +115,7 @@ export const BottomTabBarRoutes = {
     title: strings.LOGIN_RECORDS,
     navigationOptions: {
       ...commonNavigationOptions,
+      notifications: NotificationFilter.onlyDismissible,
       tabBarIcon: RecordsMenuIcon,
     },
   },
@@ -123,6 +124,7 @@ export const BottomTabBarRoutes = {
     title: strings.SETTINGS,
     navigationOptions: {
       ...commonNavigationOptions,
+      notifications: NotificationFilter.onlyDismissible,
       tabBarIcon: SettingsMenuIcon,
     },
   },
@@ -237,20 +239,32 @@ const MainStack = createStackNavigator(
     },
     [routeList.SeedPhrase]: {
       screen: SeedPhrase,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
 
     [routeList.Exception]: {
       screen: Exception,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
     [routeList.ErrorReporting]: {
       screen: ErrorReporting,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
     ...(__DEV__ && {
       [routeList.Storybook]: {
@@ -261,7 +275,7 @@ const MainStack = createStackNavigator(
         screen: NotificationScheduler,
         navigationOptions: {
           ...noHeaderNavOpts,
-          notifications: NotificationFilter.onlyDismissible,
+          notifications: NotificationFilter.all,
         },
       },
     }),
@@ -282,13 +296,13 @@ export const Routes = createSwitchNavigator(
     [routeList.Main]: {
       screen: MainStack,
       navigationOptions: {
-        notifications: NotificationFilter.onlyDismissible
-      }
+        notifications: NotificationFilter.onlyDismissible,
+      },
     },
     [routeList.Registration]: {
       screen: RegistrationScreens,
-      notifications: NotificationFilter.none
-    }
+      notifications: NotificationFilter.none,
+    },
   },
   {
     initialRouteName: routeList.AppInit,
