@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { initStore } from './store'
+import { initStore, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
 import { StatusBar } from 'react-native'
 import { RoutesContainer } from './routes'
@@ -9,7 +9,7 @@ import { useScreens } from 'react-native-screens'
 import {
   NavigationContainerComponent,
   NavigationState,
-  NavigationAction,
+  NavigationRoute,
 } from 'react-navigation'
 import { Notifications } from './ui/notifications/containers/notifications'
 import { setActiveNotificationFilter } from './actions/notifications'
@@ -40,13 +40,16 @@ export default class App extends React.PureComponent<{}> {
     if (!store) store = initStore()
   }
 
-  public handleNavigationChange(prevState: NavigationState, newState: NavigationState, action: NavigationAction) {
+  public handleNavigationChange(
+    prevState: NavigationState,
+    newState: NavigationState,
+  ) {
     // @ts-ignore
     let navigation = this.navigator._navigation
-    let curState = newState, navigationOptions
+    let curState: NavigationState | NavigationRoute = newState,
+      navigationOptions
 
     while (curState.routes) {
-      // @ts-ignore
       curState = curState.routes[curState.index]
       const childNav = navigation.getChildNavigation(curState.key)
       navigationOptions = navigation.router.getScreenOptions(childNav)
@@ -54,8 +57,10 @@ export default class App extends React.PureComponent<{}> {
     }
 
     if (navigationOptions.notifications) {
-      // @ts-ignore
-      store.dispatch(setActiveNotificationFilter(navigationOptions.notifications))
+      const thunkDispatch: ThunkDispatch = store.dispatch
+      thunkDispatch(
+        setActiveNotificationFilter(navigationOptions.notifications),
+      )
     }
   }
 
@@ -73,7 +78,8 @@ export default class App extends React.PureComponent<{}> {
           <React.Fragment>
             <RoutesContainer
               onNavigationStateChange={this.handleNavigationChange.bind(this)}
-              ref={nav => this.setNavigator(nav)} />
+              ref={nav => this.setNavigator(nav)}
+            />
             <Notifications />
             <AppLoading />
           </React.Fragment>
