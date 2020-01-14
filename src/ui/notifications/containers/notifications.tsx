@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { NotificationComponent } from '../components/notifications'
-import { Animated, LayoutChangeEvent, StatusBar, StyleSheet } from 'react-native'
+import {
+  Animated,
+  LayoutChangeEvent,
+  StatusBar,
+  StyleSheet,
+} from 'react-native'
 import { connect } from 'react-redux'
 import { Notification } from '../../../lib/notifications'
 import { ThunkDispatch } from '../../../store'
@@ -31,14 +36,12 @@ export const NotificationContainer = (props: Props) => {
   const isSticky = notification && !notification.dismiss
 
   useEffect(() => {
-    console.log(activeNotification)
     if (!notification && activeNotification) {
       setNotification(activeNotification)
       showNotification().start()
     } else if (notification && !activeNotification) {
       hideNotification().start(() => {
         setNotification(undefined)
-        setNotificationHeight(100)
       })
     } else if (
       activeNotification &&
@@ -47,8 +50,15 @@ export const NotificationContainer = (props: Props) => {
     ) {
       //check this
       hideNotification().start(() => {
-        setNotificationHeight(100)
         setNotification(activeNotification)
+
+        /** NOTE @mnzaki
+         * this should be triggered from the (!notif && active) case
+         * normally if the active notification is nulled first, but
+         * it is not because of animation flicker. If this causes issues
+         * later, add an animation queue and only trigger new ones after
+         * previous ones are over in general and not for this specific case
+         */
         showNotification().start()
       })
     }
@@ -79,7 +89,6 @@ export const NotificationContainer = (props: Props) => {
 
   const onSwipe = (gestureName: string) => {
     if (notification && !isSticky && gestureName !== 'SWIPE_DOWN') {
-      console.log('swiped')
       onDismiss(notification)
     }
   }
