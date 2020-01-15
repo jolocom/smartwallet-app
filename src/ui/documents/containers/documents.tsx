@@ -17,7 +17,7 @@ import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
 import { BackupWarning } from '../../recovery/components/backupWarning'
 import { Typography, Colors, Spacing } from 'src/styles'
-import { Container } from '../../structure'
+import { Wrapper } from '../../structure'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -96,7 +96,7 @@ export class DocumentsContainer extends React.Component<Props, State> {
     const otherIsEmpty = displayedDocs.length === documents.length
 
     return (
-      <Container style={styles.mainContainer}>
+      <Wrapper style={styles.mainContainer}>
         <Animated.View style={{ flex: 1 }}>
           <BackupWarning />
           {!otherIsEmpty && (
@@ -141,7 +141,7 @@ export class DocumentsContainer extends React.Component<Props, State> {
             )}
           </ScrollView>
         </Animated.View>
-      </Container>
+      </Wrapper>
     )
   }
 }
