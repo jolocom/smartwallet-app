@@ -36,6 +36,7 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
     true,
   )
 
+  // TODO: find sticky by id from queue, not active
   const {
     notifications: { active: stickyNotification },
   } = getState()

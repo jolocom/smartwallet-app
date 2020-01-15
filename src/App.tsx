@@ -6,6 +6,7 @@ import { StatusBar } from 'react-native'
 import { RoutesContainer } from './routes'
 import { AppLoading } from './ui/generic/appLoading'
 import { useScreens } from 'react-native-screens'
+import { isNil } from 'ramda'
 import {
   NavigationContainerComponent,
   NavigationState,
@@ -56,7 +57,7 @@ export default class App extends React.PureComponent<{}> {
       navigation = childNav
     }
 
-    if (navigationOptions.notifications) {
+    if (!isNil(navigationOptions.notifications)) {
       const thunkDispatch: ThunkDispatch = store.dispatch
       thunkDispatch(
         setActiveNotificationFilter(navigationOptions.notifications),

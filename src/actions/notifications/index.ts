@@ -168,6 +168,19 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
     dispatch(removeNotification(active, false))
   }
 
+  // clear the active notification if it should be filtered
+  if (active && !isActiveExpired) {
+    const { activeFilter } = getState().notifications
+
+    if (!notificationMatchesFilter(activeFilter, active)) {
+      ret = dispatch(clearActiveNotification())
+      if (nextUpdateTimeout) {
+        clearTimeout(nextUpdateTimeout)
+        nextUpdateTimeout = null
+      }
+    }
+  }
+
   // we only attempt to find a next notification if the active one is
   // expired or sticky (non-dismissible)
   if (isActiveExpired || isActiveSticky) {
@@ -181,6 +194,7 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
       // notifications
       next = queue.find(notification => !!notification.dismiss) || queue[0]
     } else if (active) {
+      // NOTE: active notification is cleared twice if it's a sticky and the queue is empty
       ret = dispatch(clearActiveNotification())
     }
   } else if (active) {
