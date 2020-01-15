@@ -4,7 +4,7 @@ import { initStore, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
 import { StatusBar } from 'react-native'
 import { RoutesContainer } from './routes'
-import { AppLoading } from './ui/generic/appLoading'
+import { AppLoadingAndNotifications } from './ui/generic/appLoadingAndNotifications'
 import { useScreens } from 'react-native-screens'
 import { isNil } from 'ramda'
 import {
@@ -12,7 +12,6 @@ import {
   NavigationState,
   NavigationRoute,
 } from 'react-navigation'
-import { Notifications } from './ui/notifications/containers/notifications'
 import { setActiveNotificationFilter } from './actions/notifications'
 useScreens()
 
@@ -81,8 +80,7 @@ export default class App extends React.PureComponent<{}> {
               onNavigationStateChange={this.handleNavigationChange.bind(this)}
               ref={nav => this.setNavigator(nav)}
             />
-            <Notifications />
-            <AppLoading />
+            <AppLoadingAndNotifications />
           </React.Fragment>
         </Provider>
       </React.Fragment>
