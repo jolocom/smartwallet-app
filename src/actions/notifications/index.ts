@@ -7,6 +7,7 @@ import {
   CLEAR_NOTIFICATIONS,
   SET_ACTIVE_FILTER,
 } from 'src/reducers/notifications'
+import { RootState } from '../../reducers'
 
 /**
  * @description Add a notification to the queue, to be displayed at an
@@ -146,6 +147,16 @@ const setActiveNotification = (
 
 let nextUpdateTimeout: number | null = null
 let updateInProgress = false
+
+const getActiveNotificationState = (getState: () => RootState) => {
+  const curTs = Date.now()
+  const { active, activeExpiryTs } = getState().notifications
+  const isActiveExpired =
+    !active || (active.dismiss && activeExpiryTs && curTs >= activeExpiryTs)
+  const isActiveSticky = active && !active.dismiss
+  return { active, isActiveExpired, curTs, isActiveSticky }
+}
+
 // ThunkActions must always return an AnyAction, unless they are async
 // This is async just so it can some times return nothing (when there is another
 // update already running, as a side-effect of some change), to avoid recursion.
@@ -154,11 +165,12 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
   updateInProgress = true
   let ret
 
-  const curTs = Date.now()
-  const { active, activeExpiryTs } = getState().notifications
-  const isActiveExpired =
-    !active || (active.dismiss && activeExpiryTs && curTs >= activeExpiryTs)
-  const isActiveSticky = active && !active.dismiss
+  let {
+    isActiveExpired,
+    isActiveSticky,
+    active,
+    curTs,
+  } = getActiveNotificationState(getState)
 
   let next = null,
     nextExpiry
@@ -174,6 +186,13 @@ const updateNotificationsState: ThunkAction = async (dispatch, getState) => {
 
     if (!notificationMatchesFilter(activeFilter, active)) {
       ret = dispatch(clearActiveNotification())
+      ;({
+        isActiveExpired,
+        isActiveSticky,
+        active,
+        curTs,
+      } = getActiveNotificationState(getState))
+
       if (nextUpdateTimeout) {
         clearTimeout(nextUpdateTimeout)
         nextUpdateTimeout = null
