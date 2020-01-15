@@ -1558,11 +1558,6 @@ Array [
     "notification": null,
     "type": "SET_ACTIVE_NOTIFICATION",
   },
-  Object {
-    "expiry": 0,
-    "notification": null,
-    "type": "SET_ACTIVE_NOTIFICATION",
-  },
 ]
 `;
 
