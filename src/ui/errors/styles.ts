@@ -3,6 +3,7 @@ import { Platform, StyleSheet } from 'react-native'
 import { isFinalStyle } from '../../styles/config'
 import { Colors } from '../../styles'
 import { BP } from '../../styles/breakpoints'
+import { mergeDeepLeft } from 'ramda'
 
 const borderStyle = {
   borderWidth: 1,
@@ -222,20 +223,8 @@ const finalStyles = StyleSheet.create({
 const intermediateStyles = StyleSheet.create({
   wrapper: {
     backgroundColor: Colors.iBackgroundWhite,
-    justifyContent: 'flex-start',
-  },
-  sectionWrapper: {
-    width: '100%',
-    height: 'auto',
-    paddingHorizontal: BP({
-      small: 16,
-      medium: 20,
-      large: 20,
-    }),
-    marginTop: 50,
   },
   sectionTitle: {
-    fontFamily: fontMain,
     color: Colors.baseBlack,
     fontSize: BP({
       small: 26,
@@ -245,149 +234,38 @@ const intermediateStyles = StyleSheet.create({
     lineHeight: 34,
   },
   sectionDescription: {
-    ...defaultText,
     color: Colors.iTextBlack,
-    fontSize: 16,
-    letterSpacing: 0.11,
-    lineHeight: 20,
   },
   pickerWrapper: {
-    ...borderStyle,
     backgroundColor: Colors.white,
     borderColor: Colors.iGrey,
-    paddingLeft: 10,
-    height: 50,
-    width: '100%',
-    justifyContent: Platform.select({
-      android: 'center',
-      ios: 'flex-end',
-    }),
-  },
-  pickerIconWrapper: {
-    position: 'absolute',
-    height: '100%',
-    right: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 2,
   },
   pickerDropDown: {
-    ...borderStyle,
     borderColor: Colors.iGrey,
     backgroundColor: Colors.white,
-    paddingVertical: 10,
-  },
-  pickerDropdownText: {
-    backgroundColor: 'transparent',
-    paddingLeft: 20,
-    height: 46,
-    paddingTop: Platform.select({
-      ios: 14,
-      android: 0,
-    }),
   },
   inputText: {
-    ...defaultText,
     color: Colors.black,
-    padding: 10,
   },
   inputBlock: {
-    ...borderStyle,
-    ...defaultText,
     color: Colors.black,
-    height: 90,
-    maxWidth: '100%',
-    marginTop: 16,
-    paddingHorizontal: 20,
-    paddingTop: 13,
-    flexWrap: 'wrap',
     backgroundColor: Colors.white,
     borderColor: Colors.iGrey,
   },
   inputLine: {
-    ...defaultText,
     color: Colors.black,
-    width: '100%',
     borderBottomColor: Colors.darkGrey,
-    borderBottomWidth: 1,
-    marginTop: 16,
-    paddingVertical: 12,
-  },
-  switchSection: {
-    flexDirection: 'row',
-    marginTop: 20,
-  },
-  switchWrapper: {
-    width: 70,
-    height: 'auto',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
-  emojiWrapper: {
-    maxWidth: '100%',
-    height: 'auto',
-    marginTop: 27,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   emojiButton: {
-    width: Platform.select({
-      ios: BP({
-        small: 59,
-        medium: 66,
-        large: 66,
-      }),
-      android: 60,
-    }),
-    height: Platform.select({
-      ios: BP({
-        small: 59,
-        medium: 66,
-        large: 66,
-      }),
-      android: 60,
-    }),
-    borderWidth: 1,
     borderColor: Colors.iLightGrey,
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: Colors.white,
   },
   selectedEmoji: {
     borderColor: Colors.iJoloColor,
     backgroundColor: Colors.white,
   },
-  unselectedEmoji: {
-    opacity: 0.5,
-  },
   emoji: {
-    fontSize: Platform.select({
-      ios: BP({
-        small: 28,
-        medium: 31,
-        large: 31,
-      }),
-      android: 23,
-    }),
     color: Colors.black,
-  },
-  navigationWrapper: {
-    width: '100%',
-    height: 50,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  navigationButton: {
-    height: 40,
-    paddingHorizontal: BP({
-      small: 16,
-      medium: 20,
-      large: 20,
-    }),
-    justifyContent: 'center',
   },
 
   // NOTE inline colors for switching between the intermediate and final versions
@@ -426,4 +304,6 @@ const intermediateStyles = StyleSheet.create({
   },
 })
 
-export const styles = isFinalStyle ? finalStyles : intermediateStyles
+export const styles = isFinalStyle
+  ? finalStyles
+  : mergeDeepLeft(intermediateStyles, finalStyles)

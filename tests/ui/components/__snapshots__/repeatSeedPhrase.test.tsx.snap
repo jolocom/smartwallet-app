@@ -310,7 +310,7 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
               },
               Object {
                 "alignSelf": "center",
-                "color": "white",
+                "color": "rgb(255, 255, 255)",
                 "position": "relative",
               },
             ]
