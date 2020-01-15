@@ -8,8 +8,8 @@ enum ScreenSize {
 
 const breakpoints = {
   [ScreenSize.large]: {
-    width: 360,
-    height: 720,
+    width: 414,
+    height: 814,
   },
   [ScreenSize.medium]: {
     width: 360,

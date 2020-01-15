@@ -51,7 +51,7 @@ exports[`EmojiSection Component matches the snapshot to initial EmojiButton rend
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "white",
+      "backgroundColor": "rgb(255, 255, 255)",
       "borderColor": "rgb(208, 208, 208)",
       "borderRadius": 50,
       "borderWidth": 1,
@@ -80,7 +80,7 @@ exports[`EmojiSection Component renders selected emoji button 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "white",
+      "backgroundColor": "rgb(255, 255, 255)",
       "borderColor": "rgb(149, 46, 83)",
       "borderRadius": 50,
       "borderWidth": 1,

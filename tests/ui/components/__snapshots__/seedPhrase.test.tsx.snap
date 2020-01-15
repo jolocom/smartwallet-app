@@ -48,7 +48,7 @@ exports[`seedPhrase component matches the snapshot with checkbox unchecked 1`] =
       <Text
         style={
           Object {
-            "color": "white",
+            "color": "rgb(255, 255, 255)",
             "fontFamily": "TT Commons",
             "fontSize": 30,
             "lineHeight": 38,
