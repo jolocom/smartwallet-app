@@ -121,14 +121,17 @@ export const NotificationComponent: React.FC<Props> = ({
         <Text
           style={{
             ...styles.title,
-            ...(isSticky && styles.centeredText),
+            ...(!notification.interact && styles.centeredText),
             color: isSticky ? yellowError : white,
           }}
         >
           {notification.title}
         </Text>
         <Text
-          style={{ ...styles.message, ...(isSticky && styles.centeredText) }}
+          style={{
+            ...styles.message,
+            ...(!notification.interact && styles.centeredText),
+          }}
         >
           {notification.message}
         </Text>
