@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, ScrollView, View, StyleSheet } from 'react-native'
-import { Container } from 'src/ui/structure'
+import { Wrapper } from 'src/ui/structure'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import I18n from 'src/locales/i18n'
 import {
@@ -124,7 +124,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     const buttonDisabled = !submitAllowed || this.state.pending
 
     return (
-      <Container style={styles.container}>
+      <Wrapper style={styles.container}>
         <View style={styles.topSection}>
           <IssuerCard issuer={requester} />
           <View style={styles.messageContainer}>
@@ -166,7 +166,7 @@ export class ConsentComponent extends React.Component<Props, State> {
             handleDeny={() => this.props.handleDenySubmit()}
           />
         </View>
-      </Container>
+      </Wrapper>
     )
   }
 }

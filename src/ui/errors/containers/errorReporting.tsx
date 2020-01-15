@@ -6,7 +6,7 @@ import { ThunkDispatch } from '../../../store'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
-import { Container, JolocomButton } from '../../structure'
+import { JolocomButton, Wrapper } from '../../structure'
 import { styles } from '../styles'
 import { ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
@@ -16,7 +16,6 @@ import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { SectionWrapper } from '../components/sectionWrapper'
 import { NavigationSection } from '../components/navigationSection'
-import { BP } from '../../../styles/breakpoints'
 
 interface PaymentNavigationParams {
   error?: AppError | Error
@@ -79,7 +78,7 @@ const ErrorReportingContainer = (props: Props) => {
   }
 
   return (
-    <Container style={styles.wrapper}>
+    <Wrapper style={styles.wrapper}>
       <NavigationSection
         onNavigation={navigateBack}
         isBackButton={isBackButton}
@@ -122,17 +121,13 @@ const ErrorReportingContainer = (props: Props) => {
           containerStyle={{
             marginTop: 45,
             marginBottom: 66,
+            marginHorizontal: 20,
             height: 56,
-            marginHorizontal: BP({
-              small: 16,
-              medium: 20,
-              large: 20,
-            }),
           }}
           text={I18n.t(strings.SUBMIT_REPORT)}
         />
       </ScrollView>
-    </Container>
+    </Wrapper>
   )
 }
 

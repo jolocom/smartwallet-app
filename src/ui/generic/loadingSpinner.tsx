@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container } from 'src/ui/structure/'
+import { Wrapper } from 'src/ui/structure/'
 import { StyleSheet } from 'react-native'
 import { Colors } from 'src/styles'
 const loaders = require('react-native-indicator')
@@ -27,14 +27,14 @@ export class LoadingSpinner extends React.PureComponent {
     // FIXME the key={Date.now()} bit is part of the HACK from above,
     // see componentDidMount
     return (
-      <Container style={styles.loadingContainer}>
+      <Wrapper style={styles.loadingContainer}>
         <loaders.RippleLoader
           key={Date.now()}
           size={120}
           strokeWidth={4}
           color={Colors.purpleMain}
         />
-      </Container>
+      </Wrapper>
     )
   }
 }

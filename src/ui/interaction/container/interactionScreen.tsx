@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Container } from '../../structure'
+import { Wrapper } from '../../structure'
 import {
-  StyleSheet,
-  TouchableOpacity,
+  Animated,
   Platform,
   StatusBar,
-  Animated,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native'
 import { ScannerContainer } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
@@ -18,12 +18,12 @@ import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { connect } from 'react-redux'
 import { CloseIcon } from '../../../resources'
 import { fontMain, textXXS } from '../../../styles/typography'
-import { Colors } from '../../../styles'
 import { navigatorResetHome } from '../../../actions/navigation'
 import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { Colors } from 'src/styles'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -90,7 +90,7 @@ const InteractionContainer = (props: Props) => {
           flex: 1,
         }}
       >
-        <Container>
+        <Wrapper withoutSafeArea style={{ backgroundColor: Colors.greyDark }}>
           {IS_IOS && (
             <TouchableOpacity
               onPress={props.navigateHome}
@@ -103,7 +103,7 @@ const InteractionContainer = (props: Props) => {
             navigation={props.navigation}
             onScannerSuccess={props.onScannerSuccess}
           />
-        </Container>
+        </Wrapper>
       </Animated.View>
     </React.Fragment>
   )

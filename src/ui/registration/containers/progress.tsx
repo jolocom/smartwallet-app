@@ -4,7 +4,7 @@ import { View, StyleSheet, StatusBar, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import * as loading from 'src/actions/registration/loadingStages'
 import { RootState } from 'src/reducers/'
-import { Container } from 'src/ui/structure/'
+import { Wrapper } from 'src/ui/structure/'
 import I18n from 'src/locales/i18n'
 import { ThunkDispatch } from 'src/store'
 import strings from '../../../locales/strings'
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 export const RegistrationProgressContainer: React.FunctionComponent<
   Props
 > = props => (
-  <Container style={styles.container}>
+  <Wrapper style={styles.container}>
     <StatusBar barStyle="light-content" />
     <View style={styles.messageArea}>
       <Text style={styles.text}>{I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}</Text>
@@ -87,7 +87,7 @@ export const RegistrationProgressContainer: React.FunctionComponent<
         <Text style={styles.smallText}>{props.loadingMsg}</Text>
       </View>
     </View>
-  </Container>
+  </Wrapper>
 )
 
 const mapStateToProps = ({
