@@ -125,7 +125,23 @@ describe('Notifications Actions', () => {
       const sticky = newSticky()
 
       mockStore.dispatch(scheduleNotification(sticky))
+      mockStore.dispatch(
+        setActiveNotificationFilter(NotificationFilter.onlyDismissible),
+      )
+      expect(mockStore.getActions()).toMatchSnapshot()
+      expect(mockStore.getState().notifications).toMatchSnapshot()
+    })
+
+    it('should not timeout the active notification after it was filtered', () => {
+      const slidy = newSlidy()
+
+      mockStore.dispatch(scheduleNotification(slidy))
       mockStore.dispatch(setActiveNotificationFilter(NotificationFilter.none))
+      expect(mockStore.getActions()).toMatchSnapshot()
+      expect(mockStore.getState().notifications).toMatchSnapshot()
+      MockDate.set(timeout + 200)
+      jest.runAllTimers()
+      mockStore.dispatch(setActiveNotificationFilter(NotificationFilter.all))
       expect(mockStore.getActions()).toMatchSnapshot()
       expect(mockStore.getState().notifications).toMatchSnapshot()
     })
