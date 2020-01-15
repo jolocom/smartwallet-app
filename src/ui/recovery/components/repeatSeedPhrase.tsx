@@ -118,8 +118,6 @@ const RepeatSeedPhraseComponent: React.FC<RepeatSeedPhraseProps> = ({
       <View style={styles.buttonSection}>
         <JolocomButton
           onPress={randomWords.length ? back : checkMnemonic}
-          raised
-          upperCase={false}
           text={
             randomWords.length
               ? I18n.t(strings.SHOW_MY_PHRASE_AGAIN)
