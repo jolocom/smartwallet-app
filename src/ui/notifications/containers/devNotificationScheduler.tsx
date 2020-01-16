@@ -57,9 +57,10 @@ interface Props
 const DevNotificationScheduler = (props: Props) => {
   const { showNotification, notificationQueue } = props
 
-  const [title, setTitle] = useState<string>('')
-  const [message, setMessage] = useState<string>('')
+  const [title, setTitle] = useState('')
+  const [message, setMessage] = useState('')
   const [interact, setInteract] = useState(false)
+  const [interactLabel, setInteractLabel] = useState('')
   const [warning, setWarning] = useState(false)
   const [sticky, setSticky] = useState(false)
 
@@ -80,7 +81,7 @@ const DevNotificationScheduler = (props: Props) => {
     message,
     ...(interact && {
       interact: {
-        label: 'Next',
+        label: interactLabel,
         onInteract: () => false,
       },
     }),
@@ -131,6 +132,24 @@ const DevNotificationScheduler = (props: Props) => {
             multiline={true}
             textAlignVertical={'top'}
           />
+          {interact && (
+            <TextInput
+              value={interactLabel}
+              style={{
+                marginTop: 10,
+                fontSize: 16,
+                minWidth: 60,
+                height: 40,
+                fontFamily: fontMain,
+                borderColor: blackMain,
+                borderWidth: 1,
+                borderRadius: 10,
+                alignSelf: 'flex-end',
+              }}
+              placeholder={'Label'}
+              onChangeText={setInteractLabel}
+            />
+          )}
         </View>
         <View
           style={{
