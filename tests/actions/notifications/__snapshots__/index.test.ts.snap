@@ -282,7 +282,9 @@ exports[`Notifications Actions invokeInteract should call onInteract callback an
 Array [
   Object {
     "notification": Object {
-      "dismiss": false,
+      "dismiss": Object {
+        "timeout": 3000,
+      },
       "id": "1",
       "interact": Object {
         "label": "CLICK",
@@ -295,9 +297,11 @@ Array [
     "type": "SCHEDULE_NOTIFICATION",
   },
   Object {
-    "expiry": undefined,
+    "expiry": 3000,
     "notification": Object {
-      "dismiss": false,
+      "dismiss": Object {
+        "timeout": 3000,
+      },
       "id": "1",
       "interact": Object {
         "label": "CLICK",
@@ -320,19 +324,6 @@ Array [
       "type": "info",
     },
     "type": "SCHEDULE_NOTIFICATION",
-  },
-  Object {
-    "expiry": 4500,
-    "notification": Object {
-      "dismiss": Object {
-        "timeout": 3000,
-      },
-      "id": "2",
-      "message": "sup",
-      "title": "hello",
-      "type": "info",
-    },
-    "type": "SET_ACTIVE_NOTIFICATION",
   },
 ]
 `;
@@ -341,7 +332,9 @@ exports[`Notifications Actions invokeInteract should call onInteract callback an
 Array [
   Object {
     "notification": Object {
-      "dismiss": false,
+      "dismiss": Object {
+        "timeout": 3000,
+      },
       "id": "1",
       "interact": Object {
         "label": "CLICK",
@@ -364,9 +357,11 @@ Array [
     "type": "SCHEDULE_NOTIFICATION",
   },
   Object {
-    "expiry": undefined,
+    "expiry": 3000,
     "notification": Object {
-      "dismiss": false,
+      "dismiss": Object {
+        "timeout": 3000,
+      },
       "id": "1",
       "interact": Object {
         "label": "CLICK",
@@ -401,21 +396,10 @@ Array [
     "type": "SCHEDULE_NOTIFICATION",
   },
   Object {
-    "expiry": 4500,
     "notification": Object {
       "dismiss": Object {
         "timeout": 3000,
       },
-      "id": "2",
-      "message": "sup",
-      "title": "hello",
-      "type": "info",
-    },
-    "type": "SET_ACTIVE_NOTIFICATION",
-  },
-  Object {
-    "notification": Object {
-      "dismiss": false,
       "id": "1",
       "interact": Object {
         "label": "CLICK",
@@ -436,6 +420,24 @@ Array [
       "type": "info",
     },
     "type": "REMOVE_NOTIFICATION",
+  },
+  Object {
+    "expiry": 0,
+    "notification": null,
+    "type": "SET_ACTIVE_NOTIFICATION",
+  },
+  Object {
+    "expiry": 4500,
+    "notification": Object {
+      "dismiss": Object {
+        "timeout": 3000,
+      },
+      "id": "2",
+      "message": "sup",
+      "title": "hello",
+      "type": "info",
+    },
+    "type": "SET_ACTIVE_NOTIFICATION",
   },
 ]
 `;

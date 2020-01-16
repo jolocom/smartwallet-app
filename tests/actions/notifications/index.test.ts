@@ -170,16 +170,16 @@ describe('Notifications Actions', () => {
 
     it('should call onDismiss callback and replace the notification with the next one from queue', () => {
       const onDismiss = jest.fn()
-      const sticky = newSticky({
+      const slidy1 = newSlidy({
         dismiss: { onDismiss },
       })
-      const slidy = newSlidy()
+      const slidy2 = newSlidy()
 
-      mockStore.dispatch(scheduleNotification(sticky))
+      mockStore.dispatch(scheduleNotification(slidy1))
       MockDate.set(timeout / 2)
-      mockStore.dispatch(scheduleNotification(slidy))
+      mockStore.dispatch(scheduleNotification(slidy2))
       expect(mockStore.getActions()).toMatchSnapshot()
-      mockStore.dispatch(invokeDismiss(sticky))
+      mockStore.dispatch(invokeDismiss(slidy1))
       expect(mockStore.getActions()).toMatchSnapshot()
       jest.runAllTimers()
       expect(mockStore.getState().notifications).toMatchSnapshot()
@@ -212,19 +212,19 @@ describe('Notifications Actions', () => {
 
     it('should call onInteract callback and replace the notification with the next one from queue', () => {
       const onInteract = jest.fn()
-      const sticky = newSticky({
+      const slidy1 = newSlidy({
         interact: {
           label: 'CLICK',
           onInteract,
         },
       })
-      const slidy = newSlidy()
+      const slidy2 = newSlidy()
 
-      mockStore.dispatch(scheduleNotification(sticky))
+      mockStore.dispatch(scheduleNotification(slidy1))
       MockDate.set(timeout / 2)
-      mockStore.dispatch(scheduleNotification(slidy))
+      mockStore.dispatch(scheduleNotification(slidy2))
       expect(mockStore.getActions()).toMatchSnapshot()
-      mockStore.dispatch(invokeInteract(sticky))
+      mockStore.dispatch(invokeInteract(slidy1))
       expect(mockStore.getActions()).toMatchSnapshot()
       jest.runAllTimers()
       expect(mockStore.getState().notifications).toMatchSnapshot()
