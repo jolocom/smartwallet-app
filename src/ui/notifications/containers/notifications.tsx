@@ -11,8 +11,8 @@ import { connect } from 'react-redux'
 import { Notification } from '../../../lib/notifications'
 import { ThunkDispatch } from '../../../store'
 import { invokeDismiss, invokeInteract } from '../../../actions/notifications'
-import GestureRecognizer from 'react-native-swipe-gestures'
 import { RootState } from '../../../reducers'
+import { SwipeUpWrapper } from '../../structure/swipeUpWrapper'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -97,13 +97,12 @@ export const NotificationContainer = (props: Props) => {
     setButtonWidth(width)
   }
 
-  const onSwipe = (gestureName: string, state: PanResponderGestureState) => {
-    const isSwipeUp = state.dy < 0 && Math.abs(state.dx) < 110
+  const onSwipeUp = (state: PanResponderGestureState) => {
     // NOTE: disables swiping on the side of the interaction button.
     const buttonMargin = notificationDimensions.width - buttonWidth
     const isButtonAreaSwipe =
       notification && notification.interact && buttonMargin < state.x0
-    const shouldSwipe = isSwipeUp && !isSticky && !isButtonAreaSwipe
+    const shouldSwipe = !isSticky && !isButtonAreaSwipe
 
     if (notification && shouldSwipe) {
       onDismiss(notification)
@@ -118,7 +117,7 @@ export const NotificationContainer = (props: Props) => {
         transform: [{ translateY: animatedValue }],
       }}
     >
-      <GestureRecognizer onSwipe={onSwipe}>
+      <SwipeUpWrapper onSwipeUp={onSwipeUp}>
         <NotificationComponent
           onPressDismiss={() => onDismiss(notification)}
           onPressInteract={() => onInteract(notification)}
@@ -126,7 +125,7 @@ export const NotificationContainer = (props: Props) => {
           notification={notification}
           isSticky={isSticky}
         />
-      </GestureRecognizer>
+      </SwipeUpWrapper>
     </Animated.View>
   ) : null
 }
