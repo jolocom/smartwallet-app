@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { View, Text, StyleSheet } from 'react-native'
 import I18n from 'src/locales/i18n'
-import { Container } from 'src/ui/structure'
+import { Wrapper } from 'src/ui/structure'
 import { getCredentialIconByType } from 'src/resources/util'
 import { formatEth } from 'src/utils/formatEth'
 import strings from '../../../locales/strings'
@@ -76,7 +76,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
     const { formattedAmount, unit } = formatEth(amount)
 
     return (
-      <Container style={styles.container}>
+      <Wrapper style={styles.container}>
         <View style={styles.priceContainer}>
           <Text style={styles.priceAmount}>{formattedAmount}</Text>
           <Text style={styles.priceUnit}>{unit}</Text>
@@ -108,7 +108,7 @@ export class PaymentConsentComponent extends React.Component<Props, State> {
             handleDeny={(): void => this.props.cancelPaymentRequest()}
           />
         </View>
-      </Container>
+      </Wrapper>
     )
   }
 }

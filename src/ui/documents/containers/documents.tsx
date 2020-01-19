@@ -16,6 +16,7 @@ import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
 import { Typography, Colors, Spacing } from 'src/styles'
+import { Wrapper } from '../../structure'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -95,47 +96,51 @@ export class DocumentsContainer extends React.Component<Props, State> {
     const otherIsEmpty = displayedDocs.length === documents.length
 
     return (
-      <Animated.View style={styles.mainContainer}>
-        {!otherIsEmpty && (
-          <DocumentViewToggle
-            showingValid={this.state.showingValid}
-            onTouch={this.handleToggle}
-          />
-        )}
-        <ScrollView
-          // scrollEventThrottle={16}
-          // onScroll={Animated.event([
-          //   {
-          //     nativeEvent: {
-          //       contentOffset: { y: this.state.headerHeight },
-          //     },
-          //   },
-          // ])}
-          // to scroll to top upon changing card
-          ref={ref => (this.ScrollViewRef = ref)}
-          contentContainerStyle={isEmpty && { flex: 1 }}
-          scrollEnabled={!isEmpty}
-        >
-          {isEmpty ? (
-            <View style={styles.emptyDocumentsContainer}>
-              <Text style={styles.emptyDocumentsText}>
-                {I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '...'}
-              </Text>
-            </View>
-          ) : this.state.showingValid ? (
-            <DocumentsCarousel
-              documents={displayedDocs}
-              activeIndex={this.state.activeDocumentIndex}
-              onActiveIndexChange={this.onActiveIndexChange.bind(this)}
-            />
-          ) : (
-            <DocumentsList
-              documents={displayedDocs}
-              onDocumentPress={openDocumentDetails}
+      <Wrapper style={styles.mainContainer}>
+        <Animated.View style={{ flex: 1 }}>
+          {!otherIsEmpty && (
+            <DocumentViewToggle
+              showingValid={this.state.showingValid}
+              onTouch={this.handleToggle}
             />
           )}
-        </ScrollView>
-      </Animated.View>
+          <ScrollView
+            // scrollEventThrottle={16}
+            // onScroll={Animated.event([
+            //   {
+            //     nativeEvent: {
+            //       contentOffset: { y: this.state.headerHeight },
+            //     },
+            //   },
+            // ])}
+            // to scroll to top upon changing card
+            ref={ref => (this.ScrollViewRef = ref)}
+            contentContainerStyle={
+              isEmpty ? { flex: 1 } : { paddingBottom: 110 }
+            }
+            scrollEnabled={!isEmpty}
+          >
+            {isEmpty ? (
+              <View style={styles.emptyDocumentsContainer}>
+                <Text style={styles.emptyDocumentsText}>
+                  {I18n.t(strings.NO_DOCUMENTS_TO_SEE_HERE) + '...'}
+                </Text>
+              </View>
+            ) : this.state.showingValid ? (
+              <DocumentsCarousel
+                documents={displayedDocs}
+                activeIndex={this.state.activeDocumentIndex}
+                onActiveIndexChange={this.onActiveIndexChange.bind(this)}
+              />
+            ) : (
+              <DocumentsList
+                documents={displayedDocs}
+                onDocumentPress={openDocumentDetails}
+              />
+            )}
+          </ScrollView>
+        </Animated.View>
+      </Wrapper>
     )
   }
 }

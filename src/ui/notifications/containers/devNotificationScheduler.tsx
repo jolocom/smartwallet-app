@@ -10,7 +10,7 @@ import {
 } from '../../../lib/notifications'
 import { scheduleNotification } from '../../../actions/notifications'
 import { connect } from 'react-redux'
-import { Container, JolocomButton } from '../../structure'
+import { Wrapper, JolocomButton } from '../../structure'
 import { NavigationScreenProps } from 'react-navigation'
 import { debug } from '../../../styles/presets'
 import { RootState } from '../../../reducers'
@@ -102,7 +102,7 @@ const DevNotificationScheduler = (props: Props) => {
   }
 
   return (
-    <Container style={{ backgroundColor: iBackgroundWhite }}>
+    <Wrapper style={{ backgroundColor: iBackgroundWhite }}>
       <View style={styles.topSection}>
         <View style={styles.inputs}>
           <TextInput
@@ -198,7 +198,7 @@ const DevNotificationScheduler = (props: Props) => {
       <View style={styles.buttonSection}>
         <JolocomButton onPress={onPress} text={'Schedule notification'} />
       </View>
-    </Container>
+    </Wrapper>
   )
 }
 

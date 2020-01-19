@@ -5,7 +5,7 @@ import { ThunkDispatch } from 'src/store'
 import { navigationActions, accountActions, genericActions } from 'src/actions'
 import { Linking, Dimensions, Image, StyleSheet, Text } from 'react-native'
 import { withLoading, withErrorHandler } from 'src/actions/modifiers'
-import { Container } from '../structure'
+import { Wrapper } from '../structure'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
 import { Typography, Colors } from 'src/styles'
@@ -39,7 +39,7 @@ export class AppInitContainer extends React.Component<Props> {
     const viewHeight: number = Dimensions.get('window').height
 
     return (
-      <Container style={styles.loadingContainer}>
+      <Wrapper style={styles.loadingContainer}>
         <Image
           source={image}
           style={{
@@ -49,7 +49,7 @@ export class AppInitContainer extends React.Component<Props> {
           }}
         />
         <Text style={styles.loadingText}>POWERED BY JOLOCOM</Text>
-      </Container>
+      </Wrapper>
     )
   }
 }

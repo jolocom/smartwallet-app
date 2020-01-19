@@ -1,6 +1,12 @@
-import React from 'react'
-import { Container } from '../../structure'
-import { StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Wrapper } from '../../structure'
+import {
+  Animated,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import { ScannerContainer } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { white } from '../../../styles/colors'
@@ -12,12 +18,12 @@ import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { connect } from 'react-redux'
 import { CloseIcon } from '../../../resources'
 import { fontMain, textXXS } from '../../../styles/typography'
-import { Colors } from '../../../styles'
 import { navigatorResetHome } from '../../../actions/navigation'
 import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { Colors } from 'src/styles'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -52,25 +58,56 @@ interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     NavigationScreenProps {}
 
-const InteractionContainer = (props: Props) => (
-  <React.Fragment>
-    <StatusBar hidden />
-    <Container style={{ backgroundColor: Colors.greyDark }}>
-      {IS_IOS && (
-        <TouchableOpacity
-          onPress={props.navigateHome}
-          style={styles.closeButton}
-        >
-          <CloseIcon />
-        </TouchableOpacity>
-      )}
-      <ScannerContainer
-        navigation={props.navigation}
-        onScannerSuccess={props.onScannerSuccess}
-      />
-    </Container>
-  </React.Fragment>
-)
+const InteractionContainer = (props: Props) => {
+  const [AnimatedOpacity] = useState(new Animated.Value(0))
+  const [isStatusBar, setStatusBar] = useState(true)
+
+  /*
+   * NOTE: (Android only) When navigating to the @InteractionScreen, the homepage
+   * (together with the @BottomBar) jumps about 20px up and disrupts
+   * the navigation transition. This happens due to the hiding of the
+   * @StatusBar. One workaround is delaying it, but the "flicker" is still
+   * noticeable.
+   */
+
+  useEffect(() => {
+    Animated.timing(AnimatedOpacity, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      setStatusBar(false)
+    })
+  }, [])
+
+  return (
+    <React.Fragment>
+      <StatusBar hidden={!isStatusBar} />
+      <Animated.View
+        style={{
+          backgroundColor: Colors.greyDark,
+          opacity: AnimatedOpacity,
+          flex: 1,
+        }}
+      >
+        <Wrapper withoutSafeArea style={{ backgroundColor: Colors.greyDark }}>
+          {IS_IOS && (
+            <TouchableOpacity
+              onPress={props.navigateHome}
+              style={styles.closeButton}
+            >
+              <CloseIcon />
+            </TouchableOpacity>
+          )}
+          <ScannerContainer
+            navigation={props.navigation}
+            onScannerSuccess={props.onScannerSuccess}
+          />
+        </Wrapper>
+      </Animated.View>
+    </React.Fragment>
+  )
+}
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   onScannerSuccess: async (interactionToken: JSONWebToken<JWTEncodable>) => {
