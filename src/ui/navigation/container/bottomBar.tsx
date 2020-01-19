@@ -200,10 +200,7 @@ const BottomBarContainer = (props: Props) => {
         scale={SCALING_FACTOR}
         navigateScanner={navigateInteraction}
       />
-      <BottomBarSVG
-        scaledHeight={BAR_HEIGHT}
-        color={Colors.bottomTabBarBg}
-      />
+      <BottomBarSVG scaledHeight={BAR_HEIGHT} color={Colors.bottomTabBarBg} />
       <View style={styles.safeView} />
     </AnimatedSafeAreaView>
   )

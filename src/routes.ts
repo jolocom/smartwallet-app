@@ -174,7 +174,10 @@ const MainStack = createStackNavigator(
     },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.onlyDismissible,
+      },
     },
 
     [routeList.CredentialDialog]: {
