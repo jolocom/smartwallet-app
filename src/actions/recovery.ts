@@ -3,6 +3,7 @@ import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareP
 import { navigationActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
+import { removeNotification } from './notifications'
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
@@ -34,6 +35,13 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
     settingKeys.seedPhraseSaved,
     true,
   )
+
+  // TODO: find sticky by id from queue, not active
+  const {
+    notifications: { active: stickyNotification },
+  } = getState()
+  if (stickyNotification) dispatch(removeNotification(stickyNotification))
+
   return dispatch({
     type: 'SET_SEED_PHRASE_SAVED',
   })

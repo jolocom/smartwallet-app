@@ -15,7 +15,6 @@ import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
-import { BackupWarning } from '../../recovery/components/backupWarning'
 import { Typography, Colors, Spacing } from 'src/styles'
 import { Wrapper } from '../../structure'
 
@@ -38,6 +37,7 @@ const APPBAR_HEIGHT = Platform.select({
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     backgroundColor: Colors.lightGreyLighter,
   },
   topContainer: {
@@ -98,7 +98,6 @@ export class DocumentsContainer extends React.Component<Props, State> {
     return (
       <Wrapper style={styles.mainContainer}>
         <Animated.View style={{ flex: 1 }}>
-          <BackupWarning />
           {!otherIsEmpty && (
             <DocumentViewToggle
               showingValid={this.state.showingValid}

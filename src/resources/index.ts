@@ -20,6 +20,7 @@ export const TorchOffIcon = require('./svg/TorchOffIcon').default
 export const TorchOnIcon = require('./svg/TorchOnIcon').default
 export const CloseIcon = require('./svg/CloseIcon').default
 export const CrossIcon = require('./svg/CrossIcon').default
+export const CrossNotificationIcon = require('./svg/CrossNotifications').default
 export const BackIcon = require('./svg/BackIcon').default
 export const ScanIcon = require('./svg/Scan1').default
 export const DocsIcon = require('./svg/Docs').default

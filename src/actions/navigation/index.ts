@@ -37,6 +37,7 @@ export const navigate = (
   options: NavigationNavigateActionPayload,
 ): ThunkAction => dispatch => {
   const action = NavigationActions.navigate(options)
+
   dispatchNavigationAction(action)
   return dispatch(action)
 }
