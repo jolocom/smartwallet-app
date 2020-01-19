@@ -23,7 +23,7 @@ export const checkRecoverySetup: ThunkAction = async (dispatch, getState) => {
         strings.YOUR_DATA_MAY_BE_LOST_BECAUSE_YOU_DID_NOT_CONFIRM_THE_SEED_PHRASE_WE_ADVISE_YOU_TO_COMPLETE_THE_REGISTRATION,
       ),
       interact: {
-        label: 'Confirm',
+        label: strings.CONFIRM,
         onInteract: () => {
           dispatch(showSeedPhrase())
           return true

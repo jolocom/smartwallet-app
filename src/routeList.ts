@@ -1,4 +1,4 @@
-// NOTE: don't use 'const' so that withNavigation, values are useable in both .js and .ts files
+// NOTE: don't use 'const' so that values are useable in both .js and .ts files
 export enum routeList {
   AppInit = 'AppInit',
   Main = 'Main',
