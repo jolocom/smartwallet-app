@@ -2,17 +2,19 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { initStore, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
-import { StatusBar } from 'react-native'
+import { StatusBar, View } from 'react-native'
 import { RoutesContainer } from './routes'
 import { AppLoadingAndNotifications } from './ui/generic/appLoadingAndNotifications'
 import { useScreens } from 'react-native-screens'
 import { isNil } from 'ramda'
 import {
   NavigationContainerComponent,
-  NavigationState,
   NavigationRoute,
+  NavigationState,
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
+import { black } from './styles/colors'
+
 useScreens()
 
 /**
@@ -25,7 +27,10 @@ useScreens()
  */
 let store: ReturnType<typeof initStore>
 
-export default class App extends React.PureComponent<{}> {
+export default class App extends React.PureComponent<
+  {},
+  { showStatusBar: boolean }
+> {
   private navigator!: NavigationContainerComponent
 
   public constructor(props: {}) {
@@ -38,6 +43,9 @@ export default class App extends React.PureComponent<{}> {
     // have not been excuted yet (while files are being imported) and initStore
     // triggers creation of BackendMiddleware which needs those
     if (!store) store = initStore()
+    this.state = {
+      showStatusBar: true,
+    }
   }
 
   public handleNavigationChange(
@@ -56,11 +64,17 @@ export default class App extends React.PureComponent<{}> {
       navigation = childNav
     }
 
-    if (!isNil(navigationOptions.notifications)) {
+    const { notifications, statusBar } = navigationOptions
+
+    if (!isNil(notifications)) {
       const thunkDispatch: ThunkDispatch = store.dispatch
-      thunkDispatch(
-        setActiveNotificationFilter(navigationOptions.notifications),
-      )
+      thunkDispatch(setActiveNotificationFilter(notifications))
+    }
+
+    if (!isNil(statusBar)) {
+      this.setState({ showStatusBar: statusBar })
+    } else {
+      this.setState({ showStatusBar: true })
     }
   }
 
@@ -71,17 +85,27 @@ export default class App extends React.PureComponent<{}> {
   }
 
   public render() {
+    const { showStatusBar } = this.state
     return (
       <React.Fragment>
-        <StatusBar barStyle="default" />
+        <StatusBar hidden={!showStatusBar} translucent />
+        {showStatusBar && (
+          <View
+            style={{
+              width: '100%',
+              height: StatusBar.currentHeight,
+              backgroundColor: black,
+            }}
+          />
+        )}
         <Provider store={store}>
-          <React.Fragment>
+          <View style={{ flex: 1 }}>
             <RoutesContainer
               onNavigationStateChange={this.handleNavigationChange.bind(this)}
               ref={nav => this.setNavigator(nav)}
             />
             <AppLoadingAndNotifications />
-          </React.Fragment>
+          </View>
         </Provider>
       </React.Fragment>
     )

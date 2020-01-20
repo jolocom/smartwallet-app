@@ -177,9 +177,9 @@ const MainStack = createStackNavigator(
       navigationOptions: {
         ...noHeaderNavOpts,
         notifications: NotificationFilter.onlyDismissible,
+        statusBar: false,
       },
     },
-
     [routeList.CredentialDialog]: {
       screen: CredentialReceive,
       navigationOptions: () => ({
