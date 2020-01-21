@@ -26,8 +26,12 @@ platform :android do
   end
 
   after_all do |lane, options|
-    sh("rm secrets.json")
-    sh("rm key.json")
+    begin
+      sh("rm secrets.json")
+      sh("rm key.json")
+    rescue
+      puts "no secret files"
+    end
   end
 
   lane :get_secrets do
@@ -57,7 +61,7 @@ platform :android do
     if options[:local]
       build_android_app(
         task: 'assemble',
-        build_type: 'Release',
+        build_type: 'Staging',
         print_command: false,
       )
     else
