@@ -7,7 +7,7 @@ import {
   getCredentialUiCategory,
   getUiCredentialTypeByType,
 } from '../../lib/util'
-import { cancelReceiving } from '../sso'
+import { cancelReceiving, cancelSSO } from '../sso'
 import { ThunkAction } from 'src/store'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
@@ -127,7 +127,7 @@ export const saveExternalCredentials: ThunkAction = async (
   await storageLib.store.verifiableCredential(cred)
   await dispatch(checkRecoverySetup)
 
-  return dispatch(cancelReceiving)
+  return dispatch(cancelSSO)
 }
 
 export const toggleLoading = (value: boolean) => ({

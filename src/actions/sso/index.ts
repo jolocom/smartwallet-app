@@ -4,7 +4,11 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { getUiCredentialTypeByType } from 'src/lib/util'
-import { convertToDecoratedClaim, resetSelected } from '../account'
+import {
+  convertToDecoratedClaim,
+  resetSelected,
+  saveExternalCredentials,
+} from '../account'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
@@ -20,6 +24,7 @@ import {
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 import { generateIdentitySummary } from './utils'
+import { ErrorScreenParams } from '../../ui/errors/containers/errorScreen'
 
 export const setReceivingCredential = (
   requester: IdentitySummary,
@@ -239,6 +244,29 @@ export const cancelSSO: ThunkAction = dispatch => {
 }
 
 export const cancelReceiving: ThunkAction = dispatch => {
-  dispatch(resetSelected())
-  return dispatch(navigationActions.navigatorResetHome())
+  const params: ErrorScreenParams = {
+    title: 'Are you sure about that?',
+    message:
+      'To get this document again - you have to start the whole process from the very first step',
+    interact: {
+      label: 'Save',
+      onInteract: () => {
+        dispatch(saveExternalCredentials)
+      },
+    },
+    dismiss: {
+      label: 'Decline anyway',
+      onDismiss: () => {
+        dispatch(resetSelected())
+        dispatch(navigationActions.navigatorResetHome())
+      },
+    },
+  }
+
+  return dispatch(
+    navigationActions.navigate({
+      routeName: routeList.ErrorScreen,
+      params,
+    }),
+  )
 }

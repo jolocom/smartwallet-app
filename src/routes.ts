@@ -42,6 +42,7 @@ import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
 
 import { NotificationFilter } from './lib/notifications'
+import { ErrorScreenContainer } from './ui/errors/containers/errorScreen'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -242,6 +243,13 @@ const MainStack = createStackNavigator(
     },
     [routeList.ErrorReporting]: {
       screen: ErrorReporting,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
+    },
+    [routeList.ErrorScreen]: {
+      screen: ErrorScreenContainer,
       navigationOptions: {
         ...noHeaderNavOpts,
         notifications: NotificationFilter.none,
