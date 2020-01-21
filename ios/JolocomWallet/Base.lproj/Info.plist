@@ -36,7 +36,7 @@
 	<key>CFBundleVersion</key>
 	<string>2</string>
 	<key>LSApplicationCategoryType</key>
-	<string/>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -89,7 +89,6 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
-		<string>TypeType - TT Commons Light.otf</string>
 		<string>TTCommons-Light.otf</string>
 		<string>TTCommons-Medium.otf</string>
 	</array>
