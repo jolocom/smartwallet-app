@@ -137,7 +137,7 @@ export class LandingComponent extends React.Component<Props> {
         <View style={styles.bottomSection}>
           <JolocomButton
             testID="getStarted"
-            containerStyle={{ width: '100%', height: 56 }}
+            containerStyle={{ width: '100%' }}
             onPress={this.props.handleGetStarted}
             text={I18n.t(strings.GET_STARTED)}
           />

@@ -2,7 +2,7 @@ import { Colors, Typography, Spacing } from 'src/styles'
 import { textSM } from './typography'
 
 export const buttonStandardContainer = {
-  height: 48,
+  height: 56,
   borderRadius: 8,
 }
 
