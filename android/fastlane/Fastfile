@@ -97,9 +97,7 @@ platform :android do
   desc "Install a build on an Android device"
   lane :staging do
     build(local: true)
-    adb(
-      command: 'install'
-    )
+    sh("adb install #{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}")
   end
 
   desc "Submit a new Beta Build to Play Store"
