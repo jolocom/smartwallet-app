@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
-<Container
+<Wrapper
   style={
     Array [
       Object {
@@ -37,6 +37,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
         "marginTop": 8,
       }
     }
+    testID="seedPhraseMsg"
   >
     <Text
       style={
@@ -48,8 +49,9 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           "textAlign": "center",
         }
       }
+      testID="recoveryMsg"
     >
-      Start writing your seed-phrase and it will appears here word by word
+      Start writing your seed-phrase and it will appear here word by word
     </Text>
   </View>
   <View
@@ -94,12 +96,14 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           Object {
             "flex": 1,
             "fontSize": 22,
+            "paddingVertical": 7,
           },
           Object {
             "color": "white",
           },
         ]
       }
+      testID="seedWordFld"
       textAlign="center"
       underlineColorAndroid="transparent"
       value=""
@@ -167,6 +171,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           "width": "100%",
         }
       }
+      testID="seedWordSuggestions"
     />
   </View>
   <View
@@ -196,11 +201,11 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
       text="Back to signup"
     />
   </View>
-</Container>
+</Wrapper>
 `;
 
 exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
-<Container
+<Wrapper
   style={
     Array [
       Object {
@@ -238,6 +243,7 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
         "marginTop": 8,
       }
     }
+    testID="seedPhraseMsg"
   >
     <Text
       style={
@@ -249,8 +255,9 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
           "textAlign": "center",
         }
       }
+      testID="recoveryMsg"
     >
-      Start writing your seed-phrase and it will appears here word by word
+      Start writing your seed-phrase and it will appear here word by word
     </Text>
   </View>
   <RippleLoader
@@ -265,11 +272,11 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
       }
     }
   />
-</Container>
+</Wrapper>
 `;
 
 exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
-<Container
+<Wrapper
   style={
     Array [
       Object {
@@ -305,6 +312,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
         "marginTop": 8,
       }
     }
+    testID="seedPhraseMsg"
   >
     <Text
       style={
@@ -316,8 +324,9 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           "textAlign": "center",
         }
       }
+      testID="recoveryMsg"
     >
-      Start writing your seed-phrase and it will appears here word by word
+      Start writing your seed-phrase and it will appear here word by word
     </Text>
   </View>
   <View
@@ -366,12 +375,14 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           Object {
             "flex": 1,
             "fontSize": 22,
+            "paddingVertical": 7,
           },
           Object {
             "color": "white",
           },
         ]
       }
+      testID="seedWordFld"
       textAlign="center"
       underlineColorAndroid="transparent"
       value="in"
@@ -441,6 +452,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           "width": "100%",
         }
       }
+      testID="seedWordSuggestions"
     >
       <ThemedComponent
         key="0"
@@ -449,20 +461,20 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           Object {
             "container": Object {
               "backgroundColor": "rgba(148, 47, 81, 0.4)",
-              "borderRadius": 4,
+              "borderRadius": 8,
               "height": 40,
               "margin": 4,
               "minWidth": 0,
             },
             "text": Object {
               "color": "rgb(255, 239, 223)",
-              "fontFamily": "TT Commons",
               "fontSize": 20,
               "fontWeight": "normal",
-              "paddingVertical": 16,
+              "paddingVertical": 12,
             },
           }
         }
+        testID="seedSuggestion0"
         text="insert"
         upperCase={false}
       />
@@ -473,20 +485,20 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           Object {
             "container": Object {
               "backgroundColor": "rgba(148, 47, 81, 0.4)",
-              "borderRadius": 4,
+              "borderRadius": 8,
               "height": 40,
               "margin": 4,
               "minWidth": 0,
             },
             "text": Object {
               "color": "rgb(255, 239, 223)",
-              "fontFamily": "TT Commons",
               "fontSize": 20,
               "fontWeight": "normal",
-              "paddingVertical": 16,
+              "paddingVertical": 12,
             },
           }
         }
+        testID="seedSuggestion1"
         text="input"
         upperCase={false}
       />
@@ -519,5 +531,5 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
       text="Back to signup"
     />
   </View>
-</Container>
+</Wrapper>
 `;

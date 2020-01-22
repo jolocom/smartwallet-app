@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Entropy component matches the snapshot when drawn upon and insufficient entropy 1`] = `
-<Container
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
@@ -25,27 +25,29 @@ exports[`Entropy component matches the snapshot when drawn upon and insufficient
         },
       ]
     }
+    testID="entropyMsg"
   >
     50 %
   </Text>
-  <Container
+  <Wrapper
     style={
       Object {
         "flex": 1,
         "flexDirection": "column",
       }
     }
+    testID="scratchArea"
   >
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={false}
     />
-  </Container>
-</Container>
+  </Wrapper>
+</Wrapper>
 `;
 
 exports[`Entropy component matches the snapshot when not drawn upon and insufficient entropy 1`] = `
-<Container
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
@@ -64,16 +66,18 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
         "top": "20%",
       }
     }
+    testID="entropyMsg"
   >
     For security purposes, we need some randomness. Please tap the screen and draw on it randomly
   </Text>
-  <Container
+  <Wrapper
     style={
       Object {
         "flex": 1,
         "flexDirection": "column",
       }
     }
+    testID="scratchArea"
   >
     <View
       style={
@@ -88,12 +92,12 @@ exports[`Entropy component matches the snapshot when not drawn upon and insuffic
       addPoint={[Function]}
       disabled={false}
     />
-  </Container>
-</Container>
+  </Wrapper>
+</Wrapper>
 `;
 
 exports[`Entropy component matches the snapshot with when drawn upon and sufficient entropy 1`] = `
-<Container
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(5, 5, 13)",
@@ -117,21 +121,23 @@ exports[`Entropy component matches the snapshot with when drawn upon and suffici
         },
       ]
     }
+    testID="entropyMsg"
   >
     100 %
   </Text>
-  <Container
+  <Wrapper
     style={
       Object {
         "flex": 1,
         "flexDirection": "column",
       }
     }
+    testID="scratchArea"
   >
     <MaskedImageComponent
       addPoint={[Function]}
       disabled={true}
     />
-  </Container>
-</Container>
+  </Wrapper>
+</Wrapper>
 `;
