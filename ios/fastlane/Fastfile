@@ -26,13 +26,16 @@ platform :ios do
     if options[:local]
       build_ios_app(
         scheme: "JolocomWallet",
+        export_method: "ad-hoc",
         include_bitcode: false,
+        # export_xcargs: "-allowProvisioningUpdates",
       )
     else
      build_ios_app(
         scheme: "JolocomWallet",
         export_method: 'app-store',
         include_bitcode: false,
+        # export_xcargs: "-allowProvisioningUpdates",
       ) 
     end
   end
