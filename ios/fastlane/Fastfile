@@ -17,13 +17,20 @@ default_platform(:ios)
 
 platform :ios do
 
-  lane :build do
-    match(type: 'appstore')
-    build_ios_app(
-      scheme: "JolocomWallet",
-      export_method: 'app-store',
-      include_bitcode: false,
-    )
+  lane :build do |options| 
+    match
+    if options[:local]
+      build_ios_app(
+        scheme: "JolocomWallet",
+        include_bitcode: false,
+      )
+    else
+     build_ios_app(
+        scheme: "JolocomWallet",
+        export_method: 'app-store',
+        include_bitcode: false,
+      ) 
+    end
   end
 
   lane :upload do |options|
@@ -42,7 +49,7 @@ platform :ios do
 
   desc "Install a release build on an iOS device"
   lane :staging do
-    build
+    build(local: true)
     install_on_device(
       skip_wifi: true
     )
