@@ -1,6 +1,6 @@
 {
   "name": "jolocomwallet",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "devDependencies": {
     "@babel/cli": "^7.4.4",
