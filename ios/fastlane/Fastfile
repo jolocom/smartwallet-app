@@ -17,6 +17,10 @@ default_platform(:ios)
 
 platform :ios do
 
+  before_all do |lane, options|
+    ensure_bundle_exec
+  end
+  
   lane :build do |options| 
     match
     if options[:local]
