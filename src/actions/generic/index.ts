@@ -59,8 +59,9 @@ export const setLocale = (locale: string): ThunkAction => async (
 ) => {
   await backendMiddleware.storageLib.store.setting(settingKeys.locale, locale)
   I18n.locale = locale
-  return dispatch({
-    type: 'SET_LOCALE',
-    value: locale,
-  })
+  dispatch({ type: 'SET_LOCALE', value: locale })
+
+  // we need to reset the navigator so that all screens are re-rendered with the
+  // new locale
+  return dispatch(navigationActions.navigatorReset())
 }

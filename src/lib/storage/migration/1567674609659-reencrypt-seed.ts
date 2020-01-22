@@ -15,8 +15,18 @@ export class ReencryptSeed1567674609659 implements MigrationInterface {
 
     if (!entries.length) return
 
-    // note we don't try to get a password if there is nothing to re-encrypt
-    const password = await getPassword()
+    let password: string
+    try {
+      // If there are keys to re-encrypt, then we need to get the password.
+      password = await getPassword()
+    } catch (e) {
+      // This may fail if the application was uninstalled and reinstalled, as
+      // the android keystore is cleared on uninstall, but the database may
+      // still remain (and is probably pre-migrations, given that this is
+      // running in the first place). In that case we take no action, and let
+      // the app init code handle things
+      return
+    }
 
     await Promise.all(
       entries.map((obj: any) => {

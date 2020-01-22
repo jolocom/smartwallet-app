@@ -1,10 +1,13 @@
 import React from 'react'
 import { Text, ScrollView, View, StyleSheet } from 'react-native'
-import { Container } from 'src/ui/structure'
-import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
+import { Wrapper } from 'src/ui/structure'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import I18n from 'src/locales/i18n'
-import { IdentitySummary } from '../../../actions/sso/types'
+import {
+  CredentialTypeSummary,
+  CredentialVerificationSummary,
+  IdentitySummary,
+} from '../../../actions/sso/types'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 import { Typography, Colors, Spacing } from 'src/styles'
@@ -14,15 +17,15 @@ interface Props {
   did: string
   requester: IdentitySummary
   callbackURL: string
-  availableCredentials: StateTypeSummary[]
-  handleSubmitClaims: (credentials: StateVerificationSummary[]) => void
+  availableCredentials: CredentialTypeSummary[]
+  handleSubmitClaims: (credentials: CredentialVerificationSummary[]) => void
   handleDenySubmit: () => void
 }
 
 interface State {
   pending: boolean
   selectedCredentials: {
-    [type: string]: StateVerificationSummary | undefined
+    [type: string]: CredentialVerificationSummary | undefined
   }
 }
 
@@ -61,14 +64,14 @@ export class ConsentComponent extends React.Component<Props, State> {
   public state = {
     pending: false,
     selectedCredentials: this.props.availableCredentials.reduce(
-      (acc, curr) => ({ ...acc, [curr.type]: undefined }),
+      (acc, curr) => ({ ...acc, [curr.type]: acc[curr.type] || curr.verifications[0] }),
       {},
     ),
   }
 
   private handleClaimSelect = (
     type: string,
-    selectedCredential: StateVerificationSummary,
+    selectedCredential: CredentialVerificationSummary,
   ) => {
     const selected = this.state.selectedCredentials[type]
     if (selected && selected.id === selectedCredential.id) {
@@ -92,7 +95,7 @@ export class ConsentComponent extends React.Component<Props, State> {
 
   private handleSubmitClaims = (): void => {
     const { selectedCredentials } = this.state
-    const credentials: StateVerificationSummary[] = Object.keys(
+    const credentials: CredentialVerificationSummary[] = Object.keys(
       selectedCredentials,
     ).map(key => selectedCredentials[key])
 
@@ -106,7 +109,7 @@ export class ConsentComponent extends React.Component<Props, State> {
 
     // group credentials by type so they can be rendered in sections
     const groupedByType: {
-      [key: string]: StateTypeSummary[]
+      [key: string]: CredentialTypeSummary[]
     } = availableCredentials.reduce(
       (acc, current) =>
         acc[current.type]
@@ -121,7 +124,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     const buttonDisabled = !submitAllowed || this.state.pending
 
     return (
-      <Container style={styles.container}>
+      <Wrapper style={styles.container}>
         <View style={styles.topSection}>
           <IssuerCard issuer={requester} />
           <View style={styles.messageContainer}>
@@ -163,7 +166,7 @@ export class ConsentComponent extends React.Component<Props, State> {
             handleDeny={() => this.props.handleDenySubmit()}
           />
         </View>
-      </Container>
+      </Wrapper>
     )
   }
 }

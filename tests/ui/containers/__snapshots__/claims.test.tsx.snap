@@ -7,8 +7,8 @@ exports[`Claims container correctly changes scanning to false when qr code scann
       "flex": 1,
     }
   }
+  testID="claimsScreen"
 >
-  <Connect(BackupWarningComponent) />
   <CredentialOverview
     claimsToRender={
       Object {
@@ -83,8 +83,8 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
       "flex": 1,
     }
   }
+  testID="claimsScreen"
 >
-  <Connect(BackupWarningComponent) />
   <CredentialOverview
     claimsToRender={
       Object {
@@ -159,8 +159,8 @@ exports[`Claims container mounts correctly and matches the snapshot 1`] = `
       "flex": 1,
     }
   }
+  testID="claimsScreen"
 >
-  <Connect(BackupWarningComponent) />
   <CredentialOverview
     claimsToRender={
       Object {

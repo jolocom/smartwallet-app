@@ -2,22 +2,14 @@ import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { AppError, ErrorCode } from '../../lib/errors'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { receiveExternalCredential } from './index'
-import {
-  all,
-  compose,
-  isEmpty,
-  isNil,
-  map,
-  mergeRight,
-  omit,
-  either,
-} from 'ramda'
+import { all, compose, isEmpty, isNil, map, either } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { withLoading, withErrorScreen } from '../modifiers'
+import { generateIdentitySummary } from './utils'
 
 export const consumeCredentialOfferRequest = (
   credOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -35,18 +27,10 @@ export const consumeCredentialOfferRequest = (
     throw new Error('Input requests are not yet supported on the wallet')
   }
 
-  const { did: offerorDid, publicProfile } = await registry.resolve(
-    keyIdToDid(credOfferRequest.issuer),
-  )
+  const requester = await registry.resolve(keyIdToDid(credOfferRequest.issuer))
 
-  const parsedProfile = publicProfile
-    ? omit(['id', 'did'], publicProfile.toJSON().claim)
-    : {}
+  const requesterSummary = generateIdentitySummary(requester)
 
-  const offerorInfo = mergeRight(
-    { did: offerorDid },
-    { publicProfile: parsedProfile },
-  )
   const selectedCredentialTypes = interactionToken.offeredTypes.map(type => ({
     type,
   }))
@@ -83,7 +67,7 @@ export const consumeCredentialOfferRequest = (
       withErrorScreen(
         receiveExternalCredential(
           credentialReceive,
-          offerorInfo,
+          requesterSummary,
           isDeepLinkInteraction,
           selectedMetadata,
         ),

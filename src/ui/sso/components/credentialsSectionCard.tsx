@@ -3,10 +3,13 @@ import { CardWrapper } from 'src/ui/structure'
 import { getCredentialIconByType } from 'src/resources/util'
 import { StyleSheet, View, Text } from 'react-native'
 import { Spacing, Typography } from 'src/styles'
-import { StateTypeSummary, StateVerificationSummary } from 'src/reducers/sso'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { CheckboxCredential } from './checkboxCredential'
+import {
+  CredentialTypeSummary,
+  CredentialVerificationSummary,
+} from '../../../actions/sso/types'
 
 const styles = StyleSheet.create({
   card: {
@@ -29,9 +32,9 @@ const styles = StyleSheet.create({
 interface CredentialSectionProps {
   did: string
   sectionType: string
-  credentials: StateTypeSummary[]
-  selectedCredential: StateVerificationSummary | undefined
-  onPress: (type: string, newSelected: StateVerificationSummary) => void
+  credentials: CredentialTypeSummary[]
+  selectedCredential: CredentialVerificationSummary | undefined
+  onPress: (type: string, newSelected: CredentialVerificationSummary) => void
 }
 
 /**

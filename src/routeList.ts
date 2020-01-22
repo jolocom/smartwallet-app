@@ -1,8 +1,10 @@
 // NOTE: don't use 'const' so that values are useable in both .js and .ts files
 export enum routeList {
   AppInit = 'AppInit',
+  Main = 'Main',
 
   // Registration
+  Registration = 'Registration',
   Landing = 'Landing',
   Entropy = 'Entropy',
   RegistrationProgress = 'RegistrationProgress',
@@ -17,7 +19,7 @@ export enum routeList {
   Documents = 'Documents',
   Records = 'Records',
   Settings = 'Settings',
-  QRCodeScanner = 'QRCodeScanner',
+  InteractionScreen = 'InteractionScreen',
 
   // Interactions & Details
   CredentialDialog = 'CredentialDialog',
@@ -31,5 +33,11 @@ export enum routeList {
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
 
+  // General
   Exception = 'Exception',
+  ErrorReporting = 'ErrorReporting',
+
+  // Dev only
+  Storybook = 'Storybook',
+  NotificationScheduler = 'NotificationScheduler',
 }

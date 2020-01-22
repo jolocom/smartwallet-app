@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
-import { Container } from 'src/ui/structure'
+import { Wrapper } from 'src/ui/structure'
 import { CategorizedClaims } from 'src/reducers/account'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { getNonDocumentClaims } from 'src/utils/filterDocuments'
@@ -37,18 +37,19 @@ export const CredentialOverview: React.FC<Props> = props => {
   const claimCategories = Object.keys(claimsToRender)
 
   return (
-    <Container style={styles.container}>
+    <Wrapper style={styles.container}>
       <ScrollView
         style={styles.scrollComponent}
         contentContainerStyle={styles.scrollComponentContainer}
       >
-        {claimCategories.map(category => {
+        {claimCategories.map((category, i) => {
           // we render documents on their own screen
           const nonDocumentClaims = getNonDocumentClaims(
             claimsToRender[category],
           )
           return nonDocumentClaims.length > 0 ? (
             <CredentialCategory
+              key={i}
               category={category}
               credentials={nonDocumentClaims}
               did={did}
@@ -57,6 +58,6 @@ export const CredentialOverview: React.FC<Props> = props => {
           ) : null
         })}
       </ScrollView>
-    </Container>
+    </Wrapper>
   )
 }

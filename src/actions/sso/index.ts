@@ -1,9 +1,5 @@
 import { Linking } from 'react-native'
 import { JolocomLib } from 'jolocom-lib'
-import {
-  StateCredentialRequestSummary,
-  StateVerificationSummary,
-} from 'src/reducers/sso'
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -14,23 +10,16 @@ import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentials
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { ThunkAction } from '../../store'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
-import { mergeRight, omit } from 'ramda'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { DecoratedClaims } from '../../reducers/account'
-import { IdentitySummary } from './types'
+import {
+  CredentialRequestSummary,
+  CredentialVerificationSummary,
+  IdentitySummary,
+} from './types'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
-
-export const setCredentialRequest = (
-  request: StateCredentialRequestSummary,
-) => ({
-  type: 'SET_CREDENTIAL_REQUEST',
-  value: request,
-})
-
-export const clearInteractionRequest = {
-  type: 'CLEAR_INTERACTION_REQUEST',
-}
+import { generateIdentitySummary } from './utils'
 
 export const setReceivingCredential = (
   requester: IdentitySummary,
@@ -129,18 +118,11 @@ export const consumeCredentialRequest = (
     registry,
   )
 
-  const { did: issuerDid, publicProfile } = await registry.resolve(
+  const requester = await registry.resolve(
     keyIdToDid(decodedCredentialRequest.issuer),
   )
 
-  const parsedProfile = publicProfile
-    ? omit(['id', 'did'], publicProfile.toJSON().claim)
-    : {}
-
-  const issuerInfo = mergeRight(
-    { did: issuerDid },
-    { publicProfile: parsedProfile },
-  )
+  const requesterSummary = generateIdentitySummary(requester)
 
   const {
     requestedCredentialTypes: requestedTypes,
@@ -191,76 +173,68 @@ export const consumeCredentialRequest = (
   const flattened = abbreviated.reduce((acc, val) => acc.concat(val))
 
   // TODO requester shouldn't be optional
-  const summary = {
+  const credentialRequestDetails = {
     callbackURL: decodedCredentialRequest.interactionToken.callbackURL,
-    requester: issuerInfo,
+    requester: requesterSummary,
     availableCredentials: flattened,
     requestJWT: decodedCredentialRequest.encode(),
   }
 
-  dispatch(setCredentialRequest(summary))
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.Consent,
-      params: { isDeepLinkInteraction },
+      params: { isDeepLinkInteraction, credentialRequestDetails },
       key: 'credentialRequest',
     }),
   )
 }
 
 export const sendCredentialResponse = (
-  selectedCredentials: StateVerificationSummary[],
+  selectedCredentials: CredentialVerificationSummary[],
+  credentialRequestDetails: CredentialRequestSummary,
   isDeepLinkInteraction: boolean = false,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const { storageLib, keyChainLib, identityWallet } = backendMiddleware
-  const {
-    activeCredentialRequest: { callbackURL, requestJWT },
-  } = getState().sso
+  const { callbackURL, requestJWT } = credentialRequestDetails
 
-  try {
-    const password = await keyChainLib.getPassword()
-    const request = JolocomLib.parse.interactionToken.fromJWT(requestJWT)
+  const password = await keyChainLib.getPassword()
+  const request = JolocomLib.parse.interactionToken.fromJWT(requestJWT)
 
-    const credentials = await Promise.all(
-      selectedCredentials.map(
-        async cred =>
-          (await storageLib.get.verifiableCredential({ id: cred.id }))[0],
-      ),
-    )
+  const credentials = await Promise.all(
+    selectedCredentials.map(
+      async cred =>
+        (await storageLib.get.verifiableCredential({ id: cred.id }))[0],
+    ),
+  )
 
-    const jsonCredentials = credentials.map(cred => cred.toJSON())
+  const jsonCredentials = credentials.map(cred => cred.toJSON())
 
-    const response = await identityWallet.create.interactionTokens.response.share(
-      {
-        callbackURL,
-        suppliedCredentials: jsonCredentials,
-      },
-      password,
-      request,
-    )
+  const response = await identityWallet.create.interactionTokens.response.share(
+    {
+      callbackURL,
+      suppliedCredentials: jsonCredentials,
+    },
+    password,
+    request,
+  )
 
-    if (isDeepLinkInteraction) {
-      const callback = `${callbackURL}${response.encode()}`
-      if (!(await Linking.canOpenURL(callback))) {
-        throw new AppError(ErrorCode.DeepLinkUrlNotFound)
-      }
-
-      return Linking.openURL(callback).then(() => dispatch(cancelSSO))
-    } else {
-      return fetch(callbackURL, {
-        method: 'POST',
-        body: JSON.stringify({ token: response.encode() }),
-        headers: { 'Content-Type': 'application/json' },
-      })
+  if (isDeepLinkInteraction) {
+    const callback = `${callbackURL}${response.encode()}`
+    if (!(await Linking.canOpenURL(callback))) {
+      throw new AppError(ErrorCode.DeepLinkUrlNotFound)
     }
-  } finally {
-    dispatch(cancelSSO)
-    dispatch(clearInteractionRequest)
+
+    return Linking.openURL(callback).then(() => dispatch(cancelSSO))
   }
+  await fetch(callbackURL, {
+    method: 'POST',
+    body: JSON.stringify({ token: response.encode() }),
+    headers: { 'Content-Type': 'application/json' },
+  })
+  dispatch(cancelSSO)
 }
 
 export const cancelSSO: ThunkAction = dispatch => {
-  dispatch(clearInteractionRequest)
   return dispatch(navigationActions.navigatorResetHome())
 }
 

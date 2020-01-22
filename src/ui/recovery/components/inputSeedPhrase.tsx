@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import { Container } from '../../structure'
+import { StyleSheet, Text, TextInput, View, Platform } from 'react-native'
+import { Wrapper } from '../../structure'
 import { Button } from 'react-native-material-ui'
 import { Colors, Spacing, Typography, Buttons } from 'src/styles'
 import {
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     fontSize: Typography.textLG,
+    paddingVertical: 7,
   },
   correct: {
     color: 'white',
@@ -137,18 +138,18 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
     headerText = mnemonic.length + '/12 ' + I18n.t(strings.COMPLETED)
   }
   return (
-    <Container
+    <Wrapper
       style={[
         styles.container,
         isLoading && { justifyContent: 'space-around' },
       ]}
     >
       <Text style={styles.header}>{headerText}</Text>
-      <View style={styles.mnemonicSection}>
+      <View testID="seedPhraseMsg" style={styles.mnemonicSection}>
         {mnemonic.length === 0 ? (
-          <Text style={styles.note}>
+          <Text testID="recoveryMsg" style={styles.note}>
             {I18n.t(
-              strings.START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEARS_HERE_WORD_BY_WORD,
+              strings.START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD,
             )}
           </Text>
         ) : (
@@ -177,6 +178,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
             {
               //@ts-ignore textAlign is missing in the typings of TextInput
               <TextInput
+                testID="seedWordFld"
                 textAlign={'center'}
                 ref={inputRef}
                 autoCapitalize={'none'}
@@ -222,10 +224,11 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                 I18n.t(strings.CHOOSE_THE_RIGHT_WORD_OR_PRESS_ENTER)}
           </Text>
           <View style={styles.wordListWrapper}>
-            <View style={styles.wordListSection}>
+            <View testID="seedWordSuggestions" style={styles.wordListSection}>
               {inputValue.length > 1 &&
                 suggestions.map((word, i) => (
                   <Button
+                    testID={'seedSuggestion' + i}
                     key={i}
                     text={word}
                     onPress={() => selectWord(suggestions[i])}
@@ -242,6 +245,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                         ...Buttons.buttonStandardText,
                         color: Colors.sandLight,
                         fontSize: Typography.textMD,
+                        paddingVertical: Platform.OS === 'ios' ? 12 : 0,
                       },
                     }}
                   />
@@ -253,6 +257,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           <View style={styles.buttonSection}>
             {isMnemonicValid && (
               <Button
+                testID="restoreAccount"
                 disabled={!isMnemonicValid}
                 onPress={isMnemonicValid ? handleButtonPress : undefined}
                 raised
@@ -280,7 +285,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           <View style={{ margin: 20 }} />
         </React.Fragment>
       )}
-    </Container>
+    </Wrapper>
   )
 }
 

@@ -1,14 +1,19 @@
-import { entityList } from './src/lib/storage/entities'
-import { Initial1565886000404 } from './src/lib/storage/migration/1565886000404-initial'
-import { ReencryptSeed1567674609659 } from './src/lib/storage/migration/1567674609659-reencrypt-seed'
-
+/**
+ * NOTE: This config is used by the Storage class (src/lib/storage/storage) but
+ * `migrations` and `entities` are replaced with lists of actual migration and
+ * entity classes.
+ *
+ * New migrations and entities should be added to `migration/index.ts` and
+ * `entities/index.ts` respectively
+ *
+ */
 export default {
   type: 'react-native',
   database: 'LocalSmartWalletData',
   location: 'default',
-  logging: ['error', 'query', 'schema'],
-  entities: entityList,
-  migrations: [Initial1565886000404, ReencryptSeed1567674609659],
+  logging: ['error', 'warn', 'schema'],
+  entities: ['./src/lib/storage/entities/*.ts'],
+  migrations: ['./src/lib/storage/migration/*.ts'],
   migrationsRun: true,
   synchronize: false,
   cli: {

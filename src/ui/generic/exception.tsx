@@ -10,13 +10,14 @@ import {
   StatusBar,
 } from 'react-native'
 import I18n from 'src/locales/i18n'
-import { errorTitleMessages } from 'src/lib/errors'
+import { errorTitleMessages, AppError } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'
 import { NavigationScreenProps } from 'react-navigation'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { JolocomButton } from '../structure'
+import { routeList } from '../../routeList'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -24,6 +25,10 @@ interface Props
     ReturnType<typeof mapStateToProps>,
     NavigationScreenProps {
   errorTitle?: string
+}
+
+interface State {
+  reportSent: boolean
 }
 
 const styles = StyleSheet.create({
@@ -57,12 +62,14 @@ const styles = StyleSheet.create({
   },
   buttonBlock: {
     marginTop: Spacing.LG,
+    flex: 0.8,
+    justifyContent: 'space-evenly',
   },
 })
 
-export class ExceptionComponent extends React.PureComponent<Props> {
+export class ExceptionComponent extends React.Component<Props, State> {
   private onBackButtonPressAndroid = (): boolean => {
-    this.handlePress()
+    this.handleTapBack()
     return true
   }
   public componentDidMount(): void {
@@ -79,7 +86,7 @@ export class ExceptionComponent extends React.PureComponent<Props> {
     )
   }
 
-  private handlePress = (): void => {
+  private handleTapBack = (): void => {
     const { navigation } = this.props
     if (navigation) {
       this.props.navigateBack(
@@ -88,16 +95,18 @@ export class ExceptionComponent extends React.PureComponent<Props> {
     }
   }
 
-  public render(): JSX.Element | null {
+  private getError = (): AppError | Error | undefined => {
     const stateParams =
       this.props.navigation &&
       this.props.navigation.state &&
       this.props.navigation.state.params
-    if (!stateParams) return null
+    return stateParams && stateParams.error
+  }
 
+  public render(): JSX.Element | null {
     // TODO: display error code
-    const err = stateParams.error
-    const origError = err && err.origError
+    const err = this.getError()
+    const origError = err instanceof AppError && err.origError
     const origErrorMessage = origError && origError.message
     const errorTitle =
       this.props.errorTitle || getRandomStringFromArray(errorTitleMessages)
@@ -128,11 +137,15 @@ export class ExceptionComponent extends React.PureComponent<Props> {
         </View>
         <View style={styles.buttonBlock}>
           <JolocomButton
-            raised
-            onPress={this.handlePress}
-            upperCase={false}
+            onPress={this.handleTapBack}
             text={I18n.t(strings.GO_BACK)}
           />
+          {err && (
+            <JolocomButton
+              onPress={() => this.props.navigateReporting(err)}
+              text={I18n.t(strings.SEND_ERROR_REPORT)}
+            />
+          )}
         </View>
       </View>
     )
@@ -144,6 +157,13 @@ const mapStateToProps = (): {} => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   navigateBack: (routeName: string) =>
     dispatch(navigationActions.navigate({ routeName })),
+  navigateReporting: (error: AppError | Error | undefined) =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.ErrorReporting,
+        params: { error },
+      }),
+    ),
 })
 
 export const Exception = connect(

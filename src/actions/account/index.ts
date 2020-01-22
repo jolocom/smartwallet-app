@@ -16,6 +16,7 @@ import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from 'src/backendMiddleware'
+import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -124,6 +125,7 @@ export const saveExternalCredentials: ThunkAction = async (
 
   await storageLib.delete.verifiableCredential(cred.id)
   await storageLib.store.verifiableCredential(cred)
+  await dispatch(checkRecoverySetup)
 
   return dispatch(cancelReceiving)
 }
@@ -182,7 +184,7 @@ export const setClaimsForDid: ThunkAction = async (
 export const prepareClaimsForState = (
   credentials: SignedCredential[],
   credentialMetadata: Array<CredentialMetadataSummary | {}>,
-  issuerMetadata: Array<IdentitySummary | { did: string }>,
+  issuerMetadata: IdentitySummary[],
 ) =>
   compose(
     groupBy(getCredentialUiCategory),
@@ -191,9 +193,9 @@ export const prepareClaimsForState = (
     map(convertToDecoratedClaim),
   )(credentials)
 
-export const addIssuerInfo = (
-  issuerProfiles: Array<{ did: string } | IdentitySummary> | [],
-) => (claim: DecoratedClaims) => {
+export const addIssuerInfo = (issuerProfiles: IdentitySummary[]) => (
+  claim: DecoratedClaims,
+) => {
   if (!issuerProfiles || !issuerProfiles.length) {
     return claim
   }
@@ -212,13 +214,13 @@ export const addIssuerInfo = (
 export const convertToDecoratedClaim = ({
   claim,
   type,
-  issuer,
+  issuer: issuerDid,
   id,
   expires,
 }: SignedCredential): DecoratedClaims => ({
   credentialType: getUiCredentialTypeByType(type),
   issuer: {
-    did: issuer,
+    did: issuerDid,
   },
   claimData: omit(['id'], claim),
   id,
