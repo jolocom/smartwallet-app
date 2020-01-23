@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     padding: 18,
+    paddingBottom: '10%',
   },
   section: {
     backgroundColor: Colors.black,
@@ -46,31 +47,33 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   description: {
+    fontFamily: fontMain,
     color: Colors.white050,
     fontSize: 16,
     marginTop: 8,
     textAlign: 'center',
   },
   warning: {
+    fontFamily: fontMain,
     color: Colors.error,
     fontSize: 14,
     textAlign: 'center',
     marginTop: 28,
   },
   info: {
+    fontFamily: fontMain,
+    fontSize: 14,
     textAlign: 'center',
     color: Colors.purpleMain,
     marginTop: 28,
   },
   buttonContainer: {
+    height: 45,
     marginTop: 22,
     width: '100%',
     paddingVertical: 9,
     margin: 0,
     borderRadius: 8,
-  },
-  buttonText: {
-    fontSize: 18,
   },
 })
 
@@ -90,9 +93,8 @@ export const BackupComponent: React.FC<Props> = ({
         isBackButton={true}
         isDark={true}
       />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
         <Text style={styles.title}>Backup options</Text>
-
         <View style={styles.section}>
           <Text style={styles.subtitle}>Backup data on your own</Text>
           <Text style={styles.description}>
@@ -103,7 +105,6 @@ export const BackupComponent: React.FC<Props> = ({
           {/* VS: I think this option should be disabled if auto backup is enabled*/}
           <JolocomButton
             containerStyle={styles.buttonContainer}
-            textStyle={styles.buttonText}
             onPress={exportBackup}
             text={'Export file'}
             disabled={isLoading}
@@ -114,7 +115,6 @@ export const BackupComponent: React.FC<Props> = ({
             </Text>
           )}
         </View>
-
         <View style={styles.section}>
           <Text style={styles.subtitle}>Jolocom backup service</Text>
           <Text style={styles.description}>
@@ -126,7 +126,6 @@ export const BackupComponent: React.FC<Props> = ({
             <React.Fragment>
               <JolocomButton
                 containerStyle={styles.buttonContainer}
-                textStyle={styles.buttonText}
                 text={isLoading ? 'Deleting backup...' : 'Disable auto-backup'}
                 onPress={onDisableAutoBackup}
                 disabled={isLoading}
@@ -141,7 +140,6 @@ export const BackupComponent: React.FC<Props> = ({
             <React.Fragment>
               <JolocomButton
                 containerStyle={styles.buttonContainer}
-                textStyle={styles.buttonText}
                 onPress={enableAutoBackup}
                 text={
                   isLoading ? 'Synchronization started…' : 'Use backup service'
