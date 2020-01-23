@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { Container } from '../../structure'
+import { Wrapper } from '../../structure'
 import { Colors } from '../../../styles'
-import { GradientButton } from '../../structure/gradientButton'
+import { JolocomButton } from '../../structure'
 import { ActionSheet } from '../../structure/actionSheet'
 import { fontMain } from '../../../styles/typography'
 import { debug } from '../../../styles/presets'
@@ -84,7 +84,7 @@ export const BackupOfferComponent: React.FC<Props> = ({
   manualBackup,
 }) => {
   return (
-    <Container style={styles.container}>
+    <Wrapper style={styles.container}>
       <Text style={styles.title}>
         Store your data by yourself or try to use Jolocom backup service!
       </Text>
@@ -93,7 +93,7 @@ export const BackupOfferComponent: React.FC<Props> = ({
         <Text style={styles.logoTitle}>Automatic synchronization</Text>
       </View>
       <ActionSheet showSlide={true}>
-        <GradientButton
+        <JolocomButton
           onPress={enableAutoBackup}
           text={'Turn on backup service'}
         />
@@ -105,6 +105,6 @@ export const BackupOfferComponent: React.FC<Props> = ({
           <Text style={styles.textButton}>Keep it manually</Text>
         </TouchableOpacity>
       </ActionSheet>
-    </Container>
+    </Wrapper>
   )
 }

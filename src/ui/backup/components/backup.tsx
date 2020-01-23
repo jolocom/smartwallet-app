@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { Container } from '../../structure'
+import { Wrapper } from '../../structure'
 import { Colors } from '../../../styles'
 import { fontMain } from '../../../styles/typography'
-import { GradientButton } from '../../structure/gradientButton'
+import { JolocomButton } from '../../structure'
 import { NavigationSection } from '../../structure/navigationSection'
 
 interface Props {
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 })
+
 export const BackupComponent: React.FC<Props> = ({
   isLoading,
   enableAutoBackup,
@@ -83,7 +84,7 @@ export const BackupComponent: React.FC<Props> = ({
   lastBackup,
 }) => {
   return (
-    <Container style={styles.container}>
+    <Wrapper style={styles.container}>
       <NavigationSection
         onNavigation={goBack}
         isBackButton={true}
@@ -100,7 +101,7 @@ export const BackupComponent: React.FC<Props> = ({
             somewhere safe
           </Text>
           {/* VS: I think this option should be disabled if auto backup is enabled*/}
-          <GradientButton
+          <JolocomButton
             containerStyle={styles.buttonContainer}
             textStyle={styles.buttonText}
             onPress={exportBackup}
@@ -123,7 +124,7 @@ export const BackupComponent: React.FC<Props> = ({
           </Text>
           {isAutoBackupEnabled ? (
             <React.Fragment>
-              <GradientButton
+              <JolocomButton
                 containerStyle={styles.buttonContainer}
                 textStyle={styles.buttonText}
                 text={isLoading ? 'Deleting backup...' : 'Disable auto-backup'}
@@ -138,7 +139,7 @@ export const BackupComponent: React.FC<Props> = ({
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <GradientButton
+              <JolocomButton
                 containerStyle={styles.buttonContainer}
                 textStyle={styles.buttonText}
                 onPress={enableAutoBackup}
@@ -155,7 +156,6 @@ export const BackupComponent: React.FC<Props> = ({
           )}
         </View>
       </ScrollView>
-    </Container>
+    </Wrapper>
   )
 }
-

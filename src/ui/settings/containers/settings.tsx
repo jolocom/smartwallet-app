@@ -16,6 +16,7 @@ import { LocaleSetting } from '../components/localeSetting'
 import SettingItem from '../components/settingItem'
 import settingKeys from '../settingKeys'
 import { showSeedPhrase } from '../../../actions/recovery'
+import { NavigationParams } from 'react-navigation'
 
 const styles = StyleSheet.create({
   container: {
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   scrollComponentContainer: {
-    paddingBottom: Spacing.XXL,
+    paddingBottom: 110,
   },
   versionNumber: {
     ...Typography.baseFontStyles,
@@ -41,15 +42,7 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const { setLocale, settings, setupBackup, navigate } = props
-  const {
-    setLocale,
-    settings,
-    setupBackup,
-    openStorybook,
-    editBackup,
-    openErrorScreen,
-  } = props
+  const { navigate, setLocale, settings, setupBackup } = props
   const version = VersionNumber.appVersion
   const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
@@ -76,7 +69,11 @@ export const SettingsContainer: React.FC<Props> = props => {
               title={'Error report Test'}
               description={'Exception Screen'}
               iconName={'alert'}
-              onPress={openErrorScreen}
+              onPress={() =>
+                navigate(routeList.Exception, {
+                  error: new Error('Test Error'),
+                })
+              }
             />
           </SettingSection>
         )}
@@ -106,7 +103,7 @@ export const SettingsContainer: React.FC<Props> = props => {
             title={'Backup'}
             description={'Securely backup your data'}
             iconName={'delete'}
-            onPress={editBackup}
+            onPress={() => navigate(routeList.Backup)}
             isDisabled={!seedPhraseSaved}
           />
         </SettingSection>
@@ -126,28 +123,14 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
-  navigate: (route: routeList) =>
+  navigate: (routeName: routeList, params?: NavigationParams) =>
     dispatch(
       navigationActions.navigate({
-        routeName: route,
+        routeName,
+        params,
       }),
     ),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
-  editBackup: () =>
-    dispatch(
-      withErrorScreen(
-        navigationActions.navigate({
-          routeName: routeList.Backup,
-        }),
-      ),
-    ),
-  openErrorScreen: () =>
-    dispatch(
-      navigationActions.navigate({
-        routeName: routeList.Exception,
-        params: { error: new Error('Test Error') },
-      }),
-    ),
 })
 
 export const Settings = connect(
