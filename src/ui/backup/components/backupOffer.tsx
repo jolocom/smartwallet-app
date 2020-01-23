@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { Wrapper } from '../../structure'
 import { Colors } from '../../../styles'
 import { JolocomButton } from '../../structure'
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     backgroundColor: Colors.baseBlack,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
@@ -34,34 +34,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 70,
     marginTop: '6%',
   },
-  bottomSheet: {
-    position: 'absolute',
-    bottom: 0,
-    backgroundColor: Colors.black,
-    height: 230,
-    width: '100%',
-    borderRadius: 22,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    paddingTop: 28,
-    paddingHorizontal: 20,
-  },
-  button: {
-    marginTop: 28,
-    marginHorizontal: 20,
-  },
   info: {
     color: Colors.white050,
     fontFamily: fontMain,
     fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
-  },
-  textButton: {
-    color: Colors.white,
-    fontSize: 20,
-    textAlign: 'center',
-    marginTop: 20,
   },
   imageWrapper: {
     flex: 1,
@@ -84,7 +62,7 @@ export const BackupOfferComponent: React.FC<Props> = ({
   manualBackup,
 }) => {
   return (
-    <Wrapper style={styles.container}>
+    <Wrapper style={styles.wrapper}>
       <Text style={styles.title}>
         Store your data by yourself or try to use Jolocom backup service!
       </Text>
@@ -101,9 +79,12 @@ export const BackupOfferComponent: React.FC<Props> = ({
           By clicking here i agreed backing up my data on Jolocom’s central
           server server and i know that it is not viewable by anyone
         </Text>
-        <TouchableOpacity onPress={manualBackup}>
-          <Text style={styles.textButton}>Keep it manually</Text>
-        </TouchableOpacity>
+        <JolocomButton
+          transparent
+          containerStyle={{ marginTop: 10 }}
+          onPress={manualBackup}
+          text={'Keep it manually'}
+        />
       </ActionSheet>
     </Wrapper>
   )
