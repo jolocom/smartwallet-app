@@ -4,6 +4,8 @@ import { Container } from '../../structure'
 import { Colors } from '../../../styles'
 import { GradientButton } from '../../structure/gradientButton'
 import { ActionSheet } from '../../structure/actionSheet'
+import { fontMain } from '../../../styles/typography'
+import { debug } from '../../../styles/presets'
 
 interface Props {
   enableAutoBackup: () => void
@@ -18,15 +20,19 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.white080,
+    fontFamily: fontMain,
     fontSize: 22,
     textAlign: 'center',
-    marginHorizontal: 40,
+    marginTop: 48,
+    marginHorizontal: 38,
   },
   logoTitle: {
     color: Colors.white080,
+    fontFamily: fontMain,
     fontSize: 22,
     textAlign: 'center',
-    marginHorizontal: 108,
+    marginHorizontal: 70,
+    marginTop: '6%',
   },
   bottomSheet: {
     position: 'absolute',
@@ -46,6 +52,7 @@ const styles = StyleSheet.create({
   },
   info: {
     color: Colors.white050,
+    fontFamily: fontMain,
     fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
@@ -55,6 +62,21 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginTop: 20,
+  },
+  imageWrapper: {
+    flex: 1,
+    marginVertical: 30,
+    marginHorizontal: 38,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    ...debug,
+  },
+  iconPlaceholder: {
+    marginTop: '24%',
+    width: 130,
+    height: 130,
+    ...debug,
   },
 })
 export const BackupOfferComponent: React.FC<Props> = ({
@@ -66,8 +88,10 @@ export const BackupOfferComponent: React.FC<Props> = ({
       <Text style={styles.title}>
         Store your data by yourself or try to use Jolocom backup service!
       </Text>
-      <View>{/* TODO add correct icon*/}</View>
-      <Text style={styles.logoTitle}>Automatic synchronization</Text>
+      <View style={styles.imageWrapper}>
+        <View style={styles.iconPlaceholder} />
+        <Text style={styles.logoTitle}>Automatic synchronization</Text>
+      </View>
       <ActionSheet showSlide={true}>
         <GradientButton
           onPress={enableAutoBackup}
