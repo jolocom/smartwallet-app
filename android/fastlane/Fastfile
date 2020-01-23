@@ -80,8 +80,13 @@ platform :android do
   end
 
   lane :upload do |options|
+    begin
+      sh("git clone git@infra.jolocom.io:sentry-auth")
+    rescue
+      puts "sentry auth already present"
+    end
     sentry_upload_dsym(
-      auth_token: secrets["sentryAuth"],
+      auth_token: File.read("./sentry-auth/auth-token"),
       org_slug: 'jolocom',
       project_slug: 'smartwallet',
     )

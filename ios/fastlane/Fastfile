@@ -23,26 +23,22 @@ platform :ios do
   
   lane :build do |options| 
     match
-    if options[:local]
-      build_ios_app(
-        scheme: "JolocomWallet",
-        export_method: "ad-hoc",
-        include_bitcode: false,
-        # export_xcargs: "-allowProvisioningUpdates",
-      )
-    else
-     build_ios_app(
-        scheme: "JolocomWallet",
-        export_method: 'app-store',
-        include_bitcode: false,
-        # export_xcargs: "-allowProvisioningUpdates",
-      ) 
-    end
+    build_ios_app(
+      scheme: "JolocomWallet",
+      export_method: options[:type],
+      include_bitcode: false,
+      # export_xcargs: "-allowProvisioningUpdates",
+    )
   end
 
   lane :upload do |options|
+    begin
+      sh("git clone git@infra.jolocom.io:sentry-auth")
+    rescue
+      puts "sentry auth already present"
+    end
     sentry_upload_dsym(
-      auth_token: '',
+      auth_token: File.read("./sentry-auth/auth-token"),
       org_slug: 'jolocom',
       project_slug: 'smartwallet',
     )
@@ -56,7 +52,7 @@ platform :ios do
 
   desc "Install a release build on an iOS device"
   lane :staging do
-    build(local: true)
+    build(type: "ad-hoc")
     install_on_device(
       skip_wifi: true
     )
@@ -64,7 +60,6 @@ platform :ios do
 
   desc "Submit a new beta build to TestFlight"
   lane :beta do
-    ensure_git_branch(branch: 'master')
     ensure_git_status_clean
     increment_build_number(xcodeproj: "JolocomWallet.xcodeproj")
     build
