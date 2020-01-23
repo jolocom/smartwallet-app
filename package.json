@@ -1,6 +1,6 @@
 {
   "name": "jolocomwallet",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -19,7 +19,6 @@
     "@types/react": "^16.8.19",
     "@types/react-native": "^0.57.60",
     "@types/react-native-material-ui": "^1.32.0",
-    "@types/react-native-modal-dropdown": "^0.6.1",
     "@types/react-native-permissions": "^1.1.1",
     "@types/react-native-share": "^1.1.4",
     "@types/react-native-snap-carousel": "^3.6.0",
@@ -138,6 +137,7 @@
     "@react-native-community/async-storage": "^1.6.2",
     "@react-navigation/core": "^3.4.2",
     "@sentry/react-native": "^1.0.6",
+    "@types/react-native-modal-dropdown": "^0.6.1",
     "assert": "^2.0.0",
     "bip39": "^3.0.2",
     "browser-ipfs": "^0.0.6",

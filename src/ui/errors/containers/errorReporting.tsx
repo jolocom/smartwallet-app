@@ -6,13 +6,12 @@ import { ThunkDispatch } from '../../../store'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
-import { Container } from '../../structure'
+import { JolocomButton, Wrapper } from '../../structure'
 import { styles } from '../styles'
 import { ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
 import { DescriptionSection } from '../components/descriptionSection'
 import { ContactSection } from '../components/contactSection'
-import { GradientButton } from '../../structure/gradientButton'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { SectionWrapper } from '../components/sectionWrapper'
@@ -79,7 +78,7 @@ const ErrorReportingContainer = (props: Props) => {
   }
 
   return (
-    <Container style={styles.wrapper}>
+    <Wrapper style={styles.wrapper}>
       <NavigationSection
         onNavigation={navigateBack}
         isBackButton={isBackButton}
@@ -117,17 +116,18 @@ const ErrorReportingContainer = (props: Props) => {
         <SectionWrapper title={I18n.t(strings.SOMETHING_ELSE)}>
           <EmojiSection selectedEmoji={selectedEmoji} setEmoji={setEmoji} />
         </SectionWrapper>
-        <GradientButton
+        <JolocomButton
           onPress={onSubmitReport}
           containerStyle={{
             marginTop: 45,
             marginBottom: 66,
             marginHorizontal: 20,
+            height: 56,
           }}
           text={I18n.t(strings.SUBMIT_REPORT)}
         />
       </ScrollView>
-    </Container>
+    </Wrapper>
   )
 }
 

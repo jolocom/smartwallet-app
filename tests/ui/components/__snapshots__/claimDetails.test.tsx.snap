@@ -1,120 +1,134 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ClaimDetails component matches the snapshot on render 1`] = `
-<ScrollViewMock
-  keyboardShouldPersistTaps="handled"
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(245, 245, 245)",
     }
   }
 >
-  <Text
+  <ScrollViewMock
+    keyboardShouldPersistTaps="handled"
     style={
       Object {
-        "color": "rgb(5, 5, 13)",
-        "fontFamily": "TT Commons",
-        "fontSize": 30,
-        "marginTop": 32,
-        "textAlign": "center",
+        "width": "100%",
       }
     }
   >
-    Email
-  </Text>
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "marginTop": 24,
+    <Text
+      style={
+        Object {
+          "color": "rgb(5, 5, 13)",
+          "fontFamily": "TT Commons",
+          "fontSize": 30,
+          "marginTop": 32,
+          "textAlign": "center",
+        }
       }
-    }
-  >
-    <TextInputField
-      autoFocus={true}
-      fieldName="email"
-      fieldValue="test@test.com"
-      handleFieldInput={[Function]}
-      key="email"
-    />
-  </View>
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "marginVertical": 48,
+    >
+      Email
+    </Text>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "marginTop": 24,
+        }
       }
-    }
-  >
-    <JolocomButton
-      disabled={false}
-      onPress={[Function]}
-      text="Add claim"
-      upperCase={false}
-    />
-  </View>
-</ScrollViewMock>
+    >
+      <TextInputField
+        autoFocus={true}
+        fieldName="email"
+        fieldValue="test@test.com"
+        handleFieldInput={[Function]}
+        key="email"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "marginVertical": 48,
+        }
+      }
+    >
+      <JolocomButton
+        disabled={false}
+        onPress={[Function]}
+        text="Add claim"
+      />
+    </View>
+  </ScrollViewMock>
+</Wrapper>
 `;
 
 exports[`ClaimDetails component matches the snapshot on render with multi-line claim 1`] = `
-<ScrollViewMock
-  keyboardShouldPersistTaps="handled"
+<Wrapper
   style={
     Object {
       "backgroundColor": "rgb(245, 245, 245)",
     }
   }
 >
-  <Text
+  <ScrollViewMock
+    keyboardShouldPersistTaps="handled"
     style={
       Object {
-        "color": "rgb(5, 5, 13)",
-        "fontFamily": "TT Commons",
-        "fontSize": 30,
-        "marginTop": 32,
-        "textAlign": "center",
+        "width": "100%",
       }
     }
   >
-    Name
-  </Text>
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "marginTop": 24,
+    <Text
+      style={
+        Object {
+          "color": "rgb(5, 5, 13)",
+          "fontFamily": "TT Commons",
+          "fontSize": 30,
+          "marginTop": 32,
+          "textAlign": "center",
+        }
       }
-    }
-  >
-    <TextInputField
-      autoFocus={true}
-      fieldName="givenName"
-      fieldValue="natascha"
-      handleFieldInput={[Function]}
-      key="givenName"
-    />
-    <TextInputField
-      autoFocus={false}
-      fieldName="familyName"
-      fieldValue="test"
-      handleFieldInput={[Function]}
-      key="familyName"
-    />
-  </View>
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "marginVertical": 48,
+    >
+      Name
+    </Text>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "marginTop": 24,
+        }
       }
-    }
-  >
-    <JolocomButton
-      disabled={false}
-      onPress={[Function]}
-      text="Add claim"
-      upperCase={false}
-    />
-  </View>
-</ScrollViewMock>
+    >
+      <TextInputField
+        autoFocus={true}
+        fieldName="givenName"
+        fieldValue="natascha"
+        handleFieldInput={[Function]}
+        key="givenName"
+      />
+      <TextInputField
+        autoFocus={false}
+        fieldName="familyName"
+        fieldValue="test"
+        handleFieldInput={[Function]}
+        key="familyName"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "marginVertical": 48,
+        }
+      }
+    >
+      <JolocomButton
+        disabled={false}
+        onPress={[Function]}
+        text="Add claim"
+      />
+    </View>
+  </ScrollViewMock>
+</Wrapper>
 `;

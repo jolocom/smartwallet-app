@@ -1,10 +1,10 @@
 import React from 'react'
 import VersionNumber from 'react-native-version-number'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import I18n, { locales } from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
-import { Container } from 'src/ui/structure'
+import { Wrapper } from 'src/ui/structure'
 import { SettingSection } from '../components/settingSection'
 import { RootState } from '../../../reducers'
 import { ThunkDispatch } from '../../../store'
@@ -41,6 +41,7 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
+  const { setLocale, settings, setupBackup, navigate } = props
   const {
     setLocale,
     settings,
@@ -53,7 +54,7 @@ export const SettingsContainer: React.FC<Props> = props => {
   const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
-    <Container style={styles.container}>
+    <Wrapper style={styles.container}>
       <ScrollView
         style={styles.scrollComponent}
         contentContainerStyle={styles.scrollComponentContainer}
@@ -63,7 +64,13 @@ export const SettingsContainer: React.FC<Props> = props => {
             <SettingItem
               iconName={'book-open-page-variant'}
               title={'Storybook'}
-              onPress={openStorybook}
+              onPress={() => navigate(routeList.Storybook)}
+            />
+            <SettingItem
+              title={'Notification Scheduler'}
+              description={'Mock notifications for debugging'}
+              onPress={() => navigate(routeList.NotificationScheduler)}
+              iconName={'bell-ring'}
             />
             <SettingItem
               title={'Error report Test'}
@@ -108,7 +115,7 @@ export const SettingsContainer: React.FC<Props> = props => {
         </Text>
         <View />
       </ScrollView>
-    </Container>
+    </Wrapper>
   )
 }
 
@@ -119,10 +126,10 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
-  openStorybook: () =>
+  navigate: (route: routeList) =>
     dispatch(
       navigationActions.navigate({
-        routeName: routeList.Storybook,
+        routeName: route,
       }),
     ),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),

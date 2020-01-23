@@ -16,6 +16,7 @@ import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from 'src/backendMiddleware'
+import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 import { autoBackupData } from '../recovery'
 
 export const setDid = (did: string) => ({
@@ -125,6 +126,7 @@ export const saveExternalCredentials: ThunkAction = async (
 
   await storageLib.delete.verifiableCredential(cred.id)
   await storageLib.store.verifiableCredential(cred)
+  await dispatch(checkRecoverySetup)
 
   dispatch(autoBackupData())
   return dispatch(cancelReceiving)

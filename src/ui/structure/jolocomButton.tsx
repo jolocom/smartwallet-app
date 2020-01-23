@@ -1,7 +1,13 @@
 import React from 'react'
-import { Button, ButtonProps } from 'react-native-material-ui'
-import { StyleSheet } from 'react-native'
-import { Buttons } from 'src/styles'
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+  TextStyle,
+} from 'react-native'
+import { Buttons, Colors } from 'src/styles'
+import LinearGradient from 'react-native-linear-gradient'
 
 const styles = StyleSheet.create({
   container: {
@@ -10,26 +16,63 @@ const styles = StyleSheet.create({
   text: {
     ...Buttons.buttonStandardText,
   },
-  disabledContainer: {
-    ...Buttons.buttonDisabledStandardContainer,
-  },
   disabledText: {
     ...Buttons.buttonDisabledStandardText,
   },
+  gradientWrapper: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 26,
+  },
 })
 
-export const JolocomButton: React.FC<ButtonProps> = props => {
+interface Props {
+  onPress: () => void
+  text: string
+  disabled?: boolean
+  containerStyle?: ViewStyle
+  textStyle?: TextStyle
+  testID?: string
+  transparent?: boolean
+}
+
+export const JolocomButton: React.FC<Props> = props => {
+  const {
+    onPress,
+    containerStyle,
+    textStyle,
+    text,
+    disabled,
+    transparent,
+    testID,
+  } = props
+  const onButtonPress = () => (disabled ? null : onPress())
+  const gradientColors = disabled
+    ? [Colors.disabledButtonBackground, Colors.disabledButtonBackground]
+    : ['rgb(145, 25, 66)', 'rgb(210, 45, 105)']
+  const gradient = transparent ? ['transparent', 'transparent'] : gradientColors
+
   return (
-    <Button
-      raised
-      onPress={props.onPress}
+    <LinearGradient
+      colors={gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
       style={{
-        container: props.disabled ? styles.disabledContainer : styles.container,
-        text: props.disabled ? styles.disabledText : styles.text,
+        ...styles.container,
+        ...containerStyle,
       }}
-      upperCase={false}
-      text={props.text}
-      disabled={props.disabled}
-    />
+    >
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={onButtonPress}
+        testID={testID}
+        style={styles.gradientWrapper}
+      >
+        <Text style={[disabled ? styles.disabledText : styles.text, textStyle]}>
+          {text}
+        </Text>
+      </TouchableOpacity>
+    </LinearGradient>
   )
 }

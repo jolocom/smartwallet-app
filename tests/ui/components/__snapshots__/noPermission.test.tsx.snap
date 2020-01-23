@@ -26,7 +26,7 @@ exports[`No scanner permission component matches the snapshot on initial render 
     <Text
       style={
         Object {
-          "color": "white",
+          "color": "rgb(255, 255, 255)",
           "fontFamily": "TTCommons-Light",
           "fontSize": 18,
           "lineHeight": 24,

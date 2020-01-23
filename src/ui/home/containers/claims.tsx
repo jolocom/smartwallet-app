@@ -7,7 +7,6 @@ import { DecoratedClaims } from 'src/reducers/account/'
 import { RootState } from '../../../reducers'
 import { withLoading } from '../../../actions/modifiers'
 import { ThunkDispatch } from '../../../store'
-import { BackupWarning } from '../../recovery/components/backupWarning'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -22,7 +21,6 @@ export class ClaimsContainer extends React.Component<Props> {
     const { did, claimsState, openClaimDetails } = this.props
     return (
       <View testID="claimsScreen" style={{ flex: 1 }}>
-        <BackupWarning />
         <CredentialOverview
           did={did}
           claimsToRender={claimsState.decoratedCredentials}

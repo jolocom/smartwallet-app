@@ -77,6 +77,12 @@ const backup = {
     'Start writing your seed-phrase and it will appear here word by word',
 }
 
+const notifications = {
+  CONFIRMATION_IS_NOT_COMPLETE: 'Confirmation is not complete',
+  YOUR_DATA_MAY_BE_LOST_BECAUSE_YOU_DID_NOT_CONFIRM_THE_SEED_PHRASE_WE_ADVISE_YOU_TO_COMPLETE_THE_REGISTRATION:
+    'Your data may be lost because you did not confirm the seed phrase. We advise you to complete the registration.',
+}
+
 const errorTitle = {
   DAMN: 'Damn',
   OH_NO: 'Oh no',
@@ -138,15 +144,16 @@ export default {
   ...errorTitle,
   ...errorCodes,
   ...errorReporting,
+  ...notifications,
+  IDENTITY: 'Identity',
+  DOCUMENTS: 'Documents',
+  HISTORY: 'History',
   YOUR_JOLOCOM_WALLET: 'Your Jolocom Wallet',
   ALL_CLAIMS: 'All claims',
-  MY_IDENTITY: 'My Identity',
   RECEIVING_NEW_CREDENTIAL: 'Receiving new credential',
   SHARE_CLAIMS: 'Share claims',
   CONFIRM_PAYMENT: 'Confirm payment',
   AUTHORIZATION_REQUEST: 'Authorization request',
-  DOCUMENTS: 'Documents',
-  LOGIN_RECORDS: 'Login records',
   WOULD_YOU_LIKE_TO: 'Would you like to',
   WITH_YOUR_SMARTWALLET: 'with your SmartWallet?',
   AUTHORIZE: 'Authorize',

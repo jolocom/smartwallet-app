@@ -1,14 +1,28 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { initStore } from './store'
+import { initStore, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
 import { StatusBar } from 'react-native'
 import { RoutesContainer } from './routes'
-import { AppLoading } from './ui/generic/appLoading'
+import { AppLoadingAndNotifications } from './ui/generic/appLoadingAndNotifications'
 import { useScreens } from 'react-native-screens'
-import { NavigationContainerComponent } from 'react-navigation'
+import { isNil } from 'ramda'
+import {
+  NavigationContainerComponent,
+  NavigationState,
+  NavigationRoute,
+} from 'react-navigation'
+import { setActiveNotificationFilter } from './actions/notifications'
 useScreens()
 
+/**
+ * NOTE: this is *not* exported on purpose
+ * Other parts of the app should generally *not* access the store directly, but
+ * rather through being connect()ed through redux
+ *
+ * If you think you need to export this, then something else probably needs
+ * better architecture.
+ */
 let store: ReturnType<typeof initStore>
 
 export default class App extends React.PureComponent<{}> {
@@ -26,6 +40,30 @@ export default class App extends React.PureComponent<{}> {
     if (!store) store = initStore()
   }
 
+  public handleNavigationChange(
+    prevState: NavigationState,
+    newState: NavigationState,
+  ) {
+    // @ts-ignore
+    let navigation = this.navigator._navigation
+    let curState: NavigationState | NavigationRoute = newState,
+      navigationOptions
+
+    while (curState.routes) {
+      curState = curState.routes[curState.index]
+      const childNav = navigation.getChildNavigation(curState.key)
+      navigationOptions = navigation.router.getScreenOptions(childNav)
+      navigation = childNav
+    }
+
+    if (!isNil(navigationOptions.notifications)) {
+      const thunkDispatch: ThunkDispatch = store.dispatch
+      thunkDispatch(
+        setActiveNotificationFilter(navigationOptions.notifications),
+      )
+    }
+  }
+
   private setNavigator(nav: NavigationContainerComponent | null) {
     if (!nav) return
     this.navigator = nav
@@ -38,8 +76,11 @@ export default class App extends React.PureComponent<{}> {
         <StatusBar barStyle="default" />
         <Provider store={store}>
           <React.Fragment>
-            <RoutesContainer ref={nav => this.setNavigator(nav)} />
-            <AppLoading />
+            <RoutesContainer
+              onNavigationStateChange={this.handleNavigationChange.bind(this)}
+              ref={nav => this.setNavigator(nav)}
+            />
+            <AppLoadingAndNotifications />
           </React.Fragment>
         </Provider>
       </React.Fragment>

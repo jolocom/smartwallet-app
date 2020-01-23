@@ -6,6 +6,7 @@ import settingKeys from '../ui/settings/settingKeys'
 import { SETTINGS } from '../reducers/settings'
 import Share from 'react-native-share'
 import { toBase64 } from '../lib/util'
+import { removeNotification } from './notifications'
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
@@ -37,6 +38,13 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
     settingKeys.seedPhraseSaved,
     true,
   )
+
+  // TODO: find sticky by id from queue, not active
+  const {
+    notifications: { active: stickyNotification },
+  } = getState()
+  if (stickyNotification) dispatch(removeNotification(stickyNotification))
+
   return dispatch({
     type: SETTINGS.SET_SEED_PHRASE_SAVED,
   })
