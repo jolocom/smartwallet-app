@@ -20,7 +20,7 @@ interface Props {
   showSlide: boolean
 }
 
-export const BottomSlider: React.FC<Props> = props => {
+export const ActionSheet: React.FC<Props> = props => {
   const { showSlide } = props
   // NOTE: default height is 9999 to make sure the view is hidden on first render
   const [viewHeight, setViewHeight] = useState(9999)
@@ -46,6 +46,7 @@ export const BottomSlider: React.FC<Props> = props => {
     Animated.timing(animatedValue, {
       duration: 500,
       toValue: 0,
+      useNativeDriver: true,
       easing: Easing.elastic(1),
     }).start()
   }
@@ -57,12 +58,15 @@ export const BottomSlider: React.FC<Props> = props => {
 
   const interpolatedValue = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [-viewHeight, 0],
+    outputRange: [viewHeight, 0],
   })
 
   return (
     <Animated.View
-      style={{ ...styles.wrapper, bottom: interpolatedValue }}
+      style={{
+        ...styles.wrapper,
+        transform: [{ translateY: interpolatedValue }],
+      }}
       onLayout={getDimensions}
     >
       {props.children}

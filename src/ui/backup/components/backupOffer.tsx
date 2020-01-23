@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Container } from '../../structure'
 import { Colors } from '../../../styles'
 import { GradientButton } from '../../structure/gradientButton'
-import { BottomSlider } from '../../structure/bottomSlider'
+import { ActionSheet } from '../../structure/actionSheet'
 
 interface Props {
   enableAutoBackup: () => void
@@ -68,7 +68,7 @@ export const BackupOfferComponent: React.FC<Props> = ({
       </Text>
       <View>{/* TODO add correct icon*/}</View>
       <Text style={styles.logoTitle}>Automatic synchronization</Text>
-      <BottomSlider showSlide={true}>
+      <ActionSheet showSlide={true}>
         <GradientButton
           onPress={enableAutoBackup}
           text={'Turn on backup service'}
@@ -80,7 +80,7 @@ export const BackupOfferComponent: React.FC<Props> = ({
         <TouchableOpacity onPress={manualBackup}>
           <Text style={styles.textButton}>Keep it manually</Text>
         </TouchableOpacity>
-      </BottomSlider>
+      </ActionSheet>
     </Container>
   )
 }
