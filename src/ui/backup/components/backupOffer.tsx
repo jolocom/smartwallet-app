@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Container } from '../../structure'
 import { Colors } from '../../../styles'
 import { GradientButton } from '../../structure/gradientButton'
+import { BottomSlider } from '../../structure/bottomSlider'
 
 interface Props {
   enableAutoBackup: () => void
@@ -59,25 +60,27 @@ const styles = StyleSheet.create({
 export const BackupOfferComponent: React.FC<Props> = ({
   enableAutoBackup,
   manualBackup,
-}) => (
-  <Container style={styles.container}>
-    <Text style={styles.title}>
-      Store your data by yourself or try to use Jolocom backup service!
-    </Text>
-    <View>{/* TODO add correct icon*/}</View>
-    <Text style={styles.logoTitle}>Automatic synchronization</Text>
-    <View style={styles.bottomSheet}>
-      <GradientButton
-        onPress={enableAutoBackup}
-        text={'Turn on backup service'}
-      />
-      <Text style={styles.info}>
-        By clicking here i agreed backing up my data on Jolocom’s central server
-        and i know that it is not viewable by anyone
+}) => {
+  return (
+    <Container style={styles.container}>
+      <Text style={styles.title}>
+        Store your data by yourself or try to use Jolocom backup service!
       </Text>
-      <TouchableOpacity onPress={manualBackup}>
-        <Text style={styles.textButton}>Keep it manually</Text>
-      </TouchableOpacity>
-    </View>
-  </Container>
-)
+      <View>{/* TODO add correct icon*/}</View>
+      <Text style={styles.logoTitle}>Automatic synchronization</Text>
+      <BottomSlider showSlide={true}>
+        <GradientButton
+          onPress={enableAutoBackup}
+          text={'Turn on backup service'}
+        />
+        <Text style={styles.info}>
+          By clicking here i agreed backing up my data on Jolocom’s central
+          server server and i know that it is not viewable by anyone
+        </Text>
+        <TouchableOpacity onPress={manualBackup}>
+          <Text style={styles.textButton}>Keep it manually</Text>
+        </TouchableOpacity>
+      </BottomSlider>
+    </Container>
+  )
+}
