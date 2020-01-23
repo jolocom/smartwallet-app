@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 })
-const BackupComponent: React.FC<Props> = ({
+export const BackupComponent: React.FC<Props> = ({
   isLoading,
   enableAutoBackup,
   onDisableAutoBackup,
@@ -159,4 +159,3 @@ const BackupComponent: React.FC<Props> = ({
   )
 }
 
-export default BackupComponent

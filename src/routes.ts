@@ -39,8 +39,8 @@ import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
-import { Backup } from './ui/backup/container/backupContainer'
-import { BackupOffer } from './ui/backup/container/backupOfferContainer'
+import { Backup } from './ui/backup/container/backup'
+import { BackupOffer } from './ui/backup/container/backupOffer'
 import { ImportBackup } from './ui/recovery/container/importBackup'
 
 // only used on android

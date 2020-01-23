@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
-import BackupComponent from '../components/backupComponent'
+import { BackupComponent } from '../components/backup'
 import { RootState } from '../../../reducers'
 import {
   disableAndRemoveBackup,

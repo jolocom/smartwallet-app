@@ -2,12 +2,10 @@ import * as React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Container } from '../../structure'
 import { Colors } from '../../../styles'
-import { NavigationSection } from '../../structure/navigationSection'
 import { GradientButton } from '../../structure/gradientButton'
 
 interface Props {
   enableAutoBackup: () => void
-  close: () => void
   manualBackup: () => void
 }
 
@@ -58,38 +56,28 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 })
-const BackupOfferComponent: React.FC<Props> = ({
-  close,
+export const BackupOfferComponent: React.FC<Props> = ({
   enableAutoBackup,
   manualBackup,
-}) => {
-  return (
-    <Container style={styles.container}>
-      <NavigationSection
-        onNavigation={close}
-        isBackButton={false}
-        isDark={true}
+}) => (
+  <Container style={styles.container}>
+    <Text style={styles.title}>
+      Store your data by yourself or try to use Jolocom backup service!
+    </Text>
+    <View>{/* TODO add correct icon*/}</View>
+    <Text style={styles.logoTitle}>Automatic synchronization</Text>
+    <View style={styles.bottomSheet}>
+      <GradientButton
+        onPress={enableAutoBackup}
+        text={'Turn on backup service'}
       />
-      <Text style={styles.title}>
-        Store your data by yourself or try to use Jolocom backup service!
+      <Text style={styles.info}>
+        By clicking here i agreed backing up my data on Jolocom’s central server
+        and i know that it is not viewable by anyone
       </Text>
-      <View>{/* TODO add correct icon*/}</View>
-      <Text style={styles.logoTitle}>Automatic synchronization</Text>
-      <View style={styles.bottomSheet}>
-        <GradientButton
-          onPress={enableAutoBackup}
-          text={'Turn on backup service'}
-        />
-        <Text style={styles.info}>
-          By clicking here i agreed backing up my data on Jolocom’s central
-          server and i know that it is not viewable by anyone
-        </Text>
-        <TouchableOpacity onPress={manualBackup}>
-          <Text style={styles.textButton}>Keep it manually</Text>
-        </TouchableOpacity>
-      </View>
-    </Container>
-  )
-}
-
-export default BackupOfferComponent
+      <TouchableOpacity onPress={manualBackup}>
+        <Text style={styles.textButton}>Keep it manually</Text>
+      </TouchableOpacity>
+    </View>
+  </Container>
+)
