@@ -35,7 +35,7 @@
     "class-transformer": "^0.1.9",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "3.0.2",
-    "detox": "jolocom/Detox.git#detox-v9000.0.1-gitpkg",
+    "detox": "^15.1.4",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
