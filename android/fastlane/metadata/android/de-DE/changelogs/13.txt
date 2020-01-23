@@ -1,5 +1,0 @@
-- Initial setup for abstracting the registry related functionality.
-- Added support for IOS universal links.
-
-More in depth information, including the corresponding issues, can be found on Github:
-https://github.com/jolocom/smartwallet-app/releases
