@@ -10,13 +10,14 @@ import {
   StatusBar,
 } from 'react-native'
 import I18n from 'src/locales/i18n'
-import { errorTitleMessages, AppError, reportError } from 'src/lib/errors'
+import { errorTitleMessages, AppError } from 'src/lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'
 import { NavigationScreenProps } from 'react-navigation'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { JolocomButton } from '../structure'
+import { routeList } from '../../routeList'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -61,16 +62,12 @@ const styles = StyleSheet.create({
   },
   buttonBlock: {
     marginTop: Spacing.LG,
-    flex: 1,
-    justifyContent: 'space-evenly'
+    flex: 0.8,
+    justifyContent: 'space-evenly',
   },
 })
 
 export class ExceptionComponent extends React.Component<Props, State> {
-  state: State = {
-    reportSent: false
-  }
-
   private onBackButtonPressAndroid = (): boolean => {
     this.handleTapBack()
     return true
@@ -98,13 +95,6 @@ export class ExceptionComponent extends React.Component<Props, State> {
     }
   }
 
-  private handleTapReport = (): void => {
-    const err = this.getError()
-    if (!err) return
-    reportError(err)
-    this.setState({ reportSent: true })
-  }
-
   private getError = (): AppError | Error | undefined => {
     const stateParams =
       this.props.navigation &&
@@ -125,10 +115,6 @@ export class ExceptionComponent extends React.Component<Props, State> {
       : strings.THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST
     errorText = I18n.t(errorText) + '.'
     console.error(origError || err)
-
-    const reportBtnMsg = this.state.reportSent ?
-      strings.ERROR_REPORT_SENT :
-      strings.SEND_ERROR_REPORT
 
     return (
       <View style={styles.container}>
@@ -151,20 +137,15 @@ export class ExceptionComponent extends React.Component<Props, State> {
         </View>
         <View style={styles.buttonBlock}>
           <JolocomButton
-            raised
             onPress={this.handleTapBack}
-            upperCase={false}
             text={I18n.t(strings.GO_BACK)}
           />
-          { err &&
+          {err && (
             <JolocomButton
-              raised
-              onPress={this.handleTapReport}
-              upperCase={false}
-              disabled={this.state.reportSent}
-              text={I18n.t(reportBtnMsg)}
+              onPress={() => this.props.navigateReporting(err)}
+              text={I18n.t(strings.SEND_ERROR_REPORT)}
             />
-          }
+          )}
         </View>
       </View>
     )
@@ -176,6 +157,13 @@ const mapStateToProps = (): {} => ({})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   navigateBack: (routeName: string) =>
     dispatch(navigationActions.navigate({ routeName })),
+  navigateReporting: (error: AppError | Error | undefined) =>
+    dispatch(
+      navigationActions.navigate({
+        routeName: routeList.ErrorReporting,
+        params: { error },
+      }),
+    ),
 })
 
 export const Exception = connect(

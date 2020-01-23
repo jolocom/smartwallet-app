@@ -3,6 +3,9 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+
+import com.levelasquez.androidopensettings.AndroidOpenSettingsPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import io.sentry.RNSentryPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
@@ -21,6 +24,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import org.pgsqlite.SQLitePluginPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +41,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AndroidOpenSettingsPackage(),
+            new AsyncStoragePackage(),
             new RNSentryPackage(),
             new VectorIconsPackage(),
             new RNLocalizePackage(),
@@ -50,7 +56,8 @@ public class MainApplication extends Application implements ReactApplication {
             new KeychainPackage(),
             new RNFetchBlobPackage(),
             new RNCameraPackage(),
-            new SQLitePluginPackage()
+            new SQLitePluginPackage(),
+            new LinearGradientPackage()
       );
     }
 

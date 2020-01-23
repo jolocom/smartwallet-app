@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container } from 'src/ui/structure/'
+import { Wrapper } from 'src/ui/structure/'
 import { StyleSheet } from 'react-native'
 
 const ShallowRenderer = require('react-test-renderer/shallow')
@@ -7,7 +7,7 @@ const ShallowRenderer = require('react-test-renderer/shallow')
 describe('generic container component', () => {
   it('matches the snapshot with no extra props', () => {
     const renderer = new ShallowRenderer()
-    const rendered = renderer.render(<Container> null </Container>)
+    const rendered = renderer.render(<Wrapper> null </Wrapper>)
     expect(rendered).toMatchSnapshot()
   })
 
@@ -21,7 +21,7 @@ describe('generic container component', () => {
     })
 
     const rendered = renderer.render(
-      <Container style={styles.block}>null</Container>,
+      <Wrapper style={styles.block}>null</Wrapper>,
     )
     expect(rendered).toMatchSnapshot()
   })

@@ -2,7 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react-native'
 import { IssuerCard } from 'src/ui/documents/components/issuerCard'
 import { IdentitySummary } from 'src/actions/sso/types'
-import { Container } from 'src/ui/structure'
+import { Wrapper } from 'src/ui/structure'
 
 const noPublicProfileSummary: IdentitySummary = {
   did: 'no-public-profile-summary',
@@ -29,17 +29,17 @@ const completePublicProfileSummary: IdentitySummary = {
 
 storiesOf('IssuerCard', module)
   .add('with no public profile', () => (
-    <Container>
+    <Wrapper>
       <IssuerCard issuer={noPublicProfileSummary} />
-    </Container>
+    </Wrapper>
   ))
   .add('with a public profile', () => (
-    <Container>
+    <Wrapper>
       <IssuerCard issuer={publicProfileSummary} />
-    </Container>
+    </Wrapper>
   ))
   .add('complete public profile', () => (
-    <Container>
+    <Wrapper>
       <IssuerCard issuer={completePublicProfileSummary} />
-    </Container>
+    </Wrapper>
   ))

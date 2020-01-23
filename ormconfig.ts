@@ -11,7 +11,7 @@ export default {
   type: 'react-native',
   database: 'LocalSmartWalletData',
   location: 'default',
-  logging: ['error', 'query', 'schema'],
+  logging: ['error', 'warn', 'schema'],
   entities: ['./src/lib/storage/entities/*.ts'],
   migrations: ['./src/lib/storage/migration/*.ts'],
   migrationsRun: true,
