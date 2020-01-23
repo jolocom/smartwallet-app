@@ -27,13 +27,13 @@ platform :android do
 
   after_all do |lane, options|
     begin
-      sh("rm secrets.json")
       sh("rm key.json")
     rescue
       puts "no secret files"
     end
   end
 
+  desc "Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password"
   lane :get_secrets do
     begin
       sh("git clone git@infra.jolocom.io:android-secrets")
@@ -45,14 +45,13 @@ platform :android do
       secure_text: true
     )
     sh(
-      "openssl enc -aes-256-cbc -d -in ./android-secrets/secrets.enc -out secrets.json -k #{password}",
-      log: false
-    )
-    sh(
       "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out key.json -k #{password}",
       log: false
     )
-    load_json(json_path: "./fastlane/secrets.json")
+    sh(
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/keystorePass.enc -k #{password}",
+      log: false
+    )
   end
 
   lane :build do |options|
@@ -65,16 +64,16 @@ platform :android do
         print_command: false,
       )
     else
-      secrets = get_secrets
+      keyPass = get_secrets
       build_android_app(
         task: 'assemble',
         build_type: 'Release',
         print_command: false,
         properties: {
           "android.injected.signing.store.file" => releaseFilePath,
-          "android.injected.signing.store.password" => secrets["keystorePassword"],
+          "android.injected.signing.store.password" => keyPass,
           "android.injected.signing.key.alias" => "JoloSmartWallet",
-          "android.injected.signing.key.password" => secrets["keystorePassword"],
+          "android.injected.signing.key.password" => keyPass,
         }
       )
     end
