@@ -6188,11 +6188,6 @@ invert-kv@^2.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
-ios-deploy@^1.9.4:
-  version "1.9.4"
-  resolved "https://registry.yarnpkg.com/ios-deploy/-/ios-deploy-1.9.4.tgz#5aa6b198feabcf53f912639fc2d9e11b4923079d"
-  integrity sha512-pgyc19zgtwGrfx3GL8yV0c0dAPucTpJ0VZkuS3DcqxIZYC48+UW+tBTxI43u1ZDk17mop0ABLs1SkAy5SUQ6pQ==
-
 ip@^1.1.4:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
