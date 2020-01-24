@@ -186,6 +186,7 @@ const MainStack = createStackNavigator(
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
+        notifications: NotificationFilter.none,
       }),
     },
     [routeList.Consent]: {

@@ -258,7 +258,11 @@ export const cancelReceiving: ThunkAction = dispatch => {
       label: 'Decline anyway',
       onDismiss: () => {
         dispatch(resetSelected())
-        dispatch(navigationActions.navigatorResetHome())
+        dispatch(
+          navigationActions.navigate({
+            routeName: routeList.InteractionScreen,
+          }),
+        )
       },
     },
   }
