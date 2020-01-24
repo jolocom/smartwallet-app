@@ -43,11 +43,32 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     ...centeredText,
   },
+  interactButton: {
+    marginTop: 14,
+    borderColor: 'white',
+    borderWidth: 0.5,
+  },
+  buttonSection: {
+    width: '100%',
+    paddingBottom: 62,
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+  },
+  contentSection: {
+    width: '100%',
+    alignItems: 'center',
+  },
 })
+
+enum ImageType {
+  Red = 'red',
+  Blue = 'blue',
+}
 
 export interface ErrorScreenParams {
   title: string
   message: string
+  image?: ImageType
   interact?: {
     label: string
     onInteract: () => void | Promise<void>
@@ -73,19 +94,12 @@ export const ErrorScreenContainer: React.FC<Props> = props => {
 
   return (
     <Wrapper style={styles.wrapper}>
-      <View style={{ width: '100%', alignItems: 'center' }}>
+      <View style={styles.contentSection}>
         <View style={styles._placeholder} />
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.message}>{message}</Text>
       </View>
-      <View
-        style={{
-          width: '100%',
-          paddingBottom: 62,
-          paddingHorizontal: 20,
-          justifyContent: 'space-between',
-        }}
-      >
+      <View style={styles.buttonSection}>
         <JolocomButton
           onPress={dismiss.onDismiss}
           transparent
@@ -93,11 +107,7 @@ export const ErrorScreenContainer: React.FC<Props> = props => {
         />
         {interact && (
           <JolocomButton
-            containerStyle={{
-              marginTop: 14,
-              borderColor: 'white',
-              borderWidth: 0.5,
-            }}
+            containerStyle={styles.interactButton}
             transparent
             onPress={interact.onInteract}
             text={interact.label}
