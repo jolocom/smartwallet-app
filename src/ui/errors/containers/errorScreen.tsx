@@ -2,24 +2,22 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { JolocomButton, Wrapper } from '../../structure'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { debug } from '../../../styles/presets'
 import { centeredText, fontMain } from '../../../styles/typography'
 import { Colors } from '../../../styles'
 import { BP } from '../../../styles/breakpoints'
+import { BlueCircleImage, RedCircleImage } from '../../../resources'
 
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: Colors.overflowBlack,
     justifyContent: 'space-between',
   },
-  _placeholder: {
+  imageWrapper: {
     marginTop: '15%',
-    width: 200,
-    height: 200,
-    ...debug,
+    width: '65%',
+    height: '54%',
   },
   title: {
-    marginTop: '7%',
     paddingHorizontal: 20,
     fontFamily: fontMain,
     fontSize: BP({
@@ -87,7 +85,7 @@ export const ErrorScreenContainer: React.FC<Props> = props => {
   const {
     navigation: {
       state: {
-        params: { title, message, interact, dismiss },
+        params: { title, message, interact, dismiss, image },
       },
     },
   } = props
@@ -95,7 +93,9 @@ export const ErrorScreenContainer: React.FC<Props> = props => {
   return (
     <Wrapper style={styles.wrapper}>
       <View style={styles.contentSection}>
-        <View style={styles._placeholder} />
+        <View style={styles.imageWrapper}>
+          {image === ImageType.Red ? <RedCircleImage /> : <BlueCircleImage />}
+        </View>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.message}>{message}</Text>
       </View>
