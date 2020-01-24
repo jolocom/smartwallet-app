@@ -25,7 +25,7 @@ Runs all the tests
 ```
 fastlane android get_secrets
 ```
-
+Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password
 ### android build
 ```
 fastlane android build
