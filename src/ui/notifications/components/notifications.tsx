@@ -108,6 +108,7 @@ export const NotificationComponent: React.FC<Props> = ({
   onButtonLayout,
 }) => {
   const isWarning = notification.type === NotificationType.warning
+  const isTextCentered = isSticky || !notification.interact
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -121,7 +122,7 @@ export const NotificationComponent: React.FC<Props> = ({
         <Text
           style={{
             ...styles.title,
-            ...(!notification.interact && styles.centeredText),
+            ...(isTextCentered && styles.centeredText),
             color: isSticky ? yellowError : white,
           }}
         >
@@ -130,7 +131,7 @@ export const NotificationComponent: React.FC<Props> = ({
         <Text
           style={{
             ...styles.message,
-            ...(!notification.interact && styles.centeredText),
+            ...(isTextCentered && styles.centeredText),
           }}
         >
           {notification.message}
