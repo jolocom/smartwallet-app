@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import { BackupComponent } from '../components/backup'
@@ -11,88 +11,86 @@ import {
 import { timeout } from '../../../utils/asyncTimeout'
 import { NavigationScreenProps } from 'react-navigation'
 import { Alert } from 'react-native'
+import { navigationActions } from '../../../actions'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     ReturnType<typeof mapStateToProps>,
     NavigationScreenProps {}
 
-interface State {
-  isLoading: boolean
-}
+const BackupContainer: React.FC<Props> = props => {
+  const {
+    isAutoBackupEnabled,
+    lastBackup,
+    navigateBack,
+    disableAutoBackupAndDelete,
+    exportBackup,
+  } = props
+  const [isLoading, setLoading] = useState(false)
 
-export class BackupContainer extends React.Component<Props, State> {
-  state = {
-    isLoading: false,
+  const toggleLoading = () => {
+    setLoading(!isLoading)
   }
 
-  private toggleLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading })
-  }
-
-  private enableAutoBackup = async () => {
-    this.toggleLoading()
+  const enableAutoBackup = async () => {
+    toggleLoading()
     await timeout(500)
     try {
-      await this.props.enableAutoBackup()
+      await enableAutoBackup()
     } catch (e) {
       // TODO show notification
       console.warn(e)
     } finally {
-      this.toggleLoading()
+      toggleLoading()
     }
   }
 
-  private onDisableAutoBackup = async () => {
+  const onDisableAutoBackup = async () => {
     Alert.alert(
       'Are you sure?',
       'By disabling this function you will erase all information from our server',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'OK', style: 'default', onPress: this.disableAutoBackup },
+        { text: 'OK', style: 'default', onPress: disableAutoBackup },
       ],
     )
   }
 
-  private disableAutoBackup = async () => {
-    this.toggleLoading()
+  const disableAutoBackup = async () => {
+    toggleLoading()
     await timeout(500)
     try {
-      await this.props.disableAutoBackupAndDelete()
+      await disableAutoBackupAndDelete()
     } catch (e) {
       // TODO show notification
       console.warn(e)
     } finally {
-      this.toggleLoading()
+      toggleLoading()
     }
   }
 
-  private exportBackup = async () => {
-    this.toggleLoading()
+  const onExportBackup = async () => {
+    toggleLoading()
     try {
-      await this.props.exportBackup()
+      await exportBackup()
     } catch (e) {
       console.warn(e)
     } finally {
-      this.toggleLoading()
+      toggleLoading()
     }
   }
 
-  public render() {
-    const { isAutoBackupEnabled, lastBackup, navigation } = this.props
-    const { isLoading } = this.state
-    return (
-      <BackupComponent
-        isLoading={isLoading}
-        onDisableAutoBackup={this.onDisableAutoBackup}
-        isAutoBackupEnabled={isAutoBackupEnabled}
-        exportBackup={this.exportBackup}
-        enableAutoBackup={this.enableAutoBackup}
-        goBack={() => navigation.pop()}
-        lastBackup={lastBackup}
-      />
-    )
-  }
+  return (
+    <BackupComponent
+      isLoading={isLoading}
+      onDisableAutoBackup={onDisableAutoBackup}
+      isAutoBackupEnabled={isAutoBackupEnabled}
+      exportBackup={onExportBackup}
+      enableAutoBackup={enableAutoBackup}
+      goBack={navigateBack}
+      lastBackup={lastBackup}
+    />
+  )
 }
 
 const mapStateToProps = (state: RootState) => ({
@@ -103,6 +101,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   enableAutoBackup: async () => await dispatch(setAutoBackup(true)),
   disableAutoBackupAndDelete: () => dispatch(disableAndRemoveBackup()),
   exportBackup: () => dispatch(manualBackup()),
+  navigateBack: () => dispatch(navigationActions.navigateBack()),
 })
 
 export const Backup = connect(
