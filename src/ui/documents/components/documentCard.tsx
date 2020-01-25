@@ -1,15 +1,19 @@
 import React from 'react'
 import { View, StyleSheet, Text, Image, ImageBackground } from 'react-native'
 import { DocumentValiditySummary } from './documentValidity'
-import { DecoratedClaims } from 'src/reducers/account'
 import { ClaimInterface } from 'cred-types-jolocom-core'
 import { Colors, Typography, Spacing } from 'src/styles'
+import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
 export const DOCUMENT_CARD_HEIGHT = 176
 export const DOCUMENT_CARD_WIDTH = 276
 
 interface DocumentCardProps {
-  document: DecoratedClaims
+  credentialType: string
+  renderInfo: CredentialOfferRenderInfo | undefined
+  claimData?: ClaimInterface
+  expires?: Date
+  selected?: boolean
 }
 
 const styles = StyleSheet.create({
@@ -55,18 +59,26 @@ const styles = StyleSheet.create({
     height: 40,
     marginLeft: 'auto',
   },
+  selected: {
+    borderColor: Colors.joloColor,
+    borderWidth: 2,
+    elevation: 6,
+  },
 })
 
-export const DocumentCard: React.SFC<DocumentCardProps> = ({
-  document,
-}): JSX.Element => {
-  const { renderInfo, expires } = document
+export const DocumentCard: React.FC<DocumentCardProps> = props => {
+  const { renderInfo, claimData, credentialType, expires, selected } = props
   const { background = undefined, logo = undefined, text = undefined } =
     renderInfo || {}
-  const claimData = document.claimData as ClaimInterface
 
   return (
-    <View style={[styles.card, !background && { borderColor: Colors.sand }]}>
+    <View
+      style={[
+        styles.card,
+        !background && { borderColor: Colors.sand },
+        selected && styles.selected,
+      ]}
+    >
       <ImageBackground
         style={[
           styles.cardBack,
@@ -83,11 +95,13 @@ export const DocumentCard: React.SFC<DocumentCardProps> = ({
           numberOfLines={2}
           style={[styles.documentType, { color: text && text.color }]}
         >
-          {claimData.type || document.credentialType}
+          {credentialType || (claimData && claimData.type)}
         </Text>
-        <Text style={[styles.documentNumber, { color: text && text.color }]}>
-          {claimData.documentNumber}
-        </Text>
+        {claimData && (
+          <Text style={[styles.documentNumber, { color: text && text.color }]}>
+            {claimData.documentNumber}
+          </Text>
+        )}
         <View style={styles.validityContainer}>
           {expires && (
             <DocumentValiditySummary
