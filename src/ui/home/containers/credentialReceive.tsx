@@ -22,7 +22,7 @@ import { routeList } from '../../../routeList'
 import { DocumentCard } from '../../documents/components/documentCard'
 import { JolocomButton, Wrapper } from '../../structure'
 import { Colors, Spacing } from '../../../styles'
-import { centeredText, fontMain } from '../../../styles/typography'
+import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
 import { black065, overflowBlack } from '../../../styles/colors'
 import { ActionSheet } from '../../structure/actionSheet'
 import strings from '../../../locales/strings'
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   serviceName: {
-    fontFamily: fontMain,
+    fontFamily: fontMedium,
     fontSize: 28,
     color: overflowBlack,
   },
@@ -150,6 +150,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
       </ScrollView>
       <ActionSheet showSlide={true}>
         <JolocomButton
+          textStyle={{ fontFamily: fontMedium }}
           disabled={selected.length === 0}
           onPress={handleConfirm}
           text={I18n.t(strings.RECEIVE)}

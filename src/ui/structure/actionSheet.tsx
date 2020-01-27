@@ -10,7 +10,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Colors.overflowBlack,
     zIndex: 2,
-    paddingVertical: 28,
+    paddingTop: 28,
+    paddingBottom: 14,
     paddingHorizontal: 20,
     borderRadius: 22,
   },
@@ -27,11 +28,14 @@ export const ActionSheet: React.FC<Props> = props => {
   const [animatedValue] = useState(new Animated.Value(0))
 
   useEffect(() => {
-    if (showSlide) {
-      animateShow()
-    } else {
-      animateHide()
-    }
+    //NOTE: timeout so it doesn't
+    setTimeout(() => {
+      if (showSlide) {
+        animateShow()
+      } else {
+        animateHide()
+      }
+    }, 400)
     return animateHide
   }, [showSlide])
 
@@ -39,6 +43,7 @@ export const ActionSheet: React.FC<Props> = props => {
     Animated.timing(animatedValue, {
       duration: 500,
       toValue: 1,
+      useNativeDriver: true,
       easing: Easing.elastic(1),
     }).start()
   }

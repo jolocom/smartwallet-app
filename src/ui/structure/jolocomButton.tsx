@@ -6,8 +6,9 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native'
-import { Buttons, Colors } from 'src/styles'
+import { Buttons } from 'src/styles'
 import LinearGradient from 'react-native-linear-gradient'
+import { fontMain } from '../../styles/typography'
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +16,10 @@ const styles = StyleSheet.create({
   },
   text: {
     ...Buttons.buttonStandardText,
+    fontFamily: fontMain,
   },
   disabledText: {
-    ...Buttons.buttonDisabledStandardText,
+    opacity: 0.25,
   },
   gradientWrapper: {
     flex: 1,
@@ -48,9 +50,7 @@ export const JolocomButton: React.FC<Props> = props => {
     testID,
   } = props
   const onButtonPress = () => (disabled ? null : onPress())
-  const gradientColors = disabled
-    ? [Colors.disabledButtonBackground, Colors.disabledButtonBackground]
-    : ['rgb(145, 25, 66)', 'rgb(210, 45, 105)']
+  const gradientColors = ['rgb(145, 25, 66)', 'rgb(210, 45, 105)']
   const gradient = transparent ? ['transparent', 'transparent'] : gradientColors
 
   return (
@@ -69,7 +69,7 @@ export const JolocomButton: React.FC<Props> = props => {
         testID={testID}
         style={styles.gradientWrapper}
       >
-        <Text style={[disabled ? styles.disabledText : styles.text, textStyle]}>
+        <Text style={[styles.text, textStyle, disabled && styles.disabledText]}>
           {text}
         </Text>
       </TouchableOpacity>
