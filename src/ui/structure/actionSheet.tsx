@@ -32,6 +32,7 @@ export const ActionSheet: React.FC<Props> = props => {
     } else {
       animateHide()
     }
+    return animateHide
   }, [showSlide])
 
   const animateShow = () => {

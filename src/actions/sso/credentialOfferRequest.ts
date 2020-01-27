@@ -14,6 +14,8 @@ import { setClaimsForDid } from '../account'
 import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 import { createInfoNotification, Notification } from '../../lib/notifications'
 import { scheduleNotification } from '../notifications'
+import I18n from 'src/locales/i18n'
+import strings from '../../locales/strings'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -115,10 +117,10 @@ export const acceptSelectedCredentials = (
   dispatch(setClaimsForDid)
 
   const notification: Notification = createInfoNotification({
-    title: 'Great success!',
-    message: 'You can find your new credential at the documents',
+    title: I18n.t(strings.GREAT_SUCCESS),
+    message: I18n.t(strings.YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_AT_THE_DOCUMENTS),
     interact: {
-      label: 'Open',
+      label: I18n.t(strings.OPEN),
       onInteract: () => {
         dispatch(navigationActions.navigate({ routeName: routeList.Documents }))
       },
