@@ -522,6 +522,27 @@
 			remoteGlobalIDString = 323A12871E5F266B004975B8;
 			remoteInfo = "ART-tvOS";
 		};
+		D21A4AEC23E06B1D000D75E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B242209373CE45FCB5EE9B17 /* RNScreens.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B5C32A4F220C6379000FFB8D;
+			remoteInfo = "RNScreens-tvOS";
+		};
+		D21A4AFC23E06B1E000D75E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 45C861A88687400F82F2FC82 /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = BVLinearGradient;
+		};
+		D21A4AFE23E06B1E000D75E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 45C861A88687400F82F2FC82 /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 64AA15081EF7F30100718508;
+			remoteInfo = "BVLinearGradient-tvOS";
+		};
 		F3F1C4292386E89B001BFE3E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1AA6A09A3F7143629F79D502 /* RNFetchBlob.xcodeproj */;
@@ -1125,7 +1146,7 @@
 			isa = PBXGroup;
 			children = (
 				B4A807D722C62C72008E672A /* libRNScreens.a */,
-				79386A0223DB3267001BE0AB /* libRNScreens-tvOS.a */,
+				D21A4AED23E06B1D000D75E9 /* libRNScreens-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1143,6 +1164,15 @@
 			children = (
 				B4A807EA22C6306C008E672A /* libART.a */,
 				B4A807EC22C6306C008E672A /* libART-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D21A4AF823E06B1E000D75E9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D21A4AFD23E06B1E000D75E9 /* libBVLinearGradient.a */,
+				D21A4AFF23E06B1E000D75E9 /* libBVLinearGradient.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1305,7 +1335,7 @@
 					ProjectRef = B4A807E422C6306C008E672A /* ART.xcodeproj */;
 				},
 				{
-					ProductGroup = 79386A0D23DB3267001BE0AB /* Products */;
+					ProductGroup = D21A4AF823E06B1E000D75E9 /* Products */;
 					ProjectRef = 45C861A88687400F82F2FC82 /* BVLinearGradient.xcodeproj */;
 				},
 				{
@@ -1852,6 +1882,27 @@
 			remoteRef = B4A807EB22C6306C008E672A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		D21A4AED23E06B1D000D75E9 /* libRNScreens-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNScreens-tvOS.a";
+			remoteRef = D21A4AEC23E06B1D000D75E9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D21A4AFD23E06B1E000D75E9 /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = D21A4AFC23E06B1E000D75E9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D21A4AFF23E06B1E000D75E9 /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = D21A4AFE23E06B1E000D75E9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		F3F1C42A2386E89B001BFE3E /* libRNFetchBlob.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1962,7 +2013,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=$(which node)\n\n../node_modules/react-native/scripts/react-native-xcode.sh index.ts\n";
+			shellScript = "export NODE_BINARY=$(which node)\nexport SENTRY_PROPERTIES=sentry.properties\n\n../node_modules/react-native/scripts/react-native-xcode.sh index.ts\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;

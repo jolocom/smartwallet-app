@@ -57,6 +57,12 @@ platform :android do
   lane :build do |options|
     releaseFilePath = File.join(Dir.pwd, "..", "android-secrets", "JoloSmartWallet.keystore")
     build_android_app(task: 'clean')
+    begin
+      sh("git clone git@infra.jolocom.io:sentry-auth")
+    rescue
+      puts "sentry auth already present"
+    end
+    sh("cp ./sentry-auth/sentry.properties ../sentry.properties")
     if options[:local]
       build_android_app(
         task: 'assemble',
@@ -80,16 +86,6 @@ platform :android do
   end
 
   lane :upload do |options|
-    begin
-      sh("git clone git@infra.jolocom.io:sentry-auth")
-    rescue
-      puts "sentry auth already present"
-    end
-    sentry_upload_dsym(
-      auth_token: File.read("./sentry-auth/auth-token"),
-      org_slug: 'jolocom',
-      project_slug: 'smartwallet',
-    )
     case options[:target]
     when 'release'
       upload_to_play_store

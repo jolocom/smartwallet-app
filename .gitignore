@@ -7,6 +7,7 @@ coverage/
 .watchmanconfig
 dist/
 db.sqlite3
+*/sentry.properties
 
 #### Below is the default react native .gitignore ###
 ############### DO NOT EDIT BELOW ###################
