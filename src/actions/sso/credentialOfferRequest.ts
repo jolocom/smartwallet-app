@@ -7,7 +7,10 @@ import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentials
 import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { generateIdentitySummary } from './utils'
-import { CredentialOfferResponseSelection } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import {
+  CredentialOfferRenderInfo,
+  CredentialOfferResponseSelection,
+} from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { navigationActions } from '../index'
 import { routeList } from '../../routeList'
 import { setClaimsForDid } from '../account'
@@ -16,6 +19,13 @@ import { createInfoNotification, Notification } from '../../lib/notifications'
 import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
+import { CredentialOfferNavigationParams } from '../../ui/home/containers/credentialReceive'
+import { CacheEntity } from '../../lib/storage/entities'
+
+export interface CredentialOfferRenderDetails {
+  renderInfo: CredentialOfferRenderInfo | undefined
+  type: string
+}
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -31,18 +41,25 @@ export const consumeCredentialOfferRequest = (
 
   const issuerDid = keyIdToDid(credentialOfferRequest.issuer)
   const requester = await registry.resolve(issuerDid)
-  const offerMetadata = assembleCredentialMetadata(interactionToken, issuerDid)
+  const credentialRenderDetails: CredentialOfferRenderDetails[] = interactionToken.offeredTypes.map(
+    type => ({
+      type,
+      renderInfo: interactionToken.getRenderInfoForType(type),
+    }),
+  )
   const requesterSummary = generateIdentitySummary(requester)
+
+  const params: CredentialOfferNavigationParams = {
+    credentialOfferRequest,
+    requesterSummary,
+    credentialRenderDetails,
+    isDeepLink: isDeepLinkInteraction,
+  }
 
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialDialog,
-      params: {
-        credentialOfferRequest,
-        requesterSummary,
-        offerMetadata,
-        isDeepLinkInteraction,
-      },
+      params,
     }),
   )
 }
@@ -59,9 +76,6 @@ export const acceptSelectedCredentials = (
   const { interactionToken } = credentialOfferRequest
   const { callbackURL } = interactionToken
 
-  if (!areRequirementsEmpty(interactionToken)) {
-    throw new Error('Input requests are not yet supported on the wallet')
-  }
   const password = await keyChainLib.getPassword()
 
   const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
@@ -85,6 +99,8 @@ export const acceptSelectedCredentials = (
   const providedCredentials =
     credentialReceive.interactionToken.signedCredentials
 
+  if (!providedCredentials.length) throw new Error('No credentials received')
+
   const validationResults = await JolocomLib.util.validateDigestables(
     providedCredentials,
   )
@@ -94,17 +110,22 @@ export const acceptSelectedCredentials = (
     throw new Error('Invalid credentials received')
   }
 
-  if (!providedCredentials.length) throw new Error('No credentials received')
-
   providedCredentials.map(async credential => {
     await storageLib.delete.verifiableCredential(credential.id)
     await storageLib.store.verifiableCredential(credential)
   })
 
   const issuerDid = keyIdToDid(credentialOfferRequest.issuer)
-  const offerMetadata = assembleCredentialMetadata(interactionToken, issuerDid)
-  if (offerMetadata) {
-    await Promise.all(offerMetadata.map(storageLib.store.credentialMetadata))
+  const offerCredentialDetails = assembleCredentialDetails(
+    interactionToken,
+    issuerDid,
+  )
+  if (offerCredentialDetails) {
+    await offerCredentialDetails.reduce<Promise<CacheEntity | void>>(
+      (chain, cred) =>
+        chain.then(() => storageLib.store.credentialMetadata(cred)),
+      Promise.resolve(),
+    )
   }
 
   const requester = await registry.resolve(issuerDid)
@@ -144,7 +165,7 @@ const areRequirementsEmpty = (interactionToken: CredentialOfferRequest) =>
     map(interactionToken.getRequestedInputForType.bind(interactionToken)),
   )(interactionToken.offeredTypes)
 
-const assembleCredentialMetadata = (
+const assembleCredentialDetails = (
   interactionToken: CredentialOfferRequest,
   issuerDid: string,
 ) =>
