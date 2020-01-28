@@ -28,7 +28,6 @@ export const ActionSheet: React.FC<Props> = props => {
   const [animatedValue] = useState(new Animated.Value(0))
 
   useEffect(() => {
-    //NOTE: timeout so it doesn't
     setTimeout(() => {
       if (showSlide) {
         animateShow()

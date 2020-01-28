@@ -9,8 +9,10 @@ import {
   View,
 } from 'react-native'
 import { ThunkDispatch } from '../../../store'
-import { acceptSelectedCredentials } from '../../../actions/sso/credentialOfferRequest'
-import { CredentialMetadataSummary } from '../../../lib/storage/storage'
+import {
+  acceptSelectedCredentials,
+  CredentialOfferRenderDetails,
+} from '../../../actions/sso/credentialOfferRequest'
 import { CredentialOfferResponseSelection } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
@@ -63,20 +65,22 @@ const styles = StyleSheet.create({
   },
 })
 
-interface CredentialNavigationParams {
+export interface CredentialOfferNavigationParams {
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>
-  callbackURL: string
   requesterSummary: IdentitySummary
-  offerMetadata: CredentialMetadataSummary[]
+  credentialRenderDetails: CredentialOfferRenderDetails[]
   isDeepLink: boolean
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
-  navigation: NavigationScreenProp<NavigationState, CredentialNavigationParams>
+  navigation: NavigationScreenProp<
+    NavigationState,
+    CredentialOfferNavigationParams
+  >
 }
 
 export const CredentialsReceiveContainer = (props: Props) => {
-  const [selected, setSelected] = useState<CredentialMetadataSummary[]>([])
+  const [selected, setSelected] = useState<CredentialOfferRenderDetails[]>([])
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
@@ -84,31 +88,26 @@ export const CredentialsReceiveContainer = (props: Props) => {
         credentialOfferRequest,
         requesterSummary,
         isDeepLink,
-        offerMetadata,
+        credentialRenderDetails,
       },
     },
   } = navigation
   const publicProfile = requesterSummary && requesterSummary.publicProfile
 
   const handleConfirm = () => {
-    if (selected.length) {
-      const responseSelection: CredentialOfferResponseSelection[] = selected.map(
-        credential => {
-          return {
-            type: credential.type,
-            // providedInput ???
-          }
-        },
-      )
-      acceptSelectedCredentials(
-        responseSelection,
-        credentialOfferRequest,
-        isDeepLink,
-      )
-    }
+    const responseSelection: CredentialOfferResponseSelection[] = selected.map(
+      credential => ({
+        type: credential.type,
+      }),
+    )
+    acceptSelectedCredentials(
+      responseSelection,
+      credentialOfferRequest,
+      isDeepLink,
+    )
   }
 
-  const onPressDocument = (cred: CredentialMetadataSummary) => {
+  const onPressDocument = (cred: CredentialOfferRenderDetails) => {
     if (selected.includes(cred)) {
       setSelected(selected.filter(current => current !== cred))
     } else {
@@ -118,7 +117,10 @@ export const CredentialsReceiveContainer = (props: Props) => {
 
   return (
     <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
-      <ScrollView style={{ width: '100%' }}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: '50%' }}
+        style={{ width: '100%' }}
+      >
         {publicProfile && (
           <View style={styles.topSection}>
             <Image style={styles.logo} source={{ uri: publicProfile.image }} />
@@ -130,7 +132,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
             </Text>
           </View>
         )}
-        {offerMetadata.map(summary => {
+        {credentialRenderDetails.map(summary => {
           const { type, renderInfo } = summary
           const isSelected = selected.includes(summary)
           return (
