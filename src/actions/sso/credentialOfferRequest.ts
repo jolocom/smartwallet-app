@@ -1,6 +1,16 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { all, compose, isEmpty, isNil, map, either } from 'ramda'
+import {
+  all,
+  compose,
+  includes,
+  filter,
+  isEmpty,
+  isNil,
+  map,
+  either,
+  uniqBy,
+} from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
@@ -21,6 +31,7 @@ import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import { CredentialOfferNavigationParams } from '../../ui/home/containers/credentialReceive'
 import { CacheEntity } from '../../lib/storage/entities'
+import { CredentialMetadataSummary } from '../../lib/storage/storage'
 
 export interface CredentialOfferRenderDetails {
   renderInfo: CredentialOfferRenderInfo | undefined
@@ -119,9 +130,16 @@ export const acceptSelectedCredentials = (
   const offerCredentialDetails = assembleCredentialDetails(
     interactionToken,
     issuerDid,
+    selectedCredentialTypes,
   )
+
   if (offerCredentialDetails) {
-    await offerCredentialDetails.reduce<Promise<CacheEntity | void>>(
+    const uniqCredentialDetails = uniqBy(
+      detail => `${detail.issuer.did}${detail.type}`,
+      offerCredentialDetails,
+    )
+
+    await uniqCredentialDetails.reduce<Promise<CacheEntity | void>>(
       (chain, cred) =>
         chain.then(() => storageLib.store.credentialMetadata(cred)),
       Promise.resolve(),
@@ -168,12 +186,21 @@ const areRequirementsEmpty = (interactionToken: CredentialOfferRequest) =>
 const assembleCredentialDetails = (
   interactionToken: CredentialOfferRequest,
   issuerDid: string,
-) =>
-  interactionToken.offeredTypes.map(type => ({
-    issuer: {
-      did: issuerDid,
-    },
-    type,
-    renderInfo: interactionToken.getRenderInfoForType(type) || {},
-    metadata: interactionToken.getMetadataForType(type) || {},
-  }))
+  selectedCredentialTypes: CredentialOfferResponseSelection[],
+): CredentialMetadataSummary[] => {
+  const { offeredTypes } = interactionToken
+
+  return compose(
+    map((type: string) => ({
+      issuer: {
+        did: issuerDid,
+      },
+      type,
+      renderInfo: interactionToken.getRenderInfoForType(type) || {},
+      metadata: interactionToken.getMetadataForType(type) || {},
+    })),
+    // @ts-ignore
+    filter(selected => includes(selected, offeredTypes)),
+    map((selected: CredentialOfferResponseSelection) => selected.type),
+  )(selectedCredentialTypes)
+}
