@@ -5,8 +5,8 @@ import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
 import {
   withLoading,
-  withErrorScreen,
   withInternet,
+  withErrorNotification,
 } from 'src/actions/modifiers'
 import {
   CredentialRequestSummary,
@@ -78,7 +78,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(
       withInternet(
         withLoading(
-          withErrorScreen(
+          withErrorNotification(
             ssoActions.sendCredentialResponse(
               credentials,
               credentialRequestDetails,

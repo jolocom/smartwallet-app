@@ -84,6 +84,10 @@ const notifications = {
   UH_OH_YOURE_NOT_CONNECTED: 'Uh oh… you’re not connected!',
   WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN:
     'We can’t register you if you don’t have internet. Please check your connection and try again.',
+  WHOOPS: 'Whoops...',
+  ITS_NOT_YOU_ITS_US_PLEASE_LET_US_KNOW_IF_YOURE_EXPERIENCING_THIS_ERROR_BY_FILING_A_REPORT:
+    "It's not you, it's us. Please, let us know if you're experiencing this error by filing a report",
+  REPORT: 'Report',
 }
 
 const errorTitle = {

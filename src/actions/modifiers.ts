@@ -1,13 +1,13 @@
 import { ActionCreator, AnyAction } from 'redux'
 import NetInfo from '@react-native-community/netinfo'
 import { ThunkAction } from 'src/store'
-import { AppError } from '../lib/errors'
+import { AppError, ErrorCode } from '../lib/errors'
 import { toggleLoading } from './account'
 import { showErrorScreen } from './generic'
-import { scheduleNotification } from './notifications'
-import { createInfoNotification } from '../lib/notifications'
-import I18n from 'src/locales/i18n'
-import strings from '../locales/strings'
+import {
+  scheduleErrorNotification,
+  scheduleOfflineNotification,
+} from './notifications/creators'
 
 /**
  * Curried function that wraps a {@link ThunkAction} with two calls to the provided loadingAction
@@ -32,24 +32,16 @@ export const withLoadingHandler = (loadingAction: ActionCreator<AnyAction>) => (
 
 /**
  * Curried function that wraps a {@link ThunkAction} with a notification on internet connection absence
+ * @param notificationAction - The action that should schedule a notification when there is no connection present
  * @param wrappedAction - The thunkAction to be wrapped
  * @example dispatch(withInternet((saveClaims))
  */
-export const withInternet = (
+export const withInternetHandler = (notificationAction: ThunkAction) => (
   wrappedAction: ThunkAction,
 ): ThunkAction => async dispatch => {
   const state = await NetInfo.fetch()
   if (!state.isConnected) {
-    return dispatch(
-      scheduleNotification(
-        createInfoNotification({
-          title: I18n.t(strings.UH_OH_YOURE_NOT_CONNECTED),
-          message: I18n.t(
-            strings.WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN,
-          ),
-        }),
-      ),
-    )
+    return dispatch(notificationAction)
   }
   return dispatch(wrappedAction)
 }
@@ -81,5 +73,18 @@ export const withErrorHandler = (
   }
 }
 
+const showErrorNotification = (
+  error: AppError | Error,
+): ThunkAction => dispatch => {
+  const appError: AppError =
+    error.constructor === AppError
+      ? (error as AppError)
+      : new AppError(ErrorCode.Unknown, error)
+
+  return dispatch(scheduleErrorNotification(appError))
+}
+
 export const withLoading = withLoadingHandler(toggleLoading)
 export const withErrorScreen = withErrorHandler(showErrorScreen)
+export const withInternet = withInternetHandler(scheduleOfflineNotification)
+export const withErrorNotification = withErrorHandler(showErrorNotification)
