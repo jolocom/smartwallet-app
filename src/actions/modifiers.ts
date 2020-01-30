@@ -1,8 +1,13 @@
 import { ActionCreator, AnyAction } from 'redux'
+import NetInfo from '@react-native-community/netinfo'
 import { ThunkAction } from 'src/store'
 import { AppError } from '../lib/errors'
 import { toggleLoading } from './account'
 import { showErrorScreen } from './generic'
+import { scheduleNotification } from './notifications'
+import { createInfoNotification } from '../lib/notifications'
+import I18n from 'src/locales/i18n'
+import strings from '../locales/strings'
 
 /**
  * Curried function that wraps a {@link ThunkAction} with two calls to the provided loadingAction
@@ -23,6 +28,30 @@ export const withLoadingHandler = (loadingAction: ActionCreator<AnyAction>) => (
     // down, which will flash the old screen shortly
     setTimeout(() => dispatch(loadingAction(false)), 100)
   }
+}
+
+/**
+ * Curried function that wraps a {@link ThunkAction} with a notification on internet connection absence
+ * @param wrappedAction - The thunkAction to be wrapped
+ * @example dispatch(withInternet((saveClaims))
+ */
+export const withInternet = (
+  wrappedAction: ThunkAction,
+): ThunkAction => async dispatch => {
+  const state = await NetInfo.fetch()
+  if (!state.isConnected) {
+    return dispatch(
+      scheduleNotification(
+        createInfoNotification({
+          title: I18n.t(strings.UH_OH_YOURE_NOT_CONNECTED),
+          message: I18n.t(
+            strings.WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN,
+          ),
+        }),
+      ),
+    )
+  }
+  return dispatch(wrappedAction)
 }
 
 type ErrorModifier = (error: AppError | Error) => AppError

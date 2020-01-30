@@ -3,7 +3,11 @@ import { connect } from 'react-redux'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
-import { withLoading, withErrorScreen } from 'src/actions/modifiers'
+import {
+  withLoading,
+  withErrorScreen,
+  withInternet,
+} from 'src/actions/modifiers'
 import {
   CredentialRequestSummary,
   CredentialVerificationSummary,
@@ -72,12 +76,14 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     isDeepLinkInteraction: boolean,
   ) =>
     dispatch(
-      withLoading(
-        withErrorScreen(
-          ssoActions.sendCredentialResponse(
-            credentials,
-            credentialRequestDetails,
-            isDeepLinkInteraction,
+      withInternet(
+        withLoading(
+          withErrorScreen(
+            ssoActions.sendCredentialResponse(
+              credentials,
+              credentialRequestDetails,
+              isDeepLinkInteraction,
+            ),
           ),
         ),
       ),

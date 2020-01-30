@@ -81,6 +81,9 @@ const notifications = {
   CONFIRMATION_IS_NOT_COMPLETE: 'Confirmation is not complete',
   YOUR_DATA_MAY_BE_LOST_BECAUSE_YOU_DID_NOT_CONFIRM_THE_SEED_PHRASE_WE_ADVISE_YOU_TO_COMPLETE_THE_REGISTRATION:
     'Your data may be lost because you did not confirm the seed phrase. We advise you to complete the registration.',
+  UH_OH_YOURE_NOT_CONNECTED: 'Uh oh… you’re not connected!',
+  WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN:
+    'We can’t register you if you don’t have internet. Please check your connection and try again.',
 }
 
 const errorTitle = {
