@@ -1,14 +1,8 @@
-import { Image, Platform, StyleProp, TextStyle } from 'react-native'
-import { createElement } from 'react'
-
 import {
   createAppContainer,
   createBottomTabNavigator,
   createStackNavigator,
   createSwitchNavigator,
-  NavigationRoute,
-  NavigationScreenOptions,
-  NavigationScreenProp,
 } from 'react-navigation'
 
 import { ClaimDetails, Claims, Records } from 'src/ui/home/'
@@ -20,13 +14,12 @@ import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
 import { CredentialReceive } from 'src/ui/home'
 import { Settings } from 'src/ui/settings'
-import I18n from 'src/locales/i18n'
 import { InteractionScreen } from 'src/ui/interaction/container/interactionScreen'
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
 import { AppInit } from './ui/generic/appInit'
 import strings from './locales/strings'
-import { Colors, Typography } from 'src/styles'
+import { Colors } from 'src/styles'
 
 import {
   DocsIcon,
@@ -44,45 +37,8 @@ import { NotificationScheduler } from './ui/notifications/containers/devNotifica
 import { NotificationFilter } from './lib/notifications'
 import { ErrorScreenContainer } from './ui/errors/containers/errorScreen'
 
-// only used on android
-const headerBackImage = createElement(Image, {
-  source: require('./resources/img/close.png'),
-  style: {
-    height: 26,
-    width: 26,
-    padding: 4,
-  },
-})
-
 const noHeaderNavOpts = {
   header: null,
-}
-
-const headerTitleStyle: StyleProp<TextStyle> = {
-  ...Typography.standardText,
-  // the default is 500, which is not supported on Android properly
-  fontWeight: 'normal',
-  color: Colors.navHeaderTintDefault,
-}
-
-const commonNavigationOptions: NavigationScreenOptions = {
-  headerTitleStyle,
-  headerStyle: {
-    backgroundColor: Colors.navHeaderBgDefault,
-    borderBottomWidth: 0,
-  },
-}
-
-const navOptScreenWCancel = {
-  ...commonNavigationOptions,
-  ...Platform.select({
-    android: {
-      headerBackImage,
-    },
-    ios: {
-      headerTintColor: Colors.purpleMain,
-    },
-  }),
 }
 
 export const BottomTabBarRoutes = {
@@ -90,7 +46,6 @@ export const BottomTabBarRoutes = {
     screen: Claims,
     title: strings.IDENTITY,
     navigationOptions: {
-      ...commonNavigationOptions,
       tabBarIcon: IdentityIcon,
       notifications: NotificationFilter.all,
     },
@@ -99,7 +54,6 @@ export const BottomTabBarRoutes = {
     screen: Documents,
     title: strings.DOCUMENTS,
     navigationOptions: {
-      ...commonNavigationOptions,
       tabBarIcon: DocsIcon,
       notifications: NotificationFilter.all,
     },
@@ -108,7 +62,6 @@ export const BottomTabBarRoutes = {
     screen: Records,
     title: strings.HISTORY,
     navigationOptions: {
-      ...commonNavigationOptions,
       tabBarIcon: HistoryIcon,
       notifications: NotificationFilter.onlyDismissible,
     },
@@ -117,7 +70,6 @@ export const BottomTabBarRoutes = {
     screen: Settings,
     title: strings.SETTINGS,
     navigationOptions: {
-      ...commonNavigationOptions,
       tabBarIcon: SettingsIcon,
       notifications: NotificationFilter.onlyDismissible,
     },
@@ -128,18 +80,6 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   tabBarOptions: {
     activeTintColor: Colors.white,
     inactiveTintColor: Colors.gray151,
-  },
-  navigationOptions: ({
-    navigation,
-  }: {
-    navigation: NavigationScreenProp<NavigationRoute>
-  }) => {
-    // proxy the route title as the headerTitle for this screen
-    const nestedRouteName =
-      navigation.state.routes[navigation.state.index].routeName
-    return {
-      headerTitle: I18n.t(BottomTabBarRoutes[nestedRouteName].title),
-    }
   },
   tabBarComponent: BottomBar,
 })
@@ -176,7 +116,6 @@ const MainStack = createStackNavigator(
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
       navigationOptions: {
-        ...noHeaderNavOpts,
         notifications: NotificationFilter.onlyDismissible,
       },
     },
@@ -184,53 +123,42 @@ const MainStack = createStackNavigator(
     [routeList.CredentialDialog]: {
       screen: CredentialReceive,
       navigationOptions: () => ({
-        ...navOptScreenWCancel,
-        headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
-        notifications: NotificationFilter.none,
+        notifications: NotificationFilter.onlyDismissible,
       }),
     },
     [routeList.Consent]: {
       screen: Consent,
       navigationOptions: () => ({
-        ...navOptScreenWCancel,
-        headerTitle: I18n.t(strings.SHARE_CLAIMS),
+        notifications: NotificationFilter.onlyDismissible,
       }),
     },
     [routeList.PaymentConsent]: {
       screen: PaymentConsent,
       navigationOptions: () => ({
-        ...navOptScreenWCancel,
-        headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
+        notifications: NotificationFilter.onlyDismissible,
       }),
     },
     [routeList.AuthenticationConsent]: {
       screen: AuthenticationConsent,
       navigationOptions: () => ({
-        ...navOptScreenWCancel,
-        headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
+        notifications: NotificationFilter.onlyDismissible,
       }),
     },
     [routeList.ClaimDetails]: {
       screen: ClaimDetails,
-      navigationOptions: navOptScreenWCancel,
     },
     [routeList.DocumentDetails]: {
       screen: DocumentDetails,
-      navigationOptions: {
-        ...navOptScreenWCancel,
-      },
     },
     [routeList.SeedPhrase]: {
       screen: SeedPhrase,
       navigationOptions: {
-        ...noHeaderNavOpts,
         notifications: NotificationFilter.none,
       },
     },
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
       navigationOptions: {
-        ...noHeaderNavOpts,
         notifications: NotificationFilter.none,
       },
     },
@@ -238,33 +166,28 @@ const MainStack = createStackNavigator(
     [routeList.Exception]: {
       screen: Exception,
       navigationOptions: {
-        ...noHeaderNavOpts,
         notifications: NotificationFilter.none,
       },
     },
     [routeList.ErrorReporting]: {
       screen: ErrorReporting,
       navigationOptions: {
-        ...noHeaderNavOpts,
         notifications: NotificationFilter.none,
       },
     },
     [routeList.ErrorScreen]: {
       screen: ErrorScreenContainer,
       navigationOptions: {
-        ...noHeaderNavOpts,
         notifications: NotificationFilter.none,
       },
     },
     ...(__DEV__ && {
       [routeList.Storybook]: {
         screen: require('src/ui/storybook').StorybookScreen,
-        navigationOptions: navOptScreenWCancel,
       },
       [routeList.NotificationScheduler]: {
         screen: NotificationScheduler,
         navigationOptions: {
-          ...noHeaderNavOpts,
           notifications: NotificationFilter.all,
         },
       },
