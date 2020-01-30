@@ -82,8 +82,8 @@ const notifications = {
   YOUR_DATA_MAY_BE_LOST_BECAUSE_YOU_DID_NOT_CONFIRM_THE_SEED_PHRASE_WE_ADVISE_YOU_TO_COMPLETE_THE_REGISTRATION:
     'Your data may be lost because you did not confirm the seed phrase. We advise you to complete the registration.',
   GREAT_SUCCESS: 'Great success!',
-  YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_AT_THE_DOCUMENTS:
-    'You can find your new credential at the documents',
+  YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_IN_THE_DOCUMENTS:
+    'You can find your new credential in the documents',
   OPEN: 'Open',
 }
 
@@ -156,7 +156,7 @@ export default {
   ALL_CLAIMS: 'All claims',
   RECEIVING_NEW_CREDENTIAL: 'Receiving new credential',
   CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU:
-    'Choose one or more documents provided by this service and we willgenerate them for you',
+    'Choose one or more documents provided by this service and we will generate them for you',
   RECEIVE: 'Receive',
   SHARE_CLAIMS: 'Share claims',
   CONFIRM_PAYMENT: 'Confirm payment',

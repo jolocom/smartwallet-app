@@ -4,97 +4,17 @@ import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { getUiCredentialTypeByType } from 'src/lib/util'
-import { convertToDecoratedClaim } from '../account'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { ThunkAction } from '../../store'
-import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { DecoratedClaims } from '../../reducers/account'
 import {
   CredentialRequestSummary,
   CredentialVerificationSummary,
-  IdentitySummary,
 } from './types'
 import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 import { generateIdentitySummary } from './utils'
-
-export const setReceivingCredential = (
-  requester: IdentitySummary,
-  external: Array<{
-    decoratedClaim: DecoratedClaims
-    credential: SignedCredential
-  }>,
-) => ({
-  type: 'SET_EXTERNAL',
-  value: { offeror: requester, offer: external },
-})
-
-export const receiveExternalCredential = (
-  credReceive: JSONWebToken<CredentialsReceive>,
-  offeror: IdentitySummary,
-  isDeepLinkInteraction: boolean,
-  credentialOfferMetadata?: CredentialMetadataSummary[],
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { identityWallet, registry, storageLib } = backendMiddleware
-
-  await identityWallet.validateJWT(credReceive, undefined, registry)
-  const providedCredentials = credReceive.interactionToken.signedCredentials
-
-  const validationResults = await JolocomLib.util.validateDigestables(
-    providedCredentials,
-  )
-
-  // TODO Error Code
-  if (validationResults.includes(false)) {
-    throw new Error('Invalid credentials received')
-  }
-
-  if (credentialOfferMetadata) {
-    await Promise.all(
-      credentialOfferMetadata.map(storageLib.store.credentialMetadata),
-    )
-  }
-
-  if (offeror) {
-    await storageLib.store.issuerProfile(offeror)
-  }
-
-  // TODO change convertToDecoratedClaim to (metadata) => (cred): decoratedClaim
-  // the types of the cred metadata arrays where it is use differ too much to do it simply right now
-  const asDecoratedCredentials = providedCredentials.map(cred => {
-    const md = credentialOfferMetadata
-      ? credentialOfferMetadata.filter(mds => cred.type.includes(mds.type))
-      : undefined
-
-    const renderInfo = md && md.length ? md[0].renderInfo : undefined
-
-    return {
-      ...convertToDecoratedClaim(cred),
-      renderInfo,
-    }
-  })
-
-  dispatch(
-    setReceivingCredential(
-      offeror,
-      providedCredentials.map((cred, i) => ({
-        credential: cred,
-        decoratedClaim: asDecoratedCredentials[i],
-      })),
-    ),
-  )
-
-  return dispatch(
-    navigationActions.navigate({
-      routeName: routeList.CredentialDialog,
-      params: { isDeepLinkInteraction },
-      key: 'receiveExternalCredential',
-    }),
-  )
-}
 
 interface AttributeSummary {
   type: string[]

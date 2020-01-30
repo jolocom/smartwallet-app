@@ -1,22 +1,16 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import {
-  all,
-  compose,
-  includes,
-  filter,
-  isEmpty,
-  isNil,
-  map,
-  either,
-  uniqBy,
-} from 'ramda'
+import { uniqBy } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { ThunkAction } from 'src/store'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { generateIdentitySummary } from './utils'
+import {
+  areRequirementsEmpty,
+  assembleCredentialDetails,
+  generateIdentitySummary,
+} from './utils'
 import {
   CredentialOfferRenderInfo,
   CredentialOfferResponseSelection,
@@ -30,8 +24,6 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import { CredentialOfferNavigationParams } from '../../ui/home/containers/credentialReceive'
-import { CacheEntity } from '../../lib/storage/entities'
-import { CredentialMetadataSummary } from '../../lib/storage/storage'
 
 export interface CredentialOfferRenderDetails {
   renderInfo: CredentialOfferRenderInfo | undefined
@@ -139,10 +131,8 @@ export const acceptSelectedCredentials = (
       offerCredentialDetails,
     )
 
-    await uniqCredentialDetails.reduce<Promise<CacheEntity | void>>(
-      (chain, cred) =>
-        chain.then(() => storageLib.store.credentialMetadata(cred)),
-      Promise.resolve(),
+    await Promise.all(
+      uniqCredentialDetails.map(storageLib.store.credentialMetadata),
     )
   }
 
@@ -157,7 +147,7 @@ export const acceptSelectedCredentials = (
 
   const notification: Notification = createInfoNotification({
     title: I18n.t(strings.GREAT_SUCCESS),
-    message: I18n.t(strings.YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_AT_THE_DOCUMENTS),
+    message: I18n.t(strings.YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_IN_THE_DOCUMENTS),
     interact: {
       label: I18n.t(strings.OPEN),
       onInteract: () => {
@@ -175,32 +165,4 @@ export const acceptSelectedCredentials = (
       navigationActions.navigate({ routeName: routeList.InteractionScreen }),
     )
   }
-}
-
-const areRequirementsEmpty = (interactionToken: CredentialOfferRequest) =>
-  compose(
-    all(either(isNil, isEmpty)),
-    map(interactionToken.getRequestedInputForType.bind(interactionToken)),
-  )(interactionToken.offeredTypes)
-
-const assembleCredentialDetails = (
-  interactionToken: CredentialOfferRequest,
-  issuerDid: string,
-  selectedCredentialTypes: CredentialOfferResponseSelection[],
-): CredentialMetadataSummary[] => {
-  const { offeredTypes } = interactionToken
-
-  return compose(
-    map((type: string) => ({
-      issuer: {
-        did: issuerDid,
-      },
-      type,
-      renderInfo: interactionToken.getRenderInfoForType(type) || {},
-      metadata: interactionToken.getMetadataForType(type) || {},
-    })),
-    // @ts-ignore
-    filter(selected => includes(selected, offeredTypes)),
-    map((selected: CredentialOfferResponseSelection) => selected.type),
-  )(selectedCredentialTypes)
 }
