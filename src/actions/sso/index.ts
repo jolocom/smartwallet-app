@@ -25,6 +25,10 @@ import { AppError } from '../../lib/errors'
 import ErrorCode from '../../lib/errorCodes'
 import { generateIdentitySummary } from './utils'
 import { ErrorScreenParams } from '../../ui/errors/containers/errorScreen'
+import { scheduleNotification } from '../notifications'
+import { createInfoNotification } from '../../lib/notifications'
+import I18n from 'src/locales/i18n'
+import strings from '../../locales/strings'
 
 export const setReceivingCredential = (
   requester: IdentitySummary,
@@ -231,12 +235,25 @@ export const sendCredentialResponse = (
 
     return Linking.openURL(callback).then(() => dispatch(cancelSSO))
   }
+
   await fetch(callbackURL, {
     method: 'POST',
     body: JSON.stringify({ token: response.encode() }),
     headers: { 'Content-Type': 'application/json' },
   })
-  dispatch(cancelSSO)
+
+  dispatch(
+    scheduleNotification(
+      createInfoNotification({
+        title: I18n.t(strings.GREAT_SUCCESS),
+        message: 'You successfully shared your credentials',
+      }),
+    ),
+  )
+
+  dispatch(
+    navigationActions.navigate({ routeName: routeList.InteractionScreen }),
+  )
 }
 
 export const cancelSSO: ThunkAction = dispatch => {
