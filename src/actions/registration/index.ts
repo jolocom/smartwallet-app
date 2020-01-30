@@ -5,6 +5,11 @@ import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
+import { scheduleNotification } from '../notifications'
+import { createInfoNotification } from '../../lib/notifications'
+import I18n from 'src/locales/i18n'
+import strings from '../../locales/strings'
+import { validateMnemonic } from 'bip39'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -54,11 +59,23 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   backendMiddleware,
 ) => {
   dispatch(setIsRegistering(true))
+
   let identity
   try {
+    validateMnemonic(mnemonic)
     identity = await backendMiddleware.recoverIdentity(mnemonic)
   } catch (e) {
-    return dispatch(setIsRegistering(false))
+    dispatch(setIsRegistering(false))
+    return dispatch(
+      scheduleNotification(
+        createInfoNotification({
+          title: I18n.t(strings.YIKES),
+          message: I18n.t(
+            strings.LOOKS_LIKE_YOU_HAVE_THE_WRONG_SEED_PHRASE_PLEASE_GO_BACK_AND_TRY_AGAIN,
+          ),
+        }),
+      ),
+    )
   }
 
   dispatch(setDid(identity.did))
