@@ -89,6 +89,9 @@ const notifications = {
   ITS_NOT_YOU_ITS_US_PLEASE_LET_US_KNOW_IF_YOURE_EXPERIENCING_THIS_ERROR_BY_FILING_A_REPORT:
     "It's not you, it's us. Please, let us know if you're experiencing this error by filing a report",
   REPORT: 'Report',
+  YIKES: 'Yikes!',
+  LOOKS_LIKE_YOU_HAVE_THE_WRONG_SEED_PHRASE_PLEASE_GO_BACK_AND_TRY_AGAIN:
+    'Looks like you have the wrong seed phrase. Please go back and try again.',
 }
 
 const errorTitle = {
