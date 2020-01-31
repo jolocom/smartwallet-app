@@ -11,6 +11,7 @@ import Carousel, {
 import { Typography, Colors, Spacing, Buttons } from 'src/styles'
 
 interface Props {
+  isOffline: boolean
   handleGetStarted: () => void
   handleRecover: () => void
 }
@@ -137,12 +138,14 @@ export class LandingComponent extends React.Component<Props> {
         <View style={styles.bottomSection}>
           <JolocomButton
             testID="getStarted"
+            disabled={this.props.isOffline}
             containerStyle={{ width: '100%' }}
             onPress={this.props.handleGetStarted}
             text={I18n.t(strings.GET_STARTED)}
           />
           <JolocomButton
             testID="recoverIdentity"
+            disabled={this.props.isOffline}
             containerStyle={{
               width: '100%',
               marginTop: 12,
