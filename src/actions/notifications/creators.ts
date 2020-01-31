@@ -38,6 +38,9 @@ export const scheduleErrorNotification = (
         )
       },
     },
+    dismiss: {
+      timeout: 20000,
+    },
   }
   return dispatch(scheduleNotification(createInfoNotification(notification)))
 }

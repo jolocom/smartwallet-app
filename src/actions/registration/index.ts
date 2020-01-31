@@ -14,6 +14,7 @@ import {
   ErrorScreenParams,
   ImageType,
 } from '../../ui/errors/containers/errorScreen'
+import { timeout } from '../../utils/asyncTimeout'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -62,7 +63,11 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
+  dispatch(setIsRegistering(true))
+
   if (!validateMnemonic(mnemonic)) {
+    await timeout(1000)
+    dispatch(setIsRegistering(false))
     return dispatch(
       scheduleNotification(
         createInfoNotification({
@@ -74,8 +79,6 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
       ),
     )
   }
-
-  dispatch(setIsRegistering(true))
 
   let identity
   try {
