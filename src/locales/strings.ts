@@ -100,6 +100,14 @@ const errorTitle = {
   UH_OH: 'Uh oh',
 }
 
+const errorScreen = {
+  DID_YOU_FORGET_YOUR_SEED_PHRASE: 'Did you forget your seed phrase?',
+  BECAUSE_WEVE_NEVER_SEEN_THAT_ONE_BEFORE_PLEASE_TRY_AGAIN_WITH_A_DIFFERENT_SEED_PHRASE:
+    "Because we've never seen that one before! Please try again with a different seed phrase.",
+  START_OVER: 'Start over',
+  CREATE_NEW_PROFILE: 'Create new profile',
+}
+
 const errorReporting = {
   CHOOSE_THE_ISSUE: 'Choose the issue',
   NO_INTERNET_CONNECTION: 'No internet connection',
@@ -153,6 +161,7 @@ export default {
   ...settings,
   ...backup,
   ...errorTitle,
+  ...errorScreen,
   ...errorCodes,
   ...errorReporting,
   ...notifications,

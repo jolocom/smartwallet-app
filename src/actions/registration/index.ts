@@ -10,6 +10,10 @@ import { createInfoNotification } from '../../lib/notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import { validateMnemonic } from 'bip39'
+import {
+  ErrorScreenParams,
+  ImageType,
+} from '../../ui/errors/containers/errorScreen'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -58,14 +62,7 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  dispatch(setIsRegistering(true))
-
-  let identity
-  try {
-    validateMnemonic(mnemonic)
-    identity = await backendMiddleware.recoverIdentity(mnemonic)
-  } catch (e) {
-    dispatch(setIsRegistering(false))
+  if (!validateMnemonic(mnemonic)) {
     return dispatch(
       scheduleNotification(
         createInfoNotification({
@@ -75,6 +72,45 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
           ),
         }),
       ),
+    )
+  }
+
+  dispatch(setIsRegistering(true))
+
+  let identity
+  try {
+    identity = await backendMiddleware.recoverIdentity(mnemonic)
+  } catch (e) {
+    dispatch(setIsRegistering(false))
+    const params: ErrorScreenParams = {
+      title: I18n.t(strings.DID_YOU_FORGET_YOUR_SEED_PHRASE),
+      message: I18n.t(
+        strings.BECAUSE_WEVE_NEVER_SEEN_THAT_ONE_BEFORE_PLEASE_TRY_AGAIN_WITH_A_DIFFERENT_SEED_PHRASE,
+      ),
+      image: ImageType.Red,
+      interact: {
+        label: I18n.t(strings.START_OVER),
+        onInteract: () => {
+          dispatch(
+            navigationActions.navigate({
+              routeName: routeList.InputSeedPhrase,
+            }),
+          )
+        },
+      },
+      dismiss: {
+        label: I18n.t(strings.CREATE_NEW_PROFILE),
+        onDismiss: () => {
+          dispatch(navigationActions.navigate({ routeName: routeList.Entropy }))
+        },
+      },
+    }
+
+    return dispatch(
+      navigationActions.navigate({
+        routeName: routeList.ErrorScreen,
+        params,
+      }),
     )
   }
 

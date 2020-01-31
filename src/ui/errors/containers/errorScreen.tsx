@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
 })
 
-enum ImageType {
+export enum ImageType {
   Red = 'red',
   Blue = 'blue',
 }
