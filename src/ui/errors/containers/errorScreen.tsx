@@ -1,11 +1,15 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
+import { BackHandler, StyleSheet, Text, View } from 'react-native'
 import { JolocomButton, Wrapper } from '../../structure'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { centeredText, fontMain } from '../../../styles/typography'
-import { Colors } from '../../../styles'
-import { BP } from '../../../styles/breakpoints'
+import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
+import { Colors, Typefaces } from '../../../styles'
 import { BlueCircleImage, RedCircleImage } from '../../../resources'
+import { BP } from '../../../styles/breakpoints'
+import { connect } from 'react-redux'
+import { ThunkDispatch } from '../../../store'
+import { navigationActions } from '../../../actions'
+import { routeList } from '../../../routeList'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -18,28 +22,28 @@ const styles = StyleSheet.create({
     height: '54%',
   },
   title: {
-    paddingHorizontal: 20,
-    fontFamily: fontMain,
-    fontSize: BP({
-      small: 26,
-      medium: 28,
-      large: 28,
-    }),
-    color: Colors.sandLight090,
+    ...Typefaces.title2,
     ...centeredText,
+    fontFamily: fontMedium,
+    color: Colors.sandLight090,
+    paddingHorizontal: 10,
   },
   message: {
-    marginTop: 13,
-    paddingHorizontal: 20,
+    ...centeredText,
     fontFamily: fontMain,
+    lineHeight: BP({
+      small: 20,
+      medium: 20,
+      large: 24,
+    }),
     fontSize: BP({
       small: 18,
-      medium: 20,
+      medium: 18,
       large: 20,
     }),
+    marginTop: 13,
+    paddingHorizontal: 26,
     color: Colors.sandLight080,
-    lineHeight: 24,
-    ...centeredText,
   },
   interactButton: {
     marginTop: 14,
@@ -47,12 +51,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
   },
   buttonSection: {
+    flex: 0.3,
     width: '100%',
-    paddingBottom: 62,
     paddingHorizontal: 20,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   contentSection: {
+    flex: 0.7,
     width: '100%',
     alignItems: 'center',
   },
@@ -77,18 +82,32 @@ export interface ErrorScreenParams {
   }
 }
 
-interface Props {
+interface Props extends ReturnType<typeof mapDispatchToProps> {
   navigation: NavigationScreenProp<NavigationState, ErrorScreenParams>
 }
 
-export const ErrorScreenContainer: React.FC<Props> = props => {
+const ErrorScreenContainer: React.FC<Props> = props => {
   const {
+    resetNavigation,
     navigation: {
       state: {
         params: { title, message, interact, dismiss, image },
       },
     },
   } = props
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', onBackButtonPress)
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress)
+    }
+  }, [])
+
+  const onBackButtonPress = (): boolean => {
+    resetNavigation()
+    return true
+  }
 
   return (
     <Wrapper style={styles.wrapper}>
@@ -117,3 +136,13 @@ export const ErrorScreenContainer: React.FC<Props> = props => {
     </Wrapper>
   )
 }
+
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  resetNavigation: () =>
+    dispatch(navigationActions.navigate({ routeName: routeList.AppInit })),
+})
+
+export const ErrorScreen = connect(
+  null,
+  mapDispatchToProps,
+)(ErrorScreenContainer)

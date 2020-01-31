@@ -35,7 +35,7 @@ import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
 
 import { NotificationFilter } from './lib/notifications'
-import { ErrorScreenContainer } from './ui/errors/containers/errorScreen'
+import { ErrorScreen } from './ui/errors/containers/errorScreen'
 
 const noHeaderNavOpts = {
   header: null,
@@ -176,7 +176,7 @@ const MainStack = createStackNavigator(
       },
     },
     [routeList.ErrorScreen]: {
-      screen: ErrorScreenContainer,
+      screen: ErrorScreen,
       navigationOptions: {
         notifications: NotificationFilter.none,
       },
