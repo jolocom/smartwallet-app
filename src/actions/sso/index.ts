@@ -26,9 +26,14 @@ import ErrorCode from '../../lib/errorCodes'
 import { generateIdentitySummary } from './utils'
 import { ErrorScreenParams } from '../../ui/errors/containers/errorScreen'
 import { scheduleNotification } from '../notifications'
-import { createInfoNotification } from '../../lib/notifications'
+import { createInfoNotification, Notification } from '../../lib/notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
+import {
+  localCredentialTypes,
+  uiCredentialFromType,
+} from '../../lib/categories'
+import { intersection, isEmpty, compose, equals, complement } from 'ramda'
 
 export const setReceivingCredential = (
   requester: IdentitySummary,
@@ -140,6 +145,45 @@ export const consumeCredentialRequest = (
   const attributesForType = await Promise.all<AttributeSummary>(
     requestedTypes.map(storageLib.get.attributesByType),
   )
+  const missingTypes = missingAttributeTypes(attributesForType)
+
+  if (!isEmpty(missingTypes)) {
+    const uiMissingCredentialTypes = missingTypes.map(uiCredentialFromType)
+
+    const notification: Notification = createInfoNotification({
+      dismiss: {
+        timeout: 6000,
+      },
+      title: I18n.t(strings.HMM_LOOKS_LIKE_YOURE_MISSING_SOMETHING),
+      message:
+        I18n.t(strings.YOU_DO_NOT_HAVE_THE_FOLLOWING_CREDENTIALS_TO_SEND) +
+        uiMissingCredentialTypes.join(', '),
+    })
+
+    const notificationWithInteraction = {
+      ...notification,
+      interact: {
+        label: I18n.t(strings.ADD_INFO),
+        onInteract: () => {
+          dispatch(navigationActions.navigate({ routeName: routeList.Claims }))
+        },
+      },
+    }
+
+    const anyExternalCred = compose(
+      complement(equals(missingTypes)),
+      intersection(localCredentialTypes),
+    )(missingTypes)
+    console.log(missingTypes)
+    console.log(intersection(localCredentialTypes, missingTypes))
+    console.log(anyExternalCred)
+
+    return dispatch(
+      scheduleNotification(
+        anyExternalCred ? notification : notificationWithInteraction,
+      ),
+    )
+  }
 
   const populatedWithCredentials = await Promise.all(
     attributesForType.map(async entry => {
@@ -291,3 +335,12 @@ export const cancelReceiving: ThunkAction = dispatch => {
     }),
   )
 }
+
+const missingAttributeTypes = (attr: AttributeSummary[]) =>
+  attr.reduce<string[]>((missing, attribute) => {
+    if (isEmpty(attribute.results)) {
+      const type = attribute.type
+      missing.push(type[type.length - 1])
+    }
+    return missing
+  }, [])

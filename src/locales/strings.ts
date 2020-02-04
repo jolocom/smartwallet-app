@@ -92,6 +92,11 @@ const notifications = {
   YIKES: 'Yikes!',
   LOOKS_LIKE_YOU_HAVE_THE_WRONG_SEED_PHRASE_PLEASE_GO_BACK_AND_TRY_AGAIN:
     'Looks like you have the wrong seed phrase. Please go back and try again.',
+  HMM_LOOKS_LIKE_YOURE_MISSING_SOMETHING:
+    "Hmm... looks like you're missing something",
+  YOU_DO_NOT_HAVE_THE_FOLLOWING_CREDENTIALS_TO_SEND:
+    'You do not have the following credential(s) to send: \n',
+  ADD_INFO: 'Add info',
 }
 
 const errorTitle = {
