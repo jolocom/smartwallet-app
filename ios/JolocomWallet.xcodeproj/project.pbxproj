@@ -88,6 +88,8 @@
 		FE1BAE54BEE04653A9053D29 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 102529ADDECB464985ADB5D8 /* libRNCAsyncStorage.a */; };
 		EA919C1BFF804CC4A49804E9 /* libRNCNetInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 773BBE9B211746CCAB315C7A /* libRNCNetInfo.a */; };
 		25BE17B926874094A7D3E974 /* libRNCNetInfo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF39FFED3C1948D9867E7986 /* libRNCNetInfo-tvOS.a */; };
+		EC7C79EE560144A5ACB7C030 /* TTCommons-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB5BA1C199824AC38F1E34CF /* TTCommons-Bold.otf */; };
+		5BEDD43AD7F6467294EF05A3 /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = 177D5101452E483E97F786DC /* TTCommons.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -668,6 +670,8 @@
 		DA18004D2EC843B789386457 /* RNCNetInfo.xcodeproj */ = {isa = PBXFileReference; name = "RNCNetInfo.xcodeproj"; path = "../node_modules/@react-native-community/netinfo/ios/RNCNetInfo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		773BBE9B211746CCAB315C7A /* libRNCNetInfo.a */ = {isa = PBXFileReference; name = "libRNCNetInfo.a"; path = "libRNCNetInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		FF39FFED3C1948D9867E7986 /* libRNCNetInfo-tvOS.a */ = {isa = PBXFileReference; name = "libRNCNetInfo-tvOS.a"; path = "libRNCNetInfo-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		CB5BA1C199824AC38F1E34CF /* TTCommons-Bold.otf */ = {isa = PBXFileReference; name = "TTCommons-Bold.otf"; path = "../src/assets/fonts/TTCommons-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		177D5101452E483E97F786DC /* TTCommons.otf */ = {isa = PBXFileReference; name = "TTCommons.otf"; path = "../src/assets/fonts/TTCommons.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -998,6 +1002,8 @@
 				B7F4F3F872534807887AEDDA /* TypeType - TT Commons Light.otf */,
 				336AF2D15CD3440DAB275543 /* TTCommons-Light.otf */,
 				7E9A692685474EBA8C3432F5 /* TTCommons-Medium.otf */,
+				CB5BA1C199824AC38F1E34CF /* TTCommons-Bold.otf */,
+				177D5101452E483E97F786DC /* TTCommons.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1946,6 +1952,8 @@
 				9E0B45E70C344BEFB85DD1BC /* Zocial.ttf in Resources */,
 				EFAD1C3A1B6644A08881D955 /* TTCommons-Light.otf in Resources */,
 				2C3D37BAA7B5442D986F17CF /* TTCommons-Medium.otf in Resources */,
+				EC7C79EE560144A5ACB7C030 /* TTCommons-Bold.otf in Resources */,
+				5BEDD43AD7F6467294EF05A3 /* TTCommons.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

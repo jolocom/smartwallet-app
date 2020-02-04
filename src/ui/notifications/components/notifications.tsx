@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { fontMain } from '../../../styles/typography'
+import { fontBold, fontMain, fontMedium } from '../../../styles/typography'
 import { black, white, yellowError } from '../../../styles/colors'
 import { Notification, NotificationType } from '../../../lib/notifications'
 import { AnyAction } from 'redux'
@@ -25,8 +25,7 @@ const styles = StyleSheet.create({
     }),
   },
   title: {
-    // TODO: replace with TTCommons Medium
-    fontFamily: fontMain,
+    fontFamily: fontMedium,
     fontSize: BP({
       small: 16,
       medium: 16,
@@ -78,10 +77,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 17,
   },
   buttonText: {
-    // TODO change to TTCommons-Bold
-    fontFamily: fontMain,
     fontSize: 12,
-    fontWeight: 'bold',
   },
   warningButton: {
     backgroundColor: '#f3c61c',
@@ -153,6 +149,7 @@ export const NotificationComponent: React.FC<Props> = ({
                   <Text
                     style={{
                       ...styles.buttonText,
+                      fontFamily: isWarning ? fontBold : fontMedium,
                       color: isWarning ? black : white,
                     }}
                   >
