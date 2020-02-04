@@ -156,7 +156,7 @@ export const consumeCredentialRequest = (
       },
       title: I18n.t(strings.HMM_LOOKS_LIKE_YOURE_MISSING_SOMETHING),
       message:
-        I18n.t(strings.YOU_DO_NOT_HAVE_THE_FOLLOWING_CREDENTIALS_TO_SEND) +
+        I18n.t(strings.YOU_DO_NOT_HAVE_THE_FOLLOWING_RECORDS_TO_SEND) +
         uiMissingCredentialTypes.join(', '),
     })
 
@@ -174,9 +174,6 @@ export const consumeCredentialRequest = (
       complement(equals(missingTypes)),
       intersection(localCredentialTypes),
     )(missingTypes)
-    console.log(missingTypes)
-    console.log(intersection(localCredentialTypes, missingTypes))
-    console.log(anyExternalCred)
 
     return dispatch(
       scheduleNotification(
@@ -290,7 +287,7 @@ export const sendCredentialResponse = (
     scheduleNotification(
       createInfoNotification({
         title: I18n.t(strings.GREAT_SUCCESS),
-        message: 'You successfully shared your credentials',
+        message: I18n.t(strings.YOU_HAVE_SECURELY_SHARED_YOUR_SELECTED_RECORDS),
       }),
     ),
   )

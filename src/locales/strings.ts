@@ -94,9 +94,11 @@ const notifications = {
     'Looks like you have the wrong seed phrase. Please go back and try again.',
   HMM_LOOKS_LIKE_YOURE_MISSING_SOMETHING:
     "Hmm... looks like you're missing something",
-  YOU_DO_NOT_HAVE_THE_FOLLOWING_CREDENTIALS_TO_SEND:
-    'You do not have the following credential(s) to send: \n',
+  YOU_DO_NOT_HAVE_THE_FOLLOWING_RECORDS_TO_SEND:
+    'You do not have the following record(s) to send: \n',
   ADD_INFO: 'Add info',
+  YOU_HAVE_SECURELY_SHARED_YOUR_SELECTED_RECORDS:
+    'You have securely shared your selected record(s)',
 }
 
 const errorTitle = {
