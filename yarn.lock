@@ -4012,9 +4012,10 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
   integrity sha512-ZIzRpLJrOj7jjP2miAtgqIfmzbxa4ZOr5jJc601zklsfEx9oTzmmj2nVpIPRpNlRTIh8lc1kyViIY7BWSGNmKw==
 
-detox@jolocom/Detox.git#detox-v9000.0.1-gitpkg:
-  version "9000.0.1"
-  resolved "https://codeload.github.com/jolocom/Detox/tar.gz/36d82b8f0cb0ce902b88234839b4947594f5fcac"
+detox@^15.1.4:
+  version "15.1.4"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-15.1.4.tgz#e459a39d4877ea4c582a886210aaac531c347e65"
+  integrity sha512-Clk6ceSkX5MM28eJCKJdRKSe+vesGe4OnRkEqpVshvH+Ce35/nBnyKDH0O4+qvoMJItOIZHi2Hn327b2+L81Gg==
   dependencies:
     "@babel/core" "^7.4.5"
     bunyan "^1.8.12"
