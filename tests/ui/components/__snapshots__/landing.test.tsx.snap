@@ -79,18 +79,17 @@ exports[`landing component matches the snapshot on render 1`] = `
       }
     }
   >
-    <JolocomButton
+    <OnlineJolocomButton
       containerStyle={
         Object {
           "width": "100%",
         }
       }
-      disabled={false}
       onPress={[MockFunction]}
       testID="getStarted"
       text="Get started"
     />
-    <JolocomButton
+    <OnlineJolocomButton
       containerStyle={
         Object {
           "height": 48,
@@ -98,7 +97,6 @@ exports[`landing component matches the snapshot on render 1`] = `
           "width": "100%",
         }
       }
-      disabled={false}
       onPress={[MockFunction]}
       testID="recoverIdentity"
       text="Recover identity"
@@ -187,18 +185,17 @@ exports[`landing component renders with disabled buttons when there is no connec
       }
     }
   >
-    <JolocomButton
+    <OnlineJolocomButton
       containerStyle={
         Object {
           "width": "100%",
         }
       }
-      disabled={true}
       onPress={[MockFunction]}
       testID="getStarted"
       text="Get started"
     />
-    <JolocomButton
+    <OnlineJolocomButton
       containerStyle={
         Object {
           "height": 48,
@@ -206,7 +203,6 @@ exports[`landing component renders with disabled buttons when there is no connec
           "width": "100%",
         }
       }
-      disabled={true}
       onPress={[MockFunction]}
       testID="recoverIdentity"
       text="Recover identity"
