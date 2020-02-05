@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
 import { Buttons } from 'src/styles'
 import LinearGradient from 'react-native-linear-gradient'
 import { fontMedium } from '../../styles/typography'
+import { useNetInfo } from '@react-native-community/netinfo'
 
 const styles = StyleSheet.create({
   container: {
@@ -74,5 +75,28 @@ export const JolocomButton: React.FC<Props> = props => {
         </Text>
       </TouchableOpacity>
     </LinearGradient>
+  )
+}
+
+/***
+ * A wrapper around JolocomButton which becomes disabled after pressed if there
+ * is no connection. When the connection is resumed, the button becomes enabled again.
+ * @param props: same as JolocomButton props
+ */
+export const OnlineJolocomButton: React.FC<Props> = props => {
+  const isOnline = useNetInfo().isConnected
+  const [wasPressed, setPressed] = useState(false)
+
+  const modOnPress = () => {
+    setPressed(true)
+    props.onPress()
+  }
+
+  return (
+    <JolocomButton
+      {...props}
+      onPress={modOnPress}
+      disabled={wasPressed && !isOnline}
+    />
   )
 }

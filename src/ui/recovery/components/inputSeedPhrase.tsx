@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { StyleSheet, Text, TextInput, View, Platform } from 'react-native'
-import { JolocomButton, Wrapper } from '../../structure'
+import { JolocomButton, OnlineJolocomButton, Wrapper } from '../../structure'
 import { Button } from 'react-native-material-ui'
 import { Colors, Spacing, Typography, Buttons } from 'src/styles'
 import {
@@ -256,9 +256,8 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           <View style={{ flex: 2 }} />
           <View style={styles.buttonSection}>
             {isMnemonicValid && (
-              <JolocomButton
+              <OnlineJolocomButton
                 testID="restoreAccount"
-                disabled={!isMnemonicValid}
                 onPress={handleButtonPress}
                 text={I18n.t(strings.RESTORE_ACCOUNT)}
                 containerStyle={{
