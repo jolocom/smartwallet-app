@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Wrapper } from '../../structure'
-import {
-  Animated,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native'
+import { Animated, Platform, StyleSheet, TouchableOpacity } from 'react-native'
 import { ScannerContainer } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { white } from '../../../styles/colors'
@@ -60,7 +54,6 @@ interface Props
 
 const InteractionContainer = (props: Props) => {
   const [AnimatedOpacity] = useState(new Animated.Value(0))
-  const [isStatusBar, setStatusBar] = useState(true)
 
   /*
    * NOTE: (Android only) When navigating to the @InteractionScreen, the homepage
@@ -75,14 +68,11 @@ const InteractionContainer = (props: Props) => {
       toValue: 1,
       duration: 200,
       useNativeDriver: true,
-    }).start(() => {
-      setStatusBar(false)
-    })
+    }).start()
   }, [])
 
   return (
     <React.Fragment>
-      <StatusBar hidden={!isStatusBar} />
       <Animated.View
         style={{
           backgroundColor: Colors.greyDark,
