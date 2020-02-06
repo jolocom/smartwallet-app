@@ -1,4 +1,5 @@
-import ErrorCode from '../lib/errorCodes'
+// NOTE: not importing from 'src/lib/errors' to avoid cycle
+import { ErrorCode } from 'src/lib/errors/codes'
 
 const registration = {
   ENCRYPTING_AND_STORING_DATA_LOCALLY: 'Encrypting and storing data locally',
