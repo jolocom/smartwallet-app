@@ -1,6 +1,6 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { uniqBy } from 'ramda'
+import { isEmpty, uniqBy } from 'ramda'
 import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
@@ -24,6 +24,9 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import { CredentialOfferNavigationParams } from '../../ui/home/containers/credentialReceive'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { AppError } from '../../lib/errors'
+import ErrorCode from '../../lib/errorCodes'
 
 export interface CredentialOfferRenderDetails {
   renderInfo: CredentialOfferRenderInfo | undefined
@@ -113,10 +116,46 @@ export const acceptSelectedCredentials = (
     throw new Error('Invalid credentials received')
   }
 
-  providedCredentials.map(async credential => {
-    await storageLib.delete.verifiableCredential(credential.id)
-    await storageLib.store.verifiableCredential(credential)
-  })
+  const currentDid = getState().account.did.did
+  const ownedCredentials = providedCredentials.reduce<SignedCredential[]>(
+    (acc, cred) => {
+      if (cred.subject === currentDid) acc.push(cred)
+      return acc
+    },
+    [],
+  )
+
+  if (isEmpty(ownedCredentials)) {
+    throw new AppError(ErrorCode.CredentialOfferFailed)
+  }
+
+  const acceptedCredentials = await providedCredentials.reduce<
+    Promise<SignedCredential[]>
+  >(async (prevPromise, credential) => {
+    const collection = await prevPromise
+    const storedCred = await storageLib.get.verifiableCredential({
+      issuer: credential.issuer,
+      type: credential.type,
+    })
+
+    if (isEmpty(storedCred)) {
+      collection.push(credential)
+      await storageLib.store.verifiableCredential(credential)
+    }
+    return collection
+  }, Promise.resolve([]))
+
+  if (isEmpty(acceptedCredentials)) {
+    dispatch(
+      scheduleNotification(
+        createInfoNotification({
+          title: I18n.t(strings.DEJA_VU),
+          message: I18n.t(strings.YOU_ALREADY_SAVED_THAT_ONE),
+        }),
+      ),
+    )
+    return dispatch(endReceiving())
+  }
 
   const issuerDid = keyIdToDid(credentialOfferRequest.issuer)
   const offerCredentialDetails = assembleCredentialDetails(
@@ -143,6 +182,7 @@ export const acceptSelectedCredentials = (
   }
 
   dispatch(checkRecoverySetup)
+  //TODO @mnzaki can we avoid running the FULL setClaimsForDid
   dispatch(setClaimsForDid)
 
   const notification: Notification = createInfoNotification({
@@ -161,8 +201,9 @@ export const acceptSelectedCredentials = (
   if (isDeepLink) {
     return dispatch(navigationActions.navigatorResetHome())
   } else {
-    return dispatch(
-      navigationActions.navigate({ routeName: routeList.InteractionScreen }),
-    )
+    return dispatch(endReceiving())
   }
 }
+
+const endReceiving = () =>
+  navigationActions.navigate({ routeName: routeList.InteractionScreen })

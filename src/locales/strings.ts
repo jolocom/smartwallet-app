@@ -85,6 +85,13 @@ const notifications = {
   YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_IN_THE_DOCUMENTS:
     'You can find your new credential in the documents',
   OPEN: 'Open',
+  DEJA_VU: 'Déjà vu',
+  YOU_ALREADY_SAVED_THAT_ONE: 'You already saved that one!',
+  AWKWARD: '#awkward',
+  THAT_DOC_DOESNT_BELONG_TO_YOU_TRY_SAVING_A_DIFFERENT_ONE:
+    'That doc doesn’t belong to you. Try saving a different one.',
+  WE_CANT_DO_THIS_SOME_OF_THE_DOCUMENTS_ARE_NOT_YOURS:
+    'We cant do this, some of the documents are not yours',
 }
 
 const errorTitle = {
