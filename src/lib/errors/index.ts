@@ -3,7 +3,7 @@ import strings from 'src/locales/strings'
 import { ErrorReport, ErrorCode, IAppError } from './types'
 export { ErrorCode }
 
-import { reportErrorToSentry, initSentry } from './sentry'
+import { reportErrorToSentry, initSentry } from 'src/lib/errors/sentry'
 
 export class AppError extends Error implements IAppError {
   // private code: ErrorCode
