@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AppState, AppStateStatus, Platform, View } from 'react-native'
-import { NavigationScreenProps } from 'react-navigation'
+import { NavigationInjectedProps } from 'react-navigation'
 /* TODO: When using the latest react-native-permissions version, remove this dependency,
  since there is already a cross-platform openSettings method */
 import { appDetailsSettings } from 'react-native-android-open-settings'
@@ -11,7 +11,7 @@ import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
 import { Colors } from '../../../styles'
 
-interface Props extends NavigationScreenProps {
+interface Props extends NavigationInjectedProps {
   consumeToken: (jwt: string) => Promise<any>
 }
 
