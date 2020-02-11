@@ -8,7 +8,7 @@ function logCall(pref: string) {
   return (msg: string) => console.log(`${pref}: ${msg}`)
 }
 
-const BackendMiddleware = require('src/BackendMiddleware').BackendMiddleware
+const BackendMiddleware = require('src/backendMiddleware').BackendMiddleware
 const ormconfig = require('../ormconfig.ts').default
 
 // change type to 'sqlite' instead of 'react-native'
@@ -47,11 +47,12 @@ export class KeyChain {
   public async getPassword() {
     if (this.pass != null) return this.pass
     try {
-      this.pass = readFileSync(KeyChain.PASSWORD_LOCATION).toString()
+      this.pass = readFileSync(KeyChain.PASSWORD_LOCATION)
+        .toString()
+        .trim()
     } catch (err) {
       console.error("Error reading password file", err, "\n\n")
     }
-
     return this.pass
   }
 
@@ -96,7 +97,10 @@ export default {
   hide: logCall('SplashScreen.hide')
 }
 
-export const generateSecureRandomBytes = require('crypto').randomBytes
+const { randomBytes} = require('crypto')
+export const generateSecureRandomBytes = async (length: Number) => {
+  return randomBytes(length)
+}
 
 export class Linking  {
   static async canOpenURL(url: string) {

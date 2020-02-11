@@ -11,27 +11,27 @@
  *
  */
 
-const CryptoJS = {
-  AES: {
-    decrypt: AESDecrypt,
-  },
-  algo: {
-    AES: {
-      keySize: 256/32,
-      ivSize: 128/32
-    }
-  },
-  kdf: {
-    OpenSSL: {
-      execute: OpenSSLKdfExecute
-    }
-  },
-  format: {
-    OpenSSL: {
-      parse: OpenSSLFormatterParse
-    }
-  }
-}
+export const CryptoJS = {
+         AES: {
+           decrypt: AESDecrypt,
+         },
+         algo: {
+           AES: {
+             keySize: 256 / 32,
+             ivSize: 128 / 32,
+           },
+         },
+         kdf: {
+           OpenSSL: {
+             execute: OpenSSLKdfExecute,
+           },
+         },
+         format: {
+           OpenSSL: {
+             parse: OpenSSLFormatterParse,
+           },
+         },
+       }
 
 export default CryptoJS
 

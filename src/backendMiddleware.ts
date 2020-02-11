@@ -106,6 +106,7 @@ export class BackendMiddleware {
     this._keyProvider = new JolocomLib.KeyProvider(
       Buffer.from(encryptedEntropy, 'hex'),
     )
+
     const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
 
     const userPubKey = this._keyProvider.getPublicKey({
