@@ -1,14 +1,13 @@
 import { expect } from 'detox'
 
-export const getNativeType = (typeName: string) => {
+export const getNativeType = (typeName: string) =>
   // NOTE: we can only access 'device' after detox.init
 
   // type names are platform dependent based on:
   // https://github.com/wix/Detox/blob/master/docs/APIRef.Matchers.md#bytypenativeviewtype
-  return device.getPlatform() == 'android' ?
-    `android.widget.${typeName}View` :
-    `RCT${typeName}View`
-}
+  device.getPlatform() == 'android'
+    ? `android.widget.${typeName}View`
+    : `RCT${typeName}View`
 
 export const getDetoxConfig = async () => {
   const detoxConfig = require('../package.json').detox
@@ -17,9 +16,9 @@ export const getDetoxConfig = async () => {
   const configs = detoxConfig.configurations
 
   // TODO figure out iOS configs
-  const newConfigs = detoxConfig.configurations = {
-    'ios.sim.debug': configs['ios.sim.debug']
-  }
+  const newConfigs = (detoxConfig.configurations = {
+    'ios.sim.debug': configs['ios.sim.debug'],
+  })
 
   // detox device configurations are generated dynamically here after querying
   // ADB for android devices and emulator, instead of hardcoding in package.json
@@ -35,8 +34,8 @@ export const getDetoxConfig = async () => {
         newConfigs[configKey].name = device.name
       })
     })
-  } catch(err) {
-    console.error("Could not find android device/emulator")
+  } catch (err) {
+    console.error('Could not find android device/emulator')
     throw err
   }
 
@@ -54,7 +53,10 @@ export const getDetoxConfig = async () => {
  *               concatted children. Leave undefined for default behavior
  * @returns visibleText all text visible inside the element with testID
  */
-export const readVisibleText = async (testID: string, index: number | undefined = undefined): Promise<string> => {
+export const readVisibleText = async (
+  testID: string,
+  index: number | undefined = undefined,
+): Promise<string> => {
   let el = element(by.id(testID).and(by.type(getNativeType('Text'))))
   if (index !== undefined) {
     //console.error('with index', index)
@@ -112,16 +114,16 @@ export const readVisibleText = async (testID: string, index: number | undefined 
       const [label] = restMessage.split(end)
       return label
     } else {
-      const start = 'Got:';
-      const end = '}"';
-      const errorMessage = error.message.toString();
-      const [, restMessage] = errorMessage.split(start);
-      const [label] = restMessage.split(end);
-      const value = label.split(',');
+      const start = 'Got:'
+      const end = '}"'
+      const errorMessage = error.message.toString()
+      const [, restMessage] = errorMessage.split(start)
+      const [label] = restMessage.split(end)
+      const value = label.split(',')
       let combineText = value.find((i: string) => i.includes('text='))
       if (!combineText) {
         throw new Error(
-          `readVisibleText failed! '${testID}' must be a testID of a <Text> element (or a parent of one)`
+          `readVisibleText failed! '${testID}' must be a testID of a <Text> element (or a parent of one)`,
         )
       } else {
         combineText = combineText.trim()

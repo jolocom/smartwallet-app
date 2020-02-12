@@ -24,7 +24,7 @@ describe('BackendMiddleware', () => {
     get: stub<BackendMiddleware['storageLib']['get']>({
       encryptedSeed: jest.fn().mockResolvedValue(cipher),
     }),
-    resetDatabase: jest.fn()
+    resetDatabase: jest.fn(),
   }
   const registry = stub<IRegistry>()
 
@@ -70,9 +70,9 @@ describe('BackendMiddleware', () => {
     it('should clear database and throw NoEntropy if there is no encryptionPass but there is encryptedEntropy', async () => {
       reveal(keyChainLib).getPassword.mockRejectedValueOnce(new Error())
       const walletPromise = backendMiddleware.prepareIdentityWallet()
-      return expect(walletPromise).rejects.toThrow(BackendError.codes.NoEntropy).then(() => {
-        return expect(storageLib.resetDatabase).toHaveBeenCalled()
-      })
+      return expect(walletPromise)
+        .rejects.toThrow(BackendError.codes.NoEntropy)
+        .then(() => expect(storageLib.resetDatabase).toHaveBeenCalled())
     })
 
     it('should throw DecryptionFailed if decryption fails', async () => {

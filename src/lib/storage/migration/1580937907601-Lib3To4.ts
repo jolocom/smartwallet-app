@@ -5,7 +5,7 @@ import {
   encryptWithLib4,
   decryptWithLib4,
   decryptWithLib3,
-  encryptWithLib3
+  encryptWithLib3,
 } from '../../compat/jolocomLib'
 
 const getMasterKeys = (queryRunner: QueryRunner): Promise<MasterKeyEntity[]> =>
@@ -24,7 +24,10 @@ export class Lib3To41580937907601 implements MigrationInterface {
     const entries = await getMasterKeys(queryRunner)
     return Promise.all(
       entries.map(async ({ encryptedEntropy }) => {
-        const decrypted = decryptWithLib3(Buffer.from(encryptedEntropy, 'hex'), pass)
+        const decrypted = decryptWithLib3(
+          Buffer.from(encryptedEntropy, 'hex'),
+          pass,
+        )
         const reencrypted = await encryptWithLib4(decrypted, pass)
 
         return queryRunner.query(
@@ -48,7 +51,10 @@ export class Lib3To41580937907601 implements MigrationInterface {
     const entries = await getMasterKeys(queryRunner)
     return Promise.all(
       entries.map(({ encryptedEntropy }) => {
-        const decrypted = decryptWithLib4(Buffer.from(encryptedEntropy, 'hex'), pass)
+        const decrypted = decryptWithLib4(
+          Buffer.from(encryptedEntropy, 'hex'),
+          pass,
+        )
         const reencrypted = encryptWithLib3(decrypted, pass).toString('hex')
 
         return queryRunner.query(

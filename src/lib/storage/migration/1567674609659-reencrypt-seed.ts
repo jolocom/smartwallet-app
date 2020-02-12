@@ -32,15 +32,27 @@ export class ReencryptSeed1567674609659 implements MigrationInterface {
       entries.map(({ encryptedEntropy }) => {
         // If the seed is base64 encoded, it must be migrated (CryptoJS encoded base64)
         // If the seed is hex encoded, it must not be migrated (The newer version of the lib use HEX)
-        if (/^[0-9a-fA-F]*$/.test(encryptedEntropy)) return
+        if (/^[0-9a-fA-F]*$/.test(
+          encryptedEntropy)) return
 
-        const decrypted = CryptoJS.AES.decrypt(encryptedEntropy, password).toString()
-        const reencrypted = encryptWithLib3(Buffer.from(decrypted, 'hex'), password).toString('hex')
+        const decrypted = CryptoJS.AES.decrypt(
+          encryptedEntropy,
+          password,
+        ,
+        ).toString()
+        const reencrypted = encryptWithLib3(
+          Buffer.from(decrypted, 'hex'),
+         
+          password,
+        ).toString('hex')
 
-        return queryRunner.query(`UPDATE master_keys ` +
+        return queryRunner.query(
+          `UPDATE master_keys ` +
             `SET encryptedEntropy = '${reencrypted}' ` +
-            `WHERE encryptedEntropy = '${encryptedEntropy}'`)
-      })
+            `WHERE encryptedEntropy = '${encryptedEntropy}'`,
+        ,
+        )
+      }),
     )
   }
 
