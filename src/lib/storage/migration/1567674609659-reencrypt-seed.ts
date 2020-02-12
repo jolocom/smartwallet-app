@@ -37,9 +37,9 @@ export class ReencryptSeed1567674609659 implements MigrationInterface {
 
         const decrypted = CryptoJS.AES.decrypt(
           encryptedEntropy,
-          password,
-        ,
+          password
         ).toString()
+
         const reencrypted = encryptWithLib3(
           Buffer.from(decrypted, 'hex'),
          
@@ -49,8 +49,7 @@ export class ReencryptSeed1567674609659 implements MigrationInterface {
         return queryRunner.query(
           `UPDATE master_keys ` +
             `SET encryptedEntropy = '${reencrypted}' ` +
-            `WHERE encryptedEntropy = '${encryptedEntropy}'`,
-        ,
+            `WHERE encryptedEntropy = '${encryptedEntropy}'`
         )
       }),
     )
