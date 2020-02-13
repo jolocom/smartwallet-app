@@ -6,7 +6,7 @@
 
 import { MigrationInterface, QueryRunner } from 'typeorm/browser'
 import CryptoJS from './../../compat/cryptojs'
-import { getPassword } from './util'
+import { KeyChain } from 'src/lib/keychain'
 import { MasterKeyEntity } from '../entities'
 import { encryptWithLib3 } from './../../compat/jolocomLib'
 
@@ -17,7 +17,7 @@ export class ReencryptSeed1567674609659 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     let password: string
     try {
-      password = await getPassword()
+      password = await new KeyChain().getPassword()
     } catch (e) {
       // This may fail if the application was uninstalled and reinstalled, as
       // the android keystore is cleared on uninstall, but the database may

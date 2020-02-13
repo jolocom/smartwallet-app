@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
-import { getPassword } from './util'
+import { KeyChain } from 'src/lib/keychain'
 import { MasterKeyEntity } from '../entities'
 import {
   encryptWithLib4,
@@ -16,7 +16,7 @@ export class Lib3To41580937907601 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     let pass: string
     try {
-      pass = await getPassword()
+      pass = await new KeyChain().getPassword()
     } catch (e) {
       return
     }
