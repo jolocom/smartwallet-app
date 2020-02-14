@@ -22,7 +22,8 @@ export enum routeList {
   InteractionScreen = 'InteractionScreen',
 
   // Interactions & Details
-  CredentialDialog = 'CredentialDialog',
+  CredentialReceive = 'CredentialReceive',
+  CredentialReceiveInvalid = 'CredentialReceiveInvalid',
   Consent = 'Consent',
   PaymentConsent = 'PaymentConsent',
   AuthenticationConsent = 'AuthenticationConsent',

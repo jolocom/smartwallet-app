@@ -9,8 +9,9 @@ import config from 'src/config'
 
 import { BackendMiddleware } from './backendMiddleware'
 
+export const backendMiddleware = new BackendMiddleware(config)
+
 export function initStore() {
-  const backendMiddleware = new BackendMiddleware(config)
 
   /*
    * The {} as RootState type assertion:

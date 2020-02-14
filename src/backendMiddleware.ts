@@ -15,6 +15,7 @@ import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from './lib/util'
+import { CredentialOfferFlow } from './lib/interactionManager/credentialOfferFlow'
 
 export enum ErrorCodes {
   NoEntropy = 'NoEntropy',
@@ -38,6 +39,7 @@ export class BackendMiddleware {
   public storageLib: Storage
   public keyChainLib: KeyChainInterface
   public registry: JolocomRegistry
+  public interactionManager: CredentialOfferFlow
 
   public constructor(config: {
     fuelingEndpoint: string
@@ -45,6 +47,7 @@ export class BackendMiddleware {
   }) {
     this.storageLib = new Storage(config.typeOrmConfig)
     this.keyChainLib = new KeyChain()
+    this.interactionManager = new CredentialOfferFlow()
     this.registry = createJolocomRegistry({
       ipfsConnector: new IpfsCustomConnector({
         host: 'ipfs.jolocom.com',

@@ -1,19 +1,20 @@
 import {
-  NavigationActions,
-  StackActions,
-  NavigationNavigateActionPayload,
   NavigationAction,
+  NavigationActions,
   NavigationContainerComponent,
-  NavigationRouter,
-  NavigationResetActionPayload,
   NavigationNavigateAction,
+  NavigationNavigateActionPayload,
+  NavigationResetActionPayload,
+  NavigationRouter,
+  StackActions,
 } from 'react-navigation'
 import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { AppError, ErrorCode } from 'src/lib/errors'
-import { withLoading, withErrorScreen } from 'src/actions/modifiers'
+import { withErrorScreen, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
+import { InteractionChannel } from '../../lib/interactionManager/credentialOfferFlow'
 
 const deferredNavActions: NavigationAction[] = []
 let dispatchNavigationAction = (action: NavigationAction) => {
@@ -121,7 +122,11 @@ export const handleDeepLink = (url: string): ThunkAction => (
 
     if (handler) {
       return dispatch(
-        withLoading(withErrorScreen(handler(interactionToken, true))),
+        withLoading(
+          withErrorScreen(
+            handler(interactionToken, InteractionChannel.Deeplink),
+          ),
+        ),
       )
     }
   }

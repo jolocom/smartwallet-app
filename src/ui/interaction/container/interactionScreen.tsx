@@ -18,6 +18,7 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { Colors } from 'src/styles'
+import { InteractionChannel } from '../../../lib/interactionManager/credentialOfferFlow'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -104,7 +105,11 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     const handler = interactionHandlers[interactionToken.interactionType]
 
     return handler
-      ? dispatch(withLoading(withErrorScreen(handler(interactionToken))))
+      ? dispatch(
+          withLoading(
+            withErrorScreen(handler(interactionToken, InteractionChannel.QR)),
+          ),
+        )
       : dispatch(
           showErrorScreen(
             new AppError(ErrorCode.Unknown, new Error('No handler found')),

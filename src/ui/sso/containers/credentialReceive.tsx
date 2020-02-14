@@ -12,41 +12,9 @@ import { fontMedium } from '../../../styles/typography'
 import { ActionSheet } from '../../structure/actionSheet'
 import strings from '../../../locales/strings'
 import I18n from 'src/locales/i18n'
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.lightGreyLighter,
-  },
-  topSection: {
-    paddingVertical: Spacing.MD,
-    alignItems: 'center',
-  },
-  logo: {
-    borderRadius: 35,
-    width: 70,
-    height: 70,
-    margin: 10,
-  },
-  serviceName: {
-    fontFamily: fontMedium,
-    fontSize: 28,
-    color: overflowBlack,
-  },
-  description: {
-    fontFamily: fontMain,
-    fontSize: 16,
-    color: black065,
-    marginTop: 10,
-    marginBottom: 4,
-    marginHorizontal: '10%',
-    ...centeredText,
-  },
-  documentWrapper: {
-    alignItems: 'center',
-    padding: 10,
-  },
-})
+import { CredentialOffering } from '../../../lib/interactionManager/credentialOfferFlow'
+import { consumeCredentialReceive } from '../../../actions/sso/credentialOfferRequest'
+import { CredentialReceiveComponent } from '../components/credentialReceive'
 
 export interface CredentialOfferNavigationParams {
   requesterSummary: IdentitySummary
