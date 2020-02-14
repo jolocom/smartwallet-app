@@ -14,6 +14,7 @@ interface DocumentCardProps {
   claimData?: ClaimInterface
   expires?: Date
   selected?: boolean
+  invalid?: boolean
 }
 
 const styles = StyleSheet.create({
@@ -64,10 +65,22 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     elevation: 6,
   },
+  invalid: {
+    borderColor: Colors.yellowError,
+    borderWidth: 2,
+    opacity: 0.3,
+  },
 })
 
 export const DocumentCard: React.FC<DocumentCardProps> = props => {
-  const { renderInfo, claimData, credentialType, expires, selected } = props
+  const {
+    renderInfo,
+    claimData,
+    credentialType,
+    expires,
+    selected,
+    invalid,
+  } = props
   const { background = undefined, logo = undefined, text = undefined } =
     renderInfo || {}
 
@@ -77,6 +90,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
         styles.card,
         !background && { borderColor: Colors.sand },
         selected && styles.selected,
+        invalid && styles.invalid,
       ]}
     >
       <ImageBackground
