@@ -3,11 +3,14 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { areRequirementsEmpty } from '../../actions/sso/utils'
-import { IdentitySummary } from '../../actions/sso/types'
+import {
+  CredentialOffer,
+  CredentialOfferResponseSelection,
+} from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import { backendMiddleware } from '../../store'
+import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 
 export enum InteractionChannel {
   QR = 'QR',
@@ -20,135 +23,117 @@ export interface CredentialOffering extends CredentialOffer {
 }
 
 export class CredentialOfferFlow {
-  private credentialOfferRequest:
-    | JSONWebToken<CredentialOfferRequest>
-    | undefined
-  private interactionChannel: InteractionChannel | undefined
-  private credentialOffering: CredentialOffering[] | undefined
-  private issuerSummary: IdentitySummary | undefined
-
-  public setOfferRequest(token: JSONWebToken<CredentialOfferRequest>) {
-    if (!areRequirementsEmpty(token.interactionToken)) {
-      throw new Error('Input requests are not yet supported on the wallet')
-    }
-    this.credentialOfferRequest = token
-  }
-
-  public start(channel: InteractionChannel) {
-    this.interactionChannel = channel
-  }
-
-  public getChannel = () => {
-    if (!this.interactionChannel) {
-      throw new Error('Could not find interaction channel')
-    }
-    return this.interactionChannel
-  }
-
-  public end() {
-    this.credentialOffering = undefined
-    this.issuerSummary = undefined
-    this.credentialOfferRequest = undefined
-    this.interactionChannel = undefined
-  }
-
-  public getCredentialOffering = () => {
-    if (!this.credentialOffering) {
-      throw new Error('No credential offering')
-    }
-    return this.credentialOffering
-  }
-
-  public setCredentialOffering = (offering: CredentialOffering[]) => {
-    this.credentialOffering = offering
-  }
-
-  public updateOfferingWithCredentials = (credentials: SignedCredential[]) => {
-    this.credentialOffering = credentials.map(credential => {
-      const type = credential.type[credential.type.length - 1]
-      const offering = this.getCredentialOffering().find(
-        offering => offering.type === type,
-      )
-      if (!offering) {
-        throw new Error('Received wrong credentials')
-      }
-      return {
-        ...offering,
-        credential,
-      }
-    })
-  }
-
-  public setOfferDetails = (
-    offerToken: JSONWebToken<CredentialOfferRequest>,
-    issuerSummary: IdentitySummary,
-    credentialOffering: CredentialOffering[],
-  ) => {
-    this.setOfferRequest(offerToken)
-    this.credentialOffering = credentialOffering
-    this.issuerSummary = issuerSummary
-  }
-
-  public getOfferDetails = () => {
-    if (
-      !this.credentialOfferRequest ||
-      !this.credentialOffering ||
-      !this.issuerSummary
-    ) {
-      throw new Error('Offer details not found')
-    }
-    return {
-      credentialOffering: this.credentialOffering,
-      credentialOfferRequest: this.credentialOfferRequest,
-      issuerSummary: this.issuerSummary,
-    }
-  }
-}
-
-/***
- * - initiated inside BackendMiddleware
- * - has access to identityWallet / registry ?? (or should be inside Interaction)
- * - holds a map of all interactions:
- *    - {nonce: token or interaction instance} ??
- * - can start / end an interaction
- *
- */
-
-class Manager {
-  public readonly interactions = {}
-
-  public start(channel: InteractionChannel, token: JSONWebToken<JWTEncodable>) {
-    const interaction = new Interaction(channel, token)
-    this.interactions[token.nonce] = interaction
-    return interaction
-  }
-}
-
-/***
- * - initiated by InteractionManager when an interaction starts
- * - handles the communication channel of the interaction
- * - holds the instance of the particular interaction (e.g. CredentialOffer, Authentication)
- */
-
-type InteractionFlows = CredentialOfferFlow | CredentialRequestFlow
-
-class Interaction {
-  private interactionFlow = {
-    [InteractionType.CredentialOfferRequest]: CredentialOfferFlow,
-    [InteractionType.CredentialRequest]: CredentialRequestFlow,
-  }
-  public flow: InteractionFlows
-  public channel: InteractionChannel | undefined
+  public credentialOfferingState!: CredentialOffering[]
+  public callbackURL: string
+  public tokens: Array<JSONWebToken<JWTEncodable>> = []
 
   public constructor(
-    channel: InteractionChannel,
-    interactionToken: JSONWebToken<JWTEncodable>,
+    credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
   ) {
-    this.flow = new this.interactionFlow[interactionToken.interactionType](
-      interactionToken,
+    this.callbackURL = credentialOfferRequest.interactionToken.callbackURL
+    this.handleInteractionToken(credentialOfferRequest)
+  }
+
+  public getToken(type: InteractionType) {
+    const token = this.tokens.find(token => token.interactionType === type)
+    if (!token) throw new Error('Token not found')
+
+    return token
+  }
+
+  public handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
+    this.tokens.push(token)
+    switch (token.interactionType) {
+      case InteractionType.CredentialOfferRequest:
+        this.consumeOfferRequest(token)
+        break
+      case InteractionType.CredentialOfferResponse:
+        this.consumeOfferResponse(token)
+        break
+      case InteractionType.CredentialsReceive:
+        this.consumeCredentialReceive(token)
+        break
+      default:
+        break
+    }
+  }
+
+  public consumeOfferRequest(token: JSONWebToken<JWTEncodable>) {
+    const credOfferRequest = token as JSONWebToken<CredentialOfferRequest>
+    this.setOffering(_ =>
+      credOfferRequest.interactionToken.offeredCredentials.map(offer => ({
+        ...offer,
+        valid: true,
+      })),
     )
-    this.channel = channel
+  }
+
+  public consumeOfferResponse(token: JSONWebToken<JWTEncodable>) {
+    //this.credentialOfferRequest = token as JSONWebToken<CredentialOfferRequest>
+  }
+
+  public consumeCredentialReceive(token: JSONWebToken<JWTEncodable>) {
+    const credentialsReceive = token as JSONWebToken<CredentialsReceive>
+    this.updateOfferingWithCredentials(
+      credentialsReceive.interactionToken.signedCredentials,
+    )
+  }
+
+  // maybe shouldn't be here
+  public updateOfferingWithCredentials = (credentials: SignedCredential[]) => {
+    if (!this.credentialOfferingState.length) {
+      throw new Error('No credential offering found')
+    }
+
+    this.setOffering(offeringState =>
+      credentials.map(credential => {
+        const type = credential.type[credential.type.length - 1]
+        const offering = offeringState.find(offering => offering.type === type)
+        if (!offering) {
+          throw new Error('Received wrong credentials')
+        }
+        return {
+          ...offering,
+          credential,
+        }
+      }),
+    )
+  }
+
+  public async setOfferingAsync(
+    cb: (state: CredentialOffering[]) => Promise<CredentialOffering[]>,
+  ) {
+    this.credentialOfferingState = await cb(this.credentialOfferingState)
+    return this.credentialOfferingState
+  }
+
+  public setOffering(
+    cb: (state: CredentialOffering[]) => CredentialOffering[],
+  ) {
+    this.credentialOfferingState = cb(this.credentialOfferingState)
+    return this.credentialOfferingState
+  }
+
+  public async createCredentialResponseToken(
+    selectedOffering: CredentialOffering[],
+  ) {
+    const credentialOfferRequest = this.getToken(
+      InteractionType.CredentialOfferRequest,
+    ) as JSONWebToken<CredentialOfferRequest>
+    const { callbackURL } = credentialOfferRequest.interactionToken
+    const password = await backendMiddleware.keyChainLib.getPassword()
+
+    // NOTE not returning providedInput since it's not used
+    const selectedTypes: CredentialOfferResponseSelection[] = selectedOffering.map(
+      offer => ({ type: offer.type }),
+    )
+    const credOfferResponse = await backendMiddleware.identityWallet.create.interactionTokens.response.offer(
+      { callbackURL, selectedCredentials: selectedTypes },
+      password,
+      this.getToken(InteractionType.CredentialOfferRequest),
+    )
+    this.handleInteractionToken(credOfferResponse)
+    return credOfferResponse
   }
 }
 
-class CredentialRequestFlow {}

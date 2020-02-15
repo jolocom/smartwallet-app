@@ -42,7 +42,7 @@ import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
 
 import { NotificationFilter } from './lib/notifications'
-import { CredentialReceiveIvalid } from './ui/sso/containers/credentialReceiveInvalid'
+import { CredentialReceiveInvalid } from './ui/sso/containers/credentialReceive'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -189,7 +189,7 @@ const MainStack = createStackNavigator(
       }),
     },
     [routeList.CredentialReceiveInvalid]: {
-      screen: CredentialReceiveIvalid,
+      screen: CredentialReceiveInvalid,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),

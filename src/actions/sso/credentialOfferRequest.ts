@@ -5,9 +5,6 @@ import { httpAgent } from '../../lib/http'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { ThunkAction } from 'src/store'
-import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { generateIdentitySummary } from './utils'
-import { CredentialOfferResponseSelection } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { navigationActions } from '../index'
 import { routeList } from '../../routeList'
 import { setClaimsForDid } from '../account'
@@ -16,8 +13,8 @@ import { createInfoNotification, Notification } from '../../lib/notifications'
 import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
-import { CredentialOfferNavigationParams } from '../../ui/sso/containers/credentialReceive'
 import {
+  CredentialOfferFlow,
   CredentialOffering,
   InteractionChannel,
 } from '../../lib/interactionManager/credentialOfferFlow'
@@ -26,128 +23,86 @@ import { CredentialMetadataSummary } from '../../lib/storage/storage'
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
   interactionChannel: InteractionChannel,
-): ThunkAction => async (
-  dispatch,
-  getState,
-  { identityWallet, registry, interactionManager },
-) => {
-  interactionManager.start(interactionChannel)
-
-  // @mnzaki include in Interaction
-  await identityWallet.validateJWT(credentialOfferRequest, undefined, registry)
-
-  const issuerDid = keyIdToDid(credentialOfferRequest.issuer)
-  const requester = await registry.resolve(issuerDid)
-  const requesterSummary = generateIdentitySummary(requester)
-
-  // Interaction offer specific
-  const { interactionToken } = credentialOfferRequest
-  const credentialOfferDetails: CredentialOffering[] = interactionToken.offeredCredentials.map(
-    credential => ({
-      ...credential,
-      valid: true,
-    }),
-  )
-
-  interactionManager.setOfferDetails(
+): ThunkAction => async (dispatch, getState, { interactionManager }) => {
+  const { id } = await interactionManager.start(
+    interactionChannel,
     credentialOfferRequest,
-    requesterSummary,
-    credentialOfferDetails,
   )
-
-  // pass the nonce(interaction id) to the container
-  // import backendMiddleware in containers
-  const params: CredentialOfferNavigationParams = {
-    requesterSummary,
-    credentialOffering: credentialOfferDetails,
-  }
 
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialReceive,
-      params,
+      params: { interactionId: id },
     }),
   )
 }
 
 export const consumeCredentialReceive = (
   selectedCredentialOffering: CredentialOffering[],
+  interactionId: string,
 ): ThunkAction => async (
   dispatch,
   getState,
   { interactionManager, keyChainLib, identityWallet, registry },
 ) => {
-  const { credentialOfferRequest } = interactionManager.getOfferDetails()
-
-  const { callbackURL } = credentialOfferRequest.interactionToken
-
-  const password = await keyChainLib.getPassword()
-
-  // NOTE not returning providedInput since it's not used
-  const selectedTypes: CredentialOfferResponseSelection[] = selectedCredentialOffering.map(
-    offer => ({ type: offer.type }),
-  )
-  const credOfferResponse = await identityWallet.create.interactionTokens.response.offer(
-    { callbackURL, selectedCredentials: selectedTypes },
-    password,
-    credentialOfferRequest,
+  const interactionFlow = interactionManager.getInteraction(interactionId)
+    .flow as CredentialOfferFlow
+  const credentialOfferResponse = await interactionFlow.createCredentialResponseToken(
+    selectedCredentialOffering,
   )
 
+  const { callbackURL } = interactionFlow
   const res = await httpAgent.postRequest<{ token: string }>(
     callbackURL,
     { 'Content-Type': 'application/json' },
-    { token: credOfferResponse.encode() },
+    { token: credentialOfferResponse.encode() },
   )
-
   const credentialReceive = JolocomLib.parse.interactionToken.fromJWT<
     CredentialsReceive
   >(res.token)
 
-  await identityWallet.validateJWT(credentialReceive, undefined, registry)
-
-  const providedCredentials =
-    credentialReceive.interactionToken.signedCredentials
-
-  interactionManager.setCredentialOffering(selectedCredentialOffering)
-  interactionManager.updateOfferingWithCredentials(providedCredentials)
-
-  return dispatch(validateReceivedCredentials)
+  await interactionManager.addToken(credentialReceive)
+  return dispatch(validateReceivedCredentials(interactionId))
 }
 
-const validateReceivedCredentials: ThunkAction = async (
+const validateReceivedCredentials = (
+  interactionId: string,
+): ThunkAction => async (
   dispatch,
   getState,
   { interactionManager, storageLib },
 ) => {
-  const {
-    credentialOffering,
-    issuerSummary,
-  } = interactionManager.getOfferDetails()
+  const interaction = interactionManager.getInteraction(interactionId)
+  const interactionFlow = interaction.flow as CredentialOfferFlow
 
   const currentDid = getState().account.did.did
   const validAcc: boolean[] = []
-  const validatedCredentialOffering = await Promise.all(
-    credentialOffering.map(async offering => {
-      if (!offering.credential) {
-        validAcc.push(false)
-        offering.valid = false
-      } else {
-        const { credential } = offering
-        const validated = await JolocomLib.util.validateDigestable(credential)
-        const storedCredential = await storageLib.get.verifiableCredential({
-          id: credential.id,
-        })
-        const owned = credential.subject === currentDid
-        const isValid = owned && validated && !storedCredential.length
-        validAcc.push(isValid)
-        offering.valid = isValid
-      }
 
-      return offering
-    }),
+  const validatedCredentialOffering = await interactionFlow.setOfferingAsync(
+    offeringState =>
+      Promise.all(
+        offeringState.map(async offering => {
+          if (!offering.credential) {
+            validAcc.push(false)
+            offering.valid = false
+          } else {
+            const { credential } = offering
+            const validated = await JolocomLib.util.validateDigestable(
+              credential,
+            )
+            const storedCredential = await storageLib.get.verifiableCredential({
+              id: credential.id,
+            })
+            const owned = credential.subject === currentDid
+            const isValid = owned && validated && !storedCredential.length
+            validAcc.push(isValid)
+            offering.valid = isValid
+          }
+
+          return offering
+        }),
+      ),
   )
-
-  interactionManager.setCredentialOffering(validatedCredentialOffering)
 
   // TODO @clauxx add strings
   if (!validAcc.includes(true)) {
@@ -159,15 +114,10 @@ const validateReceivedCredentials: ThunkAction = async (
         }),
       ),
     )
-    return dispatch(endReceiving)
+    return dispatch(endReceiving(interactionId))
   }
 
   if (validAcc.includes(false)) {
-    const params: CredentialOfferNavigationParams = {
-      credentialOffering: validatedCredentialOffering,
-      requesterSummary: issuerSummary,
-    }
-
     // TODO @clauxx add strings
     dispatch(
       scheduleNotification(
@@ -181,22 +131,25 @@ const validateReceivedCredentials: ThunkAction = async (
     return dispatch(
       navigationActions.navigate({
         routeName: routeList.CredentialReceiveInvalid,
-        params,
+        params: { interactionId },
       }),
     )
   }
 
-  return dispatch(saveCredentialOffer(validatedCredentialOffering))
+  return dispatch(
+    saveCredentialOffer(validatedCredentialOffering, interactionId),
+  )
 }
 
 export const saveCredentialOffer = (
   credentialOffering: CredentialOffering[],
+  interactionId: string,
 ): ThunkAction => async (
   dispatch,
   getState,
   { storageLib, interactionManager },
 ) => {
-  const { issuerSummary } = interactionManager.getOfferDetails()
+  const { issuerSummary } = interactionManager.getInteraction(interactionId)
 
   await Promise.all(
     credentialOffering.map(async offering => {
@@ -250,18 +203,18 @@ export const saveCredentialOffer = (
   })
 
   dispatch(scheduleNotification(notification))
-  return dispatch(endReceiving)
+  return dispatch(endReceiving(interactionId))
 }
 
-const endReceiving: ThunkAction = (
+const endReceiving = (interactionId: string): ThunkAction => (
   dispatch,
   getState,
   { interactionManager },
 ) => {
-  const interactionChannel = interactionManager.getChannel()
-  interactionManager.end()
+  const interaction = interactionManager.getInteraction(interactionId)
+  const { channel } = interaction
 
-  if (interactionChannel === InteractionChannel.Deeplink) {
+  if (channel === InteractionChannel.Deeplink) {
     // handle deeplink properly
     return dispatch(navigationActions.navigatorResetHome())
   } else {

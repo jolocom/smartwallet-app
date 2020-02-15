@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { ThunkDispatch } from '../../../store'
+import { backendMiddleware, ThunkDispatch } from '../../../store'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { IdentitySummary } from '../../../actions/sso/types'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { navigationActions } from '../../../actions'
 import { routeList } from '../../../routeList'
@@ -12,13 +11,18 @@ import { fontMedium } from '../../../styles/typography'
 import { ActionSheet } from '../../structure/actionSheet'
 import strings from '../../../locales/strings'
 import I18n from 'src/locales/i18n'
-import { CredentialOffering } from '../../../lib/interactionManager/credentialOfferFlow'
-import { consumeCredentialReceive } from '../../../actions/sso/credentialOfferRequest'
+import {
+  CredentialOfferFlow,
+  CredentialOffering,
+} from '../../../lib/interactionManager/credentialOfferFlow'
+import {
+  consumeCredentialReceive,
+  saveCredentialOffer,
+} from '../../../actions/sso/credentialOfferRequest'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
 
 export interface CredentialOfferNavigationParams {
-  requesterSummary: IdentitySummary
-  credentialOffering: CredentialOffering[]
+  interactionId: string
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -33,13 +37,17 @@ export const CredentialsReceiveContainer = (props: Props) => {
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
-      params: { requesterSummary, credentialOffering },
+      params: { interactionId },
     },
   } = navigation
-  const publicProfile = requesterSummary && requesterSummary.publicProfile
+  const interaction = backendMiddleware.interactionManager.getInteraction(
+    interactionId,
+  )
+  const { publicProfile } = interaction.issuerSummary
+  const { credentialOfferingState } = interaction.flow as CredentialOfferFlow
 
   const handleConfirm = () => {
-    acceptSelectedCredentials(selected)
+    acceptSelectedCredentials(selected, interactionId)
   }
 
   const onPressDocument = (cred: CredentialOffering) => {
@@ -56,7 +64,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
   return (
     <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
       <CredentialReceiveComponent
-        credentialOffering={credentialOffering}
+        credentialOffering={credentialOfferingState}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
         onPressDocument={onPressDocument}
@@ -80,8 +88,15 @@ export const CredentialsReceiveContainer = (props: Props) => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  acceptSelectedCredentials: (selected: CredentialOffering[]) =>
-    dispatch(withErrorScreen(withLoading(consumeCredentialReceive(selected)))),
+  acceptSelectedCredentials: (
+    selected: CredentialOffering[],
+    interactionId: string,
+  ) =>
+    dispatch(
+      withErrorScreen(
+        withLoading(consumeCredentialReceive(selected, interactionId)),
+      ),
+    ),
   goBack: () =>
     dispatch(
       navigationActions.navigate({ routeName: routeList.InteractionScreen }),
@@ -91,4 +106,25 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 export const CredentialReceive = connect(
   null,
   mapDispatchToProps,
+)(CredentialsReceiveContainer)
+
+const mapDispatchToPropsInvalid = (dispatch: ThunkDispatch) => ({
+  acceptSelectedCredentials: (
+    selected: CredentialOffering[],
+    interactionId: string,
+  ) =>
+    dispatch(
+      withErrorScreen(
+        withLoading(saveCredentialOffer(selected, interactionId)),
+      ),
+    ),
+  goBack: () =>
+    dispatch(
+      navigationActions.navigate({ routeName: routeList.InteractionScreen }),
+    ),
+})
+
+export const CredentialReceiveInvalid = connect(
+  null,
+  mapDispatchToPropsInvalid,
 )(CredentialsReceiveContainer)
