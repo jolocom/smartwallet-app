@@ -23,7 +23,7 @@ export interface CredentialOffering extends CredentialOffer {
 }
 
 export class CredentialOfferFlow {
-  public credentialOfferingState!: CredentialOffering[]
+  public credentialOfferingState: CredentialOffering[] = []
   public callbackURL: string
   public tokens: Array<JSONWebToken<JWTEncodable>> = []
 
@@ -34,11 +34,12 @@ export class CredentialOfferFlow {
     this.handleInteractionToken(credentialOfferRequest)
   }
 
-  public getToken(type: InteractionType) {
+  public getToken<T extends JWTEncodable>(type: InteractionType) {
     const token = this.tokens.find(token => token.interactionType === type)
     if (!token) throw new Error('Token not found')
 
-    return token
+    // TODO fix type casting
+    return token as JSONWebToken<T>
   }
 
   public handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
@@ -47,14 +48,11 @@ export class CredentialOfferFlow {
       case InteractionType.CredentialOfferRequest:
         this.consumeOfferRequest(token)
         break
-      case InteractionType.CredentialOfferResponse:
-        this.consumeOfferResponse(token)
-        break
       case InteractionType.CredentialsReceive:
         this.consumeCredentialReceive(token)
         break
       default:
-        break
+        throw new Error('Interaction type not found')
     }
   }
 
@@ -68,10 +66,6 @@ export class CredentialOfferFlow {
     )
   }
 
-  public consumeOfferResponse(token: JSONWebToken<JWTEncodable>) {
-    //this.credentialOfferRequest = token as JSONWebToken<CredentialOfferRequest>
-  }
-
   public consumeCredentialReceive(token: JSONWebToken<JWTEncodable>) {
     const credentialsReceive = token as JSONWebToken<CredentialsReceive>
     this.updateOfferingWithCredentials(
@@ -79,12 +73,7 @@ export class CredentialOfferFlow {
     )
   }
 
-  // maybe shouldn't be here
   public updateOfferingWithCredentials = (credentials: SignedCredential[]) => {
-    if (!this.credentialOfferingState.length) {
-      throw new Error('No credential offering found')
-    }
-
     this.setOffering(offeringState =>
       credentials.map(credential => {
         const type = credential.type[credential.type.length - 1]
@@ -100,6 +89,8 @@ export class CredentialOfferFlow {
     )
   }
 
+  //TODO get rid of setOffering(both) ???
+  //manage the offering from outside the manager entirely
   public async setOfferingAsync(
     cb: (state: CredentialOffering[]) => Promise<CredentialOffering[]>,
   ) {
@@ -117,9 +108,9 @@ export class CredentialOfferFlow {
   public async createCredentialResponseToken(
     selectedOffering: CredentialOffering[],
   ) {
-    const credentialOfferRequest = this.getToken(
+    const credentialOfferRequest = this.getToken<CredentialOfferRequest>(
       InteractionType.CredentialOfferRequest,
-    ) as JSONWebToken<CredentialOfferRequest>
+    )
     const { callbackURL } = credentialOfferRequest.interactionToken
     const password = await backendMiddleware.keyChainLib.getPassword()
 
@@ -136,4 +127,3 @@ export class CredentialOfferFlow {
     return credOfferResponse
   }
 }
-

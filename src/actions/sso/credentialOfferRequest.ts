@@ -40,13 +40,10 @@ export const consumeCredentialOfferRequest = (
 export const consumeCredentialReceive = (
   selectedCredentialOffering: CredentialOffering[],
   interactionId: string,
-): ThunkAction => async (
-  dispatch,
-  getState,
-  { interactionManager, keyChainLib, identityWallet, registry },
-) => {
-  const interactionFlow = interactionManager.getInteraction(interactionId)
-    .flow as CredentialOfferFlow
+): ThunkAction => async (dispatch, getState, { interactionManager }) => {
+  const interactionFlow = interactionManager
+    .getInteraction(interactionId)
+    .getFlow<CredentialOfferFlow>()
   const credentialOfferResponse = await interactionFlow.createCredentialResponseToken(
     selectedCredentialOffering,
   )
@@ -73,7 +70,7 @@ const validateReceivedCredentials = (
   { interactionManager, storageLib },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const interactionFlow = interaction.flow as CredentialOfferFlow
+  const interactionFlow = interaction.getFlow<CredentialOfferFlow>()
 
   const currentDid = getState().account.did.did
   const validAcc: boolean[] = []

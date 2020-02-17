@@ -38,4 +38,9 @@ export class Interaction {
     this.issuerSummary = issuerSummary
     this.id = jwt.nonce
   }
+
+  public getFlow<T extends InteractionFlows>(): T {
+    // TODO fix type casting
+    return this.flow as T
+  }
 }

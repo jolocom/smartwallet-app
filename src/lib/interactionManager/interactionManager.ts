@@ -31,6 +31,7 @@ export class InteractionManager {
     await this.validateJWT(token)
 
     const issuerDid = keyIdToDid(token.issuer)
+    //TODO should the registry / identityWallet be initiated in the constructor ??
     const issuer = await backendMiddleware.registry.resolve(issuerDid)
     const issuerSummary = generateIdentitySummary(issuer)
 
