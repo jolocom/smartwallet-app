@@ -1,7 +1,4 @@
-import {
-  JSONWebToken,
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import {
   CredentialOffer,
@@ -11,6 +8,12 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { backendMiddleware } from '../../store'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
+import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/credentialOfferResponse'
+import { httpAgent } from '../http'
+import { JolocomLib } from 'jolocom-lib'
+import { isNil, uniqBy } from 'ramda'
+import { Interaction } from './interaction'
+import { CredentialMetadataSummary } from '../storage/storage'
 
 export enum InteractionChannel {
   QR = 'QR',
@@ -25,11 +28,14 @@ export interface CredentialOffering extends CredentialOffer {
 export class CredentialOfferFlow {
   public credentialOfferingState: CredentialOffering[] = []
   public callbackURL: string
+  public interaction: Interaction
   public tokens: Array<JSONWebToken<JWTEncodable>> = []
 
   public constructor(
+    interaction: Interaction,
     credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
   ) {
+    this.interaction = interaction
     this.callbackURL = credentialOfferRequest.interactionToken.callbackURL
     this.handleInteractionToken(credentialOfferRequest)
   }
@@ -43,17 +49,20 @@ export class CredentialOfferFlow {
   }
 
   public handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
-    this.tokens.push(token)
     switch (token.interactionType) {
       case InteractionType.CredentialOfferRequest:
         this.consumeOfferRequest(token)
+        break
+      case InteractionType.CredentialOfferResponse:
         break
       case InteractionType.CredentialsReceive:
         this.consumeCredentialReceive(token)
         break
       default:
+        console.log(token)
         throw new Error('Interaction type not found')
     }
+    this.tokens.push(token)
   }
 
   public consumeOfferRequest(token: JSONWebToken<JWTEncodable>) {
@@ -89,19 +98,10 @@ export class CredentialOfferFlow {
     )
   }
 
-  //TODO get rid of setOffering(both) ???
-  //manage the offering from outside the manager entirely
-  public async setOfferingAsync(
-    cb: (state: CredentialOffering[]) => Promise<CredentialOffering[]>,
-  ) {
-    this.credentialOfferingState = await cb(this.credentialOfferingState)
-    return this.credentialOfferingState
-  }
-
   public setOffering(
-    cb: (state: CredentialOffering[]) => CredentialOffering[],
+    factory: (state: CredentialOffering[]) => CredentialOffering[],
   ) {
-    this.credentialOfferingState = cb(this.credentialOfferingState)
+    this.credentialOfferingState = factory(this.credentialOfferingState)
     return this.credentialOfferingState
   }
 
@@ -125,5 +125,132 @@ export class CredentialOfferFlow {
     )
     this.handleInteractionToken(credOfferResponse)
     return credOfferResponse
+  }
+
+  public async sendCredentialResponse() {
+    const credentialOfferResponse = this.getToken<CredentialOfferResponse>(
+      InteractionType.CredentialOfferResponse,
+    )
+
+    const res = await httpAgent.postRequest<{ token: string }>(
+      this.callbackURL,
+      { 'Content-Type': 'application/json' },
+      { token: credentialOfferResponse.encode() },
+    )
+    const credentialsReceive = JolocomLib.parse.interactionToken.fromJWT<
+      CredentialsReceive
+    >(res.token)
+
+    await backendMiddleware.identityWallet.validateJWT(credentialsReceive)
+
+    this.handleInteractionToken(credentialsReceive)
+
+    return credentialsReceive
+  }
+
+  public async validateOfferingDigestable() {
+    const validatedOffering = await Promise.all(
+      this.credentialOfferingState.map(async offering => {
+        let valid
+        if (isNil(offering.credential)) {
+          valid = false
+        } else {
+          valid = await JolocomLib.util.validateDigestable(offering.credential)
+        }
+        return {
+          ...offering,
+          valid,
+        }
+      }),
+    )
+    this.setOffering(_ => validatedOffering)
+  }
+
+  public async verifyCredentialStored() {
+    const verifiedOffering = await Promise.all(
+      this.credentialOfferingState.map(async offering => {
+        let valid
+        if (isNil(offering.credential)) {
+          valid = false
+        } else {
+          const storedCredential = await backendMiddleware.storageLib.get.verifiableCredential(
+            {
+              id: offering.credential.id,
+            },
+          )
+          valid = !storedCredential.length
+        }
+        return {
+          ...offering,
+          valid,
+        }
+      }),
+    )
+    this.setOffering(_ => verifiedOffering)
+  }
+
+  public verifyCredentialSubject(did: string) {
+    this.setOffering(offering =>
+      offering.map(offer => {
+        let valid
+        if (isNil(offer.credential)) {
+          valid = false
+        } else {
+          valid = offer.credential.subject === did
+        }
+        return {
+          ...offer,
+          valid,
+        }
+      }),
+    )
+  }
+
+  public async storeOfferedCredentials() {
+    this.credentialOfferingState.map(async offering => {
+      if (offering.credential) {
+        const credential = offering.credential
+        await backendMiddleware.storageLib.delete.verifiableCredential(
+          credential.id,
+        )
+        await backendMiddleware.storageLib.store.verifiableCredential(
+          credential,
+        )
+      }
+    })
+  }
+
+  public async storeOfferMetadata() {
+    const { issuerSummary } = this.interaction
+    const offerCredentialDetails: CredentialMetadataSummary[] = this.credentialOfferingState.map(
+      ({ type, renderInfo, metadata }) => ({
+        issuer: {
+          did: issuerSummary.did,
+        },
+        type,
+        renderInfo: renderInfo || {},
+        metadata: metadata || {},
+      }),
+    )
+
+    if (offerCredentialDetails) {
+      const uniqCredentialDetails = uniqBy(
+        detail => `${detail.issuer.did}${detail.type}`,
+        offerCredentialDetails,
+      )
+
+      await Promise.all(
+        uniqCredentialDetails.map(
+          backendMiddleware.storageLib.store.credentialMetadata,
+        ),
+      )
+    }
+  }
+
+  public async storeIssuerProfile() {
+    const { issuerSummary } = this.interaction
+    if (issuerSummary.publicProfile) {
+      await backendMiddleware.storageLib.store.issuerProfile(issuerSummary)
+    }
   }
 }

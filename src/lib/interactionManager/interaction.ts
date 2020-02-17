@@ -26,14 +26,13 @@ export class Interaction {
   public flow: InteractionFlows
   public channel: InteractionChannel
   public issuerSummary: IdentitySummary
-  // callbackURL should be here ???
 
   public constructor(
     channel: InteractionChannel,
     jwt: JSONWebToken<JWTEncodable>,
     issuerSummary: IdentitySummary,
   ) {
-    this.flow = new this.interactionFlow[jwt.interactionType](jwt)
+    this.flow = new this.interactionFlow[jwt.interactionType](this, jwt)
     this.channel = channel
     this.issuerSummary = issuerSummary
     this.id = jwt.nonce

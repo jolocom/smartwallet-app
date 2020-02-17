@@ -28,34 +28,22 @@ export class InteractionManager {
     channel: InteractionChannel,
     token: JSONWebToken<JWTEncodable>,
   ) {
-    await this.validateJWT(token)
-
-    const issuerDid = keyIdToDid(token.issuer)
-    //TODO should the registry / identityWallet be initiated in the constructor ??
-    const issuer = await backendMiddleware.registry.resolve(issuerDid)
-    const issuerSummary = generateIdentitySummary(issuer)
-
+    //NOTE this is here because the Interaction constructor cannot be async
+    await backendMiddleware.identityWallet.validateJWT(token)
+    const issuerSummary = await this.getIssuerSummary(token.issuer)
     const interaction = new Interaction(channel, token, issuerSummary)
     this.interactions[token.nonce] = interaction
 
     return interaction
   }
 
-  public getInteraction(nonce: string) {
-    return this.interactions[nonce]
+  public async getIssuerSummary(issuer: string) {
+    const issuerDid = keyIdToDid(issuer)
+    const issuerIdentity = await backendMiddleware.registry.resolve(issuerDid)
+    return generateIdentitySummary(issuerIdentity)
   }
 
-  public async addToken(token: JSONWebToken<JWTEncodable>) {
-    await this.validateJWT(token)
-    const interaction = this.interactions[token.nonce]
-    if (!interaction) {
-      throw new Error('No interaction found. Start the interaction first')
-    }
-    // store interaction
-    interaction.flow.handleInteractionToken(token)
-  }
-
-  private async validateJWT(token: JSONWebToken<JWTEncodable>) {
-    await backendMiddleware.identityWallet.validateJWT(token)
+  public getInteraction(id: string) {
+    return this.interactions[id]
   }
 }

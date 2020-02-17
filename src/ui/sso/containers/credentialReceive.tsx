@@ -108,16 +108,18 @@ export const CredentialReceive = connect(
   mapDispatchToProps,
 )(CredentialsReceiveContainer)
 
-const mapDispatchToPropsInvalid = (dispatch: ThunkDispatch) => ({
+const invalidMapDispatchToProps = (dispatch: ThunkDispatch) => ({
   acceptSelectedCredentials: (
     selected: CredentialOffering[],
     interactionId: string,
-  ) =>
-    dispatch(
-      withErrorScreen(
-        withLoading(saveCredentialOffer(selected, interactionId)),
-      ),
-    ),
+  ) => {
+    backendMiddleware.interactionManager
+      .getInteraction(interactionId)
+      .getFlow<CredentialOfferFlow>()
+      .setOffering(_ => selected)
+
+    dispatch(withErrorScreen(withLoading(saveCredentialOffer(interactionId))))
+  },
   goBack: () =>
     dispatch(
       navigationActions.navigate({ routeName: routeList.InteractionScreen }),
@@ -126,5 +128,5 @@ const mapDispatchToPropsInvalid = (dispatch: ThunkDispatch) => ({
 
 export const CredentialReceiveInvalid = connect(
   null,
-  mapDispatchToPropsInvalid,
+  invalidMapDispatchToProps,
 )(CredentialsReceiveContainer)
