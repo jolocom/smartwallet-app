@@ -98,7 +98,7 @@ Array [
 exports[`BackendMiddleware prepareIdentityWallet should authenticate and cache the identity if not cached 2`] = `
 Array [
   Array [
-    "did:jolo:ebfa13213949209338401070db186c191f0c9339a3d7c05beb809bae531ec236",
+    "did:jolo:d129fdce5ff7d69878c001b0973d7e1a0ff2ae4cc7066d5a769e909c28c4149d",
   ],
 ]
 `;

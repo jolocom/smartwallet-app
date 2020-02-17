@@ -42,7 +42,6 @@ export class ReencryptSeed1567674609659 implements MigrationInterface {
 
         const reencrypted = encryptWithLib3(
           Buffer.from(decrypted, 'hex'),
-         
           password,
         ).toString('hex')
 

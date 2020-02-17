@@ -43,7 +43,7 @@ export class Lib3To41580937907601 implements MigrationInterface {
     let pass: string
 
     try {
-      pass = await getPassword()
+      pass = await new KeyChain().getPassword()
     } catch (e) {
       return
     }
@@ -55,6 +55,7 @@ export class Lib3To41580937907601 implements MigrationInterface {
           Buffer.from(encryptedEntropy, 'hex'),
           pass,
         )
+
         const reencrypted = encryptWithLib3(decrypted, pass).toString('hex')
 
         return queryRunner.query(
