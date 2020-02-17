@@ -6,7 +6,7 @@ import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
-} from '../../lib/util'
+} from 'src/lib/util'
 import { ThunkAction } from 'src/store'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
@@ -126,7 +126,6 @@ export const hasExternalCredentials: ThunkAction = async (
     value: externalCredentials.length !== 0,
   })
 }
-
 export const setClaimsForDid: ThunkAction = async (
   dispatch,
   getState,
