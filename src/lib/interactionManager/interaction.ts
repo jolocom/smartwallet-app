@@ -5,6 +5,7 @@ import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { InteractionManager } from './interactionManager'
 
 class CredentialRequestFlow {
   public handleInteractionToken(token: JSONWebToken<JWTEncodable>) {}
@@ -28,11 +29,12 @@ export class Interaction {
   public issuerSummary: IdentitySummary
 
   public constructor(
+    manager: InteractionManager,
     channel: InteractionChannel,
     jwt: JSONWebToken<JWTEncodable>,
     issuerSummary: IdentitySummary,
   ) {
-    this.flow = new this.interactionFlow[jwt.interactionType](this, jwt)
+    this.flow = new this.interactionFlow[jwt.interactionType](manager, jwt)
     this.channel = channel
     this.issuerSummary = issuerSummary
     this.id = jwt.nonce

@@ -14,7 +14,7 @@ import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
-import { BackendError } from 'src/backendMiddleware'
+import { BackendError } from '../../lib/errors/types'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',

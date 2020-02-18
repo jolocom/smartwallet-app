@@ -1,10 +1,11 @@
 import * as util from 'src/lib/util'
-import { BackendError, BackendMiddleware } from 'src/backendMiddleware'
+import { BackendMiddleware } from 'src/backendMiddleware'
 import { reveal, stub } from './utils'
 import { ConnectionOptions } from 'typeorm/browser'
 import data from 'tests/actions/registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { IRegistry } from 'jolocom-lib/js/registries/types'
+import { BackendError } from '../src/lib/errors/types'
 
 const MockDate = require('mockdate')
 
@@ -70,9 +71,11 @@ describe('BackendMiddleware', () => {
     it('should clear database and throw NoEntropy if there is no encryptionPass but there is encryptedEntropy', async () => {
       reveal(keyChainLib).getPassword.mockRejectedValueOnce(new Error())
       const walletPromise = backendMiddleware.prepareIdentityWallet()
-      return expect(walletPromise).rejects.toThrow(BackendError.codes.NoEntropy).then(() => {
-        return expect(storageLib.resetDatabase).toHaveBeenCalled()
-      })
+      return expect(walletPromise)
+        .rejects.toThrow(BackendError.codes.NoEntropy)
+        .then(() => {
+          return expect(storageLib.resetDatabase).toHaveBeenCalled()
+        })
     })
 
     it('should throw DecryptionFailed if decryption fails', async () => {

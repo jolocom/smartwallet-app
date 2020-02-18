@@ -3,8 +3,8 @@ import data from '../registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
 import { createMockStore } from 'tests/utils'
-import { BackendError } from 'src/backendMiddleware'
 import { withErrorScreen } from 'src/actions/modifiers'
+import { BackendError } from '../../../src/lib/errors/types'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {

@@ -3,10 +3,10 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { backendMiddleware } from '../../store'
 import { generateIdentitySummary } from '../../actions/sso/utils'
 import { InteractionChannel } from './credentialOfferFlow'
 import { Interaction } from './interaction'
+import { BackendMiddleware } from '../../backendMiddleware'
 
 interface InteractionState {
   [nonce: string]: Interaction
@@ -22,16 +22,21 @@ interface InteractionState {
  */
 
 export class InteractionManager {
-  public readonly interactions: InteractionState = {}
+  public interactions: InteractionState = {}
+  public readonly backendMiddleware: BackendMiddleware
+
+  public constructor(backendMiddleware: BackendMiddleware) {
+    this.backendMiddleware = backendMiddleware
+  }
 
   public async start(
     channel: InteractionChannel,
     token: JSONWebToken<JWTEncodable>,
   ) {
     //NOTE this is here because the Interaction constructor cannot be async
-    await backendMiddleware.identityWallet.validateJWT(token)
+    await this.backendMiddleware.identityWallet.validateJWT(token)
     const issuerSummary = await this.getIssuerSummary(token.issuer)
-    const interaction = new Interaction(channel, token, issuerSummary)
+    const interaction = new Interaction(this, channel, token, issuerSummary)
     this.interactions[token.nonce] = interaction
 
     return interaction
@@ -39,7 +44,9 @@ export class InteractionManager {
 
   public async getIssuerSummary(issuer: string) {
     const issuerDid = keyIdToDid(issuer)
-    const issuerIdentity = await backendMiddleware.registry.resolve(issuerDid)
+    const issuerIdentity = await this.backendMiddleware.registry.resolve(
+      issuerDid,
+    )
     return generateIdentitySummary(issuerIdentity)
   }
 
