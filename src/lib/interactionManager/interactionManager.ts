@@ -4,13 +4,9 @@ import {
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { generateIdentitySummary } from '../../actions/sso/utils'
-import { InteractionChannel } from './credentialOfferFlow'
 import { Interaction } from './interaction'
 import { BackendMiddleware } from '../../backendMiddleware'
-
-interface InteractionState {
-  [nonce: string]: Interaction
-}
+import { InteractionChannel, InteractionState } from './types'
 
 /***
  * - initiated inside BackendMiddleware
@@ -36,7 +32,12 @@ export class InteractionManager {
     //NOTE this is here because the Interaction constructor cannot be async
     await this.backendMiddleware.identityWallet.validateJWT(token)
     const issuerSummary = await this.getIssuerSummary(token.issuer)
-    const interaction = new Interaction(this, channel, token, issuerSummary)
+    const interaction = new Interaction(
+      this.backendMiddleware,
+      channel,
+      token,
+      issuerSummary,
+    )
     this.interactions[token.nonce] = interaction
 
     return interaction

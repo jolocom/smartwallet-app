@@ -12,7 +12,6 @@ import { BackendMiddleware } from './backendMiddleware'
 export const backendMiddleware = new BackendMiddleware(config)
 
 export function initStore() {
-
   /*
    * The {} as RootState type assertion:
    * The second argument, "preloadedState" is mandatory, and typed as RootState.

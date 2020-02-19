@@ -3,10 +3,7 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import {
-  CredentialOffer,
-  CredentialOfferResponseSelection,
-} from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { CredentialOfferResponseSelection } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
@@ -14,34 +11,25 @@ import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/creden
 import { httpAgent } from '../http'
 import { JolocomLib } from 'jolocom-lib'
 import { isNil, uniqBy } from 'ramda'
-import { Interaction } from './interaction'
 import { CredentialMetadataSummary } from '../storage/storage'
-import { InteractionManager } from './interactionManager'
-
-export enum InteractionChannel {
-  QR = 'QR',
-  Deeplink = 'Deeplink',
-}
-
-export interface CredentialOffering extends CredentialOffer {
-  credential?: SignedCredential
-  valid: boolean
-}
+import { BackendMiddleware } from '../../backendMiddleware'
+import { IdentitySummary } from '../../actions/sso/types'
+import { CredentialOffering } from './types'
 
 export class CredentialOfferFlow {
-  public interactionManager: InteractionManager
-  public interaction: Interaction
-
+  public backendMiddleware: BackendMiddleware
   public tokens: Array<JSONWebToken<JWTEncodable>> = []
   public credentialOfferingState: CredentialOffering[] = []
+  public issuerSummary: IdentitySummary
   public callbackURL: string
 
   public constructor(
-    manager: InteractionManager,
     credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
+    backendMiddleware: BackendMiddleware,
+    issuerSummary: IdentitySummary,
   ) {
-    this.interactionManager = manager
-    this.interaction = manager.getInteraction(credentialOfferRequest.nonce)
+    this.backendMiddleware = backendMiddleware
+    this.issuerSummary = issuerSummary
     this.callbackURL = credentialOfferRequest.interactionToken.callbackURL
     this.handleInteractionToken(credentialOfferRequest)
   }
@@ -117,13 +105,13 @@ export class CredentialOfferFlow {
       InteractionType.CredentialOfferRequest,
     )
     const { callbackURL } = credentialOfferRequest.interactionToken
-    const password = await this.interactionManager.backendMiddleware.keyChainLib.getPassword()
+    const password = await this.backendMiddleware.keyChainLib.getPassword()
 
     // NOTE not returning providedInput since it's not used
     const selectedTypes: CredentialOfferResponseSelection[] = selectedOffering.map(
       offer => ({ type: offer.type }),
     )
-    const credOfferResponse = await this.interactionManager.backendMiddleware.identityWallet.create.interactionTokens.response.offer(
+    const credOfferResponse = await this.backendMiddleware.identityWallet.create.interactionTokens.response.offer(
       { callbackURL, selectedCredentials: selectedTypes },
       password,
       this.getToken(InteractionType.CredentialOfferRequest),
@@ -146,9 +134,7 @@ export class CredentialOfferFlow {
       CredentialsReceive
     >(res.token)
 
-    await this.interactionManager.backendMiddleware.identityWallet.validateJWT(
-      credentialsReceive,
-    )
+    await this.backendMiddleware.identityWallet.validateJWT(credentialsReceive)
 
     this.handleInteractionToken(credentialsReceive)
 
@@ -180,7 +166,7 @@ export class CredentialOfferFlow {
         if (isNil(offering.credential)) {
           valid = false
         } else {
-          const storedCredential = await this.interactionManager.backendMiddleware.storageLib.get.verifiableCredential(
+          const storedCredential = await this.backendMiddleware.storageLib.get.verifiableCredential(
             {
               id: offering.credential.id,
             },
@@ -217,10 +203,10 @@ export class CredentialOfferFlow {
     this.credentialOfferingState.map(async offering => {
       if (offering.credential) {
         const credential = offering.credential
-        await this.interactionManager.backendMiddleware.storageLib.delete.verifiableCredential(
+        await this.backendMiddleware.storageLib.delete.verifiableCredential(
           credential.id,
         )
-        await this.interactionManager.backendMiddleware.storageLib.store.verifiableCredential(
+        await this.backendMiddleware.storageLib.store.verifiableCredential(
           credential,
         )
       }
@@ -228,11 +214,10 @@ export class CredentialOfferFlow {
   }
 
   public async storeOfferMetadata() {
-    const { issuerSummary } = this.interaction
     const offerCredentialDetails: CredentialMetadataSummary[] = this.credentialOfferingState.map(
       ({ type, renderInfo, metadata }) => ({
         issuer: {
-          did: issuerSummary.did,
+          did: this.issuerSummary.did,
         },
         type,
         renderInfo: renderInfo || {},
@@ -248,18 +233,16 @@ export class CredentialOfferFlow {
 
       await Promise.all(
         uniqCredentialDetails.map(
-          this.interactionManager.backendMiddleware.storageLib.store
-            .credentialMetadata,
+          this.backendMiddleware.storageLib.store.credentialMetadata,
         ),
       )
     }
   }
 
   public async storeIssuerProfile() {
-    const { issuerSummary } = this.interaction
-    if (issuerSummary.publicProfile) {
-      await this.interactionManager.backendMiddleware.storageLib.store.issuerProfile(
-        issuerSummary,
+    if (this.issuerSummary.publicProfile) {
+      await this.backendMiddleware.storageLib.store.issuerProfile(
+        this.issuerSummary,
       )
     }
   }

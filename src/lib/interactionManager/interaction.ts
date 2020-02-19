@@ -1,17 +1,13 @@
-import { CredentialOfferFlow, InteractionChannel } from './credentialOfferFlow'
+import { CredentialOfferFlow } from './credentialOfferFlow'
 import { IdentitySummary } from '../../actions/sso/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { InteractionManager } from './interactionManager'
-
-class CredentialRequestFlow {
-  public handleInteractionToken(token: JSONWebToken<JWTEncodable>) {}
-}
-
-type InteractionFlows = CredentialOfferFlow | CredentialRequestFlow
+import { BackendMiddleware } from '../../backendMiddleware'
+import { InteractionChannel, InteractionFlows } from './types'
+import { CredentialRequestFlow } from './credentialRequestFlow'
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -29,12 +25,16 @@ export class Interaction {
   public issuerSummary: IdentitySummary
 
   public constructor(
-    manager: InteractionManager,
+    backendMiddleware: BackendMiddleware,
     channel: InteractionChannel,
     jwt: JSONWebToken<JWTEncodable>,
     issuerSummary: IdentitySummary,
   ) {
-    this.flow = new this.interactionFlow[jwt.interactionType](manager, jwt)
+    this.flow = new this.interactionFlow[jwt.interactionType](
+      jwt,
+      backendMiddleware,
+      issuerSummary,
+    )
     this.channel = channel
     this.issuerSummary = issuerSummary
     this.id = jwt.nonce

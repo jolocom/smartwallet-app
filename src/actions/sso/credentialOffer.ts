@@ -9,11 +9,11 @@ import { createInfoNotification, Notification } from '../../lib/notifications'
 import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
+import { CredentialOfferFlow } from '../../lib/interactionManager/credentialOfferFlow'
 import {
-  CredentialOfferFlow,
   CredentialOffering,
   InteractionChannel,
-} from '../../lib/interactionManager/credentialOfferFlow'
+} from '../../lib/interactionManager/types'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -67,6 +67,20 @@ const validateReceivedCredentials = (
 
   const allInvalid = !offeringValidity.includes(true)
   const someInvalid = offeringValidity.includes(false)
+  const oneInvalid = offeringValidity.length === 1 && !offeringValidity[0]
+
+  // simplify with one notification w/ different messages
+  if (oneInvalid) {
+    dispatch(
+      scheduleNotification(
+        createInfoNotification({
+          title: 'Oh uh',
+          message: 'The credential you requested is invalid',
+        }),
+      ),
+    )
+    return dispatch(endReceiving(interactionId))
+  }
 
   if (allInvalid) {
     // TODO @clauxx add strings

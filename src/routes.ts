@@ -42,7 +42,7 @@ import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
 
 import { NotificationFilter } from './lib/notifications'
-import { CredentialReceiveInvalid } from './ui/sso/containers/credentialReceive'
+import { CredentialReceiveInvalid } from './ui/sso/containers/credentialReceiveInvalid'
 
 // only used on android
 const headerBackImage = createElement(Image, {

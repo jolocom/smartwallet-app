@@ -14,7 +14,7 @@ import { interactionHandlers } from 'src/lib/storage/interactionTokens'
 import { AppError, ErrorCode } from 'src/lib/errors'
 import { withErrorScreen, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
-import { InteractionChannel } from '../../lib/interactionManager/credentialOfferFlow'
+import { InteractionChannel } from '../../lib/interactionManager/types'
 
 const deferredNavActions: NavigationAction[] = []
 let dispatchNavigationAction = (action: NavigationAction) => {

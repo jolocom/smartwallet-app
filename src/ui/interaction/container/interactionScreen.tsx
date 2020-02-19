@@ -18,7 +18,7 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { Colors } from 'src/styles'
-import { InteractionChannel } from '../../../lib/interactionManager/credentialOfferFlow'
+import { InteractionChannel } from '../../../lib/interactionManager/types'
 
 const IS_IOS = Platform.OS === 'ios'
 

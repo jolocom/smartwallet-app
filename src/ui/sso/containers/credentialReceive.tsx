@@ -11,15 +11,10 @@ import { fontMedium } from '../../../styles/typography'
 import { ActionSheet } from '../../structure/actionSheet'
 import strings from '../../../locales/strings'
 import I18n from 'src/locales/i18n'
-import {
-  CredentialOfferFlow,
-  CredentialOffering,
-} from '../../../lib/interactionManager/credentialOfferFlow'
-import {
-  consumeCredentialReceive,
-  saveCredentialOffer,
-} from '../../../actions/sso/credentialOfferRequest'
+import { CredentialOfferFlow } from '../../../lib/interactionManager/credentialOfferFlow'
+import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
+import { CredentialOffering } from '../../../lib/interactionManager/types'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
@@ -44,7 +39,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
     interactionId,
   )
   const { publicProfile } = interaction.issuerSummary
-  const { credentialOfferingState } = interaction.flow as CredentialOfferFlow
+  const { credentialOfferingState } = interaction.getFlow<CredentialOfferFlow>()
 
   const handleConfirm = () => {
     acceptSelectedCredentials(selected, interactionId)
@@ -106,27 +101,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 export const CredentialReceive = connect(
   null,
   mapDispatchToProps,
-)(CredentialsReceiveContainer)
-
-const invalidMapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  acceptSelectedCredentials: (
-    selected: CredentialOffering[],
-    interactionId: string,
-  ) => {
-    backendMiddleware.interactionManager
-      .getInteraction(interactionId)
-      .getFlow<CredentialOfferFlow>()
-      .setOffering(_ => selected)
-
-    dispatch(withErrorScreen(withLoading(saveCredentialOffer(interactionId))))
-  },
-  goBack: () =>
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.InteractionScreen }),
-    ),
-})
-
-export const CredentialReceiveInvalid = connect(
-  null,
-  invalidMapDispatchToProps,
 )(CredentialsReceiveContainer)
