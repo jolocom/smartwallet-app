@@ -134,12 +134,14 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       )
 
       if (isMultiLineField) {
-        const fieldsToCheck = arr.filter(field => field.includes(fieldName))
+        const fieldValuesToCheck = arr
+          .filter(field => field.includes(fieldName))
+          .map(field => claimData[field])
 
         // at least one claim of size > 0
         return
-        fieldsToCheck.some(field => claimData[field].length > 0) &&
-          fieldsToCheck.every(field => validator(claimData[field]))
+        fieldValuesToCheck.some(field => field.length > 0) &&
+          fieldValuesToCheck.every(validator)
       }
       return claimData[c].length > 0 && validator(claimData[c])
     })
