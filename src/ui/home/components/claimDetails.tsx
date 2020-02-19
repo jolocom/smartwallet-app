@@ -100,7 +100,6 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   }
 
   private handleFieldInput = (fieldValue: string, fieldName: string) => {
-    console.log('handling field input')
     this.props.handleClaimInput(fieldValue, fieldName)
   }
 
