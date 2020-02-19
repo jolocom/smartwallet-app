@@ -1,10 +1,10 @@
 export type InputValidator<T> = (input: T) => boolean
 
 const passesAll = <T>(iv: InputValidator<T>[]) => (value: T) =>
-  iv.map(fn => fn(value)).reduce((p, c) => p && c, true)
+  iv.every(fn => fn(value))
 
 const isStringLengthValid = (maxLen: number): InputValidator<string> => (
-  input: string,
+  input,
 ): boolean => input.length < maxLen && input.length >= 0
 
 const isOnlyNumbers: InputValidator<string> = input =>
