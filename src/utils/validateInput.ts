@@ -10,10 +10,16 @@ const isStringLengthValid = (maxLen: number): InputValidator<string> => (
 const isOnlyNumbers: InputValidator<string> = input =>
   /^\+?(0|[1-9]\d*)$/.test(input)
 
+const naiveEmailFormat: InputValidator<string> = input =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input)
+
 const isAddressFieldValid = isStringLengthValid(100)
 const isNameFieldValid = isStringLengthValid(100)
 const isPhoneNumberValid = passesAll([isStringLengthValid(100), isOnlyNumbers])
-const isEmailAddressValid = isStringLengthValid(100)
+const isEmailAddressValid = passesAll([
+  isStringLengthValid(100),
+  naiveEmailFormat,
+])
 
 export const inputFieldValidators: {
   [credType: string]: InputValidator<string>
