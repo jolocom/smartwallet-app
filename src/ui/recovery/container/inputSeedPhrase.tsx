@@ -31,6 +31,15 @@ interface State {
 }
 
 
+/**
+ * We are using a closure here to ensure that the mnemonic value
+ * is not accessible at runtime by rogue dependencies, i.e. by traversing
+ * the internals of the navigation system or react (@TODO Find an actual attack vector to test the fix against).
+ *
+ * @dev Please note that updating the mnemonic value from inside the container DOES NOT cause a rerender,
+ * since it's not part of the Container state / props.
+ */
+
 const ClosureInputSeedPhrase = (mnemonic: string[] = []) => {
   return class InputSeedPhraseContainer extends React.Component<Props, State> {
     private textInput: TextInput | undefined
