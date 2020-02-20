@@ -93,6 +93,8 @@ const notifications = {
     'That doc doesn’t belong to you. Try saving a different one.',
   WE_CANT_DO_THIS_SOME_OF_THE_DOCUMENTS_ARE_NOT_YOURS:
     'We cant do this, some of the documents are not yours',
+  IT_SEEMS_LIKE_WE_CANT_DO_THIS: "It seems like we can't do this",
+  SOMETHING_WENT_WRONG_CHOOSE_AGAIN: 'Something went wrong. Choose again!',
 }
 
 const errorTitle = {

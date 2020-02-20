@@ -67,43 +67,25 @@ const validateReceivedCredentials = (
 
   const allInvalid = !offeringValidity.includes(true)
   const someInvalid = offeringValidity.includes(false)
-  const oneInvalid = offeringValidity.length === 1 && !offeringValidity[0]
 
-  // simplify with one notification w/ different messages
-  if (oneInvalid) {
+  const scheduleInvalidNotification = (message: string) =>
     dispatch(
       scheduleNotification(
         createInfoNotification({
-          title: 'Oh uh',
-          message: 'The credential you requested is invalid',
+          title: I18n.t(strings.AWKWARD),
+          message,
         }),
       ),
     )
-    return dispatch(endReceiving(interactionId))
-  }
 
   if (allInvalid) {
-    // TODO @clauxx add strings
-    dispatch(
-      scheduleNotification(
-        createInfoNotification({
-          title: 'Oh uh',
-          message: 'Nothing we received makes sense',
-        }),
-      ),
-    )
+    scheduleInvalidNotification(I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS))
     return dispatch(endReceiving(interactionId))
   }
 
   if (someInvalid) {
-    // TODO @clauxx add strings
-    dispatch(
-      scheduleNotification(
-        createInfoNotification({
-          title: 'Oh uh',
-          message: 'Some of this stuff is not right.',
-        }),
-      ),
+    scheduleInvalidNotification(
+      I18n.t(strings.SOMETHING_WENT_WRONG_CHOOSE_AGAIN),
     )
 
     return dispatch(
@@ -156,7 +138,7 @@ const endReceiving = (interactionId: string): ThunkAction => (
   const { channel } = interaction
 
   if (channel === InteractionChannel.Deeplink) {
-    // handle deeplink properly
+    //TODO @clauxx handle deeplink properly
     return dispatch(navigationActions.navigatorResetHome())
   } else {
     return dispatch(

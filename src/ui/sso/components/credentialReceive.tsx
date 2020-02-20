@@ -14,7 +14,7 @@ import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
 import React from 'react'
 import { black065, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
-import { CredentialOffering } from '../../../lib/interactionManager/credentialOfferFlow'
+import { CredentialOffering } from '../../../lib/interactionManager/types'
 
 const styles = StyleSheet.create({
   container: {
@@ -56,7 +56,6 @@ interface Props {
   credentialOffering: CredentialOffering[]
   onPressDocument: (offering: CredentialOffering) => void
   isDocumentSelected: (offering: CredentialOffering) => boolean
-  isInvalidScreen?: boolean
 }
 
 export const CredentialReceiveComponent = (props: Props) => {
@@ -65,42 +64,45 @@ export const CredentialReceiveComponent = (props: Props) => {
     credentialOffering,
     isDocumentSelected,
     onPressDocument,
-    isInvalidScreen,
   } = props
-  // TODO @clauxx add to strings && smth better than isInvalidScreen
-  const description = isInvalidScreen
-    ? strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU
-    : 'Choose the valid credentials you would like to save'
   return (
-    <ScrollView
-      contentContainerStyle={{ paddingBottom: '50%' }}
-      style={{ width: '100%' }}
-    >
-      {publicProfile && (
-        <View style={styles.topSection}>
-          <Image style={styles.logo} source={{ uri: publicProfile.image }} />
-          <Text style={styles.serviceName}>{publicProfile.name}</Text>
-          <Text style={styles.description}>{I18n.t(description)}</Text>
-        </View>
-      )}
-      {credentialOffering.map(offering => {
-        const { type, renderInfo, valid } = offering
-        const isSelected = isDocumentSelected(offering)
-        return (
-          <TouchableOpacity
-            onPress={() => valid && onPressDocument(offering)}
-            activeOpacity={1}
-            style={styles.documentWrapper}
-          >
-            <DocumentCard
-              selected={isSelected}
-              credentialType={type}
-              renderInfo={renderInfo}
-              invalid={!valid}
-            />
-          </TouchableOpacity>
-        )
-      })}
-    </ScrollView>
+    <React.Fragment>
+      <View style={styles.topSection}>
+        {publicProfile && (
+          <React.Fragment>
+            <Image style={styles.logo} source={{ uri: publicProfile.image }} />
+            <Text style={styles.serviceName}>{publicProfile.name}</Text>
+          </React.Fragment>
+        )}
+        <Text style={styles.description}>
+          {I18n.t(
+            strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU,
+          )}
+        </Text>
+      </View>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: '50%' }}
+        style={{ width: '100%' }}
+      >
+        {credentialOffering.map(offering => {
+          const { type, renderInfo, valid } = offering
+          const isSelected = isDocumentSelected(offering)
+          return (
+            <TouchableOpacity
+              onPress={() => valid && onPressDocument(offering)}
+              activeOpacity={1}
+              style={styles.documentWrapper}
+            >
+              <DocumentCard
+                selected={isSelected}
+                credentialType={type}
+                renderInfo={renderInfo}
+                invalid={!valid}
+              />
+            </TouchableOpacity>
+          )
+        })}
+      </ScrollView>
+    </React.Fragment>
   )
 }
