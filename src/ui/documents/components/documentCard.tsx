@@ -1,20 +1,33 @@
 import React from 'react'
-import { View, StyleSheet, Text, Image, ImageBackground } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ImageBackground,
+  Animated,
+  Dimensions,
+} from 'react-native'
 import { DocumentValiditySummary } from './documentValidity'
 import { ClaimInterface } from 'cred-types-jolocom-core'
-import { Colors, Typography, Spacing } from 'src/styles'
+import { Colors, Typography, Spacing, Typefaces } from 'src/styles'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { fontMedium } from '../../../styles/typography'
+import { InvalidDocumentBackground } from '../../../resources'
 
-export const DOCUMENT_CARD_HEIGHT = 176
-export const DOCUMENT_CARD_WIDTH = 276
+const { width: WIDTH } = Dimensions.get('window')
+const DOCUMENT_MARGIN = 20
+export const DOCUMENT_CARD_WIDTH = WIDTH - DOCUMENT_MARGIN * 2
+export const DOCUMENT_CARD_HEIGHT = DOCUMENT_CARD_WIDTH * 0.636
 
+type ScaleFactor = Animated.Value | number
 interface DocumentCardProps {
   credentialType: string
   renderInfo: CredentialOfferRenderInfo | undefined
   claimData?: ClaimInterface
   expires?: Date
-  selected?: boolean
   invalid?: boolean
+  scale?: {x: ScaleFactor, y: ScaleFactor}
 }
 
 const styles = StyleSheet.create({
@@ -22,10 +35,9 @@ const styles = StyleSheet.create({
     height: DOCUMENT_CARD_HEIGHT,
     width: DOCUMENT_CARD_WIDTH,
     backgroundColor: Colors.white,
-    borderColor: Colors.black010,
-    borderWidth: 2,
-    borderRadius: 10,
+    borderRadius: 12,
     overflow: 'hidden',
+    elevation: 12,
   },
   cardBack: {
     position: 'absolute',
@@ -34,11 +46,13 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flex: 1,
-    paddingVertical: Spacing.MD,
+    paddingTop: 26,
+    paddingBottom: 12,
   },
   documentType: {
-    ...Typography.baseFontStyles,
-    fontSize: Typography.textXL,
+    // TODO @clauxx add BOLD font here
+    ...Typefaces.subtitle1,
+    fontFamily: fontMedium,
     paddingHorizontal: Spacing.MD,
   },
   documentNumber: {
@@ -60,16 +74,6 @@ const styles = StyleSheet.create({
     height: 40,
     marginLeft: 'auto',
   },
-  selected: {
-    borderColor: Colors.joloColor,
-    borderWidth: 2,
-    elevation: 6,
-  },
-  invalid: {
-    borderColor: Colors.yellowError,
-    borderWidth: 2,
-    opacity: 0.3,
-  },
 })
 
 export const DocumentCard: React.FC<DocumentCardProps> = props => {
@@ -78,36 +82,34 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
     claimData,
     credentialType,
     expires,
-    selected,
     invalid,
   } = props
   const { background = undefined, logo = undefined, text = undefined } =
     renderInfo || {}
+  const cardBackground = invalid ? InvalidDocumentBackground : {uri: background?.url}
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.card,
         !background && { borderColor: Colors.sand },
-        selected && styles.selected,
-        invalid && styles.invalid,
       ]}
     >
       <ImageBackground
         style={[
           styles.cardBack,
+
           {
             backgroundColor: (background && background.color) || 'transparent',
           },
         ]}
-        source={{
-          uri: background && background.url,
-        }}
+        resizeMode={'cover'}
+        source={cardBackground}
       />
       <View style={styles.cardContent}>
         <Text
           numberOfLines={2}
-          style={[styles.documentType, { color: text && text.color }]}
+          style={[styles.documentType, { color: invalid ? 'rgb(182, 182, 182)' : text && text.color }]}
         >
           {credentialType || (claimData && claimData.type)}
         </Text>
@@ -132,6 +134,6 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
           )}
         </View>
       </View>
-    </View>
+    </Animated.View>
   )
 }

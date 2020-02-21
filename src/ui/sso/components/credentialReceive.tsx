@@ -65,6 +65,7 @@ export const CredentialReceiveComponent = (props: Props) => {
     isDocumentSelected,
     onPressDocument,
   } = props
+
   return (
     <React.Fragment>
       <View style={styles.topSection}>
@@ -86,7 +87,7 @@ export const CredentialReceiveComponent = (props: Props) => {
       >
         {credentialOffering.map(offering => {
           const { type, renderInfo, valid } = offering
-          const isSelected = isDocumentSelected(offering)
+          //const isSelected = isDocumentSelected(offering)
           return (
             <TouchableOpacity
               onPress={() => valid && onPressDocument(offering)}
@@ -94,7 +95,6 @@ export const CredentialReceiveComponent = (props: Props) => {
               style={styles.documentWrapper}
             >
               <DocumentCard
-                selected={isSelected}
                 credentialType={type}
                 renderInfo={renderInfo}
                 invalid={!valid}
