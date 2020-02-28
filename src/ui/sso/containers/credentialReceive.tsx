@@ -11,13 +11,13 @@ import { fontMedium } from '../../../styles/typography'
 import { ActionSheet } from '../../structure/actionSheet'
 import strings from '../../../locales/strings'
 import I18n from 'src/locales/i18n'
-import { CredentialOfferFlow } from '../../../lib/interactionManager/credentialOfferFlow'
 import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
 import { CredentialOffering } from '../../../lib/interactionManager/types'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
+  credentialOfferingSummary: CredentialOffering[]
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -32,14 +32,16 @@ export const CredentialsReceiveContainer = (props: Props) => {
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
-      params: { interactionId },
+      params: { credentialOfferingSummary, interactionId },
     },
   } = navigation
+
   const interaction = backendMiddleware.interactionManager.getInteraction(
     interactionId,
   )
+
+  // TODO Why is this here but not in credential request?
   const { publicProfile } = interaction.issuerSummary
-  const { credentialOfferingState } = interaction.getFlow<CredentialOfferFlow>()
 
   const handleConfirm = () => {
     acceptSelectedCredentials(selected, interactionId)
@@ -59,7 +61,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
   return (
     <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
       <CredentialReceiveComponent
-        credentialOffering={credentialOfferingState}
+        credentialOffering={credentialOfferingSummary}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
         onPressDocument={onPressDocument}

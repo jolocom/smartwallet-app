@@ -17,20 +17,21 @@ import { InteractionChannel } from '../interactionManager/types'
 export const interactionHandlers = {
   [InteractionType.Authentication]: <T extends JSONWebToken<Authentication>>(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumeAuthenticationRequest(interactionToken, isDeepLinkInteraction),
+    channel: InteractionChannel,
+  //@ts-ignore
+  ) => consumeAuthenticationRequest(interactionToken, channel),
   [InteractionType.CredentialRequest]: <
     T extends JSONWebToken<CredentialRequest>
   >(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumeCredentialRequest(interactionToken, isDeepLinkInteraction),
+    channel: InteractionChannel,
+  ) => consumeCredentialRequest(interactionToken, channel),
   [InteractionType.CredentialOfferRequest]: <
     T extends JSONWebToken<CredentialOfferRequest>
   >(
     interactionToken: T,
-    interactionChannel: InteractionChannel,
-  ) => consumeCredentialOfferRequest(interactionToken, interactionChannel),
+    channel: InteractionChannel,
+  ) => consumeCredentialOfferRequest(interactionToken, channel),
   [InteractionType.PaymentRequest]: <T extends JSONWebToken<PaymentRequest>>(
     interactionToken: T,
     isDeepLinkInteraction: boolean,

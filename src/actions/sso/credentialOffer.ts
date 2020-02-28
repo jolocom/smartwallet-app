@@ -1,6 +1,6 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { ThunkAction } from 'src/store'
+import { ThunkAction } from '../../store'
 import { navigationActions } from '../index'
 import { routeList } from '../../routeList'
 import { setClaimsForDid } from '../account'
@@ -19,15 +19,16 @@ export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
   interactionChannel: InteractionChannel,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
-  const { id } = await interactionManager.start(
+  const interaction = await interactionManager.start(
     interactionChannel,
     credentialOfferRequest,
   )
 
+  await interaction.handleInteractionToken(credentialOfferRequest)
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialReceive,
-      params: { interactionId: id },
+      params: { interactionId: credentialOfferRequest.nonce, credentialOfferingSummary: interaction.getState()},
     }),
   )
 }
@@ -36,15 +37,13 @@ export const consumeCredentialReceive = (
   selectedCredentialOffering: CredentialOffering[],
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
-  const interactionFlow = interactionManager
-    .getInteraction(interactionId)
-    .getFlow<CredentialOfferFlow>()
+  const interactionFlow = interactionManager.getInteraction(interactionId).getFlow<CredentialOfferFlow>()
 
   await interactionFlow.createCredentialResponseToken(
     selectedCredentialOffering,
   )
-  await interactionFlow.sendCredentialResponse()
 
+  await interactionFlow.sendCredentialResponse()
   return dispatch(validateReceivedCredentials(interactionId))
 }
 

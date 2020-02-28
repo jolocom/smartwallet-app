@@ -28,12 +28,17 @@ export class CredentialOfferFlow {
     this.handleInteractionToken(credentialOfferRequest)
   }
 
+  // TODO breaks abstraction
   public getToken<T extends JWTEncodable>(type: InteractionType) {
     const token = this.tokens.find(token => token.interactionType === type)
     if (!token) throw new Error('Token not found')
 
-    // TODO fix type casting
+    // TODO fix type casting, breaks abstraction
     return token as JSONWebToken<T>
+  }
+
+  public getState() {
+    return this.credentialOfferingState
   }
 
   public handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
@@ -54,6 +59,7 @@ export class CredentialOfferFlow {
 
   public consumeOfferRequest(token: JSONWebToken<JWTEncodable>) {
     const credOfferRequest = token as JSONWebToken<CredentialOfferRequest>
+
     this.setOffering(_ =>
       credOfferRequest.interactionToken.offeredCredentials.map(offer => ({
         ...offer,

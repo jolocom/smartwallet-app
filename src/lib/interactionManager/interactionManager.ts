@@ -25,21 +25,19 @@ export class InteractionManager {
     this.backendMiddleware = backendMiddleware
   }
 
-  public async start(
+  public start(
     channel: InteractionChannel,
     token: JSONWebToken<JWTEncodable>,
   ) {
-    //NOTE this is here because the Interaction constructor cannot be async
-    await this.backendMiddleware.identityWallet.validateJWT(token)
-    const issuerSummary = await this.getIssuerSummary(token.issuer)
+
+    // TODO Eventually backendMiddleware shouldn't go in anymore
     const interaction = new Interaction(
       this.backendMiddleware,
       channel,
-      token,
-      issuerSummary,
+      token.nonce
     )
-    this.interactions[token.nonce] = interaction
 
+    this.interactions[token.nonce] = interaction
     return interaction
   }
 

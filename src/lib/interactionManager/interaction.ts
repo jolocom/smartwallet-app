@@ -13,6 +13,8 @@ import { httpAgent } from '../http'
 import { JolocomLib } from 'jolocom-lib'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from '../storage/storage'
+import { keyIdToDid } from 'jolocom-lib/js/utils/helper';
+import { generateIdentitySummary } from 'src/actions/sso/utils';
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -27,25 +29,48 @@ export class Interaction {
 
   public id: string
   public ctx: BackendMiddleware
-  public flow: InteractionFlows
+  public flow!: InteractionFlows
   public channel: InteractionChannel
-  public issuerSummary: IdentitySummary
+  public issuerSummary!: IdentitySummary
 
   public constructor(
     ctx: BackendMiddleware,
     channel: InteractionChannel,
-    jwt: JSONWebToken<JWTEncodable>,
-    issuerSummary: IdentitySummary,
+    id: string,
   ) {
     this.ctx = ctx
-    this.flow = new this.interactionFlow[jwt.interactionType](this, jwt)
-    this.issuerSummary = issuerSummary
     this.channel = channel
-    this.id = jwt.nonce
+    this.id = id
+  }
+
+  public async handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
+    // At some point we should strip the JSONWebToken<JWTEncodable>
+    if (!this.issuerSummary) {
+      // TODO Potential bug if we start with our token, i.e. we are the issuer
+      const issuerDid = keyIdToDid(token.issuer)
+      const issuerIdentity = await this.backendMiddleware.registry.resolve(
+        issuerDid,
+      )
+
+      this.issuerSummary = await generateIdentitySummary(issuerIdentity)
+    }
+
+    if (!this.flow) {
+      this.flow = new this.interactionFlow[token.interactionType](
+        this.ctx,
+        this.issuerSummary,
+      )
+    }
+
+    // TODO before passing to the flow, we should validate the signature
+    return this.flow.handleInteractionToken(token)
+  }
+
+  public getState() {
+    return this.flow.getState()
   }
 
   public getFlow<T extends InteractionFlows>(): T {
-    // TODO fix type casting
     return this.flow as T
   }
 
