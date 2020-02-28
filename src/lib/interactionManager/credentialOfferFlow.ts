@@ -3,33 +3,27 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { CredentialOfferResponseSelection } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/credentialOfferResponse'
-import { httpAgent } from '../http'
 import { JolocomLib } from 'jolocom-lib'
 import { isNil, uniqBy } from 'ramda'
 import { CredentialMetadataSummary } from '../storage/storage'
-import { BackendMiddleware } from '../../backendMiddleware'
-import { IdentitySummary } from '../../actions/sso/types'
 import { CredentialOffering } from './types'
+import { Interaction } from './interaction'
 
 export class CredentialOfferFlow {
-  public backendMiddleware: BackendMiddleware
+  public ctx: Interaction
   public tokens: Array<JSONWebToken<JWTEncodable>> = []
   public credentialOfferingState: CredentialOffering[] = []
-  public issuerSummary: IdentitySummary
   public callbackURL: string
 
   public constructor(
+    ctx: Interaction,
     credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
-    backendMiddleware: BackendMiddleware,
-    issuerSummary: IdentitySummary,
   ) {
-    this.backendMiddleware = backendMiddleware
-    this.issuerSummary = issuerSummary
+    this.ctx = ctx
     this.callbackURL = credentialOfferRequest.interactionToken.callbackURL
     this.handleInteractionToken(credentialOfferRequest)
   }
@@ -104,18 +98,18 @@ export class CredentialOfferFlow {
     const credentialOfferRequest = this.getToken<CredentialOfferRequest>(
       InteractionType.CredentialOfferRequest,
     )
-    const { callbackURL } = credentialOfferRequest.interactionToken
-    const password = await this.backendMiddleware.keyChainLib.getPassword()
+    const credentialResponseAttr = {
+      callbackURL: credentialOfferRequest.interactionToken.callbackURL,
+      selectedCredentials: selectedOffering.map(offer => ({
+        type: offer.type,
+      })),
+    }
+    const credOfferResponse = await this.ctx.createInteractionToken(
+      InteractionType.CredentialOfferResponse,
+      credentialResponseAttr,
+      credentialOfferRequest,
+    )
 
-    // NOTE not returning providedInput since it's not used
-    const selectedTypes: CredentialOfferResponseSelection[] = selectedOffering.map(
-      offer => ({ type: offer.type }),
-    )
-    const credOfferResponse = await this.backendMiddleware.identityWallet.create.interactionTokens.response.offer(
-      { callbackURL, selectedCredentials: selectedTypes },
-      password,
-      this.getToken(InteractionType.CredentialOfferRequest),
-    )
     this.handleInteractionToken(credOfferResponse)
     return credOfferResponse
   }
@@ -124,17 +118,11 @@ export class CredentialOfferFlow {
     const credentialOfferResponse = this.getToken<CredentialOfferResponse>(
       InteractionType.CredentialOfferResponse,
     )
-
-    const res = await httpAgent.postRequest<{ token: string }>(
+    const credentialsReceive = await this.ctx.sendPost<CredentialsReceive>(
       this.callbackURL,
-      { 'Content-Type': 'application/json' },
       { token: credentialOfferResponse.encode() },
     )
-    const credentialsReceive = JolocomLib.parse.interactionToken.fromJWT<
-      CredentialsReceive
-    >(res.token)
-
-    await this.backendMiddleware.identityWallet.validateJWT(credentialsReceive)
+    await this.ctx.validateJWT(credentialsReceive)
 
     this.handleInteractionToken(credentialsReceive)
 
@@ -166,10 +154,8 @@ export class CredentialOfferFlow {
         if (isNil(offering.credential)) {
           valid = false
         } else {
-          const storedCredential = await this.backendMiddleware.storageLib.get.verifiableCredential(
-            {
-              id: offering.credential.id,
-            },
+          const storedCredential = await this.ctx.getStoredCredentialById(
+            offering.credential.id,
           )
           valid = !storedCredential.length
         }
@@ -201,14 +187,9 @@ export class CredentialOfferFlow {
 
   public async storeOfferedCredentials() {
     this.credentialOfferingState.map(async offering => {
-      if (offering.credential) {
-        const credential = offering.credential
-        await this.backendMiddleware.storageLib.delete.verifiableCredential(
-          credential.id,
-        )
-        await this.backendMiddleware.storageLib.store.verifiableCredential(
-          credential,
-        )
+      const credential = offering.credential
+      if (credential) {
+        await this.ctx.storeCredential(credential)
       }
     })
   }
@@ -217,7 +198,7 @@ export class CredentialOfferFlow {
     const offerCredentialDetails: CredentialMetadataSummary[] = this.credentialOfferingState.map(
       ({ type, renderInfo, metadata }) => ({
         issuer: {
-          did: this.issuerSummary.did,
+          did: this.ctx.issuerSummary.did,
         },
         type,
         renderInfo: renderInfo || {},
@@ -232,18 +213,16 @@ export class CredentialOfferFlow {
       )
 
       await Promise.all(
-        uniqCredentialDetails.map(
-          this.backendMiddleware.storageLib.store.credentialMetadata,
-        ),
+        uniqCredentialDetails.map(await this.ctx.storeCredentialMetadata),
       )
     }
   }
 
   public async storeIssuerProfile() {
-    if (this.issuerSummary.publicProfile) {
-      await this.backendMiddleware.storageLib.store.issuerProfile(
-        this.issuerSummary,
-      )
+    //TODO @clauxx any particular reason to save summary only if pubProfile exists???
+    const { issuerSummary } = this.ctx
+    if (issuerSummary.publicProfile) {
+      await this.ctx.storeIssuerProfile(issuerSummary)
     }
   }
 }
