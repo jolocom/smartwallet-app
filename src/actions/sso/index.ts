@@ -16,14 +16,13 @@ export const consumeCredentialRequest = (
   credentialRequest: JSONWebToken<CredentialRequest>,
   interactionChannel: InteractionChannel // TODO replace with send function at one point
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+  debugger
   const { interactionManager } = backendMiddleware
 
-  const interaction = interactionManager.start(
+  const interaction = await interactionManager.start(
     interactionChannel,
     credentialRequest
   )
-
-  await interaction.handleInteractionToken(credentialRequest)
 
   return dispatch(
     navigationActions.navigate({

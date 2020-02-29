@@ -6,31 +6,26 @@ import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credent
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
-import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/credentialOfferResponse'
 import { JolocomLib } from 'jolocom-lib'
 import { isNil, uniqBy } from 'ramda'
 import { CredentialMetadataSummary } from '../storage/storage'
 import { CredentialOffering } from './types'
 import { Interaction } from './interaction'
+import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/credentialOfferResponse'
 
 export class CredentialOfferFlow {
   public ctx: Interaction
   public tokens: Array<JSONWebToken<JWTEncodable>> = []
   public credentialOfferingState: CredentialOffering[] = []
-  public callbackURL: string
 
-  public constructor(
-    ctx: Interaction,
-    credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
-  ) {
+  public constructor(ctx: Interaction) {
     this.ctx = ctx
-    this.callbackURL = credentialOfferRequest.interactionToken.callbackURL
-    this.handleInteractionToken(credentialOfferRequest)
   }
 
   // TODO breaks abstraction
   public getToken<T extends JWTEncodable>(type: InteractionType) {
     const token = this.tokens.find(token => token.interactionType === type)
+
     if (!token) throw new Error('Token not found')
 
     // TODO fix type casting, breaks abstraction
@@ -41,20 +36,19 @@ export class CredentialOfferFlow {
     return this.credentialOfferingState
   }
 
-  public handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
+  public async handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
+    // TODO Push once all is good FIX
+    this.tokens.push(token)
     switch (token.interactionType) {
       case InteractionType.CredentialOfferRequest:
-        this.consumeOfferRequest(token)
-        break
+        return this.consumeOfferRequest(token)
       case InteractionType.CredentialOfferResponse:
-        break
+        return this.sendCredentialResponse(token as JSONWebToken<CredentialOfferResponse>)
       case InteractionType.CredentialsReceive:
-        this.consumeCredentialReceive(token)
-        break
+        return this.consumeCredentialReceive(token)
       default:
         throw new Error('Interaction type not found')
     }
-    this.tokens.push(token)
   }
 
   public consumeOfferRequest(token: JSONWebToken<JWTEncodable>) {
@@ -116,29 +110,24 @@ export class CredentialOfferFlow {
       credentialOfferRequest,
     )
 
-    this.handleInteractionToken(credOfferResponse)
     return credOfferResponse
   }
 
-  public async sendCredentialResponse() {
-    const credentialOfferResponse = this.getToken<CredentialOfferResponse>(
-      InteractionType.CredentialOfferResponse,
-    )
+  // TODO Changed to private because can't tell where used, should go
+  // through handleInteractionToken to make sure it's vallidated
+  private async sendCredentialResponse(token: JSONWebToken<CredentialOfferResponse>) {
     const credentialsReceive = await this.ctx.sendPost<CredentialsReceive>(
-      this.callbackURL,
-      { token: credentialOfferResponse.encode() },
+      token.interactionToken.callbackURL,
+      { token: token.encode() },
     )
-    await this.ctx.validateJWT(credentialsReceive)
 
-    this.handleInteractionToken(credentialsReceive)
-
-    return credentialsReceive
+    return this.handleInteractionToken(credentialsReceive)
   }
 
   public async validateOfferingDigestable() {
     const validatedOffering = await Promise.all(
       this.credentialOfferingState.map(async offering => {
-        let valid
+        let valid: boolean
         if (isNil(offering.credential)) {
           valid = false
         } else {
@@ -156,7 +145,7 @@ export class CredentialOfferFlow {
   public async verifyCredentialStored() {
     const verifiedOffering = await Promise.all(
       this.credentialOfferingState.map(async offering => {
-        let valid
+        let valid: boolean
         if (isNil(offering.credential)) {
           valid = false
         } else {
@@ -219,7 +208,7 @@ export class CredentialOfferFlow {
       )
 
       await Promise.all(
-        uniqCredentialDetails.map(await this.ctx.storeCredentialMetadata),
+        uniqCredentialDetails.map(this.ctx.storeCredentialMetadata),
       )
     }
   }

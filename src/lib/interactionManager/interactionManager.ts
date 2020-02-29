@@ -25,11 +25,10 @@ export class InteractionManager {
     this.backendMiddleware = backendMiddleware
   }
 
-  public start(
+  public async start(
     channel: InteractionChannel,
     token: JSONWebToken<JWTEncodable>,
   ) {
-
     // TODO Eventually backendMiddleware shouldn't go in anymore
     const interaction = new Interaction(
       this.backendMiddleware,
@@ -38,6 +37,8 @@ export class InteractionManager {
     )
 
     this.interactions[token.nonce] = interaction
+    await interaction.handleInteractionToken(token)
+
     return interaction
   }
 

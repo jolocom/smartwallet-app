@@ -24,7 +24,6 @@ export const consumeCredentialOfferRequest = (
     credentialOfferRequest,
   )
 
-  await interaction.handleInteractionToken(credentialOfferRequest)
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialReceive,
@@ -39,11 +38,10 @@ export const consumeCredentialReceive = (
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interactionFlow = interactionManager.getInteraction(interactionId).getFlow<CredentialOfferFlow>()
 
-  await interactionFlow.createCredentialResponseToken(
-    selectedCredentialOffering,
+  await interactionFlow.handleInteractionToken(
+    await interactionFlow.createCredentialResponseToken(selectedCredentialOffering),
   )
 
-  await interactionFlow.sendCredentialResponse()
   return dispatch(validateReceivedCredentials(interactionId))
 }
 

@@ -48,7 +48,7 @@ export class Interaction {
     if (!this.issuerSummary) {
       // TODO Potential bug if we start with our token, i.e. we are the issuer
       const issuerDid = keyIdToDid(token.issuer)
-      const issuerIdentity = await this.backendMiddleware.registry.resolve(
+      const issuerIdentity = await this.ctx.registry.resolve(
         issuerDid,
       )
 
@@ -56,11 +56,16 @@ export class Interaction {
     }
 
     if (!this.flow) {
-      this.flow = new this.interactionFlow[token.interactionType](
-        this.ctx,
-        this.issuerSummary,
-      )
+      this.flow = new this.interactionFlow[token.interactionType](this)
     }
+
+
+    // TODO Pass the previous token instead of undefined
+    await this.ctx.identityWallet.validateJWT(
+      token,
+      undefined,
+      this.ctx.registry
+    )
 
     // TODO before passing to the flow, we should validate the signature
     return this.flow.handleInteractionToken(token)
@@ -73,6 +78,15 @@ export class Interaction {
   public getFlow<T extends InteractionFlows>(): T {
     return this.flow as T
   }
+
+  public getAttributesByType = (type: string[]) =>  {
+    return this.ctx.storageLib.get.attributesByType(type)
+  }
+
+  public getVerifiableCredential = (query?: object) => {
+    return this.ctx.storageLib.get.verifiableCredential(query)
+  }
+
 
   public async createInteractionToken(
     interactionType: InteractionType,
@@ -94,10 +108,6 @@ export class Interaction {
     return tkn(data, password, request)
   }
 
-  public async validateJWT(jwt: JSONWebToken<JWTEncodable>) {
-    await this.ctx.identityWallet.validateJWT(jwt)
-  }
-
   public async sendPost<T extends JWTEncodable>(url: string, data: any) {
     const res = await httpAgent.postRequest<{ token: string }>(
       url,
@@ -117,7 +127,7 @@ export class Interaction {
     await this.ctx.storageLib.store.verifiableCredential(credential)
   }
 
-  public async storeCredentialMetadata(metadata: CredentialMetadataSummary) {
+  public storeCredentialMetadata = async (metadata: CredentialMetadataSummary) => {
     await this.ctx.storageLib.store.credentialMetadata(metadata)
   }
 
