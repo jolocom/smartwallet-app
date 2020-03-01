@@ -16,6 +16,7 @@ import { generateIdentitySummary } from 'src/actions/sso/utils'
 import { Flow } from './flow'
 import { last } from 'ramda'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
+import { AuthenticationFlow } from './authenticationFlow'
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -31,6 +32,7 @@ export class Interaction {
   private interactionFlow = {
     [InteractionType.CredentialOfferRequest]: CredentialOfferFlow,
     [InteractionType.CredentialRequest]: CredentialRequestFlow,
+    [InteractionType.Authentication]: AuthenticationFlow,
   }
 
   public id: string
