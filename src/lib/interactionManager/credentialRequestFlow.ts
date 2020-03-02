@@ -9,37 +9,46 @@ import { getUiCredentialTypeByType } from '../util';
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
 import { Interaction } from './interaction';
 import { isEmpty } from 'ramda'
+import { Flow } from './flow';
 
 // TODO Backendmiddleware was just replaced with CTX :: Interaction to follow the example from the credentialOfferFlow
 // This is really broken
 
-export class CredentialRequestFlow {
-  public tokens: Array<JSONWebToken<JWTEncodable>> = []
-  private ctx: Interaction
+export class CredentialRequestFlow extends Flow {
   private credRequestState!: CredentialRequestSummary
 
-  constructor(
-    ctx: Interaction,
-  ) {
-    this.ctx = ctx
+  constructor(ctx: Interaction) {
+    super(ctx)
   }
+
+  /*
+   * Returns the current state, only used for rendering purposes
+   * @TODO Make sure this is only used for rendering
+   */
 
   public getState() {
     return this.credRequestState
   }
 
+  /*
+   * Implementation of the abstract handler defined in {@link Flow}
+   * Given an interaction token, will fire the appropriate step in the protocol or throw 
+   * @TODO Make sure this is only used for rendering
+   */
+
   public async handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
     switch (token.interactionType) {
-    case InteractionType.CredentialRequest: // TODO Rename this to consumeRequest in the Offer class
-      await this.consumeRequest(token as JSONWebToken<CredentialRequest>)
-      break
-    case InteractionType.CredentialsReceive:
-    default:
-      throw new Error('Interaction type not found')
+      case InteractionType.CredentialRequest:
+        return this.handleCredentialRequest(token as JSONWebToken<CredentialRequest>)
+      // TODO This is currently bypassed, but shouldn't be
+      case InteractionType.CredentialsReceive:
+        throw new Error("NOT IMPLEMENTED")
+      default:
+        throw new Error('Interaction type not found')
     }
   }
 
-  public async consumeRequest(request: JSONWebToken<CredentialRequest>) {
+  private async handleCredentialRequest(request: JSONWebToken<CredentialRequest>) {
     const {
       requestedCredentialTypes: requestedTypes,
     } = request.interactionToken

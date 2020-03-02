@@ -6,21 +6,29 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { BackendMiddleware } from '../../backendMiddleware'
-import { InteractionChannel, InteractionFlows } from './types'
+import { InteractionChannel, CredentialOffering } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
-import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { httpAgent } from '../http'
 import { JolocomLib } from 'jolocom-lib'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from '../storage/storage'
 import { keyIdToDid } from 'jolocom-lib/js/utils/helper';
 import { generateIdentitySummary } from 'src/actions/sso/utils';
+import { Flow } from './flow'
+import { last } from 'ramda'
+import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 
 /***
  * - initiated by InteractionManager when an interaction starts
  * - handles the communication channel of the interaction
  * - holds the instance of the particular interaction (e.g. CredentialOffer, Authentication)
+ *
+ * TODO needs to hold:
+ *  callbackURL
+ *  participants { us them }
  */
+
+
 export class Interaction {
   private interactionFlow = {
     [InteractionType.CredentialOfferRequest]: CredentialOfferFlow,
@@ -29,7 +37,7 @@ export class Interaction {
 
   public id: string
   public ctx: BackendMiddleware
-  public flow!: InteractionFlows
+  public flow!: Flow
   public channel: InteractionChannel
   public issuerSummary!: IdentitySummary
 
@@ -43,16 +51,36 @@ export class Interaction {
     this.id = id
   }
 
+  public getMessages() {
+    return this.flow.getMessages()
+  }
+
+  public async createCredentialOfferResponseToken(
+    selectedOffering: CredentialOffering[],
+  ) {
+    const credentialOfferRequest = this.getMessages()
+      .find(({interactionType}) => interactionType === InteractionType.CredentialOfferRequest) as JSONWebToken<CredentialOfferRequest>
+
+    const credentialOfferResponseAttr = {
+      callbackURL: credentialOfferRequest.interactionToken.callbackURL,
+      selectedCredentials: selectedOffering.map(offer => ({
+        type: offer.type,
+      })),
+    }
+
+    // TODO lol, it's about capturing "this"
+    return this.createInteractionToken().response.offer(
+      credentialOfferResponseAttr,
+      await this.ctx.keyChainLib.getPassword(),
+      credentialOfferRequest,
+    )
+  }
+
   public async handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
     // At some point we should strip the JSONWebToken<JWTEncodable>
     if (!this.issuerSummary) {
       // TODO Potential bug if we start with our token, i.e. we are the issuer
-      const issuerDid = keyIdToDid(token.issuer)
-      const issuerIdentity = await this.ctx.registry.resolve(
-        issuerDid,
-      )
-
-      this.issuerSummary = await generateIdentitySummary(issuerIdentity)
+      this.issuerSummary = generateIdentitySummary(await this.ctx.registry.resolve(keyIdToDid(token.issuer)))
     }
 
     if (!this.flow) {
@@ -63,7 +91,7 @@ export class Interaction {
     // TODO Pass the previous token instead of undefined
     await this.ctx.identityWallet.validateJWT(
       token,
-      undefined,
+      last(this.getMessages()),
       this.ctx.registry
     )
 
@@ -71,43 +99,25 @@ export class Interaction {
     return this.flow.handleInteractionToken(token)
   }
 
+  public createInteractionToken = () => this.ctx.identityWallet.create.interactionTokens
+
   public getState() {
     return this.flow.getState()
-  }
-
-  public getFlow<T extends InteractionFlows>(): T {
-    return this.flow as T
   }
 
   public getAttributesByType = (type: string[]) =>  {
     return this.ctx.storageLib.get.attributesByType(type)
   }
 
+  public async getStoredCredentialById(id: string) {
+    return this.ctx.storageLib.get.verifiableCredential({
+      id,
+    })
+  }
+
   public getVerifiableCredential = (query?: object) => {
     return this.ctx.storageLib.get.verifiableCredential(query)
   }
-
-
-  public async createInteractionToken(
-    interactionType: InteractionType,
-    data: any,
-    request: JSONWebToken<CredentialOfferRequest>,
-  ) {
-    let tkn
-    const createToken = this.ctx.identityWallet.create.interactionTokens
-
-    switch (interactionType) {
-      case InteractionType.CredentialOfferResponse:
-        tkn = createToken.response.offer
-        break
-      default:
-        throw new Error('Wrong interaction type')
-    }
-
-    const password = await this.ctx.keyChainLib.getPassword()
-    return tkn(data, password, request)
-  }
-
   public async sendPost<T extends JWTEncodable>(url: string, data: any) {
     const res = await httpAgent.postRequest<{ token: string }>(
       url,
@@ -115,12 +125,6 @@ export class Interaction {
       data,
     )
     return JolocomLib.parse.interactionToken.fromJWT<T>(res.token)
-  }
-
-  public async getStoredCredentialById(id: string) {
-    return this.ctx.storageLib.get.verifiableCredential({
-      id,
-    })
   }
 
   public async storeCredential(credential: SignedCredential) {
@@ -131,7 +135,7 @@ export class Interaction {
     await this.ctx.storageLib.store.credentialMetadata(metadata)
   }
 
-  public async storeIssuerProfile(profile: IdentitySummary) {
-    await this.ctx.storageLib.store.issuerProfile(profile)
+  public async storeIssuerProfile() {
+    await this.ctx.storageLib.store.issuerProfile(this.issuerSummary)
   }
 }

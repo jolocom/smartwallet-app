@@ -9,11 +9,15 @@ import { createInfoNotification, Notification } from '../../lib/notifications'
 import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
-import { CredentialOfferFlow } from '../../lib/interactionManager/credentialOfferFlow'
 import {
   CredentialOffering,
   InteractionChannel,
 } from '../../lib/interactionManager/types'
+import { JolocomLib } from 'jolocom-lib'
+import { isEmpty, uniqBy } from 'ramda'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { CredentialMetadataSummary } from 'src/lib/storage/storage'
+import { CacheEntity } from 'src/lib/storage/entities'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -32,38 +36,45 @@ export const consumeCredentialOfferRequest = (
   )
 }
 
+
+// TODO Why isn't the did already in the summary type? This feels hacky
+const storeOfferMetadata = async (offer: CredentialOffering[], did: string, storeCredentialMetadata: (a: CredentialMetadataSummary) => Promise<CacheEntity>) =>
+  Promise.all(uniqBy(
+    detail => `${detail.issuer.did}${detail.type}`,
+    offer.map(
+      ({ type, renderInfo, metadata }) => ({
+          // TODO Why isn't the did already in the summary type? This feels hacky
+        issuer: { did },
+        type,
+        renderInfo: renderInfo || {},
+        metadata: metadata || {},
+      }),
+    )
+  ).map(storeCredentialMetadata))
+
 export const consumeCredentialReceive = (
   selectedCredentialOffering: CredentialOffering[],
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
-  const interactionFlow = interactionManager.getInteraction(interactionId).getFlow<CredentialOfferFlow>()
-
-  await interactionFlow.handleInteractionToken(
-    await interactionFlow.createCredentialResponseToken(selectedCredentialOffering),
-  )
-
-  return dispatch(validateReceivedCredentials(interactionId))
-}
-
-const validateReceivedCredentials = (
-  interactionId: string,
-): ThunkAction => async (dispatch, getState, { interactionManager }) => {
+  const interaction = interactionManager.getInteraction(interactionId)
   const currentDid = getState().account.did.did
 
-  const interactionFlow = interactionManager
-    .getInteraction(interactionId)
-    .getFlow<CredentialOfferFlow>()
-
-  await interactionFlow.validateOfferingDigestable()
-  await interactionFlow.verifyCredentialStored()
-  interactionFlow.verifyCredentialSubject(currentDid)
-
-  const offeringValidity = interactionFlow.credentialOfferingState.map(
-    offering => offering.valid,
+  await interaction.handleInteractionToken(
+    await interaction.createCredentialOfferResponseToken(
+      selectedCredentialOffering
+    )
   )
 
-  const allInvalid = !offeringValidity.includes(true)
-  const someInvalid = offeringValidity.includes(false)
+  // TODO These should be handled in flow?
+  const validSubjects = verifyCredentialSubject(interaction.getState(), currentDid)
+  const validSignatures = await validateOfferingDigestable(interaction.getState())
+  const duplicates = await isCredentialStored(interaction.getState(), (id) => interaction.getStoredCredentialById(id))
+
+  const all = validSubjects.map((el, i) => el && validSignatures[i] && !duplicates[i])
+
+  const allInvalid = !all.includes(true)
+  const someInvalid = all.includes(false)
+  debugger
 
   const scheduleInvalidNotification = (message: string) =>
     dispatch(
@@ -96,16 +107,34 @@ const validateReceivedCredentials = (
   return dispatch(saveCredentialOffer(interactionId))
 }
 
+const validateOfferingDigestable = async (offer: CredentialOffering[]) =>
+  Promise.all(
+    offer.map(async ({credential}) => credential && await JolocomLib.util.validateDigestable(credential))
+  )
+
+  // TODO Breaks abstraction
+const isCredentialStored = async (offer: CredentialOffering[], getCredential: (id: string) => Promise<SignedCredential[]>) =>
+  Promise.all(
+    offer.map(async ({ credential }) => 
+       credential && !isEmpty(await getCredential(credential.id))
+  ))
+
+const verifyCredentialSubject = (offer: CredentialOffering[], did: string) =>
+    offer.map(({ credential }) => credential && credential.subject === did)
+
 export const saveCredentialOffer = (
   interactionId: string,
-): ThunkAction => async (dispatch, getState, { interactionManager }) => {
-  const interactionFlow = interactionManager
+): ThunkAction => async (dispatch, getState, { interactionManager, storageLib }) => {
+  const interaction = interactionManager
     .getInteraction(interactionId)
-    .getFlow<CredentialOfferFlow>()
 
-  await interactionFlow.storeOfferedCredentials()
-  await interactionFlow.storeOfferMetadata()
-  await interactionFlow.storeIssuerProfile()
+  // TODO These should be handled on the interaction layer, like the issuer profile
+  await Promise.all(interaction.getState().map(({ credential }) =>
+    credential && storageLib.store.verifiableCredential(credential)
+  ))
+
+  await storeOfferMetadata(interaction.getState(), getState().account.did.did, storageLib.store.credentialMetadata)
+  await interaction.storeIssuerProfile()
 
   dispatch(checkRecoverySetup)
   //TODO @mnzaki can we avoid running the FULL setClaimsForDid
