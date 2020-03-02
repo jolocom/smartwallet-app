@@ -1,18 +1,21 @@
-import React from 'react'
-import { Wrapper } from '../../structure'
-import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
-import { ScannerContainer } from './scanner'
-import { NavigationInjectedProps } from 'react-navigation'
-import { white } from '../../../styles/colors'
-import { ThunkDispatch } from '../../../store'
-import { connect } from 'react-redux'
-import { CloseIcon } from '../../../resources'
-import { fontMain, textXXS } from '../../../styles/typography'
-
 import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken'
-import { ErrorCode, AppError } from 'src/lib/errors'
+
+import React from 'react'
+import { connect } from 'react-redux'
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
+import { NavigationInjectedProps } from 'react-navigation'
+
+import { ThunkDispatch } from 'src/store'
+import { CloseIcon } from 'src/resources'
+import { AppError, ErrorCode } from 'src/lib/errors'
+
+import { Wrapper } from 'src/ui/structure'
+import { white } from 'src/styles/colors'
+import { fontMain, textXXS } from 'src/styles/typography'
 import { showErrorScreen } from 'src/actions/generic'
-import { navigateBack } from '../../../actions/navigation'
+import { navigateBack } from 'src/actions/navigation'
+
+import { ScannerContainer } from './scanner'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -60,7 +63,7 @@ const InteractionContainer = (props: Props) => {
       )}
       <ScannerContainer
         navigation={props.navigation}
-        onScannerSuccess={props.consumeToken}
+        consumeToken={props.consumeToken}
       />
     </Wrapper>
   )
