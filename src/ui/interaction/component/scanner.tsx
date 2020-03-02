@@ -164,7 +164,6 @@ export const ScannerComponent = (props: Props) => {
           position: 'absolute',
         }}
         cameraProps={cameraSettings}
-        reactivate={true}
         reactivateTimeout={3000}
         fadeIn
         onRead={onRead}
