@@ -3,7 +3,6 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { CredentialOffering } from './types'
@@ -22,6 +21,7 @@ export class CredentialOfferFlow extends Flow {
     return this.credentialOfferingState
   }
 
+  // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when casting
   public async handleInteractionToken(
     token: JSONWebToken<JWTEncodable>,
   ): Promise<any> {
@@ -29,68 +29,41 @@ export class CredentialOfferFlow extends Flow {
     this.tokens.push(token)
     switch (token.interactionType) {
       case InteractionType.CredentialOfferRequest:
-        return this.consumeOfferRequest(token)
+        return this.consumeOfferRequest(token as JSONWebToken<CredentialOfferRequest>)
       case InteractionType.CredentialOfferResponse:
         return this.sendCredentialResponse(token as JSONWebToken<
           CredentialOfferResponse
         >)
       case InteractionType.CredentialsReceive:
-        return this.consumeCredentialReceive(token)
+        return this.consumeCredentialReceive(token as JSONWebToken<CredentialsReceive>)
       default:
         throw new Error('Interaction type not found')
     }
   }
 
-  private consumeOfferRequest(token: JSONWebToken<JWTEncodable>) {
-    const credOfferRequest = token as JSONWebToken<CredentialOfferRequest>
-
-    this.setOffering(_ =>
-      credOfferRequest.interactionToken.offeredCredentials.map(offer => ({
-        ...offer,
-        valid: true,
-      })),
-    )
+  private consumeOfferRequest(token: JSONWebToken<CredentialOfferRequest>) {
+    this.credentialOfferingState = token.interactionToken.offeredCredentials.map(offer => ({ ...offer, valid: true }))
   }
 
-  private consumeCredentialReceive(token: JSONWebToken<JWTEncodable>) {
-    const credentialsReceive = token as JSONWebToken<CredentialsReceive>
-    this.updateOfferingWithCredentials(
-      credentialsReceive.interactionToken.signedCredentials,
-    )
+  private consumeCredentialReceive(token: JSONWebToken<CredentialsReceive>) {
+    this.credentialOfferingState = token.interactionToken.signedCredentials.map(credential => {
+      const type = credential.type[credential.type.length - 1]
+      const offering = this.credentialOfferingState.find(offering => offering.type === type)
+      if (!offering) {
+        throw new Error('Received wrong credentials')
+      }
+      return {
+        ...offering,
+        credential,
+      }
+    })
   }
 
-  private updateOfferingWithCredentials = (credentials: SignedCredential[]) => {
-    this.setOffering(offeringState =>
-      credentials.map(credential => {
-        const type = credential.type[credential.type.length - 1]
-        const offering = offeringState.find(offering => offering.type === type)
-        if (!offering) {
-          throw new Error('Received wrong credentials')
-        }
-        return {
-          ...offering,
-          credential,
-        }
-      }),
-    )
-  }
-
-  private setOffering(
-    factory: (state: CredentialOffering[]) => CredentialOffering[],
-  ) {
-    this.credentialOfferingState = factory(this.credentialOfferingState)
-    return this.credentialOfferingState
-  }
-
+  // TODO Lift this to the base class? Perhaps it can later be composed with a function to prepare the response
   private async sendCredentialResponse(
     token: JSONWebToken<CredentialOfferResponse>,
   ) {
-    // TODO Replace with send function provided by interaction class
-    const credentialsReceive = await this.ctx.sendPost<CredentialsReceive>(
-      token.interactionToken.callbackURL,
-      { token: token.encode() },
-    )
-
+    const credentialsReceive = await this.ctx.send<CredentialsReceive>(token)
     return this.handleInteractionToken(credentialsReceive)
   }
 }

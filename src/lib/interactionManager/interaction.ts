@@ -121,13 +121,17 @@ export class Interaction {
   public getVerifiableCredential = (query?: object) => {
     return this.ctx.storageLib.get.verifiableCredential(query)
   }
-  public async sendPost<T extends JWTEncodable>(url: string, data: any) {
-    const res = await httpAgent.postRequest<{ token: string }>(
-      url,
+
+  // TODO This should probably come from the transport / channel handler
+  public async send<T extends JWTEncodable>(token: JSONWebToken<JWTEncodable>): Promise<JSONWebToken<T>> {
+    const response = await httpAgent.postRequest<{ token: string }>(
+      //@ts-ignore - CREDENTIAL RECEIVE HAS NO CALLBACKURL
+      token.interactionToken.callbackURL,
       { 'Content-Type': 'application/json' },
-      data,
+      token,
     )
-    return JolocomLib.parse.interactionToken.fromJWT<T>(res.token)
+
+    return JolocomLib.parse.interactionToken.fromJWT<T>(response.token)
   }
 
   public async storeCredential(credential: SignedCredential) {

@@ -57,6 +57,7 @@ export const consumeCredentialReceive = (
     interaction.getState(),
     currentDid,
   )
+
   const validSignatures = await validateOfferingDigestable(
     interaction.getState(),
   )
@@ -70,7 +71,6 @@ export const consumeCredentialReceive = (
 
   const allInvalid = !all.includes(true)
   const someInvalid = all.includes(false)
-  debugger
 
   const scheduleInvalidNotification = (message: string) =>
     dispatch(
