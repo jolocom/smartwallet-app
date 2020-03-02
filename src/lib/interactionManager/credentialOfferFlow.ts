@@ -22,14 +22,18 @@ export class CredentialOfferFlow extends Flow {
     return this.credentialOfferingState
   }
 
-  public async handleInteractionToken(token: JSONWebToken<JWTEncodable>) : Promise<any> {
+  public async handleInteractionToken(
+    token: JSONWebToken<JWTEncodable>,
+  ): Promise<any> {
     // TODO Push once all is good FIX
     this.tokens.push(token)
     switch (token.interactionType) {
       case InteractionType.CredentialOfferRequest:
         return this.consumeOfferRequest(token)
       case InteractionType.CredentialOfferResponse:
-        return this.sendCredentialResponse(token as JSONWebToken<CredentialOfferResponse>)
+        return this.sendCredentialResponse(token as JSONWebToken<
+          CredentialOfferResponse
+        >)
       case InteractionType.CredentialsReceive:
         return this.consumeCredentialReceive(token)
       default:
@@ -78,7 +82,9 @@ export class CredentialOfferFlow extends Flow {
     return this.credentialOfferingState
   }
 
-  private async sendCredentialResponse(token: JSONWebToken<CredentialOfferResponse>) {
+  private async sendCredentialResponse(
+    token: JSONWebToken<CredentialOfferResponse>,
+  ) {
     // TODO Replace with send function provided by interaction class
     const credentialsReceive = await this.ctx.sendPost<CredentialsReceive>(
       token.interactionToken.callbackURL,
@@ -87,5 +93,4 @@ export class CredentialOfferFlow extends Flow {
 
     return this.handleInteractionToken(credentialsReceive)
   }
-
 }

@@ -31,26 +31,13 @@ export const consumeCredentialOfferRequest = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialReceive,
-      params: { interactionId: credentialOfferRequest.nonce, credentialOfferingSummary: interaction.getState()},
+      params: {
+        interactionId: credentialOfferRequest.nonce,
+        credentialOfferingSummary: interaction.getState(),
+      },
     }),
   )
 }
-
-
-// TODO Why isn't the did already in the summary type? This feels hacky
-const storeOfferMetadata = async (offer: CredentialOffering[], did: string, storeCredentialMetadata: (a: CredentialMetadataSummary) => Promise<CacheEntity>) =>
-  Promise.all(uniqBy(
-    detail => `${detail.issuer.did}${detail.type}`,
-    offer.map(
-      ({ type, renderInfo, metadata }) => ({
-          // TODO Why isn't the did already in the summary type? This feels hacky
-        issuer: { did },
-        type,
-        renderInfo: renderInfo || {},
-        metadata: metadata || {},
-      }),
-    )
-  ).map(storeCredentialMetadata))
 
 export const consumeCredentialReceive = (
   selectedCredentialOffering: CredentialOffering[],
@@ -59,18 +46,27 @@ export const consumeCredentialReceive = (
   const interaction = interactionManager.getInteraction(interactionId)
   const currentDid = getState().account.did.did
 
-  await interaction.handleInteractionToken(
+  await interaction.processInteractionToken(
     await interaction.createCredentialOfferResponseToken(
-      selectedCredentialOffering
-    )
+      selectedCredentialOffering,
+    ),
   )
 
   // TODO These should be handled in flow?
-  const validSubjects = verifyCredentialSubject(interaction.getState(), currentDid)
-  const validSignatures = await validateOfferingDigestable(interaction.getState())
-  const duplicates = await isCredentialStored(interaction.getState(), (id) => interaction.getStoredCredentialById(id))
+  const validSubjects = verifyCredentialSubject(
+    interaction.getState(),
+    currentDid,
+  )
+  const validSignatures = await validateOfferingDigestable(
+    interaction.getState(),
+  )
+  const duplicates = await isCredentialStored(interaction.getState(), id =>
+    interaction.getStoredCredentialById(id),
+  )
 
-  const all = validSubjects.map((el, i) => el && validSignatures[i] && !duplicates[i])
+  const all = validSubjects.map(
+    (el, i) => el && validSignatures[i] && !duplicates[i],
+  )
 
   const allInvalid = !all.includes(true)
   const someInvalid = all.includes(false)
@@ -109,31 +105,72 @@ export const consumeCredentialReceive = (
 
 const validateOfferingDigestable = async (offer: CredentialOffering[]) =>
   Promise.all(
-    offer.map(async ({credential}) => credential && await JolocomLib.util.validateDigestable(credential))
+    offer.map(
+      async ({ credential }) =>
+        credential && (await JolocomLib.util.validateDigestable(credential)),
+    ),
   )
 
-  // TODO Breaks abstraction
-const isCredentialStored = async (offer: CredentialOffering[], getCredential: (id: string) => Promise<SignedCredential[]>) =>
+// TODO Breaks abstraction
+const isCredentialStored = async (
+  offer: CredentialOffering[],
+  getCredential: (id: string) => Promise<SignedCredential[]>,
+) =>
   Promise.all(
-    offer.map(async ({ credential }) =>
-       credential && !isEmpty(await getCredential(credential.id))
-  ))
+    offer.map(
+      async ({ credential }) =>
+        credential && !isEmpty(await getCredential(credential.id)),
+    ),
+  )
 
 const verifyCredentialSubject = (offer: CredentialOffering[], did: string) =>
-    offer.map(({ credential }) => credential && credential.subject === did)
+  offer.map(({ credential }) => credential && credential.subject === did)
+
+// TODO Why isn't the did already in the summary type? This feels hacky
+const storeOfferMetadata = async (
+  offer: CredentialOffering[],
+  did: string,
+  storeCredentialMetadata: (
+    a: CredentialMetadataSummary,
+  ) => Promise<CacheEntity>,
+) =>
+  Promise.all(
+    uniqBy(
+      detail => `${detail.issuer.did}${detail.type}`,
+      offer.map(({ type, renderInfo, metadata }) => ({
+        // TODO Why isn't the did already in the summary type? This feels hacky
+        issuer: { did },
+        type,
+        renderInfo: renderInfo || {},
+        metadata: metadata || {},
+      })),
+    ).map(storeCredentialMetadata),
+  )
 
 export const saveCredentialOffer = (
   interactionId: string,
-): ThunkAction => async (dispatch, getState, { interactionManager, storageLib }) => {
-  const interaction = interactionManager
-    .getInteraction(interactionId)
+): ThunkAction => async (
+  dispatch,
+  getState,
+  { interactionManager, storageLib },
+) => {
+  const interaction = interactionManager.getInteraction(interactionId)
 
   // TODO These should be handled on the interaction layer, like the issuer profile
-  await Promise.all(interaction.getState().map(({ credential }: CredentialOffering) =>
-    credential && storageLib.store.verifiableCredential(credential)
-  ))
+  await Promise.all(
+    interaction
+      .getState()
+      .map(
+        ({ credential }: CredentialOffering) =>
+          credential && storageLib.store.verifiableCredential(credential),
+      ),
+  )
 
-  await storeOfferMetadata(interaction.getState(), interaction.issuerSummary.did, storageLib.store.credentialMetadata)
+  await storeOfferMetadata(
+    interaction.getState(),
+    interaction.issuerSummary.did,
+    storageLib.store.credentialMetadata,
+  )
   await interaction.storeIssuerProfile()
 
   dispatch(checkRecoverySetup)

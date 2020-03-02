@@ -1,5 +1,8 @@
 import { Interaction } from './interaction'
-import { JSONWebToken, JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import {
+  JSONWebToken,
+  JWTEncodable,
+} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 
 export abstract class Flow {
   protected ctx: Interaction
@@ -10,7 +13,9 @@ export abstract class Flow {
   }
 
   // Can this abstract anything?
-  abstract async handleInteractionToken(token: JSONWebToken<JWTEncodable>): Promise<any>
+  abstract async handleInteractionToken(
+    token: JSONWebToken<JWTEncodable>,
+  ): Promise<any>
 
   abstract getState(): any
 
