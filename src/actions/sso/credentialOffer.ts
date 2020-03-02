@@ -115,7 +115,7 @@ const validateOfferingDigestable = async (offer: CredentialOffering[]) =>
   // TODO Breaks abstraction
 const isCredentialStored = async (offer: CredentialOffering[], getCredential: (id: string) => Promise<SignedCredential[]>) =>
   Promise.all(
-    offer.map(async ({ credential }) => 
+    offer.map(async ({ credential }) =>
        credential && !isEmpty(await getCredential(credential.id))
   ))
 
@@ -129,11 +129,11 @@ export const saveCredentialOffer = (
     .getInteraction(interactionId)
 
   // TODO These should be handled on the interaction layer, like the issuer profile
-  await Promise.all(interaction.getState().map(({ credential }) =>
+  await Promise.all(interaction.getState().map(({ credential }: CredentialOffering) =>
     credential && storageLib.store.verifiableCredential(credential)
   ))
 
-  await storeOfferMetadata(interaction.getState(), getState().account.did.did, storageLib.store.credentialMetadata)
+  await storeOfferMetadata(interaction.getState(), interaction.issuerSummary.did, storageLib.store.credentialMetadata)
   await interaction.storeIssuerProfile()
 
   dispatch(checkRecoverySetup)

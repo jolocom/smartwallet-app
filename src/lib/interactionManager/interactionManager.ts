@@ -33,7 +33,7 @@ export class InteractionManager {
     const interaction = new Interaction(
       this.backendMiddleware,
       channel,
-      token.nonce
+      token.nonce,
     )
 
     this.interactions[token.nonce] = interaction

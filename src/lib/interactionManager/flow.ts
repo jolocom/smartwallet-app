@@ -12,7 +12,7 @@ export abstract class Flow {
   // Can this abstract anything?
   abstract async handleInteractionToken(token: JSONWebToken<JWTEncodable>): Promise<any>
 
-  abstract getState()
+  abstract getState(): any
 
   public getMessages() {
     return this.tokens
