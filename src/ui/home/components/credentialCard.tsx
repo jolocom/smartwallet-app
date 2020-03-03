@@ -49,7 +49,7 @@ export const CredentialCard: React.FC<Props> = props => {
         {Object.keys(claimData).map(key => (
           <React.Fragment key={key}>
             <Text style={styles.claimLabel}>{prepareLabel(I18n.t(key))}</Text>
-            <Text style={styles.claimText}>{I18n.t(claimData[key])}</Text>
+            <Text style={styles.claimText}>{claimData[key]}</Text>
           </React.Fragment>
         ))}
       </View>
