@@ -24,7 +24,7 @@ export const consumeCredentialRequest = (
       routeName: routeList.Consent,
       params: {
         interactionId: interaction.id,
-        credentialRequestDetails: interaction.getState()
+        credentialRequestDetails: interaction.getState(),
       },
       key: 'credentialRequest',
     }),
@@ -39,9 +39,11 @@ export const sendCredentialResponse = (
 
   const interaction = interactionManager.getInteraction(interactionId)
 
-  return interaction.processInteractionToken(
-    await interaction.createCredentialResponse(selectedCredentials)
-  ).then(() => dispatch(cancelSSO))
+  return interaction
+    .processInteractionToken(
+      await interaction.createCredentialResponse(selectedCredentials),
+    )
+    .then(() => dispatch(cancelSSO))
 }
 
 export const cancelSSO: ThunkAction = dispatch => {

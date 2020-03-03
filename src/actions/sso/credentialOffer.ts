@@ -45,6 +45,7 @@ export const consumeCredentialReceive = (
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = interactionManager.getInteraction(interactionId)
   const currentDid = getState().account.did.did
+  debugger
 
   await interaction.processInteractionToken(
     await interaction.createCredentialOfferResponseToken(
@@ -101,9 +102,8 @@ export const consumeCredentialReceive = (
     )
   }
 
-  // TODO This should probably take the metadata directly? 
-  // (instead of interaction)
-  await interaction.storeCredentialMetadataFromOffer(interaction)
+  // TODO This already happens in the next 
+  // await interaction.storeCredentialMetadataFromOffer(interaction)
   return dispatch(saveCredentialOffer(interactionId))
 }
 
@@ -132,9 +132,7 @@ const verifyCredentialSubject = (offer: CredentialOffering[], did: string) =>
 const storeOfferMetadata = async (
   offer: CredentialOffering[],
   did: string,
-  storeCredentialMetadata: (
-    a: CredentialMetadataSummary,
-  ) => Promise<CacheEntity>,
+  storeCredentialMetadata: (a: CredentialMetadataSummary) => Promise<CacheEntity>,
 ) =>
   Promise.all(
     uniqBy(
@@ -159,15 +157,7 @@ export const saveCredentialOffer = (
   const interaction = interactionManager.getInteraction(interactionId)
 
   // TODO These should be handled on the interaction layer, like the issuer profile
-  await Promise.all(
-    interaction
-      .getState()
-      .map(
-        ({ credential }: CredentialOffering) =>
-          credential && storageLib.store.verifiableCredential(credential),
-      ),
-  )
-
+  await interaction.storeCredential()
   await storeOfferMetadata(
     interaction.getState(),
     interaction.issuerSummary.did,

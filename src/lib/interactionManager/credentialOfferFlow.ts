@@ -55,9 +55,11 @@ export class CredentialOfferFlow extends Flow {
     this.credentialOfferingState = token.interactionToken.signedCredentials.map(credential => {
       const type = credential.type[credential.type.length - 1]
       const offering = this.credentialOfferingState.find(offering => offering.type === type)
+
       if (!offering) {
         throw new Error('Received wrong credentials')
       }
+
       return {
         ...offering,
         credential,

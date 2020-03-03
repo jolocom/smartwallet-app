@@ -9,6 +9,9 @@ export interface InteractionState {
 export enum InteractionChannel {
   QR = 'QR',
   Deeplink = 'Deeplink',
+  HTTP = 'HTTP',
+  Bluetooth = 'Bluetooth',
+  NFC = 'NFC',
 }
 
 export interface CredentialOffering extends CredentialOffer {

@@ -9,7 +9,6 @@ import { BackendMiddleware } from '../../backendMiddleware'
 import { InteractionChannel, CredentialOffering } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from '../storage/storage'
 import { generateIdentitySummary } from 'src/actions/sso/utils'
 import { Flow } from './flow'
@@ -39,6 +38,8 @@ export class Interaction {
   public id: string
   public ctx: BackendMiddleware
   public flow!: Flow
+
+  // This is the channel through which the request (first token) came in.
   public channel: InteractionChannel
   public issuerSummary!: IdentitySummary
 
@@ -56,6 +57,7 @@ export class Interaction {
     return this.flow.getMessages()
   }
 
+  // TODO Try to write a respond function that collapses these
   public async createAuthenticationResponse(args: AuthCreationArgs) { 
     // TODO Abstract to getMessages * findByType
     return this.createInteractionToken().response.auth(
@@ -132,12 +134,13 @@ export class Interaction {
     return this.flow.handleInteractionToken(token)
   }
 
-  public createInteractionToken = () =>
-    this.ctx.identityWallet.create.interactionTokens
-
   public getState() {
     return this.flow.getState()
   }
+
+  // TODO assign all of these in the constructor
+  private createInteractionToken = () =>
+    this.ctx.identityWallet.create.interactionTokens
 
   public getAttributesByType = (type: string[]) => {
     return this.ctx.storageLib.get.attributesByType(type)
@@ -173,20 +176,12 @@ export class Interaction {
     }
   }
 
-  public async storeCredential(credential: SignedCredential) {
-    await this.ctx.storageLib.store.verifiableCredential(credential)
-  }
-
-  // TODO Shouldn't take interaction?
-  public storeCredentialMetadataFromOffer(interaction: Interaction) {
+  public async storeCredential() {
     return Promise.all(
-      interaction
-        .getState()
-        .map(({ credential }: CredentialOffering) =>
-            credential && this.storeCredential(credential)
-        )
+      this.getState().map( ({ credential }: CredentialOffering) => credential && this.ctx.storageLib.store.verifiableCredential(credential))
     )
   }
+
 
   public storeCredentialMetadata = async (
     metadata: CredentialMetadataSummary,
