@@ -22,10 +22,7 @@ export const consumeCredentialRequest = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.Consent,
-      params: {
-        interactionId: interaction.id,
-        credentialRequestDetails: interaction.getState()
-      },
+      params: { interactionId: interaction.id, credentialRequestDetails: interaction.getSummary() },
       key: 'credentialRequest',
     }),
   )

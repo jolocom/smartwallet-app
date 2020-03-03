@@ -9,6 +9,12 @@ export type IssuerPublicProfileSummary = PublicProfileClaimMetadata['claimInterf
 /**
  * @dev An identity summary is composed of a DID + all public info (currently public profile)
  */
+
+export interface InteractionSummary {
+  issuer: IdentitySummary
+  state: any
+}
+
 export interface IdentitySummary {
   did: string
   publicProfile?: IssuerPublicProfileSummary

@@ -33,7 +33,7 @@ export const consumeCredentialOfferRequest = (
       routeName: routeList.CredentialReceive,
       params: {
         interactionId: credentialOfferRequest.nonce,
-        credentialOfferingSummary: interaction.getState(),
+        credentialOfferingSummary: interaction.getSummary(),
       },
     }),
   )
@@ -54,15 +54,15 @@ export const consumeCredentialReceive = (
 
   // TODO These should be handled in flow?
   const validSubjects = verifyCredentialSubject(
-    interaction.getState(),
+    interaction.getSummary().state,
     currentDid,
   )
 
   const validSignatures = await validateOfferingDigestable(
-    interaction.getState(),
+    interaction.getSummary().state,
   )
 
-  const duplicates = await isCredentialStored(interaction.getState(), id =>
+  const duplicates = await isCredentialStored(interaction.getSummary().state, id =>
     interaction.getStoredCredentialById(id),
   )
 
@@ -101,7 +101,7 @@ export const consumeCredentialReceive = (
     )
   }
 
-  // TODO This should probably take the metadata directly? 
+  // TODO This should probably take the metadata directly?
   // (instead of interaction)
   await interaction.storeCredentialMetadataFromOffer(interaction)
   return dispatch(saveCredentialOffer(interactionId))
@@ -161,7 +161,8 @@ export const saveCredentialOffer = (
   // TODO These should be handled on the interaction layer, like the issuer profile
   await Promise.all(
     interaction
-      .getState()
+      .getSummary()
+      .state
       .map(
         ({ credential }: CredentialOffering) =>
           credential && storageLib.store.verifiableCredential(credential),
@@ -169,7 +170,7 @@ export const saveCredentialOffer = (
   )
 
   await storeOfferMetadata(
-    interaction.getState(),
+    interaction.getSummary().state,
     interaction.issuerSummary.did,
     storageLib.store.credentialMetadata,
   )

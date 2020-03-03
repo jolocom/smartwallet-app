@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { backendMiddleware, ThunkDispatch } from '../../../store'
+import { ThunkDispatch } from '../../../store'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { navigationActions } from '../../../actions'
@@ -14,10 +14,11 @@ import I18n from 'src/locales/i18n'
 import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
 import { CredentialOffering } from '../../../lib/interactionManager/types'
+import { InteractionSummary } from '../../../actions/sso/types'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
-  credentialOfferingSummary: CredentialOffering[]
+  interactionSummary: InteractionSummary
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -32,16 +33,13 @@ export const CredentialsReceiveContainer = (props: Props) => {
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
-      params: { credentialOfferingSummary, interactionId },
+      params: { interactionSummary, interactionId },
     },
   } = navigation
 
-  const interaction = backendMiddleware.interactionManager.getInteraction(
-    interactionId,
-  )
-
-  // TODO Why is this here but not in credential request?
-  const { publicProfile } = interaction.issuerSummary
+  const { publicProfile } = interactionSummary.issuer
+  // TODO fix the `any` type from interaction summary state
+  const credentialOffering = interactionSummary.state as CredentialOffering[]
 
   const handleConfirm = () => {
     acceptSelectedCredentials(selected, interactionId)
@@ -61,7 +59,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
   return (
     <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
       <CredentialReceiveComponent
-        credentialOffering={credentialOfferingSummary}
+        credentialOffering={credentialOffering}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
         onPressDocument={onPressDocument}

@@ -18,8 +18,8 @@ export const consumeAuthenticationRequest = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,
-      params: { 
-        authenticationDetails: interaction.getState()
+      params: {
+        authenticationDetails: interaction.getSummary()
       },
       key: 'authenticationRequest',
     }),
@@ -32,6 +32,6 @@ export const sendAuthenticationResponse = (
   const interaction = backendMiddleware.interactionManager.getInteraction(interactionId)
 
   await interaction.processInteractionToken(
-    await interaction.createAuthenticationResponse(interaction.getState())
+    await interaction.createAuthenticationResponse(interaction.getSummary().state)
   )
 }
