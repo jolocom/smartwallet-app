@@ -8,7 +8,6 @@ import {
 import { BackendMiddleware } from '../../backendMiddleware'
 import { InteractionChannel, CredentialOffering } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
-import { httpAgent } from '../http'
 import { JolocomLib } from 'jolocom-lib'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from '../storage/storage'
@@ -73,7 +72,7 @@ export class Interaction {
         interactionType === InteractionType.CredentialRequest
     ) as JSONWebToken<CredentialRequest>
 
-    const credentials = await Promise.all(selectedCredentials.map(({ id }) => this.getVerifiableCredential({id})))
+    const credentials = await Promise.all(selectedCredentials.map(async ({ id }) => (await this.getVerifiableCredential({id}))[0]))
 
     return this.createInteractionToken().response.share({
        callbackURL: request.interactionToken.callbackURL,
@@ -158,14 +157,20 @@ export class Interaction {
   public async send<T extends JWTEncodable>(
     token: JSONWebToken<JWTEncodable>,
   ): Promise<JSONWebToken<T>> {
-    const response = await httpAgent.postRequest<{ token: string }>(
-      //@ts-ignore - CREDENTIAL RECEIVE HAS NO CALLBACKURL
-      token.interactionToken.callbackURL,
-      { 'Content-Type': 'application/json' },
-      token,
-    )
+    //@ts-ignore
+    const response = await fetch(token.interactionToken.callbackURL, {
+      method: 'POST',
+      body: JSON.stringify({ token: token.encode() }),
+      headers: { 'Content-Type': 'application/json' },
+    })
 
-    return JolocomLib.parse.interactionToken.fromJWT<T>(response.token)
+    // TODO Very hacky, sometimes a token is expected, sometimes not
+    try {
+      return JolocomLib.parse.interactionToken.fromJWT<T>((await response.json()).token)
+    } catch {
+      //@ts-ignore
+      return response
+    }
   }
 
   public async storeCredential(credential: SignedCredential) {

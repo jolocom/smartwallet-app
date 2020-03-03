@@ -39,7 +39,6 @@ const ConsentContainer = (props: Props) => {
   const handleSubmitClaims = (credentials: CredentialVerificationSummary[]) => {
     sendCredentialResponse(
       credentials,
-      credentialRequestDetails,
       interactionId,
     )
   }
@@ -69,7 +68,6 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   sendCredentialResponse: (
     credentials: CredentialVerificationSummary[],
-    credentialRequestDetails: CredentialRequestSummary,
     interactionId: string,
   ) =>
     dispatch(
@@ -77,7 +75,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
         withErrorScreen(
           ssoActions.sendCredentialResponse(
             credentials,
-            credentialRequestDetails,
             interactionId,
           ),
         ),

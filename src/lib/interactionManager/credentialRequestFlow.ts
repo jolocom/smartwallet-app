@@ -40,12 +40,10 @@ export class CredentialRequestFlow extends Flow {
   }
 
   private async handleCredentialRequest(request: JSONWebToken<CredentialRequest>) {
-    const {
-      requestedCredentialTypes: requestedTypes,
-    } = request.interactionToken
+    const { requestedCredentialTypes } = request.interactionToken
 
     const attributesForType = await Promise.all<AttributeSummary>(
-      requestedTypes.map(this.ctx.getAttributesByType),
+      requestedCredentialTypes.map(this.ctx.getAttributesByType),
     )
 
     const populatedWithCredentials = await Promise.all(

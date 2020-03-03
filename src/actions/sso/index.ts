@@ -22,7 +22,10 @@ export const consumeCredentialRequest = (
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.Consent,
-      params: { interactionId: interaction.id, credentialRequestDetails: interaction.getState() },
+      params: {
+        interactionId: interaction.id,
+        credentialRequestDetails: interaction.getState()
+      },
       key: 'credentialRequest',
     }),
   )
@@ -38,7 +41,7 @@ export const sendCredentialResponse = (
 
   return interaction.processInteractionToken(
     await interaction.createCredentialResponse(selectedCredentials)
-  )
+  ).then(() => dispatch(cancelSSO))
 }
 
 export const cancelSSO: ThunkAction = dispatch => {
