@@ -61,6 +61,7 @@ export const consumeCredentialReceive = (
   const validSignatures = await validateOfferingDigestable(
     interaction.getState(),
   )
+
   const duplicates = await isCredentialStored(interaction.getState(), id =>
     interaction.getStoredCredentialById(id),
   )
@@ -100,18 +101,19 @@ export const consumeCredentialReceive = (
     )
   }
 
+  // TODO This should probably take the metadata directly? 
+  // (instead of interaction)
+  await interaction.storeCredentialMetadataFromOffer(interaction)
   return dispatch(saveCredentialOffer(interactionId))
 }
 
 const validateOfferingDigestable = async (offer: CredentialOffering[]) =>
-  Promise.all(
-    offer.map(
-      async ({ credential }) =>
+  Promise.all(offer.map(async ({ credential }) =>
         credential && (await JolocomLib.util.validateDigestable(credential)),
     ),
   )
 
-// TODO Breaks abstraction
+// TODO Breaks abstraction, should be handled in Interaction.store
 const isCredentialStored = async (
   offer: CredentialOffering[],
   getCredential: (id: string) => Promise<SignedCredential[]>,

@@ -17,6 +17,7 @@ export abstract class Flow {
     token: JSONWebToken<JWTEncodable>,
   ): Promise<any>
 
+  // @TODO Make sure this is only used for rendering
   abstract getState(): any
 
   public getMessages() {

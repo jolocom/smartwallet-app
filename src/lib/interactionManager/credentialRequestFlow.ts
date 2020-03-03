@@ -10,9 +10,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 import { Interaction } from './interaction';
 import { isEmpty } from 'ramda'
 import { Flow } from './flow';
-
-// TODO Backendmiddleware was just replaced with CTX :: Interaction to follow the example from the credentialOfferFlow
-// This is really broken
+import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialResponse';
 
 export class CredentialRequestFlow extends Flow {
   private credRequestState!: CredentialRequestSummary
@@ -21,11 +19,6 @@ export class CredentialRequestFlow extends Flow {
     super(ctx)
   }
 
-  /*
-   * Returns the current state, only used for rendering purposes
-   * @TODO Make sure this is only used for rendering
-   */
-
   public getState() {
     return this.credRequestState
   }
@@ -33,16 +26,14 @@ export class CredentialRequestFlow extends Flow {
   /*
    * Implementation of the abstract handler defined in {@link Flow}
    * Given an interaction token, will fire the appropriate step in the protocol or throw 
-   * @TODO Make sure this is only used for rendering
    */
 
   public async handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
     switch (token.interactionType) {
       case InteractionType.CredentialRequest:
         return this.handleCredentialRequest(token as JSONWebToken<CredentialRequest>)
-      // TODO This is currently bypassed, but shouldn't be
-      case InteractionType.CredentialsReceive:
-        throw new Error("NOT IMPLEMENTED")
+      case InteractionType.CredentialResponse:
+        return this.handleCredentialResponse(token as JSONWebToken<CredentialResponse>)
       default:
         throw new Error('Interaction type not found')
     }
@@ -102,6 +93,12 @@ export class CredentialRequestFlow extends Flow {
     }
 
     this.tokens.push(request)
+  }
+
+  // TODO kind of trivial, does this need more?
+  public async handleCredentialResponse(token: JSONWebToken<CredentialResponse>) {
+    // TODO In this case, a 200 is returned, so not a JWTEncodable
+    return this.ctx.send(token)
   }
 }
 

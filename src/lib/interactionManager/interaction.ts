@@ -1,5 +1,5 @@
 import { CredentialOfferFlow } from './credentialOfferFlow'
-import { IdentitySummary } from '../../actions/sso/types'
+import { IdentitySummary, CredentialVerificationSummary } from '../../actions/sso/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import {
   JSONWebToken,
@@ -17,6 +17,8 @@ import { Flow } from './flow'
 import { last } from 'ramda'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { AuthenticationFlow } from './authenticationFlow'
+import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
+import { AuthCreationArgs } from 'jolocom-lib/js/identityWallet/types'
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -55,6 +57,31 @@ export class Interaction {
     return this.flow.getMessages()
   }
 
+  public async createAuthenticationResponse(args: AuthCreationArgs) { 
+    // TODO Abstract to getMessages * findByType
+    return this.createInteractionToken().response.auth(
+      this.getState(),
+      await this.ctx.keyChainLib.getPassword(),
+      this.getMessages().find(({ interactionType }) => interactionType === InteractionType.Authentication)
+    )
+  }
+
+  public async createCredentialResponse(selectedCredentials: CredentialVerificationSummary[]) {
+    // TODO Abstract to getMessages * findByType
+    const request = this.getMessages().find(
+      ({ interactionType }) =>
+        interactionType === InteractionType.CredentialRequest
+    ) as JSONWebToken<CredentialRequest>
+
+    const credentials = await Promise.all(selectedCredentials.map(({ id }) => this.getVerifiableCredential({id})))
+
+    return this.createInteractionToken().response.share({
+       callbackURL: request.interactionToken.callbackURL,
+       suppliedCredentials: credentials.map(c => c.toJSON()),
+    }, await this.ctx.keyChainLib.getPassword(), request)
+  }
+
+
   public async createCredentialOfferResponseToken(
     selectedOffering: CredentialOffering[],
   ) {
@@ -78,7 +105,10 @@ export class Interaction {
     )
   }
 
-  public async processInteractionToken(token: JSONWebToken<JWTEncodable>) {
+  // rename to signal this does validation
+  public async processInteractionToken(
+    token: JSONWebToken<JWTEncodable>,
+  ) {
     // At some point we should strip the JSONWebToken<JWTEncodable>
     if (!this.issuerSummary) {
       // TODO Potential bug if we start with our token, i.e. we are the issuer
@@ -125,7 +155,9 @@ export class Interaction {
   }
 
   // TODO This should probably come from the transport / channel handler
-  public async send<T extends JWTEncodable>(token: JSONWebToken<JWTEncodable>): Promise<JSONWebToken<T>> {
+  public async send<T extends JWTEncodable>(
+    token: JSONWebToken<JWTEncodable>,
+  ): Promise<JSONWebToken<T>> {
     const response = await httpAgent.postRequest<{ token: string }>(
       //@ts-ignore - CREDENTIAL RECEIVE HAS NO CALLBACKURL
       token.interactionToken.callbackURL,
@@ -138,6 +170,17 @@ export class Interaction {
 
   public async storeCredential(credential: SignedCredential) {
     await this.ctx.storageLib.store.verifiableCredential(credential)
+  }
+
+  // TODO Shouldn't take interaction?
+  public storeCredentialMetadataFromOffer(interaction: Interaction) {
+    return Promise.all(
+      interaction
+        .getState()
+        .map(({ credential }: CredentialOffering) =>
+            credential && this.storeCredential(credential)
+        )
+    )
   }
 
   public storeCredentialMetadata = async (

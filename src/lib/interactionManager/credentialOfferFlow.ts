@@ -29,23 +29,29 @@ export class CredentialOfferFlow extends Flow {
     this.tokens.push(token)
     switch (token.interactionType) {
       case InteractionType.CredentialOfferRequest:
-        return this.consumeOfferRequest(token as JSONWebToken<CredentialOfferRequest>)
+        return this.handleOfferRequest(token as JSONWebToken<CredentialOfferRequest>)
       case InteractionType.CredentialOfferResponse:
-        return this.sendCredentialResponse(token as JSONWebToken<
-          CredentialOfferResponse
-        >)
+        return this.handleOfferResponse(token as JSONWebToken<CredentialOfferResponse>)
       case InteractionType.CredentialsReceive:
-        return this.consumeCredentialReceive(token as JSONWebToken<CredentialsReceive>)
+        return this.handleCredentialReceive(token as JSONWebToken<CredentialsReceive>)
       default:
         throw new Error('Interaction type not found')
     }
   }
 
-  private consumeOfferRequest(token: JSONWebToken<CredentialOfferRequest>) {
+  private handleOfferRequest(token: JSONWebToken<CredentialOfferRequest>) {
     this.credentialOfferingState = token.interactionToken.offeredCredentials.map(offer => ({ ...offer, valid: true }))
   }
 
-  private consumeCredentialReceive(token: JSONWebToken<CredentialsReceive>) {
+  private async handleOfferResponse(
+    token: JSONWebToken<CredentialOfferResponse>,
+  ) {
+  // TODO Lift this to the base class? Perhaps it can later be composed with a function to prepare the response
+    const credentialsReceive = await this.ctx.send<CredentialsReceive>(token)
+    return this.handleInteractionToken(credentialsReceive)
+  }
+
+  private handleCredentialReceive(token: JSONWebToken<CredentialsReceive>) {
     this.credentialOfferingState = token.interactionToken.signedCredentials.map(credential => {
       const type = credential.type[credential.type.length - 1]
       const offering = this.credentialOfferingState.find(offering => offering.type === type)
@@ -57,13 +63,5 @@ export class CredentialOfferFlow extends Flow {
         credential,
       }
     })
-  }
-
-  // TODO Lift this to the base class? Perhaps it can later be composed with a function to prepare the response
-  private async sendCredentialResponse(
-    token: JSONWebToken<CredentialOfferResponse>,
-  ) {
-    const credentialsReceive = await this.ctx.send<CredentialsReceive>(token)
-    return this.handleInteractionToken(credentialsReceive)
   }
 }
