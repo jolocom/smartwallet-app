@@ -16,7 +16,6 @@ import { last } from 'ramda'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { AuthenticationFlow } from './authenticationFlow'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { AuthCreationArgs } from 'jolocom-lib/js/identityWallet/types'
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -58,7 +57,7 @@ export class Interaction {
   }
 
   // TODO Try to write a respond function that collapses these
-  public async createAuthenticationResponse(args: AuthCreationArgs) { 
+  public async createAuthenticationResponse() { 
     // TODO Abstract to getMessages * findByType
     return this.createInteractionToken().response.auth(
       this.getState(),

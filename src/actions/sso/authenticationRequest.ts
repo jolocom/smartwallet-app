@@ -19,6 +19,7 @@ export const consumeAuthenticationRequest = (
     navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,
       params: { 
+        interactionId: interaction.id,
         authenticationDetails: interaction.getState()
       },
       key: 'authenticationRequest',
@@ -31,7 +32,8 @@ export const sendAuthenticationResponse = (
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const interaction = backendMiddleware.interactionManager.getInteraction(interactionId)
 
+  debugger
   await interaction.processInteractionToken(
-    await interaction.createAuthenticationResponse(interaction.getState())
+    await interaction.createAuthenticationResponse()
   )
 }

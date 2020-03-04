@@ -45,7 +45,6 @@ export const consumeCredentialReceive = (
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = interactionManager.getInteraction(interactionId)
   const currentDid = getState().account.did.did
-  debugger
 
   await interaction.processInteractionToken(
     await interaction.createCredentialOfferResponseToken(

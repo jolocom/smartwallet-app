@@ -43,6 +43,7 @@ export class AuthenticationFlow extends Flow {
     }
 
     // This is to surpress every path returning a value
+    this.tokens.push(token)
     return
   }
 }
