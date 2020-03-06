@@ -9,19 +9,18 @@ import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { ErrorCodes as LibErrorCode } from 'jolocom-lib/js/errors'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const callHandler = (handler: () => ThunkAction) => {
   try {
     return handler()
   } catch (e) {
-    if (e.message === 'Signature on token is invalid') {
+    if (e.message === LibErrorCode.IDWInvalidJWTSignature) {
       throw new AppError(ErrorCode.InvalidSignature, e)
-    } else if (
-      e.message === 'You are not the intended audience of received token'
-    ) {
+    } else if (e.message === LibErrorCode.IDWNotIntendedAudience) {
       throw new AppError(ErrorCode.WrongDID, e)
-    } else if (e.message === 'The token nonce does not match the request') {
+    } else if (e.message === LibErrorCode.IDWIncorrectJWTNonce) {
       throw new AppError(ErrorCode.WrongNonce, e)
     } else {
       throw new AppError(ErrorCode.Unknown, e)
