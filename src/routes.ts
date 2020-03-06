@@ -25,20 +25,23 @@ import { InteractionScreen } from 'src/ui/interaction/container/interactionScree
 import { AuthenticationConsent } from 'src/ui/authentication'
 import { routeList } from './routeList'
 import { AppInit } from './ui/generic/appInit'
-import BottomTabBar from 'src/ui/generic/bottomTabBar'
 import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
 
 import {
-  DocumentsMenuIcon,
-  IdentityMenuIcon,
-  RecordsMenuIcon,
-  SettingsMenuIcon,
+  DocsIcon,
+  HistoryIcon,
+  IdentityIcon,
+  SettingsIcon,
 } from 'src/resources'
 import { RepeatSeedPhrase } from './ui/recovery/container/repeatSeedPhrase'
 import { SeedPhrase } from './ui/recovery/container/seedPhrase'
 import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
+import { BottomBar } from './ui/navigation/container/bottomBar'
+import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
+
+import { NotificationFilter } from './lib/notifications'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -84,10 +87,11 @@ const navOptScreenWCancel = {
 export const BottomTabBarRoutes = {
   [routeList.Claims]: {
     screen: Claims,
-    title: strings.MY_IDENTITY,
+    title: strings.IDENTITY,
     navigationOptions: {
       ...commonNavigationOptions,
-      tabBarIcon: IdentityMenuIcon,
+      tabBarIcon: IdentityIcon,
+      notifications: NotificationFilter.all,
     },
   },
   [routeList.Documents]: {
@@ -95,22 +99,17 @@ export const BottomTabBarRoutes = {
     title: strings.DOCUMENTS,
     navigationOptions: {
       ...commonNavigationOptions,
-      tabBarIcon: (props: {
-        tintColor: string
-        focused: boolean
-        fillColor?: string
-      }) => {
-        props.fillColor = Colors.bottomTabBarBg
-        return new DocumentsMenuIcon(props)
-      },
+      tabBarIcon: DocsIcon,
+      notifications: NotificationFilter.all,
     },
   },
   [routeList.Records]: {
     screen: Records,
-    title: strings.LOGIN_RECORDS,
+    title: strings.HISTORY,
     navigationOptions: {
       ...commonNavigationOptions,
-      tabBarIcon: RecordsMenuIcon,
+      tabBarIcon: HistoryIcon,
+      notifications: NotificationFilter.onlyDismissible,
     },
   },
   [routeList.Settings]: {
@@ -118,29 +117,16 @@ export const BottomTabBarRoutes = {
     title: strings.SETTINGS,
     navigationOptions: {
       ...commonNavigationOptions,
-      tabBarIcon: SettingsMenuIcon,
+      tabBarIcon: SettingsIcon,
+      notifications: NotificationFilter.onlyDismissible,
     },
   },
 }
 
 const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   tabBarOptions: {
-    ...Platform.select({
-      android: {
-        activeTintColor: Colors.purpleMain,
-        inactiveTintColor: Colors.greyLighter,
-      },
-      ios: {
-        activeTintColor: Colors.white,
-        inactiveTintColor: Colors.white050,
-      },
-    }),
-    showLabel: false,
-    style: {
-      height: 50,
-      bottom: 0,
-      backgroundColor: Colors.bottomTabBarBg,
-    },
+    activeTintColor: Colors.white,
+    inactiveTintColor: Colors.gray151,
   },
   navigationOptions: ({
     navigation,
@@ -154,8 +140,7 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
       headerTitle: I18n.t(BottomTabBarRoutes[nestedRouteName].title),
     }
   },
-  tabBarComponent: BottomTabBar,
-  //tabBarPosition: 'bottom',
+  tabBarComponent: BottomBar,
 })
 
 const RegistrationScreens = createSwitchNavigator(
@@ -189,9 +174,12 @@ const MainStack = createStackNavigator(
     },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.onlyDismissible,
+        statusBar: false,
+      },
     },
-
     [routeList.CredentialDialog]: {
       screen: CredentialReceive,
       navigationOptions: () => ({
@@ -230,33 +218,51 @@ const MainStack = createStackNavigator(
         ...navOptScreenWCancel,
       },
     },
-
     [routeList.SeedPhrase]: {
       screen: SeedPhrase,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
 
     [routeList.Exception]: {
       screen: Exception,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
     [routeList.ErrorReporting]: {
       screen: ErrorReporting,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
     ...(__DEV__ && {
       [routeList.Storybook]: {
         screen: require('src/ui/storybook').StorybookScreen,
         navigationOptions: navOptScreenWCancel,
       },
+      [routeList.NotificationScheduler]: {
+        screen: NotificationScheduler,
+        navigationOptions: {
+          ...noHeaderNavOpts,
+          notifications: NotificationFilter.all,
+        },
+      },
     }),
   },
   {
-    defaultNavigationOptions: commonNavigationOptions,
+    defaultNavigationOptions: noHeaderNavOpts,
   },
 )
 
@@ -268,8 +274,16 @@ export const Routes = createSwitchNavigator(
       screen: AppInit,
       navigationOptions: noHeaderNavOpts,
     },
-    [routeList.Main]: MainStack,
-    [routeList.Registration]: RegistrationScreens,
+    [routeList.Main]: {
+      screen: MainStack,
+      navigationOptions: {
+        notifications: NotificationFilter.onlyDismissible,
+      },
+    },
+    [routeList.Registration]: {
+      screen: RegistrationScreens,
+      notifications: NotificationFilter.none,
+    },
   },
   {
     initialRouteName: routeList.AppInit,

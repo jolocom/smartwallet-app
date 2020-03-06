@@ -9,7 +9,6 @@ exports[`Claims container correctly changes scanning to false when qr code scann
   }
   testID="claimsScreen"
 >
-  <Connect(BackupWarningComponent) />
   <CredentialOverview
     claimsToRender={
       Object {
@@ -86,7 +85,6 @@ exports[`Claims container correctly changes scanning to true when qr code scanne
   }
   testID="claimsScreen"
 >
-  <Connect(BackupWarningComponent) />
   <CredentialOverview
     claimsToRender={
       Object {
@@ -163,7 +161,6 @@ exports[`Claims container mounts correctly and matches the snapshot 1`] = `
   }
   testID="claimsScreen"
 >
-  <Connect(BackupWarningComponent) />
   <CredentialOverview
     claimsToRender={
       Object {

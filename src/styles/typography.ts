@@ -7,10 +7,8 @@ const initialViewportWidth = Dimensions.get('window').width
 const isSmallViewportWidth = initialViewportWidth < 360
 
 export const fontMain = Platform.OS === 'android' ? 'TTCommons' : 'TT Commons'
-export const fontLight = Platform.select({
-  android: 'TypeType - TT Commons Light',
-  ios: 'TTCommons-Light',
-})
+export const fontLight = 'TTCommons-Light'
+export const fontMedium = 'TTCommons-Medium'
 
 export const text3XS = 12
 export const textXXS = 14

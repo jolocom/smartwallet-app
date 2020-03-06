@@ -114,7 +114,7 @@ exports[`Scanner component matches snapshot when the torch button is pressed 1`]
           },
           Object {
             "backgroundColor": "rgba(0, 0, 0, 0)",
-            "borderColor": "white",
+            "borderColor": "rgb(255, 255, 255)",
           },
         ]
       }
@@ -145,7 +145,7 @@ exports[`Scanner component matches snapshot when the torch button is pressed 1`]
     <Text
       style={
         Object {
-          "color": "white",
+          "color": "rgb(255, 255, 255)",
           "fontFamily": "TTCommons-Light",
           "fontSize": 20,
           "lineHeight": 24,
@@ -293,7 +293,7 @@ exports[`Scanner component matches the snapshot on initial render 1`] = `
           },
           Object {
             "backgroundColor": "rgba(0, 0, 0, 0)",
-            "borderColor": "white",
+            "borderColor": "rgb(255, 255, 255)",
           },
         ]
       }
@@ -324,7 +324,7 @@ exports[`Scanner component matches the snapshot on initial render 1`] = `
     <Text
       style={
         Object {
-          "color": "white",
+          "color": "rgb(255, 255, 255)",
           "fontFamily": "TTCommons-Light",
           "fontSize": 20,
           "lineHeight": 24,

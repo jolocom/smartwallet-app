@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { StyleSheet, Text, TextInput, View, Platform } from 'react-native'
-import { Container } from '../../structure'
+import { Wrapper } from '../../structure'
 import { Button } from 'react-native-material-ui'
 import { Colors, Spacing, Typography, Buttons } from 'src/styles'
 import {
@@ -138,7 +138,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
     headerText = mnemonic.length + '/12 ' + I18n.t(strings.COMPLETED)
   }
   return (
-    <Container
+    <Wrapper
       style={[
         styles.container,
         isLoading && { justifyContent: 'space-around' },
@@ -228,7 +228,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
               {inputValue.length > 1 &&
                 suggestions.map((word, i) => (
                   <Button
-                    testID={"seedSuggestion" + i}
+                    testID={'seedSuggestion' + i}
                     key={i}
                     text={word}
                     onPress={() => selectWord(suggestions[i])}
@@ -285,7 +285,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           <View style={{ margin: 20 }} />
         </React.Fragment>
       )}
-    </Container>
+    </Wrapper>
   )
 }
 

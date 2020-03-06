@@ -6,13 +6,12 @@ import { ThunkDispatch } from '../../../store'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
-import { Container } from '../../structure'
+import { JolocomButton, Wrapper } from '../../structure'
 import { styles } from '../styles'
 import { ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
 import { DescriptionSection } from '../components/descriptionSection'
 import { ContactSection } from '../components/contactSection'
-import { GradientButton } from '../../structure/gradientButton'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { SectionWrapper } from '../components/sectionWrapper'
@@ -79,14 +78,14 @@ const ErrorReportingContainer = (props: Props) => {
   }
 
   return (
-    <Container style={styles.wrapper}>
+    <Wrapper style={styles.wrapper}>
       <NavigationSection
         onNavigation={navigateBack}
         isBackButton={isBackButton}
       />
       <ScrollView>
         <SectionWrapper
-          title={I18n.t(strings.CHOOSE_THE_ISSUE)}
+          title={I18n.t(strings.TELL_US_THE_PROBLEM)}
           style={{ marginTop: 14 }}
         >
           <ChooseIssueSection
@@ -106,7 +105,7 @@ const ErrorReportingContainer = (props: Props) => {
             description={description}
           />
         </SectionWrapper>
-        <SectionWrapper title={I18n.t(strings.NEED_TO_TALK_TO_US)}>
+        <SectionWrapper title={I18n.t(strings.WANT_TO_GET_IN_TOUCH)}>
           <ContactSection
             onContactInput={setContact}
             currentInput={currentInput}
@@ -114,20 +113,21 @@ const ErrorReportingContainer = (props: Props) => {
             contactValue={contact}
           />
         </SectionWrapper>
-        <SectionWrapper title={I18n.t(strings.SOMETHING_ELSE)}>
+        <SectionWrapper title={I18n.t(strings.RATE_THE_ISSUE)}>
           <EmojiSection selectedEmoji={selectedEmoji} setEmoji={setEmoji} />
         </SectionWrapper>
-        <GradientButton
+        <JolocomButton
           onPress={onSubmitReport}
           containerStyle={{
             marginTop: 45,
             marginBottom: 66,
             marginHorizontal: 20,
+            height: 56,
           }}
           text={I18n.t(strings.SUBMIT_REPORT)}
         />
       </ScrollView>
-    </Container>
+    </Wrapper>
   )
 }
 

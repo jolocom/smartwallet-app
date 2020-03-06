@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react-native'
-import { CardWrapper, Container } from 'src/ui/structure'
+import { CardWrapper, Wrapper } from 'src/ui/structure'
 import { StyleSheet, View, Text } from 'react-native'
 import { Spacing, Typography, Colors } from 'src/styles'
 import { getCredentialIconByType } from 'src/resources/util'
@@ -31,17 +31,17 @@ const styles = StyleSheet.create({
 
 storiesOf('CardWrapper usage', module)
   .add('as a credentialCard with no leftIcon', () => (
-    <Container style={styles.greyBg}>
+    <Wrapper style={styles.greyBg}>
       <CardWrapper style={styles.cardVerticalBorders}>
         <View style={styles.claimsArea}>
           <Text style={styles.claimLabel}>Claim Label</Text>
           <Text style={styles.claimText}>Claim Text</Text>
         </View>
       </CardWrapper>
-    </Container>
+    </Wrapper>
   ))
   .add('as a credentialCard with multiple claims and no icon', () => (
-    <Container style={styles.greyBg}>
+    <Wrapper style={styles.greyBg}>
       <CardWrapper style={styles.cardVerticalBorders}>
         <View style={styles.claimsArea}>
           <Text style={styles.claimLabel}>Label 1</Text>
@@ -52,10 +52,10 @@ storiesOf('CardWrapper usage', module)
           <Text style={styles.claimText}>Claim Text</Text>
         </View>
       </CardWrapper>
-    </Container>
+    </Wrapper>
   ))
   .add('as a credentialCard with multiple claims and no icon', () => (
-    <Container style={styles.greyBg}>
+    <Wrapper style={styles.greyBg}>
       <CardWrapper style={styles.cardVerticalBorders}>
         <View style={styles.claimsArea}>
           <Text style={styles.claimLabel}>Label 1</Text>
@@ -66,10 +66,10 @@ storiesOf('CardWrapper usage', module)
           <Text style={styles.claimText}>Claim Text</Text>
         </View>
       </CardWrapper>
-    </Container>
+    </Wrapper>
   ))
   .add('as a credentialCard with multiple claims with leftIcon', () => (
-    <Container style={styles.greyBg}>
+    <Wrapper style={styles.greyBg}>
       <CardWrapper style={styles.cardVerticalBorders}>
         <View style={styles.leftIconSection}>
           {getCredentialIconByType('Name')}
@@ -83,5 +83,5 @@ storiesOf('CardWrapper usage', module)
           <Text style={styles.claimText}>Claim Text</Text>
         </View>
       </CardWrapper>
-    </Container>
+    </Wrapper>
   ))

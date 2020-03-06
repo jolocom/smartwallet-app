@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import {  AppState, AppStateStatus, Platform } from 'react-native'
+import { AppState, AppStateStatus, Platform, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
-/**
- * TODO: When using the latest react-native-permissions version, remove this
- * dependency, since there is already a cross-platform openSettings method
- */
+/* TODO: When using the latest react-native-permissions version, remove this dependency,
+ since there is already a cross-platform openSettings method */
 import { appDetailsSettings } from 'react-native-android-open-settings'
 // TODO: using v1.2.1. When upgrading to RN60, use the latest version.
 import Permissions, { Status } from 'react-native-permissions'
 
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
+import { Colors } from '../../../styles'
 
 interface Props extends NavigationScreenProps {
   consumeToken: (jwt: string) => Promise<any>
@@ -88,11 +87,16 @@ export const ScannerContainer = (props: Props) => {
 
   return permission === RESULTS.AUTHORIZED ? (
     isCameraReady ? (
-      <ScannerComponent
-        reRenderKey={reRenderKey}
-        onScan={consumeToken}
+      <ScannerComponent reRenderKey={reRenderKey} onScan={consumeToken} />
+    ) : (
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          backgroundColor: Colors.black065,
+        }}
       />
-    ) : null
+    )
   ) : (
     <NoPermissionComponent onPressEnable={onEnablePermission} />
   )

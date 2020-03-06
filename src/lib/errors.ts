@@ -3,7 +3,7 @@ import VersionNumber from 'react-native-version-number'
 import { sentryDSN } from 'src/config'
 import { routeList } from '../routeList'
 import strings from '../locales/strings'
-import ErrorCode from './errorCodes'
+import { ErrorCode } from './errors/index'
 export { ErrorCode }
 
 export class AppError extends Error {

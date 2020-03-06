@@ -1,5 +1,5 @@
 // @NOTE when you add a new ErrorCode, remember to add it to src/locales/strings
-enum ErrorCode {
+export enum ErrorCode {
   Unknown = 'Unknown',
   // actions/account/index
   WalletInitFailed = 'WalletInit',
@@ -29,5 +29,3 @@ enum ErrorCode {
   // ui/generic/appInit
   AppInitFailed = 'AppInitFailed',
 }
-
-export default ErrorCode

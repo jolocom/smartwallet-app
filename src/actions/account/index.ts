@@ -6,7 +6,7 @@ import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
-} from '../../lib/util'
+} from 'src/lib/util'
 import { cancelReceiving } from '../sso'
 import { ThunkAction } from 'src/store'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
@@ -16,6 +16,7 @@ import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from 'src/backendMiddleware'
+import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -124,6 +125,7 @@ export const saveExternalCredentials: ThunkAction = async (
 
   await storageLib.delete.verifiableCredential(cred.id)
   await storageLib.store.verifiableCredential(cred)
+  await dispatch(checkRecoverySetup)
 
   return dispatch(cancelReceiving)
 }

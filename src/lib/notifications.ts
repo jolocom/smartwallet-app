@@ -14,12 +14,14 @@ interface NotificationMessage {
  * - a callback
  */
 
-type NotificationDismiss = {
-  dismiss?: false | {
-    label?: string,
-    timeout?: number,
-    onDismiss?: (...args: any) => void
-  },
+export interface NotificationDismiss {
+  dismiss?:
+    | false
+    | {
+        label?: string
+        timeout?: number
+        onDismiss?: (...args: any) => void
+      }
 }
 
 /**
@@ -28,7 +30,7 @@ type NotificationDismiss = {
  * It is not possible to simply specify a boolean, because if an interaction is
  * expected then a callback and label are required.
  */
-type NotificationInteract = {
+interface NotificationInteract {
   interact?: {
     label: string
     onInteract: (...args: any) => void | boolean | Promise<void | boolean>
@@ -40,15 +42,10 @@ type NotificationInteract = {
  * if the type is error.
  */
 
-type NotificationPayload =
-  | {
-      type: NotificationType.warning | NotificationType.info
-      error?: never
-    } & NotificationMessage
-  | {
-      type: NotificationType.error
-      error: AppError
-    }
+type NotificationPayload = {
+  type: NotificationType.warning | NotificationType.info
+  error?: AppError
+} & NotificationMessage
 
 interface NotificationBase {
   id: string
@@ -73,6 +70,13 @@ export type Notification = NotificationBase &
   NotificationDismiss &
   NotificationPayload
 
+
+export enum NotificationFilter {
+  none,
+  all,
+  onlyDismissible,
+}
+
 export enum NotificationType {
   error = 'error',
   info = 'info',
@@ -81,6 +85,13 @@ export enum NotificationType {
 
 export const createInfoNotification = createNotificationFactory({
   type: NotificationType.info,
+  dismiss: {
+    timeout: 3000,
+  },
+})
+
+export const createWarningNotification = createNotificationFactory({
+  type: NotificationType.warning,
   dismiss: {
     timeout: 3000,
   },
