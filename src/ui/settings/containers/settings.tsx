@@ -17,9 +17,6 @@ import settingKeys from '../settingKeys'
 import { showSeedPhrase } from '../../../actions/recovery'
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.backgroundLightMain,
-  },
   scrollComponent: {
     width: '100%',
   },
@@ -45,11 +42,10 @@ export const SettingsContainer: React.FC<Props> = props => {
   // const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
-    <Wrapper style={styles.container}>
+    <Wrapper centered>
       <ScrollView
         style={styles.scrollComponent}
-        contentContainerStyle={styles.scrollComponentContainer}
-      >
+        contentContainerStyle={styles.scrollComponentContainer}>
         {__DEV__ && (
           <SettingSection title={'Dev'}>
             <SettingItem
