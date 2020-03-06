@@ -4,17 +4,16 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
-import { DocumentCard } from '../../documents/components/documentCard'
 import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
 import React from 'react'
 import { black065, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
 import { CredentialOffering } from '../../../lib/interactionManager/types'
+import { DocumentReceiveCard } from './documentReceiveCard'
 
 const styles = StyleSheet.create({
   container: {
@@ -45,14 +44,10 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
     ...centeredText,
   },
-  documentWrapper: {
-    alignItems: 'center',
-    padding: 10,
-  },
 })
 
 interface Props {
-  publicProfile: IssuerPublicProfileSummary
+  publicProfile: IssuerPublicProfileSummary | undefined
   credentialOffering: CredentialOffering[]
   onPressDocument: (offering: CredentialOffering) => void
   isDocumentSelected: (offering: CredentialOffering) => boolean
@@ -86,20 +81,16 @@ export const CredentialReceiveComponent = (props: Props) => {
         style={{ width: '100%' }}
       >
         {credentialOffering.map(offering => {
-          const { type, renderInfo, valid } = offering
-          //const isSelected = isDocumentSelected(offering)
+          const selected = isDocumentSelected(offering)
+          const onPress = () => {
+            onPressDocument(offering)
+          }
           return (
-            <TouchableOpacity
-              onPress={() => valid && onPressDocument(offering)}
-              activeOpacity={1}
-              style={styles.documentWrapper}
-            >
-              <DocumentCard
-                credentialType={type}
-                renderInfo={renderInfo}
-                invalid={!valid}
-              />
-            </TouchableOpacity>
+            <DocumentReceiveCard
+              onPress={onPress}
+              selected={selected}
+              offering={offering}
+            />
           )
         })}
       </ScrollView>

@@ -16,18 +16,18 @@ import { fontMedium } from '../../../styles/typography'
 import { InvalidDocumentBackground } from '../../../resources'
 
 const { width: WIDTH } = Dimensions.get('window')
+// TODO @clauxx rename
 const DOCUMENT_MARGIN = 20
 export const DOCUMENT_CARD_WIDTH = WIDTH - DOCUMENT_MARGIN * 2
 export const DOCUMENT_CARD_HEIGHT = DOCUMENT_CARD_WIDTH * 0.636
 
-type ScaleFactor = Animated.Value | number
 interface DocumentCardProps {
   credentialType: string
   renderInfo: CredentialOfferRenderInfo | undefined
   claimData?: ClaimInterface
   expires?: Date
   invalid?: boolean
-  scale?: {x: ScaleFactor, y: ScaleFactor}
+  transform?: any
 }
 
 const styles = StyleSheet.create({

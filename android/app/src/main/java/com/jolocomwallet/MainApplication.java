@@ -25,6 +25,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import org.pgsqlite.SQLitePluginPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.wix.interactable.Interactable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +58,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFetchBlobPackage(),
             new RNCameraPackage(),
             new SQLitePluginPackage(),
-            new LinearGradientPackage()
+            new LinearGradientPackage(),
+            new Interactable()
       );
     }
 

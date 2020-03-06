@@ -33,7 +33,7 @@ export const consumeCredentialOfferRequest = (
       routeName: routeList.CredentialReceive,
       params: {
         interactionId: credentialOfferRequest.nonce,
-        credentialOfferingSummary: interaction.getSummary(),
+        interactionSummary: interaction.getSummary(),
       },
     }),
   )

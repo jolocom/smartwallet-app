@@ -45,11 +45,11 @@ export const CredentialsReceiveContainer = (props: Props) => {
     acceptSelectedCredentials(selected, interactionId)
   }
 
-  const onPressDocument = (cred: CredentialOffering) => {
-    if (selected.includes(cred)) {
-      setSelected(selected.filter(current => current !== cred))
+  const onPressDocument = (offering: CredentialOffering) => {
+    if (isDocumentSelected(offering)) {
+      setSelected(selected.filter(current => current !== offering))
     } else {
-      setSelected([...selected, cred])
+      setSelected([...selected, offering])
     }
   }
 
