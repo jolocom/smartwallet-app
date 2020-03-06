@@ -90,10 +90,11 @@ const styles = StyleSheet.create({
 interface Props {
   onScan: (jwt: string) => Promise<void>
   reRenderKey: number
+  onScannerRef: (s: any) => void
 }
 
 export const ScannerComponent = (props: Props) => {
-  const { onScan, reRenderKey } = props
+  const { onScan, onScannerRef, reRenderKey } = props
 
   const [isError, setError] = useState()
   const [errorText, setErrorText] = useState()
@@ -159,6 +160,7 @@ export const ScannerComponent = (props: Props) => {
   return (
     <React.Fragment>
       <QRScanner
+        ref={onScannerRef}
         //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
         containerStyle={{
           position: 'absolute',
@@ -176,8 +178,7 @@ export const ScannerComponent = (props: Props) => {
       <View
         style={{
           flexDirection: 'row',
-        }}
-      >
+        }}>
         <View style={styles.horizontalOverlay} />
         <Animated.View
           style={[
@@ -217,8 +218,7 @@ export const ScannerComponent = (props: Props) => {
           onPressOut={() => setTorchPressed(false)}
           activeOpacity={1}
           underlayColor={'transparent'}
-          style={styles.torch}
-        >
+          style={styles.torch}>
           {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
         </TouchableHighlight>
       </View>

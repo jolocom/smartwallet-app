@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native'
 import {
-  NavigationInjectedProps
+  NavigationInjectedProps, NavigationEventSubscription
 } from 'react-navigation'
 
 import { PERMISSIONS, RESULTS, request, openSettings, check, Permission } from 'react-native-permissions'
@@ -28,25 +28,41 @@ export const ScannerContainer: React.FC<Props> = (props) => {
   const { consumeToken, navigation } = props
   const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<string>(RESULTS.UNAVAILABLE)
+  const [scannerRef, setScannerRef] = useState(null)
+
+  // NOTE: this is needed because QRScanner behaves weirdly when the screen is
+  // remounted....
+  // @ts-ignore
+  if (scannerRef) scannerRef.reactivate()
+
+  const rerender = () => {
+    setRenderKey(Date.now())
+    // @ts-ignore
+    if (scannerRef) scannerRef.reactivate()
+  }
 
   useEffect(() => {
-    let focusListener
+    let listeners: NavigationEventSubscription[] = []
     if (navigation) {
-      focusListener = navigation.addListener('willFocus', () => {
-        // NOTE: the re-render and the re-mount should only fire during the willFocus event
-        setRenderKey(Date.now())
-      })
+      listeners.push(navigation.addListener('didFocus', () => {
+        rerender()
+        checkCameraPermissions()
+      }))
+    } else {
+      checkCameraPermissions()
     }
 
-    check(CAMERA_PERMISSION).then(perm => {
+    return () => listeners.forEach(l => l.remove())
+  }, [])
+
+  const checkCameraPermissions = async () => {
+    return check(CAMERA_PERMISSION).then(perm => {
       setPermission(perm)
       if (perm !== RESULTS.GRANTED && perm !== RESULTS.BLOCKED) {
         requestCameraPermission()
       }
     })
-
-    return focusListener && focusListener.remove
-  }, [])
+  }
 
   const requestCameraPermission = async () => {
     const permission = await request(CAMERA_PERMISSION)
@@ -83,9 +99,11 @@ export const ScannerContainer: React.FC<Props> = (props) => {
       <ScannerComponent
         reRenderKey={reRenderKey}
         onScan={consumeToken}
+        onScannerRef={r => setScannerRef(r)}
       />
     )
   } else if (permission === RESULTS.UNAVAILABLE) {
+    // TODO: maybe add a message here like "do you even camera?"
     return (
       <View
         style={{
