@@ -1,18 +1,26 @@
 import {
-  JSONWebToken,
-  JWTEncodable,
+  JSONWebToken, JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
-import { CredentialOffering } from './types'
+import { SignedCredentialWithMetadata } from './types'
 import { Interaction } from './interaction'
 import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/credentialOfferResponse'
 import { Flow } from './flow'
+import { last } from 'ramda'
+
+type ValidationErrorMap = {
+  invalidIssuer?: boolean
+  invalidSubject?: boolean
+}
+
+export type OfferWithValidity = SignedCredentialWithMetadata & {
+  validationErrors: ValidationErrorMap
+}
 
 export class CredentialOfferFlow extends Flow {
-  public credentialOfferingState: CredentialOffering[] = []
-
+  public credentialOfferingState: OfferWithValidity[] = []
   public constructor(ctx: Interaction) {
     super(ctx)
   }
@@ -39,8 +47,9 @@ export class CredentialOfferFlow extends Flow {
     }
   }
 
-  private handleOfferRequest(token: JSONWebToken<CredentialOfferRequest>) {
-    this.credentialOfferingState = token.interactionToken.offeredCredentials.map(offer => ({ ...offer, valid: true }))
+  private handleOfferRequest({ interactionToken }: JSONWebToken<CredentialOfferRequest>) {
+    const { offeredCredentials } = interactionToken
+    this.credentialOfferingState = offeredCredentials.map(offer => ({ ...offer, validationErrors: {} }))
   }
 
   private async handleOfferResponse(
@@ -51,19 +60,32 @@ export class CredentialOfferFlow extends Flow {
     return this.handleInteractionToken(credentialsReceive)
   }
 
+  // Sets the validity map, currently if the issuer and if the subjects are correct.
+  // also populates the SignedCredentialWithMetadata with credentials
   private handleCredentialReceive(token: JSONWebToken<CredentialsReceive>) {
-    this.credentialOfferingState = token.interactionToken.signedCredentials.map(credential => {
-      const type = credential.type[credential.type.length - 1]
-      const offering = this.credentialOfferingState.find(offering => offering.type === type)
 
-      if (!offering) {
-        throw new Error('Received wrong credentials')
-      }
+  // This actually cares about the credentials the user selected
+  // TODO parse from previous messages or extend the flow state
+  const { signedCredentials } = token.interactionToken
+  this.credentialOfferingState = signedCredentials.map(signedCredential => {
+    // TODO Should this throw or signal through the validitySummary?
+    const offer = this.credentialOfferingState
+      .find(({type}) => type === last(signedCredential.type))
 
-      return {
-        ...offering,
-        credential,
+    if (!offer) {
+      throw new Error('Received wrong credentials')
+    }
+
+    return {
+      ...offer,
+      signedCredential,
+      validationErrors: {
+        // This signals funny things in the flow without throwing errors. We don't simply throw because often times
+        // negotiation is still possible on the UI / UX layer, and the interaction can continue.
+        invalidIssuer: signedCredential.issuer !== this.ctx.issuerSummary.did,
+        invalidSubject: signedCredential.subject !== this.ctx.ctx.identityWallet.did // TODO FIXME Too many ctx.
       }
-    })
+    }
+  })
   }
 }

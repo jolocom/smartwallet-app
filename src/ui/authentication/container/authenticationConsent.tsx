@@ -34,9 +34,7 @@ export const AuthenticationConsentContainer = (props: Props) => {
     <AuthenticationConsentComponent
       authenticationDetails={authenticationDetails}
       confirmAuthenticationRequest={() =>
-        confirmAuthenticationRequest(
-          interactionId
-        )
+        confirmAuthenticationRequest(interactionId)
       }
       cancelAuthenticationRequest={cancelAuthenticationRequest}
     />
@@ -44,14 +42,8 @@ export const AuthenticationConsentContainer = (props: Props) => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  confirmAuthenticationRequest: (
-    interactionId: string
-  ) =>
-    dispatch(
-      withErrorScreen(
-        sendAuthenticationResponse(interactionId),
-      ),
-    ),
+  confirmAuthenticationRequest: (interactionId: string) =>
+    dispatch(withErrorScreen(sendAuthenticationResponse(interactionId))),
   cancelAuthenticationRequest: () => dispatch(cancelSSO),
 })
 

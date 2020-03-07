@@ -14,7 +14,8 @@ import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
 import React from 'react'
 import { black065, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
-import { CredentialOffering } from '../../../lib/interactionManager/types'
+import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
+import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
 
 const styles = StyleSheet.create({
   container: {
@@ -53,16 +54,15 @@ const styles = StyleSheet.create({
 
 interface Props {
   publicProfile: IssuerPublicProfileSummary
-  credentialOffering: CredentialOffering[]
-  onPressDocument: (offering: CredentialOffering) => void
-  isDocumentSelected: (offering: CredentialOffering) => boolean
+  credentialOfferSummary: OfferWithValidity[]
+  onPressDocument: (offering: SignedCredentialWithMetadata) => void
+  isDocumentSelected: (offering: SignedCredentialWithMetadata) => boolean
 }
 
 export const CredentialReceiveComponent = (props: Props) => {
   const {
     publicProfile,
-    credentialOffering,
-    isDocumentSelected,
+    credentialOfferSummary,
     onPressDocument,
   } = props
 
@@ -85,19 +85,18 @@ export const CredentialReceiveComponent = (props: Props) => {
         contentContainerStyle={{ paddingBottom: '50%' }}
         style={{ width: '100%' }}
       >
-        {credentialOffering.map(offering => {
-          const { type, renderInfo, valid } = offering
-          //const isSelected = isDocumentSelected(offering)
+        {credentialOfferSummary.map((offer, i) => {
+          const { type, renderInfo, validationErrors } = offer
           return (
             <TouchableOpacity
-              onPress={() => valid && onPressDocument(offering)}
+              onPress={() => !validationErrors.invalidIssuer && !validationErrors.invalidSubject && onPressDocument(offer)}
               activeOpacity={1}
               style={styles.documentWrapper}
             >
               <DocumentCard
                 credentialType={type}
                 renderInfo={renderInfo}
-                invalid={!valid}
+                invalid={validationErrors.invalidIssuer || validationErrors.invalidSubject}
               />
             </TouchableOpacity>
           )

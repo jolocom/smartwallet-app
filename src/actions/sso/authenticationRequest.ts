@@ -32,7 +32,6 @@ export const sendAuthenticationResponse = (
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const interaction = backendMiddleware.interactionManager.getInteraction(interactionId)
 
-  debugger
   await interaction.processInteractionToken(
     await interaction.createAuthenticationResponse()
   )

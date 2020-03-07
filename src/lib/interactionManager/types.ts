@@ -14,7 +14,6 @@ export enum InteractionChannel {
   NFC = 'NFC',
 }
 
-export interface CredentialOffering extends CredentialOffer {
-  credential?: SignedCredential
-  valid: boolean
+export interface SignedCredentialWithMetadata extends CredentialOffer {
+  signedCredential?: SignedCredential
 }

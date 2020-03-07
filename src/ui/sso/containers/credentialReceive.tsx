@@ -13,11 +13,12 @@ import strings from '../../../locales/strings'
 import I18n from 'src/locales/i18n'
 import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
-import { CredentialOffering } from '../../../lib/interactionManager/types'
+import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
+import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
-  credentialOfferingSummary: CredentialOffering[]
+  credentialOfferSummary: OfferWithValidity[]
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -28,11 +29,11 @@ interface Props extends ReturnType<typeof mapDispatchToProps> {
 }
 
 export const CredentialsReceiveContainer = (props: Props) => {
-  const [selected, setSelected] = useState<CredentialOffering[]>([])
+  const [selected, setSelected] = useState<SignedCredentialWithMetadata[]>([])
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
-      params: { credentialOfferingSummary, interactionId },
+      params: { credentialOfferSummary, interactionId },
     },
   } = navigation
 
@@ -45,9 +46,10 @@ export const CredentialsReceiveContainer = (props: Props) => {
 
   const handleConfirm = () => {
     acceptSelectedCredentials(selected, interactionId)
+    setSelected([])
   }
 
-  const onPressDocument = (cred: CredentialOffering) => {
+  const onPressDocument = (cred: SignedCredentialWithMetadata) => {
     if (selected.includes(cred)) {
       setSelected(selected.filter(current => current !== cred))
     } else {
@@ -55,13 +57,13 @@ export const CredentialsReceiveContainer = (props: Props) => {
     }
   }
 
-  const isDocumentSelected = (offering: CredentialOffering) =>
+  const isDocumentSelected = (offering: SignedCredentialWithMetadata) =>
     selected.includes(offering)
 
   return (
     <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
       <CredentialReceiveComponent
-        credentialOffering={credentialOfferingSummary}
+        credentialOfferSummary={credentialOfferSummary}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
         onPressDocument={onPressDocument}
@@ -86,7 +88,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   acceptSelectedCredentials: (
-    selected: CredentialOffering[],
+    selected: SignedCredentialWithMetadata[],
     interactionId: string,
   ) =>
     dispatch(
