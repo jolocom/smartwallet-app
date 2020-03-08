@@ -1,5 +1,5 @@
 import {
-  JSONWebToken, JWTEncodable,
+  JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
@@ -31,61 +31,56 @@ export class CredentialOfferFlow extends Flow {
 
   // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when casting
   public async handleInteractionToken(
-    token: JSONWebToken<JWTEncodable>,
+    token: JWTEncodable,
+    messageType: InteractionType
   ): Promise<any> {
     // TODO Push once all is good FIX
     this.tokens.push(token)
-    switch (token.interactionType) {
+    switch (messageType) {
       case InteractionType.CredentialOfferRequest:
-        return this.handleOfferRequest(token as JSONWebToken<CredentialOfferRequest>)
+        return this.handleOfferRequest(token as CredentialOfferRequest)
       case InteractionType.CredentialOfferResponse:
-        return this.handleOfferResponse(token as JSONWebToken<CredentialOfferResponse>)
+        return this.handleOfferResponse(token as CredentialOfferResponse)
       case InteractionType.CredentialsReceive:
-        return this.handleCredentialReceive(token as JSONWebToken<CredentialsReceive>)
+        return this.handleCredentialReceive(token as CredentialsReceive)
       default:
         throw new Error('Interaction type not found')
     }
   }
 
-  private handleOfferRequest({ interactionToken }: JSONWebToken<CredentialOfferRequest>) {
-    const { offeredCredentials } = interactionToken
+  private handleOfferRequest({ offeredCredentials }: CredentialOfferRequest) {
     this.credentialOfferingState = offeredCredentials.map(offer => ({ ...offer, validationErrors: {} }))
   }
 
-  private async handleOfferResponse(
-    token: JSONWebToken<CredentialOfferResponse>,
-  ) {
-  // TODO Lift this to the base class? Perhaps it can later be composed with a function to prepare the response
-    const credentialsReceive = await this.ctx.send<CredentialsReceive>(token)
-    return this.handleInteractionToken(credentialsReceive)
+  // Not relevant for client (?)
+  private async handleOfferResponse(token: CredentialOfferResponse) {
+    return
   }
 
   // Sets the validity map, currently if the issuer and if the subjects are correct.
   // also populates the SignedCredentialWithMetadata with credentials
-  private handleCredentialReceive(token: JSONWebToken<CredentialsReceive>) {
+  private handleCredentialReceive({ signedCredentials }: CredentialsReceive) {
+    // This actually cares about the credentials the user selected
+    // TODO parse from previous messages or extend the flow state
+    this.credentialOfferingState = signedCredentials.map(signedCredential => {
+      // TODO Should this throw or signal through the validitySummary?
+      const offer = this.credentialOfferingState
+        .find(({type}) => type === last(signedCredential.type))
 
-  // This actually cares about the credentials the user selected
-  // TODO parse from previous messages or extend the flow state
-  const { signedCredentials } = token.interactionToken
-  this.credentialOfferingState = signedCredentials.map(signedCredential => {
-    // TODO Should this throw or signal through the validitySummary?
-    const offer = this.credentialOfferingState
-      .find(({type}) => type === last(signedCredential.type))
-
-    if (!offer) {
-      throw new Error('Received wrong credentials')
-    }
-
-    return {
-      ...offer,
-      signedCredential,
-      validationErrors: {
-        // This signals funny things in the flow without throwing errors. We don't simply throw because often times
-        // negotiation is still possible on the UI / UX layer, and the interaction can continue.
-        invalidIssuer: signedCredential.issuer !== this.ctx.issuerSummary.did,
-        invalidSubject: signedCredential.subject !== this.ctx.ctx.identityWallet.did // TODO FIXME Too many ctx.
+      if (!offer) {
+        throw new Error('Received wrong credentials')
       }
-    }
-  })
+
+      return {
+        ...offer,
+        signedCredential,
+        validationErrors: {
+          // This signals funny things in the flow without throwing errors. We don't simply throw because often times
+          // negotiation is still possible on the UI / UX layer, and the interaction can continue.
+          invalidIssuer: signedCredential.issuer !== this.ctx.issuerSummary.did,
+          invalidSubject: signedCredential.subject !== this.ctx.ctx.identityWallet.did // TODO FIXME Too many ctx.
+        }
+      }
+    })
   }
 }

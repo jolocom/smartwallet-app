@@ -7,6 +7,7 @@ import {
   CredentialVerificationSummary,
 } from './types'
 import { InteractionChannel } from 'src/lib/interactionManager/types';
+import { Interaction } from 'src/lib/interactionManager/interaction'
 
 export const consumeCredentialRequest = (
   credentialRequest: JSONWebToken<CredentialRequest>,
@@ -34,15 +35,10 @@ export const consumeCredentialRequest = (
 export const sendCredentialResponse = (
   selectedCredentials: CredentialVerificationSummary[],
   interactionId: string
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { interactionManager } = backendMiddleware
+): ThunkAction => async (dispatch, getState, { interactionManager }) => {
+  const interaction: Interaction = interactionManager.getInteraction(interactionId)
 
-  const interaction = interactionManager.getInteraction(interactionId)
-
-  return interaction
-    .processInteractionToken(
-      await interaction.createCredentialResponse(selectedCredentials),
-    )
+  return interaction.send(await interaction.createCredentialResponse(selectedCredentials))
     .then(() => dispatch(cancelSSO))
 }
 

@@ -4,21 +4,21 @@ import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
 import { connect } from 'react-redux'
 import { CredentialsReceiveContainer } from './credentialReceive'
-import { abstracted } from 'src/actions/sso/credentialOffer'
+import { validateSelectionAndSave } from 'src/actions/sso/credentialOffer'
 import { SignedCredentialWithMetadata } from 'src/lib/interactionManager/types'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   acceptSelectedCredentials: (
     selected: SignedCredentialWithMetadata[],
     interactionId: string,
-  ): ThunkAction => {
-    debugger
-    return dispatch(
-      withErrorScreen(
-        withLoading(abstracted(selected, interactionId)),
-      )
+  ): ThunkAction => dispatch(
+    withErrorScreen(
+      withLoading(validateSelectionAndSave(
+        selected,
+        interactionId
+      )),
     )
-  },
+  ),
   goBack: () =>
     dispatch(
       navigationActions.navigate({ routeName: routeList.InteractionScreen }),

@@ -43,8 +43,8 @@ export const consumePaymentRequest = (
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
     description: paymentRequest.interactionToken.description,
-    requestJWT: paymentRequest.encode(),
   }
+
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.PaymentConsent,

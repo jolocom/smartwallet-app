@@ -12,7 +12,7 @@ import strings from '../../locales/strings'
 import {
   InteractionChannel, SignedCredentialWithMetadata,
 } from '../../lib/interactionManager/types'
-import { isEmpty, uniqBy, last } from 'ramda'
+import { isEmpty, uniqBy } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from 'src/lib/storage/storage'
 import { CacheEntity } from 'src/lib/storage/entities'
@@ -44,13 +44,14 @@ export const consumeCredentialReceive = (
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = interactionManager.getInteraction(interactionId)
 
-  await interaction.processInteractionToken(
+  const credentialReceive = await interaction.send(
     await interaction.createCredentialOfferResponseToken(
       selectedSignedCredentialWithMetadata,
     )
   )
 
-  return dispatch(abstracted(selectedSignedCredentialWithMetadata, interaction.id))
+  await interaction.processInteractionToken(credentialReceive)
+  return dispatch(validateSelectionAndSave(selectedSignedCredentialWithMetadata, interaction.id))
 } 
 
 // TODO Should abstract away negotiation.
@@ -65,36 +66,34 @@ export const consumeCredentialReceive = (
 // We should ensure the matching credentials pass the validation rules (assumed becaue they can't be selected on the ui layer)
 // We attempt to save the matching credentials
 
-export const abstracted = (
-  selectedCredentials: SignedCredentialWithMetadata[], 
+export const validateSelectionAndSave = (
+  selectedCredentials: SignedCredentialWithMetadata[],
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, {interactionManager, storageLib}) => {
-  // assumed to be the UI selection
-  console.log(selectedCredentials)
-
   const interaction = interactionManager.getInteraction(interactionId)
   const offer: OfferWithValidity[] = interaction.getState()
-
-  debugger
 
   const selectedTypes = selectedCredentials.map(el => el.type)
   const toSave = offer.filter(el => selectedTypes.includes(el.type))
 
   if (toSave.length !== selectedCredentials.length) {
     // TODO Decide how to handle this
+    // Means one of the selections isn't in the offer
   }
 
-  const validationErrors = toSave.map(({ validationErrors } : OfferWithValidity) => {
-      return validationErrors.invalidIssuer || !!validationErrors.invalidSubject
-    })
+  // TODO This should be abstracted away, but not sure where to
+  // TODO Inject these into the screen so they render as unselectable
+  // Maybe move this in the flow after all?
+  const duplicates = await isCredentialStored(toSave, id =>
+    interaction.getStoredCredentialById(id),)
+
+  const validationErrors = toSave.map(({ validationErrors } : OfferWithValidity, i) =>
+    validationErrors.invalidIssuer || !!validationErrors.invalidSubject || duplicates[i]
+  )
 
   // All invalid means all contain at least one error, i.e. there is no false
   const allInvalid = !validationErrors.includes(false)
   const allValid = !validationErrors.includes(true)
-
-  // This should be handled by the store implementation + a bit of logic around
-  // const duplicates = await isCredentialStored(interaction.getState().credentialOfferings, id =>
-  //   interaction.getStoredCredentialById(id),)
 
   const scheduleInvalidNotification = (message: string) =>
     scheduleNotification(

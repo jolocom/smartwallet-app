@@ -1,12 +1,12 @@
 import { Interaction } from './interaction'
 import {
-  JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
 export abstract class Flow {
   protected ctx: Interaction
-  protected tokens: Array<JSONWebToken<JWTEncodable>> = []
+  protected tokens: Array<JWTEncodable> = []
 
   constructor(ctx: Interaction) {
     this.ctx = ctx
@@ -14,7 +14,8 @@ export abstract class Flow {
 
   // Can this abstract anything?
   abstract async handleInteractionToken(
-    token: JSONWebToken<JWTEncodable>,
+    token: JWTEncodable,
+    messageType: InteractionType
   ): Promise<any>
 
   // @TODO Make sure this is only used for rendering
