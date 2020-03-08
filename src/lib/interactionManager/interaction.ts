@@ -17,6 +17,8 @@ import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credent
 import { AuthenticationFlow } from './authenticationFlow'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
+import { Linking } from 'react-native'
+import { AppError, ErrorCode } from '../errors'
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -176,25 +178,36 @@ export class Interaction {
     return this.ctx.storageLib.get.verifiableCredential(query)
   }
 
+  // @dev This will crash with a credential receive because it doesn't contain
+  // a callbackURL
   // TODO This should probably come from the transport / channel handler
   public async send<T extends JWTEncodable>(
     token: JSONWebToken<JWTEncodable>,
-  ): Promise<JSONWebToken<T>> {
-    //@ts-ignore
-    const response = await fetch(token.interactionToken.callbackURL, {
-      method: 'POST',
-      body: JSON.stringify({ token: token.encode() }),
-      headers: { 'Content-Type': 'application/json' },
-    })
+  ): Promise<JSONWebToken<T> | undefined> {
+    //@ts-ignore - needs fix on the lib for JWTEncodable.
+    const { callbackURL } = token.interactionToken
 
-    // TODO Very hacky, sometimes a token is expected, sometimes not
-    try {
-      return JolocomLib.parse.interactionToken.fromJWT<T>(
-        (await response.json()).token,
-      )
-    } catch {
-      //@ts-ignore
-      return response
+    switch (this.channel) {
+      case InteractionChannel.HTTP:
+        const response = await fetch(callbackURL, {
+          method: 'POST',
+          body: JSON.stringify({ token: token.encode() }),
+          headers: { 'Content-Type': 'application/json' },
+        })
+
+        try {
+          return JolocomLib.parse.interactionToken.fromJWT<T>((await response.json()).token)
+        } catch {
+          return
+        }
+      case InteractionChannel.Deeplink:
+        const callback = `${callbackURL}/${token.encode()}`
+        if (!(await Linking.canOpenURL(callback))) {
+          throw new AppError(ErrorCode.DeepLinkUrlNotFound)
+        }
+        return Linking.openURL(callback)
+      default:
+        throw new AppError(ErrorCode.TransportNotSupported)
     }
   }
 
