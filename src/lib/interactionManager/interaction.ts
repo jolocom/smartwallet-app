@@ -61,7 +61,7 @@ export class Interaction {
   // TODO Try to write a respond function that collapses these
   public async createAuthenticationResponse() {
     // TODO Abstract to getMessages * findByType
-    return this.createInteractionToken().response.auth(
+    return this.ctx.identityWallet.create.interactionTokens.response.auth(
       this.getState(),
       await this.ctx.keyChainLib.getPassword(),
       this.getMessages().find(
@@ -87,7 +87,7 @@ export class Interaction {
       ),
     )
 
-    return this.createInteractionToken().response.share(
+    return this.ctx.identityWallet.create.interactionTokens.response.share(
       {
         callbackURL: request.interactionToken.callbackURL,
         suppliedCredentials: credentials.map(c => c.toJSON()),
@@ -112,8 +112,7 @@ export class Interaction {
       })),
     }
 
-    // TODO lol, it's about capturing "this"
-    return this.createInteractionToken().response.offer(
+    return this.ctx.identityWallet.create.interactionTokens.response.offer(
       credentialOfferResponseAttr,
       await this.ctx.keyChainLib.getPassword(),
       credentialOfferRequest,
@@ -154,16 +153,14 @@ export class Interaction {
       await JolocomLib.util.validateDigestables((token as JSONWebToken<CredentialsReceive>).interactionToken.signedCredentials)
     }
 
+    // TODO Should be pushed only in case of success
+    this.interactionMessages.push(token)
     return this.flow.handleInteractionToken(token.interactionToken, token.interactionType)
   }
 
   public getState() {
     return this.flow.getState()
   }
-
-  // TODO assign all of these in the constructor
-  private createInteractionToken = () =>
-    this.ctx.identityWallet.create.interactionTokens
 
   public getAttributesByType = (type: string[]) => {
     return this.ctx.storageLib.get.attributesByType(type)
@@ -211,13 +208,9 @@ export class Interaction {
     )
   }
 
-  public storeCredentialMetadata = async (
-    metadata: CredentialMetadataSummary,
-  ) => {
-    await this.ctx.storageLib.store.credentialMetadata(metadata)
-  }
+  public storeCredentialMetadata = (metadata: CredentialMetadataSummary) =>
+    this.ctx.storageLib.store.credentialMetadata(metadata)
 
-  public async storeIssuerProfile() {
-    await this.ctx.storageLib.store.issuerProfile(this.issuerSummary)
-  }
+  public storeIssuerProfile = () =>
+    this.ctx.storageLib.store.issuerProfile(this.issuerSummary)
 }
