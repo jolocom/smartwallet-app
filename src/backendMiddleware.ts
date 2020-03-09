@@ -9,8 +9,8 @@ import { IRegistry } from 'jolocom-lib/js/registries/types'
 import { createJolocomRegistry } from 'jolocom-lib/js/registries/jolocomRegistry'
 import { IpfsCustomConnector } from './lib/ipfs'
 import { jolocomContractsAdapter } from 'jolocom-lib/js/contracts/contractsAdapter'
-import { jolocomEthereumResolver } from 'jolocom-lib/js/ethereum/ethereum'
-import { jolocomContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
+import { EthResolver } from 'jolocom-lib/js/ethereum/ethereum'
+import { ContractsGateway } from 'jolocom-lib/js/contracts/contractsGateway'
 
 export class BackendMiddleware {
   public identityWallet!: IdentityWallet
@@ -32,10 +32,13 @@ export class BackendMiddleware {
         port: 443,
         protocol: 'https',
       }),
-      ethereumConnector: jolocomEthereumResolver,
+      ethereumConnector: new EthResolver({
+        providerUrl: 'https://rinkeby.infura.io/v3/64fa85ca0b28483ea90919a83630d5d8',
+        contractAddress: '0xd4351c3f383d79ba378ed1875275b1e7b960f120',
+      }),
       contracts: {
         adapter: jolocomContractsAdapter,
-        gateway: jolocomContractsGateway,
+        gateway: new ContractsGateway('https://rinkeby.infura.io/v3/64fa85ca0b28483ea90919a83630d5d8'),
       },
     })
   }
