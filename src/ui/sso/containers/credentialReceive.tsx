@@ -62,7 +62,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
         credentialOffering={credentialOffering}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
-        onPressDocument={onPressDocument}
+        onToggleSelect={toggleSelect}
       />
       <ActionSheet showSlide={true}>
         <JolocomButton

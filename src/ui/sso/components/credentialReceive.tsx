@@ -1,11 +1,5 @@
 import { Colors, Spacing } from '../../../styles'
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
@@ -44,12 +38,16 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
     ...centeredText,
   },
+  scrollWrapper: {
+    paddingBottom: '50%',
+    paddingTop: '5%',
+  },
 })
 
 interface Props {
   publicProfile: IssuerPublicProfileSummary | undefined
   credentialOffering: CredentialOffering[]
-  onPressDocument: (offering: CredentialOffering) => void
+  onToggleSelect: (offering: CredentialOffering) => void
   isDocumentSelected: (offering: CredentialOffering) => boolean
 }
 
@@ -58,7 +56,7 @@ export const CredentialReceiveComponent = (props: Props) => {
     publicProfile,
     credentialOffering,
     isDocumentSelected,
-    onPressDocument,
+    onToggleSelect,
   } = props
 
   return (
@@ -77,22 +75,16 @@ export const CredentialReceiveComponent = (props: Props) => {
         </Text>
       </View>
       <ScrollView
-        contentContainerStyle={{ paddingBottom: '50%' }}
+        contentContainerStyle={styles.scrollWrapper}
         style={{ width: '100%' }}
       >
-        {credentialOffering.map(offering => {
-          const selected = isDocumentSelected(offering)
-          const onPress = () => {
-            onPressDocument(offering)
-          }
-          return (
-            <DocumentReceiveCard
-              onPress={onPress}
-              selected={selected}
-              offering={offering}
-            />
-          )
-        })}
+        {credentialOffering.map(offering => (
+          <DocumentReceiveCard
+            onToggle={() => onToggleSelect(offering)}
+            selected={isDocumentSelected(offering)}
+            offering={offering}
+          />
+        ))}
       </ScrollView>
     </React.Fragment>
   )
