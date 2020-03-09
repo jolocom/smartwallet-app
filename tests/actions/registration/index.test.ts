@@ -9,9 +9,7 @@ import { RootState } from 'src/reducers'
 describe('Registration action creators', () => {
   describe('createIdentity', () => {
     const mockMiddleware = {
-      createIdentity: jest
-        .fn()
-        .mockResolvedValue(data.identityWallet.identity),
+      createIdentity: jest.fn().mockResolvedValue(data.identityWallet.identity),
     }
     const mockState: Partial<RootState> = {
       registration: {
@@ -31,18 +29,22 @@ describe('Registration action creators', () => {
       const altMockStore = createMockStore({
         registration: {
           loading: {
-            isRegistering: true
-          }
-        }
+            isRegistering: true,
+          },
+        },
       })
-      await altMockStore.dispatch(registrationActions.createIdentity(data.entropy))
+      await altMockStore.dispatch(
+        registrationActions.createIdentity(data.entropy),
+      )
       expect(altMockStore.getActions()).toMatchSnapshot()
     })
 
     it('should attempt to create an identity', async () => {
       await mockStore.dispatch(registrationActions.createIdentity(data.entropy))
 
-      expect(middlewareStub.createKeyProvider).toHaveBeenCalledWith(data.entropy)
+      expect(middlewareStub.createKeyProvider).toHaveBeenCalledWith(
+        data.entropy,
+      )
       expect(middlewareStub.fuelKeyWithEther).toHaveBeenCalled()
       expect(middlewareStub.createIdentity).toHaveBeenCalled()
       expect(mockStore.getActions()).toMatchSnapshot()

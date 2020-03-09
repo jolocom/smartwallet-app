@@ -5,7 +5,7 @@ describe('Miscellaneous tests', () => {
       expect(RNScreensPacakgeJson.version).toBe('1.0.0-alpha.24')
     } catch (err) {
       throw new Error(
-`${err}
+        `${err}
 
 We currently use a fork of react-native-screens:
   https://github.com/jolocom/react-native-screens/tree/1.0.0-alpha.24

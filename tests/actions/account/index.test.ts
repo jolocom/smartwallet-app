@@ -4,7 +4,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
 import { createMockStore } from 'tests/utils'
 import { BackendError } from 'src/backendMiddleware'
-import { withErrorScreen } from 'src/actions/modifiers';
+import { withErrorScreen } from 'src/actions/modifiers'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
@@ -71,12 +71,10 @@ describe('Account action creators', () => {
 
   it('should display exception screen in case of error', async () => {
     mockMiddleware.prepareIdentityWallet.mockRejectedValue(
-      new Error('everything is WRONG')
+      new Error('everything is WRONG'),
     )
     await mockStore.dispatch(
-      withErrorScreen(
-        accountActions.checkIdentityExists,
-      ),
+      withErrorScreen(accountActions.checkIdentityExists),
     )
     expect(mockStore.getActions()).toMatchSnapshot()
   })

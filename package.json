@@ -19,6 +19,7 @@
 
     "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "test": "jest",
+    "test:migrations": "bash ./tests/test_databases/test_migrations.sh",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "e2e:android": "detox build -c android.debug && detox test -c android.debug",
     "e2e:android:emu": "detox build -c android.emu.debug && detox test -c android.emu.debug",
@@ -158,7 +159,7 @@
     "ethereumjs-wallet": "^0.6.0",
     "events": "^3.0.0",
     "i18n-js": "^3.1.0",
-    "jolocom-lib": "^3.0.1",
+    "jolocom-lib": "^4.0.2",
     "material-colors": "^1.2.5",
     "object.assign": "^4.1.0",
     "ramda": "^0.26.1",
