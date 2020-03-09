@@ -1,3 +1,4 @@
+import QRScanner from 'react-native-qrcode-scanner'
 import React, { useEffect, useState } from 'react'
 import {
   AppState,
@@ -28,31 +29,30 @@ export const ScannerContainer: React.FC<Props> = (props) => {
   const { consumeToken, navigation } = props
   const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<string>(RESULTS.UNAVAILABLE)
-  const [scannerRef, setScannerRef] = useState(null)
+  const [scannerRef, setScannerRef] = useState<QRScanner|null>(null)
+  const reactivate = () => scannerRef && scannerRef.reactivate()
 
   // NOTE: this is needed because QRScanner behaves weirdly when the screen is
-  // remounted....
-  // @ts-ignore
-  if (scannerRef) scannerRef.reactivate()
+  // remounted.... but we don't have error state here because rebase
+  // FIXME TODO @mnzaki
+  //if (!isError) reactivate()
 
   const rerender = () => {
     setRenderKey(Date.now())
-    // @ts-ignore
-    if (scannerRef) scannerRef.reactivate()
+    reactivate()
   }
 
   useEffect(() => {
-    let listeners: NavigationEventSubscription[] = []
+    let listener: NavigationEventSubscription | undefined
     if (navigation) {
-      listeners.push(navigation.addListener('didFocus', () => {
+      listener = navigation.addListener('didFocus', () => {
         rerender()
         checkCameraPermissions()
-      }))
-    } else {
-      checkCameraPermissions()
+      })
     }
+    checkCameraPermissions()
 
-    return () => listeners.forEach(l => l.remove())
+    return () => listener && listener.remove()
   }, [])
 
   const checkCameraPermissions = async () => {
