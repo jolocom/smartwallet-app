@@ -45,12 +45,12 @@ export const CredentialsReceiveContainer = (props: Props) => {
     acceptSelectedCredentials(selected, interactionId)
   }
 
-  const onPressDocument = (offering: CredentialOffering) => {
-    if (isDocumentSelected(offering)) {
-      setSelected(selected.filter(current => current !== offering))
-    } else {
-      setSelected([...selected, offering])
-    }
+  const toggleSelect = (offering: CredentialOffering) => {
+    setSelected(prevState => {
+      return isDocumentSelected(offering)
+        ? prevState.filter(current => current !== offering)
+        : [...prevState, offering]
+    })
   }
 
   const isDocumentSelected = (offering: CredentialOffering) =>
