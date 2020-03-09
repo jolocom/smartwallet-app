@@ -9,7 +9,7 @@ import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
 interface AuthenticationNavigationParams {
-  isDeepLinkInteraction: boolean
+  interactionId: string
   authenticationDetails: AuthenticationRequestSummary
 }
 
@@ -26,7 +26,7 @@ export const AuthenticationConsentContainer = (props: Props) => {
     cancelAuthenticationRequest,
     navigation: {
       state: {
-        params: { isDeepLinkInteraction, authenticationDetails },
+        params: { interactionId, authenticationDetails },
       },
     },
   } = props
@@ -34,10 +34,7 @@ export const AuthenticationConsentContainer = (props: Props) => {
     <AuthenticationConsentComponent
       authenticationDetails={authenticationDetails}
       confirmAuthenticationRequest={() =>
-        confirmAuthenticationRequest(
-          isDeepLinkInteraction,
-          authenticationDetails,
-        )
+        confirmAuthenticationRequest(interactionId)
       }
       cancelAuthenticationRequest={cancelAuthenticationRequest}
     />
@@ -45,18 +42,8 @@ export const AuthenticationConsentContainer = (props: Props) => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  confirmAuthenticationRequest: (
-    isDeepLinkInteraction: boolean,
-    authenticationDetails: AuthenticationRequestSummary,
-  ) =>
-    dispatch(
-      withErrorScreen(
-        sendAuthenticationResponse(
-          isDeepLinkInteraction,
-          authenticationDetails,
-        ),
-      ),
-    ),
+  confirmAuthenticationRequest: (interactionId: string) =>
+    dispatch(withErrorScreen(sendAuthenticationResponse(interactionId))),
   cancelAuthenticationRequest: () => dispatch(cancelSSO),
 })
 

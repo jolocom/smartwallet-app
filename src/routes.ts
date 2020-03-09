@@ -181,15 +181,16 @@ const MainStack = createStackNavigator(
         statusBar: false,
       },
     },
-    [routeList.CredentialReceive]: {
-      screen: CredentialReceive,
+    [routeList.CredentialReceiveInvalid]: {
+      screen: CredentialReceiveInvalid,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),
       }),
     },
-    [routeList.CredentialReceiveInvalid]: {
-      screen: CredentialReceiveInvalid,
+
+    [routeList.CredentialReceive]: {
+      screen: CredentialReceive,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.RECEIVING_NEW_CREDENTIAL),

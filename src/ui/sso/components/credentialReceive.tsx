@@ -6,8 +6,9 @@ import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
 import React from 'react'
 import { black065, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
-import { CredentialOffering } from '../../../lib/interactionManager/types'
 import { DocumentReceiveCard } from './documentReceiveCard'
+import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
+import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
 
 const styles = StyleSheet.create({
   container: {
@@ -45,18 +46,18 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
-  publicProfile: IssuerPublicProfileSummary | undefined
-  credentialOffering: CredentialOffering[]
-  onToggleSelect: (offering: CredentialOffering) => void
-  isDocumentSelected: (offering: CredentialOffering) => boolean
+  publicProfile: IssuerPublicProfileSummary
+  credentialOfferSummary: OfferWithValidity[]
+  onToggleSelect: (offering: SignedCredentialWithMetadata) => void
+  isDocumentSelected: (offering: SignedCredentialWithMetadata) => boolean
 }
 
 export const CredentialReceiveComponent = (props: Props) => {
   const {
     publicProfile,
-    credentialOffering,
-    isDocumentSelected,
+    credentialOfferSummary,
     onToggleSelect,
+    isDocumentSelected,
   } = props
 
   return (
@@ -78,13 +79,25 @@ export const CredentialReceiveComponent = (props: Props) => {
         contentContainerStyle={styles.scrollWrapper}
         style={{ width: '100%' }}
       >
-        {credentialOffering.map(offering => (
-          <DocumentReceiveCard
-            onToggle={() => onToggleSelect(offering)}
-            selected={isDocumentSelected(offering)}
-            offering={offering}
-          />
-        ))}
+        {credentialOfferSummary.map((offer, i) => {
+          const { validationErrors } = offer
+          return (
+            <DocumentReceiveCard
+              key={i}
+              onToggle={() =>
+                !validationErrors.invalidIssuer &&
+                !validationErrors.invalidSubject &&
+                onToggleSelect(offer)
+              }
+              selected={isDocumentSelected(offer)}
+              offering={offer}
+              invalid={
+                validationErrors.invalidIssuer ||
+                validationErrors.invalidSubject
+              }
+            />
+          )
+        })}
       </ScrollView>
     </React.Fragment>
   )

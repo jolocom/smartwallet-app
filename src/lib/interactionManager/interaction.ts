@@ -1,19 +1,14 @@
 import { CredentialOfferFlow } from './credentialOfferFlow'
-import {
-  IdentitySummary,
-  CredentialVerificationSummary,
-  InteractionSummary,
-} from '../../actions/sso/types'
+import { IdentitySummary, CredentialVerificationSummary } from '../../actions/sso/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { BackendMiddleware } from '../../backendMiddleware'
-import { InteractionChannel, CredentialOffering } from './types'
+import { InteractionChannel, SignedCredentialWithMetadata } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from '../storage/storage'
 import { generateIdentitySummary } from 'src/actions/sso/utils'
 import { Flow } from './flow'
@@ -21,7 +16,9 @@ import { last } from 'ramda'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { AuthenticationFlow } from './authenticationFlow'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { AuthCreationArgs } from 'jolocom-lib/js/identityWallet/types'
+import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
+import { Linking } from 'react-native'
+import { AppError, ErrorCode } from '../errors'
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -39,10 +36,13 @@ export class Interaction {
     [InteractionType.CredentialRequest]: CredentialRequestFlow,
     [InteractionType.Authentication]: AuthenticationFlow,
   }
+  private interactionMessages: JSONWebToken<JWTEncodable>[]= []
 
   public id: string
   public ctx: BackendMiddleware
   public flow!: Flow
+
+  // This is the channel through which the request (first token) came in.
   public channel: InteractionChannel
   public issuerSummary!: IdentitySummary
 
@@ -57,20 +57,14 @@ export class Interaction {
   }
 
   public getMessages() {
-    return this.flow.getMessages()
+    return this.interactionMessages
   }
 
-  public getSummary(): InteractionSummary {
-    return {
-      issuer: this.issuerSummary,
-      state: this.flow.getState(),
-    }
-  }
-
-  public async createAuthenticationResponse(args: AuthCreationArgs) {
+  // TODO Try to write a respond function that collapses these
+  public async createAuthenticationResponse() {
     // TODO Abstract to getMessages * findByType
-    return this.createInteractionToken().response.auth(
-      this.getSummary().state,
+    return this.ctx.identityWallet.create.interactionTokens.response.auth(
+      this.getState(),
       await this.ctx.keyChainLib.getPassword(),
       this.getMessages().find(
         ({ interactionType }) =>
@@ -90,11 +84,12 @@ export class Interaction {
 
     const credentials = await Promise.all(
       selectedCredentials.map(
-        async ({ id }) => (await this.getVerifiableCredential({ id }))[0],
+        async ({ id }) =>
+          (await this.getVerifiableCredential({ id }))[0],
       ),
     )
 
-    return this.createInteractionToken().response.share(
+    return this.ctx.identityWallet.create.interactionTokens.response.share(
       {
         callbackURL: request.interactionToken.callbackURL,
         suppliedCredentials: credentials.map(c => c.toJSON()),
@@ -104,9 +99,8 @@ export class Interaction {
     )
   }
 
-
   public async createCredentialOfferResponseToken(
-    selectedOffering: CredentialOffering[],
+    selectedOffering: SignedCredentialWithMetadata[],
   ) {
     const credentialOfferRequest = this.getMessages().find(
       ({ interactionType }) =>
@@ -120,8 +114,7 @@ export class Interaction {
       })),
     }
 
-    // TODO lol, it's about capturing "this"
-    return this.createInteractionToken().response.offer(
+    return this.ctx.identityWallet.create.interactionTokens.response.offer(
       credentialOfferResponseAttr,
       await this.ctx.keyChainLib.getPassword(),
       credentialOfferRequest,
@@ -129,7 +122,9 @@ export class Interaction {
   }
 
   // rename to signal this does validation
-  public async processInteractionToken(token: JSONWebToken<JWTEncodable>) {
+  public async processInteractionToken(
+    token: JSONWebToken<JWTEncodable>,
+  ) {
     // At some point we should strip the JSONWebToken<JWTEncodable>
     if (!this.issuerSummary) {
       // TODO Potential bug if we start with our token, i.e. we are the issuer
@@ -150,12 +145,24 @@ export class Interaction {
       )
     }
 
-    // TODO before passing to the flow, we should validate the signature
-    return this.flow.handleInteractionToken(token)
+    await this.ctx.identityWallet.validateJWT(
+      token,
+      undefined, // TODO Extract from .getMessages()
+      this.ctx.registry
+    )
+
+    if (token.interactionType === InteractionType.CredentialsReceive) {
+      await JolocomLib.util.validateDigestables((token as JSONWebToken<CredentialsReceive>).interactionToken.signedCredentials)
+    }
+
+    // TODO Should be pushed only in case of success
+    this.interactionMessages.push(token)
+    return this.flow.handleInteractionToken(token.interactionToken, token.interactionType)
   }
 
-  public createInteractionToken = () =>
-    this.ctx.identityWallet.create.interactionTokens
+  public getState() {
+    return this.flow.getState()
+  }
 
   public getAttributesByType = (type: string[]) => {
     return this.ctx.storageLib.get.attributesByType(type)
@@ -171,49 +178,52 @@ export class Interaction {
     return this.ctx.storageLib.get.verifiableCredential(query)
   }
 
+  // @dev This will crash with a credential receive because it doesn't contain
+  // a callbackURL
   // TODO This should probably come from the transport / channel handler
   public async send<T extends JWTEncodable>(
     token: JSONWebToken<JWTEncodable>,
-  ): Promise<JSONWebToken<T>> {
-    //@ts-ignore
-    const response = await fetch(token.interactionToken.callbackURL, {
-      method: 'POST',
-      body: JSON.stringify({ token: token.encode() }),
-      headers: { 'Content-Type': 'application/json' },
-    })
+  ): Promise<JSONWebToken<T> | undefined> {
+    //@ts-ignore - needs fix on the lib for JWTEncodable.
+    const { callbackURL } = token.interactionToken
 
-    // TODO Very hacky, sometimes a token is expected, sometimes not
-    try {
-      return JolocomLib.parse.interactionToken.fromJWT<T>((await response.json()).token)
-    } catch {
-      //@ts-ignore
-      return response
+    switch (this.channel) {
+      case InteractionChannel.HTTP:
+        const response = await fetch(callbackURL, {
+          method: 'POST',
+          body: JSON.stringify({ token: token.encode() }),
+          headers: { 'Content-Type': 'application/json' },
+        })
+
+        try {
+          return JolocomLib.parse.interactionToken.fromJWT<T>((await response.json()).token)
+        } catch {
+          return
+        }
+      case InteractionChannel.Deeplink:
+        const callback = `${callbackURL}/${token.encode()}`
+        if (!(await Linking.canOpenURL(callback))) {
+          throw new AppError(ErrorCode.DeepLinkUrlNotFound)
+        }
+        return Linking.openURL(callback)
+      default:
+        throw new AppError(ErrorCode.TransportNotSupported)
     }
   }
 
-  public async storeCredential(credential: SignedCredential) {
-    await this.ctx.storageLib.store.verifiableCredential(credential)
-  }
-
-  // TODO Shouldn't take interaction?
-  public storeCredentialMetadataFromOffer(interaction: Interaction) {
+  public async storeCredential(toSave: SignedCredentialWithMetadata[]) {
     return Promise.all(
-      interaction
-        .getSummary()
-        .state.map(
-          ({ credential }: CredentialOffering) =>
-            credential && this.storeCredential(credential),
-        ),
+      toSave
+       .map(({ signedCredential }) =>
+          signedCredential &&
+          this.ctx.storageLib.store.verifiableCredential(signedCredential),
+      ),
     )
   }
 
-  public storeCredentialMetadata = async (
-    metadata: CredentialMetadataSummary,
-  ) => {
-    await this.ctx.storageLib.store.credentialMetadata(metadata)
-  }
+  public storeCredentialMetadata = (metadata: CredentialMetadataSummary) =>
+    this.ctx.storageLib.store.credentialMetadata(metadata)
 
-  public async storeIssuerProfile() {
-    await this.ctx.storageLib.store.issuerProfile(this.issuerSummary)
-  }
+  public storeIssuerProfile = () =>
+    this.ctx.storageLib.store.issuerProfile(this.issuerSummary)
 }

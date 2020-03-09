@@ -12,9 +12,9 @@ import {
   DocumentCard,
 } from '../../documents/components/documentCard'
 import React, { useRef, useState } from 'react'
-import { CredentialOffering } from '../../../lib/interactionManager/types'
 import Interactable, { ISnapEvent } from 'react-native-interactable'
 import { Colors, Typefaces } from '../../../styles'
+import { OfferWithValidity } from '../../../lib/interactionManager/credentialOfferFlow'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -42,11 +42,12 @@ const styles = StyleSheet.create({
 interface Props {
   onToggle: () => void
   selected: boolean
-  offering: CredentialOffering
+  offering: OfferWithValidity
+  invalid: boolean | undefined
 }
 export const DocumentReceiveCard = (props: Props) => {
-  const { selected, offering, onToggle } = props
-  const { type, renderInfo, valid } = offering
+  const { selected, offering, onToggle, invalid } = props
+  const { type, renderInfo } = offering
 
   // The card is initially scaled to 0.8 from its default dimensions.
   const initScale = 0.8
@@ -152,7 +153,7 @@ export const DocumentReceiveCard = (props: Props) => {
           <DocumentCard
             credentialType={type}
             renderInfo={renderInfo}
-            invalid={!valid}
+            invalid={invalid}
           />
         </Interactable.View>
       </TouchableWithoutFeedback>

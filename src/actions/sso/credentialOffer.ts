@@ -10,14 +10,13 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import {
-  CredentialOffering,
-  InteractionChannel,
+  InteractionChannel, SignedCredentialWithMetadata,
 } from '../../lib/interactionManager/types'
-import { JolocomLib } from 'jolocom-lib'
 import { isEmpty, uniqBy } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from 'src/lib/storage/storage'
 import { CacheEntity } from 'src/lib/storage/entities'
+import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -33,108 +32,150 @@ export const consumeCredentialOfferRequest = (
       routeName: routeList.CredentialReceive,
       params: {
         interactionId: credentialOfferRequest.nonce,
-        interactionSummary: interaction.getSummary(),
+        credentialOfferSummary: interaction.getState()
       },
     }),
   )
 }
 
 export const consumeCredentialReceive = (
-  selectedCredentialOffering: CredentialOffering[],
+  selectedSignedCredentialWithMetadata: SignedCredentialWithMetadata[],
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const currentDid = getState().account.did.did
 
-  await interaction.processInteractionToken(
+  const credentialReceive = await interaction.send(
     await interaction.createCredentialOfferResponseToken(
-      selectedCredentialOffering,
-    ),
+      selectedSignedCredentialWithMetadata,
+    )
   )
 
-  // TODO These should be handled in flow?
-  const validSubjects = verifyCredentialSubject(
-    interaction.getSummary().state,
-    currentDid,
+  await interaction.processInteractionToken(credentialReceive)
+  return dispatch(validateSelectionAndSave(selectedSignedCredentialWithMetadata, interaction.id))
+}
+
+// TODO Should abstract away negotiation.
+// Takes an array of selectedCredentials,
+// where signedCredential is assumed to be populated
+// Takes an interactionId, from which the state can be pulled.
+//
+// The selectedCredentials contains the user selection,
+// i.e. first, or second, or all.
+//
+// We should ensure we have the matching crednetials
+// We should ensure the matching credentials pass the validation rules (assumed becaue they can't be selected on the ui layer)
+// We attempt to save the matching credentials
+
+export const validateSelectionAndSave = (
+  selectedCredentials: SignedCredentialWithMetadata[],
+  interactionId: string,
+): ThunkAction => async (dispatch, getState, {interactionManager, storageLib}) => {
+  const interaction = interactionManager.getInteraction(interactionId)
+  const offer: OfferWithValidity[] = interaction.getState()
+
+  const selectedTypes = selectedCredentials.map(el => el.type)
+  const toSave = offer.filter(el => selectedTypes.includes(el.type))
+
+  if (toSave.length !== selectedCredentials.length) {
+    // TODO Decide how to handle this
+    // Means one of the selections isn't in the offer
+  }
+
+  // TODO This should be abstracted away, but not sure where to
+  // TODO Inject these into the screen so they render as unselectable
+  // Maybe move this in the flow after all?
+  const duplicates = await isCredentialStored(toSave, id =>
+    interaction.getStoredCredentialById(id),)
+
+  const validationErrors = toSave.map(({ validationErrors } : OfferWithValidity, i) =>
+    validationErrors.invalidIssuer || !!validationErrors.invalidSubject || duplicates[i]
   )
 
-  const validSignatures = await validateOfferingDigestable(
-    interaction.getSummary().state,
-  )
-
-  const duplicates = await isCredentialStored(interaction.getSummary().state, id =>
-    interaction.getStoredCredentialById(id),
-  )
-
-  const all = validSubjects.map(
-    (el, i) => el && validSignatures[i] && !duplicates[i],
-  )
-
-  const allInvalid = !all.includes(true)
-  const someInvalid = all.includes(false)
+  // All invalid means all contain at least one error, i.e. there is no false
+  const allInvalid = !validationErrors.includes(false)
+  const allValid = !validationErrors.includes(true)
 
   const scheduleInvalidNotification = (message: string) =>
-    dispatch(
-      scheduleNotification(
-        createInfoNotification({
-          title: I18n.t(strings.AWKWARD),
-          message,
-        }),
-      ),
+    scheduleNotification(
+      createInfoNotification({
+        title: I18n.t(strings.AWKWARD),
+        message,
+      })
     )
 
   if (allInvalid) {
-    scheduleInvalidNotification(I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS))
+    dispatch(scheduleInvalidNotification(I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)))
     return dispatch(endReceiving(interactionId))
   }
 
-  if (someInvalid) {
-    scheduleInvalidNotification(
-      I18n.t(strings.SOMETHING_WENT_WRONG_CHOOSE_AGAIN),
+  if (allValid) {
+    // TODO These should be handled on the interaction layer, like the issuer profile
+    await interaction.storeCredential(toSave)
+
+    await storeOfferMetadata(
+      interaction.getState(),
+      interaction.issuerSummary.did,
+      storageLib.store.credentialMetadata,
     )
 
-    return dispatch(
-      navigationActions.navigate({
-        routeName: routeList.CredentialReceiveInvalid,
-        params: { interactionId },
-      }),
-    )
+    await interaction.storeIssuerProfile()
+
+    dispatch(checkRecoverySetup)
+    //TODO @mnzaki can we avoid running the FULL setClaimsForDid
+    dispatch(setClaimsForDid)
+
+    const notification: Notification = createInfoNotification({
+      title: I18n.t(strings.GREAT_SUCCESS),
+      message: I18n.t(strings.YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_IN_THE_DOCUMENTS),
+      interact: {
+        label: I18n.t(strings.OPEN),
+        onInteract: () => {
+          dispatch(navigationActions.navigate({ routeName: routeList.Documents }))
+        },
+      },
+    })
+
+    dispatch(scheduleNotification(notification))
+    return dispatch(endReceiving(interactionId))
   }
 
-  // TODO This should probably take the metadata directly?
-  // (instead of interaction)
-  await interaction.storeCredentialMetadataFromOffer(interaction)
-  return dispatch(saveCredentialOffer(interactionId))
-}
+  dispatch(scheduleInvalidNotification(
+    I18n.t(strings.SOMETHING_WENT_WRONG_CHOOSE_AGAIN),
+  ))
 
-const validateOfferingDigestable = async (offer: CredentialOffering[]) =>
-  Promise.all(offer.map(async ({ credential }) =>
-        credential && (await JolocomLib.util.validateDigestable(credential)),
-    ),
+  // The screen is borked. Save is enabled by default. Not sure what's wrong
+  return dispatch(
+    navigationActions.navigate({
+      routeName: routeList.CredentialReceiveInvalid,
+      params: {
+        interactionId,
+        credentialOfferSummary: offer
+      },
+    }),
   )
+}
 
 // TODO Breaks abstraction, should be handled in Interaction.store
 const isCredentialStored = async (
-  offer: CredentialOffering[],
+  offer: SignedCredentialWithMetadata[],
   getCredential: (id: string) => Promise<SignedCredential[]>,
 ) =>
   Promise.all(
     offer.map(
-      async ({ credential }) =>
-        credential && !isEmpty(await getCredential(credential.id)),
-    ),
+      async ({ signedCredential }) => signedCredential
+        ? !isEmpty(await getCredential(signedCredential.id))
+        : false
+    )
   )
 
-const verifyCredentialSubject = (offer: CredentialOffering[], did: string) =>
-  offer.map(({ credential }) => credential && credential.subject === did)
+// LEFT -> Probably not storing correctly, or not throwing.
+// The flow on the wallet looks okay, but stuff is not in the documetns tab
+// todo => check if the server I'm testing against isn't the problem
 
-// TODO Why isn't the did already in the summary type? This feels hacky
 const storeOfferMetadata = async (
-  offer: CredentialOffering[],
+  offer: SignedCredentialWithMetadata[],
   did: string,
-  storeCredentialMetadata: (
-    a: CredentialMetadataSummary,
-  ) => Promise<CacheEntity>,
+  storeCredentialMetadata: (a: CredentialMetadataSummary) => Promise<CacheEntity>,
 ) =>
   Promise.all(
     uniqBy(
@@ -148,52 +189,6 @@ const storeOfferMetadata = async (
       })),
     ).map(storeCredentialMetadata),
   )
-
-export const saveCredentialOffer = (
-  interactionId: string,
-): ThunkAction => async (
-  dispatch,
-  getState,
-  { interactionManager, storageLib },
-) => {
-  const interaction = interactionManager.getInteraction(interactionId)
-
-  // TODO These should be handled on the interaction layer, like the issuer profile
-  await Promise.all(
-    interaction
-      .getSummary()
-      .state
-      .map(
-        ({ credential }: CredentialOffering) =>
-          credential && storageLib.store.verifiableCredential(credential),
-      ),
-  )
-
-  await storeOfferMetadata(
-    interaction.getSummary().state,
-    interaction.issuerSummary.did,
-    storageLib.store.credentialMetadata,
-  )
-  await interaction.storeIssuerProfile()
-
-  dispatch(checkRecoverySetup)
-  //TODO @mnzaki can we avoid running the FULL setClaimsForDid
-  dispatch(setClaimsForDid)
-
-  const notification: Notification = createInfoNotification({
-    title: I18n.t(strings.GREAT_SUCCESS),
-    message: I18n.t(strings.YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_IN_THE_DOCUMENTS),
-    interact: {
-      label: I18n.t(strings.OPEN),
-      onInteract: () => {
-        dispatch(navigationActions.navigate({ routeName: routeList.Documents }))
-      },
-    },
-  })
-
-  dispatch(scheduleNotification(notification))
-  return dispatch(endReceiving(interactionId))
-}
 
 const endReceiving = (interactionId: string): ThunkAction => (
   dispatch,

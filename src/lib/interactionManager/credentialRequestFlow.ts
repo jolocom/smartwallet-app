@@ -1,5 +1,4 @@
 import {
-  JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types';
@@ -28,19 +27,19 @@ export class CredentialRequestFlow extends Flow {
    * Given an interaction token, will fire the appropriate step in the protocol or throw 
    */
 
-  public async handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
-    switch (token.interactionType) {
+  public async handleInteractionToken(token: JWTEncodable, interactionType: InteractionType) {
+    switch (interactionType) {
       case InteractionType.CredentialRequest:
-        return this.handleCredentialRequest(token as JSONWebToken<CredentialRequest>)
+        return this.handleCredentialRequest(token as CredentialRequest)
       case InteractionType.CredentialResponse:
-        return this.handleCredentialResponse(token as JSONWebToken<CredentialResponse>)
+        return this.handleCredentialResponse(token as CredentialResponse)
       default:
         throw new Error('Interaction type not found')
     }
   }
 
-  private async handleCredentialRequest(request: JSONWebToken<CredentialRequest>) {
-    const { requestedCredentialTypes } = request.interactionToken
+  private async handleCredentialRequest(request: CredentialRequest) {
+    const { requestedCredentialTypes } = request
 
     const attributesForType = await Promise.all<AttributeSummary>(
       requestedCredentialTypes.map(this.ctx.getAttributesByType),
@@ -84,20 +83,16 @@ export class CredentialRequestFlow extends Flow {
 
     // TODO requester shouldn't be optional
     this.credRequestState = {
-      callbackURL: request.interactionToken.callbackURL,
+      callbackURL: request.callbackURL,
       requester: this.ctx.issuerSummary,
       availableCredentials: flattened,
-      requestJWT: request.encode(),
     }
 
     this.tokens.push(request)
   }
 
-  // TODO kind of trivial, does this need more?
-  public async handleCredentialResponse(token: JSONWebToken<CredentialResponse>) {
-    // TODO In this case, a 200 is returned, so not a JWTEncodable
-    return this.ctx.send(token)
-  }
+  // Currently no validation here
+  public handleCredentialResponse(token: CredentialResponse) {}
 }
 
 interface AttributeSummary {

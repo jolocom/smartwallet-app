@@ -4,6 +4,7 @@ import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { routeList } from 'src/routeList'
 import { ThunkAction } from '../../store'
 import { InteractionChannel } from 'src/lib/interactionManager/types'
+import { cancelSSO } from '.'
 
 export const consumeAuthenticationRequest = (
   authenticationRequest: JSONWebToken<Authentication>,
@@ -19,7 +20,8 @@ export const consumeAuthenticationRequest = (
     navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,
       params: {
-        authenticationDetails: interaction.getSummary()
+        interactionId: interaction.id,
+        authenticationDetails: interaction.getState()
       },
       key: 'authenticationRequest',
     }),
@@ -30,8 +32,5 @@ export const sendAuthenticationResponse = (
   interactionId: string
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
   const interaction = backendMiddleware.interactionManager.getInteraction(interactionId)
-
-  await interaction.processInteractionToken(
-    await interaction.createAuthenticationResponse(interaction.getSummary().state)
-  )
+  return interaction.send(await interaction.createAuthenticationResponse()).then(() => dispatch(cancelSSO))
 }

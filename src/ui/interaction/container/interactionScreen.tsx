@@ -107,7 +107,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     return handler
       ? dispatch(
           withLoading(
-            withErrorScreen(handler(interactionToken, InteractionChannel.QR)),
+            withErrorScreen(handler(interactionToken, InteractionChannel.HTTP)),
           ),
         )
       : dispatch(

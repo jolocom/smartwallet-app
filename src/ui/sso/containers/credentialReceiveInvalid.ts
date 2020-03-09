@@ -1,25 +1,24 @@
-import { backendMiddleware, ThunkDispatch } from '../../../store'
-import { CredentialOfferFlow } from '../../../lib/interactionManager/credentialOfferFlow'
+import { ThunkDispatch, ThunkAction } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
-import { saveCredentialOffer } from '../../../actions/sso/credentialOffer'
-import { navigationActions } from '../../../actions'
 import { routeList } from '../../../routeList'
+import { navigationActions } from '../../../actions'
 import { connect } from 'react-redux'
 import { CredentialsReceiveContainer } from './credentialReceive'
-import { CredentialOffering } from '../../../lib/interactionManager/types'
+import { validateSelectionAndSave } from 'src/actions/sso/credentialOffer'
+import { SignedCredentialWithMetadata } from 'src/lib/interactionManager/types'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   acceptSelectedCredentials: (
-    selected: CredentialOffering[],
+    selected: SignedCredentialWithMetadata[],
     interactionId: string,
-  ) => {
-    backendMiddleware.interactionManager
-      .getInteraction(interactionId)
-      .getFlow<CredentialOfferFlow>()
-      .setOffering(_ => selected)
-
-    dispatch(withErrorScreen(withLoading(saveCredentialOffer(interactionId))))
-  },
+  ): ThunkAction => dispatch(
+    withErrorScreen(
+      withLoading(validateSelectionAndSave(
+        selected,
+        interactionId
+      )),
+    )
+  ),
   goBack: () =>
     dispatch(
       navigationActions.navigate({ routeName: routeList.InteractionScreen }),

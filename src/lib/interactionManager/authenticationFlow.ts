@@ -1,5 +1,4 @@
 import {
-  JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
@@ -21,28 +20,23 @@ export class AuthenticationFlow extends Flow {
     return this.authenticationRequestState
   }
 
-  public handleInteractionToken(token: JSONWebToken<JWTEncodable>) {
-    switch (token.interactionType) {
+  // TODO InteractionType.AuthenticaitonResponse should exist
+  public handleInteractionToken(token: JWTEncodable, interactionType: InteractionType) {
+    switch (interactionType) {
       case InteractionType.Authentication:
-        return this.consumeAuthenticationRequest(token as JSONWebToken<Authentication>)
+        return this.consumeAuthenticationRequest(token as Authentication)
       default:
         throw new Error('Interaction type not found')
     }
   }
 
-  public async consumeAuthenticationRequest(token: JSONWebToken<Authentication>) {
-    if (token.signer.did === this.ctx.ctx.identityWallet.did) {
-      return this.ctx.send(token)
-    }
-
+  public async consumeAuthenticationRequest(token: Authentication) {
     this.authenticationRequestState = {
       requester: this.ctx.issuerSummary,
-      callbackURL: token.interactionToken.callbackURL,
-      description: token.interactionToken.description,
-      requestJWT: token.encode(),
+      callbackURL: token.callbackURL,
+      description: token.description,
     }
 
-    // This is to surpress every path returning a value
-    return
+    this.tokens.push(token)
   }
 }

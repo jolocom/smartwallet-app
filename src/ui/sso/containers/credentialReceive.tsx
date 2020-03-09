@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { ThunkDispatch } from '../../../store'
+import { backendMiddleware, ThunkDispatch } from '../../../store'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { navigationActions } from '../../../actions'
@@ -13,12 +13,12 @@ import strings from '../../../locales/strings'
 import I18n from 'src/locales/i18n'
 import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
-import { CredentialOffering } from '../../../lib/interactionManager/types'
-import { InteractionSummary } from '../../../actions/sso/types'
+import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
+import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
-  interactionSummary: InteractionSummary
+  credentialOfferSummary: OfferWithValidity[]
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -29,40 +29,44 @@ interface Props extends ReturnType<typeof mapDispatchToProps> {
 }
 
 export const CredentialsReceiveContainer = (props: Props) => {
-  const [selected, setSelected] = useState<CredentialOffering[]>([])
+  const [selected, setSelected] = useState<SignedCredentialWithMetadata[]>([])
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
-      params: { interactionSummary, interactionId },
+      params: { credentialOfferSummary, interactionId },
     },
   } = navigation
 
-  const { publicProfile } = interactionSummary.issuer
-  // TODO fix the `any` type from interaction summary state
-  const credentialOffering = interactionSummary.state as CredentialOffering[]
+  const interaction = backendMiddleware.interactionManager.getInteraction(
+    interactionId,
+  )
+
+  // TODO Why is this here but not in credential request?
+  const { publicProfile } = interaction.issuerSummary
 
   const handleConfirm = () => {
     acceptSelectedCredentials(selected, interactionId)
+    setSelected([])
   }
 
-  const toggleSelect = (offering: CredentialOffering) => {
-    setSelected(prevState => {
-      return isDocumentSelected(offering)
-        ? prevState.filter(current => current !== offering)
-        : [...prevState, offering]
-    })
+  const toggleSelectDocument = (cred: SignedCredentialWithMetadata) => {
+    setSelected(prevState =>
+      isDocumentSelected(cred)
+        ? prevState.filter(current => current !== cred)
+        : [...selected, cred],
+    )
   }
 
-  const isDocumentSelected = (offering: CredentialOffering) =>
+  const isDocumentSelected = (offering: SignedCredentialWithMetadata) =>
     selected.includes(offering)
 
   return (
     <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
       <CredentialReceiveComponent
-        credentialOffering={credentialOffering}
+        credentialOfferSummary={credentialOfferSummary}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
-        onToggleSelect={toggleSelect}
+        onToggleSelect={toggleSelectDocument}
       />
       <ActionSheet showSlide={true}>
         <JolocomButton
@@ -84,7 +88,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   acceptSelectedCredentials: (
-    selected: CredentialOffering[],
+    selected: SignedCredentialWithMetadata[],
     interactionId: string,
   ) =>
     dispatch(

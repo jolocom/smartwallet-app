@@ -23,7 +23,6 @@ export interface IdentitySummary {
 export interface RequestSummary {
   callbackURL: string
   requester: IdentitySummary
-  requestJWT: string
 }
 
 export interface AuthenticationRequestSummary extends RequestSummary {
