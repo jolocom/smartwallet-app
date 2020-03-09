@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
   ViewStyle,
   TextStyle,
+  Animated,
 } from 'react-native'
 import { Buttons } from 'src/styles'
 import LinearGradient from 'react-native-linear-gradient'
@@ -53,6 +54,23 @@ export const JolocomButton: React.FC<Props> = props => {
   const gradientColors = ['rgb(145, 25, 66)', 'rgb(210, 45, 105)']
   const gradient = transparent ? ['transparent', 'transparent'] : gradientColors
 
+  const opacityDisabled = 0.25
+  const opacityEnabled = 1
+  const [opacityValue] = useState(
+    new Animated.Value(disabled ? opacityDisabled : opacityDisabled),
+  )
+  const animateOpacity = (value: number) => {
+    Animated.timing(opacityValue, {
+      duration: 200,
+      toValue: value,
+      useNativeDriver: true,
+    }).start()
+  }
+
+  useEffect(() => {
+    animateOpacity(disabled ? opacityDisabled : opacityEnabled)
+  }, [disabled])
+
   return (
     <LinearGradient
       colors={gradient}
@@ -69,9 +87,9 @@ export const JolocomButton: React.FC<Props> = props => {
         testID={testID}
         style={styles.gradientWrapper}
       >
-        <Text style={[styles.text, textStyle, disabled && styles.disabledText]}>
-          {text}
-        </Text>
+        <Animated.View style={{ opacity: opacityValue }}>
+          <Text style={[styles.text, textStyle]}>{text}</Text>
+        </Animated.View>
       </TouchableOpacity>
     </LinearGradient>
   )
