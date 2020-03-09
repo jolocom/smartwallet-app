@@ -5,7 +5,6 @@ import {
   Text,
   Image,
   ImageBackground,
-  Animated,
   Dimensions,
 } from 'react-native'
 import { DocumentValiditySummary } from './documentValidity'
@@ -88,14 +87,20 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
     renderInfo || {}
   const cardBackground = invalid ? InvalidDocumentBackground : {uri: background?.url}
 
+  /**
+   * NOTE @clauxx: Using .gif as background images causes inconsistencies with border radius and
+   * scaling. To disable gif animation support, remove the `com.facebook.fresco` lines from `build.gradle`.
+   * Note that when disabled, gifs will be handled as images.
+   */
   return (
-    <Animated.View
+    <View
       style={[
         styles.card,
         !background && { borderColor: Colors.sand },
       ]}
     >
       <ImageBackground
+        borderRadius={12}
         style={[
           styles.cardBack,
 
@@ -134,6 +139,6 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
           )}
         </View>
       </View>
-    </Animated.View>
+    </View>
   )
 }
