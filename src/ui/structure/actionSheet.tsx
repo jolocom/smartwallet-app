@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, Easing, LayoutChangeEvent, StyleSheet } from 'react-native'
+import { Animated, LayoutChangeEvent, StyleSheet } from 'react-native'
 import { Colors } from '../../styles'
 
 const styles = StyleSheet.create({
@@ -10,10 +10,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Colors.overflowBlack,
     zIndex: 2,
-    paddingTop: 28,
-    paddingBottom: 14,
+    paddingTop: 18,
+    paddingBottom: 24,
     paddingHorizontal: 20,
-    borderRadius: 22,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
   },
 })
 
@@ -30,29 +31,19 @@ export const ActionSheet: React.FC<Props> = props => {
   useEffect(() => {
     setTimeout(() => {
       if (showSlide) {
-        animateShow()
+        animate(1)
       } else {
-        animateHide()
+        animate(0)
       }
     }, 400)
-    return animateHide
+    return () => animate(0)
   }, [showSlide])
 
-  const animateShow = () => {
+  const animate = (toValue: number) => {
     Animated.timing(animatedValue, {
-      duration: 500,
-      toValue: 1,
+      toValue,
+      duration: 200,
       useNativeDriver: true,
-      easing: Easing.elastic(1),
-    }).start()
-  }
-
-  const animateHide = () => {
-    Animated.timing(animatedValue, {
-      duration: 500,
-      toValue: 0,
-      useNativeDriver: true,
-      easing: Easing.elastic(1),
     }).start()
   }
 

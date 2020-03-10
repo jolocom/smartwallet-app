@@ -13,8 +13,12 @@ import strings from '../../../locales/strings'
 import I18n from 'src/locales/i18n'
 import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
-import { InteractionSummary, SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
+import {
+  InteractionSummary,
+  SignedCredentialWithMetadata,
+} from '../../../lib/interactionManager/types'
 import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
+import { View } from 'react-native'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
@@ -64,18 +68,25 @@ export const CredentialsReceiveContainer = (props: Props) => {
         onToggleSelect={toggleSelectDocument}
       />
       <ActionSheet showSlide={true}>
-        <JolocomButton
-          textStyle={{ fontFamily: fontMedium }}
-          disabled={selected.length === 0}
-          onPress={handleConfirm}
-          text={I18n.t(strings.SAVE)}
-        />
-        <JolocomButton
-          containerStyle={{ marginTop: 10 }}
-          onPress={goBack}
-          text={I18n.t(strings.CANCEL)}
-          transparent
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+          }}
+        >
+          <JolocomButton
+            textStyle={{ fontFamily: fontMedium }}
+            containerStyle={{ flex: 2 }}
+            disabled={selected.length === 0}
+            onPress={handleConfirm}
+            text={I18n.t(strings.SAVE)}
+          />
+          <JolocomButton
+            containerStyle={{ flex: 1 }}
+            onPress={goBack}
+            text={I18n.t(strings.CANCEL)}
+            transparent
+          />
+        </View>
       </ActionSheet>
     </Wrapper>
   )
