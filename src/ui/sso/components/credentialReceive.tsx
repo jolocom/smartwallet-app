@@ -4,7 +4,7 @@ import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
 import React from 'react'
-import { black065, overflowBlack } from '../../../styles/colors'
+import { black065, greyLight, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
 import { DocumentReceiveCard } from './documentReceiveCard'
 import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     margin: 10,
+    backgroundColor: greyLight
   },
   serviceName: {
     fontFamily: fontMedium,
@@ -60,15 +61,16 @@ export const CredentialReceiveComponent = (props: Props) => {
     isDocumentSelected,
   } = props
 
+  const issuerImage = publicProfile?.image && publicProfile.image
+  // TODO @clauxx add strings!
+  const issuerName = publicProfile ? publicProfile.name : "Unknown"
   return (
     <React.Fragment>
       <View style={styles.topSection}>
-        {publicProfile && (
-          <React.Fragment>
-            <Image style={styles.logo} source={{ uri: publicProfile.image }} />
-            <Text style={styles.serviceName}>{publicProfile.name}</Text>
-          </React.Fragment>
-        )}
+        <React.Fragment>
+          <Image style={styles.logo} source={{ uri: issuerImage }} />
+          <Text style={styles.serviceName}>{issuerName}</Text>
+        </React.Fragment>
         <Text style={styles.description}>
           {I18n.t(
             strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU,
