@@ -3,7 +3,7 @@ import {
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types';
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest';
-import { CredentialRequestSummary } from '../../actions/sso/types';
+import { CredentialTypeSummary } from '../../actions/sso/types'
 import { getUiCredentialTypeByType } from '../util';
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
 import { Interaction } from './interaction';
@@ -12,7 +12,7 @@ import { Flow } from './flow';
 import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialResponse';
 
 export class CredentialRequestFlow extends Flow {
-  private credRequestState!: CredentialRequestSummary
+  private credRequestState!: CredentialTypeSummary[]
 
   constructor(ctx: Interaction) {
     super(ctx)
@@ -24,7 +24,7 @@ export class CredentialRequestFlow extends Flow {
 
   /*
    * Implementation of the abstract handler defined in {@link Flow}
-   * Given an interaction token, will fire the appropriate step in the protocol or throw 
+   * Given an interaction token, will fire the appropriate step in the protocol or throw
    */
 
   public async handleInteractionToken(token: JWTEncodable, interactionType: InteractionType) {
@@ -79,14 +79,7 @@ export class CredentialRequestFlow extends Flow {
       })),
     )
 
-    const flattened = abbreviated.reduce((acc, val) => acc.concat(val))
-
-    // TODO requester shouldn't be optional
-    this.credRequestState = {
-      callbackURL: request.callbackURL,
-      requester: this.ctx.issuerSummary,
-      availableCredentials: flattened,
-    }
+    this.credRequestState = abbreviated.reduce((acc, val) => acc.concat(val))
 
     this.tokens.push(request)
   }

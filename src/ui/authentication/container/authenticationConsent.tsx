@@ -5,12 +5,12 @@ import { cancelSSO } from 'src/actions/sso'
 import { sendAuthenticationResponse } from 'src/actions/sso/authenticationRequest'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
-import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { InteractionSummary } from '../../../lib/interactionManager/types'
 
 interface AuthenticationNavigationParams {
   interactionId: string
-  authenticationDetails: AuthenticationRequestSummary
+  interactionSummary: InteractionSummary
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -26,13 +26,13 @@ export const AuthenticationConsentContainer = (props: Props) => {
     cancelAuthenticationRequest,
     navigation: {
       state: {
-        params: { interactionId, authenticationDetails },
+        params: { interactionId, interactionSummary },
       },
     },
   } = props
   return (
     <AuthenticationConsentComponent
-      authenticationDetails={authenticationDetails}
+      interactionSummary={interactionSummary}
       confirmAuthenticationRequest={() =>
         confirmAuthenticationRequest(interactionId)
       }

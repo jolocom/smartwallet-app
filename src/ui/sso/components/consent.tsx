@@ -16,7 +16,6 @@ import { CredentialSectionCard } from './credentialsSectionCard'
 interface Props {
   did: string
   requester: IdentitySummary
-  callbackURL: string
   availableCredentials: CredentialTypeSummary[]
   handleSubmitClaims: (credentials: CredentialVerificationSummary[]) => void
   handleDenySubmit: () => void

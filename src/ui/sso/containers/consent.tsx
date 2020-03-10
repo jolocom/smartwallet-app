@@ -5,14 +5,15 @@ import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import {
-  CredentialRequestSummary,
+  CredentialTypeSummary,
   CredentialVerificationSummary,
 } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { InteractionSummary } from '../../../lib/interactionManager/types'
 
 interface CredentialRequestNavigationParams {
   interactionId: string
-  credentialRequestDetails: CredentialRequestSummary
+  interactionSummary: InteractionSummary
 }
 
 interface Props
@@ -31,30 +32,22 @@ const ConsentContainer = (props: Props) => {
     cancelSSO,
     navigation: {
       state: {
-        params: { interactionId, credentialRequestDetails },
+        params: { interactionId, interactionSummary },
       },
     },
   } = props
 
   const handleSubmitClaims = (credentials: CredentialVerificationSummary[]) => {
-    sendCredentialResponse(
-      credentials,
-      interactionId,
-    )
+    sendCredentialResponse(credentials, interactionId)
   }
 
-  const {
-    availableCredentials,
-    requester,
-    callbackURL,
-  } = credentialRequestDetails
+  const { issuer, state: availableCredentials } = interactionSummary
 
   return (
     <ConsentComponent
-      requester={requester}
-      callbackURL={callbackURL}
+      requester={issuer}
       did={currentDid}
-      availableCredentials={availableCredentials}
+      availableCredentials={availableCredentials as CredentialTypeSummary[]}
       handleSubmitClaims={handleSubmitClaims}
       handleDenySubmit={cancelSSO}
     />
@@ -73,10 +66,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(
       withLoading(
         withErrorScreen(
-          ssoActions.sendCredentialResponse(
-            credentials,
-            interactionId,
-          ),
+          ssoActions.sendCredentialResponse(credentials, interactionId),
         ),
       ),
     ),

@@ -1,12 +1,19 @@
 import { CredentialOfferFlow } from './credentialOfferFlow'
-import { IdentitySummary, CredentialVerificationSummary } from '../../actions/sso/types'
+import {
+  IdentitySummary,
+  CredentialVerificationSummary,
+} from '../../actions/sso/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { BackendMiddleware } from '../../backendMiddleware'
-import { InteractionChannel, SignedCredentialWithMetadata } from './types'
+import {
+  InteractionChannel,
+  InteractionSummary,
+  SignedCredentialWithMetadata,
+} from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialMetadataSummary } from '../storage/storage'
@@ -36,7 +43,7 @@ export class Interaction {
     [InteractionType.CredentialRequest]: CredentialRequestFlow,
     [InteractionType.Authentication]: AuthenticationFlow,
   }
-  private interactionMessages: JSONWebToken<JWTEncodable>[]= []
+  private interactionMessages: JSONWebToken<JWTEncodable>[] = []
 
   public id: string
   public ctx: BackendMiddleware
@@ -64,7 +71,7 @@ export class Interaction {
   public async createAuthenticationResponse() {
     // TODO Abstract to getMessages * findByType
     return this.ctx.identityWallet.create.interactionTokens.response.auth(
-      this.getState(),
+      this.getSummary().state,
       await this.ctx.keyChainLib.getPassword(),
       this.getMessages().find(
         ({ interactionType }) =>
@@ -84,8 +91,7 @@ export class Interaction {
 
     const credentials = await Promise.all(
       selectedCredentials.map(
-        async ({ id }) =>
-          (await this.getVerifiableCredential({ id }))[0],
+        async ({ id }) => (await this.getVerifiableCredential({ id }))[0],
       ),
     )
 
@@ -122,9 +128,7 @@ export class Interaction {
   }
 
   // rename to signal this does validation
-  public async processInteractionToken(
-    token: JSONWebToken<JWTEncodable>,
-  ) {
+  public async processInteractionToken(token: JSONWebToken<JWTEncodable>) {
     // At some point we should strip the JSONWebToken<JWTEncodable>
     if (!this.issuerSummary) {
       // TODO Potential bug if we start with our token, i.e. we are the issuer
@@ -148,20 +152,29 @@ export class Interaction {
     await this.ctx.identityWallet.validateJWT(
       token,
       undefined, // TODO Extract from .getMessages()
-      this.ctx.registry
+      this.ctx.registry,
     )
 
     if (token.interactionType === InteractionType.CredentialsReceive) {
-      await JolocomLib.util.validateDigestables((token as JSONWebToken<CredentialsReceive>).interactionToken.signedCredentials)
+      await JolocomLib.util.validateDigestables(
+        (token as JSONWebToken<CredentialsReceive>).interactionToken
+          .signedCredentials,
+      )
     }
 
     // TODO Should be pushed only in case of success
     this.interactionMessages.push(token)
-    return this.flow.handleInteractionToken(token.interactionToken, token.interactionType)
+    return this.flow.handleInteractionToken(
+      token.interactionToken,
+      token.interactionType,
+    )
   }
 
-  public getState() {
-    return this.flow.getState()
+  public getSummary(): InteractionSummary {
+    return {
+      issuer: this.issuerSummary,
+      state: this.flow.getState(),
+    }
   }
 
   public getAttributesByType = (type: string[]) => {
@@ -196,7 +209,9 @@ export class Interaction {
         })
 
         try {
-          return JolocomLib.parse.interactionToken.fromJWT<T>((await response.json()).token)
+          return JolocomLib.parse.interactionToken.fromJWT<T>(
+            (await response.json()).token,
+          )
         } catch {
           return
         }
@@ -213,8 +228,8 @@ export class Interaction {
 
   public async storeCredential(toSave: SignedCredentialWithMetadata[]) {
     return Promise.all(
-      toSave
-       .map(({ signedCredential }) =>
+      toSave.map(
+        ({ signedCredential }) =>
           signedCredential &&
           this.ctx.storageLib.store.verifiableCredential(signedCredential),
       ),

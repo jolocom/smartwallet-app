@@ -3,21 +3,18 @@ import {
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import {
-  AuthenticationRequestSummary,
-} from '../../actions/sso/types'
 import { Interaction } from './interaction'
 import { Flow } from './flow'
 
 export class AuthenticationFlow extends Flow {
-  private authenticationRequestState!: AuthenticationRequestSummary
+  private authenticationDescription!: string
 
   public constructor(ctx: Interaction) {
     super(ctx)
   }
 
   public getState() {
-    return this.authenticationRequestState
+    return this.authenticationDescription
   }
 
   // TODO InteractionType.AuthenticaitonResponse should exist
@@ -31,11 +28,7 @@ export class AuthenticationFlow extends Flow {
   }
 
   public async consumeAuthenticationRequest(token: Authentication) {
-    this.authenticationRequestState = {
-      requester: this.ctx.issuerSummary,
-      callbackURL: token.callbackURL,
-      description: token.description,
-    }
+    this.authenticationDescription = token.description
 
     this.tokens.push(token)
   }

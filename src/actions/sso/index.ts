@@ -25,7 +25,7 @@ export const consumeCredentialRequest = (
       routeName: routeList.Consent,
       params: {
         interactionId: interaction.id,
-        credentialRequestDetails: interaction.getState(),
+        interactionSummary: interaction.getSummary(),
       },
       key: 'credentialRequest',
     }),

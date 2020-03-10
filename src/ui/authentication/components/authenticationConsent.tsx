@@ -5,10 +5,10 @@ import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
 import { IssuerCard } from '../../documents/components/issuerCard'
-import { AuthenticationRequestSummary } from '../../../actions/sso/types'
+import { InteractionSummary } from '../../../lib/interactionManager/types'
 
 interface Props {
-  authenticationDetails: AuthenticationRequestSummary
+  interactionSummary: InteractionSummary
   confirmAuthenticationRequest: Function
   cancelAuthenticationRequest: Function
 }
@@ -58,11 +58,11 @@ export class AuthenticationConsentComponent extends React.Component<
   }
 
   public render() {
-    const { requester, description } = this.props.authenticationDetails
+    const { issuer, state: description } = this.props.interactionSummary
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
-          <IssuerCard issuer={requester} style={styles.issuerCard} />
+          <IssuerCard issuer={issuer} style={styles.issuerCard} />
           <View style={styles.authRequestContainer}>
             <Text style={styles.authRequestText}>
               {I18n.t(strings.WOULD_YOU_LIKE_TO)}

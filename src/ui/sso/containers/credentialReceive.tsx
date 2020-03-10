@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { backendMiddleware, ThunkDispatch } from '../../../store'
+import { ThunkDispatch } from '../../../store'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { navigationActions } from '../../../actions'
@@ -13,12 +13,12 @@ import strings from '../../../locales/strings'
 import I18n from 'src/locales/i18n'
 import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
-import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
+import { InteractionSummary, SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
 import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
-  credentialOfferSummary: OfferWithValidity[]
+  interactionSummary: InteractionSummary
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -33,16 +33,11 @@ export const CredentialsReceiveContainer = (props: Props) => {
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
-      params: { credentialOfferSummary, interactionId },
+      params: { interactionSummary, interactionId },
     },
   } = navigation
 
-  const interaction = backendMiddleware.interactionManager.getInteraction(
-    interactionId,
-  )
-
-  // TODO Why is this here but not in credential request?
-  const { publicProfile } = interaction.issuerSummary
+  const { publicProfile } = interactionSummary.issuer
 
   const handleConfirm = () => {
     acceptSelectedCredentials(selected, interactionId)
@@ -63,7 +58,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
   return (
     <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
       <CredentialReceiveComponent
-        credentialOfferSummary={credentialOfferSummary}
+        credentialOfferSummary={interactionSummary.state as OfferWithValidity[]}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
         onToggleSelect={toggleSelectDocument}

@@ -21,7 +21,7 @@ export const consumeAuthenticationRequest = (
       routeName: routeList.AuthenticationConsent,
       params: {
         interactionId: interaction.id,
-        authenticationDetails: interaction.getState()
+        interactionSummary: interaction.getSummary()
       },
       key: 'authenticationRequest',
     }),

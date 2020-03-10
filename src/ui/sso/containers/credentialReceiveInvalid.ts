@@ -1,4 +1,4 @@
-import { ThunkDispatch, ThunkAction } from '../../../store'
+import { ThunkDispatch } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
@@ -11,14 +11,12 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   acceptSelectedCredentials: (
     selected: SignedCredentialWithMetadata[],
     interactionId: string,
-  ): ThunkAction => dispatch(
-    withErrorScreen(
-      withLoading(validateSelectionAndSave(
-        selected,
-        interactionId
-      )),
-    )
-  ),
+  ) =>
+    dispatch(
+      withErrorScreen(
+        withLoading(validateSelectionAndSave(selected, interactionId)),
+      ),
+    ),
   goBack: () =>
     dispatch(
       navigationActions.navigate({ routeName: routeList.InteractionScreen }),

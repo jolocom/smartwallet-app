@@ -32,7 +32,7 @@ export const consumeCredentialOfferRequest = (
       routeName: routeList.CredentialReceive,
       params: {
         interactionId: credentialOfferRequest.nonce,
-        credentialOfferSummary: interaction.getState()
+        interactionSummary: interaction.getSummary()
       },
     }),
   )
@@ -50,6 +50,7 @@ export const consumeCredentialReceive = (
     )
   )
 
+  // @ts-ignore
   await interaction.processInteractionToken(credentialReceive)
   return dispatch(validateSelectionAndSave(selectedSignedCredentialWithMetadata, interaction.id))
 }
@@ -71,7 +72,7 @@ export const validateSelectionAndSave = (
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, {interactionManager, storageLib}) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const offer: OfferWithValidity[] = interaction.getState()
+  const offer: OfferWithValidity[] = interaction.getSummary().state
 
   const selectedTypes = selectedCredentials.map(el => el.type)
   const toSave = offer.filter(el => selectedTypes.includes(el.type))
@@ -113,7 +114,7 @@ export const validateSelectionAndSave = (
     await interaction.storeCredential(toSave)
 
     await storeOfferMetadata(
-      interaction.getState(),
+      interaction.getSummary().state,
       interaction.issuerSummary.did,
       storageLib.store.credentialMetadata,
     )
@@ -149,7 +150,7 @@ export const validateSelectionAndSave = (
       routeName: routeList.CredentialReceiveInvalid,
       params: {
         interactionId,
-        credentialOfferSummary: offer
+        interactionSummary: {...interaction.getSummary(), state: offer}
       },
     }),
   )
