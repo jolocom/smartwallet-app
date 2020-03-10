@@ -114,21 +114,23 @@ export const DocumentReceiveCard = (props: Props) => {
 
   return (
     <View style={styles.wrapper}>
-      <Animated.View
-        style={[
-          styles.infoWrapper,
-          {
-            opacity: selected ? 0 : opacityValue,
-            transform: [
-              { translateX: translationValue },
-              { scaleX: infoScale },
-              { scaleY: infoScale },
-            ],
-          },
-        ]}
-      >
-        <Text style={styles.infoText}>Pull to choose</Text>
-      </Animated.View>
+      {!invalid && (
+        <Animated.View
+          style={[
+            styles.infoWrapper,
+            {
+              opacity: selected ? 0 : opacityValue,
+              transform: [
+                { translateX: translationValue },
+                { scaleX: infoScale },
+                { scaleY: infoScale },
+              ],
+            },
+          ]}
+        >
+          <Text style={styles.infoText}>Pull to choose</Text>
+        </Animated.View>
+      )}
       <TouchableWithoutFeedback onPress={() => selected && onPressCard()}>
         <Interactable.View
           animatedValueX={translationX}
@@ -137,7 +139,7 @@ export const DocumentReceiveCard = (props: Props) => {
           snapPoints={[{ x: leftSnap }, { x: centerSnap }]}
           initialPosition={{ x: leftSnap }}
           onSnap={onSnap}
-          dragEnabled={!selected}
+          dragEnabled={!invalid && !selected}
           // NOTE @clauxx this seems to make the stutter more rare
           dragToss={0}
           style={
