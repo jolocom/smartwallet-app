@@ -9,8 +9,6 @@ import config from 'src/config'
 
 import { BackendMiddleware } from './backendMiddleware'
 
-export const backendMiddleware = new BackendMiddleware(config)
-
 export function initStore() {
   /*
    * The {} as RootState type assertion:
@@ -18,7 +16,7 @@ export function initStore() {
    * We provide an empty object. The store will have the correct default state
    * after all reducers initialise.
    */
-
+  const backendMiddleware = new BackendMiddleware(config)
   return createStore(
     rootReducer,
     {} as RootState,
