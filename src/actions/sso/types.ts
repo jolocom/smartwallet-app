@@ -30,6 +30,7 @@ export interface PaymentRequestSummary extends RequestSummary {
     did: string
     address: string
   }
+  requestJWT: string
   amount: number
   description: string
 }

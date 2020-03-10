@@ -40,6 +40,7 @@ export const consumePaymentRequest = (
       address: paymentRequest.interactionToken.transactionOptions.to as string,
     },
     requester: requesterSummary,
+    requestJWT: paymentRequest.encode(),
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
     description: paymentRequest.interactionToken.description,
