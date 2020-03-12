@@ -7,11 +7,9 @@ import {
 describe('lib/storage', () => {
   jest.unmock('src/lib/storage/storage')
   jest.mock('src/lib/storage/entities', () => ({}))
-  jest.mock('typeorm/browser', () => {
-    return {
-      createConnection: jest.fn().mockResolvedValue({}),
-    }
-  })
+  jest.mock('typeorm/browser', () => ({
+    createConnection: jest.fn().mockResolvedValue({}),
+  }))
 
   describe('Storage', () => {
     const Storage = require('src/lib/storage/storage').Storage

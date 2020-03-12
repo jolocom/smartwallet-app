@@ -19,6 +19,7 @@
 
     "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "test": "jest",
+    "test:migrations": "bash ./tests/test_databases/test_migrations.sh",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "e2e:android": "detox build -c android.debug && detox test -c android.debug",
     "e2e:android:emu": "detox build -c android.emu.debug && detox test -c android.emu.debug",
@@ -102,7 +103,7 @@
     "tslib": "^1.7.1",
     "typeorm": "^0.2.5",
     "typescript": "^3.5.1",
-    "yarn": "^1.16.0"
+    "yarn": "^1.22.0"
   },
   "detox": {
     "configurations": {

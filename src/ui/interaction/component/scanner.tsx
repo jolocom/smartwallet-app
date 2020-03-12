@@ -21,7 +21,7 @@ import {
   textSubheaderLineHeight,
 } from '../../../styles/typography'
 import { BP } from '../../../styles/breakpoints'
-import ErrorCode from '../../../lib/errorCodes'
+import { ErrorCode } from '../../../lib/errors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
