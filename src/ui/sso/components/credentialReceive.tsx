@@ -63,7 +63,9 @@ export const CredentialReceiveComponent = (props: Props) => {
 
   const issuerImage = publicProfile?.image && publicProfile.image
   // TODO @clauxx add strings!
-  const issuerName = publicProfile ? publicProfile.name : "Unknown"
+  const issuerName = publicProfile
+    ? publicProfile.name
+    : I18n.t(strings.UNKNOWN)
   return (
     <React.Fragment>
       <View style={styles.topSection}>

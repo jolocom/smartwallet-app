@@ -224,4 +224,5 @@ export default {
   PERSONAL: 'Personal',
   NO_DOCUMENTS_TO_SEE_HERE: 'No documents to see here',
   EXPIRED: 'expired',
+  UNKNOWN: 'Unknown',
 }
