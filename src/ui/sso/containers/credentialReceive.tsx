@@ -52,7 +52,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
     setSelected(prevState =>
       isDocumentSelected(cred)
         ? prevState.filter(current => current !== cred)
-        : [...selected, cred],
+        : [...prevState, cred],
     )
   }
 
