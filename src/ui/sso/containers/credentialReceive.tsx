@@ -5,12 +5,8 @@ import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { navigationActions } from '../../../actions'
 import { routeList } from '../../../routeList'
-import { JolocomButton, Wrapper } from '../../structure'
+import { Wrapper } from '../../structure'
 import { Colors } from '../../../styles'
-import { fontMedium } from '../../../styles/typography'
-import { ActionSheet } from '../../structure/actionSheet'
-import strings from '../../../locales/strings'
-import I18n from 'src/locales/i18n'
 import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
 import {
@@ -18,7 +14,7 @@ import {
   SignedCredentialWithMetadata,
 } from '../../../lib/interactionManager/types'
 import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
-import { View } from 'react-native'
+import { ButtonSheet } from 'src/ui/structure/buttonSheet'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
@@ -67,27 +63,11 @@ export const CredentialsReceiveContainer = (props: Props) => {
         isDocumentSelected={isDocumentSelected}
         onToggleSelect={toggleSelectDocument}
       />
-      <ActionSheet showSlide={true}>
-        <View
-          style={{
-            flexDirection: 'row',
-          }}
-        >
-          <JolocomButton
-            textStyle={{ fontFamily: fontMedium }}
-            containerStyle={{ flex: 2 }}
-            disabled={selected.length === 0}
-            onPress={handleConfirm}
-            text={I18n.t(strings.SAVE)}
-          />
-          <JolocomButton
-            containerStyle={{ flex: 1 }}
-            onPress={goBack}
-            text={I18n.t(strings.CANCEL)}
-            transparent
-          />
-        </View>
-      </ActionSheet>
+      <ButtonSheet
+        onConfirm={handleConfirm}
+        onCancel={goBack}
+        disabledConfirm={selected.length === 0}
+      />
     </Wrapper>
   )
 }
