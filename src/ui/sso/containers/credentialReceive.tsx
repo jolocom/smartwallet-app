@@ -15,6 +15,7 @@ import {
 } from '../../../lib/interactionManager/types'
 import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
+import strings from 'src/locales/strings'
 
 export interface CredentialOfferNavigationParams {
   interactionId: string
@@ -65,6 +66,8 @@ export const CredentialsReceiveContainer = (props: Props) => {
       />
       <ButtonSheet
         onConfirm={handleConfirm}
+        confirmText={strings.RECEIVE}
+        cancelText={strings.DENY}
         onCancel={goBack}
         disabledConfirm={selected.length === 0}
       />

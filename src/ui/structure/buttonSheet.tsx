@@ -5,6 +5,7 @@ import { View, StyleSheet } from 'react-native'
 import { JolocomButton } from './'
 import strings from 'src/locales/strings'
 import { fontMedium } from 'src/styles/typography'
+import { Colors } from 'src/styles'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -15,6 +16,10 @@ const styles = StyleSheet.create({
   },
   cancel: {
     flex: 1,
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderColor: Colors.iBorderGray,
+    marginLeft: 12,
   },
   confirmText: {
     fontFamily: fontMedium,
@@ -22,9 +27,11 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
-  show?: boolean
   onConfirm: () => void
   onCancel: () => void
+  show?: boolean
+  cancelText?: string
+  confirmText?: string
   disabledConfirm?: boolean
 }
 
@@ -33,6 +40,8 @@ export const ButtonSheet = ({
   onConfirm,
   onCancel,
   disabledConfirm,
+  confirmText = strings.CONFIRM,
+  cancelText = strings.CANCEL,
 }: Props) => {
   return (
     <ActionSheet showSlide={show}>
@@ -42,12 +51,12 @@ export const ButtonSheet = ({
           containerStyle={styles.confirm}
           disabled={!!disabledConfirm}
           onPress={onConfirm}
-          text={I18n.t(strings.SAVE)}
+          text={I18n.t(confirmText)}
         />
         <JolocomButton
           containerStyle={styles.cancel}
           onPress={onCancel}
-          text={I18n.t(strings.CANCEL)}
+          text={I18n.t(cancelText)}
           transparent
         />
       </View>
