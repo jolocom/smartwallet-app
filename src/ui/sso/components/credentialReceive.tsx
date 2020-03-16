@@ -1,23 +1,17 @@
-import { Colors } from '../../../styles'
+import { Colors, Typefaces } from '../../../styles'
 import { Animated, Image, StyleSheet, Text, View } from 'react-native'
 import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
-import React, { useState } from 'react'
+import React, { useRef } from 'react'
 import { black065, greyLight, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
 import { DocumentReceiveCard } from './documentReceiveCard'
 import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
 import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
+import LinearGradient from 'react-native-linear-gradient'
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.lightGreyLighter,
-  },
-  topSection: {
-    alignItems: 'center',
-  },
   logo: {
     borderRadius: 35,
     width: 70,
@@ -25,33 +19,53 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: greyLight,
   },
-  serviceWrapper: {
+  headerWrapper: {
     width: '100%',
-    backgroundColor: 'transparent',
+    height: 64,
     position: 'absolute',
     top: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 3,
+    // TODO @clauxx add shadows for ios
+    elevation: 20,
+    // HACK: @elevation won't work without @borderBottomWidth
+    // https://github.com/timomeh/react-native-material-bottom-navigation/issues/8
+    borderBottomWidth: 0,
+  },
+  headerServiceName: {
+    ...Typefaces.subtitle1,
+    fontFamily: fontMedium,
+    color: Colors.overflowBlack,
+  },
+  profileWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
   },
   serviceName: {
     fontFamily: fontMedium,
     fontSize: 28,
     color: overflowBlack,
+    marginTop: 12,
     ...centeredText,
-  },
-  descriptionWrapper: {
-    paddingBottom: 20,
   },
   description: {
     fontFamily: fontMain,
     fontSize: 16,
     color: black065,
-    marginTop: 30,
-    marginBottom: 4,
+    marginBottom: 40,
     marginHorizontal: '10%',
     ...centeredText,
   },
   scrollWrapper: {
     paddingBottom: '50%',
-    paddingTop: '5%',
+  },
+  gradientWrapper: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 
@@ -69,91 +83,64 @@ export const CredentialReceiveComponent = (props: Props) => {
     onToggleSelect,
     isDocumentSelected,
   } = props
-
   const issuerImage = publicProfile?.image && publicProfile.image
-  // TODO @clauxx add strings!
   const issuerName = publicProfile
     ? publicProfile.name
     : I18n.t(strings.UNKNOWN)
 
-  const [transY] = useState(new Animated.Value(0))
+  const gradientColors = ['rgb(245, 245, 245)', 'rgba(245, 245, 245, 0.72)']
+
+  // TODO abstract into CollapsibleScrollView if used elsewhere as well
+  const transY = useRef(new Animated.Value(0)).current
   const handleScroll = Animated.event(
     [
       {
         nativeEvent: { contentOffset: { y: transY } },
       },
     ],
-    { useNativeDriver: false },
+    { useNativeDriver: true },
   )
 
-  const opacity = transY.interpolate({
-    inputRange: [0, 30],
-    outputRange: [1, 0],
-  })
+  const interpolateY = (inputRange: number[], outputRange: number[]) =>
+    transY.interpolate({
+      inputRange,
+      outputRange,
+      extrapolate: 'clamp',
+    })
 
-  const textScale = transY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [1, 0.8],
-    extrapolateRight: 'clamp',
-  })
-
-  const iconScale = transY.interpolate({
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    inputRange: [30, 100],
-    outputRange: [1, 0.7],
-  })
-
-  const iconTrans = transY.interpolate({
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    inputRange: [30, 100],
-    outputRange: [0, -200],
-  })
-
-  const textTrans = transY.interpolate({
-    inputRange: [30, 100],
-    outputRange: [100, 20],
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  })
-
-  const marginValue = transY.interpolate({
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    inputRange: [30, 100],
-    outputRange: [0, -10],
-  })
-
-  const iconAnimations = {
-    marginVertical: marginValue,
-    transform: [
-      { scaleX: iconScale },
-      { scaleY: iconScale },
-      { translateX: iconTrans },
-    ],
-  }
-
-  const serviceAnimations = {
-    transform: [{ translateY: textTrans }],
-  }
-
-  const descriptionAnimations = {
-    opacity,
-    transform: [{ scaleX: textScale }, { scaleY: textScale }],
-  }
+  // TODO @clauxx test and adjust values for small screens
+  const headerOpacityValue = interpolateY([0, 100], [0, 1])
+  const headerTextValueY = interpolateY([120, 150], [30, 0])
+  const headerTextOpacityValue = interpolateY([130, 150], [0, 1])
+  const detailsOpacityValue = interpolateY([0, 100], [1, 0])
+  const profileScaleValue = interpolateY([0, 100], [1, 0.8])
 
   return (
     <>
-      <Animated.View style={[styles.topSection, iconAnimations]}>
-        {issuerImage ? (
-          <Image style={styles.logo} source={{ uri: issuerImage }} />
-        ) : (
-          <View style={styles.logo} />
-        )}
-      </Animated.View>
-      <Animated.View style={[styles.serviceWrapper, serviceAnimations]}>
-        <Text style={styles.serviceName}>{issuerName}</Text>
+      <Animated.View
+        style={[styles.headerWrapper, { opacity: headerOpacityValue }]}
+      >
+        <LinearGradient
+          colors={gradientColors}
+          start={{ x: 0.5, y: 0.7 }}
+          style={styles.gradientWrapper}
+        >
+          <Animated.Text
+            style={[
+              styles.headerServiceName,
+              {
+                transform: [
+                  {
+                    translateY: headerTextValueY,
+                  },
+                ],
+                opacity: headerTextOpacityValue,
+              },
+            ]}
+          >
+            {issuerName}
+          </Animated.Text>
+        </LinearGradient>
       </Animated.View>
       <Animated.ScrollView
         contentContainerStyle={styles.scrollWrapper}
@@ -161,7 +148,36 @@ export const CredentialReceiveComponent = (props: Props) => {
         onScroll={handleScroll}
       >
         <Animated.View
-          style={[styles.descriptionWrapper, descriptionAnimations]}
+          style={[
+            styles.profileWrapper,
+            {
+              transform: [
+                { scaleY: profileScaleValue },
+                { scaleX: profileScaleValue },
+                { translateY: transY },
+              ],
+              opacity: detailsOpacityValue,
+            },
+          ]}
+        >
+          {issuerImage ? (
+            <Image style={styles.logo} source={{ uri: issuerImage }} />
+          ) : (
+            <View style={styles.logo} />
+          )}
+          <Text style={styles.serviceName}>{issuerName}</Text>
+        </Animated.View>
+        <Animated.View
+          style={[
+            {
+              transform: [
+                {
+                  translateY: transY,
+                },
+              ],
+              opacity: detailsOpacityValue,
+            },
+          ]}
         >
           <Text style={styles.description}>
             {I18n.t(
