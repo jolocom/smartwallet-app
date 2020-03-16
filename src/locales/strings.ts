@@ -169,7 +169,6 @@ export default {
   CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU:
     'Choose one or more documents provided by this service and we will generate them for you',
   RECEIVE: 'Receive',
-  SAVE: 'Save',
   SHARE_CLAIMS: 'Share claims',
   CONFIRM_PAYMENT: 'Confirm payment',
   AUTHORIZATION_REQUEST: 'Authorization request',
