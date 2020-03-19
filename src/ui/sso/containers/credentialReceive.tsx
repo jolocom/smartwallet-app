@@ -3,11 +3,10 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
-import { navigationActions } from '../../../actions'
 import { routeList } from '../../../routeList'
 import { Wrapper } from '../../structure'
 import { Colors } from '../../../styles'
-import { consumeCredentialReceive } from '../../../actions/sso/credentialOffer'
+import { ssoActions, navigationActions } from 'src/actions'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
 import {
   InteractionSummary,
@@ -82,7 +81,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   ) =>
     dispatch(
       withErrorScreen(
-        withLoading(consumeCredentialReceive(selected, interactionId)),
+        withLoading(
+          ssoActions.consumeCredentialReceive(selected, interactionId),
+        ),
       ),
     ),
   goBack: () =>

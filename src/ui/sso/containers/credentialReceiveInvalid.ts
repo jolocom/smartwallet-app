@@ -1,10 +1,9 @@
 import { ThunkDispatch } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { routeList } from '../../../routeList'
-import { navigationActions } from '../../../actions'
+import { navigationActions, ssoActions } from '../../../actions'
 import { connect } from 'react-redux'
 import { CredentialsReceiveContainer } from './credentialReceive'
-import { validateSelectionAndSave } from 'src/actions/sso/credentialOffer'
 import { SignedCredentialWithMetadata } from 'src/lib/interactionManager/types'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
@@ -14,7 +13,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   ) =>
     dispatch(
       withErrorScreen(
-        withLoading(validateSelectionAndSave(selected, interactionId)),
+        withLoading(
+          ssoActions.validateSelectionAndSave(selected, interactionId),
+        ),
       ),
     ),
   goBack: () =>

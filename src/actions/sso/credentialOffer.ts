@@ -10,7 +10,8 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import {
-  InteractionChannel, SignedCredentialWithMetadata,
+  InteractionChannel,
+  SignedCredentialWithMetadata,
 } from '../../lib/interactionManager/types'
 import { isEmpty, uniqBy } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -32,7 +33,7 @@ export const consumeCredentialOfferRequest = (
       routeName: routeList.CredentialReceive,
       params: {
         interactionId: credentialOfferRequest.nonce,
-        interactionSummary: interaction.getSummary()
+        interactionSummary: interaction.getSummary(),
       },
     }),
   )
@@ -47,12 +48,17 @@ export const consumeCredentialReceive = (
   const credentialReceive = await interaction.send(
     await interaction.createCredentialOfferResponseToken(
       selectedSignedCredentialWithMetadata,
-    )
+    ),
   )
 
   // @ts-ignore
   await interaction.processInteractionToken(credentialReceive)
-  return dispatch(validateSelectionAndSave(selectedSignedCredentialWithMetadata, interaction.id))
+  return dispatch(
+    validateSelectionAndSave(
+      selectedSignedCredentialWithMetadata,
+      interaction.id,
+    ),
+  )
 }
 
 // TODO Should abstract away negotiation.
@@ -70,7 +76,11 @@ export const consumeCredentialReceive = (
 export const validateSelectionAndSave = (
   selectedCredentials: SignedCredentialWithMetadata[],
   interactionId: string,
-): ThunkAction => async (dispatch, getState, {interactionManager, storageLib}) => {
+): ThunkAction => async (
+  dispatch,
+  getState,
+  { interactionManager, storageLib },
+) => {
   const interaction = interactionManager.getInteraction(interactionId)
   const offer: OfferWithValidity[] = interaction.getSummary().state
 
@@ -86,10 +96,14 @@ export const validateSelectionAndSave = (
   // TODO Inject these into the screen so they render as unselectable
   // Maybe move this in the flow after all?
   const duplicates = await isCredentialStored(toSave, id =>
-    interaction.getStoredCredentialById(id),)
+    interaction.getStoredCredentialById(id),
+  )
 
-  const validationErrors = toSave.map(({ validationErrors } : OfferWithValidity, i) =>
-    validationErrors.invalidIssuer || !!validationErrors.invalidSubject || duplicates[i]
+  const validationErrors = toSave.map(
+    ({ validationErrors }: OfferWithValidity, i) =>
+      validationErrors.invalidIssuer ||
+      !!validationErrors.invalidSubject ||
+      duplicates[i],
   )
 
   // All invalid means all contain at least one error, i.e. there is no false
@@ -101,16 +115,19 @@ export const validateSelectionAndSave = (
       createInfoNotification({
         title: I18n.t(strings.AWKWARD),
         message,
-      })
+      }),
     )
 
   if (allInvalid) {
-    dispatch(scheduleInvalidNotification(I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)))
+    dispatch(
+      scheduleInvalidNotification(
+        I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS),
+      ),
+    )
     return dispatch(endReceiving(interactionId))
   }
 
   if (allValid) {
-    // TODO These should be handled on the interaction layer, like the issuer profile
     await interaction.storeCredential(toSave)
 
     await storeOfferMetadata(
@@ -127,11 +144,15 @@ export const validateSelectionAndSave = (
 
     const notification: Notification = createInfoNotification({
       title: I18n.t(strings.GREAT_SUCCESS),
-      message: I18n.t(strings.YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_IN_THE_DOCUMENTS),
+      message: I18n.t(
+        strings.YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_IN_THE_DOCUMENTS,
+      ),
       interact: {
         label: I18n.t(strings.OPEN),
         onInteract: () => {
-          dispatch(navigationActions.navigate({ routeName: routeList.Documents }))
+          dispatch(
+            navigationActions.navigate({ routeName: routeList.Documents }),
+          )
         },
       },
     })
@@ -140,9 +161,11 @@ export const validateSelectionAndSave = (
     return dispatch(endReceiving(interactionId))
   }
 
-  dispatch(scheduleInvalidNotification(
-    I18n.t(strings.SOMETHING_WENT_WRONG_CHOOSE_AGAIN),
-  ))
+  dispatch(
+    scheduleInvalidNotification(
+      I18n.t(strings.SOMETHING_WENT_WRONG_CHOOSE_AGAIN),
+    ),
+  )
 
   // The screen is borked. Save is enabled by default. Not sure what's wrong
   return dispatch(
@@ -150,7 +173,7 @@ export const validateSelectionAndSave = (
       routeName: routeList.CredentialReceiveInvalid,
       params: {
         interactionId,
-        interactionSummary: {...interaction.getSummary(), state: offer}
+        interactionSummary: { ...interaction.getSummary(), state: offer },
       },
     }),
   )
@@ -162,11 +185,11 @@ const isCredentialStored = async (
   getCredential: (id: string) => Promise<SignedCredential[]>,
 ) =>
   Promise.all(
-    offer.map(
-      async ({ signedCredential }) => signedCredential
+    offer.map(async ({ signedCredential }) =>
+      signedCredential
         ? !isEmpty(await getCredential(signedCredential.id))
-        : false
-    )
+        : false,
+    ),
   )
 
 // LEFT -> Probably not storing correctly, or not throwing.
@@ -176,7 +199,9 @@ const isCredentialStored = async (
 const storeOfferMetadata = async (
   offer: SignedCredentialWithMetadata[],
   did: string,
-  storeCredentialMetadata: (a: CredentialMetadataSummary) => Promise<CacheEntity>,
+  storeCredentialMetadata: (
+    a: CredentialMetadataSummary,
+  ) => Promise<CacheEntity>,
 ) =>
   Promise.all(
     uniqBy(
