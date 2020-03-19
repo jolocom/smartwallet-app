@@ -5,6 +5,7 @@ import {
   AppStateStatus,
   Platform,
   View,
+  InteractionManager,
 } from 'react-native'
 import {
   NavigationInjectedProps, NavigationEventSubscription
@@ -15,6 +16,7 @@ import { PERMISSIONS, RESULTS, request, openSettings, check, Permission } from '
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
 import { Colors } from 'src/styles'
+import { Wrapper } from 'src/ui/structure'
 
 interface Props extends NavigationInjectedProps {
   consumeToken: (jwt: string) => Promise<any>
@@ -56,11 +58,13 @@ export const ScannerContainer: React.FC<Props> = (props) => {
   }, [])
 
   const checkCameraPermissions = async () => {
-    return check(CAMERA_PERMISSION).then(perm => {
-      setPermission(perm)
-      if (perm !== RESULTS.GRANTED && perm !== RESULTS.BLOCKED) {
-        requestCameraPermission()
-      }
+    InteractionManager.runAfterInteractions(() => {
+      check(CAMERA_PERMISSION).then(perm => {
+        setPermission(perm)
+        if (perm !== RESULTS.GRANTED && perm !== RESULTS.BLOCKED) {
+          requestCameraPermission()
+        }
+      })
     })
   }
 
@@ -94,8 +98,9 @@ export const ScannerContainer: React.FC<Props> = (props) => {
     }
   }
 
+  let ret
   if (permission === RESULTS.GRANTED) {
-    return (
+    ret = (
       <ScannerComponent
         reRenderKey={reRenderKey}
         onScan={consumeToken}
@@ -104,7 +109,7 @@ export const ScannerContainer: React.FC<Props> = (props) => {
     )
   } else if (permission === RESULTS.UNAVAILABLE) {
     // TODO: maybe add a message here like "do you even camera?"
-    return (
+    ret = (
       <View
         style={{
           width: '100%',
@@ -114,8 +119,10 @@ export const ScannerContainer: React.FC<Props> = (props) => {
       />
     )
   } else {
-    return <NoPermissionComponent onPressEnable={onEnablePermission} />
+    ret = <NoPermissionComponent onPressEnable={onEnablePermission} />
   }
+
+  return <Wrapper dark withoutSafeArea withoutStatusBar>{ret}</Wrapper>
 }
 
 export const Scanner = ScannerContainer
