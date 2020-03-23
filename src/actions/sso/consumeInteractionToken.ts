@@ -2,8 +2,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from '../../lib/storage/interactionTokens'
 import { withErrorScreen, withLoading } from '../modifiers'
 import { showErrorScreen } from '../generic'
-import { AppError } from '../../lib/errors'
-import ErrorCode from '../../lib/errorCodes'
+import { AppError, ErrorCode } from '../../lib/errors'
 import { ThunkAction } from '../../store'
 import {
   JSONWebToken,
