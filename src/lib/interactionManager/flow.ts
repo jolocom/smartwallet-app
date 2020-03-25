@@ -1,7 +1,5 @@
 import { Interaction } from './interaction'
-import {
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
 export abstract class Flow {
@@ -12,13 +10,11 @@ export abstract class Flow {
     this.ctx = ctx
   }
 
-  // Can this abstract anything?
   abstract async handleInteractionToken(
     token: JWTEncodable,
-    messageType: InteractionType
-  ): Promise<any>
+    messageType: InteractionType,
+  ): Promise<void>
 
-  // @TODO Make sure this is only used for rendering
   abstract getState(): any
 
   public getMessages() {

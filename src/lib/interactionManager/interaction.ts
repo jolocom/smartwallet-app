@@ -67,26 +67,26 @@ export class Interaction {
     return this.interactionMessages
   }
 
+  private findMessageByType(type: InteractionType) {
+    return this.getMessages().find(
+      ({ interactionType }) => interactionType === type,
+    )
+  }
+
   // TODO Try to write a respond function that collapses these
   public async createAuthenticationResponse() {
-    // TODO Abstract to getMessages * findByType
     return this.ctx.identityWallet.create.interactionTokens.response.auth(
       this.getSummary().state,
       await this.ctx.keyChainLib.getPassword(),
-      this.getMessages().find(
-        ({ interactionType }) =>
-          interactionType === InteractionType.Authentication,
-      ),
+      this.findMessageByType(InteractionType.Authentication),
     )
   }
 
   public async createCredentialResponse(
     selectedCredentials: CredentialVerificationSummary[],
   ) {
-    // TODO Abstract to getMessages * findByType
-    const request = this.getMessages().find(
-      ({ interactionType }) =>
-        interactionType === InteractionType.CredentialRequest,
+    const request = this.findMessageByType(
+      InteractionType.CredentialRequest,
     ) as JSONWebToken<CredentialRequest>
 
     const credentials = await Promise.all(
@@ -108,9 +108,8 @@ export class Interaction {
   public async createCredentialOfferResponseToken(
     selectedOffering: SignedCredentialWithMetadata[],
   ) {
-    const credentialOfferRequest = this.getMessages().find(
-      ({ interactionType }) =>
-        interactionType === InteractionType.CredentialOfferRequest,
+    const credentialOfferRequest = this.findMessageByType(
+      InteractionType.CredentialOfferRequest,
     ) as JSONWebToken<CredentialOfferRequest>
 
     const credentialOfferResponseAttr = {
@@ -149,12 +148,6 @@ export class Interaction {
       )
     }
 
-    await this.ctx.identityWallet.validateJWT(
-      token,
-      undefined, // TODO Extract from .getMessages()
-      this.ctx.registry,
-    )
-
     if (token.interactionType === InteractionType.CredentialsReceive) {
       await JolocomLib.util.validateDigestables(
         (token as JSONWebToken<CredentialsReceive>).interactionToken
@@ -162,12 +155,9 @@ export class Interaction {
       )
     }
 
-    // TODO Should be pushed only in case of success
-    this.interactionMessages.push(token)
-    return this.flow.handleInteractionToken(
-      token.interactionToken,
-      token.interactionType,
-    )
+    return this.flow
+      .handleInteractionToken(token.interactionToken, token.interactionType)
+      .then(() => this.interactionMessages.push(token))
   }
 
   public getSummary(): InteractionSummary {

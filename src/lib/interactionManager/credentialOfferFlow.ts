@@ -1,6 +1,4 @@
-import {
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
@@ -32,7 +30,7 @@ export class CredentialOfferFlow extends Flow {
   // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when casting
   public async handleInteractionToken(
     token: JWTEncodable,
-    messageType: InteractionType
+    messageType: InteractionType,
   ): Promise<any> {
     // TODO Push once all is good FIX
     this.tokens.push(token)
@@ -64,8 +62,9 @@ export class CredentialOfferFlow extends Flow {
     // TODO parse from previous messages or extend the flow state
     this.credentialOfferingState = signedCredentials.map(signedCredential => {
       // TODO Should this throw or signal through the validitySummary?
-      const offer = this.credentialOfferingState
-        .find(({type}) => type === last(signedCredential.type))
+      const offer = this.credentialOfferingState.find(
+        ({ type }) => type === last(signedCredential.type),
+      )
 
       if (!offer) {
         throw new Error('Received wrong credentials')
@@ -78,8 +77,9 @@ export class CredentialOfferFlow extends Flow {
           // This signals funny things in the flow without throwing errors. We don't simply throw because often times
           // negotiation is still possible on the UI / UX layer, and the interaction can continue.
           invalidIssuer: signedCredential.issuer !== this.ctx.issuerSummary.did,
-          invalidSubject: signedCredential.subject !== this.ctx.ctx.identityWallet.did // TODO FIXME Too many ctx.
-        }
+          invalidSubject:
+            signedCredential.subject !== this.ctx.ctx.identityWallet.did, // TODO FIXME Too many ctx.
+        },
       }
     })
   }
