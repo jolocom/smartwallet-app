@@ -23,7 +23,7 @@ export enum routeList {
 
   // Interactions & Details
   CredentialReceive = 'CredentialReceive',
-  CredentialReceiveInvalid = 'CredentialReceiveInvalid',
+  CredentialReceiveNegotiate = 'CredentialReceiveNegotiate',
   Consent = 'Consent',
   PaymentConsent = 'PaymentConsent',
   AuthenticationConsent = 'AuthenticationConsent',

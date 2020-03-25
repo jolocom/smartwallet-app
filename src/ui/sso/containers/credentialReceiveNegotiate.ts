@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     ),
 })
 
-export const CredentialReceiveInvalid = connect(
+export const CredentialReceiveNegotiate = connect(
   null,
   mapDispatchToProps,
 )(CredentialsReceiveContainer)
