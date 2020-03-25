@@ -170,7 +170,7 @@ export const validateSelectionAndSave = (
   // The screen is borked. Save is enabled by default. Not sure what's wrong
   return dispatch(
     navigationActions.navigate({
-      routeName: routeList.CredentialReceiveInvalid,
+      routeName: routeList.CredentialReceiveNegotiate,
       params: {
         interactionId,
         interactionSummary: { ...interaction.getSummary(), state: offer },
