@@ -161,7 +161,9 @@ export class Interaction {
 
     return this.flow
       .handleInteractionToken(token.interactionToken, token.interactionType)
-      .then(() => this.interactionMessages.push(token))
+      .then(() => {
+        this.interactionMessages.push(token)
+      })
   }
 
   public getSummary(): InteractionSummary {
@@ -190,7 +192,7 @@ export class Interaction {
   // TODO This should probably come from the transport / channel handler
   public async send<T extends JWTEncodable>(
     token: JSONWebToken<JWTEncodable>,
-  ): Promise<JSONWebToken<T> | undefined> {
+  ): Promise<JSONWebToken<T>> {
     //@ts-ignore - needs fix on the lib for JWTEncodable.
     const { callbackURL } = token.interactionToken
 
@@ -202,19 +204,16 @@ export class Interaction {
           headers: { 'Content-Type': 'application/json' },
         })
 
-        try {
-          return JolocomLib.parse.interactionToken.fromJWT<T>(
-            (await response.json()).token,
-          )
-        } catch {
-          return
-        }
+        return JolocomLib.parse.interactionToken.fromJWT<T>(
+          (await response.json()).token)
+
       case InteractionChannel.Deeplink:
         const callback = `${callbackURL}/${token.encode()}`
         if (!(await Linking.canOpenURL(callback))) {
           throw new AppError(ErrorCode.DeepLinkUrlNotFound)
         }
         return Linking.openURL(callback)
+
       default:
         throw new AppError(ErrorCode.TransportNotSupported)
     }
