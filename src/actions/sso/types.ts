@@ -20,11 +20,6 @@ export interface RequestSummary {
   requester: IdentitySummary
 }
 
-// TODO @clauxx rename all to "state" instead of "summary"
-export interface AuthenticationRequestSummary {
-  description: string
-}
-
 export interface PaymentRequestSummary extends RequestSummary {
   receiver: {
     did: string
@@ -33,21 +28,4 @@ export interface PaymentRequestSummary extends RequestSummary {
   requestJWT: string
   amount: number
   description: string
-}
-
-export interface CredentialRequestSummary extends RequestSummary {
-  availableCredentials: CredentialTypeSummary[]
-}
-
-export interface CredentialTypeSummary {
-  type: string
-  values: string[]
-  verifications: CredentialVerificationSummary[]
-}
-
-export interface CredentialVerificationSummary {
-  id: string
-  issuer: IdentitySummary
-  selfSigned: boolean
-  expires: string | undefined | Date
 }

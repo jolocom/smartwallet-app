@@ -1,16 +1,16 @@
 import { JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { CredentialTypeSummary } from '../../actions/sso/types'
 import { getUiCredentialTypeByType } from '../util'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { Interaction } from './interaction'
 import { isEmpty } from 'ramda'
 import { Flow } from './flow'
 import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialResponse'
+import { AttributeSummary, CredentialRequestFlowState } from './types'
 
 export class CredentialRequestFlow extends Flow {
-  private credRequestState!: CredentialTypeSummary[]
+  private credRequestState!: CredentialRequestFlowState
 
   constructor(ctx: Interaction) {
     super(ctx)
@@ -89,13 +89,4 @@ export class CredentialRequestFlow extends Flow {
 
   // Currently no validation here
   public handleCredentialResponse(token: CredentialResponse) {}
-}
-
-interface AttributeSummary {
-  type: string[]
-  results: Array<{
-    verification: string
-    fieldName: string
-    values: string[]
-  }>
 }

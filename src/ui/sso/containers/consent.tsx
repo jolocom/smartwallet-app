@@ -7,7 +7,7 @@ import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from '../../../actions/sso/types'
+} from 'src/lib/interactionManager/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { InteractionSummary } from '../../../lib/interactionManager/types'
 

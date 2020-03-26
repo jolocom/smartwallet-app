@@ -9,7 +9,7 @@ export interface InteractionState {
 }
 
 // TODO @clauxx make generic???
-export interface  InteractionSummary {
+export interface InteractionSummary {
   issuer: IdentitySummary
   state: any
 }
@@ -22,6 +22,41 @@ export enum InteractionChannel {
   NFC = 'NFC',
 }
 
+export type AuthenticationFlowState = string
+export type CredentialRequestFlowState = CredentialTypeSummary[]
+export type CredentialOfferFlowState = OfferWithValidity[]
+
+export interface CredentialTypeSummary {
+  type: string
+  values: string[]
+  verifications: CredentialVerificationSummary[]
+}
+
+export interface CredentialVerificationSummary {
+  id: string
+  issuer: IdentitySummary
+  selfSigned: boolean
+  expires: string | undefined | Date
+}
+
+export interface AttributeSummary {
+  type: string[]
+  results: Array<{
+    verification: string
+    fieldName: string
+    values: string[]
+  }>
+}
+
+type ValidationErrorMap = {
+  invalidIssuer?: boolean
+  invalidSubject?: boolean
+}
+
 export interface SignedCredentialWithMetadata extends CredentialOffer {
   signedCredential?: SignedCredential
+}
+
+export type OfferWithValidity = SignedCredentialWithMetadata & {
+  validationErrors: ValidationErrorMap
 }

@@ -14,7 +14,7 @@ import {
 import React, { useRef, useState } from 'react'
 import Interactable, { ISnapEvent } from 'react-native-interactable'
 import { Colors, Typefaces } from '../../../styles'
-import { OfferWithValidity } from '../../../lib/interactionManager/credentialOfferFlow'
+import { OfferWithValidity } from 'src/lib/interactionManager/types'
 
 const styles = StyleSheet.create({
   wrapper: {

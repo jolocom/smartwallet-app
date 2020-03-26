@@ -3,11 +3,11 @@ import { Text, ScrollView, View, StyleSheet } from 'react-native'
 import { Wrapper } from 'src/ui/structure'
 import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import I18n from 'src/locales/i18n'
+import { IdentitySummary } from '../../../actions/sso/types'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-  IdentitySummary,
-} from '../../../actions/sso/types'
+} from 'src/lib/interactionManager/types'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 import { Typography, Colors, Spacing } from 'src/styles'
@@ -63,7 +63,10 @@ export class ConsentComponent extends React.Component<Props, State> {
   public state = {
     pending: false,
     selectedCredentials: this.props.availableCredentials.reduce(
-      (acc, curr) => ({ ...acc, [curr.type]: acc[curr.type] || curr.verifications[0] }),
+      (acc, curr) => ({
+        ...acc,
+        [curr.type]: acc[curr.type] || curr.verifications[0],
+      }),
       {},
     ),
   }

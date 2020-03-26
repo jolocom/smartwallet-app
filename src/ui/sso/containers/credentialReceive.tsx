@@ -12,7 +12,7 @@ import {
   InteractionSummary,
   SignedCredentialWithMetadata,
 } from '../../../lib/interactionManager/types'
-import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
+import { OfferWithValidity } from 'src/lib/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
 import strings from 'src/locales/strings'
 

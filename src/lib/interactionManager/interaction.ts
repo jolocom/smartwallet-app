@@ -1,8 +1,5 @@
 import { CredentialOfferFlow } from './credentialOfferFlow'
-import {
-  IdentitySummary,
-  CredentialVerificationSummary,
-} from '../../actions/sso/types'
+import { IdentitySummary } from '../../actions/sso/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import {
   JSONWebToken,
@@ -13,6 +10,7 @@ import {
   InteractionChannel,
   InteractionSummary,
   SignedCredentialWithMetadata,
+  CredentialVerificationSummary,
 } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'

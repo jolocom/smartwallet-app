@@ -1,24 +1,15 @@
-import { JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
-import { SignedCredentialWithMetadata } from './types'
-import { Interaction } from './interaction'
 import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/credentialOfferResponse'
-import { Flow } from './flow'
+import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
+import { JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { last } from 'ramda'
-
-type ValidationErrorMap = {
-  invalidIssuer?: boolean
-  invalidSubject?: boolean
-}
-
-export type OfferWithValidity = SignedCredentialWithMetadata & {
-  validationErrors: ValidationErrorMap
-}
+import { Flow } from './flow'
+import { Interaction } from './interaction'
+import { CredentialOfferFlowState } from './types'
 
 export class CredentialOfferFlow extends Flow {
-  public credentialOfferingState: OfferWithValidity[] = []
+  public credentialOfferingState: CredentialOfferFlowState = []
   public constructor(ctx: Interaction) {
     super(ctx)
   }
@@ -27,7 +18,8 @@ export class CredentialOfferFlow extends Flow {
     return this.credentialOfferingState
   }
 
-  // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when casting
+  // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when
+  // casting
   public async handleInteractionToken(
     token: JWTEncodable,
     messageType: InteractionType,

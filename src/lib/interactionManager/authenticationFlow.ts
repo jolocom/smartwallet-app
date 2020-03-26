@@ -3,16 +3,17 @@ import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { Interaction } from './interaction'
 import { Flow } from './flow'
+import { AuthenticationFlowState } from './types'
 
 export class AuthenticationFlow extends Flow {
-  private authenticationDescription!: string
+  private description!: AuthenticationFlowState
 
   public constructor(ctx: Interaction) {
     super(ctx)
   }
 
   public getState() {
-    return this.authenticationDescription
+    return this.description
   }
 
   // TODO InteractionType.AuthenticaitonResponse should exist
@@ -29,6 +30,6 @@ export class AuthenticationFlow extends Flow {
   }
 
   public async consumeAuthenticationRequest(token: Authentication) {
-    this.authenticationDescription = token.description
+    this.description = token.description
   }
 }

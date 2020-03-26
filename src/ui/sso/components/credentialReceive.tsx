@@ -8,7 +8,7 @@ import { black065, greyLight, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
 import { DocumentReceiveCard } from './documentReceiveCard'
 import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
-import { OfferWithValidity } from 'src/lib/interactionManager/credentialOfferFlow'
+import { OfferWithValidity } from 'src/lib/interactionManager/types'
 import LinearGradient from 'react-native-linear-gradient'
 
 const styles = StyleSheet.create({
