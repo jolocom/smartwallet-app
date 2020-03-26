@@ -7,11 +7,13 @@ import { Interaction } from './interaction'
 import { CredentialOfferResponse } from 'jolocom-lib/js/interactionTokens/credentialOfferResponse'
 import { Flow } from './flow'
 import { last } from 'ramda'
+import { isCredentialOfferRequest, isCredentialOfferResponse, isCredentialReceive } from './guards'
 
 type ValidationErrorMap = {
   invalidIssuer?: boolean
   invalidSubject?: boolean
 }
+
 
 export type OfferWithValidity = SignedCredentialWithMetadata & {
   validationErrors: ValidationErrorMap
@@ -27,22 +29,25 @@ export class CredentialOfferFlow extends Flow {
     return this.credentialOfferingState
   }
 
-  // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when casting
-  public async handleInteractionToken(
-    token: JWTEncodable,
-    messageType: InteractionType,
-  ): Promise<any> {
-    switch (messageType) {
-      case InteractionType.CredentialOfferRequest:
-        return this.handleOfferRequest(token as CredentialOfferRequest)
-      case InteractionType.CredentialOfferResponse:
-        return this.handleOfferResponse(token as CredentialOfferResponse)
-      case InteractionType.CredentialsReceive:
-        return this.handleCredentialReceive(token as CredentialsReceive)
-      default:
-        throw new Error('Interaction type not found')
-    }
-  }
+   public async handleInteractionToken(
+     token: JWTEncodable,
+     messageType: InteractionType,
+   ): Promise<any> {
+     // TODO Push once all is good FIX
+     switch (messageType) {
+       case InteractionType.CredentialOfferRequest:
+         if (isCredentialOfferRequest(token))
+           return this.handleOfferRequest(token)
+       case InteractionType.CredentialOfferResponse:
+         if (isCredentialOfferResponse(token))
+           return this.handleOfferResponse(token)
+       case InteractionType.CredentialsReceive:
+         if (isCredentialReceive(token))
+           return this.handleCredentialReceive(token)
+       default:
+         throw new Error('Interaction type not found')
+     }
+   }
 
   private handleOfferRequest({ offeredCredentials }: CredentialOfferRequest) {
     this.credentialOfferingState = offeredCredentials.map(offer => ({

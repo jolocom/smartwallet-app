@@ -3,6 +3,8 @@ import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { Interaction } from './interaction'
 import { Flow } from './flow'
+import { isAuthenticationRequest } from './guards'
+
 
 export class AuthenticationFlow extends Flow {
   private authenticationDescription!: string
@@ -22,7 +24,8 @@ export class AuthenticationFlow extends Flow {
   ) {
     switch (interactionType) {
       case InteractionType.Authentication:
-        return this.consumeAuthenticationRequest(token as Authentication)
+        if (isAuthenticationRequest(token))
+          return this.consumeAuthenticationRequest(token)
       default:
         throw new Error('Interaction type not found')
     }
