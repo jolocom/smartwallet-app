@@ -73,6 +73,10 @@ export class Interaction {
     )
   }
 
+  public getCurrentIdentityDid() {
+    return this.ctx.identityWallet.did
+  }
+
   // TODO Try to write a respond function that collapses these
   public async createAuthenticationResponse() {
     return this.ctx.identityWallet.create.interactionTokens.response.auth(

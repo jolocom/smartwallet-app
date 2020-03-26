@@ -78,20 +78,17 @@ export class CredentialOfferFlow extends Flow {
                  throw new Error('Received wrong credentials')
                }
 
-               return {
-                 ...offer,
-                 signedCredential,
-                 validationErrors: {
-                   // This signals funny things in the flow without throwing errors. We don't simply throw because often times
-                   // negotiation is still possible on the UI / UX layer, and the interaction can continue.
-                   invalidIssuer:
-                     signedCredential.issuer !== this.ctx.issuerSummary.did,
-                   invalidSubject:
-                     signedCredential.subject !==
-                     this.ctx.ctx.identityWallet.did, // TODO FIXME Too many ctx.
-                 },
-               }
-             },
-           )
-         }
-       }
+      return {
+        ...offer,
+        signedCredential,
+        validationErrors: {
+          // This signals funny things in the flow without throwing errors. We don't simply throw because often times
+          // negotiation is still possible on the UI / UX layer, and the interaction can continue.
+          invalidIssuer: signedCredential.issuer !== this.ctx.issuerSummary.did,
+          invalidSubject:
+            signedCredential.subject !== this.ctx.getCurrentIdentityDid(),
+        },
+      }
+    })
+  }
+}
