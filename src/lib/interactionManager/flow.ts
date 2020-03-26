@@ -4,7 +4,6 @@ import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
 export abstract class Flow {
   protected ctx: Interaction
-  protected tokens: Array<JWTEncodable> = []
 
   constructor(ctx: Interaction) {
     this.ctx = ctx
@@ -16,8 +15,4 @@ export abstract class Flow {
   ): Promise<void>
 
   abstract getState(): any
-
-  public getMessages() {
-    return this.tokens
-  }
 }

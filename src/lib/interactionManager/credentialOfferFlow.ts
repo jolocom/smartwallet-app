@@ -18,65 +18,58 @@ export type OfferWithValidity = SignedCredentialWithMetadata & {
 }
 
 export class CredentialOfferFlow extends Flow {
-         public credentialOfferingState: OfferWithValidity[] = []
-         public constructor(ctx: Interaction) {
-           super(ctx)
-         }
+  public credentialOfferingState: OfferWithValidity[] = []
+  public constructor(ctx: Interaction) {
+    super(ctx)
+  }
 
-         public getState() {
-           return this.credentialOfferingState
-         }
+  public getState() {
+    return this.credentialOfferingState
+  }
 
-         // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when casting
-         public async handleInteractionToken(
-           token: JWTEncodable,
-           messageType: InteractionType,
-         ): Promise<any> {
-           // TODO Push once all is good FIX
-           this.tokens.push(token)
-           switch (messageType) {
-             case InteractionType.CredentialOfferRequest:
-               return this.handleOfferRequest(token as CredentialOfferRequest)
-             case InteractionType.CredentialOfferResponse:
-               return this.handleOfferResponse(token as CredentialOfferResponse)
-             case InteractionType.CredentialsReceive:
-               return this.handleCredentialReceive(token as CredentialsReceive)
-             default:
-               throw new Error('Interaction type not found')
-           }
-         }
+  // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when casting
+  public async handleInteractionToken(
+    token: JWTEncodable,
+    messageType: InteractionType,
+  ): Promise<any> {
+    switch (messageType) {
+      case InteractionType.CredentialOfferRequest:
+        return this.handleOfferRequest(token as CredentialOfferRequest)
+      case InteractionType.CredentialOfferResponse:
+        return this.handleOfferResponse(token as CredentialOfferResponse)
+      case InteractionType.CredentialsReceive:
+        return this.handleCredentialReceive(token as CredentialsReceive)
+      default:
+        throw new Error('Interaction type not found')
+    }
+  }
 
-         private handleOfferRequest({
-           offeredCredentials,
-         }: CredentialOfferRequest) {
-           this.credentialOfferingState = offeredCredentials.map(offer => ({
-             ...offer,
-             validationErrors: {},
-           }))
-         }
+  private handleOfferRequest({ offeredCredentials }: CredentialOfferRequest) {
+    this.credentialOfferingState = offeredCredentials.map(offer => ({
+      ...offer,
+      validationErrors: {},
+    }))
+  }
 
-         // Not relevant for client (?)
-         private async handleOfferResponse(token: CredentialOfferResponse) {
-           return
-         }
+  // Not relevant for client (?)
+  private async handleOfferResponse(token: CredentialOfferResponse) {
+    return
+  }
 
-         // Sets the validity map, currently if the issuer and if the subjects are correct.
-         // also populates the SignedCredentialWithMetadata with credentials
-         private handleCredentialReceive({
-           signedCredentials,
-         }: CredentialsReceive) {
-           // This actually cares about the credentials the user selected
-           // TODO parse from previous messages or extend the flow state
-           this.credentialOfferingState = signedCredentials.map(
-             signedCredential => {
-               // TODO Should this throw or signal through the validitySummary?
-               const offer = this.credentialOfferingState.find(
-                 ({ type }) => type === last(signedCredential.type),
-               )
+  // Sets the validity map, currently if the issuer and if the subjects are correct.
+  // also populates the SignedCredentialWithMetadata with credentials
+  private handleCredentialReceive({ signedCredentials }: CredentialsReceive) {
+    // This actually cares about the credentials the user selected
+    // TODO parse from previous messages or extend the flow state
+    this.credentialOfferingState = signedCredentials.map(signedCredential => {
+      // TODO Should this throw or signal through the validitySummary?
+      const offer = this.credentialOfferingState.find(
+        ({ type }) => type === last(signedCredential.type),
+      )
 
-               if (!offer) {
-                 throw new Error('Received wrong credentials')
-               }
+      if (!offer) {
+        throw new Error('Received wrong credentials')
+      }
 
       return {
         ...offer,

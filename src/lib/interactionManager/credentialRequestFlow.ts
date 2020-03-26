@@ -1,15 +1,13 @@
-import {
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types';
-import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest';
+import { JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { CredentialTypeSummary } from '../../actions/sso/types'
-import { getUiCredentialTypeByType } from '../util';
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
-import { Interaction } from './interaction';
+import { getUiCredentialTypeByType } from '../util'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { Interaction } from './interaction'
 import { isEmpty } from 'ramda'
-import { Flow } from './flow';
-import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialResponse';
+import { Flow } from './flow'
+import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialResponse'
 
 export class CredentialRequestFlow extends Flow {
   private credRequestState!: CredentialTypeSummary[]
@@ -27,7 +25,10 @@ export class CredentialRequestFlow extends Flow {
    * Given an interaction token, will fire the appropriate step in the protocol or throw
    */
 
-  public async handleInteractionToken(token: JWTEncodable, interactionType: InteractionType) {
+  public async handleInteractionToken(
+    token: JWTEncodable,
+    interactionType: InteractionType,
+  ) {
     switch (interactionType) {
       case InteractionType.CredentialRequest:
         return this.handleCredentialRequest(token as CredentialRequest)
@@ -57,11 +58,15 @@ export class CredentialRequestFlow extends Flow {
           ]
         }
 
-        return Promise.all(results.map(async ({values, verification}) => ({
-          type: getUiCredentialTypeByType(type),
-          values,
-          verifications: await this.ctx.getVerifiableCredential({ id: verification, }),
-        })))
+        return Promise.all(
+          results.map(async ({ values, verification }) => ({
+            type: getUiCredentialTypeByType(type),
+            values,
+            verifications: await this.ctx.getVerifiableCredential({
+              id: verification,
+            }),
+          })),
+        )
       }),
     )
 
@@ -80,8 +85,6 @@ export class CredentialRequestFlow extends Flow {
     )
 
     this.credRequestState = abbreviated.reduce((acc, val) => acc.concat(val))
-
-    this.tokens.push(request)
   }
 
   // Currently no validation here
