@@ -7,9 +7,15 @@ import { last } from 'ramda'
 import { Flow } from './flow'
 import { Interaction } from './interaction'
 import { CredentialOfferFlowState } from './types'
+import {
+  isCredentialOfferRequest,
+  isCredentialOfferResponse,
+  isCredentialReceive,
+} from './guards'
 
 export class CredentialOfferFlow extends Flow {
   public credentialOfferingState: CredentialOfferFlowState = []
+
   public constructor(ctx: Interaction) {
     super(ctx)
   }
@@ -18,19 +24,20 @@ export class CredentialOfferFlow extends Flow {
     return this.credentialOfferingState
   }
 
-  // TODO Go back to JSONWebToken<JWTEncodable> and use guard functions when
-  // casting
   public async handleInteractionToken(
     token: JWTEncodable,
     messageType: InteractionType,
   ): Promise<any> {
     switch (messageType) {
       case InteractionType.CredentialOfferRequest:
-        return this.handleOfferRequest(token as CredentialOfferRequest)
+        if (isCredentialOfferRequest(token))
+          return this.handleOfferRequest(token)
       case InteractionType.CredentialOfferResponse:
-        return this.handleOfferResponse(token as CredentialOfferResponse)
+        if (isCredentialOfferResponse(token))
+          return this.handleOfferResponse(token)
       case InteractionType.CredentialsReceive:
-        return this.handleCredentialReceive(token as CredentialsReceive)
+        if (isCredentialReceive(token))
+          return this.handleCredentialReceive(token)
       default:
         throw new Error('Interaction type not found')
     }

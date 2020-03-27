@@ -12,6 +12,7 @@ import strings from '../../locales/strings'
 import {
   InteractionChannel,
   SignedCredentialWithMetadata,
+  CredentialOfferFlowState,
 } from '../../lib/interactionManager/types'
 import { isEmpty, uniqBy } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -39,6 +40,13 @@ export const consumeCredentialOfferRequest = (
   )
 }
 
+/**
+ * Given the ID for a {@link CredentialOfferFlow}, and an array representing a user selection,
+ * will attempt to create the correct {@link CredentialOfferResponse} token, and pass it to the interaction
+ * class instance to move the interaction forward.
+ * @todo - interaction.send can throw, this is not currently handled.
+ */
+
 export const consumeCredentialReceive = (
   selectedSignedCredentialWithMetadata: SignedCredentialWithMetadata[],
   interactionId: string,
@@ -51,7 +59,6 @@ export const consumeCredentialReceive = (
     ),
   )
 
-  // @ts-ignore
   await interaction.processInteractionToken(credentialReceive)
   return dispatch(
     validateSelectionAndSave(
@@ -61,17 +68,18 @@ export const consumeCredentialReceive = (
   )
 }
 
-// TODO Should abstract away negotiation.
-// Takes an array of selectedCredentials,
-// where signedCredential is assumed to be populated
-// Takes an interactionId, from which the state can be pulled.
-//
-// The selectedCredentials contains the user selection,
-// i.e. first, or second, or all.
-//
-// We should ensure we have the matching crednetials
-// We should ensure the matching credentials pass the validation rules (assumed becaue they can't be selected on the ui layer)
-// We attempt to save the matching credentials
+/**
+ * Given the ID for a {@link CredentialOfferFlow}, and an array representing a user selection,
+ * will ensure that the user selection is sane (i.e. the user selected credentials from the offer),
+ * and navigate accordingly.
+ * In case the selection is sane, we try store the selected credentials and navigate to home.
+ * In case the selection contains SOME entries which can't be saved (i.e. wrong issuer / subject, already stored),
+ * we navigate to the selection screen again, with the problematic credentials marked as invalid (and therefore unselectable)
+ * In case the selection contains NO entries that can be saved, a error notification is rendered, and the interaction is ended.
+ *
+ * @dev This function can eventually be simplified. It currently contains a bunch of logic which is not well abstracted / does not fit anywhere else
+ * (e.g. checking for duplicates)
+ */
 
 export const validateSelectionAndSave = (
   selectedCredentials: SignedCredentialWithMetadata[],
@@ -82,7 +90,7 @@ export const validateSelectionAndSave = (
   { interactionManager, storageLib },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const offer: OfferWithValidity[] = interaction.getSummary().state
+  const offer: CredentialOfferFlowState = interaction.getSummary().state
 
   const selectedTypes = selectedCredentials.map(el => el.type)
   const toSave = offer.filter(el => selectedTypes.includes(el.type))
@@ -92,9 +100,6 @@ export const validateSelectionAndSave = (
     // Means one of the selections isn't in the offer
   }
 
-  // TODO This should be abstracted away, but not sure where to
-  // TODO Inject these into the screen so they render as unselectable
-  // Maybe move this in the flow after all?
   const duplicates = await isCredentialStored(toSave, id =>
     interaction.getStoredCredentialById(id),
   )
@@ -106,8 +111,9 @@ export const validateSelectionAndSave = (
       duplicates[i],
   )
 
-  // All invalid means all contain at least one error, i.e. there is no false
+  // None passed the validation
   const allInvalid = !validationErrors.includes(false)
+  // At least one passed the validatio
   const allValid = !validationErrors.includes(true)
 
   const scheduleInvalidNotification = (message: string) =>
@@ -179,7 +185,11 @@ export const validateSelectionAndSave = (
   )
 }
 
-// TODO Breaks abstraction, should be handled in Interaction.store
+/**
+ * Helper function to check if a credential with a given ID is already stored in the wallet,
+ * used to detect "duplicate" offers
+ */
+
 const isCredentialStored = async (
   offer: SignedCredentialWithMetadata[],
   getCredential: (id: string) => Promise<SignedCredential[]>,
@@ -192,9 +202,10 @@ const isCredentialStored = async (
     ),
   )
 
-// LEFT -> Probably not storing correctly, or not throwing.
-// The flow on the wallet looks okay, but stuff is not in the documetns tab
-// todo => check if the server I'm testing against isn't the problem
+/**
+ * @todo currently the only helper which takes a function as an arg instead of a reference to the (in this instance)
+ * storage class. Does this need to change for consistency?
+ */
 
 const storeOfferMetadata = async (
   offer: SignedCredentialWithMetadata[],
@@ -225,7 +236,6 @@ const endReceiving = (interactionId: string): ThunkAction => (
   const { channel } = interaction
 
   if (channel === InteractionChannel.Deeplink) {
-    //TODO @clauxx handle deeplink properly
     return dispatch(navigationActions.navigatorResetHome())
   } else {
     return dispatch(

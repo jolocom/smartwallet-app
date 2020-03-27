@@ -11,6 +11,7 @@ import {
   InteractionSummary,
   SignedCredentialWithMetadata,
   CredentialVerificationSummary,
+  AuthenticationFlowState,
 } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'
@@ -24,6 +25,7 @@ import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRe
 import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { Linking } from 'react-native'
 import { AppError, ErrorCode } from '../errors'
+import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -77,10 +79,17 @@ export class Interaction {
 
   // TODO Try to write a respond function that collapses these
   public async createAuthenticationResponse() {
+    const request = this.findMessageByType(
+      InteractionType.Authentication,
+    ) as JSONWebToken<Authentication>
+
     return this.ctx.identityWallet.create.interactionTokens.response.auth(
-      this.getSummary().state,
+      {
+        description: this.getSummary().state,
+        callbackURL: request.interactionToken.callbackURL,
+      },
       await this.ctx.keyChainLib.getPassword(),
-      this.findMessageByType(InteractionType.Authentication),
+      request,
     )
   }
 
@@ -159,7 +168,9 @@ export class Interaction {
 
     return this.flow
       .handleInteractionToken(token.interactionToken, token.interactionType)
-      .then(() => this.interactionMessages.push(token))
+      .then(() => {
+        this.interactionMessages.push(token)
+      })
   }
 
   public getSummary(): InteractionSummary {
@@ -188,7 +199,7 @@ export class Interaction {
   // TODO This should probably come from the transport / channel handler
   public async send<T extends JWTEncodable>(
     token: JSONWebToken<JWTEncodable>,
-  ): Promise<JSONWebToken<T> | undefined> {
+  ): Promise<JSONWebToken<T>> {
     //@ts-ignore - needs fix on the lib for JWTEncodable.
     const { callbackURL } = token.interactionToken
 
@@ -200,19 +211,17 @@ export class Interaction {
           headers: { 'Content-Type': 'application/json' },
         })
 
-        try {
-          return JolocomLib.parse.interactionToken.fromJWT<T>(
-            (await response.json()).token,
-          )
-        } catch {
-          return
-        }
+        return JolocomLib.parse.interactionToken.fromJWT<T>(
+          (await response.json()).token,
+        )
+
       case InteractionChannel.Deeplink:
         const callback = `${callbackURL}/${token.encode()}`
         if (!(await Linking.canOpenURL(callback))) {
           throw new AppError(ErrorCode.DeepLinkUrlNotFound)
         }
         return Linking.openURL(callback)
+
       default:
         throw new AppError(ErrorCode.TransportNotSupported)
     }

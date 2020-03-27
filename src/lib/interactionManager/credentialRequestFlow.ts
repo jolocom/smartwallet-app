@@ -8,6 +8,7 @@ import { isEmpty } from 'ramda'
 import { Flow } from './flow'
 import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialResponse'
 import { AttributeSummary, CredentialRequestFlowState } from './types'
+import { isCredentialRequest, isCredentialResponse } from './guards'
 
 export class CredentialRequestFlow extends Flow {
   private credRequestState!: CredentialRequestFlowState
@@ -31,9 +32,11 @@ export class CredentialRequestFlow extends Flow {
   ) {
     switch (interactionType) {
       case InteractionType.CredentialRequest:
-        return this.handleCredentialRequest(token as CredentialRequest)
+        if (isCredentialRequest(token))
+          return this.handleCredentialRequest(token)
       case InteractionType.CredentialResponse:
-        return this.handleCredentialResponse(token as CredentialResponse)
+        if (isCredentialResponse(token))
+          return this.handleCredentialResponse(token)
       default:
         throw new Error('Interaction type not found')
     }
