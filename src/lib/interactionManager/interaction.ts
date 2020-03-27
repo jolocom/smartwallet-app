@@ -194,13 +194,18 @@ export class Interaction {
     return this.ctx.storageLib.get.verifiableCredential(query)
   }
 
-  // @dev This will crash with a credential receive because it doesn't contain
-  // a callbackURL
-  // TODO This should probably come from the transport / channel handler
-  public async send<T extends JWTEncodable>(
-    token: JSONWebToken<JWTEncodable>,
-  ): Promise<JSONWebToken<T>> {
-    //@ts-ignore - needs fix on the lib for JWTEncodable.
+  /**
+   * @dev This will crash with a credential receive because it doesn't contain a callbackURL
+   * @todo This should probably come from the transport / channel handler
+   * @todo Can this use the HttpAgent exported from instead of fetch? http.ts?
+   * @todo The return type is difficult to pin down. If we're making a post, we expect a Response obejct,
+   *   which either holds a token that can be parsed, or not (i.e. with credential responses, the answer from
+   *   the server only holds the status code right now)
+   *   If we're linking, the return value is a promise, as per {@see http://reactnative.dev/docs/linking.html#openurl}
+   */
+
+  public async send(token: JSONWebToken<JWTEncodable>) {
+    // @ts-ignore - CredentialReceive has no callbackURL, needs fix on the lib for JWTEncodable.
     const { callbackURL } = token.interactionToken
 
     switch (this.channel) {
@@ -211,17 +216,27 @@ export class Interaction {
           headers: { 'Content-Type': 'application/json' },
         })
 
-        return JolocomLib.parse.interactionToken.fromJWT<T>(
-          (await response.json()).token,
-        )
+        if (!response.ok) {
+          // TODO Error code for failed send?
+          // TODO Actually include some info about the error
+          throw new AppError(ErrorCode.Unknown)
+        }
 
+        const text = await response.text()
+
+        if (text.length) {
+          const { token } = JSON.parse(text)
+          return JolocomLib.parse.interactionToken.fromJWT(token)
+        }
+
+        break
       case InteractionChannel.Deeplink:
         const callback = `${callbackURL}/${token.encode()}`
         if (!(await Linking.canOpenURL(callback))) {
           throw new AppError(ErrorCode.DeepLinkUrlNotFound)
         }
-        return Linking.openURL(callback)
 
+        return Linking.openURL(callback)
       default:
         throw new AppError(ErrorCode.TransportNotSupported)
     }
