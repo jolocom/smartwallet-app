@@ -11,7 +11,7 @@ import {
   InteractionSummary,
   SignedCredentialWithMetadata,
   CredentialVerificationSummary,
-  AuthenticationFlowState,
+  FlowState,
 } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'
@@ -47,7 +47,7 @@ export class Interaction {
 
   public id: string
   public ctx: BackendMiddleware
-  public flow!: Flow
+  public flow!: Flow<FlowState>
 
   // This is the channel through which the request (first token) came in.
   public channel: InteractionChannel

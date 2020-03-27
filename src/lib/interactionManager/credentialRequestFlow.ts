@@ -10,7 +10,7 @@ import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialR
 import { AttributeSummary, CredentialRequestFlowState } from './types'
 import { isCredentialRequest, isCredentialResponse } from './guards'
 
-export class CredentialRequestFlow extends Flow {
+export class CredentialRequestFlow extends Flow<CredentialRequestFlowState> {
   private credRequestState!: CredentialRequestFlowState
 
   constructor(ctx: Interaction) {

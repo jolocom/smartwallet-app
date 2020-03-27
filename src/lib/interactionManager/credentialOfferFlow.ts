@@ -13,7 +13,7 @@ import {
   isCredentialReceive,
 } from './guards'
 
-export class CredentialOfferFlow extends Flow {
+export class CredentialOfferFlow extends Flow<CredentialOfferFlowState> {
   public credentialOfferingState: CredentialOfferFlowState = []
 
   public constructor(ctx: Interaction) {

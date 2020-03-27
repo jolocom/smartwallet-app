@@ -15,12 +15,9 @@ export interface IdentitySummary {
   publicProfile?: IssuerPublicProfileSummary
 }
 
-export interface RequestSummary {
+export interface PaymentRequestSummary {
   callbackURL: string
   requester: IdentitySummary
-}
-
-export interface PaymentRequestSummary extends RequestSummary {
   receiver: {
     did: string
     address: string

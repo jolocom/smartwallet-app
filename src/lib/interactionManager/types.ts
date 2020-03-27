@@ -3,6 +3,11 @@ import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/interactionTok
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '../../actions/sso/types'
 
+export type FlowState =
+  | AuthenticationFlowState
+  | CredentialRequestFlowState
+  | CredentialOfferFlowState
+
 // TODO @clauxx rename this
 export interface InteractionState {
   [nonce: string]: Interaction
@@ -11,7 +16,7 @@ export interface InteractionState {
 // TODO @clauxx make generic???
 export interface InteractionSummary {
   issuer: IdentitySummary
-  state: any
+  state: FlowState
 }
 
 export enum InteractionChannel {

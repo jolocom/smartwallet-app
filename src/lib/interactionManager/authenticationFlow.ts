@@ -6,7 +6,7 @@ import { Flow } from './flow'
 import { AuthenticationFlowState } from './types'
 import { isAuthenticationRequest } from './guards'
 
-export class AuthenticationFlow extends Flow {
+export class AuthenticationFlow extends Flow<AuthenticationFlowState> {
   private description!: AuthenticationFlowState
 
   public constructor(ctx: Interaction) {
