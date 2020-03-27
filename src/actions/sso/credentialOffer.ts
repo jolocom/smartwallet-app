@@ -58,13 +58,15 @@ export const consumeCredentialReceive = (
     ),
   )
 
-  await interaction.processInteractionToken(credentialReceive)
-  return dispatch(
-    validateSelectionAndSave(
-      selectedSignedCredentialWithMetadata,
-      interaction.id,
-    ),
-  )
+  if (credentialReceive) {
+    await interaction.processInteractionToken(credentialReceive)
+    return dispatch(
+      validateSelectionAndSave(
+        selectedSignedCredentialWithMetadata,
+        interaction.id,
+      ),
+    )
+  }
 }
 
 /**
