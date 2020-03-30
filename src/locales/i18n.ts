@@ -3,7 +3,6 @@
 // see
 // https://github.com/react-native-community/react-native-localize/blob/master/example/src/AsyncExample.js
 
-import * as RNLocalize from 'react-native-localize'
 import I18n from 'i18n-js'
 
 const de = require('./de.json')
@@ -18,10 +17,17 @@ I18n.translations = {
 }
 export const locales = ['en', 'de', 'nl']
 
-const fallback = { languageTag: 'en', isRTL: false }
-const { languageTag } =
-  RNLocalize.findBestAvailableLanguage(locales) || fallback
-I18n.locale = languageTag
+const defaultLocale = { languageTag: 'en', isRTL: false }
+
+/** @dev Only english is offered until the Dutch and German terms are polished, previous code:
+*
+* import * as RNLocalize from 'react-native-localize'
+* const { languageTag } =
+* RNLocalize.findBestAvailableLanguage(locales) || fallback
+* I18n.locale = languageTag
+*/
+
+I18n.locale = defaultLocale.languageTag
 
 const localeSpecificImages = {
   en: {

@@ -33,9 +33,15 @@ export const initApp: ThunkAction = async (
   try {
     await backendMiddleware.initStorage()
     const storedSettings = await backendMiddleware.storageLib.get.settingsObject()
-    // locale setup
-    if (storedSettings.locale) I18n.locale = storedSettings.locale
-    else storedSettings.locale = I18n.locale
+
+    /**
+     * @dev Until German and Dutch terms are polished, only English is used.
+     * previous code:
+     * if (storedSettings.locale) I18n.locale = storedSettings.locale
+     * else storedSettings.locale = I18n.locale
+     */
+    storedSettings.locale = I18n.locale
+
     SplashScreen.hide()
     return dispatch(loadSettings(storedSettings))
   } catch (e) {
