@@ -58,10 +58,7 @@ export class CredentialOfferFlow extends Flow<CredentialOfferFlowState> {
   // Sets the validity map, currently if the issuer and if the subjects are correct.
   // also populates the SignedCredentialWithMetadata with credentials
   private handleCredentialReceive({ signedCredentials }: CredentialsReceive) {
-    // This actually cares about the credentials the user selected
-    // TODO parse from previous messages or extend the flow state
     this.credentialOfferingState = signedCredentials.map(signedCredential => {
-      // TODO Should this throw or signal through the validitySummary?
       const offer = this.credentialOfferingState.find(
         ({ type }) => type === last(signedCredential.type),
       )
@@ -76,9 +73,8 @@ export class CredentialOfferFlow extends Flow<CredentialOfferFlowState> {
         validationErrors: {
           // This signals funny things in the flow without throwing errors. We don't simply throw because often times
           // negotiation is still possible on the UI / UX layer, and the interaction can continue.
-          invalidIssuer: signedCredential.issuer !== this.ctx.issuerSummary.did,
-          invalidSubject:
-            signedCredential.subject !== this.ctx.getCurrentIdentityDid(),
+          invalidIssuer: signedCredential.issuer !== this.ctx.participants.them.did,
+          invalidSubject: signedCredential.subject !== this.ctx.participants.us.did,
         },
       }
     })

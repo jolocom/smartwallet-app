@@ -1,5 +1,4 @@
 import { CredentialOfferFlow } from './credentialOfferFlow'
-import { IdentitySummary } from '../../actions/sso/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import {
   JSONWebToken,
@@ -16,7 +15,6 @@ import {
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'
 import { CredentialMetadataSummary } from '../storage/storage'
-import { generateIdentitySummary } from 'src/actions/sso/utils'
 import { Flow } from './flow'
 import { last } from 'ramda'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
@@ -26,15 +24,13 @@ import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentials
 import { Linking } from 'react-native'
 import { AppError, ErrorCode } from '../errors'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
+import { Identity } from 'jolocom-lib/js/identity/identity'
+import { generateIdentitySummary } from 'src/actions/sso/utils'
 
 /***
  * - initiated by InteractionManager when an interaction starts
  * - handles the communication channel of the interaction
  * - holds the instance of the particular interaction (e.g. CredentialOffer, Authentication)
- *
- * TODO needs to hold:
- *  callbackURL
- *  participants { us them }
  */
 
 export class Interaction {
@@ -49,9 +45,13 @@ export class Interaction {
   public ctx: BackendMiddleware
   public flow!: Flow<FlowState>
 
+  public participants!: {
+    us: Identity,
+    them: Identity
+  }
+
   // This is the channel through which the request (first token) came in.
   public channel: InteractionChannel
-  public issuerSummary!: IdentitySummary
 
   public constructor(
     ctx: BackendMiddleware,
@@ -73,9 +73,6 @@ export class Interaction {
     )
   }
 
-  public getCurrentIdentityDid() {
-    return this.ctx.identityWallet.did
-  }
 
   // TODO Try to write a respond function that collapses these
   public async createAuthenticationResponse() {
@@ -137,19 +134,18 @@ export class Interaction {
     )
   }
 
-  // rename to signal this does validation
   public async processInteractionToken(token: JSONWebToken<JWTEncodable>) {
-    // At some point we should strip the JSONWebToken<JWTEncodable>
-    if (!this.issuerSummary) {
-      // TODO Potential bug if we start with our token, i.e. we are the issuer
-      this.issuerSummary = generateIdentitySummary(
-        await this.ctx.registry.resolve(token.signer.did),
-      )
-    }
-
     if (!this.flow) {
       this.flow = new this.interactionFlow[token.interactionType](this)
     }
+
+    if (!this.participants) {
+      this.participants = {
+        us: this.ctx.identityWallet.identity,
+        them: await this.ctx.registry.resolve(token.signer.did)
+      }
+    }
+
 
     if (token.signer.did !== this.ctx.identityWallet.did) {
       await this.ctx.identityWallet.validateJWT(
@@ -175,7 +171,7 @@ export class Interaction {
 
   public getSummary(): InteractionSummary {
     return {
-      issuer: this.issuerSummary,
+      issuer: generateIdentitySummary(this.participants.them),
       state: this.flow.getState(),
     }
   }
@@ -228,15 +224,15 @@ export class Interaction {
           const { token } = JSON.parse(text)
           return JolocomLib.parse.interactionToken.fromJWT(token)
         }
-
         break
+
       case InteractionChannel.Deeplink:
         const callback = `${callbackURL}/${token.encode()}`
         if (!(await Linking.canOpenURL(callback))) {
           throw new AppError(ErrorCode.DeepLinkUrlNotFound)
         }
 
-        return Linking.openURL(callback)
+        return Linking.openURL(callback).then(() => {})
       default:
         throw new AppError(ErrorCode.TransportNotSupported)
     }
@@ -256,5 +252,5 @@ export class Interaction {
     this.ctx.storageLib.store.credentialMetadata(metadata)
 
   public storeIssuerProfile = () =>
-    this.ctx.storageLib.store.issuerProfile(this.issuerSummary)
+    this.ctx.storageLib.store.issuerProfile(generateIdentitySummary(this.participants.them))
 }

@@ -2,8 +2,6 @@ import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
-import { generateIdentitySummary } from '../../actions/sso/utils'
 import { Interaction } from './interaction'
 import { BackendMiddleware } from '../../backendMiddleware'
 import { InteractionChannel, InteractionState } from './types'
@@ -40,14 +38,6 @@ export class InteractionManager {
     await interaction.processInteractionToken(token)
 
     return interaction
-  }
-
-  public async getIssuerSummary(issuer: string) {
-    const issuerDid = keyIdToDid(issuer)
-    const issuerIdentity = await this.backendMiddleware.registry.resolve(
-      issuerDid,
-    )
-    return generateIdentitySummary(issuerIdentity)
   }
 
   public getInteraction(id: string) {
