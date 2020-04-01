@@ -7,8 +7,7 @@ import React, { useRef } from 'react'
 import { black065, greyLight, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
 import { DocumentReceiveCard } from './documentReceiveCard'
-import { SignedCredentialWithMetadata } from '../../../lib/interactionManager/types'
-import { OfferWithValidity } from 'src/lib/interactionManager/types'
+import { SignedCredentialWithMetadata, CredentialOfferFlowState } from '../../../lib/interactionManager/types'
 import LinearGradient from 'react-native-linear-gradient'
 
 const styles = StyleSheet.create({
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   publicProfile: IssuerPublicProfileSummary
-  credentialOfferSummary: OfferWithValidity[]
+  credentialOfferSummary: CredentialOfferFlowState
   onToggleSelect: (offering: SignedCredentialWithMetadata) => void
   isDocumentSelected: (offering: SignedCredentialWithMetadata) => boolean
 }

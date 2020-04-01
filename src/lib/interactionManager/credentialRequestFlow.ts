@@ -10,15 +10,11 @@ import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialR
 import { AttributeSummary, CredentialRequestFlowState } from './types'
 import { isCredentialRequest, isCredentialResponse } from './guards'
 
-export class CredentialRequestFlow extends Flow<CredentialRequestFlowState> {
-  private credRequestState!: CredentialRequestFlowState
+export class CredentialRequestFlow extends Flow {
+  public state: CredentialRequestFlowState = []
 
   constructor(ctx: Interaction) {
     super(ctx)
-  }
-
-  public getState() {
-    return this.credRequestState
   }
 
   /*
@@ -87,7 +83,7 @@ export class CredentialRequestFlow extends Flow<CredentialRequestFlowState> {
       })),
     )
 
-    this.credRequestState = abbreviated.reduce((acc, val) => acc.concat(val))
+    this.state = abbreviated.reduce((acc, val) => acc.concat(val))
   }
 
   // Currently no validation here

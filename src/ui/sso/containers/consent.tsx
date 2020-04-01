@@ -43,6 +43,7 @@ const ConsentContainer = (props: Props) => {
 
   const { issuer, state: availableCredentials } = interactionSummary
 
+  // TODO Instead of "as", use type guards?
   return (
     <ConsentComponent
       requester={issuer}

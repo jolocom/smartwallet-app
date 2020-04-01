@@ -18,7 +18,6 @@ import { isEmpty, uniqBy } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from 'src/lib/storage/storage'
 import { CacheEntity } from 'src/lib/storage/entities'
-import { OfferWithValidity } from 'src/lib/interactionManager/types'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -107,7 +106,7 @@ export const validateSelectionAndSave = (
   )
 
   const validationErrors = toSave.map(
-    ({ validationErrors }: OfferWithValidity, i) =>
+    ({ validationErrors }, i) =>
       validationErrors.invalidIssuer ||
       !!validationErrors.invalidSubject ||
       duplicates[i],
