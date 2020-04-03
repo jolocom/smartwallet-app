@@ -5,18 +5,13 @@ import { ScannerContainer } from './scanner'
 import { NavigationScreenProps } from 'react-navigation'
 import { white } from '../../../styles/colors'
 import { ThunkDispatch } from '../../../store'
-import { showErrorScreen } from '../../../actions/generic'
-import { AppError, ErrorCode } from '../../../lib/errors'
-import { interactionHandlers } from '../../../lib/storage/interactionTokens'
-import { withErrorScreen, withLoading } from '../../../actions/modifiers'
 import { connect } from 'react-redux'
 import { CloseIcon } from '../../../resources'
 import { fontMain, textXXS } from '../../../styles/typography'
 import { navigatorResetHome } from '../../../actions/navigation'
-import {
-  JSONWebToken,
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken'
+import { ErrorCode, AppError } from 'src/lib/errors'
+import { showErrorScreen } from 'src/actions/generic'
 import { Colors } from 'src/styles'
 import { InteractionChannel } from '../../../lib/interactionManager/types'
 
@@ -92,7 +87,7 @@ const InteractionContainer = (props: Props) => {
           )}
           <ScannerContainer
             navigation={props.navigation}
-            onScannerSuccess={props.onScannerSuccess}
+            consumeToken={props.consumeToken}
           />
         </Wrapper>
       </Animated.View>
@@ -100,23 +95,31 @@ const InteractionContainer = (props: Props) => {
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  onScannerSuccess: async (interactionToken: JSONWebToken<JWTEncodable>) => {
-    const handler = interactionHandlers[interactionToken.interactionType]
+// TODO: move these ErrorCodes to lib as LibError or something
+// in the App we should have just the errors that match user experience
+const localNotificationErrors = [
+  // AppError: "Wrong QR"
+  ErrorCode.ParseJWTFailed,
+  // AppError: "Wrong Data"
+  ErrorCode.WrongDID,
+  ErrorCode.WrongNonce,
+  ErrorCode.InvalidSignature,
+  ErrorCode.TokenExpired,
+]
 
-    return handler
-      ? dispatch(
-          withLoading(
-            withErrorScreen(handler(interactionToken, InteractionChannel.HTTP)),
-          ),
-        )
-      : dispatch(
-          showErrorScreen(
-            new AppError(ErrorCode.Unknown, new Error('No handler found')),
-          ),
-        )
-  },
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   navigateHome: () => dispatch(navigatorResetHome()),
+  consumeToken: async (jwt: string) => {
+    try {
+      return dispatch(consumeInteractionToken(jwt))
+    } catch (e) {
+      if (localNotificationErrors.includes(e.message)) {
+        throw e
+      } else {
+        return dispatch(showErrorScreen(new AppError(ErrorCode.Unknown, e)))
+      }
+    }
+  },
 })
 
 export const InteractionScreen = connect(

@@ -19,11 +19,9 @@ interface Props {
   children?: ReactNodeArray | ReactNode
 }
 
-export const SettingSection: React.FC<Props> = props => {
-  return (
-    <View style={styles.topSection}>
-      <Text style={styles.sectionHeader}>{props.title}</Text>
-      {props.children}
-    </View>
-  )
-}
+export const SettingSection: React.FC<Props> = props => (
+  <View style={styles.topSection}>
+    <Text style={styles.sectionHeader}>{props.title}</Text>
+    {props.children}
+  </View>
+)

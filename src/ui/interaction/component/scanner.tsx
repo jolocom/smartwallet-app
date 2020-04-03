@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import {
@@ -21,6 +21,7 @@ import {
   textSubheaderLineHeight,
 } from '../../../styles/typography'
 import { BP } from '../../../styles/breakpoints'
+import { ErrorCode } from '../../../lib/errors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
@@ -87,30 +88,65 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
-  onScan: (jwt: string) => void
-  isTorchPressed: boolean
-  onPressTorch: (state: boolean) => void
+  onScan: (jwt: string) => Promise<void>
   reRenderKey: number
-  isError: boolean
-  colorAnimationValue: Animated.Value
-  textAnimationValue: Animated.Value
 }
 
 export const ScannerComponent = (props: Props) => {
-  const {
-    onScan,
-    isError,
-    isTorchPressed,
-    onPressTorch,
-    reRenderKey,
-    colorAnimationValue,
-    textAnimationValue,
-  } = props
+  const { onScan, reRenderKey } = props
+
+  const [isError, setError] = useState()
+  const [errorText, setErrorText] = useState()
+  const [isTorchPressed, setTorchPressed] = useState(false)
+  const [colorAnimationValue] = useState(new Animated.Value(0))
+  const [textAnimationValue] = useState(new Animated.Value(0))
+
+  const animateColor = () =>
+    Animated.sequence([
+      Animated.timing(colorAnimationValue, {
+        toValue: 1,
+        duration: 300,
+      }),
+      Animated.timing(colorAnimationValue, {
+        toValue: 0,
+        delay: 400,
+        duration: 300,
+      }),
+    ])
+
+  const animateText = () =>
+    Animated.sequence([
+      Animated.timing(textAnimationValue, {
+        toValue: 1,
+        duration: 200,
+      }),
+      Animated.timing(textAnimationValue, {
+        toValue: 0,
+        delay: 1200,
+        duration: 500,
+      }),
+    ])
 
   const backgroundColorConfig = colorAnimationValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['transparent', 'rgba(243, 198, 28, 0.4)'],
   })
+
+  const onRead = (event: { data: string }) => {
+    return onScan(event.data).catch(err => {
+      // TODO: use different message based on error code
+      //       after fixing up error codes
+      setError(true)
+      if (err.code === ErrorCode.ParseJWTFailed) {
+        setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
+      } else {
+        setErrorText(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)
+      }
+      Animated.parallel([animateColor(), animateText()]).start(() => {
+        setError(false)
+      })
+    })
+  }
 
   const cameraSettings = {
     key: reRenderKey,
@@ -131,7 +167,7 @@ export const ScannerComponent = (props: Props) => {
         reactivate={true}
         reactivateTimeout={3000}
         fadeIn
-        onRead={e => onScan(e.data)}
+        onRead={onRead}
         cameraStyle={StyleSheet.create({
           //@ts-ignore
           height: SCREEN_HEIGHT,
@@ -168,7 +204,7 @@ export const ScannerComponent = (props: Props) => {
               },
             ]}
           >
-            {I18n.t(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)}
+            {I18n.t(errorText)}
           </Animated.Text>
         ) : (
           <Text style={styles.descriptionText}>
@@ -178,8 +214,8 @@ export const ScannerComponent = (props: Props) => {
           </Text>
         )}
         <TouchableHighlight
-          onPressIn={() => onPressTorch(true)}
-          onPressOut={() => onPressTorch(false)}
+          onPressIn={() => setTorchPressed(true)}
+          onPressOut={() => setTorchPressed(false)}
           activeOpacity={1}
           underlayColor={'transparent'}
           style={styles.torch}
