@@ -6,15 +6,11 @@ import { Flow } from './flow'
 import { AuthenticationFlowState } from './types'
 import { isAuthenticationRequest } from './guards'
 
-export class AuthenticationFlow extends Flow<AuthenticationFlowState> {
-  private description!: AuthenticationFlowState
+export class AuthenticationFlow extends Flow {
+  public state: AuthenticationFlowState = ''
 
   public constructor(ctx: Interaction) {
     super(ctx)
-  }
-
-  public getState() {
-    return this.description
   }
 
   // TODO InteractionType.AuthenticaitonResponse should exist
@@ -32,6 +28,6 @@ export class AuthenticationFlow extends Flow<AuthenticationFlowState> {
   }
 
   public async consumeAuthenticationRequest(token: Authentication) {
-    this.description = token.description
+    this.state = token.description
   }
 }

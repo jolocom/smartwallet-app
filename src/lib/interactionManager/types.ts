@@ -1,19 +1,8 @@
-import { Interaction } from './interaction'
 import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '../../actions/sso/types'
+import { FlowState } from './flow'
 
-export type FlowState =
-  | AuthenticationFlowState
-  | CredentialRequestFlowState
-  | CredentialOfferFlowState
-
-// TODO @clauxx rename this
-export interface InteractionState {
-  [nonce: string]: Interaction
-}
-
-// TODO @clauxx make generic???
 export interface InteractionSummary {
   issuer: IdentitySummary
   state: FlowState
@@ -29,7 +18,9 @@ export enum InteractionChannel {
 
 export type AuthenticationFlowState = string
 export type CredentialRequestFlowState = CredentialTypeSummary[]
-export type CredentialOfferFlowState = OfferWithValidity[]
+export type CredentialOfferFlowState = Array<SignedCredentialWithMetadata & {
+  validationErrors: ValidationErrorMap
+}>
 
 export interface CredentialTypeSummary {
   type: string
@@ -60,8 +51,4 @@ type ValidationErrorMap = {
 
 export interface SignedCredentialWithMetadata extends CredentialOffer {
   signedCredential?: SignedCredential
-}
-
-export type OfferWithValidity = SignedCredentialWithMetadata & {
-  validationErrors: ValidationErrorMap
 }

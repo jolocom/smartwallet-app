@@ -4,7 +4,7 @@ import {
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { Interaction } from './interaction'
 import { BackendMiddleware } from '../../backendMiddleware'
-import { InteractionChannel, InteractionState } from './types'
+import { InteractionChannel } from './types'
 
 /***
  * - initiated inside BackendMiddleware
@@ -16,7 +16,10 @@ import { InteractionChannel, InteractionState } from './types'
  */
 
 export class InteractionManager {
-  public interactions: InteractionState = {}
+  public interactions: {
+    [NONCE: string]: Interaction
+  }  = {}
+
   public readonly backendMiddleware: BackendMiddleware
 
   public constructor(backendMiddleware: BackendMiddleware) {
@@ -27,11 +30,11 @@ export class InteractionManager {
     channel: InteractionChannel,
     token: JSONWebToken<JWTEncodable>,
   ) {
-    // TODO Eventually backendMiddleware shouldn't go in anymore
     const interaction = new Interaction(
-      this.backendMiddleware,
+      this.backendMiddleware, // TODO Lift
       channel,
       token.nonce,
+      token.interactionType
     )
 
     this.interactions[token.nonce] = interaction

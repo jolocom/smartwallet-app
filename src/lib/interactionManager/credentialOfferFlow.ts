@@ -13,15 +13,11 @@ import {
   isCredentialReceive,
 } from './guards'
 
-export class CredentialOfferFlow extends Flow<CredentialOfferFlowState> {
-  public credentialOfferingState: CredentialOfferFlowState = []
+export class CredentialOfferFlow extends Flow {
+  public state: CredentialOfferFlowState = []
 
   public constructor(ctx: Interaction) {
     super(ctx)
-  }
-
-  public getState() {
-    return this.credentialOfferingState
   }
 
   public async handleInteractionToken(
@@ -44,7 +40,7 @@ export class CredentialOfferFlow extends Flow<CredentialOfferFlowState> {
   }
 
   private handleOfferRequest({ offeredCredentials }: CredentialOfferRequest) {
-    this.credentialOfferingState = offeredCredentials.map(offer => ({
+    this.state = offeredCredentials.map(offer => ({
       ...offer,
       validationErrors: {},
     }))
@@ -58,8 +54,8 @@ export class CredentialOfferFlow extends Flow<CredentialOfferFlowState> {
   // Sets the validity map, currently if the issuer and if the subjects are correct.
   // also populates the SignedCredentialWithMetadata with credentials
   private handleCredentialReceive({ signedCredentials }: CredentialsReceive) {
-    this.credentialOfferingState = signedCredentials.map(signedCredential => {
-      const offer = this.credentialOfferingState.find(
+    this.state = signedCredentials.map(signedCredential => {
+      const offer = this.state.find(
         ({ type }) => type === last(signedCredential.type),
       )
 

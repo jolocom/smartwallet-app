@@ -2,8 +2,12 @@ import { Interaction } from './interaction'
 import { JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
-export abstract class Flow<T> {
+export interface FlowState {
+}
+
+export abstract class Flow {
   protected ctx: Interaction
+  public abstract state: FlowState
 
   constructor(ctx: Interaction) {
     this.ctx = ctx
@@ -14,5 +18,7 @@ export abstract class Flow<T> {
     messageType: InteractionType,
   ): Promise<void>
 
-  abstract getState(): T
+  public getState() {
+    return this.state
+  }
 }

@@ -10,7 +10,6 @@ import {
   InteractionSummary,
   SignedCredentialWithMetadata,
   CredentialVerificationSummary,
-  FlowState,
 } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'
@@ -33,34 +32,36 @@ import { generateIdentitySummary } from 'src/actions/sso/utils'
  * - holds the instance of the particular interaction (e.g. CredentialOffer, Authentication)
  */
 
-export class Interaction {
-  private interactionFlow = {
-    [InteractionType.CredentialOfferRequest]: CredentialOfferFlow,
-    [InteractionType.CredentialRequest]: CredentialRequestFlow,
-    [InteractionType.Authentication]: AuthenticationFlow,
-  }
-  private interactionMessages: JSONWebToken<JWTEncodable>[] = []
+const interactionFlowForMessage = {
+  [InteractionType.CredentialOfferRequest]: CredentialOfferFlow,
+  [InteractionType.CredentialRequest]: CredentialRequestFlow,
+  [InteractionType.Authentication]: AuthenticationFlow,
+}
 
+export class Interaction {
+  private interactionMessages: JSONWebToken<JWTEncodable>[] = []
   public id: string
   public ctx: BackendMiddleware
-  public flow!: Flow<FlowState>
+  public flow: Flow
+
+  // The channel through which the request (first token) came in
+  public channel: InteractionChannel
 
   public participants!: {
     us: Identity,
     them: Identity
   }
 
-  // This is the channel through which the request (first token) came in.
-  public channel: InteractionChannel
-
   public constructor(
     ctx: BackendMiddleware,
     channel: InteractionChannel,
     id: string,
+    interactionType: InteractionType
   ) {
     this.ctx = ctx
     this.channel = channel
     this.id = id
+    this.flow = new interactionFlowForMessage[interactionType](this)
   }
 
   public getMessages() {
@@ -73,7 +74,6 @@ export class Interaction {
     )
   }
 
-
   // TODO Try to write a respond function that collapses these
   public async createAuthenticationResponse() {
     const request = this.findMessageByType(
@@ -82,7 +82,7 @@ export class Interaction {
 
     return this.ctx.identityWallet.create.interactionTokens.response.auth(
       {
-        description: this.getSummary().state,
+        description: this.getSummary().state as string,
         callbackURL: request.interactionToken.callbackURL,
       },
       await this.ctx.keyChainLib.getPassword(),
@@ -135,10 +135,6 @@ export class Interaction {
   }
 
   public async processInteractionToken(token: JSONWebToken<JWTEncodable>) {
-    if (!this.flow) {
-      this.flow = new this.interactionFlow[token.interactionType](this)
-    }
-
     if (!this.participants) {
       this.participants = {
         us: this.ctx.identityWallet.identity,

@@ -11,8 +11,8 @@ import { CredentialReceiveComponent } from '../components/credentialReceive'
 import {
   InteractionSummary,
   SignedCredentialWithMetadata,
+  CredentialOfferFlowState
 } from '../../../lib/interactionManager/types'
-import { OfferWithValidity } from 'src/lib/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
 import strings from 'src/locales/strings'
 
@@ -58,7 +58,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
   return (
     <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
       <CredentialReceiveComponent
-        credentialOfferSummary={interactionSummary.state as OfferWithValidity[]}
+        credentialOfferSummary={interactionSummary.state as CredentialOfferFlowState}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
         onToggleSelect={toggleSelectDocument}
