@@ -91,10 +91,11 @@ export const validateSelectionAndSave = (
   { interactionManager, storageLib },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const offer: CredentialOfferFlowState = interaction.getSummary().state
+  const { offerSummary } = interaction.getSummary()
+    .state as CredentialOfferFlowState
 
   const selectedTypes = selectedCredentials.map(el => el.type)
-  const toSave = offer.filter(el => selectedTypes.includes(el.type))
+  const toSave = offerSummary.filter(el => selectedTypes.includes(el.type))
 
   if (toSave.length !== selectedCredentials.length) {
     // TODO Decide how to handle this
@@ -138,7 +139,7 @@ export const validateSelectionAndSave = (
     await interaction.storeCredential(toSave)
 
     await storeOfferMetadata(
-      interaction.getSummary().state,
+      (interaction.getSummary().state as CredentialOfferFlowState).offerSummary,
       interaction.participants.them.did,
       storageLib.store.credentialMetadata,
     )
@@ -180,7 +181,10 @@ export const validateSelectionAndSave = (
       routeName: routeList.CredentialReceiveNegotiate,
       params: {
         interactionId,
-        interactionSummary: { ...interaction.getSummary(), state: offer },
+        interactionSummary: {
+          ...interaction.getSummary(),
+          state: { offerSummary },
+        },
       },
     }),
   )

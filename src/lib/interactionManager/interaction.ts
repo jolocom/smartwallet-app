@@ -10,6 +10,7 @@ import {
   InteractionSummary,
   SignedCredentialWithMetadata,
   CredentialVerificationSummary,
+  AuthenticationFlowState,
 } from './types'
 import { CredentialRequestFlow } from './credentialRequestFlow'
 import { JolocomLib } from 'jolocom-lib'
@@ -48,7 +49,7 @@ export class Interaction {
   public channel: InteractionChannel
 
   public participants!: {
-    us: Identity,
+    us: Identity
     them: Identity
   }
 
@@ -56,7 +57,7 @@ export class Interaction {
     ctx: BackendMiddleware,
     channel: InteractionChannel,
     id: string,
-    interactionType: InteractionType
+    interactionType: InteractionType,
   ) {
     this.ctx = ctx
     this.channel = channel
@@ -79,10 +80,11 @@ export class Interaction {
     const request = this.findMessageByType(
       InteractionType.Authentication,
     ) as JSONWebToken<Authentication>
+    const { description } = this.getSummary().state as AuthenticationFlowState
 
     return this.ctx.identityWallet.create.interactionTokens.response.auth(
       {
-        description: this.getSummary().state as string,
+        description,
         callbackURL: request.interactionToken.callbackURL,
       },
       await this.ctx.keyChainLib.getPassword(),
@@ -138,10 +140,9 @@ export class Interaction {
     if (!this.participants) {
       this.participants = {
         us: this.ctx.identityWallet.identity,
-        them: await this.ctx.registry.resolve(token.signer.did)
+        them: await this.ctx.registry.resolve(token.signer.did),
       }
     }
-
 
     if (token.signer.did !== this.ctx.identityWallet.did) {
       await this.ctx.identityWallet.validateJWT(
@@ -248,5 +249,7 @@ export class Interaction {
     this.ctx.storageLib.store.credentialMetadata(metadata)
 
   public storeIssuerProfile = () =>
-    this.ctx.storageLib.store.issuerProfile(generateIdentitySummary(this.participants.them))
+    this.ctx.storageLib.store.issuerProfile(
+      generateIdentitySummary(this.participants.them),
+    )
 }

@@ -3,6 +3,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 import { IdentitySummary } from '../../actions/sso/types'
 import { FlowState } from './flow'
 
+// TODO define and refactor how the UI components/containers handle the InteractionSummary.
 export interface InteractionSummary {
   issuer: IdentitySummary
   state: FlowState
@@ -16,11 +17,19 @@ export enum InteractionChannel {
   NFC = 'NFC',
 }
 
-export type AuthenticationFlowState = string
-export type CredentialRequestFlowState = CredentialTypeSummary[]
-export type CredentialOfferFlowState = Array<SignedCredentialWithMetadata & {
-  validationErrors: ValidationErrorMap
-}>
+export interface AuthenticationFlowState extends FlowState {
+  description: string
+}
+
+export interface CredentialRequestFlowState extends FlowState {
+  availableCredentials: CredentialTypeSummary[]
+}
+
+export interface CredentialOfferFlowState extends FlowState {
+  offerSummary: Array<
+    SignedCredentialWithMetadata & { validationErrors: ValidationErrorMap }
+  >
+}
 
 export interface CredentialTypeSummary {
   type: string

@@ -7,7 +7,10 @@ import React, { useRef } from 'react'
 import { black065, greyLight, overflowBlack } from '../../../styles/colors'
 import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
 import { DocumentReceiveCard } from './documentReceiveCard'
-import { SignedCredentialWithMetadata, CredentialOfferFlowState } from '../../../lib/interactionManager/types'
+import {
+  SignedCredentialWithMetadata,
+  CredentialOfferFlowState,
+} from '../../../lib/interactionManager/types'
 import LinearGradient from 'react-native-linear-gradient'
 
 const styles = StyleSheet.create({
@@ -78,7 +81,7 @@ interface Props {
 export const CredentialReceiveComponent = (props: Props) => {
   const {
     publicProfile,
-    credentialOfferSummary,
+    credentialOfferSummary: { offerSummary },
     onToggleSelect,
     isDocumentSelected,
   } = props
@@ -184,7 +187,7 @@ export const CredentialReceiveComponent = (props: Props) => {
             )}
           </Text>
         </Animated.View>
-        {credentialOfferSummary.map((offer, i) => {
+        {offerSummary.map((offer, i) => {
           const { validationErrors } = offer
           return (
             <DocumentReceiveCard

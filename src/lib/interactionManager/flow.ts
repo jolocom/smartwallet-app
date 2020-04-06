@@ -2,8 +2,7 @@ import { Interaction } from './interaction'
 import { JWTEncodable } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
-export interface FlowState {
-}
+export interface FlowState {}
 
 export abstract class Flow {
   protected ctx: Interaction

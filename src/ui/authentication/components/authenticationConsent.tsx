@@ -5,7 +5,10 @@ import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Typography, Spacing } from 'src/styles'
 import { IssuerCard } from '../../documents/components/issuerCard'
-import { InteractionSummary } from '../../../lib/interactionManager/types'
+import {
+  InteractionSummary,
+  AuthenticationFlowState,
+} from '../../../lib/interactionManager/types'
 
 interface Props {
   interactionSummary: InteractionSummary
@@ -58,7 +61,8 @@ export class AuthenticationConsentComponent extends React.Component<
   }
 
   public render() {
-    const { issuer, state: description } = this.props.interactionSummary
+    const { issuer, state } = this.props.interactionSummary
+    const { description } = state as AuthenticationFlowState
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>

@@ -11,7 +11,9 @@ import { AttributeSummary, CredentialRequestFlowState } from './types'
 import { isCredentialRequest, isCredentialResponse } from './guards'
 
 export class CredentialRequestFlow extends Flow {
-  public state: CredentialRequestFlowState = []
+  public state: CredentialRequestFlowState = {
+    availableCredentials: [],
+  }
 
   constructor(ctx: Interaction) {
     super(ctx)
@@ -83,7 +85,9 @@ export class CredentialRequestFlow extends Flow {
       })),
     )
 
-    this.state = abbreviated.reduce((acc, val) => acc.concat(val))
+    this.state.availableCredentials = abbreviated.reduce((acc, val) =>
+      acc.concat(val),
+    )
   }
 
   // Currently no validation here

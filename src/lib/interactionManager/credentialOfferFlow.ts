@@ -14,7 +14,9 @@ import {
 } from './guards'
 
 export class CredentialOfferFlow extends Flow {
-  public state: CredentialOfferFlowState = []
+  public state: CredentialOfferFlowState = {
+    offerSummary: [],
+  }
 
   public constructor(ctx: Interaction) {
     super(ctx)
@@ -40,7 +42,7 @@ export class CredentialOfferFlow extends Flow {
   }
 
   private handleOfferRequest({ offeredCredentials }: CredentialOfferRequest) {
-    this.state = offeredCredentials.map(offer => ({
+    this.state.offerSummary = offeredCredentials.map(offer => ({
       ...offer,
       validationErrors: {},
     }))
@@ -54,8 +56,8 @@ export class CredentialOfferFlow extends Flow {
   // Sets the validity map, currently if the issuer and if the subjects are correct.
   // also populates the SignedCredentialWithMetadata with credentials
   private handleCredentialReceive({ signedCredentials }: CredentialsReceive) {
-    this.state = signedCredentials.map(signedCredential => {
-      const offer = this.state.find(
+    this.state.offerSummary = signedCredentials.map(signedCredential => {
+      const offer = this.state.offerSummary.find(
         ({ type }) => type === last(signedCredential.type),
       )
 
@@ -69,8 +71,10 @@ export class CredentialOfferFlow extends Flow {
         validationErrors: {
           // This signals funny things in the flow without throwing errors. We don't simply throw because often times
           // negotiation is still possible on the UI / UX layer, and the interaction can continue.
-          invalidIssuer: signedCredential.issuer !== this.ctx.participants.them.did,
-          invalidSubject: signedCredential.subject !== this.ctx.participants.us.did,
+          invalidIssuer:
+            signedCredential.issuer !== this.ctx.participants.them.did,
+          invalidSubject:
+            signedCredential.subject !== this.ctx.participants.us.did,
         },
       }
     })

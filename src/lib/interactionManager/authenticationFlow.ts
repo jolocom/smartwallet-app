@@ -7,7 +7,7 @@ import { AuthenticationFlowState } from './types'
 import { isAuthenticationRequest } from './guards'
 
 export class AuthenticationFlow extends Flow {
-  public state: AuthenticationFlowState = ''
+  public state: AuthenticationFlowState = { description: '' }
 
   public constructor(ctx: Interaction) {
     super(ctx)
@@ -28,6 +28,6 @@ export class AuthenticationFlow extends Flow {
   }
 
   public async consumeAuthenticationRequest(token: Authentication) {
-    this.state = token.description
+    this.state.description = token.description
   }
 }
