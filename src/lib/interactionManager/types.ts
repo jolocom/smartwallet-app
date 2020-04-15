@@ -2,6 +2,8 @@ import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/interactionTok
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '../../actions/sso/types'
 import { FlowState } from './flow'
+import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
+import { CredentialResponse } from 'jolocom-lib/js/interactionTokens/credentialResponse'
 
 // TODO define and refactor how the UI components/containers handle the InteractionSummary.
 export interface InteractionSummary {
@@ -22,7 +24,8 @@ export interface AuthenticationFlowState extends FlowState {
 }
 
 export interface CredentialRequestFlowState extends FlowState {
-  availableCredentials: CredentialTypeSummary[]
+  constraints: CredentialRequest[]
+  providedCredentials: CredentialResponse[]
 }
 
 export interface CredentialOfferFlowState extends FlowState {

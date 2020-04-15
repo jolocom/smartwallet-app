@@ -12,7 +12,8 @@ import { isCredentialRequest, isCredentialResponse } from './guards'
 
 export class CredentialRequestFlow extends Flow {
   public state: CredentialRequestFlowState = {
-    availableCredentials: [],
+    constraints: [],
+    providedCredentials: [],
   }
 
   constructor(ctx: Interaction) {
@@ -41,6 +42,10 @@ export class CredentialRequestFlow extends Flow {
   }
 
   private async handleCredentialRequest(request: CredentialRequest) {
+    this.state.constraints.push(request)
+  }
+
+  public async getAvailableCredentials(request: CredentialRequest) {
     const { requestedCredentialTypes } = request
 
     const attributesForType = await Promise.all<AttributeSummary>(
@@ -85,11 +90,12 @@ export class CredentialRequestFlow extends Flow {
       })),
     )
 
-    this.state.availableCredentials = abbreviated.reduce((acc, val) =>
-      acc.concat(val),
-    )
+    return abbreviated.reduce((acc, val) => acc.concat(val))
   }
 
   // Currently no validation here
-  public handleCredentialResponse(token: CredentialResponse) {}
+  private handleCredentialResponse(token: CredentialResponse) {
+    this.state.providedCredentials.push(token)
+    token.satisfiesRequest(this.state.constraints[-1])
+  }
 }

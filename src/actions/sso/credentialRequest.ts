@@ -7,6 +7,7 @@ import { CredentialVerificationSummary } from 'src/lib/interactionManager/types'
 import { InteractionChannel } from 'src/lib/interactionManager/types'
 import { Interaction } from 'src/lib/interactionManager/interaction'
 import { cancelSSO } from './'
+import { CredentialRequestFlow } from 'src/lib/interactionManager/credentialRequestFlow'
 
 export const consumeCredentialRequest = (
   credentialRequest: JSONWebToken<CredentialRequest>,
@@ -25,6 +26,9 @@ export const consumeCredentialRequest = (
       params: {
         interactionId: interaction.id,
         interactionSummary: interaction.getSummary(),
+        availableCreds: await (interaction.flow as CredentialRequestFlow).getAvailableCredentials(
+          credentialRequest.interactionToken,
+        ),
       },
       key: 'credentialRequest',
     }),
