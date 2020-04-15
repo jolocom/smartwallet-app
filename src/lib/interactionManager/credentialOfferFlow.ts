@@ -72,9 +72,9 @@ export class CredentialOfferFlow extends Flow {
           // This signals funny things in the flow without throwing errors. We don't simply throw because often times
           // negotiation is still possible on the UI / UX layer, and the interaction can continue.
           invalidIssuer:
-            signedCredential.issuer !== this.ctx.participants.them.did,
+            signedCredential.issuer !== this.ctx.participants.requester.did,
           invalidSubject:
-            signedCredential.subject !== this.ctx.participants.us.did,
+            signedCredential.subject !== this.ctx.participants.responder!.did,
         },
       }
     })

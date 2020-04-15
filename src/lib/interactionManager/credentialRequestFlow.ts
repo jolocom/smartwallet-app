@@ -79,7 +79,7 @@ export class CredentialRequestFlow extends Flow {
           issuer: {
             did: vCred.issuer,
           },
-          selfSigned: vCred.signer.did === this.ctx.participants.us.did,
+          selfSigned: vCred.signer.did === this.ctx.participants.responder!.did,
           expires: vCred.expires,
         })),
       })),

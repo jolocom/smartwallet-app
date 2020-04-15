@@ -140,7 +140,7 @@ export const validateSelectionAndSave = (
 
     await storeOfferMetadata(
       (interaction.getSummary().state as CredentialOfferFlowState).offerSummary,
-      interaction.participants.them.did,
+      interaction.participants.requester.did,
       storageLib.store.credentialMetadata,
     )
 

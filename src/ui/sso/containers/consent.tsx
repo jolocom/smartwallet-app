@@ -42,12 +42,12 @@ const ConsentContainer = (props: Props) => {
     sendCredentialResponse(credentials, interactionId)
   }
 
-  const { issuer, state } = interactionSummary
+  const { initiator, state } = interactionSummary
 
   // TODO Instead of "as", use type guards?
   return (
     <ConsentComponent
-      requester={issuer}
+      requester={initiator}
       did={currentDid}
       availableCredentials={
         (state as CredentialRequestFlowState).availableCredentials

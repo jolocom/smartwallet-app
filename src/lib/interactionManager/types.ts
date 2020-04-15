@@ -5,7 +5,7 @@ import { FlowState } from './flow'
 
 // TODO define and refactor how the UI components/containers handle the InteractionSummary.
 export interface InteractionSummary {
-  issuer: IdentitySummary
+  initiator: IdentitySummary
   state: FlowState
 }
 
