@@ -15,7 +15,7 @@ export abstract class Flow {
   abstract async handleInteractionToken(
     token: JWTEncodable,
     messageType: InteractionType,
-  ): Promise<void>
+  ): Promise<boolean>
 
   public getState() {
     return this.state

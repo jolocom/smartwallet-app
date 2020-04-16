@@ -25,7 +25,7 @@ export class CredentialOfferFlow extends Flow {
   public async handleInteractionToken(
     token: JWTEncodable,
     messageType: InteractionType,
-  ): Promise<any> {
+  ): Promise<boolean> {
     switch (messageType) {
       case InteractionType.CredentialOfferRequest:
         if (isCredentialOfferRequest(token))
@@ -46,11 +46,12 @@ export class CredentialOfferFlow extends Flow {
       ...offer,
       validationErrors: {},
     }))
+    return true
   }
 
   // Not relevant for client (?)
   private async handleOfferResponse(token: CredentialOfferResponse) {
-    return
+    return false
   }
 
   // Sets the validity map, currently if the issuer and if the subjects are correct.
@@ -78,5 +79,6 @@ export class CredentialOfferFlow extends Flow {
         },
       }
     })
+    return true
   }
 }

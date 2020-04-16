@@ -43,6 +43,12 @@ export class CredentialRequestFlow extends Flow {
 
   private async handleCredentialRequest(request: CredentialRequest) {
     this.state.constraints.push(request)
+    return true
+  }
+
+  private async handleCredentialResponse(token: CredentialResponse) {
+    this.state.providedCredentials.push(token)
+    return token.satisfiesRequest(this.state.constraints[-1])
   }
 
   public async getAvailableCredentials(request: CredentialRequest) {
@@ -91,11 +97,5 @@ export class CredentialRequestFlow extends Flow {
     )
 
     return abbreviated.reduce((acc, val) => acc.concat(val))
-  }
-
-  // Currently no validation here
-  private handleCredentialResponse(token: CredentialResponse) {
-    this.state.providedCredentials.push(token)
-    token.satisfiesRequest(this.state.constraints[-1])
   }
 }

@@ -28,6 +28,8 @@ export class AuthenticationFlow extends Flow {
   }
 
   public async consumeAuthenticationRequest(token: Authentication) {
-    this.state.description = token.description
+    if (!this.state.description) this.state.description = token.description
+
+    return this.state.description === token.description
   }
 }

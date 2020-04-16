@@ -169,8 +169,9 @@ export class Interaction {
 
     return this.flow
       .handleInteractionToken(token.interactionToken, token.interactionType)
-      .then(() => {
+      .then(res => {
         this.interactionMessages.push(token)
+        return res
       })
   }
 
