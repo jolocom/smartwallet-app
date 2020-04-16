@@ -10,6 +10,7 @@ import { DocumentReceiveCard } from './documentReceiveCard'
 import {
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
+  IssuanceResult,
 } from '../../../lib/interactionManager/types'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   publicProfile: IssuerPublicProfileSummary
-  credentialOfferSummary: CredentialOfferFlowState
+  credentialOfferSummary: IssuanceResult
   onToggleSelect: (offering: SignedCredentialWithMetadata) => void
   isDocumentSelected: (offering: SignedCredentialWithMetadata) => boolean
 }
@@ -81,7 +82,7 @@ interface Props {
 export const CredentialReceiveComponent = (props: Props) => {
   const {
     publicProfile,
-    credentialOfferSummary: { offerSummary },
+    credentialOfferSummary,
     onToggleSelect,
     isDocumentSelected,
   } = props
@@ -187,7 +188,7 @@ export const CredentialReceiveComponent = (props: Props) => {
             )}
           </Text>
         </Animated.View>
-        {offerSummary.map((offer, i) => {
+        {credentialOfferSummary.map((offer, i) => {
           const { validationErrors } = offer
           return (
             <DocumentReceiveCard

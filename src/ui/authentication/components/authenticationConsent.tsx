@@ -61,12 +61,12 @@ export class AuthenticationConsentComponent extends React.Component<
   }
 
   public render() {
-    const { issuer, state } = this.props.interactionSummary
+    const { initiator, state } = this.props.interactionSummary
     const { description } = state as AuthenticationFlowState
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
-          <IssuerCard issuer={issuer} style={styles.issuerCard} />
+          <IssuerCard issuer={initiator} style={styles.issuerCard} />
           <View style={styles.authRequestContainer}>
             <Text style={styles.authRequestText}>
               {I18n.t(strings.WOULD_YOU_LIKE_TO)}

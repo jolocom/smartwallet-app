@@ -37,7 +37,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
     },
   } = navigation
 
-  const { publicProfile } = interactionSummary.issuer
+  const { publicProfile } = interactionSummary.initiator
 
   const handleConfirm = () => {
     acceptSelectedCredentials(selected, interactionId)
