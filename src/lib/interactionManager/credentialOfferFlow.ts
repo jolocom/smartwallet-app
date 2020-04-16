@@ -60,6 +60,14 @@ export class CredentialOfferFlow extends Flow {
     return true
   }
 
+  // return a list of types which are both offered and requested
+  public getSelectionResult(): string[] {
+    const offeredTypes = this.state.offerSummary.map(o => o.type)
+    const selectedTypes = this.state.selection.map(s => s.type)
+
+    return offeredTypes.filter(ot => selectedTypes.includes(ot))
+  }
+
   public getIssuanceResult(): IssuanceResult {
     return this.state.issued.map(cred => {
       const offer = this.state.offerSummary.find(
