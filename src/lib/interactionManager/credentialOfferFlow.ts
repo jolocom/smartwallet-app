@@ -57,6 +57,16 @@ export class CredentialOfferFlow extends Flow {
   // also populates the SignedCredentialWithMetadata with credentials
   private handleCredentialReceive({ signedCredentials }: CredentialsReceive) {
     this.state.issued = signedCredentials
+    this.state.issued.map(cred => {
+      const offer = this.state.offerSummary.find(
+        ({ type }) => type === last(cred.type),
+      )
+
+      if (!offer) {
+        throw new Error('Received wrong credentials')
+      }
+    })
+
     return true
   }
 
