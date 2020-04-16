@@ -18,6 +18,7 @@ import { isEmpty, uniqBy } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialMetadataSummary } from 'src/lib/storage/storage'
 import { CacheEntity } from 'src/lib/storage/entities'
+import { CredentialOfferFlow } from 'src/lib/interactionManager/credentialOfferFlow'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -91,8 +92,7 @@ export const validateSelectionAndSave = (
   { interactionManager, storageLib },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const { offerSummary } = interaction.getSummary()
-    .state as CredentialOfferFlowState
+  const offerSummary = (interaction.flow as CredentialOfferFlow).getIssuanceResult()
 
   const selectedTypes = selectedCredentials.map(el => el.type)
   const toSave = offerSummary.filter(el => selectedTypes.includes(el.type))

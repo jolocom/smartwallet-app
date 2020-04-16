@@ -1,4 +1,7 @@
-import { CredentialOffer } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import {
+  CredentialOffer,
+  CredentialOfferResponseSelection,
+} from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '../../actions/sso/types'
 import { FlowState } from './flow'
@@ -29,9 +32,9 @@ export interface CredentialRequestFlowState extends FlowState {
 }
 
 export interface CredentialOfferFlowState extends FlowState {
-  offerSummary: Array<
-    SignedCredentialWithMetadata & { validationErrors: ValidationErrorMap }
-  >
+  offerSummary: CredentialOffer[]
+  selection: CredentialOfferResponseSelection[]
+  issued: SignedCredential[]
 }
 
 export interface CredentialTypeSummary {
@@ -55,6 +58,10 @@ export interface AttributeSummary {
     values: string[]
   }>
 }
+
+export type IssuanceResult = Array<
+  SignedCredentialWithMetadata & { validationErrors: ValidationErrorMap }
+>
 
 type ValidationErrorMap = {
   invalidIssuer?: boolean
