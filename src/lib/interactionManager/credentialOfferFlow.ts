@@ -55,7 +55,10 @@ export class CredentialOfferFlow extends Flow {
 
   // Sets the validity map, currently if the issuer and if the subjects are correct.
   // also populates the SignedCredentialWithMetadata with credentials
-  private handleCredentialReceive({ signedCredentials }: CredentialsReceive) {
+  private async handleCredentialReceive({
+    signedCredentials,
+  }: CredentialsReceive) {
+    await this.ctx.validateDigestables(signedCredentials)
     this.state.offerSummary = signedCredentials.map(signedCredential => {
       const offer = this.state.offerSummary.find(
         ({ type }) => type === last(signedCredential.type),

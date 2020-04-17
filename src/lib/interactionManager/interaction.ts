@@ -20,12 +20,12 @@ import { last } from 'ramda'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { AuthenticationFlow } from './authenticationFlow'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { CredentialsReceive } from 'jolocom-lib/js/interactionTokens/credentialsReceive'
 import { Linking } from 'react-native'
 import { AppError, ErrorCode } from '../errors'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { generateIdentitySummary } from 'src/actions/sso/utils'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 /***
  * - initiated by InteractionManager when an interaction starts
@@ -152,13 +152,6 @@ export class Interaction {
       )
     }
 
-    if (token.interactionType === InteractionType.CredentialsReceive) {
-      await JolocomLib.util.validateDigestables(
-        (token as JSONWebToken<CredentialsReceive>).interactionToken
-          .signedCredentials,
-      )
-    }
-
     return this.flow
       .handleInteractionToken(token.interactionToken, token.interactionType)
       .then(() => {
@@ -185,6 +178,13 @@ export class Interaction {
 
   public getVerifiableCredential = (query?: object) => {
     return this.ctx.storageLib.get.verifiableCredential(query)
+  }
+
+  public validateDigestables(signedCredentials: SignedCredential[]) {
+    return JolocomLib.util.validateDigestables(
+      signedCredentials,
+      this.ctx.registry,
+    )
   }
 
   /**
