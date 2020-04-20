@@ -28,6 +28,12 @@ const initialAppWrapState: AppWrapState = {
   appWrapConfigsSet: []
 }
 
+// TODO(mnzaki): this code is unnecessarily complicated
+// the complicated "ConfigsSet" keeping is to support nested <Wrapper>
+// components
+// - but we don't really need to support them
+// - see 20APR[RN61.5] on notion.so:spaces/mnzaki
+
 export const appWrapReducer = (
   state = initialAppWrapState,
   action: AnyAction,
@@ -39,14 +45,12 @@ export const appWrapReducer = (
       if (idx > -1 || Object.keys(action.value).length === 0) return state
       appWrapConfig = {...state.appWrapConfig, ...action.value }
       appWrapConfigsSet = [...state.appWrapConfigsSet, action.value]
-      console.log('REGISTER', action.value, appWrapConfig)
       return { appWrapConfig, appWrapConfigsSet }
     case APPWRAP_UNREGISTER_CONFIG:
       const idx2 = state.appWrapConfigsSet.indexOf(action.value)
       if (idx2 < 0) return state
       appWrapConfigsSet = state.appWrapConfigsSet.filter(s => s !== action.value)
       appWrapConfig = appWrapConfigsSet.reduce((prev, cur) => ({...prev, ...cur}), initialAppWrapAttrs)
-      console.log('UNREGISTER', idx2, action.value, appWrapConfig)
       return { appWrapConfig, appWrapConfigsSet }
 
     case APPWRAP_SHOW_LOADER:

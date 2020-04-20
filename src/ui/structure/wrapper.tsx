@@ -81,15 +81,17 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
   } = props
 
   useEffect(() => {
+    // TODO @mnzaki
+    // this is overengineered to allow for nesting <Wrapper>
+    // instances that have conflicting StatusBar desires
+    // see notion:spaces/mnzaki
     if (withoutStatusBar) {
       statusBarHidden += 1
-      console.log('HIDING!')
       StatusBar.setHidden(true)
       return () => {
         statusBarHidden -= 1
         if (statusBarHidden === 0) {
           StatusBar.setHidden(false)
-          console.log('UNHIDING!')
         }
       }
     }
@@ -97,7 +99,6 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
     return
   }, [withoutStatusBar])
 
-  console.log('RERENDER', statusBarHidden)
   return (
     <>
       <AppLoadingAndNotifications loading={!!loading} />
@@ -142,7 +143,6 @@ export const Wrapper = React.memo(
       // Note: StatusBar.currentHeight is not available on iOS
       paddingTop: withoutSafeArea ? 0 : StatusBar.currentHeight,
     }
-    console.log(extraStyle)
     if (dark) extraStyle.backgroundColor = backgroundDarkMain
     if (breathy) extraStyle.justifyContent = 'space-around'
     if (centered) extraStyle.alignItems = 'center'
