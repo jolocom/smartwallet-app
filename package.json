@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "run:ios": "react-native run-ios",
+    "run:android": "react-native run-android",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
@@ -10,8 +12,15 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-community/masked-view": "^0.1.9",
+    "@react-navigation/native": "^5.1.6",
+    "@react-navigation/stack": "^5.2.11",
     "react": "16.11.0",
-    "react-native": "0.62.2"
+    "react-native": "0.62.2",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-reanimated": "^1.8.0",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -23,11 +32,12 @@
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "babel-jest": "^24.9.0",
+    "babel-plugin-root-import": "^6.5.0",
     "eslint": "^6.5.1",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.58.0",
-    "react-test-renderer": "16.11.0",
     "prettier": "^2.0.4",
+    "react-test-renderer": "16.11.0",
     "typescript": "^3.8.3"
   },
   "jest": {
