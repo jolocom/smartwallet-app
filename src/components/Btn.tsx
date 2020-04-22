@@ -29,8 +29,10 @@ const Btn: React.FC<PropsI> = ({type = Types.primary, onPress, children}) => {
 
 const styles = StyleSheet.create({
   btn: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
+    borderRadius: 7,
+    marginVertical: 5,
   },
   primary: {
     backgroundColor: Colors.activity,

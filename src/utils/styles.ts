@@ -13,7 +13,7 @@ export const modalScreenOptions: StackNavigationOptions = {
     overlayStyle: {
       opacity: progress.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 0.9],
+        outputRange: [0, 0.8],
         extrapolate: 'clamp',
       }),
     },
