@@ -1,21 +1,9 @@
-interface InterpolateParamsI {
-  inputRange: number[];
-  outputRange: number[];
-  extrapolate?: string;
-}
-interface ProgressI {
-  interpolate: (params: InterpolateParamsI) => {};
-}
-interface InterpolatorI {
-  current: {
-    progress: ProgressI;
-  };
-}
+import {StackNavigationOptions} from '@react-navigation/stack';
 
-export const modalScreenOptions = {
+export const modalScreenOptions: StackNavigationOptions = {
   cardStyle: {backgroundColor: 'black'},
   cardOverlayEnabled: true,
-  cardStyleInterpolator: ({current: {progress}}: InterpolatorI) => ({
+  cardStyleInterpolator: ({current: {progress}}) => ({
     cardStyle: {
       opacity: progress.interpolate({
         inputRange: [0, 0.5, 0.9, 1],

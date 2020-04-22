@@ -15,15 +15,7 @@ import Recovery from './Recovery';
 import SeedPhrase from './SeedPhrase';
 import SeedPhraseRepeat from './SeedPhraseRepeat';
 
-export type StackParamList = {
-  [Screens.Walkthrough]: undefined;
-  [Screens.Entropy]: undefined;
-  [Screens.Recovery]: undefined;
-  [Screens.SeedPhrase]: undefined;
-  [Screens.SeedPhraseRepeat]: undefined;
-};
-
-const Stack = createStackNavigator<StackParamList>();
+const Stack = createStackNavigator();
 
 const LoggedOut: React.FC = () => {
   return (

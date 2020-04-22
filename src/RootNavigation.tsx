@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import LoggedOut from '~/screens/LoggedOut';
+import LoggedIn from '~/screens/LoggedIn';
 
 import {modalScreenOptions} from '~/utils/styles';
 
@@ -16,6 +17,7 @@ const RootNavigation: React.FC = () => {
         mode="modal"
         screenOptions={modalScreenOptions}>
         <RootStack.Screen name="LoggedOut" component={LoggedOut} />
+        <RootStack.Screen name="LoggedIn" component={LoggedIn} />
       </RootStack.Navigator>
     </NavigationContainer>
   );
