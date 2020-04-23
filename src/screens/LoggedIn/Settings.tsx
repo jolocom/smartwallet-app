@@ -1,16 +1,14 @@
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
 
 import ScreenContainer from '~/components/ScreenContainer';
 import Header from '~/components/Header';
 import Btn from '~/components/Btn';
-
-import {Screens} from '../LoggedOut';
+import useRedirectTo from '~/hooks/useRedirectTo';
+import {ScreenNames} from '~/types/screens';
 
 const Settings: React.FC = () => {
-  const navigation = useNavigation();
-  const logout = () =>
-    navigation.navigate('LoggedOut', {screen: Screens.Walkthrough});
+  const logout = useRedirectTo(ScreenNames.Walkthrough);
+
   return (
     <ScreenContainer>
       <Header>Settings</Header>

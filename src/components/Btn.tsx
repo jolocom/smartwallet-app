@@ -3,24 +3,27 @@ import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
 import {Colors} from '~/utils/colors';
 
-export enum Types {
+export enum BtnTypes {
   primary,
   secondary,
 }
 
 interface PropsI {
-  type?: Types;
-  children: React.ReactNode;
+  type?: BtnTypes;
   onPress: () => void;
 }
 
-const Btn: React.FC<PropsI> = ({type = Types.primary, onPress, children}) => {
+const Btn: React.FC<PropsI> = ({
+  type = BtnTypes.primary,
+  onPress,
+  children,
+}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[
         styles.btn,
-        type === Types.primary ? styles.primary : styles.secondary,
+        type === BtnTypes.primary ? styles.primary : styles.secondary,
       ]}>
       <Text>{children}</Text>
     </TouchableOpacity>

@@ -3,11 +3,7 @@ import {Text, StyleSheet} from 'react-native';
 
 import {Colors} from '~/utils/colors';
 
-interface PropsI {
-  children: React.ReactNode;
-}
-
-const Paragraph: React.FC<PropsI> = ({children}) => {
+const Paragraph: React.FC = ({children}) => {
   return <Text style={styles.paragraph}>{children}</Text>;
 };
 

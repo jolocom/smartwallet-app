@@ -4,7 +4,7 @@ import Btn from '~/components/Btn';
 import Header from '~/components/Header';
 
 import useRedirectTo from '~/hooks/useRedirectTo';
-import {InteractionScreens} from '.';
+import {InteractionScreens} from '~/types/screens';
 import ScreenContainer from '~/components/ScreenContainer';
 
 const Scanner: React.FC = () => {

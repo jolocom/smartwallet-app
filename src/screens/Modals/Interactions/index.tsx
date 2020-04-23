@@ -1,10 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-export enum InteractionScreens {
-  Scanner = 'Scanner',
-  Details = 'Details',
-}
+import {InteractionScreens} from '~/types/screens';
 
 import Scanner from './Scanner';
 import Details from './Details';

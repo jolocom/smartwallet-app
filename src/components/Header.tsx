@@ -1,19 +1,18 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
 
-export enum Sizes {
+export enum HeaderSizes {
   large,
   medium,
 }
 
 interface PropsI {
-  size?: Sizes;
-  children: React.ReactNode;
+  size?: HeaderSizes;
 }
 
-const Header: React.FC<PropsI> = ({size = Sizes.large, children}) => {
+const Header: React.FC<PropsI> = ({size = HeaderSizes.large, children}) => {
   return (
-    <Text style={size === Sizes.large ? styles.large : styles.medium}>
+    <Text style={size === HeaderSizes.large ? styles.large : styles.medium}>
       {children}
     </Text>
   );

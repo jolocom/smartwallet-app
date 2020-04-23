@@ -5,10 +5,12 @@ import Header from '~/components/Header';
 import Btn from '~/components/Btn';
 
 import useRedirectTo from '~/hooks/useRedirectTo';
-import {Screens} from '.';
+import {ScreenNames} from '~/types/screens';
 
 const SeedPhrase: React.FC = () => {
-  const redirectToRepeatSeedPhrase = useRedirectTo(Screens.SeedPhraseRepeat);
+  const redirectToRepeatSeedPhrase = useRedirectTo(
+    ScreenNames.SeedPhraseRepeat,
+  );
 
   return (
     <ScreenContainer>

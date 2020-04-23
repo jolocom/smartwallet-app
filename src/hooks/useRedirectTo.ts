@@ -1,8 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
-import {Screens} from '~/screens/LoggedOut';
-import {Tabs} from '~/screens/LoggedIn';
+import {ScreenNames} from '~/types/screens';
 
-const useRedirectTo = (screenName: Screens | Tabs | string) => {
+const useRedirectTo = (screenName: ScreenNames | string) => {
   const navigation = useNavigation();
   const redirectTo = () => navigation.navigate(screenName);
   return redirectTo;

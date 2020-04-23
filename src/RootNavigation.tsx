@@ -8,7 +8,7 @@ import Loader from '~/screens/Modals/Loader';
 import Interactions from '~/screens/Modals/Interactions';
 
 import {modalScreenOptions} from '~/utils/styles';
-import {Modals} from './screens/Modals';
+import {ScreenNames} from '~/types/screens';
 
 const RootStack = createStackNavigator();
 
@@ -21,8 +21,11 @@ const RootNavigation: React.FC = () => {
         screenOptions={modalScreenOptions}>
         <RootStack.Screen name="LoggedOut" component={LoggedOut} />
         <RootStack.Screen name="LoggedIn" component={LoggedIn} />
-        <RootStack.Screen name={Modals.Loader} component={Loader} />
-        <RootStack.Screen name={Modals.Interactions} component={Interactions} />
+        <RootStack.Screen name={ScreenNames.Loader} component={Loader} />
+        <RootStack.Screen
+          name={ScreenNames.Interactions}
+          component={Interactions}
+        />
       </RootStack.Navigator>
     </NavigationContainer>
   );

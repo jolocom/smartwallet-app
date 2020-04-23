@@ -5,10 +5,10 @@ import Header from '~/components/Header';
 import Btn from '~/components/Btn';
 
 import useRedirectTo from '~/hooks/useRedirectTo';
-import {Screens} from '.';
+import {ScreenNames} from '~/types/screens';
 
 const Entropy: React.FC = () => {
-  const redirectToSeedPhrase = useRedirectTo(Screens.SeedPhrase);
+  const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase);
 
   return (
     <ScreenContainer>

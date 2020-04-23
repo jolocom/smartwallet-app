@@ -5,11 +5,11 @@ import Header from '~/components/Header';
 import Btn from '~/components/Btn';
 
 import useRedirectTo from '~/hooks/useRedirectTo';
-import {Modals} from '~/screens/Modals';
+import {ScreenNames} from '~/types/screens';
 
 const Claims: React.FC = () => {
-  const openLoader = useRedirectTo(Modals.Loader);
-  const openScanner = useRedirectTo(Modals.Interactions);
+  const openLoader = useRedirectTo(ScreenNames.Loader);
+  const openScanner = useRedirectTo(ScreenNames.Interactions);
 
   return (
     <ScreenContainer>

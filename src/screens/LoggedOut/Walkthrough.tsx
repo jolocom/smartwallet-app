@@ -1,20 +1,20 @@
 import React from 'react';
 
 import ScreenContainer from '~/components/ScreenContainer';
-import Header, {Sizes} from '~/components/Header';
-import Btn, {Types} from '~/components/Btn';
-import {Screens} from '.';
+import Header from '~/components/Header';
+import Btn, {BtnTypes} from '~/components/Btn';
+import {ScreenNames} from '~/types/screens';
 
 import useRedirectTo from '~/hooks/useRedirectTo';
 
 const Walkthrough: React.FC = () => {
-  const redirectToEntropy = useRedirectTo(Screens.Entropy);
-  const redirectToRecovery = useRedirectTo(Screens.Recovery);
+  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy);
+  const redirectToRecovery = useRedirectTo(ScreenNames.Recovery);
   return (
     <ScreenContainer>
-      <Header size={Sizes.large}>Walkthrough</Header>
+      <Header>Walkthrough</Header>
       <Btn onPress={redirectToEntropy}>Get started</Btn>
-      <Btn type={Types.secondary} onPress={redirectToRecovery}>
+      <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
         Need Restore?
       </Btn>
     </ScreenContainer>

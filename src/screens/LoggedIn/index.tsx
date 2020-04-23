@@ -1,12 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-export enum Tabs {
-  Claims = 'Claims',
-  Documents = 'Documents',
-  History = 'History',
-  Settings = 'Settings',
-}
+import {ScreenNames} from '~/types/screens';
 
 import Claims from './Claims';
 import Documents from './Documents';
@@ -18,10 +13,10 @@ const MainTabs = createBottomTabNavigator();
 const LoggedInTabs: React.FC = () => {
   return (
     <MainTabs.Navigator>
-      <MainTabs.Screen name={Tabs.Claims} component={Claims} />
-      <MainTabs.Screen name={Tabs.Documents} component={Documents} />
-      <MainTabs.Screen name={Tabs.History} component={History} />
-      <MainTabs.Screen name={Tabs.Settings} component={Settings} />
+      <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />
+      <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
+      <MainTabs.Screen name={ScreenNames.History} component={History} />
+      <MainTabs.Screen name={ScreenNames.Settings} component={Settings} />
     </MainTabs.Navigator>
   );
 };
