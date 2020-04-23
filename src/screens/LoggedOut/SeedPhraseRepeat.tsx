@@ -5,9 +5,10 @@ import Header from '~/components/Header';
 import Btn from '~/components/Btn';
 
 import useRedirectTo from '~/hooks/useRedirectTo';
+import {ScreenNames} from '~/types/screens';
 
 const SeedPhraseRepeat: React.FC = () => {
-  const redirectToClaims = useRedirectTo('LoggedIn');
+  const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn);
 
   return (
     <ScreenContainer>

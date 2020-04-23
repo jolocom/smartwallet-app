@@ -7,7 +7,7 @@ import useRedirectTo from '~/hooks/useRedirectTo';
 import {ScreenNames} from '~/types/screens';
 
 const Settings: React.FC = () => {
-  const logout = useRedirectTo(ScreenNames.Walkthrough);
+  const logout = useRedirectTo(ScreenNames.LoggedOut);
 
   return (
     <ScreenContainer>

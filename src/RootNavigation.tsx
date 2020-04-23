@@ -19,8 +19,8 @@ const RootNavigation: React.FC = () => {
         headerMode="none"
         mode="modal"
         screenOptions={modalScreenOptions}>
-        <RootStack.Screen name="LoggedOut" component={LoggedOut} />
-        <RootStack.Screen name="LoggedIn" component={LoggedIn} />
+        <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
+        <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
         <RootStack.Screen name={ScreenNames.Loader} component={Loader} />
         <RootStack.Screen
           name={ScreenNames.Interactions}
