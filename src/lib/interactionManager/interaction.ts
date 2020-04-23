@@ -180,6 +180,13 @@ export class Interaction {
     return this.ctx.storageLib.get.verifiableCredential(query)
   }
 
+  public validateDigestables(signedCredentials: SignedCredential[]) {
+    return JolocomLib.util.validateDigestables(
+      signedCredentials,
+      this.ctx.registry,
+    )
+  }
+
   public validateDigestable(signedCredentials: SignedCredential) {
     return JolocomLib.util.validateDigestable(
       signedCredentials,
