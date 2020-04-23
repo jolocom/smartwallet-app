@@ -56,6 +56,7 @@ export interface AttributeSummary {
 type ValidationErrorMap = {
   invalidIssuer?: boolean
   invalidSubject?: boolean
+  invalidSignature?: boolean
 }
 
 export interface SignedCredentialWithMetadata extends CredentialOffer {

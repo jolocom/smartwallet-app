@@ -58,28 +58,33 @@ export class CredentialOfferFlow extends Flow {
   private async handleCredentialReceive({
     signedCredentials,
   }: CredentialsReceive) {
-    await this.ctx.validateDigestables(signedCredentials)
-    this.state.offerSummary = signedCredentials.map(signedCredential => {
-      const offer = this.state.offerSummary.find(
-        ({ type }) => type === last(signedCredential.type),
-      )
+    this.state.offerSummary = await Promise.all(
+      signedCredentials.map(async signedCredential => {
+        const offer = this.state.offerSummary.find(
+          ({ type }) => type === last(signedCredential.type),
+        )
 
-      if (!offer) {
-        throw new Error('Received wrong credentials')
-      }
+        if (!offer) {
+          throw new Error('Received wrong credentials')
+        }
 
-      return {
-        ...offer,
-        signedCredential,
-        validationErrors: {
-          // This signals funny things in the flow without throwing errors. We don't simply throw because often times
-          // negotiation is still possible on the UI / UX layer, and the interaction can continue.
-          invalidIssuer:
-            signedCredential.issuer !== this.ctx.participants.them.did,
-          invalidSubject:
-            signedCredential.subject !== this.ctx.participants.us.did,
-        },
-      }
-    })
+        return {
+          ...offer,
+          signedCredential,
+          validationErrors: {
+            // This signals funny things in the flow without throwing errors. We
+            // don't simply throw because often times negotiation is still
+            // possible on the UI / UX layer, and the interaction can continue.
+            invalidIssuer:
+              signedCredential.issuer !== this.ctx.participants.them.did,
+            invalidSubject:
+              signedCredential.subject !== this.ctx.participants.us.did,
+            invalidSignature: !(await this.ctx.validateDigestable(
+              signedCredential,
+            )),
+          },
+        }
+      }),
+    )
   }
 }

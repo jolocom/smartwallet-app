@@ -180,13 +180,12 @@ export class Interaction {
     return this.ctx.storageLib.get.verifiableCredential(query)
   }
 
-  public validateDigestables(signedCredentials: SignedCredential[]) {
-    return JolocomLib.util.validateDigestables(
+  public validateDigestable(signedCredentials: SignedCredential) {
+    return JolocomLib.util.validateDigestable(
       signedCredentials,
       this.ctx.registry,
     )
   }
-
   /**
    * @dev This will crash with a credential receive because it doesn't contain a callbackURL
    * @todo This should probably come from the transport / channel handler
