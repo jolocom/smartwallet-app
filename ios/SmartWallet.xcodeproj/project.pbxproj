@@ -20,6 +20,9 @@
 		76EF6C7D75C20922CD70E8FB /* libPods-SmartWallet-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E416565DCE081881214CA4D3 /* libPods-SmartWallet-tvOSTests.a */; };
 		C40B73B81768359DDF138D18 /* libPods-SmartWallet-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 015C5A1F8526FC62D0072DF5 /* libPods-SmartWallet-tvOS.a */; };
 		FB371A33283645214F78D7F7 /* libPods-SmartWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 123A51A115D04DC418AAB411 /* libPods-SmartWallet.a */; };
+		B0F591400B3E4539A4BFB19C /* TTCommons-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3966986D7484982B13CE46F /* TTCommons-Light.otf */; };
+		4A1F2BCAE3FF4142B395B13E /* TTCommons-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8276038867CA4E5FB58899FB /* TTCommons-Medium.otf */; };
+		A7DF8B8760CD4B4FAFF81C91 /* TTCommons-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4D50F93A31E6491CB44F82B8 /* TTCommons-Regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +70,9 @@
 		E416565DCE081881214CA4D3 /* libPods-SmartWallet-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		E3966986D7484982B13CE46F /* TTCommons-Light.otf */ = {isa = PBXFileReference; name = "TTCommons-Light.otf"; path = "../assets/fonts/TTCommons-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8276038867CA4E5FB58899FB /* TTCommons-Medium.otf */ = {isa = PBXFileReference; name = "TTCommons-Medium.otf"; path = "../assets/fonts/TTCommons-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4D50F93A31E6491CB44F82B8 /* TTCommons-Regular.otf */ = {isa = PBXFileReference; name = "TTCommons-Regular.otf"; path = "../assets/fonts/TTCommons-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +171,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				8F7E96CB26940019ECFF7769 /* Pods */,
+				5512B6C32CC84D7D87F5B097 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -194,9 +201,19 @@
 				7CDBCC10E6C85E031C7BEF16 /* Pods-SmartWallet-tvOSTests.debug.xcconfig */,
 				7908052D7D70F9C2D945BA19 /* Pods-SmartWallet-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		5512B6C32CC84D7D87F5B097 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				E3966986D7484982B13CE46F /* TTCommons-Light.otf */,
+				8276038867CA4E5FB58899FB /* TTCommons-Medium.otf */,
+				4D50F93A31E6491CB44F82B8 /* TTCommons-Regular.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -340,6 +357,9 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				B0F591400B3E4539A4BFB19C /* TTCommons-Light.otf in Resources */,
+				4A1F2BCAE3FF4142B395B13E /* TTCommons-Medium.otf in Resources */,
+				A7DF8B8760CD4B4FAFF81C91 /* TTCommons-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,7 +393,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		28244AA471DAF36433FD8C28 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
