@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
+import {Colors} from '~/utils/colors';
 
 export enum HeaderSizes {
   large,
@@ -10,15 +11,24 @@ interface PropsI {
   size?: HeaderSizes;
 }
 
-const Header: React.FC<PropsI> = ({size = HeaderSizes.large, children}) => {
+const Header: React.FC<PropsI> = ({size = HeaderSizes.medium, children}) => {
   return (
-    <Text style={size === HeaderSizes.large ? styles.large : styles.medium}>
+    <Text
+      style={[
+        styles.text,
+        size === HeaderSizes.large ? styles.large : styles.medium,
+      ]}>
       {children}
     </Text>
   );
 };
 
 const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'TTCommons-Medium',
+    color: Colors.white,
+    marginVertical: 5,
+  },
   large: {
     fontSize: 34,
   },

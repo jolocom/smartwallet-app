@@ -7,4 +7,5 @@ export enum Colors {
   elevatedElement = '#29232b',
   success = '#5251c1',
   white = '#ffffff',
+  serenade = '#fff1e3',
 }
