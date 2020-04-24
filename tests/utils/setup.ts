@@ -19,8 +19,7 @@ jest.mock('src/lib/storage/storage', () => ({
 }))
 
 jest.mock('react-native', () => {
-  const lol = jest.requireActual('react-native')
-  console.log('native mods', lol.NativeModules)
-  lol.NativeModules.RNPermissions = {}
-  return lol
+  const RN = jest.requireActual('react-native')
+  RN.NativeModules.RNPermissions = {}
+  return RN
 })
