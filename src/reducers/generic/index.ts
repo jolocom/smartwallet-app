@@ -9,10 +9,12 @@ export const APPWRAP_UNREGISTER_CONFIG = 'APPWRAP_UNREGISTER_CONFIG'
 export interface AppWrapConfig {
   readonly withoutStatusBar: boolean
   readonly loading: boolean
+  readonly dark: boolean
 }
 const initialAppWrapAttrs: AppWrapConfig = {
   loading: false,
   withoutStatusBar: false,
+  dark: false,
 }
 
 export const isAppWrapConfigAttr = (key: string) => initialAppWrapAttrs[key] !== undefined
