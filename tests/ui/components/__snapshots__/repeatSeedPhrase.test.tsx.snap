@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
-<Wrapper
+<Memo(Connect(Component))
   centered={true}
   dark={true}
 >
@@ -239,15 +239,15 @@ exports[`repeatSeedPhrase component matches the snapshot with sorting 1`] = `
           }
         }
         onPress={[MockFunction]}
-        text="[missing \\"en.Confirm and check\\" translation]"
+        text="Confirm and check"
       />
     </View>
   </View>
-</Wrapper>
+</Memo(Connect(Component))>
 `;
 
 exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
-<Wrapper
+<Memo(Connect(Component))
   centered={true}
   dark={true}
 >
@@ -469,9 +469,9 @@ exports[`repeatSeedPhrase component matches the snapshot without sorting 1`] = `
           }
         }
         onPress={[MockFunction]}
-        text="[missing \\"en.Show my phrase again\\" translation]"
+        text="Show my phrase again"
       />
     </View>
   </View>
-</Wrapper>
+</Memo(Connect(Component))>
 `;

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
-<Wrapper
+<Memo(Connect(Component))
   breathy={false}
   centered={true}
   dark={true}
@@ -196,11 +196,11 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
       text="Back to signup"
     />
   </View>
-</Wrapper>
+</Memo(Connect(Component))>
 `;
 
 exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
-<Wrapper
+<Memo(Connect(Component))
   breathy={true}
   centered={true}
   dark={true}
@@ -259,11 +259,11 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
       }
     }
   />
-</Wrapper>
+</Memo(Connect(Component))>
 `;
 
 exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
-<Wrapper
+<Memo(Connect(Component))
   breathy={false}
   centered={true}
   dark={true}
@@ -513,5 +513,5 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
       text="Back to signup"
     />
   </View>
-</Wrapper>
+</Memo(Connect(Component))>
 `;
