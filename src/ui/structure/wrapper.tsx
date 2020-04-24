@@ -33,7 +33,6 @@ interface Props
   extends Partial<AppWrapConfig>,
     ReturnType<typeof mapDispatchToProps> {
   readonly withoutSafeArea: boolean
-  readonly uninterruptible: boolean
   readonly dark: boolean
   readonly breathy: boolean
   readonly centered: boolean
@@ -155,11 +154,6 @@ export const Wrapper = React.memo(
       extraStyle.position = 'absolute'
       extraStyle.zIndex = 12 // good number
       extraStyle.backgroundColor = 'transparent'
-      if (__DEV__ && dark) {
-        throw new Error(
-          "<Wrapper> can't be 'dark' and 'overlay' since overlays are transparent",
-        )
-      }
     }
 
     // @ts-ignore
