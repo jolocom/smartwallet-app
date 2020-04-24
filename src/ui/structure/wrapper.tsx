@@ -57,6 +57,15 @@ interface AppWrapProps
  *
  * NOTE: If the wrapper is used with SafeAreaView, the padding style prop passed to
  * it will be ignored on iOS. https://github.com/facebook/react-native/issues/22211
+ *
+ * Wrapper props:
+ * withoutSafeArea    don't pad for SafeArea
+ * dark               use dark background and status bar
+ * breathy            justify with 'space-around', for a breathy look-n-feel
+ * centered           alignItems 'center'
+ * overlay            absolutely positioned transpare overlay
+ * heightless         set height to 0 instead of default 100%
+ * testID             ID/label for use in tests
  */
 
 const styles = StyleSheet.create({
