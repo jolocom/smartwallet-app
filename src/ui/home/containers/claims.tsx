@@ -4,7 +4,6 @@ import { CredentialOverview } from '../components/credentialOverview'
 import { accountActions } from 'src/actions'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { RootState } from '../../../reducers'
-import { withLoading } from '../../../actions/modifiers'
 import { ThunkDispatch } from '../../../store'
 import { Wrapper } from 'src/ui/structure'
 
@@ -36,7 +35,6 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
-  setClaimsForDid: () => dispatch(withLoading(accountActions.setClaimsForDid)),
 })
 
 export const Claims = connect(
