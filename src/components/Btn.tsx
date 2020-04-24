@@ -39,6 +39,7 @@ const Btn: React.FC<PropsI> = (props) => {
   if (props.type === BtnTypes.primary) {
     return (
       <LinearGradient
+        testID="gradient"
         start={GRADIENT_START}
         end={GRADIENT_END}
         style={containerStyles}
@@ -48,7 +49,7 @@ const Btn: React.FC<PropsI> = (props) => {
     );
   }
   return (
-    <View style={containerStyles}>
+    <View style={containerStyles} testID="non-gradient">
       <Button {...props} />
     </View>
   );
