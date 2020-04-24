@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
     // height manually
     // TODO @mnzaki move this StatusBar height calculation to somewhere
     // reusable
-    paddingTop: StatusBar.currentHeight || BP({small: 20, medium: 20, large: 40})
+    paddingTop:
+      StatusBar.currentHeight || BP({ small: 20, medium: 20, large: 40 }),
   },
   bottomPadding: {
     paddingBottom: BP({

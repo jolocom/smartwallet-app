@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
 
 interface Props {
   onScan: (jwt: string) => Promise<void>
-  reRenderKey: number
-  onScannerRef: (s: any) => void
+  reRenderKey?: number
+  onScannerRef?: (s: any) => void
 }
 
 export const ScannerComponent = (props: Props) => {

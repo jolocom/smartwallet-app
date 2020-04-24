@@ -31,13 +31,13 @@ const mapStateToProps = (state: RootState) => state.generic.appWrapConfig
 interface Props
   extends Partial<AppWrapConfig>,
     ReturnType<typeof mapDispatchToProps> {
-  readonly withoutSafeArea: boolean
-  readonly dark: boolean
-  readonly breathy: boolean
-  readonly centered: boolean
-  readonly overlay: boolean
-  readonly heightless: boolean
-  readonly testID: string
+  readonly withoutSafeArea?: boolean
+  readonly dark?: boolean
+  readonly breathy?: boolean
+  readonly centered?: boolean
+  readonly overlay?: boolean
+  readonly heightless?: boolean
+  readonly testID?: string
   children: ReactNode
 }
 
