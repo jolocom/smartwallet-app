@@ -19,8 +19,12 @@ import { SwipeUpWrapper } from 'src/ui/structure/swipeUpWrapper'
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: 'rgba(0,0,0,0.9)',
-    //FIXME should be handled by the Wrapper, but it messes with the notification's dimensions
-    paddingTop: StatusBar.currentHeight,
+    // FIXME should be handled by the Wrapper, but it messes with the notification's dimensions
+    // NOTE: StatusBar.currentHeight not defined on iOS, so we use BP to set
+    // height manually
+    // TODO @mnzaki move this StatusBar height calculation to somewhere
+    // reusable
+    paddingTop: StatusBar.currentHeight || BP({small: 20, medium: 20, large: 40})
   },
   bottomPadding: {
     paddingBottom: BP({

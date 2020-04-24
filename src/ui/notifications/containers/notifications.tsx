@@ -50,7 +50,7 @@ export const NotificationContainer = (props: Props) => {
   }, [notification, activeNotification, animationRef])
 
   return activeNotification || notification ? (
-    <Wrapper heightless overlay withoutSafeArea>
+    <Wrapper heightless dark overlay withoutSafeArea>
       <NotificationComponent
         ref={animationRef}
         notification={notification}

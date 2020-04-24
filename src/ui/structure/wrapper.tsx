@@ -18,7 +18,6 @@ import {
   unregisterAppWrapConfig,
 } from 'src/actions/generic'
 import { RootState } from 'src/reducers'
-import { debug } from 'src/styles/presets'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   registerProps: (props: Props) =>
