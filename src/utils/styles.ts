@@ -19,3 +19,8 @@ export const modalScreenOptions: StackNavigationOptions = {
     },
   }),
 };
+
+export const secondaryTextStyle = {
+  opacity: 0.8,
+  fontFamily: 'TTCommons-Regular',
+};

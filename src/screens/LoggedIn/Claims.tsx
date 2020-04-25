@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ScreenContainer from '~/components/ScreenContainer';
-import Header from '~/components/Header';
+import Header, {HeaderSizes} from '~/components/Header';
 import Btn from '~/components/Btn';
 
 import useRedirectTo from '~/hooks/useRedirectTo';
@@ -13,7 +13,7 @@ const Claims: React.FC = () => {
 
   return (
     <ScreenContainer>
-      <Header>Claims</Header>
+      <Header size={HeaderSizes.large}>Claims</Header>
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
     </ScreenContainer>
