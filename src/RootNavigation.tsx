@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -10,11 +11,37 @@ import Interactions from '~/screens/Modals/Interactions';
 import {modalScreenOptions} from '~/utils/styles';
 import {ScreenNames} from '~/types/screens';
 
+import {getLoaderMsg} from '~/modules/loader/selectors';
+
 const RootStack = createStackNavigator();
 
+const useLoaderScreenVisibility = () => {
+  const ref = useRef(null);
+
+  const loaderMsg = useSelector(getLoaderMsg);
+
+  useEffect(() => {
+    if (ref.current) {
+      if (loaderMsg) {
+        ref.current.navigate(ScreenNames.Loader);
+      } else if (!loaderMsg) {
+        console.log(ref.current.canGoBack());
+        const canGoBack = ref.current.canGoBack();
+        if (canGoBack) {
+          ref.current.goBack();
+        }
+      }
+    }
+  }, [loaderMsg]);
+
+  return ref;
+};
+
 const RootNavigation: React.FC = () => {
+  const ref = useLoaderScreenVisibility();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={ref}>
       <RootStack.Navigator
         headerMode="none"
         mode="modal"

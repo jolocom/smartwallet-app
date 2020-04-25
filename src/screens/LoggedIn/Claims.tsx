@@ -1,4 +1,8 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
+
+import {setLoader} from '~/modules/loader/actions';
+import {LoaderTypes} from '~/modules/loader/types';
 
 import ScreenContainer from '~/components/ScreenContainer';
 import Header, {HeaderSizes} from '~/components/Header';
@@ -8,7 +12,16 @@ import useRedirectTo from '~/hooks/useRedirectTo';
 import {ScreenNames} from '~/types/screens';
 
 const Claims: React.FC = () => {
-  const openLoader = useRedirectTo(ScreenNames.Loader);
+  const dispatch = useDispatch();
+  const openLoader = () => {
+    dispatch(
+      setLoader({
+        type: LoaderTypes.default,
+        msg: 'Connecting to the server...',
+      }),
+    );
+  };
+
   const openScanner = useRedirectTo(ScreenNames.Interactions);
 
   return (
