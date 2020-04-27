@@ -1,6 +1,6 @@
 import React, {useRef, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, NavigationProp} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import LoggedOut from '~/screens/LoggedOut';
@@ -13,19 +13,35 @@ import {ScreenNames} from '~/types/screens';
 
 import {getLoaderMsg} from '~/modules/loader/selectors';
 
-const RootStack = createStackNavigator();
+type RootStackParamList = {
+  [ScreenNames.LoggedOut]: undefined;
+  [ScreenNames.LoggedIn]: undefined;
+  [ScreenNames.Loader]: undefined;
+  [ScreenNames.Interactions]: undefined;
+};
 
+const RootStack = createStackNavigator<RootStackParamList>();
+
+// a listener for loader module state
 const useLoaderScreenVisibility = () => {
-  const ref = useRef(null);
+  const ref = useRef<NavigationProp<RootStackParamList>>(null);
 
   const loaderMsg = useSelector(getLoaderMsg);
 
+  // as soon as state of loader module changes,
+  // 1. if there is a loader msg in state (once setLoader action was dispatched):
+  //    navigate to the Loader modal screen
+  // 2. if there there is no longer a message in the state (dismissLoader action was dispatched)
+  //    navigate back from the Loader modal screen
+
+  // [how to use]
+  // a. show Loader screen: dispatch(setLoader({type: LoaderTypes, msg: string}));
+  // b. hide Loader screen: dispatch(dismissLoader())
   useEffect(() => {
     if (ref.current) {
       if (loaderMsg) {
         ref.current.navigate(ScreenNames.Loader);
       } else if (!loaderMsg) {
-        console.log(ref.current.canGoBack());
         const canGoBack = ref.current.canGoBack();
         if (canGoBack) {
           ref.current.goBack();

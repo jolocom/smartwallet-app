@@ -3,7 +3,7 @@ import React from 'react';
 import Paragraph from '~/components/Paragraph';
 import ScreenContainer from '~/components/ScreenContainer';
 import {useDispatch, useSelector} from 'react-redux';
-import {resetLoader} from '~/modules/loader/actions';
+import {dismissLoader} from '~/modules/loader/actions';
 
 import Btn, {BtnTypes} from '~/components/Btn';
 import {getLoaderMsg} from '~/modules/loader/selectors';
@@ -13,7 +13,7 @@ const Loader: React.FC = () => {
   const loaderMsg = useSelector(getLoaderMsg);
 
   const closeLoaderModal = () => {
-    dispatch(resetLoader());
+    dispatch(dismissLoader());
   };
 
   return (

@@ -1,5 +1,5 @@
 import createAction from '~/utils/createAction';
-import {LoaderActions} from './types';
+import {LoaderActions} from '~/types/loader';
 
-export const resetLoader = createAction(LoaderActions.reset);
+export const dismissLoader = createAction(LoaderActions.dismiss);
 export const setLoader = createAction(LoaderActions.set);

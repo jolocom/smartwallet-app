@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 
 import {setLoader} from '~/modules/loader/actions';
-import {LoaderTypes} from '~/modules/loader/types';
+import {LoaderTypes} from '~/types/loader';
 
 import ScreenContainer from '~/components/ScreenContainer';
 import Header, {HeaderSizes} from '~/components/Header';
