@@ -1,6 +1,9 @@
 import React, {useRef, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {NavigationContainer, NavigationProp} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import LoggedOut from '~/screens/LoggedOut';
@@ -13,18 +16,11 @@ import {ScreenNames} from '~/types/screens';
 
 import {getLoaderMsg} from '~/modules/loader/selectors';
 
-type RootStackParamList = {
-  [ScreenNames.LoggedOut]: undefined;
-  [ScreenNames.LoggedIn]: undefined;
-  [ScreenNames.Loader]: undefined;
-  [ScreenNames.Interactions]: undefined;
-};
-
-const RootStack = createStackNavigator<RootStackParamList>();
+const RootStack = createStackNavigator();
 
 // a listener for loader module state
 const useLoaderScreenVisibility = () => {
-  const ref = useRef<NavigationProp<RootStackParamList>>(null);
+  const ref = useRef<NavigationContainerRef>(null);
 
   const loaderMsg = useSelector(getLoaderMsg);
 
@@ -64,7 +60,14 @@ const RootNavigation: React.FC = () => {
         screenOptions={modalScreenOptions}>
         <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
         <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
-        <RootStack.Screen name={ScreenNames.Loader} component={Loader} />
+        <RootStack.Screen
+          name={ScreenNames.Loader}
+          component={Loader}
+          options={{
+            cardOverlayEnabled: true,
+            cardStyle: {backgroundColor: 'transparent'},
+          }}
+        />
         <RootStack.Screen
           name={ScreenNames.Interactions}
           component={Interactions}
