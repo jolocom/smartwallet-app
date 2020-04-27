@@ -9,7 +9,7 @@ interface Props {
   description: string;
 }
 
-export const ErrorComponent: React.FC<Props> = ({
+export const ErrorFallback: React.FC<Props> = ({
   title,
   description,
   children,

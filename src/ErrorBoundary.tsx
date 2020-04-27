@@ -1,5 +1,5 @@
 import React from 'react';
-import {ErrorComponent} from './components/Error';
+import {ErrorFallback} from './components/Error';
 import Btn, {BtnTypes, BtnSize} from '~/components/Btn';
 import {strings} from '~/translations/strings';
 
@@ -19,7 +19,7 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <ErrorComponent
+        <ErrorFallback
           title={strings.UNKNOWN_ERROR}
           description={
             strings.AND_IF_THIS_IS_NOT_THE_FIRST_TIME_WE_STRONGLY_RECOMMEND_LETTING_US_KNOW
@@ -30,7 +30,7 @@ export class ErrorBoundary extends React.Component {
             onPress={this.onPressClose}>
             {strings.CLOSE}
           </Btn>
-        </ErrorComponent>
+        </ErrorFallback>
       );
     }
 

@@ -21,7 +21,11 @@ const Paragraph: React.FC<PropsI> = ({
 }) => {
   const sizeStyle =
     size === ParagraphSize.medium ? styles.medium : styles.large;
-  return <Text style={[styles.paragraph, {color}, sizeStyle]}>{children}</Text>;
+  return (
+    <Text testID={'paragraph'} style={[styles.paragraph, {color}, sizeStyle]}>
+      {children}
+    </Text>
+  );
 };
 
 const styles = StyleSheet.create({
