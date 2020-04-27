@@ -14,7 +14,7 @@ import Interactions from '~/screens/Modals/Interactions';
 import {modalScreenOptions} from '~/utils/styles';
 import {ScreenNames} from '~/types/screens';
 
-import {getLoaderMsg} from '~/modules/loader/selectors';
+import {getLoaderState} from '~/modules/loader/selectors';
 
 const RootStack = createStackNavigator();
 
@@ -22,7 +22,7 @@ const RootStack = createStackNavigator();
 const useLoaderScreenVisibility = () => {
   const ref = useRef<NavigationContainerRef>(null);
 
-  const loaderMsg = useSelector(getLoaderMsg);
+  const {msg} = useSelector(getLoaderState);
 
   // as soon as state of loader module changes,
   // 1. if there is a loader msg in state (once setLoader action was dispatched):
@@ -35,16 +35,16 @@ const useLoaderScreenVisibility = () => {
   // b. hide Loader screen: dispatch(dismissLoader())
   useEffect(() => {
     if (ref.current) {
-      if (loaderMsg) {
+      if (msg) {
         ref.current.navigate(ScreenNames.Loader);
-      } else if (!loaderMsg) {
+      } else if (!msg) {
         const canGoBack = ref.current.canGoBack();
         if (canGoBack) {
           ref.current.goBack();
         }
       }
     }
-  }, [loaderMsg]);
+  }, [msg]);
 
   return ref;
 };

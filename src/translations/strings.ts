@@ -5,3 +5,11 @@ export const strings = {
     'And if this is not the first time we strongly recommend letting us know',
   CLOSE: 'Close',
 };
+
+export const LoaderMsgs = {
+  CREATING: 'Creating your personal secret number',
+  MATCHING: 'Matching two instances',
+  SUCCESS: 'Success!',
+  FAILED: 'Failed',
+  EMPTY: '',
+};
