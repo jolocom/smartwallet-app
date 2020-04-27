@@ -7,10 +7,14 @@
     "run:android": "react-native run-android",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "test": "jest",
-    "devtools": "react-devtools",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prettier:check": "prettier --check",
+    "prettier:checkAll": "prettier --check './**/*.ts|*.tsx'",
+    "prettier:format": "prettier --write",
+    "prettier:formatAll": "prettier --write './**/*.ts|*.tsx'",
+    "devtools": "react-devtools"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.9",
