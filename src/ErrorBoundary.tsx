@@ -1,7 +1,7 @@
 import React from 'react';
 import {ErrorComponent} from './components/Error';
 import Btn, {BtnTypes, BtnSize} from '~/components/Btn';
-import {strings} from '~/utils/strings';
+import {strings} from '~/translations/strings';
 
 export class ErrorBoundary extends React.Component {
   public state = {
