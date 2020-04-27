@@ -19,6 +19,15 @@ export const TextStyle = {
     fontSize: 20,
     lineHeight: 22,
     letterSpacing: 0.14,
-    color: Colors.white70,
+    color: Colors.white,
+    opacity: 0.7,
+  },
+  largeSubtitle: {
+    fontFamily: Fonts.Regular,
+    fontSize: 22,
+    lineHeight: 26,
+    letterSpacing: 0.15,
+    color: Colors.white,
+    opacity: 0.8,
   },
 };

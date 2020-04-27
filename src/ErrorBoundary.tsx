@@ -18,9 +18,6 @@ export class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      // TODO An alternative solution would be to navigate to an Error screen, gather
-      // the details {@title, @description} from the Error object and send them as
-      // navigation props. Not sure how to handle rendering the Buttons in this case.
       return (
         <ErrorComponent
           title={strings.UNKNOWN_ERROR}

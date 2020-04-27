@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 import ScreenContainer from '~/components/ScreenContainer';
-import {TextStyle} from '~/utils/fonts';
+import Header from './Header';
+import Paragraph from './Paragraph';
 
 interface Props {
   title: string;
@@ -23,8 +24,8 @@ export const ErrorComponent: React.FC<Props> = ({
       />
     </View>
     <View style={styles.textContainer}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Header>{title}</Header>
+      <Paragraph>{description}</Paragraph>
     </View>
     <View style={styles.buttonContainer}>{children}</View>
   </ScreenContainer>
@@ -45,22 +46,12 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 0.5,
+    alignItems: 'center',
   },
   buttonContainer: {
     flex: 0.5,
     width: '100%',
     justifyContent: 'flex-end',
     paddingBottom: '5%',
-  },
-  title: {
-    marginTop: 36,
-    textAlign: 'center',
-    ...TextStyle.middleTitleRegular,
-  },
-  description: {
-    marginTop: 12,
-    marginHorizontal: '5%',
-    textAlign: 'center',
-    ...TextStyle.middleSubtitle,
   },
 });
