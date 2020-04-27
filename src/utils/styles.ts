@@ -1,4 +1,5 @@
-import {StackNavigationOptions} from '@react-navigation/stack'
+import {StackNavigationOptions} from '@react-navigation/stack';
+import {Fonts} from './fonts';
 
 export const modalScreenOptions: StackNavigationOptions = {
   cardStyle: {backgroundColor: 'transparent'},
@@ -19,9 +20,14 @@ export const modalScreenOptions: StackNavigationOptions = {
     },
     transparentCard: true,
   }),
-}
+};
 
 export const secondaryTextStyle = {
   opacity: 0.8,
-  fontFamily: 'TTCommons-Regular',
-}
+  fontFamily: Fonts.Regular,
+};
+
+export const debug = {
+  borderColor: 'red',
+  borderWidth: 1,
+};
