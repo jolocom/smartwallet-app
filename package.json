@@ -37,7 +37,10 @@
     "@typescript-eslint/parser": "^2.27.0",
     "babel-jest": "^24.9.0",
     "babel-plugin-root-import": "^6.5.0",
+    "commitizen": "^4.0.4",
+    "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.5.1",
+    "husky": "^4.2.5",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.58.0",
     "prettier": "^2.0.4",
@@ -55,5 +58,16 @@
       "json",
       "node"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "node bin/precommit.js",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
