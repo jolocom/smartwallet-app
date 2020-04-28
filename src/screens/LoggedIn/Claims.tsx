@@ -10,7 +10,7 @@ import Btn from '~/components/Btn';
 
 import useRedirectTo from '~/hooks/useRedirectTo';
 import {ScreenNames} from '~/types/screens';
-import {LoaderMsgs} from '~/translations/strings';
+import {strings} from '~/translations/strings';
 
 const Claims: React.FC = () => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const Claims: React.FC = () => {
     dispatch(
       setLoader({
         type: LoaderTypes.default,
-        msg: LoaderMsgs.MATCHING,
+        msg: strings.MATCHING,
       }),
     );
   };
