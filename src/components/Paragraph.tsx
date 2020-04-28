@@ -22,7 +22,7 @@ const Paragraph: React.FC<PropsI> = ({
   const sizeStyle =
     size === ParagraphSize.medium ? styles.medium : styles.large;
   return (
-    <Text testID={'paragraph'} style={[styles.paragraph, {color}, sizeStyle]}>
+    <Text testID="paragraph" style={[styles.paragraph, { color }, sizeStyle]}>
       {children}
     </Text>
   );

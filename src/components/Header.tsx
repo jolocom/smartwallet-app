@@ -14,7 +14,7 @@ interface PropsI {
 const Header: React.FC<PropsI> = ({size = HeaderSizes.medium, children}) => {
   return (
     <Text
-      testID={'header'}
+      testID="header"
       style={[
         styles.text,
         size === HeaderSizes.large ? styles.large : styles.medium,
