@@ -4,14 +4,22 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import {Colors} from '~/utils/colors';
 import {secondaryTextStyle} from '~/utils/styles';
+import {Fonts} from '~/utils/fonts';
 
 export enum BtnTypes {
   primary,
   secondary,
+  tertiary,
+}
+
+export enum BtnSize {
+  large,
+  medium,
 }
 
 interface PropsI {
   type?: BtnTypes;
+  size?: BtnSize;
   onPress: () => void;
   disabled?: boolean;
 }
@@ -19,13 +27,29 @@ interface PropsI {
 const GRADIENT_START = {x: 0, y: 0};
 const GRADIENT_END = {x: 1, y: 0};
 
-const Button: React.FC<PropsI> = ({type, onPress, children, disabled}) => {
+const Button: React.FC<PropsI> = ({
+  type,
+  size,
+  onPress,
+  children,
+  disabled,
+}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.btn} disabled={disabled}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        styles.btn,
+        size === BtnSize.large ? styles.largeBtn : styles.mediumBtn,
+      ]}
+      disabled={disabled}>
       <Text
         style={[
           styles.text,
-          type === BtnTypes.primary ? styles.textPrimary : styles.textSecondary,
+          type === BtnTypes.primary
+            ? styles.textPrimary
+            : type === BtnTypes.secondary
+            ? styles.textSecondary
+            : styles.textTertiary,
         ]}>
         {children}
       </Text>
@@ -47,6 +71,14 @@ const Btn: React.FC<PropsI> = (props) => {
         <Button {...props} />
       </LinearGradient>
     );
+  } else if (props.type === BtnTypes.tertiary) {
+    return (
+      <View
+        style={[containerStyles, {backgroundColor: Colors.matterhorn18}]}
+        testID="tertiary-button">
+        <Button {...props} />
+      </View>
+    );
   }
   return (
     <View style={containerStyles} testID="non-gradient">
@@ -57,18 +89,23 @@ const Btn: React.FC<PropsI> = (props) => {
 
 Btn.defaultProps = {
   type: BtnTypes.primary,
+  size: BtnSize.large,
   disabled: false,
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16,
     width: '100%',
     borderRadius: 8,
     marginVertical: 5,
   },
+  largeBtn: {
+    paddingVertical: 16,
+  },
+  mediumBtn: {
+    paddingVertical: 12,
+  },
   btn: {
-    width: '100%',
     backgroundColor: 'transparent',
     alignItems: 'center',
   },
@@ -81,10 +118,13 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   textPrimary: {
-    fontFamily: 'TTCommons-Medium',
+    fontFamily: Fonts.Regular,
   },
   textSecondary: {
     ...secondaryTextStyle,
+  },
+  textTertiary: {
+    fontFamily: Fonts.Medium,
   },
 });
 
