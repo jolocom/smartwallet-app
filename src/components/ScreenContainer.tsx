@@ -1,10 +1,10 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Colors} from '~/utils/colors';
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
+import { Colors } from '~/utils/colors'
 
-const ScreenContainer: React.FC = ({children}) => {
-  return <View style={styles.container}>{children}</View>;
-};
+const ScreenContainer: React.FC = ({ children }) => {
+  return <View style={styles.container}>{children}</View>
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -14,6 +14,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.mainBlack,
     paddingHorizontal: '5%',
   },
-});
+})
 
-export default ScreenContainer;
+export default ScreenContainer
