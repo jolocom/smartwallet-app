@@ -1,6 +1,6 @@
 import {LoaderMsgs} from '~/translations/strings';
 
-import {LoaderActions, LoaderTypes, LoaderStateI} from '~/types/loader';
+import {LoaderActions, LoaderTypes, LoaderStateI} from './types';
 
 type Actions = {
   type: LoaderActions;

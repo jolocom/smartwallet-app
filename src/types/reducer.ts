@@ -1,4 +1,4 @@
-import {LoaderStateI} from '~/types/loader';
+import {LoaderStateI} from '~/modules/loader/types';
 
 export interface RootReducerI {
   loader: LoaderStateI;
