@@ -1,9 +1,9 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Colors} from '~/utils/colors';
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
+import { Colors } from '~/utils/colors'
 
 interface ScreenContainerI {
-  isTransparent?: boolean;
+  isTransparent?: boolean
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
@@ -14,20 +14,21 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
     <View style={[styles.container, isTransparent && styles.transparent]}>
       {children}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: '5%',
+    paddingVertical: 50,
     backgroundColor: Colors.mainBlack,
   },
   transparent: {
     backgroundColor: 'transparent',
   },
-});
+})
 
-export default ScreenContainer;
+export default ScreenContainer
