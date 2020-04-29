@@ -1,8 +1,8 @@
-import React from 'react';
-import {Text, StyleSheet} from 'react-native';
+import React from 'react'
+import { Text, StyleSheet } from 'react-native'
 
-import {Colors} from '~/utils/colors';
-import {TextStyle} from '~/utils/fonts';
+import { Colors } from '~/utils/colors'
+import { TextStyle } from '~/utils/fonts'
 
 export enum ParagraphSize {
   medium,
@@ -10,8 +10,8 @@ export enum ParagraphSize {
 }
 
 interface PropsI {
-  color?: Colors;
-  size?: ParagraphSize;
+  color?: Colors
+  size?: ParagraphSize
 }
 
 const Paragraph: React.FC<PropsI> = ({
@@ -19,14 +19,13 @@ const Paragraph: React.FC<PropsI> = ({
   size = ParagraphSize.medium,
   color = Colors.white,
 }) => {
-  const sizeStyle =
-    size === ParagraphSize.medium ? styles.medium : styles.large;
+  const sizeStyle = size === ParagraphSize.medium ? styles.medium : styles.large
   return (
-    <Text testID={'paragraph'} style={[styles.paragraph, {color}, sizeStyle]}>
+    <Text testID={'paragraph'} style={[styles.paragraph, { color }, sizeStyle]}>
       {children}
     </Text>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   paragraph: {
@@ -40,6 +39,6 @@ const styles = StyleSheet.create({
   large: {
     ...TextStyle.largeSubtitle,
   },
-});
+})
 
-export default Paragraph;
+export default Paragraph

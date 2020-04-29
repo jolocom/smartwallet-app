@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: '5%',
-    paddingVertical: 50,
+    paddingVertical: 30,
     backgroundColor: Colors.mainBlack,
   },
   transparent: {
