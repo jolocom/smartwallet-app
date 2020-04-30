@@ -1,7 +1,15 @@
+
+# fastlane is recommended to run with `bundle exec fastlane`
+before_all do |lane, options|
+  ensure_bundle_exec
+end
+
+# lanes for ios building, signing and deployment
 platform :ios do
+
   desc 'Fetch certificates and provisioning profiles'
   lane :certificates do
-    match(app_identifier: 'com.app.bundle')
+    match(app_identifier: 'com.jolocom.wallet')
   end
 
   desc 'Fetch certificates. Build the iOS application.'
@@ -10,7 +18,7 @@ platform :ios do
     gym(
       scheme: "SmartWallet",
       project: './ios/SmartWallet.xcodeproj',
-      export_method: 'development'
+      export_method: 'ad-hoc'
     )
- end
+  end
 end
