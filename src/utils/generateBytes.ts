@@ -1,5 +1,5 @@
-const { RNRandomBytes } = NativeModules
 import { NativeModules } from 'react-native'
+const { RNRandomBytes } = NativeModules
 
 export function generateSecureRandomBytes(length: number): Promise<Buffer> {
   return new Promise((resolve, reject) => {

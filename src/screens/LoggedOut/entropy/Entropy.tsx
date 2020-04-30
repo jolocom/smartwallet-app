@@ -1,69 +1,82 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
+import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
+import Header from '~/components/Header'
+
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
+import { LoaderTypes } from '~/types/loader'
+import { generateSecureRandomBytes } from '~/utils/generateBytes'
+import { setLoader, dismissLoader } from '~/modules/loader/actions'
+import { LoaderMsgs } from '~/translations/strings'
+import SDK from '~/utils/SDK'
+
 import { EntropyIntro } from './EntropyIntro'
 import { EntropyGenerator } from './EntropyGenerator'
-import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { EntropyGestures } from './EntropyGestures'
-import Header from '~/components/Header'
-import { useDispatch } from 'react-redux'
-import { setLoader, dismissLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/types/loader'
-import { LoaderMsgs } from '~/translations/strings'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
-const POST_COLLECTION_WAIT_TIME = 300
 
 export const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
   const dispatch = useDispatch()
 
   const [entropyProgress, setProgress] = useState(0)
-  const [sufficientEntropy, setSufficient] = useState(false)
 
   const entropyGenerator = useRef(new EntropyGenerator()).current
 
   const submitEntropy = async (entropy: string) => {
-    console.log(entropy)
     dispatch(setLoader({ type: LoaderTypes.default, msg: LoaderMsgs.CREATING }))
-    await new Promise((resolve) => setTimeout(resolve, 5000))
-    dispatch(setLoader({ type: LoaderTypes.success, msg: LoaderMsgs.SUCCESS }))
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    dispatch(dismissLoader())
-    redirectToSeedPhrase()
-  }
+    try {
+      await SDK.createIdentity(entropy)
 
-  const updateEntropyProgress = async () => {
-    if (entropyProgress >= 1) {
-      setSufficient(true)
-      setProgress(1)
-      while (entropyGenerator.getProgress() < 1) {
-        const moreEntropy = await generateSecureRandomBytes(512)
-        // NOTE do not use moreEntropy.forEach, Buffer API is inconsistent, it
-        // doesn't work in some envirtonments
-        for (let i = 0; i < moreEntropy.length; i++) {
-          entropyGenerator.addFromDelta(moreEntropy[i])
-        }
-      }
-      setTimeout(
-        () => submitEntropy(entropyGenerator.generateRandomString(4)),
-        POST_COLLECTION_WAIT_TIME,
+      dispatch(
+        setLoader({ type: LoaderTypes.success, msg: LoaderMsgs.SUCCESS }),
       )
+
+      setTimeout(() => {
+        dispatch(dismissLoader())
+        redirectToSeedPhrase()
+      }, 0)
+    } catch (err) {
+      dispatch(setLoader({ type: LoaderTypes.error, msg: LoaderMsgs.FAILED }))
     }
   }
 
-  const addPoint = async (x: number, y: number) => {
-    if (sufficientEntropy) return
+  const supplementEntropyProgress = async () => {
+    while (entropyGenerator.getProgress() < 1) {
+      const moreEntropy = await generateSecureRandomBytes(512)
+      // NOTE do not use moreEntropy.forEach, Buffer API is inconsistent, it
+      // doesn't work in some envirtonments
+      for (let i = 0; i < moreEntropy.length; i++) {
+        entropyGenerator.addFromDelta(moreEntropy[i])
+      }
+    }
+  }
 
+  const updateProgress = () => {
+    const progress = entropyGenerator.getProgress() / ENOUGH_ENTROPY_PROGRESS
+    setProgress(progress >= 1 ? 1 : progress)
+  }
+
+  useEffect(() => {
+    if (entropyProgress === 1) {
+      ;(async () => {
+        await supplementEntropyProgress()
+        submitEntropy(entropyGenerator.generateRandomString(4))
+      })()
+    }
+
+    // don't forget to cleanup
+  }, [entropyProgress])
+
+  const addPoint = async (x: number, y: number) => {
     entropyGenerator.addFromDelta(x)
     entropyGenerator.addFromDelta(y)
-    const entropyProgress =
-      entropyGenerator.getProgress() / ENOUGH_ENTROPY_PROGRESS
-    setProgress(entropyProgress)
-    await updateEntropyProgress()
+
+    updateProgress()
   }
 
   return (
