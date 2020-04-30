@@ -43,19 +43,19 @@ const Recovery: React.FC = ({ navigation }) => {
   const [loading, setLoading] = useState(false)
   const [suggestedWords, setSuggestedWords] = useState<string[]>([])
 
-  const phraseComplete = phrase.length === 12 && currentWordIdx === 12
-
   const handleWordSubmit = () => {
-    if (currentWordIdx === phrase.length) {
-      setPhrase((prevPhrase) => [...prevPhrase, word])
-    } else {
-      setPhrase((prevState) => {
-        const phrase = prevState.slice()
-        phrase[currentWordIdx] = word
-        return phrase
-      })
+    if (word) {
+      if (currentWordIdx === phrase.length) {
+        setPhrase((prevPhrase) => [...prevPhrase, word])
+      } else {
+        setPhrase((prevState) => {
+          const phrase = prevState.slice()
+          phrase[currentWordIdx] = word
+          return phrase
+        })
+      }
+      setCurrentWordIdx((prevIdx) => prevIdx + 1)
     }
-    setCurrentWordIdx((prevIdx) => prevIdx + 1)
   }
 
   const selectPrevWord = () => {
@@ -77,10 +77,16 @@ const Recovery: React.FC = ({ navigation }) => {
         <View style={styles.header}>
           {phrase.length ? (
             <>
-              <Header>{currentWordIdx + 1}/12</Header>
+              <Header>{phrase.length}/12</Header>
               <View style={styles.seedPhraseContainer}>
-                {phrase.map((word) => (
-                  <Header key={word} size={HeaderSizes.small}>
+                {phrase.map((word, idx) => (
+                  <Header
+                    key={word}
+                    size={HeaderSizes.small}
+                    color={
+                      idx === currentWordIdx ? Colors.white : Colors.activity
+                    }
+                  >
                     {word}
                   </Header>
                 ))}
@@ -105,6 +111,8 @@ const Recovery: React.FC = ({ navigation }) => {
             )}
             <TextInput
               underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              blurOnSubmit={false}
               style={styles.input}
               value={word}
               onChangeText={setWord}
@@ -112,9 +120,9 @@ const Recovery: React.FC = ({ navigation }) => {
               spellCheck={false}
               returnKeyType="next"
               onSubmitEditing={handleWordSubmit}
-              editable={!phraseComplete}
+              editable={currentWordIdx < 12}
             />
-            {currentWordIdx < phrase.length && (
+            {currentWordIdx !== phrase.length && (
               <Arrow direction={ArrowDirections.right} onPress={selectNextWord}>
                 {currentWordIdx < phrase.length - 1 && !loading && (
                   <Paragraph>next</Paragraph>

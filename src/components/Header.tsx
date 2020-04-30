@@ -10,9 +10,14 @@ export enum HeaderSizes {
 
 interface PropsI {
   size?: HeaderSizes
+  color?: Colors
 }
 
-const Header: React.FC<PropsI> = ({ size = HeaderSizes.medium, children }) => {
+const Header: React.FC<PropsI> = ({
+  size = HeaderSizes.medium,
+  children,
+  color = Colors.white,
+}) => {
   return (
     <Text
       testID={'header'}
@@ -23,6 +28,7 @@ const Header: React.FC<PropsI> = ({ size = HeaderSizes.medium, children }) => {
           : size === HeaderSizes.medium
           ? styles.medium
           : styles.small,
+        { color },
       ]}
     >
       {children}
@@ -33,7 +39,6 @@ const Header: React.FC<PropsI> = ({ size = HeaderSizes.medium, children }) => {
 const styles = StyleSheet.create({
   text: {
     fontFamily: 'TTCommons-Medium',
-    color: Colors.white,
     marginVertical: 2,
     marginHorizontal: 3,
   },
