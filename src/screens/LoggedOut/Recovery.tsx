@@ -89,7 +89,11 @@ const Recovery: React.FC = ({ navigation }) => {
                     key={word}
                     size={HeaderSizes.small}
                     color={
-                      idx === currentWordIdx ? Colors.white : Colors.activity
+                      currentWordIdx === 12
+                        ? Colors.success
+                        : idx === currentWordIdx
+                        ? Colors.white
+                        : Colors.activity
                     }
                   >
                     {word}
