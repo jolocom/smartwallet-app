@@ -77,7 +77,12 @@ const Recovery: React.FC = ({ navigation }) => {
         <View style={styles.header}>
           {phrase.length ? (
             <>
-              <Header>{phrase.length}/12</Header>
+              <Header>
+                {currentWordIdx === phrase.length
+                  ? phrase.length
+                  : currentWordIdx + 1}
+                /12
+              </Header>
               <View style={styles.seedPhraseContainer}>
                 {phrase.map((word, idx) => (
                   <Header
