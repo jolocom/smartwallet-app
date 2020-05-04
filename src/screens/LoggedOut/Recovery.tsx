@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   InputAccessoryView,
+  Keyboard,
 } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -86,7 +87,6 @@ const Recovery: React.FC = ({ navigation }) => {
   const [seedKey, setSeedKey] = useState('')
   const [phrase, setPhrase] = useState<string[]>([])
   const [currentWordIdx, setCurrentWordIdx] = useState(0)
-  const [loading, setLoading] = useState(false)
   const [suggestedKeys, setSuggestedKeys] = useState<string[]>([])
 
   const handleKeySubmit = (word = seedKey) => {
@@ -126,6 +126,11 @@ const Recovery: React.FC = ({ navigation }) => {
 
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
 
+  const dismissKeyboard = () => {
+    Keyboard.dismiss()
+    selectNextWord()
+  }
+
   return (
     <ScreenContainer>
       <View style={styles.body}>
@@ -150,6 +155,7 @@ const Recovery: React.FC = ({ navigation }) => {
                         ? Colors.white
                         : Colors.activity
                     }
+                    customStyles={{ marginHorizontal: 3 }}
                   >
                     {seedKey}
                   </Header>
@@ -190,10 +196,17 @@ const Recovery: React.FC = ({ navigation }) => {
             />
             {currentWordIdx !== phrase.length && (
               <Arrow direction={ArrowDirections.right} onPress={selectNextWord}>
-                {currentWordIdx < phrase.length - 1 && !loading && (
+                {currentWordIdx < phrase.length - 1 && (
                   <Paragraph>next</Paragraph>
                 )}
-                {loading && <Paragraph>load</Paragraph>}
+              </Arrow>
+            )}
+            {currentWordIdx === 11 && phrase.length === 12 && (
+              <Arrow
+                direction={ArrowDirections.right}
+                onPress={dismissKeyboard}
+              >
+                <Paragraph>done</Paragraph>
               </Arrow>
             )}
           </View>
