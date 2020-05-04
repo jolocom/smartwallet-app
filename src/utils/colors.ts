@@ -9,4 +9,7 @@ export enum Colors {
   white = '#ffffff',
   white45 = 'rgba(255, 255, 255, 0.45)',
   serenade = '#fff1e3',
+  white90 = 'rgba(255,255,255,0.9)',
+  white70 = 'rgba(255, 255, 255, 0.7)',
+  matterhorn18 = 'rgba(81, 81, 81, 0.18)',
 }

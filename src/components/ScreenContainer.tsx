@@ -1,19 +1,33 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Colors} from '~/utils/colors';
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
+import { Colors } from '~/utils/colors'
 
-const ScreenContainer: React.FC = ({children}) => {
-  return <View style={styles.container}>{children}</View>;
-};
+interface ScreenContainerI {
+  isTransparent?: boolean
+}
+
+const ScreenContainer: React.FC<ScreenContainerI> = ({
+  children,
+  isTransparent = false,
+}) => {
+  return (
+    <View style={[styles.container, isTransparent && styles.transparent]}>
+      {children}
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.mainBlack,
     paddingHorizontal: '5%',
+    backgroundColor: Colors.mainBlack,
   },
-});
+  transparent: {
+    backgroundColor: 'transparent',
+  },
+})
 
-export default ScreenContainer;
+export default ScreenContainer

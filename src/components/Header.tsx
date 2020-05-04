@@ -1,6 +1,7 @@
-import React from 'react';
-import {Text, StyleSheet} from 'react-native';
-import {Colors} from '~/utils/colors';
+import React from 'react'
+import { Text, StyleSheet } from 'react-native'
+import { Colors } from '~/utils/colors'
+import { Fonts } from '~/utils/fonts'
 
 export enum HeaderSizes {
   large = 'large',
@@ -9,9 +10,9 @@ export enum HeaderSizes {
 }
 
 interface PropsI {
-  size?: HeaderSizes;
-  hasShadow?: boolean;
-  color?: Colors;
+  size?: HeaderSizes
+  hasShadow?: boolean
+  color?: Colors
 }
 
 const Header: React.FC<PropsI> = ({
@@ -22,25 +23,26 @@ const Header: React.FC<PropsI> = ({
 }) => {
   return (
     <Text
-      style={[styles.text, styles[size], {color}, hasShadow && styles.shadow]}>
+      style={[styles.text, styles[size], { color }, hasShadow && styles.shadow]}
+    >
       {children}
     </Text>
-  );
-};
+  )
+}
 
 type Style = {
-  fontSize: number;
-  lineHeight: number;
-};
+  fontSize: number
+  lineHeight: number
+}
 
 const getStyle = (fontSize: number, lineHeight: number): Style => ({
   fontSize,
   lineHeight,
-});
+})
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'TTCommons-Medium',
+    fontFamily: Fonts.Medium,
     textAlign: 'center',
     letterSpacing: 0,
     marginVertical: 5,
@@ -62,6 +64,6 @@ const styles = StyleSheet.create({
     },
     textShadowRadius: 18,
   },
-});
+})
 
-export default Header;
+export default Header

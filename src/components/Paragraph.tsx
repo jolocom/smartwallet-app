@@ -1,7 +1,8 @@
-import React from 'react';
-import {Text, StyleSheet} from 'react-native';
+import React from 'react'
+import { Text, StyleSheet } from 'react-native'
 
-import {Colors} from '~/utils/colors';
+import { Colors } from '~/utils/colors'
+import { Fonts } from '~/utils/fonts'
 
 export enum ParagraphSizes {
   large = 'large',
@@ -10,8 +11,8 @@ export enum ParagraphSizes {
 }
 
 interface PropsI {
-  size?: ParagraphSizes;
-  color?: Colors;
+  size?: ParagraphSizes
+  color?: Colors
 }
 
 const Paragraph: React.FC<PropsI> = ({
@@ -20,15 +21,15 @@ const Paragraph: React.FC<PropsI> = ({
   size = ParagraphSizes.small,
 }) => {
   return (
-    <Text style={[styles.paragraph, styles[size], {color}]}>{children}</Text>
-  );
-};
+    <Text style={[styles.paragraph, styles[size], { color }]}>{children}</Text>
+  )
+}
 
 type Style = {
-  fontSize: number;
-  lineHeight: number;
-  letterSpacing: number;
-};
+  fontSize: number
+  lineHeight: number
+  letterSpacing: number
+}
 
 const getStyle = (
   fontSize: number,
@@ -38,11 +39,11 @@ const getStyle = (
   fontSize,
   lineHeight,
   letterSpacing,
-});
+})
 
 const styles = StyleSheet.create({
   paragraph: {
-    fontFamily: 'TTCommons-Regular',
+    fontFamily: Fonts.Regular,
     textAlign: 'center',
     marginVertical: 5,
     paddingHorizontal: 10,
@@ -56,6 +57,6 @@ const styles = StyleSheet.create({
   large: {
     ...getStyle(28, 32, 0),
   },
-});
+})
 
-export default Paragraph;
+export default Paragraph
