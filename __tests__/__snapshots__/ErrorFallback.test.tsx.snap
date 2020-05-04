@@ -86,6 +86,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
               Object {
                 "color": "#ffffff",
               },
+              Object {},
               false,
             ]
           }
@@ -98,8 +99,6 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             Array [
               Object {
                 "fontFamily": "TTCommons-Regular",
-                "marginVertical": 5,
-                "paddingHorizontal": 10,
                 "textAlign": "center",
               },
               Object {
@@ -110,6 +109,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
               Object {
                 "color": "#ffffff",
               },
+              Object {},
             ]
           }
           testID="paragraph"
