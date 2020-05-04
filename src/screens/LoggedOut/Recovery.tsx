@@ -246,7 +246,9 @@ const Recovery: React.FC = ({ navigation }) => {
         </View>
       </View>
       <BtnGroup>
-        <Btn onPress={redirectToSeedPhrase}>Confirm</Btn>
+        <Btn onPress={redirectToSeedPhrase} disabled={phrase.length !== 12}>
+          Confirm
+        </Btn>
         <Btn type={BtnTypes.secondary} onPress={redirectToSeedPhrase}>
           Back to walkthrough
         </Btn>
