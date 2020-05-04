@@ -15,7 +15,7 @@ import SDK from '~/utils/SDK'
 
 import { EntropyIntro } from './EntropyIntro'
 import { EntropyGenerator } from './EntropyGenerator'
-import { EntropyGestures } from './EntropyGestures'
+import { EntropyCanvas } from './EntropyCanvas'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
@@ -24,6 +24,7 @@ export const Entropy: React.FC = () => {
   const dispatch = useDispatch()
 
   const [entropyProgress, setProgress] = useState(0)
+  const [isTouched, setTouched] = useState(false)
 
   const entropyGenerator = useRef(new EntropyGenerator()).current
 
@@ -73,6 +74,8 @@ export const Entropy: React.FC = () => {
   }, [entropyProgress])
 
   const addPoint = async (x: number, y: number) => {
+    if (!isTouched) setTouched(true)
+
     entropyGenerator.addFromDelta(x)
     entropyGenerator.addFromDelta(y)
 
@@ -81,14 +84,14 @@ export const Entropy: React.FC = () => {
 
   return (
     <ScreenContainer>
-      {entropyProgress === 0 ? (
-        <EntropyIntro />
-      ) : (
+      {isTouched ? (
         <View style={styles.percentage}>
           <Header>{`${Math.trunc(entropyProgress * 100)} %`}</Header>
         </View>
+      ) : (
+        <EntropyIntro />
       )}
-      <EntropyGestures disabled={entropyProgress === 1} addPoint={addPoint} />
+      <EntropyCanvas disabled={entropyProgress === 1} addPoint={addPoint} />
     </ScreenContainer>
   )
 }
