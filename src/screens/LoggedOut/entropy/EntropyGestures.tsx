@@ -207,4 +207,8 @@ export const EntropyGestures: React.FC<Props> = React.memo(
       </Svg>
     )
   },
+  (prevProps, nextProps) => {
+    //NOTE: re-render only if the @{disabled} prop changes
+    return prevProps.disabled === nextProps.disabled
+  },
 )
