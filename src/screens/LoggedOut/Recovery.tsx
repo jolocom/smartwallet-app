@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  InputAccessoryView,
+} from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
@@ -10,6 +17,9 @@ import Paragraph from '~/components/Paragraph'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
+import { getSuggestedSeedKeys } from '~/utils/mnemonic'
+
+const MNEMONIC_SEED_KEYS = 'MNEMONIC_SEED_KEYS'
 
 enum ArrowDirections {
   left,
@@ -36,14 +46,49 @@ const Arrow: React.FC<{ direction?: ArrowDirections; onPress: () => void }> = ({
   )
 }
 
+type PillProps = {
+  seedKey: string
+  onSelectKey: (key: string) => void
+}
+
+const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
+  return (
+    <TouchableOpacity onPress={() => onSelectKey(seedKey)}>
+      <Paragraph>{seedKey}</Paragraph>
+    </TouchableOpacity>
+  )
+}
+
+type SuggestionsProps = {
+  suggestedKeys: string[]
+  onSelectKey: (key: string) => void
+}
+
+const Suggestions: React.FC<SuggestionsProps> = ({
+  suggestedKeys,
+  onSelectKey,
+}) => {
+  return (
+    <FlatList
+      data={suggestedKeys}
+      keyExtractor={(item) => item}
+      renderItem={({ item }) => (
+        <Pill key={item} seedKey={item} onSelectKey={onSelectKey} />
+      )}
+      horizontal={true}
+      keyboardShouldPersistTaps="always"
+    />
+  )
+}
+
 const Recovery: React.FC = ({ navigation }) => {
-  const [word, setWord] = useState('')
+  const [seedKey, setSeedKey] = useState('')
   const [phrase, setPhrase] = useState<string[]>([])
   const [currentWordIdx, setCurrentWordIdx] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [suggestedWords, setSuggestedWords] = useState<string[]>([])
+  const [suggestedKeys, setSuggestedKeys] = useState<string[]>([])
 
-  const handleWordSubmit = () => {
+  const handleKeySubmit = (word = seedKey) => {
     if (word) {
       if (currentWordIdx === phrase.length) {
         setPhrase((prevPhrase) => [...prevPhrase, word])
@@ -66,8 +111,17 @@ const Recovery: React.FC = ({ navigation }) => {
   }
 
   useEffect(() => {
-    setWord(phrase[currentWordIdx])
+    setSeedKey(phrase[currentWordIdx])
   }, [currentWordIdx])
+
+  useEffect(() => {
+    if (seedKey && seedKey.length > 1) {
+      const suggestions = getSuggestedSeedKeys(seedKey)
+      setSuggestedKeys(suggestions)
+    } else {
+      setSuggestedKeys([])
+    }
+  }, [seedKey])
 
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
 
@@ -84,9 +138,9 @@ const Recovery: React.FC = ({ navigation }) => {
                 /12
               </Header>
               <View style={styles.seedPhraseContainer}>
-                {phrase.map((word, idx) => (
+                {phrase.map((seedKey, idx) => (
                   <Header
-                    key={word}
+                    key={seedKey}
                     size={HeaderSizes.small}
                     color={
                       currentWordIdx === 12
@@ -96,7 +150,7 @@ const Recovery: React.FC = ({ navigation }) => {
                         : Colors.activity
                     }
                   >
-                    {word}
+                    {seedKey}
                   </Header>
                 ))}
               </View>
@@ -119,17 +173,19 @@ const Recovery: React.FC = ({ navigation }) => {
               </Arrow>
             )}
             <TextInput
+              value={seedKey}
+              editable={currentWordIdx < 12}
+              onChangeText={setSeedKey}
+              onSubmitEditing={handleKeySubmit}
+              inputAccessoryViewID={MNEMONIC_SEED_KEYS}
+              style={styles.input}
               underlineColorAndroid="transparent"
               autoCapitalize="none"
               blurOnSubmit={false}
-              style={styles.input}
-              value={word}
-              onChangeText={setWord}
               textAlign="center"
               spellCheck={false}
+              autoCorrect={false}
               returnKeyType="next"
-              onSubmitEditing={handleWordSubmit}
-              editable={currentWordIdx < 12}
             />
             {currentWordIdx !== phrase.length && (
               <Arrow direction={ArrowDirections.right} onPress={selectNextWord}>
@@ -151,6 +207,12 @@ const Recovery: React.FC = ({ navigation }) => {
           Back to walkthrough
         </Btn>
       </BtnGroup>
+      <InputAccessoryView nativeID={MNEMONIC_SEED_KEYS}>
+        <Suggestions
+          suggestedKeys={suggestedKeys}
+          onSelectKey={handleKeySubmit}
+        />
+      </InputAccessoryView>
     </ScreenContainer>
   )
 }
