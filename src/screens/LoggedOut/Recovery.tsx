@@ -12,7 +12,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
@@ -53,8 +53,8 @@ type PillProps = {
 
 const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
   return (
-    <TouchableOpacity onPress={() => onSelectKey(seedKey)}>
-      <Paragraph>{seedKey}</Paragraph>
+    <TouchableOpacity style={styles.pill} onPress={() => onSelectKey(seedKey)}>
+      <Paragraph size={ParagraphSizes.medium}>{seedKey}</Paragraph>
     </TouchableOpacity>
   )
 }
@@ -70,6 +70,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({
 }) => {
   return (
     <FlatList
+      style={styles.suggestionsContainer}
       data={suggestedKeys}
       keyExtractor={(item) => item}
       renderItem={({ item }) => (
@@ -258,6 +259,16 @@ const styles = StyleSheet.create({
   },
   rightArrow: {
     right: 10,
+  },
+  suggestionsContainer: {
+    marginBottom: 8,
+  },
+  pill: {
+    backgroundColor: 'black',
+    borderRadius: 4,
+    paddingHorizontal: 17,
+    paddingVertical: 10,
+    marginRight: 8,
   },
 })
 

@@ -50,8 +50,6 @@ const styles = StyleSheet.create({
   paragraph: {
     fontFamily: Fonts.Regular,
     textAlign: 'center',
-    marginVertical: 5,
-    paddingHorizontal: 10,
   },
   small: {
     ...getStyle(20, 22, 0.14),
