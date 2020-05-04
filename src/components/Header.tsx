@@ -23,6 +23,7 @@ const Header: React.FC<PropsI> = ({
 }) => {
   return (
     <Text
+      testID="header"
       style={[styles.text, styles[size], { color }, hasShadow && styles.shadow]}
     >
       {children}

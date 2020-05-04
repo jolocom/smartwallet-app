@@ -21,7 +21,12 @@ const Paragraph: React.FC<PropsI> = ({
   size = ParagraphSizes.small,
 }) => {
   return (
-    <Text style={[styles.paragraph, styles[size], { color }]}>{children}</Text>
+    <Text
+      testID="paragraph"
+      style={[styles.paragraph, styles[size], { color }]}
+    >
+      {children}
+    </Text>
   )
 }
 
