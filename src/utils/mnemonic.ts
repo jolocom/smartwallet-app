@@ -5,3 +5,7 @@ export const getSuggestedSeedKeys = (chars: string) => {
     return word.startsWith(chars.trim())
   })
 }
+
+export const isKeyValid = (key: string) => {
+  return Boolean(bip39.wordlists.EN.find((word: string) => word === key))
+}

@@ -18,7 +18,8 @@ import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import { getSuggestedSeedKeys } from '~/utils/mnemonic'
+import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
+import { debug } from 'util'
 
 const MNEMONIC_SEED_KEYS = 'MNEMONIC_SEED_KEYS'
 
@@ -88,6 +89,8 @@ const Recovery: React.FC = ({ navigation }) => {
   const [phrase, setPhrase] = useState<string[]>([])
   const [currentWordIdx, setCurrentWordIdx] = useState(0)
   const [suggestedKeys, setSuggestedKeys] = useState<string[]>([])
+  const [keyHasError, setHasError] = useState(false)
+  const [keyIsValid, setKeyIsValid] = useState(false)
 
   const handleKeySubmit = (word = seedKey) => {
     if (word) {
@@ -101,6 +104,7 @@ const Recovery: React.FC = ({ navigation }) => {
         })
       }
       setCurrentWordIdx((prevIdx) => prevIdx + 1)
+      setKeyIsValid(false)
     }
   }
 
@@ -119,10 +123,21 @@ const Recovery: React.FC = ({ navigation }) => {
     if (seedKey && seedKey.length > 1) {
       const suggestions = getSuggestedSeedKeys(seedKey)
       setSuggestedKeys(suggestions)
+
+      const isValid = isKeyValid(seedKey)
+      setKeyIsValid(isValid)
     } else {
       setSuggestedKeys([])
     }
   }, [seedKey])
+
+  useEffect(() => {
+    if (seedKey && seedKey.length > 1 && !suggestedKeys.length) {
+      setHasError(true)
+    } else {
+      setHasError(false)
+    }
+  }, [suggestedKeys])
 
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
 
@@ -173,7 +188,13 @@ const Recovery: React.FC = ({ navigation }) => {
           )}
         </View>
         <View>
-          <View style={styles.inputContainer}>
+          <View
+            style={[
+              styles.inputContainer,
+              keyHasError && styles.inputError,
+              keyIsValid && styles.inputValid,
+            ]}
+          >
             {currentWordIdx > 0 && (
               <Arrow onPress={selectPrevWord}>
                 <Paragraph>prev</Paragraph>
@@ -183,7 +204,11 @@ const Recovery: React.FC = ({ navigation }) => {
               value={seedKey}
               editable={currentWordIdx < 12}
               onChangeText={setSeedKey}
-              onSubmitEditing={handleKeySubmit}
+              onSubmitEditing={
+                keyIsValid
+                  ? (e) => handleKeySubmit(e.nativeEvent.text)
+                  : Keyboard.dismiss
+              }
               inputAccessoryViewID={MNEMONIC_SEED_KEYS}
               style={styles.input}
               underlineColorAndroid="transparent"
@@ -210,9 +235,14 @@ const Recovery: React.FC = ({ navigation }) => {
               </Arrow>
             )}
           </View>
-          <Btn type={BtnTypes.secondary} onPress={() => {}}>
-            What if I forgot my phrase?
-          </Btn>
+
+          <View style={{ marginTop: 15 }}>
+            {keyHasError ? (
+              <Paragraph color={Colors.error}>Can't match this word</Paragraph>
+            ) : (
+              <Paragraph>What if I forgot my phrase?</Paragraph>
+            )}
+          </View>
         </View>
       </View>
       <BtnGroup>
@@ -251,17 +281,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     height: 80,
     borderRadius: 7,
-    paddingHorizontal: 18,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'center',
     textAlign: 'center',
+    borderWidth: 2,
   },
   input: {
     fontSize: 34,
     width: '70%',
     color: Colors.white,
-    borderWidth: 2,
     textDecorationLine: 'none',
+  },
+  inputError: {
+    borderColor: Colors.error,
+    borderWidth: 2,
+  },
+  inputValid: {
+    borderColor: Colors.success,
   },
   arrows: {
     position: 'absolute',
