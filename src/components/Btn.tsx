@@ -3,7 +3,6 @@ import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {Colors} from '~/utils/colors';
-import {secondaryTextStyle} from '~/utils/styles';
 
 export enum BtnTypes {
   primary,
@@ -84,7 +83,8 @@ const styles = StyleSheet.create({
     fontFamily: 'TTCommons-Medium',
   },
   textSecondary: {
-    ...secondaryTextStyle,
+    fontFamily: 'TTCommons-Regular',
+    opacity: 0.8,
   },
 });
 
