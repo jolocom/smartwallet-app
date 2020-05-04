@@ -74,13 +74,19 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
           style={
             Array [
               Object {
-                "color": "#ffffff",
                 "fontFamily": "TTCommons-Medium",
+                "letterSpacing": 0,
                 "marginVertical": 5,
+                "textAlign": "center",
               },
               Object {
-                "fontSize": 28,
+                "fontSize": 34,
+                "lineHeight": 40,
               },
+              Object {
+                "color": "#ffffff",
+              },
+              false,
             ]
           }
           testID="header"
@@ -91,20 +97,18 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
           style={
             Array [
               Object {
+                "fontFamily": "TTCommons-Regular",
                 "marginVertical": 5,
                 "paddingHorizontal": 10,
                 "textAlign": "center",
               },
               Object {
-                "color": "#ffffff",
-              },
-              Object {
-                "color": "#ffffff",
-                "fontFamily": "TTCommons-Regular",
                 "fontSize": 20,
                 "letterSpacing": 0.14,
                 "lineHeight": 22,
-                "opacity": 0.7,
+              },
+              Object {
+                "color": "#ffffff",
               },
             ]
           }

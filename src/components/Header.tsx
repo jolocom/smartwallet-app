@@ -1,55 +1,69 @@
 import React from 'react'
 import { Text, StyleSheet } from 'react-native'
 import { Colors } from '~/utils/colors'
+import { Fonts } from '~/utils/fonts'
 
 export enum HeaderSizes {
-  large,
-  medium,
-  small,
+  large = 'large',
+  medium = 'medium',
+  small = 'small',
 }
 
 interface PropsI {
   size?: HeaderSizes
+  hasShadow?: boolean
   color?: Colors
 }
 
 const Header: React.FC<PropsI> = ({
   size = HeaderSizes.medium,
-  children,
+  hasShadow = false,
   color = Colors.white,
+  children,
 }) => {
   return (
     <Text
-      testID={'header'}
-      style={[
-        styles.text,
-        size === HeaderSizes.large
-          ? styles.large
-          : size === HeaderSizes.medium
-          ? styles.medium
-          : styles.small,
-        { color },
-      ]}
+      testID="header"
+      style={[styles.text, styles[size], { color }, hasShadow && styles.shadow]}
     >
       {children}
     </Text>
   )
 }
 
+type Style = {
+  fontSize: number
+  lineHeight: number
+}
+
+const getStyle = (fontSize: number, lineHeight: number): Style => ({
+  fontSize,
+  lineHeight,
+})
+
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'TTCommons-Medium',
-    marginVertical: 2,
-    marginHorizontal: 3,
+    fontFamily: Fonts.Medium,
+    textAlign: 'center',
+    letterSpacing: 0,
+    marginVertical: 5,
   },
   large: {
-    fontSize: 34,
+    ...getStyle(40, 54),
   },
   medium: {
-    fontSize: 28,
+    ...getStyle(34, 40),
   },
   small: {
-    fontSize: 26,
+    ...getStyle(28, 40),
+  },
+  shadow: {
+    textShadowColor: Colors.white45,
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    textShadowRadius: 18,
   },
 })
 

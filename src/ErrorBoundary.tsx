@@ -12,7 +12,7 @@ export class ErrorBoundary extends React.Component {
     return { hasError: true }
   }
 
-  private onPressClose = () => {
+  private handleClose = () => {
     this.setState({ hasError: false })
   }
 
@@ -28,7 +28,7 @@ export class ErrorBoundary extends React.Component {
           <Btn
             type={BtnTypes.secondary}
             size={BtnSize.medium}
-            onPress={this.onPressClose}
+            onPress={this.handleClose}
           >
             {strings.CLOSE}
           </Btn>
