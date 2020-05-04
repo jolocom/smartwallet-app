@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
-import { PanResponder, GestureResponderEvent, View } from 'react-native'
+import { PanResponder, GestureResponderEvent } from 'react-native'
 import { Svg, Path, Circle, Rect } from 'react-native-svg'
+
+import { useForceUpdate } from '~/utils/helpers'
+import {
+  findIntersections,
+  Coordinates,
+  extractCoords,
+  shouldComputeEntropy,
+} from './utils'
+import { Colors } from '~/utils/colors'
 
 interface Props {
   disabled: boolean
   addPoint: (x: number, y: number) => void
-}
-
-interface Coordinates {
-  prevX: number
-  prevY: number
-  curX: number
-  curY: number
 }
 
 const MIN_DISTANCE_SQ = 50
@@ -19,15 +21,18 @@ const MAX_LINE_PTS = 100
 
 export const EntropyGestures: React.FC<Props> = React.memo(
   ({ disabled, addPoint }) => {
+    const forceUpdate = useForceUpdate()
+
     const pathEls = useRef<any[]>(new Array(10)).current
 
-    const [pathDs, setPathDs] = useState<string[]>([])
-    const [pathIdx, setPathIdx] = useState<number>(0)
     const [circles, setCircles] = useState<number[][]>([])
-    const [circlesN, setCirclesN] = useState<number>(0)
-    const [linesPts, setLinesPts] = useState<number[]>([])
-    const [linesPtsIdx, setLinesPtsIdx] = useState<number>(0)
-    const [coords, setCoords] = useState<Coordinates>({
+    const [, setCirclesN] = useState<number>(0)
+
+    const pathDs = useRef<string[]>([])
+    const pathIdx = useRef<number>(0)
+    const linesPts = useRef<number[]>([])
+    const linesPtsIdx = useRef<number>(0)
+    const coords = useRef<Coordinates>({
       prevX: 0,
       prevY: 0,
       curX: 0,
@@ -36,142 +41,105 @@ export const EntropyGestures: React.FC<Props> = React.memo(
 
     useEffect(() => {
       for (let i = 0; i < pathEls.length; i++) {
-        setPathDs([...pathDs, ''])
+        pathDs.current = [...pathDs.current, '']
       }
     }, [])
+    useEffect(() => {
+      console.log(pathIdx)
+    })
+
+    const modifyPath = (newPath: string) =>
+      (pathDs.current[pathIdx.current] += newPath)
+
+    // NOTE: We're dynamically assigning the path prop to avoid rerendering
+    // on every gesture / drawing of the line
+    const setPathProps = (path: string) => {
+      if (pathEls[pathIdx.current]) {
+        pathEls[pathIdx.current].setNativeProps({
+          d: path,
+        })
+      }
+    }
 
     const handleDrawStart = (e: GestureResponderEvent): void => {
       if (disabled) return
 
-      // if the current pathD was empty and now not, we should rerender (because
-      // empty pathD value would have caused the path element to not have been
-      // rendered previously)
-      // const shouldRerender = !pathDs[pathIdx]
-
-      const curX = Math.floor(e.nativeEvent.locationX),
-        curY = Math.floor(e.nativeEvent.locationY)
+      const { curX, curY } = extractCoords(e)
       addPoint(curX, curY)
+      modifyPath(`M${curX},${curY}`)
 
-      const newPathDs = pathDs.map((path, id) => {
-        let newPath = path
-        if (id === pathIdx) newPath = path + `M${curX},${curY}`
-        return newPath
-      })
-      setPathDs(newPathDs)
-
-      setCoords({
+      coords.current = {
         curX,
         curY,
         prevX: curX,
         prevY: curY,
-      })
-
-      //TODO: see if this is still necessary
-      /* if (shouldRerender) this.forceUpdate() */
+      }
+      forceUpdate()
     }
 
     const handleDraw = (e: GestureResponderEvent): void => {
       if (disabled) return
 
-      const { prevX, prevY } = coords
-      const curX = Math.floor(e.nativeEvent.locationX),
-        curY = Math.floor(e.nativeEvent.locationY)
-
+      const { prevX, prevY } = coords.current
+      const { curX, curY } = extractCoords(e)
+      const newCoords = { curX, curY, prevX, prevY }
       addPoint(curX, curY)
 
-      const dist_sq = Math.abs(curX - prevX) + Math.abs(curY - prevY)
-      if (dist_sq > MIN_DISTANCE_SQ) {
-        // if the new line segment is longer than the min, then
-        // check if it intersects with any previous segment
-        for (let i = 0; i < linesPts.length; i += 4) {
-          // get intersection
-          const a = linesPts[i],
-            b = linesPts[i + 1],
-            c = linesPts[i + 2],
-            d = linesPts[i + 3],
-            p = prevX,
-            q = prevY,
-            r = curX,
-            s = curY
+      if (shouldComputeEntropy(newCoords, MIN_DISTANCE_SQ)) {
+        // NOTE(@clauxx): take each line in the path and compare
+        // it to the last one
+        findIntersections(linesPts.current, newCoords).map((intersection) => {
+          setCircles([...circles, [intersection.x, intersection.y]])
+          setCirclesN(circles.length)
+        })
 
-          let det, gamma, lambda
-          det = (c - a) * (s - q) - (r - p) * (d - b)
-          if (det === 0) continue
-
-          lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det
-          gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det
-          if (0 < lambda && lambda < 1 && 0 < gamma && gamma < 1) {
-            const x = a + lambda * (c - a)
-            const y = b + lambda * (d - b)
-
-            // they intersect at (x, y)
-            // so draw a circle at the intersection
-            setCircles([...circles, [x, y]])
-            setCirclesN(circles.length)
-
-            // only 1 intersection per segment
-            break
-          }
-        }
-
-        // then add the new line and maintain the line list
-        if (linesPts.length >= MAX_LINE_PTS) {
-          if (
-            pathIdx < pathDs.length - 1 &&
-            (pathIdx == 0 || linesPtsIdx >= linesPts.length)
-          ) {
-            setPathDs(
-              pathDs.map((path, id) => {
-                let newPath = path
-                if (id === pathIdx)
-                  newPath = `M${prevX},${prevY}L${curX},${curY}`
-                return newPath
-              }),
-            )
-            setPathIdx(pathIdx + 1)
+        // NOTE: then add the new line and maintain the line list
+        if (linesPts.current.length >= MAX_LINE_PTS) {
+          const isMaxPath =
+            pathIdx.current < pathDs.current.length - 1 &&
+            (pathIdx.current == 0 ||
+              linesPtsIdx.current >= linesPts.current.length)
+          if (isMaxPath) {
+            pathIdx.current++
+            modifyPath(`M${prevX},${prevY}L${curX},${curY}`)
+            forceUpdate()
           }
 
-          if (linesPtsIdx >= linesPts.length) setLinesPtsIdx(0)
-          setLinesPts(linesPts.splice(linesPtsIdx, 4, prevX, prevY, curX, curY))
-          setLinesPtsIdx(linesPtsIdx + 4)
+          if (linesPtsIdx.current >= linesPts.current.length)
+            linesPtsIdx.current = 0
+
+          linesPts.current.splice(
+            linesPtsIdx.current,
+            4,
+            prevX,
+            prevY,
+            curX,
+            curY,
+          )
+          linesPtsIdx.current += 4
         } else {
-          setLinesPts([...linesPts, prevX, prevY, curX, curY])
+          linesPts.current = [...linesPts.current, prevX, prevY, curX, curY]
         }
 
-        // and finally update state
-        setCoords({
+        coords.current = {
           curX,
           curY,
           prevX: curX,
           prevY: curY,
-        })
-
-        setPathDs(
-          pathDs.map((path, id) => {
-            let newPath = path
-            if (id === pathIdx) newPath = path + `L${curX},${curY}`
-            return newPath
-          }),
-        )
-
-        // update the SVG path without re-rendering
-        if (pathEls[pathIdx]) {
-          pathEls[pathIdx].setNativeProps({ d: pathDs[pathIdx] })
         }
+
+        modifyPath(`L${curX},${curY}`)
+        setPathProps(pathDs.current[pathIdx.current])
       } else {
         // if the line segment was too short, we don't commit it to state but we
         // draw it anyway
-        setCoords({
-          ...coords,
+        coords.current = {
+          ...coords.current,
           curX,
           curY,
-        })
-        // unsaved temporary line segment
-        if (pathEls[pathIdx]) {
-          pathEls[pathIdx].setNativeProps({
-            d: pathDs[pathIdx] + `L${curX},${curY}`,
-          })
         }
+
+        setPathProps(pathDs.current[pathIdx.current] + `L${curX},${curY}`)
       }
     }
 
@@ -185,7 +153,7 @@ export const EntropyGestures: React.FC<Props> = React.memo(
     return (
       <Svg width="100%" height="100%" {...panResponder.panHandlers}>
         <Rect width="100%" height="100%" opacity="0.1"></Rect>
-        {pathDs.map((d, idx) => {
+        {pathDs.current.map((d, idx) => {
           if (!d) return null
           return (
             <Path
