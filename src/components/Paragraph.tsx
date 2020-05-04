@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, TextStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
@@ -13,17 +13,19 @@ export enum ParagraphSizes {
 interface PropsI {
   size?: ParagraphSizes
   color?: Colors
+  customStyles?: TextStyle
 }
 
 const Paragraph: React.FC<PropsI> = ({
   children,
   color = Colors.white,
   size = ParagraphSizes.small,
+  customStyles = {},
 }) => {
   return (
     <Text
       testID="paragraph"
-      style={[styles.paragraph, styles[size], { color }]}
+      style={[styles.paragraph, styles[size], { color }, customStyles]}
     >
       {children}
     </Text>
@@ -50,8 +52,6 @@ const styles = StyleSheet.create({
   paragraph: {
     fontFamily: Fonts.Regular,
     textAlign: 'center',
-    marginVertical: 5,
-    paddingHorizontal: 10,
   },
   small: {
     ...getStyle(20, 22, 0.14),

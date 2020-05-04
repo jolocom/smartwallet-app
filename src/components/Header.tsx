@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, TextStyle } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 
@@ -13,18 +13,26 @@ interface PropsI {
   size?: HeaderSizes
   hasShadow?: boolean
   color?: Colors
+  customStyles?: TextStyle
 }
 
 const Header: React.FC<PropsI> = ({
   size = HeaderSizes.medium,
   hasShadow = false,
   color = Colors.white,
+  customStyles = {},
   children,
 }) => {
   return (
     <Text
       testID="header"
-      style={[styles.text, styles[size], { color }, hasShadow && styles.shadow]}
+      style={[
+        styles.text,
+        styles[size],
+        { color },
+        customStyles,
+        hasShadow && styles.shadow,
+      ]}
     >
       {children}
     </Text>
