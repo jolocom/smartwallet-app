@@ -193,7 +193,7 @@ export const EntropyGestures: React.FC<Props> = React.memo(
               ref={(el) => (pathEls[idx] = el)}
               d={d}
               fill="none"
-              stroke="#FFDEBC"
+              stroke={Colors.peach}
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeDasharray="1,10"
@@ -202,7 +202,7 @@ export const EntropyGestures: React.FC<Props> = React.memo(
           )
         })}
         {circles.map(([x, y], i) => (
-          <Circle key={i} cx={x} cy={y} r="4" fill="#ffefdf" />
+          <Circle key={i} cx={x} cy={y} r="4" fill={Colors.bridal} />
         ))}
       </Svg>
     )
