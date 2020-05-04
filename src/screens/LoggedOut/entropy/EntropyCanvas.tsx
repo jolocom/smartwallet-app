@@ -19,7 +19,7 @@ interface Props {
 const MIN_DISTANCE_SQ = 50
 const MAX_LINE_PTS = 100
 
-export const EntropyGestures: React.FC<Props> = React.memo(
+export const EntropyCanvas: React.FC<Props> = React.memo(
   ({ disabled, addPoint }) => {
     const forceUpdate = useForceUpdate()
 
@@ -44,9 +44,6 @@ export const EntropyGestures: React.FC<Props> = React.memo(
         pathDs.current = [...pathDs.current, '']
       }
     }, [])
-    useEffect(() => {
-      console.log(pathIdx)
-    })
 
     const modifyPath = (newPath: string) =>
       (pathDs.current[pathIdx.current] += newPath)
