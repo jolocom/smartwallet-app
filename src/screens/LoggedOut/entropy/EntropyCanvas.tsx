@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { PanResponder, GestureResponderEvent } from 'react-native'
 import { Svg, Path, Circle, Rect } from 'react-native-svg'
 
@@ -59,8 +59,6 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
     }
 
     const handleDrawStart = (e: GestureResponderEvent): void => {
-      if (disabled) return
-
       const { curX, curY } = extractCoords(e)
       addPoint(curX, curY)
       modifyPath(`M${curX},${curY}`)
@@ -75,8 +73,6 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
     }
 
     const handleDraw = (e: GestureResponderEvent): void => {
-      if (disabled) return
-
       const { prevX, prevY } = coords.current
       const { curX, curY } = extractCoords(e)
       const newCoords = { curX, curY, prevX, prevY }
@@ -148,7 +144,11 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
     })
 
     return (
-      <Svg width="100%" height="100%" {...panResponder.panHandlers}>
+      <Svg
+        width="100%"
+        height="100%"
+        {...(!disabled && panResponder.panHandlers)}
+      >
         <Rect width="100%" height="100%" opacity="0.1"></Rect>
         {pathDs.current.map((d, idx) => {
           if (!d) return null
