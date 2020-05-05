@@ -27,7 +27,6 @@ const Suggestions: React.FC<SuggestionsProps> = ({
 }) => {
   return (
     <FlatList
-      style={styles.suggestionsContainer}
       data={suggestedKeys}
       keyExtractor={(item) => item}
       renderItem={({ item }) => (
@@ -40,14 +39,11 @@ const Suggestions: React.FC<SuggestionsProps> = ({
 }
 
 const styles = StyleSheet.create({
-  suggestionsContainer: {
-    marginBottom: 8,
-  },
   pill: {
     backgroundColor: 'black',
     borderRadius: 4,
     paddingHorizontal: 17,
-    paddingVertical: 10,
+    paddingTop: 11,
     marginRight: 8,
   },
 })

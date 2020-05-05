@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Keyboard } from 'react-native'
+import React from 'react'
+import { View, StyleSheet, Platform } from 'react-native'
 
 export enum BtnsAlignment {
   vertical,
@@ -29,8 +29,14 @@ const BtnGroup: React.FC<PropsI> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    position: 'absolute',
-    bottom: 20,
+    ...Platform.select({
+      android: {
+        marginBottom: 20,
+      },
+      ios: {
+        marginBottom: 50,
+      },
+    }),
   },
   horizontal: {
     flexDirection: 'row',

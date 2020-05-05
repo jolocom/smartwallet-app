@@ -11,9 +11,9 @@ export enum IdentityMethods {
   recoverIdentity = 'recoverIdentity',
 }
 
-const useIdentityOperation = (
+const useIdentityOperation = <T>(
   identityMethod: IdentityMethods,
-  phrase: string[],
+  input: T,
 ): (() => void) => {
   const dispatch = useDispatch()
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
@@ -22,7 +22,7 @@ const useIdentityOperation = (
     dispatch(setLoader({ type: LoaderTypes.default, msg: strings.MATCHING }))
 
     try {
-      await SDK[identityMethod](phrase)
+      await SDK[identityMethod]<T>(input)
       setTimeout(() => {
         dispatch(dismissLoader())
         redirectToSeedPhrase()

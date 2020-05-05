@@ -6,7 +6,12 @@ export enum ArrowDirections {
   right,
 }
 
-const Arrow: React.FC<{ direction?: ArrowDirections; onPress: () => void }> = ({
+type ArrowProps = {
+  direction?: ArrowDirections
+  onPress: () => void
+}
+
+const Arrow: React.FC<ArrowProps> = ({
   children,
   direction = ArrowDirections.left,
   onPress,

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   View,
   StyleSheet,
   TextInput,
-  InputAccessoryView,
   Keyboard,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -24,8 +24,6 @@ import useIdentityOperation, {
 } from '~/hooks/useIdentityOperation'
 import { strings } from '~/translations/strings'
 
-const MNEMONIC_SEED_KEYS = 'MNEMONIC_SEED_KEYS'
-
 const Recovery: React.FC = ({ navigation }) => {
   const [seedKey, setSeedKey] = useState('') // input value
   const [phrase, setPhrase] = useState<string[]>([]) // seed phrase
@@ -33,6 +31,9 @@ const Recovery: React.FC = ({ navigation }) => {
   const [suggestedKeys, setSuggestedKeys] = useState<string[]>([]) // suggestions from bip39
   const [keyHasError, setHasError] = useState(false) // used to color border of input in 'failed' color and display an error
   const [keyIsValid, setKeyIsValid] = useState(false) // used to color border of input in 'success' color
+
+  const [areBtnsVisible, setBtnsVisible] = useState(true)
+  const inputRef = useRef()
 
   const handleKeySubmit = (word = seedKey) => {
     if (word) {
@@ -87,15 +88,34 @@ const Recovery: React.FC = ({ navigation }) => {
     }
   }, [suggestedKeys])
 
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', showBtns)
+    return () => {
+      Keyboard.removeListener('keyboardDidHide', showBtns)
+    }
+  }, [])
+
   const dismissKeyboard = () => {
     Keyboard.dismiss()
     selectNextWord()
     setKeyIsValid(false)
   }
 
+  const showBtns = () => {
+    setBtnsVisible(true)
+    inputRef.current.blur()
+  }
+
+  const hideBtns = () => {
+    setBtnsVisible(false)
+  }
+
   return (
-    <ScreenContainer>
-      <View style={styles.body}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+    >
+      <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
         <View style={styles.header}>
           {phrase.length ? (
             <>
@@ -131,10 +151,10 @@ const Recovery: React.FC = ({ navigation }) => {
             </>
           )}
         </View>
-        <View>
+        <View style={styles.inputContainer}>
           <View
             style={[
-              styles.inputContainer,
+              styles.inputField,
               keyHasError && styles.inputError,
               keyIsValid && styles.inputValid,
             ]}
@@ -146,6 +166,7 @@ const Recovery: React.FC = ({ navigation }) => {
             )}
             <TextInput
               value={seedKey}
+              ref={inputRef}
               editable={currentWordIdx < 12}
               onChangeText={setSeedKey}
               onSubmitEditing={
@@ -153,8 +174,9 @@ const Recovery: React.FC = ({ navigation }) => {
                   ? (e) => handleKeySubmit(e.nativeEvent.text)
                   : Keyboard.dismiss
               }
-              inputAccessoryViewID={MNEMONIC_SEED_KEYS}
+              onFocus={hideBtns}
               style={styles.input}
+              keyboardAppearance="dark"
               underlineColorAndroid="transparent"
               autoCapitalize="none"
               textAlign="center"
@@ -165,9 +187,7 @@ const Recovery: React.FC = ({ navigation }) => {
             />
             {currentWordIdx !== phrase.length && (
               <Arrow direction={ArrowDirections.right} onPress={selectNextWord}>
-                {currentWordIdx < phrase.length - 1 && (
-                  <Paragraph>next</Paragraph>
-                )}
+                {currentWordIdx < 11 && <Paragraph>next</Paragraph>}
               </Arrow>
             )}
             {currentWordIdx === 11 && phrase.length === 12 && (
@@ -179,8 +199,7 @@ const Recovery: React.FC = ({ navigation }) => {
               </Arrow>
             )}
           </View>
-
-          <View style={{ marginTop: 15 }}>
+          <View style={styles.inputMeta}>
             {keyHasError ? (
               <Paragraph color={Colors.error}>
                 {strings.CANT_MATCH_WORD}
@@ -190,30 +209,30 @@ const Recovery: React.FC = ({ navigation }) => {
             )}
           </View>
         </View>
-      </View>
-      <BtnGroup>
-        <Btn onPress={handlePhraseSubmit} disabled={phrase.length !== 12}>
-          {strings.CONFIRM}
-        </Btn>
-        <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-          {strings.BACK_TO_WALKTHROUGH}
-        </Btn>
-      </BtnGroup>
-      {Platform.OS === 'ios' && (
-        <InputAccessoryView nativeID={MNEMONIC_SEED_KEYS}>
-          <Suggestions
-            suggestedKeys={suggestedKeys}
-            onSelectKey={handleKeySubmit}
-          />
-        </InputAccessoryView>
-      )}
-    </ScreenContainer>
+        {areBtnsVisible ? (
+          <BtnGroup>
+            <Btn onPress={handlePhraseSubmit} disabled={phrase.length !== 12}>
+              {strings.CONFIRM}
+            </Btn>
+            <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
+              {strings.BACK_TO_WALKTHROUGH}
+            </Btn>
+          </BtnGroup>
+        ) : (
+          <View style={styles.footer}>
+            <Suggestions
+              suggestedKeys={suggestedKeys}
+              onSelectKey={handleKeySubmit}
+            />
+          </View>
+        )}
+      </ScreenContainer>
+    </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
   body: {
-    flex: 0.55,
     width: '100%',
     justifyContent: 'space-between',
   },
@@ -228,6 +247,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
+  },
+  inputField: {
+    width: '100%',
     backgroundColor: 'black',
     height: 80,
     borderRadius: 7,
@@ -236,6 +258,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     borderWidth: 2,
+  },
+  inputMeta: {
+    marginTop: 15,
   },
   input: {
     fontSize: 34,
@@ -249,6 +274,15 @@ const styles = StyleSheet.create({
   },
   inputValid: {
     borderColor: Colors.success,
+  },
+  footer: {
+    height: 50,
+    width: '100%',
+    ...Platform.select({
+      android: {
+        marginBottom: 20,
+      },
+    }),
   },
 })
 

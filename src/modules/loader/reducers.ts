@@ -15,8 +15,6 @@ const initialState: LoaderStateI = {
 const reducer = (state = initialState, action: Actions) => {
   switch (action.type) {
     case LoaderActions.set:
-      console.log({ action })
-
       return action.payload
     case LoaderActions.dismiss:
       return initialState
