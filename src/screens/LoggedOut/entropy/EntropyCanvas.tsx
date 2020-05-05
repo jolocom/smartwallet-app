@@ -7,7 +7,7 @@ import {
   findIntersections,
   Coordinates,
   extractCoords,
-  shouldComputeEntropy,
+  shouldComputeLine,
 } from './utils'
 import { Colors } from '~/utils/colors'
 
@@ -77,7 +77,7 @@ const useCanvasGestures = (action: (x: number, y: number) => void) => {
     const newCoords = { curX, curY, prevX, prevY }
     action(curX, curY)
 
-    if (shouldComputeEntropy(newCoords, MIN_DISTANCE_SQ)) {
+    if (shouldComputeLine(newCoords, MIN_DISTANCE_SQ)) {
       // NOTE(@clauxx): take each line in the path and compare
       // it to the last one
       findIntersections(linesPts.current, newCoords).map((intersection) => {

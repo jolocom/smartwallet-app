@@ -14,7 +14,7 @@ export const extractCoords = (
   curY: Math.floor(e.nativeEvent.locationY),
 })
 
-export const shouldComputeEntropy = (
+export const shouldComputeLine = (
   coords: Coordinates,
   minDist: number,
 ): boolean => {
