@@ -16,17 +16,68 @@ interface Props {
   addPoint: (x: number, y: number) => void
 }
 
-const MIN_DISTANCE_SQ = 50
-const MAX_LINE_PTS = 100
+export const MIN_DISTANCE_SQ = 50
+export const MAX_LINE_PTS = 100
 
-const useCanvasGestures = (action: (x: number, y: number) => void) => {
+export const EntropyCanvas: React.FC<Props> = React.memo(
+  ({ disabled, addPoint }) => {
+    const {
+      handleDraw,
+      handleDrawStart,
+      pathDs,
+      pathEls,
+      circles,
+    } = useCanvasGestures(addPoint)
+
+    const panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponderCapture: () => true,
+      onPanResponderGrant: handleDrawStart,
+      onPanResponderMove: handleDraw,
+    })
+
+    return (
+      <Svg
+        width="100%"
+        height="100%"
+        {...(!disabled && panResponder.panHandlers)}
+      >
+        <Rect width="100%" height="100%" opacity="0.1"></Rect>
+        {pathDs.current.map((d, idx) => {
+          if (!d) return null
+          return (
+            <Path
+              key={idx}
+              ref={(el) => (pathEls[idx] = el)}
+              d={d}
+              fill="none"
+              stroke={Colors.peach}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="1,10"
+              strokeWidth="2"
+            />
+          )
+        })}
+        {circles.map(([x, y], i) => (
+          <Circle key={i} cx={x} cy={y} r="4" fill={Colors.bridal} />
+        ))}
+      </Svg>
+    )
+  },
+  (prevProps, nextProps) => {
+    //NOTE: re-render only if the @{disabled} prop changes
+    return prevProps.disabled === nextProps.disabled
+  },
+)
+
+export const useCanvasGestures = (action: (x: number, y: number) => void) => {
   const forceUpdate = useForceUpdate()
-
-  const pathEls = useRef<any[]>(new Array(10)).current
 
   const [circles, setCircles] = useState<number[][]>([])
   const [, setCirclesN] = useState<number>(0)
 
+  const pathEls = useRef<any[]>(new Array(10)).current
   const pathDs = useRef<string[]>([])
   const pathIdx = useRef<number>(0)
   const linesPts = useRef<number[]>([])
@@ -137,55 +188,3 @@ const useCanvasGestures = (action: (x: number, y: number) => void) => {
 
   return { handleDrawStart, handleDraw, pathDs, pathEls, circles }
 }
-
-export const EntropyCanvas: React.FC<Props> = React.memo(
-  ({ disabled, addPoint }) => {
-    const {
-      handleDraw,
-      handleDrawStart,
-      pathDs,
-      pathEls,
-      circles,
-    } = useCanvasGestures(addPoint)
-
-    const panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderGrant: handleDrawStart,
-      onPanResponderMove: handleDraw,
-    })
-
-    return (
-      <Svg
-        width="100%"
-        height="100%"
-        {...(!disabled && panResponder.panHandlers)}
-      >
-        <Rect width="100%" height="100%" opacity="0.1"></Rect>
-        {pathDs.current.map((d, idx) => {
-          if (!d) return null
-          return (
-            <Path
-              key={idx}
-              ref={(el) => (pathEls[idx] = el)}
-              d={d}
-              fill="none"
-              stroke={Colors.peach}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="1,10"
-              strokeWidth="2"
-            />
-          )
-        })}
-        {circles.map(([x, y], i) => (
-          <Circle key={i} cx={x} cy={y} r="4" fill={Colors.bridal} />
-        ))}
-      </Svg>
-    )
-  },
-  (prevProps, nextProps) => {
-    //NOTE: re-render only if the @{disabled} prop changes
-    return prevProps.disabled === nextProps.disabled
-  },
-)
