@@ -19,49 +19,99 @@ interface Props {
 const MIN_DISTANCE_SQ = 50
 const MAX_LINE_PTS = 100
 
-export const EntropyCanvas: React.FC<Props> = React.memo(
-  ({ disabled, addPoint }) => {
-    const forceUpdate = useForceUpdate()
+const useCanvasGestures = (action: (x: number, y: number) => void) => {
+  const forceUpdate = useForceUpdate()
 
-    const pathEls = useRef<any[]>(new Array(10)).current
+  const pathEls = useRef<any[]>(new Array(10)).current
 
-    const [circles, setCircles] = useState<number[][]>([])
-    const [, setCirclesN] = useState<number>(0)
+  const [circles, setCircles] = useState<number[][]>([])
+  const [, setCirclesN] = useState<number>(0)
 
-    const pathDs = useRef<string[]>([])
-    const pathIdx = useRef<number>(0)
-    const linesPts = useRef<number[]>([])
-    const linesPtsIdx = useRef<number>(0)
-    const coords = useRef<Coordinates>({
-      prevX: 0,
-      prevY: 0,
-      curX: 0,
-      curY: 0,
-    })
+  const pathDs = useRef<string[]>([])
+  const pathIdx = useRef<number>(0)
+  const linesPts = useRef<number[]>([])
+  const linesPtsIdx = useRef<number>(0)
+  const coords = useRef<Coordinates>({
+    prevX: 0,
+    prevY: 0,
+    curX: 0,
+    curY: 0,
+  })
 
-    useEffect(() => {
-      for (let i = 0; i < pathEls.length; i++) {
-        pathDs.current = [...pathDs.current, '']
-      }
-    }, [])
-
-    const modifyPath = (newPath: string) =>
-      (pathDs.current[pathIdx.current] += newPath)
-
-    // NOTE: We're dynamically assigning the path prop to avoid rerendering
-    // on every gesture / drawing of the line
-    const setPathProps = (path: string) => {
-      if (pathEls[pathIdx.current]) {
-        pathEls[pathIdx.current].setNativeProps({
-          d: path,
-        })
-      }
+  useEffect(() => {
+    for (let i = 0; i < pathEls.length; i++) {
+      pathDs.current = [...pathDs.current, '']
     }
+  }, [])
 
-    const handleDrawStart = (e: GestureResponderEvent): void => {
-      const { curX, curY } = extractCoords(e)
-      addPoint(curX, curY)
-      modifyPath(`M${curX},${curY}`)
+  const modifyPath = (newPath: string) =>
+    (pathDs.current[pathIdx.current] += newPath)
+
+  // NOTE: We're dynamically assigning the path prop to avoid rerendering
+  // on every gesture / drawing of the line
+  const setPathProps = (path: string) => {
+    if (pathEls[pathIdx.current]) {
+      pathEls[pathIdx.current].setNativeProps({
+        d: path,
+      })
+    }
+  }
+
+  const handleDrawStart = (e: GestureResponderEvent): void => {
+    const { curX, curY } = extractCoords(e)
+    action(curX, curY)
+    modifyPath(`M${curX},${curY}`)
+
+    coords.current = {
+      curX,
+      curY,
+      prevX: curX,
+      prevY: curY,
+    }
+    forceUpdate()
+  }
+
+  const handleDraw = (e: GestureResponderEvent): void => {
+    const { prevX, prevY } = coords.current
+    const { curX, curY } = extractCoords(e)
+    const newCoords = { curX, curY, prevX, prevY }
+    action(curX, curY)
+
+    if (shouldComputeEntropy(newCoords, MIN_DISTANCE_SQ)) {
+      // NOTE(@clauxx): take each line in the path and compare
+      // it to the last one
+      findIntersections(linesPts.current, newCoords).map((intersection) => {
+        setCircles([...circles, [intersection.x, intersection.y]])
+        setCirclesN(circles.length)
+      })
+
+      // NOTE: then add the new line and maintain the line list
+      if (linesPts.current.length >= MAX_LINE_PTS) {
+        const isMaxPath =
+          pathIdx.current < pathDs.current.length - 1 &&
+          (pathIdx.current == 0 ||
+            linesPtsIdx.current >= linesPts.current.length)
+        if (isMaxPath) {
+          pathIdx.current++
+          modifyPath(`M${prevX},${prevY}L${curX},${curY}`)
+          forceUpdate()
+        }
+
+        if (linesPtsIdx.current >= linesPts.current.length)
+          linesPtsIdx.current = 0
+
+        linesPts.current.splice(
+          linesPtsIdx.current,
+          4,
+          prevX,
+          prevY,
+          curX,
+          curY,
+        )
+        linesPtsIdx.current += 4
+      } else {
+        linesPts.current = [...linesPts.current, prevX, prevY, curX, curY]
+      }
 
       coords.current = {
         curX,
@@ -69,72 +119,34 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
         prevX: curX,
         prevY: curY,
       }
-      forceUpdate()
-    }
 
-    const handleDraw = (e: GestureResponderEvent): void => {
-      const { prevX, prevY } = coords.current
-      const { curX, curY } = extractCoords(e)
-      const newCoords = { curX, curY, prevX, prevY }
-      addPoint(curX, curY)
-
-      if (shouldComputeEntropy(newCoords, MIN_DISTANCE_SQ)) {
-        // NOTE(@clauxx): take each line in the path and compare
-        // it to the last one
-        findIntersections(linesPts.current, newCoords).map((intersection) => {
-          setCircles([...circles, [intersection.x, intersection.y]])
-          setCirclesN(circles.length)
-        })
-
-        // NOTE: then add the new line and maintain the line list
-        if (linesPts.current.length >= MAX_LINE_PTS) {
-          const isMaxPath =
-            pathIdx.current < pathDs.current.length - 1 &&
-            (pathIdx.current == 0 ||
-              linesPtsIdx.current >= linesPts.current.length)
-          if (isMaxPath) {
-            pathIdx.current++
-            modifyPath(`M${prevX},${prevY}L${curX},${curY}`)
-            forceUpdate()
-          }
-
-          if (linesPtsIdx.current >= linesPts.current.length)
-            linesPtsIdx.current = 0
-
-          linesPts.current.splice(
-            linesPtsIdx.current,
-            4,
-            prevX,
-            prevY,
-            curX,
-            curY,
-          )
-          linesPtsIdx.current += 4
-        } else {
-          linesPts.current = [...linesPts.current, prevX, prevY, curX, curY]
-        }
-
-        coords.current = {
-          curX,
-          curY,
-          prevX: curX,
-          prevY: curY,
-        }
-
-        modifyPath(`L${curX},${curY}`)
-        setPathProps(pathDs.current[pathIdx.current])
-      } else {
-        // if the line segment was too short, we don't commit it to state but we
-        // draw it anyway
-        coords.current = {
-          ...coords.current,
-          curX,
-          curY,
-        }
-
-        setPathProps(pathDs.current[pathIdx.current] + `L${curX},${curY}`)
+      modifyPath(`L${curX},${curY}`)
+      setPathProps(pathDs.current[pathIdx.current])
+    } else {
+      // if the line segment was too short, we don't commit it to state but we
+      // draw it anyway
+      coords.current = {
+        ...coords.current,
+        curX,
+        curY,
       }
+
+      setPathProps(pathDs.current[pathIdx.current] + `L${curX},${curY}`)
     }
+  }
+
+  return { handleDrawStart, handleDraw, pathDs, pathEls, circles }
+}
+
+export const EntropyCanvas: React.FC<Props> = React.memo(
+  ({ disabled, addPoint }) => {
+    const {
+      handleDraw,
+      handleDrawStart,
+      pathDs,
+      pathEls,
+      circles,
+    } = useCanvasGestures(addPoint)
 
     const panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
