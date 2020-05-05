@@ -23,11 +23,6 @@ export const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
   const dispatch = useDispatch()
 
-  const [entropyProgress, setProgress] = useState(0)
-  const [isTouched, setTouched] = useState(false)
-
-  const entropyGenerator = useRef(new EntropyGenerator()).current
-
   const submitEntropy = async (entropy: string) => {
     dispatch(setLoader({ type: LoaderTypes.default, msg: LoaderMsgs.CREATING }))
     try {
@@ -46,6 +41,38 @@ export const Entropy: React.FC = () => {
     }
   }
 
+  const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)
+
+  return (
+    <ScreenContainer>
+      {entropyProgress === 0 ? (
+        <EntropyIntro />
+      ) : (
+        <View style={styles.percentage}>
+          <Header>{`${Math.trunc(entropyProgress * 100)} %`}</Header>
+        </View>
+      )}
+      <EntropyCanvas disabled={entropyProgress === 1} addPoint={addPoint} />
+    </ScreenContainer>
+  )
+}
+
+export const useEntropyProgress = (submit: (entropy: string) => void) => {
+  const [entropyProgress, setProgress] = useState(0)
+
+  const entropyGenerator = useRef(new EntropyGenerator()).current
+
+  useEffect(() => {
+    if (entropyProgress === 1) {
+      ;(async () => {
+        await supplementEntropyProgress()
+        submit(entropyGenerator.generateRandomString(4))
+      })()
+    }
+
+    // don't forget to cleanup
+  }, [entropyProgress])
+
   const supplementEntropyProgress = async () => {
     while (entropyGenerator.getProgress() < 1) {
       const moreEntropy = await generateSecureRandomBytes(512)
@@ -62,38 +89,14 @@ export const Entropy: React.FC = () => {
     setProgress(progress >= 1 ? 1 : progress)
   }
 
-  useEffect(() => {
-    if (entropyProgress === 1) {
-      ;(async () => {
-        await supplementEntropyProgress()
-        submitEntropy(entropyGenerator.generateRandomString(4))
-      })()
-    }
-
-    // don't forget to cleanup
-  }, [entropyProgress])
-
-  const addPoint = async (x: number, y: number) => {
-    if (!isTouched) setTouched(true)
-
+  const addPoint = (x: number, y: number) => {
     entropyGenerator.addFromDelta(x)
     entropyGenerator.addFromDelta(y)
 
     updateProgress()
   }
 
-  return (
-    <ScreenContainer>
-      {isTouched ? (
-        <View style={styles.percentage}>
-          <Header>{`${Math.trunc(entropyProgress * 100)} %`}</Header>
-        </View>
-      ) : (
-        <EntropyIntro />
-      )}
-      <EntropyCanvas disabled={entropyProgress === 1} addPoint={addPoint} />
-    </ScreenContainer>
-  )
+  return { entropyProgress, addPoint, entropyGenerator }
 }
 
 const styles = StyleSheet.create({
