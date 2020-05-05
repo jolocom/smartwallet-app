@@ -3,110 +3,58 @@ import {
   View,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
-  FlatList,
   InputAccessoryView,
   Keyboard,
+  Platform,
 } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
+import Paragraph from '~/components/Paragraph'
 
-import useRedirectTo from '~/hooks/useRedirectTo'
-import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
-import { debug } from 'util'
+
+import Suggestions from './Suggestions'
+import Arrow, { ArrowDirections } from './Arrow'
+import useIdentityOperation, {
+  IdentityMethods,
+} from '~/hooks/useIdentityOperation'
+import { strings } from '~/translations/strings'
 
 const MNEMONIC_SEED_KEYS = 'MNEMONIC_SEED_KEYS'
 
-enum ArrowDirections {
-  left,
-  right,
-}
-
-const Arrow: React.FC<{ direction?: ArrowDirections; onPress: () => void }> = ({
-  children,
-  direction = ArrowDirections.left,
-  onPress,
-}) => {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        styles.arrows,
-        direction === ArrowDirections.left
-          ? styles.leftArrow
-          : styles.rightArrow,
-      ]}
-    >
-      {children}
-    </TouchableOpacity>
-  )
-}
-
-type PillProps = {
-  seedKey: string
-  onSelectKey: (key: string) => void
-}
-
-const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
-  return (
-    <TouchableOpacity style={styles.pill} onPress={() => onSelectKey(seedKey)}>
-      <Paragraph size={ParagraphSizes.medium}>{seedKey}</Paragraph>
-    </TouchableOpacity>
-  )
-}
-
-type SuggestionsProps = {
-  suggestedKeys: string[]
-  onSelectKey: (key: string) => void
-}
-
-const Suggestions: React.FC<SuggestionsProps> = ({
-  suggestedKeys,
-  onSelectKey,
-}) => {
-  return (
-    <FlatList
-      style={styles.suggestionsContainer}
-      data={suggestedKeys}
-      keyExtractor={(item) => item}
-      renderItem={({ item }) => (
-        <Pill key={item} seedKey={item} onSelectKey={onSelectKey} />
-      )}
-      horizontal={true}
-      keyboardShouldPersistTaps="always"
-    />
-  )
-}
-
 const Recovery: React.FC = ({ navigation }) => {
-  const [seedKey, setSeedKey] = useState('')
-  const [phrase, setPhrase] = useState<string[]>([])
-  const [currentWordIdx, setCurrentWordIdx] = useState(0)
-  const [suggestedKeys, setSuggestedKeys] = useState<string[]>([])
-  const [keyHasError, setHasError] = useState(false)
-  const [keyIsValid, setKeyIsValid] = useState(false)
+  const [seedKey, setSeedKey] = useState('') // input value
+  const [phrase, setPhrase] = useState<string[]>([]) // seed phrase
+  const [currentWordIdx, setCurrentWordIdx] = useState(0) // used to be able to navigate back and forth across seed phrase
+  const [suggestedKeys, setSuggestedKeys] = useState<string[]>([]) // suggestions from bip39
+  const [keyHasError, setHasError] = useState(false) // used to color border of input in 'failed' color and display an error
+  const [keyIsValid, setKeyIsValid] = useState(false) // used to color border of input in 'success' color
 
   const handleKeySubmit = (word = seedKey) => {
     if (word) {
       if (currentWordIdx === phrase.length) {
-        setPhrase((prevPhrase) => [...prevPhrase, word])
+        setPhrase((prevPhrase) => [...prevPhrase, word]) // when we are adding seedKey at the end of the phrase
       } else {
+        // this is when we are moving across seed phrase back and forth with arrows - it sets
         setPhrase((prevState) => {
           const phrase = prevState.slice()
           phrase[currentWordIdx] = word
           return phrase
         })
       }
-      setCurrentWordIdx((prevIdx) => prevIdx + 1)
+      setCurrentWordIdx((prevIdx) => prevIdx + 1) // move to the next word
       setKeyIsValid(false)
     }
   }
+
+  const handlePhraseSubmit = useIdentityOperation(
+    IdentityMethods.recoverIdentity,
+    phrase,
+  )
 
   const selectPrevWord = () => {
     setCurrentWordIdx((prevState) => prevState - 1)
@@ -139,11 +87,10 @@ const Recovery: React.FC = ({ navigation }) => {
     }
   }, [suggestedKeys])
 
-  const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
-
   const dismissKeyboard = () => {
     Keyboard.dismiss()
     selectNextWord()
+    setKeyIsValid(false)
   }
 
   return (
@@ -161,7 +108,7 @@ const Recovery: React.FC = ({ navigation }) => {
               <View style={styles.seedPhraseContainer}>
                 {phrase.map((seedKey, idx) => (
                   <Header
-                    key={seedKey}
+                    key={seedKey + idx}
                     size={HeaderSizes.small}
                     color={
                       currentWordIdx === 12
@@ -179,11 +126,8 @@ const Recovery: React.FC = ({ navigation }) => {
             </>
           ) : (
             <>
-              <Header>Recovery</Header>
-              <Paragraph>
-                Start entering your seed-phrase word by word and it will appear
-                here{' '}
-              </Paragraph>
+              <Header>{strings.RECOVERY}</Header>
+              <Paragraph>{strings.START_ENTERING_SEED_PHRASE}</Paragraph>
             </>
           )}
         </View>
@@ -213,11 +157,11 @@ const Recovery: React.FC = ({ navigation }) => {
               style={styles.input}
               underlineColorAndroid="transparent"
               autoCapitalize="none"
-              blurOnSubmit={false}
               textAlign="center"
+              returnKeyType="next"
+              blurOnSubmit={false}
               spellCheck={false}
               autoCorrect={false}
-              returnKeyType="next"
             />
             {currentWordIdx !== phrase.length && (
               <Arrow direction={ArrowDirections.right} onPress={selectNextWord}>
@@ -238,27 +182,31 @@ const Recovery: React.FC = ({ navigation }) => {
 
           <View style={{ marginTop: 15 }}>
             {keyHasError ? (
-              <Paragraph color={Colors.error}>Can't match this word</Paragraph>
+              <Paragraph color={Colors.error}>
+                {strings.CANT_MATCH_WORD}
+              </Paragraph>
             ) : (
-              <Paragraph>What if I forgot my phrase?</Paragraph>
+              <Paragraph>{strings.WHAT_IF_I_FORGOT}</Paragraph>
             )}
           </View>
         </View>
       </View>
       <BtnGroup>
-        <Btn onPress={redirectToSeedPhrase} disabled={phrase.length !== 12}>
-          Confirm
+        <Btn onPress={handlePhraseSubmit} disabled={phrase.length !== 12}>
+          {strings.CONFIRM}
         </Btn>
-        <Btn type={BtnTypes.secondary} onPress={redirectToSeedPhrase}>
-          Back to walkthrough
+        <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
+          {strings.BACK_TO_WALKTHROUGH}
         </Btn>
       </BtnGroup>
-      <InputAccessoryView nativeID={MNEMONIC_SEED_KEYS}>
-        <Suggestions
-          suggestedKeys={suggestedKeys}
-          onSelectKey={handleKeySubmit}
-        />
-      </InputAccessoryView>
+      {Platform.OS === 'ios' && (
+        <InputAccessoryView nativeID={MNEMONIC_SEED_KEYS}>
+          <Suggestions
+            suggestedKeys={suggestedKeys}
+            onSelectKey={handleKeySubmit}
+          />
+        </InputAccessoryView>
+      )}
     </ScreenContainer>
   )
 }
@@ -301,26 +249,6 @@ const styles = StyleSheet.create({
   },
   inputValid: {
     borderColor: Colors.success,
-  },
-  arrows: {
-    position: 'absolute',
-    top: 22,
-  },
-  leftArrow: {
-    left: 10,
-  },
-  rightArrow: {
-    right: 10,
-  },
-  suggestionsContainer: {
-    marginBottom: 8,
-  },
-  pill: {
-    backgroundColor: 'black',
-    borderRadius: 4,
-    paddingHorizontal: 17,
-    paddingVertical: 10,
-    marginRight: 8,
   },
 })
 
