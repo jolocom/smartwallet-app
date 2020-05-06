@@ -45,12 +45,12 @@ export const Entropy: React.FC = () => {
 
   return (
     <ScreenContainer>
-      {entropyProgress === 0 ? (
-        <EntropyIntro />
-      ) : (
+      {!!entropyProgress ? (
         <View style={styles.percentage}>
           <Header>{`${Math.trunc(entropyProgress * 100)} %`}</Header>
         </View>
+      ) : (
+        <EntropyIntro />
       )}
       <EntropyCanvas disabled={entropyProgress === 1} addPoint={addPoint} />
     </ScreenContainer>
