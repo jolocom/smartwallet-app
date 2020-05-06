@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { PanResponder, GestureResponderEvent } from 'react-native'
 import { Svg, Path, Circle, Rect } from 'react-native-svg'
 
-import { useForceUpdate } from '~/utils/helpers'
+import { useForceUpdate } from '~/hooks/forceUpdate'
 import {
   findIntersections,
   Coordinates,
@@ -64,10 +64,6 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
         ))}
       </Svg>
     )
-  },
-  (prevProps, nextProps) => {
-    //NOTE: re-render only if the @{disabled} prop changes
-    return prevProps.disabled === nextProps.disabled
   },
 )
 

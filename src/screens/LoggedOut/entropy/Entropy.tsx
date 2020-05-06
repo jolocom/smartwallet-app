@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 
@@ -87,12 +87,12 @@ export const useEntropyProgress = (submit: (entropy: string) => void) => {
     setProgress(progress >= 1 ? 1 : progress)
   }
 
-  const addPoint = (x: number, y: number) => {
+  const addPoint = useCallback((x: number, y: number) => {
     entropyGenerator.addFromDelta(x)
     entropyGenerator.addFromDelta(y)
 
     updateProgress()
-  }
+  }, [])
 
   return { entropyProgress, addPoint, entropyGenerator }
 }
