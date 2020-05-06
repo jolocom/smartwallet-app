@@ -6,6 +6,14 @@
  */
 
 module.exports = {
+  resolver: {
+    extraNodeModules: {
+      crypto: require.resolve('react-native-crypto'),
+      'crypto-browserify': require.resolve('react-native-crypto'),
+      stream: require.resolve('stream-browserify'),
+      vm: require.resolve('vm-browserify'),
+    },
+  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {
@@ -14,4 +22,4 @@ module.exports = {
       },
     }),
   },
-};
+}
