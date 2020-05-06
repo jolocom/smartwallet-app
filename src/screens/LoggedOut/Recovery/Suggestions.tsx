@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { FlatList, StyleSheet, View, TouchableOpacity } from 'react-native'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 
@@ -10,7 +10,11 @@ type PillProps = {
 
 const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
   return (
-    <TouchableOpacity style={styles.pill} onPress={() => onSelectKey(seedKey)}>
+    <TouchableOpacity
+      style={styles.pill}
+      onPress={() => onSelectKey(seedKey)}
+      testID="suggestion-pill"
+    >
       <Paragraph size={ParagraphSizes.medium}>{seedKey}</Paragraph>
     </TouchableOpacity>
   )
@@ -34,6 +38,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({
       )}
       horizontal={true}
       keyboardShouldPersistTaps="always"
+      testID="suggestions-list"
     />
   )
 }

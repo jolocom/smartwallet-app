@@ -27,7 +27,9 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             "flex": 1,
             "justifyContent": "center",
             "paddingHorizontal": "5%",
+            "paddingTop": 50,
           },
+          Object {},
           false,
         ]
       }
@@ -76,7 +78,6 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
               Object {
                 "fontFamily": "TTCommons-Medium",
                 "letterSpacing": 0,
-                "marginVertical": 5,
                 "textAlign": "center",
               },
               Object {
@@ -86,6 +87,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
               Object {
                 "color": "#ffffff",
               },
+              Object {},
               false,
             ]
           }
@@ -98,8 +100,6 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             Array [
               Object {
                 "fontFamily": "TTCommons-Regular",
-                "marginVertical": 5,
-                "paddingHorizontal": 10,
                 "textAlign": "center",
               },
               Object {
@@ -110,6 +110,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
               Object {
                 "color": "#ffffff",
               },
+              Object {},
             ]
           }
           testID="paragraph"

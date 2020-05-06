@@ -6,7 +6,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
 } from 'react-native'
-import { StackNavigationProp } from '@react-navigation/stack'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Paragraph from '~/components/Paragraph'
@@ -125,6 +124,7 @@ const Recovery: React.FC = () => {
               }
               onFocus={hideBtns}
               style={styles.input}
+              testID="seedphrase-input"
               keyboardAppearance="dark"
               underlineColorAndroid="transparent"
               autoCapitalize="none"
