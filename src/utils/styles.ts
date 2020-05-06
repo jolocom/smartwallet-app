@@ -21,8 +21,3 @@ export const modalScreenOptions: StackNavigationOptions = {
     transparentCard: true,
   }),
 }
-
-export const secondaryTextStyle = {
-  opacity: 0.8,
-  fontFamily: Fonts.Regular,
-}
