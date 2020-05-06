@@ -9,8 +9,6 @@ const usePulseForBoth = () => {
 
   const pulse = () =>
     Animated.parallel([
-      //NOTE: these sequences are made of individual time frames, here I'm just
-      // making a list of timings which each move to the next value
       Animated.sequence(
         [1, 0, 1, 0, 0, 1, 0].map((n) =>
           Animated.timing(splashPV, { toValue: n, useNativeDriver: true }),
@@ -52,7 +50,6 @@ export const HandAnimation: React.FC = () => {
 
 const styles = StyleSheet.create({
   handPosition: {
-    //NOTE: these values are to place the finger of the hand inside the 'splash'
     top: -29,
     left: 8,
   },

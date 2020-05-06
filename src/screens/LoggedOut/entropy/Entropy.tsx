@@ -69,8 +69,6 @@ export const useEntropyProgress = (submit: (entropy: string) => void) => {
         submit(entropyGenerator.generateRandomString(4))
       })()
     }
-
-    // don't forget to cleanup
   }, [entropyProgress])
 
   const supplementEntropyProgress = async () => {

@@ -1,11 +1,5 @@
-import React from 'react'
-import { render } from '@testing-library/react-native'
-import {
-  Entropy,
-  useEntropyProgress,
-} from '~/screens/LoggedOut/entropy/Entropy'
+import { useEntropyProgress } from '~/screens/LoggedOut/entropy/Entropy'
 import { renderHook, act } from '@testing-library/react-hooks'
-import { EntropyGenerator } from '~/screens/LoggedOut/entropy/EntropyGenerator'
 
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({

@@ -30,10 +30,9 @@ describe('Entropy Canvas', () => {
   })
 
   it('should correctly initialize the canvas hook', () => {
-    const { result, rerender } = renderHook(() => useCanvasGestures(addPoint))
+    const { result } = renderHook(() => useCanvasGestures(addPoint))
     const { pathEls, pathDs, circles } = result.current
 
-    rerender()
     expect(pathEls).toEqual(new Array(10))
     expect(pathDs.current).toEqual(new Array(10).fill(''))
     expect(circles).toEqual([])
