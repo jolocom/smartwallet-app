@@ -7,7 +7,7 @@ import Header from '~/components/Header'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
-import { LoaderTypes } from '~/types/loader'
+import { LoaderTypes } from '~/modules/loader/types'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderMsgs } from '~/translations/strings'
