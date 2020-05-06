@@ -1,30 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   StyleSheet,
   TextInput,
   Keyboard,
-  Platform,
   KeyboardAvoidingView,
 } from 'react-native'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Header, { HeaderSizes } from '~/components/Header'
-import Btn, { BtnTypes } from '~/components/Btn'
-import BtnGroup from '~/components/BtnGroup'
 import Paragraph from '~/components/Paragraph'
+import useIdentityOperation, {
+  IdentityMethods,
+} from '~/hooks/useIdentityOperation'
 
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
 
-import Suggestions from './Suggestions'
 import Arrow, { ArrowDirections } from './Arrow'
-import useIdentityOperation, {
-  IdentityMethods,
-} from '~/hooks/useIdentityOperation'
-import { strings } from '~/translations/strings'
+import useFooter from './useFooter'
+import InputMetadata from './InputMetadata'
+import ScreenHeader from './ScreenHeader'
+import ScreenFooter from './ScreenFooter'
 
-const Recovery: React.FC = ({ navigation }) => {
+const Recovery: React.FC = () => {
   const [seedKey, setSeedKey] = useState('') // input value
   const [phrase, setPhrase] = useState<string[]>([]) // seed phrase
   const [currentWordIdx, setCurrentWordIdx] = useState(0) // used to be able to navigate back and forth across seed phrase
@@ -32,8 +31,7 @@ const Recovery: React.FC = ({ navigation }) => {
   const [keyHasError, setHasError] = useState(false) // used to color border of input in 'failed' color and display an error
   const [keyIsValid, setKeyIsValid] = useState(false) // used to color border of input in 'success' color
 
-  const [areBtnsVisible, setBtnsVisible] = useState(true)
-  const inputRef = useRef()
+  const { inputRef, areBtnsVisible, hideBtns } = useFooter()
 
   const handleKeySubmit = (word = seedKey) => {
     if (word) {
@@ -88,69 +86,20 @@ const Recovery: React.FC = ({ navigation }) => {
     }
   }, [suggestedKeys])
 
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidHide', showBtns)
-    return () => {
-      Keyboard.removeListener('keyboardDidHide', showBtns)
-    }
-  }, [])
-
   const dismissKeyboard = () => {
     Keyboard.dismiss()
     selectNextWord()
     setKeyIsValid(false)
   }
 
-  const showBtns = () => {
-    setBtnsVisible(true)
-    inputRef.current.blur()
-  }
-
-  const hideBtns = () => {
-    setBtnsVisible(false)
-  }
-
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-    >
-      <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
-        <View style={styles.header}>
-          {phrase.length ? (
-            <>
-              <Header>
-                {currentWordIdx === phrase.length
-                  ? phrase.length
-                  : currentWordIdx + 1}
-                /12
-              </Header>
-              <View style={styles.seedPhraseContainer}>
-                {phrase.map((seedKey, idx) => (
-                  <Header
-                    key={seedKey + idx}
-                    size={HeaderSizes.small}
-                    color={
-                      currentWordIdx === 12
-                        ? Colors.success
-                        : idx === currentWordIdx
-                        ? Colors.white
-                        : Colors.activity
-                    }
-                    customStyles={{ marginHorizontal: 3 }}
-                  >
-                    {seedKey}
-                  </Header>
-                ))}
-              </View>
-            </>
-          ) : (
-            <>
-              <Header>{strings.RECOVERY}</Header>
-              <Paragraph>{strings.START_ENTERING_SEED_PHRASE}</Paragraph>
-            </>
-          )}
-        </View>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <ScreenContainer
+        customStyles={{
+          justifyContent: areBtnsVisible ? 'space-between' : 'flex-start',
+        }}
+      >
+        <ScreenHeader phrase={phrase} currentWordIdx={currentWordIdx} />
         <View style={styles.inputContainer}>
           <View
             style={[
@@ -199,33 +148,15 @@ const Recovery: React.FC = ({ navigation }) => {
               </Arrow>
             )}
           </View>
-          <View style={styles.inputMeta}>
-            {keyHasError ? (
-              <Paragraph color={Colors.error}>
-                {strings.CANT_MATCH_WORD}
-              </Paragraph>
-            ) : (
-              <Paragraph>{strings.WHAT_IF_I_FORGOT}</Paragraph>
-            )}
-          </View>
+          <InputMetadata keyHasError={keyHasError} />
         </View>
-        {areBtnsVisible ? (
-          <BtnGroup>
-            <Btn onPress={handlePhraseSubmit} disabled={phrase.length !== 12}>
-              {strings.CONFIRM}
-            </Btn>
-            <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-              {strings.BACK_TO_WALKTHROUGH}
-            </Btn>
-          </BtnGroup>
-        ) : (
-          <View style={styles.footer}>
-            <Suggestions
-              suggestedKeys={suggestedKeys}
-              onSelectKey={handleKeySubmit}
-            />
-          </View>
-        )}
+        <ScreenFooter
+          suggestedKeys={suggestedKeys}
+          areBtnsVisible={areBtnsVisible}
+          handleKeySubmit={handleKeySubmit}
+          handlePhraseSubmit={handlePhraseSubmit}
+          isPhraseComplete={phrase.length === 12}
+        />
       </ScreenContainer>
     </KeyboardAvoidingView>
   )
@@ -235,15 +166,6 @@ const styles = StyleSheet.create({
   body: {
     width: '100%',
     justifyContent: 'space-between',
-  },
-  header: {
-    alignItems: 'center',
-  },
-  seedPhraseContainer: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 5,
   },
   inputContainer: {
     width: '100%',
@@ -259,9 +181,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderWidth: 2,
   },
-  inputMeta: {
-    marginTop: 15,
-  },
   input: {
     fontSize: 34,
     width: '70%',
@@ -274,15 +193,6 @@ const styles = StyleSheet.create({
   },
   inputValid: {
     borderColor: Colors.success,
-  },
-  footer: {
-    height: 50,
-    width: '100%',
-    ...Platform.select({
-      android: {
-        marginBottom: 20,
-      },
-    }),
   },
 })
 

@@ -1,5 +1,11 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle, SafeAreaView } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  ViewStyle,
+  SafeAreaView,
+  Platform,
+} from 'react-native'
 import { Colors } from '~/utils/colors'
 
 interface ScreenContainerI {
@@ -31,7 +37,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '5%',
-    paddingTop: 50,
+    ...Platform.select({
+      android: {
+        paddingTop: 20,
+      },
+      ios: {
+        paddingTop: 50,
+      },
+    }),
     backgroundColor: Colors.mainBlack,
   },
   transparent: {
