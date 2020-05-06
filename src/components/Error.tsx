@@ -1,12 +1,12 @@
-import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
-import ScreenContainer from '~/components/ScreenContainer';
-import Header from './Header';
-import Paragraph from './Paragraph';
+import React from 'react'
+import { View, StyleSheet, Image } from 'react-native'
+import ScreenContainer from '~/components/ScreenContainer'
+import Header from './Header'
+import Paragraph from './Paragraph'
 
 interface Props {
-  title: string;
-  description: string;
+  title: string
+  description: string
 }
 
 export const ErrorFallback: React.FC<Props> = ({
@@ -29,7 +29,7 @@ export const ErrorFallback: React.FC<Props> = ({
     </View>
     <View style={styles.buttonContainer}>{children}</View>
   </ScreenContainer>
-);
+)
 
 const styles = StyleSheet.create({
   imageContainer: {
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingBottom: '5%',
   },
-});
+})

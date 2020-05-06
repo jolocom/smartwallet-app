@@ -1,6 +1,6 @@
-import {LoaderMsgs} from '~/translations/strings';
+import {strings} from '~/translations/strings';
 
-import {LoaderActions, LoaderTypes, LoaderStateI} from '~/types/loader';
+import {LoaderActions, LoaderTypes, LoaderStateI} from './types';
 
 type Actions = {
   type: LoaderActions;
@@ -9,7 +9,7 @@ type Actions = {
 
 const initialState: LoaderStateI = {
   type: LoaderTypes.default,
-  msg: LoaderMsgs.EMPTY,
+  msg: strings.EMPTY,
 };
 
 const reducer = (state = initialState, action: Actions) => {

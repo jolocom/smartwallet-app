@@ -1,10 +1,10 @@
-import {StackNavigationOptions} from '@react-navigation/stack';
-import {Fonts} from './fonts';
+import { StackNavigationOptions } from '@react-navigation/stack'
+import { Fonts } from './fonts'
 
 export const modalScreenOptions: StackNavigationOptions = {
-  cardStyle: {backgroundColor: 'transparent'},
+  cardStyle: { backgroundColor: 'transparent' },
   cardOverlayEnabled: true,
-  cardStyleInterpolator: ({current: {progress}}) => ({
+  cardStyleInterpolator: ({ current: { progress } }) => ({
     cardStyle: {
       opacity: progress.interpolate({
         inputRange: [0, 0.5, 0.9, 1],
@@ -20,14 +20,9 @@ export const modalScreenOptions: StackNavigationOptions = {
     },
     transparentCard: true,
   }),
-};
+}
 
 export const secondaryTextStyle = {
   opacity: 0.8,
   fontFamily: Fonts.Regular,
-};
-
-export const debug = {
-  borderColor: 'red',
-  borderWidth: 1,
-};
+}
