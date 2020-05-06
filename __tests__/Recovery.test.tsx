@@ -1,5 +1,9 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react-native'
+import {
+  render,
+  fireEvent,
+  waitForElement,
+} from '@testing-library/react-native'
 
 import Recovery from '~/screens/LoggedOut/Recovery'
 import { strings } from '~/translations/strings'
@@ -13,6 +17,20 @@ jest.mock('react-redux', () => ({
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => mockNavigation,
 }))
+
+const validSeedKeys = [
+  'tree',
+  'ready',
+  'real',
+  'reason',
+  'rebel',
+  'track',
+  'trade',
+  'traffic',
+  'tragic',
+  'ceiling',
+  'celery',
+]
 
 describe('User on a Recovery screen', () => {
   const { getByText, getByTestId, getAllByTestId } = render(<Recovery />)
@@ -51,5 +69,11 @@ describe('User on a Recovery screen', () => {
     // when trying to submit something that doesn't match anything form bip39
     fireEvent.submitEditing(input, { nativeEvent: { text: 'treee' } })
     expect(getByText('1/12')).toBeDefined()
+
+    validSeedKeys.forEach((key) => {
+      fireEvent.changeText(input, key)
+      fireEvent.submitEditing(input, { nativeEvent: { text: key } })
+    })
+    expect(getByText('12/12')).toBeDefined()
   })
 })
