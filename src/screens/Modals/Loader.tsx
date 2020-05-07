@@ -23,10 +23,10 @@ const Loader: React.FC = () => {
   const dispatch = useDispatch()
   const { msg, type } = useSelector(getLoaderState)
 
-  const animatedScale1 = useRef(new Animated.Value(1)).current
+  const animatedScale1 = useRef(new Animated.Value(2)).current
   const animatedScale2 = useRef(new Animated.Value(0)).current
   const animatedOpacity1 = animatedScale1.interpolate({
-    inputRange: [1, 5],
+    inputRange: [0, 5],
     outputRange: [1, 0],
   })
   const animatedOpacity2 = animatedScale2.interpolate({
@@ -43,22 +43,33 @@ const Loader: React.FC = () => {
   }, [])
 
   const scale = () => {
-    Animated.stagger(300, [
-      Animated.timing(animatedScale1, {
-        toValue: 5,
-        duration: 2000,
-        useNativeDriver: true,
-      }),
-      Animated.timing(animatedScale2, {
-        toValue: 5,
-        duration: 2000,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      animatedScale1.setValue(0)
-      animatedScale2.setValue(0)
-      scale()
-    })
+    Animated.parallel([
+      Animated.sequence([
+        Animated.timing(animatedScale1, {
+          toValue: 5,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(animatedScale1, {
+          toValue: 0,
+          duration: 0,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.sequence([
+        Animated.timing(animatedScale2, {
+          toValue: 5,
+          delay: 500,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(animatedScale2, {
+          toValue: 0,
+          duration: 0,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start(() => scale())
   }
 
   useEffect(() => {
@@ -82,7 +93,7 @@ const Loader: React.FC = () => {
           opacity: animatedOpacity1,
         }}
       >
-        <CircleIcon stroke={Colors.success} />
+        <CircleIcon />
       </Animated.View>
       <Animated.View
         style={{
@@ -91,7 +102,7 @@ const Loader: React.FC = () => {
           opacity: animatedOpacity2,
         }}
       >
-        <CircleIcon stroke={Colors.disco} />
+        <CircleIcon />
       </Animated.View>
       <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
         {msg}

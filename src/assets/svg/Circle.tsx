@@ -2,7 +2,7 @@ import React from 'react'
 import Svg, { Circle } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: title */
 
-const CircleIcon = ({ stroke }) => {
+const CircleIcon = () => {
   return (
     <Svg width={19} height={19} viewBox="0 0 19 19">
       <Circle
@@ -10,7 +10,7 @@ const CircleIcon = ({ stroke }) => {
         cy={33.5}
         r={8.5}
         transform="translate(-24 -24)"
-        stroke={stroke}
+        stroke="#FFEFDF"
         fill="none"
         fillRule="evenodd"
       />
