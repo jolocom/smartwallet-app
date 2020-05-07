@@ -1,26 +1,26 @@
-import {strings} from '~/translations/strings';
+import { strings } from '~/translations/strings'
 
-import {LoaderActions, LoaderTypes, LoaderStateI} from './types';
+import { LoaderActions, LoaderTypes, LoaderStateI } from './types'
 
 type Actions = {
-  type: LoaderActions;
-  payload?: any;
-};
+  type: LoaderActions
+  payload?: any
+}
 
 const initialState: LoaderStateI = {
-  type: LoaderTypes.default,
+  type: LoaderTypes.success,
   msg: strings.EMPTY,
-};
+}
 
 const reducer = (state = initialState, action: Actions) => {
   switch (action.type) {
     case LoaderActions.set:
-      return action.payload;
+      return action.payload
     case LoaderActions.dismiss:
-      return initialState;
+      return initialState
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default reducer;
+export default reducer
