@@ -8,7 +8,7 @@ type Actions = {
 }
 
 const initialState: LoaderStateI = {
-  type: LoaderTypes.success,
+  type: LoaderTypes.default,
   msg: strings.EMPTY,
 }
 

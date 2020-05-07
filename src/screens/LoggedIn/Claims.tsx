@@ -17,10 +17,18 @@ const Claims: React.FC = () => {
   const openLoader = () => {
     dispatch(
       setLoader({
-        type: LoaderTypes.error,
+        type: LoaderTypes.default,
         msg: strings.MATCHING,
       }),
     )
+    setTimeout(() => {
+      dispatch(
+        setLoader({
+          type: LoaderTypes.success,
+          msg: strings.SUCCESS,
+        }),
+      )
+    }, 5000)
   }
 
   const openScanner = useRedirectTo(ScreenNames.Interactions)

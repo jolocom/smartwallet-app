@@ -6,10 +6,10 @@ import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import ScreenContainer from '~/components/ScreenContainer'
 import { dismissLoader } from '~/modules/loader/actions'
 
-import Btn, { BtnTypes } from '~/components/Btn'
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
-import { CircleIcon } from '~/assets/svg'
+import { CircleIcon, SuccessTick, ErrorIcon } from '~/assets/svg'
+import { LoaderTypes } from '~/modules/loader/types'
 
 const disableBackBtn = () => true
 
@@ -25,13 +25,22 @@ const Loader: React.FC = () => {
 
   const animatedScale1 = useRef(new Animated.Value(2)).current
   const animatedScale2 = useRef(new Animated.Value(0)).current
+  const successAnimatedValue = useRef(new Animated.Value(1)).current
   const animatedOpacity1 = animatedScale1.interpolate({
-    inputRange: [0, 5],
+    inputRange: [2, 6],
     outputRange: [1, 0],
   })
   const animatedOpacity2 = animatedScale2.interpolate({
-    inputRange: [0, 5],
+    inputRange: [2, 6],
     outputRange: [1, 0],
+  })
+  const successAnimatedOpacity = successAnimatedValue.interpolate({
+    inputRange: [1, 1.5],
+    outputRange: [0, 1],
+  })
+  const successRotate = successAnimatedValue.interpolate({
+    inputRange: [1, 1.1, 1.4, 1.5],
+    outputRange: ['0deg', '20deg', '-20deg', '0deg'],
   })
 
   useEffect(() => {
@@ -43,11 +52,11 @@ const Loader: React.FC = () => {
   }, [])
 
   const scale = () => {
-    Animated.parallel([
+    const defaultAnimation = Animated.parallel([
       Animated.sequence([
         Animated.timing(animatedScale1, {
-          toValue: 5,
-          duration: 2000,
+          toValue: 6,
+          duration: 1700,
           useNativeDriver: true,
         }),
         Animated.timing(animatedScale1, {
@@ -58,9 +67,9 @@ const Loader: React.FC = () => {
       ]),
       Animated.sequence([
         Animated.timing(animatedScale2, {
-          toValue: 5,
-          delay: 500,
-          duration: 2000,
+          toValue: 6,
+          delay: 300,
+          duration: 1700,
           useNativeDriver: true,
         }),
         Animated.timing(animatedScale2, {
@@ -69,22 +78,43 @@ const Loader: React.FC = () => {
           useNativeDriver: true,
         }),
       ]),
-    ]).start(() => scale())
+    ])
+    if (type === LoaderTypes.default) {
+      Animated.loop(defaultAnimation).start()
+    } else {
+      Animated.parallel([
+        Animated.spring(successAnimatedValue, {
+          toValue: 1.5,
+          useNativeDriver: true,
+        }),
+        Animated.parallel([
+          Animated.timing(animatedScale1, {
+            duration: 1000,
+            toValue: 6,
+            useNativeDriver: true,
+          }),
+          Animated.timing(animatedScale2, {
+            duration: 1000,
+            toValue: 6,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]).start(() => {
+        defaultAnimation.stop()
+        // keep the loader for 2 sec before dismissing it
+        setTimeout(() => {
+          dispatch(dismissLoader())
+        }, 2000)
+      })
+    }
   }
 
   useEffect(() => {
     scale()
   })
 
-  const closeLoaderModal = () => {
-    dispatch(dismissLoader())
-  }
-
   return (
     <ScreenContainer isTransparent>
-      <Btn type={BtnTypes.secondary} onPress={closeLoaderModal}>
-        Close
-      </Btn>
       <View style={{ position: 'relative', height: 200 }}></View>
       <Animated.View
         style={{
@@ -93,7 +123,20 @@ const Loader: React.FC = () => {
           opacity: animatedOpacity1,
         }}
       >
-        <CircleIcon />
+        <CircleIcon stroke={colors[type]} />
+      </Animated.View>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          transform: [
+            { scale: successAnimatedValue },
+            { rotate: successRotate },
+          ],
+          opacity: successAnimatedOpacity,
+        }}
+      >
+        {type === LoaderTypes.success && <SuccessTick />}
+        {type === LoaderTypes.error && <ErrorIcon />}
       </Animated.View>
       <Animated.View
         style={{
@@ -102,7 +145,7 @@ const Loader: React.FC = () => {
           opacity: animatedOpacity2,
         }}
       >
-        <CircleIcon />
+        <CircleIcon stroke={colors[type]} />
       </Animated.View>
       <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
         {msg}
