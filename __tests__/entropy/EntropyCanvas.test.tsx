@@ -3,7 +3,7 @@ import {
   useCanvasGestures,
   MAX_LINE_PTS,
   EntropyCanvas,
-} from '~/screens/LoggedOut/entropy/EntropyCanvas'
+} from '~/screens/LoggedOut/Entropy/EntropyCanvas'
 import { renderHook, act } from '@testing-library/react-hooks'
 import { render } from '@testing-library/react-native'
 
