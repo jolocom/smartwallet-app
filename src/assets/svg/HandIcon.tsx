@@ -1,9 +1,8 @@
 import React from 'react'
 import Svg, { Defs, G, Path } from 'react-native-svg'
-/* SVGR has dropped some elements not supported by react-native-svg: filter */
 
-const SvgHandIcon = (props) => (
-  <Svg width={'100%'} height="101" viewBox="0 0 94 101" {...props}>
+const SvgHandIcon = () => (
+  <Svg width={'100%'} height="101" viewBox="0 0 94 101">
     <Defs></Defs>
     <G
       filter="url(#HandIcon_svg__a)"

@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { ScreenNames } from '~/types/screens'
 
 import Walkthrough from './Walkthrough'
-import { Entropy } from './entropy'
+import { Entropy } from './Entropy'
 import Recovery from './Recovery'
 import SeedPhrase from './SeedPhrase'
 import SeedPhraseRepeat from './SeedPhraseRepeat'

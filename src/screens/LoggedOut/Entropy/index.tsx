@@ -10,7 +10,7 @@ import { ScreenNames } from '~/types/screens'
 import { LoaderTypes } from '~/modules/loader/types'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
-import { LoaderMsgs } from '~/translations/strings'
+import { strings } from '~/translations/strings'
 import SDK from '~/utils/SDK'
 
 import { EntropyIntro } from './EntropyIntro'
@@ -24,20 +24,18 @@ export const Entropy: React.FC = () => {
   const dispatch = useDispatch()
 
   const submitEntropy = async (entropy: string) => {
-    dispatch(setLoader({ type: LoaderTypes.default, msg: LoaderMsgs.CREATING }))
+    dispatch(setLoader({ type: LoaderTypes.default, msg: strings.CREATING }))
     try {
       await SDK.createIdentity(entropy)
 
-      dispatch(
-        setLoader({ type: LoaderTypes.success, msg: LoaderMsgs.SUCCESS }),
-      )
+      dispatch(setLoader({ type: LoaderTypes.success, msg: strings.SUCCESS }))
 
       setTimeout(() => {
         dispatch(dismissLoader())
         redirectToSeedPhrase()
       }, 0)
     } catch (err) {
-      dispatch(setLoader({ type: LoaderTypes.error, msg: LoaderMsgs.FAILED }))
+      dispatch(setLoader({ type: LoaderTypes.error, msg: strings.FAILED }))
     }
   }
 
