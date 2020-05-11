@@ -1,4 +1,4 @@
-import { EntropyGenerator } from '~/screens/LoggedOut/entropy/EntropyGenerator'
+import { EntropyGenerator } from '~/screens/LoggedOut/Entropy/EntropyGenerator'
 
 describe('EntropyGenerator', () => {
   let Entropy: EntropyGenerator

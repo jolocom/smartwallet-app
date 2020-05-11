@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'

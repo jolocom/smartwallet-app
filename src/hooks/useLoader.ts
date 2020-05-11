@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import { useDelay } from './useDelay'
+import useDelay from './useDelay'
 import { strings } from '~/translations/strings'
 
 export interface LoaderConfig {

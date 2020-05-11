@@ -1,4 +1,4 @@
-export const useDelay = (callback: () => void, timeout = 2000) => {
+const useDelay = (callback: () => void, timeout = 2000) => {
   return new Promise((res) => {
     setTimeout(() => {
       callback()
@@ -6,3 +6,5 @@ export const useDelay = (callback: () => void, timeout = 2000) => {
     }, timeout)
   })
 }
+
+export default useDelay
