@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { PanResponder, GestureResponderEvent } from 'react-native'
 import { Svg, Path, Circle, Rect } from 'react-native-svg'
 
-import { useForceUpdate } from '~/hooks/forceUpdate'
+import { useForceUpdate } from '~/hooks/useForceUpdate'
 import {
   findIntersections,
   Coordinates,

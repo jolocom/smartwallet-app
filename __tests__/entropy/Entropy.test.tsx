@@ -1,4 +1,4 @@
-import { useEntropyProgress } from '~/screens/LoggedOut/entropy'
+import { useEntropyProgress } from '~/screens/LoggedOut/Entropy'
 import { renderHook, act } from '@testing-library/react-hooks'
 
 jest.mock('@react-navigation/native', () => ({

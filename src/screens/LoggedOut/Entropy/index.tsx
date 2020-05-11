@@ -6,6 +6,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
+import useDelay from '~/hooks/useDelay'
 import { ScreenNames } from '~/types/screens'
 import { LoaderTypes } from '~/modules/loader/types'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
@@ -19,16 +20,7 @@ import { EntropyCanvas } from './EntropyCanvas'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
-const useDelay = (callback: () => void, timeout = 2000) => {
-  return new Promise((res) => {
-    setTimeout(() => {
-      callback()
-      res()
-    }, timeout)
-  })
-}
-
-export const Entropy: React.FC = () => {
+const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
   const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
   const dispatch = useDispatch()
@@ -113,3 +105,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
   },
 })
+
+export default Entropy
