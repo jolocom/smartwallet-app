@@ -7,7 +7,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
-import { CircleIcon, SuccessTick, ErrorIcon } from '~/assets/svg'
+import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
 
 const disableBackBtn = () => true
@@ -153,15 +153,6 @@ const Loader: React.FC = () => {
         }}
       >
         <View style={styles.nestedCircle} />
-      </Animated.View>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          transform: [{ scale: animatedWidth2 }],
-          opacity: animatedOpacity2,
-        }}
-      >
-        <CircleIcon stroke={colors[type]} />
       </Animated.View>
       <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
         {msg}
