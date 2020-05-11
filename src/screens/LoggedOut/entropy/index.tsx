@@ -6,10 +6,9 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
+import { useLoader } from '~/hooks/useLoader'
 import { ScreenNames } from '~/types/screens'
-import { LoaderTypes } from '~/modules/loader/types'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
-import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { strings } from '~/translations/strings'
 import SDK from '~/utils/SDK'
 
@@ -19,34 +18,19 @@ import { EntropyCanvas } from './EntropyCanvas'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
-const useDelay = (callback: () => void, timeout = 2000) => {
-  return new Promise((res) => {
-    setTimeout(() => {
-      callback()
-      res()
-    }, timeout)
-  })
-}
-
 export const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
-  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
-  const dispatch = useDispatch()
+  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
+  const loader = useLoader()
 
   const submitEntropy = async (entropy: string) => {
-    dispatch(setLoader({ type: LoaderTypes.default, msg: strings.CREATING }))
-    try {
-      await SDK.createIdentity(entropy)
+    const success = await loader(() => SDK.createIdentity(entropy), {
+      showStatus: true,
+      loading: strings.CREATING,
+    })
 
-      dispatch(setLoader({ type: LoaderTypes.success, msg: strings.SUCCESS }))
-      await useDelay(() => dispatch(dismissLoader()))
-      redirectToSeedPhrase()
-    } catch (err) {
-      dispatch(setLoader({ type: LoaderTypes.error, msg: strings.FAILED }))
-      await useDelay(() => dispatch(dismissLoader()))
-      // this is for Android: when you dismiss a modal overlay still stays
-      redirectToEntropy()
-    }
+    if (success) redirectToSeedPhrase()
+    else redirectToWalkthrough()
   }
 
   const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)
