@@ -10,7 +10,7 @@ import { ScreenNames } from '~/types/screens'
 import { LoaderTypes } from '~/modules/loader/types'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
-import { LoaderMsgs } from '~/translations/strings'
+import { strings } from '~/translations/strings'
 import SDK from '~/utils/SDK'
 
 import { EntropyIntro } from './EntropyIntro'
@@ -19,25 +19,32 @@ import { EntropyCanvas } from './EntropyCanvas'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
+const useDelay = (callback: () => void) => {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      callback()
+      res()
+    }, 1000)
+  })
+}
+
 export const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
+  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
   const dispatch = useDispatch()
 
   const submitEntropy = async (entropy: string) => {
-    dispatch(setLoader({ type: LoaderTypes.default, msg: LoaderMsgs.CREATING }))
+    dispatch(setLoader({ type: LoaderTypes.default, msg: strings.CREATING }))
     try {
       await SDK.createIdentity(entropy)
 
-      dispatch(
-        setLoader({ type: LoaderTypes.success, msg: LoaderMsgs.SUCCESS }),
-      )
-
-      setTimeout(() => {
-        dispatch(dismissLoader())
-        redirectToSeedPhrase()
-      }, 0)
+      dispatch(setLoader({ type: LoaderTypes.success, msg: strings.SUCCESS }))
+      await useDelay(() => dispatch(dismissLoader()))
+      redirectToSeedPhrase()
     } catch (err) {
-      dispatch(setLoader({ type: LoaderTypes.error, msg: LoaderMsgs.FAILED }))
+      dispatch(setLoader({ type: LoaderTypes.error, msg: strings.FAILED }))
+      await useDelay(() => dispatch(dismissLoader()))
+      redirectToEntropy()
     }
   }
 

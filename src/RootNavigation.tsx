@@ -36,9 +36,17 @@ const useLoaderScreenVisibility = () => {
   useEffect(() => {
     if (ref.current) {
       if (msg) {
-        ref.current.navigate(ScreenNames.Loader)
+        const currentState = ref.current.getRootState()
+
+        const currentRouteName = currentState.routes[currentState.index].name
+
+        // to avoid loader screen to be on top of each other in the stack
+        if (currentRouteName !== ScreenNames.Loader) {
+          ref.current.navigate(ScreenNames.Loader)
+        }
       } else if (!msg) {
         const canGoBack = ref.current.canGoBack()
+
         if (canGoBack) {
           ref.current.goBack()
         }
@@ -54,17 +62,14 @@ const RootNavigation: React.FC = () => {
 
   return (
     <NavigationContainer ref={ref}>
-      <RootStack.Navigator
-        headerMode="none"
-        mode="modal"
-        screenOptions={modalScreenOptions}
-      >
+      <RootStack.Navigator headerMode="none" mode="modal">
         <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
         <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
         <RootStack.Screen
           name={ScreenNames.Loader}
           component={Loader}
           options={{
+            ...modalScreenOptions,
             cardOverlayEnabled: true,
             cardStyle: { backgroundColor: 'transparent' },
           }}
