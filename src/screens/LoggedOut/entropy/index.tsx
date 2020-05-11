@@ -19,12 +19,12 @@ import { EntropyCanvas } from './EntropyCanvas'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
-const useDelay = (callback: () => void) => {
-  return new Promise((res, rej) => {
+const useDelay = (callback: () => void, timeout = 2000) => {
+  return new Promise((res) => {
     setTimeout(() => {
       callback()
       res()
-    }, 1000)
+    }, timeout)
   })
 }
 
@@ -44,6 +44,7 @@ export const Entropy: React.FC = () => {
     } catch (err) {
       dispatch(setLoader({ type: LoaderTypes.error, msg: strings.FAILED }))
       await useDelay(() => dispatch(dismissLoader()))
+      // this is for Android: when you dismiss a modal overlay still stays
       redirectToEntropy()
     }
   }

@@ -18,32 +18,6 @@ const colors = {
   success: Colors.success,
 }
 
-type CircleProps = {
-  color: Colors
-  width: number
-}
-
-const Circle: React.FC<CircleProps> = ({
-  animatedStyles,
-  width = 25,
-  color,
-}) => {
-  return (
-    <Animated.View
-      style={[
-        styles.circle,
-        animatedStyles,
-        {
-          width: width,
-          height: width,
-          borderRadius: width / 2,
-          borderColor: color,
-        },
-      ]}
-    />
-  )
-}
-
 const Loader: React.FC = () => {
   const { msg, type } = useSelector(getLoaderState)
 
@@ -136,13 +110,24 @@ const Loader: React.FC = () => {
   return (
     <ScreenContainer isTransparent>
       <View style={{ position: 'relative', height: 200 }}></View>
-      <Circle
-        animatedStyles={{
+      <Animated.View
+        style={{
+          position: 'absolute',
           transform: [{ scale: animatedWidth1 }],
           opacity: animatedOpacity1,
+          width: 18,
+          height: 18,
+          borderRadius: 9,
+          backgroundColor: colors[type],
         }}
-        color={colors[type]}
-      />
+      >
+        {/*  the border of the circle once is scaled get pixelated
+          therefore drawing 2 circles to avoid border pixelation
+          one inside of the other
+          the outer has a background color depending on the Loader type
+          the inner circle is of the color of the screen */}
+        <View style={styles.nestedCircle} />
+      </Animated.View>
       <Animated.View
         style={{
           position: 'absolute',
@@ -156,13 +141,28 @@ const Loader: React.FC = () => {
         {type === LoaderTypes.success && <SuccessTick />}
         {type === LoaderTypes.error && <ErrorIcon />}
       </Animated.View>
-      <Circle
-        animatedStyles={{
+      <Animated.View
+        style={{
+          position: 'absolute',
+          transform: [{ scale: animatedWidth2 }],
+          opacity: animatedOpacity2,
+          width: 18,
+          height: 18,
+          borderRadius: 9,
+          backgroundColor: colors[type],
+        }}
+      >
+        <View style={styles.nestedCircle} />
+      </Animated.View>
+      <Animated.View
+        style={{
+          position: 'absolute',
           transform: [{ scale: animatedWidth2 }],
           opacity: animatedOpacity2,
         }}
-        color={colors[type]}
-      />
+      >
+        <CircleIcon stroke={colors[type]} />
+      </Animated.View>
       <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
         {msg}
       </Paragraph>
@@ -174,6 +174,15 @@ const styles = StyleSheet.create({
   circle: {
     borderWidth: 1,
     position: 'absolute',
+  },
+  nestedCircle: {
+    position: 'absolute',
+    top: 1,
+    left: 1,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: Colors.mainBlack,
   },
 })
 
