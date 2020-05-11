@@ -17,7 +17,7 @@ import { EntropyCanvas } from './EntropyCanvas'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
-export const Entropy: React.FC = () => {
+const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
   const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
   const loader = useLoader()
@@ -96,3 +96,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
   },
 })
+
+export default Entropy
