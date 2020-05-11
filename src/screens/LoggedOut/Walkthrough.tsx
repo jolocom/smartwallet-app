@@ -16,6 +16,7 @@ import {
   Walkthrough4,
 } from '~/assets/images'
 import { strings } from '~/translations/strings'
+import { Colors } from '~/utils/colors'
 
 const walkthroughData = [
   {
@@ -40,16 +41,41 @@ const walkthroughData = [
   },
 ]
 
-const Walkthrough: React.FC = () => {
+const Dot: React.FC<{ active: boolean }> = ({ active = false }) => {
+  return (
+    <View style={styles.dot}>
+      <View style={[active ? styles.activeDot : styles.inactiveDot]} />
+    </View>
+  )
+}
+
+const WalkthroughButtons = React.memo(() => {
   const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
   const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
 
+  return (
+    <>
+      <Btn onPress={redirectToEntropy}>{strings.GET_STARTED}</Btn>
+      <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
+        {strings.NEED_RESTORE}
+      </Btn>
+    </>
+  )
+})
+
+const Walkthrough: React.FC = () => {
   const handlePagination = (index: number, total: number) => {
     const { header, paragraph } = walkthroughData[index]
     return (
-      <View style={styles.textContainer}>
+      <View style={styles.contentContainer}>
         <Header>{header}</Header>
         <Paragraph>{paragraph}</Paragraph>
+        <View style={styles.dotContainer}>
+          {[...Array(total)].map((_, key) => (
+            <Dot key={key} active={index === key} />
+          ))}
+        </View>
+        <WalkthroughButtons />
       </View>
     )
   }
@@ -65,12 +91,6 @@ const Walkthrough: React.FC = () => {
           />
         ))}
       </Swiper>
-      <View style={styles.buttonContainer}>
-        <Btn onPress={redirectToEntropy}>{strings.GET_STARTED}</Btn>
-        <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
-          {strings.NEED_RESTORE}
-        </Btn>
-      </View>
     </ScreenContainer>
   )
 }
@@ -80,17 +100,37 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  textContainer: {
-    position: 'absolute',
-    bottom: '30%',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  buttonContainer: {
+  contentContainer: {
     position: 'absolute',
     bottom: '5%',
-    width: '100%',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
     paddingHorizontal: '5%',
+  },
+  dotContainer: {
+    width: 80,
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activeDot: {
+    width: 6,
+    height: 6,
+    backgroundColor: Colors.floralWhite,
+    borderRadius: 35,
+  },
+  inactiveDot: {
+    width: 3,
+    height: 3,
+    backgroundColor: Colors.peach,
+    borderRadius: 35,
   },
 })
 
