@@ -34,7 +34,7 @@ const Arrow: React.FC<ArrowProps> = ({
 const styles = StyleSheet.create({
   arrows: {
     position: 'absolute',
-    top: 22,
+    top: 30,
   },
   leftArrow: {
     left: 10,

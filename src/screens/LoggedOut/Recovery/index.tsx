@@ -15,6 +15,8 @@ import useIdentityOperation, {
 
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
+import { BackArrowIcon } from '~/assets/svg'
+import { ForthArrowIcon } from '~/assets/svg'
 
 import Arrow, { ArrowDirections } from './Arrow'
 import useFooter from './useFooter'
@@ -109,7 +111,7 @@ const Recovery: React.FC = () => {
           >
             {currentWordIdx > 0 && (
               <Arrow onPress={selectPrevWord}>
-                <Paragraph>prev</Paragraph>
+                <BackArrowIcon />
               </Arrow>
             )}
             <TextInput
@@ -136,7 +138,7 @@ const Recovery: React.FC = () => {
             />
             {currentWordIdx !== phrase.length && (
               <Arrow direction={ArrowDirections.right} onPress={selectNextWord}>
-                {currentWordIdx < 11 && <Paragraph>next</Paragraph>}
+                {currentWordIdx < 11 && <ForthArrowIcon />}
               </Arrow>
             )}
             {currentWordIdx === 11 && phrase.length === 12 && (
@@ -144,7 +146,7 @@ const Recovery: React.FC = () => {
                 direction={ArrowDirections.right}
                 onPress={dismissKeyboard}
               >
-                <Paragraph>done</Paragraph>
+                <ForthArrowIcon />
               </Arrow>
             )}
           </View>
