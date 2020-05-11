@@ -5,8 +5,16 @@ const recoverIdentity = <T>(mnemonicSeedPhrase: T) => {
   })
 }
 
+const createIdentity = (entropy: string) => {
+  return new Promise((res, rej) => {
+    setTimeout(res, 300)
+    // setTimeout(rej, 300)
+  })
+}
+
 const SDK = {
   recoverIdentity,
+  createIdentity,
 }
 
 export default SDK
