@@ -18,6 +18,7 @@ import { TextStyle } from '~/utils/fonts'
 
 import RadialGradient from 'react-native-radial-gradient'
 import Paragraph from '~/components/Paragraph'
+import { strings } from '~/translations/strings'
 
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
@@ -139,29 +140,29 @@ const SeedPhrase: React.FC = () => {
           </RadialGradient>
         </Animated.View>
         <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
-          <Paragraph>
-            Hold your finger on the circle untill magic will happen
-          </Paragraph>
+          <Paragraph>{strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}</Paragraph>
         </Animated.View>
       </View>
       <Animated.View
         style={[styles.buttonContainer, { opacity: buttonOpacity }]}
       >
-        <Paragraph>Write down this phrase. It's very important!</Paragraph>
+        <Paragraph>
+          {strings.WRITE_DOWN_THIS_PHRASE_ITS_VERY_IMPORTANT}
+        </Paragraph>
         <View style={{ marginTop: 30 }}>
           <Btn
             type={BtnTypes.primary}
             size={BtnSize.medium}
             onPress={redirectToRepeatSeedPhrase}
           >
-            Okay
+            {strings.OKAY}
           </Btn>
           <Btn
             type={BtnTypes.secondary}
             size={BtnSize.medium}
             onPress={() => null}
           >
-            Why so analogue?
+            {strings.WHY_SO_ANALOGUE}
           </Btn>
         </View>
       </Animated.View>
