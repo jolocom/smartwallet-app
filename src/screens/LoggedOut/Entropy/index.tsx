@@ -1,15 +1,13 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
+import { useLoader } from '~/hooks/useLoader'
 import { ScreenNames } from '~/types/screens'
-import { LoaderTypes } from '~/modules/loader/types'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
-import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { strings } from '~/translations/strings'
 import SDK from '~/utils/SDK'
 
@@ -19,24 +17,19 @@ import { EntropyCanvas } from './EntropyCanvas'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
-export const Entropy: React.FC = () => {
+const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
-  const dispatch = useDispatch()
+  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
+  const loader = useLoader()
 
   const submitEntropy = async (entropy: string) => {
-    dispatch(setLoader({ type: LoaderTypes.default, msg: strings.CREATING }))
-    try {
-      await SDK.createIdentity(entropy)
+    const success = await loader(() => SDK.createIdentity(entropy), {
+      showStatus: true,
+      loading: strings.CREATING,
+    })
 
-      dispatch(setLoader({ type: LoaderTypes.success, msg: strings.SUCCESS }))
-
-      setTimeout(() => {
-        dispatch(dismissLoader())
-        redirectToSeedPhrase()
-      }, 0)
-    } catch (err) {
-      dispatch(setLoader({ type: LoaderTypes.error, msg: strings.FAILED }))
-    }
+    if (success) redirectToSeedPhrase()
+    else redirectToWalkthrough()
   }
 
   const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)
@@ -103,3 +96,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
   },
 })
+
+export default Entropy

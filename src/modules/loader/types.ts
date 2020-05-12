@@ -1,7 +1,7 @@
 export enum LoaderTypes {
-  default,
-  error,
-  success,
+  default = 'default',
+  error = 'error',
+  success = 'success',
 }
 
 export enum LoaderActions {
@@ -10,6 +10,6 @@ export enum LoaderActions {
 }
 
 export interface LoaderStateI {
-  type: LoaderTypes;
-  msg: string;
+  type: LoaderTypes
+  msg: string
 }

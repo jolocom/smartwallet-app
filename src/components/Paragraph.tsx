@@ -1,43 +1,66 @@
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, TextStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import { TextStyle } from '~/utils/fonts'
+import { Fonts } from '~/utils/fonts'
 
-export enum ParagraphSize {
-  medium,
-  large,
+export enum ParagraphSizes {
+  large = 'large',
+  medium = 'medium',
+  small = 'small',
 }
 
 interface PropsI {
+  size?: ParagraphSizes
   color?: Colors
-  size?: ParagraphSize
+  customStyles?: TextStyle
 }
 
 const Paragraph: React.FC<PropsI> = ({
   children,
-  size = ParagraphSize.medium,
   color = Colors.white,
+  size = ParagraphSizes.small,
+  customStyles = {},
 }) => {
-  const sizeStyle = size === ParagraphSize.medium ? styles.medium : styles.large
   return (
-    <Text testID="paragraph" style={[styles.paragraph, { color }, sizeStyle]}>
+    <Text
+      testID="paragraph"
+      style={[styles.paragraph, styles[size], { color }, customStyles]}
+    >
       {children}
     </Text>
   )
 }
 
+type Style = {
+  fontSize: number
+  lineHeight: number
+  letterSpacing: number
+}
+
+const getStyle = (
+  fontSize: number,
+  lineHeight: number,
+  letterSpacing: number,
+): Style => ({
+  fontSize,
+  lineHeight,
+  letterSpacing,
+})
+
 const styles = StyleSheet.create({
   paragraph: {
+    fontFamily: Fonts.Regular,
     textAlign: 'center',
-    paddingHorizontal: 10,
-    marginVertical: 5,
+  },
+  small: {
+    ...getStyle(20, 22, 0.14),
   },
   medium: {
-    ...TextStyle.middleSubtitle,
+    ...getStyle(22, 26, 0.15),
   },
   large: {
-    ...TextStyle.largeSubtitle,
+    ...getStyle(28, 32, 0),
   },
 })
 

@@ -1,12 +1,13 @@
-export const loaderMsgs = {
+const loaderMsgs = {
   CREATING: 'Creating your personal secret number',
   MATCHING: 'Matching two instances',
   SUCCESS: 'Success!',
   FAILED: 'Failed',
+  LOADING: 'Loading',
   EMPTY: '',
 }
 
-export const entropy = {
+const entropy = {
   SET_UP_YOUR_IDENTITY: 'Set up your identity',
   TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100:
     'Tap the screen and draw randomly on it until you collect 100%',

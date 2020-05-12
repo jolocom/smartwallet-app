@@ -1,28 +1,28 @@
-import React, {useRef, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useRef, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import {
   NavigationContainer,
   NavigationContainerRef,
-} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+} from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import LoggedOut from '~/screens/LoggedOut';
-import LoggedIn from '~/screens/LoggedIn';
-import Loader from '~/screens/Modals/Loader';
-import Interactions from '~/screens/Modals/Interactions';
+import LoggedOut from '~/screens/LoggedOut'
+import LoggedIn from '~/screens/LoggedIn'
+import Loader from '~/screens/Modals/Loader'
+import Interactions from '~/screens/Modals/Interactions'
 
-import {modalScreenOptions} from '~/utils/styles';
-import {ScreenNames} from '~/types/screens';
+import { modalScreenOptions } from '~/utils/styles'
+import { ScreenNames } from '~/types/screens'
 
-import {getLoaderState} from '~/modules/loader/selectors';
+import { getLoaderState } from '~/modules/loader/selectors'
 
-const RootStack = createStackNavigator();
+const RootStack = createStackNavigator()
 
 // a listener for loader module state
 const useLoaderScreenVisibility = () => {
-  const ref = useRef<NavigationContainerRef>(null);
+  const ref = useRef<NavigationContainerRef>(null)
 
-  const {msg} = useSelector(getLoaderState);
+  const { msg } = useSelector(getLoaderState)
 
   // as soon as state of loader module changes,
   // 1. if there is a loader msg in state (once setLoader action was dispatched):
@@ -36,36 +36,42 @@ const useLoaderScreenVisibility = () => {
   useEffect(() => {
     if (ref.current) {
       if (msg) {
-        ref.current.navigate(ScreenNames.Loader);
+        const currentState = ref.current.getRootState()
+
+        const currentRouteName = currentState.routes[currentState.index].name
+
+        // to avoid loader screen to be on top of each other in the stack
+        if (currentRouteName !== ScreenNames.Loader) {
+          ref.current.navigate(ScreenNames.Loader)
+        }
       } else if (!msg) {
-        const canGoBack = ref.current.canGoBack();
+        const canGoBack = ref.current.canGoBack()
+
         if (canGoBack) {
-          ref.current.goBack();
+          ref.current.goBack()
         }
       }
     }
-  }, [msg]);
+  }, [msg])
 
-  return ref;
-};
+  return ref
+}
 
 const RootNavigation: React.FC = () => {
-  const ref = useLoaderScreenVisibility();
+  const ref = useLoaderScreenVisibility()
 
   return (
     <NavigationContainer ref={ref}>
-      <RootStack.Navigator
-        headerMode="none"
-        mode="modal"
-        screenOptions={modalScreenOptions}>
+      <RootStack.Navigator headerMode="none" mode="modal">
         <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
         <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
         <RootStack.Screen
           name={ScreenNames.Loader}
           component={Loader}
           options={{
+            ...modalScreenOptions,
             cardOverlayEnabled: true,
-            cardStyle: {backgroundColor: 'transparent'},
+            cardStyle: { backgroundColor: 'transparent' },
           }}
         />
         <RootStack.Screen
@@ -74,7 +80,7 @@ const RootNavigation: React.FC = () => {
         />
       </RootStack.Navigator>
     </NavigationContainer>
-  );
-};
+  )
+}
 
-export default RootNavigation;
+export default RootNavigation
