@@ -31,6 +31,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
           },
           Object {},
           false,
+          false,
         ]
       }
     >

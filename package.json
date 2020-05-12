@@ -22,13 +22,16 @@
     "@react-navigation/bottom-tabs": "^5.2.7",
     "@react-navigation/native": "^5.1.6",
     "@react-navigation/stack": "^5.2.11",
+    "@testing-library/react-hooks": "^3.2.1",
     "@tradle/react-native-http": "^2.0.0",
+    "D": "^1.0.0",
     "assert": "^1.1.1",
     "bip39": "^3.0.2",
     "browserify-zlib": "~0.1.4",
     "buffer": "^4.9.1",
     "console-browserify": "^1.1.0",
     "constants-browserify": "^1.0.0",
+    "crypto-browserify": "^3.12.0",
     "dns.js": "^1.0.1",
     "domain-browser": "^1.1.1",
     "events": "^1.0.0",
@@ -40,9 +43,6 @@
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-crypto": "^2.1.0",
-    "@testing-library/react-hooks": "^3.2.1",
-    "D": "^1.0.0",
-    "crypto-browserify": "^3.12.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-level-fs": "^3.0.0",
     "react-native-linear-gradient": "^2.5.6",
@@ -51,20 +51,21 @@
     "react-native-reanimated": "^1.8.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.5.0",
+    "react-native-svg": "^12.1.0",
+    "react-native-swiper": "^1.6.0",
     "react-native-tcp": "^3.2.1",
     "react-native-udp": "^2.1.0",
-    "react-native-svg": "^12.1.0",
     "react-redux": "^7.2.0",
     "readable-stream": "1.0.33",
     "redux": "^4.0.5",
     "reselect": "^4.0.0",
+    "sjcl": "^1.0.7",
+    "stream-browserify": "^3.0.0",
     "string_decoder": "~0.10.25",
     "timers-browserify": "^1.0.1",
     "tty-browserify": "0.0.0",
     "url": "~0.10.1",
     "util": "~0.10.3",
-    "sjcl": "^1.0.7",
-    "stream-browserify": "^3.0.0",
     "vm-browserify": "^1.1.2"
   },
   "devDependencies": {
@@ -81,13 +82,17 @@
     "@typescript-eslint/parser": "^2.27.0",
     "babel-jest": "^24.9.0",
     "babel-plugin-root-import": "^6.5.0",
+    "commitizen": "^4.0.4",
+    "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.5.1",
     "events": "^3.1.0",
+    "husky": "^4.2.5",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.58.0",
     "prettier": "^2.0.4",
     "react-devtools": "^4.6.0",
     "react-test-renderer": "16.11.0",
+    "redux-devtools-extension": "^2.13.8",
     "rn-nodeify": "tradle/rn-nodeify",
     "typescript": "^3.8.3"
   },
@@ -153,5 +158,16 @@
     "tty": "tty-browserify",
     "vm": "vm-browserify",
     "tls": false
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "node bin/precommit.js",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

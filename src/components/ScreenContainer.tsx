@@ -11,12 +11,14 @@ import { Colors } from '~/utils/colors'
 interface ScreenContainerI {
   isTransparent?: boolean
   customStyles?: ViewStyle
+  isFullscreen?: boolean
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
   children,
   customStyles,
   isTransparent = false,
+  isFullscreen = false,
 }) => {
   return (
     <View
@@ -24,6 +26,7 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
         styles.container,
         { ...customStyles },
         isTransparent && styles.transparent,
+        isFullscreen && styles.fullscreen,
       ]}
     >
       {children}
@@ -49,6 +52,9 @@ const styles = StyleSheet.create({
   },
   transparent: {
     backgroundColor: 'transparent',
+  },
+  fullscreen: {
+    paddingHorizontal: 0,
   },
 })
 

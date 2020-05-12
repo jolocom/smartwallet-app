@@ -27,20 +27,19 @@ const useLoaderScreenVisibility = () => {
   // as soon as state of loader module changes,
   // 1. if there is a loader msg in state (once setLoader action was dispatched):
   //    navigate to the Loader modal screen
-  // 2. if there there is no longer a message in the state (dismissLoader action was dispatched)
-  //    navigate back from the Loader modal screen
 
   // [how to use]
   // a. show Loader screen: dispatch(setLoader({type: LoaderTypes, msg: string}));
-  // b. hide Loader screen: dispatch(dismissLoader())
   useEffect(() => {
     if (ref.current) {
       if (msg) {
-        ref.current.navigate(ScreenNames.Loader)
-      } else if (!msg) {
-        const canGoBack = ref.current.canGoBack()
-        if (canGoBack) {
-          ref.current.goBack()
+        const currentState = ref.current.getRootState()
+
+        const currentRouteName = currentState.routes[currentState.index].name
+
+        // to avoid loader screen to be on top of each other in the stack
+        if (currentRouteName !== ScreenNames.Loader) {
+          ref.current.navigate(ScreenNames.Loader)
         }
       }
     }
@@ -54,17 +53,14 @@ const RootNavigation: React.FC = () => {
 
   return (
     <NavigationContainer ref={ref}>
-      <RootStack.Navigator
-        headerMode="none"
-        mode="modal"
-        screenOptions={modalScreenOptions}
-      >
+      <RootStack.Navigator headerMode="none" mode="modal">
         <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
         <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
         <RootStack.Screen
           name={ScreenNames.Loader}
           component={Loader}
           options={{
+            ...modalScreenOptions,
             cardOverlayEnabled: true,
             cardStyle: { backgroundColor: 'transparent' },
           }}
