@@ -44,7 +44,7 @@ const walkthroughData = [
 const Dot: React.FC<{ active: boolean }> = ({ active }) => {
   return (
     <View style={styles.dot}>
-      <View style={[active ? styles.activeDot : styles.inactiveDot]} />
+      <View style={active ? styles.activeDot : styles.inactiveDot} />
     </View>
   )
 }
@@ -64,7 +64,7 @@ const WalkthroughButtons = React.memo(() => {
 })
 
 const Walkthrough: React.FC = () => {
-  const handlePagination = (index: number, total: number) => {
+  const renderPagination = (index: number, total: number) => {
     const { header, paragraph } = walkthroughData[index]
     return (
       <View style={styles.contentContainer}>
@@ -82,7 +82,12 @@ const Walkthrough: React.FC = () => {
 
   return (
     <ScreenContainer isFullscreen>
-      <Swiper loop autoplay renderPagination={handlePagination}>
+      <Swiper
+        loop
+        autoplay
+        autoplayTimeout={6}
+        renderPagination={renderPagination}
+      >
         {walkthroughData.map((slide, key) => (
           <ImageBackground
             key={key}
