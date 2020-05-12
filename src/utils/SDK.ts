@@ -5,8 +5,24 @@ const createIdentity = (entropy: string) => {
   })
 }
 
+const getMnemonic = () => [
+  'afraid',
+  'age',
+  'fuel',
+  'impulse',
+  'undo',
+  'cable',
+  'inner',
+  'sail',
+  'bacon',
+  'aisle',
+  'wish',
+  'acquire',
+]
+
 const SDK = {
   createIdentity,
+  getMnemonic,
 }
 
 export default SDK

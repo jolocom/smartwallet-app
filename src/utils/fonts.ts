@@ -1,4 +1,4 @@
-import {Colors} from './colors';
+import { Colors } from './colors'
 
 export enum Fonts {
   Regular = 'TTCommons-Regular',
@@ -30,4 +30,11 @@ export const TextStyle = {
     color: Colors.white,
     opacity: 0.8,
   },
-};
+  seedPhrase: {
+    fontFamily: Fonts.Medium,
+    fontSize: 40,
+    lineHeight: 54,
+    letterSpacing: 0,
+    color: Colors.activity,
+  },
+}
