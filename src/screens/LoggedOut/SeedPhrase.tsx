@@ -6,19 +6,19 @@ import {
   Animated,
   GestureResponderEvent,
 } from 'react-native'
+// @ts-ignore no typescript support as of yet
+import RadialGradient from 'react-native-radial-gradient'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
-
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import SDK from '~/utils/SDK'
 import { TextStyle } from '~/utils/fonts'
-
-import RadialGradient from 'react-native-radial-gradient'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
+
+import SDK from '~/utils/SDK'
 
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
@@ -42,6 +42,7 @@ const SeedPhrase: React.FC = () => {
           useNativeDriver: true,
           toValue: 0,
         }),
+        Animated.delay(1000),
         Animated.timing(buttonOpacity, {
           duration: 400,
           useNativeDriver: true,
@@ -53,7 +54,7 @@ const SeedPhrase: React.FC = () => {
 
   useEffect(() => {
     Animated.timing(infoOpacity, {
-      duration: 500,
+      duration: 200,
       useNativeDriver: true,
       toValue: showInfo ? 1 : 0,
     }).start()
@@ -140,15 +141,21 @@ const SeedPhrase: React.FC = () => {
           </RadialGradient>
         </Animated.View>
         <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
-          <Paragraph>{strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}</Paragraph>
+          <Paragraph
+            customStyles={{ opacity: 0.8, ...TextStyle.middleSubtitle }}
+          >
+            {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
+          </Paragraph>
         </Animated.View>
       </View>
       <Animated.View
         style={[styles.buttonContainer, { opacity: buttonOpacity }]}
       >
-        <Paragraph>
-          {strings.WRITE_DOWN_THIS_PHRASE_ITS_VERY_IMPORTANT}
-        </Paragraph>
+        <View style={{ paddingHorizontal: '20%' }}>
+          <Paragraph>
+            {strings.WRITE_DOWN_THIS_PHRASE_ITS_VERY_IMPORTANT}
+          </Paragraph>
+        </View>
         <View style={{ marginTop: 30 }}>
           <Btn
             type={BtnTypes.primary}
