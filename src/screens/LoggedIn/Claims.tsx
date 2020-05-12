@@ -1,15 +1,37 @@
-import React from 'react';
+import React from 'react'
+import { useDispatch } from 'react-redux'
 
-import ScreenContainer from '~/components/ScreenContainer';
-import Header, {HeaderSizes} from '~/components/Header';
-import Btn from '~/components/Btn';
+import { setLoader } from '~/modules/loader/actions'
+import { LoaderTypes } from '~/modules/loader/types'
 
-import useRedirectTo from '~/hooks/useRedirectTo';
-import {ScreenNames} from '~/types/screens';
+import ScreenContainer from '~/components/ScreenContainer'
+import Header, { HeaderSizes } from '~/components/Header'
+import Btn from '~/components/Btn'
+
+import useRedirectTo from '~/hooks/useRedirectTo'
+import { ScreenNames } from '~/types/screens'
+import { strings } from '~/translations/strings'
 
 const Claims: React.FC = () => {
-  const openLoader = useRedirectTo(ScreenNames.Loader);
-  const openScanner = useRedirectTo(ScreenNames.Interactions);
+  const dispatch = useDispatch()
+  const openLoader = () => {
+    dispatch(
+      setLoader({
+        type: LoaderTypes.default,
+        msg: strings.MATCHING,
+      }),
+    )
+    setTimeout(() => {
+      dispatch(
+        setLoader({
+          type: LoaderTypes.success,
+          msg: strings.SUCCESS,
+        }),
+      )
+    }, 5000)
+  }
+
+  const openScanner = useRedirectTo(ScreenNames.Interactions)
 
   return (
     <ScreenContainer>
@@ -17,7 +39,7 @@ const Claims: React.FC = () => {
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
     </ScreenContainer>
-  );
-};
+  )
+}
 
-export default Claims;
+export default Claims

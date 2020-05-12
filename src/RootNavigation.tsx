@@ -1,34 +1,86 @@
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import React, { useRef, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import LoggedOut from '~/screens/LoggedOut';
-import LoggedIn from '~/screens/LoggedIn';
-import Loader from '~/screens/Modals/Loader';
-import Interactions from '~/screens/Modals/Interactions';
+import LoggedOut from '~/screens/LoggedOut'
+import LoggedIn from '~/screens/LoggedIn'
+import Loader from '~/screens/Modals/Loader'
+import Interactions from '~/screens/Modals/Interactions'
 
-import {modalScreenOptions} from '~/utils/styles';
-import {ScreenNames} from '~/types/screens';
+import { modalScreenOptions } from '~/utils/styles'
+import { ScreenNames } from '~/types/screens'
 
-const RootStack = createStackNavigator();
+import { getLoaderState } from '~/modules/loader/selectors'
+
+const RootStack = createStackNavigator()
+
+// a listener for loader module state
+const useLoaderScreenVisibility = () => {
+  const ref = useRef<NavigationContainerRef>(null)
+
+  const { msg } = useSelector(getLoaderState)
+
+  // as soon as state of loader module changes,
+  // 1. if there is a loader msg in state (once setLoader action was dispatched):
+  //    navigate to the Loader modal screen
+  // 2. if there there is no longer a message in the state (dismissLoader action was dispatched)
+  //    navigate back from the Loader modal screen
+
+  // [how to use]
+  // a. show Loader screen: dispatch(setLoader({type: LoaderTypes, msg: string}));
+  // b. hide Loader screen: dispatch(dismissLoader())
+  useEffect(() => {
+    if (ref.current) {
+      if (msg) {
+        const currentState = ref.current.getRootState()
+
+        const currentRouteName = currentState.routes[currentState.index].name
+
+        // to avoid loader screen to be on top of each other in the stack
+        if (currentRouteName !== ScreenNames.Loader) {
+          ref.current.navigate(ScreenNames.Loader)
+        }
+      } else if (!msg) {
+        const canGoBack = ref.current.canGoBack()
+
+        if (canGoBack) {
+          ref.current.goBack()
+        }
+      }
+    }
+  }, [msg])
+
+  return ref
+}
 
 const RootNavigation: React.FC = () => {
+  const ref = useLoaderScreenVisibility()
+
   return (
-    <NavigationContainer>
-      <RootStack.Navigator
-        headerMode="none"
-        mode="modal"
-        screenOptions={modalScreenOptions}>
+    <NavigationContainer ref={ref}>
+      <RootStack.Navigator headerMode="none" mode="modal">
         <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
         <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
-        <RootStack.Screen name={ScreenNames.Loader} component={Loader} />
+        <RootStack.Screen
+          name={ScreenNames.Loader}
+          component={Loader}
+          options={{
+            ...modalScreenOptions,
+            cardOverlayEnabled: true,
+            cardStyle: { backgroundColor: 'transparent' },
+          }}
+        />
         <RootStack.Screen
           name={ScreenNames.Interactions}
           component={Interactions}
         />
       </RootStack.Navigator>
     </NavigationContainer>
-  );
-};
+  )
+}
 
-export default RootNavigation;
+export default RootNavigation
