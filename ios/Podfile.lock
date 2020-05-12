@@ -300,7 +300,7 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
     - ReactCommon/callinvoker (= 0.62.2)
-  - RNCMaskedView (0.1.9):
+  - RNCMaskedView (0.1.10):
     - React
   - RNGestureHandler (1.6.1):
     - React
@@ -308,13 +308,11 @@ PODS:
     - React
   - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.5.0):
+  - RNScreens (2.7.0):
     - React
-<<<<<<< HEAD
-  - TcpSockets (3.3.2):
-=======
   - RNSVG (12.1.0):
->>>>>>> origin/develop
+    - React
+  - TcpSockets (3.3.2):
     - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -376,11 +374,8 @@ DEPENDENCIES:
   - RNOS (from `../node_modules/react-native-os`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
-<<<<<<< HEAD
-  - TcpSockets (from `../node_modules/react-native-tcp`)
-=======
   - RNSVG (from `../node_modules/react-native-svg`)
->>>>>>> origin/develop
+  - TcpSockets (from `../node_modules/react-native-tcp`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -465,13 +460,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-<<<<<<< HEAD
-  TcpSockets:
-    :path: "../node_modules/react-native-tcp"
-=======
   RNSVG:
     :path: "../node_modules/react-native-svg"
->>>>>>> origin/develop
+  TcpSockets:
+    :path: "../node_modules/react-native-tcp"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -515,16 +507,13 @@ SPEC CHECKSUMS:
   React-RCTText: fae545b10cfdb3d247c36c56f61a94cfd6dba41d
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
-  RNCMaskedView: 71fc32d971f03b7f03d6ab6b86b730c4ee64f5b6
+  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNOS: 6f2f9a70895bbbfbdad7196abd952e7b01d45027
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
-  RNScreens: ac02d0e4529f08ced69f5580d416f968a6ec3a1d
-<<<<<<< HEAD
-  TcpSockets: 14306fb79f9750ea7d2ddd02d8bed182abb01797
-=======
+  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
->>>>>>> origin/develop
+  TcpSockets: 14306fb79f9750ea7d2ddd02d8bed182abb01797
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
