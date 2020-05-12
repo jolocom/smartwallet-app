@@ -29,10 +29,18 @@ const SeedPhrase: React.FC = () => {
 
   const shadowScale = useRef<Animated.Value>(new Animated.Value(0.8)).current
   const circleScale = useRef<Animated.Value>(new Animated.Value(1.2)).current
-  const circleOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
+  const circleOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
   const ANIMATION_DURATION = 1500
+
+  useEffect(() => {
+    Animated.timing(circleOpacity, {
+      duration: 2000,
+      useNativeDriver: true,
+      toValue: 1,
+    }).start()
+  }, [])
 
   useEffect(() => {
     if (showPhrase) {
@@ -141,9 +149,7 @@ const SeedPhrase: React.FC = () => {
           </RadialGradient>
         </Animated.View>
         <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
-          <Paragraph
-            customStyles={{ opacity: 0.8, ...TextStyle.middleSubtitle }}
-          >
+          <Paragraph customStyles={styles.paragraph}>
             {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
           </Paragraph>
         </Animated.View>
@@ -221,6 +227,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     bottom: '5%',
+  },
+  paragraph: {
+    opacity: 0.8,
+    ...TextStyle.middleSubtitle,
   },
 })
 
