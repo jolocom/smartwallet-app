@@ -29,6 +29,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             "paddingHorizontal": "5%",
           },
           false,
+          false,
         ]
       }
     >

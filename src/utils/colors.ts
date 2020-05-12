@@ -14,4 +14,5 @@ export enum Colors {
   matterhorn18 = 'rgba(81, 81, 81, 0.18)',
   bridal = '#ffefdf',
   peach = '#ffdebc',
+  floralWhite = '#fffefc',
 }
