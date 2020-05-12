@@ -41,7 +41,7 @@ const walkthroughData = [
   },
 ]
 
-const Dot: React.FC<{ active: boolean }> = ({ active = false }) => {
+const Dot: React.FC<{ active: boolean }> = ({ active }) => {
   return (
     <View style={styles.dot}>
       <View style={[active ? styles.activeDot : styles.inactiveDot]} />
