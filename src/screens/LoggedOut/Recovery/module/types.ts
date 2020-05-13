@@ -3,6 +3,11 @@ export enum RecoveryActions {
   setPhrase,
   setCurrentWordIdx,
   setSuggestedKeys,
+  showSuggestions,
+  hideSuggestions,
+  setKeyIsValid,
+  setHasError,
+  submitKey,
 }
 
 export interface StateI {
@@ -10,6 +15,9 @@ export interface StateI {
   phrase: string[]
   currentWordIdx: number
   suggestedKeys: string[]
+  areSuggestionsVisible: boolean
+  keyIsValid: boolean
+  keyHasError: boolean
 }
 
 export interface ActionI {

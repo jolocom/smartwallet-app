@@ -4,14 +4,10 @@ import { View, StyleSheet } from 'react-native'
 import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
+import { useRecoveryState } from './module/context'
 
-interface RecoveryInputMetadataI {
-  keyHasError: boolean
-}
-
-const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = ({
-  keyHasError,
-}) => {
+const RecoveryInputMetadata: React.FC = ({}) => {
+  const { keyHasError } = useRecoveryState()
   return (
     <View style={styles.inputMeta}>
       {keyHasError ? (

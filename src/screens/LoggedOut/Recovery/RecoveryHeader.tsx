@@ -5,16 +5,10 @@ import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
+import { useRecoveryState } from './module/context'
 
-interface RecoveryHeaderPropsI {
-  phrase: string[]
-  currentWordIdx: number
-}
-
-const RecoveryHeader: React.FC<RecoveryHeaderPropsI> = ({
-  phrase,
-  currentWordIdx,
-}) => {
+const RecoveryHeader: React.FC = () => {
+  const { phrase, currentWordIdx } = useRecoveryState()
   return (
     <View style={styles.header}>
       {phrase.length ? (

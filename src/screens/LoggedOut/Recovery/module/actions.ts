@@ -15,3 +15,14 @@ export const setCurrentWordIdx = partiallyAppliedAction(
 export const setSuggestedKeys = partiallyAppliedAction(
   RecoveryActions.setSuggestedKeys,
 )
+export const showSuggestions = partiallyAppliedAction(
+  RecoveryActions.showSuggestions,
+)
+export const hideSuggestions = partiallyAppliedAction(
+  RecoveryActions.showSuggestions,
+)
+export const setKeyIsValid = partiallyAppliedAction(
+  RecoveryActions.setKeyIsValid,
+)
+export const setHasError = partiallyAppliedAction(RecoveryActions.setHasError)
+export const submitKey = partiallyAppliedAction(RecoveryActions.submitKey)

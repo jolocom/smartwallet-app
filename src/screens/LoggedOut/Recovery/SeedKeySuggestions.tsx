@@ -2,6 +2,8 @@ import React from 'react'
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
+import { useRecoveryState, useRecoveryDispatch } from './module/context'
+import { submitKey } from './module/actions'
 
 type PillProps = {
   seedKey: string
@@ -20,21 +22,19 @@ const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
   )
 }
 
-interface SeedKeySuggestionsPropsI {
-  suggestedKeys: string[]
-  onSelectKey: (key: string) => void
-}
+const SeedKeySuggestions: React.FC = () => {
+  const { suggestedKeys } = useRecoveryState()
+  const dispatch = useRecoveryDispatch()
 
-const SeedKeySuggestions: React.FC<SeedKeySuggestionsPropsI> = ({
-  suggestedKeys,
-  onSelectKey,
-}) => {
+  const handleKeySelect = (key: string) => {
+    dispatch(submitKey(key))
+  }
   return (
     <FlatList
       data={suggestedKeys}
       keyExtractor={(item) => item}
       renderItem={({ item }) => (
-        <Pill key={item} seedKey={item} onSelectKey={onSelectKey} />
+        <Pill key={item} seedKey={item} onSelectKey={handleKeySelect} />
       )}
       horizontal={true}
       keyboardShouldPersistTaps="always"
