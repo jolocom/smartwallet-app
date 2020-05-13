@@ -7,6 +7,7 @@ import {
 import { createStackNavigator } from '@react-navigation/stack'
 
 import LoggedOut from '~/screens/LoggedOut'
+import DeviceAuthentication from './screens/DeviceAuthentication'
 import LoggedIn from '~/screens/LoggedIn'
 import Loader from '~/screens/Modals/Loader'
 import Interactions from '~/screens/Modals/Interactions'
@@ -64,6 +65,10 @@ const RootNavigation: React.FC = () => {
     <NavigationContainer ref={ref}>
       <RootStack.Navigator headerMode="none" mode="modal">
         <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
+        <RootStack.Screen
+          name={ScreenNames.DeviceAuth}
+          component={DeviceAuthentication}
+        />
         <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
         <RootStack.Screen
           name={ScreenNames.Loader}

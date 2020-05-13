@@ -12,6 +12,10 @@ export enum ScreenNames {
   Documents = 'Documents',
   History = 'History',
   Settings = 'Settings',
+  // Device Authentication
+  DeviceAuth = 'DeviceAuth',
+  Passcode = 'Passcode',
+  Biometrics = 'Biometrics',
   // Modals
   Loader = 'Loader',
   Interactions = 'Interactions',
