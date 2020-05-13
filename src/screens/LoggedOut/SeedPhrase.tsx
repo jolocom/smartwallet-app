@@ -17,76 +17,44 @@ import { Colors } from '~/utils/colors'
 import { TextStyle } from '~/utils/fonts'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
-
 import SDK from '~/utils/SDK'
 
-const SeedPhrase: React.FC = () => {
-  const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
-  const seedphrase = SDK.getMnemonic()
-  const [showPhrase, setShowPhrase] = useState(false)
-  const [showInfo, setShowInfo] = useState(true)
+enum GestureState {
+  None,
+  Start,
+  End,
+  Success,
+}
+
+const useCircleHoldAnimation = (animationDuration: number) => {
   const [startTime, setStartTime] = useState(0)
+  const [gestureState, setGestureState] = useState<GestureState>(
+    GestureState.None,
+  )
 
   const shadowScale = useRef<Animated.Value>(new Animated.Value(0.8)).current
   const circleScale = useRef<Animated.Value>(new Animated.Value(1.2)).current
-  const circleOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
-  const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
-  const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
-  const ANIMATION_DURATION = 1500
+  const circleOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
 
-  useEffect(() => {
-    Animated.timing(circleOpacity, {
-      duration: 2000,
-      useNativeDriver: true,
-      toValue: 1,
-    }).start()
-  }, [])
-
-  useEffect(() => {
-    if (showPhrase) {
-      Animated.sequence([
-        Animated.timing(circleOpacity, {
-          duration: 300,
-          useNativeDriver: true,
-          toValue: 0,
-        }),
-        Animated.delay(1000),
-        Animated.timing(buttonOpacity, {
-          duration: 400,
-          useNativeDriver: true,
-          toValue: 1,
-        }),
-      ]).start()
-    }
-  }, [showPhrase])
-
-  useEffect(() => {
-    Animated.timing(infoOpacity, {
-      duration: 200,
-      useNativeDriver: true,
-      toValue: showInfo ? 1 : 0,
-    }).start()
-  }, [showInfo])
-
-  const onGestureStart = (e: GestureResponderEvent) => {
+  const onTouchStart = (e: GestureResponderEvent) => {
     setStartTime(e.nativeEvent.timestamp)
-    setShowInfo(false)
+    setGestureState(GestureState.Start)
     Animated.parallel([
       Animated.timing(shadowScale, {
-        duration: ANIMATION_DURATION,
+        duration: animationDuration,
         toValue: 1,
         useNativeDriver: true,
       }),
       Animated.timing(circleScale, {
-        duration: ANIMATION_DURATION,
+        duration: animationDuration,
         toValue: 1,
         useNativeDriver: true,
       }),
     ]).start()
   }
 
-  const onGestureEnd = () => {
-    if (!showPhrase) setShowInfo(true)
+  const onTouchEnd = () => {
+    if (gestureState !== GestureState.Success) setGestureState(GestureState.End)
     Animated.parallel([
       Animated.timing(shadowScale, {
         duration: 400,
@@ -101,10 +69,70 @@ const SeedPhrase: React.FC = () => {
     ]).start()
   }
 
-  const onGestureHold = (e: GestureResponderEvent) => {
-    if (e.nativeEvent.timestamp - startTime > ANIMATION_DURATION)
-      setShowPhrase(true)
+  const onTouchMove = (e: GestureResponderEvent) => {
+    if (e.nativeEvent.timestamp - startTime > animationDuration)
+      setGestureState(GestureState.Success)
   }
+
+  const gestureHandlers = { onTouchStart, onTouchEnd, onTouchMove }
+  const animationValues = {
+    shadowScale,
+    circleScale,
+    circleOpacity,
+  }
+  return {
+    gestureState,
+    animationValues,
+    gestureHandlers,
+  }
+}
+
+const SeedPhrase: React.FC = () => {
+  const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
+  const {
+    gestureState,
+    animationValues: { shadowScale, circleScale, circleOpacity },
+    gestureHandlers,
+  } = useCircleHoldAnimation(1500)
+  const seedphrase = SDK.getMnemonic()
+  const [showInfo, setShowInfo] = useState(true)
+
+  const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
+  const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
+
+  useEffect(() => {
+    switch (gestureState) {
+      case GestureState.Start:
+        setShowInfo(false)
+        break
+      case GestureState.End:
+        setShowInfo(true)
+        break
+      case GestureState.Success:
+        Animated.sequence([
+          Animated.timing(circleOpacity, {
+            duration: 300,
+            useNativeDriver: true,
+            toValue: 0,
+          }),
+          Animated.delay(1000),
+          Animated.timing(buttonOpacity, {
+            duration: 400,
+            useNativeDriver: true,
+            toValue: 1,
+          }),
+        ]).start()
+        break
+    }
+  }, [gestureState])
+
+  useEffect(() => {
+    Animated.timing(infoOpacity, {
+      duration: 200,
+      useNativeDriver: true,
+      toValue: showInfo ? 1 : 0,
+    }).start()
+  }, [showInfo])
 
   const phraseOpacity = shadowScale.interpolate({
     inputRange: [0.8, 1],
@@ -116,7 +144,9 @@ const SeedPhrase: React.FC = () => {
       <Animated.View
         style={[
           styles.seedphraseContainer,
-          { opacity: showPhrase ? 1 : phraseOpacity },
+          {
+            opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
+          },
         ]}
       >
         <Text style={styles.seedphrase}>{seedphrase.join(' ')}</Text>
@@ -136,9 +166,7 @@ const SeedPhrase: React.FC = () => {
             stops={[0.4, 1]}
           >
             <Animated.View
-              onTouchStart={onGestureStart}
-              onTouchEnd={onGestureEnd}
-              onTouchMove={onGestureHold}
+              {...gestureHandlers}
               style={[
                 styles.button,
                 {
