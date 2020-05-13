@@ -29,7 +29,7 @@ const reducer = (state: StateI, action: ActionI): StateI => {
     case Actions.updateSeedKey:
       return onUpdateProp(state, action, 'seedKey')
     case Actions.updatePhrase:
-      return onUpdatePhrase
+      return onUpdatePhrase(state, action)
     case Actions.updateCurrentWordIdx:
       return onUpdateProp(state, action, 'currentWordIdx')
     case Actions.setSuggestedKeys:
