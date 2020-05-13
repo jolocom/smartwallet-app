@@ -41,7 +41,7 @@ platform :ios do
       api_token: api_token,
       owner_name: "JolocomGmbH",
       owner_type: "organization", # Default is user - set to organization for appcenter organizations
-      app_name: "smartwallet-redesign",
+      app_name: "smartwallet-redesign-ios",
       file: lane_context[SharedValues::IPA_OUTPUT_PATH],
       notify_testers: true # Set to false if you don't want to notify testers of your new release (default: `false`)
     )
@@ -55,10 +55,10 @@ platform :android do
   desc 'Build the Android application'
   lane :build do
     build_android_app(
-      task: 'assemble',
-      # build_type: 'Staging',
-      print_command: false,
-      gradle_path: './android/gradlew'
+      task: 'bundle',
+      build_type: 'Release',
+      gradle_path: './gradlew',
+      project_dir: './android'
     )
   end
 
@@ -70,7 +70,7 @@ platform :android do
       api_token: api_token,
       owner_name: "JolocomGmbH",
       owner_type: "organization",
-      app_name: "smartwallet-redesign",
+      app_name: "smartwallet-redesign-android",
       file: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
       notify_testers: true
     )
