@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   View,
   StyleSheet,
@@ -23,11 +23,22 @@ import RecoveryHeader from './RecoveryHeader'
 import RecoveryFooter from './RecoveryFooter'
 import useRedirectTo from '~/hooks/useRedirectTo'
 
+import {
+  setSeedKey,
+  setPhrase,
+  setCurrentWordIdx,
+  setSuggestedKeys,
+} from './module/actions'
+import RecoveryContextProvider, {
+  useRecoveryDispatch,
+  useRecoveryState,
+} from './module/context'
+
 const Recovery: React.FC = () => {
-  const [seedKey, setSeedKey] = useState('') // input value
-  const [phrase, setPhrase] = useState<string[]>([]) // seed phrase
-  const [currentWordIdx, setCurrentWordIdx] = useState(0) // used to be able to navigate back and forth across seed phrase
-  const [suggestedKeys, setSuggestedKeys] = useState<string[]>([]) // suggestions from bip39
+  const dispatch = useRecoveryDispatch()
+  const recoveryState = useRecoveryState()
+  const { seedKey, phrase, currentWordIdx, suggestedKeys } = recoveryState
+
   const [keyHasError, setHasError] = useState(false) // used to color border of input in 'failed' color and display an error
   const [keyIsValid, setKeyIsValid] = useState(false) // used to color border of input in 'success' color
 
@@ -39,16 +50,14 @@ const Recovery: React.FC = () => {
   const handleKeySubmit = (word = seedKey) => {
     if (word) {
       if (currentWordIdx === phrase.length) {
-        setPhrase((prevPhrase) => [...prevPhrase, word]) // when we are adding seedKey at the end of the phrase
+        dispatch(setPhrase([...phrase, word]))
       } else {
         // this is when we are moving across seed phrase back and forth with arrows - it sets
-        setPhrase((prevState) => {
-          const phrase = prevState.slice()
-          phrase[currentWordIdx] = word
-          return phrase
-        })
+        const updatedPhrase = phrase.slice()
+        updatedPhrase[currentWordIdx] = word
+        dispatch(setPhrase(updatedPhrase))
       }
-      setCurrentWordIdx((prevIdx) => prevIdx + 1) // move to the next word
+      dispatch(setCurrentWordIdx(currentWordIdx + 1)) // move to the next word
       setKeyIsValid(false)
     }
   }
@@ -63,25 +72,25 @@ const Recovery: React.FC = () => {
   }
 
   const selectPrevWord = () => {
-    setCurrentWordIdx((prevState) => prevState - 1)
+    dispatch(setCurrentWordIdx(currentWordIdx - 1))
   }
   const selectNextWord = () => {
-    setCurrentWordIdx((prevState) => prevState + 1)
+    dispatch(setCurrentWordIdx(currentWordIdx + 1))
   }
 
   useEffect(() => {
-    setSeedKey(phrase[currentWordIdx])
+    dispatch(setSeedKey(phrase[currentWordIdx]))
   }, [currentWordIdx])
 
   useEffect(() => {
     if (seedKey && seedKey.length > 1) {
       const suggestions = getSuggestedSeedKeys(seedKey)
-      setSuggestedKeys(suggestions)
+      dispatch(setSuggestedKeys(suggestions))
 
       const isValid = isKeyValid(seedKey)
       setKeyIsValid(isValid)
     } else {
-      setSuggestedKeys([])
+      dispatch(setSuggestedKeys([]))
     }
   }, [seedKey])
 
@@ -98,6 +107,10 @@ const Recovery: React.FC = () => {
     selectNextWord()
     setKeyIsValid(false)
   }
+
+  const handleSeedKeyChange = useCallback((val: string) => {
+    dispatch(setSeedKey(val))
+  }, [])
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
@@ -124,7 +137,7 @@ const Recovery: React.FC = () => {
               value={seedKey}
               ref={inputRef}
               editable={currentWordIdx < 12}
-              onChangeText={setSeedKey}
+              onChangeText={handleSeedKeyChange}
               onSubmitEditing={
                 keyIsValid
                   ? (e) => handleKeySubmit(e.nativeEvent.text)
@@ -205,4 +218,10 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Recovery
+export default function () {
+  return (
+    <RecoveryContextProvider>
+      <Recovery />
+    </RecoveryContextProvider>
+  )
+}

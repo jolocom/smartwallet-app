@@ -1,24 +1,6 @@
-export enum Actions {
-  updateSeedKey,
-  updatePhrase,
-  updateCurrentWordIdx,
-  setSuggestedKeys,
-}
-
-export interface StateI {
-  seedKey: string
-  phrase: string[]
-  currentWordIdx: number
-  suggestedKeys: string[]
-}
-
-export interface ActionI {
-  type: Actions
-  payload: any
-}
-
+import { StateI, ActionI, RecoveryActions } from './types'
 export const initialState = {
-  seedKey: '',
+  seedKey: '', // input value
   phrase: [],
   currentWordIdx: 0,
   suggestedKeys: [],
@@ -26,27 +8,19 @@ export const initialState = {
 
 const reducer = (state: StateI, action: ActionI): StateI => {
   switch (action.type) {
-    case Actions.updateSeedKey:
+    case RecoveryActions.setSeedKey:
       return onUpdateProp(state, action, 'seedKey')
-    case Actions.updatePhrase:
-      return onUpdatePhrase(state, action)
-    case Actions.updateCurrentWordIdx:
+    case RecoveryActions.setPhrase:
+      return onUpdateProp(state, action, 'phrase')
+    case RecoveryActions.setCurrentWordIdx:
       return onUpdateProp(state, action, 'currentWordIdx')
-    case Actions.setSuggestedKeys:
+    case RecoveryActions.setSuggestedKeys:
       return onUpdateProp(state, action, 'suggestedKeys')
   }
 }
 
 const onUpdateProp = (state: StateI, action: ActionI, prop: string) => {
   return { ...state, [prop]: action.payload }
-}
-
-const onUpdatePhrase = (state: StateI, action: ActionI) => {
-  const updatedPhrase = state.phrase.slice()
-  return {
-    ...state,
-    phrase: [...updatedPhrase, action.payload],
-  }
 }
 
 export default reducer
