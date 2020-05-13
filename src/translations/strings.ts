@@ -37,9 +37,19 @@ const errorBoundary = {
   CLOSE: 'Close',
 }
 
+const seedphrase = {
+  HOLD_YOUR_FINGER_ON_THE_CIRCLE:
+    'Hold your finger on the circle untill magic will happen',
+  WRITE_DOWN_THIS_PHRASE_ITS_VERY_IMPORTANT:
+    "Write down this phrase. It's very important!",
+  OKAY: 'Okay',
+  WHY_SO_ANALOGUE: 'Why so analogue?',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...entropy,
   ...walkthrough,
   ...errorBoundary,
+  ...seedphrase,
 }
