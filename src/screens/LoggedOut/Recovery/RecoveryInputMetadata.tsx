@@ -5,11 +5,13 @@ import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 
-type Props = {
+interface RecoveryInputMetadataI {
   keyHasError: boolean
 }
 
-const InputMetadata: React.FC<Props> = ({ keyHasError }) => {
+const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = ({
+  keyHasError,
+}) => {
   return (
     <View style={styles.inputMeta}>
       {keyHasError ? (
@@ -28,4 +30,4 @@ const styles = StyleSheet.create({
 })
 
 // to avoid rerendering on every key stroke
-export default memo(InputMetadata)
+export default memo(RecoveryInputMetadata)

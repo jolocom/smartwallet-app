@@ -6,12 +6,12 @@ import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 
-type ScreenHeaderProps = {
+interface RecoveryHeaderPropsI {
   phrase: string[]
   currentWordIdx: number
 }
 
-const ScreenHeader: React.FC<ScreenHeaderProps> = ({
+const RecoveryHeader: React.FC<RecoveryHeaderPropsI> = ({
   phrase,
   currentWordIdx,
 }) => {
@@ -68,4 +68,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ScreenHeader
+export default RecoveryHeader

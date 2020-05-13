@@ -10,19 +10,18 @@ import {
 import ScreenContainer from '~/components/ScreenContainer'
 import { useLoader } from '~/hooks/useLoader'
 import { Colors } from '~/utils/colors'
-import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
-import { BackArrowIcon } from '~/assets/svg'
-import { ForthArrowIcon } from '~/assets/svg'
 import SDK from '~/utils/SDK'
+import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
+import { BackArrowIcon, ForthArrowIcon } from '~/assets/svg'
+import { strings } from '~/translations/strings'
+import { ScreenNames } from '~/types/screens'
 
 import Arrow, { ArrowDirections } from './Arrow'
-import useFooter from './useFooter'
-import InputMetadata from './InputMetadata'
-import ScreenHeader from './ScreenHeader'
-import ScreenFooter from './ScreenFooter'
-import { strings } from '~/translations/strings'
+import useBtnsVisibility from './useBtnsVisibility'
+import RecoveryInputMetadata from './RecoveryInputMetadata'
+import RecoveryHeader from './RecoveryHeader'
+import RecoveryFooter from './RecoveryFooter'
 import useRedirectTo from '~/hooks/useRedirectTo'
-import { ScreenNames } from '~/types/screens'
 
 const Recovery: React.FC = () => {
   const [seedKey, setSeedKey] = useState('') // input value
@@ -32,7 +31,7 @@ const Recovery: React.FC = () => {
   const [keyHasError, setHasError] = useState(false) // used to color border of input in 'failed' color and display an error
   const [keyIsValid, setKeyIsValid] = useState(false) // used to color border of input in 'success' color
 
-  const { inputRef, areBtnsVisible, hideBtns } = useFooter()
+  const { inputRef, areBtnsVisible, hideBtns } = useBtnsVisibility()
   const loader = useLoader()
   const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn)
   const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
@@ -107,7 +106,7 @@ const Recovery: React.FC = () => {
           justifyContent: areBtnsVisible ? 'space-between' : 'flex-start',
         }}
       >
-        <ScreenHeader phrase={phrase} currentWordIdx={currentWordIdx} />
+        <RecoveryHeader phrase={phrase} currentWordIdx={currentWordIdx} />
         <View style={styles.inputContainer}>
           <View
             style={[
@@ -117,7 +116,7 @@ const Recovery: React.FC = () => {
             ]}
           >
             {currentWordIdx > 0 && (
-              <Arrow onPress={selectPrevWord}>
+              <Arrow direction={ArrowDirections.left} onPress={selectPrevWord}>
                 <BackArrowIcon />
               </Arrow>
             )}
@@ -137,6 +136,7 @@ const Recovery: React.FC = () => {
               keyboardAppearance="dark"
               underlineColorAndroid="transparent"
               autoCapitalize="none"
+              //@ts-ignore
               textAlign="center"
               returnKeyType="next"
               blurOnSubmit={false}
@@ -157,9 +157,9 @@ const Recovery: React.FC = () => {
               </Arrow>
             )}
           </View>
-          <InputMetadata keyHasError={keyHasError} />
+          <RecoveryInputMetadata keyHasError={keyHasError} />
         </View>
-        <ScreenFooter
+        <RecoveryFooter
           suggestedKeys={suggestedKeys}
           areBtnsVisible={areBtnsVisible}
           handleKeySubmit={handleKeySubmit}

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { TextInput, Keyboard } from 'react-native'
 
-const useFooter = () => {
+const useBtnsVisibility = () => {
   const inputRef = useRef<TextInput>(null)
   const [areBtnsVisible, setBtnsVisible] = useState(true)
 
@@ -30,4 +30,4 @@ const useFooter = () => {
   }
 }
 
-export default useFooter
+export default useBtnsVisibility

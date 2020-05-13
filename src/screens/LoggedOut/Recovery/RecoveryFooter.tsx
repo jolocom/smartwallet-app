@@ -4,12 +4,12 @@ import { Animated, StyleSheet, Platform } from 'react-native'
 import BtnGroup from '~/components/BtnGroup'
 import Btn, { BtnTypes } from '~/components/Btn'
 
-import Suggestions from './Suggestions'
-import useAnimation from './useAnimation'
+import Suggestions from './SeedKeySuggestions'
+import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { strings } from '~/translations/strings'
 import { useNavigation } from '@react-navigation/native'
 
-type ScreenFooterProps = {
+interface RecoveryFooterPropsI {
   areBtnsVisible: boolean
   handleKeySubmit: (word: string) => void
   isPhraseComplete: boolean
@@ -17,14 +17,14 @@ type ScreenFooterProps = {
   handlePhraseSubmit: () => void
 }
 
-const ScreenFooter: React.FC<ScreenFooterProps> = ({
+const RecoveryFooter: React.FC<RecoveryFooterPropsI> = ({
   areBtnsVisible,
   handlePhraseSubmit,
   isPhraseComplete,
   suggestedKeys,
   handleKeySubmit,
 }) => {
-  const { animatedBtns, animatedSuggestions } = useAnimation()
+  const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
 
   const navigation = useNavigation()
 
@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ScreenFooter
+export default RecoveryFooter

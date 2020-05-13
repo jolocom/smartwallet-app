@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, StyleSheet, View, TouchableOpacity } from 'react-native'
+import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 
@@ -20,12 +20,12 @@ const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
   )
 }
 
-type SuggestionsProps = {
+interface SeedKeySuggestionsPropsI {
   suggestedKeys: string[]
   onSelectKey: (key: string) => void
 }
 
-const Suggestions: React.FC<SuggestionsProps> = ({
+const SeedKeySuggestions: React.FC<SeedKeySuggestionsPropsI> = ({
   suggestedKeys,
   onSelectKey,
 }) => {
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Suggestions
+export default SeedKeySuggestions

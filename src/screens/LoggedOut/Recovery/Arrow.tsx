@@ -6,16 +6,12 @@ export enum ArrowDirections {
   right,
 }
 
-type ArrowProps = {
-  direction?: ArrowDirections
+interface ArrowPropsI {
+  direction: ArrowDirections
   onPress: () => void
 }
 
-const Arrow: React.FC<ArrowProps> = ({
-  children,
-  direction = ArrowDirections.left,
-  onPress,
-}) => {
+const Arrow: React.FC<ArrowPropsI> = ({ children, direction, onPress }) => {
   return (
     <TouchableOpacity
       onPress={onPress}

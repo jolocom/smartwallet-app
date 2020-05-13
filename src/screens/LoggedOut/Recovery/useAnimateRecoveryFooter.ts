@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react'
 import { Animated, Keyboard } from 'react-native'
 
-const useAnimation = () => {
+const useAnimateRecoveryFooter = () => {
   const animatedSuggestions = useRef(new Animated.Value(1)).current
   const animatedBtns = useRef(new Animated.Value(1)).current
 
@@ -33,4 +33,4 @@ const useAnimation = () => {
   return { animatedSuggestions, animatedBtns }
 }
 
-export default useAnimation
+export default useAnimateRecoveryFooter
