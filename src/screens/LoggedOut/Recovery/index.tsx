@@ -8,20 +8,15 @@ import {
 } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import { useLoader } from '~/hooks/useLoader'
 import { Colors } from '~/utils/colors'
-import SDK from '~/utils/SDK'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
 import { BackArrowIcon, ForthArrowIcon } from '~/assets/svg'
-import { strings } from '~/translations/strings'
-import { ScreenNames } from '~/types/screens'
 
 import Arrow, { ArrowDirections } from './Arrow'
 import useBtnsVisibility from './useBtnsVisibility'
 import RecoveryInputMetadata from './RecoveryInputMetadata'
 import RecoveryHeader from './RecoveryHeader'
 import RecoveryFooter from './RecoveryFooter'
-import useRedirectTo from '~/hooks/useRedirectTo'
 
 import {
   setSeedKey,
@@ -43,9 +38,6 @@ const Recovery: React.FC = () => {
   const [keyIsValid, setKeyIsValid] = useState(false) // used to color border of input in 'success' color
 
   const { inputRef, areBtnsVisible, hideBtns } = useBtnsVisibility()
-  const loader = useLoader()
-  const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn)
-  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
 
   const handleKeySubmit = (word = seedKey) => {
     if (word) {
@@ -60,15 +52,6 @@ const Recovery: React.FC = () => {
       dispatch(setCurrentWordIdx(currentWordIdx + 1)) // move to the next word
       setKeyIsValid(false)
     }
-  }
-
-  const handlePhraseSubmit = async () => {
-    const success = await loader(() => SDK.recoverIdentity(phrase), {
-      loading: strings.MATCHING,
-    })
-
-    if (success) redirectToClaims()
-    else redirectToWalkthrough()
   }
 
   const selectPrevWord = () => {
@@ -176,7 +159,6 @@ const Recovery: React.FC = () => {
           suggestedKeys={suggestedKeys}
           areBtnsVisible={areBtnsVisible}
           handleKeySubmit={handleKeySubmit}
-          handlePhraseSubmit={handlePhraseSubmit}
           isPhraseComplete={phrase.length === 12}
         />
       </ScreenContainer>
