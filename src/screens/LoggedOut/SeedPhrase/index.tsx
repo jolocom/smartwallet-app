@@ -1,11 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import {
-  View,
-  StyleSheet,
-  Text,
-  Animated,
-  GestureResponderEvent,
-} from 'react-native'
+import { View, StyleSheet, Text, Animated } from 'react-native'
 // @ts-ignore no typescript support as of yet
 import RadialGradient from 'react-native-radial-gradient'
 
@@ -17,84 +11,18 @@ import { Colors } from '~/utils/colors'
 import { TextStyle } from '~/utils/fonts'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
+import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import SDK from '~/utils/SDK'
 
-enum GestureState {
-  None,
-  Start,
-  End,
-  Success,
-}
-
-const useCircleHoldAnimation = (animationDuration: number) => {
-  const [startTime, setStartTime] = useState(0)
-  const [gestureState, setGestureState] = useState<GestureState>(
-    GestureState.None,
-  )
-
-  const shadowScale = useRef<Animated.Value>(new Animated.Value(0.8)).current
-  const circleScale = useRef<Animated.Value>(new Animated.Value(1.2)).current
-  const circleOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
-
-  const onTouchStart = (e: GestureResponderEvent) => {
-    setStartTime(e.nativeEvent.timestamp)
-    setGestureState(GestureState.Start)
-    Animated.parallel([
-      Animated.timing(shadowScale, {
-        duration: animationDuration,
-        toValue: 1,
-        useNativeDriver: true,
-      }),
-      Animated.timing(circleScale, {
-        duration: animationDuration,
-        toValue: 1,
-        useNativeDriver: true,
-      }),
-    ]).start()
-  }
-
-  const onTouchEnd = () => {
-    if (gestureState !== GestureState.Success) setGestureState(GestureState.End)
-    Animated.parallel([
-      Animated.timing(shadowScale, {
-        duration: 400,
-        toValue: 0.8,
-        useNativeDriver: true,
-      }),
-      Animated.timing(circleScale, {
-        duration: 400,
-        toValue: 1.2,
-        useNativeDriver: true,
-      }),
-    ]).start()
-  }
-
-  const onTouchMove = (e: GestureResponderEvent) => {
-    if (e.nativeEvent.timestamp - startTime > animationDuration)
-      setGestureState(GestureState.Success)
-  }
-
-  const gestureHandlers = { onTouchStart, onTouchEnd, onTouchMove }
-  const animationValues = {
-    shadowScale,
-    circleScale,
-    circleOpacity,
-  }
-  return {
-    gestureState,
-    animationValues,
-    gestureHandlers,
-  }
-}
+const seedphrase = SDK.getMnemonic()
 
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
   const {
     gestureState,
-    animationValues: { shadowScale, circleScale, circleOpacity },
+    animationValues: { shadowScale, circleScale, shadowOpacity },
     gestureHandlers,
   } = useCircleHoldAnimation(1500)
-  const seedphrase = SDK.getMnemonic()
   const [showInfo, setShowInfo] = useState(true)
 
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
@@ -110,7 +38,7 @@ const SeedPhrase: React.FC = () => {
         break
       case GestureState.Success:
         Animated.sequence([
-          Animated.timing(circleOpacity, {
+          Animated.timing(shadowOpacity, {
             duration: 300,
             useNativeDriver: true,
             toValue: 0,
@@ -122,6 +50,8 @@ const SeedPhrase: React.FC = () => {
             toValue: 1,
           }),
         ]).start()
+        break
+      default:
         break
     }
   }, [gestureState])
@@ -156,7 +86,7 @@ const SeedPhrase: React.FC = () => {
           style={[
             {
               transform: [{ scaleX: shadowScale }, { scaleY: shadowScale }],
-              opacity: circleOpacity,
+              opacity: shadowOpacity,
             },
           ]}
         >
