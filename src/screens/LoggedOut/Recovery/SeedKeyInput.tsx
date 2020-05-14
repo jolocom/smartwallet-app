@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { View, StyleSheet, TextInput, Keyboard } from 'react-native'
-import { useRecoveryDispatch, useRecoveryState } from './module/context'
+import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
@@ -18,7 +18,7 @@ import {
   setHasError,
   submitKey,
   hideSuggestions,
-} from './module/actions'
+} from './module/recoveryActions'
 
 const SeedKeyInput: React.FC = () => {
   const inputRef = useRef<TextInput>(null)

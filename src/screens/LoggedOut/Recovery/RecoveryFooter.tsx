@@ -16,7 +16,7 @@ import SDK from '~/utils/SDK'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
-import { useRecoveryState } from './module/context'
+import { useRecoveryState } from './module/recoveryContext'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean

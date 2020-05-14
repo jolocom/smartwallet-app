@@ -6,7 +6,9 @@ import ScreenContainer from '~/components/ScreenContainer'
 import RecoveryHeader from './RecoveryHeader'
 import RecoveryFooter from './RecoveryFooter'
 
-import RecoveryContextProvider, { useRecoveryState } from './module/context'
+import RecoveryContextProvider, {
+  useRecoveryState,
+} from './module/recoveryContext'
 import SeedKeyInput from './SeedKeyInput'
 
 const Recovery: React.FC = () => {

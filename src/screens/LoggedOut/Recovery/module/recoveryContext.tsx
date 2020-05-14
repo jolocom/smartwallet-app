@@ -1,13 +1,13 @@
 import React, { useContext, createContext, useReducer, Dispatch } from 'react'
 
-import reducer, { initialState } from './reducer'
+import recoveryReducer, { initialRecoveryState } from './recoveryReducer'
 import { StateI, ActionI } from './types'
 
-const RecoveryStateContext = createContext<StateI>(initialState)
+const RecoveryStateContext = createContext<StateI>(initialRecoveryState)
 const RecoveryDispatchContext = createContext<Dispatch<ActionI>>(() => null)
 
 const RecoveryContextProvider: React.FC = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(recoveryReducer, initialRecoveryState)
   return (
     <RecoveryDispatchContext.Provider value={dispatch}>
       <RecoveryStateContext.Provider value={state} children={children} />

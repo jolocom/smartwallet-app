@@ -1,5 +1,5 @@
 import { StateI, ActionI, RecoveryActions } from './types'
-export const initialState = {
+export const initialRecoveryState = {
   seedKey: '',
   phrase: [],
   currentWordIdx: 0,
@@ -9,7 +9,7 @@ export const initialState = {
   keyHasError: false,
 }
 
-const reducer = (state: StateI, action: ActionI): StateI => {
+const recoveryReducer = (state: StateI, action: ActionI): StateI => {
   switch (action.type) {
     case RecoveryActions.setSeedKey:
       return onUpdateProp(state, action, 'seedKey')
@@ -63,4 +63,4 @@ const onSubmitKey = (state: StateI, action: ActionI) => {
   return state
 }
 
-export default reducer
+export default recoveryReducer

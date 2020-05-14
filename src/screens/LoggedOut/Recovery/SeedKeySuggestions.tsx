@@ -2,8 +2,8 @@ import React, { memo } from 'react'
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
-import { useRecoveryState, useRecoveryDispatch } from './module/context'
-import { submitKey } from './module/actions'
+import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
+import { submitKey } from './module/recoveryActions'
 
 type PillProps = {
   seedKey: string

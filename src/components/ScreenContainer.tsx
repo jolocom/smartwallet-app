@@ -12,7 +12,7 @@ interface ScreenContainerI {
   isTransparent?: boolean
   customStyles?: ViewStyle
   isFullscreen?: boolean
-  backgroundColor: Colors
+  backgroundColor?: Colors
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
