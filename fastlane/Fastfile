@@ -1,0 +1,78 @@
+
+# fastlane is recommended to run with `bundle exec fastlane`
+before_all do |lane, options|
+  ensure_bundle_exec
+end
+
+desc 'Get API token for MS AppCenter'
+lane :get_appcenter_token do
+  begin
+    sh("git clone git@infra.jolocom.io:appcenter-secrets")
+  rescue
+    # handle error
+    puts "appcenter auth already present"
+  end
+  File.read("appcenter-secrets/api_key.txt")
+end
+
+# lanes for ios building, signing and deployment
+platform :ios do
+
+  desc 'Fetch certificates and provisioning profiles'
+  lane :certificates do
+    match(app_identifier: 'com.jolocom.wallet')
+  end
+
+  desc 'Fetch certificates. Build the iOS application.'
+  lane :build do
+    certificates
+    build_app(
+      scheme: "SmartWallet",
+      workspace: './ios/SmartWallet.xcworkspace',
+      export_method: 'ad-hoc'
+    )
+  end
+
+  desc 'Build iOS application and upload to Appcenter'
+  lane :alpha do
+    build
+    api_token = get_appcenter_token.strip
+    appcenter_upload(
+      api_token: api_token,
+      owner_name: "JolocomGmbH",
+      owner_type: "organization", # Default is user - set to organization for appcenter organizations
+      app_name: "smartwallet-redesign-ios",
+      file: lane_context[SharedValues::IPA_OUTPUT_PATH],
+      notify_testers: true # Set to false if you don't want to notify testers of your new release (default: `false`)
+    )
+  end
+  
+end
+
+# lanes for android building, signing and deployment
+platform :android do
+
+  desc 'Build the Android application'
+  lane :build do
+    build_android_app(
+      task: 'bundle',
+      build_type: 'Release',
+      gradle_path: './gradlew',
+      project_dir: './android'
+    )
+  end
+
+  desc 'Build Android application and upload to Appcenter'
+  lane :alpha do
+    build
+    api_token = get_appcenter_token.strip
+    appcenter_upload(
+      api_token: api_token,
+      owner_name: "JolocomGmbH",
+      owner_type: "organization",
+      app_name: "smartwallet-redesign-android",
+      file: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
+      notify_testers: true
+    )
+  end
+end
