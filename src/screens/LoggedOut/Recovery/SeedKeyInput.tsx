@@ -17,6 +17,7 @@ import {
   setKeyIsValid,
   setHasError,
   submitKey,
+  hideSuggestions,
 } from './module/actions'
 
 const SeedKeyInput: React.FC = () => {
@@ -43,23 +44,30 @@ const SeedKeyInput: React.FC = () => {
     dispatch(setSeedKey(val))
   }, [])
 
-  const dismissKeyboard = () => {
+  const handleDoneEditing = () => {
     Keyboard.dismiss()
     selectNextWord()
     dispatch(setKeyIsValid(false))
   }
 
-  const handleSubmitEdition = useCallback(
-    (e) => {
-      return keyIsValid
-        ? () => dispatch(submitKey(e.nativeEvent.text))
-        : Keyboard.dismiss
-    },
-    [keyIsValid],
-  )
+  const handleDismissKeyboard = () => {
+    inputRef.current?.blur()
+    Keyboard.dismiss()
+    dispatch(hideSuggestions())
+  }
+
+  const handleInputFocus = useCallback(() => {
+    dispatch(showSuggestions())
+  }, [])
 
   useEffect(() => {
     dispatch(setSeedKey(phrase[currentWordIdx]))
+  }, [currentWordIdx])
+
+  useEffect(() => {
+    if (!inputRef.current?.isFocused()) {
+      inputRef.current?.focus()
+    }
   }, [currentWordIdx])
 
   useEffect(() => {
@@ -101,9 +109,12 @@ const SeedKeyInput: React.FC = () => {
           ref={inputRef}
           editable={currentWordIdx < 12}
           onChangeText={handleSeedKeyChange}
-          onSubmitEditing={handleSubmitEdition}
-          // 🧨 this will keep re-create
-          onFocus={() => dispatch(showSuggestions())}
+          onSubmitEditing={(e) => {
+            keyIsValid
+              ? dispatch(submitKey(e.nativeEvent.text))
+              : handleDismissKeyboard()
+          }}
+          onFocus={handleInputFocus}
           style={styles.input}
           testID="seedphrase-input"
           keyboardAppearance="dark"
@@ -122,7 +133,7 @@ const SeedKeyInput: React.FC = () => {
           </Arrow>
         )}
         {currentWordIdx === 11 && phrase.length === 12 && (
-          <Arrow direction={ArrowDirections.right} onPress={dismissKeyboard}>
+          <Arrow direction={ArrowDirections.right} onPress={handleDoneEditing}>
             <ForthArrowIcon />
           </Arrow>
         )}
@@ -135,6 +146,7 @@ const SeedKeyInput: React.FC = () => {
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
+    marginTop: 20,
   },
   inputField: {
     width: '100%',

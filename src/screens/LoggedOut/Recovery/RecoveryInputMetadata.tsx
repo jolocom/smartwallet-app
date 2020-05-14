@@ -6,18 +6,23 @@ import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/context'
 
-const RecoveryInputMetadata: React.FC = ({}) => {
-  const { keyHasError } = useRecoveryState()
-  return (
-    <View style={styles.inputMeta}>
-      {keyHasError ? (
-        <Paragraph color={Colors.error}>{strings.CANT_MATCH_WORD}</Paragraph>
-      ) : (
-        <Paragraph>{strings.WHAT_IF_I_FORGOT}</Paragraph>
-      )}
-    </View>
-  )
+interface RecoveryInputMetadataI {
+  keyHasError: boolean
 }
+
+const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
+  ({ keyHasError }) => {
+    return (
+      <View style={styles.inputMeta}>
+        {keyHasError ? (
+          <Paragraph color={Colors.error}>{strings.CANT_MATCH_WORD}</Paragraph>
+        ) : (
+          <Paragraph>{strings.WHAT_IF_I_FORGOT}</Paragraph>
+        )}
+      </View>
+    )
+  },
+)
 
 const styles = StyleSheet.create({
   inputMeta: {
@@ -25,5 +30,8 @@ const styles = StyleSheet.create({
   },
 })
 
-// to avoid rerendering on every key stroke
-export default memo(RecoveryInputMetadata)
+export default function () {
+  // extracting only keyHasError property from the context to avoid unnecessary re-renders
+  const { keyHasError } = useRecoveryState()
+  return <RecoveryInputMetadata keyHasError={keyHasError} />
+}

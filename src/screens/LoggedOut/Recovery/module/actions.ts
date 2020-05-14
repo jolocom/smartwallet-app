@@ -19,7 +19,7 @@ export const showSuggestions = partiallyAppliedAction(
   RecoveryActions.showSuggestions,
 )
 export const hideSuggestions = partiallyAppliedAction(
-  RecoveryActions.showSuggestions,
+  RecoveryActions.hideSuggestions,
 )
 export const setKeyIsValid = partiallyAppliedAction(
   RecoveryActions.setKeyIsValid,
