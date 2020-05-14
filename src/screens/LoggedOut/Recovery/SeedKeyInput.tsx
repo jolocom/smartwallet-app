@@ -8,7 +8,6 @@ import { BackArrowIcon, ForthArrowIcon } from '~/assets/svg'
 
 import RecoveryInputMetadata from './RecoveryInputMetadata'
 import Arrow, { ArrowDirections } from './Arrow'
-import useFocusInput from './useFocusInput'
 
 import {
   setSeedKey,
@@ -41,40 +40,43 @@ const SeedKeyInput: React.FC = () => {
     dispatch(setCurrentWordIdx(currentWordIdx + 1))
   }
 
-  const handleSeedKeyChange = useCallback((val: string) => {
-    dispatch(setSeedKey(val))
-  }, [])
-
-  const handleDoneEditing = () => {
-    selectNextWord()
-    dispatch(setKeyIsValid(false))
-    handleKeyboardDismiss()
-  }
-
-  const handleKeyboardDismiss = () => {
-    Keyboard.dismiss()
-    dispatch(hideSuggestions())
-  }
-
-  const handleSubmitEditing = (e) => {
-    if (keyIsValid) {
-      dispatch(submitKey(e.nativeEvent.text))
-      return
-    }
-    inputRef.current?.blur()
-    handleKeyboardDismiss()
-  }
-
   const handleInputFocus = useCallback(() => {
     dispatch(showSuggestions())
   }, [])
 
+  const handleSeedKeyChange = useCallback((val: string) => {
+    dispatch(setSeedKey(val))
+  }, [])
+
+  const handleKeyboardDismiss = () => {
+    dispatch(hideSuggestions())
+    Keyboard.dismiss()
+  }
+
+  // this is invoked when next keyboard button is pressed
+  const handleSubmitEditing = (e) => {
+    if (keyIsValid) {
+      dispatch(submitKey(e.nativeEvent.text))
+    } else {
+      handleKeyboardDismiss()
+      inputRef.current?.blur()
+    }
+  }
+
+  // when we move with arrows select a current seedKey
   useEffect(() => {
     dispatch(setSeedKey(phrase[currentWordIdx]))
   }, [currentWordIdx])
 
-  useFocusInput(inputRef, currentWordIdx, phrase.length)
+  // this for showing buttons back instead of suggestions
+  useEffect(() => {
+    if (currentWordIdx === 12 && phrase.length === 12) {
+      dispatch(hideSuggestions())
+      dispatch(setKeyIsValid(false))
+    }
+  }, [currentWordIdx, phrase])
 
+  // this is for fetching suggested keys based on the input
   useEffect(() => {
     if (seedKey && seedKey.length > 1) {
       const suggestions = getSuggestedSeedKeys(seedKey)
@@ -87,6 +89,7 @@ const SeedKeyInput: React.FC = () => {
     }
   }, [seedKey])
 
+  // this is for coloring input box to indicate no match error
   useEffect(() => {
     if (seedKey && seedKey.length > 1 && !suggestedKeys.length) {
       dispatch(setHasError(true))
@@ -130,12 +133,7 @@ const SeedKeyInput: React.FC = () => {
         />
         {currentWordIdx !== phrase.length && (
           <Arrow direction={ArrowDirections.right} onPress={selectNextWord}>
-            {currentWordIdx < 11 && <ForthArrowIcon />}
-          </Arrow>
-        )}
-        {currentWordIdx === 11 && phrase.length === 12 && (
-          <Arrow direction={ArrowDirections.right} onPress={handleDoneEditing}>
-            <ForthArrowIcon />
+            {currentWordIdx < 12 && <ForthArrowIcon />}
           </Arrow>
         )}
       </View>

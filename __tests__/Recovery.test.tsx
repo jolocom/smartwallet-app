@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  render,
-  fireEvent,
-  waitForElement,
-} from '@testing-library/react-native'
+import { render, fireEvent } from '@testing-library/react-native'
 
 import Recovery from '~/screens/LoggedOut/Recovery'
 import { strings } from '~/translations/strings'
@@ -17,7 +13,6 @@ jest.mock('react-redux', () => ({
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => mockNavigation,
 }))
-jest.mock('../src/screens/LoggedOut/Recovery/useFocusInput')
 
 const validSeedKeys = [
   'tree',
