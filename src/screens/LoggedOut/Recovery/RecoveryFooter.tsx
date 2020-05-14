@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, memo } from 'react'
 import { Animated, StyleSheet, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -18,13 +18,16 @@ import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState } from './module/context'
 
-// 🧨 rename it as I also return suggestions here
-const useRecoveryPhrase = () => {
+interface RecoveryFooterI {
+  areSuggestionsVisible: boolean
+  handlePhraseSubmit: () => void
+  isPhraseComplete: boolean
+}
+
+const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn)
   const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
-  // 🧨 this will be re-rendered every time recovery state changes
-  const { phrase, areSuggestionsVisible } = useRecoveryState()
 
   const handlePhraseSubmit = useCallback(async () => {
     const success = await loader(() => SDK.recoverIdentity(phrase), {
@@ -37,39 +40,37 @@ const useRecoveryPhrase = () => {
 
   const isPhraseComplete = phrase.length === 12
 
-  return { handlePhraseSubmit, isPhraseComplete, areSuggestionsVisible }
+  return { handlePhraseSubmit, isPhraseComplete }
 }
 
-const RecoveryFooter: React.FC = () => {
-  const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
-  const navigation = useNavigation()
+const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
+  ({ areSuggestionsVisible, handlePhraseSubmit, isPhraseComplete }) => {
+    const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
+    const navigation = useNavigation()
 
-  const {
-    handlePhraseSubmit,
-    isPhraseComplete,
-    areSuggestionsVisible,
-  } = useRecoveryPhrase()
-
-  if (areSuggestionsVisible) {
+    if (areSuggestionsVisible) {
+      return (
+        <Animated.View
+          style={[styles.footer, { opacity: animatedSuggestions }]}
+        >
+          <Suggestions />
+        </Animated.View>
+      )
+    }
     return (
-      <Animated.View style={[styles.footer, { opacity: animatedSuggestions }]}>
-        <Suggestions />
+      <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
+        <BtnGroup>
+          <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
+            {strings.CONFIRM}
+          </Btn>
+          <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
+            {strings.BACK_TO_WALKTHROUGH}
+          </Btn>
+        </BtnGroup>
       </Animated.View>
     )
-  }
-  return (
-    <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
-      <BtnGroup>
-        <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
-          {strings.CONFIRM}
-        </Btn>
-        <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-          {strings.BACK_TO_WALKTHROUGH}
-        </Btn>
-      </BtnGroup>
-    </Animated.View>
-  )
-}
+  },
+)
 
 const styles = StyleSheet.create({
   footer: {
@@ -85,4 +86,18 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RecoveryFooter
+export default function () {
+  const { phrase, areSuggestionsVisible } = useRecoveryState()
+
+  const { handlePhraseSubmit, isPhraseComplete } = useRecoveryPhraseUtils(
+    phrase,
+  )
+
+  return (
+    <RecoveryFooter
+      areSuggestionsVisible={areSuggestionsVisible}
+      handlePhraseSubmit={handlePhraseSubmit}
+      isPhraseComplete={isPhraseComplete}
+    />
+  )
+}

@@ -45,9 +45,10 @@ const SeedKeyInput: React.FC = () => {
   }, [])
 
   const handleDoneEditing = () => {
-    Keyboard.dismiss()
     selectNextWord()
+    Keyboard.dismiss()
     dispatch(setKeyIsValid(false))
+    dispatch(hideSuggestions())
   }
 
   const handleDismissKeyboard = () => {
