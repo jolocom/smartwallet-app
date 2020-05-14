@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
@@ -8,6 +8,10 @@ import { submitKey } from './module/actions'
 type PillProps = {
   seedKey: string
   onSelectKey: (key: string) => void
+}
+
+interface SeedKeySuggestionsI {
+  suggestedKeys: string[]
 }
 
 const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
@@ -22,26 +26,40 @@ const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
   )
 }
 
-const SeedKeySuggestions: React.FC = () => {
-  const { suggestedKeys } = useRecoveryState()
-  const dispatch = useRecoveryDispatch()
-
-  const handleKeySelect = (key: string) => {
-    dispatch(submitKey(key))
+const areEqual = (
+  prevProps: SeedKeySuggestionsI,
+  nextProps: SeedKeySuggestionsI,
+) => {
+  if (
+    prevProps.suggestedKeys.toString() !== nextProps.suggestedKeys.toString()
+  ) {
+    return false
   }
-  return (
-    <FlatList
-      data={suggestedKeys}
-      keyExtractor={(item) => item}
-      renderItem={({ item }) => (
-        <Pill key={item} seedKey={item} onSelectKey={handleKeySelect} />
-      )}
-      horizontal={true}
-      keyboardShouldPersistTaps="always"
-      testID="suggestions-list"
-    />
-  )
+  return true
 }
+
+const SeedKeySuggestions: React.FC<SeedKeySuggestionsI> = memo(
+  ({ suggestedKeys }) => {
+    const dispatch = useRecoveryDispatch()
+
+    const handleKeySelect = (key: string) => {
+      dispatch(submitKey(key))
+    }
+    return (
+      <FlatList
+        data={suggestedKeys}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <Pill key={item} seedKey={item} onSelectKey={handleKeySelect} />
+        )}
+        horizontal={true}
+        keyboardShouldPersistTaps="always"
+        testID="suggestions-list"
+      />
+    )
+  },
+  areEqual,
+)
 
 const styles = StyleSheet.create({
   pill: {
@@ -53,4 +71,8 @@ const styles = StyleSheet.create({
   },
 })
 
-export default SeedKeySuggestions
+export default function () {
+  const { suggestedKeys } = useRecoveryState()
+
+  return <SeedKeySuggestions suggestedKeys={suggestedKeys} />
+}
