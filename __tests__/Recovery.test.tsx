@@ -17,6 +17,7 @@ jest.mock('react-redux', () => ({
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => mockNavigation,
 }))
+jest.mock('../src/screens/LoggedOut/Recovery/useFocusInput')
 
 const validSeedKeys = [
   'tree',

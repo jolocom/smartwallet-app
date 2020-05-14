@@ -8,6 +8,7 @@ import { BackArrowIcon, ForthArrowIcon } from '~/assets/svg'
 
 import RecoveryInputMetadata from './RecoveryInputMetadata'
 import Arrow, { ArrowDirections } from './Arrow'
+import useFocusInput from './useFocusInput'
 
 import {
   setSeedKey,
@@ -46,15 +47,22 @@ const SeedKeyInput: React.FC = () => {
 
   const handleDoneEditing = () => {
     selectNextWord()
-    Keyboard.dismiss()
     dispatch(setKeyIsValid(false))
+    handleKeyboardDismiss()
+  }
+
+  const handleKeyboardDismiss = () => {
+    Keyboard.dismiss()
     dispatch(hideSuggestions())
   }
 
-  const handleDismissKeyboard = () => {
+  const handleSubmitEditing = (e) => {
+    if (keyIsValid) {
+      dispatch(submitKey(e.nativeEvent.text))
+      return
+    }
     inputRef.current?.blur()
-    Keyboard.dismiss()
-    dispatch(hideSuggestions())
+    handleKeyboardDismiss()
   }
 
   const handleInputFocus = useCallback(() => {
@@ -65,11 +73,7 @@ const SeedKeyInput: React.FC = () => {
     dispatch(setSeedKey(phrase[currentWordIdx]))
   }, [currentWordIdx])
 
-  useEffect(() => {
-    if (!inputRef.current?.isFocused()) {
-      inputRef.current?.focus()
-    }
-  }, [currentWordIdx])
+  useFocusInput(inputRef, currentWordIdx, phrase.length)
 
   useEffect(() => {
     if (seedKey && seedKey.length > 1) {
@@ -110,11 +114,7 @@ const SeedKeyInput: React.FC = () => {
           ref={inputRef}
           editable={currentWordIdx < 12}
           onChangeText={handleSeedKeyChange}
-          onSubmitEditing={(e) => {
-            keyIsValid
-              ? dispatch(submitKey(e.nativeEvent.text))
-              : handleDismissKeyboard()
-          }}
+          onSubmitEditing={handleSubmitEditing}
           onFocus={handleInputFocus}
           style={styles.input}
           testID="seedphrase-input"

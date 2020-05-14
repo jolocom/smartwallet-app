@@ -8,6 +8,7 @@ import Entropy from './Entropy'
 import Recovery from './Recovery'
 import SeedPhrase from './SeedPhrase'
 import SeedPhraseRepeat from './SeedPhraseRepeat'
+import { modalScreenOptions } from '~/utils/styles'
 
 const Stack = createStackNavigator()
 
@@ -16,6 +17,7 @@ const LoggedOut: React.FC = () => {
     <Stack.Navigator
       headerMode="none"
       initialRouteName={ScreenNames.Walkthrough}
+      screenOptions={{ ...modalScreenOptions }}
     >
       <Stack.Screen name={ScreenNames.Walkthrough} component={Walkthrough} />
       <Stack.Screen name={ScreenNames.Entropy} component={Entropy} />
