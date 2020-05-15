@@ -16,7 +16,6 @@ const DeviceAuthentication: React.FC = () => {
     >
       <Stack.Screen name={ScreenNames.Passcode} component={Passcode} />
       <Stack.Screen name={ScreenNames.Biometrics} component={Biometrics} />
-      />
     </Stack.Navigator>
   )
 }
