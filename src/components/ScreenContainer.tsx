@@ -43,14 +43,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '5%',
-    ...Platform.select({
-      android: {
-        paddingTop: 20,
-      },
-      ios: {
-        paddingTop: 50,
-      },
-    }),
     backgroundColor: Colors.mainBlack,
   },
   transparent: {
