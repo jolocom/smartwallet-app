@@ -9,23 +9,29 @@ import { useLoader } from '~/hooks/useLoader'
 import { ScreenNames } from '~/types/screens'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { strings } from '~/translations/strings'
-import SDK from '~/utils/SDK'
 
 import { EntropyIntro } from './EntropyIntro'
 import { EntropyGenerator } from './EntropyGenerator'
 import { EntropyCanvas } from './EntropyCanvas'
+import { useSDK } from '~/utils/sdk/context'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
   const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
+  const SDK = useSDK()
   const loader = useLoader()
 
   const submitEntropy = async (entropy: string) => {
-    const success = await loader(() => SDK.createIdentity(entropy), {
-      loading: strings.CREATING,
-    })
+    const entropyBuffer = new Buffer(entropy, 'hex')
+    const success = await loader(
+      () => SDK.bemw.createNewIdentity(entropyBuffer),
+      {
+        showStatus: true,
+        loading: strings.CREATING,
+      },
+    )
 
     if (success) redirectToSeedPhrase()
     else redirectToWalkthrough()

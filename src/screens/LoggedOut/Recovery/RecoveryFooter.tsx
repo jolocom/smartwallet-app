@@ -12,11 +12,10 @@ import { useLoader } from '~/hooks/useLoader'
 
 import { ScreenNames } from '~/types/screens'
 
-import SDK from '~/utils/SDK'
-
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState } from './module/recoveryContext'
+import { useSDK } from '~/utils/sdk/context'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -28,11 +27,15 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn)
   const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
+  const SDK = useSDK()
 
   const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(() => SDK.recoverIdentity(phrase), {
-      loading: strings.MATCHING,
-    })
+    const success = await loader(
+      () => SDK.bemw.initWithMnemonic(phrase.join(' ')),
+      {
+        loading: strings.MATCHING,
+      },
+    )
 
     if (success) redirectToClaims()
     else redirectToWalkthrough()

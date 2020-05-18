@@ -12,9 +12,7 @@ import { TextStyle } from '~/utils/fonts'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
-import SDK from '~/utils/SDK'
-
-const seedphrase = SDK.getMnemonic()
+import { useMnemonic } from '~/utils/sdk/context'
 
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
@@ -24,9 +22,18 @@ const SeedPhrase: React.FC = () => {
     gestureHandlers,
   } = useCircleHoldAnimation(1500)
   const [showInfo, setShowInfo] = useState(true)
+  const [seedphrase, setSeedphrase] = useState('')
+  const getMnemonic = useMnemonic()
 
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
+
+  useEffect(() => {
+    ;(async () => {
+      const seedphrase = await getMnemonic()
+      setSeedphrase(seedphrase)
+    })()
+  }, [])
 
   useEffect(() => {
     switch (gestureState) {
