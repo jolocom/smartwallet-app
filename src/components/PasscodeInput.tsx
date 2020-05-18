@@ -4,22 +4,28 @@ import {
   StyleSheet,
   TextInput,
   TouchableWithoutFeedback,
-  NativeSyntheticEvent,
 } from 'react-native'
 
 import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 
-const NUMBER_OF_DIGITS = new Array(4).fill(0)
-const CELL_WIDTH = 50
+const PASSCODE_LENGTH = new Array(4).fill(0)
+const DIGIT_WIDTH = 65
+const DIGIT_MARGIN_RIGHT = 7
 
 const PasscodeInput = () => {
-  const inputRef = useRef<TextInput>(null)
   const [passcode, setPasscode] = useState('')
   const [isFocused, setIsFocused] = useState(false)
-  const digits = passcode.split('')
+  const inputRef = useRef<TextInput>(null)
 
-  const handlePrress = () => {
+  const digits = passcode.split('')
+  const selectedIndex =
+    digits.length < PASSCODE_LENGTH.length
+      ? digits.length
+      : PASSCODE_LENGTH.length - 1
+  const hideInput = !(digits.length < PASSCODE_LENGTH.length)
+
+  const handlePress = () => {
     inputRef.current?.focus()
   }
 
@@ -31,49 +37,51 @@ const PasscodeInput = () => {
     setIsFocused(false)
   }
 
-  const handleChange = (value: string) => {
+  const handleChange = (passcode: string) => {
     setPasscode((prevState) => {
-      if (prevState.length >= NUMBER_OF_DIGITS.length) return prevState
-      return (prevState + value).slice(0, NUMBER_OF_DIGITS.length)
+      if (prevState.length >= PASSCODE_LENGTH.length) return prevState
+      return (prevState + passcode).slice(0, PASSCODE_LENGTH.length)
     })
   }
 
-  const handleUndoKeyPress = (e: NativeSyntheticEvent<TextInput>) => {
-    if (e.nativeEvent?.key === 'Backspace') {
+  const handleRemove = (e) => {
+    if (e.nativeEvent.key === 'Backspace') {
       setPasscode((prevState) => prevState.slice(0, prevState.length - 1))
     }
   }
 
-  const activeDigit =
-    digits.length < NUMBER_OF_DIGITS.length
-      ? digits.length - 1
-      : NUMBER_OF_DIGITS.length - 1
-
-  const hideInput = !(passcode.length < NUMBER_OF_DIGITS.length)
-
   return (
-    <TouchableWithoutFeedback onPress={handlePrress}>
+    <TouchableWithoutFeedback onPress={handlePress}>
       <View style={styles.inputContainer}>
+        {PASSCODE_LENGTH.map((v, index) => {
+          const isSelected = digits.length === index
+          return (
+            <View
+              style={[styles.display, isSelected && isFocused && styles.active]}
+              key={index}
+            >
+              <Paragraph customStyles={styles.text}>
+                {digits[index] || ''}
+              </Paragraph>
+            </View>
+          )
+        })}
         <TextInput
-          ref={inputRef}
           value=""
+          ref={inputRef}
+          onChangeText={handleChange}
+          onKeyPress={handleRemove}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           style={[
             styles.input,
             {
-              left: activeDigit * CELL_WIDTH,
+              left: selectedIndex * (65 + DIGIT_MARGIN_RIGHT),
               opacity: hideInput ? 0 : 1,
             },
           ]}
-          onChangeText={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onKeyPress={handleUndoKeyPress}
+          keyboardType="numeric"
         />
-        {NUMBER_OF_DIGITS.map((digit, idx) => (
-          <View key={idx} style={styles.digitBox}>
-            <Paragraph color={Colors.white}>{digits[idx] || ''}</Paragraph>
-          </View>
-        ))}
       </View>
     </TouchableWithoutFeedback>
   )
@@ -81,30 +89,36 @@ const PasscodeInput = () => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flexDirection: 'row',
     position: 'relative',
-    borderWidth: 1,
-    borderColor: 'orange',
+    flexDirection: 'row',
   },
   input: {
     position: 'absolute',
-    fontSize: 40,
+    fontSize: 43,
     textAlign: 'center',
     backgroundColor: 'transparent',
-    width: 50,
+    width: DIGIT_WIDTH,
+    borderRadius: 11,
     top: 0,
     bottom: 0,
   },
-  digitBox: {
-    width: 50,
-    height: 79,
-    borderWidth: 2,
-    borderColor: Colors.activity,
+  display: {
+    width: DIGIT_WIDTH,
+    height: 87,
     borderRadius: 11,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'visible',
-    fontSize: 40,
+    backgroundColor: Colors.black,
+    marginRight: DIGIT_MARGIN_RIGHT,
+  },
+  active: {
+    borderWidth: 3,
+    borderColor: Colors.activity,
+  },
+  text: {
+    fontSize: 43,
+    color: Colors.white,
   },
 })
 
