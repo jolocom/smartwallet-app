@@ -1,16 +1,6 @@
 import { useEntropyProgress } from '~/screens/LoggedOut/Entropy'
 import { renderHook, act } from '@testing-library/react-hooks'
 
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({
-    navigate: jest.fn(),
-  }),
-}))
-
-jest.mock('react-redux', () => ({
-  useDispatch: jest.fn(),
-}))
-
 describe('Entropy', () => {
   it('should match snapshot after adding a point to the canvas', () => {
     const mockSubmit = jest.fn()
