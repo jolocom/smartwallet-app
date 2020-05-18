@@ -7,15 +7,18 @@ import { Provider } from 'react-redux'
 import RootNavigation from '~/RootNavigation'
 import { ErrorBoundary } from '~/ErrorBoundary'
 import configureStore from './configureStore'
+import { SDKContextProvider } from '~/utils/sdk/context'
 
 const store = configureStore()
 
 const App = () => {
   return (
     <ErrorBoundary>
-      <Provider store={store}>
-        <RootNavigation />
-      </Provider>
+      <SDKContextProvider>
+        <Provider store={store}>
+          <RootNavigation />
+        </Provider>
+      </SDKContextProvider>
     </ErrorBoundary>
   )
 }
