@@ -24,7 +24,6 @@ const Entropy: React.FC = () => {
 
   const submitEntropy = async (entropy: string) => {
     const success = await loader(() => SDK.createIdentity(entropy), {
-      showStatus: true,
       loading: strings.CREATING,
     })
 

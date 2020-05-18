@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Medium,
     textAlign: 'center',
     letterSpacing: 0,
-    marginVertical: 5,
   },
   large: {
     ...getStyle(40, 54),
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     ...getStyle(34, 40),
   },
   small: {
-    ...getStyle(28, 40),
+    ...getStyle(28, 30),
   },
   shadow: {
     textShadowColor: Colors.white45,

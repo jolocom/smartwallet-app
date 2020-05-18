@@ -1,5 +1,5 @@
 import React from 'react'
-import { ErrorFallback } from './components/Error'
+import { ErrorFallback } from './components/ErrorFallback'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import { strings } from '~/translations/strings'
 
