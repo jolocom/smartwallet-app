@@ -18,19 +18,13 @@ export const SwipeUpWrapper: React.FC<Props> = props => {
     directionOffset: 110,
   }
 
-  const isGestureClick = (gestureState: PanResponderGestureState) => {
-    return (
-      Math.abs(gestureState.dx) < swipeConfig.isClickThreshold &&
-      Math.abs(gestureState.dy) < swipeConfig.isClickThreshold
-    )
-  }
+  const isGestureClick = (gestureState: PanResponderGestureState) =>
+    Math.abs(gestureState.dx) < swipeConfig.isClickThreshold &&
+    Math.abs(gestureState.dy) < swipeConfig.isClickThreshold
 
-  const isSwipeUp = (gestureState: PanResponderGestureState) => {
-    return (
-      gestureState.dy < 0 &&
-      Math.abs(gestureState.dx) < swipeConfig.directionOffset
-    )
-  }
+  const isSwipeUp = (gestureState: PanResponderGestureState) =>
+    gestureState.dy < 0 &&
+    Math.abs(gestureState.dx) < swipeConfig.directionOffset
 
   const shouldSetResponder = (
     event: GestureResponderEvent,

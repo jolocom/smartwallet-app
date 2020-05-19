@@ -22,17 +22,18 @@ export function createMockStoreWithReducers(
 ) {
   const { rootReducer } = require('src/reducers')
   if (!initialState) initialState = rootReducer(undefined, { type: '@INIT' })
-  let getState = (actions: AnyAction[]) => {
-    return actions.reduce(
+  const getState = (actions: AnyAction[]) =>
+    actions.reduce(
       (accm, action) => rootReducer(accm, action),
       initialState,
     ) as RootState
-  }
   return createMockStore(getState, backendMiddlewareStub)
 }
 
 export function createMockStore(
-  initialState: RecursivePartial<RootState> | ((actions: AnyAction[]) => RootState) = {},
+  initialState:
+    | RecursivePartial<RootState>
+    | ((actions: AnyAction[]) => RootState) = {},
   backendMiddlewareStub: RecursivePartial<BackendMiddleware> = {},
 ) {
   const mockBackendMiddleware = stub<BackendMiddleware>(backendMiddlewareStub)

@@ -9,8 +9,10 @@
  *
  */
 
-import compatCryptoJS, { reencryptWithJolocomLib } from 'src/lib/compat/cryptojs'
-import { JolocomLib } from 'jolocom-lib';
+import compatCryptoJS, {
+  reencryptWithJolocomLib,
+} from 'src/lib/compat/cryptojs'
+import { JolocomLib } from 'jolocom-lib'
 
 let CryptoJS: any
 try {
@@ -24,26 +26,32 @@ describe('CryptoJS compat utility', () => {
     const seed = 'aa5cc59f97f97263c65b87b0bbbd0bfc'
     const pass = '20acTjPsC8vl9sSV1p8OMJrtEP85HK8B1MLIyiQdmRs='
     // const encrypted = CryptoJS.AES.encrypt(seed, pass).toString()
-    const encrypted = "U2FsdGVkX18wk967sMVeGqhyPYZYDvMnr0HXKWd6VBbpunae+T5KGQdwFaTM8EL070ZKz2maesBjXYvJ6/LW7Q=="
+    const encrypted =
+      'U2FsdGVkX18wk967sMVeGqhyPYZYDvMnr0HXKWd6VBbpunae+T5KGQdwFaTM8EL070ZKz2maesBjXYvJ6/LW7Q=='
 
     it('should decrypt stored encrypted entropy', () => {
-      expect(compatCryptoJS.AES.decrypt(encrypted, pass).toString()).toEqual(seed)
+      expect(compatCryptoJS.AES.decrypt(encrypted, pass).toString()).toEqual(
+        seed,
+      )
     })
 
     it('should reencrypt with jolocom-lib', () => {
-      const keyProviderFromSeed = JolocomLib.KeyProvider.fromSeed(Buffer.from(seed, 'hex'), pass)
+      const keyProviderFromSeed = JolocomLib.KeyProvider.fromSeed(
+        Buffer.from(seed, 'hex'),
+        pass,
+      )
 
       const reencrypted = reencryptWithJolocomLib(encrypted, pass)
-      const keyProvider = new JolocomLib.KeyProvider(Buffer.from(reencrypted, 'hex'))
+      const keyProvider = new JolocomLib.KeyProvider(
+        Buffer.from(reencrypted, 'hex'),
+      )
       const derivationArgs = {
         derivationPath: JolocomLib.KeyTypes.jolocomIdentityKey,
-        encryptionPass: pass
+        encryptionPass: pass,
       }
 
-      expect(
-        keyProvider.getPublicKey(derivationArgs)
-      ).toEqual(
-        keyProviderFromSeed.getPublicKey(derivationArgs)
+      expect(keyProvider.getPublicKey(derivationArgs)).toEqual(
+        keyProviderFromSeed.getPublicKey(derivationArgs),
       )
     })
   })
@@ -57,15 +65,9 @@ describe('CryptoJS compat utility', () => {
     const cipherText = walletEncrypt(message, pass)
     const res = CryptoJS.format.OpenSSL.parse(cipherText)
     const compatRes = compatCryptoJS.format.OpenSSL.parse(cipherText)
-    expect(
-      Buffer2Hex(compatRes.salt)
-    ).toEqual(
-      WordArray2Hex(res.salt)
-    )
-    expect(
-      Buffer2Hex(compatRes.ciphertext)
-    ).toEqual(
-      WordArray2Hex(res.ciphertext)
+    expect(Buffer2Hex(compatRes.salt)).toEqual(WordArray2Hex(res.salt))
+    expect(Buffer2Hex(compatRes.ciphertext)).toEqual(
+      WordArray2Hex(res.ciphertext),
     )
   })
 
@@ -80,23 +82,21 @@ describe('CryptoJS compat utility', () => {
     const res = CryptoJS.kdf.OpenSSL.execute(pass, keySize, ivSize, salt)
 
     const { salt: compatSalt } = compatCryptoJS.format.OpenSSL.parse(cipherText)
-    const compatRes = compatCryptoJS.kdf.OpenSSL.execute(pass, keySize, ivSize, compatSalt)
+    const compatRes = compatCryptoJS.kdf.OpenSSL.execute(
+      pass,
+      keySize,
+      ivSize,
+      compatSalt,
+    )
 
-    expect(
-      Buffer2Hex(compatRes.key)
-    ).toEqual(
-      WordArray2Hex(res.key)
-    )
-    expect(
-      Buffer2Hex(compatRes.iv)
-    ).toEqual(
-      WordArray2Hex(res.iv)
-    )
+    expect(Buffer2Hex(compatRes.key)).toEqual(WordArray2Hex(res.key))
+    expect(Buffer2Hex(compatRes.iv)).toEqual(WordArray2Hex(res.iv))
   })
 
   it('should decrypt like CryptoJS.AES.decrypt', () => {
     const pass = '20acTjPsC8vl9sSV1p8OMJrtEP85HK8B1MLIyiQdmRs='
-    const cipher = "U2FsdGVkX18wk967sMVeGqhyPYZYDvMnr0HXKWd6VBbpunae+T5KGQdwFaTM8EL070ZKz2maesBjXYvJ6/LW7Q=="
+    const cipher =
+      'U2FsdGVkX18wk967sMVeGqhyPYZYDvMnr0HXKWd6VBbpunae+T5KGQdwFaTM8EL070ZKz2maesBjXYvJ6/LW7Q=='
 
     const decrypted = CryptoJS.AES.decrypt(cipher, pass)
     const compatDecrypted = compatCryptoJS.AES.decrypt(cipher, pass)

@@ -134,6 +134,10 @@ const errorCodes = {
   [ErrorCode.ParseJWTFailed]: 'Could not parse JSONWebToken',
 
   [ErrorCode.DeepLinkUrlNotFound]: 'Could not find receiving application',
+  [ErrorCode.TokenExpired]: 'The lifetime of the token has expired',
+  [ErrorCode.InvalidSignature]: 'Signature on token is invalid',
+  [ErrorCode.WrongDID]: 'You are not the intended audience of received token',
+  [ErrorCode.WrongNonce]: 'The token nonce does not match the request',
   [ErrorCode.RegistrationFailed]: 'Registration failed',
   [ErrorCode.AppInitFailed]: 'Initialization failed',
 }
@@ -169,6 +173,7 @@ export default {
   ENABLE_CAMERA_ACCESS: 'Enable Camera Access',
   LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE:
     "Looks like we can't provide this service",
+  IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN: 'Is this the right QR code? Try again.',
   START_PROCESS: 'Start Process',
   SEND_ERROR_REPORT: 'Send error report',
   ERROR_REPORT_SENT: 'Error report sent',

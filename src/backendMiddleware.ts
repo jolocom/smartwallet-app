@@ -106,6 +106,7 @@ export class BackendMiddleware {
     this._keyProvider = new JolocomLib.KeyProvider(
       Buffer.from(encryptedEntropy, 'hex'),
     )
+
     const { jolocomIdentityKey: derivationPath } = JolocomLib.KeyTypes
 
     const userPubKey = this._keyProvider.getPublicKey({
@@ -198,9 +199,7 @@ export class BackendMiddleware {
     }
     await this.storageLib.store.persona(personaData)
     const encryptedSeedData = {
-      // TODO: change to keyProvider.encryptedSeed when the library is updated
-      // with a public getter for the encryptedSeed
-      encryptedEntropy: this.keyProvider['encryptedSeed'].toString('hex'),
+      encryptedEntropy: this.keyProvider.encryptedSeed,
       timestamp: Date.now(),
     }
     await this.storageLib.store.encryptedSeed(encryptedSeedData)

@@ -70,7 +70,6 @@ export type Notification = NotificationBase &
   NotificationDismiss &
   NotificationPayload
 
-
 export enum NotificationFilter {
   none,
   all,

@@ -22,10 +22,8 @@ export const groupAttributesByCredentialId = (
     ),
   )
 
-  return groupedByCredential.map(credentials => {
-    return {
-      ...credentials[0],
-      propertyValue: credentials.map(cred => cred.propertyValue),
-    }
-  })
+  return groupedByCredential.map(credentials => ({
+    ...credentials[0],
+    propertyValue: credentials.map(cred => cred.propertyValue),
+  }))
 }
