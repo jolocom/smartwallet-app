@@ -14,11 +14,11 @@ const store = configureStore()
 const App = () => {
   return (
     <ErrorBoundary>
-      <SDKContextProvider>
-        <Provider store={store}>
+      <Provider store={store}>
+        <SDKContextProvider>
           <RootNavigation />
-        </Provider>
-      </SDKContextProvider>
+        </SDKContextProvider>
+      </Provider>
     </ErrorBoundary>
   )
 }
