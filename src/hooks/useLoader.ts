@@ -53,6 +53,7 @@ export const useLoader = () => {
         )
       await useDelay(() => dispatch(dismissLoader()))
     } catch (err) {
+      console.warn(err)
       if (showStatus)
         dispatch(
           setLoader({
