@@ -905,10 +905,10 @@
   dependencies:
     class-transformer "^0.2.3"
 
-"@jolocom/sdk@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.8.0.tgz#0a68bbd8bf6872ff864393964aadc36d11ee9826"
-  integrity sha512-XNKqCahwR8GjDT8JTkl+ylRqgKEWPswf5CHazIVUDczQDMBFGHjeUz3nDseFfnqnZLRVV3/M/Xl0DerT2qW1xw==
+"@jolocom/sdk@^0.9.0":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.9.1.tgz#870f4d9cc55ff97349881bb2731948924d652c3f"
+  integrity sha512-7fEI26mP8eAXdjCBdFZZcWuKJJ+B4HUD1WuVboQEcTOpG0vt9+Auob9l2ykleZjT3Icc2+uGmy8W1MiZ/lzvSQ==
   dependencies:
     assert "^2.0.0"
     bip39 "^3.0.2"
@@ -919,7 +919,7 @@
     events "^3.0.0"
     form-data "^3.0.0"
     i18n-js "^3.1.0"
-    jolocom-lib "^4.1.0"
+    jolocom-lib "^4.2.9"
     ramda "^0.26.1"
     sjcl "^1.0.7"
     sqlite3 "^4.0.0"
@@ -6159,10 +6159,10 @@ jetifier@^1.6.2:
   resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.5.tgz#ea87324a4230bef20a9651178ecab978ee54a8cb"
   integrity sha512-T7yzBSu9PR+DqjYt+I0KVO1XTb1QhAfHnXV5Nd3xpbXM6Xg4e3vP60Q4qkNU8Fh6PHC2PivPUNN3rY7G2MxcDQ==
 
-jolocom-lib@^4.1.0:
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.2.8.tgz#e6d8a410fbc138a1a28f7733dc377e0d41f0434a"
-  integrity sha512-g8d3oICHkgJMGGrETFV/wfJNCVK6D0ODvcVjl19ncZJVnTmZPKRFJ7QrMSC3DYSeTsho2/Owd2/dwxxA813dCQ==
+jolocom-lib@^4.2.9:
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.2.9.tgz#9a008d7c72184ce192982d5c826722b16fcba1e3"
+  integrity sha512-XEyd6KLM/vFSWwRhcd9oKe1Q97EWnewCxOu18qC9et5SNv3VuwCior4PvllI4gtf57Tan0XTgtjrnBIJnieygw==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"
