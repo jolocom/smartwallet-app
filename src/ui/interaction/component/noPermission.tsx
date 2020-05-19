@@ -62,28 +62,26 @@ interface Props {
   onPressEnable: () => void
 }
 
-export const NoPermissionComponent: FC<Props> = (props: Props) => {
-  return (
-    <React.Fragment>
-      <View style={styles.notAuthorizedOverlay}>
-        <Text style={styles.scanText}>{I18n.t(strings.SCAN_QR)}</Text>
-        <Text style={styles.notAuthorizedDescription}>
-          {I18n.t(
-            strings.ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS,
-          )}
+export const NoPermissionComponent: FC<Props> = (props: Props) => (
+  <React.Fragment>
+    <View style={styles.notAuthorizedOverlay}>
+      <Text style={styles.scanText}>{I18n.t(strings.SCAN_QR)}</Text>
+      <Text style={styles.notAuthorizedDescription}>
+        {I18n.t(
+          strings.ENABLE_ACCESS_SO_YOU_CAN_START_TAKING_PHOTOS_AND_VIDEOS,
+        )}
+      </Text>
+      <TouchableOpacity
+        style={styles.enableButtonWrapper}
+        onPress={props.onPressEnable}
+      >
+        <Text style={styles.enableButtonText}>
+          {Platform.select({
+            android: I18n.t(strings.ENABLE_CAMERA_ACCESS),
+            ios: I18n.t(strings.START_PROCESS),
+          })}
         </Text>
-        <TouchableOpacity
-          style={styles.enableButtonWrapper}
-          onPress={props.onPressEnable}
-        >
-          <Text style={styles.enableButtonText}>
-            {Platform.select({
-              android: I18n.t(strings.ENABLE_CAMERA_ACCESS),
-              ios: I18n.t(strings.START_PROCESS),
-            })}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </React.Fragment>
-  )
-}
+      </TouchableOpacity>
+    </View>
+  </React.Fragment>
+)

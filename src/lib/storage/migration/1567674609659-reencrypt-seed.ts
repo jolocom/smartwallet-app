@@ -5,20 +5,19 @@
  */
 
 import { MigrationInterface, QueryRunner } from 'typeorm/browser'
-import { reencryptWithJolocomLib } from 'src/lib/compat/cryptojs'
+import CryptoJS from './../../compat/cryptojs'
+import { KeyChain } from 'src/lib/keychain'
+import { MasterKeyEntity } from '../entities'
+import { encryptWithLib3 } from './../../compat/jolocomLib'
+
+const getMasterKeys = (queryRunner: QueryRunner): Promise<MasterKeyEntity[]> =>
+  queryRunner.query('SELECT encryptedEntropy FROM master_keys;')
 
 export class ReencryptSeed1567674609659 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
-    const entries = await queryRunner.query(
-      'SELECT encryptedEntropy FROM master_keys;',
-    )
-
-    if (!entries.length) return
-
     let password: string
     try {
-      // If there are keys to re-encrypt, then we need to get the password.
-      password = await getPassword()
+      password = await new KeyChain().getPassword()
     } catch (e) {
       // This may fail if the application was uninstalled and reinstalled, as
       // the android keystore is cleared on uninstall, but the database may
@@ -28,60 +27,35 @@ export class ReencryptSeed1567674609659 implements MigrationInterface {
       return
     }
 
-    await Promise.all(
-      entries.map((obj: any) => {
-        const encryptedEntropy = obj.encryptedEntropy
-        // encryptedEntropy is base64 encoded in the latest release (1.6.0), but is
-        // hex encoded on the current develop branch (unreleased), and also
-        // doesn't need re-encryption if it was created by code in the current
-        // develop (already not using crypto-js)
-        const reencrypted =
-          encryptedEntropy.replace(/[0-9a-f]+/, '') != '' ?
-          reencryptWithJolocomLib(encryptedEntropy, password) :
-          encryptedEntropy
+    const entries = await getMasterKeys(queryRunner)
+    return Promise.all(
+      entries.map(({ encryptedEntropy }) => {
+        // If the seed is base64 encoded, it must be migrated (CryptoJS encoded base64)
+        // If the seed is hex encoded, it must not be migrated (The newer version of the lib use HEX)
+        if (/^[0-9a-fA-F]*$/.test(
+          encryptedEntropy)) return
+
+        const decrypted = CryptoJS.AES.decrypt(
+          encryptedEntropy,
+          password
+        ).toString()
+
+        const reencrypted = encryptWithLib3(
+          Buffer.from(decrypted, 'hex'),
+          password,
+        ).toString('hex')
 
         return queryRunner.query(
           `UPDATE master_keys ` +
-          `SET encryptedEntropy = '${reencrypted}' ` +
-          `WHERE encryptedEntropy = '${encryptedEntropy}'`
+            `SET encryptedEntropy = '${reencrypted}' ` +
+            `WHERE encryptedEntropy = '${encryptedEntropy}'`
         )
-      })
+      }),
     )
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
     throw new Error("There's no going back")
     // because why?
-  }
-}
-
-async function getPassword(): Promise<string> {
-  // At the time of writing this file, the encryption password is stored in
-  // react-native-keychain and accessesed through src/lib/keychain.ts, but code
-  // is reproduced here in case things change in the future
-
-  if (typeof navigator !== 'undefined' && navigator.product == 'ReactNative') {
-    // We load react-native-keychain here conditionally because it is not
-    // transpiled and cannot be loaded into ts-node (if running migrations locally
-    // on dev machine)
-    const Keychain = require('react-native-keychain')
-
-    const keyChainData = await Keychain.getGenericPassword()
-    if (keyChainData && keyChainData.password) {
-      return keyChainData.password
-    } else {
-      throw new Error(
-        "Can't load password from react-native-keychain"
-      )
-    }
-  } else {
-    const password = process.env.SMARTWALLET_PASSWORD
-    if (!password) {
-      throw new Error(
-        "Node envrionment detected. " +
-        "Please set a password in the environment variable SMARTWALLET_PASSWORD"
-      )
-    }
-    return password
   }
 }

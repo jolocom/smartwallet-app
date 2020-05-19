@@ -1,31 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Animated,
-  AppState,
-  AppStateStatus,
-  Platform,
-  View,
-} from 'react-native'
-import {
-  NavigationEventSubscription,
-  NavigationScreenProps,
-} from 'react-navigation'
+import { AppState, AppStateStatus, Platform, View } from 'react-native'
+import { NavigationScreenProps } from 'react-navigation'
 /* TODO: When using the latest react-native-permissions version, remove this dependency,
  since there is already a cross-platform openSettings method */
 import { appDetailsSettings } from 'react-native-android-open-settings'
 // TODO: using v1.2.1. When upgrading to RN60, use the latest version.
 import Permissions, { Status } from 'react-native-permissions'
+
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
-import { JolocomLib } from 'jolocom-lib'
-import {
-  JSONWebToken,
-  JWTEncodable,
-} from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { Colors } from '../../../styles'
 
 interface Props extends NavigationScreenProps {
-  onScannerSuccess: (interactionToken: JSONWebToken<JWTEncodable>) => void
+  consumeToken: (jwt: string) => Promise<any>
 }
 
 const CAMERA_PERMISSION = 'camera'
@@ -38,17 +25,14 @@ enum RESULTS {
 const IS_IOS = Platform.OS === 'ios'
 
 export const ScannerContainer = (props: Props) => {
-  const { onScannerSuccess, navigation } = props
+  const { consumeToken, navigation } = props
+
   const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<Status>(RESULTS.RESTRICTED)
   const [isCameraReady, setCameraReady] = useState(false)
-  const [isTorch, setTorch] = useState(false)
-  const [isError, setError] = useState(false)
-  const [colorAnimationValue] = useState(new Animated.Value(0))
-  const [textAnimationValue] = useState(new Animated.Value(0))
 
   useEffect(() => {
-    let focusListener!: NavigationEventSubscription
+    let focusListener
     if (navigation) {
       focusListener = navigation.addListener('willFocus', () => {
         // NOTE: the re-render and the re-mount should only fire during the willFocus event
@@ -60,7 +44,7 @@ export const ScannerContainer = (props: Props) => {
       setTimeout(() => setCameraReady(true), 200)
     })
 
-    return focusListener.remove
+    return focusListener && focusListener.remove
   }, [])
 
   const requestCameraPermission = async () => {
@@ -101,57 +85,9 @@ export const ScannerContainer = (props: Props) => {
     }
   }
 
-  const animateColor = () =>
-    Animated.sequence([
-      Animated.timing(colorAnimationValue, {
-        toValue: 1,
-        duration: 300,
-      }),
-      Animated.timing(colorAnimationValue, {
-        toValue: 0,
-        delay: 400,
-        duration: 300,
-      }),
-    ])
-
-  const animateText = () =>
-    Animated.sequence([
-      Animated.timing(textAnimationValue, {
-        toValue: 1,
-        duration: 200,
-      }),
-      Animated.timing(textAnimationValue, {
-        toValue: 0,
-        delay: 1200,
-        duration: 500,
-      }),
-    ])
-
-  const parseJWT = (jwt: string) => {
-    try {
-      const interactionToken = JolocomLib.parse.interactionToken.fromJWT(jwt)
-      onScannerSuccess(interactionToken)
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        setError(true)
-        Animated.parallel([animateColor(), animateText()]).start(() => {
-          setError(false)
-        })
-      }
-    }
-  }
-
   return permission === RESULTS.AUTHORIZED ? (
     isCameraReady ? (
-      <ScannerComponent
-        reRenderKey={reRenderKey}
-        onScan={parseJWT}
-        isTorchPressed={isTorch}
-        onPressTorch={(state: boolean) => setTorch(state)}
-        isError={isError}
-        colorAnimationValue={colorAnimationValue}
-        textAnimationValue={textAnimationValue}
-      />
+      <ScannerComponent reRenderKey={reRenderKey} onScan={consumeToken} />
     ) : (
       <View
         style={{
@@ -165,3 +101,5 @@ export const ScannerContainer = (props: Props) => {
     <NoPermissionComponent onPressEnable={onEnablePermission} />
   )
 }
+
+export const Scanner = ScannerContainer

@@ -64,7 +64,10 @@ export class ConsentComponent extends React.Component<Props, State> {
   public state = {
     pending: false,
     selectedCredentials: this.props.availableCredentials.reduce(
-      (acc, curr) => ({ ...acc, [curr.type]: acc[curr.type] || curr.verifications[0] }),
+      (acc, curr) => ({
+        ...acc,
+        [curr.type]: acc[curr.type] || curr.verifications[0],
+      }),
       {},
     ),
   }

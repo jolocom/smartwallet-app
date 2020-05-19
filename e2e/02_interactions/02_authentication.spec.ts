@@ -1,6 +1,5 @@
 describe('Authentication', () => {
   describe('Authentication Screen', () => {
-    it('should be tested', () => {
-    })
+    it('should be tested', () => {})
   })
 })
