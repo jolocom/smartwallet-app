@@ -4,7 +4,7 @@ import { readVisibleText } from 'e2e/utils'
 
 describe('Identity Creation', () => {
   describe('Entropy Screen', () => {
-    let progressRegexp = /(\d+) %/
+    const progressRegexp = /(\d+) %/
 
     beforeAll(async () => {
       // we must disable automatic synchronization because of the inifinite loop
@@ -14,7 +14,9 @@ describe('Identity Creation', () => {
       await getStarted.tap()
       // and manually synchronize by waiting for entropyMessage to be visible
       // NOTE: waitFor polls
-      await waitFor(element(by.id('entropyMsg'))).toBeVisible().withTimeout(2000)
+      await waitFor(element(by.id('entropyMsg')))
+        .toBeVisible()
+        .withTimeout(2000)
     })
 
     it('should show an entropyMsg help text at first', async () => {
@@ -36,7 +38,7 @@ describe('Identity Creation', () => {
 
       const swipeDirs: Detox.Direction[] = ['up', 'down', 'left', 'right']
       for (let progress = 0; progress < 100; ) {
-        let text;
+        let text
         try {
           text = await readVisibleText('entropyMsg')
         } catch (err) {
@@ -47,13 +49,15 @@ describe('Identity Creation', () => {
         }
         const match = progressRegexp.exec(text)
         jestExpect(match).toHaveLength(2)
-        progress = parseInt((match as Array<string>)[1])
+        progress = parseInt((match as string[])[1])
         await scratchArea.swipe(swipeDirs[progress % 4], 'fast')
       }
     })
 
     it('should navigate home after successful creation', async () => {
-      await waitFor(element(by.id('claimsScreen'))).toBeVisible().withTimeout(30000)
+      await waitFor(element(by.id('claimsScreen')))
+        .toBeVisible()
+        .withTimeout(30000)
     })
   })
 })
