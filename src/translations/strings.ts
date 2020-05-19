@@ -37,9 +37,19 @@ const errorBoundary = {
   CLOSE: 'Close',
 }
 
+const passcode = {
+  CREATE_PASSCODE: 'Create passcode',
+  VERIFY_PASSCODE: 'Verify passcode',
+  IN_ORDER_TO_PROTECT_YOUR_DATA:
+    'In order to protect your data from other users and maintain confidentiality',
+  YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
+    'You won’t be able to easily check it again, so please memorise it',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...entropy,
   ...walkthrough,
   ...errorBoundary,
+  ...passcode,
 }

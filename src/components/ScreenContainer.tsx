@@ -1,16 +1,18 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ViewStyle } from 'react-native'
 import { Colors } from '~/utils/colors'
 
 interface ScreenContainerI {
   isTransparent?: boolean
   isFullscreen?: boolean
+  customStyles?: ViewStyle | ViewStyle[]
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
   children,
   isTransparent = false,
   isFullscreen = false,
+  customStyles = {},
 }) => {
   return (
     <View
@@ -18,6 +20,7 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
         styles.container,
         isTransparent && styles.transparent,
         isFullscreen && styles.fullscreen,
+        customStyles,
       ]}
     >
       {children}
