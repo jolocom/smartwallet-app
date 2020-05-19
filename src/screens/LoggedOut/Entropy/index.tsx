@@ -14,6 +14,8 @@ import { EntropyIntro } from './EntropyIntro'
 import { EntropyGenerator } from './EntropyGenerator'
 import { EntropyCanvas } from './EntropyCanvas'
 import { useSDK } from '~/utils/sdk/context'
+import { useDispatch } from 'react-redux'
+import { setDid } from '~/modules/account/actions'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
@@ -22,11 +24,15 @@ const Entropy: React.FC = () => {
   const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
   const SDK = useSDK()
   const loader = useLoader()
+  const dispatch = useDispatch()
 
   const submitEntropy = async (entropy: string) => {
     const entropyBuffer = new Buffer(entropy, 'hex')
     const success = await loader(
-      () => SDK.bemw.createNewIdentity(entropyBuffer),
+      async () => {
+        const iw = await SDK.bemw.createNewIdentity(entropyBuffer)
+        dispatch(setDid(iw.did))
+      },
       {
         showStatus: true,
         loading: strings.CREATING,

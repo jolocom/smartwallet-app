@@ -15,6 +15,7 @@ import { modalScreenOptions } from '~/utils/styles'
 import { ScreenNames } from '~/types/screens'
 
 import { getLoaderState } from '~/modules/loader/selectors'
+import { isLogged } from './modules/account/selectors'
 
 const RootStack = createStackNavigator()
 
@@ -50,12 +51,19 @@ const useLoaderScreenVisibility = () => {
 
 const RootNavigation: React.FC = () => {
   const ref = useLoaderScreenVisibility()
+  const isLoggedIn = useSelector(isLogged)
 
   return (
     <NavigationContainer ref={ref}>
       <RootStack.Navigator headerMode="none" mode="modal">
-        <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
-        <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
+        {isLoggedIn ? (
+          <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
+        ) : (
+          <RootStack.Screen
+            name={ScreenNames.LoggedOut}
+            component={LoggedOut}
+          />
+        )}
         <RootStack.Screen
           name={ScreenNames.Loader}
           component={Loader}
