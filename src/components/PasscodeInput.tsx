@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from 'react'
 import {
   View,
   StyleSheet,
@@ -6,27 +12,30 @@ import {
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
   Text,
+  TouchableWithoutFeedback,
 } from 'react-native'
 
-import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
-const DIGIT_WIDTH = 65
+const DIGIT_CELL_WIDTH = 65
 const DIGIT_MARGIN_RIGHT = 7
 
 interface PasscodeInputI {
   value: string
-  onAdd: (value: string) => void
-  onRemove: () => void
+  stateUpdaterFn: Dispatch<SetStateAction<string>>
   onSubmit: () => void
+  hasError?: boolean
 }
+
+type addPasscodeFnT = (prevState: string, passcode?: string) => string
+type removePasscodeFnT = (prevState: string) => string
 
 const PasscodeInput: React.FC<PasscodeInputI> = ({
   value,
-  onAdd,
-  onRemove,
+  stateUpdaterFn,
   onSubmit,
+  hasError = false,
 }) => {
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<TextInput>(null)
@@ -38,9 +47,12 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
       : PASSCODE_LENGTH.length - 1
   const hideInput = !(digits.length < PASSCODE_LENGTH.length)
 
-  useEffect(() => {
+  const handlePress = () => {
     inputRef.current?.focus()
-  }, [])
+  }
+
+  // focus on mount
+  useEffect(handlePress, [])
 
   useEffect(() => {
     if (value.length === 4) {
@@ -62,44 +74,80 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
     e: NativeSyntheticEvent<TextInputKeyPressEventData>,
   ) => {
     if (e.nativeEvent?.key === 'Backspace') {
-      onRemove()
+      handleRemovingFromPasscode()
     }
   }
 
-  return (
-    <View style={styles.inputContainer}>
-      {PASSCODE_LENGTH.map((v, index) => {
-        console.log({ v })
-        console.log('digits[index]', digits[index])
+  // a callback function that is passed (when we changing passcode) to setPasscode or setVerifiedPasscode
+  const addToPasscodeCb: addPasscodeFnT = (prevState, passcode) => {
+    if (prevState.length >= PASSCODE_LENGTH.length) return prevState
+    return (prevState + passcode).slice(0, PASSCODE_LENGTH.length)
+  }
 
-        const isSelected = digits.length === index
-        return (
-          <View
-            style={[styles.display, isSelected && isFocused && styles.active]}
-            key={index}
-          >
-            <Text style={styles.text}>{digits[index] || ''}</Text>
-          </View>
+  // a callback function that is passed (when we removing digits from passcode) to setPasscode or setVerifiedPasscode
+  const removeFromPasscodeCb: removePasscodeFnT = (prevState) =>
+    prevState.slice(0, prevState.length - 1)
+
+  // the first parameter is a setter function of passcode or verifiedPasscode, the second is deciding to add or to remove from/to passcode
+  const updatePasscode = (
+    passcodeManipulationFn: addPasscodeFnT | removePasscodeFnT,
+  ) => {
+    return (passcodeUpdaterFn: Dispatch<SetStateAction<string>>) => {
+      return (passcode?: string) => {
+        passcodeUpdaterFn((prevState: string) =>
+          passcodeManipulationFn(prevState, passcode),
         )
-      })}
-      <TextInput
-        value=""
-        ref={inputRef}
-        onChangeText={onAdd}
-        onKeyPress={handleRemove}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        style={[
-          styles.input,
-          {
-            left: selectedIndex * (65 + DIGIT_MARGIN_RIGHT),
-            opacity: hideInput ? 0 : 1,
-          },
-        ]}
-        keyboardType="numeric"
-        keyboardAppearance="dark"
-      />
-    </View>
+      }
+    }
+  }
+
+  const addToPasscode = updatePasscode(addToPasscodeCb)
+  const removeFromPasscode = updatePasscode(removeFromPasscodeCb)
+
+  // const handleAddingToPasscode = addToPasscode(setPasscode);
+  const handleAddingToPasscode = addToPasscode(stateUpdaterFn)
+  const handleRemovingFromPasscode = removeFromPasscode(stateUpdaterFn)
+
+  return (
+    <TouchableWithoutFeedback onPress={handlePress}>
+      <View style={styles.inputContainer}>
+        <View style={{ flexDirection: 'row' }}>
+          {PASSCODE_LENGTH.map((v, index) => {
+            const isSelected = digits.length === index
+            return (
+              <View
+                style={[
+                  styles.display,
+                  isSelected && isFocused && styles.active,
+                  hasError && styles.error,
+                ]}
+                key={index}
+              >
+                <Text style={styles.text}>{digits[index] || ''}</Text>
+              </View>
+            )
+          })}
+        </View>
+        <TextInput
+          value=""
+          ref={inputRef}
+          onChangeText={handleAddingToPasscode}
+          onKeyPress={handleRemove}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          style={[
+            styles.input,
+            {
+              left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
+              opacity: hideInput ? 0 : 1,
+            },
+          ]}
+          keyboardType="numeric"
+          keyboardAppearance="dark"
+          selectionColor="transparent"
+        />
+      </View>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -109,28 +157,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
+    textAlign: 'center',
     position: 'absolute',
     fontSize: 43,
-    textAlign: 'center',
     backgroundColor: 'transparent',
-    width: DIGIT_WIDTH,
+    width: DIGIT_CELL_WIDTH,
     borderRadius: 11,
     top: 0,
     bottom: 0,
   },
   display: {
-    width: DIGIT_WIDTH,
-    height: 87,
-    borderRadius: 11,
     alignItems: 'center',
     justifyContent: 'center',
+    width: DIGIT_CELL_WIDTH,
+    height: 87,
+    borderRadius: 11,
     marginRight: DIGIT_MARGIN_RIGHT,
     backgroundColor: Colors.black,
     overflow: 'visible',
+    borderWidth: 3,
+    borderColor: 'transparent',
   },
   active: {
-    borderWidth: 3,
     borderColor: Colors.activity,
+  },
+  error: {
+    borderColor: Colors.error,
   },
   text: {
     fontSize: 43,
