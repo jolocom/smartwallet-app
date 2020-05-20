@@ -6450,6 +6450,11 @@ react-native-linear-gradient@^2.5.6:
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
   integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
+react-native-radial-gradient@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-radial-gradient/-/react-native-radial-gradient-1.0.6.tgz#175ed1090c685024839dad4a20eae6b3db07866e"
+  integrity sha512-w68c6h3Kf2Yp4wr/UwVviJZuxRSwkfmqw5SkbmnsdiQ2bI0laH5cE1Oq2/N+XEqtB1udGs4jkKY/0Jm2P8jRjw==
+
 react-native-randombytes@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/react-native-randombytes/-/react-native-randombytes-3.5.3.tgz#b3bdcd11473cce106551a586244b98855e443cd1"

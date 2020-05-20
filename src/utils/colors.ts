@@ -4,6 +4,7 @@ export enum Colors {
   disco = '#911942',
   error = '#ffcc01',
   mainBlack = '#201a21',
+  black = '#000',
   elevatedElement = '#29232b',
   success = '#5251c1',
   white = '#ffffff',

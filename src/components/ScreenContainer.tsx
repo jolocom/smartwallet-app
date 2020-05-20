@@ -6,6 +6,7 @@ interface ScreenContainerI {
   isTransparent?: boolean
   isFullscreen?: boolean
   customStyles?: ViewStyle | ViewStyle[]
+  backgroundColor: Colors
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
@@ -13,11 +14,13 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
   isTransparent = false,
   isFullscreen = false,
   customStyles = {},
+  backgroundColor = Colors.mainBlack,
 }) => {
   return (
     <View
       style={[
         styles.container,
+        { backgroundColor },
         isTransparent && styles.transparent,
         isFullscreen && styles.fullscreen,
         customStyles,
@@ -34,7 +37,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '5%',
-    backgroundColor: Colors.mainBlack,
   },
   transparent: {
     backgroundColor: 'transparent',
