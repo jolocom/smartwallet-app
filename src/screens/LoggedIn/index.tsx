@@ -1,14 +1,14 @@
-import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import {ScreenNames} from '~/types/screens';
+import { ScreenNames } from '~/types/screens'
 
-import Claims from './Claims';
-import Documents from './Documents';
-import History from './History';
-import Settings from './Settings';
+import Claims from './Claims'
+import Documents from './Documents'
+import History from './History'
+import Settings from './Settings'
 
-const MainTabs = createBottomTabNavigator();
+const MainTabs = createBottomTabNavigator()
 
 const LoggedInTabs: React.FC = () => {
   return (
@@ -18,7 +18,7 @@ const LoggedInTabs: React.FC = () => {
       <MainTabs.Screen name={ScreenNames.History} component={History} />
       <MainTabs.Screen name={ScreenNames.Settings} component={Settings} />
     </MainTabs.Navigator>
-  );
-};
+  )
+}
 
-export default LoggedInTabs;
+export default LoggedInTabs

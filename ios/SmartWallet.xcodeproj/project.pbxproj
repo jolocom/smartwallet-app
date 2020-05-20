@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* SmartWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SmartWalletTests.m */; };
+		0CD803D8550A21B7391C49AC /* libPods-SmartWallet-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C103B60642EC9B2C610F807 /* libPods-SmartWallet-tvOS.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -16,6 +17,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* SmartWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SmartWalletTests.m */; };
+<<<<<<< HEAD
 		30C9836D1C3586EAF6AE8343 /* libPods-SmartWallet-SmartWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B302540B6D33A2272E916C38 /* libPods-SmartWallet-SmartWalletTests.a */; };
 		4A1F2BCAE3FF4142B395B13E /* TTCommons-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8276038867CA4E5FB58899FB /* TTCommons-Medium.otf */; };
 		76EF6C7D75C20922CD70E8FB /* libPods-SmartWallet-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E416565DCE081881214CA4D3 /* libPods-SmartWallet-tvOSTests.a */; };
@@ -23,6 +25,14 @@
 		B0F591400B3E4539A4BFB19C /* TTCommons-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3966986D7484982B13CE46F /* TTCommons-Light.otf */; };
 		C40B73B81768359DDF138D18 /* libPods-SmartWallet-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 015C5A1F8526FC62D0072DF5 /* libPods-SmartWallet-tvOS.a */; };
 		FB371A33283645214F78D7F7 /* libPods-SmartWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 123A51A115D04DC418AAB411 /* libPods-SmartWallet.a */; };
+=======
+		47CCDEEA0ED922BEF26B9024 /* libPods-SmartWallet-SmartWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2319599C99D26E274EB2AE0 /* libPods-SmartWallet-SmartWalletTests.a */; };
+		4A1F2BCAE3FF4142B395B13E /* TTCommons-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8276038867CA4E5FB58899FB /* TTCommons-Medium.otf */; };
+		61BC9CB4881562CFB8A7BD32 /* libPods-SmartWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 797A6A01AC7401BF40449286 /* libPods-SmartWallet.a */; };
+		A7DF8B8760CD4B4FAFF81C91 /* TTCommons-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4D50F93A31E6491CB44F82B8 /* TTCommons-Regular.otf */; };
+		B0F591400B3E4539A4BFB19C /* TTCommons-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3966986D7484982B13CE46F /* TTCommons-Light.otf */; };
+		D38D0F2F005684BE724853E5 /* libPods-SmartWallet-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04DAD9594E8BE513B2311C36 /* libPods-SmartWallet-tvOSTests.a */; };
+>>>>>>> origin/develop
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,12 +54,11 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		00DC4D8537FC9822122BC1A6 /* Pods-SmartWallet-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-SmartWallet-tvOSTests/Pods-SmartWallet-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* SmartWalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartWalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* SmartWalletTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmartWalletTests.m; sourceTree = "<group>"; };
-		015C5A1F8526FC62D0072DF5 /* libPods-SmartWallet-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		108F3D1764352FEF8CA9A06F /* Pods-SmartWallet-SmartWalletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-SmartWalletTests.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet-SmartWalletTests/Pods-SmartWallet-SmartWalletTests.release.xcconfig"; sourceTree = "<group>"; };
-		123A51A115D04DC418AAB411 /* libPods-SmartWallet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		04DAD9594E8BE513B2311C36 /* libPods-SmartWallet-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* SmartWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SmartWallet/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SmartWallet/AppDelegate.m; sourceTree = "<group>"; };
@@ -57,10 +66,12 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SmartWallet/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SmartWallet/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SmartWallet/main.m; sourceTree = "<group>"; };
-		287B378C4164BB424F166A11 /* Pods-SmartWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet/Pods-SmartWallet.release.xcconfig"; sourceTree = "<group>"; };
+		1C103B60642EC9B2C610F807 /* libPods-SmartWallet-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		218C3AD4CED551AF018DB3B9 /* Pods-SmartWallet-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet-tvOS/Pods-SmartWallet-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* SmartWallet-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SmartWallet-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* SmartWallet-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SmartWallet-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D50F93A31E6491CB44F82B8 /* TTCommons-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TTCommons-Regular.otf"; path = "../assets/fonts/TTCommons-Regular.otf"; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		77553AE49BD25E7FA54E64EE /* Pods-SmartWallet-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet-tvOS/Pods-SmartWallet-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		7908052D7D70F9C2D945BA19 /* Pods-SmartWallet-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet-tvOSTests/Pods-SmartWallet-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		7CDBCC10E6C85E031C7BEF16 /* Pods-SmartWallet-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-SmartWallet-tvOSTests/Pods-SmartWallet-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -73,6 +84,19 @@
 		E416565DCE081881214CA4D3 /* libPods-SmartWallet-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+=======
+		648FC54DAAAE4DB9E0116189 /* Pods-SmartWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet.debug.xcconfig"; path = "Target Support Files/Pods-SmartWallet/Pods-SmartWallet.debug.xcconfig"; sourceTree = "<group>"; };
+		797A6A01AC7401BF40449286 /* libPods-SmartWallet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8276038867CA4E5FB58899FB /* TTCommons-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TTCommons-Medium.otf"; path = "../assets/fonts/TTCommons-Medium.otf"; sourceTree = "<group>"; };
+		9F0A312B6EF76B38F2132C1C /* Pods-SmartWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet/Pods-SmartWallet.release.xcconfig"; sourceTree = "<group>"; };
+		AD5A62308C9AD10257574890 /* Pods-SmartWallet-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet-tvOSTests/Pods-SmartWallet-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		D2319599C99D26E274EB2AE0 /* libPods-SmartWallet-SmartWalletTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet-SmartWalletTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3966986D7484982B13CE46F /* TTCommons-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TTCommons-Light.otf"; path = "../assets/fonts/TTCommons-Light.otf"; sourceTree = "<group>"; };
+		ED1E3D45A87C061626056446 /* Pods-SmartWallet-SmartWalletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-SmartWalletTests.debug.xcconfig"; path = "Target Support Files/Pods-SmartWallet-SmartWalletTests/Pods-SmartWallet-SmartWalletTests.debug.xcconfig"; sourceTree = "<group>"; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F7A8DD1A2F06552C7079EB28 /* Pods-SmartWallet-SmartWalletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-SmartWalletTests.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet-SmartWalletTests/Pods-SmartWallet-SmartWalletTests.release.xcconfig"; sourceTree = "<group>"; };
+		FB5A22FC3E56C94A96B8E08C /* Pods-SmartWallet-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SmartWallet-tvOS/Pods-SmartWallet-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+>>>>>>> origin/develop
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30C9836D1C3586EAF6AE8343 /* libPods-SmartWallet-SmartWalletTests.a in Frameworks */,
+				47CCDEEA0ED922BEF26B9024 /* libPods-SmartWallet-SmartWalletTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,7 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB371A33283645214F78D7F7 /* libPods-SmartWallet.a in Frameworks */,
+				61BC9CB4881562CFB8A7BD32 /* libPods-SmartWallet.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C40B73B81768359DDF138D18 /* libPods-SmartWallet-tvOS.a in Frameworks */,
+				0CD803D8550A21B7391C49AC /* libPods-SmartWallet-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,7 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76EF6C7D75C20922CD70E8FB /* libPods-SmartWallet-tvOSTests.a in Frameworks */,
+				D38D0F2F005684BE724853E5 /* libPods-SmartWallet-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,11 +170,10 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				123A51A115D04DC418AAB411 /* libPods-SmartWallet.a */,
-				B302540B6D33A2272E916C38 /* libPods-SmartWallet-SmartWalletTests.a */,
-				015C5A1F8526FC62D0072DF5 /* libPods-SmartWallet-tvOS.a */,
-				E416565DCE081881214CA4D3 /* libPods-SmartWallet-tvOSTests.a */,
+				797A6A01AC7401BF40449286 /* libPods-SmartWallet.a */,
+				D2319599C99D26E274EB2AE0 /* libPods-SmartWallet-SmartWalletTests.a */,
+				1C103B60642EC9B2C610F807 /* libPods-SmartWallet-tvOS.a */,
+				04DAD9594E8BE513B2311C36 /* libPods-SmartWallet-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -202,14 +225,14 @@
 		8F7E96CB26940019ECFF7769 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AB30072CF67C0075EEDD51A5 /* Pods-SmartWallet.debug.xcconfig */,
-				287B378C4164BB424F166A11 /* Pods-SmartWallet.release.xcconfig */,
-				95CFD6E36E3441FD7C4297DE /* Pods-SmartWallet-SmartWalletTests.debug.xcconfig */,
-				108F3D1764352FEF8CA9A06F /* Pods-SmartWallet-SmartWalletTests.release.xcconfig */,
-				D616E69F90CAF638CF513070 /* Pods-SmartWallet-tvOS.debug.xcconfig */,
-				77553AE49BD25E7FA54E64EE /* Pods-SmartWallet-tvOS.release.xcconfig */,
-				7CDBCC10E6C85E031C7BEF16 /* Pods-SmartWallet-tvOSTests.debug.xcconfig */,
-				7908052D7D70F9C2D945BA19 /* Pods-SmartWallet-tvOSTests.release.xcconfig */,
+				648FC54DAAAE4DB9E0116189 /* Pods-SmartWallet.debug.xcconfig */,
+				9F0A312B6EF76B38F2132C1C /* Pods-SmartWallet.release.xcconfig */,
+				ED1E3D45A87C061626056446 /* Pods-SmartWallet-SmartWalletTests.debug.xcconfig */,
+				F7A8DD1A2F06552C7079EB28 /* Pods-SmartWallet-SmartWalletTests.release.xcconfig */,
+				FB5A22FC3E56C94A96B8E08C /* Pods-SmartWallet-tvOS.debug.xcconfig */,
+				218C3AD4CED551AF018DB3B9 /* Pods-SmartWallet-tvOS.release.xcconfig */,
+				00DC4D8537FC9822122BC1A6 /* Pods-SmartWallet-tvOSTests.debug.xcconfig */,
+				AD5A62308C9AD10257574890 /* Pods-SmartWallet-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -221,7 +244,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SmartWalletTests" */;
 			buildPhases = (
-				356CD81781AF97809DCF1196 /* [CP] Check Pods Manifest.lock */,
+				A2F8DA129B9E3A1D7909BBA6 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -240,7 +263,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SmartWallet" */;
 			buildPhases = (
-				C05BFE9133AA46145AAB91F1 /* [CP] Check Pods Manifest.lock */,
+				82C7F293BE24CCA09240384A /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
@@ -260,7 +283,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "SmartWallet-tvOS" */;
 			buildPhases = (
-				28244AA471DAF36433FD8C28 /* [CP] Check Pods Manifest.lock */,
+				B9D89DF6D00FC8E5FC41F0C2 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -280,7 +303,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "SmartWallet-tvOSTests" */;
 			buildPhases = (
-				460F03F27F3B5849D79315B9 /* [CP] Check Pods Manifest.lock */,
+				43C60A962943D5A148FCA2AA /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -308,7 +331,11 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+<<<<<<< HEAD
 						DevelopmentTeam = 95S8NJ5S67;
+=======
+						DevelopmentTeam = W3S7KKLXR4;
+>>>>>>> origin/develop
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -395,28 +422,6 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		28244AA471DAF36433FD8C28 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SmartWallet-tvOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -431,29 +436,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		356CD81781AF97809DCF1196 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SmartWallet-SmartWalletTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		460F03F27F3B5849D79315B9 /* [CP] Check Pods Manifest.lock */ = {
+		43C60A962943D5A148FCA2AA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -475,7 +458,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C05BFE9133AA46145AAB91F1 /* [CP] Check Pods Manifest.lock */ = {
+		82C7F293BE24CCA09240384A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -491,6 +474,50 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-SmartWallet-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A2F8DA129B9E3A1D7909BBA6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmartWallet-SmartWalletTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B9D89DF6D00FC8E5FC41F0C2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmartWallet-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -602,7 +629,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 95CFD6E36E3441FD7C4297DE /* Pods-SmartWallet-SmartWalletTests.debug.xcconfig */;
+			baseConfigurationReference = ED1E3D45A87C061626056446 /* Pods-SmartWallet-SmartWalletTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -625,7 +652,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 108F3D1764352FEF8CA9A06F /* Pods-SmartWallet-SmartWalletTests.release.xcconfig */;
+			baseConfigurationReference = F7A8DD1A2F06552C7079EB28 /* Pods-SmartWallet-SmartWalletTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -645,12 +672,16 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AB30072CF67C0075EEDD51A5 /* Pods-SmartWallet.debug.xcconfig */;
+			baseConfigurationReference = 648FC54DAAAE4DB9E0116189 /* Pods-SmartWallet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = 95S8NJ5S67;
+=======
+				DEVELOPMENT_TEAM = W3S7KKLXR4;
+>>>>>>> origin/develop
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -663,7 +694,11 @@
 					"-ObjC",
 					"-lc++",
 				);
+<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = com.jolocom.wallet;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.SmartWallet;
+>>>>>>> origin/develop
 				PRODUCT_NAME = SmartWallet;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -673,12 +708,16 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 287B378C4164BB424F166A11 /* Pods-SmartWallet.release.xcconfig */;
+			baseConfigurationReference = 9F0A312B6EF76B38F2132C1C /* Pods-SmartWallet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = 95S8NJ5S67;
+=======
+				DEVELOPMENT_TEAM = W3S7KKLXR4;
+>>>>>>> origin/develop
 				INFOPLIST_FILE = SmartWallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -686,7 +725,11 @@
 					"-ObjC",
 					"-lc++",
 				);
+<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = com.jolocom.wallet;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.SmartWallet;
+>>>>>>> origin/develop
 				PRODUCT_NAME = SmartWallet;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -695,7 +738,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D616E69F90CAF638CF513070 /* Pods-SmartWallet-tvOS.debug.xcconfig */;
+			baseConfigurationReference = FB5A22FC3E56C94A96B8E08C /* Pods-SmartWallet-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -723,7 +766,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 77553AE49BD25E7FA54E64EE /* Pods-SmartWallet-tvOS.release.xcconfig */;
+			baseConfigurationReference = 218C3AD4CED551AF018DB3B9 /* Pods-SmartWallet-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -751,7 +794,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7CDBCC10E6C85E031C7BEF16 /* Pods-SmartWallet-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 00DC4D8537FC9822122BC1A6 /* Pods-SmartWallet-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -778,7 +821,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7908052D7D70F9C2D945BA19 /* Pods-SmartWallet-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = AD5A62308C9AD10257574890 /* Pods-SmartWallet-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -837,7 +880,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -896,7 +939,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

@@ -6,7 +6,7 @@ import useDelay from './useDelay'
 import { strings } from '~/translations/strings'
 
 export interface LoaderConfig {
-  showStatus: boolean
+  showStatus?: boolean
   loading?: string
   success?: string
   failed?: string
@@ -27,7 +27,7 @@ export const useLoader = () => {
     config: LoaderConfig = defaultConfig,
   ) => {
     const {
-      showStatus,
+      showStatus = defaultConfig.showStatus,
       loading = defaultConfig.loading,
       success = defaultConfig.success,
       failed = defaultConfig.failed,
@@ -64,6 +64,6 @@ export const useLoader = () => {
       result = false
     }
 
-    return !!result
+    return result
   }
 }
