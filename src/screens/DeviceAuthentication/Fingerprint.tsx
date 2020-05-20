@@ -1,15 +1,10 @@
 import React from 'react'
 
-import ScreenContainer from '~/components/ScreenContainer'
 import Biometrics from './Biometrics'
 import { strings } from '~/translations/strings'
 
 const Fingerprint = () => {
-  return (
-    <ScreenContainer>
-      <Biometrics authType={strings.FINGERPRINT} />
-    </ScreenContainer>
-  )
+  return <Biometrics authType={strings.FINGERPRINT} />
 }
 
 export default Fingerprint

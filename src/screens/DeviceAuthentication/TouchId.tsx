@@ -1,15 +1,10 @@
 import React from 'react'
 
-import ScreenContainer from '~/components/ScreenContainer'
 import Biometrics from './Biometrics'
 import { strings } from '~/translations/strings'
 
 const TouchId = () => {
-  return (
-    <ScreenContainer>
-      <Biometrics authType={strings.TOUCH} />
-    </ScreenContainer>
-  )
+  return <Biometrics authType={strings.TOUCH} />
 }
 
 export default TouchId

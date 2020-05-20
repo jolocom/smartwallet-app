@@ -318,6 +318,8 @@ PODS:
     - React
   - TcpSockets (3.3.2):
     - React
+  - TouchID (4.4.1):
+    - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -382,6 +384,7 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - SRSRadialGradient (from `../node_modules/react-native-radial-gradient/ios`)
   - TcpSockets (from `../node_modules/react-native-tcp`)
+  - TouchID (from `../node_modules/react-native-touch-id`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -474,6 +477,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-radial-gradient/ios"
   TcpSockets:
     :path: "../node_modules/react-native-tcp"
+  TouchID:
+    :path: "../node_modules/react-native-touch-id"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -526,6 +531,7 @@ SPEC CHECKSUMS:
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SRSRadialGradient: c8ab040309de2b2c1fc3f5c4804f2436c2df1f1a
   TcpSockets: 14306fb79f9750ea7d2ddd02d8bed182abb01797
+  TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

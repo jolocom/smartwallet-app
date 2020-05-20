@@ -48,12 +48,13 @@ const errorBoundary = {
 }
 
 const passcode = {
-  CREATE_PASSCODE: 'Create passcode',
-  VERIFY_PASSCODE: 'Verify passcode',
+  CREATE_PASSCODE: 'Create PIN',
+  VERIFY_PASSCODE: 'Verify PIN',
   IN_ORDER_TO_PROTECT_YOUR_DATA:
     'In order to protect your data from other users and maintain confidentiality',
   YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
     'You won’t be able to easily check it again, so please memorise it',
+  PINS_DONT_MATCH: "PINs don't match",
 }
 const seedphrase = {
   HOLD_YOUR_FINGER_ON_THE_CIRCLE:
@@ -74,7 +75,7 @@ const deviceAuthentication = {
   TAP_TO_ACTIVATE: (type: string) => `Tap to activate ${type} ID
   so you don’t need to confirm your PIN 
   every time you need to use it`,
-  SKIP: 'Skip',
+  I_WILL_RATHER_SET_PIN: 'I will rather use PIN',
 }
 
 export const strings = {

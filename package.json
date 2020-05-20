@@ -58,6 +58,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-swiper": "^1.6.0",
     "react-native-tcp": "^3.2.1",
+    "react-native-touch-id": "^4.4.1",
     "react-native-udp": "^2.1.0",
     "react-redux": "^7.2.0",
     "readable-stream": "1.0.33",

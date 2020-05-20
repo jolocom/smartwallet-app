@@ -60,6 +60,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSFaceIDUsageDescription</key>
-<string>$(PRODUCT_NAME) Authentication with TouchId or FaceID</string>
+	<string>$(PRODUCT_NAME) Authentication with TouchId or FaceID</string>
 </dict>
 </plist>

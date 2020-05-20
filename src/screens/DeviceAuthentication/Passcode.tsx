@@ -65,7 +65,7 @@ const Passcode = () => {
       )}
       {showLoading && <ActivityIndicator />}
       {hasError && (
-        <Paragraph color={Colors.error}>Passcodes don't match</Paragraph>
+        <Paragraph color={Colors.error}>{strings.PINS_DONT_MATCH}</Paragraph>
       )}
     </ScreenContainer>
   )
