@@ -15,7 +15,9 @@ export enum ScreenNames {
   // Device Authentication
   DeviceAuth = 'DeviceAuth',
   Passcode = 'Passcode',
-  Biometrics = 'Biometrics',
+  TouchId = 'TouchId',
+  FaceId = 'FaceId',
+  Fingerprint = 'Fingerprint',
   // Modals
   Loader = 'Loader',
   Interactions = 'Interactions',

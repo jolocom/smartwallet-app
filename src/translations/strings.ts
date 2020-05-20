@@ -64,6 +64,19 @@ const seedphrase = {
   WHY_SO_ANALOGUE: 'Why so analogue?',
 }
 
+const deviceAuthentication = {
+  USE_ID_TO_AUTHORIZE: (type: string) => `Use ${type} ID to authorise wallet`,
+  TOUCH: 'Touch',
+  FACE: 'Face',
+  FINGERPRINT: 'Fingerprint',
+  SO_YOU_DONT_NEED_TO_CONFIRM:
+    'So you don’t need to confirm your PIN every time you need to use it',
+  TAP_TO_ACTIVATE: (type: string) => `Tap to activate ${type} ID
+  so you don’t need to confirm your PIN 
+  every time you need to use it`,
+  SKIP: 'Skip',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -72,4 +85,5 @@ export const strings = {
   ...entropy,
   ...recovery,
   ...seedphrase,
+  ...deviceAuthentication,
 }
