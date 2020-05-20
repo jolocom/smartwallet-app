@@ -28,12 +28,9 @@ const useLoaderScreenVisibility = () => {
   // as soon as state of loader module changes,
   // 1. if there is a loader msg in state (once setLoader action was dispatched):
   //    navigate to the Loader modal screen
-  // 2. if there there is no longer a message in the state (dismissLoader action was dispatched)
-  //    navigate back from the Loader modal screen
 
   // [how to use]
   // a. show Loader screen: dispatch(setLoader({type: LoaderTypes, msg: string}));
-  // b. hide Loader screen: dispatch(dismissLoader())
   useEffect(() => {
     if (ref.current) {
       if (msg) {
@@ -44,12 +41,6 @@ const useLoaderScreenVisibility = () => {
         // to avoid loader screen to be on top of each other in the stack
         if (currentRouteName !== ScreenNames.Loader) {
           ref.current.navigate(ScreenNames.Loader)
-        }
-      } else if (!msg) {
-        const canGoBack = ref.current.canGoBack()
-
-        if (canGoBack) {
-          ref.current.goBack()
         }
       }
     }

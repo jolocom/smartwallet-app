@@ -1,5 +1,5 @@
 import React from 'react'
-import { ErrorFallback } from '~/components/Error'
+import { ErrorFallback } from '~/components/ErrorFallback'
 import { render } from '@testing-library/react-native'
 
 describe('ErrorFallback', () => {

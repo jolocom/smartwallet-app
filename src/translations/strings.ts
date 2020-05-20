@@ -13,6 +13,16 @@ const entropy = {
     'Tap the screen and draw randomly on it until you collect 100%',
 }
 
+export const recovery = {
+  RECOVERY: 'Recovery',
+  START_ENTERING_SEED_PHRASE:
+    'Start entering your seed-phrase word by word and it will appear here',
+  CANT_MATCH_WORD: "Can't match this word",
+  WHAT_IF_I_FORGOT: 'What if I forgot my phrase?',
+  CONFIRM: 'Confirm',
+  BACK_TO_WALKTHROUGH: 'Back to walkthrough',
+}
+
 const walkthrough = {
   GET_STARTED: 'Get started',
   NEED_RESTORE: 'Need restore?',
@@ -56,9 +66,10 @@ const seedphrase = {
 
 export const strings = {
   ...loaderMsgs,
-  ...entropy,
-  ...walkthrough,
   ...errorBoundary,
   ...passcode,
+  ...walkthrough,
+  ...entropy,
+  ...recovery,
   ...seedphrase,
 }
