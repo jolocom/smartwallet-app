@@ -36,7 +36,8 @@ export const SDKContextProvider: React.FC = ({ children }) => {
             setLoaded(true)
           })
       })
-      .catch(() => {
+      .catch((e) => {
+        console.warn(e)
         throw new Error('Failed to initiate the SDK')
       })
   }, [])

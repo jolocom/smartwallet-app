@@ -7,8 +7,8 @@ export default {
   location: 'default',
   logging: ['error', 'warn', 'schema'],
   entities: entityList,
-  //migrations: ['~/utils/sdk/migrations/*.ts'],
-  //migrationsRun: true,
+  migrations: [],
+  migrationsRun: true,
   synchronize: false,
   cli: {
     migrationsDir: '~/utils/sdk/migrations',

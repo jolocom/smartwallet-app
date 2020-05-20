@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler'
-import './shim'
 import 'crypto'
 import React from 'react'
 import { Provider } from 'react-redux'
