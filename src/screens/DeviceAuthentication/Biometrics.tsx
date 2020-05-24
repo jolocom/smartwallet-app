@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import TouchID from 'react-native-touch-id'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -12,11 +11,7 @@ import { strings } from '~/translations/strings'
 import { useDeviceAuthDispatch } from './module/context'
 import { TouchableOpacity } from 'react-native'
 import { Colors } from '~/utils/colors'
-import { setLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
-import useDelay from '~/hooks/useDelay'
-import useRedirectTo from '~/hooks/useRedirectTo'
-import { ScreenNames } from '~/types/screens'
+import useSuccessProtection from './useSuccessProtection'
 
 interface BiometricsPropsI {
   authType: string
@@ -31,10 +26,9 @@ const authConfig = {
 const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
   const [error, setError] = useState(null)
 
-  const dispatchToLoader = useDispatch()
   const dispatch = useDeviceAuthDispatch()
 
-  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
+  const handleProtectionSet = useSuccessProtection()
 
   const fallbackToPasscode = () => {
     dispatch(null)
@@ -50,17 +44,10 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
 
       // if biometrics from device match
       if (isAuthenticated) {
-        dispatchToLoader(
-          setLoader({
-            type: LoaderTypes.success,
-            msg: strings.SUCCESS_SETTING_UP_ADDITIONAL_PROTECTION,
-          }),
-        )
-        await useDelay(redirectToLoggedIn)
+        handleProtectionSet()
 
         //TODO: store prefered DeviceAuth method somewhere.
       }
-      console.log({ isAuthenticated })
     } catch (e) {
       setError(e.message)
     }

@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react'
-import { View, ActivityIndicator } from 'react-native'
+import React, { useState, useCallback, useEffect } from 'react'
+import { ActivityIndicator } from 'react-native'
+import Keychain from 'react-native-keychain'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -8,6 +9,7 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import Paragraph from '~/components/Paragraph'
 import useDelay from '~/hooks/useDelay'
+import useSuccessProtection from './useSuccessProtection'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -15,6 +17,8 @@ const Passcode = () => {
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [showLoading, setShowLoading] = useState(false) // to immitate loading after passcode was submit and before redirecting to verifies passcode
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
+
+  const handleProtectionSet = useSuccessProtection()
 
   const showVerification = () => {
     setIsCreating(false)
@@ -28,7 +32,9 @@ const Passcode = () => {
 
   const handleVerifiedPasscodeSubmit = () => {
     if (passcode === verifiedPasscode) {
-      console.log('Saving to the keychain')
+      // this Keychain.getGenericPassword() will later on retrieve passcode (stored in password field)
+      Keychain.setGenericPassword('com.jolocom.wallet', passcode)
+      handleProtectionSet()
     } else {
       setHasError(true)
     }
