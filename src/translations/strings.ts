@@ -75,7 +75,11 @@ const deviceAuthentication = {
   TAP_TO_ACTIVATE: (type: string) => `Tap to activate ${type} ID
   so you don’t need to confirm your PIN 
   every time you need to use it`,
-  I_WILL_RATHER_SET_PIN: 'I will rather use PIN',
+  I_WILL_RATHER_SET_PIN: 'I will rather set PIN',
+  SUCCESS_SETTING_UP_ADDITIONAL_PROTECTION:
+    'Success, setting up additional protection',
+  TO_PROTECT_YOUR_DATA_AND_CONFIDENTIALITY:
+    'To protect your data and its confidentiality',
 }
 
 export const strings = {
