@@ -13,20 +13,34 @@ import DeviceAuthContextProvider, {
   useDeviceAuthDispatch,
   useDeviceAuthState,
 } from './module/context'
+import ScreenContainer from '~/components/ScreenContainer'
+import { ActivityIndicator } from 'react-native'
 
 const Stack = createStackNavigator()
 
+const LoadingScreen = () => {
+  return (
+    <ScreenContainer>
+      <ActivityIndicator />
+    </ScreenContainer>
+  )
+}
+
 const DeviceAuthentication: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true)
   const supportedDeviceAuthType = useDeviceAuthState()
   const dispatch = useDeviceAuthDispatch()
 
   useEffect(() => {
     const getAuthenticationType = async () => {
+      setIsLoading(true)
       try {
         const authenticationType = await Keychain.getSupportedBiometryType()
         dispatch(authenticationType)
       } catch (e) {
         dispatch(null)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -35,6 +49,9 @@ const DeviceAuthentication: React.FC = () => {
 
   return (
     <Stack.Navigator headerMode="none">
+      {isLoading && (
+        <Stack.Screen name={ScreenNames.Loading} component={LoadingScreen} />
+      )}
       {supportedDeviceAuthType === Keychain.BIOMETRY_TYPE.TOUCH_ID && (
         <Stack.Screen name={ScreenNames.TouchId} component={TouchId} />
       )}

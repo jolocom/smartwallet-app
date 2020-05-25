@@ -18,6 +18,7 @@ export enum ScreenNames {
   TouchId = 'TouchId',
   FaceId = 'FaceId',
   Fingerprint = 'Fingerprint',
+  Loading = 'Loading',
   // Modals
   Loader = 'Loader',
   Interactions = 'Interactions',
