@@ -77,7 +77,7 @@ const deviceAuthentication = {
   every time you need to use it`,
   I_WILL_RATHER_SET_PIN: 'I will rather set PIN',
   SUCCESS_SETTING_UP_ADDITIONAL_PROTECTION:
-    'Success, setting up additional protection',
+    'Additional app protection was set up',
   TO_PROTECT_YOUR_DATA_AND_CONFIDENTIALITY:
     'To protect your data and its confidentiality',
 }

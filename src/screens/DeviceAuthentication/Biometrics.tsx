@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import TouchID from 'react-native-touch-id'
+import Keychain from 'react-native-keychain'
 import { View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -14,6 +15,7 @@ import { TouchableOpacity } from 'react-native'
 import { Colors } from '~/utils/colors'
 import useSuccessProtection from './useSuccessProtection'
 import TouchIdIcon from '~/assets/svg/TouchIdIcon'
+import FaceIdIcon from '~/assets/svg/FaceIdIcon'
 
 interface BiometricsPropsI {
   authType: string
@@ -66,7 +68,11 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
         </Paragraph>
       </View>
       <TouchableOpacity onPress={authenticate}>
-        <TouchIdIcon />
+        {authType === Keychain.BIOMETRY_TYPE.FACE_ID ? (
+          <FaceIdIcon />
+        ) : (
+          <TouchIdIcon />
+        )}
       </TouchableOpacity>
       <Paragraph color={Colors.success}>
         {strings.TAP_TO_ACTIVATE(authType)}
