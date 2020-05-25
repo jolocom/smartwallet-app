@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import TouchID from 'react-native-touch-id'
+import { View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Header from '~/components/Header'
+import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph from '~/components/Paragraph'
 import Btn from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
@@ -12,6 +13,7 @@ import { useDeviceAuthDispatch } from './module/context'
 import { TouchableOpacity } from 'react-native'
 import { Colors } from '~/utils/colors'
 import useSuccessProtection from './useSuccessProtection'
+import TouchIdIcon from '~/assets/svg/TouchIdIcon'
 
 interface BiometricsPropsI {
   authType: string
@@ -54,14 +56,21 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
   }
 
   return (
-    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
-      <Header>{strings.USE_ID_TO_AUTHORIZE(authType)}</Header>
-      <Paragraph>{strings.SO_YOU_DONT_NEED_TO_CONFIRM}</Paragraph>
-      <TouchableOpacity onPress={authenticate}>
-        <Paragraph color={Colors.success}>
-          {strings.TAP_TO_ACTIVATE(authType)}
+    <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
+      <View>
+        <Header size={HeaderSizes.small}>
+          {strings.USE_ID_TO_AUTHORIZE(authType)}
+        </Header>
+        <Paragraph color={Colors.white70}>
+          {strings.SO_YOU_DONT_NEED_TO_CONFIRM}
         </Paragraph>
+      </View>
+      <TouchableOpacity onPress={authenticate}>
+        <TouchIdIcon />
       </TouchableOpacity>
+      <Paragraph color={Colors.success}>
+        {strings.TAP_TO_ACTIVATE(authType)}
+      </Paragraph>
       {error && <Paragraph color={Colors.error}>{error}</Paragraph>}
       <BtnGroup>
         <Btn onPress={fallbackToPasscode}>{strings.I_WILL_RATHER_SET_PIN}</Btn>

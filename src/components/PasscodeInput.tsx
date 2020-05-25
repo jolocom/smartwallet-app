@@ -123,7 +123,6 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
                 ]}
                 key={index}
               >
-                {/* <Text style={styles.text}>{digits[index] || ''}</Text> */}
                 <Text style={styles.text}>
                   {(index < digits.length && '*') || ''}
                 </Text>
