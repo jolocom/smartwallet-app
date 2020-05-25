@@ -40,6 +40,12 @@ const Passcode = () => {
     }
   }
 
+  useEffect(() => {
+    if (verifiedPasscode.length < 4 && hasError) {
+      setHasError(false)
+    }
+  }, [verifiedPasscode])
+
   return (
     <ScreenContainer
       customStyles={{
