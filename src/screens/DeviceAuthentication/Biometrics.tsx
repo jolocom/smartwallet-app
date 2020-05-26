@@ -16,6 +16,7 @@ import { Colors } from '~/utils/colors'
 import useSuccessProtection from './useSuccessProtection'
 import TouchIdIcon from '~/assets/svg/TouchIdIcon'
 import FaceIdIcon from '~/assets/svg/FaceIdIcon'
+import Ripple from '~/components/Ripple'
 
 interface BiometricsPropsI {
   authType: string
@@ -68,6 +69,24 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
         </Paragraph>
       </View>
       <TouchableOpacity onPress={authenticate}>
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Ripple
+            color={Colors.activity}
+            initialValue1={5}
+            maxValue1={15}
+            maxValue2={15}
+          />
+        </View>
         {authType === Keychain.BIOMETRY_TYPE.FACE_ID ? (
           <FaceIdIcon />
         ) : (
