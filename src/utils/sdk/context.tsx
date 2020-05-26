@@ -9,7 +9,7 @@ import React, {
 import { View } from 'react-native'
 import { initSDK } from './'
 import { JolocomSDK } from '@jolocom/sdk'
-import { setDid } from '~/modules/account/actions'
+import { setDid, setLogged } from '~/modules/account/actions'
 import { useDispatch } from 'react-redux'
 
 const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
@@ -28,8 +28,8 @@ export const SDKContextProvider: React.FC = ({ children }) => {
         sdk
           .init({ dontAutoRegister: true })
           .then((iw) => {
-            console.log(iw.did)
             dispatch(setDid(iw.did))
+            dispatch(setLogged(true))
           })
           .catch(console.warn)
           .finally(() => {

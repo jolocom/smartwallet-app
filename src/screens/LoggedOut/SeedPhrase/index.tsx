@@ -86,7 +86,7 @@ const SeedPhrase: React.FC = () => {
           },
         ]}
       >
-        <Text style={styles.seedphrase}>{seedphrase.join(' ')}</Text>
+        <Text style={styles.seedphrase}>{seedphrase}</Text>
       </Animated.View>
       <View style={styles.bottomContainer}>
         <Animated.View
