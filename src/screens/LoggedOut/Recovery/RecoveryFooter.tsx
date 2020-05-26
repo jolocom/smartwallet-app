@@ -26,7 +26,7 @@ interface RecoveryFooterI {
 
 const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
-  const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn)
+  const redirectToDeviceAuth = useRedirectTo(ScreenNames.DeviceAuth)
   const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
 
   const handlePhraseSubmit = useCallback(async () => {
@@ -34,7 +34,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
       loading: strings.MATCHING,
     })
 
-    if (success) redirectToClaims()
+    if (success) redirectToDeviceAuth()
     else redirectToWalkthrough()
   }, [phrase])
 
