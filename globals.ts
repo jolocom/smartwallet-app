@@ -7,5 +7,6 @@ process.version = 'v11.13.0'
 String.prototype.normalize = function (form: string): string {
   return require('unorm')[String(form).toLowerCase()](this)
 }
+const Fetch = RNFetchBlob.polyfill.Fetch
 // @ts-ignore
-global.fetch = new RNFetchBlob.polyfill.Fetch().build()
+global.fetch = new Fetch({ auto: true }).build()
