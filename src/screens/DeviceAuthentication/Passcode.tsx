@@ -13,7 +13,7 @@ import { useDeviceAuthState } from './module/context'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
-import { setLoader } from '~/modules/loader/actions'
+import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 
 const Passcode = () => {
@@ -41,34 +41,32 @@ const Passcode = () => {
     await useDelay(showVerification, 1000)
   }, [])
 
-  const proceedWithFurtherRedirect = async () => {
-    await useDelay(() => {
-      if (biometryType) {
-        switch (biometryType) {
-          case Keychain.BIOMETRY_TYPE.FACE_ID:
-            redirectToFaceId()
-          case Keychain.BIOMETRY_TYPE.TOUCH_ID:
-            redirectToTouchId()
-          case Keychain.BIOMETRY_TYPE.FINGERPRINT:
-            redirectToFingerprint()
-        }
-      } else {
-        redirectToLoggedIn()
+  const proceedWithFurtherRedirect = () => {
+    if (biometryType) {
+      switch (biometryType) {
+        case Keychain.BIOMETRY_TYPE.FACE_ID:
+          redirectToFaceId()
+        case Keychain.BIOMETRY_TYPE.TOUCH_ID:
+          redirectToTouchId()
+        case Keychain.BIOMETRY_TYPE.FINGERPRINT:
+          redirectToFingerprint()
       }
-    })
+    } else {
+      redirectToLoggedIn()
+    }
   }
 
-  const handleVerifiedPasscodeSubmit = () => {
+  const handleVerifiedPasscodeSubmit = async () => {
     if (passcode === verifiedPasscode) {
       // this Keychain.getGenericPassword() will later on retrieve passcode (stored in password field)
       Keychain.setGenericPassword('com.jolocom.wallet', passcode) // setting up pin in the keychain
       // show success loader
-      dispatch(
-        setLoader({
-          type: LoaderTypes.success,
-          msg: strings.YOUR_PIN_WAS_SET_UP,
-        }),
-      )
+      // dispatch(
+      //   setLoader({
+      //     type: LoaderTypes.success,
+      //     msg: strings.YOUR_PIN_WAS_SET_UP,
+      //   }),
+      // )
       // redirect to Biometry screen if biometry is supported on a device, otherwise, redirect to LoggedIn section
       proceedWithFurtherRedirect()
     } else {
