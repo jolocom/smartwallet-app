@@ -80,6 +80,8 @@ const deviceAuthentication = {
     'Additional app protection was set up',
   TO_PROTECT_YOUR_DATA_AND_CONFIDENTIALITY:
     'To protect your data and its confidentiality',
+  SKIP: 'Skip',
+  YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
 }
 
 export const strings = {

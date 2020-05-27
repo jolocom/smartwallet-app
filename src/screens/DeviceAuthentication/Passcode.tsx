@@ -9,7 +9,12 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import Paragraph from '~/components/Paragraph'
 import useDelay from '~/hooks/useDelay'
-import useSuccessProtection from './useSuccessProtection'
+import { useDeviceAuthState } from './module/context'
+import useRedirectTo from '~/hooks/useRedirectTo'
+import { ScreenNames } from '~/types/screens'
+import { useDispatch } from 'react-redux'
+import { setLoader } from '~/modules/loader/actions'
+import { LoaderTypes } from '~/modules/loader/types'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -18,7 +23,13 @@ const Passcode = () => {
   const [showLoading, setShowLoading] = useState(false) // to immitate loading after passcode was submit and before redirecting to verifies passcode
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
-  const handleProtectionSet = useSuccessProtection()
+  const biometryType = useDeviceAuthState()
+  const redirectToTouchId = useRedirectTo(ScreenNames.TouchId)
+  const redirectToFaceId = useRedirectTo(ScreenNames.FaceId)
+  const redirectToFingerprint = useRedirectTo(ScreenNames.Fingerprint)
+  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
+
+  const dispatch = useDispatch()
 
   const showVerification = () => {
     setIsCreating(false)
@@ -30,11 +41,36 @@ const Passcode = () => {
     await useDelay(showVerification, 1000)
   }, [])
 
+  const proceedWithFurtherRedirect = async () => {
+    await useDelay(() => {
+      if (biometryType) {
+        switch (biometryType) {
+          case Keychain.BIOMETRY_TYPE.FACE_ID:
+            redirectToFaceId()
+          case Keychain.BIOMETRY_TYPE.TOUCH_ID:
+            redirectToTouchId()
+          case Keychain.BIOMETRY_TYPE.FINGERPRINT:
+            redirectToFingerprint()
+        }
+      } else {
+        redirectToLoggedIn()
+      }
+    })
+  }
+
   const handleVerifiedPasscodeSubmit = () => {
     if (passcode === verifiedPasscode) {
       // this Keychain.getGenericPassword() will later on retrieve passcode (stored in password field)
-      Keychain.setGenericPassword('com.jolocom.wallet', passcode)
-      handleProtectionSet()
+      Keychain.setGenericPassword('com.jolocom.wallet', passcode) // setting up pin in the keychain
+      // show success loader
+      dispatch(
+        setLoader({
+          type: LoaderTypes.success,
+          msg: strings.YOUR_PIN_WAS_SET_UP,
+        }),
+      )
+      // redirect to Biometry screen if biometry is supported on a device, otherwise, redirect to LoggedIn section
+      proceedWithFurtherRedirect()
     } else {
       setHasError(true)
     }

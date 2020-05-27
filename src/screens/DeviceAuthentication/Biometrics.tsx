@@ -6,7 +6,7 @@ import { View } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph from '~/components/Paragraph'
-import Btn from '~/components/Btn'
+import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
 
 import { strings } from '~/translations/strings'
@@ -17,6 +17,8 @@ import useSuccessProtection from './useSuccessProtection'
 import TouchIdIcon from '~/assets/svg/TouchIdIcon'
 import FaceIdIcon from '~/assets/svg/FaceIdIcon'
 import Ripple from '~/components/Ripple'
+import useRedirectTo from '~/hooks/useRedirectTo'
+import { ScreenNames } from '~/types/screens'
 
 interface BiometricsPropsI {
   authType: string
@@ -31,13 +33,9 @@ const authConfig = {
 const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
   const [error, setError] = useState(null)
 
-  const dispatch = useDeviceAuthDispatch()
-
   const handleProtectionSet = useSuccessProtection()
 
-  const fallbackToPasscode = () => {
-    dispatch(null)
-  }
+  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
   const authenticate = async () => {
     setError(null)
@@ -98,7 +96,9 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
       </Paragraph>
       {error && <Paragraph color={Colors.error}>{error}</Paragraph>}
       <BtnGroup>
-        <Btn onPress={fallbackToPasscode}>{strings.I_WILL_RATHER_SET_PIN}</Btn>
+        <Btn type={BtnTypes.secondary} onPress={redirectToLoggedIn}>
+          {strings.SKIP}
+        </Btn>
       </BtnGroup>
     </ScreenContainer>
   )
