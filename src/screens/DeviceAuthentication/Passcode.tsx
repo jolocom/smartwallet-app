@@ -82,7 +82,9 @@ const Passcode = () => {
           />
         )}
       </View>
-      {showLoading && <ActivityIndicator style={styles.spinner} />}
+      {showLoading && (
+        <ActivityIndicator testID="loading-indicator" style={styles.spinner} />
+      )}
       {hasError && (
         <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
           {strings.PINS_DONT_MATCH}

@@ -123,7 +123,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
                 ]}
                 key={index}
               >
-                <Text style={styles.text}>
+                <Text style={styles.text} testID="passcode-cell">
                   {(index < digits.length && '*') || ''}
                 </Text>
               </View>
@@ -137,6 +137,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
           onKeyPress={handleRemove}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          testID="passcode-digit-input"
           style={[
             styles.input,
             {
