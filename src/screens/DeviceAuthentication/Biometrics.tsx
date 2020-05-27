@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import TouchID from 'react-native-touch-id'
 import Keychain from 'react-native-keychain'
 import { View } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph from '~/components/Paragraph'
-import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
+import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
 
 import { strings } from '~/translations/strings'
-import { useDeviceAuthDispatch } from './module/context'
 import { TouchableOpacity } from 'react-native'
 import { Colors } from '~/utils/colors'
 import useSuccessProtection from './useSuccessProtection'
@@ -19,6 +19,7 @@ import FaceIdIcon from '~/assets/svg/FaceIdIcon'
 import Ripple from '~/components/Ripple'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
+import { useDeviceAuthState } from './module/context'
 
 interface BiometricsPropsI {
   authType: string
@@ -34,6 +35,7 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
   const [error, setError] = useState(null)
 
   const handleProtectionSet = useSuccessProtection()
+  const biometryType = useDeviceAuthState()
 
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
@@ -49,7 +51,7 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
       if (isAuthenticated) {
         handleProtectionSet()
 
-        //TODO: store prefered DeviceAuth method somewhere.
+        await AsyncStorage.setItem('preferedLocalAuthType', biometryType || '')
       }
     } catch (e) {
       setError(e.message)
