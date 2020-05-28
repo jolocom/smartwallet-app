@@ -47,8 +47,9 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
   const authenticate = async () => {
     try {
       const biometryAuthValue = await Keychain.setGenericPassword(
-        'wallet-user',
-        'wallet-password',
+        //@ts-ignore
+        process.env['BIOMETRY_USERNAME'],
+        process.env['BIOMETRY_PASSWORD'],
         {
           service: process.env['BIOMETRY_SERVICE'],
           accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,

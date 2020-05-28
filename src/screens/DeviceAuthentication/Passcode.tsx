@@ -68,9 +68,14 @@ const Passcode = () => {
     if (passcode === verifiedPasscode) {
       try {
         // setting up pin in the keychain
-        await Keychain.setGenericPassword('walletPIN', passcode, {
-          service: process.env['PIN_SERVICE'],
-        })
+        await Keychain.setGenericPassword(
+          //@ts-ignore
+          process.env['PIN_USERNAME'],
+          passcode,
+          {
+            service: process.env['PIN_SERVICE'],
+          },
+        )
       } catch (err) {
         console.log({ err })
       }
