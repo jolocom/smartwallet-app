@@ -52,13 +52,12 @@ const Passcode = () => {
 
   const redirectToBiometry = () => {
     if (biometryType) {
-      switch (biometryType) {
-        case Keychain.BIOMETRY_TYPE.FACE_ID:
-          redirectToFaceId()
-        case Keychain.BIOMETRY_TYPE.TOUCH_ID:
-          redirectToTouchId()
-        case Keychain.BIOMETRY_TYPE.FINGERPRINT:
-          redirectToFingerprint()
+      if (biometryType === Keychain.BIOMETRY_TYPE.FACE_ID) {
+        redirectToFaceId()
+      } else if (biometryType === Keychain.BIOMETRY_TYPE.TOUCH_ID) {
+        redirectToTouchId()
+      } else if (biometryType === Keychain.BIOMETRY_TYPE.FINGERPRINT) {
+        redirectToFingerprint()
       }
     } else {
       redirectToLoggedIn()

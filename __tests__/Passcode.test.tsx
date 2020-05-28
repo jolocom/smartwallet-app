@@ -5,6 +5,7 @@ import Passcode from '~/screens/DeviceAuthentication/Passcode'
 import { strings } from '~/translations/strings'
 
 jest.mock('../src/screens/DeviceAuthentication/useSuccessProtection')
+jest.mock('../src/hooks/useRedirectTo')
 
 test('It displays Create orr Verify PIN screen correctly', async () => {
   const { getByText, getByTestId, getAllByTestId } = render(<Passcode />)

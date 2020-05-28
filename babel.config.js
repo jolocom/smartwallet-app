@@ -8,5 +8,6 @@ module.exports = {
         rootPathSuffix: 'src',
       },
     ],
+    'transform-inline-environment-variables',
   ],
-};
+}
