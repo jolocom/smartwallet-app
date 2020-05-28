@@ -12,9 +12,7 @@ import useDelay from '~/hooks/useDelay'
 import { useDeviceAuthState } from './module/context'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
-import { useDispatch } from 'react-redux'
-import { setLoader, dismissLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
+import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -29,7 +27,18 @@ const Passcode = () => {
   const redirectToFingerprint = useRedirectTo(ScreenNames.Fingerprint)
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
-  const dispatch = useDispatch()
+  const resetServiceValuesInKeychain = useResetKeychainValues(
+    //@ts-ignore
+    process.env['PIN_SERVICE'],
+  )
+
+  // 🧨🧨🧨🧨🧨
+  // this is only for testing purposes !!! should be removed later on
+  // this will delete credentials associated with a service name
+  useEffect(() => {
+    resetServiceValuesInKeychain()
+  }, [])
+  // 🧨🧨🧨🧨🧨
 
   const showVerification = () => {
     setIsCreating(false)
@@ -41,7 +50,7 @@ const Passcode = () => {
     await useDelay(showVerification, 1000)
   }, [])
 
-  const proceedWithFurtherRedirect = () => {
+  const redirectToBiometry = () => {
     if (biometryType) {
       switch (biometryType) {
         case Keychain.BIOMETRY_TYPE.FACE_ID:
@@ -58,17 +67,16 @@ const Passcode = () => {
 
   const handleVerifiedPasscodeSubmit = async () => {
     if (passcode === verifiedPasscode) {
-      // this Keychain.getGenericPassword() will later on retrieve passcode (stored in password field)
-      Keychain.setGenericPassword('com.jolocom.wallet', passcode) // setting up pin in the keychain
-      // show success loader
-      // dispatch(
-      //   setLoader({
-      //     type: LoaderTypes.success,
-      //     msg: strings.YOUR_PIN_WAS_SET_UP,
-      //   }),
-      // )
+      try {
+        // setting up pin in the keychain
+        await Keychain.setGenericPassword('walletPIN', passcode, {
+          service: process.env['PIN_SERVICE'],
+        })
+      } catch (err) {
+        console.log({ err })
+      }
       // redirect to Biometry screen if biometry is supported on a device, otherwise, redirect to LoggedIn section
-      proceedWithFurtherRedirect()
+      redirectToBiometry()
     } else {
       setHasError(true)
     }

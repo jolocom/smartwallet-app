@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
-import TouchID from 'react-native-touch-id'
+import React, { useEffect } from 'react'
 import Keychain from 'react-native-keychain'
-import { View } from 'react-native'
+import { View, Alert, Linking } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -20,43 +19,82 @@ import Ripple from '~/components/Ripple'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { useDeviceAuthState } from './module/context'
+import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 
 interface BiometricsPropsI {
   authType: string
 }
 
-const authConfig = {
-  title: 'Authentication Required',
-  fallbackLabel: '',
-  passcodeFallback: false,
-}
-
 const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
-  const [error, setError] = useState(null)
-
   const handleProtectionSet = useSuccessProtection()
   const biometryType = useDeviceAuthState()
 
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
+  const resetServiceValuesInKeychain = useResetKeychainValues(
+    //@ts-ignore
+    process.env['BIOMETRY_SERVICE'],
+  )
+
+  // 🧨🧨🧨🧨🧨
+  // this is only for testing purposes !!! should be removed later on
+  // this will delete credentials associated with a service name
+  useEffect(() => {
+    resetServiceValuesInKeychain()
+  }, [])
+  // 🧨🧨🧨🧨🧨
+
   const authenticate = async () => {
-    setError(null)
     try {
-      const isAuthenticated = await TouchID.authenticate(
-        strings.TO_PROTECT_YOUR_DATA_AND_CONFIDENTIALITY,
-        authConfig,
+      const biometryAuthValue = await Keychain.setGenericPassword(
+        'wallet-user',
+        'wallet-password',
+        {
+          service: process.env['BIOMETRY_SERVICE'],
+          accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+          accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+        },
       )
-
-      // if biometrics from device match
-      if (isAuthenticated) {
+      if (biometryAuthValue) {
+        await AsyncStorage.setItem('biometry', biometryType || '')
         handleProtectionSet()
-
-        await AsyncStorage.setItem('preferedLocalAuthType', biometryType || '')
       }
-    } catch (e) {
-      setError(e.message)
+    } catch (err) {
+      Alert.alert(
+        `${biometryType} is disabled`,
+        'To use biometrics enable this feature in the system settings',
+        [
+          {
+            text: 'Settings',
+            onPress: () => Linking.openSettings(),
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+        ],
+        { cancelable: false },
+      )
     }
   }
+
+  // this is snippent can be used to on lock screen
+  // const unlock = async () => {
+  //   try {
+  //     const getBiometryStoredValue = await Keychain.getGenericPassword({
+  //       service: 'com.jolocom.wallet-BIOMETRY',
+  //       authenticationPrompt: {
+  //         title: 'Authenticate to unblock the app',
+  //       },
+  //     })
+  //     if(getBiometryStoredValue) {
+  //       // if user authenticated with biometry successfully - do something
+  //     }
+  //   } catch (err) {
+  //     console.log({ err })
+  //   }
+  // }
 
   return (
     <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
@@ -96,7 +134,6 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
       <Paragraph color={Colors.success}>
         {strings.TAP_TO_ACTIVATE(authType)}
       </Paragraph>
-      {error && <Paragraph color={Colors.error}>{error}</Paragraph>}
       <BtnGroup>
         <Btn type={BtnTypes.secondary} onPress={redirectToLoggedIn}>
           {strings.SKIP}
