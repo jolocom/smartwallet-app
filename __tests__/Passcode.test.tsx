@@ -6,6 +6,7 @@ import { strings } from '~/translations/strings'
 
 jest.mock('../src/screens/DeviceAuthentication/useSuccessProtection')
 jest.mock('../src/hooks/useRedirectTo')
+jest.useFakeTimers()
 
 test('It displays Create orr Verify PIN screen correctly', async () => {
   const { getByText, getByTestId, getAllByTestId } = render(<Passcode />)
