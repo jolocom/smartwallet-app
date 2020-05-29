@@ -2,6 +2,11 @@ import React, { useEffect } from 'react'
 import Keychain from 'react-native-keychain'
 import { View, Alert, Linking } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
+import {
+  BIOMETRY_USERNAME,
+  BIOMETRY_PASSWORD,
+  BIOMETRY_SERVICE,
+} from 'react-native-dotenv'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
@@ -48,10 +53,10 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
     try {
       const biometryAuthValue = await Keychain.setGenericPassword(
         //@ts-ignore
-        process.env['BIOMETRY_USERNAME'],
-        process.env['BIOMETRY_PASSWORD'],
+        BIOMETRY_USERNAME,
+        BIOMETRY_PASSWORD,
         {
-          service: process.env['BIOMETRY_SERVICE'],
+          service: BIOMETRY_SERVICE,
           accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
           accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
         },
@@ -62,8 +67,8 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
       }
     } catch (err) {
       Alert.alert(
-        `${biometryType} is disabled`,
-        'To use biometrics enable this feature in the system settings',
+        strings.BIOMETRY_IS_DISABLED(biometryType),
+        strings.TO_USE_BIOMETRICS_ENABLE,
         [
           {
             text: 'Settings',
@@ -79,23 +84,6 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
       )
     }
   }
-
-  // this is snippent can be used to on lock screen
-  // const unlock = async () => {
-  //   try {
-  //     const getBiometryStoredValue = await Keychain.getGenericPassword({
-  //       service: 'com.jolocom.wallet-BIOMETRY',
-  //       authenticationPrompt: {
-  //         title: 'Authenticate to unblock the app',
-  //       },
-  //     })
-  //     if(getBiometryStoredValue) {
-  //       // if user authenticated with biometry successfully - do something
-  //     }
-  //   } catch (err) {
-  //     console.log({ err })
-  //   }
-  // }
 
   return (
     <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>

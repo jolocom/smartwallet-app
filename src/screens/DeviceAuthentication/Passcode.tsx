@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import Keychain from 'react-native-keychain'
+import { PIN_SERVICE, PIN_USERNAME } from 'react-native-dotenv'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -27,10 +28,7 @@ const Passcode = () => {
   const redirectToFingerprint = useRedirectTo(ScreenNames.Fingerprint)
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
-  const resetServiceValuesInKeychain = useResetKeychainValues(
-    //@ts-ignore
-    process.env['PIN_SERVICE'],
-  )
+  const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
   // 🧨🧨🧨🧨🧨
   // this is only for testing purposes !!! should be removed later on
@@ -68,14 +66,9 @@ const Passcode = () => {
     if (passcode === verifiedPasscode) {
       try {
         // setting up pin in the keychain
-        await Keychain.setGenericPassword(
-          //@ts-ignore
-          process.env['PIN_USERNAME'],
-          passcode,
-          {
-            service: process.env['PIN_SERVICE'],
-          },
-        )
+        await Keychain.setGenericPassword(PIN_USERNAME, passcode, {
+          service: PIN_SERVICE,
+        })
       } catch (err) {
         console.log({ err })
       }

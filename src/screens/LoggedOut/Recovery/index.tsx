@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { KeyboardAvoidingView } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'

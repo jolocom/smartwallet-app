@@ -82,6 +82,10 @@ const deviceAuthentication = {
     'To protect your data and its confidentiality',
   SKIP: 'Skip',
   YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
+  BIOMETRY_IS_DISABLED: (biometryType: string | null) =>
+    `${biometryType} is disabled`,
+  TO_USE_BIOMETRICS_ENABLE:
+    'To use biometrics enable this feature in the system settings',
 }
 
 export const strings = {

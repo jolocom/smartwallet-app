@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import Keychain from 'react-native-keychain'
 
@@ -18,6 +18,7 @@ const Stack = createStackNavigator()
 const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
 
+  // on this step we chceck wether user device supports biometrics
   useEffect(() => {
     const getAuthenticationType = async () => {
       try {

@@ -1,10 +1,10 @@
 import React from 'react'
 
-import Biometrics from './Biometrics'
+import Biometry from './Biometry'
 import { strings } from '~/translations/strings'
 
 const Fingerprint = () => {
-  return <Biometrics authType={strings.FINGERPRINT} />
+  return <Biometry authType={strings.FINGERPRINT} />
 }
 
 export default Fingerprint

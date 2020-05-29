@@ -1,10 +1,10 @@
 import React from 'react'
 
-import Biometrics from './Biometrics'
+import Biometry from './Biometry'
 import { strings } from '~/translations/strings'
 
 const FaceId = () => {
-  return <Biometrics authType={strings.FACE} />
+  return <Biometry authType={strings.FACE} />
 }
 
 export default FaceId
