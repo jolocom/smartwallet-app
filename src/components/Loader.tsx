@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { BackHandler, View, Animated, StyleSheet } from 'react-native'
+import { BackHandler, View, Animated, StyleSheet, Modal } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
@@ -40,6 +40,8 @@ const Loader: React.FC = () => {
     inputRange: [1, 1.1, 1.4, 1.5],
     outputRange: ['0deg', '20deg', '-20deg', '0deg'],
   })
+
+  const modalVisible = type !== null
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -108,60 +110,75 @@ const Loader: React.FC = () => {
   })
 
   return (
-    <ScreenContainer isTransparent>
-      <View style={{ position: 'relative', height: 200 }}></View>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          transform: [{ scale: animatedWidth1 }],
-          opacity: animatedOpacity1,
-          width: 18,
-          height: 18,
-          borderRadius: 9,
-          backgroundColor: colors[type],
-        }}
-      >
-        {/*  the border of the circle once is scaled get pixelated
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      presentationStyle="overFullScreen"
+    >
+      <View style={styles.modalBodyContainer}>
+        <ScreenContainer isTransparent>
+          <View style={{ position: 'relative', height: 200 }}></View>
+          <Animated.View
+            style={{
+              position: 'absolute',
+              transform: [{ scale: animatedWidth1 }],
+              opacity: animatedOpacity1,
+              width: 18,
+              height: 18,
+              borderRadius: 9,
+              backgroundColor: colors[type],
+            }}
+          >
+            {/*  the border of the circle once is scaled get pixelated
           therefore drawing 2 circles to avoid border pixelation
           one inside of the other
           the outer has a background color depending on the Loader type
           the inner circle is of the color of the screen */}
-        <View style={styles.nestedCircle} />
-      </Animated.View>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          transform: [
-            { scale: successAnimatedValue },
-            { rotate: successRotate },
-          ],
-          opacity: successAnimatedOpacity,
-        }}
-      >
-        {type === LoaderTypes.success && <SuccessTick />}
-        {type === LoaderTypes.error && <ErrorIcon />}
-      </Animated.View>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          transform: [{ scale: animatedWidth2 }],
-          opacity: animatedOpacity2,
-          width: 18,
-          height: 18,
-          borderRadius: 9,
-          backgroundColor: colors[type],
-        }}
-      >
-        <View style={styles.nestedCircle} />
-      </Animated.View>
-      <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
-        {msg}
-      </Paragraph>
-    </ScreenContainer>
+            <View style={styles.nestedCircle} />
+          </Animated.View>
+          <Animated.View
+            style={{
+              position: 'absolute',
+              transform: [
+                { scale: successAnimatedValue },
+                { rotate: successRotate },
+              ],
+              opacity: successAnimatedOpacity,
+            }}
+          >
+            {type === LoaderTypes.success && <SuccessTick />}
+            {type === LoaderTypes.error && <ErrorIcon />}
+          </Animated.View>
+          <Animated.View
+            style={{
+              position: 'absolute',
+              transform: [{ scale: animatedWidth2 }],
+              opacity: animatedOpacity2,
+              width: 18,
+              height: 18,
+              borderRadius: 9,
+              backgroundColor: type !== null && colors[type],
+            }}
+          >
+            <View style={styles.nestedCircle} />
+          </Animated.View>
+          <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
+            {msg}
+          </Paragraph>
+        </ScreenContainer>
+      </View>
+    </Modal>
   )
 }
 
 const styles = StyleSheet.create({
+  modalBodyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.85)',
+  },
   circle: {
     borderWidth: 1,
     position: 'absolute',
