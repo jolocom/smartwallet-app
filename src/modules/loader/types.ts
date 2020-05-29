@@ -10,6 +10,6 @@ export enum LoaderActions {
 }
 
 export interface LoaderStateI {
-  type: LoaderTypes | null
+  type: LoaderTypes
   msg: string
 }

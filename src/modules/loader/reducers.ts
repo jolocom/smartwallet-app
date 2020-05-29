@@ -1,6 +1,6 @@
 import { strings } from '~/translations/strings'
 
-import { LoaderActions, LoaderStateI } from './types'
+import { LoaderActions, LoaderStateI, LoaderTypes } from './types'
 
 type Actions = {
   type: LoaderActions
@@ -8,7 +8,7 @@ type Actions = {
 }
 
 const initialState: LoaderStateI = {
-  type: null,
+  type: LoaderTypes.default,
   msg: strings.EMPTY,
 }
 

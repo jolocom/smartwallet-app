@@ -41,7 +41,7 @@ const Loader: React.FC = () => {
     outputRange: ['0deg', '20deg', '-20deg', '0deg'],
   })
 
-  const modalVisible = type !== null
+  const modalVisible = msg !== ''
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -158,7 +158,7 @@ const Loader: React.FC = () => {
               width: 18,
               height: 18,
               borderRadius: 9,
-              backgroundColor: type !== null && colors[type],
+              backgroundColor: colors[type],
             }}
           >
             <View style={styles.nestedCircle} />
