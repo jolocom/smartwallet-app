@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Keychain from 'react-native-keychain'
-import { View, Alert, Linking } from 'react-native'
+import { View, Alert, Linking, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import {
   BIOMETRY_USERNAME,
@@ -66,16 +66,18 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
         handleProtectionSet()
       }
     } catch (err) {
+      console.log({ err })
+
       Alert.alert(
         strings.BIOMETRY_IS_DISABLED(biometryType),
         strings.TO_USE_BIOMETRICS_ENABLE,
         [
           {
-            text: 'Settings',
+            text: strings.SETTINGS,
             onPress: () => Linking.openSettings(),
           },
           {
-            text: 'Cancel',
+            text: strings.CANCEL,
             onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
@@ -96,17 +98,7 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
         </Paragraph>
       </View>
       <TouchableOpacity onPress={authenticate}>
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
+        <View style={styles.animationContainer}>
           <Ripple
             color={Colors.activity}
             initialValue1={5}
@@ -131,5 +123,17 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
     </ScreenContainer>
   )
 }
+
+const styles = StyleSheet.create({
+  animationContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
 
 export default Biometrics

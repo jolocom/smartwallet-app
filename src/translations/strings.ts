@@ -86,6 +86,8 @@ const deviceAuthentication = {
     `${biometryType} is disabled`,
   TO_USE_BIOMETRICS_ENABLE:
     'To use biometrics enable this feature in the system settings',
+  SETTINGS: 'Settings',
+  CANCEL: 'Cancel',
 }
 
 export const strings = {
