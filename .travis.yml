@@ -2,12 +2,14 @@ language: node_js
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
 node_js:
-  - "10.15.1"
+- 10.15.1
 install:
-  - yarn install
+- yarn install
 script: yarn test --runInBand --passWithNoTests
 after_success:before_script: node_modules/.bin/tslint -c ./tslint.json './src/**/*.ts?(x)'
   - yarn global add codeclimate-test-reporter
   - codeclimate-test-reporter < ./coverage/lcov.info
+env:
+  secure: VivECTO9yvzxHIx1GqmmU28+pOIQVRu2FZLqshmdWIk12dJphXE0M1LzsDYrFOlEjbyzpY2Gdu7u9fUJZXkNct0jLVNedE626GNt4xaHhZHc7gTTW6Vsewpz7XLNtKRyIL8Q7wccvXcaHDYX+fj15nrA1guG4eBz5czhALjN2ZkGEzN5+Ox1nrlIPix+CXWsTUnkGZMW190rOVAhLe5CSMl6K6ZM8WfZcrJ/KrrtvSPz++CKWuli/mAeOBBp+orqzz9x+wTsr+d3frl1PaqFUH12SRnL4d9fn/BLHDAZQI0fihwmijoL/zGAmOhGKTG3lsqxruvm8DfKyYk0m0IFSERUXFd+235Nm+B9q2r6WcQW4jbwRY8EOPD1azQt/4Y9K4naul1vTlIF8Z34B0Io2AQ4WjoPApbBKtRHX1ajAptxYe/d5UOcoB+uo8xvGZ3Q4EcBMMr0yOHi6JrZpEK23Srw4lve9WA6i6Nu5lpjex2IMcNYrawQgBny9FKvQ7ue+qNhMR1KCUe8nHsYXzDJ0pFqtc6QbMKRqP1TDmmtFcUZse3voHSP4W0ZnHDpfr6kbueUFJqCMl4sDCihAjruYU4y1u0hstw+BPara0HDtWzizTx53RfHvQMxEZ3wECh/YKnT6R85Tku7oYAabPSc29VhLI1WqH9JZfUJjQOwaSU=
