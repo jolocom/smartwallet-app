@@ -898,6 +898,13 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
+"@jolocom/sdk-password-store-mobile-keychain@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk-password-store-mobile-keychain/-/sdk-password-store-mobile-keychain-0.1.1.tgz#5d4f0e0c6065f637f08bacca422960bafd377759"
+  integrity sha512-mrLk5+kz6Ve9ZKlImRJfnfWlZZyPmjiJP4BYrXG6UeNUrBch6c8oTfDNY7Mq6f1MzN6kTc+fDJLk1YpuIVw+sQ==
+  dependencies:
+    react-native-keychain "^6.0.0"
+
 "@jolocom/sdk-storage-typeorm@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-1.1.0.tgz#79682411ef275bf1937aa95ac35ac8bd5182d1fa"
@@ -905,10 +912,10 @@
   dependencies:
     class-transformer "^0.2.3"
 
-"@jolocom/sdk@^0.9.1":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.9.1.tgz#870f4d9cc55ff97349881bb2731948924d652c3f"
-  integrity sha512-7fEI26mP8eAXdjCBdFZZcWuKJJ+B4HUD1WuVboQEcTOpG0vt9+Auob9l2ykleZjT3Icc2+uGmy8W1MiZ/lzvSQ==
+"@jolocom/sdk@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.8.1.tgz#49787f41beb60ddef538fde8591051f0a70c08d6"
+  integrity sha512-ClKhijAQN5iRc7NtwgxFzIRNrOaZexuJAQeMrO6MQWuERZZMrhTB2bu0JgQHDY7bF//LwBoCmpyPMcRYrrkFCg==
   dependencies:
     assert "^2.0.0"
     bip39 "^3.0.2"
@@ -919,7 +926,7 @@
     events "^3.0.0"
     form-data "^3.0.0"
     i18n-js "^3.1.0"
-    jolocom-lib "^4.2.9"
+    jolocom-lib "^4.1.0"
     ramda "^0.26.1"
     sjcl "^1.0.7"
     sqlite3 "^4.0.0"
@@ -6008,10 +6015,10 @@ jetifier@^1.6.2:
   resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.5.tgz#ea87324a4230bef20a9651178ecab978ee54a8cb"
   integrity sha512-T7yzBSu9PR+DqjYt+I0KVO1XTb1QhAfHnXV5Nd3xpbXM6Xg4e3vP60Q4qkNU8Fh6PHC2PivPUNN3rY7G2MxcDQ==
 
-jolocom-lib@^4.2.9:
-  version "4.2.9"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.2.9.tgz#9a008d7c72184ce192982d5c826722b16fcba1e3"
-  integrity sha512-XEyd6KLM/vFSWwRhcd9oKe1Q97EWnewCxOu18qC9et5SNv3VuwCior4PvllI4gtf57Tan0XTgtjrnBIJnieygw==
+jolocom-lib@^4.1.0:
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.2.8.tgz#e6d8a410fbc138a1a28f7733dc377e0d41f0434a"
+  integrity sha512-g8d3oICHkgJMGGrETFV/wfJNCVK6D0ODvcVjl19ncZJVnTmZPKRFJ7QrMSC3DYSeTsho2/Owd2/dwxxA813dCQ==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"

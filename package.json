@@ -17,7 +17,8 @@
     "devtools": "react-devtools"
   },
   "dependencies": {
-    "@jolocom/sdk": "^0.9.1",
+    "@jolocom/sdk": "^0.8.1",
+    "@jolocom/sdk-password-store-mobile-keychain": "^0.1.1",
     "@jolocom/sdk-storage-typeorm": "^1.1.0",
     "@react-native-community/masked-view": "^0.1.9",
     "@react-navigation/bottom-tabs": "^5.2.7",

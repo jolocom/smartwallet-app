@@ -1,8 +1,8 @@
 import { JolocomSDK } from '@jolocom/sdk'
 import { JolocomTypeormStorage } from '@jolocom/sdk-storage-typeorm'
+import { KeyChain } from '@jolocom/sdk-password-store-mobile-keychain'
 import { createConnection, getConnection } from 'typeorm'
 import typeormConfig from './ormconfig'
-import { KeyChain } from './keychain'
 
 const initConnection = async () => {
   let connection
