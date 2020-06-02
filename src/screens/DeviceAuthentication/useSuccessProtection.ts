@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 
-import { setLoader } from '~/modules/loader/actions'
+import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import useDelay from '~/hooks/useDelay'
@@ -15,10 +15,14 @@ const useSuccessProtection = () => {
     dispatch(
       setLoader({
         type: LoaderTypes.success,
-        msg: strings.SUCCESS_SETTING_UP_ADDITIONAL_PROTECTION,
+        msg: strings.YOU_WILL_BE_PROMPT_TO_USE_BIOMETRY_AS_A_LOCAL_AUTH,
       }),
     )
-    await useDelay(redirectToLoggedIn)
+
+    await useDelay(() => {
+      dispatch(dismissLoader())
+      redirectToLoggedIn()
+    })
   }
 
   return handleProtectionSet

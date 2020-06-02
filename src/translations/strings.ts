@@ -88,6 +88,8 @@ const deviceAuthentication = {
     'To use biometrics enable this feature in the system settings',
   SETTINGS: 'Settings',
   CANCEL: 'Cancel',
+  YOU_WILL_BE_PROMPT_TO_USE_BIOMETRY_AS_A_LOCAL_AUTH:
+    'You will be prompt to use Biometry as a local authentication',
 }
 
 export const strings = {
