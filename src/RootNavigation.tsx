@@ -15,7 +15,7 @@ import { modalScreenOptions } from '~/utils/styles'
 import { ScreenNames } from '~/types/screens'
 
 import { getLoaderState } from '~/modules/loader/selectors'
-import { isLogged } from './modules/account/selectors'
+import { isLogged } from '~/modules/account/selectors'
 
 const RootStack = createStackNavigator()
 

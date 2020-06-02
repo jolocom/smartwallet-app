@@ -12,7 +12,7 @@ import { TextStyle } from '~/utils/fonts'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
-import { useMnemonic } from '~/utils/sdk/context'
+import { useMnemonic } from '~/hooks/sdk'
 
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)

@@ -15,7 +15,7 @@ import { ScreenNames } from '~/types/screens'
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState } from './module/recoveryContext'
-import { useSDK } from '~/utils/sdk/context'
+import { useSDK } from '~/hooks/sdk'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean

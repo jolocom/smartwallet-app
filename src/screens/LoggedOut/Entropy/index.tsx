@@ -13,7 +13,7 @@ import { strings } from '~/translations/strings'
 import { EntropyIntro } from './EntropyIntro'
 import { EntropyGenerator } from './EntropyGenerator'
 import { EntropyCanvas } from './EntropyCanvas'
-import { useSDK } from '~/utils/sdk/context'
+import { useSDK } from '~/hooks/sdk'
 import { useDispatch } from 'react-redux'
 import { setDid } from '~/modules/account/actions'
 

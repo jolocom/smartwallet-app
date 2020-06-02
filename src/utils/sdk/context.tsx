@@ -12,7 +12,7 @@ import { JolocomSDK } from '@jolocom/sdk'
 import { setDid, setLogged } from '~/modules/account/actions'
 import { useDispatch } from 'react-redux'
 
-const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
+export const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
   null,
 )
 
@@ -40,6 +40,11 @@ export const SDKContextProvider: React.FC = ({ children }) => {
         console.warn(e)
         throw new Error('Failed to initiate the SDK')
       })
+
+    return () => {
+      setLoaded(false)
+      sdkRef.current = null
+    }
   }, [])
 
   return !loaded ? (
@@ -47,20 +52,4 @@ export const SDKContextProvider: React.FC = ({ children }) => {
   ) : (
     <SDKContext.Provider value={sdkRef} children={children} />
   )
-}
-
-export const useSDK = () => {
-  const sdk = useContext(SDKContext)
-  if (!sdk?.current) throw new Error('SDK was not found!')
-  return sdk.current
-}
-
-export const useMnemonic = () => {
-  const sdk = useSDK()
-
-  return async () => {
-    const password = await sdk.bemw.keyChainLib.getPassword()
-    const mnemonic = sdk.bemw.keyProvider.getMnemonic(password)
-    return mnemonic
-  }
 }
