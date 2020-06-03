@@ -2,16 +2,13 @@ import { useDispatch } from 'react-redux'
 
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import useRedirectTo from '~/hooks/useRedirectTo'
-import useDelay from '~/hooks/useDelay'
-import { ScreenNames } from '~/types/screens'
 import { strings } from '~/translations/strings'
+import useDelay from '~/hooks/useDelay'
 
-const useBiometryRegistrationLoader = () => {
+const useSuccess = (delay: number = 4000) => {
   const dispatch = useDispatch()
-  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
-  const handleProtectionSet = async () => {
+  return async () => {
     dispatch(
       setLoader({
         type: LoaderTypes.success,
@@ -21,11 +18,8 @@ const useBiometryRegistrationLoader = () => {
 
     await useDelay(() => {
       dispatch(dismissLoader())
-      redirectToLoggedIn()
-    }, 4000)
+    }, delay)
   }
-
-  return handleProtectionSet
 }
 
-export default useBiometryRegistrationLoader
+export default useSuccess

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import Keychain from 'react-native-keychain'
+import React from 'react'
+import { BIOMETRY_TYPE } from 'react-native-keychain'
 import {
   View,
   Alert,
@@ -22,7 +22,6 @@ import { strings } from '~/translations/strings'
 import TouchIdIcon from '~/assets/svg/TouchIdIcon'
 import FaceIdIcon from '~/assets/svg/FaceIdIcon'
 
-import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 import useRedirectTo from '~/hooks/useRedirectTo'
 
 import { Colors } from '~/utils/colors'
@@ -32,46 +31,39 @@ import { ScreenNames } from '~/types/screens'
 import { useDeviceAuthState } from './module/context'
 
 import useBiometryRegistrationLoader from './useBiometryRegistrationLoader'
+import {
+  getBiometryHeader,
+  getBiometryActionText,
+  getBiometryIsDisabledText,
+  getBiometryDescription,
+} from './utils/getText'
+import useSuccess from '~/hooks/useSuccess'
 
-interface BiometricsPropsI {
-  authType: string
-}
-
-const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
-  const handleBiometryRegistration = useBiometryRegistrationLoader()
+const Biometry: React.FC = () => {
+  // const handleBiometryRegistration = useBiometryRegistrationLoader()
   const biometryType = useDeviceAuthState()
+  const displaySuccessLoader = useSuccess()
 
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
-
-  const resetServiceValuesInKeychain = useResetKeychainValues(
-    //@ts-ignore
-    process.env['BIOMETRY_SERVICE'],
-  )
-
-  // 🧨🧨🧨🧨🧨
-  // this is only for testing purposes !!! should be removed later on
-  // this will delete credentials associated with a service name
-  useEffect(() => {
-    resetServiceValuesInKeychain()
-  }, [])
-  // 🧨🧨🧨🧨🧨
+  const isFaceBiometry =
+    biometryType === BIOMETRY_TYPE.FACE_ID || biometryType === 'FACE'
 
   const authenticate = async () => {
     try {
       await FingerprintScanner.authenticate({
-        description:
-          biometryType === 'FaceID'
-            ? strings.SCAN_YOUR_FACE
-            : strings.SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER,
+        description: getBiometryDescription(biometryType),
         fallbackEnabled: false, // on this stage we don't want to prompr use passcode as a fallback
       })
 
       await AsyncStorage.setItem('biometry', biometryType || '')
-      handleBiometryRegistration()
+      // handleBiometryRegistration();
+
+      await displaySuccessLoader()
+      redirectToLoggedIn()
     } catch (err) {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         Alert.alert(
-          strings.BIOMETRY_IS_DISABLED(biometryType),
+          getBiometryIsDisabledText(biometryType),
           strings.TO_USE_BIOMETRICS_ENABLE,
           [
             {
@@ -94,7 +86,7 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
     <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
       <View>
         <Header size={HeaderSizes.small}>
-          {strings.USE_ID_TO_AUTHORIZE(authType)}
+          {getBiometryHeader(biometryType)}
         </Header>
         <Paragraph color={Colors.white70}>
           {strings.SO_YOU_DONT_NEED_TO_CONFIRM}
@@ -109,14 +101,10 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
             maxValue2={15}
           />
         </View>
-        {authType === Keychain.BIOMETRY_TYPE.FACE_ID ? (
-          <FaceIdIcon />
-        ) : (
-          <TouchIdIcon />
-        )}
+        {isFaceBiometry ? <FaceIdIcon /> : <TouchIdIcon />}
       </TouchableOpacity>
       <Paragraph color={Colors.success}>
-        {strings.TAP_TO_ACTIVATE(authType)}
+        {getBiometryActionText(biometryType)}
       </Paragraph>
       <BtnGroup>
         <Btn type={BtnTypes.secondary} onPress={redirectToLoggedIn}>
@@ -139,4 +127,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Biometrics
+export default Biometry

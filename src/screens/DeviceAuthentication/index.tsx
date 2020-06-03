@@ -5,9 +5,7 @@ import Keychain from 'react-native-keychain'
 import { ScreenNames } from '~/types/screens'
 
 import Passcode from './Passcode'
-import TouchId from './TouchId'
-import FaceId from './FaceId'
-import Fingerprint from './Fingerprint'
+import Biometry from './Biometry'
 
 import DeviceAuthContextProvider, {
   useDeviceAuthDispatch,
@@ -35,9 +33,7 @@ const DeviceAuthentication: React.FC = () => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name={ScreenNames.Passcode} component={Passcode} />
-      <Stack.Screen name={ScreenNames.TouchId} component={TouchId} />
-      <Stack.Screen name={ScreenNames.FaceId} component={FaceId} />
-      <Stack.Screen name={ScreenNames.Fingerprint} component={Fingerprint} />
+      <Stack.Screen name={ScreenNames.Biometry} component={Biometry} />
     </Stack.Navigator>
   )
 }

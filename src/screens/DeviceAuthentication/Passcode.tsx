@@ -14,6 +14,7 @@ import { useDeviceAuthState } from './module/context'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import useResetKeychainValues from '~/hooks/useResetKeychainValues'
+import useSuccess from '~/hooks/useSuccess'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -23,12 +24,11 @@ const Passcode = () => {
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
   const biometryType = useDeviceAuthState()
-  const redirectToTouchId = useRedirectTo(ScreenNames.TouchId)
-  const redirectToFaceId = useRedirectTo(ScreenNames.FaceId)
-  const redirectToFingerprint = useRedirectTo(ScreenNames.Fingerprint)
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
-
+  const redirectToBiometry = useRedirectTo(ScreenNames.Biometry)
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
+
+  const displaySuccessLoader = useSuccess()
 
   // 🧨🧨🧨🧨🧨
   // this is only for testing purposes !!! should be removed later on
@@ -48,15 +48,9 @@ const Passcode = () => {
     await useDelay(showVerification, 1000)
   }, [])
 
-  const redirectToBiometry = () => {
-    if (biometryType) {
-      if (biometryType === Keychain.BIOMETRY_TYPE.FACE_ID) {
-        redirectToFaceId()
-      } else if (biometryType === Keychain.BIOMETRY_TYPE.TOUCH_ID) {
-        redirectToTouchId()
-      } else if (biometryType === Keychain.BIOMETRY_TYPE.FINGERPRINT) {
-        redirectToFingerprint()
-      }
+  const redirectTo = () => {
+    if (biometryType && biometryType !== 'IRIS') {
+      redirectToBiometry()
     } else {
       redirectToLoggedIn()
     }
@@ -70,11 +64,13 @@ const Passcode = () => {
           service: PIN_SERVICE,
           storage: Keychain.STORAGE_TYPE.AES,
         })
+        await displaySuccessLoader()
       } catch (err) {
         console.log({ err })
       }
       // redirect to Biometry screen if biometry is supported on a device, otherwise, redirect to LoggedIn section
-      redirectToBiometry()
+
+      redirectTo()
     } else {
       setHasError(true)
     }

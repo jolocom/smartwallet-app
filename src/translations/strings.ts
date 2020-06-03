@@ -66,30 +66,36 @@ const seedphrase = {
 }
 
 const deviceAuthentication = {
-  USE_ID_TO_AUTHORIZE: (type: string) => `Use ${type} ID to authorise wallet`,
-  TOUCH: 'Touch',
-  FACE: 'Face',
-  FINGERPRINT: 'Fingerprint',
+  USE_TOUCH_ID_TO_AUTHORIZE: 'Use Touch ID to authorise wallet',
+  USE_FACE_ID_TO_AUTHORIZE: 'Use Face ID to authorise wallet',
+  USE_FINGERPRINT_TO_AUTHORIZE: 'Use Fingerprint to authorise wallet',
+  USE_FACE_TO_AUTHORIZE: 'Use your Face to authorise wallet', // a terrible wording here
+
+  TAP_TO_ACTIVATE_TOUCH_ID:
+    'Tap to activate Touch ID so you don’t need to confirm your PIN every time you need to use it',
+  TAP_TO_ACTIVATE_FACE_ID:
+    'Tap to activate Face ID so you don’t need to confirm your PIN every time you need to use it',
+  TAP_TO_ACTIVATE_FINGERPRINT:
+    'Tap to activate Fingerprint so you don’t need to confirm your PIN every time you need to use it',
+  TAP_TO_ACTIVATE_FACE:
+    'Tap to activate Face so you don’t need to confirm your PIN every time you need to use it',
+
   SO_YOU_DONT_NEED_TO_CONFIRM:
     'So you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE: (type: string) => `Tap to activate ${type} ID
-  so you don’t need to confirm your PIN 
-  every time you need to use it`,
-  I_WILL_RATHER_SET_PIN: 'I will rather set PIN',
-  SUCCESS_SETTING_UP_ADDITIONAL_PROTECTION:
-    'Additional app protection was set up',
-  TO_PROTECT_YOUR_DATA_AND_CONFIDENTIALITY:
-    'To protect your data and its confidentiality',
+
   SKIP: 'Skip',
   YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
-  BIOMETRY_IS_DISABLED: (biometryType: string | null) =>
-    `${biometryType} is disabled`,
+
+  TOUCH_ID_IS_DISABLED: 'Touch ID is disabled',
+  FACE_ID_IS_DISABLED: 'Touch ID is disabled',
+  FINGERPRINT_IS_DISABLED: 'Touch ID is disabled',
+  FACE_IS_DISABLED: 'Touch ID is disabled',
+
   TO_USE_BIOMETRICS_ENABLE:
     'To use biometrics enable this feature in the system settings',
   SETTINGS: 'Settings',
   CANCEL: 'Cancel',
-  YOU_WILL_BE_PROMPT_TO_USE_BIOMETRY_AS_A_LOCAL_AUTH:
-    'You will be prompt to use Biometry as a local authentication',
+
   SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER:
     'Scan your fingerprint on the device scanner to continue',
   SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed

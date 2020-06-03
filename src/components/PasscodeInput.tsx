@@ -28,8 +28,8 @@ interface PasscodeInputI {
   hasError?: boolean
 }
 
-type addPasscodeFnT = (prevState: string, passcode?: string) => string
-type removePasscodeFnT = (prevState: string) => string
+type AddPasscodeFnT = (prevState: string, passcode?: string) => string
+type RemovePasscodeFnT = (prevState: string) => string
 
 const PasscodeInput: React.FC<PasscodeInputI> = ({
   value,
@@ -47,12 +47,12 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
       : PASSCODE_LENGTH.length - 1
   const hideInput = !(digits.length < PASSCODE_LENGTH.length)
 
-  const handlePress = () => {
+  const focusInput = () => {
     inputRef.current?.focus()
   }
 
   // focus on mount
-  useEffect(handlePress, [])
+  useEffect(focusInput, [])
 
   useEffect(() => {
     if (value.length === 4) {
@@ -79,18 +79,18 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   }
 
   // a callback function that is passed (when we changing passcode) to setPasscode or setVerifiedPasscode
-  const addToPasscodeCb: addPasscodeFnT = (prevState, passcode) => {
+  const addToPasscodeCb: AddPasscodeFnT = (prevState, passcode) => {
     if (prevState.length >= PASSCODE_LENGTH.length) return prevState
     return (prevState + passcode).slice(0, PASSCODE_LENGTH.length)
   }
 
   // a callback function that is passed (when we removing digits from passcode) to setPasscode or setVerifiedPasscode
-  const removeFromPasscodeCb: removePasscodeFnT = (prevState) =>
+  const removeFromPasscodeCb: RemovePasscodeFnT = (prevState) =>
     prevState.slice(0, prevState.length - 1)
 
   // the first parameter is a setter function of passcode or verifiedPasscode, the second is deciding to add or to remove from/to passcode
   const updatePasscode = (
-    passcodeManipulationFn: addPasscodeFnT | removePasscodeFnT,
+    passcodeManipulationFn: AddPasscodeFnT | RemovePasscodeFnT,
   ) => {
     return (passcodeUpdaterFn: Dispatch<SetStateAction<string>>) => {
       return (passcode?: string) => {
@@ -109,7 +109,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const handleRemovingFromPasscode = removeFromPasscode(stateUpdaterFn)
 
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
+    <TouchableWithoutFeedback onPress={focusInput}>
       <View style={styles.inputContainer}>
         <View style={{ flexDirection: 'row' }}>
           {PASSCODE_LENGTH.map((v, index) => {
