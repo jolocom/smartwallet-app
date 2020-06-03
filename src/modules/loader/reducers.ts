@@ -1,6 +1,6 @@
 import { strings } from '~/translations/strings'
 
-import { LoaderActions, LoaderTypes, LoaderStateI } from './types'
+import { LoaderActions, LoaderStateI, LoaderTypes } from './types'
 
 type Actions = {
   type: LoaderActions
