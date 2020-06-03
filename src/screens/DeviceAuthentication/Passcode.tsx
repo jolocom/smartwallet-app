@@ -68,6 +68,7 @@ const Passcode = () => {
         // setting up pin in the keychain
         await Keychain.setGenericPassword(PIN_USERNAME, passcode, {
           service: PIN_SERVICE,
+          storage: Keychain.STORAGE_TYPE.AES,
         })
       } catch (err) {
         console.log({ err })
