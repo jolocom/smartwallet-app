@@ -5,6 +5,7 @@ import './shim'
 
 import RootNavigation from '~/RootNavigation'
 import { ErrorBoundary } from '~/ErrorBoundary'
+import Loader from '~/components/Loader'
 import configureStore from './configureStore'
 
 const store = configureStore()
@@ -14,6 +15,7 @@ const App = () => {
     <ErrorBoundary>
       <Provider store={store}>
         <RootNavigation />
+        <Loader />
       </Provider>
     </ErrorBoundary>
   )
