@@ -6789,6 +6789,11 @@ react-native-dotenv@^0.2.0:
   dependencies:
     babel-plugin-dotenv "0.1.1"
 
+react-native-fingerprint-scanner@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-fingerprint-scanner/-/react-native-fingerprint-scanner-5.0.0.tgz#440ac2461643b3249f26895d58aefa98a1ceeb60"
+  integrity sha512-g858NwkgDqAC5dwIKqI939/hnzXZ1MKj62NVr644sVSzTCVlobfgvsTVkln9QOqRPz87w/swwiPUZTDODMdP5A==
+
 react-native-gesture-handler@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"

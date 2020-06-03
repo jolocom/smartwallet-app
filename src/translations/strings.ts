@@ -90,6 +90,9 @@ const deviceAuthentication = {
   CANCEL: 'Cancel',
   YOU_WILL_BE_PROMPT_TO_USE_BIOMETRY_AS_A_LOCAL_AUTH:
     'You will be prompt to use Biometry as a local authentication',
+  SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER:
+    'Scan your fingerprint on the device scanner to continue',
+  SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed
 }
 
 export const strings = {

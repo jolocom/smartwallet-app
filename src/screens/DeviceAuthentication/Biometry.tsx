@@ -1,37 +1,44 @@
 import React, { useEffect } from 'react'
 import Keychain from 'react-native-keychain'
-import { View, Alert, Linking, StyleSheet } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
 import {
-  BIOMETRY_USERNAME,
-  BIOMETRY_PASSWORD,
-  BIOMETRY_SERVICE,
-} from 'react-native-dotenv'
+  View,
+  Alert,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
+import FingerprintScanner from 'react-native-fingerprint-scanner'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
+import Ripple from '~/components/Ripple'
 
 import { strings } from '~/translations/strings'
-import { TouchableOpacity } from 'react-native'
-import { Colors } from '~/utils/colors'
-import useSuccessProtection from './useSuccessProtection'
+
 import TouchIdIcon from '~/assets/svg/TouchIdIcon'
 import FaceIdIcon from '~/assets/svg/FaceIdIcon'
-import Ripple from '~/components/Ripple'
-import useRedirectTo from '~/hooks/useRedirectTo'
-import { ScreenNames } from '~/types/screens'
-import { useDeviceAuthState } from './module/context'
+
 import useResetKeychainValues from '~/hooks/useResetKeychainValues'
+import useRedirectTo from '~/hooks/useRedirectTo'
+
+import { Colors } from '~/utils/colors'
+
+import { ScreenNames } from '~/types/screens'
+
+import { useDeviceAuthState } from './module/context'
+
+import useBiometryRegistrationLoader from './useBiometryRegistrationLoader'
 
 interface BiometricsPropsI {
   authType: string
 }
 
 const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
-  const handleProtectionSet = useSuccessProtection()
+  const handleBiometryRegistration = useBiometryRegistrationLoader()
   const biometryType = useDeviceAuthState()
 
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
@@ -51,39 +58,35 @@ const Biometrics: React.FC<BiometricsPropsI> = ({ authType }) => {
 
   const authenticate = async () => {
     try {
-      const biometryAuthValue = await Keychain.setGenericPassword(
-        //@ts-ignore
-        BIOMETRY_USERNAME,
-        BIOMETRY_PASSWORD,
-        {
-          service: BIOMETRY_SERVICE,
-          accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
-          accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-        },
-      )
-      if (biometryAuthValue) {
-        await AsyncStorage.setItem('biometry', biometryType || '')
-        handleProtectionSet()
-      }
-    } catch (err) {
-      console.log({ err })
+      await FingerprintScanner.authenticate({
+        description:
+          biometryType === 'FaceID'
+            ? strings.SCAN_YOUR_FACE
+            : strings.SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER,
+        fallbackEnabled: false, // on this stage we don't want to prompr use passcode as a fallback
+      })
 
-      Alert.alert(
-        strings.BIOMETRY_IS_DISABLED(biometryType),
-        strings.TO_USE_BIOMETRICS_ENABLE,
-        [
-          {
-            text: strings.SETTINGS,
-            onPress: () => Linking.openSettings(),
-          },
-          {
-            text: strings.CANCEL,
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-        ],
-        { cancelable: false },
-      )
+      await AsyncStorage.setItem('biometry', biometryType || '')
+      handleBiometryRegistration()
+    } catch (err) {
+      if (err.name === 'FingerprintScannerNotEnrolled') {
+        Alert.alert(
+          strings.BIOMETRY_IS_DISABLED(biometryType),
+          strings.TO_USE_BIOMETRICS_ENABLE,
+          [
+            {
+              text: strings.SETTINGS,
+              onPress: () => Linking.openSettings(),
+            },
+            {
+              text: strings.CANCEL,
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+          ],
+          { cancelable: false },
+        )
+      }
     }
   }
 

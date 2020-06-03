@@ -7,7 +7,7 @@ import useDelay from '~/hooks/useDelay'
 import { ScreenNames } from '~/types/screens'
 import { strings } from '~/translations/strings'
 
-const useSuccessProtection = () => {
+const useBiometryRegistrationLoader = () => {
   const dispatch = useDispatch()
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
@@ -22,10 +22,10 @@ const useSuccessProtection = () => {
     await useDelay(() => {
       dispatch(dismissLoader())
       redirectToLoggedIn()
-    })
+    }, 4000)
   }
 
   return handleProtectionSet
 }
 
-export default useSuccessProtection
+export default useBiometryRegistrationLoader
