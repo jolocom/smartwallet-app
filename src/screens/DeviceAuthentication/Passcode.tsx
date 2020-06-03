@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import Keychain from 'react-native-keychain'
-import { PIN_SERVICE, PIN_USERNAME } from 'react-native-dotenv'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -15,6 +14,9 @@ import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 import useSuccess from '~/hooks/useSuccess'
+
+const PIN_SERVICE = 'com.jolocom.wallet-PIN'
+const PIN_USERNAME = 'wallet-user'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
