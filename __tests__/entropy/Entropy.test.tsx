@@ -6,13 +6,13 @@ describe('Entropy', () => {
     const mockSubmit = jest.fn()
     const { result } = renderHook(() => useEntropyProgress(mockSubmit))
     const { addPoint, entropyGenerator } = result.current
-    jest.spyOn(entropyGenerator, 'addFromDelta')
+    jest.spyOn(entropyGenerator.current, 'addFromDelta')
 
     act(() => {
       addPoint(100, 300)
     })
 
-    expect(entropyGenerator.addFromDelta).toBeCalledTimes(2)
+    expect(entropyGenerator.current.addFromDelta).toBeCalledTimes(2)
     expect(result.current.entropyProgress).toMatchSnapshot()
   })
 
@@ -20,7 +20,7 @@ describe('Entropy', () => {
     const mockSubmit = jest.fn()
     const { result } = renderHook(() => useEntropyProgress(mockSubmit))
     const { addPoint, entropyGenerator } = result.current
-    jest.spyOn(entropyGenerator, 'addFromDelta')
+    jest.spyOn(entropyGenerator.current, 'addFromDelta')
 
     act(() => {
       addPoint(100, 300)
@@ -28,7 +28,7 @@ describe('Entropy', () => {
       addPoint(400, 200)
     })
 
-    expect(entropyGenerator.addFromDelta).toBeCalledTimes(6)
+    expect(entropyGenerator.current.addFromDelta).toBeCalledTimes(6)
     expect(result.current.entropyProgress).toMatchSnapshot()
   })
 
