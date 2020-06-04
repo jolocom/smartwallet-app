@@ -21,16 +21,18 @@ const ENOUGH_ENTROPY_PROGRESS = 0.3
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
-  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
   const SDK = useSDK()
   const loader = useLoader()
   const dispatch = useDispatch()
 
-  const submitEntropy = async (entropy: string) => {
+  const submitEntropy = async (entropy: string, onError: () => void) => {
     const entropyBuffer = new Buffer(entropy, 'hex')
+
     const success = await loader(
       async () => {
         const iw = await SDK.bemw.createNewIdentity(entropyBuffer)
+        console.log({ iw })
+
         dispatch(setDid(iw.did))
       },
       {
@@ -40,10 +42,12 @@ const Entropy: React.FC = () => {
     )
 
     if (success) redirectToSeedPhrase()
-    else redirectToWalkthrough()
+    else onError()
   }
 
-  const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)
+  const { entropyProgress, addPoint, isCanvasReady } = useEntropyProgress(
+    submitEntropy,
+  )
 
   return (
     <ScreenContainer>
@@ -54,49 +58,62 @@ const Entropy: React.FC = () => {
       ) : (
         <EntropyIntro />
       )}
-      <EntropyCanvas disabled={entropyProgress === 1} addPoint={addPoint} />
+      {isCanvasReady && (
+        <EntropyCanvas disabled={entropyProgress === 1} addPoint={addPoint} />
+      )}
     </ScreenContainer>
   )
 }
 
-export const useEntropyProgress = (submit: (entropy: string) => void) => {
+export const useEntropyProgress = (
+  submit: (entropy: string, onError: () => void) => void,
+) => {
   const [entropyProgress, setProgress] = useState(0)
+  const [isCanvasReady, setIsCanvasRready] = useState(true)
 
-  const entropyGenerator = useRef(new EntropyGenerator()).current
+  let entropyGenerator = useRef(new EntropyGenerator())
 
   useEffect(() => {
     if (entropyProgress === 1) {
       ;(async () => {
         await supplementEntropyProgress()
-        submit(entropyGenerator.generateRandomString(4))
+        submit(entropyGenerator.current.generateRandomString(4), resetProgress)
       })()
     }
   }, [entropyProgress])
 
   const supplementEntropyProgress = async () => {
-    while (entropyGenerator.getProgress() < 1) {
+    while (entropyGenerator.current.getProgress() < 1) {
       const moreEntropy = await generateSecureRandomBytes(512)
       // NOTE do not use moreEntropy.forEach, Buffer API is inconsistent, it
       // doesn't work in some envirtonments
       for (let i = 0; i < moreEntropy.length; i++) {
-        entropyGenerator.addFromDelta(moreEntropy[i])
+        entropyGenerator.current.addFromDelta(moreEntropy[i])
       }
     }
   }
 
   const updateProgress = () => {
-    const progress = entropyGenerator.getProgress() / ENOUGH_ENTROPY_PROGRESS
+    const progress =
+      entropyGenerator.current.getProgress() / ENOUGH_ENTROPY_PROGRESS
     setProgress(progress >= 1 ? 1 : progress)
   }
 
+  const resetProgress = () => {
+    setIsCanvasRready(false)
+    setProgress(0)
+    setIsCanvasRready(true)
+    entropyGenerator.current = new EntropyGenerator()
+  }
+
   const addPoint = useCallback((x: number, y: number) => {
-    entropyGenerator.addFromDelta(x)
-    entropyGenerator.addFromDelta(y)
+    entropyGenerator.current.addFromDelta(x)
+    entropyGenerator.current.addFromDelta(y)
 
     updateProgress()
   }, [])
 
-  return { entropyProgress, addPoint, entropyGenerator }
+  return { entropyProgress, addPoint, entropyGenerator, isCanvasReady }
 }
 
 const styles = StyleSheet.create({
