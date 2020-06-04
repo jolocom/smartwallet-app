@@ -29,14 +29,6 @@ const BtnGroup: React.FC<PropsI> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    ...Platform.select({
-      android: {
-        marginBottom: 20,
-      },
-      ios: {
-        marginBottom: 50,
-      },
-    }),
   },
   horizontal: {
     flexDirection: 'row',

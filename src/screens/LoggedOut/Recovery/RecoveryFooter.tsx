@@ -17,6 +17,7 @@ import SDK from '~/utils/SDK'
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState } from './module/recoveryContext'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -58,31 +59,27 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
       )
     }
     return (
-      <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
-        <BtnGroup>
-          <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
-            {strings.CONFIRM}
-          </Btn>
-          <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-            {strings.BACK_TO_WALKTHROUGH}
-          </Btn>
-        </BtnGroup>
-      </Animated.View>
+      <AbsoluteBottom>
+        <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
+          <BtnGroup>
+            <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
+              {strings.CONFIRM}
+            </Btn>
+            <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
+              {strings.BACK_TO_WALKTHROUGH}
+            </Btn>
+          </BtnGroup>
+        </Animated.View>
+      </AbsoluteBottom>
     )
   },
 )
 
 const styles = StyleSheet.create({
   footer: {
-    height: 50,
+    width: '100%',
     position: 'absolute',
     bottom: 10,
-    width: '100%',
-    ...Platform.select({
-      android: {
-        bottom: 30,
-      },
-    }),
   },
 })
 

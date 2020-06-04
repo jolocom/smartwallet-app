@@ -27,10 +27,7 @@ const Recovery: React.FC = () => {
               paddingTop: 50,
             },
           }),
-
-          justifyContent: areSuggestionsVisible
-            ? 'flex-start'
-            : 'space-between',
+          justifyContent: 'flex-start',
         }}
       >
         <RecoveryHeader />
