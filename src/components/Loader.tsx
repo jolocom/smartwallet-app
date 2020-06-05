@@ -26,8 +26,9 @@ const colors = {
 const Loader: React.FC = () => {
   const { msg, type } = useSelector(getLoaderState)
   const isAnimating = useRef(true)
+  const loaderType = useRef(type)
 
-  const animatedWidth1 = useRef(new Animated.Value(1)).current
+  const animatedWidth1 = useRef(new Animated.Value(0)).current
   const animatedOpacity1 = animatedWidth1.interpolate({
     inputRange: [1, 5, 7],
     outputRange: [1, 0.6, 0],
@@ -39,13 +40,31 @@ const Loader: React.FC = () => {
     outputRange: [0, 1, 0],
   })
 
-  const animatedWidth3 = useRef(new Animated.Value(2)).current
+  const animatedWidth3 = useRef(new Animated.Value(0)).current
   const animatedOpacity3 = animatedWidth3.interpolate({
     inputRange: [2, 7],
     outputRange: [0, 1],
   })
 
+  const errorScale = useRef(new Animated.Value(0)).current
+  const errorOpacity = errorScale.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  })
+
+  const bounceError = () =>
+    Animated.timing(errorScale, {
+      toValue: 1.5,
+      easing: Easing.bounce,
+      useNativeDriver: true,
+    }).start()
+
   const firstRipple = Animated.parallel([
+    Animated.timing(animatedWidth1, {
+      toValue: 1,
+      duration: 0,
+      useNativeDriver: true,
+    }),
     Animated.timing(animatedWidth1, {
       toValue: 7,
       duration: 3500,
@@ -66,16 +85,23 @@ const Loader: React.FC = () => {
     }),
   ])
 
-  const thirdRipple = Animated.timing(animatedWidth3, {
-    toValue: 7,
-    delay: 3000,
-    duration: 1500,
-    useNativeDriver: true,
-  })
+  const thirdRipple = Animated.sequence([
+    Animated.timing(animatedWidth3, {
+      toValue: 2,
+      duration: 0,
+      useNativeDriver: true,
+    }),
+    Animated.timing(animatedWidth3, {
+      toValue: 7,
+      delay: 3000,
+      duration: 1500,
+      useNativeDriver: true,
+    }),
+  ])
 
   const reset = Animated.parallel([
     Animated.timing(animatedWidth1, {
-      toValue: 1,
+      toValue: 0,
       duration: 0,
       useNativeDriver: true,
     }),
@@ -85,7 +111,7 @@ const Loader: React.FC = () => {
       useNativeDriver: true,
     }),
     Animated.timing(animatedWidth3, {
-      toValue: 2,
+      toValue: 0,
       duration: 0,
       useNativeDriver: true,
     }),
@@ -101,20 +127,21 @@ const Loader: React.FC = () => {
 
   const looping = () => {
     Animated.loop(ripple, { iterations: 1 }).start(() => {
-      if (type !== LoaderTypes.default) {
-        // animate success or failure
-      } else {
+      if (loaderType.current === LoaderTypes.default) {
         looping()
+      } else if (loaderType.current === LoaderTypes.error) {
+        bounceError()
       }
     })
   }
 
   useEffect(() => {
+    loaderType.current = type
     isAnimating.current && looping()
     return () => {
       isAnimating.current = false
     }
-  })
+  }, [type])
 
   return (
     <Modal
@@ -170,6 +197,15 @@ const Loader: React.FC = () => {
           >
             <View style={styles.nestedCircle} />
           </Animated.View>
+          <Animated.View
+            style={{
+              position: 'absolute',
+              transform: [{ scale: errorScale }],
+              opacity: errorOpacity,
+            }}
+          >
+            <ErrorIcon />
+          </Animated.View>
           <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
             {msg}
           </Paragraph>
@@ -201,4 +237,10 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Loader
+export default function () {
+  const { isVisible } = useSelector(getLoaderState)
+  if (isVisible) {
+    return <Loader />
+  }
+  return null
+}

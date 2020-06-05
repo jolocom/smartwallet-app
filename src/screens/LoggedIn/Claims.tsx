@@ -22,7 +22,17 @@ const Claims: React.FC = () => {
         msg: strings.MATCHING,
       }),
     )
-    await useDelay(() => dispatch(dismissLoader()), 20000)
+    await useDelay(
+      () =>
+        dispatch(
+          setLoader({
+            type: LoaderTypes.error,
+            msg: strings.FAILED,
+          }),
+        ),
+      2000,
+    )
+    await useDelay(() => dispatch(dismissLoader()), 5000)
   }
 
   const openScanner = useRedirectTo(ScreenNames.Interactions)

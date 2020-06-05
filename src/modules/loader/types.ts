@@ -12,4 +12,5 @@ export enum LoaderActions {
 export interface LoaderStateI {
   type: LoaderTypes
   msg: string
+  isVisible: boolean
 }
