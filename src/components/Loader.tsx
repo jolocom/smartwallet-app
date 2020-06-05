@@ -25,6 +25,7 @@ const colors = {
 
 const Loader: React.FC = () => {
   const { msg, type } = useSelector(getLoaderState)
+  const isAnimating = useRef(true)
 
   const animatedWidth1 = useRef(new Animated.Value(1)).current
   const animatedOpacity1 = animatedWidth1.interpolate({
@@ -92,13 +93,27 @@ const Loader: React.FC = () => {
 
   const ripple = Animated.sequence([
     Animated.stagger(500, [firstRipple, secondRipple, thirdRipple]),
+    Animated.delay(1000),
     reset,
   ])
 
   const modalVisible = msg !== ''
 
+  const looping = () => {
+    Animated.loop(ripple, { iterations: 1 }).start(() => {
+      if (type !== LoaderTypes.default) {
+        // animate success or failure
+      } else {
+        looping()
+      }
+    })
+  }
+
   useEffect(() => {
-    Animated.loop(ripple).start()
+    isAnimating.current && looping()
+    return () => {
+      isAnimating.current = false
+    }
   })
 
   return (
