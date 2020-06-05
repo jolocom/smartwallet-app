@@ -32,7 +32,7 @@ const Claims: React.FC = () => {
         ),
       2000,
     )
-    await useDelay(() => dispatch(dismissLoader()), 5000)
+    await useDelay(() => dispatch(dismissLoader()), 10000)
   }
 
   const openScanner = useRedirectTo(ScreenNames.Interactions)

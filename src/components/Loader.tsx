@@ -1,12 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import {
-  BackHandler,
-  View,
-  Animated,
-  StyleSheet,
-  Modal,
-  Easing,
-} from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, Animated, StyleSheet, Modal, Easing } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
@@ -26,7 +19,11 @@ const colors = {
 const Loader: React.FC = () => {
   const { msg, type } = useSelector(getLoaderState)
   const isAnimating = useRef(true)
+
   const loaderType = useRef(type)
+  const loaderMsg = useRef(msg)
+
+  const [status, setStatus] = useState(msg)
 
   const animatedWidth1 = useRef(new Animated.Value(0)).current
   const animatedOpacity1 = animatedWidth1.interpolate({
@@ -130,6 +127,7 @@ const Loader: React.FC = () => {
       if (loaderType.current === LoaderTypes.default) {
         looping()
       } else if (loaderType.current === LoaderTypes.error) {
+        setStatus(loaderMsg.current)
         bounceError()
       }
     })
@@ -137,11 +135,12 @@ const Loader: React.FC = () => {
 
   useEffect(() => {
     loaderType.current = type
+    loaderMsg.current = msg
     isAnimating.current && looping()
     return () => {
       isAnimating.current = false
     }
-  }, [type])
+  })
 
   return (
     <Modal
@@ -207,7 +206,7 @@ const Loader: React.FC = () => {
             <ErrorIcon />
           </Animated.View>
           <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
-            {msg}
+            {status}
           </Paragraph>
         </ScreenContainer>
       </View>
