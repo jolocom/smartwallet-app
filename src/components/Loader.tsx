@@ -18,7 +18,7 @@ const colors = {
 }
 
 interface LoaderI {
-  bgColor: Colors
+  bgColor?: Colors
 }
 
 const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
@@ -45,8 +45,8 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
 
   const animatedWidth3 = useRef(new Animated.Value(0)).current
   const animatedOpacity3 = animatedWidth3.interpolate({
-    inputRange: [2, 5],
-    outputRange: [0, 1],
+    inputRange: [2, 4.5, 5],
+    outputRange: [0, 1, 0],
   })
 
   const errorScale = useRef(new Animated.Value(0)).current
@@ -97,9 +97,15 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
       useNativeDriver: true,
     }),
     Animated.timing(animatedWidth3, {
-      toValue: 5,
+      toValue: 4.5,
       delay: 3000,
-      duration: 1500,
+      duration: 1000,
+      useNativeDriver: true,
+    }),
+    Animated.timing(animatedWidth3, {
+      toValue: 5,
+      delay: 500,
+      duration: 500,
       useNativeDriver: true,
     }),
   ])
@@ -315,7 +321,6 @@ const styles = StyleSheet.create({
   tickBlocker: {
     height: '100%',
     width: 50,
-    backgroundColor: 'rgba(0,0,0,0.95)',
   },
 })
 
