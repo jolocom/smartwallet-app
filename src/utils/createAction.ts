@@ -1,14 +1,14 @@
-import {LoaderActions} from '~/modules/loader/types';
+import { RootActions } from '~/modules/rootReducer'
 
-const createAction = (type: LoaderActions) => {
+const createAction = (type: RootActions) => {
   const actionCreator = (payload?: any) => ({
     type,
     payload,
-  });
+  })
 
-  actionCreator.type = type;
+  actionCreator.type = type
 
-  return actionCreator;
-};
+  return actionCreator
+}
 
-export default createAction;
+export default createAction

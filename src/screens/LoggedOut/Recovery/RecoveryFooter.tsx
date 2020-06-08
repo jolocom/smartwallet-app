@@ -11,12 +11,12 @@ import useRedirectTo from '~/hooks/useRedirectTo'
 import { useLoader } from '~/hooks/useLoader'
 
 import { ScreenNames } from '~/types/screens'
-
-import SDK from '~/utils/SDK'
+import { useSDK } from '~/utils/sdk/context'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
-import { useRecoveryState } from './module/recoveryContext'
+import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
+import { resetPhrase } from './module/recoveryActions'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -26,16 +26,20 @@ interface RecoveryFooterI {
 
 const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
+  const dispatch = useRecoveryDispatch()
   const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn)
-  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
+  const SDK = useSDK()
 
   const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(() => SDK.recoverIdentity(phrase), {
-      loading: strings.MATCHING,
-    })
+    const success = await loader(
+      () => SDK.bemw.initWithMnemonic(phrase.join(' ')),
+      {
+        loading: strings.MATCHING,
+      },
+    )
 
     if (success) redirectToClaims()
-    else redirectToWalkthrough()
+    else dispatch(resetPhrase())
   }, [phrase])
 
   const isPhraseComplete = phrase.length === 12

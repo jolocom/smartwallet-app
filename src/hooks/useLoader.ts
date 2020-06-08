@@ -51,8 +51,8 @@ export const useLoader = () => {
             msg: success,
           }),
         )
-      await useDelay(() => dispatch(dismissLoader()))
     } catch (err) {
+      console.warn(err)
       if (showStatus)
         dispatch(
           setLoader({
@@ -60,8 +60,9 @@ export const useLoader = () => {
             msg: failed,
           }),
         )
-      await useDelay(() => dispatch(dismissLoader()))
       result = false
+    } finally {
+      await useDelay(() => dispatch(dismissLoader()))
     }
 
     return result
