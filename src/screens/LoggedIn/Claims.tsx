@@ -26,8 +26,8 @@ const Claims: React.FC = () => {
       () =>
         dispatch(
           setLoader({
-            type: LoaderTypes.error,
-            msg: strings.FAILED,
+            type: LoaderTypes.success,
+            msg: strings.SUCCESS,
           }),
         ),
       2000,
