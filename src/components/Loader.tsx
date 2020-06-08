@@ -22,6 +22,7 @@ const Loader: React.FC = () => {
 
   const loaderType = useRef(type)
   const loaderMsg = useRef(msg)
+  const loaderColor = useRef(colors[loaderType.current])
 
   const [status, setStatus] = useState(msg)
 
@@ -48,13 +49,6 @@ const Loader: React.FC = () => {
     inputRange: [0, 1],
     outputRange: [0, 1],
   })
-
-  const bounceError = () =>
-    Animated.timing(errorScale, {
-      toValue: 1.5,
-      easing: Easing.bounce,
-      useNativeDriver: true,
-    }).start()
 
   const firstRipple = Animated.parallel([
     Animated.timing(animatedWidth1, {
@@ -120,6 +114,15 @@ const Loader: React.FC = () => {
     reset,
   ])
 
+  const bounceError = () =>
+    Animated.timing(errorScale, {
+      toValue: 1.5,
+      easing: Easing.bounce,
+      useNativeDriver: true,
+    }).start()
+
+  // const showTick = () =>
+
   const modalVisible = msg !== ''
 
   const looping = () => {
@@ -129,6 +132,9 @@ const Loader: React.FC = () => {
       } else if (loaderType.current === LoaderTypes.error) {
         setStatus(loaderMsg.current)
         bounceError()
+      } else if (loaderType.current === LoaderTypes.success) {
+        setStatus(loaderMsg.current)
+        // showTick();
       }
     })
   }
@@ -136,6 +142,7 @@ const Loader: React.FC = () => {
   useEffect(() => {
     loaderType.current = type
     loaderMsg.current = msg
+    loaderColor.current = colors[type]
     isAnimating.current && looping()
     return () => {
       isAnimating.current = false
@@ -160,7 +167,7 @@ const Loader: React.FC = () => {
               width: 18,
               height: 18,
               borderRadius: 9,
-              backgroundColor: colors[type],
+              backgroundColor: loaderColor.current,
             }}
           >
             {/*  the border of the circle once is scaled get pixelated
@@ -178,7 +185,7 @@ const Loader: React.FC = () => {
               width: 18,
               height: 18,
               borderRadius: 9,
-              backgroundColor: colors[type],
+              backgroundColor: loaderColor.current,
             }}
           >
             <View style={styles.nestedCircle} />
@@ -191,7 +198,7 @@ const Loader: React.FC = () => {
               width: 18,
               height: 18,
               borderRadius: 9,
-              backgroundColor: colors[type],
+              backgroundColor: loaderColor.current,
             }}
           >
             <View style={styles.nestedCircle} />
@@ -205,7 +212,7 @@ const Loader: React.FC = () => {
           >
             <ErrorIcon />
           </Animated.View>
-          <Paragraph size={ParagraphSizes.medium} color={colors[type]}>
+          <Paragraph size={ParagraphSizes.medium} color={loaderColor.current}>
             {status}
           </Paragraph>
         </ScreenContainer>
