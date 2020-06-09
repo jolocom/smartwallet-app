@@ -99,6 +99,7 @@ const deviceAuthentication = {
   SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER:
     'Scan your fingerprint on the device scanner to continue',
   SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed
+  RESET: 'Reset',
 }
 
 export const strings = {

@@ -5,15 +5,20 @@ import Keychain from 'react-native-keychain'
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
 import PasscodeInput from '~/components/PasscodeInput'
-import { strings } from '~/translations/strings'
-import { Colors } from '~/utils/colors'
 import Paragraph from '~/components/Paragraph'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
+import Btn, { BtnTypes } from '~/components/Btn'
+
 import useDelay from '~/hooks/useDelay'
-import { useDeviceAuthState } from './module/context'
 import useRedirectTo from '~/hooks/useRedirectTo'
-import { ScreenNames } from '~/types/screens'
 import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 import useSuccess from '~/hooks/useSuccess'
+
+import { strings } from '~/translations/strings'
+import { Colors } from '~/utils/colors'
+import { ScreenNames } from '~/types/screens'
+
+import { useDeviceAuthState } from './module/context'
 
 const PIN_SERVICE = 'com.jolocom.wallet-PIN'
 const PIN_USERNAME = 'wallet-user'
@@ -77,6 +82,13 @@ const Passcode = () => {
     }
   }
 
+  const resetPasscode = () => {
+    setIsCreating(true)
+    setPasscode('')
+    setVerifiedPasscode('')
+    setHasError(false)
+  }
+
   useEffect(() => {
     if (verifiedPasscode.length < 4 && hasError) {
       setHasError(false)
@@ -118,14 +130,24 @@ const Passcode = () => {
             hasError={hasError}
           />
         )}
+        {showLoading && (
+          <ActivityIndicator
+            testID="loading-indicator"
+            style={styles.spinner}
+          />
+        )}
       </View>
-      {showLoading && (
-        <ActivityIndicator testID="loading-indicator" style={styles.spinner} />
-      )}
       {hasError && (
         <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
           {strings.PINS_DONT_MATCH}
         </Paragraph>
+      )}
+      {!isCreating && (
+        <AbsoluteBottom>
+          <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
+            {strings.RESET}
+          </Btn>
+        </AbsoluteBottom>
       )}
     </ScreenContainer>
   )
@@ -134,9 +156,12 @@ const Passcode = () => {
 const styles = StyleSheet.create({
   passcodeContainer: {
     marginTop: '30%',
+    position: 'relative',
   },
   spinner: {
-    marginTop: 20,
+    position: 'absolute',
+    left: '38%',
+    top: 100,
   },
 })
 

@@ -16,6 +16,7 @@ import {
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = 65
@@ -106,49 +107,51 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const handleRemovingFromPasscode = removeFromPasscode(stateUpdaterFn)
 
   return (
-    <TouchableWithoutFeedback onPress={focusInput}>
-      <View style={styles.inputContainer}>
-        <View style={{ flexDirection: 'row' }}>
-          {PASSCODE_LENGTH.map((v, index) => {
-            const isSelected = digits.length === index
-            return (
-              <View
-                style={[
-                  styles.display,
-                  isSelected && isFocused && styles.active,
-                  hasError && styles.error,
-                ]}
-                key={index}
-              >
-                <Text style={styles.text} testID="passcode-cell">
-                  {(index < digits.length && '*') || ''}
-                </Text>
-              </View>
-            )
-          })}
+    <ScrollView keyboardShouldPersistTaps="never" scrollEnabled={false}>
+      <TouchableWithoutFeedback onPress={focusInput}>
+        <View style={styles.inputContainer}>
+          <View style={{ flexDirection: 'row' }}>
+            {PASSCODE_LENGTH.map((v, index) => {
+              const isSelected = digits.length === index
+              return (
+                <View
+                  style={[
+                    styles.display,
+                    isSelected && isFocused && styles.active,
+                    hasError && styles.error,
+                  ]}
+                  key={index}
+                >
+                  <Text style={styles.text} testID="passcode-cell">
+                    {(index < digits.length && '*') || ''}
+                  </Text>
+                </View>
+              )
+            })}
+          </View>
+          <TextInput
+            value=""
+            ref={inputRef}
+            onChangeText={handleAddingToPasscode}
+            onKeyPress={handleRemove}
+            onFocus={handleFocus}
+            autoFocus={true}
+            onBlur={handleBlur}
+            testID="passcode-digit-input"
+            style={[
+              styles.input,
+              {
+                left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
+                opacity: hideInput ? 0 : 1,
+              },
+            ]}
+            keyboardType="numeric"
+            keyboardAppearance="dark"
+            selectionColor="transparent"
+          />
         </View>
-        <TextInput
-          value=""
-          ref={inputRef}
-          onChangeText={handleAddingToPasscode}
-          onKeyPress={handleRemove}
-          onFocus={handleFocus}
-          autoFocus={true}
-          onBlur={handleBlur}
-          testID="passcode-digit-input"
-          style={[
-            styles.input,
-            {
-              left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
-              opacity: hideInput ? 0 : 1,
-            },
-          ]}
-          keyboardType="numeric"
-          keyboardAppearance="dark"
-          selectionColor="transparent"
-        />
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </ScrollView>
   )
 }
 
