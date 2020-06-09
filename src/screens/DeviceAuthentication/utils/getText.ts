@@ -1,9 +1,9 @@
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 
 import { strings } from '~/translations/strings'
-import { StateI } from '../module/reducer'
+import { BiometryTypes } from '~/screens/DeviceAuthentication/module/deviceAuthTypes'
 
-export const getBiometryHeader = (biometryType: StateI) => {
+export const getBiometryHeader = (biometryType: BiometryTypes) => {
   switch (biometryType) {
     case BIOMETRY_TYPE.TOUCH_ID:
       return strings.USE_TOUCH_ID_TO_AUTHORIZE
@@ -18,7 +18,7 @@ export const getBiometryHeader = (biometryType: StateI) => {
   }
 }
 
-export const getBiometryActionText = (biometryType: StateI) => {
+export const getBiometryActionText = (biometryType: BiometryTypes) => {
   switch (biometryType) {
     case BIOMETRY_TYPE.TOUCH_ID:
       return strings.TAP_TO_ACTIVATE_TOUCH_ID
@@ -33,7 +33,7 @@ export const getBiometryActionText = (biometryType: StateI) => {
   }
 }
 
-export const getBiometryIsDisabledText = (biometryType: StateI) => {
+export const getBiometryIsDisabledText = (biometryType: BiometryTypes) => {
   switch (biometryType) {
     case BIOMETRY_TYPE.TOUCH_ID:
       return strings.TOUCH_ID_IS_DISABLED
@@ -48,7 +48,7 @@ export const getBiometryIsDisabledText = (biometryType: StateI) => {
   }
 }
 
-export const getBiometryDescription = (biometryType: StateI) => {
+export const getBiometryDescription = (biometryType: BiometryTypes) => {
   switch (biometryType) {
     case BIOMETRY_TYPE.TOUCH_ID || BIOMETRY_TYPE.FINGERPRINT:
       return strings.SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER

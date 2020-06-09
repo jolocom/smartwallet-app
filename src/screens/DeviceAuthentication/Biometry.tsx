@@ -9,13 +9,14 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
+import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
-import BtnGroup from '~/components/BtnGroup'
 import Ripple from '~/components/Ripple'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
 
@@ -23,30 +24,39 @@ import TouchIdIcon from '~/assets/svg/TouchIdIcon'
 import FaceIdIcon from '~/assets/svg/FaceIdIcon'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
+import useSuccess from '~/hooks/useSuccess'
 
 import { Colors } from '~/utils/colors'
 
 import { ScreenNames } from '~/types/screens'
 
-import { useDeviceAuthState } from './module/context'
+import { useDeviceAuthState } from './module/deviceAuthContext'
 
-import useBiometryRegistrationLoader from './useBiometryRegistrationLoader'
 import {
   getBiometryHeader,
   getBiometryActionText,
   getBiometryIsDisabledText,
   getBiometryDescription,
 } from './utils/getText'
-import useSuccess from '~/hooks/useSuccess'
+import { setLogged } from '~/modules/account/actions'
+import useDelay from '~/hooks/useDelay'
 
 const Biometry: React.FC = () => {
-  // const handleBiometryRegistration = useBiometryRegistrationLoader()
-  const biometryType = useDeviceAuthState()
+  const { biometryType } = useDeviceAuthState()
   const displaySuccessLoader = useSuccess()
-
+  const dispatch = useDispatch()
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
+
   const isFaceBiometry =
     biometryType === BIOMETRY_TYPE.FACE_ID || biometryType === 'FACE'
+
+  // 🗑 temporarily solution
+  // there will be no need to redirect to logged in section
+  // as DeviceAuth will be displayed out of Logged in Section
+  const handleLogin = async () => {
+    dispatch(setLogged(true))
+    await useDelay(redirectToLoggedIn, 100)
+  }
 
   const authenticate = async () => {
     try {
@@ -59,7 +69,7 @@ const Biometry: React.FC = () => {
       // handleBiometryRegistration();
 
       await displaySuccessLoader()
-      redirectToLoggedIn()
+      handleLogin()
     } catch (err) {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         Alert.alert(
@@ -83,7 +93,7 @@ const Biometry: React.FC = () => {
   }
 
   return (
-    <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
+    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
       <View>
         <Header size={HeaderSizes.small}>
           {getBiometryHeader(biometryType)}
@@ -92,8 +102,11 @@ const Biometry: React.FC = () => {
           {strings.SO_YOU_DONT_NEED_TO_CONFIRM}
         </Paragraph>
       </View>
-      <TouchableOpacity onPress={authenticate}>
-        <View style={styles.animationContainer}>
+      <TouchableOpacity
+        onPress={authenticate}
+        style={styles.animationContainer}
+      >
+        <View style={styles.ripple}>
           <Ripple
             color={Colors.activity}
             initialValue1={5}
@@ -103,20 +116,27 @@ const Biometry: React.FC = () => {
         </View>
         {isFaceBiometry ? <FaceIdIcon /> : <TouchIdIcon />}
       </TouchableOpacity>
-      <Paragraph color={Colors.success}>
+      <Paragraph
+        color={Colors.success}
+        customStyles={{ paddingHorizontal: 25 }}
+      >
         {getBiometryActionText(biometryType)}
       </Paragraph>
-      <BtnGroup>
-        <Btn type={BtnTypes.secondary} onPress={redirectToLoggedIn}>
+      <AbsoluteBottom>
+        <Btn type={BtnTypes.secondary} onPress={handleLogin}>
           {strings.SKIP}
         </Btn>
-      </BtnGroup>
+      </AbsoluteBottom>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
   animationContainer: {
+    marginTop: '40%',
+    marginBottom: '30%',
+  },
+  ripple: {
     position: 'absolute',
     top: 0,
     bottom: 0,

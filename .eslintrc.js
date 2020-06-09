@@ -70,5 +70,6 @@ module.exports = {
     '@typescript-eslint/no-var-requires': ['off'],
     '@typescript-eslint/no-use-before-define': ['off'],
     '@typescript-eslint/explicit-function-return-type': ['off'],
+    'import/no-duplicates': ['error'],
   },
 }

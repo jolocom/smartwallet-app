@@ -9,21 +9,24 @@ import Biometry from './Biometry'
 
 import DeviceAuthContextProvider, {
   useDeviceAuthDispatch,
-} from './module/context'
+  useDeviceAuthState,
+} from './module/deviceAuthContext'
+import { setBiometryType } from './module/deviceAuthActions'
 
 const Stack = createStackNavigator()
 
 const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
+  const { isPasscodeView } = useDeviceAuthState()
 
   // on this step we chceck wether user device supports biometrics
   useEffect(() => {
     const getAuthenticationType = async () => {
       try {
         const authenticationType = await Keychain.getSupportedBiometryType()
-        dispatch(authenticationType)
+        dispatch(setBiometryType(authenticationType))
       } catch (e) {
-        dispatch(null)
+        dispatch(setBiometryType(null))
       }
     }
 
@@ -32,8 +35,11 @@ const DeviceAuthentication: React.FC = () => {
 
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name={ScreenNames.Passcode} component={Passcode} />
-      <Stack.Screen name={ScreenNames.Biometry} component={Biometry} />
+      {isPasscodeView ? (
+        <Stack.Screen name={ScreenNames.Passcode} component={Passcode} />
+      ) : (
+        <Stack.Screen name={ScreenNames.Biometry} component={Biometry} />
+      )}
     </Stack.Navigator>
   )
 }

@@ -18,7 +18,11 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { ScreenNames } from '~/types/screens'
 
-import { useDeviceAuthState } from './module/context'
+import {
+  useDeviceAuthState,
+  useDeviceAuthDispatch,
+} from './module/deviceAuthContext'
+import { showBiometry } from './module/deviceAuthActions'
 
 const PIN_SERVICE = 'com.jolocom.wallet-PIN'
 const PIN_USERNAME = 'wallet-user'
@@ -30,9 +34,10 @@ const Passcode = () => {
   const [showLoading, setShowLoading] = useState(false) // to immitate loading after passcode was submit and before redirecting to verifies passcode
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
-  const biometryType = useDeviceAuthState()
+  const { biometryType } = useDeviceAuthState()
+  const dispatch = useDeviceAuthDispatch()
+
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
-  const redirectToBiometry = useRedirectTo(ScreenNames.Biometry)
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
   const displaySuccessLoader = useSuccess()
@@ -57,7 +62,7 @@ const Passcode = () => {
 
   const redirectTo = () => {
     if (biometryType && biometryType !== 'IRIS') {
-      redirectToBiometry()
+      dispatch(showBiometry())
     } else {
       redirectToLoggedIn()
     }
@@ -99,7 +104,6 @@ const Passcode = () => {
     <ScreenContainer
       customStyles={{
         justifyContent: 'flex-start',
-        paddingTop: 30,
       }}
     >
       <View>
