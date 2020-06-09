@@ -15,6 +15,8 @@ const recoveryReducer = (state: StateI, action: ActionI): StateI => {
       return onUpdateProp(state, action, 'seedKey')
     case RecoveryActions.setPhrase:
       return onUpdateProp(state, action, 'phrase')
+    case RecoveryActions.resetPhrase:
+      return initialRecoveryState
     case RecoveryActions.setCurrentWordIdx:
       return onUpdateProp(state, action, 'currentWordIdx')
     case RecoveryActions.setSuggestedKeys:

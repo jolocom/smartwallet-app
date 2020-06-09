@@ -79,7 +79,7 @@ const Loader: React.FC = () => {
 
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={modalVisible}
       presentationStyle="overFullScreen"
