@@ -71,7 +71,6 @@ const Passcode = () => {
         console.log({ err })
       }
       // redirect to Biometry screen if biometry is supported on a device, otherwise, redirect to LoggedIn section
-
       redirectTo()
     } else {
       setHasError(true)

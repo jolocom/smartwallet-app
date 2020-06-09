@@ -51,9 +51,6 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
     inputRef.current?.focus()
   }
 
-  // focus on mount
-  useEffect(focusInput, [])
-
   useEffect(() => {
     if (value.length === 4) {
       inputRef.current?.blur()
@@ -136,6 +133,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
           onChangeText={handleAddingToPasscode}
           onKeyPress={handleRemove}
           onFocus={handleFocus}
+          autoFocus={true}
           onBlur={handleBlur}
           testID="passcode-digit-input"
           style={[
