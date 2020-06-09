@@ -153,7 +153,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
     Animated.parallel([
       Animated.timing(animatedOpacity4, {
         toValue: 1,
-        duration: 300,
+        duration: 0,
         easing: Easing.ease,
         useNativeDriver: true,
       }),
@@ -164,7 +164,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
           useNativeDriver: true,
         }),
         Animated.timing(tickBlockerPosition, {
-          toValue: 30,
+          toValue: 28,
           duration: 700,
           useNativeDriver: true,
         }),
@@ -297,19 +297,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  circle: {
-    borderWidth: 1,
-    position: 'absolute',
-  },
-  nestedCircle: {
-    position: 'absolute',
-    top: 0.3,
-    left: 0.3,
-    width: 17.4,
-    height: 17.4,
-    borderRadius: 8.7,
-    backgroundColor: Colors.black,
   },
   tickContainer: {
     width: 100,
