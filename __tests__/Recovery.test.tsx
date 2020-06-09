@@ -4,16 +4,6 @@ import { render, fireEvent } from '@testing-library/react-native'
 import Recovery from '~/screens/LoggedOut/Recovery'
 import { strings } from '~/translations/strings'
 
-const mockDispatch = jest.fn()
-const mockNavigation = jest.fn()
-
-jest.mock('react-redux', () => ({
-  useDispatch: () => mockDispatch,
-}))
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => mockNavigation,
-}))
-
 const validSeedKeys = [
   'tree',
   'ready',
