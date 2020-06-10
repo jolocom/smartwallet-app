@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   },
   fullscreen: {
     paddingHorizontal: 0,
+    paddingTop: 0,
   },
 })
 
