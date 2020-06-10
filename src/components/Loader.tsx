@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View, Animated, StyleSheet, Modal, Easing } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -10,7 +10,8 @@ import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
-import useAnimatedCircles from '~/hooks/useAnimatedCircles'
+import useDelay from '~/hooks/useDelay'
+import { dismissLoader } from '~/modules/loader/actions'
 
 const colors = {
   default: Colors.white90,
@@ -25,6 +26,7 @@ interface LoaderI {
 const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   const { msg, type } = useSelector(getLoaderState)
   const isAnimating = useRef(true)
+  const dispatch = useDispatch()
 
   const loaderType = useRef(type)
   const loaderMsg = useRef(msg)
@@ -135,7 +137,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
     reset,
   ])
 
-  const bounceError = () =>
+  const bounceError = async () => {
     Animated.parallel([
       Animated.timing(animatedOpacity4, {
         toValue: 1,
@@ -149,8 +151,10 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
         useNativeDriver: true,
       }),
     ]).start()
+    await useDelay(() => dispatch(dismissLoader()), 3000)
+  }
 
-  const showTick = () =>
+  const showTick = async () => {
     Animated.parallel([
       Animated.timing(animatedOpacity4, {
         toValue: 1,
@@ -171,6 +175,8 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
         }),
       ]),
     ]).start()
+    await useDelay(() => dispatch(dismissLoader()), 3000)
+  }
 
   const modalVisible = msg !== ''
 

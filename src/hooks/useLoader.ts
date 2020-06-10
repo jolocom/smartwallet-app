@@ -2,7 +2,6 @@ import { useDispatch } from 'react-redux'
 
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import useDelay from './useDelay'
 import { strings } from '~/translations/strings'
 
 export interface LoaderConfig {
@@ -44,13 +43,16 @@ export const useLoader = () => {
     try {
       await callback()
       result = true
-      if (showStatus)
+      if (showStatus) {
         dispatch(
           setLoader({
             type: LoaderTypes.success,
             msg: success,
           }),
         )
+      } else {
+        dispatch(dismissLoader())
+      }
     } catch (err) {
       console.warn(err)
       if (showStatus)
@@ -61,8 +63,6 @@ export const useLoader = () => {
           }),
         )
       result = false
-    } finally {
-      await useDelay(() => dispatch(dismissLoader()))
     }
 
     return result
