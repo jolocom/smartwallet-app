@@ -44,15 +44,15 @@ describe('Navigation action creators', () => {
       'fromJWT',
     )
 
-    const interactionHandlersSpies = {}
-    Object.keys(interactionHandlers).forEach(typ => {
-      interactionHandlersSpies[typ] = jest
-        // @ts-ignore bleh
-        .spyOn(interactionHandlers, typ)
-        .mockReturnValue({ type: `MOCK_${typ}_INTERACTION_TOKEN_HANDLER` })
-    })
-
     beforeEach(() => {
+      const interactionHandlersSpies = {}
+      Object.keys(interactionHandlers).forEach(typ => {
+        interactionHandlersSpies[typ] = jest
+          // @ts-ignore bleh
+          .spyOn(interactionHandlers, typ)
+          .mockReturnValue({ type: `MOCK_${typ}_INTERACTION_TOKEN_HANDLER` })
+      })
+
       jest.useFakeTimers()
       mockStore.reset()
       parseInteractionTokenSpy.mockClear()
