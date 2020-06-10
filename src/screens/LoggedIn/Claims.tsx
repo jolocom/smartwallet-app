@@ -22,6 +22,16 @@ const Claims: React.FC = () => {
         msg: strings.MATCHING,
       }),
     )
+    await useDelay(
+      () =>
+        dispatch(
+          setLoader({
+            type: LoaderTypes.success,
+            msg: strings.SUCCESS,
+          }),
+        ),
+      2000,
+    )
     await useDelay(() => dispatch(dismissLoader()), 10000)
   }
 
