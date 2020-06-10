@@ -17,15 +17,13 @@ import useSuccess from '~/hooks/useSuccess'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { ScreenNames } from '~/types/screens'
+import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
 import {
   useDeviceAuthState,
   useDeviceAuthDispatch,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
-
-const PIN_SERVICE = 'com.jolocom.wallet-PIN'
-const PIN_USERNAME = 'wallet-user'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
