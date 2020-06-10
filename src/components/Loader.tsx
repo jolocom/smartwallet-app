@@ -9,6 +9,7 @@ import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
+import useAnimatedCircles from '~/hooks/useAnimatedCircles'
 
 const disableBackBtn = () => true
 
@@ -21,17 +22,16 @@ const colors = {
 const Loader: React.FC = () => {
   const { msg, type } = useSelector(getLoaderState)
 
-  const animatedWidth1 = useRef(new Animated.Value(2)).current
-  const animatedWidth2 = useRef(new Animated.Value(0)).current
+  const {
+    animatedScale1,
+    animatedScale2,
+    animatedOpacity1,
+    animatedOpacity2,
+    startScaling,
+  } = useAnimatedCircles(2, 0, 6, 6, 1700)
+
   const successAnimatedValue = useRef(new Animated.Value(1)).current
-  const animatedOpacity1 = animatedWidth1.interpolate({
-    inputRange: [2, 6],
-    outputRange: [1, 0],
-  })
-  const animatedOpacity2 = animatedWidth2.interpolate({
-    inputRange: [2, 6],
-    outputRange: [1, 0],
-  })
+
   const successAnimatedOpacity = successAnimatedValue.interpolate({
     inputRange: [1, 1.5],
     outputRange: [0, 1],
@@ -52,55 +52,23 @@ const Loader: React.FC = () => {
   }, [])
 
   const scale = () => {
-    const defaultAnimation = Animated.parallel([
-      Animated.sequence([
-        Animated.timing(animatedWidth1, {
-          toValue: 6,
-          duration: 1700,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animatedWidth1, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ]),
-      Animated.sequence([
-        Animated.timing(animatedWidth2, {
-          toValue: 6,
-          delay: 700,
-          duration: 1700,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animatedWidth2, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ]),
-    ])
     if (type === LoaderTypes.default) {
-      Animated.loop(defaultAnimation).start()
+      Animated.loop(startScaling).start()
     } else {
       Animated.parallel([
         Animated.spring(successAnimatedValue, {
           toValue: 1.5,
           useNativeDriver: true,
         }),
-        Animated.parallel([
-          Animated.timing(animatedWidth1, {
-            toValue: 6,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(animatedWidth1, {
+        Animated.sequence([
+          Animated.timing(animatedScale1, {
             toValue: 6,
             duration: 1000,
             useNativeDriver: true,
           }),
         ]),
       ]).start(() => {
-        defaultAnimation.stop()
+        startScaling.stop()
       })
     }
   }
@@ -122,7 +90,7 @@ const Loader: React.FC = () => {
           <Animated.View
             style={{
               position: 'absolute',
-              transform: [{ scale: animatedWidth1 }],
+              transform: [{ scale: animatedScale1 }],
               opacity: animatedOpacity1,
               width: 18,
               height: 18,
@@ -153,7 +121,7 @@ const Loader: React.FC = () => {
           <Animated.View
             style={{
               position: 'absolute',
-              transform: [{ scale: animatedWidth2 }],
+              transform: [{ scale: animatedScale2 }],
               opacity: animatedOpacity2,
               width: 18,
               height: 18,
@@ -190,7 +158,7 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: Colors.mainBlack,
+    backgroundColor: Colors.black,
   },
 })
 

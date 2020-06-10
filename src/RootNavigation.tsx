@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import LoggedOut from '~/screens/LoggedOut'
+import DeviceAuthentication from './screens/DeviceAuthentication'
 import LoggedIn from '~/screens/LoggedIn'
 import Interactions from '~/screens/Modals/Interactions'
 
@@ -27,6 +28,10 @@ const RootNavigation: React.FC = () => {
             component={LoggedOut}
           />
         )}
+        <RootStack.Screen
+          name={ScreenNames.DeviceAuth}
+          component={DeviceAuthentication}
+        />
         <RootStack.Screen
           name={ScreenNames.Interactions}
           component={Interactions}

@@ -22,12 +22,15 @@
     "@jolocom/sdk": "^0.8.1",
     "@jolocom/sdk-password-store-mobile-keychain": "^0.1.1",
     "@jolocom/sdk-storage-typeorm": "^1.1.0",
+    "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.9",
     "@react-navigation/bottom-tabs": "^5.2.7",
     "@react-navigation/native": "^5.1.6",
     "@react-navigation/stack": "^5.2.11",
     "@testing-library/react-hooks": "^3.2.1",
     "D": "^1.0.0",
+    "assert": "^1.1.1",
+    "asyncstorage-down": "^4.2.0",
     "bip39": "^3.0.2",
     "crypto-browserify": "^3.12.0",
     "react": "16.11.0",
@@ -35,6 +38,7 @@
     "react-native-crypto": "^2.1.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-keychain": "^6.0.0",
+    "react-native-level-fs": "^3.0.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-radial-gradient": "^1.0.6",
     "react-native-randombytes": "^3.5.3",
@@ -49,7 +53,8 @@
     "reselect": "^4.0.0",
     "rn-fetch-blob": "^0.12.0",
     "sjcl": "^1.0.7",
-    "typeorm": "^0.2.24"
+    "typeorm": "^0.2.24",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -73,6 +78,7 @@
     "metro-react-native-babel-preset": "^0.58.0",
     "prettier": "^2.0.4",
     "react-devtools": "^4.6.0",
+    "react-native-fingerprint-scanner": "^5.0.0",
     "react-test-renderer": "16.11.0",
     "redux-devtools-extension": "^2.13.8",
     "typescript": "^3.8.3"

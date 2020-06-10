@@ -1,4 +1,4 @@
-import { StateI, ActionI, RecoveryActions } from './types'
+import { StateI, ActionI, RecoveryActions } from './recoveryTypes'
 export const initialRecoveryState = {
   seedKey: '',
   phrase: [],

@@ -27,6 +27,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             "flex": 1,
             "justifyContent": "center",
             "paddingHorizontal": "5%",
+            "paddingTop": 40,
             "position": "relative",
           },
           Object {},
@@ -35,6 +36,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
           },
           false,
           false,
+          Object {},
         ]
       }
     >
