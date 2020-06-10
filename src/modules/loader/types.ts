@@ -5,8 +5,8 @@ export enum LoaderTypes {
 }
 
 export enum LoaderActions {
-  dismiss,
-  set,
+  dismiss = 'dismissLoader',
+  set = 'setLoader',
 }
 
 export interface LoaderStateI {

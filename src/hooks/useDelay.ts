@@ -1,4 +1,4 @@
-const useDelay = (callback: () => void, timeout = 2000) => {
+const useDelay = (callback: () => void, timeout = 2500) => {
   return new Promise((res) => {
     setTimeout(() => {
       callback()

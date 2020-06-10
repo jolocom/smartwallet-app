@@ -10,6 +10,7 @@ import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
+import useAnimatedCircles from '~/hooks/useAnimatedCircles'
 
 const colors = {
   default: Colors.white90,

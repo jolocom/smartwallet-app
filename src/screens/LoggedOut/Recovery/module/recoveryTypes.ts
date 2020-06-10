@@ -1,6 +1,7 @@
 export enum RecoveryActions {
   setSeedKey,
   setPhrase,
+  resetPhrase,
   setCurrentWordIdx,
   setSuggestedKeys,
   showSuggestions,

@@ -17,4 +17,5 @@ export enum Colors {
   bridal = '#ffefdf',
   peach = '#ffdebc',
   floralWhite = '#fffefc',
+  black = '#000000',
 }
