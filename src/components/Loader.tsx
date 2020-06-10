@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Animated, StyleSheet, Modal, Easing } from 'react-native'
+import { View, Animated, StyleSheet, Easing } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import ScreenContainer from '~/components/ScreenContainer'
 import Circle from '~/components/Circle'
+import Modal from '~/components/Modal'
 
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
@@ -211,12 +212,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   })
 
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={modalVisible}
-      presentationStyle="overFullScreen"
-    >
+    <Modal isVisible={modalVisible}>
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
         <ScreenContainer isTransparent>
           <View
