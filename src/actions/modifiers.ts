@@ -14,7 +14,7 @@ export const withLoadingHandler = (
   loadingAction: ActionCreator<ThunkAction>,
 ) => (wrappedAction: ThunkAction): ThunkAction => async dispatch => {
   try {
-    await dispatch(loadingAction(true))
+    dispatch(loadingAction(true))
     return await dispatch(wrappedAction)
   } finally {
     dispatch(loadingAction(false))
