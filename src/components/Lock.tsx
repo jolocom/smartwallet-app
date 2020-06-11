@@ -17,7 +17,13 @@ import AsyncStorage from '@react-native-community/async-storage'
 const Lock = () => {
   const [pin, setPin] = useState('')
   const [keychainPin, setKeychainPin] = useState('')
-  const [error, setError] = useState(false)
+  const [hasError, setHasError] = useState(false)
+
+  useEffect(() => {
+    if (pin.length < 4 && hasError) {
+      setHasError(false)
+    }
+  }, [pin])
 
   const getStoredPin = async () => {
     try {
@@ -37,7 +43,7 @@ const Lock = () => {
         setKeychainPin(storedPin.password)
       }
     } catch (err) {
-      // ✍🏼 todo: how should we handle this error ?
+      // ✍🏼 todo: how should we handle this hasError ?
       console.log({ err })
     }
   }
@@ -51,7 +57,7 @@ const Lock = () => {
     if (keychainPin === pin) {
       dispatch(unlockApp())
     } else {
-      setError(true)
+      setHasError(true)
     }
   }
 
@@ -67,7 +73,7 @@ const Lock = () => {
             value={pin}
             stateUpdaterFn={setPin}
             onSubmit={handleAppUnlock}
-            hasError={error}
+            hasError={hasError}
           />
         </View>
       </ScreenContainer>

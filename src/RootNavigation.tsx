@@ -20,7 +20,7 @@ const RootNavigation: React.FC = () => {
   return (
     <NavigationContainer>
       <RootStack.Navigator headerMode="none" mode="modal">
-        <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} />
+        <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
         {/* {isLoggedIn ? (
           <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
         ) : (
