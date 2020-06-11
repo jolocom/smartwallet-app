@@ -4,6 +4,7 @@ const initialState: AccountState = {
   did: '',
   loggedIn: true, // 🧨 for testing only should be false after implementation is complete
   isAppLocked: true,
+  isLocaclAuthSet: false, // this value indicates where user went through local auth registration
 }
 
 const reducer = (state = initialState, action: Action) => {
@@ -18,6 +19,8 @@ const reducer = (state = initialState, action: Action) => {
       return { ...state, isAppLocked: true }
     case AccountActionTypes.unlockApp:
       return { ...state, isAppLocked: false }
+    case AccountActionTypes.setLocalAuth:
+      return { ...state, isLocaclAuthSet: true }
     default:
       return state
   }

@@ -38,7 +38,7 @@ import {
   getBiometryIsDisabledText,
   getBiometryDescription,
 } from './utils/getText'
-import { setLogged } from '~/modules/account/actions'
+import { setLocalAuth } from '~/modules/account/actions'
 import useDelay from '~/hooks/useDelay'
 
 const Biometry: React.FC = () => {
@@ -50,11 +50,8 @@ const Biometry: React.FC = () => {
   const isFaceBiometry =
     biometryType === BIOMETRY_TYPE.FACE_ID || biometryType === 'FACE'
 
-  // 🗑 temporarily solution
-  // there will be no need to redirect to logged in section
-  // as DeviceAuth will be displayed out of Logged in Section
   const handleLogin = async () => {
-    dispatch(setLogged(true))
+    dispatch(setLocalAuth())
     await useDelay(redirectToLoggedIn, 100)
   }
 

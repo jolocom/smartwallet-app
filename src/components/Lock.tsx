@@ -2,17 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppState, AppStateStatus, View, StyleSheet } from 'react-native'
 import Keychain from 'react-native-keychain'
+import AsyncStorage from '@react-native-community/async-storage'
 
-import { isAppLocked, isLogged } from '~/modules/account/selectors'
+import {
+  isAppLocked,
+  isLogged,
+  isLocaclAuthSet,
+} from '~/modules/account/selectors'
 import { lockApp, unlockApp } from '~/modules/account/actions'
+import { PIN_SERVICE } from '~/utils/keychainConsts'
+import { strings } from '~/translations/strings'
 
 import ScreenContainer from './ScreenContainer'
-import Header from './Header'
+import Header, { HeaderSizes } from './Header'
 import Modal from './Modal'
 import PasscodeInput from './PasscodeInput'
-import { PIN_SERVICE } from '~/utils/keychainConsts'
-import Paragraph from './Paragraph'
-import AsyncStorage from '@react-native-community/async-storage'
+import Btn, { BtnTypes } from './Btn'
+import AbsoluteBottom from './AbsoluteBottom'
+import Paragraph, { ParagraphSizes } from './Paragraph'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -33,8 +40,6 @@ const Lock = () => {
           service: PIN_SERVICE,
         }),
       ])
-      console.log({ storedBiometry })
-      console.log({ storedPin })
 
       if (storedBiometry) {
         // show biometry view
@@ -63,10 +68,9 @@ const Lock = () => {
 
   return (
     <Modal isVisible>
-      <ScreenContainer customStyles={{ paddingTop: 80 }}>
-        <Header>Provide your PIN</Header>
-        <Paragraph>
-          To gain access to the app please provide your Smart Wallet PIN
+      <ScreenContainer customStyles={{ marginTop: '30%' }}>
+        <Paragraph size={ParagraphSizes.large}>
+          {strings.ENTER_YOUR_PIN}
         </Paragraph>
         <View style={styles.inputContainer}>
           <PasscodeInput
@@ -76,6 +80,11 @@ const Lock = () => {
             hasError={hasError}
           />
         </View>
+        <AbsoluteBottom>
+          <Btn type={BtnTypes.secondary} onPress={() => {}}>
+            {strings.FORGOT_YOUR_PIN}
+          </Btn>
+        </AbsoluteBottom>
       </ScreenContainer>
     </Modal>
   )
@@ -83,13 +92,14 @@ const Lock = () => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginTop: '30%',
+    marginTop: 20,
   },
 })
 
 export default function () {
   const isLocked = useSelector(isAppLocked)
   const isLoggedIn = useSelector(isLogged)
+  const isAuthSet = useSelector(isLocaclAuthSet)
   const dispatch = useDispatch()
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
@@ -105,7 +115,7 @@ export default function () {
     }
   }, [])
 
-  if (isLocked && isLoggedIn) {
+  if (isLocked && isAuthSet && isLoggedIn) {
     return <Lock />
   }
   return null

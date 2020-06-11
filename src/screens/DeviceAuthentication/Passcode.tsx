@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import Keychain from 'react-native-keychain'
+import { useDispatch } from 'react-redux'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -24,6 +25,7 @@ import {
   useDeviceAuthDispatch,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
+import { setLocalAuth } from '~/modules/account/actions'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -33,7 +35,8 @@ const Passcode = () => {
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
   const { biometryType } = useDeviceAuthState()
-  const dispatch = useDeviceAuthDispatch()
+  const dispatchToLocalAuth = useDeviceAuthDispatch()
+  const dispatch = useDispatch()
 
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -60,8 +63,9 @@ const Passcode = () => {
 
   const redirectTo = () => {
     if (biometryType && biometryType !== 'IRIS') {
-      dispatch(showBiometry())
+      dispatchToLocalAuth(showBiometry())
     } else {
+      dispatch(setLocalAuth())
       redirectToLoggedIn()
     }
   }

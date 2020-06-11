@@ -4,12 +4,14 @@ export enum AccountActionTypes {
   resetAccount = 'resetAccount',
   lockApp = 'lockApp',
   unlockApp = 'unlockApp',
+  setLocalAuth = 'setLocalAuth',
 }
 
 export interface AccountState {
   did: string
   loggedIn: boolean
   isAppLocked: boolean
+  isLocaclAuthSet: boolean
 }
 
 export interface Action {

@@ -102,6 +102,11 @@ const deviceAuthentication = {
   RESET: 'Reset',
 }
 
+const lock = {
+  ENTER_YOUR_PIN: 'Enter your PIN',
+  FORGOT_YOUR_PIN: 'Forgot your PIN?',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -111,4 +116,5 @@ export const strings = {
   ...recovery,
   ...seedphrase,
   ...deviceAuthentication,
+  ...lock,
 }
