@@ -2,7 +2,7 @@ import { AccountState, Action, AccountActionTypes } from './types'
 
 const initialState: AccountState = {
   did: '',
-  loggedIn: true, // 🧨 for testing only should be false after implementation is complete
+  loggedIn: false,
   isAppLocked: true,
   isLocaclAuthSet: false, // this value indicates where user went through local auth registration
 }
