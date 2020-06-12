@@ -104,6 +104,9 @@ const deviceAuthentication = {
 
 const settings = {
   CHANGE_PIN: 'Change PIN',
+  CURRENT_PASSCODE: 'Current passcode',
+  CREATE_NEW_PASSCODE: 'Create new passcode',
+  WRONG_PIN: 'Wrong PIN',
 }
 
 export const strings = {
