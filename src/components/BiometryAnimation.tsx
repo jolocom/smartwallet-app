@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, View, StyleSheet } from 'react-native'
+import { TouchableOpacity, View, StyleSheet, ViewStyle } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 
 import TouchIdIcon from '~/assets/svg/TouchIdIcon'
@@ -13,18 +13,20 @@ import { BiometryTypes } from '~/screens/DeviceAuthentication/module/deviceAuthT
 interface PropsI {
   biometryType: BiometryTypes
   handleAuthenticate: () => void
+  customStyles?: ViewStyle
 }
 
 const BiometryAnimation: React.FC<PropsI> = ({
   biometryType,
   handleAuthenticate,
+  customStyles,
 }) => {
   const isFaceBiometry =
     biometryType === BIOMETRY_TYPE.FACE_ID || biometryType === 'FACE'
   return (
     <TouchableOpacity
       onPress={handleAuthenticate}
-      style={styles.animationContainer}
+      style={[styles.animationContainer, customStyles]}
     >
       <View style={styles.ripple}>
         <Ripple

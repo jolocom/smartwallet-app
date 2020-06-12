@@ -106,6 +106,7 @@ const lock = {
   ENTER_YOUR_PIN: 'Enter your PIN',
   FORGOT_YOUR_PIN: 'Forgot your PIN?',
   UNLOCK_WITH_BIOMETRY: 'Unlock with biometry',
+  I_WILL_USE_PIN_INSTEAD: 'I will use PIN instead',
 }
 
 export const strings = {

@@ -101,9 +101,15 @@ const Lock = () => {
     }
   }
 
+  const showPin = () => {
+    setIsBiometryShow(false)
+  }
+
   return (
     <Modal isVisible>
-      <ScreenContainer customStyles={{ marginTop: '30%' }}>
+      <ScreenContainer
+        customStyles={{ marginTop: '30%', justifyContent: 'flex-start' }}
+      >
         {isLoadingStorage ? (
           <ActivityIndicator />
         ) : isBiometryShown ? (
@@ -114,7 +120,13 @@ const Lock = () => {
             <BiometryAnimation
               biometryType={biometryType}
               handleAuthenticate={handleBiometryAuthentication}
+              customStyles={{ marginTop: '20%' }}
             />
+            <AbsoluteBottom>
+              <Btn type={BtnTypes.secondary} onPress={showPin}>
+                {strings.I_WILL_USE_PIN_INSTEAD}
+              </Btn>
+            </AbsoluteBottom>
           </>
         ) : (
           <>
