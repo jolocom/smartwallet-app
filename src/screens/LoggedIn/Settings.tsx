@@ -1,20 +1,22 @@
-import React from 'react';
+import React from 'react'
 
-import ScreenContainer from '~/components/ScreenContainer';
-import Header from '~/components/Header';
-import Btn from '~/components/Btn';
-import useRedirectTo from '~/hooks/useRedirectTo';
-import {ScreenNames} from '~/types/screens';
+import ScreenContainer from '~/components/ScreenContainer'
+import Btn from '~/components/Btn'
 
-const Settings: React.FC = () => {
-  const logout = useRedirectTo(ScreenNames.LoggedOut);
+import useRedirectTo from '~/hooks/useRedirectTo'
+import { ScreenNames } from '~/types/screens'
+import { strings } from '~/translations/strings'
+
+const Settings = () => {
+  const redirectToChangePin = useRedirectTo(ScreenNames.SettingsList, {
+    screen: ScreenNames.ChangePin,
+  })
 
   return (
     <ScreenContainer>
-      <Header>Settings</Header>
-      <Btn onPress={logout}>Log out</Btn>
+      <Btn onPress={redirectToChangePin}>{strings.CHANGE_PIN}</Btn>
     </ScreenContainer>
-  );
-};
+  )
+}
 
-export default Settings;
+export default Settings

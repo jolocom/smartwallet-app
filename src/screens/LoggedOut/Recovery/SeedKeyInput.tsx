@@ -4,10 +4,8 @@ import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
-import { BackArrowIcon, ForthArrowIcon } from '~/assets/svg'
 
 import RecoveryInputMetadata from './RecoveryInputMetadata'
-import Arrow, { ArrowDirections } from './Arrow'
 
 import {
   setSeedKey,
@@ -19,6 +17,8 @@ import {
   submitKey,
   hideSuggestions,
 } from './module/recoveryActions'
+import LeftArrow from '~/components/LeftArrow'
+import RightArrow from '~/components/RightArrow'
 
 const SeedKeyInput: React.FC = () => {
   const inputRef = useRef<TextInput>(null)
@@ -107,11 +107,7 @@ const SeedKeyInput: React.FC = () => {
           keyIsValid && styles.inputValid,
         ]}
       >
-        {currentWordIdx > 0 && (
-          <Arrow direction={ArrowDirections.left} onPress={selectPrevWord}>
-            <BackArrowIcon />
-          </Arrow>
-        )}
+        {currentWordIdx > 0 && <LeftArrow handlePress={selectPrevWord} />}
         <TextInput
           value={seedKey}
           ref={inputRef}
@@ -131,10 +127,8 @@ const SeedKeyInput: React.FC = () => {
           spellCheck={false}
           autoCorrect={false}
         />
-        {currentWordIdx !== phrase.length && (
-          <Arrow direction={ArrowDirections.right} onPress={selectNextWord}>
-            {currentWordIdx < 12 && <ForthArrowIcon />}
-          </Arrow>
+        {currentWordIdx !== phrase.length && currentWordIdx < 12 && (
+          <RightArrow handlePress={selectNextWord} />
         )}
       </View>
       <RecoveryInputMetadata />

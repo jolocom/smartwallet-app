@@ -6,6 +6,7 @@ import LoggedOut from '~/screens/LoggedOut'
 import DeviceAuthentication from './screens/DeviceAuthentication'
 import LoggedIn from '~/screens/LoggedIn'
 import Interactions from '~/screens/Modals/Interactions'
+import SettingsList from '~/screens/SettingsList'
 
 import { ScreenNames } from '~/types/screens'
 
@@ -20,17 +21,23 @@ const RootNavigation: React.FC = () => {
   return (
     <NavigationContainer>
       <RootStack.Navigator headerMode="none" mode="modal">
-        {isLoggedIn ? (
+        <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
+        {/* <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} /> */}
+        {/* {isLoggedIn ? (
           <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
         ) : (
           <RootStack.Screen
             name={ScreenNames.LoggedOut}
             component={LoggedOut}
           />
-        )}
+        )} */}
         <RootStack.Screen
           name={ScreenNames.DeviceAuth}
           component={DeviceAuthentication}
+        />
+        <RootStack.Screen
+          name={ScreenNames.SettingsList}
+          component={SettingsList}
         />
         <RootStack.Screen
           name={ScreenNames.Interactions}

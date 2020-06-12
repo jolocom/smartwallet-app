@@ -102,6 +102,10 @@ const deviceAuthentication = {
   RESET: 'Reset',
 }
 
+const settings = {
+  CHANGE_PIN: 'Change PIN',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -111,4 +115,5 @@ export const strings = {
   ...recovery,
   ...seedphrase,
   ...deviceAuthentication,
+  ...settings,
 }
