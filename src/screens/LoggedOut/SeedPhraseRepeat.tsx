@@ -4,14 +4,38 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 import Btn from '~/components/Btn'
 
-import { useDispatch } from 'react-redux'
-import { setLogged } from '~/modules/account/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLogged, setDid, setEntropy } from '~/modules/account/actions'
+import { getEntropy } from '~/modules/account/selectors'
+import { useSDK } from '~/hooks/sdk'
+import { useLoader } from '~/hooks/useLoader'
+import { strings } from '~/translations/strings'
+import { ScreenNames } from '~/types/screens'
+import useRedirectTo from '~/hooks/useRedirectTo'
 
 const SeedPhraseRepeat: React.FC = () => {
+  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
   const dispatch = useDispatch()
+  const entropy = useSelector(getEntropy)
+  const SDK = useSDK()
+  const loader = useLoader()
 
-  const onPress = () => {
-    dispatch(setLogged(true))
+  const onPress = async () => {
+    const entropyBuffer = new Buffer(entropy, 'hex')
+    const success = await loader(
+      async () => {
+        const iw = await SDK.bemw.createNewIdentity(entropyBuffer)
+        dispatch(setDid(iw.did))
+        dispatch(setLogged(true))
+        // NOTE: Entropy should only be present in the store during on-boarding (for now)
+        dispatch(setEntropy(''))
+      },
+      {
+        showStatus: true,
+        loading: strings.CREATING,
+      },
+    )
+    if (!success) redirectToWalkthrough()
   }
 
   return (

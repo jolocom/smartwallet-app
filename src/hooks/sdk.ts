@@ -10,9 +10,7 @@ export const useSDK = () => {
 export const useMnemonic = () => {
   const sdk = useSDK()
 
-  return async () => {
-    const password = await sdk.bemw.keyChainLib.getPassword()
-    const mnemonic = sdk.bemw.keyProvider.getMnemonic(password)
-    return mnemonic
+  return (entropy: string) => {
+    return sdk.bemw.fromEntropyToMnemonic(Buffer.from(entropy, 'hex'))
   }
 }

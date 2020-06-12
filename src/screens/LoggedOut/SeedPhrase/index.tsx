@@ -13,6 +13,8 @@ import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
+import { getEntropy } from '~/modules/account/selectors'
+import { useSelector } from 'react-redux'
 
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
@@ -24,15 +26,14 @@ const SeedPhrase: React.FC = () => {
   const [showInfo, setShowInfo] = useState(true)
   const [seedphrase, setSeedphrase] = useState('')
   const getMnemonic = useMnemonic()
+  const entropy = useSelector(getEntropy)
 
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
 
   useEffect(() => {
-    ;(async () => {
-      const seedphrase = await getMnemonic()
-      setSeedphrase(seedphrase)
-    })()
+    const seedphrase = getMnemonic(entropy)
+    setSeedphrase(seedphrase)
   }, [])
 
   useEffect(() => {

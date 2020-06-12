@@ -5,42 +5,24 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
-import { useLoader } from '~/hooks/useLoader'
 import { ScreenNames } from '~/types/screens'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
-import { strings } from '~/translations/strings'
 
 import { EntropyIntro } from './EntropyIntro'
 import { EntropyGenerator } from './EntropyGenerator'
 import { EntropyCanvas } from './EntropyCanvas'
-import { useSDK } from '~/hooks/sdk'
 import { useDispatch } from 'react-redux'
-import { setDid } from '~/modules/account/actions'
+import { setEntropy } from '~/modules/account/actions'
 
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
-  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
-  const SDK = useSDK()
-  const loader = useLoader()
   const dispatch = useDispatch()
 
   const submitEntropy = async (entropy: string) => {
-    const entropyBuffer = new Buffer(entropy, 'hex')
-    const success = await loader(
-      async () => {
-        const iw = await SDK.bemw.createNewIdentity(entropyBuffer)
-        dispatch(setDid(iw.did))
-      },
-      {
-        showStatus: true,
-        loading: strings.CREATING,
-      },
-    )
-
-    if (success) redirectToSeedPhrase()
-    else redirectToWalkthrough()
+    dispatch(setEntropy(entropy))
+    redirectToSeedPhrase()
   }
 
   const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)

@@ -912,10 +912,10 @@
   dependencies:
     class-transformer "^0.2.3"
 
-"@jolocom/sdk@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.8.1.tgz#49787f41beb60ddef538fde8591051f0a70c08d6"
-  integrity sha512-ClKhijAQN5iRc7NtwgxFzIRNrOaZexuJAQeMrO6MQWuERZZMrhTB2bu0JgQHDY7bF//LwBoCmpyPMcRYrrkFCg==
+"@jolocom/sdk@^0.9.15":
+  version "0.9.15"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.9.15.tgz#6a4655855f3c43ef42f962b7140b32d0e5c7fe1e"
+  integrity sha512-fFPQ5vC5dVd5XtYS+i+oOgNDVO8QMVuZZTPB67UL6+/ePb5SEInsBRdg5G+/ICsN+9CDWlemBixwuNoXbBYxCw==
   dependencies:
     assert "^2.0.0"
     bip39 "^3.0.2"
@@ -926,7 +926,7 @@
     events "^3.0.0"
     form-data "^3.0.0"
     i18n-js "^3.1.0"
-    jolocom-lib "^4.1.0"
+    jolocom-lib "^4.3.0"
     ramda "^0.26.1"
     sjcl "^1.0.7"
     sqlite3 "^4.0.0"
@@ -3426,7 +3426,7 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-eccrypto@rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88:
+"eccrypto@github:rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88":
   version "1.1.2"
   resolved "https://codeload.github.com/rootstock/eccrypto/tar.gz/485e11f163093fb6e0d5263fa46ed5075dedfe88"
   dependencies:
@@ -6015,10 +6015,10 @@ jetifier@^1.6.2:
   resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.5.tgz#ea87324a4230bef20a9651178ecab978ee54a8cb"
   integrity sha512-T7yzBSu9PR+DqjYt+I0KVO1XTb1QhAfHnXV5Nd3xpbXM6Xg4e3vP60Q4qkNU8Fh6PHC2PivPUNN3rY7G2MxcDQ==
 
-jolocom-lib@^4.1.0:
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.2.8.tgz#e6d8a410fbc138a1a28f7733dc377e0d41f0434a"
-  integrity sha512-g8d3oICHkgJMGGrETFV/wfJNCVK6D0ODvcVjl19ncZJVnTmZPKRFJ7QrMSC3DYSeTsho2/Owd2/dwxxA813dCQ==
+jolocom-lib@^4.3.0:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.3.3.tgz#4f4a0bbd2cde593d58ad9b67c45ccbcb4d1f89ac"
+  integrity sha512-XnzIODwAJ52QVc72AnRMcrrbUIjLqtkiJIyHeck6TzYBde5JLKYeWaDpDo2Yy5vWdRnNys60f8Zs4wLA3Rumig==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"
