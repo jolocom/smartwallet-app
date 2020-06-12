@@ -105,6 +105,7 @@ const deviceAuthentication = {
 const lock = {
   ENTER_YOUR_PIN: 'Enter your PIN',
   FORGOT_YOUR_PIN: 'Forgot your PIN?',
+  UNLOCK_WITH_BIOMETRY: 'Unlock with biometry',
 }
 
 export const strings = {

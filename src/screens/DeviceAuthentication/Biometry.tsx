@@ -1,12 +1,5 @@
 import React from 'react'
-import { BIOMETRY_TYPE } from 'react-native-keychain'
-import {
-  View,
-  Alert,
-  Linking,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native'
+import { View } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { useDispatch } from 'react-redux'
@@ -15,13 +8,9 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
-import Ripple from '~/components/Ripple'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
-
-import TouchIdIcon from '~/assets/svg/TouchIdIcon'
-import FaceIdIcon from '~/assets/svg/FaceIdIcon'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
 import useSuccess from '~/hooks/useSuccess'
@@ -35,11 +24,12 @@ import { useDeviceAuthState } from './module/deviceAuthContext'
 import {
   getBiometryHeader,
   getBiometryActionText,
-  getBiometryIsDisabledText,
   getBiometryDescription,
 } from './utils/getText'
 import { setLocalAuth } from '~/modules/account/actions'
 import useDelay from '~/hooks/useDelay'
+import BiometryAnimation from '~/components/BiometryAnimation'
+import { handleNotEnrolled } from '~/utils/biometryErrors'
 
 const Biometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
@@ -47,15 +37,12 @@ const Biometry: React.FC = () => {
   const dispatch = useDispatch()
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
-  const isFaceBiometry =
-    biometryType === BIOMETRY_TYPE.FACE_ID || biometryType === 'FACE'
-
   const handleLogin = async () => {
     dispatch(setLocalAuth())
     await useDelay(redirectToLoggedIn, 100)
   }
 
-  const authenticate = async () => {
+  const handleAuthenticate = async () => {
     try {
       await FingerprintScanner.authenticate({
         description: getBiometryDescription(biometryType),
@@ -63,28 +50,12 @@ const Biometry: React.FC = () => {
       })
 
       await AsyncStorage.setItem('biometry', biometryType || '')
-      // handleBiometryRegistration();
 
       await displaySuccessLoader()
       handleLogin()
     } catch (err) {
       if (err.name === 'FingerprintScannerNotEnrolled') {
-        Alert.alert(
-          getBiometryIsDisabledText(biometryType),
-          strings.TO_USE_BIOMETRICS_ENABLE,
-          [
-            {
-              text: strings.SETTINGS,
-              onPress: () => Linking.openSettings(),
-            },
-            {
-              text: strings.CANCEL,
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
-            },
-          ],
-          { cancelable: false },
-        )
+        handleNotEnrolled(biometryType)
       }
     }
   }
@@ -99,20 +70,10 @@ const Biometry: React.FC = () => {
           {strings.SO_YOU_DONT_NEED_TO_CONFIRM}
         </Paragraph>
       </View>
-      <TouchableOpacity
-        onPress={authenticate}
-        style={styles.animationContainer}
-      >
-        <View style={styles.ripple}>
-          <Ripple
-            color={Colors.activity}
-            initialValue1={5}
-            maxValue1={15}
-            maxValue2={15}
-          />
-        </View>
-        {isFaceBiometry ? <FaceIdIcon /> : <TouchIdIcon />}
-      </TouchableOpacity>
+      <BiometryAnimation
+        biometryType={biometryType}
+        handleAuthenticate={handleAuthenticate}
+      />
       <Paragraph
         color={Colors.success}
         customStyles={{ paddingHorizontal: 25 }}
@@ -127,21 +88,5 @@ const Biometry: React.FC = () => {
     </ScreenContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  animationContainer: {
-    marginTop: '40%',
-    marginBottom: '30%',
-  },
-  ripple: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-})
 
 export default Biometry
