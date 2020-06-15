@@ -26,16 +26,19 @@ const SeedPhraseRepeat: React.FC = () => {
       async () => {
         const iw = await SDK.bemw.createNewIdentity(entropyBuffer)
         dispatch(setDid(iw.did))
-        dispatch(setLogged(true))
-        // NOTE: Entropy should only be present in the store during on-boarding (for now)
-        dispatch(setEntropy(''))
       },
       {
         showStatus: true,
         loading: strings.CREATING,
       },
     )
-    if (!success) redirectToWalkthrough()
+    if (success) {
+      dispatch(setLogged(true))
+      // NOTE: Entropy should only be present in the store during on-boarding (for now)
+      dispatch(setEntropy(''))
+    } else {
+      redirectToWalkthrough()
+    }
   }
 
   return (
