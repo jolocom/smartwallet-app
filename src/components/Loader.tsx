@@ -13,7 +13,7 @@ import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
 import useDelay from '~/hooks/useDelay'
 import { dismissLoader } from '~/modules/loader/actions'
-import { isAppLocked } from '~/modules/account/selectors'
+import { isAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 
 const colors = {
   default: Colors.white90,
@@ -320,8 +320,9 @@ const styles = StyleSheet.create({
 export default function () {
   const { isVisible } = useSelector(getLoaderState)
   const isLocked = useSelector(isAppLocked)
+  const isAuthSet = useSelector(isLocalAuthSet)
 
-  if (isVisible && !isLocked) {
+  if ((isVisible && !isLocked) || (isVisible && isLocked && !isAuthSet)) {
     return <Loader />
   }
   return null

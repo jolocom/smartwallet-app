@@ -25,7 +25,7 @@ import {
   useDeviceAuthDispatch,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
-import { setLocalAuth } from '~/modules/account/actions'
+import { setLocalAuth, unlockApp } from '~/modules/account/actions'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -65,9 +65,10 @@ const Passcode = () => {
     if (biometryType && biometryType !== 'IRIS') {
       dispatchToLocalAuth(showBiometry())
     } else {
-      dispatch(setLocalAuth())
       redirectToLoggedIn()
     }
+    dispatch(setLocalAuth())
+    dispatch(unlockApp())
   }
 
   const handleVerifiedPasscodeSubmit = async () => {
@@ -78,7 +79,7 @@ const Passcode = () => {
           service: PIN_SERVICE,
           storage: Keychain.STORAGE_TYPE.AES,
         })
-        await displaySuccessLoader()
+        displaySuccessLoader()
       } catch (err) {
         console.log({ err })
       }

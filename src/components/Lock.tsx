@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import {
   isAppLocked,
   isLogged,
-  isLocaclAuthSet,
+  isLocalAuthSet,
 } from '~/modules/account/selectors'
 import { lockApp, unlockApp } from '~/modules/account/actions'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
@@ -30,6 +30,7 @@ import { BiometryTypes } from '~/screens/DeviceAuthentication/module/deviceAuthT
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
+import { Colors } from '~/utils/colors'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -51,14 +52,16 @@ const Lock = () => {
         }),
       ])
 
+      setBiometryType(storedBiometry as BiometryTypes)
+      if (storedPin) {
+        setKeychainPin(storedPin.password)
+      }
       if (storedBiometry) {
         // show biometry view
-        setBiometryType(storedBiometry as BiometryTypes)
         setIsBiometryShow(true)
-      } else if (storedPin) {
+      } else {
         // show pin view
         setIsBiometryShow(false)
-        setKeychainPin(storedPin.password)
       }
     } catch (err) {
       // ✍🏼 todo: how should we handle this hasError ?
@@ -122,6 +125,9 @@ const Lock = () => {
               handleAuthenticate={handleBiometryAuthentication}
               customStyles={{ marginTop: '20%' }}
             />
+            <Paragraph color={Colors.success}>
+              {strings.TAP_TO_ACTIVATE}
+            </Paragraph>
             <AbsoluteBottom>
               <Btn type={BtnTypes.secondary} onPress={showPin}>
                 {strings.I_WILL_USE_PIN_INSTEAD}
@@ -162,7 +168,7 @@ const styles = StyleSheet.create({
 export default function () {
   const isLocked = useSelector(isAppLocked)
   const isLoggedIn = useSelector(isLogged)
-  const isAuthSet = useSelector(isLocaclAuthSet)
+  const isAuthSet = useSelector(isLocalAuthSet)
   const dispatch = useDispatch()
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {

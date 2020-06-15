@@ -2,7 +2,6 @@ import React from 'react'
 import { View } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
@@ -26,21 +25,13 @@ import {
   getBiometryActionText,
   getBiometryDescription,
 } from './utils/getText'
-import { setLocalAuth } from '~/modules/account/actions'
-import useDelay from '~/hooks/useDelay'
 import BiometryAnimation from '~/components/BiometryAnimation'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 
 const Biometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
   const displaySuccessLoader = useSuccess()
-  const dispatch = useDispatch()
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
-
-  const handleLogin = async () => {
-    dispatch(setLocalAuth())
-    await useDelay(redirectToLoggedIn, 100)
-  }
 
   const handleAuthenticate = async () => {
     try {
@@ -51,8 +42,8 @@ const Biometry: React.FC = () => {
 
       await AsyncStorage.setItem('biometry', biometryType || '')
 
-      await displaySuccessLoader()
-      handleLogin()
+      displaySuccessLoader()
+      redirectToLoggedIn()
     } catch (err) {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         handleNotEnrolled(biometryType)
@@ -81,7 +72,7 @@ const Biometry: React.FC = () => {
         {getBiometryActionText(biometryType)}
       </Paragraph>
       <AbsoluteBottom>
-        <Btn type={BtnTypes.secondary} onPress={handleLogin}>
+        <Btn type={BtnTypes.secondary} onPress={redirectToLoggedIn}>
           {strings.SKIP}
         </Btn>
       </AbsoluteBottom>

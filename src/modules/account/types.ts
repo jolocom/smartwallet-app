@@ -11,7 +11,7 @@ export interface AccountState {
   did: string
   loggedIn: boolean
   isAppLocked: boolean
-  isLocaclAuthSet: boolean
+  isLocalAuthSet: boolean
 }
 
 export interface Action {
