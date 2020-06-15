@@ -13,6 +13,7 @@ import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
 import useDelay from '~/hooks/useDelay'
 import { dismissLoader } from '~/modules/loader/actions'
+import { isAppLocked } from '~/modules/account/selectors'
 
 const colors = {
   default: Colors.white90,
@@ -202,10 +203,12 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   }
 
   useEffect(() => {
-    loaderType.current = type
-    loaderMsg.current = msg
-    loaderColor.current = colors[type]
-    isAnimating.current && looping()
+    if (isAnimating.current) {
+      loaderType.current = type
+      loaderMsg.current = msg
+      loaderColor.current = colors[type]
+      looping()
+    }
     return () => {
       isAnimating.current = false
     }
@@ -316,7 +319,9 @@ const styles = StyleSheet.create({
 
 export default function () {
   const { isVisible } = useSelector(getLoaderState)
-  if (isVisible) {
+  const isLocked = useSelector(isAppLocked)
+
+  if (isVisible && !isLocked) {
     return <Loader />
   }
   return null
