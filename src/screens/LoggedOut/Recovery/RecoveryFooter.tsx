@@ -11,10 +11,10 @@ import useRedirectTo from '~/hooks/useRedirectTo'
 import { useLoader } from '~/hooks/useLoader'
 
 import { ScreenNames } from '~/types/screens'
-import { useSDK } from '~/utils/sdk/context'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
+import { useSDK } from '~/hooks/sdk'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
