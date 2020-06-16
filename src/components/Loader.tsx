@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Animated, StyleSheet, Modal, Easing } from 'react-native'
+import { View, Animated, StyleSheet, Easing } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import ScreenContainer from '~/components/ScreenContainer'
 import Circle from '~/components/Circle'
+import Modal from '~/components/Modal'
 
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
@@ -12,6 +13,7 @@ import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
 import useDelay from '~/hooks/useDelay'
 import { dismissLoader } from '~/modules/loader/actions'
+import { isAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 
 const colors = {
   default: Colors.white90,
@@ -201,22 +203,19 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   }
 
   useEffect(() => {
-    loaderType.current = type
-    loaderMsg.current = msg
-    loaderColor.current = colors[type]
-    isAnimating.current && looping()
+    if (isAnimating.current) {
+      loaderType.current = type
+      loaderMsg.current = msg
+      loaderColor.current = colors[type]
+      looping()
+    }
     return () => {
       isAnimating.current = false
     }
   })
 
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={modalVisible}
-      presentationStyle="overFullScreen"
-    >
+    <Modal isVisible={modalVisible}>
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
         <ScreenContainer isTransparent>
           <View
@@ -320,7 +319,10 @@ const styles = StyleSheet.create({
 
 export default function () {
   const { isVisible } = useSelector(getLoaderState)
-  if (isVisible) {
+  const isLocked = useSelector(isAppLocked)
+  const isAuthSet = useSelector(isLocalAuthSet)
+
+  if ((isVisible && !isLocked) || (isVisible && isLocked && !isAuthSet)) {
     return <Loader />
   }
   return null

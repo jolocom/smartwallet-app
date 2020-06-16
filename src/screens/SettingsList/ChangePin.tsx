@@ -27,6 +27,7 @@ const useGetStoredPin = () => {
       const storedPin = await Keychain.getGenericPassword({
         service: PIN_SERVICE,
       })
+      console.log({ storedPin })
 
       if (storedPin) {
         // show pin view

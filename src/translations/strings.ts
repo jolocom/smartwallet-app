@@ -102,6 +102,14 @@ const deviceAuthentication = {
   RESET: 'Reset',
 }
 
+const lock = {
+  ENTER_YOUR_PIN: 'Enter your PIN',
+  FORGOT_YOUR_PIN: 'Forgot your PIN?',
+  UNLOCK_WITH_BIOMETRY: 'Unlock the app with biometry',
+  I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
+  TAP_TO_ACTIVATE: 'Tap to activate',
+}
+
 const settings = {
   CHANGE_PIN: 'Change PIN',
   CURRENT_PASSCODE: 'Current passcode',
@@ -119,4 +127,5 @@ export const strings = {
   ...seedphrase,
   ...deviceAuthentication,
   ...settings,
+  ...lock,
 }

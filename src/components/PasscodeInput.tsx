@@ -13,10 +13,10 @@ import {
   TextInputKeyPressEventData,
   Text,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import { ScrollView } from 'react-native-gesture-handler'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = 65
@@ -105,12 +105,11 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const addToPasscode = updatePasscode(addToPasscodeCb)
   const removeFromPasscode = updatePasscode(removeFromPasscodeCb)
 
-  // const handleAddingToPasscode = addToPasscode(setPasscode);
   const handleAddingToPasscode = addToPasscode(stateUpdaterFn)
   const handleRemovingFromPasscode = removeFromPasscode(stateUpdaterFn)
 
   return (
-    <ScrollView keyboardShouldPersistTaps="never" scrollEnabled={false}>
+    <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false}>
       <TouchableWithoutFeedback onPress={focusInput}>
         <View style={styles.inputContainer}>
           <View style={{ flexDirection: 'row' }}>
