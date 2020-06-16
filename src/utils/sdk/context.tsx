@@ -1,5 +1,4 @@
 import React, {
-  useContext,
   useState,
   MutableRefObject,
   createContext,
@@ -11,6 +10,7 @@ import { initSDK } from './'
 import { JolocomSDK } from '@jolocom/sdk'
 import { setDid, setLogged } from '~/modules/account/actions'
 import { useDispatch } from 'react-redux'
+import { Colors } from '../colors'
 
 export const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
   null,
@@ -48,7 +48,9 @@ export const SDKContextProvider: React.FC = ({ children }) => {
   }, [])
 
   return !loaded ? (
-    <View style={{ width: '100%', height: '100%', backgroundColor: 'red' }} />
+    <View
+      style={{ width: '100%', height: '100%', backgroundColor: Colors.black }}
+    />
   ) : (
     <SDKContext.Provider value={sdkRef} children={children} />
   )

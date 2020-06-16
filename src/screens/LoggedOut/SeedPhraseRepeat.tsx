@@ -21,7 +21,7 @@ const SeedPhraseRepeat: React.FC = () => {
   const SDK = useSDK()
   const loader = useLoader()
 
-  const onPress = async () => {
+  const onSubmitIdentity = async () => {
     const entropyBuffer = new Buffer(entropy, 'hex')
     const success = await loader(
       async () => {
@@ -46,7 +46,7 @@ const SeedPhraseRepeat: React.FC = () => {
   return (
     <ScreenContainer>
       <Header>Seed Phrase Repeat</Header>
-      <Btn onPress={onPress}>Done</Btn>
+      <Btn onPress={onSubmitIdentity}>Done</Btn>
     </ScreenContainer>
   )
 }
