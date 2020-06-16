@@ -81,12 +81,6 @@ const ChangePin = () => {
     )
   }
 
-  useEffect(() => {
-    if (pin.length < 4 && hasError) {
-      setHasError(false)
-    }
-  }, [pin])
-
   return (
     <SingleSettingView>
       <ScreenContainer
@@ -115,6 +109,7 @@ const ChangePin = () => {
           <PasscodeInput
             value={pin}
             stateUpdaterFn={setPin}
+            errorStateUpdaterFn={setHasError}
             onSubmit={handlePinVerification}
             hasError={hasError}
           />

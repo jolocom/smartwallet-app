@@ -26,6 +26,7 @@ interface PasscodeInputI {
   value: string
   stateUpdaterFn: Dispatch<SetStateAction<string>>
   onSubmit: () => void
+  errorStateUpdaterFn?: Dispatch<SetStateAction<boolean>>
   hasError?: boolean
 }
 
@@ -35,6 +36,7 @@ type RemovePasscodeFnT = (prevState: string) => string
 const PasscodeInput: React.FC<PasscodeInputI> = ({
   value,
   stateUpdaterFn,
+  errorStateUpdaterFn,
   onSubmit,
   hasError = false,
 }) => {
@@ -55,8 +57,9 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   useEffect(() => {
     if (value.length === 4) {
       inputRef.current?.blur()
-
       onSubmit()
+    } else if (value.length < 4 && hasError && errorStateUpdaterFn) {
+      errorStateUpdaterFn(false)
     }
   }, [value])
 
