@@ -17,6 +17,7 @@ import {
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
+import useDelay from '~/hooks/useDelay'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = 65
@@ -41,14 +42,34 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   hasError = false,
 }) => {
   const [isFocused, setIsFocused] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(-1)
   const inputRef = useRef<TextInput>(null)
 
   const digits = value.split('')
-  const selectedIndex =
-    digits.length < PASSCODE_LENGTH.length
-      ? digits.length
-      : PASSCODE_LENGTH.length - 1
   const hideInput = !(digits.length < PASSCODE_LENGTH.length)
+
+  useEffect(() => {
+    let isCurrent = true
+    const updateSelectedIndex = async () => {
+      // it is implemented with delay to be able to preview digits and not seeing asterics straight away
+      await useDelay(() => {
+        isCurrent &&
+          setSelectedIndex(() => {
+            if (digits.length < PASSCODE_LENGTH.length) {
+              return digits.length
+            } else if (digits.length === 4) {
+              return -1
+            } else {
+              return PASSCODE_LENGTH.length - 1
+            }
+          })
+      }, 100)
+    }
+    updateSelectedIndex()
+    return () => {
+      isCurrent = false
+    }
+  }, [value])
 
   const focusInput = () => {
     inputRef.current?.focus()
@@ -112,25 +133,6 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
     <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false}>
       <TouchableWithoutFeedback onPress={focusInput}>
         <View style={styles.inputContainer}>
-          <View style={{ flexDirection: 'row' }}>
-            {PASSCODE_LENGTH.map((v, index) => {
-              const isSelected = digits.length === index
-              return (
-                <View
-                  style={[
-                    styles.display,
-                    isSelected && isFocused && styles.active,
-                    hasError && styles.error,
-                  ]}
-                  key={index}
-                >
-                  <Text style={styles.text} testID="passcode-cell">
-                    {(index < digits.length && '*') || ''}
-                  </Text>
-                </View>
-              )
-            })}
-          </View>
           <TextInput
             value=""
             ref={inputRef}
@@ -151,6 +153,29 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
             keyboardAppearance="dark"
             selectionColor="transparent"
           />
+          <View style={{ flexDirection: 'row' }}>
+            {PASSCODE_LENGTH.map((v, index) => {
+              const isSelected = digits.length === index
+              return (
+                <View
+                  style={[
+                    styles.display,
+                    isSelected && isFocused && styles.active,
+                    hasError && styles.error,
+                  ]}
+                  key={index}
+                >
+                  <Text style={styles.text} testID="passcode-cell">
+                    {index === selectedIndex
+                      ? digits[index]
+                      : index < digits.length
+                      ? '*'
+                      : ''}
+                  </Text>
+                </View>
+              )
+            })}
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </ScrollView>

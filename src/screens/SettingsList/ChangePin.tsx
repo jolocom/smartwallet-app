@@ -13,12 +13,23 @@ import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 import SingleSettingView from './SingleSettingView'
 import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 import { useDispatch } from 'react-redux'
-import { setLoader } from '~/modules/loader/actions'
+import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import useDelay from '~/hooks/useDelay'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
+import { ScreenNames } from '~/types/screens'
+import useRedirectTo from '~/hooks/useRedirectTo'
+import { NavigationProp } from '@react-navigation/native'
 
-const ChangePin = () => {
+interface PropsI {
+  onSuccessRedirectToScreen?: ScreenNames
+  navigation: NavigationProp<{}>
+}
+
+const ChangePin: React.FC<PropsI> = ({
+  onSuccessRedirectToScreen,
+  navigation,
+}) => {
   const [pin, setPin] = useState('')
   const [newPin, setNewPin] = useState('')
   const [hasError, setHasError] = useState(false)
@@ -46,9 +57,16 @@ const ChangePin = () => {
     dispatch(
       setLoader({
         type: LoaderTypes.success,
-        msg: strings.SUCCESS,
+        msg: strings.PASSWORD_SUCCESSFULLY_CHANGED,
       }),
     )
+    await useDelay(() => dispatch(dismissLoader()))
+    if (onSuccessRedirectToScreen) {
+      const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
+      redirectToScreen()
+    } else {
+      navigation.goBack()
+    }
   }
 
   return (
