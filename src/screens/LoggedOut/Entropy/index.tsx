@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 
-import useRedirectTo from '~/hooks/useRedirectTo'
+import useReplaceWith from '~/hooks/useReplaceWith'
 import { ScreenNames } from '~/types/screens'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 
@@ -17,7 +17,7 @@ import { setEntropy } from '~/modules/account/actions'
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
 const Entropy: React.FC = () => {
-  const redirectToSeedPhrase = useRedirectTo(ScreenNames.SeedPhrase)
+  const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
   const dispatch = useDispatch()
 
   const submitEntropy = async (entropy: string) => {

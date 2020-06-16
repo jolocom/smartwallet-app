@@ -14,7 +14,7 @@ import { ScreenNames } from '~/types/screens'
 import useRedirectTo from '~/hooks/useRedirectTo'
 
 const SeedPhraseRepeat: React.FC = () => {
-  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
+  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
   const redirectToDeviceAuth = useRedirectTo(ScreenNames.DeviceAuth)
   const dispatch = useDispatch()
   const entropy = useSelector(getEntropy)
@@ -39,7 +39,7 @@ const SeedPhraseRepeat: React.FC = () => {
       dispatch(setEntropy(''))
       redirectToDeviceAuth()
     } else {
-      redirectToWalkthrough()
+      redirectToEntropy()
     }
   }
 
