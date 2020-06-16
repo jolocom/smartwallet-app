@@ -1,14 +1,9 @@
-import { RecoveryActions } from './types'
-
-const partiallyAppliedAction = (type: RecoveryActions) => {
-  return (payload?: any) => ({
-    type,
-    payload,
-  })
-}
+import partiallyAppliedAction from '~/utils/partiallyAppliedActions'
+import { RecoveryActions } from './recoveryTypes'
 
 export const setSeedKey = partiallyAppliedAction(RecoveryActions.setSeedKey)
 export const setPhrase = partiallyAppliedAction(RecoveryActions.setPhrase)
+export const resetPhrase = partiallyAppliedAction(RecoveryActions.resetPhrase)
 export const setCurrentWordIdx = partiallyAppliedAction(
   RecoveryActions.setCurrentWordIdx,
 )

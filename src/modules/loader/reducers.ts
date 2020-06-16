@@ -1,6 +1,6 @@
 import { strings } from '~/translations/strings'
 
-import { LoaderActions, LoaderTypes, LoaderStateI } from './types'
+import { LoaderActions, LoaderStateI, LoaderTypes } from './types'
 
 type Actions = {
   type: LoaderActions
@@ -10,12 +10,13 @@ type Actions = {
 const initialState: LoaderStateI = {
   type: LoaderTypes.default,
   msg: strings.EMPTY,
+  isVisible: false,
 }
 
 const reducer = (state = initialState, action: Actions) => {
   switch (action.type) {
     case LoaderActions.set:
-      return action.payload
+      return { ...action.payload, isVisible: true }
     case LoaderActions.dismiss:
       return initialState
     default:

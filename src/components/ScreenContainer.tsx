@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  View,
-  StyleSheet,
-  ViewStyle,
-  SafeAreaView,
-  Platform,
-} from 'react-native'
+import { View, StyleSheet, ViewStyle } from 'react-native'
 import { Colors } from '~/utils/colors'
 
 interface ScreenContainerI {
@@ -17,9 +11,9 @@ interface ScreenContainerI {
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
   children,
-  customStyles,
   isTransparent = false,
   isFullscreen = false,
+  customStyles = {},
   backgroundColor = Colors.mainBlack,
 }) => {
   return (
@@ -30,6 +24,7 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
         { backgroundColor },
         isTransparent && styles.transparent,
         isFullscreen && styles.fullscreen,
+        customStyles,
       ]}
     >
       {children}
@@ -44,12 +39,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: '5%',
     backgroundColor: Colors.mainBlack,
+    position: 'relative',
+    paddingTop: 40,
   },
   transparent: {
     backgroundColor: 'transparent',
   },
   fullscreen: {
     paddingHorizontal: 0,
+    paddingTop: 0,
   },
 })
 

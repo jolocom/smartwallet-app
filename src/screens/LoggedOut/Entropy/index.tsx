@@ -44,36 +44,37 @@ const Entropy: React.FC = () => {
 export const useEntropyProgress = (submit: (entropy: string) => void) => {
   const [entropyProgress, setProgress] = useState(0)
 
-  const entropyGenerator = useRef(new EntropyGenerator()).current
+  let entropyGenerator = useRef(new EntropyGenerator())
 
   useEffect(() => {
     if (entropyProgress === 1) {
       ;(async () => {
         await supplementEntropyProgress()
-        submit(entropyGenerator.generateRandomString(4))
+        submit(entropyGenerator.current.generateRandomString(4))
       })()
     }
   }, [entropyProgress])
 
   const supplementEntropyProgress = async () => {
-    while (entropyGenerator.getProgress() < 1) {
+    while (entropyGenerator.current.getProgress() < 1) {
       const moreEntropy = await generateSecureRandomBytes(512)
       // NOTE do not use moreEntropy.forEach, Buffer API is inconsistent, it
       // doesn't work in some envirtonments
       for (let i = 0; i < moreEntropy.length; i++) {
-        entropyGenerator.addFromDelta(moreEntropy[i])
+        entropyGenerator.current.addFromDelta(moreEntropy[i])
       }
     }
   }
 
   const updateProgress = () => {
-    const progress = entropyGenerator.getProgress() / ENOUGH_ENTROPY_PROGRESS
+    const progress =
+      entropyGenerator.current.getProgress() / ENOUGH_ENTROPY_PROGRESS
     setProgress(progress >= 1 ? 1 : progress)
   }
 
   const addPoint = useCallback((x: number, y: number) => {
-    entropyGenerator.addFromDelta(x)
-    entropyGenerator.addFromDelta(y)
+    entropyGenerator.current.addFromDelta(x)
+    entropyGenerator.current.addFromDelta(y)
 
     updateProgress()
   }, [])

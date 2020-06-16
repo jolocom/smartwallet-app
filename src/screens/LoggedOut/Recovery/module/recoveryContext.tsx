@@ -1,7 +1,7 @@
 import React, { useContext, createContext, useReducer, Dispatch } from 'react'
 
 import recoveryReducer, { initialRecoveryState } from './recoveryReducer'
-import { StateI, ActionI } from './types'
+import { StateI, ActionI } from './recoveryTypes'
 
 const RecoveryStateContext = createContext<StateI>(initialRecoveryState)
 const RecoveryDispatchContext = createContext<Dispatch<ActionI>>(() => null)

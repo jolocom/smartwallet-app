@@ -1,5 +1,5 @@
 import React, { useCallback, memo } from 'react'
-import { Animated, StyleSheet, Platform } from 'react-native'
+import { Animated, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import BtnGroup from '~/components/BtnGroup'
@@ -14,8 +14,10 @@ import { ScreenNames } from '~/types/screens'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
-import { useRecoveryState } from './module/recoveryContext'
 import { useSDK } from '~/hooks/sdk'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
+import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
+import { resetPhrase } from './module/recoveryActions'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -25,8 +27,8 @@ interface RecoveryFooterI {
 
 const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
+  const dispatch = useRecoveryDispatch()
   const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn)
-  const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
   const SDK = useSDK()
 
   const handlePhraseSubmit = useCallback(async () => {
@@ -38,7 +40,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
     )
 
     if (success) redirectToClaims()
-    else redirectToWalkthrough()
+    else dispatch(resetPhrase())
   }, [phrase])
 
   const isPhraseComplete = phrase.length === 12
@@ -61,31 +63,27 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
       )
     }
     return (
-      <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
-        <BtnGroup>
-          <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
-            {strings.CONFIRM}
-          </Btn>
-          <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-            {strings.BACK_TO_WALKTHROUGH}
-          </Btn>
-        </BtnGroup>
-      </Animated.View>
+      <AbsoluteBottom>
+        <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
+          <BtnGroup>
+            <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
+              {strings.CONFIRM}
+            </Btn>
+            <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
+              {strings.BACK_TO_WALKTHROUGH}
+            </Btn>
+          </BtnGroup>
+        </Animated.View>
+      </AbsoluteBottom>
     )
   },
 )
 
 const styles = StyleSheet.create({
   footer: {
-    height: 50,
+    width: '100%',
     position: 'absolute',
     bottom: 10,
-    width: '100%',
-    ...Platform.select({
-      android: {
-        bottom: 30,
-      },
-    }),
   },
 })
 

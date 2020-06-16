@@ -27,8 +27,8 @@ const GRADIENT_START = { x: 0, y: 0 }
 const GRADIENT_END = { x: 1, y: 0 }
 
 const Button: React.FC<PropsI> = ({
-  type,
-  size,
+  type = BtnTypes.primary,
+  size = BtnSize.large,
   onPress,
   children,
   disabled,

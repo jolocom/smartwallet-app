@@ -15,6 +15,7 @@ import useRedirectTo from '~/hooks/useRedirectTo'
 
 const SeedPhraseRepeat: React.FC = () => {
   const redirectToWalkthrough = useRedirectTo(ScreenNames.Walkthrough)
+  const redirectToDeviceAuth = useRedirectTo(ScreenNames.DeviceAuth)
   const dispatch = useDispatch()
   const entropy = useSelector(getEntropy)
   const SDK = useSDK()
@@ -36,6 +37,7 @@ const SeedPhraseRepeat: React.FC = () => {
       dispatch(setLogged(true))
       // NOTE: Entropy should only be present in the store during on-boarding (for now)
       dispatch(setEntropy(''))
+      redirectToDeviceAuth()
     } else {
       redirectToWalkthrough()
     }
