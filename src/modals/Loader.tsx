@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import ScreenContainer from '~/components/ScreenContainer'
 import Circle from '~/components/Circle'
-import Modal from '~/components/Modal'
+import Modal from '~/modals/Modal'
 
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
@@ -322,6 +322,7 @@ export default function () {
   const isLocked = useSelector(isAppLocked)
   const isAuthSet = useSelector(isLocalAuthSet)
 
+  // isVisible && isLocked && !isAuthSet => Logged out section
   if ((isVisible && !isLocked) || (isVisible && isLocked && !isAuthSet)) {
     return <Loader />
   }

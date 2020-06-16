@@ -16,46 +16,15 @@ import { useDispatch } from 'react-redux'
 import { setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import useDelay from '~/hooks/useDelay'
-
-const useGetStoredPin = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [keychainPin, setKeychainPin] = useState('')
-
-  const getStoredPin = async () => {
-    setIsLoading(true)
-    try {
-      const storedPin = await Keychain.getGenericPassword({
-        service: PIN_SERVICE,
-      })
-      console.log({ storedPin })
-
-      if (storedPin) {
-        // show pin view
-        setKeychainPin(storedPin.password)
-      } else {
-        throw new Error('No PIN set, revisit your flow of setting up PIN')
-      }
-    } catch (err) {
-      // ✍🏼 todo: how should we handle this hasError ?
-      console.log({ err })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    getStoredPin()
-  }, [])
-
-  return { isLoading, keychainPin }
-}
+import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
 
 const ChangePin = () => {
   const [pin, setPin] = useState('')
   const [newPin, setNewPin] = useState('')
-  const { isLoading, keychainPin } = useGetStoredPin()
   const [hasError, setHasError] = useState(false)
   const [isCreateNew, setIsCreateNew] = useState(false)
+
+  const { keychainPin, isLoadingStorage } = useGetStoredAuthValues()
 
   const dispatch = useDispatch()
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -98,7 +67,7 @@ const ChangePin = () => {
             ? strings.CREATE_NEW_PASSCODE
             : strings.CURRENT_PASSCODE}
         </PasscodeHeader>
-        {isLoading ? (
+        {isLoadingStorage ? (
           <ActivityIndicator />
         ) : isCreateNew ? (
           <PasscodeInput

@@ -7,8 +7,6 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native'
-import Keychain from 'react-native-keychain'
-import AsyncStorage from '@react-native-community/async-storage'
 
 import {
   isAppLocked,
@@ -16,64 +14,33 @@ import {
   isLocalAuthSet,
 } from '~/modules/account/selectors'
 import { lockApp, unlockApp } from '~/modules/account/actions'
-import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { strings } from '~/translations/strings'
 
-import ScreenContainer from './ScreenContainer'
+import ScreenContainer from '../components/ScreenContainer'
 import Modal from './Modal'
-import PasscodeInput from './PasscodeInput'
-import Btn, { BtnTypes } from './Btn'
-import AbsoluteBottom from './AbsoluteBottom'
-import Paragraph, { ParagraphSizes } from './Paragraph'
-import BiometryAnimation from './BiometryAnimation'
-import { BiometryTypes } from '~/screens/DeviceAuthentication/module/deviceAuthTypes'
+import PasscodeInput from '../components/PasscodeInput'
+import Btn, { BtnTypes } from '../components/Btn'
+import AbsoluteBottom from '../components/AbsoluteBottom'
+import Paragraph, { ParagraphSizes } from '../components/Paragraph'
+import BiometryAnimation from '../components/BiometryAnimation'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { Colors } from '~/utils/colors'
+import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
-  const [keychainPin, setKeychainPin] = useState('')
   const [hasError, setHasError] = useState(false)
-  const [isBiometryShown, setIsBiometryShow] = useState(false)
-  const [isLoadingStorage, setIsLoadingStorage] = useState(false)
-  const [biometryType, setBiometryType] = useState<BiometryTypes>(null)
 
   const dispatch = useDispatch()
-
-  const getStoredPin = async () => {
-    setIsLoadingStorage(true)
-    try {
-      const [storedBiometry, storedPin] = await Promise.all([
-        AsyncStorage.getItem('biometry'),
-        Keychain.getGenericPassword({
-          service: PIN_SERVICE,
-        }),
-      ])
-
-      setBiometryType(storedBiometry as BiometryTypes)
-      if (storedPin) {
-        setKeychainPin(storedPin.password)
-      }
-      if (storedBiometry) {
-        // show biometry view
-        setIsBiometryShow(true)
-      } else {
-        // show pin view
-        setIsBiometryShow(false)
-      }
-    } catch (err) {
-      // ✍🏼 todo: how should we handle this hasError ?
-      console.log({ err })
-    } finally {
-      setIsLoadingStorage(false)
-    }
-  }
-
-  useEffect(() => {
-    getStoredPin()
-  }, [])
+  const {
+    isLoadingStorage,
+    biometryType,
+    keychainPin,
+    isBiometryShown,
+    setIsBiometryShow,
+  } = useGetStoredAuthValues()
 
   useEffect(() => {
     if (pin.length < 4 && hasError) {
