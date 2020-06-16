@@ -9,8 +9,6 @@ import {
   View,
   StyleSheet,
   TextInput,
-  NativeSyntheticEvent,
-  TextInputKeyPressEventData,
   Text,
   TouchableWithoutFeedback,
   ScrollView,
@@ -48,6 +46,26 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const digits = value.split('')
   const hideInput = !(digits.length < PASSCODE_LENGTH.length)
 
+  const focusInput = () => {
+    inputRef.current?.focus()
+  }
+
+  // this will hide keyboard when passcode is complete
+  useEffect(() => {
+    if (value.length === 4) {
+      inputRef.current?.blur()
+      onSubmit()
+    }
+  }, [value])
+
+  // this will remove error once passoce is incompete
+  useEffect(() => {
+    if (value.length < 4 && hasError && errorStateUpdaterFn) {
+      errorStateUpdaterFn(false)
+    }
+  }, [value])
+
+  // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
     let isCurrent = true
     const updateSelectedIndex = async () => {
@@ -71,33 +89,16 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
     }
   }, [value])
 
-  const focusInput = () => {
-    inputRef.current?.focus()
-  }
-
-  useEffect(() => {
-    if (value.length === 4) {
-      inputRef.current?.blur()
-      onSubmit()
-    } else if (value.length < 4 && hasError && errorStateUpdaterFn) {
-      errorStateUpdaterFn(false)
-    }
-  }, [value])
-
   const handleFocus = () => {
     setIsFocused(true)
+    if (hasError && errorStateUpdaterFn) {
+      errorStateUpdaterFn(false)
+      stateUpdaterFn('')
+    }
   }
 
   const handleBlur = () => {
     setIsFocused(false)
-  }
-
-  const handleRemove = (
-    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
-  ) => {
-    if (e.nativeEvent?.key === 'Backspace') {
-      handleRemovingFromPasscode()
-    }
   }
 
   // a callback function that is passed (when we changing passcode) to setPasscode or setVerifiedPasscode
@@ -105,10 +106,6 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
     if (prevState.length >= PASSCODE_LENGTH.length) return prevState
     return (prevState + passcode).slice(0, PASSCODE_LENGTH.length)
   }
-
-  // a callback function that is passed (when we removing digits from passcode) to setPasscode or setVerifiedPasscode
-  const removeFromPasscodeCb: RemovePasscodeFnT = (prevState) =>
-    prevState.slice(0, prevState.length - 1)
 
   // the first parameter is a setter function of passcode or verifiedPasscode, the second is deciding to add or to remove from/to passcode
   const updatePasscode = (
@@ -124,10 +121,8 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   }
 
   const addToPasscode = updatePasscode(addToPasscodeCb)
-  const removeFromPasscode = updatePasscode(removeFromPasscodeCb)
 
   const handleAddingToPasscode = addToPasscode(stateUpdaterFn)
-  const handleRemovingFromPasscode = removeFromPasscode(stateUpdaterFn)
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false}>
@@ -137,7 +132,6 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
             value=""
             ref={inputRef}
             onChangeText={handleAddingToPasscode}
-            onKeyPress={handleRemove}
             onFocus={handleFocus}
             autoFocus={true}
             onBlur={handleBlur}
