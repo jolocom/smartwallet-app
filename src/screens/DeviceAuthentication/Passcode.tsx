@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import Keychain from 'react-native-keychain'
+import { useDispatch } from 'react-redux'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -17,15 +18,14 @@ import useSuccess from '~/hooks/useSuccess'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { ScreenNames } from '~/types/screens'
+import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
 import {
   useDeviceAuthState,
   useDeviceAuthDispatch,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
-
-const PIN_SERVICE = 'com.jolocom.wallet-PIN'
-const PIN_USERNAME = 'wallet-user'
+import { setLocalAuth, unlockApp } from '~/modules/account/actions'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -35,7 +35,8 @@ const Passcode = () => {
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
   const { biometryType } = useDeviceAuthState()
-  const dispatch = useDeviceAuthDispatch()
+  const dispatchToLocalAuth = useDeviceAuthDispatch()
+  const dispatch = useDispatch()
 
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -62,10 +63,12 @@ const Passcode = () => {
 
   const redirectTo = () => {
     if (biometryType && biometryType !== 'IRIS') {
-      dispatch(showBiometry())
+      dispatchToLocalAuth(showBiometry())
     } else {
       redirectToLoggedIn()
     }
+    dispatch(setLocalAuth())
+    dispatch(unlockApp())
   }
 
   const handleVerifiedPasscodeSubmit = async () => {
@@ -76,7 +79,7 @@ const Passcode = () => {
           service: PIN_SERVICE,
           storage: Keychain.STORAGE_TYPE.AES,
         })
-        await displaySuccessLoader()
+        displaySuccessLoader()
       } catch (err) {
         console.log({ err })
       }

@@ -55,11 +55,13 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 
     if (areSuggestionsVisible) {
       return (
-        <Animated.View
-          style={[styles.footer, { opacity: animatedSuggestions }]}
-        >
-          <Suggestions />
-        </Animated.View>
+        <AbsoluteBottom>
+          <Animated.View
+            style={[styles.footer, { opacity: animatedSuggestions }]}
+          >
+            <Suggestions />
+          </Animated.View>
+        </AbsoluteBottom>
       )
     }
     return (

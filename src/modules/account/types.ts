@@ -3,12 +3,17 @@ export enum AccountActionTypes {
   setEntropy = 'setEntropy',
   setLogged = 'setLogged',
   resetAccount = 'resetAccount',
+  lockApp = 'lockApp',
+  unlockApp = 'unlockApp',
+  setLocalAuth = 'setLocalAuth',
 }
 
 export interface AccountState {
   did: string
   entropy: string
   loggedIn: boolean
+  isAppLocked: boolean
+  isLocalAuthSet: boolean
 }
 
 export interface Action {
