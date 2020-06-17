@@ -112,6 +112,7 @@ const Lock = () => {
                 stateUpdaterFn={setPin}
                 onSubmit={handleAppUnlock}
                 hasError={hasError}
+                errorStateUpdaterFn={setHasError}
               />
             </View>
             <AbsoluteBottom>

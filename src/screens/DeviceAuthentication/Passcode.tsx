@@ -134,6 +134,7 @@ const Passcode = () => {
             value={verifiedPasscode}
             stateUpdaterFn={setVerifiedPasscode}
             onSubmit={handleVerifiedPasscodeSubmit}
+            errorStateUpdaterFn={setHasError}
             hasError={hasError}
           />
         )}
