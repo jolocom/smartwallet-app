@@ -1,28 +1,52 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 import Btn from '~/components/Btn'
 
-import useRedirectTo from '~/hooks/useRedirectTo'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLogged, setDid, setEntropy } from '~/modules/account/actions'
+import { getEntropy } from '~/modules/account/selectors'
+import { useSDK } from '~/hooks/sdk'
+import { useLoader } from '~/hooks/useLoader'
+import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
-import { setLogged } from '~/modules/account/actions'
+import useRedirectTo from '~/hooks/useRedirectTo'
 
 const SeedPhraseRepeat: React.FC = () => {
-  
+  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
   const redirectToDeviceAuth = useRedirectTo(ScreenNames.DeviceAuth)
   const dispatch = useDispatch()
+  const entropy = useSelector(getEntropy)
+  const SDK = useSDK()
+  const loader = useLoader()
 
-  const onPress = () => {
-    dispatch(setLogged(true))
-    redirectToDeviceAuth();
+  const onSubmitIdentity = async () => {
+    const entropyBuffer = new Buffer(entropy, 'hex')
+    const success = await loader(
+      async () => {
+        const iw = await SDK.bemw.createNewIdentity(entropyBuffer)
+        dispatch(setDid(iw.did))
+      },
+      {
+        showStatus: true,
+        loading: strings.CREATING,
+      },
+    )
+    if (success) {
+      dispatch(setLogged(true))
+      // NOTE: Entropy should only be present in the store during on-boarding (for now)
+      dispatch(setEntropy(''))
+      redirectToDeviceAuth()
+    } else {
+      redirectToEntropy()
+    }
   }
 
   return (
     <ScreenContainer>
       <Header>Seed Phrase Repeat</Header>
-      <Btn onPress={onPress}>Done</Btn>
+      <Btn onPress={onSubmitIdentity}>Done</Btn>
     </ScreenContainer>
   )
 }
