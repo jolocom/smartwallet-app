@@ -102,6 +102,13 @@ const deviceAuthentication = {
   RESET: 'Reset',
 }
 
+const scanner = {
+  CAMERA_PERMISSION: 'Camera Permission',
+  YOU_CANT_SCAN_WITHOUT_MAIN_FUNCTION:
+    "You can't scan without main function. Please allow permisson in your settings",
+  TAP_TO_ACTIVATE_CAMERA: 'Tap to activate camera',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -111,4 +118,5 @@ export const strings = {
   ...recovery,
   ...seedphrase,
   ...deviceAuthentication,
+  ...scanner,
 }
