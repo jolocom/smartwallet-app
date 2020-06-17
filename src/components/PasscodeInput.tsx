@@ -12,6 +12,8 @@ import {
   Text,
   TouchableWithoutFeedback,
   ScrollView,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
@@ -101,11 +103,23 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
     setIsFocused(false)
   }
 
+  const handleRemove = (
+    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
+  ) => {
+    if (e.nativeEvent?.key === 'Backspace') {
+      handleRemovingFromPasscode()
+    }
+  }
+
   // a callback function that is passed (when we changing passcode) to setPasscode or setVerifiedPasscode
   const addToPasscodeCb: AddPasscodeFnT = (prevState, passcode) => {
     if (prevState.length >= PASSCODE_LENGTH.length) return prevState
     return (prevState + passcode).slice(0, PASSCODE_LENGTH.length)
   }
+
+  // a callback function that is passed (when we removing digits from passcode) to setPasscode or setVerifiedPasscode
+  const removeFromPasscodeCb: RemovePasscodeFnT = (prevState) =>
+    prevState.slice(0, prevState.length - 1)
 
   // the first parameter is a setter function of passcode or verifiedPasscode, the second is deciding to add or to remove from/to passcode
   const updatePasscode = (
@@ -121,8 +135,10 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   }
 
   const addToPasscode = updatePasscode(addToPasscodeCb)
+  const removeFromPasscode = updatePasscode(removeFromPasscodeCb)
 
   const handleAddingToPasscode = addToPasscode(stateUpdaterFn)
+  const handleRemovingFromPasscode = removeFromPasscode(stateUpdaterFn)
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false}>
@@ -133,6 +149,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
             ref={inputRef}
             onChangeText={handleAddingToPasscode}
             onFocus={handleFocus}
+            onKeyPress={handleRemove}
             autoFocus={true}
             onBlur={handleBlur}
             testID="passcode-digit-input"
