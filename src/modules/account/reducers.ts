@@ -2,7 +2,7 @@ import { AccountState, Action, AccountActionTypes } from './types'
 
 const initialState: AccountState = {
   did: '',
-  loggedIn: false,
+  loggedIn: true,
   isAppLocked: true,
   isLocalAuthSet: false, // this value indicates where user went through local auth registration
 }

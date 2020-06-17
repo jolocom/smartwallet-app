@@ -21,16 +21,14 @@ const RootNavigation: React.FC = () => {
   return (
     <NavigationContainer>
       <RootStack.Navigator headerMode="none" mode="modal">
-        <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
-        {/* <RootStack.Screen name={ScreenNames.LoggedOut} component={LoggedOut} /> */}
-        {/* {isLoggedIn ? (
+        {isLoggedIn ? (
           <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
         ) : (
           <RootStack.Screen
             name={ScreenNames.LoggedOut}
             component={LoggedOut}
           />
-        )} */}
+        )}
         <RootStack.Screen
           name={ScreenNames.DeviceAuth}
           component={DeviceAuthentication}
