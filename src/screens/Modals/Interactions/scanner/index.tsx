@@ -15,7 +15,7 @@ const Scanner: React.FC = () => {
   const { permission, handlePlatformPermissions } = useCameraPermissions()
 
   return (
-    <ScreenContainer isFullscreen>
+    <ScreenContainer isFullscreen navigationHeader>
       {permission === Results.GRANTED ? (
         <View style={styles.scannerContainer}>
           <QRCodeScanner
