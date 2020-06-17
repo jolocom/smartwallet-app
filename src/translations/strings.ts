@@ -20,7 +20,7 @@ export const recovery = {
   CANT_MATCH_WORD: "Can't match this word",
   WHAT_IF_I_FORGOT: 'What if I forgot my phrase?',
   CONFIRM: 'Confirm',
-  BACK_TO_WALKTHROUGH: 'Back to walkthrough',
+  BACK: 'Back',
 }
 
 const walkthrough = {

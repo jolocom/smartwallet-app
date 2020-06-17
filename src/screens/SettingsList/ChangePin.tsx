@@ -4,7 +4,6 @@ import { ActivityIndicator } from 'react-native'
 
 import PasscodeHeader from '~/components/PasscodeHeader'
 import PasscodeInput from '~/components/PasscodeInput'
-import Paragraph from '~/components/Paragraph'
 import ScreenContainer from '~/components/ScreenContainer'
 
 import { strings } from '~/translations/strings'

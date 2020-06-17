@@ -27,7 +27,7 @@ describe('User on a Recovery screen', () => {
     expect(getByTestId('seedphrase-input')).toBeDefined()
     expect(getByText(strings.WHAT_IF_I_FORGOT)).toBeDefined()
     expect(getByText(strings.CONFIRM)).toBeDefined()
-    expect(getByText(strings.BACK_TO_WALKTHROUGH)).toBeDefined()
+    expect(getByText(strings.BACK)).toBeDefined()
   })
 
   test('can add a seed key to a phrase', async () => {
