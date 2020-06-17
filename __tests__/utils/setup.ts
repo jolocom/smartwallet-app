@@ -19,7 +19,7 @@ jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
 }))
 
-jest.mock('../../src/utils/sdk/context', () => ({
+jest.mock('../../src/hooks/sdk', () => ({
   useSDK: () => ({
     bemw: {
       initWithMnemonic: jest.fn().mockResolvedValue(true),
