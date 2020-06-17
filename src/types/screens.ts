@@ -20,9 +20,8 @@ export enum ScreenNames {
   // Modals
   Loader = 'Loader',
   Interactions = 'Interactions',
-}
-
-export enum InteractionScreens {
+  // Interactions
   Scanner = 'Scanner',
+  ScannerPermission = 'ScannerPermission',
   Details = 'Details',
 }
