@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 
@@ -19,6 +19,9 @@ import {
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import BtnGroup from '~/components/BtnGroup'
+
+import useResetKeychainValues from '~/hooks/useResetKeychainValues'
+import { PIN_SERVICE } from '~/utils/keychainConsts'
 
 const walkthroughData = [
   {
@@ -50,24 +53,19 @@ const Dot: React.FC<{ active: boolean }> = ({ active }) => {
     </View>
   )
 }
-
-const WalkthroughButtons = React.memo(() => {
-  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
-  const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
-
-  return (
-    <>
-      <Btn onPress={redirectToEntropy}>{strings.GET_STARTED}</Btn>
-      <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
-        {strings.NEED_RESTORE}
-      </Btn>
-    </>
-  )
-})
-
 const Walkthrough: React.FC = () => {
   const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
   const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
+
+  const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
+
+  // 🧨🧨🧨🧨🧨
+  // this is only for testing purposes !!! should be removed later on
+  // this will delete credentials associated with a service name
+  useEffect(() => {
+    resetServiceValuesInKeychain()
+  }, [])
+  // 🧨🧨🧨🧨🧨
 
   const renderPagination = (index: number, total: number) => {
     const { header, paragraph } = walkthroughData[index]

@@ -71,6 +71,13 @@ const Lock = () => {
     }
   }
 
+  // without additional tapping user can scan a finger on mount
+  useEffect(() => {
+    if (isBiometryShown) {
+      handleBiometryAuthentication()
+    }
+  }, [isBiometryShown])
+
   const showPin = () => {
     setIsBiometryShow(false)
   }

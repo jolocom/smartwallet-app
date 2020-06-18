@@ -203,12 +203,10 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   }
 
   useEffect(() => {
-    if (isAnimating.current) {
-      loaderType.current = type
-      loaderMsg.current = msg
-      loaderColor.current = colors[type]
-      looping()
-    }
+    loaderType.current = type
+    loaderMsg.current = msg
+    loaderColor.current = colors[type]
+    isAnimating.current && looping()
     return () => {
       isAnimating.current = false
     }
