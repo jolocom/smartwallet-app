@@ -14,7 +14,7 @@ const Camera = () => {
   return (
     <ScreenContainer isFullscreen>
       <View style={styles.scannerContainer}>
-        <View style={{ position: 'absolute', top: 0, zIndex: 10 }}>
+        <View style={styles.navigationContainer}>
           <NavigationHeader />
         </View>
         <QRCodeScanner
@@ -51,6 +51,11 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 const MARKER_SIZE = SCREEN_WIDTH * 0.75
 
 const styles = StyleSheet.create({
+  navigationContainer: {
+    position: 'absolute',
+    top: 0,
+    zIndex: 10,
+  },
   scannerContainer: {
     width: '100%',
     flex: 1,
