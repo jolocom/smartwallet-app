@@ -34,15 +34,13 @@ export const SDKContextProvider: React.FC = ({ children }) => {
           service: PIN_SERVICE,
         }),
       ])
-
-      if (sdk) {
-        sdkRef.current = sdk
-        let iw = await sdk.init({ dontAutoRegister: true })
-        if (iw.did) {
-          dispatch(setDid(iw.did))
-          dispatch(setLogged(true))
-        }
+      sdkRef.current = sdk
+      let iw = await sdk.init({ dontAutoRegister: true })
+      if (iw.did) {
+        dispatch(setDid(iw.did))
+        dispatch(setLogged(true))
       }
+
       if (pin) {
         dispatch(setLocalAuth())
       }
