@@ -116,6 +116,7 @@ const settings = {
   CREATE_NEW_PASSCODE: 'Create new passcode',
   WRONG_PIN: 'Wrong PIN',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
+  LOG_OUT: 'Log out',
 }
 
 export const strings = {

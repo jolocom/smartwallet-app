@@ -5,12 +5,16 @@ import React, {
   useRef,
   useEffect,
 } from 'react'
-import { View } from 'react-native'
-import { initSDK } from './'
-import { JolocomSDK } from '@jolocom/sdk'
-import { setDid, setLogged } from '~/modules/account/actions'
+import { ActivityIndicator } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { Colors } from '../colors'
+import { JolocomSDK } from '@jolocom/sdk'
+import Keychain from 'react-native-keychain'
+
+import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
+
+import { initSDK } from './'
+import { PIN_SERVICE } from '../keychainConsts'
+import ScreenContainer from '~/components/ScreenContainer'
 
 export const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
   null,
@@ -18,40 +22,53 @@ export const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | nu
 
 export const SDKContextProvider: React.FC = ({ children }) => {
   const sdkRef = useRef<JolocomSDK | null>(null)
-  const [loaded, setLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    initSDK()
-      .then((sdk) => {
-        sdkRef.current = sdk
-        sdk
-          .init({ dontAutoRegister: true })
-          .then((iw) => {
-            dispatch(setDid(iw.did))
-            dispatch(setLogged(true))
-          })
-          .catch(console.warn)
-          .finally(() => {
-            setLoaded(true)
-          })
-      })
-      .catch((e) => {
-        console.warn(e)
-        throw new Error('Failed to initiate the SDK')
-      })
+  const initializeAll = async () => {
+    try {
+      let [sdk, pin] = await Promise.all([
+        initSDK(),
+        Keychain.getGenericPassword({
+          service: PIN_SERVICE,
+        }),
+      ])
 
+      if (sdk) {
+        sdkRef.current = sdk
+        let iw = await sdk.init({ dontAutoRegister: true })
+        if (iw.did) {
+          dispatch(setDid(iw.did))
+          dispatch(setLogged(true))
+        }
+      }
+      if (pin) {
+        dispatch(setLocalAuth())
+      }
+    } catch (err) {
+      if (err.message !== 'NoEntropy') {
+        throw new Error('Root initialization failed')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    initializeAll()
     return () => {
-      setLoaded(false)
+      setIsLoading(false)
       sdkRef.current = null
     }
   }, [])
 
-  return !loaded ? (
-    <View
-      style={{ width: '100%', height: '100%', backgroundColor: Colors.black }}
-    />
-  ) : (
-    <SDKContext.Provider value={sdkRef} children={children} />
-  )
+  if (isLoading) {
+    return (
+      <ScreenContainer>
+        <ActivityIndicator />
+      </ScreenContainer>
+    )
+  }
+  return <SDKContext.Provider value={sdkRef} children={children} />
 }
