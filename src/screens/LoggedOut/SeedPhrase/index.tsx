@@ -167,43 +167,30 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flex: 1,
     width: '100%',
-
-    ...Platform.select({
-      ios: {
-        paddingRight: 0,
-      },
-      android: {
-        paddingRight: 10,
-      },
-    }),
     alignItems: 'flex-end',
+    paddingRight: Platform.select({
+      ios: 0,
+      android: 10,
+    }),
   },
   gradient: {
     width: 160,
     height: 160,
     justifyContent: 'center',
-    position: 'relative',
   },
   button: {
     position: 'absolute',
-
     width: 100,
     height: 100,
     borderRadius: 50,
     backgroundColor: Colors.black,
-    ...Platform.select({
-      ios: {
-        borderWidth: 1,
-        top: 25,
-        left: 25,
-      },
-      android: {
-        borderWidth: 0.5,
-        top: 30,
-        left: 30,
-      },
-    }),
+    top: 30,
+    left: 30,
     borderColor: Colors.success,
+    borderWidth: Platform.select({
+      ios: 1,
+      android: 0.5,
+    }),
   },
   info: {
     width: '80%',
