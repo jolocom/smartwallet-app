@@ -7,10 +7,7 @@ import Btn, { BtnTypes } from '~/components/Btn'
 
 import { strings } from '~/translations/strings'
 
-import useRedirectTo from '~/hooks/useRedirectTo'
 import { useLoader } from '~/hooks/useLoader'
-
-import { ScreenNames } from '~/types/screens'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
@@ -18,6 +15,8 @@ import { useSDK } from '~/hooks/sdk'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
+import { useDispatch } from 'react-redux'
+import { setLogged } from '~/modules/account/actions'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -27,20 +26,20 @@ interface RecoveryFooterI {
 
 const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
-  const dispatch = useRecoveryDispatch()
-  const redirectToClaims = useRedirectTo(ScreenNames.LoggedIn)
+  const recoveryDispatch = useRecoveryDispatch()
+  const dispatch = useDispatch()
   const SDK = useSDK()
 
   const handlePhraseSubmit = useCallback(async () => {
     const success = await loader(
-      () => SDK.bemw.initWithMnemonic(phrase.join(' ')),
+      async () => SDK.bemw.initWithMnemonic(phrase.join(' ')),
       {
         loading: strings.MATCHING,
       },
     )
 
-    if (success) redirectToClaims()
-    else dispatch(resetPhrase())
+    if (success) dispatch(setLogged(true))
+    else recoveryDispatch(resetPhrase())
   }, [phrase])
 
   const isPhraseComplete = phrase.length === 12
@@ -55,11 +54,13 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 
     if (areSuggestionsVisible) {
       return (
-        <Animated.View
-          style={[styles.footer, { opacity: animatedSuggestions }]}
-        >
-          <Suggestions />
-        </Animated.View>
+        <AbsoluteBottom>
+          <Animated.View
+            style={[styles.footer, { opacity: animatedSuggestions }]}
+          >
+            <Suggestions />
+          </Animated.View>
+        </AbsoluteBottom>
       )
     }
     return (
@@ -70,7 +71,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
               {strings.CONFIRM}
             </Btn>
             <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-              {strings.BACK}
+              {strings.BACK_TO_WALKTHROUGH}
             </Btn>
           </BtnGroup>
         </Animated.View>
