@@ -20,7 +20,7 @@ export const recovery = {
   CANT_MATCH_WORD: "Can't match this word",
   WHAT_IF_I_FORGOT: 'What if I forgot my phrase?',
   CONFIRM: 'Confirm',
-  BACK_TO_WALKTHROUGH: 'Back to walkthrough',
+  BACK: 'Back',
 }
 
 const walkthrough = {
@@ -110,6 +110,15 @@ const lock = {
   TAP_TO_ACTIVATE: 'Tap to activate',
 }
 
+const settings = {
+  CHANGE_PIN: 'Change PIN',
+  CURRENT_PASSCODE: 'Current passcode',
+  CREATE_NEW_PASSCODE: 'Create new passcode',
+  WRONG_PIN: 'Wrong PIN',
+  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
+  LOG_OUT: 'Log out',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -119,5 +128,6 @@ export const strings = {
   ...recovery,
   ...seedphrase,
   ...deviceAuthentication,
+  ...settings,
   ...lock,
 }

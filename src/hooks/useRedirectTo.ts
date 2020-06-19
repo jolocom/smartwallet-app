@@ -1,9 +1,16 @@
 import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 
-const useRedirectTo = (screenName: ScreenNames) => {
+interface NestedSceenI {
+  screen?: ScreenNames
+}
+
+const useRedirectTo = (
+  screenName: ScreenNames,
+  nestedScreen: NestedSceenI = {},
+) => {
   const navigation = useNavigation()
-  const redirectTo = () => navigation.navigate(screenName)
+  const redirectTo = () => navigation.navigate(screenName, nestedScreen)
   return redirectTo
 }
 

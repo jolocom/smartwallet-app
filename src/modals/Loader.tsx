@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import ScreenContainer from '~/components/ScreenContainer'
 import Circle from '~/components/Circle'
-import Modal from '~/components/Modal'
+import Modal from '~/modals/Modal'
 
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
@@ -203,12 +203,10 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   }
 
   useEffect(() => {
-    if (isAnimating.current) {
-      loaderType.current = type
-      loaderMsg.current = msg
-      loaderColor.current = colors[type]
-      looping()
-    }
+    loaderType.current = type
+    loaderMsg.current = msg
+    loaderColor.current = colors[type]
+    isAnimating.current && looping()
     return () => {
       isAnimating.current = false
     }
@@ -322,6 +320,7 @@ export default function () {
   const isLocked = useSelector(isAppLocked)
   const isAuthSet = useSelector(isLocalAuthSet)
 
+  // isVisible && isLocked && !isAuthSet => Logged out section
   if ((isVisible && !isLocked) || (isVisible && isLocked && !isAuthSet)) {
     return <Loader />
   }

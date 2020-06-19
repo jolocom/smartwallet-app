@@ -5,8 +5,8 @@ import { Provider } from 'react-redux'
 
 import RootNavigation from '~/RootNavigation'
 import { ErrorBoundary } from '~/ErrorBoundary'
-import Loader from '~/components/Loader'
-import Lock from '~/components/Lock'
+import Loader from '~/modals/Loader'
+import Lock from '~/modals/Lock'
 import { SDKContextProvider } from '~/utils/sdk/context'
 
 import configureStore from './configureStore'

@@ -6,6 +6,7 @@ export enum AccountActionTypes {
   lockApp = 'lockApp',
   unlockApp = 'unlockApp',
   setLocalAuth = 'setLocalAuth',
+  accountReset = 'accountReset',
 }
 
 export interface AccountState {

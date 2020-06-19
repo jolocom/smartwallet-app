@@ -50,21 +50,6 @@ const Dot: React.FC<{ active: boolean }> = ({ active }) => {
     </View>
   )
 }
-
-const WalkthroughButtons = React.memo(() => {
-  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
-  const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
-
-  return (
-    <>
-      <Btn onPress={redirectToEntropy}>{strings.GET_STARTED}</Btn>
-      <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
-        {strings.NEED_RESTORE}
-      </Btn>
-    </>
-  )
-})
-
 const Walkthrough: React.FC = () => {
   const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
   const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
