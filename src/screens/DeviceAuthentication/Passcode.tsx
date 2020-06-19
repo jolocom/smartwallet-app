@@ -12,7 +12,7 @@ import Btn, { BtnTypes } from '~/components/Btn'
 
 import useDelay from '~/hooks/useDelay'
 import useRedirectTo from '~/hooks/useRedirectTo'
-import useResetKeychainValues from '~/hooks/useResetKeychainValues'
+
 import useSuccess from '~/hooks/useSuccess'
 
 import { strings } from '~/translations/strings'
@@ -39,17 +39,8 @@ const Passcode = () => {
   const dispatch = useDispatch()
 
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
-  const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
   const displaySuccessLoader = useSuccess()
-
-  // 🧨🧨🧨🧨🧨
-  // this is only for testing purposes !!! should be removed later on
-  // this will delete credentials associated with a service name
-  useEffect(() => {
-    resetServiceValuesInKeychain()
-  }, [])
-  // 🧨🧨🧨🧨🧨
 
   const showVerification = () => {
     setIsCreating(false)
@@ -134,6 +125,7 @@ const Passcode = () => {
             value={verifiedPasscode}
             stateUpdaterFn={setVerifiedPasscode}
             onSubmit={handleVerifiedPasscodeSubmit}
+            errorStateUpdaterFn={setHasError}
             hasError={hasError}
           />
         )}

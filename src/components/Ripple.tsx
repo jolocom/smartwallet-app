@@ -27,8 +27,8 @@ const Circle: React.FC<CirclePropsI> = ({
         position: 'absolute',
         transform: [{ scale: animatedValue }],
         opacity: animatedOpacity,
-        width: 17,
-        height: 17,
+        width: 18,
+        height: 18,
         borderRadius: 9,
         backgroundColor: color,
       }}
@@ -80,12 +80,12 @@ const Ripple: React.FC<RipplePropsI> = ({
 const styles = StyleSheet.create({
   nestedCircle: {
     position: 'absolute',
-    top: 0.5,
-    left: 0.5,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: Colors.black,
+    top: 0.3,
+    left: 0.3,
+    width: 17.4,
+    height: 17.4,
+    borderRadius: 8.7,
+    backgroundColor: Colors.mainBlack,
   },
 })
 

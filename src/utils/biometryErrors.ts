@@ -15,7 +15,7 @@ export const handleNotEnrolled = (biometryType: BiometryTypes) => {
       },
       {
         text: strings.CANCEL,
-        onPress: () => console.log('Cancel Pressed'),
+        // onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
     ],

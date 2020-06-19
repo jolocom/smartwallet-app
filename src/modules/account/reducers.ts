@@ -24,6 +24,8 @@ const reducer = (state = initialState, action: Action) => {
       return { ...state, isLocalAuthSet: true }
     case AccountActionTypes.setEntropy:
       return { ...state, entropy: action.payload }
+    case AccountActionTypes.accountReset:
+      return initialState
     default:
       return state
   }

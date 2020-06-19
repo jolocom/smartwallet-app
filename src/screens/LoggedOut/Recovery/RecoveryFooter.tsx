@@ -55,13 +55,11 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 
     if (areSuggestionsVisible) {
       return (
-        <AbsoluteBottom>
-          <Animated.View
-            style={[styles.footer, { opacity: animatedSuggestions }]}
-          >
-            <Suggestions />
-          </Animated.View>
-        </AbsoluteBottom>
+        <Animated.View
+          style={[styles.footer, { opacity: animatedSuggestions }]}
+        >
+          <Suggestions />
+        </Animated.View>
       )
     }
     return (
@@ -72,7 +70,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
               {strings.CONFIRM}
             </Btn>
             <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-              {strings.BACK_TO_WALKTHROUGH}
+              {strings.BACK}
             </Btn>
           </BtnGroup>
         </Animated.View>
