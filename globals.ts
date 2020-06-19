@@ -10,3 +10,6 @@ String.prototype.normalize = function (form: string): string {
 
 // @ts-ignore
 global.fetch = new RNFetchBlob.polyfill.Fetch({ auto: true }).build()
+
+// @ts-ignore
+global.Blob = RNFetchBlob.polyfill.Blob
