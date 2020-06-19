@@ -71,7 +71,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
               {strings.CONFIRM}
             </Btn>
             <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-              {strings.BACK_TO_WALKTHROUGH}
+              {strings.BACK}
             </Btn>
           </BtnGroup>
         </Animated.View>
