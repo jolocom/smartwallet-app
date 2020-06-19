@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { View, StyleSheet, Text, Animated } from 'react-native'
+import { View, StyleSheet, Text, Animated, Platform } from 'react-native'
 // @ts-ignore no typescript support as of yet
 import RadialGradient from 'react-native-radial-gradient'
 
@@ -102,17 +102,16 @@ const SeedPhrase: React.FC = () => {
             style={styles.gradient}
             colors={[Colors.success, 'transparent']}
             stops={[0.4, 1]}
-          >
-            <Animated.View
-              {...gestureHandlers}
-              style={[
-                styles.button,
-                {
-                  transform: [{ scaleX: circleScale }, { scaleY: circleScale }],
-                },
-              ]}
-            ></Animated.View>
-          </RadialGradient>
+          />
+          <Animated.View
+            {...gestureHandlers}
+            style={[
+              styles.button,
+              {
+                transform: [{ scaleX: circleScale }, { scaleY: circleScale }],
+              },
+            ]}
+          ></Animated.View>
         </Animated.View>
         <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
           <Paragraph customStyles={styles.paragraph}>
@@ -168,22 +167,42 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flex: 1,
     width: '100%',
-    paddingRight: 10,
+
+    ...Platform.select({
+      ios: {
+        paddingRight: 0,
+      },
+      android: {
+        paddingRight: 10,
+      },
+    }),
     alignItems: 'flex-end',
   },
   gradient: {
-    marginTop: '10%',
-    width: 150,
-    height: 150,
-    alignItems: 'center',
+    width: 160,
+    height: 160,
     justifyContent: 'center',
+    position: 'relative',
   },
   button: {
+    position: 'absolute',
+
     width: 100,
     height: 100,
-    backgroundColor: Colors.black,
     borderRadius: 50,
-    borderWidth: 0.5,
+    backgroundColor: Colors.black,
+    ...Platform.select({
+      ios: {
+        borderWidth: 1,
+        top: 25,
+        left: 25,
+      },
+      android: {
+        borderWidth: 0.5,
+        top: 30,
+        left: 30,
+      },
+    }),
     borderColor: Colors.success,
   },
   info: {
@@ -195,7 +214,6 @@ const styles = StyleSheet.create({
     bottom: '5%',
   },
   paragraph: {
-    opacity: 0.8,
     ...TextStyle.middleSubtitle,
   },
 })

@@ -51,11 +51,10 @@ const Circle: React.FC<PropsI> = ({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   nestedCircle: {
-    position: 'absolute',
-    top: 0.3,
-    left: 0.3,
     width: 17.4,
     height: 17.4,
     borderRadius: 8.7,
