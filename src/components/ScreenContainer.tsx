@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, Platform } from 'react-native'
 import { Colors } from '~/utils/colors'
 import NavigationHeader from './NavigationHeader'
 

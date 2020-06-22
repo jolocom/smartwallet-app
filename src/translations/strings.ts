@@ -20,7 +20,7 @@ export const recovery = {
   CANT_MATCH_WORD: "Can't match this word",
   WHAT_IF_I_FORGOT: 'What if I forgot my phrase?',
   CONFIRM: 'Confirm',
-  BACK_TO_WALKTHROUGH: 'Back to walkthrough',
+  BACK: 'Back',
 }
 
 const walkthrough = {
@@ -109,6 +109,23 @@ const scanner = {
   TAP_TO_ACTIVATE_CAMERA: 'Tap to activate camera',
 }
 
+const lock = {
+  ENTER_YOUR_PIN: 'Enter your PIN',
+  FORGOT_YOUR_PIN: 'Forgot your PIN?',
+  UNLOCK_WITH_BIOMETRY: 'Unlock the app with biometry',
+  I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
+  TAP_TO_ACTIVATE: 'Tap to activate',
+}
+
+const settings = {
+  CHANGE_PIN: 'Change PIN',
+  CURRENT_PASSCODE: 'Current passcode',
+  CREATE_NEW_PASSCODE: 'Create new passcode',
+  WRONG_PIN: 'Wrong PIN',
+  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
+  LOG_OUT: 'Log out',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -119,4 +136,6 @@ export const strings = {
   ...seedphrase,
   ...deviceAuthentication,
   ...scanner,
+  ...settings,
+  ...lock,
 }

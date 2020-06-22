@@ -19,7 +19,7 @@
     "devtools": "react-devtools"
   },
   "dependencies": {
-    "@jolocom/sdk": "^0.9.15",
+    "@jolocom/sdk": "^0.10.0",
     "@jolocom/sdk-password-store-mobile-keychain": "^0.1.1",
     "@jolocom/sdk-storage-typeorm": "^1.1.0",
     "@react-native-community/async-storage": "^1.11.0",
@@ -33,10 +33,13 @@
     "asyncstorage-down": "^4.2.0",
     "bip39": "^3.0.2",
     "crypto-browserify": "^3.12.0",
+    "events": "^3.1.0",
+    "jolocom-lib": "^4.2.8",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-camera": "^3.30.0",
     "react-native-crypto": "^2.1.0",
+    "react-native-fingerprint-scanner": "^5.0.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-keychain": "^6.0.0",
     "react-native-level-fs": "^3.0.0",
@@ -56,7 +59,10 @@
     "reselect": "^4.0.0",
     "rn-fetch-blob": "^0.12.0",
     "sjcl": "^1.0.7",
-    "typeorm": "0.2.24"
+    "stream-browserify": "^3.0.0",
+    "typeorm": "0.2.24",
+    "unorm": "^1.6.0",
+    "vm-browserify": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -80,7 +86,6 @@
     "metro-react-native-babel-preset": "^0.58.0",
     "prettier": "^2.0.4",
     "react-devtools": "^4.6.0",
-    "react-native-fingerprint-scanner": "^5.0.0",
     "react-test-renderer": "16.11.0",
     "redux-devtools-extension": "^2.13.8",
     "typescript": "^3.8.3"
