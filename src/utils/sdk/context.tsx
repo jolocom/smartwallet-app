@@ -46,7 +46,9 @@ export const SDKContextProvider: React.FC = ({ children }) => {
       }
     } catch (err) {
       if (err.message !== 'NoEntropy') {
-        throw new Error('Root initialization failed')
+        console.warn('NoEntropy')
+      } else {
+        console.warn('Root initialization failed')
       }
     } finally {
       setIsLoading(false)

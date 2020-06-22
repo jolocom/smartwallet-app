@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
@@ -50,10 +50,6 @@ const Biometry: React.FC = () => {
       }
     }
   }
-
-  useEffect(() => {
-    handleAuthenticate()
-  }, [])
 
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
