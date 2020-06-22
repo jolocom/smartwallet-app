@@ -99,6 +99,7 @@ Btn.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    height: 50,
     borderRadius: 8,
     marginVertical: 5,
   },
@@ -117,8 +118,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    paddingTop: 5,
     color: Colors.white,
+    margin: 0,
   },
   textPrimary: {
     fontFamily: Fonts.Regular,
