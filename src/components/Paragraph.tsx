@@ -14,7 +14,7 @@ interface PropsI {
   size?: ParagraphSizes
   color?: Colors
   customStyles?: TextStyle | Animated.WithAnimatedValue<TextStyle>
-  animated: boolean
+  animated?: boolean
 }
 
 const Paragraph: React.FC<PropsI> = ({
