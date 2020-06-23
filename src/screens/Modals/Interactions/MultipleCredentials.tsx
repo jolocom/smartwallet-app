@@ -8,6 +8,7 @@ import {
   Animated,
   ScrollView,
   Easing,
+  LayoutAnimation,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
@@ -16,6 +17,7 @@ import InteractionHeader from './InteractionHeader'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
+import useDelay from '~/hooks/useDelay'
 
 interface PropsI {
   ctaText: string
@@ -78,8 +80,9 @@ const Card = () => {
         toValue: 1.25,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      setHeight(215)
+    ]).start(async () => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+      await useDelay(() => setHeight(215), 550)
     })
   }
 
