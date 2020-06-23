@@ -119,6 +119,10 @@ const settings = {
   LOG_OUT: 'Log out',
 }
 
+const interactions = {
+  PULL_TO_CHOOSE: 'Pull to choose',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -130,4 +134,5 @@ export const strings = {
   ...deviceAuthentication,
   ...settings,
   ...lock,
+  ...interactions,
 }
