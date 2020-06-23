@@ -34,7 +34,6 @@ export const useInteractionStart = (channel: InteractionChannel) => {
     try {
       return JolocomLib.parse.interactionToken.fromJWT(jwt)
     } catch (e) {
-      console.log(e)
       if (e instanceof SyntaxError) {
         throw new Error(ErrorCode.ParseJWTFailed)
       } else if (e.message === 'Token expired') {
