@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import { PanResponder, View } from 'react-native'
 import ActionSheet from 'react-native-actions-sheet'
 
 import Btn from '~/components/Btn'
@@ -36,7 +37,7 @@ const Scanner: React.FC = () => {
         ctaText="Receive"
         title="Name of Service"
         description="Choose one or more documents provided by this
- service and we will generate them for you"
+        service and we will generate them for you"
       />
     </ScreenContainer>
   )

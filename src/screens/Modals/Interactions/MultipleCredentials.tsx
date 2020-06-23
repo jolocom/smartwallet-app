@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import ActionSheet from 'react-native-actions-sheet'
-import { StyleSheet, Dimensions, View } from 'react-native'
+import {
+  StyleSheet,
+  Dimensions,
+  View,
+  PanResponder,
+  Animated,
+  ScrollView,
+  Easing,
+} from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import InteractionFooter from './InteractionFooter'
 import InteractionHeader from './InteractionHeader'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
-import { FlatList } from 'react-native-gesture-handler'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 
@@ -16,19 +23,84 @@ interface PropsI {
   description: string
 }
 
-const claims = [{ id: 1 }, { id: 2 }, { id: 3 }]
+const CLAIMS = [{ id: '1' }, { id: '2' }, { id: '3' }]
+const SWIPE_THRESHOLD = 20
 
-const height = Dimensions.get('window').height
+const HEIGHT = Dimensions.get('window').height
 
 const Card = () => {
+  const position = useRef(new Animated.ValueXY()).current
+  const scale = useRef(new Animated.Value(1)).current
+  const [cardHeight, setHeight] = useState(170)
+
+  const [isInstructionVisible, setIsInstructionVisible] = useState(true)
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onPanResponderMove: (event, gesture) => {
+        // we are setting position manually here,
+        // as we want the card to follow user fingers
+        position.setValue({ x: gesture.dx, y: 0 })
+        if (gesture.dx > SWIPE_THRESHOLD) {
+          pullRight(gesture.dx)
+        }
+      },
+      onPanResponderRelease: (event, gesture) => {
+        if (gesture.dx < SWIPE_THRESHOLD) {
+          resetPosition()
+        }
+      },
+    }),
+  ).current
+
+  const resetPosition = () => {
+    Animated.spring(position, {
+      toValue: { x: 0, y: 0 },
+      useNativeDriver: true,
+    }).start()
+  }
+
+  const handleHideInstruction = () => {
+    setIsInstructionVisible(false)
+  }
+
+  const pullRight = (x: number) => {
+    handleHideInstruction()
+    Animated.sequence([
+      Animated.timing(position, {
+        toValue: { x: 0, y: 0 },
+        easing: Easing.bounce,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scale, {
+        toValue: 1.25,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setHeight(215)
+    })
+  }
+
+  const getCardStyle = () => {
+    return {
+      transform: [{ scale }, position.getTranslateTransform()[0]],
+    }
+  }
+
   return (
-    <View style={styles.cardContainer}>
-      <View style={styles.card}></View>
-      <View style={styles.instruction}>
-        <Paragraph size={ParagraphSizes.micro} color={Colors.white45}>
-          {strings.PULL_TO_CHOOSE}
-        </Paragraph>
-      </View>
+    <View style={[styles.cardContainer, { height: cardHeight }]}>
+      <Animated.View style={[getCardStyle()]} {...panResponder.panHandlers}>
+        <View style={styles.card}></View>
+      </Animated.View>
+      {isInstructionVisible && (
+        <View style={styles.instruction}>
+          <Paragraph size={ParagraphSizes.micro} color={Colors.white45}>
+            {strings.PULL_TO_CHOOSE}
+          </Paragraph>
+        </View>
+      )}
     </View>
   )
 }
@@ -48,11 +120,14 @@ const MultipleCredentials: React.FC<PropsI> = React.forwardRef(
         <View style={styles.headerWrapper}>
           <InteractionHeader title={title} description={description} />
         </View>
-        <FlatList
+        <ScrollView
           contentContainerStyle={{ paddingBottom: 80 }}
-          data={claims}
-          renderItem={({ item }) => <Card />}
-        />
+          disableScrollViewPanResponder
+        >
+          {CLAIMS.map((claim) => (
+            <Card key={claim.id} />
+          ))}
+        </ScrollView>
         <AbsoluteBottom customStyles={styles.btns}>
           <InteractionFooter
             hideActionSheet={hideActionSheet}
@@ -66,7 +141,8 @@ const MultipleCredentials: React.FC<PropsI> = React.forwardRef(
 
 const styles = StyleSheet.create({
   container: {
-    height: height,
+    flex: 1,
+    height: HEIGHT,
     paddingTop: 32,
     paddingBottom: 0,
     backgroundColor: Colors.mainBlack,
@@ -87,13 +163,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   cardContainer: {
-    flex: 1,
     width: '100%',
-    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     paddingHorizontal: 20,
     marginVertical: 10,
   },
   card: {
+    position: 'absolute',
     width: 268,
     height: 170,
     borderRadius: 10,
@@ -101,8 +178,8 @@ const styles = StyleSheet.create({
   },
   instruction: {
     position: 'absolute',
-    right: 15,
-    top: '45%',
+    right: 8,
+    top: '35%',
     width: 70,
     paddingHorizontal: 10,
   },
