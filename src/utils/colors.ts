@@ -1,4 +1,5 @@
 export enum Colors {
+  transparent = 'transparent',
   activity = '#fa3384',
   ceriseRed = '#d22d69',
   disco = '#911942',

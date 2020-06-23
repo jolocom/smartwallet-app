@@ -67,12 +67,12 @@ const Camera = () => {
 
   const markerBackground = colorAnimationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['transparent', Colors.error40],
+    outputRange: [Colors.transparent, Colors.error40],
   })
 
   useEffect(() => {
     //TODO: While the camera renders, the Modal transition freezes for a moment.
-    //       Delaying as a temporary fix.
+    //      Delaying as a temporary fix.
     useDelay(() => setRenderCamera(true), 300)
   }, [])
 
@@ -153,7 +153,7 @@ const Camera = () => {
             onPressIn={() => setTorchPressed(true)}
             onPressOut={() => setTorchPressed(false)}
             activeOpacity={1}
-            underlayColor="transparent"
+            underlayColor={Colors.transparent}
             style={styles.torch}
           >
             {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.transparent,
   },
   topOverlay: {
     backgroundColor: Colors.black65,
