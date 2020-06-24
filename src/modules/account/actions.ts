@@ -13,3 +13,9 @@ export const setInteraction = createAction(AccountActionTypes.setInteraction)
 export const resetInteraction = createAction(
   AccountActionTypes.resetInteraction,
 )
+export const setInteractionSheet = createAction(
+  AccountActionTypes.setInteractionSheet,
+)
+export const resetInteractionSheet = createAction(
+  AccountActionTypes.resetInteractionSheet,
+)
