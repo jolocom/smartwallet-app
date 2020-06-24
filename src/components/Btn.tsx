@@ -1,5 +1,11 @@
 import React from 'react'
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native'
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  View,
+  TextStyle,
+} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
 import { Colors } from '~/utils/colors'
@@ -21,6 +27,7 @@ interface PropsI {
   size?: BtnSize
   onPress: () => void
   disabled?: boolean
+  customTextStyles?: TextStyle
 }
 
 const GRADIENT_START = { x: 0, y: 0 }
@@ -32,6 +39,7 @@ const Button: React.FC<PropsI> = ({
   onPress,
   children,
   disabled,
+  customTextStyles = {},
 }) => {
   return (
     <TouchableOpacity
@@ -50,6 +58,7 @@ const Button: React.FC<PropsI> = ({
             : type === BtnTypes.secondary
             ? styles.textSecondary
             : styles.textTertiary,
+          customTextStyles,
         ]}
       >
         {children}

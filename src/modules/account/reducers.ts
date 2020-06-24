@@ -6,6 +6,7 @@ const initialState: AccountState = {
   loggedIn: false,
   isAppLocked: true,
   isLocalAuthSet: false, // this value indicates where user went through local auth registration
+  interactionId: '',
 }
 
 const reducer = (state = initialState, action: Action) => {
@@ -24,6 +25,10 @@ const reducer = (state = initialState, action: Action) => {
       return { ...state, isLocalAuthSet: true }
     case AccountActionTypes.setEntropy:
       return { ...state, entropy: action.payload }
+    case AccountActionTypes.setInteraction:
+      return { ...state, interactionId: action.payload }
+    case AccountActionTypes.resetInteraction:
+      return { ...state, interactionId: '' }
     case AccountActionTypes.accountReset:
       return initialState
     default:
