@@ -6,7 +6,7 @@ import { strings } from '~/translations/strings'
 
 export interface LoaderConfig {
   showFailed?: boolean
-  showSuccess: boolean
+  showSuccess?: boolean
   loading?: string
   success?: string
   failed?: string
