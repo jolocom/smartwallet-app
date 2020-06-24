@@ -15,6 +15,7 @@ import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { initSDK } from './'
 import { PIN_SERVICE } from '../keychainConsts'
 import ScreenContainer from '~/components/ScreenContainer'
+import { BackendMiddlewareErrorCodes } from '@jolocom/sdk/js/src/lib/errors/types'
 
 export const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
   null,
@@ -45,7 +46,9 @@ export const SDKContextProvider: React.FC = ({ children }) => {
         dispatch(setLocalAuth())
       }
     } catch (err) {
-      if (err.message !== 'NoEntropy') {
+      if (err.message !== BackendMiddlewareErrorCodes.NoEntropy) {
+        console.warn(err)
+        //TODO: add wallet Error Codes
         throw new Error('Root initialization failed')
       }
     } finally {
