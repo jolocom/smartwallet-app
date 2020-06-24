@@ -28,11 +28,15 @@ import {
   getInteractionId,
   getInteractionSheet,
 } from '~/modules/account/selectors'
+import { getLoaderState } from '~/modules/loader/selectors'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
   const { startInteraction } = useInteractionStart(InteractionChannel.HTTP)
+
   const interactionSheet = useSelector(getInteractionSheet)
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
+  const shouldScan = !interactionSheet && !isLoaderVisible
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
@@ -107,8 +111,8 @@ const Camera = () => {
         {renderCamera && (
           <QRCodeScanner
             containerStyle={{ position: 'absolute' }}
-            onRead={interactionSheet ? () => {} : handleScan}
-            vibrate={!interactionSheet}
+            onRead={shouldScan ? handleScan : () => {}}
+            vibrate={shouldScan}
             reactivate={true}
             reactivateTimeout={3000}
             fadeIn
