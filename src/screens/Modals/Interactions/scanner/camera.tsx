@@ -23,10 +23,17 @@ import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/t
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import { strings } from '~/translations/strings'
 import { useInteractionStart } from '~/hooks/sdk'
+import { useSelector } from 'react-redux'
+import {
+  getInteractionId,
+  getInteractionSheet,
+} from '~/modules/account/selectors'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
   const { startInteraction } = useInteractionStart(InteractionChannel.HTTP)
+  const interactionSheet = useSelector(getInteractionSheet)
+
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
 
@@ -100,7 +107,8 @@ const Camera = () => {
         {renderCamera && (
           <QRCodeScanner
             containerStyle={{ position: 'absolute' }}
-            onRead={handleScan}
+            onRead={interactionSheet ? () => {} : handleScan}
+            vibrate={!interactionSheet}
             reactivate={true}
             reactivateTimeout={3000}
             fadeIn
