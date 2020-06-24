@@ -5,7 +5,8 @@ import { LoaderTypes } from '~/modules/loader/types'
 import { strings } from '~/translations/strings'
 
 export interface LoaderConfig {
-  showStatus?: boolean
+  showFailed?: boolean
+  showSuccess: boolean
   loading?: string
   success?: string
   failed?: string
@@ -13,7 +14,8 @@ export interface LoaderConfig {
 
 const defaultConfig = {
   loading: strings.LOADING,
-  showStatus: true,
+  showFailed: true,
+  showSuccess: true,
   success: strings.SUCCESS,
   failed: strings.FAILED,
 }
@@ -26,7 +28,8 @@ export const useLoader = () => {
     config: LoaderConfig = defaultConfig,
   ) => {
     const {
-      showStatus = defaultConfig.showStatus,
+      showSuccess = defaultConfig.showSuccess,
+      showFailed = defaultConfig.showFailed,
       loading = defaultConfig.loading,
       success = defaultConfig.success,
       failed = defaultConfig.failed,
@@ -43,7 +46,7 @@ export const useLoader = () => {
     try {
       await callback()
       result = true
-      if (showStatus) {
+      if (showSuccess) {
         dispatch(
           setLoader({
             type: LoaderTypes.success,
@@ -55,7 +58,7 @@ export const useLoader = () => {
       }
     } catch (err) {
       console.warn(err)
-      if (showStatus)
+      if (showFailed)
         dispatch(
           setLoader({
             type: LoaderTypes.error,

@@ -54,8 +54,8 @@ export const useInteractionStart = (channel: InteractionChannel) => {
           channel,
           token,
         )
-        dispatch(setInteraction(interaction.id))
 
+        dispatch(setInteraction(interaction.id))
         switch (interaction.flow.type) {
           case FlowType.Authentication:
             return dispatch(setInteractionSheet(FlowType.Authentication))
@@ -67,7 +67,7 @@ export const useInteractionStart = (channel: InteractionChannel) => {
             return null
         }
       },
-      { showStatus: false },
+      { showSuccess: false },
     )
   }
 
