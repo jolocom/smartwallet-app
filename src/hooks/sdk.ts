@@ -9,7 +9,8 @@ import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import { SDKContext } from '~/utils/sdk/context'
-import { setInteraction } from '~/modules/account/actions'
+import { setInteraction, setInteractionSheet } from '~/modules/account/actions'
+import { useLoader } from './useLoader'
 
 export const useSDK = () => {
   const sdk = useContext(SDKContext)
@@ -28,6 +29,7 @@ export const useMnemonic = () => {
 export const useInteractionStart = (channel: InteractionChannel) => {
   const sdk = useSDK()
   const dispatch = useDispatch()
+  const loader = useLoader()
 
   //NOTE: This can move to the SDK
   const parseJWT = (jwt: string) => {
@@ -46,20 +48,27 @@ export const useInteractionStart = (channel: InteractionChannel) => {
 
   const startInteraction = async (jwt: string) => {
     const token = parseJWT(jwt)
-    const interaction = await sdk.bemw.interactionManager.start(channel, token)
-    dispatch(setInteraction(interaction.id))
+    await loader(
+      async () => {
+        const interaction = await sdk.bemw.interactionManager.start(
+          channel,
+          token,
+        )
+        dispatch(setInteraction(interaction.id))
 
-    Alert.alert('Interaction Type', interaction.flow.type)
-    switch (interaction.flow.type) {
-      case FlowType.Authentication:
-        return null
-      case FlowType.CredentialShare:
-        return null
-      case FlowType.CredentialReceive:
-        return null
-      default:
-        return null
-    }
+        switch (interaction.flow.type) {
+          case FlowType.Authentication:
+            return dispatch(setInteractionSheet(FlowType.Authentication))
+          case FlowType.CredentialShare:
+            return dispatch(setInteractionSheet(FlowType.CredentialShare))
+          case FlowType.CredentialReceive:
+            return dispatch(setInteractionSheet(FlowType.CredentialReceive))
+          default:
+            return null
+        }
+      },
+      { showStatus: false },
+    )
   }
 
   return { startInteraction }
