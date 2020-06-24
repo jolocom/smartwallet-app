@@ -21,6 +21,8 @@ const ActionSheetContainer: React.FC = () => {
   useEffect(() => {
     if (interactionSheet) {
       actionSheetRef.current?.setModalVisible()
+    } else {
+      actionSheetRef.current?.setModalVisible(false)
     }
   }, [interactionSheet])
 
@@ -43,7 +45,7 @@ const ActionSheetContainer: React.FC = () => {
         <View
           style={{
             width: '100%',
-            height: 200,
+            height: 300,
             backgroundColor: Colors.black,
             borderRadius: 20,
             justifyContent: 'center',
