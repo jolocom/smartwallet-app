@@ -11,6 +11,7 @@ import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import Camera from '~/screens/Modals/Interactions/scanner/camera'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 const Scanner: React.FC = () => {
   const { permission, handlePlatformPermissions } = useCameraPermissions()
@@ -18,7 +19,7 @@ const Scanner: React.FC = () => {
   return permission === Results.GRANTED ? (
     <Camera />
   ) : (
-    <ScreenContainer navigationHeader>
+    <ScreenContainer hasHeaderClose>
       <Header customStyles={styles.permissionText}>
         {strings.CAMERA_PERMISSION}
       </Header>

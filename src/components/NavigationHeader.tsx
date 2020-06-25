@@ -1,21 +1,36 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ViewStyle } from 'react-native'
 import CloseIcon from '~/assets/svg/CloseIcon'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import useNavigateBack from '~/hooks/useNavigateBack'
+import IconBtn from './IconBtn'
+import { BackArrowIcon } from '~/assets/svg'
 
-const NavigationHeader = () => {
+export enum NavHeaderType {
+  Back = 'back',
+  Close = 'close',
+}
+
+interface Props {
+  type: NavHeaderType
+}
+
+const NavigationHeader: React.FC<Props> = ({ type }) => {
   const navigateBack = useNavigateBack()
 
   return (
-    <View style={styles.navContainer}>
-      <TouchableOpacity
-        // TODO replace with @Btn (add customContainerStyles prop)
-        style={styles.button}
-        onPress={navigateBack}
-      >
-        <CloseIcon />
-      </TouchableOpacity>
+    <View
+      style={[
+        styles.navContainer,
+        {
+          justifyContent:
+            type === NavHeaderType.Close ? 'flex-end' : 'flex-start',
+        },
+      ]}
+    >
+      <IconBtn onPress={navigateBack} style={styles.button}>
+        {type === NavHeaderType.Back ? <BackArrowIcon /> : <CloseIcon />}
+      </IconBtn>
     </View>
   )
 }
@@ -26,14 +41,11 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
     paddingHorizontal: 15,
   },
   button: {
     width: 40,
     height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 })
 
