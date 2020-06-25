@@ -9,7 +9,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import { SDKContext } from '~/utils/sdk/context'
-import { setInteraction } from '~/modules/account/actions'
+import { setInteraction, setInteractionSheet } from '~/modules/account/actions'
 import { useLoader } from './useLoader'
 
 export const useSDK = () => {
@@ -58,11 +58,11 @@ export const useInteractionStart = (channel: InteractionChannel) => {
         dispatch(setInteraction(interaction.id))
         switch (interaction.flow.type) {
           case FlowType.Authentication:
-            return null
+            return dispatch(setInteractionSheet(FlowType.Authentication))
           case FlowType.CredentialShare:
-            return null
+            return dispatch(setInteractionSheet(FlowType.CredentialShare))
           case FlowType.CredentialReceive:
-            return null
+            return dispatch(setInteractionSheet(FlowType.CredentialReceive))
           default:
             return null
         }
