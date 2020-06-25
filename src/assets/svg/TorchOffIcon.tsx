@@ -2,8 +2,8 @@ import React from 'react'
 import Svg, { G, Path, Circle, Rect } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: title, desc */
 
-const SvgTorchOffIcon = (props) => (
-  <Svg width="69px" height="69px" viewBox="0 0 69 69" {...props}>
+const SvgTorchOffIcon = () => (
+  <Svg width="69px" height="69px" viewBox="0 0 69 69">
     <G
       id="iconset-/-lighter"
       stroke="none"

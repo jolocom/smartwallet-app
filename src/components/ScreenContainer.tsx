@@ -1,14 +1,15 @@
 import React from 'react'
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native'
 import { Colors } from '~/utils/colors'
-import NavigationHeader from './NavigationHeader'
+import NavigationHeader, { NavHeaderType } from './NavigationHeader'
 
 interface ScreenContainerI {
   isTransparent?: boolean
   customStyles?: ViewStyle
   isFullscreen?: boolean
   backgroundColor?: Colors
-  navigationHeader?: boolean
+  hasHeaderBack?: boolean
+  hasHeaderClose?: boolean
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
@@ -17,11 +18,16 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
   isFullscreen = false,
   customStyles = {},
   backgroundColor = Colors.mainBlack,
-  navigationHeader = false,
+  hasHeaderBack = false,
+  hasHeaderClose = false,
 }) => {
   return (
     <View style={[styles.navContainer, isTransparent && styles.transparent]}>
-      {navigationHeader && <NavigationHeader />}
+      {(hasHeaderClose || hasHeaderBack) && (
+        <NavigationHeader
+          type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
+        />
+      )}
       <View
         style={[
           styles.container,

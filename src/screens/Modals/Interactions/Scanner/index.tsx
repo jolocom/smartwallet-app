@@ -5,12 +5,12 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 import useCameraPermissions, {
   Results,
-} from '~/screens/Modals/Interactions/scanner/useCameraPermissions'
+} from '~/screens/Modals/Interactions/Scanner/useCameraPermissions'
 import Paragraph from '~/components/Paragraph'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
-import Camera from '~/screens/Modals/Interactions/scanner/camera'
+import Camera from '~/screens/Modals/Interactions/Scanner/Camera'
 
 const Scanner: React.FC = () => {
   const { permission, handlePlatformPermissions } = useCameraPermissions()
@@ -18,7 +18,7 @@ const Scanner: React.FC = () => {
   return permission === Results.GRANTED ? (
     <Camera />
   ) : (
-    <ScreenContainer navigationHeader>
+    <ScreenContainer hasHeaderClose>
       <Header customStyles={styles.permissionText}>
         {strings.CAMERA_PERMISSION}
       </Header>

@@ -10,17 +10,16 @@ import {
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
-import NavigationHeader from '~/components/NavigationHeader'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import BP from '~/utils/breakpoints'
 import useDelay from '~/hooks/useDelay'
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
-
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import { strings } from '~/translations/strings'
 import { useInteractionStart } from '~/hooks/sdk'
 import { useSelector } from 'react-redux'
@@ -88,7 +87,9 @@ const Camera = () => {
   }, [])
 
   const handleScan = async (e: { data: string }) => {
-    startInteraction(e.data).catch((err) => {
+    try {
+      await startInteraction(e.data)
+    } catch (err) {
       setError(true)
       if (err.code === ErrorCode.ParseJWTFailed) {
         setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
@@ -98,7 +99,7 @@ const Camera = () => {
       Animated.parallel([animateColor(), animateText()]).start(() => {
         setError(false)
       })
-    })
+    }
   }
 
   return (
@@ -106,7 +107,7 @@ const Camera = () => {
       <StatusBar hidden />
       <View style={styles.scannerContainer}>
         <View style={styles.navigationContainer}>
-          <NavigationHeader />
+          <NavigationHeader type={NavHeaderType.Close} />
         </View>
         {renderCamera && (
           <QRCodeScanner
