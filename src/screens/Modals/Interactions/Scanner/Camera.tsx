@@ -14,7 +14,7 @@ import { RNCamera } from 'react-native-camera'
 import ScreenContainer from '~/components/ScreenContainer'
 import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
-import NavigationHeader from '~/components/NavigationHeader'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import BP from '~/utils/breakpoints'
 import useDelay from '~/hooks/useDelay'
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
@@ -95,7 +95,7 @@ const Camera = () => {
       <StatusBar hidden />
       <View style={styles.scannerContainer}>
         <View style={styles.navigationContainer}>
-          <NavigationHeader />
+          <NavigationHeader type={NavHeaderType.Close} />
         </View>
         {renderCamera && (
           <QRCodeScanner

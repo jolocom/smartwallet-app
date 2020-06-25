@@ -2,7 +2,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { ScreenNames } from '~/types/screens'
-import Scanner from './scanner'
+import Scanner from '~/screens/Modals/Interactions/Scanner'
 
 const Stack = createStackNavigator()
 
