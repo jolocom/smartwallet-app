@@ -76,7 +76,9 @@ const Camera = () => {
   }, [])
 
   const handleScan = async (e: { data: string }) => {
-    startInteraction(e.data).catch((err) => {
+    try {
+      await startInteraction(e.data)
+    } catch (err) {
       setError(true)
       if (err.code === ErrorCode.ParseJWTFailed) {
         setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
@@ -86,7 +88,7 @@ const Camera = () => {
       Animated.parallel([animateColor(), animateText()]).start(() => {
         setError(false)
       })
-    })
+    }
   }
 
   return (
