@@ -9,3 +9,7 @@ export const unlockApp = createAction(AccountActionTypes.unlockApp)
 export const setLocalAuth = createAction(AccountActionTypes.setLocalAuth)
 export const setEntropy = createAction(AccountActionTypes.setEntropy)
 export const accountReset = createAction(AccountActionTypes.accountReset)
+export const setInteraction = createAction(AccountActionTypes.setInteraction)
+export const resetInteraction = createAction(
+  AccountActionTypes.resetInteraction,
+)

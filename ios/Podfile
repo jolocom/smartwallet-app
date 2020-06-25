@@ -79,6 +79,8 @@ target 'SmartWallet' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+  pod 'Permission-Notifications', :path => "../node_modules/react-native-permissions/ios/Notifications.podspec"
+  pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera.podspec"
 
   target 'SmartWalletTests' do
     inherit! :complete

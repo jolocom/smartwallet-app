@@ -215,82 +215,80 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   return (
     <Modal isVisible={modalVisible}>
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
-        <ScreenContainer isTransparent>
-          <View
+        <View
+          style={{
+            position: 'relative',
+            justifyContent: 'center',
+            height: 160,
+          }}
+        ></View>
+        <Circle
+          diameter={18}
+          bgColor={loaderColor.current}
+          animatedStyles={{
+            transform: [{ scale: animatedWidth1 }],
+            opacity: animatedOpacity1,
+          }}
+        />
+        <Circle
+          diameter={18}
+          bgColor={loaderColor.current}
+          animatedStyles={{
+            transform: [{ scale: animatedWidth2 }],
+            opacity: animatedOpacity2,
+          }}
+        />
+        <Circle
+          diameter={18}
+          bgColor={loaderColor.current}
+          animatedStyles={{
+            transform: [{ scale: animatedWidth3 }],
+            opacity: animatedOpacity3,
+          }}
+        />
+        {loaderType.current !== LoaderTypes.default && (
+          <Circle
+            diameter={18}
+            bgColor={loaderColor.current}
+            animatedStyles={{
+              transform: [{ scale: 5 }],
+              opacity: animatedOpacity4,
+            }}
+          />
+        )}
+        {loaderType.current === LoaderTypes.error && (
+          <Animated.View
             style={{
-              position: 'relative',
-              justifyContent: 'center',
-              height: 160,
+              position: 'absolute',
+              transform: [{ scale: errorScale }],
+              opacity: errorOpacity,
             }}
-          ></View>
-          <Circle
-            diameter={18}
-            bgColor={loaderColor.current}
-            animatedStyles={{
-              transform: [{ scale: animatedWidth1 }],
-              opacity: animatedOpacity1,
-            }}
-          />
-          <Circle
-            diameter={18}
-            bgColor={loaderColor.current}
-            animatedStyles={{
-              transform: [{ scale: animatedWidth2 }],
-              opacity: animatedOpacity2,
-            }}
-          />
-          <Circle
-            diameter={18}
-            bgColor={loaderColor.current}
-            animatedStyles={{
-              transform: [{ scale: animatedWidth3 }],
-              opacity: animatedOpacity3,
-            }}
-          />
-          {loaderType.current !== LoaderTypes.default && (
-            <Circle
-              diameter={18}
-              bgColor={loaderColor.current}
-              animatedStyles={{
-                transform: [{ scale: 5 }],
-                opacity: animatedOpacity4,
-              }}
-            />
-          )}
-          {loaderType.current === LoaderTypes.error && (
-            <Animated.View
-              style={{
-                position: 'absolute',
-                transform: [{ scale: errorScale }],
-                opacity: errorOpacity,
-              }}
-            >
-              <ErrorIcon />
-            </Animated.View>
-          )}
-          {loaderType.current === LoaderTypes.success && (
-            <View style={styles.tickContainer}>
-              <View style={{ position: 'absolute' }}>
-                <SuccessTick />
-              </View>
-              <Animated.View
-                style={[
-                  styles.tickBlocker,
-                  {
-                    backgroundColor: bgColor,
-                    transform: [
-                      { translateX: tickBlockerPosition },
-                      { scale: tickBlockerWidth },
-                    ],
-                  },
-                ]}
-              />
+          >
+            <ErrorIcon />
+          </Animated.View>
+        )}
+        {loaderType.current === LoaderTypes.success && (
+          <View style={styles.tickContainer}>
+            <View style={{ position: 'absolute' }}>
+              <SuccessTick />
             </View>
-          )}
-          <Paragraph size={ParagraphSizes.medium} color={loaderColor.current}>
-            {status}
-          </Paragraph>
-        </ScreenContainer>
+            <Animated.View
+              style={[
+                styles.tickBlocker,
+                {
+                  backgroundColor: bgColor,
+                  transform: [
+                    { translateX: tickBlockerPosition },
+                    { scale: tickBlockerWidth },
+                  ],
+                },
+              ]}
+            />
+          </View>
+        )}
+        <Paragraph size={ParagraphSizes.medium} color={loaderColor.current}>
+          {status}
+        </Paragraph>
       </View>
     </Modal>
   )

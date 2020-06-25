@@ -102,6 +102,18 @@ const deviceAuthentication = {
   RESET: 'Reset',
 }
 
+const scanner = {
+  CAMERA_PERMISSION: 'Camera Permission',
+  YOU_CANT_SCAN_WITHOUT_MAIN_FUNCTION:
+    "You can't scan without main function. Please allow permisson in your settings",
+  TAP_TO_ACTIVATE_CAMERA: 'Tap to activate camera',
+  IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN: 'Is this the right QR code? Try again.',
+  LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE:
+    "Looks like we can't provide this service",
+  ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE:
+    "It's all automatic, just place your phone above the code",
+}
+
 const lock = {
   ENTER_YOUR_PIN: 'Enter your PIN',
   FORGOT_YOUR_PIN: 'Forgot your PIN?',
@@ -128,6 +140,7 @@ export const strings = {
   ...recovery,
   ...seedphrase,
   ...deviceAuthentication,
+  ...scanner,
   ...settings,
   ...lock,
 }
