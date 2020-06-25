@@ -145,9 +145,10 @@ export default function () {
   const isLoggedIn = useSelector(isLogged)
   const isAuthSet = useSelector(isLocalAuthSet)
   const dispatch = useDispatch()
+  const [appState, setAppState] = useState(AppState.currentState)
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    if (nextAppState === 'background') {
+    if (appState.match(/inactive|background/) && nextAppState === 'active') {
       dispatch(lockApp())
     }
   }
@@ -159,6 +160,7 @@ export default function () {
     }
   }, [])
 
+  console.log({ isLocked, isAuthSet, isLoggedIn })
   if (isLocked && isAuthSet && isLoggedIn) {
     return <Lock />
   }
