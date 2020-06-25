@@ -151,6 +151,7 @@ export default function () {
     if (appState.match(/inactive|background/) && nextAppState === 'active') {
       dispatch(lockApp())
     }
+    setAppState(nextAppState)
   }
 
   useEffect(() => {
@@ -160,7 +161,6 @@ export default function () {
     }
   }, [])
 
-  console.log({ isLocked, isAuthSet, isLoggedIn })
   if (isLocked && isAuthSet && isLoggedIn) {
     return <Lock />
   }
