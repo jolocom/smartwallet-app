@@ -10,6 +10,8 @@ import {
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Paragraph from '~/components/Paragraph'
@@ -18,9 +20,6 @@ import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import BP from '~/utils/breakpoints'
 import useDelay from '~/hooks/useDelay'
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
-
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import { strings } from '~/translations/strings'
 import { useInteractionStart } from '~/hooks/sdk'
 
