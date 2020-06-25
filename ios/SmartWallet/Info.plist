@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>SmartWallet</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -39,8 +39,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSFaceIDUsageDescription</key>
+	<string>$(PRODUCT_NAME) requires FaceID access to allow you quick and secure access</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>TTCommons-Light.otf</string>
@@ -61,7 +63,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) requires FaceID access to allows you quick and secure access</string>
 </dict>
 </plist>

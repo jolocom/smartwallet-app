@@ -48,7 +48,6 @@ export const SDKContextProvider: React.FC = ({ children }) => {
     } catch (err) {
       if (err.message !== BackendMiddlewareErrorCodes.NoEntropy) {
         console.warn(err)
-        //TODO: add wallet Error Codes
         throw new Error('Root initialization failed')
       }
     } finally {

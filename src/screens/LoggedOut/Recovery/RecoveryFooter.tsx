@@ -1,5 +1,5 @@
 import React, { useCallback, memo } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, StyleSheet, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import BtnGroup from '~/components/BtnGroup'
@@ -54,7 +54,9 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 
     if (areSuggestionsVisible) {
       return (
-        <AbsoluteBottom>
+        <AbsoluteBottom
+          customStyles={{ bottom: Platform.OS === 'ios' ? 0 : 20 }}
+        >
           <Animated.View
             style={[styles.footer, { opacity: animatedSuggestions }]}
           >
