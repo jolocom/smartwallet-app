@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useCallback, useMemo } from 'react'
 import ActionSheet from 'react-native-actions-sheet'
 import {
   StyleSheet,
@@ -8,7 +8,6 @@ import {
   Animated,
   ScrollView,
   Easing,
-  LayoutAnimation,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
@@ -25,34 +24,54 @@ interface PropsI {
   description: string
 }
 
-const CLAIMS = [{ id: '1' }, { id: '2' }, { id: '3' }]
+interface CardPropsI {
+  isSelected: boolean
+  onToggle: () => void
+}
+
+const CLAIMS = [
+  { id: '1', isSelected: false },
+  { id: '2', isSelected: false },
+  { id: '3', isSelected: false },
+]
+const MARGIN = -10
+const MARGIN_SCALED = 10
 const SWIPE_THRESHOLD = 20
 
 const HEIGHT = Dimensions.get('window').height
 
-const Card = () => {
+const Card: React.FC<CardPropsI> = React.memo(({ isSelected, onToggle }) => {
   const position = useRef(new Animated.ValueXY()).current
   const scale = useRef(new Animated.Value(1)).current
-  const [cardHeight, setHeight] = useState(170)
 
-  const [isInstructionVisible, setIsInstructionVisible] = useState(true)
+  const [isInteracted, setIsInteracted] = useState(false)
+
+  const [margin, setMargin] = useState(MARGIN)
 
   const panResponder = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
       onPanResponderMove: (event, gesture) => {
         // we are setting position manually here,
-        // as we want the card to follow user fingers
-        position.setValue({ x: gesture.dx, y: 0 })
+        // as we want the card to follow user fingers555
+        position.setValue({ x: gesture.dx, y: gesture.dy })
+
         if (gesture.dx > SWIPE_THRESHOLD) {
-          pullRight(gesture.dx)
+          if (!isInteracted) {
+            setIsInteracted(true)
+            pullRight()
+          }
         }
+        return true
       },
       onPanResponderRelease: (event, gesture) => {
-        if (gesture.dx < SWIPE_THRESHOLD) {
+        if (gesture.dx < SWIPE_THRESHOLD && gesture.dx > 0) {
           resetPosition()
         }
+        return true
       },
     }),
   ).current
@@ -64,27 +83,28 @@ const Card = () => {
     }).start()
   }
 
-  const handleHideInstruction = () => {
-    setIsInstructionVisible(false)
+  const pull = (direction: 'right') => {
+    return () => {
+      onToggle()
+      Animated.sequence([
+        Animated.timing(position, {
+          toValue: { x: direction === 'right' ? 26 : 0, y: 0 },
+          easing: Easing.bounce,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+        Animated.spring(scale, {
+          toValue: 1.25,
+          useNativeDriver: true,
+        }),
+      ]).start(async () => {
+        console.log('After animation')
+        await useDelay(() => setMargin(MARGIN_SCALED), 205)
+      })
+    }
   }
 
-  const pullRight = (x: number) => {
-    handleHideInstruction()
-    Animated.sequence([
-      Animated.timing(position, {
-        toValue: { x: 0, y: 0 },
-        easing: Easing.bounce,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scale, {
-        toValue: 1.25,
-        useNativeDriver: true,
-      }),
-    ]).start(async () => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-      await useDelay(() => setHeight(215), 550)
-    })
-  }
+  const pullRight = pull('right')
 
   const getCardStyle = () => {
     return {
@@ -93,11 +113,20 @@ const Card = () => {
   }
 
   return (
-    <View style={[styles.cardContainer, { height: cardHeight }]}>
-      <Animated.View style={[getCardStyle()]} {...panResponder.panHandlers}>
-        <View style={styles.card}></View>
+    <View
+      style={[
+        styles.cardContainer,
+        {
+          justifyContent: 'center',
+          paddingVertical: 20,
+          marginVertical: margin,
+        },
+      ]}
+    >
+      <Animated.View style={getCardStyle()} {...panResponder.panHandlers}>
+        <View style={styles.card} />
       </Animated.View>
-      {isInstructionVisible && (
+      {!isSelected && (
         <View style={styles.instruction}>
           <Paragraph size={ParagraphSizes.micro} color={Colors.white45}>
             {strings.PULL_TO_CHOOSE}
@@ -106,14 +135,23 @@ const Card = () => {
       )}
     </View>
   )
-}
+})
 
 const MultipleCredentials: React.FC<PropsI> = React.forwardRef(
   ({ ctaText, title, description }, ref) => {
+    const [claims, setClaims] = useState(CLAIMS)
+
+    const handleClaimToggle = (id: string) => {
+      setClaims((prevState) => {
+        return prevState.map((claim) =>
+          claim.id === id ? { ...claim, isSelected: !claim.isSelected } : claim,
+        )
+      })
+    }
+
     const hideActionSheet = () => {
       ref.current?.setModalVisible(false)
     }
-
     return (
       <ActionSheet
         ref={ref}
@@ -124,11 +162,15 @@ const MultipleCredentials: React.FC<PropsI> = React.forwardRef(
           <InteractionHeader title={title} description={description} />
         </View>
         <ScrollView
+          directionalLockEnabled
           contentContainerStyle={{ paddingBottom: 80 }}
-          disableScrollViewPanResponder
         >
-          {CLAIMS.map((claim) => (
-            <Card key={claim.id} />
+          {claims.map((claim) => (
+            <Card
+              key={claim.id}
+              isSelected={claim.isSelected}
+              onToggle={() => handleClaimToggle(claim.id)}
+            />
           ))}
         </ScrollView>
         <AbsoluteBottom customStyles={styles.btns}>
@@ -166,14 +208,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   cardContainer: {
-    width: '100%',
-    flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingHorizontal: 20,
-    marginVertical: 10,
+    justifyContent: 'flex-end',
   },
   card: {
-    position: 'absolute',
     width: 268,
     height: 170,
     borderRadius: 10,

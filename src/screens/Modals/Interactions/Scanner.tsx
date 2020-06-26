@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { PanResponder, View } from 'react-native'
 import ActionSheet from 'react-native-actions-sheet'
 
 import Btn from '~/components/Btn'
