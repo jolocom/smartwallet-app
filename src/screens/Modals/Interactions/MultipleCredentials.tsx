@@ -65,46 +65,58 @@ const Card: React.FC<CardPropsI> = React.memo(({ isSelected, onToggle }) => {
             pullRight()
           }
         }
+        if (gesture.dx < -SWIPE_THRESHOLD) {
+          console.log('Pulling left')
+
+          setIsInteracted(false)
+          pullLeft()
+        }
         return true
       },
       onPanResponderRelease: (event, gesture) => {
-        if (gesture.dx < SWIPE_THRESHOLD && gesture.dx > 0) {
-          resetPosition()
+        if (gesture.dx < SWIPE_THRESHOLD && gesture.dx > 0 && isInteracted) {
+          resetPosition(0)
+        } else if (
+          gesture.dx > -SWIPE_THRESHOLD &&
+          gesture.dx < 0 &&
+          !isInteracted
+        ) {
+          resetPosition(26)
         }
         return true
       },
     }),
   ).current
 
-  const resetPosition = () => {
+  const resetPosition = (x: number) => {
     Animated.spring(position, {
-      toValue: { x: 0, y: 0 },
+      toValue: { x, y: 0 },
       useNativeDriver: true,
     }).start()
   }
 
-  const pull = (direction: 'right') => {
+  const pull = (direction: 'right' | 'left') => {
     return () => {
       onToggle()
       Animated.sequence([
         Animated.timing(position, {
           toValue: { x: direction === 'right' ? 26 : 0, y: 0 },
           easing: Easing.bounce,
-          duration: 400,
           useNativeDriver: true,
         }),
         Animated.spring(scale, {
-          toValue: 1.25,
+          toValue: direction === 'right' ? 1.25 : 1,
           useNativeDriver: true,
         }),
       ]).start(async () => {
-        console.log('After animation')
+        setIsInteracted(false)
         await useDelay(() => setMargin(MARGIN_SCALED), 205)
       })
     }
   }
 
   const pullRight = pull('right')
+  const pullLeft = pull('left')
 
   const getCardStyle = () => {
     return {
@@ -141,13 +153,13 @@ const MultipleCredentials: React.FC<PropsI> = React.forwardRef(
   ({ ctaText, title, description }, ref) => {
     const [claims, setClaims] = useState(CLAIMS)
 
-    const handleClaimToggle = (id: string) => {
+    const handleClaimToggle = useCallback((id: string) => {
       setClaims((prevState) => {
         return prevState.map((claim) =>
           claim.id === id ? { ...claim, isSelected: !claim.isSelected } : claim,
         )
       })
-    }
+    }, [])
 
     const hideActionSheet = () => {
       ref.current?.setModalVisible(false)
