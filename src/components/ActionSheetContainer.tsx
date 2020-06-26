@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import ActionSheet from 'react-native-actions-sheet'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -33,24 +33,14 @@ const ActionSheetContainer: React.FC = () => {
       <ActionSheet
         ref={actionSheetRef}
         onClose={handleCloseSheet}
-        indicatorColor={Colors.black}
+        //NOTE: removes shadow artifacts left from transparent view elevation
         elevation={0}
         gestureEnabled
+        //NOTE: removes the gesture header
         CustomHeaderComponent={<View />}
-        containerStyle={{
-          padding: 5,
-          backgroundColor: Colors.transparent,
-        }}
+        containerStyle={styles.actionSheet}
       >
-        <View
-          style={{
-            width: '100%',
-            height: 300,
-            backgroundColor: Colors.black,
-            borderRadius: 20,
-            justifyContent: 'center',
-          }}
-        >
+        <View style={styles.wrapper}>
           <Paragraph>{interactionSheet}</Paragraph>
           <Paragraph>{interactionId}</Paragraph>
         </View>
@@ -58,5 +48,19 @@ const ActionSheetContainer: React.FC = () => {
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  actionSheet: {
+    padding: 5,
+    backgroundColor: Colors.transparent,
+  },
+  wrapper: {
+    width: '100%',
+    height: 300,
+    backgroundColor: Colors.black,
+    borderRadius: 20,
+    justifyContent: 'center',
+  },
+})
 
 export default ActionSheetContainer
