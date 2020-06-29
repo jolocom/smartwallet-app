@@ -23,10 +23,7 @@ import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 import { strings } from '~/translations/strings'
 import { useInteractionStart } from '~/hooks/sdk'
 import { useSelector } from 'react-redux'
-import {
-  getInteractionId,
-  getInteractionSheet,
-} from '~/modules/account/selectors'
+import { getInteractionSheet } from '~/modules/account/selectors'
 import { getLoaderState } from '~/modules/loader/selectors'
 
 const Camera = () => {
@@ -36,6 +33,7 @@ const Camera = () => {
   const interactionSheet = useSelector(getInteractionSheet)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
   const shouldScan = !interactionSheet && !isLoaderVisible
+  const overlayVisible = !interactionSheet
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
@@ -137,8 +135,11 @@ const Camera = () => {
             style={[
               styles.rectangle,
               {
-                backgroundColor: markerBackground,
+                backgroundColor: overlayVisible
+                  ? markerBackground
+                  : Colors.black65,
                 borderColor: isError ? Colors.error : Colors.white,
+                ...(!overlayVisible && { borderWidth: 0 }),
               },
             ]}
           />
@@ -157,9 +158,11 @@ const Camera = () => {
               {errorText}
             </Paragraph>
           ) : (
-            <Paragraph customStyles={{ width: MARKER_SIZE }}>
-              {strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE}
-            </Paragraph>
+            overlayVisible && (
+              <Paragraph customStyles={{ width: MARKER_SIZE }}>
+                {strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE}
+              </Paragraph>
+            )
           )}
           <Paragraph customStyles={{ width: MARKER_SIZE }}></Paragraph>
           <TouchableHighlight
