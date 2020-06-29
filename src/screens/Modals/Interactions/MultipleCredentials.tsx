@@ -8,6 +8,7 @@ import {
   Animated,
   ScrollView,
   Easing,
+  LayoutAnimation,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
@@ -34,23 +35,37 @@ const CLAIMS = [
   { id: '2', isSelected: false },
   { id: '3', isSelected: false },
 ]
-const MARGIN = -10
-const MARGIN_SCALED = 10
+
+const MEASURES = [
+  {
+    name: 'forPullRight',
+    marginAfterAction: 10,
+    scale: 1.25,
+    startX: 26,
+    bounceTimes: 4,
+  },
+  {
+    name: 'forPullLeft',
+    marginAfterAction: -10,
+    scale: 1,
+    startX: 0,
+    bounceTimes: 2,
+  },
+]
 const SWIPE_THRESHOLD = 1
 const WINDOW = Dimensions.get('window')
 const SCREEN_WIDTH = WINDOW.width
 const SCREEN_HEIGHT = WINDOW.height
 
-const HEIGHT = Dimensions.get('window').height
-
 const Card: React.FC<CardPropsI> = React.memo(
   ({ onToggleSelect, onToggleScroll }) => {
     const position = useRef(new Animated.ValueXY()).current
     const scale = useRef(new Animated.Value(1)).current
+    const instructionOpacity = useRef(new Animated.Value(1)).current
 
     const [isInteracted, setIsInteracted] = useState(false)
 
-    const [margin, setMargin] = useState(MARGIN)
+    const [margin, setMargin] = useState(MEASURES[1].marginAfterAction)
 
     const panResponder = useRef(
       PanResponder.create({
@@ -60,7 +75,7 @@ const Card: React.FC<CardPropsI> = React.memo(
         onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
         onPanResponderMove: (event, gesture) => {
           // we are setting position manually here,
-          // as we want the card to follow user fingers555
+          // as we want the card to follow user fingers
           position.setValue({ x: gesture.dx, y: gesture.dy })
 
           onToggleScroll(false)
@@ -77,15 +92,16 @@ const Card: React.FC<CardPropsI> = React.memo(
           return true
         },
         onPanResponderRelease: (event, gesture) => {
+          const [pullRight, pullLeft] = MEASURES
           if (gesture.dx < SWIPE_THRESHOLD && gesture.dx > 0 && isInteracted) {
-            resetPosition(0)
+            resetPosition(pullLeft.startX)
             onToggleScroll(true)
           } else if (
             gesture.dx > -SWIPE_THRESHOLD &&
             gesture.dx < 0 &&
             !isInteracted
           ) {
-            resetPosition(26)
+            resetPosition(pullRight.startX)
             onToggleScroll(true)
           }
           return true
@@ -102,22 +118,43 @@ const Card: React.FC<CardPropsI> = React.memo(
 
     const pull = (direction: 'right' | 'left') => {
       return () => {
+        const [pullRight, pullLeft] = MEASURES
+        const isPullRight = direction === 'right'
         onToggleSelect()
         Animated.sequence([
-          Animated.timing(position, {
-            toValue: { x: direction === 'right' ? 26 : 0, y: 0 },
-            easing: Easing.elastic(4),
-            useNativeDriver: true,
-          }),
+          Animated.parallel([
+            Animated.timing(position, {
+              toValue: {
+                x: isPullRight ? pullRight.startX : pullLeft.startX,
+                y: 0,
+              },
+              easing: Easing.elastic(
+                isPullRight ? pullRight.bounceTimes : pullLeft.bounceTimes,
+              ),
+              useNativeDriver: true,
+            }),
+            Animated.timing(instructionOpacity, {
+              toValue: isPullRight ? 0 : 1,
+              duration: isPullRight ? 0 : 500,
+              useNativeDriver: true,
+            }),
+          ]),
           Animated.spring(scale, {
-            toValue: direction === 'right' ? 1.25 : 1,
+            toValue: isPullRight ? pullRight.scale : pullLeft.scale,
             useNativeDriver: true,
           }),
         ]).start(async () => {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
           onToggleScroll(true)
           await useDelay(
-            () => setMargin(direction === 'right' ? MARGIN_SCALED : MARGIN),
-            590,
+            () => {
+              setMargin(
+                isPullRight
+                  ? pullRight.marginAfterAction
+                  : pullLeft.marginAfterAction,
+              )
+            },
+            isPullRight ? 590 : 900,
           )
         })
       }
@@ -133,26 +170,17 @@ const Card: React.FC<CardPropsI> = React.memo(
     }
 
     return (
-      <View
-        style={[
-          styles.cardContainer,
-          {
-            justifyContent: 'center',
-            paddingVertical: 20,
-            marginVertical: margin,
-          },
-        ]}
-      >
+      <View style={[styles.cardContainer, { marginVertical: margin }]}>
         <Animated.View style={getCardStyle()} {...panResponder.panHandlers}>
           <View style={styles.card} />
         </Animated.View>
-        {!isInteracted && (
-          <View style={styles.instruction}>
-            <Paragraph size={ParagraphSizes.micro} color={Colors.white45}>
-              {strings.PULL_TO_CHOOSE}
-            </Paragraph>
-          </View>
-        )}
+        <Animated.View
+          style={[styles.instruction, { opacity: instructionOpacity }]}
+        >
+          <Paragraph size={ParagraphSizes.micro} color={Colors.white45}>
+            {strings.PULL_TO_CHOOSE}
+          </Paragraph>
+        </Animated.View>
       </View>
     )
   },
@@ -189,7 +217,7 @@ const MultipleCredentials: React.FC<PropsI> = React.forwardRef(
         <ScrollView
           directionalLockEnabled
           scrollEnabled={isScrollEnabled}
-          contentContainerStyle={{ paddingBottom: 80, paddingHorizontal: 20 }}
+          contentContainerStyle={styles.listContainer}
         >
           {claims.map((claim) => (
             <Card
@@ -213,7 +241,7 @@ const MultipleCredentials: React.FC<PropsI> = React.forwardRef(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: HEIGHT,
+    height: SCREEN_HEIGHT,
     paddingTop: 32,
     paddingBottom: 0,
     backgroundColor: Colors.mainBlack,
@@ -230,12 +258,13 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    borderColor: 'green',
-    borderWidth: 2,
+    paddingBottom: 80,
+    paddingHorizontal: 20,
   },
   cardContainer: {
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
+    paddingVertical: 20,
   },
   card: {
     width: SCREEN_WIDTH * 0.64,
@@ -245,8 +274,10 @@ const styles = StyleSheet.create({
   },
   instruction: {
     position: 'absolute',
-    right: 8,
-    top: '35%',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    justifyContent: 'center',
     width: 70,
     paddingHorizontal: 10,
   },
