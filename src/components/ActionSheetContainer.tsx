@@ -10,6 +10,9 @@ import {
 } from '~/modules/account/selectors'
 import { Colors } from '~/utils/colors'
 import { resetInteractionSheet } from '~/modules/account/actions'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import Authentication from '~/screens/Modals/Interactions/Authentication'
+import Authorization from '~/screens/Modals/Interactions/Authorization'
 
 const ActionSheetContainer: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
@@ -32,17 +35,31 @@ const ActionSheetContainer: React.FC = () => {
     <>
       <ActionSheet
         ref={actionSheetRef}
+        gestureEnabled
         onClose={handleCloseSheet}
+        footerHeight={0}
         //NOTE: removes shadow artifacts left from transparent view elevation
         elevation={0}
-        gestureEnabled
         //NOTE: removes the gesture header
         CustomHeaderComponent={<View />}
         containerStyle={styles.actionSheet}
       >
         <View style={styles.wrapper}>
-          <Paragraph>{interactionSheet}</Paragraph>
-          <Paragraph>{interactionId}</Paragraph>
+          {(() => {
+            switch (interactionSheet) {
+              case FlowType.Authentication:
+                return <Authentication />
+              case FlowType.Authorization:
+                return <Authorization />
+              default:
+                return (
+                  <>
+                    <Paragraph>{interactionSheet}</Paragraph>
+                    <Paragraph>{interactionId}</Paragraph>
+                  </>
+                )
+            }
+          })()}
         </View>
       </ActionSheet>
     </>
@@ -56,10 +73,11 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: '100%',
-    height: 300,
     backgroundColor: Colors.black,
     borderRadius: 20,
     justifyContent: 'center',
+    paddingVertical: 30,
+    paddingHorizontal: 20,
   },
 })
 
