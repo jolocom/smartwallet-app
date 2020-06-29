@@ -257,9 +257,8 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   listContainer: {
-    flex: 1,
-    paddingBottom: 80,
     paddingHorizontal: 20,
+    paddingBottom: 80,
   },
   cardContainer: {
     alignItems: 'flex-start',
