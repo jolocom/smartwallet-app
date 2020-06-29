@@ -7,9 +7,9 @@ import Paragraph from '~/components/Paragraph'
 import {
   getInteractionSheet,
   getInteractionId,
-} from '~/modules/account/selectors'
+} from '~/modules/interactions/selectors'
 import { Colors } from '~/utils/colors'
-import { resetInteractionSheet } from '~/modules/account/actions'
+import { resetInteraction } from '~/modules/interactions/actions'
 
 const ActionSheetContainer: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
@@ -26,7 +26,7 @@ const ActionSheetContainer: React.FC = () => {
     }
   }, [interactionSheet])
 
-  const handleCloseSheet = () => dispatch(resetInteractionSheet())
+  const handleCloseSheet = () => dispatch(resetInteraction())
 
   return (
     <>

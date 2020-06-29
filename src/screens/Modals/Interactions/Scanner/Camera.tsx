@@ -23,7 +23,7 @@ import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 import { strings } from '~/translations/strings'
 import { useInteractionStart } from '~/hooks/sdk'
 import { useSelector } from 'react-redux'
-import { getInteractionSheet } from '~/modules/account/selectors'
+import { getInteractionSheet } from '~/modules/interactions/selectors'
 import { getLoaderState } from '~/modules/loader/selectors'
 
 const Camera = () => {
