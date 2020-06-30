@@ -10,7 +10,7 @@ import Lock from '~/modals/Lock'
 import { SDKContextProvider } from '~/utils/sdk/context'
 
 import configureStore from './configureStore'
-import ActionSheetContainer from '~/components/ActionSheetContainer'
+import ActionSheetContainer from '~/screens/Modals/Interactions/ActionSheetContainer'
 
 const store = configureStore()
 

@@ -10,7 +10,7 @@ export const getInteractionSheet = (state: RootReducerI): FlowType | null =>
 export const getInteractionSummary = (state: RootReducerI): any =>
   state.interaction.summary
 
-export const isInteractionMultiple = createSelector(
+export const getIsMultipleCredentials = createSelector(
   getInteractionSummary,
-  (summary) => summary.length,
+  (summary) => summary.length > 1,
 )

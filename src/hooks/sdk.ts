@@ -71,23 +71,8 @@ export const useInteractionStart = (channel: InteractionChannel) => {
             interactionSheet: interaction.flow.type,
           }),
         )
-
         const summary = interaction.getSummary().state.offerSummary
         dispatch(setInteractionSummary(summary))
-
-        // dispatch(setInteraction(interaction.id))
-        // switch (interaction.flow.type) {
-        //   case FlowType.Authentication:
-        //     return dispatch(setInteractionSheet(FlowType.Authentication))
-        //   case FlowType.Authorization:
-        //     return dispatch(setInteractionSheet(FlowType.Authorization))
-        //   case FlowType.CredentialShare:
-        //     return dispatch(setInteractionSheet(FlowType.CredentialShare))
-        //   case FlowType.CredentialReceive:
-        //     return dispatch(setInteractionSheet(FlowType.CredentialReceive))
-        //   default:
-        //     return null
-        // }
       },
       { showSuccess: false },
     )

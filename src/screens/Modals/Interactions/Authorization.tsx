@@ -7,13 +7,10 @@ import Header, { HeaderSizes } from '~/components/Header'
 import { Image, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import InteractionFooter from './InteractionFooter'
-import {
-  resetInteraction,
-  resetInteractionSheet,
-} from '~/modules/account/actions'
 import { useLoader } from '~/hooks/useLoader'
 import HyperLink from 'react-native-hyperlink'
 import { strings } from '~/translations/strings'
+import { resetInteraction } from '~/modules/interaction/actions'
 
 const Authorization = () => {
   const interaction = useInteraction()
@@ -34,7 +31,6 @@ const Authorization = () => {
       },
       { showFailed: false, showSuccess: false },
     )
-    dispatch(resetInteractionSheet())
     dispatch(resetInteraction())
     if (!success) {
       //TODO: show toast
