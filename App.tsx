@@ -10,6 +10,7 @@ import Lock from '~/modals/Lock'
 import { SDKContextProvider } from '~/utils/sdk/context'
 
 import configureStore from './configureStore'
+import ActionSheetContainer from '~/components/ActionSheetContainer'
 
 const store = configureStore()
 
@@ -18,6 +19,7 @@ const App = () => {
     <ErrorBoundary>
       <Provider store={store}>
         <SDKContextProvider>
+          <ActionSheetContainer />
           <RootNavigation />
         </SDKContextProvider>
         <Loader />

@@ -55,7 +55,7 @@ platform :android do
   desc 'Build the Android application'
   lane :build do
     build_android_app(
-      task: 'bundle',
+      task: 'assemble',
       build_type: 'Release',
       gradle_path: './gradlew',
       project_dir: './android'

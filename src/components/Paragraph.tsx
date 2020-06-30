@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet, TextStyle } from 'react-native'
+import { Text, StyleSheet, TextStyle, Animated } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
@@ -14,7 +14,8 @@ export enum ParagraphSizes {
 interface PropsI {
   size?: ParagraphSizes
   color?: Colors
-  customStyles?: TextStyle
+  customStyles?: TextStyle | Animated.WithAnimatedValue<TextStyle>
+  animated?: boolean
 }
 
 const Paragraph: React.FC<PropsI> = ({
@@ -22,14 +23,16 @@ const Paragraph: React.FC<PropsI> = ({
   color = Colors.white,
   size = ParagraphSizes.small,
   customStyles = {},
+  animated = false,
 }) => {
+  const TextComponent = animated ? Animated.Text : Text
   return (
-    <Text
+    <TextComponent
       testID="paragraph"
       style={[styles.paragraph, styles[size], { color }, customStyles]}
     >
       {children}
-    </Text>
+    </TextComponent>
   )
 }
 
