@@ -38,6 +38,7 @@ const CredentialShare = () => {
       credentials={credentials}
       handleSubmit={handleSubmit}
       initiatorDID={summary.initiator.did}
+      onSelectCredential={handleCredSelect}
     />
   )
 }

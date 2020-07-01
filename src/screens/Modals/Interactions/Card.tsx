@@ -30,6 +30,7 @@ export const Card: React.FC<CardPropsI> = ({ children, isFull = false }) => {
 
 interface AnimatedCardPropsI {
   onToggleScroll: (value: boolean) => void
+  onSelect: () => void
 }
 const MEASURES = [
   {
@@ -52,7 +53,7 @@ const SCREEN_WIDTH = WINDOW.width
 const SCREEN_HEIGHT = WINDOW.height
 
 const AnimatedCard: React.FC<AnimatedCardPropsI> = React.memo(
-  ({ onToggleScroll, children }) => {
+  ({ onToggleScroll, onSelect, children }) => {
     const position = useRef(new Animated.ValueXY()).current
     const scale = useRef(new Animated.Value(1)).current
     const instructionOpacity = useRef(new Animated.Value(1)).current
@@ -78,6 +79,12 @@ const AnimatedCard: React.FC<AnimatedCardPropsI> = React.memo(
           }
 
           onToggleScroll(false)
+
+          return true
+        },
+        onPanResponderRelease: (event, gesture) => {
+          const [pullRightV, pullLeftV] = MEASURES
+
           if (gesture.dx > SWIPE_THRESHOLD) {
             if (!isInteracted) {
               setIsInteracted(true)
@@ -88,19 +95,16 @@ const AnimatedCard: React.FC<AnimatedCardPropsI> = React.memo(
             setIsInteracted(false)
             pullLeft()
           }
-          return true
-        },
-        onPanResponderRelease: (event, gesture) => {
-          const [pullRight, pullLeft] = MEASURES
+
           if (gesture.dx < SWIPE_THRESHOLD && gesture.dx > 0 && isInteracted) {
-            resetPosition(pullLeft.startX)
+            resetPosition(pullLeftV.startX)
             onToggleScroll(true)
           } else if (
             gesture.dx > -SWIPE_THRESHOLD &&
             gesture.dx < 0 &&
             !isInteracted
           ) {
-            resetPosition(pullRight.startX)
+            resetPosition(pullRightV.startX)
             onToggleScroll(true)
           }
           return true
@@ -120,6 +124,7 @@ const AnimatedCard: React.FC<AnimatedCardPropsI> = React.memo(
         const [pullRight, pullLeft] = MEASURES
         const isPullRight = direction === 'right'
         // TODO: select credential here as well
+        onSelect()
         Animated.sequence([
           Animated.parallel([
             Animated.timing(position, {

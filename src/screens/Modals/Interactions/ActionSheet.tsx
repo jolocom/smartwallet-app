@@ -57,7 +57,8 @@ const ActionSheetContainer: React.FC = () => {
     <>
       <ActionSheet
         ref={actionSheetRef}
-        gestureEnabled
+        closeOnTouchBackdrop={false}
+        gestureEnabled={false}
         onClose={handleCloseSheet}
         footerHeight={0}
         //NOTE: removes shadow artifacts left from transparent view elevation

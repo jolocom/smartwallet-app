@@ -10,12 +10,12 @@ import { strings } from '~/translations/strings'
 import truncateString from '~/utils/truncateString'
 import SingleCredential from './SingleCredential'
 
-interface OfferCredI {
+export interface OfferCredI {
   type: [string, string]
   constrains: []
 }
 
-interface ReceiveCredI {
+export interface ReceiveCredI {
   type: string
   renderInfo: {
     logo: {
@@ -35,18 +35,28 @@ interface CredentialPlaceholderComponentI {
   credentials: OfferCredI[] | ReceiveCredI[]
   handleSubmit: () => void
   initiatorDID: string
+  onSelectCredential: (type: string) => void
 }
 
 const CredentialPlaceholderComponent: React.FC<CredentialPlaceholderComponentI> = ({
   credentials,
   handleSubmit,
   initiatorDID,
+  onSelectCredential,
 }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
 
   const renderCards = (handletoggleScroll: (value: boolean) => void) => {
     return credentials.map((claim: any, idx: number) => (
-      <AnimatedCard key={idx} onToggleScroll={handletoggleScroll}>
+      <AnimatedCard
+        key={idx}
+        onToggleScroll={handletoggleScroll}
+        onSelect={() =>
+          onSelectCredential(
+            Array.isArray(claim.type) ? claim.type[1] : claim.type,
+          )
+        }
+      >
         {renderCardBody(claim)}
       </AnimatedCard>
     ))
