@@ -87,8 +87,6 @@ const styles = StyleSheet.create({
   containerSingle: {
     flex: 1,
     justifyContent: 'space-between',
-    // TODO: height should fit the content
-    height: SCREEN_HEIGHT / 2,
     paddingVertical: 32,
     paddingHorizontal: 20,
     backgroundColor: Colors.black,

@@ -20,9 +20,9 @@ interface CardPropsI {
   isFull?: boolean
 }
 
-export const Card: React.FC<CardPropsI> = ({ children, isFull }) => {
+export const Card: React.FC<CardPropsI> = ({ children, isFull = false }) => {
   return (
-    <View style={[styles.card, isFull && { width: '100%', height: '63%' }]}>
+    <View style={[styles.card, isFull ? styles.fullCard : styles.shrinkedCard]}>
       {children}
     </View>
   )
@@ -192,11 +192,19 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   card: {
-    width: SCREEN_WIDTH * 0.64,
-    height: SCREEN_HEIGHT * 0.22,
     borderRadius: 10,
     backgroundColor: Colors.activity,
+    marginVertical: 30,
   },
+  fullCard: {
+    width: SCREEN_WIDTH * 0.9,
+    height: SCREEN_WIDTH * 0.9 * 0.63,
+  },
+  shrinkedCard: {
+    width: SCREEN_WIDTH * 0.64,
+    height: SCREEN_HEIGHT * 0.22,
+  },
+
   instruction: {
     position: 'absolute',
     top: 0,

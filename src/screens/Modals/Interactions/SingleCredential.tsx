@@ -1,8 +1,8 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
 
 import InteractionHeader from './InteractionHeader'
 import InteractionFooter from './InteractionFooter'
+import { View, StyleSheet } from 'react-native'
 
 interface PropsI {
   title: string
@@ -18,8 +18,8 @@ const SingleCredential: React.FC<PropsI> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <InteractionHeader title={title} description={description} />
-      <View style={styles.body}>{children}</View>
+      <InteractionHeader title={title} />
+      {children}
       <InteractionFooter onSubmit={onSubmit} />
     </View>
   )
@@ -28,10 +28,8 @@ const SingleCredential: React.FC<PropsI> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
-  },
-  body: {
-    paddingVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 
