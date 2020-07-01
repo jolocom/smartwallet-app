@@ -5,11 +5,15 @@ import { Colors } from '~/utils/colors'
 import InteractionFooter from './InteractionFooter'
 import InteractionHeader from './InteractionHeader'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
+import { useSelector } from 'react-redux'
+import { getInteractionSheet } from '~/modules/interaction/selectors'
+
+import getCTAText from './utils/getCTAText'
 
 interface PropsI {
-  ctaText: string
   title: string
   description: string
+  onSubmit: () => void
   children: (handletoggleScroll: (value: boolean) => void) => React.ReactNode
 }
 
@@ -17,12 +21,14 @@ const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
 
 const MultipleCredentials: React.FC<PropsI> = ({
-  ctaText,
   title,
   description,
   children,
+  onSubmit,
 }) => {
   const [isScrollEnabled, setIsScrollEnabled] = useState(true)
+
+  const interactionType = useSelector(getInteractionSheet)
 
   const handletoggleScroll = (value: boolean) => {
     setIsScrollEnabled(value)
@@ -41,7 +47,10 @@ const MultipleCredentials: React.FC<PropsI> = ({
         {children(handletoggleScroll)}
       </ScrollView>
       <AbsoluteBottom customStyles={styles.btns}>
-        <InteractionFooter onSubmit={() => {}} ctaText={ctaText} />
+        <InteractionFooter
+          onSubmit={onSubmit}
+          ctaText={getCTAText(interactionType)}
+        />
       </AbsoluteBottom>
     </>
   )

@@ -10,15 +10,13 @@ import Authorization from '~/screens/Modals/Interactions/Authorization'
 import Paragraph from '~/components/Paragraph'
 import {
   getInteractionSheet,
-  getIsMultipleCredentials,
-  getInteractionSummary,
+  getIsFullScreenInteraction,
 } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
 import { resetInteraction } from '~/modules/interaction/actions'
-import MultipleCredentials from './MultipleCredentials'
-import SingleCredential from './SingleCredential'
-import Card from './Card'
+import CredentialOffer from './CredentialOffer'
+import CredentialReceive from './CredentialReceive'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -28,8 +26,7 @@ const ActionSheetContainer: React.FC = () => {
 
   const dispatch = useDispatch()
   const interactionSheet = useSelector(getInteractionSheet)
-  const isMultipleCredentials = useSelector(getIsMultipleCredentials)
-  const summary = useSelector(getInteractionSummary)
+  const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
 
   useEffect(() => {
     if (interactionSheet) {
@@ -41,50 +38,18 @@ const ActionSheetContainer: React.FC = () => {
 
   const handleCloseSheet = () => dispatch(resetInteraction())
 
-  // TODO: to add proper type annotation
-  const renderCards = (handletoggleScroll: (value: boolean) => void) => {
-    return summary.map((claim: any, idx: number) => (
-      <Card key={claim.type + idx} onToggleScroll={handletoggleScroll} />
-    ))
-  }
-
   const renderBody = () => {
     switch (interactionSheet) {
       case FlowType.Authentication:
         return <Authentication />
       case FlowType.Authorization:
         return <Authorization />
+      case FlowType.CredentialShare:
+        return <CredentialOffer />
+      case FlowType.CredentialReceive:
+        return <CredentialReceive />
       default:
-        return (
-          <>
-            <Paragraph>{interactionSheet}</Paragraph>
-          </>
-        )
-    }
-  }
-
-  const renderInteraction = () => {
-    if (isMultipleCredentials) {
-      return (
-        <MultipleCredentials
-          ctaText="Receive"
-          title="Name of Service"
-          description="Choose one or more documents provided by this
-          service and we will generate them for you"
-        >
-          {renderCards}
-        </MultipleCredentials>
-      )
-    } else {
-      return (
-        <SingleCredential
-          title="You recieved an ID Card"
-          description="Good news, your request was successful and you have recieved the necessary document. Dont forget to save it!"
-          ctaText="Receive"
-        >
-          {renderBody()}
-        </SingleCredential>
-      )
+        return <Paragraph>{interactionSheet}</Paragraph>
     }
   }
 
@@ -100,12 +65,12 @@ const ActionSheetContainer: React.FC = () => {
         //NOTE: removes the gesture header
         CustomHeaderComponent={<View />}
         containerStyle={
-          isMultipleCredentials
+          isFullScreenInteraction
             ? styles.containerMultiple
             : styles.containerSingle
         }
       >
-        {renderInteraction()}
+        {renderBody()}
       </ActionSheet>
     </>
   )
@@ -120,6 +85,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.mainBlack,
   },
   containerSingle: {
+    flex: 1,
+    justifyContent: 'space-between',
+    // TODO: height should fit the content
+    height: SCREEN_HEIGHT / 2,
     paddingVertical: 32,
     paddingHorizontal: 20,
     backgroundColor: Colors.black,

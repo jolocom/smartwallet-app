@@ -5,7 +5,7 @@ import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 
 interface PropsI {
   title: string
-  description: string
+  description?: string
 }
 
 const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
@@ -14,9 +14,11 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
       <Header size={HeaderSizes.small} color={Colors.white90}>
         {title}
       </Header>
-      <Paragraph size={ParagraphSizes.micro} color={Colors.white90}>
-        {description}
-      </Paragraph>
+      {description && (
+        <Paragraph size={ParagraphSizes.micro} color={Colors.white90}>
+          {description}
+        </Paragraph>
+      )}
     </>
   )
 }

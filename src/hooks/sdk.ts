@@ -71,7 +71,8 @@ export const useInteractionStart = (channel: InteractionChannel) => {
             interactionSheet: interaction.flow.type,
           }),
         )
-        const summary = interaction.getSummary().state.offerSummary
+
+        const summary = interaction.getSummary()
         dispatch(setInteractionSummary(summary))
       },
       { showSuccess: false },

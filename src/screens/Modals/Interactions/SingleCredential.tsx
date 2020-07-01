@@ -1,33 +1,34 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { Colors } from '~/utils/colors'
-import InteractionFooter from './InteractionFooter'
 import InteractionHeader from './InteractionHeader'
+import InteractionFooter from './InteractionFooter'
 
 interface PropsI {
   title: string
-  description: string
-  ctaText: string
+  description?: string
+  onSubmit: () => void
 }
 
-const SingleCredential: React.FC<PropsI> = React.forwardRef(
-  ({ title, description, ctaText, children }) => {
-    return (
-      <>
-        <InteractionHeader title={title} description={description} />
-        <View style={styles.body}>{children}</View>
-        <InteractionFooter onSubmit={() => {}} ctaText={ctaText} />
-      </>
-    )
-  },
-)
+const SingleCredential: React.FC<PropsI> = ({
+  title,
+  description,
+  children,
+  onSubmit,
+}) => {
+  return (
+    <View style={styles.container}>
+      <InteractionHeader title={title} description={description} />
+      <View style={styles.body}>{children}</View>
+      <InteractionFooter onSubmit={onSubmit} />
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 32,
-    paddingHorizontal: 20,
-    backgroundColor: Colors.black,
+    flex: 1,
+    justifyContent: 'space-between',
   },
   body: {
     paddingVertical: 20,
