@@ -6,28 +6,25 @@ import { useInteraction } from '~/hooks/sdk'
 import { resetInteraction } from '~/modules/interaction/actions'
 import { getInteractionSummary } from '~/modules/interaction/selectors'
 import CredentialPlaceholderComponent from './CredentialPlaceholderComponent'
-import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { CredentialVerificationSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
-const CredentialReceive = () => {
-  const [selected, setSelected] = useState<SignedCredentialWithMetadata[]>([])
+const CredentialShare = () => {
+  const [selected, setSelected] = useState<CredentialVerificationSummary[]>([])
 
   const interaction = useInteraction()
   const loader = useLoader()
   const dispatch = useDispatch()
 
   const summary = useSelector(getInteractionSummary)
-  const credentials = summary.state.offerSummary
+  const credentials = summary.state.constraints[0].credentialRequirements
 
   const handleCredSelect = () => {}
 
   const handleSubmit = async () => {
     const success = loader(
       async () => {
-        const response = await interaction.createCredentialOfferResponseToken(
-          selected,
-        )
-        const credentailReceive = await interaction.send(response)
-        console.log(credentailReceive)
+        const response = await interaction.createCredentialResponse(selected)
+        await interaction.send(response)
       },
       { showFailed: false, showSuccess: false },
     )
@@ -45,4 +42,4 @@ const CredentialReceive = () => {
   )
 }
 
-export default CredentialReceive
+export default CredentialShare

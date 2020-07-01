@@ -15,7 +15,7 @@ import {
 
 import { Colors } from '~/utils/colors'
 import { resetInteraction } from '~/modules/interaction/actions'
-import CredentialOffer from './CredentialOffer'
+import CredentialShare from './CredentialShare'
 import CredentialReceive from './CredentialReceive'
 
 const WINDOW = Dimensions.get('window')
@@ -45,7 +45,7 @@ const ActionSheetContainer: React.FC = () => {
       case FlowType.Authorization:
         return <Authorization />
       case FlowType.CredentialShare:
-        return <CredentialOffer />
+        return <CredentialShare />
       case FlowType.CredentialReceive:
         return <CredentialReceive />
       default:
