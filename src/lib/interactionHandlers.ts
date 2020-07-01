@@ -4,7 +4,7 @@ import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
-import { InteractionChannel } from '../interactionManager/types'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ssoActions } from 'src/actions'
 /**
  * @param Metadata should not need to be passed to credential receive because it comes from cred Offer

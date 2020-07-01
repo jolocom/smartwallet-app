@@ -10,7 +10,7 @@ import { DocumentReceiveCard } from './documentReceiveCard'
 import {
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '../../../lib/interactionManager/types'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import LinearGradient from 'react-native-linear-gradient'
 
 const styles = StyleSheet.create({

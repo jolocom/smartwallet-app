@@ -1046,6 +1046,28 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
+"@jolocom/sdk-password-store-mobile-keychain@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk-password-store-mobile-keychain/-/sdk-password-store-mobile-keychain-0.1.1.tgz#5d4f0e0c6065f637f08bacca422960bafd377759"
+  integrity sha512-mrLk5+kz6Ve9ZKlImRJfnfWlZZyPmjiJP4BYrXG6UeNUrBch6c8oTfDNY7Mq6f1MzN6kTc+fDJLk1YpuIVw+sQ==
+  dependencies:
+    react-native-keychain "^6.0.0"
+
+"@jolocom/sdk-storage-typeorm@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-1.1.0.tgz#79682411ef275bf1937aa95ac35ac8bd5182d1fa"
+  integrity sha512-LLRXUb2jQ4NGlz1S4mdhbQ7VezGMNF0dF6TEw7FHbmn7BtL/wztZaKkor/6JBTG/IOCu8cXrjy7ASQkhuZeNbA==
+  dependencies:
+    class-transformer "^0.2.3"
+
+"@jolocom/sdk@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.11.0.tgz#f4aab89e5eb0617bb860dd44dab2ae5b6c314b81"
+  integrity sha512-aD5S+omlQIci0c12fNx6T1iYBXkbg/d4UI0hIuAt3O7Q9RzWfsPNKsChclkZ/7mHf192kDGToC8pi/DVkfxWlg==
+  dependencies:
+    form-data "^3.0.0"
+    ramda "^0.26.1"
+
 "@reach/router@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@reach/router/-/router-1.2.1.tgz#34ae3541a5ac44fa7796e5506a5d7274a162be4e"
@@ -3160,6 +3182,11 @@ class-transformer@^0.1.10, class-transformer@^0.1.9:
   resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.1.10.tgz#350f168ebb4c1f87edb18b98dd973681fc20fff7"
   integrity sha512-QiNdUxEvTBiUtc0KiapGVHhgaqGQVEhOfL9UEBnb9xRfcwmDJT5ijIDwcwJUTwXaT/kGvZZB4JCGsiuR5adX6g==
 
+class-transformer@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.2.3.tgz#598c92ca71dcca73f91ccb875d74a3847ccfa32d"
+  integrity sha512-qsP+0xoavpOlJHuYsQJsN58HXSl8Jvveo+T37rEvCEeRfMWoytAyR0Ua/YsFgpM6AZYZ/og2PJwArwzJl1aXtQ==
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"
@@ -3324,7 +3351,7 @@ colors@^1.0.3:
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
 
-combined-stream@^1.0.6, combined-stream@~1.0.6:
+combined-stream@^1.0.6, combined-stream@^1.0.8, combined-stream@~1.0.6:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
   integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
@@ -5368,6 +5395,15 @@ form-data@^2.3.3, form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
+form-data@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.0.tgz#31b7e39c85f1355b7139ee0c647cf0de7f83c682"
+  integrity sha512-CKMFDglpbMi6PyN+brwB9Q/GOw0eAnsrEZDgcsH5Krhz5Od/haKHAX0NmQfha2zPPz0JpWzA7GJHGSnvCRLWsg==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
+    mime-types "^2.1.12"
+
 forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
@@ -7131,10 +7167,10 @@ jest@^24.8.0:
     import-local "^2.0.0"
     jest-cli "^24.8.0"
 
-jolocom-lib@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.1.0.tgz#dcbf79e62201e6fdcec2fa2fa9f1da4da687238f"
-  integrity sha512-Ab5aYuOpaAetNV8F7shadvFWYtULrclCzxb1sVljF3VI34higSbOy3qYn1V+XhRR5MT1dGKhrr4wQedscPs++w==
+jolocom-lib@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.3.3.tgz#4f4a0bbd2cde593d58ad9b67c45ccbcb4d1f89ac"
+  integrity sha512-XnzIODwAJ52QVc72AnRMcrrbUIjLqtkiJIyHeck6TzYBde5JLKYeWaDpDo2Yy5vWdRnNys60f8Zs4wLA3Rumig==
   dependencies:
     base64url "^3.0.1"
     bip32 "^1.0.2"
@@ -9949,6 +9985,11 @@ react-native-keychain@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-3.1.3.tgz#fce176e7b95243cecda1896a7e6bdfe0335d778a"
   integrity sha512-eWUbjYJge4icX8FhWJk/OPlyGxPnW9bZDysBX3WwOG37iurdH692HKnM2Ih+S+0te65RytImvUrcVnHVBbumYg==
+
+react-native-keychain@^6.0.0:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-6.1.1.tgz#3c14e4df9e5599f8d5a708da75d27f9d2424d7c1"
+  integrity sha512-WYvAg7FbYPyX8jJ1rY/IQGS+6zK5LtNMRa3E8x1n0M5Lmsm/9CHtakzbmqT+rLvFE7DpPBg7qFawMuUoDjjtYA==
 
 react-native-linear-gradient@^2.5.6:
   version "2.5.6"

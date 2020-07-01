@@ -3,7 +3,7 @@ import { navigationActions } from 'src/actions'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { routeList } from 'src/routeList'
 import { ThunkAction } from '../../store'
-import { InteractionChannel } from 'src/lib/interactionManager/types'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { cancelSSO } from '.'
 
 export const consumeAuthenticationRequest = (

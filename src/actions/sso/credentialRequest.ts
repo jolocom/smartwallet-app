@@ -3,9 +3,10 @@ import { routeList } from 'src/routeList'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { ThunkAction } from '../../store'
-import { CredentialVerificationSummary } from 'src/lib/interactionManager/types'
-import { InteractionChannel } from 'src/lib/interactionManager/types'
-import { Interaction } from 'src/lib/interactionManager/interaction'
+import { CredentialVerificationSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
+import { CredentialRequestFlow } from '@jolocom/sdk/js/src/lib/interactionManager/credentialRequestFlow'
 import { cancelSSO } from './'
 
 export const consumeCredentialRequest = (
@@ -19,12 +20,16 @@ export const consumeCredentialRequest = (
     credentialRequest,
   )
 
+  // @ts-ignore
+  const availableCredentials = (interaction.flow as CredentialRequestFlow).getAvailableCredentials(summary.state.constraints[0])
+
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.Consent,
       params: {
         interactionId: interaction.id,
         interactionSummary: interaction.getSummary(),
+        availableCredentials
       },
       key: 'credentialRequest',
     }),

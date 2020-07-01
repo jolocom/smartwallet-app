@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { initStore, ThunkDispatch } from './store'
+import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
 import { StatusBar, View } from 'react-native'
 import { RoutesContainer } from './routes'
@@ -14,6 +14,8 @@ import {
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
 import { black } from './styles/colors'
+import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
+import { LoadingSpinner } from './ui/generic'
 
 useScreens()
 
@@ -26,15 +28,20 @@ useScreens()
  * better architecture.
  */
 let store: ReturnType<typeof initStore>
+let typeormPromise: Promise<void | IStorage>
 
 export default class App extends React.PureComponent<
   {},
-  { showStatusBar: boolean }
+  { ready: boolean, showStatusBar: boolean }
 > {
   private navigator!: NavigationContainerComponent
 
   public constructor(props: {}) {
     super(props)
+    this.state = {
+      ready: false,
+      showStatusBar: true,
+    }
     // only init store once, or else Provider complains (especially on 'toggle
     // inspector')
     //
@@ -42,9 +49,11 @@ export default class App extends React.PureComponent<
     // instantiated because otherwise the overrides at the top of index.ts will
     // have not been excuted yet (while files are being imported) and initStore
     // triggers creation of BackendMiddleware which needs those
-    if (!store) store = initStore()
-    this.state = {
-      showStatusBar: true,
+    if (!typeormPromise) {
+      typeormPromise = initTypeorm().then((storage) => {
+        store = initStore(storage)
+        this.setState({ ready: true })
+      })
     }
   }
 
@@ -85,7 +94,8 @@ export default class App extends React.PureComponent<
   }
 
   public render() {
-    const { showStatusBar } = this.state
+    const { showStatusBar, ready } = this.state
+
     return (
       <React.Fragment>
         <StatusBar hidden={!showStatusBar} translucent />
@@ -98,15 +108,17 @@ export default class App extends React.PureComponent<
             }}
           />
         )}
-        <Provider store={store}>
-          <View style={{ flex: 1 }}>
-            <RoutesContainer
-              onNavigationStateChange={this.handleNavigationChange.bind(this)}
-              ref={nav => this.setNavigator(nav)}
-            />
-            <AppLoadingAndNotifications />
-          </View>
-        </Provider>
+        {!ready ? <LoadingSpinner /> :
+          <Provider store={store}>
+            <View style={{ flex: 1 }}>
+              <RoutesContainer
+                onNavigationStateChange={this.handleNavigationChange.bind(this)}
+                ref={nav => this.setNavigator(nav)}
+              />
+              <AppLoadingAndNotifications />
+            </View>
+          </Provider>
+        }
       </React.Fragment>
     )
   }

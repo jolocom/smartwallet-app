@@ -10,10 +10,10 @@ import { CloseIcon } from '../../../resources'
 import { fontMain, textXXS } from '../../../styles/typography'
 import { navigatorResetHome } from '../../../actions/navigation'
 import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken'
-import { ErrorCode, AppError } from 'src/lib/errors'
+import { ErrorCode, AppError } from '@jolocom/sdk/js/src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
 import { Colors } from 'src/styles'
-import { InteractionChannel } from '../../../lib/interactionManager/types'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 const IS_IOS = Platform.OS === 'ios'
 

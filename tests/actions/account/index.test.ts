@@ -4,7 +4,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
 import { createMockStore } from 'tests/utils'
 import { withErrorScreen } from 'src/actions/modifiers'
-import { BackendError } from '../../../src/lib/errors/types'
+import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {

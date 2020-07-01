@@ -1,6 +1,6 @@
 import { ActionCreator, AnyAction } from 'redux'
 import { ThunkAction } from 'src/store'
-import { AppError } from '../lib/errors'
+import { AppError } from '@jolocom/sdk/js/src/lib/errors'
 import { toggleLoading } from './account'
 import { showErrorScreen } from './generic'
 

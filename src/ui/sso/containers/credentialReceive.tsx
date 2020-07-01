@@ -12,7 +12,7 @@ import {
   InteractionSummary,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '../../../lib/interactionManager/types'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
 import strings from 'src/locales/strings'
 
@@ -37,7 +37,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
     },
   } = navigation
 
-  const { publicProfile } = interactionSummary.issuer
+  const { publicProfile } = interactionSummary.initiator
 
   const handleConfirm = () => {
     acceptSelectedCredentials(selected, interactionId)

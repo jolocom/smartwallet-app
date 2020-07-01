@@ -14,7 +14,7 @@ import {
 import React, { useRef, useState } from 'react'
 import Interactable, { ISnapEvent } from 'react-native-interactable'
 import { Colors, Typefaces } from '../../../styles'
-import { OfferWithValidity } from 'src/lib/interactionManager/types'
+import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 interface Props {
   onToggle: () => void
   selected: boolean
-  offering: OfferWithValidity
+  offering: SignedCredentialWithMetadata
   invalid: boolean | undefined
 }
 export const DocumentReceiveCard = (props: Props) => {

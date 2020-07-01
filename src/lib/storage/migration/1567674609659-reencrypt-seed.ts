@@ -6,8 +6,8 @@
 
 import { MigrationInterface, QueryRunner } from 'typeorm/browser'
 import CryptoJS from './../../compat/cryptojs'
-import { KeyChain } from 'src/lib/keychain'
-import { MasterKeyEntity } from '../entities'
+import { KeyChain } from '@jolocom/sdk-password-store-mobile-keychain'
+import { MasterKeyEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
 import { encryptWithLib3 } from './../../compat/jolocomLib'
 
 const getMasterKeys = (queryRunner: QueryRunner): Promise<MasterKeyEntity[]> =>

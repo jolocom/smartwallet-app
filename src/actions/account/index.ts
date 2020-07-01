@@ -6,15 +6,15 @@ import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
-} from 'src/lib/util'
+} from '@jolocom/sdk/js/src/lib/util'
 import { ThunkAction } from 'src/store'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
-import { CredentialMetadataSummary } from '../../lib/storage/storage'
+import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
-import { BackendError } from '../../lib/errors/types'
+import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',

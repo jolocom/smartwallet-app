@@ -140,6 +140,9 @@
     }
   },
   "dependencies": {
+    "@jolocom/sdk": "^0.11.0",
+    "@jolocom/sdk-password-store-mobile-keychain": "^0.1.1",
+    "@jolocom/sdk-storage-typeorm": "^1.1.0",
     "@react-native-community/async-storage": "^1.6.2",
     "@react-navigation/core": "^3.4.2",
     "@sentry/react-native": "^1.0.6",
@@ -151,7 +154,7 @@
     "ethereumjs-wallet": "^0.6.0",
     "events": "^3.0.0",
     "i18n-js": "^3.1.0",
-    "jolocom-lib": "^4.1.0",
+    "jolocom-lib": "^4.3.3",
     "material-colors": "^1.2.5",
     "object.assign": "^4.1.0",
     "ramda": "^0.26.1",

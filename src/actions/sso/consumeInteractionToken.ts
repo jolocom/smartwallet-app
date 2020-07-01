@@ -1,15 +1,15 @@
 import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from '../../lib/storage/interactionTokens'
+import { interactionHandlers } from '../../lib/interactionHandlers'
 import { withErrorScreen, withLoading } from '../modifiers'
 import { showErrorScreen } from '../generic'
-import { AppError, ErrorCode } from '../../lib/errors'
+import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import { ThunkAction } from '../../store'
 import {
   JSONWebToken,
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { ErrorCodes as LibErrorCode } from 'jolocom-lib/js/errors'
-import { InteractionChannel } from 'src/lib/interactionManager/types'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const callHandler = (handler: () => ThunkAction) => {

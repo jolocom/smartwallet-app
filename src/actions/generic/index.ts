@@ -3,7 +3,7 @@ import { routeList } from 'src/routeList'
 import SplashScreen from 'react-native-splash-screen'
 import I18n from 'src/locales/i18n'
 import { ThunkAction } from 'src/store'
-import { AppError, ErrorCode } from 'src/lib/errors'
+import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import settingKeys from '../../ui/settings/settingKeys'
 
 export const showErrorScreen = (
@@ -31,7 +31,6 @@ export const initApp: ThunkAction = async (
   backendMiddleware,
 ) => {
   try {
-    await backendMiddleware.initStorage()
     const storedSettings = await backendMiddleware.storageLib.get.settingsObject()
 
     /**
