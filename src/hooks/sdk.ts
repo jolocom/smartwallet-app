@@ -13,7 +13,7 @@ import {
   setInteractionSheet,
 } from '~/modules/interactions/actions'
 import { useLoader } from './useLoader'
-import { getInteractionId } from '~/modules/account/selectors'
+import { getInteractionId } from '~/modules/interactions/selectors'
 
 export const useSDK = () => {
   const sdk = useContext(SDKContext)

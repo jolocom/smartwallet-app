@@ -4,10 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import { strings } from '~/translations/strings'
 import { useDispatch } from 'react-redux'
-import {
-  resetInteractionSheet,
-  resetInteraction,
-} from '~/modules/account/actions'
+import { resetInteraction } from '~/modules/interactions/actions'
 import { Colors } from '~/utils/colors'
 
 interface PropsI {
@@ -19,7 +16,6 @@ const InteractionFooter: React.FC<PropsI> = ({ onSubmit, ctaText }) => {
   const dispatch = useDispatch()
 
   const handleCancel = () => {
-    dispatch(resetInteractionSheet())
     dispatch(resetInteraction())
   }
 

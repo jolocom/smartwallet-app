@@ -8,7 +8,7 @@ export enum ParagraphSizes {
   large = 'large',
   medium = 'medium',
   small = 'small',
-  xsmall = 'xsmall',
+  micro = 'micro',
 }
 
 interface PropsI {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Regular,
     textAlign: 'center',
   },
-  xsmall: {
+  micro: {
     ...getStyle(16, 22, 0),
   },
   small: {

@@ -1,19 +1,18 @@
 import React from 'react'
-import { useInteraction } from '~/hooks/sdk'
+import { Image, View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import HyperLink from 'react-native-hyperlink'
 import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
+
+import { useInteraction } from '~/hooks/sdk'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Header, { HeaderSizes } from '~/components/Header'
-import { Image, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import InteractionFooter from './InteractionFooter'
-import {
-  resetInteraction,
-  resetInteractionSheet,
-} from '~/modules/account/actions'
+import { resetInteraction } from '~/modules/interactions/actions'
 import { useLoader } from '~/hooks/useLoader'
-import HyperLink from 'react-native-hyperlink'
 import { strings } from '~/translations/strings'
+import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 
 const Authorization = () => {
   const interaction = useInteraction()
@@ -21,10 +20,8 @@ const Authorization = () => {
   const loader = useLoader()
   const { description, imageURL, action } = interaction.getSummary()
     .state as AuthorizationFlowState
-  const ctaWord = action?.split(' ')[0]
-  const ctaCapitalized = ctaWord
-    ? ctaWord?.charAt(0).toUpperCase() + ctaWord?.slice(1)
-    : strings.AUTHORIZE
+  const ctaWord = action ? truncateFirstWord(action) : strings.AUTHORIZE
+  const ctaCapitalized = capitalizeWord(ctaWord)
 
   const handleSubmit = async () => {
     const success = loader(
@@ -34,7 +31,6 @@ const Authorization = () => {
       },
       { showFailed: false, showSuccess: false },
     )
-    dispatch(resetInteractionSheet())
     dispatch(resetInteraction())
     if (!success) {
       //TODO: show toast
@@ -51,7 +47,7 @@ const Authorization = () => {
         linkStyle={{ textDecorationLine: 'underline' }}
       >
         <Paragraph
-          size={ParagraphSizes.xsmall}
+          size={ParagraphSizes.micro}
           customStyles={{ color: Colors.white70, marginVertical: 20 }}
         >
           {description}

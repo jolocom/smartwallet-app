@@ -1,18 +1,16 @@
 import React from 'react'
-import { useInteraction } from '~/hooks/sdk'
+import { StyleSheet } from 'react-native'
+import HyperLink from 'react-native-hyperlink'
 import { useDispatch } from 'react-redux'
+import { AuthenticationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+
+import { useInteraction } from '~/hooks/sdk'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Header, { HeaderSizes } from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import InteractionFooter from './InteractionFooter'
-import {
-  resetInteraction,
-  resetInteractionSheet,
-} from '~/modules/account/actions'
-import { AuthenticationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { resetInteraction } from '~/modules/interactions/actions'
 import { useLoader } from '~/hooks/useLoader'
-import { StyleSheet } from 'react-native'
-import HyperLink from 'react-native-hyperlink'
 import { strings } from '~/translations/strings'
 
 const Authentication = () => {
@@ -30,7 +28,6 @@ const Authentication = () => {
       },
       { showFailed: false, showSuccess: false },
     )
-    dispatch(resetInteractionSheet())
     dispatch(resetInteraction())
     if (!success) {
       //TODO: show toast
@@ -46,7 +43,7 @@ const Authentication = () => {
         linkDefault={true}
         linkStyle={{ textDecorationLine: 'underline' }}
       >
-        <Paragraph size={ParagraphSizes.xsmall} customStyles={styles.paragraph}>
+        <Paragraph size={ParagraphSizes.micro} customStyles={styles.paragraph}>
           {description}
         </Paragraph>
       </HyperLink>
