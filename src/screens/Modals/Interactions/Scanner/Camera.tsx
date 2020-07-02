@@ -22,10 +22,19 @@ import useDelay from '~/hooks/useDelay'
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 import { strings } from '~/translations/strings'
 import { useInteractionStart } from '~/hooks/sdk'
+import { useSelector } from 'react-redux'
+import { getInteractionSheet } from '~/modules/interactions/selectors'
+import { getLoaderState } from '~/modules/loader/selectors'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
   const { startInteraction } = useInteractionStart(InteractionChannel.HTTP)
+
+  const interactionSheet = useSelector(getInteractionSheet)
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
+  const shouldScan = !interactionSheet && !isLoaderVisible
+  const overlayVisible = !interactionSheet
+
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
 
@@ -101,7 +110,8 @@ const Camera = () => {
         {renderCamera && (
           <QRCodeScanner
             containerStyle={{ position: 'absolute' }}
-            onRead={handleScan}
+            onRead={shouldScan ? handleScan : () => {}}
+            vibrate={shouldScan}
             reactivate={true}
             reactivateTimeout={3000}
             fadeIn
@@ -114,52 +124,60 @@ const Camera = () => {
             }}
           />
         )}
-        <View style={styles.topOverlay} />
-        <View
-          style={{
-            flexDirection: 'row',
-          }}
-        >
-          <View style={styles.horizontalOverlay} />
-          <Animated.View
-            style={[
-              styles.rectangle,
-              {
-                backgroundColor: markerBackground,
-                borderColor: isError ? Colors.error : Colors.white,
-              },
-            ]}
-          />
-          <View style={styles.horizontalOverlay} />
-        </View>
-        <View style={styles.bottomOverlay}>
-          {isError ? (
-            <Paragraph
-              animated
-              customStyles={{
-                width: MARKER_SIZE,
-                color: Colors.error,
-                opacity: textAnimationValue,
+        {overlayVisible ? (
+          <>
+            <View style={styles.topOverlay} />
+            <View
+              style={{
+                flexDirection: 'row',
               }}
             >
-              {errorText}
-            </Paragraph>
-          ) : (
-            <Paragraph customStyles={{ width: MARKER_SIZE }}>
-              {strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE}
-            </Paragraph>
-          )}
-          <Paragraph customStyles={{ width: MARKER_SIZE }}></Paragraph>
-          <TouchableHighlight
-            onPressIn={() => setTorchPressed(true)}
-            onPressOut={() => setTorchPressed(false)}
-            activeOpacity={1}
-            underlayColor={Colors.transparent}
-            style={styles.torch}
-          >
-            {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
-          </TouchableHighlight>
-        </View>
+              <View style={styles.horizontalOverlay} />
+              <Animated.View
+                style={[
+                  styles.rectangle,
+                  {
+                    backgroundColor: markerBackground,
+                    borderColor: isError ? Colors.error : Colors.white,
+                  },
+                ]}
+              />
+              <View style={styles.horizontalOverlay} />
+            </View>
+            <View style={styles.bottomOverlay}>
+              {isError ? (
+                <Paragraph
+                  animated
+                  customStyles={{
+                    width: MARKER_SIZE,
+                    color: Colors.error,
+                    opacity: textAnimationValue,
+                  }}
+                >
+                  {errorText}
+                </Paragraph>
+              ) : (
+                <Paragraph customStyles={{ width: MARKER_SIZE }}>
+                  {
+                    strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE
+                  }
+                </Paragraph>
+              )}
+              <Paragraph customStyles={{ width: MARKER_SIZE }}></Paragraph>
+              <TouchableHighlight
+                onPressIn={() => setTorchPressed(true)}
+                onPressOut={() => setTorchPressed(false)}
+                activeOpacity={1}
+                underlayColor={Colors.transparent}
+                style={styles.torch}
+              >
+                {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
+              </TouchableHighlight>
+            </View>
+          </>
+        ) : (
+          <View style={{ flex: 1, backgroundColor: Colors.black65 }} />
+        )}
       </View>
     </ScreenContainer>
   )

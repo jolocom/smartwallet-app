@@ -28,7 +28,6 @@ const SeedPhraseRepeat: React.FC = () => {
         dispatch(setDid(iw.did))
       },
       {
-        showStatus: true,
         loading: strings.CREATING,
       },
     )
