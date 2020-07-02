@@ -7,12 +7,12 @@ import Paragraph from '~/components/Paragraph'
 import {
   getInteractionSheet,
   getInteractionId,
-} from '~/modules/account/selectors'
+} from '~/modules/interactions/selectors'
 import { Colors } from '~/utils/colors'
-import { resetInteractionSheet } from '~/modules/account/actions'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
+import { resetInteraction } from '~/modules/interactions/actions'
 
 const ActionSheetContainer: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
@@ -29,7 +29,7 @@ const ActionSheetContainer: React.FC = () => {
     }
   }, [interactionSheet])
 
-  const handleCloseSheet = () => dispatch(resetInteractionSheet())
+  const handleCloseSheet = () => dispatch(resetInteraction())
 
   return (
     <>
