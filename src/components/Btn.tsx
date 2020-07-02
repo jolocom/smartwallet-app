@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   TextStyle,
+  ViewStyle,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -28,6 +29,7 @@ interface PropsI {
   onPress: () => void
   disabled?: boolean
   customTextStyles?: TextStyle
+  customContainerStyles?: ViewStyle
 }
 
 const GRADIENT_START = { x: 0, y: 0 }
@@ -40,6 +42,7 @@ const Button: React.FC<PropsI> = ({
   children,
   disabled,
   customTextStyles = {},
+  customContainerStyles = {},
 }) => {
   return (
     <TouchableOpacity
@@ -47,6 +50,7 @@ const Button: React.FC<PropsI> = ({
       style={[
         styles.btn,
         size === BtnSize.large ? styles.largeBtn : styles.mediumBtn,
+        customContainerStyles,
       ]}
       disabled={disabled}
     >

@@ -1,6 +1,5 @@
-import { Alert } from 'react-native'
 import { useContext } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   InteractionChannel,
   FlowType,
@@ -14,6 +13,7 @@ import {
   setInteractionSheet,
 } from '~/modules/interactions/actions'
 import { useLoader } from './useLoader'
+import { getInteractionId } from '~/modules/interactions/selectors'
 
 export const useSDK = () => {
   const sdk = useContext(SDKContext)
@@ -34,7 +34,6 @@ export const useInteractionStart = (channel: InteractionChannel) => {
   const dispatch = useDispatch()
   const loader = useLoader()
 
-  //NOTE: This can move to the SDK
   const parseJWT = (jwt: string) => {
     try {
       return JolocomLib.parse.interactionToken.fromJWT(jwt)
@@ -50,6 +49,14 @@ export const useInteractionStart = (channel: InteractionChannel) => {
   }
 
   const startInteraction = async (jwt: string) => {
+    // NOTE For testing Authorization flow until it's available on a demo service
+    // const encodedToken = await sdk.authorizationRequestToken({
+    //   description:
+    //     'The  http://google.com is ready to share a scooter with you, unlock to start your ride',
+    //   imageURL: 'http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png',
+    //   action: 'unlock the scooter',
+    //   callbackURL: 'http://test.test.test',
+    // })
     const token = parseJWT(jwt)
     await loader(
       async () => {
@@ -62,6 +69,8 @@ export const useInteractionStart = (channel: InteractionChannel) => {
         switch (interaction.flow.type) {
           case FlowType.Authentication:
             return dispatch(setInteractionSheet(FlowType.Authentication))
+          case FlowType.Authorization:
+            return dispatch(setInteractionSheet(FlowType.Authorization))
           case FlowType.CredentialShare:
             return dispatch(setInteractionSheet(FlowType.CredentialShare))
           case FlowType.CredentialReceive:
@@ -75,4 +84,12 @@ export const useInteractionStart = (channel: InteractionChannel) => {
   }
 
   return { startInteraction }
+}
+
+export const useInteraction = () => {
+  const sdk = useSDK()
+  const interactionId = useSelector(getInteractionId)
+  if (!interactionId.length) throw new Error('Interaction not found')
+
+  return sdk.bemw.interactionManager.getInteraction(interactionId)
 }
