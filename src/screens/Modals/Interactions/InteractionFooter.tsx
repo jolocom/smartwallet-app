@@ -1,12 +1,18 @@
 import React from 'react'
-import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import { View, StyleSheet } from 'react-native'
-import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
-import { strings } from '~/translations/strings'
 import { useDispatch, useSelector } from 'react-redux'
-import { Colors } from '~/utils/colors'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+
+import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
+import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
+
 import { resetInteraction } from '~/modules/interaction/actions'
 import { getInteractionSheet } from '~/modules/interaction/selectors'
+
+import { strings } from '~/translations/strings'
+
+import { Colors } from '~/utils/colors'
+
 import getCTAText from './utils/getCTAText'
 
 interface PropsI {
@@ -27,7 +33,7 @@ const InteractionFooter: React.FC<PropsI> = ({ onSubmit, ctaText }) => {
     <BtnGroup alignment={BtnsAlignment.horizontal}>
       <View style={[styles.container, { width: '70%', marginRight: 12 }]}>
         <Btn size={BtnSize.medium} onPress={onSubmit}>
-          {ctaText || getCTAText(interactionType)}
+          {ctaText || getCTAText(interactionType as FlowType)}
         </Btn>
       </View>
       <View style={[styles.container, { width: '30%' }]}>
