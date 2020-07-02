@@ -1,11 +1,11 @@
 import createAction from '~/utils/createAction'
-import { AccountActionTypes } from './types'
+import { AccountActions } from './types'
 
-export const setDid = createAction(AccountActionTypes.setDid)
-export const setLogged = createAction(AccountActionTypes.setLogged)
-export const resetAccount = createAction(AccountActionTypes.resetAccount)
-export const lockApp = createAction(AccountActionTypes.lockApp)
-export const unlockApp = createAction(AccountActionTypes.unlockApp)
-export const setLocalAuth = createAction(AccountActionTypes.setLocalAuth)
-export const setEntropy = createAction(AccountActionTypes.setEntropy)
-export const accountReset = createAction(AccountActionTypes.accountReset)
+export const setDid = createAction(AccountActions.setDid)
+export const setLogged = createAction(AccountActions.setLogged)
+export const resetAccount = createAction(AccountActions.resetAccount)
+export const lockApp = createAction(AccountActions.lockApp)
+export const unlockApp = createAction(AccountActions.unlockApp)
+export const setLocalAuth = createAction(AccountActions.setLocalAuth)
+export const setEntropy = createAction(AccountActions.setEntropy)
+export const accountReset = createAction(AccountActions.accountReset)

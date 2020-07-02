@@ -1,27 +1,27 @@
 import React from 'react'
-import { useInteraction } from '~/hooks/sdk'
+import { Image, View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import HyperLink from 'react-native-hyperlink'
 import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
+
+import { useInteraction } from '~/hooks/sdk'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Header, { HeaderSizes } from '~/components/Header'
-import { Image, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import InteractionFooter from './InteractionFooter'
 import { useLoader } from '~/hooks/useLoader'
-import HyperLink from 'react-native-hyperlink'
 import { strings } from '~/translations/strings'
 import { resetInteraction } from '~/modules/interaction/actions'
+import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 
 const Authorization = () => {
   const interaction = useInteraction()
   const dispatch = useDispatch()
   const loader = useLoader()
-  const summary = interaction.getSummary().state as AuthorizationFlowState
-  const { description, imageURL, action } = summary
-  const ctaWord = action?.split(' ')[0]
-  const ctaCapitalized = ctaWord
-    ? ctaWord?.charAt(0).toUpperCase() + ctaWord?.slice(1)
-    : strings.AUTHORIZE
+  const { description, imageURL, action } = interaction.getSummary()
+    .state as AuthorizationFlowState
+  const ctaWord = action ? truncateFirstWord(action) : strings.AUTHORIZE
+  const ctaCapitalized = capitalizeWord(ctaWord)
 
   const handleSubmit = async () => {
     const success = loader(

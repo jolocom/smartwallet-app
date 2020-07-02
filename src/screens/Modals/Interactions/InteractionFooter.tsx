@@ -10,7 +10,6 @@ import { resetInteraction } from '~/modules/interaction/actions'
 import { getInteractionSheet } from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
-
 import { Colors } from '~/utils/colors'
 
 import getCTAText from './utils/getCTAText'

@@ -9,5 +9,5 @@ export enum InteractionActions {
 export interface InteractionState {
   interactionId: string
   interactionSheet: FlowType | null
-  summary: any // TODO: update type annotation
+  summary: any
 }

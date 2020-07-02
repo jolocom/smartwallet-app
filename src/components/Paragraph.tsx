@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   micro: {
-    ...getStyle(16, 18, 0),
+    ...getStyle(16, 22, 0),
   },
   small: {
     ...getStyle(20, 22, 0.14),
