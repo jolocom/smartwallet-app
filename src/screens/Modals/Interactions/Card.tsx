@@ -7,6 +7,8 @@ import {
   View,
   StyleSheet,
   Dimensions,
+  Platform,
+  UIManager,
 } from 'react-native'
 
 const SWIPE_THRESHOLD = 1
@@ -32,6 +34,18 @@ interface AnimatedCardPropsI {
   onToggleScroll: (value: boolean) => void
   onSelect: () => void
 }
+/**
+ * MEASURES value holds information about animation adjustments for **pull to right** (select card)
+ * and **pull to left** (unselect card ) animations
+ *
+ * `marginAfterAction` property defines what should be a margin of the card after animation occured
+ *
+ * `scale` property defines by what value the card should be scaled: **on pull right** it scales by 1.25, **on pull left** it scales back to its original size 1
+ *
+ * `startX` property to what X value the card should be attached from the left. Transforms scales card from the center. To avoid card to be partially hidden from the left side on **pull right** it has to be moved slightly left
+ *
+ * `bouceTimes` propery defines how many times the card bounces when coming back to the initial position on the left before scale occurs
+ */
 const MEASURES = [
   {
     name: 'forPullRight',
@@ -51,6 +65,12 @@ const MEASURES = [
 const WINDOW = Dimensions.get('window')
 const SCREEN_WIDTH = WINDOW.width
 const SCREEN_HEIGHT = WINDOW.height
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true)
+  }
+}
 
 const AnimatedCard: React.FC<AnimatedCardPropsI> = React.memo(
   ({ onToggleScroll, onSelect, children }) => {
@@ -203,7 +223,7 @@ const styles = StyleSheet.create({
   },
   fullCard: {
     width: SCREEN_WIDTH * 0.9,
-    height: SCREEN_WIDTH * 0.9 * 0.63,
+    height: SCREEN_WIDTH * 0.9 * 0.63, // card height is 63% of card width
   },
   shrinkedCard: {
     width: SCREEN_WIDTH * 0.64,
