@@ -10,7 +10,7 @@ import Lock from '~/modals/Lock'
 import { SDKContextProvider } from '~/utils/sdk/context'
 
 import configureStore from './configureStore'
-import ActionSheetContainer from '~/components/ActionSheetContainer'
+import InteractionActionSheet from '~/screens/Modals/Interactions/ActionSheet'
 
 const store = configureStore()
 
@@ -19,7 +19,7 @@ const App = () => {
     <ErrorBoundary>
       <Provider store={store}>
         <SDKContextProvider>
-          <ActionSheetContainer />
+          <InteractionActionSheet />
           <RootNavigation />
         </SDKContextProvider>
         <Loader />

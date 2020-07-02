@@ -9,7 +9,7 @@ export enum LoaderActions {
   set = 'setLoader',
 }
 
-export interface LoaderStateI {
+export interface LoaderState {
   type: LoaderTypes
   msg: string
   isVisible: boolean

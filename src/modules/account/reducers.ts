@@ -1,4 +1,4 @@
-import { AccountState, Action, AccountActionTypes } from './types'
+import { AccountState, Action, AccountActions } from './types'
 
 const initialState: AccountState = {
   did: '',
@@ -10,21 +10,21 @@ const initialState: AccountState = {
 
 const reducer = (state = initialState, action: Action) => {
   switch (action.type) {
-    case AccountActionTypes.setDid:
+    case AccountActions.setDid:
       return { ...state, did: action.payload }
-    case AccountActionTypes.resetAccount:
+    case AccountActions.resetAccount:
       return initialState
-    case AccountActionTypes.setLogged:
+    case AccountActions.setLogged:
       return { ...state, loggedIn: action.payload }
-    case AccountActionTypes.lockApp:
+    case AccountActions.lockApp:
       return { ...state, isAppLocked: true }
-    case AccountActionTypes.unlockApp:
+    case AccountActions.unlockApp:
       return { ...state, isAppLocked: false }
-    case AccountActionTypes.setLocalAuth:
+    case AccountActions.setLocalAuth:
       return { ...state, isLocalAuthSet: true }
-    case AccountActionTypes.setEntropy:
+    case AccountActions.setEntropy:
       return { ...state, entropy: action.payload }
-    case AccountActionTypes.accountReset:
+    case AccountActions.accountReset:
       return initialState
     default:
       return state

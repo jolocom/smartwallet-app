@@ -4,14 +4,19 @@ import HyperLink from 'react-native-hyperlink'
 import { useDispatch } from 'react-redux'
 import { AuthenticationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
-import { useInteraction } from '~/hooks/sdk'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Header, { HeaderSizes } from '~/components/Header'
-import { Colors } from '~/utils/colors'
-import InteractionFooter from './InteractionFooter'
-import { resetInteraction } from '~/modules/interactions/actions'
+
+import { useInteraction } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/useLoader'
+
+import { resetInteraction } from '~/modules/interaction/actions'
+
+import { Colors } from '~/utils/colors'
+
 import { strings } from '~/translations/strings'
+
+import InteractionFooter from './InteractionFooter'
 
 const Authentication = () => {
   const interaction = useInteraction()

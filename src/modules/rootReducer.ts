@@ -1,21 +1,20 @@
 import { combineReducers } from 'redux'
 
 import loaderReducer from './loader/reducers'
-import accountReducer from './account/reducers'
-import interactionsReducer from './interactions/reducers'
 import { LoaderActions } from './loader/types'
-import { AccountActionTypes } from './account/types'
-import { InteractionsActionTypes } from './interactions/types'
+
+import accountReducer from './account/reducers'
+import { AccountActions } from './account/types'
+
+import interactionReducer from './interaction/reducer'
+import { InteractionActions } from './interaction/types'
 
 const rootReducer = combineReducers({
   loader: loaderReducer,
   account: accountReducer,
-  interactions: interactionsReducer,
+  interaction: interactionReducer,
 })
 
-export type RootActions =
-  | LoaderActions
-  | AccountActionTypes
-  | InteractionsActionTypes
+export type RootActions = LoaderActions | AccountActions | InteractionActions
 
 export default rootReducer

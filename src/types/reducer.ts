@@ -1,9 +1,9 @@
-import { LoaderStateI } from '~/modules/loader/types'
+import { LoaderState } from '~/modules/loader/types'
 import { AccountState } from '~/modules/account/types'
-import { InteractionsState } from '~/modules/interactions/types'
+import { InteractionState } from '~/modules/interaction/types'
 
 export interface RootReducerI {
-  loader: LoaderStateI
+  loader: LoaderState
   account: AccountState
-  interactions: InteractionsState
+  interaction: InteractionState
 }

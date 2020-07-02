@@ -1,19 +1,16 @@
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  InteractionChannel,
-  FlowType,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import { SDKContext } from '~/utils/sdk/context'
-import {
-  setInteractionId,
-  setInteractionSheet,
-} from '~/modules/interactions/actions'
 import { useLoader } from './useLoader'
-import { getInteractionId } from '~/modules/interactions/selectors'
+import {
+  setInteractionSummary,
+  setInteraction,
+} from '~/modules/interaction/actions'
+import { getInteractionId } from '~/modules/interaction/selectors'
 
 export const useSDK = () => {
   const sdk = useContext(SDKContext)
@@ -57,7 +54,10 @@ export const useInteractionStart = (channel: InteractionChannel) => {
     //   action: 'unlock the scooter',
     //   callbackURL: 'http://test.test.test',
     // })
+    // console.log({ encodedToken })
+
     const token = parseJWT(jwt)
+
     await loader(
       async () => {
         const interaction = await sdk.bemw.interactionManager.start(
@@ -65,19 +65,15 @@ export const useInteractionStart = (channel: InteractionChannel) => {
           token,
         )
 
-        dispatch(setInteractionId(interaction.id))
-        switch (interaction.flow.type) {
-          case FlowType.Authentication:
-            return dispatch(setInteractionSheet(FlowType.Authentication))
-          case FlowType.Authorization:
-            return dispatch(setInteractionSheet(FlowType.Authorization))
-          case FlowType.CredentialShare:
-            return dispatch(setInteractionSheet(FlowType.CredentialShare))
-          case FlowType.CredentialReceive:
-            return dispatch(setInteractionSheet(FlowType.CredentialReceive))
-          default:
-            return null
-        }
+        dispatch(
+          setInteraction({
+            interactionId: interaction.id,
+            interactionSheet: interaction.flow.type,
+          }),
+        )
+
+        const summary = interaction.getSummary()
+        dispatch(setInteractionSummary(summary))
       },
       { showSuccess: false },
     )

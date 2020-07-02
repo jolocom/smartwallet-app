@@ -1,4 +1,4 @@
-export enum AccountActionTypes {
+export enum AccountActions {
   setDid = 'setDid',
   setEntropy = 'setEntropy',
   setLogged = 'setLogged',
@@ -18,6 +18,6 @@ export interface AccountState {
 }
 
 export interface Action {
-  type: AccountActionTypes
+  type: AccountActions
   payload?: any
 }

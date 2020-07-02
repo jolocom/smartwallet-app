@@ -10,21 +10,27 @@ import {
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
+import { useSelector } from 'react-redux'
+
 import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Paragraph from '~/components/Paragraph'
-import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
-import BP from '~/utils/breakpoints'
-import useDelay from '~/hooks/useDelay'
-import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
-import { strings } from '~/translations/strings'
-import { useInteractionStart } from '~/hooks/sdk'
-import { useSelector } from 'react-redux'
-import { getInteractionSheet } from '~/modules/interactions/selectors'
+
 import { getLoaderState } from '~/modules/loader/selectors'
+import { getInteractionSheet } from '~/modules/interaction/selectors'
+
+import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
+
+import useDelay from '~/hooks/useDelay'
+import { useInteractionStart } from '~/hooks/sdk'
+
+import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
+
+import { strings } from '~/translations/strings'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
@@ -88,6 +94,8 @@ const Camera = () => {
     try {
       await startInteraction(e.data)
     } catch (err) {
+      console.log({ err })
+
       setError(true)
       if (err.code === ErrorCode.ParseJWTFailed) {
         setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
