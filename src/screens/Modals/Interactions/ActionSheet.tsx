@@ -71,7 +71,11 @@ const ActionSheetContainer: React.FC = () => {
             : styles.containerSingle
         }
       >
-        {renderBody()}
+        {isFullScreenInteraction ? (
+          renderBody()
+        ) : (
+          <View style={styles.wrapper}>{renderBody()}</View>
+        )}
       </ActionSheet>
     </>
   )
@@ -86,11 +90,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.mainBlack,
   },
   containerSingle: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingVertical: 32,
-    paddingHorizontal: 20,
-    backgroundColor: Colors.black,
+    padding: 5,
+    backgroundColor: Colors.transparent,
   },
   wrapper: {
     width: '100%',
