@@ -20,7 +20,7 @@ import Paragraph from '~/components/Paragraph'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 import { getLoaderState } from '~/modules/loader/selectors'
-import { getInteractionSheet } from '~/modules/interaction/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
@@ -36,10 +36,10 @@ const Camera = () => {
   const { height } = useWindowDimensions()
   const { startInteraction } = useInteractionStart(InteractionChannel.HTTP)
 
-  const interactionSheet = useSelector(getInteractionSheet)
+  const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
-  const shouldScan = !interactionSheet && !isLoaderVisible
-  const overlayVisible = !interactionSheet
+  const shouldScan = !interactionType && !isLoaderVisible
+  const overlayVisible = !interactionType
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)

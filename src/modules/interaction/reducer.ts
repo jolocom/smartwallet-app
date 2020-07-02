@@ -2,7 +2,7 @@ import { InteractionActions } from './types'
 
 const initialState = {
   interactionId: '',
-  interactionSheet: null,
+  interactionType: null,
   summary: {},
 }
 
@@ -12,7 +12,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         interactionId: action.payload.interactionId,
-        interactionSheet: action.payload.interactionSheet,
+        interactionType: action.payload.interactionType,
       }
     case InteractionActions.setInteractionSummary:
       return { ...state, summary: action.payload }

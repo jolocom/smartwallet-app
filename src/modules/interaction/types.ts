@@ -8,6 +8,6 @@ export enum InteractionActions {
 
 export interface InteractionState {
   interactionId: string
-  interactionSheet: FlowType | null
+  interactionType: FlowType | null
   summary: any
 }

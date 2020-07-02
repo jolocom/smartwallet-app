@@ -9,7 +9,7 @@ import Authorization from '~/screens/Modals/Interactions/Authorization'
 
 import Paragraph from '~/components/Paragraph'
 import {
-  getInteractionSheet,
+  getInteractionType,
   getIsFullScreenInteraction,
 } from '~/modules/interaction/selectors'
 
@@ -25,21 +25,21 @@ const ActionSheetContainer: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
 
   const dispatch = useDispatch()
-  const interactionSheet = useSelector(getInteractionSheet)
+  const interactionType = useSelector(getInteractionType)
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
 
   useEffect(() => {
-    if (interactionSheet) {
+    if (interactionType) {
       actionSheetRef.current?.setModalVisible()
     } else {
       actionSheetRef.current?.setModalVisible(false)
     }
-  }, [interactionSheet])
+  }, [interactionType])
 
   const handleCloseSheet = () => dispatch(resetInteraction())
 
   const renderBody = () => {
-    switch (interactionSheet) {
+    switch (interactionType) {
       case FlowType.Authentication:
         return <Authentication />
       case FlowType.Authorization:
@@ -49,7 +49,7 @@ const ActionSheetContainer: React.FC = () => {
       case FlowType.CredentialReceive:
         return <CredentialReceive />
       default:
-        return <Paragraph>{interactionSheet}</Paragraph>
+        return null
     }
   }
 
