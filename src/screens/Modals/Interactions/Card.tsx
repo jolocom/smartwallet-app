@@ -214,7 +214,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
-    paddingVertical: 20,
   },
   card: {
     borderRadius: 10,
