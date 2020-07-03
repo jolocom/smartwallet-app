@@ -16,12 +16,10 @@ import getCTAText from './utils/getCTAText'
 
 interface PropsI {
   onSubmit: () => void
-  ctaText?: string
 }
 
-const InteractionFooter: React.FC<PropsI> = ({ onSubmit, ctaText }) => {
+const InteractionFooter: React.FC<PropsI> = ({ onSubmit }) => {
   const dispatch = useDispatch()
-
   const interactionType = useSelector(getInteractionType)
 
   const handleCancel = () => {
@@ -32,7 +30,7 @@ const InteractionFooter: React.FC<PropsI> = ({ onSubmit, ctaText }) => {
     <BtnGroup alignment={BtnsAlignment.horizontal}>
       <View style={[styles.container, { width: '70%', marginRight: 12 }]}>
         <Btn size={BtnSize.medium} onPress={onSubmit}>
-          {ctaText || getCTAText(interactionType as FlowType)}
+          {getCTAText(interactionType)}
         </Btn>
       </View>
       <View style={[styles.container, { width: '30%' }]}>

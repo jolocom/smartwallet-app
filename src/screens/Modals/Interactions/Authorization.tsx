@@ -20,8 +20,6 @@ const Authorization = () => {
   const loader = useLoader()
   const { description, imageURL, action } = interaction.getSummary()
     .state as AuthorizationFlowState
-  const ctaWord = action ? truncateFirstWord(action) : strings.AUTHORIZE
-  const ctaCapitalized = capitalizeWord(ctaWord)
 
   const handleSubmit = async () => {
     const success = loader(
@@ -62,7 +60,7 @@ const Authorization = () => {
           />
         </View>
       )}
-      <InteractionFooter ctaText={ctaCapitalized} onSubmit={handleSubmit} />
+      <InteractionFooter onSubmit={handleSubmit} />
     </>
   )
 }

@@ -28,7 +28,6 @@ const MultipleCredentials: React.FC<PropsI> = ({
   onSubmit,
 }) => {
   const [isScrollEnabled, setIsScrollEnabled] = useState(true)
-
   const interactionType = useSelector(getInteractionType)
 
   const handletoggleScroll = (value: boolean) => {
@@ -48,10 +47,7 @@ const MultipleCredentials: React.FC<PropsI> = ({
         {children(handletoggleScroll)}
       </ScrollView>
       <AbsoluteBottom customStyles={styles.btns}>
-        <InteractionFooter
-          onSubmit={onSubmit}
-          ctaText={getCTAText(interactionType as FlowType)}
-        />
+        <InteractionFooter onSubmit={onSubmit} />
       </AbsoluteBottom>
     </>
   )
