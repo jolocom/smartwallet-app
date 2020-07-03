@@ -68,7 +68,7 @@ export const useInteractionStart = (channel: InteractionChannel) => {
         dispatch(
           setInteraction({
             interactionId: interaction.id,
-            interactionSheet: interaction.flow.type,
+            interactionType: interaction.flow.type,
           }),
         )
 

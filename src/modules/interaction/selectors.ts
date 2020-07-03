@@ -4,14 +4,14 @@ import { createSelector } from 'reselect'
 
 export const getInteractionId = (state: RootReducerI): string =>
   state.interaction.interactionId
-export const getInteractionSheet = (state: RootReducerI): FlowType | null =>
-  state.interaction.interactionSheet
+export const getInteractionType = (state: RootReducerI): FlowType | null =>
+  state.interaction.interactionType
 // TODO: add type annotation
 export const getInteractionSummary = (state: RootReducerI): any =>
   state.interaction.summary
 
 export const getIsFullScreenInteraction = createSelector(
-  [getInteractionSheet, getInteractionSummary],
+  [getInteractionType, getInteractionSummary],
   (type, summary) => {
     if (
       type === FlowType.CredentialShare &&

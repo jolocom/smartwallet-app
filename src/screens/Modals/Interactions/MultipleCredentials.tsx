@@ -6,9 +6,10 @@ import InteractionFooter from './InteractionFooter'
 import InteractionHeader from './InteractionHeader'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useSelector } from 'react-redux'
-import { getInteractionSheet } from '~/modules/interaction/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
 
 import getCTAText from './utils/getCTAText'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 interface PropsI {
   title: string
@@ -27,8 +28,7 @@ const MultipleCredentials: React.FC<PropsI> = ({
   onSubmit,
 }) => {
   const [isScrollEnabled, setIsScrollEnabled] = useState(true)
-
-  const interactionType = useSelector(getInteractionSheet)
+  const interactionType = useSelector(getInteractionType)
 
   const handletoggleScroll = (value: boolean) => {
     setIsScrollEnabled(value)
@@ -47,10 +47,7 @@ const MultipleCredentials: React.FC<PropsI> = ({
         {children(handletoggleScroll)}
       </ScrollView>
       <AbsoluteBottom customStyles={styles.btns}>
-        <InteractionFooter
-          onSubmit={onSubmit}
-          ctaText={getCTAText(interactionType)}
-        />
+        <InteractionFooter onSubmit={onSubmit} />
       </AbsoluteBottom>
     </>
   )

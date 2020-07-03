@@ -7,7 +7,7 @@ import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 
 import { resetInteraction } from '~/modules/interaction/actions'
-import { getInteractionSheet } from '~/modules/interaction/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
@@ -16,13 +16,11 @@ import getCTAText from './utils/getCTAText'
 
 interface PropsI {
   onSubmit: () => void
-  ctaText?: string
 }
 
-const InteractionFooter: React.FC<PropsI> = ({ onSubmit, ctaText }) => {
+const InteractionFooter: React.FC<PropsI> = ({ onSubmit }) => {
   const dispatch = useDispatch()
-
-  const interactionType = useSelector(getInteractionSheet)
+  const interactionType = useSelector(getInteractionType)
 
   const handleCancel = () => {
     dispatch(resetInteraction())
@@ -32,7 +30,7 @@ const InteractionFooter: React.FC<PropsI> = ({ onSubmit, ctaText }) => {
     <BtnGroup alignment={BtnsAlignment.horizontal}>
       <View style={[styles.container, { width: '70%', marginRight: 12 }]}>
         <Btn size={BtnSize.medium} onPress={onSubmit}>
-          {ctaText || getCTAText(interactionType as FlowType)}
+          {getCTAText(interactionType)}
         </Btn>
       </View>
       <View style={[styles.container, { width: '30%' }]}>

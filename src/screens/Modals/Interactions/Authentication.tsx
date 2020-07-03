@@ -52,10 +52,7 @@ const Authentication = () => {
           {description}
         </Paragraph>
       </HyperLink>
-      <InteractionFooter
-        ctaText={strings.AUTHENTICATE}
-        onSubmit={handleSubmit}
-      />
+      <InteractionFooter onSubmit={handleSubmit} />
     </>
   )
 }
