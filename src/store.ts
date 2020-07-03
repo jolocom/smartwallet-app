@@ -10,15 +10,13 @@ import config from 'src/config'
 import { BackendMiddleware } from './backendMiddleware'
 
 export function initStore() {
-  const backendMiddleware = new BackendMiddleware(config)
-
   /*
    * The {} as RootState type assertion:
    * The second argument, "preloadedState" is mandatory, and typed as RootState.
    * We provide an empty object. The store will have the correct default state
    * after all reducers initialise.
    */
-
+  const backendMiddleware = new BackendMiddleware(config)
   return createStore(
     rootReducer,
     {} as RootState,

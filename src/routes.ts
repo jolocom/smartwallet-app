@@ -42,6 +42,7 @@ import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
 
 import { NotificationFilter } from './lib/notifications'
+import { CredentialReceiveNegotiate } from './ui/sso/containers/credentialReceiveNegotiate'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -180,7 +181,11 @@ const MainStack = createStackNavigator(
         statusBar: false,
       },
     },
-    [routeList.CredentialDialog]: {
+    [routeList.CredentialReceiveNegotiate]: {
+      screen: CredentialReceiveNegotiate,
+    },
+
+    [routeList.CredentialReceive]: {
       screen: CredentialReceive,
       navigationOptions: () => ({
         ...navOptScreenWCancel,

@@ -1,13 +1,11 @@
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { consumeCredentialRequest } from '../../actions/sso'
-import { consumeAuthenticationRequest } from '../../actions/sso/authenticationRequest'
-import { consumeCredentialOfferRequest } from '../../actions/sso/credentialOfferRequest'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
-import { consumePaymentRequest } from '../../actions/sso/paymentRequest'
+import { InteractionChannel } from '../interactionManager/types'
+import { ssoActions } from 'src/actions'
 /**
  * @param Metadata should not need to be passed to credential receive because it comes from cred Offer
  * Furthermore, this only needs to be defined for requests
@@ -16,22 +14,24 @@ import { consumePaymentRequest } from '../../actions/sso/paymentRequest'
 export const interactionHandlers = {
   [InteractionType.Authentication]: <T extends JSONWebToken<Authentication>>(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumeAuthenticationRequest(interactionToken, isDeepLinkInteraction),
+    channel: InteractionChannel,
+    //@ts-ignore
+  ) => ssoActions.consumeAuthenticationRequest(interactionToken, channel),
   [InteractionType.CredentialRequest]: <
     T extends JSONWebToken<CredentialRequest>
   >(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumeCredentialRequest(interactionToken, isDeepLinkInteraction),
+    channel: InteractionChannel,
+  ) => ssoActions.consumeCredentialRequest(interactionToken, channel),
   [InteractionType.CredentialOfferRequest]: <
     T extends JSONWebToken<CredentialOfferRequest>
   >(
     interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) => consumeCredentialOfferRequest(interactionToken, isDeepLinkInteraction),
+    channel: InteractionChannel,
+  ) => ssoActions.consumeCredentialOfferRequest(interactionToken, channel),
   [InteractionType.PaymentRequest]: <T extends JSONWebToken<PaymentRequest>>(
     interactionToken: T,
     isDeepLinkInteraction: boolean,
-  ) => consumePaymentRequest(interactionToken, isDeepLinkInteraction),
+  ) =>
+    ssoActions.consumePaymentRequest(interactionToken, isDeepLinkInteraction),
 }

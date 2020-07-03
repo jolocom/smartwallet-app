@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: Typography.textLG,
     paddingVertical: 7,
+    textAlign: 'center',
   },
   correct: {
     color: 'white',
@@ -179,7 +180,6 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
               //@ts-ignore textAlign is missing in the typings of TextInput
               <TextInput
                 testID="seedWordFld"
-                textAlign={'center'}
                 ref={inputRef}
                 autoCapitalize={'none'}
                 autoCorrect={false}

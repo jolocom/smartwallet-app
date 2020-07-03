@@ -5,6 +5,7 @@ export enum ErrorCode {
   WalletInitFailed = 'WalletInit',
   SaveClaimFailed = 'SaveClaim',
   SaveExternalCredentialFailed = 'SaveExtCred',
+  TransportNotSupported = 'UnsuportedTransport',
   // actions/sso
   DeepLinkUrlNotFound = 'DeepLinkUrlNotFound',
   TokenExpired = 'TokenExpired',
