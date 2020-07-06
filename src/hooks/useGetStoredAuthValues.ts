@@ -9,7 +9,7 @@ const useGetStoredAuthValues = () => {
   const [isLoadingStorage, setIsLoadingStorage] = useState(false)
   const [biometryType, setBiometryType] = useState<BiometryTypes>(null)
   const [keychainPin, setKeychainPin] = useState('')
-  const [isBiometryShown, setIsBiometryShow] = useState(false)
+  const [isBiometrySelected, setIsBiometrySelected] = useState(false)
 
   useEffect(() => {
     let isCurrent = true
@@ -32,10 +32,10 @@ const useGetStoredAuthValues = () => {
         }
         if (storedBiometry) {
           // show biometry view
-          isCurrent && setIsBiometryShow(true)
+          isCurrent && setIsBiometrySelected(true)
         } else {
           // show pin view
-          isCurrent && setIsBiometryShow(false)
+          isCurrent && setIsBiometrySelected(false)
         }
       } catch (err) {
         // ✍🏼 todo: how should we handle this hasError ?
@@ -54,8 +54,8 @@ const useGetStoredAuthValues = () => {
     isLoadingStorage,
     biometryType,
     keychainPin,
-    isBiometryShown,
-    setIsBiometryShow,
+    isBiometrySelected,
+    setIsBiometrySelected,
   }
 }
 
