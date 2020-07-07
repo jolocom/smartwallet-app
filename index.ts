@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import RNFetchBlob from 'rn-fetch-blob'
 
 // react-native overrides Object.assign with a non-spec-compliant version.
 // bring it back because some dependencies break otherwise
@@ -27,6 +28,11 @@ if (!Object.setPrototypeOf) {
     return obj
   }
 }
+
+// Needed so we can post DID documents to IPFS nodes. Regular fetch has issues
+// related to multi-part data / boundries
+// @ts-ignore
+global.fetch = new RNFetchBlob.polyfill.Fetch({ auto: true }).build()
 
 // disable react-native warning boxes
 console.disableYellowBox = true

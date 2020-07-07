@@ -6,7 +6,7 @@
 
 import { MigrationInterface, QueryRunner } from 'typeorm/browser'
 import CryptoJS from './../../compat/cryptojs'
-import { KeyChain } from '@jolocom/sdk-password-store-mobile-keychain'
+import { KeyChain } from '../../../lib/keychain'
 import { MasterKeyEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
 import { encryptWithLib3 } from './../../compat/jolocomLib'
 
