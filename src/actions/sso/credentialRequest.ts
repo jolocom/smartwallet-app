@@ -3,11 +3,13 @@ import { routeList } from 'src/routeList'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { ThunkAction } from '../../store'
-import { CredentialVerificationSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { CredentialVerificationSummary, CredentialRequestFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
-import { CredentialRequestFlow } from '@jolocom/sdk/js/src/lib/interactionManager/credentialRequestFlow'
 import { cancelSSO } from './'
+import isEmpty from 'ramda/es/isEmpty'
+import { getUiCredentialTypeByType } from '@jolocom/sdk/js/src/lib/util'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 export const consumeCredentialRequest = (
   credentialRequest: JSONWebToken<CredentialRequest>,
@@ -20,8 +22,39 @@ export const consumeCredentialRequest = (
     credentialRequest,
   )
 
-  // @ts-ignore
-  const availableCredentials = (interaction.flow as CredentialRequestFlow).getAvailableCredentials(summary.state.constraints[0])
+  // TODO - Eugeniu
+  // Must refactor this abomination.
+
+  const credentialsPerType = await Promise.all(credentialRequest.interactionToken.requestedCredentialTypes.map(interaction.getAttributesByType))
+
+  const populatedWithCredentials = await Promise.all(
+    credentialsPerType.map(({ results, type }) =>
+      isEmpty(results) ? [{
+        type: getUiCredentialTypeByType(type),
+        values: [],
+        verifications: [],
+      }] : Promise.all(results.map(async ({ values, verification }) => ({
+        type: getUiCredentialTypeByType(type),
+        values,
+        verifications: await interaction.getVerifiableCredential({
+          id: verification,
+        })
+    })))))
+  
+  debugger
+  const abbreviated = populatedWithCredentials.map(attribute =>
+    attribute.map(entry => ({
+      ...entry,
+      verifications: entry.verifications.map((vCred: SignedCredential) => ({
+        id: vCred.id,
+        issuer: {
+          did: vCred.issuer,
+        },
+        selfSigned: vCred.signer.did === getState().account.did.did,
+        expires: vCred.expires,
+      })),
+    })),
+  )
 
   return dispatch(
     navigationActions.navigate({
@@ -29,7 +62,7 @@ export const consumeCredentialRequest = (
       params: {
         interactionId: interaction.id,
         interactionSummary: interaction.getSummary(),
-        availableCredentials
+        availableCredentials: abbreviated.reduce((acc, val) => acc.concat(val))
       },
       key: 'credentialRequest',
     }),
