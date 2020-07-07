@@ -85,7 +85,6 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 const styles = StyleSheet.create({
   footer: {
     width: '100%',
-    position: 'absolute',
     bottom: 10,
   },
 })
