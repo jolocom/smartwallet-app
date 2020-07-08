@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
 import PasscodeInput from '~/components/PasscodeInput'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 
@@ -123,6 +123,15 @@ const Passcode = () => {
             />
           )}
         </View>
+        {isCreating && (
+          <Paragraph
+            size={ParagraphSizes.small}
+            color={Colors.success}
+            customStyles={{ marginTop: 20 }}
+          >
+            {strings.ANY_FUTURE_PASSCODE_RESTORE}
+          </Paragraph>
+        )}
         {hasError && (
           <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
             {strings.PINS_DONT_MATCH}
