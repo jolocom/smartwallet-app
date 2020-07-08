@@ -69,7 +69,14 @@ const SeedKeyInput: React.FC = () => {
 
   // when we move with arrows select a current seedKey
   useEffect(() => {
-    dispatch(setSeedKey(phrase[currentWordIdx]))
+    const updateInput = async () => {
+      setIsSuccessBorder(true)
+      await useDelay(() => {
+        dispatch(setSeedKey(phrase[currentWordIdx]))
+      }, 200)
+      await useDelay(() => setIsSuccessBorder(false), 100)
+    }
+    updateInput()
   }, [currentWordIdx])
 
   // this for showing buttons back instead of suggestions
@@ -101,16 +108,6 @@ const SeedKeyInput: React.FC = () => {
       dispatch(setHasError(false))
     }
   }, [suggestedKeys])
-
-  useEffect(() => {
-    const colorBorder = async () => {
-      if (keyIsValid) {
-        setIsSuccessBorder(true)
-        await useDelay(() => setIsSuccessBorder(false), 100)
-      }
-    }
-    colorBorder()
-  }, [keyIsValid])
 
   return (
     <View style={styles.inputContainer}>
