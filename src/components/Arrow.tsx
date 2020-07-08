@@ -30,13 +30,14 @@ const Arrow: React.FC<ArrowPropsI> = ({ children, direction, onPress }) => {
 const styles = StyleSheet.create({
   arrows: {
     position: 'absolute',
-    top: 30,
+    top: 13,
+    padding: 15,
   },
   leftArrow: {
-    left: 10,
+    left: 0,
   },
   rightArrow: {
-    right: 10,
+    right: 0,
   },
 })
 
