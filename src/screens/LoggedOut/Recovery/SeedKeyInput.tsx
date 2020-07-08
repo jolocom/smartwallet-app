@@ -120,6 +120,7 @@ const SeedKeyInput: React.FC = () => {
           keyboardAppearance="dark"
           underlineColorAndroid="transparent"
           autoCapitalize="none"
+          autoFocus
           //@ts-ignore
           textAlign="center"
           returnKeyType="next"
