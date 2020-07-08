@@ -31,7 +31,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
       <View style={styles.header}>
         {phrase.length ? (
           <>
-            <Header>
+            <Header size={HeaderSizes.small}>
               {currentWordIdx === phrase.length
                 ? phrase.length
                 : currentWordIdx + 1}
@@ -58,8 +58,10 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
           </>
         ) : (
           <>
-            <Header>{strings.RECOVERY}</Header>
-            <Paragraph>{strings.START_ENTERING_SEED_PHRASE}</Paragraph>
+            <Header size={HeaderSizes.small}>{strings.RECOVERY}</Header>
+            <Paragraph color={Colors.white70}>
+              {strings.START_ENTERING_SEED_PHRASE}
+            </Paragraph>
           </>
         )}
       </View>
