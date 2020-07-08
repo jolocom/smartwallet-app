@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
 interface Props {
   publicProfile: IssuerPublicProfileSummary
   credentialOfferSummary: CredentialOfferFlowState
+  passedValidation: boolean[]
   onToggleSelect: (offering: SignedCredentialWithMetadata) => void
   isDocumentSelected: (offering: SignedCredentialWithMetadata) => boolean
 }
@@ -84,7 +85,9 @@ export const CredentialReceiveComponent = (props: Props) => {
     credentialOfferSummary: { offerSummary },
     onToggleSelect,
     isDocumentSelected,
+    passedValidation
   } = props
+
   const issuerImage = publicProfile?.image && publicProfile.image
   const issuerName = publicProfile
     ? publicProfile.name
@@ -188,21 +191,15 @@ export const CredentialReceiveComponent = (props: Props) => {
           </Text>
         </Animated.View>
         {offerSummary.map((offer, i) => {
-          const { validationErrors } = offer
           return (
             <DocumentReceiveCard
               key={i}
               onToggle={() =>
-                !validationErrors.invalidIssuer &&
-                !validationErrors.invalidSubject &&
-                onToggleSelect(offer)
+                passedValidation[i] && onToggleSelect(offer)
               }
               selected={isDocumentSelected(offer)}
               offering={offer}
-              invalid={
-                validationErrors.invalidIssuer ||
-                validationErrors.invalidSubject
-              }
+              invalid={!passedValidation[i]}
             />
           )
         })}

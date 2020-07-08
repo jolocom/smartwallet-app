@@ -66,7 +66,6 @@ export const consumeCredentialRequest = (
      ),
    )
 
-   debugger
    const abbreviated = populatedWithCredentials.map(
      attribute =>
        attribute.map(

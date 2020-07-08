@@ -19,6 +19,7 @@ import strings from 'src/locales/strings'
 export interface CredentialOfferNavigationParams {
   interactionId: string
   interactionSummary: InteractionSummary
+  passedValidation: boolean[]
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -33,7 +34,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
-      params: { interactionSummary, interactionId },
+      params: { interactionSummary, interactionId, passedValidation },
     },
   } = navigation
 
@@ -61,6 +62,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
         credentialOfferSummary={
           interactionSummary.state as CredentialOfferFlowState
         }
+        passedValidation={passedValidation}
         publicProfile={publicProfile}
         isDocumentSelected={isDocumentSelected}
         onToggleSelect={toggleSelectDocument}
