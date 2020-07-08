@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { View, StyleSheet, TextInput, Keyboard } from 'react-native'
 import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
@@ -19,6 +19,8 @@ import {
 } from './module/recoveryActions'
 import LeftArrow from '~/components/LeftArrow'
 import RightArrow from '~/components/RightArrow'
+import useDelay from '~/hooks/useDelay'
+import { Fonts } from '~/utils/fonts'
 
 const SeedKeyInput: React.FC = () => {
   const inputRef = useRef<TextInput>(null)
@@ -32,6 +34,8 @@ const SeedKeyInput: React.FC = () => {
     keyHasError,
     keyIsValid,
   } = useRecoveryState()
+
+  const [isSuccessBorder, setIsSuccessBorder] = useState(keyIsValid)
 
   const selectPrevWord = () => {
     dispatch(setCurrentWordIdx(currentWordIdx - 1))
@@ -98,13 +102,23 @@ const SeedKeyInput: React.FC = () => {
     }
   }, [suggestedKeys])
 
+  useEffect(() => {
+    const colorBorder = async () => {
+      if (keyIsValid) {
+        setIsSuccessBorder(true)
+        await useDelay(() => setIsSuccessBorder(false), 100)
+      }
+    }
+    colorBorder()
+  }, [keyIsValid])
+
   return (
     <View style={styles.inputContainer}>
       <View
         style={[
           styles.inputField,
           keyHasError && styles.inputError,
-          keyIsValid && styles.inputValid,
+          isSuccessBorder && styles.inputValid,
         ]}
       >
         {currentWordIdx > 0 && <LeftArrow handlePress={selectPrevWord} />}
@@ -123,7 +137,7 @@ const SeedKeyInput: React.FC = () => {
           autoFocus
           //@ts-ignore
           textAlign="center"
-          returnKeyType="next"
+          returnKeyType="done"
           blurOnSubmit={false}
           spellCheck={false}
           autoCorrect={false}
@@ -154,8 +168,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   input: {
-    fontSize: 34,
     width: '70%',
+    fontFamily: Fonts.Medium,
+    fontSize: 34,
+    fontWeight: '500',
     color: Colors.white,
     textDecorationLine: 'none',
   },
