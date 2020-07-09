@@ -1,5 +1,5 @@
 import React, { useCallback, memo } from 'react'
-import { Animated, StyleSheet, Platform } from 'react-native'
+import { Animated, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import BtnGroup from '~/components/BtnGroup'
@@ -17,6 +17,7 @@ import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useDispatch } from 'react-redux'
 import { setLogged } from '~/modules/account/actions'
+import { useKeyboard } from './useKeyboard'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -52,21 +53,20 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
     const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
     const navigation = useNavigation()
 
-    if (areSuggestionsVisible) {
-      return (
-        <AbsoluteBottom
-          customStyles={{ bottom: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <Animated.View
-            style={[styles.footer, { opacity: animatedSuggestions }]}
-          >
-            <Suggestions />
-          </Animated.View>
-        </AbsoluteBottom>
-      )
-    }
+    const { keyboardHeight } = useKeyboard()
+
     return (
-      <AbsoluteBottom>
+      <>
+        {areSuggestionsVisible && (
+          <AbsoluteBottom customStyles={{ bottom: keyboardHeight + 10 }}>
+            <Animated.View
+              style={[styles.footer, { opacity: animatedSuggestions }]}
+            >
+              <Suggestions />
+            </Animated.View>
+          </AbsoluteBottom>
+        )}
+
         <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
           <BtnGroup>
             <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
@@ -77,7 +77,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
             </Btn>
           </BtnGroup>
         </Animated.View>
-      </AbsoluteBottom>
+      </>
     )
   },
 )
@@ -85,8 +85,6 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 const styles = StyleSheet.create({
   footer: {
     width: '100%',
-    position: 'absolute',
-    bottom: 10,
   },
 })
 

@@ -37,10 +37,16 @@ const SeedKeyInput: React.FC = () => {
 
   const [isSuccessBorder, setIsSuccessBorder] = useState(keyIsValid)
 
+  const focusInput = () => {
+    inputRef && inputRef.current && inputRef.current.focus()
+  }
+
   const selectPrevWord = () => {
+    focusInput()
     dispatch(setCurrentWordIdx(currentWordIdx - 1))
   }
   const selectNextWord = () => {
+    focusInput()
     dispatch(setCurrentWordIdx(currentWordIdx + 1))
   }
 
@@ -153,7 +159,7 @@ const SeedKeyInput: React.FC = () => {
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
-    marginTop: 20,
+    marginTop: 50,
   },
   inputField: {
     width: '100%',

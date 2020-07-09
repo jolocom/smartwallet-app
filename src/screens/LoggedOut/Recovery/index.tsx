@@ -1,5 +1,5 @@
 import React from 'react'
-import { KeyboardAvoidingView } from 'react-native'
+import { ScrollView, View, StyleSheet } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 
@@ -11,19 +11,31 @@ import SeedKeyInput from './SeedKeyInput'
 
 const Recovery: React.FC = () => {
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+    <ScrollView
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ flex: 1 }}
+    >
       <ScreenContainer
         customStyles={{
-          justifyContent: 'flex-start',
+          justifyContent: 'space-between',
         }}
       >
-        <RecoveryHeader />
-        <SeedKeyInput />
+        <View style={styles.headerContainer}>
+          <RecoveryHeader />
+          <SeedKeyInput />
+        </View>
         <RecoveryFooter />
       </ScreenContainer>
-    </KeyboardAvoidingView>
+    </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    flex: 1,
+    width: '100%',
+  },
+})
 
 export default function () {
   return (
