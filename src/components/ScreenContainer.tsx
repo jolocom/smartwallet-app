@@ -24,10 +24,7 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
   hasHeaderClose = false,
 }) => {
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor, borderColor: 'red', borderWidth: 2 }}
-      mode="padding"
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor }} mode="padding">
       <View style={[styles.navContainer, isTransparent && styles.transparent]}>
         {(hasHeaderClose || hasHeaderBack) && (
           <NavigationHeader
