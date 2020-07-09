@@ -11,6 +11,7 @@ import { SDKContextProvider } from '~/utils/sdk/context'
 
 import configureStore from './configureStore'
 import ActionSheetContainer from '~/components/ActionSheetContainer'
+import { StatusBar } from 'react-native'
 
 const store = configureStore()
 
@@ -18,6 +19,7 @@ const App = () => {
   return (
     <ErrorBoundary>
       <Provider store={store}>
+        <StatusBar barStyle="light-content" />
         <SDKContextProvider>
           <ActionSheetContainer />
           <RootNavigation />
