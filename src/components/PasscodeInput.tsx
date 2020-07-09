@@ -14,6 +14,8 @@ import {
   ScrollView,
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
+  AppState,
+  AppStateStatus,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
@@ -29,6 +31,7 @@ interface PasscodeInputI {
   onSubmit: () => void
   errorStateUpdaterFn?: Dispatch<SetStateAction<boolean>>
   hasError?: boolean
+  autoFocus?: boolean
 }
 
 type AddPasscodeFnT = (prevState: string, passcode?: string) => string
@@ -40,9 +43,11 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   errorStateUpdaterFn,
   onSubmit,
   hasError = false,
+  autoFocus = true,
 }) => {
   const [isFocused, setIsFocused] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
+
   const inputRef = useRef<TextInput>(null)
 
   const digits = value.split('')
@@ -51,6 +56,26 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const focusInput = () => {
     inputRef.current?.focus()
   }
+
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    const currentState = AppState.currentState
+    if (currentState.match(/active/) && nextAppState === 'inactive') {
+      // this is when the alert to use Biometry appears
+      inputRef.current?.blur()
+      handleBlur()
+    } else if (currentState.match(/active/) && nextAppState === 'active') {
+      // this is when the alert to use Biometry disappears
+      inputRef.current?.focus()
+      handleFocus()
+    }
+  }
+
+  useEffect(() => {
+    AppState.addEventListener('change', handleAppStateChange)
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange)
+    }
+  }, [])
 
   // this will hide keyboard when passcode is complete
   useEffect(() => {
@@ -150,7 +175,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
             onChangeText={handleAddingToPasscode}
             onFocus={handleFocus}
             onKeyPress={handleRemove}
-            autoFocus={true}
+            autoFocus={autoFocus}
             onBlur={handleBlur}
             testID="passcode-digit-input"
             style={[
