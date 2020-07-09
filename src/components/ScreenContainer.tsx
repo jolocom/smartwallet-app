@@ -1,5 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
 
@@ -22,24 +24,29 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
   hasHeaderClose = false,
 }) => {
   return (
-    <View style={[styles.navContainer, isTransparent && styles.transparent]}>
-      {(hasHeaderClose || hasHeaderBack) && (
-        <NavigationHeader
-          type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
-        />
-      )}
-      <View
-        style={[
-          styles.container,
-          { ...customStyles },
-          { backgroundColor },
-          isFullscreen && styles.fullscreen,
-          customStyles,
-        ]}
-      >
-        {children}
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor, borderColor: 'red', borderWidth: 2 }}
+      mode="padding"
+    >
+      <View style={[styles.navContainer, isTransparent && styles.transparent]}>
+        {(hasHeaderClose || hasHeaderBack) && (
+          <NavigationHeader
+            type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
+          />
+        )}
+        <View
+          style={[
+            styles.container,
+            { ...customStyles },
+            { backgroundColor },
+            isFullscreen && styles.fullscreen,
+            customStyles,
+          ]}
+        >
+          {children}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 

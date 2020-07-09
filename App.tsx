@@ -2,6 +2,7 @@ import 'react-native-gesture-handler'
 import 'crypto'
 import React from 'react'
 import { Provider } from 'react-redux'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import RootNavigation from '~/RootNavigation'
 import { ErrorBoundary } from '~/ErrorBoundary'
@@ -20,12 +21,14 @@ const App = () => {
     <ErrorBoundary>
       <Provider store={store}>
         <StatusBar barStyle="light-content" />
-        <SDKContextProvider>
-          <ActionSheetContainer />
-          <RootNavigation />
-        </SDKContextProvider>
-        <Loader />
-        <Lock />
+        <SafeAreaProvider>
+          <SDKContextProvider>
+            <ActionSheetContainer />
+            <RootNavigation />
+          </SDKContextProvider>
+          <Loader />
+          <Lock />
+        </SafeAreaProvider>
       </Provider>
     </ErrorBoundary>
   )
