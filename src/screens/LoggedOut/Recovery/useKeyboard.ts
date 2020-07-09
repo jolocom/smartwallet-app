@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Keyboard, KeyboardEventListener } from 'react-native'
-import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
+import { useRecoveryDispatch } from './module/recoveryContext'
 import { hideSuggestions } from './module/recoveryActions'
 
 export const useKeyboard = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0)
 
-  const { suggestedKeys } = useRecoveryState()
   const recoveryDispatch = useRecoveryDispatch()
 
   const handleKeyboardShow: KeyboardEventListener = (e) => {
@@ -15,9 +14,7 @@ export const useKeyboard = () => {
 
   const handleKeyboardHide = () => {
     setKeyboardHeight(0)
-    if (suggestedKeys.length) {
-      recoveryDispatch(hideSuggestions())
-    }
+    recoveryDispatch(hideSuggestions())
   }
 
   useEffect(() => {

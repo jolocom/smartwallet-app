@@ -1,12 +1,24 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { View, StyleSheet, TextInput, Keyboard } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputSubmitEditingEventData,
+} from 'react-native'
 import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
+import LeftArrow from '~/components/LeftArrow'
+import RightArrow from '~/components/RightArrow'
+
+import useDelay from '~/hooks/useDelay'
+
+import { Fonts } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
 
 import RecoveryInputMetadata from './RecoveryInputMetadata'
-
 import {
   setSeedKey,
   setCurrentWordIdx,
@@ -17,10 +29,6 @@ import {
   submitKey,
   hideSuggestions,
 } from './module/recoveryActions'
-import LeftArrow from '~/components/LeftArrow'
-import RightArrow from '~/components/RightArrow'
-import useDelay from '~/hooks/useDelay'
-import { Fonts } from '~/utils/fonts'
 
 const SeedKeyInput: React.FC = () => {
   const inputRef = useRef<TextInput>(null)
@@ -37,41 +45,45 @@ const SeedKeyInput: React.FC = () => {
 
   const [isSuccessBorder, setIsSuccessBorder] = useState(keyIsValid)
 
-  const focusInput = () => {
-    inputRef && inputRef.current && inputRef.current.focus()
-  }
-
   const selectPrevWord = () => {
-    focusInput()
     dispatch(setCurrentWordIdx(currentWordIdx - 1))
   }
   const selectNextWord = () => {
-    focusInput()
     dispatch(setCurrentWordIdx(currentWordIdx + 1))
   }
+
+  const handleSeedKeyChange = useCallback(
+    (val: string) => {
+      if (currentWordIdx < 12) {
+        dispatch(setSeedKey(val))
+      }
+    },
+    [currentWordIdx],
+  )
 
   const handleInputFocus = useCallback(() => {
     dispatch(showSuggestions())
   }, [])
 
-  const handleSeedKeyChange = useCallback((val: string) => {
-    dispatch(setSeedKey(val))
-  }, [])
-
-  const handleKeyboardDismiss = () => {
+  const handleInputBlur = () => {
     dispatch(hideSuggestions())
-    Keyboard.dismiss()
   }
 
   // this is invoked when next keyboard button is pressed
-  const handleSubmitEditing = (e) => {
+  const handleSubmitEditing = (
+    e: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
+  ) => {
     if (keyIsValid) {
       dispatch(submitKey(e.nativeEvent.text))
-    } else {
-      handleKeyboardDismiss()
-      inputRef.current?.blur()
     }
   }
+
+  // after the phrase is complete - keyboard hides, to bring keyoboard back when user moves across keys in phrase
+  useEffect(() => {
+    if (!inputRef.current?.isFocused()) {
+      inputRef.current?.focus()
+    }
+  }, [currentWordIdx])
 
   // when we move with arrows select a current seedKey
   useEffect(() => {
@@ -92,6 +104,7 @@ const SeedKeyInput: React.FC = () => {
     if (currentWordIdx === 12 && phrase.length === 12) {
       dispatch(hideSuggestions())
       dispatch(setKeyIsValid(false))
+      inputRef.current?.blur()
     }
   }, [currentWordIdx, phrase])
 
@@ -130,10 +143,10 @@ const SeedKeyInput: React.FC = () => {
         <TextInput
           value={seedKey}
           ref={inputRef}
-          editable={currentWordIdx < 12}
           onChangeText={handleSeedKeyChange}
           onSubmitEditing={handleSubmitEditing}
           onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
           style={styles.input}
           testID="seedphrase-input"
           keyboardAppearance="dark"
@@ -151,7 +164,7 @@ const SeedKeyInput: React.FC = () => {
           <RightArrow handlePress={selectNextWord} />
         )}
       </View>
-      <RecoveryInputMetadata />
+      {!suggestedKeys.length ? <RecoveryInputMetadata /> : null}
     </View>
   )
 }
@@ -164,7 +177,11 @@ const styles = StyleSheet.create({
   inputField: {
     width: '100%',
     backgroundColor: 'black',
-    height: 80,
+    height: BP({
+      small: 50,
+      medium: 80,
+      large: 80,
+    }),
     borderRadius: 7,
     paddingHorizontal: 16,
     flexDirection: 'row',
