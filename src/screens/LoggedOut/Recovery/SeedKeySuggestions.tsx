@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { submitKey } from './module/recoveryActions'
+import { Colors } from '~/utils/colors'
 
 type PillProps = {
   seedKey: string
@@ -63,11 +64,11 @@ const SeedKeySuggestions: React.FC<SeedKeySuggestionsI> = memo(
 
 const styles = StyleSheet.create({
   pill: {
-    backgroundColor: 'black',
+    backgroundColor: Colors.black,
     borderRadius: 4,
     paddingHorizontal: 17,
-    paddingTop: 8,
-    paddingBottom: 4,
+    justifyContent: 'center',
+    height: 44,
     marginRight: 8,
   },
 })

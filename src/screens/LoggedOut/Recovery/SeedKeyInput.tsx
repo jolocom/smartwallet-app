@@ -159,6 +159,8 @@ const SeedKeyInput: React.FC = () => {
           blurOnSubmit={false}
           spellCheck={false}
           autoCorrect={false}
+          //NOTE: disables suggestions on Android https://stackoverflow.com/a/51411575
+          keyboardType="visible-password"
         />
         {currentWordIdx !== phrase.length && currentWordIdx < 12 && (
           <RightArrow handlePress={selectNextWord} />
