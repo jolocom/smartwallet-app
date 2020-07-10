@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     marginTop: BP({
-      large: 50,
+      large: 70,
       medium: 50,
       small: 30,
     }),

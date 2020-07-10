@@ -19,6 +19,7 @@ import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
+import BP from '~/utils/breakpoints'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -59,7 +60,11 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
     return (
       <>
         {areSuggestionsVisible && (
-          <AbsoluteBottom customStyles={{ bottom: keyboardHeight + 10 }}>
+          <AbsoluteBottom
+            customStyles={{
+              bottom: keyboardHeight + BP({ large: 0, medium: 10, small: 10 }),
+            }}
+          >
             <Animated.View
               style={[styles.footer, { opacity: animatedSuggestions }]}
             >
