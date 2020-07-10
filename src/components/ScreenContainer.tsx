@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
+import BP from '~/utils/breakpoints'
 
 interface ScreenContainerI {
   isTransparent?: boolean
@@ -60,7 +61,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '5%',
-    paddingTop: 40,
+    paddingTop: BP({
+      large: 40,
+      medium: 40,
+      small: 15,
+    }),
   },
   transparent: {
     backgroundColor: 'transparent',

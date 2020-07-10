@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     width: '100%',
-    height: 150,
   },
   seedPhraseContainer: {
     flexWrap: 'wrap',

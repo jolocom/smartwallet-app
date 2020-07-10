@@ -172,7 +172,11 @@ const SeedKeyInput: React.FC = () => {
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
-    marginTop: 50,
+    marginTop: BP({
+      large: 50,
+      medium: 50,
+      small: 30,
+    }),
   },
   inputField: {
     width: '100%',
