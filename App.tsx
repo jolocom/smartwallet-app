@@ -3,6 +3,7 @@ import 'crypto'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { StatusBar } from 'react-native'
 
 import RootNavigation from '~/RootNavigation'
 import { ErrorBoundary } from '~/ErrorBoundary'
@@ -12,7 +13,6 @@ import { SDKContextProvider } from '~/utils/sdk/context'
 
 import configureStore from './configureStore'
 import ActionSheetContainer from '~/components/ActionSheetContainer'
-import { StatusBar } from 'react-native'
 
 const store = configureStore()
 
