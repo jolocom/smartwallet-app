@@ -48,7 +48,6 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
 
   const focusInput = () => {
     inputRef.current?.focus()
-    handleFocus()
   }
 
   // this will hide keyboard when passcode is complete
