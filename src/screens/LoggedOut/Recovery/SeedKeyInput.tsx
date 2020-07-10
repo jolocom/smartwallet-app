@@ -88,11 +88,11 @@ const SeedKeyInput: React.FC = () => {
   // when we move with arrows select a current seedKey
   useEffect(() => {
     const updateInput = async () => {
+      currentWordIdx !== 0 && setIsSuccessBorder(true)
       await useDelay(() => {
         dispatch(setSeedKey(phrase[currentWordIdx]))
       }, 200)
       if (currentWordIdx !== 0) {
-        setIsSuccessBorder(true)
         await useDelay(() => setIsSuccessBorder(false), 100)
       }
     }
