@@ -10,32 +10,36 @@ import {
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
+import { useSelector } from 'react-redux'
+
 import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Paragraph from '~/components/Paragraph'
-import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
-import BP from '~/utils/breakpoints'
-import useDelay from '~/hooks/useDelay'
-import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
-import { strings } from '~/translations/strings'
-import { useInteractionStart } from '~/hooks/sdk'
-import { useSelector } from 'react-redux'
-import {
-  getInteractionId,
-  getInteractionSheet,
-} from '~/modules/account/selectors'
+
 import { getLoaderState } from '~/modules/loader/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
+
+import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
+
+import useDelay from '~/hooks/useDelay'
+import { useInteractionStart } from '~/hooks/sdk'
+
+import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
+
+import { strings } from '~/translations/strings'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
   const { startInteraction } = useInteractionStart(InteractionChannel.HTTP)
 
-  const interactionSheet = useSelector(getInteractionSheet)
+  const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
-  const shouldScan = !interactionSheet && !isLoaderVisible
+  const shouldScan = !interactionType && !isLoaderVisible
+  const overlayVisible = !interactionType
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
@@ -90,6 +94,8 @@ const Camera = () => {
     try {
       await startInteraction(e.data)
     } catch (err) {
+      console.log({ err })
+
       setError(true)
       if (err.code === ErrorCode.ParseJWTFailed) {
         setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
@@ -126,52 +132,60 @@ const Camera = () => {
             }}
           />
         )}
-        <View style={styles.topOverlay} />
-        <View
-          style={{
-            flexDirection: 'row',
-          }}
-        >
-          <View style={styles.horizontalOverlay} />
-          <Animated.View
-            style={[
-              styles.rectangle,
-              {
-                backgroundColor: markerBackground,
-                borderColor: isError ? Colors.error : Colors.white,
-              },
-            ]}
-          />
-          <View style={styles.horizontalOverlay} />
-        </View>
-        <View style={styles.bottomOverlay}>
-          {isError ? (
-            <Paragraph
-              animated
-              customStyles={{
-                width: MARKER_SIZE,
-                color: Colors.error,
-                opacity: textAnimationValue,
+        {overlayVisible ? (
+          <>
+            <View style={styles.topOverlay} />
+            <View
+              style={{
+                flexDirection: 'row',
               }}
             >
-              {errorText}
-            </Paragraph>
-          ) : (
-            <Paragraph customStyles={{ width: MARKER_SIZE }}>
-              {strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE}
-            </Paragraph>
-          )}
-          <Paragraph customStyles={{ width: MARKER_SIZE }}></Paragraph>
-          <TouchableHighlight
-            onPressIn={() => setTorchPressed(true)}
-            onPressOut={() => setTorchPressed(false)}
-            activeOpacity={1}
-            underlayColor={Colors.transparent}
-            style={styles.torch}
-          >
-            {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
-          </TouchableHighlight>
-        </View>
+              <View style={styles.horizontalOverlay} />
+              <Animated.View
+                style={[
+                  styles.rectangle,
+                  {
+                    backgroundColor: markerBackground,
+                    borderColor: isError ? Colors.error : Colors.white,
+                  },
+                ]}
+              />
+              <View style={styles.horizontalOverlay} />
+            </View>
+            <View style={styles.bottomOverlay}>
+              {isError ? (
+                <Paragraph
+                  animated
+                  customStyles={{
+                    width: MARKER_SIZE,
+                    color: Colors.error,
+                    opacity: textAnimationValue,
+                  }}
+                >
+                  {errorText}
+                </Paragraph>
+              ) : (
+                <Paragraph customStyles={{ width: MARKER_SIZE }}>
+                  {
+                    strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE
+                  }
+                </Paragraph>
+              )}
+              <Paragraph customStyles={{ width: MARKER_SIZE }}></Paragraph>
+              <TouchableHighlight
+                onPressIn={() => setTorchPressed(true)}
+                onPressOut={() => setTorchPressed(false)}
+                activeOpacity={1}
+                underlayColor={Colors.transparent}
+                style={styles.torch}
+              >
+                {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
+              </TouchableHighlight>
+            </View>
+          </>
+        ) : (
+          <View style={{ flex: 1, backgroundColor: Colors.black65 }} />
+        )}
       </View>
     </ScreenContainer>
   )

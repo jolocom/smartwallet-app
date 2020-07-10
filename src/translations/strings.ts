@@ -116,6 +116,18 @@ const scanner = {
     "It's all automatic, just place your phone above the code",
 }
 
+const interactions = {
+  WOULD_YOU_LIKE_TO_AUTHENTICATE: 'Would you like to authenticate?',
+  AUTHENTICATE: 'Authenticate',
+  WOULD_YOU_LIKE_TO: 'Would you like to',
+  AUTHORIZE: 'Authorize',
+  PULL_TO_CHOOSE: 'Pull to choose',
+  SHARE: 'Share',
+  RECEIVE: 'Receive',
+  CHOOSE_ONE_OR_MORE_DOCUMENTS:
+    'Choose one or more documents provided by this service and we will generate them for you',
+}
+
 const lock = {
   ENTER_YOUR_PIN: 'Enter your PIN',
   FORGOT_YOUR_PIN: 'Forgot your PIN?',
@@ -145,4 +157,5 @@ export const strings = {
   ...scanner,
   ...settings,
   ...lock,
+  ...interactions,
 }
