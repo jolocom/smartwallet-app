@@ -50,7 +50,12 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const hideInput = !(digits.length < PASSCODE_LENGTH.length)
 
   const focusInput = () => {
-    inputRef.current?.focus()
+    // NOTE: Workaround for the case when the Keyboard is dismissed with Back-button, and it can't @focus() again
+    // https://github.com/facebook/react-native/issues/19366#issuecomment-400603928
+    inputRef.current?.blur()
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 100)
   }
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
