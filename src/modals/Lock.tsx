@@ -22,11 +22,9 @@ import PasscodeInput from '../components/PasscodeInput'
 import Btn, { BtnTypes } from '../components/Btn'
 import AbsoluteBottom from '../components/AbsoluteBottom'
 import Paragraph, { ParagraphSizes } from '../components/Paragraph'
-import BiometryAnimation from '../components/BiometryAnimation'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
-import { Colors } from '~/utils/colors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
 
 const Lock = () => {
@@ -38,8 +36,8 @@ const Lock = () => {
     isLoadingStorage,
     biometryType,
     keychainPin,
-    isBiometryShown,
-    setIsBiometryShow,
+    setIsBiometrySelected,
+    isBiometrySelected,
   } = useGetStoredAuthValues()
 
   useEffect(() => {
@@ -66,21 +64,17 @@ const Lock = () => {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         handleNotEnrolled(biometryType)
       } else if (err.name === 'UserFallback') {
-        setIsBiometryShow(false)
+        setIsBiometrySelected(false)
       }
     }
   }
 
   // without additional tapping user can scan a finger on mount
   useEffect(() => {
-    if (isBiometryShown) {
+    if (isBiometrySelected) {
       handleBiometryAuthentication()
     }
-  }, [isBiometryShown])
-
-  const showPin = () => {
-    setIsBiometryShow(false)
-  }
+  }, [isBiometrySelected])
 
   return (
     <Modal isVisible>
@@ -89,25 +83,6 @@ const Lock = () => {
       >
         {isLoadingStorage ? (
           <ActivityIndicator />
-        ) : isBiometryShown ? (
-          <>
-            <Paragraph size={ParagraphSizes.large}>
-              {strings.UNLOCK_WITH_BIOMETRY}
-            </Paragraph>
-            <BiometryAnimation
-              biometryType={biometryType}
-              handleAuthenticate={handleBiometryAuthentication}
-              customStyles={{ marginTop: '20%' }}
-            />
-            <Paragraph color={Colors.success}>
-              {strings.TAP_TO_ACTIVATE}
-            </Paragraph>
-            <AbsoluteBottom>
-              <Btn type={BtnTypes.secondary} onPress={showPin}>
-                {strings.I_WILL_USE_PIN_INSTEAD}
-              </Btn>
-            </AbsoluteBottom>
-          </>
         ) : (
           <>
             <Paragraph size={ParagraphSizes.large}>
@@ -148,7 +123,7 @@ export default function () {
   const [appState, setAppState] = useState(AppState.currentState)
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    if (appState.match(/inactive|background/) && nextAppState === 'active') {
+    if (appState.match(/active|background/) && nextAppState === 'active') {
       dispatch(lockApp())
     }
     setAppState(nextAppState)
