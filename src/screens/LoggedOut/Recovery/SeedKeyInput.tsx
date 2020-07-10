@@ -5,6 +5,7 @@ import {
   TextInput,
   NativeSyntheticEvent,
   TextInputSubmitEditingEventData,
+  Platform,
 } from 'react-native'
 import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
@@ -160,7 +161,9 @@ const SeedKeyInput: React.FC = () => {
           spellCheck={false}
           autoCorrect={false}
           //NOTE: disables suggestions on Android https://stackoverflow.com/a/51411575
-          keyboardType="visible-password"
+          keyboardType={
+            Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'
+          }
         />
         {currentWordIdx !== phrase.length && currentWordIdx < 12 && (
           <RightArrow handlePress={selectNextWord} />
