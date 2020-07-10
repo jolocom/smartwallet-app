@@ -21,4 +21,5 @@ export enum Colors {
   bridal = '#ffefdf',
   peach = '#ffdebc',
   floralWhite = '#fffefc',
+  borderGray20 = 'rgba(143, 146, 161, 0.2)',
 }

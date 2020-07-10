@@ -1,4 +1,4 @@
-import { AccountState, Action, AccountActionTypes } from './types'
+import { AccountState, Action, AccountActions } from './types'
 
 const initialState: AccountState = {
   did: '',
@@ -6,36 +6,26 @@ const initialState: AccountState = {
   loggedIn: false,
   isAppLocked: true,
   isLocalAuthSet: false, // this value indicates where user went through local auth registration
-  interactionId: '',
-  interactionSheet: null,
 }
 
 const reducer = (state = initialState, action: Action) => {
   switch (action.type) {
-    case AccountActionTypes.setDid:
+    case AccountActions.setDid:
       return { ...state, did: action.payload }
-    case AccountActionTypes.resetAccount:
+    case AccountActions.resetAccount:
       return initialState
-    case AccountActionTypes.setLogged:
+    case AccountActions.setLogged:
       return { ...state, loggedIn: action.payload }
-    case AccountActionTypes.lockApp:
+    case AccountActions.lockApp:
       return { ...state, isAppLocked: true }
-    case AccountActionTypes.unlockApp:
+    case AccountActions.unlockApp:
       return { ...state, isAppLocked: false }
-    case AccountActionTypes.setLocalAuth:
+    case AccountActions.setLocalAuth:
       return { ...state, isLocalAuthSet: true }
-    case AccountActionTypes.setEntropy:
+    case AccountActions.setEntropy:
       return { ...state, entropy: action.payload }
-    case AccountActionTypes.setInteraction:
-      return { ...state, interactionId: action.payload }
-    case AccountActionTypes.resetInteraction:
-      return { ...state, interactionId: '' }
-    case AccountActionTypes.accountReset:
+    case AccountActions.accountReset:
       return initialState
-    case AccountActionTypes.setInteractionSheet:
-      return { ...state, interactionSheet: action.payload }
-    case AccountActionTypes.resetInteractionSheet:
-      return { ...state, interactionSheet: null }
     default:
       return state
   }

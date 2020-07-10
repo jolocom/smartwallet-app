@@ -1,6 +1,4 @@
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-
-export enum AccountActionTypes {
+export enum AccountActions {
   setDid = 'setDid',
   setEntropy = 'setEntropy',
   setLogged = 'setLogged',
@@ -9,10 +7,6 @@ export enum AccountActionTypes {
   unlockApp = 'unlockApp',
   setLocalAuth = 'setLocalAuth',
   accountReset = 'accountReset',
-  setInteraction = 'setInteraction',
-  resetInteraction = 'resetInteraction',
-  setInteractionSheet = 'setInteractionSheet',
-  resetInteractionSheet = 'resetInteractionSheet',
 }
 
 export interface AccountState {
@@ -21,11 +15,9 @@ export interface AccountState {
   loggedIn: boolean
   isAppLocked: boolean
   isLocalAuthSet: boolean
-  interactionId: string
-  interactionSheet: FlowType | null
 }
 
 export interface Action {
-  type: AccountActionTypes
+  type: AccountActions
   payload?: any
 }

@@ -1,5 +1,4 @@
 import { RootReducerI } from '~/types/reducer'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 export const getDid = (state: RootReducerI): string => state.account.did
 export const isLogged = (state: RootReducerI): boolean => state.account.loggedIn
@@ -8,7 +7,3 @@ export const isAppLocked = (state: RootReducerI): boolean =>
 export const isLocalAuthSet = (state: RootReducerI): boolean =>
   state.account.isLocalAuthSet
 export const getEntropy = (state: RootReducerI): string => state.account.entropy
-export const getInteractionId = (state: RootReducerI): string =>
-  state.account.interactionId
-export const getInteractionSheet = (state: RootReducerI): FlowType | null =>
-  state.account.interactionSheet
