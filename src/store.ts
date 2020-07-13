@@ -6,16 +6,14 @@ import thunk, {
 } from 'redux-thunk'
 import { RootState, rootReducer } from 'src/reducers'
 
-import { JolocomSDK } from '@jolocom/sdk'
-import { JolocomTypeormStorage } from '@jolocom/sdk-storage-typeorm'
+import {
+  JolocomSDK,
+  JolocomTypeormStorage,
+  JolocomKeychainPasswordStore,
+} from 'react-native-jolocom'
 import { createConnection, getConnection } from 'typeorm'
 import typeormConfig from '../ormconfig'
 import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
-
-// TODO stop using this and use @jolocom/sdk-password-store-mobile-keychain
-// after upgrading to RN60+
-
-import { KeyChain } from './lib/keychain'
 
 const initConnection = async () => {
   let connection
@@ -40,7 +38,7 @@ export async function initTypeorm() {
 
 let sdk: JolocomSDK
 export function initStore(storage: IStorage) {
-  const passwordStore = new KeyChain()
+  const passwordStore = new JolocomKeychainPasswordStore()
   sdk = new JolocomSDK({ storage, passwordStore })
 
   /*
