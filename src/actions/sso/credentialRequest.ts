@@ -6,7 +6,7 @@ import { ThunkAction } from '../../store'
 import {
   CredentialVerificationSummary,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { cancelSSO } from './'
 import isEmpty from 'ramda/es/isEmpty'
@@ -15,7 +15,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 
 export const consumeCredentialRequest = (
   credentialRequest: JSONWebToken<CredentialRequest>,
-  interactionChannel: InteractionChannel, // TODO replace with send function at one point
+  interactionChannel: InteractionTransportType, // TODO replace with send function at one point
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
    const {
      interactionManager,

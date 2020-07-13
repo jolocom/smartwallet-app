@@ -10,7 +10,7 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import {
-  InteractionChannel,
+  InteractionTransportType,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
@@ -21,7 +21,7 @@ import { CacheEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
-  interactionChannel: InteractionChannel,
+  interactionChannel: InteractionTransportType,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = await interactionManager.start(
     interactionChannel,
@@ -247,9 +247,9 @@ const endReceiving = (interactionId: string): ThunkAction => (
   { interactionManager },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const { channel } = interaction
+  const { transportType } = interaction
 
-  if (channel === InteractionChannel.Deeplink) {
+  if (transportType === InteractionTransportType.Deeplink) {
     return dispatch(navigationActions.navigatorResetHome())
   } else {
     return dispatch(

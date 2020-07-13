@@ -13,7 +13,6 @@ import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken
 import { ErrorCode, AppError } from '@jolocom/sdk/js/src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
 import { Colors } from 'src/styles'
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 const IS_IOS = Platform.OS === 'ios'
 

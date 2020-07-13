@@ -46,7 +46,7 @@ export function initStore(storage: IStorage) {
    * We provide an empty object. The store will have the correct default state
    * after all reducers initialise.
    */
-  const backendMiddleware = sdk.bemw
+  const backendMiddleware = sdk
   return createStore(
     rootReducer,
     {} as RootState,
@@ -56,9 +56,9 @@ export function initStore(storage: IStorage) {
 
 export type ThunkDispatch = OriginalThunkDispatch<
   RootState,
-  BackendMiddleware,
+  JolocomSDK,
   AnyAction
 >
 export type ThunkAction<
   R = AnyAction | Promise<AnyAction | void>
-> = OriginalThunkAction<R, RootState, BackendMiddleware, AnyAction>
+> = OriginalThunkAction<R, RootState, JolocomSDK, AnyAction>

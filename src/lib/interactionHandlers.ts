@@ -4,7 +4,7 @@ import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ssoActions } from 'src/actions'
 /**
  * @param Metadata should not need to be passed to credential receive because it comes from cred Offer
@@ -14,20 +14,20 @@ import { ssoActions } from 'src/actions'
 export const interactionHandlers = {
   [InteractionType.Authentication]: <T extends JSONWebToken<Authentication>>(
     interactionToken: T,
-    channel: InteractionChannel,
+    channel: InteractionTransportType,
     //@ts-ignore
   ) => ssoActions.consumeAuthenticationRequest(interactionToken, channel),
   [InteractionType.CredentialRequest]: <
     T extends JSONWebToken<CredentialRequest>
   >(
     interactionToken: T,
-    channel: InteractionChannel,
+    channel: InteractionTransportType,
   ) => ssoActions.consumeCredentialRequest(interactionToken, channel),
   [InteractionType.CredentialOfferRequest]: <
     T extends JSONWebToken<CredentialOfferRequest>
   >(
     interactionToken: T,
-    channel: InteractionChannel,
+    channel: InteractionTransportType,
   ) => ssoActions.consumeCredentialOfferRequest(interactionToken, channel),
   [InteractionType.PaymentRequest]: <T extends JSONWebToken<PaymentRequest>>(
     interactionToken: T,
