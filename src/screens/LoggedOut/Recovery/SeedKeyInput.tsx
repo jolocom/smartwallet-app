@@ -124,7 +124,7 @@ const SeedKeyInput: React.FC = () => {
 
   // this is for coloring input box to indicate no match error
   useEffect(() => {
-    if (seedKey && seedKey.length > 1 && !suggestedKeys.length) {
+    if (seedKey && seedKey.length > 1) {
       dispatch(setHasError(true))
     } else {
       dispatch(setHasError(false))
@@ -136,7 +136,7 @@ const SeedKeyInput: React.FC = () => {
       <View
         style={[
           styles.inputField,
-          keyHasError && styles.inputError,
+          keyHasError && !suggestedKeys.length && styles.inputError,
           isSuccessBorder && styles.inputValid,
         ]}
       >
@@ -169,7 +169,7 @@ const SeedKeyInput: React.FC = () => {
           <RightArrow handlePress={selectNextWord} />
         )}
       </View>
-      {!suggestedKeys.length ? <RecoveryInputMetadata /> : null}
+      {!suggestedKeys.length && <RecoveryInputMetadata />}
     </View>
   )
 }
