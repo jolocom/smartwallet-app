@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: 'transparent',
     alignItems: 'center',
-    fontWeight: '500',
   },
   disabled: {
     opacity: 0.5,
