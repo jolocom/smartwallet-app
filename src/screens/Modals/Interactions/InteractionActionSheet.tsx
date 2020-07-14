@@ -21,7 +21,7 @@ import CredentialReceive from './CredentialReceive'
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
 
-const ActionSheetContainer: React.FC = () => {
+const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
 
   const dispatch = useDispatch()
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ActionSheetContainer
+export default InteractionActionSheet

@@ -25,6 +25,7 @@ import {
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
 import { setLocalAuth, unlockApp } from '~/modules/account/actions'
+import BP from '~/utils/breakpoints'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -151,7 +152,11 @@ const Passcode = () => {
 
 const styles = StyleSheet.create({
   passcodeContainer: {
-    marginTop: '30%',
+    marginTop: BP({
+      large: '30%',
+      medium: '30%',
+      small: '10%',
+    }),
     position: 'relative',
   },
   spinner: {

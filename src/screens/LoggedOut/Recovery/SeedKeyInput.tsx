@@ -1,12 +1,25 @@
-import React, { useCallback, useEffect, useRef } from 'react'
-import { View, StyleSheet, TextInput, Keyboard } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputSubmitEditingEventData,
+  Platform,
+} from 'react-native'
 import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
+import LeftArrow from '~/components/LeftArrow'
+import RightArrow from '~/components/RightArrow'
+
+import useDelay from '~/hooks/useDelay'
+
+import { Fonts } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
 
 import RecoveryInputMetadata from './RecoveryInputMetadata'
-
 import {
   setSeedKey,
   setCurrentWordIdx,
@@ -17,8 +30,6 @@ import {
   submitKey,
   hideSuggestions,
 } from './module/recoveryActions'
-import LeftArrow from '~/components/LeftArrow'
-import RightArrow from '~/components/RightArrow'
 
 const SeedKeyInput: React.FC = () => {
   const inputRef = useRef<TextInput>(null)
@@ -33,6 +44,8 @@ const SeedKeyInput: React.FC = () => {
     keyIsValid,
   } = useRecoveryState()
 
+  const [isSuccessBorder, setIsSuccessBorder] = useState(keyIsValid)
+
   const selectPrevWord = () => {
     dispatch(setCurrentWordIdx(currentWordIdx - 1))
   }
@@ -40,32 +53,51 @@ const SeedKeyInput: React.FC = () => {
     dispatch(setCurrentWordIdx(currentWordIdx + 1))
   }
 
+  const handleSeedKeyChange = useCallback(
+    (val: string) => {
+      if (currentWordIdx < 12) {
+        dispatch(setSeedKey(val))
+      }
+    },
+    [currentWordIdx],
+  )
+
   const handleInputFocus = useCallback(() => {
     dispatch(showSuggestions())
   }, [])
 
-  const handleSeedKeyChange = useCallback((val: string) => {
-    dispatch(setSeedKey(val))
-  }, [])
-
-  const handleKeyboardDismiss = () => {
+  const handleInputBlur = () => {
     dispatch(hideSuggestions())
-    Keyboard.dismiss()
   }
 
   // this is invoked when next keyboard button is pressed
-  const handleSubmitEditing = (e) => {
+  const handleSubmitEditing = (
+    e: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
+  ) => {
     if (keyIsValid) {
       dispatch(submitKey(e.nativeEvent.text))
-    } else {
-      handleKeyboardDismiss()
-      inputRef.current?.blur()
     }
   }
 
+  // after the phrase is complete - keyboard hides, to bring keyoboard back when user moves across keys in phrase
+  useEffect(() => {
+    if (!inputRef.current?.isFocused()) {
+      inputRef.current?.focus()
+    }
+  }, [currentWordIdx])
+
   // when we move with arrows select a current seedKey
   useEffect(() => {
-    dispatch(setSeedKey(phrase[currentWordIdx]))
+    const updateInput = async () => {
+      if (currentWordIdx !== 0) {
+        setIsSuccessBorder(true)
+        await useDelay(() => setIsSuccessBorder(false), 100)
+      }
+      await useDelay(() => {
+        dispatch(setSeedKey(phrase[currentWordIdx]))
+      }, 200)
+    }
+    updateInput()
   }, [currentWordIdx])
 
   // this for showing buttons back instead of suggestions
@@ -73,6 +105,7 @@ const SeedKeyInput: React.FC = () => {
     if (currentWordIdx === 12 && phrase.length === 12) {
       dispatch(hideSuggestions())
       dispatch(setKeyIsValid(false))
+      inputRef.current?.blur()
     }
   }, [currentWordIdx, phrase])
 
@@ -91,7 +124,7 @@ const SeedKeyInput: React.FC = () => {
 
   // this is for coloring input box to indicate no match error
   useEffect(() => {
-    if (seedKey && seedKey.length > 1 && !suggestedKeys.length) {
+    if (seedKey && seedKey.length > 1) {
       dispatch(setHasError(true))
     } else {
       dispatch(setHasError(false))
@@ -103,35 +136,40 @@ const SeedKeyInput: React.FC = () => {
       <View
         style={[
           styles.inputField,
-          keyHasError && styles.inputError,
-          keyIsValid && styles.inputValid,
+          keyHasError && !suggestedKeys.length && styles.inputError,
+          isSuccessBorder && styles.inputValid,
         ]}
       >
         {currentWordIdx > 0 && <LeftArrow handlePress={selectPrevWord} />}
         <TextInput
           value={seedKey}
           ref={inputRef}
-          editable={currentWordIdx < 12}
           onChangeText={handleSeedKeyChange}
           onSubmitEditing={handleSubmitEditing}
           onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
           style={styles.input}
           testID="seedphrase-input"
           keyboardAppearance="dark"
           underlineColorAndroid="transparent"
           autoCapitalize="none"
+          autoFocus
           //@ts-ignore
           textAlign="center"
-          returnKeyType="next"
+          returnKeyType="done"
           blurOnSubmit={false}
           spellCheck={false}
           autoCorrect={false}
+          //NOTE: disables suggestions on Android https://stackoverflow.com/a/51411575
+          keyboardType={
+            Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'
+          }
         />
         {currentWordIdx !== phrase.length && currentWordIdx < 12 && (
           <RightArrow handlePress={selectNextWord} />
         )}
       </View>
-      <RecoveryInputMetadata />
+      {!suggestedKeys.length && <RecoveryInputMetadata />}
     </View>
   )
 }
@@ -139,12 +177,20 @@ const SeedKeyInput: React.FC = () => {
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
-    marginTop: 20,
+    marginTop: BP({
+      large: 70,
+      medium: 50,
+      small: 30,
+    }),
   },
   inputField: {
     width: '100%',
     backgroundColor: 'black',
-    height: 80,
+    height: BP({
+      small: 50,
+      medium: 80,
+      large: 80,
+    }),
     borderRadius: 7,
     paddingHorizontal: 16,
     flexDirection: 'row',
@@ -153,8 +199,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   input: {
-    fontSize: 34,
     width: '70%',
+    fontFamily: Fonts.Medium,
+    fontSize: 34,
+    fontWeight: '500',
     color: Colors.white,
     textDecorationLine: 'none',
   },
