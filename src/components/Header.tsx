@@ -56,13 +56,14 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   large: {
-    ...getStyle(40, 54),
-  },
-  medium: {
     ...getStyle(34, 40),
   },
+  medium: {
+    ...getStyle(28, 40),
+  },
   small: {
-    ...getStyle(28, 30),
+    ...getStyle(18, 24),
+    fontFamily: Fonts.Regular,
   },
   shadow: {
     textShadowColor: Colors.white45,
