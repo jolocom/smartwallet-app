@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   AppState,
@@ -120,13 +120,16 @@ export default function () {
   const isLoggedIn = useSelector(isLogged)
   const isAuthSet = useSelector(isLocalAuthSet)
   const dispatch = useDispatch()
-  const [appState, setAppState] = useState(AppState.currentState)
+  const appState = useRef(AppState.currentState)
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    if (appState.match(/active|background/) && nextAppState === 'active') {
+    if (
+      appState.current.match(/inactive|active/) &&
+      nextAppState.match(/background/)
+    ) {
       dispatch(lockApp())
     }
-    setAppState(nextAppState)
+    appState.current = nextAppState
   }
 
   useEffect(() => {
