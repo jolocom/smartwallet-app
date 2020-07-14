@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   ActivityIndicator,
+  Platform,
 } from 'react-native'
 
 import {
@@ -120,9 +121,17 @@ export default function () {
   const dispatch = useDispatch()
 
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
-    if (appState.match(/inactive|active/) && nextAppState.match(/background/)) {
+    if (
+      (Platform.OS === 'ios' &&
+        appState.match(/inactive|active/) &&
+        nextAppState.match(/background/)) ||
+      (Platform.OS === 'android' &&
+        appState.match(/inactive|background/) &&
+        nextAppState.match(/active/))
+    ) {
       dispatch(lockApp())
     }
+
     appState = nextAppState
   })
 
