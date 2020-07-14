@@ -1,22 +1,25 @@
 import React, { useCallback, memo } from 'react'
-import { Animated, StyleSheet, Platform } from 'react-native'
+import { Animated, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+
+import { setLogged } from '~/modules/account/actions'
 
 import BtnGroup from '~/components/BtnGroup'
-import Btn, { BtnTypes } from '~/components/Btn'
+import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
 
 import { useLoader } from '~/hooks/useLoader'
+import { useSDK } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
-import { useSDK } from '~/hooks/sdk'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
-import { useDispatch } from 'react-redux'
-import { setLogged } from '~/modules/account/actions'
+import { useKeyboard } from './useKeyboard'
+import BP from '~/utils/breakpoints'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -52,32 +55,43 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
     const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
     const navigation = useNavigation()
 
-    if (areSuggestionsVisible) {
-      return (
-        <AbsoluteBottom
-          customStyles={{ bottom: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <Animated.View
-            style={[styles.footer, { opacity: animatedSuggestions }]}
-          >
-            <Suggestions />
-          </Animated.View>
-        </AbsoluteBottom>
-      )
-    }
+    const { keyboardHeight } = useKeyboard()
+
     return (
-      <AbsoluteBottom>
+      <>
+        {areSuggestionsVisible && (
+          <AbsoluteBottom
+            customStyles={{
+              bottom: keyboardHeight + BP({ large: 0, medium: 10, small: 10 }),
+            }}
+          >
+            <Animated.View
+              style={[styles.footer, { opacity: animatedSuggestions }]}
+            >
+              <Suggestions />
+            </Animated.View>
+          </AbsoluteBottom>
+        )}
+
         <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
           <BtnGroup>
-            <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
+            <Btn
+              size={BtnSize.medium}
+              onPress={handlePhraseSubmit}
+              disabled={!isPhraseComplete}
+            >
               {strings.CONFIRM}
             </Btn>
-            <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
+            <Btn
+              size={BtnSize.medium}
+              type={BtnTypes.secondary}
+              onPress={() => navigation.goBack()}
+            >
               {strings.BACK}
             </Btn>
           </BtnGroup>
         </Animated.View>
-      </AbsoluteBottom>
+      </>
     )
   },
 )
@@ -85,8 +99,6 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 const styles = StyleSheet.create({
   footer: {
     width: '100%',
-    position: 'absolute',
-    bottom: 10,
   },
 })
 
