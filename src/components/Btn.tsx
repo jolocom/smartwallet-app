@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: 'transparent',
     alignItems: 'center',
+    fontWeight: '500',
   },
   disabled: {
     opacity: 0.5,
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   textPrimary: {
-    fontFamily: Fonts.Regular,
+    fontFamily: Fonts.Medium,
   },
   textSecondary: {
     fontFamily: Fonts.Regular,
