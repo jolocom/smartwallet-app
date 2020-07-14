@@ -13,12 +13,11 @@ import {
   TouchableWithoutFeedback,
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
-  AppState,
-  AppStateStatus,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import useDelay from '~/hooks/useDelay'
+import { useAppState } from '~/hooks/useAppState'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = 65
@@ -58,23 +57,16 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
     }, 100)
   }
 
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    const currentState = AppState.currentState
-    if (currentState.match(/active/) && nextAppState === 'inactive') {
+  useAppState((appState, nextAppState) => {
+    if (appState.match(/active/) && nextAppState === 'inactive') {
       // this is when the alert to use Biometry appears
       inputRef.current?.blur()
-    } else if (currentState.match(/active/) && nextAppState === 'active') {
+    } else if (appState.match(/inactive/) && nextAppState === 'active') {
       // this is when the alert to use Biometry disappears
       inputRef.current?.focus()
     }
-  }
-
-  useEffect(() => {
-    AppState.addEventListener('change', handleAppStateChange)
-    return () => {
-      AppState.removeEventListener('change', handleAppStateChange)
-    }
-  }, [])
+    appState = nextAppState
+  })
 
   // this will hide keyboard when passcode is complete
   useEffect(() => {
