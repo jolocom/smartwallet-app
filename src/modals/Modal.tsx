@@ -3,9 +3,14 @@ import { Modal } from 'react-native'
 
 interface PropsI {
   isVisible: boolean
+  onShow?: () => void
 }
 
-const ModalScreen: React.FC<PropsI> = ({ children, isVisible }) => {
+const ModalScreen: React.FC<PropsI> = ({
+  children,
+  isVisible,
+  onShow = () => {},
+}) => {
   return (
     <Modal
       animationType="fade"
@@ -14,6 +19,7 @@ const ModalScreen: React.FC<PropsI> = ({ children, isVisible }) => {
       presentationStyle="overFullScreen"
       //@ts-ignore
       statusBarTranslucent={true}
+      onShow={onShow}
     >
       {children}
     </Modal>

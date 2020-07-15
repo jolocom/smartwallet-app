@@ -11,15 +11,14 @@ import {
   TextInput,
   Text,
   TouchableWithoutFeedback,
-  ScrollView,
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
-  AppState,
-  AppStateStatus,
+  Platform,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import useDelay from '~/hooks/useDelay'
+import { useAppState } from '~/hooks/useAppState'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = 65
@@ -31,7 +30,6 @@ interface PasscodeInputI {
   onSubmit: () => void
   errorStateUpdaterFn?: Dispatch<SetStateAction<boolean>>
   hasError?: boolean
-  autoFocus?: boolean
 }
 
 type AddPasscodeFnT = (prevState: string, passcode?: string) => string
@@ -43,9 +41,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   errorStateUpdaterFn,
   onSubmit,
   hasError = false,
-  autoFocus = true,
 }) => {
-  const [isFocused, setIsFocused] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
 
   const inputRef = useRef<TextInput>(null)
@@ -54,33 +50,32 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const hideInput = !(digits.length < PASSCODE_LENGTH.length)
 
   const focusInput = () => {
-    inputRef.current?.focus()
+    // NOTE: Workaround for the case when the Keyboard is dismissed with Back-button, and it can't @focus() again
+    // https://github.com/facebook/react-native/issues/19366#issuecomment-400603928
+    inputRef.current?.blur()
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 100)
   }
 
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    const currentState = AppState.currentState
-    if (currentState.match(/active/) && nextAppState === 'inactive') {
+  useAppState((appState, nextAppState) => {
+    if (appState.match(/active/) && nextAppState === 'inactive') {
       // this is when the alert to use Biometry appears
       inputRef.current?.blur()
-      handleBlur()
-    } else if (currentState.match(/active/) && nextAppState === 'active') {
+    } else if (
+      ((Platform.OS === 'ios' && appState.match(/inactive/)) ||
+        (Platform.OS === 'android' && appState.match(/background/))) &&
+      nextAppState === 'active'
+    ) {
       // this is when the alert to use Biometry disappears
       inputRef.current?.focus()
-      handleFocus()
     }
-  }
-
-  useEffect(() => {
-    AppState.addEventListener('change', handleAppStateChange)
-    return () => {
-      AppState.removeEventListener('change', handleAppStateChange)
-    }
-  }, [])
+    appState = nextAppState
+  })
 
   // this will hide keyboard when passcode is complete
   useEffect(() => {
     if (value.length === 4) {
-      inputRef.current?.blur()
       onSubmit()
     }
   }, [value])
@@ -117,15 +112,10 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   }, [value])
 
   const handleFocus = () => {
-    setIsFocused(true)
     if (hasError && errorStateUpdaterFn) {
       errorStateUpdaterFn(false)
       stateUpdaterFn('')
     }
-  }
-
-  const handleBlur = () => {
-    setIsFocused(false)
   }
 
   const handleRemove = (
@@ -143,8 +133,12 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   }
 
   // a callback function that is passed (when we removing digits from passcode) to setPasscode or setVerifiedPasscode
-  const removeFromPasscodeCb: RemovePasscodeFnT = (prevState) =>
-    prevState.slice(0, prevState.length - 1)
+  const removeFromPasscodeCb: RemovePasscodeFnT = (prevState) => {
+    if (!hasError) {
+      return prevState.slice(0, prevState.length - 1)
+    }
+    return ''
+  }
 
   // the first parameter is a setter function of passcode or verifiedPasscode, the second is deciding to add or to remove from/to passcode
   const updatePasscode = (
@@ -166,55 +160,52 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const handleRemovingFromPasscode = removeFromPasscode(stateUpdaterFn)
 
   return (
-    <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false}>
-      <TouchableWithoutFeedback onPress={focusInput}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            value=""
-            ref={inputRef}
-            onChangeText={handleAddingToPasscode}
-            onFocus={handleFocus}
-            onKeyPress={handleRemove}
-            autoFocus={autoFocus}
-            onBlur={handleBlur}
-            testID="passcode-digit-input"
-            style={[
-              styles.input,
-              {
-                left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
-                opacity: hideInput ? 0 : 1,
-              },
-            ]}
-            keyboardType="numeric"
-            keyboardAppearance="dark"
-            selectionColor="transparent"
-          />
-          <View style={{ flexDirection: 'row' }}>
-            {PASSCODE_LENGTH.map((v, index) => {
-              const isSelected = digits.length === index
-              return (
-                <View
-                  style={[
-                    styles.display,
-                    isSelected && isFocused && styles.active,
-                    hasError && styles.error,
-                  ]}
-                  key={index}
-                >
-                  <Text style={styles.text} testID="passcode-cell">
-                    {index === selectedIndex
-                      ? digits[index]
-                      : index < digits.length
-                      ? '*'
-                      : ''}
-                  </Text>
-                </View>
-              )
-            })}
-          </View>
+    <TouchableWithoutFeedback onPress={focusInput}>
+      <View style={styles.inputContainer}>
+        <TextInput
+          value=""
+          ref={inputRef}
+          onChangeText={handleAddingToPasscode}
+          onFocus={handleFocus}
+          onKeyPress={handleRemove}
+          autoFocus
+          testID="passcode-digit-input"
+          style={[
+            styles.input,
+            {
+              left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
+              opacity: hideInput ? 0 : 1,
+            },
+          ]}
+          keyboardType="numeric"
+          keyboardAppearance="dark"
+          selectionColor="transparent"
+        />
+        <View style={{ flexDirection: 'row' }}>
+          {PASSCODE_LENGTH.map((v, index) => {
+            const isSelected = digits.length === index
+            return (
+              <View
+                style={[
+                  styles.display,
+                  isSelected && styles.active,
+                  hasError && styles.error,
+                ]}
+                key={index}
+              >
+                <Text style={styles.text} testID="passcode-cell">
+                  {index === selectedIndex
+                    ? digits[index]
+                    : index < digits.length
+                    ? '*'
+                    : ''}
+                </Text>
+              </View>
+            )
+          })}
         </View>
-      </TouchableWithoutFeedback>
-    </ScrollView>
+      </View>
+    </TouchableWithoutFeedback>
   )
 }
 
