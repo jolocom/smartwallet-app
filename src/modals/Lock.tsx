@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  AppState,
   AppStateStatus,
   View,
   StyleSheet,
   ActivityIndicator,
+  Platform,
 } from 'react-native'
 
 import {
@@ -28,6 +28,7 @@ import { handleNotEnrolled } from '~/utils/biometryErrors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { setPopup } from '~/modules/appState/actions'
+import { useAppState } from '~/hooks/useAppState'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -38,7 +39,6 @@ const Lock = () => {
     isLoadingStorage,
     biometryType,
     keychainPin,
-    setIsBiometrySelected,
     isBiometrySelected,
   } = useGetStoredAuthValues()
 
@@ -66,20 +66,19 @@ const Lock = () => {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         handleNotEnrolled(biometryType)
       } else if (err.name === 'UserFallback') {
-        setIsBiometrySelected(false)
+        isBiometrySelected.current = false
       }
     }
   }
 
-  // without additional tapping user can scan a finger on mount
-  useEffect(() => {
-    if (isBiometrySelected) {
-      handleBiometryAuthentication()
+  const handleModalShow = async () => {
+    if (isBiometrySelected.current) {
+      await handleBiometryAuthentication()
     }
-  }, [isBiometrySelected])
+  }
 
   return (
-    <Modal isVisible>
+    <Modal isVisible onShow={handleModalShow}>
       <ScreenContainer
         customStyles={{ marginTop: '30%', justifyContent: 'flex-start' }}
       >
@@ -97,7 +96,6 @@ const Lock = () => {
                 onSubmit={handleAppUnlock}
                 hasError={hasError}
                 errorStateUpdaterFn={setHasError}
-                autoFocus={false}
               />
             </View>
             <AbsoluteBottom>
@@ -124,27 +122,27 @@ export default function () {
   const isAuthSet = useSelector(isLocalAuthSet)
   const isPopup = useSelector(getIsPopup)
   const dispatch = useDispatch()
-  const [appState, setAppState] = useState(AppState.currentState)
   const isPopupRef = useRef<boolean>(isPopup)
 
   useEffect(() => {
     isPopupRef.current = isPopup
   }, [isPopup])
 
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    if (appState.match(/active|background/) && nextAppState === 'active') {
+  useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
+    if (
+      (Platform.OS === 'ios' &&
+        appState.match(/inactive|active/) &&
+        nextAppState.match(/background/)) ||
+      (Platform.OS === 'android' &&
+        appState.match(/inactive|background/) &&
+        nextAppState.match(/active/))
+    ) {
       if (!isPopupRef.current) dispatch(lockApp())
       else dispatch(setPopup(false))
     }
-    setAppState(nextAppState)
-  }
 
-  useEffect(() => {
-    AppState.addEventListener('change', handleAppStateChange)
-    return () => {
-      AppState.removeEventListener('change', handleAppStateChange)
-    }
-  }, [])
+    appState = nextAppState
+  })
 
   if (isLocked && isAuthSet && isLoggedIn) {
     return <Lock />

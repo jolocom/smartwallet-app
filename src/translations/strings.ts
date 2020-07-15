@@ -63,6 +63,8 @@ const seedphrase = {
     "Write down this phrase. It's very important!",
   OKAY: 'Okay',
   WHY_SO_ANALOGUE: 'Why so analogue?',
+  ANY_FUTURE_PASSCODE_RESTORE:
+    'Any future passcode restore is possible only with your secret phrase',
 }
 
 const deviceAuthentication = {

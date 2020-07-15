@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   textPrimary: {
-    fontFamily: Fonts.Regular,
+    fontFamily: Fonts.Medium,
   },
   textSecondary: {
     fontFamily: Fonts.Regular,

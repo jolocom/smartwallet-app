@@ -4,12 +4,14 @@ import Swiper from 'react-native-swiper'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
+import BtnGroup from '~/components/BtnGroup'
+
 import { ScreenNames } from '~/types/screens'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
-import Paragraph from '~/components/Paragraph'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
 import {
   Walkthrough1,
   Walkthrough2,
@@ -18,7 +20,6 @@ import {
 } from '~/assets/images'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
-import BtnGroup from '~/components/BtnGroup'
 
 const walkthroughData = [
   {
@@ -55,25 +56,12 @@ const Walkthrough: React.FC = () => {
   const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
 
   const renderPagination = (index: number, total: number) => {
-    const { header, paragraph } = walkthroughData[index]
     return (
-      <AbsoluteBottom customStyles={{ paddingHorizontal: '5%' }}>
-        <View style={styles.contentContainer}>
-          <Header>{header}</Header>
-          <Paragraph>{paragraph}</Paragraph>
-          <View style={styles.dotContainer}>
-            {[...Array(total)].map((_, key) => (
-              <Dot key={key} active={index === key} />
-            ))}
-          </View>
-        </View>
-        <BtnGroup>
-          <Btn onPress={redirectToEntropy}>{strings.GET_STARTED}</Btn>
-          <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
-            {strings.NEED_RESTORE}
-          </Btn>
-        </BtnGroup>
-      </AbsoluteBottom>
+      <View style={styles.dotContainer}>
+        {[...Array(total)].map((_, key) => (
+          <Dot key={key} active={index === key} />
+        ))}
+      </View>
     )
   }
 
@@ -82,38 +70,66 @@ const Walkthrough: React.FC = () => {
       <Swiper
         loop
         autoplay
-        autoplayTimeout={6}
+        autoplayTimeout={2}
         renderPagination={renderPagination}
       >
-        {walkthroughData.map((slide, key) => (
-          <ImageBackground
-            key={key}
-            style={styles.background}
-            source={slide.background}
-          />
+        {walkthroughData.map((slide, idx) => (
+          <>
+            <ImageBackground
+              key={idx}
+              style={styles.background}
+              source={slide.background}
+            />
+            <AbsoluteBottom
+              customStyles={{ ...styles.consistentContainer, bottom: 190 }}
+            >
+              <View style={styles.contentContainer}>
+                <Header color={Colors.white90}>
+                  {walkthroughData[idx].header}
+                </Header>
+                <Paragraph size={ParagraphSizes.medium} color={Colors.white85}>
+                  {walkthroughData[idx].paragraph}
+                </Paragraph>
+              </View>
+            </AbsoluteBottom>
+          </>
         ))}
       </Swiper>
+      <AbsoluteBottom customStyles={styles.consistentContainer}>
+        <BtnGroup>
+          <Btn onPress={redirectToEntropy}>{strings.GET_STARTED}</Btn>
+          <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
+            {strings.NEED_RESTORE}
+          </Btn>
+        </BtnGroup>
+      </AbsoluteBottom>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
   background: { ...(StyleSheet.absoluteFill as {}) },
+  consistentContainer: {
+    paddingHorizontal: '5%',
+  },
   contentContainer: {
     alignItems: 'center',
     backgroundColor: 'transparent',
     paddingHorizontal: '5%',
   },
   dotContainer: {
-    width: 80,
     height: 40,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 155,
   },
   dot: {
-    width: 10,
-    height: 10,
+    width: 3,
+    height: 3,
+    marginHorizontal: 3.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
