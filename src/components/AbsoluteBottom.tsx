@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Platform, ViewStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle } from 'react-native'
 
 interface PropsI {
   customStyles?: ViewStyle
