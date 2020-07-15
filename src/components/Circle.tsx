@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
+import { Animated, StyleSheet, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 
@@ -13,7 +13,7 @@ interface AnimatedStylesI {
 }
 
 interface PropsI {
-  animatedStyles?: AnimatedStylesI
+  animatedStyles?: AnimatedStylesI | ViewStyle
   diameter: number
   bgColor: Colors
 }
@@ -32,7 +32,9 @@ const Circle: React.FC<PropsI> = ({
           width: diameter,
           height: diameter,
           borderRadius: diameter / 2,
-          backgroundColor: bgColor,
+          backgroundColor: Colors.transparent,
+          borderWidth: 0.4,
+          borderColor: bgColor,
         },
         animatedStyles,
       ]}
@@ -42,7 +44,6 @@ const Circle: React.FC<PropsI> = ({
         one inside of the other
         the outer has a background color depending on the Loader type
         the inner circle is of the color of the screen */}
-      <View style={styles.nestedCircle} />
       {children}
     </Animated.View>
   )

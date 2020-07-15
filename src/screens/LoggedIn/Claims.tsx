@@ -1,38 +1,23 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 
-import { setLoader, dismissLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
-
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Btn from '~/components/Btn'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
-import { strings } from '~/translations/strings'
 import useDelay from '~/hooks/useDelay'
+import { useLoader } from '~/hooks/useLoader'
 
 const Claims: React.FC = () => {
-  const dispatch = useDispatch()
+  const loader = useLoader()
   const openLoader = async () => {
-    dispatch(
-      setLoader({
-        type: LoaderTypes.default,
-        msg: strings.MATCHING,
-      }),
-    )
-    await useDelay(
-      () =>
-        dispatch(
-          setLoader({
-            type: LoaderTypes.success,
-            msg: strings.SUCCESS,
-          }),
-        ),
-      2000,
-    )
-    await useDelay(() => dispatch(dismissLoader()), 10000)
+    await loader(async () => {}, {
+      success: 'Good loader :)',
+      loading: 'Testing ...',
+      failed: 'Bad loader :(',
+    })
   }
 
   const openScanner = useRedirectTo(ScreenNames.Interactions)
