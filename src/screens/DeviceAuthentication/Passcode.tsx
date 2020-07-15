@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
 import PasscodeInput from '~/components/PasscodeInput'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 
@@ -102,12 +102,13 @@ const Passcode = () => {
       }}
     >
       <View>
-        <Header size={HeaderSizes.small} color={Colors.white90}>
+        <Header color={Colors.white85}>
           {isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
         </Header>
         <Paragraph
           color={Colors.white70}
-          customStyles={{ marginHorizontal: 10 }}
+          size={ParagraphSizes.medium}
+          customStyles={{ marginHorizontal: 5, opacity: 0.8 }}
         >
           {isCreating
             ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA

@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
@@ -15,9 +15,13 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
     return (
       <View style={styles.inputMeta}>
         {keyHasError ? (
-          <Paragraph color={Colors.error}>{strings.CANT_MATCH_WORD}</Paragraph>
+          <Paragraph size={ParagraphSizes.medium} color={Colors.error}>
+            {strings.CANT_MATCH_WORD}
+          </Paragraph>
         ) : (
-          <Paragraph>{strings.WHAT_IF_I_FORGOT}</Paragraph>
+          <Paragraph size={ParagraphSizes.medium}>
+            {strings.WHAT_IF_I_FORGOT}
+          </Paragraph>
         )}
       </View>
     )

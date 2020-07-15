@@ -5,7 +5,7 @@ import FingerprintScanner from 'react-native-fingerprint-scanner'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
@@ -54,10 +54,8 @@ const Biometry: React.FC = () => {
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
       <View>
-        <Header size={HeaderSizes.small}>
-          {getBiometryHeader(biometryType)}
-        </Header>
-        <Paragraph color={Colors.white70}>
+        <Header>{getBiometryHeader(biometryType)}</Header>
+        <Paragraph size={ParagraphSizes.medium} color={Colors.white70}>
           {strings.SO_YOU_DONT_NEED_TO_CONFIRM}
         </Paragraph>
       </View>
@@ -67,6 +65,7 @@ const Biometry: React.FC = () => {
       />
       <Paragraph
         color={Colors.success}
+        size={ParagraphSizes.medium}
         customStyles={{ paddingHorizontal: 25 }}
       >
         {getBiometryActionText(biometryType)}
