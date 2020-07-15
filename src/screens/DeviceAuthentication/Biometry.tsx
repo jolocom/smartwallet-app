@@ -27,13 +27,18 @@ import {
 } from './utils/getText'
 import BiometryAnimation from '~/components/BiometryAnimation'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
+import { setPopup } from '~/modules/appState/actions'
+import { useDispatch } from 'react-redux'
 
 const Biometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
   const displaySuccessLoader = useSuccess()
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
+  const dispatch = useDispatch()
+
   const handleAuthenticate = async () => {
+    dispatch(setPopup(true))
     try {
       await FingerprintScanner.authenticate({
         description: getBiometryDescription(biometryType),
