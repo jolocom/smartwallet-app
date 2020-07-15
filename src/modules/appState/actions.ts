@@ -1,7 +1,4 @@
 import createAction from '~/utils/createAction'
+import { AppStateActions } from './types'
 
-export enum AppStateActions {
-  changePopupState = 'changePopupState',
-}
-
-export const changePopupState = createAction(AppStateActions.changePopupState)
+export const setPopup = createAction(AppStateActions.setPopup)
