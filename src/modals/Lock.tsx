@@ -26,6 +26,7 @@ import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
+import Header from '~/components/Header'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -85,9 +86,7 @@ const Lock = () => {
           <ActivityIndicator />
         ) : (
           <>
-            <Paragraph size={ParagraphSizes.large}>
-              {strings.ENTER_YOUR_PIN}
-            </Paragraph>
+            <Header>{strings.ENTER_YOUR_PIN}</Header>
             <View style={styles.inputContainer}>
               <PasscodeInput
                 value={pin}
