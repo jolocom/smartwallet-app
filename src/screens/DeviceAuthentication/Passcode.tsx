@@ -95,12 +95,13 @@ const Passcode = () => {
         }}
       >
         <View>
-          <Header size={HeaderSizes.small} color={Colors.white90}>
+          <Header color={Colors.white90}>
             {isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
           </Header>
           <Paragraph
             color={Colors.white70}
-            customStyles={{ marginHorizontal: 10 }}
+            size={ParagraphSizes.medium}
+            customStyles={{ marginHorizontal: 5, opacity: 0.8 }}
           >
             {isCreating
               ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
@@ -126,7 +127,7 @@ const Passcode = () => {
         </View>
         {isCreating && (
           <Paragraph
-            size={ParagraphSizes.small}
+            size={ParagraphSizes.medium}
             color={Colors.success}
             customStyles={{ marginTop: 20 }}
           >

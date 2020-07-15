@@ -3,8 +3,9 @@ import { View, StyleSheet } from 'react-native'
 
 import { HandAnimation } from './HandAnimation'
 import Header from '~/components/Header'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
+import { Colors } from '~/utils/colors'
 
 export const EntropyIntro: React.FC = () => {
   return (
@@ -13,8 +14,12 @@ export const EntropyIntro: React.FC = () => {
         <HandAnimation />
       </View>
       <View style={styles.textContainer}>
-        <Header>{strings.SET_UP_YOUR_IDENTITY}</Header>
-        <Paragraph>
+        <Header color={Colors.white85}>{strings.SET_UP_YOUR_IDENTITY}</Header>
+        <Paragraph
+          color={Colors.white70}
+          customStyles={{ opacity: 0.8 }}
+          size={ParagraphSizes.medium}
+        >
           {strings.TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100}
         </Paragraph>
       </View>
