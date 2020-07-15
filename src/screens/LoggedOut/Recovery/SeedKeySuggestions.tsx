@@ -5,6 +5,7 @@ import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { submitKey } from './module/recoveryActions'
 import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
 
 type PillProps = {
   seedKey: string
@@ -66,6 +67,11 @@ const styles = StyleSheet.create({
   pill: {
     backgroundColor: Colors.black,
     borderRadius: 4,
+    paddingTop: BP({
+      large: 0,
+      medium: 0,
+      small: 4,
+    }),
     paddingHorizontal: 17,
     justifyContent: 'center',
     height: 44,

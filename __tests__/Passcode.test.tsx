@@ -33,17 +33,12 @@ test('It displays Create or Verify PIN screen correctly', async () => {
 
   fireEvent.changeText(input, '4')
 
-  const spinner = getByTestId('loading-indicator')
-  expect(spinner).toBeDefined()
+  expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
+  expect(passcodeCells[0].props.children).toBe('')
+  fireEvent.changeText(input, '1')
+  fireEvent.changeText(input, '1')
+  fireEvent.changeText(input, '1')
+  fireEvent.changeText(input, '1')
 
-  setTimeout(() => {
-    expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
-    expect(passcodeCells[0].props.children).toBe('')
-    fireEvent.changeText(input, '1')
-    fireEvent.changeText(input, '1')
-    fireEvent.changeText(input, '1')
-    fireEvent.changeText(input, '1')
-
-    expect(strings.PINS_DONT_MATCH).toBeDefined()
-  }, 3000)
+  expect(strings.PINS_DONT_MATCH).toBeDefined()
 })
