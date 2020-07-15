@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import Keychain from 'react-native-keychain'
-import { useDispatch } from 'react-redux'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -11,13 +10,11 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 
 import useDelay from '~/hooks/useDelay'
-import useRedirectTo from '~/hooks/useRedirectTo'
 
 import useSuccess from '~/hooks/useSuccess'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
-import { ScreenNames } from '~/types/screens'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
 import {
@@ -25,8 +22,8 @@ import {
   useDeviceAuthDispatch,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
-import { setLocalAuth, unlockApp } from '~/modules/account/actions'
 import BP from '~/utils/breakpoints'
+import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -37,9 +34,8 @@ const Passcode = () => {
 
   const { biometryType } = useDeviceAuthState()
   const dispatchToLocalAuth = useDeviceAuthDispatch()
-  const dispatch = useDispatch()
 
-  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
+  const handleRedirectToLoggedIn = useRedirectToLoggedIn()
 
   const displaySuccessLoader = useSuccess()
 
@@ -57,10 +53,8 @@ const Passcode = () => {
     if (biometryType && biometryType !== 'IRIS') {
       dispatchToLocalAuth(showBiometry())
     } else {
-      redirectToLoggedIn()
+      handleRedirectToLoggedIn()
     }
-    dispatch(setLocalAuth())
-    dispatch(unlockApp())
   }
 
   const handleVerifiedPasscodeSubmit = async () => {

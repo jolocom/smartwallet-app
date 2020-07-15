@@ -11,12 +11,9 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
 
-import useRedirectTo from '~/hooks/useRedirectTo'
 import useSuccess from '~/hooks/useSuccess'
 
 import { Colors } from '~/utils/colors'
-
-import { ScreenNames } from '~/types/screens'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'
 
@@ -29,13 +26,15 @@ import BiometryAnimation from '~/components/BiometryAnimation'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { setPopup } from '~/modules/appState/actions'
 import { useDispatch } from 'react-redux'
+import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 
 const Biometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
   const displaySuccessLoader = useSuccess()
-  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
   const dispatch = useDispatch()
+
+  const handleRedirectToLogin = useRedirectToLoggedIn()
 
   const handleAuthenticate = async () => {
     dispatch(setPopup(true))
@@ -48,7 +47,7 @@ const Biometry: React.FC = () => {
       await AsyncStorage.setItem('biometry', biometryType || '')
 
       displaySuccessLoader()
-      redirectToLoggedIn()
+      handleRedirectToLogin()
     } catch (err) {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         handleNotEnrolled(biometryType)
@@ -77,7 +76,7 @@ const Biometry: React.FC = () => {
         {getBiometryActionText(biometryType)}
       </Paragraph>
       <AbsoluteBottom>
-        <Btn type={BtnTypes.secondary} onPress={redirectToLoggedIn}>
+        <Btn type={BtnTypes.secondary} onPress={handleRedirectToLogin}>
           {strings.SKIP}
         </Btn>
       </AbsoluteBottom>
