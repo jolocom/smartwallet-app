@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Animated, GestureResponderEvent } from 'react-native'
+import { Animated, GestureResponderEvent, PanResponder } from 'react-native'
 
 export enum GestureState {
   None,
@@ -35,7 +35,7 @@ const useCircleHoldAnimation = (animationDuration: number) => {
       }),
       Animated.timing(circleScale, {
         duration: animationDuration,
-        toValue: 1,
+        toValue: 1.32,
         useNativeDriver: true,
       }),
     ]).start()
@@ -44,11 +44,6 @@ const useCircleHoldAnimation = (animationDuration: number) => {
   const onTouchEnd = () => {
     if (gestureState !== GestureState.Success) setGestureState(GestureState.End)
     Animated.parallel([
-      Animated.timing(shadowScale, {
-        duration: 400,
-        toValue: 0.8,
-        useNativeDriver: true,
-      }),
       Animated.timing(circleScale, {
         duration: 400,
         toValue: 1.2,
@@ -68,7 +63,18 @@ const useCircleHoldAnimation = (animationDuration: number) => {
       setGestureState(GestureState.Success)
   }
 
-  const gestureHandlers = { onTouchStart, onTouchEnd, onTouchMove }
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onPanResponderGrant: onTouchStart,
+      onPanResponderMove: onTouchMove,
+      onPanResponderRelease: onTouchEnd,
+    }),
+  ).current
+
   const animationValues = {
     shadowScale,
     circleScale,
@@ -77,7 +83,7 @@ const useCircleHoldAnimation = (animationDuration: number) => {
   return {
     gestureState,
     animationValues,
-    gestureHandlers,
+    gestureHandlers: panResponder.panHandlers,
   }
 }
 

@@ -1,5 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { View, StyleSheet, Text, Animated, Platform } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Text,
+  Animated,
+  Platform,
+  TouchableOpacity,
+} from 'react-native'
 // @ts-ignore no typescript support as of yet
 import RadialGradient from 'react-native-radial-gradient'
 
@@ -15,6 +22,10 @@ import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
 import { getEntropy } from '~/modules/account/selectors'
 import { useSelector } from 'react-redux'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
+import { InfoIcon } from '~/assets/svg'
+
+const noop = () => {}
 
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
@@ -23,7 +34,8 @@ const SeedPhrase: React.FC = () => {
     animationValues: { shadowScale, circleScale, shadowOpacity },
     gestureHandlers,
   } = useCircleHoldAnimation(1500)
-  const [showInfo, setShowInfo] = useState(true)
+
+  const showInfo = useRef(true)
   const [seedphrase, setSeedphrase] = useState('')
   const getMnemonic = useMnemonic()
   const entropy = useSelector(getEntropy)
@@ -39,10 +51,10 @@ const SeedPhrase: React.FC = () => {
   useEffect(() => {
     switch (gestureState) {
       case GestureState.Start:
-        setShowInfo(false)
+        showInfo.current = false
         break
       case GestureState.End:
-        setShowInfo(true)
+        showInfo.current = true
         break
       case GestureState.Success:
         Animated.sequence([
@@ -68,9 +80,9 @@ const SeedPhrase: React.FC = () => {
     Animated.timing(infoOpacity, {
       duration: 200,
       useNativeDriver: true,
-      toValue: showInfo ? 1 : 0,
+      toValue: showInfo.current ? 1 : 0,
     }).start()
-  }, [showInfo])
+  }, [showInfo.current])
 
   const phraseOpacity = shadowScale.interpolate({
     inputRange: [0.8, 1],
@@ -79,6 +91,12 @@ const SeedPhrase: React.FC = () => {
 
   return (
     <ScreenContainer backgroundColor={Colors.black}>
+      <Animated.View style={[styles.iconContainer, { opacity: phraseOpacity }]}>
+        <TouchableOpacity>
+          <InfoIcon />
+        </TouchableOpacity>
+      </Animated.View>
+
       <Animated.View
         style={[
           styles.seedphraseContainer,
@@ -108,41 +126,34 @@ const SeedPhrase: React.FC = () => {
             style={[
               styles.button,
               {
-                transform: [{ scaleX: circleScale }, { scaleY: circleScale }],
+                transform: [{ scale: circleScale }],
               },
             ]}
           ></Animated.View>
         </Animated.View>
         <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
-          <Paragraph customStyles={styles.paragraph}>
-            {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
-          </Paragraph>
+          {showInfo.current && (
+            <Paragraph customStyles={styles.paragraph}>
+              {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
+            </Paragraph>
+          )}
         </Animated.View>
       </View>
       <Animated.View
         style={[styles.buttonContainer, { opacity: buttonOpacity }]}
       >
-        <View style={{ paddingHorizontal: '20%' }}>
-          <Paragraph>
-            {strings.WRITE_DOWN_THIS_PHRASE_ITS_VERY_IMPORTANT}
+        <AbsoluteBottom>
+          <Paragraph customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}>
+            {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
           </Paragraph>
-        </View>
-        <View style={{ marginTop: 30 }}>
           <Btn
             type={BtnTypes.primary}
             size={BtnSize.medium}
-            onPress={redirectToRepeatSeedPhrase}
+            onPress={showInfo.current ? redirectToRepeatSeedPhrase : noop}
           >
-            {strings.OKAY}
+            {strings.DONE}
           </Btn>
-          <Btn
-            type={BtnTypes.secondary}
-            size={BtnSize.medium}
-            onPress={() => null}
-          >
-            {strings.WHY_SO_ANALOGUE}
-          </Btn>
-        </View>
+        </AbsoluteBottom>
       </Animated.View>
     </ScreenContainer>
   )
@@ -163,9 +174,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
+    marginTop: 10,
   },
   bottomContainer: {
-    flex: 1,
+    flex: 0.8,
     width: '100%',
     alignItems: 'flex-end',
     paddingRight: Platform.select({
@@ -196,12 +208,15 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   buttonContainer: {
-    position: 'absolute',
     width: '100%',
-    bottom: '5%',
   },
   paragraph: {
     ...TextStyle.middleSubtitle,
+  },
+  iconContainer: {
+    position: 'absolute',
+    top: 30,
+    right: 30,
   },
 })
 
