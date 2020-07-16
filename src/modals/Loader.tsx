@@ -68,6 +68,10 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   })
 
   const animatedOpacity4 = useRef(new Animated.Value(0)).current
+  const animatedWidth4 = animatedOpacity4.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.6, 1],
+  })
 
   const firstRipple = Animated.parallel([
     Animated.timing(animatedWidth1, {
@@ -148,7 +152,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
         useNativeDriver: true,
       }),
       Animated.timing(errorScale, {
-        toValue: 1.5,
+        toValue: 1,
         easing: Easing.bounce,
         useNativeDriver: true,
       }),
@@ -160,7 +164,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
     Animated.parallel([
       Animated.timing(animatedOpacity4, {
         toValue: 1,
-        duration: 0,
+        duration: 300,
         easing: Easing.ease,
         useNativeDriver: true,
       }),
@@ -253,6 +257,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
             bgColor={loaderColor.current}
             animatedStyles={{
               opacity: animatedOpacity4,
+              transform: [{ scale: animatedWidth4 }],
               borderWidth: 3,
             }}
           >
@@ -276,18 +281,18 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
                 >
                   <SuccessTick />
                 </View>
-                <Animated.View
-                  style={[
+                {/* <Animated.View
+                    style={[
                     styles.tickBlocker,
                     {
-                      backgroundColor: bgColor,
-                      transform: [
-                        { translateX: tickBlockerPosition },
-                        { scale: tickBlockerWidth },
-                      ],
+                    backgroundColor: bgColor,
+                    transform: [
+                    { translateX: tickBlockerPosition },
+                    { scale: tickBlockerWidth },
+                    ],
                     },
-                  ]}
-                />
+                    ]}
+                    /> */}
               </View>
             )}
           </Circle>

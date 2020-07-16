@@ -4,7 +4,7 @@ import { Animated, StyleSheet, ViewStyle } from 'react-native'
 import { Colors } from '~/utils/colors'
 
 interface TransformI {
-  scale: Animated.Value | number
+  scale: Animated.Value | number | Animated.AnimatedInterpolation
 }
 
 interface AnimatedStylesI {
@@ -33,7 +33,7 @@ const Circle: React.FC<PropsI> = ({
           height: diameter,
           borderRadius: diameter / 2,
           backgroundColor: Colors.transparent,
-          borderWidth: 0.4,
+          borderWidth: 0.8,
           borderColor: bgColor,
         },
         animatedStyles,
