@@ -21,13 +21,13 @@ import Modal from './Modal'
 import PasscodeInput from '../components/PasscodeInput'
 import Btn, { BtnTypes } from '../components/Btn'
 import AbsoluteBottom from '../components/AbsoluteBottom'
-import Paragraph, { ParagraphSizes } from '../components/Paragraph'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { setPopup } from '~/modules/appState/actions'
+import Header from '~/components/Header'
 import { useAppState } from '~/hooks/useAppState'
 
 const Lock = () => {
@@ -86,9 +86,7 @@ const Lock = () => {
           <ActivityIndicator />
         ) : (
           <>
-            <Paragraph size={ParagraphSizes.large}>
-              {strings.ENTER_YOUR_PIN}
-            </Paragraph>
+            <Header>{strings.ENTER_YOUR_PIN}</Header>
             <View style={styles.inputContainer}>
               <PasscodeInput
                 value={pin}
