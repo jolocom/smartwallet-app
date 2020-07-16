@@ -33,7 +33,6 @@ const Circle: React.FC<PropsI> = ({
           height: diameter,
           borderRadius: diameter / 2,
           backgroundColor: Colors.transparent,
-          borderWidth: 0.8,
           borderColor: bgColor,
         },
         animatedStyles,
@@ -51,7 +50,6 @@ const Circle: React.FC<PropsI> = ({
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
   },
