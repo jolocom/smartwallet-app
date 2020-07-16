@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux'
 import { setEntropy } from '~/modules/account/actions'
 import { Colors } from '~/utils/colors'
 
-const ENOUGH_ENTROPY_PROGRESS = 0.3
+const ENOUGH_ENTROPY_PROGRESS = 0.6
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)

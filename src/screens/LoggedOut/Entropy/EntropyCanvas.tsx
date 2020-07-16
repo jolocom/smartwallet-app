@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { PanResponder, GestureResponderEvent, Animated } from 'react-native'
-import { Svg, Path } from 'react-native-svg'
+import { Svg, Path, Rect } from 'react-native-svg'
 import { EntropyCircle } from '~/assets/svg'
 
 import { useForceUpdate } from '~/hooks/useForceUpdate'
@@ -73,6 +73,7 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
           height="100%"
           {...(!disabled && panResponder.panHandlers)}
         >
+          <Rect width="100%" height="100%" opacity="0.1"></Rect>
           {pathDs.current.map((d, idx) => {
             if (!d) return null
             return (
