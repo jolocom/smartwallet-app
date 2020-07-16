@@ -13,8 +13,9 @@ import { EntropyGenerator } from './EntropyGenerator'
 import { EntropyCanvas } from './EntropyCanvas'
 import { useDispatch } from 'react-redux'
 import { setEntropy } from '~/modules/account/actions'
+import { Colors } from '~/utils/colors'
 
-const ENOUGH_ENTROPY_PROGRESS = 0.3
+const ENOUGH_ENTROPY_PROGRESS = 0.6
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
@@ -31,7 +32,9 @@ const Entropy: React.FC = () => {
     <ScreenContainer>
       {!!entropyProgress ? (
         <View style={styles.percentage}>
-          <Header>{`${Math.trunc(entropyProgress * 100)} %`}</Header>
+          <Header color={Colors.white85}>{`${Math.trunc(
+            entropyProgress * 100,
+          )} %`}</Header>
         </View>
       ) : (
         <EntropyIntro />

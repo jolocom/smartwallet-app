@@ -9,7 +9,7 @@ import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { TextStyle } from '~/utils/fonts'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
@@ -123,7 +123,7 @@ const SeedPhrase: React.FC = () => {
         style={[styles.buttonContainer, { opacity: buttonOpacity }]}
       >
         <View style={{ paddingHorizontal: '20%' }}>
-          <Paragraph>
+          <Paragraph size={ParagraphSizes.medium}>
             {strings.WRITE_DOWN_THIS_PHRASE_ITS_VERY_IMPORTANT}
           </Paragraph>
         </View>

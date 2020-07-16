@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import Header, { HeaderSizes } from '~/components/Header'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
@@ -31,7 +31,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
       <View style={styles.header}>
         {phrase.length ? (
           <>
-            <Header size={HeaderSizes.small}>
+            <Header>
               {currentWordIdx === phrase.length
                 ? phrase.length
                 : currentWordIdx + 1}
@@ -41,7 +41,6 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
               {phrase.map((seedKey: string, idx: number) => (
                 <Header
                   key={seedKey + idx}
-                  size={HeaderSizes.small}
                   color={
                     currentWordIdx === 12
                       ? Colors.success
@@ -58,8 +57,12 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
           </>
         ) : (
           <>
-            <Header size={HeaderSizes.small}>{strings.RECOVERY}</Header>
-            <Paragraph color={Colors.white70}>
+            <Header>{strings.RECOVERY}</Header>
+            <Paragraph
+              size={ParagraphSizes.medium}
+              color={Colors.white70}
+              customStyles={{ opacity: 0.8 }}
+            >
               {strings.START_ENTERING_SEED_PHRASE}
             </Paragraph>
           </>

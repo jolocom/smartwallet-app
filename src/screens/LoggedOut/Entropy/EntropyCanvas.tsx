@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { PanResponder, GestureResponderEvent } from 'react-native'
-import { Svg, Path, Circle, Rect } from 'react-native-svg'
+import { PanResponder, GestureResponderEvent, Animated } from 'react-native'
+import { Svg, Path, Rect } from 'react-native-svg'
+import { EntropyCircle } from '~/assets/svg'
 
 import { useForceUpdate } from '~/hooks/useForceUpdate'
 import {
@@ -16,8 +17,34 @@ interface Props {
   addPoint: (x: number, y: number) => void
 }
 
-export const MIN_DISTANCE_SQ = 50
+export const MIN_DISTANCE_SQ = 30
 export const MAX_LINE_PTS = 100
+
+const CanvasCircle: React.FC<{ x: number; y: number }> = ({ x, y }) => {
+  const opacity = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 100,
+      useNativeDriver: true,
+    }).start()
+  }, [])
+
+  return (
+    <Animated.View
+      style={{
+        position: 'absolute',
+        //NOTE: Manually adjusting the position of the svg
+        left: x + 8,
+        top: y + 26,
+        opacity,
+      }}
+    >
+      <EntropyCircle />
+    </Animated.View>
+  )
+}
 
 export const EntropyCanvas: React.FC<Props> = React.memo(
   ({ disabled, addPoint }) => {
@@ -37,32 +64,34 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
     })
 
     return (
-      <Svg
-        width="100%"
-        height="100%"
-        {...(!disabled && panResponder.panHandlers)}
-      >
-        <Rect width="100%" height="100%" opacity="0.1"></Rect>
-        {pathDs.current.map((d, idx) => {
-          if (!d) return null
-          return (
-            <Path
-              key={idx}
-              ref={(el) => (pathEls[idx] = el)}
-              d={d}
-              fill="none"
-              stroke={Colors.peach}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="1,10"
-              strokeWidth="2"
-            />
-          )
+      <>
+        {circles.map(([x, y], i) => {
+          return <CanvasCircle key={i} x={x} y={y} />
         })}
-        {circles.map(([x, y], i) => (
-          <Circle key={i} cx={x} cy={y} r="4" fill={Colors.bridal} />
-        ))}
-      </Svg>
+        <Svg
+          width="100%"
+          height="100%"
+          {...(!disabled && panResponder.panHandlers)}
+        >
+          <Rect width="100%" height="100%" opacity="0.1"></Rect>
+          {pathDs.current.map((d, idx) => {
+            if (!d) return null
+            return (
+              <Path
+                key={idx}
+                ref={(el) => (pathEls[idx] = el)}
+                d={d}
+                fill="none"
+                stroke={Colors.white}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeDasharray="1,10"
+                strokeWidth="2"
+              />
+            )
+          })}
+        </Svg>
+      </>
     )
   },
 )
