@@ -1,4 +1,5 @@
 import { InteractionActions } from './types'
+import { Action } from '~/types/actions'
 
 const initialState = {
   interactionId: '',
@@ -6,7 +7,10 @@ const initialState = {
   summary: {},
 }
 
-const reducer = (state = initialState, action) => {
+const reducer = (
+  state = initialState,
+  action: Action<InteractionActions, any>,
+) => {
   switch (action.type) {
     case InteractionActions.setInteraction:
       return {

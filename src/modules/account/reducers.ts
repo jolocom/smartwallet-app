@@ -1,4 +1,5 @@
-import { AccountState, Action, AccountActions } from './types'
+import { AccountState, AccountActions } from './types'
+import { Action } from '~/types/actions'
 
 const initialState: AccountState = {
   did: '',
@@ -8,7 +9,7 @@ const initialState: AccountState = {
   isLocalAuthSet: false, // this value indicates where user went through local auth registration
 }
 
-const reducer = (state = initialState, action: Action) => {
+const reducer = (state = initialState, action: Action<AccountActions, any>) => {
   switch (action.type) {
     case AccountActions.setDid:
       return { ...state, did: action.payload }

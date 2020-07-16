@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   AppStateStatus,
@@ -26,6 +26,8 @@ import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
+import { getIsPopup } from '~/modules/appState/selectors'
+import { setPopup } from '~/modules/appState/actions'
 import { useAppState } from '~/hooks/useAppState'
 
 const Lock = () => {
@@ -118,7 +120,13 @@ export default function () {
   const isLocked = useSelector(isAppLocked)
   const isLoggedIn = useSelector(isLogged)
   const isAuthSet = useSelector(isLocalAuthSet)
+  const isPopup = useSelector(getIsPopup)
   const dispatch = useDispatch()
+  const isPopupRef = useRef<boolean>(isPopup)
+
+  useEffect(() => {
+    isPopupRef.current = isPopup
+  }, [isPopup])
 
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
     if (
@@ -129,7 +137,8 @@ export default function () {
         appState.match(/inactive|background/) &&
         nextAppState.match(/active/))
     ) {
-      dispatch(lockApp())
+      if (!isPopupRef.current) dispatch(lockApp())
+      else dispatch(setPopup(false))
     }
 
     appState = nextAppState

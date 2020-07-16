@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Platform, AppState, AppStateStatus } from 'react-native'
 import Permissions from 'react-native-permissions'
+import { useDispatch } from 'react-redux'
+import { setPopup } from '~/modules/appState/actions'
 
 export enum Results {
   UNAVAILABLE = 'unavailable',
@@ -11,12 +13,14 @@ export enum Results {
 
 const useCameraPermissions = () => {
   const [permission, setPermission] = useState<Results>(Results.UNAVAILABLE)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     requestPermission()
   }, [])
 
   const requestPermission = async () => {
+    dispatch(setPopup(true))
     const permissionType = Platform.select({
       ios: Permissions.PERMISSIONS.IOS.CAMERA,
       android: Permissions.PERMISSIONS.ANDROID.CAMERA,
