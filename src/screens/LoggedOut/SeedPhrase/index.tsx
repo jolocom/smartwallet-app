@@ -35,7 +35,7 @@ const SeedPhrase: React.FC = () => {
     gestureHandlers,
   } = useCircleHoldAnimation(1500)
 
-  const showInfo = useRef(true)
+  const [showInfo, setShowInfo] = useState(true)
   const [seedphrase, setSeedphrase] = useState('')
   const getMnemonic = useMnemonic()
   const entropy = useSelector(getEntropy)
@@ -51,10 +51,10 @@ const SeedPhrase: React.FC = () => {
   useEffect(() => {
     switch (gestureState) {
       case GestureState.Start:
-        showInfo.current = false
+        setShowInfo(false)
         break
       case GestureState.End:
-        showInfo.current = true
+        setShowInfo(true)
         break
       case GestureState.Success:
         Animated.sequence([
@@ -80,9 +80,9 @@ const SeedPhrase: React.FC = () => {
     Animated.timing(infoOpacity, {
       duration: 200,
       useNativeDriver: true,
-      toValue: showInfo.current ? 1 : 0,
+      toValue: showInfo ? 1 : 0,
     }).start()
-  }, [showInfo.current])
+  }, [showInfo])
 
   const phraseOpacity = shadowScale.interpolate({
     inputRange: [0.8, 1],
@@ -132,28 +132,24 @@ const SeedPhrase: React.FC = () => {
           ></Animated.View>
         </Animated.View>
         <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
-          {showInfo.current && (
-            <Paragraph customStyles={styles.paragraph}>
-              {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
-            </Paragraph>
-          )}
+          <Paragraph customStyles={styles.paragraph}>
+            {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
+          </Paragraph>
         </Animated.View>
       </View>
       <Animated.View
         style={[styles.buttonContainer, { opacity: buttonOpacity }]}
       >
-        <AbsoluteBottom>
-          <Paragraph customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}>
-            {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
-          </Paragraph>
-          <Btn
-            type={BtnTypes.primary}
-            size={BtnSize.medium}
-            onPress={showInfo.current ? redirectToRepeatSeedPhrase : noop}
-          >
-            {strings.DONE}
-          </Btn>
-        </AbsoluteBottom>
+        <Paragraph customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}>
+          {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
+        </Paragraph>
+        <Btn
+          type={BtnTypes.primary}
+          size={BtnSize.medium}
+          onPress={redirectToRepeatSeedPhrase}
+        >
+          {strings.DONE}
+        </Btn>
       </Animated.View>
     </ScreenContainer>
   )
@@ -177,7 +173,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   bottomContainer: {
-    flex: 0.8,
+    flex: 0.4,
     width: '100%',
     alignItems: 'flex-end',
     paddingRight: Platform.select({

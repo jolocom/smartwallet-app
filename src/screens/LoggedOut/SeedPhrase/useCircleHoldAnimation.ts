@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useCallback, useEffect } from 'react'
 import { Animated, GestureResponderEvent, PanResponder } from 'react-native'
 
 export enum GestureState {
@@ -9,10 +9,16 @@ export enum GestureState {
 }
 
 const useCircleHoldAnimation = (animationDuration: number) => {
-  const [startTime, setStartTime] = useState(0)
   const [gestureState, setGestureState] = useState<GestureState>(
     GestureState.None,
   )
+  const gestureStateRef = useRef<GestureState>(gestureState)
+  const startTime = useRef(0)
+
+  //NOTE: for @onTouchEnd to get the updated @gestureState from the ref
+  useEffect(() => {
+    gestureStateRef.current = gestureState
+  }, [gestureState])
 
   // NOTE: the @shadow in this case is used for the view wrapping the @RadialGradient
   // component, which scales it up during a gesture. To avoid the inner circle
@@ -25,31 +31,40 @@ const useCircleHoldAnimation = (animationDuration: number) => {
   const circleScale = useRef<Animated.Value>(new Animated.Value(1.2)).current
 
   const onTouchStart = (e: GestureResponderEvent) => {
-    setStartTime(e.nativeEvent.timestamp)
-    setGestureState(GestureState.Start)
-    Animated.parallel([
-      Animated.timing(shadowScale, {
-        duration: animationDuration,
-        toValue: 1,
-        useNativeDriver: true,
-      }),
-      Animated.timing(circleScale, {
-        duration: animationDuration,
-        toValue: 1.32,
-        useNativeDriver: true,
-      }),
-    ]).start()
+    if (gestureStateRef.current !== GestureState.Success) {
+      startTime.current = e.nativeEvent.timestamp
+      setGestureState(GestureState.Start)
+      Animated.parallel([
+        Animated.timing(shadowScale, {
+          duration: animationDuration,
+          toValue: 1,
+          useNativeDriver: true,
+        }),
+        Animated.timing(circleScale, {
+          duration: animationDuration,
+          toValue: 1,
+          useNativeDriver: true,
+        }),
+      ]).start()
+    }
   }
 
   const onTouchEnd = () => {
-    if (gestureState !== GestureState.Success) setGestureState(GestureState.End)
-    Animated.parallel([
-      Animated.timing(circleScale, {
-        duration: 400,
-        toValue: 1.2,
-        useNativeDriver: true,
-      }),
-    ]).start()
+    if (gestureStateRef.current !== GestureState.Success) {
+      setGestureState(GestureState.End)
+      Animated.parallel([
+        Animated.timing(circleScale, {
+          duration: 400,
+          toValue: 1.2,
+          useNativeDriver: true,
+        }),
+        Animated.timing(shadowScale, {
+          duration: 400,
+          toValue: 0.8,
+          useNativeDriver: true,
+        }),
+      ]).start()
+    }
   }
 
   const onTouchMove = (e: GestureResponderEvent) => {
@@ -59,16 +74,14 @@ const useCircleHoldAnimation = (animationDuration: number) => {
     // only after the finger was lifted, while here it is triggered continuously
     // when the finger is moved (and there is always some small movement), allowing
     // the state to change while the gesture was not yet finished.
-    if (e.nativeEvent.timestamp - startTime >= animationDuration)
+    if (e.nativeEvent.timestamp - startTime.current >= animationDuration)
       setGestureState(GestureState.Success)
   }
 
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
       onPanResponderGrant: onTouchStart,
       onPanResponderMove: onTouchMove,
       onPanResponderRelease: onTouchEnd,
