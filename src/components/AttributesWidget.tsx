@@ -75,6 +75,40 @@ const reducer = (state: AttributesI<AttributeI>, action: Action) => {
   }
 }
 
+// 🚨 - write good guards
+// type: isSelectable (onSelect, value, isSelected) / isStatic (value) / isEmpty
+const Field = ({ type, value, isSelected, onSelect }) => {
+  switch (type) {
+    case 'isSelectable':
+      return (
+        <TouchableWithoutFeedback onPress={onSelect}>
+          <View style={styles.field}>
+            <Paragraph>{value}</Paragraph>
+            {isSelected ? (
+              <View style={[styles.radio, styles.selected]} />
+            ) : (
+              <View style={[styles.radio, styles.notSelected]} />
+            )}
+          </View>
+        </TouchableWithoutFeedback>
+      )
+    case 'isStatic':
+      return (
+        <View style={styles.field}>
+          <Paragraph>{value}</Paragraph>
+        </View>
+      )
+    case 'isEmpty':
+      return (
+        <TouchableOpacity style={styles.field}>
+          <Paragraph color={Colors.error}>{strings.MISSING_INFO}*</Paragraph>
+        </TouchableOpacity>
+      )
+    default:
+      return null
+  }
+}
+
 const AttributesWidget: React.FC<PropsI> = ({
   isSelectable = false,
   onSelect = () => {},
@@ -92,48 +126,52 @@ const AttributesWidget: React.FC<PropsI> = ({
         const section = state[sectionKey]
         return (
           <View style={styles.attrSection} key={sectionKey}>
-            <View style={styles.header}>
-              <Paragraph color={Colors.white70} customStyles={{ opacity: 0.6 }}>
-                {strings[sectionKey.toUpperCase()]}
-              </Paragraph>
-              <TouchableOpacity style={styles.createNewBtn}>
-                <View style={styles.plus}>
-                  <CloseIcon />
-                </View>
-                <Paragraph>{strings.CREATE_NEW_ONE}</Paragraph>
-              </TouchableOpacity>
-            </View>
+            <Header sectionKey={sectionKey} />
             {section.length ? (
               <>
-                {section.map((entry) => (
-                  <TouchableWithoutFeedback
-                    onPress={() =>
-                      dispatch(toggleAttrValue(sectionKey, entry.val))
-                    }
-                  >
-                    <View style={styles.field} key={entry.val}>
-                      <Paragraph>{entry.val}</Paragraph>
-                      {!entry.isSelected && (
-                        <View style={[styles.radio, styles.notSelected]} />
-                      )}
-                      {entry.isSelected && (
-                        <View style={[styles.radio, styles.selected]} />
-                      )}
-                    </View>
-                  </TouchableWithoutFeedback>
-                ))}
+                {section.map((entry) => {
+                  return isSelectable ? (
+                    <Field
+                      key={entry.val}
+                      type="isSelectable"
+                      value={entry.val}
+                      isSelected={entry.isSelected}
+                      onSelect={() =>
+                        dispatch(toggleAttrValue(sectionKey, entry.val))
+                      }
+                    />
+                  ) : (
+                    <Field key={entry.val} type="isStatic" value={entry.val} />
+                  )
+                })}
               </>
             ) : (
-              <TouchableOpacity style={styles.field}>
-                <Paragraph color={Colors.error}>
-                  {strings.MISSING_INFO}*
-                </Paragraph>
-              </TouchableOpacity>
+              <Field type="isEmpty" />
             )}
           </View>
         )
       })}
     </ContainerComponent>
+  )
+}
+
+interface HeaderPropsI {
+  sectionKey: string
+}
+
+const Header: React.FC<HeaderPropsI> = ({ sectionKey }) => {
+  return (
+    <View style={styles.header}>
+      <Paragraph color={Colors.white70} customStyles={{ opacity: 0.6 }}>
+        {strings[sectionKey.toUpperCase()]}
+      </Paragraph>
+      <TouchableOpacity style={styles.createNewBtn}>
+        <View style={styles.plus}>
+          <CloseIcon />
+        </View>
+        <Paragraph>{strings.CREATE_NEW_ONE}</Paragraph>
+      </TouchableOpacity>
+    </View>
   )
 }
 
