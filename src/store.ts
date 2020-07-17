@@ -10,6 +10,7 @@ import {
   JolocomSDK,
   JolocomTypeormStorage,
 } from 'react-native-jolocom'
+
 import { createConnection, getConnection } from 'typeorm'
 import typeormConfig from '../ormconfig'
 
