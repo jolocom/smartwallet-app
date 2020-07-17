@@ -1,5 +1,4 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
@@ -7,8 +6,8 @@ import Btn from '~/components/Btn'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
-import useDelay from '~/hooks/useDelay'
 import { useLoader } from '~/hooks/useLoader'
+import AttributesWidget from '~/components/AttributesWidget'
 
 const Claims: React.FC = () => {
   const loader = useLoader()
@@ -25,6 +24,7 @@ const Claims: React.FC = () => {
   return (
     <ScreenContainer>
       <Header size={HeaderSizes.large}>Claims</Header>
+      <AttributesWidget />
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
     </ScreenContainer>
