@@ -149,6 +149,7 @@ const attributes = {
   CREATE_NEW_ONE: 'Create new one',
   NAME: 'Name',
   EMAIL: 'Email',
+  PHONE: 'Phone number',
   MISSING_INFO: 'Missing info',
 }
 

@@ -2,7 +2,6 @@ import React from 'react'
 import { View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Header, { HeaderSizes } from '~/components/Header'
 import Btn from '~/components/Btn'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
@@ -13,6 +12,7 @@ import AttributesWidget from '~/components/AttributesWidget'
 const attributes = {
   name: ['Sveta Buben', 'sbub'],
   email: ['sveta@jolocom.com'],
+  phone: [],
 }
 
 const ContainerComponent: React.FC = ({ children }) => {
@@ -33,7 +33,6 @@ const Claims: React.FC = () => {
 
   return (
     <ScreenContainer>
-      <Header size={HeaderSizes.large}>Claims</Header>
       <AttributesWidget
         containerComponent={ContainerComponent}
         attributes={attributes}
