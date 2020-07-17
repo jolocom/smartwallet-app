@@ -26,6 +26,8 @@ interface LoaderI {
   bgColor?: Colors
 }
 
+const CIRCLE_DIAMETER = 70
+
 const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   const { msg, type } = useSelector(getLoaderState)
   const isAnimating = useRef(true)
@@ -117,7 +119,6 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
             count={2}
             size={CIRCLE_DIAMETER}
             waveMode={'outline'}
-            //waveFactor={0.4}
           />
         </View>
       )
@@ -159,7 +160,6 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
     }
   }
 
-  const CIRCLE_DIAMETER = 70
   return (
     <Modal isVisible={modalVisible}>
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
