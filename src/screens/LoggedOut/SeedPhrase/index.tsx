@@ -25,8 +25,6 @@ import { useSelector } from 'react-redux'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { InfoIcon } from '~/assets/svg'
 
-const noop = () => {}
-
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
   const {
@@ -89,76 +87,124 @@ const SeedPhrase: React.FC = () => {
     outputRange: [0, 1],
   })
 
-  return (
-    <ScreenContainer backgroundColor={Colors.black}>
-      <Animated.View style={[styles.iconContainer, { opacity: phraseOpacity }]}>
-        <TouchableOpacity>
-          <InfoIcon />
-        </TouchableOpacity>
-      </Animated.View>
+  const initialBackgroundOpacity = shadowScale.interpolate({
+    inputRange: [0.82, 1],
+    outputRange: [1, 0],
+  })
 
+  const finalBackgroundOpacity = shadowScale.interpolate({
+    inputRange: [0.5, 1],
+    outputRange: [0.8, 1],
+  })
+
+  return (
+    <ScreenContainer isFullscreen backgroundColor={Colors.transparent}>
       <Animated.View
         style={[
-          styles.seedphraseContainer,
+          styles.wrapper,
           {
-            opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
+            backgroundColor: Colors.mainBlack,
+            opacity: finalBackgroundOpacity,
           },
         ]}
+      />
+      <Animated.View
+        style={[
+          styles.wrapper,
+          { backgroundColor: Colors.black, opacity: initialBackgroundOpacity },
+        ]}
+      />
+      <ScreenContainer
+        backgroundColor={Colors.transparent}
+        customStyles={{ paddingBottom: 60 }}
       >
-        <Text style={styles.seedphrase}>{seedphrase}</Text>
-      </Animated.View>
-      <View style={styles.bottomContainer}>
+        <Animated.View
+          style={[styles.iconContainer, { opacity: phraseOpacity }]}
+        >
+          <TouchableOpacity>
+            <InfoIcon />
+          </TouchableOpacity>
+        </Animated.View>
+
         <Animated.View
           style={[
+            styles.seedphraseContainer,
             {
-              transform: [{ scaleX: shadowScale }, { scaleY: shadowScale }],
-              opacity: shadowOpacity,
+              opacity:
+                gestureState === GestureState.Success ? 1 : phraseOpacity,
             },
           ]}
         >
-          <RadialGradient
-            style={styles.gradient}
-            colors={[Colors.success, 'transparent']}
-            stops={[0.4, 1]}
-          />
-          <Animated.View
-            {...gestureHandlers}
+          <Text
             style={[
-              styles.button,
+              styles.seedphrase,
+              gestureState !== GestureState.Success && styles.seedphraseShadow,
+            ]}
+          >
+            {seedphrase}
+          </Text>
+        </Animated.View>
+        <View style={styles.bottomContainer}>
+          <Animated.View
+            style={[
               {
-                transform: [{ scale: circleScale }],
+                transform: [{ scaleX: shadowScale }, { scaleY: shadowScale }],
+                opacity: shadowOpacity,
               },
             ]}
-          ></Animated.View>
-        </Animated.View>
-        <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
-          <Paragraph customStyles={styles.paragraph}>
-            {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
-          </Paragraph>
-        </Animated.View>
-      </View>
-      <Animated.View
-        style={[styles.buttonContainer, { opacity: buttonOpacity }]}
-      >
-        <Paragraph customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}>
-          {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
-        </Paragraph>
-        <Btn
-          type={BtnTypes.primary}
-          size={BtnSize.medium}
-          onPress={redirectToRepeatSeedPhrase}
+          >
+            <RadialGradient
+              style={styles.gradient}
+              colors={[Colors.success, 'transparent']}
+              stops={[0.4, 1]}
+            />
+            <Animated.View
+              {...gestureHandlers}
+              style={[
+                styles.button,
+                {
+                  transform: [{ scale: circleScale }],
+                },
+              ]}
+            ></Animated.View>
+          </Animated.View>
+          <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
+            <Paragraph customStyles={styles.paragraph}>
+              {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
+            </Paragraph>
+          </Animated.View>
+        </View>
+        <Animated.View
+          style={[styles.buttonContainer, { opacity: buttonOpacity }]}
         >
-          {strings.DONE}
-        </Btn>
-      </Animated.View>
+          <Paragraph customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}>
+            {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
+          </Paragraph>
+          <Btn
+            type={BtnTypes.primary}
+            size={BtnSize.medium}
+            onPress={redirectToRepeatSeedPhrase}
+          >
+            {strings.DONE}
+          </Btn>
+        </Animated.View>
+      </ScreenContainer>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
   seedphrase: {
     ...TextStyle.seedPhrase,
     textAlign: 'center',
+  },
+  seedphraseShadow: {
     textShadowColor: Colors.white45,
     textShadowOffset: {
       width: 0,
