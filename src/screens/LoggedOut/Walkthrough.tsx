@@ -2,7 +2,6 @@ import React from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 
-import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -66,7 +65,7 @@ const Walkthrough: React.FC = () => {
   }
 
   return (
-    <ScreenContainer isFullscreen>
+    <>
       <Swiper
         loop
         autoplay
@@ -107,7 +106,7 @@ const Walkthrough: React.FC = () => {
           </Btn>
         </BtnGroup>
       </AbsoluteBottom>
-    </ScreenContainer>
+    </>
   )
 }
 

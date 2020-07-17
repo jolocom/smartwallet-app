@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { FlatList, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
@@ -67,10 +67,13 @@ const styles = StyleSheet.create({
   pill: {
     backgroundColor: Colors.black,
     borderRadius: 4,
-    paddingTop: BP({
-      large: 0,
-      medium: 0,
-      small: 4,
+    paddingTop: Platform.select({
+      ios: 4,
+      android: BP({
+        large: 0,
+        medium: 0,
+        small: 4,
+      }),
     }),
     paddingHorizontal: 17,
     justifyContent: 'center',
