@@ -145,6 +145,13 @@ const settings = {
   LOG_OUT: 'Log out',
 }
 
+const attributes = {
+  CREATE_NEW_ONE: 'Create new one',
+  NAME: 'Name',
+  EMAIL: 'Email',
+  MISSING_INFO: 'Missing info',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -158,4 +165,5 @@ export const strings = {
   ...settings,
   ...lock,
   ...interactions,
+  ...attributes,
 }
