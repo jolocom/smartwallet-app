@@ -3,8 +3,8 @@ export interface AttrsStateI<T> {
 }
 
 export enum AttrActions {
-  setAttrs,
-  updateAttrs, // after we have created a new one and we want to update the whole collection
+  setAttrs = 'setAttrs',
+  updateAttrs = 'updateAttrs', // after we have created a new one and we want to update the whole collection
 }
 
 export enum Attrs {
