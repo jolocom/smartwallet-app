@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { View } from 'react-native'
 
 import { useLoader } from '~/hooks/useLoader'
 import { useInteraction } from '~/hooks/sdk'
-import { resetInteraction } from '~/modules/interaction/actions'
+import {
+  resetInteraction,
+  setIntermediaryState,
+} from '~/modules/interaction/actions'
 import { getInteractionSummary } from '~/modules/interaction/selectors'
-import CredentialPlaceholderComponent from './CredentialPlaceholderComponent'
 import { CredentialVerificationSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import Btn from '~/components/Btn'
+import { IntermediaryState } from '~/modules/interaction/types'
 
 const CredentialShare = () => {
   const [selected, setSelected] = useState<CredentialVerificationSummary[]>([])
@@ -33,13 +38,15 @@ const CredentialShare = () => {
       //TODO: show toast
     }
   }
+
+  const handleShowIntermediary = () => {
+    dispatch(setIntermediaryState(IntermediaryState.showing))
+  }
+
   return (
-    <CredentialPlaceholderComponent
-      credentials={credentials}
-      handleSubmit={handleSubmit}
-      initiatorDID={summary.initiator.did}
-      onSelectCredential={handleCredSelect}
-    />
+    <View>
+      <Btn onPress={handleShowIntermediary}>Show Intermediary Sheet</Btn>
+    </View>
   )
 }
 

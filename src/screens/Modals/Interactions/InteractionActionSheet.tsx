@@ -7,16 +7,20 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
 
-import Paragraph from '~/components/Paragraph'
 import {
   getInteractionType,
   getIsFullScreenInteraction,
+  getIntermediaryState,
 } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
 import { resetInteraction } from '~/modules/interaction/actions'
 import CredentialShare from './CredentialShare'
 import CredentialReceive from './CredentialReceive'
+import IntermediaryActionSheet from './IntermediaryActionSheet'
+import useDelay from '~/hooks/useDelay'
+import { IntermediaryState } from '~/modules/interaction/types'
+import { setIntermediaryState } from '~/modules/interaction/actions'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -26,7 +30,14 @@ const InteractionActionSheet: React.FC = () => {
 
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
-  const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
+  const intermediaryState = useSelector(getIntermediaryState)
+  const isFullScreenInteractionSelector = useSelector(
+    getIsFullScreenInteraction,
+  )
+  const isFullScreenInteraction =
+    intermediaryState !== IntermediaryState.absent
+      ? false
+      : isFullScreenInteractionSelector
 
   useEffect(() => {
     if (interactionType) {
@@ -36,9 +47,30 @@ const InteractionActionSheet: React.FC = () => {
     }
   }, [interactionType])
 
-  const handleCloseSheet = () => dispatch(resetInteraction())
+  useEffect(() => {
+    if (interactionType) {
+      const hideAndShow = async () => {
+        actionSheetRef.current?.setModalVisible(false)
+        await useDelay(() => {
+          actionSheetRef.current?.setModalVisible(true)
+        }, 300)
+      }
+      hideAndShow()
+    }
+  }, [intermediaryState])
+
+  const handleCloseSheet = () => {
+    if (intermediaryState === IntermediaryState.hiding) {
+      dispatch(setIntermediaryState(IntermediaryState.absent))
+    } else if (intermediaryState === IntermediaryState.absent) {
+      dispatch(resetInteraction())
+    }
+  }
 
   const renderBody = () => {
+    if (intermediaryState === IntermediaryState.showing)
+      return <IntermediaryActionSheet />
+
     switch (interactionType) {
       case FlowType.Authentication:
         return <Authentication />
@@ -58,9 +90,10 @@ const InteractionActionSheet: React.FC = () => {
       <ActionSheet
         ref={actionSheetRef}
         closeOnTouchBackdrop={false}
-        gestureEnabled={!isFullScreenInteraction}
+        //gestureEnabled={!isFullScreenInteraction}
         onClose={handleCloseSheet}
         footerHeight={0}
+        closeOnPressBack={false}
         //NOTE: removes shadow artifacts left from transparent view elevation
         elevation={0}
         //NOTE: removes the gesture header
