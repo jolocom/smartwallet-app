@@ -11,7 +11,37 @@ export enum FieldTypes {
   isEmpty = 'isEmpty',
 }
 
-const Field = ({ type, value, isSelected, onSelect }) => {
+interface SelectableFieldI {
+  onCreateNewOne: (sectionKey: string) => void
+  type: FieldTypes.isSelectable
+  value: string
+  isSelected: boolean
+  onSelect: (sectionKey: string, value: string) => void
+}
+
+interface StaticFieldI {
+  onCreateNewOne: (sectionKey: string) => void
+  type: FieldTypes.isStatic
+  value: string
+  isSelected?: never
+  onSelect?: never
+}
+
+interface EmptyFieldI {
+  onCreateNewOne: (sectionKey: string) => void
+  type: FieldTypes.isEmpty
+  value?: never
+  isSelected?: never
+  onSelect?: never
+}
+
+const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
+  type,
+  value,
+  isSelected,
+  onSelect,
+  onCreateNewOne,
+}) => {
   switch (type) {
     case FieldTypes.isSelectable:
       return (
@@ -26,16 +56,18 @@ const Field = ({ type, value, isSelected, onSelect }) => {
           </View>
         </TouchableWithoutFeedback>
       )
-    case 'isStatic':
+    case FieldTypes.isStatic:
       return (
         <View style={styles.field}>
           <Paragraph>{value}</Paragraph>
         </View>
       )
-    case 'isEmpty':
+    case FieldTypes.isEmpty:
       return (
-        <TouchableOpacity style={styles.field}>
-          <Paragraph color={Colors.error}>{strings.MISSING_INFO}*</Paragraph>
+        <TouchableOpacity onPress={onCreateNewOne}>
+          <View style={styles.field}>
+            <Paragraph color={Colors.error}>{strings.MISSING_INFO}*</Paragraph>
+          </View>
         </TouchableOpacity>
       )
     default:

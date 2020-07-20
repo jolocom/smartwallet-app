@@ -8,7 +8,6 @@ import Field, { FieldTypes } from './Field'
 
 interface AttrsWidgetPropsI {
   attributes: AttrsStateI<string> | AttrsStateI<SelectableAttrI>
-  containerComponent: React.FC
   isSelectable?: boolean
   onAttrSelect: (sectionKey: string, value: string) => void
   onCreateNewAttr: (sectionKey: string) => void
@@ -21,18 +20,14 @@ export interface SelectableAttrI {
 
 const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
   attributes,
-  containerComponent: ContainerComponent,
   isSelectable = true,
   onAttrSelect,
-  onCreateNewAttr = (sectionKey) =>
-    console.log('Creating new attr for', sectionKey),
+  onCreateNewAttr,
 }) => {
   return (
-    <ContainerComponent>
+    <>
       {Object.keys(attributes).map((sectionKey) => {
         const section = attributes[sectionKey]
-        console.log({ section })
-
         return (
           <View style={styles.attrSectionContainer} key={sectionKey}>
             <AttrSectionHeader
@@ -40,24 +35,37 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
               onCreateNew={onCreateNewAttr}
             />
             {section.length ? (
-              section.map((entry: SelectableAttrI) => (
-                <Field
-                  key={entry.val}
-                  type={
-                    isSelectable ? FieldTypes.isSelectable : FieldTypes.isStatic
-                  }
-                  value={entry.val}
-                  isSelected={entry.isSelected}
-                  onSelect={() => onAttrSelect(sectionKey, entry.val)}
-                />
-              ))
+              isSelectable ? (
+                section.map((entry: SelectableAttrI) => (
+                  <Field
+                    key={entry.val}
+                    type={FieldTypes.isSelectable}
+                    value={entry.val}
+                    isSelected={entry.isSelected}
+                    onSelect={() => onAttrSelect(sectionKey, entry.val)}
+                    onCreateNewOne={() => onCreateNewAttr(sectionKey)}
+                  />
+                ))
+              ) : (
+                section.map((entry: SelectableAttrI) => (
+                  <Field
+                    key={entry.val}
+                    type={FieldTypes.isStatic}
+                    value={entry.val}
+                    onCreateNewOne={() => onCreateNewAttr(sectionKey)}
+                  />
+                ))
+              )
             ) : (
-              <Field type={FieldTypes.isEmpty} />
+              <Field
+                type={FieldTypes.isEmpty}
+                onCreateNewOne={() => onCreateNewAttr(sectionKey)}
+              />
             )}
           </View>
         )
       })}
-    </ContainerComponent>
+    </>
   )
 }
 

@@ -39,11 +39,16 @@ const Claims: React.FC = () => {
 
   return (
     <ScreenContainer>
-      <AttributesWidget
-        containerComponent={ContainerComponent}
-        attributes={attrs}
-        onAttrSelect={handleAttrSelect}
-      />
+      <ContainerComponent>
+        <AttributesWidget
+          attributes={attrs}
+          onAttrSelect={handleAttrSelect}
+          onCreateNewAttr={(sectionKey) =>
+            console.log('Creating new attr for', sectionKey)
+          }
+        />
+      </ContainerComponent>
+
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
     </ScreenContainer>
