@@ -1,9 +1,14 @@
-import { InteractionActions } from './types'
+import {
+  InteractionActions,
+  InteractionState,
+  IntermediaryState,
+} from './types'
 import { Action } from '~/types/actions'
 
-const initialState = {
+const initialState: InteractionState = {
   interactionId: '',
   interactionType: null,
+  intermediaryState: IntermediaryState.absent,
   summary: {},
 }
 
@@ -22,6 +27,8 @@ const reducer = (
       return { ...state, summary: action.payload }
     case InteractionActions.resetInteraction:
       return initialState
+    case InteractionActions.setIntermediaryState:
+      return { ...state, intermediaryState: action.payload }
     default:
       return state
   }

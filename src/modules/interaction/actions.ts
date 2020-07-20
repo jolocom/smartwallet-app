@@ -8,3 +8,7 @@ export const resetInteraction = createAction(
 export const setInteractionSummary = createAction(
   InteractionActions.setInteractionSummary,
 )
+
+export const setIntermediaryState = createAction(
+  InteractionActions.setIntermediaryState,
+)

@@ -10,6 +10,9 @@ export const getInteractionType = (state: RootReducerI): FlowType | null =>
 export const getInteractionSummary = (state: RootReducerI): any =>
   state.interaction.summary
 
+export const getIntermediaryState = (state: RootReducerI): any =>
+  state.interaction.intermediaryState
+
 export const getIsFullScreenInteraction = createSelector(
   [getInteractionType, getInteractionSummary],
   (type, summary) => {
