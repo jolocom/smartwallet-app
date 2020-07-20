@@ -9,12 +9,20 @@ import { AccountActions } from './account/types'
 import interactionReducer from './interaction/reducer'
 import { InteractionActions } from './interaction/types'
 
+import attrsReducer from './attributes/reducer'
+import { AttrActions } from './attributes/types'
+
 const rootReducer = combineReducers({
   loader: loaderReducer,
   account: accountReducer,
   interaction: interactionReducer,
+  attrs: attrsReducer,
 })
 
-export type RootActions = LoaderActions | AccountActions | InteractionActions
+export type RootActions =
+  | LoaderActions
+  | AccountActions
+  | InteractionActions
+  | AttrActions
 
 export default rootReducer

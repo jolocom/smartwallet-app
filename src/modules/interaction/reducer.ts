@@ -1,3 +1,4 @@
+import { ActionI } from '~/types/actions'
 import { InteractionActions } from './types'
 
 const initialState = {
@@ -6,7 +7,7 @@ const initialState = {
   summary: {},
 }
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: ActionI<InteractionActions>) => {
   switch (action.type) {
     case InteractionActions.setInteraction:
       return {

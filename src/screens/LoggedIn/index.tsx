@@ -28,6 +28,10 @@ const LoggedInTabs: React.FC = () => {
     }
   }, [isVisible, isAuthSet])
 
+  useEffect(() => {
+    // TODO: get all attributes here
+  }, [])
+
   return (
     <MainTabs.Navigator>
       <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />

@@ -8,6 +8,7 @@ import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
+import { useSelectAttribute } from '~/hooks/useSelectAttributes'
 
 const attributes = {
   name: ['Sveta Buben', 'sbub'],
@@ -29,13 +30,19 @@ const Claims: React.FC = () => {
     })
   }
 
+  const { attrs, handleAttrSelect } = useSelectAttribute({
+    isSelectable: true,
+    attributes,
+  })
+
   const openScanner = useRedirectTo(ScreenNames.Interactions)
 
   return (
     <ScreenContainer>
       <AttributesWidget
         containerComponent={ContainerComponent}
-        attributes={attributes}
+        attributes={attrs}
+        onAttrSelect={handleAttrSelect}
       />
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
