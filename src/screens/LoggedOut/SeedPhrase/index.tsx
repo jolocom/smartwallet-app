@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 // @ts-ignore no typescript support as of yet
 import RadialGradient from 'react-native-radial-gradient'
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
@@ -22,8 +23,12 @@ import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
 import { getEntropy } from '~/modules/account/selectors'
 import { useSelector } from 'react-redux'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { InfoIcon } from '~/assets/svg'
+
+const vibrationOptions = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: true,
+}
 
 const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
@@ -41,6 +46,11 @@ const SeedPhrase: React.FC = () => {
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
 
+  const phraseOpacity = shadowScale.interpolate({
+    inputRange: [0.8, 1],
+    outputRange: [0, 1],
+  })
+
   useEffect(() => {
     const seedphrase = getMnemonic(entropy)
     setSeedphrase(seedphrase)
@@ -55,15 +65,15 @@ const SeedPhrase: React.FC = () => {
         setShowInfo(true)
         break
       case GestureState.Success:
-        Animated.sequence([
+        ReactNativeHapticFeedback.trigger('impactLight', vibrationOptions)
+        Animated.parallel([
           Animated.timing(shadowOpacity, {
             duration: 300,
             useNativeDriver: true,
             toValue: 0,
           }),
-          Animated.delay(1000),
           Animated.timing(buttonOpacity, {
-            duration: 400,
+            duration: 200,
             useNativeDriver: true,
             toValue: 1,
           }),
@@ -82,19 +92,9 @@ const SeedPhrase: React.FC = () => {
     }).start()
   }, [showInfo])
 
-  const phraseOpacity = shadowScale.interpolate({
-    inputRange: [0.8, 1],
-    outputRange: [0, 1],
-  })
-
   const initialBackgroundOpacity = shadowScale.interpolate({
-    inputRange: [0.82, 1],
+    inputRange: [0.92, 1],
     outputRange: [1, 0],
-  })
-
-  const finalBackgroundOpacity = shadowScale.interpolate({
-    inputRange: [0.5, 1],
-    outputRange: [0.8, 1],
   })
 
   const renderBackgroundCrossfade = () => (
@@ -104,26 +104,35 @@ const SeedPhrase: React.FC = () => {
           styles.wrapper,
           {
             backgroundColor: Colors.mainBlack,
-            opacity: finalBackgroundOpacity,
           },
         ]}
       />
-      <Animated.View
-        style={[
-          styles.wrapper,
-          { backgroundColor: Colors.black, opacity: initialBackgroundOpacity },
-        ]}
-      />
+      {gestureState !== GestureState.Success && (
+        <Animated.View
+          style={[
+            styles.wrapper,
+            {
+              backgroundColor: Colors.black,
+              opacity: initialBackgroundOpacity,
+            },
+          ]}
+        />
+      )}
     </>
   )
 
   const renderInfoIcon = () => (
-    <Animated.View style={[styles.iconContainer, { opacity: phraseOpacity }]}>
+    <Animated.View style={[styles.iconContainer, { opacity: buttonOpacity }]}>
       <TouchableOpacity>
         <InfoIcon />
       </TouchableOpacity>
     </Animated.View>
   )
+
+  const shadowAnimation = shadowScale.interpolate({
+    inputRange: [0.8, 0.85],
+    outputRange: [0, 1],
+  })
 
   const renderSeedphrase = () => (
     <Animated.View
@@ -134,14 +143,28 @@ const SeedPhrase: React.FC = () => {
         },
       ]}
     >
-      <Text
+      <Text style={[styles.seedphrase]}>{seedphrase}</Text>
+      <Animated.View
         style={[
-          styles.seedphrase,
-          gestureState !== GestureState.Success && styles.seedphraseShadow,
+          {
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          },
+          styles.seedphraseContainer,
+          { opacity: shadowAnimation },
         ]}
       >
-        {seedphrase}
-      </Text>
+        <Text
+          style={[
+            styles.seedphrase,
+            { color: Colors.transparent },
+            styles.seedphraseShadow,
+          ]}
+        >
+          {seedphrase}
+        </Text>
+      </Animated.View>
     </Animated.View>
   )
 
@@ -187,7 +210,11 @@ const SeedPhrase: React.FC = () => {
       <Btn
         type={BtnTypes.primary}
         size={BtnSize.medium}
-        onPress={redirectToRepeatSeedPhrase}
+        onPress={
+          gestureState === GestureState.Success
+            ? redirectToRepeatSeedPhrase
+            : () => {}
+        }
       >
         {strings.DONE}
       </Btn>
@@ -228,9 +255,9 @@ const styles = StyleSheet.create({
     textShadowColor: Colors.white45,
     textShadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    textShadowRadius: 18,
+    textShadowRadius: 10,
   },
   seedphraseContainer: {
     flex: 1,

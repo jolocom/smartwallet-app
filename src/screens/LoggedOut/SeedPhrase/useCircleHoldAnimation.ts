@@ -18,6 +18,13 @@ const useCircleHoldAnimation = (animationDuration: number) => {
   //NOTE: for @onTouchEnd to get the updated @gestureState from the ref
   useEffect(() => {
     gestureStateRef.current = gestureState
+    if (gestureState === GestureState.Success) {
+      Animated.timing(shadowScale, {
+        duration: 700,
+        toValue: 0.8,
+        useNativeDriver: true,
+      }).start()
+    }
   }, [gestureState])
 
   // NOTE: the @shadow in this case is used for the view wrapping the @RadialGradient
@@ -53,14 +60,14 @@ const useCircleHoldAnimation = (animationDuration: number) => {
     if (gestureStateRef.current !== GestureState.Success) {
       setGestureState(GestureState.End)
       Animated.parallel([
-        Animated.timing(circleScale, {
-          duration: 400,
-          toValue: 1.2,
-          useNativeDriver: true,
-        }),
         Animated.timing(shadowScale, {
           duration: 400,
           toValue: 0.8,
+          useNativeDriver: true,
+        }),
+        Animated.timing(circleScale, {
+          duration: 400,
+          toValue: 1.2,
           useNativeDriver: true,
         }),
       ]).start()
@@ -74,8 +81,12 @@ const useCircleHoldAnimation = (animationDuration: number) => {
     // only after the finger was lifted, while here it is triggered continuously
     // when the finger is moved (and there is always some small movement), allowing
     // the state to change while the gesture was not yet finished.
-    if (e.nativeEvent.timestamp - startTime.current >= animationDuration)
+    if (
+      e.nativeEvent.timestamp - startTime.current >= animationDuration &&
+      gestureStateRef.current !== GestureState.Success
+    ) {
       setGestureState(GestureState.Success)
+    }
   }
 
   const panResponder = useRef(
