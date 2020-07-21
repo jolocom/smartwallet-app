@@ -4,6 +4,7 @@ import { TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native'
 import { Colors } from '~/utils/colors'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
+import { PurpleTickSuccess } from '~/assets/svg'
 
 export enum FieldTypes {
   isSelectable = 'isSelectable',
@@ -49,7 +50,9 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
           <View style={styles.field}>
             <Paragraph>{value}</Paragraph>
             {isSelected ? (
-              <View style={[styles.radio, styles.selected]} />
+              <View style={styles.radio}>
+                <PurpleTickSuccess />
+              </View>
             ) : (
               <View style={[styles.radio, styles.notSelected]} />
             )}
