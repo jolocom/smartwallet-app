@@ -1,5 +1,7 @@
-export interface AttrsStateI<T> {
-  [key: string]: T[]
+import { AttrKeys } from '~/components/AttributesWidget/AttrSectionHeader'
+
+export type AttrsState<T> = {
+  [key in keyof typeof AttrKeys]: T[]
 }
 
 export enum AttrActions {

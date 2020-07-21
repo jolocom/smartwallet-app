@@ -21,7 +21,7 @@ const LoggedInTabs: React.FC = () => {
   const isAuthSet = useSelector(isLocalAuthSet)
   const isLoggedIn = useSelector(isLogged)
 
-  const getVerifiableCredentials = useVerifiableCredentials()
+  const getAttributes = useVerifiableCredentials()
 
   // this hook is responsible for displaying device auth screen only after the Loader modal is hidden
   // otherwise, the keyboard appears on top loader modal
@@ -32,7 +32,7 @@ const LoggedInTabs: React.FC = () => {
   }, [isVisible, isAuthSet])
 
   useEffect(() => {
-    getVerifiableCredentials()
+    getAttributes()
   }, [])
 
   return (

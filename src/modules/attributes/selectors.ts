@@ -1,5 +1,5 @@
 import { RootReducerI } from '~/types/reducer'
-import { AttrsStateI } from './types'
+import { AttrsState } from './types'
 
-export const getAttributes = (state: RootReducerI): AttrsStateI<string> =>
+export const getAttributes = (state: RootReducerI): AttrsState<string> =>
   state.attrs

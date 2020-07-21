@@ -6,9 +6,16 @@ import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { CloseIcon } from '~/assets/svg'
 
+export enum AttrKeys {
+  name = 'name',
+  email = 'email',
+  number = 'number',
+}
+type AttrKeysUpper = 'NAME' | 'EMAIL' | 'NUMBER'
+
 interface AttrSectionHeaderPropsI {
-  sectionKey: string
-  onCreateNew: (sectionKey: string) => void
+  sectionKey: AttrKeys
+  onCreateNew: (sectionKey: AttrKeys) => void
 }
 
 const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
@@ -18,7 +25,7 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
   return (
     <View style={styles.headerContainer}>
       <Paragraph color={Colors.white70} customStyles={{ opacity: 0.6 }}>
-        {strings[sectionKey.toUpperCase() as 'NAME' | 'PHONE' | 'EMAIL']}
+        {strings[sectionKey.toUpperCase() as AttrKeysUpper]}
       </Paragraph>
       <TouchableOpacity
         style={styles.createNewBtn}

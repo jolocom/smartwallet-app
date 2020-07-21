@@ -97,11 +97,9 @@ export const useVerifiableCredentials = () => {
   const sdk = useSDK()
   const dispatch = useDispatch()
 
-  const getVerifiableCredentials = async () => {
+  const getAttributes = async () => {
     try {
       const verifiableCredentials = await sdk.bemw.storageLib.get.verifiableCredential()
-      console.log({ verifiableCredentials })
-
       const mappedCredentials = verifiableCredentials.reduce((acc, v) => {
         if (v.name === 'Email address') {
           acc['email'] = Array.isArray(acc['email'])
@@ -121,7 +119,7 @@ export const useVerifiableCredentials = () => {
     }
   }
 
-  return getVerifiableCredentials
+  return getAttributes
 }
 
 export const useCreateSelfIssuedCredential = () => {

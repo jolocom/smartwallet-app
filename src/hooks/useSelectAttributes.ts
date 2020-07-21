@@ -1,11 +1,12 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { AttrsStateI } from '~/modules/attributes/types'
+import { AttrsState } from '~/modules/attributes/types'
 import { getMappedAttrubited } from '~/utils/attributes'
 import { SelectableAttrI } from '~/components/AttributesWidget/index'
+import { AttrKeys } from '~/components/AttributesWidget/AttrSectionHeader'
 
 interface SelectAttributeI {
   isSelectable: boolean
-  attributes: AttrsStateI<string>
+  attributes: AttrsState<string>
 }
 
 export const useSelectAttribute = ({
@@ -18,13 +19,13 @@ export const useSelectAttribute = ({
   )
 
   useEffect(() => {
-    setAttrs(prevAttrs => {
+    setAttrs(() => {
       return isSelectable ? getMappedAttrubited(attributes) : attributes
     })
   }, [JSON.stringify(attributes)])
 
   const handleAttrSelect = useCallback(
-    (sectionKey: string, value: string) => {
+    (sectionKey: AttrKeys, value: string) => {
       const updatedAttrs = attrs[sectionKey].map((attr: SelectableAttrI) => {
         if (attr.val === value) {
           return { ...attr, isSelected: !attr.isSelected }

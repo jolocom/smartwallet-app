@@ -1,16 +1,16 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { AttrsStateI } from '~/modules/attributes/types'
+import { AttrsState } from '~/modules/attributes/types'
 
-import AttrSectionHeader from './AttrSectionHeader'
+import AttrSectionHeader, { AttrKeys } from './AttrSectionHeader'
 import Field, { FieldTypes } from './Field'
 
 interface AttrsWidgetPropsI {
-  attributes: AttrsStateI<string> | AttrsStateI<SelectableAttrI>
+  attributes: AttrsState<string> | AttrsState<SelectableAttrI>
   isSelectable?: boolean
-  onAttrSelect: (sectionKey: string, value: string) => void
-  onCreateNewAttr: (sectionKey: string) => void
+  onAttrSelect?: (sectionKey: AttrKeys, value: string) => void
+  onCreateNewAttr: (sectionKey: AttrKeys) => void
 }
 
 export interface SelectableAttrI {
@@ -27,11 +27,11 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
   return (
     <>
       {Object.keys(attributes).map((sectionKey) => {
-        const section = attributes[sectionKey]
+        const section = attributes[sectionKey as AttrKeys]
         return (
           <View style={styles.attrSectionContainer} key={sectionKey}>
             <AttrSectionHeader
-              sectionKey={sectionKey}
+              sectionKey={sectionKey as AttrKeys}
               onCreateNew={onCreateNewAttr}
             />
             {section.length ? (
@@ -42,8 +42,12 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                     type={FieldTypes.isSelectable}
                     value={entry.val}
                     isSelected={entry.isSelected}
-                    onSelect={() => onAttrSelect(sectionKey, entry.val)}
-                    onCreateNewOne={() => onCreateNewAttr(sectionKey)}
+                    onSelect={() =>
+                      onAttrSelect(sectionKey as AttrKeys, entry.val)
+                    }
+                    onCreateNewOne={() =>
+                      onCreateNewAttr(sectionKey as AttrKeys)
+                    }
                   />
                 ))
               ) : (
@@ -52,14 +56,16 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                     key={entry.val}
                     type={FieldTypes.isStatic}
                     value={entry.val}
-                    onCreateNewOne={() => onCreateNewAttr(sectionKey)}
+                    onCreateNewOne={() =>
+                      onCreateNewAttr(sectionKey as AttrKeys)
+                    }
                   />
                 ))
               )
             ) : (
               <Field
                 type={FieldTypes.isEmpty}
-                onCreateNewOne={() => onCreateNewAttr(sectionKey)}
+                onCreateNewOne={() => onCreateNewAttr(sectionKey as AttrKeys)}
               />
             )}
           </View>

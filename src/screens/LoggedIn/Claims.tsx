@@ -9,7 +9,6 @@ import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { useSelectAttribute } from '~/hooks/useSelectAttributes'
-import { AttrsStateI } from '~/modules/attributes/types'
 import { useSelector } from 'react-redux'
 import { getAttributes } from '~/modules/attributes/selectors'
 
@@ -18,7 +17,7 @@ import { getAttributes } from '~/modules/attributes/selectors'
 // const attributes = {
 //   name: ['Sveta Buben', 'sbub'],
 //   email: ['sveta@jolocom.com'],
-//   phone: [],
+//   number: [],
 // }
 
 const ContainerComponent: React.FC = ({ children }) => {
@@ -52,7 +51,7 @@ const Claims: React.FC = () => {
           onCreateNewAttr={(sectionKey) =>
             console.log('Creating new attr for', sectionKey)
           }
-          isSelectable={false}
+          isSelectable={true}
         />
       </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>

@@ -5,6 +5,7 @@ import { Colors } from '~/utils/colors'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import { PurpleTickSuccess } from '~/assets/svg'
+import { AttrKeys } from './AttrSectionHeader'
 
 export enum FieldTypes {
   isSelectable = 'isSelectable',
@@ -13,15 +14,15 @@ export enum FieldTypes {
 }
 
 interface SelectableFieldI {
-  onCreateNewOne: (sectionKey: string) => void
+  onCreateNewOne: (sectionKey: AttrKeys) => void
   type: FieldTypes.isSelectable
   value: string
   isSelected: boolean
-  onSelect: (sectionKey: string, value: string) => void
+  onSelect: (sectionKey: AttrKeys, value: string) => void
 }
 
 interface StaticFieldI {
-  onCreateNewOne: (sectionKey: string) => void
+  onCreateNewOne: (sectionKey: AttrKeys) => void
   type: FieldTypes.isStatic
   value: string
   isSelected?: never
@@ -29,7 +30,7 @@ interface StaticFieldI {
 }
 
 interface EmptyFieldI {
-  onCreateNewOne: (sectionKey: string) => void
+  onCreateNewOne: (sectionKey: AttrKeys) => void
   type: FieldTypes.isEmpty
   value?: never
   isSelected?: never
