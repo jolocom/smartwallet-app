@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, RefObject } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import ActionSheet from 'react-native-actions-sheet'
 import { useSelector, useDispatch } from 'react-redux'
@@ -27,6 +27,7 @@ const SCREEN_HEIGHT = WINDOW.height
 
 const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
+  const intermediarySheetRef = useRef<ActionSheet>(null)
 
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
@@ -45,14 +46,24 @@ const InteractionActionSheet: React.FC = () => {
     }
   }, [interactionType])
 
+  const replaceActionSheet = async (
+    initial: RefObject<ActionSheet>,
+    next: RefObject<ActionSheet>,
+  ) => {
+    initial.current?.setModalVisible(false)
+    await useDelay(() => {
+      next.current?.setModalVisible(true)
+    }, 300)
+  }
+
   useEffect(() => {
     if (interactionType) {
       const hideAndShow = async () => {
-        actionSheetRef.current?.setModalVisible(false)
-        //NOTE: without delay it doesn't show it :(
-        await useDelay(() => {
-          actionSheetRef.current?.setModalVisible(true)
-        }, 300)
+        if (intermediaryState === IntermediaryState.showing) {
+          replaceActionSheet(actionSheetRef, intermediarySheetRef)
+        } else if (intermediaryState === IntermediaryState.hiding) {
+          replaceActionSheet(intermediarySheetRef, actionSheetRef)
+        }
       }
       hideAndShow()
     }
@@ -67,9 +78,6 @@ const InteractionActionSheet: React.FC = () => {
   }
 
   const renderBody = () => {
-    if (intermediaryState === IntermediaryState.showing)
-      return <IntermediaryActionSheet />
-
     switch (interactionType) {
       case FlowType.Authentication:
         return <Authentication />
@@ -84,19 +92,21 @@ const InteractionActionSheet: React.FC = () => {
     }
   }
 
+  const actionSheetProps = {
+    closeOnTouchBackdrop: false,
+    onClose: handleCloseSheet,
+    footerHeight: 0,
+    closeOnPressBack: false,
+    //NOTE: removes shadow artifacts left from transparent view elevation
+    elevation: 0,
+    //NOTE: removes the gesture header
+    CustomHeaderComponent: <View />,
+  }
   return (
     <>
       <ActionSheet
+        {...actionSheetProps}
         ref={actionSheetRef}
-        closeOnTouchBackdrop={false}
-        //gestureEnabled={!isFullScreen}
-        onClose={handleCloseSheet}
-        footerHeight={0}
-        closeOnPressBack={false}
-        //NOTE: removes shadow artifacts left from transparent view elevation
-        elevation={0}
-        //NOTE: removes the gesture header
-        CustomHeaderComponent={<View />}
         containerStyle={
           isFullScreen ? styles.containerMultiple : styles.containerSingle
         }
@@ -107,6 +117,17 @@ const InteractionActionSheet: React.FC = () => {
           <View style={styles.wrapper}>{renderBody()}</View>
         )}
       </ActionSheet>
+      {intermediaryState !== IntermediaryState.absent && (
+        <ActionSheet
+          {...actionSheetProps}
+          ref={intermediarySheetRef}
+          containerStyle={styles.containerSingle}
+        >
+          <View style={styles.wrapper}>
+            <IntermediaryActionSheet />
+          </View>
+        </ActionSheet>
+      )}
     </>
   )
 }
