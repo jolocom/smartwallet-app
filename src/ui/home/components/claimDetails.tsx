@@ -17,6 +17,7 @@ import { Buttons, Typography, Colors, Spacing } from 'src/styles'
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.backgroundLightMain,
+    marginBottom: 300,
   },
   scroll: {
     width: '100%',
