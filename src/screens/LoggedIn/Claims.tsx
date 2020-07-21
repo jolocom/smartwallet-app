@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -9,12 +9,17 @@ import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { useSelectAttribute } from '~/hooks/useSelectAttributes'
+import { AttrsStateI } from '~/modules/attributes/types'
+import { useSelector } from 'react-redux'
+import { getAttributes } from '~/modules/attributes/selectors'
 
-const attributes = {
-  name: ['Sveta Buben', 'sbub'],
-  email: ['sveta@jolocom.com'],
-  phone: [],
-}
+// NOTE: you can test with this attributes as well to see the missing field
+// - you would have to comment line 38 though to test values below
+// const attributes = {
+//   name: ['Sveta Buben', 'sbub'],
+//   email: ['sveta@jolocom.com'],
+//   phone: [],
+// }
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -30,6 +35,7 @@ const Claims: React.FC = () => {
     })
   }
 
+  const attributes = useSelector(getAttributes)
   const { attrs, handleAttrSelect } = useSelectAttribute({
     isSelectable: true,
     attributes,
@@ -46,9 +52,9 @@ const Claims: React.FC = () => {
           onCreateNewAttr={(sectionKey) =>
             console.log('Creating new attr for', sectionKey)
           }
+          isSelectable={false}
         />
       </ContainerComponent>
-
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
     </ScreenContainer>
