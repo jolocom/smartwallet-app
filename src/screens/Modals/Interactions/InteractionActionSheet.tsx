@@ -31,13 +31,11 @@ const InteractionActionSheet: React.FC = () => {
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
   const intermediaryState = useSelector(getIntermediaryState)
-  const isFullScreenInteractionSelector = useSelector(
-    getIsFullScreenInteraction,
-  )
-  const isFullScreenInteraction =
+  const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
+  const isFullScreen =
     intermediaryState !== IntermediaryState.absent
       ? false
-      : isFullScreenInteractionSelector
+      : isFullScreenInteraction
 
   useEffect(() => {
     if (interactionType) {
@@ -51,6 +49,7 @@ const InteractionActionSheet: React.FC = () => {
     if (interactionType) {
       const hideAndShow = async () => {
         actionSheetRef.current?.setModalVisible(false)
+        //NOTE: without delay it doesn't show it :(
         await useDelay(() => {
           actionSheetRef.current?.setModalVisible(true)
         }, 300)
@@ -90,7 +89,7 @@ const InteractionActionSheet: React.FC = () => {
       <ActionSheet
         ref={actionSheetRef}
         closeOnTouchBackdrop={false}
-        //gestureEnabled={!isFullScreenInteraction}
+        //gestureEnabled={!isFullScreen}
         onClose={handleCloseSheet}
         footerHeight={0}
         closeOnPressBack={false}
@@ -99,12 +98,10 @@ const InteractionActionSheet: React.FC = () => {
         //NOTE: removes the gesture header
         CustomHeaderComponent={<View />}
         containerStyle={
-          isFullScreenInteraction
-            ? styles.containerMultiple
-            : styles.containerSingle
+          isFullScreen ? styles.containerMultiple : styles.containerSingle
         }
       >
-        {isFullScreenInteraction ? (
+        {isFullScreen ? (
           renderBody()
         ) : (
           <View style={styles.wrapper}>{renderBody()}</View>
