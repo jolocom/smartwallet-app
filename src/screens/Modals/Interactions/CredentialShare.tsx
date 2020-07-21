@@ -7,11 +7,13 @@ import { useInteraction } from '~/hooks/sdk'
 import {
   resetInteraction,
   setIntermediaryState,
+  setIntermediaryInputType,
 } from '~/modules/interaction/actions'
 import { getInteractionSummary } from '~/modules/interaction/selectors'
 import { CredentialVerificationSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import Btn from '~/components/Btn'
 import { IntermediaryState } from '~/modules/interaction/types'
+import InteractionFooter from './InteractionFooter'
 
 const CredentialShare = () => {
   const [selected, setSelected] = useState<CredentialVerificationSummary[]>([])
@@ -41,11 +43,15 @@ const CredentialShare = () => {
 
   const handleShowIntermediary = () => {
     dispatch(setIntermediaryState(IntermediaryState.showing))
+    dispatch(setIntermediaryInputType('email'))
   }
 
   return (
     <View>
-      <Btn onPress={handleShowIntermediary}>Show Intermediary Sheet</Btn>
+      <InteractionFooter
+        customCTA={'Create email'}
+        onSubmit={handleShowIntermediary}
+      />
     </View>
   )
 }
