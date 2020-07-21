@@ -12,3 +12,7 @@ export const setInteractionSummary = createAction(
 export const setIntermediaryState = createAction(
   InteractionActions.setIntermediaryState,
 )
+
+export const setIntermediaryInputType = createAction(
+  InteractionActions.setIntermediaryInputType,
+)

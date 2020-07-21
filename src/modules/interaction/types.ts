@@ -5,6 +5,7 @@ export enum InteractionActions {
   setInteractionSummary = 'setInteractionSummary',
   resetInteraction = 'resetInteraction',
   setIntermediaryState = 'setIntermediaryState',
+  setIntermediaryInputType = 'setIntermediaryInputType',
 }
 
 export interface InteractionState {
@@ -12,6 +13,8 @@ export interface InteractionState {
   interactionType: FlowType | null
   summary: any
   intermediaryState: IntermediaryState
+  //TODO: change to attribute type
+  intermediaryInputType: string | null
 }
 
 export enum IntermediaryState {

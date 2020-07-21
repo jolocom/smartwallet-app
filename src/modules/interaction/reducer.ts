@@ -9,6 +9,7 @@ const initialState: InteractionState = {
   interactionId: '',
   interactionType: null,
   intermediaryState: IntermediaryState.absent,
+  intermediaryInputType: null,
   summary: {},
 }
 
@@ -29,6 +30,8 @@ const reducer = (
       return initialState
     case InteractionActions.setIntermediaryState:
       return { ...state, intermediaryState: action.payload }
+    case InteractionActions.setIntermediaryInputType:
+      return { ...state, intermediaryInputType: action.payload }
     default:
       return state
   }
