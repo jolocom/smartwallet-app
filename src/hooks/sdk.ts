@@ -100,15 +100,15 @@ export const useVerifiableCredentials = () => {
   const getVerifiableCredentials = async () => {
     try {
       const verifiableCredentials = await sdk.bemw.storageLib.get.verifiableCredential()
-      verifiableCredentials.map((cred) => console.log)
+      console.log({ verifiableCredentials })
 
       const mappedCredentials = verifiableCredentials.reduce((acc, v) => {
         if (v.name === 'Email address') {
-          acc['email'] = Array.isArray(acc[v.name])
+          acc['email'] = Array.isArray(acc['email'])
             ? [...acc['email'], v.claim.email]
             : [v.claim.email]
         } else if (v.name === 'Name') {
-          acc['name'] = Array.isArray(acc[v.name])
+          acc['name'] = Array.isArray(acc['name'])
             ? [...acc['name'], `${v.claim.givenName} ${v.claim.familyName}`]
             : [`${v.claim.givenName} ${v.claim.familyName}`]
         }
@@ -158,7 +158,7 @@ export const useCreateSelfIssuedCredential = () => {
 
   return {
     addEmail: () =>
-      createSelfIssuedCredential('Email', { email: 'johnsmith@example.com' }),
+      createSelfIssuedCredential('Email', { email: 'johns@example.com' }),
     addName: () =>
       createSelfIssuedCredential('Name', {
         familyName: 'Smith',
