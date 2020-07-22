@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import Keychain from 'react-native-keychain'
-import { useDispatch } from 'react-redux'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -9,14 +8,9 @@ import PasscodeInput from '~/components/PasscodeInput'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
-
-import useRedirectTo from '~/hooks/useRedirectTo'
-
 import useSuccess from '~/hooks/useSuccess'
-
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
-import { ScreenNames } from '~/types/screens'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
 import {
@@ -24,8 +18,8 @@ import {
   useDeviceAuthDispatch,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
-import { setLocalAuth, unlockApp } from '~/modules/account/actions'
 import BP from '~/utils/breakpoints'
+import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -35,9 +29,8 @@ const Passcode = () => {
 
   const { biometryType } = useDeviceAuthState()
   const dispatchToLocalAuth = useDeviceAuthDispatch()
-  const dispatch = useDispatch()
 
-  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
+  const handleRedirectToLoggedIn = useRedirectToLoggedIn()
 
   const displaySuccessLoader = useSuccess()
 
@@ -49,10 +42,8 @@ const Passcode = () => {
     if (biometryType && biometryType !== 'IRIS') {
       dispatchToLocalAuth(showBiometry())
     } else {
-      redirectToLoggedIn()
+      handleRedirectToLoggedIn()
     }
-    dispatch(setLocalAuth())
-    dispatch(unlockApp())
   }
 
   const handleVerifiedPasscodeSubmit = async () => {
@@ -95,12 +86,13 @@ const Passcode = () => {
         }}
       >
         <View>
-          <Header size={HeaderSizes.small} color={Colors.white90}>
+          <Header color={Colors.white90}>
             {isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
           </Header>
           <Paragraph
             color={Colors.white70}
-            customStyles={{ marginHorizontal: 10 }}
+            size={ParagraphSizes.medium}
+            customStyles={{ marginHorizontal: 5, opacity: 0.8 }}
           >
             {isCreating
               ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
@@ -126,7 +118,7 @@ const Passcode = () => {
         </View>
         {isCreating && (
           <Paragraph
-            size={ParagraphSizes.small}
+            size={ParagraphSizes.medium}
             color={Colors.success}
             customStyles={{ marginTop: 20 }}
           >

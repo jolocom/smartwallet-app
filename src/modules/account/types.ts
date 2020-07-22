@@ -16,8 +16,3 @@ export interface AccountState {
   isAppLocked: boolean
   isLocalAuthSet: boolean
 }
-
-export interface Action {
-  type: AccountActions
-  payload?: any
-}

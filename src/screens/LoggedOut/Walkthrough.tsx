@@ -3,7 +3,7 @@ import { ImageBackground, StyleSheet, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Header from '~/components/Header'
+import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
@@ -81,13 +81,17 @@ const Walkthrough: React.FC = () => {
               source={slide.background}
             />
             <AbsoluteBottom
-              customStyles={{ ...styles.consistentContainer, bottom: 190 }}
+              customStyles={{ ...styles.consistentContainer, bottom: 195 }}
             >
               <View style={styles.contentContainer}>
-                <Header color={Colors.white90}>
+                <Header size={HeaderSizes.large} color={Colors.white90}>
                   {walkthroughData[idx].header}
                 </Header>
-                <Paragraph size={ParagraphSizes.medium} color={Colors.white85}>
+                <Paragraph
+                  size={ParagraphSizes.large}
+                  color={Colors.white85}
+                  customStyles={{ opacity: 0.8, marginTop: 12 }}
+                >
                   {walkthroughData[idx].paragraph}
                 </Paragraph>
               </View>
@@ -114,7 +118,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     alignItems: 'center',
-    backgroundColor: 'transparent',
     paddingHorizontal: '5%',
   },
   dotContainer: {

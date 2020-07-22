@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   AppStateStatus,
@@ -21,11 +21,13 @@ import Modal from './Modal'
 import PasscodeInput from '../components/PasscodeInput'
 import Btn, { BtnTypes } from '../components/Btn'
 import AbsoluteBottom from '../components/AbsoluteBottom'
-import Paragraph, { ParagraphSizes } from '../components/Paragraph'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
+import { getIsPopup } from '~/modules/appState/selectors'
+import { setPopup } from '~/modules/appState/actions'
+import Header from '~/components/Header'
 import { useAppState } from '~/hooks/useAppState'
 
 const Lock = () => {
@@ -84,9 +86,7 @@ const Lock = () => {
           <ActivityIndicator />
         ) : (
           <>
-            <Paragraph size={ParagraphSizes.large}>
-              {strings.ENTER_YOUR_PIN}
-            </Paragraph>
+            <Header>{strings.ENTER_YOUR_PIN}</Header>
             <View style={styles.inputContainer}>
               <PasscodeInput
                 value={pin}
@@ -118,7 +118,13 @@ export default function () {
   const isLocked = useSelector(isAppLocked)
   const isLoggedIn = useSelector(isLogged)
   const isAuthSet = useSelector(isLocalAuthSet)
+  const isPopup = useSelector(getIsPopup)
   const dispatch = useDispatch()
+  const isPopupRef = useRef<boolean>(isPopup)
+
+  useEffect(() => {
+    isPopupRef.current = isPopup
+  }, [isPopup])
 
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
     if (
@@ -129,7 +135,8 @@ export default function () {
         appState.match(/inactive|background/) &&
         nextAppState.match(/active/))
     ) {
-      dispatch(lockApp())
+      if (!isPopupRef.current) dispatch(lockApp())
+      else dispatch(setPopup(false))
     }
 
     appState = nextAppState

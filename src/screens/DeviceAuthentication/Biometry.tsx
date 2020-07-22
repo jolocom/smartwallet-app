@@ -5,18 +5,15 @@ import FingerprintScanner from 'react-native-fingerprint-scanner'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
 
-import useRedirectTo from '~/hooks/useRedirectTo'
 import useSuccess from '~/hooks/useSuccess'
 
 import { Colors } from '~/utils/colors'
-
-import { ScreenNames } from '~/types/screens'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'
 
@@ -27,13 +24,20 @@ import {
 } from './utils/getText'
 import BiometryAnimation from '~/components/BiometryAnimation'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
+import { setPopup } from '~/modules/appState/actions'
+import { useDispatch } from 'react-redux'
+import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 
 const Biometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
   const displaySuccessLoader = useSuccess()
-  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
+
+  const dispatch = useDispatch()
+
+  const handleRedirectToLogin = useRedirectToLoggedIn()
 
   const handleAuthenticate = async () => {
+    dispatch(setPopup(true))
     try {
       await FingerprintScanner.authenticate({
         description: getBiometryDescription(biometryType),
@@ -43,7 +47,7 @@ const Biometry: React.FC = () => {
       await AsyncStorage.setItem('biometry', biometryType || '')
 
       displaySuccessLoader()
-      redirectToLoggedIn()
+      handleRedirectToLogin()
     } catch (err) {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         handleNotEnrolled(biometryType)
@@ -54,10 +58,8 @@ const Biometry: React.FC = () => {
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
       <View>
-        <Header size={HeaderSizes.small}>
-          {getBiometryHeader(biometryType)}
-        </Header>
-        <Paragraph color={Colors.white70}>
+        <Header>{getBiometryHeader(biometryType)}</Header>
+        <Paragraph size={ParagraphSizes.medium} color={Colors.white70}>
           {strings.SO_YOU_DONT_NEED_TO_CONFIRM}
         </Paragraph>
       </View>
@@ -67,12 +69,13 @@ const Biometry: React.FC = () => {
       />
       <Paragraph
         color={Colors.success}
+        size={ParagraphSizes.medium}
         customStyles={{ paddingHorizontal: 25 }}
       >
         {getBiometryActionText(biometryType)}
       </Paragraph>
       <AbsoluteBottom>
-        <Btn type={BtnTypes.secondary} onPress={redirectToLoggedIn}>
+        <Btn type={BtnTypes.secondary} onPress={handleRedirectToLogin}>
           {strings.SKIP}
         </Btn>
       </AbsoluteBottom>
