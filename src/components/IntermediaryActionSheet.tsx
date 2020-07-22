@@ -3,12 +3,12 @@ import { View, TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
-import { getIntermediaryInputType } from '~/modules/interaction/selectors'
+import { getAttributeInputKey } from '~/modules/interaction/selectors'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 
 const IntermediaryActionSheet = () => {
   const dispatch = useDispatch()
-  const inputType = useSelector(getIntermediaryInputType)
+  const inputType = useSelector(getAttributeInputKey)
   const inputRef = useRef<TextInput>(null)
 
   useEffect(() => {

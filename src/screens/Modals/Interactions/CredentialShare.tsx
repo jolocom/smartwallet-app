@@ -7,7 +7,7 @@ import { useInteraction } from '~/hooks/sdk'
 import {
   resetInteraction,
   setIntermediaryState,
-  setIntermediaryInputType,
+  setAttributeInputKey,
 } from '~/modules/interaction/actions'
 import { getInteractionSummary } from '~/modules/interaction/selectors'
 import { CredentialVerificationSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
@@ -43,7 +43,7 @@ const CredentialShare = () => {
 
   const handleShowIntermediary = () => {
     dispatch(setIntermediaryState(IntermediaryState.showing))
-    dispatch(setIntermediaryInputType('email'))
+    dispatch(setAttributeInputKey('email'))
   }
 
   return (

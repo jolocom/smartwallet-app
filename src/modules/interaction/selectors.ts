@@ -14,8 +14,8 @@ export const getInteractionSummary = (state: RootReducerI): any =>
 export const getIntermediaryState = (state: RootReducerI): any =>
   state.interaction.intermediaryState
 
-export const getIntermediaryInputType = (state: RootReducerI): any =>
-  state.interaction.intermediaryInputType
+export const getAttributeInputKey = (state: RootReducerI): any =>
+  state.interaction.attributeInputKey
 
 export const getIsFullScreenInteraction = createSelector(
   [getInteractionType, getInteractionSummary, getIntermediaryState],
