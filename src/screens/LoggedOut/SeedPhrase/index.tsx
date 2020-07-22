@@ -17,7 +17,7 @@ import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { TextStyle } from '~/utils/fonts'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
@@ -104,7 +104,7 @@ const SeedPhrase: React.FC = () => {
 
   const renderBackgroundCrossfade = () => (
     <>
-      <Animated.View
+      <View
         style={[
           styles.wrapper,
           {
@@ -143,7 +143,7 @@ const SeedPhrase: React.FC = () => {
         },
       ]}
     >
-      <Text style={[styles.seedphrase]}>{seedphrase}</Text>
+      <Text style={styles.seedphrase}>{seedphrase}</Text>
       <Animated.View
         style={[
           {
@@ -204,7 +204,10 @@ const SeedPhrase: React.FC = () => {
 
   const renderBottomButtons = () => (
     <Animated.View style={[styles.buttonContainer, { opacity: buttonOpacity }]}>
-      <Paragraph customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}>
+      <Paragraph
+        size={ParagraphSizes.medium}
+        customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}
+      >
         {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
       </Paragraph>
       <Btn
@@ -222,7 +225,7 @@ const SeedPhrase: React.FC = () => {
   )
 
   return (
-    <ScreenContainer isFullscreen backgroundColor={Colors.transparent}>
+    <>
       {renderBackgroundCrossfade()}
       <ScreenContainer
         backgroundColor={Colors.transparent}
@@ -236,7 +239,7 @@ const SeedPhrase: React.FC = () => {
         </View>
         {renderBottomButtons()}
       </ScreenContainer>
-    </ScreenContainer>
+    </>
   )
 }
 
