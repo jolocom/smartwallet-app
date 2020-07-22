@@ -18,7 +18,7 @@ export interface InteractionState {
 }
 
 export enum IntermediaryState {
-  showing,
-  hiding,
-  absent,
+  showing = 'showing',
+  hiding = 'hiding',
+  absent = 'absent',
 }

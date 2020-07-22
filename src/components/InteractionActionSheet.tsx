@@ -15,8 +15,8 @@ import {
 
 import { Colors } from '~/utils/colors'
 import { resetInteraction } from '~/modules/interaction/actions'
-import CredentialShare from './CredentialShare'
-import CredentialReceive from './CredentialReceive'
+import CredentialShare from '~/screens/Modals/Interactions/CredentialShare'
+import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
 import useDelay from '~/hooks/useDelay'
 import { IntermediaryState } from '~/modules/interaction/types'
@@ -24,6 +24,19 @@ import { setIntermediaryState } from '~/modules/interaction/actions'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
+const ACTION_SHEET_PROPS = {
+  closeOnTouchBackdrop: false,
+  footerHeight: 0,
+  closeOnPressBack: false,
+  //NOTE: removes shadow artifacts left from transparent view elevation
+  elevation: 0,
+  //NOTE: removes the gesture header
+  CustomHeaderComponent: <View />,
+}
+
+const BasWrapper: React.FC = ({ children }) => (
+  <View style={styles.wrapper}>{children}</View>
+)
 
 const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
@@ -33,10 +46,6 @@ const InteractionActionSheet: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
   const intermediaryState = useSelector(getIntermediaryState)
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
-  const isFullScreen =
-    intermediaryState !== IntermediaryState.absent
-      ? false
-      : isFullScreenInteraction
 
   useEffect(() => {
     if (interactionType) {
@@ -46,26 +55,23 @@ const InteractionActionSheet: React.FC = () => {
     }
   }, [interactionType])
 
-  const replaceActionSheet = async (
+  const replaceActionSheet = (
     initial: RefObject<ActionSheet>,
     next: RefObject<ActionSheet>,
   ) => {
     initial.current?.setModalVisible(false)
-    await useDelay(() => {
+    setTimeout(() => {
       next.current?.setModalVisible(true)
     }, 300)
   }
 
   useEffect(() => {
     if (interactionType) {
-      const hideAndShow = async () => {
-        if (intermediaryState === IntermediaryState.showing) {
-          replaceActionSheet(actionSheetRef, intermediarySheetRef)
-        } else if (intermediaryState === IntermediaryState.hiding) {
-          replaceActionSheet(intermediarySheetRef, actionSheetRef)
-        }
+      if (intermediaryState === IntermediaryState.showing) {
+        replaceActionSheet(actionSheetRef, intermediarySheetRef)
+      } else if (intermediaryState === IntermediaryState.hiding) {
+        replaceActionSheet(intermediarySheetRef, actionSheetRef)
       }
-      hideAndShow()
     }
   }, [intermediaryState])
 
@@ -92,40 +98,34 @@ const InteractionActionSheet: React.FC = () => {
     }
   }
 
-  const actionSheetProps = {
-    closeOnTouchBackdrop: false,
-    onClose: handleCloseSheet,
-    footerHeight: 0,
-    closeOnPressBack: false,
-    //NOTE: removes shadow artifacts left from transparent view elevation
-    elevation: 0,
-    //NOTE: removes the gesture header
-    CustomHeaderComponent: <View />,
-  }
   return (
     <>
       <ActionSheet
-        {...actionSheetProps}
+        {...ACTION_SHEET_PROPS}
         ref={actionSheetRef}
+        onClose={handleCloseSheet}
         containerStyle={
-          isFullScreen ? styles.containerMultiple : styles.containerSingle
+          isFullScreenInteraction
+            ? styles.containerMultiple
+            : styles.containerSingle
         }
       >
-        {isFullScreen ? (
+        {isFullScreenInteraction ? (
           renderBody()
         ) : (
-          <View style={styles.wrapper}>{renderBody()}</View>
+          <BasWrapper>{renderBody()}</BasWrapper>
         )}
       </ActionSheet>
       {intermediaryState !== IntermediaryState.absent && (
         <ActionSheet
-          {...actionSheetProps}
+          {...ACTION_SHEET_PROPS}
           ref={intermediarySheetRef}
+          onClose={handleCloseSheet}
           containerStyle={styles.containerSingle}
         >
-          <View style={styles.wrapper}>
+          <BasWrapper>
             <IntermediaryActionSheet />
-          </View>
+          </BasWrapper>
         </ActionSheet>
       )}
     </>

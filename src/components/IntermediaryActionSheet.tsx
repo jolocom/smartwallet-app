@@ -1,13 +1,10 @@
 import React, { useRef, useEffect } from 'react'
 import { View, TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  resetInteraction,
-  setIntermediaryState,
-} from '~/modules/interaction/actions'
+import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { getIntermediaryInputType } from '~/modules/interaction/selectors'
-import InteractionHeader from './InteractionHeader'
+import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 
 const IntermediaryActionSheet = () => {
   const dispatch = useDispatch()
