@@ -34,9 +34,9 @@ const SeedPhrase: React.FC = () => {
   const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
   const {
     gestureState,
-    animationValues: { shadowScale, circleScale, shadowOpacity },
+    animationValues: { shadowScale, circleScale, magicOpacity },
     gestureHandlers,
-  } = useCircleHoldAnimation(1500)
+  } = useCircleHoldAnimation(1200)
 
   const [showInfo, setShowInfo] = useState(true)
   const [seedphrase, setSeedphrase] = useState('')
@@ -67,7 +67,7 @@ const SeedPhrase: React.FC = () => {
       case GestureState.Success:
         ReactNativeHapticFeedback.trigger('impactLight', vibrationOptions)
         Animated.parallel([
-          Animated.timing(shadowOpacity, {
+          Animated.timing(magicOpacity, {
             duration: 300,
             useNativeDriver: true,
             toValue: 0,
@@ -93,8 +93,13 @@ const SeedPhrase: React.FC = () => {
   }, [showInfo])
 
   const initialBackgroundOpacity = shadowScale.interpolate({
-    inputRange: [0.92, 1],
+    inputRange: [0.85, 1],
     outputRange: [1, 0],
+  })
+
+  const shadowAnimation = shadowScale.interpolate({
+    inputRange: [0.8, 1],
+    outputRange: [0, 1],
   })
 
   const renderBackgroundCrossfade = () => (
@@ -128,11 +133,6 @@ const SeedPhrase: React.FC = () => {
       </TouchableOpacity>
     </Animated.View>
   )
-
-  const shadowAnimation = shadowScale.interpolate({
-    inputRange: [0.8, 0.85],
-    outputRange: [0, 1],
-  })
 
   const renderSeedphrase = () => (
     <Animated.View
@@ -173,7 +173,7 @@ const SeedPhrase: React.FC = () => {
       style={[
         {
           transform: [{ scaleX: shadowScale }, { scaleY: shadowScale }],
-          opacity: shadowOpacity,
+          opacity: magicOpacity,
         },
       ]}
     >
