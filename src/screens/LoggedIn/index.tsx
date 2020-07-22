@@ -11,7 +11,7 @@ import Claims from './Claims'
 import Documents from './Documents'
 import History from './History'
 import Settings from './Settings'
-import { useSDK, useVerifiableCredentials } from '~/hooks/sdk'
+import { useGetAttributes } from '~/hooks/sdk'
 
 const MainTabs = createBottomTabNavigator()
 
@@ -21,7 +21,7 @@ const LoggedInTabs: React.FC = () => {
   const isAuthSet = useSelector(isLocalAuthSet)
   const isLoggedIn = useSelector(isLogged)
 
-  const getAttributes = useVerifiableCredentials()
+  const getAttributes = useGetAttributes()
 
   // this hook is responsible for displaying device auth screen only after the Loader modal is hidden
   // otherwise, the keyboard appears on top loader modal

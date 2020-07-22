@@ -1,6 +1,7 @@
 import { RootReducerI } from '~/types/reducer'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
+import { AttrsState, AttributeI } from '../attributes/types'
 
 export const getInteractionId = (state: RootReducerI): string =>
   state.interaction.interactionId
@@ -9,6 +10,12 @@ export const getInteractionType = (state: RootReducerI): FlowType | null =>
 // TODO: add type annotation
 export const getInteractionSummary = (state: RootReducerI): any =>
   state.interaction.summary
+export const getInteractionAttributes = (
+  state: RootReducerI,
+): AttrsState<AttributeI> => state.interaction.attributes
+export const getSelectedAttributes = (
+  state: RootReducerI,
+): AttrsState<string> => state.interaction.selectedAttributes
 
 export const getIsFullScreenInteraction = createSelector(
   [getInteractionType, getInteractionSummary],

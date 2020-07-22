@@ -3,10 +3,10 @@ import React from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 import Btn from '~/components/Btn'
-import { useCreateSelfIssuedCredential } from '~/hooks/sdk'
+import { useCreateAttributes } from '~/hooks/sdk'
 
 const Documents: React.FC = () => {
-  const { addEmail, addName } = useCreateSelfIssuedCredential()
+  const { addEmail, addName } = useCreateAttributes()
   return (
     <ScreenContainer>
       <Header>Documents</Header>

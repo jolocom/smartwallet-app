@@ -1,19 +1,24 @@
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import {
+  InteractionChannel,
+  FlowType,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import { SDKContext } from '~/utils/sdk/context'
-import { getClaimMetadataByCredentialType } from '~/utils/claims'
 import { useLoader } from './useLoader'
 import {
   setInteractionSummary,
   setInteraction,
+  setInteractionAttributes,
+  setInitialSelectedAttributes,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import { getDid } from '~/modules/account/selectors'
-import { setAttrs } from '~/modules/attributes/actions'
+import { setAttrs, updateAttrs } from '~/modules/attributes/actions'
+import { Attrs } from '~/modules/attributes/types'
+import { getMappedAttrubutes } from '~/utils/attributes'
 
 export const useSDK = () => {
   const sdk = useContext(SDKContext)
@@ -93,27 +98,40 @@ export const useInteraction = () => {
   return sdk.bemw.interactionManager.getInteraction(interactionId)
 }
 
-export const useVerifiableCredentials = () => {
-  const sdk = useSDK()
+export const useGetAttributes = () => {
   const dispatch = useDispatch()
 
   const getAttributes = async () => {
     try {
-      const verifiableCredentials = await sdk.bemw.storageLib.get.verifiableCredential()
-      const mappedCredentials = verifiableCredentials.reduce((acc, v) => {
-        if (v.name === 'Email address') {
-          acc['email'] = Array.isArray(acc['email'])
-            ? [...acc['email'], v.claim.email]
-            : [v.claim.email]
-        } else if (v.name === 'Name') {
-          acc['name'] = Array.isArray(acc['name'])
-            ? [...acc['name'], `${v.claim.givenName} ${v.claim.familyName}`]
-            : [`${v.claim.givenName} ${v.claim.familyName}`]
-        }
+      const attributes = {
+        name: [
+          { id: 'abc1', value: 'John Smith' },
+          { id: 'abc2', value: 'JSmith' },
+        ],
+        email: [{ id: 'abc3', value: 'johnsmith@example.com' }],
+      }
+      dispatch(setAttrs(attributes))
+
+      // this will happen on Credentail Share flow
+      const requestedAttributes = ['number', 'email']
+      const interactionAttributues = requestedAttributes.reduce((acc, v) => {
+        acc[v] = attributes[v] || []
         return acc
       }, {})
+      dispatch(setInteractionAttributes(interactionAttributues))
 
-      dispatch(setAttrs(mappedCredentials))
+      const selectedAttributes = Object.keys(interactionAttributues).reduce(
+        (acc, v) => {
+          if (!acc[v]) {
+            acc[v] = interactionAttributues[v].length
+              ? interactionAttributues[v][0].id
+              : ''
+          }
+          return acc
+        },
+        {},
+      )
+      dispatch(setInitialSelectedAttributes(selectedAttributes))
     } catch (err) {
       console.warn('Failed getting verifiable credentials')
     }
@@ -122,45 +140,21 @@ export const useVerifiableCredentials = () => {
   return getAttributes
 }
 
-export const useCreateSelfIssuedCredential = () => {
-  const sdk = useSDK()
-  const did = useSelector(getDid)
-
+const getId = () => '_' + Math.random().toString(36).substr(2, 9)
+export const useCreateAttributes = () => {
+  const dispatch = useDispatch()
   const createSelfIssuedCredential = async (
-    credentialType: 'Email' | 'Name',
-    claimData: { [key: string]: any },
+    attributeKey: Attrs,
+    value: string,
   ) => {
-    const password = await sdk.bemw.keyChainLib.getPassword()
-
-    const claim = {
-      credentialType,
-      claimData,
-      id: '',
-      issuer: {
-        did: '',
-      },
-      subject: '',
-    }
-
-    const verifiableCredential = await sdk.bemw.identityWallet.create.signedCredential(
-      {
-        metadata: getClaimMetadataByCredentialType(claim.credentialType),
-        claim: { ...claim.claimData },
-        subject: did,
-      },
-      password,
-    )
-
-    await sdk.bemw.storageLib.store.verifiableCredential(verifiableCredential)
+    const id = getId()
+    const attribute = { id, value }
+    dispatch(updateAttrs({ attributeKey, attribute }))
   }
 
   return {
     addEmail: () =>
-      createSelfIssuedCredential('Email', { email: 'johns@example.com' }),
-    addName: () =>
-      createSelfIssuedCredential('Name', {
-        familyName: 'Smith',
-        givenName: 'John',
-      }),
+      createSelfIssuedCredential(Attrs.email, 'johns@example.com'),
+    addName: () => createSelfIssuedCredential(Attrs.name, 'John Smith'),
   }
 }

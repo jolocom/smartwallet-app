@@ -1,29 +1,33 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { AttrsState } from '~/modules/attributes/types'
+import { AttrsState, AttributeI } from '~/modules/attributes/types'
 
 import AttrSectionHeader, { AttrKeys } from './AttrSectionHeader'
 import Field, { FieldTypes } from './Field'
+import { useDispatch, useSelector } from 'react-redux'
+import { getSelectedAttributes } from '~/modules/interaction/selectors'
+import { selectAttr } from '~/modules/interaction/actions'
 
 interface AttrsWidgetPropsI {
-  attributes: AttrsState<string> | AttrsState<SelectableAttrI>
+  attributes: AttrsState<AttributeI>
   isSelectable?: boolean
-  onAttrSelect?: (sectionKey: AttrKeys, value: string) => void
   onCreateNewAttr: (sectionKey: AttrKeys) => void
 }
 
 export interface SelectableAttrI {
+  id: string
   isSelected: boolean
-  val: string
+  value: string
 }
 
 const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
   attributes,
   isSelectable = true,
-  onAttrSelect,
   onCreateNewAttr,
 }) => {
+  const dispatch = useDispatch()
+  const selectedAttributes = useSelector(getSelectedAttributes)
   return (
     <>
       {Object.keys(attributes).map((sectionKey) => {
@@ -36,14 +40,16 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
             />
             {section.length ? (
               isSelectable ? (
-                section.map((entry: SelectableAttrI) => (
+                section.map((entry) => (
                   <Field
-                    key={entry.val}
+                    key={entry.id}
                     type={FieldTypes.isSelectable}
-                    value={entry.val}
-                    isSelected={entry.isSelected}
+                    value={entry.value}
+                    isSelected={selectedAttributes[sectionKey] === entry.id}
                     onSelect={() =>
-                      onAttrSelect(sectionKey as AttrKeys, entry.val)
+                      dispatch(
+                        selectAttr({ attrKey: sectionKey, id: entry.id }),
+                      )
                     }
                     onCreateNewOne={() =>
                       onCreateNewAttr(sectionKey as AttrKeys)
@@ -51,11 +57,11 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                   />
                 ))
               ) : (
-                section.map((entry: SelectableAttrI) => (
+                section.map((entry: AttributeI) => (
                   <Field
-                    key={entry.val}
+                    key={entry.id}
                     type={FieldTypes.isStatic}
-                    value={entry.val}
+                    value={entry.value}
                     onCreateNewOne={() =>
                       onCreateNewAttr(sectionKey as AttrKeys)
                     }

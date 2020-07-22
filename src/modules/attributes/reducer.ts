@@ -1,14 +1,18 @@
 import { ActionI } from '~/types/action'
-import { AttrsState, AttrActions } from './types'
+import { AttrsState, AttrActions, Attrs, AttributeI } from './types'
 
-export const initialState: AttrsState<string> = {}
+export const initialState = {} as AttrsState<AttributeI>
 
 const reducer = (state = initialState, action: ActionI<AttrActions>) => {
   switch (action.type) {
     case AttrActions.setAttrs:
       return action.payload
     case AttrActions.updateAttrs:
-      return { ...state, ...action.payload }
+      const {
+        attributeKey,
+        attribute,
+      }: { attributeKey: Attrs; attribute: AttributeI } = action.payload
+      return { ...state, [attributeKey]: [...state[attributeKey], attribute] }
     default:
       return state
   }

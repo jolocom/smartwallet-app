@@ -8,3 +8,13 @@ export const resetInteraction = createAction(
 export const setInteractionSummary = createAction(
   InteractionActions.setInteractionSummary,
 )
+
+export const setInteractionAttributes = createAction(
+  InteractionActions.setInteractionAttributes,
+)
+
+export const setInitialSelectedAttributes = createAction(
+  InteractionActions.setInitialSelectedAttributes,
+)
+
+export const selectAttr = createAction(InteractionActions.selectAttr)
