@@ -143,28 +143,39 @@ const SeedPhrase: React.FC = () => {
         },
       ]}
     >
-      <Text style={styles.seedphrase}>{seedphrase}</Text>
-      <Animated.View
+      <Text
         style={[
-          {
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          },
-          styles.seedphraseContainer,
-          { opacity: shadowAnimation },
+          styles.seedphrase,
+          Platform.OS === 'ios' &&
+            gestureState !== GestureState.Success &&
+            styles.seedphraseShadow,
         ]}
       >
-        <Text
+        {seedphrase}
+      </Text>
+      {Platform.OS === 'android' && (
+        <Animated.View
           style={[
-            styles.seedphrase,
-            { color: Colors.transparent },
-            styles.seedphraseShadow,
+            {
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            },
+            styles.seedphraseContainer,
+            { opacity: shadowAnimation },
           ]}
         >
-          {seedphrase}
-        </Text>
-      </Animated.View>
+          <Text
+            style={[
+              styles.seedphrase,
+              { color: Colors.transparent },
+              styles.seedphraseShadow,
+            ]}
+          >
+            {seedphrase}
+          </Text>
+        </Animated.View>
+      )}
     </Animated.View>
   )
 
