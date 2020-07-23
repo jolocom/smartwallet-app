@@ -1,6 +1,7 @@
 import { RootReducerI } from '~/types/reducer'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
+import { IntermediaryState } from './types'
 
 export const getInteractionId = (state: RootReducerI): string =>
   state.interaction.interactionId
@@ -10,10 +11,18 @@ export const getInteractionType = (state: RootReducerI): FlowType | null =>
 export const getInteractionSummary = (state: RootReducerI): any =>
   state.interaction.summary
 
+export const getIntermediaryState = (state: RootReducerI): any =>
+  state.interaction.intermediaryState
+
+export const getAttributeInputKey = (state: RootReducerI): any =>
+  state.interaction.attributeInputKey
+
 export const getIsFullScreenInteraction = createSelector(
-  [getInteractionType, getInteractionSummary],
-  (type, summary) => {
-    if (
+  [getInteractionType, getInteractionSummary, getIntermediaryState],
+  (type, summary, intermediaryState) => {
+    if (intermediaryState !== IntermediaryState.absent) {
+      return false
+    } else if (
       type === FlowType.CredentialShare &&
       summary.state &&
       summary.state.constraints[0].credentialRequirements.length > 1

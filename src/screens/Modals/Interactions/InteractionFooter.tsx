@@ -16,9 +16,10 @@ import getCTAText from './utils/getCTAText'
 
 interface PropsI {
   onSubmit: () => void
+  customCTA?: string
 }
 
-const InteractionFooter: React.FC<PropsI> = ({ onSubmit }) => {
+const InteractionFooter: React.FC<PropsI> = ({ onSubmit, customCTA }) => {
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
 
@@ -30,7 +31,7 @@ const InteractionFooter: React.FC<PropsI> = ({ onSubmit }) => {
     <BtnGroup alignment={BtnsAlignment.horizontal}>
       <View style={[styles.container, { width: '70%', marginRight: 12 }]}>
         <Btn size={BtnSize.medium} onPress={onSubmit}>
-          {getCTAText(interactionType)}
+          {customCTA || getCTAText(interactionType)}
         </Btn>
       </View>
       <View style={[styles.container, { width: '30%' }]}>
