@@ -1,5 +1,4 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header, { HeaderSizes } from '~/components/Header'
@@ -7,7 +6,6 @@ import Btn from '~/components/Btn'
 
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
-import useDelay from '~/hooks/useDelay'
 import { useLoader } from '~/hooks/useLoader'
 
 const Claims: React.FC = () => {
