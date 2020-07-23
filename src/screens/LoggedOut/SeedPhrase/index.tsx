@@ -24,6 +24,7 @@ import { useMnemonic } from '~/hooks/sdk'
 import { getEntropy } from '~/modules/account/selectors'
 import { useSelector } from 'react-redux'
 import { InfoIcon } from '~/assets/svg'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -136,17 +137,13 @@ const SeedPhrase: React.FC = () => {
 
   const renderSeedphrase = () => (
     <Animated.View
-      style={[
-        styles.seedphraseContainer,
-        {
-          opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
-        },
-      ]}
+      style={{
+        opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
+      }}
     >
       <Text style={styles.seedphrase}>{seedphrase}</Text>
       <Animated.View
         style={[
-          styles.seedphraseContainer,
           {
             position: 'absolute',
             width: '100%',
@@ -159,7 +156,6 @@ const SeedPhrase: React.FC = () => {
           style={[
             styles.seedphrase,
             Platform.OS === 'android' && { color: Colors.transparent },
-
             styles.seedphraseShadow,
           ]}
         >
@@ -204,47 +200,61 @@ const SeedPhrase: React.FC = () => {
   )
 
   const renderBottomButtons = () => (
-    <Animated.View style={[styles.buttonContainer, { opacity: buttonOpacity }]}>
-      <Paragraph
-        size={ParagraphSizes.medium}
-        customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}
-      >
-        {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
-      </Paragraph>
-      <Btn
-        type={BtnTypes.primary}
-        size={BtnSize.medium}
-        onPress={
-          gestureState === GestureState.Success
-            ? redirectToRepeatSeedPhrase
-            : () => {}
-        }
-      >
-        {strings.DONE}
-      </Btn>
-    </Animated.View>
+    <AbsoluteBottom>
+      <Animated.View style={[{ opacity: buttonOpacity }]}>
+        <Paragraph
+          size={ParagraphSizes.medium}
+          customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}
+        >
+          {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
+        </Paragraph>
+        <Btn
+          type={BtnTypes.primary}
+          size={BtnSize.medium}
+          onPress={
+            gestureState === GestureState.Success
+              ? redirectToRepeatSeedPhrase
+              : () => {}
+          }
+        >
+          {strings.DONE}
+        </Btn>
+      </Animated.View>
+    </AbsoluteBottom>
   )
 
   return (
     <>
       {renderBackgroundCrossfade()}
-      <ScreenContainer
-        backgroundColor={Colors.transparent}
-        customStyles={{ paddingBottom: 60 }}
-      >
-        {renderInfoIcon()}
-        {renderSeedphrase()}
-        <View style={styles.bottomContainer}>
-          {renderMagicButton()}
-          {renderMagicInfo()}
+      <ScreenContainer backgroundColor={Colors.transparent}>
+        {/* this should take 3/5 of a screen; justify-content: space-between */}
+        <View style={styles.phraseContainer}>
+          {renderInfoIcon()}
+          {renderSeedphrase()}
         </View>
-        {renderBottomButtons()}
+        {/* this should take 2/5 of a screen */}
+        <View style={styles.helpersContainer}>
+          <View style={styles.bottomContainer}>
+            {renderMagicButton()}
+            {renderMagicInfo()}
+          </View>
+          {renderBottomButtons()}
+        </View>
       </ScreenContainer>
     </>
   )
 }
 
 const styles = StyleSheet.create({
+  phraseContainer: {
+    flex: 0.6,
+    width: '100%',
+    justifyContent: 'space-around',
+  },
+  helpersContainer: {
+    flex: 0.4,
+    width: '100%',
+  },
   wrapper: {
     flex: 1,
     width: '100%',
@@ -263,15 +273,7 @@ const styles = StyleSheet.create({
     },
     textShadowRadius: 10,
   },
-  seedphraseContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginTop: 10,
-  },
   bottomContainer: {
-    flex: 0.4,
-    width: '100%',
     alignItems: 'flex-end',
     paddingRight: Platform.select({
       ios: 0,
@@ -300,16 +302,11 @@ const styles = StyleSheet.create({
   info: {
     width: '80%',
   },
-  buttonContainer: {
-    width: '100%',
-  },
   paragraph: {
     ...TextStyle.middleSubtitle,
   },
   iconContainer: {
-    position: 'absolute',
-    top: 30,
-    right: 30,
+    alignSelf: 'flex-end',
   },
 })
 
