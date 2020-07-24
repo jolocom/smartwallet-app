@@ -1,6 +1,7 @@
 import React from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import Swiper from 'react-native-swiper'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
@@ -19,6 +20,7 @@ import {
 } from '~/assets/images'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
+import ScreenContainer from '~/components/ScreenContainer'
 
 const walkthroughData = [
   {
@@ -64,8 +66,10 @@ const Walkthrough: React.FC = () => {
     )
   }
 
+  const insets = useSafeArea()
+
   return (
-    <>
+    <ScreenContainer isFullscreen customStyles={{ marginTop: -insets.top }}>
       <Swiper
         loop
         autoplay
@@ -106,12 +110,12 @@ const Walkthrough: React.FC = () => {
           </Btn>
         </BtnGroup>
       </AbsoluteBottom>
-    </>
+    </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
-  background: { ...(StyleSheet.absoluteFill as {}) },
+  background: { ...(StyleSheet.absoluteFill as {}), top: -20 },
   consistentContainer: {
     paddingHorizontal: '5%',
   },
