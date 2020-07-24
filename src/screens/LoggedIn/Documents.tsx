@@ -3,7 +3,7 @@ import React from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
 import Btn from '~/components/Btn'
-import { useCreateAttributes } from '~/hooks/sdk'
+import { useCreateAttributes } from '~/hooks/attributes'
 
 const Documents: React.FC = () => {
   const { addEmail, addName } = useCreateAttributes()

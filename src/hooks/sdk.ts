@@ -1,9 +1,6 @@
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  InteractionChannel,
-  FlowType,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
@@ -12,13 +9,8 @@ import { useLoader } from './useLoader'
 import {
   setInteractionSummary,
   setInteraction,
-  setInteractionAttributes,
-  setInitialSelectedAttributes,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import { setAttrs, updateAttrs } from '~/modules/attributes/actions'
-import { Attrs } from '~/modules/attributes/types'
-import { getMappedAttrubutes } from '~/utils/attributes'
 
 export const useSDK = () => {
   const sdk = useContext(SDKContext)
@@ -96,65 +88,4 @@ export const useInteraction = () => {
   if (!interactionId.length) throw new Error('Interaction not found')
 
   return sdk.bemw.interactionManager.getInteraction(interactionId)
-}
-
-export const useGetAttributes = () => {
-  const dispatch = useDispatch()
-
-  const getAttributes = async () => {
-    try {
-      const attributes = {
-        name: [
-          { id: 'abc1', value: 'John Smith' },
-          { id: 'abc2', value: 'JSmith' },
-        ],
-        email: [{ id: 'abc3', value: 'johnsmith@example.com' }],
-      }
-      dispatch(setAttrs(attributes))
-
-      // this will happen on Credentail Share flow
-      const requestedAttributes = ['number', 'email']
-      const interactionAttributues = requestedAttributes.reduce((acc, v) => {
-        acc[v] = attributes[v] || []
-        return acc
-      }, {})
-      dispatch(setInteractionAttributes(interactionAttributues))
-
-      const selectedAttributes = Object.keys(interactionAttributues).reduce(
-        (acc, v) => {
-          if (!acc[v]) {
-            acc[v] = interactionAttributues[v].length
-              ? interactionAttributues[v][0].id
-              : ''
-          }
-          return acc
-        },
-        {},
-      )
-      dispatch(setInitialSelectedAttributes(selectedAttributes))
-    } catch (err) {
-      console.warn('Failed getting verifiable credentials')
-    }
-  }
-
-  return getAttributes
-}
-
-const getId = () => '_' + Math.random().toString(36).substr(2, 9)
-export const useCreateAttributes = () => {
-  const dispatch = useDispatch()
-  const createSelfIssuedCredential = async (
-    attributeKey: Attrs,
-    value: string,
-  ) => {
-    const id = getId()
-    const attribute = { id, value }
-    dispatch(updateAttrs({ attributeKey, attribute }))
-  }
-
-  return {
-    addEmail: () =>
-      createSelfIssuedCredential(Attrs.email, 'johns@example.com'),
-    addName: () => createSelfIssuedCredential(Attrs.name, 'John Smith'),
-  }
 }

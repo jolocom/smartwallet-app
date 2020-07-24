@@ -1,28 +1,51 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Paragraph from '~/components/Paragraph'
 import AttributesWidget from '~/components/AttributesWidget'
-import { useSelector } from 'react-redux'
+import Btn, { BtnTypes } from '~/components/Btn'
+import { useSelector, useDispatch } from 'react-redux'
 import { getInteractionAttributes } from '~/modules/interaction/selectors'
+import { resetInteraction } from '~/modules/interaction/actions'
+import { useSetInteractionAttributes } from '~/hooks/attributes'
 
 const History: React.FC = () => {
   const attributes = useSelector(getInteractionAttributes)
+  const [isWidgetShown, setIsWidgetShown] = useState(false)
+
+  const dispatch = useDispatch()
+  const setInteractionAttributes = useSetInteractionAttributes()
+
+  const handleShareCredentials = () => {
+    setIsWidgetShown(true)
+    setInteractionAttributes()
+  }
+
+  const handleResetInteraction = () => {
+    setIsWidgetShown(false)
+    dispatch(resetInteraction())
+  }
 
   return (
     <ScreenContainer>
       <View style={{ width: '100%' }}>
-        <Paragraph customStyles={{ marginBottom: 20 }}>
-          Below is the widget from the interaction
-        </Paragraph>
-        <AttributesWidget
-          attributes={attributes}
-          onCreateNewAttr={(sectionKey) =>
-            console.log('Creating new attr for', sectionKey)
-          }
-          isSelectable={true}
-        />
+        {!isWidgetShown && (
+          <Btn onPress={handleShareCredentials}>Share attributes</Btn>
+        )}
+        {isWidgetShown && (
+          <>
+            <AttributesWidget
+              attributes={attributes}
+              onCreateNewAttr={(sectionKey) =>
+                console.log('Creating new attr for', sectionKey)
+              }
+              isSelectable={true}
+            />
+            <Btn type={BtnTypes.secondary} onPress={handleResetInteraction}>
+              Reset Interaction
+            </Btn>
+          </>
+        )}
       </View>
     </ScreenContainer>
   )
