@@ -13,7 +13,12 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
         attributeKey,
         attribute,
       }: { attributeKey: AttrKeys; attribute: AttributeI } = action.payload
-      return { ...state, [attributeKey]: [...state[attributeKey], attribute] }
+      return {
+        ...state,
+        [attributeKey]: state[attributeKey]
+          ? [...state[attributeKey], attribute]
+          : [attribute],
+      }
     default:
       return state
   }
