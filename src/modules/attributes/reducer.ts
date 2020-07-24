@@ -1,5 +1,6 @@
 import { ActionI } from '~/types/action'
-import { AttrsState, AttrActions, Attrs, AttributeI } from './types'
+import { AttrsState, AttrActions, AttributeI } from './types'
+import { AttrKeys } from '~/types/attributes'
 
 export const initialState = {} as AttrsState<AttributeI>
 
@@ -11,7 +12,7 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
       const {
         attributeKey,
         attribute,
-      }: { attributeKey: Attrs; attribute: AttributeI } = action.payload
+      }: { attributeKey: AttrKeys; attribute: AttributeI } = action.payload
       return { ...state, [attributeKey]: [...state[attributeKey], attribute] }
     default:
       return state

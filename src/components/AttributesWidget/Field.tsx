@@ -5,7 +5,7 @@ import { Colors } from '~/utils/colors'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import { PurpleTickSuccess } from '~/assets/svg'
-import { AttrKeys } from './AttrSectionHeader'
+import { AttrKeys } from '~/types/attributes'
 
 export enum FieldTypes {
   isSelectable = 'isSelectable',

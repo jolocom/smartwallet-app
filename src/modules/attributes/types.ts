@@ -1,4 +1,4 @@
-import { AttrKeys } from '~/components/AttributesWidget/AttrSectionHeader'
+import { AttrKeys } from '~/types/attributes'
 
 export type AttrsState<T> = {
   [key in keyof typeof AttrKeys]: T[]
@@ -12,10 +12,4 @@ export enum AttrActions {
 export interface AttributeI {
   id: string
   value: string
-}
-
-export enum Attrs {
-  name = 'name',
-  email = 'email',
-  phone = 'phone',
 }

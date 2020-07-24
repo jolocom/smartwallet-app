@@ -1,6 +1,6 @@
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { AttrsState } from '../attributes/types'
-import { SelectableAttrI } from '~/components/AttributesWidget'
+import { AttrsState, AttributeI } from '../attributes/types'
+import { AttrKeys } from '~/types/attributes'
 
 export enum InteractionActions {
   setInteraction = 'setInteraction',
@@ -15,6 +15,6 @@ export interface InteractionState {
   interactionId: string
   interactionType: FlowType | null
   summary: any
-  attributes: AttrsState<SelectableAttrI>
-  selectedAttributes: { [key: string]: string[] } // TODO: to be corrected: instead of string enum
+  attributes: AttrsState<AttributeI>
+  selectedAttributes: { [key in keyof typeof AttrKeys]: string }
 }

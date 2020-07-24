@@ -3,22 +3,17 @@ import { StyleSheet, View } from 'react-native'
 
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
 
-import AttrSectionHeader, { AttrKeys } from './AttrSectionHeader'
+import AttrSectionHeader from './AttrSectionHeader'
 import Field, { FieldTypes } from './Field'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSelectedAttributes } from '~/modules/interaction/selectors'
 import { selectAttr } from '~/modules/interaction/actions'
+import { AttrKeys } from '~/types/attributes'
 
 interface AttrsWidgetPropsI {
   attributes: AttrsState<AttributeI>
   isSelectable?: boolean
   onCreateNewAttr: (sectionKey: AttrKeys) => void
-}
-
-export interface SelectableAttrI {
-  id: string
-  isSelected: boolean
-  value: string
 }
 
 const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({

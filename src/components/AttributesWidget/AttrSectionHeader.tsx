@@ -5,13 +5,9 @@ import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { CloseIcon } from '~/assets/svg'
+import { AttrKeys } from '~/types/attributes'
 
-export enum AttrKeys {
-  name = 'name',
-  email = 'email',
-  number = 'number',
-}
-type AttrKeysUpper = 'NAME' | 'EMAIL' | 'NUMBER'
+export type AttrKeysUpper = 'NAME' | 'EMAIL' | 'NUMBER'
 
 interface AttrSectionHeaderPropsI {
   sectionKey: AttrKeys
