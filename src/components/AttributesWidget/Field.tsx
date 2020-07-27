@@ -19,15 +19,15 @@ export enum FieldTypes {
 }
 
 interface SelectableFieldI {
-  onCreateNewOne: (e: GestureResponderEvent) => void
+  onCreateNewOne: () => void
   type: FieldTypes.isSelectable
   value: string
   isSelected: boolean
-  onSelect: (e: GestureResponderEvent) => void
+  onSelect: () => void
 }
 
 interface StaticFieldI {
-  onCreateNewOne: (e: GestureResponderEvent) => void
+  onCreateNewOne: () => void
   type: FieldTypes.isStatic
   value: string
   isSelected?: never
@@ -35,7 +35,7 @@ interface StaticFieldI {
 }
 
 interface EmptyFieldI {
-  onCreateNewOne: (e: GestureResponderEvent) => void
+  onCreateNewOne: () => void
   type: FieldTypes.isEmpty
   value?: never
   isSelected?: never
