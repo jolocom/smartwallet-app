@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import { PurpleTickSuccess } from '~/assets/svg'
 
@@ -54,7 +54,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
       return (
         <TouchableWithoutFeedback onPress={onSelect}>
           <View style={styles.field as ViewStyle}>
-            <Paragraph>{value}</Paragraph>
+            <Paragraph size={ParagraphSizes.medium}>{value}</Paragraph>
             {isSelected ? (
               <View style={styles.radio}>
                 <PurpleTickSuccess />
@@ -68,14 +68,16 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
     case FieldTypes.isStatic:
       return (
         <View style={styles.field as ViewStyle}>
-          <Paragraph>{value}</Paragraph>
+          <Paragraph size={ParagraphSizes.medium}>{value}</Paragraph>
         </View>
       )
     case FieldTypes.isEmpty:
       return (
         <TouchableOpacity onPress={onCreateNewOne}>
           <View style={styles.field as ViewStyle}>
-            <Paragraph color={Colors.error}>{strings.MISSING_INFO}*</Paragraph>
+            <Paragraph size={ParagraphSizes.medium} color={Colors.error}>
+              {strings.MISSING_INFO}*
+            </Paragraph>
           </View>
         </TouchableOpacity>
       )

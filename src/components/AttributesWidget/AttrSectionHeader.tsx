@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
-import { CloseIcon } from '~/assets/svg'
+import { PlusIcon } from '~/assets/svg'
 import { AttrKeys, AttrKeysUpper } from '~/types/attributes'
 
 interface AttrSectionHeaderPropsI {
@@ -18,7 +18,11 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
 }) => {
   return (
     <View style={styles.headerContainer}>
-      <Paragraph color={Colors.white70} customStyles={{ opacity: 0.6 }}>
+      <Paragraph
+        size={ParagraphSizes.medium}
+        color={Colors.white70}
+        customStyles={{ opacity: 0.6 }}
+      >
         {strings[sectionKey.toUpperCase() as AttrKeysUpper]}
       </Paragraph>
       <TouchableOpacity
@@ -26,9 +30,11 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
         onPress={(e) => onCreateNew(sectionKey)}
       >
         <View style={styles.plus}>
-          <CloseIcon />
+          <PlusIcon />
         </View>
-        <Paragraph>{strings.CREATE_NEW_ONE}</Paragraph>
+        <Paragraph size={ParagraphSizes.medium}>
+          {strings.CREATE_NEW_ONE}
+        </Paragraph>
       </TouchableOpacity>
     </View>
   )
@@ -38,15 +44,18 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 10,
+    marginBottom: -5,
   },
   createNewBtn: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   plus: {
-    transform: [{ rotate: '45deg' }, { scale: 0.7 }],
-    marginRight: 13,
-    marginTop: 2,
+    transform: [{ scale: 0.7 }],
+    marginRight: 3,
+    marginBottom: 2,
   },
 })
 
