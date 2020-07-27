@@ -18,3 +18,10 @@ export const setInitialSelectedAttributes = createAction(
 )
 
 export const selectAttr = createAction(InteractionActions.selectAttr)
+export const setIntermediaryState = createAction(
+  InteractionActions.setIntermediaryState,
+)
+
+export const setAttributeInputKey = createAction(
+  InteractionActions.setAttributeInputKey,
+)

@@ -1,10 +1,14 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import Paragraph, { ParagraphSizes } from './Paragraph'
+import Header from './Header'
+import { Fonts } from '~/utils/fonts'
+import { Colors } from '~/utils/colors'
 
 const PasscodeHeader: React.FC = ({ children }) => (
   <View style={styles.headerContainer}>
-    <Paragraph size={ParagraphSizes.large}>{children}</Paragraph>
+    <Header customStyles={{ fontFamily: Fonts.Regular }} color={Colors.white90}>
+      {children}
+    </Header>
   </View>
 )
 

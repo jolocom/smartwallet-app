@@ -8,6 +8,7 @@ export const useAppState = (
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
     callback(appState.current, nextAppState)
+    appState.current = nextAppState
   }
 
   useEffect(() => {

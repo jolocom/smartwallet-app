@@ -11,11 +11,11 @@ interface PropsI {
 const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   return (
     <>
-      <Header size={HeaderSizes.small} color={Colors.white90}>
+      <Header size={HeaderSizes.medium} color={Colors.white90}>
         {title}
       </Header>
       {description && (
-        <Paragraph size={ParagraphSizes.micro} color={Colors.white90}>
+        <Paragraph size={ParagraphSizes.small} color={Colors.white90}>
           {description}
         </Paragraph>
       )}

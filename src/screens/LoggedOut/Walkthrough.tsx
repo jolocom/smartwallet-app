@@ -1,9 +1,9 @@
 import React from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import Swiper from 'react-native-swiper'
+import { useSafeArea } from 'react-native-safe-area-context'
 
-import ScreenContainer from '~/components/ScreenContainer'
-import Header from '~/components/Header'
+import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
@@ -20,6 +20,7 @@ import {
 } from '~/assets/images'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
+import ScreenContainer from '~/components/ScreenContainer'
 
 const walkthroughData = [
   {
@@ -65,8 +66,10 @@ const Walkthrough: React.FC = () => {
     )
   }
 
+  const insets = useSafeArea()
+
   return (
-    <ScreenContainer isFullscreen>
+    <ScreenContainer isFullscreen customStyles={{ marginTop: -insets.top }}>
       <Swiper
         loop
         autoplay
@@ -81,13 +84,17 @@ const Walkthrough: React.FC = () => {
               source={slide.background}
             />
             <AbsoluteBottom
-              customStyles={{ ...styles.consistentContainer, bottom: 190 }}
+              customStyles={{ ...styles.consistentContainer, bottom: 195 }}
             >
               <View style={styles.contentContainer}>
-                <Header color={Colors.white90}>
+                <Header size={HeaderSizes.large} color={Colors.white90}>
                   {walkthroughData[idx].header}
                 </Header>
-                <Paragraph size={ParagraphSizes.medium} color={Colors.white85}>
+                <Paragraph
+                  size={ParagraphSizes.large}
+                  color={Colors.white85}
+                  customStyles={{ opacity: 0.8, marginTop: 12 }}
+                >
                   {walkthroughData[idx].paragraph}
                 </Paragraph>
               </View>
@@ -108,13 +115,12 @@ const Walkthrough: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
-  background: { ...(StyleSheet.absoluteFill as {}) },
+  background: { ...(StyleSheet.absoluteFill as {}), top: -20 },
   consistentContainer: {
     paddingHorizontal: '5%',
   },
   contentContainer: {
     alignItems: 'center',
-    backgroundColor: 'transparent',
     paddingHorizontal: '5%',
   },
   dotContainer: {

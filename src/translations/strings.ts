@@ -59,9 +59,9 @@ const passcode = {
 const seedphrase = {
   HOLD_YOUR_FINGER_ON_THE_CIRCLE:
     'Hold your finger on the circle untill magic will happen',
-  WRITE_DOWN_THIS_PHRASE_ITS_VERY_IMPORTANT:
-    "Write down this phrase. It's very important!",
-  OKAY: 'Okay',
+  WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE:
+    'Write down this phrase somewhere safe to proceed with the next step',
+  DONE: 'Done',
   WHY_SO_ANALOGUE: 'Why so analogue?',
   ANY_FUTURE_PASSCODE_RESTORE:
     'Any future passcode restore is possible only with your secret phrase',

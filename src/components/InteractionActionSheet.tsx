@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, RefObject } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import ActionSheet from 'react-native-actions-sheet'
 import { useSelector, useDispatch } from 'react-redux'
@@ -7,25 +7,44 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
 
-import Paragraph from '~/components/Paragraph'
 import {
   getInteractionType,
   getIsFullScreenInteraction,
+  getIntermediaryState,
 } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
 import { resetInteraction } from '~/modules/interaction/actions'
-import CredentialShare from './CredentialShare'
-import CredentialReceive from './CredentialReceive'
+import CredentialShare from '~/screens/Modals/Interactions/CredentialShare'
+import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
+import IntermediaryActionSheet from './IntermediaryActionSheet'
+import useDelay from '~/hooks/useDelay'
+import { IntermediaryState } from '~/modules/interaction/types'
+import { setIntermediaryState } from '~/modules/interaction/actions'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
+const ACTION_SHEET_PROPS = {
+  closeOnTouchBackdrop: false,
+  footerHeight: 0,
+  closeOnPressBack: false,
+  //NOTE: removes shadow artifacts left from transparent view elevation
+  elevation: 0,
+  //NOTE: removes the gesture header
+  CustomHeaderComponent: <View />,
+}
+
+const BasWrapper: React.FC = ({ children }) => (
+  <View style={styles.wrapper}>{children}</View>
+)
 
 const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
+  const intermediarySheetRef = useRef<ActionSheet>(null)
 
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
+  const intermediaryState = useSelector(getIntermediaryState)
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
 
   useEffect(() => {
@@ -36,7 +55,33 @@ const InteractionActionSheet: React.FC = () => {
     }
   }, [interactionType])
 
-  const handleCloseSheet = () => dispatch(resetInteraction())
+  const replaceActionSheet = (
+    initial: RefObject<ActionSheet>,
+    next: RefObject<ActionSheet>,
+  ) => {
+    initial.current?.setModalVisible(false)
+    setTimeout(() => {
+      next.current?.setModalVisible(true)
+    }, 300)
+  }
+
+  useEffect(() => {
+    if (interactionType) {
+      if (intermediaryState === IntermediaryState.showing) {
+        replaceActionSheet(actionSheetRef, intermediarySheetRef)
+      } else if (intermediaryState === IntermediaryState.hiding) {
+        replaceActionSheet(intermediarySheetRef, actionSheetRef)
+      }
+    }
+  }, [intermediaryState])
+
+  const handleCloseSheet = () => {
+    if (intermediaryState === IntermediaryState.hiding) {
+      dispatch(setIntermediaryState(IntermediaryState.absent))
+    } else if (intermediaryState === IntermediaryState.absent) {
+      dispatch(resetInteraction())
+    }
+  }
 
   const renderBody = () => {
     switch (interactionType) {
@@ -56,15 +101,9 @@ const InteractionActionSheet: React.FC = () => {
   return (
     <>
       <ActionSheet
+        {...ACTION_SHEET_PROPS}
         ref={actionSheetRef}
-        closeOnTouchBackdrop={false}
-        gestureEnabled={!isFullScreenInteraction}
         onClose={handleCloseSheet}
-        footerHeight={0}
-        //NOTE: removes shadow artifacts left from transparent view elevation
-        elevation={0}
-        //NOTE: removes the gesture header
-        CustomHeaderComponent={<View />}
         containerStyle={
           isFullScreenInteraction
             ? styles.containerMultiple
@@ -74,9 +113,21 @@ const InteractionActionSheet: React.FC = () => {
         {isFullScreenInteraction ? (
           renderBody()
         ) : (
-          <View style={styles.wrapper}>{renderBody()}</View>
+          <BasWrapper>{renderBody()}</BasWrapper>
         )}
       </ActionSheet>
+      {intermediaryState !== IntermediaryState.absent && (
+        <ActionSheet
+          {...ACTION_SHEET_PROPS}
+          ref={intermediarySheetRef}
+          onClose={handleCloseSheet}
+          containerStyle={styles.containerSingle}
+        >
+          <BasWrapper>
+            <IntermediaryActionSheet />
+          </BasWrapper>
+        </ActionSheet>
+      )}
     </>
   )
 }

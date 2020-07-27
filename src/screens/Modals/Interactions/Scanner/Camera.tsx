@@ -16,7 +16,7 @@ import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/t
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Paragraph from '~/components/Paragraph'
+import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 import { getLoaderState } from '~/modules/loader/selectors'
@@ -156,6 +156,7 @@ const Camera = () => {
               {isError ? (
                 <Paragraph
                   animated
+                  size={ParagraphSizes.medium}
                   customStyles={{
                     width: MARKER_SIZE,
                     color: Colors.error,
@@ -165,7 +166,10 @@ const Camera = () => {
                   {errorText}
                 </Paragraph>
               ) : (
-                <Paragraph customStyles={{ width: MARKER_SIZE }}>
+                <Paragraph
+                  size={ParagraphSizes.medium}
+                  customStyles={{ width: MARKER_SIZE }}
+                >
                   {
                     strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE
                   }

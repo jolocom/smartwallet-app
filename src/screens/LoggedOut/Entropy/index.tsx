@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from '~/components/Header'
@@ -13,8 +13,14 @@ import { EntropyGenerator } from './EntropyGenerator'
 import { EntropyCanvas } from './EntropyCanvas'
 import { useDispatch } from 'react-redux'
 import { setEntropy } from '~/modules/account/actions'
+import { Colors } from '~/utils/colors'
 
-const ENOUGH_ENTROPY_PROGRESS = 0.3
+//NOTE: Determines the duration of entropy collection
+const ENOUGH_ENTROPY_PROGRESS = Platform.select({
+  ios: 0.6,
+  android: 0.3,
+  default: 0.3,
+})
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
@@ -31,7 +37,9 @@ const Entropy: React.FC = () => {
     <ScreenContainer>
       {!!entropyProgress ? (
         <View style={styles.percentage}>
-          <Header>{`${Math.trunc(entropyProgress * 100)} %`}</Header>
+          <Header color={Colors.white85}>{`${Math.trunc(
+            entropyProgress * 100,
+          )} %`}</Header>
         </View>
       ) : (
         <EntropyIntro />

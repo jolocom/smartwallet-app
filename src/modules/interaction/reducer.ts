@@ -1,15 +1,25 @@
-import { ActionI } from '~/types/actions'
-import { InteractionActions, InteractionState } from './types'
+import {
+  InteractionActions,
+  InteractionState,
+  IntermediaryState,
+} from './types'
+import { Action } from '~/types/actions'
+import { ActionI } from '~/types/action'
 
-const initialState = {
+const initialState: InteractionState = {
   interactionId: '',
   interactionType: null,
+  intermediaryState: IntermediaryState.absent,
+  attributeInputKey: null,
   summary: {},
   attributes: {},
   selectedAttributes: {},
 }
 
-const reducer = (state = initialState, action: ActionI<InteractionActions>) => {
+const reducer = (
+  state = initialState,
+  action: Action<InteractionActions, any>,
+) => {
   switch (action.type) {
     case InteractionActions.setInteraction:
       return {
@@ -27,6 +37,10 @@ const reducer = (state = initialState, action: ActionI<InteractionActions>) => {
       return { ...state, selectedAttributes: action.payload }
     case InteractionActions.selectAttr:
       return onSelectAttr(state, action)
+    case InteractionActions.setIntermediaryState:
+      return { ...state, intermediaryState: action.payload }
+    case InteractionActions.setAttributeInputKey:
+      return { ...state, attributeInputKey: action.payload }
     default:
       return state
   }

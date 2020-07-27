@@ -18,8 +18,8 @@ import { isAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 
 const colors: { [x: string]: Colors } = {
   default: Colors.white70,
-  error: Colors.error,
-  success: Colors.success,
+  error: Colors.white70,
+  success: Colors.white70,
 }
 
 interface LoaderI {
@@ -60,7 +60,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
         useNativeDriver: true,
       }),
       Animated.timing(errorScale, {
-        toValue: 0.8,
+        toValue: 1,
         easing: Easing.bounce,
         useNativeDriver: true,
       }),
@@ -135,24 +135,18 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
         >
           {loaderType.current === LoaderTypes.success ? (
             <View style={styles.tickContainer}>
-              <View
-                style={{
-                  position: 'absolute',
-                  transform: [{ scale: 0.8 }],
-                }}
-              >
-                <SuccessTick />
+              <View>
+                <SuccessTick color={loaderColor.current} />
               </View>
             </View>
           ) : (
             <Animated.View
               style={{
-                position: 'absolute',
                 transform: [{ scale: errorScale }],
                 opacity: errorOpacity,
               }}
             >
-              <ErrorIcon />
+              <ErrorIcon color={loaderColor.current} />
             </Animated.View>
           )}
         </Circle>
@@ -165,7 +159,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
         {renderLoaderType()}
         <Paragraph
-          customStyles={{ marginTop: 20, opacity: 0.9 }}
+          customStyles={styles.description}
           size={ParagraphSizes.medium}
           color={loaderColor.current}
         >
@@ -192,6 +186,10 @@ const styles = StyleSheet.create({
   tickBlocker: {
     height: '100%',
     width: 10,
+  },
+  description: {
+    marginTop: 20,
+    opacity: 0.9,
   },
 })
 

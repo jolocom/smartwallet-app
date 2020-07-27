@@ -9,6 +9,8 @@ export enum InteractionActions {
   setInteractionAttributes = 'setInteractionAttributes',
   setInitialSelectedAttributes = 'setInitialSelectedAttributes',
   selectAttr = 'selectAttr',
+  setIntermediaryState = 'setIntermediaryState',
+  setAttributeInputKey = 'setAttributeInputKey',
 }
 
 export interface InteractionState {
@@ -16,5 +18,14 @@ export interface InteractionState {
   interactionType: FlowType | null
   summary: any
   attributes: AttrsState<AttributeI>
-  selectedAttributes: { [key in keyof typeof AttrKeys]: string }
+  selectedAttributes: { [key in keyof typeof AttrKeys]: string } | {}
+  intermediaryState: IntermediaryState
+  //TODO: change to attribute type
+  attributeInputKey: string | null
+}
+
+export enum IntermediaryState {
+  showing = 'showing',
+  hiding = 'hiding',
+  absent = 'absent',
 }

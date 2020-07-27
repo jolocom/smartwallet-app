@@ -19,11 +19,16 @@ const ContainerComponent: React.FC = ({ children }) => {
 const Claims: React.FC = () => {
   const loader = useLoader()
   const openLoader = async () => {
-    await loader(async () => {}, {
-      success: 'Good loader :)',
-      loading: 'Testing ...',
-      failed: 'Bad loader :(',
-    })
+    await loader(
+      async () => {
+        // throw new Error('test')
+      },
+      {
+        success: 'Good loader',
+        loading: 'Testing',
+        failed: 'Bad loader',
+      },
+    )
   }
 
   const openScanner = useRedirectTo(ScreenNames.Interactions)
