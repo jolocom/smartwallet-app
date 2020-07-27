@@ -18,7 +18,7 @@ export interface InteractionState {
   interactionType: FlowType | null
   summary: any
   attributes: AttrsState<AttributeI>
-  selectedAttributes: AttrsState<string>
+  selectedAttributes: { [x: string]: string }
   intermediaryState: IntermediaryState
   //TODO: change to attribute type
   attributeInputKey: AttrKeys | null
