@@ -18,10 +18,10 @@ export interface InteractionState {
   interactionType: FlowType | null
   summary: any
   attributes: AttrsState<AttributeI>
-  selectedAttributes: { [key in AttrKeys]: string } | {}
+  selectedAttributes: AttrsState<string>
   intermediaryState: IntermediaryState
   //TODO: change to attribute type
-  attributeInputKey: string | null
+  attributeInputKey: AttrKeys | null
 }
 
 export enum IntermediaryState {

@@ -1,5 +1,9 @@
 import { AttrKeys } from '~/types/attributes'
 
+export interface AttributesState {
+  all: AttrsState<AttributeI>
+}
+
 export type AttrsState<T> = {
   [key in AttrKeys]?: T[]
 }

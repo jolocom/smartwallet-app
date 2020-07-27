@@ -16,7 +16,7 @@ export const getInteractionAttributes = (
 ): AttrsState<AttributeI> => state.interaction.attributes
 export const getSelectedAttributes = (
   state: RootReducerI,
-): { [key: string]: string } => state.interaction.selectedAttributes
+): AttrsState<string> => state.interaction.selectedAttributes
 
 export const getIntermediaryState = (state: RootReducerI): any =>
   state.interaction.intermediaryState
