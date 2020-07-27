@@ -4,18 +4,12 @@ import {
   setInteractionAttributes,
   setInitialSelectedAttributes,
 } from '~/modules/interaction/actions'
-import { AttrKeys } from '~/types/attributes'
+import { AttrKeys, AttrTypes } from '~/types/attributes'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useSDK } from './sdk'
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
 import { makeAttrEntry } from '~/utils/dataMapping'
 import { CredentialI } from '~/utils/dataMapping'
-
-enum AttrTypes {
-  ProofOfEmailCredential = 'ProofOfEmailCredential',
-  ProofOfMobilePhoneNumberCredential = 'ProofOfMobilePhoneNumberCredential',
-  ProofOfNameCredential = 'ProofOfNameCredential',
-}
 
 const ATTR_TYPES = {
   ProofOfEmailCredential: AttrKeys.email,
