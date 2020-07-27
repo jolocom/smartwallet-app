@@ -33,7 +33,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
               sectionKey={sectionKey as AttrKeys}
               onCreateNew={onCreateNewAttr}
             />
-            {Array.isArray(section) ? (
+            {Array.isArray(section) && section.length ? (
               isSelectable ? (
                 section.map((entry) => (
                   <Field

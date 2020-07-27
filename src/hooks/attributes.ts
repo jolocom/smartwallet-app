@@ -8,8 +8,6 @@ import { AttrKeys } from '~/types/attributes'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useSDK } from './sdk'
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
-import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
-import { Credential } from 'jolocom-lib/js/credentials/credential/credential'
 
 enum AttrTypes {
   ProofOfEmailCredential = 'ProofOfEmailCredential',
