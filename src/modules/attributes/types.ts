@@ -1,7 +1,7 @@
 import { AttrKeys } from '~/types/attributes'
 
 export type AttrsState<T> = {
-  [key in keyof typeof AttrKeys]?: T[]
+  [key in AttrKeys]?: T[]
 }
 
 export enum AttrActions {

@@ -1,11 +1,16 @@
 import React from 'react'
-import { TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native'
+import {
+  TouchableWithoutFeedback,
+  View,
+  TouchableOpacity,
+  GestureResponderEvent,
+  ViewStyle,
+} from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import { PurpleTickSuccess } from '~/assets/svg'
-import { AttrKeys } from '~/types/attributes'
 
 export enum FieldTypes {
   isSelectable = 'isSelectable',
@@ -14,15 +19,15 @@ export enum FieldTypes {
 }
 
 interface SelectableFieldI {
-  onCreateNewOne: (sectionKey: AttrKeys) => void
+  onCreateNewOne: (e: GestureResponderEvent) => void
   type: FieldTypes.isSelectable
   value: string
   isSelected: boolean
-  onSelect: (sectionKey: AttrKeys, value: string) => void
+  onSelect: (e: GestureResponderEvent) => void
 }
 
 interface StaticFieldI {
-  onCreateNewOne: (sectionKey: AttrKeys) => void
+  onCreateNewOne: (e: GestureResponderEvent) => void
   type: FieldTypes.isStatic
   value: string
   isSelected?: never
@@ -30,7 +35,7 @@ interface StaticFieldI {
 }
 
 interface EmptyFieldI {
-  onCreateNewOne: (sectionKey: AttrKeys) => void
+  onCreateNewOne: (e: GestureResponderEvent) => void
   type: FieldTypes.isEmpty
   value?: never
   isSelected?: never
@@ -48,7 +53,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
     case FieldTypes.isSelectable:
       return (
         <TouchableWithoutFeedback onPress={onSelect}>
-          <View style={styles.field}>
+          <View style={styles.field as ViewStyle}>
             <Paragraph>{value}</Paragraph>
             {isSelected ? (
               <View style={styles.radio}>
@@ -62,14 +67,14 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
       )
     case FieldTypes.isStatic:
       return (
-        <View style={styles.field}>
+        <View style={styles.field as ViewStyle}>
           <Paragraph>{value}</Paragraph>
         </View>
       )
     case FieldTypes.isEmpty:
       return (
         <TouchableOpacity onPress={onCreateNewOne}>
-          <View style={styles.field}>
+          <View style={styles.field as ViewStyle}>
             <Paragraph color={Colors.error}>{strings.MISSING_INFO}*</Paragraph>
           </View>
         </TouchableOpacity>

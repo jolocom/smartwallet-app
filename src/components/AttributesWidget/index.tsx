@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, GestureResponderEvent } from 'react-native'
 
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
 
@@ -41,12 +41,12 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                     type={FieldTypes.isSelectable}
                     value={entry.value}
                     isSelected={selectedAttributes[sectionKey] === entry.id}
-                    onSelect={() =>
+                    onSelect={(e) =>
                       dispatch(
                         selectAttr({ attrKey: sectionKey, id: entry.id }),
                       )
                     }
-                    onCreateNewOne={() =>
+                    onCreateNewOne={(e) =>
                       onCreateNewAttr(sectionKey as AttrKeys)
                     }
                   />
@@ -57,7 +57,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                     key={entry.id}
                     type={FieldTypes.isStatic}
                     value={entry.value}
-                    onCreateNewOne={() =>
+                    onCreateNewOne={(e: GestureResponderEvent) =>
                       onCreateNewAttr(sectionKey as AttrKeys)
                     }
                   />
@@ -66,7 +66,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
             ) : (
               <Field
                 type={FieldTypes.isEmpty}
-                onCreateNewOne={() => onCreateNewAttr(sectionKey as AttrKeys)}
+                onCreateNewOne={(e) => onCreateNewAttr(sectionKey as AttrKeys)}
               />
             )}
           </View>

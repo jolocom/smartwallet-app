@@ -25,7 +25,7 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
       </Paragraph>
       <TouchableOpacity
         style={styles.createNewBtn}
-        onPress={() => onCreateNew(sectionKey)}
+        onPress={(e) => onCreateNew(sectionKey)}
       >
         <View style={styles.plus}>
           <CloseIcon />
