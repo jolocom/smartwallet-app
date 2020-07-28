@@ -20,13 +20,18 @@ export const makeAttrEntry = (
   } else if (attrKey === AttrKeys.email) {
     entry.value = v.claim.email
   } else if (attrKey === AttrKeys.number) {
-    entry.value = v.claim.number
+    entry.value = v.claim.telephone
   }
 
   return Array.isArray(initialValue) ? [...initialValue, entry] : [entry]
 }
 
-export const credTypes = {
+export enum CredentialTypes {
+  emailAddress = 'emailAddress',
+  mobilePhoneNumber = 'mobilePhoneNumber',
+  name = 'name',
+}
+export const credTypesMapped = {
   email: 'emailAddress',
   number: 'mobilePhoneNumber',
   name: 'name',
@@ -34,8 +39,8 @@ export const credTypes = {
 export const getClaim = (attributeKey: AttrKeys, value: string) => {
   switch (attributeKey) {
     case AttrKeys.name:
-      const [givenName, familyName] = value
-      return { giveName, familyName }
+      const [givenName, familyName] = value.split(' ')
+      return { givenName, familyName: familyName || '' }
     case AttrKeys.email:
       return { email: value }
     case AttrKeys.number:

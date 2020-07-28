@@ -13,8 +13,9 @@ import { AttrsState, AttributeI } from '~/modules/attributes/types'
 import {
   makeAttrEntry,
   CredentialI,
-  credTypes,
   getClaim,
+  CredentialTypes,
+  credTypesMapped,
 } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
 
@@ -93,19 +94,23 @@ export const useCreateAttributes = () => {
     const password = await sdk.bemw.keyChainLib.getPassword()
 
     // this one is done to map our custom fields names to the one in `cred-types-jolocom-core`
-    const attrCredType = credTypes[attributeKey]
+    const attrCredType = credTypesMapped[attributeKey]
     const verifiableCredential = await sdk.bemw.identityWallet.create.signedCredential(
       {
-        metadata: claimsMetadata[attrCredType],
+        metadata: claimsMetadata[attrCredType as CredentialTypes],
         claim: getClaim(attributeKey, value), // this will split claims and create an object with properties it should have
         subject: did,
       },
       password,
     )
-    const entry = makeAttrEntry(attributeKey, undefined, verifiableCredential)
+    const entry = makeAttrEntry(
+      attributeKey,
+      undefined,
+      verifiableCredential as CredentialI,
+    )
 
     // save it in the storage
-    // await sdk.bemw.storageLib.store.verifiableCredential(verifiableCredential)
+    await sdk.bemw.storageLib.store.verifiableCredential(verifiableCredential)
 
     dispatch(updateAttrs({ attributeKey, attribute: entry[0] }))
   }
