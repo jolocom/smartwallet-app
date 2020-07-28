@@ -25,3 +25,20 @@ export const makeAttrEntry = (
 
   return Array.isArray(initialValue) ? [...initialValue, entry] : [entry]
 }
+
+export const credTypes = {
+  email: 'emailAddress',
+  number: 'mobilePhoneNumber',
+  name: 'name',
+}
+export const getClaim = (attributeKey: AttrKeys, value: string) => {
+  switch (attributeKey) {
+    case AttrKeys.name:
+      const [givenName, familyName] = value
+      return { giveName, familyName }
+    case AttrKeys.email:
+      return { email: value }
+    case AttrKeys.number:
+      return { telephone: value }
+  }
+}
