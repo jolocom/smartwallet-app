@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet, TextStyle, Animated } from 'react-native'
+import { Text, StyleSheet, TextStyle, Animated, Platform } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
@@ -56,6 +56,10 @@ const styles = StyleSheet.create({
   paragraph: {
     fontFamily: Fonts.Regular,
     textAlign: 'center',
+    paddingTop: Platform.select({
+      ios: 5,
+      android: 0,
+    }),
   },
   micro: {
     ...getStyle(14, 22, 0),
