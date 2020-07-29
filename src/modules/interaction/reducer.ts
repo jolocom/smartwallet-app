@@ -1,11 +1,27 @@
-import { InteractionActions, IntermediaryState } from './types'
+import {
+  InteractionActions,
+  IntermediaryState,
+  InteractionStateI,
+  AuthenticationDetailsI,
+  AuthorizationDetailsI,
+  CredShareI,
+  CredReceiveI,
+} from './types'
 import { Action } from '~/types/actions'
 import { ActionI } from '~/types/action'
 
-const initialState = {
+const initialState: InteractionStateI<
+  AuthenticationDetailsI | AuthorizationDetailsI | CredShareI | CredReceiveI
+> = {
   details: {
     id: '',
     flowType: null,
+    initiator: {
+      did: '',
+    },
+    issuer: {
+      did: '',
+    },
     description: '',
     image: '',
     action: '',
@@ -15,7 +31,6 @@ const initialState = {
       invalid: [],
     },
   },
-
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
   attributes: {},
@@ -46,7 +61,10 @@ const reducer = (
   }
 }
 
-const onSelectAttr = (state, action: ActionI<InteractionActions>) => {
+const onSelectAttr = (
+  state: InteractionStateI<CredShareI>,
+  action: ActionI<InteractionActions>,
+) => {
   const updatedSelectedAttrs = { [action.payload.attrKey]: action.payload.id }
 
   return {

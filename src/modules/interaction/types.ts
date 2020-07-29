@@ -12,56 +12,72 @@ export enum InteractionActions {
   setAttributeInputKey = 'setAttributeInputKey',
 }
 
-interface InteractionCommonStateI {
-  id: string
-  flowType: FlowType | null
+export interface InteractionStateI<T> {
+  details: T
   attributes: AttrsState<AttributeI>
   selectedAttributes: { [x: string]: string }
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
 }
 
-interface InitiatorI {
+interface InteractionCommonI {
+  id: string
+  flowType: FlowType | null
+}
+
+interface AuthCommonI extends InteractionCommonI {
   initiator: {
     did: string
   }
+  issuer: {
+    did: ''
+  }
+  credentials: {
+    self_issued: []
+    service_issued: []
+    invalid: []
+  }
 }
 
-interface AuthenticationDetailsI extends InitiatorI {
+export interface AuthenticationDetailsI extends AuthCommonI {
   description: string
+  image: ''
+  action: ''
 }
 
-interface AuthorizationDetailsI extends InitiatorI {
-  description?: string
-  image?: string
+export interface AuthorizationDetailsI extends AuthCommonI {
+  description: string
+  image: string
   action: string
 }
 
-interface IssuerI {
+interface CredCommonI extends InteractionCommonI {
+  initiator: {
+    did: ''
+  }
   issuer: {
     did: string
   }
+  description: ''
+  image: ''
+  action: ''
 }
 
-interface CredShareI extends IssuerI {
+export interface CredShareI extends CredCommonI {
   credentials: {
     self_issued: string[]
     service_issued: string[]
-  }
-}
-interface CredReceiveI extends IssuerI {
-  credentials: {
-    service_issued: string[]
+    invalid: []
   }
 }
 
-export type AuthenticationInteractionStateT = InteractionCommonStateI &
-  AuthenticationDetailsI
-export type AuthorizationInteractionStateT = InteractionCommonStateI &
-  AuthorizationDetailsI
-export type CredShareInteractionStateT = InteractionCommonStateI & CredShareI
-export type CredReceiveInteractionStateT = InteractionCommonStateI &
-  CredReceiveI
+export interface CredReceiveI extends CredCommonI {
+  credentials: {
+    self_issued: []
+    service_issued: string[]
+    invalid: string[]
+  }
+}
 
 export enum IntermediaryState {
   showing = 'showing',
