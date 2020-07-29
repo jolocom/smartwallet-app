@@ -3,21 +3,23 @@ import { Action } from '~/types/actions'
 import { ActionI } from '~/types/action'
 
 const initialState = {
-  id: '',
-  flowType: null,
+  details: {
+    id: '',
+    flowType: null,
+    description: '',
+    image: '',
+    action: '',
+    credentials: {
+      self_issued: [],
+      service_issued: [],
+      invalid: [],
+    },
+  },
+
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
   attributes: {},
   selectedAttributes: {},
-
-  description: '',
-  image: '',
-  action: '',
-  credentials: {
-    self_issued: [],
-    service_issued: [],
-    invalid: [],
-  },
 }
 
 const reducer = (
@@ -25,11 +27,8 @@ const reducer = (
   action: Action<InteractionActions, any>,
 ) => {
   switch (action.type) {
-    case InteractionActions.setInteractionIdAndType:
-      const { id, flowType } = action.payload
-      return { ...state, id, flowType }
     case InteractionActions.setInteractionDetails:
-      return { ...state, ...action.payload }
+      return { ...state, details: action.payload }
     case InteractionActions.resetInteraction:
       return initialState
     case InteractionActions.setInteractionAttributes:

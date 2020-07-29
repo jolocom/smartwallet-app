@@ -65,8 +65,6 @@ const mapAuthenticationData = (summary: AuthenticationSummaryI) => {
 }
 
 const mapCredShareData = (summary: CredShareSummaryI) => {
-  console.log({ summary })
-
   const credentials = summary.state.constraints[0].credentialRequirements.reduce(
     (acc, v) => {
       const credType: AttrKeys | string = v.type[1]

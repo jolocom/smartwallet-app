@@ -3,7 +3,6 @@ import { AttrsState, AttributeI } from '../attributes/types'
 import { AttrKeys } from '~/types/attributes'
 
 export enum InteractionActions {
-  setInteractionIdAndType = 'setInteractionIdAndType',
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
   setInteractionAttributes = 'setInteractionAttributes',

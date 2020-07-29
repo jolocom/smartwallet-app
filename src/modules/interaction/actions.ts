@@ -1,10 +1,6 @@
 import createAction from '~/utils/createAction'
 import { InteractionActions } from './types'
 
-export const setInteractionIdAndType = createAction(
-  InteractionActions.setInteractionIdAndType,
-)
-
 export const setInteractionDetails = createAction(
   InteractionActions.setInteractionDetails,
 )

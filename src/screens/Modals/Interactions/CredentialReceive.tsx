@@ -7,7 +7,7 @@ import { useInteraction } from '~/hooks/sdk'
 import { resetInteraction } from '~/modules/interaction/actions'
 import { getIsFullScreenInteraction } from '~/modules/interaction/selectors'
 import Header from '~/components/Header'
-import Btn from '~/components/Btn'
+import InteractionFooter from './InteractionFooter'
 
 const CredentialReceive = () => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -50,7 +50,7 @@ const CredentialReceive = () => {
   return (
     <>
       <Header>Credential Receive</Header>
-      <Btn onPress={() => dispatch(resetInteraction())}>Cancel</Btn>
+      <InteractionFooter onSubmit={() => {}} />
     </>
   )
 }

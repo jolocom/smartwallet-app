@@ -6,10 +6,7 @@ import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import { SDKContext } from '~/utils/sdk/context'
 import { useLoader } from './useLoader'
-import {
-  setInteractionIdAndType,
-  setInteractionDetails,
-} from '~/modules/interaction/actions'
+import { setInteractionDetails } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { getMappedInteraction } from '~/utils/dataMapping'
 
@@ -68,12 +65,12 @@ export const useInteractionStart = (channel: InteractionChannel) => {
         let mappedInteraction = getMappedInteraction(interaction)
 
         dispatch(
-          setInteractionIdAndType({
+          setInteractionDetails({
             id: interaction.id,
             flowType: interaction.flow.type,
+            ...mappedInteraction,
           }),
         )
-        dispatch(setInteractionDetails(mappedInteraction))
       },
       { showSuccess: false },
     )

@@ -5,9 +5,9 @@ import { AttrsState, AttributeI } from '../attributes/types'
 import { IntermediaryState } from './types'
 
 export const getInteractionId = (state: RootReducerI): string =>
-  state.interaction.id
+  state.interaction.details.id
 export const getInteractionType = (state: RootReducerI): FlowType | null =>
-  state.interaction.flowType
+  state.interaction.details.flowType
 
 export const getInteractionAttributes = (
   state: RootReducerI,
@@ -23,13 +23,13 @@ export const getAttributeInputKey = (state: RootReducerI): any =>
   state.interaction.attributeInputKey
 
 export const getCredentials = (state: RootReducerI): any =>
-  state.interaction.credentials
+  state.interaction.details.credentials
 
 export const getInteractionDescription = (state: RootReducerI): any =>
-  state.interaction.description
+  state.interaction.details.description
 
 export const getInteractionAction = (state: RootReducerI): any =>
-  state.interaction.action
+  state.interaction.details.action
 
 export const getIsFullScreenInteraction = createSelector(
   [getInteractionType, getIntermediaryState, getCredentials],
@@ -46,6 +46,11 @@ export const getIsFullScreenInteraction = createSelector(
       !credentials.service_issued.length
     ) {
       return false
+    } else if (
+      type === FlowType.CredentialShare &&
+      !credentials.self_issued.length &&
+      credentials.service_issued.length === 1
+    ) {
     } else if (
       type === FlowType.CredentialReceive &&
       credentials.service_issued.length === 1
