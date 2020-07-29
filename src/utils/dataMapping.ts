@@ -109,5 +109,8 @@ export const getMappedInteraction = (interaction: Interaction) => {
     return mapCredReceiveData(
       (interaction.getSummary() as unknown) as CredReceiveSummaryI,
     )
+  } else if (interaction.flow.type === FlowType.Authorization) {
+    // TODO: to update once available
+    return {}
   }
 }

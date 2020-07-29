@@ -1,19 +1,23 @@
-import {
-  InteractionActions,
-  InteractionState,
-  IntermediaryState,
-} from './types'
+import { InteractionActions, IntermediaryState } from './types'
 import { Action } from '~/types/actions'
 import { ActionI } from '~/types/action'
 
-const initialState: InteractionState = {
-  interactionId: '',
-  interactionType: null,
+const initialState = {
+  id: '',
+  flowType: null,
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
-  summary: {},
   attributes: {},
   selectedAttributes: {},
+
+  description: '',
+  image: '',
+  action: '',
+  credentials: {
+    self_issued: [],
+    service_issued: [],
+    invalid: [],
+  },
 }
 
 const reducer = (
@@ -21,14 +25,11 @@ const reducer = (
   action: Action<InteractionActions, any>,
 ) => {
   switch (action.type) {
-    case InteractionActions.setInteraction:
-      return {
-        ...state,
-        interactionId: action.payload.interactionId,
-        interactionType: action.payload.interactionType,
-      }
-    case InteractionActions.setInteractionSummary:
-      return { ...state, summary: action.payload }
+    case InteractionActions.setInteractionIdAndType:
+      const { id, flowType } = action.payload
+      return { ...state, id, flowType }
+    case InteractionActions.setInteractionDetails:
+      return { ...state, ...action.payload }
     case InteractionActions.resetInteraction:
       return initialState
     case InteractionActions.setInteractionAttributes:
@@ -46,10 +47,7 @@ const reducer = (
   }
 }
 
-const onSelectAttr = (
-  state: InteractionState,
-  action: ActionI<InteractionActions>,
-) => {
+const onSelectAttr = (state, action: ActionI<InteractionActions>) => {
   const updatedSelectedAttrs = { [action.payload.attrKey]: action.payload.id }
 
   return {

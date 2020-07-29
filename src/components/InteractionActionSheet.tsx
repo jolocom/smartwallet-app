@@ -18,7 +18,6 @@ import { resetInteraction } from '~/modules/interaction/actions'
 import CredentialShare from '~/screens/Modals/Interactions/CredentialShare'
 import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
-import useDelay from '~/hooks/useDelay'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 

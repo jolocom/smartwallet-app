@@ -1,17 +1,14 @@
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  InteractionChannel,
-  FlowType,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import { SDKContext } from '~/utils/sdk/context'
 import { useLoader } from './useLoader'
 import {
-  setInteractionSummary,
-  setInteraction,
+  setInteractionIdAndType,
+  setInteractionDetails,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { getMappedInteraction } from '~/utils/dataMapping'
@@ -58,7 +55,6 @@ export const useInteractionStart = (channel: InteractionChannel) => {
     //   action: 'unlock the scooter',
     //   callbackURL: 'http://test.test.test',
     // })
-    // console.log({ encodedToken })
 
     const token = parseJWT(jwt)
 
@@ -69,23 +65,15 @@ export const useInteractionStart = (channel: InteractionChannel) => {
           token,
         )
 
-        dispatch(
-          setInteraction({
-            interactionId: interaction.id,
-            interactionType: interaction.flow.type,
-          }),
-        )
-
-        // dispatch(setFlowType(interaction.flow.type))
-
-        console.log({ interaction })
-
         let mappedInteraction = getMappedInteraction(interaction)
 
-        console.log({ mappedInteraction })
-
-        const summary = interaction.getSummary()
-        dispatch(setInteractionSummary(summary))
+        dispatch(
+          setInteractionIdAndType({
+            id: interaction.id,
+            flowType: interaction.flow.type,
+          }),
+        )
+        dispatch(setInteractionDetails(mappedInteraction))
       },
       { showSuccess: false },
     )

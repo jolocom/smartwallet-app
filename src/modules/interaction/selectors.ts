@@ -5,12 +5,10 @@ import { AttrsState, AttributeI } from '../attributes/types'
 import { IntermediaryState } from './types'
 
 export const getInteractionId = (state: RootReducerI): string =>
-  state.interaction.interactionId
+  state.interaction.id
 export const getInteractionType = (state: RootReducerI): FlowType | null =>
-  state.interaction.interactionType
-// TODO: add type annotation
-export const getInteractionSummary = (state: RootReducerI): any =>
-  state.interaction.summary
+  state.interaction.flowType
+
 export const getInteractionAttributes = (
   state: RootReducerI,
 ): AttrsState<AttributeI> => state.interaction.attributes
@@ -24,25 +22,37 @@ export const getIntermediaryState = (state: RootReducerI): any =>
 export const getAttributeInputKey = (state: RootReducerI): any =>
   state.interaction.attributeInputKey
 
+export const getCredentials = (state: RootReducerI): any =>
+  state.interaction.credentials
+
+export const getInteractionDescription = (state: RootReducerI): any =>
+  state.interaction.description
+
+export const getInteractionAction = (state: RootReducerI): any =>
+  state.interaction.action
+
 export const getIsFullScreenInteraction = createSelector(
-  [getInteractionType, getInteractionSummary, getIntermediaryState],
-  (type, summary, intermediaryState) => {
-    if (intermediaryState !== IntermediaryState.absent) {
+  [getInteractionType, getIntermediaryState, getCredentials],
+  (type, intermediaryState, credentials) => {
+    if (
+      intermediaryState !== IntermediaryState.absent ||
+      type === FlowType.Authentication ||
+      type === FlowType.Authorization
+    ) {
       return false
     } else if (
       type === FlowType.CredentialShare &&
-      summary.state &&
-      summary.state.constraints[0].credentialRequirements.length > 1
+      credentials.self_issued.length &&
+      !credentials.service_issued.length
     ) {
-      return true
+      return false
     } else if (
       type === FlowType.CredentialReceive &&
-      summary.state &&
-      summary.state.offerSummary.length > 1
+      credentials.service_issued.length === 1
     ) {
-      return true
-    } else {
       return false
+    } else {
+      return true
     }
   },
 )

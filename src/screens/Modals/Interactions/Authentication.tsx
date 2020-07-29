@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import HyperLink from 'react-native-hyperlink'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AuthenticationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
@@ -17,13 +17,13 @@ import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 
 import InteractionFooter from './InteractionFooter'
+import { getInteractionDescription } from '~/modules/interaction/selectors'
 
 const Authentication = () => {
   const interaction = useInteraction()
   const dispatch = useDispatch()
   const loader = useLoader()
-  const { description } = interaction.getSummary()
-    .state as AuthenticationFlowState
+  const description = useSelector(getInteractionDescription)
 
   const handleSubmit = async () => {
     const success = loader(

@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import { useLoader } from '~/hooks/useLoader'
 import { useInteraction } from '~/hooks/sdk'
 import { resetInteraction } from '~/modules/interaction/actions'
-import {
-  getInteractionSummary,
-  getIsFullScreenInteraction,
-} from '~/modules/interaction/selectors'
-import CredentialPlaceholderComponent from './CredentialPlaceholderComponent'
-import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-
-import { ReceiveCredI } from './CredentialPlaceholderComponent'
+import { getIsFullScreenInteraction } from '~/modules/interaction/selectors'
+import Header from '~/components/Header'
+import Btn from '~/components/Btn'
 
 const CredentialReceive = () => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -20,12 +16,7 @@ const CredentialReceive = () => {
   const loader = useLoader()
   const dispatch = useDispatch()
 
-  const summary = useSelector(getInteractionSummary)
-  const credentials = summary.state.offerSummary
-
-  const [selectedTypes, setSelectedTypes] = useState<string[]>(
-    isFullScreenInteraction ? [] : [credentials[0].type],
-  )
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
 
   const handleCredSelect = (type: string) => {
     if (selectedTypes.indexOf(type) > -1) {
@@ -40,12 +31,7 @@ const CredentialReceive = () => {
   }
 
   const handleSubmit = async () => {
-    const selectedCredentials: SignedCredentialWithMetadata[] = selectedTypes.map(
-      (type) =>
-        credentials.find(
-          (credential: ReceiveCredI) => credential.type === type,
-        ),
-    )
+    const selectedCredentials: SignedCredentialWithMetadata[] = []
     const success = loader(
       async () => {
         const response = await interaction.createCredentialOfferResponseToken(
@@ -62,12 +48,10 @@ const CredentialReceive = () => {
     }
   }
   return (
-    <CredentialPlaceholderComponent
-      credentials={credentials}
-      handleSubmit={handleSubmit}
-      initiatorDID={summary.initiator.did}
-      onSelectCredential={handleCredSelect}
-    />
+    <>
+      <Header>Credential Receive</Header>
+      <Btn onPress={() => dispatch(resetInteraction())}>Cancel</Btn>
+    </>
   )
 }
 
