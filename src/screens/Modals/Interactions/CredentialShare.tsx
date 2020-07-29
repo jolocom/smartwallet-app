@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 
 import {
@@ -8,23 +8,26 @@ import {
 } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
 import InteractionFooter from './InteractionFooter'
+import InteractionHeader from './InteractionHeader'
+import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { getInteractionSummary } from '~/modules/interaction/selectors'
+
+const FAS: React.FC = ({ children }) => {
+  const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
+
+  return (
+    <>
+      <InteractionHeader title={'Incoming request'} description />
+      <View style={{ flex: 1 }}>{children}</View>
+      <InteractionFooter />
+    </>
+  )
+}
 
 const CredentialShare = () => {
   const dispatch = useDispatch()
 
-  const handleShowIntermediary = () => {
-    dispatch(setIntermediaryState(IntermediaryState.showing))
-    dispatch(setAttributeInputKey('email'))
-  }
-
-  return (
-    <View>
-      <InteractionFooter
-        customCTA={'Create email'}
-        onSubmit={handleShowIntermediary}
-      />
-    </View>
-  )
+  return <FAS></FAS>
 }
 
 export default CredentialShare

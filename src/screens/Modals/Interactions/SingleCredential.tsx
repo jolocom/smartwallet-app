@@ -6,7 +6,7 @@ import { View, StyleSheet } from 'react-native'
 
 interface PropsI {
   title: string
-  description?: string
+  description: string
   onSubmit: () => void
 }
 
@@ -18,7 +18,7 @@ const SingleCredential: React.FC<PropsI> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <InteractionHeader title={title} />
+      <InteractionHeader title={title} description={description} />
       {children}
       <InteractionFooter onSubmit={onSubmit} />
     </View>

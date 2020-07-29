@@ -17,6 +17,7 @@ import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 
 import InteractionFooter from './InteractionFooter'
+import InteractionHeader from './InteractionHeader'
 
 const Authentication = () => {
   const interaction = useInteraction()
@@ -41,27 +42,13 @@ const Authentication = () => {
 
   return (
     <>
-      <Header size={HeaderSizes.small}>
-        {strings.WOULD_YOU_LIKE_TO_AUTHENTICATE}
-      </Header>
-      <HyperLink
-        linkDefault={true}
-        linkStyle={{ textDecorationLine: 'underline' }}
-      >
-        <Paragraph size={ParagraphSizes.micro} customStyles={styles.paragraph}>
-          {description}
-        </Paragraph>
-      </HyperLink>
+      <InteractionHeader
+        title={strings.WOULD_YOU_LIKE_TO_AUTHENTICATE}
+        description={description}
+      />
       <InteractionFooter onSubmit={handleSubmit} />
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  paragraph: {
-    color: Colors.white70,
-    marginVertical: 20,
-  },
-})
 
 export default Authentication

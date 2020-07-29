@@ -7,7 +7,7 @@ import MultipleCredentials from './MultipleCredentials'
 import AnimatedCard, { Card } from './Card'
 import Paragraph from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
-import truncateString from '~/utils/truncateString'
+import truncateDid from '~/utils/truncateDid'
 import SingleCredential from './SingleCredential'
 
 export interface OfferCredI {
@@ -84,10 +84,7 @@ const CredentialPlaceholderComponent: React.FC<CredentialPlaceholderComponentI> 
     )
   }
   return (
-    <SingleCredential
-      title={truncateString(initiatorDID)}
-      onSubmit={handleSubmit}
-    >
+    <SingleCredential title={truncateDid(initiatorDID)} onSubmit={handleSubmit}>
       <Card isFull>{renderCardBody(credentials[0])}</Card>
     </SingleCredential>
   )
