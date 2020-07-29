@@ -1,6 +1,9 @@
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import {
+  InteractionChannel,
+  FlowType,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
@@ -11,6 +14,7 @@ import {
   setInteraction,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
+import { getMappedInteraction } from '~/utils/dataMapping'
 
 export const useSDK = () => {
   const sdk = useContext(SDKContext)
@@ -71,6 +75,14 @@ export const useInteractionStart = (channel: InteractionChannel) => {
             interactionType: interaction.flow.type,
           }),
         )
+
+        // dispatch(setFlowType(interaction.flow.type))
+
+        console.log({ interaction })
+
+        let mappedInteraction = getMappedInteraction(interaction)
+
+        console.log({ mappedInteraction })
 
         const summary = interaction.getSummary()
         dispatch(setInteractionSummary(summary))
