@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, RefObject } from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native'
+import { View, StyleSheet, Dimensions, Image } from 'react-native'
 import ActionSheet from 'react-native-actions-sheet'
 import { useSelector, useDispatch } from 'react-redux'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import {
+  FlowType,
+  InteractionSummary,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
@@ -11,6 +14,7 @@ import {
   getInteractionType,
   getIsFullScreenInteraction,
   getIntermediaryState,
+  getInteractionSummary,
 } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
@@ -18,9 +22,9 @@ import { resetInteraction } from '~/modules/interaction/actions'
 import CredentialShare from '~/screens/Modals/Interactions/CredentialShare'
 import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
-import useDelay from '~/hooks/useDelay'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
+import { InitiatorPlaceholderIcon } from '~/assets/svg'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -38,6 +42,29 @@ const BasWrapper: React.FC = ({ children }) => (
   <View style={styles.wrapper}>{children}</View>
 )
 
+const BasIconWrapper: React.FC = ({ children }) => (
+  <View
+    style={{
+      width: '100%',
+      marginTop: -70,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 20,
+    }}
+  >
+    <View
+      style={{
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        backgroundColor: Colors.white,
+      }}
+    >
+      {children}
+    </View>
+  </View>
+)
+
 const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
   const intermediarySheetRef = useRef<ActionSheet>(null)
@@ -46,6 +73,10 @@ const InteractionActionSheet: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
   const intermediaryState = useSelector(getIntermediaryState)
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
+  const summary: InteractionSummary = useSelector(getInteractionSummary)
+  console.log(summary)
+  const initiatorLogo = summary.initiator?.publicProfile?.image
+  // const initiatorLogo = 'https://banner2.cleanpng.com/20180604/pol/kisspng-react-javascript-angularjs-ionic-atom-5b154be6709500.6532453515281223424611.jpg'
 
   useEffect(() => {
     if (interactionType) {
@@ -113,7 +144,16 @@ const InteractionActionSheet: React.FC = () => {
         {isFullScreenInteraction ? (
           renderBody()
         ) : (
-          <BasWrapper>{renderBody()}</BasWrapper>
+          <BasWrapper>
+            <BasIconWrapper>
+              {initiatorLogo ? (
+                <Image source={{ uri: initiatorLogo }} />
+              ) : (
+                <InitiatorPlaceholderIcon />
+              )}
+            </BasIconWrapper>
+            {renderBody()}
+          </BasWrapper>
         )}
       </ActionSheet>
       {intermediaryState !== IntermediaryState.absent && (
