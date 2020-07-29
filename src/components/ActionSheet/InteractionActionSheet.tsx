@@ -25,6 +25,8 @@ import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
+import { BasIconWrapper, BasWrapper } from './BAS'
+import InteractionIcon from './InteractionIcon'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -35,35 +37,7 @@ const ACTION_SHEET_PROPS = {
   //NOTE: removes shadow artifacts left from transparent view elevation
   elevation: 0,
   //NOTE: removes the gesture header
-  CustomHeaderComponent: <View />,
 }
-
-const BasWrapper: React.FC = ({ children }) => (
-  <View style={styles.wrapper}>{children}</View>
-)
-
-const BasIconWrapper: React.FC = ({ children }) => (
-  <View
-    style={{
-      width: '100%',
-      marginTop: -70,
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingBottom: 20,
-    }}
-  >
-    <View
-      style={{
-        width: 70,
-        height: 70,
-        borderRadius: 35,
-        backgroundColor: Colors.white,
-      }}
-    >
-      {children}
-    </View>
-  </View>
-)
 
 const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
@@ -74,9 +48,9 @@ const InteractionActionSheet: React.FC = () => {
   const intermediaryState = useSelector(getIntermediaryState)
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
   const summary: InteractionSummary = useSelector(getInteractionSummary)
-  console.log(summary)
-  const initiatorLogo = summary.initiator?.publicProfile?.image
-  // const initiatorLogo = 'https://banner2.cleanpng.com/20180604/pol/kisspng-react-javascript-angularjs-ionic-atom-5b154be6709500.6532453515281223424611.jpg'
+  const initiatorIcon = summary.initiator?.publicProfile?.image
+  /* const initiatorUrl = summary.initiator?.publicProfile?.url */
+  const initiatorUrl = 'http://www.google.com'
 
   useEffect(() => {
     if (interactionType) {
@@ -135,25 +109,22 @@ const InteractionActionSheet: React.FC = () => {
         {...ACTION_SHEET_PROPS}
         ref={actionSheetRef}
         onClose={handleCloseSheet}
+        headerAlwaysVisible={true}
         containerStyle={
           isFullScreenInteraction
             ? styles.containerMultiple
             : styles.containerSingle
         }
+        CustomHeaderComponent={
+          <BasIconWrapper>
+            <InteractionIcon icon={initiatorIcon} redirectUrl={initiatorUrl} />
+          </BasIconWrapper>
+        }
       >
         {isFullScreenInteraction ? (
           renderBody()
         ) : (
-          <BasWrapper>
-            <BasIconWrapper>
-              {initiatorLogo ? (
-                <Image source={{ uri: initiatorLogo }} />
-              ) : (
-                <InitiatorPlaceholderIcon />
-              )}
-            </BasIconWrapper>
-            {renderBody()}
-          </BasWrapper>
+          <BasWrapper>{renderBody()}</BasWrapper>
         )}
       </ActionSheet>
       {intermediaryState !== IntermediaryState.absent && (
@@ -162,6 +133,7 @@ const InteractionActionSheet: React.FC = () => {
           ref={intermediarySheetRef}
           onClose={handleCloseSheet}
           containerStyle={styles.containerSingle}
+          CustomHeaderComponent={<View />}
         >
           <BasWrapper>
             <IntermediaryActionSheet />
