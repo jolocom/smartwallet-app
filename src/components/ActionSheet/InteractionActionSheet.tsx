@@ -116,9 +116,16 @@ const InteractionActionSheet: React.FC = () => {
             : styles.containerSingle
         }
         CustomHeaderComponent={
-          <BasIconWrapper>
-            <InteractionIcon icon={initiatorIcon} redirectUrl={initiatorUrl} />
-          </BasIconWrapper>
+          isFullScreenInteraction ? (
+            <View />
+          ) : (
+            <BasIconWrapper>
+              <InteractionIcon
+                icon={initiatorIcon}
+                redirectUrl={initiatorUrl}
+              />
+            </BasIconWrapper>
+          )
         }
       >
         {isFullScreenInteraction ? (
