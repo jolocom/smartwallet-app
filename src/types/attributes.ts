@@ -1,13 +1,8 @@
 export enum AttrKeys {
+  emailAddress = 'emailAddress',
+  mobilePhoneNumber = 'mobilePhoneNumber',
   name = 'name',
-  email = 'email',
-  number = 'number',
+  postalAddress = 'postalAddress',
 }
 
-export type AttrKeysUpper = 'NAME' | 'EMAIL' | 'NUMBER'
-
-export enum AttrTypes {
-  ProofOfEmailCredential = 'ProofOfEmailCredential',
-  ProofOfMobilePhoneNumberCredential = 'ProofOfMobilePhoneNumberCredential',
-  ProofOfNameCredential = 'ProofOfNameCredential',
-}
+export type AttrKeysUpper = 'NAME' | 'EMAILADDRESS' | 'MOBILEPHONENUMBER'

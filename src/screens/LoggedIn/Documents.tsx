@@ -8,6 +8,7 @@ import { useCreateAttributes } from '~/hooks/attributes'
 import Link from '~/components/Link'
 import { AttrKeys } from '~/types/attributes'
 import { Colors } from '~/utils/colors'
+import { fieldNames } from '~/utils/dataMapping'
 
 const text =
   'The https://www.google.com/ is ready to share a scooter with you, unlock to start your ride'
@@ -52,9 +53,16 @@ const AddAttribute: React.FC<AddAttributeI> = ({
         }}
         onValueChange={(itemValue, itemIndex) => setSelectedKey(itemValue)}
       >
-        <Picker.Item label={AttrKeys.email} value="email" />
-        <Picker.Item label={AttrKeys.name} value="name" />
-        <Picker.Item label={AttrKeys.number} value="number" />
+        <Picker.Item
+          label={fieldNames.emailAddress}
+          value={AttrKeys.emailAddress}
+        />
+        <Picker.Item label={fieldNames.name} value={AttrKeys.name} />
+        <Picker.Item
+          label={fieldNames.mobilePhoneNumber}
+          value={AttrKeys.mobilePhoneNumber}
+        />
+        {/* TODO: add support for AttrKeys.postalAddress */}
       </Picker>
     </>
   )

@@ -148,8 +148,8 @@ const settings = {
 const attributes = {
   CREATE_NEW_ONE: 'Create new one',
   NAME: 'Name',
-  EMAIL: 'Email',
-  NUMBER: 'Number',
+  EMAILADDRESS: 'Email',
+  MOBILEPHONENUMBER: 'Number',
   MISSING_INFO: 'Missing info',
 }
 
