@@ -24,9 +24,8 @@ import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
-import { InitiatorPlaceholderIcon } from '~/assets/svg'
-import { BasIconWrapper, BasWrapper } from './BAS'
-import InteractionIcon from './InteractionIcon'
+import BasWrapper from './BasWrapper'
+import InteractionIcon, { IconWrapper } from './InteractionIcon'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -48,8 +47,6 @@ const InteractionActionSheet: React.FC = () => {
   const intermediaryState = useSelector(getIntermediaryState)
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
   const summary: InteractionSummary = useSelector(getInteractionSummary)
-  const initiatorIcon = summary.initiator?.publicProfile?.image
-  const initiatorUrl = summary.initiator?.publicProfile?.url
 
   useEffect(() => {
     if (interactionType) {
@@ -118,12 +115,11 @@ const InteractionActionSheet: React.FC = () => {
           isFullScreenInteraction ? (
             <View />
           ) : (
-            <BasIconWrapper>
-              <InteractionIcon
-                icon={initiatorIcon}
-                redirectUrl={initiatorUrl}
-              />
-            </BasIconWrapper>
+            <IconWrapper>
+              <View style={styles.basIcon}>
+                <InteractionIcon />
+              </View>
+            </IconWrapper>
           )
         }
       >
@@ -169,6 +165,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 30,
     paddingHorizontal: 20,
+  },
+  basIcon: {
+    position: 'absolute',
+    top: 35,
+    zIndex: 2,
   },
 })
 
