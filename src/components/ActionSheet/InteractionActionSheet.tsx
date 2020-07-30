@@ -47,7 +47,6 @@ const InteractionActionSheet: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
   const intermediaryState = useSelector(getIntermediaryState)
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
-  const summary: InteractionSummary = useSelector(getInteractionSummary)
 
   useEffect(() => {
     if (interactionType) {
@@ -135,9 +134,7 @@ const InteractionActionSheet: React.FC = () => {
           containerStyle={styles.containerSingle}
           CustomHeaderComponent={<View />}
         >
-          <BasWrapper>
-            <IntermediaryActionSheet />
-          </BasWrapper>
+          <IntermediaryActionSheet />
         </ActionSheet>
       )}
     </>

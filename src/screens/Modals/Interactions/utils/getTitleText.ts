@@ -4,9 +4,14 @@ import {
   CredentialRequestFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { useSelector } from 'react-redux'
-import { getInteractionSummary } from '~/modules/interaction/selectors'
+import {
+  getInteractionSummary,
+  getIntermediaryState,
+  getAttributeInputKey,
+} from '~/modules/interaction/selectors'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
+import { IntermediaryState } from '~/modules/interaction/types'
 
 //NOTE: Temporary
 const attr = [
@@ -34,6 +39,11 @@ const getTitleText = (flowType: FlowType | null) => {
   const { state, initiator }: InteractionSummary = useSelector(
     getInteractionSummary,
   )
+  const intermediaryState = useSelector(getIntermediaryState)
+  const inputType = useSelector(getAttributeInputKey)
+
+  if (intermediaryState === IntermediaryState.showing)
+    return `Save your ${inputType}`
 
   //TODO: @clauss add strings
   switch (flowType) {

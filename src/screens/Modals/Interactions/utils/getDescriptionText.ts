@@ -3,13 +3,23 @@ import {
   InteractionSummary,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { useSelector } from 'react-redux'
-import { getInteractionSummary } from '~/modules/interaction/selectors'
+import {
+  getInteractionSummary,
+  getIntermediaryState,
+  getAttributeInputKey,
+} from '~/modules/interaction/selectors'
 import truncateDid from '~/utils/truncateDid'
+import { IntermediaryState } from '~/modules/interaction/types'
 
 const getDescriptionText = (flowType: FlowType | null) => {
   const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
+  const intermediaryState = useSelector(getIntermediaryState)
+  const inputType = useSelector(getAttributeInputKey)
   const serviceName = initiator.publicProfile?.name
   const isAnonymous = !initiator.publicProfile
+
+  if (intermediaryState === IntermediaryState.showing)
+    return `You will immidiately find your ${inputType} in the personal info section after all`
 
   if (isAnonymous)
     return `This public profile ${truncateDid(

@@ -1,18 +1,18 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ViewStyle } from 'react-native'
 import { Colors } from '~/utils/colors'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
 
-const BasWrapper: React.FC<{ onSubmit: () => void }> = ({
-  children,
-  onSubmit,
-}) => {
+const BasWrapper: React.FC<{
+  onSubmit?: () => void
+  customStyle?: ViewStyle
+}> = ({ children, onSubmit, customStyle = {} }) => {
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, customStyle]}>
       <InteractionHeader />
       {children}
-      <InteractionFooter onSubmit={onSubmit} />
+      {onSubmit && <InteractionFooter onSubmit={onSubmit} />}
     </View>
   )
 }

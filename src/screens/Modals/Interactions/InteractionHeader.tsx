@@ -8,11 +8,13 @@ import {
 import {
   getInteractionSummary,
   getInteractionType,
+  getIntermediaryState,
 } from '~/modules/interaction/selectors'
 import { useSelector } from 'react-redux'
 import { Colors } from '~/utils/colors'
 import getTitleText from './utils/getTitleText'
 import getDescriptionText from './utils/getDescriptionText'
+import { IntermediaryState } from '~/modules/interaction/types'
 
 interface PropsI {
   title?: string
@@ -22,7 +24,12 @@ interface PropsI {
 const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   const summary: InteractionSummary = useSelector(getInteractionSummary)
   const interactionType: FlowType | null = useSelector(getInteractionType)
-  const isAnonymous = !summary.initiator?.publicProfile
+  const intermediaryState = useSelector(getIntermediaryState)
+  //NOTE: this is getting ugly b/c of the intermediary screen
+  const isAnonymous =
+    intermediaryState === IntermediaryState.showing
+      ? false
+      : !summary.initiator?.publicProfile
 
   //TODO: @clauxx add strings
   return (
