@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Dispatch, SetStateAction } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import { useDispatch } from 'react-redux'
 import { View, Switch } from 'react-native'
@@ -14,9 +14,32 @@ import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { accountReset } from '~/modules/account/actions'
 import CredentialCard from '../Modals/Interactions/CredentialCard'
 import Paragraph from '~/components/Paragraph'
+import { Colors } from '~/utils/colors'
+
+interface SwitcherPropsI {
+  value: boolean
+  onValueChange: Dispatch<SetStateAction<boolean>>
+  leftTitle: string
+  rightTitle: string
+}
+const Switcher: React.FC<SwitcherPropsI> = ({
+  value,
+  onValueChange,
+  leftTitle,
+  rightTitle,
+}) => {
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      <Paragraph customStyles={{ marginRight: 10 }}>{leftTitle}</Paragraph>
+      <Switch value={value} onValueChange={onValueChange} />
+      <Paragraph customStyles={{ marginLeft: 10 }}>{rightTitle}</Paragraph>
+    </View>
+  )
+}
 
 const Settings = () => {
   const [isSmall, setIsSmall] = useState(true)
+  const [isDisabled, setIsDisabled] = useState(true)
 
   const redirectToChangePin = useRedirectTo(ScreenNames.SettingsList, {
     screen: ScreenNames.ChangePin,
@@ -45,14 +68,23 @@ const Settings = () => {
           justifyContent: 'flex-start',
         }}
       >
-        <View style={{ flexDirection: 'row' }}>
-          <Paragraph customStyles={{ marginRight: 10 }}>Large</Paragraph>
-          <Switch value={isSmall} onValueChange={setIsSmall} />
-          <Paragraph customStyles={{ marginLeft: 10 }}>Small</Paragraph>
-        </View>
-        <CredentialCard isSmall={isSmall}>
-          <View style={{ flex: 1 }}>
-            <Paragraph>This is a custom card content</Paragraph>
+        <Switcher
+          value={isSmall}
+          onValueChange={setIsSmall}
+          leftTitle="Large"
+          rightTitle="Small"
+        />
+        <Switcher
+          value={isDisabled}
+          onValueChange={setIsDisabled}
+          leftTitle="Active"
+          rightTitle="Disabled"
+        />
+        <CredentialCard isSmall={isSmall} disabled={isDisabled}>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Paragraph color={Colors.black}>
+              This is a custom card content
+            </Paragraph>
           </View>
         </CredentialCard>
       </View>
