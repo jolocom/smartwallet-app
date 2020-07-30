@@ -2,12 +2,8 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Colors } from '~/utils/colors'
 
-export const BasWrapper: React.FC = ({ children }) => (
+const BasWrapper: React.FC = ({ children }) => (
   <View style={styles.wrapper}>{children}</View>
-)
-
-export const BasIconWrapper: React.FC = ({ children }) => (
-  <View style={styles.iconWrapper}>{children}</View>
 )
 
 const styles = StyleSheet.create({
@@ -20,9 +16,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 55,
   },
-  iconWrapper: {
-    width: '100%',
-    alignItems: 'center',
-    height: 70,
-  },
 })
+
+export default BasWrapper
