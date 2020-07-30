@@ -10,7 +10,6 @@ import {
   getInteractionType,
 } from '~/modules/interaction/selectors'
 import { useSelector } from 'react-redux'
-import truncateDid from '~/utils/truncateDid'
 import { Colors } from '~/utils/colors'
 import getTitleText from './utils/getTitleText'
 import getDescriptionText from './utils/getDescriptionText'
@@ -21,9 +20,9 @@ interface PropsI {
 }
 
 const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
-  const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
+  const summary: InteractionSummary = useSelector(getInteractionSummary)
   const interactionType: FlowType | null = useSelector(getInteractionType)
-  const isAnonymous = !initiator.publicProfile
+  const isAnonymous = !summary.initiator?.publicProfile
 
   //TODO: @clauxx add strings
   return (

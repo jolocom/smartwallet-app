@@ -26,6 +26,7 @@ export const IconWrapper: React.FC<{ customStyle?: ViewStyle }> = ({
 const InteractionIcon: React.FC = () => {
   const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
   const initiatorIcon = initiator?.publicProfile?.image
+  //NOTE: to test the button, replace the initiatorUrl with a valid url
   const initiatorUrl = initiator?.publicProfile?.url
 
   return (
@@ -33,9 +34,11 @@ const InteractionIcon: React.FC = () => {
       style={styles.wrapper}
       onPress={() => {
         initiatorUrl &&
-          Linking.canOpenURL(initiatorUrl).then(
-            (can) => can && Linking.openURL(initiatorUrl),
-          )
+          Linking.canOpenURL(initiatorUrl)
+            .then((can) => can && Linking.openURL(initiatorUrl))
+            .catch(() => {
+              //TODO: show can't open url toast
+            })
       }}
       activeOpacity={initiatorUrl ? 0.8 : 1}
     >

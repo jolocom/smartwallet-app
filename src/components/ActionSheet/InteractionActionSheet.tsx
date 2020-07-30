@@ -26,6 +26,7 @@ import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import BasWrapper from './BasWrapper'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
+import FasWrapper from './FasWrapper'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -91,6 +92,7 @@ const InteractionActionSheet: React.FC = () => {
       case FlowType.Authorization:
         return <Authorization />
       case FlowType.CredentialShare:
+        //TODO: here based on @isFullScreenInteraction we decide between @CredentialShareFas and @CredentialShareBas (???)
         return <CredentialShare />
       case FlowType.CredentialReceive:
         return <CredentialReceive />
@@ -123,11 +125,7 @@ const InteractionActionSheet: React.FC = () => {
           )
         }
       >
-        {isFullScreenInteraction ? (
-          renderBody()
-        ) : (
-          <BasWrapper>{renderBody()}</BasWrapper>
-        )}
+        {renderBody()}
       </ActionSheet>
       {intermediaryState !== IntermediaryState.absent && (
         <ActionSheet
