@@ -8,6 +8,7 @@ import { getInteractionSummary } from '~/modules/interaction/selectors'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
 
+//NOTE: Temporary
 const attr = [
   'ProofOfEmailCredential',
   'ProofOfMobilePhoneNumberCredential',
@@ -29,7 +30,7 @@ const isSingleAttributeRequest = (constraints: CredentialRequest) => {
   return isSingleRequest && isAttribute
 }
 
-const getHeaderText = (flowType: FlowType | null) => {
+const getTitleText = (flowType: FlowType | null) => {
   const { state, initiator }: InteractionSummary = useSelector(
     getInteractionSummary,
   )
@@ -61,4 +62,4 @@ const getHeaderText = (flowType: FlowType | null) => {
   }
 }
 
-export default getHeaderText
+export default getTitleText
