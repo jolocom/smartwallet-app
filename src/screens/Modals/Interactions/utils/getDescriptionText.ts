@@ -7,13 +7,11 @@ import { getInteractionSummary } from '~/modules/interaction/selectors'
 import truncateDid from '~/utils/truncateDid'
 
 const getDescriptionText = (flowType: FlowType | null) => {
-  const { state, initiator }: InteractionSummary = useSelector(
-    getInteractionSummary,
-  )
+  const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
   const serviceName = initiator.publicProfile?.name
-  const isAnonimous = !!initiator.publicProfile
+  const isAnonymous = !initiator.publicProfile
 
-  if (isAnonimous)
+  if (isAnonymous)
     return `This public profile ${truncateDid(
       initiator.did,
     )} chose to remain anonymous. Pay attention before sharing data.`

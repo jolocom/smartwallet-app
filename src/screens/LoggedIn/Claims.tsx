@@ -32,8 +32,20 @@ const Claims: React.FC = () => {
       callbackURL: 'test',
       description: 'test',
     })
-    console.log(authToken)
+
     await startInteraction(authToken)
+  }
+
+  const onShare = async () => {
+    const credReqToken = await sdk.credRequestToken({
+      callbackURL: 'test',
+      credentialRequirements: [
+        { type: ['Credential', 'ProofOfEmail'], constraints: [] },
+        { type: ['Credential', 'ProofOfName'], constraints: [] },
+      ],
+    })
+
+    await startInteraction(credReqToken)
   }
 
   const openScanner = useRedirectTo(ScreenNames.Interactions)
@@ -44,6 +56,7 @@ const Claims: React.FC = () => {
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
       <Btn onPress={onAuth}>Start Auth</Btn>
+      <Btn onPress={onShare}>Start Share</Btn>
     </ScreenContainer>
   )
 }

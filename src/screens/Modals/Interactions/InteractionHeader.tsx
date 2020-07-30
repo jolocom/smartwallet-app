@@ -34,7 +34,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
       <Paragraph
         size={ParagraphSizes.small}
         color={isAnonymous ? Colors.error : Colors.white90}
-        customStyles={{ paddingHorizontal: 25, marginTop: 8, marginBottom: 36 }}
+        customStyles={{ paddingHorizontal: 16, marginTop: 8, marginBottom: 36 }}
       >
         {description || getDescriptionText(interactionType)}
       </Paragraph>

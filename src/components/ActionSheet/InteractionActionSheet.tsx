@@ -49,8 +49,7 @@ const InteractionActionSheet: React.FC = () => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
   const summary: InteractionSummary = useSelector(getInteractionSummary)
   const initiatorIcon = summary.initiator?.publicProfile?.image
-  /* const initiatorUrl = summary.initiator?.publicProfile?.url */
-  const initiatorUrl = 'http://www.google.com'
+  const initiatorUrl = summary.initiator?.publicProfile?.url
 
   useEffect(() => {
     if (interactionType) {
