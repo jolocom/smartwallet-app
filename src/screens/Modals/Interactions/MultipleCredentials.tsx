@@ -37,7 +37,7 @@ const MultipleCredentials: React.FC<PropsI> = ({
   return (
     <>
       <View style={styles.headerWrapper}>
-        <InteractionHeader title={title} description={description} />
+        <InteractionHeader />
       </View>
       <ScrollView
         directionalLockEnabled

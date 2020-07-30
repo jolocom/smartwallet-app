@@ -17,7 +17,7 @@ const FAS: React.FC = ({ children }) => {
 
   return (
     <>
-      <InteractionHeader title={'Incoming request'} description />
+      <InteractionHeader />
       <View style={{ flex: 1 }}>{children}</View>
       <InteractionFooter />
     </>

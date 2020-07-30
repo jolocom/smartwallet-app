@@ -42,10 +42,7 @@ const Authentication = () => {
 
   return (
     <>
-      <InteractionHeader
-        title={strings.WOULD_YOU_LIKE_TO_AUTHENTICATE}
-        description={description}
-      />
+      <InteractionHeader />
       <InteractionFooter onSubmit={handleSubmit} />
     </>
   )

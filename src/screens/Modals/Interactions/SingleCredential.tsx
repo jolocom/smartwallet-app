@@ -18,7 +18,7 @@ const SingleCredential: React.FC<PropsI> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <InteractionHeader title={title} description={description} />
+      <InteractionHeader />
       {children}
       <InteractionFooter onSubmit={onSubmit} />
     </View>
