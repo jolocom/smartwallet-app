@@ -29,7 +29,7 @@ const Switcher: React.FC<SwitcherPropsI> = ({
   rightTitle,
 }) => {
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', marginBottom: 20 }}>
       <Paragraph customStyles={{ marginRight: 10 }}>{leftTitle}</Paragraph>
       <Switch value={value} onValueChange={onValueChange} />
       <Paragraph customStyles={{ marginLeft: 10 }}>{rightTitle}</Paragraph>
@@ -40,6 +40,7 @@ const Switcher: React.FC<SwitcherPropsI> = ({
 const Settings = () => {
   const [isSmall, setIsSmall] = useState(true)
   const [isDisabled, setIsDisabled] = useState(true)
+  const [isCardSelected, setIsCardSelected] = useState(false)
 
   const redirectToChangePin = useRedirectTo(ScreenNames.SettingsList, {
     screen: ScreenNames.ChangePin,
@@ -59,12 +60,17 @@ const Settings = () => {
     }
   }
 
+  const handleToggleelect = () => {
+    setIsCardSelected((prevState) => !prevState)
+    console.log('Selecting card')
+  }
+
   return (
     <ScreenContainer>
       <View
         style={{
           flex: 1,
-          alignItems: 'flex-start',
+          alignItems: 'center',
           justifyContent: 'flex-start',
         }}
       >
@@ -80,7 +86,12 @@ const Settings = () => {
           leftTitle="Active"
           rightTitle="Disabled"
         />
-        <CredentialCard isSmall={isSmall} disabled={isDisabled}>
+        <CredentialCard
+          isSmall={isSmall}
+          disabled={isDisabled}
+          selected={isCardSelected}
+          onSelect={handleToggleelect}
+        >
           <View style={{ flex: 1, justifyContent: 'center' }}>
             <Paragraph color={Colors.black}>
               This is a custom card content
