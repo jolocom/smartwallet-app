@@ -50,8 +50,12 @@ export const makeAttrEntry = (
 export const getClaim = (attributeKey: AttrKeys, value: string) => {
   switch (attributeKey) {
     case AttrKeys.name:
-      const [givenName, familyName] = value.split(' ')
-      return { givenName, familyName: familyName || '' }
+      const [givenName, ...familyName] = value.split(' ')
+
+      return {
+        givenName,
+        familyName: familyName.length ? familyName.join(' ') : '',
+      }
     case AttrKeys.emailAddress:
       return { email: value }
     case AttrKeys.mobilePhoneNumber:
