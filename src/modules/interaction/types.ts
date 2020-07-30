@@ -1,4 +1,7 @@
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import {
+  FlowType,
+  InteractionSummary,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 export enum InteractionActions {
   setInteraction = 'setInteraction',
@@ -11,7 +14,7 @@ export enum InteractionActions {
 export interface InteractionState {
   interactionId: string
   interactionType: FlowType | null
-  summary: any
+  summary: InteractionSummary | {}
   intermediaryState: IntermediaryState
   //TODO: change to attribute type
   attributeInputKey: string | null
