@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import truncateDid from '~/utils/truncateDid'
 import { Colors } from '~/utils/colors'
 import getTitleText from './utils/getTitleText'
+import getDescriptionText from './utils/getDescriptionText'
 
 interface PropsI {
   title?: string
@@ -35,11 +36,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
         color={isAnonymous ? Colors.error : Colors.white90}
         customStyles={{ paddingHorizontal: 25, marginTop: 8, marginBottom: 36 }}
       >
-        {isAnonymous
-          ? `This public profile ${truncateDid(
-              initiator.did,
-            )} chose to remain anonymous. Pay attention before sharing data.`
-          : description}
+        {description || getDescriptionText(interactionType)}
       </Paragraph>
     </>
   )
