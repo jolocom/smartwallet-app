@@ -15,8 +15,8 @@ interface PropsI {
   onSelect?: () => void
 }
 
-const WIDTH = Dimensions.get('window').width * 0.83
-const HEIGHT = WIDTH * 0.64
+export const CARD_WIDTH = Dimensions.get('window').width * 0.83
+export const CARD_HEIGHT = CARD_WIDTH * 0.64
 
 const Tick = () => {
   return (
@@ -42,12 +42,14 @@ const CredentialCard: React.FC<PropsI> = ({
           isSmall && styles.scaledDown,
         ]}
       >
-        {children}
-        {(disabled || selected) && (
-          <View style={[styles.darken, styles.card]}>
-            {selected && <Tick />}
-          </View>
-        )}
+        <>
+          {children}
+          {(disabled || selected) && (
+            <View style={[styles.darken, styles.card]}>
+              {selected && <Tick />}
+            </View>
+          )}
+        </>
       </View>
     </TouchableWithoutFeedback>
   )
@@ -58,12 +60,14 @@ const styles = StyleSheet.create({
     borderRadius: 13.5,
   },
   cardContainer: {
-    width: WIDTH,
-    height: HEIGHT,
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     marginVertical: 20,
     backgroundColor: Colors.white,
   },
   scaledDown: {
+    marginLeft: -20,
+    marginRight: -5,
     transform: [{ scale: 0.83 }],
   },
   darken: {

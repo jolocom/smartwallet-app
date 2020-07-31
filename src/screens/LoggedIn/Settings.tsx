@@ -1,7 +1,7 @@
 import React, { useState, Dispatch, SetStateAction } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import { useDispatch } from 'react-redux'
-import { View, Switch } from 'react-native'
+import { View, Switch, ScrollView } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn from '~/components/Btn'
@@ -15,6 +15,7 @@ import { accountReset } from '~/modules/account/actions'
 import CredentialCard from '../Modals/Interactions/CredentialCard'
 import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
+import Carousel from '../Modals/Interactions/Carousel'
 
 interface SwitcherPropsI {
   value: boolean
@@ -67,41 +68,93 @@ const Settings = () => {
 
   return (
     <ScreenContainer>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-        }}
-      >
-        <Switcher
-          value={isSmall}
-          onValueChange={setIsSmall}
-          leftTitle="Large"
-          rightTitle="Small"
-        />
-        <Switcher
-          value={isDisabled}
-          onValueChange={setIsDisabled}
-          leftTitle="Active"
-          rightTitle="Disabled"
-        />
-        <CredentialCard
-          isSmall={isSmall}
-          disabled={isDisabled}
-          selected={isCardSelected}
-          onSelect={handleToggleelect}
+      <ScrollView>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
         >
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Paragraph color={Colors.black}>
-              This is a custom card content
-            </Paragraph>
-          </View>
-        </CredentialCard>
-      </View>
+          <Switcher
+            value={isSmall}
+            onValueChange={setIsSmall}
+            leftTitle="Large"
+            rightTitle="Small"
+          />
+          <Switcher
+            value={isDisabled}
+            onValueChange={setIsDisabled}
+            leftTitle="Active"
+            rightTitle="Disabled"
+          />
+          <CredentialCard
+            isSmall={isSmall}
+            disabled={isDisabled}
+            selected={isCardSelected}
+            onSelect={handleToggleelect}
+          >
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+              <Paragraph color={Colors.black}>
+                This is a custom card content
+              </Paragraph>
+            </View>
+          </CredentialCard>
+          <Carousel>
+            <CredentialCard
+              isSmall={true}
+              disabled={false}
+              selected={isCardSelected}
+              onSelect={handleToggleelect}
+            >
+              <View style={{ flex: 1, justifyContent: 'center' }}>
+                <Paragraph color={Colors.black}>
+                  This is a custom card content
+                </Paragraph>
+              </View>
+            </CredentialCard>
+            <CredentialCard
+              isSmall={true}
+              disabled={false}
+              selected={isCardSelected}
+              onSelect={handleToggleelect}
+            >
+              <View style={{ flex: 1, justifyContent: 'center' }}>
+                <Paragraph color={Colors.black}>
+                  This is a custom card content
+                </Paragraph>
+              </View>
+            </CredentialCard>
+            <CredentialCard
+              isSmall={true}
+              disabled={false}
+              selected={isCardSelected}
+              onSelect={handleToggleelect}
+            >
+              <View style={{ flex: 1, justifyContent: 'center' }}>
+                <Paragraph color={Colors.black}>
+                  This is a custom card content
+                </Paragraph>
+              </View>
+            </CredentialCard>
+            <CredentialCard
+              isSmall={true}
+              disabled={false}
+              selected={isCardSelected}
+              onSelect={handleToggleelect}
+            >
+              <View style={{ flex: 1, justifyContent: 'center' }}>
+                <Paragraph color={Colors.black}>
+                  This is a custom card content
+                </Paragraph>
+              </View>
+            </CredentialCard>
+          </Carousel>
+        </View>
 
-      <Btn onPress={redirectToChangePin}>{strings.CHANGE_PIN}</Btn>
-      <Btn onPress={logout}>{strings.LOG_OUT}</Btn>
+        <Btn onPress={redirectToChangePin}>{strings.CHANGE_PIN}</Btn>
+        <Btn onPress={logout}>{strings.LOG_OUT}</Btn>
+      </ScrollView>
     </ScreenContainer>
   )
 }
