@@ -106,6 +106,7 @@ const Settings = () => {
               disabled={false}
               selected={isCardSelected}
               onSelect={handleToggleelect}
+              hasInstruction
             >
               <View style={{ flex: 1, justifyContent: 'center' }}>
                 <Paragraph color={Colors.black}>

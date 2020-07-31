@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   StyleSheet,
@@ -7,12 +7,14 @@ import {
 } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { SuccessTick } from '~/assets/svg'
+import { HandAnimation } from '~/components/HandAnimation'
 
 interface PropsI {
   isSmall?: boolean
   disabled?: boolean
   selected?: boolean
   onSelect?: () => void
+  hasInstruction?: boolean
 }
 
 export const CARD_WIDTH = Dimensions.get('window').width * 0.83
@@ -30,11 +32,28 @@ const CredentialCard: React.FC<PropsI> = ({
   children,
   isSmall = false,
   disabled = false,
+  hasInstruction = false,
   selected,
   onSelect,
 }) => {
+  const [isAnimated, setIsAnimated] = useState(hasInstruction)
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setIsAnimated(false)
+    }, 5000)
+    return () => {
+      clearTimeout(id)
+    }
+  }, [])
+
+  const handleCardTap = () => {
+    setIsAnimated(false)
+    onSelect && onSelect()
+  }
+
   return (
-    <TouchableWithoutFeedback disabled={disabled} onPress={onSelect}>
+    <TouchableWithoutFeedback disabled={disabled} onPress={handleCardTap}>
       <View
         style={[
           styles.cardContainer,
@@ -44,9 +63,14 @@ const CredentialCard: React.FC<PropsI> = ({
       >
         <>
           {children}
-          {(disabled || selected) && (
+          {(disabled || selected || isAnimated) && (
             <View style={[styles.darken, styles.card]}>
               {selected && <Tick />}
+              {isAnimated && (
+                <View style={{ alignSelf: 'center' }}>
+                  <HandAnimation />
+                </View>
+              )}
             </View>
           )}
         </>
