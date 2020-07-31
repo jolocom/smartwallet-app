@@ -60,14 +60,24 @@ interface CredReceiveSummaryI extends CredSummaryI {
 
 const mapAuthenticationData = (summary: AuthenticationSummaryI) => {
   return {
+    counterparty: summary.initiator,
     description: summary.state.description,
   }
 }
 
+// TODO: once Authorization is available
+// const mapAuthorizationData = (summary) => {
+//   return {
+//     descriptio: '',
+//     action: '',
+//     image: ''
+//   }
+// }
+
 const mapCredShareData = (summary: CredShareSummaryI) => {
-  const credentials = summary.state.constraints[0].credentialRequirements.reduce(
+  const credentials = summary.state.constraints[0].requestedCredentialTypes.reduce(
     (acc, v) => {
-      const credType: AttrKeys | string = v.type[1]
+      const credType: AttrKeys | string = v[1]
       if (credType in AttrTypes) {
         acc.self_issued = [...acc.self_issued, credType]
       } else {
@@ -79,16 +89,21 @@ const mapCredShareData = (summary: CredShareSummaryI) => {
   )
 
   return {
-    issuer: summary.initiator,
+    counterparty: summary.initiator,
     credentials,
   }
 }
 
 const mapCredReceiveData = (summary: CredReceiveSummaryI) => {
+  console.log({ summary })
   return {
-    issuer: summary.initiator,
+    counterparty: summary.initiator,
     credentials: {
-      service_issued: summary.state.offerSummary.map((cred) => cred.type),
+      service_issued: summary.state.offerSummary.map((cred) => ({
+        type: cred.type,
+        invalid: false,
+        renderAs: cred.renderInfo.renderAs,
+      })),
     },
     invalid: [], // !!! Note: this has to be updated once working on Negotiation
   }

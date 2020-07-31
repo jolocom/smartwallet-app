@@ -22,20 +22,15 @@ export interface InteractionStateI<T> {
 
 interface InteractionCommonI {
   id: string
-  flowType: FlowType | null
+  counterparty: {
+    did: string
+  }
 }
 
 interface AuthCommonI extends InteractionCommonI {
-  initiator: {
-    did: string
-  }
-  issuer: {
-    did: ''
-  }
   credentials: {
     self_issued: []
     service_issued: []
-    invalid: []
   }
 }
 
@@ -52,12 +47,6 @@ export interface AuthorizationDetailsI extends AuthCommonI {
 }
 
 interface CredCommonI extends InteractionCommonI {
-  initiator: {
-    did: ''
-  }
-  issuer: {
-    did: string
-  }
   description: ''
   image: ''
   action: ''
@@ -67,7 +56,6 @@ export interface CredShareI extends CredCommonI {
   credentials: {
     self_issued: string[]
     service_issued: string[]
-    invalid: []
   }
 }
 
@@ -75,7 +63,6 @@ export interface CredReceiveI extends CredCommonI {
   credentials: {
     self_issued: []
     service_issued: string[]
-    invalid: string[]
   }
 }
 

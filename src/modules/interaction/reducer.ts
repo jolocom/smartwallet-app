@@ -16,10 +16,7 @@ const initialState: InteractionStateI<
   details: {
     id: '',
     flowType: null,
-    initiator: {
-      did: '',
-    },
-    issuer: {
+    counterparty: {
       did: '',
     },
     description: '',
@@ -28,7 +25,6 @@ const initialState: InteractionStateI<
     credentials: {
       self_issued: [],
       service_issued: [],
-      invalid: [],
     },
   },
   intermediaryState: IntermediaryState.absent,
@@ -43,7 +39,7 @@ const reducer = (
 ) => {
   switch (action.type) {
     case InteractionActions.setInteractionDetails:
-      return { ...state, details: action.payload }
+      return { ...state, details: { ...state.details, ...action.payload } }
     case InteractionActions.resetInteraction:
       return initialState
     case InteractionActions.setInteractionAttributes:
