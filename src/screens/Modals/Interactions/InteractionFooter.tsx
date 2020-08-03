@@ -28,12 +28,12 @@ const InteractionFooter: React.FC<PropsI> = ({ onSubmit, customCTA }) => {
 
   return (
     <BtnGroup alignment={BtnsAlignment.horizontal}>
-      <View style={[styles.container, { width: '70%', marginRight: 12 }]}>
+      <View style={[styles.container, { flex: 0.7, marginRight: 12 }]}>
         <Btn size={BtnSize.medium} onPress={onSubmit}>
           {customCTA || getCTAText(interactionType)}
         </Btn>
       </View>
-      <View style={[styles.container, { width: '30%' }]}>
+      <View style={[styles.container, { flex: 0.3 }]}>
         <Btn
           size={BtnSize.medium}
           type={BtnTypes.secondary}
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.borderGray20,
     borderRadius: 8,
-    paddingVertical: 10,
   },
 })
 

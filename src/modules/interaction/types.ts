@@ -22,6 +22,7 @@ export interface InteractionStateI<T> {
 
 interface InteractionCommonI {
   id: string
+  flowType: FlowType | null
   counterparty: {
     did: string
   }
