@@ -29,7 +29,7 @@ export const useGetAllAttributes = () => {
   const sdk = useSDK()
   const getAttributes = async () => {
     try {
-      const verifiableCredentials = await sdk.bemw.storageLib.get.verifiableCredential()
+      const verifiableCredentials = await sdk.storageLib.get.verifiableCredential()
 
       const attributes = verifiableCredentials.reduce((acc, v) => {
         if (Object.values(credentialSchemas).indexOf(v.type[1]) > -1) {
@@ -94,10 +94,10 @@ export const useCreateAttributes = () => {
     attributeKey: AttrKeys,
     value: string,
   ) => {
-    const password = await sdk.bemw.keyChainLib.getPassword()
+    const password = await sdk.keyChainLib.getPassword()
 
     // this one is done to map our custom fields names to the one in `cred-types-jolocom-core`
-    const verifiableCredential = await sdk.bemw.identityWallet.create.signedCredential(
+    const verifiableCredential = await sdk.identityWallet.create.signedCredential(
       {
         metadata: claimsMetadata[attributeKey],
         claim: getClaim(attributeKey, value), // this will split claims and create an object with properties it should have
@@ -112,7 +112,7 @@ export const useCreateAttributes = () => {
     )
 
     // save it in the storage
-    await sdk.bemw.storageLib.store.verifiableCredential(verifiableCredential)
+    await sdk.storageLib.store.verifiableCredential(verifiableCredential)
 
     dispatch(updateAttrs({ attributeKey, attribute: entry[0] }))
   }
