@@ -124,6 +124,7 @@ const interactions = {
   PULL_TO_CHOOSE: 'Pull to choose',
   SHARE: 'Share',
   RECEIVE: 'Receive',
+  IGNORE: 'Ignore',
   CHOOSE_ONE_OR_MORE_DOCUMENTS:
     'Choose one or more documents provided by this service and we will generate them for you',
 }

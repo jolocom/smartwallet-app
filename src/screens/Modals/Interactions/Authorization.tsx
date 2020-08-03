@@ -8,11 +8,9 @@ import { useInteraction } from '~/hooks/sdk'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Header, { HeaderSizes } from '~/components/Header'
 import { Colors } from '~/utils/colors'
-import InteractionFooter from './InteractionFooter'
 import { useLoader } from '~/hooks/useLoader'
 import { strings } from '~/translations/strings'
 import { resetInteraction } from '~/modules/interaction/actions'
-import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 
 const Authorization = () => {
   const interaction = useInteraction()
@@ -60,7 +58,6 @@ const Authorization = () => {
           />
         </View>
       )}
-      <InteractionFooter onSubmit={handleSubmit} />
     </>
   )
 }

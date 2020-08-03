@@ -1,13 +1,12 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { View } from 'react-native'
 
+import Header from '~/components/Header'
 import {
   setIntermediaryState,
   setAttributeInputKey,
 } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
-import InteractionFooter from './InteractionFooter'
 
 const CredentialShare = () => {
   const dispatch = useDispatch()
@@ -17,14 +16,7 @@ const CredentialShare = () => {
     dispatch(setAttributeInputKey('email'))
   }
 
-  return (
-    <View>
-      <InteractionFooter
-        customCTA={'Create email'}
-        onSubmit={handleShowIntermediary}
-      />
-    </View>
-  )
+  return <Header>Credential Share</Header>
 }
 
 export default CredentialShare

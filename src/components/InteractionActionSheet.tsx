@@ -20,6 +20,8 @@ import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
+import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
+import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -82,19 +84,28 @@ const InteractionActionSheet: React.FC = () => {
     }
   }
 
-  const renderBody = () => {
-    switch (interactionType) {
-      case FlowType.Authentication:
-        return <Authentication />
-      case FlowType.Authorization:
-        return <Authorization />
-      case FlowType.CredentialShare:
-        return <CredentialShare />
-      case FlowType.CredentialReceive:
-        return <CredentialReceive />
-      default:
-        return null
+  const renderInteraction = () => {
+    const body = () => {
+      switch (interactionType) {
+        case FlowType.Authentication:
+          return <Authentication />
+        case FlowType.Authorization:
+          return <Authorization />
+        case FlowType.CredentialShare:
+          return <CredentialShare />
+        case FlowType.CredentialReceive:
+          return <CredentialReceive />
+        default:
+          return null
+      }
     }
+    return (
+      <>
+        <InteractionHeader />
+        {body()}
+        <InteractionFooter />
+      </>
+    )
   }
 
   return (
@@ -104,15 +115,13 @@ const InteractionActionSheet: React.FC = () => {
         ref={actionSheetRef}
         onClose={handleCloseSheet}
         containerStyle={
-          isFullScreenInteraction
-            ? styles.containerMultiple
-            : styles.containerSingle
+          isFullScreenInteraction ? styles.containerFAS : styles.containerBAS
         }
       >
         {isFullScreenInteraction ? (
-          renderBody()
+          renderInteraction()
         ) : (
-          <BasWrapper>{renderBody()}</BasWrapper>
+          <BasWrapper>{renderInteraction()}</BasWrapper>
         )}
       </ActionSheet>
       {intermediaryState !== IntermediaryState.absent && (
@@ -120,7 +129,7 @@ const InteractionActionSheet: React.FC = () => {
           {...ACTION_SHEET_PROPS}
           ref={intermediarySheetRef}
           onClose={handleCloseSheet}
-          containerStyle={styles.containerSingle}
+          containerStyle={styles.containerBAS}
         >
           <BasWrapper>
             <IntermediaryActionSheet />
@@ -132,14 +141,12 @@ const InteractionActionSheet: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
-  containerMultiple: {
-    flex: 1,
+  containerFAS: {
     height: SCREEN_HEIGHT,
-    paddingTop: 32,
-    paddingBottom: 0,
     backgroundColor: Colors.mainBlack,
+    justifyContent: 'space-between',
   },
-  containerSingle: {
+  containerBAS: {
     padding: 5,
     backgroundColor: Colors.transparent,
   },
@@ -148,8 +155,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     borderRadius: 20,
     justifyContent: 'center',
-    paddingVertical: 30,
-    paddingHorizontal: 20,
+    padding: 20,
   },
 })
 

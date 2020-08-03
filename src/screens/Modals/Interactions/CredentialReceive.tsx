@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import { useLoader } from '~/hooks/useLoader'
 import { useInteraction } from '~/hooks/sdk'
 import { resetInteraction } from '~/modules/interaction/actions'
-import { getIsFullScreenInteraction } from '~/modules/interaction/selectors'
 import Header from '~/components/Header'
-import InteractionFooter from './InteractionFooter'
 
 const CredentialReceive = () => {
-  const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
-
   const interaction = useInteraction()
   const loader = useLoader()
   const dispatch = useDispatch()
@@ -47,12 +43,7 @@ const CredentialReceive = () => {
       //TODO: show toast
     }
   }
-  return (
-    <>
-      <Header>Credential Receive</Header>
-      <InteractionFooter onSubmit={() => {}} />
-    </>
-  )
+  return <Header>Credential Receive</Header>
 }
 
 export default CredentialReceive

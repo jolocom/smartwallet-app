@@ -16,7 +16,6 @@ import { Colors } from '~/utils/colors'
 
 import { strings } from '~/translations/strings'
 
-import InteractionFooter from './InteractionFooter'
 import { getInteractionDescription } from '~/modules/interaction/selectors'
 
 const Authentication = () => {
@@ -52,7 +51,6 @@ const Authentication = () => {
           {description}
         </Paragraph>
       </HyperLink>
-      <InteractionFooter onSubmit={handleSubmit} />
     </>
   )
 }
