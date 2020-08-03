@@ -1,19 +1,26 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { claimsMetadata } from 'cred-types-jolocom-core'
+
 import { setAttrs, updateAttrs } from '~/modules/attributes/actions'
 import {
   setInteractionAttributes,
   setInitialSelectedAttributes,
 } from '~/modules/interaction/actions'
-import { AttrKeys, AttrTypes } from '~/types/attributes'
+import { AttrKeys } from '~/types/attributes'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useSDK } from './sdk'
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
-import { makeAttrEntry } from '~/utils/dataMapping'
-import { CredentialI } from '~/utils/dataMapping'
+import {
+  makeAttrEntry,
+  CredentialI,
+  getClaim,
+  credentialSchemas,
+} from '~/utils/dataMapping'
+import { getDid } from '~/modules/account/selectors'
 
 const ATTR_TYPES = {
-  ProofOfEmailCredential: AttrKeys.email,
-  ProofOfMobilePhoneNumberCredential: AttrKeys.number,
+  ProofOfEmailCredential: AttrKeys.emailAddress,
+  ProofOfMobilePhoneNumberCredential: AttrKeys.mobilePhoneNumber,
   ProofOfNameCredential: AttrKeys.name,
 }
 
@@ -23,9 +30,10 @@ export const useGetAllAttributes = () => {
   const getAttributes = async () => {
     try {
       const verifiableCredentials = await sdk.bemw.storageLib.get.verifiableCredential()
+
       const attributes = verifiableCredentials.reduce((acc, v) => {
-        if (v.type[1] in AttrTypes) {
-          const attrType = v.type[1] as AttrTypes
+        if (Object.values(credentialSchemas).indexOf(v.type[1]) > -1) {
+          const attrType = v.type[1] as keyof typeof ATTR_TYPES
           const attrKey: AttrKeys = ATTR_TYPES[attrType]
           const entry = makeAttrEntry(attrKey, acc[attrKey], v as CredentialI)
 
@@ -48,7 +56,10 @@ export const useSetInteractionAttributes = () => {
   const attributes = useSelector(getAttributes)
   const updateInteractionAttributes = () => {
     // this will happen on Credentail Share flow
-    const requestedAttributes = ['number', 'email']
+    const requestedAttributes = [
+      AttrKeys.mobilePhoneNumber,
+      AttrKeys.emailAddress,
+    ]
     const interactionAttributues = requestedAttributes.reduce((acc, v) => {
       const value = v as AttrKeys
       acc[v] = attributes[value] || []
@@ -74,21 +85,37 @@ export const useSetInteractionAttributes = () => {
   return updateInteractionAttributes
 }
 
-const getId = () => '_' + Math.random().toString(36).substr(2, 9)
 export const useCreateAttributes = () => {
+  const sdk = useSDK()
+  const did = useSelector(getDid)
   const dispatch = useDispatch()
+
   const createSelfIssuedCredential = async (
     attributeKey: AttrKeys,
     value: string,
   ) => {
-    const id = getId()
-    const attribute = { id, value }
-    dispatch(updateAttrs({ attributeKey, attribute }))
+    const password = await sdk.bemw.keyChainLib.getPassword()
+
+    // this one is done to map our custom fields names to the one in `cred-types-jolocom-core`
+    const verifiableCredential = await sdk.bemw.identityWallet.create.signedCredential(
+      {
+        metadata: claimsMetadata[attributeKey],
+        claim: getClaim(attributeKey, value), // this will split claims and create an object with properties it should have
+        subject: did,
+      },
+      password,
+    )
+    const entry = makeAttrEntry(
+      attributeKey,
+      undefined,
+      verifiableCredential as CredentialI,
+    )
+
+    // save it in the storage
+    await sdk.bemw.storageLib.store.verifiableCredential(verifiableCredential)
+
+    dispatch(updateAttrs({ attributeKey, attribute: entry[0] }))
   }
 
-  return {
-    addEmail: () =>
-      createSelfIssuedCredential(AttrKeys.email, 'johns@example.com'),
-    addName: () => createSelfIssuedCredential(AttrKeys.name, 'John Smith'),
-  }
+  return createSelfIssuedCredential
 }
