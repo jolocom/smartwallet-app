@@ -5,10 +5,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 
-import { resetInteraction } from '~/modules/interaction/actions'
+import {
+  resetInteraction,
+  setIntermediaryState,
+  setAttributeInputKey,
+} from '~/modules/interaction/actions'
 import {
   getInteractionType,
   getIsFullScreenInteraction,
+  getAttributesToShare,
+  getServiceIssuedCreds,
 } from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
@@ -16,6 +22,7 @@ import { Colors } from '~/utils/colors'
 
 import getCTAText from './utils/getCTAText'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
+import { IntermediaryState } from '~/modules/interaction/types'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -32,9 +39,21 @@ const FooterContainer: React.FC = ({ children }) => {
 const InteractionFooter: React.FC = () => {
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
+  const serviceIssuedCreds = useSelector(getServiceIssuedCreds)
+  const attributesToShare = useSelector(getAttributesToShare)
+  // NOTE: for now this will alway return false because we don't set attributesToShare yet
+  const showIntermediaryScreen =
+    Object.keys(attributesToShare).length === 1 &&
+    attributesToShare[Object.keys(attributesToShare)[0]] === [] &&
+    serviceIssuedCreds.length === 0
 
   const handleSubmit = () => {
-    // TODO: add logic for different interaction types
+    if (showIntermediaryScreen) {
+      dispatch(setIntermediaryState(IntermediaryState.showing))
+      dispatch(setAttributeInputKey('email'))
+    } else {
+      // TODO: add logic for different interaction types
+    }
   }
 
   const handleCancel = () => {

@@ -13,8 +13,8 @@ export const setInteractionAttributes = createAction(
   InteractionActions.setInteractionAttributes,
 )
 
-export const setInitialSelectedAttributes = createAction(
-  InteractionActions.setInitialSelectedAttributes,
+export const setAttributesToShare = createAction(
+  InteractionActions.setAttributesToShare,
 )
 
 export const selectAttr = createAction(InteractionActions.selectAttr)

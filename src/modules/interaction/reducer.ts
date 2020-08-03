@@ -30,7 +30,7 @@ const initialState: InteractionStateI<
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
   attributes: {},
-  selectedAttributes: {},
+  attributesToShare: {},
 }
 
 const reducer = (
@@ -44,8 +44,8 @@ const reducer = (
       return initialState
     case InteractionActions.setInteractionAttributes:
       return { ...state, attributes: action.payload }
-    case InteractionActions.setInitialSelectedAttributes:
-      return { ...state, selectedAttributes: action.payload }
+    case InteractionActions.setAttributesToShare:
+      return { ...state, attributesToShare: action.payload }
     case InteractionActions.selectAttr:
       return onSelectAttr(state, action)
     case InteractionActions.setIntermediaryState:

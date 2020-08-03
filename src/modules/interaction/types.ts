@@ -6,7 +6,7 @@ export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
   setInteractionAttributes = 'setInteractionAttributes',
-  setInitialSelectedAttributes = 'setInitialSelectedAttributes',
+  setAttributesToShare = 'setAttributesToShare',
   selectAttr = 'selectAttr',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputKey = 'setAttributeInputKey',
@@ -15,7 +15,7 @@ export enum InteractionActions {
 export interface InteractionStateI<T> {
   details: T
   attributes: AttrsState<AttributeI>
-  selectedAttributes: { [x: string]: string }
+  attributesToShare: { [x: string]: string }
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
 }
