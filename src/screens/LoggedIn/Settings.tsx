@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react'
+import React, { useState, Dispatch, SetStateAction, useEffect } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import { useDispatch } from 'react-redux'
 import { View, Switch, ScrollView } from 'react-native'
@@ -38,10 +38,13 @@ const Switcher: React.FC<SwitcherPropsI> = ({
   )
 }
 
+const CARDS = [{ id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'd' }]
+
 const Settings = () => {
   const [isSmall, setIsSmall] = useState(true)
   const [isDisabled, setIsDisabled] = useState(true)
-  const [isCardSelected, setIsCardSelected] = useState(false)
+  const [selectedCard, setSelectedCard] = useState('')
+  const [instructionVisible, setInstructionVisibility] = useState(true)
 
   const redirectToChangePin = useRedirectTo(ScreenNames.SettingsList, {
     screen: ScreenNames.ChangePin,
@@ -61,10 +64,26 @@ const Settings = () => {
     }
   }
 
-  const handleToggleelect = () => {
-    setIsCardSelected((prevState) => !prevState)
+  const handleToggleSelect = (id: string) => {
+    setSelectedCard(selectedCard === id ? '' : id)
     console.log('Selecting card')
   }
+
+  useEffect(() => {
+    let id: ReturnType<typeof setTimeout> | undefined = undefined
+    if (!selectedCard) {
+      id = setTimeout(() => {
+        setInstructionVisibility(false)
+      }, 5000)
+    } else if (id && selectedCard) {
+      setInstructionVisibility(false)
+      clearTimeout(id)
+    }
+
+    return () => {
+      id && clearTimeout(id)
+    }
+  }, [selectedCard])
 
   return (
     <ScreenContainer>
@@ -88,68 +107,23 @@ const Settings = () => {
             leftTitle="Active"
             rightTitle="Disabled"
           />
-          <CredentialCard
-            isSmall={isSmall}
-            disabled={isDisabled}
-            selected={isCardSelected}
-            onSelect={handleToggleelect}
-          >
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Paragraph color={Colors.black}>
-                This is a custom card content
-              </Paragraph>
-            </View>
-          </CredentialCard>
           <Carousel>
-            <CredentialCard
-              isSmall={true}
-              disabled={false}
-              selected={isCardSelected}
-              onSelect={handleToggleelect}
-              hasInstruction
-            >
-              <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Paragraph color={Colors.black}>
-                  This is a custom card content
-                </Paragraph>
-              </View>
-            </CredentialCard>
-            <CredentialCard
-              isSmall={true}
-              disabled={false}
-              selected={isCardSelected}
-              onSelect={handleToggleelect}
-            >
-              <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Paragraph color={Colors.black}>
-                  This is a custom card content
-                </Paragraph>
-              </View>
-            </CredentialCard>
-            <CredentialCard
-              isSmall={true}
-              disabled={false}
-              selected={isCardSelected}
-              onSelect={handleToggleelect}
-            >
-              <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Paragraph color={Colors.black}>
-                  This is a custom card content
-                </Paragraph>
-              </View>
-            </CredentialCard>
-            <CredentialCard
-              isSmall={true}
-              disabled={false}
-              selected={isCardSelected}
-              onSelect={handleToggleelect}
-            >
-              <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Paragraph color={Colors.black}>
-                  This is a custom card content
-                </Paragraph>
-              </View>
-            </CredentialCard>
+            {CARDS.map((card, idx) => (
+              <CredentialCard
+                isSmall={true}
+                selected={card.id === selectedCard}
+                onSelect={() => handleToggleSelect(card.id)}
+                hasInstruction={
+                  instructionVisible && idx === 0 && !selectedCard
+                }
+              >
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                  <Paragraph color={Colors.black}>
+                    This is a custom card content
+                  </Paragraph>
+                </View>
+              </CredentialCard>
+            ))}
           </Carousel>
         </View>
 

@@ -8,6 +8,7 @@ const Carousel: React.FC = ({ children }) => {
       directionalLockEnabled
       horizontal={true}
       decelerationRate={0}
+      showsHorizontalScrollIndicator={false}
       snapToInterval={CARD_WIDTH - 30}
       contentContainerStyle={{
         height: CARD_HEIGHT,

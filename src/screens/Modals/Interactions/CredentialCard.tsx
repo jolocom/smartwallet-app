@@ -14,7 +14,7 @@ interface PropsI {
   disabled?: boolean
   selected?: boolean
   onSelect?: () => void
-  hasInstruction?: boolean
+  hasInstruction: boolean
 }
 
 export const CARD_WIDTH = Dimensions.get('window').width * 0.83
@@ -32,23 +32,12 @@ const CredentialCard: React.FC<PropsI> = ({
   children,
   isSmall = false,
   disabled = false,
-  hasInstruction = false,
+  hasInstruction,
   selected,
   onSelect,
 }) => {
-  const [isAnimated, setIsAnimated] = useState(hasInstruction)
-
-  useEffect(() => {
-    const id = setTimeout(() => {
-      setIsAnimated(false)
-    }, 5000)
-    return () => {
-      clearTimeout(id)
-    }
-  }, [])
-
   const handleCardTap = () => {
-    setIsAnimated(false)
+    // setIsAnimated(false)
     onSelect && onSelect()
   }
 
@@ -63,10 +52,10 @@ const CredentialCard: React.FC<PropsI> = ({
       >
         <>
           {children}
-          {(disabled || selected || isAnimated) && (
+          {(disabled || selected || hasInstruction) && (
             <View style={[styles.darken, styles.card]}>
               {selected && <Tick />}
-              {isAnimated && (
+              {hasInstruction && (
                 <View style={{ alignSelf: 'center' }}>
                   <HandAnimation />
                 </View>
