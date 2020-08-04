@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     width: WIDTH,
     height: HEIGHT,
     marginVertical: 20,
-    backgroundColor: Colors.white,
+    backgroundColor: 'transparent',
   },
   scaledDown: {
     transform: [{ scale: 0.83 }],

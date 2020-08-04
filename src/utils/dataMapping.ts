@@ -1,4 +1,4 @@
-import { AttrKeys, AttrTypes, ATTR_TYPES } from '~/types/attributes'
+import { AttrKeys, ATTR_TYPES } from '~/types/attributes'
 import { claimsMetadata } from 'cred-types-jolocom-core'
 
 import { AttributeI } from '~/modules/attributes/types'
@@ -103,8 +103,6 @@ const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
 }
 
 const mapCredReceiveData = (summary: SummaryI<CredentialOfferFlowState>) => {
-  console.log('cred receive')
-  console.log({ summary })
   return {
     counterparty: summary.initiator,
     credentials: {

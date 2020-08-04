@@ -12,6 +12,7 @@ export enum Colors {
   black65 = 'rgba(0,0,0,0.65)',
   success = '#5251c1',
   white = '#ffffff',
+  white35 = 'rgba(255, 255, 255, 0.35)',
   white45 = 'rgba(255, 255, 255, 0.45)',
   serenade = '#fff1e3',
   white70 = 'rgba(255, 255, 255, 0.7)',

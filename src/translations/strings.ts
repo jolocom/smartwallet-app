@@ -126,6 +126,8 @@ const interactions = {
   RECEIVE: 'Receive',
   CHOOSE_ONE_OR_MORE_DOCUMENTS:
     'Choose one or more documents provided by this service and we will generate them for you',
+  DOCUMENTS: 'Documents',
+  OTHER: 'Other',
 }
 
 const lock = {
