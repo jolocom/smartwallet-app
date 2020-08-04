@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Dimensions } from 'react-native'
+import { ScrollView } from 'react-native'
 import { CARD_WIDTH, CARD_HEIGHT } from './CredentialCard'
 
 const Carousel: React.FC = ({ children }) => {
@@ -7,7 +7,7 @@ const Carousel: React.FC = ({ children }) => {
     <ScrollView
       directionalLockEnabled
       horizontal={true}
-      decelerationRate={0}
+      decelerationRate="fast"
       showsHorizontalScrollIndicator={false}
       snapToInterval={CARD_WIDTH - 30}
       contentContainerStyle={{
