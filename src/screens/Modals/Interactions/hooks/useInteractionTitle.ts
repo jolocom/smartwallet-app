@@ -13,6 +13,7 @@ import {
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
 import { IntermediaryState } from '~/modules/interaction/types'
+import { strings } from '~/translations/strings'
 
 //NOTE: Temporary
 const attr = [
@@ -45,32 +46,33 @@ const useInteractionTitle = () => {
   const interactionType: FlowType | null = useSelector(getInteractionType)
 
   if (intermediaryState === IntermediaryState.showing)
-    return `Save your ${inputType}`
+    return strings.SAVE_YOUR_ATTRIBUTE(inputType)
 
   //TODO: @clauss add strings
   switch (interactionType) {
     case FlowType.Authentication:
-      return 'Is it really you?'
+      return strings.IS_IT_REALLY_YOU
 
     case FlowType.CredentialShare:
       const initiatorName = initiator.publicProfile?.name
       const { constraints } = state as CredentialRequestFlowState
       const firstType = constraints[0].requestedCredentialTypes[0][0]
       return isSingleAttributeRequest(constraints[0])
-        ? `${initiatorName ? initiatorName : 'Service'} requests ${
-            mappedAttr[firstType]
-          }`
-        : 'Incoming request'
+        ? strings.SERVICE_REQUESTS_ATTRIBUTE(
+            initiatorName ? initiatorName : strings.SERVICE,
+            mappedAttr[firstType],
+          )
+        : strings.INCOMING_REQUEST
 
     case FlowType.CredentialReceive:
-      return 'Incoming offer'
+      return strings.INCOMING_OFFER
 
     case FlowType.Authorization:
       const { action } = state as AuthorizationFlowState
-      return `Would you like to ${action}`
+      return strings.WOULD_YOU_LIKE_TO_ACTION(action)
 
     default:
-      return 'Incoming interaction'
+      return strings.INCOMING_INTERACTION
   }
 }
 
