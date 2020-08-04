@@ -3,7 +3,6 @@ import {
   TouchableWithoutFeedback,
   View,
   TouchableOpacity,
-  GestureResponderEvent,
   ViewStyle,
 } from 'react-native'
 

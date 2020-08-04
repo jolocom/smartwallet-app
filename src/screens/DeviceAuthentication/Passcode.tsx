@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
       large: '30%',
       medium: '30%',
       small: '10%',
+      xsmall: '10%',
     }),
     position: 'relative',
   },
