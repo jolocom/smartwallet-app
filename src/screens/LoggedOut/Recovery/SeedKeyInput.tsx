@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
       large: 70,
       medium: 50,
       small: 30,
+      xsmall: 30,
     }),
   },
   inputField: {
