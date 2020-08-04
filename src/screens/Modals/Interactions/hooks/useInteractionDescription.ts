@@ -7,13 +7,15 @@ import {
   getInteractionSummary,
   getIntermediaryState,
   getAttributeInputKey,
+  getInteractionType,
 } from '~/modules/interaction/selectors'
 import truncateDid from '~/utils/truncateDid'
 import { IntermediaryState } from '~/modules/interaction/types'
 
-const getDescriptionText = (flowType: FlowType | null) => {
+const useInteractionDescription = () => {
   const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
   const intermediaryState = useSelector(getIntermediaryState)
+  const interactionType = useSelector(getInteractionType)
   const inputType = useSelector(getAttributeInputKey)
   const serviceName = initiator.publicProfile?.name
   const isAnonymous = !initiator.publicProfile
@@ -27,7 +29,7 @@ const getDescriptionText = (flowType: FlowType | null) => {
     )} chose to remain anonymous. Pay attention before sharing data.`
 
   //TODO: @clauxx add strings
-  switch (flowType) {
+  switch (interactionType) {
     case FlowType.Authentication:
       //TODO: ask what is the right fallback for anonymous
       return `${serviceName} would like to confirm your digital identity before proceeding`
@@ -42,4 +44,4 @@ const getDescriptionText = (flowType: FlowType | null) => {
   }
 }
 
-export default getDescriptionText
+export default useInteractionDescription

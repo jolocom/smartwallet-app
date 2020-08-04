@@ -8,6 +8,7 @@ import {
   getInteractionSummary,
   getIntermediaryState,
   getAttributeInputKey,
+  getInteractionType,
 } from '~/modules/interaction/selectors'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
@@ -35,18 +36,19 @@ const isSingleAttributeRequest = (constraints: CredentialRequest) => {
   return isSingleRequest && isAttribute
 }
 
-const getTitleText = (flowType: FlowType | null) => {
+const useInteractionTitle = () => {
   const { state, initiator }: InteractionSummary = useSelector(
     getInteractionSummary,
   )
   const intermediaryState = useSelector(getIntermediaryState)
   const inputType = useSelector(getAttributeInputKey)
+  const interactionType: FlowType | null = useSelector(getInteractionType)
 
   if (intermediaryState === IntermediaryState.showing)
     return `Save your ${inputType}`
 
   //TODO: @clauss add strings
-  switch (flowType) {
+  switch (interactionType) {
     case FlowType.Authentication:
       return 'Is it really you?'
 
@@ -72,4 +74,4 @@ const getTitleText = (flowType: FlowType | null) => {
   }
 }
 
-export default getTitleText
+export default useInteractionTitle

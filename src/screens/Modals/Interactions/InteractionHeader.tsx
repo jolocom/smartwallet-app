@@ -1,20 +1,16 @@
 import React from 'react'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
-import {
-  InteractionSummary,
-  FlowType,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import {
   getInteractionSummary,
-  getInteractionType,
   getIntermediaryState,
 } from '~/modules/interaction/selectors'
 import { useSelector } from 'react-redux'
 import { Colors } from '~/utils/colors'
-import getTitleText from './utils/getTitleText'
-import getDescriptionText from './utils/getDescriptionText'
 import { IntermediaryState } from '~/modules/interaction/types'
+import useInteractionTitle from './hooks/useInteractionTitle'
+import useInteractionDescription from './hooks/useInteractionDescription'
 
 interface PropsI {
   title?: string
@@ -23,8 +19,9 @@ interface PropsI {
 
 const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   const summary: InteractionSummary = useSelector(getInteractionSummary)
-  const interactionType: FlowType | null = useSelector(getInteractionType)
   const intermediaryState = useSelector(getIntermediaryState)
+  const interactionTitle = useInteractionTitle()
+  const interactionDescription = useInteractionDescription()
   //NOTE: this is getting ugly b/c of the intermediary screen
   const isAnonymous =
     intermediaryState === IntermediaryState.showing
@@ -35,14 +32,14 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   return (
     <>
       <Header size={HeaderSizes.medium} color={Colors.white90}>
-        {title || getTitleText(interactionType)}
+        {title || interactionTitle}
       </Header>
       <Paragraph
         size={ParagraphSizes.small}
         color={isAnonymous ? Colors.error : Colors.white90}
         customStyles={{ paddingHorizontal: 16, marginTop: 8, marginBottom: 36 }}
       >
-        {description || getDescriptionText(interactionType)}
+        {description || interactionDescription}
       </Paragraph>
     </>
   )

@@ -8,9 +8,6 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useSelector } from 'react-redux'
 import { getInteractionType } from '~/modules/interaction/selectors'
 
-import getCTAText from './utils/getCTAText'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-
 interface PropsI {
   title: string
   description: string
