@@ -1,11 +1,8 @@
 import React, { useEffect, useRef, RefObject } from 'react'
-import { View, StyleSheet, Dimensions, Image } from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 import ActionSheet from 'react-native-actions-sheet'
 import { useSelector, useDispatch } from 'react-redux'
-import {
-  FlowType,
-  InteractionSummary,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
@@ -14,7 +11,6 @@ import {
   getInteractionType,
   getIsFullScreenInteraction,
   getIntermediaryState,
-  getInteractionSummary,
 } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
@@ -24,9 +20,7 @@ import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
-import BasWrapper from './BasWrapper'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
-import FasWrapper from './FasWrapper'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -91,7 +85,6 @@ const InteractionActionSheet: React.FC = () => {
       case FlowType.Authorization:
         return <Authorization />
       case FlowType.CredentialShare:
-        //TODO: here based on @isFullScreenInteraction we decide between @CredentialShareFas and @CredentialShareBas (???)
         return <CredentialShare />
       case FlowType.CredentialReceive:
         return <CredentialReceive />

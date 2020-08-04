@@ -18,6 +18,11 @@ import { getInteractionSummary } from '~/modules/interaction/selectors'
 // is not pressible after it crosses the @ActionSheet border (???). In contrast, for FAS it has to be
 // inside the @FASWrapper because the icon has to be animated when the interaction screen is scrollable.
 
+// NOTE: When the action sheet is shown from e.g. the @Claims screen and the user taps on the icon
+// to navigate to the url, when coming back, the @Claims screen is not tappable anymore, even though the
+// @ActionSheet can be interacted with. The issue does not appear when the @ActionSheet is shown from
+// the @Scanner screen, hence the issue has to be fixed when implementing DeepLinking.
+
 export const IconWrapper: React.FC<{ customStyle?: ViewStyle }> = ({
   children,
   customStyle,
