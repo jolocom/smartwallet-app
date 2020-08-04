@@ -80,18 +80,18 @@ const mapAuthenticationData = (summary: SummaryI<AuthenticationFlowState>) => {
 // }
 
 const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
-  const credentials = summary.state.constraints[0].requestedCredentialTypes.reduce(
-    (acc, v) => {
-      const credType: AttrKeys | string = v[1]
-      if (credType in ATTR_TYPES) {
-        acc.self_issued = [...acc.self_issued, credType]
-      } else {
-        acc.service_issued = [...acc.service_issued, credType]
-      }
-      return acc
-    },
-    { service_issued: [] as string[], self_issued: [] as string[] },
-  )
+  const credentials = summary.state.constraints[0].requestedCredentialTypes.reduce<{
+    service_issued: string[]
+    self_issued: string[]
+  }>((acc, v) => {
+    const credType: AttrKeys | string = v[1]
+    if (credType in ATTR_TYPES) {
+      acc.self_issued = [...acc.self_issued, credType]
+    } else {
+      acc.service_issued = [...acc.service_issued, credType]
+    }
+    return acc
+  }, {})
 
   return {
     counterparty: summary.initiator,
