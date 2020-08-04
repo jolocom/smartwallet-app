@@ -100,8 +100,6 @@ const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
 }
 
 const mapCredReceiveData = (summary: SummaryI<CredentialOfferFlowState>) => {
-  console.log('cred receive')
-  console.log({ summary })
   return {
     counterparty: summary.initiator,
     credentials: {
