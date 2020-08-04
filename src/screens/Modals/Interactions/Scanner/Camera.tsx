@@ -12,7 +12,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import { useSelector } from 'react-redux'
 
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -34,7 +34,9 @@ import { strings } from '~/translations/strings'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
-  const { startInteraction } = useInteractionStart(InteractionChannel.HTTP)
+  const { startInteraction } = useInteractionStart(
+    InteractionTransportType.HTTP,
+  )
 
   const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)

@@ -35,7 +35,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
 
   const handlePhraseSubmit = useCallback(async () => {
     const success = await loader(
-      async () => SDK.bemw.initWithMnemonic(phrase.join(' ')),
+      async () => SDK.initWithMnemonic(phrase.join(' ')),
       {
         loading: strings.MATCHING,
       },
