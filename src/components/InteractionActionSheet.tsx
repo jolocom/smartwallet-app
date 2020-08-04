@@ -86,8 +86,8 @@ const InteractionActionSheet: React.FC = () => {
     switch (interactionType) {
       case FlowType.Authentication:
         return <Authentication />
-      case FlowType.Authorization:
-        return <Authorization />
+      // case FlowType.Authorization:
+      //   return <Authorization />
       case FlowType.CredentialShare:
         return <CredentialShare />
       case FlowType.CredentialReceive:

@@ -62,7 +62,7 @@ export const useInteractionStart = (channel: InteractionChannel) => {
           token,
         )
 
-        let mappedInteraction = getMappedInteraction(interaction)
+        const mappedInteraction = getMappedInteraction(interaction)
 
         dispatch(
           setInteractionDetails({

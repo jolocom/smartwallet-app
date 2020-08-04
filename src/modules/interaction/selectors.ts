@@ -31,6 +31,9 @@ export const getInteractionDescription = (state: RootReducerI): any =>
 export const getInteractionAction = (state: RootReducerI): any =>
   state.interaction.details.action
 
+export const getInteractionDetails = (state: RootReducerI): any =>
+  state.interaction.details
+
 export const getIsFullScreenInteraction = createSelector(
   [getInteractionType, getIntermediaryState, getCredentials],
   (type, intermediaryState, credentials) => {
