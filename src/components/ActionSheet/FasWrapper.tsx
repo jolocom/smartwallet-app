@@ -42,7 +42,28 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
   const detailsOpacityValue = interpolateY([0, 100], [1, 0])
   const profileScaleValue = interpolateY([0, 100], [1, 0.8])
 
-  const gradientColors = ['rgb(245, 245, 245)', 'rgba(245, 245, 245, 0.72)']
+  const animatedScaleStyle = [
+    {
+      transform: [
+        { scaleY: profileScaleValue },
+        { scaleX: profileScaleValue },
+        { translateY: transY },
+      ],
+      opacity: detailsOpacityValue,
+    },
+  ]
+
+  const animatedOpacityStyle = [
+    {
+      transform: [
+        {
+          translateY: transY,
+        },
+      ],
+      opacity: detailsOpacityValue,
+    },
+  ]
+
   return (
     <ScreenContainer isFullscreen>
       <Animated.View
@@ -69,24 +90,15 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
         scrollEventThrottle={1}
         onScroll={handleScroll}
       >
-        <Animated.View
-          style={[
-            styles.profileWrapper,
-            {
-              transform: [
-                { scaleY: profileScaleValue },
-                { scaleX: profileScaleValue },
-                { translateY: transY },
-              ],
-              opacity: detailsOpacityValue,
-            },
-          ]}
-        >
+        <Animated.View style={animatedScaleStyle}>
           <IconWrapper customStyle={{ marginVertical: 12 }}>
             <InteractionIcon />
           </IconWrapper>
-          <InteractionHeader />
         </Animated.View>
+        <InteractionHeader
+          animatedTitleStyle={animatedScaleStyle}
+          animatedDescriptionStyle={animatedOpacityStyle}
+        />
         {children}
       </Animated.ScrollView>
       <InteractionFooter onSubmit={onSubmit} />

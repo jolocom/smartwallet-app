@@ -11,13 +11,21 @@ import { Colors } from '~/utils/colors'
 import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionTitle from './hooks/useInteractionTitle'
 import useInteractionDescription from './hooks/useInteractionDescription'
+import { Animated, StyleProp, ViewStyle } from 'react-native'
 
 interface PropsI {
   title?: string
   description?: string
+  animatedTitleStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>
+  animatedDescriptionStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>
 }
 
-const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
+const InteractionHeader: React.FC<PropsI> = ({
+  title,
+  description,
+  animatedTitleStyle = {},
+  animatedDescriptionStyle = {},
+}) => {
   const summary: InteractionSummary = useSelector(getInteractionSummary)
   const intermediaryState = useSelector(getIntermediaryState)
   const interactionTitle = useInteractionTitle()
@@ -31,16 +39,24 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   //TODO: @clauxx add strings
   return (
     <>
-      <Header size={HeaderSizes.medium} color={Colors.white90}>
-        {title || interactionTitle}
-      </Header>
-      <Paragraph
-        size={ParagraphSizes.small}
-        color={isAnonymous ? Colors.error : Colors.white90}
-        customStyles={{ paddingHorizontal: 16, marginTop: 8, marginBottom: 36 }}
-      >
-        {description || interactionDescription}
-      </Paragraph>
+      <Animated.View style={animatedTitleStyle}>
+        <Header size={HeaderSizes.medium} color={Colors.white90}>
+          {title || interactionTitle}
+        </Header>
+      </Animated.View>
+      <Animated.View style={animatedDescriptionStyle}>
+        <Paragraph
+          size={ParagraphSizes.small}
+          color={isAnonymous ? Colors.error : Colors.white90}
+          customStyles={{
+            paddingHorizontal: 16,
+            marginTop: 8,
+            marginBottom: 36,
+          }}
+        >
+          {description || interactionDescription}
+        </Paragraph>
+      </Animated.View>
     </>
   )
 }
