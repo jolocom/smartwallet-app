@@ -24,7 +24,7 @@ const SeedPhraseRepeat: React.FC = () => {
     const entropyBuffer = new Buffer(entropy, 'hex')
     const success = await loader(
       async () => {
-        const iw = await SDK.bemw.createNewIdentity(entropyBuffer)
+        const iw = await SDK.createNewIdentity(entropyBuffer)
         dispatch(setDid(iw.did))
       },
       {

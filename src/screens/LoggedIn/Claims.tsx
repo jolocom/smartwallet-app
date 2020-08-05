@@ -1,19 +1,23 @@
 import React from 'react'
+import { View } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Header, { HeaderSizes } from '~/components/Header'
 import Btn from '~/components/Btn'
-
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
-import { useSDK, useInteractionStart } from '~/hooks/sdk'
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import AttributesWidget from '~/components/AttributesWidget'
+import { getAttributes } from '~/modules/attributes/selectors'
+import Paragraph from '~/components/Paragraph'
+
+const ContainerComponent: React.FC = ({ children }) => {
+  return <View style={{ width: '100%' }}>{children}</View>
+}
 
 const Claims: React.FC = () => {
   const loader = useLoader()
-  const sdk = useSDK()
-  const { startInteraction } = useInteractionStart(InteractionChannel.HTTP)
+
   const openLoader = async () => {
     await loader(
       async () => {
@@ -27,36 +31,25 @@ const Claims: React.FC = () => {
     )
   }
 
-  const onAuth = async () => {
-    const authToken = await sdk.authRequestToken({
-      callbackURL: 'test',
-      description: 'test',
-    })
-
-    await startInteraction(authToken)
-  }
-
-  const onShare = async () => {
-    const credReqToken = await sdk.credRequestToken({
-      callbackURL: 'test',
-      credentialRequirements: [
-        { type: ['Credential', 'ProofOfEmail'], constraints: [] },
-        { type: ['Credential', 'ProofOfName'], constraints: [] },
-      ],
-    })
-
-    await startInteraction(credReqToken)
-  }
-
   const openScanner = useRedirectTo(ScreenNames.Interactions)
+  const attributes = useSelector(getAttributes)
 
   return (
     <ScreenContainer>
-      <Header size={HeaderSizes.large}>Claims</Header>
+      <ContainerComponent>
+        <Paragraph customStyles={{ marginBottom: 20 }}>
+          Below is the widget from the home page
+        </Paragraph>
+        <AttributesWidget
+          attributes={attributes}
+          onCreateNewAttr={(sectionKey) =>
+            console.log('Creating new attr for', sectionKey)
+          }
+          isSelectable={false}
+        />
+      </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
-      <Btn onPress={onAuth}>Start Auth</Btn>
-      <Btn onPress={onShare}>Start Share</Btn>
     </ScreenContainer>
   )
 }

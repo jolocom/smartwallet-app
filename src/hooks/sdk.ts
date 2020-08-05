@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { InteractionChannel } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
@@ -22,11 +22,11 @@ export const useMnemonic = () => {
   const sdk = useSDK()
 
   return (entropy: string) => {
-    return sdk.bemw.fromEntropyToMnemonic(Buffer.from(entropy, 'hex'))
+    return sdk.fromEntropyToMnemonic(Buffer.from(entropy, 'hex'))
   }
 }
 
-export const useInteractionStart = (channel: InteractionChannel) => {
+export const useInteractionStart = (channel: InteractionTransportType) => {
   const sdk = useSDK()
   const dispatch = useDispatch()
   const loader = useLoader()
@@ -60,10 +60,7 @@ export const useInteractionStart = (channel: InteractionChannel) => {
 
     await loader(
       async () => {
-        const interaction = await sdk.bemw.interactionManager.start(
-          channel,
-          token,
-        )
+        const interaction = await sdk.interactionManager.start(channel, token)
 
         dispatch(
           setInteraction({
@@ -87,5 +84,5 @@ export const useInteraction = () => {
   const interactionId = useSelector(getInteractionId)
   if (!interactionId.length) throw new Error('Interaction not found')
 
-  return sdk.bemw.interactionManager.getInteraction(interactionId)
+  return sdk.interactionManager.getInteraction(interactionId)
 }
