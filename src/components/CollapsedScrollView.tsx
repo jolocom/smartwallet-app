@@ -4,10 +4,12 @@ import {
   StyleSheet,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  StatusBar,
 } from 'react-native'
 
-import Header, { HeaderSizes } from '../Header'
+import Header, { HeaderSizes } from '~/components/Header'
 import { Colors } from '~/utils/colors'
+import Paragraph, { ParagraphSizes } from './Paragraph'
 
 interface Props {
   collapsedTitle: string
@@ -49,10 +51,11 @@ const CollapsedScrollView: React.FC<Props> = ({
             },
           ]}
         >
-          <Header size={HeaderSizes.medium}>{collapsedTitle}</Header>
+          <Paragraph size={ParagraphSizes.large}>{collapsedTitle}</Paragraph>
         </Animated.View>
       </Animated.View>
       <Animated.ScrollView
+        overScrollMode="never"
         style={{ flex: 1 }}
         contentContainerStyle={styles.scrollWrapper}
         scrollEventThrottle={1}
@@ -64,12 +67,15 @@ const CollapsedScrollView: React.FC<Props> = ({
   )
 }
 
+const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 0
+
 const styles = StyleSheet.create({
   headerWrapper: {
+    paddingTop: STATUS_BAR_HEIGHT,
     width: '100%',
-    height: 84,
+    height: 62 + STATUS_BAR_HEIGHT,
     position: 'absolute',
-    top: -30,
+    top: 0,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 3,
