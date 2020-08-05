@@ -1,11 +1,8 @@
 import React from 'react'
 import { View, StyleSheet, ImageBackground, ScrollView } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { useSelector } from 'react-redux'
+import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
-import { useLoader } from '~/hooks/useLoader'
-import { useInteraction } from '~/hooks/sdk'
-import { resetInteraction } from '~/modules/interaction/actions'
 import {
   getIsFullScreenInteraction,
   getCredentialsBySection,
@@ -17,7 +14,6 @@ import { Colors } from '~/utils/colors'
 import CredentialCard from './CredentialCard'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import InteractionFooter from './InteractionFooter'
-import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
 interface CardI {
   renderInfo: CredentialOfferRenderInfo
@@ -54,28 +50,6 @@ const CredentialReceive = () => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
   const sections = useSelector(getCredentialsBySection)
 
-  const interaction = useInteraction()
-  const loader = useLoader()
-  const dispatch = useDispatch()
-
-  const handleSubmit = async () => {
-    const selectedCredentials: SignedCredentialWithMetadata[] = []
-    const success = loader(
-      async () => {
-        const response = await interaction.createCredentialOfferResponseToken(
-          selectedCredentials,
-        )
-        const credentailReceive = await interaction.send(response)
-        console.log({ credentailReceive })
-      },
-      { showFailed: false, showSuccess: false },
-    )
-    dispatch(resetInteraction())
-    if (!success) {
-      //TODO: show toast
-    }
-  }
-
   return (
     <>
       <ScrollView
@@ -93,9 +67,12 @@ const CredentialReceive = () => {
               </Header>
             ) : null}
 
-            {sections[section].map((entry: ServiceIssuedCredI) => {
+            {sections[section].map((entry: ServiceIssuedCredI, idx: number) => {
               return (
-                <CredentialCard disabled={entry.invalid}>
+                <CredentialCard
+                  disabled={entry.invalid}
+                  key={`${entry.type}${idx}`}
+                >
                   <CredentialCardContainer renderInfo={entry.renderInfo}>
                     <Paragraph
                       size={ParagraphSizes.large}
@@ -114,7 +91,7 @@ const CredentialReceive = () => {
           </View>
         ))}
       </ScrollView>
-      <InteractionFooter onSubmit={() => {}} />
+      <InteractionFooter />
     </>
   )
 }

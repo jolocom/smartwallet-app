@@ -58,7 +58,7 @@ interface InitiatorI {
   did: string
 }
 
-interface SummaryI<T> {
+export interface SummaryI<T> {
   state: T
   initiator: InitiatorI
 }

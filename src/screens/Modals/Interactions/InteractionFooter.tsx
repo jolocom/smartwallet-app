@@ -12,24 +12,29 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 
 import getCTAText from './utils/getCTAText'
+import { useHandleFlowSubmit } from '~/hooks/credentials'
 
 interface PropsI {
-  onSubmit: () => void
   customCTA?: string
 }
 
-const InteractionFooter: React.FC<PropsI> = ({ onSubmit, customCTA }) => {
+const InteractionFooter: React.FC<PropsI> = ({ customCTA }) => {
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
+  const handleFlowSubmit = useHandleFlowSubmit()
 
   const handleCancel = () => {
     dispatch(resetInteraction())
   }
 
+  const handleSubmit = () => {
+    handleFlowSubmit()
+  }
+
   return (
     <BtnGroup alignment={BtnsAlignment.horizontal}>
       <View style={[styles.container, { width: '70%', marginRight: 12 }]}>
-        <Btn size={BtnSize.medium} onPress={onSubmit}>
+        <Btn size={BtnSize.medium} onPress={handleSubmit}>
           {customCTA || getCTAText(interactionType)}
         </Btn>
       </View>
