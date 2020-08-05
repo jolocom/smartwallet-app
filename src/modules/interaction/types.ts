@@ -12,6 +12,10 @@ export enum InteractionActions {
   setAttributeInputKey = 'setAttributeInputKey',
 }
 
+export interface CounterpartyI {
+  did: string
+}
+
 export interface InteractionStateI {
   details:
     | {}
@@ -27,9 +31,7 @@ export interface InteractionStateI {
 
 interface InteractionCommonI {
   id: string
-  counterparty: {
-    did: string
-  }
+  counterparty: CounterpartyI
 }
 
 interface AuthCommonI extends InteractionCommonI {

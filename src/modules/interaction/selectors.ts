@@ -2,12 +2,7 @@ import { RootReducerI } from '~/types/reducer'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
-import { IntermediaryState } from './types'
-
-export const getInteractionId = (state: RootReducerI): string =>
-  state.interaction.details.id
-export const getInteractionType = (state: RootReducerI): FlowType | null =>
-  state.interaction.details.flowType
+import { IntermediaryState, CounterpartyI } from './types'
 
 export const getInteractionAttributes = (
   state: RootReducerI,
@@ -25,13 +20,17 @@ export const getAttributeInputKey = (state: RootReducerI): any =>
 export const getCredentials = (state: RootReducerI): any =>
   state.interaction.details.credentials
 
-export const getInteractionDescription = (state: RootReducerI): any =>
-  state.interaction.details.description
+export const getInteractionId = (state: RootReducerI): string =>
+  state.interaction.details.id
 
-export const getInteractionAction = (state: RootReducerI): any =>
-  state.interaction.details.action
+export const getInteractionType = (state: RootReducerI): FlowType | null =>
+  state.interaction.details.flowType
 
-export const getInteractionDetails = (state: RootReducerI): any =>
+export const getInteractionCounterparty = (
+  state: RootReducerI,
+): CounterpartyI => state.interaction.details.counterparty
+
+export const getInteractionDetails = <T>(state: RootReducerI): T =>
   state.interaction.details
 
 export const getIsFullScreenInteraction = createSelector(

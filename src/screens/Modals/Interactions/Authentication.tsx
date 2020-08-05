@@ -17,13 +17,17 @@ import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 
 import InteractionFooter from './InteractionFooter'
-import { getInteractionDescription } from '~/modules/interaction/selectors'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { AuthenticationDetailsI } from '~/modules/interaction/types'
+import { RootReducerI } from '~/types/reducer'
 
 const Authentication = () => {
   const interaction = useInteraction()
   const dispatch = useDispatch()
   const loader = useLoader()
-  const description = useSelector(getInteractionDescription)
+  const { description } = useSelector((state: RootReducerI) =>
+    getInteractionDetails<AuthenticationDetailsI>(state),
+  )
 
   const handleSubmit = async () => {
     const success = loader(

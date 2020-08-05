@@ -1,11 +1,16 @@
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { strings } from '~/translations/strings'
 import { useSelector } from 'react-redux'
+
+import { strings } from '~/translations/strings'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
-import { getInteractionAction } from '~/modules/interaction/selectors'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { RootReducerI } from '~/types/reducer'
+import { AuthorizationDetailsI } from '~/modules/interaction/types'
 
 export default function getCTAText(flowType: FlowType | null) {
-  const action = useSelector(getInteractionAction)
+  const { action } = useSelector((state: RootReducerI) =>
+    getInteractionDetails<AuthorizationDetailsI>(state),
+  )
 
   switch (flowType) {
     case FlowType.Authentication:
