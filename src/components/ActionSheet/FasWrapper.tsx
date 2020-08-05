@@ -24,7 +24,7 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
   } = useInteractionHeaderAnimation(yPositionValue)
 
   return (
-    <ScreenContainer isFullscreen>
+    <>
       <CollapsedScrollView
         collapsedTitle={interactionTitle}
         scrollAnimatedValue={yPositionValue}
@@ -42,7 +42,7 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
         {children}
       </CollapsedScrollView>
       <InteractionFooter onSubmit={onSubmit} />
-    </ScreenContainer>
+    </>
   )
 }
 
