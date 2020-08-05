@@ -1,93 +1,33 @@
-import React, { useRef } from 'react'
-import { View, ScrollView, Animated, StyleSheet } from 'react-native'
+import React from 'react'
+import { Animated, StyleSheet } from 'react-native'
 
-import InteractionIcon, { IconWrapper } from './InteractionIcon'
+import { Colors } from '~/utils/colors'
+import CollapsedScrollView from '~/components/CollapsedScrollView'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
-import LinearGradient from 'react-native-linear-gradient'
-import Header, { HeaderSizes } from '../Header'
-import { Colors } from '~/utils/colors'
-import ScreenContainer from '../ScreenContainer'
-import { useSelector } from 'react-redux'
-import { getInteractionSummary } from '~/modules/interaction/selectors'
-import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import ScreenContainer from '~/components/ScreenContainer'
 import useInteractionTitle from '~/screens/Modals/Interactions/hooks/useInteractionTitle'
+import useScrollAnimation from '~/hooks/useScrollAnimation'
+
+import useInteractionHeaderAnimation from './useInteractionHeaderAnimation'
+import InteractionIcon, { IconWrapper } from './InteractionIcon'
 
 const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
   children,
   onSubmit,
 }) => {
   const interactionTitle = useInteractionTitle()
-  const transY = useRef(new Animated.Value(0)).current
-  const handleScroll = Animated.event(
-    [
-      {
-        nativeEvent: { contentOffset: { y: transY } },
-      },
-    ],
-    { useNativeDriver: true },
-  )
-
-  const interpolateY = (inputRange: number[], outputRange: number[]) =>
-    transY.interpolate({
-      inputRange,
-      outputRange,
-      extrapolate: 'clamp',
-    })
-
-  // TODO @clauxx test and adjust values for small screens
-  const headerOpacityValue = interpolateY([0, 100], [0, 1])
-  const headerTextValueY = interpolateY([120, 150], [30, 0])
-  const headerTextOpacityValue = interpolateY([130, 150], [0, 1])
-  const detailsOpacityValue = interpolateY([0, 100], [1, 0])
-  const profileScaleValue = interpolateY([0, 100], [1, 0.8])
-
-  const animatedScaleStyle = [
-    {
-      transform: [
-        { scaleY: profileScaleValue },
-        { scaleX: profileScaleValue },
-        { translateY: transY },
-      ],
-      opacity: detailsOpacityValue,
-    },
-  ]
-
-  const animatedOpacityStyle = [
-    {
-      transform: [
-        {
-          translateY: transY,
-        },
-      ],
-      opacity: detailsOpacityValue,
-    },
-  ]
+  const { handleScroll, yPositionValue } = useScrollAnimation()
+  const {
+    animatedOpacityStyle,
+    animatedScaleStyle,
+  } = useInteractionHeaderAnimation(yPositionValue)
 
   return (
     <ScreenContainer isFullscreen>
-      <Animated.View
-        style={[styles.headerWrapper, { opacity: headerOpacityValue }]}
-      >
-        <Animated.View
-          style={[
-            {
-              transform: [
-                {
-                  translateY: headerTextValueY,
-                },
-              ],
-              opacity: headerTextOpacityValue,
-            },
-          ]}
-        >
-          <Header size={HeaderSizes.medium}>{interactionTitle}</Header>
-        </Animated.View>
-      </Animated.View>
-      <Animated.ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={styles.scrollWrapper}
-        scrollEventThrottle={1}
+      <CollapsedScrollView
+        collapsedTitle={interactionTitle}
+        scrollAnimatedValue={yPositionValue}
         onScroll={handleScroll}
       >
         <Animated.View style={animatedScaleStyle}>
@@ -100,7 +40,7 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
           animatedDescriptionStyle={animatedOpacityStyle}
         />
         {children}
-      </Animated.ScrollView>
+      </CollapsedScrollView>
       <InteractionFooter onSubmit={onSubmit} />
     </ScreenContainer>
   )
