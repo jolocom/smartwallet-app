@@ -8,7 +8,7 @@ import Field, { FieldTypes } from './Field'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSelectedAttributes } from '~/modules/interaction/selectors'
 import { selectAttr } from '~/modules/interaction/actions'
-import { AttrKeys } from '~/types/attributes'
+import { AttrKeys } from '~/types/credentials'
 
 interface AttrsWidgetPropsI {
   attributes: AttrsState<AttributeI>

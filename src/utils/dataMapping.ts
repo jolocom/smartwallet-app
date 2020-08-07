@@ -1,4 +1,4 @@
-import { AttrKeys, ATTR_TYPES } from '~/types/attributes'
+import { AttrKeys, ATTR_TYPES } from '~/types/credentials'
 import { claimsMetadata } from 'cred-types-jolocom-core'
 
 import { AttributeI } from '~/modules/attributes/types'

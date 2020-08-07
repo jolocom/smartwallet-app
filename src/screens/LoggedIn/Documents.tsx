@@ -6,7 +6,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Btn from '~/components/Btn'
 import { useCreateAttributes } from '~/hooks/attributes'
 import Link from '~/components/Link'
-import { AttrKeys } from '~/types/attributes'
+import { AttrKeys } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import { fieldNames } from '~/utils/dataMapping'
 

@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   FlowType,
   SignedCredentialWithMetadata,
@@ -7,12 +7,23 @@ import {
 
 import { getInteractionType } from '~/modules/interaction/selectors'
 import { SummaryI } from '~/utils/dataMapping' // TODO: find a better place for types
-import { useInteraction } from './sdk'
-import { JSONWebToken } from '@jolocom/sdk'
+import { useInteraction, useSDK } from './sdk'
+import {
+  proceedWithTokensCommunication,
+  getUpdatedCredentials,
+  storeCredentials,
+} from '~/utils/credReceive'
+import {
+  resetInteraction,
+  setInteractionDetails,
+} from '~/modules/interaction/actions'
+import { ServiceIssuedCredI } from '~/types/credentials'
 
 export const useHandleFlowSubmit = () => {
   const interaction = useInteraction()
   const interactionType = useSelector(getInteractionType)
+  const sdk = useSDK()
+  const dispatch = useDispatch()
 
   if (interactionType === FlowType.Authentication) {
     return function authenticate() {
@@ -34,30 +45,30 @@ export const useHandleFlowSubmit = () => {
       // for this flow type we select all the credentials offered;
       const selectedCredentials: SignedCredentialWithMetadata[] =
         summary.state.offerSummary
-      console.log({ selectedCredentials })
-      console.log({ summary })
 
       try {
-        // RES: prepare the responseToken to be send to a service
-        const responseToken = await interaction.createCredentialOfferResponseToken(
-          selectedCredentials,
+        await proceedWithTokensCommunication(interaction, selectedCredentials)
+        const updatedCredentials = await getUpdatedCredentials(interaction)
+        const allValid = updatedCredentials.every((cred) =>
+          Boolean(!cred.invalid),
         )
-        // RES: process the response Token: TODO: figure out what is actually done here
-        await interaction.processInteractionToken(responseToken)
 
-        // RECEIVE: prepare the receive token containing signed credentials: payload.interactionToken.signedCredentials
-        const credentialsToken = await interaction.send(responseToken)
-        // RECEIVE: process the recive Token: TODO: figure out what is actually done here
-        await interaction.processInteractionToken(credentialsToken)
+        if (allValid) {
+          // STORE CREDENTIALS
+          await storeCredentials(interaction, sdk.storageLib)
+          // UPDATE THE STORE WITH NEW CREDENTIALS
+          // TODO: add a new module credentials and update VC there
 
-        console.log({ credentialsToken })
-
-        // NOW this will container: issued: SignedCredential[]
-        const updatedSummary = interaction.getSummary()
-        console.log({ updatedSummary })
-
-        // check weather credentials offered exist in the wallet as well;
-        // const duplicates = await isCredentialStored(selectedCredentials, id => interaction.getStoredCredentialById(id))
+          // FINISH THE INTERACTION
+          dispatch(resetInteraction())
+        } else {
+          // NOTIFY USER ABOUT INVALID CREDENTIALS
+          // UPDATE THE UI WITH UPDATED CREDENTIALS
+          const credentials = {
+            service_issued: updatedCredentials,
+          }
+          dispatch(setInteractionDetails({ credentials }))
+        }
       } catch (err) {
         console.warn('An error occured while preparing credentials', err)
         console.log({ err })
@@ -72,17 +83,3 @@ export const useHandleFlowSubmit = () => {
     }
   }
 }
-
-// const isCredentialStored = async (
-//   offer: SignedCredentialWithMetadata[],
-//   getCredential: (id: string) => Promise<SignedCredential[]>,
-// ) => {
-//   await getCredential()
-//   return Promise.all(
-//     offer.map(async ({ signedCredential }) =>
-//       signedCredential
-//         ? !isEmpty(await getCredential(signedCredential.id))
-//         : false,
-//     ),
-//   )
-// }

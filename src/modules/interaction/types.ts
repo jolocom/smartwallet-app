@@ -1,6 +1,6 @@
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { AttrsState, AttributeI } from '../attributes/types'
-import { AttrKeys } from '~/types/attributes'
+import { AttrKeys } from '~/types/credentials'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',

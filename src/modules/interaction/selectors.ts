@@ -3,7 +3,7 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
 import { IntermediaryState } from './types'
-import { ServiceIssuedCredI } from '~/types/attributes'
+import { ServiceIssuedCredI } from '~/types/credentials'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
 export const getInteractionId = (state: RootReducerI): string =>

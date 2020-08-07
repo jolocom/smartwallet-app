@@ -5,7 +5,7 @@ import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { PlusIcon } from '~/assets/svg'
-import { AttrKeys, AttrKeysUpper } from '~/types/attributes'
+import { AttrKeys, AttrKeysUpper } from '~/types/credentials'
 
 interface AttrSectionHeaderPropsI {
   sectionKey: AttrKeys

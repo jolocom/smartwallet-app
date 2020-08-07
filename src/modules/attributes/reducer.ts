@@ -1,6 +1,6 @@
 import { ActionI } from '~/types/action'
 import { AttributesState, AttrActions, AttributeI } from './types'
-import { AttrKeys } from '~/types/attributes'
+import { AttrKeys } from '~/types/credentials'
 
 export const initialState: AttributesState = { all: {} }
 

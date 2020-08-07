@@ -9,7 +9,10 @@ import {
 } from '~/modules/interaction/selectors'
 import Header from '~/components/Header'
 import { strings } from '~/translations/strings'
-import { CredentialSectionsUpper, ServiceIssuedCredI } from '~/types/attributes'
+import {
+  CredentialSectionsUpper,
+  ServiceIssuedCredI,
+} from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import CredentialCard from './CredentialCard'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'

@@ -6,7 +6,7 @@ import {
   setInteractionAttributes,
   setInitialSelectedAttributes,
 } from '~/modules/interaction/actions'
-import { AttrKeys, ATTR_TYPES } from '~/types/attributes'
+import { AttrKeys, ATTR_TYPES } from '~/types/credentials'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useSDK } from './sdk'
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
