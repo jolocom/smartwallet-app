@@ -21,6 +21,7 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
   const {
     animatedOpacityStyle,
     animatedScaleStyle,
+    animatedTitleStyle,
   } = useInteractionHeaderAnimation(yPositionValue)
 
   return (
@@ -36,8 +37,9 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
           </IconWrapper>
         </Animated.View>
         <InteractionHeader
-          animatedTitleStyle={animatedScaleStyle}
-          animatedDescriptionStyle={animatedOpacityStyle}
+          animatedTitleStyle={animatedTitleStyle}
+          //animatedDescriptionStyle={animatedOpacityStyle}
+          animatedDescriptionStyle={animatedTitleStyle}
         />
         {children}
       </CollapsedScrollView>

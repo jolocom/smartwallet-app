@@ -30,9 +30,9 @@ const CollapsedScrollView: React.FC<Props> = ({
       extrapolate: 'clamp',
     })
 
-  const headerOpacityValue = interpolateScroll([0, 100], [0, 1])
-  const headerTextValuePosition = interpolateScroll([120, 150], [30, 0])
-  const headerTextOpacityValue = interpolateScroll([130, 150], [0, 1])
+  const headerOpacityValue = interpolateScroll([50, 55], [0, 1])
+  const headerTextValuePosition = interpolateScroll([40, 90], [50, 0])
+  const headerTextOpacityValue = interpolateScroll([70, 80], [0, 1])
 
   return (
     <>
