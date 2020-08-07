@@ -1,15 +1,12 @@
 import React from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
-import ScreenContainer from '~/components/ScreenContainer'
 import useInteractionTitle from '~/screens/Modals/Interactions/hooks/useInteractionTitle'
-import useScrollAnimation from '~/hooks/useScrollAnimation'
 
-import useInteractionHeaderAnimation from './useInteractionHeaderAnimation'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
 
 const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
@@ -17,22 +14,17 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
   onSubmit,
 }) => {
   const interactionTitle = useInteractionTitle()
-  const { handleScroll, yPositionValue } = useScrollAnimation()
-  const { animatedScaleStyle } = useInteractionHeaderAnimation(yPositionValue)
-
   return (
     <>
       <CollapsedScrollView
         collapsedTitle={interactionTitle}
-        scrollAnimatedValue={yPositionValue}
-        onScroll={handleScroll}
         animationStartPoint={40}
-      >
-        <Animated.View style={animatedScaleStyle}>
+        renderCollapsingComponent={() => (
           <IconWrapper customStyle={{ marginVertical: 12 }}>
             <InteractionIcon />
           </IconWrapper>
-        </Animated.View>
+        )}
+      >
         <InteractionHeader />
         {children}
       </CollapsedScrollView>
@@ -40,37 +32,5 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  headerWrapper: {
-    width: '100%',
-    height: 84,
-    position: 'absolute',
-    top: -30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 3,
-    // TODO @clauxx add shadows for ios
-    elevation: 20,
-    // HACK: @elevation won't work without @borderBottomWidth
-    // https://github.com/timomeh/react-native-material-bottom-navigation/issues/8
-    borderBottomWidth: 0,
-    backgroundColor: Colors.mainBlack,
-  },
-  gradientWrapper: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  scrollWrapper: {
-    paddingBottom: '30%',
-  },
-  profileWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-  },
-})
 
 export default FasWrapper

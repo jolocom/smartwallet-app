@@ -1,50 +1,46 @@
 import React from 'react'
-import {
-  Animated,
-  StyleSheet,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  StatusBar,
-} from 'react-native'
+import { Animated, StyleSheet, StatusBar } from 'react-native'
 
-import Header, { HeaderSizes } from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Paragraph, { ParagraphSizes } from './Paragraph'
+import useCollapsedScrollViewAnimations from '~/hooks/useScrollAnimation'
 
 interface Props {
   collapsedTitle: string
+  renderCollapsingComponent: () => React.ReactNode
   animationStartPoint: number
-  scrollAnimatedValue: Animated.Value
-  onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => void
 }
 
 const CollapsedScrollView: React.FC<Props> = ({
   children,
   collapsedTitle,
-  scrollAnimatedValue,
-  onScroll,
+  renderCollapsingComponent,
   animationStartPoint,
 }) => {
-  const interpolateScroll = (inputRange: number[], outputRange: number[]) =>
-    scrollAnimatedValue.interpolate({
-      inputRange,
-      outputRange,
-      extrapolate: 'clamp',
-    })
+  const {
+    handleScroll,
+    componentAnimatedValues: {
+      componentScaleValue,
+      componentOpacityValue,
+      componentPositionValue,
+    },
+    headerAnimatedValues: {
+      headerOpacityValue,
+      headerTextOpacityValue,
+      headerTextPositionValue,
+    },
+  } = useCollapsedScrollViewAnimations(animationStartPoint)
 
-  const headerOpacityValue = interpolateScroll(
-    [animationStartPoint + 10, animationStartPoint + 15],
-    [0, 1],
-  )
-  const headerTextValuePosition = interpolateScroll(
-    [animationStartPoint, animationStartPoint + 50],
-    [50, 0],
-  )
-  const headerTextOpacityValue = interpolateScroll(
-    [animationStartPoint + 30, animationStartPoint + 40],
-    [0, 1],
-  )
-
+  const animatedScaleStyle = [
+    {
+      transform: [
+        { scaleY: componentScaleValue },
+        { scaleX: componentScaleValue },
+        { translateY: componentPositionValue },
+      ],
+      opacity: componentOpacityValue,
+    },
+  ]
   return (
     <>
       <Animated.View
@@ -55,7 +51,7 @@ const CollapsedScrollView: React.FC<Props> = ({
             {
               transform: [
                 {
-                  translateY: headerTextValuePosition,
+                  translateY: headerTextPositionValue,
                 },
               ],
               opacity: headerTextOpacityValue,
@@ -70,8 +66,11 @@ const CollapsedScrollView: React.FC<Props> = ({
         style={{ flex: 1 }}
         contentContainerStyle={styles.scrollWrapper}
         scrollEventThrottle={1}
-        onScroll={onScroll}
+        onScroll={handleScroll}
       >
+        <Animated.View style={animatedScaleStyle}>
+          {renderCollapsingComponent()}
+        </Animated.View>
         {children}
       </Animated.ScrollView>
     </>
