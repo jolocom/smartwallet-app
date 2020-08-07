@@ -13,6 +13,7 @@ import Paragraph, { ParagraphSizes } from './Paragraph'
 
 interface Props {
   collapsedTitle: string
+  animationStartPoint: number
   scrollAnimatedValue: Animated.Value
   onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => void
 }
@@ -22,6 +23,7 @@ const CollapsedScrollView: React.FC<Props> = ({
   collapsedTitle,
   scrollAnimatedValue,
   onScroll,
+  animationStartPoint,
 }) => {
   const interpolateScroll = (inputRange: number[], outputRange: number[]) =>
     scrollAnimatedValue.interpolate({
@@ -30,9 +32,18 @@ const CollapsedScrollView: React.FC<Props> = ({
       extrapolate: 'clamp',
     })
 
-  const headerOpacityValue = interpolateScroll([50, 55], [0, 1])
-  const headerTextValuePosition = interpolateScroll([40, 90], [50, 0])
-  const headerTextOpacityValue = interpolateScroll([70, 80], [0, 1])
+  const headerOpacityValue = interpolateScroll(
+    [animationStartPoint + 10, animationStartPoint + 15],
+    [0, 1],
+  )
+  const headerTextValuePosition = interpolateScroll(
+    [animationStartPoint, animationStartPoint + 50],
+    [50, 0],
+  )
+  const headerTextOpacityValue = interpolateScroll(
+    [animationStartPoint + 30, animationStartPoint + 40],
+    [0, 1],
+  )
 
   return (
     <>

@@ -18,11 +18,7 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
 }) => {
   const interactionTitle = useInteractionTitle()
   const { handleScroll, yPositionValue } = useScrollAnimation()
-  const {
-    animatedOpacityStyle,
-    animatedScaleStyle,
-    animatedTitleStyle,
-  } = useInteractionHeaderAnimation(yPositionValue)
+  const { animatedScaleStyle } = useInteractionHeaderAnimation(yPositionValue)
 
   return (
     <>
@@ -30,17 +26,14 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
         collapsedTitle={interactionTitle}
         scrollAnimatedValue={yPositionValue}
         onScroll={handleScroll}
+        animationStartPoint={40}
       >
         <Animated.View style={animatedScaleStyle}>
           <IconWrapper customStyle={{ marginVertical: 12 }}>
             <InteractionIcon />
           </IconWrapper>
         </Animated.View>
-        <InteractionHeader
-          animatedTitleStyle={animatedTitleStyle}
-          //animatedDescriptionStyle={animatedOpacityStyle}
-          animatedDescriptionStyle={animatedTitleStyle}
-        />
+        <InteractionHeader />
         {children}
       </CollapsedScrollView>
       <InteractionFooter onSubmit={onSubmit} />
