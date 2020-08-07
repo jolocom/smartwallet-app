@@ -1,6 +1,7 @@
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { AttrsState, AttributeI } from '../attributes/types'
 import { AttrKeys } from '~/types/attributes'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
@@ -10,10 +11,6 @@ export enum InteractionActions {
   selectAttr = 'selectAttr',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputKey = 'setAttributeInputKey',
-}
-
-export interface CounterpartyI {
-  did: string
 }
 
 export interface InteractionStateI {
@@ -31,7 +28,7 @@ export interface InteractionStateI {
 
 interface InteractionCommonI {
   id: string
-  counterparty: CounterpartyI
+  counterparty: IdentitySummary
 }
 
 interface AuthCommonI extends InteractionCommonI {

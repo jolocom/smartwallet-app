@@ -2,7 +2,8 @@ import { RootReducerI } from '~/types/reducer'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
-import { IntermediaryState, CounterpartyI } from './types'
+import { IntermediaryState } from './types'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export const getInteractionAttributes = (
   state: RootReducerI,
@@ -28,7 +29,7 @@ export const getInteractionType = (state: RootReducerI): FlowType | null =>
 
 export const getInteractionCounterparty = (
   state: RootReducerI,
-): CounterpartyI => state.interaction.details.counterparty
+): IdentitySummary => state.interaction.details.counterparty
 
 export const getInteractionDetails = <T>(state: RootReducerI): T =>
   state.interaction.details
