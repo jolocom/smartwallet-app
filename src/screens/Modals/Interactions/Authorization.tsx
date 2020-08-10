@@ -1,8 +1,7 @@
 import React from 'react'
 import { Image, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import HyperLink from 'react-native-hyperlink'
-import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
 
 import { useInteraction } from '~/hooks/sdk'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
@@ -12,14 +11,13 @@ import InteractionFooter from './InteractionFooter'
 import { useLoader } from '~/hooks/useLoader'
 import { strings } from '~/translations/strings'
 import { resetInteraction } from '~/modules/interaction/actions'
-import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
 
 const Authorization = () => {
   const interaction = useInteraction()
   const dispatch = useDispatch()
   const loader = useLoader()
-  const { description, imageURL, action } = interaction.getSummary()
-    .state as AuthorizationFlowState
+  const { description, image, action } = useSelector(getInteractionDetails)
 
   const handleSubmit = async () => {
     const success = loader(
@@ -51,12 +49,12 @@ const Authorization = () => {
           {description}
         </Paragraph>
       </HyperLink>
-      {imageURL && (
+      {image && (
         <View style={{ width: '100%', alignItems: 'center' }}>
           <Image
             resizeMode="center"
             style={{ height: 230, width: 260, marginBottom: 30 }}
-            source={{ uri: imageURL }}
+            source={{ uri: image }}
           />
         </View>
       )}

@@ -6,7 +6,7 @@ import {
   setInteractionAttributes,
   setInitialSelectedAttributes,
 } from '~/modules/interaction/actions'
-import { AttrKeys } from '~/types/attributes'
+import { AttrKeys, ATTR_TYPES } from '~/types/attributes'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useSDK } from './sdk'
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
@@ -17,12 +17,6 @@ import {
   credentialSchemas,
 } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
-
-const ATTR_TYPES = {
-  ProofOfEmailCredential: AttrKeys.emailAddress,
-  ProofOfMobilePhoneNumberCredential: AttrKeys.mobilePhoneNumber,
-  ProofOfNameCredential: AttrKeys.name,
-}
 
 export const useGetAllAttributes = () => {
   const dispatch = useDispatch()
