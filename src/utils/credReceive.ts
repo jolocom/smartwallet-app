@@ -1,5 +1,8 @@
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
-import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import {
+  SignedCredentialWithMetadata,
+  CredentialOfferFlowState,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { JSONWebToken } from '@jolocom/sdk'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
@@ -39,20 +42,28 @@ export const proceedWithTokensCommunication = async (
 }
 
 // this will check for duplicates and invalid credentials and return type of cred mapped to FE
-export const getUpdatedCredentials = async (interaction: Interaction) => {
-  const summary = interaction.getSummary()
-  const { state } = summary
+export const verifyAndGetUpdatedCredentials = async (
+  interaction: Interaction,
+) => {
+  const state: CredentialOfferFlowState = interaction.getSummary().state
 
   return Promise.all(
     state.offerSummary.map(async (offeredCred, idx: number) => {
+      let storedSignedCred
       const updatedCred = { ...offeredCred }
       const signedCred = state.issued.find(
         (cred: SignedCredential) => cred.type[1] === offeredCred.type,
       )
-      const storedSignedCred = await interaction.getStoredCredentialById(
-        signedCred.id,
-      )
-      if (storedSignedCred.length || !state.credentialsValidity[idx]) {
+      if (signedCred && signedCred.id) {
+        storedSignedCred = await interaction.getStoredCredentialById(
+          signedCred.id,
+        )
+      }
+
+      if (
+        (storedSignedCred && storedSignedCred.length) ||
+        !state.credentialsValidity[idx]
+      ) {
         updatedCred.invalid = true
       } else {
         updatedCred.invalid = false
@@ -68,6 +79,8 @@ export const storeCredentials = async (
 ) => {
   const summary = interaction.getSummary()
   const { state, initiator } = summary
+
+  await interaction.storeCredential(state.offerSummary)
 
   Promise.all(
     state.offerSummary.map(async (cred) => {

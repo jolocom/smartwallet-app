@@ -10,14 +10,13 @@ import { SummaryI } from '~/utils/dataMapping' // TODO: find a better place for 
 import { useInteraction, useSDK } from './sdk'
 import {
   proceedWithTokensCommunication,
-  getUpdatedCredentials,
+  verifyAndGetUpdatedCredentials,
   storeCredentials,
 } from '~/utils/credReceive'
 import {
   resetInteraction,
   setInteractionDetails,
 } from '~/modules/interaction/actions'
-import { ServiceIssuedCredI } from '~/types/credentials'
 
 export const useHandleFlowSubmit = () => {
   const interaction = useInteraction()
@@ -48,21 +47,33 @@ export const useHandleFlowSubmit = () => {
 
       try {
         await proceedWithTokensCommunication(interaction, selectedCredentials)
-        const updatedCredentials = await getUpdatedCredentials(interaction)
+        const updatedCredentials = await verifyAndGetUpdatedCredentials(
+          interaction,
+        )
         const allValid = updatedCredentials.every((cred) =>
           Boolean(!cred.invalid),
         )
+        const allInvalid = updatedCredentials.every((cred) => cred.invalid)
 
         if (allValid) {
           // STORE CREDENTIALS
           await storeCredentials(interaction, sdk.storageLib)
+
           // UPDATE THE STORE WITH NEW CREDENTIALS
-          // TODO: add a new module credentials and update VC there
+          // TODO: add a new module credentials and update VerifiedCredentials there
+
+          // FINISH THE INTERACTION
+          dispatch(resetInteraction())
+        } else if (allInvalid) {
+          // NOTIFY USER ABOUT INVALID CREDENTIALS
+          // TODO:
 
           // FINISH THE INTERACTION
           dispatch(resetInteraction())
         } else {
           // NOTIFY USER ABOUT INVALID CREDENTIALS
+          // TODO:
+
           // UPDATE THE UI WITH UPDATED CREDENTIALS
           const credentials = {
             service_issued: updatedCredentials,
