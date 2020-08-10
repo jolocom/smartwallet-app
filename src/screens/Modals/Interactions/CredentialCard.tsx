@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   StyleSheet,
@@ -7,16 +7,18 @@ import {
 } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { SuccessTick } from '~/assets/svg'
+import { HandAnimation } from '~/components/HandAnimation'
 
 interface PropsI {
   isSmall?: boolean
   disabled?: boolean
   selected?: boolean
   onSelect?: () => void
+  hasInstruction: boolean
 }
 
-const WIDTH = Dimensions.get('window').width * 0.83
-const HEIGHT = WIDTH * 0.64
+export const CARD_WIDTH = Dimensions.get('window').width * 0.83
+export const CARD_HEIGHT = CARD_WIDTH * 0.64
 
 const Tick = () => {
   return (
@@ -30,11 +32,17 @@ const CredentialCard: React.FC<PropsI> = ({
   children,
   isSmall = false,
   disabled = false,
+  hasInstruction,
   selected,
   onSelect,
 }) => {
+  const handleCardTap = () => {
+    // setIsAnimated(false)
+    onSelect && onSelect()
+  }
+
   return (
-    <TouchableWithoutFeedback disabled={disabled} onPress={onSelect}>
+    <TouchableWithoutFeedback disabled={disabled} onPress={handleCardTap}>
       <View
         style={[
           styles.cardContainer,
@@ -42,12 +50,19 @@ const CredentialCard: React.FC<PropsI> = ({
           isSmall && styles.scaledDown,
         ]}
       >
-        {children}
-        {(disabled || selected) && (
-          <View style={[styles.darken, styles.card]}>
-            {selected && <Tick />}
-          </View>
-        )}
+        <>
+          {children}
+          {(disabled || selected || hasInstruction) && (
+            <View style={[styles.darken, styles.card]}>
+              {selected && <Tick />}
+              {hasInstruction && (
+                <View style={{ alignSelf: 'center' }}>
+                  <HandAnimation />
+                </View>
+              )}
+            </View>
+          )}
+        </>
       </View>
     </TouchableWithoutFeedback>
   )
@@ -58,12 +73,14 @@ const styles = StyleSheet.create({
     borderRadius: 13.5,
   },
   cardContainer: {
-    width: WIDTH,
-    height: HEIGHT,
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     marginVertical: 20,
     backgroundColor: Colors.white,
   },
   scaledDown: {
+    marginLeft: -20,
+    marginRight: -5,
     transform: [{ scale: 0.83 }],
   },
   darken: {

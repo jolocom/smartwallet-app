@@ -1,18 +1,18 @@
-import {
-  FlowType,
-  AuthorizationFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { strings } from '~/translations/strings'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { useSelector } from 'react-redux'
-import {
-  getInteractionSummary,
-  getInteractionType,
-} from '~/modules/interaction/selectors'
+
+import { strings } from '~/translations/strings'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { AuthorizationDetailsI } from '~/modules/interaction/types'
+import { useRootSelector } from '~/hooks/useRootSelector'
+import { getInteractionType } from '~/modules/interaction/selectors'
 
 export default function useInteractionCta() {
   const interactionType = useSelector(getInteractionType)
-  const interactionSummary = useSelector(getInteractionSummary)
+  const { action } = useRootSelector<AuthorizationDetailsI | { action: null }>(
+    getInteractionDetails,
+  )
 
   switch (interactionType) {
     case FlowType.Authentication:
@@ -22,7 +22,6 @@ export default function useInteractionCta() {
     case FlowType.CredentialReceive:
       return strings.RECEIVE
     case FlowType.Authorization:
-      const { action } = interactionSummary.state as AuthorizationFlowState
       const ctaWord = action ? truncateFirstWord(action) : strings.AUTHORIZE
       const ctaCapitalized = capitalizeWord(ctaWord)
       return ctaCapitalized

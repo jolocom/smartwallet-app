@@ -1,6 +1,5 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { AuthenticationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import { useInteraction } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/useLoader'
@@ -11,8 +10,6 @@ const Authentication = () => {
   const interaction = useInteraction()
   const dispatch = useDispatch()
   const loader = useLoader()
-  const { description } = interaction.getSummary()
-    .state as AuthenticationFlowState
 
   const handleSubmit = async () => {
     const success = loader(
