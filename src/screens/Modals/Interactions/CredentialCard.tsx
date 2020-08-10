@@ -14,7 +14,7 @@ interface PropsI {
   disabled?: boolean
   selected?: boolean
   onSelect?: () => void
-  hasInstruction: boolean
+  hasInstruction?: boolean
 }
 
 export const CARD_WIDTH = Dimensions.get('window').width * 0.83
@@ -32,7 +32,7 @@ const CredentialCard: React.FC<PropsI> = ({
   children,
   isSmall = false,
   disabled = false,
-  hasInstruction,
+  hasInstruction = false,
   selected,
   onSelect,
 }) => {

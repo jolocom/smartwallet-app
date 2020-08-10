@@ -7,6 +7,8 @@ import {
   setAttributeInputKey,
 } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
+import CredentialCard from './CredentialCard'
+import Header from '~/components/Header'
 
 const CredentialShare = () => {
   const dispatch = useDispatch()
