@@ -31,20 +31,21 @@ export const IconWrapper: React.FC<{ customStyle?: ViewStyle }> = ({
 const InteractionIcon: React.FC = () => {
   const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
   const initiatorIcon = initiator?.publicProfile?.image
-  //NOTE: to test the button, replace the initiatorUrl with a valid url
   const initiatorUrl = initiator?.publicProfile?.url
+
+  const handlePress = () => {
+    initiatorUrl &&
+      Linking.canOpenURL(initiatorUrl)
+        .then((can) => can && Linking.openURL(initiatorUrl))
+        .catch(() => {
+          //TODO: show "can't open url" toast
+        })
+  }
 
   return (
     <TouchableOpacity
       style={styles.wrapper}
-      onPress={() => {
-        initiatorUrl &&
-          Linking.canOpenURL(initiatorUrl)
-            .then((can) => can && Linking.openURL(initiatorUrl))
-            .catch(() => {
-              //TODO: show can't open url toast
-            })
-      }}
+      onPress={handlePress}
       activeOpacity={initiatorUrl ? 0.8 : 1}
     >
       {initiatorIcon ? (
