@@ -17,7 +17,6 @@ interface PropsI {
 }
 
 const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
-  console.log({ getInteractionCounterparty, getIntermediaryState })
   const counterparty = useSelector(getInteractionCounterparty)
   const intermediaryState = useSelector(getIntermediaryState)
   const interactionTitle = useInteractionTitle()

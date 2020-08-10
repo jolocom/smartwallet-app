@@ -11,9 +11,9 @@ import {
   CredentialShareFas,
 } from '~/screens/Modals/Interactions/CredentialShare'
 import {
-  CredentialIssueFas,
-  CredentialIssueBas,
-} from '~/screens/Modals/Interactions/CredentialIssue'
+  CredentialOfferFas,
+  CredentialOfferBas,
+} from '~/screens/Modals/Interactions/CredentialOffer'
 
 import {
   getInteractionType,
@@ -98,9 +98,9 @@ const InteractionActionSheet: React.FC = () => {
         )
       case FlowType.CredentialReceive:
         return isFullScreenInteraction ? (
-          <CredentialIssueFas />
+          <CredentialOfferFas />
         ) : (
-          <CredentialIssueBas />
+          <CredentialOfferBas />
         )
       default:
         return null

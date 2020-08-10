@@ -1,8 +1,8 @@
 import React from 'react'
 import FasWrapper from '~/components/ActionSheet/FasWrapper'
 
-const CredentialIssueFas = () => {
+const CredentialOfferFas = () => {
   return <FasWrapper onSubmit={() => {}}></FasWrapper>
 }
 
-export default CredentialIssueFas
+export default CredentialOfferFas

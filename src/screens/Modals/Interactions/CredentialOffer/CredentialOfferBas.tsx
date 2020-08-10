@@ -1,8 +1,8 @@
 import React from 'react'
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
 
-const CredentialIssueBas = () => {
+const CredentialOfferBas = () => {
   return <BasWrapper onSubmit={() => {}}></BasWrapper>
 }
 
-export default CredentialIssueBas
+export default CredentialOfferBas
