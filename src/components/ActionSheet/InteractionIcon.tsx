@@ -9,9 +9,8 @@ import {
 } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
-import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { useSelector } from 'react-redux'
-import { getInteractionSummary } from '~/modules/interaction/selectors'
+import { getInteractionCounterparty } from '~/modules/interaction/selectors'
 
 // NOTE: There is an inconsistency around where the @InteractionIcon is rendered for FAS and BAS.
 // For BAS it has to be as the @CustomHeaderComponent prop inside the @ActionSheet because the button
@@ -29,22 +28,23 @@ export const IconWrapper: React.FC<{ customStyle?: ViewStyle }> = ({
 }) => <View style={[styles.iconWrapper, customStyle]}>{children}</View>
 
 const InteractionIcon: React.FC = () => {
-  const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
-  const initiatorIcon = initiator?.publicProfile?.image
-  //NOTE: to test the button, replace the initiatorUrl with a valid url
-  const initiatorUrl = initiator?.publicProfile?.url
+  const counterparty = useSelector(getInteractionCounterparty)
+  const initiatorIcon = counterparty?.publicProfile?.image
+  const initiatorUrl = counterparty?.publicProfile?.url
+
+  const handlePress = () => {
+    initiatorUrl &&
+      Linking.canOpenURL(initiatorUrl)
+        .then((can) => can && Linking.openURL(initiatorUrl))
+        .catch(() => {
+          //TODO: show "can't open url" toast
+        })
+  }
 
   return (
     <TouchableOpacity
       style={styles.wrapper}
-      onPress={() => {
-        initiatorUrl &&
-          Linking.canOpenURL(initiatorUrl)
-            .then((can) => can && Linking.openURL(initiatorUrl))
-            .catch(() => {
-              //TODO: show can't open url toast
-            })
-      }}
+      onPress={handlePress}
       activeOpacity={initiatorUrl ? 0.8 : 1}
     >
       {initiatorIcon ? (

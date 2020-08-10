@@ -1,25 +1,23 @@
-import {
-  FlowType,
-  InteractionSummary,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { useSelector } from 'react-redux'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+
 import {
-  getInteractionSummary,
   getIntermediaryState,
   getAttributeInputKey,
   getInteractionType,
+  getInteractionCounterparty,
 } from '~/modules/interaction/selectors'
 import truncateDid from '~/utils/truncateDid'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
 
 const useInteractionDescription = () => {
-  const { initiator }: InteractionSummary = useSelector(getInteractionSummary)
+  const counterparty = useSelector(getInteractionCounterparty)
   const intermediaryState = useSelector(getIntermediaryState)
   const interactionType = useSelector(getInteractionType)
   const inputType = useSelector(getAttributeInputKey)
-  const serviceName = initiator.publicProfile?.name || strings.SERVICE
-  const isAnonymous = !initiator.publicProfile
+  const serviceName = counterparty.publicProfile?.name || strings.SERVICE
+  const isAnonymous = !counterparty.publicProfile
 
   if (intermediaryState === IntermediaryState.showing)
     return strings.YOU_WILL_IMMIDIATELY_FIND_YOUR_DOC_IN_THE_PERSONAL_INFO_SECTION(
@@ -28,7 +26,7 @@ const useInteractionDescription = () => {
 
   if (isAnonymous)
     return strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(
-      truncateDid(initiator.did),
+      truncateDid(counterparty.did),
     )
 
   //TODO: @clauxx add strings

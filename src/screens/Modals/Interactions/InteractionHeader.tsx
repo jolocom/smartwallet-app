@@ -1,10 +1,9 @@
 import React from 'react'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
-import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import {
-  getInteractionSummary,
   getIntermediaryState,
+  getInteractionCounterparty,
 } from '~/modules/interaction/selectors'
 import { useSelector } from 'react-redux'
 import { Colors } from '~/utils/colors'
@@ -18,7 +17,8 @@ interface PropsI {
 }
 
 const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
-  const summary: InteractionSummary = useSelector(getInteractionSummary)
+  console.log({ getInteractionCounterparty, getIntermediaryState })
+  const counterparty = useSelector(getInteractionCounterparty)
   const intermediaryState = useSelector(getIntermediaryState)
   const interactionTitle = useInteractionTitle()
   const interactionDescription = useInteractionDescription()
@@ -26,7 +26,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   const isAnonymous =
     intermediaryState === IntermediaryState.showing
       ? false
-      : !summary.initiator?.publicProfile
+      : !counterparty?.publicProfile
 
   //TODO: @clauxx add strings
   return (
