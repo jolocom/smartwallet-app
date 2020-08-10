@@ -7,10 +7,8 @@ import {
   setAttributeInputKey,
 } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
-import CredentialCard from './CredentialCard'
-import Header from '~/components/Header'
 
-const CredentialShare = () => {
+const CredentialShareFas = () => {
   const dispatch = useDispatch()
   return (
     <FasWrapper
@@ -22,4 +20,4 @@ const CredentialShare = () => {
   )
 }
 
-export default CredentialShare
+export default CredentialShareFas

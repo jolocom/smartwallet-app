@@ -6,6 +6,14 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
+import {
+  CredentialShareBas,
+  CredentialShareFas,
+} from '~/screens/Modals/Interactions/CredentialShare'
+import {
+  CredentialIssueFas,
+  CredentialIssueBas,
+} from '~/screens/Modals/Interactions/CredentialIssue'
 
 import {
   getInteractionType,
@@ -15,8 +23,6 @@ import {
 
 import { Colors } from '~/utils/colors'
 import { resetInteraction } from '~/modules/interaction/actions'
-import CredentialShare from '~/screens/Modals/Interactions/CredentialShare'
-import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
@@ -85,9 +91,17 @@ const InteractionActionSheet: React.FC = () => {
       case FlowType.Authorization:
         return <Authorization />
       case FlowType.CredentialShare:
-        return <CredentialShare />
+        return isFullScreenInteraction ? (
+          <CredentialShareFas />
+        ) : (
+          <CredentialShareBas />
+        )
       case FlowType.CredentialReceive:
-        return <CredentialReceive />
+        return isFullScreenInteraction ? (
+          <CredentialIssueFas />
+        ) : (
+          <CredentialIssueBas />
+        )
       default:
         return null
     }
