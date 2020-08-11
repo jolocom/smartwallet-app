@@ -8,14 +8,22 @@ import useCollapsedScrollViewAnimations from '~/hooks/useScrollAnimation'
 interface Props {
   collapsedTitle: string
   renderCollapsingComponent: () => React.ReactNode
-  animationStartPoint: number
+  collapseStart: number
 }
+
+/**
+ *  @ScrollView wrapper which collapses content into a header
+ *
+ *  @param collapsedTitle - text that should appear in the header after the content is collapsed
+ *  @param renderCollapsingComponent - JSX that will be collapsed on scroll
+ *  @param collapseStart - distance scrolled (dp) after which the content starts collapsing
+ */
 
 const CollapsedScrollView: React.FC<Props> = ({
   children,
   collapsedTitle,
   renderCollapsingComponent,
-  animationStartPoint,
+  collapseStart,
 }) => {
   const {
     handleScroll,
@@ -29,7 +37,7 @@ const CollapsedScrollView: React.FC<Props> = ({
       headerTextOpacityValue,
       headerTextPositionValue,
     },
-  } = useCollapsedScrollViewAnimations(animationStartPoint)
+  } = useCollapsedScrollViewAnimations(collapseStart)
 
   const animatedScaleStyle = [
     {

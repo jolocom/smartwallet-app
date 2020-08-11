@@ -18,7 +18,7 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
     <>
       <CollapsedScrollView
         collapsedTitle={interactionTitle}
-        animationStartPoint={40}
+        collapseStart={40}
         renderCollapsingComponent={() => (
           <IconWrapper customStyle={{ marginVertical: 12 }}>
             <InteractionIcon />
