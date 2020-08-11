@@ -12,3 +12,9 @@ export const ATTR_TYPES = {
   ProofOfMobilePhoneNumberCredential: AttrKeys.mobilePhoneNumber,
   ProofOfNameCredential: AttrKeys.name,
 }
+
+export const ATTR_UI_NAMES: { [x: string]: string } = {
+  ProofOfEmailCredential: 'email',
+  ProofOfMobilePhoneNumberCredential: 'phone number',
+  ProofOfNameCredential: 'name',
+}

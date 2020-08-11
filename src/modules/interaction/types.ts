@@ -1,4 +1,7 @@
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import {
+  FlowType,
+  InteractionSummary,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { AttrsState, AttributeI } from '../attributes/types'
 import { AttrKeys } from '~/types/attributes'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'

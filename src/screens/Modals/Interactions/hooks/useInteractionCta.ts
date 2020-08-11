@@ -4,15 +4,17 @@ import { useSelector } from 'react-redux'
 import { strings } from '~/translations/strings'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
-import { RootReducerI } from '~/types/reducer'
 import { AuthorizationDetailsI } from '~/modules/interaction/types'
+import { useRootSelector } from '~/hooks/useRootSelector'
+import { getInteractionType } from '~/modules/interaction/selectors'
 
-export default function getCTAText(flowType: FlowType | null) {
-  const { action } = useSelector((state: RootReducerI) =>
-    getInteractionDetails<AuthorizationDetailsI>(state),
+export default function useInteractionCta() {
+  const interactionType = useSelector(getInteractionType)
+  const { action } = useRootSelector<AuthorizationDetailsI | { action: null }>(
+    getInteractionDetails,
   )
 
-  switch (flowType) {
+  switch (interactionType) {
     case FlowType.Authentication:
       return strings.AUTHENTICATE
     case FlowType.CredentialShare:
