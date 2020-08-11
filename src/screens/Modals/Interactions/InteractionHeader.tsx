@@ -21,13 +21,11 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   const intermediaryState = useSelector(getIntermediaryState)
   const interactionTitle = useInteractionTitle()
   const interactionDescription = useInteractionDescription()
-  //NOTE: this is getting ugly b/c of the intermediary screen
   const isAnonymous =
     intermediaryState === IntermediaryState.showing
       ? false
       : !counterparty?.publicProfile
 
-  //TODO: @clauxx add strings
   return (
     <>
       <Header size={HeaderSizes.medium} color={Colors.white90}>
@@ -36,7 +34,11 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
       <Paragraph
         size={ParagraphSizes.small}
         color={isAnonymous ? Colors.error : Colors.white90}
-        customStyles={{ paddingHorizontal: 16, marginTop: 8, marginBottom: 36 }}
+        customStyles={{
+          paddingHorizontal: 16,
+          marginTop: 8,
+          marginBottom: 36,
+        }}
       >
         {description || interactionDescription}
       </Paragraph>
