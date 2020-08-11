@@ -17,14 +17,13 @@ export const fieldNames = {
   [AttrKeys.postalAddress]: 'address',
 }
 
-export const credentialSchemas = Object.keys(claimsMetadata).reduce(
-  (acc, v) => {
-    const value = v as AttrKeys
-    acc[value] = claimsMetadata[value].type[1]
-    return acc
-  },
-  {} as { [key: string]: string },
-)
+export const credentialSchemas = Object.keys(claimsMetadata).reduce<{
+  [key: string]: string
+}>((acc, v) => {
+  const value = v as AttrKeys
+  acc[value] = claimsMetadata[value].type[1]
+  return acc
+}, {})
 
 type InitialEntryValueT = undefined | AttributeI[]
 export interface CredentialI {
@@ -133,6 +132,7 @@ export const getMappedInteraction = (interaction: Interaction) => {
     return {}
   }
 }
+
 export const getClaim = (attributeKey: AttrKeys, value: string) => {
   switch (attributeKey) {
     case AttrKeys.name:

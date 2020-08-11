@@ -21,7 +21,13 @@ export enum CredentialSectionsUpper {
 }
 
 export interface ServiceIssuedCredI {
-  renderInfo: CredentialOfferRenderInfo
+  renderInfo?: CredentialOfferRenderInfo
   invalid: boolean
   type: string
+}
+
+export const ATTR_UI_NAMES: { [x: string]: string } = {
+  ProofOfEmailCredential: 'email',
+  ProofOfMobilePhoneNumberCredential: 'phone number',
+  ProofOfNameCredential: 'name',
 }

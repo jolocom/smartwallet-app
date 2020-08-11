@@ -2,14 +2,10 @@ import { RootReducerI } from '~/types/reducer'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
-import { IntermediaryState } from './types'
+import { IntermediaryState, CredShareI, CredReceiveI } from './types'
 import { ServiceIssuedCredI } from '~/types/credentials'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-
-export const getInteractionId = (state: RootReducerI): string =>
-  state.interaction.details.id
-export const getInteractionType = (state: RootReducerI): FlowType | null =>
-  state.interaction.details.flowType
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export const getInteractionAttributes = (
   state: RootReducerI,
@@ -27,13 +23,17 @@ export const getAttributeInputKey = (state: RootReducerI): any =>
 export const getCredentials = (state: RootReducerI): any =>
   state.interaction.details.credentials
 
-export const getInteractionDescription = (state: RootReducerI): any =>
-  state.interaction.details.description
+export const getInteractionId = (state: RootReducerI): string =>
+  state.interaction.details.id
 
-export const getInteractionAction = (state: RootReducerI): any =>
-  state.interaction.details.action
+export const getInteractionType = (state: RootReducerI): FlowType | null =>
+  state.interaction.details.flowType
 
-export const getInteractionDetails = (state: RootReducerI): any =>
+export const getInteractionCounterparty = (
+  state: RootReducerI,
+): IdentitySummary => state.interaction.details.counterparty
+
+export const getInteractionDetails = <T>(state: RootReducerI): T =>
   state.interaction.details
 
 export const getIsFullScreenInteraction = createSelector(
@@ -67,25 +67,28 @@ export const getIsFullScreenInteraction = createSelector(
   },
 )
 
-export const getCredentialsBySection = createSelector(
-  [getInteractionDetails],
-  (details) => {
-    return details.credentials.service_issued.reduce(
-      (
-        acc: { documents: ServiceIssuedCredI[]; other: ServiceIssuedCredI[] },
-        v: ServiceIssuedCredI,
-      ) => {
-        if (
-          v.renderInfo &&
-          v.renderInfo.renderAs === CredentialRenderTypes.document
-        ) {
-          acc.documents = [...acc.documents, v]
-        } else {
-          acc.other = [...acc.other, v]
-        }
-        return acc
-      },
-      { documents: [], other: [] },
-    )
-  },
-)
+interface CredentialsInSections {
+  documents: ServiceIssuedCredI[]
+  other: ServiceIssuedCredI[]
+}
+
+export const getCredentialsBySection = createSelector<
+  RootReducerI,
+  CredReceiveI,
+  CredentialsInSections
+>([getInteractionDetails], (details) => {
+  return details.credentials.service_issued.reduce<CredentialsInSections>(
+    (acc, v) => {
+      if (
+        v.renderInfo &&
+        v.renderInfo.renderAs === CredentialRenderTypes.document
+      ) {
+        acc.documents = [...acc.documents, v]
+      } else {
+        acc.other = [...acc.other, v]
+      }
+      return acc
+    },
+    { documents: [], other: [] },
+  )
+})

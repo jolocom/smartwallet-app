@@ -117,9 +117,7 @@ const scanner = {
 }
 
 const interactions = {
-  WOULD_YOU_LIKE_TO_AUTHENTICATE: 'Would you like to authenticate?',
   AUTHENTICATE: 'Authenticate',
-  WOULD_YOU_LIKE_TO: 'Would you like to',
   AUTHORIZE: 'Authorize',
   PULL_TO_CHOOSE: 'Pull to choose',
   SHARE: 'Share',
@@ -128,6 +126,31 @@ const interactions = {
     'Choose one or more documents provided by this service and we will generate them for you',
   DOCUMENTS: 'Documents',
   OTHER: 'Other',
+  //FIXME: when we add i18t for translations, we can interpolate values with %{VALUE}
+  YOU_WILL_IMMIDIATELY_FIND_YOUR_DOC_IN_THE_PERSONAL_INFO_SECTION: (
+    attributeType: string,
+  ) =>
+    `You will immidiately find your ${attributeType} in the personal info section after all`,
+  THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS: (did: string) =>
+    `This public profile ${did} chose to remain anonymous. Pay attention before sharing data.`,
+  SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS: (service: string) =>
+    `${service} would like to confirm your digital identity before proceeding`,
+  SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY: (service: string) =>
+    `${service} would like to confirm your digital identity before proceeding`,
+  SERVICE: 'Service',
+  CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED: (
+    service: string,
+  ) => `Choose one or more documents requested by ${service} to proceed `,
+  SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS: (service: string) =>
+    `${service} sent your wallet the following document(s):`,
+  SAVE_YOUR_ATTRIBUTE: (attr: string) => `Save your ${attr}`,
+  IS_IT_REALLY_YOU: 'Is it really you?',
+  INCOMING_INTERACTION: `Incoming interaction`,
+  SERVICE_REQUESTS_ATTRIBUTE: (service: string, attribute: string) =>
+    `${service} requests ${attribute}`,
+  INCOMING_REQUEST: 'Incoming request',
+  INCOMING_OFFER: 'Incoming offer',
+  WOULD_YOU_LIKE_TO_ACTION: (action: string) => `Would you like to ${action}`,
 }
 
 const lock = {

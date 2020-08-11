@@ -6,6 +6,14 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
+import {
+  CredentialShareBas,
+  CredentialShareFas,
+} from '~/screens/Modals/Interactions/CredentialShare'
+import {
+  CredentialOfferFas,
+  CredentialOfferBas,
+} from '~/screens/Modals/Interactions/CredentialOffer'
 
 import {
   getInteractionType,
@@ -15,11 +23,10 @@ import {
 
 import { Colors } from '~/utils/colors'
 import { resetInteraction } from '~/modules/interaction/actions'
-import CredentialShare from '~/screens/Modals/Interactions/CredentialShare'
-import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
+import InteractionIcon, { IconWrapper } from './InteractionIcon'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -30,12 +37,7 @@ const ACTION_SHEET_PROPS = {
   //NOTE: removes shadow artifacts left from transparent view elevation
   elevation: 0,
   //NOTE: removes the gesture header
-  CustomHeaderComponent: <View />,
 }
-
-const BasWrapper: React.FC = ({ children }) => (
-  <View style={styles.wrapper}>{children}</View>
-)
 
 const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
@@ -86,12 +88,20 @@ const InteractionActionSheet: React.FC = () => {
     switch (interactionType) {
       case FlowType.Authentication:
         return <Authentication />
-      // case FlowType.Authorization:
-      //   return <Authorization />
+      case FlowType.Authorization:
+        return <Authorization />
       case FlowType.CredentialShare:
-        return <CredentialShare />
+        return isFullScreenInteraction ? (
+          <CredentialShareFas />
+        ) : (
+          <CredentialShareBas />
+        )
       case FlowType.CredentialReceive:
-        return <CredentialReceive />
+        return isFullScreenInteraction ? (
+          <CredentialOfferFas />
+        ) : (
+          <CredentialOfferBas />
+        )
       default:
         return null
     }
@@ -103,17 +113,25 @@ const InteractionActionSheet: React.FC = () => {
         {...ACTION_SHEET_PROPS}
         ref={actionSheetRef}
         onClose={handleCloseSheet}
+        headerAlwaysVisible={true}
         containerStyle={
           isFullScreenInteraction
             ? styles.containerMultiple
             : styles.containerSingle
         }
+        CustomHeaderComponent={
+          isFullScreenInteraction ? (
+            <View />
+          ) : (
+            <IconWrapper>
+              <View style={styles.basIcon}>
+                <InteractionIcon />
+              </View>
+            </IconWrapper>
+          )
+        }
       >
-        {isFullScreenInteraction ? (
-          renderBody()
-        ) : (
-          <BasWrapper>{renderBody()}</BasWrapper>
-        )}
+        {renderBody()}
       </ActionSheet>
       {intermediaryState !== IntermediaryState.absent && (
         <ActionSheet
@@ -121,10 +139,9 @@ const InteractionActionSheet: React.FC = () => {
           ref={intermediarySheetRef}
           onClose={handleCloseSheet}
           containerStyle={styles.containerSingle}
+          CustomHeaderComponent={<View />}
         >
-          <BasWrapper>
-            <IntermediaryActionSheet />
-          </BasWrapper>
+          <IntermediaryActionSheet />
         </ActionSheet>
       )}
     </>
@@ -150,6 +167,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 30,
     paddingHorizontal: 20,
+  },
+  basIcon: {
+    position: 'absolute',
+    top: 35,
+    zIndex: 2,
   },
 })
 

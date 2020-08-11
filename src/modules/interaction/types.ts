@@ -1,6 +1,8 @@
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { AttrsState, AttributeI } from '../attributes/types'
 import { AttrKeys } from '~/types/credentials'
+import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
@@ -12,13 +14,14 @@ export enum InteractionActions {
   setAttributeInputKey = 'setAttributeInputKey',
 }
 
+export type InteractionDetails =
+  | AuthenticationDetailsI
+  | AuthorizationDetailsI
+  | CredShareI
+  | CredReceiveI
+
 export interface InteractionStateI {
-  details:
-    | {}
-    | AuthenticationDetailsI
-    | AuthorizationDetailsI
-    | CredShareI
-    | CredReceiveI
+  details: {} | InteractionDetails
   attributes: AttrsState<AttributeI>
   selectedAttributes: { [x: string]: string }
   intermediaryState: IntermediaryState
@@ -27,9 +30,7 @@ export interface InteractionStateI {
 
 interface InteractionCommonI {
   id: string
-  counterparty: {
-    did: string
-  }
+  counterparty: IdentitySummary
 }
 
 interface AuthCommonI extends InteractionCommonI {
@@ -57,6 +58,7 @@ interface CredCommonI extends InteractionCommonI {
 }
 
 export interface CredShareI extends CredCommonI {
+  flowType: FlowType.CredentialShare
   credentials: {
     self_issued: string[]
     service_issued: string[]
@@ -66,10 +68,11 @@ export interface CredShareI extends CredCommonI {
 interface ServiceIssuedCredI {
   type: string
   invalid: boolean
-  renderAs: 'document' | 'other'
+  renderInfo?: CredentialOfferRenderInfo
 }
 
 export interface CredReceiveI extends CredCommonI {
+  flowType: FlowType.CredentialReceive
   credentials: {
     self_issued?: never
     service_issued: ServiceIssuedCredI[]

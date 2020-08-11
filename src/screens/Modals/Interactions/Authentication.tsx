@@ -1,29 +1,15 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import HyperLink from 'react-native-hyperlink'
-import { useDispatch, useSelector } from 'react-redux'
-import { AuthenticationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
-import Header, { HeaderSizes } from '~/components/Header'
+import { useDispatch } from 'react-redux'
 
 import { useInteraction } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/useLoader'
-
 import { resetInteraction } from '~/modules/interaction/actions'
-
-import { Colors } from '~/utils/colors'
-
-import { strings } from '~/translations/strings'
-
-import InteractionFooter from './InteractionFooter'
-import { getInteractionDescription } from '~/modules/interaction/selectors'
+import BasWrapper from '~/components/ActionSheet/BasWrapper'
 
 const Authentication = () => {
   const interaction = useInteraction()
   const dispatch = useDispatch()
   const loader = useLoader()
-  const description = useSelector(getInteractionDescription)
 
   const handleSubmit = async () => {
     const success = loader(
@@ -39,29 +25,7 @@ const Authentication = () => {
     }
   }
 
-  return (
-    <>
-      <Header size={HeaderSizes.small}>
-        {strings.WOULD_YOU_LIKE_TO_AUTHENTICATE}
-      </Header>
-      <HyperLink
-        linkDefault={true}
-        linkStyle={{ textDecorationLine: 'underline' }}
-      >
-        <Paragraph size={ParagraphSizes.micro} customStyles={styles.paragraph}>
-          {description}
-        </Paragraph>
-      </HyperLink>
-      <InteractionFooter onSubmit={handleSubmit} />
-    </>
-  )
+  return <BasWrapper onSubmit={handleSubmit}></BasWrapper>
 }
-
-const styles = StyleSheet.create({
-  paragraph: {
-    color: Colors.white70,
-    marginVertical: 20,
-  },
-})
 
 export default Authentication
