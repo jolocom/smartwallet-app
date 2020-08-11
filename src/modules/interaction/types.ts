@@ -16,13 +16,14 @@ export enum InteractionActions {
   setAttributeInputKey = 'setAttributeInputKey',
 }
 
+export type InteractionDetails =
+  | AuthenticationDetailsI
+  | AuthorizationDetailsI
+  | CredShareI
+  | CredReceiveI
+
 export interface InteractionStateI {
-  details:
-    | {}
-    | AuthenticationDetailsI
-    | AuthorizationDetailsI
-    | CredShareI
-    | CredReceiveI
+  details: {} | InteractionDetails
   attributes: AttrsState<AttributeI>
   selectedAttributes: { [x: string]: string }
   intermediaryState: IntermediaryState
@@ -59,6 +60,7 @@ interface CredCommonI extends InteractionCommonI {
 }
 
 export interface CredShareI extends CredCommonI {
+  flowType: FlowType.CredentialShare
   credentials: {
     self_issued: string[]
     service_issued: string[]
@@ -72,6 +74,7 @@ interface ServiceIssuedCredI {
 }
 
 export interface CredReceiveI extends CredCommonI {
+  flowType: FlowType.CredentialReceive
   credentials: {
     self_issued?: never
     service_issued: ServiceIssuedCredI[]
