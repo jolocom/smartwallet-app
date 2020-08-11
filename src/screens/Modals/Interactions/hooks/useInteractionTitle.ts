@@ -3,14 +3,11 @@ import { useSelector } from 'react-redux'
 import {
   getIntermediaryState,
   getAttributeInputKey,
-  getInteractionType,
   getInteractionCounterparty,
   getInteractionDetails,
 } from '~/modules/interaction/selectors'
 import {
   IntermediaryState,
-  CredShareI,
-  AuthorizationDetailsI,
   InteractionDetails,
 } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
