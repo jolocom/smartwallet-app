@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import { TextInput, KeyboardAvoidingView } from 'react-native'
+import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'

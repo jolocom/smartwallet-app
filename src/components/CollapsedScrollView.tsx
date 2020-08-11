@@ -97,8 +97,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 3,
-    // TODO @clauxx add shadows for ios
     elevation: 20,
+    shadowColor: Colors.black65,
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowRadius: 11,
+    shadowOpacity: 1,
     // HACK: @elevation won't work without @borderBottomWidth
     // https://github.com/timomeh/react-native-material-bottom-navigation/issues/8
     borderBottomWidth: 0,
