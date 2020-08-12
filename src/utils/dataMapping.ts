@@ -9,6 +9,7 @@ import {
   AuthenticationFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export const fieldNames = {
   [AttrKeys.name]: 'name',
@@ -53,13 +54,9 @@ export const makeAttrEntry = (
   return Array.isArray(initialValue) ? [...initialValue, entry] : [entry]
 }
 
-interface InitiatorI {
-  did: string
-}
-
 export interface SummaryI<T> {
   state: T
-  initiator: InitiatorI
+  initiator: IdentitySummary
 }
 
 const mapAuthenticationData = (summary: SummaryI<AuthenticationFlowState>) => {

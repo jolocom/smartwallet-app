@@ -1,28 +1,22 @@
 import { useSelector, useDispatch } from 'react-redux'
-import {
-  FlowType,
-  SignedCredentialWithMetadata,
-  CredentialOfferFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import { getInteractionType } from '~/modules/interaction/selectors'
-import { SummaryI } from '~/utils/dataMapping' // TODO: find a better place for types
-import { useInteraction, useSDK } from './sdk'
-import {
-  proceedWithTokensCommunication,
-  verifyAndGetUpdatedCredentials,
-  storeCredentials,
-} from '~/utils/credReceive'
 import {
   resetInteraction,
   setInteractionDetails,
 } from '~/modules/interaction/actions'
+import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 
 export const useHandleFlowSubmit = () => {
-  const interaction = useInteraction()
   const interactionType = useSelector(getInteractionType)
-  const sdk = useSDK()
   const dispatch = useDispatch()
+  const {
+    assembleOfferResponseToken,
+    processOfferReceiveToken,
+    getValidatedCredentials,
+    storeSelectedCredentials,
+  } = useCredentialOfferFlow()
 
   if (interactionType === FlowType.Authentication) {
     return function authenticate() {
@@ -37,52 +31,45 @@ export const useHandleFlowSubmit = () => {
       // TODO: add onCredShare functionality here
     }
   } else if (interactionType === FlowType.CredentialOffer) {
-    return async function receiveCredentials() {
-      const summary = interaction.getSummary() as SummaryI<
-        CredentialOfferFlowState
-      >
-      // for this flow type we select all the credentials offered;
-      const selectedCredentials: SignedCredentialWithMetadata[] =
-        summary.state.offerSummary
-
+    return async () => {
       try {
-        await proceedWithTokensCommunication(interaction, selectedCredentials)
-        const updatedCredentials = await verifyAndGetUpdatedCredentials(
-          interaction,
-        )
-        const allValid = updatedCredentials.every((cred) =>
-          Boolean(!cred.invalid),
-        )
-        const allInvalid = updatedCredentials.every((cred) => cred.invalid)
+        /**
+         * if(renegotiation) {
+         *    return storeSelectedCredentials()
+         *    dispatch(resetInteraction())
+         * }
+         */
+
+        await assembleOfferResponseToken()
+        await processOfferReceiveToken()
+
+        const validatedCredentials = getValidatedCredentials()
+        const allValid = validatedCredentials.every((cred) => !cred.invalid)
+        const allInvalid = validatedCredentials.every((cred) => cred.invalid)
 
         if (allValid) {
-          // STORE CREDENTIALS
-          await storeCredentials(interaction, sdk.storageLib)
+          await storeSelectedCredentials()
+          //TODO: update store credentials with the new ones
 
-          // UPDATE THE STORE WITH NEW CREDENTIALS
-          // TODO: add a new module credentials and update VerifiedCredentials there
-
-          // FINISH THE INTERACTION
           dispatch(resetInteraction())
         } else if (allInvalid) {
-          // NOTIFY USER ABOUT INVALID CREDENTIALS
-          // TODO:
+          //TODO: dispatch "interaction failed" notification
 
-          // FINISH THE INTERACTION
           dispatch(resetInteraction())
         } else {
-          // NOTIFY USER ABOUT INVALID CREDENTIALS
-          // TODO:
+          //TODO: dispatch renegotiation notification
+          //TODO: dispatch isRenegotiation
 
-          // UPDATE THE UI WITH UPDATED CREDENTIALS
           const credentials = {
-            service_issued: updatedCredentials,
+            service_issued: validatedCredentials,
           }
           dispatch(setInteractionDetails({ credentials }))
         }
       } catch (err) {
-        console.warn('An error occured while preparing credentials', err)
+        //TODO: dispatch error notification
+
         console.log({ err })
+        dispatch(resetInteraction())
       }
     }
   } else {
