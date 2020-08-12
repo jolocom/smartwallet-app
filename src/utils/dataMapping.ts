@@ -115,18 +115,13 @@ const mapCredReceiveData = (summary: SummaryI<CredentialOfferFlowState>) => {
 }
 
 export const getMappedInteraction = (interaction: Interaction) => {
+  const summary = interaction.getSummary()
   if (interaction.flow.type === FlowType.Authentication) {
-    return mapAuthenticationData(
-      interaction.getSummary() as SummaryI<AuthenticationFlowState>,
-    )
+    return mapAuthenticationData(summary as SummaryI<AuthenticationFlowState>)
   } else if (interaction.flow.type === FlowType.CredentialShare) {
-    return mapCredShareData(
-      interaction.getSummary() as SummaryI<CredentialRequestFlowState>,
-    )
-  } else if (interaction.flow.type === FlowType.CredentialReceive) {
-    return mapCredReceiveData(
-      interaction.getSummary() as SummaryI<CredentialOfferFlowState>,
-    )
+    return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
+  } else if (interaction.flow.type === FlowType.CredentialOffer) {
+    return mapCredReceiveData(summary as SummaryI<CredentialOfferFlowState>)
   } else if (interaction.flow.type === FlowType.Authorization) {
     // TODO: to update once available
     return {}

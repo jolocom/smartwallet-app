@@ -42,7 +42,7 @@ const useInteractionDescription = () => {
       return strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(
         serviceName,
       )
-    case FlowType.CredentialReceive:
+    case FlowType.CredentialOffer:
       return strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS(
         serviceName,
       )

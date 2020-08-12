@@ -48,7 +48,7 @@ const useInteractionTitle = () => {
           )
         : strings.INCOMING_REQUEST
 
-    case FlowType.CredentialReceive:
+    case FlowType.CredentialOffer:
       return strings.INCOMING_OFFER
 
     case FlowType.Authorization:

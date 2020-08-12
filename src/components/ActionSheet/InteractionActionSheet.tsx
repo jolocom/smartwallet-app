@@ -96,7 +96,7 @@ const InteractionActionSheet: React.FC = () => {
         ) : (
           <CredentialShareBas />
         )
-      case FlowType.CredentialReceive:
+      case FlowType.CredentialOffer:
         return isFullScreenInteraction ? (
           <CredentialOfferFas />
         ) : (

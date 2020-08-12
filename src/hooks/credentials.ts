@@ -36,7 +36,7 @@ export const useHandleFlowSubmit = () => {
     return function shareCredentials() {
       // TODO: add onCredShare functionality here
     }
-  } else if (interactionType === FlowType.CredentialReceive) {
+  } else if (interactionType === FlowType.CredentialOffer) {
     return async function receiveCredentials() {
       const summary = interaction.getSummary() as SummaryI<
         CredentialOfferFlowState

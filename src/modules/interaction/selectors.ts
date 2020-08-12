@@ -2,8 +2,7 @@ import { RootReducerI } from '~/types/reducer'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
-import { IntermediaryState, CredShareI, CredReceiveI } from './types'
-import { ServiceIssuedCredI } from '~/types/credentials'
+import { IntermediaryState, CredReceiveI, CredentialsInSections } from './types'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
@@ -57,7 +56,7 @@ export const getIsFullScreenInteraction = createSelector(
       credentials.service_issued.length === 1
     ) {
     } else if (
-      type === FlowType.CredentialReceive &&
+      type === FlowType.CredentialOffer &&
       credentials.service_issued.length === 1
     ) {
       return false
@@ -67,17 +66,12 @@ export const getIsFullScreenInteraction = createSelector(
   },
 )
 
-interface CredentialsInSections {
-  documents: ServiceIssuedCredI[]
-  other: ServiceIssuedCredI[]
-}
-
 export const getCredentialsBySection = createSelector<
   RootReducerI,
   CredReceiveI,
   CredentialsInSections
->([getInteractionDetails], (details) => {
-  return details.credentials.service_issued.reduce<CredentialsInSections>(
+>([getInteractionDetails], (details) =>
+  details.credentials.service_issued.reduce<CredentialsInSections>(
     (acc, v) => {
       if (
         v.renderInfo &&
@@ -90,5 +84,5 @@ export const getCredentialsBySection = createSelector<
       return acc
     },
     { documents: [], other: [] },
-  )
-})
+  ),
+)

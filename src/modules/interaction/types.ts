@@ -72,7 +72,7 @@ interface ServiceIssuedCredI {
 }
 
 export interface CredReceiveI extends CredCommonI {
-  flowType: FlowType.CredentialReceive
+  flowType: FlowType.CredentialOffer
   credentials: {
     self_issued?: never
     service_issued: ServiceIssuedCredI[]
@@ -83,4 +83,9 @@ export enum IntermediaryState {
   showing = 'showing',
   hiding = 'hiding',
   absent = 'absent',
+}
+
+export interface CredentialsInSections {
+  documents: ServiceIssuedCredI[]
+  other: ServiceIssuedCredI[]
 }
