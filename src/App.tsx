@@ -14,6 +14,7 @@ import {
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
 import { black } from './styles/colors'
+import Lock from './ui/deviceauth/Lock'
 
 useScreens()
 
@@ -105,6 +106,7 @@ export default class App extends React.PureComponent<
               ref={nav => this.setNavigator(nav)}
             />
             <AppLoadingAndNotifications />
+            <Lock />
           </View>
         </Provider>
       </React.Fragment>
