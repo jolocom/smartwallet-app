@@ -1,23 +1,21 @@
 import React from 'react'
-import { Image, View } from 'react-native'
 import { useDispatch } from 'react-redux'
-import HyperLink from 'react-native-hyperlink'
-import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
 
+import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import { useInteraction } from '~/hooks/sdk'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
-import Header, { HeaderSizes } from '~/components/Header'
-import { Colors } from '~/utils/colors'
 import { useLoader } from '~/hooks/useLoader'
-import { strings } from '~/translations/strings'
+import { useRootSelector } from '~/hooks/useRootSelector'
 import { resetInteraction } from '~/modules/interaction/actions'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { AuthorizationDetailsI } from '~/modules/interaction/types'
 
 const Authorization = () => {
   const interaction = useInteraction()
   const dispatch = useDispatch()
   const loader = useLoader()
-  const { description, imageURL, action } = interaction.getSummary()
-    .state as AuthorizationFlowState
+  const { image } = useRootSelector<AuthorizationDetailsI>(
+    getInteractionDetails,
+  )
 
   const handleSubmit = async () => {
     const success = loader(
@@ -33,33 +31,7 @@ const Authorization = () => {
     }
   }
 
-  return (
-    <>
-      <Header size={HeaderSizes.small}>
-        {`${strings.WOULD_YOU_LIKE_TO} ${action || strings.AUTHORIZE}`} ?
-      </Header>
-      <HyperLink
-        linkDefault={true}
-        linkStyle={{ textDecorationLine: 'underline' }}
-      >
-        <Paragraph
-          size={ParagraphSizes.micro}
-          customStyles={{ color: Colors.white70, marginVertical: 20 }}
-        >
-          {description}
-        </Paragraph>
-      </HyperLink>
-      {imageURL && (
-        <View style={{ width: '100%', alignItems: 'center' }}>
-          <Image
-            resizeMode="center"
-            style={{ height: 230, width: 260, marginBottom: 30 }}
-            source={{ uri: imageURL }}
-          />
-        </View>
-      )}
-    </>
-  )
+  return <BasWrapper />
 }
 
 export default Authorization

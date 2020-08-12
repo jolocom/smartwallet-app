@@ -912,10 +912,10 @@
   dependencies:
     class-transformer "^0.2.3"
 
-"@jolocom/sdk@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.11.0.tgz#f4aab89e5eb0617bb860dd44dab2ae5b6c314b81"
-  integrity sha512-aD5S+omlQIci0c12fNx6T1iYBXkbg/d4UI0hIuAt3O7Q9RzWfsPNKsChclkZ/7mHf192kDGToC8pi/DVkfxWlg==
+"@jolocom/sdk@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.12.0.tgz#631ecdf3bac02d8b372856c0a3009fdc8b48a37e"
+  integrity sha512-8DFJDDhVnVipQ+w8eFNpKfA3Lg4p/tno73SSJbp3IfjC/VVIG3mIJZQbxehUJYSOsvJM2syqOUohOZSMD0n/Aw==
   dependencies:
     form-data "^3.0.0"
     ramda "^0.26.1"
@@ -1062,6 +1062,11 @@
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
+
+"@react-native-community/picker@^1.6.5":
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/@react-native-community/picker/-/picker-1.6.5.tgz#9489fdb6d0b4b5877491101e0c3185ea9511d1aa"
+  integrity sha512-mwt0sBaFdURJWkq6wFf2BrYh7fzB1CKK4/gx20zmDYDmahvk3CVUQVlkINDDyXE9m0lYZ9V8rBZBBAJy9W3GkQ==
 
 "@react-navigation/bottom-tabs@^5.2.7":
   version "5.5.2"

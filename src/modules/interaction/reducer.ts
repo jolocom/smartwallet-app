@@ -2,31 +2,12 @@ import {
   InteractionActions,
   IntermediaryState,
   InteractionStateI,
-  AuthenticationDetailsI,
-  AuthorizationDetailsI,
-  CredShareI,
-  CredReceiveI,
 } from './types'
 import { Action } from '~/types/actions'
 import { ActionI } from '~/types/action'
 
-const initialState: InteractionStateI<
-  AuthenticationDetailsI | AuthorizationDetailsI | CredShareI | CredReceiveI
-> = {
-  details: {
-    id: '',
-    flowType: null,
-    counterparty: {
-      did: '',
-    },
-    description: '',
-    image: '',
-    action: '',
-    credentials: {
-      self_issued: [],
-      service_issued: [],
-    },
-  },
+const initialState: InteractionStateI = {
+  details: {},
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
   attributes: {},
@@ -39,7 +20,7 @@ const reducer = (
 ) => {
   switch (action.type) {
     case InteractionActions.setInteractionDetails:
-      return { ...state, details: { ...state.details, ...action.payload } }
+      return { ...state, details: action.payload }
     case InteractionActions.resetInteraction:
       return initialState
     case InteractionActions.setInteractionAttributes:
@@ -58,7 +39,7 @@ const reducer = (
 }
 
 const onSelectAttr = (
-  state: InteractionStateI<CredShareI>,
+  state: InteractionStateI,
   action: ActionI<InteractionActions>,
 ) => {
   const updatedSelectedAttrs = { [action.payload.attrKey]: action.payload.id }

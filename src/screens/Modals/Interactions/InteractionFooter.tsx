@@ -20,9 +20,9 @@ import {
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 
-import getCTAText from './utils/getCTAText'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { IntermediaryState } from '~/modules/interaction/types'
+import useInteractionCta from './hooks/useInteractionCta'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -38,9 +38,10 @@ const FooterContainer: React.FC = ({ children }) => {
 
 const InteractionFooter: React.FC = () => {
   const dispatch = useDispatch()
-  const interactionType = useSelector(getInteractionType)
   const serviceIssuedCreds = useSelector(getServiceIssuedCreds)
   const attributesToShare = useSelector(getAttributesToShare)
+  const interactionCTA = useInteractionCta()
+
   // NOTE: for now this will alway return false because we don't set attributesToShare yet
   const showIntermediaryScreen =
     Object.keys(attributesToShare).length === 1 &&
@@ -65,7 +66,7 @@ const InteractionFooter: React.FC = () => {
       <BtnGroup alignment={BtnsAlignment.horizontal}>
         <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
           <Btn size={BtnSize.medium} onPress={handleSubmit}>
-            {getCTAText(interactionType)}
+            {interactionCTA}
           </Btn>
         </View>
         <View style={[styles.btnContainer, { flex: 0.3 }]}>

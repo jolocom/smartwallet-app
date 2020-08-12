@@ -1,16 +1,17 @@
 import React from 'react'
 import { View } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn from '~/components/Btn'
-
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
-import { useSelector } from 'react-redux'
 import { getAttributes } from '~/modules/attributes/selectors'
 import Paragraph from '~/components/Paragraph'
+import { useSDK, useInteractionStart } from '~/hooks/sdk'
+import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -18,6 +19,11 @@ const ContainerComponent: React.FC = ({ children }) => {
 
 const Claims: React.FC = () => {
   const loader = useLoader()
+  const sdk = useSDK()
+  const { startInteraction } = useInteractionStart(
+    InteractionTransportType.HTTP,
+  )
+
   const openLoader = async () => {
     await loader(
       async () => {
@@ -33,6 +39,18 @@ const Claims: React.FC = () => {
 
   const openScanner = useRedirectTo(ScreenNames.Interactions)
   const attributes = useSelector(getAttributes)
+
+  const startShare = () => {
+    sdk
+      .credRequestToken({
+        callbackURL: 'test',
+        credentialRequirements: [
+          { type: ['Credential', 'ProofOfEmailCredential'], constraints: [] },
+          { type: ['Credential', 'ProofOfNameCredential'], constraints: [] },
+        ],
+      })
+      .then(startInteraction)
+  }
 
   return (
     <ScreenContainer>
@@ -50,6 +68,7 @@ const Claims: React.FC = () => {
       </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
+      <Btn onPress={startShare}>Start Share</Btn>
     </ScreenContainer>
   )
 }

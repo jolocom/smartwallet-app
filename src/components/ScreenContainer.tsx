@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
       large: 40,
       medium: 40,
       small: 15,
+      xsmall: 15,
     }),
   },
   transparent: {

@@ -6,6 +6,14 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
+import {
+  CredentialShareBas,
+  CredentialShareFas,
+} from '~/screens/Modals/Interactions/CredentialShare'
+import {
+  CredentialOfferFas,
+  CredentialOfferBas,
+} from '~/screens/Modals/Interactions/CredentialOffer'
 
 import {
   getInteractionType,
@@ -15,13 +23,10 @@ import {
 
 import { Colors } from '~/utils/colors'
 import { resetInteraction } from '~/modules/interaction/actions'
-import CredentialShare from '~/screens/Modals/Interactions/CredentialShare'
-import CredentialReceive from '~/screens/Modals/Interactions/CredentialReceive'
 import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
-import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
-import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
+import InteractionIcon, { IconWrapper } from './InteractionIcon'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -32,12 +37,7 @@ const ACTION_SHEET_PROPS = {
   //NOTE: removes shadow artifacts left from transparent view elevation
   elevation: 0,
   //NOTE: removes the gesture header
-  CustomHeaderComponent: <View />,
 }
-
-const BasWrapper: React.FC = ({ children }) => (
-  <View style={styles.wrapper}>{children}</View>
-)
 
 const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
@@ -84,28 +84,27 @@ const InteractionActionSheet: React.FC = () => {
     }
   }
 
-  const renderInteraction = () => {
-    const body = () => {
-      switch (interactionType) {
-        case FlowType.Authentication:
-          return <Authentication />
-        case FlowType.Authorization:
-          return <Authorization />
-        case FlowType.CredentialShare:
-          return <CredentialShare />
-        case FlowType.CredentialReceive:
-          return <CredentialReceive />
-        default:
-          return null
-      }
+  const renderBody = () => {
+    switch (interactionType) {
+      case FlowType.Authentication:
+        return <Authentication />
+      case FlowType.Authorization:
+        return <Authorization />
+      case FlowType.CredentialShare:
+        return isFullScreenInteraction ? (
+          <CredentialShareFas />
+        ) : (
+          <CredentialShareBas />
+        )
+      case FlowType.CredentialReceive:
+        return isFullScreenInteraction ? (
+          <CredentialOfferFas />
+        ) : (
+          <CredentialOfferBas />
+        )
+      default:
+        return null
     }
-    return (
-      <>
-        <InteractionHeader />
-        {body()}
-        <InteractionFooter />
-      </>
-    )
   }
 
   return (
@@ -114,15 +113,23 @@ const InteractionActionSheet: React.FC = () => {
         {...ACTION_SHEET_PROPS}
         ref={actionSheetRef}
         onClose={handleCloseSheet}
+        headerAlwaysVisible={true}
         containerStyle={
           isFullScreenInteraction ? styles.containerFAS : styles.containerBAS
         }
+        CustomHeaderComponent={
+          isFullScreenInteraction ? (
+            <View />
+          ) : (
+            <IconWrapper>
+              <View style={styles.basIcon}>
+                <InteractionIcon />
+              </View>
+            </IconWrapper>
+          )
+        }
       >
-        {isFullScreenInteraction ? (
-          renderInteraction()
-        ) : (
-          <BasWrapper>{renderInteraction()}</BasWrapper>
-        )}
+        {renderBody()}
       </ActionSheet>
       {intermediaryState !== IntermediaryState.absent && (
         <ActionSheet
@@ -130,10 +137,9 @@ const InteractionActionSheet: React.FC = () => {
           ref={intermediarySheetRef}
           onClose={handleCloseSheet}
           containerStyle={styles.containerBAS}
+          CustomHeaderComponent={<View />}
         >
-          <BasWrapper>
-            <IntermediaryActionSheet />
-          </BasWrapper>
+          <IntermediaryActionSheet />
         </ActionSheet>
       )}
     </>
@@ -156,6 +162,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     padding: 20,
+  },
+  basIcon: {
+    position: 'absolute',
+    top: 35,
+    zIndex: 2,
   },
 })
 

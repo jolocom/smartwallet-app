@@ -1,16 +1,18 @@
 import React, { useRef, useEffect } from 'react'
-import { View, TextInput } from 'react-native'
+import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { getAttributeInputKey } from '~/modules/interaction/selectors'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
+import BasWrapper from './BasWrapper'
 
 const IntermediaryActionSheet = () => {
   const dispatch = useDispatch()
   const inputType = useSelector(getAttributeInputKey)
   const inputRef = useRef<TextInput>(null)
 
+  //FIXME: when the Keyboard appears, the input is not moved above it.
   useEffect(() => {
     setTimeout(() => {
       inputRef.current?.focus()
@@ -22,17 +24,13 @@ const IntermediaryActionSheet = () => {
   }
 
   return (
-    <View>
-      <InteractionHeader
-        title={`Save your ${inputType}`}
-        description={`You will immidiately find your ${inputType} in the personal info section after all`}
-      />
+    <BasWrapper customStyle={{ paddingTop: 20 }}>
       <TextInput
         onSubmitEditing={handleSubmit}
         ref={inputRef}
         style={{ color: 'white' }}
       />
-    </View>
+    </BasWrapper>
   )
 }
 

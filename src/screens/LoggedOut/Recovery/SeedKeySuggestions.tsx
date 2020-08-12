@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
         large: 0,
         medium: 0,
         small: 4,
+        xsmall: 4,
       }),
     }),
     paddingHorizontal: 17,

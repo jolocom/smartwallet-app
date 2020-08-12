@@ -3,11 +3,7 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
 import { IntermediaryState } from './types'
-
-export const getInteractionId = (state: RootReducerI): string =>
-  state.interaction.details.id
-export const getInteractionType = (state: RootReducerI): FlowType | null =>
-  state.interaction.details.flowType
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export const getInteractionAttributes = (
   state: RootReducerI,
@@ -25,17 +21,26 @@ export const getAttributeInputKey = (state: RootReducerI): any =>
 export const getCredentials = (state: RootReducerI): any =>
   state.interaction.details.credentials
 
-export const getInteractionDescription = (state: RootReducerI): any =>
-  state.interaction.details.description
+export const getInteractionId = (state: RootReducerI): string =>
+  state.interaction.details.id
 
-export const getInteractionAction = (state: RootReducerI): any =>
-  state.interaction.details.action
+export const getInteractionType = (state: RootReducerI): FlowType | null =>
+  state.interaction.details.flowType
+
+export const getInteractionCounterparty = (
+  state: RootReducerI,
+): IdentitySummary => state.interaction.details.counterparty
+
+export const getInteractionDetails = <T>(state: RootReducerI): T =>
+  state.interaction.details
 
 export const getAttributesToShare = (state: RootReducerI): any =>
   state.interaction.attributesToShare
 
 export const getServiceIssuedCreds = (state: RootReducerI): any =>
-  state.interaction.details.credentials.service_issued
+  state.interaction.details.credentials
+    ? state.interaction.details.credentials.service_issued
+    : []
 
 export const getIsFullScreenInteraction = createSelector(
   [getInteractionType, getIntermediaryState, getCredentials],

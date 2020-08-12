@@ -37,7 +37,7 @@ export const HandAnimation: React.FC = () => {
   const { handPV, splashPV } = usePulseForBoth()
 
   return (
-    <View>
+    <View style={styles.container}>
       <Animated.View style={{ opacity: splashPV, ...styles.splashPosition }}>
         <SplashIcon />
       </Animated.View>
@@ -49,6 +49,12 @@ export const HandAnimation: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    margin: 60,
+    width: 78,
+    height: 84,
+  },
+
   handPosition: {
     top: -29,
     left: 8,

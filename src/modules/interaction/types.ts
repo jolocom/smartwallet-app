@@ -1,6 +1,10 @@
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import {
+  FlowType,
+  InteractionSummary,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { AttrsState, AttributeI } from '../attributes/types'
 import { AttrKeys } from '~/types/attributes'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
@@ -12,8 +16,14 @@ export enum InteractionActions {
   setAttributeInputKey = 'setAttributeInputKey',
 }
 
-export interface InteractionStateI<T> {
-  details: T
+export type InteractionDetails =
+  | AuthenticationDetailsI
+  | AuthorizationDetailsI
+  | CredShareI
+  | CredReceiveI
+
+export interface InteractionStateI {
+  details: {} | InteractionDetails
   attributes: AttrsState<AttributeI>
   attributesToShare: { [x: string]: string }
   intermediaryState: IntermediaryState
@@ -22,48 +32,52 @@ export interface InteractionStateI<T> {
 
 interface InteractionCommonI {
   id: string
-  flowType: FlowType | null
-  counterparty: {
-    did: string
-  }
+  counterparty: IdentitySummary
 }
 
 interface AuthCommonI extends InteractionCommonI {
-  credentials: {
-    self_issued: []
-    service_issued: []
-  }
+  credentials?: never
 }
 
 export interface AuthenticationDetailsI extends AuthCommonI {
+  flowType: FlowType.Authentication
   description: string
-  image: ''
-  action: ''
+  image?: never
+  action?: never
 }
 
 export interface AuthorizationDetailsI extends AuthCommonI {
-  description: string
-  image: string
+  flowType: FlowType.Authorization
+  description?: string
+  image?: string
   action: string
 }
 
 interface CredCommonI extends InteractionCommonI {
-  description: ''
-  image: ''
-  action: ''
+  description?: never
+  image?: never
+  action?: never
 }
 
 export interface CredShareI extends CredCommonI {
+  flowType: FlowType.CredentialShare
   credentials: {
     self_issued: string[]
     service_issued: string[]
   }
 }
 
+interface ServiceIssuedCredI {
+  type: string
+  invalid: boolean
+  renderAs: 'document' | 'other'
+}
+
 export interface CredReceiveI extends CredCommonI {
+  flowType: FlowType.CredentialReceive
   credentials: {
-    self_issued: []
-    service_issued: string[]
+    self_issued?: never
+    service_issued: ServiceIssuedCredI[]
   }
 }
 
