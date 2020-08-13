@@ -8,7 +8,7 @@ import {
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 
-export const useHandleFlowSubmit = () => {
+export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
   const dispatch = useDispatch()
   const {
@@ -16,34 +16,34 @@ export const useHandleFlowSubmit = () => {
     processOfferReceiveToken,
     getValidatedCredentials,
     storeSelectedCredentials,
+    isRenegotiation,
   } = useCredentialOfferFlow()
 
   if (interactionType === FlowType.Authentication) {
-    return function authenticate() {
+    return async function authenticate() {
       // TODO: add onAuthenticate functionality here
     }
   } else if (interactionType === FlowType.Authorization) {
-    return function authorize() {
+    return async function authorize() {
       // TODO: add onAuthorization functionality here
     }
   } else if (interactionType === FlowType.CredentialShare) {
-    return function shareCredentials() {
+    return async function shareCredentials() {
       // TODO: add onCredShare functionality here
     }
   } else if (interactionType === FlowType.CredentialOffer) {
     return async () => {
       try {
-        /**
-         * if(renegotiation) {
-         *    return storeSelectedCredentials()
-         *    dispatch(resetInteraction())
-         * }
-         */
+        if (isRenegotiation()) {
+          await storeSelectedCredentials()
+          return dispatch(resetInteraction())
+        }
 
         await assembleOfferResponseToken()
         await processOfferReceiveToken()
 
         const validatedCredentials = getValidatedCredentials()
+        console.log(validatedCredentials.map((cred) => cred.invalid))
         const allValid = validatedCredentials.every((cred) => !cred.invalid)
         const allInvalid = validatedCredentials.every((cred) => cred.invalid)
 
@@ -70,14 +70,10 @@ export const useHandleFlowSubmit = () => {
 
         console.log({ err })
         dispatch(resetInteraction())
+        throw new Error(err)
       }
     }
   } else {
-    return function () {
-      console.log(
-        'No handle submit function is provided for this interaction type:',
-        interactionType,
-      )
-    }
+    throw new Error('Interaction Type not found')
   }
 }
