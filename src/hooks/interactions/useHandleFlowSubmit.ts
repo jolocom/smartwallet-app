@@ -44,7 +44,6 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
         await processOfferReceiveToken()
 
         const validatedCredentials = getValidatedCredentials()
-        console.log(validatedCredentials.map((cred) => cred.invalid))
         const allValid = validatedCredentials.every((cred) => !cred.invalid)
         const allInvalid = validatedCredentials.every((cred) => cred.invalid)
 
