@@ -6,6 +6,7 @@ import {
   View,
   TextStyle,
   ViewStyle,
+  Platform,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -23,116 +24,113 @@ export enum BtnSize {
   medium,
 }
 
-interface PropsI {
+interface BtnPropsI {
   type?: BtnTypes
+  customTextStyles?: TextStyle
+  size?: BtnSize
+}
+
+interface PropsI extends BtnPropsI {
   size?: BtnSize
   onPress: () => void
   disabled?: boolean
-  customTextStyles?: TextStyle
+
   customContainerStyles?: ViewStyle
 }
 
 const GRADIENT_START = { x: 0, y: 0 }
 const GRADIENT_END = { x: 1, y: 0 }
 
-const Button: React.FC<PropsI> = ({
+const Button: React.FC<BtnPropsI> = ({
   type = BtnTypes.primary,
-  size = BtnSize.large,
-  onPress,
+  size = BtnSize.medium,
   children,
-  disabled,
   customTextStyles = {},
-  customContainerStyles = {},
 }) => {
   return (
-    <TouchableOpacity
-      onPress={onPress}
+    <Text
       style={[
-        styles.btn,
-        size === BtnSize.large ? styles.largeBtn : styles.mediumBtn,
-        customContainerStyles,
+        styles.text,
+        type === BtnTypes.primary
+          ? styles.textPrimary
+          : type === BtnTypes.secondary
+          ? styles.textSecondary
+          : styles.textTertiary,
+        { fontSize: size === BtnSize.medium ? 18 : 20 },
+        customTextStyles,
       ]}
-      disabled={disabled}
     >
-      <Text
-        style={[
-          styles.text,
-          type === BtnTypes.primary
-            ? styles.textPrimary
-            : type === BtnTypes.secondary
-            ? styles.textSecondary
-            : styles.textTertiary,
-          customTextStyles,
-        ]}
-      >
-        {children}
-      </Text>
-    </TouchableOpacity>
+      {children}
+    </Text>
   )
 }
 
 const Btn: React.FC<PropsI> = (props) => {
   const containerStyles = [styles.container, props.disabled && styles.disabled]
+  const btnStyle =
+    props.size === BtnSize.large ? styles.largeBtn : styles.mediumBtn
 
-  if (props.type === BtnTypes.primary) {
-    return (
-      <LinearGradient
-        testID="gradient"
-        start={GRADIENT_START}
-        end={GRADIENT_END}
-        style={containerStyles}
-        colors={[Colors.disco, Colors.ceriseRed]}
-      >
-        <Button {...props} />
-      </LinearGradient>
-    )
-  } else if (props.type === BtnTypes.tertiary) {
-    return (
-      <View
-        style={[containerStyles, { backgroundColor: Colors.matterhorn18 }]}
-        testID="tertiary-button"
-      >
-        <Button {...props} />
-      </View>
-    )
-  }
   return (
-    <View style={containerStyles} testID="non-gradient">
-      <Button {...props} />
-    </View>
+    <TouchableOpacity
+      style={[containerStyles]}
+      onPress={props.onPress}
+      disabled={props.disabled}
+    >
+      {props.type === BtnTypes.primary ? (
+        <LinearGradient
+          testID="gradient"
+          start={GRADIENT_START}
+          end={GRADIENT_END}
+          style={[styles.container, btnStyle]}
+          colors={[Colors.disco, Colors.ceriseRed]}
+        >
+          <Button {...props} />
+        </LinearGradient>
+      ) : (
+        <View
+          style={[containerStyles, props.customContainerStyles, btnStyle]}
+          testID="non-gradient"
+        >
+          <Button {...props} />
+        </View>
+      )}
+    </TouchableOpacity>
   )
 }
 
 Btn.defaultProps = {
   type: BtnTypes.primary,
-  size: BtnSize.large,
+  size: BtnSize.medium,
   disabled: false,
 }
 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 50,
     borderRadius: 8,
     marginVertical: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   largeBtn: {
-    paddingVertical: 16,
+    height: 56,
   },
   mediumBtn: {
-    paddingVertical: 12,
+    height: 45,
   },
   btn: {
     backgroundColor: 'transparent',
-    alignItems: 'center',
   },
   disabled: {
     opacity: 0.5,
   },
   text: {
-    fontSize: 20,
     color: Colors.white,
-    margin: 0,
+    textAlignVertical: 'center',
+    paddingTop: Platform.select({
+      ios: 5,
+      android: 0,
+    }),
   },
   textPrimary: {
     fontFamily: Fonts.Medium,

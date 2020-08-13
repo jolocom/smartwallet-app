@@ -6,7 +6,6 @@ import { useRootSelector } from '~/hooks/useRootSelector'
 import { CredReceiveI } from '~/modules/interaction/types'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
 import Header from '~/components/Header'
-import { ImageBackground } from 'react-native'
 import { Colors } from '~/utils/colors'
 
 const CredentialOfferBas = () => {

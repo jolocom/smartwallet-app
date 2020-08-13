@@ -5,7 +5,7 @@ import { useSafeArea } from 'react-native-safe-area-context'
 
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
-import Btn, { BtnTypes } from '~/components/Btn'
+import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import BtnGroup from '~/components/BtnGroup'
 
@@ -84,28 +84,35 @@ const Walkthrough: React.FC = () => {
               source={slide.background}
             />
             <AbsoluteBottom
-              customStyles={{ ...styles.consistentContainer, bottom: 195 }}
+              customStyles={{
+                ...styles.consistentContainer,
+                bottom: 235,
+              }}
             >
-              <View style={styles.contentContainer}>
-                <Header size={HeaderSizes.large} color={Colors.white90}>
-                  {walkthroughData[idx].header}
-                </Header>
-                <Paragraph
-                  size={ParagraphSizes.large}
-                  color={Colors.white85}
-                  customStyles={{ opacity: 0.8, marginTop: 12 }}
-                >
-                  {walkthroughData[idx].paragraph}
-                </Paragraph>
-              </View>
+              <Header size={HeaderSizes.large} color={Colors.white90}>
+                {walkthroughData[idx].header}
+              </Header>
+              <Paragraph
+                size={ParagraphSizes.large}
+                color={Colors.white85}
+                customStyles={{ opacity: 0.8, marginTop: 12 }}
+              >
+                {walkthroughData[idx].paragraph}
+              </Paragraph>
             </AbsoluteBottom>
           </>
         ))}
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
         <BtnGroup>
-          <Btn onPress={redirectToEntropy}>{strings.GET_STARTED}</Btn>
-          <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
+          <Btn size={BtnSize.large} onPress={redirectToEntropy}>
+            {strings.GET_STARTED}
+          </Btn>
+          <Btn
+            size={BtnSize.large}
+            type={BtnTypes.secondary}
+            onPress={redirectToRecovery}
+          >
             {strings.NEED_RESTORE}
           </Btn>
         </BtnGroup>
@@ -130,7 +137,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 155,
+    bottom: 185,
   },
   dot: {
     width: 3,

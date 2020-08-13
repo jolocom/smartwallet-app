@@ -11,7 +11,7 @@ const BasWrapper: React.FC<{
     <View style={[styles.wrapper, customStyle]}>
       <InteractionHeader />
       <View style={{ paddingTop: 28 }}>{children}</View>
-      {<InteractionFooter />}
+      <InteractionFooter />
     </View>
   )
 }

@@ -1,13 +1,13 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 
+import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import { useInteraction } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/useLoader'
+import { useRootSelector } from '~/hooks/useRootSelector'
 import { resetInteraction } from '~/modules/interaction/actions'
-import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
 import { AuthorizationDetailsI } from '~/modules/interaction/types'
-import { useRootSelector } from '~/hooks/useRootSelector'
 
 const Authorization = () => {
   const interaction = useInteraction()
@@ -31,7 +31,7 @@ const Authorization = () => {
     }
   }
 
-  return <BasWrapper onSubmit={handleSubmit}></BasWrapper>
+  return <BasWrapper />
 }
 
 export default Authorization

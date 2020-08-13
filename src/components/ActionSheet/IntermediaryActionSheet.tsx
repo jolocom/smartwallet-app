@@ -6,6 +6,7 @@ import { IntermediaryState } from '~/modules/interaction/types'
 import { getAttributeInputKey } from '~/modules/interaction/selectors'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import BasWrapper from './BasWrapper'
+import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
 
 const IntermediaryActionSheet = () => {
   const dispatch = useDispatch()
@@ -30,6 +31,7 @@ const IntermediaryActionSheet = () => {
         ref={inputRef}
         style={{ color: 'white' }}
       />
+      <InteractionFooter />
     </BasWrapper>
   )
 }
