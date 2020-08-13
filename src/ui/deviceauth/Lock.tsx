@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Modal,
-  Dimensions,
-} from 'react-native'
+import { View, StyleSheet, ActivityIndicator, Modal } from 'react-native'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 
 import PasscodeInput from './PasscodeInput'
 import { getBiometryDescription } from './utils/getText'
 import { handleNotEnrolled } from './utils/biometryErrors'
 import useGetStoredAuthValues from './hooks/useGetStoredAuthValues'
-import { Colors } from './colors'
+import ScreenContainer from './ScreenContainer'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -68,7 +62,7 @@ const Lock = () => {
       presentationStyle="overFullScreen"
       onShow={handleModalShow}
     >
-      <View style={styles.container}>
+      <ScreenContainer>
         {isLoadingStorage ? (
           <ActivityIndicator />
         ) : (
@@ -84,17 +78,14 @@ const Lock = () => {
             </View>
           </>
         )}
-      </View>
+      </ScreenContainer>
     </Modal>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.mainBlack,
-  },
   inputContainer: {
-    height: Dimensions.get('window').height,
+    // height: Dimensions.get('window').height,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,

@@ -196,6 +196,11 @@ const deviceAuth = {
     'Scan your fingerprint on the device scanner to continue',
   SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed
   RESET: 'Reset',
+  CHANGE_PIN: 'Change PIN',
+  CURRENT_PASSCODE: 'Current passcode',
+  CREATE_NEW_PASSCODE: 'Create new passcode',
+  WRONG_PIN: 'Wrong PIN',
+  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
 }
 
 export default {
