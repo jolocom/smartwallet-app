@@ -25,7 +25,7 @@ const Authentication = () => {
     }
   }
 
-  return <BasWrapper onSubmit={handleSubmit}></BasWrapper>
+  return <BasWrapper />
 }
 
 export default Authentication

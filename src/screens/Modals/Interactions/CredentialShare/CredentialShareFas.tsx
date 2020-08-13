@@ -1,23 +1,9 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 
 import FasWrapper from '~/components/ActionSheet/FasWrapper'
-import {
-  setIntermediaryState,
-  setAttributeInputKey,
-} from '~/modules/interaction/actions'
-import { IntermediaryState } from '~/modules/interaction/types'
 
 const CredentialShareFas = () => {
-  const dispatch = useDispatch()
-  return (
-    <FasWrapper
-      onSubmit={() => {
-        dispatch(setIntermediaryState(IntermediaryState.showing))
-        dispatch(setAttributeInputKey('name'))
-      }}
-    ></FasWrapper>
-  )
+  return <FasWrapper />
 }
 
 export default CredentialShareFas

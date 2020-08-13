@@ -210,7 +210,6 @@ const SeedPhrase: React.FC = () => {
         </Paragraph>
         <Btn
           type={BtnTypes.primary}
-          size={BtnSize.medium}
           onPress={
             gestureState === GestureState.Success
               ? redirectToRepeatSeedPhrase

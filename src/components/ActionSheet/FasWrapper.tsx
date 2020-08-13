@@ -1,7 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 
-import { Colors } from '~/utils/colors'
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
@@ -9,10 +7,7 @@ import useInteractionTitle from '~/screens/Modals/Interactions/hooks/useInteract
 
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
 
-const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
-  children,
-  onSubmit,
-}) => {
+const FasWrapper: React.FC = ({ children }) => {
   const interactionTitle = useInteractionTitle()
   return (
     <>
@@ -28,7 +23,7 @@ const FasWrapper: React.FC<{ onSubmit: () => void }> = ({
         <InteractionHeader />
         {children}
       </CollapsedScrollView>
-      <InteractionFooter onSubmit={onSubmit} />
+      <InteractionFooter />
     </>
   )
 }

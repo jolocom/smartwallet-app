@@ -4,7 +4,7 @@ import { claimsMetadata } from 'cred-types-jolocom-core'
 import { setAttrs, updateAttrs } from '~/modules/attributes/actions'
 import {
   setInteractionAttributes,
-  setInitialSelectedAttributes,
+  setAttributesToShare,
 } from '~/modules/interaction/actions'
 import { AttrKeys, ATTR_TYPES } from '~/types/attributes'
 import { getAttributes } from '~/modules/attributes/selectors'
@@ -73,7 +73,7 @@ export const useSetInteractionAttributes = () => {
       },
       {} as { [key: string]: string },
     )
-    dispatch(setInitialSelectedAttributes(selectedAttributes))
+    dispatch(setAttributesToShare(selectedAttributes))
   }
 
   return updateInteractionAttributes

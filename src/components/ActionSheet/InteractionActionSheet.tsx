@@ -115,9 +115,7 @@ const InteractionActionSheet: React.FC = () => {
         onClose={handleCloseSheet}
         headerAlwaysVisible={true}
         containerStyle={
-          isFullScreenInteraction
-            ? styles.containerMultiple
-            : styles.containerSingle
+          isFullScreenInteraction ? styles.containerFAS : styles.containerBAS
         }
         CustomHeaderComponent={
           isFullScreenInteraction ? (
@@ -138,7 +136,7 @@ const InteractionActionSheet: React.FC = () => {
           {...ACTION_SHEET_PROPS}
           ref={intermediarySheetRef}
           onClose={handleCloseSheet}
-          containerStyle={styles.containerSingle}
+          containerStyle={styles.containerBAS}
           CustomHeaderComponent={<View />}
         >
           <IntermediaryActionSheet />
@@ -149,14 +147,12 @@ const InteractionActionSheet: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
-  containerMultiple: {
-    flex: 1,
+  containerFAS: {
     height: SCREEN_HEIGHT,
-    paddingTop: 32,
-    paddingBottom: 0,
     backgroundColor: Colors.mainBlack,
+    justifyContent: 'space-between',
   },
-  containerSingle: {
+  containerBAS: {
     padding: 5,
     backgroundColor: Colors.transparent,
   },
@@ -165,8 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     borderRadius: 20,
     justifyContent: 'center',
-    paddingVertical: 30,
-    paddingHorizontal: 20,
+    padding: 20,
   },
   basIcon: {
     position: 'absolute',

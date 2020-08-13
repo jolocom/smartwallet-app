@@ -34,6 +34,14 @@ export const getInteractionCounterparty = (
 export const getInteractionDetails = <T>(state: RootReducerI): T =>
   state.interaction.details
 
+export const getAttributesToShare = (state: RootReducerI): any =>
+  state.interaction.attributesToShare
+
+export const getServiceIssuedCreds = (state: RootReducerI): any =>
+  state.interaction.details.credentials
+    ? state.interaction.details.credentials.service_issued
+    : []
+
 export const getIsFullScreenInteraction = createSelector(
   [getInteractionType, getIntermediaryState, getCredentials],
   (type, intermediaryState, credentials) => {
