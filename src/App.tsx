@@ -106,7 +106,7 @@ export default class App extends React.PureComponent<
               ref={nav => this.setNavigator(nav)}
             />
             <AppLoadingAndNotifications />
-            <Lock />
+            {/* <Lock /> */}
           </View>
         </Provider>
       </React.Fragment>
