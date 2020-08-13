@@ -9,8 +9,9 @@ import { resetInteraction } from '~/modules/interaction/actions'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
-import { useHandleFlowSubmit } from '~/hooks/credentials'
+import { useHandleFlowSubmit } from '~/hooks/interactions/useHandleFlowSubmit'
 import useInteractionCta from './hooks/useInteractionCta'
+import { useLoader } from '~/hooks/useLoader'
 
 interface PropsI {
   customCTA?: string
@@ -20,13 +21,19 @@ const InteractionFooter: React.FC<PropsI> = ({ customCTA }) => {
   const dispatch = useDispatch()
   const handleFlowSubmit = useHandleFlowSubmit()
   const interactionCta = useInteractionCta()
+  const loader = useLoader()
 
   const handleCancel = () => {
     dispatch(resetInteraction())
   }
 
-  const handleSubmit = () => {
-    handleFlowSubmit()
+  const handleSubmit = async () => {
+    await loader(
+      async () => {
+        await handleFlowSubmit()
+      },
+      { showFailed: false, showSuccess: false },
+    )
   }
 
   return (

@@ -12,7 +12,7 @@ import {
 } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
 import { useRootSelector } from '~/hooks/useRootSelector'
-import { ATTR_UI_NAMES } from '~/types/attributes'
+import { ATTR_UI_NAMES } from '~/types/credentials'
 
 const isSingleAttributeRequest = (
   selfIssued: string[],
