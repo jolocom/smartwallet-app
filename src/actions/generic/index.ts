@@ -2,9 +2,12 @@ import { navigationActions } from 'src/actions/'
 import { routeList } from 'src/routeList'
 import SplashScreen from 'react-native-splash-screen'
 import I18n from 'src/locales/i18n'
-import { ThunkAction } from 'src/store'
+import { ThunkAction, ThunkDispatch } from 'src/store'
 import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import settingKeys from '../../ui/settings/settingKeys'
+import { AsyncStorage } from 'react-native'
+import crypto from 'crypto'
+import { termsOfServiceDE } from 'src/ui/termsofservice/termsOfServiceDE'
 
 export const showErrorScreen = (
   error: AppError | Error,
@@ -50,6 +53,37 @@ export const initApp: ThunkAction = async (
       ),
     )
   }
+}
+
+const hashString = (text: string) => {
+  return crypto
+    .createHash('sha256')
+    .update(text)
+    .digest('hex')
+}
+
+export const checkTermsOfService = (
+  route: routeList,
+): ThunkAction => async dispatch => {
+  const storageHash = await AsyncStorage.getItem('termsOfConditions')
+  const currentHash = hashString(termsOfServiceDE)
+  const shouldShowTerms = storageHash !== currentHash
+
+  return dispatch(
+    navigationActions.navigate({
+      routeName: shouldShowTerms ? routeList.TermsOfServiceConsent : route,
+      params: { nextRoute: route },
+    }),
+  )
+}
+
+export const storeTermsOfService = (
+  route: routeList,
+): ThunkAction => async dispatch => {
+  const termsHash = hashString(termsOfServiceDE)
+  await AsyncStorage.setItem('termsOfConditions', termsHash)
+
+  dispatch(navigationActions.navigate({ routeName: route }))
 }
 
 export const loadSettings = (settings: { [key: string]: any }) => ({

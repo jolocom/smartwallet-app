@@ -5,6 +5,8 @@ import { navigationActions } from 'src/actions/'
 import { ThunkDispatch } from 'src/store'
 import { StatusBar } from 'react-native'
 import { routeList } from '../../../routeList'
+import { checkTermsOfService } from 'src/actions/generic'
+import { withLoading } from 'src/actions/modifiers'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
 
@@ -23,21 +25,12 @@ export class LandingContainer extends React.Component<Props> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  getStarted: () =>
-    dispatch(
-      navigationActions.navigate({
-        routeName: routeList.Entropy,
-      }),
-    ),
-  recoverIdentity: () =>
-    dispatch(
-      navigationActions.navigate({
-        routeName: routeList.InputSeedPhrase,
-      }),
-    ),
+  getStarted: async () => {
+    dispatch(withLoading(checkTermsOfService(routeList.Entropy)))
+  },
+  recoverIdentity: async () => {
+    dispatch(withLoading(checkTermsOfService(routeList.InputSeedPhrase)))
+  },
 })
 
-export const Landing = connect(
-  null,
-  mapDispatchToProps,
-)(LandingContainer)
+export const Landing = connect(null, mapDispatchToProps)(LandingContainer)
