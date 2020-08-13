@@ -10,12 +10,15 @@ import { ServiceIssuedCredI } from '~/types/credentials'
 const useCredentialOfferFlow = () => {
   const interaction = useInteraction()
 
+  /**
+   * Not accounting for selections. Currently @selectedCredentials are all the
+   * credentials that were offered.
+   */
   const assembleOfferResponseToken = async () => {
-    const summary = interaction.getSummary() as SummaryI<
-      CredentialOfferFlowState
-    >
+    const state = interaction.getSummary().state as CredentialOfferFlowState
+
     const selectedCredentials: SignedCredentialWithMetadata[] =
-      summary.state.offerSummary
+      state.offerSummary
 
     const responseToken = await interaction.createCredentialOfferResponseToken(
       selectedCredentials,
@@ -68,11 +71,21 @@ const useCredentialOfferFlow = () => {
     await interaction.storeIssuerProfile()
   }
 
+  /**
+   * We are renegotiating if there are issued credentials in the state before
+   * sending the @CredentalOfferResponse token
+   */
+  const isRenegotiation = () => {
+    const state = interaction.getSummary().state as CredentialOfferFlowState
+    return state.issued.length
+  }
+
   return {
     assembleOfferResponseToken,
     processOfferReceiveToken,
     getValidatedCredentials,
     storeSelectedCredentials,
+    isRenegotiation,
   }
 }
 
