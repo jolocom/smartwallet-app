@@ -5,14 +5,13 @@ import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
 
 const BasWrapper: React.FC<{
-  onSubmit?: () => void
   customStyle?: ViewStyle
-}> = ({ children, onSubmit, customStyle = {} }) => {
+}> = ({ children, customStyle = {} }) => {
   return (
     <View style={[styles.wrapper, customStyle]}>
       <InteractionHeader />
-      {children}
-      {onSubmit && <InteractionFooter onSubmit={onSubmit} />}
+      <View style={{ paddingTop: 28 }}>{children}</View>
+      {<InteractionFooter />}
     </View>
   )
 }
