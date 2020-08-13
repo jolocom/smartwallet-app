@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     marginVertical: 20,
-    backgroundColor: Colors.white35,
+    backgroundColor: Colors.white,
   },
   scaledDown: {
     marginLeft: -20,

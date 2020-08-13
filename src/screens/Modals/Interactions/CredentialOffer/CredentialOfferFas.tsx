@@ -13,8 +13,8 @@ const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getCredentialsBySection)
 
   const renderCredentials = (credentials: ServiceIssuedCredI[]) =>
-    credentials.map(({ type }) => (
-      <CredentialCard>
+    credentials.map(({ type, invalid }) => (
+      <CredentialCard disabled={invalid}>
         <Header color={Colors.black}>{type}</Header>
       </CredentialCard>
     ))
