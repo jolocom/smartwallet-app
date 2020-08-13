@@ -104,6 +104,15 @@ const styles = StyleSheet.create({
     height: 106,
     backgroundColor: Colors.black,
     justifyContent: 'center',
+    borderRadius: 22,
+    shadowColor: Colors.black30,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowRadius: 7,
+    shadowOpacity: 1,
+    elevation: 10,
   },
   btnContainer: {
     alignItems: 'center',
