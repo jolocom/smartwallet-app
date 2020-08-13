@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 import Header, { HeaderSizes } from '~/components/Header'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import {
@@ -27,7 +28,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
       : !counterparty?.publicProfile
 
   return (
-    <>
+    <View>
       <Header size={HeaderSizes.medium} color={Colors.white90}>
         {title || interactionTitle}
       </Header>
@@ -41,7 +42,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
       >
         {description || interactionDescription}
       </Paragraph>
-    </>
+    </View>
   )
 }
 
