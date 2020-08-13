@@ -7,6 +7,7 @@ import {
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
+import { Alert } from 'react-native'
 
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
@@ -49,21 +50,23 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
 
         if (allValid) {
           await storeSelectedCredentials()
+          Alert.alert('Documents stored successfully')
           //TODO: update store credentials with the new ones
 
           dispatch(resetInteraction())
         } else if (allInvalid) {
+          Alert.alert('All the documents are corrupted')
           //TODO: dispatch "interaction failed" notification
 
           dispatch(resetInteraction())
         } else {
           //TODO: dispatch renegotiation notification
-          //TODO: dispatch isRenegotiation
 
           const credentials = {
             service_issued: validatedCredentials,
           }
           dispatch(setInteractionDetails({ credentials }))
+          Alert.alert('Renegotiating')
         }
       } catch (err) {
         //TODO: dispatch error notification
