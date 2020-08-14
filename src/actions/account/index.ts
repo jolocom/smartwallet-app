@@ -15,6 +15,7 @@ import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
+import { checkTermsOfService } from '../generic'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -45,7 +46,7 @@ export const checkIdentityExists: ThunkAction = async (
     const identityWallet = await backendMiddleware.prepareIdentityWallet()
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
-    return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+    return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {
     if (!(err instanceof BackendError)) throw err
 
