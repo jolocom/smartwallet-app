@@ -46,21 +46,13 @@ const ConsentTextButton: React.FC<{ text: string; onPress: () => void }> = ({
   text,
 }) => {
   return (
-    <TouchableOpacity
-      style={{
-        width: '100%',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        marginVertical: BP({ small: 6, medium: 10, large: 10 }),
-      }}
-      onPress={onPress}
-    >
+    <TouchableOpacity style={styles.consentButton} onPress={onPress}>
       <Text style={styles.termsText}>{text}</Text>
     </TouchableOpacity>
   )
 }
 
-const TermsOfServiceComponent: React.FC<Props> = ({
+const TermsOfServiceContainer: React.FC<Props> = ({
   storeTermsConsent,
   navigation,
 }) => {
@@ -247,9 +239,15 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: BP({ small: 20, medium: 32, large: 32 }),
   },
+  consentButton: {
+    width: '100%',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginVertical: BP({ small: 6, medium: 10, large: 10 }),
+  },
 })
 
 export const TermsOfServiceConsent = connect(
   null,
   mapDispatchToProps,
-)(TermsOfServiceComponent)
+)(TermsOfServiceContainer)
