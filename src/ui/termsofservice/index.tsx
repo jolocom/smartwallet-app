@@ -20,6 +20,9 @@ import {
   privacyPolicyEN,
   privacyPolicyDE,
 } from './legalTexts'
+import { CheckmarkSmallIcon } from 'src/resources'
+import strings from 'src/locales/strings'
+import I18n from 'src/locales/i18n'
 
 interface NavigationProps {
   nextRoute: routeList
@@ -100,11 +103,14 @@ const TermsOfServiceComponent: React.FC<Props> = ({
     <Wrapper style={{ backgroundColor: 'rgb(32, 26, 33)' }}>
       <View style={{ paddingHorizontal: 30 }}>
         <Text style={styles.title}>
-          SmartWallet introducing Terms and Conditions and Privacy Policy
+          {I18n.t(
+            strings.SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY,
+          )}
         </Text>
         <Text style={styles.description}>
-          You can find the German and English version of the documents below.
-          Please note that the German version is legally binding
+          {I18n.t(
+            strings.YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW,
+          )}
         </Text>
       </View>
       <View style={{ flex: 3, width: '100%', paddingHorizontal: 30 }}>
@@ -146,16 +152,20 @@ const TermsOfServiceComponent: React.FC<Props> = ({
                 styles.checkboxBase,
                 accepted ? styles.checkboxActive : styles.checkboxInactive,
               ]}
-            />
+            >
+              {accepted ? <CheckmarkSmallIcon /> : null}
+            </View>
           </View>
           <View style={{ paddingLeft: 20, flex: 0.9 }}>
             <Text style={styles.acceptText}>
-              I understand and accept the Terms of Service and Privacy Policy
+              {I18n.t(
+                strings.I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY,
+              )}
             </Text>
           </View>
         </TouchableOpacity>
         <JolocomButton
-          text={'Accept new terms'}
+          text={I18n.t(strings.ACCEPT_NEW_TERMS)}
           containerStyle={{ width: '100%' }}
           onPress={() => storeTermsConsent(nextRoute)}
           disabled={!accepted}
@@ -217,6 +227,8 @@ const styles = StyleSheet.create({
   },
   checkboxActive: {
     backgroundColor: 'rgb(82, 81, 193)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkboxInactive: {
     backgroundColor: 'transparent',
