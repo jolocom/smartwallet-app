@@ -21,6 +21,18 @@ export const setDid = (did: string) => ({
   value: did,
 })
 
+export const setLocalAuth = () => ({
+  type: 'SET_LOCAL_AUTH',
+})
+
+export const openLocalAuth = () => ({
+  type: 'OPEN_LOCAL_AUTH',
+})
+
+export const closeLocalAuth = () => ({
+  type: 'CLOSE_LOCAL_AUTH',
+})
+
 export const setSelected = (claim: DecoratedClaims) => ({
   type: 'SET_SELECTED',
   selected: claim,

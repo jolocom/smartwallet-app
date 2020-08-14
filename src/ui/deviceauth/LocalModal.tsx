@@ -3,14 +3,15 @@ import { Modal } from 'react-native'
 
 interface PropsI {
   onShow?: () => void
+  isVisible: boolean
 }
 
-const LocalModal: React.FC<PropsI> = ({ onShow, children }) => {
+const LocalModal: React.FC<PropsI> = ({ onShow, children, isVisible }) => {
   return (
     <Modal
       animationType="fade"
       transparent={true}
-      visible
+      visible={isVisible}
       presentationStyle="overFullScreen"
       onShow={onShow}
     >

@@ -28,7 +28,6 @@ import { AppInit } from './ui/generic/appInit'
 import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
 import ChangePIN from './ui/deviceauth/ChangePIN'
-import RegisterPIN from './ui/deviceauth/RegisterPIN'
 
 import {
   DocsIcon,
@@ -177,9 +176,6 @@ const MainStack = createStackNavigator(
     },
     [routeList.ChangePIN]: {
       screen: ChangePIN,
-    },
-    [routeList.RegisterPIN]: {
-      screen: RegisterPIN,
     },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,

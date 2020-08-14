@@ -40,6 +40,8 @@ export interface ClaimsState {
 
 export interface DidState {
   readonly did: string
+  isLocalAuthSet: boolean
+  isLocalAuthVisible: boolean
 }
 
 export type LoadingState = boolean

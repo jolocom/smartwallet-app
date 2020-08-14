@@ -12,34 +12,30 @@ import strings from '../../locales/strings'
 import { PIN_USERNAME, PIN_SERVICE } from './utils/keychainConsts'
 import BP from './utils/breakpoints'
 
-import {
-  useDeviceAuthState,
-  useDeviceAuthDispatch,
-} from './module/deviceAuthContext'
-import { showBiometry } from './module/deviceAuthActions'
 import LocalModal from './LocalModal'
 import { Colors } from './colors'
+import { connect } from 'react-redux'
+import { RootState } from 'src/reducers'
+import { ThunkDispatch } from 'src/store'
+import { accountActions } from 'src/actions'
 
-const RegisterPIN = () => {
+interface PropsI {
+  isLocalAuthVisible: boolean
+  closeLocalAuth: () => void
+}
+
+const RegisterPIN: React.FC<PropsI> = ({
+  isLocalAuthVisible,
+  closeLocalAuth,
+}) => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [passcode, setPasscode] = useState('')
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
-  const { biometryType } = useDeviceAuthState()
-  const dispatchToLocalAuth = useDeviceAuthDispatch()
-
   const handlePasscodeSubmit = useCallback(() => {
     setIsCreating(false)
   }, [])
-
-  const redirectTo = () => {
-    if (biometryType && biometryType !== 'IRIS') {
-      dispatchToLocalAuth(showBiometry())
-    } else {
-      // handleRedirectToLoggedIn()
-    }
-  }
 
   const handleVerifiedPasscodeSubmit = async () => {
     if (passcode === verifiedPasscode) {
@@ -49,12 +45,11 @@ const RegisterPIN = () => {
           service: PIN_SERVICE,
           storage: Keychain.STORAGE_TYPE.AES,
         })
-        // displaySuccessLoader()
       } catch (err) {
         console.log({ err })
       }
-      // redirect to Biometry screen if biometry is supported on a device, otherwise, redirect to LoggedIn section
-      redirectTo()
+
+      closeLocalAuth()
     } else {
       setHasError(true)
     }
@@ -74,7 +69,7 @@ const RegisterPIN = () => {
   }, [verifiedPasscode])
 
   return (
-    <LocalModal>
+    <LocalModal isVisible={isLocalAuthVisible}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
         <ScreenContainer
           customStyles={{
@@ -159,4 +154,11 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RegisterPIN
+const mapStateToProps = (state: RootState) => ({
+  isLocalAuthVisible: state.account.did.isLocalAuthVisible,
+})
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  closeLocalAuth: () => dispatch(accountActions.closeLocalAuth()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPIN)
