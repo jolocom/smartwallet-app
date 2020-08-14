@@ -1,7 +1,7 @@
 export const termsOfServiceDE = `
 Terms of Service
-
 1   General Provisions
+
 1.1             Kolibri Games GmbH, Hallesches Ufer 60, 10963 Berlin (hereinafter, “Kolibri Games”) develops and publishes mobile applications (“Games”) that can be downloaded from the App Stores of various providers.
 
 1.2             The Games are only offered to consumers in terms of § 13 of the German Civil Code (BGB), i.e. natural persons who conclude a legal transaction for purposes which can predominantly neither be attributed to their commercial nor their self-employed professional activity.
