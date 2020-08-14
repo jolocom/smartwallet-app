@@ -2,12 +2,12 @@ import { navigationActions } from 'src/actions/'
 import { routeList } from 'src/routeList'
 import SplashScreen from 'react-native-splash-screen'
 import I18n from 'src/locales/i18n'
-import { ThunkAction, ThunkDispatch } from 'src/store'
+import { ThunkAction } from 'src/store'
 import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import settingKeys from '../../ui/settings/settingKeys'
 import { AsyncStorage } from 'react-native'
 import crypto from 'crypto'
-import { termsOfServiceDE } from 'src/ui/termsofservice/termsOfServiceDE'
+import { termsOfServiceDE } from 'src/ui/termsofservice/legalTexts'
 
 export const showErrorScreen = (
   error: AppError | Error,

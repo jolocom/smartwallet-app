@@ -7,16 +7,19 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
-import { termsOfServiceDE } from './termsOfServiceDE'
-import { termsOfServiceEN } from './termsOfServiceEN'
 import { ThunkDispatch } from 'src/store'
 import { storeTermsOfService } from 'src/actions/generic'
 import { JolocomButton } from '../structure'
 import { connect } from 'react-redux'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { routeList } from 'src/routeList'
-import { debug } from 'src/styles/presets'
-import { fontMain } from 'src/styles/typography'
+import { fontMain, fontMedium } from 'src/styles/typography'
+import {
+  termsOfServiceEN,
+  termsOfServiceDE,
+  privacyPolicyEN,
+  privacyPolicyDE,
+} from './legalTexts'
 
 interface NavigationProps {
   nextRoute: routeList
@@ -24,6 +27,46 @@ interface NavigationProps {
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
   navigation: NavigationScreenProp<NavigationState, NavigationProps>
+}
+
+enum TextType {
+  None,
+  PrivacyEN,
+  PrivacyDE,
+  TermsEN,
+  TermsDE,
+}
+
+const ConsentTextButton: React.FC<{ text: string; onPress: () => void }> = ({
+  onPress,
+  text,
+}) => {
+  return (
+    <TouchableOpacity
+      style={{
+        width: '100%',
+        height: 32,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        marginVertical: 5,
+      }}
+      onPress={onPress}
+    >
+      <Text
+        style={{
+          fontFamily: fontMain,
+          fontSize: 20,
+          fontWeight: 'normal',
+          fontStyle: 'normal',
+          lineHeight: 22,
+          letterSpacing: 0.14,
+          color: '#7372ee',
+        }}
+      >
+        {text}
+      </Text>
+    </TouchableOpacity>
+  )
 }
 
 const TermsOfServiceComponent: React.FC<Props> = ({
@@ -36,21 +79,60 @@ const TermsOfServiceComponent: React.FC<Props> = ({
     },
   } = navigation
   const [accepted, setAccepted] = useState(false)
+  const [textType, setTextType] = useState(TextType.None)
+
+  const getLegalText = () => {
+    switch (textType) {
+      case TextType.TermsEN:
+        return termsOfServiceEN
+      case TextType.TermsDE:
+        return termsOfServiceDE
+      case TextType.PrivacyEN:
+        return privacyPolicyEN
+      case TextType.PrivacyDE:
+        return privacyPolicyDE
+      default:
+        return ''
+    }
+  }
 
   return (
-    <Wrapper>
-      <View>
-        <Text>
+    <Wrapper style={{ backgroundColor: 'rgb(32, 26, 33)' }}>
+      <View style={{ paddingHorizontal: 30 }}>
+        <Text style={styles.title}>
           SmartWallet introducing Terms and Conditions and Privacy Policy
         </Text>
-        <Text>
+        <Text style={styles.description}>
           You can find the German and English version of the documents below.
           Please note that the German version is legally binding
         </Text>
       </View>
-      <View style={{ flex: 3 }}>
-        <ScrollView>
-          <Text>{termsOfServiceEN}</Text>
+      <View style={{ flex: 3, width: '100%', paddingHorizontal: 30 }}>
+        <ScrollView contentContainerStyle={{ paddingBottom: '50%' }}>
+          {textType === TextType.None ? (
+            <>
+              <ConsentTextButton
+                text={'Terms of Service'}
+                onPress={() => setTextType(TextType.TermsEN)}
+              />
+              <ConsentTextButton
+                text={'Privacy Policy'}
+                onPress={() => setTextType(TextType.PrivacyEN)}
+              />
+              <ConsentTextButton
+                text={'Nutzungsbedingungen '}
+                onPress={() => setTextType(TextType.TermsDE)}
+              />
+              <ConsentTextButton
+                text={'Datenschutzerklärung '}
+                onPress={() => setTextType(TextType.PrivacyDE)}
+              />
+            </>
+          ) : (
+            <TouchableOpacity onPress={() => setTextType(TextType.None)}>
+              <Text style={styles.termsText}>{getLegalText()}</Text>
+            </TouchableOpacity>
+          )}
         </ScrollView>
       </View>
       <View style={styles.bottomBar}>
@@ -89,8 +171,29 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 })
 
 const styles = StyleSheet.create({
+  title: {
+    fontFamily: fontMedium,
+    fontSize: 28,
+    fontWeight: '500',
+    fontStyle: 'normal',
+    lineHeight: 30,
+    letterSpacing: 0,
+    color: 'rgba(255, 255, 255, 0.85)',
+    marginTop: 30,
+    marginBottom: 20,
+  },
+  description: {
+    fontFamily: fontMain,
+    fontSize: 20,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 22,
+    letterSpacing: 0.14,
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginBottom: 50,
+  },
   bottomBar: {
-    height: 160,
+    paddingVertical: 26,
     width: '100%',
     position: 'absolute',
     bottom: 0,
@@ -110,6 +213,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: 20,
   },
   checkboxActive: {
     backgroundColor: 'rgb(82, 81, 193)',
@@ -126,6 +230,15 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     color: 'rgba(255,255,255,0.9)',
+  },
+  termsText: {
+    fontFamily: fontMain,
+    fontSize: 20,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 22,
+    letterSpacing: 0.14,
+    color: '#7372ee',
   },
 })
 
