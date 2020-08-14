@@ -1,6 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Wrapper } from 'src/ui/structure/wrapper'
-import { Text, ScrollView, View, StyleSheet } from 'react-native'
+import {
+  Text,
+  ScrollView,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import { termsOfServiceDE } from './termsOfServiceDE'
 import { termsOfServiceEN } from './termsOfServiceEN'
 import { ThunkDispatch } from 'src/store'
@@ -9,6 +15,8 @@ import { JolocomButton } from '../structure'
 import { connect } from 'react-redux'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { routeList } from 'src/routeList'
+import { debug } from 'src/styles/presets'
+import { fontMain } from 'src/styles/typography'
 
 interface NavigationProps {
   nextRoute: routeList
@@ -27,6 +35,8 @@ const TermsOfServiceComponent: React.FC<Props> = ({
       params: { nextRoute },
     },
   } = navigation
+  const [accepted, setAccepted] = useState(false)
+
   return (
     <Wrapper>
       <View>
@@ -44,9 +54,29 @@ const TermsOfServiceComponent: React.FC<Props> = ({
         </ScrollView>
       </View>
       <View style={styles.bottomBar}>
+        <TouchableOpacity
+          onPress={() => setAccepted(!accepted)}
+          style={styles.acceptWrapper}
+        >
+          <View style={{ flex: 0.1 }}>
+            <View
+              style={[
+                styles.checkboxBase,
+                accepted ? styles.checkboxActive : styles.checkboxInactive,
+              ]}
+            />
+          </View>
+          <View style={{ paddingLeft: 20, flex: 0.9 }}>
+            <Text style={styles.acceptText}>
+              I understand and accept the Terms of Service and Privacy Policy
+            </Text>
+          </View>
+        </TouchableOpacity>
         <JolocomButton
           text={'Accept new terms'}
+          containerStyle={{ width: '100%' }}
           onPress={() => storeTermsConsent(nextRoute)}
+          disabled={!accepted}
         />
       </View>
     </Wrapper>
@@ -66,7 +96,36 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: 'rgb(11, 3,13)',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 20,
+    borderRadius: 22,
+  },
+  checkboxBase: {
+    width: 28,
+    height: 28,
+    borderRadius: 20,
+  },
+  acceptWrapper: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  checkboxActive: {
+    backgroundColor: 'rgb(82, 81, 193)',
+  },
+  checkboxInactive: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#ffffff',
+  },
+  acceptText: {
+    fontFamily: fontMain,
+    fontSize: 16,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    color: 'rgba(255,255,255,0.9)',
   },
 })
 
