@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, ActivityIndicator, Modal } from 'react-native'
+import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 
 import PasscodeInput from './PasscodeInput'
-import { getBiometryDescription } from './utils/getText'
-import { handleNotEnrolled } from './utils/biometryErrors'
-import useGetStoredAuthValues from './hooks/useGetStoredAuthValues'
 import ScreenContainer from './ScreenContainer'
+import Header from './Header'
+import LocalModal from './LocalModal'
+import useGetStoredAuthValues from './hooks/useGetStoredAuthValues'
+import { handleNotEnrolled } from './utils/biometryErrors'
+import { getBiometryDescription } from './utils/getText'
+
+import strings from '../../locales/strings'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -55,18 +59,13 @@ const Lock = () => {
   }
 
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible
-      presentationStyle="overFullScreen"
-      onShow={handleModalShow}
-    >
+    <LocalModal onShow={handleModalShow}>
       <ScreenContainer>
         {isLoadingStorage ? (
           <ActivityIndicator />
         ) : (
           <>
+            <Header>{strings.ENTER_YOUR_PIN}</Header>
             <View style={styles.inputContainer}>
               <PasscodeInput
                 value={pin}
@@ -79,7 +78,7 @@ const Lock = () => {
           </>
         )}
       </ScreenContainer>
-    </Modal>
+    </LocalModal>
   )
 }
 

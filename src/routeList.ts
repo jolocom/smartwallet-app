@@ -35,6 +35,8 @@ export enum routeList {
   SeedPhrase = 'SeedPhrase',
   ChangePIN = 'ChangePIN',
 
+  RegisterPIN = 'RegisterPIN',
+
   // General
   Exception = 'Exception',
   ErrorReporting = 'ErrorReporting',

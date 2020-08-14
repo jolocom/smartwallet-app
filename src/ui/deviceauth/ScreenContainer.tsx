@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: Dimensions.get('window').height,
     backgroundColor: Colors.mainBlack,
+    paddingTop: 50,
   },
 })
 
