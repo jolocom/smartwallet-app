@@ -23,6 +23,7 @@ import {
 import { CheckmarkSmallIcon } from 'src/resources'
 import strings from 'src/locales/strings'
 import I18n from 'src/locales/i18n'
+import { BP } from 'src/styles/breakpoints'
 
 interface NavigationProps {
   nextRoute: routeList
@@ -48,26 +49,13 @@ const ConsentTextButton: React.FC<{ text: string; onPress: () => void }> = ({
     <TouchableOpacity
       style={{
         width: '100%',
-        height: 32,
         alignItems: 'flex-start',
         justifyContent: 'center',
-        marginVertical: 5,
+        marginVertical: BP({ small: 6, medium: 10, large: 10 }),
       }}
       onPress={onPress}
     >
-      <Text
-        style={{
-          fontFamily: fontMain,
-          fontSize: 20,
-          fontWeight: 'normal',
-          fontStyle: 'normal',
-          lineHeight: 22,
-          letterSpacing: 0.14,
-          color: '#7372ee',
-        }}
-      >
-        {text}
-      </Text>
+      <Text style={styles.termsText}>{text}</Text>
     </TouchableOpacity>
   )
 }
@@ -101,7 +89,9 @@ const TermsOfServiceComponent: React.FC<Props> = ({
 
   return (
     <Wrapper style={{ backgroundColor: 'rgb(32, 26, 33)' }}>
-      <View style={{ paddingHorizontal: 30 }}>
+      <View
+        style={{ paddingHorizontal: BP({ small: 20, medium: 32, large: 32 }) }}
+      >
         <Text style={styles.title}>
           {I18n.t(
             strings.SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY,
@@ -113,7 +103,7 @@ const TermsOfServiceComponent: React.FC<Props> = ({
           )}
         </Text>
       </View>
-      <View style={{ flex: 3, width: '100%', paddingHorizontal: 30 }}>
+      <View style={styles.termsWrapper}>
         <ScrollView contentContainerStyle={{ paddingBottom: '50%' }}>
           {textType === TextType.None ? (
             <>
@@ -183,24 +173,24 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 const styles = StyleSheet.create({
   title: {
     fontFamily: fontMedium,
-    fontSize: 28,
+    fontSize: BP({ small: 24, medium: 28, large: 28 }),
     fontWeight: '500',
     fontStyle: 'normal',
-    lineHeight: 30,
+    lineHeight: BP({ small: 26, medium: 30, large: 30 }),
     letterSpacing: 0,
     color: 'rgba(255, 255, 255, 0.85)',
     marginTop: 30,
-    marginBottom: 20,
+    marginBottom: BP({ small: 12, medium: 20, large: 20 }),
   },
   description: {
     fontFamily: fontMain,
-    fontSize: 20,
+    fontSize: BP({ small: 18, medium: 20, large: 20 }),
     fontWeight: 'normal',
     fontStyle: 'normal',
-    lineHeight: 22,
+    lineHeight: BP({ small: 20, medium: 22, large: 22 }),
     letterSpacing: 0.14,
     color: 'rgba(255, 255, 255, 0.8)',
-    marginBottom: 50,
+    marginBottom: BP({ small: 32, medium: 54, large: 54 }),
   },
   bottomBar: {
     paddingVertical: 26,
@@ -237,7 +227,7 @@ const styles = StyleSheet.create({
   },
   acceptText: {
     fontFamily: fontMain,
-    fontSize: 16,
+    fontSize: BP({ small: 14, medium: 16, large: 16 }),
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -245,12 +235,17 @@ const styles = StyleSheet.create({
   },
   termsText: {
     fontFamily: fontMain,
-    fontSize: 20,
+    fontSize: BP({ small: 18, medium: 20, large: 20 }),
     fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 22,
     letterSpacing: 0.14,
     color: '#7372ee',
+  },
+  termsWrapper: {
+    flex: 3,
+    width: '100%',
+    paddingHorizontal: BP({ small: 20, medium: 32, large: 32 }),
   },
 })
 
