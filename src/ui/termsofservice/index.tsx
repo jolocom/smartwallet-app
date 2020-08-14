@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native'
 import { ThunkDispatch } from 'src/store'
 import { storeTermsOfService } from 'src/actions/generic'
@@ -81,6 +82,7 @@ const TermsOfServiceContainer: React.FC<Props> = ({
 
   return (
     <Wrapper style={{ backgroundColor: 'rgb(32, 26, 33)' }}>
+      <StatusBar barStyle="light-content" />
       <View
         style={{ paddingHorizontal: BP({ small: 20, medium: 32, large: 32 }) }}
       >
@@ -193,7 +195,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     paddingHorizontal: 20,
-    borderRadius: 22,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
   },
   checkboxBase: {
     width: 28,
