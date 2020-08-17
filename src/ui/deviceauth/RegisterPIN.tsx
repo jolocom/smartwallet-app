@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state: RootState) => ({
-  isLocalAuthVisible: state.account.did.isLocalAuthVisible,
+  isLocalAuthVisible: state.account.appState.isLocalAuthVisible,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   unlockApplication: () => dispatch(accountActions.unlockApp()),

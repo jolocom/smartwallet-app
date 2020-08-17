@@ -82,9 +82,9 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state: RootState) => ({
-  isLocalAuthSet: state.account.did.isLocalAuthSet,
-  isPopup: state.account.did.isPopup,
-  isAppLocked: state.account.did.isAppLocked,
+  isLocalAuthSet: state.account.appState.isLocalAuthSet,
+  isPopup: state.account.appState.isPopup,
+  isAppLocked: state.account.appState.isAppLocked,
   did: state.account.did.did,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
