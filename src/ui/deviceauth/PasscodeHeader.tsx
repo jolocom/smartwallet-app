@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import Header from './Header'
+import Header from './components/Header'
 
 const PasscodeHeader: React.FC = ({ children }) => (
   <View style={styles.headerContainer}>
-    <Header>{children}</Header>
+    <Header customStyles={{ paddingTop: 100 }}>{children}</Header>
   </View>
 )
 

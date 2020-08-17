@@ -4,7 +4,7 @@ import { ActivityIndicator, View, StyleSheet } from 'react-native'
 
 import PasscodeInput from './PasscodeInput'
 import PasscodeHeader from './PasscodeHeader'
-import ScreenContainer from './ScreenContainer'
+import ScreenContainer from './components/ScreenContainer'
 
 import { PIN_SERVICE, PIN_USERNAME } from './utils/keychainConsts'
 

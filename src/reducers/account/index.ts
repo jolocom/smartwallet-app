@@ -42,6 +42,8 @@ export interface DidState {
   readonly did: string
   isLocalAuthSet: boolean
   isLocalAuthVisible: boolean
+  isPopup: boolean
+  isAppLocked: boolean
 }
 
 export type LoadingState = boolean

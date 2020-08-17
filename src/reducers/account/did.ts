@@ -5,6 +5,8 @@ const initialState: DidState = {
   did: '',
   isLocalAuthSet: false,
   isLocalAuthVisible: false,
+  isPopup: false,
+  isAppLocked: true,
 }
 
 export const did = (state = initialState, action: AnyAction): DidState => {
@@ -28,6 +30,21 @@ export const did = (state = initialState, action: AnyAction): DidState => {
       return {
         ...state,
         isLocalAuthVisible: false,
+      }
+    case 'SET_POPUP':
+      return {
+        ...state,
+        isPopup: action.payload,
+      }
+    case 'LOCK_APP':
+      return {
+        ...state,
+        isAppLocked: true,
+      }
+    case 'UNLOCK_APP':
+      return {
+        ...state,
+        isAppLocked: false,
       }
     default:
       return state

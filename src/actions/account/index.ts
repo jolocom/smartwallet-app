@@ -1,14 +1,18 @@
-import { navigationActions } from 'src/actions/'
+import Keychain from 'react-native-keychain'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
+
+import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
+import { navigationActions, accountActions } from 'src/actions/'
+
 import { routeList } from 'src/routeList'
 import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
 } from 'src/lib/util'
 import { ThunkAction } from 'src/store'
-import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
 import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
@@ -36,6 +40,19 @@ export const closeLocalAuth = () => ({
 export const setSelected = (claim: DecoratedClaims) => ({
   type: 'SET_SELECTED',
   selected: claim,
+})
+
+export const setPopup = (value: boolean) => ({
+  type: 'SET_POPUP',
+  payload: value,
+})
+
+export const lockApp = () => ({
+  type: 'LOCK_APP',
+})
+
+export const unlockApp = () => ({
+  type: 'UNLOCK_APP',
 })
 
 export const resetSelected = () => ({
@@ -72,6 +89,17 @@ export const checkIdentityExists: ThunkAction = async (
 
       return dispatch(navigationActions.navigate({ routeName }))
     }
+  }
+}
+
+export const checkLocalDeviceAuthSet: ThunkAction = async dispatch => {
+  const pin = await Keychain.getGenericPassword({
+    service: PIN_SERVICE,
+  })
+  if (pin) {
+    dispatch(accountActions.setLocalAuth())
+  } else {
+    dispatch(accountActions.openLocalAuth())
   }
 }
 

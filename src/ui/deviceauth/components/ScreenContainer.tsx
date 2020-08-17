@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import { Colors } from './colors'
+import { Colors } from '../colors'
 import { ViewStyle } from 'react-native-material-ui'
 
 interface PropsI {
