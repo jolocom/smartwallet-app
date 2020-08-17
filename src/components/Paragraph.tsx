@@ -13,7 +13,7 @@ export enum ParagraphSizes {
 
 interface PropsI {
   size?: ParagraphSizes
-  color?: Colors | string
+  color?: Colors
   customStyles?: TextStyle | Animated.WithAnimatedValue<TextStyle>
   animated?: boolean
 }

@@ -17,7 +17,8 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     processOfferReceiveToken,
     getValidatedCredentials,
     storeSelectedCredentials,
-    isRenegotiation,
+    credentialsAlreadyIssued,
+    checkDuplicates,
   } = useCredentialOfferFlow()
 
   if (interactionType === FlowType.Authentication) {
@@ -35,13 +36,21 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   } else if (interactionType === FlowType.CredentialOffer) {
     return async () => {
       try {
-        if (isRenegotiation()) {
+        if (credentialsAlreadyIssued()) {
           await storeSelectedCredentials()
           return dispatch(resetInteraction())
         }
 
         await assembleOfferResponseToken()
         await processOfferReceiveToken()
+
+        // NOTE: Uncomment the line below to test the duplicates edge-case
+        // await storeSelectedCredentials()
+        const anyDuplicates = await checkDuplicates()
+        if (anyDuplicates)
+          throw new Error(
+            "Duplicates were found. Can't proceed with the interaction",
+          )
 
         const validatedCredentials = getValidatedCredentials()
         const allValid = validatedCredentials.every((cred) => !cred.invalid)
@@ -69,6 +78,7 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
         }
       } catch (err) {
         //TODO: dispatch error notification
+        Alert.alert('Interaction failed', err.message)
 
         console.log({ err })
         dispatch(resetInteraction())

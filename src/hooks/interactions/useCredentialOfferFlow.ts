@@ -71,11 +71,22 @@ const useCredentialOfferFlow = () => {
     await interaction.storeIssuerProfile()
   }
 
+  const checkDuplicates = async () => {
+    const state = interaction.getSummary().state as CredentialOfferFlowState
+    const duplicates = await Promise.all(
+      state.issued.map(async (cred) => {
+        const stored = await interaction.getStoredCredentialById(cred.id)
+        return !!stored.length
+      }),
+    )
+    return duplicates.every((c) => c)
+  }
+
   /**
    * We are renegotiating if there are issued credentials in the state before
    * sending the @CredentalOfferResponse token
    */
-  const isRenegotiation = () => {
+  const credentialsAlreadyIssued = () => {
     const state = interaction.getSummary().state as CredentialOfferFlowState
     return state.issued.length
   }
@@ -85,7 +96,8 @@ const useCredentialOfferFlow = () => {
     processOfferReceiveToken,
     getValidatedCredentials,
     storeSelectedCredentials,
-    isRenegotiation,
+    credentialsAlreadyIssued,
+    checkDuplicates,
   }
 }
 
