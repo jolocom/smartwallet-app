@@ -22,11 +22,15 @@ import { accountActions } from 'src/actions'
 interface PropsI {
   isLocalAuthVisible: boolean
   closeLocalAuth: () => void
+  setAuth: () => void
+  unlockApplication: () => void
 }
 
 const RegisterPIN: React.FC<PropsI> = ({
   isLocalAuthVisible,
   closeLocalAuth,
+  setAuth,
+  unlockApplication,
 }) => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [passcode, setPasscode] = useState('')
@@ -48,6 +52,8 @@ const RegisterPIN: React.FC<PropsI> = ({
       } catch (err) {
         console.log({ err })
       }
+      setAuth()
+      unlockApplication()
 
       closeLocalAuth()
     } else {
@@ -158,7 +164,14 @@ const mapStateToProps = (state: RootState) => ({
   isLocalAuthVisible: state.account.did.isLocalAuthVisible,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  unlockApplication: () => dispatch(accountActions.unlockApp()),
+  setAuth: () => dispatch(accountActions.setLocalAuth()),
   closeLocalAuth: () => dispatch(accountActions.closeLocalAuth()),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterPIN)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(props => {
+  return <RegisterPIN {...props} />
+})
