@@ -1,6 +1,6 @@
 import React from 'react'
 import VersionNumber from 'react-native-version-number'
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Linking } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   scrollComponentContainer: {
-    paddingBottom: Spacing.XXL,
+    paddingBottom: '40%',
   },
   versionNumber: {
     ...Typography.baseFontStyles,
@@ -40,7 +40,7 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const {  settings, setupBackup, navigate } = props
+  const { settings, setupBackup, navigate } = props
   const version = VersionNumber.appVersion
   // const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
@@ -97,6 +97,18 @@ export const SettingsContainer: React.FC<Props> = props => {
             isDisabled
           />
           */}
+        </SettingSection>
+        <SettingSection title={I18n.t(strings.ABOUT)}>
+          <SettingItem
+            title={I18n.t(strings.PRIVACY_POLICY)}
+            iconName={'shield-lock'}
+            onPress={() => Linking.openURL('http://www.jolocom.com')}
+          />
+          <SettingItem
+            title={I18n.t(strings.TERMS_OF_SERVICE)}
+            iconName={'file-document'}
+            onPress={() => Linking.openURL('http://www.jolocom.com')}
+          />
         </SettingSection>
         <Text style={styles.versionNumber}>
           Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}
