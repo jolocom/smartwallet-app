@@ -58,13 +58,16 @@ export const useLoader = () => {
       }
     } catch (err) {
       console.warn(err)
-      if (showFailed)
+      if (showFailed) {
         dispatch(
           setLoader({
             type: LoaderTypes.error,
             msg: failed,
           }),
         )
+      } else {
+        dispatch(dismissLoader())
+      }
       result = false
     }
 
