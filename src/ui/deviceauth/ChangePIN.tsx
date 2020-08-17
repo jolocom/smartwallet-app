@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import Keychain from 'react-native-keychain'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 
+import I18n from 'src/locales/i18n'
+
 import PasscodeInput from './PasscodeInput'
 import PasscodeHeader from './PasscodeHeader'
 import ScreenContainer from './components/ScreenContainer'
@@ -66,10 +68,10 @@ const ChangePin: React.FC<PropsI> = ({
       </View>
       <PasscodeHeader>
         {hasError
-          ? strings.WRONG_PIN
+          ? I18n.t(strings.WRONG_PIN)
           : isCreateNew
-          ? strings.CREATE_NEW_PASSCODE
-          : strings.CURRENT_PASSCODE}
+          ? I18n.t(strings.CREATE_NEW_PASSCODE)
+          : I18n.t(strings.CURRENT_PASSCODE)}
       </PasscodeHeader>
       {isLoadingStorage ? (
         <ActivityIndicator />

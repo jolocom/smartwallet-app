@@ -2,6 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import Keychain from 'react-native-keychain'
 
+import I18n from 'src/locales/i18n'
+
 import Header from './components/Header'
 import Paragraph, { ParagraphSizes } from './components/Paragraph'
 import AbsoluteBottom from './components/AbsoluteBottom'
@@ -84,7 +86,9 @@ const RegisterPIN: React.FC<PropsI> = ({
         >
           <View>
             <Header color={Colors.white90}>
-              {isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
+              {isCreating
+                ? I18n.t(strings.CREATE_PASSCODE)
+                : I18n.t(strings.VERIFY_PASSCODE)}
             </Header>
             <Paragraph
               color={Colors.white70}
@@ -92,8 +96,8 @@ const RegisterPIN: React.FC<PropsI> = ({
               customStyles={{ marginHorizontal: 5, opacity: 0.8 }}
             >
               {isCreating
-                ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
-                : strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN}
+                ? I18n.t(strings.IN_ORDER_TO_PROTECT_YOUR_DATA)
+                : I18n.t(strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN)}
             </Paragraph>
           </View>
           <View style={styles.passcodeContainer}>
@@ -119,18 +123,18 @@ const RegisterPIN: React.FC<PropsI> = ({
               color={Colors.success}
               customStyles={{ marginTop: 20 }}
             >
-              {strings.ANY_FUTURE_PASSCODE_RESTORE}
+              {I18n.t(strings.ANY_FUTURE_PASSCODE_RESTORE)}
             </Paragraph>
           )}
           {hasError && (
             <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
-              {strings.PINS_DONT_MATCH}
+              {I18n.t(strings.PINS_DONT_MATCH)}
             </Paragraph>
           )}
           {!isCreating && (
             <AbsoluteBottom customStyles={styles.btn}>
               <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-                {strings.RESET}
+                {I18n.t(strings.RESET)}
               </Btn>
             </AbsoluteBottom>
           )}

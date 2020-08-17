@@ -7,6 +7,8 @@ import {
   AppStateStatus,
 } from 'react-native'
 
+import I18n from 'src/locales/i18n'
+
 import PasscodeInput from './PasscodeInput'
 import ScreenContainer from './components/ScreenContainer'
 import Header from './components/Header'
@@ -52,7 +54,7 @@ const Lock: React.FC<LockI> = ({ unlockApplication }) => {
         ) : (
           <>
             <Header customStyles={{ paddingTop: 100 }}>
-              {strings.ENTER_YOUR_PIN}
+              {I18n.t(strings.ENTER_YOUR_PIN)}
             </Header>
             <View style={styles.inputContainer}>
               <PasscodeInput
