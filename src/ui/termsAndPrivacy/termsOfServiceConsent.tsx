@@ -53,7 +53,7 @@ const ConsentTextButton: React.FC<{ text: string; onPress: () => void }> = ({
   )
 }
 
-const TermsOfServiceContainer: React.FC<Props> = ({
+const TermsOfServiceConsentContainer: React.FC<Props> = ({
   storeTermsConsent,
   navigation,
 }) => {
@@ -253,4 +253,4 @@ const styles = StyleSheet.create({
 export const TermsOfServiceConsent = connect(
   null,
   mapDispatchToProps,
-)(TermsOfServiceContainer)
+)(TermsOfServiceConsentContainer)

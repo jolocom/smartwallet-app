@@ -7,7 +7,7 @@ import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import settingKeys from '../../ui/settings/settingKeys'
 import { AsyncStorage } from 'react-native'
 import crypto from 'crypto'
-import { termsOfServiceDE } from 'src/ui/termsofservice/legalTexts'
+import { termsOfServiceDE } from 'src/ui/termsAndPrivacy/legalTexts'
 
 export const showErrorScreen = (
   error: AppError | Error,

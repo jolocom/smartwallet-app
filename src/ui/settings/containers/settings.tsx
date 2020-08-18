@@ -102,12 +102,12 @@ export const SettingsContainer: React.FC<Props> = props => {
           <SettingItem
             title={I18n.t(strings.PRIVACY_POLICY)}
             iconName={'shield-lock'}
-            onPress={() => Linking.openURL('http://www.jolocom.com')}
+            onPress={() => navigate(routeList.PrivacyPolicy)}
           />
           <SettingItem
             title={I18n.t(strings.TERMS_OF_SERVICE)}
             iconName={'file-document'}
-            onPress={() => Linking.openURL('http://www.jolocom.com')}
+            onPress={() => navigate(routeList.TermsOfService)}
           />
         </SettingSection>
         <Text style={styles.versionNumber}>

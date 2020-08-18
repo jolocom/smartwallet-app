@@ -43,6 +43,13 @@ export const navigate = (
   return dispatch(action)
 }
 
+export const navigateBack = (): ThunkAction => dispatch => {
+  const action = NavigationActions.back()
+
+  dispatchNavigationAction(action)
+  return dispatch(action)
+}
+
 export const navigatorReset = (
   newScreen?: NavigationNavigateActionPayload,
 ): ThunkAction => dispatch => {
