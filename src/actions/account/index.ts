@@ -55,6 +55,14 @@ export const unlockApp = () => ({
   type: 'UNLOCK_APP',
 })
 
+export const closeLock = () => ({
+  type: 'CLOSE_LOCK',
+})
+
+export const openLock = () => ({
+  type: 'OPEN_LOCK',
+})
+
 export const resetSelected = () => ({
   type: 'RESET_SELECTED',
 })

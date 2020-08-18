@@ -153,7 +153,7 @@
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
 		};
-		29D49C0424E41EC100497FCE /* PBXContainerItemProxy */ = {
+		2903821724EBD49100259FA2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C0BA610976C447EF929EEA6C /* Interactable.xcodeproj */;
 			proxyType = 2;
@@ -871,10 +871,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29D49C0124E41EC100497FCE /* Products */ = {
+		2903821024EBD48400259FA2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				29D49C0524E41EC100497FCE /* libInteractable.a */,
+				2903821824EBD49100259FA2 /* libInteractable.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1335,7 +1335,7 @@
 					ProjectRef = 45C861A88687400F82F2FC82 /* BVLinearGradient.xcodeproj */;
 				},
 				{
-					ProductGroup = 29D49C0124E41EC100497FCE /* Products */;
+					ProductGroup = 2903821024EBD48400259FA2 /* Products */;
 					ProjectRef = C0BA610976C447EF929EEA6C /* Interactable.xcodeproj */;
 				},
 				{
@@ -1518,11 +1518,11 @@
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		29D49C0524E41EC100497FCE /* libInteractable.a */ = {
+		2903821824EBD49100259FA2 /* libInteractable.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libInteractable.a;
-			remoteRef = 29D49C0424E41EC100497FCE /* PBXContainerItemProxy */;
+			remoteRef = 2903821724EBD49100259FA2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */ = {

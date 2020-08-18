@@ -179,6 +179,14 @@ const deviceAuth = {
   PINS_DONT_MATCH: "PINs don't match",
   ANY_FUTURE_PASSCODE_RESTORE:
     'Any future passcode restore is possible only with your secret phrase',
+  HOW_TO_CHANGE_PIN: 'How to change your PIN',
+  WE_ARE_SORRY_THAT_YOU_FORGOT:
+    'We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!',
+  RESTORE_ACCESS: 'Restore access',
+  STORING_NO_AFFECT_DATA:
+    'Setting a new passcode will not affect your stored data',
+  YOU_CAN_CHANGE_PIN:
+    'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
 }
 
 export default {

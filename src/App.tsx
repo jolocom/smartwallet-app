@@ -16,6 +16,7 @@ import { setActiveNotificationFilter } from './actions/notifications'
 import { black } from './styles/colors'
 import Lock from './ui/deviceauth/Lock'
 import RegisterPIN from './ui/deviceauth/RegisterPIN'
+import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
 
 useScreens()
 
@@ -109,6 +110,7 @@ export default class App extends React.PureComponent<
             <AppLoadingAndNotifications />
             <Lock />
             <RegisterPIN />
+            <HowToChangePIN />
           </View>
         </Provider>
       </React.Fragment>

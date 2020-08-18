@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Platform,
   AppStateStatus,
+  Keyboard,
 } from 'react-native'
 
 import I18n from 'src/locales/i18n'
@@ -12,6 +13,7 @@ import I18n from 'src/locales/i18n'
 import PasscodeInput from './PasscodeInput'
 import ScreenContainer from './components/ScreenContainer'
 import Header from './components/Header'
+import Btn, { BtnTypes } from './components/Btn'
 import LocalModal from './LocalModal'
 import useGetStoredAuthValues from './hooks/useGetStoredAuthValues'
 
@@ -20,13 +22,20 @@ import { connect } from 'react-redux'
 import { RootState } from 'src/reducers'
 import { useAppState } from './hooks/useAppState'
 import { ThunkDispatch } from 'src/store'
-import { setPopup, lockApp, unlockApp } from 'src/actions/account'
+import { setPopup, lockApp, unlockApp, closeLock } from 'src/actions/account'
+import AbsoluteBottom from './components/AbsoluteBottom'
+import { navigationActions } from 'src/actions'
+import { routeList } from 'src/routeList'
 
 interface LockI {
   unlockApplication: () => void
+  navigateTorecoveryInstuction: () => void
 }
 
-const Lock: React.FC<LockI> = ({ unlockApplication }) => {
+const Lock: React.FC<LockI> = ({
+  unlockApplication,
+  navigateTorecoveryInstuction,
+}) => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
 
@@ -37,6 +46,12 @@ const Lock: React.FC<LockI> = ({ unlockApplication }) => {
       setHasError(false)
     }
   }, [pin])
+
+  useEffect(() => {
+    setTimeout(() => {
+      Keyboard.dismiss()
+    }, 3000)
+  }, [])
 
   const handleAppUnlock = () => {
     if (keychainPin === pin) {
@@ -65,6 +80,14 @@ const Lock: React.FC<LockI> = ({ unlockApplication }) => {
                 errorStateUpdaterFn={setHasError}
               />
             </View>
+            <AbsoluteBottom>
+              <Btn
+                type={BtnTypes.secondary}
+                onPress={navigateTorecoveryInstuction}
+              >
+                {strings.FORGOT_YOUR_PIN}
+              </Btn>
+            </AbsoluteBottom>
           </>
         )}
       </ScreenContainer>
@@ -85,12 +108,19 @@ const mapStateToProps = (state: RootState) => ({
   isLocalAuthSet: state.account.appState.isLocalAuthSet,
   isPopup: state.account.appState.isPopup,
   isAppLocked: state.account.appState.isAppLocked,
+  isLockVisible: state.account.appState.isLockVisible,
   did: state.account.did.did,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setPopupState: (value: boolean) => dispatch(setPopup(value)),
   lockApplication: () => dispatch(lockApp()),
   unlockApplication: () => dispatch(unlockApp()),
+  navigateTorecoveryInstuction: () => {
+    dispatch(closeLock())
+    dispatch(
+      navigationActions.navigate({ routeName: routeList.HowToChangePIN }),
+    )
+  },
 })
 
 export default connect(
@@ -102,9 +132,11 @@ export default connect(
     isLocalAuthSet,
     isAppLocked,
     isPopup,
+    isLockVisible,
     lockApplication,
     setPopupState,
     unlockApplication,
+    navigateTorecoveryInstuction,
   }) => {
     const isPopupRef = useRef<boolean>(isPopup)
 
@@ -127,8 +159,13 @@ export default connect(
 
       appState = nextAppState
     })
-    if (did && isLocalAuthSet && isAppLocked) {
-      return <Lock unlockApplication={unlockApplication} />
+    if (did && isLocalAuthSet && isAppLocked && isLockVisible) {
+      return (
+        <Lock
+          unlockApplication={unlockApplication}
+          navigateTorecoveryInstuction={navigateTorecoveryInstuction}
+        />
+      )
     }
     return null
   },
