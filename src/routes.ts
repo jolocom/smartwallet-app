@@ -40,9 +40,9 @@ import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
 import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
-
 import { NotificationFilter } from './lib/notifications'
 import { CredentialReceiveNegotiate } from './ui/sso/containers/credentialReceiveNegotiate'
+import { EstablishChannelConsent } from './ui/establishChannel'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -211,6 +211,13 @@ const MainStack = createStackNavigator(
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
+      }),
+    },
+    [routeList.EstablishChannelConsent]: {
+      screen: EstablishChannelConsent,
+      navigationOptions: () => ({
+        ...navOptScreenWCancel,
+        headerTitle: I18n.t(strings.ESTABLISH_CHANNEL_REQUEST),
       }),
     },
     [routeList.ClaimDetails]: {
