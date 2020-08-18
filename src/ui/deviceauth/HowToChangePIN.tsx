@@ -89,7 +89,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   handleAccessRestore: () => {
     dispatch(accountActions.closePINinstructions())
     dispatch(
-      navigationActions.navigate({ routeName: routeList.InputSeedPhrase }),
+      navigationActions.navigate({
+        routeName: routeList.InputSeedPhrase,
+        params: { isPINrestoration: true },
+      }),
     )
   },
 })

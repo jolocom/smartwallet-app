@@ -5,28 +5,44 @@ import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { removeNotification } from './notifications'
 
+const getStoredSeedPhrase = async (backendMiddleware: any) => {
+  return ''
+}
+
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
-       // FIXME TODO update after ready in native-core
+  try {
+    const mnemonic = await getStoredSeedPhrase(backendMiddleware)
+    return dispatch(
+      navigationActions.navigate({
+        routeName: routeList.SeedPhrase,
+        params: { mnemonic },
+      }),
+    )
+  } catch (e) {
+    console.error({ e })
+  }
+}
 
-       //  const encryptedSeed = await backendMiddleware.storageLib.get.encryptedSeed()
-       //  if (!encryptedSeed) {
-       //    throw new Error('Can not retrieve Seed from database')
-       //  }
-       //  // TODO create vault from encrypted Seed
-       //  const pass = await backendMiddleware.keyChainLib.getPassword()
-       //  const vault = new SoftwareKeyProvider(Buffer.from(encryptedSeed, 'hex'))
-       //  const mnemonic = vault.getMnemonic(pass)
-       return dispatch(
-         navigationActions.navigate({
-           routeName: routeList.SeedPhrase,
-           params: { mnemonic: ':(' },
-         }),
-       )
-     }
+export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
+  dispatch,
+  getState,
+  backendMiddleware,
+) => {
+  const storedMnemonic = await getStoredSeedPhrase(backendMiddleware)
+  if (storedMnemonic === mnemonicInput.join(' ')) {
+    return dispatch(
+      navigationActions.navigate({
+        routeName: routeList.ChangePIN,
+        params: { isResettingPIN: true },
+      }),
+    )
+  }
+  return dispatch(navigationActions.navigate({ routeName: routeList.Landing }))
+}
 
 export const setSeedPhraseSaved = (): ThunkAction => async (
   dispatch,

@@ -127,6 +127,17 @@ export const checkLocalDeviceAuthSet: ThunkAction = async dispatch => {
   }
 }
 
+export const handleRecoveryBack: ThunkAction = async (dispatch, getState) => {
+  console.log(getState())
+  const state = getState()
+  if (state.account.did.did) {
+    dispatch(accountActions.openPINinstructions())
+    dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+  } else {
+    dispatch(navigationActions.navigate({ routeName: routeList.Landing }))
+  }
+}
+
 export const openClaimDetails = (
   claim: DecoratedClaims,
 ): ThunkAction => dispatch => {
