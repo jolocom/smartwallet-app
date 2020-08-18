@@ -62,10 +62,11 @@ const hashString = (text: string) => {
     .digest('hex')
 }
 
+const TERMS_OF_CONDITIONS_KEY = 'TERMS_OF_CONDITIONS'
 export const checkTermsOfService = (
   route: routeList,
 ): ThunkAction => async dispatch => {
-  const storageHash = await AsyncStorage.getItem('termsOfConditions')
+  const storageHash = await AsyncStorage.getItem(TERMS_OF_CONDITIONS_KEY)
   const currentHash = hashString(termsOfServiceDE)
   const shouldShowTerms = storageHash !== currentHash
 
@@ -81,7 +82,7 @@ export const storeTermsOfService = (
   route: routeList,
 ): ThunkAction => async dispatch => {
   const termsHash = hashString(termsOfServiceDE)
-  await AsyncStorage.setItem('termsOfConditions', termsHash)
+  await AsyncStorage.setItem(TERMS_OF_CONDITIONS_KEY, termsHash)
 
   dispatch(navigationActions.navigate({ routeName: route }))
 }
