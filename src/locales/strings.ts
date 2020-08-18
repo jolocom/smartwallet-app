@@ -217,6 +217,7 @@ export default {
   SHARE_CLAIMS: 'Share claims',
   CONFIRM_PAYMENT: 'Confirm payment',
   AUTHORIZATION_REQUEST: 'Authorization request',
+  ESTABLISH_CHANNEL_REQUEST: 'Establish Channel request',
   WOULD_YOU_LIKE_TO: 'Would you like to',
   WITH_YOUR_SMARTWALLET: 'with your SmartWallet?',
   AUTHORIZE: 'Authorize',
