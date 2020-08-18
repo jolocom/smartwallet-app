@@ -63,6 +63,14 @@ export const openLock = () => ({
   type: 'OPEN_LOCK',
 })
 
+export const closePINinstructions = () => ({
+  type: 'CLOSE_PIN_INSTRICTIONS',
+})
+
+export const openPINinstructions = () => ({
+  type: 'OPEN_PIN_INSTRICTIONS',
+})
+
 export const resetSelected = () => ({
   type: 'RESET_SELECTED',
 })

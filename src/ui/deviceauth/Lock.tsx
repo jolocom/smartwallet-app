@@ -22,10 +22,8 @@ import { connect } from 'react-redux'
 import { RootState } from 'src/reducers'
 import { useAppState } from './hooks/useAppState'
 import { ThunkDispatch } from 'src/store'
-import { setPopup, lockApp, unlockApp, closeLock } from 'src/actions/account'
 import AbsoluteBottom from './components/AbsoluteBottom'
-import { navigationActions } from 'src/actions'
-import { routeList } from 'src/routeList'
+import { accountActions } from 'src/actions'
 
 interface LockI {
   unlockApplication: () => void
@@ -110,16 +108,15 @@ const mapStateToProps = (state: RootState) => ({
   isAppLocked: state.account.appState.isAppLocked,
   isLockVisible: state.account.appState.isLockVisible,
   did: state.account.did.did,
+  isPINInstructionVisible: state.account.appState.isPINInstructionVisible,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  setPopupState: (value: boolean) => dispatch(setPopup(value)),
-  lockApplication: () => dispatch(lockApp()),
-  unlockApplication: () => dispatch(unlockApp()),
+  setPopupState: (value: boolean) => dispatch(accountActions.setPopup(value)),
+  lockApplication: () => dispatch(accountActions.lockApp()),
+  unlockApplication: () => dispatch(accountActions.unlockApp()),
   navigateTorecoveryInstuction: () => {
-    dispatch(closeLock())
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.HowToChangePIN }),
-    )
+    dispatch(accountActions.closeLock())
+    dispatch(accountActions.openPINinstructions())
   },
 })
 
@@ -133,6 +130,7 @@ export default connect(
     isAppLocked,
     isPopup,
     isLockVisible,
+    isPINInstructionVisible,
     lockApplication,
     setPopupState,
     unlockApplication,
@@ -159,7 +157,13 @@ export default connect(
 
       appState = nextAppState
     })
-    if (did && isLocalAuthSet && isAppLocked && isLockVisible) {
+    if (
+      did &&
+      isLocalAuthSet &&
+      isAppLocked &&
+      isLockVisible &&
+      !isPINInstructionVisible
+    ) {
       return (
         <Lock
           unlockApplication={unlockApplication}
