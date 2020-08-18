@@ -14,6 +14,10 @@ export {
   sendCredentialResponse,
 } from './credentialRequest'
 export { consumePaymentRequest, sendPaymentResponse } from './paymentRequest'
+export {
+  startChannel,
+  consumeEstablishChannelRequest,
+} from './establishChannel'
 
 export const cancelSSO: ThunkAction = dispatch => {
   return dispatch(navigationActions.navigatorResetHome())

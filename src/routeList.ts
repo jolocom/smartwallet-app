@@ -25,6 +25,7 @@ export enum routeList {
   CredentialReceive = 'CredentialReceive',
   CredentialReceiveNegotiate = 'CredentialReceiveNegotiate',
   Consent = 'Consent',
+  EstablishChannelConsent = 'EstablishChannelConsent',
   PaymentConsent = 'PaymentConsent',
   AuthenticationConsent = 'AuthenticationConsent',
   ClaimDetails = 'ClaimDetails',
