@@ -7,6 +7,7 @@ const initialState: AppState = {
   isPopup: false,
   isAppLocked: true,
   isLockVisible: true,
+  isPINInstructionVisible: false,
 }
 
 export const appState = (state = initialState, action: AnyAction): AppState => {
@@ -52,6 +53,16 @@ export const appState = (state = initialState, action: AnyAction): AppState => {
       return {
         ...state,
         isLockVisible: true,
+      }
+    case 'OPEN_PIN_INSTRICTIONS':
+      return {
+        ...state,
+        isPINInstructionVisible: true,
+      }
+    case 'CLOSE_PIN_INSTRICTIONS':
+      return {
+        ...state,
+        isPINInstructionVisible: false,
       }
     default:
       return state

@@ -51,6 +51,7 @@ export interface AppState {
   isPopup: boolean
   isAppLocked: boolean
   isLockVisible: boolean
+  isPINInstructionVisible: boolean
 }
 
 export type LoadingState = boolean

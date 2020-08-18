@@ -12,18 +12,20 @@ import { ThunkDispatch } from 'src/store'
 import { Colors } from './colors'
 import LocalModal from './LocalModal'
 import { RootState } from 'src/reducers'
-import { openLock } from 'src/actions/account'
 import BP from './utils/breakpoints'
-import { navigationActions } from 'src/actions'
+import { accountActions, navigationActions } from 'src/actions'
+import { routeList } from 'src/routeList'
 
 const recoveryInstruction = require('src/resources/img/recoveryInstructions.png')
 
 interface PropsI {
   handleGoBack: () => void
+  handleAccessRestore: () => void
 }
-const HowToChangePIN: React.FC<PropsI> = ({ handleGoBack }) => {
-  const handleRedirectToRecovery = () => {}
-
+const HowToChangePIN: React.FC<PropsI> = ({
+  handleGoBack,
+  handleAccessRestore,
+}) => {
   return (
     <LocalModal isVisible>
       <ScreenContainer
@@ -51,7 +53,7 @@ const HowToChangePIN: React.FC<PropsI> = ({ handleGoBack }) => {
         </Paragraph>
         <Image source={recoveryInstruction} />
         <AbsoluteBottom customStyles={{ alignSelf: 'center' }}>
-          <Btn onPress={handleRedirectToRecovery}>{strings.RESTORE_ACCESS}</Btn>
+          <Btn onPress={handleAccessRestore}>{strings.RESTORE_ACCESS}</Btn>
           <Paragraph
             color={Colors.white70}
             customStyles={{
@@ -76,18 +78,33 @@ const HowToChangePIN: React.FC<PropsI> = ({ handleGoBack }) => {
 
 const mapStateToProps = (state: RootState) => ({
   isLockVisible: state.account.appState.isLockVisible,
+  isPINInstructionVisible: state.account.appState.isPINInstructionVisible,
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  handleGoBack: () => dispatch(openLock()),
+  handleGoBack: () => {
+    dispatch(accountActions.closePINinstructions())
+    dispatch(accountActions.openLock())
+  },
+  handleAccessRestore: () => {
+    dispatch(accountActions.closePINinstructions())
+    dispatch(
+      navigationActions.navigate({ routeName: routeList.InputSeedPhrase }),
+    )
+  },
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(({ isLockVisible, handleGoBack }) => {
-  if (!isLockVisible) {
-    return <HowToChangePIN handleGoBack={handleGoBack} />
+)(({ isPINInstructionVisible, handleGoBack, handleAccessRestore }) => {
+  if (isPINInstructionVisible) {
+    return (
+      <HowToChangePIN
+        handleGoBack={handleGoBack}
+        handleAccessRestore={handleAccessRestore}
+      />
+    )
   }
   return null
 })
