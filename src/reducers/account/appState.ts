@@ -6,6 +6,7 @@ const initialState: AppState = {
   isLocalAuthVisible: false,
   isPopup: false,
   isAppLocked: true,
+  isLockVisible: true,
 }
 
 export const appState = (state = initialState, action: AnyAction): AppState => {
@@ -34,11 +35,23 @@ export const appState = (state = initialState, action: AnyAction): AppState => {
       return {
         ...state,
         isAppLocked: true,
+        isLockVisible: true,
       }
     case 'UNLOCK_APP':
       return {
         ...state,
         isAppLocked: false,
+        isLockVisible: false,
+      }
+    case 'CLOSE_LOCK':
+      return {
+        ...state,
+        isLockVisible: false,
+      }
+    case 'OPEN_LOCK':
+      return {
+        ...state,
+        isLockVisible: true,
       }
     default:
       return state

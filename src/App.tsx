@@ -15,6 +15,7 @@ import { setActiveNotificationFilter } from './actions/notifications'
 
 import Lock from './ui/deviceauth/Lock'
 import RegisterPIN from './ui/deviceauth/RegisterPIN'
+import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
 
 import { LoadingSpinner } from './ui/generic'
 
@@ -137,6 +138,7 @@ export default class App extends React.PureComponent<
               />
               <Lock />
               <RegisterPIN />
+              <HowToChangePIN />
             </AppWrap>
           </Provider>
         )}
