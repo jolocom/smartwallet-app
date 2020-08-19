@@ -125,6 +125,8 @@ const interactions = {
   IGNORE: 'Ignore',
   CHOOSE_ONE_OR_MORE_DOCUMENTS:
     'Choose one or more documents provided by this service and we will generate them for you',
+  DOCUMENTS: 'Documents',
+  OTHER: 'Other',
   //FIXME: when we add i18t for translations, we can interpolate values with %{VALUE}
   YOU_WILL_IMMIDIATELY_FIND_YOUR_DOC_IN_THE_PERSONAL_INFO_SECTION: (
     attributeType: string,

@@ -20,7 +20,7 @@ const reducer = (
 ) => {
   switch (action.type) {
     case InteractionActions.setInteractionDetails:
-      return { ...state, details: action.payload }
+      return { ...state, details: { ...state.details, ...action.payload } }
     case InteractionActions.resetInteraction:
       return initialState
     case InteractionActions.setInteractionAttributes:

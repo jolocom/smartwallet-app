@@ -1,4 +1,4 @@
-import { AttrKeys } from '~/types/attributes'
+import { AttrKeys } from '~/types/credentials'
 
 export interface AttributesState {
   all: AttrsState<AttributeI>

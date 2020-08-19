@@ -19,10 +19,12 @@ import {
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
+import { useHandleFlowSubmit } from '~/hooks/interactions/useHandleFlowSubmit'
 
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionCta from './hooks/useInteractionCta'
+import { useLoader } from '~/hooks/useLoader'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -41,6 +43,8 @@ const InteractionFooter: React.FC = () => {
   const serviceIssuedCreds = useSelector(getServiceIssuedCreds)
   const attributesToShare = useSelector(getAttributesToShare)
   const interactionCTA = useInteractionCta()
+  const handleFlowSubmit = useHandleFlowSubmit()
+  const loader = useLoader()
 
   // NOTE: for now this will alway return false because we don't set attributesToShare yet
   const showIntermediaryScreen =
@@ -48,12 +52,17 @@ const InteractionFooter: React.FC = () => {
     attributesToShare[Object.keys(attributesToShare)[0]] === [] &&
     serviceIssuedCreds.length === 0
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (showIntermediaryScreen) {
       dispatch(setIntermediaryState(IntermediaryState.showing))
       dispatch(setAttributeInputKey('email'))
     } else {
-      // TODO: add logic for different interaction types
+      await loader(
+        async () => {
+          await handleFlowSubmit()
+        },
+        { showFailed: false, showSuccess: false },
+      )
     }
   }
 
@@ -95,6 +104,15 @@ const styles = StyleSheet.create({
     height: 106,
     backgroundColor: Colors.black,
     justifyContent: 'center',
+    borderRadius: 22,
+    shadowColor: Colors.black30,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowRadius: 7,
+    shadowOpacity: 1,
+    elevation: 10,
   },
   btnContainer: {
     alignItems: 'center',

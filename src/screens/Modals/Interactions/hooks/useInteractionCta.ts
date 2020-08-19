@@ -19,7 +19,7 @@ export default function useInteractionCta() {
       return strings.AUTHENTICATE
     case FlowType.CredentialShare:
       return strings.SHARE
-    case FlowType.CredentialReceive:
+    case FlowType.CredentialOffer:
       return strings.RECEIVE
     case FlowType.Authorization:
       const ctaWord = action ? truncateFirstWord(action) : strings.AUTHORIZE

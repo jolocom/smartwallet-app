@@ -6,7 +6,7 @@ import {
   setInteractionAttributes,
   setAttributesToShare,
 } from '~/modules/interaction/actions'
-import { AttrKeys, ATTR_TYPES } from '~/types/attributes'
+import { AttrKeys, ATTR_TYPES } from '~/types/credentials'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useSDK } from './sdk'
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
@@ -25,18 +25,22 @@ export const useGetAllAttributes = () => {
     try {
       const verifiableCredentials = await sdk.storageLib.get.verifiableCredential()
 
-      const attributes = verifiableCredentials.reduce((acc, v) => {
-        if (Object.values(credentialSchemas).indexOf(v.type[1]) > -1) {
-          const attrType = v.type[1] as keyof typeof ATTR_TYPES
-          const attrKey: AttrKeys = ATTR_TYPES[attrType]
-          const entry = makeAttrEntry(attrKey, acc[attrKey], v as CredentialI)
+      const attributes = verifiableCredentials.reduce<AttrsState<AttributeI>>(
+        (acc, v) => {
+          if (Object.values(credentialSchemas).indexOf(v.type[1]) > -1) {
+            const attrType = v.type[1] as keyof typeof ATTR_TYPES
+            const attrKey: AttrKeys = ATTR_TYPES[attrType]
+            const entry = makeAttrEntry(attrKey, acc[attrKey], v as CredentialI)
 
-          acc[attrKey] = entry
-        }
-        return acc
-      }, {} as AttrsState<AttributeI>)
+            acc[attrKey] = entry
+          }
+          return acc
+        },
+        {},
+      )
 
       dispatch(setAttrs(attributes))
+      // dispatch(setCredentials(credentials));
     } catch (err) {
       console.warn('Failed getting verifiable credentials', err)
     }

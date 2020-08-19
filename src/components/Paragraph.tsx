@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
     }),
   },
   micro: {
-    ...getStyle(14, 22, 0),
+    ...getStyle(14, 14, 0),
   },
   small: {
-    ...getStyle(16, 22, 0),
+    ...getStyle(16, 16, 0),
   },
   medium: {
     ...getStyle(20, 22, 0.14),

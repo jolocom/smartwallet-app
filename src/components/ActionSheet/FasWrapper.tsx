@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
@@ -13,15 +14,15 @@ const FasWrapper: React.FC = ({ children }) => {
     <>
       <CollapsedScrollView
         collapsedTitle={interactionTitle}
-        collapseStart={40}
+        collapseStart={20}
         renderCollapsingComponent={() => (
-          <IconWrapper customStyle={{ marginVertical: 12 }}>
+          <IconWrapper customStyle={{ marginBottom: 12, marginTop: 30 }}>
             <InteractionIcon />
           </IconWrapper>
         )}
       >
         <InteractionHeader />
-        {children}
+        <View style={{ paddingTop: 32 }}>{children}</View>
       </CollapsedScrollView>
       <InteractionFooter />
     </>

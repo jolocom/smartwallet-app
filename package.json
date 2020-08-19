@@ -19,7 +19,7 @@
     "devtools": "react-devtools"
   },
   "dependencies": {
-    "@jolocom/sdk": "^0.12.0",
+    "@jolocom/sdk": "^0.14.1",
     "@jolocom/sdk-password-store-mobile-keychain": "^0.1.1",
     "@jolocom/sdk-storage-typeorm": "^1.1.0",
     "@react-native-community/async-storage": "^1.11.0",

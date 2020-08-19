@@ -912,10 +912,10 @@
   dependencies:
     class-transformer "^0.2.3"
 
-"@jolocom/sdk@^0.12.0":
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.12.0.tgz#631ecdf3bac02d8b372856c0a3009fdc8b48a37e"
-  integrity sha512-8DFJDDhVnVipQ+w8eFNpKfA3Lg4p/tno73SSJbp3IfjC/VVIG3mIJZQbxehUJYSOsvJM2syqOUohOZSMD0n/Aw==
+"@jolocom/sdk@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.14.1.tgz#8f34cc21c2087e30ab38e500ec51b3ff74d9002b"
+  integrity sha512-IbFz3TVDW43DqmEOBJB+CwUQHuIqszaQt1DhbiAQVi1kybpBSRUCZRLfiseNzoF3sPKw/hj/0f8DEpRE3c04KA==
   dependencies:
     form-data "^3.0.0"
     ramda "^0.26.1"
