@@ -1,4 +1,6 @@
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export enum AttrKeys {
   emailAddress = 'emailAddress',
@@ -30,4 +32,14 @@ export const ATTR_UI_NAMES: { [x: string]: string } = {
   ProofOfEmailCredential: 'email',
   ProofOfMobilePhoneNumberCredential: 'phone number',
   ProofOfNameCredential: 'name',
+}
+
+interface UICredentialMetadata
+  extends Pick<SignedCredential, 'name' | 'expires' | 'issued'> {
+  renderInfo: CredentialOfferRenderInfo | undefined
+}
+
+export interface UICredential extends Pick<SignedCredential, 'id' | 'claim'> {
+  metadata: UICredentialMetadata
+  issuer: IdentitySummary
 }
