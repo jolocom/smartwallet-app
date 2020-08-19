@@ -43,3 +43,8 @@ export interface UICredential extends Pick<SignedCredential, 'id' | 'claim'> {
   metadata: UICredentialMetadata
   issuer: IdentitySummary
 }
+
+export interface CredentialsBySection {
+  documents: UICredential[]
+  other: UICredential[]
+}
