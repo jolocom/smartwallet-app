@@ -42,9 +42,7 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
 
   const handlePinVerification = async () => {
     if (pin === keychainPin) {
-      setTimeout(() => {
-        setIsCreateNew(true)
-      }, 1000)
+      setIsCreateNew(true)
     } else {
       setHasError(true)
     }
