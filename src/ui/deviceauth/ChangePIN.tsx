@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Keychain from 'react-native-keychain'
+import * as Keychain from 'react-native-keychain'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 
 import I18n from 'src/locales/i18n'
@@ -54,7 +54,6 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
     await resetServiceValuesInKeychain()
     await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
       service: PIN_SERVICE,
-      storage: Keychain.STORAGE_TYPE.AES,
     })
     navigation.goBack()
   }

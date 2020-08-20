@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, KeyboardAvoidingView } from 'react-native'
-import Keychain from 'react-native-keychain'
+import * as Keychain from 'react-native-keychain'
 
 import I18n from 'src/locales/i18n'
 
@@ -49,7 +49,6 @@ const RegisterPIN: React.FC<PropsI> = ({
         // setting up pin in the keychain
         await Keychain.setGenericPassword(PIN_USERNAME, passcode, {
           service: PIN_SERVICE,
-          storage: Keychain.STORAGE_TYPE.AES,
         })
       } catch (err) {
         console.log({ err })

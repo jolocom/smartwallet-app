@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import Keychain from 'react-native-keychain'
+import * as Keychain from 'react-native-keychain'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import { PIN_SERVICE } from '../utils/keychainConsts'

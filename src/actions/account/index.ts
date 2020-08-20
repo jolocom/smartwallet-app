@@ -1,4 +1,4 @@
-import Keychain from 'react-native-keychain'
+import * as Keychain from 'react-native-keychain'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 

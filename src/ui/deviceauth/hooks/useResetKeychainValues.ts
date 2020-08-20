@@ -1,4 +1,4 @@
-import Keychain from 'react-native-keychain'
+import * as Keychain from 'react-native-keychain'
 
 const useResetKeychainValues = (service: string) => {
   const resetServiceValuesInKeychain = async () => {
