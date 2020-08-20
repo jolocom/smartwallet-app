@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Keychain from 'react-native-keychain'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
+import { NavigationScreenProp } from 'react-navigation'
 
 import I18n from 'src/locales/i18n'
 
@@ -19,7 +20,7 @@ import strings from '../../locales/strings'
 
 interface PropsI {
   onSuccessRedirectToScreen?: any
-  navigation: any
+  navigation: NavigationScreenProp<{}, { isPINrestore: boolean }>
 }
 
 const ChangePin: React.FC<PropsI> = ({
@@ -62,7 +63,10 @@ const ChangePin: React.FC<PropsI> = ({
       }}
     >
       <View style={styles.header}>
-        <TouchableOpacity style={{ padding: 10 }} onPress={navigation.goBack}>
+        <TouchableOpacity
+          style={{ padding: 10 }}
+          onPress={e => navigation.goBack()}
+        >
           <CloseIcon />
         </TouchableOpacity>
       </View>

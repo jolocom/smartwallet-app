@@ -12,7 +12,7 @@ import ScreenContainer from './components/ScreenContainer'
 import PasscodeInput from './PasscodeInput'
 import strings from '../../locales/strings'
 import { PIN_USERNAME, PIN_SERVICE } from './utils/keychainConsts'
-import BP from './utils/breakpoints'
+import { BP } from 'src/styles/breakpoints'
 
 import LocalModal from './LocalModal'
 import { Colors } from './colors'

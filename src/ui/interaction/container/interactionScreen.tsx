@@ -13,7 +13,7 @@ import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken
 import { ErrorCode, AppError } from 'src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
 import { Colors } from 'src/styles'
-import { InteractionChannel } from '../../../lib/interactionManager/types'
+import { accountActions } from 'src/actions'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -88,6 +88,7 @@ const InteractionContainer = (props: Props) => {
           <ScannerContainer
             navigation={props.navigation}
             consumeToken={props.consumeToken}
+            registerPopup={props.registerPopup}
           />
         </Wrapper>
       </Animated.View>
@@ -120,6 +121,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       }
     }
   },
+  registerPopup: () => dispatch(accountActions.setPopup(true)),
 })
 
 export const InteractionScreen = connect(
