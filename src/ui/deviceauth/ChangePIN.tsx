@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Keychain from 'react-native-keychain'
+import * as Keychain from 'react-native-keychain'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 
@@ -50,7 +50,6 @@ const ChangePin: React.FC<PropsI> = ({
     resetServiceValuesInKeychain()
     await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
       service: PIN_SERVICE,
-      storage: Keychain.STORAGE_TYPE.AES,
     })
     navigation.goBack()
   }
