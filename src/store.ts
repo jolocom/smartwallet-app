@@ -9,11 +9,9 @@ import { RootState, rootReducer } from 'src/reducers'
 import {
   JolocomSDK,
   JolocomTypeormStorage,
-  JolocomKeychainPasswordStore,
 } from 'react-native-jolocom'
 import { createConnection, getConnection } from 'typeorm'
 import typeormConfig from '../ormconfig'
-import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
 
 const initConnection = async () => {
   let connection
@@ -36,11 +34,7 @@ export async function initTypeorm() {
   return new JolocomTypeormStorage(connection)
 }
 
-let sdk: JolocomSDK
-export function initStore(storage: IStorage) {
-  const passwordStore = new JolocomKeychainPasswordStore()
-  sdk = new JolocomSDK({ storage, passwordStore })
-
+export function initStore(sdk: JolocomSDK) {
   /*
    * The {} as RootState type assertion:
    * The second argument, "preloadedState" is mandatory, and typed as RootState.

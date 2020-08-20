@@ -14,8 +14,14 @@ import {
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
 import { black } from './styles/colors'
-import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
 import { LoadingSpinner } from './ui/generic'
+
+import {
+  JolocomLinking,
+  JolocomWebSockets,
+  JolocomKeychainPasswordStore,
+  JolocomSDK,
+} from 'react-native-jolocom'
 
 useScreens()
 
@@ -28,7 +34,7 @@ useScreens()
  * better architecture.
  */
 let store: ReturnType<typeof initStore>
-let typeormPromise: Promise<void | IStorage>
+let sdkPromise: Promise<JolocomSDK>
 
 export default class App extends React.PureComponent<
   {},
@@ -49,10 +55,14 @@ export default class App extends React.PureComponent<
     // instantiated because otherwise the overrides at the top of index.ts will
     // have not been excuted yet (while files are being imported) and initStore
     // triggers creation of BackendMiddleware which needs those
-    if (!typeormPromise) {
-      typeormPromise = initTypeorm().then((storage) => {
-        store = initStore(storage)
+    if (!sdkPromise) {
+      sdkPromise = initTypeorm().then(async storage => {
+        const passwordStore = new JolocomKeychainPasswordStore()
+        const sdk = new JolocomSDK({ storage, passwordStore })
+        await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        store = initStore(sdk)
         this.setState({ ready: true })
+        return sdk
       })
     }
   }
