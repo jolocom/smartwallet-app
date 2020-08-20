@@ -1046,6 +1046,13 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
+"@jolocom/protocol-ts@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/protocol-ts/-/protocol-ts-0.4.0.tgz#152c4b23b9802a78bd98fbe18847d764f51a91f0"
+  integrity sha512-meKpwdHgWgkc2sgvbFYViIJN94+HKDsSqK1Xf7TBoiHGWHoMO95AbGNwOg/bE5+FnyJAQACa0wJmSC0GOK8ECA==
+  dependencies:
+    cred-types-jolocom-core "^0.0.11"
+
 "@jolocom/sdk-storage-typeorm@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-1.2.1.tgz#0c53077150cd96b1d5aa4f147d6203c73ca4532c"
@@ -1054,10 +1061,10 @@
     class-transformer "^0.2.3"
     reflect-metadata "^0.1.13"
 
-"@jolocom/sdk@0.12.0":
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.12.0.tgz#631ecdf3bac02d8b372856c0a3009fdc8b48a37e"
-  integrity sha512-8DFJDDhVnVipQ+w8eFNpKfA3Lg4p/tno73SSJbp3IfjC/VVIG3mIJZQbxehUJYSOsvJM2syqOUohOZSMD0n/Aw==
+"@jolocom/sdk@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.17.0.tgz#b2bfa0b4caf5b9b7b246c77f7529efec7b19a807"
+  integrity sha512-D8sK2ulBl6XbWn2pGVB9+2nrGCsLprRdbFBjBPTh9rOGs4eSbc/V5Z8TnCjWZxeijlf9luPtFNg2Lg6vKZekuw==
   dependencies:
     form-data "^3.0.0"
     ramda "^0.26.1"
@@ -2597,6 +2604,11 @@ bl@^1.0.0:
   dependencies:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
+
+blakejs@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/blakejs/-/blakejs-1.1.0.tgz#69df92ef953aa88ca51a32df6ab1c54a155fc7a5"
+  integrity sha1-ad+S75U6qIylGjLfarHFShVfx6U=
 
 block-stream@*:
   version "0.0.9"
@@ -7189,17 +7201,17 @@ jest@^24.8.0:
     import-local "^2.0.0"
     jest-cli "^24.8.0"
 
-jolocom-lib@^4.3.3:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.3.3.tgz#4f4a0bbd2cde593d58ad9b67c45ccbcb4d1f89ac"
-  integrity sha512-XnzIODwAJ52QVc72AnRMcrrbUIjLqtkiJIyHeck6TzYBde5JLKYeWaDpDo2Yy5vWdRnNys60f8Zs4wLA3Rumig==
+jolocom-lib@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-4.4.1.tgz#53ecff82d970aa7bb34e744ba016e14cf52c1da8"
+  integrity sha512-cLvV9jwEs3ECDCHiWc+1EbM5wZa88wkiwK81p5s5Ap6JXgZ0hxprmhDe3C9gstYzOHaL4Zh9u6AJtsAOP6ilUw==
   dependencies:
+    "@jolocom/protocol-ts" "^0.4.0"
     base64url "^3.0.1"
     bip32 "^1.0.2"
     bip39 "^3.0.1"
     class-transformer "^0.1.10"
     create-hash "^1.2.0"
-    cred-types-jolocom-core "^0.0.11"
     detect-node "^2.0.4"
     eccrypto rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88
     ethereumjs-tx "^1.3.7"
@@ -7216,6 +7228,8 @@ jolocom-lib@^4.3.3:
     secrets.js-grempe "^1.1.0"
     sinon-chai "^3.3.0"
     tiny-secp256k1 "^1.0.1"
+    tweetnacl "^1.0.3"
+    tweetnacl-sealedbox-js "^1.2.0"
 
 jolocom-registry-contract@^0.1.7:
   version "0.1.7"
@@ -10016,10 +10030,10 @@ react-native-interactable@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-native-interactable/-/react-native-interactable-1.0.0.tgz#b6dcdff9ec61dfae9233e46e1d673ce8480a4f64"
   integrity sha512-e/GyydV3nFWVL36frdM8H+wGxy5pJu0WjlN6dgtBIRCaGz7nLbCRWFINs7SRwIaI9LPXVAqEXQTOc2d5LJN4HA==
 
-react-native-jolocom@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-1.0.1.tgz#e55c423d0eb29fe30366f55a422b1e2aaee459d0"
-  integrity sha512-2oRanhrTOe/65AGo5PN5EFVlacbGtXirju0yeJ5HagcVhhOoSfcwAJQBpzTKFJtGSShiwGHIVu4+rpkcX/IToA==
+react-native-jolocom@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-1.3.0.tgz#51e8dbbff383aaa4478bf93b83e4202a0a7790cf"
+  integrity sha512-GH3IUDbZpngWa6z/9ChLXL7U8Rqc5r4l/K0Spc5YB5upklVL3Zt8Ea344G03RjE4+hjhraAlGm5tP5f03wCD5w==
   dependencies:
     "@jolocom/sdk-storage-typeorm" "^1.2.1"
     crypto-browserify "^3.12.0"
@@ -12221,10 +12235,23 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
+tweetnacl-sealedbox-js@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tweetnacl-sealedbox-js/-/tweetnacl-sealedbox-js-1.2.0.tgz#37f0d49a24445d6f55a1b9e8870568529bcb233f"
+  integrity sha512-QoCr8K2hwri+ky7SUa22oSre8g88XaWi0hwwWd16pJMuDyn5gL/UyE0PyR2EOFEMJ70T2trJ9+Sv+Qa18olEmQ==
+  dependencies:
+    blakejs "^1.1.0"
+    tweetnacl "^1.0.1"
+
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
+
+tweetnacl@^1.0.1, tweetnacl@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
+  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@~0.3.2:
   version "0.3.2"
