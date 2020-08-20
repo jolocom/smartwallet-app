@@ -5,6 +5,7 @@ import { ThunkAction } from '../../store'
 import {
   InteractionTransportType,
   EstablishChannelRequest,
+  FlowType,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { navigatorResetHome } from 'src/actions/navigation'
 
@@ -40,7 +41,28 @@ export const startChannel = (interactionId: string): ThunkAction => async (
   const response = await interaction.createEstablishChannelResponse(0)
   await interaction.processInteractionToken(response)
   const channel = await sdk.channels.create(interaction)
-  channel.start()
+  channel.send(response.encode())
+  channel.start(async (interxn) => {
+    console.log('handing interxn', interxn.id, interxn.flow.type)
+    let resp
+    // TODO: make this configurable
+    //       for now hardcoded
+    switch (interxn.flow.type) {
+//      case FlowType.Authentication:
+//        resp = await interxn.createAuthenticationResponse()
+//        break
+      case FlowType.Encrypt:
+        resp = await interxn.createEncResponseToken()
+        break
+      case FlowType.Decrypt:
+        resp = await interxn.createDecResponseToken()
+        break
+    }
+
+    if (resp) {
+      channel.send(resp.encode())
+    }
+  })
 
   return dispatch(navigatorResetHome())
 }
