@@ -6,10 +6,8 @@ import thunk, {
 } from 'redux-thunk'
 import { RootState, rootReducer } from 'src/reducers'
 
-import {
-  JolocomSDK,
-  JolocomTypeormStorage,
-} from 'react-native-jolocom'
+import { JolocomSDK, JolocomTypeormStorage } from 'react-native-jolocom'
+
 import { createConnection, getConnection } from 'typeorm'
 import typeormConfig from '../ormconfig'
 
