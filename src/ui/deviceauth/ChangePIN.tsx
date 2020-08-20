@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Keychain from 'react-native-keychain'
+import * as Keychain from 'react-native-keychain'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 
