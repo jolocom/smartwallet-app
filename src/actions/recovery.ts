@@ -37,7 +37,7 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
     return dispatch(
       navigationActions.navigate({
         routeName: routeList.ChangePIN,
-        params: { isResettingPIN: true },
+        params: { isPINrecovery: true },
       }),
     )
   }
