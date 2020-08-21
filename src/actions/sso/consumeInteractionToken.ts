@@ -9,6 +9,7 @@ import {
   JWTEncodable,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { ErrorCodes as LibErrorCode } from 'jolocom-lib/js/errors'
+import { InteractionChannel } from 'src/lib/interactionManager/types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const callHandler = (handler: () => ThunkAction) => {
@@ -49,7 +50,7 @@ export const consumeInteractionToken = (
   return handler
     ? dispatch(
         withLoading(
-          withErrorScreen(callHandler(() => handler(interactionToken))),
+          withErrorScreen(callHandler(() => handler(interactionToken, InteractionChannel.HTTP))),
         ),
       )
     : dispatch(

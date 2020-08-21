@@ -6,7 +6,6 @@ import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '../../actions/sso/types'
 
 export interface DecoratedClaims {
@@ -36,13 +35,6 @@ export interface CategorizedClaims {
 export interface ClaimsState {
   readonly selected: DecoratedClaims
   readonly decoratedCredentials: CategorizedClaims
-  readonly pendingExternal: {
-    offeror: IdentitySummary
-    offer: Array<{
-      credential: SignedCredential
-      decoratedClaim: DecoratedClaims
-    }>
-  }
   readonly hasExternalCredentials: boolean
 }
 

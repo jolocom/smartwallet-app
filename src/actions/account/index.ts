@@ -7,7 +7,6 @@ import {
   getCredentialUiCategory,
   getUiCredentialTypeByType,
 } from 'src/lib/util'
-import { cancelReceiving } from '../sso'
 import { ThunkAction } from 'src/store'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
@@ -15,8 +14,7 @@ import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
-import { BackendError } from 'src/backendMiddleware'
-import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
+import { BackendError } from '../../lib/errors/types'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -106,28 +104,6 @@ export const saveClaim: ThunkAction = async (
   await dispatch(setClaimsForDid)
 
   return dispatch(navigationActions.navigatorResetHome())
-}
-
-// TODO Currently only rendering  / adding one
-export const saveExternalCredentials: ThunkAction = async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  const { storageLib } = backendMiddleware
-  const externalCredentials = getState().account.claims.pendingExternal
-
-  if (!externalCredentials.offer.length) {
-    return dispatch(cancelReceiving)
-  }
-
-  const cred: SignedCredential = externalCredentials.offer[0].credential
-
-  await storageLib.delete.verifiableCredential(cred.id)
-  await storageLib.store.verifiableCredential(cred)
-  await dispatch(checkRecoverySetup)
-
-  return dispatch(cancelReceiving)
 }
 
 export const toggleLoading = (value: boolean) => ({

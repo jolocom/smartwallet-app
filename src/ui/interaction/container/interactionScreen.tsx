@@ -13,6 +13,7 @@ import { consumeInteractionToken } from 'src/actions/sso/consumeInteractionToken
 import { ErrorCode, AppError } from 'src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
 import { Colors } from 'src/styles'
+import { InteractionChannel } from '../../../lib/interactionManager/types'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -99,7 +100,6 @@ const InteractionContainer = (props: Props) => {
 const localNotificationErrors = [
   // AppError: "Wrong QR"
   ErrorCode.ParseJWTFailed,
-
   // AppError: "Wrong Data"
   ErrorCode.WrongDID,
   ErrorCode.WrongNonce,

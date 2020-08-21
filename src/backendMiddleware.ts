@@ -15,21 +15,8 @@ import { publicKeyToDID } from 'jolocom-lib/js/utils/crypto'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
 import { generateSecureRandomBytes } from 'src/lib/util'
-
-export enum ErrorCodes {
-  NoEntropy = 'NoEntropy',
-  NoKeyProvider = 'NoKeyProvider',
-  NoWallet = 'NoWallet',
-  DecryptionFailed = 'DecryptionFailed',
-}
-
-export class BackendError extends Error {
-  public static codes = ErrorCodes
-
-  public constructor(code: ErrorCodes) {
-    super(code)
-  }
-}
+import { InteractionManager } from './lib/interactionManager/interactionManager'
+import { BackendError, BackendMiddlewareErrorCodes } from './lib/errors/types'
 
 export class BackendMiddleware {
   private _identityWallet!: IdentityWallet
@@ -38,6 +25,7 @@ export class BackendMiddleware {
   public storageLib: Storage
   public keyChainLib: KeyChainInterface
   public registry: JolocomRegistry
+  public interactionManager: InteractionManager
 
   public constructor(config: {
     fuelingEndpoint: string
@@ -57,6 +45,7 @@ export class BackendMiddleware {
         gateway: jolocomContractsGateway,
       },
     })
+    this.interactionManager = new InteractionManager(this)
   }
 
   public async initStorage(): Promise<void> {
@@ -65,12 +54,12 @@ export class BackendMiddleware {
 
   public get identityWallet(): IdentityWallet {
     if (this._identityWallet) return this._identityWallet
-    throw new BackendError(ErrorCodes.NoWallet)
+    throw new BackendError(BackendMiddlewareErrorCodes.NoWallet)
   }
 
   public get keyProvider(): SoftwareKeyProvider {
     if (this._keyProvider) return this._keyProvider
-    throw new BackendError(ErrorCodes.NoKeyProvider)
+    throw new BackendError(BackendMiddlewareErrorCodes.NoKeyProvider)
   }
 
   public async prepareIdentityWallet(): Promise<IdentityWallet> {
@@ -100,7 +89,7 @@ export class BackendMiddleware {
       // Note that the case of having an encryptionPass but no encryptedEntropy
       // is an uncommon edge case, but may potentially happen due to errors/bugs
       // etc
-      throw new BackendError(ErrorCodes.NoEntropy)
+      throw new BackendError(BackendMiddlewareErrorCodes.NoEntropy)
     }
 
     this._keyProvider = new JolocomLib.KeyProvider(

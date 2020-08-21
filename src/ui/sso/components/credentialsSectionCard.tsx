@@ -9,7 +9,7 @@ import { CheckboxCredential } from './checkboxCredential'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from '../../../actions/sso/types'
+} from 'src/lib/interactionManager/types'
 
 const styles = StyleSheet.create({
   card: {
@@ -42,9 +42,7 @@ interface CredentialSectionProps {
  * render the credentials wrapped in a card. The card displays an icon and title
  * for the group.
  */
-export const CredentialSectionCard: React.FC<
-  CredentialSectionProps
-> = props => {
+export const CredentialSectionCard: React.FC<CredentialSectionProps> = props => {
   const { sectionType, did, credentials, selectedCredential, onPress } = props
   return (
     <CardWrapper style={styles.card}>

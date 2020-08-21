@@ -97,6 +97,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
             "flex": 1,
             "fontSize": 22,
             "paddingVertical": 7,
+            "textAlign": "center",
           },
           Object {
             "color": "white",
@@ -104,7 +105,6 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
         ]
       }
       testID="seedWordFld"
-      textAlign="center"
       underlineColorAndroid="transparent"
       value=""
     />
@@ -376,6 +376,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
             "flex": 1,
             "fontSize": 22,
             "paddingVertical": 7,
+            "textAlign": "center",
           },
           Object {
             "color": "white",
@@ -383,7 +384,6 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
         ]
       }
       testID="seedWordFld"
-      textAlign="center"
       underlineColorAndroid="transparent"
       value="in"
     />
