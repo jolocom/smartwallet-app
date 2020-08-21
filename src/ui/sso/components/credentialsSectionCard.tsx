@@ -9,7 +9,7 @@ import { CheckboxCredential } from './checkboxCredential'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from 'src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 const styles = StyleSheet.create({
   card: {

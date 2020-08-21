@@ -8,7 +8,7 @@ import { IssuerCard } from '../../documents/components/issuerCard'
 import {
   InteractionSummary,
   AuthenticationFlowState,
-} from '../../../lib/interactionManager/types'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 interface Props {
   interactionSummary: InteractionSummary
@@ -61,7 +61,7 @@ export class AuthenticationConsentComponent extends React.Component<
   }
 
   public render() {
-    const { issuer, state } = this.props.interactionSummary
+    const { initiator: issuer, state } = this.props.interactionSummary
     const { description } = state as AuthenticationFlowState
     return (
       <View style={styles.container}>

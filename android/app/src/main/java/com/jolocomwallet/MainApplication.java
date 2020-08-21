@@ -3,15 +3,18 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.toolbarandroid.ReactToolbarPackage;
+import com.reactnativecommunity.art.ARTPackage;
+import io.sentry.RNSentryPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.reactlibrary.RNJolocomPackage;
 
 import com.levelasquez.androidopensettings.AndroidOpenSettingsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import io.sentry.RNSentryPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.horcrux.svg.SvgPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -42,14 +45,17 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactToolbarPackage(),
+            new ARTPackage(),
+            new RNSentryPackage(),
+            new RNGestureHandlerPackage(),
+            new RNJolocomPackage(),
             new AndroidOpenSettingsPackage(),
             new AsyncStoragePackage(),
-            new RNSentryPackage(),
             new VectorIconsPackage(),
             new RNLocalizePackage(),
             new ReanimatedPackage(),
             new RNScreensPackage(),
-            new RNGestureHandlerPackage(),
             new RNVersionNumberPackage(),
             new SvgPackage(),
             new SplashScreenReactPackage(),

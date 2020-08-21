@@ -7,7 +7,7 @@ import { IdentitySummary } from '../../../actions/sso/types'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from 'src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 import { Typography, Colors, Spacing } from 'src/styles'

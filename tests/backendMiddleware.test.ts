@@ -1,11 +1,11 @@
-import * as util from 'src/lib/util'
-import { BackendMiddleware } from 'src/backendMiddleware'
+import * as util from '@jolocom/sdk/js/src/lib/util'
+import { BackendMiddleware } from '@jolocom/sdk/js/src/backendMiddleware'
 import { reveal, stub } from './utils'
 import { ConnectionOptions } from 'typeorm/browser'
 import data from 'tests/actions/registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { IRegistry } from 'jolocom-lib/js/registries/types'
-import { BackendError } from '../src/lib/errors/types'
+import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 const MockDate = require('mockdate')
 

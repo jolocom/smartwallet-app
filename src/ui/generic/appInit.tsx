@@ -6,7 +6,7 @@ import { navigationActions, accountActions, genericActions } from 'src/actions'
 import { Linking, Dimensions, Image, StyleSheet, Text } from 'react-native'
 import { withLoading, withErrorHandler } from 'src/actions/modifiers'
 import { Wrapper } from '../structure'
-import { AppError, ErrorCode } from 'src/lib/errors'
+import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
 import { Typography, Colors } from 'src/styles'
 import { checkRecoverySetup } from '../../actions/notifications/checkRecoverySetup'
@@ -56,6 +56,7 @@ export class AppInitContainer extends React.Component<Props> {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   doAppInit: async () => {
+    console.log('cred init')
     const withErrorScreen = withErrorHandler(
       showErrorScreen,
       (err: Error) => new AppError(ErrorCode.AppInitFailed, err),
@@ -77,7 +78,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   },
 })
 
-export const AppInit = connect(
-  null,
-  mapDispatchToProps,
-)(AppInitContainer)
+export const AppInit = connect(null, mapDispatchToProps)(AppInitContainer)

@@ -5,18 +5,41 @@ import thunk, {
   ThunkAction as OriginalThunkAction,
 } from 'redux-thunk'
 import { RootState, rootReducer } from 'src/reducers'
-import config from 'src/config'
 
-import { BackendMiddleware } from './backendMiddleware'
+import { JolocomSDK, JolocomTypeormStorage } from 'react-native-jolocom'
 
-export function initStore() {
+import { createConnection, getConnection } from 'typeorm'
+import typeormConfig from '../ormconfig'
+
+const initConnection = async () => {
+  let connection
+  try {
+    // *** this will clear the database
+    // *** used for resetting the did
+    // await getConnection().synchronize(true)
+    // console.log('DB was cleaned')
+
+    connection = getConnection()
+  } catch (e) {
+    connection = await createConnection(typeormConfig)
+  }
+  return connection
+}
+
+export async function initTypeorm() {
+  const connection = await initConnection()
+  await connection.synchronize()
+  return new JolocomTypeormStorage(connection)
+}
+
+export function initStore(sdk: JolocomSDK) {
   /*
    * The {} as RootState type assertion:
    * The second argument, "preloadedState" is mandatory, and typed as RootState.
    * We provide an empty object. The store will have the correct default state
    * after all reducers initialise.
    */
-  const backendMiddleware = new BackendMiddleware(config)
+  const backendMiddleware = sdk
   return createStore(
     rootReducer,
     {} as RootState,
@@ -26,9 +49,9 @@ export function initStore() {
 
 export type ThunkDispatch = OriginalThunkDispatch<
   RootState,
-  BackendMiddleware,
+  JolocomSDK,
   AnyAction
 >
 export type ThunkAction<
   R = AnyAction | Promise<AnyAction | void>
-> = OriginalThunkAction<R, RootState, BackendMiddleware, AnyAction>
+> = OriginalThunkAction<R, RootState, JolocomSDK, AnyAction>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { initStore, ThunkDispatch } from './store'
+import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
 import { StatusBar, View } from 'react-native'
 import { RoutesContainer } from './routes'
@@ -16,6 +16,14 @@ import { setActiveNotificationFilter } from './actions/notifications'
 import { black } from './styles/colors'
 import Lock from './ui/deviceauth/Lock'
 import RegisterPIN from './ui/deviceauth/RegisterPIN'
+import { LoadingSpinner } from './ui/generic'
+
+import {
+  JolocomLinking,
+  JolocomWebSockets,
+  JolocomKeychainPasswordStore,
+  JolocomSDK,
+} from 'react-native-jolocom'
 
 useScreens()
 
@@ -28,15 +36,20 @@ useScreens()
  * better architecture.
  */
 let store: ReturnType<typeof initStore>
+let sdkPromise: Promise<JolocomSDK>
 
 export default class App extends React.PureComponent<
   {},
-  { showStatusBar: boolean }
+  { ready: boolean; showStatusBar: boolean }
 > {
   private navigator!: NavigationContainerComponent
 
   public constructor(props: {}) {
     super(props)
+    this.state = {
+      ready: false,
+      showStatusBar: true,
+    }
     // only init store once, or else Provider complains (especially on 'toggle
     // inspector')
     //
@@ -44,9 +57,15 @@ export default class App extends React.PureComponent<
     // instantiated because otherwise the overrides at the top of index.ts will
     // have not been excuted yet (while files are being imported) and initStore
     // triggers creation of BackendMiddleware which needs those
-    if (!store) store = initStore()
-    this.state = {
-      showStatusBar: true,
+    if (!sdkPromise) {
+      sdkPromise = initTypeorm().then(async storage => {
+        const passwordStore = new JolocomKeychainPasswordStore()
+        const sdk = new JolocomSDK({ storage, passwordStore })
+        await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        store = initStore(sdk)
+        this.setState({ ready: true })
+        return sdk
+      })
     }
   }
 
@@ -87,7 +106,8 @@ export default class App extends React.PureComponent<
   }
 
   public render() {
-    const { showStatusBar } = this.state
+    const { showStatusBar, ready } = this.state
+
     return (
       <React.Fragment>
         <StatusBar hidden={!showStatusBar} translucent />
@@ -100,17 +120,21 @@ export default class App extends React.PureComponent<
             }}
           />
         )}
-        <Provider store={store}>
-          <View style={{ flex: 1 }}>
-            <RoutesContainer
-              onNavigationStateChange={this.handleNavigationChange.bind(this)}
-              ref={nav => this.setNavigator(nav)}
-            />
-            <AppLoadingAndNotifications />
-            <Lock />
-            <RegisterPIN />
-          </View>
-        </Provider>
+        {!ready ? (
+          <LoadingSpinner />
+        ) : (
+          <Provider store={store}>
+            <View style={{ flex: 1 }}>
+              <RoutesContainer
+                onNavigationStateChange={this.handleNavigationChange.bind(this)}
+                ref={nav => this.setNavigator(nav)}
+              />
+              <AppLoadingAndNotifications />
+              <Lock />
+              <RegisterPIN />
+            </View>
+          </Provider>
+        )}
       </React.Fragment>
     )
   }

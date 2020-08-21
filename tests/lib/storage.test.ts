@@ -2,7 +2,7 @@ import { groupAttributesByCredentialId } from '../../src/lib/storage/utils'
 import {
   CredentialEntity,
   VerifiableCredentialEntity,
-} from '../../src/lib/storage/entities'
+} from '@jolocom/sdk/js/src/lib/storage/entities'
 
 describe('lib/storage', () => {
   jest.unmock('src/lib/storage/storage')
