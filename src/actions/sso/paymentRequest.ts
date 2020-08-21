@@ -14,6 +14,11 @@ import { keyIdToDid } from 'jolocom-lib/js/utils/helper'
 import { generateIdentitySummary } from './utils'
 import { PaymentRequestSummary } from './types'
 
+/**
+ * @dev Given that this functionality might be deprecated soon (at least in it's current form),
+ * the payment interactions were not integrated with the {@link InteractionManager}
+ */
+
 export const consumePaymentRequest = (
   paymentRequest: JSONWebToken<PaymentRequest>,
   isDeepLinkInteraction: boolean = false,
@@ -40,11 +45,12 @@ export const consumePaymentRequest = (
       address: paymentRequest.interactionToken.transactionOptions.to as string,
     },
     requester: requesterSummary,
+    requestJWT: paymentRequest.encode(),
     callbackURL: paymentRequest.interactionToken.callbackURL,
     amount: paymentRequest.interactionToken.transactionOptions.value,
     description: paymentRequest.interactionToken.description,
-    requestJWT: paymentRequest.encode(),
   }
+
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.PaymentConsent,

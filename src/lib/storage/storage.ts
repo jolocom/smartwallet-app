@@ -35,6 +35,13 @@ interface EncryptedSeedAttributes {
   timestamp: number
 }
 
+/**
+ * @todo IdentitySummary is a UI type, which can always be
+ * derived from a DID Doc and Public Profile.
+ * Perhaps that's what we should store instead, since those
+ * are more generic and can be reused.
+ */
+
 export class Storage {
   private connection!: Connection
   private connectionPromise!: Promise<Connection> | null
