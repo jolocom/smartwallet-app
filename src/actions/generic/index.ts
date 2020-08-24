@@ -64,15 +64,17 @@ const hashString = (text: string) => {
 
 export const checkTermsOfService = (
   route: routeList,
+  onSubmit?: () => void,
 ): ThunkAction => async dispatch => {
   const storageHash = await AsyncStorage.getItem('termsOfConditions')
   const currentHash = hashString(termsOfServiceDE)
   const shouldShowTerms = storageHash !== currentHash
 
+  if (!shouldShowTerms && onSubmit) onSubmit()
   return dispatch(
     navigationActions.navigate({
       routeName: shouldShowTerms ? routeList.TermsOfServiceConsent : route,
-      params: { nextRoute: route },
+      params: { nextRoute: route, onSubmit },
     }),
   )
 }

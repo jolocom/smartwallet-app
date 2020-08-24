@@ -49,7 +49,6 @@ export const checkIdentityExists: ThunkAction = async (
     dispatch(setDid(userDid))
     await dispatch(checkRecoverySetup)
     return dispatch(checkTermsOfService(routeList.Home))
-    return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
   } catch (err) {
     if (
       err.message === BackendError.codes.NoEntropy ||

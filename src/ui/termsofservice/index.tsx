@@ -28,6 +28,7 @@ import { BP } from 'src/styles/breakpoints'
 
 interface NavigationProps {
   nextRoute: routeList
+  onSubmit: () => void
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -59,7 +60,7 @@ const TermsOfServiceContainer: React.FC<Props> = ({
 }) => {
   const {
     state: {
-      params: { nextRoute },
+      params: { nextRoute, onSubmit },
     },
   } = navigation
   const [accepted, setAccepted] = useState(false)
@@ -151,7 +152,10 @@ const TermsOfServiceContainer: React.FC<Props> = ({
         <JolocomButton
           text={I18n.t(strings.ACCEPT_NEW_TERMS)}
           containerStyle={{ width: '100%' }}
-          onPress={() => storeTermsConsent(nextRoute)}
+          onPress={async () => {
+            await storeTermsConsent(nextRoute)
+            onSubmit()
+          }}
           disabled={!accepted}
         />
       </View>
