@@ -26,7 +26,10 @@ const PrivacyPolicyContainer: React.FC<Props> = ({
       <NavigationSection onNavigation={navigateBack} isBackButton={true} />
       <View style={styles.wrapper}>
         <Text style={styles.header}>{I18n.t(strings.PRIVACY_POLICY)}</Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          overScrollMode={'never'}
+        >
           <Text style={styles.text}>{privacyText}</Text>
         </ScrollView>
       </View>

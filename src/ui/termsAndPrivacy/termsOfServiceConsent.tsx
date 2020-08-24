@@ -97,6 +97,7 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
         <ScrollView
           contentContainerStyle={{ paddingBottom: '50%' }}
           showsVerticalScrollIndicator={false}
+          overScrollMode={'never'}
         >
           <Text style={styles.description}>
             {I18n.t(
