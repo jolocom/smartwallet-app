@@ -50,7 +50,7 @@ Functions such as opening and looking through the App after the download / updat
 V.     Notifications / Updates / Changes
 
 Jolocom reserves the right to change, interrupt, or discontinue the App and its functions at its own discretion.
-In the event of any change, e.g. changes in the service, the functions, the content, or the terms of use, Jolocom will provide a new version of the App. It is the sole responsibility of the User to establish a connection to the internet at regular intervals in order to receive updates.
+In the event of any change, e.g. changes in the service, the functions, the content, or the terms of use, Jolocom will provide a new version of the App. It is the sole responsibility of the User to establish a connection to the internet at regular intervals and to update the App to the latest version in accordance with the terms of use of the respective Download Platform.
 If the updates require further authorizations, the User will be informed of this before the installation. If the User does not agree to these further authorizations, there will be no update and this may affect the operation of the App.
 Additional functions and services within the App may be or become subjects to charge. In this case, Jolocom will notify you of the prices and features in advance. The use of new paid functions and services is at the sole discretion of the User.
 

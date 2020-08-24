@@ -4,7 +4,7 @@ buildscript {
     ext {
         buildToolsVersion = "28.0.3"
         // detox requires at least version 18
-        minSdkVersion = 18
+        minSdkVersion = 21
         compileSdkVersion = 28
         targetSdkVersion = 28
         supportLibVersion = "28.0.0"
