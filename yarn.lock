@@ -1395,28 +1395,28 @@
     detect-node "^2.0.4"
     node-fetch "^2.6.0"
 
-"@jolocom/native-core-node-darwin-x64@^1.0.0-rc4":
-  version "1.0.0-rc4"
-  resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-darwin-x64/-/native-core-node-darwin-x64-1.0.0-rc4.tgz#78dbe342a1499d8f5f4302ff7e69c6890bb9aad8"
-  integrity sha512-suaIxsx+TkSVxTTaGShHZYyvptfECP7RSwU9WsaHTGXE1Gj3+jM2n1wOAguq2JVUvxYhkU6qsS6RwsC4Z8+tEQ==
+"@jolocom/native-core-node-darwin-x64@^1.0.0-rc5":
+  version "1.0.0-rc5"
+  resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-darwin-x64/-/native-core-node-darwin-x64-1.0.0-rc5.tgz#4721ce2e99f1e22aa00ccec108dd5fb1927cc9a6"
+  integrity sha512-9uIkpog+LEBxZws1nqPJhkXoxtCz1xtiwKZdqGDpEpLMqda4mXmlUOlfklg+8u3mNrYsJR4lkaU86OMr2tc39g==
 
-"@jolocom/native-core-node-linux-x64@^1.0.0-rc4":
+"@jolocom/native-core-node-linux-x64@^1.0.0-rc5":
   version "1.0.0-rc3"
   resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-linux-x64/-/native-core-node-linux-x64-1.0.0-rc3.tgz#b41a3f9662d1525563eea64d874c15050188fcda"
   integrity sha512-RJLgRlmRliRLDzNItnCLIHbbp/K7LsysJpFSX6HqTR15KA7Rfk6mKKkHvlWD26bmItrzvatL8KXVigRpctaVqA==
 
-"@jolocom/native-core-react-native@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.0.8.tgz#b53d4356eaa6f62b0c7cda412b7673dd211645e2"
-  integrity sha512-tV6LnvXyqgbNSgePiQOOthiXjypsw+axEB6o0b91/SXIMS4dNBcvulM5ctR5looJt4TI63L0zShSVgWASDAAtA==
+"@jolocom/native-core-react-native@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.0.10.tgz#ec1d4307b7c67729094958966adb00cb3130903f"
+  integrity sha512-hiFJhvGMfMiMBMeu3ck/zztF/tA3KcYUphLQWNwKZU6E+7GaUFOJtDro75bMwSS+KY+kUdNMlwNWHC1ce2rR+A==
 
-"@jolocom/native-core@^0.7.18":
-  version "0.7.18"
-  resolved "https://registry.yarnpkg.com/@jolocom/native-core/-/native-core-0.7.18.tgz#81ee1e9a459798d64a038d4825ee6c3208da8127"
-  integrity sha512-QzkdFPTzHIUlpuMQmfIexZ1c0Gt1IYQK+gSsQYWFofKr045mxu9HCKOyJB7XHSyEcGRuPYdZwykMcmTO9gP5lw==
+"@jolocom/native-core@^0.7.19":
+  version "0.7.19"
+  resolved "https://registry.yarnpkg.com/@jolocom/native-core/-/native-core-0.7.19.tgz#40d0cf9c8238afbb0157a47c32f3ff59fffc289f"
+  integrity sha512-o+m8Fb4+VnDBp/4Dkm8CtUYlCADE9YY7LzmeBe5XhukdtvHqcYWlyQqC+heQIjjuu74r6IkHoeyoN6qWs8cwaw==
   optionalDependencies:
-    "@jolocom/native-core-node-darwin-x64" "^1.0.0-rc4"
-    "@jolocom/native-core-node-linux-x64" "^1.0.0-rc4"
+    "@jolocom/native-core-node-darwin-x64" "^1.0.0-rc5"
+    "@jolocom/native-core-node-linux-x64" "^1.0.0-rc5"
 
 "@jolocom/protocol-ts@^0.5.1":
   version "0.5.1"
@@ -1440,10 +1440,10 @@
     class-transformer "^0.2.3"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^0.18.5":
-  version "0.18.5"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.18.5.tgz#878f16981850a6b01dbf131534dfd05c869c023e"
-  integrity sha512-dNa+kU9qYJYRUQlLgBP2e6rDS5TiDPJ4xqJCdndNsuPHuqZ7/3108YHXc/71p5vl86fuAmqxe/Q2a8R2SZcYug==
+"@jolocom/sdk@^0.18.6":
+  version "0.18.6"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.18.6.tgz#521daa48e3f91ea4cddccc12a5c1e859669eb5b3"
+  integrity sha512-zwjlXSLDdoibn5QnJ0+pQ7T/DHcg4Q4Y69cMptsUg737hmCeYw0ahO1Jh4vdNG8UPpqpNENKxPDvsaTRTdptLw==
   dependencies:
     form-data "^3.0.0"
     ramda "^0.26.1"
@@ -6940,14 +6940,14 @@ jest@^24.8.0:
     import-local "^2.0.0"
     jest-cli "^24.8.0"
 
-jolocom-lib@^5.0.22:
-  version "5.0.22"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.0.22.tgz#4464d743449937bf65c81ad40503df9bdb74aad7"
-  integrity sha512-PPZ9V4ZrmyGO7fpMIWfYUZ712+Vv98BvO1sOgZFPn/9aL/eZqQx+EHW4Os62akaXEFBfPbOBSEpj9gkYgP9Zyg==
+jolocom-lib@^5.0.24:
+  version "5.0.24"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.0.24.tgz#b36960ff56befdd5bcb6973c37be1e5d6e0958c0"
+  integrity sha512-IOAC3Qjhtl+qwkaBCbCsrbeeH0c2HUAIJfpMSb7Xe6qtp/+IFyIRh6MNWpxoNTr07rf05HPhGu6dt3B+MkTYpg==
   dependencies:
     "@jolocom/jolo-did-registrar" "^1.0.0-rc4"
     "@jolocom/jolo-did-resolver" "^1.0.0-rc4"
-    "@jolocom/native-core" "^0.7.18"
+    "@jolocom/native-core" "^0.7.19"
     "@jolocom/protocol-ts" "^0.5.1"
     "@jolocom/vaulted-key-provider" "^0.7.3"
     base64url "^3.0.1"
@@ -9527,12 +9527,12 @@ react-native-interactable@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-native-interactable/-/react-native-interactable-1.0.0.tgz#b6dcdff9ec61dfae9233e46e1d673ce8480a4f64"
   integrity sha512-e/GyydV3nFWVL36frdM8H+wGxy5pJu0WjlN6dgtBIRCaGz7nLbCRWFINs7SRwIaI9LPXVAqEXQTOc2d5LJN4HA==
 
-react-native-jolocom@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-1.4.3.tgz#4f05c7e3a5a9987f4bf14646586c9ad285ef87d7"
-  integrity sha512-2VwJ/4S+BDmfmVrAPIPjZ6ZH7JERx+0PVRQ7Vx5aA064VVVUEOnaTL7mjU0PgRfHYG1+rPci8oduLnJAbnm6uA==
+react-native-jolocom@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-1.4.4.tgz#97312fb3a4f1d9b8c65a11c431fce84bc697071d"
+  integrity sha512-gtpHvH5M40xL2hTUloYNHyH40SmBeMp4LNvP7MiZ5AOB89+x+wMzbtNJq9EW58T8okCvsIHvqFegTUOgfgzeIw==
   dependencies:
-    "@jolocom/native-core-react-native" "^1.0.8"
+    "@jolocom/native-core-react-native" "^1.0.10"
     "@jolocom/sdk-storage-typeorm" "^2.0.9"
     crypto-browserify "^3.12.0"
     object.assign "^4.1.0"
