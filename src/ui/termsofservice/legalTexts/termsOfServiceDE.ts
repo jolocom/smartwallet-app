@@ -1,190 +1,110 @@
 export const termsOfServiceDE = `
-Terms of Service
-1   General Provisions
+Nutzungsbedingungen SmartWallet App
+Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin (“Jolocom”)
 
-1.1             Kolibri Games GmbH, Hallesches Ufer 60, 10963 Berlin (hereinafter, “Kolibri Games”) develops and publishes mobile applications (“Games”) that can be downloaded from the App Stores of various providers.
 
-1.2             The Games are only offered to consumers in terms of § 13 of the German Civil Code (BGB), i.e. natural persons who conclude a legal transaction for purposes which can predominantly neither be attributed to their commercial nor their self-employed professional activity.
+Präambel / Geltung und Änderung der Nutzungsbedingungen
 
-1.3             All Games made by Kolibri Games are provided exclusively on the basis of these General Terms and Conditions. Any general terms and conditions of the user shall expressly not form part of the agreement, even if Kolibri Games does not expressly object to their applicability.
+Jolocom ist Anbieter einer mobilen Software-Anwendung, der Jolocom SmartWallet App („App“), für verschiedene Betriebssysteme (iOS, Android). Als „Nutzer“ wird derjenige bezeichnet, der die App auf sein mobiles Endgerät herunterlädt („Download“) und/ oder die auf einem mobilen Endgerät installierte App in Gebrauch nimmt. Jolocom und der Nutzer werden nachfolgend jeweils einzeln auch als „Partei“ oder gemeinsam als „Parteien“ bezeichnet.
 
-1.4             These General Terms and Conditions are displayed when downloading each Game, within the Game, on the company website (https://kolibrigames.com/) and the Game-specific websites (e.g. https://www.idleminertycoon.com/, https://www.idlefactorytycoon.com/).
+Jolocom ist der Auffassung, dass Datenschutz und Datensicherheit mit transparenter Technologie einhergehen. Jolocom erhält daher zu keinem Zeitpunkt Einsicht oder Zugriff auf die Daten des Nutzers und garantiert volle Transparenz hinsichtlich des Programmcodes des SmartWallets.  Der Code ist jederzeit auf der Entwickler-Plattform GitHub einzusehen, um dem Nutzenden somit die höchste Sicherheit zu gewährleisten.
+Da Jolocom keinerlei Zugriff auf die App eines Nutzers hat, werden Änderungen der App stets mit einer neuen Version einhergehen. Jolocom wird auch bei derartigen neuen Versionen den Programm/Objektcode frei einsehbar halten.
 
-2   Conclusion of contract, term, termination
-2.1             The user confirms to have full legal capacity and, in the case of restricted legal capacity, to have obtained the consent of his/her legal guardian.
+Der Download sowie die Nutzung der App sind kostenfrei.
 
-2.2             The contract for the use of the Game is concluded by downloading the Game from the respective App Store. Details of this process can be found in the terms of use of the respective App Store. The download creates a contract between the user and Kolibri Games for the free use of the respective Game. The corresponding license and usage agreement on the basis of these General Terms and Conditions is concluded for an indefinite period of time and may be terminated by either party at any time, subject to Section 2.3, without specifying any reasons by providing notice of four weeks.
+Diese Nutzungsbedingungen regeln das Verhältnis zwischen Jolocom und den Nutzern. Mit dem Download der App und / oder deren Verwendung erklärt der Nutzer sich mit der Geltung der Nutzungsbedingungen einverstanden. Sie gelten auch dann, wenn der Nutzer eigene Allgemeine Geschäftsbedingungen verwendet und diese entgegenstehende oder abweichende Regelungen enthalten. Allgemeine Geschäftsbedingungen des Nutzers finden keine Anwendung, auch wenn Jolocom diesen nicht ausdrücklich widerspricht.
 
-2.3             In addition to the possibility of free use, Kolibri Games also offers additional paid content, e.g. virtual items and power-ups (premium content). The use of the premium content is voluntary and forgoing such use does not restrict other use of the Game. The cost obligation will be indicated separately in the Game. For the acquisition and use of such premium content, the provisions of Section 4 of these General Terms and Conditions as well as any separate terms and conditions of use of the App Store providers shall apply in a supplementary fashion. If premium content has a defined duration (e.g. activation of certain premium functions for one month), ordinary termination (also of the contract for free use) shall be excluded during this period. To clarify, ordinary termination shall be possible if the user has purchased premium content without a fixed term (e.g. one-time or permanent power-ups), even if these have effects on the entire further period of use.
+Die Nutzungsbedingungen gelten entsprechend für etwaige Updates oder sonstige Änderungen der App, sofern nicht von Jolocom anderweitig mitgeteilt.
 
-2.4             It is recommended to always install the latest version of the Game. Kolibri Games is only obligated to provide the full scope of performance and the correct functionality, even of premium content, for the current version of the Game.
+Ergänzend gelten die gesetzlichen Bestimmungen, für die kostenfreie Zurverfügungstellung der Software-Anwendung, insbesondere die §§ 516 ff. BGB (Schenkung).
 
-2.5             In the event of ordinary termination by the user or termination by Kolibri Games for good cause, no reimbursement of paid fees shall take place. Kolibri Games shall be entitled to continue to charge all outstanding fees for premium content already purchased.
+Jolocom behält sich vor, diese Nutzungsbedingungen aus sachlichen Gründen (bspw. Änderung von Gesetz oder Rechtsprechung, Änderung der wirtschaftlichen Verhältnisse oder des Geschäftsmodells) zu ändern. In diesem Fall stellt Jolocom eine aktualisierte Version der App zum Download für den Nutzer bereit.
 
-2.6             The user may not transfer this agreement to third parties. In the event of a breach of this provision (account transfer), Kolibri Games shall be entitled to terminate the agreement without notice, including agreements on premium content. In such event, a prorated refund shall also be excluded.
 
-2.7             The statutory right to extraordinary termination of this Agreement without notice for good cause shall not be affected.
+Gegenstand der App / Leistungsumfang
 
-3   Account and user data
-3.1             Upon conclusion of the contract and use of the Game, Kolibri Games shall store the progress of the Game and any additional paid content. For more information, please refer to Kolibri Games’ privacy policy (https://kolibrigames.com/privacy-policy/).
+Die App ermöglicht ein dezentralisiertes digitales Identitäts- und Authentifizierungsmanagement. Durch sie kann der Nutzer eindeutige Identitätsinformationen erstellen, auszutauschen und verwalten.
+Die Daten (z.B. Name, Adresse, Versicherungsnachweise, Personalausweisinformationen) werden ausschließlich lokal und verschlüsselt auf dem mobilen Endgerät des Nutzers gespeichert. Diese können durch Vorlage bei den Identifizierungs- und Vertrauensdiensten („Issuers“) verifiziert werden. Der Nutzer entscheidet, welche seiner verifizierten Daten er welchem Unternehmen zur Verfügung stellt.
+Die App ist damit ein reines Werkzeug zur Organisation und Verwaltung eigener (personenbezogener) Daten.  Es obliegt allein dem Nutzer, die abgelegten Inhalte zu speichern und Datensicherungen vorzunehmen.
+Jolocom erlangt keine Kenntnis von den Daten und hat keinerlei Zugriff auf die eingestellten Daten des Nutzers, übernimmt demnach auch keine eigenständige Überprüfung der Daten.
+Die App stellt keinen Speicherplatz zur Verfügung. Sämtliche in die App eingefügte Daten werden ausschließlich auf dem jeweiligen mobilen Endgerät des Nutzers gespeichert.
+Die Internetverbindung und die funktionierende Infrastruktur des beteiligten mobilen Endgerätes (bspw. zulässiges Endgerät, Version des Betriebssystems, Speicherplatz auf dem Endgerät) sind nicht Gegenstand der Leistungen von Jolocom. Hierfür ist der Nutzer selbst verantwortlich.
 
-3.2             The user must select secure access credentials and not make such data available to third parties. Kolibri Games is not responsible for any damage resulting from the breach of this duty. In the event of suspected abuse, Kolibri Games shall be entitled to temporarily block access to the Game in question.
+Vertragsschluss / Bereitstellung der App
 
-3.3             If the user can select a username in the Game, this must not violate applicable laws and/or these General Terms and Conditions. Kolibri Games shall be entitled to change the name in the event of a breach of this provision, either at the instigation of a third party or on its own initiative. No separate justification for the name change shall be necessary. The user has no claim to a specific name. Other rights of Kolibri Games in the event of a breach of this provision shall not be affected.
+Jolocom stellt die App über den Google Play Store, über den Apple App Store sowie über dem Microsoft GitHub (gemeinsam „AppStores“) zum kostenfreien Download auf mobile Endgeräte des Nutzers zur Verfügung.
+Mit dem Download der App auf ein mobiles Endgerät und / oder der Verwendung einer bereits installierten App kommt ein Nutzungsvertrag zwischen Jolocom und dem Nutzer zustande. Der Nutzer muss im Zeitpunkt des Vertragsschlusses mindestens 18 Jahre alt sein.
+Weder Apple Inc., als Betreiberin des Apple App Stores, noch Google Inc., als Betreiberin des Google Play Stores, noch Microsoft Corp. als Betreiberin des GitHub werden Vertragspartner dieses Nutzungsvertrages.  Auf etwaige Geschäftsbedingungen der App Stores oder dortige Datenerhebung hat Jolocom keinen Einfluss und trägt diesbezüglich keinerlei Verantwortlichkeit.
+Es besteht kein Anspruch auf eine ständige und ununterbrochene Verfügbarkeit der App. Vorübergehende Betriebsunterbrechungen aufgrund der üblichen Wartungszeiten, systemimmanenten Störungen des Internets sowie im Falle höherer Gewalt sind möglich. Jolocom ist jedoch bemüht, eine höchstmögliche Verfügbarkeit zu erreichen und Störungen schnellst möglich zu beheben.
 
-4   Premium content
-4.1             The contract for additional premium content shall only be concluded if the user clicks on the “Pay” or “Order for a fee” button in the shop area of the Game (exact labelling may vary for in-app purchases depending on the App Store). The contract shall be accepted by Kolibri Games (or on its behalf by the respective App Store provider) by sending an order confirmation via message or email, or by actually providing the respective premium content. The fee shall be payable in advance upon acquisition of premium content.
+Download / Nutzung
 
-4.2             A refund after the purchase of premium content can only be made within the scope of statutory consumer rights or the statutory right of revocation with due regard to the respective elements of exclusion.
+Der Download der App sowie der Zugang zu Mitteilungen, Updates oder sonstigen Änderungen erfordern eine funktionierende Internetverbindung und setzen eine funktionierende Infrastruktur des beteiligten mobilen Endgerätes (bspw. zulässiges Endgerät, Version des Betriebssystems, Speicherplatz auf dem Endgerät) voraus.
+Die technischen Voraussetzungen zu Download und Nutzung der App sind in der Beschreibung in den App Stores dargestellt.
+Die Funktionen wie das Öffnen und das Durchschauen des SmartWallets nach dem Download/ Update sind im Übrigen Offline verfügbar. Während der Nutzung dieser Funktionen ist eine Internetverbindung daher nicht erforderlich. Interaktionen mit Issuern erfordert hingegen eine funktionierende Internetverbindung.
 
-4.3             The prices for premium content as displayed via the respective App Stores and transmitted in the order confirmation for the respective order shall apply in each case. These can vary according to currency and country. The prices include any applicable value added tax. Payments will be processed via the respective App Stores. The terms of use and payment of the App Stores shall apply in this regard, supplemented by these General Terms and Conditions. In the event of contradictions between the general terms and conditions of the App Stores and these General Terms and Conditions, the terms of use and payment of the App Stores shall take precedence.
 
-4.4             If currencies are simulated in the Games (hereinafter, “Premium Points”), these represent premium content or units of measurement for the scope of the license to use the Game in question, and not real money. If such Premium Points can be earned both through Game play and as premium content, the units purchased in return for payment will always be used first when such Premium Points are used. Premium Points may only be converted back into real money if the operation of the Game as a whole is permanently discontinued. In such an event, the fee paid for Premium Points shall be refunded insofar as the corresponding Premium Points have not yet been used to activate Game content.
+Mitteilungen / Updates / Änderungen
 
-4.5             The user shall be responsible for cancellations or chargebacks which the user itself has caused, e.g. due to insufficient account coverage. The user shall normally bear the costs arising therefrom. Kolibri Games shall be entitled to collect these costs together with the original fee from the user’s means of payment. The user shall reserve the right to prove that any damage did not occur or did not occur to the value of the requested amount.
+Jolocom behält sich das Recht vor, die App und deren Funktionen nach eigenem Ermessen zu ändern, zu unterbrechen oder einzustellen.
+Im Falle etwaiger Änderung, z.B. durch Änderungen der Leistung, der Funktionen, der Inhalte oder der Nutzungsbedingungen wird Jolocom eine neue Version der App zur Verfügung stellen. Es obliegt allein dem Nutzer, in regelmäßigen Abständen eine Verbindung zum Internet herzustellen, den jeweiligen AppStore zu besuchen und dort die App auf die aktuellste Version zu updaten.
+Erfordern die Updates weitergehende Berechtigungen, so wird der Nutzer vor der Installation hierauf hingewiesen. Stimmt der Nutzer diesen weitergehenden Berechtigungen nicht zu, so erfolgt kein Update und es kann sein, dass hierdurch der Betrieb der App beeinträchtigt werden kann.
+Zusätzliche Funktionen und Dienstleistungen innerhalb der App können kostenpflichtig sein oder werden. In diesem Fall wird Jolocom die Preise und Leistungsmerkmale vorab mitteilen. Die Inanspruchnahme neuer kostenpflichtiger Funktionen und Dienstleistungen steht im alleineigen Ermessen des Nutzers.
 
-4.6             If the user defaults on payment, Kolibri Games may, irrespective of the continued obligation to pay, block access to the Game and demand the default interest stipulated by law.
+Pflichten der Nutzer
 
-4.7             Kolibri Games may offer new premium content, change existing premium content and discontinue premium content. Permanent premium content already purchased (virtual items), which are removed from the Game, may in this case be used within a transitional period or exchanged for new premium content. Further claims of the user shall be excluded.
+Eine Registrierung ist nicht erforderlich.
+Es obliegt dem Nutzer die Funktionsfähigkeit der Arbeitsumgebung der App sicherzustellen (bspw. zulässiges Endgerät, Version des Betriebssystems, Speicherplatz auf dem Endgerät) und eine Verwendbarkeit in der konkreten Situation zu testen, bevor er mit der produktiven Nutzung der App beginnt.
+Der Nutzer verpflichtet sich, ausschließlich korrekte, vollständige und der Wahrheit entsprechende Angaben, insbesondere hinsichtlich seiner Identität, zu machen. Er schützt seine in der App angegebene Identität vor der Einsichtnahme, dem Zugriff und der Nutzung durch Dritte.
+Es obliegt allein dem Nutzer, die abgelegten Inhalte zu speichern und Datensicherungen vorzunehmen.
+Die App darf in keiner Weise genutzt werden, die der Schädigung Dritter dient, missbräuchlich ist oder Rechtsvorschriften und Bestimmungen deutscher Gesetze verstößt.
 
-4.8             For purposes of clarification: All claims of the user with respect to the premium content, particularly with respect to copyrights, warranty for defects and damage compensation, shall be asserted against Kolibri Games (and not against the App Stores).
 
-5   Subscriptions
-5.1             Certain features of the Games might be available through a subscription. Subscriptions may be available at different fees chargeable for a set period specified in the Games (“Subscription Period”). If you order a subscription, you must ensure that all the information you submit is true and accurate and that you have appropriate parental or guardian consent if you are under 18 years of age.
+Urheber- und Nutzungs- und sonstige Leistungsschutzrechte
 
-5.2             The user can manage subscriptions and turn off auto-renewals in the respective device’s account settings.
+Sämtliche Urheber-, Patent-, Marken- und sonstige Leistungsschutzrechte an der App stehen im Verhältnis der Parteien ausschließlich Jolocom zu. Das Einstellen von Inhalten in die App begründet kein Miturheberrecht des Nutzers.
+Dem Nutzer wird das einfache, nicht übertragbare Recht zur bestimmungsgemäßen Nutzung der App eingeräumt.
+Der Nutzer ist nicht berechtigt, an der App irgendeine Art von Bearbeitung oder Änderung (bspw. am (Quell-)Code, der Software, der Dokumentation bspw. durch reverse engeneering, Manipulation, Dekompilierung, Disassemblierung o.ä.) vorzunehmen.
+Jede Form der Nachahmung, Vervielfältigung, des Verkaufs oder einer sonstigen Verbreitung der App oder von Teilen der App durch den Nutzer ist unzulässig.
 
-5.3             Kolibri Games reserves the right to alter the amount and/or terms of the subscription fees at any time. Additional information to price changes can be found in the terms of the respective platform.
 
-5.4             Additional information on payment and use of subscriptions can be found in the terms of the respective platform:
+Gewährleistung
 
-Google Play Store: https://play.google.com/about/play-terms/index.html
-Apple App Store: https://www.apple.com/legal/internet-services/itunes/
+Jolocom haftet für Sach- und Rechtsmängel an der überlassenen App nur sofern Jolocom den Mangel gegenüber dem Nutzer arglistig verschwiegen hat.
 
-Monthly Subscription
-5.5             If the user chooses to purchase the monthly subscription offer, the displayed monthly amount will be charged to his/her Apple or Google Play account after confirming the purchase. It will auto-renew unless canceled at least 24 hours before the end of each 30-day period (“Monthly Subscription Period”).
+Haftung
 
-Weekly Subscription
-5.6             If the user chooses to purchase the weekly subscription offer, the displayed weekly amount will be charged to his/her Apple or Google Play account after confirming the purchase. It will auto-renew unless canceled at least 24 hours before the end of each 7-day period (“Weekly Subscription Period”).
+Im Übrigen haftet Jolocom für durch sie oder ihre Erfüllungsgehilfen entstandene Schäden nur bei Vorsatz und grober Fahrlässigkeit.
+Der Einwand des Mitverschuldens bleibt Jolocom unbenommen. Der Nutzer hat insbesondere die Pflicht zum bestimmungsgemäßen Gebrauch, zur Datensicherung sowie zur Sicherstellung einer funktionsfähigen Arbeitsumgebung.
+Jolocom haftet ausdrücklich nicht für den Verlust von Inhalten und dem daraus ggf. entstehenden Schaden, der auf Beschädigung/Verlust des mobilen Endgerätes oder in Folge einer vom Nutzer verursachten unsachgemäßen Bedienung der App beruht oder wenn der Nutzer kein Backup vorgenommen hat und es hierdurch zu einem Datenverlust gekommen ist.
+Jolocom hat keine Kenntnis von und hat keinerlei Zugriff auf die eingestellten Inhalte des Nutzers. Jolocom haftet daher ebenfalls nicht für die Rechtmäßigkeit und rechtmäßige Erlangung der Inhalte.
 
-Free Trial
-5.7             For selected subscription offers, a trial period may be included. In this case, the exclusive contents of the subscription may be used free of charge for a specific period specified in the offer ("Free Trial Period"). This will automatically be converted into a paid subscription unless canceled at least 24 hours before the end of the Free Trial Period.
+Freistellung
 
-5.8             A Free Trial Period can only be claimed once by each user. If a user has already used the Free Trial Period, the subscription fee will be charged directly after confirmation of the purchase of the subscription.
+Der Nutzer wird Jolocom von allen geltend gemachten Ansprüchen Dritter freistellen, die sich auf die Verletzung ihrer Rechte beziehen. Dies gilt nicht, wenn die Rechtsverletzung von dem Nutzer nicht zu vertreten ist.
+In Streitfällen mit Dritten wird der Nutzer Jolocom alle erforderlichen Informationen unverzüglich bereitstellen und Jolocom bestmöglich bei der Abwehr oder Geltendmachung von Ansprüchen unterstützen.
 
-6   Instructions on revocation
-With regard to contracts in return for payment, consumers (§ 13 of the German Civil Code) have a right of revocation in accordance with the following provisions:
+Datenschutz
 
-Revocation right
-You have the right to revoke this contract within 14 days without specifying any reasons.
+Der Nutzer hat die Datenschutzerklärung von Jolocom zur Kenntnis genommen.
+Der Nutzer bestätigt, dass von ihm oder auf seine Veranlassung von Dritten an Jolocom übermittelte, personenbezogene Daten entsprechend den einschlägigen Bestimmungen des Datenschutzes erhoben und verarbeitet wurden.
+Sofern Einwilligungen Betroffener erforderlich sind, stellt der Nutzer sicher, dass alle betroffenen Personen, die Datenschutzerklärung von Jolocom zur Kenntnis genommen haben und eine ggf. erforderliche Einwilligungserklärung abgegeben haben.
 
-The revocation period is 14 days from the closing date of the contract.
+Laufzeit und Beendigung der Nutzung
 
-In order to exercise your revocation right, you must contact us (Kolibri Games GmbH, Hallesches Ufer 60, 10963 Berlin; e-mail: revocation@kolibrigames.com; telephone: +49 179 4411365) by means of a clear declaration (e.g. a letter by post or e-mail) of your decision to revoke this contract. You can use the model revocation form for this purpose, though this is not mandatory.
+Der Nutzungsvertrag läuft auf unbestimmte Zeit und kann jederzeit ohne Einhaltung einer Frist von Jolocom und/oder dem Nutzer beendet werden.
+Der Nutzer kann die Nutzung jederzeit beenden, indem er die App von seinem mobilen Endgerät löscht.
+Jolocom ist jederzeit berechtigt, den Betrieb der App einzustellen in der Form, dass die erforderlichen Updates nicht mehr zur Verfügung gestellt werden. In diesem Fall wird Jolocom den Nutzer im Wege einer Mitteilung über die App rechtzeitig informieren.
 
-In order to comply with the revocation period, it is sufficient that you send the notice of the exercise of the right of revocation before the expiry of the revocation period.
+Schlussbestimmungen
 
-Consequence of revocation
-If you revoke this Agreement, Kolibri Games GmbH shall immediately, i.e. no later than fourteen days from the date on which we receive notice of the revocation of this Agreement, repay all payments received from you, including delivery costs (excluding additional costs resulting from your choosing a different type of delivery from the cheapest standard delivery offered by us). For this refund, we will use the same means of payment that you used for the original transaction, unless expressly agreed otherwise with you; in no event shall you be charged for this refund.
+Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts. Dies gilt gegenüber Verbrauchern nur soweit der durch zwingende Bestimmungen des Rechts des Staates des gewöhnlichen Aufenthaltes des Verbrauchers gewährte Schutz diesem nicht entzogen wird.
 
-End of instructions on revocation.
+Sofern es sich beim Nutzer um einen Unternehmer, eine juristische Person des öffentlichen Rechts oder um ein öffentlich-rechtliches Sondervermögen handelt, ist Gerichtsstand für alle Streitigkeiten aus Vertragsverhältnissen zwischen den Parteien der Sitz von Jolocom. Jolocom ist berechtigt, nicht jedoch verpflichtet, am Sitz des Nutzers zu klagen.
+Dieser Text unterliegt deutschem Recht und soll nach deutschem Rechtsverständnis ausgelegt werden. Die beigefügte englische Fassung dient nur der Information und ist nicht Bestandteil des Rechtsgeschäftes. Im Falle von Abweichungen zwischen der deutschen und der englischen Fassung gilt daher nur die deutsche Fassung.
 
 
 
-Special reference to the premature expiry of the revocation right:
-Your right of revocation shall expire prematurely if we have begun to execute the contract before the expiry of the revocation period, after you as the user have given your express consent to this and have confirmed your awareness that you will lose your revocation right as a result of the consent at the start of the execution of the contract.
+Stand August 2020
 
-Revocation form
-(If you want to revoke the contract, please fill out this form and send it back.)
-
-– To Kolibri Games GmbH, Hallesches Ufer 60, 10963 Berlin; e-mail: revocation@kolibrigames.com:
-
-– I/we (*) hereby revoke the contract concluded by me/us (*) for the purchase of the the following goods (*)/the provision of the following service (*)
-
-– ordered on (*)/received on (*)
-
-– Name(s) of consumer(s) – Address of consumer(s)
-
-– Signature of consumer(s) (only for hard copy form)
-
-– Date
-
-___________
-
-(*) Delete if appropriate.
-
-
-
-
-
-7   User obligations
-7.1             When using the Games, the user may not use any other software or other routines that could interfere with the systems of Kolibri Games or other users. This includes actions that could lead to an unreasonable overloading of the systems of Kolibri Games. The use of special software, particularly for systematic or automatic control of Games, is prohibited.
-
-7.2             The user may not use any software or exploit any programming errors that lead or could lead to obtaining premium content in the Games or other unintended benefits for the user without having concluded a premium agreement, the user thus becoming obliged to pay the fee for such premium content. In the event of unjustified acquisition of premium content, Kolibri Games may delete or deactivate the unjustified premium content or other benefits. For the purposes of clarification: The above shall not apply if premium content can be acquired as a reward for certain Game actions.
-
-7.3             In connection with the services of Kolibri Games, the user may not use any software that enables “data mining” or otherwise collects information in connection with the Games.
-
-7.4             The user may not use, buy for real money (except through the App Stores), sell, trade, or attempt to use Premium Content outside the Game.
-
-7.5             When using any communication functions within the Games, the user must comply with all applicable laws and must not infringe the rights of third parties. In addition, certain content is undesirable in the Games because it contradicts the character of the Games as family entertainment media. In concrete terms, this means that users may not:
-
-use, post or publish any harassing, threatening, disturbing, insulting or defamatory, discriminatory, political, immoral, pornographic, morally reprehensible, offensive, violent, sexist, extreme right-wing or left-wing content or content that glorifies violence or violates laws, particularly laws for the protection of minors, or link to corresponding material on a third party website or advertise, offer or distribute such content or products that violates laws, particularly laws for the protection of minors;
-and publish, duplicate, make publicly accessible or disseminate content protected for the benefit of third parties without a corresponding license, in particular infringe upon industrial property rights, advertise, offer or distribute goods or services, commit or promote anti-competitive acts, request other users to provide personal data for commercial or illegal purposes or to provide access data, organize or advertise commercial activities and sales of third parties, duplicate an image of another person or make it publicly accessible without the written consent of the person concerned, or publish personal data and confidential data without being entitled to do so.
-7.6             Kolibri Games shall be entitled to delete content that violates applicable law and/or these General Terms and Conditions.
-
-7.7             The user may only use the Games for private purposes, unless Kolibri Games has given its express prior written consent to any other use in individual cases.
-
-7.8             Any breach of these General Terms and Conditions may lead to termination for good cause. In lieu of such termination, Kolibri Games may, at its sole discretion, announce measures or take sanctioning measures of any kind to enforce the provisions of these General Terms and Conditions. In particular, this shall include declaring a temporary or permanent virtual ban from the systems, warning the user of their temporary or permanent exclusion of the user from individual Game functions.
-
-7.9             Users shall be obligated to regularly back up all their data on the devices on which they use the Games in a manner appropriate to the risk.
-
-8   Rights, indemnity
-8.1             Kolibri Games grants the user a non-exclusive, non-transferable and non-sublicensable right of use for private use with respect to the respective Game for the duration of the contract. This shall include multiple downloads to the device(s) linked to the respective account in the respective App Store. Furthermore, the Game may not be reproduced, distributed, publicly performed, broadcast or made publicly accessible on the Internet or via a network, edited or stored on data carriers. It may also not be used or exploited commercially. In addition, decompilation, disassembly and reverse engineering shall be prohibited, unless expressly permitted by law.
-
-8.2             If the user sends Kolibri Games feedback, suggestions and/or ideas (collectively referred to as “Feedback”) regarding the Game or possible enhancements or new developments of Games, Kolibri Games may incorporate such Feedback into its Products and/or incorporate such Feedback into the further development of its Products and use such Feedback as part of the Products, or otherwise publish, edit, use and exploit such Feedback. The user grants Kolibri Games, free of charge, the permanent, non-exclusive, spatially unlimited, royalty-free, transferable and sub-licensable right to reproduce, edit, distribute, distribute and make publicly available (in whole and/or in part, and in each case also with respect to adaptations thereof) and otherwise to exploit all Feedback provided by the user. Kolibri Games shall not be obliged to respond to Feedback and/or to use or exploit it. The user waives all possible copyrights in connection with the possible use and exploitation of the Feedback.
-
-8.3             The user shall indemnify Kolibri Games against all claims, including damage compensation claims, asserted by third parties due to an infringement of their rights by the user’s conduct or the content or data posted. The user shall also be obliged to reimburse the reasonable costs incurred as a result thereof, particularly the costs arising from any legal defense that may be required (including lawyers’ fees customary for the market, which shall not be limited to the statutory fees). This shall not apply if the user is not responsible for the infringement. All further rights and claims of Kolibri Games shall not be affected.
-
-9   Warranty, liability
-9.1             Insofar as Kolibri Games provides services free of charge, no warranty claims shall exist and Kolibri Games shall only be liable in accordance with the provisions of law for intentional and gross negligence; Kolibri Games shall only be liable for defects if it has fraudulently concealed them.
-
-9.2             If services are rendered in return for payment, the warranty claims of the user shall be governed by the provisions of law, unless stipulated otherwise in this Section 9.2.
-
-9.2.1         A warranty shall only be given for the current program version.
-
-9.2.2         The statutory liability of Kolibri Games for damage compensation and reimbursement of futile expenses shall be unrestricted only in the event of intentional action or gross negligence, in the event of negligent or intentional injury to life, limb or health, due to the assumption of a guarantee (which must be expressly designated as such in order to constitute a guarantee in the legal sense), and due to mandatory liability under the Product Liability Act. “Material contractual duties” shall mean duties whose fulfilment initially enables the achievement of the contractual purpose and on whose compliance the parties may therefore normally rely.
-
-9.2.3         In events other than those referred to in Section 9.2.2, Kolibri Games shall only be liable for minor negligence in the event of a breach of a material contractual duty. Otherwise, Kolibri Games shall not be liable for minor negligence.
-
-9.2.4         The damage compensation for the minor negligent breach of material contractual duties in accordance with Section 9.2.3 shall be limited to the foreseeable damage typical in contracts.
-
-9.3             To the extent Kolibri Games is liable for data loss on the merits in accordance with the foregoing, the amount of such liability shall also be limited to the costs that would have been necessary to restore the data if the user had made reasonable regular data backups.
-
-10   Modifications of these General Terms and Conditions
-10.1          Kolibri Games reserves the right to amend these General Terms and Conditions and other terms and conditions with effect for the future in accordance with this Section 10.
-
-10.2          Kolibri Games shall notify you in writing (e.g. by message within the Game or by e-mail) at least four weeks in advance of any changes for necessary reasons, e.g. for reasons relating to the expansion of services or changes to the Games, amendments to laws or legal rulings or other equivalent reasons that do not affect the main performance duties of the parties. These General Terms and Conditions shall then be deemed approved if the user does not object in writing or in text form within four weeks of receiving this information. The time limit for objection and the consequences of silence shall be indicated separately in the notice.
-
-10.3          Changes other than those mentioned in Section 10.2 shall require the user’s consent, which can be requested at the start of the next Game.
-
-10.4          If there is an objection in accordance with Section 10.2 or no consent given in accordance with Section 10.3, the user shall retain the right to use the current version of the Game. However, Kolibri Games may make the use of an extended version of the Game subject to approval of the modification of these General Terms and Conditions.
-
-11   Applicable law, jurisdiction
-11.1          German law shall apply to the exclusion of the UN Convention on Contracts for the International Sale of Goods. If the user is resident in another member state of the EU, this choice of law shall not result in the mandatory consumer protection regulations of his or her home country being rescinde
-
-11.2          For disputes with the user, the statutory place of jurisdiction shall apply, provided the user has a general place of jurisdiction in Germany. If the user has moved his or her domicile or habitual place of residence from Germany after concluding the contract or if his or her domicile or habitual place of residence is not known at the time the action is filed, Berlin shall be the place of jurisdiction.
-
-Last updated on: November 2019
-
-Additional Resources
-Contact
-Careers
-Press Room
-Legal Information
-Impressum – Legal Disclosure
-Privacy Policy – Website
-Privacy Policy – Games
-Terms and Conditions
-Let's connect
-   
 `

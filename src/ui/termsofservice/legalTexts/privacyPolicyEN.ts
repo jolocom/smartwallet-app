@@ -1,190 +1,125 @@
 export const privacyPolicyEN = `
-Terms of Service
+SmartWallet App - Privacy Policy
+Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin, Germany (“Jolocom”)
 
-1   General Provisions
-1.1             Kolibri Games GmbH, Hallesches Ufer 60, 10963 Berlin (hereinafter, “Kolibri Games”) develops and publishes mobile applications (“Games”) that can be downloaded from the App Stores of various providers.
 
-1.2             The Games are only offered to consumers in terms of § 13 of the German Civil Code (BGB), i.e. natural persons who conclude a legal transaction for purposes which can predominantly neither be attributed to their commercial nor their self-employed professional activity.
+Jolocom provides you with the SmartWallet mobile app ("SmartWallet App"), which you can download to your mobile device.
 
-1.3             All Games made by Kolibri Games are provided exclusively on the basis of these General Terms and Conditions. Any general terms and conditions of the user shall expressly not form part of the agreement, even if Kolibri Games does not expressly object to their applicability.
+The protection of personal data is very important to Jolocom. The following Privacy Policy explains whether personal data is collected when using the SmartWallet App and for what purpose it is processed. Jolocom complies with all applicable legal provisions for the protection of personal data and data security.
 
-1.4             These General Terms and Conditions are displayed when downloading each Game, within the Game, on the company website (https://kolibrigames.com/) and the Game-specific websites (e.g. https://www.idleminertycoon.com/, https://www.idlefactorytycoon.com/).
+The legal basis for data processing is Article 6 (1) (a) and Article 7 GDPR, Article 6 (1) (b) and (f) GDPR, and Article 6 (1) (c) GDPR.
 
-2   Conclusion of contract, term, termination
-2.1             The user confirms to have full legal capacity and, in the case of restricted legal capacity, to have obtained the consent of his/her legal guardian.
+I.    Name and contact details of the person responsible
 
-2.2             The contract for the use of the Game is concluded by downloading the Game from the respective App Store. Details of this process can be found in the terms of use of the respective App Store. The download creates a contract between the user and Kolibri Games for the free use of the respective Game. The corresponding license and usage agreement on the basis of these General Terms and Conditions is concluded for an indefinite period of time and may be terminated by either party at any time, subject to Section 2.3, without specifying any reasons by providing notice of four weeks.
+The person responsible within the meaning of Article 4 GDPR for the processing of personal data is:
 
-2.3             In addition to the possibility of free use, Kolibri Games also offers additional paid content, e.g. virtual items and power-ups (premium content). The use of the premium content is voluntary and forgoing such use does not restrict other use of the Game. The cost obligation will be indicated separately in the Game. For the acquisition and use of such premium content, the provisions of Section 4 of these General Terms and Conditions as well as any separate terms and conditions of use of the App Store providers shall apply in a supplementary fashion. If premium content has a defined duration (e.g. activation of certain premium functions for one month), ordinary termination (also of the contract for free use) shall be excluded during this period. To clarify, ordinary termination shall be possible if the user has purchased premium content without a fixed term (e.g. one-time or permanent power-ups), even if these have effects on the entire further period of use.
+Jolocom GmbH
+Waldemarstr. 37A
+10999 Berlin
+info@jolocom.com
 
-2.4             It is recommended to always install the latest version of the Game. Kolibri Games is only obligated to provide the full scope of performance and the correct functionality, even of premium content, for the current version of the Game.
 
-2.5             In the event of ordinary termination by the user or termination by Kolibri Games for good cause, no reimbursement of paid fees shall take place. Kolibri Games shall be entitled to continue to charge all outstanding fees for premium content already purchased.
+II.    Type of data processed and legal basis
 
-2.6             The user may not transfer this agreement to third parties. In the event of a breach of this provision (account transfer), Kolibri Games shall be entitled to terminate the agreement without notice, including agreements on premium content. In such event, a prorated refund shall also be excluded.
+User and device data
+Jolocom does not have any knowledge of or access to your personal data at any time, unless you contact Jolocom using the form provided or via email using the address provided in the SmartWallet App.
 
-2.7             The statutory right to extraordinary termination of this Agreement without notice for good cause shall not be affected.
+When the SmartWallet App is downloaded, the information required for this is transferred to the Apple AppStore or the GooglePlay Store (the "App Stores"), in particular the user name, email address, and customer number of your account; the time of the download; and the individual device code. Jolocom has no influence on this data collection and is not responsible for it. For more information on the purpose and scope of data processing in the App Stores, please refer to the corresponding Privacy Policy for each of the App Stores.
 
-3   Account and user data
-3.1             Upon conclusion of the contract and use of the Game, Kolibri Games shall store the progress of the Game and any additional paid content. For more information, please refer to Kolibri Games’ privacy policy (https://kolibrigames.com/privacy-policy/).
+After the SmartWallet App has been successfully loaded onto your mobile device, it can be used without access to the Internet. When using the SmartWallet App, no personal data is collected by Jolocom. The identity data that you provide to the SmartWallet App for use (e.g. name, address, driver's license, ID card) are exclusively stored locally and encrypted on your mobile device. If you make this information available to participating partners ("Issuers") for verification, the Issuer's Privacy Policy applies with regard to the purpose and scope of data processing. Jolocom has no access to the data or the data flow here either.
 
-3.2             The user must select secure access credentials and not make such data available to third parties. Kolibri Games is not responsible for any damage resulting from the breach of this duty. In the event of suspected abuse, Kolibri Games shall be entitled to temporarily block access to the Game in question.
+Jolocom does not verify the data. It is also your sole responsibility to save the stored content and make data backups.
 
-3.3             If the user can select a username in the Game, this must not violate applicable laws and/or these General Terms and Conditions. Kolibri Games shall be entitled to change the name in the event of a breach of this provision, either at the instigation of a third party or on its own initiative. No separate justification for the name change shall be necessary. The user has no claim to a specific name. Other rights of Kolibri Games in the event of a breach of this provision shall not be affected.
+Cookies
+No cookies are used when using the SmartWallet App.
 
-4   Premium content
-4.1             The contract for additional premium content shall only be concluded if the user clicks on the “Pay” or “Order for a fee” button in the shop area of the Game (exact labelling may vary for in-app purchases depending on the App Store). The contract shall be accepted by Kolibri Games (or on its behalf by the respective App Store provider) by sending an order confirmation via message or email, or by actually providing the respective premium content. The fee shall be payable in advance upon acquisition of premium content.
-
-4.2             A refund after the purchase of premium content can only be made within the scope of statutory consumer rights or the statutory right of revocation with due regard to the respective elements of exclusion.
-
-4.3             The prices for premium content as displayed via the respective App Stores and transmitted in the order confirmation for the respective order shall apply in each case. These can vary according to currency and country. The prices include any applicable value added tax. Payments will be processed via the respective App Stores. The terms of use and payment of the App Stores shall apply in this regard, supplemented by these General Terms and Conditions. In the event of contradictions between the general terms and conditions of the App Stores and these General Terms and Conditions, the terms of use and payment of the App Stores shall take precedence.
-
-4.4             If currencies are simulated in the Games (hereinafter, “Premium Points”), these represent premium content or units of measurement for the scope of the license to use the Game in question, and not real money. If such Premium Points can be earned both through Game play and as premium content, the units purchased in return for payment will always be used first when such Premium Points are used. Premium Points may only be converted back into real money if the operation of the Game as a whole is permanently discontinued. In such an event, the fee paid for Premium Points shall be refunded insofar as the corresponding Premium Points have not yet been used to activate Game content.
-
-4.5             The user shall be responsible for cancellations or chargebacks which the user itself has caused, e.g. due to insufficient account coverage. The user shall normally bear the costs arising therefrom. Kolibri Games shall be entitled to collect these costs together with the original fee from the user’s means of payment. The user shall reserve the right to prove that any damage did not occur or did not occur to the value of the requested amount.
-
-4.6             If the user defaults on payment, Kolibri Games may, irrespective of the continued obligation to pay, block access to the Game and demand the default interest stipulated by law.
-
-4.7             Kolibri Games may offer new premium content, change existing premium content and discontinue premium content. Permanent premium content already purchased (virtual items), which are removed from the Game, may in this case be used within a transitional period or exchanged for new premium content. Further claims of the user shall be excluded.
-
-4.8             For purposes of clarification: All claims of the user with respect to the premium content, particularly with respect to copyrights, warranty for defects and damage compensation, shall be asserted against Kolibri Games (and not against the App Stores).
-
-5   Subscriptions
-5.1             Certain features of the Games might be available through a subscription. Subscriptions may be available at different fees chargeable for a set period specified in the Games (“Subscription Period”). If you order a subscription, you must ensure that all the information you submit is true and accurate and that you have appropriate parental or guardian consent if you are under 18 years of age.
-
-5.2             The user can manage subscriptions and turn off auto-renewals in the respective device’s account settings.
-
-5.3             Kolibri Games reserves the right to alter the amount and/or terms of the subscription fees at any time. Additional information to price changes can be found in the terms of the respective platform.
-
-5.4             Additional information on payment and use of subscriptions can be found in the terms of the respective platform:
-
-Google Play Store: https://play.google.com/about/play-terms/index.html
-Apple App Store: https://www.apple.com/legal/internet-services/itunes/
-
-Monthly Subscription
-5.5             If the user chooses to purchase the monthly subscription offer, the displayed monthly amount will be charged to his/her Apple or Google Play account after confirming the purchase. It will auto-renew unless canceled at least 24 hours before the end of each 30-day period (“Monthly Subscription Period”).
-
-Weekly Subscription
-5.6             If the user chooses to purchase the weekly subscription offer, the displayed weekly amount will be charged to his/her Apple or Google Play account after confirming the purchase. It will auto-renew unless canceled at least 24 hours before the end of each 7-day period (“Weekly Subscription Period”).
-
-Free Trial
-5.7             For selected subscription offers, a trial period may be included. In this case, the exclusive contents of the subscription may be used free of charge for a specific period specified in the offer ("Free Trial Period"). This will automatically be converted into a paid subscription unless canceled at least 24 hours before the end of the Free Trial Period.
-
-5.8             A Free Trial Period can only be claimed once by each user. If a user has already used the Free Trial Period, the subscription fee will be charged directly after confirmation of the purchase of the subscription.
-
-6   Instructions on revocation
-With regard to contracts in return for payment, consumers (§ 13 of the German Civil Code) have a right of revocation in accordance with the following provisions:
-
-Revocation right
-You have the right to revoke this contract within 14 days without specifying any reasons.
-
-The revocation period is 14 days from the closing date of the contract.
-
-In order to exercise your revocation right, you must contact us (Kolibri Games GmbH, Hallesches Ufer 60, 10963 Berlin; e-mail: revocation@kolibrigames.com; telephone: +49 179 4411365) by means of a clear declaration (e.g. a letter by post or e-mail) of your decision to revoke this contract. You can use the model revocation form for this purpose, though this is not mandatory.
-
-In order to comply with the revocation period, it is sufficient that you send the notice of the exercise of the right of revocation before the expiry of the revocation period.
-
-Consequence of revocation
-If you revoke this Agreement, Kolibri Games GmbH shall immediately, i.e. no later than fourteen days from the date on which we receive notice of the revocation of this Agreement, repay all payments received from you, including delivery costs (excluding additional costs resulting from your choosing a different type of delivery from the cheapest standard delivery offered by us). For this refund, we will use the same means of payment that you used for the original transaction, unless expressly agreed otherwise with you; in no event shall you be charged for this refund.
-
-End of instructions on revocation.
-
-
-
-Special reference to the premature expiry of the revocation right:
-Your right of revocation shall expire prematurely if we have begun to execute the contract before the expiry of the revocation period, after you as the user have given your express consent to this and have confirmed your awareness that you will lose your revocation right as a result of the consent at the start of the execution of the contract.
-
-Revocation form
-(If you want to revoke the contract, please fill out this form and send it back.)
-
-– To Kolibri Games GmbH, Hallesches Ufer 60, 10963 Berlin; e-mail: revocation@kolibrigames.com:
-
-– I/we (*) hereby revoke the contract concluded by me/us (*) for the purchase of the the following goods (*)/the provision of the following service (*)
-
-– ordered on (*)/received on (*)
-
-– Name(s) of consumer(s) – Address of consumer(s)
-
-– Signature of consumer(s) (only for hard copy form)
-
-– Date
-
-___________
-
-(*) Delete if appropriate.
-
-
-
-
-
-7   User obligations
-7.1             When using the Games, the user may not use any other software or other routines that could interfere with the systems of Kolibri Games or other users. This includes actions that could lead to an unreasonable overloading of the systems of Kolibri Games. The use of special software, particularly for systematic or automatic control of Games, is prohibited.
-
-7.2             The user may not use any software or exploit any programming errors that lead or could lead to obtaining premium content in the Games or other unintended benefits for the user without having concluded a premium agreement, the user thus becoming obliged to pay the fee for such premium content. In the event of unjustified acquisition of premium content, Kolibri Games may delete or deactivate the unjustified premium content or other benefits. For the purposes of clarification: The above shall not apply if premium content can be acquired as a reward for certain Game actions.
-
-7.3             In connection with the services of Kolibri Games, the user may not use any software that enables “data mining” or otherwise collects information in connection with the Games.
-
-7.4             The user may not use, buy for real money (except through the App Stores), sell, trade, or attempt to use Premium Content outside the Game.
-
-7.5             When using any communication functions within the Games, the user must comply with all applicable laws and must not infringe the rights of third parties. In addition, certain content is undesirable in the Games because it contradicts the character of the Games as family entertainment media. In concrete terms, this means that users may not:
-
-use, post or publish any harassing, threatening, disturbing, insulting or defamatory, discriminatory, political, immoral, pornographic, morally reprehensible, offensive, violent, sexist, extreme right-wing or left-wing content or content that glorifies violence or violates laws, particularly laws for the protection of minors, or link to corresponding material on a third party website or advertise, offer or distribute such content or products that violates laws, particularly laws for the protection of minors;
-and publish, duplicate, make publicly accessible or disseminate content protected for the benefit of third parties without a corresponding license, in particular infringe upon industrial property rights, advertise, offer or distribute goods or services, commit or promote anti-competitive acts, request other users to provide personal data for commercial or illegal purposes or to provide access data, organize or advertise commercial activities and sales of third parties, duplicate an image of another person or make it publicly accessible without the written consent of the person concerned, or publish personal data and confidential data without being entitled to do so.
-7.6             Kolibri Games shall be entitled to delete content that violates applicable law and/or these General Terms and Conditions.
-
-7.7             The user may only use the Games for private purposes, unless Kolibri Games has given its express prior written consent to any other use in individual cases.
-
-7.8             Any breach of these General Terms and Conditions may lead to termination for good cause. In lieu of such termination, Kolibri Games may, at its sole discretion, announce measures or take sanctioning measures of any kind to enforce the provisions of these General Terms and Conditions. In particular, this shall include declaring a temporary or permanent virtual ban from the systems, warning the user of their temporary or permanent exclusion of the user from individual Game functions.
-
-7.9             Users shall be obligated to regularly back up all their data on the devices on which they use the Games in a manner appropriate to the risk.
-
-8   Rights, indemnity
-8.1             Kolibri Games grants the user a non-exclusive, non-transferable and non-sublicensable right of use for private use with respect to the respective Game for the duration of the contract. This shall include multiple downloads to the device(s) linked to the respective account in the respective App Store. Furthermore, the Game may not be reproduced, distributed, publicly performed, broadcast or made publicly accessible on the Internet or via a network, edited or stored on data carriers. It may also not be used or exploited commercially. In addition, decompilation, disassembly and reverse engineering shall be prohibited, unless expressly permitted by law.
-
-8.2             If the user sends Kolibri Games feedback, suggestions and/or ideas (collectively referred to as “Feedback”) regarding the Game or possible enhancements or new developments of Games, Kolibri Games may incorporate such Feedback into its Products and/or incorporate such Feedback into the further development of its Products and use such Feedback as part of the Products, or otherwise publish, edit, use and exploit such Feedback. The user grants Kolibri Games, free of charge, the permanent, non-exclusive, spatially unlimited, royalty-free, transferable and sub-licensable right to reproduce, edit, distribute, distribute and make publicly available (in whole and/or in part, and in each case also with respect to adaptations thereof) and otherwise to exploit all Feedback provided by the user. Kolibri Games shall not be obliged to respond to Feedback and/or to use or exploit it. The user waives all possible copyrights in connection with the possible use and exploitation of the Feedback.
-
-8.3             The user shall indemnify Kolibri Games against all claims, including damage compensation claims, asserted by third parties due to an infringement of their rights by the user’s conduct or the content or data posted. The user shall also be obliged to reimburse the reasonable costs incurred as a result thereof, particularly the costs arising from any legal defense that may be required (including lawyers’ fees customary for the market, which shall not be limited to the statutory fees). This shall not apply if the user is not responsible for the infringement. All further rights and claims of Kolibri Games shall not be affected.
-
-9   Warranty, liability
-9.1             Insofar as Kolibri Games provides services free of charge, no warranty claims shall exist and Kolibri Games shall only be liable in accordance with the provisions of law for intentional and gross negligence; Kolibri Games shall only be liable for defects if it has fraudulently concealed them.
-
-9.2             If services are rendered in return for payment, the warranty claims of the user shall be governed by the provisions of law, unless stipulated otherwise in this Section 9.2.
-
-9.2.1         A warranty shall only be given for the current program version.
-
-9.2.2         The statutory liability of Kolibri Games for damage compensation and reimbursement of futile expenses shall be unrestricted only in the event of intentional action or gross negligence, in the event of negligent or intentional injury to life, limb or health, due to the assumption of a guarantee (which must be expressly designated as such in order to constitute a guarantee in the legal sense), and due to mandatory liability under the Product Liability Act. “Material contractual duties” shall mean duties whose fulfilment initially enables the achievement of the contractual purpose and on whose compliance the parties may therefore normally rely.
-
-9.2.3         In events other than those referred to in Section 9.2.2, Kolibri Games shall only be liable for minor negligence in the event of a breach of a material contractual duty. Otherwise, Kolibri Games shall not be liable for minor negligence.
-
-9.2.4         The damage compensation for the minor negligent breach of material contractual duties in accordance with Section 9.2.3 shall be limited to the foreseeable damage typical in contracts.
-
-9.3             To the extent Kolibri Games is liable for data loss on the merits in accordance with the foregoing, the amount of such liability shall also be limited to the costs that would have been necessary to restore the data if the user had made reasonable regular data backups.
-
-10   Modifications of these General Terms and Conditions
-10.1          Kolibri Games reserves the right to amend these General Terms and Conditions and other terms and conditions with effect for the future in accordance with this Section 10.
-
-10.2          Kolibri Games shall notify you in writing (e.g. by message within the Game or by e-mail) at least four weeks in advance of any changes for necessary reasons, e.g. for reasons relating to the expansion of services or changes to the Games, amendments to laws or legal rulings or other equivalent reasons that do not affect the main performance duties of the parties. These General Terms and Conditions shall then be deemed approved if the user does not object in writing or in text form within four weeks of receiving this information. The time limit for objection and the consequences of silence shall be indicated separately in the notice.
-
-10.3          Changes other than those mentioned in Section 10.2 shall require the user’s consent, which can be requested at the start of the next Game.
-
-10.4          If there is an objection in accordance with Section 10.2 or no consent given in accordance with Section 10.3, the user shall retain the right to use the current version of the Game. However, Kolibri Games may make the use of an extended version of the Game subject to approval of the modification of these General Terms and Conditions.
-
-11   Applicable law, jurisdiction
-11.1          German law shall apply to the exclusion of the UN Convention on Contracts for the International Sale of Goods. If the user is resident in another member state of the EU, this choice of law shall not result in the mandatory consumer protection regulations of his or her home country being rescinde
-
-11.2          For disputes with the user, the statutory place of jurisdiction shall apply, provided the user has a general place of jurisdiction in Germany. If the user has moved his or her domicile or habitual place of residence from Germany after concluding the contract or if his or her domicile or habitual place of residence is not known at the time the action is filed, Berlin shall be the place of jurisdiction.
-
-Last updated on: November 2019
-
-Additional Resources
 Contact
-Careers
-Press Room
-Legal Information
-Impressum – Legal Disclosure
-Privacy Policy – Website
-Privacy Policy – Games
-Terms and Conditions
-Let's connect
+If you contact us via the contact form or via our e-mail address, we will use the personal data you provide — postal address, e-mail address, telephone number as well as your name and any additional contact information provided — for the purpose of answering the inquiry.
 
+The legal basis for data processing is Article 6 (1) (b) and (f) GDPR.
+
+
+III.    Purpose of processing
+
+Personal data is only collected, stored, and processed in the event that you initiate contact, insofar as it is necessary to answer the request. In this case, your personal data will only be processed in strict compliance with data protection regulations, in particular only if there is legal permission / legal basis.
+
+Specifically:
+
+1.     User and device data
+The data mentioned are required to enable the SmartWallet App to be downloaded from the App Stores. Jolocom itself does not receive any personal data.
+
+2.    Contact
+If you contact us via the e-mail address provided by us, the processing of the contact details you have used is essential in order to answer your inquiry. If data is also processed, such as name, address, or similar, any processing serves to be able to respond to your request as best as possible.
+
+
+IV.     Duration of storage
+
+Your data will be stored for as long as is necessary to fulfill the purposes mentioned above.
+
+As soon as this is no longer the case, e.g. after your request has been fully answered, they will be deleted or blocked if and for as long as required by commercial or tax retention obligations (Article 6 (1) (c) GDPR). From the point in time at which statutory retention requirements no longer conflict, the data will be deleted, unless you have expressly consented to further use (Article 6 (1) (a) GDPR).
+
+
+V.     Transfer of data to third parties / Transfer to third countries
+
+The data you transmit to Jolocom will neither be made available to third parties, nor passed on to third countries.
+
+
+VI.     Affected Rights
+
+If you are a person belonging to those affected by the processing of personal data, you have the rights listed below. These rights result from the provisions of the General Data Protection Regulation and are reproduced here in a partially simplified form.
+
+1.     Right to revoke the declaration of consent
+You have according to Article 7 (3) GDPR the right to withdraw your consent to the processing at any time. The legality of the processing carried out on the basis of the consent until the revocation is not affected. The right of withdrawal can be exercised by means of an informal declaration. A written declaration or, alternatively, an email to the contact address given above is sufficient.
+
+2.    Right to information
+According to Article 15 GDPR you have the right to request confirmation from us as to whether personal data relating to you is being processed. If this is the case, you have a right to information about this personal data and the information mentioned in Article 15 Para. 1 GDPR. This includes in particular the purpose of the processing, the categories of the processed data, the recipients to whom the data has been or will be disclosed, the planned duration (as far as possible) of the storage or the criteria for the duration of the storage.
+
+3.     Right to rectification
+You have according to Article 16 GDPR the right to demand that we correct any incorrect personal data concerning you without delay. Taking into account the purposes of the processing, you have the right to request — including by means of a supplementary declaration — the completion of incomplete personal data.
+
+4.     Right to cancellation
+You have according to Article 17 GDPR the right to demand that we delete personal data concerning you immediately. We are obliged to delete personal data immediately if one of the conditions in Article 17 (1) GDPR applies. These reasons include, for instance, that the data is no longer necessary for the purposes for which it was collected or otherwise processed.
+
+5.    Right to restriction of processing
+You have according to Article 18 GDPR the right to demand that we restrict processing if one of the conditions specified in Article 18 GDPR is met. This includes, for example, that you dispute the accuracy of the personal data. We are then only allowed to process the data to a limited extent for as long as it takes to check the correctness of the personal data.
+
+6.    Right to data portability
+You have according to Article 20 GDPR the right to receive the personal data concerning you that you have provided to us in a structured, common, and machine-readable format. You have the right to transfer this data without hindrance to another person responsible, i.e. to another body that processes data, provided that the original processing was based on consent or was necessary for the execution of a contract.
+
+7.    Right to object
+You have according to Article 21 GDPR the right to object at any time to the processing of personal data concerning you if this data is processed on the basis of Article 6 (1) (e) or (f) GDPR and there are reasons that arise from your personal situation. You can object at any time to the processing of data for the purpose of operating direct marketing. Personal data will then no longer be processed for this purpose. The right to object can be exercised by means of an informal declaration. A written declaration or, alternatively, an email to the contact address given above is sufficient.
+
+8.    Automated decision in individual cases including profiling
+You have, according to Article 22 GDPR, the right not to be subject to a decision based solely on automated processing — including profiling — which has legal effects on you or which significantly affects you in a similar manner. Article 22 (1) GDPR provides for exceptions to this, whereby Article 22 (4) GDPR again partially contains exceptions.
+
+9.    Right to lodge a complaint with a supervisory authority
+You have, according to Article 77 GDPR, without prejudice to any other administrative or judicial remedy, the right to lodge a complaint with a supervisory authority, in particular in the Member State of your place of habitual residence, place of work or place of the alleged infringement if you are of the opinion that the processing of personal data relating you infringes this Regulation.
+
+In the present case, the competent supervisory authority is:
+
+Berliner Beauftragte für Datenschutz und Informationsfreiheit
+Friedrichstraße 219
+10969 Berlin
+Telefon: 030/13 889-0
+Telefax: 030/215-5050
+E-Mail: mailbox@datenschutz-berlin.de
+http://www.datenschutz-berlin.de
+
+
+VII.    Technical and organizational measures
+
+We take technical and organizational measures to ensure that the security and protection requirements of the GDPR are met and that personal data is protected from loss, destruction, manipulation, or access by unauthorized persons. The measures are always adapted to the current state of the art.
+
+
+VIII.    Changes to the Privacy Policy
+
+We reserve the right to change this data protection declaration at any time. You are asked to inform yourself regularly about the content of the Privacy Policy.
+
+
+IX. Final provision
+
+This text is subject to German law and should be interpreted according to German legal understanding. The attached English version is for informational purposes only. In the event of discrepancies between the German and English versions, only the German version applies.
+
+
+As of August 2020
 `
