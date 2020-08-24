@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { AppError, reportError } from '@jolocom/sdk/js/src/lib/errors'
+import { AppError } from '@jolocom/sdk/js/src/lib/errors'
 import { ThunkDispatch } from '../../../store'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
@@ -16,6 +16,7 @@ import I18n from '../../../locales/i18n'
 import strings from '../../../locales/strings'
 import { SectionWrapper } from '../components/sectionWrapper'
 import { NavigationSection } from '../components/navigationSection'
+import { reportToSentry } from 'src/lib/errors/sentry'
 
 interface PaymentNavigationParams {
   error?: AppError | Error
@@ -71,10 +72,8 @@ const ErrorReportingContainer = (props: Props) => {
       sendPrivateData: toggleState,
     }
 
-    if (navigation && error) {
-      reportError({ ...userReport, error })
-      navigateBack()
-    }
+    reportToSentry({ ...userReport, error })
+    navigateBack()
   }
 
   return (

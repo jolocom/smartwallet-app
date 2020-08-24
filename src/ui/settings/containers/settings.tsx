@@ -40,7 +40,7 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const {  settings, setupBackup, navigate } = props
+  const { settings, setupBackup, navigate } = props
   const version = VersionNumber.appVersion
   // const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
@@ -98,6 +98,28 @@ export const SettingsContainer: React.FC<Props> = props => {
           />
           */}
         </SettingSection>
+        <SettingSection title={I18n.t(strings.ABOUT)}>
+          <SettingItem
+            title={I18n.t(strings.PRIVACY_POLICY)}
+            iconName={'shield-lock'}
+            onPress={() => navigate(routeList.PrivacyPolicy)}
+          />
+          <SettingItem
+            title={I18n.t(strings.TERMS_OF_SERVICE)}
+            iconName={'file-document'}
+            onPress={() => navigate(routeList.TermsOfService)}
+          />
+          <SettingItem
+            title={'Contact us'}
+            iconName={'contacts'}
+            onPress={() =>
+              navigate(routeList.ErrorReporting, {
+                error: new Error('Contact us'),
+                previousScreen: routeList.Settings,
+              })
+            }
+          />
+        </SettingSection>
         <Text style={styles.versionNumber}>
           Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}
         </Text>
@@ -114,10 +136,11 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
-  navigate: (route: routeList) =>
+  navigate: (route: routeList, params?: any) =>
     dispatch(
       navigationActions.navigate({
         routeName: route,
+        params,
       }),
     ),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),
