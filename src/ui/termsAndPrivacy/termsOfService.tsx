@@ -26,7 +26,7 @@ const TermsOfServiceContainer: React.FC<Props> = ({
       <NavigationSection onNavigation={navigateBack} isBackButton={true} />
       <View style={styles.wrapper}>
         <Text style={styles.header}>{I18n.t(strings.TERMS_OF_SERVICE)}</Text>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.text}>{termsText}</Text>
         </ScrollView>
       </View>
