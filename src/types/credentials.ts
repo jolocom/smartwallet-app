@@ -17,27 +17,30 @@ export const ATTR_TYPES = {
   ProofOfNameCredential: AttrKeys.name,
 }
 
-export interface ServiceIssuedCredI {
-  renderInfo?: CredentialOfferRenderInfo
-  invalid: boolean
-  type: string
-}
-
 export const ATTR_UI_NAMES: { [x: string]: string } = {
   ProofOfEmailCredential: 'email',
   ProofOfMobilePhoneNumberCredential: 'phone number',
   ProofOfNameCredential: 'name',
 }
 
-export interface UICredentialMetadata
-  extends Pick<SignedCredential, 'name' | 'expires' | 'issued'> {
+// NOTE: @renderInfo is not part of the @metadata property b/c the metadata properties
+// are only available for @SignedCredentials, while for Credential Offer @renderInfo would still
+// be needed. Hence, it should be available at the base of the @UICredential.
+export interface BaseUICredential {
+  type: string
+  issuer: IdentitySummary
   renderInfo: CredentialOfferRenderInfo | undefined
 }
 
-export interface UICredential extends Pick<SignedCredential, 'id' | 'claim'> {
-  type: string
+export type UICredentialMetadata = Pick<
+  SignedCredential,
+  'name' | 'expires' | 'issued'
+>
+
+export interface UICredential
+  extends BaseUICredential,
+    Pick<SignedCredential, 'id' | 'claim'> {
   metadata: UICredentialMetadata
-  issuer: IdentitySummary
 }
 
 export enum CredentialSection {
@@ -60,4 +63,8 @@ export interface MultipleShareUICredential
 export interface ShareCredentialsBySection
   extends CredentialsBySection<ShareUICredential | MultipleShareUICredential> {
   missingTypes: string[]
+}
+
+export interface OfferUICredential extends BaseUICredential {
+  invalid: boolean
 }

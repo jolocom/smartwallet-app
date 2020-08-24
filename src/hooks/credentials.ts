@@ -40,11 +40,11 @@ export const useSyncCredentials = () => {
       type,
       claim,
       issuer,
+      renderInfo,
       metadata: {
         name,
         expires,
         issued,
-        renderInfo,
       },
     }
   }

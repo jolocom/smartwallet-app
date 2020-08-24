@@ -5,7 +5,7 @@ import {
   SignedCredentialWithMetadata,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { ServiceIssuedCredI } from '~/types/credentials'
+import { OfferUICredential } from '~/types/credentials'
 
 const useCredentialOfferFlow = () => {
   const interaction = useInteraction()
@@ -45,7 +45,7 @@ const useCredentialOfferFlow = () => {
     await interaction.processInteractionToken(receiveToken)
   }
 
-  const getValidatedCredentials = (): ServiceIssuedCredI[] => {
+  const getValidatedCredentials = (): OfferUICredential[] => {
     const {
       offerSummary,
       issued,

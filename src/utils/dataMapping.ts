@@ -18,6 +18,7 @@ import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interact
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { InteractionDetails } from '~/modules/interaction/types'
 
 export const fieldNames = {
   [AttrKeys.name]: 'name',
@@ -109,15 +110,19 @@ const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
   }
 }
 
+// TODO: have proper types for all the mapped interactions
 const mapCredReceiveData = (summary: SummaryI<CredentialOfferFlowState>) => {
   return {
     counterparty: summary.initiator,
     credentials: {
-      service_issued: summary.state.offerSummary.map((cred) => ({
-        type: cred.type,
-        invalid: false,
-        renderInfo: cred.renderInfo,
-      })),
+      service_issued: summary.state.offerSummary.map(
+        ({ renderInfo, type }) => ({
+          type,
+          renderInfo,
+          issuer: summary.initiator,
+          invalid: false,
+        }),
+      ),
     },
   }
 }

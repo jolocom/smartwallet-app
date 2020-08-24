@@ -1,26 +1,17 @@
 import {
-  UICredentialMetadata,
   CredentialsBySection,
-  UICredential,
   CredentialSection,
+  BaseUICredential,
 } from '~/types/credentials'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
-export const getCredentialsBySection = <
-  T extends { metadata: UICredentialMetadata }
->(
+export const getCredentialsBySection = <T extends BaseUICredential>(
   creds: T[],
 ) => {
   return creds.reduce<CredentialsBySection<T>>(
     (acc, cred) => {
-      if (
-        cred.metadata.renderInfo &&
-        cred.metadata.renderInfo.renderAs === CredentialRenderTypes.document
-      ) {
-        acc.documents = [...acc.documents, cred]
-      } else {
-        acc.other = [...acc.other, cred]
-      }
+      const section = getCredentialSection(cred)
+      acc[section] = [...acc[section], cred]
 
       return acc
     },
@@ -31,8 +22,7 @@ export const getCredentialsBySection = <
 /**
  * Returns @CredentialSection based on the @renderAs property of the Credential Metadata
  */
-export const getCredentialSection = (cred: UICredential) =>
-  cred.metadata.renderInfo &&
-  cred.metadata.renderInfo.renderAs === CredentialRenderTypes.document
+export const getCredentialSection = <T extends BaseUICredential>(cred: T) =>
+  cred.renderInfo && cred.renderInfo.renderAs === CredentialRenderTypes.document
     ? CredentialSection.Documents
     : CredentialSection.Other
