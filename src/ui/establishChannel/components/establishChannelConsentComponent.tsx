@@ -63,21 +63,19 @@ export class EstablishChannelConsentComponent extends React.Component<
   public render() {
     const { initiator: issuer, state } = this.props.interactionSummary
     const { description } = state as EstablishChannelFlowState
+
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
           <IssuerCard issuer={issuer} style={styles.issuerCard} />
           <View style={styles.authRequestContainer}>
             <Text style={styles.authRequestText}>
-              {I18n.t(strings.WOULD_YOU_LIKE_TO)}
+              {I18n.t(strings.CONNECTION_DESCRIPTION)}
             </Text>
             <Text
               style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
             >
               {description}
-            </Text>
-            <Text style={styles.authRequestText}>
-              {I18n.t(strings.WITH_YOUR_SMARTWALLET)}
             </Text>
           </View>
         </View>
