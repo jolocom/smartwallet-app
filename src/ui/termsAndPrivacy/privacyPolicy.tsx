@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
 })
 
 export const PrivacyPolicy = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(PrivacyPolicyContainer)
