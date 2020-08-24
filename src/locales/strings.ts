@@ -231,4 +231,7 @@ export default {
   NO_DOCUMENTS_TO_SEE_HERE: 'No documents to see here',
   EXPIRED: 'expired',
   UNKNOWN: 'Unknown',
+
+  //ESATABLISH
+  CONNECTION_DESCRIPTION: 'Connection description:',
 }
