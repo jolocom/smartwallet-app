@@ -3,6 +3,8 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.jolocom.nativeUtils.NativeUtilsPackage;
+import com.reactlibrary.RNJolocomPackage;
 
 import com.levelasquez.androidopensettings.AndroidOpenSettingsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -42,6 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new NativeUtilsPackage(),
+            new RNJolocomPackage(),
             new AndroidOpenSettingsPackage(),
             new AsyncStoragePackage(),
             new RNSentryPackage(),

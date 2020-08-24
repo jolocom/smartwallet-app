@@ -166,6 +166,8 @@ android {
 }
 
 dependencies {
+    implementation project(':@jolocom_native-core-react-native')
+    implementation project(':react-native-jolocom')
 
     implementation project(':react-native-android-open-settings')
     implementation project(':@react-native-community_async-storage')

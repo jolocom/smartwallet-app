@@ -8,10 +8,6 @@
 module.exports = {
   resolver: {
     extraNodeModules: {
-      // React Native bindings for jolocom/wallet-rs
-      '@jolocom/native-utils-node': require.resolve(
-        '@jolocom/native-utils-react-native',
-      ),
       // Polyfills for node packages
       crypto: require.resolve('react-native-crypto'),
       'crypto-browserify': require.resolve('react-native-crypto'),
