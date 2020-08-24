@@ -6,6 +6,11 @@ import { StatusBar } from 'react-native'
 import { routeList } from '../../../routeList'
 import { checkTermsOfService } from 'src/actions/generic'
 import { withErrorScreen } from 'src/actions/modifiers'
+import { navigationActions, registrationActions } from 'src/actions/'
+import { StatusBar } from 'react-native'
+import { routeList } from '../../../routeList'
+import { withErrorScreen } from 'src/actions/modifiers'
+import { AppError, ErrorCode } from 'src/lib/errors'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
 
@@ -25,7 +30,23 @@ export class LandingContainer extends React.Component<Props> {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   getStarted: () => {
-    dispatch(withErrorScreen(checkTermsOfService(routeList.Entropy)))
+    dispatch(
+      withErrorScreen(
+        checkTermsOfService(routeList.Entropy, () => {
+          dispatch(
+            withErrorScreen(
+              registrationActions.createIdentity(''),
+              err =>
+                new AppError(
+                  ErrorCode.RegistrationFailed,
+                  err,
+                  routeList.Landing,
+                ),
+            ),
+          )
+        }),
+      ),
+    )
   },
   recoverIdentity: () => {
     dispatch(withErrorScreen(checkTermsOfService(routeList.InputSeedPhrase)))

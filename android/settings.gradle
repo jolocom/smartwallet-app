@@ -1,4 +1,8 @@
 rootProject.name = 'JolocomWallet'
+include ':@jolocom_native-core-react-native'
+project(':@jolocom_native-core-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/@jolocom/native-core-react-native/android')
+include ':react-native-jolocom'
+project(':react-native-jolocom').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-jolocom/android')
 include ':react-native-android-open-settings'
 project(':react-native-android-open-settings').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-open-settings/android')
 include ':@react-native-community_async-storage'

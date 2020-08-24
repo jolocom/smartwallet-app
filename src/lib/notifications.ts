@@ -1,5 +1,4 @@
 import { AppError } from '@jolocom/sdk/js/src/lib/errors'
-import { randomBytes } from 'crypto'
 
 interface NotificationMessage {
   title: string
@@ -56,11 +55,13 @@ type PartialNotification = Partial<NotificationBase> &
   NotificationInteract &
   NotificationDismiss
 
+let notifIds = 0
+
 const createNotificationFactory = (
   template: PartialNotification & Omit<NotificationBase, 'id'>,
 ) => (overrides: PartialNotification & NotificationMessage): Notification =>
   ({
-    id: randomBytes(4).toString('hex'),
+    id: notifIds++,
     ...(template as Notification),
     ...overrides,
   } as Notification)
