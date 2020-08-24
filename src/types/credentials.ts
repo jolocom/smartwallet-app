@@ -17,11 +17,6 @@ export const ATTR_TYPES = {
   ProofOfNameCredential: AttrKeys.name,
 }
 
-export enum CredentialSectionsUpper {
-  DOCUMENTS = 'DOCUMENTS',
-  OTHER = 'OTHER',
-}
-
 export interface ServiceIssuedCredI {
   renderInfo?: CredentialOfferRenderInfo
   invalid: boolean
@@ -34,17 +29,35 @@ export const ATTR_UI_NAMES: { [x: string]: string } = {
   ProofOfNameCredential: 'name',
 }
 
-interface UICredentialMetadata
+export interface UICredentialMetadata
   extends Pick<SignedCredential, 'name' | 'expires' | 'issued'> {
   renderInfo: CredentialOfferRenderInfo | undefined
 }
 
 export interface UICredential extends Pick<SignedCredential, 'id' | 'claim'> {
+  type: string
   metadata: UICredentialMetadata
   issuer: IdentitySummary
 }
 
-export interface CredentialsBySection {
-  documents: UICredential[]
-  other: UICredential[]
+export enum CredentialSection {
+  Documents = 'documents',
+  Other = 'other',
+}
+
+export interface CredentialsBySection<T> {
+  [CredentialSection.Documents]: T[]
+  [CredentialSection.Other]: T[]
+}
+
+export type ShareUICredential = Omit<UICredential, 'claim'>
+
+export interface MultipleShareUICredential
+  extends Pick<ShareUICredential, 'type'> {
+  credentials: ShareUICredential[]
+}
+
+export interface ShareCredentialsBySection
+  extends CredentialsBySection<ShareUICredential | MultipleShareUICredential> {
+  missingTypes: string[]
 }

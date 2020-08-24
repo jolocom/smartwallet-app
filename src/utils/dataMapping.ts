@@ -1,4 +1,10 @@
-import { AttrKeys, ATTR_TYPES } from '~/types/credentials'
+import {
+  AttrKeys,
+  ATTR_TYPES,
+  UICredential,
+  ShareUICredential,
+  CredentialSection,
+} from '~/types/credentials'
 import { claimsMetadata } from 'cred-types-jolocom-core'
 
 import { AttributeI } from '~/modules/attributes/types'
@@ -11,6 +17,7 @@ import {
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
 export const fieldNames = {
   [AttrKeys.name]: 'name',
@@ -143,4 +150,11 @@ export const getClaim = (attributeKey: AttrKeys, value: string) => {
     case AttrKeys.mobilePhoneNumber:
       return { telephone: value }
   }
+}
+
+export const uiCredentialToShareCredential = (
+  cred: UICredential,
+): ShareUICredential => {
+  const { claim, ...shareCred } = cred
+  return shareCred
 }

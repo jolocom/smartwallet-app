@@ -65,6 +65,9 @@ export interface CredShareI extends CredCommonI {
   }
 }
 
+// TODO: have @ServiceIssuedCredI, @UICredential and @CredentialShareCredential extend
+// the same interface, hence share a structure. Will make separation by section more
+// generic. Also the use of Credential Cards more consistent across the app.
 interface ServiceIssuedCredI {
   type: string
   invalid: boolean
@@ -83,9 +86,4 @@ export enum IntermediaryState {
   showing = 'showing',
   hiding = 'hiding',
   absent = 'absent',
-}
-
-export interface InteractionCredentialsBySection {
-  documents: ServiceIssuedCredI[]
-  other: ServiceIssuedCredI[]
 }

@@ -2,13 +2,19 @@ import { RootReducerI } from '~/types/reducer'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
-import {
-  IntermediaryState,
-  CredReceiveI,
-  InteractionCredentialsBySection,
-} from './types'
+import { IntermediaryState, CredReceiveI, CredShareI } from './types'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+import { getAllCredentials } from '../credentials/selectors'
+import {
+  UICredential,
+  CredentialsBySection,
+  ServiceIssuedCredI,
+  ShareCredentialsBySection,
+} from '~/types/credentials'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { uiCredentialToShareCredential } from '~/utils/dataMapping'
+import { getCredentialSection } from '~/utils/credentialsBySection'
 
 export const getInteractionAttributes = (
   state: RootReducerI,
@@ -25,7 +31,7 @@ export const getIntermediaryState = (state: RootReducerI): any =>
 export const getAttributeInputKey = (state: RootReducerI): any =>
   state.interaction.attributeInputKey
 
-export const getCredentials = (state: RootReducerI): any =>
+export const getInteractionCredentials = (state: RootReducerI): any =>
   state.interaction.details.credentials
 
 export const getInteractionId = (state: RootReducerI): string =>
@@ -80,12 +86,14 @@ export const getIsFullScreenInteraction = createSelector(
   },
 )
 
-export const getCredentialsBySection = createSelector<
+export const getOfferCredentialsBySection = createSelector<
   RootReducerI,
   CredReceiveI,
-  InteractionCredentialsBySection
+  CredentialsBySection<ServiceIssuedCredI>
 >([getInteractionDetails], (details) =>
-  details.credentials.service_issued.reduce<InteractionCredentialsBySection>(
+  details.credentials.service_issued.reduce<
+    CredentialsBySection<ServiceIssuedCredI>
+  >(
     (acc, v) => {
       if (
         v.renderInfo &&
@@ -100,3 +108,38 @@ export const getCredentialsBySection = createSelector<
     { documents: [], other: [] },
   ),
 )
+
+export const getShareCredentialsBySection = createSelector<
+  RootReducerI,
+  CredShareI,
+  UICredential[],
+  ShareCredentialsBySection
+>([getInteractionDetails, getAllCredentials], (details, credentials) => {
+  return details.credentials.service_issued.reduce<ShareCredentialsBySection>(
+    (acc, type) => {
+      const creds = credentials.filter((cred) => cred.type === type)
+
+      if (!creds.length) {
+        acc.missingTypes.push(type)
+        return acc
+      }
+
+      // NOTE: we assume the @renderAs property is the same for all credentials
+      // of the same type
+      const section = getCredentialSection(creds[0])
+
+      acc[section] = [
+        ...acc[section],
+        creds.length === 1
+          ? uiCredentialToShareCredential(creds[0])
+          : {
+              type,
+              credentials: creds.map(uiCredentialToShareCredential),
+            },
+      ]
+
+      return acc
+    },
+    { documents: [], other: [], missingTypes: [] },
+  )
+})
