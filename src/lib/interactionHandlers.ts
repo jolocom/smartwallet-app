@@ -3,7 +3,6 @@ import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import {
   InteractionTransportType,
   EstablishChannelType,
@@ -37,11 +36,6 @@ export const interactionHandlers = {
     interactionToken: T,
     channel: InteractionTransportType,
   ) => ssoActions.consumeCredentialOfferRequest(interactionToken, channel),
-  [InteractionType.PaymentRequest]: <T extends JSONWebToken<PaymentRequest>>(
-    interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) =>
-    ssoActions.consumePaymentRequest(interactionToken, isDeepLinkInteraction),
 
   [EstablishChannelType.EstablishChannelRequest]: <T extends JSONWebToken<EstablishChannelRequest>>(
     interactionToken: T,
