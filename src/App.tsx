@@ -14,6 +14,8 @@ import {
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
 import { black } from './styles/colors'
+import Lock from './ui/deviceauth/Lock'
+import RegisterPIN from './ui/deviceauth/RegisterPIN'
 import { LoadingSpinner } from './ui/generic'
 
 import {
@@ -38,7 +40,7 @@ let sdkPromise: Promise<JolocomSDK>
 
 export default class App extends React.PureComponent<
   {},
-  { ready: boolean, showStatusBar: boolean }
+  { ready: boolean; showStatusBar: boolean }
 > {
   private navigator!: NavigationContainerComponent
 
@@ -120,7 +122,9 @@ export default class App extends React.PureComponent<
             }}
           />
         )}
-        {!ready ? <LoadingSpinner /> :
+        {!ready ? (
+          <LoadingSpinner />
+        ) : (
           <Provider store={store}>
             <View style={{ flex: 1 }}>
               <RoutesContainer
@@ -128,9 +132,11 @@ export default class App extends React.PureComponent<
                 ref={nav => this.setNavigator(nav)}
               />
               <AppLoadingAndNotifications />
+              <Lock />
+              <RegisterPIN />
             </View>
           </Provider>
-        }
+        )}
       </React.Fragment>
     )
   }

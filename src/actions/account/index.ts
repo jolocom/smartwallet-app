@@ -1,14 +1,18 @@
-import { navigationActions } from 'src/actions/'
+import * as Keychain from 'react-native-keychain'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
+
+import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
+import { navigationActions, accountActions } from 'src/actions/'
+
 import { routeList } from 'src/routeList'
 import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
 } from '@jolocom/sdk/js/src/lib/util'
 import { ThunkAction } from 'src/store'
-import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
@@ -22,9 +26,34 @@ export const setDid = (did: string) => ({
   value: did,
 })
 
+export const setLocalAuth = () => ({
+  type: 'SET_LOCAL_AUTH',
+})
+
+export const openLocalAuth = () => ({
+  type: 'OPEN_LOCAL_AUTH',
+})
+
+export const closeLocalAuth = () => ({
+  type: 'CLOSE_LOCAL_AUTH',
+})
+
 export const setSelected = (claim: DecoratedClaims) => ({
   type: 'SET_SELECTED',
   selected: claim,
+})
+
+export const setPopup = (value: boolean) => ({
+  type: 'SET_POPUP',
+  payload: value,
+})
+
+export const lockApp = () => ({
+  type: 'LOCK_APP',
+})
+
+export const unlockApp = () => ({
+  type: 'UNLOCK_APP',
 })
 
 export const resetSelected = () => ({
@@ -65,6 +94,17 @@ export const checkIdentityExists: ThunkAction = async (
     }
 
     throw err
+  }
+}
+
+export const checkLocalDeviceAuthSet: ThunkAction = async dispatch => {
+  const pin = await Keychain.getGenericPassword({
+    service: PIN_SERVICE,
+  })
+  if (pin) {
+    dispatch(accountActions.setLocalAuth())
+  } else {
+    dispatch(accountActions.openLocalAuth())
   }
 }
 

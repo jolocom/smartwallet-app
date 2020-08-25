@@ -13,6 +13,7 @@ import { Colors } from '../../../styles'
 
 interface Props extends NavigationScreenProps {
   consumeToken: (jwt: string) => Promise<any>
+  registerPopup: () => void
 }
 
 const CAMERA_PERMISSION = 'camera'
@@ -48,6 +49,7 @@ export const ScannerContainer = (props: Props) => {
   }, [])
 
   const requestCameraPermission = async () => {
+    props.registerPopup()
     const permission = await Permissions.request(CAMERA_PERMISSION)
     setPermission(permission)
   }

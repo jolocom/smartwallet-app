@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
+
 import { CredentialOverview } from '../components/credentialOverview'
 import { accountActions } from 'src/actions'
 import { DecoratedClaims } from 'src/reducers/account/'
@@ -15,6 +16,7 @@ interface Props
 export class ClaimsContainer extends React.Component<Props> {
   public componentWillMount(): void {
     this.props.setClaimsForDid()
+    this.props.checkLocalAuthSet()
   }
 
   public render(): JSX.Element {
@@ -42,6 +44,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
   setClaimsForDid: () => dispatch(withLoading(accountActions.setClaimsForDid)),
+  checkLocalAuthSet: () => dispatch(accountActions.checkLocalDeviceAuthSet),
 })
 
 export const Claims = connect(
