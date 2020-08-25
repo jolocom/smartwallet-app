@@ -3,9 +3,9 @@ package com.jolocomwallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.sentry.RNSentryPackage;
 import com.reactnativecommunity.toolbarandroid.ReactToolbarPackage;
 import com.reactnativecommunity.art.ARTPackage;
-import io.sentry.RNSentryPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.reactlibrary.RNJolocomPackage;
 
@@ -45,9 +45,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSentryPackage(),
             new ReactToolbarPackage(),
             new ARTPackage(),
-            new RNSentryPackage(),
             new RNGestureHandlerPackage(),
             new RNJolocomPackage(),
             new AndroidOpenSettingsPackage(),

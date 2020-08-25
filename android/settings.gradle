@@ -1,10 +1,10 @@
 rootProject.name = 'JolocomWallet'
+include ':@sentry_react-native'
+project(':@sentry_react-native').projectDir = new File(rootProject.projectDir, '../node_modules/@sentry/react-native/android')
 include ':@react-native-community_toolbar-android'
 project(':@react-native-community_toolbar-android').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/toolbar-android/android')
 include ':@react-native-community_art'
 project(':@react-native-community_art').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/art/android')
-include ':@sentry_react-native'
-project(':@sentry_react-native').projectDir = new File(rootProject.projectDir, '../node_modules/@sentry/react-native/android')
 include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
 include ':react-native-jolocom'

@@ -166,9 +166,9 @@ android {
 }
 
 dependencies {
+    implementation project(':@sentry_react-native')
     implementation project(':@react-native-community_toolbar-android')
     implementation project(':@react-native-community_art')
-    implementation project(':@sentry_react-native')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-jolocom')
 
