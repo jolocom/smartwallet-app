@@ -8,6 +8,7 @@ import {
   EstablishChannelType,
   EstablishChannelRequest,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { ResolutionType, ResolutionRequest } from '@jolocom/sdk/js/src/lib/interactionManager/resolutionFlow'
 import { ssoActions } from 'src/actions'
 import { ThunkAction } from 'src/store'
 import { JolocomSDK } from 'react-native-jolocom'
@@ -53,6 +54,20 @@ export const interactionHandlers = {
     const ch = await sdk.channels.create(interxn)
     ch.start()
 
+    return dispatch(navigatorResetHome())
+  },
+
+  [ResolutionType.ResolutionRequest]: <T extends JSONWebToken<ResolutionRequest>>(
+    interactionToken: T,
+    channel: InteractionTransportType,
+  ): ThunkAction => async (
+    dispatch,
+    getState,
+    sdk: JolocomSDK
+  ) => {
+    const interxn = await sdk.interactionManager.start(InteractionTransportType.HTTP, interactionToken)
+    const resp = await interxn.createResolutionResponse()
+    await interxn.send(resp)
     return dispatch(navigatorResetHome())
   }
 }
