@@ -60,6 +60,8 @@ export default class App extends React.PureComponent<
         const passwordStore = new JolocomKeychainPasswordStore()
         const sdk = new JolocomSDK({ storage, passwordStore })
         await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        sdk.setDefaultDidMethod('jun')
+
         store = initStore(sdk)
         this.setState({ ready: true })
         return sdk
