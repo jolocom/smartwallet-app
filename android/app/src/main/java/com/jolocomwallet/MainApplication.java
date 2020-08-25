@@ -19,7 +19,6 @@ import com.horcrux.svg.SvgPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.oblador.keychain.KeychainPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -59,7 +58,6 @@ public class MainApplication extends Application implements ReactApplication {
             new SplashScreenReactPackage(),
             new RandomBytesPackage(),
             new KeychainPackage(),
-            new RNFetchBlobPackage(),
             new RNCameraPackage(),
             new SQLitePluginPackage(),
             new LinearGradientPackage(),

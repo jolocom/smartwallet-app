@@ -173,7 +173,6 @@ dependencies {
     implementation project(':@react-native-community_async-storage')
     implementation project(':@sentry_react-native')
     implementation project(':react-native-vector-icons')
-    implementation project(':rn-fetch-blob')
     implementation project(':react-native-localize')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-screens')
