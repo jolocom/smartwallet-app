@@ -35,6 +35,7 @@ export enum routeList {
   SeedPhrase = 'SeedPhrase',
   TermsOfService = 'TermsOfService',
   PrivacyPolicy = 'PrivacyPolicy',
+  Impressum = 'Impressum',
 
   // General
   Exception = 'Exception',
