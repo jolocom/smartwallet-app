@@ -56,6 +56,7 @@
 		7082D98B3B874DC08B6B174B /* libRNKeychain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C76AB0EC3DB8409284E3F553 /* libRNKeychain.a */; };
 		712FAAB8DBDE463893AD69C6 /* libRNLocalize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F26AAA51D40D4E3B8151DF65 /* libRNLocalize.a */; };
 		715D8480D35E4A449C21FDA9 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC43EF73F7D44A6A2082E07 /* libRNFetchBlob.a */; };
+		75A8D6ADD3E74CC6955EEA95 /* libReactNativeFingerprintScanner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59971462B6074722B2A17BA5 /* libReactNativeFingerprintScanner.a */; };
 		7D2934DA020F45AAA4D8821D /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C906022DEE944DEC932EC9BF /* MaterialCommunityIcons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		85AD815310C54BA68FA0FBF2 /* libRNScreens.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BF9BF5B43C74D9A95933AEF /* libRNScreens.a */; };
@@ -63,6 +64,7 @@
 		952E9DC568924369A9B2DAEB /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB1AFA6024429DA4C7BCF7 /* FontAwesome5_Solid.ttf */; };
 		9E0B45E70C344BEFB85DD1BC /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C03F830DD4448148A98E92F /* Zocial.ttf */; };
 		A47BC7729D4746C4A82FC921 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4BDE2C1EA0940A7B3236BB3 /* FontAwesome5_Regular.ttf */; };
+		A7AEAB13722F4445A35DDF6D /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = FCD3DC59FECB4C9C8BCD1725 /* TTCommons.otf */; };
 		A9099028F51940559D388196 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F71AB2FA26694E9B99BD6BFC /* FontAwesome5_Brands.ttf */; };
 		A99F7055421844509BEA9DA4 /* libRNSentry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF478301C2D647E0B3AAB7C2 /* libRNSentry.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
@@ -70,7 +72,6 @@
 		B0E821B3835247E3A445A5B4 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC9AFAC42ADC4D81AB9C3208 /* Feather.ttf */; };
 		B465E65822CE17D100F87457 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = B465E65722CE17D000F87457 /* assets */; };
 		B465E66522CE1D3F00F87457 /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B465E66422CE1D2500F87457 /* libReactNativePermissions.a */; };
-		B4A807E322C62D0C008E672A /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = B4A807E222C62D0C008E672A /* TTCommons.otf */; };
 		B4A807ED22C6307F008E672A /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4A807EA22C6306C008E672A /* libART.a */; };
 		B4A8080F22C6394C008E672A /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4A8080E22C6394C008E672A /* Launch Screen.storyboard */; };
 		B6E1627C4B934D5AB4511F20 /* libRNLocalize-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCE5F13C0E6545B9916D609E /* libRNLocalize-tvOS.a */; };
@@ -159,6 +160,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = CC0127971E3ACC3900B23C9F;
 			remoteInfo = Interactable;
+		};
+		2973BBD324F4FA250081EF67 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA48C30EE5974ED2B35A8542 /* ReactNativeFingerprintScanner.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = ReactNativeFingerprintScanner;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -614,6 +622,7 @@
 		4C65CC91E4AE44FC9E37B2DD /* RNCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; };
 		51077AE9886846C9B1C77495 /* libRNVersionNumber-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNVersionNumber-tvOS.a"; sourceTree = "<group>"; };
 		589CFA911D4E4F9D8087981A /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; };
+		59971462B6074722B2A17BA5 /* libReactNativeFingerprintScanner.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeFingerprintScanner.a; sourceTree = "<group>"; };
 		5B5B976388974E47A7EA021A /* libRNRandomBytes-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNRandomBytes-tvOS.a"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6C41D2A7A6B44AC4B72CE335 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
@@ -671,7 +680,9 @@
 		F4BDE2C1EA0940A7B3236BB3 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		F6BA50AFB74644C59D087441 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		F71AB2FA26694E9B99BD6BFC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		FA48C30EE5974ED2B35A8542 /* ReactNativeFingerprintScanner.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeFingerprintScanner.xcodeproj; path = "../node_modules/react-native-fingerprint-scanner/ios/ReactNativeFingerprintScanner.xcodeproj"; sourceTree = "<group>"; };
 		FB75B9F4BADB4C7E849222AB /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
+		FCD3DC59FECB4C9C8BCD1725 /* TTCommons.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = TTCommons.otf; path = ../src/assets/fonts/TTCommons.otf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -720,6 +731,7 @@
 				D6B0DC966DA547D29909ADE5 /* libBVLinearGradient.a in Frameworks */,
 				FE1BAE54BEE04653A9053D29 /* libRNCAsyncStorage.a in Frameworks */,
 				3AA38DE8D6334641A65A7269 /* libInteractable.a in Frameworks */,
+				75A8D6ADD3E74CC6955EEA95 /* libReactNativeFingerprintScanner.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -879,6 +891,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2973BBA624F4FA220081EF67 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2973BBD424F4FA250081EF67 /* libReactNativeFingerprintScanner.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -943,6 +963,7 @@
 				45C861A88687400F82F2FC82 /* BVLinearGradient.xcodeproj */,
 				FB75B9F4BADB4C7E849222AB /* RNCAsyncStorage.xcodeproj */,
 				C0BA610976C447EF929EEA6C /* Interactable.xcodeproj */,
+				FA48C30EE5974ED2B35A8542 /* ReactNativeFingerprintScanner.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1008,6 +1029,7 @@
 				B7F4F3F872534807887AEDDA /* TypeType - TT Commons Light.otf */,
 				336AF2D15CD3440DAB275543 /* TTCommons-Light.otf */,
 				7E9A692685474EBA8C3432F5 /* TTCommons-Medium.otf */,
+				FCD3DC59FECB4C9C8BCD1725 /* TTCommons.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1056,6 +1078,7 @@
 				102529ADDECB464985ADB5D8 /* libRNCAsyncStorage.a */,
 				F6BA50AFB74644C59D087441 /* libBVLinearGradient.a */,
 				EE414E6BE3C44D1EA941E62C /* libInteractable.a */,
+				59971462B6074722B2A17BA5 /* libReactNativeFingerprintScanner.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1387,6 +1410,10 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
+					ProductGroup = 2973BBA624F4FA220081EF67 /* Products */;
+					ProjectRef = FA48C30EE5974ED2B35A8542 /* ReactNativeFingerprintScanner.xcodeproj */;
+				},
+				{
 					ProductGroup = B465E66022CE1D2500F87457 /* Products */;
 					ProjectRef = B465E65F22CE1D2500F87457 /* ReactNativePermissions.xcodeproj */;
 				},
@@ -1523,6 +1550,13 @@
 			fileType = archive.ar;
 			path = libInteractable.a;
 			remoteRef = 2903821724EBD49100259FA2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2973BBD424F4FA250081EF67 /* libReactNativeFingerprintScanner.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactNativeFingerprintScanner.a;
+			remoteRef = 2973BBD324F4FA250081EF67 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */ = {
@@ -1947,7 +1981,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				B4A8080F22C6394C008E672A /* Launch Screen.storyboard in Resources */,
-				B4A807E322C62D0C008E672A /* TTCommons.otf in Resources */,
 				B465E65822CE17D100F87457 /* assets in Resources */,
 				5089B098C24E4A2E8DC40E18 /* AntDesign.ttf in Resources */,
 				3E527DB531E64FC48B752D9B /* Entypo.ttf in Resources */,
@@ -1967,6 +2000,7 @@
 				9E0B45E70C344BEFB85DD1BC /* Zocial.ttf in Resources */,
 				EFAD1C3A1B6644A08881D955 /* TTCommons-Light.otf in Resources */,
 				2C3D37BAA7B5442D986F17CF /* TTCommons-Medium.otf in Resources */,
+				A7AEAB13722F4445A35DDF6D /* TTCommons.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2112,12 +2146,14 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-fingerprint-scanner/ios",
 				);
 				INFOPLIST_FILE = JolocomWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -2161,12 +2197,14 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-fingerprint-scanner/ios",
 				);
 				INFOPLIST_FILE = JolocomWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -2214,6 +2252,7 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-fingerprint-scanner/ios",
 				);
 				INFOPLIST_FILE = JolocomWallet/Base.lproj/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2257,6 +2296,7 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-fingerprint-scanner/ios",
 				);
 				INFOPLIST_FILE = JolocomWallet/Base.lproj/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2303,11 +2343,13 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-fingerprint-scanner/ios",
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -2359,11 +2401,13 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-fingerprint-scanner/ios",
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -2414,11 +2458,13 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-fingerprint-scanner/ios",
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -2469,11 +2515,13 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-fingerprint-scanner/ios",
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
