@@ -166,7 +166,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-fingerprint-scanner')
 
     implementation project(':react-native-android-open-settings')
     implementation project(':@react-native-community_async-storage')
