@@ -11,7 +11,7 @@ import {
 import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from 'src/lib/interactionHandlers'
-import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
+import { AppError, ErrorCode } from '../../lib/errors'
 import { withErrorScreen, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
 import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'

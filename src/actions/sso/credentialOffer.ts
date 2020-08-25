@@ -16,8 +16,8 @@ import {
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { isEmpty, uniqBy } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage/storage'
 import { CacheEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
+import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -114,7 +114,7 @@ export const validateSelectionAndSave = (
   // TODO update to the latest version of the SDK and && the signature check as well
   const passedValidation = toSave.map(
     (credential, i) =>
-      credential.signer.did === interaction.participants.requester.did &&
+      credential.signer.did === interaction.participants.requester!.did &&
       credential.claim.id === getState().account.did.did &&
       !duplicates[i]
   )
@@ -147,7 +147,7 @@ export const validateSelectionAndSave = (
 
     await storeOfferMetadata(
       (interaction.getSummary().state as CredentialOfferFlowState).offerSummary,
-      interaction.participants.requester.did,
+      interaction.participants.requester!.did,
       //@ts-ignore
       storageLib.store.credentialMetadata,
     )
@@ -247,9 +247,9 @@ const endReceiving = (interactionId: string): ThunkAction => (
   { interactionManager },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const { transportType } = interaction
+  const { desc: transportDesc } = interaction.transportAPI
 
-  if (transportType === InteractionTransportType.Deeplink) {
+  if (transportDesc && transportDesc.type === InteractionTransportType.Deeplink) {
     return dispatch(navigationActions.navigatorResetHome())
   } else {
     return dispatch(
