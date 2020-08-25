@@ -140,7 +140,7 @@
     }
   },
   "dependencies": {
-    "@jolocom/sdk": "^0.18.7",
+    "@jolocom/sdk": "^0.18.8",
     "@react-native-community/async-storage": "^1.6.2",
     "@react-navigation/core": "^3.4.2",
     "@sentry/react-native": "^1.0.6",

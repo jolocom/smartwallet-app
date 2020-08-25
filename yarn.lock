@@ -1396,9 +1396,9 @@
     node-fetch "^2.6.0"
 
 "@jolocom/native-core-node-darwin-x64@^1.0.0-rc8":
-  version "1.0.0-rc7"
-  resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-darwin-x64/-/native-core-node-darwin-x64-1.0.0-rc7.tgz#0d69f3f75717d8c471872b69c0009130e12a7eb0"
-  integrity sha512-0Y9JTIBiReRz+3D7PfAQhgm0NxEf78GVZUOz2iKS4TOrgvh6QOMVSZ2HHvaQlwogcnL0Q+uhkE6HyLtKgXVVdg==
+  version "1.0.0-rc8"
+  resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-darwin-x64/-/native-core-node-darwin-x64-1.0.0-rc8.tgz#9a62b3a9f90164f21bd8e4009ae59f122d5cd9fb"
+  integrity sha512-91HT+y2Y4PY/MDeURMGqgd6tqfJktgn1HCMqiS1GEKtPS8sHvWoSw+a2yyvR4oqe1cfn8t8Ex5uhwfV4Ji5ILQ==
 
 "@jolocom/native-core-node-linux-x64@^1.0.0-rc8":
   version "1.0.0-rc8"
@@ -1440,10 +1440,10 @@
     class-transformer "^0.2.3"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^0.18.7":
-  version "0.18.7"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.18.7.tgz#fb0df4353243d05998676aa027ca0ede3039428d"
-  integrity sha512-ZHu87ohEKjDNo/PJXsbXwSaSTfkLwh0aZvF6LAuNkqghUD4NCnAhF7uCNKxgqJtvmobF2d8DTBYWyzMXY8VBPA==
+"@jolocom/sdk@^0.18.8":
+  version "0.18.8"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.18.8.tgz#bde16d4416dfb72130ec499e66535ae4faecb859"
+  integrity sha512-EJizqeleMgzvhTneqjaGopoYodR2BbSWFY+CdnNhLDXPM3V+/Gooh+CyWtijokuJPY244MbewsDKKmLajUiQLw==
   dependencies:
     form-data "^3.0.0"
     ramda "^0.26.1"

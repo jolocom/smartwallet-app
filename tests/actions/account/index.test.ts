@@ -10,7 +10,7 @@ describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
     settings: {
       locale: 'en',
-      seedPhraseSaved: false
+      seedPhraseSaved: false,
     },
     registration: {
       loading: {
@@ -60,7 +60,7 @@ describe('Account action creators', () => {
         publicProfile: jest.fn().mockResolvedValue({}),
       },
     },
-    identityWallet
+    identityWallet,
   }
 
   const mockStore = createMockStore(initialState, mockMiddleware)

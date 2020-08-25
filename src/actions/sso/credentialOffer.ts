@@ -116,7 +116,7 @@ export const validateSelectionAndSave = (
     (credential, i) =>
       credential.signer.did === interaction.participants.requester!.did &&
       credential.claim.id === getState().account.did.did &&
-      !duplicates[i]
+      !duplicates[i],
   )
 
   // None passed the validation
@@ -249,7 +249,10 @@ const endReceiving = (interactionId: string): ThunkAction => (
   const interaction = interactionManager.getInteraction(interactionId)
   const { desc: transportDesc } = interaction.transportAPI
 
-  if (transportDesc && transportDesc.type === InteractionTransportType.Deeplink) {
+  if (
+    transportDesc &&
+    transportDesc.type === InteractionTransportType.Deeplink
+  ) {
     return dispatch(navigationActions.navigatorResetHome())
   } else {
     return dispatch(
