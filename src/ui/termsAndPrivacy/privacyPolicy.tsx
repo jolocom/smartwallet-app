@@ -22,14 +22,13 @@ const PrivacyPolicyContainer: React.FC<Props> = ({
   const privacyText = language === 'en' ? privacyPolicyEN : privacyPolicyDE
 
   return (
-    <Wrapper style={{ backgroundColor: 'rgb(32,26,33)' }}>
+    <Wrapper dark>
       <NavigationSection onNavigation={navigateBack} isBackButton={true} />
       <View style={styles.wrapper}>
         <Text style={styles.header}>{I18n.t(strings.PRIVACY_POLICY)}</Text>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          overScrollMode={'never'}
-        >
+          overScrollMode={'never'}>
           <Text style={styles.text}>{privacyText}</Text>
         </ScrollView>
       </View>

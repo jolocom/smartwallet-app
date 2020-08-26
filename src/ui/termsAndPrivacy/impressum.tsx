@@ -19,7 +19,7 @@ const ImpressumContainer: React.FC<Props> = ({ navigateBack, language }) => {
   const impressumText = language === 'en' ? impressumEN : impressumDE
 
   return (
-    <Wrapper style={{ backgroundColor: 'rgb(32,26,33)' }}>
+    <Wrapper dark>
       <NavigationSection onNavigation={navigateBack} isBackButton={true} />
       <View style={styles.wrapper}>
         <Text style={styles.header}>{I18n.t(strings.IMPRESSUM)}</Text>
