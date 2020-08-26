@@ -45,12 +45,10 @@ export const startChannel = (interactionId: string): ThunkAction => async (
   channel.start(async (interxn) => {
     console.log('handing interxn', interxn.id, interxn.flow.type)
     let resp
-    // TODO: make this configurable
-    //       for now hardcoded
     switch (interxn.flow.type) {
-//      case FlowType.Authentication:
-//        resp = await interxn.createAuthenticationResponse()
-//        break
+      case FlowType.Resolution:
+        resp = await interxn.createResolutionResponse()
+        break
       case FlowType.Encrypt:
         resp = await interxn.createEncResponseToken()
         break
@@ -60,7 +58,11 @@ export const startChannel = (interactionId: string): ThunkAction => async (
     }
 
     if (resp) {
+      console.log('Channel', channel.id, 'responded to', interxn.flow.type, `(${interxn.id})`, 'with', resp.interactionToken)
       channel.send(resp.encode())
+    } else {
+      console.warn('received illegal interxn request on channel', channel.id, interxn.flow.type)
+      // TODO: notify user that we got some weird thing on the channel
     }
   })
 
