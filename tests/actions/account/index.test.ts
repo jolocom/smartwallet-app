@@ -1,5 +1,5 @@
 import { accountActions } from 'src/actions/'
-import data from '../registration/data/mockRegistrationData'
+import data from './mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
 import { createMockStore } from 'tests/utils'
@@ -8,6 +8,10 @@ import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
+    settings: {
+      locale: 'en',
+      seedPhraseSaved: false,
+    },
     registration: {
       loading: {
         loadingMsg: '',
@@ -42,8 +46,21 @@ describe('Account action creators', () => {
     didDocument: {},
   }
 
+  const { identityWallet, testSignedCredentialDefault } = data
   const mockMiddleware = {
     prepareIdentityWallet: jest.fn().mockResolvedValue(mockIdentityWallet),
+    storageLib: {
+      get: {
+        verifiableCredential: jest
+          .fn()
+          .mockResolvedValue([
+            JolocomLib.parse.signedCredential(testSignedCredentialDefault),
+          ]),
+        credentialMetadata: jest.fn().mockResolvedValue({}),
+        publicProfile: jest.fn().mockResolvedValue({}),
+      },
+    },
+    identityWallet,
   }
 
   const mockStore = createMockStore(initialState, mockMiddleware)

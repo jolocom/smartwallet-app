@@ -16,8 +16,12 @@ import { setActiveNotificationFilter } from './actions/notifications'
 import { black } from './styles/colors'
 import { LoadingSpinner } from './ui/generic'
 
-import { JolocomDeeplink, JolocomWebSockets } from 'react-native-jolocom/js/transports'
-import { JolocomKeychainPasswordStore, JolocomSDK } from 'react-native-jolocom'
+import {
+  JolocomLinking,
+  JolocomWebSockets,
+  JolocomKeychainPasswordStore,
+  JolocomSDK,
+} from 'react-native-jolocom'
 
 useScreens()
 
@@ -55,7 +59,9 @@ export default class App extends React.PureComponent<
       sdkPromise = initTypeorm().then(async storage => {
         const passwordStore = new JolocomKeychainPasswordStore()
         const sdk = new JolocomSDK({ storage, passwordStore })
-        await sdk.usePlugins(new JolocomDeeplink(), new JolocomWebSockets())
+        await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        sdk.setDefaultDidMethod('jun')
+
         store = initStore(sdk)
         this.setState({ ready: true })
         return sdk

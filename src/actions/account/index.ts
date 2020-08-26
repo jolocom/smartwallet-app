@@ -10,11 +10,12 @@ import {
 import { ThunkAction } from 'src/store'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
-import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
+import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
+import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -45,11 +46,13 @@ export const checkIdentityExists: ThunkAction = async (
     const identityWallet = await backendMiddleware.prepareIdentityWallet()
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
+    await dispatch(checkRecoverySetup)
     return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
   } catch (err) {
-    if (!(err instanceof BackendError)) throw err
-
-    if (err.message === BackendError.codes.NoEntropy) {
+    if (
+      err.message === BackendError.codes.NoEntropy ||
+      err.message === BackendError.codes.NoWallet
+    ) {
       // No seed in database, user must register
       // But check if a registration was already in progress
       const isRegistering = getState().registration.loading.isRegistering
@@ -60,6 +63,8 @@ export const checkIdentityExists: ThunkAction = async (
 
       return dispatch(navigationActions.navigate({ routeName }))
     }
+
+    throw err
   }
 }
 

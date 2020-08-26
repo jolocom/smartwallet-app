@@ -9,7 +9,7 @@ import {
 import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { cancelSSO } from './'
-import isEmpty from 'ramda/es/isEmpty'
+import { isEmpty } from 'ramda'
 import { getUiCredentialTypeByType } from '@jolocom/sdk/js/src/lib/util'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
