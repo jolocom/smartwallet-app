@@ -16,6 +16,7 @@ import { showErrorScreen } from 'src/actions/generic'
 import { navigateBack } from 'src/actions/navigation'
 
 import { ScannerContainer } from './scanner'
+import { accountActions } from 'src/actions'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -63,6 +64,7 @@ const InteractionContainer = (props: Props) => {
       <ScannerContainer
         navigation={props.navigation}
         consumeToken={props.consumeToken}
+        registerPopup={props.registerPopup}
       />
     </Wrapper>
   )
@@ -93,6 +95,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     }
   },
   navigateHome: () => dispatch(navigateBack()),
+  registerPopup: () => dispatch(accountActions.setPopup(true)),
 })
 
 export const InteractionScreen = connect(

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+
 import { CredentialOverview } from '../components/credentialOverview'
 import { accountActions } from 'src/actions'
 import { DecoratedClaims } from 'src/reducers/account/'
@@ -13,6 +14,10 @@ export interface ClaimsContainerProps
 
 export const ClaimsContainer = (props: ClaimsContainerProps) => {
   const { did, claimsState, openClaimDetails } = props
+
+  useEffect(() => {
+    props.checkLocalAuthSet()
+  }, [])
 
   return (
     <Wrapper testID="claimsScreen">
@@ -35,6 +40,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
+  checkLocalAuthSet: () => dispatch(accountActions.checkLocalDeviceAuthSet),
 })
 
 export const Claims = connect(

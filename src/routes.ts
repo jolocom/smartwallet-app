@@ -30,6 +30,7 @@ import { routeList } from './routeList'
 import { AppInit } from './ui/generic/appInit'
 import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
+import ChangePIN from './ui/deviceauth/ChangePIN'
 
 import {
   DocsIcon,
@@ -179,6 +180,9 @@ const MainStack = createStackNavigator(
   {
     [routeList.Home]: {
       screen: BottomTabNavigator,
+    },
+    [routeList.ChangePIN]: {
+      screen: ChangePIN,
     },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,

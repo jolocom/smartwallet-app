@@ -38,7 +38,7 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const {  settings, setupBackup, navigate } = props
+  const { settings, setupBackup, navigate } = props
   const version = VersionNumber.appVersion
   // const currentLocale = settings.locale
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
@@ -59,6 +59,11 @@ export const SettingsContainer: React.FC<Props> = props => {
               description={'Mock notifications for debugging'}
               onPress={() => navigate(routeList.NotificationScheduler)}
               iconName={'bell-ring'}
+            />
+            <SettingItem
+              title="Change PIN"
+              onPress={() => navigate(routeList.ChangePIN)}
+              iconName="bell-ring"
             />
           </SettingSection>
         )}

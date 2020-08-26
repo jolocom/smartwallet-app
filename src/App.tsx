@@ -13,6 +13,8 @@ import {
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
 import { AppWrap } from './ui/structure/wrapper'
+import Lock from './ui/deviceauth/Lock'
+import RegisterPIN from './ui/deviceauth/RegisterPIN'
 
 import {
   JolocomLinking,
@@ -120,6 +122,8 @@ export default class App extends React.PureComponent<
                 onNavigationStateChange={this.handleNavigationChange.bind(this)}
                 ref={nav => this.setNavigator(nav)}
               />
+              <Lock />
+              <RegisterPIN />
             </AppWrap>
           </Provider>
         )}

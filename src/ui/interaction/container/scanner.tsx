@@ -8,10 +8,18 @@ import {
   InteractionManager,
 } from 'react-native'
 import {
-  NavigationInjectedProps, NavigationEventSubscription
+  NavigationInjectedProps,
+  NavigationEventSubscription,
 } from 'react-navigation'
 
-import { PERMISSIONS, RESULTS, request, openSettings, check, Permission } from 'react-native-permissions'
+import {
+  PERMISSIONS,
+  RESULTS,
+  request,
+  openSettings,
+  check,
+  Permission,
+} from 'react-native-permissions'
 
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
@@ -20,18 +28,19 @@ import { Wrapper } from 'src/ui/structure'
 
 interface Props extends NavigationInjectedProps {
   consumeToken: (jwt: string) => Promise<any>
+  registerPopup: () => void
 }
 
 const CAMERA_PERMISSION = Platform.select({
   android: PERMISSIONS.ANDROID.CAMERA,
-  ios: PERMISSIONS.IOS.CAMERA
+  ios: PERMISSIONS.IOS.CAMERA,
 }) as Permission
 
-export const ScannerContainer: React.FC<Props> = (props) => {
+export const ScannerContainer: React.FC<Props> = props => {
   const { consumeToken, navigation } = props
   const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<string>(RESULTS.UNAVAILABLE)
-  const [scannerRef, setScannerRef] = useState<QRScanner|null>(null)
+  const [scannerRef, setScannerRef] = useState<QRScanner | null>(null)
   const reactivate = () => scannerRef && scannerRef.reactivate()
 
   // NOTE: this is needed because QRScanner behaves weirdly when the screen is
@@ -70,6 +79,7 @@ export const ScannerContainer: React.FC<Props> = (props) => {
 
   const requestCameraPermission = async () => {
     const permission = await request(CAMERA_PERMISSION)
+    props.registerPopup()
     setPermission(permission)
   }
 
@@ -122,7 +132,11 @@ export const ScannerContainer: React.FC<Props> = (props) => {
     ret = <NoPermissionComponent onPressEnable={onEnablePermission} />
   }
 
-  return <Wrapper dark withoutSafeArea withoutStatusBar>{ret}</Wrapper>
+  return (
+    <Wrapper dark withoutSafeArea withoutStatusBar>
+      {ret}
+    </Wrapper>
+  )
 }
 
 export const Scanner = ScannerContainer
