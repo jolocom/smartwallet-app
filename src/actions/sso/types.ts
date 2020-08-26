@@ -9,43 +9,20 @@ export type IssuerPublicProfileSummary = PublicProfileClaimMetadata['claimInterf
 /**
  * @dev An identity summary is composed of a DID + all public info (currently public profile)
  */
+
 export interface IdentitySummary {
   did: string
   publicProfile?: IssuerPublicProfileSummary
 }
 
-export interface RequestSummary {
+export interface PaymentRequestSummary {
   callbackURL: string
   requester: IdentitySummary
-  requestJWT: string
-}
-
-export interface AuthenticationRequestSummary extends RequestSummary {
-  description: string
-}
-
-export interface PaymentRequestSummary extends RequestSummary {
   receiver: {
     did: string
     address: string
   }
+  requestJWT: string
   amount: number
   description: string
-}
-
-export interface CredentialRequestSummary extends RequestSummary {
-  availableCredentials: CredentialTypeSummary[]
-}
-
-export interface CredentialTypeSummary {
-  type: string
-  values: string[]
-  verifications: CredentialVerificationSummary[]
-}
-
-export interface CredentialVerificationSummary {
-  id: string
-  issuer: IdentitySummary
-  selfSigned: boolean
-  expires: string | undefined | Date
 }

@@ -1,5 +1,6 @@
 // NOTE: not importing from 'src/lib/errors' to avoid cycle
-import { ErrorCode } from 'src/lib/errors/codes'
+// NOTE: absolute path causes `generateTerms` to crash, since it is outside /src (I guess that's the cause)
+import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/codes'
 
 const registration = {
   ENCRYPTING_AND_STORING_DATA_LOCALLY: 'Encrypting and storing data locally',
@@ -82,6 +83,19 @@ const notifications = {
   CONFIRMATION_IS_NOT_COMPLETE: 'Confirmation is not complete',
   YOUR_DATA_MAY_BE_LOST_BECAUSE_YOU_DID_NOT_CONFIRM_THE_SEED_PHRASE_WE_ADVISE_YOU_TO_COMPLETE_THE_REGISTRATION:
     'Your data may be lost because you did not confirm the seed phrase. We advise you to complete the registration.',
+  GREAT_SUCCESS: 'Great success!',
+  YOU_CAN_FIND_YOUR_NEW_CREDENTIAL_IN_THE_DOCUMENTS:
+    'You can find your new credential in the documents',
+  OPEN: 'Open',
+  DEJA_VU: 'Déjà vu',
+  YOU_ALREADY_SAVED_THAT_ONE: 'You already saved that one!',
+  AWKWARD: '#awkward',
+  THAT_DOC_DOESNT_BELONG_TO_YOU_TRY_SAVING_A_DIFFERENT_ONE:
+    'That doc doesn’t belong to you. Try saving a different one.',
+  WE_CANT_DO_THIS_SOME_OF_THE_DOCUMENTS_ARE_NOT_YOURS:
+    "We can't do this, some of the documents are not yours",
+  IT_SEEMS_LIKE_WE_CANT_DO_THIS: "It seems like we can't do this",
+  SOMETHING_WENT_WRONG_CHOOSE_AGAIN: 'Something went wrong. Choose again!',
 }
 
 const errorTitle = {
@@ -156,6 +170,9 @@ export default {
   YOUR_JOLOCOM_WALLET: 'Your Jolocom Wallet',
   ALL_CLAIMS: 'All claims',
   RECEIVING_NEW_CREDENTIAL: 'Receiving new credential',
+  CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU:
+    'Choose one or more documents provided by this service and we will generate them for you',
+  RECEIVE: 'Receive',
   SHARE_CLAIMS: 'Share claims',
   CONFIRM_PAYMENT: 'Confirm payment',
   AUTHORIZATION_REQUEST: 'Authorization request',
@@ -212,4 +229,5 @@ export default {
   PERSONAL: 'Personal',
   NO_DOCUMENTS_TO_SEE_HERE: 'No documents to see here',
   EXPIRED: 'expired',
+  UNKNOWN: 'Unknown',
 }

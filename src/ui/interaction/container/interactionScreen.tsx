@@ -7,11 +7,11 @@ import { NavigationInjectedProps } from 'react-navigation'
 
 import { ThunkDispatch } from 'src/store'
 import { CloseIcon } from 'src/resources'
-import { AppError, ErrorCode } from 'src/lib/errors'
 
 import { Wrapper } from 'src/ui/structure'
 import { white } from 'src/styles/colors'
 import { fontMain, textXXS } from 'src/styles/typography'
+import { ErrorCode, AppError } from '@jolocom/sdk/js/src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
 import { navigateBack } from 'src/actions/navigation'
 
@@ -56,8 +56,7 @@ const InteractionContainer = (props: Props) => {
       {IS_IOS && (
         <TouchableOpacity
           onPress={props.navigateHome}
-          style={styles.closeButton}
-        >
+          style={styles.closeButton}>
           <CloseIcon />
         </TouchableOpacity>
       )}
@@ -74,7 +73,6 @@ const InteractionContainer = (props: Props) => {
 const localNotificationErrors = [
   // AppError: "Wrong QR"
   ErrorCode.ParseJWTFailed,
-
   // AppError: "Wrong Data"
   ErrorCode.WrongDID,
   ErrorCode.WrongNonce,

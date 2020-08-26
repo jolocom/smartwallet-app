@@ -1,5 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
 import { Wrapper } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'

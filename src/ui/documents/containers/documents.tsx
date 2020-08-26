@@ -9,7 +9,7 @@ import { getDocumentClaims } from 'src/utils/filterDocuments'
 import { ThunkDispatch } from 'src/store'
 
 import I18n from 'src/locales/i18n'
-import { filters } from 'src/lib/filterDecoratedClaims'
+import { filters } from '@jolocom/sdk/js/src/lib/filterDecoratedClaims'
 
 import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'

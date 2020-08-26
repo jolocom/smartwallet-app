@@ -39,6 +39,10 @@ Array [
     "value": true,
   },
   Object {
+    "type": "HAS_EXTERNAL_CREDENTIALS",
+    "value": true,
+  },
+  Object {
     "routeName": "Home",
     "type": "Navigation/NAVIGATE",
   },

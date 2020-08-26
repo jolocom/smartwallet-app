@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: Typography.textLG,
     paddingVertical: 7,
+    textAlign: 'center',
   },
   correct: {
     color: 'white',

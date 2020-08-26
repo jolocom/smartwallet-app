@@ -90,6 +90,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
             "flex": 1,
             "fontSize": 22,
             "paddingVertical": 7,
+            "textAlign": "center",
           },
           Object {
             "textAlign": "center",
@@ -356,6 +357,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
             "flex": 1,
             "fontSize": 22,
             "paddingVertical": 7,
+            "textAlign": "center",
           },
           Object {
             "textAlign": "center",

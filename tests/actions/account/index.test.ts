@@ -1,13 +1,17 @@
 import { accountActions } from 'src/actions/'
-import data from '../registration/data/mockRegistrationData'
+import data from './mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
 import { createMockStore } from 'tests/utils'
-import { BackendError } from 'src/backendMiddleware'
 import { withErrorScreen } from 'src/actions/modifiers'
+import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
+    settings: {
+      locale: 'en',
+      seedPhraseSaved: false,
+    },
     registration: {
       loading: {
         loadingMsg: '',
@@ -16,7 +20,7 @@ describe('Account action creators', () => {
     },
     settings: {
       locale: 'en',
-      seedPhraseSaved: false
+      seedPhraseSaved: false,
     },
     account: {
       claims: {
@@ -30,12 +34,6 @@ describe('Account action creators', () => {
             did: 'did:jolo:test',
           },
           subject: 'did:jolo:test',
-        },
-        pendingExternal: {
-          offer: [],
-          offeror: {
-            did: '',
-          },
         },
         decoratedCredentials: {},
         hasExternalCredentials: false,
@@ -83,7 +81,7 @@ describe('Account action creators', () => {
 
   it('should display exception screen in case of error', async () => {
     backendMiddleware.prepareIdentityWallet.mockRejectedValue(
-      new Error('everything is WRONG')
+      new Error('everything is WRONG'),
     )
     await mockStore.dispatch(
       withErrorScreen(accountActions.checkIdentityExists),

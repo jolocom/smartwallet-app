@@ -6,16 +6,15 @@ import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
-} from 'src/lib/util'
-import { cancelReceiving } from '../sso'
+} from '@jolocom/sdk/js/src/lib/util'
 import { ThunkAction } from 'src/store'
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
-import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
-import { BackendError } from 'src/backendMiddleware'
+import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
+import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 
 export const setDid = (did: string) => ({
@@ -51,9 +50,10 @@ export const checkIdentityExists: ThunkAction = async (
     await dispatch(checkRecoverySetup)
     return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
   } catch (err) {
-    if (!(err instanceof BackendError)) throw err
-
-    if (err.message === BackendError.codes.NoEntropy) {
+    if (
+      err.message === BackendError.codes.NoEntropy ||
+      err.message === BackendError.codes.NoWallet
+    ) {
       // No seed in database, user must register
       // But check if a registration was already in progress
       const isRegistering = getState().registration.loading.isRegistering
@@ -64,6 +64,8 @@ export const checkIdentityExists: ThunkAction = async (
 
       return dispatch(navigationActions.navigate({ routeName }))
     }
+
+    throw err
   }
 }
 
@@ -110,27 +112,10 @@ export const saveClaim: ThunkAction = async (
   return dispatch(navigationActions.navigatorResetHome())
 }
 
-// TODO Currently only rendering / adding one
-export const saveExternalCredentials: ThunkAction = async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  const { storageLib } = backendMiddleware
-  const externalCredentials = getState().account.claims.pendingExternal
-
-  if (!externalCredentials.offer.length) {
-    return dispatch(cancelReceiving)
-  }
-
-  const cred: SignedCredential = externalCredentials.offer[0].credential
-
-  await storageLib.delete.verifiableCredential(cred.id)
-  await storageLib.store.verifiableCredential(cred)
-  await dispatch(checkRecoverySetup)
-
-  return dispatch(cancelReceiving)
-}
+export const toggleLoading = (value: boolean) => ({
+  type: 'SET_LOADING',
+  value,
+})
 
 export const hasExternalCredentials: ThunkAction = async (
   dispatch,

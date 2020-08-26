@@ -1,19 +1,20 @@
 import {
-  NavigationActions,
-  StackActions,
-  NavigationNavigateActionPayload,
   NavigationAction,
+  NavigationActions,
   NavigationContainerComponent,
-  NavigationRouter,
-  NavigationResetActionPayload,
   NavigationNavigateAction,
+  NavigationNavigateActionPayload,
+  NavigationResetActionPayload,
+  NavigationRouter,
+  StackActions,
 } from 'react-navigation'
 import { routeList } from 'src/routeList'
 import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from 'src/lib/storage/interactionTokens'
-import { AppError, ErrorCode } from 'src/lib/errors'
-import { withLoading, withErrorScreen } from 'src/actions/modifiers'
+import { interactionHandlers } from 'src/lib/interactionHandlers'
+import { AppError, ErrorCode } from '../../lib/errors'
+import { withErrorScreen, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
+import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 const deferredNavActions: NavigationAction[] = []
 let dispatchNavigationAction = (action: NavigationAction) => {
@@ -137,14 +138,18 @@ export const handleDeepLink = (url: string): ThunkAction => (
     }
   }
 
-  const supportedRoutes = ['consent', 'payment', 'authenticate']
+  const supportedRoutes = ['consent', 'authenticate']
   if (supportedRoutes.includes(routeName)) {
     const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
     const handler = interactionHandlers[interactionToken.interactionType]
 
     if (handler) {
       return dispatch(
-        withLoading(withErrorScreen(handler(interactionToken, true))),
+        withLoading(
+          withErrorScreen(
+            handler(interactionToken, InteractionTransportType.Deeplink),
+          ),
+        ),
       )
     }
   }

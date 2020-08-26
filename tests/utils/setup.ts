@@ -23,3 +23,5 @@ jest.mock('react-native', () => {
   RN.NativeModules.RNPermissions = {}
   return RN
 })
+
+jest.mock('deprecated-react-native-listview')

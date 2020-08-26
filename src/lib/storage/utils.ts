@@ -1,5 +1,5 @@
 import { groupBy } from 'ramda'
-import { CredentialEntity } from './entities'
+import { CredentialEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
 
 /**
  * Given an array of Credential Entities, will attempt to group them by

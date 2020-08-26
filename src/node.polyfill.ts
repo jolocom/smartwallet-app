@@ -119,7 +119,7 @@ export function initSentry() {
   console.log('initSentry')
 }
 
-import { ErrorReport } from 'src/lib/errors/types'
+import { ErrorReport } from '@jolocom/sdk/js/src/lib/errors/types'
 export function reportErrorToSentry(err: ErrorReport) {
   console.error('reportErrorToSentry:\n', err.error)
 }

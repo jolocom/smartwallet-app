@@ -6,6 +6,8 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 
 import com.facebook.react.ReactApplication;
+import io.jolocom.nativeUtils.NativeUtilsPackage;
+import com.reactlibrary.RNJolocomPackage;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

@@ -4,7 +4,7 @@ import {
 } from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
-import { BackendMiddleware } from 'src/backendMiddleware'
+import { BackendMiddleware } from '@jolocom/sdk/js/src/backendMiddleware'
 import { stub, RecursivePartial } from 'tests/utils/stub'
 import { RootState } from 'src/reducers'
 import { ThunkDispatch } from 'src/store'
