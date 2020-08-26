@@ -8,11 +8,14 @@ import {
   EstablishChannelType,
   EstablishChannelRequest,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { ResolutionType, ResolutionRequest } from '@jolocom/sdk/js/src/lib/interactionManager/resolutionFlow'
+import {
+  ResolutionType,
+  ResolutionRequest,
+} from '@jolocom/sdk/js/src/lib/interactionManager/resolutionFlow'
 import { ssoActions } from 'src/actions'
-import { ThunkAction } from 'src/store'
-import { JolocomSDK } from 'react-native-jolocom'
 import { navigatorResetHome } from 'src/actions/navigation'
+import { ThunkAction } from 'src/store'
+import { JolocomSDK } from '@jolocom/sdk'
 
 /**
  * @param Metadata should not need to be passed to credential receive because it comes from cred Offer
@@ -38,36 +41,25 @@ export const interactionHandlers = {
     channel: InteractionTransportType,
   ) => ssoActions.consumeCredentialOfferRequest(interactionToken, channel),
 
-  [EstablishChannelType.EstablishChannelRequest]: <T extends JSONWebToken<EstablishChannelRequest>>(
-    interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ): ThunkAction => async (
-    dispatch,
-    getState,
-    sdk: JolocomSDK
-  ) => {
-    const interxn = await sdk.interactionManager.start<EstablishChannelRequest>(InteractionTransportType.HTTP, interactionToken)
-
-    // TODO: get user consent first
-    const resp = await interxn.createEstablishChannelResponse(0)
-    await interxn.processInteractionToken(resp)
-    const ch = await sdk.channels.create(interxn)
-    ch.start()
-
-    return dispatch(navigatorResetHome())
-  },
-
-  [ResolutionType.ResolutionRequest]: <T extends JSONWebToken<ResolutionRequest>>(
+  [EstablishChannelType.EstablishChannelRequest]: <
+    T extends JSONWebToken<EstablishChannelRequest>
+  >(
     interactionToken: T,
     channel: InteractionTransportType,
-  ): ThunkAction => async (
-    dispatch,
-    getState,
-    sdk: JolocomSDK
-  ) => {
-    const interxn = await sdk.interactionManager.start(InteractionTransportType.HTTP, interactionToken)
+  ) => ssoActions.consumeEstablishChannelRequest(interactionToken, channel),
+
+  [ResolutionType.ResolutionRequest]: <
+    T extends JSONWebToken<ResolutionRequest>
+  >(
+    interactionToken: T,
+    channel: InteractionTransportType,
+  ): ThunkAction => async (dispatch, getState, sdk: JolocomSDK) => {
+    const interxn = await sdk.interactionManager.start(
+      InteractionTransportType.HTTP,
+      interactionToken,
+    )
     const resp = await interxn.createResolutionResponse()
     await interxn.send(resp)
     return dispatch(navigatorResetHome())
-  }
+  },
 }
