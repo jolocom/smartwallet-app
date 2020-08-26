@@ -1405,10 +1405,10 @@
   resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-linux-x64/-/native-core-node-linux-x64-1.0.0-rc11.tgz#591cc1626704b4ecc771a6b971b2e9cab2acf96c"
   integrity sha512-Q86dbFiwYf8ql4+qHoBIp3A1F6FO1CLrNrwxRVtWUA/g1zVJimAvIaEds3fjpY49QfP+VN6WOgaAnRCJhzX+AQ==
 
-"@jolocom/native-core-react-native@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.0.18.tgz#cd0cbc866ce40d4ca54a95a1204307dac2bdb130"
-  integrity sha512-ceLSh/dUEFgi2dUdJy3bGIg7KFj6DbShh4yxyp4PQgNdpTJr6Os5gh0lt3PADA53AnERwENSZc+ik14nzrfz0Q==
+"@jolocom/native-core-react-native@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.0.19.tgz#85c1d50b6a167c66dfb7c0e09e3527acf072949c"
+  integrity sha512-ZqQD6oy072Gnxlkyfp9opj1bdhBs5i8tRa9ucRTISV2YQyuHJsp4sgUaXtnfiwDsK4Ex+8BTtKPJvcyx3U5Z5A==
 
 "@jolocom/native-core@^0.7.26":
   version "0.7.26"
@@ -9487,12 +9487,12 @@ react-native-interactable@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-native-interactable/-/react-native-interactable-1.0.0.tgz#b6dcdff9ec61dfae9233e46e1d673ce8480a4f64"
   integrity sha512-e/GyydV3nFWVL36frdM8H+wGxy5pJu0WjlN6dgtBIRCaGz7nLbCRWFINs7SRwIaI9LPXVAqEXQTOc2d5LJN4HA==
 
-react-native-jolocom@^1.4.11:
-  version "1.4.11"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-1.4.11.tgz#2b2bfc98087b23056db614ba99402817437edee0"
-  integrity sha512-Bu1UZ0BEEUoNPbYUshzvIreOWD3/x273yohA0L+MDImSP3yBch9Chq2yAr8oYn1jCQq+RVYsxjFpNQ7A0epTrQ==
+react-native-jolocom@^1.4.12:
+  version "1.4.12"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-1.4.12.tgz#a885e48788680783f8e6ce92007a96ba991984d6"
+  integrity sha512-nIUlOkP842n6cUv9rfsZC5xMNVj6W7MlNM+B4HcyQML3G0lzPqctJyqcqRXqtnrm4M/LWtT4rrqlYt+JmOmDyw==
   dependencies:
-    "@jolocom/native-core-react-native" "^1.0.18"
+    "@jolocom/native-core-react-native" "^1.0.19"
     "@jolocom/sdk-storage-typeorm" "^2.0.9"
     crypto-browserify "^3.12.0"
     object.assign "^4.1.0"
