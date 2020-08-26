@@ -22,7 +22,7 @@ const TermsOfServiceContainer: React.FC<Props> = ({
   const termsText = language === 'en' ? termsOfServiceEN : termsOfServiceDE
 
   return (
-    <Wrapper style={{ backgroundColor: 'rgb(32,26,33)' }}>
+    <Wrapper dark>
       <NavigationSection onNavigation={navigateBack} isBackButton={true} />
       <View style={styles.wrapper}>
         <Text style={styles.header}>{I18n.t(strings.TERMS_OF_SERVICE)}</Text>
