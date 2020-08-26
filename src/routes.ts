@@ -40,6 +40,11 @@ import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
 import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
+import {
+  TermsOfServiceConsent,
+  TermsOfService,
+  PrivacyPolicy,
+} from './ui/termsAndPrivacy'
 
 import { NotificationFilter } from './lib/notifications'
 import { CredentialReceiveNegotiate } from './ui/sso/containers/credentialReceiveNegotiate'
@@ -150,6 +155,13 @@ const RegistrationScreens = createSwitchNavigator(
       screen: Landing,
       navigationOptions: noHeaderNavOpts,
     },
+    [routeList.TermsOfServiceConsent]: {
+      screen: TermsOfServiceConsent,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
+    },
     [routeList.InputSeedPhrase]: {
       screen: InputSeedPhrase,
       navigationOptions: noHeaderNavOpts,
@@ -233,7 +245,20 @@ const MainStack = createStackNavigator(
         notifications: NotificationFilter.none,
       },
     },
-
+    [routeList.TermsOfService]: {
+      screen: TermsOfService,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.all,
+      },
+    },
+    [routeList.PrivacyPolicy]: {
+      screen: PrivacyPolicy,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.all,
+      },
+    },
     [routeList.Exception]: {
       screen: Exception,
       navigationOptions: {

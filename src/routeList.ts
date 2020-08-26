@@ -36,6 +36,8 @@ export enum routeList {
   ChangePIN = 'ChangePIN',
 
   RegisterPIN = 'RegisterPIN',
+  TermsOfService = 'TermsOfService',
+  PrivacyPolicy = 'PrivacyPolicy',
 
   // General
   Exception = 'Exception',
@@ -44,4 +46,7 @@ export enum routeList {
   // Dev only
   Storybook = 'Storybook',
   NotificationScheduler = 'NotificationScheduler',
+
+  // SW2.0
+  TermsOfServiceConsent = 'TermsOfServiceConsent',
 }

@@ -18,6 +18,7 @@ import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
+import { checkTermsOfService } from '../generic'
 import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 
@@ -76,7 +77,7 @@ export const checkIdentityExists: ThunkAction = async (
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
     await dispatch(checkRecoverySetup)
-    return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+    return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {
     if (
       err.message === BackendError.codes.NoEntropy ||

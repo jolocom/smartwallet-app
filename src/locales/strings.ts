@@ -41,6 +41,9 @@ const settings = {
   SETTINGS: 'Settings',
   YOUR_PREFERENCES: 'Your preferences',
   SECURITY: 'Security',
+  ABOUT: 'About',
+  TERMS_OF_SERVICE: 'Terms of Service',
+  PRIVACY_POLICY: 'Privacy Policy',
   LANGUAGE: 'Language',
   BACKUP_YOUR_IDENTITY: 'Backup your Identity',
   YOUR_IDENTITY_IS_ALREADY_BACKED_UP: 'Your identity is already backed up',
@@ -181,6 +184,16 @@ const deviceAuth = {
     'Any future passcode restore is possible only with your secret phrase',
 }
 
+const termsOfService = {
+  SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY:
+    'SmartWallet introducing Terms and Conditions and Privacy Policy',
+  YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW:
+    'You can find the German and English version of the documents below. Please note that the German version is legally binding',
+  I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY:
+    'I understand and accept the Terms of Service and Privacy Policy',
+  ACCEPT_NEW_TERMS: 'Accept new terms',
+}
+
 export default {
   ...registration,
   ...settings,
@@ -190,6 +203,7 @@ export default {
   ...errorReporting,
   ...notifications,
   ...deviceAuth,
+  ...termsOfService,
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
   HISTORY: 'History',

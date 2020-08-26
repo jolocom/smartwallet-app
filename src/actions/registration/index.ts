@@ -22,12 +22,6 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   getState,
   sdk,
 ) => {
-  dispatch(
-    navigationActions.navigate({
-      routeName: routeList.RegistrationProgress,
-    }),
-  )
-
   const isRegistering = getState().registration.loading.isRegistering
   if (isRegistering) return
 
