@@ -22,6 +22,8 @@ export {
   consumeEstablishChannelRequest,
 } from './establishChannel'
 
+export { consumeResolutionRequest } from './resolution'
+
 export const cancelSSO: ThunkAction = dispatch => {
   return dispatch(navigationActions.navigatorResetHome())
 }

@@ -41,6 +41,7 @@ export const startChannel = (interactionId: string): ThunkAction => async (
   const response = await interaction.createEstablishChannelResponse(0)
   await interaction.processInteractionToken(response)
   const channel = await sdk.channels.create(interaction)
+
   channel.send(response.encode())
   channel.start(async (interxn) => {
     console.log('handing interxn', interxn.id, interxn.flow.type)
