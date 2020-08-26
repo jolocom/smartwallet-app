@@ -136,10 +136,7 @@
     "runner-config": "e2e/jest.config.js"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "precise-commits; node bin/precommit.js",
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
-    }
+    "hooks": {}
   },
   "dependencies": {
     "@react-native-community/art": "^1.1.2",
