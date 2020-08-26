@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   Platform,
   AppStateStatus,
-  Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native'
 
 import I18n from 'src/locales/i18n'
@@ -45,12 +45,6 @@ const Lock: React.FC<LockI> = ({
     }
   }, [pin])
 
-  useEffect(() => {
-    setTimeout(() => {
-      Keyboard.dismiss()
-    }, 3000)
-  }, [])
-
   const handleAppUnlock = () => {
     if (keychainPin === pin) {
       unlockApplication()
@@ -61,34 +55,36 @@ const Lock: React.FC<LockI> = ({
 
   return (
     <LocalModal isVisible>
-      <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
-        {isLoadingStorage ? (
-          <ActivityIndicator />
-        ) : (
-          <>
-            <Header customStyles={{ paddingTop: 100 }}>
-              {I18n.t(strings.ENTER_YOUR_PIN)}
-            </Header>
-            <View style={styles.inputContainer}>
-              <PasscodeInput
-                value={pin}
-                stateUpdaterFn={setPin}
-                onSubmit={handleAppUnlock}
-                hasError={hasError}
-                errorStateUpdaterFn={setHasError}
-              />
-            </View>
-            <AbsoluteBottom>
-              <Btn
-                type={BtnTypes.secondary}
-                onPress={navigateTorecoveryInstuction}
-              >
-                {strings.FORGOT_YOUR_PIN}
-              </Btn>
-            </AbsoluteBottom>
-          </>
-        )}
-      </ScreenContainer>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+          {isLoadingStorage ? (
+            <ActivityIndicator />
+          ) : (
+            <>
+              <Header customStyles={{ paddingTop: 100 }}>
+                {I18n.t(strings.ENTER_YOUR_PIN)}
+              </Header>
+              <View style={styles.inputContainer}>
+                <PasscodeInput
+                  value={pin}
+                  stateUpdaterFn={setPin}
+                  onSubmit={handleAppUnlock}
+                  hasError={hasError}
+                  errorStateUpdaterFn={setHasError}
+                />
+              </View>
+              <AbsoluteBottom customStyles={{ bottom: 0 }}>
+                <Btn
+                  type={BtnTypes.secondary}
+                  onPress={navigateTorecoveryInstuction}
+                >
+                  {strings.FORGOT_YOUR_PIN}
+                </Btn>
+              </AbsoluteBottom>
+            </>
+          )}
+        </ScreenContainer>
+      </KeyboardAvoidingView>
     </LocalModal>
   )
 }
