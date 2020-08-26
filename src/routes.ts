@@ -237,6 +237,13 @@ const MainStack = createStackNavigator(
         headerTitle: I18n.t(strings.ESTABLISH_CHANNEL_REQUEST),
       }),
     },
+    [routeList.EstablishChannelConsent]: {
+      screen: EstablishChannelConsent,
+      navigationOptions: () => ({
+        ...navOptScreenWCancel,
+        headerTitle: I18n.t(strings.ESTABLISH_CHANNEL_REQUEST),
+      }),
+    },
     [routeList.ClaimDetails]: {
       screen: ClaimDetails,
       navigationOptions: navOptScreenWCancel,
