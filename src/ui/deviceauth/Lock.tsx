@@ -93,6 +93,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   unlockApplication: () => dispatch(unlockApp()),
 })
 
+type LockContainerProps = ReturnType<typeof mapDispatchToProps> &
+  ReturnType<typeof mapStateToProps>
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
@@ -105,7 +108,7 @@ export default connect(
     lockApplication,
     setPopupState,
     unlockApplication,
-  }) => {
+  }: LockContainerProps) => {
     const isPopupRef = useRef<boolean>(isPopup)
 
     useEffect(() => {
@@ -121,6 +124,7 @@ export default connect(
           appState.match(/inactive|background/) &&
           nextAppState.match(/active/))
       ) {
+        console.log('popup', isPopupRef.current)
         if (!isPopupRef.current) lockApplication()
         else setPopupState(false)
       }
