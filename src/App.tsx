@@ -1,8 +1,8 @@
 import React from 'react'
+import { View } from 'react-native'
 import { Provider } from 'react-redux'
 import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
-import { StyleSheet } from 'react-native'
 import { RoutesContainer } from './routes'
 import { enableScreens } from 'react-native-screens'
 import { isNil } from 'ramda'
@@ -12,9 +12,7 @@ import {
   NavigationState,
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
-import { backgroundDarkMain } from './styles/colors'
 import { AppWrap } from './ui/structure/wrapper'
-import { LoadingSpinner } from './ui/generic'
 
 import {
   JolocomLinking,
@@ -114,7 +112,7 @@ export default class App extends React.PureComponent<
     return (
       <>
         {!ready ? (
-          <LoadingSpinner />
+          <View />
         ) : (
           <Provider store={store}>
             <AppWrap>
