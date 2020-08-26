@@ -51,8 +51,14 @@ const HowToChangePIN: React.FC<PropsI> = ({
         >
           {strings.YOU_CAN_CHANGE_PIN}
         </Paragraph>
-        <Image source={recoveryInstruction} />
+
         <AbsoluteBottom customStyles={{ alignSelf: 'center' }}>
+          <Image
+            source={recoveryInstruction}
+            style={{
+              marginBottom: -100,
+            }}
+          />
           <Btn onPress={handleAccessRestore}>{strings.RESTORE_ACCESS}</Btn>
           <Paragraph
             color={Colors.white70}
