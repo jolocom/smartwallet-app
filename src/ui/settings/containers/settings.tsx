@@ -114,6 +114,11 @@ export const SettingsContainer: React.FC<Props> = props => {
             iconName={'file-document'}
             onPress={() => navigate(routeList.TermsOfService)}
           />
+          <SettingItem
+            title={I18n.t(strings.IMPRESSUM)}
+            iconName={'book-minus'}
+            onPress={() => navigate(routeList.Impressum)}
+          />
         </SettingSection>
         <Text style={styles.versionNumber}>
           Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}

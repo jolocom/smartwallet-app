@@ -44,6 +44,7 @@ import {
   TermsOfServiceConsent,
   TermsOfService,
   PrivacyPolicy,
+  Impressum,
 } from './ui/termsAndPrivacy'
 
 import { NotificationFilter } from './lib/notifications'
@@ -254,6 +255,13 @@ const MainStack = createStackNavigator(
     },
     [routeList.PrivacyPolicy]: {
       screen: PrivacyPolicy,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.all,
+      },
+    },
+    [routeList.Impressum]: {
+      screen: Impressum,
       navigationOptions: {
         ...noHeaderNavOpts,
         notifications: NotificationFilter.all,
