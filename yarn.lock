@@ -1598,7 +1598,7 @@
   resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-linux-x64/-/native-core-node-linux-x64-1.0.0-rc10.tgz#d1a03855d90b2857d71b3baa0556ec388086b551"
   integrity sha512-Km4Zzui8X4d0v3laQ18/5aNUIB8wgnvm3ZMgpj4Sp8jkR40UxeLouQaejSNSzGfUhJismcKPYniFu560e1Fb8A==
 
-"@jolocom/native-core-react-native@^1.0.17":
+"@jolocom/native-core-react-native@^1.0.16", "@jolocom/native-core-react-native@^1.0.17":
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.0.17.tgz#0e46f0f049ac216348e5f492d106f9112a65778f"
   integrity sha512-Q5NXgVh/B0oirN8gEyDZvkf9fmtL3h72kzPQ4uoWy0DJS0vuzamgrFCp6+vqwXYebb2JoWbt9m6/PFUBAyqtyg==
