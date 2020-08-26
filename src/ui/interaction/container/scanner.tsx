@@ -78,8 +78,8 @@ export const ScannerContainer: React.FC<Props> = props => {
   }
 
   const requestCameraPermission = async () => {
-    const permission = await request(CAMERA_PERMISSION)
     props.registerPopup()
+    const permission = await request(CAMERA_PERMISSION)
     setPermission(permission)
   }
 
