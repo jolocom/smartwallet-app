@@ -18,6 +18,9 @@ import { AnyAction } from 'redux'
 // Default delay on the loading state value before it can switch back to 'false'
 const DEFAULT_LOADING_LATCH_DELAY_MS = 300
 import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
+import { AsyncStorage } from 'react-native'
+import crypto from 'crypto'
+import { termsOfServiceDE } from 'src/ui/termsAndPrivacy/legalTexts'
 
 export const showErrorScreen = (
   error: AppError | Error,
@@ -50,11 +53,11 @@ export const initApp: ThunkAction = async (
     /** locale setup
      * @dev Until German and Dutch terms are polished, only English is used.
      * previous code:
-     * if (storedSettings.locale) I18n.locale = storedSettings.locale
-     * else storedSettings.locale = I18n.locale
      */
     if (storedSettings.locale) I18n.locale = storedSettings.locale
     else storedSettings.locale = I18n.locale
+
+    storedSettings.locale = I18n.locale
 
     await dispatch(loadSettings(storedSettings))
 
@@ -87,7 +90,41 @@ export const initApp: ThunkAction = async (
   }
 }
 
-const loadSettings = (settings: { [key: string]: any }) => ({
+const hashString = (text: string) => {
+  return crypto
+    .createHash('sha256')
+    .update(text)
+    .digest('hex')
+}
+
+const TERMS_OF_CONDITIONS_KEY = 'TERMS_OF_CONDITIONS'
+export const checkTermsOfService = (
+  route: routeList,
+  onSubmit?: () => void,
+): ThunkAction => async dispatch => {
+  const storageHash = await AsyncStorage.getItem(TERMS_OF_CONDITIONS_KEY)
+  const currentHash = hashString(termsOfServiceDE)
+  const shouldShowTerms = storageHash !== currentHash
+
+  if (!shouldShowTerms && onSubmit) onSubmit()
+  return dispatch(
+    navigationActions.navigate({
+      routeName: shouldShowTerms ? routeList.TermsOfServiceConsent : route,
+      params: { nextRoute: route, onSubmit },
+    }),
+  )
+}
+
+export const storeTermsOfService = (
+  route: routeList,
+): ThunkAction => async dispatch => {
+  const termsHash = hashString(termsOfServiceDE)
+  await AsyncStorage.setItem(TERMS_OF_CONDITIONS_KEY, termsHash)
+
+  dispatch(navigationActions.navigate({ routeName: route }))
+}
+
+export const loadSettings = (settings: { [key: string]: any }) => ({
   type: 'LOAD_SETTINGS',
   value: settings,
 })

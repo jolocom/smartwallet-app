@@ -6,26 +6,26 @@
 import I18n from 'i18n-js'
 
 const de = require('./de.json')
-const nl = require('./nl.json')
+//const nl = require('./nl.json')
 
 I18n.defaultLocale = 'en'
 I18n.fallbacks = true
 I18n.missingTranslation = scope => scope
 I18n.translations = {
   de,
-  nl,
+  //nl,
 }
-export const locales = ['en', 'de', 'nl']
+export const locales = ['en', 'de']
 
 const defaultLocale = { languageTag: 'en', isRTL: false }
 
 /** @dev Only english is offered until the Dutch and German terms are polished, previous code:
-*
-* import * as RNLocalize from 'react-native-localize'
-* const { languageTag } =
-* RNLocalize.findBestAvailableLanguage(locales) || fallback
-* I18n.locale = languageTag
-*/
+ *
+ * import * as RNLocalize from 'react-native-localize'
+ * const { languageTag } =
+ * RNLocalize.findBestAvailableLanguage(locales) || fallback
+ * I18n.locale = languageTag
+ */
 
 I18n.locale = defaultLocale.languageTag
 

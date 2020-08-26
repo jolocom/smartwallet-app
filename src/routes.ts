@@ -44,9 +44,15 @@ import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
 import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
-
+import {
+  TermsOfServiceConsent,
+  TermsOfService,
+  PrivacyPolicy,
+  Impressum,
+} from './ui/termsAndPrivacy'
 import { NotificationFilter } from './lib/notifications'
 import { CredentialReceiveNegotiate } from './ui/sso/containers/credentialReceiveNegotiate'
+import { EstablishChannelConsent } from './ui/establishChannel'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -158,6 +164,13 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
       screen: Landing,
       navigationOptions: noHeaderNavOpts,
     },
+    [routeList.TermsOfServiceConsent]: {
+      screen: TermsOfServiceConsent,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
+    },
     [routeList.InputSeedPhrase]: {
       screen: InputSeedPhrase,
       navigationOptions: noHeaderNavOpts,
@@ -217,6 +230,13 @@ const MainStack = createStackNavigator(
         headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
       }),
     },
+    [routeList.EstablishChannelConsent]: {
+      screen: EstablishChannelConsent,
+      navigationOptions: () => ({
+        ...navOptScreenWCancel,
+        headerTitle: I18n.t(strings.ESTABLISH_CHANNEL_REQUEST),
+      }),
+    },
     [routeList.ClaimDetails]: {
       screen: ClaimDetails,
       navigationOptions: navOptScreenWCancel,
@@ -243,7 +263,27 @@ const MainStack = createStackNavigator(
         notifications: NotificationFilter.none,
       },
     },
-
+    [routeList.TermsOfService]: {
+      screen: TermsOfService,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.all,
+      },
+    },
+    [routeList.PrivacyPolicy]: {
+      screen: PrivacyPolicy,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.all,
+      },
+    },
+    [routeList.Impressum]: {
+      screen: Impressum,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.all,
+      },
+    },
     [routeList.Exception]: {
       screen: Exception,
       navigationOptions: {
