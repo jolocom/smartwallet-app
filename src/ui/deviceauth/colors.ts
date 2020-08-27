@@ -9,5 +9,6 @@ export enum Colors {
   white = '#ffffff',
   white45 = 'rgba(255, 255, 255, 0.45)',
   white70 = 'rgba(255, 255, 255, 0.7)',
+  white80 = 'rgba(255, 255, 255, 0.8)',
   white90 = 'rgba(255,255,255,0.9)',
 }
