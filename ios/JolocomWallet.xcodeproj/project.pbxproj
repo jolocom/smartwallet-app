@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -66,6 +67,7 @@
 		952E9DC568924369A9B2DAEB /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB1AFA6024429DA4C7BCF7 /* FontAwesome5_Solid.ttf */; };
 		9E0B45E70C344BEFB85DD1BC /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C03F830DD4448148A98E92F /* Zocial.ttf */; };
 		A47BC7729D4746C4A82FC921 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4BDE2C1EA0940A7B3236BB3 /* FontAwesome5_Regular.ttf */; };
+		A7AEAB13722F4445A35DDF6D /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = FCD3DC59FECB4C9C8BCD1725 /* TTCommons.otf */; };
 		A9099028F51940559D388196 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F71AB2FA26694E9B99BD6BFC /* FontAwesome5_Brands.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B0E821B3835247E3A445A5B4 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC9AFAC42ADC4D81AB9C3208 /* Feather.ttf */; };
@@ -153,7 +155,7 @@
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
 		};
-		290E2EB524F011BE000BE666 /* PBXContainerItemProxy */ = {
+		2903821724EBD49100259FA2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 50B16B6DE8284E7EA882D494 /* RNCToolbarAndroid.xcodeproj */;
 			proxyType = 2;
@@ -689,6 +691,7 @@
 		F6BA50AFB74644C59D087441 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		F71AB2FA26694E9B99BD6BFC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		FB75B9F4BADB4C7E849222AB /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
+		FCD3DC59FECB4C9C8BCD1725 /* TTCommons.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = TTCommons.otf; path = ../src/assets/fonts/TTCommons.otf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -923,6 +926,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2903821024EBD48400259FA2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2903821824EBD49100259FA2 /* libInteractable.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1061,7 +1072,7 @@
 				B7F4F3F872534807887AEDDA /* TypeType - TT Commons Light.otf */,
 				336AF2D15CD3440DAB275543 /* TTCommons-Light.otf */,
 				7E9A692685474EBA8C3432F5 /* TTCommons-Medium.otf */,
-				179579D7C62A4D91B58A9608 /* TTCommons.otf */,
+				FCD3DC59FECB4C9C8BCD1725 /* TTCommons.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1112,6 +1123,7 @@
 				98A96BDC5328444F823AF0A9 /* libRNCToolbarAndroid.a */,
 				59F06C66E9A84471B03C46F1 /* libRNSentry.a */,
 				51152A7513BF4FF3A18D82D0 /* libRNSentry-tvOS.a */,
+				59971462B6074722B2A17BA5 /* libReactNativeFingerprintScanner.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1367,7 +1379,7 @@
 					ProjectRef = 45C861A88687400F82F2FC82 /* BVLinearGradient.xcodeproj */;
 				},
 				{
-					ProductGroup = 79BC32E324ACDC3800CA8153 /* Products */;
+					ProductGroup = 2903821024EBD48400259FA2 /* Products */;
 					ProjectRef = C0BA610976C447EF929EEA6C /* Interactable.xcodeproj */;
 				},
 				{
@@ -1601,6 +1613,13 @@
 			fileType = archive.ar;
 			path = "libRNGestureHandler-tvOS.a";
 			remoteRef = 29A5DC0E24EFD06400419085 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2903821824EBD49100259FA2 /* libInteractable.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libInteractable.a;
+			remoteRef = 2903821724EBD49100259FA2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */ = {
@@ -2016,7 +2035,7 @@
 				9E0B45E70C344BEFB85DD1BC /* Zocial.ttf in Resources */,
 				EFAD1C3A1B6644A08881D955 /* TTCommons-Light.otf in Resources */,
 				2C3D37BAA7B5442D986F17CF /* TTCommons-Medium.otf in Resources */,
-				7F1D083C137C41ABB2DE6CD3 /* TTCommons.otf in Resources */,
+				A7AEAB13722F4445A35DDF6D /* TTCommons.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

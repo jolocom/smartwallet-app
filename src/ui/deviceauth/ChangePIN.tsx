@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as Keychain from 'react-native-keychain'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
@@ -19,35 +19,37 @@ import { CloseIcon } from 'src/resources'
 import strings from '../../locales/strings'
 
 interface PropsI {
-  onSuccessRedirectToScreen?: any
-  navigation: NavigationScreenProp<{}, { isPINrestore: boolean }>
+  navigation: NavigationScreenProp<{}, { isPINrecovery: boolean }>
 }
 
-const ChangePin: React.FC<PropsI> = ({
-  onSuccessRedirectToScreen,
-  navigation,
-}) => {
+const ChangePin: React.FC<PropsI> = ({ navigation }) => {
   const [pin, setPin] = useState('')
   const [newPin, setNewPin] = useState('')
   const [hasError, setHasError] = useState(false)
   const [isCreateNew, setIsCreateNew] = useState(false)
 
+  const isPINrecovery = navigation.state.params?.isPINrecovery
+
   const { keychainPin, isLoadingStorage } = useGetStoredAuthValues()
+
+  useEffect(() => {
+    if (isPINrecovery && keychainPin) {
+      setPin(keychainPin)
+    }
+  }, [isPINrecovery, keychainPin])
 
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
   const handlePinVerification = async () => {
     if (pin === keychainPin) {
-      setTimeout(() => {
-        setIsCreateNew(true)
-      }, 1000)
+      setIsCreateNew(true)
     } else {
       setHasError(true)
     }
   }
 
   const handleSetNewPin = async () => {
-    resetServiceValuesInKeychain()
+    await resetServiceValuesInKeychain()
     await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
       service: PIN_SERVICE,
     })
@@ -61,14 +63,16 @@ const ChangePin: React.FC<PropsI> = ({
         padding: 20,
       }}
     >
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={{ padding: 10 }}
-          onPress={e => navigation.goBack()}
-        >
-          <CloseIcon />
-        </TouchableOpacity>
-      </View>
+      {!isPINrecovery && (
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={{ padding: 10 }}
+            onPress={e => navigation.goBack()}
+          >
+            <CloseIcon />
+          </TouchableOpacity>
+        </View>
+      )}
       <PasscodeHeader>
         {hasError
           ? I18n.t(strings.WRONG_PIN)

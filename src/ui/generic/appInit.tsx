@@ -56,7 +56,6 @@ export class AppInitContainer extends React.Component<Props> {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   doAppInit: async () => {
-    console.log('cred init')
     const withErrorScreen = withErrorHandler(
       showErrorScreen,
       (err: Error) => new AppError(ErrorCode.AppInitFailed, err),
