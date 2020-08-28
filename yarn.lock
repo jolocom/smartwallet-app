@@ -1682,6 +1682,11 @@
   resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.1.0-rc1.tgz#3a79449cbd677952a8a7887f5614f4b52e9b5148"
   integrity sha512-ZvfkusZsVQxI7TsUsh2ll/a6HhQSixlbnbe+Q5OJZfjqZbGlJn/JwltefMNT3UjnELrXx8oNh9K1liWbiJ4+9w==
 
+"@jolocom/native-core-react-native@^1.1.0-rc4":
+  version "1.1.0-rc4"
+  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.1.0-rc4.tgz#daa519f3bfacc7165f41e0259286af4157aec72a"
+  integrity sha512-jvIh2zikZtsnz/V2wfotHjX/WreL8KuNd+dOLGOyv5lFYp1Ts3GXLaN/yTqzAaE23qiYkcnhNVtijD6GmybJXQ==
+
 "@jolocom/native-core@^1.0.0-rc1":
   version "1.0.0-rc1"
   resolved "https://registry.yarnpkg.com/@jolocom/native-core/-/native-core-1.0.0-rc1.tgz#94277de938cedad213942d1aa5a6c015deaff75c"

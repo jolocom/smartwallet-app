@@ -7,11 +7,6 @@ import com.facebook.react.PackageList;
 
 import com.facebook.react.ReactApplication;
 import io.jolocom.jolocomCore.JolocomCorePackage;
-import io.sentry.RNSentryPackage;
-import com.reactnativecommunity.toolbarandroid.ReactToolbarPackage;
-import com.reactnativecommunity.art.ARTPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.reactlibrary.RNJolocomPackage;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

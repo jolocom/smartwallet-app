@@ -142,7 +142,7 @@
     "hooks": {}
   },
   "dependencies": {
-    "@jolocom/native-core-react-native": "^1.1.0-rc1",
+    "@jolocom/native-core-react-native": "^1.1.0-rc4",
     "@jolocom/sdk": "^1.0.0-rc0",
     "@react-native-community/toolbar-android": "^0.1.0-rc.2",
     "@react-native-community/art": "^1.2.0",
