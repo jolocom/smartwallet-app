@@ -5,7 +5,7 @@ import {
   StatusBar,
   View,
   StyleProp,
-  ViewStyle
+  ViewStyle,
 } from 'react-native'
 
 import { backgroundDarkMain, backgroundLightMain } from 'src/styles/colors'
@@ -18,6 +18,9 @@ import {
   unregisterAppWrapConfig,
 } from 'src/actions/generic'
 import { RootState } from 'src/reducers'
+import Lock from '../deviceauth/Lock'
+import RegisterPIN from '../deviceauth/RegisterPIN'
+import HowToChangePIN from '../deviceauth/HowToChangePIN'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   registerProps: (props: Props) =>
@@ -78,14 +81,9 @@ const styles = StyleSheet.create({
   },
 })
 
-
 let statusBarHidden = 0
 const AppWrapContainer: React.FC<AppWrapProps> = props => {
-  const {
-    dark,
-    loading,
-    withoutStatusBar,
-  } = props
+  const { dark, loading, withoutStatusBar } = props
 
   useEffect(() => {
     // TODO @mnzaki
@@ -108,7 +106,6 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
 
   return (
     <>
-      <AppLoadingAndNotifications loading={!!loading} />
       <StatusBar
         //hidden={statusBarHidden > 0}
         barStyle={dark ? 'light-content' : 'dark-content'}
@@ -116,6 +113,10 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
         animated
         translucent
       />
+      <AppLoadingAndNotifications loading={!!loading} />
+      <Lock />
+      <RegisterPIN />
+      <HowToChangePIN />
       {props.children}
     </>
   )
