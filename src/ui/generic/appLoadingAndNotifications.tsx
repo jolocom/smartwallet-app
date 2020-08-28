@@ -17,15 +17,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     // to cover things such as the qr code scanner
     zIndex: 1,
+    // zIndex is buggy on android https://stackoverflow.com/a/62137629
+    elevation: 1,
     flex: 1,
     width: '100%',
     height: '100%',
   },
 })
 
-export const AppLoadingAndNotifications: React.FunctionComponent<
-  Props
-> = props => {
+export const AppLoadingAndNotifications: React.FunctionComponent<Props> = props => {
   const [loadingOpacity] = React.useState(new Animated.Value(0))
   const [showContainer, setShowContainer] = React.useState(false)
   const showRightNow = props.loading || showContainer
@@ -49,8 +49,7 @@ export const AppLoadingAndNotifications: React.FunctionComponent<
       style={[
         showRightNow && styles.loadingContainer,
         { opacity: loadingOpacity },
-      ]}
-    >
+      ]}>
       <LoadingSpinner />
     </Animated.View>
   ) : (

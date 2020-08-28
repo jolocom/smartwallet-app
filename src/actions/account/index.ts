@@ -181,11 +181,6 @@ export const saveClaim: ThunkAction = async (
   return dispatch(navigationActions.navigatorResetHome())
 }
 
-export const toggleLoading = (value: boolean) => ({
-  type: 'SET_LOADING',
-  value,
-})
-
 export const hasExternalCredentials: ThunkAction = async (
   dispatch,
   getState,
