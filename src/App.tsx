@@ -22,6 +22,7 @@ import {
   JolocomKeychainPasswordStore,
   JolocomSDK,
 } from 'react-native-jolocom'
+import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
 
 enableScreens()
 
@@ -124,6 +125,7 @@ export default class App extends React.PureComponent<
               />
               <Lock />
               <RegisterPIN />
+              <HowToChangePIN />
             </AppWrap>
           </Provider>
         )}

@@ -5,11 +5,11 @@ import InputSeedPhraseComponent from '../components/inputSeedPhrase'
 import { validateMnemonic, wordlists } from 'bip39'
 import { withErrorScreen } from '../../../actions/modifiers'
 import { recoverIdentity } from '../../../actions/registration'
-import { routeList } from '../../../routeList'
 import { TextInput } from 'react-native'
 import { timeout } from '../../../utils/asyncTimeout'
-import { navigationActions } from '../../../actions'
 import { RootState } from '../../../reducers'
+import { accountActions, recoveryActions } from 'src/actions'
+import { NavigationScreenProps } from 'react-navigation'
 
 export enum WordState {
   editing,
@@ -20,7 +20,8 @@ export enum WordState {
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> {}
+    ReturnType<typeof mapStateToProps>,
+    NavigationScreenProps {}
 
 interface State {
   inputValue: string
@@ -123,6 +124,15 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
   private nextWord = () => this.changeMarkedWord(true)
   private previousWord = () => this.changeMarkedWord(false)
 
+  private onSubmit = async () => {
+    const { state } = this.props.navigation
+    if (state.params && state.params.isPINrestoration) {
+      this.props.handleRestoreAccess(this.state.mnemonic)
+    } else {
+      this.props.recoverIdentity(this.state.mnemonic.join(' '))
+    }
+  }
+
   public render(): JSX.Element {
     const {
       inputValue,
@@ -134,39 +144,41 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     } = this.state
 
     return (
-      <InputSeedPhraseComponent
-        inputValue={inputValue}
-        mnemonic={mnemonic}
-        isMnemonicValid={isMnemonicValid}
-        suggestions={suggestions}
-        markedWord={markedWord}
-        inputState={inputState}
-        selectWord={this.selectWord}
-        handleTextInput={this.handleInputChange}
-        handleButtonPress={() =>
-          this.props.recoverIdentity(mnemonic.join(' '))
-        }
-        inputRef={ref => {
-          this.textInput = ref
-        }}
-        handleDoneButton={this.onDoneButton}
-        handleNextWord={this.nextWord}
-        handlePreviousWord={this.previousWord}
-        handleBackButton={this.props.goBack}
-        isLoading={this.props.isLoading}
-      />
+      <React.Fragment>
+        <InputSeedPhraseComponent
+          inputValue={inputValue}
+          mnemonic={mnemonic}
+          isMnemonicValid={isMnemonicValid}
+          suggestions={suggestions}
+          markedWord={markedWord}
+          inputState={inputState}
+          selectWord={this.selectWord}
+          handleTextInput={this.handleInputChange}
+          handleButtonPress={this.onSubmit}
+          inputRef={ref => {
+            this.textInput = ref
+          }}
+          handleDoneButton={this.onDoneButton}
+          handleNextWord={this.nextWord}
+          handlePreviousWord={this.previousWord}
+          handleBackButton={this.props.goBack}
+          isLoading={this.props.isLoading}
+        />
+      </React.Fragment>
     )
   }
 }
 
 const mapStateToProps = (state: RootState) => ({
   isLoading: state.registration.loading.isRegistering,
+  seedPhraseSaved: state.settings.seedPhraseSaved,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   recoverIdentity: (seedPhrase: string) =>
     dispatch(withErrorScreen(recoverIdentity(seedPhrase))),
-  goBack: () =>
-    dispatch(navigationActions.navigate({ routeName: routeList.Landing })),
+  goBack: () => dispatch(accountActions.handleRecoveryBack),
+  handleRestoreAccess: (mnemonic: string[]) =>
+    dispatch(recoveryActions.onRestoreAccess(mnemonic)),
 })
 
 export const InputSeedPhrase = connect(

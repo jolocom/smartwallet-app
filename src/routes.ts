@@ -196,6 +196,9 @@ const MainStack = createStackNavigator(
     },
     [routeList.ChangePIN]: {
       screen: ChangePIN,
+      navigationOptions: {
+        gesturesEnabled: false,
+      },
     },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
