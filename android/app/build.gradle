@@ -207,6 +207,12 @@ android {
 
         }
     }
+
+  packagingOptions {
+    pickFirst "lib/arm64-v8a/libkeriox_wrapper.so"
+    pickFirst "lib/x86/libkeriox_wrapper.so"
+    pickFirst "lib/armeabi-v7a/libkeriox_wrapper.so"
+  }
 }
 
 dependencies {

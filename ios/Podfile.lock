@@ -23,7 +23,7 @@ PODS:
   - glog (0.3.5)
   - Interactable (2.0.1):
     - React
-  - JolocomCore (1.0.21):
+  - JolocomCore (1.1.0-rc4):
     - React
   - Permission-BluetoothPeripheral (2.2.0):
     - RNPermissions
@@ -247,7 +247,7 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - ReactNativeART (1.2.0):
     - React
-  - RNCAsyncStorage (1.12.0):
+  - RNCAsyncStorage (1.7.1):
     - React
   - RNCMaskedView (0.1.10):
     - React
@@ -287,7 +287,7 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Interactable (from `../node_modules/react-native-interactable`)
-  - "JolocomCore (from `../node_modules/@jolocom/native-core-react-native/ios`)"
+  - "JolocomCore (from `../node_modules/@jolocom/native-core-react-native`)"
   - Permission-BluetoothPeripheral (from `../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec`)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -355,7 +355,7 @@ EXTERNAL SOURCES:
   Interactable:
     :path: "../node_modules/react-native-interactable"
   JolocomCore:
-    :path: "../node_modules/@jolocom/native-core-react-native/ios"
+    :path: "../node_modules/@jolocom/native-core-react-native"
   Permission-BluetoothPeripheral:
     :path: "../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec"
   Permission-Camera:
@@ -450,7 +450,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Interactable: 411887c89fa16ac41f8e7898aca06dcad55e5f22
-  JolocomCore: 4fb45270184e36ce541e32813763aeac63350f48
+  JolocomCore: 9178d2e888fc4b4075df1db3121edc2a0a61bed0
   Permission-BluetoothPeripheral: d7b686f612db77ffb95762e28d76f01b587dcd03
   Permission-Camera: 9ff12884205fb282b4a22b9e8c358ba53cee7567
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
@@ -479,7 +479,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
-  RNCAsyncStorage: 2a692bcb9b69b76a2f1a95f33db057129700af64
+  RNCAsyncStorage: 44395cb9c7c1523104c2b499eb426ef7aff82bca
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
   RNJolocom: dbea930125f52ecff59176b5ce81b7aac44d755e
@@ -495,6 +495,6 @@ SPEC CHECKSUMS:
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 4346525159f55f5aaba60f4c2883efd21e4ae5c2
+PODFILE CHECKSUM: 4c445d45f66b2240370a6a9ce28af3f871da1e73
 
 COCOAPODS: 1.8.4
