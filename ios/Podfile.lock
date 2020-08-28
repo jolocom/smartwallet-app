@@ -21,6 +21,10 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - Interactable (2.0.1):
+    - React
+  - JolocomCore (1.0.21):
+    - React
   - Permission-BluetoothPeripheral (2.2.0):
     - RNPermissions
   - Permission-Camera (2.2.0):
@@ -249,6 +253,8 @@ PODS:
     - React
   - RNGestureHandler (1.7.0):
     - React
+  - RNJolocom (1.0.0):
+    - React
   - RNKeychain (3.1.3):
     - React
   - RNLocalize (1.4.1):
@@ -280,6 +286,8 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Interactable (from `../node_modules/react-native-interactable`)
+  - "JolocomCore (from `../node_modules/@jolocom/native-core-react-native/ios`)"
   - Permission-BluetoothPeripheral (from `../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec`)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -314,6 +322,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNJolocom (from `../node_modules/react-native-jolocom/ios`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -343,6 +352,10 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Interactable:
+    :path: "../node_modules/react-native-interactable"
+  JolocomCore:
+    :path: "../node_modules/@jolocom/native-core-react-native/ios"
   Permission-BluetoothPeripheral:
     :path: "../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec"
   Permission-Camera:
@@ -405,6 +418,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNJolocom:
+    :path: "../node_modules/react-native-jolocom/ios"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
   RNLocalize:
@@ -434,6 +449,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  Interactable: 411887c89fa16ac41f8e7898aca06dcad55e5f22
+  JolocomCore: 4fb45270184e36ce541e32813763aeac63350f48
   Permission-BluetoothPeripheral: d7b686f612db77ffb95762e28d76f01b587dcd03
   Permission-Camera: 9ff12884205fb282b4a22b9e8c358ba53cee7567
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
@@ -465,6 +482,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 2a692bcb9b69b76a2f1a95f33db057129700af64
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
+  RNJolocom: dbea930125f52ecff59176b5ce81b7aac44d755e
   RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
   RNLocalize: 49634a6a605dcdeb319e9c42a5c2f1aec508694b
   RNPermissions: 477d88d0be7ecb0a7b344e4d5fbb0352de104626
@@ -477,6 +495,6 @@ SPEC CHECKSUMS:
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: d5f23aa614a182626e3245b12d233aab33a78bac
+PODFILE CHECKSUM: 4346525159f55f5aaba60f4c2883efd21e4ae5c2
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.8.4

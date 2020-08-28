@@ -18,6 +18,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* JolocomWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* JolocomWalletTests.m */; };
 		4D1FC8046A23495D94061A40 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 13B34D408D864C7EA5D2DCB1 /* libz.tbd */; };
+		797D875024F825A20048D4FE /* jolocom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797D874F24F825A20048D4FE /* jolocom.swift */; };
 		A431D390F7F5781EEA4C8E86 /* libPods-JolocomWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 217C7D710BCA6E6CAF6E8416 /* libPods-JolocomWallet.a */; };
 		B465E65822CE17D100F87457 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = B465E65722CE17D000F87457 /* assets */; };
 		B4A807E322C62D0C008E672A /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = B4A807E222C62D0C008E672A /* TTCommons.otf */; };
@@ -64,6 +65,8 @@
 		3BEAAC35529228E3AFDE344D /* Pods-JolocomWallet-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JolocomWallet-tvOS.release.xcconfig"; path = "Target Support Files/Pods-JolocomWallet-tvOS/Pods-JolocomWallet-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		3F5698155A4598FF33970A7C /* libPods-JolocomWallet-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JolocomWallet-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B7319EA24D5D75638B45686 /* libPods-JolocomWallet-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JolocomWallet-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		797D874C24F7FCBD0048D4FE /* JolocomWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JolocomWallet-Bridging-Header.h"; sourceTree = "<group>"; };
+		797D874F24F825A20048D4FE /* jolocom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jolocom.swift; sourceTree = "<group>"; };
 		7E9A692685474EBA8C3432F5 /* TTCommons-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TTCommons-Medium.otf"; path = "../src/assets/fonts/TTCommons-Medium.otf"; sourceTree = "<group>"; };
 		93D3970E93A7768602B70D7C /* Pods-JolocomWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JolocomWallet.release.xcconfig"; path = "Target Support Files/Pods-JolocomWallet/Pods-JolocomWallet.release.xcconfig"; sourceTree = "<group>"; };
 		A5EDB0F9CBA88D413C2BA1C7 /* Pods-JolocomWallet-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JolocomWallet-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-JolocomWallet-tvOSTests/Pods-JolocomWallet-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -141,11 +144,13 @@
 		13B07FAE1A68108700A75B9A /* JolocomWallet */ = {
 			isa = PBXGroup;
 			children = (
+				797D874F24F825A20048D4FE /* jolocom.swift */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				D27ED15722CB950D008FD1C1 /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				797D874C24F7FCBD0048D4FE /* JolocomWallet-Bridging-Header.h */,
 			);
 			name = JolocomWallet;
 			sourceTree = "<group>";
@@ -333,6 +338,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 95S8NJ5S67;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -371,9 +377,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -625,6 +628,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				797D875024F825A20048D4FE /* jolocom.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -682,6 +686,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 067EC48000DEF726F21356EB /* Pods-JolocomWalletTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -710,9 +715,7 @@
 				INFOPLIST_FILE = JolocomWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -728,6 +731,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F3C6022D1A26D8CAE1325D84 /* Pods-JolocomWalletTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 95S8NJ5S67;
@@ -753,9 +757,7 @@
 				INFOPLIST_FILE = JolocomWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -772,6 +774,7 @@
 			baseConfigurationReference = AE65353438C8A7B388A0CC8B /* Pods-JolocomWallet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDev;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -807,6 +810,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jolocom.wallet.debug;
 				PRODUCT_NAME = JolocomWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "JolocomWallet-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -816,6 +822,7 @@
 			baseConfigurationReference = 93D3970E93A7768602B70D7C /* Pods-JolocomWallet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -850,6 +857,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jolocom.wallet;
 				PRODUCT_NAME = JolocomWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "JolocomWallet-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -888,9 +897,7 @@
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -937,9 +944,7 @@
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -985,9 +990,7 @@
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1033,9 +1036,7 @@
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1078,6 +1079,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1132,6 +1134,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

@@ -6,7 +6,7 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 
 import com.facebook.react.ReactApplication;
-import io.jolocom.nativeUtils.NativeUtilsPackage;
+import io.jolocom.jolocomCore.JolocomCorePackage;
 import io.sentry.RNSentryPackage;
 import com.reactnativecommunity.toolbarandroid.ReactToolbarPackage;
 import com.reactnativecommunity.art.ARTPackage;
@@ -54,6 +54,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new JolocomCorePackage(),
               new AndroidOpenSettingsPackage(),
               new AsyncStoragePackage(),
               new RNSentryPackage(),
