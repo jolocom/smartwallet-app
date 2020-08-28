@@ -79,8 +79,6 @@ const styles = StyleSheet.create({
   },
 })
 
-const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView)
-
 interface Props
   extends BottomTabBarProps,
     ReturnType<typeof mapDispatchToProps> {
@@ -159,8 +157,8 @@ const BottomBarContainer = (props: Props) => {
   }
 
   return (
-    <AnimatedSafeAreaView
-      style={[styles.wrapper, { transform: [{ translateY: AnimatedHiding }] }]}
+    <SafeAreaView
+      style={styles.wrapper}
       forceInset={safeAreaInset}
     >
       <View style={styles.buttonWrapper}>
@@ -201,7 +199,7 @@ const BottomBarContainer = (props: Props) => {
         navigateScanner={navigateInteraction}
       />
       <View style={styles.safeView} />
-    </AnimatedSafeAreaView>
+    </SafeAreaView>
   )
 }
 
