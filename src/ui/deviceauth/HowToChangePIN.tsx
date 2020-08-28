@@ -2,6 +2,8 @@ import React from 'react'
 import { Image } from 'react-native'
 import { connect } from 'react-redux'
 
+import I18n from 'src/locales/i18n'
+
 import ScreenContainer from './components/ScreenContainer'
 import Header from './components/Header'
 import Paragraph from './components/Paragraph'
@@ -34,22 +36,19 @@ const HowToChangePIN: React.FC<PropsI> = ({
           justifyContent: 'flex-start',
           paddingTop: 30,
           paddingHorizontal: 20,
-        }}
-      >
+        }}>
         <Header color={Colors.white90} customStyles={{ textAlign: 'left' }}>
-          {strings.HOW_TO_CHANGE_PIN}
+          {I18n.t(strings.HOW_TO_CHANGE_PIN)}
         </Header>
         <Paragraph
           color={Colors.white80}
-          customStyles={{ alignSelf: 'flex-start', textAlign: 'left' }}
-        >
-          {strings.WE_ARE_SORRY_THAT_YOU_FORGOT}
+          customStyles={{ alignSelf: 'flex-start', textAlign: 'left' }}>
+          {I18n.t(strings.WE_ARE_SORRY_THAT_YOU_FORGOT)}
         </Paragraph>
         <Paragraph
           color={Colors.white80}
-          customStyles={{ alignSelf: 'flex-start', textAlign: 'left' }}
-        >
-          {strings.YOU_CAN_CHANGE_PIN}
+          customStyles={{ alignSelf: 'flex-start', textAlign: 'left' }}>
+          {I18n.t(strings.YOU_CAN_CHANGE_PIN)}
         </Paragraph>
 
         <AbsoluteBottom customStyles={{ alignSelf: 'center' }}>
@@ -59,22 +58,22 @@ const HowToChangePIN: React.FC<PropsI> = ({
               marginBottom: -100,
             }}
           />
-          <Btn onPress={handleAccessRestore}>{strings.RESTORE_ACCESS}</Btn>
+          <Btn onPress={handleAccessRestore}>
+            {I18n.t(strings.RESTORE_ACCESS)}
+          </Btn>
           <Paragraph
             color={Colors.white70}
             customStyles={{
               paddingHorizontal: BP({
-                xsmall: 5,
                 small: 5,
                 medium: 10,
                 large: 25,
               }),
-            }}
-          >
-            {strings.STORING_NO_AFFECT_DATA}
+            }}>
+            {I18n.t(strings.STORING_NO_AFFECT_DATA)}
           </Paragraph>
           <Btn onPress={handleGoBack} type={BtnTypes.secondary}>
-            {strings.CANCEL}
+            {I18n.t(strings.CANCEL)}
           </Btn>
         </AbsoluteBottom>
       </ScreenContainer>
