@@ -57,7 +57,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
     selected.includes(offering)
 
   return (
-    <Wrapper style={{ backgroundColor: Colors.iBackgroundWhite }}>
+    <Wrapper>
       <CredentialReceiveComponent
         credentialOfferSummary={
           interactionSummary.state as CredentialOfferFlowState
