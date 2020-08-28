@@ -24,6 +24,7 @@ import { useAppState } from './hooks/useAppState'
 import { ThunkDispatch } from 'src/store'
 import AbsoluteBottom from './components/AbsoluteBottom'
 import { accountActions } from 'src/actions'
+import useKeyboardHeight from './hooks/useKeyboardHeight'
 
 interface LockI {
   unlockApplication: () => void
@@ -38,6 +39,7 @@ const Lock: React.FC<LockI> = ({
   const [hasError, setHasError] = useState(false)
 
   const { isLoadingStorage, keychainPin } = useGetStoredAuthValues()
+  const { keyboardHeight } = useKeyboardHeight()
 
   useEffect(() => {
     if (pin.length < 4 && hasError) {
@@ -78,11 +80,10 @@ const Lock: React.FC<LockI> = ({
                 errorStateUpdaterFn={setHasError}
               />
             </View>
-            <AbsoluteBottom>
+            <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
               <Btn
                 type={BtnTypes.secondary}
-                onPress={navigateTorecoveryInstuction}
-              >
+                onPress={navigateTorecoveryInstuction}>
                 {strings.FORGOT_YOUR_PIN}
               </Btn>
             </AbsoluteBottom>
