@@ -84,7 +84,7 @@ const Lock: React.FC<LockI> = ({
               <Btn
                 type={BtnTypes.secondary}
                 onPress={navigateTorecoveryInstuction}>
-                {strings.FORGOT_YOUR_PIN}
+                {I18n.t(strings.FORGOT_YOUR_PIN)}
               </Btn>
             </AbsoluteBottom>
           </>
@@ -96,7 +96,6 @@ const Lock: React.FC<LockI> = ({
 
 const styles = StyleSheet.create({
   inputContainer: {
-    // height: Dimensions.get('window').height,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
