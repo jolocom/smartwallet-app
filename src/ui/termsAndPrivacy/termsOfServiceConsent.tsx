@@ -43,12 +43,23 @@ enum TextType {
   TermsDE,
 }
 
-const ConsentTextButton: React.FC<{ text: string; onPress: () => void }> = ({
+export const ConsentTextButton: React.FC<{
+  text: string
+  onPress: () => void
+}> = ({ onPress, text }) => {
+  return (
+    <TouchableOpacity style={styles.consentButton} onPress={onPress}>
+      <Text style={styles.termsText}>{text}</Text>
+    </TouchableOpacity>
+  )
+}
+
+export const ConsentText: React.FC<{ text: string; onPress: () => void }> = ({
   onPress,
   text,
 }) => {
   return (
-    <TouchableOpacity style={styles.consentButton} onPress={onPress}>
+    <TouchableOpacity onPress={onPress}>
       <Text style={styles.termsText}>{text}</Text>
     </TouchableOpacity>
   )
@@ -122,9 +133,10 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
               />
             </>
           ) : (
-            <TouchableOpacity onPress={() => setTextType(TextType.None)}>
-              <Text style={styles.termsText}>{getLegalText()}</Text>
-            </TouchableOpacity>
+            <ConsentText
+              text={getLegalText()}
+              onPress={() => setTextType(TextType.None)}
+            />
           )}
         </ScrollView>
       </View>
