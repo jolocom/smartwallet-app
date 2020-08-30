@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 
 import I18n from 'src/locales/i18n'
@@ -20,6 +20,7 @@ import { connect } from 'react-redux'
 import { RootState } from 'src/reducers'
 import { ThunkDispatch } from 'src/store'
 import { accountActions } from 'src/actions'
+import useKeyboardHeight from './hooks/useKeyboardHeight'
 
 interface PropsI {
   isLocalAuthVisible: boolean
@@ -38,6 +39,8 @@ const RegisterPIN: React.FC<PropsI> = ({
   const [passcode, setPasscode] = useState('')
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
+
+  const { keyboardHeight } = useKeyboardHeight()
 
   const handlePasscodeSubmit = useCallback(() => {
     setIsCreating(false)
@@ -77,68 +80,63 @@ const RegisterPIN: React.FC<PropsI> = ({
 
   return (
     <LocalModal isVisible={isLocalAuthVisible}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-        <ScreenContainer
-          customStyles={{
-            justifyContent: 'flex-start',
-          }}
-        >
-          <View>
-            <Header color={Colors.white90}>
-              {isCreating
-                ? I18n.t(strings.CREATE_PASSCODE)
-                : I18n.t(strings.VERIFY_PASSCODE)}
-            </Header>
-            <Paragraph
-              color={Colors.white70}
-              size={ParagraphSizes.medium}
-              customStyles={{ marginHorizontal: 5, opacity: 0.8 }}
-            >
-              {isCreating
-                ? I18n.t(strings.IN_ORDER_TO_PROTECT_YOUR_DATA)
-                : I18n.t(strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN)}
-            </Paragraph>
-          </View>
-          <View style={styles.passcodeContainer}>
-            {isCreating ? (
-              <PasscodeInput
-                value={passcode}
-                stateUpdaterFn={setPasscode}
-                onSubmit={handlePasscodeSubmit}
-              />
-            ) : (
-              <PasscodeInput
-                value={verifiedPasscode}
-                stateUpdaterFn={setVerifiedPasscode}
-                onSubmit={handleVerifiedPasscodeSubmit}
-                errorStateUpdaterFn={setHasError}
-                hasError={hasError}
-              />
-            )}
-          </View>
-          {isCreating && (
-            <Paragraph
-              size={ParagraphSizes.medium}
-              color={Colors.success}
-              customStyles={{ marginTop: 20 }}
-            >
-              {I18n.t(strings.ANY_FUTURE_PASSCODE_RESTORE)}
-            </Paragraph>
+      <ScreenContainer
+        customStyles={{
+          justifyContent: 'flex-start',
+        }}>
+        <View>
+          <Header color={Colors.white90}>
+            {isCreating
+              ? I18n.t(strings.CREATE_PASSCODE)
+              : I18n.t(strings.VERIFY_PASSCODE)}
+          </Header>
+          <Paragraph
+            color={Colors.white70}
+            size={ParagraphSizes.medium}
+            customStyles={{ marginHorizontal: 5, opacity: 0.8 }}>
+            {isCreating
+              ? I18n.t(strings.IN_ORDER_TO_PROTECT_YOUR_DATA)
+              : I18n.t(strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN)}
+          </Paragraph>
+        </View>
+        <View style={styles.passcodeContainer}>
+          {isCreating ? (
+            <PasscodeInput
+              value={passcode}
+              stateUpdaterFn={setPasscode}
+              onSubmit={handlePasscodeSubmit}
+            />
+          ) : (
+            <PasscodeInput
+              value={verifiedPasscode}
+              stateUpdaterFn={setVerifiedPasscode}
+              onSubmit={handleVerifiedPasscodeSubmit}
+              errorStateUpdaterFn={setHasError}
+              hasError={hasError}
+            />
           )}
-          {hasError && (
-            <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
-              {I18n.t(strings.PINS_DONT_MATCH)}
-            </Paragraph>
-          )}
-          {!isCreating && (
-            <AbsoluteBottom customStyles={styles.btn}>
-              <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-                {I18n.t(strings.RESET)}
-              </Btn>
-            </AbsoluteBottom>
-          )}
-        </ScreenContainer>
-      </KeyboardAvoidingView>
+        </View>
+        {isCreating && (
+          <Paragraph
+            size={ParagraphSizes.medium}
+            color={Colors.success}
+            customStyles={{ marginTop: 20 }}>
+            {I18n.t(strings.ANY_FUTURE_PASSCODE_RESTORE)}
+          </Paragraph>
+        )}
+        {hasError && (
+          <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
+            {I18n.t(strings.PINS_DONT_MATCH)}
+          </Paragraph>
+        )}
+        {!isCreating && (
+          <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
+            <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
+              {I18n.t(strings.RESET)}
+            </Btn>
+          </AbsoluteBottom>
+        )}
+      </ScreenContainer>
     </LocalModal>
   )
 }
@@ -156,9 +154,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: '38%',
     top: 100,
-  },
-  btn: {
-    bottom: 0,
   },
 })
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Modal, StatusBar } from 'react-native'
-import { Wrapper } from '../structure'
 import { Colors } from './colors'
 
 interface PropsI {
