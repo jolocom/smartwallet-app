@@ -29,7 +29,11 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
 
   return (
     <View>
-      <Header size={HeaderSizes.medium} color={Colors.white90}>
+      <Header
+        size={HeaderSizes.medium}
+        color={Colors.white90}
+        customStyles={{ lineHeight: 32 }}
+      >
         {title || interactionTitle}
       </Header>
       <Paragraph

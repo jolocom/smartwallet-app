@@ -40,20 +40,20 @@ interface AuthCommonI extends InteractionCommonI {
 export interface AuthenticationDetailsI extends AuthCommonI {
   flowType: FlowType.Authentication
   description: string
-  image?: never
+  imageURL?: never
   action?: never
 }
 
 export interface AuthorizationDetailsI extends AuthCommonI {
   flowType: FlowType.Authorization
   description?: string
-  image?: string
+  imageURL?: string
   action: string
 }
 
 interface CredCommonI extends InteractionCommonI {
   description?: never
-  image?: never
+  imageURL?: never
   action?: never
 }
 

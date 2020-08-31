@@ -45,15 +45,18 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
 
   const startInteraction = async (jwt: string) => {
     // NOTE For testing Authorization flow until it's available on a demo service
-    // const encodedToken = await sdk.authorizationRequestToken({
-    //   description:
-    //     'The  http://google.com is ready to share a scooter with you, unlock to start your ride',
-    //   imageURL: 'http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png',
-    //   action: 'unlock the scooter',
-    //   callbackURL: 'http://test.test.test',
-    // })
+    /* 
+    const encodedToken = await sdk.authorizationRequestToken({
+      description:
+        'The  http://google.com is ready to share a scooter with you, unlock to start your ride',
+      imageURL: 'http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png',
+      action: 'unlock the scooter',
+      callbackURL: 'http://test.test.test',
+    })
+    */
 
     const token = parseJWT(jwt)
+    // const token = parseJWT(encodedToken)
 
     await loader(
       async () => {
