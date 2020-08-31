@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, RefObject } from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import {
@@ -92,12 +92,11 @@ const styles = StyleSheet.create({
 
 interface Props {
   onScan: (jwt: string) => Promise<void>
-  reRenderKey?: number
-  onScannerRef?: (s: any) => void
+  onScannerRef?: RefObject<QRScanner>
 }
 
 export const ScannerComponent = (props: Props) => {
-  const { onScan, onScannerRef, reRenderKey } = props
+  const { onScan, onScannerRef } = props
 
   const [isError, setError] = useState(false)
   const [errorText, setErrorText] = useState('')
@@ -153,7 +152,6 @@ export const ScannerComponent = (props: Props) => {
   }
 
   const cameraSettings = {
-    key: reRenderKey,
     captureAudio: false,
     flashMode: isTorchPressed
       ? RNCamera.Constants.FlashMode.torch
@@ -169,6 +167,7 @@ export const ScannerComponent = (props: Props) => {
           position: 'absolute',
         }}
         cameraProps={cameraSettings}
+        reactivate={true}
         reactivateTimeout={3000}
         fadeIn={false}
         onRead={onRead}
@@ -178,9 +177,8 @@ export const ScannerComponent = (props: Props) => {
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'stretch'
-        }}
-      >
+          alignItems: 'stretch',
+        }}>
         <View style={styles.horizontalOverlay} />
         <Animated.View
           style={[
@@ -204,8 +202,7 @@ export const ScannerComponent = (props: Props) => {
               {
                 opacity: textAnimationValue,
               },
-            ]}
-          >
+            ]}>
             {I18n.t(errorText)}
           </Animated.Text>
         ) : (
@@ -220,8 +217,7 @@ export const ScannerComponent = (props: Props) => {
           onPressOut={() => setTorchPressed(false)}
           activeOpacity={1}
           underlayColor={'transparent'}
-          style={styles.torch}
-        >
+          style={styles.torch}>
           {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
         </TouchableHighlight>
       </View>
