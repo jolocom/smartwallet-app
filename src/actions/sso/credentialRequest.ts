@@ -116,6 +116,6 @@ export const sendCredentialResponse = (
   )
 
   return interaction
-    .send(await interaction.createCredentialResponse(selectedCredentials))
+    .send(await interaction.createCredentialResponse(selectedCredentials.map(c => c.id)))
     .then(() => dispatch(cancelSSO))
 }
