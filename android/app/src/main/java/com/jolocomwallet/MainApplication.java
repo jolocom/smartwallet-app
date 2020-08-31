@@ -1,5 +1,6 @@
 package com.jolocomwallet;
 
+import com.wix.interactable.Interactable;
 import android.app.Application;
 import androidx.multidex.MultiDexApplication;
 import android.content.Context;
@@ -32,7 +33,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         List<ReactPackage> packages = new PackageList(this).getPackages();
         // Packages that cannot be autolinked yet can be added manually here, for example:
         // packages.add(new MyReactNativePackage());
-
+        packages.add(new Interactable());
         // https://github.com/crazycodeboy/react-native-splash-screen
         // this package looks dead, we should move to https://github.com/zoontek/react-native-bootsplash
         //packages.add(new SplashScreenReactPackage())
