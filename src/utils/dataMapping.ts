@@ -111,7 +111,7 @@ const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
 }
 
 // TODO: have proper types for all the mapped interactions
-const mapCredReceiveData = (summary: SummaryI<CredentialOfferFlowState>) => {
+const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
   return {
     counterparty: summary.initiator,
     credentials: {
@@ -134,7 +134,7 @@ export const getMappedInteraction = (interaction: Interaction) => {
   } else if (interaction.flow.type === FlowType.CredentialShare) {
     return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
   } else if (interaction.flow.type === FlowType.CredentialOffer) {
-    return mapCredReceiveData(summary as SummaryI<CredentialOfferFlowState>)
+    return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
   } else if (interaction.flow.type === FlowType.Authorization) {
     // TODO: to update once available
     return {}

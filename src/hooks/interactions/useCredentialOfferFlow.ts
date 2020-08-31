@@ -1,5 +1,4 @@
 import { useInteraction } from '~/hooks/sdk'
-import { SummaryI } from '~/utils/dataMapping'
 import {
   CredentialOfferFlowState,
   SignedCredentialWithMetadata,
@@ -46,11 +45,12 @@ const useCredentialOfferFlow = () => {
   }
 
   const getValidatedCredentials = (): OfferUICredential[] => {
+    const { initiator, state } = interaction.getSummary()
     const {
       offerSummary,
       issued,
       credentialsValidity,
-    } = interaction.getSummary().state as CredentialOfferFlowState
+    } = state as CredentialOfferFlowState
 
     return issued.map((cred, i) => {
       const offer = offerSummary.find(({ type }) => type === cred.type[1])
@@ -60,6 +60,7 @@ const useCredentialOfferFlow = () => {
       return {
         type: offer.type,
         renderInfo: offer.renderInfo,
+        issuer: initiator,
         invalid: !credentialsValidity[i],
       }
     })
