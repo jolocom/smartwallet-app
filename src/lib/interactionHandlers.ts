@@ -16,9 +16,6 @@ import {
 } from '@jolocom/sdk/js/src/lib/interactionManager/resolutionFlow'
 
 import { ssoActions } from 'src/actions'
-import { navigatorResetHome } from 'src/actions/navigation'
-import { ThunkAction } from 'src/store'
-import { JolocomSDK } from '@jolocom/sdk'
 
 /**
  * @param Metadata should not need to be passed to credential receive because it comes from cred Offer

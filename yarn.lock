@@ -1470,12 +1470,13 @@
     class-transformer "^0.2.3"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.0.0-rc2":
-  version "1.0.0-rc2"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc2.tgz#a3f7d3b9d442c62bd149de778964fe90937ce80c"
-  integrity sha512-CT7iMIBRxssqP5Vg3Ocwl4Y2x8uznjcVQxE+iUXPN07CEB7hJeL9XGZne1/pwrwb+SFnbw97NqvX+gCPhEwSPA==
+"@jolocom/sdk@^1.0.0-rc3":
+  version "1.0.0-rc3"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc3.tgz#bc7610bd0dcce62e328be9e0187f8be9844dac3a"
+  integrity sha512-i05LSuKsl8m1XUT/bTFPZfPSXDd5Gn+UEYfUVKyABwovtT9rQT+Tg8By+D3+shjRu7DyocB9Bzgv6qviG0yi/Q==
   dependencies:
     form-data "^3.0.0"
+    local-resolver-registrar "^0.3.1"
     ramda "^0.26.1"
 
 "@jolocom/vaulted-key-provider@^0.7.4":
@@ -9918,10 +9919,10 @@ react-native-splash-screen@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.2.0.tgz#d47ec8557b1ba988ee3ea98d01463081b60fff45"
   integrity sha512-Ls9qiNZzW/OLFoI25wfjjAcrf2DZ975hn2vr6U9gyuxi2nooVbzQeFoQS5vQcbCt9QX5NY8ASEEAtlLdIa6KVg==
 
-react-native-sqlite-storage@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-sqlite-storage/-/react-native-sqlite-storage-4.1.0.tgz#641780eef06bc90b853d3dcd628c0fe54b656d7b"
-  integrity sha512-H8++CILlZQ2f2n+OvVmGyqMaV+UFKTRSTx9/3eIAxBg4d0rjeZogs6hgHlfADvEGNmrEyUBDpnX9+uHnDtwAHQ==
+react-native-sqlite-storage@^3:
+  version "3.3.11"
+  resolved "https://registry.yarnpkg.com/react-native-sqlite-storage/-/react-native-sqlite-storage-3.3.11.tgz#834c26917f5b5c36a084a9e8d62b04109115422a"
+  integrity sha512-Ek2VsteYQKf1Sz8QmWr5MXjyYYcGqVt8i9FFOIrCg/6OboC6MvpdeY/RYWy4PnquHfQirB7unHPagOFZBCo3Zw==
 
 react-native-svg@^11.0.1:
   version "11.0.1"
