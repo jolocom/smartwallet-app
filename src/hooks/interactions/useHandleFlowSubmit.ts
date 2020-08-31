@@ -8,6 +8,8 @@ import {
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { Alert } from 'react-native'
+import { useInteraction } from '../sdk'
+import { JSONWebToken } from '@jolocom/sdk'
 
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
@@ -20,14 +22,24 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
+  const interaction = useInteraction()
+
+  const submitAuth = async (
+    token: JSONWebToken<{ [key: string]: string } | any>,
+  ) => {
+    await interaction.send(token)
+    dispatch(resetInteraction())
+  }
 
   if (interactionType === FlowType.Authentication) {
     return async function authenticate() {
-      // TODO: add onAuthenticate functionality here
+      const authResponse = await interaction.createAuthenticationResponse()
+      submitAuth(authResponse)
     }
   } else if (interactionType === FlowType.Authorization) {
     return async function authorize() {
-      // TODO: add onAuthorization functionality here
+      const authzResponse = await interaction.createAuthorizationResponse()
+      submitAuth(authzResponse)
     }
   } else if (interactionType === FlowType.CredentialShare) {
     return async function shareCredentials() {
