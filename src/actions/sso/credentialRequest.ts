@@ -30,9 +30,9 @@ export const consumeCredentialRequest = (
    // Must refactor this abomination.
 
    const credentialsPerType = await Promise.all(
-     credentialRequest.interactionToken.requestedCredentialTypes.map(
-       interaction.getAttributesByType,
-     ),
+     credentialRequest.interactionToken.requestedCredentialTypes.map((t) => {
+       return interaction.getAttributesByType(t)
+     }),
    )
 
    const populatedWithCredentials = await Promise.all(
