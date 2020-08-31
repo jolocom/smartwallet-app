@@ -1,5 +1,5 @@
 import QRScanner from 'react-native-qrcode-scanner'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {
   AppState,
   AppStateStatus,
@@ -38,10 +38,9 @@ const CAMERA_PERMISSION = Platform.select({
 
 export const ScannerContainer: React.FC<Props> = props => {
   const { consumeToken, navigation } = props
-  const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<string>(RESULTS.UNAVAILABLE)
-  const [scannerRef, setScannerRef] = useState<QRScanner | null>(null)
-  const reactivate = () => scannerRef && scannerRef.reactivate()
+  const scannerRef = useRef<QRScanner>(null)
+  const reactivate = () => scannerRef && scannerRef.current?.reactivate()
 
   // NOTE: this is needed because QRScanner behaves weirdly when the screen is
   // remounted.... but we don't have error state here because rebase
@@ -49,7 +48,6 @@ export const ScannerContainer: React.FC<Props> = props => {
   //if (!isError) reactivate()
 
   const rerender = () => {
-    setRenderKey(Date.now())
     reactivate()
   }
 
@@ -110,13 +108,7 @@ export const ScannerContainer: React.FC<Props> = props => {
 
   let ret
   if (permission === RESULTS.GRANTED) {
-    ret = (
-      <ScannerComponent
-        reRenderKey={reRenderKey}
-        onScan={consumeToken}
-        onScannerRef={r => setScannerRef(r)}
-      />
-    )
+    ret = <ScannerComponent onScan={consumeToken} onScannerRef={scannerRef} />
   } else if (permission === RESULTS.UNAVAILABLE) {
     // TODO: maybe add a message here like "do you even camera?"
     ret = (
