@@ -98,28 +98,28 @@ export const getServiceIssuedCreds = (state: RootReducerI): any => {
 }
 
 export const getIsFullScreenInteraction = createSelector(
-  [getInteractionType, getIntermediaryState, getCredentials],
-  (type, intermediaryState, credentials) => {
+  [getIntermediaryState, getInteractionDetails],
+  (intermediaryState, details) => {
     if (
       intermediaryState !== IntermediaryState.absent ||
-      type === FlowType.Authentication ||
-      type === FlowType.Authorization
+      isAuthDetails(details) ||
+      isAuthzDetails(details)
     ) {
       return false
     } else if (
-      type === FlowType.CredentialShare &&
-      credentials.self_issued.length &&
-      !credentials.service_issued.length
+      isCredShareDetails(details) &&
+      details.credentials.self_issued.length &&
+      !details.credentials.service_issued.length
     ) {
       return false
     } else if (
-      type === FlowType.CredentialShare &&
-      !credentials.self_issued.length &&
-      credentials.service_issued.length === 1
+      isCredShareDetails(details) &&
+      !details.credentials.self_issued.length &&
+      details.credentials.service_issued.length === 1
     ) {
     } else if (
-      type === FlowType.CredentialOffer &&
-      credentials.service_issued.length === 1
+      isCredOfferDetails(details) &&
+      details.credentials.service_issued.length === 1
     ) {
       return false
     } else {
