@@ -7,11 +7,12 @@ import { Action } from '~/types/actions'
 import { ActionI } from '~/types/action'
 
 const initialState: InteractionStateI = {
-  details: {},
+  details: { flowType: null },
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
   attributes: {},
   attributesToShare: {},
+  selectedAttributes: {},
 }
 
 const reducer = (

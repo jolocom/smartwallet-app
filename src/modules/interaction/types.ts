@@ -18,19 +18,28 @@ export type InteractionDetails =
   | AuthenticationDetailsI
   | AuthorizationDetailsI
   | CredShareI
-  | CredReceiveI
+  | CredOfferI
+  | NotActiveInteractionDetailsI
 
 export interface InteractionStateI {
-  details: {} | InteractionDetails
+  details: InteractionDetails
   attributes: AttrsState<AttributeI>
   attributesToShare: { [x: string]: string }
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
+  selectedAttributes: SelectedAttributesT
 }
+
+export type SelectedAttributesT = { [x: string]: string }
 
 interface InteractionCommonI {
   id: string
   counterparty: IdentitySummary
+}
+
+// default state of details prop in interaction
+export interface NotActiveInteractionDetailsI {
+  flowType: null
 }
 
 interface AuthCommonI extends InteractionCommonI {
@@ -71,7 +80,7 @@ interface ServiceIssuedCredI {
   renderInfo?: CredentialOfferRenderInfo
 }
 
-export interface CredReceiveI extends CredCommonI {
+export interface CredOfferI extends CredCommonI {
   flowType: FlowType.CredentialOffer
   credentials: {
     self_issued?: never
