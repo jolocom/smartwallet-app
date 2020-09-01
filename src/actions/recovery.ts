@@ -4,54 +4,32 @@ import { navigationActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { removeNotification } from './notifications'
-import { BackendMiddleware } from 'src/backendMiddleware'
+import { entropyToMnemonic } from 'bip39'
 
-const getStoredSeedPhrase = async (backendMiddleware: BackendMiddleware) => {
-  const encryptedSeed = await backendMiddleware.storageLib.get.encryptedSeed()
-  if (!encryptedSeed) {
-    throw new Error('Can not retrieve Seed from database')
-  }
-  // TODO create vault from encrypted Seed
-  const pass = await backendMiddleware.keyChainLib.getPassword()
-  const vault = new SoftwareKeyProvider(Buffer.from(encryptedSeed, 'hex'))
-  const mnemonic = vault.getMnemonic(pass)
-  return mnemonic
-}
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
-  // FIXME TODO update after ready in native-core
-  // NOTE: this below snipper has been extracted into getStoredSeedPhrase
-  // because it is reused.
+  const encryptedSeed = await backendMiddleware.storageLib
+    .get.setting('encryptedSeed')
 
-  //  const encryptedSeed = await backendMiddleware.storageLib.get.encryptedSeed()
-  //  if (!encryptedSeed) {
-  //    throw new Error('Can not retrieve Seed from database')
-  //  }
-  //  // TODO create vault from encrypted Seed
-  //  const pass = await backendMiddleware.keyChainLib.getPassword()
-  //  const vault = new SoftwareKeyProvider(Buffer.from(encryptedSeed, 'hex'))
-  //  const mnemonic = vault.getMnemonic(pass)
-  try {
-    const mnemonic = await getStoredSeedPhrase(backendMiddleware)
-    // return dispatch(
-    //   navigationActions.navigate({
-    //     routeName: routeList.SeedPhrase,
-    //     params: { mnemonic },
-    //   }),
-    // )
-    return dispatch(
-      navigationActions.navigate({
-        routeName: routeList.SeedPhrase,
-        params: { mnemonic: ':(' },
-      }),
-    )
-  } catch (e) {
-    console.error({ e })
+  if (!encryptedSeed) {
+    throw new Error('Can not retrieve Seed from database')
   }
+
+  const decrypted = await backendMiddleware.idw.asymDecrypt(
+    Buffer.from(encryptedSeed.b64Encoded, 'base64'),
+    await backendMiddleware.keyChainLib.getPassword()
+  )
+
+  return dispatch(
+    navigationActions.navigate({
+      routeName: routeList.SeedPhrase,
+      params: { mnemonic: entropyToMnemonic(decrypted)},
+    }),
+  )
 }
 
 export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
@@ -83,6 +61,8 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
+  // No delete call available yet, overwriting with empty object
+  await backendMiddleware.storageLib.store.setting('encryptedSeed', {})
   await backendMiddleware.storageLib.store.setting(
     settingKeys.seedPhraseSaved,
     true,

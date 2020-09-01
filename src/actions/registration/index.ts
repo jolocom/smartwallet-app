@@ -1,11 +1,10 @@
-import { navigationActions } from 'src/actions/'
-import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
-import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
 import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
+import { ThunkAction } from '../../store'
+import { entropyToMnemonic } from 'bip39'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -34,9 +33,26 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   //await backendMiddleware.fuelKeyWithEther()
 
   dispatch(setLoadingMsg(loading.loadingStages[2]))
-  console.log('about to createNewIdentity')
+
+  const seed = await generateSecureRandomBytes(16)
   const password = (await generateSecureRandomBytes(32)).toString('base64')
-  const identity = await sdk.createNewIdentity(password)
+
+  const identity = await sdk.loadFromMnemonic(entropyToMnemonic(seed), password)
+
+  // TODO Better call here.
+  const encryptedSeed = await identity.asymEncryptToDid(
+    Buffer.from(seed),
+    identity.did, {
+      prefix: '',
+      resolve: async _ => identity.identity
+    })
+
+  await sdk.storageLib.store.setting(
+    'encryptedSeed',
+    {
+      b64Encoded: encryptedSeed.toString('base64')
+    }
+  )
 
   dispatch(setDid(identity.did))
   dispatch(setLoadingMsg(loading.loadingStages[3]))
@@ -51,17 +67,17 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   backendMiddleware,
 ) => {
   dispatch(setIsRegistering(true))
-  let identity
+
   try {
-    identity = await backendMiddleware.init({ mnemonic })
+    const password = (await generateSecureRandomBytes(32)).toString('base64')
+    const identity = await backendMiddleware.loadFromMnemonic(mnemonic, password)
+    dispatch(setDid(identity.did))
+    dispatch(setSeedPhraseSaved())
+
+    dispatch(setIsRegistering(false))
+    return dispatch(navigatorResetHome())
   } catch (e) {
     dispatch(setIsRegistering(false))
     throw e
   }
-
-  dispatch(setDid(identity.did))
-  dispatch(setSeedPhraseSaved())
-
-  dispatch(setIsRegistering(false))
-  return dispatch(navigatorResetHome())
 }
