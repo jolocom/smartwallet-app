@@ -60,10 +60,9 @@ export interface MultipleShareUICredential
   credentials: ShareUICredential[]
 }
 
-export interface ShareCredentialsBySection
-  extends CredentialsBySection<ShareUICredential | MultipleShareUICredential> {
-  missingTypes: string[]
-}
+export type ShareCredentialsBySection = CredentialsBySection<
+  MultipleShareUICredential
+>
 
 export interface OfferUICredential extends BaseUICredential {
   invalid: boolean

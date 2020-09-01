@@ -27,6 +27,9 @@ export const fieldNames = {
   [AttrKeys.postalAddress]: 'address',
 }
 
+export const isTypeAttribute = (type: string) =>
+  Object.values(credentialSchemas).includes(type)
+
 export const isCredentialAttribute = (cred: SignedCredential) =>
   Object.values(credentialSchemas).indexOf(cred.type[1]) > -1
 

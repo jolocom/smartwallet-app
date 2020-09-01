@@ -114,29 +114,22 @@ export const getShareCredentialsBySection = createSelector<
     (acc, type) => {
       const creds = credentials.filter((cred) => cred.type === type)
 
-      if (!creds.length) {
-        acc.missingTypes.push(type)
-        return acc
-      }
-
       // NOTE: we assume the @renderAs property is the same for all credentials
       // of the same type
       const section = getCredentialSection(creds[0])
 
-      // TODO: move @uiCredentialToShareCredential to @mapCredShareData when the interaction starts,
+      // TODO?: move @uiCredentialToShareCredential to @mapCredShareData when the interaction starts,
       // in order to store the proper credentials in the store instead of the types.
       acc[section] = [
         ...acc[section],
-        creds.length === 1
-          ? uiCredentialToShareCredential(creds[0])
-          : {
-              type,
-              credentials: creds.map(uiCredentialToShareCredential),
-            },
+        {
+          type,
+          credentials: creds.map(uiCredentialToShareCredential),
+        },
       ]
 
       return acc
     },
-    { documents: [], other: [], missingTypes: [] },
+    { documents: [], other: [] },
   )
 })
