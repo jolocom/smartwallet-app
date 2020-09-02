@@ -1,4 +1,5 @@
 {
+  "About": "About",
   "Accept new terms": "Accept new terms",
   "Account is at risk": "Account is at risk",
   "add": "add",
@@ -93,6 +94,7 @@
   "Postal Address": "Postal Address",
   "Postal Code": "Postal Code",
   "Preparing launch": "Preparing launch",
+  "Privacy Policy": "Privacy Policy",
   "Problems with the interface": "Problems with the interface",
   "Protect your digital self against fraud": "Protect your digital self against fraud",
   "Could not parse JSONWebToken": "Could not parse JSONWebToken",
@@ -131,6 +133,7 @@
   "Tap to write...": "Tap to write...",
   "Telephone": "Telephone",
   "Tell us the problem": "Tell us the problem",
+  "Terms of Service": "Terms of Service",
   "That doc doesn’t belong to you. Try saving a different one.": "That doc doesn’t belong to you. Try saving a different one.",
   "There was an error with your request": "There was an error with your request",
   "The app keeps crashing": "The app keeps crashing",

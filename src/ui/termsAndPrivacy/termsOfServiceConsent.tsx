@@ -54,7 +54,7 @@ const ConsentTextButton: React.FC<{ text: string; onPress: () => void }> = ({
   )
 }
 
-const TermsOfServiceContainer: React.FC<Props> = ({
+const TermsOfServiceConsentContainer: React.FC<Props> = ({
   storeTermsConsent,
   navigation,
 }) => {
@@ -92,14 +92,18 @@ const TermsOfServiceContainer: React.FC<Props> = ({
             strings.SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY,
           )}
         </Text>
-        <Text style={styles.description}>
-          {I18n.t(
-            strings.YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW,
-          )}
-        </Text>
       </View>
       <View style={styles.termsWrapper}>
-        <ScrollView contentContainerStyle={{ paddingBottom: '50%' }}>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: '50%' }}
+          showsVerticalScrollIndicator={false}
+          overScrollMode={'never'}
+        >
+          <Text style={styles.description}>
+            {I18n.t(
+              strings.YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW,
+            )}
+          </Text>
           {textType === TextType.None ? (
             <>
               <ConsentTextButton
@@ -257,4 +261,4 @@ const styles = StyleSheet.create({
 export const TermsOfServiceConsent = connect(
   null,
   mapDispatchToProps,
-)(TermsOfServiceContainer)
+)(TermsOfServiceConsentContainer)
