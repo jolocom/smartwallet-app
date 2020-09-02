@@ -33,6 +33,9 @@ export enum routeList {
   // Settings
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
+  ChangePIN = 'ChangePIN',
+
+  RegisterPIN = 'RegisterPIN',
   TermsOfService = 'TermsOfService',
   PrivacyPolicy = 'PrivacyPolicy',
   Impressum = 'Impressum',

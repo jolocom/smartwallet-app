@@ -8,13 +8,13 @@ exports[`ContactSection Component matches the snapshot on initial render 1`] = `
     onChangeText={[MockFunction]}
     onFocus={[Function]}
     placeholder="Leave us your email or number..."
-    placeholderTextColor="rgba(0, 0, 0, 0.5)"
+    placeholderTextColor="rgba(255, 255, 255, 0.5)"
     rejectResponderTermination={true}
     style={
       Object {
-        "borderBottomColor": "#838383",
+        "borderBottomColor": "rgba(255, 255, 255, 0.21)",
         "borderBottomWidth": 1,
-        "color": "black",
+        "color": "rgb(255, 255, 255)",
         "fontFamily": "TT Commons",
         "fontSize": 20,
         "marginTop": 16,
@@ -28,7 +28,7 @@ exports[`ContactSection Component matches the snapshot on initial render 1`] = `
   <Text
     style={
       Object {
-        "color": "rgb(48, 48, 48)",
+        "color": "rgb(255, 255, 255)",
         "fontFamily": "TT Commons",
         "fontSize": 16,
         "letterSpacing": 0.11,
@@ -50,13 +50,13 @@ exports[`ContactSection Component renders the input with selected border 1`] = `
     onChangeText={[MockFunction]}
     onFocus={[Function]}
     placeholder="Leave us your email or number..."
-    placeholderTextColor="rgba(0, 0, 0, 0.5)"
+    placeholderTextColor="rgba(255, 255, 255, 0.5)"
     rejectResponderTermination={true}
     style={
       Object {
-        "borderBottomColor": "#838383",
+        "borderBottomColor": "rgba(255, 255, 255, 0.21)",
         "borderBottomWidth": 1,
-        "color": "black",
+        "color": "rgb(255, 255, 255)",
         "fontFamily": "TT Commons",
         "fontSize": 20,
         "marginTop": 16,
@@ -70,7 +70,7 @@ exports[`ContactSection Component renders the input with selected border 1`] = `
   <Text
     style={
       Object {
-        "color": "rgb(48, 48, 48)",
+        "color": "rgb(255, 255, 255)",
         "fontFamily": "TT Commons",
         "fontSize": 16,
         "letterSpacing": 0.11,

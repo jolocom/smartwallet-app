@@ -15,17 +15,15 @@ import { connect } from 'react-redux'
 import SettingItem from '../components/settingItem'
 import settingKeys from '../settingKeys'
 import { showSeedPhrase } from '../../../actions/recovery'
+import { BOTTOM_BAR_HEIGHT } from 'src/ui/navigation/container/bottomBar'
 import { LocaleSetting } from '../components/localeSetting'
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.backgroundLightMain,
-  },
   scrollComponent: {
     width: '100%',
   },
   scrollComponentContainer: {
-    paddingBottom: '40%',
+    paddingBottom: Spacing.XXL + BOTTOM_BAR_HEIGHT,
   },
   versionNumber: {
     ...Typography.baseFontStyles,
@@ -47,11 +45,10 @@ export const SettingsContainer: React.FC<Props> = props => {
 
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
-    <Wrapper style={styles.container}>
+    <Wrapper centered>
       <ScrollView
         style={styles.scrollComponent}
-        contentContainerStyle={styles.scrollComponentContainer}
-      >
+        contentContainerStyle={styles.scrollComponentContainer}>
         {__DEV__ && (
           <SettingSection title={'Dev'}>
             <SettingItem
@@ -64,6 +61,11 @@ export const SettingsContainer: React.FC<Props> = props => {
               description={'Mock notifications for debugging'}
               onPress={() => navigate(routeList.NotificationScheduler)}
               iconName={'bell-ring'}
+            />
+            <SettingItem
+              title="Change PIN"
+              onPress={() => navigate(routeList.ChangePIN)}
+              iconName="bell-ring"
             />
           </SettingSection>
         )}

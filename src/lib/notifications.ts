@@ -1,4 +1,4 @@
-import { AppError } from '@jolocom/sdk/js/src/lib/errors'
+import { AppError } from '../lib/errors'
 
 interface NotificationMessage {
   title: string
@@ -62,7 +62,7 @@ const createNotificationFactory = (
 ) => (overrides: PartialNotification & NotificationMessage): Notification =>
   ({
     id: notifIds++,
-    ...(template as Notification),
+    ...template,
     ...overrides,
   } as Notification)
 

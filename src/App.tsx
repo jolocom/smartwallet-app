@@ -2,10 +2,9 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
-import { StatusBar, View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { RoutesContainer } from './routes'
-import { AppLoadingAndNotifications } from './ui/generic/appLoadingAndNotifications'
-import { useScreens } from 'react-native-screens'
+import { enableScreens } from 'react-native-screens'
 import { isNil } from 'ramda'
 import {
   NavigationContainerComponent,
@@ -13,7 +12,10 @@ import {
   NavigationState,
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
-import { black } from './styles/colors'
+
+import Lock from './ui/deviceauth/Lock'
+import RegisterPIN from './ui/deviceauth/RegisterPIN'
+
 import { LoadingSpinner } from './ui/generic'
 
 import {
@@ -23,7 +25,10 @@ import {
   JolocomSDK,
 } from 'react-native-jolocom'
 
-useScreens()
+import { backgroundDarkMain } from './styles/colors'
+import { AppWrap } from './ui/structure/wrapper'
+
+enableScreens()
 
 /**
  * NOTE: this is *not* exported on purpose
@@ -36,9 +41,17 @@ useScreens()
 let store: ReturnType<typeof initStore>
 let sdkPromise: Promise<JolocomSDK>
 
+const styles = StyleSheet.create({
+  appWrapper: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: backgroundDarkMain,
+  },
+})
+
 export default class App extends React.PureComponent<
   {},
-  { ready: boolean, showStatusBar: boolean }
+  { ready: boolean; showStatusBar: boolean }
 > {
   private navigator!: NavigationContainerComponent
 
@@ -60,6 +73,8 @@ export default class App extends React.PureComponent<
         const passwordStore = new JolocomKeychainPasswordStore()
         const sdk = new JolocomSDK({ storage, passwordStore })
         await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        sdk.setDefaultDidMethod('jun')
+
         store = initStore(sdk)
         this.setState({ ready: true })
         return sdk
@@ -77,23 +92,27 @@ export default class App extends React.PureComponent<
       navigationOptions
 
     while (curState.routes) {
-      curState = curState.routes[curState.index]
-      const childNav = navigation.getChildNavigation(curState.key)
-      navigationOptions = navigation.router.getScreenOptions(childNav)
+      const nextState: NavigationRoute = curState.routes[curState.index]
+      const childNav = navigation.getChildNavigation(nextState.key)
+      try {
+        // NOTE
+        // this throws for mysterious reasons sometimes
+        // specifically, when using navigateBackHome(), so
+        navigationOptions = navigation.router.getScreenOptions(childNav)
+      } catch {
+        // we just assume it means dead end
+        break
+      }
+
+      curState = nextState
       navigation = childNav
     }
 
-    const { notifications, statusBar } = navigationOptions
+    const { notifications } = navigationOptions
 
     if (!isNil(notifications)) {
       const thunkDispatch: ThunkDispatch = store.dispatch
       thunkDispatch(setActiveNotificationFilter(notifications))
-    }
-
-    if (!isNil(statusBar)) {
-      this.setState({ showStatusBar: statusBar })
-    } else {
-      this.setState({ showStatusBar: true })
     }
   }
 
@@ -104,32 +123,24 @@ export default class App extends React.PureComponent<
   }
 
   public render() {
-    const { showStatusBar, ready } = this.state
-
+    const { ready } = this.state
     return (
-      <React.Fragment>
-        <StatusBar hidden={!showStatusBar} translucent />
-        {showStatusBar && (
-          <View
-            style={{
-              width: '100%',
-              height: StatusBar.currentHeight,
-              backgroundColor: black,
-            }}
-          />
-        )}
-        {!ready ? <LoadingSpinner /> :
+      <View style={styles.appWrapper}>
+        {!ready ? (
+          <LoadingSpinner />
+        ) : (
           <Provider store={store}>
-            <View style={{ flex: 1 }}>
+            <AppWrap>
               <RoutesContainer
                 onNavigationStateChange={this.handleNavigationChange.bind(this)}
                 ref={nav => this.setNavigator(nav)}
               />
-              <AppLoadingAndNotifications />
-            </View>
+              <Lock />
+              <RegisterPIN />
+            </AppWrap>
           </Provider>
-        }
-      </React.Fragment>
+        )}
+      </View>
     )
   }
 }

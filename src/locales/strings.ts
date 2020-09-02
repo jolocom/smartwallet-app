@@ -1,6 +1,6 @@
 // NOTE: not importing from 'src/lib/errors' to avoid cycle
 // NOTE: absolute path causes `generateTerms` to crash, since it is outside /src (I guess that's the cause)
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/codes'
+import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/types'
 
 const registration = {
   ENCRYPTING_AND_STORING_DATA_LOCALLY: 'Encrypting and storing data locally',
@@ -160,6 +160,31 @@ const errorCodes = {
   [ErrorCode.AppInitFailed]: 'Initialization failed',
 }
 
+const deviceAuth = {
+  ENTER_YOUR_PIN: 'Enter your PIN',
+  FORGOT_YOUR_PIN: 'Forgot your PIN?',
+  I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
+  SKIP: 'Skip',
+  YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
+  SETTINGS: 'Settings',
+  CANCEL: 'Cancel',
+  RESET: 'Reset',
+  CHANGE_PIN: 'Change PIN',
+  CURRENT_PASSCODE: 'Current passcode',
+  CREATE_NEW_PASSCODE: 'Create new passcode',
+  WRONG_PIN: 'Wrong PIN',
+  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
+  CREATE_PASSCODE: 'Create PIN',
+  VERIFY_PASSCODE: 'Verify PIN',
+  IN_ORDER_TO_PROTECT_YOUR_DATA:
+    'In order to protect your data from other users and maintain confidentiality',
+  YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
+    'You won’t be able to easily check it again, so please memorise it',
+  PINS_DONT_MATCH: "PINs don't match",
+  ANY_FUTURE_PASSCODE_RESTORE:
+    'Any future passcode restore is possible only with your secret phrase',
+}
+
 const termsOfService = {
   SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY:
     'SmartWallet introducing Terms and Conditions and Privacy Policy',
@@ -178,6 +203,7 @@ export default {
   ...errorCodes,
   ...errorReporting,
   ...notifications,
+  ...deviceAuth,
   ...termsOfService,
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
