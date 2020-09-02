@@ -47,6 +47,7 @@ export const checkIdentityExists: ThunkAction = async (
     const identityWallet = await backendMiddleware.prepareIdentityWallet()
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
+    await dispatch(setClaimsForDid)
     await dispatch(checkRecoverySetup)
     return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {
@@ -123,6 +124,9 @@ export const hasExternalCredentials: ThunkAction = async (
   backendMiddleware,
 ) => {
   const { storageLib, identityWallet } = backendMiddleware
+  // TODO FIXME
+  // we only need a count, no need to actually load and deserialize
+  // all of them
   const externalCredentials = await storageLib.get.verifiableCredential({
     issuer: Not(identityWallet.did),
   })
