@@ -156,6 +156,16 @@ const errorCodes = {
   [ErrorCode.AppInitFailed]: 'Initialization failed',
 }
 
+const termsOfService = {
+  SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY:
+    'SmartWallet introducing Terms and Conditions and Privacy Policy',
+  YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW:
+    'You can find the German and English version of the documents below. Please note that the German version is legally binding',
+  I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY:
+    'I understand and accept the Terms of Service and Privacy Policy',
+  ACCEPT_NEW_TERMS: 'Accept new terms',
+}
+
 export default {
   ...registration,
   ...settings,
@@ -164,6 +174,7 @@ export default {
   ...errorCodes,
   ...errorReporting,
   ...notifications,
+  ...termsOfService,
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
   HISTORY: 'History',

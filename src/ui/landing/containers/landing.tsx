@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { LandingComponent } from 'src/ui/landing/components/landing'
-import { navigationActions, registrationActions } from 'src/actions/'
 import { ThunkDispatch } from 'src/store'
 import { routeList } from '../../../routeList'
+import { checkTermsOfService } from 'src/actions/generic'
 import { withErrorScreen } from 'src/actions/modifiers'
+import { registrationActions } from 'src/actions/'
 import { AppError, ErrorCode } from 'src/lib/errors'
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
@@ -21,23 +22,28 @@ export class LandingContainer extends React.Component<Props> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  getStarted: () =>
+  getStarted: () => {
     dispatch(
       withErrorScreen(
-        registrationActions.createIdentity(''),
-        err =>
-          new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
+        checkTermsOfService(routeList.RegistrationProgress, () => {
+          dispatch(
+            withErrorScreen(
+              registrationActions.createIdentity(''),
+              err =>
+                new AppError(
+                  ErrorCode.RegistrationFailed,
+                  err,
+                  routeList.Landing,
+                ),
+            ),
+          )
+        }),
       ),
-    ),
-  recoverIdentity: () =>
-    dispatch(
-      navigationActions.navigate({
-        routeName: routeList.InputSeedPhrase,
-      }),
-    ),
+    )
+  },
+  recoverIdentity: () => {
+    dispatch(withErrorScreen(checkTermsOfService(routeList.InputSeedPhrase)))
+  },
 })
 
-export const Landing = connect(
-  null,
-  mapDispatchToProps,
-)(LandingContainer)
+export const Landing = connect(null, mapDispatchToProps)(LandingContainer)
