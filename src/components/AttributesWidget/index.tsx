@@ -6,7 +6,7 @@ import { AttrsState, AttributeI } from '~/modules/attributes/types'
 import AttrSectionHeader from './AttrSectionHeader'
 import Field, { FieldTypes } from './Field'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSelectedAttributes } from '~/modules/interaction/selectors'
+import { getSelectedShareCredentials } from '~/modules/interaction/selectors'
 import { selectAttr } from '~/modules/interaction/actions'
 import { AttrKeys } from '~/types/credentials'
 
@@ -22,7 +22,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
   onCreateNewAttr,
 }) => {
   const dispatch = useDispatch()
-  const selectedAttributes = useSelector(getSelectedAttributes)
+  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
 
   return (
     <>
@@ -41,7 +41,9 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                     key={entry.id}
                     type={FieldTypes.isSelectable}
                     value={entry.value}
-                    isSelected={selectedAttributes[sectionKey] === entry.id}
+                    isSelected={
+                      selectedShareCredentials[sectionKey] === entry.id
+                    }
                     onSelect={() => {
                       dispatch(selectAttr({ [sectionKey]: entry.id }))
                     }}

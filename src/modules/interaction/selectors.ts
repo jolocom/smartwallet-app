@@ -19,9 +19,9 @@ export const getAvailablaAttributesToShare = (
 ): AttrsState<AttributeI> => state.interaction.availableAttributesToShare
 
 //FIXME: Must fix the types, or re-structure the module
-export const getSelectedAttributes = (
+export const getSelectedShareCredentials = (
   state: RootReducerI,
-): { [x: string]: string } => state.interaction.selectedAttributes
+): { [x: string]: string } => state.interaction.selectedShareCredentials
 
 export const getIntermediaryState = (state: RootReducerI) =>
   state.interaction.intermediaryState

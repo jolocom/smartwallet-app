@@ -10,7 +10,7 @@ const initialState: InteractionStateI = {
   details: {},
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
-  selectedAttributes: {},
+  selectedShareCredentials: {},
 }
 
 const reducer = (
@@ -42,7 +42,7 @@ const onSelectAttr = (
   return {
     ...state,
     selectedAttributes: {
-      ...state.selectedAttributes,
+      ...state.selectedShareCredentials,
       ...action.payload,
     },
   }

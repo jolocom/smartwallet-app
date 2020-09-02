@@ -4,7 +4,7 @@ import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   getShareCredentialsBySection,
-  getSelectedAttributes,
+  getSelectedShareCredentials,
   getInteractionDetails,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
@@ -27,7 +27,7 @@ import InteractionFooter from '../InteractionFooter'
 const CredentialShareFas = () => {
   const dispatch = useDispatch()
   const attributes = useSelector(getShareAttributes)
-  const selectedAttributes = useSelector(getSelectedAttributes)
+  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const [instructionVisible, setInstructionVisibility] = useState(true)
   const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
@@ -45,11 +45,11 @@ const CredentialShareFas = () => {
 
   const areAllSelected = () => {
     const allAttributes = Object.keys(attributes).every((t) =>
-      Object.keys(selectedAttributes).includes(t),
+      Object.keys(selectedShareCredentials).includes(t),
     )
 
     const allCredentials = service_issued.every((t) =>
-      Object.keys(selectedAttributes).includes(t),
+      Object.keys(selectedShareCredentials).includes(t),
     )
 
     return allAttributes && allCredentials
@@ -100,7 +100,7 @@ const CredentialShareFas = () => {
                 shouldShowInstruction && setShouldShowInstruction(false)
                 dispatch(selectAttr({ [cred.type]: cred.id }))
               }}
-              selected={selectedAttributes[cred.type] === cred.id}
+              selected={selectedShareCredentials[cred.type] === cred.id}
             >
               <Header color={Colors.black}>{type}</Header>
             </CredentialCard>
