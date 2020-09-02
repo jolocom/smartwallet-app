@@ -50,6 +50,7 @@ describe('Navigation action creators', () => {
         interactionHandlersSpies[typ] = jest
           // @ts-ignore bleh
           .spyOn(interactionHandlers, typ)
+          // @ts-ignore bleh
           .mockReturnValue({ type: `MOCK_${typ}_INTERACTION_TOKEN_HANDLER` })
       })
 
