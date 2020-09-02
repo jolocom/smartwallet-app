@@ -2,7 +2,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { interactionHandlers } from '../../lib/interactionHandlers'
 import { withErrorScreen, withLoading } from '../modifiers'
 import { showErrorScreen } from '../generic'
-import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
+import { AppError, ErrorCode } from '../../lib/errors'
 import { ThunkAction } from '../../store'
 import {
   JSONWebToken,
