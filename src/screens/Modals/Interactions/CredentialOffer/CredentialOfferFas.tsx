@@ -21,16 +21,12 @@ const CredentialOfferFas = () => {
 
   return (
     <FasWrapper>
-      {!!documents.length && (
-        <InteractionSection title={'Documents'}>
-          {renderCredentials(documents)}
-        </InteractionSection>
-      )}
-      {!!other.length && (
-        <InteractionSection title={'Others'}>
-          {renderCredentials(other)}
-        </InteractionSection>
-      )}
+      <InteractionSection visible={!!documents.length} title={'Documents'}>
+        {renderCredentials(documents)}
+      </InteractionSection>
+      <InteractionSection visible={!!other.length} title={'Others'}>
+        {renderCredentials(other)}
+      </InteractionSection>
     </FasWrapper>
   )
 }

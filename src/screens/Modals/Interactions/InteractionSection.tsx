@@ -5,17 +5,18 @@ import { Colors } from '~/utils/colors'
 
 interface Props {
   title: string
+  visible: boolean
 }
 
-const InteractionSection: React.FC<Props> = ({ title, children }) => {
-  return (
+const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
+  return visible ? (
     <View style={styles.wrapper}>
       <Header color={Colors.white35} customStyles={{ textAlign: 'left' }}>
         {title}
       </Header>
       {children}
     </View>
-  )
+  ) : null
 }
 
 const styles = StyleSheet.create({
