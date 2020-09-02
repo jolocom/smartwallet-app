@@ -13,6 +13,8 @@ import { Wrapper } from 'src/ui/structure'
 import { white } from 'src/styles/colors'
 import { fontMain, textXXS } from 'src/styles/typography'
 import { showErrorScreen } from 'src/actions/generic'
+
+import { accountActions } from 'src/actions'
 import { navigateBack } from 'src/actions/navigation'
 
 import { ScannerContainer } from './scanner'
@@ -64,6 +66,7 @@ const InteractionContainer = (props: Props) => {
       <ScannerContainer
         navigation={props.navigation}
         consumeToken={props.consumeToken}
+        registerPopup={props.registerPopup}
       />
     </Wrapper>
   )
@@ -93,6 +96,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       }
     }
   },
+  registerPopup: () => dispatch(accountActions.setPopup(true)),
   navigateHome: () => dispatch(navigateBack()),
 })
 

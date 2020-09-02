@@ -13,6 +13,9 @@ import {
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
 
+import Lock from './ui/deviceauth/Lock'
+import RegisterPIN from './ui/deviceauth/RegisterPIN'
+
 import { LoadingSpinner } from './ui/generic'
 
 import {
@@ -42,8 +45,8 @@ const styles = StyleSheet.create({
   appWrapper: {
     width: '100%',
     height: '100%',
-    backgroundColor: backgroundDarkMain
-  }
+    backgroundColor: backgroundDarkMain,
+  },
 })
 
 export default class App extends React.PureComponent<
@@ -132,6 +135,8 @@ export default class App extends React.PureComponent<
                 onNavigationStateChange={this.handleNavigationChange.bind(this)}
                 ref={nav => this.setNavigator(nav)}
               />
+              <Lock />
+              <RegisterPIN />
             </AppWrap>
           </Provider>
         )}

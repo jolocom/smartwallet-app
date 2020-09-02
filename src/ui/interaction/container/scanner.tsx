@@ -20,6 +20,7 @@ import { Wrapper } from 'src/ui/structure'
 
 interface Props extends NavigationInjectedProps {
   consumeToken: (jwt: string) => Promise<any>
+  registerPopup: () => void
 }
 
 const CAMERA_PERMISSION = Platform.select({
@@ -69,6 +70,7 @@ export const ScannerContainer: React.FC<Props> = (props) => {
   }
 
   const requestCameraPermission = async () => {
+    props.registerPopup()
     const permission = await request(CAMERA_PERMISSION)
     setPermission(permission)
   }

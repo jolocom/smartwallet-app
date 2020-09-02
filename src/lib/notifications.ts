@@ -62,7 +62,7 @@ const createNotificationFactory = (
 ) => (overrides: PartialNotification & NotificationMessage): Notification =>
   ({
     id: notifIds++,
-    ...(template as Notification),
+    ...template,
     ...overrides,
   } as Notification)
 

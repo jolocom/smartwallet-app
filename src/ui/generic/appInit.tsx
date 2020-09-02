@@ -59,7 +59,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   )
 })
 
-export const AppInit = connect(
-  null,
-  mapDispatchToProps,
-)(AppInitContainer)
+export const AppInit = connect(null, mapDispatchToProps)(AppInitContainer)

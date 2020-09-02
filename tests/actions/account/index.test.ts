@@ -19,6 +19,13 @@ describe('Account action creators', () => {
       },
     },
     account: {
+      loading: false,
+      appState: {
+        isLocalAuthSet: false,
+        isLocalAuthVisible: false,
+        isPopup: false,
+        isAppLocked: false,
+      },
       claims: {
         selected: {
           credentialType: 'Email',
@@ -63,6 +70,9 @@ describe('Account action creators', () => {
   beforeEach(mockStore.reset)
 
   it('should correctly handle stored encrypted seed', async () => {
+    const getGenericPassword = require('react-native-keychain')
+      .getGenericPassword
+    getGenericPassword.mockReturnValueOnce('MOCK PIN')
     await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockStore.getActions()).toMatchSnapshot()
   })

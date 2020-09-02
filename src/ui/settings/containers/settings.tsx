@@ -62,6 +62,11 @@ export const SettingsContainer: React.FC<Props> = props => {
               onPress={() => navigate(routeList.NotificationScheduler)}
               iconName={'bell-ring'}
             />
+            <SettingItem
+              title="Change PIN"
+              onPress={() => navigate(routeList.ChangePIN)}
+              iconName="bell-ring"
+            />
           </SettingSection>
         )}
         <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
