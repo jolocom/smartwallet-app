@@ -6,8 +6,9 @@ import { Dimensions, Image, StyleSheet, Text } from 'react-native'
 import { withErrorHandler } from '../../actions/modifiers'
 import { Wrapper } from '../structure'
 import { AppError, ErrorCode } from '../../lib/errors'
-import { showErrorScreen, initApp } from '../../actions/generic'
+import { showErrorScreen } from '../../actions/generic'
 import { Typography, Colors } from '../../styles'
+import { initApp } from 'src/actions/generic/init'
 const image = require('../../resources/img/splashScreen.png')
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
