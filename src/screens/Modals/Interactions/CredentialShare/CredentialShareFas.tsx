@@ -1,30 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
-
 import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   getShareCredentialsBySection,
-  getInteractionDetails,
-  getInteractionAttributes,
   getSelectedAttributes,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
-import {
-  MultipleShareUICredential,
-  ATTR_TYPES,
-  attrTypeToAttrKey,
-} from '~/types/credentials'
+import { MultipleShareUICredential, AttrKeys } from '~/types/credentials'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
-import { CredShareI, IntermediaryState } from '~/modules/interaction/types'
+import { IntermediaryState } from '~/modules/interaction/types'
 import AttributesWidget from '~/components/AttributesWidget'
-import { useSetInteractionAttributes } from '~/hooks/attributes'
 import {
   setIntermediaryState,
   setAttributeInputKey,
+  selectAttr,
 } from '~/modules/interaction/actions'
 import { getShareAttributes } from '~/modules/attributes/selectors'
 
@@ -32,11 +25,9 @@ const CredentialShareFas = () => {
   const dispatch = useDispatch()
   const attributes = useSelector(getShareAttributes)
   const selectedAttributes = useSelector(getSelectedAttributes)
-  const setInteractionAttributes = useSetInteractionAttributes()
   const { documents, other } = useSelector(getShareCredentialsBySection)
-  //FIXME: remove cast after types are fixed
   const [instructionVisible, setInstructionVisibility] = useState(true)
-  const [selected, setSelected] = useState<{ type: string; id: string }[]>([])
+  const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
 
   const isFirstCredential = (id: string) => {
     if (documents.length) {
@@ -46,52 +37,35 @@ const CredentialShareFas = () => {
     }
   }
 
-  const isTypeSelected = (t: string) => selected.map((c) => c.type).includes(t)
-
-  /* const isSubmitReady = () => {
-     *   const allService = service_issued.every(isTypeSelected)
-     *   const allSelf = self_issued.every(isTypeSelected)
-
-     *   return allService && allSelf
-     * } */
-
   useEffect(() => {
-    setInteractionAttributes()
+    const preselectedAttrs = Object.keys(attributes).reduce<{
+      [key: string]: string
+    }>((acc, v) => {
+      const value = v as AttrKeys
+      if (!acc[value]) {
+        const attr = attributes[value] || []
+        acc[value] = attr.length ? attr[0].id : ''
+      }
+      return acc
+    }, {})
+
+    dispatch(selectAttr(preselectedAttrs))
   }, [])
 
   useEffect(() => {
-    let id: ReturnType<typeof setTimeout> | undefined = undefined
-    if (!selected.length) {
-      id = setTimeout(() => {
-        setInstructionVisibility(false)
-      }, 5000)
-    } else if (id && selected.length) {
+    const id = setTimeout(() => {
+      setInstructionVisibility(false)
+    }, 5000)
+
+    if (!shouldShowInstruction) {
       setInstructionVisibility(false)
       clearTimeout(id)
     }
 
     return () => {
-      id && clearTimeout(id)
+      clearTimeout(id)
     }
-  }, [selected])
-
-  const onSelect = (type: string, id: string) => {
-    setSelected((prevSel) => {
-      const newSel = prevSel
-      const isSameType = prevSel.map((c) => c.type).includes(type)
-      const isSameId = prevSel.map((c) => c.id).includes(id)
-
-      if (isSameType) {
-        if (isSameId) {
-          return newSel.filter((c) => c.type !== type)
-        } else {
-          return [...newSel.filter((c) => c.type !== type), { type, id }]
-        }
-      } else {
-        return [...newSel, { type, id }]
-      }
-    })
-  }
+  }, [shouldShowInstruction])
 
   const renderCredentials = (credCollections: MultipleShareUICredential[]) =>
     credCollections.map(({ type, credentials }) => {
@@ -104,8 +78,11 @@ const CredentialShareFas = () => {
             <CredentialCard
               isSmall
               hasInstruction={instructionVisible && isFirstCredential(cred.id)}
-              onSelect={() => onSelect(type, cred.id)}
-              selected={selected.map((c) => c.id).includes(cred.id)}
+              onSelect={() => {
+                shouldShowInstruction && setShouldShowInstruction(false)
+                dispatch(selectAttr({ [cred.type]: cred.id }))
+              }}
+              selected={selectedAttributes[cred.type] === cred.id}
             >
               <Header color={Colors.black}>{type}</Header>
             </CredentialCard>

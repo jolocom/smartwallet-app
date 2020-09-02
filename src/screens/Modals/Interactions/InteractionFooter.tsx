@@ -11,9 +11,7 @@ import {
   setAttributeInputKey,
 } from '~/modules/interaction/actions'
 import {
-  getInteractionType,
   getIsFullScreenInteraction,
-  getAttributesToShare,
   getServiceIssuedCreds,
   getAttributeInputKey,
 } from '~/modules/interaction/selectors'
@@ -26,6 +24,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
+import { getShareAttributes } from '~/modules/attributes/selectors'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -42,7 +41,7 @@ const FooterContainer: React.FC = ({ children }) => {
 const InteractionFooter: React.FC = () => {
   const dispatch = useDispatch()
   const serviceIssuedCreds = useSelector(getServiceIssuedCreds)
-  const attributesToShare = useSelector(getAttributesToShare)
+  const attributesToShare = useSelector(getShareAttributes)
   const interactionCTA = useInteractionCta()
   const handleFlowSubmit = useHandleFlowSubmit()
   const loader = useLoader()

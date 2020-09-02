@@ -21,7 +21,6 @@ export type InteractionDetails =
 
 export interface InteractionStateI {
   details: {} | InteractionDetails
-  availableAttributesToShare: AttrsState<AttributeI>
   selectedAttributes: { [x: string]: string }
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null

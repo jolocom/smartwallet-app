@@ -23,7 +23,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
 }) => {
   const dispatch = useDispatch()
   const selectedAttributes = useSelector(getSelectedAttributes)
-
+  console.log({ selectedAttributes })
   return (
     <>
       {(Object.keys(attributes) as AttrKeys[]).map((sectionKey) => {
@@ -42,11 +42,9 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                     type={FieldTypes.isSelectable}
                     value={entry.value}
                     isSelected={selectedAttributes[sectionKey] === entry.id}
-                    onSelect={() =>
-                      dispatch(
-                        selectAttr({ attrKey: sectionKey, id: entry.id }),
-                      )
-                    }
+                    onSelect={() => {
+                      dispatch(selectAttr({ [sectionKey]: entry.id }))
+                    }}
                     onCreateNewOne={() => onCreateNewAttr(sectionKey)}
                   />
                 ))
