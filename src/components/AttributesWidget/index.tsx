@@ -23,7 +23,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
 }) => {
   const dispatch = useDispatch()
   const selectedAttributes = useSelector(getSelectedAttributes)
-  console.log({ selectedAttributes })
+
   return (
     <>
       {(Object.keys(attributes) as AttrKeys[]).map((sectionKey) => {

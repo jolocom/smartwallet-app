@@ -12,7 +12,7 @@ import {
 } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
 import { useRootSelector } from '~/hooks/useRootSelector'
-import { ATTR_UI_NAMES } from '~/types/credentials'
+import { ATTR_UI_NAMES, attrTypeToAttrKey } from '~/types/credentials'
 
 const isSingleAttributeRequest = (
   selfIssued: string[],
@@ -29,10 +29,11 @@ const useInteractionTitle = () => {
   const intermediaryState = useSelector(getIntermediaryState)
   const inputType = useSelector(getAttributeInputKey)
 
-  if (intermediaryState === IntermediaryState.showing)
-    return strings.SAVE_YOUR_ATTRIBUTE(inputType)
+  if (intermediaryState === IntermediaryState.showing) {
+    if (!inputType) throw new Error('No InputType found')
+    return strings.SAVE_YOUR_ATTRIBUTE(attrTypeToAttrKey(inputType))
+  }
 
-  //TODO: @clauss add strings
   switch (interactionDetails.flowType) {
     case FlowType.Authentication:
       return strings.IS_IT_REALLY_YOU

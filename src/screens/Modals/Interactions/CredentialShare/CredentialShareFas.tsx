@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   getShareCredentialsBySection,
   getSelectedAttributes,
+  getInteractionDetails,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
@@ -12,7 +13,7 @@ import { MultipleShareUICredential, AttrKeys } from '~/types/credentials'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
-import { IntermediaryState } from '~/modules/interaction/types'
+import { IntermediaryState, CredShareI } from '~/modules/interaction/types'
 import AttributesWidget from '~/components/AttributesWidget'
 import {
   setIntermediaryState,
@@ -20,6 +21,7 @@ import {
   selectAttr,
 } from '~/modules/interaction/actions'
 import { getShareAttributes } from '~/modules/attributes/selectors'
+import { useRootSelector } from '~/hooks/useRootSelector'
 
 const CredentialShareFas = () => {
   const dispatch = useDispatch()
@@ -28,6 +30,9 @@ const CredentialShareFas = () => {
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const [instructionVisible, setInstructionVisibility] = useState(true)
   const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
+  const {
+    credentials: { service_issued },
+  } = useRootSelector<CredShareI>(getInteractionDetails)
 
   const isFirstCredential = (id: string) => {
     if (documents.length) {
@@ -35,6 +40,18 @@ const CredentialShareFas = () => {
     } else {
       return id === other[0].credentials[0].id
     }
+  }
+
+  const areAllSelected = () => {
+    const allAttributes = Object.keys(attributes).every((t) =>
+      Object.keys(selectedAttributes).includes(t),
+    )
+
+    const allCredentials = service_issued.every((t) =>
+      Object.keys(selectedAttributes).includes(t),
+    )
+
+    return allAttributes && allCredentials
   }
 
   useEffect(() => {
@@ -50,7 +67,7 @@ const CredentialShareFas = () => {
     }, {})
 
     dispatch(selectAttr(preselectedAttrs))
-  }, [])
+  }, [attributes])
 
   useEffect(() => {
     const id = setTimeout(() => {

@@ -30,7 +30,6 @@ export const getShareAttributes = createSelector<
         acc[value] = attributes[value] || []
         return acc
       }, {})
-  console.log(interactionAttributues)
 
   return interactionAttributues
 })
