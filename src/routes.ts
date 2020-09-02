@@ -43,6 +43,7 @@ import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
 import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
+import { TermsOfServiceConsent } from './ui/termsofservice'
 
 import { NotificationFilter } from './lib/notifications'
 import { CredentialReceiveNegotiate } from './ui/sso/containers/credentialReceiveNegotiate'
@@ -156,6 +157,13 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
     [routeList.Landing]: {
       screen: Landing,
       navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.TermsOfServiceConsent]: {
+      screen: TermsOfServiceConsent,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
     [routeList.InputSeedPhrase]: {
       screen: InputSeedPhrase,

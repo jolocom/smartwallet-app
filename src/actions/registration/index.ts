@@ -1,5 +1,3 @@
-import { navigationActions } from 'src/actions/'
-import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
@@ -22,12 +20,6 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   getState,
   sdk,
 ) => {
-  dispatch(
-    navigationActions.navigate({
-      routeName: routeList.RegistrationProgress,
-    }),
-  )
-
   const isRegistering = getState().registration.loading.isRegistering
   if (isRegistering) return
 

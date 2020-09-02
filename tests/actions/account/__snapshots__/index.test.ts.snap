@@ -39,7 +39,11 @@ Array [
     "value": true,
   },
   Object {
-    "routeName": "Home",
+    "params": Object {
+      "nextRoute": "Home",
+      "onSubmit": undefined,
+    },
+    "routeName": "TermsOfServiceConsent",
     "type": "Navigation/NAVIGATE",
   },
 ]

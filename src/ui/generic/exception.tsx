@@ -10,7 +10,7 @@ import {
   StatusBar,
 } from 'react-native'
 import I18n from 'src/locales/i18n'
-import { errorTitleMessages, AppError } from '@jolocom/sdk/js/src/lib/errors'
+import { errorTitleMessages, AppError } from '../../lib/errors'
 import { getRandomStringFromArray } from 'src/utils/getRandomStringFromArray'
 import strings from 'src/locales/strings'
 import { ThunkDispatch } from '../../store'

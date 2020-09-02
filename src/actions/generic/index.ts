@@ -1,12 +1,17 @@
-import { Linking } from 'react-native'
-import SplashScreen from 'react-native-splash-screen'
 import { AppError, ErrorCode } from '../../lib/errors'
 import I18n from '../../locales/i18n'
 import { routeList } from '../../routeList'
-import { navigationActions, accountActions } from '../../actions'
+import { navigationActions } from '../../actions'
 import { ThunkAction } from '../../store'
 import settingKeys from '../../ui/settings/settingKeys'
-import { withLoading, withErrorScreen } from '../modifiers'
+
+// TODO use the settings items from storage
+import { AsyncStorage } from 'react-native'
+// TODO don't depend on the crypto lib, perhaps use the rust crypto utils?
+import crypto from 'crypto'
+
+import { termsOfServiceDE } from 'src/ui/termsofservice/legalTexts'
+
 import {
   AppWrapConfig,
   APPWRAP_UPDATE_CONFIG,
@@ -38,57 +43,38 @@ export const showErrorScreen = (
   )
 }
 
-export const initApp: ThunkAction = async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  try {
-    const storedSettings = await backendMiddleware.storageLib.get.settingsObject()
-
-    // locale setup
-    if (storedSettings.locale) I18n.locale = storedSettings.locale
-    else storedSettings.locale = I18n.locale
-     
-    storedSettings.locale = I18n.locale
-
-    await dispatch(loadSettings(storedSettings))
-
-    const ret = await dispatch(accountActions.checkIdentityExists)
-
-    // FIXME what happens if no identity and this is a deeplink?
-    // navigationActions.handleDeepLink throws NoWallet
-    // need to improve this UX
-
-    // FIXME: get rid of these after setting up deepLinking properly using
-    // react-navigation
-    const handleDeepLink = (url: string) =>
-      dispatch(
-        withLoading(
-          withErrorScreen(navigationActions.handleDeepLink(url)),
-        ),
-      )
-    Linking.addEventListener('url', event => handleDeepLink(event.url))
-    await Linking.getInitialURL().then(url => {
-      if (url) handleDeepLink(url)
-    })
-
-    return ret
-  } catch (e) {
-    return dispatch(
-      showErrorScreen(
-        new AppError(ErrorCode.WalletInitFailed, e, routeList.Landing),
-      ),
-    )
-  } finally {
-    SplashScreen.hide()
-  }
+const hashString = (text: string) => {
+  return crypto
+    .createHash('sha256')
+    .update(text)
+    .digest('hex')
 }
 
-const loadSettings = (settings: { [key: string]: any }) => ({
-  type: 'LOAD_SETTINGS',
-  value: settings,
-})
+export const checkTermsOfService = (
+  route: routeList,
+  onSubmit?: () => void,
+): ThunkAction => async dispatch => {
+  const storageHash = await AsyncStorage.getItem('termsOfConditions')
+  const currentHash = hashString(termsOfServiceDE)
+  const shouldShowTerms = storageHash !== currentHash
+
+  if (!shouldShowTerms && onSubmit) onSubmit()
+  return dispatch(
+    navigationActions.navigate({
+      routeName: shouldShowTerms ? routeList.TermsOfServiceConsent : route,
+      params: { nextRoute: route, onSubmit },
+    }),
+  )
+}
+
+export const storeTermsOfService = (
+  route: routeList,
+): ThunkAction => async dispatch => {
+  const termsHash = hashString(termsOfServiceDE)
+  await AsyncStorage.setItem('termsOfConditions', termsHash)
+
+  dispatch(navigationActions.navigate({ routeName: route }))
+}
 
 export const setLocale = (locale: string): ThunkAction => async (
   dispatch,

@@ -41,4 +41,7 @@ export enum routeList {
   // Dev only
   Storybook = 'Storybook',
   NotificationScheduler = 'NotificationScheduler',
+
+  // SW2.0
+  TermsOfServiceConsent = 'TermsOfServiceConsent',
 }

@@ -10,7 +10,7 @@ import {
 import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { ThunkDispatch } from 'src/store'
-import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
+import { AppError, ErrorCode } from 'src/lib/errors'
 import { routeList } from 'src/routeList'
 
 interface Props
