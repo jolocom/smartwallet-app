@@ -55,7 +55,7 @@ const CredentialCard: React.FC<PropsI> = ({
           {(disabled || selected || hasInstruction) && (
             <View style={[styles.darken, styles.card]}>
               {selected && <Tick />}
-              {hasInstruction && (
+              {hasInstruction && !selected && (
                 <View style={{ alignSelf: 'center' }}>
                   <HandAnimation />
                 </View>
