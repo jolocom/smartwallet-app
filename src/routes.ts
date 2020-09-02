@@ -200,6 +200,10 @@ const MainStack = createStackNavigator(
         gesturesEnabled: false,
       },
     },
+    [routeList.InputSeedPhrasePin]: {
+      screen: InputSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
       navigationOptions: {

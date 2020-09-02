@@ -95,7 +95,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(accountActions.closePINinstructions())
     dispatch(
       navigationActions.navigate({
-        routeName: routeList.InputSeedPhrase,
+        routeName: routeList.InputSeedPhrasePin,
         params: { isPINrestoration: true },
       }),
     )

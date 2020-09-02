@@ -12,6 +12,8 @@ export enum routeList {
 
   // Recovery
   InputSeedPhrase = 'InputSeedPhrase',
+  // Pin Recovery
+  InputSeedPhrasePin = 'InputSeedPhrasePin',
 
   // Bottom Nav Screens
   Home = 'Home',

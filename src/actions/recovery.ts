@@ -1,10 +1,11 @@
 import { ThunkAction } from '../store'
 //import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { navigationActions } from './index'
+import { navigationActions, accountActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { removeNotification } from './notifications'
-import { entropyToMnemonic } from 'bip39'
+import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
+ // TODO Import ^ from jolocom-lib
 
 
 export const showSeedPhrase = (): ThunkAction => async (
@@ -37,23 +38,32 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
+  let recovered = false
+
+  const recoveredEntropy = Buffer.from(
+    mnemonicToEntropy(mnemonicInput.join(' ')),
+    'hex'
+  )
+
   try {
-    const storedMnemonic = await getStoredSeedPhrase(backendMiddleware)
-    if (storedMnemonic === mnemonicInput.join(' ')) {
-      return dispatch(
-        navigationActions.navigate({
-          routeName: routeList.ChangePIN,
-          params: { isPINrecovery: true },
-        }),
-      )
-    }
-  } catch (err) {
-    throw new Error('Cannot retrieve stored mnemonic')
-  } finally {
-    return dispatch(
-      navigationActions.navigate({ routeName: routeList.Landing }),
+    const { identityWallet } = await backendMiddleware.didMethods.getDefault().recoverFromSeed(
+      recoveredEntropy,
+      await backendMiddleware.keyChainLib.getPassword()
     )
+
+    recovered = identityWallet.did === backendMiddleware.idw.did
+  } catch(e) {
+    recovered = false
   }
+
+  return dispatch(
+    recovered ? navigationActions.navigate({
+      routeName: routeList.ChangePIN,
+      params: { isPINrecovery: true },
+    }): navigationActions.navigateBack() && dispatch(
+      accountActions.openLock()
+    )
+  )
 }
 
 export const setSeedPhraseSaved = (): ThunkAction => async (
