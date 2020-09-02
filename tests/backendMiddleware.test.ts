@@ -1,10 +1,11 @@
 import * as util from 'src/lib/util'
-import { BackendError, BackendMiddleware } from 'src/backendMiddleware'
+import { BackendMiddleware } from 'src/backendMiddleware'
 import { reveal, stub } from './utils'
 import { ConnectionOptions } from 'typeorm/browser'
 import data from 'tests/actions/registration/data/mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { IRegistry } from 'jolocom-lib/js/registries/types'
+import { BackendError } from '../src/lib/errors/types'
 
 const MockDate = require('mockdate')
 
@@ -211,10 +212,12 @@ describe('BackendMiddleware', () => {
       //   timestamp: Date.now()
       // }
 
-      expect(registry.authenticate).toHaveBeenCalledWith(
-        backendMiddleware.keyProvider,
-        { derivationPath: "m/73'/0'/0'/0", encryptionPass: getPasswordResult },
-      )
+      expect(
+        registry.authenticate,
+      ).toHaveBeenCalledWith(backendMiddleware.keyProvider, {
+        derivationPath: "m/73'/0'/0'/0",
+        encryptionPass: getPasswordResult,
+      })
 
       expect(storageLib.store.didDoc).toHaveBeenCalledWith(
         identityWallet.didDocument,

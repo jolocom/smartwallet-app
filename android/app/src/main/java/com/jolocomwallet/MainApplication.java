@@ -11,6 +11,9 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import org.pgsqlite.SQLitePluginPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.wix.interactable.Interactable;
 
 import java.util.Arrays;
 import java.lang.reflect.InvocationTargetException;
@@ -65,6 +68,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
               new RNCameraPackage(),
               new SQLitePluginPackage(),
               new LinearGradientPackage()
+              new Interactable()
         );
       }
 */

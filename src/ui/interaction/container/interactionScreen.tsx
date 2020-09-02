@@ -74,7 +74,6 @@ const InteractionContainer = (props: Props) => {
 const localNotificationErrors = [
   // AppError: "Wrong QR"
   ErrorCode.ParseJWTFailed,
-
   // AppError: "Wrong Data"
   ErrorCode.WrongDID,
   ErrorCode.WrongNonce,
