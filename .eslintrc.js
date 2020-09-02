@@ -69,14 +69,13 @@ module.exports = {
     '@typescript-eslint/no-floating-promises': ['error'],
     '@typescript-eslint/no-misused-promises': ['error'],
 
+    // Naming Conventions
+    '@typescript-eslint/naming-convention': ['warn'],
+
     // these seem to be out of date
     // use ES6-style imports instead
     // '@typescript-eslint/no-triple-slash-reference': ['error'],
     // don't conflict <Types> and JSX
     // '@typescript-eslint/no-angle-bracket-type-assertion': ['error'],
-    // PascalCase for classes
-    // '@typescript-eslint/class-name-casing': ['error'],
-    // don't prefix interface names with 'I'
-    // '@typescript-eslint/interface-name-prefix': ['warn'],
   },
 }
