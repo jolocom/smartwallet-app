@@ -3,6 +3,7 @@ import { Text, StyleSheet, TextStyle, Animated, Platform } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 
 export enum ParagraphSizes {
   large = 'large',
@@ -65,13 +66,25 @@ const styles = StyleSheet.create({
     ...getStyle(14, 14, 0),
   },
   small: {
-    ...getStyle(16, 16, 0),
+    ...getStyle(
+      BP({ xsmall: 14, small: 16, medium: 16, large: 16 }),
+      BP({ xsmall: 14, small: 16, medium: 16, large: 16 }),
+      BP({ xsmall: 0, small: 0, medium: 0, large: 0 }),
+    ),
   },
   medium: {
-    ...getStyle(20, 22, 0.14),
+    ...getStyle(
+      BP({ xsmall: 16, small: 16, medium: 20, large: 20 }),
+      BP({ xsmall: 18, small: 18, medium: 22, large: 22 }),
+      BP({ xsmall: 0.11, small: 0.11, medium: 0.14, large: 0.14 }),
+    ),
   },
   large: {
-    ...getStyle(22, 26, 0.15),
+    ...getStyle(
+      BP({ xsmall: 18, small: 20, medium: 22, large: 22 }),
+      BP({ xsmall: 22, small: 24, medium: 26, large: 26 }),
+      BP({ xsmall: 0.12, small: 0.14, medium: 0.15, large: 0.15 }),
+    ),
   },
 })
 
