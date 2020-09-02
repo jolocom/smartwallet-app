@@ -14,11 +14,13 @@ import {
 } from '@jolocom/sdk/js/src/lib/util'
 import { ThunkAction } from 'src/store'
 import { compose } from 'redux'
-import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
+import { checkTermsOfService } from '../generic'
+import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
+import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -74,11 +76,15 @@ export const checkIdentityExists: ThunkAction = async (
     const identityWallet = await backendMiddleware.prepareIdentityWallet()
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
-    return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+    await dispatch(setClaimsForDid)
+    await dispatch(accountActions.checkLocalDeviceAuthSet)
+    await dispatch(checkRecoverySetup)
+    return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {
-    if (!(err instanceof BackendError)) throw err
-
-    if (err.message === BackendError.codes.NoEntropy) {
+    if (
+      err.message === BackendError.codes.NoEntropy ||
+      err.message === BackendError.codes.NoWallet
+    ) {
       // No seed in database, user must register
       // But check if a registration was already in progress
       const isRegistering = getState().registration.loading.isRegistering
@@ -89,6 +95,8 @@ export const checkIdentityExists: ThunkAction = async (
 
       return dispatch(navigationActions.navigate({ routeName }))
     }
+
+    throw err
   }
 }
 
@@ -157,6 +165,9 @@ export const hasExternalCredentials: ThunkAction = async (
   backendMiddleware,
 ) => {
   const { storageLib, identityWallet } = backendMiddleware
+  // TODO FIXME
+  // we only need a count, no need to actually load and deserialize
+  // all of them
   const externalCredentials = await storageLib.get.verifiableCredential({
     issuer: Not(identityWallet.did),
   })

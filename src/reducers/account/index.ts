@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import { did } from 'src/reducers/account/did'
 import { claims } from 'src/reducers/account/claims'
+
 import { loading } from 'src/reducers/account/loading'
 import { appState } from 'src/reducers/account/appState'
+
 import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
@@ -51,6 +53,7 @@ export interface AppState {
 }
 
 export type LoadingState = boolean
+
 
 // TODO avoid state.account.did.did access patterns
 export interface AccountState {

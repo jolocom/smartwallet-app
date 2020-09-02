@@ -75,7 +75,6 @@ Object {
   "did": Object {
     "did": "mock did",
   },
-  "loading": false,
 }
 `;
 
@@ -152,6 +151,5 @@ Object {
     },
   },
   "did": "",
-  "loading": false,
 }
 `;

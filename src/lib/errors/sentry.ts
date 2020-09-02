@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react-native'
 import VersionNumber from 'react-native-version-number'
 import { sentryDSN } from 'src/config'
-import { ErrorReport } from '@jolocom/sdk/js/src/lib/errors/types'
+import { ErrorReport } from './index'
 
 export function reportErrorToSentry(report: ErrorReport, extraData?: object) {
   Sentry.withScope(scope => {

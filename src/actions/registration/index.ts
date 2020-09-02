@@ -1,10 +1,9 @@
-import { navigationActions } from 'src/actions/'
-import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
+import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -19,27 +18,23 @@ export const setIsRegistering = (value: boolean) => ({
 export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
   getState,
-  backendMiddleware,
+  sdk,
 ) => {
-  dispatch(
-    navigationActions.navigate({
-      routeName: routeList.RegistrationProgress,
-    }),
-  )
-
   const isRegistering = getState().registration.loading.isRegistering
   if (isRegistering) return
 
   dispatch(setIsRegistering(true))
 
-  dispatch(setLoadingMsg(loading.loadingStages[0]))
-  await backendMiddleware.createKeyProvider(encodedEntropy)
+  //dispatch(setLoadingMsg(loading.loadingStages[0]))
+  //await backendMiddleware.createKeyProvider(encodedEntropy)
 
-  dispatch(setLoadingMsg(loading.loadingStages[1]))
-  await backendMiddleware.fuelKeyWithEther()
+  //dispatch(setLoadingMsg(loading.loadingStages[1]))
+  //await backendMiddleware.fuelKeyWithEther()
 
   dispatch(setLoadingMsg(loading.loadingStages[2]))
-  const identity = await backendMiddleware.createIdentity()
+  console.log('about to createNewIdentity')
+  const password = (await generateSecureRandomBytes(32)).toString('base64')
+  const identity = await sdk.createNewIdentity(password)
 
   dispatch(setDid(identity.did))
   dispatch(setLoadingMsg(loading.loadingStages[3]))

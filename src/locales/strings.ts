@@ -1,6 +1,6 @@
 // NOTE: not importing from 'src/lib/errors' to avoid cycle
 // NOTE: absolute path causes `generateTerms` to crash, since it is outside /src (I guess that's the cause)
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/codes'
+import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/types'
 
 const registration = {
   ENCRYPTING_AND_STORING_DATA_LOCALLY: 'Encrypting and storing data locally',
@@ -181,6 +181,16 @@ const deviceAuth = {
     'Any future passcode restore is possible only with your secret phrase',
 }
 
+const termsOfService = {
+  SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY:
+    'SmartWallet introducing Terms and Conditions and Privacy Policy',
+  YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW:
+    'You can find the German and English version of the documents below. Please note that the German version is legally binding',
+  I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY:
+    'I understand and accept the Terms of Service and Privacy Policy',
+  ACCEPT_NEW_TERMS: 'Accept new terms',
+}
+
 export default {
   ...registration,
   ...settings,
@@ -190,6 +200,7 @@ export default {
   ...errorReporting,
   ...notifications,
   ...deviceAuth,
+  ...termsOfService,
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
   HISTORY: 'History',
