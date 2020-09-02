@@ -35,6 +35,9 @@ Array [
     "type": "SET_CLAIMS_FOR_DID",
   },
   Object {
+    "type": "SET_LOCAL_AUTH",
+  },
+  Object {
     "type": "HAS_EXTERNAL_CREDENTIALS",
     "value": true,
   },
