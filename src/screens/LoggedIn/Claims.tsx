@@ -12,6 +12,7 @@ import { getAttributes } from '~/modules/attributes/selectors'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { useSDK, useInteractionStart } from '~/hooks/sdk'
 import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import Title, { TitleKind } from '~/components/Title'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -55,6 +56,9 @@ const Claims: React.FC = () => {
   return (
     <ScreenContainer>
       <ContainerComponent>
+        <Title kind={TitleKind.subtitle} size="big">
+          Hey Theres
+        </Title>
         <Paragraph
           customStyles={{ marginBottom: 20 }}
           size={ParagraphSizes.large}
