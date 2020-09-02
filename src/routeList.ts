@@ -38,6 +38,7 @@ export enum routeList {
   RegisterPIN = 'RegisterPIN',
   TermsOfService = 'TermsOfService',
   PrivacyPolicy = 'PrivacyPolicy',
+  Impressum = 'Impressum',
 
   // General
   Exception = 'Exception',

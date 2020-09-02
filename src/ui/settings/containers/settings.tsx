@@ -39,7 +39,7 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const {  settings, setupBackup, navigate, setLocale } = props
+  const { settings, setupBackup, navigate, setLocale } = props
   const version = VersionNumber.appVersion
   const currentLocale = settings.locale
 
@@ -110,6 +110,11 @@ export const SettingsContainer: React.FC<Props> = props => {
             title={I18n.t(strings.TERMS_OF_SERVICE)}
             iconName={'file-document'}
             onPress={() => navigate(routeList.TermsOfService)}
+          />
+          <SettingItem
+            title={I18n.t(strings.IMPRESSUM)}
+            iconName={'book-minus'}
+            onPress={() => navigate(routeList.Impressum)}
           />
         </SettingSection>
         <Text style={styles.versionNumber}>

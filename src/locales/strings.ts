@@ -58,6 +58,7 @@ const settings = {
   TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE:
     'Try again with another six words from your secure phrase',
   VERSION: 'version',
+  IMPRESSUM: 'Impressum',
 }
 
 const backup = {
