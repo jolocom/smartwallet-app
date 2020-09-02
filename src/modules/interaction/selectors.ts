@@ -3,7 +3,6 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
 import { IntermediaryState, CredReceiveI, CredShareI } from './types'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { getAllCredentials } from '../credentials/selectors'
 import {
@@ -12,13 +11,12 @@ import {
   OfferUICredential,
   ShareCredentialsBySection,
 } from '~/types/credentials'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
 import { getCredentialSection } from '~/utils/credentialsBySection'
 
-export const getInteractionAttributes = (
+export const getAvailablaAttributesToShare = (
   state: RootReducerI,
-): AttrsState<AttributeI> => state.interaction.attributes
+): AttrsState<AttributeI> => state.interaction.availableAttributesToShare
 
 //FIXME: Must fix the types, or re-structure the module
 export const getSelectedAttributes = (
@@ -46,9 +44,6 @@ export const getInteractionCounterparty = (
 
 export const getInteractionDetails = <T>(state: RootReducerI): T =>
   state.interaction.details
-
-export const getAttributesToShare = (state: RootReducerI) =>
-  state.interaction.attributesToShare
 
 export const getServiceIssuedCreds = (state: RootReducerI) =>
   state.interaction.details.credentials

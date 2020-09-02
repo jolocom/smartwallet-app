@@ -10,8 +10,8 @@ const initialState: InteractionStateI = {
   details: {},
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
-  attributes: {},
-  attributesToShare: {},
+  availableAttributesToShare: {},
+  selectedAttributes: {},
 }
 
 const reducer = (
@@ -23,10 +23,10 @@ const reducer = (
       return { ...state, details: { ...state.details, ...action.payload } }
     case InteractionActions.resetInteraction:
       return initialState
-    case InteractionActions.setInteractionAttributes:
-      return { ...state, attributes: action.payload }
-    case InteractionActions.setAttributesToShare:
-      return { ...state, attributesToShare: action.payload }
+    case InteractionActions.setAvailableAttributesToShare:
+      return { ...state, availableAttributesToShare: action.payload }
+    case InteractionActions.setSelectedAttributes:
+      return { ...state, selectedAttributes: action.payload }
     case InteractionActions.selectAttr:
       return onSelectAttr(state, action)
     case InteractionActions.setIntermediaryState:

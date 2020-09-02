@@ -9,12 +9,12 @@ export const resetInteraction = createAction(
   InteractionActions.resetInteraction,
 )
 
-export const setInteractionAttributes = createAction(
-  InteractionActions.setInteractionAttributes,
+export const setAvailableAttributesToShare = createAction(
+  InteractionActions.setAvailableAttributesToShare,
 )
 
-export const setAttributesToShare = createAction(
-  InteractionActions.setAttributesToShare,
+export const setSelectedAttributes = createAction(
+  InteractionActions.setSelectedAttributes,
 )
 
 export const selectAttr = createAction(InteractionActions.selectAttr)

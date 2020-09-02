@@ -3,8 +3,8 @@ import { claimsMetadata } from 'cred-types-jolocom-core'
 
 import { setAttrs, updateAttrs } from '~/modules/attributes/actions'
 import {
-  setInteractionAttributes,
-  setAttributesToShare,
+  setSelectedAttributes,
+  setAvailableAttributesToShare,
 } from '~/modules/interaction/actions'
 import { AttrKeys, ATTR_TYPES } from '~/types/credentials'
 import { getAttributes } from '~/modules/attributes/selectors'
@@ -14,7 +14,6 @@ import {
   makeAttrEntry,
   CredentialI,
   getClaim,
-  credentialSchemas,
   isCredentialAttribute,
 } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
@@ -41,7 +40,6 @@ export const useGetAllAttributes = () => {
       )
 
       dispatch(setAttrs(attributes))
-      // dispatch(setCredentials(credentials));
     } catch (err) {
       console.warn('Failed getting verifiable credentials', err)
     }
@@ -50,6 +48,7 @@ export const useGetAllAttributes = () => {
   return getAttributes
 }
 
+// should be changes to something like useSetAttributesToShare
 export const useSetInteractionAttributes = () => {
   const dispatch = useDispatch()
   const attributes = useSelector(getAttributes)
@@ -64,7 +63,7 @@ export const useSetInteractionAttributes = () => {
       acc[v] = attributes[value] || []
       return acc
     }, {} as { [key: string]: AttributeI[] })
-    dispatch(setInteractionAttributes(interactionAttributues))
+    dispatch(setAvailableAttributesToShare(interactionAttributues))
 
     const selectedAttributes = Object.keys(interactionAttributues).reduce(
       (acc, v) => {
@@ -78,7 +77,7 @@ export const useSetInteractionAttributes = () => {
       },
       {} as { [key: string]: string },
     )
-    dispatch(setAttributesToShare(selectedAttributes))
+    dispatch(setSelectedAttributes(selectedAttributes))
   }
 
   return updateInteractionAttributes

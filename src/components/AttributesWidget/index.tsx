@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, GestureResponderEvent } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
 
@@ -23,6 +23,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
 }) => {
   const dispatch = useDispatch()
   const selectedAttributes = useSelector(getSelectedAttributes)
+
   return (
     <>
       {(Object.keys(attributes) as AttrKeys[]).map((sectionKey) => {

@@ -1,14 +1,13 @@
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { AttrsState, AttributeI } from '../attributes/types'
 import { AttrKeys, OfferUICredential } from '~/types/credentials'
-import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
-  setInteractionAttributes = 'setInteractionAttributes',
-  setAttributesToShare = 'setAttributesToShare',
+  setAvailableAttributesToShare = 'setAvailableAttributesToShare',
+  setSelectedAttributes = 'setSelectedAttributes',
   selectAttr = 'selectAttr',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputKey = 'setAttributeInputKey',
@@ -22,8 +21,8 @@ export type InteractionDetails =
 
 export interface InteractionStateI {
   details: {} | InteractionDetails
-  attributes: AttrsState<AttributeI>
-  attributesToShare: { [x: string]: string }
+  availableAttributesToShare: AttrsState<AttributeI>
+  selectedAttributes: { [x: string]: string }
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
 }
