@@ -28,6 +28,9 @@ const MARKER_SIZE = SCREEN_WIDTH * 0.75
 const SPACE_AROUND_MARKER = (SCREEN_WIDTH - MARKER_SIZE) / 2
 
 const styles = StyleSheet.create({
+  cameraStyle: {
+    height: SCREEN_HEIGHT,
+  },
   rectangle: {
     height: MARKER_SIZE,
     width: MARKER_SIZE,
@@ -96,8 +99,8 @@ interface Props {
 export const ScannerComponent = (props: Props) => {
   const { onScan, onScannerRef, reRenderKey } = props
 
-  const [isError, setError] = useState()
-  const [errorText, setErrorText] = useState()
+  const [isError, setError] = useState(false)
+  const [errorText, setErrorText] = useState('')
   const [isTorchPressed, setTorchPressed] = useState(false)
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
@@ -169,10 +172,7 @@ export const ScannerComponent = (props: Props) => {
         reactivateTimeout={3000}
         fadeIn={false}
         onRead={onRead}
-        cameraStyle={StyleSheet.create({
-          //@ts-ignore
-          height: SCREEN_HEIGHT,
-        })}
+        cameraStyle={styles.cameraStyle}
       />
       <View style={styles.topOverlay} />
       <View
