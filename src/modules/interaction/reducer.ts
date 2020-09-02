@@ -46,8 +46,8 @@ const onSelectAttr = (
 
   return {
     ...state,
-    selectedAttributes: {
-      ...state.selectedAttributes,
+    attributesToShare: {
+      ...state.attributesToShare,
       ...updatedSelectedAttrs,
     },
   }

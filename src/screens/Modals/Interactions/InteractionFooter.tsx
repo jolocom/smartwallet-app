@@ -15,6 +15,7 @@ import {
   getIsFullScreenInteraction,
   getAttributesToShare,
   getServiceIssuedCreds,
+  getAttributeInputKey,
 } from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
@@ -45,6 +46,7 @@ const InteractionFooter: React.FC = () => {
   const interactionCTA = useInteractionCta()
   const handleFlowSubmit = useHandleFlowSubmit()
   const loader = useLoader()
+  const attributeInputKey = useSelector(getAttributeInputKey)
 
   // NOTE: for now this will alway return false because we don't set attributesToShare yet
   const showIntermediaryScreen =
@@ -55,7 +57,7 @@ const InteractionFooter: React.FC = () => {
   const handleSubmit = async () => {
     if (showIntermediaryScreen) {
       dispatch(setIntermediaryState(IntermediaryState.showing))
-      dispatch(setAttributeInputKey('email'))
+      dispatch(setAttributeInputKey(attributeInputKey))
     } else {
       await loader(
         async () => {

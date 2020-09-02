@@ -1,30 +1,42 @@
 import React, { useState, useEffect } from 'react'
+import { View } from 'react-native'
 
 import FasWrapper from '~/components/ActionSheet/FasWrapper'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   getShareCredentialsBySection,
   getInteractionDetails,
   getInteractionAttributes,
+  getSelectedAttributes,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
-import { MultipleShareUICredential } from '~/types/credentials'
+import {
+  MultipleShareUICredential,
+  ATTR_TYPES,
+  attrTypeToAttrKey,
+} from '~/types/credentials'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
-import { CredShareI } from '~/modules/interaction/types'
+import { CredShareI, IntermediaryState } from '~/modules/interaction/types'
 import AttributesWidget from '~/components/AttributesWidget'
 import { useSetInteractionAttributes } from '~/hooks/attributes'
+import {
+  setIntermediaryState,
+  setAttributeInputKey,
+} from '~/modules/interaction/actions'
+import { getShareAttributes } from '~/modules/attributes/selectors'
 
 const CredentialShareFas = () => {
-  const attributes = useSelector(getInteractionAttributes)
+  const dispatch = useDispatch()
+  const attributes = useSelector(getShareAttributes)
+  const selectedAttributes = useSelector(getSelectedAttributes)
   const setInteractionAttributes = useSetInteractionAttributes()
   const { documents, other } = useSelector(getShareCredentialsBySection)
   //FIXME: remove cast after types are fixed
   const [instructionVisible, setInstructionVisibility] = useState(true)
   const [selected, setSelected] = useState<{ type: string; id: string }[]>([])
-  console.log({ attributes })
 
   const isFirstCredential = (id: string) => {
     if (documents.length) {
@@ -104,15 +116,36 @@ const CredentialShareFas = () => {
 
   return (
     <FasWrapper>
-      {/* {Object.keys(attributes).length && (
-            <AttributesWidget
+      {!!Object.keys(attributes).length && (
+        <View
+          style={{
+            marginHorizontal: 17,
+            paddingHorizontal: 20,
+            paddingTop: 20,
+            backgroundColor: 'rgb(9,9,9)',
+            borderRadius: 20,
+            marginBottom: 46,
+            //shadows
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowOffset: {
+              width: 0,
+              height: -2,
+            },
+            shadowRadius: 14,
+            shadowOpacity: 1,
+            elevation: 10,
+          }}
+        >
+          <AttributesWidget
             attributes={attributes}
-            onCreateNewAttr={(sectionKey) =>
-            console.log('Creating new attr for', sectionKey)
-            }
+            onCreateNewAttr={(sectionKey) => {
+              dispatch(setIntermediaryState(IntermediaryState.showing))
+              dispatch(setAttributeInputKey(sectionKey))
+            }}
             isSelectable={true}
-            />
-            )} */}
+          />
+        </View>
+      )}
       <InteractionSection visible={!!documents.length} title={'Documents'}>
         {renderCredentials(documents)}
       </InteractionSection>

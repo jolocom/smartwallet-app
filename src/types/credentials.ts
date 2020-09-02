@@ -11,7 +11,7 @@ export enum AttrKeys {
 
 export type AttrKeysUpper = 'NAME' | 'EMAILADDRESS' | 'MOBILEPHONENUMBER'
 
-export const ATTR_TYPES = {
+export const ATTR_TYPES: { [x: string]: string } = {
   ProofOfEmailCredential: AttrKeys.emailAddress,
   ProofOfMobilePhoneNumberCredential: AttrKeys.mobilePhoneNumber,
   ProofOfNameCredential: AttrKeys.name,
@@ -21,6 +21,13 @@ export const ATTR_UI_NAMES: { [x: string]: string } = {
   ProofOfEmailCredential: 'email',
   ProofOfMobilePhoneNumberCredential: 'phone number',
   ProofOfNameCredential: 'name',
+}
+
+export const attrTypeToAttrKey = (type: string) => {
+  const attrKey = ATTR_TYPES[type]
+  if (!attrKey) throw new Error('No attribute key for type')
+
+  return attrKey
 }
 
 // NOTE: @renderInfo is not part of the @metadata property b/c the metadata properties
