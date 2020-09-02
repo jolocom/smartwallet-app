@@ -100,6 +100,18 @@ export const SettingsContainer: React.FC<Props> = props => {
           />
           */}
         </SettingSection>
+        <SettingSection title={I18n.t(strings.ABOUT)}>
+          <SettingItem
+            title={I18n.t(strings.PRIVACY_POLICY)}
+            iconName={'shield-lock'}
+            onPress={() => navigate(routeList.PrivacyPolicy)}
+          />
+          <SettingItem
+            title={I18n.t(strings.TERMS_OF_SERVICE)}
+            iconName={'file-document'}
+            onPress={() => navigate(routeList.TermsOfService)}
+          />
+        </SettingSection>
         <Text style={styles.versionNumber}>
           Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}
         </Text>

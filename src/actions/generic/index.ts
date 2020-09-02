@@ -10,14 +10,14 @@ import { AsyncStorage } from 'react-native'
 // TODO don't depend on the crypto lib, perhaps use the rust crypto utils?
 import crypto from 'crypto'
 
-import { termsOfServiceDE } from 'src/ui/termsofservice/legalTexts'
+import { termsOfServiceDE } from 'src/ui/termsAndPrivacy/legalTexts'
 
 import {
   AppWrapConfig,
   APPWRAP_UPDATE_CONFIG,
   APPWRAP_SHOW_LOADER,
   APPWRAP_REGISTER_CONFIG,
-  APPWRAP_UNREGISTER_CONFIG
+  APPWRAP_UNREGISTER_CONFIG,
 } from '../../reducers/generic'
 import { AnyAction } from 'redux'
 
@@ -50,11 +50,12 @@ const hashString = (text: string) => {
     .digest('hex')
 }
 
+const TERMS_OF_CONDITIONS_KEY = 'TERMS_OF_CONDITIONS'
 export const checkTermsOfService = (
   route: routeList,
   onSubmit?: () => void,
 ): ThunkAction => async dispatch => {
-  const storageHash = await AsyncStorage.getItem('termsOfConditions')
+  const storageHash = await AsyncStorage.getItem(TERMS_OF_CONDITIONS_KEY)
   const currentHash = hashString(termsOfServiceDE)
   const shouldShowTerms = storageHash !== currentHash
 
@@ -71,7 +72,7 @@ export const storeTermsOfService = (
   route: routeList,
 ): ThunkAction => async dispatch => {
   const termsHash = hashString(termsOfServiceDE)
-  await AsyncStorage.setItem('termsOfConditions', termsHash)
+  await AsyncStorage.setItem(TERMS_OF_CONDITIONS_KEY, termsHash)
 
   dispatch(navigationActions.navigate({ routeName: route }))
 }

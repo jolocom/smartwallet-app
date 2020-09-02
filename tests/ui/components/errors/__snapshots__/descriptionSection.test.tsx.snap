@@ -5,7 +5,7 @@ exports[`DescriptionSection Component matches the snapshot on initial render 1`]
   <Text
     style={
       Object {
-        "color": "rgb(48, 48, 48)",
+        "color": "rgb(255, 255, 255)",
         "fontFamily": "TT Commons",
         "fontSize": 16,
         "letterSpacing": 0.11,
@@ -24,15 +24,15 @@ exports[`DescriptionSection Component matches the snapshot on initial render 1`]
     onChangeText={[Function]}
     onFocus={[Function]}
     placeholder="Tap to write..."
-    placeholderTextColor="rgba(0, 0, 0, 0.5)"
+    placeholderTextColor="rgba(255, 255, 255, 0.5)"
     rejectResponderTermination={true}
     style={
       Object {
-        "backgroundColor": "rgb(255, 255, 255)",
-        "borderColor": "rgb(224, 224, 224)",
+        "backgroundColor": "rgb(16, 15, 17)",
+        "borderColor": "rgba(255, 255, 255, 0.21)",
         "borderRadius": 8,
         "borderWidth": 1,
-        "color": "black",
+        "color": "rgb(255, 255, 255)",
         "flexWrap": "wrap",
         "fontFamily": "TT Commons",
         "fontSize": 20,
@@ -68,8 +68,8 @@ exports[`DescriptionSection Component matches the snapshot on initial render 1`]
       <ToggleSwitch
         offGradient={
           Array [
-            "rgb(208, 208, 208)",
-            "rgb(208, 208, 208)",
+            "rgb(12, 12, 12)",
+            "rgb(12, 12, 12)",
           ]
         }
         onGradient={
@@ -79,7 +79,7 @@ exports[`DescriptionSection Component matches the snapshot on initial render 1`]
           ]
         }
         onToggle={[Function]}
-        trackColor="rgb(255, 255, 255)"
+        trackColor="rgb(55, 53, 55)"
         value={false}
       />
     </View>
@@ -93,7 +93,7 @@ exports[`DescriptionSection Component matches the snapshot on initial render 1`]
       <Text
         style={
           Object {
-            "color": "rgb(48, 48, 48)",
+            "color": "rgb(255, 255, 255)",
             "fontFamily": "TT Commons",
             "fontSize": 16,
             "letterSpacing": 0.11,
@@ -106,7 +106,7 @@ exports[`DescriptionSection Component matches the snapshot on initial render 1`]
       <Text
         style={
           Object {
-            "color": "rgba(0, 0, 0, 0.5)",
+            "color": "rgba(255, 255, 255, 0.5)",
             "fontFamily": "TT Commons",
             "fontSize": 16,
             "letterSpacing": 0.11,
@@ -127,7 +127,7 @@ exports[`DescriptionSection Component renders the input with selected border 1`]
   <Text
     style={
       Object {
-        "color": "rgb(48, 48, 48)",
+        "color": "rgb(255, 255, 255)",
         "fontFamily": "TT Commons",
         "fontSize": 16,
         "letterSpacing": 0.11,
@@ -146,15 +146,15 @@ exports[`DescriptionSection Component renders the input with selected border 1`]
     onChangeText={[Function]}
     onFocus={[Function]}
     placeholder="Tap to write..."
-    placeholderTextColor="rgba(0, 0, 0, 0.5)"
+    placeholderTextColor="rgba(255, 255, 255, 0.5)"
     rejectResponderTermination={true}
     style={
       Object {
-        "backgroundColor": "rgb(255, 255, 255)",
-        "borderColor": "rgb(149, 46, 83)",
+        "backgroundColor": "rgb(16, 15, 17)",
+        "borderColor": "rgb(197, 41, 105)",
         "borderRadius": 8,
         "borderWidth": 1,
-        "color": "black",
+        "color": "rgb(255, 255, 255)",
         "flexWrap": "wrap",
         "fontFamily": "TT Commons",
         "fontSize": 20,
@@ -190,8 +190,8 @@ exports[`DescriptionSection Component renders the input with selected border 1`]
       <ToggleSwitch
         offGradient={
           Array [
-            "rgb(208, 208, 208)",
-            "rgb(208, 208, 208)",
+            "rgb(12, 12, 12)",
+            "rgb(12, 12, 12)",
           ]
         }
         onGradient={
@@ -201,7 +201,7 @@ exports[`DescriptionSection Component renders the input with selected border 1`]
           ]
         }
         onToggle={[Function]}
-        trackColor="rgb(255, 255, 255)"
+        trackColor="rgb(55, 53, 55)"
         value={false}
       />
     </View>
@@ -215,7 +215,7 @@ exports[`DescriptionSection Component renders the input with selected border 1`]
       <Text
         style={
           Object {
-            "color": "rgb(48, 48, 48)",
+            "color": "rgb(255, 255, 255)",
             "fontFamily": "TT Commons",
             "fontSize": 16,
             "letterSpacing": 0.11,
@@ -228,7 +228,7 @@ exports[`DescriptionSection Component renders the input with selected border 1`]
       <Text
         style={
           Object {
-            "color": "rgba(0, 0, 0, 0.5)",
+            "color": "rgba(255, 255, 255, 0.5)",
             "fontFamily": "TT Commons",
             "fontSize": 16,
             "letterSpacing": 0.11,
