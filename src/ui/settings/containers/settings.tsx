@@ -1,7 +1,7 @@
 import React from 'react'
 import VersionNumber from 'react-native-version-number'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import I18n from 'src/locales/i18n'
+import I18n, { locales } from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { Wrapper } from 'src/ui/structure'
@@ -16,6 +16,7 @@ import SettingItem from '../components/settingItem'
 import settingKeys from '../settingKeys'
 import { showSeedPhrase } from '../../../actions/recovery'
 import { BOTTOM_BAR_HEIGHT } from 'src/ui/navigation/container/bottomBar'
+import { LocaleSetting } from '../components/localeSetting'
 
 const styles = StyleSheet.create({
   scrollComponent: {
@@ -38,9 +39,10 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const {  settings, setupBackup, navigate } = props
+  const {  settings, setupBackup, navigate, setLocale } = props
   const version = VersionNumber.appVersion
-  // const currentLocale = settings.locale
+  const currentLocale = settings.locale
+
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
     <Wrapper centered>
@@ -62,15 +64,13 @@ export const SettingsContainer: React.FC<Props> = props => {
             />
           </SettingSection>
         )}
-        {/*
-          <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
-            <LocaleSetting
-              locales={locales}
-              currentLocale={currentLocale}
-              setLocale={setLocale}
-            />
-          </SettingSection>
-        */}
+        <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
+          <LocaleSetting
+            locales={locales}
+            currentLocale={currentLocale}
+            setLocale={setLocale}
+          />
+        </SettingSection>
         <SettingSection title={I18n.t(strings.SECURITY)}>
           <SettingItem
             title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
