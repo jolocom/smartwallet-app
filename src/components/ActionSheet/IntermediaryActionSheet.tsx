@@ -4,11 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { getAttributeInputKey } from '~/modules/interaction/selectors'
-import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import BasWrapper from './BasWrapper'
-import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
 import { useCreateAttributes } from '~/hooks/attributes'
-import { ATTR_TYPES } from '~/types/credentials'
 
 const IntermediaryActionSheet = () => {
   const dispatch = useDispatch()
@@ -44,7 +41,6 @@ const IntermediaryActionSheet = () => {
         onChangeText={setValue}
         style={{ color: 'white' }}
       />
-      <InteractionFooter />
     </BasWrapper>
   )
 }

@@ -18,9 +18,9 @@ export const ATTR_TYPES: { [x: string]: string } = {
 }
 
 export const ATTR_UI_NAMES: { [x: string]: string } = {
-  ProofOfEmailCredential: 'email',
-  ProofOfMobilePhoneNumberCredential: 'phone number',
-  ProofOfNameCredential: 'name',
+  [AttrKeys.emailAddress]: 'email',
+  [AttrKeys.mobilePhoneNumber]: 'phone number',
+  [AttrKeys.name]: 'name',
 }
 
 export const attrTypeToAttrKey = (type: string) => {

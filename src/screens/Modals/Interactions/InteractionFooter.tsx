@@ -38,7 +38,11 @@ const FooterContainer: React.FC = ({ children }) => {
   return <View>{children}</View>
 }
 
-const InteractionFooter: React.FC = () => {
+interface Props {
+  disabled?: boolean
+}
+
+const InteractionFooter: React.FC<Props> = ({ disabled }) => {
   const dispatch = useDispatch()
   const serviceIssuedCreds = useSelector(getServiceIssuedCreds)
   const attributesToShare = useSelector(getShareAttributes)
@@ -75,7 +79,7 @@ const InteractionFooter: React.FC = () => {
     <FooterContainer>
       <BtnGroup alignment={BtnsAlignment.horizontal}>
         <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-          <Btn size={BtnSize.medium} onPress={handleSubmit}>
+          <Btn disabled={disabled} size={BtnSize.medium} onPress={handleSubmit}>
             {interactionCTA}
           </Btn>
         </View>

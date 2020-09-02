@@ -31,7 +31,7 @@ const useInteractionTitle = () => {
 
   if (intermediaryState === IntermediaryState.showing) {
     if (!inputType) throw new Error('No InputType found')
-    return strings.SAVE_YOUR_ATTRIBUTE(attrTypeToAttrKey(inputType))
+    return strings.SAVE_YOUR_ATTRIBUTE(ATTR_UI_NAMES[inputType])
   }
 
   switch (interactionDetails.flowType) {
@@ -45,7 +45,7 @@ const useInteractionTitle = () => {
       return isSingleAttributeRequest(self_issued, service_issued)
         ? strings.SERVICE_REQUESTS_ATTRIBUTE(
             initiatorName ? initiatorName : strings.SERVICE,
-            ATTR_UI_NAMES[firstRequestedAttr],
+            ATTR_UI_NAMES[attrTypeToAttrKey(firstRequestedAttr)],
           )
         : strings.INCOMING_REQUEST
 

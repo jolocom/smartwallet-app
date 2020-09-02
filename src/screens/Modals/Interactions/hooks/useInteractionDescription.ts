@@ -10,6 +10,7 @@ import {
 import truncateDid from '~/utils/truncateDid'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
+import { ATTR_UI_NAMES } from '~/types/credentials'
 
 const useInteractionDescription = () => {
   const counterparty = useSelector(getInteractionCounterparty)
@@ -19,10 +20,12 @@ const useInteractionDescription = () => {
   const serviceName = counterparty.publicProfile?.name || strings.SERVICE
   const isAnonymous = !counterparty.publicProfile
 
-  if (intermediaryState === IntermediaryState.showing)
+  if (intermediaryState === IntermediaryState.showing) {
+    if (!inputType) throw new Error('InputType not found')
     return strings.YOU_WILL_IMMIDIATELY_FIND_YOUR_DOC_IN_THE_PERSONAL_INFO_SECTION(
-      inputType,
+      ATTR_UI_NAMES[inputType],
     )
+  }
 
   if (isAnonymous)
     return strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(

@@ -8,6 +8,7 @@ import CredentialCard from '../CredentialCard'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import { OfferUICredential } from '~/types/credentials'
+import InteractionFooter from '../InteractionFooter'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
@@ -27,6 +28,7 @@ const CredentialOfferFas = () => {
       <InteractionSection visible={!!other.length} title={'Others'}>
         {renderCredentials(other)}
       </InteractionSection>
+      <InteractionFooter />
     </FasWrapper>
   )
 }
