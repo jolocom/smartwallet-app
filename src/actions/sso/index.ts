@@ -1,5 +1,6 @@
 import { navigationActions } from 'src/actions'
 import { ThunkAction } from '../../store'
+
 export {
   consumeAuthenticationRequest,
   sendAuthenticationResponse,
@@ -15,5 +16,5 @@ export {
 } from './credentialRequest'
 
 export const cancelSSO: ThunkAction = dispatch => {
-  return dispatch(navigationActions.navigatorResetHome())
+  return dispatch(navigationActions.navigateBackHome())
 }

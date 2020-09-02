@@ -4,4 +4,8 @@ import Adapter from 'enzyme-adapter-react-16'
 // React 16 Enzyme adapter
 Enzyme.configure({ adapter: new Adapter() })
 
-jest.mock('deprecated-react-native-listview')
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.NativeModules.RNPermissions = {}
+  return RN
+})

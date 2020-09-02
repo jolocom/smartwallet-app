@@ -19,7 +19,6 @@ describe('Account action creators', () => {
       },
     },
     account: {
-      loading: false,
       claims: {
         selected: {
           credentialType: 'Email',
@@ -41,14 +40,10 @@ describe('Account action creators', () => {
     },
   }
 
-  const mockIdentityWallet = {
-    identity: { did: 'did:jolo:first', didDocument: {} },
-    didDocument: {},
-  }
-
   const { identityWallet, testSignedCredentialDefault } = data
-  const mockMiddleware = {
-    prepareIdentityWallet: jest.fn().mockResolvedValue(mockIdentityWallet),
+
+  const backendMiddleware = {
+    prepareIdentityWallet: jest.fn().mockResolvedValue(identityWallet),
     storageLib: {
       get: {
         verifiableCredential: jest
@@ -63,7 +58,7 @@ describe('Account action creators', () => {
     identityWallet,
   }
 
-  const mockStore = createMockStore(initialState, mockMiddleware)
+  const mockStore = createMockStore(initialState, backendMiddleware)
 
   beforeEach(mockStore.reset)
 
@@ -73,7 +68,7 @@ describe('Account action creators', () => {
   })
 
   it('should correctly handle an empty encrypted seed table', async () => {
-    mockMiddleware.prepareIdentityWallet.mockRejectedValue(
+    backendMiddleware.prepareIdentityWallet.mockRejectedValue(
       new BackendError(BackendError.codes.NoEntropy),
     )
     await mockStore.dispatch(accountActions.checkIdentityExists)
@@ -81,8 +76,8 @@ describe('Account action creators', () => {
   })
 
   it('should display exception screen in case of error', async () => {
-    mockMiddleware.prepareIdentityWallet.mockRejectedValue(
-      new Error('everything is WRONG'),
+    backendMiddleware.prepareIdentityWallet.mockRejectedValue(
+      new Error('everything is WRONG')
     )
     await mockStore.dispatch(
       withErrorScreen(accountActions.checkIdentityExists),
