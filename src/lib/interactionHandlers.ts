@@ -3,12 +3,12 @@ import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
-import { PaymentRequest } from 'jolocom-lib/js/interactionTokens/paymentRequest'
 import {
   InteractionTransportType,
   EstablishChannelType,
   EstablishChannelRequest,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { ResolutionType, ResolutionRequest } from '@jolocom/sdk/js/src/lib/interactionManager/resolutionFlow'
 import { ssoActions } from 'src/actions'
 import { ThunkAction } from 'src/store'
 import { JolocomSDK } from 'react-native-jolocom'
@@ -37,11 +37,6 @@ export const interactionHandlers = {
     interactionToken: T,
     channel: InteractionTransportType,
   ) => ssoActions.consumeCredentialOfferRequest(interactionToken, channel),
-  [InteractionType.PaymentRequest]: <T extends JSONWebToken<PaymentRequest>>(
-    interactionToken: T,
-    isDeepLinkInteraction: boolean,
-  ) =>
-    ssoActions.consumePaymentRequest(interactionToken, isDeepLinkInteraction),
 
   [EstablishChannelType.EstablishChannelRequest]: <T extends JSONWebToken<EstablishChannelRequest>>(
     interactionToken: T,
@@ -59,6 +54,20 @@ export const interactionHandlers = {
     const ch = await sdk.channels.create(interxn)
     ch.start()
 
+    return dispatch(navigatorResetHome())
+  },
+
+  [ResolutionType.ResolutionRequest]: <T extends JSONWebToken<ResolutionRequest>>(
+    interactionToken: T,
+    channel: InteractionTransportType,
+  ): ThunkAction => async (
+    dispatch,
+    getState,
+    sdk: JolocomSDK
+  ) => {
+    const interxn = await sdk.interactionManager.start(InteractionTransportType.HTTP, interactionToken)
+    const resp = await interxn.createResolutionResponse()
+    await interxn.send(resp)
     return dispatch(navigatorResetHome())
   }
 }
