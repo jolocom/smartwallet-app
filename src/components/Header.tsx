@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, StyleSheet, TextStyle } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 
 export enum HeaderSizes {
   large = 'large',
@@ -9,15 +10,22 @@ export enum HeaderSizes {
   small = 'small',
 }
 
+export enum HeaderWeight {
+  bold = 'bold',
+  regular = 'regular',
+}
+
 interface PropsI {
   size?: HeaderSizes
   hasShadow?: boolean
   color?: Colors
   customStyles?: TextStyle
+  weight?: HeaderWeight
 }
 
 const Header: React.FC<PropsI> = ({
   size = HeaderSizes.medium,
+  weight = HeaderWeight.bold,
   hasShadow = false,
   color = Colors.white,
   customStyles = {},
@@ -30,6 +38,10 @@ const Header: React.FC<PropsI> = ({
         styles.text,
         styles[size],
         { color },
+        {
+          fontFamily:
+            weight === HeaderWeight.bold ? Fonts.Medium : Fonts.Regular,
+        },
         customStyles,
         hasShadow && styles.shadow,
       ]}
@@ -56,10 +68,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   large: {
-    ...getStyle(34, 40),
+    ...getStyle(BP({ xsmall: 26, small: 30, medium: 34, large: 34 }), 40),
   },
   medium: {
-    ...getStyle(28, 40),
+    ...getStyle(BP({ xsmall: 24, small: 28, medium: 28, large: 28 }), 40),
   },
   small: {
     ...getStyle(18, 24),

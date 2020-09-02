@@ -1,4 +1,5 @@
 import { Colors } from './colors'
+import BP from './breakpoints'
 
 export enum Fonts {
   Regular = 'TTCommons-Regular',
@@ -32,7 +33,7 @@ export const TextStyle = {
   },
   seedPhrase: {
     fontFamily: Fonts.Medium,
-    fontSize: 40,
+    fontSize: BP({ large: 40, medium: 40, small: 32, xsmall: 32 }),
     lineHeight: 54,
     letterSpacing: 0,
     color: Colors.activity,
