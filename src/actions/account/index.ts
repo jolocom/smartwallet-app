@@ -15,6 +15,7 @@ import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { BackendError } from '../../lib/errors/types'
+import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -45,6 +46,8 @@ export const checkIdentityExists: ThunkAction = async (
     const identityWallet = await backendMiddleware.prepareIdentityWallet()
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
+    await dispatch(setClaimsForDid)
+    await dispatch(checkRecoverySetup)
     return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
   } catch (err) {
     if (!(err instanceof BackendError)) throw err
@@ -117,6 +120,9 @@ export const hasExternalCredentials: ThunkAction = async (
   backendMiddleware,
 ) => {
   const { storageLib, identityWallet } = backendMiddleware
+  // TODO FIXME
+  // we only need a count, no need to actually load and deserialize
+  // all of them
   const externalCredentials = await storageLib.get.verifiableCredential({
     issuer: Not(identityWallet.did),
   })

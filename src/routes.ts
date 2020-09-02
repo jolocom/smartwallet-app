@@ -3,13 +3,17 @@ import { createElement } from 'react'
 
 import {
   createAppContainer,
-  createBottomTabNavigator,
-  createStackNavigator,
-  createSwitchNavigator,
   NavigationRoute,
-  NavigationScreenOptions,
   NavigationScreenProp,
 } from 'react-navigation'
+
+import {
+  //StackViewTransitionConfigs,
+  //NavigationStackOptions,
+  createStackNavigator,
+} from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
 
 import { ClaimDetails, Claims, Records } from 'src/ui/home/'
 import { DocumentDetails, Documents } from 'src/ui/documents'
@@ -65,7 +69,7 @@ const headerTitleStyle: StyleProp<TextStyle> = {
   color: Colors.navHeaderTintDefault,
 }
 
-const commonNavigationOptions: NavigationScreenOptions = {
+const commonNavigationOptions = {
   headerTitleStyle,
   headerStyle: {
     backgroundColor: Colors.navHeaderBgDefault,
@@ -77,7 +81,7 @@ const navOptScreenWCancel = {
   ...commonNavigationOptions,
   ...Platform.select({
     android: {
-      headerBackImage,
+      headerBackImage: () => headerBackImage,
     },
     ios: {
       headerTintColor: Colors.purpleMain,
@@ -92,6 +96,7 @@ export const BottomTabBarRoutes = {
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: IdentityIcon,
+      // @ts-ignore
       notifications: NotificationFilter.all,
     },
   },
@@ -101,6 +106,7 @@ export const BottomTabBarRoutes = {
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: DocsIcon,
+      // @ts-ignore
       notifications: NotificationFilter.all,
     },
   },
@@ -110,6 +116,7 @@ export const BottomTabBarRoutes = {
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: HistoryIcon,
+      // @ts-ignore
       notifications: NotificationFilter.onlyDismissible,
     },
   },
@@ -119,6 +126,7 @@ export const BottomTabBarRoutes = {
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: SettingsIcon,
+      // @ts-ignore
       notifications: NotificationFilter.onlyDismissible,
     },
   },
@@ -144,7 +152,7 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   tabBarComponent: BottomBar,
 })
 
-const RegistrationScreens = createSwitchNavigator(
+const RegistrationScreens = createAnimatedSwitchNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
@@ -177,8 +185,8 @@ const MainStack = createStackNavigator(
       screen: InteractionScreen,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
-        statusBar: false,
       },
     },
     [routeList.CredentialReceiveNegotiate]: {
@@ -227,6 +235,7 @@ const MainStack = createStackNavigator(
       screen: SeedPhrase,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.none,
       },
     },
@@ -234,6 +243,7 @@ const MainStack = createStackNavigator(
       screen: RepeatSeedPhrase,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.none,
       },
     },
@@ -242,6 +252,7 @@ const MainStack = createStackNavigator(
       screen: Exception,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.none,
       },
     },
@@ -249,6 +260,7 @@ const MainStack = createStackNavigator(
       screen: ErrorReporting,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.none,
       },
     },
@@ -261,19 +273,35 @@ const MainStack = createStackNavigator(
         screen: NotificationScheduler,
         navigationOptions: {
           ...noHeaderNavOpts,
+          // @ts-ignore
           notifications: NotificationFilter.all,
         },
       },
     }),
   },
   {
+//    transitionConfig: (transitionProps, prevTransitionProps) => {
+//      const isModal = MODAL_ROUTES.some(
+//        screenName =>
+//          screenName === transitionProps.scene.route.routeName ||
+//          (prevTransitionProps &&
+//            screenName === prevTransitionProps.scene.route.routeName),
+//      )
+//      return StackViewTransitionConfigs.defaultTransitionConfig(
+//        transitionProps,
+//        prevTransitionProps,
+//        isModal,
+//      )
+//    },
     defaultNavigationOptions: noHeaderNavOpts,
   },
 )
 
+//const MODAL_ROUTES = [routeList.InteractionScreen]
+
 // NOTE: navigatorReset in actions/navigation assumes that there is only 1
 // StackRouter child at the top level
-export const Routes = createSwitchNavigator(
+export const Routes = createAnimatedSwitchNavigator(
   {
     [routeList.AppInit]: {
       screen: AppInit,
@@ -282,11 +310,13 @@ export const Routes = createSwitchNavigator(
     [routeList.Main]: {
       screen: MainStack,
       navigationOptions: {
+        // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
       },
     },
     [routeList.Registration]: {
       screen: RegistrationScreens,
+      // @ts-ignore
       notifications: NotificationFilter.none,
     },
   },
