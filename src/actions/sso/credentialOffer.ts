@@ -10,18 +10,18 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import {
-  InteractionChannel,
+  InteractionTransportType,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '../../lib/interactionManager/types'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { isEmpty, uniqBy } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { CredentialMetadataSummary } from 'src/lib/storage/storage'
-import { CacheEntity } from 'src/lib/storage/entities'
+import { CacheEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
+import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
-  interactionChannel: InteractionChannel,
+  interactionChannel: InteractionTransportType,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = await interactionManager.start(
     interactionChannel,
@@ -34,6 +34,8 @@ export const consumeCredentialOfferRequest = (
       params: {
         interactionId: credentialOfferRequest.nonce,
         interactionSummary: interaction.getSummary(),
+        passedValidation: (interaction.getSummary().state as CredentialOfferFlowState)
+          .offerSummary.map(_ => true)
       },
     }),
   )
@@ -51,6 +53,11 @@ export const consumeCredentialReceive = (
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = interactionManager.getInteraction(interactionId)
+
+  const response = await interaction
+    .createCredentialOfferResponseToken(selectedSignedCredentialWithMetadata)
+
+  await interaction.processInteractionToken(response)
 
   const credentialReceive = await interaction.send(
     await interaction.createCredentialOfferResponseToken(
@@ -91,32 +98,31 @@ export const validateSelectionAndSave = (
   { interactionManager, storageLib },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const { offerSummary } = interaction.getSummary()
+  const { offerSummary, issued } = interaction.getSummary()
     .state as CredentialOfferFlowState
 
   const selectedTypes = selectedCredentials.map(el => el.type)
-  const toSave = offerSummary.filter(el => selectedTypes.includes(el.type))
+  const toSave = issued.filter(credential => selectedTypes.includes(credential.type[1]))
 
-  if (toSave.length !== selectedCredentials.length) {
-    // TODO Decide how to handle this
-    // Means one of the selections isn't in the offer
-  }
+  // if (toSave.length !== selectedCredentials.length) {}
 
-  const duplicates = await isCredentialStored(toSave, id =>
-    interaction.getStoredCredentialById(id),
+  const duplicates = await isCredentialStored(
+    toSave,
+    id => interaction.getStoredCredentialById(id)
   )
 
-  const validationErrors = toSave.map(
-    ({ validationErrors }, i) =>
-      validationErrors.invalidIssuer ||
-      !!validationErrors.invalidSubject ||
-      duplicates[i],
+  // TODO update to the latest version of the SDK and && the signature check as well
+  const passedValidation = toSave.map(
+    (credential, i) =>
+      credential.signer.did === interaction.participants.requester!.did &&
+      credential.claim.id === getState().account.did.did &&
+      !duplicates[i],
   )
 
   // None passed the validation
-  const allInvalid = !validationErrors.includes(false)
+  const allInvalid = !passedValidation.includes(true)
   // At least one passed the validatio
-  const allValid = !validationErrors.includes(true)
+  const allValid = !passedValidation.includes(false)
 
   const scheduleInvalidNotification = (message: string) =>
     scheduleNotification(
@@ -136,11 +142,13 @@ export const validateSelectionAndSave = (
   }
 
   if (allValid) {
-    await interaction.storeCredential(toSave)
+    //@ts-ignore TODO change the API on the SDK to only take a signed credential
+    await interaction.storeCredential(toSave.map(el => ({signedCredential: el})))
 
     await storeOfferMetadata(
       (interaction.getSummary().state as CredentialOfferFlowState).offerSummary,
-      interaction.participants.them.did,
+      interaction.participants.requester!.did,
+      //@ts-ignore
       storageLib.store.credentialMetadata,
     )
 
@@ -185,6 +193,7 @@ export const validateSelectionAndSave = (
           ...interaction.getSummary(),
           state: { offerSummary },
         },
+        passedValidation
       },
     }),
   )
@@ -196,11 +205,11 @@ export const validateSelectionAndSave = (
  */
 
 const isCredentialStored = async (
-  offer: SignedCredentialWithMetadata[],
+  offer: SignedCredential[],
   getCredential: (id: string) => Promise<SignedCredential[]>,
 ) =>
   Promise.all(
-    offer.map(async ({ signedCredential }) =>
+    offer.map(async (signedCredential) =>
       signedCredential
         ? !isEmpty(await getCredential(signedCredential.id))
         : false,
@@ -238,9 +247,12 @@ const endReceiving = (interactionId: string): ThunkAction => (
   { interactionManager },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const { channel } = interaction
+  const { desc: transportDesc } = interaction.transportAPI
 
-  if (channel === InteractionChannel.Deeplink) {
+  if (
+    transportDesc &&
+    transportDesc.type === InteractionTransportType.Deeplink
+  ) {
     return dispatch(navigationActions.navigatorResetHome())
   } else {
     return dispatch(

@@ -1,6 +1,10 @@
 import { routeList } from 'src/routeList'
 import strings from 'src/locales/strings'
-import { ErrorReport, ErrorCode, IAppError } from './types'
+import {
+  ErrorReport,
+  ErrorCode,
+  IAppError,
+} from '@jolocom/sdk/js/src/lib/errors/types'
 export { ErrorCode }
 
 import { reportErrorToSentry, initSentry } from 'src/lib/errors/sentry'

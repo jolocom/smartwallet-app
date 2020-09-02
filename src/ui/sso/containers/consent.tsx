@@ -5,16 +5,16 @@ import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import {
-  CredentialTypeSummary,
   CredentialVerificationSummary,
-  CredentialRequestFlowState,
-} from 'src/lib/interactionManager/types'
+  CredentialTypeSummary,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { InteractionSummary } from '../../../lib/interactionManager/types'
+import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 interface CredentialRequestNavigationParams {
   interactionId: string
   interactionSummary: InteractionSummary
+  availableCredentials: CredentialTypeSummary[]
 }
 
 interface Props
@@ -33,7 +33,7 @@ const ConsentContainer = (props: Props) => {
     cancelSSO,
     navigation: {
       state: {
-        params: { interactionId, interactionSummary },
+        params: { interactionId, interactionSummary, availableCredentials },
       },
     },
   } = props
@@ -42,16 +42,14 @@ const ConsentContainer = (props: Props) => {
     sendCredentialResponse(credentials, interactionId)
   }
 
-  const { issuer, state } = interactionSummary
+  const { initiator: issuer } = interactionSummary
 
   // TODO Instead of "as", use type guards?
   return (
     <ConsentComponent
       requester={issuer}
       did={currentDid}
-      availableCredentials={
-        (state as CredentialRequestFlowState).availableCredentials
-      }
+      availableCredentials={availableCredentials}
       handleSubmitClaims={handleSubmitClaims}
       handleDenySubmit={cancelSSO}
     />

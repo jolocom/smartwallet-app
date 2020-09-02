@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { initStore, ThunkDispatch } from './store'
+import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
 import { View, StyleSheet } from 'react-native'
 import { RoutesContainer } from './routes'
@@ -12,6 +12,16 @@ import {
   NavigationState,
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
+
+import { LoadingSpinner } from './ui/generic'
+
+import {
+  JolocomLinking,
+  JolocomWebSockets,
+  JolocomKeychainPasswordStore,
+  JolocomSDK,
+} from 'react-native-jolocom'
+
 import { backgroundDarkMain } from './styles/colors'
 import { AppWrap } from './ui/structure/wrapper'
 
@@ -26,6 +36,7 @@ enableScreens()
  * better architecture.
  */
 let store: ReturnType<typeof initStore>
+let sdkPromise: Promise<JolocomSDK>
 
 const styles = StyleSheet.create({
   appWrapper: {
@@ -35,11 +46,18 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class App extends React.PureComponent<{},{}> {
+export default class App extends React.PureComponent<
+  {},
+  { ready: boolean; showStatusBar: boolean }
+> {
   private navigator!: NavigationContainerComponent
 
   public constructor(props: {}) {
     super(props)
+    this.state = {
+      ready: false,
+      showStatusBar: true,
+    }
     // only init store once, or else Provider complains (especially on 'toggle
     // inspector')
     //
@@ -47,7 +65,18 @@ export default class App extends React.PureComponent<{},{}> {
     // instantiated because otherwise the overrides at the top of index.ts will
     // have not been excuted yet (while files are being imported) and initStore
     // triggers creation of BackendMiddleware which needs those
-    if (!store) store = initStore()
+    if (!sdkPromise) {
+      sdkPromise = initTypeorm().then(async storage => {
+        const passwordStore = new JolocomKeychainPasswordStore()
+        const sdk = new JolocomSDK({ storage, passwordStore })
+        await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        sdk.setDefaultDidMethod('jun')
+
+        store = initStore(sdk)
+        this.setState({ ready: true })
+        return sdk
+      })
+    }
   }
 
   public handleNavigationChange(
@@ -91,16 +120,21 @@ export default class App extends React.PureComponent<{},{}> {
   }
 
   public render() {
+    const { ready } = this.state
     return (
       <View style={styles.appWrapper}>
-        <Provider store={store}>
-          <AppWrap>
-            <RoutesContainer
-              onNavigationStateChange={this.handleNavigationChange.bind(this)}
-              ref={nav => this.setNavigator(nav)}
-            />
-          </AppWrap>
-        </Provider>
+        {!ready ? (
+          <LoadingSpinner />
+        ) : (
+          <Provider store={store}>
+            <AppWrap>
+              <RoutesContainer
+                onNavigationStateChange={this.handleNavigationChange.bind(this)}
+                ref={nav => this.setNavigator(nav)}
+              />
+            </AppWrap>
+          </Provider>
+        )}
       </View>
     )
   }

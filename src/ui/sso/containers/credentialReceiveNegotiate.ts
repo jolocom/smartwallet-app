@@ -4,7 +4,7 @@ import { routeList } from '../../../routeList'
 import { navigationActions, ssoActions } from '../../../actions'
 import { connect } from 'react-redux'
 import { CredentialsReceiveContainer } from './credentialReceive'
-import { SignedCredentialWithMetadata } from 'src/lib/interactionManager/types'
+import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   acceptSelectedCredentials: (

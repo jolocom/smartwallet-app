@@ -2,7 +2,7 @@ import { navigationActions } from '../../../src/actions'
 import { JolocomLib } from 'jolocom-lib'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { interactionHandlers } from 'src/lib/storage/interactionTokens'
+import { interactionHandlers } from 'src/lib/interactionHandlers'
 import { createMockStore } from 'tests/utils'
 import { AppError } from 'src/lib/errors'
 
@@ -25,10 +25,10 @@ describe('Navigation action creators', () => {
       },
       {
         storageLib: {
-          get: {
-            persona: jest.fn().mockResolvedValue([{ did: mockDid }]),
-            encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
-          },
+          //get: {
+          //  persona: jest.fn().mockResolvedValue([{ did: mockDid }]),
+          //  encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
+          //},
         },
         keyChainLib: {
           getPassword: jest.fn().mockResolvedValue('secret123'),

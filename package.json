@@ -142,6 +142,8 @@
     }
   },
   "dependencies": {
+    "@jolocom/sdk": "^0.18.15",
+    "@react-navigation/core": "^3.4.2",
     "@react-native-community/art": "^1.1.2",
     "@react-native-community/async-storage": "^1.7.1",
     "@react-native-community/masked-view": "^0.1.1",
@@ -149,14 +151,10 @@
     "@types/react-native-modal-dropdown": "^0.6.1",
     "assert": "^2.0.0",
     "bip39": "^3.0.2",
-    "browser-ipfs": "^0.0.6",
-    "crypto-browserify": "^3.12.0",
-    "ethereumjs-wallet": "^0.6.0",
     "events": "^3.0.0",
     "i18n-js": "^3.1.0",
-    "jolocom-lib": "^4.1.0",
+    "jolocom-lib": "^5.0.36",
     "material-colors": "^1.2.5",
-    "object.assign": "^4.1.0",
     "ramda": "^0.26.1",
     "react": "16.9.0",
     "react-native": "0.61.5",
@@ -164,6 +162,7 @@
     "react-native-crypto": "^2.1.2",
     "react-native-gesture-handler": "^1.5.6",
     "react-native-indicator": "^1.2.0",
+    "react-native-jolocom": "^1.4.13",
     "react-native-keychain": "^4.0.5",
     "react-native-interactable": "^1.0.0",
     "react-native-linear-gradient": "^2.5.6",
@@ -191,14 +190,8 @@
     "react-redux": "^7.2.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.3.0",
-    "rn-fetch-blob": "^0.12.0",
     "sjcl": "^1.0.7",
-    "sqlite3": "^4.0.0",
-    "squel": "^5.12.1",
-    "stream-browserify": "^2.0.2",
-    "unorm": "^1.6.0",
-    "vm-browserify": "^1.1.0",
-    "wif": "^2.0.6"
+    "sqlite3": "^4.0.0"
   },
   "config": {
     "commitizen": {

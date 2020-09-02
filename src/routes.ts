@@ -18,7 +18,6 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
 import { ClaimDetails, Claims, Records } from 'src/ui/home/'
 import { DocumentDetails, Documents } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
-import { PaymentConsent } from 'src/ui/payment'
 import { Entropy, RegistrationProgress } from 'src/ui/registration/'
 import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
@@ -205,13 +204,6 @@ const MainStack = createStackNavigator(
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.SHARE_CLAIMS),
-      }),
-    },
-    [routeList.PaymentConsent]: {
-      screen: PaymentConsent,
-      navigationOptions: () => ({
-        ...navOptScreenWCancel,
-        headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
       }),
     },
     [routeList.AuthenticationConsent]: {

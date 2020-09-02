@@ -1,22 +1,22 @@
 import { accountActions } from 'src/actions/'
-import data from '../registration/data/mockRegistrationData'
+import data from './mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
 import { createMockStore } from 'tests/utils'
 import { withErrorScreen } from 'src/actions/modifiers'
-import { BackendError } from '../../../src/lib/errors/types'
+import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
+    settings: {
+      locale: 'en',
+      seedPhraseSaved: false,
+    },
     registration: {
       loading: {
         loadingMsg: '',
         isRegistering: false,
       },
-    },
-    settings: {
-      locale: 'en',
-      seedPhraseSaved: false
     },
     account: {
       claims: {

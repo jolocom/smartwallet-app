@@ -1,13 +1,19 @@
 import { Linking } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
-import { AppError, ErrorCode } from 'src/lib/errors'
-import I18n from 'src/locales/i18n'
-import { routeList } from 'src/routeList'
-import { navigationActions, accountActions } from 'src/actions'
-import { ThunkAction } from 'src/store'
-import settingKeys from 'src/ui/settings/settingKeys'
+import { AppError, ErrorCode } from '../../lib/errors'
+import I18n from '../../locales/i18n'
+import { routeList } from '../../routeList'
+import { navigationActions, accountActions } from '../../actions'
+import { ThunkAction } from '../../store'
+import settingKeys from '../../ui/settings/settingKeys'
 import { withLoading, withErrorScreen } from '../modifiers'
-import { AppWrapConfig, APPWRAP_UPDATE_CONFIG, APPWRAP_SHOW_LOADER, APPWRAP_REGISTER_CONFIG, APPWRAP_UNREGISTER_CONFIG } from 'src/reducers/generic'
+import {
+  AppWrapConfig,
+  APPWRAP_UPDATE_CONFIG,
+  APPWRAP_SHOW_LOADER,
+  APPWRAP_REGISTER_CONFIG,
+  APPWRAP_UNREGISTER_CONFIG
+} from '../../reducers/generic'
 import { AnyAction } from 'redux'
 
 // Default delay on the loading state value before it can switch back to 'false'
@@ -38,7 +44,6 @@ export const initApp: ThunkAction = async (
   backendMiddleware,
 ) => {
   try {
-    await backendMiddleware.initStorage()
     const storedSettings = await backendMiddleware.storageLib.get.settingsObject()
 
     // locale setup

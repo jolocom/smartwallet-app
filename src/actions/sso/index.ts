@@ -14,7 +14,6 @@ export {
   consumeCredentialRequest,
   sendCredentialResponse,
 } from './credentialRequest'
-export { consumePaymentRequest, sendPaymentResponse } from './paymentRequest'
 
 export const cancelSSO: ThunkAction = dispatch => {
   return dispatch(navigationActions.navigateBackHome())

@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 
-import { ThunkDispatch } from 'src/store'
+import { ThunkDispatch } from '../../store'
 import { Dimensions, Image, StyleSheet, Text } from 'react-native'
-import { withErrorHandler } from 'src/actions/modifiers'
+import { withErrorHandler } from '../../actions/modifiers'
 import { Wrapper } from '../structure'
-import { AppError, ErrorCode } from 'src/lib/errors'
-import { showErrorScreen, initApp } from 'src/actions/generic'
-import { Typography, Colors } from 'src/styles'
-const image = require('src/resources/img/splashScreen.png')
+import { AppError, ErrorCode } from '../../lib/errors'
+import { showErrorScreen, initApp } from '../../actions/generic'
+import { Typography, Colors } from '../../styles'
+const image = require('../../resources/img/splashScreen.png')
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
 
