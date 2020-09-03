@@ -14,16 +14,17 @@ interface AttrsWidgetPropsI {
   attributes: AttrsState<AttributeI>
   isSelectable?: boolean
   onCreateNewAttr: (sectionKey: AttrKeys) => void
+  onSelect?: (key: AttrKeys, id: string) => void
+  selectedAttributes?: { [x: string]: string }
 }
 
 const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
   attributes,
   isSelectable = true,
   onCreateNewAttr,
+  onSelect,
+  selectedAttributes,
 }) => {
-  const dispatch = useDispatch()
-  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
-
   return (
     <>
       {(Object.keys(attributes) as AttrKeys[]).map((sectionKey) => {
@@ -42,11 +43,11 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                     type={FieldTypes.isSelectable}
                     value={entry.value}
                     isSelected={
-                      selectedShareCredentials[sectionKey] === entry.id
+                      selectedAttributes
+                        ? selectedAttributes[sectionKey] === entry.id
+                        : false
                     }
-                    onSelect={() => {
-                      dispatch(selectAttr({ [sectionKey]: entry.id }))
-                    }}
+                    onSelect={() => onSelect && onSelect(sectionKey, entry.id)}
                     onCreateNewOne={() => onCreateNewAttr(sectionKey)}
                   />
                 ))

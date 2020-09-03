@@ -23,6 +23,7 @@ import {
 import { getShareAttributes } from '~/modules/attributes/selectors'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import InteractionFooter from '../InteractionFooter'
+import { setAttrs } from '~/modules/attributes/actions'
 
 const CredentialShareFas = () => {
   const dispatch = useDispatch()
@@ -135,10 +136,11 @@ const CredentialShareFas = () => {
             <AttributesWidget
               attributes={attributes}
               onCreateNewAttr={(sectionKey) => {
-                console.log({ sectionKey })
                 dispatch(setIntermediaryState(IntermediaryState.showing))
                 dispatch(setAttributeInputKey(sectionKey))
               }}
+              onSelect={(key, id) => dispatch(selectAttr({ [key]: id }))}
+              selectedAttributes={selectedShareCredentials}
               isSelectable={true}
             />
           </View>

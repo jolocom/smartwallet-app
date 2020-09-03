@@ -22,29 +22,20 @@ const reducer = (
       return { ...state, details: { ...state.details, ...action.payload } }
     case InteractionActions.resetInteraction:
       return initialState
-    case InteractionActions.setSelectedAttributes:
-      return { ...state, selectedAttributes: action.payload }
     case InteractionActions.selectAttr:
-      return onSelectAttr(state, action)
+      return {
+        ...state,
+        selectedShareCredentials: {
+          ...state.selectedShareCredentials,
+          ...action.payload,
+        },
+      }
     case InteractionActions.setIntermediaryState:
       return { ...state, intermediaryState: action.payload }
     case InteractionActions.setAttributeInputKey:
       return { ...state, attributeInputKey: action.payload }
     default:
       return state
-  }
-}
-
-const onSelectAttr = (
-  state: InteractionStateI,
-  action: ActionI<InteractionActions>,
-) => {
-  return {
-    ...state,
-    selectedAttributes: {
-      ...state.selectedShareCredentials,
-      ...action.payload,
-    },
   }
 }
 
