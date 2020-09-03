@@ -7,5 +7,6 @@ Enzyme.configure({ adapter: new Adapter() })
 jest.mock('react-native', () => {
   const RN = jest.requireActual('react-native')
   RN.NativeModules.RNPermissions = {}
+  RN.NativeModules.RNCAsyncStorage = {}
   return RN
 })
