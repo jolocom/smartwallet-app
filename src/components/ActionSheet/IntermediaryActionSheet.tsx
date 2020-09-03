@@ -14,7 +14,6 @@ const IntermediaryActionSheet = () => {
   const createAttribute = useCreateAttributes()
   const [value, setValue] = useState('')
 
-  //FIXME: when the Keyboard appears, the input is not moved above it.
   useEffect(() => {
     setTimeout(() => {
       inputRef.current?.focus()
@@ -33,7 +32,7 @@ const IntermediaryActionSheet = () => {
   }
 
   return (
-    <BasWrapper customStyle={{ paddingTop: 20 }}>
+    <BasWrapper withFooter={false} customStyle={{ paddingTop: 20 }}>
       <TextInput
         onSubmitEditing={handleSubmit}
         ref={inputRef}

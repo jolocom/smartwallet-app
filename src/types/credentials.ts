@@ -11,7 +11,7 @@ export enum AttrKeys {
 
 export type AttrKeysUpper = 'NAME' | 'EMAILADDRESS' | 'MOBILEPHONENUMBER'
 
-export const ATTR_TYPES: { [x: string]: string } = {
+export const ATTR_TYPES: { [x: string]: AttrKeys } = {
   ProofOfEmailCredential: AttrKeys.emailAddress,
   ProofOfMobilePhoneNumberCredential: AttrKeys.mobilePhoneNumber,
   ProofOfNameCredential: AttrKeys.name,

@@ -12,14 +12,8 @@ import {
 } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
 import { useRootSelector } from '~/hooks/useRootSelector'
-import { ATTR_UI_NAMES, attrTypeToAttrKey } from '~/types/credentials'
-
-const isSingleAttributeRequest = (
-  selfIssued: string[],
-  serviceIssued: string[],
-) => {
-  return !serviceIssued.length && selfIssued.length === 1
-}
+import { ATTR_UI_NAMES } from '~/types/credentials'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 
 const useInteractionTitle = () => {
   const counterparty = useSelector(getInteractionCounterparty)
@@ -28,8 +22,10 @@ const useInteractionTitle = () => {
   )
   const intermediaryState = useSelector(getIntermediaryState)
   const inputType = useSelector(getAttributeInputKey)
+  const { getSingleMissingAttribute } = useCredentialShareFlow()
 
   if (intermediaryState === IntermediaryState.showing) {
+    console.log({ inputType })
     if (!inputType) throw new Error('No InputType found')
     return strings.SAVE_YOUR_ATTRIBUTE(ATTR_UI_NAMES[inputType])
   }
@@ -40,12 +36,11 @@ const useInteractionTitle = () => {
 
     case FlowType.CredentialShare:
       const initiatorName = counterparty.publicProfile?.name
-      const { self_issued, service_issued } = interactionDetails.credentials
-      const firstRequestedAttr = self_issued[0]
-      return isSingleAttributeRequest(self_issued, service_issued)
+      const missingAttr = getSingleMissingAttribute()
+      return missingAttr
         ? strings.SERVICE_REQUESTS_ATTRIBUTE(
             initiatorName ? initiatorName : strings.SERVICE,
-            ATTR_UI_NAMES[attrTypeToAttrKey(firstRequestedAttr)],
+            ATTR_UI_NAMES[missingAttr],
           )
         : strings.INCOMING_REQUEST
 

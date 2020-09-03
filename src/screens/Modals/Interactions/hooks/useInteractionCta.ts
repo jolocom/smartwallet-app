@@ -7,18 +7,20 @@ import { getInteractionDetails } from '~/modules/interaction/selectors'
 import { AuthorizationDetailsI } from '~/modules/interaction/types'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import { getInteractionType } from '~/modules/interaction/selectors'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 
 export default function useInteractionCta() {
   const interactionType = useSelector(getInteractionType)
   const { action } = useRootSelector<AuthorizationDetailsI | { action: null }>(
     getInteractionDetails,
   )
+  const { getSingleMissingAttribute } = useCredentialShareFlow()
 
   switch (interactionType) {
     case FlowType.Authentication:
       return strings.AUTHENTICATE
     case FlowType.CredentialShare:
-      return strings.SHARE
+      return getSingleMissingAttribute() ? strings.ADD_INFO : strings.SHARE
     case FlowType.CredentialOffer:
       return strings.RECEIVE
     case FlowType.Authorization:

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import {
   getFirstShareDocument,
   getSelectedShareCredentials,
 } from '~/modules/interaction/selectors'
-import { useSelector, useDispatch } from 'react-redux'
 import { getShareAttributes } from '~/modules/interaction/selectors'
 import AttributesWidget from '~/components/AttributesWidget'
-import { selectShareCredential } from '~/modules/interaction/actions'
 import CredentialCard from '../CredentialCard'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
@@ -21,6 +21,7 @@ const CredentialShareBas = () => {
     getPreselectedAttributes,
     handleCreateAttribute,
     handleSelectCredential,
+    getSingleMissingAttribute,
   } = useCredentialShareFlow()
 
   useEffect(() => {
@@ -32,9 +33,17 @@ const CredentialShareBas = () => {
     handleSelectCredential(getPreselectedAttributes())
   }, [attributes])
 
-  return (
-    <BasWrapper>
-      {!shareDocument ? (
+  const renderContent = () => {
+    if (shareDocument) {
+      return (
+        <CredentialCard>
+          <Header color={Colors.black}>{shareDocument.type}</Header>
+        </CredentialCard>
+      )
+    } else if (getSingleMissingAttribute()) {
+      return null
+    } else {
+      return (
         <AttributesWidget
           attributes={attributes}
           onCreateNewAttr={handleCreateAttribute}
@@ -42,13 +51,11 @@ const CredentialShareBas = () => {
           selectedAttributes={selectedShareCredentials}
           isSelectable={true}
         />
-      ) : (
-        <CredentialCard>
-          <Header color={Colors.black}>{shareDocument.type}</Header>
-        </CredentialCard>
-      )}
-    </BasWrapper>
-  )
+      )
+    }
+  }
+
+  return <BasWrapper>{renderContent()}</BasWrapper>
 }
 
 export default CredentialShareBas

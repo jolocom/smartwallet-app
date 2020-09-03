@@ -6,7 +6,7 @@ import {
   getInteractionDetails,
   getShareCredentialsBySection,
 } from '~/modules/interaction/selectors'
-import { AttrKeys } from '~/types/credentials'
+import { AttrKeys, attrTypeToAttrKey } from '~/types/credentials'
 import { useRootSelector } from '../useRootSelector'
 import { CredShareI, IntermediaryState } from '~/modules/interaction/types'
 import {
@@ -21,7 +21,7 @@ export const useCredentialShareFlow = () => {
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getShareAttributes)
   const {
-    credentials: { service_issued },
+    credentials: { service_issued, self_issued },
   } = useRootSelector<CredShareI>(getInteractionDetails)
   const { documents, other } = useSelector(getShareCredentialsBySection)
 
@@ -80,6 +80,15 @@ export const useCredentialShareFlow = () => {
     dispatch(selectShareCredential(credential))
   }
 
+  const getSingleMissingAttribute = (): AttrKeys | null => {
+    const isSingleAttribute = !service_issued.length && self_issued.length === 1
+    const attrKey = attrTypeToAttrKey(self_issued[0])
+    const typeAttributes = attributes[attrKey]
+    const isMissing = !typeAttributes || !typeAttributes.length
+
+    return isSingleAttribute && isMissing ? attrKey : null
+  }
+
   return {
     assembleShareResponseToken,
     getPreselectedAttributes,
@@ -87,5 +96,6 @@ export const useCredentialShareFlow = () => {
     isFirstCredential,
     handleCreateAttribute,
     handleSelectCredential,
+    getSingleMissingAttribute,
   }
 }

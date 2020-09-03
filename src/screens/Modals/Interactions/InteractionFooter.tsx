@@ -5,16 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 
-import {
-  resetInteraction,
-  setIntermediaryState,
-  setAttributeInputKey,
-} from '~/modules/interaction/actions'
-import {
-  getIsFullScreenInteraction,
-  getServiceIssuedCreds,
-  getAttributeInputKey,
-} from '~/modules/interaction/selectors'
+import { resetInteraction } from '~/modules/interaction/actions'
+import { getIsFullScreenInteraction } from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
@@ -24,7 +16,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
-import { getShareAttributes } from '~/modules/interaction/selectors'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -44,23 +36,18 @@ interface Props {
 
 const InteractionFooter: React.FC<Props> = ({ disabled }) => {
   const dispatch = useDispatch()
-  const serviceIssuedCreds = useSelector(getServiceIssuedCreds)
-  const attributesToShare = useSelector(getShareAttributes)
   const interactionCTA = useInteractionCta()
   const handleFlowSubmit = useHandleFlowSubmit()
   const loader = useLoader()
-  const attributeInputKey = useSelector(getAttributeInputKey)
-
-  // NOTE: for now this will alway return false because we don't set attributesToShare yet
-  const showIntermediaryScreen =
-    Object.keys(attributesToShare).length === 1 &&
-    attributesToShare[Object.keys(attributesToShare)[0]] === [] &&
-    serviceIssuedCreds.length === 0
+  const {
+    getSingleMissingAttribute,
+    handleCreateAttribute,
+  } = useCredentialShareFlow()
 
   const handleSubmit = async () => {
-    if (showIntermediaryScreen) {
-      dispatch(setIntermediaryState(IntermediaryState.showing))
-      dispatch(setAttributeInputKey(attributeInputKey))
+    const missingAttribute = getSingleMissingAttribute()
+    if (missingAttribute) {
+      handleCreateAttribute(missingAttribute)
     } else {
       await loader(
         async () => {
