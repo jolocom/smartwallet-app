@@ -148,6 +148,18 @@ export const getOfferCredentialsBySection = createSelector<
   ),
 )
 
+export const getFirstShareDocument = createSelector<
+  RootReducerI,
+  CredShareI,
+  UICredential[],
+  ShareUICredential | null
+>([getInteractionDetails, getAllCredentials], (details, credentials) => {
+  const firstType = details.credentials.service_issued[0]
+  const firstCredential = credentials.find((c) => c.type === firstType)
+
+  return firstCredential ? uiCredentialToShareCredential(firstCredential) : null
+})
+
 export const getShareCredentialsBySection = createSelector<
   RootReducerI,
   CredShareI,
