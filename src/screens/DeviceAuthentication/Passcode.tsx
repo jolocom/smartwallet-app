@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import Keychain from 'react-native-keychain'
 
-import Header, { HeaderSizes } from '~/components/Header'
+import Header from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
 import PasscodeInput from '~/components/PasscodeInput'
 import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
