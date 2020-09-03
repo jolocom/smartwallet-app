@@ -1,7 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
-import { getInteractionType } from '~/modules/interaction/selectors'
+import {
+  getInteractionType,
+  getSelectedShareCredentials,
+} from '~/modules/interaction/selectors'
 import {
   resetInteraction,
   setInteractionDetails,
@@ -9,6 +12,7 @@ import {
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { Alert } from 'react-native'
 import { useSyncCredentials } from '../credentials'
+import { useInteraction } from '../sdk'
 
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
@@ -21,6 +25,8 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
+  const interaction = useInteraction()
+  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const syncCredentials = useSyncCredentials()
 
   if (interactionType === FlowType.Authentication) {
@@ -32,8 +38,20 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
       // TODO: add onAuthorization functionality here
     }
   } else if (interactionType === FlowType.CredentialShare) {
-    return async function shareCredentials() {
-      // TODO: add onCredShare functionality here
+    return async () => {
+      const mappedSelection = Object.values(selectedShareCredentials).map(
+        (id) => ({
+          id,
+        }),
+      )
+      const response = await interaction.createCredentialResponse(
+        // @ts-ignore is fixed in future SDK version. Should work this way, since we only need the @id
+        mappedSelection,
+      )
+      await interaction.processInteractionToken(response)
+      await interaction.send(response)
+      Alert.alert('Credentials shared successfully')
+      dispatch(resetInteraction())
     }
   } else if (interactionType === FlowType.CredentialOffer) {
     return async () => {
