@@ -3,7 +3,7 @@ import { fireEvent } from '@testing-library/react-native'
 
 import Recovery from '~/screens/LoggedOut/Recovery'
 import { strings } from '~/translations/strings'
-import { renderWithSafeArea } from './utils/renderWithSafeArea'
+import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const validSeedKeys = [
   'tree',

@@ -4,10 +4,10 @@ import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
 
 import Passcode from '~/screens/DeviceAuthentication/Passcode'
 import { strings } from '~/translations/strings'
-import { renderWithSafeArea } from './utils/renderWithSafeArea'
+import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
-jest.mock('../src/hooks/useRedirectTo')
+jest.mock('../../../src/hooks/useRedirectTo')
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
 }))

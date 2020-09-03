@@ -1,8 +1,6 @@
 import React from 'react'
 import { ErrorFallback } from '~/components/ErrorFallback'
-import { renderWithSafeArea } from './utils/renderWithSafeArea'
-import { render } from '@testing-library/react-native'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 describe('ErrorFallback', () => {
   const defaultProps = {
