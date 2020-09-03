@@ -24,7 +24,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
-import { getShareAttributes } from '~/modules/attributes/selectors'
+import { getShareAttributes } from '~/modules/interaction/selectors'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { View } from 'react-native'
 import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -20,7 +19,7 @@ import {
   setAttributeInputKey,
   selectShareCredential,
 } from '~/modules/interaction/actions'
-import { getShareAttributes } from '~/modules/attributes/selectors'
+import { getShareAttributes } from '~/modules/interaction/selectors'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import InteractionFooter from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'

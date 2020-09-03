@@ -10,9 +10,13 @@ import {
   CredentialsBySection,
   OfferUICredential,
   ShareCredentialsBySection,
+  ShareUICredential,
+  attrTypeToAttrKey,
+  AttrKeys,
 } from '~/types/credentials'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
 import { getCredentialSection } from '~/utils/credentialsBySection'
+import { getAttributes } from '../attributes/selectors'
 
 export const getAvailablaAttributesToShare = (
   state: RootReducerI,
@@ -50,9 +54,43 @@ export const getServiceIssuedCreds = (state: RootReducerI) =>
     ? state.interaction.details.credentials.service_issued
     : []
 
+export const getShareAttributes = createSelector<
+  RootReducerI,
+  AttrsState<AttributeI>,
+  CredShareI,
+  AttrsState<AttributeI>
+>([getAttributes, getInteractionDetails], (attributes, shareDetails) => {
+  //FIXME @clauxx If we have to do this, then the pattern we're using is bad
+  if (!shareDetails.credentials) return {}
+
+  const {
+    credentials: { self_issued: requestedAttributes },
+  } = shareDetails
+  //FIXME @clauxx If we have to do this, then the pattern we're using is bad
+  if (!requestedAttributes) return {}
+
+  const interactionAttributues = !requestedAttributes.length
+    ? {}
+    : requestedAttributes.reduce<{
+        [key: string]: AttributeI[]
+      }>((acc, v) => {
+        //FIXME type assertion
+        const value = attrTypeToAttrKey(v) as AttrKeys
+        acc[value] = attributes[value] || []
+        return acc
+      }, {})
+
+  return interactionAttributues
+})
+
 export const getIsFullScreenInteraction = createSelector(
-  [getInteractionType, getIntermediaryState, getInteractionCredentials],
-  (type, intermediaryState, credentials) => {
+  [
+    getInteractionType,
+    getIntermediaryState,
+    getInteractionCredentials,
+    getShareAttributes,
+  ],
+  (type, intermediaryState, credentials, shareAttributes) => {
     if (
       intermediaryState !== IntermediaryState.absent ||
       type === FlowType.Authentication ||
@@ -64,6 +102,17 @@ export const getIsFullScreenInteraction = createSelector(
       credentials.self_issued.length &&
       !credentials.service_issued.length
     ) {
+      const availableAttributes = Object.values(shareAttributes).reduce<
+        AttributeI[]
+      >((acc, arr) => {
+        if (!arr) return acc
+        return acc.concat(arr)
+      }, [])
+
+      //TODO: add breakpoints
+      if (availableAttributes.length > 6) {
+        return true
+      }
       return false
     } else if (
       type === FlowType.CredentialShare &&
