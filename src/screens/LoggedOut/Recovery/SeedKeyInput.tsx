@@ -80,9 +80,17 @@ const SeedKeyInput: React.FC = () => {
   }
 
   // after the phrase is complete - keyboard hides, to bring keyoboard back when user moves across keys in phrase
+  const renderedTimes = useRef(0)
   useEffect(() => {
-    if (!inputRef.current?.isFocused()) {
-      inputRef.current?.focus()
+    renderedTimes.current++
+    if (renderedTimes) {
+      if (
+        inputRef.current &&
+        inputRef.current.isFocused &&
+        !inputRef.current.isFocused()
+      ) {
+        inputRef.current?.focus()
+      }
     }
   }, [currentWordIdx])
 
@@ -188,6 +196,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'black',
     height: BP({
+      xsmall: 50,
       small: 50,
       medium: 80,
       large: 80,
