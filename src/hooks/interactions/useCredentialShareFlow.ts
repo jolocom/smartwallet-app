@@ -1,8 +1,91 @@
-import { useDispatch } from 'react-redux'
-import { useSDK, useInteraction } from '../sdk'
+import { useSelector, useDispatch } from 'react-redux'
+import { useInteraction } from '../sdk'
+import {
+  getSelectedShareCredentials,
+  getShareAttributes,
+  getInteractionDetails,
+  getShareCredentialsBySection,
+} from '~/modules/interaction/selectors'
+import { AttrKeys } from '~/types/credentials'
+import { useRootSelector } from '../useRootSelector'
+import { CredShareI, IntermediaryState } from '~/modules/interaction/types'
+import {
+  setIntermediaryState,
+  setAttributeInputKey,
+  selectShareCredential,
+} from '~/modules/interaction/actions'
 
 export const useCredentialShareFlow = () => {
+  const dispatch = useDispatch()
   const interaction = useInteraction()
+  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
+  const attributes = useSelector(getShareAttributes)
+  const {
+    credentials: { service_issued },
+  } = useRootSelector<CredShareI>(getInteractionDetails)
+  const { documents, other } = useSelector(getShareCredentialsBySection)
 
-  //TODO: add submit methods
+  const assembleShareResponseToken = async () => {
+    const mappedSelection = Object.values(selectedShareCredentials).map(
+      (id) => ({
+        id,
+      }),
+    )
+    const response = await interaction.createCredentialResponse(
+      // @ts-ignore is fixed in future SDK version. Should work this way, since we only need the @id
+      mappedSelection,
+    )
+    await interaction.processInteractionToken(response)
+    await interaction.send(response)
+  }
+
+  const getPreselectedAttributes = () =>
+    Object.keys(attributes).reduce<{
+      [key: string]: string
+    }>((acc, v) => {
+      const value = v as AttrKeys
+      if (!acc[value]) {
+        const attr = attributes[value] || []
+        acc[value] = attr.length ? attr[0].id : ''
+      }
+      return acc
+    }, {})
+
+  const selectionReady = () => {
+    const allAttributes = Object.keys(attributes).every((t) =>
+      Object.keys(selectedShareCredentials).includes(t),
+    )
+
+    const allCredentials = service_issued.every((t) =>
+      Object.keys(selectedShareCredentials).includes(t),
+    )
+
+    return allAttributes && allCredentials
+  }
+
+  const isFirstCredential = (id: string) => {
+    if (documents.length) {
+      return id === documents[0].credentials[0].id
+    } else {
+      return id === other[0].credentials[0].id
+    }
+  }
+
+  const handleCreateAttribute = (sectionKey: AttrKeys) => {
+    dispatch(setIntermediaryState(IntermediaryState.showing))
+    dispatch(setAttributeInputKey(sectionKey))
+  }
+
+  const handleSelectCredential = (credential: { [key: string]: string }) => {
+    dispatch(selectShareCredential(credential))
+  }
+
+  return {
+    assembleShareResponseToken,
+    getPreselectedAttributes,
+    selectionReady,
+    isFirstCredential,
+    handleCreateAttribute,
+    handleSelectCredential,
+  }
 }

@@ -110,7 +110,7 @@ export const getIsFullScreenInteraction = createSelector(
       }, [])
 
       //TODO: add breakpoints
-      if (availableAttributes.length > 6) {
+      if (availableAttributes.length > 3) {
         return true
       }
       return false
