@@ -18,12 +18,11 @@ import AttributesWidget from '~/components/AttributesWidget'
 import {
   setIntermediaryState,
   setAttributeInputKey,
-  selectAttr,
+  selectShareCredential,
 } from '~/modules/interaction/actions'
 import { getShareAttributes } from '~/modules/attributes/selectors'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import InteractionFooter from '../InteractionFooter'
-import { setAttrs } from '~/modules/attributes/actions'
 
 const CredentialShareFas = () => {
   const dispatch = useDispatch()
@@ -68,7 +67,7 @@ const CredentialShareFas = () => {
       return acc
     }, {})
 
-    dispatch(selectAttr(preselectedAttrs))
+    dispatch(selectShareCredential(preselectedAttrs))
   }, [attributes])
 
   useEffect(() => {
@@ -99,7 +98,7 @@ const CredentialShareFas = () => {
               hasInstruction={instructionVisible && isFirstCredential(cred.id)}
               onSelect={() => {
                 shouldShowInstruction && setShouldShowInstruction(false)
-                dispatch(selectAttr({ [cred.type]: cred.id }))
+                dispatch(selectShareCredential({ [cred.type]: cred.id }))
               }}
               selected={selectedShareCredentials[cred.type] === cred.id}
             >
@@ -139,7 +138,9 @@ const CredentialShareFas = () => {
                 dispatch(setIntermediaryState(IntermediaryState.showing))
                 dispatch(setAttributeInputKey(sectionKey))
               }}
-              onSelect={(key, id) => dispatch(selectAttr({ [key]: id }))}
+              onSelect={(key, id) =>
+                dispatch(selectShareCredential({ [key]: id }))
+              }
               selectedAttributes={selectedShareCredentials}
               isSelectable={true}
             />

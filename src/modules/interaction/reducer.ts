@@ -4,7 +4,6 @@ import {
   InteractionStateI,
 } from './types'
 import { Action } from '~/types/actions'
-import { ActionI } from '~/types/action'
 
 const initialState: InteractionStateI = {
   details: {},
@@ -22,7 +21,7 @@ const reducer = (
       return { ...state, details: { ...state.details, ...action.payload } }
     case InteractionActions.resetInteraction:
       return initialState
-    case InteractionActions.selectAttr:
+    case InteractionActions.selectShareCredential:
       return {
         ...state,
         selectedShareCredentials: {

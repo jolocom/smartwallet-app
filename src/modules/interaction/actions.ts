@@ -9,15 +9,10 @@ export const resetInteraction = createAction(
   InteractionActions.resetInteraction,
 )
 
-export const setAvailableAttributesToShare = createAction(
-  InteractionActions.setAvailableAttributesToShare,
+export const selectShareCredential = createAction(
+  InteractionActions.selectShareCredential,
 )
 
-export const setSelectedAttributes = createAction(
-  InteractionActions.setSelectedAttributes,
-)
-
-export const selectAttr = createAction(InteractionActions.selectAttr)
 export const setIntermediaryState = createAction(
   InteractionActions.setIntermediaryState,
 )

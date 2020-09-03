@@ -6,9 +6,7 @@ import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
-  setAvailableAttributesToShare = 'setAvailableAttributesToShare',
-  setSelectedAttributes = 'setSelectedAttributes',
-  selectAttr = 'selectAttr',
+  selectShareCredential = 'selectShareCredential',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputKey = 'setAttributeInputKey',
 }
