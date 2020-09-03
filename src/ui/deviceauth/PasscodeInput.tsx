@@ -89,10 +89,9 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
     let isCurrent = true
-    let id
     const updateSelectedIndex = async () => {
       // it is implemented with delay to be able to preview digits and not seeing asterics straight away
-      id = setTimeout(() => {
+      setTimeout(() => {
         isCurrent &&
           setSelectedIndex(() => {
             if (digits.length < PASSCODE_LENGTH.length) {

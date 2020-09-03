@@ -25,6 +25,8 @@ describe('Account action creators', () => {
         isLocalAuthVisible: false,
         isPopup: false,
         isAppLocked: false,
+        isLockVisible: false,
+        isPINInstructionVisible: false
       },
       claims: {
         selected: {

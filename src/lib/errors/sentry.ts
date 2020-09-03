@@ -3,7 +3,7 @@ import VersionNumber from 'react-native-version-number'
 import { sentryDSN } from 'src/config'
 import { ErrorReport } from './index'
 
-export function reportErrorToSentry(report: ErrorReport, extraData?: object) {
+export function reportErrorToSentry(report: ErrorReport, extraData?: Record<string, unknown>) {
   Sentry.withScope(scope => {
     if (extraData) scope.setExtras(extraData)
     Sentry.captureException(report.error)
