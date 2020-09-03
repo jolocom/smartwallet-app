@@ -75,7 +75,12 @@ describe('Account action creators', () => {
     const getGenericPassword = require('react-native-keychain')
       .getGenericPassword
     getGenericPassword.mockReturnValueOnce('MOCK PIN')
+
+    const asyncStorageGetItem: jest.Mock =
+      require('@react-native-community/async-storage').default.getItem
+
     await mockStore.dispatch(accountActions.checkIdentityExists)
+    expect(asyncStorageGetItem).toHaveBeenCalledTimes(1)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 
