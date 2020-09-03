@@ -1,8 +1,9 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react-native'
+import { fireEvent } from '@testing-library/react-native'
 
 import Recovery from '~/screens/LoggedOut/Recovery'
 import { strings } from '~/translations/strings'
+import { renderWithSafeArea } from './utils/renderWithSafeArea'
 
 const validSeedKeys = [
   'tree',
@@ -19,7 +20,9 @@ const validSeedKeys = [
 ]
 
 describe('User on a Recovery screen', () => {
-  const { getByText, getByTestId, getAllByTestId } = render(<Recovery />)
+  const { getByText, getByTestId, getAllByTestId } = renderWithSafeArea(
+    <Recovery />,
+  )
 
   test('sees screen with initial state', () => {
     expect(getByText(strings.RECOVERY)).toBeDefined()

@@ -3,6 +3,7 @@ import { render, fireEvent } from '@testing-library/react-native'
 
 import Passcode from '~/screens/DeviceAuthentication/Passcode'
 import { strings } from '~/translations/strings'
+import { renderWithSafeArea } from './utils/renderWithSafeArea'
 
 jest.mock('../src/hooks/useRedirectTo')
 jest.mock('react-redux', () => ({
@@ -11,7 +12,9 @@ jest.mock('react-redux', () => ({
 jest.useFakeTimers()
 
 test('It displays Create or Verify PIN screen correctly', async () => {
-  const { getByText, getByTestId, getAllByTestId } = render(<Passcode />)
+  const { getByText, getByTestId, getAllByTestId } = renderWithSafeArea(
+    <Passcode />,
+  )
 
   expect(getByText(strings.CREATE_PASSCODE)).toBeDefined()
 
