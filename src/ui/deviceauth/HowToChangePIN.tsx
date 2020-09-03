@@ -14,7 +14,7 @@ import { ThunkDispatch } from 'src/store'
 import { Colors } from './colors'
 import LocalModal from './LocalModal'
 import { RootState } from 'src/reducers'
-import BP from './utils/breakpoints'
+import { BP } from '../../styles/breakpoints'
 import { accountActions, navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 

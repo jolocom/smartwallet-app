@@ -17,7 +17,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { CloseIcon } from 'src/resources'
 
 import strings from '../../locales/strings'
-import { NavigationScreenProp } from 'react-navigation'
 
 interface PropsI {
   navigation: NavigationScreenProp<{}, { isPINrecovery: boolean }>

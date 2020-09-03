@@ -128,7 +128,7 @@ export default class App extends React.PureComponent<
     return (
       <View style={styles.appWrapper}>
         {!ready ? (
-          <LoadingSpinner />
+          <View />
         ) : (
           <Provider store={store}>
             <AppWrap>
