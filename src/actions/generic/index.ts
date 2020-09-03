@@ -6,7 +6,7 @@ import { ThunkAction } from '../../store'
 import settingKeys from '../../ui/settings/settingKeys'
 
 // TODO use the settings items from storage
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 // TODO don't depend on the crypto lib, perhaps use the rust crypto utils?
 import crypto from 'crypto'
 
