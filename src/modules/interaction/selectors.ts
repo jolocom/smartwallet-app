@@ -169,6 +169,7 @@ export const getShareCredentialsBySection = createSelector<
   return details.credentials.service_issued.reduce<ShareCredentialsBySection>(
     (acc, type) => {
       const creds = credentials.filter((cred) => cred.type === type)
+      if (!creds.length) return acc
 
       // NOTE: we assume the @renderAs property is the same for all credentials
       // of the same type

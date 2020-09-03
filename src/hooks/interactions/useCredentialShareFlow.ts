@@ -14,6 +14,7 @@ import {
   setAttributeInputKey,
   selectShareCredential,
 } from '~/modules/interaction/actions'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 export const useCredentialShareFlow = () => {
   const dispatch = useDispatch()
@@ -81,6 +82,8 @@ export const useCredentialShareFlow = () => {
   }
 
   const getSingleMissingAttribute = (): AttrKeys | null => {
+    if (interaction.flow.type !== FlowType.CredentialShare) return null
+
     const isSingleAttribute = !service_issued.length && self_issued.length === 1
     const attrKey = attrTypeToAttrKey(self_issued[0])
     const typeAttributes = attributes[attrKey]
