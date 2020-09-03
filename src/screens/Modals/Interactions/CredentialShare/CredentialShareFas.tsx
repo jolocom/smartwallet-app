@@ -23,6 +23,7 @@ import {
 import { getShareAttributes } from '~/modules/attributes/selectors'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import InteractionFooter from '../InteractionFooter'
+import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 
 const CredentialShareFas = () => {
   const dispatch = useDispatch()
@@ -113,25 +114,7 @@ const CredentialShareFas = () => {
     <>
       <FasWrapper>
         {!!Object.keys(attributes).length && (
-          <View
-            style={{
-              marginHorizontal: 17,
-              paddingHorizontal: 20,
-              paddingTop: 20,
-              backgroundColor: 'rgb(9,9,9)',
-              borderRadius: 20,
-              marginBottom: 46,
-              //shadows
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-              shadowOffset: {
-                width: 0,
-                height: -2,
-              },
-              shadowRadius: 14,
-              shadowOpacity: 1,
-              elevation: 10,
-            }}
-          >
+          <AttributeWidgetWrapper>
             <AttributesWidget
               attributes={attributes}
               onCreateNewAttr={(sectionKey) => {
@@ -144,7 +127,7 @@ const CredentialShareFas = () => {
               selectedAttributes={selectedShareCredentials}
               isSelectable={true}
             />
-          </View>
+          </AttributeWidgetWrapper>
         )}
         <InteractionSection visible={!!documents.length} title={'Documents'}>
           {renderCredentials(documents)}
