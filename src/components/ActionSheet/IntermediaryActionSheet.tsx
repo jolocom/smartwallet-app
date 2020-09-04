@@ -1,11 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import {
-  TextInput,
-  Alert,
-  KeyboardAvoidingView,
-  StyleSheet,
-  View,
-} from 'react-native'
+import { TextInput, Alert, StyleSheet, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
@@ -16,7 +10,6 @@ import { ATTR_KEYBOARD_TYPE } from '~/types/credentials'
 import { useLoader } from '~/hooks/useLoader'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
-import { useKeyboard } from '~/screens/LoggedOut/Recovery/useKeyboard'
 
 const IntermediaryActionSheet = () => {
   const dispatch = useDispatch()

@@ -3,28 +3,22 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import {
   getIntermediaryState,
-  getAttributeInputKey,
   getInteractionType,
   getInteractionCounterparty,
 } from '~/modules/interaction/selectors'
 import truncateDid from '~/utils/truncateDid'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
-import { ATTR_UI_NAMES } from '~/types/credentials'
 
 const useInteractionDescription = () => {
   const counterparty = useSelector(getInteractionCounterparty)
   const intermediaryState = useSelector(getIntermediaryState)
   const interactionType = useSelector(getInteractionType)
-  const inputType = useSelector(getAttributeInputKey)
   const serviceName = counterparty.publicProfile?.name || strings.SERVICE
   const isAnonymous = !counterparty.publicProfile
 
   if (intermediaryState === IntermediaryState.showing) {
-    if (!inputType) throw new Error('InputType not found')
-    return strings.YOU_WILL_IMMIDIATELY_FIND_YOUR_DOC_IN_THE_PERSONAL_INFO_SECTION(
-      ATTR_UI_NAMES[inputType],
-    )
+    return strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
   }
 
   if (isAnonymous)
