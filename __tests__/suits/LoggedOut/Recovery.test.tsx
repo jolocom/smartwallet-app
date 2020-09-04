@@ -20,11 +20,10 @@ const validSeedKeys = [
 ]
 
 describe('User on a Recovery screen', () => {
-  const { getByText, getByTestId, getAllByTestId } = renderWithSafeArea(
-    <Recovery />,
-  )
-
   test('sees screen with initial state', () => {
+    const { getByText, getByTestId, getAllByTestId } = renderWithSafeArea(
+      <Recovery />,
+    )
     expect(getByText(strings.RECOVERY)).toBeDefined()
     expect(getByText(strings.START_ENTERING_SEED_PHRASE)).toBeDefined()
     expect(getByTestId('seedphrase-input')).toBeDefined()
@@ -34,10 +33,12 @@ describe('User on a Recovery screen', () => {
   })
 
   test('can add a seed key to a phrase', async () => {
+    const { getByText, getByTestId, getAllByTestId } = renderWithSafeArea(
+      <Recovery />,
+    )
     const input = getByTestId('seedphrase-input')
 
-    fireEvent.focus(input)
-
+    fireEvent(input, 'focus')
     // test if suggestions are displayed when keyboard is up
     const suggestions = getByTestId('suggestions-list')
     expect(suggestions).toBeDefined()
@@ -52,16 +53,16 @@ describe('User on a Recovery screen', () => {
     expect(suggestions.props.data).toHaveLength(0)
     expect(input.props.value).toBe('')
 
-    fireEvent.submitEditing(input, { nativeEvent: { text: 'you' } })
+    fireEvent(input, 'submitEditing', { nativeEvent: { text: 'you' } })
     expect(getByText('1/12')).toBeDefined()
 
     // when trying to submit something that doesn't match anything form bip39
-    fireEvent.submitEditing(input, { nativeEvent: { text: 'treee' } })
+    fireEvent(input, 'submitEditing', { nativeEvent: { text: 'treee' } })
     expect(getByText('1/12')).toBeDefined()
 
     validSeedKeys.forEach((key) => {
       fireEvent.changeText(input, key)
-      fireEvent.submitEditing(input, { nativeEvent: { text: key } })
+      fireEvent(input, 'submitEditing', { nativeEvent: { text: key } })
     })
     expect(getByText('12/12')).toBeDefined()
   })
