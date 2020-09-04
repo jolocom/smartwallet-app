@@ -49,7 +49,7 @@ export const Lock = () => {
   }, [pin])
 
   const handleAppUnlock = () => {
-    if (keychainPin === pin) {
+    if (keychainPin.toString() === pin) {
       dispatch(unlockApp())
     } else {
       setHasError(true)

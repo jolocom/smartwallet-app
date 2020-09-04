@@ -5,6 +5,8 @@ import Recovery from '~/screens/LoggedOut/Recovery'
 import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
+jest.useFakeTimers()
+
 const validSeedKeys = [
   'tree',
   'ready',
