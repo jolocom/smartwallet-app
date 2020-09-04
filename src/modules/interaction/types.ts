@@ -42,31 +42,19 @@ export interface NotActiveInteractionDetailsI {
   flowType: null
 }
 
-interface AuthCommonI extends InteractionCommonI {
-  credentials?: never
-}
-
-export interface AuthenticationDetailsI extends AuthCommonI {
+export interface AuthenticationDetailsI extends InteractionCommonI {
   flowType: FlowType.Authentication
   description: string
-  image?: never
-  action?: never
 }
 
-export interface AuthorizationDetailsI extends AuthCommonI {
+export interface AuthorizationDetailsI extends InteractionCommonI {
   flowType: FlowType.Authorization
   description?: string
   image?: string
   action: string
 }
 
-interface CredCommonI extends InteractionCommonI {
-  description?: never
-  image?: never
-  action?: never
-}
-
-export interface CredShareI extends CredCommonI {
+export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
   credentials: {
     self_issued: string[]
@@ -80,10 +68,9 @@ interface ServiceIssuedCredI {
   renderInfo?: CredentialOfferRenderInfo
 }
 
-export interface CredOfferI extends CredCommonI {
+export interface CredOfferI extends InteractionCommonI {
   flowType: FlowType.CredentialOffer
   credentials: {
-    self_issued?: never
     service_issued: ServiceIssuedCredI[]
   }
 }
