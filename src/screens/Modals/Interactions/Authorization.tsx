@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image } from 'react-native'
+import { Image, View, StyleSheet } from 'react-native'
 
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import { useRootSelector } from '~/hooks/useRootSelector'
@@ -13,9 +13,28 @@ const Authorization = () => {
 
   return (
     <BasWrapper>
-      <Image source={{ uri: imageURL }} style={{ width: 260, height: 230 }} />
+      {imageURL && (
+        <View style={styles.imageWrapper}>
+          <Image
+            resizeMode="center"
+            source={{ uri: imageURL }}
+            style={styles.image}
+          />
+        </View>
+      )}
     </BasWrapper>
   )
 }
+
+const styles = StyleSheet.create({
+  imageWrapper: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  image: {
+    width: 260,
+    height: 230,
+  },
+})
 
 export default Authorization
