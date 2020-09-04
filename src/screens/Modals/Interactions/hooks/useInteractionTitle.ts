@@ -3,15 +3,17 @@ import {
   getIntermediaryState,
   getAttributeInputKey,
   getInteractionDetails,
-  isAuthDetails,
-  isAuthzDetails,
-  isCredOfferDetails,
-  isCredShareDetails,
 } from '~/modules/interaction/selectors'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import { ATTR_UI_NAMES } from '~/types/credentials'
+import {
+  isAuthDetails,
+  isAuthzDetails,
+  isCredOfferDetails,
+  isCredShareDetails,
+} from '~/modules/interaction/guards'
 
 const isSingleAttributeRequest = (
   selfIssued: string[],
@@ -25,10 +27,12 @@ const useInteractionTitle = () => {
   const intermediaryState = useSelector(getIntermediaryState)
   const inputType = useSelector(getAttributeInputKey)
 
-  if (intermediaryState === IntermediaryState.showing)
-    return strings.SAVE_YOUR_ATTRIBUTE(inputType)
+  if (intermediaryState === IntermediaryState.showing) {
+    if (!inputType) throw new Error('inputType not found')
 
-  //TODO: @clauss add strings
+    return strings.SAVE_YOUR_ATTRIBUTE(inputType)
+  }
+
   if (isAuthDetails(details)) {
     return strings.IS_IT_REALLY_YOU
   } else if (isAuthzDetails(details)) {

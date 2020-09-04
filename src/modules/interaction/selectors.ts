@@ -4,42 +4,19 @@ import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
 import {
   IntermediaryState,
-  CredOfferI,
   InteractionCredentialsBySection,
   InteractionDetails,
-  AuthorizationDetailsI,
-  AuthenticationDetailsI,
-  CredShareI,
   SelectedAttributesT,
 } from './types'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
-
-export function isAuthDetails(
-  details: InteractionDetails,
-): details is AuthenticationDetailsI {
-  return details.flowType === FlowType.Authentication
-}
-export function isAuthzDetails(
-  details: InteractionDetails,
-): details is AuthorizationDetailsI {
-  return details.flowType === FlowType.Authorization
-}
-export function isCredOfferDetails(
-  details: InteractionDetails,
-): details is CredOfferI {
-  return details.flowType === FlowType.CredentialOffer
-}
-export function isCredShareDetails(
-  details: InteractionDetails,
-): details is CredShareI {
-  return details.flowType === FlowType.CredentialShare
-}
-export function isNotActiveInteraction(
-  details: InteractionDetails,
-): details is { flowType: null } {
-  return details.flowType === null
-}
+import {
+  isNotActiveInteraction,
+  isCredOfferDetails,
+  isCredShareDetails,
+  isAuthDetails,
+  isAuthzDetails,
+} from './guards'
 
 export const getInteractionAttributes = (
   state: RootReducerI,
@@ -55,12 +32,6 @@ export const getIntermediaryState = (state: RootReducerI) =>
 
 export const getAttributeInputKey = (state: RootReducerI) =>
   state.interaction.attributeInputKey
-
-export const getCredentials = (state: RootReducerI) => {
-  if (!isNotActiveInteraction(state.interaction.details)) {
-    return state.interaction.details.credentials
-  }
-}
 
 export const getInteractionId = (state: RootReducerI): string | undefined => {
   if (!isNotActiveInteraction(state.interaction.details)) {
