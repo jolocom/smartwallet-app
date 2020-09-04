@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import * as Keychain from 'react-native-keychain'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
@@ -19,7 +19,7 @@ import { CloseIcon } from 'src/resources'
 import strings from '../../locales/strings'
 
 interface PropsI {
-  navigation: NavigationScreenProp<{}, { isPINrecovery: boolean }>
+  navigation: NavigationScreenProp<{},{}>
 }
 
 const ChangePin: React.FC<PropsI> = ({ navigation }) => {
@@ -28,15 +28,7 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
   const [hasError, setHasError] = useState(false)
   const [isCreateNew, setIsCreateNew] = useState(false)
 
-  const isPINrecovery = navigation.state.params?.isPINrecovery
-
   const { keychainPin, isLoadingStorage } = useGetStoredAuthValues()
-
-  useEffect(() => {
-    if (isPINrecovery && keychainPin) {
-      setPin(keychainPin)
-    }
-  }, [isPINrecovery, keychainPin])
 
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
@@ -63,16 +55,14 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
         padding: 20,
       }}
     >
-      {!isPINrecovery && (
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={{ padding: 10 }}
-            onPress={e => navigation.goBack()}
-          >
-            <CloseIcon />
-          </TouchableOpacity>
-        </View>
-      )}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={{ padding: 10 }}
+          onPress={e => navigation.goBack()}
+        >
+          <CloseIcon />
+        </TouchableOpacity>
+      </View>
       <PasscodeHeader>
         {hasError
           ? I18n.t(strings.WRONG_PIN)

@@ -1,10 +1,12 @@
 import { ThunkAction } from '../store'
 //import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { navigationActions, accountActions } from './index'
+import { navigationActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { removeNotification } from './notifications'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
+import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
+import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
  // TODO Import ^ from jolocom-lib
 
 export const showSeedPhrase = (): ThunkAction => async (
@@ -61,11 +63,9 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   }
 
   if (recovered) {
-    await dispatch(accountActions.openLock())
-    return dispatch(navigationActions.navigate({
-      routeName: routeList.ChangePIN,
-      params: { isPINrecovery: true },
-    }))
+    const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
+    await resetServiceValuesInKeychain()
+    await dispatch(navigationActions.navigatorResetHome())
   }
 
   return dispatch(navigationActions.navigateBackHome())
