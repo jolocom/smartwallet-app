@@ -8,8 +8,8 @@ import {
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
-import { useSyncCredentials } from '../credentials'
 import { useCredentialShareFlow } from './useCredentialShareFlow'
+import { useSyncCredentials } from '~/hooks/credentials'
 
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)

@@ -17,7 +17,7 @@ export type InteractionDetails =
   | CredShareI
   | CredReceiveI
 
-export interface InteractionStateI {
+export interface InteractionState {
   details: {} | InteractionDetails
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
