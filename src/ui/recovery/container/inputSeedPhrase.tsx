@@ -126,7 +126,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
 
   private onSubmit = async () => {
     const { state } = this.props.navigation
-    if (state.params && state.params.isPINrestoration) {
+    if (state.params && state.params.isPINrecovery) {
       this.props.handleRestoreAccess(this.state.mnemonic)
     } else {
       this.props.recoverIdentity(this.state.mnemonic.join(' '))
