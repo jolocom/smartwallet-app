@@ -10,6 +10,7 @@ describe('Claims container', () => {
   const COMMON_PROPS: ClaimsContainerProps = {
     claimsState: initialState,
     openClaimDetails: jest.fn(),
+    checkLocalAuthSet: jest.fn(),
     did: '',
   }
 
