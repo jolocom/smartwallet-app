@@ -1,3 +1,4 @@
+import { Alert } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
@@ -7,8 +8,7 @@ import {
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
-import { Alert } from 'react-native'
-import { useSyncCredentials } from '../credentials'
+import { useSyncCredentials } from '~/hooks/credentials'
 
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
