@@ -3,11 +3,8 @@ import {
   ATTR_TYPES,
   UICredential,
   ShareUICredential,
-  CredentialSection,
 } from '~/types/credentials'
 import { claimsMetadata } from 'cred-types-jolocom-core'
-
-import { AttributeI } from '~/modules/attributes/types'
 import {
   FlowType,
   CredentialRequestFlowState,
@@ -17,9 +14,10 @@ import {
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { InteractionDetails } from '~/modules/interaction/types'
 
+import { AttributeI } from '~/modules/attributes/types'
+
+//TODO: move to `~/types/credentials`
 export const fieldNames = {
   [AttrKeys.name]: 'name',
   [AttrKeys.emailAddress]: 'email',

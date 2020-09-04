@@ -12,6 +12,7 @@ export enum AttrKeys {
 
 export type AttrKeysUpper = 'NAME' | 'EMAILADDRESS' | 'MOBILEPHONENUMBER'
 
+//TODO: add support for Postal Address
 export const ATTR_TYPES: { [x: string]: AttrKeys } = {
   ProofOfEmailCredential: AttrKeys.emailAddress,
   ProofOfMobilePhoneNumberCredential: AttrKeys.mobilePhoneNumber,
