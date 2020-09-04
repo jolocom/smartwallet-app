@@ -35,15 +35,18 @@ Array [
     "type": "SET_CLAIMS_FOR_DID",
   },
   Object {
-    "type": "HAS_EXTERNAL_CREDENTIALS",
-    "value": true,
+    "type": "SET_LOCAL_AUTH",
   },
   Object {
     "type": "HAS_EXTERNAL_CREDENTIALS",
     "value": true,
   },
   Object {
-    "routeName": "Home",
+    "params": Object {
+      "nextRoute": "Home",
+      "onSubmit": undefined,
+    },
+    "routeName": "TermsOfServiceConsent",
     "type": "Navigation/NAVIGATE",
   },
 ]

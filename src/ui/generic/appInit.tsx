@@ -1,14 +1,15 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 
-import { ThunkDispatch } from 'src/store'
+import { ThunkDispatch } from '../../store'
 import { Dimensions, Image, StyleSheet, Text } from 'react-native'
-import { withErrorHandler } from 'src/actions/modifiers'
+import { withErrorHandler } from '../../actions/modifiers'
 import { Wrapper } from '../structure'
-import { showErrorScreen, initApp } from 'src/actions/generic'
-import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
-import { Typography, Colors } from 'src/styles'
-const image = require('src/resources/img/splashScreen.png')
+import { AppError, ErrorCode } from '../../lib/errors'
+import { showErrorScreen } from '../../actions/generic'
+import { Typography, Colors } from '../../styles'
+import { initApp } from 'src/actions/generic/init'
+const image = require('../../resources/img/splashScreen.png')
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {}
 
@@ -50,13 +51,12 @@ export class AppInitContainer extends React.Component<Props> {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  doAppInit: () =>
-    dispatch(
-      withErrorHandler(
-        showErrorScreen,
-        (err: Error) => new AppError(ErrorCode.AppInitFailed, err),
-      )(initApp),
-    ),
+  doAppInit: () => dispatch(
+    withErrorHandler(
+      showErrorScreen,
+      (err: Error) => new AppError(ErrorCode.AppInitFailed, err)
+    )(initApp)
+  )
 })
 
 export const AppInit = connect(null, mapDispatchToProps)(AppInitContainer)

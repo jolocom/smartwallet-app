@@ -15,6 +15,7 @@ import { connect } from 'react-redux'
 import SettingItem from '../components/settingItem'
 import settingKeys from '../settingKeys'
 import { showSeedPhrase } from '../../../actions/recovery'
+import { BOTTOM_BAR_HEIGHT } from 'src/ui/navigation/container/bottomBar'
 import { LocaleSetting } from '../components/localeSetting'
 
 const styles = StyleSheet.create({
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   scrollComponentContainer: {
-    paddingBottom: '40%',
+    paddingBottom: Spacing.XXL + BOTTOM_BAR_HEIGHT,
   },
   versionNumber: {
     ...Typography.baseFontStyles,

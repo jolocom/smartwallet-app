@@ -21,7 +21,7 @@ import {
   textSubheaderLineHeight,
 } from '../../../styles/typography'
 import { BP } from '../../../styles/breakpoints'
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
+import { ErrorCode } from '../../../lib/errors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
@@ -29,6 +29,9 @@ const MARKER_SIZE = SCREEN_WIDTH * 0.75
 const SPACE_AROUND_MARKER = (SCREEN_WIDTH - MARKER_SIZE) / 2
 
 const styles = StyleSheet.create({
+  cameraStyle: {
+    height: SCREEN_HEIGHT,
+  },
   rectangle: {
     height: MARKER_SIZE,
     width: MARKER_SIZE,
@@ -97,7 +100,7 @@ export const ScannerComponent = (props: Props) => {
   const { onScan, onScannerRef } = props
 
   const [isError, setError] = useState(false)
-  const [errorText, setErrorText] = useState()
+  const [errorText, setErrorText] = useState('')
   const [isTorchPressed, setTorchPressed] = useState(false)
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
@@ -182,10 +185,7 @@ export const ScannerComponent = (props: Props) => {
           reactivateTimeout={3000}
           fadeIn={false}
           onRead={onRead}
-          cameraStyle={StyleSheet.create({
-            //@ts-ignore
-            height: SCREEN_HEIGHT,
-          })}
+          cameraStyle={styles.cameraStyle}
         />
       )}
       <View style={styles.topOverlay} />

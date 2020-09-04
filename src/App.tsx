@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Provider } from 'react-redux'
 import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
@@ -12,9 +12,10 @@ import {
   NavigationState,
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
-import { AppWrap } from './ui/structure/wrapper'
+
 import Lock from './ui/deviceauth/Lock'
 import RegisterPIN from './ui/deviceauth/RegisterPIN'
+import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
 
 import {
   JolocomLinking,
@@ -22,7 +23,9 @@ import {
   JolocomKeychainPasswordStore,
   JolocomSDK,
 } from 'react-native-jolocom'
-import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
+
+import { backgroundDarkMain } from './styles/colors'
+import { AppWrap } from './ui/structure/wrapper'
 
 enableScreens()
 
@@ -36,6 +39,14 @@ enableScreens()
  */
 let store: ReturnType<typeof initStore>
 let sdkPromise: Promise<JolocomSDK>
+
+const styles = StyleSheet.create({
+  appWrapper: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: backgroundDarkMain,
+  },
+})
 
 export default class App extends React.PureComponent<
   {},
@@ -113,10 +124,11 @@ export default class App extends React.PureComponent<
   public render() {
     const { ready } = this.state
     return (
-      <>
+      <View style={styles.appWrapper}>
         {!ready ? (
           <View />
         ) : (
+          // @ts-ignore
           <Provider store={store}>
             <AppWrap>
               <RoutesContainer
@@ -129,7 +141,7 @@ export default class App extends React.PureComponent<
             </AppWrap>
           </Provider>
         )}
-      </>
+      </View>
     )
   }
 }

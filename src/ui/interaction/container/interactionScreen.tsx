@@ -5,18 +5,19 @@ import { connect } from 'react-redux'
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 
+import { ErrorCode, AppError } from 'src/lib/errors'
 import { ThunkDispatch } from 'src/store'
 import { CloseIcon } from 'src/resources'
 
 import { Wrapper } from 'src/ui/structure'
 import { white } from 'src/styles/colors'
 import { fontMain, textXXS } from 'src/styles/typography'
-import { ErrorCode, AppError } from '@jolocom/sdk/js/src/lib/errors'
 import { showErrorScreen } from 'src/actions/generic'
+
+import { accountActions } from 'src/actions'
 import { navigateBack } from 'src/actions/navigation'
 
 import { ScannerContainer } from './scanner'
-import { accountActions } from 'src/actions'
 
 const IS_IOS = Platform.OS === 'ios'
 

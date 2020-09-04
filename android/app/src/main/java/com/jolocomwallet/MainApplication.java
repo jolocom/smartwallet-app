@@ -1,8 +1,6 @@
 package com.jolocomwallet;
 
-import com.wix.interactable.Interactable;
 import android.app.Application;
-import androidx.multidex.MultiDexApplication;
 import android.content.Context;
 import com.facebook.react.PackageList;
 
@@ -18,7 +16,7 @@ import java.util.Arrays;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class MainApplication extends MultiDexApplication implements ReactApplication {
+public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
     new ReactNativeHost(this) {
@@ -33,7 +31,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         List<ReactPackage> packages = new PackageList(this).getPackages();
         // Packages that cannot be autolinked yet can be added manually here, for example:
         // packages.add(new MyReactNativePackage());
-        packages.add(new Interactable());
+
         // https://github.com/crazycodeboy/react-native-splash-screen
         // this package looks dead, we should move to https://github.com/zoontek/react-native-bootsplash
         //packages.add(new SplashScreenReactPackage())
@@ -68,6 +66,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
               new RNCameraPackage(),
               new SQLitePluginPackage(),
               new LinearGradientPackage()
+              new Interactable()
         );
       }
 */

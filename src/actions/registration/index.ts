@@ -1,10 +1,12 @@
 import * as loading from 'src/actions/registration/loadingStages'
-import { setDid } from 'src/actions/account'
+import { setDid, checkLocalDeviceAuthSet } from 'src/actions/account'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
 import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
 import { ThunkAction } from '../../store'
 import { entropyToMnemonic } from 'bip39'
+
+const humanTimeout = () => new Promise(resolve => setTimeout(resolve, 1000))
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -26,18 +28,19 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
 
   dispatch(setIsRegistering(true))
 
-  //dispatch(setLoadingMsg(loading.loadingStages[0]))
-  //await backendMiddleware.createKeyProvider(encodedEntropy)
-
-  //dispatch(setLoadingMsg(loading.loadingStages[1]))
-  //await backendMiddleware.fuelKeyWithEther()
-
-  dispatch(setLoadingMsg(loading.loadingStages[2]))
+  // strings.REGISTERING_DECENTRALIZED_IDENTITY
+  // aka "we are generating a random number"
+  dispatch(setLoadingMsg(loading.loadingStages[0]))
 
   const seed = await generateSecureRandomBytes(16)
   const password = (await generateSecureRandomBytes(32)).toString('base64')
-
+  // const identity = await sdk.createNewIdentity(password)
   const identity = await sdk.loadFromMnemonic(entropyToMnemonic(seed), password)
+  // and it's too fast so slow down
+  await humanTimeout()
+
+  // strings.ENCRYPTING_AND_STORING_DATA_LOCALLY
+  dispatch(setLoadingMsg(loading.loadingStages[1]))
 
   // TODO Better call here.
   const encryptedSeed = await identity.asymEncryptToDid(
@@ -53,10 +56,14 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
       b64Encoded: encryptedSeed.toString('base64')
     }
   )
+  await humanTimeout()
 
+  // strings.PREPARING_LAUNCH
+  dispatch(setLoadingMsg(loading.loadingStages[2]))
   dispatch(setDid(identity.did))
-  dispatch(setLoadingMsg(loading.loadingStages[3]))
+  await humanTimeout()
   dispatch(setIsRegistering(false))
+  await dispatch(checkLocalDeviceAuthSet)
 
   return dispatch(navigatorResetHome())
 }

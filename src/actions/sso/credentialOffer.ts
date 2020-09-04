@@ -14,10 +14,8 @@ import {
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { isEmpty, uniqBy } from 'ramda'
+import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { CacheEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
-import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,

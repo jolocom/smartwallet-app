@@ -244,13 +244,6 @@ const MainStack = createStackNavigator(
         headerTitle: I18n.t(strings.ESTABLISH_CHANNEL_REQUEST),
       }),
     },
-    [routeList.EstablishChannelConsent]: {
-      screen: EstablishChannelConsent,
-      navigationOptions: () => ({
-        ...navOptScreenWCancel,
-        headerTitle: I18n.t(strings.ESTABLISH_CHANNEL_REQUEST),
-      }),
-    },
     [routeList.ClaimDetails]: {
       screen: ClaimDetails,
       navigationOptions: navOptScreenWCancel,
@@ -281,6 +274,7 @@ const MainStack = createStackNavigator(
       screen: TermsOfService,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.all,
       },
     },
@@ -288,6 +282,7 @@ const MainStack = createStackNavigator(
       screen: PrivacyPolicy,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.all,
       },
     },
@@ -295,6 +290,7 @@ const MainStack = createStackNavigator(
       screen: Impressum,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.all,
       },
     },

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { AppError, reportError } from '@jolocom/sdk/js/src/lib/errors'
+import { AppError, reportError } from '../../../lib/errors'
 import { ThunkDispatch } from '../../../store'
 import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'

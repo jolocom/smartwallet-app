@@ -40,7 +40,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
-  checkLocalAuthSet: () => dispatch(accountActions.checkLocalDeviceAuthSet),
+    checkLocalAuthSet: () => dispatch(accountActions.checkLocalDeviceAuthSet),
 })
 
 export const Claims = connect(

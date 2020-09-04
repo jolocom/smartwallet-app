@@ -1,26 +1,28 @@
-import { Linking } from 'react-native'
-import SplashScreen from 'react-native-splash-screen'
-import I18n from 'src/locales/i18n'
-import { routeList } from 'src/routeList'
-import { navigationActions, accountActions } from 'src/actions'
-import { ThunkAction } from 'src/store'
-import settingKeys from 'src/ui/settings/settingKeys'
-import { withLoading, withErrorScreen } from '../modifiers'
+import { AppError, ErrorCode } from '../../lib/errors'
+import I18n from '../../locales/i18n'
+import { routeList } from '../../routeList'
+import { navigationActions } from '../../actions'
+import { ThunkAction } from '../../store'
+import settingKeys from '../../ui/settings/settingKeys'
+
+// TODO use the settings items from storage
+import AsyncStorage from '@react-native-community/async-storage'
+// TODO don't depend on the crypto lib, perhaps use the rust crypto utils?
+import crypto from 'crypto'
+
+import { termsOfServiceDE } from 'src/ui/termsAndPrivacy/legalTexts'
+
 import {
   AppWrapConfig,
   APPWRAP_UPDATE_CONFIG,
   APPWRAP_SHOW_LOADER,
   APPWRAP_REGISTER_CONFIG,
   APPWRAP_UNREGISTER_CONFIG,
-} from 'src/reducers/generic'
+} from '../../reducers/generic'
 import { AnyAction } from 'redux'
 
 // Default delay on the loading state value before it can switch back to 'false'
 const DEFAULT_LOADING_LATCH_DELAY_MS = 300
-import { AppError, ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
-import { AsyncStorage } from 'react-native'
-import crypto from 'crypto'
-import { termsOfServiceDE } from 'src/ui/termsAndPrivacy/legalTexts'
 
 export const showErrorScreen = (
   error: AppError | Error,
@@ -39,55 +41,6 @@ export const showErrorScreen = (
       },
     }),
   )
-}
-
-export const initApp: ThunkAction = async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  try {
-    const storedSettings = await backendMiddleware.storageLib.get.settingsObject()
-
-    // locale setup
-    /** locale setup
-     * @dev Until German and Dutch terms are polished, only English is used.
-     * previous code:
-     */
-    if (storedSettings.locale) I18n.locale = storedSettings.locale.selected
-    else storedSettings.locale = I18n.locale
-
-    storedSettings.locale = I18n.locale
-
-    await dispatch(loadSettings(storedSettings))
-
-    const ret = await dispatch(accountActions.checkIdentityExists)
-
-    // FIXME what happens if no identity and this is a deeplink?
-    // navigationActions.handleDeepLink throws NoWallet
-    // need to improve this UX
-
-    // FIXME: get rid of these after setting up deepLinking properly using
-    // react-navigation
-    const handleDeepLink = (url: string) =>
-      dispatch(
-        withLoading(withErrorScreen(navigationActions.handleDeepLink(url))),
-      )
-    Linking.addEventListener('url', event => handleDeepLink(event.url))
-    await Linking.getInitialURL().then(url => {
-      if (url) handleDeepLink(url)
-    })
-
-    return ret
-  } catch (e) {
-    return dispatch(
-      showErrorScreen(
-        new AppError(ErrorCode.WalletInitFailed, e, routeList.Landing),
-      ),
-    )
-  } finally {
-    SplashScreen.hide()
-  }
 }
 
 const hashString = (text: string) => {
@@ -123,11 +76,6 @@ export const storeTermsOfService = (
 
   dispatch(navigationActions.navigate({ routeName: route }))
 }
-
-export const loadSettings = (settings: { [key: string]: any }) => ({
-  type: 'LOAD_SETTINGS',
-  value: settings,
-})
 
 export const setLocale = (locale: string): ThunkAction => async (
   dispatch,

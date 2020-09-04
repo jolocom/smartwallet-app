@@ -9,7 +9,7 @@ import { TextInput } from 'react-native'
 import { timeout } from '../../../utils/asyncTimeout'
 import { RootState } from '../../../reducers'
 import { accountActions, recoveryActions } from 'src/actions'
-import { NavigationScreenProps } from 'react-navigation'
+import { NavigationInjectedProps } from 'react-navigation'
 
 export enum WordState {
   editing,
@@ -21,7 +21,7 @@ export enum WordState {
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
     ReturnType<typeof mapStateToProps>,
-    NavigationScreenProps {}
+    NavigationInjectedProps {}
 
 interface State {
   inputValue: string
@@ -144,27 +144,25 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     } = this.state
 
     return (
-      <React.Fragment>
-        <InputSeedPhraseComponent
-          inputValue={inputValue}
-          mnemonic={mnemonic}
-          isMnemonicValid={isMnemonicValid}
-          suggestions={suggestions}
-          markedWord={markedWord}
-          inputState={inputState}
-          selectWord={this.selectWord}
-          handleTextInput={this.handleInputChange}
-          handleButtonPress={this.onSubmit}
-          inputRef={ref => {
-            this.textInput = ref
-          }}
-          handleDoneButton={this.onDoneButton}
-          handleNextWord={this.nextWord}
-          handlePreviousWord={this.previousWord}
-          handleBackButton={this.props.goBack}
-          isLoading={this.props.isLoading}
-        />
-      </React.Fragment>
+      <InputSeedPhraseComponent
+        inputValue={inputValue}
+        mnemonic={mnemonic}
+        isMnemonicValid={isMnemonicValid}
+        suggestions={suggestions}
+        markedWord={markedWord}
+        inputState={inputState}
+        selectWord={this.selectWord}
+        handleTextInput={this.handleInputChange}
+        handleButtonPress={this.onSubmit}
+        inputRef={ref => {
+          this.textInput = ref
+        }}
+        handleDoneButton={this.onDoneButton}
+        handleNextWord={this.nextWord}
+        handlePreviousWord={this.previousWord}
+        handleBackButton={this.props.goBack}
+        isLoading={this.props.isLoading}
+      />
     )
   }
 }

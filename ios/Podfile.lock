@@ -23,7 +23,7 @@ PODS:
   - glog (0.3.5)
   - Interactable (2.0.1):
     - React
-  - JolocomCore (1.1.0-rc4):
+  - JolocomCore (1.1.0-rc6):
     - React
   - Permission-BluetoothPeripheral (2.2.0):
     - RNPermissions
@@ -255,7 +255,7 @@ PODS:
     - React
   - RNJolocom (1.0.0):
     - React
-  - RNKeychain (3.1.3):
+  - RNJolocom (1.0.0):
     - React
   - RNLocalize (1.4.1):
     - React
@@ -265,16 +265,16 @@ PODS:
     - React
   - RNScreens (2.10.1):
     - React
-  - RNSentry (1.0.6):
+  - RNSentry (1.7.2):
     - React
-    - Sentry (~> 4.4.0)
+    - Sentry (~> 5.2.0)
   - RNSVG (11.0.1):
     - React
   - RNVectorIcons (6.7.0):
     - React
-  - Sentry (4.4.3):
-    - Sentry/Core (= 4.4.3)
-  - Sentry/Core (4.4.3)
+  - Sentry (5.2.2):
+    - Sentry/Core (= 5.2.2)
+  - Sentry/Core (5.2.2)
   - toolbar-android (0.1.0-rc.2):
     - React
   - Yoga (1.14.0)
@@ -450,7 +450,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Interactable: 411887c89fa16ac41f8e7898aca06dcad55e5f22
-  JolocomCore: 9178d2e888fc4b4075df1db3121edc2a0a61bed0
+  JolocomCore: c084993864cadb629aa35b06f8284503bb84037f
   Permission-BluetoothPeripheral: d7b686f612db77ffb95762e28d76f01b587dcd03
   Permission-Camera: 9ff12884205fb282b4a22b9e8c358ba53cee7567
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
@@ -483,15 +483,15 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
   RNJolocom: dbea930125f52ecff59176b5ce81b7aac44d755e
-  RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
+  RNKeychain: 840f8e6f13be0576202aefcdffd26a4f54bfe7b5
   RNLocalize: 49634a6a605dcdeb319e9c42a5c2f1aec508694b
   RNPermissions: 477d88d0be7ecb0a7b344e4d5fbb0352de104626
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
-  RNSentry: f1c8e34f9109a94b77e946d0ca50803375c1c19e
+  RNSentry: 2d4a0e18c6dfe93b647c360e0d15c9391d24e9d1
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
-  Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
+  Sentry: 8fa58a051237554f22507fb483b9a1de0171a2dc
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 

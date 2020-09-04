@@ -21,12 +21,14 @@
 		797D875024F825A20048D4FE /* jolocom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797D874F24F825A20048D4FE /* jolocom.swift */; };
 		A431D390F7F5781EEA4C8E86 /* libPods-JolocomWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 217C7D710BCA6E6CAF6E8416 /* libPods-JolocomWallet.a */; };
 		B465E65822CE17D100F87457 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = B465E65722CE17D000F87457 /* assets */; };
-		B4A807E322C62D0C008E672A /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = B4A807E222C62D0C008E672A /* TTCommons.otf */; };
 		B4A8080F22C6394C008E672A /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4A8080E22C6394C008E672A /* Launch Screen.storyboard */; };
 		D5125362E6574EEBE7B386D0 /* libPods-JolocomWallet-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F5698155A4598FF33970A7C /* libPods-JolocomWallet-tvOSTests.a */; };
 		D6D8B3475224E324A3623F32 /* libPods-JolocomWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E78EDDFA25C3CCEF0CEB04C9 /* libPods-JolocomWalletTests.a */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 		EFAD1C3A1B6644A08881D955 /* TTCommons-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 336AF2D15CD3440DAB275543 /* TTCommons-Light.otf */; };
+		74A0A6078DC3485EBC37BF22 /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = 341ACA75002B4750B82A54E9 /* TTCommons.otf */; };
+		31E90523896944B380144436 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 469F74391917439FB43B3480 /* MaterialCommunityIcons.ttf */; };
+		1E16C2D4512346DCB6C48992 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99DEAA1AD39B478481F8CE2A /* MaterialIcons.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +86,9 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F3C6022D1A26D8CAE1325D84 /* Pods-JolocomWalletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JolocomWalletTests.release.xcconfig"; path = "Target Support Files/Pods-JolocomWalletTests/Pods-JolocomWalletTests.release.xcconfig"; sourceTree = "<group>"; };
+		341ACA75002B4750B82A54E9 /* TTCommons.otf */ = {isa = PBXFileReference; name = "TTCommons.otf"; path = "../src/assets/fonts/TTCommons.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		469F74391917439FB43B3480 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; name = "MaterialCommunityIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		99DEAA1AD39B478481F8CE2A /* MaterialIcons.ttf */ = {isa = PBXFileReference; name = "MaterialIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,7 +200,6 @@
 			isa = PBXGroup;
 			children = (
 				B4A8080E22C6394C008E672A /* Launch Screen.storyboard */,
-				B4A807E222C62D0C008E672A /* TTCommons.otf */,
 				B465E65722CE17D000F87457 /* assets */,
 				13B07FAE1A68108700A75B9A /* JolocomWallet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -225,19 +229,15 @@
 		A43983400AD34E30ACD8EEA3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B4A807E222C62D0C008E672A /* TTCommons.otf */,
 				B7F4F3F872534807887AEDDA /* TypeType - TT Commons Light.otf */,
 				336AF2D15CD3440DAB275543 /* TTCommons-Light.otf */,
 				7E9A692685474EBA8C3432F5 /* TTCommons-Medium.otf */,
+				341ACA75002B4750B82A54E9 /* TTCommons.otf */,
+				469F74391917439FB43B3480 /* MaterialCommunityIcons.ttf */,
+				99DEAA1AD39B478481F8CE2A /* MaterialIcons.ttf */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		FD1E377124F7BAA90099BE71 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				2F32A9BE310541899605822F /* libInteractable.a */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -366,8 +366,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* JolocomWallet */,
@@ -396,6 +394,9 @@
 				B465E65822CE17D100F87457 /* assets in Resources */,
 				EFAD1C3A1B6644A08881D955 /* TTCommons-Light.otf in Resources */,
 				2C3D37BAA7B5442D986F17CF /* TTCommons-Medium.otf in Resources */,
+				74A0A6078DC3485EBC37BF22 /* TTCommons.otf in Resources */,
+				31E90523896944B380144436 /* MaterialCommunityIcons.ttf in Resources */,
+				1E16C2D4512346DCB6C48992 /* MaterialIcons.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,7 +430,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport NODE_BINARY=$(which node)\nexport SENTRY_PROPERTIES=sentry.properties\n\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode -- ../node_modules/react-native/scripts/react-native-xcode.sh index.ts\n";
+			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport NODE_BINARY=$(which node)\nexport SENTRY_PROPERTIES=sentry.properties\n\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh -- index.ts\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -443,7 +444,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 		30710A42AA61D671CA8C7AC1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -711,6 +712,8 @@
 					"$(SRCROOT)/../node_modules/@sentry/react-native/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-jolocom/ios",
 				);
 				INFOPLIST_FILE = JolocomWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -753,6 +756,8 @@
 					"$(SRCROOT)/../node_modules/@sentry/react-native/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-jolocom/ios",
 				);
 				INFOPLIST_FILE = JolocomWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -799,9 +804,12 @@
 					"$(SRCROOT)/../node_modules/@sentry/react-native/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-jolocom/ios",
 				);
 				INFOPLIST_FILE = JolocomWallet/Base.lproj/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.9.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -821,6 +829,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 93D3970E93A7768602B70D7C /* Pods-JolocomWallet.release.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -846,9 +855,12 @@
 					"$(SRCROOT)/../node_modules/@sentry/react-native/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-jolocom/ios",
 				);
 				INFOPLIST_FILE = JolocomWallet/Base.lproj/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.9.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -894,6 +906,8 @@
 					"$(SRCROOT)/../node_modules/@sentry/react-native/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-jolocom/ios",
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -941,6 +955,8 @@
 					"$(SRCROOT)/../node_modules/@sentry/react-native/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-jolocom/ios",
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -987,6 +1003,8 @@
 					"$(SRCROOT)/../node_modules/@sentry/react-native/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-jolocom/ios",
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1033,6 +1051,8 @@
 					"$(SRCROOT)/../node_modules/@sentry/react-native/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-interactable/lib/ios/Interactable",
+					"$(SRCROOT)/../node_modules/react-native-jolocom/ios",
 				);
 				INFOPLIST_FILE = "JolocomWallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1108,6 +1128,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					arm64,
+					arm64e,
+				);
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

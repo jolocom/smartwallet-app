@@ -7,7 +7,6 @@ import { removeNotification } from './notifications'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
  // TODO Import ^ from jolocom-lib
 
-
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
   getState,
@@ -33,6 +32,9 @@ export const showSeedPhrase = (): ThunkAction => async (
   )
 }
 
+/**
+ * called during PIN code restoration
+ */
 export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   dispatch,
   getState,
@@ -46,24 +48,27 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   )
 
   try {
-    const { identityWallet } = await backendMiddleware.didMethods.getDefault().recoverFromSeed(
-      recoveredEntropy,
-      await backendMiddleware.keyChainLib.getPassword()
-    )
-
-    recovered = identityWallet.did === backendMiddleware.idw.did
+    const didMethod = await backendMiddleware.didMethods.getDefault()
+    if (didMethod.recoverFromSeed) {
+      const { identityWallet } = await didMethod.recoverFromSeed(
+        recoveredEntropy,
+        await backendMiddleware.keyChainLib.getPassword()
+      )
+      recovered = identityWallet.did === backendMiddleware.idw.did
+    }
   } catch(e) {
-    recovered = false
+    console.error('onRestoreAccess failed', e)
   }
 
-  return dispatch(
-    recovered ? navigationActions.navigate({
+  if (recovered) {
+    await dispatch(accountActions.openLock())
+    return dispatch(navigationActions.navigate({
       routeName: routeList.ChangePIN,
       params: { isPINrecovery: true },
-    }): navigationActions.navigateBack() && dispatch(
-      accountActions.openLock()
-    )
-  )
+    }))
+  }
+
+  return dispatch(navigationActions.navigateBackHome())
 }
 
 export const setSeedPhraseSaved = (): ThunkAction => async (

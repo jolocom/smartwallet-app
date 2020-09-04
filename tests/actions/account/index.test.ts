@@ -8,10 +8,6 @@ import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
-    settings: {
-      locale: 'en',
-      seedPhraseSaved: false,
-    },
     registration: {
       loading: {
         loadingMsg: '',
@@ -23,6 +19,15 @@ describe('Account action creators', () => {
       seedPhraseSaved: false,
     },
     account: {
+      loading: false,
+      appState: {
+        isLocalAuthSet: false,
+        isLocalAuthVisible: false,
+        isPopup: false,
+        isAppLocked: false,
+        isLockVisible: false,
+        isPINInstructionVisible: false
+      },
       claims: {
         selected: {
           credentialType: 'Email',
@@ -67,7 +72,15 @@ describe('Account action creators', () => {
   beforeEach(mockStore.reset)
 
   it('should correctly handle stored encrypted seed', async () => {
+    const getGenericPassword = require('react-native-keychain')
+      .getGenericPassword
+    getGenericPassword.mockReturnValueOnce('MOCK PIN')
+
+    const asyncStorageGetItem: jest.Mock =
+      require('@react-native-community/async-storage').default.getItem
+
     await mockStore.dispatch(accountActions.checkIdentityExists)
+    expect(asyncStorageGetItem).toHaveBeenCalledTimes(1)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 

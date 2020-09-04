@@ -93,6 +93,7 @@ export const checkIdentityExists: ThunkAction = async (
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
     await dispatch(setClaimsForDid)
+    await dispatch(accountActions.checkLocalDeviceAuthSet)
     await dispatch(checkRecoverySetup)
     return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {

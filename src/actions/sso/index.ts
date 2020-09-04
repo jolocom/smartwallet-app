@@ -25,5 +25,5 @@ export {
 export { consumeResolutionRequest } from './resolution'
 
 export const cancelSSO: ThunkAction = dispatch => {
-  return dispatch(navigationActions.navigatorResetHome())
+  return dispatch(navigationActions.navigateBackHome())
 }
