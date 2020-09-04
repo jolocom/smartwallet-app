@@ -1,5 +1,6 @@
 import React from 'react'
-import { Modal } from 'react-native'
+import { Modal, StatusBar } from 'react-native'
+import { Colors } from './colors'
 
 interface PropsI {
   onShow?: () => void
@@ -13,8 +14,11 @@ const LocalModal: React.FC<PropsI> = ({ onShow, children, isVisible }) => {
       transparent={true}
       visible={isVisible}
       presentationStyle="overFullScreen"
-      onShow={onShow}
-    >
+      onShow={onShow}>
+      <StatusBar
+        backgroundColor={Colors.mainBlack}
+        barStyle={'light-content'}
+      />
       {children}
     </Modal>
   )

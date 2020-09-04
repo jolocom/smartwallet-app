@@ -112,7 +112,7 @@ export const SettingsContainer: React.FC<Props> = props => {
             onPress={() => navigate(routeList.TermsOfService)}
           />
           <SettingItem
-            title={I18n.t(strings.IMPRESSUM)}
+            title={I18n.t(strings.IMPRINT)}
             iconName={'book-minus'}
             onPress={() => navigate(routeList.Impressum)}
           />

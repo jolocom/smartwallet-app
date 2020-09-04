@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Wrapper } from 'src/ui/structure/wrapper'
 import {
   Text,
   ScrollView,
@@ -25,6 +24,7 @@ import { CheckmarkSmallIcon } from 'src/resources'
 import strings from 'src/locales/strings'
 import I18n from 'src/locales/i18n'
 import { BP } from 'src/styles/breakpoints'
+import ScreenContainer from 'src/ui/deviceauth/components/ScreenContainer'
 
 interface NavigationProps {
   nextRoute: routeList
@@ -43,12 +43,23 @@ enum TextType {
   TermsDE,
 }
 
-const ConsentTextButton: React.FC<{ text: string; onPress: () => void }> = ({
+export const ConsentTextButton: React.FC<{
+  text: string
+  onPress: () => void
+}> = ({ onPress, text }) => {
+  return (
+    <TouchableOpacity style={styles.consentButton} onPress={onPress}>
+      <Text style={styles.termsText}>{text}</Text>
+    </TouchableOpacity>
+  )
+}
+
+export const ConsentText: React.FC<{ text: string; onPress: () => void }> = ({
   onPress,
   text,
 }) => {
   return (
-    <TouchableOpacity style={styles.consentButton} onPress={onPress}>
+    <TouchableOpacity onPress={onPress}>
       <Text style={styles.termsText}>{text}</Text>
     </TouchableOpacity>
   )
@@ -82,11 +93,10 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
   }
 
   return (
-    <Wrapper style={{ backgroundColor: 'rgb(32, 26, 33)' }}>
+    <ScreenContainer>
       <StatusBar barStyle="light-content" />
       <View
-        style={{ paddingHorizontal: BP({ small: 20, medium: 32, large: 32 }) }}
-      >
+        style={{ paddingHorizontal: BP({ small: 20, medium: 32, large: 32 }) }}>
         <Text style={styles.title}>
           {I18n.t(
             strings.SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY,
@@ -97,8 +107,7 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
         <ScrollView
           contentContainerStyle={{ paddingBottom: '50%' }}
           showsVerticalScrollIndicator={false}
-          overScrollMode={'never'}
-        >
+          overScrollMode={'never'}>
           <Text style={styles.description}>
             {I18n.t(
               strings.YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW,
@@ -124,24 +133,23 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
               />
             </>
           ) : (
-            <TouchableOpacity onPress={() => setTextType(TextType.None)}>
-              <Text style={styles.termsText}>{getLegalText()}</Text>
-            </TouchableOpacity>
+            <ConsentText
+              text={getLegalText()}
+              onPress={() => setTextType(TextType.None)}
+            />
           )}
         </ScrollView>
       </View>
       <View style={styles.bottomBar}>
         <TouchableOpacity
           onPress={() => setAccepted(!accepted)}
-          style={styles.acceptWrapper}
-        >
+          style={styles.acceptWrapper}>
           <View style={{ flex: 0.1 }}>
             <View
               style={[
                 styles.checkboxBase,
                 accepted ? styles.checkboxActive : styles.checkboxInactive,
-              ]}
-            >
+              ]}>
               {accepted ? <CheckmarkSmallIcon /> : null}
             </View>
           </View>
@@ -163,7 +171,7 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
           disabled={!accepted}
         />
       </View>
-    </Wrapper>
+    </ScreenContainer>
   )
 }
 

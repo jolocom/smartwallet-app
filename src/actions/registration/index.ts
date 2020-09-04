@@ -4,6 +4,9 @@ import { ThunkAction } from 'src/store'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
 import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
+import { accountActions } from '..'
+
+const humanTimeout = () => new Promise(resolve => setTimeout(resolve, 1000))
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -25,20 +28,24 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
 
   dispatch(setIsRegistering(true))
 
-  //dispatch(setLoadingMsg(loading.loadingStages[0]))
-  //await backendMiddleware.createKeyProvider(encodedEntropy)
-
-  //dispatch(setLoadingMsg(loading.loadingStages[1]))
-  //await backendMiddleware.fuelKeyWithEther()
-
-  dispatch(setLoadingMsg(loading.loadingStages[2]))
-  console.log('about to createNewIdentity')
+  // strings.REGISTERING_DECENTRALIZED_IDENTITY
+  // aka "we are generating a random number"
+  dispatch(setLoadingMsg(loading.loadingStages[0]))
   const password = (await generateSecureRandomBytes(32)).toString('base64')
-  const identity = await sdk.createNewIdentity(password)
+  // and it's too fast so slow down
+  await humanTimeout()
 
+  // strings.ENCRYPTING_AND_STORING_DATA_LOCALLY
+  dispatch(setLoadingMsg(loading.loadingStages[1]))
+  const identity = await sdk.createNewIdentity(password)
+  await humanTimeout()
+
+  // strings.PREPARING_LAUNCH
+  dispatch(setLoadingMsg(loading.loadingStages[2]))
   dispatch(setDid(identity.did))
-  dispatch(setLoadingMsg(loading.loadingStages[3]))
+  await humanTimeout()
   dispatch(setIsRegistering(false))
+  await dispatch(accountActions.checkLocalDeviceAuthSet)
 
   return dispatch(navigatorResetHome())
 }

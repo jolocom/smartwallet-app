@@ -1,11 +1,12 @@
 import QRScanner from 'react-native-qrcode-scanner'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {
   AppState,
   AppStateStatus,
   Platform,
   View,
   InteractionManager,
+  BackHandler,
 } from 'react-native'
 import {
   NavigationInjectedProps, NavigationEventSubscription
@@ -30,10 +31,10 @@ const CAMERA_PERMISSION = Platform.select({
 
 export const ScannerContainer: React.FC<Props> = (props) => {
   const { consumeToken, navigation } = props
-  const [reRenderKey, setRenderKey] = useState(Date.now())
   const [permission, setPermission] = useState<string>(RESULTS.UNAVAILABLE)
-  const [scannerRef, setScannerRef] = useState<QRScanner|null>(null)
-  const reactivate = () => scannerRef && scannerRef.reactivate()
+  const scannerRef = useRef<QRScanner>(null)
+  const reactivate = () => scannerRef && scannerRef.current?.reactivate()
+  const [showCamera, setShowCamera] = useState(true)
 
   // NOTE: this is needed because QRScanner behaves weirdly when the screen is
   // remounted.... but we don't have error state here because rebase
@@ -41,21 +42,32 @@ export const ScannerContainer: React.FC<Props> = (props) => {
   //if (!isError) reactivate()
 
   const rerender = () => {
-    setRenderKey(Date.now())
     reactivate()
   }
 
   useEffect(() => {
+    const backListener = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        setShowCamera(false)
+        return false
+      },
+    )
+
     let listener: NavigationEventSubscription | undefined
     if (navigation) {
       listener = navigation.addListener('didFocus', () => {
+        setShowCamera(true)
         rerender()
         checkCameraPermissions()
       })
     }
     checkCameraPermissions()
 
-    return () => listener && listener.remove()
+    return () => {
+      listener && listener.remove()
+      backListener.remove()
+    }
   }, [])
 
   const checkCameraPermissions = async () => {
@@ -101,15 +113,9 @@ export const ScannerContainer: React.FC<Props> = (props) => {
   }
 
   let ret
-  if (permission === RESULTS.GRANTED) {
-    ret = (
-      <ScannerComponent
-        reRenderKey={reRenderKey}
-        onScan={consumeToken}
-        onScannerRef={r => setScannerRef(r)}
-      />
-    )
-  } else if (permission === RESULTS.UNAVAILABLE) {
+  if (showCamera && permission === RESULTS.GRANTED) {
+    ret = <ScannerComponent onScan={consumeToken} onScannerRef={scannerRef} />
+  } else if (permission === RESULTS.UNAVAILABLE || !showCamera) {
     // TODO: maybe add a message here like "do you even camera?"
     ret = (
       <View

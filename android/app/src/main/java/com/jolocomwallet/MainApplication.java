@@ -1,27 +1,22 @@
 package com.jolocomwallet;
 
 import android.app.Application;
-import androidx.multidex.MultiDexApplication;
 import android.content.Context;
 import com.facebook.react.PackageList;
 
 import com.facebook.react.ReactApplication;
-import io.jolocom.nativeUtils.NativeUtilsPackage;
-import com.reactlibrary.RNJolocomPackage;
+import io.jolocom.jolocomCore.JolocomCorePackage;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import org.pgsqlite.SQLitePluginPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
-import com.wix.interactable.Interactable;
 
 import java.util.Arrays;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class MainApplication extends MultiDexApplication implements ReactApplication {
+public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
     new ReactNativeHost(this) {
@@ -53,6 +48,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new JolocomCorePackage(),
               new AndroidOpenSettingsPackage(),
               new AsyncStoragePackage(),
               new RNSentryPackage(),

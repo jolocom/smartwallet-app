@@ -14,10 +14,8 @@ import {
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { isEmpty, uniqBy } from 'ramda'
+import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { CacheEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
-import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
@@ -142,17 +140,18 @@ export const validateSelectionAndSave = (
   }
 
   if (allValid) {
-    //@ts-ignore TODO change the API on the SDK to only take a signed credential
-    await interaction.storeCredential(toSave.map(el => ({signedCredential: el})))
+    await interaction.storeSelectedCredentials()
+    await interaction.storeIssuerProfile()
+    await interaction.storeCredentialMetadata()
 
+    /*
     await storeOfferMetadata(
       (interaction.getSummary().state as CredentialOfferFlowState).offerSummary,
       interaction.participants.requester!.did,
       //@ts-ignore
       storageLib.store.credentialMetadata,
     )
-
-    await interaction.storeIssuerProfile()
+    */
 
     dispatch(checkRecoverySetup)
     //TODO @mnzaki can we avoid running the FULL setClaimsForDid
@@ -221,26 +220,26 @@ const isCredentialStored = async (
  * storage class. Does this need to change for consistency?
  */
 
-const storeOfferMetadata = async (
-  offer: SignedCredentialWithMetadata[],
-  did: string,
-  storeCredentialMetadata: (
-    a: CredentialMetadataSummary,
-  ) => Promise<CacheEntity>,
-) =>
-  Promise.all(
-    uniqBy(
-      detail => `${detail.issuer.did}${detail.type}`,
-      offer.map(({ type, renderInfo, metadata }) => ({
-        // TODO Why isn't the did already in the summary type? This feels hacky
-        issuer: { did },
-        type,
-        renderInfo: renderInfo || {},
-        metadata: metadata || {},
-      })),
-    ).map(storeCredentialMetadata),
-  )
-
+//const storeOfferMetadata = async (
+//  offer: SignedCredentialWithMetadata[],
+//  did: string,
+//  storeCredentialMetadata: (
+//    a: CredentialMetadataSummary,
+//  ) => Promise<CacheEntity>,
+//) =>
+//  Promise.all(
+//    uniqBy(
+//      detail => `${detail.issuer.did}${detail.type}`,
+//      offer.map(({ type, renderInfo, metadata }) => ({
+//        // TODO Why isn't the did already in the summary type? This feels hacky
+//        issuer: { did },
+//        type,
+//        renderInfo: renderInfo || {},
+//        metadata: metadata || {},
+//      })),
+//    ).map(storeCredentialMetadata),
+//  )
+//
 const endReceiving = (interactionId: string): ThunkAction => (
   dispatch,
   getState,

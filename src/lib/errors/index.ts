@@ -7,6 +7,7 @@ export interface IAppError {
   origError: any
   navigateTo: routeList
 }
+
 export interface UserReport {
   userError: string | undefined
   userDescription: string

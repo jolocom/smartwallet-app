@@ -49,8 +49,10 @@ const styles = StyleSheet.create({
 
 export const RegistrationProgressContainer: React.FunctionComponent<
   Props
-> = props => (
-  <Wrapper dark centered breathy>
+> = props => {
+  const curStageIdx = loading.loadingStages.indexOf(props.loadingMsg)
+
+  return (<Wrapper dark centered breathy>
     <View style={styles.messageArea}>
       <Text style={styles.text}>{I18n.t(strings.GIVE_US_A_FEW_MOMENTS)}</Text>
       <Text style={styles.text}>{I18n.t(strings.TO_SET_UP_YOUR_IDENTITY)}</Text>
@@ -64,16 +66,15 @@ export const RegistrationProgressContainer: React.FunctionComponent<
     </View>
     <View style={styles.progressArea}>
       <View style={styles.dotsContainer}>
-        {[0, 1, 2, 3].map((prop, key) => {
-          const stageNumber = loading.loadingStages.indexOf(props.loadingMsg)
+        {loading.loadingStages.map((stageMsg, idx) => {
           return (
             <Icon
               name="circle"
-              size={prop <= stageNumber ? 15 : 10}
+              size={idx <= curStageIdx ? 15 : 10}
               style={
-                prop <= stageNumber ? styles.dotActive : styles.dotInactive
+                idx <= curStageIdx ? styles.dotActive : styles.dotInactive
               }
-              key={prop}
+              key={idx}
             />
           )
         })}
@@ -82,8 +83,8 @@ export const RegistrationProgressContainer: React.FunctionComponent<
         <Text style={styles.smallText}>{props.loadingMsg}</Text>
       </View>
     </View>
-  </Wrapper>
-)
+  </Wrapper>)
+}
 
 const mapStateToProps = ({
   registration: {

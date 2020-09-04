@@ -6,7 +6,7 @@ import { ThunkAction } from '../../store'
 import settingKeys from '../../ui/settings/settingKeys'
 
 // TODO use the settings items from storage
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 // TODO don't depend on the crypto lib, perhaps use the rust crypto utils?
 import crypto from 'crypto'
 
@@ -82,7 +82,10 @@ export const setLocale = (locale: string): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  await backendMiddleware.storageLib.store.setting(settingKeys.locale, locale)
+  await backendMiddleware.storageLib.store.setting(settingKeys.locale, {
+    selected: locale
+  })
+
   I18n.locale = locale
   dispatch({ type: 'SET_LOCALE', value: locale })
 

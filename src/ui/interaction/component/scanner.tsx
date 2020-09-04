@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, RefObject } from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import {
@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   View,
   Animated,
+  BackHandler,
 } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
@@ -92,18 +93,29 @@ const styles = StyleSheet.create({
 
 interface Props {
   onScan: (jwt: string) => Promise<void>
-  reRenderKey?: number
-  onScannerRef?: (s: any) => void
+  onScannerRef?: RefObject<QRScanner>
 }
 
 export const ScannerComponent = (props: Props) => {
-  const { onScan, onScannerRef, reRenderKey } = props
+  const { onScan, onScannerRef } = props
 
   const [isError, setError] = useState(false)
   const [errorText, setErrorText] = useState('')
   const [isTorchPressed, setTorchPressed] = useState(false)
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
+  const [showCamera, setShowCamera] = useState(true)
+
+  useEffect(() => {
+    let backListener = BackHandler.addEventListener('hardwareBackPress', () => {
+      setShowCamera(false)
+      return false
+    })
+
+    return () => {
+      backListener.remove()
+    }
+  }, [])
 
   const animateColor = () =>
     Animated.sequence([
@@ -153,7 +165,6 @@ export const ScannerComponent = (props: Props) => {
   }
 
   const cameraSettings = {
-    key: reRenderKey,
     captureAudio: false,
     flashMode: isTorchPressed
       ? RNCamera.Constants.FlashMode.torch
@@ -162,25 +173,27 @@ export const ScannerComponent = (props: Props) => {
 
   return (
     <>
-      <QRScanner
-        ref={onScannerRef}
-        //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
-        containerStyle={{
-          position: 'absolute',
-        }}
-        cameraProps={cameraSettings}
-        reactivateTimeout={3000}
-        fadeIn={false}
-        onRead={onRead}
-        cameraStyle={styles.cameraStyle}
-      />
+      {showCamera && (
+        <QRScanner
+          ref={onScannerRef}
+          //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
+          containerStyle={{
+            position: 'absolute',
+          }}
+          cameraProps={cameraSettings}
+          reactivate={true}
+          reactivateTimeout={3000}
+          fadeIn={false}
+          onRead={onRead}
+          cameraStyle={styles.cameraStyle}
+        />
+      )}
       <View style={styles.topOverlay} />
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'stretch'
-        }}
-      >
+          alignItems: 'stretch',
+        }}>
         <View style={styles.horizontalOverlay} />
         <Animated.View
           style={[
@@ -204,8 +217,7 @@ export const ScannerComponent = (props: Props) => {
               {
                 opacity: textAnimationValue,
               },
-            ]}
-          >
+            ]}>
             {I18n.t(errorText)}
           </Animated.Text>
         ) : (
@@ -220,8 +232,7 @@ export const ScannerComponent = (props: Props) => {
           onPressOut={() => setTorchPressed(false)}
           activeOpacity={1}
           underlayColor={'transparent'}
-          style={styles.torch}
-        >
+          style={styles.torch}>
           {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
         </TouchableHighlight>
       </View>

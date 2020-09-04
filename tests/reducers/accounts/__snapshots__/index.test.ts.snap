@@ -6,6 +6,8 @@ Object {
     "isAppLocked": true,
     "isLocalAuthSet": false,
     "isLocalAuthVisible": false,
+    "isLockVisible": true,
+    "isPINInstructionVisible": false,
     "isPopup": false,
   },
   "claims": Object {
@@ -91,6 +93,8 @@ Object {
     "isAppLocked": true,
     "isLocalAuthSet": false,
     "isLocalAuthVisible": false,
+    "isLockVisible": true,
+    "isPINInstructionVisible": false,
     "isPopup": false,
   },
   "claims": Object {

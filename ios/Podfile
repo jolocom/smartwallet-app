@@ -3,6 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 target 'JolocomWallet' do
   # Pods for JolocomWallet
+  pod 'Interactable', :path => '../node_modules/react-native-interactable'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -38,6 +39,8 @@ target 'JolocomWallet' do
   pod 'Permission-BluetoothPeripheral', :path => "#{permissions_path}/BluetoothPeripheral.podspec"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
   #pod 'Permission-FaceID', :path => "#{permissions_path}/FaceID.podspec"
+
+  pod 'JolocomCore', :path => '../node_modules/@jolocom/native-core-react-native'
 
   target 'JolocomWalletTests' do
     inherit! :search_paths

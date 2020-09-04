@@ -79,7 +79,7 @@ project.ext.react = [
     bundleInStaging: true,
     devDisabledInStaging: true,
     entryFile: "index.ts",
-    enableHermes: true,  // clean and rebuild if changing
+    enableHermes: false,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -141,8 +141,8 @@ android {
         applicationId "com.jolocomwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
-        versionName "1.7.1"
+        versionCode 23
+        versionName "1.9.2"
         vectorDrawables.useSupportLibrary = true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
@@ -205,9 +205,16 @@ android {
 
         }
     }
+
+  packagingOptions {
+    pickFirst "lib/arm64-v8a/libkeriox_wrapper.so"
+    pickFirst "lib/x86/libkeriox_wrapper.so"
+    pickFirst "lib/armeabi-v7a/libkeriox_wrapper.so"
+  }
 }
 
 dependencies {
+    implementation project(':@jolocom_native-core-react-native')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
@@ -223,7 +230,6 @@ dependencies {
     androidTestImplementation 'junit:junit:4.12'
     implementation 'com.facebook.fresco:fresco:1.10.0'
     implementation 'com.facebook.fresco:animated-gif:1.10.0'
-    implementation project(path: ":react-native-interactable")
 }
 
 // Run this once to be able to run the application with BUCK

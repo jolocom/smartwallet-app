@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     justifyContent: 'flex-end',
+    alignItems: 'center',
   },
 })
 

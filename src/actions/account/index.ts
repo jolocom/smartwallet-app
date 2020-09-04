@@ -57,6 +57,22 @@ export const unlockApp = () => ({
   type: 'UNLOCK_APP',
 })
 
+export const closeLock = () => ({
+  type: 'CLOSE_LOCK',
+})
+
+export const openLock = () => ({
+  type: 'OPEN_LOCK',
+})
+
+export const closePINinstructions = () => ({
+  type: 'CLOSE_PIN_INSTRICTIONS',
+})
+
+export const openPINinstructions = () => ({
+  type: 'OPEN_PIN_INSTRICTIONS',
+})
+
 export const resetSelected = () => ({
   type: 'RESET_SELECTED',
 })
@@ -111,6 +127,17 @@ export const checkLocalDeviceAuthSet: ThunkAction = async dispatch => {
   }
 }
 
+export const handleRecoveryBack: ThunkAction = async (dispatch, getState) => {
+  console.log(getState())
+  const state = getState()
+  if (state.account.did.did) {
+    dispatch(accountActions.openPINinstructions())
+    dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+  } else {
+    dispatch(navigationActions.navigate({ routeName: routeList.Landing }))
+  }
+}
+
 export const openClaimDetails = (
   claim: DecoratedClaims,
 ): ThunkAction => dispatch => {
@@ -153,11 +180,6 @@ export const saveClaim: ThunkAction = async (
 
   return dispatch(navigationActions.navigatorResetHome())
 }
-
-export const toggleLoading = (value: boolean) => ({
-  type: 'SET_LOADING',
-  value,
-})
 
 export const hasExternalCredentials: ThunkAction = async (
   dispatch,

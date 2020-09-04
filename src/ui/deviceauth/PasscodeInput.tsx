@@ -89,10 +89,9 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
     let isCurrent = true
-    let id
     const updateSelectedIndex = async () => {
       // it is implemented with delay to be able to preview digits and not seeing asterics straight away
-      id = setTimeout(() => {
+      setTimeout(() => {
         isCurrent &&
           setSelectedIndex(() => {
             if (digits.length < PASSCODE_LENGTH.length) {
@@ -160,39 +159,38 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   const handleRemovingFromPasscode = removeFromPasscode(stateUpdaterFn)
 
   return (
-    <TouchableWithoutFeedback onPress={focusInput}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          value=""
-          ref={inputRef}
-          onChangeText={handleAddingToPasscode}
-          onFocus={handleFocus}
-          onKeyPress={handleRemove}
-          autoFocus
-          testID="passcode-digit-input"
-          style={[
-            styles.input,
-            {
-              left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
-              opacity: hideInput ? 0 : 1,
-            },
-          ]}
-          keyboardType="numeric"
-          keyboardAppearance="dark"
-          selectionColor="transparent"
-        />
-        <View style={{ flexDirection: 'row' }}>
-          {PASSCODE_LENGTH.map((v, index) => {
-            const isSelected = digits.length === index
-            return (
+    <View style={styles.inputContainer}>
+      <TextInput
+        value=""
+        ref={inputRef}
+        onChangeText={handleAddingToPasscode}
+        onFocus={handleFocus}
+        onKeyPress={handleRemove}
+        autoFocus
+        testID="passcode-digit-input"
+        style={[
+          styles.input,
+          {
+            left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
+            opacity: hideInput ? 0 : 1,
+          },
+        ]}
+        keyboardType="numeric"
+        keyboardAppearance="dark"
+        selectionColor="transparent"
+      />
+      <View style={{ flexDirection: 'row' }}>
+        {PASSCODE_LENGTH.map((v, index) => {
+          const isSelected = digits.length === index
+          return (
+            <TouchableWithoutFeedback onPress={focusInput}>
               <View
                 style={[
                   styles.display,
                   isSelected && styles.active,
                   hasError && styles.error,
                 ]}
-                key={index}
-              >
+                key={index}>
                 <Text style={styles.text} testID="passcode-cell">
                   {index === selectedIndex
                     ? digits[index]
@@ -201,11 +199,11 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
                     : ''}
                 </Text>
               </View>
-            )
-          })}
-        </View>
+            </TouchableWithoutFeedback>
+          )
+        })}
       </View>
-    </TouchableWithoutFeedback>
+    </View>
   )
 }
 

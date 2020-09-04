@@ -50,6 +50,8 @@ export interface AppState {
   isLocalAuthVisible: boolean
   isPopup: boolean
   isAppLocked: boolean
+  isLockVisible: boolean
+  isPINInstructionVisible: boolean
 }
 
 export type LoadingState = boolean
