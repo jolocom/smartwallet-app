@@ -56,7 +56,6 @@ export interface AppState {
 
 export type LoadingState = boolean
 
-
 // TODO avoid state.account.did.did access patterns
 export interface AccountState {
   did: DidState

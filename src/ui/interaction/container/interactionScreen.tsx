@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 
+import { ErrorCode, AppError } from 'src/lib/errors'
 import { ThunkDispatch } from 'src/store'
 import { CloseIcon } from 'src/resources'
-import { AppError, ErrorCode } from 'src/lib/errors'
 
 import { Wrapper } from 'src/ui/structure'
 import { white } from 'src/styles/colors'
@@ -58,8 +58,7 @@ const InteractionContainer = (props: Props) => {
       {IS_IOS && (
         <TouchableOpacity
           onPress={props.navigateHome}
-          style={styles.closeButton}
-        >
+          style={styles.closeButton}>
           <CloseIcon />
         </TouchableOpacity>
       )}
@@ -96,8 +95,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       }
     }
   },
-  registerPopup: () => dispatch(accountActions.setPopup(true)),
   navigateHome: () => dispatch(navigateBack()),
+  registerPopup: () => dispatch(accountActions.setPopup(true)),
 })
 
 export const InteractionScreen = connect(

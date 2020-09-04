@@ -5,20 +5,24 @@ export {
   consumeAuthenticationRequest,
   sendAuthenticationResponse,
 } from './authenticationRequest'
+
 export {
   consumeCredentialOfferRequest,
   consumeCredentialReceive,
   validateSelectionAndSave,
 } from './credentialOffer'
+
 export {
   consumeCredentialRequest,
   sendCredentialResponse,
 } from './credentialRequest'
 
 export {
-  startChannel,
   consumeEstablishChannelRequest,
+  startChannel,
 } from './establishChannel'
+
+export { consumeResolutionRequest } from './resolution'
 
 export const cancelSSO: ThunkAction = dispatch => {
   return dispatch(navigationActions.navigateBackHome())

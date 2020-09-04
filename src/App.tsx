@@ -1,8 +1,8 @@
 import React from 'react'
+import { View, StyleSheet } from 'react-native'
 import { Provider } from 'react-redux'
 import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
-import { View, StyleSheet } from 'react-native'
 import { RoutesContainer } from './routes'
 import { enableScreens } from 'react-native-screens'
 import { isNil } from 'ramda'
@@ -16,8 +16,6 @@ import { setActiveNotificationFilter } from './actions/notifications'
 import Lock from './ui/deviceauth/Lock'
 import RegisterPIN from './ui/deviceauth/RegisterPIN'
 import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
-
-import { LoadingSpinner } from './ui/generic'
 
 import {
   JolocomLinking,
@@ -130,6 +128,7 @@ export default class App extends React.PureComponent<
         {!ready ? (
           <View />
         ) : (
+          // @ts-ignore
           <Provider store={store}>
             <AppWrap>
               <RoutesContainer

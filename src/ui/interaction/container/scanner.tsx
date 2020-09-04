@@ -9,10 +9,18 @@ import {
   BackHandler,
 } from 'react-native'
 import {
-  NavigationInjectedProps, NavigationEventSubscription
+  NavigationInjectedProps,
+  NavigationEventSubscription,
 } from 'react-navigation'
 
-import { PERMISSIONS, RESULTS, request, openSettings, check, Permission } from 'react-native-permissions'
+import {
+  PERMISSIONS,
+  RESULTS,
+  request,
+  openSettings,
+  check,
+  Permission,
+} from 'react-native-permissions'
 
 import { ScannerComponent } from '../component/scanner'
 import { NoPermissionComponent } from '../component/noPermission'
@@ -26,10 +34,10 @@ interface Props extends NavigationInjectedProps {
 
 const CAMERA_PERMISSION = Platform.select({
   android: PERMISSIONS.ANDROID.CAMERA,
-  ios: PERMISSIONS.IOS.CAMERA
+  ios: PERMISSIONS.IOS.CAMERA,
 }) as Permission
 
-export const ScannerContainer: React.FC<Props> = (props) => {
+export const ScannerContainer: React.FC<Props> = props => {
   const { consumeToken, navigation } = props
   const [permission, setPermission] = useState<string>(RESULTS.UNAVAILABLE)
   const scannerRef = useRef<QRScanner>(null)
@@ -130,7 +138,11 @@ export const ScannerContainer: React.FC<Props> = (props) => {
     ret = <NoPermissionComponent onPressEnable={onEnablePermission} />
   }
 
-  return <Wrapper dark withoutSafeArea withoutStatusBar>{ret}</Wrapper>
+  return (
+    <Wrapper dark withoutSafeArea withoutStatusBar>
+      {ret}
+    </Wrapper>
+  )
 }
 
 export const Scanner = ScannerContainer

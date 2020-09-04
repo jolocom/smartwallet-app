@@ -50,7 +50,6 @@ import {
   PrivacyPolicy,
   Impressum,
 } from './ui/termsAndPrivacy'
-
 import { NotificationFilter } from './lib/notifications'
 import { CredentialReceiveNegotiate } from './ui/sso/containers/credentialReceiveNegotiate'
 import { EstablishChannelConsent } from './ui/establishChannel'
@@ -201,6 +200,10 @@ const MainStack = createStackNavigator(
         gesturesEnabled: false,
       },
     },
+    [routeList.InputSeedPhrasePin]: {
+      screen: InputSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
       navigationOptions: {
@@ -323,19 +326,19 @@ const MainStack = createStackNavigator(
     }),
   },
   {
-//    transitionConfig: (transitionProps, prevTransitionProps) => {
-//      const isModal = MODAL_ROUTES.some(
-//        screenName =>
-//          screenName === transitionProps.scene.route.routeName ||
-//          (prevTransitionProps &&
-//            screenName === prevTransitionProps.scene.route.routeName),
-//      )
-//      return StackViewTransitionConfigs.defaultTransitionConfig(
-//        transitionProps,
-//        prevTransitionProps,
-//        isModal,
-//      )
-//    },
+    //    transitionConfig: (transitionProps, prevTransitionProps) => {
+    //      const isModal = MODAL_ROUTES.some(
+    //        screenName =>
+    //          screenName === transitionProps.scene.route.routeName ||
+    //          (prevTransitionProps &&
+    //            screenName === prevTransitionProps.scene.route.routeName),
+    //      )
+    //      return StackViewTransitionConfigs.defaultTransitionConfig(
+    //        transitionProps,
+    //        prevTransitionProps,
+    //        isModal,
+    //      )
+    //    },
     defaultNavigationOptions: noHeaderNavOpts,
   },
 )

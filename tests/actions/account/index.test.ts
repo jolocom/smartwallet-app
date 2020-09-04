@@ -8,15 +8,15 @@ import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 describe('Account action creators', () => {
   const initialState: Partial<RootState> = {
-    settings: {
-      locale: 'en',
-      seedPhraseSaved: false,
-    },
     registration: {
       loading: {
         loadingMsg: '',
         isRegistering: false,
       },
+    },
+    settings: {
+      locale: 'en',
+      seedPhraseSaved: false,
     },
     account: {
       loading: false,
@@ -94,7 +94,7 @@ describe('Account action creators', () => {
 
   it('should display exception screen in case of error', async () => {
     backendMiddleware.prepareIdentityWallet.mockRejectedValue(
-      new Error('everything is WRONG')
+      new Error('everything is WRONG'),
     )
     await mockStore.dispatch(
       withErrorScreen(accountActions.checkIdentityExists),
