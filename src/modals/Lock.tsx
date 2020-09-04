@@ -30,7 +30,7 @@ import { setPopup } from '~/modules/appState/actions'
 import Header from '~/components/Header'
 import { useAppState } from '~/hooks/useAppState'
 
-const Lock = () => {
+export const Lock = () => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
 
