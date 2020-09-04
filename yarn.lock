@@ -1674,6 +1674,11 @@
     detect-node "^2.0.4"
     node-fetch "^2.6.0"
 
+"@jolocom/local-resolver-registrar@^1.0.0-rc0":
+  version "1.0.0-rc0"
+  resolved "https://registry.yarnpkg.com/@jolocom/local-resolver-registrar/-/local-resolver-registrar-1.0.0-rc0.tgz#7948ad6b484e07f6932f8aafa5f9cfedd94f58d3"
+  integrity sha512-7edvGZUzxwvUrq23barezdN6SrafHli9brRYpTGPgzpwOyIKJqHZDiE2mBM5YnoSd66W+6AxryML9wg0it8q2A==
+
 "@jolocom/native-core-node-darwin-x64@^1.0.0-rc15":
   version "1.0.0-rc15"
   resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-darwin-x64/-/native-core-node-darwin-x64-1.0.0-rc15.tgz#4bc65d7bffbc706b1f4b120bcb70406a55ca396c"
@@ -1724,13 +1729,12 @@
     class-transformer "^0.2.3"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.0.0-rc7":
-  version "1.0.0-rc7"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc7.tgz#353cef2b65c7c118b518ffc3fb6384a3be38c721"
-  integrity sha512-c0ioFLRdXEtjZmDbdCZvccDSsEL2+C6k5wGfGzqjhIiciLk3cSDatVm508bQ3xDSK2h8ae9OH92a9CVeRZyu3w==
+"@jolocom/sdk@^1.0.0-rc10":
+  version "1.0.0-rc10"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc10.tgz#32d58aaeb16f2efba31b19a11c13b39b5d916469"
+  integrity sha512-8NCHLtwy6+0uBODf5AJg9R/01TYChPDCHfEqcJVKh771NTrHoFcrH9RxLv25ZCF9A/bn8u2fKjNivkk5ayrQ3A==
   dependencies:
     form-data "^3.0.0"
-    local-resolver-registrar "^0.3.1"
     ramda "^0.26.1"
 
 "@jolocom/vaulted-key-provider@^0.7.4":
@@ -7764,14 +7768,15 @@ jetifier@^1.6.2:
   resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.6.tgz#fec8bff76121444c12dc38d2dad6767c421dab68"
   integrity sha512-JNAkmPeB/GS2tCRqUzRPsTOHpGDah7xP18vGJfIjZC+W2sxEHbxgJxetIjIqhjQ3yYbYNEELkM/spKLtwoOSUQ==
 
-jolocom-lib@^5.1.0-rc5:
-  version "5.1.0-rc5"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.1.0-rc5.tgz#1dc6083b0d556cf26ba99281bbb6fe80e3d7aeb5"
-  integrity sha512-4nrohw+MKYsfx1UTDp5h4epO9YTdxVNuCxC4dysyTtEj1306nJ9SZl9TfitJV9kdZ8istd/lfFKnbec2Lr9FjQ==
+jolocom-lib@^5.1.0-rc7:
+  version "5.1.0-rc7"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.1.0-rc7.tgz#cb1f38623d583e10102c5aee3d4af212ab367225"
+  integrity sha512-v2x+u5hbTAtYtN4hACtEYY8b6cUr4XhoTjBSyOp4Kz4+t9Hf6yENhUCNNyBaPxlm2N4uftnFJuxtwe7YK3B3DQ==
   dependencies:
     "@hawkingnetwork/ed25519-hd-key-rn" "^1.0.1"
     "@jolocom/jolo-did-registrar" "^1.0.0-rc5"
     "@jolocom/jolo-did-resolver" "^1.0.0-rc5"
+    "@jolocom/local-resolver-registrar" "^1.0.0-rc0"
     "@jolocom/native-core" "^1.0.0-rc3"
     "@jolocom/protocol-ts" "^0.5.1"
     "@jolocom/vaulted-key-provider" "^0.7.4"
@@ -7786,7 +7791,6 @@ jolocom-lib@^5.1.0-rc5:
     json-logic-js "^1.2.2"
     jsonld "^1.6.1"
     jsontokens "^1.0.0"
-    local-resolver-registrar "^0.3.2"
     node-fetch "^2.3.0"
     reflect-metadata "^0.1.13"
     secrets.js-grempe "^1.1.0"
@@ -8144,16 +8148,6 @@ loader-utils@^1.0.2:
     big.js "^5.2.2"
     emojis-list "^3.0.0"
     json5 "^1.0.1"
-
-local-resolver-registrar@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/local-resolver-registrar/-/local-resolver-registrar-0.3.1.tgz#0a06f0269102c55e43ccc80b7004868afd3199ea"
-  integrity sha512-MG+sdZUTa4XA2uOExWfhq/taoLRHpbeP8rcImc8OlPRz0WSikuCUkLEifSCY0X/p+tsXjw2uPSe3XldswTMocA==
-
-local-resolver-registrar@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/local-resolver-registrar/-/local-resolver-registrar-0.3.2.tgz#f9d33efe641a7134a1b4da3c37fc19054486a7ed"
-  integrity sha512-jh7jch+h8XQ2C6ErH2xXeEplhKKASOKin9eV95WKx8ikriRtx2WnQIObUDMQYGzou5GthFZ2KO+RgSu8ebRNnw==
 
 localforage@1.8.1:
   version "1.8.1"
