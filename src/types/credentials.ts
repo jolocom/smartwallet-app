@@ -1,6 +1,7 @@
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+import { KeyboardTypeOptions } from 'react-native'
 
 export enum AttrKeys {
   emailAddress = 'emailAddress',
@@ -21,6 +22,15 @@ export const ATTR_UI_NAMES: { [x: string]: string } = {
   [AttrKeys.emailAddress]: 'email',
   [AttrKeys.mobilePhoneNumber]: 'phone number',
   [AttrKeys.name]: 'name',
+}
+
+export const ATTR_KEYBOARD_TYPE: {
+  [x in AttrKeys]: KeyboardTypeOptions
+} = {
+  [AttrKeys.emailAddress]: 'email-address',
+  [AttrKeys.mobilePhoneNumber]: 'phone-pad',
+  [AttrKeys.name]: 'default',
+  [AttrKeys.postalAddress]: 'default',
 }
 
 export const attrTypeToAttrKey = (type: string) => {

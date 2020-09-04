@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, KeyboardAvoidingView } from 'react-native'
 import { Colors } from '~/utils/colors'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
@@ -9,18 +9,18 @@ const BasWrapper: React.FC<{
   withFooter?: boolean
 }> = ({ children, customStyle = {}, withFooter = true }) => {
   return (
-    <View style={[styles.wrapper, customStyle]}>
+    <KeyboardAvoidingView style={[styles.wrapper, customStyle]}>
       <InteractionHeader />
       <View style={{ paddingTop: 28 }}>{children}</View>
       {withFooter && <InteractionFooter />}
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.lightBlack,
     borderRadius: 20,
     justifyContent: 'center',
     paddingVertical: 30,
