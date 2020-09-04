@@ -26,6 +26,9 @@
 		D6D8B3475224E324A3623F32 /* libPods-JolocomWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E78EDDFA25C3CCEF0CEB04C9 /* libPods-JolocomWalletTests.a */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 		EFAD1C3A1B6644A08881D955 /* TTCommons-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 336AF2D15CD3440DAB275543 /* TTCommons-Light.otf */; };
+		74A0A6078DC3485EBC37BF22 /* TTCommons.otf in Resources */ = {isa = PBXBuildFile; fileRef = 341ACA75002B4750B82A54E9 /* TTCommons.otf */; };
+		31E90523896944B380144436 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 469F74391917439FB43B3480 /* MaterialCommunityIcons.ttf */; };
+		1E16C2D4512346DCB6C48992 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99DEAA1AD39B478481F8CE2A /* MaterialIcons.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +86,9 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F3C6022D1A26D8CAE1325D84 /* Pods-JolocomWalletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JolocomWalletTests.release.xcconfig"; path = "Target Support Files/Pods-JolocomWalletTests/Pods-JolocomWalletTests.release.xcconfig"; sourceTree = "<group>"; };
+		341ACA75002B4750B82A54E9 /* TTCommons.otf */ = {isa = PBXFileReference; name = "TTCommons.otf"; path = "../src/assets/fonts/TTCommons.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		469F74391917439FB43B3480 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; name = "MaterialCommunityIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		99DEAA1AD39B478481F8CE2A /* MaterialIcons.ttf */ = {isa = PBXFileReference; name = "MaterialIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +232,9 @@
 				B7F4F3F872534807887AEDDA /* TypeType - TT Commons Light.otf */,
 				336AF2D15CD3440DAB275543 /* TTCommons-Light.otf */,
 				7E9A692685474EBA8C3432F5 /* TTCommons-Medium.otf */,
+				341ACA75002B4750B82A54E9 /* TTCommons.otf */,
+				469F74391917439FB43B3480 /* MaterialCommunityIcons.ttf */,
+				99DEAA1AD39B478481F8CE2A /* MaterialIcons.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -383,6 +392,9 @@
 				B465E65822CE17D100F87457 /* assets in Resources */,
 				EFAD1C3A1B6644A08881D955 /* TTCommons-Light.otf in Resources */,
 				2C3D37BAA7B5442D986F17CF /* TTCommons-Medium.otf in Resources */,
+				74A0A6078DC3485EBC37BF22 /* TTCommons.otf in Resources */,
+				31E90523896944B380144436 /* MaterialCommunityIcons.ttf in Resources */,
+				1E16C2D4512346DCB6C48992 /* MaterialIcons.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
