@@ -21,7 +21,7 @@ jest.mock('react-native-keychain', () => ({
 }))
 
 describe('Lock screen', () => {
-  test('displays', async () => {
+  test('displays body and unlocks the app', async () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
     const mockDispatchFn = jest.fn()
     useDispatchSpy.mockReturnValue(mockDispatchFn)
