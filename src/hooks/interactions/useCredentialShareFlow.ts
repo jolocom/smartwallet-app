@@ -5,6 +5,7 @@ import {
   getShareAttributes,
   getShareCredentialsBySection,
   getShareCredentialTypes,
+  getInteractionDetails,
 } from '~/modules/interaction/selectors'
 import { AttrKeys, attrTypeToAttrKey } from '~/types/credentials'
 import { IntermediaryState } from '~/modules/interaction/types'
@@ -14,12 +15,14 @@ import {
   selectShareCredential,
 } from '~/modules/interaction/actions'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { isCredShareDetails } from '~/modules/interaction/guards'
 
 export const useCredentialShareFlow = () => {
   const dispatch = useDispatch()
   const interaction = useInteraction()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getShareAttributes)
+  const interactionDetails = useSelector(getInteractionDetails)
   const { service_issued, self_issued } = useSelector(getShareCredentialTypes)
   const { documents, other } = useSelector(getShareCredentialsBySection)
 
@@ -79,7 +82,7 @@ export const useCredentialShareFlow = () => {
   }
 
   const getSingleMissingAttribute = (): AttrKeys | null => {
-    if (interaction.flow.type !== FlowType.CredentialShare) return null
+    if (!isCredShareDetails(interactionDetails)) return null
 
     const isSingleAttribute = !service_issued.length && self_issued.length === 1
     const attrKey = attrTypeToAttrKey(self_issued[0])
