@@ -1,28 +1,29 @@
-import { RootReducerI } from '~/types/reducer'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
-import { AttrsState, AttributeI } from '../attributes/types'
-import { IntermediaryState, CredReceiveI, CredShareI } from './types'
+
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
-import { getAllCredentials } from '../credentials/selectors'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+
+import { RootReducerI } from '~/types/reducer'
 import {
-  UICredential,
   CredentialsBySection,
   OfferUICredential,
   ShareCredentialsBySection,
-  ShareUICredential,
   attrTypeToAttrKey,
-  AttrKeys,
 } from '~/types/credentials'
+import { AttributeI } from '~/modules/attributes/types'
+import { getAttributes } from '~/modules/attributes/selectors'
+import { getAllCredentials } from '~/modules/credentials/selectors'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
 import { getCredentialSection } from '~/utils/credentialsBySection'
-import { getAttributes } from '../attributes/selectors'
+import { IntermediaryState, InteractionDetails } from './types'
+import {
+  isNotActiveInteraction,
+  isCredOfferDetails,
+  isCredShareDetails,
+  isAuthDetails,
+  isAuthzDetails,
+} from './guards'
 
-export const getAvailablaAttributesToShare = (
-  state: RootReducerI,
-): AttrsState<AttributeI> => state.interaction.availableAttributesToShare
-
-//FIXME: Must fix the types, or re-structure the module
 export const getSelectedShareCredentials = (
   state: RootReducerI,
 ): { [x: string]: string } => state.interaction.selectedShareCredentials
@@ -33,74 +34,75 @@ export const getIntermediaryState = (state: RootReducerI) =>
 export const getAttributeInputKey = (state: RootReducerI) =>
   state.interaction.attributeInputKey
 
-export const getInteractionCredentials = (state: RootReducerI) =>
-  state.interaction.details.credentials
-
-export const getInteractionId = (state: RootReducerI): string =>
-  state.interaction.details.id
+export const getInteractionId = (state: RootReducerI): string | undefined => {
+  if (!isNotActiveInteraction(state.interaction.details)) {
+    return state.interaction.details.id
+  }
+}
 
 export const getInteractionType = (state: RootReducerI): FlowType | null =>
   state.interaction.details.flowType
 
 export const getInteractionCounterparty = (
   state: RootReducerI,
-): IdentitySummary => state.interaction.details.counterparty
+): IdentitySummary | undefined => {
+  if (!isNotActiveInteraction(state.interaction.details)) {
+    return state.interaction.details.counterparty
+  }
+}
 
-export const getInteractionDetails = <T>(state: RootReducerI): T =>
-  state.interaction.details
+export const getInteractionDetails = (
+  state: RootReducerI,
+): InteractionDetails => state.interaction.details
 
-export const getServiceIssuedCreds = (state: RootReducerI) =>
-  state.interaction.details.credentials
-    ? state.interaction.details.credentials.service_issued
-    : []
+export const getServiceIssuedCreds = (state: RootReducerI): any => {
+  if (
+    (isCredOfferDetails(state.interaction.details) ||
+      isCredShareDetails(state.interaction.details)) &&
+    !isNotActiveInteraction(state.interaction.details)
+  ) {
+    return state.interaction.details.credentials.service_issued
+  }
+  return []
+}
 
-export const getShareAttributes = createSelector<
-  RootReducerI,
-  AttrsState<AttributeI>,
-  CredShareI,
-  AttrsState<AttributeI>
->([getAttributes, getInteractionDetails], (attributes, shareDetails) => {
-  //FIXME @clauxx If we have to do this, then the pattern we're using is bad
-  if (!shareDetails.credentials) return {}
+export const getShareAttributes = createSelector(
+  [getAttributes, getInteractionDetails],
+  (attributes, shareDetails) => {
+    if (isCredShareDetails(shareDetails)) {
+      const {
+        credentials: { self_issued: requestedAttributes },
+      } = shareDetails
 
-  const {
-    credentials: { self_issued: requestedAttributes },
-  } = shareDetails
-  //FIXME @clauxx If we have to do this, then the pattern we're using is bad
-  if (!requestedAttributes) return {}
+      const interactionAttributues = !requestedAttributes.length
+        ? {}
+        : requestedAttributes.reduce<{
+            [key: string]: AttributeI[]
+          }>((acc, v) => {
+            const value = attrTypeToAttrKey(v)
+            acc[value] = attributes[value] || []
+            return acc
+          }, {})
 
-  const interactionAttributues = !requestedAttributes.length
-    ? {}
-    : requestedAttributes.reduce<{
-        [key: string]: AttributeI[]
-      }>((acc, v) => {
-        //FIXME type assertion
-        const value = attrTypeToAttrKey(v) as AttrKeys
-        acc[value] = attributes[value] || []
-        return acc
-      }, {})
-
-  return interactionAttributues
-})
+      return interactionAttributues
+    }
+    return {}
+  },
+)
 
 export const getIsFullScreenInteraction = createSelector(
-  [
-    getInteractionType,
-    getIntermediaryState,
-    getInteractionCredentials,
-    getShareAttributes,
-  ],
-  (type, intermediaryState, credentials, shareAttributes) => {
+  [getIntermediaryState, getShareAttributes, getInteractionDetails],
+  (intermediaryState, shareAttributes, details) => {
     if (
       intermediaryState !== IntermediaryState.absent ||
-      type === FlowType.Authentication ||
-      type === FlowType.Authorization
+      isAuthDetails(details) ||
+      isAuthzDetails(details)
     ) {
       return false
     } else if (
-      type === FlowType.CredentialShare &&
-      credentials.self_issued.length &&
-      !credentials.service_issued.length
+      isCredShareDetails(details) &&
+      details.credentials.self_issued.length &&
+      !details.credentials.service_issued.length
     ) {
       const availableAttributes = Object.values(shareAttributes).reduce<
         AttributeI[]
@@ -115,13 +117,13 @@ export const getIsFullScreenInteraction = createSelector(
       }
       return false
     } else if (
-      type === FlowType.CredentialShare &&
-      !credentials.self_issued.length &&
-      credentials.service_issued.length === 1
+      isCredShareDetails(details) &&
+      !details.credentials.self_issued.length &&
+      details.credentials.service_issued.length === 1
     ) {
     } else if (
-      type === FlowType.CredentialOffer &&
-      credentials.service_issued.length === 1
+      isCredOfferDetails(details) &&
+      details.credentials.service_issued.length === 1
     ) {
       return false
     } else {
@@ -130,63 +132,72 @@ export const getIsFullScreenInteraction = createSelector(
   },
 )
 
-export const getOfferCredentialsBySection = createSelector<
-  RootReducerI,
-  CredReceiveI,
-  CredentialsBySection<OfferUICredential>
->([getInteractionDetails], (details) =>
-  details.credentials.service_issued.reduce<
-    CredentialsBySection<OfferUICredential>
-  >(
-    (acc, cred) => {
-      const section = getCredentialSection(cred)
-      acc[section] = [...acc[section], cred]
+export const getOfferCredentialsBySection = createSelector(
+  [getInteractionDetails],
+  (details) => {
+    const defaultSections = { documents: [], other: [] }
 
-      return acc
-    },
-    { documents: [], other: [] },
-  ),
+    if (isCredOfferDetails(details)) {
+      return details.credentials.service_issued.reduce<
+        CredentialsBySection<OfferUICredential>
+      >((acc, cred) => {
+        const section = getCredentialSection(cred)
+        acc[section] = [...acc[section], cred]
+
+        return acc
+      }, defaultSections)
+    }
+
+    return defaultSections
+  },
 )
 
-export const getFirstShareDocument = createSelector<
-  RootReducerI,
-  CredShareI,
-  UICredential[],
-  ShareUICredential | null
->([getInteractionDetails, getAllCredentials], (details, credentials) => {
-  const firstType = details.credentials.service_issued[0]
-  const firstCredential = credentials.find((c) => c.type === firstType)
+export const getFirstShareDocument = createSelector(
+  [getInteractionDetails, getAllCredentials],
+  (details, credentials) => {
+    if (isCredShareDetails(details)) {
+      const firstType = details.credentials.service_issued[0]
+      const firstCredential = credentials.find((c) => c.type === firstType)
 
-  return firstCredential ? uiCredentialToShareCredential(firstCredential) : null
-})
+      return firstCredential
+        ? uiCredentialToShareCredential(firstCredential)
+        : null
+    }
 
-export const getShareCredentialsBySection = createSelector<
-  RootReducerI,
-  CredShareI,
-  UICredential[],
-  ShareCredentialsBySection
->([getInteractionDetails, getAllCredentials], (details, credentials) => {
-  return details.credentials.service_issued.reduce<ShareCredentialsBySection>(
-    (acc, type) => {
-      const creds = credentials.filter((cred) => cred.type === type)
-      if (!creds.length) return acc
+    return null
+  },
+)
 
-      // NOTE: we assume the @renderAs property is the same for all credentials
-      // of the same type
-      const section = getCredentialSection(creds[0])
+export const getShareCredentialsBySection = createSelector(
+  [getInteractionDetails, getAllCredentials],
+  (details, credentials) => {
+    const defaultSections = { documents: [], other: [] }
 
-      // TODO?: move @uiCredentialToShareCredential to @mapCredShareData when the interaction starts,
-      // in order to store the proper credentials in the store instead of the types.
-      acc[section] = [
-        ...acc[section],
-        {
-          type,
-          credentials: creds.map(uiCredentialToShareCredential),
-        },
-      ]
+    if (isCredShareDetails(details)) {
+      return details.credentials.service_issued.reduce<
+        ShareCredentialsBySection
+      >((acc, type) => {
+        const creds = credentials.filter((cred) => cred.type === type)
+        if (!creds.length) return acc
 
-      return acc
-    },
-    { documents: [], other: [] },
-  )
-})
+        // NOTE: we assume the @renderAs property is the same for all credentials
+        // of the same type
+        const section = getCredentialSection(creds[0])
+
+        // TODO?: move @uiCredentialToShareCredential to @mapCredShareData when the interaction starts,
+        // in order to store the proper credentials in the store instead of the types.
+        acc[section] = [
+          ...acc[section],
+          {
+            type,
+            credentials: creds.map(uiCredentialToShareCredential),
+          },
+        ]
+
+        return acc
+      }, defaultSections)
+    }
+
+    return defaultSections
+  },
+)

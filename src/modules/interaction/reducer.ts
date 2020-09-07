@@ -1,12 +1,12 @@
 import {
   InteractionActions,
   IntermediaryState,
-  InteractionStateI,
+  InteractionState,
 } from './types'
 import { Action } from '~/types/actions'
 
-const initialState: InteractionStateI = {
-  details: {},
+const initialState: InteractionState = {
+  details: { flowType: null },
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
   selectedShareCredentials: {},

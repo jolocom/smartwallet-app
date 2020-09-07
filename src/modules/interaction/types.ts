@@ -1,5 +1,4 @@
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { AttrsState, AttributeI } from '../attributes/types'
 import { AttrKeys, OfferUICredential } from '~/types/credentials'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
@@ -15,45 +14,41 @@ export type InteractionDetails =
   | AuthenticationDetailsI
   | AuthorizationDetailsI
   | CredShareI
-  | CredReceiveI
+  | CredOfferI
+  | NotActiveInteractionDetailsI
 
 export interface InteractionState {
-  details: {} | InteractionDetails
+  details: InteractionDetails
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
   selectedShareCredentials: { [x: string]: string }
 }
+
+export type SelectedAttributesT = { [x: string]: string }
 
 interface InteractionCommonI {
   id: string
   counterparty: IdentitySummary
 }
 
-interface AuthCommonI extends InteractionCommonI {
-  credentials?: never
+// default state of details prop in interaction
+export interface NotActiveInteractionDetailsI {
+  flowType: null
 }
 
-export interface AuthenticationDetailsI extends AuthCommonI {
+export interface AuthenticationDetailsI extends InteractionCommonI {
   flowType: FlowType.Authentication
   description: string
-  image?: never
-  action?: never
 }
 
-export interface AuthorizationDetailsI extends AuthCommonI {
+export interface AuthorizationDetailsI extends InteractionCommonI {
   flowType: FlowType.Authorization
   description?: string
   image?: string
   action: string
 }
 
-interface CredCommonI extends InteractionCommonI {
-  description?: never
-  image?: never
-  action?: never
-}
-
-export interface CredShareI extends CredCommonI {
+export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
   credentials: {
     self_issued: string[]
@@ -61,10 +56,9 @@ export interface CredShareI extends CredCommonI {
   }
 }
 
-export interface CredReceiveI extends CredCommonI {
+export interface CredOfferI extends InteractionCommonI {
   flowType: FlowType.CredentialOffer
   credentials: {
-    self_issued?: never
     service_issued: OfferUICredential[]
   }
 }
