@@ -1,6 +1,7 @@
 import { ActionI } from '~/types/action'
 import { CredentialActions } from './types'
 
+//TODO: check if additional nesting is required
 const initialState = {
   all: [],
 }

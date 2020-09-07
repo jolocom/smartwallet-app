@@ -21,7 +21,7 @@ export type InteractionDetails =
   | CredOfferI
   | NotActiveInteractionDetailsI
 
-export interface InteractionStateI {
+export interface InteractionState {
   details: InteractionDetails
   attributes: AttrsState<AttributeI>
   attributesToShare: { [x: string]: string }

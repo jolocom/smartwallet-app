@@ -1,4 +1,5 @@
-import React, { useState, Dispatch, SetStateAction, useEffect } from 'react'
+import React, { useState, Dispatch, SetStateAction } from 'react'
+import { useSelector } from 'react-redux'
 import { TextInput, ScrollView, View } from 'react-native'
 import { Picker } from '@react-native-community/picker'
 
@@ -9,10 +10,8 @@ import Link from '~/components/Link'
 import { AttrKeys } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import { fieldNames } from '~/utils/dataMapping'
-import { useSDK } from '~/hooks/sdk'
 import Paragraph from '~/components/Paragraph'
 import Header from '~/components/Header'
-import { useSelector } from 'react-redux'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 
 const text =
