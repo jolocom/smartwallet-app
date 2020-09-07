@@ -16,6 +16,7 @@ import { getShareAttributes } from '~/modules/interaction/selectors'
 import InteractionFooter from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
+import { strings } from '~/translations/strings'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getShareAttributes)
@@ -74,7 +75,6 @@ const CredentialShareFas = () => {
       )
     })
 
-  //TODO: add strings
   return (
     <>
       <FasWrapper>
@@ -89,10 +89,13 @@ const CredentialShareFas = () => {
             />
           </AttributeWidgetWrapper>
         )}
-        <InteractionSection visible={!!documents.length} title={'Documents'}>
+        <InteractionSection
+          visible={!!documents.length}
+          title={strings.DOCUMENTS}
+        >
           {renderCredentials(documents)}
         </InteractionSection>
-        <InteractionSection visible={!!other.length} title={'Others'}>
+        <InteractionSection visible={!!other.length} title={strings.OTHER}>
           {renderCredentials(other)}
         </InteractionSection>
       </FasWrapper>
