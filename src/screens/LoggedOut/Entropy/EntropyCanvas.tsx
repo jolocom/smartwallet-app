@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { PanResponder, GestureResponderEvent, Animated } from 'react-native'
 import { Svg, Path, Rect, Circle } from 'react-native-svg'
-import { EntropyCircle } from '~/assets/svg'
 
 import { useForceUpdate } from '~/hooks/useForceUpdate'
 import {
