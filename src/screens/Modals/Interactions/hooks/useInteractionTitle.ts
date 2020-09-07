@@ -8,7 +8,6 @@ import {
 } from '~/modules/interaction/selectors'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
-import { useRootSelector } from '~/hooks/useRootSelector'
 import { ATTR_UI_NAMES } from '~/types/credentials'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import {
@@ -19,7 +18,7 @@ import {
 } from '~/modules/interaction/guards'
 
 const useInteractionTitle = () => {
-  const details = useRootSelector(getInteractionDetails)
+  const details = useSelector(getInteractionDetails)
   const intermediaryState = useSelector(getIntermediaryState)
   const inputType = useSelector(getAttributeInputKey)
   const counterparty = useSelector(getInteractionCounterparty)

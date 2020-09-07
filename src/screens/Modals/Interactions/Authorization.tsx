@@ -1,14 +1,12 @@
+import { useSelector } from 'react-redux'
 import React from 'react'
 
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
-import { useRootSelector } from '~/hooks/useRootSelector'
-import {
-  getInteractionDetails,
-  isAuthzDetails,
-} from '~/modules/interaction/selectors'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { isAuthzDetails } from '~/modules/interaction/guards'
 
 const Authorization = () => {
-  const details = useRootSelector(getInteractionDetails)
+  const details = useSelector(getInteractionDetails)
   if (isAuthzDetails(details)) {
     const { image } = details
     return <BasWrapper />

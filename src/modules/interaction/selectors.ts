@@ -168,6 +168,17 @@ export const getFirstShareDocument = createSelector(
   },
 )
 
+export const getShareCredentialTypes = createSelector(
+  [getInteractionDetails],
+  (details) => {
+    if (isCredShareDetails(details)) {
+      return details.credentials
+    }
+
+    return { self_issued: [], service_issued: [] }
+  },
+)
+
 export const getShareCredentialsBySection = createSelector(
   [getInteractionDetails, getAllCredentials],
   (details, credentials) => {

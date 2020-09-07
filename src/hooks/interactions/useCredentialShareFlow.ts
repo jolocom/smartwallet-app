@@ -3,12 +3,11 @@ import { useInteraction } from '../sdk'
 import {
   getSelectedShareCredentials,
   getShareAttributes,
-  getInteractionDetails,
   getShareCredentialsBySection,
+  getShareCredentialTypes,
 } from '~/modules/interaction/selectors'
 import { AttrKeys, attrTypeToAttrKey } from '~/types/credentials'
-import { useRootSelector } from '../useRootSelector'
-import { CredShareI, IntermediaryState } from '~/modules/interaction/types'
+import { IntermediaryState } from '~/modules/interaction/types'
 import {
   setIntermediaryState,
   setAttributeInputKey,
@@ -21,9 +20,7 @@ export const useCredentialShareFlow = () => {
   const interaction = useInteraction()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getShareAttributes)
-  const {
-    credentials: { service_issued, self_issued },
-  } = useRootSelector<CredShareI>(getInteractionDetails)
+  const { service_issued, self_issued } = useSelector(getShareCredentialTypes)
   const { documents, other } = useSelector(getShareCredentialsBySection)
 
   const assembleShareResponseToken = async () => {

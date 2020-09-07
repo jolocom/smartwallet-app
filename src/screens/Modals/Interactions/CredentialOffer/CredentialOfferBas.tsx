@@ -1,17 +1,15 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import CredentialCard from '../CredentialCard'
-import { useRootSelector } from '~/hooks/useRootSelector'
-import {
-  getInteractionDetails,
-  isCredOfferDetails,
-} from '~/modules/interaction/selectors'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
+import { isCredOfferDetails } from '~/modules/interaction/guards'
 
 const CredentialOfferBas = () => {
-  const details = useRootSelector(getInteractionDetails)
+  const details = useSelector(getInteractionDetails)
   if (isCredOfferDetails(details)) {
     const {
       credentials: { service_issued },
