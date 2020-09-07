@@ -6,6 +6,7 @@ import com.facebook.react.PackageList;
 
 import com.facebook.react.ReactApplication;
 import io.jolocom.jolocomCore.JolocomCorePackage;
+import com.wix.interactable.Interactable;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
         List<ReactPackage> packages = new PackageList(this).getPackages();
         // Packages that cannot be autolinked yet can be added manually here, for example:
         // packages.add(new MyReactNativePackage());
+        packages.add(new Interactable());
 
         // https://github.com/crazycodeboy/react-native-splash-screen
         // this package looks dead, we should move to https://github.com/zoontek/react-native-bootsplash
