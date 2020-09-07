@@ -74,6 +74,7 @@ const CredentialShareFas = () => {
       )
     })
 
+  //TODO: add strings
   return (
     <>
       <FasWrapper>

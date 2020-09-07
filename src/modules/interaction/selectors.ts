@@ -24,10 +24,6 @@ import {
   isAuthzDetails,
 } from './guards'
 
-export const getSelectedShareCredentials = (
-  state: RootReducerI,
-): { [x: string]: string } => state.interaction.selectedShareCredentials
-
 export const getIntermediaryState = (state: RootReducerI) =>
   state.interaction.intermediaryState
 
@@ -51,21 +47,24 @@ export const getInteractionCounterparty = (
   }
 }
 
+/**
+ * Gets the mapping of all selected credentials (attributes + documents)
+ */
+export const getSelectedShareCredentials = (
+  state: RootReducerI,
+): { [x: string]: string } => state.interaction.selectedShareCredentials
+
+/**
+ * Gets the interaction details from the @interactions module
+ */
 export const getInteractionDetails = (
   state: RootReducerI,
 ): InteractionDetails => state.interaction.details
 
-export const getServiceIssuedCreds = (state: RootReducerI): any => {
-  if (
-    (isCredOfferDetails(state.interaction.details) ||
-      isCredShareDetails(state.interaction.details)) &&
-    !isNotActiveInteraction(state.interaction.details)
-  ) {
-    return state.interaction.details.credentials.service_issued
-  }
-  return []
-}
-
+/**
+ * Gets the available requested attributes from the @attributes module. If an attribute
+ * of a particular type is not available, the value for the type will be an empty array.
+ */
 export const getShareAttributes = createSelector(
   [getAttributes, getInteractionDetails],
   (attributes, shareDetails) => {
@@ -90,6 +89,10 @@ export const getShareAttributes = createSelector(
   },
 )
 
+/**
+ * Contains the logic that decides whether we need to show a full-screen ActionSheet (FAS)
+ * or a bottom ActionSheet (BAS).
+ */
 export const getIsFullScreenInteraction = createSelector(
   [getIntermediaryState, getShareAttributes, getInteractionDetails],
   (intermediaryState, shareAttributes, details) => {
@@ -132,6 +135,9 @@ export const getIsFullScreenInteraction = createSelector(
   },
 )
 
+/**
+ * Gets the categorized @OfferUICredentials from the @interactionDetails.
+ */
 export const getOfferCredentialsBySection = createSelector(
   [getInteractionDetails],
   (details) => {
@@ -152,6 +158,10 @@ export const getOfferCredentialsBySection = createSelector(
   },
 )
 
+/**
+ * Gets the first requested @ShareUIDocument, if available in the @credentials module.
+ * Otherwise, returns @null.
+ */
 export const getFirstShareDocument = createSelector(
   [getInteractionDetails, getAllCredentials],
   (details, credentials) => {
@@ -168,6 +178,9 @@ export const getFirstShareDocument = createSelector(
   },
 )
 
+/**
+ * Gets the requested credential types for CredentialShare.
+ */
 export const getShareCredentialTypes = createSelector(
   [getInteractionDetails],
   (details) => {
@@ -179,6 +192,10 @@ export const getShareCredentialTypes = createSelector(
   },
 )
 
+/**
+ * Gets the categorized @ShareUICredentials from the @credentials module
+ * based on the @interactionDetails.
+ */
 export const getShareCredentialsBySection = createSelector(
   [getInteractionDetails, getAllCredentials],
   (details, credentials) => {

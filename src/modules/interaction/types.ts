@@ -17,6 +17,15 @@ export type InteractionDetails =
   | CredOfferI
   | NotActiveInteractionDetailsI
 
+/*
+ * Holds the mapped Flow state from the SDK's InteractionManager and additional
+ * UI related state.
+ *
+ * @details - mapped flow state. If no active interaction, defaults to { flowType: null }
+ * @intermediaryState - status of the Intermediary ActionSheet
+ * @attributeInputKey - the attribute type that should be created on the @IntermediaryActionSheet
+ * @selectedShareCredentials - mapping of selected {[type]: id} credentials within the interaction
+ */
 export interface InteractionState {
   details: InteractionDetails
   intermediaryState: IntermediaryState
@@ -24,14 +33,31 @@ export interface InteractionState {
   selectedShareCredentials: { [x: string]: string }
 }
 
-export type SelectedAttributesT = { [x: string]: string }
+/**
+ * @showing - Shows the Intermediary ActionSheet
+ * @hiding - Hides the Intermediary ActionSheet before showing another ActionSheet
+ * @absent - Hides the Intermediary ActionSheet entirely
+ */
+export enum IntermediaryState {
+  showing = 'showing',
+  hiding = 'hiding',
+  absent = 'absent',
+}
 
+/**
+ * Common InteractionDetails properties across all interactions
+ *
+ * @id - unique interaction identifier (nonce)
+ * @counterparty - the @IdentitySummary of the identity that initiated the interaction
+ */
 interface InteractionCommonI {
   id: string
   counterparty: IdentitySummary
 }
 
-// default state of details prop in interaction
+/**
+ * Default interaction state, if there are no active interactions
+ */
 export interface NotActiveInteractionDetailsI {
   flowType: null
 }
@@ -61,10 +87,4 @@ export interface CredOfferI extends InteractionCommonI {
   credentials: {
     service_issued: OfferUICredential[]
   }
-}
-
-export enum IntermediaryState {
-  showing = 'showing',
-  hiding = 'hiding',
-  absent = 'absent',
 }

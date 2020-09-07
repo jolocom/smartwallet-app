@@ -14,9 +14,11 @@ import {
   setAttributeInputKey,
   selectShareCredential,
 } from '~/modules/interaction/actions'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { isCredShareDetails } from '~/modules/interaction/guards'
 
+/**
+ * A custom hook which exposes a collection of utils for the Credential Share interaction
+ */
 export const useCredentialShareFlow = () => {
   const dispatch = useDispatch()
   const interaction = useInteraction()
@@ -26,6 +28,10 @@ export const useCredentialShareFlow = () => {
   const { service_issued, self_issued } = useSelector(getShareCredentialTypes)
   const { documents, other } = useSelector(getShareCredentialsBySection)
 
+  /**
+   * Assembles a @CredentialRequestResponse token with the selected
+   * credentials, processes it and sends it to the @counterparty.
+   */
   const assembleShareResponseToken = async () => {
     const mappedSelection = Object.values(selectedShareCredentials).map(
       (id) => ({
@@ -40,6 +46,9 @@ export const useCredentialShareFlow = () => {
     await interaction.send(response)
   }
 
+  /**
+   * Returns the @id for the first available attribute of each type.
+   */
   const getPreselectedAttributes = () =>
     Object.keys(attributes).reduce<{
       [key: string]: string
@@ -52,6 +61,9 @@ export const useCredentialShareFlow = () => {
       return acc
     }, {})
 
+  /**
+   * Assures all requested credentials & attributes are selected.
+   */
   const selectionReady = () => {
     const allAttributes = Object.keys(attributes).every((t) =>
       Object.keys(selectedShareCredentials).includes(t),
@@ -64,6 +76,10 @@ export const useCredentialShareFlow = () => {
     return allAttributes && allCredentials
   }
 
+  /**
+   * Returns @true if the credential @id is the first in the list of available credentials.
+   * Used for knowing where to show the selection instruction animation.
+   */
   const isFirstCredential = (id: string) => {
     if (documents.length) {
       return id === documents[0].credentials[0].id
@@ -72,15 +88,25 @@ export const useCredentialShareFlow = () => {
     }
   }
 
+  /**
+   * Shows the Intermediary ActionSheet for creating a new attribute.
+   */
   const handleCreateAttribute = (sectionKey: AttrKeys) => {
     dispatch(setIntermediaryState(IntermediaryState.showing))
     dispatch(setAttributeInputKey(sectionKey))
   }
 
+  /**
+   * Selects a credential in the @interactions module
+   */
   const handleSelectCredential = (credential: { [key: string]: string }) => {
     dispatch(selectShareCredential(credential))
   }
 
+  /**
+   * Returns the attribute type if only one attribute is requested, and it's not
+   * available in the @attributes module. Otherwise returns @null.
+   */
   const getSingleMissingAttribute = (): AttrKeys | null => {
     if (!isCredShareDetails(interactionDetails)) return null
 
