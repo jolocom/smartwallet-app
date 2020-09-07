@@ -45,6 +45,7 @@ type FontSetI = {
   lineHeight: number
   letterSpacing: number
   color: Colors
+  fontFamily: Fonts
 }
 const sizes = ['big', 'middle', 'mini', 'tiniest'] as const
 export type TitleSizes = typeof sizes[number]
@@ -54,11 +55,13 @@ const arrangeFontStyle = (
   lineHeight: number,
   letterSpacing: number,
   color: Colors,
+  fontFamily: Fonts,
 ): FontSetI => ({
   fontSize,
   lineHeight,
   letterSpacing,
   color,
+  fontFamily,
 })
 
 export const TITLE_SETS: Record<TitleSizes, FontSetI> = {
@@ -68,6 +71,7 @@ export const TITLE_SETS: Record<TitleSizes, FontSetI> = {
       BP({ xsmall: 32, small: 36, medium: 40, large: 40 }),
       0,
       Colors.white90,
+      Fonts.Medium,
     ),
   },
   middle: {
@@ -76,6 +80,7 @@ export const TITLE_SETS: Record<TitleSizes, FontSetI> = {
       BP({ xsmall: 28, small: 32, medium: 32, large: 32 }),
       0,
       Colors.white90,
+      Fonts.Medium,
     ),
   },
   mini: {
@@ -84,10 +89,11 @@ export const TITLE_SETS: Record<TitleSizes, FontSetI> = {
       BP({ xsmall: 20, small: 24, medium: 24, large: 24 }),
       0,
       Colors.white90,
+      Fonts.Medium,
     ),
   },
   tiniest: {
-    ...arrangeFontStyle(14, 20, 0, Colors.white70),
+    ...arrangeFontStyle(14, 20, 0, Colors.white70, Fonts.Medium),
   },
 }
 
@@ -103,6 +109,7 @@ export const SUBTITLE_SETS = {
         medium: Colors.white80,
         large: Colors.white80,
       }),
+      Fonts.Regular,
     ),
   },
   middle: {
@@ -116,6 +123,7 @@ export const SUBTITLE_SETS = {
         medium: Colors.white70,
         large: Colors.white70,
       }),
+      Fonts.Regular,
     ),
   },
   mini: {
@@ -124,9 +132,10 @@ export const SUBTITLE_SETS = {
       BP({ xsmall: 14, small: 16, medium: 16, large: 16 }),
       BP({ xsmall: 0, small: 0, medium: 0, large: 0 }),
       Colors.white40,
+      Fonts.Regular,
     ),
   },
   tiniest: {
-    ...arrangeFontStyle(14, 20, 0, Colors.white70),
+    ...arrangeFontStyle(14, 20, 0, Colors.white70, Fonts.Regular),
   },
 }

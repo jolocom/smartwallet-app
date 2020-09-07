@@ -27,12 +27,8 @@ const JoloText: React.FC<PropsI> = ({
   const TextComponent = animated ? Animated.Text : Text
   const fontStylesAllSizes =
     kind === JoloTextKind.title ? TITLE_SETS : SUBTITLE_SETS
-  const fontFamily =
-    (kind === JoloTextKind.title && Fonts.Medium) ||
-    (kind === JoloTextKind.subtitle && Fonts.Regular)
   const sizeStyles = {
     ...fontStylesAllSizes[size],
-    fontFamily,
     ...(color && { color }),
   }
   return (
