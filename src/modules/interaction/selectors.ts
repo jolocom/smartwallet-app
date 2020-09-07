@@ -2,13 +2,19 @@ import { RootReducerI } from '~/types/reducer'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { createSelector } from 'reselect'
 import { AttrsState, AttributeI } from '../attributes/types'
-import { IntermediaryState, CredReceiveI, CredentialsInSections } from './types'
+import {
+  IntermediaryState,
+  CredReceiveI,
+  InteractionCredentialsBySection,
+} from './types'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export const getInteractionAttributes = (
   state: RootReducerI,
 ): AttrsState<AttributeI> => state.interaction.attributes
+
+//FIXME: Must fix the types, or re-structure the module
 export const getSelectedAttributes = (
   state: RootReducerI,
 ): { [x: string]: string } => state.interaction.selectedAttributes
@@ -77,9 +83,9 @@ export const getIsFullScreenInteraction = createSelector(
 export const getCredentialsBySection = createSelector<
   RootReducerI,
   CredReceiveI,
-  CredentialsInSections
+  InteractionCredentialsBySection
 >([getInteractionDetails], (details) =>
-  details.credentials.service_issued.reduce<CredentialsInSections>(
+  details.credentials.service_issued.reduce<InteractionCredentialsBySection>(
     (acc, v) => {
       if (
         v.renderInfo &&

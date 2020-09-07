@@ -20,7 +20,7 @@ export type InteractionDetails =
   | CredShareI
   | CredReceiveI
 
-export interface InteractionStateI {
+export interface InteractionState {
   details: {} | InteractionDetails
   attributes: AttrsState<AttributeI>
   attributesToShare: { [x: string]: string }
@@ -85,7 +85,7 @@ export enum IntermediaryState {
   absent = 'absent',
 }
 
-export interface CredentialsInSections {
+export interface InteractionCredentialsBySection {
   documents: ServiceIssuedCredI[]
   other: ServiceIssuedCredI[]
 }
