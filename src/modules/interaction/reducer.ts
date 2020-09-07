@@ -1,17 +1,18 @@
 import {
   InteractionActions,
   IntermediaryState,
-  InteractionStateI,
+  InteractionState,
 } from './types'
 import { Action } from '~/types/actions'
 import { ActionI } from '~/types/action'
 
-const initialState: InteractionStateI = {
-  details: {},
+const initialState: InteractionState = {
+  details: { flowType: null },
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
   attributes: {},
   attributesToShare: {},
+  selectedAttributes: {},
 }
 
 const reducer = (
@@ -39,7 +40,7 @@ const reducer = (
 }
 
 const onSelectAttr = (
-  state: InteractionStateI,
+  state: InteractionState,
   action: ActionI<InteractionActions>,
 ) => {
   const updatedSelectedAttrs = { [action.payload.attrKey]: action.payload.id }
