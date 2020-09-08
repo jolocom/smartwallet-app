@@ -80,23 +80,23 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
 
   const modalVisible = msg !== ''
 
-  const looping = () => {
+  const looping = async () => {
     if (loaderType.current === LoaderTypes.default) {
-      setTimeout(() => {
+      setTimeout(async () => {
         if (loaderType.current === LoaderTypes.default) {
-          looping()
+          await looping()
         } else if (loaderType.current === LoaderTypes.error) {
           setStatus(loaderMsg.current)
-          bounceError()
+          await bounceError()
         } else if (loaderType.current === LoaderTypes.success) {
           setStatus(loaderMsg.current)
-          showTick()
+          await showTick()
         }
       }, 2000)
     } else if (loaderType.current === LoaderTypes.error) {
-      bounceError()
+      await bounceError()
     } else if (loaderType.current === LoaderTypes.success) {
-      showTick()
+      await showTick()
     }
   }
 
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 10
   },
   tickContainer: {
     width: 100,

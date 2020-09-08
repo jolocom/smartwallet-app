@@ -44,17 +44,17 @@ const InteractionFooter: React.FC<Props> = ({ disabled }) => {
   } = useCredentialShareFlow()
 
   const handleSubmit = async () => {
-    const missingAttribute = getSingleMissingAttribute()
-    if (missingAttribute) {
-      handleCreateAttribute(missingAttribute)
-    } else {
-      await loader(
+    await loader(
         async () => {
-          await handleFlowSubmit()
+          const missingAttribute = getSingleMissingAttribute()
+          if (missingAttribute) {
+            handleCreateAttribute(missingAttribute)
+          } else {
+            await handleFlowSubmit()
+          }
         },
         { showFailed: false, showSuccess: false },
-      )
-    }
+    )
   }
 
   const handleCancel = () => {
