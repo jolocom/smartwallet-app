@@ -2,10 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import Keychain from 'react-native-keychain'
 
-import Header, { HeaderSizes } from '~/components/Header'
 import ScreenContainer from '~/components/ScreenContainer'
 import PasscodeInput from '~/components/PasscodeInput'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
+import Paragraph from '~/components/Paragraph'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 import useSuccess from '~/hooks/useSuccess'
@@ -20,6 +19,8 @@ import {
 import { showBiometry } from './module/deviceAuthActions'
 import BP from '~/utils/breakpoints'
 import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import ScreenHeader from '~/components/ScreenHeader'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -85,20 +86,14 @@ const Passcode = () => {
           justifyContent: 'flex-start',
         }}
       >
-        <View>
-          <Header color={Colors.white90}>
-            {isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
-          </Header>
-          <Paragraph
-            color={Colors.white70}
-            size={ParagraphSizes.medium}
-            customStyles={{ marginHorizontal: 5, opacity: 0.8 }}
-          >
-            {isCreating
+        <ScreenHeader
+          title={isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
+          subtitle={
+            isCreating
               ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
-              : strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN}
-          </Paragraph>
-        </View>
+              : strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN
+          }
+        />
         <View style={styles.passcodeContainer}>
           {isCreating ? (
             <PasscodeInput
@@ -117,13 +112,15 @@ const Passcode = () => {
           )}
         </View>
         {isCreating && (
-          <Paragraph
-            size={ParagraphSizes.medium}
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size="middle"
             color={Colors.success}
             customStyles={{ marginTop: 20 }}
           >
+            {' '}
             {strings.ANY_FUTURE_PASSCODE_RESTORE}
-          </Paragraph>
+          </JoloText>
         )}
         {hasError && (
           <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>

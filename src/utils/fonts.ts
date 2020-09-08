@@ -15,14 +15,6 @@ export const TextStyle = {
     letterSpacing: 0,
     color: Colors.white90,
   },
-  middleSubtitle: {
-    fontFamily: Fonts.Regular,
-    fontSize: 20,
-    lineHeight: 22,
-    letterSpacing: 0.14,
-    color: Colors.white,
-    opacity: 0.7,
-  },
   largeSubtitle: {
     fontFamily: Fonts.Regular,
     fontSize: 22,
@@ -34,7 +26,7 @@ export const TextStyle = {
   seedPhrase: {
     fontFamily: Fonts.Medium,
     fontSize: BP({ large: 40, medium: 40, small: 32, xsmall: 32 }),
-    lineHeight: 54,
+    lineHeight: BP({ large: 54, medium: 54, small: 46, xsmall: 46 }),
     letterSpacing: 0,
     color: Colors.activity,
   },

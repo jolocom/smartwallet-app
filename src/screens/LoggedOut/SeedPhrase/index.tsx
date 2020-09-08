@@ -17,7 +17,6 @@ import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { TextStyle } from '~/utils/fonts'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
@@ -25,6 +24,7 @@ import { getEntropy } from '~/modules/account/selectors'
 import { useSelector } from 'react-redux'
 import { InfoIcon } from '~/assets/svg'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -193,21 +193,28 @@ const SeedPhrase: React.FC = () => {
 
   const renderMagicInfo = () => (
     <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
-      <Paragraph customStyles={styles.paragraph}>
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size="middle"
+        color={Colors.white70}
+        customStyles={{ opacity: 0.7 }}
+      >
         {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
-      </Paragraph>
+      </JoloText>
     </Animated.View>
   )
 
   const renderBottomButtons = () => (
     <AbsoluteBottom>
       <Animated.View style={[{ opacity: buttonOpacity }]}>
-        <Paragraph
-          size={ParagraphSizes.medium}
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size="middle"
+          color={Colors.white}
           customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}
         >
           {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
-        </Paragraph>
+        </JoloText>
         <Btn
           type={BtnTypes.primary}
           onPress={
@@ -300,9 +307,6 @@ const styles = StyleSheet.create({
   },
   info: {
     width: '80%',
-  },
-  paragraph: {
-    ...TextStyle.middleSubtitle,
   },
   iconContainer: {
     alignSelf: 'flex-end',

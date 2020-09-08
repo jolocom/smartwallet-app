@@ -1,11 +1,8 @@
 import React from 'react'
-import { View } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Header, { HeaderSizes } from '~/components/Header'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
@@ -27,6 +24,8 @@ import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { setPopup } from '~/modules/appState/actions'
 import { useDispatch } from 'react-redux'
 import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import ScreenHeader from '~/components/ScreenHeader'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 const Biometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
@@ -57,23 +56,22 @@ const Biometry: React.FC = () => {
 
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
-      <View>
-        <Header>{getBiometryHeader(biometryType)}</Header>
-        <Paragraph size={ParagraphSizes.medium} color={Colors.white70}>
-          {strings.SO_YOU_DONT_NEED_TO_CONFIRM}
-        </Paragraph>
-      </View>
+      <ScreenHeader
+        title={getBiometryHeader(biometryType)}
+        subtitle={strings.SO_YOU_DONT_NEED_TO_CONFIRM}
+      />
       <BiometryAnimation
         biometryType={biometryType}
         handleAuthenticate={handleAuthenticate}
       />
-      <Paragraph
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size="middle"
         color={Colors.success}
-        size={ParagraphSizes.medium}
         customStyles={{ paddingHorizontal: 25 }}
       >
         {getBiometryActionText(biometryType)}
-      </Paragraph>
+      </JoloText>
       <AbsoluteBottom>
         <Btn type={BtnTypes.secondary} onPress={handleRedirectToLogin}>
           {strings.SKIP}

@@ -5,6 +5,7 @@ import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import ScreenHeader from '~/components/ScreenHeader'
 
 interface RecoveryHeaderI {
   phrase: string[]
@@ -57,18 +58,10 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
             </View>
           </>
         ) : (
-          <>
-            <JoloText kind={JoloTextKind.title} size="middle">
-              {strings.RECOVERY}
-            </JoloText>
-            <JoloText
-              kind={JoloTextKind.subtitle}
-              size="middle"
-              color={Colors.white70}
-            >
-              {strings.START_ENTERING_SEED_PHRASE}
-            </JoloText>
-          </>
+          <ScreenHeader
+            title={strings.RECOVERY}
+            subtitle={strings.START_ENTERING_SEED_PHRASE}
+          />
         )}
       </View>
     )
