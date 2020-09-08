@@ -5,24 +5,18 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import { RootReducerI } from '~/types/reducer'
 import {
-  CredentialsBySection,
-  OfferUICredential,
-  ShareCredentialsBySection,
-  attrTypeToAttrKey,
+    attrTypeToAttrKey,
+    CredentialsBySection,
+    OfferUICredential,
+    ShareCredentialsBySection, ShareUICredential,
 } from '~/types/credentials'
-import { AttributeI } from '~/modules/attributes/types'
-import { getAttributes } from '~/modules/attributes/selectors'
-import { getAllCredentials } from '~/modules/credentials/selectors'
-import { uiCredentialToShareCredential } from '~/utils/dataMapping'
-import { getCredentialSection } from '~/utils/credentialsBySection'
-import { IntermediaryState, InteractionDetails } from './types'
-import {
-  isNotActiveInteraction,
-  isCredOfferDetails,
-  isCredShareDetails,
-  isAuthDetails,
-  isAuthzDetails,
-} from './guards'
+import {AttributeI} from '~/modules/attributes/types'
+import {getAttributes} from '~/modules/attributes/selectors'
+import {getAllCredentials} from '~/modules/credentials/selectors'
+import {uiCredentialToShareCredential} from '~/utils/dataMapping'
+import {getCredentialSection} from '~/utils/credentialsBySection'
+import {InteractionDetails, IntermediaryState} from './types'
+import {isAuthDetails, isAuthzDetails, isCredOfferDetails, isCredShareDetails, isNotActiveInteraction,} from './guards'
 
 export const getIntermediaryState = (state: RootReducerI) =>
   state.interaction.intermediaryState
@@ -72,27 +66,38 @@ export const getShareAttributes = createSelector(
         credentials: { self_issued: requestedAttributes },
       } = shareDetails
 
-      const interactionAttributues = !requestedAttributes.length
-        ? {}
-        : requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
-            const value = attrTypeToAttrKey(v)
-            acc[value] = attributes[value] || []
-            return acc
+      return !requestedAttributes.length
+          ? {}
+          : requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
+              const value = attrTypeToAttrKey(v)
+              if(!value) return acc
+              acc[value] = attributes[value] || []
+              return acc
           }, {})
-
-      return interactionAttributues
     }
     return {}
   },
 )
+
+const getShareCredentials = createSelector([getInteractionDetails, getAllCredentials], (details, credentials) => {
+    if(isCredShareDetails(details)) {
+        return details.credentials.service_issued.reduce<ShareUICredential[]>((acc, type) => {
+            const creds = credentials.filter((cred) => cred.type === type)
+            if(!creds.length)  return acc
+            acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
+            return acc
+        }, [])
+    }
+    return []
+})
 
 /**
  * Contains the logic that decides whether we need to show a full-screen ActionSheet (FAS)
  * or a bottom ActionSheet (BAS).
  */
 export const getIsFullScreenInteraction = createSelector(
-  [getIntermediaryState, getShareAttributes, getInteractionDetails],
-  (intermediaryState, shareAttributes, details) => {
+  [getIntermediaryState, getShareAttributes, getInteractionDetails, getShareCredentials],
+  (intermediaryState, shareAttributes, details, shareCredentials) => {
     if (
       intermediaryState !== IntermediaryState.absent ||
       isAuthDetails(details) ||
@@ -112,15 +117,13 @@ export const getIsFullScreenInteraction = createSelector(
       }, [])
 
       //TODO: add breakpoints
-      if (availableAttributes.length > 3) {
-        return true
-      }
-      return false
+      return availableAttributes.length > 3;
+
     } else if (
       isCredShareDetails(details) &&
-      !details.credentials.self_issued.length &&
-      details.credentials.service_issued.length === 1
+      !details.credentials.self_issued.length && shareCredentials.length === 1
     ) {
+        return false
     } else if (
       isCredOfferDetails(details) &&
       details.credentials.service_issued.length === 1
