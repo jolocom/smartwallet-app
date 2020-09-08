@@ -1,7 +1,7 @@
 import React from 'react'
 import { TextStyle, Animated, StyleSheet, Platform, Text } from 'react-native'
 import { Colors } from '~/utils/colors'
-import { Fonts, TITLE_SETS, SUBTITLE_SETS, TitleSizes } from '~/utils/fonts'
+import { titleFontStyles, subtitleFontStyles, TitleSizes } from '~/utils/fonts'
 
 export enum JoloTextKind {
   title = 'title',
@@ -26,13 +26,13 @@ const JoloText: React.FC<PropsI> = ({
 }) => {
   const TextComponent = animated ? Animated.Text : Text
   const fontStylesAllSizes =
-    kind === JoloTextKind.title ? TITLE_SETS : SUBTITLE_SETS
+    kind === JoloTextKind.title ? titleFontStyles : subtitleFontStyles
   const sizeStyles = {
     ...fontStylesAllSizes[size],
     ...(color && { color }),
   }
   return (
-    <TextComponent style={[styles.title, customStyles, sizeStyles]}>
+    <TextComponent style={[styles.title, sizeStyles, customStyles]}>
       {children}
     </TextComponent>
   )

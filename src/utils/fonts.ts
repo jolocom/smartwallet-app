@@ -64,7 +64,7 @@ const arrangeFontStyle = (
   fontFamily,
 })
 
-export const TITLE_SETS: Record<TitleSizes, FontSetI> = {
+export const titleFontStyles: Record<TitleSizes, FontSetI> = {
   big: {
     ...arrangeFontStyle(
       BP({ xsmall: 26, small: 30, medium: 34, large: 34 }),
@@ -97,7 +97,7 @@ export const TITLE_SETS: Record<TitleSizes, FontSetI> = {
   },
 }
 
-export const SUBTITLE_SETS = {
+export const subtitleFontStyles = {
   big: {
     ...arrangeFontStyle(
       BP({ xsmall: 18, small: 20, medium: 22, large: 22 }),

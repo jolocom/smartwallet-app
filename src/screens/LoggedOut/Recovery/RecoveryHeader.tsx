@@ -1,11 +1,10 @@
 import React, { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import Header, { HeaderSizes } from '~/components/Header'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 interface RecoveryHeaderI {
   phrase: string[]
@@ -31,15 +30,17 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
       <View style={styles.header}>
         {phrase.length ? (
           <>
-            <Header>
+            <JoloText kind={JoloTextKind.title} size="middle">
               {currentWordIdx === phrase.length
                 ? phrase.length
                 : currentWordIdx + 1}
               /12
-            </Header>
+            </JoloText>
             <View style={styles.seedPhraseContainer}>
               {phrase.map((seedKey: string, idx: number) => (
-                <Header
+                <JoloText
+                  kind={JoloTextKind.title}
+                  size="middle"
                   key={seedKey + idx}
                   color={
                     currentWordIdx === 12
@@ -51,20 +52,22 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                   customStyles={{ marginHorizontal: 3 }}
                 >
                   {seedKey}
-                </Header>
+                </JoloText>
               ))}
             </View>
           </>
         ) : (
           <>
-            <Header>{strings.RECOVERY}</Header>
-            <Paragraph
-              size={ParagraphSizes.medium}
+            <JoloText kind={JoloTextKind.title} size="middle">
+              {strings.RECOVERY}
+            </JoloText>
+            <JoloText
+              kind={JoloTextKind.subtitle}
+              size="middle"
               color={Colors.white70}
-              customStyles={{ opacity: 0.8 }}
             >
               {strings.START_ENTERING_SEED_PHRASE}
-            </Paragraph>
+            </JoloText>
           </>
         )}
       </View>
