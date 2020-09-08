@@ -11,6 +11,7 @@ import {
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 export const fieldNames = {
   [AttrKeys.name]: 'name',
@@ -18,6 +19,9 @@ export const fieldNames = {
   [AttrKeys.mobilePhoneNumber]: 'number',
   [AttrKeys.postalAddress]: 'address',
 }
+
+export const isCredentialAttribute = (cred: SignedCredential) =>
+  Object.values(credentialSchemas).indexOf(cred.type[1]) > -1
 
 export const credentialSchemas = Object.keys(claimsMetadata).reduce<{
   [key: string]: string

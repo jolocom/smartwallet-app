@@ -1,3 +1,4 @@
+import { Alert } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
@@ -7,9 +8,9 @@ import {
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
-import { Alert } from 'react-native'
 import { useInteraction } from '../sdk'
 import { JSONWebToken } from '@jolocom/sdk'
+import { useSyncCredentials } from '~/hooks/credentials'
 
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
@@ -31,6 +32,7 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     await interaction.send(token)
     dispatch(resetInteraction())
   }
+  const syncCredentials = useSyncCredentials()
 
   if (interactionType === FlowType.Authentication) {
     return async function authenticate() {
@@ -51,6 +53,7 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
       try {
         if (credentialsAlreadyIssued()) {
           await storeSelectedCredentials()
+          await syncCredentials()
           return dispatch(resetInteraction())
         }
 
@@ -71,6 +74,7 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
 
         if (allValid) {
           await storeSelectedCredentials()
+          await syncCredentials()
           Alert.alert('Documents stored successfully')
           //TODO: update store credentials with the new ones
 

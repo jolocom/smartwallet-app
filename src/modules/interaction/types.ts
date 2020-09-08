@@ -18,46 +18,43 @@ export type InteractionDetails =
   | AuthenticationDetailsI
   | AuthorizationDetailsI
   | CredShareI
-  | CredReceiveI
+  | CredOfferI
+  | NotActiveInteractionDetailsI
 
-export interface InteractionStateI {
-  details: {} | InteractionDetails
+export interface InteractionState {
+  details: InteractionDetails
   attributes: AttrsState<AttributeI>
   attributesToShare: { [x: string]: string }
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
+  selectedAttributes: SelectedAttributesT
 }
+
+export type SelectedAttributesT = { [x: string]: string }
 
 interface InteractionCommonI {
   id: string
   counterparty: IdentitySummary
 }
 
-interface AuthCommonI extends InteractionCommonI {
-  credentials?: never
+// default state of details prop in interaction
+export interface NotActiveInteractionDetailsI {
+  flowType: null
 }
 
-export interface AuthenticationDetailsI extends AuthCommonI {
+export interface AuthenticationDetailsI extends InteractionCommonI {
   flowType: FlowType.Authentication
   description: string
-  imageURL?: never
-  action?: never
 }
 
-export interface AuthorizationDetailsI extends AuthCommonI {
+export interface AuthorizationDetailsI extends InteractionCommonI {
   flowType: FlowType.Authorization
   description?: string
   imageURL?: string
   action: string
 }
 
-interface CredCommonI extends InteractionCommonI {
-  description?: never
-  imageURL?: never
-  action?: never
-}
-
-export interface CredShareI extends CredCommonI {
+export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
   credentials: {
     self_issued: string[]
@@ -71,10 +68,9 @@ interface ServiceIssuedCredI {
   renderInfo?: CredentialOfferRenderInfo
 }
 
-export interface CredReceiveI extends CredCommonI {
+export interface CredOfferI extends InteractionCommonI {
   flowType: FlowType.CredentialOffer
   credentials: {
-    self_issued?: never
     service_issued: ServiceIssuedCredI[]
   }
 }
@@ -85,7 +81,7 @@ export enum IntermediaryState {
   absent = 'absent',
 }
 
-export interface CredentialsInSections {
+export interface InteractionCredentialsBySection {
   documents: ServiceIssuedCredI[]
   other: ServiceIssuedCredI[]
 }

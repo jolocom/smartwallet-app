@@ -1,4 +1,5 @@
-import React, { useState, Dispatch, SetStateAction, useEffect } from 'react'
+import React, { useState, Dispatch, SetStateAction } from 'react'
+import { useSelector } from 'react-redux'
 import { TextInput, ScrollView, View } from 'react-native'
 import { Picker } from '@react-native-community/picker'
 
@@ -9,9 +10,9 @@ import Link from '~/components/Link'
 import { AttrKeys } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import { fieldNames } from '~/utils/dataMapping'
-import { useSDK } from '~/hooks/sdk'
 import Paragraph from '~/components/Paragraph'
 import Header from '~/components/Header'
+import { getAllCredentials } from '~/modules/credentials/selectors'
 
 const text =
   'The https://www.google.com/ is ready to share a scooter with you, unlock to start your ride'
@@ -72,22 +73,14 @@ const AddAttribute: React.FC<AddAttributeI> = ({
 }
 
 const DocumentList = () => {
-  const sdk = useSDK()
-  const [creds, setCreds] = useState<string[]>([])
-
-  useEffect(() => {
-    sdk.storageLib.get
-      .verifiableCredential()
-      .then((cred) => cred.map((c) => c.type[1]))
-      .then(setCreds)
-  }, [])
+  const credentials = useSelector(getAllCredentials)
 
   return (
     <View style={{ height: 200, paddingVertical: 20 }}>
       <Header>All Credentials</Header>
       <ScrollView>
-        {creds.map((type) => (
-          <Paragraph customStyles={{ paddingVertical: 10 }}>{type}</Paragraph>
+        {credentials.map(({ metadata: { name } }) => (
+          <Paragraph customStyles={{ paddingVertical: 10 }}>{name}</Paragraph>
         ))}
       </ScrollView>
     </View>

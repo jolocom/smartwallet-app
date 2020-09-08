@@ -1,3 +1,5 @@
+import { AttrKeys } from '~/types/credentials'
+
 const loaderMsgs = {
   CREATING: 'Creating your personal secret number',
   MATCHING: 'Matching two instances',
@@ -177,6 +179,7 @@ const attributes = {
   EMAILADDRESS: 'Email',
   MOBILEPHONENUMBER: 'Number',
   MISSING_INFO: 'Missing info',
+  SAVE_YOUR_ATTRIBUTE: (attr: AttrKeys) => `Save your attribute ${attr}`,
 }
 
 export const strings = {
