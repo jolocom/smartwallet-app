@@ -3,6 +3,9 @@ import { View, StyleSheet, Image } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import Header from './Header'
 import Paragraph from './Paragraph'
+import JoloText, { JoloTextKind } from './JoloText'
+import { Colors } from '~/utils/colors'
+import { Fonts } from '~/utils/fonts'
 
 interface Props {
   title: string
@@ -24,8 +27,20 @@ export const ErrorFallback: React.FC<Props> = ({
       />
     </View>
     <View style={styles.textContainer}>
-      <Header>{title}</Header>
-      <Paragraph>{description}</Paragraph>
+      <JoloText
+        kind={JoloTextKind.title}
+        size="middle"
+        customStyles={{ fontFamily: Fonts.Regular }}
+      >
+        {title}
+      </JoloText>
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size="middle"
+        color={Colors.white70}
+      >
+        {description}
+      </JoloText>
     </View>
     <View style={styles.buttonContainer}>{children}</View>
   </ScreenContainer>

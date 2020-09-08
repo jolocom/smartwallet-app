@@ -15,6 +15,7 @@ import { LoaderTypes } from '~/modules/loader/types'
 import useDelay from '~/hooks/useDelay'
 import { dismissLoader } from '~/modules/loader/actions'
 import { isAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 const colors: { [x: string]: Colors } = {
   default: Colors.white70,
@@ -158,13 +159,13 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
     <Modal isVisible={modalVisible}>
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
         {renderLoaderType()}
-        <Paragraph
-          customStyles={styles.description}
-          size={ParagraphSizes.medium}
-          color={loaderColor.current}
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size="big"
+          color={Colors.white80}
         >
           {status}
-        </Paragraph>
+        </JoloText>
       </View>
     </Modal>
   )

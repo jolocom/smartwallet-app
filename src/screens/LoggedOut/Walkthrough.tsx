@@ -21,6 +21,7 @@ import {
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 const walkthroughData = [
   {
@@ -89,16 +90,17 @@ const Walkthrough: React.FC = () => {
                 bottom: 235,
               }}
             >
-              <Header size={HeaderSizes.large} color={Colors.white90}>
+              <JoloText kind={JoloTextKind.title} size="big">
                 {walkthroughData[idx].header}
-              </Header>
-              <Paragraph
-                size={ParagraphSizes.large}
-                color={Colors.white85}
-                customStyles={{ opacity: 0.8, marginTop: 12 }}
+              </JoloText>
+              <JoloText
+                kind={JoloTextKind.subtitle}
+                size="big"
+                color={Colors.white80}
+                customStyles={{ marginTop: 12 }}
               >
                 {walkthroughData[idx].paragraph}
-              </Paragraph>
+              </JoloText>
             </AbsoluteBottom>
           </>
         ))}
