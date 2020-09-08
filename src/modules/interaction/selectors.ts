@@ -5,18 +5,25 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import { RootReducerI } from '~/types/reducer'
 import {
-    attrTypeToAttrKey,
-    CredentialsBySection,
-    OfferUICredential,
-    ShareCredentialsBySection, ShareUICredential,
+  attrTypeToAttrKey,
+  CredentialsBySection,
+  OfferUICredential,
+  ShareCredentialsBySection,
+  ShareUICredential,
 } from '~/types/credentials'
-import {AttributeI} from '~/modules/attributes/types'
-import {getAttributes} from '~/modules/attributes/selectors'
-import {getAllCredentials} from '~/modules/credentials/selectors'
-import {uiCredentialToShareCredential} from '~/utils/dataMapping'
-import {getCredentialSection} from '~/utils/credentialsBySection'
-import {InteractionDetails, IntermediaryState} from './types'
-import {isAuthDetails, isAuthzDetails, isCredOfferDetails, isCredShareDetails, isNotActiveInteraction,} from './guards'
+import { AttributeI } from '~/modules/attributes/types'
+import { getAttributes } from '~/modules/attributes/selectors'
+import { getAllCredentials } from '~/modules/credentials/selectors'
+import { uiCredentialToShareCredential } from '~/utils/dataMapping'
+import { getCredentialSection } from '~/utils/credentialsBySection'
+import { InteractionDetails, IntermediaryState } from './types'
+import {
+  isAuthDetails,
+  isAuthzDetails,
+  isCredOfferDetails,
+  isCredShareDetails,
+  isNotActiveInteraction,
+} from './guards'
 
 export const getIntermediaryState = (state: RootReducerI) =>
   state.interaction.intermediaryState
@@ -66,37 +73,52 @@ export const getShareAttributes = createSelector(
         credentials: { self_issued: requestedAttributes },
       } = shareDetails
 
-      return !requestedAttributes.length
-          ? {}
-          : requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
-              const value = attrTypeToAttrKey(v)
-              if(!value) return acc
-              acc[value] = attributes[value] || []
-              return acc
-          }, {})
+      return requestedAttributes.reduce<Record<string, AttributeI[]>>(
+        (acc, v) => {
+          const value = attrTypeToAttrKey(v)
+          if (!value) return acc
+          acc[value] = attributes[value] || []
+          return acc
+        },
+        {},
+      )
     }
     return {}
   },
 )
 
-const getShareCredentials = createSelector([getInteractionDetails, getAllCredentials], (details, credentials) => {
-    if(isCredShareDetails(details)) {
-        return details.credentials.service_issued.reduce<ShareUICredential[]>((acc, type) => {
-            const creds = credentials.filter((cred) => cred.type === type)
-            if(!creds.length)  return acc
-            acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
-            return acc
-        }, [])
+/**
+ * Gets all the available credentials for sharing. Returns an array of @ShareUICredential
+ */
+const getShareCredentials = createSelector(
+  [getInteractionDetails, getAllCredentials],
+  (details, credentials) => {
+    if (isCredShareDetails(details)) {
+      return details.credentials.service_issued.reduce<ShareUICredential[]>(
+        (acc, type) => {
+          const creds = credentials.filter((cred) => cred.type === type)
+          if (!creds.length) return acc
+          acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
+          return acc
+        },
+        [],
+      )
     }
     return []
-})
+  },
+)
 
 /**
  * Contains the logic that decides whether we need to show a full-screen ActionSheet (FAS)
  * or a bottom ActionSheet (BAS).
  */
 export const getIsFullScreenInteraction = createSelector(
-  [getIntermediaryState, getShareAttributes, getInteractionDetails, getShareCredentials],
+  [
+    getIntermediaryState,
+    getShareAttributes,
+    getInteractionDetails,
+    getShareCredentials,
+  ],
   (intermediaryState, shareAttributes, details, shareCredentials) => {
     if (
       intermediaryState !== IntermediaryState.absent ||
@@ -117,13 +139,13 @@ export const getIsFullScreenInteraction = createSelector(
       }, [])
 
       //TODO: add breakpoints
-      return availableAttributes.length > 3;
-
+      return availableAttributes.length > 3
     } else if (
       isCredShareDetails(details) &&
-      !details.credentials.self_issued.length && shareCredentials.length === 1
+      !details.credentials.self_issued.length &&
+      shareCredentials.length === 1
     ) {
-        return false
+      return false
     } else if (
       isCredOfferDetails(details) &&
       details.credentials.service_issued.length === 1
@@ -197,35 +219,31 @@ export const getShareCredentialTypes = createSelector(
  * based on the @interactionDetails.
  */
 export const getShareCredentialsBySection = createSelector(
-  [getInteractionDetails, getAllCredentials],
-  (details, credentials) => {
+  [getShareCredentials, getShareCredentialTypes],
+  (shareCredentials, shareCredTypes) => {
     const defaultSections = { documents: [], other: [] }
 
-    if (isCredShareDetails(details)) {
-      return details.credentials.service_issued.reduce<
-        ShareCredentialsBySection
-      >((acc, type) => {
-        const creds = credentials.filter((cred) => cred.type === type)
-        if (!creds.length) return acc
+    return shareCredTypes.service_issued.reduce<ShareCredentialsBySection>(
+      (acc, type) => {
+        const credentials = shareCredentials.filter(
+          (cred) => cred.type === type,
+        )
 
         // NOTE: we assume the @renderAs property is the same for all credentials
         // of the same type
-        const section = getCredentialSection(creds[0])
+        const section = getCredentialSection(credentials[0])
 
-        // TODO?: move @uiCredentialToShareCredential to @mapCredShareData when the interaction starts,
-        // in order to store the proper credentials in the store instead of the types.
         acc[section] = [
           ...acc[section],
           {
             type,
-            credentials: creds.map(uiCredentialToShareCredential),
+            credentials,
           },
         ]
 
         return acc
-      }, defaultSections)
-    }
-
-    return defaultSections
+      },
+      defaultSections,
+    )
   },
 )
