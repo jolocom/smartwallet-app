@@ -1,8 +1,23 @@
 import { routeList } from 'src/routeList'
-import strings from 'src/locales/strings'
-import { ErrorReport, ErrorCode, IAppError } from './types'
+import strings from '../../locales/strings'
+import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/types'
 export { ErrorCode }
 
+export interface IAppError {
+  origError: any
+  navigateTo: routeList
+}
+
+export interface UserReport {
+  userError: string | undefined
+  userDescription: string
+  userContact: string
+  sendPrivateData: boolean
+}
+
+export interface ErrorReport extends UserReport {
+  error: IAppError | Error | undefined
+}
 import { reportErrorToSentry, initSentry } from 'src/lib/errors/sentry'
 
 export class AppError extends Error implements IAppError {

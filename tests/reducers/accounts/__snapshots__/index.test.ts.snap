@@ -2,6 +2,14 @@
 
 exports[`account reducer should handle the DID_SET action  1`] = `
 Object {
+  "appState": Object {
+    "isAppLocked": true,
+    "isLocalAuthSet": false,
+    "isLocalAuthVisible": false,
+    "isLockVisible": true,
+    "isPINInstructionVisible": false,
+    "isPopup": false,
+  },
   "claims": Object {
     "decoratedCredentials": Object {
       "Contact": Array [
@@ -81,6 +89,14 @@ Object {
 
 exports[`account reducer should initialize correctly 1`] = `
 Object {
+  "appState": Object {
+    "isAppLocked": true,
+    "isLocalAuthSet": false,
+    "isLocalAuthVisible": false,
+    "isLockVisible": true,
+    "isPINInstructionVisible": false,
+    "isPopup": false,
+  },
   "claims": Object {
     "decoratedCredentials": Object {
       "Contact": Array [

@@ -1,7 +1,7 @@
 import React from 'react'
 import VersionNumber from 'react-native-version-number'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import I18n from 'src/locales/i18n'
+import I18n, { locales } from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { Wrapper } from 'src/ui/structure'
@@ -15,16 +15,15 @@ import { connect } from 'react-redux'
 import SettingItem from '../components/settingItem'
 import settingKeys from '../settingKeys'
 import { showSeedPhrase } from '../../../actions/recovery'
+import { BOTTOM_BAR_HEIGHT } from 'src/ui/navigation/container/bottomBar'
+import { LocaleSetting } from '../components/localeSetting'
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.backgroundLightMain,
-  },
   scrollComponent: {
     width: '100%',
   },
   scrollComponentContainer: {
-    paddingBottom: Spacing.XXL,
+    paddingBottom: Spacing.XXL + BOTTOM_BAR_HEIGHT,
   },
   versionNumber: {
     ...Typography.baseFontStyles,
@@ -40,16 +39,16 @@ interface Props
     ReturnType<typeof mapDispatchToProps> {}
 
 export const SettingsContainer: React.FC<Props> = props => {
-  const {  settings, setupBackup, navigate } = props
+  const { settings, setupBackup, navigate, setLocale } = props
   const version = VersionNumber.appVersion
-  // const currentLocale = settings.locale
+  const currentLocale = settings.locale
+
   const seedPhraseSaved = settings[settingKeys.seedPhraseSaved] as boolean
   return (
-    <Wrapper style={styles.container}>
+    <Wrapper centered>
       <ScrollView
         style={styles.scrollComponent}
-        contentContainerStyle={styles.scrollComponentContainer}
-      >
+        contentContainerStyle={styles.scrollComponentContainer}>
         {__DEV__ && (
           <SettingSection title={'Dev'}>
             <SettingItem
@@ -63,17 +62,20 @@ export const SettingsContainer: React.FC<Props> = props => {
               onPress={() => navigate(routeList.NotificationScheduler)}
               iconName={'bell-ring'}
             />
-          </SettingSection>
-        )}
-        {/*
-          <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
-            <LocaleSetting
-              locales={locales}
-              currentLocale={currentLocale}
-              setLocale={setLocale}
+            <SettingItem
+              title="Change PIN"
+              onPress={() => navigate(routeList.ChangePIN)}
+              iconName="bell-ring"
             />
           </SettingSection>
-        */}
+        )}
+        <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
+          <LocaleSetting
+            locales={locales}
+            currentLocale={currentLocale}
+            setLocale={setLocale}
+          />
+        </SettingSection>
         <SettingSection title={I18n.t(strings.SECURITY)}>
           <SettingItem
             title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
@@ -97,6 +99,23 @@ export const SettingsContainer: React.FC<Props> = props => {
             isDisabled
           />
           */}
+        </SettingSection>
+        <SettingSection title={I18n.t(strings.ABOUT)}>
+          <SettingItem
+            title={I18n.t(strings.PRIVACY_POLICY)}
+            iconName={'shield-lock'}
+            onPress={() => navigate(routeList.PrivacyPolicy)}
+          />
+          <SettingItem
+            title={I18n.t(strings.TERMS_OF_SERVICE)}
+            iconName={'file-document'}
+            onPress={() => navigate(routeList.TermsOfService)}
+          />
+          <SettingItem
+            title={I18n.t(strings.IMPRINT)}
+            iconName={'book-minus'}
+            onPress={() => navigate(routeList.Impressum)}
+          />
         </SettingSection>
         <Text style={styles.versionNumber}>
           Jolocom SmartWallet {I18n.t(strings.VERSION)} {version}

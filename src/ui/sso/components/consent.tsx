@@ -7,7 +7,7 @@ import { IdentitySummary } from '../../../actions/sso/types'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from 'src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 import { Typography, Colors, Spacing } from 'src/styles'
@@ -29,10 +29,6 @@ interface State {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.backgroundLightMain,
-    alignItems: 'stretch',
-  },
   topSection: {
     flex: 0.3,
     marginTop: Spacing.XL,
@@ -126,7 +122,7 @@ export class ConsentComponent extends React.Component<Props, State> {
     const buttonDisabled = !submitAllowed || this.state.pending
 
     return (
-      <Wrapper style={styles.container}>
+      <Wrapper>
         <View style={styles.topSection}>
           <IssuerCard issuer={requester} />
           <View style={styles.messageContainer}>

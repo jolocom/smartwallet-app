@@ -12,6 +12,8 @@ export enum routeList {
 
   // Recovery
   InputSeedPhrase = 'InputSeedPhrase',
+  // Pin Recovery
+  InputSeedPhrasePin = 'InputSeedPhrasePin',
 
   // Bottom Nav Screens
   Home = 'Home',
@@ -25,6 +27,7 @@ export enum routeList {
   CredentialReceive = 'CredentialReceive',
   CredentialReceiveNegotiate = 'CredentialReceiveNegotiate',
   Consent = 'Consent',
+  EstablishChannelConsent = 'EstablishChannelConsent',
   PaymentConsent = 'PaymentConsent',
   AuthenticationConsent = 'AuthenticationConsent',
   ClaimDetails = 'ClaimDetails',
@@ -33,6 +36,12 @@ export enum routeList {
   // Settings
   RepeatSeedPhrase = 'RepeatSeedPhrase',
   SeedPhrase = 'SeedPhrase',
+  ChangePIN = 'ChangePIN',
+
+  RegisterPIN = 'RegisterPIN',
+  TermsOfService = 'TermsOfService',
+  PrivacyPolicy = 'PrivacyPolicy',
+  Impressum = 'Impressum',
 
   // General
   Exception = 'Exception',
@@ -41,4 +50,7 @@ export enum routeList {
   // Dev only
   Storybook = 'Storybook',
   NotificationScheduler = 'NotificationScheduler',
+
+  // SW2.0
+  TermsOfServiceConsent = 'TermsOfServiceConsent',
 }

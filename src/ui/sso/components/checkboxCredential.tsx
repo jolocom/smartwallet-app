@@ -6,7 +6,7 @@ import { IdentitySummary } from 'src/actions/sso/types'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from 'src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { IconToggle } from 'react-native-material-ui'

@@ -1,10 +1,12 @@
-import { navigationActions } from 'src/actions/'
-import { routeList } from 'src/routeList'
 import * as loading from 'src/actions/registration/loadingStages'
-import { setDid } from 'src/actions/account'
-import { ThunkAction } from 'src/store'
+import { setDid, checkLocalDeviceAuthSet } from 'src/actions/account'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
+import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
+import { ThunkAction } from '../../store'
+import { entropyToMnemonic } from 'bip39'
+
+const humanTimeout = () => new Promise(resolve => setTimeout(resolve, 1000))
 
 export const setLoadingMsg = (loadingMsg: string) => ({
   type: 'SET_LOADING_MSG',
@@ -19,31 +21,49 @@ export const setIsRegistering = (value: boolean) => ({
 export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
   getState,
-  backendMiddleware,
+  sdk,
 ) => {
-  dispatch(
-    navigationActions.navigate({
-      routeName: routeList.RegistrationProgress,
-    }),
-  )
-
   const isRegistering = getState().registration.loading.isRegistering
   if (isRegistering) return
 
   dispatch(setIsRegistering(true))
 
+  // strings.REGISTERING_DECENTRALIZED_IDENTITY
+  // aka "we are generating a random number"
   dispatch(setLoadingMsg(loading.loadingStages[0]))
-  await backendMiddleware.createKeyProvider(encodedEntropy)
 
+  const seed = await generateSecureRandomBytes(16)
+  const password = (await generateSecureRandomBytes(32)).toString('base64')
+  // const identity = await sdk.createNewIdentity(password)
+  const identity = await sdk.loadFromMnemonic(entropyToMnemonic(seed), password)
+  // and it's too fast so slow down
+  await humanTimeout()
+
+  // strings.ENCRYPTING_AND_STORING_DATA_LOCALLY
   dispatch(setLoadingMsg(loading.loadingStages[1]))
-  await backendMiddleware.fuelKeyWithEther()
 
+  // TODO Better call here.
+  const encryptedSeed = await identity.asymEncryptToDid(
+    Buffer.from(seed),
+    identity.did, {
+      prefix: '',
+      resolve: async _ => identity.identity
+    })
+
+  await sdk.storageLib.store.setting(
+    'encryptedSeed',
+    {
+      b64Encoded: encryptedSeed.toString('base64')
+    }
+  )
+  await humanTimeout()
+
+  // strings.PREPARING_LAUNCH
   dispatch(setLoadingMsg(loading.loadingStages[2]))
-  const identity = await backendMiddleware.createIdentity()
-
   dispatch(setDid(identity.did))
-  dispatch(setLoadingMsg(loading.loadingStages[3]))
+  await humanTimeout()
   dispatch(setIsRegistering(false))
+  await dispatch(checkLocalDeviceAuthSet)
 
   return dispatch(navigatorResetHome())
 }
@@ -54,16 +74,17 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   backendMiddleware,
 ) => {
   dispatch(setIsRegistering(true))
-  let identity
+
   try {
-    identity = await backendMiddleware.recoverIdentity(mnemonic)
+    const password = (await generateSecureRandomBytes(32)).toString('base64')
+    const identity = await backendMiddleware.loadFromMnemonic(mnemonic, password)
+    dispatch(setDid(identity.did))
+    dispatch(setSeedPhraseSaved())
+
+    dispatch(setIsRegistering(false))
+    return dispatch(navigatorResetHome())
   } catch (e) {
-    return dispatch(setIsRegistering(false))
+    dispatch(setIsRegistering(false))
+    throw e
   }
-
-  dispatch(setDid(identity.did))
-  dispatch(setSeedPhraseSaved())
-
-  dispatch(setIsRegistering(false))
-  return dispatch(navigatorResetHome())
 }

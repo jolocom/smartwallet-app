@@ -10,18 +10,16 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import {
-  InteractionChannel,
+  InteractionTransportType,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '../../lib/interactionManager/types'
-import { isEmpty, uniqBy } from 'ramda'
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { CredentialMetadataSummary } from 'src/lib/storage/storage'
-import { CacheEntity } from 'src/lib/storage/entities'
 
 export const consumeCredentialOfferRequest = (
   credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
-  interactionChannel: InteractionChannel,
+  interactionChannel: InteractionTransportType,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = await interactionManager.start(
     interactionChannel,
@@ -34,6 +32,8 @@ export const consumeCredentialOfferRequest = (
       params: {
         interactionId: credentialOfferRequest.nonce,
         interactionSummary: interaction.getSummary(),
+        passedValidation: (interaction.getSummary().state as CredentialOfferFlowState)
+          .offerSummary.map(_ => true)
       },
     }),
   )
@@ -51,6 +51,11 @@ export const consumeCredentialReceive = (
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = interactionManager.getInteraction(interactionId)
+
+  const response = await interaction
+    .createCredentialOfferResponseToken(selectedSignedCredentialWithMetadata)
+
+  await interaction.processInteractionToken(response)
 
   const credentialReceive = await interaction.send(
     await interaction.createCredentialOfferResponseToken(
@@ -91,32 +96,31 @@ export const validateSelectionAndSave = (
   { interactionManager, storageLib },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const { offerSummary } = interaction.getSummary()
+  const { offerSummary, issued } = interaction.getSummary()
     .state as CredentialOfferFlowState
 
   const selectedTypes = selectedCredentials.map(el => el.type)
-  const toSave = offerSummary.filter(el => selectedTypes.includes(el.type))
+  const toSave = issued.filter(credential => selectedTypes.includes(credential.type[1]))
 
-  if (toSave.length !== selectedCredentials.length) {
-    // TODO Decide how to handle this
-    // Means one of the selections isn't in the offer
-  }
+  // if (toSave.length !== selectedCredentials.length) {}
 
-  const duplicates = await isCredentialStored(toSave, id =>
-    interaction.getStoredCredentialById(id),
+  const duplicates = await isCredentialStored(
+    toSave,
+    id => interaction.getStoredCredentialById(id)
   )
 
-  const validationErrors = toSave.map(
-    ({ validationErrors }, i) =>
-      validationErrors.invalidIssuer ||
-      !!validationErrors.invalidSubject ||
-      duplicates[i],
+  // TODO update to the latest version of the SDK and && the signature check as well
+  const passedValidation = toSave.map(
+    (credential, i) =>
+      credential.signer.did === interaction.participants.requester!.did &&
+      credential.claim.id === getState().account.did.did &&
+      !duplicates[i],
   )
 
   // None passed the validation
-  const allInvalid = !validationErrors.includes(false)
+  const allInvalid = !passedValidation.includes(true)
   // At least one passed the validatio
-  const allValid = !validationErrors.includes(true)
+  const allValid = !passedValidation.includes(false)
 
   const scheduleInvalidNotification = (message: string) =>
     scheduleNotification(
@@ -136,15 +140,18 @@ export const validateSelectionAndSave = (
   }
 
   if (allValid) {
-    await interaction.storeCredential(toSave)
+    await interaction.storeSelectedCredentials()
+    await interaction.storeIssuerProfile()
+    await interaction.storeCredentialMetadata()
 
+    /*
     await storeOfferMetadata(
       (interaction.getSummary().state as CredentialOfferFlowState).offerSummary,
-      interaction.participants.them.did,
+      interaction.participants.requester!.did,
+      //@ts-ignore
       storageLib.store.credentialMetadata,
     )
-
-    await interaction.storeIssuerProfile()
+    */
 
     dispatch(checkRecoverySetup)
     //TODO @mnzaki can we avoid running the FULL setClaimsForDid
@@ -185,6 +192,7 @@ export const validateSelectionAndSave = (
           ...interaction.getSummary(),
           state: { offerSummary },
         },
+        passedValidation
       },
     }),
   )
@@ -196,11 +204,11 @@ export const validateSelectionAndSave = (
  */
 
 const isCredentialStored = async (
-  offer: SignedCredentialWithMetadata[],
+  offer: SignedCredential[],
   getCredential: (id: string) => Promise<SignedCredential[]>,
 ) =>
   Promise.all(
-    offer.map(async ({ signedCredential }) =>
+    offer.map(async (signedCredential) =>
       signedCredential
         ? !isEmpty(await getCredential(signedCredential.id))
         : false,
@@ -212,35 +220,38 @@ const isCredentialStored = async (
  * storage class. Does this need to change for consistency?
  */
 
-const storeOfferMetadata = async (
-  offer: SignedCredentialWithMetadata[],
-  did: string,
-  storeCredentialMetadata: (
-    a: CredentialMetadataSummary,
-  ) => Promise<CacheEntity>,
-) =>
-  Promise.all(
-    uniqBy(
-      detail => `${detail.issuer.did}${detail.type}`,
-      offer.map(({ type, renderInfo, metadata }) => ({
-        // TODO Why isn't the did already in the summary type? This feels hacky
-        issuer: { did },
-        type,
-        renderInfo: renderInfo || {},
-        metadata: metadata || {},
-      })),
-    ).map(storeCredentialMetadata),
-  )
-
+//const storeOfferMetadata = async (
+//  offer: SignedCredentialWithMetadata[],
+//  did: string,
+//  storeCredentialMetadata: (
+//    a: CredentialMetadataSummary,
+//  ) => Promise<CacheEntity>,
+//) =>
+//  Promise.all(
+//    uniqBy(
+//      detail => `${detail.issuer.did}${detail.type}`,
+//      offer.map(({ type, renderInfo, metadata }) => ({
+//        // TODO Why isn't the did already in the summary type? This feels hacky
+//        issuer: { did },
+//        type,
+//        renderInfo: renderInfo || {},
+//        metadata: metadata || {},
+//      })),
+//    ).map(storeCredentialMetadata),
+//  )
+//
 const endReceiving = (interactionId: string): ThunkAction => (
   dispatch,
   getState,
   { interactionManager },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
-  const { channel } = interaction
+  const { desc: transportDesc } = interaction.transportAPI
 
-  if (channel === InteractionChannel.Deeplink) {
+  if (
+    transportDesc &&
+    transportDesc.type === InteractionTransportType.Deeplink
+  ) {
     return dispatch(navigationActions.navigatorResetHome())
   } else {
     return dispatch(

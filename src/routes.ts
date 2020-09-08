@@ -3,18 +3,21 @@ import { createElement } from 'react'
 
 import {
   createAppContainer,
-  createBottomTabNavigator,
-  createStackNavigator,
-  createSwitchNavigator,
   NavigationRoute,
-  NavigationScreenOptions,
   NavigationScreenProp,
 } from 'react-navigation'
+
+import {
+  //StackViewTransitionConfigs,
+  //NavigationStackOptions,
+  createStackNavigator,
+} from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
 
 import { ClaimDetails, Claims, Records } from 'src/ui/home/'
 import { DocumentDetails, Documents } from 'src/ui/documents'
 import { Landing } from 'src/ui/landing/'
-import { PaymentConsent } from 'src/ui/payment'
 import { Entropy, RegistrationProgress } from 'src/ui/registration/'
 import { Exception } from 'src/ui/generic/'
 import { Consent } from 'src/ui/sso'
@@ -27,6 +30,7 @@ import { routeList } from './routeList'
 import { AppInit } from './ui/generic/appInit'
 import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
+import ChangePIN from './ui/deviceauth/ChangePIN'
 
 import {
   DocsIcon,
@@ -40,9 +44,15 @@ import { InputSeedPhrase } from './ui/recovery/container/inputSeedPhrase'
 import { ErrorReporting } from './ui/errors/containers/errorReporting'
 import { BottomBar } from './ui/navigation/container/bottomBar'
 import { NotificationScheduler } from './ui/notifications/containers/devNotificationScheduler'
-
+import {
+  TermsOfServiceConsent,
+  TermsOfService,
+  PrivacyPolicy,
+  Impressum,
+} from './ui/termsAndPrivacy'
 import { NotificationFilter } from './lib/notifications'
 import { CredentialReceiveNegotiate } from './ui/sso/containers/credentialReceiveNegotiate'
+import { EstablishChannelConsent } from './ui/establishChannel'
 
 // only used on android
 const headerBackImage = createElement(Image, {
@@ -65,7 +75,7 @@ const headerTitleStyle: StyleProp<TextStyle> = {
   color: Colors.navHeaderTintDefault,
 }
 
-const commonNavigationOptions: NavigationScreenOptions = {
+const commonNavigationOptions = {
   headerTitleStyle,
   headerStyle: {
     backgroundColor: Colors.navHeaderBgDefault,
@@ -77,7 +87,7 @@ const navOptScreenWCancel = {
   ...commonNavigationOptions,
   ...Platform.select({
     android: {
-      headerBackImage,
+      headerBackImage: () => headerBackImage,
     },
     ios: {
       headerTintColor: Colors.purpleMain,
@@ -92,6 +102,7 @@ export const BottomTabBarRoutes = {
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: IdentityIcon,
+      // @ts-ignore
       notifications: NotificationFilter.all,
     },
   },
@@ -101,6 +112,7 @@ export const BottomTabBarRoutes = {
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: DocsIcon,
+      // @ts-ignore
       notifications: NotificationFilter.all,
     },
   },
@@ -110,6 +122,7 @@ export const BottomTabBarRoutes = {
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: HistoryIcon,
+      // @ts-ignore
       notifications: NotificationFilter.onlyDismissible,
     },
   },
@@ -119,6 +132,7 @@ export const BottomTabBarRoutes = {
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: SettingsIcon,
+      // @ts-ignore
       notifications: NotificationFilter.onlyDismissible,
     },
   },
@@ -144,11 +158,18 @@ const BottomTabNavigator = createBottomTabNavigator(BottomTabBarRoutes, {
   tabBarComponent: BottomBar,
 })
 
-const RegistrationScreens = createSwitchNavigator(
+const RegistrationScreens = createAnimatedSwitchNavigator(
   {
     [routeList.Landing]: {
       screen: Landing,
       navigationOptions: noHeaderNavOpts,
+    },
+    [routeList.TermsOfServiceConsent]: {
+      screen: TermsOfServiceConsent,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.none,
+      },
     },
     [routeList.InputSeedPhrase]: {
       screen: InputSeedPhrase,
@@ -173,12 +194,22 @@ const MainStack = createStackNavigator(
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
+    [routeList.ChangePIN]: {
+      screen: ChangePIN,
+      navigationOptions: {
+        gesturesEnabled: false,
+      },
+    },
+    [routeList.InputSeedPhrasePin]: {
+      screen: InputSeedPhrase,
+      navigationOptions: noHeaderNavOpts,
+    },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
-        statusBar: false,
       },
     },
     [routeList.CredentialReceiveNegotiate]: {
@@ -199,18 +230,18 @@ const MainStack = createStackNavigator(
         headerTitle: I18n.t(strings.SHARE_CLAIMS),
       }),
     },
-    [routeList.PaymentConsent]: {
-      screen: PaymentConsent,
-      navigationOptions: () => ({
-        ...navOptScreenWCancel,
-        headerTitle: I18n.t(strings.CONFIRM_PAYMENT),
-      }),
-    },
     [routeList.AuthenticationConsent]: {
       screen: AuthenticationConsent,
       navigationOptions: () => ({
         ...navOptScreenWCancel,
         headerTitle: I18n.t(strings.AUTHORIZATION_REQUEST),
+      }),
+    },
+    [routeList.EstablishChannelConsent]: {
+      screen: EstablishChannelConsent,
+      navigationOptions: () => ({
+        ...navOptScreenWCancel,
+        headerTitle: I18n.t(strings.ESTABLISH_CHANNEL_REQUEST),
       }),
     },
     [routeList.ClaimDetails]: {
@@ -227,6 +258,7 @@ const MainStack = createStackNavigator(
       screen: SeedPhrase,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.none,
       },
     },
@@ -234,14 +266,39 @@ const MainStack = createStackNavigator(
       screen: RepeatSeedPhrase,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.none,
       },
     },
-
+    [routeList.TermsOfService]: {
+      screen: TermsOfService,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        // @ts-ignore
+        notifications: NotificationFilter.all,
+      },
+    },
+    [routeList.PrivacyPolicy]: {
+      screen: PrivacyPolicy,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        // @ts-ignore
+        notifications: NotificationFilter.all,
+      },
+    },
+    [routeList.Impressum]: {
+      screen: Impressum,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        // @ts-ignore
+        notifications: NotificationFilter.all,
+      },
+    },
     [routeList.Exception]: {
       screen: Exception,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.none,
       },
     },
@@ -249,6 +306,7 @@ const MainStack = createStackNavigator(
       screen: ErrorReporting,
       navigationOptions: {
         ...noHeaderNavOpts,
+        // @ts-ignore
         notifications: NotificationFilter.none,
       },
     },
@@ -261,19 +319,35 @@ const MainStack = createStackNavigator(
         screen: NotificationScheduler,
         navigationOptions: {
           ...noHeaderNavOpts,
+          // @ts-ignore
           notifications: NotificationFilter.all,
         },
       },
     }),
   },
   {
+    //    transitionConfig: (transitionProps, prevTransitionProps) => {
+    //      const isModal = MODAL_ROUTES.some(
+    //        screenName =>
+    //          screenName === transitionProps.scene.route.routeName ||
+    //          (prevTransitionProps &&
+    //            screenName === prevTransitionProps.scene.route.routeName),
+    //      )
+    //      return StackViewTransitionConfigs.defaultTransitionConfig(
+    //        transitionProps,
+    //        prevTransitionProps,
+    //        isModal,
+    //      )
+    //    },
     defaultNavigationOptions: noHeaderNavOpts,
   },
 )
 
+//const MODAL_ROUTES = [routeList.InteractionScreen]
+
 // NOTE: navigatorReset in actions/navigation assumes that there is only 1
 // StackRouter child at the top level
-export const Routes = createSwitchNavigator(
+export const Routes = createAnimatedSwitchNavigator(
   {
     [routeList.AppInit]: {
       screen: AppInit,
@@ -282,11 +356,13 @@ export const Routes = createSwitchNavigator(
     [routeList.Main]: {
       screen: MainStack,
       navigationOptions: {
+        // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
       },
     },
     [routeList.Registration]: {
       screen: RegistrationScreens,
+      // @ts-ignore
       notifications: NotificationFilter.none,
     },
   },

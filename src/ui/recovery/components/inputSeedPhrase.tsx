@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { StyleSheet, Text, TextInput, View, Platform } from 'react-native'
-import { Wrapper } from '../../structure'
+import { Wrapper, JolocomButton } from '../../structure'
 import { Button } from 'react-native-material-ui'
 import { Colors, Spacing, Typography, Buttons } from 'src/styles'
 import {
@@ -18,11 +18,6 @@ import strings from '../../../locales/strings'
 import I18n from 'i18n-js'
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    backgroundColor: Colors.backgroundDarkMain,
-  },
   header: {
     ...Typography.largeText,
     color: Colors.sandLight,
@@ -139,12 +134,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
     headerText = mnemonic.length + '/12 ' + I18n.t(strings.COMPLETED)
   }
   return (
-    <Wrapper
-      style={[
-        styles.container,
-        isLoading && { justifyContent: 'space-around' },
-      ]}
-    >
+    <Wrapper dark centered breathy={isLoading}>
       <Text style={styles.header}>{headerText}</Text>
       <View testID="seedPhraseMsg" style={styles.mnemonicSection}>
         {mnemonic.length === 0 ? (
@@ -159,8 +149,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
               style={[
                 styles.mnemonicWord,
                 markedWord === i && { color: Colors.purpleMain },
-              ]}
-            >
+              ]}>
               {word}
             </Text>
           ))
@@ -185,6 +174,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                 autoCorrect={false}
                 style={[
                   styles.textInput,
+                  { textAlign: 'center' },
                   inputState === WordState.wrong
                     ? styles.error
                     : styles.correct,
@@ -256,20 +246,16 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
           <View style={{ flex: 2 }} />
           <View style={styles.buttonSection}>
             {isMnemonicValid && (
-              <Button
+              <JolocomButton
                 testID="restoreAccount"
                 disabled={!isMnemonicValid}
-                onPress={isMnemonicValid ? handleButtonPress : undefined}
-                raised
-                upperCase={false}
+                onPress={isMnemonicValid ? handleButtonPress : () => undefined}
                 text={I18n.t(strings.RESTORE_ACCOUNT)}
-                style={{
-                  container: {
-                    marginHorizontal: 30,
-                    ...Buttons.buttonStandardContainer,
-                  },
-                  text: Buttons.buttonStandardText,
+                containerStyle={{
+                  marginHorizontal: 30,
+                  ...Buttons.buttonStandardContainer,
                 }}
+                textStyle={Buttons.buttonStandardText}
               />
             )}
             <TransparentButton

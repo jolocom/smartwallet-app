@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, RefObject } from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import {
@@ -8,12 +8,12 @@ import {
   TouchableHighlight,
   View,
   Animated,
+  BackHandler,
 } from 'react-native'
-import I18n from '../../../locales/i18n'
-import strings from '../../../locales/strings'
-import { TorchOffIcon, TorchOnIcon } from '../../../resources'
-import { black065, white } from '../../../styles/colors'
-import { Colors, Spacing } from '../../../styles'
+import I18n from 'src/locales/i18n'
+import strings from 'src/locales/strings'
+import { TorchOffIcon, TorchOnIcon } from 'src/resources'
+import { Colors, Spacing } from 'src/styles'
 import {
   centeredText,
   fontLight,
@@ -26,8 +26,12 @@ import { ErrorCode } from '../../../lib/errors'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 const MARKER_SIZE = SCREEN_WIDTH * 0.75
+const SPACE_AROUND_MARKER = (SCREEN_WIDTH - MARKER_SIZE) / 2
 
 const styles = StyleSheet.create({
+  cameraStyle: {
+    height: SCREEN_HEIGHT,
+  },
   rectangle: {
     height: MARKER_SIZE,
     width: MARKER_SIZE,
@@ -57,8 +61,8 @@ const styles = StyleSheet.create({
   },
   horizontalOverlay: {
     height: MARKER_SIZE,
-    width: SCREEN_WIDTH,
-    backgroundColor: black065,
+    width: SPACE_AROUND_MARKER,
+    backgroundColor: Colors.black065,
   },
   descriptionText: {
     marginTop: Spacing.MD,
@@ -89,17 +93,29 @@ const styles = StyleSheet.create({
 
 interface Props {
   onScan: (jwt: string) => Promise<void>
-  reRenderKey: number
+  onScannerRef?: RefObject<QRScanner>
 }
 
 export const ScannerComponent = (props: Props) => {
-  const { onScan, reRenderKey } = props
+  const { onScan, onScannerRef } = props
 
-  const [isError, setError] = useState()
-  const [errorText, setErrorText] = useState()
+  const [isError, setError] = useState(false)
+  const [errorText, setErrorText] = useState('')
   const [isTorchPressed, setTorchPressed] = useState(false)
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
+  const [showCamera, setShowCamera] = useState(true)
+
+  useEffect(() => {
+    let backListener = BackHandler.addEventListener('hardwareBackPress', () => {
+      setShowCamera(false)
+      return false
+    })
+
+    return () => {
+      backListener.remove()
+    }
+  }, [])
 
   const animateColor = () =>
     Animated.sequence([
@@ -149,7 +165,6 @@ export const ScannerComponent = (props: Props) => {
   }
 
   const cameraSettings = {
-    key: reRenderKey,
     captureAudio: false,
     flashMode: isTorchPressed
       ? RNCamera.Constants.FlashMode.torch
@@ -157,35 +172,35 @@ export const ScannerComponent = (props: Props) => {
   }
 
   return (
-    <React.Fragment>
-      <QRScanner
-        //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
-        containerStyle={{
-          position: 'absolute',
-        }}
-        cameraProps={cameraSettings}
-        reactivate={true}
-        reactivateTimeout={3000}
-        fadeIn
-        onRead={onRead}
-        cameraStyle={StyleSheet.create({
-          //@ts-ignore
-          height: SCREEN_HEIGHT,
-        })}
-      />
+    <>
+      {showCamera && (
+        <QRScanner
+          ref={onScannerRef}
+          //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
+          containerStyle={{
+            position: 'absolute',
+          }}
+          cameraProps={cameraSettings}
+          reactivate={true}
+          reactivateTimeout={3000}
+          fadeIn={false}
+          onRead={onRead}
+          cameraStyle={styles.cameraStyle}
+        />
+      )}
       <View style={styles.topOverlay} />
       <View
         style={{
           flexDirection: 'row',
-        }}
-      >
+          alignItems: 'stretch',
+        }}>
         <View style={styles.horizontalOverlay} />
         <Animated.View
           style={[
             styles.rectangle,
             {
               backgroundColor: backgroundColorConfig,
-              borderColor: isError ? 'rgb(243, 198, 28)' : white,
+              borderColor: isError ? 'rgb(243, 198, 28)' : Colors.white,
             },
           ]}
         />
@@ -202,8 +217,7 @@ export const ScannerComponent = (props: Props) => {
               {
                 opacity: textAnimationValue,
               },
-            ]}
-          >
+            ]}>
             {I18n.t(errorText)}
           </Animated.Text>
         ) : (
@@ -218,11 +232,10 @@ export const ScannerComponent = (props: Props) => {
           onPressOut={() => setTorchPressed(false)}
           activeOpacity={1}
           underlayColor={'transparent'}
-          style={styles.torch}
-        >
+          style={styles.torch}>
           {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
         </TouchableHighlight>
       </View>
-    </React.Fragment>
+    </>
   )
 }

@@ -1,6 +1,6 @@
 // NOTE: not importing from 'src/lib/errors' to avoid cycle
 // NOTE: absolute path causes `generateTerms` to crash, since it is outside /src (I guess that's the cause)
-import { ErrorCode } from '../lib/errors/codes'
+import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/types'
 
 const registration = {
   ENCRYPTING_AND_STORING_DATA_LOCALLY: 'Encrypting and storing data locally',
@@ -41,6 +41,9 @@ const settings = {
   SETTINGS: 'Settings',
   YOUR_PREFERENCES: 'Your preferences',
   SECURITY: 'Security',
+  ABOUT: 'About',
+  TERMS_OF_SERVICE: 'Terms of Service',
+  PRIVACY_POLICY: 'Privacy Policy',
   LANGUAGE: 'Language',
   BACKUP_YOUR_IDENTITY: 'Backup your Identity',
   YOUR_IDENTITY_IS_ALREADY_BACKED_UP: 'Your identity is already backed up',
@@ -55,6 +58,8 @@ const settings = {
   TRY_AGAIN_WITH_ANOTHER_SIX_WORDS_FROM_YOUR_SECURE_PHRASE:
     'Try again with another six words from your secure phrase',
   VERSION: 'version',
+  IMPRINT: 'Imprint',
+  DE_VERSION: 'DE Version',
 }
 
 const backup = {
@@ -156,6 +161,49 @@ const errorCodes = {
   [ErrorCode.AppInitFailed]: 'Initialization failed',
 }
 
+const deviceAuth = {
+  ENTER_YOUR_PIN: 'Enter your PIN',
+  FORGOT_YOUR_PIN: 'Forgot your PIN?',
+  I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
+  SKIP: 'Skip',
+  YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
+  SETTINGS: 'Settings',
+  CANCEL: 'Cancel',
+  RESET: 'Reset',
+  CHANGE_PIN: 'Change PIN',
+  CURRENT_PASSCODE: 'Current passcode',
+  CREATE_NEW_PASSCODE: 'Create new passcode',
+  WRONG_PIN: 'Wrong PIN',
+  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
+  CREATE_PASSCODE: 'Create PIN',
+  VERIFY_PASSCODE: 'Verify PIN',
+  IN_ORDER_TO_PROTECT_YOUR_DATA:
+    'In order to protect your data from other users and maintain confidentiality',
+  YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
+    'You won’t be able to easily check it again, so please memorise it',
+  PINS_DONT_MATCH: "PINs don't match",
+  ANY_FUTURE_PASSCODE_RESTORE:
+    'Any future passcode restore is possible only with your secret phrase',
+  HOW_TO_CHANGE_PIN: 'How to change your PIN',
+  WE_ARE_SORRY_THAT_YOU_FORGOT:
+    'We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!',
+  RESTORE_ACCESS: 'Restore access',
+  STORING_NO_AFFECT_DATA:
+    'Setting a new passcode will not affect your stored data',
+  YOU_CAN_CHANGE_PIN:
+    'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
+}
+
+const termsOfService = {
+  SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY:
+    'SmartWallet introducing Terms and Conditions and Privacy Policy',
+  YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW:
+    'You can find the German and English version of the documents below. Please note that the German version is legally binding',
+  I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY:
+    'I understand and accept the Terms of Service and Privacy Policy',
+  ACCEPT_NEW_TERMS: 'Accept new terms',
+}
+
 export default {
   ...registration,
   ...settings,
@@ -164,6 +212,8 @@ export default {
   ...errorCodes,
   ...errorReporting,
   ...notifications,
+  ...deviceAuth,
+  ...termsOfService,
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
   HISTORY: 'History',
@@ -176,6 +226,7 @@ export default {
   SHARE_CLAIMS: 'Share claims',
   CONFIRM_PAYMENT: 'Confirm payment',
   AUTHORIZATION_REQUEST: 'Authorization request',
+  ESTABLISH_CHANNEL_REQUEST: 'Establish Channel request',
   WOULD_YOU_LIKE_TO: 'Would you like to',
   WITH_YOUR_SMARTWALLET: 'with your SmartWallet?',
   AUTHORIZE: 'Authorize',
@@ -230,4 +281,7 @@ export default {
   NO_DOCUMENTS_TO_SEE_HERE: 'No documents to see here',
   EXPIRED: 'expired',
   UNKNOWN: 'Unknown',
+
+  //ESATABLISH
+  CONNECTION_DESCRIPTION: 'Connection description:',
 }

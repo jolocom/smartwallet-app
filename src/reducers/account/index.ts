@@ -1,7 +1,10 @@
 import { combineReducers } from 'redux'
 import { did } from 'src/reducers/account/did'
 import { claims } from 'src/reducers/account/claims'
+
 import { loading } from 'src/reducers/account/loading'
+import { appState } from 'src/reducers/account/appState'
+
 import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
@@ -42,6 +45,15 @@ export interface DidState {
   readonly did: string
 }
 
+export interface AppState {
+  isLocalAuthSet: boolean
+  isLocalAuthVisible: boolean
+  isPopup: boolean
+  isAppLocked: boolean
+  isLockVisible: boolean
+  isPINInstructionVisible: boolean
+}
+
 export type LoadingState = boolean
 
 // TODO avoid state.account.did.did access patterns
@@ -49,10 +61,12 @@ export interface AccountState {
   did: DidState
   claims: ClaimsState
   loading: LoadingState
+  appState: AppState
 }
 
 export const accountReducer = combineReducers({
   did,
   claims,
   loading,
+  appState,
 })
