@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
   View,
   StyleSheet,
   Dimensions,
-  TouchableWithoutFeedback,
   Animated,
   TouchableOpacity,
 } from 'react-native'
@@ -21,6 +20,7 @@ interface PropsI {
 
 export const CARD_WIDTH = Dimensions.get('window').width * 0.83
 export const CARD_HEIGHT = CARD_WIDTH * 0.64
+export const SMALL_CARD_SCALE = 0.84
 
 const Tick = () => {
   return (
@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   scaledDown: {
-    marginLeft: -20,
-    marginRight: -5,
-    transform: [{ scale: 0.83 }],
+    marginHorizontal: -CARD_WIDTH * ((1 - SMALL_CARD_SCALE) / 2),
+    marginVertical: -CARD_HEIGHT * ((1 - SMALL_CARD_SCALE) / 2),
+    transform: [{ scale: SMALL_CARD_SCALE }],
   },
   darken: {
     position: 'absolute',

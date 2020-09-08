@@ -10,8 +10,8 @@ interface Props {
 
 const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
   return visible ? (
-    <View style={styles.wrapper}>
-      <Header color={Colors.white35} customStyles={{ textAlign: 'left' }}>
+    <View>
+      <Header color={Colors.white35} customStyles={styles.header}>
         {title}
       </Header>
       {children}
@@ -20,8 +20,9 @@ const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
+  header: {
     paddingLeft: 27,
+    textAlign: 'left',
   },
 })
 

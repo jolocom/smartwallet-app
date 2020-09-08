@@ -17,6 +17,7 @@ import InteractionFooter from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
+import { View } from 'react-native'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getShareAttributes)
@@ -57,21 +58,27 @@ const CredentialShareFas = () => {
       const Wrapper = isCarousel ? Carousel : React.Fragment
 
       return (
-        <Wrapper>
-          {credentials.map((cred) => (
-            <CredentialCard
-              isSmall
-              hasInstruction={instructionVisible && isFirstCredential(cred.id)}
-              onSelect={() => {
-                shouldShowInstruction && setShouldShowInstruction(false)
-                handleSelectCredential({ [cred.type]: cred.id })
-              }}
-              selected={selectedShareCredentials[cred.type] === cred.id}
-            >
-              <Header color={Colors.black}>{type}</Header>
-            </CredentialCard>
-          ))}
-        </Wrapper>
+        <View style={{ marginLeft: isCarousel ? 0 : 27 }}>
+          <Wrapper>
+            {credentials.map((cred) => (
+              <View style={{ marginRight: 20, marginVertical: 14 }}>
+                <CredentialCard
+                  isSmall
+                  hasInstruction={
+                    instructionVisible && isFirstCredential(cred.id)
+                  }
+                  onSelect={() => {
+                    shouldShowInstruction && setShouldShowInstruction(false)
+                    handleSelectCredential({ [cred.type]: cred.id })
+                  }}
+                  selected={selectedShareCredentials[cred.type] === cred.id}
+                >
+                  <Header color={Colors.black}>{type}</Header>
+                </CredentialCard>
+              </View>
+            ))}
+          </Wrapper>
+        </View>
       )
     })
 
