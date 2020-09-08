@@ -11,6 +11,12 @@ import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useCredentialShareFlow } from './useCredentialShareFlow'
 import { useSyncCredentials } from '~/hooks/credentials'
 
+const showNotification = (title: string, message?: string) => {
+  setTimeout(() => {
+    Alert.alert(title, message)
+  }, 500)
+}
+
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
   const dispatch = useDispatch()
@@ -37,9 +43,9 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     return async () => {
       try {
         await assembleShareResponseToken()
-        Alert.alert('Credentials shared successfully')
+        showNotification('Credentials shared successfully')
       } catch (e) {
-        Alert.alert('Failed to share credentials', e.message)
+        showNotification('Failed to share credentials', e.message)
       } finally {
         dispatch(resetInteraction())
       }
@@ -71,12 +77,12 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
         if (allValid) {
           await storeSelectedCredentials()
           await syncCredentials()
-          Alert.alert('Documents stored successfully')
+          showNotification('Documents stored successfully')
           //TODO: update store credentials with the new ones
 
           dispatch(resetInteraction())
         } else if (allInvalid) {
-          Alert.alert('All the documents are corrupted')
+          showNotification('All the documents are corrupted')
           //TODO: dispatch "interaction failed" notification
 
           dispatch(resetInteraction())
@@ -87,11 +93,11 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
             service_issued: validatedCredentials,
           }
           dispatch(setInteractionDetails({ credentials }))
-          Alert.alert('Renegotiating')
+          showNotification('Renegotiating')
         }
       } catch (err) {
         //TODO: dispatch error notification
-        Alert.alert('Interaction failed', err.message)
+        showNotification('Interaction failed', err.message)
 
         console.log({ err })
         dispatch(resetInteraction())

@@ -42,7 +42,8 @@ export const useCredentialShareFlow = () => {
       // @ts-ignore is fixed in future SDK version. Should work this way, since we only need the @id
       mappedSelection,
     )
-    await interaction.processInteractionToken(response)
+    //TODO: uncomment when the constraints bug on the SDK is fixed
+    //await interaction.processInteractionToken(response)
     await interaction.send(response)
   }
 

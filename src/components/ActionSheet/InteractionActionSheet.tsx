@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, RefObject } from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native'
+import {View, StyleSheet, Dimensions, Platform} from 'react-native'
 import ActionSheet, { ActionSheetProps } from 'react-native-actions-sheet'
 import { useSelector, useDispatch } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
@@ -27,6 +27,7 @@ import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
+import Loader from "~/modals/Loader";
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -49,7 +50,11 @@ const InteractionActionSheet: React.FC = () => {
 
   useEffect(() => {
     if (interactionType) {
-      actionSheetRef.current?.setModalVisible()
+      // NOTE: RN doesn't support showing 2 modals at the same time, so we need a timeout
+      // to assure the loader is hidden before starting to animate the ActionSheet.
+      setTimeout(() => {
+        actionSheetRef.current?.setModalVisible()
+      }, 200)
     } else {
       actionSheetRef.current?.setModalVisible(false)
     }
@@ -91,8 +96,7 @@ const InteractionActionSheet: React.FC = () => {
 
   const renderBody = () => {
     switch (interactionType) {
-      case FlowType.Authentication:
-        return <Authentication />
+      case FlowType.Authentication: return <Authentication />
       case FlowType.Authorization:
         return <Authorization />
       case FlowType.CredentialShare:
@@ -112,6 +116,11 @@ const InteractionActionSheet: React.FC = () => {
     }
   }
 
+  /**
+   * NOTE: On iOS the @Loader doesn't show up while an @ActionSheet is active. This is due
+   * to a RN limitation of showing 2 modals simultaneously. Fixed by nesting the @Loader
+   * inside each @ActionSheet (only for iOS).
+   */
   return (
     <>
       <ActionSheet
@@ -134,6 +143,7 @@ const InteractionActionSheet: React.FC = () => {
           )
         }
       >
+        {Platform.OS === 'ios' && <Loader />}
         {renderBody()}
       </ActionSheet>
       {intermediaryState !== IntermediaryState.absent && (
@@ -144,6 +154,8 @@ const InteractionActionSheet: React.FC = () => {
           containerStyle={styles.containerBAS}
           CustomHeaderComponent={<View />}
         >
+          {Platform.OS === 'ios' && <Loader />}
+          {renderBody()}
           <IntermediaryActionSheet />
         </ActionSheet>
       )}
