@@ -13,21 +13,19 @@ export enum AttrKeys {
 export type AttrKeysUpper = 'NAME' | 'EMAILADDRESS' | 'MOBILEPHONENUMBER'
 
 //TODO: add support for Postal Address
-export const ATTR_TYPES: { [x: string]: AttrKeys } = {
+export const ATTR_TYPES: Record<string, AttrKeys> = {
   ProofOfEmailCredential: AttrKeys.emailAddress,
   ProofOfMobilePhoneNumberCredential: AttrKeys.mobilePhoneNumber,
   ProofOfNameCredential: AttrKeys.name,
 }
 
-export const ATTR_UI_NAMES: { [x: string]: string } = {
+export const ATTR_UI_NAMES: Record<string, string> = {
   [AttrKeys.emailAddress]: 'email',
   [AttrKeys.mobilePhoneNumber]: 'phone number',
   [AttrKeys.name]: 'name',
 }
 
-export const ATTR_KEYBOARD_TYPE: {
-  [x in AttrKeys]: KeyboardTypeOptions
-} = {
+export const ATTR_KEYBOARD_TYPE: Record<AttrKeys, KeyboardTypeOptions> = {
   [AttrKeys.emailAddress]: 'email-address',
   [AttrKeys.mobilePhoneNumber]: 'phone-pad',
   [AttrKeys.name]: 'default',

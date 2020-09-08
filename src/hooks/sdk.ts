@@ -17,6 +17,8 @@ import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interact
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { Alert } from 'react-native'
 
+type PreInteractionHandler = (i: Interaction) => boolean
+
 export const useSDK = () => {
   const sdk = useContext(SDKContext)
   if (!sdk?.current) throw new Error('SDK was not found!')
@@ -56,9 +58,7 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
    * returns false, the Interaction will not be started (still accessible
    * from the SDK).
    */
-  const preInteractionHandler: {
-    [x: string]: (interaction: Interaction) => boolean
-  } = {
+  const preInteractionHandler: Record<string, PreInteractionHandler> = {
     [FlowType.CredentialShare]: (interaction) => {
       const { constraints } = interaction.getSummary()
         .state as CredentialRequestFlowState
@@ -123,7 +123,7 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
 export const useInteraction = () => {
   const sdk = useSDK()
   const interactionId = useSelector(getInteractionId)
-  if (!interactionId.length) throw new Error('Interaction not found')
+  if (!interactionId) throw new Error('Interaction not found')
 
   return sdk.interactionManager.getInteraction(interactionId)
 }

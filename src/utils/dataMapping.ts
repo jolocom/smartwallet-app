@@ -31,20 +31,19 @@ export const isTypeAttribute = (type: string) =>
 export const isCredentialAttribute = (cred: SignedCredential) =>
   Object.values(credentialSchemas).indexOf(cred.type[1]) > -1
 
-export const credentialSchemas = Object.keys(claimsMetadata).reduce<{
-  [key: string]: string
-}>((acc, v) => {
+export const credentialSchemas = Object.keys(claimsMetadata).reduce<
+  Record<string, string>
+>((acc, v) => {
   const value = v as AttrKeys
   acc[value] = claimsMetadata[value].type[1]
   return acc
 }, {})
 
+//TODO: move to ~/types/credentials
 type InitialEntryValueT = undefined | AttributeI[]
 export interface CredentialI {
   id: string
-  claim: {
-    [key: string]: string
-  }
+  claim: Record<string, string>
 }
 
 export const makeAttrEntry = (
@@ -67,7 +66,7 @@ export const makeAttrEntry = (
   return Array.isArray(initialValue) ? [...initialValue, entry] : [entry]
 }
 
-export interface SummaryI<T> {
+interface SummaryI<T> {
   state: T
   initiator: IdentitySummary
 }

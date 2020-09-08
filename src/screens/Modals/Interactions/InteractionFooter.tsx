@@ -13,7 +13,6 @@ import { Colors } from '~/utils/colors'
 import { useHandleFlowSubmit } from '~/hooks/interactions/useHandleFlowSubmit'
 
 import AbsoluteBottom from '~/components/AbsoluteBottom'
-import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'

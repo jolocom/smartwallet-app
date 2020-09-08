@@ -21,7 +21,7 @@ interface Breakpoint {
   height: number
 }
 
-const breakpoints: { [x: string]: Breakpoint } = {
+const breakpoints: Record<string, Breakpoint> = {
   large: {
     width: 414,
     height: 814,

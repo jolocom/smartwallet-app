@@ -30,7 +30,7 @@ export interface InteractionState {
   details: InteractionDetails
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
-  selectedShareCredentials: { [x: string]: string }
+  selectedShareCredentials: Record<string, string>
 }
 
 /**

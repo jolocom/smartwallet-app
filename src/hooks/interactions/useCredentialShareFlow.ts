@@ -50,9 +50,7 @@ export const useCredentialShareFlow = () => {
    * Returns the @id for the first available attribute of each type.
    */
   const getPreselectedAttributes = () =>
-    Object.keys(attributes).reduce<{
-      [key: string]: string
-    }>((acc, v) => {
+    Object.keys(attributes).reduce<Record<string, string>>((acc, v) => {
       const value = v as AttrKeys
       if (!acc[value]) {
         const attr = attributes[value] || []
@@ -99,7 +97,7 @@ export const useCredentialShareFlow = () => {
   /**
    * Selects a credential in the @interactions module
    */
-  const handleSelectCredential = (credential: { [key: string]: string }) => {
+  const handleSelectCredential = (credential: Record<string, string>) => {
     dispatch(selectShareCredential(credential))
   }
 

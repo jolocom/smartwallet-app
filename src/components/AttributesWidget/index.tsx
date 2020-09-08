@@ -15,7 +15,7 @@ interface AttrsWidgetPropsI {
   isSelectable?: boolean
   onCreateNewAttr: (sectionKey: AttrKeys) => void
   onSelect?: (key: AttrKeys, id: string) => void
-  selectedAttributes?: { [x: string]: string }
+  selectedAttributes?: Record<string, string>
 }
 
 const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({

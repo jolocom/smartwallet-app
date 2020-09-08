@@ -16,7 +16,7 @@ import useDelay from '~/hooks/useDelay'
 import { dismissLoader } from '~/modules/loader/actions'
 import { isAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 
-const colors: { [x: string]: Colors } = {
+const colors: Record<string, Colors> = {
   default: Colors.white70,
   error: Colors.white70,
   success: Colors.white70,

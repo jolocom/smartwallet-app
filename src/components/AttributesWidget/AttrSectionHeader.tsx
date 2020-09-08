@@ -23,7 +23,11 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
         color={Colors.white70}
         customStyles={{ opacity: 0.6 }}
       >
-        {strings[sectionKey.toUpperCase() as AttrKeysUpper]}
+        {
+          strings[
+            sectionKey.toUpperCase() as AttrKeysUpper
+          ] /* why is the assertion necessary? */
+        }
       </Paragraph>
       <TouchableOpacity
         style={styles.createNewBtn}

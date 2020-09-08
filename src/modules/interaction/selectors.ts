@@ -50,9 +50,8 @@ export const getInteractionCounterparty = (
 /**
  * Gets the mapping of all selected credentials (attributes + documents)
  */
-export const getSelectedShareCredentials = (
-  state: RootReducerI,
-): { [x: string]: string } => state.interaction.selectedShareCredentials
+export const getSelectedShareCredentials = (state: RootReducerI) =>
+  state.interaction.selectedShareCredentials
 
 /**
  * Gets the interaction details from the @interactions module
@@ -75,9 +74,7 @@ export const getShareAttributes = createSelector(
 
       const interactionAttributues = !requestedAttributes.length
         ? {}
-        : requestedAttributes.reduce<{
-            [key: string]: AttributeI[]
-          }>((acc, v) => {
+        : requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
             const value = attrTypeToAttrKey(v)
             acc[value] = attributes[value] || []
             return acc
