@@ -27,6 +27,7 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const submitAuth = async (
     token: JSONWebToken<{ [key: string]: string } | any>,
   ) => {
+    await interaction.processInteractionToken(token)
     await interaction.send(token)
     dispatch(resetInteraction())
   }

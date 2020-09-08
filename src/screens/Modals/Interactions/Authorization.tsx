@@ -16,9 +16,9 @@ const Authorization = () => {
       {imageURL && (
         <View style={styles.imageWrapper}>
           <Image
-            resizeMode="center"
             source={{ uri: imageURL }}
             style={styles.image}
+            resizeMode="cover" // it will take max Dimension size (260 - width) and make height based on the aspect ration of actual image size
           />
         </View>
       )}
