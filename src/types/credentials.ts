@@ -34,7 +34,7 @@ export const ATTR_KEYBOARD_TYPE: Record<AttrKeys, KeyboardTypeOptions> = {
 
 export const attrTypeToAttrKey = (type: string) => {
   const attrKey = ATTR_TYPES[type]
-  if (!attrKey) throw new Error('No attribute key for type')
+  if (!attrKey) return null
 
   return attrKey
 }

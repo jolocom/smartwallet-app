@@ -110,6 +110,8 @@ export const useCredentialShareFlow = () => {
 
     const isSingleAttribute = !service_issued.length && self_issued.length === 1
     const attrKey = attrTypeToAttrKey(self_issued[0])
+    if(!attrKey) return null
+
     const typeAttributes = attributes[attrKey]
     const isMissing = !typeAttributes || !typeAttributes.length
 
