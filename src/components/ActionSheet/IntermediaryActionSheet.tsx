@@ -66,6 +66,7 @@ const IntermediaryActionSheet = () => {
 const styles = StyleSheet.create({
   inputWrapper: {
     paddingHorizontal: 20,
+    paddingVertical: 12,
     backgroundColor: Colors.black,
     borderRadius: 8,
   },
