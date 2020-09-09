@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '~/components/Header'
 import { StyleSheet, View } from 'react-native'
 import { Colors } from '~/utils/colors'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 interface Props {
   title: string
@@ -10,9 +10,14 @@ interface Props {
 const InteractionSection: React.FC<Props> = ({ title, children }) => {
   return (
     <View style={styles.wrapper}>
-      <Header color={Colors.white35} customStyles={{ textAlign: 'left' }}>
+      <JoloText
+        kind={JoloTextKind.title}
+        size="middle"
+        color={Colors.white35}
+        customStyles={{ textAlign: 'left' }}
+      >
         {title}
-      </Header>
+      </JoloText>
       {children}
     </View>
   )

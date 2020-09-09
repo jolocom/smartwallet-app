@@ -16,7 +16,6 @@ import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionMan
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 import { getLoaderState } from '~/modules/loader/selectors'
@@ -180,7 +179,6 @@ const Camera = () => {
                   }
                 </JoloText>
               )}
-              <Paragraph customStyles={{ width: MARKER_SIZE }}></Paragraph>
               <TouchableHighlight
                 onPressIn={() => setTorchPressed(true)}
                 onPressOut={() => setTorchPressed(false)}

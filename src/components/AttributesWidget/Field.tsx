@@ -7,9 +7,9 @@ import {
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import { PurpleTickSuccess } from '~/assets/svg'
+import JoloText, { JoloTextKind } from '../JoloText'
 
 export enum FieldTypes {
   isSelectable = 'isSelectable',
@@ -53,7 +53,13 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
       return (
         <TouchableWithoutFeedback onPress={onSelect}>
           <View style={styles.field as ViewStyle}>
-            <Paragraph size={ParagraphSizes.medium}>{value}</Paragraph>
+            <JoloText
+              kind={JoloTextKind.subtitle}
+              size="mini"
+              color={Colors.white90}
+            >
+              {value}
+            </JoloText>
             {isSelected ? (
               <View style={styles.radio}>
                 <PurpleTickSuccess />
@@ -67,16 +73,26 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
     case FieldTypes.isStatic:
       return (
         <View style={styles.field as ViewStyle}>
-          <Paragraph size={ParagraphSizes.medium}>{value}</Paragraph>
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size="mini"
+            color={Colors.white90}
+          >
+            {value}
+          </JoloText>
         </View>
       )
     case FieldTypes.isEmpty:
       return (
         <TouchableOpacity onPress={onCreateNewOne}>
           <View style={styles.field as ViewStyle}>
-            <Paragraph size={ParagraphSizes.medium} color={Colors.error}>
-              {strings.MISSING_INFO}*
-            </Paragraph>
+            <JoloText
+              kind={JoloTextKind.subtitle}
+              size="mini"
+              color={Colors.error}
+            >
+              {strings.MISSING_INFO}
+            </JoloText>
           </View>
         </TouchableOpacity>
       )

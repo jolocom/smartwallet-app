@@ -5,7 +5,7 @@ import CredentialCard from '../CredentialCard'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import { CredReceiveI } from '~/modules/interaction/types'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
-import Header from '~/components/Header'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 
 const CredentialOfferBas = () => {
@@ -17,7 +17,9 @@ const CredentialOfferBas = () => {
   return (
     <BasWrapper>
       <CredentialCard>
-        <Header color={Colors.black}>{type}</Header>
+        <JoloText kind={JoloTextKind.title} size="middle" color={Colors.black}>
+          {type}
+        </JoloText>
       </CredentialCard>
     </BasWrapper>
   )

@@ -3,14 +3,14 @@ import { Linking } from 'react-native'
 import Hyperlink from 'react-native-hyperlink'
 
 import { Colors } from '~/utils/colors'
-import Paragraph from '~/components/Paragraph'
+import JoloText, { JoloTextKind } from './JoloText'
 
 interface LinkPropsI {
   text: string
 }
 
 const Link: React.FC<LinkPropsI> = ({ text }) => {
-  const handleLinkClick = async (url) => {
+  const handleLinkClick = async (url: string) => {
     try {
       const isSupported = await Linking.canOpenURL(url)
       if (isSupported) {
@@ -29,7 +29,9 @@ const Link: React.FC<LinkPropsI> = ({ text }) => {
       onPress={handleLinkClick}
       linkStyle={{ textDecorationLine: 'underline' }}
     >
-      <Paragraph color={Colors.white70}>{text}</Paragraph>
+      <JoloText kind={JoloTextKind.subtitle} size="mini" color={Colors.white70}>
+        {text}
+      </JoloText>
     </Hyperlink>
   )
 }

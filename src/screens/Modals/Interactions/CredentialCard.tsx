@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   View,
   StyleSheet,
@@ -50,19 +50,17 @@ const CredentialCard: React.FC<PropsI> = ({
           isSmall && styles.scaledDown,
         ]}
       >
-        <>
-          {children}
-          {(disabled || selected || hasInstruction) && (
-            <View style={[styles.darken, styles.card]}>
-              {selected && <Tick />}
-              {hasInstruction && (
-                <View style={{ alignSelf: 'center' }}>
-                  <HandAnimation />
-                </View>
-              )}
-            </View>
-          )}
-        </>
+        {children}
+        {(disabled || selected || hasInstruction) && (
+          <View style={[styles.darken, styles.card]}>
+            {selected && <Tick />}
+            {hasInstruction && (
+              <View style={{ alignSelf: 'center' }}>
+                <HandAnimation />
+              </View>
+            )}
+          </View>
+        )}
       </View>
     </TouchableWithoutFeedback>
   )
@@ -77,6 +75,8 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
     marginVertical: 20,
     backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   scaledDown: {
     marginLeft: -20,

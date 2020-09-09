@@ -4,7 +4,6 @@ import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import PasscodeInput from '~/components/PasscodeInput'
-import Paragraph from '~/components/Paragraph'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 import useSuccess from '~/hooks/useSuccess'
@@ -123,9 +122,14 @@ const Passcode = () => {
           </JoloText>
         )}
         {hasError && (
-          <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size="middle"
+            color={Colors.error}
+            customStyles={{ marginTop: 20 }}
+          >
             {strings.PINS_DONT_MATCH}
-          </Paragraph>
+          </JoloText>
         )}
         {!isCreating && (
           <AbsoluteBottom customStyles={styles.btn}>

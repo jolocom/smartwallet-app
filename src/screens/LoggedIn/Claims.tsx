@@ -9,10 +9,8 @@ import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { useSDK, useInteractionStart } from '~/hooks/sdk'
 import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -56,15 +54,6 @@ const Claims: React.FC = () => {
   return (
     <ScreenContainer>
       <ContainerComponent>
-        <JoloText kind={JoloTextKind.subtitle} size="big">
-          Hey Theres
-        </JoloText>
-        <Paragraph
-          customStyles={{ marginBottom: 20 }}
-          size={ParagraphSizes.large}
-        >
-          Below is the widget from the home page
-        </Paragraph>
         <AttributesWidget
           attributes={attributes}
           onCreateNewAttr={(sectionKey) =>

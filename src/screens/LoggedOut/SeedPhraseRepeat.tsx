@@ -1,7 +1,6 @@
 import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Header from '~/components/Header'
 import Btn from '~/components/Btn'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,6 +11,7 @@ import { useLoader } from '~/hooks/useLoader'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import useRedirectTo from '~/hooks/useRedirectTo'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 const SeedPhraseRepeat: React.FC = () => {
   const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
@@ -42,7 +42,9 @@ const SeedPhraseRepeat: React.FC = () => {
 
   return (
     <ScreenContainer>
-      <Header>Seed Phrase Repeat</Header>
+      <JoloText kind={JoloTextKind.title} size="big">
+        Seed Phrase Repeat
+      </JoloText>
       <Btn onPress={onSubmitIdentity}>Done</Btn>
     </ScreenContainer>
   )
