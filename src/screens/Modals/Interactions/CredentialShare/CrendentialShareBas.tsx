@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import {
   getFirstShareDocument,
-  getSelectedShareCredentials,
+  getSelectedRequestedCredentialsAtrributes,
 } from '~/modules/interaction/selectors'
 import { getShareAttributes } from '~/modules/interaction/selectors'
 import AttributesWidget from '~/components/AttributesWidget'
@@ -16,7 +16,9 @@ import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareF
 const CredentialShareBas = () => {
   const shareDocument = useSelector(getFirstShareDocument)
   const attributes = useSelector(getShareAttributes)
-  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
+  const selectedShareCredentials = useSelector(
+    getSelectedRequestedCredentialsAtrributes,
+  )
   const {
     getPreselectedAttributes,
     handleCreateAttribute,

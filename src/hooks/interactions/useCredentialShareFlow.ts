@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useInteraction } from '../sdk'
 import {
-  getSelectedShareCredentials,
+  getSelectedRequestedCredentialsAtrributes,
   getShareAttributes,
   getShareCredentialsBySection,
   getShareCredentialTypes,
@@ -22,7 +22,9 @@ import { isCredShareDetails } from '~/modules/interaction/guards'
 export const useCredentialShareFlow = () => {
   const dispatch = useDispatch()
   const interaction = useInteraction()
-  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
+  const selectedRequestedCredentialsAttributes = useSelector(
+    getSelectedRequestedCredentialsAtrributes,
+  )
   const attributes = useSelector(getShareAttributes)
   const interactionDetails = useSelector(getInteractionDetails)
   const { requestedAttributes, requestedCredentials } = useSelector(
@@ -35,7 +37,9 @@ export const useCredentialShareFlow = () => {
    * credentials, processes it and sends it to the @counterparty.
    */
   const assembleShareResponseToken = async () => {
-    const mappedSelection = Object.values(selectedShareCredentials).map(id => ({
+    const mappedSelection = Object.values(
+      getSelectedRequestedCredentialsAtrributes,
+    ).map(id => ({
       id,
     }))
     const response = await interaction.createCredentialResponse(
@@ -65,11 +69,11 @@ export const useCredentialShareFlow = () => {
    */
   const selectionReady = () => {
     const allAttributes = Object.keys(attributes).every(t =>
-      Object.keys(selectedShareCredentials).includes(t),
+      Object.keys(selectedRequestedCredentialsAttributes).includes(t),
     )
 
     const allCredentials = requestedCredentials.every(t =>
-      Object.keys(selectedShareCredentials).includes(t),
+      Object.keys(selectedRequestedCredentialsAttributes).includes(t),
     )
 
     return allAttributes && allCredentials

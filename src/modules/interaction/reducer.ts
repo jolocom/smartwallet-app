@@ -4,12 +4,12 @@ import {
   InteractionState,
 } from './types'
 import { Action } from '~/types/actions'
+import { isCredShareDetails } from './guards'
 
 const initialState: InteractionState = {
   details: { flowType: null },
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
-  selectedShareCredentials: {}, // this is where the credential id's are collected when the user selects the credentials
 }
 
 const reducer = (
@@ -22,13 +22,19 @@ const reducer = (
     case InteractionActions.resetInteraction:
       return initialState
     case InteractionActions.selectShareCredential:
-      return {
-        ...state,
-        selectedShareCredentials: {
-          ...state.selectedShareCredentials,
-          ...action.payload,
-        },
+      if (isCredShareDetails(state.details)) {
+        return {
+          ...state,
+          details: {
+            ...state.details,
+            selectedRequestedCredentialsAttributes: {
+              ...state.details.selectedRequestedCredentialsAttributes,
+              ...action.payload,
+            },
+          },
+        }
       }
+      return state
     case InteractionActions.setIntermediaryState:
       return { ...state, intermediaryState: action.payload }
     case InteractionActions.setAttributeInputKey:
@@ -39,3 +45,8 @@ const reducer = (
 }
 
 export default reducer
+
+// selectedShareCredentials: {
+//   ...state.selectedShareCredentials,
+//   ...action.payload,
+// },

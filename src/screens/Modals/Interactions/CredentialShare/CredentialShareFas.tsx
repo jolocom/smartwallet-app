@@ -3,7 +3,7 @@ import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import { useSelector } from 'react-redux'
 import {
   getShareCredentialsBySection,
-  getSelectedShareCredentials,
+  getSelectedRequestedCredentialsAtrributes,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
@@ -21,7 +21,9 @@ import { View } from 'react-native'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getShareAttributes)
-  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
+  const selectedRequestedCredentialsAttributes = useSelector(
+    getSelectedRequestedCredentialsAtrributes,
+  )
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const [instructionVisible, setInstructionVisibility] = useState(true)
   const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
@@ -35,7 +37,7 @@ const CredentialShareFas = () => {
 
   useEffect(() => {
     handleSelectCredential(getPreselectedAttributes())
-  }, [attributes])
+  }, [JSON.stringify(Object.values(attributes))])
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -71,7 +73,10 @@ const CredentialShareFas = () => {
                     shouldShowInstruction && setShouldShowInstruction(false)
                     handleSelectCredential({ [cred.type]: cred.id })
                   }}
-                  selected={selectedShareCredentials[cred.type] === cred.id}
+                  selected={
+                    selectedRequestedCredentialsAttributes[cred.type] ===
+                    cred.id
+                  }
                 >
                   <Header color={Colors.black}>{type}</Header>
                 </CredentialCard>
@@ -91,7 +96,7 @@ const CredentialShareFas = () => {
               attributes={attributes}
               onCreateNewAttr={handleCreateAttribute}
               onSelect={(key, id) => handleSelectCredential({ [key]: id })}
-              selectedAttributes={selectedShareCredentials}
+              selectedAttributes={selectedRequestedCredentialsAttributes}
               isSelectable={true}
             />
           </AttributeWidgetWrapper>

@@ -30,7 +30,6 @@ export interface InteractionState {
   details: InteractionDetails
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
-  selectedShareCredentials: Record<string, string>
 }
 
 /**
@@ -78,6 +77,7 @@ export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
   requestedAttributes: string[]
   requestedCredentials: string[]
+  selectedRequestedCredentialsAttributes: Record<string, string>
 }
 
 export interface CredOfferI extends InteractionCommonI {

@@ -51,8 +51,13 @@ export const getInteractionCounterparty = (
 /**
  * Gets the mapping of all selected credentials (attributes + documents)
  */
-export const getSelectedShareCredentials = (state: RootReducerI) =>
-  state.interaction.selectedShareCredentials
+export const getSelectedRequestedCredentialsAtrributes = (
+  state: RootReducerI,
+) => {
+  if (isCredShareDetails(state.interaction.details)) {
+    return state.interaction.details.selectedRequestedCredentialsAttributes
+  }
+}
 
 /**
  * Gets the interaction details from the @interactions module
