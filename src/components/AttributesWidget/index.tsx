@@ -5,9 +5,6 @@ import { AttrsState, AttributeI } from '~/modules/attributes/types'
 
 import AttrSectionHeader from './AttrSectionHeader'
 import Field, { FieldTypes } from './Field'
-import { useDispatch, useSelector } from 'react-redux'
-import { getSelectedShareCredentials } from '~/modules/interaction/selectors'
-import { selectShareCredential } from '~/modules/interaction/actions'
 import { AttrKeys } from '~/types/credentials'
 
 interface AttrsWidgetPropsI {

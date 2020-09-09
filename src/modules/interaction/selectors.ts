@@ -69,9 +69,7 @@ export const getShareAttributes = createSelector(
   [getAttributes, getInteractionDetails],
   (attributes, shareDetails) => {
     if (isCredShareDetails(shareDetails)) {
-      const {
-        credentials: { self_issued: requestedAttributes },
-      } = shareDetails
+      const { requestedAttributes } = shareDetails
 
       return requestedAttributes.reduce<Record<string, AttributeI[]>>(
         (acc, v) => {
@@ -94,9 +92,9 @@ const getShareCredentials = createSelector(
   [getInteractionDetails, getAllCredentials],
   (details, credentials) => {
     if (isCredShareDetails(details)) {
-      return details.credentials.service_issued.reduce<ShareUICredential[]>(
+      return details.requestedCredentials.reduce<ShareUICredential[]>(
         (acc, type) => {
-          const creds = credentials.filter((cred) => cred.type === type)
+          const creds = credentials.filter(cred => cred.type === type)
           if (!creds.length) return acc
           acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
           return acc
@@ -128,8 +126,8 @@ export const getIsFullScreenInteraction = createSelector(
       return false
     } else if (
       isCredShareDetails(details) &&
-      details.credentials.self_issued.length &&
-      !details.credentials.service_issued.length
+      details.requestedAttributes.length &&
+      !details.requestedCredentials.length
     ) {
       const availableAttributes = Object.values(shareAttributes).reduce<
         AttributeI[]
@@ -142,7 +140,7 @@ export const getIsFullScreenInteraction = createSelector(
       return availableAttributes.length > 3
     } else if (
       isCredShareDetails(details) &&
-      !details.credentials.self_issued.length &&
+      !details.requestedAttributes.length &&
       shareCredentials.length === 1
     ) {
       return false
@@ -162,7 +160,7 @@ export const getIsFullScreenInteraction = createSelector(
  */
 export const getOfferCredentialsBySection = createSelector(
   [getInteractionDetails],
-  (details) => {
+  details => {
     const defaultSections = { documents: [], other: [] }
 
     if (isCredOfferDetails(details)) {
@@ -188,8 +186,8 @@ export const getFirstShareDocument = createSelector(
   [getInteractionDetails, getAllCredentials],
   (details, credentials) => {
     if (isCredShareDetails(details)) {
-      const firstType = details.credentials.service_issued[0]
-      const firstCredential = credentials.find((c) => c.type === firstType)
+      const firstType = details.requestedCredentials[0]
+      const firstCredential = credentials.find(c => c.type === firstType)
 
       return firstCredential
         ? uiCredentialToShareCredential(firstCredential)
@@ -205,12 +203,14 @@ export const getFirstShareDocument = createSelector(
  */
 export const getShareCredentialTypes = createSelector(
   [getInteractionDetails],
-  (details) => {
+  details => {
     if (isCredShareDetails(details)) {
-      return details.credentials
+      // return details.credentials
+      const { requestedAttributes, requestedCredentials } = details
+      return { requestedAttributes, requestedCredentials }
     }
 
-    return { self_issued: [], service_issued: [] }
+    return { requestedAttributes: [], requestedCredentials: [] }
   },
 )
 
@@ -220,30 +220,27 @@ export const getShareCredentialTypes = createSelector(
  */
 export const getShareCredentialsBySection = createSelector(
   [getShareCredentials, getShareCredentialTypes],
-  (shareCredentials, shareCredTypes) => {
+  (shareCredentials, rrequestedCredTypes) => {
     const defaultSections = { documents: [], other: [] }
 
-    return shareCredTypes.service_issued.reduce<ShareCredentialsBySection>(
-      (acc, type) => {
-        const credentials = shareCredentials.filter(
-          (cred) => cred.type === type,
-        )
+    return rrequestedCredTypes.requestedCredentials.reduce<
+      ShareCredentialsBySection
+    >((acc, type) => {
+      const credentials = shareCredentials.filter(cred => cred.type === type)
 
-        // NOTE: we assume the @renderAs property is the same for all credentials
-        // of the same type
-        const section = getCredentialSection(credentials[0])
+      // NOTE: we assume the @renderAs property is the same for all credentials
+      // of the same type
+      const section = getCredentialSection(credentials[0])
 
-        acc[section] = [
-          ...acc[section],
-          {
-            type,
-            credentials,
-          },
-        ]
+      acc[section] = [
+        ...acc[section],
+        {
+          type,
+          credentials,
+        },
+      ]
 
-        return acc
-      },
-      defaultSections,
-    )
+      return acc
+    }, defaultSections)
   },
 )

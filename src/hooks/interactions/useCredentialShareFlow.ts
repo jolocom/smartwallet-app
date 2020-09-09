@@ -25,7 +25,9 @@ export const useCredentialShareFlow = () => {
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getShareAttributes)
   const interactionDetails = useSelector(getInteractionDetails)
-  const { service_issued, self_issued } = useSelector(getShareCredentialTypes)
+  const { requestedAttributes, requestedCredentials } = useSelector(
+    getShareCredentialTypes,
+  )
   const { documents, other } = useSelector(getShareCredentialsBySection)
 
   /**
@@ -33,11 +35,9 @@ export const useCredentialShareFlow = () => {
    * credentials, processes it and sends it to the @counterparty.
    */
   const assembleShareResponseToken = async () => {
-    const mappedSelection = Object.values(selectedShareCredentials).map(
-      (id) => ({
-        id,
-      }),
-    )
+    const mappedSelection = Object.values(selectedShareCredentials).map(id => ({
+      id,
+    }))
     const response = await interaction.createCredentialResponse(
       // @ts-ignore is fixed in future SDK version. Should work this way, since we only need the @id
       mappedSelection,
@@ -64,11 +64,11 @@ export const useCredentialShareFlow = () => {
    * Assures all requested credentials & attributes are selected.
    */
   const selectionReady = () => {
-    const allAttributes = Object.keys(attributes).every((t) =>
+    const allAttributes = Object.keys(attributes).every(t =>
       Object.keys(selectedShareCredentials).includes(t),
     )
 
-    const allCredentials = service_issued.every((t) =>
+    const allCredentials = requestedCredentials.every(t =>
       Object.keys(selectedShareCredentials).includes(t),
     )
 
@@ -109,9 +109,10 @@ export const useCredentialShareFlow = () => {
   const getSingleMissingAttribute = (): AttrKeys | null => {
     if (!isCredShareDetails(interactionDetails)) return null
 
-    const isSingleAttribute = !service_issued.length && self_issued.length === 1
-    const attrKey = attrTypeToAttrKey(self_issued[0])
-    if(!attrKey) return null
+    const isSingleAttribute =
+      !requestedCredentials.length && requestedAttributes.length === 1
+    const attrKey = attrTypeToAttrKey(requestedAttributes[0])
+    if (!attrKey) return null
 
     const typeAttributes = attributes[attrKey]
     const isMissing = !typeAttributes || !typeAttributes.length

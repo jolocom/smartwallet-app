@@ -76,10 +76,8 @@ export interface AuthorizationDetailsI extends InteractionCommonI {
 
 export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
-  credentials: {
-    self_issued: string[]
-    service_issued: string[]
-  }
+  requestedAttributes: string[]
+  requestedCredentials: string[]
 }
 
 export interface CredOfferI extends InteractionCommonI {
