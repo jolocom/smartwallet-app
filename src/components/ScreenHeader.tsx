@@ -18,7 +18,7 @@ const ScreenHeader: React.FC<PropsI> = ({ title, subtitle }) => {
         kind={JoloTextKind.subtitle}
         size="middle"
         color={Colors.white70}
-        customStyles={{ opacity: 0.8 }}
+        customStyles={{ opacity: 0.8, paddingVertical: 18 }}
       >
         {subtitle}
       </JoloText>
