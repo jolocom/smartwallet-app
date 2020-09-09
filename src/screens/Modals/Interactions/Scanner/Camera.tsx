@@ -31,6 +31,7 @@ import { useInteractionStart } from '~/hooks/sdk'
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 
 import { strings } from '~/translations/strings'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
@@ -156,9 +157,10 @@ const Camera = () => {
             </View>
             <View style={styles.bottomOverlay}>
               {isError ? (
-                <Paragraph
+                <JoloText
                   animated
-                  size={ParagraphSizes.medium}
+                  kind={JoloTextKind.subtitle}
+                  size="middle"
                   customStyles={{
                     width: MARKER_SIZE,
                     color: Colors.error,
@@ -166,16 +168,17 @@ const Camera = () => {
                   }}
                 >
                   {errorText}
-                </Paragraph>
+                </JoloText>
               ) : (
-                <Paragraph
-                  size={ParagraphSizes.medium}
+                <JoloText
+                  kind={JoloTextKind.subtitle}
+                  size="middle"
                   customStyles={{ width: MARKER_SIZE }}
                 >
                   {
                     strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE
                   }
-                </Paragraph>
+                </JoloText>
               )}
               <Paragraph customStyles={{ width: MARKER_SIZE }}></Paragraph>
               <TouchableHighlight

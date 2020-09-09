@@ -27,8 +27,10 @@ import { handleNotEnrolled } from '~/utils/biometryErrors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { setPopup } from '~/modules/appState/actions'
-import Header from '~/components/Header'
 import { useAppState } from '~/hooks/useAppState'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { Fonts } from '~/utils/fonts'
+import { Colors } from '~/utils/colors'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -86,7 +88,14 @@ const Lock = () => {
           <ActivityIndicator />
         ) : (
           <>
-            <Header>{strings.ENTER_YOUR_PIN}</Header>
+            <JoloText
+              kind={JoloTextKind.title}
+              size="middle"
+              customStyles={{ fontFamily: Fonts.Regular }}
+              color={Colors.white90}
+            >
+              {strings.ENTER_YOUR_PIN}
+            </JoloText>
             <View style={styles.inputContainer}>
               <PasscodeInput
                 value={pin}
