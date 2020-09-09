@@ -13,10 +13,6 @@ import {
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
 
-import Lock from './ui/deviceauth/Lock'
-import RegisterPIN from './ui/deviceauth/RegisterPIN'
-import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
-
 import {
   JolocomLinking,
   JolocomWebSockets,
@@ -50,7 +46,7 @@ const styles = StyleSheet.create({
 
 export default class App extends React.PureComponent<
   {},
-  { ready: boolean; showStatusBar: boolean }
+  { ready: boolean }
 > {
   private navigator!: NavigationContainerComponent
 
@@ -58,7 +54,6 @@ export default class App extends React.PureComponent<
     super(props)
     this.state = {
       ready: false,
-      showStatusBar: true,
     }
     // only init store once, or else Provider complains (especially on 'toggle
     // inspector')
@@ -135,9 +130,6 @@ export default class App extends React.PureComponent<
                 onNavigationStateChange={this.handleNavigationChange.bind(this)}
                 ref={nav => this.setNavigator(nav)}
               />
-              <Lock />
-              <RegisterPIN />
-              <HowToChangePIN />
             </AppWrap>
           </Provider>
         )}

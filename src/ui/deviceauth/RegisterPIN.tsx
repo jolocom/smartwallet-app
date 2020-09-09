@@ -14,12 +14,10 @@ import strings from '../../locales/strings'
 import { PIN_USERNAME, PIN_SERVICE } from './utils/keychainConsts'
 import { BP } from 'src/styles/breakpoints'
 
-import LocalModal from './LocalModal'
 import { Colors } from './colors'
 import { connect } from 'react-redux'
-import { RootState } from 'src/reducers'
 import { ThunkDispatch } from 'src/store'
-import { accountActions } from 'src/actions'
+import { genericActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
 
 interface PropsI {
@@ -56,10 +54,7 @@ const RegisterPIN: React.FC<PropsI> = ({
       } catch (err) {
         console.log({ err })
       }
-      setAuth()
       unlockApplication()
-
-      closeLocalAuth()
     } else {
       setHasError(true)
     }
@@ -79,7 +74,6 @@ const RegisterPIN: React.FC<PropsI> = ({
   }, [verifiedPasscode])
 
   return (
-    <LocalModal isVisible={isLocalAuthVisible}>
       <ScreenContainer
         customStyles={{
           justifyContent: 'flex-start',
@@ -137,7 +131,6 @@ const RegisterPIN: React.FC<PropsI> = ({
           </AbsoluteBottom>
         )}
       </ScreenContainer>
-    </LocalModal>
   )
 }
 
@@ -157,18 +150,11 @@ const styles = StyleSheet.create({
   },
 })
 
-const mapStateToProps = (state: RootState) => ({
-  isLocalAuthVisible: state.account.appState.isLocalAuthVisible,
-})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  unlockApplication: () => dispatch(accountActions.unlockApp()),
-  setAuth: () => dispatch(accountActions.setLocalAuth()),
-  closeLocalAuth: () => dispatch(accountActions.closeLocalAuth()),
+  unlockApplication: () => dispatch(genericActions.setLocked(false)),
 })
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
-)(props => {
-  return <RegisterPIN {...props} />
-})
+)(RegisterPIN)

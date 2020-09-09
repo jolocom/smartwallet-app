@@ -32,6 +32,11 @@ import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
 import ChangePIN from './ui/deviceauth/ChangePIN'
 
+import Lock from './ui/deviceauth/Lock'
+import RegisterPIN from './ui/deviceauth/RegisterPIN'
+import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
+
+
 import {
   DocsIcon,
   HistoryIcon,
@@ -191,17 +196,24 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
 
 const MainStack = createStackNavigator(
   {
-    [routeList.Home]: {
-      screen: BottomTabNavigator,
+    [routeList.Lock]: {
+      screen: Lock,
+    },
+    [routeList.RegisterPIN]: {
+      screen: RegisterPIN,
+    },
+    [routeList.HowToChangePIN]: {
+      screen: HowToChangePIN,
     },
     [routeList.ChangePIN]: {
       screen: ChangePIN,
-      navigationOptions: {
-        gesturesEnabled: false,
-      },
+    },
+    [routeList.Home]: {
+      screen: BottomTabNavigator,
     },
     [routeList.InputSeedPhrasePin]: {
       screen: InputSeedPhrase,
+      // @ts-ignore
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.InteractionScreen]: {
