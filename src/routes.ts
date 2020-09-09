@@ -196,8 +196,14 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
 
 const MainStack = createStackNavigator(
   {
+    [routeList.Home]: {
+      screen: BottomTabNavigator,
+    },
     [routeList.Lock]: {
       screen: Lock,
+      navigationOptions: {
+        gesturesEnabled: false
+      }
     },
     [routeList.RegisterPIN]: {
       screen: RegisterPIN,
@@ -207,9 +213,6 @@ const MainStack = createStackNavigator(
     },
     [routeList.ChangePIN]: {
       screen: ChangePIN,
-    },
-    [routeList.Home]: {
-      screen: BottomTabNavigator,
     },
     [routeList.InputSeedPhrasePin]: {
       screen: InputSeedPhrase,

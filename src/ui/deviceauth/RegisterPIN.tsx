@@ -20,11 +20,10 @@ import { ThunkDispatch } from 'src/store'
 import { genericActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
 
-interface PropsI {
+interface PropsI extends ReturnType<typeof mapDispatchToProps> {
   isLocalAuthVisible: boolean
   closeLocalAuth: () => void
   setAuth: () => void
-  unlockApplication: () => void
 }
 
 const RegisterPIN: React.FC<PropsI> = ({
@@ -54,7 +53,7 @@ const RegisterPIN: React.FC<PropsI> = ({
       } catch (err) {
         console.log({ err })
       }
-      unlockApplication()
+      unlockApplication(passcode)
     } else {
       setHasError(true)
     }
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  unlockApplication: () => dispatch(genericActions.setLocked(false)),
+  unlockApplication: (pin: string) => dispatch(genericActions.unlockApp(pin)),
 })
 
 export default connect(

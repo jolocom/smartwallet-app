@@ -17,9 +17,9 @@ import {
   AppWrapConfig,
   APPWRAP_UPDATE_CONFIG,
   APPWRAP_SHOW_LOADER,
-  APPWRAP_SET_LOCKED,
   APPWRAP_REGISTER_CONFIG,
   APPWRAP_UNREGISTER_CONFIG,
+  APPWRAP_SET_LOCKED,
 } from '../../reducers/generic'
 import { AnyAction } from 'redux'
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
@@ -110,6 +110,16 @@ export const setLocked = (value: boolean) => ({
 export const lockApp = (
 ): ThunkAction => async (dispatch, getState) => {
   dispatch(setLocked(true))
+  const keychainPin = await Keychain.getGenericPassword({
+    service: PIN_SERVICE,
+  })
+  if (!keychainPin) {
+    return dispatch(
+      navigationActions.navigate(
+        { routeName: routeList.RegisterPIN },
+      )
+    )
+  }
   return dispatch(navigationActions.navigate({ routeName: routeList.Lock }))
 }
 

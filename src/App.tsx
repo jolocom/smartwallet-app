@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Provider } from 'react-redux'
 import { initStore, initTypeorm, ThunkDispatch } from './store'
-import { navigationActions, genericActions } from 'src/actions'
+import { navigationActions } from 'src/actions'
 import { RoutesContainer } from './routes'
 import { enableScreens } from 'react-native-screens'
 import { isNil } from 'ramda'
@@ -22,7 +22,6 @@ import {
 
 import { backgroundDarkMain } from './styles/colors'
 import { AppWrap } from './ui/structure/wrapper'
-import { routeList } from './routeList'
 
 enableScreens()
 
@@ -83,14 +82,11 @@ export default class App extends React.PureComponent<
   ) {
     // @ts-ignore
     let navigation = this.navigator._navigation
+
     const thunkDispatch: ThunkDispatch = store.dispatch
     let curState: NavigationState | NavigationRoute = newState,
       navigationOptions
 
-    if (store.getState().generic.appWrapConfig.locked && prevState.key === routeList.Lock) {
-      thunkDispatch(genericActions.lockApp())
-      return
-    }
     while (curState.routes) {
       const nextState: NavigationRoute = curState.routes[curState.index]
       const childNav = navigation.getChildNavigation(nextState.key)

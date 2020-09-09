@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react'
 import {
   View,
   StyleSheet,
+  BackHandler,
 } from 'react-native'
+
+import { NavigationInjectedProps } from 'react-navigation'
 
 import I18n from 'src/locales/i18n'
 
@@ -20,14 +23,18 @@ import { genericActions, navigationActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
 import { routeList } from 'src/routeList'
 
+
 interface LockProps extends
+  NavigationInjectedProps,
   ReturnType<typeof mapDispatchToProps>,
   ReturnType<typeof mapStateToProps> {
 }
 
 const Lock: React.FC<LockProps> = ({
   navigateTorecoveryInstuction,
-  unlockApp
+  unlockApp,
+  navigation,
+  isLocked
 }) => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
@@ -47,11 +54,31 @@ const Lock: React.FC<LockProps> = ({
   }, [])
   */
 
+  let errorTimeout: number
+
+  useEffect(() => {
+    const handleBack = () => {
+      if (isLocked && navigation.isFocused()) {
+        // don't let react-navigation handle this back button press
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    BackHandler.addEventListener('hardwareBackPress', handleBack)
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBack)
+      if (errorTimeout) clearTimeout(errorTimeout)
+    }
+  }, [])
+
   const handleAppUnlock = async () => {
     await unlockApp(pin)
     // unlockApp() should navigate away, if it hasn't then something is wrong.
     // this is in a timeout to not show error immediately
-    setTimeout(() => setHasError(true), 0)
+    errorTimeout = setTimeout(() => setHasError(true), 100)
   }
 
   return (
@@ -88,7 +115,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state: RootState) => ({
-  isLocked: state.generic.appWrapConfig.locked
+  isLocked: state.generic.locked
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({

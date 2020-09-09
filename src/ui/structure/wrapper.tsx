@@ -10,8 +10,6 @@ import {
   Platform,
 } from 'react-native'
 
-import { NavigationEvents } from 'react-navigation'
-
 import { backgroundDarkMain, backgroundLightMain } from 'src/styles/colors'
 import { AppWrapConfig, pickAppWrapConfigAttrs } from 'src/reducers/generic'
 import { AppLoadingAndNotifications } from '../generic/appLoadingAndNotifications'
@@ -124,10 +122,6 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
     }
   })
 
-  const handleNavigationBlur = (payload) => {
-    console.log('blurring now', payload)
-  }
-
   return (
     <>
       <StatusBar
@@ -137,8 +131,6 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
         animated
         translucent
       />
-      <NavigationEvents
-        onWillBlur={handleNavigationBlur} />
 
       <AppLoadingAndNotifications loading={!!loading} />
       {props.children}
