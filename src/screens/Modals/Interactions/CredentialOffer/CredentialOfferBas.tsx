@@ -3,10 +3,8 @@ import React from 'react'
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import CredentialCard from '../CredentialCard'
 import { useRootSelector } from '~/hooks/useRootSelector'
-import {
-  getInteractionDetails,
-  isCredOfferDetails,
-} from '~/modules/interaction/selectors'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { isCredOfferDetails } from '~/modules/interaction/guards'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 

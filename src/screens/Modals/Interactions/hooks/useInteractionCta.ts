@@ -1,12 +1,12 @@
 import { strings } from '~/translations/strings'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
 import {
-  getInteractionDetails,
   isAuthDetails,
   isAuthzDetails,
   isCredOfferDetails,
   isCredShareDetails,
-} from '~/modules/interaction/selectors'
+} from '~/modules/interaction/guards'
 import { useRootSelector } from '~/hooks/useRootSelector'
 
 export default function useInteractionCta() {

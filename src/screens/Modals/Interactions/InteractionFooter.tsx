@@ -11,7 +11,6 @@ import {
   setAttributeInputKey,
 } from '~/modules/interaction/actions'
 import {
-  getInteractionType,
   getIsFullScreenInteraction,
   getAttributesToShare,
   getServiceIssuedCreds,
