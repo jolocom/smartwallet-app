@@ -1,6 +1,6 @@
 import { ThunkAction } from '../store'
 //import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { navigationActions } from './index'
+import { navigationActions, genericActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { removeNotification } from './notifications'
@@ -66,6 +66,7 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   if (recovered) {
     const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
     await resetServiceValuesInKeychain()
+    await dispatch(genericActions.setLocked(false))
   }
 
   await dispatch(checkLocalDeviceAuthSet)

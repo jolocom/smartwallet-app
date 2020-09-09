@@ -3,6 +3,7 @@ import { pickBy } from 'ramda'
 
 export const APPWRAP_UPDATE_CONFIG = 'APPWRAP_UPDATE_CONFIG'
 export const APPWRAP_SHOW_LOADER = 'APPWRAP_SHOW_LOADER'
+export const APPWRAP_SET_LOCKED = 'APPWRAP_SET_LOCKED'
 export const APPWRAP_REGISTER_CONFIG = 'APPWRAP_REGISTER_CONFIG'
 export const APPWRAP_UNREGISTER_CONFIG = 'APPWRAP_UNREGISTER_CONFIG'
 
@@ -10,9 +11,11 @@ export interface AppWrapConfig {
   readonly withoutStatusBar: boolean
   readonly loading: boolean
   readonly dark: boolean
+  readonly locked: boolean
 }
 const initialAppWrapAttrs: AppWrapConfig = {
   loading: false,
+  locked: true,
   withoutStatusBar: false,
   dark: false,
 }
@@ -57,6 +60,8 @@ export const appWrapReducer = (
 
     case APPWRAP_SHOW_LOADER:
       return {...state, appWrapConfig: {...state.appWrapConfig, loading: action.value} }
+    case APPWRAP_SET_LOCKED:
+      return {...state, appWrapConfig: {...state.appWrapConfig, locked: action.value} }
     default:
       return state
   }

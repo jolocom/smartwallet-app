@@ -5,6 +5,7 @@ import { navigationActions } from '../../actions'
 import { ThunkAction } from '../../store'
 import settingKeys from '../../ui/settings/settingKeys'
 
+import * as Keychain from 'react-native-keychain'
 // TODO use the settings items from storage
 import AsyncStorage from '@react-native-community/async-storage'
 // TODO don't depend on the crypto lib, perhaps use the rust crypto utils?
@@ -16,10 +17,12 @@ import {
   AppWrapConfig,
   APPWRAP_UPDATE_CONFIG,
   APPWRAP_SHOW_LOADER,
+  APPWRAP_SET_LOCKED,
   APPWRAP_REGISTER_CONFIG,
   APPWRAP_UNREGISTER_CONFIG,
 } from '../../reducers/generic'
 import { AnyAction } from 'redux'
+import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
 
 // Default delay on the loading state value before it can switch back to 'false'
 const DEFAULT_LOADING_LATCH_DELAY_MS = 300
@@ -98,6 +101,30 @@ const setLoading = (value: boolean) => ({
   type: APPWRAP_SHOW_LOADER,
   value,
 })
+
+export const setLocked = (value: boolean) => ({
+  type: APPWRAP_SET_LOCKED,
+  value,
+})
+
+export const lockApp = (
+): ThunkAction => async (dispatch, getState) => {
+  dispatch(setLocked(true))
+  return dispatch(navigationActions.navigate({ routeName: routeList.Lock }))
+}
+
+export const unlockApp = (
+  pin: string
+): ThunkAction => async (dispatch, getState) => {
+  const keychainPin = await Keychain.getGenericPassword({
+    service: PIN_SERVICE,
+  })
+  if (!keychainPin || keychainPin.password !== pin) return
+
+  dispatch(setLocked(false))
+  return dispatch(navigationActions.navigateBack())
+}
+
 
 export const updateAppWrapConfig = (value: AppWrapConfig) => ({
   type: APPWRAP_UPDATE_CONFIG,
