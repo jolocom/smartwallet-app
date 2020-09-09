@@ -16,7 +16,7 @@ import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareF
 const CredentialShareBas = () => {
   const shareDocument = useSelector(getFirstShareDocument)
   const attributes = useSelector(getShareAttributes)
-  const selectedShareCredentials = useSelector(
+  const selectedRequestedCredentialsAtrributes = useSelector(
     getSelectedRequestedCredentialsAtrributes,
   )
   const {
@@ -50,7 +50,7 @@ const CredentialShareBas = () => {
           attributes={attributes}
           onCreateNewAttr={handleCreateAttribute}
           onSelect={(key, id) => handleSelectCredential({ [key]: id })}
-          selectedAttributes={selectedShareCredentials}
+          selectedAttributes={selectedRequestedCredentialsAtrributes}
           isSelectable={true}
         />
       )

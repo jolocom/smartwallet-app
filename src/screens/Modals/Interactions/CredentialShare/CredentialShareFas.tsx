@@ -3,7 +3,7 @@ import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import { useSelector } from 'react-redux'
 import {
   getShareCredentialsBySection,
-  getSelectedRequestedCredentialsAtrributes,
+  getInteractionDetails,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
@@ -18,12 +18,11 @@ import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
 import { View } from 'react-native'
+import { isCredShareDetails } from '~/modules/interaction/guards'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getShareAttributes)
-  const selectedRequestedCredentialsAttributes = useSelector(
-    getSelectedRequestedCredentialsAtrributes,
-  )
+  const details = useSelector(getInteractionDetails)
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const [instructionVisible, setInstructionVisibility] = useState(true)
   const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
@@ -74,8 +73,10 @@ const CredentialShareFas = () => {
                     handleSelectCredential({ [cred.type]: cred.id })
                   }}
                   selected={
-                    selectedRequestedCredentialsAttributes[cred.type] ===
-                    cred.id
+                    isCredShareDetails(details) &&
+                    details.selectedRequestedCredentialsAttributes[
+                      cred.type
+                    ] === cred.id
                   }
                 >
                   <Header color={Colors.black}>{type}</Header>
@@ -96,7 +97,11 @@ const CredentialShareFas = () => {
               attributes={attributes}
               onCreateNewAttr={handleCreateAttribute}
               onSelect={(key, id) => handleSelectCredential({ [key]: id })}
-              selectedAttributes={selectedRequestedCredentialsAttributes}
+              selectedAttributes={
+                isCredShareDetails(details)
+                  ? details.selectedRequestedCredentialsAttributes
+                  : {}
+              }
               isSelectable={true}
             />
           </AttributeWidgetWrapper>
