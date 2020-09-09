@@ -9,8 +9,7 @@ import { Colors } from '~/utils/colors'
 import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionTitle from './hooks/useInteractionTitle'
 import useInteractionDescription from './hooks/useInteractionDescription'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { Fonts } from '~/utils/fonts'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 
 interface PropsI {
   title?: string
@@ -32,7 +31,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
       <JoloText
         kind={JoloTextKind.title}
         size="middle"
-        customStyles={{ fontFamily: Fonts.Regular }}
+        weight={JoloTextWeight.normal}
       >
         {title || interactionTitle}
       </JoloText>

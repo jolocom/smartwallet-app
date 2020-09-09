@@ -28,8 +28,7 @@ import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { setPopup } from '~/modules/appState/actions'
 import { useAppState } from '~/hooks/useAppState'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { Fonts } from '~/utils/fonts'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 
 const Lock = () => {
@@ -91,7 +90,7 @@ const Lock = () => {
             <JoloText
               kind={JoloTextKind.title}
               size="middle"
-              customStyles={{ fontFamily: Fonts.Regular }}
+              weight={JoloTextWeight.normal}
               color={Colors.white90}
             >
               {strings.ENTER_YOUR_PIN}
