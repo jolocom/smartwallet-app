@@ -6,7 +6,11 @@ import {
   View,
   StyleProp,
   ViewStyle,
+  AppStateStatus,
+  Platform,
 } from 'react-native'
+
+import { NavigationEvents } from 'react-navigation'
 
 import { backgroundDarkMain, backgroundLightMain } from 'src/styles/colors'
 import { AppWrapConfig, pickAppWrapConfigAttrs } from 'src/reducers/generic'
@@ -18,9 +22,8 @@ import {
   unregisterAppWrapConfig,
 } from 'src/actions/generic'
 import { RootState } from 'src/reducers'
-import Lock from '../deviceauth/Lock'
-import RegisterPIN from '../deviceauth/RegisterPIN'
-import HowToChangePIN from '../deviceauth/HowToChangePIN'
+import { useAppState } from '../deviceauth/hooks/useAppState'
+import { genericActions } from 'src/actions'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   registerProps: (props: Props) =>
@@ -29,7 +32,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(unregisterAppWrapConfig(ref.value)),
 })
 
-const mapStateToProps = (state: RootState) => state.generic.appWrapConfig
+const mapStateToAppWrapProps = (state: RootState) => state.generic.appWrapConfig
+const mapDispatchToAppWrapProps = (dispatch: ThunkDispatch) => ({
+  lockApp: () => dispatch(genericActions.lockApp())
+})
 
 interface Props
   extends Partial<AppWrapConfig>,
@@ -46,7 +52,8 @@ interface Props
 
 interface AppWrapProps
   extends AppWrapConfig,
-    ReturnType<typeof mapStateToProps> {
+    ReturnType<typeof mapDispatchToAppWrapProps>,
+    ReturnType<typeof mapStateToAppWrapProps> {
   children: ReactNode
 }
 
@@ -83,7 +90,7 @@ const styles = StyleSheet.create({
 
 let statusBarHidden = 0
 const AppWrapContainer: React.FC<AppWrapProps> = props => {
-  const { dark, loading, withoutStatusBar } = props
+  const { dark, loading, withoutStatusBar, lockApp } = props
 
   useEffect(() => {
     // TODO @mnzaki
@@ -104,6 +111,23 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
     return
   }, [withoutStatusBar])
 
+  useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
+    if (
+      (Platform.OS === 'ios' &&
+        appState.match(/inactive|active/) &&
+        nextAppState.match(/background/)) ||
+      (Platform.OS === 'android' &&
+        appState.match(/inactive|background/) &&
+        nextAppState.match(/active/))
+    ) {
+      lockApp()
+    }
+  })
+
+  const handleNavigationBlur = (payload) => {
+    console.log('blurring now', payload)
+  }
+
   return (
     <>
       <StatusBar
@@ -113,16 +137,19 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
         animated
         translucent
       />
+      <NavigationEvents
+        onWillBlur={handleNavigationBlur} />
+
       <AppLoadingAndNotifications loading={!!loading} />
-      <Lock />
-      <RegisterPIN />
-      <HowToChangePIN />
       {props.children}
     </>
   )
 }
 
-export const AppWrap = connect(mapStateToProps)(AppWrapContainer)
+export const AppWrap = connect(
+  mapStateToAppWrapProps,
+  mapDispatchToAppWrapProps
+)(AppWrapContainer)
 
 export const Wrapper = React.memo(
   connect(
