@@ -15,6 +15,7 @@ import {
   CredentialI,
   getClaim,
   credentialSchemas,
+  isCredentialAttribute,
 } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
 
@@ -27,7 +28,7 @@ export const useGetAllAttributes = () => {
 
       const attributes = verifiableCredentials.reduce<AttrsState<AttributeI>>(
         (acc, v) => {
-          if (Object.values(credentialSchemas).indexOf(v.type[1]) > -1) {
+          if (isCredentialAttribute(v)) {
             const attrType = v.type[1] as keyof typeof ATTR_TYPES
             const attrKey: AttrKeys = ATTR_TYPES[attrType]
             const entry = makeAttrEntry(attrKey, acc[attrKey], v as CredentialI)

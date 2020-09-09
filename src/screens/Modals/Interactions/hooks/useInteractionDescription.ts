@@ -16,18 +16,22 @@ const useInteractionDescription = () => {
   const intermediaryState = useSelector(getIntermediaryState)
   const interactionType = useSelector(getInteractionType)
   const inputType = useSelector(getAttributeInputKey)
-  const serviceName = counterparty.publicProfile?.name || strings.SERVICE
-  const isAnonymous = !counterparty.publicProfile
+  const serviceName = counterparty?.publicProfile?.name || strings.SERVICE
+  const isAnonymous = !counterparty?.publicProfile
 
   if (intermediaryState === IntermediaryState.showing)
     return strings.YOU_WILL_IMMIDIATELY_FIND_YOUR_DOC_IN_THE_PERSONAL_INFO_SECTION(
-      inputType,
+      inputType ?? '',
     )
 
-  if (isAnonymous)
-    return strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(
-      truncateDid(counterparty.did),
-    )
+  if (isAnonymous) {
+    if (!counterparty) throw new Error('Counterparty not found')
+
+    if (!counterparty.publicProfile)
+      return strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(
+        truncateDid(counterparty.did),
+      )
+  }
 
   //TODO: @clauxx add strings
   switch (interactionType) {
