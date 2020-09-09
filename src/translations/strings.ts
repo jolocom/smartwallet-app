@@ -1,3 +1,5 @@
+import { AttrKeys } from '~/types/credentials'
+
 const loaderMsgs = {
   CREATING: 'Creating your personal secret number',
   MATCHING: 'Matching two instances',
@@ -151,7 +153,7 @@ const interactions = {
     `${service} requests ${attribute}`,
   INCOMING_REQUEST: 'Incoming request',
   INCOMING_OFFER: 'Incoming offer',
-  WOULD_YOU_LIKE_TO_ACTION: (action: string) => `Would you like to ${action}`,
+  WOULD_YOU_LIKE_TO_ACTION: (action: string) => `Would you like to ${action}?`,
 }
 
 const lock = {
@@ -177,6 +179,7 @@ const attributes = {
   EMAILADDRESS: 'Email',
   MOBILEPHONENUMBER: 'Number',
   MISSING_INFO: 'Missing info',
+  SAVE_YOUR_ATTRIBUTE: (attr: AttrKeys) => `Save your attribute ${attr}`,
 }
 
 export const strings = {

@@ -5,8 +5,8 @@ import CredentialCard from '../CredentialCard'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { Colors } from '~/utils/colors'
 import { isCredOfferDetails } from '~/modules/interaction/guards'
+import { Colors } from '~/utils/colors'
 
 const CredentialOfferBas = () => {
   const details = useRootSelector(getInteractionDetails)
