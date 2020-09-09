@@ -9,7 +9,7 @@ const initialState: InteractionState = {
   details: { flowType: null },
   intermediaryState: IntermediaryState.absent,
   attributeInputKey: null,
-  selectedShareCredentials: {},
+  selectedShareCredentials: {}, // this is where the credential id's are collected when the user selects the credentials
 }
 
 const reducer = (
