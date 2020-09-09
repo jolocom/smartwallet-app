@@ -24,6 +24,7 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     checkDuplicates,
   } = useCredentialOfferFlow()
   const interaction = useInteraction()
+  const syncCredentials = useSyncCredentials()
 
   const submitAuth = async (
     token: JSONWebToken<{ [key: string]: string } | any>,
@@ -32,20 +33,19 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     await interaction.send(token)
     dispatch(resetInteraction())
   }
-  const syncCredentials = useSyncCredentials()
 
   if (interactionType === FlowType.Authentication) {
-    return async function authenticate() {
+    return async function authenticate () {
       const authResponse = await interaction.createAuthenticationResponse()
       submitAuth(authResponse)
     }
   } else if (interactionType === FlowType.Authorization) {
-    return async function authorize() {
+    return async function authorize () {
       const authzResponse = await interaction.createAuthorizationResponse()
       submitAuth(authzResponse)
     }
   } else if (interactionType === FlowType.CredentialShare) {
-    return async function shareCredentials() {
+    return async function shareCredentials () {
       // TODO: add onCredShare functionality here
     }
   } else if (interactionType === FlowType.CredentialOffer) {
@@ -69,8 +69,8 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
           )
 
         const validatedCredentials = getValidatedCredentials()
-        const allValid = validatedCredentials.every((cred) => !cred.invalid)
-        const allInvalid = validatedCredentials.every((cred) => cred.invalid)
+        const allValid = validatedCredentials.every(cred => !cred.invalid)
+        const allInvalid = validatedCredentials.every(cred => cred.invalid)
 
         if (allValid) {
           await storeSelectedCredentials()
