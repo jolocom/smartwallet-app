@@ -68,7 +68,7 @@ export const getInteractionDetails = (
  * Gets the available requested attributes from the @attributes module. If an attribute
  * of a particular type is not available, the value for the type will be an empty array.
  */
-export const getShareAttributes = createSelector(
+export const getAvailableAttributesToShare = createSelector(
   [getAttributes, getInteractionDetails],
   (attributes, shareDetails) => {
     if (isCredShareDetails(shareDetails)) {
@@ -91,7 +91,7 @@ export const getShareAttributes = createSelector(
 /**
  * Gets all the available credentials for sharing. Returns an array of @ShareUICredential
  */
-const getShareCredentials = createSelector(
+const getAvailableCredentialsToShare = createSelector(
   [getInteractionDetails, getAllCredentials],
   (details, credentials) => {
     if (isCredShareDetails(details)) {
@@ -114,7 +114,11 @@ const getShareCredentials = createSelector(
  * or a bottom ActionSheet (BAS).
  */
 export const getIsFullScreenInteraction = createSelector(
-  [getShareAttributes, getInteractionDetails, getShareCredentials],
+  [
+    getAvailableAttributesToShare,
+    getInteractionDetails,
+    getAvailableCredentialsToShare,
+  ],
   (shareAttributes, details, shareCredentials) => {
     if (isAuthDetails(details) || isAuthzDetails(details)) {
       return false
@@ -213,11 +217,11 @@ export const getShareCredentialTypes = createSelector(
  * based on the @interactionDetails.
  */
 export const getShareCredentialsBySection = createSelector(
-  [getShareCredentials, getShareCredentialTypes],
-  (shareCredentials, rrequestedCredTypes) => {
+  [getAvailableCredentialsToShare, getShareCredentialTypes],
+  (shareCredentials, requestedCredTypes) => {
     const defaultSections = { documents: [], other: [] }
 
-    return rrequestedCredTypes.requestedCredentials.reduce<
+    return requestedCredTypes.requestedCredentials.reduce<
       ShareCredentialsBySection
     >((acc, type) => {
       const credentials = shareCredentials.filter((cred) => cred.type === type)

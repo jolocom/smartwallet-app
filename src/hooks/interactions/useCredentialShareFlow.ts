@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useInteraction } from '../sdk'
 import {
   getSelectedShareCredentials,
-  getShareAttributes,
+  getAvailableAttributesToShare,
   getShareCredentialsBySection,
   getShareCredentialTypes,
   getInteractionDetails,
@@ -23,7 +23,7 @@ export const useCredentialShareFlow = () => {
   const dispatch = useDispatch()
   const interaction = useInteraction()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
-  const attributes = useSelector(getShareAttributes)
+  const attributes = useSelector(getAvailableAttributesToShare)
   const interactionDetails = useSelector(getInteractionDetails)
   const { requestedAttributes, requestedCredentials } = useSelector(
     getShareCredentialTypes,
@@ -55,11 +55,12 @@ export const useCredentialShareFlow = () => {
    * Returns the @id for the first available attribute of each type.
    */
   const getPreselectedAttributes = () =>
-    Object.keys(attributes).reduce<Record<string, string>>((acc, v) => {
-      const value = v as AttrKeys
+    Object.keys(attributes).reduce<Record<string, string>>((acc, value) => {
       if (!acc[value]) {
         const attr = attributes[value] || []
-        acc[value] = attr.length ? attr[0].id : ''
+        if (attr.length) {
+          acc[value] = attr[0].id
+        }
       }
       return acc
     }, {})

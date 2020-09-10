@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -6,6 +6,7 @@ import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import {
   getShareCredentialsBySection,
   getInteractionDetails,
+  getAvailableAttributesToShare,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
@@ -14,7 +15,6 @@ import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
 import AttributesWidget from '~/components/AttributesWidget'
-import { getShareAttributes } from '~/modules/interaction/selectors'
 import InteractionFooter from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
@@ -22,7 +22,7 @@ import { strings } from '~/translations/strings'
 import { isCredShareDetails } from '~/modules/interaction/guards'
 
 const CredentialShareFas = () => {
-  const attributes = useSelector(getShareAttributes)
+  const attributes = useSelector(getAvailableAttributesToShare)
   const details = useSelector(getInteractionDetails)
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const [instructionVisible, setInstructionVisibility] = useState(true)
@@ -54,7 +54,17 @@ const CredentialShareFas = () => {
     }
   }, [shouldShowInstruction])
 
-  const renderCredentials = (credCollections: MultipleShareUICredential[]) =>
+  const handleSelectCard = useCallback(
+    (type: string, id: string) => {
+      shouldShowInstruction && setShouldShowInstruction(false)
+      handleSelectCredential({ [type]: id })
+    },
+    [shouldShowInstruction],
+  )
+
+  const renderSectionCredentials = (
+    credCollections: MultipleShareUICredential[],
+  ) =>
     credCollections.map(({ type, credentials }) => {
       const isCarousel = credentials.length > 1
       const Wrapper = isCarousel ? Carousel : React.Fragment
@@ -69,10 +79,7 @@ const CredentialShareFas = () => {
                   hasInstruction={
                     instructionVisible && isFirstCredential(cred.id)
                   }
-                  onSelect={() => {
-                    shouldShowInstruction && setShouldShowInstruction(false)
-                    handleSelectCredential({ [cred.type]: cred.id })
-                  }}
+                  onSelect={() => handleSelectCard(cred.type, cred.id)}
                   selected={
                     isCredShareDetails(details) &&
                     details.selectedCredentials[cred.type] === cred.id
@@ -107,10 +114,10 @@ const CredentialShareFas = () => {
           visible={!!documents.length}
           title={strings.DOCUMENTS}
         >
-          {renderCredentials(documents)}
+          {renderSectionCredentials(documents)}
         </InteractionSection>
         <InteractionSection visible={!!other.length} title={strings.OTHER}>
-          {renderCredentials(other)}
+          {renderSectionCredentials(other)}
         </InteractionSection>
       </FasWrapper>
       <InteractionFooter disabled={!selectionReady()} />

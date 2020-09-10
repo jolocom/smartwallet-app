@@ -6,7 +6,7 @@ import {
   getFirstShareDocument,
   getSelectedShareCredentials,
 } from '~/modules/interaction/selectors'
-import { getShareAttributes } from '~/modules/interaction/selectors'
+import { getAvailableAttributesToShare } from '~/modules/interaction/selectors'
 import AttributesWidget from '~/components/AttributesWidget'
 import CredentialCard from '../CredentialCard'
 import Header from '~/components/Header'
@@ -15,7 +15,7 @@ import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareF
 
 const CredentialShareBas = () => {
   const shareDocument = useSelector(getFirstShareDocument)
-  const attributes = useSelector(getShareAttributes)
+  const attributes = useSelector(getAvailableAttributesToShare)
   const selectedCredentials = useSelector(getSelectedShareCredentials)
   const {
     getPreselectedAttributes,
