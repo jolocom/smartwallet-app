@@ -107,7 +107,7 @@ const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
   return {
     counterparty: summary.initiator,
     ...credentials,
-    selectedRequestedCredentialsAttributes: {},
+    selectedCredentials: {},
   }
 }
 

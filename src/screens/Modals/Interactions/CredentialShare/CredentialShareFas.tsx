@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import FasWrapper from '~/components/ActionSheet/FasWrapper'
+import { View } from 'react-native'
 import { useSelector } from 'react-redux'
+
+import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import {
   getShareCredentialsBySection,
   getInteractionDetails,
@@ -17,7 +19,6 @@ import InteractionFooter from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
-import { View } from 'react-native'
 import { isCredShareDetails } from '~/modules/interaction/guards'
 
 const CredentialShareFas = () => {
@@ -74,9 +75,7 @@ const CredentialShareFas = () => {
                   }}
                   selected={
                     isCredShareDetails(details) &&
-                    details.selectedRequestedCredentialsAttributes[
-                      cred.type
-                    ] === cred.id
+                    details.selectedCredentials[cred.type] === cred.id
                   }
                 >
                   <Header color={Colors.black}>{type}</Header>
@@ -98,9 +97,7 @@ const CredentialShareFas = () => {
               onCreateNewAttr={handleCreateAttribute}
               onSelect={(key, id) => handleSelectCredential({ [key]: id })}
               selectedAttributes={
-                isCredShareDetails(details)
-                  ? details.selectedRequestedCredentialsAttributes
-                  : {}
+                isCredShareDetails(details) ? details.selectedCredentials : {}
               }
               isSelectable={true}
             />

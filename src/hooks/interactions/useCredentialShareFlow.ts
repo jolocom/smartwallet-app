@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useInteraction } from '../sdk'
 import {
-  getSelectedRequestedCredentialsAtrributes,
+  getSelectedShareCredentials,
   getShareAttributes,
   getShareCredentialsBySection,
   getShareCredentialTypes,
@@ -22,9 +22,7 @@ import { isCredShareDetails } from '~/modules/interaction/guards'
 export const useCredentialShareFlow = () => {
   const dispatch = useDispatch()
   const interaction = useInteraction()
-  const selectedRequestedCredentialsAttributes = useSelector(
-    getSelectedRequestedCredentialsAtrributes,
-  )
+  const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getShareAttributes)
   const interactionDetails = useSelector(getInteractionDetails)
   const { requestedAttributes, requestedCredentials } = useSelector(
@@ -37,18 +35,20 @@ export const useCredentialShareFlow = () => {
    * credentials, processes it and sends it to the @counterparty.
    */
   const assembleShareResponseToken = async () => {
-    const mappedSelection = Object.values(
-      getSelectedRequestedCredentialsAtrributes,
-    ).map(id => ({
-      id,
-    }))
-    const response = await interaction.createCredentialResponse(
-      // @ts-ignore is fixed in future SDK version. Should work this way, since we only need the @id
-      mappedSelection,
-    )
-    //TODO: uncomment when the constraints bug on the SDK is fixed
-    //await interaction.processInteractionToken(response)
-    await interaction.send(response)
+    if (selectedShareCredentials) {
+      const mappedSelection = Object.values(selectedShareCredentials).map(
+        (id) => ({
+          id,
+        }),
+      )
+      const response = await interaction.createCredentialResponse(
+        // @ts-ignore is fixed in future SDK version. Should work this way, since we only need the @id
+        mappedSelection,
+      )
+      //TODO: uncomment when the constraints bug on the SDK is fixed
+      //await interaction.processInteractionToken(response)
+      await interaction.send(response)
+    }
   }
 
   /**
@@ -68,15 +68,19 @@ export const useCredentialShareFlow = () => {
    * Assures all requested credentials & attributes are selected.
    */
   const selectionReady = () => {
-    const allAttributes = Object.keys(attributes).every(t =>
-      Object.keys(selectedRequestedCredentialsAttributes).includes(t),
-    )
+    if (selectedShareCredentials) {
+      const allAttributes = Object.keys(attributes).every((t) =>
+        Object.keys(selectedShareCredentials).includes(t),
+      )
 
-    const allCredentials = requestedCredentials.every(t =>
-      Object.keys(selectedRequestedCredentialsAttributes).includes(t),
-    )
+      const allCredentials = requestedCredentials.every((t) =>
+        Object.keys(selectedShareCredentials).includes(t),
+      )
 
-    return allAttributes && allCredentials
+      return allAttributes && allCredentials
+    }
+
+    return false
   }
 
   /**

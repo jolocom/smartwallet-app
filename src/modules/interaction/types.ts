@@ -76,8 +76,9 @@ export interface AuthorizationDetailsI extends InteractionCommonI {
 export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
   requestedAttributes: string[]
+  //TODO: should be renamed to smth else (not @credentials)
   requestedCredentials: string[]
-  selectedRequestedCredentialsAttributes: Record<string, string>
+  selectedCredentials: Record<string, string>
 }
 
 export interface CredOfferI extends InteractionCommonI {

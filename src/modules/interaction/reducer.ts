@@ -27,8 +27,8 @@ const reducer = (
           ...state,
           details: {
             ...state.details,
-            selectedRequestedCredentialsAttributes: {
-              ...state.details.selectedRequestedCredentialsAttributes,
+            selectedCredentials: {
+              ...state.details.selectedCredentials,
               ...action.payload,
             },
           },
@@ -45,8 +45,3 @@ const reducer = (
 }
 
 export default reducer
-
-// selectedShareCredentials: {
-//   ...state.selectedShareCredentials,
-//   ...action.payload,
-// },

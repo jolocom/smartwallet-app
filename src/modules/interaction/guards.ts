@@ -7,9 +7,7 @@ import {
 } from './types'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
-export function isAuthDetails (
-  details: any,
-): details is AuthenticationDetailsI {
+export function isAuthDetails(details: any): details is AuthenticationDetailsI {
   return (
     details.flowType === FlowType.Authentication &&
     !!details.description &&
@@ -17,9 +15,7 @@ export function isAuthDetails (
     !details.image
   )
 }
-export function isAuthzDetails (
-  details: any,
-): details is AuthorizationDetailsI {
+export function isAuthzDetails(details: any): details is AuthorizationDetailsI {
   return (
     details.flowType === FlowType.Authorization &&
     !!details.description &&
@@ -27,7 +23,7 @@ export function isAuthzDetails (
   )
 }
 
-export function isCredOfferDetails (details: any): details is CredOfferI {
+export function isCredOfferDetails(details: any): details is CredOfferI {
   return (
     details.flowType === FlowType.CredentialOffer &&
     !!details.credentials.service_issued &&
@@ -35,16 +31,16 @@ export function isCredOfferDetails (details: any): details is CredOfferI {
   )
 }
 
-export function isCredShareDetails (details: any): details is CredShareI {
+export function isCredShareDetails(details: any): details is CredShareI {
   return (
     details.flowType === FlowType.CredentialShare &&
     !!details.requestedAttributes &&
     !!details.requestedCredentials &&
-    !!details.selectedRequestedCredentialsAttributes
+    !!details.selectedCredentials
   )
 }
 
-export function isNotActiveInteraction (
+export function isNotActiveInteraction(
   details: InteractionDetails,
 ): details is { flowType: null } {
   return details.flowType === null

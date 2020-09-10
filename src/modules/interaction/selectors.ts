@@ -16,7 +16,7 @@ import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
 import { getCredentialSection } from '~/utils/credentialsBySection'
-import { InteractionDetails, IntermediaryState } from './types'
+import { InteractionDetails } from './types'
 import {
   isAuthDetails,
   isAuthzDetails,
@@ -51,11 +51,9 @@ export const getInteractionCounterparty = (
 /**
  * Gets the mapping of all selected credentials (attributes + documents)
  */
-export const getSelectedRequestedCredentialsAtrributes = (
-  state: RootReducerI,
-) => {
+export const getSelectedShareCredentials = (state: RootReducerI) => {
   if (isCredShareDetails(state.interaction.details)) {
-    return state.interaction.details.selectedRequestedCredentialsAttributes
+    return state.interaction.details.selectedCredentials
   }
 }
 
