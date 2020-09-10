@@ -8,8 +8,6 @@ import {
 } from 'react-navigation'
 
 import {
-  //StackViewTransitionConfigs,
-  //NavigationStackOptions,
   createStackNavigator,
 } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
@@ -70,7 +68,7 @@ const headerBackImage = createElement(Image, {
 })
 
 const noHeaderNavOpts = {
-  header: null,
+  headerShown: false,
 }
 
 const headerTitleStyle: StyleProp<TextStyle> = {
@@ -222,7 +220,6 @@ const MainStack = createStackNavigator(
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
       },
@@ -272,7 +269,6 @@ const MainStack = createStackNavigator(
     [routeList.SeedPhrase]: {
       screen: SeedPhrase,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -280,7 +276,6 @@ const MainStack = createStackNavigator(
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -288,7 +283,6 @@ const MainStack = createStackNavigator(
     [routeList.TermsOfService]: {
       screen: TermsOfService,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.all,
       },
@@ -296,7 +290,6 @@ const MainStack = createStackNavigator(
     [routeList.PrivacyPolicy]: {
       screen: PrivacyPolicy,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.all,
       },
@@ -304,7 +297,6 @@ const MainStack = createStackNavigator(
     [routeList.Impressum]: {
       screen: Impressum,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.all,
       },
@@ -312,7 +304,6 @@ const MainStack = createStackNavigator(
     [routeList.Exception]: {
       screen: Exception,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -320,7 +311,6 @@ const MainStack = createStackNavigator(
     [routeList.ErrorReporting]: {
       screen: ErrorReporting,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -333,7 +323,6 @@ const MainStack = createStackNavigator(
       [routeList.NotificationScheduler]: {
         screen: NotificationScheduler,
         navigationOptions: {
-          ...noHeaderNavOpts,
           // @ts-ignore
           notifications: NotificationFilter.all,
         },
