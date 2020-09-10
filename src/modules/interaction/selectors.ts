@@ -99,7 +99,7 @@ const getShareCredentials = createSelector(
     if (isCredShareDetails(details)) {
       return details.requestedCredentials.reduce<ShareUICredential[]>(
         (acc, type) => {
-          const creds = credentials.filter(cred => cred.type === type)
+          const creds = credentials.filter((cred) => cred.type === type)
           if (!creds.length) return acc
           acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
           return acc
@@ -116,18 +116,9 @@ const getShareCredentials = createSelector(
  * or a bottom ActionSheet (BAS).
  */
 export const getIsFullScreenInteraction = createSelector(
-  [
-    getIntermediaryState,
-    getShareAttributes,
-    getInteractionDetails,
-    getShareCredentials,
-  ],
-  (intermediaryState, shareAttributes, details, shareCredentials) => {
-    if (
-      intermediaryState !== IntermediaryState.absent ||
-      isAuthDetails(details) ||
-      isAuthzDetails(details)
-    ) {
+  [getShareAttributes, getInteractionDetails, getShareCredentials],
+  (shareAttributes, details, shareCredentials) => {
+    if (isAuthDetails(details) || isAuthzDetails(details)) {
       return false
     } else if (
       isCredShareDetails(details) &&
@@ -165,7 +156,7 @@ export const getIsFullScreenInteraction = createSelector(
  */
 export const getOfferCredentialsBySection = createSelector(
   [getInteractionDetails],
-  details => {
+  (details) => {
     const defaultSections = { documents: [], other: [] }
 
     if (isCredOfferDetails(details)) {
@@ -192,7 +183,7 @@ export const getFirstShareDocument = createSelector(
   (details, credentials) => {
     if (isCredShareDetails(details)) {
       const firstType = details.requestedCredentials[0]
-      const firstCredential = credentials.find(c => c.type === firstType)
+      const firstCredential = credentials.find((c) => c.type === firstType)
 
       return firstCredential
         ? uiCredentialToShareCredential(firstCredential)
@@ -208,7 +199,7 @@ export const getFirstShareDocument = createSelector(
  */
 export const getShareCredentialTypes = createSelector(
   [getInteractionDetails],
-  details => {
+  (details) => {
     if (isCredShareDetails(details)) {
       // return details.credentials
       const { requestedAttributes, requestedCredentials } = details
@@ -231,7 +222,7 @@ export const getShareCredentialsBySection = createSelector(
     return rrequestedCredTypes.requestedCredentials.reduce<
       ShareCredentialsBySection
     >((acc, type) => {
-      const credentials = shareCredentials.filter(cred => cred.type === type)
+      const credentials = shareCredentials.filter((cred) => cred.type === type)
 
       // NOTE: we assume the @renderAs property is the same for all credentials
       // of the same type

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, RefObject } from 'react'
-import {View, StyleSheet, Dimensions, Platform} from 'react-native'
+import { View, StyleSheet, Dimensions, Platform } from 'react-native'
 import ActionSheet, { ActionSheetProps } from 'react-native-actions-sheet'
 import { useSelector, useDispatch } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
@@ -27,7 +27,7 @@ import IntermediaryActionSheet from './IntermediaryActionSheet'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
-import Loader from "~/modals/Loader";
+import Loader from '~/modals/Loader'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -96,7 +96,8 @@ const InteractionActionSheet: React.FC = () => {
 
   const renderBody = () => {
     switch (interactionType) {
-      case FlowType.Authentication: return <Authentication />
+      case FlowType.Authentication:
+        return <Authentication />
       case FlowType.Authorization:
         return <Authorization />
       case FlowType.CredentialShare:
@@ -155,7 +156,6 @@ const InteractionActionSheet: React.FC = () => {
           CustomHeaderComponent={<View />}
         >
           {Platform.OS === 'ios' && <Loader />}
-          {renderBody()}
           <IntermediaryActionSheet />
         </ActionSheet>
       )}
