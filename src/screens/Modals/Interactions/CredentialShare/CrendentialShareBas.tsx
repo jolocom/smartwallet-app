@@ -31,7 +31,7 @@ const CredentialShareBas = () => {
 
   useEffect(() => {
     handleSelectCredential(getPreselectedAttributes())
-  }, [attributes])
+  }, [JSON.stringify(Object.values(attributes))])
 
   const renderContent = () => {
     if (shareDocument) {
