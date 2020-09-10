@@ -7,7 +7,6 @@ import { removeNotification } from './notifications'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
 import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
-import { checkLocalDeviceAuthSet } from './account'
  // TODO Import ^ from jolocom-lib
 
 export const showSeedPhrase = (): ThunkAction => async (
@@ -66,11 +65,11 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   if (recovered) {
     const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
     await resetServiceValuesInKeychain()
-    await dispatch(genericActions.setLocked(false))
+    dispatch(navigationActions.navigateBackHome())
   }
 
-  await dispatch(checkLocalDeviceAuthSet)
-  return dispatch(navigationActions.navigatorResetHome())
+  // we re-lock the app, which will trigger the create pin screen
+  return dispatch(genericActions.lockApp())
 }
 
 export const setSeedPhraseSaved = (): ThunkAction => async (
