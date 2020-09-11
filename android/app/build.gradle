@@ -82,15 +82,14 @@ project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]
 
+
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialCommunityIcons.ttf', 'MaterialIcons.ttf' ]
+]
+
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
 
-
-project.ext.vectoricons = [
-    iconFontNames: [ 'MaterialCommunityIcons.ttf' ]
-]
-
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -217,6 +216,7 @@ dependencies {
     implementation project(':@jolocom_native-core-react-native')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(path: ":react-native-interactable")
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
