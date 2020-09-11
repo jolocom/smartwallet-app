@@ -1689,10 +1689,10 @@
   resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-linux-x64/-/native-core-node-linux-x64-1.0.0-rc15.tgz#73106ca497c936c8a44a0ea82d6634d9487e4b39"
   integrity sha512-zGoosZEVCCTQygVNoKot9sKKEwC/PLFH8RAHiRBsehIsmF+HULzusK6Z1xDjIeW8W3DEe1Wn7EdhCZCWPgEsHQ==
 
-"@jolocom/native-core-react-native@^1.1.0-rc6":
-  version "1.1.0-rc6"
-  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.1.0-rc6.tgz#c47f85e6154385f61903b9d6ab128075eae29e20"
-  integrity sha512-4t4TcU7u4+O8IJINLVzRg83aTJ5Im0xXyiVO1UOQqTQIG+LXvdOQ6U70lpNbEeifpaTSrQRCqd3MIBmqyI7qzg==
+"@jolocom/native-core-react-native@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.2.0.tgz#a0cf1711861bbc27f04d88bba9fbcf063c79136d"
+  integrity sha512-kHnbVW+AQnpVIui/4Y4wSik4jpf1jy5/ybwNU6xT/RV1Mzjeqd0biNS+St7WpmcNKL/andSLYMQHqug0gn8T4g==
 
 "@jolocom/native-core@^1.0.0-rc3":
   version "1.0.0-rc3"
@@ -10259,10 +10259,10 @@ react-native-iphone-x-helper@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
 
-react-native-jolocom@^2.0.0-rc2:
-  version "2.0.0-rc2"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.0.0-rc2.tgz#8089a1f9f270dffd41c12d8bd11dbbbcd84b97d4"
-  integrity sha512-pJfNYlw7+l8rb2g6YVmUO8deGiu2xsuGbiH5lb49zP3Kmh7SIqKu6/ja+VD86hPSNr10+eV0PVJu9SwJd0mM6A==
+react-native-jolocom@^2.0.0-rc3:
+  version "2.0.0-rc3"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.0.0-rc3.tgz#8df92316bed5d15b5cd112bd8f708969000d043c"
+  integrity sha512-yP4MQ7glpT1XPgvD7GjhXl3UtVi1mqUJKTWb0afd7yZZUWKAHtcDDPB5ogcGR+R3TK7hUn4yXG/HEAk/XZOkxA==
   dependencies:
     "@jolocom/sdk-storage-typeorm" "^2.0.9"
     crypto-browserify "^3.12.0"
