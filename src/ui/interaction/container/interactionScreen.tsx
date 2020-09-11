@@ -14,10 +14,10 @@ import { white } from 'src/styles/colors'
 import { fontMain, textXXS } from 'src/styles/typography'
 import { showErrorScreen } from 'src/actions/generic'
 
-import { accountActions } from 'src/actions'
 import { navigateBack } from 'src/actions/navigation'
 
 import { ScannerContainer } from './scanner'
+import { genericActions } from 'src/actions'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -65,7 +65,7 @@ const InteractionContainer = (props: Props) => {
       <ScannerContainer
         navigation={props.navigation}
         consumeToken={props.consumeToken}
-        registerPopup={props.registerPopup}
+        setDisableLock={props.setDisableLock}
       />
     </Wrapper>
   )
@@ -96,7 +96,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     }
   },
   navigateHome: () => dispatch(navigateBack()),
-  registerPopup: () => dispatch(accountActions.setPopup(true)),
+  setDisableLock: (val: boolean) => dispatch(genericActions.setDisableLock(val))
 })
 
 export const InteractionScreen = connect(

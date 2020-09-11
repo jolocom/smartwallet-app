@@ -37,8 +37,6 @@ const Lock: React.FC<LockProps> = ({
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
 
-  if (!isLocked) navigation.goBack()
-
   useEffect(() => {
     if (pin.length < 4 && hasError) {
       setHasError(false)
@@ -48,6 +46,8 @@ const Lock: React.FC<LockProps> = ({
   let errorTimeout: number
 
   useEffect(() => {
+    if (!isLocked) navigation.goBack()
+
     // don't let react-navigation handle this back button press
     // if the app is locked and the lock is focused
     const handleBack = () => isLocked && navigation.isFocused()

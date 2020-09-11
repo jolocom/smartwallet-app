@@ -6,6 +6,7 @@ export const APPWRAP_SHOW_LOADER = 'APPWRAP_SHOW_LOADER'
 export const APPWRAP_REGISTER_CONFIG = 'APPWRAP_REGISTER_CONFIG'
 export const APPWRAP_UNREGISTER_CONFIG = 'APPWRAP_UNREGISTER_CONFIG'
 export const APPWRAP_SET_LOCKED = 'APPWRAP_SET_LOCKED'
+export const APPWRAP_SET_DISABLE_LOCK = 'APPWRAP_SET_DISABLE_LOCK'
 
 export interface AppWrapConfig {
   readonly withoutStatusBar: boolean
@@ -24,11 +25,13 @@ export const pickAppWrapConfigAttrs: (o: any) => AppWrapConfig =
 
 export interface AppWrapState {
   readonly locked: boolean
+  readonly disableLock: boolean
   readonly appWrapConfig: AppWrapConfig
   readonly appWrapConfigsSet: AppWrapConfig[]
 }
 const initialAppWrapState: AppWrapState = {
   locked: false,
+  disableLock: false,
   appWrapConfig: initialAppWrapAttrs,
   appWrapConfigsSet: []
 }
@@ -63,6 +66,8 @@ export const appWrapReducer = (
     case APPWRAP_SET_LOCKED:
       return { ...state, locked: action.value }
 
+    case APPWRAP_SET_DISABLE_LOCK:
+      return { ...state, disableLock: action.value }
     default:
       return state
   }
