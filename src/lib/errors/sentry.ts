@@ -31,6 +31,7 @@ export function initSentry() {
         if (!extra.sendPrivateData) {
           delete contexts.device
           delete contexts.os
+          delete contexts.app.device_app_hash
         }
 
         delete extra.sendPrivateData
