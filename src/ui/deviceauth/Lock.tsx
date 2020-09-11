@@ -10,7 +10,6 @@ import { NavigationInjectedProps } from 'react-navigation'
 import I18n from 'src/locales/i18n'
 
 import PasscodeInput from './PasscodeInput'
-import ScreenContainer from './components/ScreenContainer'
 import Header from './components/Header'
 import Btn, { BtnTypes } from './components/Btn'
 
@@ -22,6 +21,7 @@ import AbsoluteBottom from './components/AbsoluteBottom'
 import { genericActions, navigationActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
 import { routeList } from 'src/routeList'
+import { Wrapper } from '../structure'
 
 
 interface LockProps extends
@@ -40,31 +40,20 @@ const Lock: React.FC<LockProps> = ({
   const [hasError, setHasError] = useState(false)
   const { keyboardHeight } = useKeyboardHeight()
 
+  if (!isLocked) navigation.goBack()
+
   useEffect(() => {
     if (pin.length < 4 && hasError) {
       setHasError(false)
     }
   }, [pin])
 
-  /*
-  useEffect(() => {
-    setTimeout(() => {
-      Keyboard.dismiss()
-    }, 3000)
-  }, [])
-  */
-
   let errorTimeout: number
 
   useEffect(() => {
-    const handleBack = () => {
-      if (isLocked && navigation.isFocused()) {
-        // don't let react-navigation handle this back button press
-        return true;
-      } else {
-        return false;
-      }
-    }
+    // don't let react-navigation handle this back button press
+    // if the app is locked and the lock is focused
+    const handleBack = () => isLocked && navigation.isFocused()
 
     BackHandler.addEventListener('hardwareBackPress', handleBack)
 
@@ -72,7 +61,7 @@ const Lock: React.FC<LockProps> = ({
       BackHandler.removeEventListener('hardwareBackPress', handleBack)
       if (errorTimeout) clearTimeout(errorTimeout)
     }
-  }, [])
+  }, [isLocked])
 
   const handleAppUnlock = async () => {
     await unlockApp(pin)
@@ -82,8 +71,8 @@ const Lock: React.FC<LockProps> = ({
   }
 
   return (
-    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
-      <Header customStyles={{ paddingTop: 100 }}>
+    <Wrapper dark>
+      <Header>
         {I18n.t(strings.ENTER_YOUR_PIN)}
       </Header>
       <View style={styles.inputContainer}>
@@ -95,14 +84,12 @@ const Lock: React.FC<LockProps> = ({
           errorStateUpdaterFn={setHasError}
         />
       </View>
-      <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
-        <Btn
-          type={BtnTypes.secondary}
-          onPress={navigateTorecoveryInstuction}>
-          {I18n.t(strings.FORGOT_YOUR_PIN)}
-        </Btn>
-      </AbsoluteBottom>
-    </ScreenContainer>
+      <Btn
+        type={BtnTypes.secondary}
+        onPress={navigateTorecoveryInstuction}>
+        {I18n.t(strings.FORGOT_YOUR_PIN)}
+      </Btn>
+    </Wrapper>
   )
 }
 
