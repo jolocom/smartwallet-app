@@ -60,6 +60,7 @@ const settings = {
   VERSION: 'version',
   IMPRINT: 'Imprint',
   DE_VERSION: 'DE Version',
+  CONTACT_US: 'Contact us',
 }
 
 const backup = {
