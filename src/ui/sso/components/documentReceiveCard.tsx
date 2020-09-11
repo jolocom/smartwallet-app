@@ -99,6 +99,13 @@ export const DocumentReceiveCard = (props: Props) => {
     }
   }
 
+  const onSnap = (e: ISnapEvent) => {
+    if (e.nativeEvent.index === 1) {
+      if (!selected) onSelect()
+      else onUnselect()
+    }
+  }
+
   const marginValue = scaleValue.interpolate({
     inputRange: [initScale, finScale],
     outputRange: [initMargin, cardMargin],
@@ -147,6 +154,7 @@ export const DocumentReceiveCard = (props: Props) => {
           snapPoints={[{ x: leftSnap }, { x: centerSnap }]}
           initialPosition={{ x: leftSnap }}
           dragEnabled={!invalid}
+          onSnap={onSnap}
           onDrag={onDrag}
           // NOTE @clauxx this seems to make the stutter more rare
           dragToss={0}
@@ -158,8 +166,7 @@ export const DocumentReceiveCard = (props: Props) => {
                 transform: [{ scaleX: scaleValue }, { scaleY: scaleValue }],
               },
             ] as any
-          }
-        >
+          }>
           <DocumentCard
             credentialType={type}
             renderInfo={renderInfo}
