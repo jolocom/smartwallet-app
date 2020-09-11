@@ -7,6 +7,7 @@ import { removeNotification } from './notifications'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
 import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
+import { checkLocalDeviceAuthSet } from './account'
  // TODO Import ^ from jolocom-lib
 
 export const showSeedPhrase = (): ThunkAction => async (
@@ -40,7 +41,7 @@ export const showSeedPhrase = (): ThunkAction => async (
 export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   dispatch,
   getState,
-  backendMiddleware,
+  sdk,
 ) => {
   let recovered = false
 
@@ -50,13 +51,13 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   )
 
   try {
-    const didMethod = await backendMiddleware.didMethods.getDefault()
+    const didMethod = await sdk.didMethods.getDefault()
     if (didMethod.recoverFromSeed) {
       const { identityWallet } = await didMethod.recoverFromSeed(
         recoveredEntropy,
-        await backendMiddleware.keyChainLib.getPassword()
+        await sdk.keyChainLib.getPassword()
       )
-      recovered = identityWallet.did === backendMiddleware.idw.did
+      recovered = identityWallet.did === sdk.idw.did
     }
   } catch(e) {
     console.error('onRestoreAccess failed', e)
@@ -65,10 +66,10 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   if (recovered) {
     const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
     await resetServiceValuesInKeychain()
-    await dispatch(navigationActions.navigatorResetHome())
   }
 
-  return dispatch(navigationActions.navigateBackHome())
+  await dispatch(checkLocalDeviceAuthSet)
+  return dispatch(navigationActions.navigatorResetHome())
 }
 
 export const setSeedPhraseSaved = (): ThunkAction => async (
