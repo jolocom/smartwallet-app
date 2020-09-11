@@ -1,10 +1,11 @@
 import * as loading from 'src/actions/registration/loadingStages'
-import { setDid, checkLocalDeviceAuthSet } from 'src/actions/account'
+import { setDid } from 'src/actions/account'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
 import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
 import { ThunkAction } from '../../store'
 import { entropyToMnemonic } from 'bip39'
+import { genericActions } from '..'
 
 const humanTimeout = () => new Promise(resolve => setTimeout(resolve, 1000))
 
@@ -63,9 +64,9 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setDid(identity.did))
   await humanTimeout()
   dispatch(setIsRegistering(false))
-  await dispatch(checkLocalDeviceAuthSet)
 
-  return dispatch(navigatorResetHome())
+  dispatch(navigatorResetHome())
+  return dispatch(genericActions.lockApp())
 }
 
 export const recoverIdentity = (mnemonic: string): ThunkAction => async (

@@ -110,17 +110,19 @@ export const setLocked = (value: boolean) => ({
 export const lockApp = (
 ): ThunkAction => async (dispatch, getState) => {
   dispatch(setLocked(true))
+  dispatch(navigationActions.navigate({ routeName: routeList.Lock }))
+
   const keychainPin = await Keychain.getGenericPassword({
     service: PIN_SERVICE,
   })
+
   if (!keychainPin) {
-    return dispatch(
+    dispatch(
       navigationActions.navigate(
         { routeName: routeList.RegisterPIN },
       )
     )
   }
-  return dispatch(navigationActions.navigate({ routeName: routeList.Lock }))
 }
 
 export const unlockApp = (

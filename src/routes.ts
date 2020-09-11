@@ -200,11 +200,14 @@ const MainStack = createStackNavigator(
     [routeList.Lock]: {
       screen: Lock,
       navigationOptions: {
-        gesturesEnabled: false
+        gestureEnabled: false
       }
     },
     [routeList.RegisterPIN]: {
       screen: RegisterPIN,
+      navigationOptions: {
+        gestureEnabled: false
+      }
     },
     [routeList.HowToChangePIN]: {
       screen: HowToChangePIN,
