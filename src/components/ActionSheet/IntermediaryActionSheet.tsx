@@ -1,5 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { TextInput, Alert, StyleSheet, View } from 'react-native'
+import {
+  TextInput,
+  Alert,
+  StyleSheet,
+  View,
+  Keyboard,
+  Platform,
+} from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediaryState } from '~/modules/interaction/types'
@@ -20,27 +27,36 @@ const IntermediaryActionSheet = () => {
   const [value, setValue] = useState('')
   const keyboardType = inputType ? ATTR_KEYBOARD_TYPE[inputType] : 'default'
 
-  useEffect(() => {
+  const focusKeyboard = () => {
     setTimeout(() => {
       inputRef.current?.focus()
     }, 600)
+  }
+
+  useEffect(() => {
+    focusKeyboard()
   }, [])
 
   const handleSubmit = async () => {
     if (!inputType) throw new Error('No attribute provided')
 
-    const success = await loader(
-      async () => {
-        await createAttribute(inputType, value)
-        dispatch(setIntermediaryState(IntermediaryState.hiding))
-      },
-      { showSuccess: false },
-    )
+    if (value.length) {
+      const success = await loader(
+        async () => {
+          await createAttribute(inputType, value)
+          dispatch(setIntermediaryState(IntermediaryState.hiding))
+        },
+        { showSuccess: false },
+      )
 
-    if (!success) {
-      dispatch(setIntermediaryState(IntermediaryState.hiding))
-      //TODO: add notification
-      Alert.alert('Failed to create a new attribute')
+      if (!success) {
+        dispatch(setIntermediaryState(IntermediaryState.hiding))
+        //TODO: add notification
+        Alert.alert('Failed to create a new attribute')
+      }
+    } else {
+      focusKeyboard()
+      //TODO: add notification when input is empty
     }
   }
 
@@ -66,7 +82,7 @@ const IntermediaryActionSheet = () => {
 const styles = StyleSheet.create({
   inputWrapper: {
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    height: 50,
     backgroundColor: Colors.black,
     borderRadius: 8,
   },

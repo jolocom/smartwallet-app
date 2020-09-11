@@ -45,15 +45,15 @@ const InteractionFooter: React.FC<Props> = ({ disabled }) => {
 
   const handleSubmit = async () => {
     await loader(
-        async () => {
-          const missingAttribute = getSingleMissingAttribute()
-          if (missingAttribute) {
-            handleCreateAttribute(missingAttribute)
-          } else {
-            await handleFlowSubmit()
-          }
-        },
-        { showFailed: false, showSuccess: false },
+      async () => {
+        const missingAttribute = getSingleMissingAttribute()
+        if (missingAttribute) {
+          handleCreateAttribute(missingAttribute)
+        } else {
+          await handleFlowSubmit()
+        }
+      },
+      { showFailed: false, showSuccess: false },
     )
   }
 
@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
     height: 106,
     backgroundColor: Colors.black,
     justifyContent: 'center',
-    borderRadius: 22,
+    borderTopRightRadius: 22,
+    borderTopLeftRadius: 22,
     shadowColor: Colors.black30,
     shadowOffset: {
       width: 0,

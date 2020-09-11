@@ -173,13 +173,6 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: Colors.transparent,
   },
-  wrapper: {
-    width: '100%',
-    backgroundColor: Colors.black,
-    borderRadius: 20,
-    justifyContent: 'center',
-    padding: 20,
-  },
   basIcon: {
     position: 'absolute',
     top: 35,
