@@ -3,7 +3,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
-import { navigationActions, accountActions } from 'src/actions/'
+import { navigationActions } from 'src/actions/'
 
 import { routeList } from 'src/routeList'
 import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
@@ -93,7 +93,7 @@ export const checkIdentityExists: ThunkAction = async (
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
     await dispatch(setClaimsForDid)
-    await dispatch(accountActions.checkLocalDeviceAuthSet)
+    await dispatch(checkLocalDeviceAuthSet)
     await dispatch(checkRecoverySetup)
     return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {
@@ -121,9 +121,9 @@ export const checkLocalDeviceAuthSet: ThunkAction = async dispatch => {
     service: PIN_SERVICE,
   })
   if (pin) {
-    dispatch(accountActions.setLocalAuth())
+    dispatch(setLocalAuth())
   } else {
-    dispatch(accountActions.openLocalAuth())
+    dispatch(openLocalAuth())
   }
 }
 
@@ -131,7 +131,7 @@ export const handleRecoveryBack: ThunkAction = async (dispatch, getState) => {
   console.log(getState())
   const state = getState()
   if (state.account.did.did) {
-    dispatch(accountActions.openPINinstructions())
+    dispatch(openPINinstructions())
     dispatch(navigationActions.navigate({ routeName: routeList.Home }))
   } else {
     dispatch(navigationActions.navigate({ routeName: routeList.Landing }))
