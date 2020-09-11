@@ -255,7 +255,7 @@ PODS:
     - React
   - RNJolocom (1.0.0):
     - React
-  - RNJolocom (1.0.0):
+  - RNKeychain (4.0.5):
     - React
   - RNLocalize (1.4.1):
     - React
@@ -497,4 +497,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 4c445d45f66b2240370a6a9ce28af3f871da1e73
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3
