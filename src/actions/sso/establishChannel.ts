@@ -8,6 +8,7 @@ import {
   FlowType,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { navigatorResetHome } from 'src/actions/navigation'
+import { cancelSSO, scheduleSuccessNotification } from '.'
 
 export const consumeEstablishChannelRequest = (
   establishChannelRequest: JSONWebToken<EstablishChannelRequest>,
@@ -43,7 +44,7 @@ export const startChannel = (interactionId: string): ThunkAction => async (
   const channel = await sdk.channels.create(interaction)
 
   channel.send(response.encode())
-  channel.start(async (interxn) => {
+  channel.start(async interxn => {
     console.log('handing interxn', interxn.id, interxn.flow.type)
     let resp
     switch (interxn.flow.type) {
@@ -59,13 +60,26 @@ export const startChannel = (interactionId: string): ThunkAction => async (
     }
 
     if (resp) {
-      console.log('Channel', channel.id, 'responded to', interxn.flow.type, `(${interxn.id})`, 'with', resp.interactionToken)
+      console.log(
+        'Channel',
+        channel.id,
+        'responded to',
+        interxn.flow.type,
+        `(${interxn.id})`,
+        'with',
+        resp.interactionToken,
+      )
       channel.send(resp.encode())
     } else {
-      console.warn('received illegal interxn request on channel', channel.id, interxn.flow.type)
+      console.warn(
+        'received illegal interxn request on channel',
+        channel.id,
+        interxn.flow.type,
+      )
       // TODO: notify user that we got some weird thing on the channel
     }
   })
 
-  return dispatch(navigatorResetHome())
+  dispatch(scheduleSuccessNotification)
+  dispatch(cancelSSO)
 }
