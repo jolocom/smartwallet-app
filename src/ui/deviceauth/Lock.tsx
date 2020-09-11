@@ -17,9 +17,7 @@ import strings from '../../locales/strings'
 import { connect } from 'react-redux'
 import { RootState } from 'src/reducers'
 import { ThunkDispatch } from 'src/store'
-import AbsoluteBottom from './components/AbsoluteBottom'
 import { genericActions, navigationActions } from 'src/actions'
-import useKeyboardHeight from './hooks/useKeyboardHeight'
 import { routeList } from 'src/routeList'
 import { Wrapper } from '../structure'
 
@@ -38,7 +36,6 @@ const Lock: React.FC<LockProps> = ({
 }) => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
-  const { keyboardHeight } = useKeyboardHeight()
 
   if (!isLocked) navigation.goBack()
 

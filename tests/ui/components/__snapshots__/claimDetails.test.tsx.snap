@@ -2,6 +2,11 @@
 
 exports[`ClaimDetails component matches the snapshot on render 1`] = `
 <Memo(Connect(Component))>
+  <NavigationSection
+    backButtonColor="#000"
+    isBackButton={true}
+    onNavigation={[Function]}
+  />
   <ScrollViewMock
     keyboardShouldPersistTaps="handled"
     style={
@@ -59,6 +64,11 @@ exports[`ClaimDetails component matches the snapshot on render 1`] = `
 
 exports[`ClaimDetails component matches the snapshot on render with multi-line claim 1`] = `
 <Memo(Connect(Component))>
+  <NavigationSection
+    backButtonColor="#000"
+    isBackButton={true}
+    onNavigation={[Function]}
+  />
   <ScrollViewMock
     keyboardShouldPersistTaps="handled"
     style={
