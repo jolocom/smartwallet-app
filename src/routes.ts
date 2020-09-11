@@ -275,7 +275,7 @@ const MainStack = createStackNavigator(
       navigationOptions: {
         ...noHeaderNavOpts,
         // @ts-ignore
-        notifications: NotificationFilter.all,
+        notifications: NotificationFilter.onlyDismissible,
       },
     },
     [routeList.PrivacyPolicy]: {
@@ -283,7 +283,7 @@ const MainStack = createStackNavigator(
       navigationOptions: {
         ...noHeaderNavOpts,
         // @ts-ignore
-        notifications: NotificationFilter.all,
+        notifications: NotificationFilter.onlyDismissible,
       },
     },
     [routeList.Impressum]: {
@@ -291,7 +291,7 @@ const MainStack = createStackNavigator(
       navigationOptions: {
         ...noHeaderNavOpts,
         // @ts-ignore
-        notifications: NotificationFilter.all,
+        notifications: NotificationFilter.onlyDismissible,
       },
     },
     [routeList.Exception]: {
