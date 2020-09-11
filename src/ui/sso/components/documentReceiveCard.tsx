@@ -91,7 +91,9 @@ export const DocumentReceiveCard = (props: Props) => {
     }).start(onToggle)
   }
 
+  //NOTE: using @onDrag instead of @onSnap b/c on iOS the snap event is delayed
   const onDrag = ({ nativeEvent: { x } }: IDragEvent) => {
+    //NOTE: 20 is subtracted from the centerSnap position to not trigger the @onSnap handler
     if (!selected && x > centerSnap - 20) {
       onSelect()
     } else if (selected) {
@@ -99,6 +101,7 @@ export const DocumentReceiveCard = (props: Props) => {
     }
   }
 
+  //NOTE: @onSnap will fire if the animation/selection wasn't handled by @onDrag.
   const onSnap = (e: ISnapEvent) => {
     if (e.nativeEvent.index === 1) {
       if (!selected) onSelect()
