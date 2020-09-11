@@ -8,6 +8,7 @@ import strings from '../../../locales/strings'
 import * as I18n from 'i18n-js'
 import { NavigationInjectedProps } from 'react-navigation'
 import { routeList } from '../../../routeList'
+import { Vibration } from 'react-native'
 
 interface Props
   extends ReturnType<typeof mapDispatchToProps>,
@@ -59,6 +60,7 @@ export class RepeatSeedPhraseContainer extends React.Component<Props, State> {
     if (isCorrect) {
       this.props.setSeedPhraseSaved()
     } else {
+      Vibration.vibrate(400)
       this.setState({
         sorting: {},
         randomWords: Object.keys(sorting).map(key => sorting[key]),
