@@ -107,6 +107,7 @@ export const SettingsContainer: React.FC<Props> = props => {
             onPress={() =>
               navigate(routeList.ErrorReporting, {
                 previousScreen: routeList.Settings,
+                error: "Contact Us"
               })
             }
           />
