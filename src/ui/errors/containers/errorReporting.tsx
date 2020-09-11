@@ -83,7 +83,7 @@ const ErrorReportingContainer = (props: Props) => {
         onNavigation={navigateBack}
         isBackButton={isBackButton}
       />
-      <ScrollView>
+      <ScrollView overScrollMode="never">
         <SectionWrapper
           title={I18n.t(strings.TELL_US_THE_PROBLEM)}
           style={{ marginTop: 14 }}>
