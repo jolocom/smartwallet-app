@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, BackHandler } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 
 import I18n from 'src/locales/i18n'
@@ -19,23 +19,31 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'src/store'
 import { genericActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
+import { NavigationInjectedProps } from 'react-navigation'
 
-interface PropsI extends ReturnType<typeof mapDispatchToProps> {
-  isLocalAuthVisible: boolean
-  closeLocalAuth: () => void
-  setAuth: () => void
+interface PropsI extends
+  NavigationInjectedProps,
+  ReturnType<typeof mapDispatchToProps> {
 }
 
 const RegisterPIN: React.FC<PropsI> = ({
-  isLocalAuthVisible,
-  closeLocalAuth,
-  setAuth,
   unlockApplication,
+  navigation
 }) => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [passcode, setPasscode] = useState('')
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
+
+  useEffect(() => {
+    // don't let react-navigation handle this back button press if we are
+    // focused
+    const handleBack = () => navigation.isFocused()
+    BackHandler.addEventListener('hardwareBackPress', handleBack)
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBack)
+    }
+  }, [])
 
   const { keyboardHeight } = useKeyboardHeight()
 
