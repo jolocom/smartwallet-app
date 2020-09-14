@@ -7,16 +7,22 @@
  * `entities/index.ts` respectively
  *
  */
+import { entityList } from '@jolocom/sdk-storage-typeorm'
+import { ConnectionOptions } from 'typeorm'
+
+// TODO load migrations
+const migrations: any[] = []
+
 export default {
   type: 'react-native',
   database: 'LocalSmartWalletData',
   location: 'default',
   logging: ['error', 'warn', 'schema'],
-  entities: ['./src/lib/storage/entities/*.ts'],
-  migrations: ['./src/lib/storage/migration/*.ts'],
+  entities: entityList,
+  migrations,
   migrationsRun: true,
   synchronize: false,
   cli: {
     migrationsDir: 'src/lib/storage/migration',
   },
-}
+} as ConnectionOptions

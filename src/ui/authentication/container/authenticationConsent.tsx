@@ -1,16 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AuthenticationConsentComponent } from '../components/authenticationConsent'
-import { cancelSSO } from 'src/actions/sso'
-import { sendAuthenticationResponse } from 'src/actions/sso/authenticationRequest'
+import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
-import { AuthenticationRequestSummary } from '../../../actions/sso/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 interface AuthenticationNavigationParams {
-  isDeepLinkInteraction: boolean
-  authenticationDetails: AuthenticationRequestSummary
+  interactionId: string
+  interactionSummary: InteractionSummary
 }
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
@@ -26,18 +25,15 @@ export const AuthenticationConsentContainer = (props: Props) => {
     cancelAuthenticationRequest,
     navigation: {
       state: {
-        params: { isDeepLinkInteraction, authenticationDetails },
+        params: { interactionId, interactionSummary },
       },
     },
   } = props
   return (
     <AuthenticationConsentComponent
-      authenticationDetails={authenticationDetails}
+      interactionSummary={interactionSummary}
       confirmAuthenticationRequest={() =>
-        confirmAuthenticationRequest(
-          isDeepLinkInteraction,
-          authenticationDetails,
-        )
+        confirmAuthenticationRequest(interactionId)
       }
       cancelAuthenticationRequest={cancelAuthenticationRequest}
     />
@@ -45,19 +41,11 @@ export const AuthenticationConsentContainer = (props: Props) => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  confirmAuthenticationRequest: (
-    isDeepLinkInteraction: boolean,
-    authenticationDetails: AuthenticationRequestSummary,
-  ) =>
+  confirmAuthenticationRequest: (interactionId: string) =>
     dispatch(
-      withErrorScreen(
-        sendAuthenticationResponse(
-          isDeepLinkInteraction,
-          authenticationDetails,
-        ),
-      ),
+      withErrorScreen(ssoActions.sendAuthenticationResponse(interactionId)),
     ),
-  cancelAuthenticationRequest: () => dispatch(cancelSSO),
+  cancelAuthenticationRequest: () => dispatch(ssoActions.cancelSSO),
 })
 
 export const AuthenticationConsent = connect(

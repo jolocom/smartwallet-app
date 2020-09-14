@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 import { KeyChain } from 'src/lib/keychain'
-import { MasterKeyEntity } from '../entities'
+import { MasterKeyEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
 import {
   encryptWithLib4,
   decryptWithLib4,

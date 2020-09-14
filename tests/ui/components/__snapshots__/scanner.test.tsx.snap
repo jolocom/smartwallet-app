@@ -3,11 +3,11 @@
 exports[`Scanner component matches snapshot when the torch button is pressed 1`] = `
 <Fragment>
   <QRCodeScanner
+    buttonPositive="OK"
     cameraProps={
       Object {
         "captureAudio": false,
         "flashMode": "torch",
-        "key": 4,
       }
     }
     cameraStyle={
@@ -22,7 +22,7 @@ exports[`Scanner component matches snapshot when the torch button is pressed 1`]
         "position": "absolute",
       }
     }
-    fadeIn={true}
+    fadeIn={false}
     notAuthorizedView={
       <View
         style={
@@ -87,6 +87,7 @@ exports[`Scanner component matches snapshot when the torch button is pressed 1`]
   <View
     style={
       Object {
+        "alignItems": "stretch",
         "flexDirection": "row",
       }
     }
@@ -96,7 +97,7 @@ exports[`Scanner component matches snapshot when the torch button is pressed 1`]
         Object {
           "backgroundColor": "rgba(0, 0, 0, 0.65)",
           "height": 562.5,
-          "width": 750,
+          "width": 93.75,
         }
       }
     />
@@ -124,7 +125,7 @@ exports[`Scanner component matches snapshot when the torch button is pressed 1`]
         Object {
           "backgroundColor": "rgba(0, 0, 0, 0.65)",
           "height": 562.5,
-          "width": 750,
+          "width": 93.75,
         }
       }
     />
@@ -182,11 +183,11 @@ exports[`Scanner component matches snapshot when the torch button is pressed 1`]
 exports[`Scanner component matches the snapshot on initial render 1`] = `
 <Fragment>
   <QRCodeScanner
+    buttonPositive="OK"
     cameraProps={
       Object {
         "captureAudio": false,
         "flashMode": "off",
-        "key": 4,
       }
     }
     cameraStyle={
@@ -201,7 +202,7 @@ exports[`Scanner component matches the snapshot on initial render 1`] = `
         "position": "absolute",
       }
     }
-    fadeIn={true}
+    fadeIn={false}
     notAuthorizedView={
       <View
         style={
@@ -266,6 +267,7 @@ exports[`Scanner component matches the snapshot on initial render 1`] = `
   <View
     style={
       Object {
+        "alignItems": "stretch",
         "flexDirection": "row",
       }
     }
@@ -275,7 +277,7 @@ exports[`Scanner component matches the snapshot on initial render 1`] = `
         Object {
           "backgroundColor": "rgba(0, 0, 0, 0.65)",
           "height": 562.5,
-          "width": 750,
+          "width": 93.75,
         }
       }
     />
@@ -303,7 +305,7 @@ exports[`Scanner component matches the snapshot on initial render 1`] = `
         Object {
           "backgroundColor": "rgba(0, 0, 0, 0.65)",
           "height": 562.5,
-          "width": 750,
+          "width": 93.75,
         }
       }
     />

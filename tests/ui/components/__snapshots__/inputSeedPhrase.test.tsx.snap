@@ -1,17 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
-<Wrapper
-  style={
-    Array [
-      Object {
-        "backgroundColor": "rgb(5, 5, 13)",
-        "flex": 1,
-        "justifyContent": "flex-start",
-      },
-      false,
-    ]
-  }
+<Memo(Connect(Component))
+  breathy={false}
+  centered={true}
+  dark={true}
 >
   <Text
     style={
@@ -97,6 +90,10 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
             "flex": 1,
             "fontSize": 22,
             "paddingVertical": 7,
+            "textAlign": "center",
+          },
+          Object {
+            "textAlign": "center",
           },
           Object {
             "color": "white",
@@ -104,7 +101,6 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
         ]
       }
       testID="seedWordFld"
-      textAlign="center"
       underlineColorAndroid="transparent"
       value=""
     />
@@ -198,26 +194,17 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           "paddingVertical": 10,
         }
       }
-      text="Back to signup"
+      text="Cancel"
     />
   </View>
-</Wrapper>
+</Memo(Connect(Component))>
 `;
 
 exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
-<Wrapper
-  style={
-    Array [
-      Object {
-        "backgroundColor": "rgb(5, 5, 13)",
-        "flex": 1,
-        "justifyContent": "flex-start",
-      },
-      Object {
-        "justifyContent": "space-around",
-      },
-    ]
-  }
+<Memo(Connect(Component))
+  breathy={true}
+  centered={true}
+  dark={true}
 >
   <Text
     style={
@@ -262,6 +249,7 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
   </View>
   <RippleLoader
     color="rgb(89, 167, 145)"
+    frequency={1600}
     size={120}
     strokeWidth={4}
   />
@@ -272,21 +260,14 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
       }
     }
   />
-</Wrapper>
+</Memo(Connect(Component))>
 `;
 
 exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
-<Wrapper
-  style={
-    Array [
-      Object {
-        "backgroundColor": "rgb(5, 5, 13)",
-        "flex": 1,
-        "justifyContent": "flex-start",
-      },
-      false,
-    ]
-  }
+<Memo(Connect(Component))
+  breathy={false}
+  centered={true}
+  dark={true}
 >
   <Text
     style={
@@ -376,6 +357,10 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
             "flex": 1,
             "fontSize": 22,
             "paddingVertical": 7,
+            "textAlign": "center",
+          },
+          Object {
+            "textAlign": "center",
           },
           Object {
             "color": "white",
@@ -383,7 +368,6 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
         ]
       }
       testID="seedWordFld"
-      textAlign="center"
       underlineColorAndroid="transparent"
       value="in"
     />
@@ -528,8 +512,8 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           "paddingVertical": 10,
         }
       }
-      text="Back to signup"
+      text="Cancel"
     />
   </View>
-</Wrapper>
+</Memo(Connect(Component))>
 `;

@@ -1,0 +1,496 @@
+Info 0    [16:41:22.707] Starting TS Server
+Info 1    [16:41:22.707] Version: 3.7.5
+Info 2    [16:41:22.707] Arguments: /home/cl/.nvm/versions/node/v10.16.3/bin/node /home/cl/jolocom/smartwallet-app/node_modules/.bin/tsserver --logFile /home/cl/jolocom/smartwallet-app/.log/tsserver.log --logVerbosity info --cancellationPipeName /tmp/35b4d7356f35b8cfbe6a318870ae7155/tscancellation*
+Info 3    [16:41:22.707] Platform: linux NodeVersion: 10 CaseSensitive: true
+Info 4    [16:41:22.721] Search path: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager
+Info 5    [16:41:22.723] For info: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts :: Config file name: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 6    [16:41:22.723] Opened configuration file /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 7    [16:41:22.863] Config: /home/cl/jolocom/smartwallet-app/tsconfig.json : {
+ "rootNames": [
+  "/home/cl/jolocom/smartwallet-app/src/App.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/backendMiddleware.ts",
+  "/home/cl/jolocom/smartwallet-app/src/config.ts",
+  "/home/cl/jolocom/smartwallet-app/src/node.polyfill.ts",
+  "/home/cl/jolocom/smartwallet-app/src/routeList.ts",
+  "/home/cl/jolocom/smartwallet-app/src/routes.ts",
+  "/home/cl/jolocom/smartwallet-app/src/store.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/modifiers.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/recovery.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/account/actionTypes.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/account/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/documents/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/generic/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/navigation/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/notifications/checkRecoverySetup.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/notifications/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/registration/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/registration/loadingStages.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/sso/authenticationRequest.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/sso/credentialOffer.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/sso/credentialRequest.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/sso/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/sso/paymentRequest.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/sso/types.ts",
+  "/home/cl/jolocom/smartwallet-app/src/actions/sso/utils.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/categories.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/entropyGenerator.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/filter.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/filterCreds.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/filterDecoratedClaims.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/http.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/ipfs.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/keychain.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/notifications.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/util.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/compat/cryptojs.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/errors/codes.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/errors/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/errors/sentry.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/errors/types.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/credentialOfferFlow.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/credentialRequestFlow.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interactionManager.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/types.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/OfferMetadataAgent.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/interactionTokens.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/storage.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/utils.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/entities/cacheEntity.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/entities/credentialEntity.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/entities/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/entities/masterKeyEntity.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/entities/personaEntity.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/entities/settingEntity.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/entities/signatureEntity.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/entities/verifiableCredentialEntity.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/migration/1565886000404-initial.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/migration/1567674609659-reencrypt-seed.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/migration/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/lib/storage/migration/template.ts",
+  "/home/cl/jolocom/smartwallet-app/src/locales/i18n.ts",
+  "/home/cl/jolocom/smartwallet-app/src/locales/strings.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/account/claims.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/account/did.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/account/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/account/loading.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/documents/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/notifications/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/registration/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/registration/loading.ts",
+  "/home/cl/jolocom/smartwallet-app/src/reducers/settings/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/resources/Landing00.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/Landing01.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/Landing02.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/Landing03.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/resources/util.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/AccessibilityIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/BackIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/CheckmarkIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/CloseIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/CrossIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/CrossNotifications.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/Docs.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/DropdownIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/EmailIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/HandIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/History.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/Identity.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/MoreIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/NameIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/NextIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/PhoneIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/PreviousIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/Scan1.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/ScanDisabledIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/ScanEnabledIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/Settings.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/SpinningIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/SplashIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/TorchOffIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/resources/svg/TorchOnIcon.js",
+  "/home/cl/jolocom/smartwallet-app/src/storybook/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/storybook/stories/cardWrapper.stories.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/storybook/stories/index.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/storybook/stories/issuerCard.stories.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/styles/breakpoints.ts",
+  "/home/cl/jolocom/smartwallet-app/src/styles/buttons.ts",
+  "/home/cl/jolocom/smartwallet-app/src/styles/colors.ts",
+  "/home/cl/jolocom/smartwallet-app/src/styles/config.ts",
+  "/home/cl/jolocom/smartwallet-app/src/styles/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/styles/presets.ts",
+  "/home/cl/jolocom/smartwallet-app/src/styles/spacing.ts",
+  "/home/cl/jolocom/smartwallet-app/src/styles/typefaces.ts",
+  "/home/cl/jolocom/smartwallet-app/src/styles/typography.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/index.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/animation/Rotation.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/authentication/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/authentication/components/authenticationConsent.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/authentication/container/authenticationConsent.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/index.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/components/documentCard.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/components/documentDetails.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/components/documentValidity.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/components/documentViewToggle.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/components/documentsCarousel.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/components/documentsList.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/components/issuerCard.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/containers/documentDetails.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/documents/containers/documents.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/errors/styles.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/errors/components/chooseIssueSection.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/errors/components/contactSection.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/errors/components/descriptionSection.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/errors/components/emojiSection.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/errors/components/navigationSection.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/errors/components/sectionWrapper.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/errors/containers/errorReporting.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/generic/appInit.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/generic/appLoadingAndNotifications.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/generic/exception.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/generic/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/generic/loadingSpinner.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/index.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/claimDetails.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/collapsibleCredentialCard.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/credentialCard.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/credentialCategory.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/credentialOverview.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/placeholderCredentialCard.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/records.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/sharedConstants.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/components/textInputField.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/containers/claimDetails.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/containers/claims.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/home/containers/records.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/interaction/component/noPermission.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/interaction/component/scanner.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/interaction/container/interactionScreen.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/interaction/container/scanner.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/landing/index.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/landing/components/landing.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/landing/components/landingSlides.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/landing/containers/landing.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/navigation/components/bottomBarSvg.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/navigation/components/interactionButton.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/navigation/components/tabButton.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/navigation/container/bottomBar.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/notifications/components/notifications.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/notifications/containers/devNotificationScheduler.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/notifications/containers/notifications.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/payment/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/payment/components/paymentConsent.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/payment/components/paymentConsentCard.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/payment/containers/paymentConsent.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/recovery/components/inputSeedPhrase.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/recovery/components/placeholder.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/recovery/components/repeatSeedPhrase.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/recovery/components/seedPhrase.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/recovery/container/inputSeedPhrase.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/recovery/container/repeatSeedPhrase.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/recovery/container/seedPhrase.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/registration/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/registration/components/entropy.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/registration/components/handAnimation.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/registration/components/maskedImage.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/registration/containers/entropy.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/registration/containers/progress.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/registration/containers/seedPhrase.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/settings/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/settings/settingKeys.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/settings/components/localeSetting.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/settings/components/settingItem.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/settings/components/settingSection.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/settings/containers/settings.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/components/checkboxCredential.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/components/consent.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/components/credentialReceive.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/components/credentialsSectionCard.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/components/documentReceiveCard.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/containers/consent.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceive.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/storybook/index.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/actionSheet.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/buttonSectionBottom.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/buttonSheet.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/cardWrapper.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/index.ts",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/jolocomButton.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/swipeUpWrapper.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/toggleSwitch.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/transparentButton.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/ui/structure/wrapper.tsx",
+  "/home/cl/jolocom/smartwallet-app/src/utils/asyncTimeout.ts",
+  "/home/cl/jolocom/smartwallet-app/src/utils/filterDocuments.ts",
+  "/home/cl/jolocom/smartwallet-app/src/utils/formatEth.ts",
+  "/home/cl/jolocom/smartwallet-app/src/utils/getRandomStringFromArray.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/assetsTransformer.js",
+  "/home/cl/jolocom/smartwallet-app/tests/backendMiddleware.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/misc.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/__mocks__/react-native-camera.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/__mocks__/react-native-keychain.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/__mocks__/react-native-localize.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/__mocks__/deprecated-react-native-listview/index.js",
+  "/home/cl/jolocom/smartwallet-app/tests/actions/account/index.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/actions/generic/index.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/actions/navigation/index.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/actions/notifications/index.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/actions/registration/index.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/actions/registration/data/mockRegistrationData.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/lib/entropyGenerator.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/lib/filter.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/lib/ipfs.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/lib/keyChain.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/lib/storage.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/lib/compat/cryptojs.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/lib/testData/filterTestData.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/lib/testData/storageTestData.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/reducers/accounts/index.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/reducers/registration/index.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/claimDetails.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/credentialCard.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/credentialOverview.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/entropy.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/inputSeedPhrase.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/landing.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/maskedImage.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/noPermission.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/placeholder.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/repeatSeedPhrase.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/scanner.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/seedPhrase.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/textInputField.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/errors/chooseIssueSection.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/errors/contactSection.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/errors/descriptionSection.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/errors/emojiSection.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/errors/navigationSection.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/components/errors/sectionWrapper.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/containers/claimDetails.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/containers/claims.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/containers/entropy.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/containers/landing.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/containers/repeatSeedPhrase.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/containers/seedPhrase.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/generic/exception.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/structure/container.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/ui/structure/toggleSwitch.test.tsx",
+  "/home/cl/jolocom/smartwallet-app/tests/utils/createMockNavigationProp.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/utils/createMockStore.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/utils/formatEth.test.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/utils/index.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/utils/setup.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/utils/stub.ts",
+  "/home/cl/jolocom/smartwallet-app/tests/utils/terms.test.ts",
+  "/home/cl/jolocom/smartwallet-app/bin/generateTerms.ts",
+  "/home/cl/jolocom/smartwallet-app/bin/precommit.js",
+  "/home/cl/jolocom/smartwallet-app/bin/repl.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/init.js",
+  "/home/cl/jolocom/smartwallet-app/e2e/jest.config.js",
+  "/home/cl/jolocom/smartwallet-app/e2e/utils.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/01_new_user/01_landing.spec.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/01_new_user/02_creation.spec.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/01_new_user/03_recovery.spec.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/02_interactions/01_payment.spec.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/02_interactions/02_authentication.spec.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/02_interactions/03_credential_request.spec.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/02_interactions/04_credential_offer.spec.ts",
+  "/home/cl/jolocom/smartwallet-app/e2e/02_interactions/05_errors.spec.ts"
+ ],
+ "options": {
+  "allowJs": true,
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true,
+  "isolatedModules": true,
+  "jsx": 2,
+  "lib": [
+   "lib.es2018.promise.d.ts",
+   "lib.es2016.d.ts",
+   "lib.es2015.d.ts"
+  ],
+  "moduleResolution": 2,
+  "noEmit": true,
+  "strict": true,
+  "target": 99,
+  "module": 5,
+  "resolveJsonModule": true,
+  "suppressImplicitAnyIndexErrors": true,
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+  "noEmitHelpers": true,
+  "importHelpers": true,
+  "noImplicitReturns": true,
+  "skipLibCheck": true,
+  "noUnusedLocals": true,
+  "baseUrl": "/home/cl/jolocom/smartwallet-app",
+  "configFilePath": "/home/cl/jolocom/smartwallet-app/tsconfig.json"
+ }
+}
+Info 8    [16:41:22.977] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 9    [16:41:32.888] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 1 structureChanged: true Elapsed: 9911ms
+Info 10   [16:41:32.888] Project '/home/cl/jolocom/smartwallet-app/tsconfig.json' (Configured) 
+Info 11   [16:41:32.888] 	Files (1671)
+
+Info 12   [16:41:32.888] -----------------------------------------------
+Info 13   [16:41:33.182] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 14   [16:41:33.291] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 2 structureChanged: false Elapsed: 108ms
+Info 15   [16:41:33.291] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 16   [16:41:58.664] Search path: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager
+Info 17   [16:41:58.664] For info: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts :: Config file name: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 18   [16:43:19.256] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 19   [16:43:19.336] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 3 structureChanged: false Elapsed: 80ms
+Info 20   [16:43:19.336] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 21   [16:48:13.91] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 22   [16:48:13.93] Elapsed:: 1ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 23   [16:48:13.343] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 24   [16:48:13.464] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 4 structureChanged: false Elapsed: 120ms
+Info 25   [16:48:13.465] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 26   [16:48:13.465] Structure before ensureProjectForOpenFiles:
+Info 27   [16:48:13.465] Structure after ensureProjectForOpenFiles:
+Info 28   [16:48:13.465] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 29   [16:48:38.93] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 30   [16:48:38.93] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 31   [16:48:38.343] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 32   [16:48:38.460] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 5 structureChanged: false Elapsed: 117ms
+Info 33   [16:48:38.460] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 34   [16:48:38.460] Structure before ensureProjectForOpenFiles:
+Info 35   [16:48:38.460] Structure after ensureProjectForOpenFiles:
+Info 36   [16:48:38.460] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 37   [16:49:3.97] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 38   [16:49:3.98] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 39   [16:49:3.348] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 40   [16:49:3.453] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 6 structureChanged: false Elapsed: 105ms
+Info 41   [16:49:3.453] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 42   [16:49:3.453] Structure before ensureProjectForOpenFiles:
+Info 43   [16:49:3.453] Structure after ensureProjectForOpenFiles:
+Info 44   [16:49:3.453] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 45   [16:49:53.101] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 46   [16:49:53.102] Elapsed:: 1ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 47   [16:49:53.351] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 48   [16:49:53.439] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 7 structureChanged: false Elapsed: 88ms
+Info 49   [16:49:53.439] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 50   [16:49:53.439] Structure before ensureProjectForOpenFiles:
+Info 51   [16:49:53.439] Structure after ensureProjectForOpenFiles:
+Info 52   [16:49:53.439] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 53   [16:54:50.623] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 54   [16:54:50.623] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 55   [16:54:50.873] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 56   [16:54:50.977] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 8 structureChanged: false Elapsed: 104ms
+Info 57   [16:54:50.977] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 58   [16:54:50.977] Structure before ensureProjectForOpenFiles:
+Info 59   [16:54:50.977] Structure after ensureProjectForOpenFiles:
+Info 60   [16:54:50.977] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 61   [16:55:15.625] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 62   [16:55:15.625] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 63   [16:55:15.875] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 64   [16:55:15.950] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 9 structureChanged: false Elapsed: 75ms
+Info 65   [16:55:15.950] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 66   [16:55:15.950] Structure before ensureProjectForOpenFiles:
+Info 67   [16:55:15.950] Structure after ensureProjectForOpenFiles:
+Info 68   [16:55:15.950] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 69   [17:0:38.166] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 70   [17:0:38.166] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 71   [17:0:38.417] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 72   [17:0:38.518] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 10 structureChanged: false Elapsed: 101ms
+Info 73   [17:0:38.518] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 74   [17:0:38.518] Structure before ensureProjectForOpenFiles:
+Info 75   [17:0:38.518] Structure after ensureProjectForOpenFiles:
+Info 76   [17:0:38.518] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 77   [17:1:3.170] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 78   [17:1:3.170] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/interaction.ts 500 Project:  WatchType: Closed Script info
+Info 79   [17:1:3.420] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 80   [17:1:3.510] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 11 structureChanged: false Elapsed: 90ms
+Info 81   [17:1:3.510] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 82   [17:1:3.510] Structure before ensureProjectForOpenFiles:
+Info 83   [17:1:3.510] Structure after ensureProjectForOpenFiles:
+Info 84   [17:1:3.510] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 85   [17:1:30.676] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/locales/strings.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/locales/strings.ts 500 Project:  WatchType: Closed Script info
+Info 86   [17:1:30.676] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/locales/strings.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/locales/strings.ts 500 Project:  WatchType: Closed Script info
+Info 87   [17:1:30.926] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 88   [17:1:30.981] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 12 structureChanged: false Elapsed: 55ms
+Info 89   [17:1:30.981] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 90   [17:1:30.981] Structure before ensureProjectForOpenFiles:
+Info 91   [17:1:30.981] Structure after ensureProjectForOpenFiles:
+Info 92   [17:1:30.981] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 93   [17:2:38.182] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/routeList.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/routeList.ts 500 Project:  WatchType: Closed Script info
+Info 94   [17:2:38.182] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/routeList.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/routeList.ts 500 Project:  WatchType: Closed Script info
+Info 95   [17:2:38.433] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 96   [17:2:38.509] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 13 structureChanged: false Elapsed: 76ms
+Info 97   [17:2:38.509] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 98   [17:2:38.510] Structure before ensureProjectForOpenFiles:
+Info 99   [17:2:38.510] Structure after ensureProjectForOpenFiles:
+Info 100  [17:2:38.510] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 101  [17:2:55.683] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts 500 Project:  WatchType: Closed Script info
+Info 102  [17:2:55.684] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts 500 Project:  WatchType: Closed Script info
+Info 103  [17:2:55.935] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 104  [17:2:56.43] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 14 structureChanged: false Elapsed: 108ms
+Info 105  [17:2:56.43] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 106  [17:2:56.43] Structure before ensureProjectForOpenFiles:
+Info 107  [17:2:56.43] Structure after ensureProjectForOpenFiles:
+Info 108  [17:2:56.43] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 109  [17:4:9.972] DirectoryWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts :: WatchInfo: /home/cl/jolocom/smartwallet-app/src 1 Project: /home/cl/jolocom/smartwallet-app/tsconfig.json WatchType: Wild card directory
+Info 110  [17:4:9.975] Elapsed:: 3ms DirectoryWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts :: WatchInfo: /home/cl/jolocom/smartwallet-app/src 1 Project: /home/cl/jolocom/smartwallet-app/tsconfig.json WatchType: Wild card directory
+Info 111  [17:4:9.975] DirectoryWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts :: WatchInfo: /home/cl/jolocom/smartwallet-app/src 1 Project: /home/cl/jolocom/smartwallet-app/tsconfig.json WatchType: Failed Lookup Locations
+Info 112  [17:4:9.977] Elapsed:: 2ms DirectoryWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts :: WatchInfo: /home/cl/jolocom/smartwallet-app/src 1 Project: /home/cl/jolocom/smartwallet-app/tsconfig.json WatchType: Failed Lookup Locations
+Info 113  [17:4:9.978] DirectoryWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveNegotiate.ts :: WatchInfo: /home/cl/jolocom/smartwallet-app/src 1 Project: /home/cl/jolocom/smartwallet-app/tsconfig.json WatchType: Wild card directory
+Info 114  [17:4:9.978] Elapsed:: 0ms DirectoryWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveNegotiate.ts :: WatchInfo: /home/cl/jolocom/smartwallet-app/src 1 Project: /home/cl/jolocom/smartwallet-app/tsconfig.json WatchType: Wild card directory
+Info 115  [17:4:9.979] DirectoryWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveNegotiate.ts :: WatchInfo: /home/cl/jolocom/smartwallet-app/src 1 Project: /home/cl/jolocom/smartwallet-app/tsconfig.json WatchType: Failed Lookup Locations
+Info 116  [17:4:9.979] Elapsed:: 0ms DirectoryWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveNegotiate.ts :: WatchInfo: /home/cl/jolocom/smartwallet-app/src 1 Project: /home/cl/jolocom/smartwallet-app/tsconfig.json WatchType: Failed Lookup Locations
+Info 117  [17:4:10.279] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 118  [17:4:13.851] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 15 structureChanged: true Elapsed: 3572ms
+Info 119  [17:4:13.851] Project '/home/cl/jolocom/smartwallet-app/tsconfig.json' (Configured) 
+Info 120  [17:4:13.851] 	Files (1671)
+
+Info 121  [17:4:13.851] -----------------------------------------------
+Info 122  [17:4:13.854] Structure before ensureProjectForOpenFiles:
+Info 123  [17:4:13.854] Structure after ensureProjectForOpenFiles:
+Info 124  [17:4:13.854] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 125  [17:4:13.854] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts 2:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts 500 Project:  WatchType: Closed Script info
+Info 126  [17:4:13.855] Elapsed:: 1ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts 2:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/ui/sso/containers/credentialReceiveInvalid.ts 500 Project:  WatchType: Closed Script info
+Info 127  [17:5:36.365] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/routes.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/routes.ts 500 Project:  WatchType: Closed Script info
+Info 128  [17:5:36.366] Elapsed:: 1ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/routes.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/routes.ts 500 Project:  WatchType: Closed Script info
+Info 129  [17:5:36.616] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 130  [17:5:37.69] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 16 structureChanged: true Elapsed: 453ms
+Info 131  [17:5:37.69] Different program with same set of files:: oldProgram.structureIsReused:: 1
+Info 132  [17:5:37.71] Structure before ensureProjectForOpenFiles:
+Info 133  [17:5:37.71] Structure after ensureProjectForOpenFiles:
+Info 134  [17:5:37.71] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 135  [17:6:1.365] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/routes.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/routes.ts 500 Project:  WatchType: Closed Script info
+Info 136  [17:6:1.366] Elapsed:: 1ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/routes.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/routes.ts 500 Project:  WatchType: Closed Script info
+Info 137  [17:6:1.616] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 138  [17:6:1.705] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 17 structureChanged: false Elapsed: 89ms
+Info 139  [17:6:1.705] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 140  [17:6:1.705] Structure before ensureProjectForOpenFiles:
+Info 141  [17:6:1.705] Structure after ensureProjectForOpenFiles:
+Info 142  [17:6:1.705] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 143  [17:9:46.388] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/credentialOfferFlow.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/credentialOfferFlow.ts 500 Project:  WatchType: Closed Script info
+Info 144  [17:9:46.388] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/credentialOfferFlow.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/credentialOfferFlow.ts 500 Project:  WatchType: Closed Script info
+Info 145  [17:9:46.638] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 146  [17:9:46.724] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 18 structureChanged: false Elapsed: 85ms
+Info 147  [17:9:46.724] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 148  [17:9:46.724] Structure before ensureProjectForOpenFiles:
+Info 149  [17:9:46.724] Structure after ensureProjectForOpenFiles:
+Info 150  [17:9:46.724] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 151  [17:44:54.103] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/locales/en.json 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/locales/en.json 500 Project:  WatchType: Closed Script info
+Info 152  [17:44:54.106] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/locales/en.json 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/locales/en.json 500 Project:  WatchType: Closed Script info
+Info 153  [17:44:54.356] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 154  [17:44:54.582] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 19 structureChanged: false Elapsed: 226ms
+Info 155  [17:44:54.583] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 156  [17:44:54.583] Structure before ensureProjectForOpenFiles:
+Info 157  [17:44:54.583] Structure after ensureProjectForOpenFiles:
+Info 158  [17:44:54.583] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
+Info 159  [17:44:56.605] FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/actions/sso/credentialOffer.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/actions/sso/credentialOffer.ts 500 Project:  WatchType: Closed Script info
+Info 160  [17:44:56.605] Elapsed:: 0ms FileWatcher:: Triggered with /home/cl/jolocom/smartwallet-app/src/actions/sso/credentialOffer.ts 1:: WatchInfo: /home/cl/jolocom/smartwallet-app/src/actions/sso/credentialOffer.ts 500 Project:  WatchType: Closed Script info
+Info 161  [17:44:56.856] Starting updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json
+Info 162  [17:44:56.947] Finishing updateGraphWorker: Project: /home/cl/jolocom/smartwallet-app/tsconfig.json Version: 20 structureChanged: false Elapsed: 91ms
+Info 163  [17:44:56.947] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 164  [17:44:56.948] Structure before ensureProjectForOpenFiles:
+Info 165  [17:44:56.948] Structure after ensureProjectForOpenFiles:
+Info 166  [17:44:56.948] got projects updated in background, updating diagnostics for /home/cl/jolocom/smartwallet-app/src/lib/interactionManager/authenticationFlow.ts,/home/cl/jolocom/smartwallet-app/src/lib/interactionManager/flow.ts
