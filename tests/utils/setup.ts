@@ -8,5 +8,6 @@ jest.mock('react-native', () => {
   const RN = jest.requireActual('react-native')
   RN.NativeModules.RNPermissions = {}
   RN.NativeModules.RNCAsyncStorage = {}
+  RN.NativeModules.Vibration = { vibrate: () => true }
   return RN
 })
