@@ -194,7 +194,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
           "paddingVertical": 10,
         }
       }
-      text="Back to signup"
+      text="Cancel"
     />
   </View>
 </Memo(Connect(Component))>
@@ -512,7 +512,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
           "paddingVertical": 10,
         }
       }
-      text="Back to signup"
+      text="Cancel"
     />
   </View>
 </Memo(Connect(Component))>

@@ -261,7 +261,7 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
             <TransparentButton
               onPress={handleBackButton}
               style={{ marginHorizontal: 30, paddingVertical: 10 }}
-              text={I18n.t(strings.BACK_TO_SIGNUP)}
+              text={I18n.t(strings.CANCEL)}
             />
           </View>
         </React.Fragment>
