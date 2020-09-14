@@ -10,6 +10,8 @@ import Svg, {
   Rect,
   Image,
 } from 'react-native-svg'
+import strings from 'src/locales/strings'
+import I18n from 'src/locales/i18n'
 
 function ForgotPIN(props) {
   return (
@@ -35,10 +37,10 @@ function ForgotPIN(props) {
             fontFamily="TTCommons-Regular, TT Commons"
             fontSize={14}>
             <TSpan x={12.52} y={10}>
-              {'Repeat your phrase '}
+              {I18n.t(strings.REPEAT_YOUR_PHRASE)}
             </TSpan>
             <TSpan x={28.865} y={24}>
-              {'word by word'}
+              {I18n.t(strings.WORD_BY_WORD)}
             </TSpan>
           </Text>
           <G transform="translate(48 64)">

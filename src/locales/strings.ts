@@ -193,6 +193,8 @@ const deviceAuth = {
     'Setting a new passcode will not affect your stored data',
   YOU_CAN_CHANGE_PIN:
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
+  REPEAT_YOUR_PHRASE: 'Repeat your phrase',
+  WORD_BY_WORD: 'word by word',
 }
 
 const termsOfService = {
