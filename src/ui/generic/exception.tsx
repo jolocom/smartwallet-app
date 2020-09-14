@@ -18,6 +18,7 @@ import { NavigationInjectedProps } from 'react-navigation'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { JolocomButton } from '../structure'
 import { routeList } from '../../routeList'
+import { BP } from 'src/styles/breakpoints'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props
@@ -62,8 +63,12 @@ const styles = StyleSheet.create({
   },
   buttonBlock: {
     marginTop: Spacing.LG,
-    flex: 0.8,
-    justifyContent: 'space-evenly',
+    justifyContent: BP<'space-between' | 'space-evenly'>({
+      small: 'space-between',
+      medium: 'space-evenly',
+      large: 'space-evenly',
+    }),
+    flex: BP({ small: 1, medium: 0.8, large: 0.8 }),
   },
 })
 
@@ -89,9 +94,7 @@ export class ExceptionComponent extends React.Component<Props, State> {
   private handleTapBack = (): void => {
     const { navigation } = this.props
     if (navigation) {
-      this.props.navigateBack(
-        navigation?.state?.params?.returnTo,
-      )
+      this.props.navigateBack(navigation?.state?.params?.returnTo)
     }
   }
 
