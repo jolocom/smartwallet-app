@@ -7,7 +7,6 @@ import {
   EstablishChannelRequest,
   FlowType,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { navigatorResetHome } from 'src/actions/navigation'
 import { cancelSSO, scheduleSuccessNotification } from '.'
 
 export const consumeEstablishChannelRequest = (
