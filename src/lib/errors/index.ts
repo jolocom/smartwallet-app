@@ -40,17 +40,18 @@ export class AppError extends Error implements IAppError {
 export const errorTitleMessages = [strings.DAMN, strings.OH_NO, strings.UH_OH]
 
 export function reportError(report: ErrorReport) {
-  let extraData
+  let extraData: Record<string, any> = {
+    UserError: report.userError,
+    UserDescription: report.userDescription,
+    UserContact: report.userContact,
+    sendPrivateData: report.sendPrivateData,
+  }
+
   if (report.error instanceof AppError && report.error.origError) {
-    extraData = {
-      AppError: report.error.message,
-      UserError: report.userError,
-      UserDescription: report.userDescription,
-      UserContact: report.userContact,
-      sendPrivateData: report.sendPrivateData,
-    }
+    extraData.AppError = report.error.message
     report.error = report.error.origError
   }
+
   return reportErrorToSentry(report, extraData)
 }
 

@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   Platform,
   AppStateStatus,
-  Keyboard,
 } from 'react-native'
 
 import I18n from 'src/locales/i18n'
@@ -46,12 +45,6 @@ const Lock: React.FC<LockI> = ({
       setHasError(false)
     }
   }, [pin])
-
-  useEffect(() => {
-    setTimeout(() => {
-      Keyboard.dismiss()
-    }, 3000)
-  }, [])
 
   const handleAppUnlock = () => {
     if (keychainPin === pin) {

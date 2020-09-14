@@ -2,10 +2,15 @@ import * as Sentry from '@sentry/react-native'
 import VersionNumber from 'react-native-version-number'
 import { sentryDSN } from 'src/config'
 import { ErrorReport } from './index'
+import { Platform } from 'react-native'
 
-export function reportErrorToSentry(report: ErrorReport, extraData?: Record<string, unknown>) {
+export function reportErrorToSentry(
+  report: ErrorReport,
+  extraData: Record<string, unknown>,
+) {
   Sentry.withScope(scope => {
-    if (extraData) scope.setExtras(extraData)
+    scope.setExtras(extraData)
+    if (!extraData.sendPrivateData) scope.setUser(null)
     Sentry.captureException(report.error)
   })
 }
@@ -18,6 +23,11 @@ export function initSentry() {
     // disable automatic reporting of errors/rejections without user consent
     integrations: defaultIntegrations =>
       defaultIntegrations.filter(i => i.name !== 'ReactNativeErrorHandlers'),
+
+    // FIXME we disable native integrations on android because we can't cleanup
+    // the even in the beforeEvent handler below, `contexts` is undefined on
+    // android
+    enableNative: Platform.OS !== 'android',
 
     /**
      * @param event
