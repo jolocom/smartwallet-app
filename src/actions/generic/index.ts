@@ -115,25 +115,18 @@ export const setDisableLock = (value: boolean) => ({
 
 export const lockApp = (
 ): ThunkAction => async (dispatch, getState) => {
+  // if the lock is globally disabled, then this action has no effect
   if (getState().generic.disableLock) return
 
-  dispatch(setLocked(true))
-
-  dispatch(navigationActions.navigate({
-    routeName: routeList.Lock
-  }))
-
+  // otherwise we lock the app, using the appropriate lock screen
   const keychainPin = await Keychain.getGenericPassword({
     service: PIN_SERVICE,
   })
+  const lockScreen = keychainPin ? routeList.Lock : routeList.RegisterPIN
 
-  if (!keychainPin) {
-    dispatch(
-      navigationActions.navigate(
-        { routeName: routeList.RegisterPIN },
-      )
-    )
-  }
+  dispatch(setLocked(true))
+  return dispatch(navigationActions.navigate({ routeName: lockScreen }))
+
 }
 
 export const unlockApp = (

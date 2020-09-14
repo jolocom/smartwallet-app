@@ -65,7 +65,7 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   if (recovered) {
     const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
     await resetServiceValuesInKeychain()
-    dispatch(navigationActions.navigateBackHome())
+    dispatch(navigationActions.navigatorResetHome())
   }
 
   // we re-lock the app, which will trigger the create pin screen
