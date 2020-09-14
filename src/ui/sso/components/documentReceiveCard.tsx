@@ -12,7 +12,7 @@ import {
   DocumentCard,
 } from '../../documents/components/documentCard'
 import React, { useRef, useState } from 'react'
-import Interactable, { ISnapEvent } from 'react-native-interactable'
+import Interactable, { IDragEvent, ISnapEvent } from 'react-native-interactable'
 import { Colors, Typefaces } from '../../../styles'
 import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
@@ -71,22 +71,41 @@ export const DocumentReceiveCard = (props: Props) => {
   const [translationX] = useState(new Animated.Value(leftSnap))
   const viewRef = useRef(null)
 
-  const onPressCard = () => {
+  const onUnselect = () => {
     // @ts-ignore
     viewRef.current.snapTo({ index: 0 })
+    setTimeout(() => {
+      Animated.timing(scaleValue, {
+        toValue: initScale,
+        duration: 100,
+      }).start(onToggle)
+    }, 50)
+  }
+
+  const onSelect = () => {
+    // @ts-ignore
+    Vibration.vibrate(10)
     Animated.timing(scaleValue, {
-      toValue: initScale,
+      toValue: finScale,
       duration: 100,
     }).start(onToggle)
   }
 
-  const onSnap = (event: ISnapEvent) => {
-    if (event.nativeEvent.index === 1) {
-      Vibration.vibrate(10)
-      Animated.timing(scaleValue, {
-        toValue: finScale,
-        duration: 100,
-      }).start(onToggle)
+  //NOTE: using @onDrag instead of @onSnap b/c on iOS the snap event is delayed
+  const onDrag = ({ nativeEvent: { x } }: IDragEvent) => {
+    //NOTE: 20 is subtracted from the centerSnap position to not trigger the @onSnap handler
+    if (!selected && x > centerSnap - 20) {
+      onSelect()
+    } else if (selected) {
+      onUnselect()
+    }
+  }
+
+  //NOTE: @onSnap will fire if the animation/selection wasn't handled by @onDrag.
+  const onSnap = (e: ISnapEvent) => {
+    if (e.nativeEvent.index === 1) {
+      if (!selected) onSelect()
+      else onUnselect()
     }
   }
 
@@ -126,20 +145,20 @@ export const DocumentReceiveCard = (props: Props) => {
                 { scaleY: infoScale },
               ],
             },
-          ]}
-        >
+          ]}>
           <Text style={styles.infoText}>Pull to choose</Text>
         </Animated.View>
       )}
-      <TouchableWithoutFeedback onPress={() => selected && onPressCard()}>
+      <TouchableWithoutFeedback onPress={() => selected && onUnselect()}>
         <Interactable.View
           animatedValueX={translationX}
           ref={viewRef}
           horizontalOnly={true}
           snapPoints={[{ x: leftSnap }, { x: centerSnap }]}
           initialPosition={{ x: leftSnap }}
+          dragEnabled={!invalid}
           onSnap={onSnap}
-          dragEnabled={!invalid && !selected}
+          onDrag={onDrag}
           // NOTE @clauxx this seems to make the stutter more rare
           dragToss={0}
           style={
@@ -150,8 +169,7 @@ export const DocumentReceiveCard = (props: Props) => {
                 transform: [{ scaleX: scaleValue }, { scaleY: scaleValue }],
               },
             ] as any
-          }
-        >
+          }>
           <DocumentCard
             credentialType={type}
             renderInfo={renderInfo}

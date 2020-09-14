@@ -53,10 +53,11 @@ const ErrorReportingContainer = (props: Props) => {
   // hence a navigation prop (navigateTo) would be better than in the error object
   const navigateBack = () => {
     const error = props.navigation?.state?.params?.error
+    const previousScreen = props.navigation?.state.params?.previousScreen
     if (error instanceof AppError) {
       navigateToScreen(error.navigateTo)
     } else {
-      navigateToScreen(routeList.AppInit)
+      navigateToScreen(previousScreen || routeList.AppInit)
     }
   }
 
@@ -70,7 +71,7 @@ const ErrorReportingContainer = (props: Props) => {
       sendPrivateData: toggleState,
     }
 
-    if (navigation && error) {
+    if (navigation) {
       reportError({ ...userReport, error })
       navigateBack()
     }
@@ -82,11 +83,10 @@ const ErrorReportingContainer = (props: Props) => {
         onNavigation={navigateBack}
         isBackButton={isBackButton}
       />
-      <ScrollView>
+      <ScrollView overScrollMode="never">
         <SectionWrapper
           title={I18n.t(strings.TELL_US_THE_PROBLEM)}
-          style={{ marginTop: 14 }}
-        >
+          style={{ marginTop: 14 }}>
           <ChooseIssueSection
             currentInput={currentInput}
             pickedIssue={pickedIssue}

@@ -3,7 +3,7 @@ import { Svg, G, Path } from 'react-native-svg'
 
 export default function MoreIcon() {
   return (
-    <Svg height="16" width="4" viewBox="0 0 4 16">
+    <Svg height="16" width="16" viewBox="0 0 4 16">
       <G fill="none" fillRule="evenodd">
         <Path d="M-4-4H8v24H-4z" />
         <Path
