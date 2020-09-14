@@ -59,7 +59,7 @@ exports[`No scanner permission component matches the snapshot on initial render 
           }
         }
       >
-        Start Process
+        Request permission
       </Text>
     </TouchableOpacity>
   </View>
