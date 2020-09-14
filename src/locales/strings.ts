@@ -245,7 +245,7 @@ export default {
   LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE:
     "Looks like we can't provide this service",
   IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN: 'Is this the right QR code? Try again.',
-  START_PROCESS: 'Start Process',
+  REQUEST_PERMISSION: 'Request permission',
   SEND_ERROR_REPORT: 'Send error report',
   ERROR_REPORT_SENT: 'Error report sent',
   YOU_CAN_SCAN_THE_QR_CODE_NOW: 'You can scan the qr code now!',
