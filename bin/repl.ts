@@ -6,7 +6,7 @@ let s = bmw.storageLib
 let e = require('src/lib/storage/entities')
 let a = require('src/actions')
 
-/****** Cheatsheet ******
+/******* Cheatsheet ******
  *
  * p = _ // put last return value in global variable p
  * store.dispatch(a.registrationActions.createIdentity(crypto.randomBytes(16)))

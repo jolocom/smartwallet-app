@@ -1,11 +1,11 @@
 import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account'
 import I18n from 'src/locales/i18n'
 import { CardWrapper } from 'src/ui/structure'
 import { Spacing, Typography } from 'src/styles'
 import MoreIcon from 'src/resources/svg/MoreIcon'
-import { prepareLabel } from 'src/lib/util'
+import { prepareLabel } from '@jolocom/sdk/js/src/lib/util'
 import { credentialStyles } from './sharedConstants'
 
 interface Props {
@@ -54,9 +54,11 @@ export const CredentialCard: React.FC<Props> = props => {
         ))}
       </View>
       {selfSigned && (
-        <View style={credentialStyles.rightIconArea} onTouchEnd={onPress}>
+        <TouchableOpacity
+          style={credentialStyles.rightIconArea}
+          onPress={onPress}>
           <MoreIcon />
-        </View>
+        </TouchableOpacity>
       )}
     </CardWrapper>
   )

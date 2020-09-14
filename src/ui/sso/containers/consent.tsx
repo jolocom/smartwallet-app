@@ -5,14 +5,16 @@ import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
 import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import {
-  CredentialRequestSummary,
   CredentialVerificationSummary,
-} from '../../../actions/sso/types'
+  CredentialTypeSummary,
+} from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 interface CredentialRequestNavigationParams {
-  isDeepLinkInteraction: boolean
-  credentialRequestDetails: CredentialRequestSummary
+  interactionId: string
+  interactionSummary: InteractionSummary
+  availableCredentials: CredentialTypeSummary[]
 }
 
 interface Props
@@ -31,28 +33,21 @@ const ConsentContainer = (props: Props) => {
     cancelSSO,
     navigation: {
       state: {
-        params: { isDeepLinkInteraction, credentialRequestDetails },
+        params: { interactionId, interactionSummary, availableCredentials },
       },
     },
   } = props
 
   const handleSubmitClaims = (credentials: CredentialVerificationSummary[]) => {
-    sendCredentialResponse(
-      credentials,
-      credentialRequestDetails,
-      isDeepLinkInteraction,
-    )
+    sendCredentialResponse(credentials, interactionId)
   }
 
-  const {
-    availableCredentials,
-    requester,
-    callbackURL,
-  } = credentialRequestDetails
+  const { initiator: issuer } = interactionSummary
+
+  // TODO Instead of "as", use type guards?
   return (
     <ConsentComponent
-      requester={requester}
-      callbackURL={callbackURL}
+      requester={issuer}
       did={currentDid}
       availableCredentials={availableCredentials}
       handleSubmitClaims={handleSubmitClaims}
@@ -68,17 +63,12 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   sendCredentialResponse: (
     credentials: CredentialVerificationSummary[],
-    credentialRequestDetails: CredentialRequestSummary,
-    isDeepLinkInteraction: boolean,
+    interactionId: string,
   ) =>
     dispatch(
       withLoading(
         withErrorScreen(
-          ssoActions.sendCredentialResponse(
-            credentials,
-            credentialRequestDetails,
-            isDeepLinkInteraction,
-          ),
+          ssoActions.sendCredentialResponse(credentials, interactionId),
         ),
       ),
     ),

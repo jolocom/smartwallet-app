@@ -73,9 +73,7 @@ export interface KeyChainInterface {
 const fetch = require('node-fetch')
 const FormData = require('form-data')
 
-export {
-  IpfsStorageAgent as IpfsCustomConnector,
-} from 'node_modules/jolocom-lib/js/ipfs/ipfs'
+export { IpfsStorageAgent as IpfsCustomConnector } from 'node_modules/jolocom-lib/js/ipfs/ipfs'
 
 // default export merge of all default exports
 export default {
@@ -113,15 +111,6 @@ export class Linking {
   static async openURL(url: string) {
     console.log('openURL called with ' + url)
   }
-}
-
-export function initSentry() {
-  console.log('initSentry')
-}
-
-import { ErrorReport } from 'src/lib/errors/types'
-export function reportErrorToSentry(err: ErrorReport) {
-  console.error('reportErrorToSentry:\n', err.error)
 }
 
 export function findBestAvailableLanguage(locales: string[]) {}

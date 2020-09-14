@@ -1,5 +1,5 @@
 import React from 'react'
-import { compareDates } from 'src/lib/util'
+import { compareDates } from '@jolocom/sdk/js/src/lib/util'
 import { Text, Image, View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Spacing, Typography } from 'src/styles'

@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
   ViewStyle,
   TextStyle,
+  Animated,
+  Platform,
 } from 'react-native'
-import { Buttons, Colors } from 'src/styles'
+import { Buttons } from 'src/styles'
 import LinearGradient from 'react-native-linear-gradient'
+import { fontMain } from '../../styles/typography'
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +18,15 @@ const styles = StyleSheet.create({
   },
   text: {
     ...Buttons.buttonStandardText,
+    fontFamily: fontMain,
+    ...Platform.select({
+      ios: {
+        marginTop: 3,
+      },
+    }),
   },
   disabledText: {
-    ...Buttons.buttonDisabledStandardText,
+    opacity: 0.25,
   },
   gradientWrapper: {
     flex: 1,
@@ -48,10 +57,25 @@ export const JolocomButton: React.FC<Props> = props => {
     testID,
   } = props
   const onButtonPress = () => (disabled ? null : onPress())
-  const gradientColors = disabled
-    ? [Colors.disabledButtonBackground, Colors.disabledButtonBackground]
-    : ['rgb(145, 25, 66)', 'rgb(210, 45, 105)']
+  const gradientColors = ['rgb(145, 25, 66)', 'rgb(210, 45, 105)']
   const gradient = transparent ? ['transparent', 'transparent'] : gradientColors
+
+  const opacityDisabled = 0.25
+  const opacityEnabled = 1
+  const [opacityValue] = useState(
+    new Animated.Value(disabled ? opacityDisabled : opacityDisabled),
+  )
+  const animateOpacity = (value: number) => {
+    Animated.timing(opacityValue, {
+      duration: 200,
+      toValue: value,
+      useNativeDriver: true,
+    }).start()
+  }
+
+  useEffect(() => {
+    animateOpacity(disabled ? opacityDisabled : opacityEnabled)
+  }, [disabled])
 
   return (
     <LinearGradient
@@ -61,17 +85,15 @@ export const JolocomButton: React.FC<Props> = props => {
       style={{
         ...styles.container,
         ...containerStyle,
-      }}
-    >
+      }}>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={onButtonPress}
         testID={testID}
-        style={styles.gradientWrapper}
-      >
-        <Text style={[disabled ? styles.disabledText : styles.text, textStyle]}>
-          {text}
-        </Text>
+        style={styles.gradientWrapper}>
+        <Animated.View style={{ opacity: opacityValue }}>
+          <Text style={[styles.text, textStyle]}>{text}</Text>
+        </Animated.View>
       </TouchableOpacity>
     </LinearGradient>
   )

@@ -1,21 +1,25 @@
+import * as Keychain from 'react-native-keychain'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
+
+import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
 import { navigationActions } from 'src/actions/'
+
 import { routeList } from 'src/routeList'
 import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
-} from 'src/lib/util'
-import { cancelReceiving } from '../sso'
+} from '@jolocom/sdk/js/src/lib/util'
 import { ThunkAction } from 'src/store'
-import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { compose } from 'redux'
-import { CredentialMetadataSummary } from '../../lib/storage/storage'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
-import { BackendError } from 'src/backendMiddleware'
+import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
+import { checkTermsOfService } from '../generic'
+import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
 
 export const setDid = (did: string) => ({
@@ -23,9 +27,50 @@ export const setDid = (did: string) => ({
   value: did,
 })
 
+export const setLocalAuth = () => ({
+  type: 'SET_LOCAL_AUTH',
+})
+
+export const openLocalAuth = () => ({
+  type: 'OPEN_LOCAL_AUTH',
+})
+
+export const closeLocalAuth = () => ({
+  type: 'CLOSE_LOCAL_AUTH',
+})
+
 export const setSelected = (claim: DecoratedClaims) => ({
   type: 'SET_SELECTED',
   selected: claim,
+})
+
+export const setPopup = (value: boolean) => ({
+  type: 'SET_POPUP',
+  payload: value,
+})
+
+export const lockApp = () => ({
+  type: 'LOCK_APP',
+})
+
+export const unlockApp = () => ({
+  type: 'UNLOCK_APP',
+})
+
+export const closeLock = () => ({
+  type: 'CLOSE_LOCK',
+})
+
+export const openLock = () => ({
+  type: 'OPEN_LOCK',
+})
+
+export const closePINinstructions = () => ({
+  type: 'CLOSE_PIN_INSTRICTIONS',
+})
+
+export const openPINinstructions = () => ({
+  type: 'OPEN_PIN_INSTRICTIONS',
 })
 
 export const resetSelected = () => ({
@@ -47,11 +92,15 @@ export const checkIdentityExists: ThunkAction = async (
     const identityWallet = await backendMiddleware.prepareIdentityWallet()
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
-    return dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+    await dispatch(setClaimsForDid)
+    await dispatch(checkLocalDeviceAuthSet)
+    await dispatch(checkRecoverySetup)
+    return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {
-    if (!(err instanceof BackendError)) throw err
-
-    if (err.message === BackendError.codes.NoEntropy) {
+    if (
+      err.message === BackendError.codes.NoEntropy ||
+      err.message === BackendError.codes.NoWallet
+    ) {
       // No seed in database, user must register
       // But check if a registration was already in progress
       const isRegistering = getState().registration.loading.isRegistering
@@ -62,6 +111,30 @@ export const checkIdentityExists: ThunkAction = async (
 
       return dispatch(navigationActions.navigate({ routeName }))
     }
+
+    throw err
+  }
+}
+
+export const checkLocalDeviceAuthSet: ThunkAction = async dispatch => {
+  const pin = await Keychain.getGenericPassword({
+    service: PIN_SERVICE,
+  })
+  if (pin) {
+    dispatch(setLocalAuth())
+  } else {
+    dispatch(openLocalAuth())
+  }
+}
+
+export const handleRecoveryBack: ThunkAction = async (dispatch, getState) => {
+  console.log(getState())
+  const state = getState()
+  if (state.account.did.did) {
+    dispatch(openPINinstructions())
+    dispatch(navigationActions.navigate({ routeName: routeList.Home }))
+  } else {
+    dispatch(navigationActions.navigate({ routeName: routeList.Landing }))
   }
 }
 
@@ -108,39 +181,15 @@ export const saveClaim: ThunkAction = async (
   return dispatch(navigationActions.navigatorResetHome())
 }
 
-// TODO Currently only rendering  / adding one
-export const saveExternalCredentials: ThunkAction = async (
-  dispatch,
-  getState,
-  backendMiddleware,
-) => {
-  const { storageLib } = backendMiddleware
-  const externalCredentials = getState().account.claims.pendingExternal
-
-  if (!externalCredentials.offer.length) {
-    return dispatch(cancelReceiving)
-  }
-
-  const cred: SignedCredential = externalCredentials.offer[0].credential
-
-  await storageLib.delete.verifiableCredential(cred.id)
-  await storageLib.store.verifiableCredential(cred)
-  await dispatch(checkRecoverySetup)
-
-  return dispatch(cancelReceiving)
-}
-
-export const toggleLoading = (value: boolean) => ({
-  type: 'SET_LOADING',
-  value,
-})
-
 export const hasExternalCredentials: ThunkAction = async (
   dispatch,
   getState,
   backendMiddleware,
 ) => {
   const { storageLib, identityWallet } = backendMiddleware
+  // TODO FIXME
+  // we only need a count, no need to actually load and deserialize
+  // all of them
   const externalCredentials = await storageLib.get.verifiableCredential({
     issuer: Not(identityWallet.did),
   })

@@ -7,7 +7,6 @@ import { routeList } from '../../../routeList'
 import { navigationActions } from '../../../actions'
 import { Emoji, EmojiSection } from '../components/emojiSection'
 import { JolocomButton, Wrapper } from '../../structure'
-import { styles } from '../styles'
 import { ScrollView } from 'react-native'
 import { ChooseIssueSection } from '../components/chooseIssueSection'
 import { DescriptionSection } from '../components/descriptionSection'
@@ -53,16 +52,17 @@ const ErrorReportingContainer = (props: Props) => {
   // NOTE error reports can show up without an error,
   // hence a navigation prop (navigateTo) would be better than in the error object
   const navigateBack = () => {
-    const { error } = props.navigation.state.params
+    const error = props.navigation?.state?.params?.error
+    const previousScreen = props.navigation?.state.params?.previousScreen
     if (error instanceof AppError) {
       navigateToScreen(error.navigateTo)
     } else {
-      navigateToScreen(routeList.AppInit)
+      navigateToScreen(previousScreen || routeList.AppInit)
     }
   }
 
   const onSubmitReport = () => {
-    const { error } = props.navigation.state.params
+    const error = props.navigation?.state?.params?.error
 
     const userReport = {
       userError: pickedIssue,
@@ -71,23 +71,22 @@ const ErrorReportingContainer = (props: Props) => {
       sendPrivateData: toggleState,
     }
 
-    if (navigation && error) {
+    if (navigation) {
       reportError({ ...userReport, error })
       navigateBack()
     }
   }
 
   return (
-    <Wrapper style={styles.wrapper}>
+    <Wrapper dark>
       <NavigationSection
         onNavigation={navigateBack}
         isBackButton={isBackButton}
       />
-      <ScrollView>
+      <ScrollView overScrollMode="never">
         <SectionWrapper
           title={I18n.t(strings.TELL_US_THE_PROBLEM)}
-          style={{ marginTop: 14 }}
-        >
+          style={{ marginTop: 14 }}>
           <ChooseIssueSection
             currentInput={currentInput}
             pickedIssue={pickedIssue}

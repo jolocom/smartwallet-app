@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux'
 import { did } from 'src/reducers/account/did'
 import { claims } from 'src/reducers/account/claims'
+
 import { loading } from 'src/reducers/account/loading'
+import { appState } from 'src/reducers/account/appState'
+
 import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '../../actions/sso/types'
 
 export interface DecoratedClaims {
@@ -36,18 +38,20 @@ export interface CategorizedClaims {
 export interface ClaimsState {
   readonly selected: DecoratedClaims
   readonly decoratedCredentials: CategorizedClaims
-  readonly pendingExternal: {
-    offeror: IdentitySummary
-    offer: Array<{
-      credential: SignedCredential
-      decoratedClaim: DecoratedClaims
-    }>
-  }
   readonly hasExternalCredentials: boolean
 }
 
 export interface DidState {
   readonly did: string
+}
+
+export interface AppState {
+  isLocalAuthSet: boolean
+  isLocalAuthVisible: boolean
+  isPopup: boolean
+  isAppLocked: boolean
+  isLockVisible: boolean
+  isPINInstructionVisible: boolean
 }
 
 export type LoadingState = boolean
@@ -57,10 +61,12 @@ export interface AccountState {
   did: DidState
   claims: ClaimsState
   loading: LoadingState
+  appState: AppState
 }
 
 export const accountReducer = combineReducers({
   did,
   claims,
   loading,
+  appState,
 })
