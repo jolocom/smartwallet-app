@@ -102,6 +102,16 @@ export const SettingsContainer: React.FC<Props> = props => {
         </SettingSection>
         <SettingSection title={I18n.t(strings.ABOUT)}>
           <SettingItem
+            title={I18n.t(strings.CONTACT_US)}
+            iconName={'message'}
+            onPress={() =>
+              navigate(routeList.ErrorReporting, {
+                previousScreen: routeList.Settings,
+                error: "Contact Us"
+              })
+            }
+          />
+          <SettingItem
             title={I18n.t(strings.PRIVACY_POLICY)}
             iconName={'shield-lock'}
             onPress={() => navigate(routeList.PrivacyPolicy)}
@@ -133,10 +143,11 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   setLocale: (locale: string) =>
     dispatch(withLoading(genericActions.setLocale(locale))),
-  navigate: (route: routeList) =>
+  navigate: (route: routeList, params?: any) =>
     dispatch(
       navigationActions.navigate({
         routeName: route,
+        params,
       }),
     ),
   setupBackup: () => dispatch(withErrorScreen(showSeedPhrase())),

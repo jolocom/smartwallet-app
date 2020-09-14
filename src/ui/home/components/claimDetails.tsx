@@ -7,6 +7,7 @@ import {
   ScrollView,
   Text,
   View,
+  Platform,
 } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { TextInputField } from 'src/ui/home/components/textInputField'
@@ -14,6 +15,8 @@ import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Buttons, Typography, Colors, Spacing } from 'src/styles'
 import { inputFieldValidators } from 'src/utils/validateInput'
+import { NavigationSection } from 'src/ui/errors/components/navigationSection'
+import { Colors as ColorsEnum } from 'src/ui/deviceauth/colors'
 
 const styles = StyleSheet.create({
   scroll: {
@@ -51,6 +54,7 @@ interface Props {
   selectedClaim: DecoratedClaims
   handleClaimInput: (fieldName: string, fieldValue: string) => void
   saveClaim: () => void
+  onBackPress: () => void
 }
 
 interface State {
@@ -154,6 +158,14 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
 
     return (
       <Wrapper>
+        {Platform.OS === 'ios' ? (
+          <NavigationSection
+            isBackButton
+            onNavigation={this.props.onBackPress}
+            backButtonColor={ColorsEnum.black}
+          />
+        ) : null}
+
         <ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>
           <Text style={styles.header}>{I18n.t(credentialType)}</Text>
           <View style={styles.textInputArea}>

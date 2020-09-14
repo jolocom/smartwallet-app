@@ -6,6 +6,7 @@ import {
   ViewStyle,
   TextStyle,
   Animated,
+  Platform,
 } from 'react-native'
 import { Buttons } from 'src/styles'
 import LinearGradient from 'react-native-linear-gradient'
@@ -18,6 +19,11 @@ const styles = StyleSheet.create({
   text: {
     ...Buttons.buttonStandardText,
     fontFamily: fontMain,
+    ...Platform.select({
+      ios: {
+        marginTop: 3,
+      },
+    }),
   },
   disabledText: {
     opacity: 0.25,
@@ -79,14 +85,12 @@ export const JolocomButton: React.FC<Props> = props => {
       style={{
         ...styles.container,
         ...containerStyle,
-      }}
-    >
+      }}>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={onButtonPress}
         testID={testID}
-        style={styles.gradientWrapper}
-      >
+        style={styles.gradientWrapper}>
         <Animated.View style={{ opacity: opacityValue }}>
           <Text style={[styles.text, textStyle]}>{text}</Text>
         </Animated.View>
