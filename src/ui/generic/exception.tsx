@@ -63,12 +63,8 @@ const styles = StyleSheet.create({
   },
   buttonBlock: {
     marginTop: Spacing.LG,
-    justifyContent: BP<'space-between' | 'space-evenly'>({
-      small: 'space-between',
-      medium: 'space-evenly',
-      large: 'space-evenly',
-    }),
-    flex: BP({ small: 1, medium: 0.8, large: 0.8 }),
+    justifyContent: 'space-evenly',
+    height: 150,
   },
 })
 
