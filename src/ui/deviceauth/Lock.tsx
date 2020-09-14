@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   View,
   StyleSheet,
@@ -20,6 +20,8 @@ import { ThunkDispatch } from 'src/store'
 import { genericActions, navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { Wrapper } from '../structure'
+
+import useDisableBackButton from './hooks/useDisableBackButton'
 
 
 interface LockProps extends
@@ -44,6 +46,14 @@ const Lock: React.FC<LockProps> = ({
   }, [pin])
 
   let errorTimeout: number
+
+  useDisableBackButton(
+    useCallback(() => {
+      // don't let react-navigation handle this back button press
+      // if the app is locked and the lock is focused
+      return isLocked && navigation.isFocused()
+    }, [isLocked])
+  )
 
   useEffect(() => {
     if (!isLocked) navigation.goBack()

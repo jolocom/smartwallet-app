@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, StyleSheet, BackHandler } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 
 import I18n from 'src/locales/i18n'
@@ -20,6 +20,7 @@ import { ThunkDispatch } from 'src/store'
 import { genericActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
 import { NavigationInjectedProps } from 'react-navigation'
+import useDisableBackButton from './hooks/useDisableBackButton'
 
 interface PropsI extends
   NavigationInjectedProps,
@@ -35,15 +36,11 @@ const RegisterPIN: React.FC<PropsI> = ({
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
-  useEffect(() => {
+  useDisableBackButton(useCallback(() => {
     // don't let react-navigation handle this back button press if we are
     // focused
-    const handleBack = () => navigation.isFocused()
-    BackHandler.addEventListener('hardwareBackPress', handleBack)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBack)
-    }
-  }, [])
+    return navigation.isFocused()
+  }, []))
 
   const { keyboardHeight } = useKeyboardHeight()
 
