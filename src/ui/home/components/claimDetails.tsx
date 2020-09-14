@@ -14,6 +14,7 @@ import { TextInputField } from 'src/ui/home/components/textInputField'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
 import { Buttons, Typography, Colors, Spacing } from 'src/styles'
+import { inputFieldValidators } from 'src/utils/validateInput'
 import { NavigationSection } from 'src/ui/errors/components/navigationSection'
 import { Colors as ColorsEnum } from 'src/ui/deviceauth/colors'
 
@@ -121,7 +122,12 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     !this.allDataCompleted || this.state.pending
 
   get allDataCompleted() {
-    const { claimData } = this.props.selectedClaim
+    const { claimData, credentialType } = this.props.selectedClaim
+    const validator =
+      inputFieldValidators[credentialType] ||
+      (input => {
+        return true
+      })
     return Object.keys(claimData).every((c, idx, arr) => {
       const fieldName = c.replace(/[0-9]/g, '')
       const isMultiLineField = arr.some(
@@ -129,12 +135,16 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       )
 
       if (isMultiLineField) {
-        const fieldsToCheck = arr.filter(field => field.includes(fieldName))
+        const fieldValuesToCheck = arr
+          .filter(field => field.includes(fieldName))
+          .map(field => claimData[field])
 
-        return fieldsToCheck.some(field => claimData[field].length > 0)
+        // at least one claim of size > 0
+        return
+        fieldValuesToCheck.some(field => field.length > 0) &&
+          fieldValuesToCheck.every(validator)
       }
-
-      return claimData[c].length > 0
+      return claimData[c].length > 0 && validator(claimData[c])
     })
   }
 
