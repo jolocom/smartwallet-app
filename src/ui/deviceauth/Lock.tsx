@@ -77,7 +77,10 @@ const Lock: React.FC<LockI> = ({
               <Btn
                 customTextStyles={{
                   opacity: 0.5,
-                  fontSize: 16,
+                  fontSize: Platform.select({
+                    ios: 20,
+                    android: 16,
+                  }),
                   lineHeight: 22,
                 }}
                 type={BtnTypes.secondary}
