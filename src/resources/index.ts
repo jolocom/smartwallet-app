@@ -29,3 +29,5 @@ export const HistoryIcon = require('./svg/History').default
 export const IdentityIcon = require('./svg/Identity').default
 export const SettingsIcon = require('./svg/Settings').default
 export const CheckmarkSmallIcon = require('./svg/CheckmarkIconSmall').default
+export const ForgotPINInstructions = require('./svg/ForgotPINInstructions')
+  .default
