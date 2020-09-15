@@ -9,6 +9,7 @@ import {
   AuthenticationFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
+import { Wrapper } from '../../structure'
 
 interface Props {
   interactionSummary: InteractionSummary
@@ -64,7 +65,7 @@ export class AuthenticationConsentComponent extends React.Component<
     const { initiator: issuer, state } = this.props.interactionSummary
     const { description } = state as AuthenticationFlowState
     return (
-      <View style={styles.container}>
+      <Wrapper>
         <View style={styles.topSection}>
           <IssuerCard issuer={issuer} style={styles.issuerCard} />
           <View style={styles.authRequestContainer}>
@@ -92,7 +93,7 @@ export class AuthenticationConsentComponent extends React.Component<
             onConfirm={this.handleConfirm}
           />
         </View>
-      </View>
+      </Wrapper>
     )
   }
 }
