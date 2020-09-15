@@ -173,6 +173,7 @@ export const DocumentReceiveCard = (props: Props) => {
             credentialType={type}
             renderInfo={renderInfo}
             invalid={invalid}
+            shadow={true}
           />
         </Interactable.View>
       </TouchableWithoutFeedback>
