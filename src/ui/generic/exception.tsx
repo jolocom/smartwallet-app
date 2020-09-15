@@ -18,7 +18,6 @@ import { NavigationInjectedProps } from 'react-navigation'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { JolocomButton } from '../structure'
 import { routeList } from '../../routeList'
-import { BP } from 'src/styles/breakpoints'
 const errorImage = require('src/resources/img/error_image.png')
 
 interface Props

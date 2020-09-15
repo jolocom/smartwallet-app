@@ -41,9 +41,6 @@ export const initApp: ThunkAction = async (
       if (url) handleDeepLink(url)
     })
 
-    throw new Error(
-      'hfsdhfasdfhadjfhashdfasd akjdfhjashdfjkashdf ajsdhfasjdhfaksdhf ajhajdsfhasf',
-    )
     return ret
   } catch (e) {
     return dispatch(
