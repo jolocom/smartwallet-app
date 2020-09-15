@@ -14,31 +14,33 @@ import strings from '../../locales/strings'
 import { PIN_USERNAME, PIN_SERVICE } from './utils/keychainConsts'
 import { BP } from 'src/styles/breakpoints'
 
-import LocalModal from './LocalModal'
 import { Colors } from './colors'
 import { connect } from 'react-redux'
-import { RootState } from 'src/reducers'
 import { ThunkDispatch } from 'src/store'
-import { accountActions } from 'src/actions'
+import { genericActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
+import { NavigationInjectedProps } from 'react-navigation'
+import useDisableBackButton from './hooks/useDisableBackButton'
 
-interface PropsI {
-  isLocalAuthVisible: boolean
-  closeLocalAuth: () => void
-  setAuth: () => void
-  unlockApplication: () => void
+interface PropsI extends
+  NavigationInjectedProps,
+  ReturnType<typeof mapDispatchToProps> {
 }
 
 const RegisterPIN: React.FC<PropsI> = ({
-  isLocalAuthVisible,
-  closeLocalAuth,
-  setAuth,
   unlockApplication,
+  navigation
 }) => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [passcode, setPasscode] = useState('')
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
+
+  useDisableBackButton(useCallback(() => {
+    // don't let react-navigation handle this back button press if we are
+    // focused
+    return navigation.isFocused()
+  }, []))
 
   const { keyboardHeight } = useKeyboardHeight()
 
@@ -56,10 +58,7 @@ const RegisterPIN: React.FC<PropsI> = ({
       } catch (err) {
         console.log({ err })
       }
-      setAuth()
-      unlockApplication()
-
-      closeLocalAuth()
+      unlockApplication(passcode)
     } else {
       setHasError(true)
     }
@@ -79,7 +78,6 @@ const RegisterPIN: React.FC<PropsI> = ({
   }, [verifiedPasscode])
 
   return (
-    <LocalModal isVisible={isLocalAuthVisible}>
       <ScreenContainer
         customStyles={{
           justifyContent: 'flex-start',
@@ -137,7 +135,6 @@ const RegisterPIN: React.FC<PropsI> = ({
           </AbsoluteBottom>
         )}
       </ScreenContainer>
-    </LocalModal>
   )
 }
 
@@ -157,18 +154,11 @@ const styles = StyleSheet.create({
   },
 })
 
-const mapStateToProps = (state: RootState) => ({
-  isLocalAuthVisible: state.account.appState.isLocalAuthVisible,
-})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  unlockApplication: () => dispatch(accountActions.unlockApp()),
-  setAuth: () => dispatch(accountActions.setLocalAuth()),
-  closeLocalAuth: () => dispatch(accountActions.closeLocalAuth()),
+  unlockApplication: (pin: string) => dispatch(genericActions.unlockApp(pin)),
 })
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
-)(props => {
-  return <RegisterPIN {...props} />
-})
+)(RegisterPIN)
