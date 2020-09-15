@@ -5,6 +5,7 @@ import {
   createAppContainer,
   NavigationRoute,
   NavigationScreenProp,
+  createSwitchNavigator,
 } from 'react-navigation'
 
 import {
@@ -354,7 +355,7 @@ const MainStack = createStackNavigator(
 
 // NOTE: navigatorReset in actions/navigation assumes that there is only 1
 // StackRouter child at the top level
-export const Routes = createAnimatedSwitchNavigator(
+export const Routes = createSwitchNavigator(
   {
     [routeList.AppInit]: {
       screen: AppInit,

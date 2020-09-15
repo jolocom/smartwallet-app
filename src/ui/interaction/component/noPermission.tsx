@@ -73,12 +73,11 @@ export const NoPermissionComponent: FC<Props> = (props: Props) => (
       </Text>
       <TouchableOpacity
         style={styles.enableButtonWrapper}
-        onPress={props.onPressEnable}
-      >
+        onPress={props.onPressEnable}>
         <Text style={styles.enableButtonText}>
           {Platform.select({
             android: I18n.t(strings.ENABLE_CAMERA_ACCESS),
-            ios: I18n.t(strings.START_PROCESS),
+            ios: I18n.t(strings.REQUEST_PERMISSION),
           })}
         </Text>
       </TouchableOpacity>
