@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Colors, Typography, Spacing } from 'src/styles'
+import { Typography, Spacing } from 'src/styles'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import {
   InteractionSummary,
@@ -20,10 +20,6 @@ interface Props {
 interface State {}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundLightMain,
-  },
   topSection: {
     flex: 0.9,
   },
