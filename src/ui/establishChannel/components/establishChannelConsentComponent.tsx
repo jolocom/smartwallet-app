@@ -9,6 +9,7 @@ import {
   EstablishChannelFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
+import { Wrapper } from '../../structure'
 
 interface Props {
   interactionSummary: InteractionSummary
@@ -65,7 +66,7 @@ export class EstablishChannelConsentComponent extends React.Component<
     const { description } = state as EstablishChannelFlowState
 
     return (
-      <View style={styles.container}>
+      <Wrapper>
         <View style={styles.topSection}>
           <IssuerCard issuer={issuer} style={styles.issuerCard} />
           <View style={styles.authRequestContainer}>
@@ -90,7 +91,7 @@ export class EstablishChannelConsentComponent extends React.Component<
             onConfirm={this.handleConfirm}
           />
         </View>
-      </View>
+      </Wrapper>
     )
   }
 }
