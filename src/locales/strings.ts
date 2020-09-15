@@ -163,29 +163,29 @@ const errorCodes = {
 }
 
 const deviceAuth = {
-  ENTER_YOUR_PIN: 'Enter your PIN',
-  FORGOT_YOUR_PIN: 'Forgot your PIN?',
+  ENTER_YOUR_PIN: 'Enter your passcode',
+  FORGOT_YOUR_PIN: 'Forgot your passcode?',
   I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
   SKIP: 'Skip',
-  YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
+  YOUR_PIN_WAS_SET_UP: 'Enter your passcode',
   SETTINGS: 'Settings',
   CANCEL: 'Cancel',
   RESET: 'Reset',
-  CHANGE_PIN: 'Change PIN',
+  CHANGE_PIN: 'Change passcode',
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
-  WRONG_PIN: 'Wrong PIN',
-  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
-  CREATE_PASSCODE: 'Create PIN',
-  VERIFY_PASSCODE: 'Verify PIN',
+  WRONG_PIN: 'Wrong code',
+  PASSWORD_SUCCESSFULLY_CHANGED: 'Passcode changed!\n',
+  CREATE_PASSCODE: 'Create new passcode',
+  VERIFY_PASSCODE: 'Verify passcode',
   IN_ORDER_TO_PROTECT_YOUR_DATA:
-    'In order to protect your data from other users and maintain confidentiality',
+    'Adding an extra layer of security helps prevent unwanted access to your wallet',
   YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
-    'You won’t be able to easily check it again, so please memorise it',
+    'You can change the passcode later by using your secret phrase',
   PINS_DONT_MATCH: "PINs don't match",
   ANY_FUTURE_PASSCODE_RESTORE:
     'Any future passcode restore is possible only with your secret phrase',
-  HOW_TO_CHANGE_PIN: 'How to change your PIN',
+  HOW_TO_CHANGE_PIN: ' How to change your passcode ',
   WE_ARE_SORRY_THAT_YOU_FORGOT:
     'We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!',
   RESTORE_ACCESS: 'Restore access',
