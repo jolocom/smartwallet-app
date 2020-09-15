@@ -2,13 +2,14 @@ import React from 'react'
 import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
-import { Colors, Typography, Spacing } from 'src/styles'
+import { Typography, Spacing } from 'src/styles'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import {
   InteractionSummary,
   EstablishChannelFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
+import { Wrapper } from '../../structure'
 
 interface Props {
   interactionSummary: InteractionSummary
@@ -19,10 +20,6 @@ interface Props {
 interface State {}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundLightMain,
-  },
   topSection: {
     flex: 0.9,
   },
@@ -65,7 +62,7 @@ export class EstablishChannelConsentComponent extends React.Component<
     const { description } = state as EstablishChannelFlowState
 
     return (
-      <View style={styles.container}>
+      <Wrapper>
         <View style={styles.topSection}>
           <IssuerCard issuer={issuer} style={styles.issuerCard} />
           <View style={styles.authRequestContainer}>
@@ -90,7 +87,7 @@ export class EstablishChannelConsentComponent extends React.Component<
             onConfirm={this.handleConfirm}
           />
         </View>
-      </View>
+      </Wrapper>
     )
   }
 }

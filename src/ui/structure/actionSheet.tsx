@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, LayoutChangeEvent, StyleSheet } from 'react-native'
+import { Animated, LayoutChangeEvent, StyleSheet, View } from 'react-native'
 import { Colors } from '../../styles'
+import { overflowBlack } from '../../styles/colors'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -58,6 +59,7 @@ export const ActionSheet: React.FC<Props> = props => {
   })
 
   return (
+
     <Animated.View
       style={{
         ...styles.wrapper,
@@ -66,6 +68,16 @@ export const ActionSheet: React.FC<Props> = props => {
       onLayout={getDimensions}
     >
       {props.children}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: -300,
+          height: 300,
+          left: 0,
+          right: 0,
+          backgroundColor: overflowBlack,
+        }}
+      />
     </Animated.View>
   )
 }
