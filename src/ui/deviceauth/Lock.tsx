@@ -75,6 +75,11 @@ const Lock: React.FC<LockI> = ({
             </View>
             <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
               <Btn
+                customTextStyles={{
+                  opacity: 0.5,
+                  fontSize: 16,
+                  lineHeight: 22,
+                }}
                 type={BtnTypes.secondary}
                 onPress={navigateTorecoveryInstuction}>
                 {I18n.t(strings.FORGOT_YOUR_PIN)}
