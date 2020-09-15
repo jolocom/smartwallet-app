@@ -1,10 +1,13 @@
 import { useContext } from 'react'
+import { Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+
 import {
   InteractionTransportType,
   FlowType,
   CredentialRequestFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { JolocomLib } from 'jolocom-lib'
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
@@ -13,9 +16,7 @@ import { useLoader } from './useLoader'
 import { setInteractionDetails } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { getMappedInteraction, isTypeAttribute } from '~/utils/dataMapping'
-import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { getAllCredentials } from '~/modules/credentials/selectors'
-import { Alert } from 'react-native'
 
 type PreInteractionHandler = (i: Interaction) => boolean
 

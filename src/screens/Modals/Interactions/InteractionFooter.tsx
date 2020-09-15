@@ -7,16 +7,6 @@ import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 
 import { resetInteraction } from '~/modules/interaction/actions'
 import { getIsFullScreenInteraction } from '~/modules/interaction/selectors'
-import {
-  resetInteraction,
-  setIntermediaryState,
-  setAttributeInputKey,
-} from '~/modules/interaction/actions'
-import {
-  getIsFullScreenInteraction,
-  getAttributesToShare,
-  getServiceIssuedCreds,
-} from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'

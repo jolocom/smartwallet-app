@@ -1,6 +1,7 @@
 import { Alert } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { JSONWebToken } from '@jolocom/sdk'
 
 import { getInteractionType } from '~/modules/interaction/selectors'
 import {
@@ -10,7 +11,6 @@ import {
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useCredentialShareFlow } from './useCredentialShareFlow'
 import { useInteraction } from '../sdk'
-import { JSONWebToken } from '@jolocom/sdk'
 import { useSyncCredentials } from '~/hooks/credentials'
 
 const showNotification = (title: string, message?: string) => {
@@ -43,12 +43,12 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   }
 
   if (interactionType === FlowType.Authentication) {
-    return async function authenticate() {
+    return async () => {
       const authResponse = await interaction.createAuthenticationResponse()
       submitAuth(authResponse)
     }
   } else if (interactionType === FlowType.Authorization) {
-    return async function authorize() {
+    return async () => {
       const authzResponse = await interaction.createAuthorizationResponse()
       submitAuth(authzResponse)
     }
