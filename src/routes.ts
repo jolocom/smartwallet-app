@@ -198,18 +198,26 @@ const MainStack = createStackNavigator(
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
+
+    // The following two screens "lock" the app, and should not show
+    // notifications or allow using the "navigate back" gesture
     [routeList.Lock]: {
       screen: Lock,
       navigationOptions: {
-        gestureEnabled: false
+        gestureEnabled: false,
+        // @ts-ignore
+        notifications: NotificationFilter.none,
       }
     },
     [routeList.RegisterPIN]: {
       screen: RegisterPIN,
       navigationOptions: {
-        gestureEnabled: false
+        gestureEnabled: false,
+        // @ts-ignore
+        notifications: NotificationFilter.none,
       }
     },
+
     [routeList.HowToChangePIN]: {
       screen: HowToChangePIN,
     },
