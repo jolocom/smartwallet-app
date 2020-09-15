@@ -35,9 +35,6 @@ Array [
     "type": "SET_CLAIMS_FOR_DID",
   },
   Object {
-    "type": "SET_LOCAL_AUTH",
-  },
-  Object {
     "type": "HAS_EXTERNAL_CREDENTIALS",
     "value": true,
   },
@@ -47,6 +44,14 @@ Array [
       "onSubmit": undefined,
     },
     "routeName": "TermsOfServiceConsent",
+    "type": "Navigation/NAVIGATE",
+  },
+  Object {
+    "type": "APPWRAP_SET_LOCKED",
+    "value": true,
+  },
+  Object {
+    "routeName": "Lock",
     "type": "Navigation/NAVIGATE",
   },
 ]
