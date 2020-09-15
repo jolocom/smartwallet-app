@@ -1,4 +1,4 @@
-name: Run tests for SW 2.0:
+name: Run tests for SW 2.0
 
 on: [push]
 
