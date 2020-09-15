@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Account recovery actions should correctly restore access for forgotten pin 1`] = `
+Array [
+  Object {
+    "actions": Array [
+      Object {
+        "routeName": "Home",
+        "type": "Navigation/NAVIGATE",
+      },
+    ],
+    "index": 0,
+    "key": null,
+    "type": "Navigation/RESET",
+  },
+  Object {
+    "type": "APPWRAP_SET_LOCKED",
+    "value": true,
+  },
+  Object {
+    "routeName": "RegisterPIN",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;
+
+exports[`Account recovery actions should not restore access for incorrect mnemonic 1`] = `
+Array [
+  Object {
+    "type": "APPWRAP_SET_LOCKED",
+    "value": true,
+  },
+  Object {
+    "routeName": "Lock",
+    "type": "Navigation/NAVIGATE",
+  },
+]
+`;

@@ -8,7 +8,7 @@ import { recoverIdentity } from '../../../actions/registration'
 import { TextInput } from 'react-native'
 import { timeout } from '../../../utils/asyncTimeout'
 import { RootState } from '../../../reducers'
-import { accountActions, recoveryActions } from 'src/actions'
+import { navigationActions, recoveryActions } from 'src/actions'
 import { NavigationInjectedProps } from 'react-navigation'
 
 export enum WordState {
@@ -172,9 +172,9 @@ const mapStateToProps = (state: RootState) => ({
   seedPhraseSaved: state.settings.seedPhraseSaved,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  recoverIdentity: (seedPhrase: string) =>
-    dispatch(withErrorScreen(recoverIdentity(seedPhrase))),
-  goBack: () => dispatch(accountActions.handleRecoveryBack),
+  recoverIdentity: (mnemonic: string) =>
+    dispatch(withErrorScreen(recoverIdentity(mnemonic))),
+  goBack: () => dispatch(navigationActions.navigateBack()),
   handleRestoreAccess: (mnemonic: string[]) =>
     dispatch(recoveryActions.onRestoreAccess(mnemonic)),
 })
