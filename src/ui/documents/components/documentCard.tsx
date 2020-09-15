@@ -27,6 +27,7 @@ interface DocumentCardProps {
   expires?: Date
   invalid?: boolean
   transform?: any
+  shadow?: boolean
 }
 
 const styles = StyleSheet.create({
@@ -36,7 +37,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 12,
     overflow: 'hidden',
-    elevation: 12,
   },
   cardBack: {
     position: 'absolute',
@@ -82,10 +82,13 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
     credentialType,
     expires,
     invalid,
+    shadow = false,
   } = props
   const { background = undefined, logo = undefined, text = undefined } =
     renderInfo || {}
-  const cardBackground = invalid ? InvalidDocumentBackground : {uri: background?.url}
+  const cardBackground = invalid
+    ? InvalidDocumentBackground
+    : { uri: background?.url }
 
   /**
    * NOTE @clauxx: Using .gif as background images causes inconsistencies with border radius and
@@ -97,8 +100,8 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
       style={[
         styles.card,
         !background && { borderColor: Colors.sand },
-      ]}
-    >
+        shadow && { elevation: 12 },
+      ]}>
       <ImageBackground
         borderRadius={12}
         style={[
@@ -114,8 +117,10 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
       <View style={styles.cardContent}>
         <Text
           numberOfLines={2}
-          style={[styles.documentType, { color: invalid ? 'rgb(182, 182, 182)' : text && text.color }]}
-        >
+          style={[
+            styles.documentType,
+            { color: invalid ? 'rgb(182, 182, 182)' : text && text.color },
+          ]}>
           {credentialType || (claimData && claimData.type)}
         </Text>
         {claimData && (
