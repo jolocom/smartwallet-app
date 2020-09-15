@@ -9,8 +9,6 @@ import {
 } from 'react-navigation'
 
 import {
-  //StackViewTransitionConfigs,
-  //NavigationStackOptions,
   createStackNavigator,
 } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
@@ -32,6 +30,11 @@ import { AppInit } from './ui/generic/appInit'
 import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
 import ChangePIN from './ui/deviceauth/ChangePIN'
+
+import Lock from './ui/deviceauth/Lock'
+import RegisterPIN from './ui/deviceauth/RegisterPIN'
+import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
+
 
 import {
   DocsIcon,
@@ -66,7 +69,7 @@ const headerBackImage = createElement(Image, {
 })
 
 const noHeaderNavOpts = {
-  header: null,
+  headerShown: false,
 }
 
 const headerTitleStyle: StyleProp<TextStyle> = {
@@ -195,20 +198,32 @@ const MainStack = createStackNavigator(
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
+    [routeList.Lock]: {
+      screen: Lock,
+      navigationOptions: {
+        gestureEnabled: false
+      }
+    },
+    [routeList.RegisterPIN]: {
+      screen: RegisterPIN,
+      navigationOptions: {
+        gestureEnabled: false
+      }
+    },
+    [routeList.HowToChangePIN]: {
+      screen: HowToChangePIN,
+    },
     [routeList.ChangePIN]: {
       screen: ChangePIN,
-      navigationOptions: {
-        gesturesEnabled: false,
-      },
     },
     [routeList.InputSeedPhrasePin]: {
       screen: InputSeedPhrase,
+      // @ts-ignore
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
       },
@@ -258,7 +273,6 @@ const MainStack = createStackNavigator(
     [routeList.SeedPhrase]: {
       screen: SeedPhrase,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -266,7 +280,6 @@ const MainStack = createStackNavigator(
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -274,7 +287,6 @@ const MainStack = createStackNavigator(
     [routeList.TermsOfService]: {
       screen: TermsOfService,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
       },
@@ -282,7 +294,6 @@ const MainStack = createStackNavigator(
     [routeList.PrivacyPolicy]: {
       screen: PrivacyPolicy,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
       },
@@ -290,7 +301,6 @@ const MainStack = createStackNavigator(
     [routeList.Impressum]: {
       screen: Impressum,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
       },
@@ -298,7 +308,6 @@ const MainStack = createStackNavigator(
     [routeList.Exception]: {
       screen: Exception,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -306,7 +315,6 @@ const MainStack = createStackNavigator(
     [routeList.ErrorReporting]: {
       screen: ErrorReporting,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -319,7 +327,6 @@ const MainStack = createStackNavigator(
       [routeList.NotificationScheduler]: {
         screen: NotificationScheduler,
         navigationOptions: {
-          ...noHeaderNavOpts,
           // @ts-ignore
           notifications: NotificationFilter.all,
         },

@@ -3,7 +3,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
-import { navigationActions } from 'src/actions/'
+import { navigationActions, genericActions } from 'src/actions/'
 
 import { routeList } from 'src/routeList'
 import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
@@ -93,9 +93,10 @@ export const checkIdentityExists: ThunkAction = async (
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
     await dispatch(setClaimsForDid)
-    await dispatch(checkLocalDeviceAuthSet)
+    //await dispatch(checkLocalDeviceAuthSet)
     await dispatch(checkRecoverySetup)
-    return dispatch(checkTermsOfService(routeList.Home))
+    await dispatch(checkTermsOfService(routeList.Home))
+    return dispatch(genericActions.lockApp())
   } catch (err) {
     if (
       err.message === BackendError.codes.NoEntropy ||
