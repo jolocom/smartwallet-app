@@ -1,5 +1,4 @@
 import React from 'react'
-import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
@@ -9,11 +8,12 @@ import {
   InteractionSummary,
   EstablishChannelFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { ButtonSheet } from 'src/ui/structure/buttonSheet'
 
 interface Props {
   interactionSummary: InteractionSummary
-  confirmEstablishChannelRequest: Function
-  cancelEstablishChannelRequest: Function
+  confirmEstablishChannelRequest: () => void
+  cancelEstablishChannelRequest: () => void
 }
 
 interface State {}
@@ -73,20 +73,21 @@ export class EstablishChannelConsentComponent extends React.Component<
               {I18n.t(strings.CONNECTION_DESCRIPTION)}
             </Text>
             <Text
-              style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
-            >
+              style={[
+                styles.authRequestText,
+                { fontSize: Typography.text4XL },
+              ]}>
               {description}
             </Text>
           </View>
         </View>
         <View style={styles.buttonSection}>
-          <ButtonSection
-            disabled={this.state.pending}
-            denyDisabled={this.state.pending}
-            confirmText={I18n.t(strings.AUTHORIZE)}
-            denyText={I18n.t(strings.DENY)}
-            handleConfirm={this.handleConfirm}
-            handleDeny={() => this.props.cancelEstablishChannelRequest()}
+          <ButtonSheet
+            disabledConfirm={this.state.pending}
+            confirmText={strings.AUTHORIZE}
+            cancelText={strings.DENY}
+            onCancel={this.props.cancelEstablishChannelRequest}
+            onConfirm={this.handleConfirm}
           />
         </View>
       </View>
