@@ -69,7 +69,7 @@ export interface AuthenticationDetailsI extends InteractionCommonI {
 export interface AuthorizationDetailsI extends InteractionCommonI {
   flowType: FlowType.Authorization
   description?: string
-  image?: string
+  imageURL?: string
   action: string
 }
 

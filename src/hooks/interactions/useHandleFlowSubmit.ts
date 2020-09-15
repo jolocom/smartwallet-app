@@ -9,6 +9,8 @@ import {
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useCredentialShareFlow } from './useCredentialShareFlow'
+import { useInteraction } from '../sdk'
+import { JSONWebToken } from '@jolocom/sdk'
 import { useSyncCredentials } from '~/hooks/credentials'
 
 const showNotification = (title: string, message?: string) => {
@@ -29,15 +31,26 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     checkDuplicates,
   } = useCredentialOfferFlow()
   const { assembleShareResponseToken } = useCredentialShareFlow()
+  const interaction = useInteraction()
   const syncCredentials = useSyncCredentials()
+
+  const submitAuth = async (
+    token: JSONWebToken<{ [key: string]: string } | any>,
+  ) => {
+    await interaction.processInteractionToken(token)
+    await interaction.send(token)
+    dispatch(resetInteraction())
+  }
 
   if (interactionType === FlowType.Authentication) {
     return async function authenticate() {
-      // TODO: add onAuthenticate functionality here
+      const authResponse = await interaction.createAuthenticationResponse()
+      submitAuth(authResponse)
     }
   } else if (interactionType === FlowType.Authorization) {
     return async function authorize() {
-      // TODO: add onAuthorization functionality here
+      const authzResponse = await interaction.createAuthorizationResponse()
+      submitAuth(authzResponse)
     }
   } else if (interactionType === FlowType.CredentialShare) {
     return async () => {
