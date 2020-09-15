@@ -2,12 +2,16 @@ import { accountActions } from 'src/actions/'
 import data from './mockRegistrationData'
 import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
-import { createMockStore } from 'tests/utils'
+import { createMockStore, RecursivePartial } from 'tests/utils'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
 
 describe('Account action creators', () => {
-  const initialState: Partial<RootState> = {
+  const initialState: RecursivePartial<RootState> = {
+    generic: {
+      locked: false,
+      disableLock: false
+    },
     registration: {
       loading: {
         loadingMsg: '',

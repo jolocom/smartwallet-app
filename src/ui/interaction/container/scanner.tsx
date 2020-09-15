@@ -29,7 +29,7 @@ import { Wrapper } from 'src/ui/structure'
 
 interface Props extends NavigationInjectedProps {
   consumeToken: (jwt: string) => Promise<any>
-  registerPopup: () => void
+  setDisableLock: (val: boolean) => void
 }
 
 const CAMERA_PERMISSION = Platform.select({
@@ -67,7 +67,6 @@ export const ScannerContainer: React.FC<Props> = props => {
       listener = navigation.addListener('didFocus', () => {
         setShowCamera(true)
         rerender()
-        checkCameraPermissions()
       })
     }
     checkCameraPermissions()
@@ -90,9 +89,12 @@ export const ScannerContainer: React.FC<Props> = props => {
   }
 
   const requestCameraPermission = async () => {
-    props.registerPopup()
+    // we disable the app lock while getting permissions so that user is not
+    // locked out on returning to app
+    props.setDisableLock(true)
     const permission = await request(CAMERA_PERMISSION)
     setPermission(permission)
+    props.setDisableLock(false)
   }
 
   const tryOpenSettings = () => {
