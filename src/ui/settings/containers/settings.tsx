@@ -63,7 +63,7 @@ export const SettingsContainer: React.FC<Props> = props => {
               iconName={'bell-ring'}
             />
             <SettingItem
-              title="Change PIN"
+              title={I18n.t(strings.CHANGE_PIN)}
               onPress={() => navigate(routeList.ChangePIN)}
               iconName="bell-ring"
             />
