@@ -103,9 +103,8 @@ export const DocumentReceiveCard = (props: Props) => {
 
   //NOTE: @onSnap will fire if the animation/selection wasn't handled by @onDrag.
   const onSnap = (e: ISnapEvent) => {
-    if (e.nativeEvent.index === 1) {
-      if (!selected) onSelect()
-      else onUnselect()
+    if (e.nativeEvent.index === 1 && selected) {
+      onUnselect()
     }
   }
 
@@ -174,6 +173,7 @@ export const DocumentReceiveCard = (props: Props) => {
             credentialType={type}
             renderInfo={renderInfo}
             invalid={invalid}
+            shadow={true}
           />
         </Interactable.View>
       </TouchableWithoutFeedback>

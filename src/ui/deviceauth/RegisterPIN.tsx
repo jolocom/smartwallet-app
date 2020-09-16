@@ -14,31 +14,33 @@ import strings from '../../locales/strings'
 import { PIN_USERNAME, PIN_SERVICE } from './utils/keychainConsts'
 import { BP } from 'src/styles/breakpoints'
 
-import LocalModal from './LocalModal'
 import { Colors } from './colors'
 import { connect } from 'react-redux'
-import { RootState } from 'src/reducers'
 import { ThunkDispatch } from 'src/store'
-import { accountActions } from 'src/actions'
+import { genericActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
+import { NavigationInjectedProps } from 'react-navigation'
+import useDisableBackButton from './hooks/useDisableBackButton'
+import { Wrapper } from '../structure'
+import PasscodeWrapper from './components/PasscodeWrapper'
 
-interface PropsI {
-  isLocalAuthVisible: boolean
-  closeLocalAuth: () => void
-  setAuth: () => void
-  unlockApplication: () => void
-}
+interface PropsI
+  extends NavigationInjectedProps,
+    ReturnType<typeof mapDispatchToProps> {}
 
-const RegisterPIN: React.FC<PropsI> = ({
-  isLocalAuthVisible,
-  closeLocalAuth,
-  setAuth,
-  unlockApplication,
-}) => {
+const RegisterPIN: React.FC<PropsI> = ({ unlockApplication, navigation }) => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [passcode, setPasscode] = useState('')
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
+
+  useDisableBackButton(
+    useCallback(() => {
+      // don't let react-navigation handle this back button press if we are
+      // focused
+      return navigation.isFocused()
+    }, []),
+  )
 
   const { keyboardHeight } = useKeyboardHeight()
 
@@ -56,12 +58,13 @@ const RegisterPIN: React.FC<PropsI> = ({
       } catch (err) {
         console.log({ err })
       }
-      setAuth()
-      unlockApplication()
-
-      closeLocalAuth()
+      unlockApplication(passcode)
     } else {
       setHasError(true)
+      setTimeout(() => {
+        setVerifiedPasscode('')
+        setHasError(false)
+      }, 700)
     }
   }
 
@@ -79,11 +82,8 @@ const RegisterPIN: React.FC<PropsI> = ({
   }, [verifiedPasscode])
 
   return (
-    <LocalModal isVisible={isLocalAuthVisible}>
-      <ScreenContainer
-        customStyles={{
-          justifyContent: 'flex-start',
-        }}>
+    <Wrapper dark>
+      <PasscodeWrapper customStyles={{ paddingTop: 38 }}>
         <View>
           <Header color={Colors.white90}>
             {isCreating
@@ -93,7 +93,7 @@ const RegisterPIN: React.FC<PropsI> = ({
           <Paragraph
             color={Colors.white70}
             size={ParagraphSizes.medium}
-            customStyles={{ marginHorizontal: 5, opacity: 0.8 }}>
+            customStyles={{ opacity: 0.8, marginHorizontal: 15, marginTop: 8 }}>
             {isCreating
               ? I18n.t(strings.IN_ORDER_TO_PROTECT_YOUR_DATA)
               : I18n.t(strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN)}
@@ -116,28 +116,20 @@ const RegisterPIN: React.FC<PropsI> = ({
             />
           )}
         </View>
-        {isCreating && (
+        {isCreating ? (
           <Paragraph
             size={ParagraphSizes.medium}
             color={Colors.success}
-            customStyles={{ marginTop: 20 }}>
+            customStyles={{ marginTop: 20, marginHorizontal: 30 }}>
             {I18n.t(strings.ANY_FUTURE_PASSCODE_RESTORE)}
           </Paragraph>
+        ) : (
+          <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
+            {I18n.t(strings.RESET)}
+          </Btn>
         )}
-        {hasError && (
-          <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
-            {I18n.t(strings.PINS_DONT_MATCH)}
-          </Paragraph>
-        )}
-        {!isCreating && (
-          <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
-            <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {I18n.t(strings.RESET)}
-            </Btn>
-          </AbsoluteBottom>
-        )}
-      </ScreenContainer>
-    </LocalModal>
+      </PasscodeWrapper>
+    </Wrapper>
   )
 }
 
@@ -157,18 +149,8 @@ const styles = StyleSheet.create({
   },
 })
 
-const mapStateToProps = (state: RootState) => ({
-  isLocalAuthVisible: state.account.appState.isLocalAuthVisible,
-})
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  unlockApplication: () => dispatch(accountActions.unlockApp()),
-  setAuth: () => dispatch(accountActions.setLocalAuth()),
-  closeLocalAuth: () => dispatch(accountActions.closeLocalAuth()),
+  unlockApplication: (pin: string) => dispatch(genericActions.unlockApp(pin)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(props => {
-  return <RegisterPIN {...props} />
-})
+export default connect(null, mapDispatchToProps)(RegisterPIN)
