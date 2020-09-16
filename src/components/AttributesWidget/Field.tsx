@@ -3,7 +3,7 @@ import {
   TouchableWithoutFeedback,
   View,
   TouchableOpacity,
-  ViewStyle,
+  StyleSheet,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
@@ -52,7 +52,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
     case FieldTypes.isSelectable:
       return (
         <TouchableWithoutFeedback onPress={onSelect}>
-          <View style={styles.field as ViewStyle}>
+          <View style={styles.field}>
             <JoloText
               kind={JoloTextKind.subtitle}
               size="mini"
@@ -72,7 +72,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
       )
     case FieldTypes.isStatic:
       return (
-        <View style={styles.field as ViewStyle}>
+        <View style={styles.field}>
           <JoloText
             kind={JoloTextKind.subtitle}
             size="mini"
@@ -85,7 +85,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
     case FieldTypes.isEmpty:
       return (
         <TouchableOpacity onPress={onCreateNewOne}>
-          <View style={styles.field as ViewStyle}>
+          <View style={styles.field}>
             <JoloText
               kind={JoloTextKind.subtitle}
               size="mini"
@@ -101,7 +101,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   field: {
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -125,6 +125,6 @@ const styles = {
   selected: {
     backgroundColor: Colors.success,
   },
-}
+})
 
 export default Field
