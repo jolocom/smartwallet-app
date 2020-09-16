@@ -33,7 +33,7 @@ const HowToChangePIN: React.FC<PropsI> = ({
       }}>
       <PasscodeWrapper
         customStyles={{
-          paddingTop: BP({ small: 30, medium: 50, large: 50 }),
+          paddingTop: BP({ small: 20, medium: 30, large: 50 }),
           paddingHorizontal: BP({ small: 16, medium: 20, large: 30 }),
         }}>
         <Header
@@ -47,7 +47,7 @@ const HowToChangePIN: React.FC<PropsI> = ({
         <Paragraph
           color={Colors.white80}
           customStyles={{
-            marginTop: 24,
+            marginTop: BP({ small: 0, medium: 12, large: 24 }),
             fontSize: BP({ small: 16, medium: 16, large: 20 }),
             lineHeight: BP({ small: 18, medium: 18, large: 22 }),
             alignSelf: 'flex-start',
@@ -68,9 +68,9 @@ const HowToChangePIN: React.FC<PropsI> = ({
         </Paragraph>
         <View
           style={{
-            transform: [{ scale: BP({ small: 0.75, medium: 1, large: 1 }) }],
+            transform: [{ scale: BP({ small: 0.7, medium: 1, large: 1 }) }],
             position: 'absolute',
-            bottom: BP({ small: -70, medium: -50, large: -50 }),
+            bottom: BP({ small: -80, medium: -70, large: -50 }),
           }}>
           <RecoveryInstructions />
         </View>
