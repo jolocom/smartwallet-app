@@ -6,6 +6,7 @@ import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenHeader from '~/components/ScreenHeader'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface RecoveryHeaderI {
   phrase: string[]
@@ -31,7 +32,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
       <View style={styles.header}>
         {phrase.length ? (
           <>
-            <JoloText kind={JoloTextKind.title} size="middle">
+            <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
               {currentWordIdx === phrase.length
                 ? phrase.length
                 : currentWordIdx + 1}
@@ -41,7 +42,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
               {phrase.map((seedKey: string, idx: number) => (
                 <JoloText
                   kind={JoloTextKind.title}
-                  size="middle"
+                  size={JoloTextSizes.middle}
                   key={seedKey + idx}
                   color={
                     currentWordIdx === 12

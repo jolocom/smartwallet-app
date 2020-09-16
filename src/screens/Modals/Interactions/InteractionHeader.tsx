@@ -10,6 +10,7 @@ import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionTitle from './hooks/useInteractionTitle'
 import useInteractionDescription from './hooks/useInteractionDescription'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface PropsI {
   title?: string
@@ -30,14 +31,14 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
     <View>
       <JoloText
         kind={JoloTextKind.title}
-        size="middle"
+        size={JoloTextSizes.middle}
         weight={JoloTextWeight.normal}
       >
         {title || interactionTitle}
       </JoloText>
       <JoloText
         kind={JoloTextKind.subtitle}
-        size="mini"
+        size={JoloTextSizes.mini}
         color={isAnonymous ? Colors.error : Colors.white70}
         customStyles={{
           paddingHorizontal: 16,

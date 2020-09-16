@@ -26,6 +26,7 @@ import { useDispatch } from 'react-redux'
 import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const Biometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
@@ -66,7 +67,7 @@ const Biometry: React.FC = () => {
       />
       <JoloText
         kind={JoloTextKind.subtitle}
-        size="middle"
+        size={JoloTextSizes.middle}
         color={Colors.success}
         customStyles={{ paddingHorizontal: 25 }}
       >

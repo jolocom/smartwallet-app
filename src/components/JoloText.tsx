@@ -4,7 +4,7 @@ import { Colors } from '~/utils/colors'
 import {
   titleFontStyles,
   subtitleFontStyles,
-  TitleSizes,
+  JoloTextSizes,
   Fonts,
 } from '~/utils/fonts'
 
@@ -20,7 +20,7 @@ export enum JoloTextWeight {
 
 interface PropsI {
   kind: JoloTextKind
-  size: TitleSizes
+  size: JoloTextSizes
   weight?: JoloTextWeight
   color?: Colors
   customStyles?: TextStyle | Animated.WithAnimatedValue<TextStyle>

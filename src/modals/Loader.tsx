@@ -16,6 +16,7 @@ import useDelay from '~/hooks/useDelay'
 import { dismissLoader } from '~/modules/loader/actions'
 import { isAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const colors: { [x: string]: Colors } = {
   default: Colors.white70,
@@ -161,7 +162,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
         {renderLoaderType()}
         <JoloText
           kind={JoloTextKind.subtitle}
-          size="big"
+          size={JoloTextSizes.big}
           color={Colors.white80}
         >
           {status}

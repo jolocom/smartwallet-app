@@ -16,7 +16,7 @@ import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import { TextStyle } from '~/utils/fonts'
+import { JoloTextSizes, TextStyle } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
@@ -195,7 +195,7 @@ const SeedPhrase: React.FC = () => {
     <Animated.View style={[styles.info, { opacity: infoOpacity }]}>
       <JoloText
         kind={JoloTextKind.subtitle}
-        size="middle"
+        size={JoloTextSizes.middle}
         color={Colors.white70}
         customStyles={{ opacity: 0.7 }}
       >
@@ -209,7 +209,7 @@ const SeedPhrase: React.FC = () => {
       <Animated.View style={[{ opacity: buttonOpacity }]}>
         <JoloText
           kind={JoloTextKind.subtitle}
-          size="middle"
+          size={JoloTextSizes.middle}
           color={Colors.white}
           customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}
         >

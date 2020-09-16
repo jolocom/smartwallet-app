@@ -31,6 +31,7 @@ import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
@@ -159,7 +160,7 @@ const Camera = () => {
                 <JoloText
                   animated
                   kind={JoloTextKind.subtitle}
-                  size="middle"
+                  size={JoloTextSizes.middle}
                   customStyles={{
                     width: MARKER_SIZE,
                     color: Colors.error,
@@ -171,7 +172,7 @@ const Camera = () => {
               ) : (
                 <JoloText
                   kind={JoloTextKind.subtitle}
-                  size="middle"
+                  size={JoloTextSizes.middle}
                   customStyles={{ width: MARKER_SIZE }}
                 >
                   {

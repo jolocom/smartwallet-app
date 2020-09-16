@@ -12,6 +12,7 @@ import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const SeedPhraseRepeat: React.FC = () => {
   const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
@@ -42,7 +43,7 @@ const SeedPhraseRepeat: React.FC = () => {
 
   return (
     <ScreenContainer>
-      <JoloText kind={JoloTextKind.title} size="big">
+      <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
         Seed Phrase Repeat
       </JoloText>
       <Btn onPress={onSubmitIdentity}>Done</Btn>

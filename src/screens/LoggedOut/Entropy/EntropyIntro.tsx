@@ -5,18 +5,19 @@ import { HandAnimation } from '~/components/HandAnimation'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 export const EntropyIntro: React.FC = () => {
   return (
     <View style={styles.container}>
       <HandAnimation />
       <View style={styles.textContainer}>
-        <JoloText kind={JoloTextKind.title} size="middle">
+        <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
           {strings.SET_UP_YOUR_IDENTITY}
         </JoloText>
         <JoloText
           kind={JoloTextKind.subtitle}
-          size="middle"
+          size={JoloTextSizes.middle}
           color={Colors.white70}
           customStyles={{ opacity: 0.8 }}
         >

@@ -20,6 +20,7 @@ import BP from '~/utils/breakpoints'
 import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -113,7 +114,7 @@ const Passcode = () => {
         {isCreating && (
           <JoloText
             kind={JoloTextKind.subtitle}
-            size="middle"
+            size={JoloTextSizes.middle}
             color={Colors.success}
             customStyles={{ marginTop: 20 }}
           >
@@ -124,7 +125,7 @@ const Passcode = () => {
         {hasError && (
           <JoloText
             kind={JoloTextKind.subtitle}
-            size="middle"
+            size={JoloTextSizes.middle}
             color={Colors.error}
             customStyles={{ marginTop: 20 }}
           >

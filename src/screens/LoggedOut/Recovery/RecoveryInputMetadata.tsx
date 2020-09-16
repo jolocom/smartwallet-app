@@ -1,11 +1,11 @@
 import React, { memo } from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface RecoveryInputMetadataI {
   keyHasError: boolean
@@ -18,13 +18,13 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
         {keyHasError ? (
           <JoloText
             kind={JoloTextKind.subtitle}
-            size="middle"
+            size={JoloTextSizes.middle}
             color={Colors.error}
           >
             {strings.CANT_MATCH_WORD}
           </JoloText>
         ) : (
-          <JoloText kind={JoloTextKind.subtitle} size="middle">
+          <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
             {strings.WHAT_IF_I_FORGOT}
           </JoloText>
         )}

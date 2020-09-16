@@ -7,6 +7,7 @@ import { getInteractionDetails } from '~/modules/interaction/selectors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { isCredOfferDetails } from '~/modules/interaction/guards'
 import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const CredentialOfferBas = () => {
   const details = useRootSelector(getInteractionDetails)
@@ -20,7 +21,7 @@ const CredentialOfferBas = () => {
         <CredentialCard>
           <JoloText
             kind={JoloTextKind.title}
-            size="middle"
+            size={JoloTextSizes.middle}
             color={Colors.black}
           >
             {type}

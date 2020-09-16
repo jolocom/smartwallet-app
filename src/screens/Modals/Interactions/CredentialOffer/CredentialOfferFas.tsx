@@ -8,6 +8,7 @@ import CredentialCard from '../CredentialCard'
 import { Colors } from '~/utils/colors'
 import { ServiceIssuedCredI } from '~/types/credentials'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getCredentialsBySection)
@@ -15,7 +16,11 @@ const CredentialOfferFas = () => {
   const renderCredentials = (credentials: ServiceIssuedCredI[]) =>
     credentials.map(({ type, invalid }) => (
       <CredentialCard disabled={invalid}>
-        <JoloText kind={JoloTextKind.title} size="middle" color={Colors.black}>
+        <JoloText
+          kind={JoloTextKind.title}
+          size={JoloTextSizes.middle}
+          color={Colors.black}
+        >
           {type}
         </JoloText>
       </CredentialCard>

@@ -3,8 +3,6 @@ import { ImageBackground, StyleSheet, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
 
-import Header, { HeaderSizes } from '~/components/Header'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import BtnGroup from '~/components/BtnGroup'
@@ -22,6 +20,7 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const walkthroughData = [
   {
@@ -90,12 +89,12 @@ const Walkthrough: React.FC = () => {
                 bottom: 235,
               }}
             >
-              <JoloText kind={JoloTextKind.title} size="big">
+              <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
                 {walkthroughData[idx].header}
               </JoloText>
               <JoloText
                 kind={JoloTextKind.subtitle}
-                size="big"
+                size={JoloTextSizes.big}
                 color={Colors.white80}
                 customStyles={{ marginTop: 12 }}
               >

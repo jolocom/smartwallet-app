@@ -16,6 +16,7 @@ import CredentialCard from '../Modals/Interactions/CredentialCard'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Modals/Interactions/Carousel'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface SwitcherPropsI {
   value: boolean
@@ -33,7 +34,7 @@ const Switcher: React.FC<SwitcherPropsI> = ({
     <View style={{ flexDirection: 'row', marginBottom: 20 }}>
       <JoloText
         kind={JoloTextKind.subtitle}
-        size="middle"
+        size={JoloTextSizes.middle}
         customStyles={{ marginRight: 10 }}
       >
         {leftTitle}
@@ -41,7 +42,7 @@ const Switcher: React.FC<SwitcherPropsI> = ({
       <Switch value={value} onValueChange={onValueChange} />
       <JoloText
         kind={JoloTextKind.subtitle}
-        size="middle"
+        size={JoloTextSizes.middle}
         customStyles={{ marginLeft: 10 }}
       >
         {rightTitle}
@@ -132,7 +133,7 @@ const Settings = () => {
                 <View style={{ flex: 1, justifyContent: 'center' }}>
                   <JoloText
                     kind={JoloTextKind.subtitle}
-                    size="middle"
+                    size={JoloTextSizes.middle}
                     color={Colors.black}
                   >
                     This is a custom card content

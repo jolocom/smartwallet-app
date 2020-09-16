@@ -10,6 +10,7 @@ import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { PurpleTickSuccess } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '../JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 export enum FieldTypes {
   isSelectable = 'isSelectable',
@@ -55,7 +56,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
           <View style={styles.field}>
             <JoloText
               kind={JoloTextKind.subtitle}
-              size="mini"
+              size={JoloTextSizes.mini}
               color={Colors.white90}
             >
               {value}
@@ -75,7 +76,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
         <View style={styles.field}>
           <JoloText
             kind={JoloTextKind.subtitle}
-            size="mini"
+            size={JoloTextSizes.mini}
             color={Colors.white90}
           >
             {value}
@@ -88,7 +89,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
           <View style={styles.field}>
             <JoloText
               kind={JoloTextKind.subtitle}
-              size="mini"
+              size={JoloTextSizes.mini}
               color={Colors.error}
             >
               {strings.MISSING_INFO}

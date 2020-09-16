@@ -3,6 +3,7 @@ import { Linking } from 'react-native'
 import Hyperlink from 'react-native-hyperlink'
 
 import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 
 interface LinkPropsI {
@@ -29,7 +30,11 @@ const Link: React.FC<LinkPropsI> = ({ text }) => {
       onPress={handleLinkClick}
       linkStyle={{ textDecorationLine: 'underline' }}
     >
-      <JoloText kind={JoloTextKind.subtitle} size="mini" color={Colors.white70}>
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size={JoloTextSizes.mini}
+        color={Colors.white70}
+      >
         {text}
       </JoloText>
     </Hyperlink>

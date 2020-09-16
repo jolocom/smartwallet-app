@@ -39,8 +39,13 @@ type FontSetI = {
   color: Colors
   fontFamily: Fonts
 }
-const sizes = ['big', 'middle', 'mini', 'tiniest'] as const
-export type TitleSizes = typeof sizes[number]
+
+export enum JoloTextSizes {
+  big = 'big',
+  middle = 'middle',
+  mini = 'mini',
+  tiniest = 'tiniest',
+}
 
 const arrangeFontStyle = (
   fontSize: number,
@@ -56,7 +61,7 @@ const arrangeFontStyle = (
   fontFamily,
 })
 
-export const titleFontStyles: Record<TitleSizes, FontSetI> = {
+export const titleFontStyles: Record<JoloTextSizes, FontSetI> = {
   big: {
     ...arrangeFontStyle(
       BP({ xsmall: 26, small: 30, medium: 34, large: 34 }),

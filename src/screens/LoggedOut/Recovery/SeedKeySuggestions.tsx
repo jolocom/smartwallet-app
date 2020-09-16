@@ -6,6 +6,7 @@ import { submitKey } from './module/recoveryActions'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 type PillProps = {
   seedKey: string
@@ -23,7 +24,7 @@ const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
       onPress={() => onSelectKey(seedKey)}
       testID="suggestion-pill"
     >
-      <JoloText kind={JoloTextKind.subtitle} size="big">
+      <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.big}>
         {seedKey}
       </JoloText>
     </TouchableOpacity>

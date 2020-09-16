@@ -3,6 +3,7 @@ import { View, StyleSheet, Image } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
 import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface Props {
   title: string
@@ -26,14 +27,14 @@ export const ErrorFallback: React.FC<Props> = ({
     <View style={styles.textContainer}>
       <JoloText
         kind={JoloTextKind.title}
-        size="middle"
+        size={JoloTextSizes.middle}
         weight={JoloTextWeight.normal}
       >
         {title}
       </JoloText>
       <JoloText
         kind={JoloTextKind.subtitle}
-        size="middle"
+        size={JoloTextSizes.middle}
         color={Colors.white70}
       >
         {description}

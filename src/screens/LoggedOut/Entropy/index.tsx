@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux'
 import { setEntropy } from '~/modules/account/actions'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 //NOTE: Determines the duration of entropy collection
 const ENOUGH_ENTROPY_PROGRESS = Platform.select({
@@ -39,7 +40,7 @@ const Entropy: React.FC = () => {
         <View style={styles.percentage}>
           <JoloText
             kind={JoloTextKind.title}
-            size="middle"
+            size={JoloTextSizes.middle}
             color={Colors.white85}
           >{`${Math.trunc(entropyProgress * 100)} %`}</JoloText>
         </View>

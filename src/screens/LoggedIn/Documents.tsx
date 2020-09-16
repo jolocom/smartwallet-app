@@ -12,6 +12,7 @@ import { Colors } from '~/utils/colors'
 import { fieldNames } from '~/utils/dataMapping'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { getAllCredentials } from '~/modules/credentials/selectors'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const text =
   'The https://www.google.com/ is ready to share a scooter with you, unlock to start your ride'
@@ -76,14 +77,14 @@ const DocumentList = () => {
 
   return (
     <View style={{ height: 200, paddingVertical: 20 }}>
-      <JoloText kind={JoloTextKind.title} size="big">
+      <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
         All Credentials
       </JoloText>
       <ScrollView>
         {credentials.map(({ metadata: { name } }) => (
           <JoloText
             kind={JoloTextKind.subtitle}
-            size="middle"
+            size={JoloTextSizes.middle}
             customStyles={{ paddingVertical: 10 }}
           >
             {name}
