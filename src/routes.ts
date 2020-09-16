@@ -33,7 +33,6 @@ import Lock from './ui/deviceauth/Lock'
 import RegisterPIN from './ui/deviceauth/RegisterPIN'
 import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
 
-
 import {
   DocsIcon,
   HistoryIcon,
@@ -205,7 +204,8 @@ const MainStack = createStackNavigator(
         gestureEnabled: false,
         // @ts-ignore
         notifications: NotificationFilter.none,
-      }
+        ...TransitionPresets.ScaleFromCenterAndroid,
+      },
     },
     [routeList.RegisterPIN]: {
       screen: RegisterPIN,
@@ -213,7 +213,8 @@ const MainStack = createStackNavigator(
         gestureEnabled: false,
         // @ts-ignore
         notifications: NotificationFilter.none,
-      }
+        ...TransitionPresets.ScaleFromCenterAndroid,
+      },
     },
 
     [routeList.HowToChangePIN]: {
@@ -342,7 +343,6 @@ const MainStack = createStackNavigator(
   {
     defaultNavigationOptions: {
       ...noHeaderNavOpts,
-      ...TransitionPresets.ScaleFromCenterAndroid,
     },
   },
 )
