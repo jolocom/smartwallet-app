@@ -164,6 +164,7 @@ const SeedKeyInput: React.FC = () => {
           keyboardType={
             Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'
           }
+          inputAccessoryViewID="suggestions"
         />
         {currentWordIdx !== phrase.length && currentWordIdx < 12 && (
           <RightArrow handlePress={selectNextWord} />

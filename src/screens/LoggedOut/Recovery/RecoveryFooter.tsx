@@ -1,5 +1,5 @@
 import React, { useCallback, memo } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, Platform, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
@@ -59,12 +59,12 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 
     return (
       <>
-        {areSuggestionsVisible && (
+        {Platform.OS === 'android' && areSuggestionsVisible && (
           <AbsoluteBottom
             customStyles={{
               bottom:
                 keyboardHeight +
-                BP({ large: 0, medium: -10, small: 10, xsmall: 10 }),
+                BP({ large: 0, medium: 0, small: 10, xsmall: 10 }),
             }}
           >
             <Animated.View
