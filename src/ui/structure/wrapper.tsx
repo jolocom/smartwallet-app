@@ -22,6 +22,7 @@ import {
 import { RootState } from 'src/reducers'
 import { useAppState } from '../deviceauth/hooks/useAppState'
 import { genericActions } from 'src/actions'
+import { Colors } from '../deviceauth/colors'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   registerProps: (props: Props) =>
@@ -41,6 +42,7 @@ interface Props
   readonly customStyles?: ViewStyle
   readonly withoutSafeArea?: boolean
   readonly dark?: boolean
+  readonly secondaryDark?: boolean
   readonly breathy?: boolean
   readonly centered?: boolean
   readonly overlay?: boolean
@@ -69,6 +71,7 @@ interface AppWrapProps
  * Wrapper props:
  * withoutSafeArea    don't pad for SafeArea
  * dark               use dark background and status bar
+ * secondaryDark      lighter background and status bar
  * breathy            justify with 'space-around', for a breathy look-n-feel
  * centered           alignItems 'center'
  * overlay            absolutely positioned transpare overlay
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
 
 let statusBarHidden = 0
 const AppWrapContainer: React.FC<AppWrapProps> = props => {
-  const { dark, loading, withoutStatusBar, lockApp } = props
+  const { dark, secondaryDark, loading, withoutStatusBar, lockApp } = props
 
   useEffect(() => {
     // TODO @mnzaki
@@ -127,7 +130,7 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
     <>
       <StatusBar
         //hidden={statusBarHidden > 0}
-        barStyle={dark ? 'light-content' : 'dark-content'}
+        barStyle={dark || secondaryDark ? 'light-content' : 'dark-content'}
         backgroundColor={'transparent'}
         animated
         translucent
@@ -167,6 +170,7 @@ export const Wrapper = React.memo(
       heightless,
       withoutStatusBar,
       customStyles,
+      secondaryDark
     } = props
 
     const extraStyle: StyleProp<ViewStyle> = {
@@ -175,6 +179,7 @@ export const Wrapper = React.memo(
     }
     if (withoutStatusBar) extraStyle.paddingTop = 0
     if (dark) extraStyle.backgroundColor = backgroundDarkMain
+    if (secondaryDark) extraStyle.backgroundColor = Colors.mainBlack
     if (breathy) extraStyle.justifyContent = 'space-around'
     if (centered) extraStyle.alignItems = 'center'
     if (heightless) {
