@@ -48,19 +48,21 @@ const HowToChangePIN: React.FC<PropsI> = ({
           color={Colors.white80}
           customStyles={{
             marginTop: 24,
+            fontSize: BP({ small: 16, medium: 16, large: 20 }),
+            lineHeight: BP({ small: 18, medium: 18, large: 22 }),
             alignSelf: 'flex-start',
             textAlign: 'left',
-            lineHeight: 17,
           }}>
           {I18n.t(strings.WE_ARE_SORRY_THAT_YOU_FORGOT)}
         </Paragraph>
         <Paragraph
           color={Colors.white80}
           customStyles={{
+            fontSize: BP({ small: 16, medium: 16, large: 20 }),
+            lineHeight: BP({ small: 18, medium: 18, large: 22 }),
             alignSelf: 'flex-start',
             textAlign: 'left',
-            lineHeight: 17,
-            marginTop: 17,
+            marginTop: 18,
           }}>
           {I18n.t(strings.YOU_CAN_CHANGE_PIN)}
         </Paragraph>
