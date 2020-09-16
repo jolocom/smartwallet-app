@@ -17,7 +17,7 @@ import { compose } from 'redux'
 import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
-import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
+import { SDKError } from '@jolocom/sdk'
 import { checkTermsOfService } from '../generic'
 import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
@@ -99,8 +99,8 @@ export const checkIdentityExists: ThunkAction = async (
     return dispatch(genericActions.lockApp())
   } catch (err) {
     if (
-      err.message === BackendError.codes.NoEntropy ||
-      err.message === BackendError.codes.NoWallet
+      err.message === SDKError.codes.NoEntropy ||
+      err.message === SDKError.codes.NoWallet
     ) {
       // No seed in database, user must register
       // But check if a registration was already in progress

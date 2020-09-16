@@ -1,6 +1,6 @@
 // NOTE: not importing from 'src/lib/errors' to avoid cycle
 // NOTE: absolute path causes `generateTerms` to crash, since it is outside /src (I guess that's the cause)
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/types'
+import { ErrorCode } from '../lib/errors'
 
 const registration = {
   ENCRYPTING_AND_STORING_DATA_LOCALLY: 'Encrypting and storing data locally',
@@ -149,6 +149,7 @@ const errorCodes = {
 
   [ErrorCode.AuthenticationRequestFailed]: 'Authentication request failed',
   [ErrorCode.AuthenticationResponseFailed]: 'Authentication response failed',
+
   [ErrorCode.CredentialOfferFailed]: 'Credential offer failed',
   [ErrorCode.CredentialsReceiveFailed]: 'Could not receive credentials',
   [ErrorCode.CredentialRequestFailed]: 'Credential request failed',

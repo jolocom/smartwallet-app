@@ -1,6 +1,6 @@
 import { routeList } from 'src/routeList'
 import strings from '../../locales/strings'
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/types'
+import { ErrorCode, SDKErrorCode } from './codes'
 export { ErrorCode }
 
 export interface IAppError {
@@ -26,7 +26,7 @@ export class AppError extends Error implements IAppError {
   public navigateTo: routeList
 
   public constructor(
-    code = ErrorCode.Unknown,
+    code: ErrorCode | SDKErrorCode = ErrorCode.Unknown,
     origError?: any,
     navigateTo: routeList = routeList.Home,
   ) {
