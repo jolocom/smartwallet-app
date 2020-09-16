@@ -32,7 +32,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 
 const mapStateToAppWrapProps = (state: RootState) => state.generic.appWrapConfig
 const mapDispatchToAppWrapProps = (dispatch: ThunkDispatch) => ({
-  lockApp: () => dispatch(genericActions.lockApp())
+  lockApp: () => dispatch(genericActions.lockApp()),
 })
 
 interface Props
@@ -45,6 +45,7 @@ interface Props
   readonly overlay?: boolean
   readonly heightless?: boolean
   readonly testID?: string
+  readonly customStyles?: ViewStyle
   children: ReactNode
 }
 
@@ -140,7 +141,7 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
 
 export const AppWrap = connect(
   mapStateToAppWrapProps,
-  mapDispatchToAppWrapProps
+  mapDispatchToAppWrapProps,
 )(AppWrapContainer)
 
 export const Wrapper = React.memo(
@@ -194,7 +195,9 @@ export const Wrapper = React.memo(
 
     return (
       <>
-        <WrapperView testID={props.testID} style={[styles.wrapper, extraStyle]}>
+        <WrapperView
+          testID={props.testID}
+          style={[styles.wrapper, extraStyle, props.customStyles]}>
           {props.children}
         </WrapperView>
       </>
