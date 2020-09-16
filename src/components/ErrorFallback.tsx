@@ -28,7 +28,7 @@ export const ErrorFallback: React.FC<Props> = ({
       <JoloText
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}
-        weight={JoloTextWeight.normal}
+        weight={JoloTextWeight.regular}
       >
         {title}
       </JoloText>

@@ -14,8 +14,8 @@ export enum JoloTextKind {
 }
 
 export enum JoloTextWeight {
-  bold = 'bold',
-  normal = 'normal',
+  medium = 'medium',
+  regular = 'regular',
 }
 
 interface PropsI {
@@ -43,7 +43,8 @@ const JoloText: React.FC<PropsI> = ({
     ...fontStylesAllSizes[size],
     ...(color && { color }),
     ...(weight && {
-      fontFamily: weight === JoloTextWeight.bold ? Fonts.Medium : Fonts.Regular,
+      fontFamily:
+        weight === JoloTextWeight.medium ? Fonts.Medium : Fonts.Regular,
     }),
   }
   return (

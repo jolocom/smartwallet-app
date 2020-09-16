@@ -32,7 +32,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
       <JoloText
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}
-        weight={JoloTextWeight.normal}
+        weight={JoloTextWeight.regular}
       >
         {title || interactionTitle}
       </JoloText>

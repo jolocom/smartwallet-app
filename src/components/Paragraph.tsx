@@ -19,6 +19,7 @@ interface PropsI {
   animated?: boolean
 }
 
+// TODO: should be removed and its instaces changed to JoloText
 const Paragraph: React.FC<PropsI> = ({
   children,
   color = Colors.white,

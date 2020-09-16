@@ -23,6 +23,7 @@ interface PropsI {
   weight?: HeaderWeight
 }
 
+// TODO: should be removed and its instaces changed to JoloText
 const Header: React.FC<PropsI> = ({
   size = HeaderSizes.medium,
   weight = HeaderWeight.bold,

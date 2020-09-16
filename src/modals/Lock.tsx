@@ -91,7 +91,7 @@ const Lock = () => {
             <JoloText
               kind={JoloTextKind.title}
               size={JoloTextSizes.middle}
-              weight={JoloTextWeight.normal}
+              weight={JoloTextWeight.regular}
               color={Colors.white90}
             >
               {strings.ENTER_YOUR_PIN}

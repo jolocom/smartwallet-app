@@ -70,7 +70,7 @@ const CollapsedScrollView: React.FC<Props> = ({
           <JoloText
             kind={JoloTextKind.title}
             size={JoloTextSizes.mini}
-            weight={JoloTextWeight.normal}
+            weight={JoloTextWeight.regular}
             color={Colors.white}
           >
             {collapsedTitle}

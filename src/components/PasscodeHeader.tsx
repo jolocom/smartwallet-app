@@ -9,7 +9,7 @@ const PasscodeHeader: React.FC = ({ children }) => (
     <JoloText
       kind={JoloTextKind.title}
       size={JoloTextSizes.middle}
-      weight={JoloTextWeight.normal}
+      weight={JoloTextWeight.regular}
       color={Colors.white90}
     >
       {children}
