@@ -205,6 +205,12 @@ const styles = StyleSheet.create({
     width: '70%',
     color: Colors.white,
     textDecorationLine: 'none',
+    lineHeight: BP({ xsmall: 26, small: 30, medium: 34, large: 34 }),
+    ...Platform.select({
+      ios: {
+        marginTop: 2,
+      },
+    }),
   },
   inputError: {
     borderColor: Colors.error,

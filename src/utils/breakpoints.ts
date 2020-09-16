@@ -37,7 +37,7 @@ const breakpoints: { [x: string]: Breakpoint } = {
 }
 
 const isBreakpoint = (breakpointSize: ScreenSize) =>
-  SCREEN_SIZE.width >= breakpoints[breakpointSize].width &&
+  // SCREEN_SIZE.width >= breakpoints[breakpointSize].width ||
   SCREEN_SIZE.height >= breakpoints[breakpointSize].height
 
 // NOTE: Maps through the breakpoints (biggest to smallest) and returns the @ScreenSize of the device if it's

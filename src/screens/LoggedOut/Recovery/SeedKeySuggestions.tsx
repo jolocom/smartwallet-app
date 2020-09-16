@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     borderRadius: 4,
     paddingTop: Platform.select({
-      ios: 4,
+      ios: 0,
       android: BP({
         large: 0,
         medium: 0,

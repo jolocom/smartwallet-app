@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { setLogged } from '~/modules/account/actions'
 
 import BtnGroup from '~/components/BtnGroup'
-import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
+import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
@@ -64,7 +64,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
             customStyles={{
               bottom:
                 keyboardHeight +
-                BP({ large: 0, medium: 10, small: 10, xsmall: 10 }),
+                BP({ large: 0, medium: -10, small: 10, xsmall: 10 }),
             }}
           >
             <Animated.View
