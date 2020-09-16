@@ -42,7 +42,7 @@ export const LegalTextComponent: React.FC<Props> = ({
   }
 
   return (
-    <Wrapper dark>
+    <Wrapper secondaryDark>
       <NavigationSection onNavigation={onBackPress} isBackButton={true} />
       <View style={styles.wrapper}>
         <Text style={styles.header}>{I18n.t(title)}</Text>

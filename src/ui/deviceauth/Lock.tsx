@@ -6,7 +6,6 @@ import { NavigationInjectedProps } from 'react-navigation'
 import I18n from 'src/locales/i18n'
 
 import PasscodeInput from './PasscodeInput'
-import Header from './components/Header'
 import Btn, { BtnTypes } from './components/Btn'
 
 import strings from '../../locales/strings'
@@ -74,7 +73,7 @@ const Lock: React.FC<LockProps> = ({
   }
 
   return (
-    <Wrapper dark>
+    <Wrapper secondaryDark>
       <PasscodeWrapper>
         <PasscodeHeader>{I18n.t(strings.ENTER_YOUR_PIN)}</PasscodeHeader>
         <View style={styles.inputContainer}>

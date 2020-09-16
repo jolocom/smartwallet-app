@@ -5,7 +5,6 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  StatusBar,
 } from 'react-native'
 import { ThunkDispatch } from 'src/store'
 import { storeTermsOfService } from 'src/actions/generic'
@@ -24,7 +23,6 @@ import { CheckmarkSmallIcon } from 'src/resources'
 import strings from 'src/locales/strings'
 import I18n from 'src/locales/i18n'
 import { BP } from 'src/styles/breakpoints'
-import { Colors } from '../../styles'
 import { ActionSheet } from '../structure/actionSheet'
 
 interface NavigationProps {
@@ -94,7 +92,7 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
   }
 
   return (
-    <Wrapper dark customStyles={{ backgroundColor: Colors.baseBlack }}>
+    <Wrapper secondaryDark>
       <View
         style={{ paddingHorizontal: BP({ small: 20, medium: 32, large: 32 }) }}>
         <Text style={styles.title}>
