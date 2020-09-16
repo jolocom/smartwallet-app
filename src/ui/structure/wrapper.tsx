@@ -32,12 +32,13 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 
 const mapStateToAppWrapProps = (state: RootState) => state.generic.appWrapConfig
 const mapDispatchToAppWrapProps = (dispatch: ThunkDispatch) => ({
-  lockApp: () => dispatch(genericActions.lockApp())
+  lockApp: () => dispatch(genericActions.lockApp()),
 })
 
 interface Props
   extends Partial<AppWrapConfig>,
     ReturnType<typeof mapDispatchToProps> {
+  readonly customStyles?: ViewStyle
   readonly withoutSafeArea?: boolean
   readonly dark?: boolean
   readonly breathy?: boolean
@@ -110,13 +111,17 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
   }, [withoutStatusBar])
 
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
+    /* if (appState.match(/active/) && nextAppState.match(/inactive|background/)) {
+     *   lockApp()
+     * } */
+
     if (
       (Platform.OS === 'ios' &&
-        appState.match(/inactive|active/) &&
-        nextAppState.match(/background/)) ||
+        appState.match(/background/) &&
+        nextAppState.match(/inactive|active/)) ||
       (Platform.OS === 'android' &&
-        appState.match(/inactive|background/) &&
-        nextAppState.match(/active/))
+        appState.match(/active/) &&
+        nextAppState.match(/inactive|background/))
     ) {
       lockApp()
     }
@@ -140,7 +145,7 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
 
 export const AppWrap = connect(
   mapStateToAppWrapProps,
-  mapDispatchToAppWrapProps
+  mapDispatchToAppWrapProps,
 )(AppWrapContainer)
 
 export const Wrapper = React.memo(
@@ -164,12 +169,15 @@ export const Wrapper = React.memo(
       centered,
       overlay,
       heightless,
+      withoutStatusBar,
+      customStyles,
     } = props
 
     const extraStyle: StyleProp<ViewStyle> = {
       // Note: StatusBar.currentHeight is not available on iOS
       paddingTop: withoutSafeArea ? 0 : StatusBar.currentHeight,
     }
+    if (withoutStatusBar) extraStyle.paddingTop = 0
     if (dark) extraStyle.backgroundColor = backgroundDarkMain
     if (breathy) extraStyle.justifyContent = 'space-around'
     if (centered) extraStyle.alignItems = 'center'
@@ -183,6 +191,9 @@ export const Wrapper = React.memo(
       extraStyle.zIndex = 12 // good number
       extraStyle.backgroundColor = 'transparent'
     }
+
+    //NOTE: <Wrapper> now cares a bit bout yo style.
+    if (customStyles) Object.assign(extraStyle, customStyles)
 
     // @ts-ignore
     if (__DEV__ && props.style) {
