@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 import I18n from 'src/locales/i18n'
 
-import ScreenContainer from './components/ScreenContainer'
 import Header from './components/Header'
 import Paragraph, { ParagraphSizes } from './components/Paragraph'
 import Btn, { BtnTypes } from './components/Btn'
@@ -16,6 +15,8 @@ import { BP } from '../../styles/breakpoints'
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import RecoveryInstructions from 'src/resources/svg/ForgotPINInstructions'
+import { Wrapper } from '../structure'
+import PasscodeWrapper from './components/PasscodeWrapper'
 
 interface PropsI {
   handleGoBack: () => void
@@ -26,70 +27,74 @@ const HowToChangePIN: React.FC<PropsI> = ({
   handleAccessRestore,
 }) => {
   return (
-    <ScreenContainer
+    <Wrapper
       customStyles={{
         backgroundColor: Colors.black,
-        justifyContent: 'flex-start',
-        paddingTop: BP({ small: 30, medium: 50, large: 50 }),
-        paddingHorizontal: 20,
       }}>
-      <Header
-        color={Colors.white90}
+      <PasscodeWrapper
         customStyles={{
-          fontSize: BP({ small: 24, medium: 28, large: 28 }),
-          alignSelf: 'flex-start',
+          paddingTop: BP({ small: 30, medium: 50, large: 50 }),
+          paddingHorizontal: BP({ small: 16, medium: 20, large: 30 }),
         }}>
-        {I18n.t(strings.HOW_TO_CHANGE_PIN)}
-      </Header>
-      <Paragraph
-        color={Colors.white80}
-        customStyles={{
-          alignSelf: 'flex-start',
-          textAlign: 'left',
-          lineHeight: 17,
-        }}>
-        {I18n.t(strings.WE_ARE_SORRY_THAT_YOU_FORGOT)}
-      </Paragraph>
-      <Paragraph
-        color={Colors.white80}
-        customStyles={{
-          alignSelf: 'flex-start',
-          textAlign: 'left',
-          lineHeight: 17,
-          marginTop: 10,
-        }}>
-        {I18n.t(strings.YOU_CAN_CHANGE_PIN)}
-      </Paragraph>
-      <View
-        style={{
-          transform: [{ scale: BP({ small: 0.75, medium: 1, large: 1 }) }],
-          position: 'absolute',
-          bottom: BP({ small: -70, medium: -50, large: -50 }),
-        }}>
-        <RecoveryInstructions />
-      </View>
-      <AbsoluteBottom customStyles={{ alignSelf: 'center', bottom: 0 }}>
-        <Btn onPress={handleAccessRestore}>
-          {I18n.t(strings.RESTORE_ACCESS)}
-        </Btn>
-        <Paragraph
-          size={ParagraphSizes.micro}
-          color={Colors.white70}
+        <Header
+          color={Colors.white90}
           customStyles={{
-            paddingHorizontal: BP({
-              small: 10,
-              medium: 25,
-              large: 25,
-            }),
-            lineHeight: 15,
+            fontSize: BP({ small: 24, medium: 28, large: 28 }),
+            alignSelf: 'flex-start',
           }}>
-          {I18n.t(strings.STORING_NO_AFFECT_DATA)}
+          {I18n.t(strings.HOW_TO_CHANGE_PIN)}
+        </Header>
+        <Paragraph
+          color={Colors.white80}
+          customStyles={{
+            marginTop: 24,
+            alignSelf: 'flex-start',
+            textAlign: 'left',
+            lineHeight: 17,
+          }}>
+          {I18n.t(strings.WE_ARE_SORRY_THAT_YOU_FORGOT)}
         </Paragraph>
-        <Btn onPress={handleGoBack} type={BtnTypes.secondary}>
-          {I18n.t(strings.CANCEL)}
-        </Btn>
-      </AbsoluteBottom>
-    </ScreenContainer>
+        <Paragraph
+          color={Colors.white80}
+          customStyles={{
+            alignSelf: 'flex-start',
+            textAlign: 'left',
+            lineHeight: 17,
+            marginTop: 17,
+          }}>
+          {I18n.t(strings.YOU_CAN_CHANGE_PIN)}
+        </Paragraph>
+        <View
+          style={{
+            transform: [{ scale: BP({ small: 0.75, medium: 1, large: 1 }) }],
+            position: 'absolute',
+            bottom: BP({ small: -70, medium: -50, large: -50 }),
+          }}>
+          <RecoveryInstructions />
+        </View>
+        <AbsoluteBottom customStyles={{ alignSelf: 'center', bottom: 0 }}>
+          <Btn onPress={handleAccessRestore}>
+            {I18n.t(strings.RESTORE_ACCESS)}
+          </Btn>
+          <Paragraph
+            size={ParagraphSizes.micro}
+            color={Colors.white70}
+            customStyles={{
+              paddingHorizontal: BP({
+                small: 10,
+                medium: 25,
+                large: 25,
+              }),
+              lineHeight: 15,
+            }}>
+            {I18n.t(strings.STORING_NO_AFFECT_DATA)}
+          </Paragraph>
+          <Btn onPress={handleGoBack} type={BtnTypes.secondary}>
+            {I18n.t(strings.CANCEL)}
+          </Btn>
+        </AbsoluteBottom>
+      </PasscodeWrapper>
+    </Wrapper>
   )
 }
 
