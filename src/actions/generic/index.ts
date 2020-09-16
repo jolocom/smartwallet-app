@@ -126,21 +126,22 @@ export const lockApp = (
 
   dispatch(setLocked(true))
   return dispatch(navigationActions.navigate({ routeName: lockScreen }))
-
 }
 
 export const unlockApp = (
-  pin: string
-): ThunkAction => async (dispatch, getState) => {
+  pin: string,
+  resetNav?: boolean,
+): ThunkAction => async dispatch => {
   const keychainPin = await Keychain.getGenericPassword({
     service: PIN_SERVICE,
   })
   if (!keychainPin || keychainPin.password !== pin) return
 
   dispatch(setLocked(false))
-  return dispatch(navigationActions.navigateBack())
+  return resetNav
+    ? dispatch(navigationActions.navigatorResetHome())
+    : dispatch(navigationActions.navigateBack())
 }
-
 
 export const updateAppWrapConfig = (value: AppWrapConfig) => ({
   type: APPWRAP_UPDATE_CONFIG,
