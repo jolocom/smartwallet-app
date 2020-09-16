@@ -233,6 +233,7 @@ const MainStack = createStackNavigator(
       navigationOptions: {
         // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
+        ...TransitionPresets.ScaleFromCenterAndroid,
       },
     },
     [routeList.CredentialReceiveNegotiate]: {
