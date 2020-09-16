@@ -21,26 +21,26 @@ import { genericActions } from 'src/actions'
 import useKeyboardHeight from './hooks/useKeyboardHeight'
 import { NavigationInjectedProps } from 'react-navigation'
 import useDisableBackButton from './hooks/useDisableBackButton'
+import { Wrapper } from '../structure'
+import PasscodeWrapper from './components/PasscodeWrapper'
 
-interface PropsI extends
-  NavigationInjectedProps,
-  ReturnType<typeof mapDispatchToProps> {
-}
+interface PropsI
+  extends NavigationInjectedProps,
+    ReturnType<typeof mapDispatchToProps> {}
 
-const RegisterPIN: React.FC<PropsI> = ({
-  unlockApplication,
-  navigation
-}) => {
+const RegisterPIN: React.FC<PropsI> = ({ unlockApplication, navigation }) => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [passcode, setPasscode] = useState('')
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
-  useDisableBackButton(useCallback(() => {
-    // don't let react-navigation handle this back button press if we are
-    // focused
-    return navigation.isFocused()
-  }, []))
+  useDisableBackButton(
+    useCallback(() => {
+      // don't let react-navigation handle this back button press if we are
+      // focused
+      return navigation.isFocused()
+    }, []),
+  )
 
   const { keyboardHeight } = useKeyboardHeight()
 
@@ -61,6 +61,10 @@ const RegisterPIN: React.FC<PropsI> = ({
       unlockApplication(passcode)
     } else {
       setHasError(true)
+      setTimeout(() => {
+        setVerifiedPasscode('')
+        setHasError(false)
+      }, 700)
     }
   }
 
@@ -78,10 +82,8 @@ const RegisterPIN: React.FC<PropsI> = ({
   }, [verifiedPasscode])
 
   return (
-      <ScreenContainer
-        customStyles={{
-          justifyContent: 'flex-start',
-        }}>
+    <Wrapper dark>
+      <PasscodeWrapper customStyles={{ paddingTop: 38 }}>
         <View>
           <Header color={Colors.white90}>
             {isCreating
@@ -91,7 +93,7 @@ const RegisterPIN: React.FC<PropsI> = ({
           <Paragraph
             color={Colors.white70}
             size={ParagraphSizes.medium}
-            customStyles={{ marginHorizontal: 5, opacity: 0.8 }}>
+            customStyles={{ opacity: 0.8, marginHorizontal: 15, marginTop: 8 }}>
             {isCreating
               ? I18n.t(strings.IN_ORDER_TO_PROTECT_YOUR_DATA)
               : I18n.t(strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN)}
@@ -114,27 +116,20 @@ const RegisterPIN: React.FC<PropsI> = ({
             />
           )}
         </View>
-        {isCreating && (
+        {isCreating ? (
           <Paragraph
             size={ParagraphSizes.medium}
             color={Colors.success}
-            customStyles={{ marginTop: 20 }}>
+            customStyles={{ marginTop: 20, marginHorizontal: 30 }}>
             {I18n.t(strings.ANY_FUTURE_PASSCODE_RESTORE)}
           </Paragraph>
+        ) : (
+          <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
+            {I18n.t(strings.RESET)}
+          </Btn>
         )}
-        {hasError && (
-          <Paragraph color={Colors.error} customStyles={{ marginTop: 20 }}>
-            {I18n.t(strings.PINS_DONT_MATCH)}
-          </Paragraph>
-        )}
-        {!isCreating && (
-          <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
-            <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {I18n.t(strings.RESET)}
-            </Btn>
-          </AbsoluteBottom>
-        )}
-      </ScreenContainer>
+      </PasscodeWrapper>
+    </Wrapper>
   )
 }
 
@@ -158,7 +153,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   unlockApplication: (pin: string) => dispatch(genericActions.unlockApp(pin)),
 })
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(RegisterPIN)
+export default connect(null, mapDispatchToProps)(RegisterPIN)
