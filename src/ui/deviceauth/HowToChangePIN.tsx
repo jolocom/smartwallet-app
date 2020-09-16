@@ -48,8 +48,8 @@ const HowToChangePIN: React.FC<PropsI> = ({
           color={Colors.white80}
           customStyles={{
             marginTop: BP({ small: 0, medium: 12, large: 24 }),
-            fontSize: BP({ small: 16, medium: 16, large: 20 }),
-            lineHeight: BP({ small: 18, medium: 18, large: 22 }),
+            fontSize: BP({ small: 16, medium: 18, large: 20 }),
+            lineHeight: BP({ small: 18, medium: 20, large: 22 }),
             alignSelf: 'flex-start',
             textAlign: 'left',
           }}>
@@ -58,8 +58,8 @@ const HowToChangePIN: React.FC<PropsI> = ({
         <Paragraph
           color={Colors.white80}
           customStyles={{
-            fontSize: BP({ small: 16, medium: 16, large: 20 }),
-            lineHeight: BP({ small: 18, medium: 18, large: 22 }),
+            fontSize: BP({ small: 16, medium: 18, large: 20 }),
+            lineHeight: BP({ small: 18, medium: 20, large: 22 }),
             alignSelf: 'flex-start',
             textAlign: 'left',
             marginTop: 18,
@@ -70,7 +70,7 @@ const HowToChangePIN: React.FC<PropsI> = ({
           style={{
             transform: [{ scale: BP({ small: 0.7, medium: 1, large: 1 }) }],
             position: 'absolute',
-            bottom: BP({ small: -80, medium: -70, large: -50 }),
+            bottom: BP({ small: -80, medium: -80, large: -50 }),
           }}>
           <RecoveryInstructions />
         </View>
