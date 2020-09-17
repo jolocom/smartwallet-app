@@ -9,6 +9,7 @@ const de = require('./de.json')
 //const nl = require('./nl.json')
 
 I18n.defaultLocale = 'en'
+I18n.keySeparator = false
 I18n.fallbacks = true
 I18n.missingTranslation = scope => scope
 I18n.translations = {
