@@ -43,11 +43,13 @@ const Lock: React.FC<LockProps> = ({
   let errorTimeout: number
 
   useDisableBackButton(
-    useCallback(() => {
-      // don't let react-navigation handle this back button press
-      // if the app is locked and the lock is focused
-      return isLocked && navigation.isFocused()
-    }, [isLocked]),
+    useCallback(
+      () =>
+        // don't let react-navigation handle this back button press
+        // if the app is locked and the lock is focused
+        isLocked && navigation.isFocused(),
+      [isLocked],
+    ),
   )
 
   useEffect(() => {
@@ -87,6 +89,14 @@ const Lock: React.FC<LockProps> = ({
         </View>
         <Btn
           customContainerStyles={{ marginTop: 30 }}
+          customTextStyles={{
+            opacity: 0.5,
+            fontSize: Platform.select({
+              ios: 20,
+              android: 16,
+            }),
+            lineHeight: 22,
+          }}
           type={BtnTypes.secondary}
           onPress={navigateTorecoveryInstuction}>
           {I18n.t(strings.FORGOT_YOUR_PIN)}
