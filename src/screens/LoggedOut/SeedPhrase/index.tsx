@@ -12,11 +12,11 @@ import RadialGradient from 'react-native-radial-gradient'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
+import Btn, { BtnTypes } from '~/components/Btn'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import { JoloTextSizes, TextStyle } from '~/utils/fonts'
+import { Fonts, JoloTextSizes } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
@@ -25,6 +25,7 @@ import { useSelector } from 'react-redux'
 import { InfoIcon } from '~/assets/svg'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import BP from '~/utils/breakpoints'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -139,6 +140,7 @@ const SeedPhrase: React.FC = () => {
     <Animated.View
       style={{
         opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
+        marginTop: 30,
       }}
     >
       <Text style={styles.seedphrase}>{seedphrase}</Text>
@@ -167,20 +169,17 @@ const SeedPhrase: React.FC = () => {
 
   const renderMagicButton = () => (
     <Animated.View
+      {...gestureHandlers}
       style={[
         {
           transform: [{ scaleX: shadowScale }, { scaleY: shadowScale }],
           opacity: magicOpacity,
+          alignItems: 'center',
+          justifyContent: 'center',
         },
       ]}
     >
-      <RadialGradient
-        style={styles.gradient}
-        colors={[Colors.success, 'transparent']}
-        stops={[0.4, 1]}
-      />
       <Animated.View
-        {...gestureHandlers}
         style={[
           styles.button,
           {
@@ -188,6 +187,11 @@ const SeedPhrase: React.FC = () => {
           },
         ]}
       ></Animated.View>
+      <RadialGradient
+        style={styles.gradient}
+        colors={[Colors.success, 'transparent']}
+        stops={[0.4, 1]}
+      />
     </Animated.View>
   )
 
@@ -255,11 +259,12 @@ const styles = StyleSheet.create({
   phraseContainer: {
     flex: 0.6,
     width: '100%',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
   },
   helpersContainer: {
     flex: 0.4,
-    width: '100%',
+    width: '90%',
+    justifyContent: 'flex-start',
   },
   wrapper: {
     flex: 1,
@@ -268,8 +273,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   seedphrase: {
-    ...TextStyle.seedPhrase,
     textAlign: 'center',
+    fontFamily: Fonts.Medium,
+    fontSize: BP({ large: 40, medium: 40, small: 32, xsmall: 32 }),
+    lineHeight: BP({ large: 54, medium: 54, small: 46, xsmall: 46 }),
+    letterSpacing: 0,
+    color: Colors.activity,
   },
   seedphraseShadow: {
     textShadowColor: Colors.white45,
@@ -289,24 +298,25 @@ const styles = StyleSheet.create({
   gradient: {
     width: 160,
     height: 160,
-    justifyContent: 'center',
+    position: 'absolute',
+    zIndex: 10,
+    alignSelf: 'center',
   },
   button: {
-    position: 'absolute',
     width: 100,
     height: 100,
     borderRadius: 50,
     backgroundColor: Colors.black,
-    top: 30,
-    left: 30,
     borderColor: Colors.success,
     borderWidth: Platform.select({
       ios: 1,
       android: 0.5,
     }),
+    zIndex: 20,
   },
   info: {
-    width: '80%',
+    width: '75%',
+    marginTop: 20,
   },
   iconContainer: {
     alignSelf: 'flex-end',
