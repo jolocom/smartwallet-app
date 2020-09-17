@@ -197,7 +197,9 @@ export const Wrapper = React.memo(
 
     return (
       <>
-        <WrapperView testID={props.testID} style={[styles.wrapper, extraStyle]}>
+        <WrapperView
+          testID={props.testID}
+          style={[styles.wrapper, extraStyle]}>
           {props.children}
         </WrapperView>
       </>
