@@ -4,19 +4,23 @@
 // https://github.com/react-native-community/react-native-localize/blob/master/example/src/AsyncExample.js
 
 import I18n from 'i18n-js'
+import * as RNLocalize from 'react-native-localize'
 
 const de = require('./de.json')
-//const nl = require('./nl.json')
 
-I18n.defaultLocale = 'en'
+export const locales = ['en', 'de']
+const fallback = { languageTag: 'en', isRTL: false };
+
+const { languageTag } = RNLocalize.findBestAvailableLanguage(locales) || fallback
+
+I18n.defaultLocale = languageTag
 I18n.keySeparator = false
 I18n.fallbacks = true
 I18n.missingTranslation = scope => scope
+
 I18n.translations = {
   de,
-  //nl,
 }
-export const locales = ['en', 'de']
 
 const defaultLocale = { languageTag: 'en', isRTL: false }
 
