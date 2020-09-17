@@ -70,7 +70,6 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   // clear the saved PIN code, if any
   await useResetKeychainValues(PIN_SERVICE)()
 
-  dispatch(navigatorResetHome())
   return dispatch(genericActions.lockApp())
 }
 
