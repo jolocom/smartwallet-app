@@ -36,6 +36,6 @@ export const sendAuthenticationResponse = (
   )
   return interaction
     .send(await interaction.createAuthenticationResponse())
-    .then(() => dispatch(scheduleSuccessNotification))
     .then(() => dispatch(cancelSSO))
+    .then(() => dispatch(scheduleSuccessNotification))
 }

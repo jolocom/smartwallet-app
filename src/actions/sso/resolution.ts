@@ -14,6 +14,6 @@ export const consumeResolutionRequest = (
 
   return interxn
     .send(resp)
-    .then(() => dispatch(scheduleSuccessNotification))
     .then(() => dispatch(cancelSSO))
+    .then(() => dispatch(scheduleSuccessNotification))
 }

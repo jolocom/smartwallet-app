@@ -94,6 +94,6 @@ export const sendCredentialResponse = (
         selectedCredentials.map(c => c.id),
       ),
     )
-    .then(() => dispatch(scheduleSuccessNotification))
     .then(() => dispatch(cancelSSO))
+    .then(() => dispatch(scheduleSuccessNotification))
 }
