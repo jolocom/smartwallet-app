@@ -75,7 +75,7 @@ const Lock: React.FC<LockProps> = ({
   }
 
   return (
-    <Wrapper dark>
+    <Wrapper secondaryDark>
       <PasscodeWrapper>
         <PasscodeHeader>{I18n.t(strings.ENTER_YOUR_PIN)}</PasscodeHeader>
         <View style={styles.inputContainer}>

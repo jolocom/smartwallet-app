@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native'
 import { Provider } from 'react-redux'
 import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
@@ -122,7 +122,12 @@ export default class App extends React.PureComponent<
     return (
       <View style={styles.appWrapper}>
         {!ready ? (
-          <View />
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Image
+              source={require('src/resources/img/splashIcons/joloLogoIcon.png')}
+            />
+          </View>
         ) : (
           // @ts-ignore
           <Provider store={store}>
