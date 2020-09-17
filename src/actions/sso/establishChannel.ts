@@ -46,6 +46,17 @@ export const startChannel = (interactionId: string): ThunkAction => async (
   await interaction.processInteractionToken(response)
   const channel = await sdk.channels.create(interaction)
 
+  const successNotification = (message: string) => {
+    dispatch(
+      scheduleNotification(
+        createInfoNotification({
+          title: I18n.t(strings.ACTION_SUCCEEDED),
+          message: I18n.t(message),
+        }),
+      ),
+    )
+  }
+
   channel.send(response.encode())
   channel.start(async interxn => {
     let resp
@@ -55,9 +66,15 @@ export const startChannel = (interactionId: string): ThunkAction => async (
         break
       case FlowType.Encrypt:
         resp = await interxn.createEncResponseToken()
+        // Action Succeeded!
+        // your data was encrypted
+        successNotification(strings.YOUR_DATA_WAS_ENCRYPTED)
         break
       case FlowType.Decrypt:
+        // Action succeeded!
+        // the data was decrypted
         resp = await interxn.createDecResponseToken()
+        successNotification(strings.YOUR_DATA_WAS_DECRYPTED)
         break
     }
 

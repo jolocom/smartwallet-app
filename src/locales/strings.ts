@@ -104,6 +104,9 @@ const notifications = {
   SOMETHING_WENT_WRONG_CHOOSE_AGAIN: 'Something went wrong. Choose again!',
   INTERACTION_WITH_THE_SERVICE_COMPLETED:
     'Interaction with the service completed. Your service page should be updated now',
+  ACTION_SUCCEEDED: 'Action succeeded',
+  YOUR_DATA_WAS_ENCRYPTED: 'Your data was encrypted',
+  YOUR_DATA_WAS_DECRYPTED: 'Your data was decrypted',
 }
 
 const errorTitle = {
