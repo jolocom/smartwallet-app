@@ -3,13 +3,14 @@ import {
   TouchableWithoutFeedback,
   View,
   TouchableOpacity,
-  ViewStyle,
+  StyleSheet,
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { strings } from '~/translations/strings'
 import { PurpleTickSuccess } from '~/assets/svg'
+import JoloText, { JoloTextKind } from '../JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 export enum FieldTypes {
   isSelectable = 'isSelectable',
@@ -52,8 +53,14 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
     case FieldTypes.isSelectable:
       return (
         <TouchableWithoutFeedback onPress={onSelect}>
-          <View style={styles.field as ViewStyle}>
-            <Paragraph size={ParagraphSizes.medium}>{value}</Paragraph>
+          <View style={styles.field}>
+            <JoloText
+              kind={JoloTextKind.subtitle}
+              size={JoloTextSizes.mini}
+              color={Colors.white90}
+            >
+              {value}
+            </JoloText>
             {isSelected ? (
               <View style={styles.radio}>
                 <PurpleTickSuccess />
@@ -66,17 +73,27 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
       )
     case FieldTypes.isStatic:
       return (
-        <View style={styles.field as ViewStyle}>
-          <Paragraph size={ParagraphSizes.medium}>{value}</Paragraph>
+        <View style={styles.field}>
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size={JoloTextSizes.mini}
+            color={Colors.white90}
+          >
+            {value}
+          </JoloText>
         </View>
       )
     case FieldTypes.isEmpty:
       return (
         <TouchableOpacity onPress={onCreateNewOne}>
-          <View style={styles.field as ViewStyle}>
-            <Paragraph size={ParagraphSizes.medium} color={Colors.error}>
-              {strings.MISSING_INFO}*
-            </Paragraph>
+          <View style={styles.field}>
+            <JoloText
+              kind={JoloTextKind.subtitle}
+              size={JoloTextSizes.mini}
+              color={Colors.error}
+            >
+              {strings.MISSING_INFO}
+            </JoloText>
           </View>
         </TouchableOpacity>
       )
@@ -85,7 +102,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   field: {
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -109,6 +126,6 @@ const styles = {
   selected: {
     backgroundColor: Colors.success,
   },
-}
+})
 
 export default Field

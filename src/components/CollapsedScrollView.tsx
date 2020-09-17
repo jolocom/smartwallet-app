@@ -2,8 +2,9 @@ import React from 'react'
 import { Animated, StyleSheet, StatusBar } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import Paragraph, { ParagraphSizes } from './Paragraph'
 import useCollapsedScrollViewAnimations from '~/hooks/useScrollAnimation'
+import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface Props {
   collapsedTitle: string
@@ -66,7 +67,14 @@ const CollapsedScrollView: React.FC<Props> = ({
             },
           ]}
         >
-          <Paragraph size={ParagraphSizes.large}>{collapsedTitle}</Paragraph>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.mini}
+            weight={JoloTextWeight.regular}
+            color={Colors.white}
+          >
+            {collapsedTitle}
+          </JoloText>
         </Animated.View>
       </Animated.View>
       <Animated.ScrollView

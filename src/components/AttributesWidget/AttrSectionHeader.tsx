@@ -1,11 +1,12 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { PlusIcon } from '~/assets/svg'
 import { AttrKeys, AttrKeysUpper } from '~/types/credentials'
+import JoloText, { JoloTextKind } from '../JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface AttrSectionHeaderPropsI {
   sectionKey: AttrKeys
@@ -18,13 +19,14 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
 }) => {
   return (
     <View style={styles.headerContainer}>
-      <Paragraph
-        size={ParagraphSizes.medium}
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size={JoloTextSizes.mini}
         color={Colors.white70}
         customStyles={{ opacity: 0.6 }}
       >
         {strings[sectionKey.toUpperCase() as AttrKeysUpper]}
-      </Paragraph>
+      </JoloText>
       <TouchableOpacity
         style={styles.createNewBtn}
         onPress={() => onCreateNew(sectionKey)}
@@ -32,9 +34,13 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
         <View style={styles.plus}>
           <PlusIcon />
         </View>
-        <Paragraph size={ParagraphSizes.medium}>
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size={JoloTextSizes.mini}
+          color={Colors.white}
+        >
           {strings.CREATE_NEW_ONE}
-        </Paragraph>
+        </JoloText>
       </TouchableOpacity>
     </View>
   )

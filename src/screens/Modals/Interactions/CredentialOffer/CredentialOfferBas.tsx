@@ -4,9 +4,10 @@ import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import CredentialCard from '../CredentialCard'
 import { useRootSelector } from '~/hooks/useRootSelector'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { isCredOfferDetails } from '~/modules/interaction/guards'
-import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const CredentialOfferBas = () => {
   const details = useRootSelector(getInteractionDetails)
@@ -18,7 +19,13 @@ const CredentialOfferBas = () => {
     return (
       <BasWrapper>
         <CredentialCard>
-          <Header color={Colors.black}>{type}</Header>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.middle}
+            color={Colors.black}
+          >
+            {type}
+          </JoloText>
         </CredentialCard>
       </BasWrapper>
     )
