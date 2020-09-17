@@ -19,10 +19,7 @@ export class AppInitContainer extends React.Component<Props> {
 
   render() {
     return (
-      <Wrapper
-        dark
-        centered
-        customStyles={{ justifyContent: 'flex-start', marginTop: 120 }}>
+      <Wrapper dark withoutSafeArea centered>
         <Image
           source={require('src/resources/img/splashIcons/joloLogoIcon.png')}
         />
