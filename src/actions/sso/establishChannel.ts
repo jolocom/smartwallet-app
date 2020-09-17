@@ -8,6 +8,10 @@ import {
   FlowType,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { cancelSSO, scheduleSuccessNotification } from '.'
+import { scheduleNotification } from '../notifications'
+import { createInfoNotification } from '../../lib/notifications'
+import I18n from 'src/locales/i18n'
+import strings from '../../locales/strings'
 
 export const consumeEstablishChannelRequest = (
   establishChannelRequest: JSONWebToken<EstablishChannelRequest>,
@@ -44,7 +48,6 @@ export const startChannel = (interactionId: string): ThunkAction => async (
 
   channel.send(response.encode())
   channel.start(async interxn => {
-    console.log('handing interxn', interxn.id, interxn.flow.type)
     let resp
     switch (interxn.flow.type) {
       case FlowType.Resolution:
@@ -59,15 +62,6 @@ export const startChannel = (interactionId: string): ThunkAction => async (
     }
 
     if (resp) {
-      console.log(
-        'Channel',
-        channel.id,
-        'responded to',
-        interxn.flow.type,
-        `(${interxn.id})`,
-        'with',
-        resp.interactionToken,
-      )
       channel.send(resp.encode())
     } else {
       console.warn(
@@ -75,10 +69,17 @@ export const startChannel = (interactionId: string): ThunkAction => async (
         channel.id,
         interxn.flow.type,
       )
-      // TODO: notify user that we got some weird thing on the channel
+      dispatch(
+        scheduleNotification(
+          createInfoNotification({
+            title: I18n.t(strings.AWKWARD),
+            message: I18n.t(strings.SOMETHING_DOESNT_SEEM_RIGHT),
+          }),
+        ),
+      )
     }
   })
 
-  dispatch(scheduleSuccessNotification)
   dispatch(cancelSSO)
+  dispatch(scheduleSuccessNotification)
 }
