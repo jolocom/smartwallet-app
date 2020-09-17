@@ -1,5 +1,11 @@
 import React from 'react'
-import { ScrollView, View, StyleSheet, InputAccessoryView } from 'react-native'
+import {
+  ScrollView,
+  View,
+  StyleSheet,
+  InputAccessoryView,
+  Platform,
+} from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 
@@ -29,13 +35,13 @@ const Recovery: React.FC = () => {
           <RecoveryFooter />
         </ScreenContainer>
       </ScrollView>
-      {
+      {Platform.OS === 'ios' && (
         <InputAccessoryView nativeID="suggestions">
           <View style={{ marginBottom: 10 }}>
             <SeedKeySuggestions />
           </View>
         </InputAccessoryView>
-      }
+      )}
     </>
   )
 }
