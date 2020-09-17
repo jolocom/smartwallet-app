@@ -45,7 +45,6 @@ interface Props
   readonly overlay?: boolean
   readonly heightless?: boolean
   readonly testID?: string
-  readonly customStyles?: ViewStyle
   children: ReactNode
 }
 
@@ -197,7 +196,7 @@ export const Wrapper = React.memo(
       <>
         <WrapperView
           testID={props.testID}
-          style={[styles.wrapper, extraStyle, props.customStyles]}>
+          style={[styles.wrapper, extraStyle]}>
           {props.children}
         </WrapperView>
       </>
