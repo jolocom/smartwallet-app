@@ -114,13 +114,17 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
   }, [withoutStatusBar])
 
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
+    /* if (appState.match(/active/) && nextAppState.match(/inactive|background/)) {
+     *   lockApp()
+     * } */
+
     if (
       (Platform.OS === 'ios' &&
-        appState.match(/inactive|active/) &&
-        nextAppState.match(/background/)) ||
+        appState.match(/background/) &&
+        nextAppState.match(/inactive|active/)) ||
       (Platform.OS === 'android' &&
-        appState.match(/inactive|background/) &&
-        nextAppState.match(/active/))
+        appState.match(/active/) &&
+        nextAppState.match(/inactive|background/))
     ) {
       lockApp()
     }

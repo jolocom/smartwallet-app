@@ -145,7 +145,8 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  unlockApplication: (pin: string) => dispatch(genericActions.unlockApp(pin)),
+  unlockApplication: (pin: string) =>
+    dispatch(genericActions.unlockApp(pin, true)),
 })
 
 export default connect(null, mapDispatchToProps)(RegisterPIN)
