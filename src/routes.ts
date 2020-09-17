@@ -190,6 +190,8 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
   },
 )
 
+const lockTransition = TransitionPresets.ModalSlideFromBottomIOS
+
 const MainStack = createStackNavigator(
   {
     [routeList.Home]: {
@@ -204,7 +206,7 @@ const MainStack = createStackNavigator(
         gestureEnabled: false,
         // @ts-ignore
         notifications: NotificationFilter.none,
-        ...TransitionPresets.ScaleFromCenterAndroid,
+        ...lockTransition
       },
     },
     [routeList.RegisterPIN]: {
@@ -213,7 +215,7 @@ const MainStack = createStackNavigator(
         gestureEnabled: false,
         // @ts-ignore
         notifications: NotificationFilter.none,
-        ...TransitionPresets.ScaleFromCenterAndroid,
+        ...lockTransition
       },
     },
 
