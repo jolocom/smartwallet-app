@@ -4,7 +4,7 @@ import Header from './components/Header'
 
 const PasscodeHeader: React.FC = ({ children }) => (
   <View style={styles.headerContainer}>
-    <Header customStyles={{ paddingTop: 100 }}>{children}</Header>
+    <Header>{children}</Header>
   </View>
 )
 
