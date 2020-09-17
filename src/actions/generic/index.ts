@@ -115,8 +115,11 @@ export const setDisableLock = (value: boolean) => ({
 
 export const lockApp = (
 ): ThunkAction => async (dispatch, getState) => {
-  // if the lock is globally disabled, then this action has no effect
-  if (getState().generic.disableLock) return
+  // if the lock is globally disabled, or there is no identity created/loaded
+  // yet, then this action has no effect
+  const disableLock = getState().generic.disableLock
+  const hasIdentity = !!getState().account.did.did
+  if (disableLock || !hasIdentity) return
 
   // otherwise we lock the app, using the appropriate lock screen
   const keychainPin = await Keychain.getGenericPassword({
