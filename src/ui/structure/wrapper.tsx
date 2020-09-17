@@ -39,7 +39,7 @@ const mapDispatchToAppWrapProps = (dispatch: ThunkDispatch) => ({
 interface Props
   extends Partial<AppWrapConfig>,
     ReturnType<typeof mapDispatchToProps> {
-  readonly customStyles?: ViewStyle
+  readonly style?: ViewStyle
   readonly withoutSafeArea?: boolean
   readonly dark?: boolean
   readonly secondaryDark?: boolean
@@ -76,6 +76,7 @@ interface AppWrapProps
  * centered           alignItems 'center'
  * overlay            absolutely positioned transpare overlay
  * heightless         set height to 0 instead of default 100%
+ * style              custom styles for the wrapping view
  * testID             ID/label for use in tests
  */
 
@@ -86,7 +87,6 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     backgroundColor: backgroundLightMain,
-    //...debug
   },
 })
 
@@ -169,8 +169,8 @@ export const Wrapper = React.memo(
       overlay,
       heightless,
       withoutStatusBar,
-      customStyles,
-      secondaryDark
+      style,
+      secondaryDark,
     } = props
 
     const extraStyle: StyleProp<ViewStyle> = {
@@ -193,16 +193,7 @@ export const Wrapper = React.memo(
       extraStyle.backgroundColor = 'transparent'
     }
 
-    //NOTE: <Wrapper> now cares a bit bout yo style.
-    if (customStyles) Object.assign(extraStyle, customStyles)
-
-    // @ts-ignore
-    if (__DEV__ && props.style) {
-      throw new Error(
-        '<Wrapper> dont care bout yo style. ' +
-          'Look at src/ui/structure/wrapper.tsx',
-      )
-    }
+    if (style) Object.assign(extraStyle, style)
 
     return (
       <>

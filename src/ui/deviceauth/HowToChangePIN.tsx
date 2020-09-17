@@ -28,7 +28,7 @@ const HowToChangePIN: React.FC<PropsI> = ({
 }) => {
   return (
     <Wrapper
-      customStyles={{
+      style={{
         backgroundColor: Colors.black,
       }}>
       <PasscodeWrapper
