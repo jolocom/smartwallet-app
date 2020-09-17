@@ -37,7 +37,7 @@ export const scheduleSuccessNotification: ThunkAction = dispatch => {
     scheduleNotification(
       createInfoNotification({
         title: I18n.t(strings.GREAT_SUCCESS),
-        message: 'Interaction successfully done finished',
+        message: I18n.t(strings.INTERACTION_WITH_THE_SERVICE_COMPLETED),
       }),
     ),
   )
