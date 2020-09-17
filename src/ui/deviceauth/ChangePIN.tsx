@@ -49,7 +49,7 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
   }
 
   return (
-    <Wrapper dark>
+    <Wrapper secondaryDark>
       <NavigationSection
         isBackButton={false}
         onNavigation={() => navigation.goBack()}

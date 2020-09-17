@@ -6,9 +6,7 @@ import I18n from 'src/locales/i18n'
 
 import Header from './components/Header'
 import Paragraph, { ParagraphSizes } from './components/Paragraph'
-import AbsoluteBottom from './components/AbsoluteBottom'
 import Btn, { BtnTypes } from './components/Btn'
-import ScreenContainer from './components/ScreenContainer'
 import PasscodeInput from './PasscodeInput'
 import strings from '../../locales/strings'
 import { PIN_USERNAME, PIN_SERVICE } from './utils/keychainConsts'
@@ -18,7 +16,6 @@ import { Colors } from './colors'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'src/store'
 import { genericActions } from 'src/actions'
-import useKeyboardHeight from './hooks/useKeyboardHeight'
 import { NavigationInjectedProps } from 'react-navigation'
 import useDisableBackButton from './hooks/useDisableBackButton'
 import { Wrapper } from '../structure'
@@ -41,8 +38,6 @@ const RegisterPIN: React.FC<PropsI> = ({ unlockApplication, navigation }) => {
       return navigation.isFocused()
     }, []),
   )
-
-  const { keyboardHeight } = useKeyboardHeight()
 
   const handlePasscodeSubmit = useCallback(() => {
     setIsCreating(false)
@@ -82,7 +77,7 @@ const RegisterPIN: React.FC<PropsI> = ({ unlockApplication, navigation }) => {
   }, [verifiedPasscode])
 
   return (
-    <Wrapper dark>
+    <Wrapper secondaryDark>
       <PasscodeWrapper customStyles={{ paddingTop: 38 }}>
         <View>
           <Header color={Colors.white90}>

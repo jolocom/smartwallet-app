@@ -12,11 +12,13 @@ export interface AppWrapConfig {
   readonly withoutStatusBar: boolean
   readonly loading: boolean
   readonly dark: boolean
+  readonly secondaryDark: boolean
 }
 const initialAppWrapAttrs: AppWrapConfig = {
   loading: false,
   withoutStatusBar: false,
   dark: false,
+  secondaryDark: false,
 }
 
 export const isAppWrapConfigAttr = (key: string) => initialAppWrapAttrs[key] !== undefined

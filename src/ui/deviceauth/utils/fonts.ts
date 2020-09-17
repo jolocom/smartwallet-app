@@ -1,9 +1,10 @@
 import { Colors } from '../colors'
+import { fontLight, fontMain, fontMedium } from '../../../styles/typography'
 
 export enum Fonts {
-  Regular = 'TTCommons-Regular',
-  Medium = 'TTCommons-Medium',
-  Light = 'TTCommons-Light',
+  Regular = fontMain,
+  Medium = fontMedium,
+  Light = fontLight,
 }
 
 export const TextStyle = {
