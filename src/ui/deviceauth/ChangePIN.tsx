@@ -27,6 +27,7 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
   const [newPin, setNewPin] = useState('')
   const [hasError, setHasError] = useState(false)
   const [isCreateNew, setIsCreateNew] = useState(false)
+  const [isSuccess, setSuccess] = useState(false)
 
   const { keychainPin, isLoadingStorage } = useGetStoredAuthValues()
 
@@ -41,11 +42,29 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
   }
 
   const handleSetNewPin = async () => {
-    await resetServiceValuesInKeychain()
-    await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
-      service: PIN_SERVICE,
-    })
-    navigation.goBack()
+    setSuccess(true)
+    setTimeout(async () => {
+      await resetServiceValuesInKeychain()
+      await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
+        service: PIN_SERVICE,
+      })
+      navigation.goBack()
+    }, 700)
+  }
+
+  const getHeader = () => {
+    if (hasError) {
+      return strings.WRONG_PIN
+    } else {
+      if (!isCreateNew) {
+        return strings.CURRENT_PASSCODE
+      } else {
+        if (isSuccess) {
+          return strings.PASSCODE_CHANGED
+        }
+        return strings.CREATE_NEW_PASSCODE
+      }
+    }
   }
 
   return (
@@ -55,13 +74,7 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
         onNavigation={() => navigation.goBack()}
       />
       <PasscodeWrapper>
-        <PasscodeHeader>
-          {hasError
-            ? I18n.t(strings.WRONG_PIN)
-            : isCreateNew
-            ? I18n.t(strings.CREATE_NEW_PASSCODE)
-            : I18n.t(strings.CURRENT_PASSCODE)}
-        </PasscodeHeader>
+        <PasscodeHeader>{I18n.t(getHeader())}</PasscodeHeader>
         {isLoadingStorage ? (
           <ActivityIndicator />
         ) : isCreateNew ? (
@@ -69,6 +82,7 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
             value={newPin}
             stateUpdaterFn={setNewPin}
             onSubmit={handleSetNewPin}
+            isSuccess={isSuccess}
           />
         ) : (
           <PasscodeInput

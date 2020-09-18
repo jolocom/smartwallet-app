@@ -8,9 +8,7 @@ import {
   createSwitchNavigator,
 } from 'react-navigation'
 
-import {
-  createStackNavigator,
-} from 'react-navigation-stack'
+import { createStackNavigator, TransitionPresets } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
 
@@ -34,7 +32,6 @@ import ChangePIN from './ui/deviceauth/ChangePIN'
 import Lock from './ui/deviceauth/Lock'
 import RegisterPIN from './ui/deviceauth/RegisterPIN'
 import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
-
 
 import {
   DocsIcon,
@@ -193,6 +190,8 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
   },
 )
 
+const lockTransition = TransitionPresets.ModalSlideFromBottomIOS
+
 const MainStack = createStackNavigator(
   {
     [routeList.Home]: {
@@ -207,7 +206,8 @@ const MainStack = createStackNavigator(
         gestureEnabled: false,
         // @ts-ignore
         notifications: NotificationFilter.none,
-      }
+        ...lockTransition
+      },
     },
     [routeList.RegisterPIN]: {
       screen: RegisterPIN,
@@ -215,7 +215,8 @@ const MainStack = createStackNavigator(
         gestureEnabled: false,
         // @ts-ignore
         notifications: NotificationFilter.none,
-      }
+        ...lockTransition
+      },
     },
 
     [routeList.HowToChangePIN]: {
@@ -234,6 +235,7 @@ const MainStack = createStackNavigator(
       navigationOptions: {
         // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
+        ...TransitionPresets.ScaleFromCenterAndroid,
       },
     },
     [routeList.CredentialReceiveNegotiate]: {
@@ -342,24 +344,11 @@ const MainStack = createStackNavigator(
     }),
   },
   {
-    //    transitionConfig: (transitionProps, prevTransitionProps) => {
-    //      const isModal = MODAL_ROUTES.some(
-    //        screenName =>
-    //          screenName === transitionProps.scene.route.routeName ||
-    //          (prevTransitionProps &&
-    //            screenName === prevTransitionProps.scene.route.routeName),
-    //      )
-    //      return StackViewTransitionConfigs.defaultTransitionConfig(
-    //        transitionProps,
-    //        prevTransitionProps,
-    //        isModal,
-    //      )
-    //    },
-    defaultNavigationOptions: noHeaderNavOpts,
+    defaultNavigationOptions: {
+      ...noHeaderNavOpts,
+    },
   },
 )
-
-//const MODAL_ROUTES = [routeList.InteractionScreen]
 
 // NOTE: navigatorReset in actions/navigation assumes that there is only 1
 // StackRouter child at the top level
