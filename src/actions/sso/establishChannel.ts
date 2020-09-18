@@ -66,13 +66,9 @@ export const startChannel = (interactionId: string): ThunkAction => async (
         break
       case FlowType.Encrypt:
         resp = await interxn.createEncResponseToken()
-        // Action Succeeded!
-        // your data was encrypted
         successNotification(strings.YOUR_DATA_WAS_ENCRYPTED)
         break
       case FlowType.Decrypt:
-        // Action succeeded!
-        // the data was decrypted
         resp = await interxn.createDecResponseToken()
         successNotification(strings.YOUR_DATA_WAS_DECRYPTED)
         break
