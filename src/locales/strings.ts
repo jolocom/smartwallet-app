@@ -102,6 +102,11 @@ const notifications = {
     "We can't do this, some of the documents are not yours",
   IT_SEEMS_LIKE_WE_CANT_DO_THIS: "It seems like we can't do this",
   SOMETHING_WENT_WRONG_CHOOSE_AGAIN: 'Something went wrong. Choose again!',
+  INTERACTION_WITH_THE_SERVICE_COMPLETED:
+    'Interaction with the service completed. Your service page should be updated now',
+  ACTION_SUCCEEDED: 'Action succeeded',
+  YOUR_DATA_WAS_ENCRYPTED: 'Your data was encrypted',
+  YOUR_DATA_WAS_DECRYPTED: 'Your data was decrypted',
 }
 
 const errorTitle = {
@@ -187,6 +192,8 @@ const deviceAuth = {
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
   REPEAT_YOUR_PHRASE: 'Repeat your phrase',
   WORD_BY_WORD: 'word by word',
+  ADDING_AN_EXTRA_LAYER_OF_SECURITY:
+    'Adding an extra layer of security helps prevent unwanted access to your wallet',
 }
 
 const termsOfService = {
