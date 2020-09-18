@@ -78,7 +78,7 @@ const ErrorReportingContainer = (props: Props) => {
   }
 
   return (
-    <Wrapper dark>
+    <Wrapper secondaryDark>
       <NavigationSection
         onNavigation={navigateBack}
         isBackButton={isBackButton}
