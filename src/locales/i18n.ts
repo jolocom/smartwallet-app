@@ -7,6 +7,7 @@ import I18n from 'i18n-js'
 import * as RNLocalize from 'react-native-localize'
 
 const de = require('./de.json')
+const en = require('./en.json')
 
 export const locales = ['en', 'de']
 const fallback = { languageTag: 'en', isRTL: false };
@@ -15,11 +16,12 @@ const { languageTag } = RNLocalize.findBestAvailableLanguage(locales) || fallbac
 
 I18n.defaultLocale = fallback.languageTag
 I18n.defaultSeparator = '|' // Defaults to ".", which prevents us from using sentences with fullstops
-I18n.fallbacks = true
+I18n.fallbacks = false
 I18n.missingTranslation = scope => scope
 
 I18n.translations = {
   de,
+  en
 }
 
 I18n.locale = languageTag

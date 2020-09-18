@@ -186,7 +186,7 @@ export const CredentialReceiveComponent = (props: Props) => {
         >
           <Text style={styles.description}>
             {I18n.t(
-              strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU,
+              strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU, {'service-name': issuerName}
             )}
           </Text>
         </Animated.View>
