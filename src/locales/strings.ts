@@ -170,7 +170,7 @@ const deviceAuth = {
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'New passcode',
   WRONG_PIN: 'Wrong code',
-  PASSWORD_SUCCESSFULLY_CHANGED: 'Passcode changed!',
+  PASSCODE_CHANGED: 'Passcode changed!',
   CREATE_PASSCODE: 'Create passcode',
   VERIFY_PASSCODE: 'Verify passcode',
   IN_ORDER_TO_PROTECT_YOUR_DATA:
