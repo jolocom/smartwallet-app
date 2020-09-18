@@ -235,7 +235,6 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                         ...Buttons.buttonStandardText,
                         color: Colors.sandLight,
                         fontSize: Typography.textMD,
-                        paddingVertical: Platform.OS === 'ios' ? 12 : 0,
                       },
                     }}
                   />
