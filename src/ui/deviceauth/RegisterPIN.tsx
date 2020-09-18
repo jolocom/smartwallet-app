@@ -20,6 +20,7 @@ import { NavigationInjectedProps } from 'react-navigation'
 import useDisableBackButton from './hooks/useDisableBackButton'
 import { Wrapper } from '../structure'
 import PasscodeWrapper from './components/PasscodeWrapper'
+import { ERROR_TIMEOUT } from './utils'
 
 interface PropsI
   extends NavigationInjectedProps,
@@ -59,7 +60,7 @@ const RegisterPIN: React.FC<PropsI> = ({ unlockApplication, navigation }) => {
       setTimeout(() => {
         setVerifiedPasscode('')
         setHasError(false)
-      }, 700)
+      }, ERROR_TIMEOUT)
     }
   }
 
@@ -89,9 +90,7 @@ const RegisterPIN: React.FC<PropsI> = ({ unlockApplication, navigation }) => {
             color={Colors.white70}
             size={ParagraphSizes.medium}
             customStyles={{ opacity: 0.8, marginHorizontal: 15, marginTop: 8 }}>
-            {isCreating
-              ? I18n.t(strings.IN_ORDER_TO_PROTECT_YOUR_DATA)
-              : I18n.t(strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN)}
+            {I18n.t(strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY)}
           </Paragraph>
         </View>
         <View style={styles.passcodeContainer}>

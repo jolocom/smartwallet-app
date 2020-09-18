@@ -17,6 +17,7 @@ import strings from '../../locales/strings'
 import PasscodeWrapper from './components/PasscodeWrapper'
 import { Wrapper } from '../structure'
 import { NavigationSection } from '../errors/components/navigationSection'
+import { ERROR_TIMEOUT } from './utils'
 
 interface PropsI {
   navigation: NavigationScreenProp<{}, {}>
@@ -37,6 +38,9 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
       setIsCreateNew(true)
     } else {
       setHasError(true)
+      setTimeout(() => {
+        setPin('')
+      }, ERROR_TIMEOUT)
     }
   }
 

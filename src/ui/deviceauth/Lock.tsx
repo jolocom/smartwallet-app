@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { View, StyleSheet, BackHandler } from 'react-native'
+import { View, StyleSheet, BackHandler, Platform } from 'react-native'
 
 import { NavigationInjectedProps } from 'react-navigation'
 
@@ -19,6 +19,7 @@ import { Wrapper } from '../structure'
 import useDisableBackButton from './hooks/useDisableBackButton'
 import PasscodeWrapper from './components/PasscodeWrapper'
 import PasscodeHeader from './PasscodeHeader'
+import { ERROR_TIMEOUT } from './utils'
 
 interface LockProps
   extends NavigationInjectedProps,
@@ -33,14 +34,13 @@ const Lock: React.FC<LockProps> = ({
 }) => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
+  const [isSuccess, setSuccess] = useState(false)
 
   useEffect(() => {
     if (pin.length < 4 && hasError) {
       setHasError(false)
     }
   }, [pin])
-
-  let errorTimeout: number
 
   useDisableBackButton(
     useCallback(
@@ -63,15 +63,21 @@ const Lock: React.FC<LockProps> = ({
 
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBack)
-      if (errorTimeout) clearTimeout(errorTimeout)
     }
   }, [isLocked])
 
   const handleAppUnlock = async () => {
-    await unlockApp(pin)
-    // unlockApp() should navigate away, if it hasn't then something is wrong.
-    // this is in a timeout to not show error immediately
-    errorTimeout = setTimeout(() => setHasError(true), 100)
+    try {
+      await unlockApp(pin)
+      setSuccess(true)
+    } catch (e) {
+      if (e.message === 'wrongPin') {
+        setHasError(true)
+        setTimeout(() => {
+          setPin('')
+        }, ERROR_TIMEOUT)
+      }
+    }
   }
 
   return (
@@ -85,6 +91,7 @@ const Lock: React.FC<LockProps> = ({
             onSubmit={handleAppUnlock}
             hasError={hasError}
             errorStateUpdaterFn={setHasError}
+            isSuccess={isSuccess}
           />
         </View>
         <Btn

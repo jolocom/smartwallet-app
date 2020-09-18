@@ -135,7 +135,8 @@ export const unlockApp = (
   const keychainPin = await Keychain.getGenericPassword({
     service: PIN_SERVICE,
   })
-  if (!keychainPin || keychainPin.password !== pin) return
+
+  if (!keychainPin || keychainPin.password !== pin) throw new Error('wrongPin')
 
   dispatch(setLocked(false))
   return dispatch(navigationActions.navigateBack())
