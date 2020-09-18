@@ -14,10 +14,8 @@ import { white } from 'src/styles/colors'
 import { fontMain, textXXS } from 'src/styles/typography'
 import { showErrorScreen } from 'src/actions/generic'
 
-import { navigateBack } from 'src/actions/navigation'
-
 import { ScannerContainer } from './scanner'
-import { genericActions } from 'src/actions'
+import { genericActions, navigationActions } from 'src/actions'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -95,7 +93,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       }
     }
   },
-  navigateHome: () => dispatch(navigateBack()),
+  navigateHome: () => dispatch(navigationActions.navigateBackHome()),
   setDisableLock: (val: boolean) => dispatch(genericActions.setDisableLock(val))
 })
 

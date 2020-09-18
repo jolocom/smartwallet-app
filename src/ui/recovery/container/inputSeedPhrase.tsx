@@ -10,6 +10,7 @@ import { timeout } from '../../../utils/asyncTimeout'
 import { RootState } from '../../../reducers'
 import { navigationActions, recoveryActions } from 'src/actions'
 import { NavigationInjectedProps } from 'react-navigation'
+import { routeList } from '../../../routeList'
 
 export enum WordState {
   editing,
@@ -133,6 +134,15 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
     }
   }
 
+  private onCancel = () => {
+    const { state } = this.props.navigation
+    if (state.params && state.params.isPINrecovery) {
+      this.props.goBack()
+    } else {
+      this.props.goToLanding()
+    }
+  }
+
   public render(): JSX.Element {
     const {
       inputValue,
@@ -160,7 +170,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
         handleDoneButton={this.onDoneButton}
         handleNextWord={this.nextWord}
         handlePreviousWord={this.previousWord}
-        handleBackButton={this.props.goBack}
+        handleBackButton={this.onCancel}
         isLoading={this.props.isLoading}
       />
     )
@@ -175,6 +185,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   recoverIdentity: (mnemonic: string) =>
     dispatch(withErrorScreen(recoverIdentity(mnemonic))),
   goBack: () => dispatch(navigationActions.navigateBack()),
+  goToLanding: () =>
+    dispatch(navigationActions.navigate({ routeName: routeList.Landing })),
   handleRestoreAccess: (mnemonic: string[]) =>
     dispatch(recoveryActions.onRestoreAccess(mnemonic)),
 })

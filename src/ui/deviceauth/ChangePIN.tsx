@@ -28,7 +28,10 @@ interface PropsI extends ReturnType<typeof mapDispatchToProps> {
   navigation: NavigationScreenProp<{}, {}>
 }
 
-const ChangePin: React.FC<PropsI> = ({ navigation, navigateTorecoveryInstuction }) => {
+const ChangePin: React.FC<PropsI> = ({
+  navigation,
+  navigateTorecoveryInstuction,
+}) => {
   const [pin, setPin] = useState('')
   const [newPin, setNewPin] = useState('')
   const [hasError, setHasError] = useState(false)
@@ -102,20 +105,22 @@ const ChangePin: React.FC<PropsI> = ({ navigation, navigateTorecoveryInstuction 
             hasError={hasError}
           />
         )}
-        <Btn
-          customContainerStyles={{ marginTop: 30 }}
-          customTextStyles={{
-            opacity: 0.5,
-            fontSize: Platform.select({
-              ios: 20,
-              android: 16,
-            }),
-            lineHeight: 22,
-          }}
-          type={BtnTypes.secondary}
-          onPress={navigateTorecoveryInstuction}>
-          {I18n.t(strings.FORGOT_YOUR_PIN)}
-        </Btn>
+        {!isSuccess && (
+          <Btn
+            customContainerStyles={{ marginTop: 30 }}
+            customTextStyles={{
+              opacity: 0.5,
+              fontSize: Platform.select({
+                ios: 20,
+                android: 16,
+              }),
+              lineHeight: 22,
+            }}
+            type={BtnTypes.secondary}
+            onPress={navigateTorecoveryInstuction}>
+            {I18n.t(strings.FORGOT_YOUR_PIN)}
+          </Btn>
+        )}
       </PasscodeWrapper>
     </Wrapper>
   )

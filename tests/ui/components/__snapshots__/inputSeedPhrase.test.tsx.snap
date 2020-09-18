@@ -44,7 +44,7 @@ exports[`inputSeedPhrase component matches the snapshot at start 1`] = `
       }
       testID="recoveryMsg"
     >
-      Start writing your seed-phrase and it will appear here word by word
+      Enter your secret phrase word by word and it will appear here
     </Text>
   </View>
   <View
@@ -244,7 +244,7 @@ exports[`inputSeedPhrase component matches the snapshot when loading 1`] = `
       }
       testID="recoveryMsg"
     >
-      Start writing your seed-phrase and it will appear here word by word
+      Enter your secret phrase word by word and it will appear here
     </Text>
   </View>
   <RippleLoader
@@ -307,7 +307,7 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
       }
       testID="recoveryMsg"
     >
-      Start writing your seed-phrase and it will appear here word by word
+      Enter your secret phrase word by word and it will appear here
     </Text>
   </View>
   <View
@@ -454,7 +454,6 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
               "color": "rgb(255, 239, 223)",
               "fontSize": 20,
               "fontWeight": "normal",
-              "paddingVertical": 12,
             },
           }
         }
@@ -478,7 +477,6 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
               "color": "rgb(255, 239, 223)",
               "fontSize": 20,
               "fontWeight": "normal",
-              "paddingVertical": 12,
             },
           }
         }

@@ -3,6 +3,8 @@ import { StyleSheet, Image, View, Text, ViewStyle } from 'react-native'
 import { IdentitySummary } from '../../../actions/sso/types'
 import { Colors, Spacing, Typography } from 'src/styles'
 import { CardWrapper } from 'src/ui/structure'
+import strings from 'src/locales/strings'
+import I18n from 'src/locales/i18n'
 
 interface Props {
   issuer: IdentitySummary
@@ -39,7 +41,7 @@ export const IssuerCard: React.FC<Props> = props => {
   } = props
 
   const publicProfile = issuerPublicProfile || {
-    name: 'Service Name',
+    name: I18n.t(strings.NO_SERVICE_NAME),
     url: issuerDid,
     description: '',
   }
