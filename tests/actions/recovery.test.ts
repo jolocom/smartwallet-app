@@ -8,6 +8,11 @@ import { entropyToMnemonic} from 'bip39'
 
 describe('Account recovery actions', () => {
   const initialState: RecursivePartial<RootState> = {
+    account: {
+      did: {
+        did: 'some did'
+      }
+    },
     generic: {
       disableLock: false
     }
