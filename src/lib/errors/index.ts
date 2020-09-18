@@ -28,7 +28,7 @@ export class AppError extends Error implements IAppError {
   public constructor(
     code = ErrorCode.Unknown,
     origError?: any,
-    navigateTo: routeList = routeList.AppInit,
+    navigateTo: routeList = routeList.Home,
   ) {
     super(strings[code] || strings[ErrorCode.Unknown])
     // this.code = code
