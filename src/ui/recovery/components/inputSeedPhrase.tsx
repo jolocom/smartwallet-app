@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StyleSheet, Text, TextInput, View, Platform } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { Wrapper, JolocomButton } from '../../structure'
 import { Button } from 'react-native-material-ui'
 import { Colors, Spacing, Typography, Buttons } from 'src/styles'
@@ -235,7 +235,6 @@ const InputSeedPhraseComponent: React.FC<InputSeedPhraseProps> = ({
                         ...Buttons.buttonStandardText,
                         color: Colors.sandLight,
                         fontSize: Typography.textMD,
-                        paddingVertical: Platform.OS === 'ios' ? 12 : 0,
                       },
                     }}
                   />

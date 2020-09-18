@@ -178,8 +178,6 @@ const deviceAuth = {
   PASSCODE_CHANGED: 'Passcode changed!',
   CREATE_PASSCODE: 'Create passcode',
   VERIFY_PASSCODE: 'Verify passcode',
-  IN_ORDER_TO_PROTECT_YOUR_DATA:
-    'Adding an extra layer of security helps prevent unwanted access to your wallet',
   ANY_FUTURE_PASSCODE_RESTORE:
     'You can change the passcode later by using your secret phrase',
   HOW_TO_CHANGE_PIN: 'How to change your passcode',

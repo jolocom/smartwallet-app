@@ -46,7 +46,7 @@ export const navigate = (
 export const navigateBack = (): ThunkAction => dispatch => {
   const action = NavigationActions.back()
   dispatchNavigationAction(action)
-  return action
+  return dispatch(action)
 }
 
 export const navigateBackHome = (): ThunkAction => dispatch => {

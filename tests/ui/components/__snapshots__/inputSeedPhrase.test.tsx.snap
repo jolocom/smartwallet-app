@@ -454,7 +454,6 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
               "color": "rgb(255, 239, 223)",
               "fontSize": 20,
               "fontWeight": "normal",
-              "paddingVertical": 12,
             },
           }
         }
@@ -478,7 +477,6 @@ exports[`inputSeedPhrase component matches the snapshot while inputting 1`] = `
               "color": "rgb(255, 239, 223)",
               "fontSize": 20,
               "fontWeight": "normal",
-              "paddingVertical": 12,
             },
           }
         }

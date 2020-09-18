@@ -42,7 +42,13 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     )
   },
   recoverIdentity: () => {
-    dispatch(withErrorScreen(checkTermsOfService(routeList.InputSeedPhrase)))
+    dispatch(
+      withErrorScreen(
+        checkTermsOfService(routeList.InputSeedPhrase),
+        err =>
+          new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
+      ),
+    )
   },
 })
 
