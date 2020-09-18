@@ -200,6 +200,8 @@ const deviceAuth = {
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
   REPEAT_YOUR_PHRASE: 'Repeat your phrase',
   WORD_BY_WORD: 'word by word',
+  ADDING_AN_EXTRA_LAYER_OF_SECURITY:
+    'Adding an extra layer of security helps prevent unwanted access to your wallet',
 }
 
 const termsOfService = {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as Keychain from 'react-native-keychain'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, Platform } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 
 import I18n from 'src/locales/i18n'
@@ -17,12 +17,18 @@ import strings from '../../locales/strings'
 import PasscodeWrapper from './components/PasscodeWrapper'
 import { Wrapper } from '../structure'
 import { NavigationSection } from '../errors/components/navigationSection'
+import { ERROR_TIMEOUT } from './utils'
+import Btn, { BtnTypes } from './components/Btn'
+import { ThunkDispatch } from '../../store'
+import { navigationActions } from '../../actions'
+import { routeList } from '../../routeList'
+import { connect } from 'react-redux'
 
-interface PropsI {
+interface PropsI extends ReturnType<typeof mapDispatchToProps> {
   navigation: NavigationScreenProp<{}, {}>
 }
 
-const ChangePin: React.FC<PropsI> = ({ navigation }) => {
+const ChangePin: React.FC<PropsI> = ({ navigation, navigateTorecoveryInstuction }) => {
   const [pin, setPin] = useState('')
   const [newPin, setNewPin] = useState('')
   const [hasError, setHasError] = useState(false)
@@ -38,6 +44,9 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
       setIsCreateNew(true)
     } else {
       setHasError(true)
+      setTimeout(() => {
+        setPin('')
+      }, ERROR_TIMEOUT)
     }
   }
 
@@ -93,9 +102,31 @@ const ChangePin: React.FC<PropsI> = ({ navigation }) => {
             hasError={hasError}
           />
         )}
+        <Btn
+          customContainerStyles={{ marginTop: 30 }}
+          customTextStyles={{
+            opacity: 0.5,
+            fontSize: Platform.select({
+              ios: 20,
+              android: 16,
+            }),
+            lineHeight: 22,
+          }}
+          type={BtnTypes.secondary}
+          onPress={navigateTorecoveryInstuction}>
+          {I18n.t(strings.FORGOT_YOUR_PIN)}
+        </Btn>
       </PasscodeWrapper>
     </Wrapper>
   )
 }
 
-export default ChangePin
+const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
+  navigateTorecoveryInstuction: () => {
+    dispatch(
+      navigationActions.navigate({ routeName: routeList.HowToChangePIN }),
+    )
+  },
+})
+
+export default connect(null, mapDispatchToProps)(ChangePin)
