@@ -123,7 +123,6 @@ const ChangePin: React.FC<PropsI> = ({ navigation, navigateTorecoveryInstuction 
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   navigateTorecoveryInstuction: () => {
-    console.log("TEST")
     dispatch(
       navigationActions.navigate({ routeName: routeList.HowToChangePIN }),
     )
