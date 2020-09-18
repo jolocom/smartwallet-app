@@ -38,7 +38,6 @@ const Lock = () => {
 
   const dispatch = useDispatch()
   const {
-    isLoadingStorage,
     biometryType,
     keychainPin,
     isBiometrySelected,
@@ -84,34 +83,28 @@ const Lock = () => {
       <ScreenContainer
         customStyles={{ marginTop: '30%', justifyContent: 'flex-start' }}
       >
-        {isLoadingStorage ? (
-          <ActivityIndicator />
-        ) : (
-          <>
-            <JoloText
-              kind={JoloTextKind.title}
-              size={JoloTextSizes.middle}
-              weight={JoloTextWeight.regular}
-              color={Colors.white90}
-            >
-              {strings.ENTER_YOUR_PIN}
-            </JoloText>
-            <View style={styles.inputContainer}>
-              <PasscodeInput
-                value={pin}
-                stateUpdaterFn={setPin}
-                onSubmit={handleAppUnlock}
-                hasError={hasError}
-                errorStateUpdaterFn={setHasError}
-              />
-            </View>
-            <AbsoluteBottom>
-              <Btn type={BtnTypes.secondary} onPress={() => {}}>
-                {strings.FORGOT_YOUR_PIN}
-              </Btn>
-            </AbsoluteBottom>
-          </>
-        )}
+        <JoloText
+          kind={JoloTextKind.title}
+          size={JoloTextSizes.middle}
+          weight={JoloTextWeight.regular}
+          color={Colors.white90}
+        >
+          {strings.ENTER_YOUR_PIN}
+        </JoloText>
+        <View style={styles.inputContainer}>
+          <PasscodeInput
+            value={pin}
+            stateUpdaterFn={setPin}
+            onSubmit={handleAppUnlock}
+            hasError={hasError}
+            errorStateUpdaterFn={setHasError}
+          />
+        </View>
+        <AbsoluteBottom>
+          <Btn type={BtnTypes.secondary} onPress={() => {}}>
+            {strings.FORGOT_YOUR_PIN}
+          </Btn>
+        </AbsoluteBottom>
       </ScreenContainer>
     </Modal>
   )
