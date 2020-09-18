@@ -40,7 +40,9 @@ const HowToChangePIN: React.FC<PropsI> = ({
           color={Colors.white90}
           customStyles={{
             fontSize: BP({ small: 24, medium: 28, large: 28 }),
+            lineHeight: BP({ small: 28, medium: 32, large: 32 }),
             alignSelf: 'flex-start',
+            textAlign: 'left',
           }}>
           {I18n.t(strings.HOW_TO_CHANGE_PIN)}
         </Header>
@@ -62,7 +64,7 @@ const HowToChangePIN: React.FC<PropsI> = ({
             lineHeight: BP({ small: 18, medium: 20, large: 22 }),
             alignSelf: 'flex-start',
             textAlign: 'left',
-            marginTop: 18,
+            marginTop: BP({ small: 0, medium: 12, large: 24 }),
           }}>
           {I18n.t(strings.YOU_CAN_CHANGE_PIN)}
         </Paragraph>
