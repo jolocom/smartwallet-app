@@ -82,7 +82,7 @@ const backup = {
   RESTORE_ACCOUNT: 'Restore account',
   BACK_TO_SIGNUP: 'Back to signup',
   START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD:
-    'Start writing your seed-phrase and it will appear here word by word',
+    'Enter your secret phrase word by word and it will appear here',
 }
 
 const notifications = {
@@ -130,7 +130,7 @@ const errorReporting = {
     'You can provide further details about the issue here',
   TAP_TO_WRITE: 'Tap to write...',
   WANT_TO_GET_IN_TOUCH: 'Want to get in touch?',
-  LEAVE_US_YOUR_EMAIL_AND_NUMBER: 'Leave us your email or number...',
+  LEAVE_US_YOUR_EMAIL_AND_NUMBER: 'Leave us your email',
   WE_DO_NOT_STORE_ANY_DATA_AND_DO_NOT_SPAM_ANY_USER_INFORMATION_WILL_BE_DELETED_IMMEDIATELY_AFTER_SOLVING_THE_PROBLEM:
     'We do not store data and do not spam, any user information will be deleted immediately after solving the problem',
   RATE_THE_ISSUE: 'Rate the issue',
@@ -149,9 +149,6 @@ const errorCodes = {
 
   [ErrorCode.AuthenticationRequestFailed]: 'Authentication request failed',
   [ErrorCode.AuthenticationResponseFailed]: 'Authentication response failed',
-  [ErrorCode.PaymentRequestFailed]: 'Payment request failed',
-  [ErrorCode.PaymentResponseFailed]: 'Payment response failed',
-
   [ErrorCode.CredentialOfferFailed]: 'Credential offer failed',
   [ErrorCode.CredentialsReceiveFailed]: 'Could not receive credentials',
   [ErrorCode.CredentialRequestFailed]: 'Credential request failed',
@@ -168,29 +165,24 @@ const errorCodes = {
 }
 
 const deviceAuth = {
-  ENTER_YOUR_PIN: 'Enter your PIN',
-  FORGOT_YOUR_PIN: 'Forgot your PIN?',
-  I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
+  ENTER_YOUR_PIN: 'Enter your passcode',
+  FORGOT_YOUR_PIN: 'Forgot your passcode?',
   SKIP: 'Skip',
-  YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
   SETTINGS: 'Settings',
   CANCEL: 'Cancel',
   RESET: 'Reset',
-  CHANGE_PIN: 'Change PIN',
+  CHANGE_PIN: 'Change passcode',
   CURRENT_PASSCODE: 'Current passcode',
-  CREATE_NEW_PASSCODE: 'Create new passcode',
-  WRONG_PIN: 'Wrong PIN',
-  PASSCODE_CHANGED: 'Passcode changed!',
-  CREATE_PASSCODE: 'Create PIN',
-  VERIFY_PASSCODE: 'Verify PIN',
+  CREATE_NEW_PASSCODE: 'New passcode',
+  WRONG_PIN: 'Wrong code',
+  PASSWORD_SUCCESSFULLY_CHANGED: 'Passcode changed!',
+  CREATE_PASSCODE: 'Create passcode',
+  VERIFY_PASSCODE: 'Verify passcode',
   IN_ORDER_TO_PROTECT_YOUR_DATA:
-    'In order to protect your data from other users and maintain confidentiality',
-  YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
-    'You won’t be able to easily check it again, so please memorise it',
-  PINS_DONT_MATCH: "PINs don't match",
+    'Adding an extra layer of security helps prevent unwanted access to your wallet',
   ANY_FUTURE_PASSCODE_RESTORE:
-    'Any future passcode restore is possible only with your secret phrase',
-  HOW_TO_CHANGE_PIN: 'How to change your PIN',
+    'You can change the passcode later by using your secret phrase',
+  HOW_TO_CHANGE_PIN: 'How to change your passcode',
   WE_ARE_SORRY_THAT_YOU_FORGOT:
     'We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!',
   RESTORE_ACCESS: 'Restore access',
@@ -224,6 +216,10 @@ export default {
   ...notifications,
   ...deviceAuth,
   ...termsOfService,
+  NO_SERVICE_NAME: "Service shared no public profile",
+  SHOWING_VALID: "Showing valid",
+  SHOWING_EXPIRED: "Showing expired",
+  ISSUED_BY: "Issued by",
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
   HISTORY: 'History',
@@ -289,8 +285,10 @@ export default {
   NAME: 'Name',
   PERSONAL: 'Personal',
   NO_DOCUMENTS_TO_SEE_HERE: 'No documents to see here',
-  EXPIRED: 'expired',
+  EXPIRED: 'Expired',
   UNKNOWN: 'Unknown',
+  VALID_UNTIL: 'Valid until',
+  EXPIRES_ON: 'Expires on',
 
   //ESATABLISH
   CONNECTION_DESCRIPTION: 'Connection description:',
