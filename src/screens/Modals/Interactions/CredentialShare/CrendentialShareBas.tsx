@@ -12,6 +12,7 @@ import CredentialCard from '../CredentialCard'
 import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
+import {View} from "react-native";
 
 const CredentialShareBas = () => {
   const shareDocument = useSelector(getFirstShareDocument)
@@ -44,13 +45,15 @@ const CredentialShareBas = () => {
       return null
     } else {
       return (
-        <AttributesWidget
-          attributes={attributes}
-          onCreateNewAttr={handleCreateAttribute}
-          onSelect={(key, id) => handleSelectCredential({ [key]: id })}
-          selectedAttributes={selectedCredentials}
-          isSelectable={true}
-        />
+          <View style={{ width: '100%' }}>
+            <AttributesWidget
+                attributes={attributes}
+                onCreateNewAttr={handleCreateAttribute}
+                onSelect={(key, id) => handleSelectCredential({ [key]: id })}
+                selectedAttributes={selectedCredentials}
+                isSelectable={true}
+            />
+          </View>
       )
     }
   }
