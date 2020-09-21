@@ -12,6 +12,7 @@ import Documents from './Documents'
 import History from './History'
 import Settings from './Settings'
 import { useGetAllAttributes } from '~/hooks/attributes'
+import BottomBar from '~/components/BottomBar'
 
 const MainTabs = createBottomTabNavigator()
 
@@ -36,7 +37,11 @@ const LoggedInTabs: React.FC = () => {
   }, [])
 
   return (
-    <MainTabs.Navigator>
+    <MainTabs.Navigator
+      tabBar={(props) => {
+        return <BottomBar {...props} />
+      }}
+    >
       <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />
       <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
       <MainTabs.Screen name={ScreenNames.History} component={History} />
