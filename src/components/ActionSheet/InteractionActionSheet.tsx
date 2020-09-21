@@ -1,21 +1,34 @@
-import React, {RefObject, useEffect, useRef} from 'react'
-import {Dimensions, Platform, StyleSheet, View} from 'react-native'
-import ActionSheet, {ActionSheetProps} from 'react-native-actions-sheet'
-import {useDispatch, useSelector} from 'react-redux'
-import {FlowType} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import React, { RefObject, useEffect, useRef } from 'react'
+import { Dimensions, Platform, StyleSheet, View } from 'react-native'
+import ActionSheet, { ActionSheetProps } from 'react-native-actions-sheet'
+import { useDispatch, useSelector } from 'react-redux'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'
-import {CredentialShareBas, CredentialShareFas,} from '~/screens/Modals/Interactions/CredentialShare'
-import {CredentialOfferBas, CredentialOfferFas,} from '~/screens/Modals/Interactions/CredentialOffer'
+import {
+  CredentialShareBas,
+  CredentialShareFas,
+} from '~/screens/Modals/Interactions/CredentialShare'
+import {
+  CredentialOfferBas,
+  CredentialOfferFas,
+} from '~/screens/Modals/Interactions/CredentialOffer'
 
-import {getInteractionType, getIntermediaryState, getIsFullScreenInteraction,} from '~/modules/interaction/selectors'
+import {
+  getInteractionType,
+  getIntermediaryState,
+  getIsFullScreenInteraction,
+} from '~/modules/interaction/selectors'
 
-import {Colors} from '~/utils/colors'
-import {resetInteraction, setIntermediaryState} from '~/modules/interaction/actions'
+import { Colors } from '~/utils/colors'
+import {
+  resetInteraction,
+  setIntermediaryState,
+} from '~/modules/interaction/actions'
 import IntermediarySheetBody from './IntermediarySheetBody'
-import {IntermediaryState} from '~/modules/interaction/types'
-import InteractionIcon, {IconWrapper} from './InteractionIcon'
+import { IntermediaryState } from '~/modules/interaction/types'
+import InteractionIcon, { IconWrapper } from './InteractionIcon'
 import Loader from '~/modals/Loader'
 
 const WINDOW = Dimensions.get('window')
@@ -77,7 +90,6 @@ const InteractionActionSheet: React.FC = () => {
     }
   }, [intermediaryState])
 
-
   /**
    * Handles the dismissal of the @InteractionSheet when the @ActionSheet closes. The @InteractionSheet
    * can be dismissed by canceling the interaction (DENY button), or by tapping outside the @ActionSheet
@@ -86,7 +98,7 @@ const InteractionActionSheet: React.FC = () => {
    * the DENY button). Furthermore, the interaction should be reset only when the user taps outside the @ActionSheet.
    */
   const handleCloseInteractionSheet = () => {
-    if(intermediaryState !== IntermediaryState.showing && interactionType) {
+    if (intermediaryState !== IntermediaryState.showing && interactionType) {
       dispatch(resetInteraction())
     }
   }
