@@ -1,8 +1,7 @@
-import { navigationActions } from '../../../src/actions'
+import { navigationActions, interactionHandlers } from '../../../src/actions'
 import { JolocomLib } from 'jolocom-lib'
 import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { interactionHandlers } from 'src/lib/interactionHandlers'
 import { createMockStore } from 'tests/utils'
 import { AppError } from 'src/lib/errors'
 

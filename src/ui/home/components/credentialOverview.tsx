@@ -6,7 +6,7 @@ import { getNonDocumentClaims } from 'src/utils/filterDocuments'
 import { Typography, Spacing } from 'src/styles'
 import { CredentialCategory } from './credentialCategory'
 
-interface Props {
+export interface Props {
   claimsToRender: CategorizedClaims
   onEdit: (claim: DecoratedClaims) => void
   did: string

@@ -1,8 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react-native'
 import { IssuerCard } from 'src/ui/documents/components/issuerCard'
-import { IdentitySummary } from 'src/actions/sso/types'
 import { Wrapper } from 'src/ui/structure'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 const noPublicProfileSummary: IdentitySummary = {
   did: 'no-public-profile-summary',

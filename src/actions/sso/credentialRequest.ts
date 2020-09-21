@@ -6,7 +6,7 @@ import { CredentialVerificationSummary } from '@jolocom/sdk/js/src/lib/interacti
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { cancelSSO, scheduleSuccessNotification } from './'
 import { isEmpty } from 'ramda'
-import { getUiCredentialTypeByType } from '@jolocom/sdk/js/src/lib/util'
+import { getUiCredentialTypeByType } from 'src/lib/util'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 export const consumeCredentialRequest = (

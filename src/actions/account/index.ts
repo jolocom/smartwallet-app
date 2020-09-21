@@ -11,16 +11,16 @@ import {
   getClaimMetadataByCredentialType,
   getCredentialUiCategory,
   getUiCredentialTypeByType,
-} from '@jolocom/sdk/js/src/lib/util'
+} from 'src/lib/util'
 import { ThunkAction } from 'src/store'
 import { compose } from 'redux'
-import { IdentitySummary } from '../sso/types'
 import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { SDKError } from '@jolocom/sdk'
 import { checkTermsOfService } from '../generic'
 import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',

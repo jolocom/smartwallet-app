@@ -3,10 +3,11 @@ import { ThunkAction } from '../../store'
 import { ErrorCodes as LibErrorCode } from 'jolocom-lib/js/errors'
 import { interactionHandlers } from '..'
 
-
-export const consumeInteractionToken = (
-  jwt: string,
-): ThunkAction => async (dispatch, getState, sdk) => {
+export const consumeInteractionToken = (jwt: string): ThunkAction => async (
+  dispatch,
+  getState,
+  sdk,
+) => {
   let interxn, handler
 
   try {
