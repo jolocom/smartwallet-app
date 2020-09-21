@@ -1,7 +1,7 @@
 import { ThunkAction } from '../../store'
 
 import { scheduleSuccessNotification, cancelSSO } from '.'
-import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
+import { Interaction } from '@jolocom/sdk'
 
 export const consumeResolutionRequest = (
   interxn: Interaction,

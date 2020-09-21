@@ -4,7 +4,7 @@ import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionSummary } from '@jolocom/sdk/js/interactionManager/types'
 import { EstablishChannelConsentComponent } from '../components/establishChannelConsentComponent'
 
 interface EstablishChannelNavigationParams {

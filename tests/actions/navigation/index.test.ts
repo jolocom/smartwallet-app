@@ -23,13 +23,7 @@ describe('Navigation action creators', () => {
         },
       },
       {
-        storageLib: {
-          //get: {
-          //  persona: jest.fn().mockResolvedValue([{ did: mockDid }]),
-          //  encryptedSeed: jest.fn().mockResolvedValue('johnnycryptoseed'),
-          //},
-        },
-        keyChainLib: {
+        passwordStore: {
           getPassword: jest.fn().mockResolvedValue('secret123'),
         },
         identityWallet: {

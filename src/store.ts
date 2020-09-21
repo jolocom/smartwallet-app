@@ -6,7 +6,7 @@ import thunk, {
 } from 'redux-thunk'
 import { RootState, rootReducer } from 'src/reducers'
 
-import { JolocomSDK, JolocomTypeormStorage } from 'react-native-jolocom'
+import { JolocomTypeormStorage, Agent } from 'react-native-jolocom'
 
 import { createConnection, getConnection } from 'typeorm'
 import typeormConfig from '../ormconfig'
@@ -32,14 +32,14 @@ export async function initTypeorm() {
   return new JolocomTypeormStorage(connection)
 }
 
-export function initStore(sdk: JolocomSDK) {
+export function initStore(agent: Agent) {
   /*
    * The {} as RootState type assertion:
    * The second argument, "preloadedState" is mandatory, and typed as RootState.
    * We provide an empty object. The store will have the correct default state
    * after all reducers initialise.
    */
-  const backendMiddleware = sdk
+  const backendMiddleware = agent
   return createStore(
     rootReducer,
     {} as RootState,
@@ -49,9 +49,9 @@ export function initStore(sdk: JolocomSDK) {
 
 export type ThunkDispatch = OriginalThunkDispatch<
   RootState,
-  JolocomSDK,
+  Agent,
   AnyAction
 >
 export type ThunkAction<
   R = AnyAction | Promise<AnyAction | void>
-> = OriginalThunkAction<R, RootState, JolocomSDK, AnyAction>
+> = OriginalThunkAction<R, RootState, Agent, AnyAction>

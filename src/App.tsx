@@ -65,11 +65,13 @@ export default class App extends React.PureComponent<
     if (!sdkPromise) {
       sdkPromise = initTypeorm().then(async storage => {
         const passwordStore = new JolocomKeychainPasswordStore()
-        const sdk = new JolocomSDK({ storage, passwordStore })
+    //const password = (await generateSecureRandomBytes(32)).toString('base64')
+        const sdk = new JolocomSDK({ storage })
         await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
         sdk.setDefaultDidMethod('jun')
+        const agent = await sdk.createAgent(passwordStore)
 
-        store = initStore(sdk)
+        store = initStore(agent)
         this.setState({ ready: true })
         return sdk
       })

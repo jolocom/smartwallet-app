@@ -1,12 +1,13 @@
+import { Interaction } from '@jolocom/sdk'
+
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { ThunkAction } from '../../store'
 import { cancelSSO, scheduleSuccessNotification } from '.'
-import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 
 export const consumeAuthenticationRequest = (
   interaction: Interaction,
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
+): ThunkAction => async (dispatch, getState, agent) => {
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,

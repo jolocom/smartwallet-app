@@ -1,6 +1,5 @@
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { Interaction, FlowType } from '@jolocom/sdk'
 import { ThunkAction } from 'src/store'
-import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 
 import * as accountActions from 'src/actions/account/'
 import * as registrationActions from 'src/actions/registration/'

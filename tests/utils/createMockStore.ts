@@ -4,7 +4,7 @@ import {
 } from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
-import { BackendMiddleware } from '@jolocom/sdk/js/src/backendMiddleware'
+import { Agent } from '@jolocom/sdk'
 import { stub, RecursivePartial } from 'tests/utils/stub'
 import { RootState } from 'src/reducers'
 import { ThunkDispatch } from 'src/store'
@@ -13,12 +13,12 @@ import { AnyAction } from 'redux'
 interface MockStoreWithMockBackend
   extends MockStoreEnhanced<RootState, ThunkDispatch> {
   reset: () => void
-  backendMiddleware: BackendMiddleware
+  backendMiddleware: Agent
 }
 
 export function createMockStoreWithReducers(
   initialState?: RecursivePartial<RootState>,
-  backendMiddlewareStub: RecursivePartial<BackendMiddleware> = {},
+  backendMiddlewareStub: RecursivePartial<Agent> = {},
 ) {
   const { rootReducer } = require('src/reducers')
   if (!initialState) initialState = rootReducer(undefined, { type: '@INIT' })
@@ -34,9 +34,9 @@ export function createMockStore(
   initialState:
     | RecursivePartial<RootState>
     | ((actions: AnyAction[]) => RootState) = {},
-  backendMiddlewareStub: RecursivePartial<BackendMiddleware> = {},
+  backendMiddlewareStub: RecursivePartial<Agent> = {},
 ) {
-  const mockBackendMiddleware = stub<BackendMiddleware>(backendMiddlewareStub)
+  const mockBackendMiddleware = stub<Agent>(backendMiddlewareStub)
   const mockStore = originalCreateMockStore<RootState, ThunkDispatch>([
     thunk.withExtraArgument(mockBackendMiddleware),
   ])(initialState as RootState) as MockStoreWithMockBackend

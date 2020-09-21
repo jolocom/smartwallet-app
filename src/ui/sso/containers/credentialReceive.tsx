@@ -12,7 +12,7 @@ import {
   InteractionSummary,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
 import strings from 'src/locales/strings'
 

@@ -1,6 +1,7 @@
+import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import * as Keychain from 'react-native-keychain'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
+import { IdentitySummary, CredentialMetadataSummary } from '@jolocom/sdk'
 
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
 import { navigationActions, genericActions } from 'src/actions/'
@@ -18,9 +19,7 @@ import { Not } from 'typeorm'
 import { HAS_EXTERNAL_CREDENTIALS } from './actionTypes'
 import { SDKError } from '@jolocom/sdk'
 import { checkTermsOfService } from '../generic'
-import { CredentialMetadataSummary } from '@jolocom/sdk/js/src/lib/storage'
 import { checkRecoverySetup } from '../notifications/checkRecoverySetup'
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export const setDid = (did: string) => ({
   type: 'DID_SET',
@@ -153,13 +152,13 @@ export const openClaimDetails = (
 export const saveClaim: ThunkAction = async (
   dispatch,
   getState,
-  backendMiddleware,
+  agent,
 ) => {
-  const { identityWallet, storageLib, keyChainLib } = backendMiddleware
+  const { identityWallet, storage, passwordStore } = agent
 
   const did = getState().account.did.did
   const claimsItem = getState().account.claims.selected
-  const password = await keyChainLib.getPassword()
+  const password = await passwordStore.getPassword()
 
   const verifiableCredential = await identityWallet.create.signedCredential(
     {
@@ -172,10 +171,10 @@ export const saveClaim: ThunkAction = async (
   )
 
   if (claimsItem.id) {
-    await storageLib.delete.verifiableCredential(claimsItem.id)
+    await storage.delete.verifiableCredential(claimsItem.id)
   }
 
-  await storageLib.store.verifiableCredential(verifiableCredential)
+  await storage.store.verifiableCredential(verifiableCredential)
 
   await dispatch(setClaimsForDid)
 
@@ -187,11 +186,11 @@ export const hasExternalCredentials: ThunkAction = async (
   getState,
   backendMiddleware,
 ) => {
-  const { storageLib, identityWallet } = backendMiddleware
+  const { storage, identityWallet } = backendMiddleware
   // TODO FIXME
   // we only need a count, no need to actually load and deserialize
   // all of them
-  const externalCredentials = await storageLib.get.verifiableCredential({
+  const externalCredentials = await storage.get.verifiableCredential({
     issuer: Not(identityWallet.did),
   })
 
@@ -205,18 +204,18 @@ export const setClaimsForDid: ThunkAction = async (
   getState,
   backendMiddleware,
 ) => {
-  const { storageLib } = backendMiddleware
+  const { storage } = backendMiddleware
 
-  const verifiableCredentials: SignedCredential[] = await storageLib.get.verifiableCredential()
+  const verifiableCredentials: SignedCredential[] = await storage.get.verifiableCredential()
 
   const metadata = await Promise.all(
-    verifiableCredentials.map(el => storageLib.get.credentialMetadata(el)),
+    verifiableCredentials.map(el => storage.get.credentialMetadata(el)),
   )
 
   const issuers = uniq(verifiableCredentials.map(cred => cred.issuer))
 
   const issuerMetadata = await Promise.all(
-    issuers.map(storageLib.get.publicProfile),
+    issuers.map(storage.get.publicProfile),
   )
 
   const claims = prepareClaimsForState(

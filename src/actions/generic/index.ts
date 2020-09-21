@@ -86,7 +86,7 @@ export const setLocale = (locale: string): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  await backendMiddleware.storageLib.store.setting(settingKeys.locale, {
+  await backendMiddleware.storage.store.setting(settingKeys.locale, {
     selected: locale
   })
 

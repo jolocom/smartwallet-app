@@ -4,7 +4,7 @@ import { Colors, Spacing, Typography } from 'src/styles'
 import { CardWrapper } from 'src/ui/structure'
 import strings from 'src/locales/strings'
 import I18n from 'src/locales/i18n'
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+import { IdentitySummary } from '@jolocom/sdk'
 
 interface Props {
   issuer: IdentitySummary

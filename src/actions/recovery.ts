@@ -12,18 +12,18 @@ import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
   getState,
-  backendMiddleware,
+  agent,
 ) => {
-  const encryptedSeed = await backendMiddleware.storageLib
+  const encryptedSeed = await agent.storage
     .get.setting('encryptedSeed')
 
   if (!encryptedSeed) {
     throw new Error('Can not retrieve Seed from database')
   }
 
-  const decrypted = await backendMiddleware.idw.asymDecrypt(
+  const decrypted = await agent.idw.asymDecrypt(
     Buffer.from(encryptedSeed.b64Encoded, 'base64'),
-    await backendMiddleware.keyChainLib.getPassword()
+    await agent.passwordStore.getPassword()
   )
 
   return dispatch(
@@ -40,7 +40,7 @@ export const showSeedPhrase = (): ThunkAction => async (
 export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   dispatch,
   getState,
-  sdk,
+  agent,
 ) => {
   let recovered = false
 
@@ -50,13 +50,12 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   )
 
   try {
-    const didMethod = await sdk.didMethods.getDefault()
-    if (didMethod.recoverFromSeed) {
-      const { identityWallet } = await didMethod.recoverFromSeed(
+    if (agent.didMethod.recoverFromSeed) {
+      const { identityWallet } = await agent.didMethod.recoverFromSeed(
         recoveredEntropy,
-        await sdk.keyChainLib.getPassword()
+        await agent.passwordStore.getPassword()
       )
-      recovered = identityWallet.did === sdk.idw.did
+      recovered = identityWallet.did === agent.idw.did
     }
   } catch(e) {
     console.error('onRestoreAccess failed', e)
@@ -78,8 +77,8 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
   backendMiddleware,
 ) => {
   // No delete call available yet, overwriting with empty object
-  await backendMiddleware.storageLib.store.setting('encryptedSeed', {})
-  await backendMiddleware.storageLib.store.setting(
+  await backendMiddleware.storage.store.setting('encryptedSeed', {})
+  await backendMiddleware.storage.store.setting(
     settingKeys.seedPhraseSaved,
     true,
   )

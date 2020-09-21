@@ -4,7 +4,7 @@ import { JolocomLib } from 'jolocom-lib'
 import { RootState } from 'src/reducers'
 import { createMockStore, RecursivePartial } from 'tests/utils'
 import { withErrorScreen } from 'src/actions/modifiers'
-import { BackendError } from '@jolocom/sdk/js/src/lib/errors/types'
+import { SDKError } from '@jolocom/sdk'
 
 describe('Account action creators', () => {
   const initialState: RecursivePartial<RootState> = {
@@ -90,7 +90,7 @@ describe('Account action creators', () => {
 
   it('should correctly handle an empty encrypted seed table', async () => {
     backendMiddleware.prepareIdentityWallet.mockRejectedValue(
-      new BackendError(BackendError.codes.NoEntropy),
+      new SDKError(SDKError.codes.NoEntropy),
     )
     await mockStore.dispatch(accountActions.checkIdentityExists)
     expect(mockStore.getActions()).toMatchSnapshot()

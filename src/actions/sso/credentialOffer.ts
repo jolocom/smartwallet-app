@@ -11,11 +11,11 @@ import {
   InteractionTransportType,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { cancelSSO } from './index'
-import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
+import { Interaction } from '@jolocom/sdk'
 
 export const consumeCredentialOfferRequest = (
   interaction: Interaction
@@ -89,7 +89,7 @@ export const validateSelectionAndSave = (
 ): ThunkAction => async (
   dispatch,
   getState,
-  { interactionManager, storageLib },
+  { interactionManager, storage },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
   const { offerSummary, issued } = interaction.getSummary()
@@ -145,7 +145,7 @@ export const validateSelectionAndSave = (
       (interaction.getSummary().state as CredentialOfferFlowState).offerSummary,
       interaction.participants.requester!.did,
       //@ts-ignore
-      storageLib.store.credentialMetadata,
+      storage.store.credentialMetadata,
     )
     */
 

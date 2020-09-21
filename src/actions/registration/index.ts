@@ -2,7 +2,7 @@ import * as loading from 'src/actions/registration/loadingStages'
 import { setDid } from 'src/actions/account'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
-import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
+import { generateSecureRandomBytes } from '@jolocom/sdk/js/util'
 import { ThunkAction } from '../../store'
 import { entropyToMnemonic } from 'bip39'
 import { genericActions } from '..'
@@ -24,7 +24,7 @@ export const setIsRegistering = (value: boolean) => ({
 export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
   getState,
-  sdk,
+  agent,
 ) => {
   const isRegistering = getState().registration.loading.isRegistering
   if (isRegistering) return
@@ -36,9 +36,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setLoadingMsg(loading.loadingStages[0]))
 
   const seed = await generateSecureRandomBytes(16)
-  const password = (await generateSecureRandomBytes(32)).toString('base64')
-  // const identity = await sdk.createNewIdentity(password)
-  const identity = await sdk.loadFromMnemonic(entropyToMnemonic(seed), password)
+  const identity = await agent.loadFromMnemonic(entropyToMnemonic(seed))
   // and it's too fast so slow down
   await humanTimeout()
 
@@ -53,7 +51,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
       resolve: async _ => identity.identity
     })
 
-  await sdk.storageLib.store.setting(
+  await agent.storage.store.setting(
     'encryptedSeed',
     {
       b64Encoded: encryptedSeed.toString('base64')
@@ -76,13 +74,12 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
 export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   dispatch,
   getState,
-  backendMiddleware,
+  agent,
 ) => {
   dispatch(setIsRegistering(true))
 
   try {
-    const password = (await generateSecureRandomBytes(32)).toString('base64')
-    const identity = await backendMiddleware.loadFromMnemonic(mnemonic, password)
+    const identity = await agent.loadFromMnemonic(mnemonic)
     dispatch(setDid(identity.did))
     dispatch(setSeedPhraseSaved())
 
