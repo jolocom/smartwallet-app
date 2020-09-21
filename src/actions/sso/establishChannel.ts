@@ -1,28 +1,17 @@
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { ThunkAction } from '../../store'
-import {
-  InteractionTransportType,
-  EstablishChannelRequest,
-  FlowType,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { cancelSSO, scheduleSuccessNotification } from '.'
 import { scheduleNotification } from '../notifications'
 import { createInfoNotification } from '../../lib/notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
+import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 
 export const consumeEstablishChannelRequest = (
-  establishChannelRequest: JSONWebToken<EstablishChannelRequest>,
-  channel: InteractionTransportType,
+  interaction: Interaction,
 ): ThunkAction => async (dispatch, getState, sdk) => {
-  const { interactionManager } = sdk
-  const interaction = await interactionManager.start<EstablishChannelRequest>(
-    InteractionTransportType.HTTP,
-    establishChannelRequest,
-  )
-
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.EstablishChannelConsent,

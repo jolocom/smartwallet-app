@@ -1,10 +1,8 @@
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { ThunkAction } from '../../store'
 import { CredentialVerificationSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { cancelSSO, scheduleSuccessNotification } from './'
 import { isEmpty } from 'ramda'
@@ -12,21 +10,15 @@ import { getUiCredentialTypeByType } from '@jolocom/sdk/js/src/lib/util'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 export const consumeCredentialRequest = (
-  credentialRequest: JSONWebToken<CredentialRequest>,
-  interactionChannel: InteractionTransportType, // TODO replace with send function at one point
+  interaction: Interaction,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { interactionManager } = backendMiddleware
-
-  const interaction = await interactionManager.start(
-    interactionChannel,
-    credentialRequest,
-  )
-
   // TODO - Eugeniu
   // Must refactor this abomination.
 
+  const credentialRequest =
+    interaction.getMessages()[0].interactionToken as CredentialRequest
   const credentialsPerType = await Promise.all(
-    credentialRequest.interactionToken.requestedCredentialTypes.map(t => {
+    credentialRequest.requestedCredentialTypes.map(t => {
       return interaction.getAttributesByType(t)
     }),
   )

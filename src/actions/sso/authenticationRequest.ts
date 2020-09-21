@@ -1,21 +1,12 @@
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { navigationActions } from 'src/actions'
-import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { routeList } from 'src/routeList'
 import { ThunkAction } from '../../store'
-import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { cancelSSO, scheduleSuccessNotification } from '.'
+import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 
 export const consumeAuthenticationRequest = (
-  authenticationRequest: JSONWebToken<Authentication>,
-  channel: InteractionTransportType,
+  interaction: Interaction,
 ): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { interactionManager } = backendMiddleware
-  const interaction = await interactionManager.start(
-    channel,
-    authenticationRequest,
-  )
-
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,
@@ -30,8 +21,8 @@ export const consumeAuthenticationRequest = (
 
 export const sendAuthenticationResponse = (
   interactionId: string,
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const interaction = backendMiddleware.interactionManager.getInteraction(
+): ThunkAction => async (dispatch, getState, sdk) => {
+  const interaction = sdk.interactionManager.getInteraction(
     interactionId,
   )
   return interaction

@@ -1,5 +1,3 @@
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { ThunkAction } from '../../store'
 import { navigationActions } from '../index'
 import { routeList } from '../../routeList'
@@ -17,24 +15,21 @@ import {
 import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { cancelSSO } from './index'
+import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 
 export const consumeCredentialOfferRequest = (
-  credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
-  interactionChannel: InteractionTransportType,
+  interaction: Interaction
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
-  const interaction = await interactionManager.start(
-    interactionChannel,
-    credentialOfferRequest,
-  )
-
+  const interactionSummary = interaction.getSummary()
+  const passedValidation = (interactionSummary.state as CredentialOfferFlowState)
+          .offerSummary.map(_ => true)
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialReceive,
       params: {
-        interactionId: credentialOfferRequest.nonce,
-        interactionSummary: interaction.getSummary(),
-        passedValidation: (interaction.getSummary().state as CredentialOfferFlowState)
-          .offerSummary.map(_ => true)
+        interactionId: interaction.id,
+        interactionSummary,
+        passedValidation,
       },
     }),
   )
