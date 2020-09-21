@@ -18,7 +18,7 @@ import { useLoader } from '~/hooks/useLoader'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 
-const IntermediaryActionSheet = () => {
+const IntermediarySheetBody = () => {
   const dispatch = useDispatch()
   const loader = useLoader()
   const inputType = useSelector(getAttributeInputKey)
@@ -44,13 +44,13 @@ const IntermediaryActionSheet = () => {
       const success = await loader(
         async () => {
           await createAttribute(inputType, value)
-          dispatch(setIntermediaryState(IntermediaryState.hiding))
+          dispatch(setIntermediaryState(IntermediaryState.switching))
         },
         { showSuccess: false },
       )
 
       if (!success) {
-        dispatch(setIntermediaryState(IntermediaryState.hiding))
+        dispatch(setIntermediaryState(IntermediaryState.switching))
         //TODO: add notification
         Alert.alert('Failed to create a new attribute')
       }
@@ -98,4 +98,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default IntermediaryActionSheet
+export default IntermediarySheetBody

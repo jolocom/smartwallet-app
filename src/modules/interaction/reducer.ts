@@ -8,7 +8,7 @@ import { isCredShareDetails } from './guards'
 
 const initialState: InteractionState = {
   details: { flowType: null },
-  intermediaryState: IntermediaryState.absent,
+  intermediaryState: IntermediaryState.hiding,
   attributeInputKey: null,
 }
 

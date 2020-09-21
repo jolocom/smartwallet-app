@@ -26,7 +26,7 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
         {
           strings[
             sectionKey.toUpperCase() as AttrKeysUpper
-          ] /* why is the assertion necessary? */
+          ]
         }
       </Paragraph>
       <TouchableOpacity
