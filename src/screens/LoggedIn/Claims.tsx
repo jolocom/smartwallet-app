@@ -9,7 +9,6 @@ import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
-import Paragraph from '~/components/Paragraph'
 import { useSDK, useInteractionStart } from '~/hooks/sdk'
 import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
@@ -55,9 +54,6 @@ const Claims: React.FC = () => {
   return (
     <ScreenContainer>
       <ContainerComponent>
-        <Paragraph customStyles={{ marginBottom: 20 }}>
-          Below is the widget from the home page
-        </Paragraph>
         <AttributesWidget
           attributes={attributes}
           onCreateNewAttr={(sectionKey) =>

@@ -6,11 +6,12 @@ import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import { getOfferCredentialsBySection } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
-import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import { OfferUICredential } from '~/types/credentials'
 import InteractionFooter from '../InteractionFooter'
 import { strings } from '~/translations/strings'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
@@ -19,7 +20,13 @@ const CredentialOfferFas = () => {
     credentials.map(({ type, invalid }) => (
       <View style={{ marginLeft: 27 }}>
         <CredentialCard disabled={invalid}>
-          <Header color={Colors.black}>{type}</Header>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.middle}
+            color={Colors.black}
+          >
+            {type}
+          </JoloText>
         </CredentialCard>
       </View>
     ))

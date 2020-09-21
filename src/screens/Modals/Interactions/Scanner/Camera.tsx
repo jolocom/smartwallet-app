@@ -16,7 +16,6 @@ import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionMan
 import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 import { getLoaderState } from '~/modules/loader/selectors'
@@ -31,6 +30,8 @@ import { useInteractionStart } from '~/hooks/sdk'
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 
 import { strings } from '~/translations/strings'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
@@ -156,9 +157,10 @@ const Camera = () => {
             </View>
             <View style={styles.bottomOverlay}>
               {isError ? (
-                <Paragraph
+                <JoloText
                   animated
-                  size={ParagraphSizes.medium}
+                  kind={JoloTextKind.subtitle}
+                  size={JoloTextSizes.middle}
                   customStyles={{
                     width: MARKER_SIZE,
                     color: Colors.error,
@@ -166,18 +168,18 @@ const Camera = () => {
                   }}
                 >
                   {errorText}
-                </Paragraph>
+                </JoloText>
               ) : (
-                <Paragraph
-                  size={ParagraphSizes.medium}
+                <JoloText
+                  kind={JoloTextKind.subtitle}
+                  size={JoloTextSizes.middle}
                   customStyles={{ width: MARKER_SIZE }}
                 >
                   {
                     strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE
                   }
-                </Paragraph>
+                </JoloText>
               )}
-              <Paragraph customStyles={{ width: MARKER_SIZE }}></Paragraph>
               <TouchableHighlight
                 onPressIn={() => setTorchPressed(true)}
                 onPressOut={() => setTorchPressed(false)}

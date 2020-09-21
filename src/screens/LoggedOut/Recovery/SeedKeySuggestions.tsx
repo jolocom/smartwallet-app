@@ -1,11 +1,12 @@
 import React, { memo } from 'react'
 import { FlatList, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { submitKey } from './module/recoveryActions'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 type PillProps = {
   seedKey: string
@@ -23,7 +24,9 @@ const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
       onPress={() => onSelectKey(seedKey)}
       testID="suggestion-pill"
     >
-      <Paragraph size={ParagraphSizes.medium}>{seedKey}</Paragraph>
+      <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.big}>
+        {seedKey}
+      </JoloText>
     </TouchableOpacity>
   )
 }

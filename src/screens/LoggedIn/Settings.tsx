@@ -13,9 +13,10 @@ import { strings } from '~/translations/strings'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { accountReset } from '~/modules/account/actions'
 import CredentialCard from '../Modals/Interactions/CredentialCard'
-import Paragraph from '~/components/Paragraph'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Modals/Interactions/Carousel'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface SwitcherPropsI {
   value: boolean
@@ -31,9 +32,21 @@ const Switcher: React.FC<SwitcherPropsI> = ({
 }) => {
   return (
     <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-      <Paragraph customStyles={{ marginRight: 10 }}>{leftTitle}</Paragraph>
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size={JoloTextSizes.middle}
+        customStyles={{ marginRight: 10 }}
+      >
+        {leftTitle}
+      </JoloText>
       <Switch value={value} onValueChange={onValueChange} />
-      <Paragraph customStyles={{ marginLeft: 10 }}>{rightTitle}</Paragraph>
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size={JoloTextSizes.middle}
+        customStyles={{ marginLeft: 10 }}
+      >
+        {rightTitle}
+      </JoloText>
     </View>
   )
 }
@@ -118,9 +131,13 @@ const Settings = () => {
                 }
               >
                 <View style={{ flex: 1, justifyContent: 'center' }}>
-                  <Paragraph color={Colors.black}>
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    size={JoloTextSizes.middle}
+                    color={Colors.black}
+                  >
                     This is a custom card content
-                  </Paragraph>
+                  </JoloText>
                 </View>
               </CredentialCard>
             ))}

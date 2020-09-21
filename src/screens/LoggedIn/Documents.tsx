@@ -10,9 +10,9 @@ import Link from '~/components/Link'
 import { AttrKeys } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import { fieldNames } from '~/utils/dataMapping'
-import Paragraph from '~/components/Paragraph'
-import Header from '~/components/Header'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { getAllCredentials } from '~/modules/credentials/selectors'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const text =
   'The https://www.google.com/ is ready to share a scooter with you, unlock to start your ride'
@@ -77,10 +77,18 @@ const DocumentList = () => {
 
   return (
     <View style={{ height: 200, paddingVertical: 20 }}>
-      <Header>All Credentials</Header>
+      <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
+        All Credentials
+      </JoloText>
       <ScrollView>
         {credentials.map(({ metadata: { name } }) => (
-          <Paragraph customStyles={{ paddingVertical: 10 }}>{name}</Paragraph>
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size={JoloTextSizes.middle}
+            customStyles={{ paddingVertical: 10 }}
+          >
+            {name}
+          </JoloText>
         ))}
       </ScrollView>
     </View>

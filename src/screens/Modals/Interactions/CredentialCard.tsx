@@ -96,6 +96,8 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
     marginVertical: 20,
     backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   scaledDown: {
     marginHorizontal: -CARD_WIDTH * ((1 - SMALL_CARD_SCALE) / 2),

@@ -1,7 +1,5 @@
 import React from 'react'
 import { View } from 'react-native'
-import Header, { HeaderSizes } from '~/components/Header'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
 import {
   getIntermediaryState,
   getInteractionCounterparty,
@@ -11,6 +9,8 @@ import { Colors } from '~/utils/colors'
 import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionTitle from './hooks/useInteractionTitle'
 import useInteractionDescription from './hooks/useInteractionDescription'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface PropsI {
   title?: string
@@ -29,23 +29,24 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
 
   return (
     <View>
-      <Header
-        size={HeaderSizes.medium}
-        color={Colors.white90}
-        customStyles={{ lineHeight: 28 }}
+      <JoloText
+        kind={JoloTextKind.title}
+        size={JoloTextSizes.middle}
+        weight={JoloTextWeight.regular}
       >
         {title || interactionTitle}
-      </Header>
-      <Paragraph
-        size={ParagraphSizes.small}
-        color={isAnonymous ? Colors.error : Colors.white90}
+      </JoloText>
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size={JoloTextSizes.mini}
+        color={isAnonymous ? Colors.error : Colors.white70}
         customStyles={{
           paddingHorizontal: 16,
           marginTop: 14,
         }}
       >
         {description || interactionDescription}
-      </Paragraph>
+      </JoloText>
     </View>
   )
 }

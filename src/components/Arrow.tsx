@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: BP({
       xsmall: 0,
-      small: 0,
+      small: 13,
       medium: 13,
       large: 13,
     }),
