@@ -4,13 +4,20 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { ScannerIcon } from '~/assets/svg'
+import {
+  DocumentsTabIcon,
+  HistoryTabIcon,
+  IdentityTabIcon,
+  ScannerIcon,
+  SettingsTabIcon,
+} from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
@@ -25,11 +32,27 @@ interface IconPropsI {
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
-const TabIcon: React.FC<IconPropsI> = ({ label, isActive }) => {
+const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const redirectToTab = useRedirectTo(label as ScreenNames)
+  const renderIcon = () => {
+    const color = isActive ? Colors.white : Colors.white40
+    switch (label) {
+      case ScreenNames.Claims:
+        return <IdentityTabIcon color={color} />
+      case ScreenNames.Documents:
+        return <DocumentsTabIcon color={color} />
+      case ScreenNames.History:
+        return <HistoryTabIcon color={color} />
+      case ScreenNames.Settings:
+        return <SettingsTabIcon color={color} />
+      default:
+        return null
+    }
+  }
   return (
-    <TouchableOpacity onPress={redirectToTab}>
+    <TouchableWithoutFeedback onPress={redirectToTab}>
       <View style={styles.iconContainer}>
+        {renderIcon()}
         <JoloText
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.tiniest}
@@ -39,7 +62,7 @@ const TabIcon: React.FC<IconPropsI> = ({ label, isActive }) => {
           {label}
         </JoloText>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -48,14 +71,7 @@ const ScannerButton = () => {
   return (
     <TouchableOpacity
       onPress={redirectToScanner}
-      style={[
-        styles.scannerBtn,
-        {
-          position: 'absolute',
-          bottom: 58,
-          zIndex: 100,
-        },
-      ]}
+      style={[styles.scannerBtn, styles.scannerFrame]}
     >
       <LinearGradient
         style={[styles.scannerBtn, styles.scannerBody]}
@@ -82,7 +98,7 @@ const BottomBar = (props: BottomTabBarProps) => {
         >
           <View style={[styles.iconGroup, { justifyContent: 'flex-start' }]}>
             {routeNames.slice(0, 2).map((routeName: string, idx: number) => (
-              <TabIcon
+              <Tab
                 key={idx}
                 label={routeName}
                 isActive={
@@ -96,7 +112,7 @@ const BottomBar = (props: BottomTabBarProps) => {
             {props.state.routeNames
               .slice(2)
               .map((routeName: string, idx: number) => (
-                <TabIcon
+                <Tab
                   key={idx}
                   label={routeName}
                   isActive={
@@ -118,6 +134,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  scannerFrame: {
+    position: 'absolute',
+    bottom: 58,
+    zIndex: 100,
   },
   scannerBtn: {
     width: 66,
@@ -144,7 +165,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     paddingHorizontal: 13,
-    marginTop: 40,
+    marginTop: 5,
+    alignItems: 'center',
   },
   iconGroup: {
     flexDirection: 'row',
