@@ -7,12 +7,14 @@ import {
   View,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { ScannerIcon } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import useRedirectTo from '~/hooks/useRedirectTo'
 
 interface IconPropsI {
@@ -42,13 +44,26 @@ const TabIcon: React.FC<IconPropsI> = ({ label, isActive }) => {
 }
 
 const ScannerButton = () => {
+  const redirectToScanner = useRedirectTo(ScreenNames.Interactions)
   return (
-    <LinearGradient
-      style={styles.scannerButton}
-      colors={[Colors.ceriseRed, Colors.disco]}
+    <TouchableOpacity
+      onPress={redirectToScanner}
+      style={[
+        styles.scannerBtn,
+        {
+          position: 'absolute',
+          bottom: 58,
+          zIndex: 100,
+        },
+      ]}
     >
-      <ScannerIcon />
-    </LinearGradient>
+      <LinearGradient
+        style={[styles.scannerBtn, styles.scannerBody]}
+        colors={[Colors.ceriseRed, Colors.disco]}
+      >
+        <ScannerIcon />
+      </LinearGradient>
+    </TouchableOpacity>
   )
 }
 
@@ -58,28 +73,15 @@ const BottomBar = (props: BottomTabBarProps) => {
     routes.find((el) => el.name === label) || { key: '' }
 
   return (
-    <View style={styles.container}>
-      <ScannerButton />
-      <ImageBackground
-        style={styles.tabsContainer}
-        source={require('~/assets/images/bottomBarBG.png')}
-      >
-        <View style={[styles.iconGroup, { justifyContent: 'flex-start' }]}>
-          {routeNames.slice(0, 2).map((routeName: string, idx: number) => (
-            <TabIcon
-              key={idx}
-              label={routeName}
-              isActive={
-                history[history.length - 1].key ===
-                getSelectedRoute(routeName).key
-              }
-            />
-          ))}
-        </View>
-        <View style={[styles.iconGroup, { justifyContent: 'flex-end' }]}>
-          {props.state.routeNames
-            .slice(2)
-            .map((routeName: string, idx: number) => (
+    <SafeAreaView style={{ backgroundColor: Colors.mainBlack, height: 1 }}>
+      <View style={styles.container}>
+        <ScannerButton />
+        <ImageBackground
+          style={styles.tabsContainer}
+          source={require('~/assets/images/bottomBarBG.png')}
+        >
+          <View style={[styles.iconGroup, { justifyContent: 'flex-start' }]}>
+            {routeNames.slice(0, 2).map((routeName: string, idx: number) => (
               <TabIcon
                 key={idx}
                 label={routeName}
@@ -89,9 +91,24 @@ const BottomBar = (props: BottomTabBarProps) => {
                 }
               />
             ))}
-        </View>
-      </ImageBackground>
-    </View>
+          </View>
+          <View style={[styles.iconGroup, { justifyContent: 'flex-end' }]}>
+            {props.state.routeNames
+              .slice(2)
+              .map((routeName: string, idx: number) => (
+                <TabIcon
+                  key={idx}
+                  label={routeName}
+                  isActive={
+                    history[history.length - 1].key ===
+                    getSelectedRoute(routeName).key
+                  }
+                />
+              ))}
+          </View>
+        </ImageBackground>
+      </View>
+    </SafeAreaView>
   )
 }
 
@@ -99,30 +116,20 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     bottom: 0,
-    width: SCREEN_WIDTH,
-    height: 122,
     justifyContent: 'flex-end',
-  },
-  scannerFrame: {
-    position: 'absolute',
-    bottom: 48,
     alignItems: 'center',
-    justifyContent: 'center',
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    alignSelf: 'center',
   },
-  scannerButton: {
+  scannerBtn: {
+    width: 66,
+    height: 66,
+    borderRadius: 33,
+  },
+  scannerBody: {
     alignItems: 'center',
     justifyContent: 'center',
     width: 66,
     height: 66,
     borderRadius: 33,
-
-    position: 'absolute',
-    bottom: 58,
-    alignSelf: 'center',
   },
   tabsContainer: {
     flexDirection: 'row',
@@ -132,12 +139,12 @@ const styles = StyleSheet.create({
     height: 105,
     width: SCREEN_WIDTH,
     paddingVertical: 10,
+    // marginLeft: -1,
+    zIndex: 10,
   },
   iconContainer: {
     paddingHorizontal: 13,
-    borderWidth: 1,
-    borderColor: 'blue',
-    marginTop: 20,
+    marginTop: 40,
   },
   iconGroup: {
     flexDirection: 'row',
