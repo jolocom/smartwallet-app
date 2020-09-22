@@ -1,3 +1,4 @@
+import { Alert } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
@@ -7,7 +8,9 @@ import {
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
-import { Alert } from 'react-native'
+import { useInteraction } from '../sdk'
+import { JSONWebToken } from '@jolocom/sdk'
+import { useSyncCredentials } from '~/hooks/credentials'
 
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
@@ -20,17 +23,29 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
+  const interaction = useInteraction()
+  const syncCredentials = useSyncCredentials()
+
+  const submitAuth = async (
+    token: JSONWebToken<{ [key: string]: string } | any>,
+  ) => {
+    await interaction.processInteractionToken(token)
+    await interaction.send(token)
+    dispatch(resetInteraction())
+  }
 
   if (interactionType === FlowType.Authentication) {
-    return async function authenticate() {
-      // TODO: add onAuthenticate functionality here
+    return async function authenticate () {
+      const authResponse = await interaction.createAuthenticationResponse()
+      submitAuth(authResponse)
     }
   } else if (interactionType === FlowType.Authorization) {
-    return async function authorize() {
-      // TODO: add onAuthorization functionality here
+    return async function authorize () {
+      const authzResponse = await interaction.createAuthorizationResponse()
+      submitAuth(authzResponse)
     }
   } else if (interactionType === FlowType.CredentialShare) {
-    return async function shareCredentials() {
+    return async function shareCredentials () {
       // TODO: add onCredShare functionality here
     }
   } else if (interactionType === FlowType.CredentialOffer) {
@@ -38,6 +53,7 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
       try {
         if (credentialsAlreadyIssued()) {
           await storeSelectedCredentials()
+          await syncCredentials()
           return dispatch(resetInteraction())
         }
 
@@ -53,11 +69,12 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
           )
 
         const validatedCredentials = getValidatedCredentials()
-        const allValid = validatedCredentials.every((cred) => !cred.invalid)
-        const allInvalid = validatedCredentials.every((cred) => cred.invalid)
+        const allValid = validatedCredentials.every(cred => !cred.invalid)
+        const allInvalid = validatedCredentials.every(cred => cred.invalid)
 
         if (allValid) {
           await storeSelectedCredentials()
+          await syncCredentials()
           Alert.alert('Documents stored successfully')
           //TODO: update store credentials with the new ones
 

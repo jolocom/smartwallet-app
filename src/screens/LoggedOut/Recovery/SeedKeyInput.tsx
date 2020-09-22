@@ -14,7 +14,7 @@ import RightArrow from '~/components/RightArrow'
 
 import useDelay from '~/hooks/useDelay'
 
-import { Fonts } from '~/utils/fonts'
+import { titleFontStyles } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
@@ -156,7 +156,7 @@ const SeedKeyInput: React.FC = () => {
           onSubmitEditing={handleSubmitEditing}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          style={styles.input}
+          style={[titleFontStyles.big, styles.input]}
           testID="seedphrase-input"
           keyboardAppearance="dark"
           underlineColorAndroid="transparent"
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     height: BP({
       xsmall: 50,
-      small: 50,
+      small: 80,
       medium: 80,
       large: 80,
     }),
@@ -207,12 +207,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     borderWidth: 2,
+    alignItems: 'center',
   },
   input: {
     width: '70%',
-    fontFamily: Fonts.Medium,
-    fontSize: 34,
-    fontWeight: '500',
     color: Colors.white,
     textDecorationLine: 'none',
   },

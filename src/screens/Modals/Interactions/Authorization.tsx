@@ -1,37 +1,41 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { Image, View, StyleSheet } from 'react-native'
 
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
-import { useInteraction } from '~/hooks/sdk'
-import { useLoader } from '~/hooks/useLoader'
 import { useRootSelector } from '~/hooks/useRootSelector'
-import { resetInteraction } from '~/modules/interaction/actions'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
-import { AuthorizationDetailsI } from '~/modules/interaction/types'
+import { isAuthzDetails } from '~/modules/interaction/guards'
 
 const Authorization = () => {
-  const interaction = useInteraction()
-  const dispatch = useDispatch()
-  const loader = useLoader()
-  const { image } = useRootSelector<AuthorizationDetailsI>(
-    getInteractionDetails,
-  )
-
-  const handleSubmit = async () => {
-    const success = loader(
-      async () => {
-        const authzResponse = await interaction.createAuthorizationResponse()
-        await interaction.send(authzResponse)
-      },
-      { showFailed: false, showSuccess: false },
+  const details = useRootSelector(getInteractionDetails)
+  if (isAuthzDetails(details)) {
+    const { imageURL } = details
+    return (
+      <BasWrapper>
+        {imageURL && (
+          <View style={styles.imageWrapper}>
+            <Image
+              source={{ uri: imageURL }}
+              style={styles.image}
+              resizeMode="cover" // it will take max Dimension size (260 - width) and make height based on the aspect ration of actual image size
+            />
+          </View>
+        )}
+      </BasWrapper>
     )
-    dispatch(resetInteraction())
-    if (!success) {
-      //TODO: show toast
-    }
   }
-
-  return <BasWrapper />
+  return null
 }
+
+const styles = StyleSheet.create({
+  imageWrapper: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  image: {
+    width: 260,
+    height: 230,
+  },
+})
 
 export default Authorization

@@ -10,7 +10,16 @@ const BasWrapper: React.FC<{
   return (
     <View style={[styles.wrapper, customStyle]}>
       <InteractionHeader />
-      <View style={{ paddingTop: 28 }}>{children}</View>
+      <View
+        style={{
+          marginTop: children ? 28 : 5,
+          marginBottom: 28,
+          alignItems: 'center',
+        }}
+      >
+        {children}
+      </View>
+
       <InteractionFooter />
     </View>
   )

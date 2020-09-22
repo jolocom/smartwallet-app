@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { PanResponder, GestureResponderEvent, Animated } from 'react-native'
-import { Svg, Path, Rect } from 'react-native-svg'
-import { EntropyCircle } from '~/assets/svg'
+import { Svg, Path, Rect, Circle } from 'react-native-svg'
 
 import { useForceUpdate } from '~/hooks/useForceUpdate'
 import {
@@ -19,32 +18,6 @@ interface Props {
 
 export const MIN_DISTANCE_SQ = 30
 export const MAX_LINE_PTS = 100
-
-const CanvasCircle: React.FC<{ x: number; y: number }> = ({ x, y }) => {
-  const opacity = useRef(new Animated.Value(0)).current
-
-  useEffect(() => {
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 100,
-      useNativeDriver: true,
-    }).start()
-  }, [])
-
-  return (
-    <Animated.View
-      style={{
-        position: 'absolute',
-        //NOTE: Manually adjusting the position of the svg
-        left: x + 8,
-        top: y + 26,
-        opacity,
-      }}
-    >
-      <EntropyCircle />
-    </Animated.View>
-  )
-}
 
 export const EntropyCanvas: React.FC<Props> = React.memo(
   ({ disabled, addPoint }) => {
@@ -65,9 +38,6 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
 
     return (
       <>
-        {circles.map(([x, y], i) => {
-          return <CanvasCircle key={i} x={x} y={y} />
-        })}
         <Svg
           width="100%"
           height="100%"
@@ -90,6 +60,9 @@ export const EntropyCanvas: React.FC<Props> = React.memo(
               />
             )
           })}
+          {circles.map(([x, y], i) => (
+            <Circle cx={x} cy={y} key={i} r={4} fill={Colors.white} />
+          ))}
         </Svg>
       </>
     )

@@ -7,9 +7,11 @@ import {
   CredentialRequestFlowState,
   CredentialOfferFlowState,
   AuthenticationFlowState,
+  AuthorizationFlowState,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 export const fieldNames = {
   [AttrKeys.name]: 'name',
@@ -17,6 +19,9 @@ export const fieldNames = {
   [AttrKeys.mobilePhoneNumber]: 'number',
   [AttrKeys.postalAddress]: 'address',
 }
+
+export const isCredentialAttribute = (cred: SignedCredential) =>
+  Object.values(credentialSchemas).indexOf(cred.type[1]) > -1
 
 export const credentialSchemas = Object.keys(claimsMetadata).reduce<{
   [key: string]: string
@@ -66,14 +71,12 @@ const mapAuthenticationData = (summary: SummaryI<AuthenticationFlowState>) => {
   }
 }
 
-// TODO: once Authorization is available
-// const mapAuthorizationData = (summary) => {
-//   return {
-//     description: '',
-//     action: '',
-//     image: ''
-//   }
-// }
+const mapAuthorizationData = (summary: SummaryI<AuthorizationFlowState>) => {
+  return {
+    counterparty: summary.initiator,
+    ...summary.state,
+  }
+}
 
 const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
   const credentials = summary.state.constraints[0].requestedCredentialTypes.reduce<{
@@ -120,8 +123,7 @@ export const getMappedInteraction = (interaction: Interaction) => {
   } else if (interaction.flow.type === FlowType.CredentialOffer) {
     return mapCredReceiveData(summary as SummaryI<CredentialOfferFlowState>)
   } else if (interaction.flow.type === FlowType.Authorization) {
-    // TODO: to update once available
-    return {}
+    return mapAuthorizationData(summary as SummaryI<AuthorizationFlowState>)
   }
 }
 

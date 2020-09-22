@@ -5,9 +5,10 @@ import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import { getCredentialsBySection } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
-import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import { ServiceIssuedCredI } from '~/types/credentials'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getCredentialsBySection)
@@ -15,7 +16,13 @@ const CredentialOfferFas = () => {
   const renderCredentials = (credentials: ServiceIssuedCredI[]) =>
     credentials.map(({ type, invalid }) => (
       <CredentialCard disabled={invalid}>
-        <Header color={Colors.black}>{type}</Header>
+        <JoloText
+          kind={JoloTextKind.title}
+          size={JoloTextSizes.middle}
+          color={Colors.black}
+        >
+          {type}
+        </JoloText>
       </CredentialCard>
     ))
 
