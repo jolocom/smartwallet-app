@@ -140,7 +140,7 @@ const SeedPhrase: React.FC = () => {
     <Animated.View
       style={{
         opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
-        marginTop: 30,
+        marginTop: 40,
       }}
     >
       <Text style={styles.seedphrase}>{seedphrase}</Text>
@@ -215,7 +215,7 @@ const SeedPhrase: React.FC = () => {
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.middle}
           color={Colors.white}
-          customStyles={{ marginBottom: 30, paddingHorizontal: 10 }}
+          customStyles={{ marginBottom: 10, paddingHorizontal: 10 }}
         >
           {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
         </JoloText>
@@ -260,17 +260,10 @@ const styles = StyleSheet.create({
     flex: 0.6,
     width: '100%',
     justifyContent: 'center',
+    paddingHorizontal: 10,
   },
-  helpersContainer: {
-    flex: 0.4,
-    width: '90%',
-    justifyContent: 'flex-start',
-  },
-  wrapper: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
+  iconContainer: {
+    alignSelf: 'flex-end',
   },
   seedphrase: {
     textAlign: 'center',
@@ -288,6 +281,22 @@ const styles = StyleSheet.create({
     },
     textShadowRadius: 10,
   },
+  helpersContainer: {
+    flex: 0.4,
+    width: '100%',
+    justifyContent: 'flex-start',
+  },
+  info: {
+    width: '75%',
+    marginTop: 20,
+  },
+  wrapper: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
+
   bottomContainer: {
     alignItems: 'flex-end',
     paddingRight: Platform.select({
@@ -313,13 +322,6 @@ const styles = StyleSheet.create({
       android: 0.5,
     }),
     zIndex: 20,
-  },
-  info: {
-    width: '75%',
-    marginTop: 20,
-  },
-  iconContainer: {
-    alignSelf: 'flex-end',
   },
 })
 

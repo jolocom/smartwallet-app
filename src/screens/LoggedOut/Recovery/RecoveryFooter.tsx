@@ -62,9 +62,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
         {Platform.OS === 'android' && areSuggestionsVisible && (
           <AbsoluteBottom
             customStyles={{
-              bottom:
-                keyboardHeight +
-                BP({ large: 0, medium: 0, small: 10, xsmall: 10 }),
+              bottom: keyboardHeight + 10,
             }}
           >
             <Animated.View
