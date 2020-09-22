@@ -215,7 +215,7 @@ const SeedPhrase: React.FC = () => {
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.middle}
           color={Colors.white}
-          customStyles={{ marginBottom: 10, paddingHorizontal: 10 }}
+          customStyles={{ marginBottom: 10 }}
         >
           {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
         </JoloText>
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   info: {
-    width: '75%',
+    width: '40%',
     marginTop: 20,
   },
   wrapper: {
@@ -299,10 +299,7 @@ const styles = StyleSheet.create({
 
   bottomContainer: {
     alignItems: 'flex-end',
-    paddingRight: Platform.select({
-      ios: 0,
-      android: 10,
-    }),
+    paddingRight: 10,
   },
   gradient: {
     width: 160,
