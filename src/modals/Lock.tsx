@@ -32,7 +32,7 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-const Lock = () => {
+export const Lock = () => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
 
@@ -51,7 +51,7 @@ const Lock = () => {
   }, [pin])
 
   const handleAppUnlock = () => {
-    if (keychainPin === pin) {
+    if (keychainPin.toString() === pin) {
       dispatch(unlockApp())
     } else {
       setHasError(true)
