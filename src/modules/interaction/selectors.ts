@@ -135,7 +135,7 @@ export const getIsFullScreenInteraction = createSelector(
       }, [])
 
       //TODO: add breakpoints
-      return availableAttributes.length > 3
+      return availableAttributes.length > 3 || details.requestedAttributes.length > 2
     } else if (
       isCredShareDetails(details) &&
       !details.requestedAttributes.length &&
