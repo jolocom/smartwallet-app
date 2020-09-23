@@ -33,9 +33,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightBlack,
     borderRadius: 20,
     justifyContent: 'center',
-    paddingVertical: 30,
     paddingHorizontal: 20,
     paddingTop: 55,
+    paddingBottom: 20,
   },
   childrenWrapper: {
     marginBottom: 28,

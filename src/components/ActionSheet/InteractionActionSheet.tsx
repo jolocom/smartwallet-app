@@ -157,7 +157,7 @@ const InteractionActionSheet: React.FC = () => {
           isFullScreenInteraction ? (
             <View />
           ) : (
-            <IconWrapper>
+            <IconWrapper customStyle={{height: 0}}>
               <View style={styles.basIcon}>
                 <InteractionIcon />
               </View>
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   basIcon: {
     position: 'absolute',
-    top: 35,
+    top: -35,
     zIndex: 2,
   },
 })
