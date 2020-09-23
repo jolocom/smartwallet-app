@@ -106,12 +106,12 @@ const InteractionActionSheet: React.FC = () => {
   /**
    * Handles the dismissal of the @IntermediarySheet when called by the @onClose prop (@ActionSheet).
    * Similarly to @handleCloseInteractionSheet, the @IntermediarySheet can be closed by @switching with
-   * the @InteractionSheet, as well as when there is a tap outside the @ActionSheet. The interaction should
-   * be reset only in the latter case.
+   * the @InteractionSheet, as well as when there is a tap outside the @ActionSheet. On tap, the @IntermediarySheet
+   * should be replaced with the @InteractionSheet
    */
   const handleCloseIntermediarySheet = () => {
     if (intermediaryState !== IntermediaryState.switching) {
-      dispatch(resetInteraction())
+        dispatch(setIntermediaryState(IntermediaryState.switching))
     }
   }
 

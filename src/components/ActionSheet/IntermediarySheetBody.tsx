@@ -64,6 +64,7 @@ const IntermediarySheetBody = () => {
     <BasWrapper withFooter={false} customStyle={{ paddingTop: 32 }}>
       <View style={styles.inputWrapper}>
         <TextInput
+          returnKeyType={'done'}
           keyboardType={keyboardType}
           autoCapitalize={'none'}
           autoCorrect={false}
