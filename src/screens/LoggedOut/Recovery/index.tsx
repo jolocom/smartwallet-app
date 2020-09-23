@@ -14,6 +14,7 @@ const Recovery: React.FC = () => {
     <ScrollView
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={{ flex: 1 }}
+      scrollEnabled={false}
     >
       <ScreenContainer
         customStyles={{
