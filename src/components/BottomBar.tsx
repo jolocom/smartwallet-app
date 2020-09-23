@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import {
   Dimensions,
   ImageBackground,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -9,7 +10,7 @@ import {
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import {
   DocumentsTabIcon,
@@ -68,10 +69,11 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
 
 const ScannerButton = () => {
   const redirectToScanner = useRedirectTo(ScreenNames.Interactions)
+  const { bottom } = useSafeArea()
   return (
     <TouchableOpacity
       onPress={redirectToScanner}
-      style={[styles.scannerBtn, styles.scannerFrame]}
+      style={[styles.scannerBtn, styles.scannerFrame, { bottom: 28 + bottom }]}
     >
       <LinearGradient
         style={[styles.scannerBtn, styles.scannerBody]}
@@ -87,17 +89,32 @@ const BottomBar = (props: BottomTabBarProps) => {
   const { history, routeNames, routes } = props.state
   const getSelectedRoute = (label: string) =>
     routes.find((el) => el.name === label) || { key: '' }
+  const { bottom } = useSafeArea()
+  const Container = Platform.OS === 'ios' ? SafeAreaView : Fragment
 
   return (
-    <SafeAreaView style={{ backgroundColor: Colors.mainBlack, height: 1 }}>
-      <View style={styles.container}>
-        <ScannerButton />
-        <ImageBackground
-          style={styles.tabsContainer}
-          source={require('~/assets/images/bottomBarBG.png')}
-        >
-          <View style={[styles.iconGroup, { justifyContent: 'flex-start' }]}>
-            {routeNames.slice(0, 2).map((routeName: string, idx: number) => (
+    <Container style={{ backgroundColor: Colors.mainBlack }}>
+      <ScannerButton />
+      <ImageBackground
+        style={[styles.tabsContainer, { bottom: bottom }]}
+        source={require('~/assets/images/bottomBarBG.png')}
+      >
+        <View style={[styles.iconGroup, { justifyContent: 'flex-start' }]}>
+          {routeNames.slice(0, 2).map((routeName: string, idx: number) => (
+            <Tab
+              key={idx}
+              label={routeName}
+              isActive={
+                history[history.length - 1].key ===
+                getSelectedRoute(routeName).key
+              }
+            />
+          ))}
+        </View>
+        <View style={[styles.iconGroup, { justifyContent: 'flex-end' }]}>
+          {props.state.routeNames
+            .slice(2)
+            .map((routeName: string, idx: number) => (
               <Tab
                 key={idx}
                 label={routeName}
@@ -107,38 +124,19 @@ const BottomBar = (props: BottomTabBarProps) => {
                 }
               />
             ))}
-          </View>
-          <View style={[styles.iconGroup, { justifyContent: 'flex-end' }]}>
-            {props.state.routeNames
-              .slice(2)
-              .map((routeName: string, idx: number) => (
-                <Tab
-                  key={idx}
-                  label={routeName}
-                  isActive={
-                    history[history.length - 1].key ===
-                    getSelectedRoute(routeName).key
-                  }
-                />
-              ))}
-          </View>
-        </ImageBackground>
-      </View>
-    </SafeAreaView>
+        </View>
+      </ImageBackground>
+    </Container>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
   scannerFrame: {
     position: 'absolute',
-    bottom: 58,
     zIndex: 100,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   scannerBtn: {
     width: 66,
@@ -153,6 +151,8 @@ const styles = StyleSheet.create({
     borderRadius: 33,
   },
   tabsContainer: {
+    position: 'absolute',
+    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderTopLeftRadius: 10,
@@ -160,8 +160,9 @@ const styles = StyleSheet.create({
     height: 105,
     width: SCREEN_WIDTH,
     paddingVertical: 10,
-    // marginLeft: -1,
+    marginLeft: -0.5,
     zIndex: 10,
+    marginBottom: -30,
   },
   iconContainer: {
     paddingHorizontal: 13,
