@@ -10,12 +10,19 @@ import { useSDK } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/useLoader'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
-import useRedirectTo from '~/hooks/useRedirectTo'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { StackActions, NavigationProp } from '@react-navigation/native'
 
-const SeedPhraseRepeat: React.FC = () => {
-  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
+interface PropsI {
+  navigation: NavigationProp<{}>
+}
+
+const SeedPhraseRepeat: React.FC<PropsI> = ({ navigation }) => {
+  const redirectToEntropy = () => {
+    navigation.dispatch(StackActions.popToTop()) // this is for clearing the stack;
+    navigation.dispatch(StackActions.push(ScreenNames.Entropy))
+  }
   const dispatch = useDispatch()
   const entropy = useSelector(getEntropy)
   const SDK = useSDK()

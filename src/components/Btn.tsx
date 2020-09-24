@@ -75,6 +75,7 @@ const Btn: React.FC<PropsI> = (props) => {
       style={[containerStyles]}
       onPress={props.onPress}
       disabled={props.disabled}
+      testID="button"
     >
       {props.type === BtnTypes.primary ? (
         <LinearGradient
