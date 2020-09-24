@@ -1,11 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import {
   Dimensions,
   ImageBackground,
   Platform,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
@@ -24,6 +23,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
 import useRedirectTo from '~/hooks/useRedirectTo'
+import { OptionalContainer } from './OptionalContainer'
 
 interface IconPropsI {
   label: string
@@ -51,7 +51,7 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
     }
   }
   return (
-    <TouchableWithoutFeedback onPress={redirectToTab}>
+    <TouchableOpacity onPress={redirectToTab}>
       <View style={styles.iconContainer}>
         {renderIcon()}
         <JoloText
@@ -63,7 +63,7 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
           {label}
         </JoloText>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   )
 }
 
@@ -90,10 +90,16 @@ const BottomBar = (props: BottomTabBarProps) => {
   const getSelectedRoute = (label: string) =>
     routes.find((el) => el.name === label) || { key: '' }
   const { bottom } = useSafeArea()
-  const Container = Platform.OS === 'ios' ? SafeAreaView : Fragment
 
   return (
-    <Container style={{ backgroundColor: Colors.mainBlack }}>
+    <OptionalContainer
+      condition={Platform.OS === 'ios'}
+      container={(children) => (
+        <SafeAreaView style={{ backgroundColor: Colors.mainBlack }}>
+          {children}
+        </SafeAreaView>
+      )}
+    >
       <ScannerButton />
       <ImageBackground
         style={[styles.tabsContainer, { bottom: bottom }]}
@@ -126,7 +132,7 @@ const BottomBar = (props: BottomTabBarProps) => {
             ))}
         </View>
       </ImageBackground>
-    </Container>
+    </OptionalContainer>
   )
 }
 
