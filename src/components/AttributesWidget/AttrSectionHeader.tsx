@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   plus: {
-    transform: [{ scale: 0.7 }],
-    marginRight: 3,
-    marginBottom: 2,
+    transform: [{ scale: 0.6 }],
+    marginRight: 1,
+    marginBottom: 1,
   },
 })
 

@@ -6,6 +6,7 @@ import { AttrsState, AttributeI } from '~/modules/attributes/types'
 import AttrSectionHeader from './AttrSectionHeader'
 import Field, { FieldTypes } from './Field'
 import { AttrKeys } from '~/types/credentials'
+import BP from '~/utils/breakpoints'
 
 interface AttrsWidgetPropsI {
   attributes: AttrsState<AttributeI>
@@ -73,7 +74,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
 
 const styles = StyleSheet.create({
   attrSectionContainer: {
-    marginBottom: 40,
+    marginBottom: BP({ large: 40, medium: 40, small: 20, xsmall: 20 }),
   },
 })
 

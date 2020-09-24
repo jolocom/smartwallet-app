@@ -18,7 +18,7 @@ const CredentialOfferFas = () => {
 
   const renderCredentials = (credentials: OfferUICredential[]) =>
     credentials.map(({ type, invalid }) => (
-      <View style={{ marginLeft: 27 }}>
+      <View style={{ marginLeft: 27, borderColor: 'blue', borderWidth: 2 }}>
         <CredentialCard disabled={invalid}>
           <JoloText
             kind={JoloTextKind.title}

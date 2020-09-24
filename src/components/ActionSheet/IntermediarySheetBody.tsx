@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     borderRadius: 8,
     width: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: -20,
   },
   inputText: {
     color: Colors.white,
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 22,
     letterSpacing: 0.14,
-    width: '100%'
+    width: '100%',
   },
 })
 

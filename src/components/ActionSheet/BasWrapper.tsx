@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   childrenWrapper: {
-    marginBottom: 28,
     alignItems: 'center',
   },
 })
