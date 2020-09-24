@@ -14,7 +14,7 @@ import RightArrow from '~/components/RightArrow'
 
 import useDelay from '~/hooks/useDelay'
 
-import { Fonts } from '~/utils/fonts'
+import { titleFontStyles } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
@@ -80,9 +80,17 @@ const SeedKeyInput: React.FC = () => {
   }
 
   // after the phrase is complete - keyboard hides, to bring keyoboard back when user moves across keys in phrase
+  const renderedTimes = useRef(0)
   useEffect(() => {
-    if (!inputRef.current?.isFocused()) {
-      inputRef.current?.focus()
+    renderedTimes.current++
+    if (renderedTimes) {
+      if (
+        inputRef.current &&
+        inputRef.current.isFocused &&
+        !inputRef.current.isFocused()
+      ) {
+        inputRef.current?.focus()
+      }
     }
   }, [currentWordIdx])
 
@@ -148,7 +156,7 @@ const SeedKeyInput: React.FC = () => {
           onSubmitEditing={handleSubmitEditing}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          style={styles.input}
+          style={[titleFontStyles.big, styles.input]}
           testID="seedphrase-input"
           keyboardAppearance="dark"
           underlineColorAndroid="transparent"
@@ -181,13 +189,15 @@ const styles = StyleSheet.create({
       large: 70,
       medium: 50,
       small: 30,
+      xsmall: 30,
     }),
   },
   inputField: {
     width: '100%',
     backgroundColor: 'black',
     height: BP({
-      small: 50,
+      xsmall: 50,
+      small: 80,
       medium: 80,
       large: 80,
     }),
@@ -197,12 +207,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     borderWidth: 2,
+    alignItems: 'center',
   },
   input: {
     width: '70%',
-    fontFamily: Fonts.Medium,
-    fontSize: 34,
-    fontWeight: '500',
     color: Colors.white,
     textDecorationLine: 'none',
   },

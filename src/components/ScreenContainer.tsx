@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
-    backgroundColor: Colors.mainBlack,
   },
   container: {
     flex: 1,
@@ -65,6 +64,7 @@ const styles = StyleSheet.create({
       large: 40,
       medium: 40,
       small: 15,
+      xsmall: 15,
     }),
   },
   transparent: {

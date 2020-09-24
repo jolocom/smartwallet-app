@@ -1,3 +1,5 @@
+import { AttrKeys } from '~/types/credentials'
+
 const loaderMsgs = {
   CREATING: 'Creating your personal secret number',
   MATCHING: 'Matching two instances',
@@ -59,9 +61,9 @@ const passcode = {
 const seedphrase = {
   HOLD_YOUR_FINGER_ON_THE_CIRCLE:
     'Hold your finger on the circle untill magic will happen',
-  WRITE_DOWN_THIS_PHRASE_ITS_VERY_IMPORTANT:
-    "Write down this phrase. It's very important!",
-  OKAY: 'Okay',
+  WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE:
+    'Write down this phrase somewhere safe to proceed with the next step',
+  DONE: 'Done',
   WHY_SO_ANALOGUE: 'Why so analogue?',
   ANY_FUTURE_PASSCODE_RESTORE:
     'Any future passcode restore is possible only with your secret phrase',
@@ -117,15 +119,39 @@ const scanner = {
 }
 
 const interactions = {
-  WOULD_YOU_LIKE_TO_AUTHENTICATE: 'Would you like to authenticate?',
   AUTHENTICATE: 'Authenticate',
-  WOULD_YOU_LIKE_TO: 'Would you like to',
   AUTHORIZE: 'Authorize',
   PULL_TO_CHOOSE: 'Pull to choose',
   SHARE: 'Share',
   RECEIVE: 'Receive',
+  IGNORE: 'Ignore',
   CHOOSE_ONE_OR_MORE_DOCUMENTS:
     'Choose one or more documents provided by this service and we will generate them for you',
+  DOCUMENTS: 'Documents',
+  OTHER: 'Other',
+  ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION: `Once you click done, it will be displayed in the personal info section.`,
+  //FIXME: when we add i18t for translations, we can interpolate values with %{VALUE}
+  THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS: (did: string) =>
+    `This public profile ${did} chose to remain anonymous. Pay attention before sharing data.`,
+  SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS: (service: string) =>
+    `${service} would like to confirm your digital identity before proceeding`,
+  SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY: (service: string) =>
+    `${service} would like to confirm your digital identity before proceeding`,
+  SERVICE: 'Service',
+  CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED: (
+    service: string,
+  ) => `Choose one or more documents requested by ${service} to proceed `,
+  SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS: (service: string) =>
+    `${service} sent your wallet the following document(s):`,
+  ADD_YOUR_ATTRIBUTE: (attr: string) => `Add your ${attr}`,
+  IS_IT_REALLY_YOU: 'Is it really you?',
+  INCOMING_INTERACTION: `Incoming interaction`,
+  SERVICE_REQUESTS_ATTRIBUTE: (service: string, attribute: string) =>
+    `${service} requests ${attribute}`,
+  INCOMING_REQUEST: 'Incoming request',
+  INCOMING_OFFER: 'Incoming offer',
+  ADD_INFO: 'Add info',
+  WOULD_YOU_LIKE_TO_ACTION: (action: string) => `Would you like to ${action}?`,
 }
 
 const lock = {
@@ -145,6 +171,15 @@ const settings = {
   LOG_OUT: 'Log out',
 }
 
+const attributes = {
+  CREATE_NEW_ONE: 'Create new one',
+  NAME: 'Name',
+  EMAILADDRESS: 'Email',
+  MOBILEPHONENUMBER: 'Number',
+  MISSING_INFO: 'Missing info',
+  SAVE_YOUR_ATTRIBUTE: (attr: AttrKeys) => `Save your attribute ${attr}`,
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -158,4 +193,5 @@ export const strings = {
   ...settings,
   ...lock,
   ...interactions,
+  ...attributes,
 }

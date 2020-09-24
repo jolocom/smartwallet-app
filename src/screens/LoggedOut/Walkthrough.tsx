@@ -1,11 +1,9 @@
 import React from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import Swiper from 'react-native-swiper'
+import { useSafeArea } from 'react-native-safe-area-context'
 
-import ScreenContainer from '~/components/ScreenContainer'
-import Header, { HeaderSizes } from '~/components/Header'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
-import Btn, { BtnTypes } from '~/components/Btn'
+import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import BtnGroup from '~/components/BtnGroup'
 
@@ -20,6 +18,9 @@ import {
 } from '~/assets/images'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
+import ScreenContainer from '~/components/ScreenContainer'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const walkthroughData = [
   {
@@ -65,8 +66,10 @@ const Walkthrough: React.FC = () => {
     )
   }
 
+  const insets = useSafeArea()
+
   return (
-    <ScreenContainer isFullscreen>
+    <ScreenContainer isFullscreen customStyles={{ marginTop: -insets.top }}>
       <Swiper
         loop
         autoplay
@@ -81,28 +84,36 @@ const Walkthrough: React.FC = () => {
               source={slide.background}
             />
             <AbsoluteBottom
-              customStyles={{ ...styles.consistentContainer, bottom: 195 }}
+              customStyles={{
+                ...styles.consistentContainer,
+                bottom: 235,
+              }}
             >
-              <View style={styles.contentContainer}>
-                <Header size={HeaderSizes.large} color={Colors.white90}>
-                  {walkthroughData[idx].header}
-                </Header>
-                <Paragraph
-                  size={ParagraphSizes.large}
-                  color={Colors.white85}
-                  customStyles={{ opacity: 0.8, marginTop: 12 }}
-                >
-                  {walkthroughData[idx].paragraph}
-                </Paragraph>
-              </View>
+              <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
+                {walkthroughData[idx].header}
+              </JoloText>
+              <JoloText
+                kind={JoloTextKind.subtitle}
+                size={JoloTextSizes.big}
+                color={Colors.white80}
+                customStyles={{ marginTop: 12 }}
+              >
+                {walkthroughData[idx].paragraph}
+              </JoloText>
             </AbsoluteBottom>
           </>
         ))}
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
         <BtnGroup>
-          <Btn onPress={redirectToEntropy}>{strings.GET_STARTED}</Btn>
-          <Btn type={BtnTypes.secondary} onPress={redirectToRecovery}>
+          <Btn size={BtnSize.large} onPress={redirectToEntropy}>
+            {strings.GET_STARTED}
+          </Btn>
+          <Btn
+            size={BtnSize.large}
+            type={BtnTypes.secondary}
+            onPress={redirectToRecovery}
+          >
             {strings.NEED_RESTORE}
           </Btn>
         </BtnGroup>
@@ -112,7 +123,7 @@ const Walkthrough: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
-  background: { ...(StyleSheet.absoluteFill as {}) },
+  background: { ...(StyleSheet.absoluteFill as {}), top: -20 },
   consistentContainer: {
     paddingHorizontal: '5%',
   },
@@ -127,7 +138,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 155,
+    bottom: 185,
   },
   dot: {
     width: 3,

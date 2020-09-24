@@ -27,16 +27,17 @@ import { handleNotEnrolled } from '~/utils/biometryErrors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { setPopup } from '~/modules/appState/actions'
-import Header from '~/components/Header'
 import { useAppState } from '~/hooks/useAppState'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
 
-const Lock = () => {
+export const Lock = () => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
 
   const dispatch = useDispatch()
   const {
-    isLoadingStorage,
     biometryType,
     keychainPin,
     isBiometrySelected,
@@ -49,7 +50,7 @@ const Lock = () => {
   }, [pin])
 
   const handleAppUnlock = () => {
-    if (keychainPin === pin) {
+    if (keychainPin.toString() === pin) {
       dispatch(unlockApp())
     } else {
       setHasError(true)
@@ -82,27 +83,28 @@ const Lock = () => {
       <ScreenContainer
         customStyles={{ marginTop: '30%', justifyContent: 'flex-start' }}
       >
-        {isLoadingStorage ? (
-          <ActivityIndicator />
-        ) : (
-          <>
-            <Header>{strings.ENTER_YOUR_PIN}</Header>
-            <View style={styles.inputContainer}>
-              <PasscodeInput
-                value={pin}
-                stateUpdaterFn={setPin}
-                onSubmit={handleAppUnlock}
-                hasError={hasError}
-                errorStateUpdaterFn={setHasError}
-              />
-            </View>
-            <AbsoluteBottom>
-              <Btn type={BtnTypes.secondary} onPress={() => {}}>
-                {strings.FORGOT_YOUR_PIN}
-              </Btn>
-            </AbsoluteBottom>
-          </>
-        )}
+        <JoloText
+          kind={JoloTextKind.title}
+          size={JoloTextSizes.middle}
+          weight={JoloTextWeight.regular}
+          color={Colors.white90}
+        >
+          {strings.ENTER_YOUR_PIN}
+        </JoloText>
+        <View style={styles.inputContainer}>
+          <PasscodeInput
+            value={pin}
+            stateUpdaterFn={setPin}
+            onSubmit={handleAppUnlock}
+            hasError={hasError}
+            errorStateUpdaterFn={setHasError}
+          />
+        </View>
+        <AbsoluteBottom>
+          <Btn type={BtnTypes.secondary} onPress={() => {}}>
+            {strings.FORGOT_YOUR_PIN}
+          </Btn>
+        </AbsoluteBottom>
       </ScreenContainer>
     </Modal>
   )

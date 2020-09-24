@@ -1,6 +1,5 @@
 import React from 'react'
 import Svg, { Path, G } from 'react-native-svg'
-/* SVGR has dropped some elements not supported by react-native-svg: title */
 
 const CloseIcon = () => (
   <Svg width="16px" height="16px" viewBox="0 0 16 16">

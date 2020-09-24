@@ -1,50 +1,54 @@
 import { Dimensions } from 'react-native'
 
+const SCREEN_SIZE = Dimensions.get('window')
+
 enum ScreenSize {
+  xsmall = 'xsmall',
   small = 'small',
   medium = 'medium',
   large = 'large',
 }
 
-const breakpoints = {
-  [ScreenSize.large]: {
-    width: 414,
-    height: 814,
-  },
-  [ScreenSize.medium]: {
-    width: 360,
-    height: 640,
-  },
-}
-
 interface StyleValues<T extends string | number> {
+  [ScreenSize.xsmall]: T
   [ScreenSize.small]: T
   [ScreenSize.medium]: T
   [ScreenSize.large]: T
 }
 
+interface Breakpoint {
+  width: number
+  height: number
+}
+
+const breakpoints: Record<string, Breakpoint> = {
+  large: {
+    width: 414,
+    height: 814,
+  },
+  medium: {
+    width: 380,
+    height: 700,
+  },
+  small: {
+    width: 360,
+    height: 640,
+  },
+}
+
+const isBreakpoint = (breakpointSize: ScreenSize) =>
+  SCREEN_SIZE.width >= breakpoints[breakpointSize].width &&
+  SCREEN_SIZE.height >= breakpoints[breakpointSize].height
+
+// NOTE: Maps through the breakpoints (biggest to smallest) and returns the @ScreenSize of the device if it's
+// bigger than the breakpoint. In case the map didn't find anything, means the screen is smaller than all the
+// breakpoints, returning the smallest @ScreenSize.
 const getScreenSize = (): ScreenSize => {
-  const { width, height } = Dimensions.get('window')
-  const screenSize = { width, height }
-
-  if (
-    screenSize.width >= breakpoints.large.width &&
-    screenSize.height >= breakpoints.large.height
-  ) {
-    return ScreenSize.large
-  } else if (
-    screenSize.width >= breakpoints.medium.width &&
-    screenSize.height >= breakpoints.medium.height
-  ) {
-    return ScreenSize.medium
-  } else {
-    return ScreenSize.small
-  }
+  const size = (Object.keys(breakpoints) as ScreenSize[]).find(isBreakpoint)
+  return size ? size : ScreenSize.xsmall
 }
 
-const BP = <T extends string | number>(values: StyleValues<T>): T => {
-  const size = getScreenSize()
-  return values[size]
-}
+const BP = <T extends string | number>(values: StyleValues<T>): T =>
+  values[getScreenSize()]
 
 export default BP

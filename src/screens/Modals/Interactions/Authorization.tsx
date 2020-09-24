@@ -1,68 +1,41 @@
+import { useSelector } from 'react-redux'
 import React from 'react'
-import { Image, View } from 'react-native'
-import { useDispatch } from 'react-redux'
-import HyperLink from 'react-native-hyperlink'
-import { AuthorizationFlowState } from '@jolocom/sdk/js/src/lib/interactionManager/authorizationFlow'
+import { Image, View, StyleSheet } from 'react-native'
 
-import { useInteraction } from '~/hooks/sdk'
-import Paragraph, { ParagraphSizes } from '~/components/Paragraph'
-import Header, { HeaderSizes } from '~/components/Header'
-import { Colors } from '~/utils/colors'
-import InteractionFooter from './InteractionFooter'
-import { useLoader } from '~/hooks/useLoader'
-import { strings } from '~/translations/strings'
-import { resetInteraction } from '~/modules/interaction/actions'
-import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
+import BasWrapper from '~/components/ActionSheet/BasWrapper'
+import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { isAuthzDetails } from '~/modules/interaction/guards'
 
 const Authorization = () => {
-  const interaction = useInteraction()
-  const dispatch = useDispatch()
-  const loader = useLoader()
-  const { description, imageURL, action } = interaction.getSummary()
-    .state as AuthorizationFlowState
-
-  const handleSubmit = async () => {
-    const success = loader(
-      async () => {
-        const authzResponse = await interaction.createAuthorizationResponse()
-        await interaction.send(authzResponse)
-      },
-      { showFailed: false, showSuccess: false },
+  const details = useSelector(getInteractionDetails)
+  if (isAuthzDetails(details)) {
+    const { imageURL } = details
+    return (
+      <BasWrapper>
+        {imageURL && (
+          <View style={styles.imageWrapper}>
+            <Image
+              source={{ uri: imageURL }}
+              style={styles.image}
+              resizeMode="cover" // it will take max Dimension size (260 - width) and make height based on the aspect ration of actual image size
+            />
+          </View>
+        )}
+      </BasWrapper>
     )
-    dispatch(resetInteraction())
-    if (!success) {
-      //TODO: show toast
-    }
   }
-
-  return (
-    <>
-      <Header size={HeaderSizes.small}>
-        {`${strings.WOULD_YOU_LIKE_TO} ${action || strings.AUTHORIZE}`} ?
-      </Header>
-      <HyperLink
-        linkDefault={true}
-        linkStyle={{ textDecorationLine: 'underline' }}
-      >
-        <Paragraph
-          size={ParagraphSizes.micro}
-          customStyles={{ color: Colors.white70, marginVertical: 20 }}
-        >
-          {description}
-        </Paragraph>
-      </HyperLink>
-      {imageURL && (
-        <View style={{ width: '100%', alignItems: 'center' }}>
-          <Image
-            resizeMode="center"
-            style={{ height: 230, width: 260, marginBottom: 30 }}
-            source={{ uri: imageURL }}
-          />
-        </View>
-      )}
-      <InteractionFooter onSubmit={handleSubmit} />
-    </>
-  )
+  return null
 }
+
+const styles = StyleSheet.create({
+  imageWrapper: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  image: {
+    width: 260,
+    height: 230,
+  },
+})
 
 export default Authorization

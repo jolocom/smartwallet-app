@@ -1,10 +1,15 @@
-import { InteractionActions } from './types'
+import {
+  InteractionActions,
+  IntermediaryState,
+  InteractionState,
+} from './types'
 import { Action } from '~/types/actions'
+import { isCredShareDetails } from './guards'
 
-const initialState = {
-  interactionId: '',
-  interactionType: null,
-  summary: {},
+const initialState: InteractionState = {
+  details: { flowType: null },
+  intermediaryState: IntermediaryState.hiding,
+  attributeInputKey: null,
 }
 
 const reducer = (
@@ -12,16 +17,28 @@ const reducer = (
   action: Action<InteractionActions, any>,
 ) => {
   switch (action.type) {
-    case InteractionActions.setInteraction:
-      return {
-        ...state,
-        interactionId: action.payload.interactionId,
-        interactionType: action.payload.interactionType,
-      }
-    case InteractionActions.setInteractionSummary:
-      return { ...state, summary: action.payload }
+    case InteractionActions.setInteractionDetails:
+      return { ...state, details: { ...state.details, ...action.payload } }
     case InteractionActions.resetInteraction:
       return initialState
+    case InteractionActions.selectShareCredential:
+      if (isCredShareDetails(state.details)) {
+        return {
+          ...state,
+          details: {
+            ...state.details,
+            selectedCredentials: {
+              ...state.details.selectedCredentials,
+              ...action.payload,
+            },
+          },
+        }
+      }
+      return state
+    case InteractionActions.setIntermediaryState:
+      return { ...state, intermediaryState: action.payload }
+    case InteractionActions.setAttributeInputKey:
+      return { ...state, attributeInputKey: action.payload }
     default:
       return state
   }

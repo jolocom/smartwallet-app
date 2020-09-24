@@ -11,7 +11,7 @@ import Loader from '~/modals/Loader'
 import Lock from '~/modals/Lock'
 import { SDKContextProvider } from '~/utils/sdk/context'
 import configureStore from './configureStore'
-import InteractionActionSheet from '~/screens/Modals/Interactions/InteractionActionSheet'
+import InteractionActionSheet from '~/components/ActionSheet/InteractionActionSheet'
 
 const store = configureStore()
 

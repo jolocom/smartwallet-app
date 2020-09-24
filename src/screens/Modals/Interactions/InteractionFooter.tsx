@@ -1,62 +1,137 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 
 import { resetInteraction } from '~/modules/interaction/actions'
-import { getInteractionType } from '~/modules/interaction/selectors'
+import {
+  getIsFullScreenInteraction,
+  getInteractionDetails,
+} from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
+import { useHandleFlowSubmit } from '~/hooks/interactions/useHandleFlowSubmit'
 
-import getCTAText from './utils/getCTAText'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
+import useInteractionCta from './hooks/useInteractionCta'
+import { useLoader } from '~/hooks/useLoader'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
+import { isCredShareDetails } from '~/modules/interaction/guards'
 
-interface PropsI {
-  onSubmit: () => void
+const FooterContainer: React.FC = ({ children }) => {
+  const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
+  if (isFullScreenInteraction) {
+    return (
+      <AbsoluteBottom customStyles={styles.FASfooter}>
+        <View style={styles.FAScontainer}>{children}</View>
+      </AbsoluteBottom>
+    )
+  }
+  return <View>{children}</View>
 }
 
-const InteractionFooter: React.FC<PropsI> = ({ onSubmit }) => {
+const InteractionFooter: React.FC = () => {
   const dispatch = useDispatch()
-  const interactionType = useSelector(getInteractionType)
+  const interactionCTA = useInteractionCta()
+  const handleFlowSubmit = useHandleFlowSubmit()
+  const interactionDetails = useSelector(getInteractionDetails)
+  const loader = useLoader()
+  const {
+    getSingleMissingAttribute,
+    handleCreateAttribute,
+    selectionReady,
+  } = useCredentialShareFlow()
+
+  /*
+   * Logic for disabling the submit button for each interaction type
+   */
+  const isDisabled = () => {
+    if (isCredShareDetails(interactionDetails)) {
+      return !selectionReady()
+    } else {
+      return false
+    }
+  }
+
+  const handleSubmit = async () => {
+    await loader(
+      async () => {
+        const missingAttribute = getSingleMissingAttribute()
+        if (missingAttribute) {
+          handleCreateAttribute(missingAttribute)
+        } else {
+          await handleFlowSubmit()
+        }
+      },
+      { showFailed: false, showSuccess: false },
+    )
+  }
 
   const handleCancel = () => {
     dispatch(resetInteraction())
   }
 
   return (
-    <BtnGroup alignment={BtnsAlignment.horizontal}>
-      <View style={[styles.container, { width: '70%', marginRight: 12 }]}>
-        <Btn size={BtnSize.medium} onPress={onSubmit}>
-          {getCTAText(interactionType)}
-        </Btn>
-      </View>
-      <View style={[styles.container, { width: '30%' }]}>
-        <Btn
-          size={BtnSize.medium}
-          type={BtnTypes.secondary}
-          onPress={handleCancel}
-          customContainerStyles={styles.cancelBtn}
-        >
-          {strings.CANCEL}
-        </Btn>
-      </View>
-    </BtnGroup>
+    <FooterContainer>
+      <BtnGroup alignment={BtnsAlignment.horizontal}>
+        <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
+          <Btn
+            disabled={isDisabled()}
+            size={BtnSize.medium}
+            onPress={handleSubmit}
+          >
+            {interactionCTA}
+          </Btn>
+        </View>
+        <View style={[styles.btnContainer, { flex: 0.3 }]}>
+          <Btn
+            size={BtnSize.medium}
+            type={BtnTypes.secondary}
+            onPress={handleCancel}
+            customContainerStyles={styles.cancelBtn}
+          >
+            {strings.IGNORE}
+          </Btn>
+        </View>
+      </BtnGroup>
+    </FooterContainer>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  FAScontainer: {
+    paddingHorizontal: '5%',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  FASfooter: {
+    bottom: 0,
+    height: 106,
+    backgroundColor: Colors.black,
+    justifyContent: 'center',
+    borderTopRightRadius: 22,
+    borderTopLeftRadius: 22,
+    shadowColor: Colors.black30,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowRadius: 7,
+    shadowOpacity: 1,
+    elevation: 10,
+  },
+  btnContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
   cancelBtn: {
     borderWidth: 2,
     borderColor: Colors.borderGray20,
     borderRadius: 8,
-    paddingVertical: 10,
   },
 })
 

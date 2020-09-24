@@ -1,6 +1,3 @@
-// jest.autoMockOff()
-
-jest.useFakeTimers()
 jest.mock('react-native-keychain', () => ({
   SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
   SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
@@ -22,9 +19,7 @@ jest.mock('react-redux', () => ({
 
 jest.mock('../../src/hooks/sdk', () => ({
   useSDK: () => ({
-    bemw: {
-      initWithMnemonic: jest.fn().mockResolvedValue(true),
-    },
+    initWithMnemonic: jest.fn().mockResolvedValue(true),
   }),
 }))
 
