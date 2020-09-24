@@ -6,7 +6,10 @@ import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 
 import { resetInteraction } from '~/modules/interaction/actions'
-import { getIsFullScreenInteraction } from '~/modules/interaction/selectors'
+import {
+  getIsFullScreenInteraction,
+  getInteractionDetails,
+} from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
@@ -16,6 +19,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
+import { isCredShareDetails } from '~/modules/interaction/guards'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -29,19 +33,28 @@ const FooterContainer: React.FC = ({ children }) => {
   return <View>{children}</View>
 }
 
-interface Props {
-  disabled?: boolean
-}
-
-const InteractionFooter: React.FC<Props> = ({ disabled }) => {
+const InteractionFooter: React.FC = () => {
   const dispatch = useDispatch()
   const interactionCTA = useInteractionCta()
   const handleFlowSubmit = useHandleFlowSubmit()
+  const interactionDetails = useSelector(getInteractionDetails)
   const loader = useLoader()
   const {
     getSingleMissingAttribute,
     handleCreateAttribute,
+    selectionReady,
   } = useCredentialShareFlow()
+
+  /*
+   * Logic for disabling the submit button for each interaction type
+   */
+  const isDisabled = () => {
+    if (isCredShareDetails(interactionDetails)) {
+      return !selectionReady()
+    } else {
+      return false
+    }
+  }
 
   const handleSubmit = async () => {
     await loader(
@@ -65,7 +78,11 @@ const InteractionFooter: React.FC<Props> = ({ disabled }) => {
     <FooterContainer>
       <BtnGroup alignment={BtnsAlignment.horizontal}>
         <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-          <Btn disabled={disabled} size={BtnSize.medium} onPress={handleSubmit}>
+          <Btn
+            disabled={isDisabled()}
+            size={BtnSize.medium}
+            onPress={handleSubmit}
+          >
             {interactionCTA}
           </Btn>
         </View>

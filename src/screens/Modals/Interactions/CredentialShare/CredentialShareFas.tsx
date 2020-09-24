@@ -120,7 +120,7 @@ const CredentialShareFas = () => {
           {renderSectionCredentials(other)}
         </InteractionSection>
       </FasWrapper>
-      <InteractionFooter disabled={!selectionReady()} />
+      <InteractionFooter />
     </>
   )
 }
