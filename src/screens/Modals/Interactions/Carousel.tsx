@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView } from 'react-native'
-import { CARD_WIDTH, CARD_HEIGHT } from './CredentialCard'
+import { CARD_WIDTH, SMALL_CARD_SCALE } from './CredentialCard'
 
 const Carousel: React.FC = ({ children }) => {
   return (
@@ -9,10 +9,13 @@ const Carousel: React.FC = ({ children }) => {
       horizontal={true}
       decelerationRate="fast"
       showsHorizontalScrollIndicator={false}
-      snapToInterval={CARD_WIDTH - 30}
+      //NOTE: 20 is the margin between the cards
+      snapToInterval={CARD_WIDTH * SMALL_CARD_SCALE + 20}
+      overScrollMode="never"
       contentContainerStyle={{
-        height: CARD_HEIGHT,
         alignItems: 'center',
+        paddingLeft: 27,
+        paddingRight: (CARD_WIDTH * SMALL_CARD_SCALE) / 4,
       }}
     >
       {children}

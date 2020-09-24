@@ -1,8 +1,8 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import CredentialCard from '../CredentialCard'
-import { useRootSelector } from '~/hooks/useRootSelector'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { isCredOfferDetails } from '~/modules/interaction/guards'
@@ -10,7 +10,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 const CredentialOfferBas = () => {
-  const details = useRootSelector(getInteractionDetails)
+  const details = useSelector(getInteractionDetails)
   if (isCredOfferDetails(details)) {
     const {
       credentials: { service_issued },

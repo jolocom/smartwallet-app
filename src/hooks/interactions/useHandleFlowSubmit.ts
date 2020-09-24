@@ -1,6 +1,7 @@
 import { Alert } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { JSONWebToken } from '@jolocom/sdk'
 
 import { getInteractionType } from '~/modules/interaction/selectors'
 import {
@@ -8,9 +9,15 @@ import {
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
+import { useCredentialShareFlow } from './useCredentialShareFlow'
 import { useInteraction } from '../sdk'
-import { JSONWebToken } from '@jolocom/sdk'
 import { useSyncCredentials } from '~/hooks/credentials'
+
+const showNotification = (title: string, message?: string) => {
+  setTimeout(() => {
+    Alert.alert(title, message)
+  }, 500)
+}
 
 export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   const interactionType = useSelector(getInteractionType)
@@ -23,6 +30,7 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
+  const { assembleShareResponseToken } = useCredentialShareFlow()
   const interaction = useInteraction()
   const syncCredentials = useSyncCredentials()
 
@@ -35,18 +43,25 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
   }
 
   if (interactionType === FlowType.Authentication) {
-    return async function authenticate () {
+    return async () => {
       const authResponse = await interaction.createAuthenticationResponse()
       submitAuth(authResponse)
     }
   } else if (interactionType === FlowType.Authorization) {
-    return async function authorize () {
+    return async () => {
       const authzResponse = await interaction.createAuthorizationResponse()
       submitAuth(authzResponse)
     }
   } else if (interactionType === FlowType.CredentialShare) {
-    return async function shareCredentials () {
-      // TODO: add onCredShare functionality here
+    return async () => {
+      try {
+        await assembleShareResponseToken()
+        showNotification('Credentials shared successfully')
+      } catch (e) {
+        showNotification('Failed to share credentials', e.message)
+      } finally {
+        dispatch(resetInteraction())
+      }
     }
   } else if (interactionType === FlowType.CredentialOffer) {
     return async () => {
@@ -69,18 +84,18 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
           )
 
         const validatedCredentials = getValidatedCredentials()
-        const allValid = validatedCredentials.every(cred => !cred.invalid)
-        const allInvalid = validatedCredentials.every(cred => cred.invalid)
+        const allValid = validatedCredentials.every((cred) => !cred.invalid)
+        const allInvalid = validatedCredentials.every((cred) => cred.invalid)
 
         if (allValid) {
           await storeSelectedCredentials()
           await syncCredentials()
-          Alert.alert('Documents stored successfully')
+          showNotification('Documents stored successfully')
           //TODO: update store credentials with the new ones
 
           dispatch(resetInteraction())
         } else if (allInvalid) {
-          Alert.alert('All the documents are corrupted')
+          showNotification('All the documents are corrupted')
           //TODO: dispatch "interaction failed" notification
 
           dispatch(resetInteraction())
@@ -91,11 +106,11 @@ export const useHandleFlowSubmit = (): (() => Promise<any>) => {
             service_issued: validatedCredentials,
           }
           dispatch(setInteractionDetails({ credentials }))
-          Alert.alert('Renegotiating')
+          showNotification('Renegotiating')
         }
       } catch (err) {
         //TODO: dispatch error notification
-        Alert.alert('Interaction failed', err.message)
+        showNotification('Interaction failed', err.message)
 
         console.log({ err })
         dispatch(resetInteraction())

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
   View,
   StyleSheet,
   Dimensions,
-  TouchableWithoutFeedback,
+  Animated,
+  TouchableOpacity,
 } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { SuccessTick } from '~/assets/svg'
@@ -19,6 +20,7 @@ interface PropsI {
 
 export const CARD_WIDTH = Dimensions.get('window').width * 0.83
 export const CARD_HEIGHT = CARD_WIDTH * 0.64
+export const SMALL_CARD_SCALE = 0.84
 
 const Tick = () => {
   return (
@@ -36,13 +38,26 @@ const CredentialCard: React.FC<PropsI> = ({
   selected,
   onSelect,
 }) => {
+  const instructionOpacity = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    Animated.timing(instructionOpacity, {
+      duration: !hasInstruction && !disabled && !selected ? 200 : 0,
+      toValue: hasInstruction || disabled || selected ? 0.85 : 0,
+      useNativeDriver: true,
+    }).start()
+  }, [hasInstruction, disabled, selected])
+
   const handleCardTap = () => {
-    // setIsAnimated(false)
     onSelect && onSelect()
   }
 
   return (
-    <TouchableWithoutFeedback disabled={disabled} onPress={handleCardTap}>
+    <TouchableOpacity
+      activeOpacity={onSelect ? 0.85 : 1}
+      disabled={disabled}
+      onPress={handleCardTap}
+    >
       <View
         style={[
           styles.cardContainer,
@@ -50,19 +65,25 @@ const CredentialCard: React.FC<PropsI> = ({
           isSmall && styles.scaledDown,
         ]}
       >
-        {children}
-        {(disabled || selected || hasInstruction) && (
-          <View style={[styles.darken, styles.card]}>
+        <>
+          {children}
+          <Animated.View
+            style={[
+              styles.darken,
+              styles.card,
+              { opacity: instructionOpacity },
+            ]}
+          >
             {selected && <Tick />}
-            {hasInstruction && (
-              <View style={{ alignSelf: 'center' }}>
+            {!selected && (
+              <View style={[{ alignSelf: 'center' }]}>
                 <HandAnimation />
               </View>
             )}
-          </View>
-        )}
+          </Animated.View>
+        </>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   )
 }
 
@@ -79,9 +100,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scaledDown: {
-    marginLeft: -20,
-    marginRight: -5,
-    transform: [{ scale: 0.83 }],
+    marginHorizontal: -CARD_WIDTH * ((1 - SMALL_CARD_SCALE) / 2),
+    marginVertical: -CARD_HEIGHT * ((1 - SMALL_CARD_SCALE) / 2),
+    transform: [{ scale: SMALL_CARD_SCALE }],
   },
   darken: {
     position: 'absolute',
@@ -90,7 +111,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: Colors.mainBlack,
-    opacity: 0.85,
     justifyContent: 'center',
   },
   iconContainer: {

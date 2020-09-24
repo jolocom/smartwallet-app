@@ -1,16 +1,19 @@
+import { useSelector } from 'react-redux'
+
 import { strings } from '~/translations/strings'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import {
   isAuthDetails,
   isAuthzDetails,
   isCredOfferDetails,
   isCredShareDetails,
 } from '~/modules/interaction/guards'
-import { useRootSelector } from '~/hooks/useRootSelector'
 
 export default function useInteractionCta() {
-  const details = useRootSelector(getInteractionDetails)
+  const details = useSelector(getInteractionDetails)
+  const { getSingleMissingAttribute } = useCredentialShareFlow()
 
   if (isAuthDetails(details)) {
     return strings.AUTHENTICATE
@@ -22,7 +25,7 @@ export default function useInteractionCta() {
   } else if (isCredOfferDetails(details)) {
     return strings.RECEIVE
   } else if (isCredShareDetails(details)) {
-    return strings.SHARE
+    return getSingleMissingAttribute() ? strings.ADD_INFO : strings.SHARE
   } else {
     return ''
   }

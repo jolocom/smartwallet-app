@@ -5,15 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 
-import {
-  resetInteraction,
-  setIntermediaryState,
-  setAttributeInputKey,
-} from '~/modules/interaction/actions'
+import { resetInteraction } from '~/modules/interaction/actions'
 import {
   getIsFullScreenInteraction,
-  getAttributesToShare,
-  getServiceIssuedCreds,
+  getInteractionDetails,
 } from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
@@ -21,9 +16,10 @@ import { Colors } from '~/utils/colors'
 import { useHandleFlowSubmit } from '~/hooks/interactions/useHandleFlowSubmit'
 
 import AbsoluteBottom from '~/components/AbsoluteBottom'
-import { IntermediaryState } from '~/modules/interaction/types'
 import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
+import { isCredShareDetails } from '~/modules/interaction/guards'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -39,30 +35,39 @@ const FooterContainer: React.FC = ({ children }) => {
 
 const InteractionFooter: React.FC = () => {
   const dispatch = useDispatch()
-  const serviceIssuedCreds = useSelector(getServiceIssuedCreds)
-  const attributesToShare = useSelector(getAttributesToShare)
   const interactionCTA = useInteractionCta()
   const handleFlowSubmit = useHandleFlowSubmit()
+  const interactionDetails = useSelector(getInteractionDetails)
   const loader = useLoader()
+  const {
+    getSingleMissingAttribute,
+    handleCreateAttribute,
+    selectionReady,
+  } = useCredentialShareFlow()
 
-  // NOTE: for now this will alway return false because we don't set attributesToShare yet
-  const showIntermediaryScreen =
-    Object.keys(attributesToShare).length === 1 &&
-    attributesToShare[Object.keys(attributesToShare)[0]] === [] &&
-    serviceIssuedCreds.length === 0
+  /*
+   * Logic for disabling the submit button for each interaction type
+   */
+  const isDisabled = () => {
+    if (isCredShareDetails(interactionDetails)) {
+      return !selectionReady()
+    } else {
+      return false
+    }
+  }
 
   const handleSubmit = async () => {
-    if (showIntermediaryScreen) {
-      dispatch(setIntermediaryState(IntermediaryState.showing))
-      dispatch(setAttributeInputKey('email'))
-    } else {
-      await loader(
-        async () => {
+    await loader(
+      async () => {
+        const missingAttribute = getSingleMissingAttribute()
+        if (missingAttribute) {
+          handleCreateAttribute(missingAttribute)
+        } else {
           await handleFlowSubmit()
-        },
-        { showFailed: false, showSuccess: false },
-      )
-    }
+        }
+      },
+      { showFailed: false, showSuccess: false },
+    )
   }
 
   const handleCancel = () => {
@@ -73,7 +78,11 @@ const InteractionFooter: React.FC = () => {
     <FooterContainer>
       <BtnGroup alignment={BtnsAlignment.horizontal}>
         <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-          <Btn size={BtnSize.medium} onPress={handleSubmit}>
+          <Btn
+            disabled={isDisabled()}
+            size={BtnSize.medium}
+            onPress={handleSubmit}
+          >
             {interactionCTA}
           </Btn>
         </View>
@@ -103,7 +112,8 @@ const styles = StyleSheet.create({
     height: 106,
     backgroundColor: Colors.black,
     justifyContent: 'center',
-    borderRadius: 22,
+    borderTopRightRadius: 22,
+    borderTopLeftRadius: 22,
     shadowColor: Colors.black30,
     shadowOffset: {
       width: 0,

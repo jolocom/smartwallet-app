@@ -5,12 +5,12 @@ import ScreenContainer from '~/components/ScreenContainer'
 import AttributesWidget from '~/components/AttributesWidget'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useSelector, useDispatch } from 'react-redux'
-import { getInteractionAttributes } from '~/modules/interaction/selectors'
 import { resetInteraction } from '~/modules/interaction/actions'
 import { useSetInteractionAttributes } from '~/hooks/attributes'
+import { getAvailablaAttributesToShare } from '~/modules/interaction/selectors'
 
 const History: React.FC = () => {
-  const attributes = useSelector(getInteractionAttributes)
+  const attributes = useSelector(getAvailablaAttributesToShare)
   const [isWidgetShown, setIsWidgetShown] = useState(false)
 
   const dispatch = useDispatch()

@@ -23,18 +23,28 @@ export const useSyncCredentials = () => {
       renderInfo,
       //issuer,
     } = await sdk.storageLib.get.credentialMetadata(cred)
-    const { name, expires, claim, issued, id, issuer: issuerDid } = cred
+    const {
+      name,
+      expires,
+      claim,
+      issued,
+      id,
+      issuer: issuerDid,
+      type: typeArr,
+    } = cred
     const issuer = await sdk.storageLib.get.publicProfile(issuerDid)
+    const type = typeArr[typeArr.length - 1]
 
     return {
       id,
+      type,
       claim,
       issuer,
+      renderInfo,
       metadata: {
         name,
         expires,
         issued,
-        renderInfo,
       },
     }
   }

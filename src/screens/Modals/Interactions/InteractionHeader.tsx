@@ -42,7 +42,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
         color={isAnonymous ? Colors.error : Colors.white70}
         customStyles={{
           paddingHorizontal: 16,
-          marginTop: 4,
+          marginTop: 14,
         }}
       >
         {description || interactionDescription}

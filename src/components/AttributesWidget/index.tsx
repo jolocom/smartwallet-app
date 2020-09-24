@@ -1,28 +1,27 @@
 import React from 'react'
-import { StyleSheet, View, GestureResponderEvent } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
 
 import AttrSectionHeader from './AttrSectionHeader'
 import Field, { FieldTypes } from './Field'
-import { useDispatch, useSelector } from 'react-redux'
-import { getSelectedAttributes } from '~/modules/interaction/selectors'
-import { selectAttr } from '~/modules/interaction/actions'
 import { AttrKeys } from '~/types/credentials'
 
 interface AttrsWidgetPropsI {
   attributes: AttrsState<AttributeI>
   isSelectable?: boolean
   onCreateNewAttr: (sectionKey: AttrKeys) => void
+  onSelect?: (key: AttrKeys, id: string) => void
+  selectedAttributes?: Record<string, string>
 }
 
 const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
   attributes,
   isSelectable = true,
   onCreateNewAttr,
+  onSelect,
+  selectedAttributes,
 }) => {
-  const dispatch = useDispatch()
-  const selectedAttributes = useSelector(getSelectedAttributes)
   return (
     <>
       {(Object.keys(attributes) as AttrKeys[]).map((sectionKey) => {
@@ -40,12 +39,12 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                     key={entry.id}
                     type={FieldTypes.isSelectable}
                     value={entry.value}
-                    isSelected={selectedAttributes[sectionKey] === entry.id}
-                    onSelect={() =>
-                      dispatch(
-                        selectAttr({ attrKey: sectionKey, id: entry.id }),
-                      )
+                    isSelected={
+                      selectedAttributes
+                        ? selectedAttributes[sectionKey] === entry.id
+                        : false
                     }
+                    onSelect={() => onSelect && onSelect(sectionKey, entry.id)}
                     onCreateNewOne={() => onCreateNewAttr(sectionKey)}
                   />
                 ))

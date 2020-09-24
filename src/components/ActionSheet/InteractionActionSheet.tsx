@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, RefObject } from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native'
-import ActionSheet from 'react-native-actions-sheet'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { RefObject, useEffect, useRef } from 'react'
+import { Dimensions, Platform, StyleSheet, View } from 'react-native'
+import ActionSheet, { ActionSheetProps } from 'react-native-actions-sheet'
+import { useDispatch, useSelector } from 'react-redux'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
@@ -11,34 +11,43 @@ import {
   CredentialShareFas,
 } from '~/screens/Modals/Interactions/CredentialShare'
 import {
-  CredentialOfferFas,
   CredentialOfferBas,
+  CredentialOfferFas,
 } from '~/screens/Modals/Interactions/CredentialOffer'
 
 import {
   getInteractionType,
-  getIsFullScreenInteraction,
   getIntermediaryState,
+  getIsFullScreenInteraction,
 } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
-import { resetInteraction } from '~/modules/interaction/actions'
-import IntermediaryActionSheet from './IntermediaryActionSheet'
+import {
+  resetInteraction,
+  setIntermediaryState,
+} from '~/modules/interaction/actions'
+import IntermediarySheetBody from './IntermediarySheetBody'
 import { IntermediaryState } from '~/modules/interaction/types'
-import { setIntermediaryState } from '~/modules/interaction/actions'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
+import Loader from '~/modals/Loader'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
-const ACTION_SHEET_PROPS = {
-  closeOnTouchBackdrop: false,
+
+const ACTION_SHEET_PROPS: ActionSheetProps = {
+  closeOnTouchBackdrop: true,
   footerHeight: 0,
   closeOnPressBack: false,
-  //NOTE: removes shadow artifacts left from transparent view elevation
   elevation: 0,
-  //NOTE: removes the gesture header
 }
 
+/**
+ * Manages @ActionSheets: @InteractionSheet (default) and @IntermediarySheet (inputs). Only one
+ * @ActionSheet should be active at a time.
+ *
+ * TODO: have some better way to manage @ActionSheets. Some sort of ActionSheetManager abstraction, that would
+ * allow for easier addition or configuration of @ActionSheets. It could manage the @refs and the state of the sheets.
+ */
 const InteractionActionSheet: React.FC = () => {
   const actionSheetRef = useRef<ActionSheet>(null)
   const intermediarySheetRef = useRef<ActionSheet>(null)
@@ -50,7 +59,11 @@ const InteractionActionSheet: React.FC = () => {
 
   useEffect(() => {
     if (interactionType) {
-      actionSheetRef.current?.setModalVisible()
+      // NOTE: RN doesn't support showing 2 modals at the same time, so we need a timeout
+      // to assure the loader is hidden before starting to animate the ActionSheet.
+      setTimeout(() => {
+        actionSheetRef.current?.setModalVisible()
+      }, 200)
     } else {
       actionSheetRef.current?.setModalVisible(false)
     }
@@ -70,17 +83,35 @@ const InteractionActionSheet: React.FC = () => {
     if (interactionType) {
       if (intermediaryState === IntermediaryState.showing) {
         replaceActionSheet(actionSheetRef, intermediarySheetRef)
-      } else if (intermediaryState === IntermediaryState.hiding) {
+      } else if (intermediaryState === IntermediaryState.switching) {
         replaceActionSheet(intermediarySheetRef, actionSheetRef)
+        dispatch(setIntermediaryState(IntermediaryState.hiding))
       }
     }
   }, [intermediaryState])
 
-  const handleCloseSheet = () => {
-    if (intermediaryState === IntermediaryState.hiding) {
-      dispatch(setIntermediaryState(IntermediaryState.absent))
-    } else if (intermediaryState === IntermediaryState.absent) {
+  /**
+   * Handles the dismissal of the @InteractionSheet when the @ActionSheet closes. The @InteractionSheet
+   * can be dismissed by canceling the interaction (DENY button), or by tapping outside the @ActionSheet
+   * (only relevant to @BAS). Hence, @handleCloseInteractionSheet will be called when there is a tap outside
+   * the @ActionSheet, when the @InteractionSheet is @showing and when the interaction is canceled (by tapping
+   * the DENY button). Furthermore, the interaction should be reset only when the user taps outside the @ActionSheet.
+   */
+  const handleCloseInteractionSheet = () => {
+    if (intermediaryState !== IntermediaryState.showing && interactionType) {
       dispatch(resetInteraction())
+    }
+  }
+
+  /**
+   * Handles the dismissal of the @IntermediarySheet when called by the @onClose prop (@ActionSheet).
+   * Similarly to @handleCloseInteractionSheet, the @IntermediarySheet can be closed by @switching with
+   * the @InteractionSheet, as well as when there is a tap outside the @ActionSheet. On tap, the @IntermediarySheet
+   * should be replaced with the @InteractionSheet
+   */
+  const handleCloseIntermediarySheet = () => {
+    if (intermediaryState !== IntermediaryState.switching) {
+        dispatch(setIntermediaryState(IntermediaryState.switching))
     }
   }
 
@@ -107,13 +138,18 @@ const InteractionActionSheet: React.FC = () => {
     }
   }
 
+  /**
+   * NOTE: On iOS the @Loader doesn't show up while an @ActionSheet is active. This is due
+   * to a RN limitation of showing 2 modals simultaneously. Fixed by nesting the @Loader
+   * inside each @ActionSheet (only for iOS).
+   */
   return (
     <>
       <ActionSheet
         {...ACTION_SHEET_PROPS}
         ref={actionSheetRef}
-        onClose={handleCloseSheet}
         headerAlwaysVisible={true}
+        onClose={handleCloseInteractionSheet}
         containerStyle={
           isFullScreenInteraction ? styles.containerFAS : styles.containerBAS
         }
@@ -121,7 +157,7 @@ const InteractionActionSheet: React.FC = () => {
           isFullScreenInteraction ? (
             <View />
           ) : (
-            <IconWrapper>
+            <IconWrapper customStyle={{height: 0}}>
               <View style={styles.basIcon}>
                 <InteractionIcon />
               </View>
@@ -129,17 +165,19 @@ const InteractionActionSheet: React.FC = () => {
           )
         }
       >
+        {Platform.OS === 'ios' && <Loader />}
         {renderBody()}
       </ActionSheet>
-      {intermediaryState !== IntermediaryState.absent && (
+      {intermediaryState !== IntermediaryState.hiding && (
         <ActionSheet
           {...ACTION_SHEET_PROPS}
           ref={intermediarySheetRef}
-          onClose={handleCloseSheet}
+          onClose={handleCloseIntermediarySheet}
           containerStyle={styles.containerBAS}
           CustomHeaderComponent={<View />}
         >
-          <IntermediaryActionSheet />
+          {Platform.OS === 'ios' && <Loader />}
+          <IntermediarySheetBody />
         </ActionSheet>
       )}
     </>
@@ -156,16 +194,9 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: Colors.transparent,
   },
-  wrapper: {
-    width: '100%',
-    backgroundColor: Colors.black,
-    borderRadius: 20,
-    justifyContent: 'center',
-    padding: 20,
-  },
   basIcon: {
     position: 'absolute',
-    top: 35,
+    top: -35,
     zIndex: 2,
   },
 })

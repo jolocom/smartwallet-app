@@ -1,16 +1,17 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 
 interface Props {
   title: string
+  visible: boolean
 }
 
-const InteractionSection: React.FC<Props> = ({ title, children }) => {
-  return (
-    <View style={styles.wrapper}>
+const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
+  return visible ? (
+    <>
       <JoloText
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}
@@ -20,14 +21,8 @@ const InteractionSection: React.FC<Props> = ({ title, children }) => {
         {title}
       </JoloText>
       {children}
-    </View>
-  )
+    </>
+  ) : null
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    paddingLeft: 27,
-  },
-})
 
 export default InteractionSection

@@ -1,18 +1,21 @@
 import { useInteraction } from '~/hooks/sdk'
-import { SummaryI } from '~/utils/dataMapping'
 import {
   CredentialOfferFlowState,
   SignedCredentialWithMetadata,
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { ServiceIssuedCredI } from '~/types/credentials'
+import { OfferUICredential } from '~/types/credentials'
 
+/**
+ * Custom hook that exposes a collection of utils for the Credential Offer interaction
+ */
 const useCredentialOfferFlow = () => {
   const interaction = useInteraction()
 
   /**
-   * Not accounting for selections. Currently @selectedCredentials are all the
-   * credentials that were offered.
+   * Assembles a @CredentialOfferResponse token with the credential types that
+   * were selected by the user. Currently not accounting for selections, so
+   * @selectedCredentials are all the credentials that were offered.
    */
   const assembleOfferResponseToken = async () => {
     const state = interaction.getSummary().state as CredentialOfferFlowState
@@ -26,6 +29,10 @@ const useCredentialOfferFlow = () => {
     await interaction.processInteractionToken(responseToken)
   }
 
+  /**
+   * Sends the @CredentialOfferResponse token and receives as a response the
+   * @CredentialsReceive token, which is finally processed by the InteractionManager.
+   */
   const processOfferReceiveToken = async () => {
     const responseToken = interaction
       .getMessages()
@@ -45,12 +52,16 @@ const useCredentialOfferFlow = () => {
     await interaction.processInteractionToken(receiveToken)
   }
 
-  const getValidatedCredentials = (): ServiceIssuedCredI[] => {
+  /**
+   * Gets the credential validation results from the @InteractionManager.
+   */
+  const getValidatedCredentials = (): OfferUICredential[] => {
+    const { initiator, state } = interaction.getSummary()
     const {
       offerSummary,
       issued,
       credentialsValidity,
-    } = interaction.getSummary().state as CredentialOfferFlowState
+    } = state as CredentialOfferFlowState
 
     return issued.map((cred, i) => {
       const offer = offerSummary.find(({ type }) => type === cred.type[1])
@@ -60,17 +71,28 @@ const useCredentialOfferFlow = () => {
       return {
         type: offer.type,
         renderInfo: offer.renderInfo,
+        issuer: initiator,
         invalid: !credentialsValidity[i],
       }
     })
   }
 
+  /**
+   * Stores the @SignedCredentials, @CredentialMetadata and the counterparty's @IdentitySummary
+   * in the SDK's TypeORM storage.
+   */
   const storeSelectedCredentials = async () => {
     await interaction.storeSelectedCredentials()
     await interaction.storeCredentialMetadata()
     await interaction.storeIssuerProfile()
   }
 
+  /**
+   * Checks if any of the offered credentials are already available in the storage (same @id).
+   * An unlikely scenario, which is indicative of something being wrong on the @counterparty's
+   * side (issuing credentials with the same @id), or the wallet's side (trying to store the same
+   * credential multiple times).
+   */
   const checkDuplicates = async () => {
     const state = interaction.getSummary().state as CredentialOfferFlowState
     const duplicates = await Promise.all(
@@ -83,8 +105,9 @@ const useCredentialOfferFlow = () => {
   }
 
   /**
-   * We are renegotiating if there are issued credentials in the state before
-   * sending the @CredentalOfferResponse token
+   * Checks if a @CredentialsReceive token was already processed. Used to indicate
+   * whether renegotiation is in progress. In the future can use a flag in the store
+   * to indicate renegotiation.
    */
   const credentialsAlreadyIssued = () => {
     const state = interaction.getSummary().state as CredentialOfferFlowState
