@@ -34,8 +34,8 @@ export interface InteractionState {
 
 /**
  * @showing - Shows the Intermediary ActionSheet
- * @hiding - Hides the Intermediary ActionSheet before showing another ActionSheet
- * @absent - Hides the Intermediary ActionSheet entirely
+ * @hiding - Hides the Intermediary ActionSheet entirely
+ * @switching - Hides the Intermediary ActionSheet before showing another ActionSheet
  */
 export enum IntermediaryState {
   showing = 'showing',
