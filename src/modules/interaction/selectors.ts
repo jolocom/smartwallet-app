@@ -1,8 +1,5 @@
 import { createSelector } from 'reselect'
 
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-
 import { RootReducerI } from '~/types/reducer'
 import {
   attrTypeToAttrKey,
@@ -33,6 +30,12 @@ export const getAttributeInputKey = (state: RootReducerI) =>
   state.interaction.attributeInputKey
 
 /**
+ * Returns the @FlowType if there is an active interaction or null otherwise.
+ */
+export const getInteractionType = (state: RootReducerI) =>
+  state.interaction.details.flowType
+
+/**
  * Gets the interaction details from the @interactions module
  */
 const getInteractionDetails = (state: RootReducerI): InteractionDetails =>
@@ -59,11 +62,6 @@ export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
 export const getInteractionId = createSelector(
   [getActiveInteraction],
   ({ id }) => id,
-)
-
-export const getInteractionType = createSelector(
-  [getActiveInteraction],
-  ({ flowType }) => flowType,
 )
 
 export const getInteractionCounterparty = createSelector(
@@ -114,11 +112,11 @@ const getAvailableCredentialsToShare = createSelector(
  */
 export const getIsFullScreenInteraction = createSelector(
   [
+    getInteractionDetails,
     getAvailableAttributesToShare,
-    getActiveInteraction,
     getAvailableCredentialsToShare,
   ],
-  (shareAttributes, details, shareCredentials) => {
+  (details, shareAttributes, shareCredentials) => {
     if (isAuthDetails(details) || isAuthzDetails(details)) {
       return false
     } else if (

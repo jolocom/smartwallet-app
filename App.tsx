@@ -11,7 +11,7 @@ import Loader from '~/modals/Loader'
 import Lock from '~/modals/Lock'
 import { SDKContextProvider } from '~/utils/sdk/context'
 import configureStore from './configureStore'
-import InteractionActionSheet from '~/components/ActionSheet/InteractionActionSheet'
+import GlobalComponents from '~/GlobalComponents'
 
 const store = configureStore()
 
@@ -22,7 +22,7 @@ const App = () => {
         <Provider store={store}>
           <StatusBar barStyle="light-content" />
           <SDKContextProvider>
-            <InteractionActionSheet />
+            <GlobalComponents />
             <RootNavigation />
           </SDKContextProvider>
           <Loader />
