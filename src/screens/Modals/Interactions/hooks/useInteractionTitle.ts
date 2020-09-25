@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 import {
   getIntermediaryState,
   getAttributeInputKey,
-  getInteractionDetails,
   getInteractionCounterparty,
+  getActiveInteraction,
 } from '~/modules/interaction/selectors'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
@@ -18,7 +18,7 @@ import {
 } from '~/modules/interaction/guards'
 
 const useInteractionTitle = () => {
-  const details = useSelector(getInteractionDetails)
+  const details = useSelector(getActiveInteraction)
   const intermediaryState = useSelector(getIntermediaryState)
   const inputType = useSelector(getAttributeInputKey)
   const counterparty = useSelector(getInteractionCounterparty)
@@ -29,6 +29,7 @@ const useInteractionTitle = () => {
     return strings.ADD_YOUR_ATTRIBUTE(ATTR_UI_NAMES[inputType])
   }
 
+  //TODO @clauxx move this out
   if (isAuthDetails(details)) {
     return strings.IS_IT_REALLY_YOU
   } else if (isAuthzDetails(details)) {

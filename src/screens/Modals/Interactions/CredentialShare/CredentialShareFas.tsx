@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux'
 import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import {
   getShareCredentialsBySection,
-  getInteractionDetails,
   getAvailableAttributesToShare,
+  getCredShareDetails,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
@@ -19,17 +19,15 @@ import InteractionFooter from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
-import { isCredShareDetails } from '~/modules/interaction/guards'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
-  const details = useSelector(getInteractionDetails)
+  const details = useSelector(getCredShareDetails)
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const [instructionVisible, setInstructionVisibility] = useState(true)
   const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
   const {
     getPreselectedAttributes,
-    selectionReady,
     isFirstCredential,
     handleSelectCredential,
     handleCreateAttribute,
@@ -80,10 +78,7 @@ const CredentialShareFas = () => {
                     instructionVisible && isFirstCredential(cred.id)
                   }
                   onSelect={() => handleSelectCard(cred.type, cred.id)}
-                  selected={
-                    isCredShareDetails(details) &&
-                    details.selectedCredentials[cred.type] === cred.id
-                  }
+                  selected={details.selectedCredentials[cred.type] === cred.id}
                 >
                   <Header color={Colors.black}>{type}</Header>
                 </CredentialCard>
@@ -103,9 +98,7 @@ const CredentialShareFas = () => {
               attributes={attributes}
               onCreateNewAttr={handleCreateAttribute}
               onSelect={(key, id) => handleSelectCredential({ [key]: id })}
-              selectedAttributes={
-                isCredShareDetails(details) ? details.selectedCredentials : {}
-              }
+              selectedAttributes={details.selectedCredentials}
               isSelectable={true}
             />
           </AttributeWidgetWrapper>

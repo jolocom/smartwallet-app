@@ -5,7 +5,7 @@ import {
   getAvailableAttributesToShare,
   getShareCredentialsBySection,
   getShareCredentialTypes,
-  getInteractionDetails,
+  getCredShareDetails,
 } from '~/modules/interaction/selectors'
 import { AttrKeys, attrTypeToAttrKey } from '~/types/credentials'
 import { IntermediaryState } from '~/modules/interaction/types'
@@ -14,7 +14,6 @@ import {
   setAttributeInputKey,
   selectShareCredential,
 } from '~/modules/interaction/actions'
-import { isCredShareDetails } from '~/modules/interaction/guards'
 
 /**
  * A custom hook which exposes a collection of utils for the Credential Share interaction
@@ -24,7 +23,7 @@ export const useCredentialShareFlow = () => {
   const interaction = useInteraction()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getAvailableAttributesToShare)
-  const interactionDetails = useSelector(getInteractionDetails)
+  const interactionDetails = useSelector(getCredShareDetails)
   const { requestedAttributes, requestedCredentials } = useSelector(
     getShareCredentialTypes,
   )
@@ -116,8 +115,6 @@ export const useCredentialShareFlow = () => {
    * available in the @attributes module. Otherwise returns @null.
    */
   const getSingleMissingAttribute = (): AttrKeys | null => {
-    if (!isCredShareDetails(interactionDetails)) return null
-
     const isSingleAttribute =
       !requestedCredentials.length && requestedAttributes.length === 1
     const attrKey = attrTypeToAttrKey(requestedAttributes[0])

@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 
 import { strings } from '~/translations/strings'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
-import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { getActiveInteraction } from '~/modules/interaction/selectors'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import {
   isAuthDetails,
@@ -12,7 +12,7 @@ import {
 } from '~/modules/interaction/guards'
 
 export default function useInteractionCta() {
-  const details = useSelector(getInteractionDetails)
+  const details = useSelector(getActiveInteraction)
   const { getSingleMissingAttribute } = useCredentialShareFlow()
 
   if (isAuthDetails(details)) {

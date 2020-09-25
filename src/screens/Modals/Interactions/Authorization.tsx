@@ -3,28 +3,24 @@ import React from 'react'
 import { Image, View, StyleSheet } from 'react-native'
 
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
-import { getInteractionDetails } from '~/modules/interaction/selectors'
-import { isAuthzDetails } from '~/modules/interaction/guards'
+import { getAuthorizationDetails } from '~/modules/interaction/selectors'
 
 const Authorization = () => {
-  const details = useSelector(getInteractionDetails)
-  if (isAuthzDetails(details)) {
-    const { imageURL } = details
-    return (
-      <BasWrapper>
-        {imageURL && (
-          <View style={styles.imageWrapper}>
-            <Image
-              source={{ uri: imageURL }}
-              style={styles.image}
-              resizeMode="cover" // it will take max Dimension size (260 - width) and make height based on the aspect ration of actual image size
-            />
-          </View>
-        )}
-      </BasWrapper>
-    )
-  }
-  return null
+  const { imageURL } = useSelector(getAuthorizationDetails)
+
+  return (
+    <BasWrapper>
+      {imageURL && (
+        <View style={styles.imageWrapper}>
+          <Image
+            source={{ uri: imageURL }}
+            style={styles.image}
+            resizeMode="cover" // it will take max Dimension size (260 - width) and make height based on the aspect ration of actual image size
+          />
+        </View>
+      )}
+    </BasWrapper>
+  )
 }
 
 const styles = StyleSheet.create({
