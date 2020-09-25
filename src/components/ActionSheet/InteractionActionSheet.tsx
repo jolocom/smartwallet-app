@@ -27,7 +27,7 @@ import {
   setIntermediaryState,
 } from '~/modules/interaction/actions'
 import IntermediarySheetBody from './IntermediarySheetBody'
-import { IntermediaryState } from '~/modules/interaction/types'
+import { IntermediarySheetState } from '~/modules/interaction/types'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
 import Loader from '~/modals/Loader'
 
@@ -54,7 +54,7 @@ const InteractionActionSheet: React.FC = () => {
 
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
-  const intermediaryState = useSelector(getIntermediaryState)
+  const { sheetState } = useSelector(getIntermediaryState)
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
 
   useEffect(() => {
@@ -81,14 +81,14 @@ const InteractionActionSheet: React.FC = () => {
 
   useEffect(() => {
     if (interactionType) {
-      if (intermediaryState === IntermediaryState.showing) {
+      if (sheetState === IntermediarySheetState.showing) {
         replaceActionSheet(actionSheetRef, intermediarySheetRef)
-      } else if (intermediaryState === IntermediaryState.switching) {
+      } else if (sheetState === IntermediarySheetState.switching) {
         replaceActionSheet(intermediarySheetRef, actionSheetRef)
-        dispatch(setIntermediaryState(IntermediaryState.hiding))
+        dispatch(setIntermediaryState(IntermediarySheetState.hiding))
       }
     }
-  }, [intermediaryState])
+  }, [sheetState])
 
   /**
    * Handles the dismissal of the @InteractionSheet when the @ActionSheet closes. The @InteractionSheet
@@ -98,7 +98,7 @@ const InteractionActionSheet: React.FC = () => {
    * the DENY button). Furthermore, the interaction should be reset only when the user taps outside the @ActionSheet.
    */
   const handleCloseInteractionSheet = () => {
-    if (intermediaryState !== IntermediaryState.showing && interactionType) {
+    if (sheetState !== IntermediarySheetState.showing && interactionType) {
       dispatch(resetInteraction())
     }
   }
@@ -110,8 +110,8 @@ const InteractionActionSheet: React.FC = () => {
    * should be replaced with the @InteractionSheet
    */
   const handleCloseIntermediarySheet = () => {
-    if (intermediaryState !== IntermediaryState.switching) {
-        dispatch(setIntermediaryState(IntermediaryState.switching))
+    if (sheetState !== IntermediarySheetState.switching) {
+      dispatch(setIntermediaryState(IntermediarySheetState.switching))
     }
   }
 
@@ -157,7 +157,7 @@ const InteractionActionSheet: React.FC = () => {
           isFullScreenInteraction ? (
             <View />
           ) : (
-            <IconWrapper customStyle={{height: 0}}>
+            <IconWrapper customStyle={{ height: 0 }}>
               <View style={styles.basIcon}>
                 <InteractionIcon />
               </View>
@@ -168,7 +168,7 @@ const InteractionActionSheet: React.FC = () => {
         {Platform.OS === 'ios' && <Loader />}
         {renderBody()}
       </ActionSheet>
-      {intermediaryState !== IntermediaryState.hiding && (
+      {sheetState !== IntermediarySheetState.hiding && (
         <ActionSheet
           {...ACTION_SHEET_PROPS}
           ref={intermediarySheetRef}

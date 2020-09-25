@@ -8,8 +8,10 @@ import { isCredShareDetails } from './guards'
 
 const initialState: InteractionState = {
   details: { flowType: null },
-  intermediaryState: IntermediaryState.hiding,
-  attributeInputKey: null,
+  intermediary: {
+    sheetState: IntermediaryState.hiding,
+    attributeInputKey: null,
+  },
 }
 
 const reducer = (
@@ -36,9 +38,15 @@ const reducer = (
       }
       return state
     case InteractionActions.setIntermediaryState:
-      return { ...state, intermediaryState: action.payload }
+      return {
+        ...state,
+        ...{ ...state.intermediary, intermediaryState: action.payload },
+      }
     case InteractionActions.setAttributeInputKey:
-      return { ...state, attributeInputKey: action.payload }
+      return {
+        ...state,
+        ...{ ...state.intermediary, attributeInputKey: action.payload },
+      }
     default:
       return state
   }

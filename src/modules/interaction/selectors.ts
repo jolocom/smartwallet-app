@@ -13,7 +13,7 @@ import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
 import { getCredentialSection } from '~/utils/credentialsBySection'
-import { InteractionDetails } from './types'
+import { InteractionDetails, IntermediarySheetState } from './types'
 import {
   isAuthDetails,
   isAuthzDetails,
@@ -22,12 +22,20 @@ import {
   isNotActiveInteraction,
 } from './guards'
 import { createInteractionSelector } from './utils'
+import { strings } from '~/translations/strings'
 
 export const getIntermediaryState = (state: RootReducerI) =>
-  state.interaction.intermediaryState
+  state.interaction.intermediary
 
-export const getAttributeInputKey = (state: RootReducerI) =>
-  state.interaction.attributeInputKey
+export const getAttributeInputKey = createSelector(
+  [getIntermediaryState],
+  (state) => {
+    if (state.sheetState !== IntermediarySheetState.showing)
+      throw new Error("Can't get inputType without an intermediarySheet")
+
+    return state.attributeInputKey
+  },
+)
 
 /**
  * Returns the @FlowType if there is an active interaction or null otherwise.
@@ -67,6 +75,11 @@ export const getInteractionId = createSelector(
 export const getInteractionCounterparty = createSelector(
   [getActiveInteraction],
   ({ counterparty }) => counterparty,
+)
+
+export const getCounterpartyName = createSelector(
+  [getActiveInteraction],
+  ({ counterparty }) => counterparty.publicProfile?.name ?? strings.SERVICE,
 )
 
 /**

@@ -1,31 +1,28 @@
 import React from 'react'
 import { View } from 'react-native'
-import {
-  getIntermediaryState,
-  getInteractionCounterparty,
-} from '~/modules/interaction/selectors'
 import { useSelector } from 'react-redux'
+
+import { getInteractionCounterparty } from '~/modules/interaction/selectors'
 import { Colors } from '~/utils/colors'
-import { IntermediaryState } from '~/modules/interaction/types'
-import useInteractionTitle from './hooks/useInteractionTitle'
-import useInteractionDescription from './hooks/useInteractionDescription'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { strings } from '~/translations/strings'
+import truncateDid from '~/utils/truncateDid'
 
 interface PropsI {
-  title?: string
-  description?: string
+  title: string
+  description: string
 }
 
 const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   const counterparty = useSelector(getInteractionCounterparty)
-  const intermediaryState = useSelector(getIntermediaryState)
-  const interactionTitle = useInteractionTitle()
-  const interactionDescription = useInteractionDescription()
-  const isAnonymous =
-    intermediaryState === IntermediaryState.showing
-      ? false
-      : !counterparty?.publicProfile
+  const isAnonymous = !counterparty?.publicProfile
+
+  if (isAnonymous) {
+    description = strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(
+      truncateDid(counterparty.did),
+    )
+  }
 
   return (
     <View>
@@ -34,7 +31,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
         size={JoloTextSizes.middle}
         weight={JoloTextWeight.regular}
       >
-        {title || interactionTitle}
+        {title}
       </JoloText>
       <JoloText
         kind={JoloTextKind.subtitle}
@@ -45,7 +42,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
           marginTop: 14,
         }}
       >
-        {description || interactionDescription}
+        {description}
       </JoloText>
     </View>
   )

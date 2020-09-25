@@ -25,7 +25,6 @@ const useInteractionTitle = () => {
   const { getSingleMissingAttribute } = useCredentialShareFlow()
 
   if (intermediaryState === IntermediaryState.showing) {
-    if (!inputType) throw new Error('No InputType found')
     return strings.ADD_YOUR_ATTRIBUTE(ATTR_UI_NAMES[inputType])
   }
 

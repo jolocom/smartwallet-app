@@ -19,6 +19,7 @@ import InteractionFooter from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
+import InteractionHeader from '../InteractionHeader'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
@@ -31,6 +32,7 @@ const CredentialShareFas = () => {
     isFirstCredential,
     handleSelectCredential,
     handleCreateAttribute,
+    getHeaderText,
   } = useCredentialShareFlow()
 
   useEffect(() => {
@@ -91,6 +93,7 @@ const CredentialShareFas = () => {
 
   return (
     <>
+      <InteractionHeader {...getHeaderText()} />
       <FasWrapper>
         {!!Object.keys(attributes).length && (
           <AttributeWidgetWrapper>

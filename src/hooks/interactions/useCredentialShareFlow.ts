@@ -5,15 +5,16 @@ import {
   getAvailableAttributesToShare,
   getShareCredentialsBySection,
   getShareCredentialTypes,
-  getCredShareDetails,
+  getCounterpartyName,
 } from '~/modules/interaction/selectors'
-import { AttrKeys, attrTypeToAttrKey } from '~/types/credentials'
+import { AttrKeys, attrTypeToAttrKey, ATTR_UI_NAMES } from '~/types/credentials'
 import { IntermediaryState } from '~/modules/interaction/types'
 import {
   setIntermediaryState,
   setAttributeInputKey,
   selectShareCredential,
 } from '~/modules/interaction/actions'
+import { strings } from '~/translations/strings'
 
 /**
  * A custom hook which exposes a collection of utils for the Credential Share interaction
@@ -23,11 +24,11 @@ export const useCredentialShareFlow = () => {
   const interaction = useInteraction()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getAvailableAttributesToShare)
-  const interactionDetails = useSelector(getCredShareDetails)
   const { requestedAttributes, requestedCredentials } = useSelector(
     getShareCredentialTypes,
   )
   const { documents, other } = useSelector(getShareCredentialsBySection)
+  const serviceName = useSelector(getCounterpartyName)
 
   /**
    * Assembles a @CredentialRequestResponse token with the selected
@@ -126,6 +127,21 @@ export const useCredentialShareFlow = () => {
     return isSingleAttribute && isMissing ? attrKey : null
   }
 
+  const getHeaderText = () => {
+    const missingAttr = getSingleMissingAttribute()
+    const title = missingAttr
+      ? strings.SERVICE_REQUESTS_ATTRIBUTE(
+          serviceName,
+          ATTR_UI_NAMES[missingAttr],
+        )
+      : strings.INCOMING_REQUEST
+    const description = strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(
+      serviceName,
+    )
+
+    return { title, description }
+  }
+
   return {
     assembleShareResponseToken,
     getPreselectedAttributes,
@@ -134,5 +150,6 @@ export const useCredentialShareFlow = () => {
     handleCreateAttribute,
     handleSelectCredential,
     getSingleMissingAttribute,
+    getHeaderText,
   }
 }
