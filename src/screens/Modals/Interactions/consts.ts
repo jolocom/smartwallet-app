@@ -1,1 +1,1 @@
-export const FAS_PADDING = 20
+export const FAS_PADDING = 10

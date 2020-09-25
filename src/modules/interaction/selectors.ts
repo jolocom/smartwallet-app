@@ -127,17 +127,19 @@ export const getIsFullScreenInteraction = createSelector(
       details.requestedAttributes.length &&
       !details.requestedCredentials.length
     ) {
-      const availableAttributes = Object.values(shareAttributes).reduce<
-        AttributeI[]
-      >((acc, arr) => {
-        if (!arr) return acc
-        return acc.concat(arr)
-      }, [])
-
-      //TODO: add breakpoints
-      return (
-        availableAttributes.length > 3 || details.requestedAttributes.length > 2
+      const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
+        (acc, v) => {
+          if (!!v.length) {
+            acc += v.length
+          } else {
+            acc += 1
+          }
+          return acc
+        },
+        0,
       )
+
+      return numberOfFieldsDisplayed > 3
     } else if (
       isCredShareDetails(details) &&
       !details.requestedAttributes.length &&
