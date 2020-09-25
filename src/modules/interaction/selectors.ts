@@ -24,6 +24,7 @@ import {
   isCredShareDetails,
   isNotActiveInteraction,
 } from './guards'
+import { createInteractionSelector } from './utils'
 
 export const getIntermediaryState = (state: RootReducerI) =>
   state.interaction.intermediaryState
@@ -31,82 +32,80 @@ export const getIntermediaryState = (state: RootReducerI) =>
 export const getAttributeInputKey = (state: RootReducerI) =>
   state.interaction.attributeInputKey
 
-export const getInteractionId = (state: RootReducerI): string | undefined => {
-  if (!isNotActiveInteraction(state.interaction.details)) {
-    return state.interaction.details.id
-  }
-}
+/**
+ * Gets the interaction details from the @interactions module
+ */
+const getInteractionDetails = (state: RootReducerI): InteractionDetails =>
+  state.interaction.details
 
-export const getInteractionType = (state: RootReducerI): FlowType | null =>
-  state.interaction.details.flowType
+export const getActiveInteraction = createSelector(
+  [getInteractionDetails],
+  (details) => {
+    if (isNotActiveInteraction(details))
+      throw new Error('Interaction is not present in the store')
 
-export const getInteractionCounterparty = (
-  state: RootReducerI,
-): IdentitySummary | undefined => {
-  if (!isNotActiveInteraction(state.interaction.details)) {
-    return state.interaction.details.counterparty
-  }
-}
+    return details
+  },
+)
+
+export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
+
+export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
+
+export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
+
+export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
+
+export const getInteractionId = createSelector(
+  [getActiveInteraction],
+  ({ id }) => id,
+)
+
+export const getInteractionType = createSelector(
+  [getActiveInteraction],
+  ({ flowType }) => flowType,
+)
+
+export const getInteractionCounterparty = createSelector(
+  [getActiveInteraction],
+  ({ counterparty }) => counterparty,
+)
 
 /**
  * Gets the mapping of all selected credentials (attributes + documents)
  */
-export const getSelectedShareCredentials = (state: RootReducerI) => {
-  if (isCredShareDetails(state.interaction.details)) {
-    return state.interaction.details.selectedCredentials
-  }
-}
-
-/**
- * Gets the interaction details from the @interactions module
- */
-export const getInteractionDetails = (
-  state: RootReducerI,
-): InteractionDetails => state.interaction.details
+export const getSelectedShareCredentials = createSelector(
+  [getCredShareDetails],
+  ({ selectedCredentials }) => selectedCredentials,
+)
 
 /**
  * Gets the available requested attributes from the @attributes module. If an attribute
  * of a particular type is not available, the value for the type will be an empty array.
  */
 export const getAvailableAttributesToShare = createSelector(
-  [getAttributes, getInteractionDetails],
-  (attributes, shareDetails) => {
-    if (isCredShareDetails(shareDetails)) {
-      const { requestedAttributes } = shareDetails
-
-      return requestedAttributes.reduce<Record<string, AttributeI[]>>(
-        (acc, v) => {
-          const value = attrTypeToAttrKey(v)
-          if (!value) return acc
-          acc[value] = attributes[value] || []
-          return acc
-        },
-        {},
-      )
-    }
-    return {}
-  },
+  [getCredShareDetails, getAttributes],
+  ({ requestedAttributes }, attributes) =>
+    requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
+      const value = attrTypeToAttrKey(v)
+      if (!value) return acc
+      acc[value] = attributes[value] || []
+      return acc
+    }, {}),
 )
 
 /**
  * Gets all the available credentials for sharing. Returns an array of @ShareUICredential
  */
 const getAvailableCredentialsToShare = createSelector(
-  [getInteractionDetails, getAllCredentials],
-  (details, credentials) => {
-    if (isCredShareDetails(details)) {
-      return details.requestedCredentials.reduce<ShareUICredential[]>(
-        (acc, type) => {
-          const creds = credentials.filter((cred) => cred.type === type)
-          if (!creds.length) return acc
-          acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
-          return acc
-        },
-        [],
-      )
-    }
-    return []
-  },
+  [getCredShareDetails, getAllCredentials],
+  ({ requestedCredentials }, credentials) =>
+    requestedCredentials.reduce<ShareUICredential[]>((acc, type) => {
+      const creds = credentials.filter((cred) => cred.type === type)
+      if (!creds.length) return acc
+      acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
+      return acc
+    }, []),
 )
 
 /**
@@ -116,7 +115,7 @@ const getAvailableCredentialsToShare = createSelector(
 export const getIsFullScreenInteraction = createSelector(
   [
     getAvailableAttributesToShare,
-    getInteractionDetails,
+    getActiveInteraction,
     getAvailableCredentialsToShare,
   ],
   (shareAttributes, details, shareCredentials) => {
@@ -135,7 +134,9 @@ export const getIsFullScreenInteraction = createSelector(
       }, [])
 
       //TODO: add breakpoints
-      return availableAttributes.length > 3 || details.requestedAttributes.length > 2
+      return (
+        availableAttributes.length > 3 || details.requestedAttributes.length > 2
+      )
     } else if (
       isCredShareDetails(details) &&
       !details.requestedAttributes.length &&
