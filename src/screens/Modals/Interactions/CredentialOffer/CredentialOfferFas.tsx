@@ -12,13 +12,19 @@ import InteractionFooter from '../InteractionFooter'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { FAS_PADDING } from '../consts'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
 
   const renderCredentials = (credentials: OfferUICredential[]) =>
-    credentials.map(({ type, invalid }) => (
-      <View style={{ marginLeft: 27, borderColor: 'blue', borderWidth: 2 }}>
+    credentials.map(({ type, invalid }, idx) => (
+      <View
+        style={{
+          marginLeft: FAS_PADDING,
+          marginBottom: idx === credentials.length - 1 ? 0 : 20,
+        }}
+      >
         <CredentialCard disabled={invalid}>
           <JoloText
             kind={JoloTextKind.title}

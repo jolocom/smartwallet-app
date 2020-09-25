@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView } from 'react-native'
+import { FAS_PADDING } from './consts'
 import { CARD_WIDTH, SMALL_CARD_SCALE } from './CredentialCard'
 
 const Carousel: React.FC = ({ children }) => {
@@ -14,7 +15,7 @@ const Carousel: React.FC = ({ children }) => {
       overScrollMode="never"
       contentContainerStyle={{
         alignItems: 'center',
-        paddingLeft: 27,
+        paddingLeft: FAS_PADDING,
         paddingRight: (CARD_WIDTH * SMALL_CARD_SCALE) / 4,
       }}
     >

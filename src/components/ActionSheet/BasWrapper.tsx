@@ -12,7 +12,7 @@ const BasWrapper: React.FC<{
   return (
     <View style={[styles.wrapper, customStyle]}>
       <InteractionHeader />
-      <View style={styles.childrenWrapper}>{children}</View>
+      {children && <View style={styles.childrenWrapper}>{children}</View>}
 
       {withFooter && <InteractionFooter />}
     </View>
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   },
   childrenWrapper: {
     alignItems: 'center',
+    marginTop: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
   },
 })
 

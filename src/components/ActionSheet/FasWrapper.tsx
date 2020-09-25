@@ -6,6 +6,7 @@ import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import useInteractionTitle from '~/screens/Modals/Interactions/hooks/useInteractionTitle'
 
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
+import BP from '~/utils/breakpoints'
 
 const FasWrapper: React.FC = ({ children }) => {
   const interactionTitle = useInteractionTitle()
@@ -21,7 +22,13 @@ const FasWrapper: React.FC = ({ children }) => {
         )}
       >
         <InteractionHeader />
-        <View style={{ paddingTop: 32 }}>{children}</View>
+        <View
+          style={{
+            marginTop: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
+          }}
+        >
+          {children}
+        </View>
       </CollapsedScrollView>
     </>
   )

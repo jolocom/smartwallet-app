@@ -44,9 +44,6 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.mini}
         color={isAnonymous ? Colors.error : Colors.white70}
-        customStyles={{
-          marginBottom: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
-        }}
       >
         {description || interactionDescription}
       </JoloText>
