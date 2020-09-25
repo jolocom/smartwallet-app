@@ -16,6 +16,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
+import BP from '~/utils/breakpoints'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
@@ -26,7 +27,15 @@ const FooterContainer: React.FC = ({ children }) => {
       </AbsoluteBottom>
     )
   }
-  return <View>{children}</View>
+  return (
+    <View
+      style={{
+        marginTop: BP({ large: 48, medium: 48, small: 36, xsmall: 36 }),
+      }}
+    >
+      {children}
+    </View>
+  )
 }
 
 interface Props {
@@ -65,7 +74,12 @@ const InteractionFooter: React.FC<Props> = ({ disabled }) => {
     <FooterContainer>
       <BtnGroup alignment={BtnsAlignment.horizontal}>
         <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-          <Btn disabled={disabled} size={BtnSize.medium} onPress={handleSubmit}>
+          <Btn
+            disabled={disabled}
+            size={BtnSize.medium}
+            onPress={handleSubmit}
+            withoutMargins
+          >
             {interactionCTA}
           </Btn>
         </View>
@@ -75,6 +89,7 @@ const InteractionFooter: React.FC<Props> = ({ disabled }) => {
             type={BtnTypes.secondary}
             onPress={handleCancel}
             customContainerStyles={styles.cancelBtn}
+            withoutMargins
           >
             {strings.IGNORE}
           </Btn>

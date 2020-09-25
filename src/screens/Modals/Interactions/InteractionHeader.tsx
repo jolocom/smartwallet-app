@@ -11,6 +11,7 @@ import useInteractionTitle from './hooks/useInteractionTitle'
 import useInteractionDescription from './hooks/useInteractionDescription'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 
 interface PropsI {
   title?: string
@@ -28,11 +29,14 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
       : !counterparty?.publicProfile
 
   return (
-    <View>
+    <>
       <JoloText
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}
         weight={JoloTextWeight.regular}
+        customStyles={{
+          lineHeight: BP({ xsmall: 24, small: 28, medium: 28, large: 28 }),
+        }}
       >
         {title || interactionTitle}
       </JoloText>
@@ -41,12 +45,12 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
         size={JoloTextSizes.mini}
         color={isAnonymous ? Colors.error : Colors.white70}
         customStyles={{
-          paddingHorizontal: 16,
+          marginBottom: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
         }}
       >
         {description || interactionDescription}
       </JoloText>
-    </View>
+    </>
   )
 }
 

@@ -25,10 +25,18 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
 }) => {
   return (
     <>
-      {(Object.keys(attributes) as AttrKeys[]).map((sectionKey) => {
+      {(Object.keys(attributes) as AttrKeys[]).map((sectionKey, idx) => {
         const section = attributes[sectionKey]
         return (
-          <View style={styles.attrSectionContainer} key={sectionKey}>
+          <View
+            key={sectionKey}
+            style={{
+              marginBottom:
+                idx === Object.keys(attributes).length - 1
+                  ? 0
+                  : BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
+            }}
+          >
             <AttrSectionHeader
               sectionKey={sectionKey}
               onCreateNew={onCreateNewAttr}
@@ -73,8 +81,8 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
 }
 
 const styles = StyleSheet.create({
-  attrSectionContainer: {
-    marginBottom: BP({ large: 40, medium: 40, small: 20, xsmall: 20 }),
+  attrSection: {
+    marginBottom: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
   },
 })
 

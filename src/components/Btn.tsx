@@ -34,7 +34,7 @@ interface PropsI extends BtnPropsI {
   size?: BtnSize
   onPress: () => void
   disabled?: boolean
-
+  withoutMargins?: boolean
   customContainerStyles?: ViewStyle
 }
 
@@ -66,13 +66,17 @@ const Button: React.FC<BtnPropsI> = ({
 }
 
 const Btn: React.FC<PropsI> = (props) => {
-  const containerStyles = [styles.container, props.disabled && styles.disabled]
+  const containerStyles = [
+    styles.container,
+    props.disabled && styles.disabled,
+    { marginVertical: props.withoutMargins ? 0 : 5 },
+  ]
   const btnStyle =
     props.size === BtnSize.large ? styles.largeBtn : styles.mediumBtn
 
   return (
     <TouchableOpacity
-      style={[containerStyles]}
+      style={containerStyles}
       onPress={props.onPress}
       disabled={props.disabled}
     >
@@ -108,7 +112,6 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     borderRadius: 8,
-    marginVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },

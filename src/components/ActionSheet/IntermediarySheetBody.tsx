@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: '100%',
     justifyContent: 'center',
-    marginBottom: -20,
   },
   inputText: {
     color: Colors.white,
