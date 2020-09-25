@@ -8,7 +8,7 @@ import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import { resetInteraction } from '~/modules/interaction/actions'
 import {
   getIsFullScreenInteraction,
-  getInteractionDetails,
+  getActiveInteraction,
 } from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
@@ -37,7 +37,7 @@ const InteractionFooter: React.FC = () => {
   const dispatch = useDispatch()
   const interactionCTA = useInteractionCta()
   const handleFlowSubmit = useHandleFlowSubmit()
-  const interactionDetails = useSelector(getInteractionDetails)
+  const interactionDetails = useSelector(getActiveInteraction)
   const loader = useLoader()
   const {
     getSingleMissingAttribute,
