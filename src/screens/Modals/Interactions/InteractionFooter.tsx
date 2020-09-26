@@ -33,9 +33,12 @@ const InteractionFooter: React.FC<Props> = ({
   const loader = useLoader()
 
   const handleSubmit = async () => {
-    await loader(async () => {
-      await onSubmit()
-    })
+    await loader(
+      async () => {
+        await onSubmit()
+      },
+      { showSuccess: false, showFailed: false },
+    )
   }
 
   const handleCancel = () => {

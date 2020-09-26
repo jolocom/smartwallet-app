@@ -71,12 +71,12 @@ const CredentialShareBas = () => {
       <InteractionHeader {...getHeaderText()} />
       {renderContent()}
       <InteractionFooter
-        disabled={!selectionReady()}
+        disabled={!!missingAttribute || !selectionReady()}
         cta={getCtaText()}
         onSubmit={() => {
-          missingAttribute
+          return missingAttribute
             ? handleCreateAttribute(missingAttribute)
-            : handleSubmit
+            : handleSubmit()
         }}
       />
     </BasWrapper>
