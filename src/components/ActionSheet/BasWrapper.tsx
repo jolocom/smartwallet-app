@@ -5,16 +5,23 @@ import InteractionIcon, { IconWrapper } from './InteractionIcon'
 
 interface Props {
   style?: ViewStyle
+  showIcon?: boolean
 }
 
-const BasWrapper: React.FC<Props> = ({ children, style = {} }) => {
+const BasWrapper: React.FC<Props> = ({
+  children,
+  style = {},
+  showIcon = true,
+}) => {
   return (
     <View style={styles.wrapper}>
-      <IconWrapper customStyle={{ marginBottom: -35 }}>
-        <View style={styles.basIcon}>
-          <InteractionIcon />
-        </View>
-      </IconWrapper>
+      {showIcon && (
+        <IconWrapper customStyle={{ marginBottom: -35 }}>
+          <View style={styles.basIcon}>
+            <InteractionIcon />
+          </View>
+        </IconWrapper>
+      )}
       <View style={[styles.childrenWrapper, style]}>{children}</View>
     </View>
   )
