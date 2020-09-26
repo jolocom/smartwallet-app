@@ -8,7 +8,7 @@ import {
   getCounterpartyName,
 } from '~/modules/interaction/selectors'
 import { AttrKeys, attrTypeToAttrKey, ATTR_UI_NAMES } from '~/types/credentials'
-import { IntermediaryState } from '~/modules/interaction/types'
+import { IntermediarySheetState } from '~/modules/interaction/types'
 import {
   setIntermediaryState,
   setAttributeInputKey,
@@ -100,7 +100,7 @@ export const useCredentialShareFlow = () => {
    * Shows the Intermediary ActionSheet for creating a new attribute.
    */
   const handleCreateAttribute = (sectionKey: AttrKeys) => {
-    dispatch(setIntermediaryState(IntermediaryState.showing))
+    dispatch(setIntermediaryState(IntermediarySheetState.showing))
     dispatch(setAttributeInputKey(sectionKey))
   }
 

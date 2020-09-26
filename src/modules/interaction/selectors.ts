@@ -119,6 +119,9 @@ const getAvailableCredentialsToShare = createSelector(
     }, []),
 )
 
+// FIXME: This is the only place left which generalizes stuff
+// Maybe take out getIsFullScreenInteraction from the ActionSheet
+// and move the @CustomHeaderComponent into the BAS wrapper
 /**
  * Contains the logic that decides whether we need to show a full-screen ActionSheet (FAS)
  * or a bottom ActionSheet (BAS).
@@ -169,22 +172,18 @@ export const getIsFullScreenInteraction = createSelector(
  * Gets the categorized @OfferUICredentials from the @interactionDetails.
  */
 export const getOfferCredentialsBySection = createSelector(
-  [getInteractionDetails],
+  [getCredOfferDetails],
   (details) => {
     const defaultSections = { documents: [], other: [] }
 
-    if (isCredOfferDetails(details)) {
-      return details.credentials.service_issued.reduce<
-        CredentialsBySection<OfferUICredential>
-      >((acc, cred) => {
-        const section = getCredentialSection(cred)
-        acc[section] = [...acc[section], cred]
+    return details.credentials.service_issued.reduce<
+      CredentialsBySection<OfferUICredential>
+    >((acc, cred) => {
+      const section = getCredentialSection(cred)
+      acc[section] = [...acc[section], cred]
 
-        return acc
-      }, defaultSections)
-    }
-
-    return defaultSections
+      return acc
+    }, defaultSections)
   },
 )
 
@@ -193,18 +192,14 @@ export const getOfferCredentialsBySection = createSelector(
  * Otherwise, returns @null.
  */
 export const getFirstShareDocument = createSelector(
-  [getInteractionDetails, getAllCredentials],
-  (details, credentials) => {
-    if (isCredShareDetails(details)) {
-      const firstType = details.requestedCredentials[0]
-      const firstCredential = credentials.find((c) => c.type === firstType)
+  [getCredShareDetails, getAllCredentials],
+  ({ requestedCredentials }, credentials) => {
+    const firstType = requestedCredentials[0]
+    const firstCredential = credentials.find((c) => c.type === firstType)
 
-      return firstCredential
-        ? uiCredentialToShareCredential(firstCredential)
-        : null
-    }
-
-    return null
+    return firstCredential
+      ? uiCredentialToShareCredential(firstCredential)
+      : null
   },
 )
 
@@ -212,16 +207,11 @@ export const getFirstShareDocument = createSelector(
  * Gets the requested credential types for CredentialShare.
  */
 export const getShareCredentialTypes = createSelector(
-  [getInteractionDetails],
-  (details) => {
-    if (isCredShareDetails(details)) {
-      // return details.credentials
-      const { requestedAttributes, requestedCredentials } = details
-      return { requestedAttributes, requestedCredentials }
-    }
-
-    return { requestedAttributes: [], requestedCredentials: [] }
-  },
+  [getCredShareDetails],
+  ({ requestedAttributes, requestedCredentials }) => ({
+    requestedAttributes,
+    requestedCredentials,
+  }),
 )
 
 /**
