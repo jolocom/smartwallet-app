@@ -63,7 +63,7 @@ const IntermediarySheetBody = () => {
   }
 
   return (
-    <BasWrapper customStyle={{ paddingTop: 32 }}>
+    <BasWrapper style={{ paddingTop: 32 }}>
       <InteractionHeader {...{ title, description }} />
       <View style={styles.inputWrapper}>
         <TextInput
