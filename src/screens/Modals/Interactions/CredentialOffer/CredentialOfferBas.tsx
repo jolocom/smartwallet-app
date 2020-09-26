@@ -9,6 +9,9 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
+import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
+import { strings } from '~/translations/strings'
+import InteractionFooter from '../InteractionFooter'
 
 const CredentialOfferBas = () => {
   const details = useSelector(getCredOfferDetails)
@@ -17,6 +20,7 @@ const CredentialOfferBas = () => {
   } = details
   const { type } = service_issued[0]
   const { getHeaderText } = useCredentialOfferFlow()
+  const handleSubmit = useCredentialOfferSubmit()
 
   return (
     <BasWrapper>
@@ -30,6 +34,7 @@ const CredentialOfferBas = () => {
           {type}
         </JoloText>
       </CredentialCard>
+      <InteractionFooter cta={strings.RECEIVE} onSubmit={handleSubmit} />
     </BasWrapper>
   )
 }

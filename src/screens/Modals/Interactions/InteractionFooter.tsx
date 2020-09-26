@@ -1,22 +1,14 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
-
 import { resetInteraction } from '~/modules/interaction/actions'
-import { getActiveInteraction } from '~/modules/interaction/selectors'
-
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
-import { useHandleFlowSubmit } from '~/hooks/interactions/useHandleFlowSubmit'
-
 import AbsoluteBottom from '~/components/AbsoluteBottom'
-import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
-import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
-import { isCredShareDetails } from '~/modules/interaction/guards'
 
 export const FooterContainer: React.FC = ({ children }) => {
   return (
@@ -26,41 +18,24 @@ export const FooterContainer: React.FC = ({ children }) => {
   )
 }
 
-const InteractionFooter: React.FC = () => {
-  const dispatch = useDispatch()
-  const interactionCTA = useInteractionCta()
-  const handleFlowSubmit = useHandleFlowSubmit()
-  const interactionDetails = useSelector(getActiveInteraction)
-  const loader = useLoader()
-  const {
-    getSingleMissingAttribute,
-    handleCreateAttribute,
-    selectionReady,
-  } = useCredentialShareFlow()
+interface Props {
+  onSubmit: () => Promise<any> | any
+  cta: string
+  disabled?: boolean
+}
 
-  /*
-   * Logic for disabling the submit button for each interaction type
-   */
-  const isDisabled = () => {
-    if (isCredShareDetails(interactionDetails)) {
-      return !selectionReady()
-    } else {
-      return false
-    }
-  }
+const InteractionFooter: React.FC<Props> = ({
+  onSubmit,
+  cta,
+  disabled = false,
+}) => {
+  const dispatch = useDispatch()
+  const loader = useLoader()
 
   const handleSubmit = async () => {
-    await loader(
-      async () => {
-        const missingAttribute = getSingleMissingAttribute()
-        if (missingAttribute) {
-          handleCreateAttribute(missingAttribute)
-        } else {
-          await handleFlowSubmit()
-        }
-      },
-      { showFailed: false, showSuccess: false },
-    )
+    await loader(async () => {
+      await onSubmit()
+    })
   }
 
   const handleCancel = () => {
@@ -70,12 +45,8 @@ const InteractionFooter: React.FC = () => {
   return (
     <BtnGroup alignment={BtnsAlignment.horizontal}>
       <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-        <Btn
-          disabled={isDisabled()}
-          size={BtnSize.medium}
-          onPress={handleSubmit}
-        >
-          {interactionCTA}
+        <Btn disabled={disabled} size={BtnSize.medium} onPress={handleSubmit}>
+          {cta}
         </Btn>
       </View>
       <View style={[styles.btnContainer, { flex: 0.3 }]}>

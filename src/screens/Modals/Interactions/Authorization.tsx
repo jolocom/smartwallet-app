@@ -9,6 +9,9 @@ import {
 } from '~/modules/interaction/selectors'
 import InteractionHeader from './InteractionHeader'
 import { strings } from '~/translations/strings'
+import InteractionFooter from './InteractionFooter'
+import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit'
+import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 
 const Authorization = () => {
   const { imageURL, action } = useSelector(getAuthorizationDetails)
@@ -17,6 +20,10 @@ const Authorization = () => {
     serviceName,
   )
   const title = strings.WOULD_YOU_LIKE_TO_ACTION(action)
+  const ctaWord = action ? truncateFirstWord(action) : strings.AUTHORIZE
+  const cta = capitalizeWord(ctaWord)
+
+  const handleSubmit = useAuthzSubmit()
 
   return (
     <BasWrapper>
@@ -32,6 +39,7 @@ const Authorization = () => {
           />
         </View>
       )}
+      <InteractionFooter cta={cta} onSubmit={handleSubmit} />
     </BasWrapper>
   )
 }

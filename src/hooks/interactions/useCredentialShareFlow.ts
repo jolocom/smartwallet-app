@@ -142,6 +142,10 @@ export const useCredentialShareFlow = () => {
     return { title, description }
   }
 
+  const getCtaText = () => {
+    return getSingleMissingAttribute() ? strings.ADD_INFO : strings.SHARE
+  }
+
   return {
     assembleShareResponseToken,
     getPreselectedAttributes,
@@ -151,5 +155,6 @@ export const useCredentialShareFlow = () => {
     handleSelectCredential,
     getSingleMissingAttribute,
     getHeaderText,
+    getCtaText,
   }
 }

@@ -20,6 +20,7 @@ import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
 import InteractionHeader from '../InteractionHeader'
+import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
@@ -32,8 +33,11 @@ const CredentialShareFas = () => {
     isFirstCredential,
     handleSelectCredential,
     handleCreateAttribute,
+    selectionReady,
     getHeaderText,
+    getCtaText,
   } = useCredentialShareFlow()
+  const handleSubmit = useCredentialShareSubmit()
 
   useEffect(() => {
     handleSelectCredential(getPreselectedAttributes())
@@ -117,7 +121,11 @@ const CredentialShareFas = () => {
         </InteractionSection>
       </FasWrapper>
       <FooterContainer>
-        <InteractionFooter />
+        <InteractionFooter
+          cta={getCtaText()}
+          disabled={!selectionReady()}
+          onSubmit={handleSubmit}
+        />
       </FooterContainer>
     </>
   )

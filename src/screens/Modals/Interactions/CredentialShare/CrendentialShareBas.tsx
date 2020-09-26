@@ -14,6 +14,8 @@ import { Colors } from '~/utils/colors'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { View } from 'react-native'
 import InteractionHeader from '../InteractionHeader'
+import InteractionFooter from '../InteractionFooter'
+import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 
 const CredentialShareBas = () => {
   const shareDocument = useSelector(getFirstShareDocument)
@@ -25,7 +27,11 @@ const CredentialShareBas = () => {
     handleSelectCredential,
     getSingleMissingAttribute,
     getHeaderText,
+    getCtaText,
+    selectionReady,
   } = useCredentialShareFlow()
+  const missingAttribute = getSingleMissingAttribute()
+  const handleSubmit = useCredentialShareSubmit()
 
   useEffect(() => {
     shareDocument &&
@@ -43,7 +49,7 @@ const CredentialShareBas = () => {
           <Header color={Colors.black}>{shareDocument.type}</Header>
         </CredentialCard>
       )
-    } else if (getSingleMissingAttribute()) {
+    } else if (missingAttribute) {
       return null
     } else {
       return (
@@ -64,6 +70,15 @@ const CredentialShareBas = () => {
     <BasWrapper>
       <InteractionHeader {...getHeaderText()} />
       {renderContent()}
+      <InteractionFooter
+        disabled={!selectionReady()}
+        cta={getCtaText()}
+        onSubmit={() => {
+          missingAttribute
+            ? handleCreateAttribute(missingAttribute)
+            : handleSubmit
+        }}
+      />
     </BasWrapper>
   )
 }
