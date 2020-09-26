@@ -1,30 +1,40 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
-import useInteractionTitle from '~/screens/Modals/Interactions/hooks/useInteractionTitle'
 
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
+import { Colors } from '~/utils/colors'
+import { debugView } from '~/utils/dev'
+
+const WINDOW = Dimensions.get('window')
+const SCREEN_HEIGHT = WINDOW.height
 
 const FasWrapper: React.FC = ({ children }) => {
-  const interactionTitle = useInteractionTitle()
   return (
-    <>
+    <View style={styles.wrapper}>
       <CollapsedScrollView
-        collapsedTitle={interactionTitle}
+        collapsedTitle={'title'}
         collapseStart={20}
         renderCollapsingComponent={() => (
-          <IconWrapper customStyle={{ marginBottom: 12, marginTop: 30 }}>
+          <IconWrapper customStyle={{ marginTop: 35 }}>
             <InteractionIcon />
           </IconWrapper>
         )}
       >
-        <InteractionHeader />
-        <View style={{ paddingTop: 32 }}>{children}</View>
+        <View style={{ paddingTop: 12 }}>{children}</View>
       </CollapsedScrollView>
-    </>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    height: SCREEN_HEIGHT,
+    backgroundColor: Colors.mainBlack,
+    justifyContent: 'space-between',
+  },
+})
 
 export default FasWrapper
