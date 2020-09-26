@@ -11,7 +11,7 @@ import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
 import { Colors } from '~/utils/colors'
 import { OfferUICredential } from '~/types/credentials'
-import InteractionFooter from '../InteractionFooter'
+import InteractionFooter, { FooterContainer } from '../InteractionFooter'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -51,7 +51,9 @@ const CredentialOfferFas = () => {
           {renderCredentials(other)}
         </InteractionSection>
       </FasWrapper>
-      <InteractionFooter />
+      <FooterContainer>
+        <InteractionFooter />
+      </FooterContainer>
     </>
   )
 }

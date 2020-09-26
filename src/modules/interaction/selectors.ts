@@ -119,27 +119,19 @@ const getAvailableCredentialsToShare = createSelector(
     }, []),
 )
 
-// FIXME: This is the only place left which generalizes stuff
-// Maybe take out getIsFullScreenInteraction from the ActionSheet
-// and move the @CustomHeaderComponent into the BAS wrapper
-/**
- * Contains the logic that decides whether we need to show a full-screen ActionSheet (FAS)
- * or a bottom ActionSheet (BAS).
- */
-export const getIsFullScreenInteraction = createSelector(
+export const getIsFullscreenCredShare = createSelector(
   [
-    getInteractionDetails,
+    getCredShareDetails,
     getAvailableAttributesToShare,
     getAvailableCredentialsToShare,
   ],
   (details, shareAttributes, shareCredentials) => {
-    if (isAuthDetails(details) || isAuthzDetails(details)) {
-      return false
-    } else if (
-      isCredShareDetails(details) &&
-      details.requestedAttributes.length &&
-      !details.requestedCredentials.length
-    ) {
+    const onlyAttributes =
+      details.requestedAttributes.length && !details.requestedCredentials.length
+    const onlyOneCredential =
+      !details.requestedAttributes.length && shareCredentials.length === 1
+
+    if (onlyAttributes) {
       const availableAttributes = Object.values(shareAttributes).reduce<
         AttributeI[]
       >((acc, arr) => {
@@ -151,16 +143,20 @@ export const getIsFullScreenInteraction = createSelector(
       return (
         availableAttributes.length > 3 || details.requestedAttributes.length > 2
       )
-    } else if (
-      isCredShareDetails(details) &&
-      !details.requestedAttributes.length &&
-      shareCredentials.length === 1
-    ) {
+    } else if (onlyOneCredential) {
       return false
-    } else if (
-      isCredOfferDetails(details) &&
-      details.credentials.service_issued.length === 1
-    ) {
+    } else {
+      return true
+    }
+  },
+)
+
+export const getIsFullscreenCredOffer = createSelector(
+  [getCredOfferDetails],
+  (details) => {
+    const onlyOneCredential = details.credentials.service_issued.length === 1
+
+    if (onlyOneCredential) {
       return false
     } else {
       return true

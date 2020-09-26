@@ -15,7 +15,7 @@ import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
 import AttributesWidget from '~/components/AttributesWidget'
-import InteractionFooter from '../InteractionFooter'
+import InteractionFooter, { FooterContainer } from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
@@ -116,7 +116,9 @@ const CredentialShareFas = () => {
           {renderSectionCredentials(other)}
         </InteractionSection>
       </FasWrapper>
-      <InteractionFooter />
+      <FooterContainer>
+        <InteractionFooter />
+      </FooterContainer>
     </>
   )
 }

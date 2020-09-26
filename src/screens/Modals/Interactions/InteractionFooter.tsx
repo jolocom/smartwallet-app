@@ -6,10 +6,7 @@ import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 
 import { resetInteraction } from '~/modules/interaction/actions'
-import {
-  getIsFullScreenInteraction,
-  getActiveInteraction,
-} from '~/modules/interaction/selectors'
+import { getActiveInteraction } from '~/modules/interaction/selectors'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
@@ -21,16 +18,12 @@ import { useLoader } from '~/hooks/useLoader'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { isCredShareDetails } from '~/modules/interaction/guards'
 
-const FooterContainer: React.FC = ({ children }) => {
-  const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
-  if (isFullScreenInteraction) {
-    return (
-      <AbsoluteBottom customStyles={styles.FASfooter}>
-        <View style={styles.FAScontainer}>{children}</View>
-      </AbsoluteBottom>
-    )
-  }
-  return <View>{children}</View>
+export const FooterContainer: React.FC = ({ children }) => {
+  return (
+    <AbsoluteBottom customStyles={styles.FASfooter}>
+      <View style={styles.FAScontainer}>{children}</View>
+    </AbsoluteBottom>
+  )
 }
 
 const InteractionFooter: React.FC = () => {
@@ -75,29 +68,27 @@ const InteractionFooter: React.FC = () => {
   }
 
   return (
-    <FooterContainer>
-      <BtnGroup alignment={BtnsAlignment.horizontal}>
-        <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-          <Btn
-            disabled={isDisabled()}
-            size={BtnSize.medium}
-            onPress={handleSubmit}
-          >
-            {interactionCTA}
-          </Btn>
-        </View>
-        <View style={[styles.btnContainer, { flex: 0.3 }]}>
-          <Btn
-            size={BtnSize.medium}
-            type={BtnTypes.secondary}
-            onPress={handleCancel}
-            customContainerStyles={styles.cancelBtn}
-          >
-            {strings.IGNORE}
-          </Btn>
-        </View>
-      </BtnGroup>
-    </FooterContainer>
+    <BtnGroup alignment={BtnsAlignment.horizontal}>
+      <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
+        <Btn
+          disabled={isDisabled()}
+          size={BtnSize.medium}
+          onPress={handleSubmit}
+        >
+          {interactionCTA}
+        </Btn>
+      </View>
+      <View style={[styles.btnContainer, { flex: 0.3 }]}>
+        <Btn
+          size={BtnSize.medium}
+          type={BtnTypes.secondary}
+          onPress={handleCancel}
+          customContainerStyles={styles.cancelBtn}
+        >
+          {strings.IGNORE}
+        </Btn>
+      </View>
+    </BtnGroup>
   )
 }
 
