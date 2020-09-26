@@ -38,10 +38,6 @@ const reducer = (
       }
       return state
     case InteractionActions.setIntermediaryState:
-      console.log({
-        ...state,
-        intermediary: { ...state.intermediary, sheetState: action.payload },
-      })
       return {
         ...state,
         intermediary: { ...state.intermediary, sheetState: action.payload },
@@ -49,7 +45,10 @@ const reducer = (
     case InteractionActions.setAttributeInputKey:
       return {
         ...state,
-        ...{ ...state.intermediary, attributeInputKey: action.payload },
+        intermediary: {
+          ...state.intermediary,
+          attributeInputKey: action.payload,
+        },
       }
     default:
       return state

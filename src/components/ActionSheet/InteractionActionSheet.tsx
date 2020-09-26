@@ -134,13 +134,16 @@ const InteractionActionSheet: React.FC = () => {
         {Platform.OS === 'ios' && <Loader />}
         {renderBody()}
       </CustomActionSheet>
-      <CustomActionSheet
-        onClose={handleCloseIntermediarySheet}
-        show={activeSheet === ActionSheetTypes.IntermediateSheet}
-      >
-        {Platform.OS === 'ios' && <Loader />}
-        <IntermediarySheetBody />
-      </CustomActionSheet>
+
+      {sheetState === IntermediarySheetState.showing && (
+        <CustomActionSheet
+          onClose={handleCloseIntermediarySheet}
+          show={activeSheet === ActionSheetTypes.IntermediateSheet}
+        >
+          {Platform.OS === 'ios' && <Loader />}
+          <IntermediarySheetBody />
+        </CustomActionSheet>
+      )}
     </>
   )
 }
