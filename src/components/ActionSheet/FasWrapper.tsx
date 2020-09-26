@@ -11,11 +11,15 @@ import { debugView } from '~/utils/dev'
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
 
-const FasWrapper: React.FC = ({ children }) => {
+interface Props {
+  collapsedTitle: string
+}
+
+const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
   return (
     <View style={styles.wrapper}>
       <CollapsedScrollView
-        collapsedTitle={'title'}
+        collapsedTitle={collapsedTitle}
         collapseStart={20}
         renderCollapsingComponent={() => (
           <IconWrapper customStyle={{ marginTop: 35 }}>

@@ -97,7 +97,7 @@ const CredentialShareFas = () => {
 
   return (
     <>
-      <FasWrapper>
+      <FasWrapper collapsedTitle={getHeaderText().title}>
         <InteractionHeader {...getHeaderText()} />
         {!!Object.keys(attributes).length && (
           <AttributeWidgetWrapper>

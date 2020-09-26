@@ -3,10 +3,7 @@ import { useSelector } from 'react-redux'
 import { View } from 'react-native'
 
 import FasWrapper from '~/components/ActionSheet/FasWrapper'
-import {
-  getOfferCredentialsBySection,
-  getCounterpartyName,
-} from '~/modules/interaction/selectors'
+import { getOfferCredentialsBySection } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
 import { Colors } from '~/utils/colors'
@@ -17,10 +14,12 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
+import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
   const { getHeaderText } = useCredentialOfferFlow()
+  const handleSubmit = useCredentialOfferSubmit()
 
   const renderCredentials = (credentials: OfferUICredential[]) =>
     credentials.map(({ type, invalid }) => (
@@ -39,7 +38,7 @@ const CredentialOfferFas = () => {
 
   return (
     <>
-      <FasWrapper>
+      <FasWrapper collapsedTitle={getHeaderText().title}>
         <InteractionHeader {...getHeaderText()} />
         <InteractionSection
           visible={!!documents.length}
@@ -52,7 +51,7 @@ const CredentialOfferFas = () => {
         </InteractionSection>
       </FasWrapper>
       <FooterContainer>
-        <InteractionFooter />
+        <InteractionFooter onSubmit={handleSubmit} cta={strings.RECEIVE} />
       </FooterContainer>
     </>
   )
