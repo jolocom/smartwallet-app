@@ -53,6 +53,7 @@ const CollapsedScrollView: React.FC<Props> = ({
   return (
     <>
       <Animated.View
+        pointerEvents="none"
         style={[styles.headerWrapper, { opacity: headerOpacityValue }]}
       >
         <Animated.View

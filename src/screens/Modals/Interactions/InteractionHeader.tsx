@@ -25,7 +25,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
   }
 
   return (
-    <View>
+    <View style={{ marginBottom: 36 }}>
       <JoloText
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}

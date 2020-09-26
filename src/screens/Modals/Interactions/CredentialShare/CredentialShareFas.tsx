@@ -93,8 +93,8 @@ const CredentialShareFas = () => {
 
   return (
     <>
-      <InteractionHeader {...getHeaderText()} />
       <FasWrapper>
+        <InteractionHeader {...getHeaderText()} />
         {!!Object.keys(attributes).length && (
           <AttributeWidgetWrapper>
             <AttributesWidget
