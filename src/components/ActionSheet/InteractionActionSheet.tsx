@@ -2,6 +2,7 @@ import React, { RefObject, useEffect, useRef } from 'react'
 import { Dimensions, Platform, StyleSheet, View } from 'react-native'
 import ActionSheet, { ActionSheetProps } from 'react-native-actions-sheet'
 import { useDispatch, useSelector } from 'react-redux'
+import { useSafeArea } from 'react-native-safe-area-context'
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
@@ -111,7 +112,7 @@ const InteractionActionSheet: React.FC = () => {
    */
   const handleCloseIntermediarySheet = () => {
     if (intermediaryState !== IntermediaryState.switching) {
-        dispatch(setIntermediaryState(IntermediaryState.switching))
+      dispatch(setIntermediaryState(IntermediaryState.switching))
     }
   }
 
@@ -138,6 +139,16 @@ const InteractionActionSheet: React.FC = () => {
     }
   }
 
+  const insets = useSafeArea()
+  const basContainerStyles = {
+    ...styles.containerBAS,
+    ...(insets.bottom && { paddingBottom: insets.bottom }),
+  }
+  const fasContainerStyles = {
+    ...styles.containerFAS,
+    marginTop: -insets.top,
+  }
+
   /**
    * NOTE: On iOS the @Loader doesn't show up while an @ActionSheet is active. This is due
    * to a RN limitation of showing 2 modals simultaneously. Fixed by nesting the @Loader
@@ -151,13 +162,13 @@ const InteractionActionSheet: React.FC = () => {
         headerAlwaysVisible={true}
         onClose={handleCloseInteractionSheet}
         containerStyle={
-          isFullScreenInteraction ? styles.containerFAS : styles.containerBAS
+          isFullScreenInteraction ? fasContainerStyles : basContainerStyles
         }
         CustomHeaderComponent={
           isFullScreenInteraction ? (
             <View />
           ) : (
-            <IconWrapper customStyle={{height: 0}}>
+            <IconWrapper customStyle={{ height: 0 }}>
               <View style={styles.basIcon}>
                 <InteractionIcon />
               </View>
@@ -173,7 +184,7 @@ const InteractionActionSheet: React.FC = () => {
           {...ACTION_SHEET_PROPS}
           ref={intermediarySheetRef}
           onClose={handleCloseIntermediarySheet}
-          containerStyle={styles.containerBAS}
+          containerStyle={basContainerStyles}
           CustomHeaderComponent={<View />}
         >
           {Platform.OS === 'ios' && <Loader />}

@@ -11,26 +11,24 @@ import BP from '~/utils/breakpoints'
 const FasWrapper: React.FC = ({ children }) => {
   const interactionTitle = useInteractionTitle()
   return (
-    <>
-      <CollapsedScrollView
-        collapsedTitle={interactionTitle}
-        collapseStart={20}
-        renderCollapsingComponent={() => (
-          <IconWrapper customStyle={{ marginBottom: 12, marginTop: 30 }}>
-            <InteractionIcon />
-          </IconWrapper>
-        )}
+    <CollapsedScrollView
+      collapsedTitle={interactionTitle}
+      collapseStart={20}
+      renderCollapsingComponent={() => (
+        <IconWrapper customStyle={{ marginBottom: 12, marginTop: 30 }}>
+          <InteractionIcon />
+        </IconWrapper>
+      )}
+    >
+      <InteractionHeader />
+      <View
+        style={{
+          marginTop: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
+        }}
       >
-        <InteractionHeader />
-        <View
-          style={{
-            marginTop: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
-          }}
-        >
-          {children}
-        </View>
-      </CollapsedScrollView>
-    </>
+        {children}
+      </View>
+    </CollapsedScrollView>
   )
 }
 

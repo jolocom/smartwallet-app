@@ -20,6 +20,7 @@ import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
 import { isCredShareDetails } from '~/modules/interaction/guards'
+import { FAS_PADDING } from '../consts'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
@@ -70,10 +71,19 @@ const CredentialShareFas = () => {
       const Wrapper = isCarousel ? Carousel : React.Fragment
 
       return (
-        <View style={{ marginLeft: isCarousel ? 0 : 27 }}>
+        <View
+          style={{
+            marginLeft: FAS_PADDING,
+          }}
+        >
           <Wrapper>
             {credentials.map((cred) => (
-              <View style={{ marginRight: 20, marginVertical: 14 }}>
+              <View
+                style={{
+                  marginRight: 20,
+                  marginVertical: 14,
+                }}
+              >
                 <CredentialCard
                   isSmall
                   hasInstruction={

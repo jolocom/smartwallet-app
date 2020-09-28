@@ -15,7 +15,6 @@ const Carousel: React.FC = ({ children }) => {
       overScrollMode="never"
       contentContainerStyle={{
         alignItems: 'center',
-        paddingLeft: FAS_PADDING,
         paddingRight: (CARD_WIDTH * SMALL_CARD_SCALE) / 4,
       }}
     >

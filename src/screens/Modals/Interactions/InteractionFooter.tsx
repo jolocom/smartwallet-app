@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
@@ -20,9 +21,15 @@ import BP from '~/utils/breakpoints'
 
 const FooterContainer: React.FC = ({ children }) => {
   const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
+  const insets = useSafeArea()
   if (isFullScreenInteraction) {
     return (
-      <AbsoluteBottom customStyles={styles.FASfooter}>
+      <AbsoluteBottom
+        customStyles={{
+          ...styles.FASfooter,
+          bottom: insets.bottom + insets.top,
+        }}
+      >
         <View style={styles.FAScontainer}>{children}</View>
       </AbsoluteBottom>
     )
@@ -71,31 +78,33 @@ const InteractionFooter: React.FC<Props> = ({ disabled }) => {
   }
 
   return (
-    <FooterContainer>
-      <BtnGroup alignment={BtnsAlignment.horizontal}>
-        <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-          <Btn
-            disabled={disabled}
-            size={BtnSize.medium}
-            onPress={handleSubmit}
-            withoutMargins
-          >
-            {interactionCTA}
-          </Btn>
-        </View>
-        <View style={[styles.btnContainer, { flex: 0.3 }]}>
-          <Btn
-            size={BtnSize.medium}
-            type={BtnTypes.secondary}
-            onPress={handleCancel}
-            customContainerStyles={styles.cancelBtn}
-            withoutMargins
-          >
-            {strings.IGNORE}
-          </Btn>
-        </View>
-      </BtnGroup>
-    </FooterContainer>
+    <SafeAreaView style={{ backgroundColor: Colors.black }}>
+      <FooterContainer>
+        <BtnGroup alignment={BtnsAlignment.horizontal}>
+          <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
+            <Btn
+              disabled={disabled}
+              size={BtnSize.medium}
+              onPress={handleSubmit}
+              withoutMargins
+            >
+              {interactionCTA}
+            </Btn>
+          </View>
+          <View style={[styles.btnContainer, { flex: 0.3 }]}>
+            <Btn
+              size={BtnSize.medium}
+              type={BtnTypes.secondary}
+              onPress={handleCancel}
+              customContainerStyles={styles.cancelBtn}
+              withoutMargins
+            >
+              {strings.IGNORE}
+            </Btn>
+          </View>
+        </BtnGroup>
+      </FooterContainer>
+    </SafeAreaView>
   )
 }
 
@@ -106,7 +115,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   FASfooter: {
-    bottom: 0,
     height: 106,
     backgroundColor: Colors.black,
     justifyContent: 'center',
