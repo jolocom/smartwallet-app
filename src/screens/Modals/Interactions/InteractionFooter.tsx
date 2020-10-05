@@ -1,75 +1,51 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
-
 import { resetInteraction } from '~/modules/interaction/actions'
-import { getIsFullScreenInteraction } from '~/modules/interaction/selectors'
-
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
-import { useHandleFlowSubmit } from '~/hooks/interactions/useHandleFlowSubmit'
-
 import AbsoluteBottom from '~/components/AbsoluteBottom'
-import useInteractionCta from './hooks/useInteractionCta'
 import { useLoader } from '~/hooks/useLoader'
-import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
-import BP from '~/utils/breakpoints'
+import { debugView } from '~/utils/dev'
 
-const FooterContainer: React.FC = ({ children }) => {
-  const isFullScreenInteraction = useSelector(getIsFullScreenInteraction)
+export const FooterContainer: React.FC = ({ children }) => {
   const insets = useSafeArea()
-  if (isFullScreenInteraction) {
-    return (
-      <AbsoluteBottom
-        customStyles={{
-          ...styles.FASfooter,
-          bottom: insets.bottom + insets.top,
-        }}
-      >
-        <View style={styles.FAScontainer}>{children}</View>
-      </AbsoluteBottom>
-    )
-  }
   return (
-    <View
-      style={{
-        marginTop: BP({ large: 48, medium: 48, small: 36, xsmall: 36 }),
+    <AbsoluteBottom
+      customStyles={{
+        ...styles.FASfooter,
+        bottom: insets.bottom + insets.top,
       }}
     >
-      {children}
-    </View>
+      <View style={styles.FAScontainer}>{children}</View>
+    </AbsoluteBottom>
   )
 }
 
 interface Props {
+  onSubmit: () => Promise<any> | any
+  cta: string
   disabled?: boolean
 }
 
-const InteractionFooter: React.FC<Props> = ({ disabled }) => {
+const InteractionFooter: React.FC<Props> = ({
+  onSubmit,
+  cta,
+  disabled = false,
+}) => {
   const dispatch = useDispatch()
-  const interactionCTA = useInteractionCta()
-  const handleFlowSubmit = useHandleFlowSubmit()
   const loader = useLoader()
-  const {
-    getSingleMissingAttribute,
-    handleCreateAttribute,
-  } = useCredentialShareFlow()
 
   const handleSubmit = async () => {
     await loader(
       async () => {
-        const missingAttribute = getSingleMissingAttribute()
-        if (missingAttribute) {
-          handleCreateAttribute(missingAttribute)
-        } else {
-          await handleFlowSubmit()
-        }
+        await onSubmit()
       },
-      { showFailed: false, showSuccess: false },
+      { showSuccess: false, showFailed: false },
     )
   }
 
@@ -78,33 +54,31 @@ const InteractionFooter: React.FC<Props> = ({ disabled }) => {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: Colors.black }}>
-      <FooterContainer>
-        <BtnGroup alignment={BtnsAlignment.horizontal}>
-          <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-            <Btn
-              disabled={disabled}
-              size={BtnSize.medium}
-              onPress={handleSubmit}
-              withoutMargins
-            >
-              {interactionCTA}
-            </Btn>
-          </View>
-          <View style={[styles.btnContainer, { flex: 0.3 }]}>
-            <Btn
-              size={BtnSize.medium}
-              type={BtnTypes.secondary}
-              onPress={handleCancel}
-              customContainerStyles={styles.cancelBtn}
-              withoutMargins
-            >
-              {strings.IGNORE}
-            </Btn>
-          </View>
-        </BtnGroup>
-      </FooterContainer>
-    </SafeAreaView>
+    <>
+      <BtnGroup alignment={BtnsAlignment.horizontal}>
+        <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
+          <Btn
+            disabled={disabled}
+            size={BtnSize.medium}
+            onPress={handleSubmit}
+            withoutMargins
+          >
+            {cta}
+          </Btn>
+        </View>
+        <View style={[styles.btnContainer, { flex: 0.3 }]}>
+          <Btn
+            size={BtnSize.medium}
+            type={BtnTypes.secondary}
+            onPress={handleCancel}
+            customContainerStyles={styles.cancelBtn}
+            withoutMargins
+          >
+            {strings.IGNORE}
+          </Btn>
+        </View>
+      </BtnGroup>
+    </>
   )
 }
 

@@ -8,14 +8,19 @@ import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
 import { Colors } from '~/utils/colors'
 import { OfferUICredential } from '~/types/credentials'
-import InteractionFooter from '../InteractionFooter'
+import InteractionFooter, { FooterContainer } from '../InteractionFooter'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { FAS_PADDING } from '../consts'
+import InteractionHeader from '../InteractionHeader'
+import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
+import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
+  const { getHeaderText } = useCredentialOfferFlow()
+  const handleSubmit = useCredentialOfferSubmit()
 
   const renderCredentials = (credentials: OfferUICredential[]) =>
     credentials.map(({ type, invalid }, idx) => (
@@ -39,7 +44,8 @@ const CredentialOfferFas = () => {
 
   return (
     <>
-      <FasWrapper>
+      <FasWrapper collapsedTitle={getHeaderText().title}>
+        <InteractionHeader {...getHeaderText()} />
         <InteractionSection
           visible={!!documents.length}
           title={strings.DOCUMENTS}
@@ -50,7 +56,9 @@ const CredentialOfferFas = () => {
           {renderCredentials(other)}
         </InteractionSection>
       </FasWrapper>
-      <InteractionFooter />
+      <FooterContainer>
+        <InteractionFooter onSubmit={handleSubmit} cta={strings.RECEIVE} />
+      </FooterContainer>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   View,
   StyleSheet,
@@ -39,6 +39,7 @@ const CredentialCard: React.FC<PropsI> = ({
   onSelect,
 }) => {
   const instructionOpacity = useRef(new Animated.Value(0)).current
+  const [cardHeight, setCardHeight] = useState(CARD_HEIGHT)
 
   useEffect(() => {
     Animated.timing(instructionOpacity, {
@@ -62,8 +63,13 @@ const CredentialCard: React.FC<PropsI> = ({
         style={[
           styles.cardContainer,
           styles.card,
+          { height: cardHeight },
           isSmall && styles.scaledDown,
         ]}
+        onLayout={(event) => {
+          const { width, height } = event.nativeEvent.layout
+          setCardHeight(height)
+        }}
       >
         <>
           {children}
@@ -92,8 +98,7 @@ const styles = StyleSheet.create({
     borderRadius: 13.5,
   },
   cardContainer: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
+    width: '100%',
     backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',

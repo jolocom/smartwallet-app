@@ -1,8 +1,5 @@
 import { createSelector } from 'reselect'
 
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-
 import { RootReducerI } from '~/types/reducer'
 import {
   attrTypeToAttrKey,
@@ -16,7 +13,7 @@ import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
 import { getCredentialSection } from '~/utils/credentialsBySection'
-import { InteractionDetails } from './types'
+import { InteractionDetails, IntermediarySheetState } from './types'
 import {
   isAuthDetails,
   isAuthzDetails,
@@ -24,132 +21,169 @@ import {
   isCredShareDetails,
   isNotActiveInteraction,
 } from './guards'
+import { createInteractionSelector } from './utils'
+import { strings } from '~/translations/strings'
 
 export const getIntermediaryState = (state: RootReducerI) =>
-  state.interaction.intermediaryState
+  state.interaction.intermediary
 
-export const getAttributeInputKey = (state: RootReducerI) =>
-  state.interaction.attributeInputKey
+export const getAttributeInputKey = createSelector(
+  [getIntermediaryState],
+  (state) => {
+    if (state.sheetState !== IntermediarySheetState.showing)
+      throw new Error("Can't get inputType without an intermediarySheet")
 
-export const getInteractionId = (state: RootReducerI): string | undefined => {
-  if (!isNotActiveInteraction(state.interaction.details)) {
-    return state.interaction.details.id
-  }
-}
-
-export const getInteractionType = (state: RootReducerI): FlowType | null =>
-  state.interaction.details.flowType
-
-export const getInteractionCounterparty = (
-  state: RootReducerI,
-): IdentitySummary | undefined => {
-  if (!isNotActiveInteraction(state.interaction.details)) {
-    return state.interaction.details.counterparty
-  }
-}
+    return state.attributeInputKey
+  },
+)
 
 /**
- * Gets the mapping of all selected credentials (attributes + documents)
+ * Returns the @FlowType if there is an active interaction or null otherwise.
  */
-export const getSelectedShareCredentials = (state: RootReducerI) => {
-  if (isCredShareDetails(state.interaction.details)) {
-    return state.interaction.details.selectedCredentials
-  }
-}
+export const getInteractionType = (state: RootReducerI) =>
+  state.interaction.details.flowType
 
 /**
  * Gets the interaction details from the @interactions module
  */
-export const getInteractionDetails = (
-  state: RootReducerI,
-): InteractionDetails => state.interaction.details
+const getInteractionDetails = (state: RootReducerI): InteractionDetails =>
+  state.interaction.details
+
+export const getActiveInteraction = createSelector(
+  [getInteractionDetails],
+  (details) => {
+    if (isNotActiveInteraction(details))
+      throw new Error('Interaction is not present in the store')
+
+    return details
+  },
+)
+
+export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
+
+export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
+
+export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
+
+export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
+
+export const getInteractionId = createSelector(
+  [getActiveInteraction],
+  ({ id }) => id,
+)
+
+export const getInteractionCounterparty = createSelector(
+  [getActiveInteraction],
+  ({ counterparty }) => counterparty,
+)
+
+export const getCounterpartyName = createSelector(
+  [getActiveInteraction],
+  ({ counterparty }) => counterparty.publicProfile?.name ?? strings.SERVICE,
+)
+
+/**
+ * Gets the mapping of all selected credentials (attributes + documents)
+ */
+export const getSelectedShareCredentials = createSelector(
+  [getCredShareDetails],
+  ({ selectedCredentials }) => selectedCredentials,
+)
 
 /**
  * Gets the available requested attributes from the @attributes module. If an attribute
  * of a particular type is not available, the value for the type will be an empty array.
  */
 export const getAvailableAttributesToShare = createSelector(
-  [getAttributes, getInteractionDetails],
-  (attributes, shareDetails) => {
-    if (isCredShareDetails(shareDetails)) {
-      const { requestedAttributes } = shareDetails
-
-      return requestedAttributes.reduce<Record<string, AttributeI[]>>(
-        (acc, v) => {
-          const value = attrTypeToAttrKey(v)
-          if (!value) return acc
-          acc[value] = attributes[value] || []
-          return acc
-        },
-        {},
-      )
-    }
-    return {}
-  },
+  [getCredShareDetails, getAttributes],
+  ({ requestedAttributes }, attributes) =>
+    requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
+      const value = attrTypeToAttrKey(v)
+      if (!value) return acc
+      acc[value] = attributes[value] || []
+      return acc
+    }, {}),
 )
 
 /**
  * Gets all the available credentials for sharing. Returns an array of @ShareUICredential
  */
 const getAvailableCredentialsToShare = createSelector(
-  [getInteractionDetails, getAllCredentials],
-  (details, credentials) => {
-    if (isCredShareDetails(details)) {
-      return details.requestedCredentials.reduce<ShareUICredential[]>(
-        (acc, type) => {
-          const creds = credentials.filter((cred) => cred.type === type)
-          if (!creds.length) return acc
-          acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
-          return acc
-        },
-        [],
-      )
-    }
-    return []
+  [getCredShareDetails, getAllCredentials],
+  ({ requestedCredentials }, credentials) =>
+    requestedCredentials.reduce<ShareUICredential[]>((acc, type) => {
+      const creds = credentials.filter((cred) => cred.type === type)
+      if (!creds.length) return acc
+      acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
+      return acc
+    }, []),
+)
+
+export const getIsFullscreenCredShare = createSelector(
+  [
+    getCredShareDetails,
+    getAvailableAttributesToShare,
+    getAvailableCredentialsToShare,
+  ],
+  // (shareAttributes, details, shareCredentials) => {
+  //   if (isAuthDetails(details) || isAuthzDetails(details)) {
+  //     return false
+  //   } else if (
+  //     isCredShareDetails(details) &&
+  //     details.requestedAttributes.length &&
+  //     !details.requestedCredentials.length
+  //   ) {
+  //     const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
+  //       (acc, v) => {
+  //         if (!!v.length) {
+  //           acc += v.length
+  //         } else {
+  //           acc += 1
+  //         }
+  //         return acc
+  //       },
+  //       0,
+  //     )
+
+  //     return numberOfFieldsDisplayed > 3
+  //   } else if (
+  //     isCredShareDetails(details) &&
+  //     !details.requestedAttributes.length &&
+  //     shareCredentials.length === 1
+  //   ) {
+
+  (details, shareAttributes, shareCredentials) => {
+    const onlyAttributes =
+      details.requestedAttributes.length && !details.requestedCredentials.length
+    const onlyOneCredential =
+      !details.requestedAttributes.length && shareCredentials.length === 1
+
+    const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
+      (acc, v) => {
+        if (!!v.length) {
+          acc += v.length
+        } else {
+          acc += 1
+        }
+        return acc
+      },
+      0,
+    )
+
+    return onlyAttributes
+      ? numberOfFieldsDisplayed > 3
+      : onlyOneCredential
+      ? false
+      : true
   },
 )
 
-/**
- * Contains the logic that decides whether we need to show a full-screen ActionSheet (FAS)
- * or a bottom ActionSheet (BAS).
- */
-export const getIsFullScreenInteraction = createSelector(
-  [
-    getAvailableAttributesToShare,
-    getInteractionDetails,
-    getAvailableCredentialsToShare,
-  ],
-  (shareAttributes, details, shareCredentials) => {
-    if (isAuthDetails(details) || isAuthzDetails(details)) {
-      return false
-    } else if (
-      isCredShareDetails(details) &&
-      details.requestedAttributes.length &&
-      !details.requestedCredentials.length
-    ) {
-      const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
-        (acc, v) => {
-          if (!!v.length) {
-            acc += v.length
-          } else {
-            acc += 1
-          }
-          return acc
-        },
-        0,
-      )
+export const getIsFullscreenCredOffer = createSelector(
+  [getCredOfferDetails],
+  (details) => {
+    const onlyOneCredential = details.credentials.service_issued.length === 1
 
-      return numberOfFieldsDisplayed > 3
-    } else if (
-      isCredShareDetails(details) &&
-      !details.requestedAttributes.length &&
-      shareCredentials.length === 1
-    ) {
-      return false
-    } else if (
-      isCredOfferDetails(details) &&
-      details.credentials.service_issued.length === 1
-    ) {
+    if (onlyOneCredential) {
       return false
     } else {
       return true
@@ -161,22 +195,18 @@ export const getIsFullScreenInteraction = createSelector(
  * Gets the categorized @OfferUICredentials from the @interactionDetails.
  */
 export const getOfferCredentialsBySection = createSelector(
-  [getInteractionDetails],
+  [getCredOfferDetails],
   (details) => {
     const defaultSections = { documents: [], other: [] }
 
-    if (isCredOfferDetails(details)) {
-      return details.credentials.service_issued.reduce<
-        CredentialsBySection<OfferUICredential>
-      >((acc, cred) => {
-        const section = getCredentialSection(cred)
-        acc[section] = [...acc[section], cred]
+    return details.credentials.service_issued.reduce<
+      CredentialsBySection<OfferUICredential>
+    >((acc, cred) => {
+      const section = getCredentialSection(cred)
+      acc[section] = [...acc[section], cred]
 
-        return acc
-      }, defaultSections)
-    }
-
-    return defaultSections
+      return acc
+    }, defaultSections)
   },
 )
 
@@ -185,18 +215,14 @@ export const getOfferCredentialsBySection = createSelector(
  * Otherwise, returns @null.
  */
 export const getFirstShareDocument = createSelector(
-  [getInteractionDetails, getAllCredentials],
-  (details, credentials) => {
-    if (isCredShareDetails(details)) {
-      const firstType = details.requestedCredentials[0]
-      const firstCredential = credentials.find((c) => c.type === firstType)
+  [getCredShareDetails, getAllCredentials],
+  ({ requestedCredentials }, credentials) => {
+    const firstType = requestedCredentials[0]
+    const firstCredential = credentials.find((c) => c.type === firstType)
 
-      return firstCredential
-        ? uiCredentialToShareCredential(firstCredential)
-        : null
-    }
-
-    return null
+    return firstCredential
+      ? uiCredentialToShareCredential(firstCredential)
+      : null
   },
 )
 
@@ -204,16 +230,11 @@ export const getFirstShareDocument = createSelector(
  * Gets the requested credential types for CredentialShare.
  */
 export const getShareCredentialTypes = createSelector(
-  [getInteractionDetails],
-  (details) => {
-    if (isCredShareDetails(details)) {
-      // return details.credentials
-      const { requestedAttributes, requestedCredentials } = details
-      return { requestedAttributes, requestedCredentials }
-    }
-
-    return { requestedAttributes: [], requestedCredentials: [] }
-  },
+  [getCredShareDetails],
+  ({ requestedAttributes, requestedCredentials }) => ({
+    requestedAttributes,
+    requestedCredentials,
+  }),
 )
 
 /**

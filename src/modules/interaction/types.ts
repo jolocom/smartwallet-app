@@ -28,16 +28,24 @@ export type InteractionDetails =
  */
 export interface InteractionState {
   details: InteractionDetails
-  intermediaryState: IntermediaryState
-  attributeInputKey: AttrKeys | null
+  intermediary: IntermediaryState
 }
+
+type IntermediaryState =
+  | { sheetState: IntermediarySheetState.showing; attributeInputKey: AttrKeys }
+  | {
+      sheetState:
+        | IntermediarySheetState.hiding
+        | IntermediarySheetState.switching
+      attributeInputKey: null
+    }
 
 /**
  * @showing - Shows the Intermediary ActionSheet
- * @hiding - Hides the Intermediary ActionSheet before showing another ActionSheet
- * @absent - Hides the Intermediary ActionSheet entirely
+ * @hiding - Hides the Intermediary ActionSheet entirely
+ * @switching - Hides the Intermediary ActionSheet before showing another ActionSheet
  */
-export enum IntermediaryState {
+export enum IntermediarySheetState {
   showing = 'showing',
   hiding = 'hiding',
   switching = 'switching',

@@ -1,6 +1,6 @@
 import React from 'react'
 import { ErrorFallback } from '~/components/ErrorFallback'
-import { render } from '@testing-library/react-native'
+import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 describe('ErrorFallback', () => {
   const defaultProps = {
@@ -9,13 +9,17 @@ describe('ErrorFallback', () => {
   }
 
   it('should match the initial snapshot', () => {
-    const { baseElement } = render(<ErrorFallback {...defaultProps} />)
+    const { baseElement } = renderWithSafeArea(
+      <ErrorFallback {...defaultProps} />,
+    )
 
     expect(baseElement).toMatchSnapshot()
   })
 
   it('should correctly render the props', () => {
-    const { getByTestId } = render(<ErrorFallback {...defaultProps} />)
+    const { getByTestId } = renderWithSafeArea(
+      <ErrorFallback {...defaultProps} />,
+    )
 
     expect(getByTestId('paragraph').props.children).toBe(
       defaultProps.description,
