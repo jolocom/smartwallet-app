@@ -12,7 +12,7 @@ const AttributeWidgetWrapper: React.FC<{
 const styles = StyleSheet.create({
   wrapper: {
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingVertical: 30,
     backgroundColor: Colors.lightBlack,
     borderRadius: 20,
     marginBottom: BP({ large: 52, medium: 52, small: 52, xsmall: 52 }),

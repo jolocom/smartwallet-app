@@ -10,6 +10,7 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useLoader } from '~/hooks/useLoader'
+import BP from '~/utils/breakpoints'
 
 export const FooterContainer: React.FC = ({ children }) => {
   const insets = useSafeArea()
@@ -17,7 +18,7 @@ export const FooterContainer: React.FC = ({ children }) => {
     <AbsoluteBottom
       customStyles={{
         ...styles.FASfooter,
-        bottom: insets.bottom + insets.top,
+        paddingBottom: insets.bottom,
       }}
     >
       <View style={styles.FAScontainer}>{children}</View>
@@ -82,15 +83,12 @@ const InteractionFooter: React.FC<Props> = ({
 }
 
 const styles = StyleSheet.create({
-  FAScontainer: {
-    paddingHorizontal: '5%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   FASfooter: {
+    bottom: 0,
     height: 106,
+    paddingTop: BP({ large: 25, medium: 25, small: 25, xsmall: 25 }),
     backgroundColor: Colors.black,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     borderTopRightRadius: 22,
     borderTopLeftRadius: 22,
     shadowColor: Colors.black30,
@@ -101,6 +99,11 @@ const styles = StyleSheet.create({
     shadowRadius: 7,
     shadowOpacity: 1,
     elevation: 10,
+  },
+  FAScontainer: {
+    paddingHorizontal: '5%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   btnContainer: {
     alignItems: 'center',
