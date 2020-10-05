@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
     borderRadius: 13.5,
   },
   cardContainer: {
-    width: '100%',
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',

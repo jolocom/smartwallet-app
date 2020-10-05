@@ -8,7 +8,6 @@ import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { strings } from '~/translations/strings'
 import truncateDid from '~/utils/truncateDid'
-import { debugView } from '~/utils/dev'
 import { StyleSheet, View } from 'react-native'
 
 interface PropsI {
@@ -44,6 +43,7 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.mini}
         color={isAnonymous ? Colors.error : Colors.white70}
+        customStyles={{ paddingHorizontal: 20 }}
       >
         {description}
       </JoloText>

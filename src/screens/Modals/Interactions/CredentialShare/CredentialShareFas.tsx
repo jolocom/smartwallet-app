@@ -19,7 +19,6 @@ import InteractionFooter, { FooterContainer } from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
-import { FAS_PADDING } from '../consts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 
@@ -75,33 +74,27 @@ const CredentialShareFas = () => {
       const Wrapper = isCarousel ? Carousel : React.Fragment
 
       return (
-        <View
-          style={{
-            marginLeft: FAS_PADDING,
-          }}
-        >
-          <Wrapper>
-            {credentials.map((cred) => (
-              <View
-                style={{
-                  marginRight: 20,
-                  marginVertical: 14,
-                }}
+        <Wrapper>
+          {credentials.map((cred) => (
+            <View
+              style={{
+                marginRight: 20,
+                marginVertical: 14,
+              }}
+            >
+              <CredentialCard
+                isSmall
+                hasInstruction={
+                  instructionVisible && isFirstCredential(cred.id)
+                }
+                onSelect={() => handleSelectCard(cred.type, cred.id)}
+                selected={details.selectedCredentials[cred.type] === cred.id}
               >
-                <CredentialCard
-                  isSmall
-                  hasInstruction={
-                    instructionVisible && isFirstCredential(cred.id)
-                  }
-                  onSelect={() => handleSelectCard(cred.type, cred.id)}
-                  selected={details.selectedCredentials[cred.type] === cred.id}
-                >
-                  <Header color={Colors.black}>{type}</Header>
-                </CredentialCard>
-              </View>
-            ))}
-          </Wrapper>
-        </View>
+                <Header color={Colors.black}>{type}</Header>
+              </CredentialCard>
+            </View>
+          ))}
+        </Wrapper>
       )
     })
 

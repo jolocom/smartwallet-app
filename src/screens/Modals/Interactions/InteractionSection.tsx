@@ -2,9 +2,8 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { FAS_PADDING } from './consts'
 import BP from '~/utils/breakpoints'
 
 interface Props {
@@ -19,7 +18,11 @@ const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}
         color={Colors.white35}
-        customStyles={{ textAlign: 'left', marginLeft: FAS_PADDING }}
+        weight={JoloTextWeight.regular}
+        customStyles={{
+          textAlign: 'left',
+          marginBottom: BP({ large: 12, medium: 12, small: 12, xsmall: 12 }),
+        }}
       >
         {title}
       </JoloText>

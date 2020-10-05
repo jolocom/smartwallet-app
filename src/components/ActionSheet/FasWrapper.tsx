@@ -6,7 +6,6 @@ import CollapsedScrollView from '~/components/CollapsedScrollView'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 
 const WINDOW = Dimensions.get('window')
 const SCREEN_HEIGHT = WINDOW.height
@@ -17,42 +16,21 @@ interface Props {
 
 const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
   return (
-    // <CollapsedScrollView
-    //   collapsedTitle={interactionTitle}
-    //   collapseStart={20}
-    //   renderCollapsingComponent={() => (
-    //     <IconWrapper customStyle={{ marginBottom: 12, marginTop: 30 }}>
-    //       <InteractionIcon />
-    //     </IconWrapper>
-    //   )}
-    // >
-    //   <InteractionHeader />
-    //   <View
-    //     style={{
-    //       marginTop: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
-    //     }}
-    //   >
-    //     {children}
-    //   </View>
-    // </CollapsedScrollView>
     <View style={styles.wrapper}>
       <CollapsedScrollView
         collapsedTitle={collapsedTitle}
         collapseStart={20}
         renderCollapsingComponent={() => (
-          <IconWrapper customStyle={{ marginTop: 35 }}>
+          <IconWrapper
+            customStyle={{
+              marginTop: BP({ large: 35, medium: 35, small: 20, xsmall: 20 }),
+            }}
+          >
             <InteractionIcon />
           </IconWrapper>
         )}
       >
-        <View
-          style={{
-            paddingTop: 12,
-            marginTop: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
-          }}
-        >
-          {children}
-        </View>
+        {children}
       </CollapsedScrollView>
     </View>
   )
@@ -63,6 +41,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     backgroundColor: Colors.mainBlack,
     justifyContent: 'space-between',
+    width: Dimensions.get('window').width,
   },
 })
 

@@ -12,7 +12,6 @@ import InteractionFooter, { FooterContainer } from '../InteractionFooter'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { FAS_PADDING } from '../consts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
@@ -26,8 +25,7 @@ const CredentialOfferFas = () => {
     credentials.map(({ type, invalid }, idx) => (
       <View
         style={{
-          marginLeft: FAS_PADDING,
-          marginBottom: idx === credentials.length - 1 ? 0 : 20,
+          marginBottom: idx === credentials.length - 1 ? 0 : 30,
         }}
       >
         <CredentialCard disabled={invalid}>

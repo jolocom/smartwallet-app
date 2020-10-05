@@ -1,1 +1,1 @@
-export const FAS_PADDING = 20
+export const INTERACTION_SHEET_PADDING = 20

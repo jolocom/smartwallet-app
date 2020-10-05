@@ -10,7 +10,6 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useLoader } from '~/hooks/useLoader'
-import { debugView } from '~/utils/dev'
 
 export const FooterContainer: React.FC = ({ children }) => {
   const insets = useSafeArea()

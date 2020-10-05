@@ -5,6 +5,7 @@ import { Colors } from '~/utils/colors'
 import useCollapsedScrollViewAnimations from '~/hooks/useScrollAnimation'
 import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { INTERACTION_SHEET_PADDING } from '~/screens/Modals/Interactions/consts'
 
 interface Props {
   collapsedTitle: string
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
   },
   scrollWrapper: {
     paddingBottom: '30%',
+    paddingHorizontal: INTERACTION_SHEET_PADDING,
   },
 })
 

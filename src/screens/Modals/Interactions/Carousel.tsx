@@ -1,6 +1,5 @@
 import React from 'react'
 import { ScrollView } from 'react-native'
-import { FAS_PADDING } from './consts'
 import { CARD_WIDTH, SMALL_CARD_SCALE } from './CredentialCard'
 
 const Carousel: React.FC = ({ children }) => {

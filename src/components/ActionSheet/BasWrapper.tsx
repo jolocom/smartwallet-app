@@ -4,7 +4,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
-import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 interface Props {
   style?: ViewStyle
@@ -22,7 +22,7 @@ const BasWrapper: React.FC<Props> = ({
 }) => {
   const { bottom } = useSafeArea()
   return (
-    <SafeAreaView style={[styles.wrapper, { bottom: bottom + 5 }]}>
+    <View style={[styles.wrapper, { bottom: bottom + 5 }]}>
       {showIcon && (
         <IconWrapper customStyle={{ marginBottom: -35 }}>
           <View style={styles.basIcon}>
@@ -31,7 +31,7 @@ const BasWrapper: React.FC<Props> = ({
         </IconWrapper>
       )}
       <View style={[styles.childrenWrapper, style]}>{children}</View>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     paddingTop: BP({ large: 48, medium: 48, small: 44, xsmall: 44 }),
     paddingBottom: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
   },
-
   interactionBody: {
     marginBottom: BP({ large: 50, medium: 50, small: 50, xsmall: 40 }),
     width: '100%',
