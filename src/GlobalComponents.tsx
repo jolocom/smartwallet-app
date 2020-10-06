@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import Loader from '~/modals/Loader'
+import Lock from '~/modals/Lock'
 import ActionSheetManager from './components/ActionSheet/ActionSheetManager'
 import { getInteractionType } from './modules/interaction/selectors'
 import { isAppLocked } from './modules/account/selectors'
@@ -11,7 +13,13 @@ const GlobalComponents = () => {
 
   const shouldShowActionSheets = !isLocked && isInteracting
 
-  return shouldShowActionSheets ? <ActionSheetManager /> : null
+  return (
+    <>
+      <Loader />
+      <Lock />
+      {shouldShowActionSheets ? <ActionSheetManager /> : null}
+    </>
+  )
 }
 
 export default GlobalComponents
