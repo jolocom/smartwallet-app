@@ -1,15 +1,11 @@
 import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { AttrsState, AttributeI } from '../attributes/types'
-import { AttrKeys } from '~/types/credentials'
-import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { AttrKeys, OfferUICredential } from '~/types/credentials'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
-  setInteractionAttributes = 'setInteractionAttributes',
-  setAttributesToShare = 'setAttributesToShare',
-  selectAttr = 'selectAttr',
+  selectShareCredential = 'selectShareCredential',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputKey = 'setAttributeInputKey',
 }
@@ -21,23 +17,46 @@ export type InteractionDetails =
   | CredOfferI
   | NotActiveInteractionDetailsI
 
+/*
+ * Holds the mapped Flow state from the SDK's InteractionManager and additional
+ * UI related state.
+ *
+ * @details - mapped flow state. If no active interaction, defaults to { flowType: null }
+ * @intermediaryState - status of the Intermediary ActionSheet
+ * @attributeInputKey - the attribute type that should be created on the @IntermediaryActionSheet
+ * @selectedShareCredentials - mapping of selected {[type]: id} credentials within the interaction
+ */
 export interface InteractionState {
   details: InteractionDetails
-  attributes: AttrsState<AttributeI>
-  attributesToShare: { [x: string]: string }
   intermediaryState: IntermediaryState
   attributeInputKey: AttrKeys | null
-  selectedAttributes: SelectedAttributesT
 }
 
-export type SelectedAttributesT = { [x: string]: string }
+/**
+ * @showing - Shows the Intermediary ActionSheet
+ * @hiding - Hides the Intermediary ActionSheet entirely
+ * @switching - Hides the Intermediary ActionSheet before showing another ActionSheet
+ */
+export enum IntermediaryState {
+  showing = 'showing',
+  hiding = 'hiding',
+  switching = 'switching',
+}
 
+/**
+ * Common InteractionDetails properties across all interactions
+ *
+ * @id - unique interaction identifier (nonce)
+ * @counterparty - the @IdentitySummary of the identity that initiated the interaction
+ */
 interface InteractionCommonI {
   id: string
   counterparty: IdentitySummary
 }
 
-// default state of details prop in interaction
+/**
+ * Default interaction state, if there are no active interactions
+ */
 export interface NotActiveInteractionDetailsI {
   flowType: null
 }
@@ -56,32 +75,15 @@ export interface AuthorizationDetailsI extends InteractionCommonI {
 
 export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
-  credentials: {
-    self_issued: string[]
-    service_issued: string[]
-  }
-}
-
-interface ServiceIssuedCredI {
-  type: string
-  invalid: boolean
-  renderInfo?: CredentialOfferRenderInfo
+  requestedAttributes: string[]
+  //TODO: should be renamed to smth else (not @credentials)
+  requestedCredentials: string[]
+  selectedCredentials: Record<string, string>
 }
 
 export interface CredOfferI extends InteractionCommonI {
   flowType: FlowType.CredentialOffer
   credentials: {
-    service_issued: ServiceIssuedCredI[]
+    service_issued: OfferUICredential[]
   }
-}
-
-export enum IntermediaryState {
-  showing = 'showing',
-  hiding = 'hiding',
-  absent = 'absent',
-}
-
-export interface InteractionCredentialsBySection {
-  documents: ServiceIssuedCredI[]
-  other: ServiceIssuedCredI[]
 }

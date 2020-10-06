@@ -3,7 +3,6 @@ import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 import {
   getIntermediaryState,
-  getAttributeInputKey,
   getInteractionType,
   getInteractionCounterparty,
 } from '~/modules/interaction/selectors'
@@ -15,14 +14,12 @@ const useInteractionDescription = () => {
   const counterparty = useSelector(getInteractionCounterparty)
   const intermediaryState = useSelector(getIntermediaryState)
   const interactionType = useSelector(getInteractionType)
-  const inputType = useSelector(getAttributeInputKey)
   const serviceName = counterparty?.publicProfile?.name || strings.SERVICE
   const isAnonymous = !counterparty?.publicProfile
 
-  if (intermediaryState === IntermediaryState.showing)
-    return strings.YOU_WILL_IMMIDIATELY_FIND_YOUR_DOC_IN_THE_PERSONAL_INFO_SECTION(
-      inputType ?? '',
-    )
+  if (intermediaryState === IntermediaryState.showing) {
+    return strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
+  }
 
   if (isAnonymous) {
     if (!counterparty) throw new Error('Counterparty not found')
@@ -33,10 +30,8 @@ const useInteractionDescription = () => {
       )
   }
 
-  //TODO: @clauxx add strings
   switch (interactionType) {
     case FlowType.Authentication:
-      //TODO: ask what is the right fallback for anonymous
       return strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY(
         serviceName,
       )

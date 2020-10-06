@@ -1,7 +1,10 @@
-import { AttrKeys, ATTR_TYPES } from '~/types/credentials'
+import {
+  AttrKeys,
+  ATTR_TYPES,
+  UICredential,
+  ShareUICredential,
+} from '~/types/credentials'
 import { claimsMetadata } from 'cred-types-jolocom-core'
-
-import { AttributeI } from '~/modules/attributes/types'
 import {
   FlowType,
   CredentialRequestFlowState,
@@ -13,6 +16,9 @@ import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interact
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
+import { AttributeI } from '~/modules/attributes/types'
+
+//TODO: move to `~/types/credentials`
 export const fieldNames = {
   [AttrKeys.name]: 'name',
   [AttrKeys.emailAddress]: 'email',
@@ -20,23 +26,25 @@ export const fieldNames = {
   [AttrKeys.postalAddress]: 'address',
 }
 
+export const isTypeAttribute = (type: string) =>
+  Object.values(credentialSchemas).includes(type)
+
 export const isCredentialAttribute = (cred: SignedCredential) =>
   Object.values(credentialSchemas).indexOf(cred.type[1]) > -1
 
-export const credentialSchemas = Object.keys(claimsMetadata).reduce<{
-  [key: string]: string
-}>((acc, v) => {
+export const credentialSchemas = Object.keys(claimsMetadata).reduce<
+  Record<string, string>
+>((acc, v) => {
   const value = v as AttrKeys
   acc[value] = claimsMetadata[value].type[1]
   return acc
 }, {})
 
+//TODO: move to ~/types/credentials
 type InitialEntryValueT = undefined | AttributeI[]
 export interface CredentialI {
   id: string
-  claim: {
-    [key: string]: string
-  }
+  claim: Record<string, string>
 }
 
 export const makeAttrEntry = (
@@ -59,7 +67,7 @@ export const makeAttrEntry = (
   return Array.isArray(initialValue) ? [...initialValue, entry] : [entry]
 }
 
-export interface SummaryI<T> {
+interface SummaryI<T> {
   state: T
   initiator: IdentitySummary
 }
@@ -80,36 +88,41 @@ const mapAuthorizationData = (summary: SummaryI<AuthorizationFlowState>) => {
 
 const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
   const credentials = summary.state.constraints[0].requestedCredentialTypes.reduce<{
-    service_issued: string[]
-    self_issued: string[]
+    requestedCredentials: string[]
+    requestedAttributes: string[]
   }>(
     (acc, v) => {
       const credType: AttrKeys | string = v[1]
       if (credType in ATTR_TYPES) {
-        acc.self_issued = [...acc.self_issued, credType]
+        acc.requestedAttributes = [...acc.requestedAttributes, credType]
       } else {
-        acc.service_issued = [...acc.service_issued, credType]
+        acc.requestedCredentials = [...acc.requestedCredentials, credType]
       }
       return acc
     },
-    { service_issued: [], self_issued: [] },
+    { requestedCredentials: [], requestedAttributes: [] },
   )
 
   return {
     counterparty: summary.initiator,
-    credentials,
+    ...credentials,
+    selectedCredentials: {},
   }
 }
 
-const mapCredReceiveData = (summary: SummaryI<CredentialOfferFlowState>) => {
+// TODO: have proper types for all the mapped interactions
+const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
   return {
     counterparty: summary.initiator,
     credentials: {
-      service_issued: summary.state.offerSummary.map((cred) => ({
-        type: cred.type,
-        invalid: false,
-        renderInfo: cred.renderInfo,
-      })),
+      service_issued: summary.state.offerSummary.map(
+        ({ renderInfo, type }) => ({
+          type,
+          renderInfo,
+          issuer: summary.initiator,
+          invalid: false,
+        }),
+      ),
     },
   }
 }
@@ -121,7 +134,7 @@ export const getMappedInteraction = (interaction: Interaction) => {
   } else if (interaction.flow.type === FlowType.CredentialShare) {
     return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
   } else if (interaction.flow.type === FlowType.CredentialOffer) {
-    return mapCredReceiveData(summary as SummaryI<CredentialOfferFlowState>)
+    return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
   } else if (interaction.flow.type === FlowType.Authorization) {
     return mapAuthorizationData(summary as SummaryI<AuthorizationFlowState>)
   }
@@ -141,4 +154,11 @@ export const getClaim = (attributeKey: AttrKeys, value: string) => {
     case AttrKeys.mobilePhoneNumber:
       return { telephone: value }
   }
+}
+
+export const uiCredentialToShareCredential = (
+  cred: UICredential,
+): ShareUICredential => {
+  const { claim, ...shareCred } = cred
+  return shareCred
 }

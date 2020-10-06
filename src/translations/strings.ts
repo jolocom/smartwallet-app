@@ -128,11 +128,8 @@ const interactions = {
     'Choose one or more documents provided by this service and we will generate them for you',
   DOCUMENTS: 'Documents',
   OTHER: 'Other',
+  ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION: `Once you click done, it will be displayed in the personal info section.`,
   //FIXME: when we add i18t for translations, we can interpolate values with %{VALUE}
-  YOU_WILL_IMMIDIATELY_FIND_YOUR_DOC_IN_THE_PERSONAL_INFO_SECTION: (
-    attributeType: string,
-  ) =>
-    `You will immidiately find your ${attributeType} in the personal info section after all`,
   THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS: (did: string) =>
     `This public profile ${did} chose to remain anonymous. Pay attention before sharing data.`,
   SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS: (service: string) =>
@@ -145,13 +142,14 @@ const interactions = {
   ) => `Choose one or more documents requested by ${service} to proceed `,
   SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS: (service: string) =>
     `${service} sent your wallet the following document(s):`,
-  SAVE_YOUR_ATTRIBUTE: (attr: string) => `Save your ${attr}`,
+  ADD_YOUR_ATTRIBUTE: (attr: string) => `Add your ${attr}`,
   IS_IT_REALLY_YOU: 'Is it really you?',
   INCOMING_INTERACTION: `Incoming interaction`,
   SERVICE_REQUESTS_ATTRIBUTE: (service: string, attribute: string) =>
     `${service} requests ${attribute}`,
   INCOMING_REQUEST: 'Incoming request',
   INCOMING_OFFER: 'Incoming offer',
+  ADD_INFO: 'Add info',
   WOULD_YOU_LIKE_TO_ACTION: (action: string) => `Would you like to ${action}?`,
 }
 
