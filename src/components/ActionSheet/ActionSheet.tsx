@@ -2,18 +2,18 @@ import React from 'react'
 import { Modal, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 
 interface Props {
-  show: boolean
+  isVisible: boolean
   onClose: () => void
 }
 
-const ActionSheet: React.FC<Props> = ({ children, show, onClose }) => {
+const ActionSheet: React.FC<Props> = ({ children, isVisible, onClose }) => {
   return (
     <Modal
       animated
       onRequestClose={onClose}
       animationType="slide"
       transparent={true}
-      visible={show}
+      visible={isVisible}
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay} />
@@ -24,13 +24,7 @@ const ActionSheet: React.FC<Props> = ({ children, show, onClose }) => {
 }
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
+  modalOverlay: StyleSheet.absoluteFillObject,
 })
 
 export default ActionSheet

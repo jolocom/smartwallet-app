@@ -11,6 +11,7 @@ interface Props {
 const BasWrapper: React.FC<Props> = ({
   children,
   customStyles = {},
+  //NOTE: currently only the @IntermediarySheetBody doesn't render the counterparty icon
   showIcon = true,
 }) => {
   return (
