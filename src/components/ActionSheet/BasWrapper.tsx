@@ -6,21 +6,23 @@ import InteractionFooter from '~/screens/Modals/Interactions/InteractionFooter'
 
 const BasWrapper: React.FC<{
   customStyle?: ViewStyle
-}> = ({ children, customStyle = {} }) => {
+  withFooter?: boolean
+}> = ({ children, customStyle = {}, withFooter = true }) => {
   return (
     <View style={[styles.wrapper, customStyle]}>
       <InteractionHeader />
       <View
-        style={{
-          marginTop: children ? 28 : 5,
-          marginBottom: 28,
-          alignItems: 'center',
-        }}
+        style={[
+          styles.childrenWrapper,
+          {
+            marginTop: children ? 28 : 5,
+          },
+        ]}
       >
         {children}
       </View>
 
-      <InteractionFooter />
+      {withFooter && <InteractionFooter />}
     </View>
   )
 }
@@ -28,12 +30,16 @@ const BasWrapper: React.FC<{
 const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.lightBlack,
     borderRadius: 20,
     justifyContent: 'center',
-    paddingVertical: 30,
     paddingHorizontal: 20,
     paddingTop: 55,
+    paddingBottom: 20,
+  },
+  childrenWrapper: {
+    marginBottom: 28,
+    alignItems: 'center',
   },
 })
 

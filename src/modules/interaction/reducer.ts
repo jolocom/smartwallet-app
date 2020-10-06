@@ -4,15 +4,12 @@ import {
   InteractionState,
 } from './types'
 import { Action } from '~/types/actions'
-import { ActionI } from '~/types/action'
+import { isCredShareDetails } from './guards'
 
 const initialState: InteractionState = {
   details: { flowType: null },
-  intermediaryState: IntermediaryState.absent,
+  intermediaryState: IntermediaryState.hiding,
   attributeInputKey: null,
-  attributes: {},
-  attributesToShare: {},
-  selectedAttributes: {},
 }
 
 const reducer = (
@@ -24,33 +21,26 @@ const reducer = (
       return { ...state, details: { ...state.details, ...action.payload } }
     case InteractionActions.resetInteraction:
       return initialState
-    case InteractionActions.setInteractionAttributes:
-      return { ...state, attributes: action.payload }
-    case InteractionActions.setAttributesToShare:
-      return { ...state, attributesToShare: action.payload }
-    case InteractionActions.selectAttr:
-      return onSelectAttr(state, action)
+    case InteractionActions.selectShareCredential:
+      if (isCredShareDetails(state.details)) {
+        return {
+          ...state,
+          details: {
+            ...state.details,
+            selectedCredentials: {
+              ...state.details.selectedCredentials,
+              ...action.payload,
+            },
+          },
+        }
+      }
+      return state
     case InteractionActions.setIntermediaryState:
       return { ...state, intermediaryState: action.payload }
     case InteractionActions.setAttributeInputKey:
       return { ...state, attributeInputKey: action.payload }
     default:
       return state
-  }
-}
-
-const onSelectAttr = (
-  state: InteractionState,
-  action: ActionI<InteractionActions>,
-) => {
-  const updatedSelectedAttrs = { [action.payload.attrKey]: action.payload.id }
-
-  return {
-    ...state,
-    selectedAttributes: {
-      ...state.selectedAttributes,
-      ...updatedSelectedAttrs,
-    },
   }
 }
 

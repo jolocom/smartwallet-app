@@ -1,13 +1,15 @@
 import { useSelector } from 'react-redux'
+
 import {
   getIntermediaryState,
   getAttributeInputKey,
   getInteractionDetails,
+  getInteractionCounterparty,
 } from '~/modules/interaction/selectors'
 import { IntermediaryState } from '~/modules/interaction/types'
 import { strings } from '~/translations/strings'
-import { useRootSelector } from '~/hooks/useRootSelector'
 import { ATTR_UI_NAMES } from '~/types/credentials'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import {
   isAuthDetails,
   isAuthzDetails,
@@ -15,22 +17,16 @@ import {
   isCredShareDetails,
 } from '~/modules/interaction/guards'
 
-const isSingleAttributeRequest = (
-  selfIssued: string[],
-  serviceIssued: string[],
-) => {
-  return !serviceIssued.length && selfIssued.length === 1
-}
-
 const useInteractionTitle = () => {
-  const details = useRootSelector(getInteractionDetails)
+  const details = useSelector(getInteractionDetails)
   const intermediaryState = useSelector(getIntermediaryState)
   const inputType = useSelector(getAttributeInputKey)
+  const counterparty = useSelector(getInteractionCounterparty)
+  const { getSingleMissingAttribute } = useCredentialShareFlow()
 
   if (intermediaryState === IntermediaryState.showing) {
-    if (!inputType) throw new Error('inputType not found')
-
-    return strings.SAVE_YOUR_ATTRIBUTE(inputType)
+    if (!inputType) throw new Error('No InputType found')
+    return strings.ADD_YOUR_ATTRIBUTE(ATTR_UI_NAMES[inputType])
   }
 
   if (isAuthDetails(details)) {
@@ -41,14 +37,12 @@ const useInteractionTitle = () => {
   } else if (isCredOfferDetails(details)) {
     return strings.INCOMING_OFFER
   } else if (isCredShareDetails(details)) {
-    const { counterparty } = details
-    const initiatorName = counterparty.publicProfile?.name
-    const { self_issued, service_issued } = details.credentials
-    const firstRequestedAttr = self_issued[0]
-    return isSingleAttributeRequest(self_issued, service_issued)
+    const initiatorName = counterparty?.publicProfile?.name
+    const missingAttr = getSingleMissingAttribute()
+    return missingAttr
       ? strings.SERVICE_REQUESTS_ATTRIBUTE(
           initiatorName ? initiatorName : strings.SERVICE,
-          ATTR_UI_NAMES[firstRequestedAttr],
+          ATTR_UI_NAMES[missingAttr],
         )
       : strings.INCOMING_REQUEST
   } else {
