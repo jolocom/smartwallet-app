@@ -118,13 +118,15 @@ export const useCredentialShareFlow = () => {
   const getSingleMissingAttribute = (): AttrKeys | null => {
     const isSingleAttribute =
       !requestedCredentials.length && requestedAttributes.length === 1
+    if (!isSingleAttribute) return null
+
     const attrKey = attrTypeToAttrKey(requestedAttributes[0])
     if (!attrKey) return null
 
     const typeAttributes = attributes[attrKey]
     const isMissing = !typeAttributes || !typeAttributes.length
 
-    return isSingleAttribute && isMissing ? attrKey : null
+    return isMissing ? attrKey : null
   }
 
   const getHeaderText = () => {

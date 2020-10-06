@@ -158,7 +158,7 @@ export const getIsFullscreenCredShare = createSelector(
   (details, shareAttributes, shareCredentials) => {
     const onlyAttributes =
       details.requestedAttributes.length && !details.requestedCredentials.length
-    const onlyOneCredential =
+    const isOnlyOneCredential =
       !details.requestedAttributes.length && shareCredentials.length === 1
 
     if (onlyAttributes) {
@@ -173,7 +173,7 @@ export const getIsFullscreenCredShare = createSelector(
       return (
         availableAttributes.length > 3 || details.requestedAttributes.length > 2
       )
-    } else if (onlyOneCredential) {
+    } else if (isOnlyOneCredential) {
       return false
     } else {
       return true
@@ -248,9 +248,9 @@ export const getShareCredentialsBySection = createSelector(
 export const getIsFullscreenCredOffer = createSelector(
   [getCredOfferDetails],
   (details) => {
-    const onlyOneCredential = details.credentials.service_issued.length === 1
+    const isOnlyOneCredential = details.credentials.service_issued.length === 1
 
-    if (onlyOneCredential) {
+    if (isOnlyOneCredential) {
       return false
     } else {
       return true
