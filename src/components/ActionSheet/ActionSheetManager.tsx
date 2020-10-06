@@ -127,7 +127,7 @@ const ActionSheetManager: React.FC = () => {
     <>
       <ActionSheet
         onClose={handleCloseInteractionSheet}
-        show={activeSheet === ActionSheetTypes.InteractionSheet}
+        isVisible={activeSheet === ActionSheetTypes.InteractionSheet}
       >
         {Platform.OS === 'ios' && <Loader />}
         {renderInteractionBody()}
@@ -136,7 +136,7 @@ const ActionSheetManager: React.FC = () => {
       {sheetState === IntermediarySheetState.showing && (
         <ActionSheet
           onClose={handleCloseIntermediarySheet}
-          show={activeSheet === ActionSheetTypes.IntermediateSheet}
+          isVisible={activeSheet === ActionSheetTypes.IntermediateSheet}
         >
           {Platform.OS === 'ios' && <Loader />}
           <IntermediarySheetBody />
