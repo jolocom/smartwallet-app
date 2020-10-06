@@ -30,7 +30,8 @@ const Claims: React.FC = () => {
       },
       {
         success: 'Good loader',
-        loading: 'Testing',
+        loading:
+          'Loader with a very long description to test container height and width',
         failed: 'Bad loader',
       },
     )

@@ -19,7 +19,7 @@ export const EntropyIntro: React.FC = () => {
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.middle}
           color={Colors.white70}
-          customStyles={{ opacity: 0.8 }}
+          customStyles={{ opacity: 0.8, marginTop: 10 }}
         >
           {strings.TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100}
         </JoloText>

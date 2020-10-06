@@ -10,9 +10,9 @@ const loaderMsgs = {
 }
 
 const entropy = {
-  SET_UP_YOUR_IDENTITY: 'Set up your identity',
+  SET_UP_YOUR_IDENTITY: 'Add uniqueness',
   TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100:
-    'Tap the screen and draw randomly on it until you collect 100%',
+    'Randomly draw untill 100% to secure your identity',
 }
 
 export const recovery = {
@@ -59,10 +59,9 @@ const passcode = {
   PINS_DONT_MATCH: "PINs don't match",
 }
 const seedphrase = {
-  HOLD_YOUR_FINGER_ON_THE_CIRCLE:
-    'Hold your finger on the circle untill magic will happen',
+  HOLD_YOUR_FINGER_ON_THE_CIRCLE: 'Place your finger on the circle ',
   WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE:
-    'Write down this phrase somewhere safe to proceed with the next step',
+    'Write down the collection of words exactly as shown above. Keep this safe!',
   DONE: 'Done',
   WHY_SO_ANALOGUE: 'Why so analogue?',
   ANY_FUTURE_PASSCODE_RESTORE:
