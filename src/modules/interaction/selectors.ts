@@ -266,6 +266,9 @@ export const getOfferCredentialsBySection = createSelector(
   (details) => {
     const defaultSections = { documents: [], other: [] }
 
+    // NOTE: will be moving away from the `credentials.service_issued` structure in favor of
+    // just credentials, since during this flow we only receive "service issued" credentials
+    // anyways
     return details.credentials.service_issued.reduce<
       CredentialsBySection<OfferUICredential>
     >((acc, cred) => {
