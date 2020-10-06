@@ -13,10 +13,11 @@ import {
 } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
 
-export const useGetAllAttributes = () => {
+export const useSyncStorageAttributes = () => {
   const dispatch = useDispatch()
   const sdk = useSDK()
-  const getAttributes = async () => {
+
+  return async () => {
     try {
       const verifiableCredentials = await sdk.storageLib.get.verifiableCredential()
 
@@ -40,8 +41,6 @@ export const useGetAllAttributes = () => {
       console.warn('Failed getting verifiable credentials', err)
     }
   }
-
-  return getAttributes
 }
 
 export const useCreateAttributes = () => {
