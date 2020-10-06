@@ -4,13 +4,13 @@ import { Colors } from '~/utils/colors'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
 
 interface Props {
-  style?: ViewStyle
+  customStyles?: ViewStyle
   showIcon?: boolean
 }
 
 const BasWrapper: React.FC<Props> = ({
   children,
-  style = {},
+  customStyles = {},
   showIcon = true,
 }) => {
   return (
@@ -22,7 +22,7 @@ const BasWrapper: React.FC<Props> = ({
           </View>
         </IconWrapper>
       )}
-      <View style={[styles.childrenWrapper, style]}>{children}</View>
+      <View style={[styles.childrenWrapper, customStyles]}>{children}</View>
     </View>
   )
 }

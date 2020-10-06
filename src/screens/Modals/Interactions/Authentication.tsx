@@ -19,7 +19,7 @@ const Authentication: React.FC = () => {
 
   return (
     <BasWrapper
-      style={{
+      customStyles={{
         marginTop: 5,
       }}
     >
