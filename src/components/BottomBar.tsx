@@ -97,6 +97,7 @@ const BottomBar = (props: BottomTabBarProps) => {
   const { history, routeNames, routes } = props.state
   const getSelectedRoute = (label: string) =>
     routes.find((el) => el.name === label) || { key: '' }
+
   return (
     <>
       <ScannerButton />
@@ -178,18 +179,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: TAB_IMAGE_WIDTH,
     justifyContent: 'space-between',
-    paddingHorizontal: 5,
-    alignItems: 'center',
-  },
-  iconContainer: {
-    marginTop: 5,
+    paddingHorizontal: 10,
     alignItems: 'center',
   },
   iconGroup: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: TAB_IMAGE_WIDTH * 0.048,
-    flex: 0.35,
+    justifyContent: 'space-around',
+    flex: 0.37,
+  },
+  iconContainer: {
+    marginTop: 5,
+    alignItems: 'center',
+    flex: 1,
   },
 })
 
