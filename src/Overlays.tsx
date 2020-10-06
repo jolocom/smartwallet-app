@@ -7,7 +7,7 @@ import ActionSheetManager from './components/ActionSheet/ActionSheetManager'
 import { getInteractionType } from './modules/interaction/selectors'
 import { isAppLocked } from './modules/account/selectors'
 
-const GlobalComponents = () => {
+const Overlays = () => {
   const isInteracting = useSelector(getInteractionType)
   const isLocked = useSelector(isAppLocked)
 
@@ -22,4 +22,4 @@ const GlobalComponents = () => {
   )
 }
 
-export default GlobalComponents
+export default Overlays
