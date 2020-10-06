@@ -1,15 +1,13 @@
 import React from 'react'
 import {
   Dimensions,
-  ImageBackground,
-  Platform,
+  Image,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
-import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import {
   DocumentsTabIcon,
@@ -23,7 +21,6 @@ import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
 import useRedirectTo from '~/hooks/useRedirectTo'
-import { OptionalContainer } from './OptionalContainer'
 
 interface IconPropsI {
   label: string
@@ -32,6 +29,12 @@ interface IconPropsI {
 }
 
 const SCREEN_WIDTH = Dimensions.get('window').width
+const TAB_IMAGE_WIDTH = SCREEN_WIDTH
+const TAB_IMAGE_HEIGHT = 0.28 * TAB_IMAGE_WIDTH
+const SCANNER_BUTTON_BOTTOM = 0.545 * TAB_IMAGE_HEIGHT
+const SCANNER_BTN_MARGIN = 16
+const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
+const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
 
 const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const redirectToTab = useRedirectTo(label as ScreenNames)
@@ -69,11 +72,16 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
 
 const ScannerButton = () => {
   const redirectToScanner = useRedirectTo(ScreenNames.Interactions)
-  const { bottom } = useSafeArea()
   return (
     <TouchableOpacity
       onPress={redirectToScanner}
-      style={[styles.scannerBtn, styles.scannerFrame, { bottom: 28 + bottom }]}
+      style={[
+        styles.scannerBtn,
+        styles.scannerFrame,
+        {
+          bottom: SCANNER_BUTTON_BOTTOM,
+        },
+      ]}
     >
       <LinearGradient
         style={[styles.scannerBtn, styles.scannerBody]}
@@ -89,23 +97,16 @@ const BottomBar = (props: BottomTabBarProps) => {
   const { history, routeNames, routes } = props.state
   const getSelectedRoute = (label: string) =>
     routes.find((el) => el.name === label) || { key: '' }
-  const { bottom } = useSafeArea()
-
   return (
-    <OptionalContainer
-      condition={Platform.OS === 'ios'}
-      container={(children) => (
-        <SafeAreaView style={{ backgroundColor: Colors.mainBlack }}>
-          {children}
-        </SafeAreaView>
-      )}
-    >
+    <>
       <ScannerButton />
-      <ImageBackground
-        style={[styles.tabsContainer, { bottom: bottom }]}
+      <Image
+        style={styles.tabsImage}
         source={require('~/assets/images/bottomBarBG.png')}
-      >
-        <View style={[styles.iconGroup, { justifyContent: 'flex-start' }]}>
+        resizeMode="contain"
+      />
+      <View style={styles.tabsContainer}>
+        <View style={styles.iconGroup}>
           {routeNames.slice(0, 2).map((routeName: string, idx: number) => (
             <Tab
               key={idx}
@@ -117,7 +118,7 @@ const BottomBar = (props: BottomTabBarProps) => {
             />
           ))}
         </View>
-        <View style={[styles.iconGroup, { justifyContent: 'flex-end' }]}>
+        <View style={styles.iconGroup}>
           {props.state.routeNames
             .slice(2)
             .map((routeName: string, idx: number) => (
@@ -131,8 +132,8 @@ const BottomBar = (props: BottomTabBarProps) => {
               />
             ))}
         </View>
-      </ImageBackground>
-    </OptionalContainer>
+      </View>
+    </>
   )
 }
 
@@ -145,40 +146,50 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scannerBtn: {
-    width: 66,
-    height: 66,
-    borderRadius: 33,
+    width: SCANNER_BUTTON_DIMENSIONS,
+    height: SCANNER_BUTTON_DIMENSIONS,
+    borderRadius: SCANNER_BUTTON_RADIUS,
+    backgroundColor: 'transparent',
   },
   scannerBody: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 66,
-    height: 66,
-    borderRadius: 33,
+    width: SCANNER_BUTTON_DIMENSIONS,
+    height: SCANNER_BUTTON_DIMENSIONS,
+    borderRadius: SCANNER_BUTTON_RADIUS,
   },
-  tabsContainer: {
+  tabsImage: {
     position: 'absolute',
     bottom: 0,
+    left: -0.5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    height: 105,
-    width: SCREEN_WIDTH,
+    width: TAB_IMAGE_WIDTH,
+    height: TAB_IMAGE_HEIGHT,
     paddingVertical: 10,
-    marginLeft: -0.5,
-    zIndex: 10,
-    marginBottom: -30,
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+  },
+  tabsContainer: {
+    position: 'absolute',
+    bottom: TAB_IMAGE_HEIGHT - 65,
+    flexDirection: 'row',
+    width: TAB_IMAGE_WIDTH,
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
+    alignItems: 'center',
   },
   iconContainer: {
-    paddingHorizontal: 13,
     marginTop: 5,
     alignItems: 'center',
   },
   iconGroup: {
     flexDirection: 'row',
-    paddingHorizontal: 10,
-    flex: 0.5,
+    justifyContent: 'space-between',
+    paddingHorizontal: TAB_IMAGE_WIDTH * 0.048,
+    flex: 0.35,
   },
 })
 
