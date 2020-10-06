@@ -1,19 +1,12 @@
 import React from 'react'
-import {
-  Modal,
-  ViewProps,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
+import { Modal, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 
 interface Props {
   show: boolean
   onClose: () => void
 }
 
-// NOTE: this shouldn't be aware if it's FAS or BAS
-const CustomActionSheet: React.FC<Props> = ({ children, show, onClose }) => {
+const ActionSheet: React.FC<Props> = ({ children, show, onClose }) => {
   return (
     <Modal
       animated
@@ -40,4 +33,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default CustomActionSheet
+export default ActionSheet
