@@ -2,7 +2,7 @@ import { useInteraction } from '~/hooks/sdk'
 import {
   CredentialOfferFlowState,
   SignedCredentialWithMetadata,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { OfferUICredential } from '~/types/credentials'
 import { strings } from '~/translations/strings'

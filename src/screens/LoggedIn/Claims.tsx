@@ -10,7 +10,7 @@ import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useSDK, useInteractionStart } from '~/hooks/sdk'
-import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionTransportType } from '@jolocom/sdk/js/types'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>

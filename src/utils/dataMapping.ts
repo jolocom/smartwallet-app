@@ -11,9 +11,9 @@ import {
   CredentialOfferFlowState,
   AuthenticationFlowState,
   AuthorizationFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+} from '@jolocom/sdk/js/interactionManager/types'
+import { Interaction } from '@jolocom/sdk/js/interactionManager/interaction'
+import { IdentitySummary } from '@jolocom/sdk/js/types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 import { AttributeI } from '~/modules/attributes/types'

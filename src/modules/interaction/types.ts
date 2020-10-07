@@ -1,6 +1,6 @@
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { FlowType } from '@jolocom/sdk/js/interactionManager/types'
 import { AttrKeys, OfferUICredential } from '~/types/credentials'
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+import { IdentitySummary } from '@jolocom/sdk/js/types'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',

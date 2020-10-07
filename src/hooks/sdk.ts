@@ -3,13 +3,13 @@ import { Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
-  InteractionTransportType,
   FlowType,
   CredentialRequestFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { Interaction } from '@jolocom/sdk/js/src/lib/interactionManager/interaction'
+} from '@jolocom/sdk/js/interactionManager/types'
+import { Interaction } from '@jolocom/sdk/js/interactionManager/interaction'
+import { ErrorCode } from '@jolocom/sdk/js/errors'
 import { JolocomLib } from 'jolocom-lib'
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
+import { InteractionTransportType } from '@jolocom/sdk/js/types'
 
 import { SDKContext } from '~/utils/sdk/context'
 import { useLoader } from './useLoader'

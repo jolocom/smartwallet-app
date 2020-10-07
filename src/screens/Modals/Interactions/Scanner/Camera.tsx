@@ -12,8 +12,8 @@ import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import { useSelector } from 'react-redux'
 
-import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors'
+import { InteractionTransportType } from '@jolocom/sdk/js/types'
+import { ErrorCode } from '@jolocom/sdk/js/errors'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'

@@ -1,6 +1,6 @@
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+import { IdentitySummary } from '@jolocom/sdk/js/types'
 import { KeyboardTypeOptions } from 'react-native'
 
 export enum AttrKeys {
