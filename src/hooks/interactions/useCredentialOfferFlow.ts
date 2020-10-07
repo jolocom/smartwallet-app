@@ -48,12 +48,7 @@ const useCredentialOfferFlow = () => {
     if (!responseToken)
       throw new Error('Could not find the CredentialOfferResponse token')
 
-    const receiveToken = await interaction.send(responseToken)
-
-    if (!receiveToken)
-      throw new Error('Failed to fetch the CredentialsReceive token')
-
-    await interaction.processInteractionToken(receiveToken)
+    await interaction.send(responseToken)
   }
 
   /**
