@@ -11,7 +11,6 @@ import {
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
 import { MultipleShareUICredential } from '~/types/credentials'
-import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
 import AttributesWidget from '~/components/AttributesWidget'
@@ -20,6 +19,8 @@ import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
 import { isCredShareDetails } from '~/modules/interaction/guards'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
@@ -85,7 +86,13 @@ const CredentialShareFas = () => {
                     details.selectedCredentials[cred.type] === cred.id
                   }
                 >
-                  <Header color={Colors.black}>{type}</Header>
+                  <JoloText
+                    kind={JoloTextKind.title}
+                    size={JoloTextSizes.middle}
+                    color={Colors.black}
+                  >
+                    {type}
+                  </JoloText>
                 </CredentialCard>
               </View>
             ))}
