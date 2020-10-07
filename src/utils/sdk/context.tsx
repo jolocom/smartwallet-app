@@ -7,7 +7,6 @@ import React, {
 } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { JolocomSDK } from '@jolocom/sdk'
 import Keychain from 'react-native-keychain'
 
 import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
@@ -15,14 +14,18 @@ import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { initSDK } from './'
 import { PIN_SERVICE } from '../keychainConsts'
 import ScreenContainer from '~/components/ScreenContainer'
-import { SDKError } from '@jolocom/sdk'
+import {
+  JolocomKeychainPasswordStore,
+  SDKError,
+  Agent,
+} from 'react-native-jolocom'
 
-export const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
+export const AgentContext = createContext<MutableRefObject<Agent | null> | null>(
   null,
 )
 
-export const SDKContextProvider: React.FC = ({ children }) => {
-  const sdkRef = useRef<JolocomSDK | null>(null)
+export const AgentContextProvider: React.FC = ({ children }) => {
+  const agentRef = useRef<Agent | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   const dispatch = useDispatch()
@@ -35,18 +38,21 @@ export const SDKContextProvider: React.FC = ({ children }) => {
           service: PIN_SERVICE,
         }),
       ])
-      sdkRef.current = sdk
-      let iw = await sdk.init({ dontAutoRegister: true })
-      if (iw.did) {
-        dispatch(setDid(iw.did))
-        dispatch(setLogged(true))
-      }
+      const passwordStore = new JolocomKeychainPasswordStore()
+      let agent = await sdk.createAgent(passwordStore)
+      agentRef.current = agent
+
+      // NOTE: If loading the identity fails, we don't set the did and the logged state, thus navigating
+      // to the @LoggedOut section
+      const idw = await agent.loadIdentity()
+      dispatch(setDid(idw.did))
+      dispatch(setLogged(true))
 
       if (pin) {
         dispatch(setLocalAuth())
       }
     } catch (err) {
-      if (err.message !== SDKError.codes.NoEntropy) {
+      if (err.code !== SDKError.codes.NoWallet) {
         console.warn(err)
         throw new Error('Root initialization failed')
       }
@@ -59,7 +65,7 @@ export const SDKContextProvider: React.FC = ({ children }) => {
     initializeAll()
     return () => {
       setIsLoading(false)
-      sdkRef.current = null
+      agentRef.current = null
     }
   }, [])
 
@@ -70,5 +76,5 @@ export const SDKContextProvider: React.FC = ({ children }) => {
       </ScreenContainer>
     )
   }
-  return <SDKContext.Provider value={sdkRef} children={children} />
+  return <AgentContext.Provider value={agentRef} children={children} />
 }

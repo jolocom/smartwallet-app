@@ -1,6 +1,5 @@
-import { FlowType } from '@jolocom/sdk/js/interactionManager/types'
+import { FlowType, IdentitySummary } from 'react-native-jolocom'
 import { AttrKeys, OfferUICredential } from '~/types/credentials'
-import { IdentitySummary } from '@jolocom/sdk/js/types'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',

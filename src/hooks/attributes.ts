@@ -3,7 +3,7 @@ import { claimsMetadata } from 'cred-types-jolocom-core'
 
 import { setAttrs, updateAttrs } from '~/modules/attributes/actions'
 import { AttrKeys, ATTR_TYPES } from '~/types/credentials'
-import { useSDK } from './sdk'
+import { useAgent } from './sdk'
 import { AttrsState, AttributeI } from '~/modules/attributes/types'
 import {
   makeAttrEntry,
@@ -15,11 +15,11 @@ import { getDid } from '~/modules/account/selectors'
 
 export const useSyncStorageAttributes = () => {
   const dispatch = useDispatch()
-  const sdk = useSDK()
+  const agent = useAgent()
 
   return async () => {
     try {
-      const verifiableCredentials = await sdk.storageLib.get.verifiableCredential()
+      const verifiableCredentials = await agent.storage.get.verifiableCredential()
 
       const attributes = verifiableCredentials.reduce<AttrsState<AttributeI>>(
         (acc, v) => {
@@ -44,7 +44,7 @@ export const useSyncStorageAttributes = () => {
 }
 
 export const useCreateAttributes = () => {
-  const sdk = useSDK()
+  const agent = useAgent()
   const did = useSelector(getDid)
   const dispatch = useDispatch()
 
@@ -52,12 +52,12 @@ export const useCreateAttributes = () => {
     attributeKey: AttrKeys,
     value: string,
   ) => {
-    const password = await sdk.keyChainLib.getPassword()
+    const password = await agent.keyProvider.getPassword()
     const metadata = claimsMetadata[attributeKey]
     if (!metadata) throw new Error('Attribute key is not supported')
 
     // this one is done to map our custom fields names to the one in `cred-types-jolocom-core`
-    const verifiableCredential = await sdk.identityWallet.create.signedCredential(
+    const verifiableCredential = await agent.idw.create.signedCredential(
       {
         metadata,
         claim: getClaim(attributeKey, value), // this will split claims and create an object with properties it should have
@@ -72,7 +72,7 @@ export const useCreateAttributes = () => {
     )
 
     // save it in the storage
-    await sdk.storageLib.store.verifiableCredential(verifiableCredential)
+    await agent.storage.store.verifiableCredential(verifiableCredential)
 
     dispatch(updateAttrs({ attributeKey, attribute: entry[0] }))
   }

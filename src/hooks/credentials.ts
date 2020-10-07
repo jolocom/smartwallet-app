@@ -1,4 +1,4 @@
-import { useSDK } from './sdk'
+import { useAgent } from './sdk'
 import { useDispatch } from 'react-redux'
 import { UICredential } from '~/types/credentials'
 import { isCredentialAttribute } from '~/utils/dataMapping'
@@ -11,7 +11,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
  * syncing with the storage, but adding the new mapped @UICredential(s) to the store).
  */
 export const useSyncStorageCredentials = () => {
-  const sdk = useSDK()
+  const agent = useAgent()
   const dispatch = useDispatch()
 
   const credentialToUICredential = async (
@@ -21,8 +21,8 @@ export const useSyncStorageCredentials = () => {
     // return @IdentitySummary
     const {
       renderInfo,
-      //issuer,
-    } = await sdk.storageLib.get.credentialMetadata(cred)
+      //issu
+    } = await agent.storage.get.credentialMetadata(cred)
     const {
       name,
       expires,
@@ -32,7 +32,7 @@ export const useSyncStorageCredentials = () => {
       issuer: issuerDid,
       type: typeArr,
     } = cred
-    const issuer = await sdk.storageLib.get.publicProfile(issuerDid)
+    const issuer = await agent.storage.get.publicProfile(issuerDid)
     const type = typeArr[typeArr.length - 1]
 
     return {
@@ -50,7 +50,7 @@ export const useSyncStorageCredentials = () => {
   }
 
   return async () => {
-    const allCreds = await sdk.storageLib.get.verifiableCredential()
+    const allCreds = await agent.storage.get.verifiableCredential()
 
     const credentials = await allCreds.reduce<Promise<UICredential[]>>(
       async (accPromise, cred) => {

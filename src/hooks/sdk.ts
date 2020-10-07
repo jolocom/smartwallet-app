@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import {
   FlowType,
-  CredentialRequestFlowState,
-} from '@jolocom/sdk/js/interactionManager/types'
-import { Interaction } from '@jolocom/sdk/js/interactionManager/interaction'
-import { SDKError } from '@jolocom/sdk'
-import { JolocomLib } from 'jolocom-lib'
-import { InteractionTransportType } from '@jolocom/sdk/js/types'
+  Interaction,
+  SDKError,
+  InteractionTransportType,
+  JolocomLib,
+} from 'react-native-jolocom'
+import { CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/types'
 
-import { SDKContext } from '~/utils/sdk/context'
+import { AgentContext } from '~/utils/sdk/context'
 import { useLoader } from './useLoader'
 import { setInteractionDetails } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
@@ -20,22 +20,22 @@ import { getAllCredentials } from '~/modules/credentials/selectors'
 
 type PreInteractionHandler = (i: Interaction) => boolean
 
-export const useSDK = () => {
-  const sdk = useContext(SDKContext)
-  if (!sdk?.current) throw new Error('SDK was not found!')
-  return sdk.current
+export const useAgent = () => {
+  const agent = useContext(AgentContext)
+  if (!agent?.current) throw new Error('SDK was not found!')
+  return agent.current
 }
 
 export const useMnemonic = () => {
-  const sdk = useSDK()
+  const agent = useAgent()
 
   return (entropy: string) => {
-    return sdk.fromEntropyToMnemonic(Buffer.from(entropy, 'hex'))
+    return agent.fromEntropyToMnemonic(Buffer.from(entropy, 'hex'))
   }
 }
 
 export const useInteractionStart = (channel: InteractionTransportType) => {
-  const sdk = useSDK()
+  const agent = useAgent()
   const dispatch = useDispatch()
   const loader = useLoader()
   const credentials = useSelector(getAllCredentials)
@@ -109,7 +109,7 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
 
     await loader(
       async () => {
-        const interaction = await sdk.interactionManager.start(channel, token)
+        const interaction = await agent.interactionManager.start(channel, token)
         const mappedInteraction = getMappedInteraction(interaction)
         const shouldStart = preInteractionHandler[interaction.flow.type]
           ? preInteractionHandler[interaction.flow.type](interaction)
@@ -132,9 +132,9 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
 }
 
 export const useInteraction = () => {
-  const sdk = useSDK()
+  const agent = useAgent()
   const interactionId = useSelector(getInteractionId)
   if (!interactionId) throw new Error('Interaction not found')
 
-  return sdk.interactionManager.getInteraction(interactionId)
+  return agent.interactionManager.getInteraction(interactionId)
 }

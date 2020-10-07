@@ -4,17 +4,17 @@ import {
   UICredential,
   ShareUICredential,
 } from '~/types/credentials'
+
 import { claimsMetadata } from 'cred-types-jolocom-core'
+// FIXME: expose these types from react-native-jolocom
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
-  FlowType,
   CredentialRequestFlowState,
   CredentialOfferFlowState,
   AuthenticationFlowState,
   AuthorizationFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
-import { Interaction } from '@jolocom/sdk/js/interactionManager/interaction'
-import { IdentitySummary } from '@jolocom/sdk/js/types'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { FlowType, Interaction, IdentitySummary } from 'react-native-jolocom'
 
 import { AttributeI } from '~/modules/attributes/types'
 

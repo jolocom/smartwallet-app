@@ -12,14 +12,13 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { strings } from '~/translations/strings'
 
 import { useLoader } from '~/hooks/useLoader'
-import { useSDK } from '~/hooks/sdk'
+import { useAgent } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
-import BP from '~/utils/breakpoints'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -31,11 +30,11 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
-  const SDK = useSDK()
+  const agent = useAgent()
 
   const handlePhraseSubmit = useCallback(async () => {
     const success = await loader(
-      async () => SDK.initWithMnemonic(phrase.join(' ')),
+      async () => agent.loadFromMnemonic(phrase.join(' ')),
       {
         loading: strings.MATCHING,
       },

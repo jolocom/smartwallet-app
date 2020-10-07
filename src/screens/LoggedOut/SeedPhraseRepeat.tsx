@@ -1,18 +1,17 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { StackActions, NavigationProp } from '@react-navigation/native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn from '~/components/Btn'
-
-import { useDispatch, useSelector } from 'react-redux'
 import { setLogged, setDid, setEntropy } from '~/modules/account/actions'
 import { getEntropy } from '~/modules/account/selectors'
-import { useSDK } from '~/hooks/sdk'
+import { useAgent } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/useLoader'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { StackActions, NavigationProp } from '@react-navigation/native'
 
 interface PropsI {
   navigation: NavigationProp<{}>
@@ -25,14 +24,17 @@ const SeedPhraseRepeat: React.FC<PropsI> = ({ navigation }) => {
   }
   const dispatch = useDispatch()
   const entropy = useSelector(getEntropy)
-  const SDK = useSDK()
+  const agent = useAgent()
   const loader = useLoader()
 
   const onSubmitIdentity = async () => {
     const entropyBuffer = new Buffer(entropy, 'hex')
     const success = await loader(
       async () => {
-        const iw = await SDK.createNewIdentity(entropyBuffer)
+        // FIXME: currently not using the entropy for identity creation
+        //const iw = await agent.createNewIdentity(entropyBuffer)
+        const iw = await agent.createNewIdentity()
+
         dispatch(setDid(iw.did))
       },
       {
