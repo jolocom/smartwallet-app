@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux'
 import FasWrapper from '~/components/ActionSheet/FasWrapper'
 import {
   getShareCredentialsBySection,
-  getInteractionDetails,
   getAvailableAttributesToShare,
+  getCredShareDetails,
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
@@ -15,25 +15,29 @@ import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
 import AttributesWidget from '~/components/AttributesWidget'
-import InteractionFooter from '../InteractionFooter'
+import InteractionFooter, { FooterContainer } from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
-import { isCredShareDetails } from '~/modules/interaction/guards'
+import InteractionHeader from '../InteractionHeader'
+import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
-  const details = useSelector(getInteractionDetails)
+  const details = useSelector(getCredShareDetails)
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const [instructionVisible, setInstructionVisibility] = useState(true)
   const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
   const {
     getPreselectedAttributes,
-    selectionReady,
     isFirstCredential,
     handleSelectCredential,
     handleCreateAttribute,
+    selectionReady,
+    getHeaderText,
+    getCtaText,
   } = useCredentialShareFlow()
+  const handleSubmit = useCredentialShareSubmit()
 
   useEffect(() => {
     handleSelectCredential(getPreselectedAttributes())
@@ -80,10 +84,7 @@ const CredentialShareFas = () => {
                     instructionVisible && isFirstCredential(cred.id)
                   }
                   onSelect={() => handleSelectCard(cred.type, cred.id)}
-                  selected={
-                    isCredShareDetails(details) &&
-                    details.selectedCredentials[cred.type] === cred.id
-                  }
+                  selected={details.selectedCredentials[cred.type] === cred.id}
                 >
                   <Header color={Colors.black}>{type}</Header>
                 </CredentialCard>
@@ -96,16 +97,15 @@ const CredentialShareFas = () => {
 
   return (
     <>
-      <FasWrapper>
+      <FasWrapper collapsedTitle={getHeaderText().title}>
+        <InteractionHeader {...getHeaderText()} />
         {!!Object.keys(attributes).length && (
           <AttributeWidgetWrapper>
             <AttributesWidget
               attributes={attributes}
               onCreateNewAttr={handleCreateAttribute}
               onSelect={(key, id) => handleSelectCredential({ [key]: id })}
-              selectedAttributes={
-                isCredShareDetails(details) ? details.selectedCredentials : {}
-              }
+              selectedAttributes={details.selectedCredentials}
               isSelectable={true}
             />
           </AttributeWidgetWrapper>
@@ -120,7 +120,13 @@ const CredentialShareFas = () => {
           {renderSectionCredentials(other)}
         </InteractionSection>
       </FasWrapper>
-      <InteractionFooter />
+      <FooterContainer>
+        <InteractionFooter
+          cta={getCtaText()}
+          disabled={!selectionReady()}
+          onSubmit={handleSubmit}
+        />
+      </FooterContainer>
     </>
   )
 }

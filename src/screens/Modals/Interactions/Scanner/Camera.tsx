@@ -115,9 +115,11 @@ const Camera = () => {
     <ScreenContainer isFullscreen>
       <StatusBar hidden />
       <View style={styles.scannerContainer}>
-        <View style={styles.navigationContainer}>
-          <NavigationHeader type={NavHeaderType.Close} />
-        </View>
+        {overlayVisible && (
+          <View style={styles.navigationContainer}>
+            <NavigationHeader type={NavHeaderType.Close} />
+          </View>
+        )}
         {renderCamera && (
           <QRCodeScanner
             containerStyle={{ position: 'absolute' }}

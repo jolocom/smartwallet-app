@@ -1,15 +1,17 @@
 import {
   InteractionActions,
-  IntermediaryState,
   InteractionState,
+  IntermediarySheetState,
 } from './types'
 import { Action } from '~/types/actions'
 import { isCredShareDetails } from './guards'
 
 const initialState: InteractionState = {
   details: { flowType: null },
-  intermediaryState: IntermediaryState.hiding,
-  attributeInputKey: null,
+  intermediary: {
+    sheetState: IntermediarySheetState.hiding,
+    attributeInputKey: null,
+  },
 }
 
 const reducer = (
@@ -36,9 +38,18 @@ const reducer = (
       }
       return state
     case InteractionActions.setIntermediaryState:
-      return { ...state, intermediaryState: action.payload }
+      return {
+        ...state,
+        intermediary: { ...state.intermediary, sheetState: action.payload },
+      }
     case InteractionActions.setAttributeInputKey:
-      return { ...state, attributeInputKey: action.payload }
+      return {
+        ...state,
+        intermediary: {
+          ...state.intermediary,
+          attributeInputKey: action.payload,
+        },
+      }
     default:
       return state
   }
