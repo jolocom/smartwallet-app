@@ -15,6 +15,7 @@ import { setEntropy } from '~/modules/account/actions'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useIdentityCreate } from '~/hooks/sdk'
 
 //NOTE: Determines the duration of entropy collection
 const ENOUGH_ENTROPY_PROGRESS = Platform.select({
@@ -25,11 +26,16 @@ const ENOUGH_ENTROPY_PROGRESS = Platform.select({
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
-  const dispatch = useDispatch()
+  const refreshEntropy = useReplaceWith(ScreenNames.Entropy)
+  const createIdentity = useIdentityCreate()
 
+  //NOTE: not using the entropy
   const submitEntropy = async (entropy: string) => {
-    dispatch(setEntropy(entropy))
-    redirectToSeedPhrase()
+    const success = await createIdentity()
+    if (success) {
+      return redirectToSeedPhrase()
+    }
+    return refreshEntropy()
   }
 
   const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)

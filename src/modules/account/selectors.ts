@@ -6,4 +6,3 @@ export const isAppLocked = (state: RootReducerI): boolean =>
   state.account.isAppLocked
 export const isLocalAuthSet = (state: RootReducerI): boolean =>
   state.account.isLocalAuthSet
-export const getEntropy = (state: RootReducerI): string => state.account.entropy

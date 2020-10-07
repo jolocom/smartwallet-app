@@ -20,8 +20,6 @@ import { Fonts, JoloTextSizes } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useMnemonic } from '~/hooks/sdk'
-import { getEntropy } from '~/modules/account/selectors'
-import { useSelector } from 'react-redux'
 import { InfoIcon } from '~/assets/svg'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -43,7 +41,6 @@ const SeedPhrase: React.FC = () => {
   const [showInfo, setShowInfo] = useState(true)
   const [seedphrase, setSeedphrase] = useState('')
   const getMnemonic = useMnemonic()
-  const entropy = useSelector(getEntropy)
 
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
@@ -54,8 +51,7 @@ const SeedPhrase: React.FC = () => {
   })
 
   useEffect(() => {
-    const seedphrase = getMnemonic(entropy)
-    setSeedphrase(seedphrase)
+    getMnemonic().then(setSeedphrase)
   }, [])
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import { entropyToMnemonic } from 'bip39'
 
 import {
   FlowType,
@@ -17,6 +18,8 @@ import { setInteractionDetails } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { getMappedInteraction, isTypeAttribute } from '~/utils/dataMapping'
 import { getAllCredentials } from '~/modules/credentials/selectors'
+import { setDid } from '~/modules/account/actions'
+import { strings } from '~/translations/strings'
 
 type PreInteractionHandler = (i: Interaction) => boolean
 
@@ -29,9 +32,39 @@ export const useAgent = () => {
 export const useMnemonic = () => {
   const agent = useAgent()
 
-  return (entropy: string) => {
-    //return agent.fromEntropyToMnemonic(Buffer.from(entropy, 'hex'))
-    return 'a a a a a a a a a a a a'
+  return async () => {
+    const encryptedSeed = await agent.storage.get.setting('encryptedSeed')
+
+    if (!encryptedSeed) {
+      throw new Error('Can not retrieve Seed from database')
+    }
+
+    const decrypted = await agent.idw.asymDecrypt(
+      Buffer.from(encryptedSeed.b64Encoded, 'base64'),
+      await agent.passwordStore.getPassword(),
+    )
+
+    return entropyToMnemonic(decrypted)
+  }
+}
+
+export const useIdentityCreate = () => {
+  const agent = useAgent()
+  const loader = useLoader()
+  const dispatch = useDispatch()
+
+  return async () => {
+    return loader(
+      async () => {
+        // FIXME: currently not using the entropy for identity creation
+        //const iw = await agent.createNewIdentity(entropyBuffer)
+        const iw = await agent.createNewIdentity()
+        dispatch(setDid(iw.did))
+      },
+      {
+        loading: strings.CREATING,
+      },
+    )
   }
 }
 
