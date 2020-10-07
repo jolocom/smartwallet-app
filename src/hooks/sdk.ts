@@ -30,7 +30,8 @@ export const useMnemonic = () => {
   const agent = useAgent()
 
   return (entropy: string) => {
-    return agent.fromEntropyToMnemonic(Buffer.from(entropy, 'hex'))
+    //return agent.fromEntropyToMnemonic(Buffer.from(entropy, 'hex'))
+    return 'a a a a a a a a a a a a'
   }
 }
 

@@ -18,6 +18,8 @@ import {
   JolocomKeychainPasswordStore,
   SDKError,
   Agent,
+  JolocomLinking,
+  JolocomWebSockets,
 } from 'react-native-jolocom'
 
 export const AgentContext = createContext<MutableRefObject<Agent | null> | null>(
@@ -38,6 +40,9 @@ export const AgentContextProvider: React.FC = ({ children }) => {
           service: PIN_SERVICE,
         }),
       ])
+      await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+      sdk.setDefaultDidMethod('jun')
+
       const passwordStore = new JolocomKeychainPasswordStore()
       let agent = await sdk.createAgent(passwordStore)
       agentRef.current = agent
