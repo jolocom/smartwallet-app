@@ -7,7 +7,7 @@ import {
   CredentialRequestFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
 import { Interaction } from '@jolocom/sdk/js/interactionManager/interaction'
-import { ErrorCode } from '@jolocom/sdk/js/errors'
+import { SDKError } from '@jolocom/sdk'
 import { JolocomLib } from 'jolocom-lib'
 import { InteractionTransportType } from '@jolocom/sdk/js/types'
 
@@ -45,11 +45,11 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
       return JolocomLib.parse.interactionToken.fromJWT(jwt)
     } catch (e) {
       if (e instanceof SyntaxError) {
-        throw new Error(ErrorCode.ParseJWTFailed)
+        throw new Error(SDKError.codes.ParseJWTFailed)
       } else if (e.message === 'Token expired') {
-        throw new Error(ErrorCode.TokenExpired)
+        throw new Error(SDKError.codes.TokenExpired)
       } else {
-        throw new Error(ErrorCode.Unknown)
+        throw new Error(SDKError.codes.Unknown)
       }
     }
   }

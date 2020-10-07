@@ -13,7 +13,7 @@ import { RNCamera } from 'react-native-camera'
 import { useSelector } from 'react-redux'
 
 import { InteractionTransportType } from '@jolocom/sdk/js/types'
-import { ErrorCode } from '@jolocom/sdk/js/errors'
+import { SDKError } from '@jolocom/sdk'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
@@ -100,7 +100,7 @@ const Camera = () => {
       console.log({ err })
 
       setError(true)
-      if (err.code === ErrorCode.ParseJWTFailed) {
+      if (err.code === SDKError.codes.ParseJWTFailed) {
         setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
       } else {
         setErrorText(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)

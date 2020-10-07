@@ -15,7 +15,7 @@ import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { initSDK } from './'
 import { PIN_SERVICE } from '../keychainConsts'
 import ScreenContainer from '~/components/ScreenContainer'
-import { ErrorCode } from '@jolocom/sdk/js/errors'
+import { SDKError } from '@jolocom/sdk'
 
 export const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
   null,
@@ -46,7 +46,7 @@ export const SDKContextProvider: React.FC = ({ children }) => {
         dispatch(setLocalAuth())
       }
     } catch (err) {
-      if (err.message !== ErrorCode.NoEntropy) {
+      if (err.message !== SDKError.codes.NoEntropy) {
         console.warn(err)
         throw new Error('Root initialization failed')
       }
