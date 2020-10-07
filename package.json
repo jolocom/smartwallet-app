@@ -20,8 +20,6 @@
   },
   "dependencies": {
     "@jolocom/sdk": "^0.14.1",
-    "@jolocom/sdk-password-store-mobile-keychain": "^0.1.1",
-    "@jolocom/sdk-storage-typeorm": "^1.1.0",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.9",
     "@react-native-community/picker": "^1.6.5",
@@ -36,7 +34,7 @@
     "cred-types-jolocom-core": "^0.0.11",
     "crypto-browserify": "^3.12.0",
     "events": "^3.1.0",
-    "jolocom-lib": "^4.3.0",
+    "jolocom-lib": "^5.1.0-rc7",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-camera": "^3.30.0",
@@ -67,7 +65,8 @@
     "stream-browserify": "^3.0.0",
     "typeorm": "0.2.24",
     "unorm": "^1.6.0",
-    "vm-browserify": "^1.1.2"
+    "vm-browserify": "^1.1.2",
+    "ws": "^7.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
