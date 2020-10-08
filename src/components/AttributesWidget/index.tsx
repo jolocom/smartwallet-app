@@ -35,6 +35,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
                 idx === Object.keys(attributes).length - 1
                   ? 0
                   : BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
+              width: '100%',
             }}
           >
             <AttrSectionHeader

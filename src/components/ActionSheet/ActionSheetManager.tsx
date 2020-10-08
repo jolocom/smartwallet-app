@@ -119,16 +119,6 @@ const ActionSheetManager: React.FC = () => {
     }
   }
 
-  // const insets = useSafeArea()
-  // const basContainerStyles = {
-  //   ...styles.containerBAS,
-  //   ...(insets.bottom && { paddingBottom: insets.bottom }),
-  // }
-  // const fasContainerStyles = {
-  //   ...styles.containerFAS,
-  //   marginTop: -insets.top,
-  // }
-
   /**
    * NOTE: On iOS the @Loader doesn't show up while an @ActionSheet is active. This is due
    * to a RN limitation of showing 2 modals simultaneously. Fixed by rendering the @Loader
