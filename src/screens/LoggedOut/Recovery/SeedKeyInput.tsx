@@ -172,6 +172,7 @@ const SeedKeyInput: React.FC = () => {
           keyboardType={
             Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'
           }
+          inputAccessoryViewID="suggestions"
         />
         {currentWordIdx !== phrase.length && currentWordIdx < 12 && (
           <RightArrow handlePress={selectNextWord} />
@@ -213,6 +214,12 @@ const styles = StyleSheet.create({
     width: '70%',
     color: Colors.white,
     textDecorationLine: 'none',
+    lineHeight: BP({ xsmall: 26, small: 30, medium: 34, large: 34 }),
+    ...Platform.select({
+      ios: {
+        marginTop: 2,
+      },
+    }),
   },
   inputError: {
     borderColor: Colors.error,

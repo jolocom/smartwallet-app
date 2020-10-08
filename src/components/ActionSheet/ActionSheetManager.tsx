@@ -20,15 +20,7 @@ import {
 import IntermediarySheetBody from './IntermediarySheetBody'
 import { IntermediarySheetState } from '~/modules/interaction/types'
 import Loader from '~/modals/Loader'
-import CustomActionSheet from './CustomActionSheet'
-
-/**
- * Manages @ActionSheets: @InteractionSheet (default) and @IntermediarySheet (inputs). Only one
- * @ActionSheet should be active at a time.
- *
- * TODO: have some better way to manage @ActionSheets. Some sort of ActionSheetManager abstraction, that would
- * allow for easier addition or configuration of @ActionSheets. It could manage the @refs and the state of the sheets.
- */
+import ActionSheet from './ActionSheet'
 
 enum ActionSheetTypes {
   InteractionSheet,
@@ -36,8 +28,12 @@ enum ActionSheetTypes {
   None,
 }
 
-// TODO: update inline docs
-const InteractionActionSheet: React.FC = () => {
+/**
+ * Manages @ActionSheets: @InteractionSheet (default) and @IntermediarySheet (inputs). Only one
+ * @ActionSheet should be active at a time.
+ */
+
+const ActionSheetManager: React.FC = () => {
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
   const { sheetState } = useSelector(getIntermediaryState)
@@ -48,7 +44,9 @@ const InteractionActionSheet: React.FC = () => {
     if (interactionType) {
       // NOTE: RN doesn't support showing 2 modals at the same time, so we need a timeout
       // to assure the loader is hidden before starting to animate the ActionSheet.
-      setActiveSheet(ActionSheetTypes.InteractionSheet)
+      setTimeout(() => {
+        setActiveSheet(ActionSheetTypes.InteractionSheet)
+      }, 200)
     } else {
       setActiveSheet(ActionSheetTypes.None)
     }
@@ -106,7 +104,7 @@ const InteractionActionSheet: React.FC = () => {
     }
   }
 
-  const renderBody = () => {
+  const renderInteractionBody = () => {
     switch (interactionType) {
       case FlowType.Authentication:
         return <Authentication />
@@ -133,30 +131,30 @@ const InteractionActionSheet: React.FC = () => {
 
   /**
    * NOTE: On iOS the @Loader doesn't show up while an @ActionSheet is active. This is due
-   * to a RN limitation of showing 2 modals simultaneously. Fixed by nesting the @Loader
+   * to a RN limitation of showing 2 modals simultaneously. Fixed by rendering the @Loader
    * inside each @ActionSheet (only for iOS).
    */
   return (
     <>
-      <CustomActionSheet
+      <ActionSheet
         onClose={handleCloseInteractionSheet}
-        show={activeSheet === ActionSheetTypes.InteractionSheet}
+        isVisible={activeSheet === ActionSheetTypes.InteractionSheet}
       >
         {Platform.OS === 'ios' && <Loader />}
-        {renderBody()}
-      </CustomActionSheet>
+        {renderInteractionBody()}
+      </ActionSheet>
 
       {sheetState === IntermediarySheetState.showing && (
-        <CustomActionSheet
+        <ActionSheet
           onClose={handleCloseIntermediarySheet}
-          show={activeSheet === ActionSheetTypes.IntermediateSheet}
+          isVisible={activeSheet === ActionSheetTypes.IntermediateSheet}
         >
           {Platform.OS === 'ios' && <Loader />}
           <IntermediarySheetBody />
-        </CustomActionSheet>
+        </ActionSheet>
       )}
     </>
   )
 }
 
-export default InteractionActionSheet
+export default ActionSheetManager

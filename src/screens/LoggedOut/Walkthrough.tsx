@@ -69,7 +69,11 @@ const Walkthrough: React.FC = () => {
   const insets = useSafeArea()
 
   return (
-    <ScreenContainer isFullscreen customStyles={{ marginTop: -insets.top }}>
+    <ScreenContainer
+      isFullscreen
+      customStyles={{ marginTop: -insets.top }}
+      backgroundColor={Colors.black}
+    >
       <Swiper
         loop
         autoplay

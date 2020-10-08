@@ -71,7 +71,7 @@ const CredentialShareBas = () => {
         <BasInteractionBody>{renderContent()}</BasInteractionBody>
       )}
       <InteractionFooter
-        disabled={!selectionReady() && !hasMissingAttribute}
+        disabled={hasMissingAttribute ? false : !selectionReady()}
         cta={getCtaText()}
         onSubmit={() => {
           return hasMissingAttribute

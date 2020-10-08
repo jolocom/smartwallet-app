@@ -26,6 +26,7 @@ export const ErrorFallback: React.FC<Props> = ({
     </View>
     <View style={styles.textContainer}>
       <JoloText
+        testID="title"
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}
         weight={JoloTextWeight.regular}
@@ -33,6 +34,7 @@ export const ErrorFallback: React.FC<Props> = ({
         {title}
       </JoloText>
       <JoloText
+        testID="subtitle"
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.middle}
         color={Colors.white70}

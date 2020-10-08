@@ -24,9 +24,16 @@ import {
 import { createInteractionSelector } from './utils'
 import { strings } from '~/translations/strings'
 
+/**
+ * Gets the @IntermediaryState of the @IntermediarySheet
+ */
 export const getIntermediaryState = (state: RootReducerI) =>
   state.interaction.intermediary
 
+/**
+ * Gets the Attribute Type that has to be created on the @IntermediarySheet. Can only
+ * be used while there is an active (@showing) @IntermediarySheet
+ */
 export const getAttributeInputKey = createSelector(
   [getIntermediaryState],
   (state) => {
@@ -38,17 +45,23 @@ export const getAttributeInputKey = createSelector(
 )
 
 /**
- * Returns the @FlowType if there is an active interaction or null otherwise.
+ * Gets the @FlowType if there is an active interaction or null otherwise.
  */
 export const getInteractionType = (state: RootReducerI) =>
   state.interaction.details.flowType
 
 /**
- * Gets the interaction details from the @interactions module
+ * Gets the interaction details from the @interactions module.
+ *
+ * NOTE: Not type safe. Generally the interaction specific selector (e.g. getAuthenticationDetails, etc.)
+ *       should be used.
  */
 const getInteractionDetails = (state: RootReducerI): InteractionDetails =>
   state.interaction.details
 
+/**
+ * Gets the @interactionDetails if there is an active interaction, otherwise throws.
+ */
 export const getActiveInteraction = createSelector(
   [getInteractionDetails],
   (details) => {
@@ -59,28 +72,41 @@ export const getActiveInteraction = createSelector(
   },
 )
 
-export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
-
-export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
-
-export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
-
-export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
-
+/**
+ * Gets the @interactionId of the interaction that is currently active.
+ */
 export const getInteractionId = createSelector(
   [getActiveInteraction],
   ({ id }) => id,
 )
 
+/**
+ * Gets the @counterparty of the current active interaction.
+ */
 export const getInteractionCounterparty = createSelector(
   [getActiveInteraction],
   ({ counterparty }) => counterparty,
 )
 
+/**
+ * Gets the @name of the counterparty (from the public profile) if available. Otherwise, will
+ * return a fallback string.
+ */
 export const getCounterpartyName = createSelector(
   [getActiveInteraction],
   ({ counterparty }) => counterparty.publicProfile?.name ?? strings.SERVICE,
 )
+
+/**
+ * Gets the @interactionDetails for each type of interaction. Can only be used within the specific interaction
+ * components, otherwise will throw (e.g. using @getAuthenticationDetails inside @BasWrapper will throw).
+ */
+export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
+export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
+export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
+export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
+
+/** CredentialShare selectors **/
 
 /**
  * Gets the mapping of all selected credentials (attributes + documents)
@@ -119,43 +145,20 @@ const getAvailableCredentialsToShare = createSelector(
     }, []),
 )
 
+/**
+ * Gets a boolean value that decides whether to use the @FASWrapper or @BASWrapper for the CredentialShare
+ * interaction.
+ */
 export const getIsFullscreenCredShare = createSelector(
   [
     getCredShareDetails,
     getAvailableAttributesToShare,
     getAvailableCredentialsToShare,
   ],
-  // (shareAttributes, details, shareCredentials) => {
-  //   if (isAuthDetails(details) || isAuthzDetails(details)) {
-  //     return false
-  //   } else if (
-  //     isCredShareDetails(details) &&
-  //     details.requestedAttributes.length &&
-  //     !details.requestedCredentials.length
-  //   ) {
-  //     const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
-  //       (acc, v) => {
-  //         if (!!v.length) {
-  //           acc += v.length
-  //         } else {
-  //           acc += 1
-  //         }
-  //         return acc
-  //       },
-  //       0,
-  //     )
-
-  //     return numberOfFieldsDisplayed > 3
-  //   } else if (
-  //     isCredShareDetails(details) &&
-  //     !details.requestedAttributes.length &&
-  //     shareCredentials.length === 1
-  //   ) {
-
   (details, shareAttributes, shareCredentials) => {
     const onlyAttributes =
       details.requestedAttributes.length && !details.requestedCredentials.length
-    const onlyOneCredential =
+    const isOnlyOneCredential =
       !details.requestedAttributes.length && shareCredentials.length === 1
 
     const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
@@ -172,41 +175,9 @@ export const getIsFullscreenCredShare = createSelector(
 
     return onlyAttributes
       ? numberOfFieldsDisplayed > 3
-      : onlyOneCredential
+      : isOnlyOneCredential
       ? false
       : true
-  },
-)
-
-export const getIsFullscreenCredOffer = createSelector(
-  [getCredOfferDetails],
-  (details) => {
-    const onlyOneCredential = details.credentials.service_issued.length === 1
-
-    if (onlyOneCredential) {
-      return false
-    } else {
-      return true
-    }
-  },
-)
-
-/**
- * Gets the categorized @OfferUICredentials from the @interactionDetails.
- */
-export const getOfferCredentialsBySection = createSelector(
-  [getCredOfferDetails],
-  (details) => {
-    const defaultSections = { documents: [], other: [] }
-
-    return details.credentials.service_issued.reduce<
-      CredentialsBySection<OfferUICredential>
-    >((acc, cred) => {
-      const section = getCredentialSection(cred)
-      acc[section] = [...acc[section], cred]
-
-      return acc
-    }, defaultSections)
   },
 )
 
@@ -262,6 +233,47 @@ export const getShareCredentialsBySection = createSelector(
           credentials,
         },
       ]
+
+      return acc
+    }, defaultSections)
+  },
+)
+
+/** CredentialOffer selectors **/
+
+/**
+ * Gets a boolean value that decides whether to use the @FASWrapper or @BASWrapper for the CredentialOffer
+ * interaction.
+ */
+export const getIsFullscreenCredOffer = createSelector(
+  [getCredOfferDetails],
+  (details) => {
+    const isOnlyOneCredential = details.credentials.service_issued.length === 1
+
+    if (isOnlyOneCredential) {
+      return false
+    } else {
+      return true
+    }
+  },
+)
+
+/**
+ * Gets the categorized @OfferUICredentials from the @interactionDetails.
+ */
+export const getOfferCredentialsBySection = createSelector(
+  [getCredOfferDetails],
+  (details) => {
+    const defaultSections = { documents: [], other: [] }
+
+    // NOTE: will be moving away from the `credentials.service_issued` structure in favor of
+    // just credentials, since during this flow we only receive "service issued" credentials
+    // anyways
+    return details.credentials.service_issued.reduce<
+      CredentialsBySection<OfferUICredential>
+    >((acc, cred) => {
+      const section = getCredentialSection(cred)
+      acc[section] = [...acc[section], cred]
 
       return acc
     }, defaultSections)

@@ -15,6 +15,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
+import { debugView } from '~/utils/dev'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
@@ -44,15 +45,17 @@ const CredentialOfferFas = () => {
     <>
       <FasWrapper collapsedTitle={getHeaderText().title}>
         <InteractionHeader {...getHeaderText()} />
-        <InteractionSection
-          visible={!!documents.length}
-          title={strings.DOCUMENTS}
-        >
-          {renderCredentials(documents)}
-        </InteractionSection>
-        <InteractionSection visible={!!other.length} title={strings.OTHER}>
-          {renderCredentials(other)}
-        </InteractionSection>
+        <View style={{ paddingHorizontal: 27 }}>
+          <InteractionSection
+            visible={!!documents.length}
+            title={strings.DOCUMENTS}
+          >
+            {renderCredentials(documents)}
+          </InteractionSection>
+          <InteractionSection visible={!!other.length} title={strings.OTHER}>
+            {renderCredentials(other)}
+          </InteractionSection>
+        </View>
       </FasWrapper>
       <FooterContainer>
         <InteractionFooter onSubmit={handleSubmit} cta={strings.RECEIVE} />

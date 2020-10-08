@@ -8,3 +8,6 @@ const inset = {
 export const SafeAreaConsumer = ({ children }) => {
   return children(inset)
 }
+
+//FIXME: Any better way to do this?
+test.skip('Workaround', () => 1)

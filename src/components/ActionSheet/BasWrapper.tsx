@@ -7,7 +7,7 @@ import InteractionIcon, { IconWrapper } from './InteractionIcon'
 import { useSafeArea } from 'react-native-safe-area-context'
 
 interface Props {
-  style?: ViewStyle
+  customStyles?: ViewStyle
   showIcon?: boolean
 }
 
@@ -17,7 +17,8 @@ export const BasInteractionBody: React.FC = ({ children }) => (
 
 const BasWrapper: React.FC<Props> = ({
   children,
-  style = {},
+  customStyles = {},
+  //NOTE: currently only the @IntermediarySheetBody doesn't render the counterparty icon
   showIcon = true,
 }) => {
   const { bottom } = useSafeArea()
@@ -30,7 +31,7 @@ const BasWrapper: React.FC<Props> = ({
           </View>
         </IconWrapper>
       )}
-      <View style={[styles.childrenWrapper, style]}>{children}</View>
+      <View style={[styles.childrenWrapper, customStyles]}>{children}</View>
     </View>
   )
 }

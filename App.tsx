@@ -7,11 +7,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import RootNavigation from '~/RootNavigation'
 import { ErrorBoundary } from '~/ErrorBoundary'
-import Loader from '~/modals/Loader'
-import Lock from '~/modals/Lock'
 import { SDKContextProvider } from '~/utils/sdk/context'
 import configureStore from './configureStore'
-import GlobalComponents from '~/GlobalComponents'
+import Overlays from '~/Overlays'
 
 const store = configureStore()
 
@@ -22,11 +20,9 @@ const App = () => {
         <Provider store={store}>
           <StatusBar barStyle="light-content" />
           <SDKContextProvider>
-            <GlobalComponents />
+            <Overlays />
             <RootNavigation />
           </SDKContextProvider>
-          <Loader />
-          <Lock />
         </Provider>
       </ErrorBoundary>
     </SafeAreaProvider>

@@ -7,31 +7,6 @@ export enum Fonts {
   Light = 'TTCommons-Light',
 }
 
-export const TextStyle = {
-  middleTitleRegular: {
-    fontFamily: Fonts.Regular,
-    fontSize: 28,
-    lineHeight: 32,
-    letterSpacing: 0,
-    color: Colors.white90,
-  },
-  largeSubtitle: {
-    fontFamily: Fonts.Regular,
-    fontSize: 22,
-    lineHeight: 26,
-    letterSpacing: 0.15,
-    color: Colors.white,
-    opacity: 0.8,
-  },
-  seedPhrase: {
-    fontFamily: Fonts.Medium,
-    fontSize: BP({ large: 40, medium: 40, small: 32, xsmall: 32 }),
-    lineHeight: BP({ large: 54, medium: 54, small: 46, xsmall: 46 }),
-    letterSpacing: 0,
-    color: Colors.activity,
-  },
-}
-
 type FontSetI = {
   fontSize: number
   lineHeight: number

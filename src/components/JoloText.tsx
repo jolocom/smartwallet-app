@@ -25,6 +25,7 @@ interface PropsI {
   color?: Colors
   customStyles?: TextStyle | Animated.WithAnimatedValue<TextStyle>
   animated?: boolean
+  testID?: string
 }
 
 const JoloText: React.FC<PropsI> = ({
@@ -35,6 +36,7 @@ const JoloText: React.FC<PropsI> = ({
   color,
   customStyles,
   animated,
+  testID,
 }) => {
   const TextComponent = animated ? Animated.Text : Text
   const fontStylesAllSizes =
@@ -48,7 +50,10 @@ const JoloText: React.FC<PropsI> = ({
     }),
   }
   return (
-    <TextComponent style={[styles.title, sizeStyles, customStyles]}>
+    <TextComponent
+      testID={testID}
+      style={[styles.title, sizeStyles, customStyles]}
+    >
       {children}
     </TextComponent>
   )
