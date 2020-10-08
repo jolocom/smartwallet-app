@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   interactionBody: {
     marginBottom: BP({ large: 50, medium: 50, small: 50, xsmall: 40 }),
     width: '100%',
+    alignItems: 'center',
   },
 })
 
