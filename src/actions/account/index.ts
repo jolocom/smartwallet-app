@@ -85,10 +85,10 @@ export const handleClaimInput = (fieldValue: string, fieldName: string) => ({
 export const checkIdentityExists: ThunkAction = async (
   dispatch,
   getState,
-  backendMiddleware,
+  agent,
 ) => {
   try {
-    const identityWallet = await backendMiddleware.prepareIdentityWallet()
+    const identityWallet = await agent.loadIdentity()
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
     await dispatch(setClaimsForDid)
