@@ -154,21 +154,9 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
   }
 
   const startInteraction = async (jwt: string) => {
-    // NOTE For testing Authorization flow until it's available on a demo service
-
-    // const encodedToken = await sdk.authorizationRequestToken({
-    //   description:
-    //     'The  http://google.com is ready to share a scooter with you, unlock to start your ride',
-    //   imageURL: 'http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png',
-    //   action: 'unlock the scooter',
-    //   callbackURL: 'http://test.test.test',
-    // })
-    // const token = parseJWT(encodedToken)
-    const token = parseJWT(jwt)
-
-    await loader(
+    return loader(
       async () => {
-        const interaction = await agent.interactionManager.start(channel, token)
+        const interaction = await agent.processJWT(jwt)
         const mappedInteraction = getMappedInteraction(interaction)
         const shouldStart = preInteractionHandler[interaction.flow.type]
           ? preInteractionHandler[interaction.flow.type](interaction)
