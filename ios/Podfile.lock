@@ -23,7 +23,7 @@ PODS:
   - glog (0.3.5)
   - Interactable (2.0.1):
     - React
-  - JolocomCore (1.2.0):
+  - JolocomCore (1.3.0):
     - React
   - Permission-Camera (2.2.0):
     - RNPermissions
@@ -251,9 +251,9 @@ PODS:
     - React
   - RNGestureHandler (1.7.0):
     - React
-  - RNJolocom (2.0.0-rc3):
+  - RNJolocom (2.0.0-rc5):
     - React
-  - RNKeychain (4.0.5):
+  - RNKeychain (6.2.0):
     - React
   - RNLocalize (1.4.1):
     - React
@@ -445,7 +445,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Interactable: 411887c89fa16ac41f8e7898aca06dcad55e5f22
-  JolocomCore: 02ddb3cbc63ab19251ecb204c48a2e98a3739038
+  JolocomCore: 1de0693327fd69709ed729f008dba89bed11682f
   Permission-Camera: 9ff12884205fb282b4a22b9e8c358ba53cee7567
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -476,8 +476,8 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 44395cb9c7c1523104c2b499eb426ef7aff82bca
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
-  RNJolocom: b1da4e5afba380d844b805025fab60278d2ec293
-  RNKeychain: 840f8e6f13be0576202aefcdffd26a4f54bfe7b5
+  RNJolocom: 4ff9ea23485a0c9673e70cd31ff82507a8173c1b
+  RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNLocalize: 49634a6a605dcdeb319e9c42a5c2f1aec508694b
   RNPermissions: 477d88d0be7ecb0a7b344e4d5fbb0352de104626
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
