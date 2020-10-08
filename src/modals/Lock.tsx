@@ -17,10 +17,13 @@ import { JoloTextSizes } from '~/utils/fonts'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
 import { useNavigation } from '@react-navigation/native'
+import { useKeyboard } from '~/screens/LoggedOut/Recovery/useKeyboard'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
+
+  const { keyboardHeight } = useKeyboard()
 
   const navigation = useNavigation()
   const redirectToPinRecoveryInstruction = useRedirectTo(
@@ -99,7 +102,7 @@ const Lock = () => {
           errorStateUpdaterFn={setHasError}
         />
       </View>
-      <AbsoluteBottom>
+      <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
         <Btn
           type={BtnTypes.secondary}
           onPress={redirectToPinRecoveryInstruction}
