@@ -106,11 +106,11 @@ export const navigatorResetHome = (): ThunkAction => dispatch =>
 export const handleDeepLink = (url: string): ThunkAction => (
   dispatch,
   getState,
-  backendMiddleware,
+  agent,
 ) => {
   // The identityWallet is initialised before the deep link is handled. If it
   // is not initialized, then we may not even have an identity.
-  if (!backendMiddleware.identityWallet) {
+  if (!agent.identityWallet) {
     return dispatch(
       navigate({
         routeName: routeList.Landing,

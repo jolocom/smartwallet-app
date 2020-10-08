@@ -55,9 +55,9 @@ describe('Account action creators', () => {
 
   const { identityWallet, testSignedCredentialDefault } = data
 
-  const backendMiddleware = {
-    prepareIdentityWallet: jest.fn().mockResolvedValue(identityWallet),
-    storageLib: {
+  const agent = {
+    loadIdentity: jest.fn().mockResolvedValue(identityWallet),
+    storage: {
       get: {
         verifiableCredential: jest
           .fn()
@@ -71,7 +71,7 @@ describe('Account action creators', () => {
     identityWallet,
   }
 
-  const mockStore = createMockStore(initialState, backendMiddleware)
+  const mockStore = createMockStore(initialState, agent)
 
   beforeEach(mockStore.reset)
 
@@ -89,7 +89,7 @@ describe('Account action creators', () => {
   })
 
   it('should correctly handle an empty encrypted seed table', async () => {
-    backendMiddleware.prepareIdentityWallet.mockRejectedValue(
+    agent.loadIdentity.mockRejectedValue(
       new SDKError(SDKError.codes.NoEntropy),
     )
     await mockStore.dispatch(accountActions.checkIdentityExists)
@@ -97,7 +97,7 @@ describe('Account action creators', () => {
   })
 
   it('should display exception screen in case of error', async () => {
-    backendMiddleware.prepareIdentityWallet.mockRejectedValue(
+    agent.loadIdentity.mockRejectedValue(
       new Error('everything is WRONG'),
     )
     await mockStore.dispatch(
@@ -109,8 +109,8 @@ describe('Account action creators', () => {
   it('should correctly retrieve claims from device storage db on setClaimForDid', async () => {
     const { identityWallet, testSignedCredentialDefault } = data
 
-    const backendMiddleware = {
-      storageLib: {
+    const agent = {
+      storage: {
         get: {
           verifiableCredential: jest
             .fn()
@@ -124,7 +124,7 @@ describe('Account action creators', () => {
       identityWallet,
     }
 
-    const altMockStore = createMockStore(initialState, backendMiddleware)
+    const altMockStore = createMockStore(initialState, agent)
 
     await altMockStore.dispatch(accountActions.setClaimsForDid)
     expect(altMockStore.getActions()).toMatchSnapshot()
@@ -133,11 +133,11 @@ describe('Account action creators', () => {
   it('should correctly save claim', async () => {
     const { identityWallet } = data
 
-    const backendMiddleware = {
-      keyChainLib: {
+    const agent = {
+      passwordStore: {
         getPassword: jest.fn().mockResolvedValue('sekrit'),
       },
-      storageLib: {
+      storage: {
         store: {
           verifiableCredential: jest.fn().mockResolvedValue([]),
         },
@@ -149,7 +149,7 @@ describe('Account action creators', () => {
       identityWallet,
     }
 
-    const altMockStore = createMockStore(initialState, backendMiddleware)
+    const altMockStore = createMockStore(initialState, agent)
 
     await altMockStore.dispatch(accountActions.saveClaim)
     expect(altMockStore.getActions()).toMatchSnapshot()

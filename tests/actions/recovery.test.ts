@@ -23,16 +23,14 @@ describe('Account recovery actions', () => {
     recoverFromSeed: jest.fn()
   }
 
-  const sdk = {
+  const agent = {
     identityWallet,
-    keyChainLib: {
+    passwordStore: {
       getPassword: () => getPasswordResult
     },
-    didMethods: {
-      getDefault: () => mockMethod
-    }
+    didMethod: mockMethod
   }
-  const mockStore = createMockStore(initialState, sdk)
+  const mockStore = createMockStore(initialState, agent)
   const { resetGenericPassword, getGenericPassword } = require('react-native-keychain')
 
   beforeEach(() => {
@@ -43,7 +41,7 @@ describe('Account recovery actions', () => {
   it('should correctly restore access for forgotten pin', async () => {
     mockMethod.recoverFromSeed.mockImplementationOnce(() => {
       return {
-        identityWallet: sdk.identityWallet
+        identityWallet: agent.identityWallet
       }
     })
     getGenericPassword.mockImplementationOnce(() => {
