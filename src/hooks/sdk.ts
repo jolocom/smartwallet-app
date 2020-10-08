@@ -20,6 +20,7 @@ import { getMappedInteraction, isTypeAttribute } from '~/utils/dataMapping'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { setDid } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
+import { generateSecureRandomBytes } from '~/utils/generateBytes'
 
 type PreInteractionHandler = (i: Interaction) => boolean
 
@@ -56,10 +57,25 @@ export const useIdentityCreate = () => {
   return async () => {
     return loader(
       async () => {
-        // FIXME: currently not using the entropy for identity creation
-        //const iw = await agent.createNewIdentity(entropyBuffer)
-        const iw = await agent.createNewIdentity()
-        dispatch(setDid(iw.did))
+        // FIXME use the seed generated on the entropy screen. Currently the entropy
+        // seed generates 24 word seedphrases
+        const seed = await generateSecureRandomBytes(16)
+
+        const identity = await agent.loadFromMnemonic(entropyToMnemonic(seed))
+        dispatch(setDid(identity.did))
+
+        const encryptedSeed = await identity.asymEncryptToDid(
+          Buffer.from(seed),
+          identity.did,
+          {
+            prefix: '',
+            resolve: async (_) => identity.identity,
+          },
+        )
+
+        await agent.storage.store.setting('encryptedSeed', {
+          b64Encoded: encryptedSeed.toString('base64'),
+        })
       },
       {
         loading: strings.CREATING,
