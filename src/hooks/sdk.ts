@@ -84,6 +84,15 @@ export const useIdentityCreate = () => {
   }
 }
 
+export const useSubmitSeedphraseBackup = () => {
+  const agent = useAgent()
+
+  return async () => {
+    await agent.storage.store.setting('encryptedSeed', {})
+    // TODO: set seedBackedUp to true (storage)
+  }
+}
+
 export const useInteractionStart = (channel: InteractionTransportType) => {
   const agent = useAgent()
   const dispatch = useDispatch()

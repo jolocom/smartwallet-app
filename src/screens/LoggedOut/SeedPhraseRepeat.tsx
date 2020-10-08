@@ -6,11 +6,14 @@ import Btn from '~/components/Btn'
 import { setLogged } from '~/modules/account/actions'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useSubmitSeedphraseBackup } from '~/hooks/sdk'
 
 const SeedPhraseRepeat: React.FC = () => {
   const dispatch = useDispatch()
+  const submitBackup = useSubmitSeedphraseBackup()
 
   const onSubmit = async () => {
+    await submitBackup()
     dispatch(setLogged(true))
   }
 
