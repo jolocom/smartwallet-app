@@ -45,7 +45,7 @@ export const startChannel = (interactionId: string): ThunkAction => async (
     )
   }
 
-  channel.send(response.encode())
+  channel.send(response)
   channel.start(async interxn => {
     let resp
     switch (interxn.flow.type) {
@@ -63,7 +63,7 @@ export const startChannel = (interactionId: string): ThunkAction => async (
     }
 
     if (resp) {
-      channel.send(resp.encode())
+      channel.send(resp)
     } else {
       console.warn(
         'received illegal interxn request on channel',

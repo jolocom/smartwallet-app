@@ -8,14 +8,13 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import {
-  InteractionTransportType,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
 import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { cancelSSO } from './index'
-import { Interaction } from '@jolocom/sdk'
+import { Interaction, InteractionTransportType } from '@jolocom/sdk'
 
 export const consumeCredentialOfferRequest = (
   interaction: Interaction
@@ -53,21 +52,18 @@ export const consumeCredentialReceive = (
 
   await interaction.processInteractionToken(response)
 
-  const credentialReceive = await interaction.send(
+  await interaction.send(
     await interaction.createCredentialOfferResponseToken(
       selectedSignedCredentialWithMetadata,
     ),
   )
 
-  if (credentialReceive) {
-    await interaction.processInteractionToken(credentialReceive)
-    return dispatch(
-      validateSelectionAndSave(
-        selectedSignedCredentialWithMetadata,
-        interaction.id,
-      ),
-    )
-  }
+  return dispatch(
+    validateSelectionAndSave(
+      selectedSignedCredentialWithMetadata,
+      interaction.id,
+    ),
+  )
 }
 
 /**
