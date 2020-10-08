@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { View, StyleSheet, Keyboard, TextInput } from 'react-native'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import { strings } from '~/translations/strings'
 
@@ -16,7 +17,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import { ScreenNames } from '~/types/screens'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useKeyboard } from '~/screens/LoggedOut/Recovery/useKeyboard'
 
 const Lock = () => {
@@ -26,9 +27,26 @@ const Lock = () => {
   const { keyboardHeight } = useKeyboard()
 
   const navigation = useNavigation()
+
   const redirectToPinRecoveryInstruction = useRedirectTo(
     ScreenNames.PinRecoveryInstructions,
   )
+
+  /* START -> This is for showing and hiding keyboard when we move away from Lock screen */
+  const pinInputRef = useRef<TextInput>(null)
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if (!isFocused) {
+      Keyboard.dismiss()
+    } else {
+      pinInputRef.current?.focus()
+    }
+  }, [isFocused])
+  /* E -> This is for showing and hiding keyboard when we move away from Lock screen */
+
+  /* disable hardwareback button default functionality */
+  useBackHandler(() => true)
 
   const {
     biometryType,
@@ -100,6 +118,7 @@ const Lock = () => {
           onSubmit={handlePINSubmit}
           hasError={hasError}
           errorStateUpdaterFn={setHasError}
+          ref={pinInputRef}
         />
       </View>
       <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>

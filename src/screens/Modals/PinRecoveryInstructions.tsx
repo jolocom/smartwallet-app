@@ -1,9 +1,9 @@
-import { NavigationProp } from '@react-navigation/native'
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { NavigationProp } from '@react-navigation/native'
+
 import Btn from '~/components/Btn'
+import ScreenContainer from '~/components/ScreenContainer'
 import useRedirectTo from '~/hooks/useRedirectTo'
-import { setLogged } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 
@@ -12,13 +12,12 @@ interface PropsI {
 }
 
 const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
-  const dispatch = useDispatch()
   const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
-  const handleRestoreClick = () => {
-    dispatch(setLogged(false))
-    redirectToRecovery()
-  }
-  return <Btn onPress={handleRestoreClick}>{strings.RESTORE_ACCESS}</Btn>
+  return (
+    <ScreenContainer>
+      <Btn onPress={redirectToRecovery}>{strings.RESTORE_ACCESS}</Btn>
+    </ScreenContainer>
+  )
 }
 
 export default PinRecoveryInstructions
