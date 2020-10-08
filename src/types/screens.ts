@@ -20,6 +20,8 @@ export enum ScreenNames {
   // Modals
   Loader = 'Loader',
   Interactions = 'Interactions',
+  Lock = 'Lock',
+  PinRecoveryInstructions = 'PinRecoveryInstructions',
   //Settings
   SettingsList = 'SettingsList',
   ChangePin = 'ChangePin',

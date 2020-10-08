@@ -104,6 +104,7 @@ const deviceAuthentication = {
     'Scan your fingerprint on the device scanner to continue',
   SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed
   RESET: 'Reset',
+  RESTORE_ACCESS: 'Restore access',
 }
 
 const scanner = {

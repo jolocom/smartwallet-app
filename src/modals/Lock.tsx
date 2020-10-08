@@ -1,23 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import {
-  AppStateStatus,
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Platform,
-} from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { View, StyleSheet } from 'react-native'
 
-import {
-  isAppLocked,
-  isLogged,
-  isLocalAuthSet,
-} from '~/modules/account/selectors'
-import { lockApp, unlockApp } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 
 import ScreenContainer from '../components/ScreenContainer'
-import Modal from './Modal'
 import PasscodeInput from '../components/PasscodeInput'
 import Btn, { BtnTypes } from '../components/Btn'
 import AbsoluteBottom from '../components/AbsoluteBottom'
@@ -25,18 +11,22 @@ import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
-import { getIsPopup } from '~/modules/appState/selectors'
-import { setPopup } from '~/modules/appState/actions'
-import { useAppState } from '~/hooks/useAppState'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import useRedirectTo from '~/hooks/useRedirectTo'
+import { ScreenNames } from '~/types/screens'
+import { useNavigation } from '@react-navigation/native'
 
-export const Lock = () => {
+const Lock = () => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
 
-  const dispatch = useDispatch()
+  const navigation = useNavigation()
+  const redirectToPinRecoveryInstruction = useRedirectTo(
+    ScreenNames.PinRecoveryInstructions,
+  )
+
   const {
     biometryType,
     keychainPin,
@@ -49,9 +39,13 @@ export const Lock = () => {
     }
   }, [pin])
 
-  const handleAppUnlock = () => {
+  const unlockApp = useCallback(() => {
+    navigation.goBack()
+  }, [])
+
+  const handlePINSubmit = () => {
     if (keychainPin.toString() === pin) {
-      dispatch(unlockApp())
+      unlockApp()
     } else {
       setHasError(true)
     }
@@ -62,7 +56,7 @@ export const Lock = () => {
       await FingerprintScanner.authenticate({
         description: getBiometryDescription(biometryType),
       })
-      dispatch(unlockApp())
+      unlockApp()
     } catch (err) {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         handleNotEnrolled(biometryType)
@@ -72,41 +66,48 @@ export const Lock = () => {
     }
   }
 
-  const handleModalShow = async () => {
-    if (isBiometrySelected.current) {
-      await handleBiometryAuthentication()
+  useEffect(() => {
+    const handleBiometryAuth = async () => {
+      if (isBiometrySelected.current) {
+        await handleBiometryAuthentication()
+      }
     }
-  }
+    handleBiometryAuth()
+  }, [])
 
   return (
-    <Modal isVisible onShow={handleModalShow}>
-      <ScreenContainer
-        customStyles={{ marginTop: '30%', justifyContent: 'flex-start' }}
+    <ScreenContainer
+      customStyles={{
+        marginTop: '30%',
+        justifyContent: 'flex-start',
+      }}
+    >
+      <JoloText
+        kind={JoloTextKind.title}
+        size={JoloTextSizes.middle}
+        weight={JoloTextWeight.regular}
+        color={Colors.white90}
       >
-        <JoloText
-          kind={JoloTextKind.title}
-          size={JoloTextSizes.middle}
-          weight={JoloTextWeight.regular}
-          color={Colors.white90}
+        {strings.ENTER_YOUR_PIN}
+      </JoloText>
+      <View style={styles.inputContainer}>
+        <PasscodeInput
+          value={pin}
+          stateUpdaterFn={setPin}
+          onSubmit={handlePINSubmit}
+          hasError={hasError}
+          errorStateUpdaterFn={setHasError}
+        />
+      </View>
+      <AbsoluteBottom>
+        <Btn
+          type={BtnTypes.secondary}
+          onPress={redirectToPinRecoveryInstruction}
         >
-          {strings.ENTER_YOUR_PIN}
-        </JoloText>
-        <View style={styles.inputContainer}>
-          <PasscodeInput
-            value={pin}
-            stateUpdaterFn={setPin}
-            onSubmit={handleAppUnlock}
-            hasError={hasError}
-            errorStateUpdaterFn={setHasError}
-          />
-        </View>
-        <AbsoluteBottom>
-          <Btn type={BtnTypes.secondary} onPress={() => {}}>
-            {strings.FORGOT_YOUR_PIN}
-          </Btn>
-        </AbsoluteBottom>
-      </ScreenContainer>
-    </Modal>
+          {strings.FORGOT_YOUR_PIN}
+        </Btn>
+      </AbsoluteBottom>
+    </ScreenContainer>
   )
 }
 
@@ -116,36 +117,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function () {
-  const isLocked = useSelector(isAppLocked)
-  const isLoggedIn = useSelector(isLogged)
-  const isAuthSet = useSelector(isLocalAuthSet)
-  const isPopup = useSelector(getIsPopup)
-  const dispatch = useDispatch()
-  const isPopupRef = useRef<boolean>(isPopup)
-
-  useEffect(() => {
-    isPopupRef.current = isPopup
-  }, [isPopup])
-
-  useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
-    if (
-      (Platform.OS === 'ios' &&
-        appState.match(/inactive|active/) &&
-        nextAppState.match(/background/)) ||
-      (Platform.OS === 'android' &&
-        appState.match(/inactive|background/) &&
-        nextAppState.match(/active/))
-    ) {
-      if (!isPopupRef.current) dispatch(lockApp())
-      else dispatch(setPopup(false))
-    }
-
-    appState = nextAppState
-  })
-
-  if (isLocked && isAuthSet && isLoggedIn) {
-    return <Lock />
-  }
-  return null
-}
+export default Lock

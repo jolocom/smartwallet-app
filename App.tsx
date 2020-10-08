@@ -8,7 +8,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import RootNavigation from '~/RootNavigation'
 import { ErrorBoundary } from '~/ErrorBoundary'
 import Loader from '~/modals/Loader'
-import Lock from '~/modals/Lock'
 import { SDKContextProvider } from '~/utils/sdk/context'
 import configureStore from './configureStore'
 import GlobalComponents from '~/GlobalComponents'
@@ -26,7 +25,6 @@ const App = () => {
             <RootNavigation />
           </SDKContextProvider>
           <Loader />
-          <Lock />
         </Provider>
       </ErrorBoundary>
     </SafeAreaProvider>

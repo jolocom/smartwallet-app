@@ -12,6 +12,8 @@ import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
 import { useSelector } from 'react-redux'
+import Lock from './modals/Lock'
+import PinRecoveryInstructions from './screens/Modals/PinRecoveryInstructions'
 
 const RootStack = createStackNavigator()
 
@@ -29,18 +31,26 @@ const RootNavigation: React.FC = () => {
             component={LoggedOut}
           />
         )}
-        <RootStack.Screen
-          name={ScreenNames.DeviceAuth}
-          component={DeviceAuthentication}
-        />
+
         <RootStack.Screen
           name={ScreenNames.SettingsList}
           component={SettingsList}
         />
+        {/* Modals -> Start */}
         <RootStack.Screen
           name={ScreenNames.Interactions}
           component={Interactions}
         />
+        <RootStack.Screen
+          name={ScreenNames.DeviceAuth}
+          component={DeviceAuthentication}
+        />
+        <RootStack.Screen name={ScreenNames.Lock} component={Lock} />
+        <RootStack.Screen
+          name={ScreenNames.PinRecoveryInstructions}
+          component={PinRecoveryInstructions}
+        />
+        {/* Modals -> End */}
       </RootStack.Navigator>
     </NavigationContainer>
   )
