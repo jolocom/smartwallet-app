@@ -12,23 +12,23 @@ import useSuccess from '~/hooks/useSuccess'
 
 import { Colors } from '~/utils/colors'
 
-import { useDeviceAuthState } from './module/deviceAuthContext'
+import { useDeviceAuthState } from '../DeviceAuthentication/module/deviceAuthContext'
 
 import {
   getBiometryHeader,
   getBiometryActionText,
   getBiometryDescription,
-} from './utils/getText'
+} from '../DeviceAuthentication/utils/getText'
 import BiometryAnimation from '~/components/BiometryAnimation'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { setPopup } from '~/modules/appState/actions'
 import { useDispatch } from 'react-redux'
-import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import { useRedirectToLoggedIn } from '../DeviceAuthentication/useRedirectToLoggedIn'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 
-const Biometry: React.FC = () => {
+const RegisterBiometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
   const displaySuccessLoader = useSuccess()
 
@@ -45,6 +45,8 @@ const Biometry: React.FC = () => {
       })
 
       await AsyncStorage.setItem('biometry', biometryType || '')
+      const biometry = await AsyncStorage.getItem('biometry')
+      console.log({ biometry })
 
       displaySuccessLoader()
       handleRedirectToLogin()
@@ -82,4 +84,4 @@ const Biometry: React.FC = () => {
   )
 }
 
-export default Biometry
+export default RegisterBiometry

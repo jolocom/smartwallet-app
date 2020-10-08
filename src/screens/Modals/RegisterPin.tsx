@@ -11,25 +11,17 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
-import {
-  useDeviceAuthState,
-  useDeviceAuthDispatch,
-} from './module/deviceAuthContext'
-import { showBiometry } from './module/deviceAuthActions'
 import BP from '~/utils/breakpoints'
-import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import { useRedirectToLoggedIn } from '../DeviceAuthentication/useRedirectToLoggedIn'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 
-const Passcode = () => {
+const RegisterPin = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [passcode, setPasscode] = useState('')
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
-
-  const { biometryType } = useDeviceAuthState()
-  const dispatchToLocalAuth = useDeviceAuthDispatch()
 
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
 
@@ -38,14 +30,6 @@ const Passcode = () => {
   const handlePasscodeSubmit = useCallback(() => {
     setIsCreating(false)
   }, [])
-
-  const redirectTo = () => {
-    if (biometryType && biometryType !== 'IRIS') {
-      dispatchToLocalAuth(showBiometry())
-    } else {
-      handleRedirectToLoggedIn()
-    }
-  }
 
   const handleVerifiedPasscodeSubmit = async () => {
     if (passcode === verifiedPasscode) {
@@ -59,8 +43,7 @@ const Passcode = () => {
       } catch (err) {
         console.log({ err })
       }
-      // redirect to Biometry screen if biometry is supported on a device, otherwise, redirect to LoggedIn section
-      redirectTo()
+      handleRedirectToLoggedIn()
     } else {
       setHasError(true)
     }
@@ -164,4 +147,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Passcode
+export default RegisterPin

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Keychain from 'react-native-keychain'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -9,8 +9,7 @@ const useGetStoredAuthValues = () => {
   const [isLoadingStorage, setIsLoadingStorage] = useState(false)
   const [biometryType, setBiometryType] = useState<BiometryTypes>(null)
   const [keychainPin, setKeychainPin] = useState('')
-
-  const isBiometrySelected = useRef(false)
+  const [isBiometrySelected, setIsBiometrySelected] = useState(false)
 
   useEffect(() => {
     let isCurrent = true
@@ -31,14 +30,8 @@ const useGetStoredAuthValues = () => {
         } else {
           throw new Error('No PIN was set, revisit your flow of setting up PIN')
         }
-        if (storedBiometry && isCurrent) {
-          // show biometry view
-          isBiometrySelected.current = true
-        } else {
-          // show pin view
-          if (isCurrent) {
-            isBiometrySelected.current = false
-          }
+        if (isCurrent) {
+          setIsBiometrySelected(!!storedBiometry)
         }
       } catch (err) {
         // ✍🏼 todo: how should we handle this hasError ?

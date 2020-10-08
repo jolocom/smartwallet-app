@@ -7,11 +7,10 @@ interface NestedSceenI {
 
 const useRedirectTo = (
   screenName: ScreenNames,
-  nestedScreen: NestedSceenI = {},
+  params: Record<string, any> & NestedSceenI = {},
 ) => {
   const navigation = useNavigation()
-  const pushAction = StackActions.push(screenName, nestedScreen)
-  const redirectTo = () => navigation.dispatch(pushAction)
+  const redirectTo = () => navigation.navigate(screenName, params)
   return redirectTo
 }
 

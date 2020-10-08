@@ -17,7 +17,7 @@ const reducer = (state = initialState, action: Action<AccountActions, any>) => {
     case AccountActions.setLogged:
       return { ...state, loggedIn: action.payload }
     case AccountActions.setLocalAuth:
-      return { ...state, isLocalAuthSet: true }
+      return { ...state, isLocalAuthSet: action.payload }
     case AccountActions.setEntropy:
       return { ...state, entropy: action.payload }
     case AccountActions.accountReset:

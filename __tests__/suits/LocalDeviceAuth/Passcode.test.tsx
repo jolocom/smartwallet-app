@@ -2,7 +2,7 @@ import React from 'react'
 import { fireEvent } from '@testing-library/react-native'
 import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
 
-import Passcode from '~/screens/DeviceAuthentication/Passcode'
+import Passcode from '~/screens/Modals/RegisterPin'
 import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'

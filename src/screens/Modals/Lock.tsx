@@ -1,24 +1,25 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { View, StyleSheet, Keyboard, TextInput } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 
 import { strings } from '~/translations/strings'
 
-import ScreenContainer from '../components/ScreenContainer'
-import PasscodeInput from '../components/PasscodeInput'
-import Btn, { BtnTypes } from '../components/Btn'
-import AbsoluteBottom from '../components/AbsoluteBottom'
-import FingerprintScanner from 'react-native-fingerprint-scanner'
-import { getBiometryDescription } from '~/screens/DeviceAuthentication/utils/getText'
-import { handleNotEnrolled } from '~/utils/biometryErrors'
-import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
+import ScreenContainer from '~/components/ScreenContainer'
+import PasscodeInput from '~/components/PasscodeInput'
+import Btn, { BtnTypes } from '~/components/Btn'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+
+import { useKeyboard } from '~/screens/Modals/Recovery/useKeyboard'
+
+import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
+import useRedirectTo from '~/hooks/useRedirectTo'
+
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import useRedirectTo from '~/hooks/useRedirectTo'
+
 import { ScreenNames } from '~/types/screens'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { useKeyboard } from '~/screens/LoggedOut/Recovery/useKeyboard'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -43,16 +44,12 @@ const Lock = () => {
       pinInputRef.current?.focus()
     }
   }, [isFocused])
-  /* E -> This is for showing and hiding keyboard when we move away from Lock screen */
+  /* END -> This is for showing and hiding keyboard when we move away from Lock screen */
+
+  const { keychainPin } = useGetStoredAuthValues()
 
   /* disable hardwareback button default functionality */
   useBackHandler(() => true)
-
-  const {
-    biometryType,
-    keychainPin,
-    isBiometrySelected,
-  } = useGetStoredAuthValues()
 
   useEffect(() => {
     if (pin.length < 4 && hasError) {
@@ -71,30 +68,6 @@ const Lock = () => {
       setHasError(true)
     }
   }
-
-  const handleBiometryAuthentication = async () => {
-    try {
-      await FingerprintScanner.authenticate({
-        description: getBiometryDescription(biometryType),
-      })
-      unlockApp()
-    } catch (err) {
-      if (err.name === 'FingerprintScannerNotEnrolled') {
-        handleNotEnrolled(biometryType)
-      } else if (err.name === 'UserFallback') {
-        isBiometrySelected.current = false
-      }
-    }
-  }
-
-  useEffect(() => {
-    const handleBiometryAuth = async () => {
-      if (isBiometrySelected.current) {
-        await handleBiometryAuthentication()
-      }
-    }
-    handleBiometryAuth()
-  }, [])
 
   return (
     <ScreenContainer

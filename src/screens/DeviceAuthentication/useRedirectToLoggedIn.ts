@@ -7,7 +7,7 @@ export const useRedirectToLoggedIn = () => {
   const dispatch = useDispatch()
   const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
   return () => {
-    dispatch(setLocalAuth())
+    dispatch(setLocalAuth(true))
     redirectToLoggedIn()
   }
 }

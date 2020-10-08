@@ -4,8 +4,8 @@ import Keychain from 'react-native-keychain'
 
 import { ScreenNames } from '~/types/screens'
 
-import Passcode from './Passcode'
-import Biometry from './Biometry'
+import RegisterPin from '../Modals/RegisterPin'
+import RegisterBiometry from '../Modals/RegisterBiometry'
 
 import DeviceAuthContextProvider, {
   useDeviceAuthDispatch,
@@ -36,9 +36,12 @@ const DeviceAuthentication: React.FC = () => {
   return (
     <Stack.Navigator headerMode="none">
       {isPasscodeView ? (
-        <Stack.Screen name={ScreenNames.Passcode} component={Passcode} />
+        <Stack.Screen name={ScreenNames.RegisterPin} component={RegisterPin} />
       ) : (
-        <Stack.Screen name={ScreenNames.Biometry} component={Biometry} />
+        <Stack.Screen
+          name={ScreenNames.RegisterBiometry}
+          component={RegisterBiometry}
+        />
       )}
     </Stack.Navigator>
   )

@@ -14,9 +14,8 @@ export enum ScreenNames {
   Settings = 'Settings',
   // Device Authentication
   DeviceAuth = 'DeviceAuth',
-  Passcode = 'Passcode',
-  Biometry = 'Biometry',
-  Loading = 'Loading',
+  RegisterPin = 'RegisterPin',
+  RegisterBiometry = 'RegisterBiometry',
   // Modals
   Loader = 'Loader',
   Interactions = 'Interactions',

@@ -1,20 +1,21 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 
 import LoggedOut from '~/screens/LoggedOut'
-import DeviceAuthentication from './screens/DeviceAuthentication'
 import LoggedIn from '~/screens/LoggedIn'
-import Interactions from '~/screens/Modals/Interactions'
 import SettingsList from '~/screens/SettingsList'
+
+import Interactions from '~/screens/Modals/Interactions'
+import PinRecoveryInstructions from '~/screens/Modals/PinRecoveryInstructions'
+import Recovery from '~/screens/Modals/Recovery'
+import Lock from '~/screens/Modals/Lock'
 
 import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
-import { useSelector } from 'react-redux'
-import Lock from './modals/Lock'
-import PinRecoveryInstructions from './screens/Modals/PinRecoveryInstructions'
-import Recovery from './screens/LoggedOut/Recovery'
+import DeviceAuthentication from './screens/DeviceAuthentication'
 
 const RootStack = createStackNavigator()
 
@@ -24,8 +25,38 @@ const RootNavigation: React.FC = () => {
   return (
     <NavigationContainer>
       <RootStack.Navigator headerMode="none" mode="modal">
+        {/* TODO: this will re-render the whole app on change  */}
         {isLoggedIn ? (
-          <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
+          <>
+            <RootStack.Screen
+              name={ScreenNames.LoggedIn}
+              component={LoggedIn}
+            />
+            {/* Logged in Modals -> Start */}
+            <RootStack.Screen
+              name={ScreenNames.SettingsList}
+              component={SettingsList}
+            />
+
+            <RootStack.Screen
+              name={ScreenNames.Interactions}
+              component={Interactions}
+            />
+            <RootStack.Screen
+              name={ScreenNames.DeviceAuth}
+              component={DeviceAuthentication}
+            />
+            <RootStack.Screen
+              name={ScreenNames.Lock}
+              component={Lock}
+              options={{ gestureEnabled: false }}
+            />
+            <RootStack.Screen
+              name={ScreenNames.PinRecoveryInstructions}
+              component={PinRecoveryInstructions}
+            />
+            {/* Logged in Modals -> End */}
+          </>
         ) : (
           <RootStack.Screen
             name={ScreenNames.LoggedOut}
@@ -33,29 +64,8 @@ const RootNavigation: React.FC = () => {
           />
         )}
 
-        <RootStack.Screen
-          name={ScreenNames.SettingsList}
-          component={SettingsList}
-        />
         {/* Modals -> Start */}
         <RootStack.Screen name={ScreenNames.Recovery} component={Recovery} />
-        <RootStack.Screen
-          name={ScreenNames.Interactions}
-          component={Interactions}
-        />
-        <RootStack.Screen
-          name={ScreenNames.DeviceAuth}
-          component={DeviceAuthentication}
-        />
-        <RootStack.Screen
-          name={ScreenNames.Lock}
-          component={Lock}
-          options={{ gestureEnabled: false }}
-        />
-        <RootStack.Screen
-          name={ScreenNames.PinRecoveryInstructions}
-          component={PinRecoveryInstructions}
-        />
         {/* Modals -> End */}
       </RootStack.Navigator>
     </NavigationContainer>

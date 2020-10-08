@@ -1,12 +1,12 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
+import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { setLogged } from '~/modules/account/actions'
 
 import BtnGroup from '~/components/BtnGroup'
-import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
+import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
@@ -19,7 +19,10 @@ import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
-import BP from '~/utils/breakpoints'
+import useResetKeychainValues from '~/hooks/useResetKeychainValues'
+import { PIN_SERVICE } from '~/utils/keychainConsts'
+import { isLocalAuthSet } from '~/modules/account/selectors'
+import { ScreenNames } from '~/types/screens'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -32,17 +35,39 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
   const SDK = useSDK()
+  const route = useRoute()
+
+  const isAuthSet = useSelector(isLocalAuthSet)
+  const navigation = useNavigation()
+
+  const resetPin = useResetKeychainValues(PIN_SERVICE)
+
+  const { isAccessRestore } = route.params
+
+  const restoreEntropy = async () => {
+    // TODO: check for when it fails
+    await resetPin()
+  }
+
+  const submitCb = async () => {
+    if (isAccessRestore) {
+      await restoreEntropy()
+    } else {
+      await SDK.initWithMnemonic(phrase.join(' '))
+    }
+  }
 
   const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(
-      async () => SDK.initWithMnemonic(phrase.join(' ')),
-      {
-        loading: strings.MATCHING,
-      },
-    )
+    const success = await loader(async () => submitCb(), {
+      loading: strings.MATCHING,
+    })
 
-    if (success) dispatch(setLogged(true))
-    else recoveryDispatch(resetPhrase())
+    if (success) {
+      dispatch(setLogged(true))
+      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
+      navigation.dispatch(replaceAction)
+      // navigation.navigate(ScreenNames.LoggedIn)
+    } else recoveryDispatch(resetPhrase())
   }, [phrase])
 
   const isPhraseComplete = phrase.length === 12

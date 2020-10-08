@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent } from '@testing-library/react-native'
 
-import Recovery from '~/screens/LoggedOut/Recovery'
+import Recovery from '~/screens/Modals/Recovery'
 import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 

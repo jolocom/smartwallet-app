@@ -3,13 +3,12 @@ import * as redux from 'react-redux'
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock'
 import { getGenericPassword } from 'react-native-keychain'
 
-import LockContainer, { Lock } from '~/modals/Lock'
+import Lock from '~/screens/Modals/Lock'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 
 import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { Colors } from '~/utils/colors'
-import { unlockApp } from '~/modules/account/actions'
 import { applyMiddleware } from 'redux'
 
 const mockAppState = {
@@ -71,7 +70,7 @@ describe('Lock screen', () => {
     const mockDispatchFn = jest.fn()
     useDispatchSpy.mockReturnValue(mockDispatchFn)
 
-    const { findByText } = renderWithSafeArea(<LockContainer />)
+    const { findByText } = renderWithSafeArea(<Lock />)
 
     const lockText = await findByText(strings.ENTER_YOUR_PIN)
     expect(lockText).toBeDefined()
