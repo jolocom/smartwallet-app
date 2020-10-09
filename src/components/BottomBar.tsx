@@ -22,6 +22,7 @@ import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import BP from '~/utils/breakpoints'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 interface IconPropsI {
   label: string
@@ -36,8 +37,8 @@ const SCANNER_BUTTON_BOTTOM = 0.545 * TAB_IMAGE_HEIGHT
 const SCANNER_BTN_MARGIN = 16
 const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
-const SMALL_DEVICES_DELTA = 35
-const XSMALL_DEVICES_DELTA = 25
+const TABS_POSITION_BOTTOM_SMALL = 40
+const TABS_POSITION_BOTTOM_LARGE = 50
 
 const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const redirectToTab = useRedirectTo(label as ScreenNames)
@@ -75,6 +76,7 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
 
 const ScannerButton = () => {
   const redirectToScanner = useRedirectTo(ScreenNames.Interactions)
+  const insets = useSafeArea()
   return (
     <TouchableOpacity
       onPress={redirectToScanner}
@@ -82,12 +84,7 @@ const ScannerButton = () => {
         styles.scannerBtn,
         styles.scannerFrame,
         {
-          bottom: BP({
-            large: SCANNER_BUTTON_BOTTOM,
-            medium: SCANNER_BUTTON_BOTTOM,
-            small: SCANNER_BUTTON_BOTTOM - SMALL_DEVICES_DELTA,
-            xsmall: SCANNER_BUTTON_BOTTOM - XSMALL_DEVICES_DELTA,
-          }),
+          bottom: SCANNER_BUTTON_BOTTOM + insets.bottom,
         },
       ]}
     >
@@ -106,15 +103,35 @@ const BottomBar = (props: BottomTabBarProps) => {
   const getSelectedRoute = (label: string) =>
     routes.find((el) => el.name === label) || { key: '' }
 
+  const insets = useSafeArea()
+
   return (
     <>
       <ScannerButton />
+      <View
+        style={{
+          paddingBottom: insets.bottom,
+          backgroundColor: 'pink',
+        }}
+      />
       <Image
-        style={styles.tabsImage}
+        style={[styles.tabsImage, { bottom: insets.bottom }]}
         source={require('~/assets/images/bottomBarBG.png')}
         resizeMode="contain"
       />
-      <View style={styles.tabsContainer}>
+      <View
+        style={[
+          styles.tabsContainer,
+          {
+            bottom: BP({
+              large: TABS_POSITION_BOTTOM_LARGE + insets.bottom,
+              medium: TABS_POSITION_BOTTOM_LARGE + insets.bottom,
+              small: TABS_POSITION_BOTTOM_SMALL + insets.bottom,
+              xsmall: TABS_POSITION_BOTTOM_SMALL + insets.bottom,
+            }),
+          },
+        ]}
+      >
         <View style={styles.iconGroup}>
           {routeNames.slice(0, 2).map((routeName: string, idx: number) => (
             <Tab
@@ -169,12 +186,6 @@ const styles = StyleSheet.create({
   },
   tabsImage: {
     position: 'absolute',
-    bottom: BP({
-      large: 0,
-      medium: 0,
-      small: -SMALL_DEVICES_DELTA,
-      xsmall: -XSMALL_DEVICES_DELTA,
-    }),
     left: -0.5,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -188,14 +199,6 @@ const styles = StyleSheet.create({
   },
   tabsContainer: {
     position: 'absolute',
-    bottom:
-      TAB_IMAGE_HEIGHT -
-      BP({
-        large: 65,
-        medium: 65,
-        small: 60 + SMALL_DEVICES_DELTA,
-        xsmall: 60 + XSMALL_DEVICES_DELTA,
-      }),
     flexDirection: 'row',
     width: TAB_IMAGE_WIDTH,
     justifyContent: 'space-between',
