@@ -40,6 +40,7 @@ const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
 const TABS_POSITION_BOTTOM = 17
 const TABS_POSITION_BOTTOM_SMALL = 13
+const TABS_POSITION_BOTTOM_XSMALL = 5
 /* picture has invisble bottom margins, therefore adding 1 point to hide it */
 const INVISIBLE_BOTTOM_MARGIN = 1
 
@@ -135,7 +136,7 @@ const BottomBar = (props: BottomTabBarProps) => {
               large: TABS_POSITION_BOTTOM + insets.bottom,
               medium: TABS_POSITION_BOTTOM + insets.bottom,
               small: TABS_POSITION_BOTTOM_SMALL + insets.bottom,
-              xsmall: TABS_POSITION_BOTTOM_SMALL + insets.bottom,
+              xsmall: TABS_POSITION_BOTTOM_XSMALL + insets.bottom,
             }),
           },
         ]}
