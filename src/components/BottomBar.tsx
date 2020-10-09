@@ -21,6 +21,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
 import useRedirectTo from '~/hooks/useRedirectTo'
+import BP from '~/utils/breakpoints'
 
 interface IconPropsI {
   label: string
@@ -35,6 +36,8 @@ const SCANNER_BUTTON_BOTTOM = 0.545 * TAB_IMAGE_HEIGHT
 const SCANNER_BTN_MARGIN = 16
 const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
+const SMALL_DEVICES_DELTA = 35
+const XSMALL_DEVICES_DELTA = 25
 
 const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const redirectToTab = useRedirectTo(label as ScreenNames)
@@ -79,7 +82,12 @@ const ScannerButton = () => {
         styles.scannerBtn,
         styles.scannerFrame,
         {
-          bottom: SCANNER_BUTTON_BOTTOM,
+          bottom: BP({
+            large: SCANNER_BUTTON_BOTTOM,
+            medium: SCANNER_BUTTON_BOTTOM,
+            small: SCANNER_BUTTON_BOTTOM - SMALL_DEVICES_DELTA,
+            xsmall: SCANNER_BUTTON_BOTTOM - XSMALL_DEVICES_DELTA,
+          }),
         },
       ]}
     >
@@ -161,7 +169,12 @@ const styles = StyleSheet.create({
   },
   tabsImage: {
     position: 'absolute',
-    bottom: 0,
+    bottom: BP({
+      large: 0,
+      medium: 0,
+      small: -SMALL_DEVICES_DELTA,
+      xsmall: -XSMALL_DEVICES_DELTA,
+    }),
     left: -0.5,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -175,7 +188,14 @@ const styles = StyleSheet.create({
   },
   tabsContainer: {
     position: 'absolute',
-    bottom: TAB_IMAGE_HEIGHT - 65,
+    bottom:
+      TAB_IMAGE_HEIGHT -
+      BP({
+        large: 65,
+        medium: 65,
+        small: 60 + SMALL_DEVICES_DELTA,
+        xsmall: 60 + XSMALL_DEVICES_DELTA,
+      }),
     flexDirection: 'row',
     width: TAB_IMAGE_WIDTH,
     justifyContent: 'space-between',
