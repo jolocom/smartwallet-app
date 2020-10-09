@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import {
   DocumentsTabIcon,
@@ -22,7 +23,6 @@ import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
 import useRedirectTo from '~/hooks/useRedirectTo'
 import BP from '~/utils/breakpoints'
-import { useSafeArea } from 'react-native-safe-area-context'
 
 interface IconPropsI {
   label: string
@@ -30,15 +30,17 @@ interface IconPropsI {
   isActive: boolean
 }
 
-const SCREEN_WIDTH = Dimensions.get('window').width
+/* picture has invisble horizontal margins, therefore adding 4 point to hide it */
+const SCREEN_WIDTH = Dimensions.get('window').width + 4
 const TAB_IMAGE_WIDTH = SCREEN_WIDTH
-const TAB_IMAGE_HEIGHT = 0.28 * TAB_IMAGE_WIDTH
-const SCANNER_BUTTON_BOTTOM = 0.545 * TAB_IMAGE_HEIGHT
+const TAB_IMAGE_HEIGHT = 0.192 * TAB_IMAGE_WIDTH
+const SCANNER_BUTTON_BOTTOM = 0.32 * TAB_IMAGE_HEIGHT
 const SCANNER_BTN_MARGIN = 16
 const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
-const TABS_POSITION_BOTTOM_SMALL = 40
-const TABS_POSITION_BOTTOM_LARGE = 50
+const TABS_POSITION_BOTTOM = 17
+/* picture has invisble bottom margins, therefore adding 1 point to hide it */
+const INVISIBLE_BOTTOM_MARGIN = 1
 
 const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const redirectToTab = useRedirectTo(label as ScreenNames)
@@ -84,7 +86,8 @@ const ScannerButton = () => {
         styles.scannerBtn,
         styles.scannerFrame,
         {
-          bottom: SCANNER_BUTTON_BOTTOM + insets.bottom,
+          bottom:
+            SCANNER_BUTTON_BOTTOM + insets.bottom - INVISIBLE_BOTTOM_MARGIN,
         },
       ]}
     >
@@ -107,16 +110,20 @@ const BottomBar = (props: BottomTabBarProps) => {
 
   return (
     <>
-      <ScannerButton />
       <View
         style={{
           paddingBottom: insets.bottom,
-          backgroundColor: 'pink',
+          backgroundColor: '#0c060e',
         }}
       />
+      <ScannerButton />
+
       <Image
-        style={[styles.tabsImage, { bottom: insets.bottom }]}
-        source={require('~/assets/images/bottomBarBG.png')}
+        style={[
+          styles.tabsImage,
+          { bottom: insets.bottom - INVISIBLE_BOTTOM_MARGIN },
+        ]}
+        source={require('~/assets/images/blackBckgr.png')}
         resizeMode="contain"
       />
       <View
@@ -124,10 +131,10 @@ const BottomBar = (props: BottomTabBarProps) => {
           styles.tabsContainer,
           {
             bottom: BP({
-              large: TABS_POSITION_BOTTOM_LARGE + insets.bottom,
-              medium: TABS_POSITION_BOTTOM_LARGE + insets.bottom,
-              small: TABS_POSITION_BOTTOM_SMALL + insets.bottom,
-              xsmall: TABS_POSITION_BOTTOM_SMALL + insets.bottom,
+              large: TABS_POSITION_BOTTOM + insets.bottom,
+              medium: TABS_POSITION_BOTTOM + insets.bottom,
+              small: TABS_POSITION_BOTTOM + insets.bottom,
+              xsmall: TABS_POSITION_BOTTOM + insets.bottom,
             }),
           },
         ]}
@@ -186,7 +193,7 @@ const styles = StyleSheet.create({
   },
   tabsImage: {
     position: 'absolute',
-    left: -0.5,
+    // left: -0.5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderTopLeftRadius: 10,
@@ -196,6 +203,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignSelf: 'center',
     backgroundColor: 'transparent',
+    // ...debugView(),
   },
   tabsContainer: {
     position: 'absolute',
