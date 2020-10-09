@@ -20,6 +20,10 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 import { ScreenNames } from '~/types/screens'
+import FingerprintScanner from 'react-native-fingerprint-scanner'
+import { getBiometryDescription } from '../DeviceAuthentication/utils/getText'
+import { useDispatch } from 'react-redux'
+import { handleNotEnrolled } from '~/utils/biometryErrors'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -32,6 +36,10 @@ const Lock = () => {
   const redirectToPinRecoveryInstruction = useRedirectTo(
     ScreenNames.PinRecoveryInstructions,
   )
+
+  const unlockApp = useCallback(() => {
+    navigation.goBack()
+  }, [])
 
   /* START -> This is for showing and hiding keyboard when we move away from Lock screen */
   const pinInputRef = useRef<TextInput>(null)
@@ -46,7 +54,37 @@ const Lock = () => {
   }, [isFocused])
   /* END -> This is for showing and hiding keyboard when we move away from Lock screen */
 
-  const { keychainPin } = useGetStoredAuthValues()
+  const {
+    biometryType,
+    keychainPin,
+    isBiometrySelected,
+  } = useGetStoredAuthValues()
+
+  const dispatch = useDispatch()
+
+  /* START -> Biometry authentication if applicatble */
+  const handleBiometryAuthentication = async () => {
+    try {
+      await FingerprintScanner.authenticate({
+        description: getBiometryDescription(biometryType),
+      })
+      dispatch(unlockApp())
+    } catch (err) {
+      if (err.name === 'FingerprintScannerNotEnrolled') {
+        handleNotEnrolled(biometryType)
+      }
+    }
+  }
+
+  useEffect(() => {
+    const initialBiometry = async () => {
+      if (isFocused && isBiometrySelected) {
+        await handleBiometryAuthentication()
+      }
+    }
+    initialBiometry()
+  }, [isFocused, isBiometrySelected])
+  /* START -> Biometry authentication if applicatble */
 
   /* disable hardwareback button default functionality */
   useBackHandler(() => true)
@@ -56,10 +94,6 @@ const Lock = () => {
       setHasError(false)
     }
   }, [pin])
-
-  const unlockApp = useCallback(() => {
-    navigation.goBack()
-  }, [])
 
   const handlePINSubmit = () => {
     if (keychainPin.toString() === pin) {

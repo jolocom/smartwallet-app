@@ -16,6 +16,11 @@ import { useRedirectToLoggedIn } from '../DeviceAuthentication/useRedirectToLogg
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import {
+  useDeviceAuthDispatch,
+  useDeviceAuthState,
+} from '../DeviceAuthentication/module/deviceAuthContext'
+import { showBiometry } from '../DeviceAuthentication/module/deviceAuthActions'
 
 const RegisterPin = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -25,11 +30,22 @@ const RegisterPin = () => {
 
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
 
+  const { biometryType } = useDeviceAuthState()
+  const dispatchToLocalAuth = useDeviceAuthDispatch()
+
   const displaySuccessLoader = useSuccess()
 
   const handlePasscodeSubmit = useCallback(() => {
     setIsCreating(false)
   }, [])
+
+  const redirectTo = () => {
+    if (biometryType && biometryType !== 'IRIS') {
+      dispatchToLocalAuth(showBiometry())
+    } else {
+      handleRedirectToLoggedIn()
+    }
+  }
 
   const handleVerifiedPasscodeSubmit = async () => {
     if (passcode === verifiedPasscode) {
@@ -43,7 +59,7 @@ const RegisterPin = () => {
       } catch (err) {
         console.log({ err })
       }
-      handleRedirectToLoggedIn()
+      redirectTo()
     } else {
       setHasError(true)
     }
