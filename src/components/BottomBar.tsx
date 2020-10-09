@@ -34,13 +34,16 @@ interface IconPropsI {
 const SCREEN_WIDTH = Dimensions.get('window').width + 4
 const TAB_IMAGE_WIDTH = SCREEN_WIDTH
 const TAB_IMAGE_HEIGHT = 0.192 * TAB_IMAGE_WIDTH
-const SCANNER_BUTTON_BOTTOM = 0.32 * TAB_IMAGE_HEIGHT
+const SCANNER_BUTTON_BOTTOM = 0.345 * TAB_IMAGE_HEIGHT
 const SCANNER_BTN_MARGIN = 16
 const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
-const TABS_POSITION_BOTTOM = 17
-const TABS_POSITION_BOTTOM_SMALL = 13
-const TABS_POSITION_BOTTOM_XSMALL = 5
+const TABS_POSITION_BOTTOM = BP({
+  large: 0.2 * TAB_IMAGE_HEIGHT,
+  medium: 0.2 * TAB_IMAGE_HEIGHT,
+  small: 0.2 * TAB_IMAGE_HEIGHT,
+  xsmall: 0.1 * TAB_IMAGE_HEIGHT,
+})
 /* picture has invisble bottom margins, therefore adding 1 point to hide it */
 const INVISIBLE_BOTTOM_MARGIN = 1
 
@@ -97,7 +100,15 @@ const ScannerButton = () => {
         style={[styles.scannerBtn, styles.scannerBody]}
         colors={[Colors.ceriseRed, Colors.disco]}
       >
-        <ScannerIcon />
+        <View
+          style={{
+            transform: [
+              { scale: BP({ large: 1, medium: 1, small: 1, xsmall: 0.9 }) },
+            ],
+          }}
+        >
+          <ScannerIcon />
+        </View>
       </LinearGradient>
     </TouchableOpacity>
   )
@@ -132,12 +143,7 @@ const BottomBar = (props: BottomTabBarProps) => {
         style={[
           styles.tabsContainer,
           {
-            bottom: BP({
-              large: TABS_POSITION_BOTTOM + insets.bottom,
-              medium: TABS_POSITION_BOTTOM + insets.bottom,
-              small: TABS_POSITION_BOTTOM_SMALL + insets.bottom,
-              xsmall: TABS_POSITION_BOTTOM_XSMALL + insets.bottom,
-            }),
+            bottom: TABS_POSITION_BOTTOM + insets.bottom,
           },
         ]}
       >
@@ -195,7 +201,6 @@ const styles = StyleSheet.create({
   },
   tabsImage: {
     position: 'absolute',
-    // left: -0.5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderTopLeftRadius: 10,
@@ -205,7 +210,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignSelf: 'center',
     backgroundColor: 'transparent',
-    // ...debugView(),
   },
   tabsContainer: {
     position: 'absolute',
@@ -219,6 +223,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     flex: 0.37,
+    // transform: [{ scale: BP({ large: 1, medium: 1, small: 1, xsmall: 0.8 }) }],
   },
   iconContainer: {
     marginTop: 5,
