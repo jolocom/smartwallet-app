@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native'
+import { Dimensions, Platform } from 'react-native'
 
 const SCREEN_SIZE = Dimensions.get('window')
 
@@ -36,9 +36,9 @@ const breakpoints: Record<string, Breakpoint> = {
   },
 }
 
-const isBreakpoint = (breakpointSize: ScreenSize) =>
-  SCREEN_SIZE.width >= breakpoints[breakpointSize].width &&
-  SCREEN_SIZE.height >= breakpoints[breakpointSize].height
+const isBreakpoint = (breakpointSize: ScreenSize) => {
+  return SCREEN_SIZE.height >= breakpoints[breakpointSize].height
+}
 
 // NOTE: Maps through the breakpoints (biggest to smallest) and returns the @ScreenSize of the device if it's
 // bigger than the breakpoint. In case the map didn't find anything, means the screen is smaller than all the

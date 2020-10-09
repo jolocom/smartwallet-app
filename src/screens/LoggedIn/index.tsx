@@ -15,9 +15,9 @@ import Claims from './Claims'
 import Documents from './Documents'
 import History from './History'
 import Settings from './Settings'
-import { useGetAllAttributes } from '~/hooks/attributes'
 import BottomBar from '~/components/BottomBar'
-import { useSyncCredentials } from '~/hooks/credentials'
+import { useSyncStorageAttributes } from '~/hooks/attributes'
+import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { Dimensions, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 
@@ -33,8 +33,8 @@ const LoggedInTabs: React.FC = () => {
   const isLoggedIn = useSelector(isLogged)
   const isLocked = useSelector(isAppLocked)
 
-  const getAllAttributes = useGetAllAttributes()
-  const syncCredentials = useSyncCredentials()
+  const syncAttributes = useSyncStorageAttributes()
+  const syncCredentials = useSyncStorageCredentials()
 
   // this hook is responsible for displaying device auth screen only after the Loader modal is hidden
   // otherwise, the keyboard appears on top loader modal
@@ -45,7 +45,7 @@ const LoggedInTabs: React.FC = () => {
   }, [isVisible, isAuthSet])
 
   useEffect(() => {
-    getAllAttributes()
+    syncAttributes()
     syncCredentials()
   }, [])
 

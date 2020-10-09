@@ -56,7 +56,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
           <View style={styles.field}>
             <JoloText
               kind={JoloTextKind.subtitle}
-              size={JoloTextSizes.mini}
+              size={JoloTextSizes.middle}
               color={Colors.white90}
             >
               {value}
@@ -76,7 +76,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
         <View style={styles.field}>
           <JoloText
             kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.mini}
+            size={JoloTextSizes.middle}
             color={Colors.white90}
           >
             {value}
@@ -89,7 +89,7 @@ const Field: React.FC<EmptyFieldI | SelectableFieldI | StaticFieldI> = ({
           <View style={styles.field}>
             <JoloText
               kind={JoloTextKind.subtitle}
-              size={JoloTextSizes.mini}
+              size={JoloTextSizes.middle}
               color={Colors.error}
             >
               {strings.MISSING_INFO}
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     borderRadius: 8,
     height: 50,
-    marginVertical: 4,
+    marginVertical: 2,
   },
   radio: {
     width: 20,

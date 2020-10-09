@@ -5,12 +5,16 @@ import {
 } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { OfferUICredential } from '~/types/credentials'
+import { strings } from '~/translations/strings'
+import { useSelector } from 'react-redux'
+import { getCounterpartyName } from '~/modules/interaction/selectors'
 
 /**
  * Custom hook that exposes a collection of utils for the Credential Offer interaction
  */
 const useCredentialOfferFlow = () => {
   const interaction = useInteraction()
+  const serviceName = useSelector(getCounterpartyName)
 
   /**
    * Assembles a @CredentialOfferResponse token with the credential types that
@@ -114,6 +118,16 @@ const useCredentialOfferFlow = () => {
     return state.issued.length
   }
 
+  // NOTE: Not sure this fits here. Maybe we should have a separation between SDK
+  // enabling hooks and UX/UI related ones. Same thing is relevant to @useCredentialShareFlow
+  const getHeaderText = () => {
+    const title = strings.INCOMING_OFFER
+    const description = strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS(
+      serviceName,
+    )
+    return { title, description }
+  }
+
   return {
     assembleOfferResponseToken,
     processOfferReceiveToken,
@@ -121,6 +135,7 @@ const useCredentialOfferFlow = () => {
     storeSelectedCredentials,
     credentialsAlreadyIssued,
     checkDuplicates,
+    getHeaderText,
   }
 }
 

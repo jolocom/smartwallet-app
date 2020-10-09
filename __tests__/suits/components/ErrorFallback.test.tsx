@@ -9,11 +9,9 @@ describe('ErrorFallback', () => {
   }
 
   it('should match the initial snapshot', () => {
-    const { baseElement } = renderWithSafeArea(
-      <ErrorFallback {...defaultProps} />,
-    )
+    const { toJSON } = renderWithSafeArea(<ErrorFallback {...defaultProps} />)
 
-    expect(baseElement).toMatchSnapshot()
+    expect(toJSON()).toMatchSnapshot()
   })
 
   it('should correctly render the props', () => {
@@ -21,9 +19,9 @@ describe('ErrorFallback', () => {
       <ErrorFallback {...defaultProps} />,
     )
 
-    expect(getByTestId('paragraph').props.children).toBe(
+    expect(getByTestId('title').props.children).toBe(defaultProps.title)
+    expect(getByTestId('subtitle').props.children).toBe(
       defaultProps.description,
     )
-    expect(getByTestId('header').props.children).toBe(defaultProps.title)
   })
 })

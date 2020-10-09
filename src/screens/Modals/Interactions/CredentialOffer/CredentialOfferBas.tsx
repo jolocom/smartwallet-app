@@ -1,23 +1,33 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import BasWrapper from '~/components/ActionSheet/BasWrapper'
+import BasWrapper, {
+  BasInteractionBody,
+} from '~/components/ActionSheet/BasWrapper'
 import CredentialCard from '../CredentialCard'
-import { getInteractionDetails } from '~/modules/interaction/selectors'
+import { getCredOfferDetails } from '~/modules/interaction/selectors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { isCredOfferDetails } from '~/modules/interaction/guards'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import InteractionHeader from '../InteractionHeader'
+import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
+import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
+import { strings } from '~/translations/strings'
+import InteractionFooter from '../InteractionFooter'
 
 const CredentialOfferBas = () => {
-  const details = useSelector(getInteractionDetails)
-  if (isCredOfferDetails(details)) {
-    const {
-      credentials: { service_issued },
-    } = details
-    const { type } = service_issued[0]
-    return (
-      <BasWrapper>
+  const details = useSelector(getCredOfferDetails)
+  const {
+    credentials: { service_issued },
+  } = details
+  const { type } = service_issued[0]
+  const { getHeaderText } = useCredentialOfferFlow()
+  const handleSubmit = useCredentialOfferSubmit()
+
+  return (
+    <BasWrapper>
+      <InteractionHeader {...getHeaderText()} />
+      <BasInteractionBody>
         <CredentialCard>
           <JoloText
             kind={JoloTextKind.title}
@@ -27,10 +37,10 @@ const CredentialOfferBas = () => {
             {type}
           </JoloText>
         </CredentialCard>
-      </BasWrapper>
-    )
-  }
-  return null
+      </BasInteractionBody>
+      <InteractionFooter cta={strings.RECEIVE} onSubmit={handleSubmit} />
+    </BasWrapper>
+  )
 }
 
 export default CredentialOfferBas

@@ -1,12 +1,12 @@
 import React, { useCallback, memo } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, Platform, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
 import { setLogged } from '~/modules/account/actions'
 
 import BtnGroup from '~/components/BtnGroup'
-import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
+import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
@@ -59,12 +59,10 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 
     return (
       <>
-        {areSuggestionsVisible && (
+        {Platform.OS === 'android' && areSuggestionsVisible && (
           <AbsoluteBottom
             customStyles={{
-              bottom:
-                keyboardHeight +
-                BP({ large: 0, medium: 10, small: 10, xsmall: 10 }),
+              bottom: keyboardHeight + 10,
             }}
           >
             <Animated.View

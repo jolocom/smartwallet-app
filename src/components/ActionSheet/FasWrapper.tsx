@@ -1,30 +1,47 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 
 import CollapsedScrollView from '~/components/CollapsedScrollView'
-import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
-import useInteractionTitle from '~/screens/Modals/Interactions/hooks/useInteractionTitle'
-
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
+import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
 
-const FasWrapper: React.FC = ({ children }) => {
-  const interactionTitle = useInteractionTitle()
+const WINDOW = Dimensions.get('window')
+const SCREEN_HEIGHT = WINDOW.height
+
+interface Props {
+  // NOTE: the string that will be shown by @CollapsedScrollView after it collapses. Usually
+  //       it's the @title from the @InteractionHeader
+  collapsedTitle: string
+}
+
+const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
   return (
-    <>
+    <View style={styles.wrapper}>
       <CollapsedScrollView
-        collapsedTitle={interactionTitle}
+        collapsedTitle={collapsedTitle}
         collapseStart={20}
         renderCollapsingComponent={() => (
-          <IconWrapper customStyle={{ marginBottom: 12, marginTop: 30 }}>
+          <IconWrapper
+            customStyle={{
+              marginTop: BP({ large: 35, medium: 35, small: 20, xsmall: 20 }),
+            }}
+          >
             <InteractionIcon />
           </IconWrapper>
         )}
       >
-        <InteractionHeader />
-        <View style={{ paddingTop: 32 }}>{children}</View>
+        {children}
       </CollapsedScrollView>
-    </>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    height: SCREEN_HEIGHT,
+    backgroundColor: Colors.mainBlack,
+  },
+})
 
 export default FasWrapper
