@@ -112,9 +112,7 @@ const Camera = () => {
   }
 
   return (
-    <ScreenContainer isFullscreen>
-      {/* TODO: make sure with use insets and remove status bar it make content jump */}
-      <StatusBar hidden />
+    <ScreenContainer isFullscreen backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
         <View style={styles.navigationContainer}>
           <NavigationHeader type={NavHeaderType.Close} />
