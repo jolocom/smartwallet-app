@@ -23,16 +23,22 @@ const CredentialOfferFas = () => {
   const handleSubmit = useCredentialOfferSubmit()
 
   const renderCredentials = (credentials: OfferUICredential[]) =>
-    credentials.map(({ type, invalid }) => (
-      <CredentialCard disabled={invalid}>
-        <JoloText
-          kind={JoloTextKind.title}
-          size={JoloTextSizes.middle}
-          color={Colors.black}
-        >
-          {type}
-        </JoloText>
-      </CredentialCard>
+    credentials.map(({ type, invalid }, idx) => (
+      <View
+        style={{
+          marginBottom: idx === credentials.length - 1 ? 0 : 30,
+        }}
+      >
+        <CredentialCard disabled={invalid}>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.middle}
+            color={Colors.black}
+          >
+            {type}
+          </JoloText>
+        </CredentialCard>
+      </View>
     ))
 
   return (

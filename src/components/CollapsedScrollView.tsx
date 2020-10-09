@@ -5,6 +5,8 @@ import { Colors } from '~/utils/colors'
 import useCollapsedScrollViewAnimations from '~/hooks/useScrollAnimation'
 import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { INTERACTION_SHEET_PADDING } from '~/screens/Modals/Interactions/consts'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 interface Props {
   collapsedTitle: string
@@ -50,11 +52,21 @@ const CollapsedScrollView: React.FC<Props> = ({
       opacity: componentOpacityValue,
     },
   ]
+
+  const { top } = useSafeArea()
   return (
     <>
       <Animated.View
         pointerEvents="none"
-        style={[styles.headerWrapper, { opacity: headerOpacityValue }]}
+        style={[
+          styles.headerWrapper,
+
+          {
+            opacity: headerOpacityValue,
+            height: 62 + top,
+            paddingTop: top,
+          },
+        ]}
       >
         <Animated.View
           style={[
@@ -98,9 +110,7 @@ const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 0
 
 const styles = StyleSheet.create({
   headerWrapper: {
-    paddingTop: STATUS_BAR_HEIGHT,
     width: '100%',
-    height: 62 + STATUS_BAR_HEIGHT,
     position: 'absolute',
     top: 0,
     alignItems: 'center',
@@ -121,6 +131,7 @@ const styles = StyleSheet.create({
   },
   scrollWrapper: {
     paddingBottom: '30%',
+    paddingHorizontal: INTERACTION_SHEET_PADDING,
   },
 })
 

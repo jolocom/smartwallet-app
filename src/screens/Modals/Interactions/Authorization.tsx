@@ -2,7 +2,9 @@ import { useSelector } from 'react-redux'
 import React from 'react'
 import { Image, View, StyleSheet } from 'react-native'
 
-import BasWrapper from '~/components/ActionSheet/BasWrapper'
+import BasWrapper, {
+  BasInteractionBody,
+} from '~/components/ActionSheet/BasWrapper'
 import {
   getAuthorizationDetails,
   getCounterpartyName,
@@ -29,15 +31,17 @@ const Authorization = () => {
     <BasWrapper>
       <InteractionHeader {...{ title, description }} />
       {imageURL && (
-        <View style={styles.imageWrapper}>
-          <Image
-            source={{ uri: imageURL }}
-            style={styles.image}
-            // NOTE: it will take max Dimension size (260 - width) and make height
-            // based on the aspect ration of actual image size
-            resizeMode="cover"
-          />
-        </View>
+        <BasInteractionBody>
+          <View style={styles.imageWrapper}>
+            <Image
+              source={{ uri: imageURL }}
+              style={styles.image}
+              // NOTE: it will take max Dimension size (260 - width) and make height
+              // based on the aspect ration of actual image size
+              resizeMode="cover"
+            />
+          </View>
+        </BasInteractionBody>
       )}
       <InteractionFooter cta={cta} onSubmit={handleSubmit} />
     </BasWrapper>

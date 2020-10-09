@@ -161,23 +161,23 @@ export const getIsFullscreenCredShare = createSelector(
     const isOnlyOneCredential =
       !details.requestedAttributes.length && shareCredentials.length === 1
 
-    if (onlyAttributes) {
-      const availableAttributes = Object.values(shareAttributes).reduce<
-        AttributeI[]
-      >((acc, arr) => {
-        if (!arr) return acc
-        return acc.concat(arr)
-      }, [])
+    const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
+      (acc, v) => {
+        if (!!v.length) {
+          acc += v.length
+        } else {
+          acc += 1
+        }
+        return acc
+      },
+      0,
+    )
 
-      //TODO: add breakpoints
-      return (
-        availableAttributes.length > 3 || details.requestedAttributes.length > 2
-      )
-    } else if (isOnlyOneCredential) {
-      return false
-    } else {
-      return true
-    }
+    return onlyAttributes
+      ? numberOfFieldsDisplayed > 3
+      : isOnlyOneCredential
+      ? false
+      : true
   },
 )
 

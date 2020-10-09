@@ -74,24 +74,27 @@ const CredentialShareFas = () => {
       const Wrapper = isCarousel ? Carousel : React.Fragment
 
       return (
-        <View style={{ marginLeft: isCarousel ? 0 : 27 }}>
-          <Wrapper>
-            {credentials.map((cred) => (
-              <View style={{ marginRight: 20, marginVertical: 14 }}>
-                <CredentialCard
-                  isSmall
-                  hasInstruction={
-                    instructionVisible && isFirstCredential(cred.id)
-                  }
-                  onSelect={() => handleSelectCard(cred.type, cred.id)}
-                  selected={details.selectedCredentials[cred.type] === cred.id}
-                >
-                  <Header color={Colors.black}>{type}</Header>
-                </CredentialCard>
-              </View>
-            ))}
-          </Wrapper>
-        </View>
+        <Wrapper>
+          {credentials.map((cred) => (
+            <View
+              style={{
+                marginRight: 20,
+                marginVertical: 14,
+              }}
+            >
+              <CredentialCard
+                isSmall
+                hasInstruction={
+                  instructionVisible && isFirstCredential(cred.id)
+                }
+                onSelect={() => handleSelectCard(cred.type, cred.id)}
+                selected={details.selectedCredentials[cred.type] === cred.id}
+              >
+                <Header color={Colors.black}>{type}</Header>
+              </CredentialCard>
+            </View>
+          ))}
+        </Wrapper>
       )
     })
 

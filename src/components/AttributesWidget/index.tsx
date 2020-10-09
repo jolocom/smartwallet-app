@@ -6,6 +6,7 @@ import { AttrsState, AttributeI } from '~/modules/attributes/types'
 import AttrSectionHeader from './AttrSectionHeader'
 import Field, { FieldTypes } from './Field'
 import { AttrKeys } from '~/types/credentials'
+import BP from '~/utils/breakpoints'
 
 interface AttrsWidgetPropsI {
   attributes: AttrsState<AttributeI>
@@ -24,10 +25,19 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
 }) => {
   return (
     <>
-      {(Object.keys(attributes) as AttrKeys[]).map((sectionKey) => {
+      {(Object.keys(attributes) as AttrKeys[]).map((sectionKey, idx) => {
         const section = attributes[sectionKey]
         return (
-          <View style={styles.attrSectionContainer} key={sectionKey}>
+          <View
+            key={sectionKey}
+            style={{
+              marginBottom:
+                idx === Object.keys(attributes).length - 1
+                  ? 0
+                  : BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
+              width: '100%',
+            }}
+          >
             <AttrSectionHeader
               sectionKey={sectionKey}
               onCreateNew={onCreateNewAttr}
@@ -72,8 +82,8 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
 }
 
 const styles = StyleSheet.create({
-  attrSectionContainer: {
-    marginBottom: 40,
+  attrSection: {
+    marginBottom: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
   },
 })
 
