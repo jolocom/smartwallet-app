@@ -19,7 +19,6 @@ import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
-import BP from '~/utils/breakpoints'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -74,14 +73,19 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
         )}
 
         <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
-          <BtnGroup>
-            <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
-              {strings.CONFIRM}
-            </Btn>
-            <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-              {strings.BACK}
-            </Btn>
-          </BtnGroup>
+          <AbsoluteBottom>
+            <BtnGroup>
+              <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
+                {strings.CONFIRM}
+              </Btn>
+              <Btn
+                type={BtnTypes.secondary}
+                onPress={() => navigation.goBack()}
+              >
+                {strings.BACK}
+              </Btn>
+            </BtnGroup>
+          </AbsoluteBottom>
         </Animated.View>
       </>
     )

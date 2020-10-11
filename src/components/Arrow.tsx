@@ -34,11 +34,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: BP({
       xsmall: 0,
-      small: 13,
-      medium: 13,
-      large: 13,
+      small: 18,
+      medium: 18,
+      large: 18,
     }),
-    padding: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
   },
   leftArrow: {
     left: 0,

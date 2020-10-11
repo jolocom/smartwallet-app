@@ -6,6 +6,7 @@ import {
   NativeSyntheticEvent,
   TextInputSubmitEditingEventData,
   Platform,
+  Dimensions,
 } from 'react-native'
 import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
@@ -30,6 +31,8 @@ import {
   submitKey,
   hideSuggestions,
 } from './module/recoveryActions'
+
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const SeedKeyInput: React.FC = () => {
   const inputRef = useRef<TextInput>(null)
@@ -178,13 +181,16 @@ const SeedKeyInput: React.FC = () => {
           <RightArrow handlePress={selectNextWord} />
         )}
       </View>
-      {!suggestedKeys.length && <RecoveryInputMetadata />}
+      {/* {!suggestedKeys.length && <RecoveryInputMetadata />} */}
+      <RecoveryInputMetadata />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   inputContainer: {
+    position: 'absolute',
+    top: 0.25 * SCREEN_HEIGHT,
     width: '100%',
     marginTop: BP({
       large: 70,
@@ -198,28 +204,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     height: BP({
       xsmall: 50,
-      small: 80,
-      medium: 80,
-      large: 80,
+      small: 87,
+      medium: 87,
+      large: 87,
     }),
     borderRadius: 7,
-    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     textAlign: 'center',
     borderWidth: 2,
-    alignItems: 'center',
   },
   input: {
     width: '70%',
     color: Colors.white,
     textDecorationLine: 'none',
-    lineHeight: BP({ xsmall: 26, small: 30, medium: 34, large: 34 }),
-    ...Platform.select({
-      ios: {
-        marginTop: 2,
-      },
-    }),
+    lineHeight: BP({ xsmall: 28, small: 32, medium: 36, large: 36 }),
   },
   inputError: {
     borderColor: Colors.error,

@@ -4,9 +4,10 @@ import { StyleSheet, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import ScreenHeader from '~/components/ScreenHeader'
 import { JoloTextSizes } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 
 interface RecoveryHeaderI {
   phrase: string[]
@@ -43,6 +44,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                 <JoloText
                   kind={JoloTextKind.title}
                   size={JoloTextSizes.middle}
+                  weight={JoloTextWeight.regular}
                   key={seedKey + idx}
                   color={
                     currentWordIdx === 12
@@ -51,7 +53,15 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                       ? Colors.white
                       : Colors.activity
                   }
-                  customStyles={{ marginHorizontal: 3 }}
+                  customStyles={{
+                    marginHorizontal: 3,
+                    lineHeight: BP({
+                      large: 26,
+                      medium: 26,
+                      small: 26,
+                      xsmall: 22,
+                    }),
+                  }}
                 >
                   {seedKey}
                 </JoloText>
