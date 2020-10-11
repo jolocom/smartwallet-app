@@ -31,6 +31,8 @@ import {
   submitKey,
   hideSuggestions,
 } from './module/recoveryActions'
+import { useSelector } from 'react-redux'
+import { getLoaderState } from '~/modules/loader/selectors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -48,6 +50,7 @@ const SeedKeyInput: React.FC = () => {
   } = useRecoveryState()
 
   const [isSuccessBorder, setIsSuccessBorder] = useState(keyIsValid)
+  const isLoaderVisible = useSelector(getLoaderState)
 
   const selectPrevWord = () => {
     dispatch(setCurrentWordIdx(currentWordIdx - 1))
@@ -90,12 +93,13 @@ const SeedKeyInput: React.FC = () => {
       if (
         inputRef.current &&
         inputRef.current.isFocused &&
-        !inputRef.current.isFocused()
+        !inputRef.current.isFocused() &&
+        !isLoaderVisible
       ) {
         inputRef.current?.focus()
       }
     }
-  }, [currentWordIdx])
+  }, [currentWordIdx, isLoaderVisible])
 
   // when we move with arrows select a current seedKey
   useEffect(() => {
