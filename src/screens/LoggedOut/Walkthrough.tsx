@@ -19,7 +19,7 @@ import {
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 
 const walkthroughData = [
@@ -93,7 +93,12 @@ const Walkthrough: React.FC = () => {
                 bottom: 235,
               }}
             >
-              <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
+              <JoloText
+                kind={JoloTextKind.title}
+                size={JoloTextSizes.big}
+                weight={JoloTextWeight.regular}
+                color={Colors.white90}
+              >
                 {walkthroughData[idx].header}
               </JoloText>
               <JoloText
