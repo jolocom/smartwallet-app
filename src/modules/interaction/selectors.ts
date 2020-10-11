@@ -23,6 +23,7 @@ import {
 } from './guards'
 import { createInteractionSelector } from './utils'
 import { strings } from '~/translations/strings'
+import BP from '~/utils/breakpoints'
 
 /**
  * Gets the @IntermediaryState of the @IntermediarySheet
@@ -174,7 +175,8 @@ export const getIsFullscreenCredShare = createSelector(
     )
 
     return onlyAttributes
-      ? numberOfFieldsDisplayed > 3
+      ? numberOfFieldsDisplayed >
+          BP({ large: 3, medium: 3, small: 3, xsmall: 2 })
       : isOnlyOneCredential
       ? false
       : true
