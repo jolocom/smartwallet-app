@@ -185,7 +185,6 @@ const SeedKeyInput: React.FC = () => {
           <RightArrow handlePress={selectNextWord} />
         )}
       </View>
-      {/* {!suggestedKeys.length && <RecoveryInputMetadata />} */}
       <RecoveryInputMetadata />
     </View>
   )
