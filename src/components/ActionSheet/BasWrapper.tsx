@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, Platform } from 'react-native'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
@@ -27,7 +27,12 @@ const BasWrapper: React.FC<Props> = ({
   const bottomPosition = keyboardHeight ? keyboardHeight : bottom + 5
 
   return (
-    <View style={[styles.wrapper, { bottom: bottomPosition }]}>
+    <View
+      style={[
+        styles.wrapper,
+        { bottom: Platform.OS === 'ios' ? bottomPosition : bottom + 5 },
+      ]}
+    >
       {showIcon && (
         <IconWrapper customStyle={{ marginBottom: -35 }}>
           <View style={styles.basIcon}>
