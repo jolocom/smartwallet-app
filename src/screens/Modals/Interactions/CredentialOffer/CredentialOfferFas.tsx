@@ -15,7 +15,6 @@ import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
-import { debugView } from '~/utils/dev'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
