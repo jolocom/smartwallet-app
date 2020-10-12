@@ -1,5 +1,5 @@
-import React from 'react'
-import { Animated, StyleSheet, StatusBar } from 'react-native'
+import React, { useState } from 'react'
+import { Animated, StyleSheet, LayoutChangeEvent } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import useCollapsedScrollViewAnimations from '~/hooks/useScrollAnimation'
@@ -26,8 +26,8 @@ const CollapsedScrollView: React.FC<Props> = ({
   children,
   collapsedTitle,
   renderCollapsingComponent,
-  collapseStart,
 }) => {
+  const [headerHeight, setHeaderHeight] = useState(0)
   const {
     handleScroll,
     componentAnimatedValues: {
@@ -40,7 +40,11 @@ const CollapsedScrollView: React.FC<Props> = ({
       headerTextOpacityValue,
       headerTextPositionValue,
     },
-  } = useCollapsedScrollViewAnimations(collapseStart)
+  } = useCollapsedScrollViewAnimations(headerHeight)
+
+  const handleLayout = (e: LayoutChangeEvent) => {
+    setHeaderHeight(e.nativeEvent.layout.height)
+  }
 
   const animatedScaleStyle = [
     {
@@ -81,8 +85,8 @@ const CollapsedScrollView: React.FC<Props> = ({
           ]}
         >
           <JoloText
-            kind={JoloTextKind.title}
-            size={JoloTextSizes.mini}
+            kind={JoloTextKind.subtitle}
+            size={JoloTextSizes.middle}
             weight={JoloTextWeight.regular}
             color={Colors.white}
           >
@@ -97,7 +101,7 @@ const CollapsedScrollView: React.FC<Props> = ({
         scrollEventThrottle={1}
         onScroll={handleScroll}
       >
-        <Animated.View style={animatedScaleStyle}>
+        <Animated.View onLayout={handleLayout} style={animatedScaleStyle}>
           {renderCollapsingComponent()}
         </Animated.View>
         {children}
@@ -105,8 +109,6 @@ const CollapsedScrollView: React.FC<Props> = ({
     </>
   )
 }
-
-const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 0
 
 const styles = StyleSheet.create({
   headerWrapper: {
