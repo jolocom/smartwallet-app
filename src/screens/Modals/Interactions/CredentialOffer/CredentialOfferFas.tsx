@@ -45,7 +45,7 @@ const CredentialOfferFas = () => {
     <>
       <FasWrapper collapsedTitle={getHeaderText().title}>
         <InteractionHeader {...getHeaderText()} />
-        <View style={{ paddingHorizontal: 27 }}>
+        <View style={{ alignItems: 'center' }}>
           <InteractionSection
             visible={!!documents.length}
             title={strings.DOCUMENTS}
