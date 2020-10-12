@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
@@ -55,11 +55,15 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                   }
                   customStyles={{
                     marginHorizontal: 3,
-                    lineHeight: BP({
-                      large: 26,
-                      medium: 26,
-                      small: 26,
-                      xsmall: 22,
+                    ...Platform.select({
+                      ios: {
+                        lineHeight: BP({
+                          large: 26,
+                          medium: 26,
+                          small: 26,
+                          xsmall: 22,
+                        }),
+                      },
                     }),
                   }}
                 >
@@ -69,10 +73,25 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
             </View>
           </>
         ) : (
-          <ScreenHeader
-            title={strings.RECOVERY}
-            subtitle={strings.START_ENTERING_SEED_PHRASE}
-          />
+          <View
+            style={{
+              ...Platform.select({
+                android: {
+                  paddingBottom: BP({
+                    large: 79,
+                    medium: 79,
+                    small: 79,
+                    xsmall: 44,
+                  }),
+                },
+              }),
+            }}
+          >
+            <ScreenHeader
+              title={strings.RECOVERY}
+              subtitle={strings.START_ENTERING_SEED_PHRASE}
+            />
+          </View>
         )}
       </View>
     )
@@ -90,6 +109,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 5,
+    ...Platform.select({
+      android: {
+        height: BP({ large: 140, medium: 140, small: 160, xsmall: 120 }),
+      },
+    }),
   },
 })
 

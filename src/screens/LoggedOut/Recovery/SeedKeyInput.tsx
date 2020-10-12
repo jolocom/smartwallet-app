@@ -193,15 +193,19 @@ const SeedKeyInput: React.FC = () => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    position: 'absolute',
-    top: 0.25 * SCREEN_HEIGHT,
-    width: '100%',
-    marginTop: BP({
-      large: 70,
-      medium: 50,
-      small: 30,
-      xsmall: 30,
+    ...Platform.select({
+      ios: {
+        position: 'absolute',
+        top: 0.25 * SCREEN_HEIGHT,
+        marginTop: BP({
+          large: 70,
+          medium: 50,
+          small: 30,
+          xsmall: 30,
+        }),
+      },
     }),
+    width: '100%',
   },
   inputField: {
     width: '100%',
