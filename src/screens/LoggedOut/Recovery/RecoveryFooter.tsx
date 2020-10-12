@@ -73,19 +73,14 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
         )}
 
         <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
-          <AbsoluteBottom>
-            <BtnGroup>
-              <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
-                {strings.CONFIRM}
-              </Btn>
-              <Btn
-                type={BtnTypes.secondary}
-                onPress={() => navigation.goBack()}
-              >
-                {strings.BACK}
-              </Btn>
-            </BtnGroup>
-          </AbsoluteBottom>
+          <BtnGroup>
+            <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
+              {strings.CONFIRM}
+            </Btn>
+            <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
+              {strings.BACK}
+            </Btn>
+          </BtnGroup>
         </Animated.View>
       </>
     )
