@@ -15,6 +15,7 @@ import Claims from './Claims'
 import Documents from './Documents'
 import History from './History'
 import Settings from './Settings'
+import BottomBar from '~/components/BottomBar'
 import { useSyncStorageAttributes } from '~/hooks/attributes'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { Dimensions, View } from 'react-native'
@@ -50,7 +51,11 @@ const LoggedInTabs: React.FC = () => {
 
   if (!isLocked) {
     return (
-      <MainTabs.Navigator>
+      <MainTabs.Navigator
+        tabBar={(props) => {
+          return <BottomBar {...props} />
+        }}
+      >
         <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />
         <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
         <MainTabs.Screen name={ScreenNames.History} component={History} />

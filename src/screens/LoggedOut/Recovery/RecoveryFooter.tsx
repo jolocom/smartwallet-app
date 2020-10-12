@@ -72,6 +72,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
           </AbsoluteBottom>
         )}
 
+        {/* don't use AbsoluteBottom component here it disables buttons on Android */}
         <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
           <BtnGroup>
             <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>

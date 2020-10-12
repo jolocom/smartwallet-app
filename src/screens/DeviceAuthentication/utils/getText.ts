@@ -18,21 +18,6 @@ export const getBiometryHeader = (biometryType: BiometryTypes) => {
   }
 }
 
-export const getBiometryActionText = (biometryType: BiometryTypes) => {
-  switch (biometryType) {
-    case BIOMETRY_TYPE.TOUCH_ID:
-      return strings.TAP_TO_ACTIVATE_TOUCH_ID
-    case BIOMETRY_TYPE.FACE_ID:
-      return strings.TAP_TO_ACTIVATE_FACE_ID
-    case BIOMETRY_TYPE.FINGERPRINT:
-      return strings.TAP_TO_ACTIVATE_FINGERPRINT
-    case 'FACE':
-      return strings.TAP_TO_ACTIVATE_FACE
-    default:
-      return ''
-  }
-}
-
 export const getBiometryIsDisabledText = (biometryType: BiometryTypes) => {
   switch (biometryType) {
     case BIOMETRY_TYPE.TOUCH_ID:

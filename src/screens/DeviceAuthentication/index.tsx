@@ -15,6 +15,10 @@ import { setBiometryType } from './module/deviceAuthActions'
 
 const Stack = createStackNavigator()
 
+const disableGesturesOptions = {
+  gestureEnabled: false,
+}
+
 const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
   const { isPasscodeView } = useDeviceAuthState()
@@ -36,9 +40,17 @@ const DeviceAuthentication: React.FC = () => {
   return (
     <Stack.Navigator headerMode="none">
       {isPasscodeView ? (
-        <Stack.Screen name={ScreenNames.Passcode} component={Passcode} />
+        <Stack.Screen
+          name={ScreenNames.Passcode}
+          component={Passcode}
+          options={disableGesturesOptions}
+        />
       ) : (
-        <Stack.Screen name={ScreenNames.Biometry} component={Biometry} />
+        <Stack.Screen
+          name={ScreenNames.Biometry}
+          component={Biometry}
+          options={disableGesturesOptions}
+        />
       )}
     </Stack.Navigator>
   )

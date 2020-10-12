@@ -33,10 +33,11 @@ const styles = StyleSheet.create({
   arrows: {
     position: 'absolute',
     top: BP({
+      default: 18,
       xsmall: 0,
-      default: 13,
     }),
-    padding: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
   },
   leftArrow: {
     left: 0,

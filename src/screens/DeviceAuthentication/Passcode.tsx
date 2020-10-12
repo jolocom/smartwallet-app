@@ -1,5 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Dimensions,
+} from 'react-native'
 import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -21,6 +26,9 @@ import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useBackHandler } from '@react-native-community/hooks'
+
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const Passcode = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
@@ -79,6 +87,8 @@ const Passcode = () => {
     }
   }, [verifiedPasscode])
 
+  useBackHandler(() => true)
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
       <ScreenContainer
@@ -91,7 +101,7 @@ const Passcode = () => {
           subtitle={
             isCreating
               ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
-              : strings.YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN
+              : strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY
           }
         />
         <View style={styles.passcodeContainer}>
@@ -119,7 +129,7 @@ const Passcode = () => {
             customStyles={{ marginTop: 20 }}
           >
             {' '}
-            {strings.ANY_FUTURE_PASSCODE_RESTORE}
+            {strings.YOU_CAN_CHANGE_THE_PASSCODE}
           </JoloText>
         )}
         {hasError && (
@@ -146,11 +156,7 @@ const Passcode = () => {
 
 const styles = StyleSheet.create({
   passcodeContainer: {
-    marginTop: BP({
-      default: '10%',
-      large: '30%',
-      medium: '30%',
-    }),
+    marginTop: BP({ default: 0.16, xsmall: 0.05 }) * SCREEN_HEIGHT,
     position: 'relative',
   },
   spinner: {
