@@ -10,7 +10,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
  * operations with the credentials module (e.g. after a credential offer. not
  * syncing with the storage, but adding the new mapped @UICredential(s) to the store).
  */
-export const useSyncCredentials = () => {
+export const useSyncStorageCredentials = () => {
   const sdk = useSDK()
   const dispatch = useDispatch()
 

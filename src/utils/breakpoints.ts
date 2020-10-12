@@ -37,13 +37,7 @@ const breakpoints: Record<string, Breakpoint> = {
 }
 
 const isBreakpoint = (breakpointSize: ScreenSize) => {
-  if (Platform.OS === 'ios') {
-    return SCREEN_SIZE.height >= breakpoints[breakpointSize].height
-  }
-  return (
-    SCREEN_SIZE.width >= breakpoints[breakpointSize].width &&
-    SCREEN_SIZE.height >= breakpoints[breakpointSize].height
-  )
+  return SCREEN_SIZE.height >= breakpoints[breakpointSize].height
 }
 
 // NOTE: Maps through the breakpoints (biggest to smallest) and returns the @ScreenSize of the device if it's

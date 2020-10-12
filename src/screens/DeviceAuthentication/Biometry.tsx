@@ -1,6 +1,7 @@
 import React from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -14,11 +15,7 @@ import { Colors } from '~/utils/colors'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'
 
-import {
-  getBiometryHeader,
-  getBiometryActionText,
-  getBiometryDescription,
-} from './utils/getText'
+import { getBiometryHeader, getBiometryDescription } from './utils/getText'
 import BiometryAnimation from '~/components/BiometryAnimation'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { setPopup } from '~/modules/appState/actions'
@@ -55,6 +52,8 @@ const Biometry: React.FC = () => {
     }
   }
 
+  useBackHandler(() => true)
+
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
       <ScreenHeader
@@ -68,10 +67,10 @@ const Biometry: React.FC = () => {
       <JoloText
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.middle}
-        color={Colors.success}
-        customStyles={{ paddingHorizontal: 25 }}
+        color={Colors.activity}
+        customStyles={{ paddingHorizontal: 25, opacity: 0.8 }}
       >
-        {getBiometryActionText(biometryType)}
+        {strings.TAP_TO_ACTIVATE}
       </JoloText>
       <AbsoluteBottom>
         <Btn type={BtnTypes.secondary} onPress={handleRedirectToLogin}>

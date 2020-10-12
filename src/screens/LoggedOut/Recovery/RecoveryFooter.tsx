@@ -19,7 +19,6 @@ import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
-import BP from '~/utils/breakpoints'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -73,6 +72,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
           </AbsoluteBottom>
         )}
 
+        {/* don't use AbsoluteBottom component here it disables buttons on Android */}
         <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
           <BtnGroup>
             <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>

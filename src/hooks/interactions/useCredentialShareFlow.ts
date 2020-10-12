@@ -5,16 +5,16 @@ import {
   getAvailableAttributesToShare,
   getShareCredentialsBySection,
   getShareCredentialTypes,
-  getInteractionDetails,
+  getCounterpartyName,
 } from '~/modules/interaction/selectors'
-import { AttrKeys, attrTypeToAttrKey } from '~/types/credentials'
-import { IntermediaryState } from '~/modules/interaction/types'
+import { AttrKeys, attrTypeToAttrKey, ATTR_UI_NAMES } from '~/types/credentials'
+import { IntermediarySheetState } from '~/modules/interaction/types'
 import {
   setIntermediaryState,
   setAttributeInputKey,
   selectShareCredential,
 } from '~/modules/interaction/actions'
-import { isCredShareDetails } from '~/modules/interaction/guards'
+import { strings } from '~/translations/strings'
 
 /**
  * A custom hook which exposes a collection of utils for the Credential Share interaction
@@ -24,11 +24,11 @@ export const useCredentialShareFlow = () => {
   const interaction = useInteraction()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getAvailableAttributesToShare)
-  const interactionDetails = useSelector(getInteractionDetails)
   const { requestedAttributes, requestedCredentials } = useSelector(
     getShareCredentialTypes,
   )
   const { documents, other } = useSelector(getShareCredentialsBySection)
+  const serviceName = useSelector(getCounterpartyName)
 
   /**
    * Assembles a @CredentialRequestResponse token with the selected
@@ -100,7 +100,7 @@ export const useCredentialShareFlow = () => {
    * Shows the Intermediary ActionSheet for creating a new attribute.
    */
   const handleCreateAttribute = (sectionKey: AttrKeys) => {
-    dispatch(setIntermediaryState(IntermediaryState.showing))
+    dispatch(setIntermediaryState(IntermediarySheetState.showing))
     dispatch(setAttributeInputKey(sectionKey))
   }
 
@@ -116,17 +116,36 @@ export const useCredentialShareFlow = () => {
    * available in the @attributes module. Otherwise returns @null.
    */
   const getSingleMissingAttribute = (): AttrKeys | null => {
-    if (!isCredShareDetails(interactionDetails)) return null
-
     const isSingleAttribute =
       !requestedCredentials.length && requestedAttributes.length === 1
+    if (!isSingleAttribute) return null
+
     const attrKey = attrTypeToAttrKey(requestedAttributes[0])
     if (!attrKey) return null
 
     const typeAttributes = attributes[attrKey]
     const isMissing = !typeAttributes || !typeAttributes.length
 
-    return isSingleAttribute && isMissing ? attrKey : null
+    return isMissing ? attrKey : null
+  }
+
+  const getHeaderText = () => {
+    const missingAttr = getSingleMissingAttribute()
+    const title = missingAttr
+      ? strings.SERVICE_REQUESTS_ATTRIBUTE(
+          serviceName,
+          ATTR_UI_NAMES[missingAttr],
+        )
+      : strings.INCOMING_REQUEST
+    const description = strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(
+      serviceName,
+    )
+
+    return { title, description }
+  }
+
+  const getCtaText = () => {
+    return getSingleMissingAttribute() ? strings.ADD_INFO : strings.SHARE
   }
 
   return {
@@ -137,5 +156,7 @@ export const useCredentialShareFlow = () => {
     handleCreateAttribute,
     handleSelectCredential,
     getSingleMissingAttribute,
+    getHeaderText,
+    getCtaText,
   }
 }
