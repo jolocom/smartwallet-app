@@ -112,8 +112,7 @@ const Camera = () => {
   }
 
   return (
-    <ScreenContainer isFullscreen>
-      <StatusBar hidden />
+    <ScreenContainer isFullscreen backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
         {overlayVisible && (
           <View style={styles.navigationContainer}>

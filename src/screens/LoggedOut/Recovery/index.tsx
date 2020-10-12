@@ -22,6 +22,7 @@ const Recovery: React.FC = () => {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flex: 1 }}
+        scrollEnabled={false} // to prevent pulling up and down the screen
       >
         <ScreenContainer
           customStyles={{
@@ -37,7 +38,7 @@ const Recovery: React.FC = () => {
       </ScrollView>
       {Platform.OS === 'ios' && (
         <InputAccessoryView nativeID="suggestions">
-          <View style={{ marginBottom: 10 }}>
+          <View style={{ marginBottom: 10, marginLeft: 10 }}>
             <SeedKeySuggestions />
           </View>
         </InputAccessoryView>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
-import JoloText, { JoloTextKind } from './JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
@@ -12,7 +12,12 @@ interface PropsI {
 const ScreenHeader: React.FC<PropsI> = ({ title, subtitle }) => {
   return (
     <View>
-      <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
+      <JoloText
+        kind={JoloTextKind.title}
+        size={JoloTextSizes.middle}
+        weight={JoloTextWeight.regular}
+        color={Colors.white85}
+      >
         {title}
       </JoloText>
       <JoloText

@@ -30,7 +30,9 @@ const Circle: React.FC<CirclePropsI> = ({
         width: 18,
         height: 18,
         borderRadius: 9,
-        backgroundColor: color,
+        borderWidth: StyleSheet.hairlineWidth / 5,
+        borderColor: color,
+        overflow: 'hidden',
       }}
     >
       {/*  the border of the circle once is scaled get pixelated
@@ -38,7 +40,6 @@ const Circle: React.FC<CirclePropsI> = ({
         one inside of the other
         the outer has a background color depending on the Loader type
         the inner circle is of the color of the screen */}
-      <View style={styles.nestedCircle} />
     </Animated.View>
   )
 }
@@ -76,17 +77,5 @@ const Ripple: React.FC<RipplePropsI> = ({
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  nestedCircle: {
-    position: 'absolute',
-    top: 0.3,
-    left: 0.3,
-    width: 17.4,
-    height: 17.4,
-    borderRadius: 8.7,
-    backgroundColor: Colors.mainBlack,
-  },
-})
 
 export default Ripple
