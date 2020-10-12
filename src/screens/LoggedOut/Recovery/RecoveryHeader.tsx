@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     ...Platform.select({
       android: {
-        height: BP({ large: 140, medium: 140, small: 160, xsmall: 120 }),
+        height: BP({ large: 160, medium: 160, small: 160, xsmall: 120 }),
       },
     }),
   },
