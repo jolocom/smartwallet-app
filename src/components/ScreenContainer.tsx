@@ -14,6 +14,7 @@ interface ScreenContainerI {
   backgroundColor?: Colors
   hasHeaderBack?: boolean
   hasHeaderClose?: boolean
+  hideStatusBar?: boolean
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
@@ -24,8 +25,9 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
   backgroundColor = Colors.mainBlack,
   hasHeaderBack = false,
   hasHeaderClose = false,
+  hideStatusBar = false,
 }) => {
-  isFullscreen && useHideStatusBar()
+  hideStatusBar && useHideStatusBar()
 
   return (
     <SafeAreaView
