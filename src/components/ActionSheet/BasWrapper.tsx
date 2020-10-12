@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, StyleSheet, ViewStyle, Platform } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { View, StyleSheet, ViewStyle, Platform, Animated } from 'react-native'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
@@ -23,14 +23,29 @@ const BasWrapper: React.FC<Props> = ({
   showIcon = true,
 }) => {
   const { bottom } = useSafeArea()
-  const { keyboardHeight } = useKeyboardHeight()
-  const bottomPosition = keyboardHeight ? keyboardHeight : bottom + 5
+  const { keyboardHeight } = useKeyboardHeight(0)
+  const bottomPosition = keyboardHeight ? keyboardHeight + 5 : bottom + 5
+
+  const animatedOpacity = useRef(
+    new Animated.Value(showIcon || Platform.OS === 'android' ? 1 : 0),
+  ).current
+
+  useEffect(() => {
+    if (keyboardHeight && Platform.OS !== 'android') {
+      Animated.timing(animatedOpacity, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: true,
+      }).start()
+    }
+  }, [keyboardHeight])
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.wrapper,
         { bottom: Platform.OS === 'ios' ? bottomPosition : bottom + 5 },
+        { opacity: animatedOpacity },
       ]}
     >
       {showIcon && (
@@ -41,7 +56,7 @@ const BasWrapper: React.FC<Props> = ({
         </IconWrapper>
       )}
       <View style={[styles.childrenWrapper, customStyles]}>{children}</View>
-    </View>
+    </Animated.View>
   )
 }
 

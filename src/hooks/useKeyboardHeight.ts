@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 import { Keyboard, KeyboardEvent } from "react-native";
 
-export const useKeyboardHeight = () => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0)
+export const useKeyboardHeight = (initialValue: number) => {
+  const [keyboardHeight, setKeyboardHeight] = useState(initialValue)
 
     const handleKeyboard = (e: KeyboardEvent) => {
       setKeyboardHeight(e.startCoordinates ? 
