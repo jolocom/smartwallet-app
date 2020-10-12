@@ -7,8 +7,6 @@ import {
   TextInputSubmitEditingEventData,
   Platform,
   Dimensions,
-  Keyboard,
-  KeyboardEvent,
 } from 'react-native'
 import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
@@ -35,7 +33,6 @@ import {
 } from './module/recoveryActions'
 import { useSelector } from 'react-redux'
 import { getLoaderState } from '~/modules/loader/selectors'
-import { useKeyboard } from '@react-native-community/hooks'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -149,28 +146,8 @@ const SeedKeyInput: React.FC = () => {
     }
   }, [suggestedKeys])
 
-  const keyboardHeight = useRef(0)
-
-  const handleKeyboard = (e: KeyboardEvent) => {
-    keyboardHeight.current =
-      (e.endCoordinates.height + e.startCoordinates.height) / 2
-  }
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', handleKeyboard)
-    ;() => {
-      Keyboard.removeListener('keyboardDidShow', handleKeyboard)
-    }
-  }, [])
-
   return (
-    // <View style={[styles.inputContainer, {top: Platform.OS === 'ios' ? 0.25 * SCREEN_HEIGHT : SCREEN_HEIGHT - keyboardHeight * 0.5}]}>
-    <View
-      style={[
-        styles.inputContainer,
-        { top: (SCREEN_HEIGHT - keyboardHeight.current) * 0.5 },
-      ]}
-    >
+    <View style={styles.inputContainer}>
       <View
         style={[
           styles.inputField,
@@ -216,7 +193,18 @@ const SeedKeyInput: React.FC = () => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    position: 'absolute',
+    ...Platform.select({
+      ios: {
+        position: 'absolute',
+        top: 0.25 * SCREEN_HEIGHT,
+        marginTop: BP({
+          large: 70,
+          medium: 50,
+          small: 30,
+          xsmall: 30,
+        }),
+      },
+    }),
     width: '100%',
   },
   inputField: {
