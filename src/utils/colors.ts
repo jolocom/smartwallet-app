@@ -14,6 +14,7 @@ export enum Colors {
   black30 = 'rgba(0,0,0,0.30)',
   lightBlack = 'rgb(9,9,9)',
   codGrey = '#101010',
+  abbey = '#04040c',
   success = '#5251c1',
   white = '#ffffff',
   white35 = 'rgba(255, 255, 255, 0.35)',

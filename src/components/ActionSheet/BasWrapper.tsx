@@ -5,6 +5,7 @@ import BP from '~/utils/breakpoints'
 
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 
 interface Props {
   customStyles?: ViewStyle
@@ -22,8 +23,11 @@ const BasWrapper: React.FC<Props> = ({
   showIcon = true,
 }) => {
   const { bottom } = useSafeArea()
+  const { keyboardHeight } = useKeyboardHeight()
+  const bottomPosition = keyboardHeight ? keyboardHeight : bottom + 5
+
   return (
-    <View style={[styles.wrapper, { bottom: bottom + 5 }]}>
+    <View style={[styles.wrapper, { bottom: bottomPosition }]}>
       {showIcon && (
         <IconWrapper customStyle={{ marginBottom: -35 }}>
           <View style={styles.basIcon}>
