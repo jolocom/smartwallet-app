@@ -11,7 +11,6 @@ import { useSafeArea } from 'react-native-safe-area-context'
 interface Props {
   collapsedTitle: string
   renderCollapsingComponent: () => React.ReactNode
-  collapseStart: number
 }
 
 /**
@@ -86,7 +85,7 @@ const CollapsedScrollView: React.FC<Props> = ({
         >
           <JoloText
             kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
+            size={JoloTextSizes.big}
             weight={JoloTextWeight.regular}
             color={Colors.white}
           >
