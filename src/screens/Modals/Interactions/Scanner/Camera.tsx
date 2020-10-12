@@ -4,7 +4,6 @@ import {
   useWindowDimensions,
   Dimensions,
   StyleSheet,
-  StatusBar,
   TouchableHighlight,
   Animated,
 } from 'react-native'

@@ -1,10 +1,11 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle, Platform } from 'react-native'
+import { View, StyleSheet, ViewStyle, Platform, StatusBar } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
 import BP from '~/utils/breakpoints'
+import useHideStatusBar from '~/hooks/useHideStatusBar'
 
 interface ScreenContainerI {
   isTransparent?: boolean
@@ -24,8 +25,22 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
   hasHeaderBack = false,
   hasHeaderClose = false,
 }) => {
+  isFullscreen && useHideStatusBar()
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor }} mode="padding">
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor,
+        paddingTop: isFullscreen
+          ? 0
+          : Platform.select({
+              android: StatusBar.currentHeight,
+              ios: 20,
+            }),
+      }}
+      mode="padding"
+    >
       <View style={[styles.navContainer, isTransparent && styles.transparent]}>
         {(hasHeaderClose || hasHeaderBack) && (
           <NavigationHeader
