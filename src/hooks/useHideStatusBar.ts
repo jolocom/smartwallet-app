@@ -1,16 +1,12 @@
 import { useEffect } from 'react'
 import { StatusBar } from 'react-native'
 
-const useHideStatusBar = (delay: number = 600) => {
+const useHideStatusBar = () => {
   useEffect(() => {
-    setTimeout(() => {
-      StatusBar.setHidden(true)
-    }, delay)
+    StatusBar.setHidden(true)
 
     return () => {
-      setTimeout(() => {
-        StatusBar.setHidden(false)
-      }, delay)
+      StatusBar.setHidden(false)
     }
   }, [])
 }
