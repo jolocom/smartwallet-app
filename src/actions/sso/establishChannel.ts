@@ -1,12 +1,15 @@
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { ThunkAction } from '../../store'
-import { Interaction, FlowType } from '@jolocom/sdk'
+import { Interaction, FlowType, ErrorCode } from '@jolocom/sdk'
 import { cancelSSO, scheduleSuccessNotification } from '.'
 import { scheduleNotification } from '../notifications'
 import { createInfoNotification } from '../../lib/notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
+import { showErrorScreen } from '../generic'
+import { AppError } from 'src/lib/errors'
+import { Channel } from '@jolocom/sdk/js/channels'
 
 export const consumeEstablishChannelRequest = (
   interaction: Interaction,
@@ -23,17 +26,11 @@ export const consumeEstablishChannelRequest = (
   )
 }
 
-export const startChannel = (interactionId: string): ThunkAction => async (
+export const handleChannelInterxn = (channel: Channel, interxn: Interaction): ThunkAction => async (
   dispatch,
   getState,
   sdk,
 ) => {
-  const interaction = sdk.interactionManager.getInteraction(interactionId)
-
-  const response = await interaction.createEstablishChannelResponse(0)
-  await interaction.processInteractionToken(response)
-  const channel = await sdk.channels.create(interaction)
-
   const successNotification = (message: string) => {
     dispatch(
       scheduleNotification(
@@ -45,9 +42,8 @@ export const startChannel = (interactionId: string): ThunkAction => async (
     )
   }
 
-  channel.send(response)
-  channel.start(async interxn => {
-    let resp
+  let resp
+  try {
     switch (interxn.flow.type) {
       case FlowType.Resolution:
         resp = await interxn.createResolutionResponse()
@@ -63,7 +59,7 @@ export const startChannel = (interactionId: string): ThunkAction => async (
     }
 
     if (resp) {
-      channel.send(resp)
+      await channel.send(resp)
     } else {
       console.warn(
         'received illegal interxn request on channel',
@@ -79,7 +75,29 @@ export const startChannel = (interactionId: string): ThunkAction => async (
         ),
       )
     }
+  } catch (err) {
+    const error = err instanceof AppError
+      ? err
+      : new AppError(ErrorCode.Unknown, err)
+    dispatch(showErrorScreen(error))
+  }
+}
+
+export const startChannel = (interactionId: string): ThunkAction => async (
+  dispatch,
+  getState,
+  sdk,
+) => {
+  const interaction = sdk.interactionManager.getInteraction(interactionId)
+
+  const establishResp = await interaction.createEstablishChannelResponse(0)
+  await interaction.processInteractionToken(establishResp)
+  const channel = await sdk.channels.create(interaction)
+
+  await channel.start(async interxn => {
+    await dispatch(handleChannelInterxn(channel, interxn))
   })
+  await channel.send(establishResp)
 
   dispatch(cancelSSO)
   dispatch(scheduleSuccessNotification)
