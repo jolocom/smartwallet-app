@@ -110,6 +110,8 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
     await loader(
       async () => {
         const interaction = await sdk.interactionManager.start(channel, token)
+        console.log({ interaction })
+
         const mappedInteraction = getMappedInteraction(interaction)
         const shouldStart = preInteractionHandler[interaction.flow.type]
           ? preInteractionHandler[interaction.flow.type](interaction)

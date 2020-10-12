@@ -50,7 +50,7 @@ const SeedKeyInput: React.FC = () => {
   } = useRecoveryState()
 
   const [isSuccessBorder, setIsSuccessBorder] = useState(keyIsValid)
-  const isLoaderVisible = useSelector(getLoaderState)
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
 
   const selectPrevWord = () => {
     dispatch(setCurrentWordIdx(currentWordIdx - 1))

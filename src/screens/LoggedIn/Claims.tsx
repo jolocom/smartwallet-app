@@ -47,6 +47,41 @@ const Claims: React.FC = () => {
         credentialRequirements: [
           { type: ['Credential', 'ProofOfEmailCredential'], constraints: [] },
           { type: ['Credential', 'ProofOfNameCredential'], constraints: [] },
+          { type: ['Credential', 'FirstCredential'], constraints: [] },
+        ],
+      })
+      .then(startInteraction)
+  }
+
+  const startShare1 = () => {
+    sdk
+      .credRequestToken({
+        callbackURL: 'test',
+        credentialRequirements: [
+          { type: ['Credential', 'FirstCredential'], constraints: [] },
+        ],
+      })
+      .then(startInteraction)
+  }
+
+  const startShare2 = () => {
+    sdk
+      .credRequestToken({
+        callbackURL: 'test',
+        credentialRequirements: [
+          { type: ['Credential', 'ProofOfEmailCredential'], constraints: [] },
+          { type: ['Credential', 'ProofOfNameCredential'], constraints: [] },
+        ],
+      })
+      .then(startInteraction)
+  }
+
+  const startShare3 = () => {
+    sdk
+      .credRequestToken({
+        callbackURL: 'test',
+        credentialRequirements: [
+          { type: ['Credential', 'ProofOfEmailCredential'], constraints: [] },
         ],
       })
       .then(startInteraction)
@@ -66,6 +101,9 @@ const Claims: React.FC = () => {
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={openScanner}>Open scanner</Btn>
       <Btn onPress={startShare}>Start Share</Btn>
+      <Btn onPress={startShare1}>Start Share1</Btn>
+      <Btn onPress={startShare2}>Start Share2</Btn>
+      <Btn onPress={startShare3}>Start Share3</Btn>
     </ScreenContainer>
   )
 }
