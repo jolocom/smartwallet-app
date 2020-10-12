@@ -33,8 +33,8 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
         weight={JoloTextWeight.regular}
         color={Colors.white90}
         customStyles={{
-          lineHeight: BP({ xsmall: 24, small: 28, medium: 28, large: 28 }),
-          marginBottom: BP({ xsmall: 4, small: 4, medium: 8, large: 8 }),
+          lineHeight: BP({ xsmall: 24, default: 28 }),
+          marginBottom: BP({ default: 4, medium: 8, large: 8 }),
         }}
       >
         {title}
@@ -53,8 +53,8 @@ const InteractionHeader: React.FC<PropsI> = ({ title, description }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: BP({ large: 20, medium: 20, small: 20, xsmall: 20 }),
-    marginBottom: BP({ large: 40, medium: 40, small: 40, xsmall: 40 }),
+    marginTop: 20,
+    marginBottom: 40,
   },
 })
 

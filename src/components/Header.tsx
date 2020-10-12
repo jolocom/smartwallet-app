@@ -69,10 +69,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   large: {
-    ...getStyle(BP({ xsmall: 26, small: 30, medium: 34, large: 34 }), 40),
+    ...getStyle(BP({ xsmall: 26, small: 30, default: 34 }), 40),
   },
   medium: {
-    ...getStyle(BP({ xsmall: 24, small: 28, medium: 28, large: 28 }), 40),
+    ...getStyle(BP({ xsmall: 24, default: 28 }), 40),
   },
   small: {
     ...getStyle(18, 24),

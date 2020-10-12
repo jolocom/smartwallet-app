@@ -34,7 +34,7 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
               marginBottom:
                 idx === Object.keys(attributes).length - 1
                   ? 0
-                  : BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
+                  : BP({ default: 24, large: 36, medium: 36 }),
               width: '100%',
             }}
           >

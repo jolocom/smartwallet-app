@@ -19,7 +19,6 @@ import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
-import BP from '~/utils/breakpoints'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean

@@ -268,8 +268,8 @@ const styles = StyleSheet.create({
   seedphrase: {
     textAlign: 'center',
     fontFamily: Fonts.Medium,
-    fontSize: BP({ large: 40, medium: 40, small: 32, xsmall: 32 }),
-    lineHeight: BP({ large: 54, medium: 54, small: 46, xsmall: 46 }),
+    fontSize: BP({ default: 32, large: 40, medium: 40 }),
+    lineHeight: BP({ default: 46, large: 54, medium: 54 }),
     letterSpacing: 0,
     color: Colors.activity,
   },

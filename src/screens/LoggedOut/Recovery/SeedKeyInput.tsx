@@ -187,20 +187,17 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     marginTop: BP({
-      large: 70,
+      default: 30,
       medium: 50,
-      small: 30,
-      xsmall: 30,
+      large: 70,
     }),
   },
   inputField: {
     width: '100%',
     backgroundColor: 'black',
     height: BP({
+      default: 80,
       xsmall: 50,
-      small: 80,
-      medium: 80,
-      large: 80,
     }),
     borderRadius: 7,
     paddingHorizontal: 16,
@@ -214,7 +211,7 @@ const styles = StyleSheet.create({
     width: '70%',
     color: Colors.white,
     textDecorationLine: 'none',
-    lineHeight: BP({ xsmall: 26, small: 30, medium: 34, large: 34 }),
+    lineHeight: BP({ default: 34, xsmall: 26, small: 30 }),
     ...Platform.select({
       ios: {
         marginTop: 2,

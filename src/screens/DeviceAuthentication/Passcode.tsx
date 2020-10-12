@@ -147,10 +147,9 @@ const Passcode = () => {
 const styles = StyleSheet.create({
   passcodeContainer: {
     marginTop: BP({
+      default: '10%',
       large: '30%',
       medium: '30%',
-      small: '10%',
-      xsmall: '10%',
     }),
     position: 'relative',
   },

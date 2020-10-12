@@ -73,8 +73,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.select({
       ios: 0,
       android: BP({
-        large: 0,
-        medium: 0,
+        default: 0,
         small: 4,
         xsmall: 4,
       }),

@@ -24,7 +24,7 @@ const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
         renderCollapsingComponent={() => (
           <IconWrapper
             customStyle={{
-              marginTop: BP({ large: 35, medium: 35, small: 20, xsmall: 20 }),
+              marginTop: BP({ large: 35, medium: 35, default: 20 }),
             }}
           >
             <InteractionIcon />
