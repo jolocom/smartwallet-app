@@ -49,6 +49,18 @@ const Claims: React.FC = () => {
       .then(startInteraction)
   }
 
+  const startAuthorization = () => {
+    sdk
+      .authorizationRequestToken({
+        callbackURL: 'test',
+        description:
+          'The  http://google.com is ready to share a scooter with you, unlock to start your ride',
+        action: 'unlock the scooter',
+        imageURL: 'http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png',
+      })
+      .then(startInteraction)
+  }
+
   return (
     <ScreenContainer>
       <ContainerComponent>
@@ -62,6 +74,7 @@ const Claims: React.FC = () => {
       </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={startShare}>Start Share</Btn>
+      <Btn onPress={startAuthorization}>Start Authz</Btn>
     </ScreenContainer>
   )
 }
