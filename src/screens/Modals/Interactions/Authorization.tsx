@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import React from 'react'
-import { Image, View, StyleSheet } from 'react-native'
+import { Image, View, StyleSheet, Dimensions } from 'react-native'
 
 import BasWrapper, {
   BasInteractionBody,
@@ -14,6 +14,8 @@ import { strings } from '~/translations/strings'
 import InteractionFooter from './InteractionFooter'
 import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
+
+const SCREEN_WIDTH = Dimensions.get('window').width
 
 const Authorization = () => {
   const { imageURL, action } = useSelector(getAuthorizationDetails)
@@ -54,8 +56,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 260,
-    height: 230,
+    width: SCREEN_WIDTH * 0.6,
+    height: SCREEN_WIDTH * 0.6 * 0.88,
   },
 })
 
