@@ -1,10 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Dimensions,
-} from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -27,6 +22,7 @@ import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useBackHandler } from '@react-native-community/hooks'
+import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -89,6 +85,8 @@ const Passcode = () => {
 
   useBackHandler(() => true)
 
+  const { keyboardHeight } = useKeyboardHeight(0)
+
   return (
     <ScreenContainer
       customStyles={{
@@ -142,7 +140,7 @@ const Passcode = () => {
         </JoloText>
       )}
       {!isCreating && (
-        <AbsoluteBottom customStyles={styles.btn}>
+        <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
           <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
             {strings.RESET}
           </Btn>
@@ -163,9 +161,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: '38%',
     top: 100,
-  },
-  btn: {
-    bottom: 0,
   },
 })
 
