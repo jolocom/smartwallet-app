@@ -72,7 +72,7 @@ const Walkthrough: React.FC = () => {
     <ScreenContainer
       isFullscreen
       customStyles={{ marginTop: -insets.top }}
-      backgroundColor={Colors.black}
+      backgroundColor={Colors.abbey}
     >
       <Swiper
         loop

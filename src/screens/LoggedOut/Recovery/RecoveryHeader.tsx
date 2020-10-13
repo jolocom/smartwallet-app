@@ -78,10 +78,10 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
               ...Platform.select({
                 android: {
                   paddingBottom: BP({
-                    large: 79,
-                    medium: 79,
-                    small: 79,
-                    xsmall: 44,
+                    large: 101,
+                    medium: 101,
+                    small: 101,
+                    xsmall: 66,
                   }),
                 },
               }),
