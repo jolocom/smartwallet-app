@@ -2,7 +2,6 @@ import React from 'react'
 import { TouchableOpacity, StyleSheet } from 'react-native'
 
 import BP from '~/utils/breakpoints'
-import { debugView } from '~/utils/dev'
 
 export enum ArrowDirections {
   left,
