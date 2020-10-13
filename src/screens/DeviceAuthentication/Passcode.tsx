@@ -153,14 +153,8 @@ const Passcode = () => {
 const styles = StyleSheet.create({
   passcodeContainer: {
     marginTop:
-      BP({ large: 0.16, medium: 0.16, small: 0.16, xsmall: 0.05 }) *
-      SCREEN_HEIGHT,
+      BP({ large: 0.1, medium: 0.1, small: 0.1, xsmall: 0.05 }) * SCREEN_HEIGHT,
     position: 'relative',
-  },
-  spinner: {
-    position: 'absolute',
-    left: '38%',
-    top: 100,
   },
 })
 
