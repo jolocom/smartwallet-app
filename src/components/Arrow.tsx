@@ -2,6 +2,7 @@ import React from 'react'
 import { TouchableOpacity, StyleSheet } from 'react-native'
 
 import BP from '~/utils/breakpoints'
+import { debugView } from '~/utils/dev'
 
 export enum ArrowDirections {
   left,
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
     }),
     paddingVertical: 15,
     paddingHorizontal: 20,
+    zIndex: 10,
   },
   leftArrow: {
     left: 0,
