@@ -1,4 +1,5 @@
 import React from 'react'
+import { StatusBar } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import Loader from '~/modals/Loader'
@@ -15,6 +16,12 @@ const Overlays = () => {
 
   return (
     <>
+      <StatusBar
+        backgroundColor={'transparent'}
+        animated
+        translucent
+        barStyle="light-content"
+      />
       <Loader />
       <Lock />
       {shouldShowActionSheets ? <ActionSheetManager /> : null}

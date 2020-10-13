@@ -126,7 +126,7 @@ const BottomBar = (props: BottomTabBarProps) => {
       <View
         style={{
           paddingBottom: insets.bottom,
-          backgroundColor: '#0c060e',
+          backgroundColor: Colors.haiti,
         }}
       />
       <ScannerButton />

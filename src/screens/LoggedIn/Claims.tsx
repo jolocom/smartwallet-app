@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn from '~/components/Btn'
-import useRedirectTo from '~/hooks/useRedirectTo'
-import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
@@ -37,7 +35,6 @@ const Claims: React.FC = () => {
     )
   }
 
-  const openScanner = useRedirectTo(ScreenNames.Interactions)
   const attributes = useSelector(getAttributes)
 
   const startShare = () => {
@@ -64,7 +61,6 @@ const Claims: React.FC = () => {
         />
       </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>
-      <Btn onPress={openScanner}>Open scanner</Btn>
       <Btn onPress={startShare}>Start Share</Btn>
     </ScreenContainer>
   )

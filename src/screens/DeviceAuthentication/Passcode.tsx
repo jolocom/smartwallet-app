@@ -90,67 +90,65 @@ const Passcode = () => {
   useBackHandler(() => true)
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-      <ScreenContainer
-        customStyles={{
-          justifyContent: 'flex-start',
-        }}
-      >
-        <ScreenHeader
-          title={isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
-          subtitle={
-            isCreating
-              ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
-              : strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY
-          }
-        />
-        <View style={styles.passcodeContainer}>
-          {isCreating ? (
-            <PasscodeInput
-              value={passcode}
-              stateUpdaterFn={setPasscode}
-              onSubmit={handlePasscodeSubmit}
-            />
-          ) : (
-            <PasscodeInput
-              value={verifiedPasscode}
-              stateUpdaterFn={setVerifiedPasscode}
-              onSubmit={handleVerifiedPasscodeSubmit}
-              errorStateUpdaterFn={setHasError}
-              hasError={hasError}
-            />
-          )}
-        </View>
-        {isCreating && (
-          <JoloText
-            kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
-            color={Colors.success}
-            customStyles={{ marginTop: 20 }}
-          >
-            {' '}
-            {strings.YOU_CAN_CHANGE_THE_PASSCODE}
-          </JoloText>
+    <ScreenContainer
+      customStyles={{
+        justifyContent: 'flex-start',
+      }}
+    >
+      <ScreenHeader
+        title={isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
+        subtitle={
+          isCreating
+            ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
+            : strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY
+        }
+      />
+      <View style={styles.passcodeContainer}>
+        {isCreating ? (
+          <PasscodeInput
+            value={passcode}
+            stateUpdaterFn={setPasscode}
+            onSubmit={handlePasscodeSubmit}
+          />
+        ) : (
+          <PasscodeInput
+            value={verifiedPasscode}
+            stateUpdaterFn={setVerifiedPasscode}
+            onSubmit={handleVerifiedPasscodeSubmit}
+            errorStateUpdaterFn={setHasError}
+            hasError={hasError}
+          />
         )}
-        {hasError && (
-          <JoloText
-            kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
-            color={Colors.error}
-            customStyles={{ marginTop: 20 }}
-          >
-            {strings.PINS_DONT_MATCH}
-          </JoloText>
-        )}
-        {!isCreating && (
-          <AbsoluteBottom customStyles={styles.btn}>
-            <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {strings.RESET}
-            </Btn>
-          </AbsoluteBottom>
-        )}
-      </ScreenContainer>
-    </KeyboardAvoidingView>
+      </View>
+      {isCreating && (
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size={JoloTextSizes.middle}
+          color={Colors.success}
+          customStyles={{ marginTop: 20 }}
+        >
+          {' '}
+          {strings.YOU_CAN_CHANGE_THE_PASSCODE}
+        </JoloText>
+      )}
+      {hasError && (
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size={JoloTextSizes.middle}
+          color={Colors.error}
+          customStyles={{ marginTop: 20 }}
+        >
+          {strings.PINS_DONT_MATCH}
+        </JoloText>
+      )}
+      {!isCreating && (
+        <AbsoluteBottom customStyles={styles.btn}>
+          <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
+            {strings.RESET}
+          </Btn>
+        </AbsoluteBottom>
+      )}
+    </ScreenContainer>
   )
 }
 
