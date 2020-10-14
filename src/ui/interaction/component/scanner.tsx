@@ -1,4 +1,4 @@
-import React, { useState, useEffect, RefObject } from 'react'
+import React, { useState, RefObject } from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import {

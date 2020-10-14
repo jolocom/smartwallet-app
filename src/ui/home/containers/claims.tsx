@@ -9,7 +9,6 @@ import { ThunkDispatch } from '../../../store'
 import { Wrapper } from 'src/ui/structure'
 import useDisableBackButton from 'src/ui/deviceauth/hooks/useDisableBackButton'
 import { NavigationInjectedProps } from 'react-navigation'
-import { routeList } from 'src/routeList'
 
 export interface ClaimsContainerProps
   extends ReturnType<typeof mapDispatchToProps>,
