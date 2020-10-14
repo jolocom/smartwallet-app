@@ -64,12 +64,21 @@ export const checkTermsOfService = (
   const shouldShowTerms = storageHash !== currentHash
 
   if (!shouldShowTerms && onSubmit) onSubmit()
-  return dispatch(
-    navigationActions.navigate({
-      routeName: shouldShowTerms ? routeList.TermsOfServiceConsent : route,
-      params: { nextRoute: route, onSubmit },
-    }),
-  )
+
+  if (shouldShowTerms) {
+    return dispatch(
+      navigationActions.navigate({
+        routeName: routeList.TermsOfServiceConsent,
+        params: { nextRoute: route, onSubmit },
+      })
+    )
+  } else {
+    return dispatch(
+      navigationActions.navigate({
+        routeName: route,
+      })
+    )
+  }
 }
 
 export const storeTermsOfService = (
