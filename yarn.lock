@@ -10317,10 +10317,10 @@ react-native-iphone-x-helper@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
 
-react-native-jolocom@^2.0.0-rc5:
-  version "2.0.0-rc5"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.0.0-rc5.tgz#14a4ec7c4cdbb3969be1bde26513a24c3d4b8eeb"
-  integrity sha512-9FmaNAqZAi8tDHkEeh7GvbFYUgsvDQzzPVXLepRn77bYRrMS2pPv1g3SQIJVCdi/w5XPQtH4oNDwy3c6csZ6EA==
+react-native-jolocom@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.0.0.tgz#24aa69ef9f46204ddb778f51145e2b54d9c94b62"
+  integrity sha512-pdyjb4HTXBMQN9Aw8BhwjQDfeF15jJfjpPiZbEUdDNiETEjRewvbqcgz/CLct2u+JFUspnoHFWe68JeP93jApw==
   dependencies:
     "@jolocom/sdk-storage-typeorm" "^2.0.9"
     crypto-browserify "^3.12.0"

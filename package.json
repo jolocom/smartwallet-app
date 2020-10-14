@@ -166,7 +166,7 @@
     "react-native-gesture-handler": "^1.5.6",
     "react-native-indicator": "^1.2.0",
     "react-native-interactable": "^2.0.1",
-    "react-native-jolocom": "^2.0.0-rc5",
+    "react-native-jolocom": "^2.0.0",
     "react-native-keychain": "^6.2.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-localize": "^1.4.1",
