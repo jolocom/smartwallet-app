@@ -3,7 +3,7 @@ import { Animated, Platform, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
-import { setLogged } from '~/modules/account/actions'
+import { setLogged, setDid } from '~/modules/account/actions'
 
 import BtnGroup from '~/components/BtnGroup'
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -34,7 +34,10 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
 
   const handlePhraseSubmit = useCallback(async () => {
     const success = await loader(
-      async () => SDK.initWithMnemonic(phrase.join(' ')),
+      async () => {
+        const idw = await SDK.initWithMnemonic(phrase.join(' '))
+        dispatch(setDid(idw.did))
+      },
       {
         loading: strings.MATCHING,
       },
