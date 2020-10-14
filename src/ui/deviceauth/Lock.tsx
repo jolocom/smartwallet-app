@@ -37,6 +37,8 @@ const Lock: React.FC<LockProps> = ({
   const [isSuccess, setSuccess] = useState(false)
 
   useEffect(() => {
+    if (!isLocked) navigation.goBack()
+
     if (pin.length < 4 && hasError) {
       setHasError(false)
     }
@@ -51,20 +53,6 @@ const Lock: React.FC<LockProps> = ({
       [isLocked],
     ),
   )
-
-  useEffect(() => {
-    if (!isLocked) navigation.goBack()
-
-    // don't let react-navigation handle this back button press
-    // if the app is locked and the lock is focused
-    const handleBack = () => isLocked && navigation.isFocused()
-
-    BackHandler.addEventListener('hardwareBackPress', handleBack)
-
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBack)
-    }
-  }, [isLocked])
 
   const handleAppUnlock = async () => {
     try {

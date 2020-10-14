@@ -8,7 +8,6 @@ import {
   TouchableHighlight,
   View,
   Animated,
-  BackHandler,
 } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
@@ -104,18 +103,6 @@ export const ScannerComponent = (props: Props) => {
   const [isTorchPressed, setTorchPressed] = useState(false)
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
-  const [showCamera, setShowCamera] = useState(true)
-
-  useEffect(() => {
-    let backListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      setShowCamera(false)
-      return false
-    })
-
-    return () => {
-      backListener.remove()
-    }
-  }, [])
 
   const animateColor = () =>
     Animated.sequence([
@@ -173,21 +160,20 @@ export const ScannerComponent = (props: Props) => {
 
   return (
     <>
-      {showCamera && (
-        <QRScanner
-          ref={onScannerRef}
-          //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
-          containerStyle={{
-            position: 'absolute',
-          }}
-          cameraProps={cameraSettings}
-          reactivate={true}
-          reactivateTimeout={3000}
-          fadeIn={false}
-          onRead={onRead}
-          cameraStyle={styles.cameraStyle}
-        />
-      )}
+      <QRScanner
+        ref={onScannerRef}
+        //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
+        containerStyle={{
+          position: 'absolute',
+        }}
+        cameraProps={cameraSettings}
+        reactivate={true}
+        reactivateTimeout={3000}
+        fadeIn={false}
+        onRead={onRead}
+        cameraStyle={styles.cameraStyle}
+      />
+
       <View style={styles.topOverlay} />
       <View
         style={{
