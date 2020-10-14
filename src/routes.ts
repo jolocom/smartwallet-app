@@ -373,6 +373,7 @@ export const Routes = createSwitchNavigator(
   },
   {
     initialRouteName: routeList.AppInit,
+    backBehavior: 'initialRoute'
   },
 )
 

@@ -7,10 +7,14 @@ import { DecoratedClaims } from 'src/reducers/account/'
 import { RootState } from '../../../reducers'
 import { ThunkDispatch } from '../../../store'
 import { Wrapper } from 'src/ui/structure'
+import useDisableBackButton from 'src/ui/deviceauth/hooks/useDisableBackButton'
+import { NavigationInjectedProps } from 'react-navigation'
+import { routeList } from 'src/routeList'
 
 export interface ClaimsContainerProps
   extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> {}
+    ReturnType<typeof mapStateToProps>,
+    NavigationInjectedProps {}
 
 export const ClaimsContainer = (props: ClaimsContainerProps) => {
   const { did, claimsState, openClaimDetails } = props
@@ -18,6 +22,12 @@ export const ClaimsContainer = (props: ClaimsContainerProps) => {
   useEffect(() => {
     props.checkLocalAuthSet()
   }, [])
+
+  useDisableBackButton(() => {
+    // return true (disable back button) if we are focused
+    return props.navigation?.isFocused()
+  })
+
 
   return (
     <Wrapper testID="claimsScreen">
