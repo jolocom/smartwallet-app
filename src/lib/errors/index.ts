@@ -21,7 +21,7 @@ export interface ErrorReport extends UserReport {
 import { reportErrorToSentry, initSentry } from 'src/lib/errors/sentry'
 
 export class AppError extends Error implements IAppError {
-  // private code: ErrorCode
+  public code: ErrorCode | SDKErrorCode
   public origError: any
   public navigateTo: routeList
 
@@ -31,7 +31,7 @@ export class AppError extends Error implements IAppError {
     navigateTo: routeList = routeList.Home,
   ) {
     super(strings[code] || strings[ErrorCode.Unknown])
-    // this.code = code
+    this.code = code
     this.origError = origError
     this.navigateTo = navigateTo
   }
