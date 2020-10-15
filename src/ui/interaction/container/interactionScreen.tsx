@@ -76,6 +76,7 @@ const localNotificationErrors = [
   ErrorCode.ParseJWTFailed,
   // AppError: "Wrong Data"
   ErrorCode.WrongDID,
+  ErrorCode.WrongFlow,
   ErrorCode.WrongNonce,
   ErrorCode.InvalidSignature,
   ErrorCode.TokenExpired,
@@ -84,9 +85,11 @@ const localNotificationErrors = [
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   consumeToken: async (jwt: string) => {
     try {
-      return dispatch(consumeInteractionToken(jwt))
+      // NOTE: need to await here, for the catch to trigger correctly on error
+      const ret = await dispatch(consumeInteractionToken(jwt))
+      return ret
     } catch (e) {
-      if (localNotificationErrors.includes(e.message)) {
+      if (localNotificationErrors.includes(e.code)) {
         throw e
       } else {
         return dispatch(showErrorScreen(new AppError(ErrorCode.Unknown, e)))
