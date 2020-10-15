@@ -12,15 +12,15 @@ import { Colors } from '~/utils/colors'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
 import BP from '~/utils/breakpoints'
-import { useRedirectToLoggedIn } from '../DeviceAuthentication/useRedirectToLoggedIn'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useRedirectToLoggedIn } from '../useRedirectToLoggedIn'
 import {
   useDeviceAuthDispatch,
   useDeviceAuthState,
-} from '../DeviceAuthentication/module/deviceAuthContext'
-import { showBiometry } from '../DeviceAuthentication/module/deviceAuthActions'
+} from '../module/deviceAuthContext'
+import { showBiometry } from '../module/deviceAuthActions'
 
 const RegisterPin = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode

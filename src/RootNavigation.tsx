@@ -11,11 +11,11 @@ import Interactions from '~/screens/Modals/Interactions'
 import PinRecoveryInstructions from '~/screens/Modals/PinRecoveryInstructions'
 import Recovery from '~/screens/Modals/Recovery'
 import Lock from '~/screens/Modals/Lock'
+import DeviceAuthentication from './screens/Modals/DeviceAuthentication'
 
 import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
-import DeviceAuthentication from './screens/DeviceAuthentication'
 
 const RootStack = createStackNavigator()
 
@@ -31,6 +31,7 @@ const RootNavigation: React.FC = () => {
             <RootStack.Screen
               name={ScreenNames.LoggedIn}
               component={LoggedIn}
+              options={{ gestureEnabled: false }}
             />
             {/* Logged in Modals -> Start */}
             <RootStack.Screen
@@ -45,6 +46,7 @@ const RootNavigation: React.FC = () => {
             <RootStack.Screen
               name={ScreenNames.DeviceAuth}
               component={DeviceAuthentication}
+              options={{ gestureEnabled: false }}
             />
             <RootStack.Screen
               name={ScreenNames.Lock}

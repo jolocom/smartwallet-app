@@ -21,9 +21,9 @@ import { JoloTextSizes } from '~/utils/fonts'
 
 import { ScreenNames } from '~/types/screens'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
-import { getBiometryDescription } from '../DeviceAuthentication/utils/getText'
 import { useDispatch } from 'react-redux'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
+import { getBiometryDescription } from './DeviceAuthentication/utils/getText'
 
 const Lock = () => {
   const [pin, setPin] = useState('')

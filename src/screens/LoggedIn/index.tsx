@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useDispatch, useSelector } from 'react-redux'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import { ScreenNames } from '~/types/screens'
 import { getLoaderState } from '~/modules/loader/selectors'
@@ -96,6 +97,8 @@ const LoggedInTabs: React.FC = () => {
     appState = nextAppState
   })
   /* All about when lock screen comes up - END */
+
+  useBackHandler(() => true)
 
   return (
     <MainTabs.Navigator>

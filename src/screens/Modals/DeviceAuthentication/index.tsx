@@ -4,14 +4,13 @@ import Keychain from 'react-native-keychain'
 
 import { ScreenNames } from '~/types/screens'
 
-import RegisterPin from '../Modals/RegisterPin'
-import RegisterBiometry from '../Modals/RegisterBiometry'
-
 import DeviceAuthContextProvider, {
   useDeviceAuthDispatch,
   useDeviceAuthState,
 } from './module/deviceAuthContext'
 import { setBiometryType } from './module/deviceAuthActions'
+import RegisterPin from './utils/RegisterPin'
+import RegisterBiometry from './RegisterBiometry'
 
 const Stack = createStackNavigator()
 
