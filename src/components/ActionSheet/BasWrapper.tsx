@@ -1,10 +1,11 @@
-import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { View, StyleSheet, ViewStyle, Platform, Animated } from 'react-native'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 
 interface Props {
   customStyles?: ViewStyle
@@ -22,8 +23,31 @@ const BasWrapper: React.FC<Props> = ({
   showIcon = true,
 }) => {
   const { bottom } = useSafeArea()
+  const { keyboardHeight } = useKeyboardHeight(0)
+  const bottomPosition = keyboardHeight ? keyboardHeight + 5 : bottom + 5
+
+  const animatedOpacity = useRef(
+    new Animated.Value(showIcon || Platform.OS === 'android' ? 1 : 0),
+  ).current
+
+  useEffect(() => {
+    if (keyboardHeight && Platform.OS !== 'android') {
+      Animated.timing(animatedOpacity, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: true,
+      }).start()
+    }
+  }, [keyboardHeight])
+
   return (
-    <View style={[styles.wrapper, { bottom: bottom + 5 }]}>
+    <Animated.View
+      style={[
+        styles.wrapper,
+        { bottom: Platform.OS === 'ios' ? bottomPosition : bottom + 5 },
+        { opacity: animatedOpacity },
+      ]}
+    >
       {showIcon && (
         <IconWrapper customStyle={{ marginBottom: -35 }}>
           <View style={styles.basIcon}>
@@ -32,7 +56,7 @@ const BasWrapper: React.FC<Props> = ({
         </IconWrapper>
       )}
       <View style={[styles.childrenWrapper, customStyles]}>{children}</View>
-    </View>
+    </Animated.View>
   )
 }
 

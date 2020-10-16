@@ -11,9 +11,10 @@ import {
 import { getAvailableAttributesToShare } from '~/modules/interaction/selectors'
 import AttributesWidget from '~/components/AttributesWidget'
 import CredentialCard from '../CredentialCard'
-import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import InteractionFooter from '../InteractionFooter'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
@@ -48,7 +49,13 @@ const CredentialShareBas = () => {
     if (shareDocument) {
       return (
         <CredentialCard>
-          <Header color={Colors.black}>{shareDocument.type}</Header>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.middle}
+            color={Colors.black}
+          >
+            {shareDocument.type}
+          </JoloText>
         </CredentialCard>
       )
     } else {

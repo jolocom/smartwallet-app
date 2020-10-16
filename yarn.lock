@@ -8324,10 +8324,10 @@ react-native-qrcode-scanner@^1.4.1:
     prop-types "^15.5.10"
     react-native-permissions "^2.0.2"
 
-react-native-radial-gradient@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-native-radial-gradient/-/react-native-radial-gradient-1.0.6.tgz#175ed1090c685024839dad4a20eae6b3db07866e"
-  integrity sha512-w68c6h3Kf2Yp4wr/UwVviJZuxRSwkfmqw5SkbmnsdiQ2bI0laH5cE1Oq2/N+XEqtB1udGs4jkKY/0Jm2P8jRjw==
+react-native-radial-gradient@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-radial-gradient/-/react-native-radial-gradient-1.0.7.tgz#e85556c53deb22d6bd54497bf65a65fb713f0369"
+  integrity sha512-Wt1yYwZo4MTIrndiVXBXSGV6og3fYEZNUubUSeG6f0OqATW50MEx+gbB1fdKr1S5ont8j3ee64r4qobdWe1RJg==
 
 react-native-randombytes@^3.5.3:
   version "3.5.3"

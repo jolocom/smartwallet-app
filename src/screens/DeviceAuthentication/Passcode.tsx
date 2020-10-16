@@ -1,10 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Dimensions,
-} from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -27,6 +22,7 @@ import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useBackHandler } from '@react-native-community/hooks'
+import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -89,83 +85,75 @@ const Passcode = () => {
 
   useBackHandler(() => true)
 
+  const { keyboardHeight } = useKeyboardHeight(0)
+
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-      <ScreenContainer
-        customStyles={{
-          justifyContent: 'flex-start',
-        }}
-      >
-        <ScreenHeader
-          title={isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
-          subtitle={
-            isCreating
-              ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
-              : strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY
-          }
-        />
-        <View style={styles.passcodeContainer}>
-          {isCreating ? (
-            <PasscodeInput
-              value={passcode}
-              stateUpdaterFn={setPasscode}
-              onSubmit={handlePasscodeSubmit}
-            />
-          ) : (
-            <PasscodeInput
-              value={verifiedPasscode}
-              stateUpdaterFn={setVerifiedPasscode}
-              onSubmit={handleVerifiedPasscodeSubmit}
-              errorStateUpdaterFn={setHasError}
-              hasError={hasError}
-            />
-          )}
-        </View>
-        {isCreating && (
-          <JoloText
-            kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
-            color={Colors.success}
-            customStyles={{ marginTop: 20 }}
-          >
-            {' '}
-            {strings.YOU_CAN_CHANGE_THE_PASSCODE}
-          </JoloText>
+    <ScreenContainer
+      customStyles={{
+        justifyContent: 'flex-start',
+      }}
+    >
+      <ScreenHeader
+        title={isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
+        subtitle={
+          isCreating
+            ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
+            : strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY
+        }
+      />
+      <View style={styles.passcodeContainer}>
+        {isCreating ? (
+          <PasscodeInput
+            value={passcode}
+            stateUpdaterFn={setPasscode}
+            onSubmit={handlePasscodeSubmit}
+          />
+        ) : (
+          <PasscodeInput
+            value={verifiedPasscode}
+            stateUpdaterFn={setVerifiedPasscode}
+            onSubmit={handleVerifiedPasscodeSubmit}
+            errorStateUpdaterFn={setHasError}
+            hasError={hasError}
+          />
         )}
-        {hasError && (
-          <JoloText
-            kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
-            color={Colors.error}
-            customStyles={{ marginTop: 20 }}
-          >
-            {strings.PINS_DONT_MATCH}
-          </JoloText>
-        )}
-        {!isCreating && (
-          <AbsoluteBottom customStyles={styles.btn}>
-            <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {strings.RESET}
-            </Btn>
-          </AbsoluteBottom>
-        )}
-      </ScreenContainer>
-    </KeyboardAvoidingView>
+      </View>
+      {isCreating && (
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size={JoloTextSizes.middle}
+          color={Colors.success}
+          customStyles={{ marginTop: 20 }}
+        >
+          {' '}
+          {strings.YOU_CAN_CHANGE_THE_PASSCODE}
+        </JoloText>
+      )}
+      {hasError && (
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size={JoloTextSizes.middle}
+          color={Colors.error}
+          customStyles={{ marginTop: 20 }}
+        >
+          {strings.PINS_DONT_MATCH}
+        </JoloText>
+      )}
+      {!isCreating && (
+        <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
+          <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
+            {strings.RESET}
+          </Btn>
+        </AbsoluteBottom>
+      )}
+    </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
   passcodeContainer: {
-    marginTop: BP({ default: 0.16, xsmall: 0.05 }) * SCREEN_HEIGHT,
+    marginTop: BP({ default: 0.1, xsmall: 0.05 }) * SCREEN_HEIGHT,
     position: 'relative',
-  },
-  spinner: {
-    position: 'absolute',
-    left: '38%',
-    top: 100,
-  },
-  btn: {
-    bottom: 0,
   },
 })
 

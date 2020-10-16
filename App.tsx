@@ -18,7 +18,6 @@ const App = () => {
     <SafeAreaProvider>
       <ErrorBoundary>
         <Provider store={store}>
-          <StatusBar barStyle="light-content" />
           <SDKContextProvider>
             <Overlays />
             <RootNavigation />

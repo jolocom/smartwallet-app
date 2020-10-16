@@ -39,9 +39,7 @@ const SCANNER_BTN_MARGIN = 16
 const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
 const TABS_POSITION_BOTTOM = BP({
-  large: 0.2 * TAB_IMAGE_HEIGHT,
-  medium: 0.2 * TAB_IMAGE_HEIGHT,
-  small: 0.2 * TAB_IMAGE_HEIGHT,
+  default: 0.2 * TAB_IMAGE_HEIGHT,
   xsmall: 0.1 * TAB_IMAGE_HEIGHT,
 })
 /* picture has invisble bottom margins, therefore adding 1 point to hide it */
@@ -126,7 +124,7 @@ const BottomBar = (props: BottomTabBarProps) => {
       <View
         style={{
           paddingBottom: insets.bottom,
-          backgroundColor: '#0c060e',
+          backgroundColor: Colors.haiti,
         }}
       />
       <ScannerButton />

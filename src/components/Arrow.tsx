@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     }),
     paddingVertical: 15,
     paddingHorizontal: 20,
+    zIndex: 10,
   },
   leftArrow: {
     left: 0,

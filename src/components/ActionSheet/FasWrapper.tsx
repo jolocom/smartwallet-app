@@ -20,7 +20,6 @@ const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
     <View style={styles.wrapper}>
       <CollapsedScrollView
         collapsedTitle={collapsedTitle}
-        collapseStart={20}
         renderCollapsingComponent={() => (
           <IconWrapper
             customStyle={{

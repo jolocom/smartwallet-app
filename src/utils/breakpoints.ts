@@ -60,7 +60,7 @@ const getScreenSize = (): ScreenSize => {
 const BP = <T extends string | number>(
   values: StyleValues<T> | DefaultedStyleValues<T>,
 ): T => {
-  const value = values[getScreenSize()]
+  const value = values[getScreenSize()];
   const isValue = typeof value !== 'undefined'
   const isDefault = typeof values.default !== 'undefined'
 
