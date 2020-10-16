@@ -100,9 +100,7 @@ const ScannerButton = () => {
       >
         <View
           style={{
-            transform: [
-              { scale: BP({ large: 1, medium: 1, small: 1, xsmall: 0.9 }) },
-            ],
+            transform: [{ scale: BP({ default: 1, xsmall: 0.9 }) }],
           }}
         >
           <ScannerIcon />
@@ -221,7 +219,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     flex: 0.37,
-    // transform: [{ scale: BP({ large: 1, medium: 1, small: 1, xsmall: 0.8 }) }],
   },
   iconContainer: {
     marginTop: 5,

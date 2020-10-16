@@ -140,7 +140,7 @@ const SeedPhrase: React.FC = () => {
     <Animated.View
       style={{
         opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
-        marginTop: BP({ large: 40, medium: 40, small: 20, xsmall: 20 }),
+        marginTop: BP({ default: 40, small: 20, xsmall: 20 }),
       }}
     >
       <Text style={styles.seedphrase}>{seedphrase}</Text>

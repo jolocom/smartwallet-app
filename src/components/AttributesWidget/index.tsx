@@ -81,10 +81,4 @@ const AttributesWidget: React.FC<AttrsWidgetPropsI> = ({
   )
 }
 
-const styles = StyleSheet.create({
-  attrSection: {
-    marginBottom: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
-  },
-})
-
 export default AttributesWidget
