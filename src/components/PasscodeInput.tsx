@@ -35,6 +35,7 @@ interface PasscodeInputI {
 type AddPasscodeFnT = (prevState: string, passcode?: string) => string
 type RemovePasscodeFnT = (prevState: string) => string
 
+/* Forwarding `ref` here to be able to control input outside of this component */
 const PasscodeInput = React.forwardRef<TextInput, PasscodeInputI>(
   (
     { value, stateUpdaterFn, errorStateUpdaterFn, onSubmit, hasError = false },

@@ -44,7 +44,7 @@ export const useLoader = () => {
 
     let result
     try {
-      await callback()
+      await callback();
       result = true
       if (showSuccess) {
         dispatch(

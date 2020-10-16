@@ -25,7 +25,6 @@ const RootNavigation: React.FC = () => {
   return (
     <NavigationContainer>
       <RootStack.Navigator headerMode="none" mode="modal">
-        {/* TODO: this will re-render the whole app on change  */}
         {isLoggedIn ? (
           <>
             <RootStack.Screen

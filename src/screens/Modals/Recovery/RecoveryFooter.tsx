@@ -45,8 +45,9 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const { isAccessRestore } = route.params
 
   const restoreEntropy = async () => {
-    // TODO: check for when it fails
+    // TODO: do actual phrase comparison
     await resetPin()
+    // throw new Error('oops')
   }
 
   const submitCb = async () => {

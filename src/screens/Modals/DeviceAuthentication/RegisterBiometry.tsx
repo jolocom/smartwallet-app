@@ -42,8 +42,6 @@ const RegisterBiometry: React.FC = () => {
       })
 
       await AsyncStorage.setItem('biometry', biometryType || '')
-      const biometry = await AsyncStorage.getItem('biometry')
-      console.log({ biometry })
 
       displaySuccessLoader()
       handleRedirectToLogin()

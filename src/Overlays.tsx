@@ -9,8 +9,6 @@ import { getInteractionType } from './modules/interaction/selectors'
 const Overlays = () => {
   const isInteracting = useSelector(getInteractionType)
 
-  const shouldShowActionSheets = isInteracting
-
   return (
     <>
       <StatusBar
@@ -20,7 +18,7 @@ const Overlays = () => {
         barStyle="light-content"
       />
       <Loader />
-      {shouldShowActionSheets ? <ActionSheetManager /> : null}
+      {isInteracting ? <ActionSheetManager /> : null}
     </>
   )
 }
