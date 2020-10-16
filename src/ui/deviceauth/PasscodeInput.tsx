@@ -185,7 +185,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
         {PASSCODE_LENGTH.map((v, index) => {
           const isSelected = digits.length === index
           return (
-            <TouchableWithoutFeedback onPress={focusInput}>
+            <TouchableWithoutFeedback key={index} onPress={focusInput}>
               <View
                 style={[
                   styles.display,
