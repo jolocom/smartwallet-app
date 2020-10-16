@@ -6,7 +6,7 @@ import {
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
-import { useSyncCredentials } from '~/hooks/credentials'
+import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { showNotification } from './utils'
 
 const useCredentialOfferSubmit = () => {
@@ -19,7 +19,7 @@ const useCredentialOfferSubmit = () => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
-  const syncCredentials = useSyncCredentials()
+  const syncCredentials = useSyncStorageCredentials()
 
   return async () => {
     try {

@@ -1,31 +1,28 @@
 import React from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
+import { useBackHandler } from '@react-native-community/hooks'
+import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import ScreenHeader from '~/components/ScreenHeader'
+import BiometryAnimation from '~/components/BiometryAnimation'
 
 import { strings } from '~/translations/strings'
 
 import useSuccess from '~/hooks/useSuccess'
 
-import { Colors } from '~/utils/colors'
-
-import { useDeviceAuthState } from '../DeviceAuthentication/module/deviceAuthContext'
-
-import {
-  getBiometryHeader,
-  getBiometryActionText,
-  getBiometryDescription,
-} from '../DeviceAuthentication/utils/getText'
-import BiometryAnimation from '~/components/BiometryAnimation'
-import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { setPopup } from '~/modules/appState/actions'
-import { useDispatch } from 'react-redux'
-import { useRedirectToLoggedIn } from '../DeviceAuthentication/useRedirectToLoggedIn'
-import ScreenHeader from '~/components/ScreenHeader'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+
+import { useDeviceAuthState } from './module/deviceAuthContext'
+import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import { getBiometryHeader, getBiometryDescription } from './utils/getText'
+
+import { handleNotEnrolled } from '~/utils/biometryErrors'
+import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 const RegisterBiometry: React.FC = () => {
@@ -57,6 +54,8 @@ const RegisterBiometry: React.FC = () => {
     }
   }
 
+  useBackHandler(() => true)
+
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
       <ScreenHeader
@@ -70,10 +69,10 @@ const RegisterBiometry: React.FC = () => {
       <JoloText
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.middle}
-        color={Colors.success}
-        customStyles={{ paddingHorizontal: 25 }}
+        color={Colors.activity}
+        customStyles={{ paddingHorizontal: 25, opacity: 0.8 }}
       >
-        {getBiometryActionText(biometryType)}
+        {strings.TAP_TO_ACTIVATE}
       </JoloText>
       <AbsoluteBottom>
         <Btn type={BtnTypes.secondary} onPress={handleRedirectToLogin}>

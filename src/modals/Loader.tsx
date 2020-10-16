@@ -113,7 +113,12 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   const renderLoaderType = () => {
     if (loaderType.current === LoaderTypes.default) {
       return (
-        <View style={{ width: CIRCLE_DIAMETER, height: CIRCLE_DIAMETER }}>
+        <View
+          style={{
+            width: CIRCLE_DIAMETER,
+            height: CIRCLE_DIAMETER,
+          }}
+        >
           <WaveIndicator
             color={loaderColor.current}
             count={2}
@@ -131,6 +136,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
             opacity: animatedOpacity,
             transform: [{ scale: animatedWidth }],
             borderWidth: 1,
+            marginBottom: 10,
           }}
         >
           {loaderType.current === LoaderTypes.success ? (
@@ -157,14 +163,25 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   return (
     <Modal isVisible={modalVisible}>
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
-        {renderLoaderType()}
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.big}
-          color={Colors.white80}
+        <View
+          style={{
+            height: 200,
+            width: 230,
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
         >
-          {status}
-        </JoloText>
+          {renderLoaderType()}
+
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size={JoloTextSizes.big}
+            color={Colors.white80}
+            customStyles={{ marginTop: 5 }}
+          >
+            {status}
+          </JoloText>
+        </View>
       </View>
     </Modal>
   )

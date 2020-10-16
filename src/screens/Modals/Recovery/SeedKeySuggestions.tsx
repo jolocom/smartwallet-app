@@ -24,7 +24,11 @@ const Pill: React.FC<PillProps> = ({ seedKey, onSelectKey }) => {
       onPress={() => onSelectKey(seedKey)}
       testID="suggestion-pill"
     >
-      <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.big}>
+      <JoloText
+        kind={JoloTextKind.subtitle}
+        size={JoloTextSizes.big}
+        color={Colors.white}
+      >
         {seedKey}
       </JoloText>
     </TouchableOpacity>
@@ -60,6 +64,7 @@ const SeedKeySuggestions: React.FC<SeedKeySuggestionsI> = memo(
         horizontal={true}
         keyboardShouldPersistTaps="always"
         testID="suggestions-list"
+        showsHorizontalScrollIndicator={false}
       />
     )
   },
@@ -71,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     borderRadius: 4,
     paddingTop: Platform.select({
-      ios: 4,
+      ios: 0,
       android: BP({
         large: 0,
         medium: 0,

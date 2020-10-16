@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
+import { AppStateStatus, Platform } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 import { ScreenNames } from '~/types/screens'
 import { getLoaderState } from '~/modules/loader/selectors'
@@ -12,15 +14,17 @@ import Claims from './Claims'
 import Documents from './Documents'
 import History from './History'
 import Settings from './Settings'
-import { useGetAllAttributes } from '~/hooks/attributes'
-import { useSyncCredentials } from '~/hooks/credentials'
-import { AppStateStatus, Platform } from 'react-native'
-import { useAppState } from '~/hooks/useAppState'
-import { useNavigation } from '@react-navigation/native'
+
 import { dismissLoader } from '~/modules/loader/actions'
 import { resetInteraction } from '~/modules/interaction/actions'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { setPopup } from '~/modules/appState/actions'
+import BottomBar from '~/components/BottomBar'
+
+import { useAppState } from '~/hooks/useAppState'
+
+import { useSyncStorageAttributes } from '~/hooks/attributes'
+import { useSyncStorageCredentials } from '~/hooks/credentials'
 
 const MainTabs = createBottomTabNavigator()
 
@@ -30,8 +34,8 @@ const LoggedInTabs: React.FC = () => {
   const isAuthSet = useSelector(isLocalAuthSet)
   const isLoggedIn = useSelector(isLogged)
 
-  const getAllAttributes = useGetAllAttributes()
-  const syncCredentials = useSyncCredentials()
+  const syncAttributes = useSyncStorageAttributes()
+  const syncCredentials = useSyncStorageCredentials()
 
   /* this hook is responsible for displaying device auth screen only after the Loader modal is hidden
   otherwise, the keyboard appears on top loader modal */
@@ -43,7 +47,7 @@ const LoggedInTabs: React.FC = () => {
 
   /* Loading attributes and credentials into the store */
   useEffect(() => {
-    getAllAttributes()
+    syncAttributes()
     syncCredentials()
   }, [])
 
@@ -101,7 +105,11 @@ const LoggedInTabs: React.FC = () => {
   useBackHandler(() => true)
 
   return (
-    <MainTabs.Navigator>
+    <MainTabs.Navigator
+      tabBar={(props) => {
+        return <BottomBar {...props} />
+      }}
+    >
       <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />
       <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
       <MainTabs.Screen name={ScreenNames.History} component={History} />

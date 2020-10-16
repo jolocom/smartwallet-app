@@ -11,8 +11,8 @@ export const getCredentialsBySection = createSelector(
     creds.reduce<CredentialsBySection<UICredential>>(
       (acc, cred) => {
         if (
-          cred.metadata.renderInfo &&
-          cred.metadata.renderInfo.renderAs === CredentialRenderTypes.document
+          cred.renderInfo &&
+          cred.renderInfo.renderAs === CredentialRenderTypes.document
         ) {
           acc.documents = [...acc.documents, cred]
         } else {

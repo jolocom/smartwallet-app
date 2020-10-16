@@ -1,11 +1,22 @@
 import React from 'react'
+import * as redux from 'react-redux'
 import { fireEvent } from '@testing-library/react-native'
 
 import Recovery from '~/screens/Modals/Recovery'
 import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
+const mockAppState = {
+  loader: {
+    isVisible: false,
+  },
+}
+
 jest.useFakeTimers()
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+}))
 
 const validSeedKeys = [
   'tree',
@@ -23,6 +34,12 @@ const validSeedKeys = [
 
 describe('User on a Recovery screen', () => {
   test('sees screen with initial state', () => {
+    const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
+    const mockDispatchFn = jest.fn()
+    useDispatchSpy.mockReturnValue(mockDispatchFn)
+    redux.useSelector.mockImplementation((callback: (state: any) => void) => {
+      return callback(mockAppState)
+    })
     const { getByText, getByTestId, getAllByTestId } = renderWithSafeArea(
       <Recovery />,
     )

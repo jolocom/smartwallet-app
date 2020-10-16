@@ -10,9 +10,9 @@ const loaderMsgs = {
 }
 
 const entropy = {
-  SET_UP_YOUR_IDENTITY: 'Set up your identity',
+  SET_UP_YOUR_IDENTITY: 'Add uniqueness',
   TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100:
-    'Tap the screen and draw randomly on it until you collect 100%',
+    'Randomly draw untill 100% to secure your identity',
 }
 
 export const recovery = {
@@ -54,19 +54,18 @@ const passcode = {
   VERIFY_PASSCODE: 'Verify PIN',
   IN_ORDER_TO_PROTECT_YOUR_DATA:
     'In order to protect your data from other users and maintain confidentiality',
-  YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
-    'You won’t be able to easily check it again, so please memorise it',
+  ADDING_AN_EXTRA_LAYER_OF_SECURITY:
+    'Adding an extra layer of security helps prevent unwanted access to your wallet',
   PINS_DONT_MATCH: "PINs don't match",
 }
 const seedphrase = {
-  HOLD_YOUR_FINGER_ON_THE_CIRCLE:
-    'Hold your finger on the circle untill magic will happen',
+  HOLD_YOUR_FINGER_ON_THE_CIRCLE: 'Place your finger on the circle ',
   WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE:
-    'Write down this phrase somewhere safe to proceed with the next step',
+    'Write down the collection of words exactly as shown above. Keep this safe!',
   DONE: 'Done',
   WHY_SO_ANALOGUE: 'Why so analogue?',
-  ANY_FUTURE_PASSCODE_RESTORE:
-    'Any future passcode restore is possible only with your secret phrase',
+  YOU_CAN_CHANGE_THE_PASSCODE:
+    'You can change the passcode later by using your secret phrase',
 }
 
 const deviceAuthentication = {

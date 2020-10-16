@@ -22,8 +22,12 @@ const CredentialOfferFas = () => {
   const handleSubmit = useCredentialOfferSubmit()
 
   const renderCredentials = (credentials: OfferUICredential[]) =>
-    credentials.map(({ type, invalid }) => (
-      <View style={{ marginLeft: 27 }}>
+    credentials.map(({ type, invalid }, idx) => (
+      <View
+        style={{
+          marginBottom: idx === credentials.length - 1 ? 0 : 30,
+        }}
+      >
         <CredentialCard disabled={invalid}>
           <JoloText
             kind={JoloTextKind.title}
@@ -40,15 +44,17 @@ const CredentialOfferFas = () => {
     <>
       <FasWrapper collapsedTitle={getHeaderText().title}>
         <InteractionHeader {...getHeaderText()} />
-        <InteractionSection
-          visible={!!documents.length}
-          title={strings.DOCUMENTS}
-        >
-          {renderCredentials(documents)}
-        </InteractionSection>
-        <InteractionSection visible={!!other.length} title={strings.OTHER}>
-          {renderCredentials(other)}
-        </InteractionSection>
+        <View style={{ alignItems: 'center' }}>
+          <InteractionSection
+            visible={!!documents.length}
+            title={strings.DOCUMENTS}
+          >
+            {renderCredentials(documents)}
+          </InteractionSection>
+          <InteractionSection visible={!!other.length} title={strings.OTHER}>
+            {renderCredentials(other)}
+          </InteractionSection>
+        </View>
       </FasWrapper>
       <FooterContainer>
         <InteractionFooter onSubmit={handleSubmit} cta={strings.RECEIVE} />

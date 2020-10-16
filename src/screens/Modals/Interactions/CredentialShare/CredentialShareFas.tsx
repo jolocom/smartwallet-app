@@ -11,7 +11,6 @@ import {
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
 import { MultipleShareUICredential } from '~/types/credentials'
-import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
 import AttributesWidget from '~/components/AttributesWidget'
@@ -19,6 +18,8 @@ import InteractionFooter, { FooterContainer } from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 
@@ -74,24 +75,33 @@ const CredentialShareFas = () => {
       const Wrapper = isCarousel ? Carousel : React.Fragment
 
       return (
-        <View style={{ marginLeft: isCarousel ? 0 : 27 }}>
-          <Wrapper>
-            {credentials.map((cred) => (
-              <View style={{ marginRight: 20, marginVertical: 14 }}>
-                <CredentialCard
-                  isSmall
-                  hasInstruction={
-                    instructionVisible && isFirstCredential(cred.id)
-                  }
-                  onSelect={() => handleSelectCard(cred.type, cred.id)}
-                  selected={details.selectedCredentials[cred.type] === cred.id}
+        <Wrapper>
+          {credentials.map((cred) => (
+            <View
+              style={{
+                marginRight: 20,
+                marginVertical: 14,
+              }}
+            >
+              <CredentialCard
+                isSmall
+                hasInstruction={
+                  instructionVisible && isFirstCredential(cred.id)
+                }
+                onSelect={() => handleSelectCard(cred.type, cred.id)}
+                selected={details.selectedCredentials[cred.type] === cred.id}
+              >
+                <JoloText
+                  kind={JoloTextKind.title}
+                  size={JoloTextSizes.middle}
+                  color={Colors.black}
                 >
-                  <Header color={Colors.black}>{type}</Header>
-                </CredentialCard>
-              </View>
-            ))}
-          </Wrapper>
-        </View>
+                  {type}
+                </JoloText>
+              </CredentialCard>
+            </View>
+          ))}
+        </Wrapper>
       )
     })
 

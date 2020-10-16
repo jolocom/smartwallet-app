@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import BasWrapper from '~/components/ActionSheet/BasWrapper'
+import BasWrapper, {
+  BasInteractionBody,
+} from '~/components/ActionSheet/BasWrapper'
 import {
   getFirstShareDocument,
   getSelectedShareCredentials,
@@ -9,10 +11,10 @@ import {
 import { getAvailableAttributesToShare } from '~/modules/interaction/selectors'
 import AttributesWidget from '~/components/AttributesWidget'
 import CredentialCard from '../CredentialCard'
-import Header from '~/components/Header'
 import { Colors } from '~/utils/colors'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
-import { View } from 'react-native'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import InteractionFooter from '../InteractionFooter'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
@@ -30,7 +32,8 @@ const CredentialShareBas = () => {
     getCtaText,
     selectionReady,
   } = useCredentialShareFlow()
-  const missingAttribute = getSingleMissingAttribute()
+  const hasMissingAttribute = getSingleMissingAttribute()
+
   const handleSubmit = useCredentialShareSubmit()
 
   useEffect(() => {
@@ -46,22 +49,24 @@ const CredentialShareBas = () => {
     if (shareDocument) {
       return (
         <CredentialCard>
-          <Header color={Colors.black}>{shareDocument.type}</Header>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.middle}
+            color={Colors.black}
+          >
+            {shareDocument.type}
+          </JoloText>
         </CredentialCard>
       )
-    } else if (missingAttribute) {
-      return null
     } else {
       return (
-        <View style={{ width: '100%' }}>
-          <AttributesWidget
-            attributes={attributes}
-            onCreateNewAttr={handleCreateAttribute}
-            onSelect={(key, id) => handleSelectCredential({ [key]: id })}
-            selectedAttributes={selectedCredentials}
-            isSelectable={true}
-          />
-        </View>
+        <AttributesWidget
+          attributes={attributes}
+          onCreateNewAttr={handleCreateAttribute}
+          onSelect={(key, id) => handleSelectCredential({ [key]: id })}
+          selectedAttributes={selectedCredentials}
+          isSelectable={true}
+        />
       )
     }
   }
@@ -69,13 +74,15 @@ const CredentialShareBas = () => {
   return (
     <BasWrapper>
       <InteractionHeader {...getHeaderText()} />
-      {renderContent()}
+      {!hasMissingAttribute && (
+        <BasInteractionBody>{renderContent()}</BasInteractionBody>
+      )}
       <InteractionFooter
-        disabled={!!missingAttribute || !selectionReady()}
+        disabled={hasMissingAttribute ? false : !selectionReady()}
         cta={getCtaText()}
         onSubmit={() => {
-          return missingAttribute
-            ? handleCreateAttribute(missingAttribute)
+          return hasMissingAttribute
+            ? handleCreateAttribute(hasMissingAttribute)
             : handleSubmit()
         }}
       />

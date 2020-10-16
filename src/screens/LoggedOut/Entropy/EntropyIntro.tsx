@@ -3,26 +3,19 @@ import { View, StyleSheet } from 'react-native'
 
 import { HandAnimation } from '~/components/HandAnimation'
 import { strings } from '~/translations/strings'
-import { Colors } from '~/utils/colors'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
+import ScreenHeader from '~/components/ScreenHeader'
 
 export const EntropyIntro: React.FC = () => {
   return (
     <View style={styles.container}>
       <HandAnimation />
       <View style={styles.textContainer}>
-        <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
-          {strings.SET_UP_YOUR_IDENTITY}
-        </JoloText>
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.middle}
-          color={Colors.white70}
-          customStyles={{ opacity: 0.8 }}
-        >
-          {strings.TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100}
-        </JoloText>
+        <ScreenHeader
+          title={strings.SET_UP_YOUR_IDENTITY}
+          subtitle={
+            strings.TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100
+          }
+        />
       </View>
     </View>
   )

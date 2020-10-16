@@ -1,9 +1,9 @@
 import React, { useCallback, memo } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, Platform, StyleSheet } from 'react-native'
 import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { setLogged } from '~/modules/account/actions'
+import { setLogged, setDid } from '~/modules/account/actions'
 
 import BtnGroup from '~/components/BtnGroup'
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -53,12 +53,13 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
     if (isAccessRestore) {
       await restoreEntropy()
     } else {
-      await SDK.initWithMnemonic(phrase.join(' '))
+      const idw = await SDK.initWithMnemonic(phrase.join(' '))
+      dispatch(setDid(idw.did))
     }
   }
 
   const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(async () => submitCb(), {
+    const success = await loader(async () => await submitCb(), {
       loading: strings.MATCHING,
     })
 
@@ -66,7 +67,6 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
       dispatch(setLogged(true))
       const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
       navigation.dispatch(replaceAction)
-      // navigation.navigate(ScreenNames.LoggedIn)
     } else recoveryDispatch(resetPhrase())
   }, [phrase])
 
@@ -84,7 +84,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
 
     return (
       <>
-        {areSuggestionsVisible && (
+        {Platform.OS === 'android' && areSuggestionsVisible && (
           <AbsoluteBottom
             customStyles={{
               bottom: keyboardHeight + 10,
@@ -98,6 +98,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
           </AbsoluteBottom>
         )}
 
+        {/* don't use AbsoluteBottom component here it disables buttons on Android */}
         <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
           <BtnGroup>
             <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>

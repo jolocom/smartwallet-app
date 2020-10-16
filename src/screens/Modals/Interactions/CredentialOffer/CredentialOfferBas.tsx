@@ -1,7 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import BasWrapper from '~/components/ActionSheet/BasWrapper'
+import BasWrapper, {
+  BasInteractionBody,
+} from '~/components/ActionSheet/BasWrapper'
 import CredentialCard from '../CredentialCard'
 import { getCredOfferDetails } from '~/modules/interaction/selectors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -25,15 +27,17 @@ const CredentialOfferBas = () => {
   return (
     <BasWrapper>
       <InteractionHeader {...getHeaderText()} />
-      <CredentialCard>
-        <JoloText
-          kind={JoloTextKind.title}
-          size={JoloTextSizes.middle}
-          color={Colors.black}
-        >
-          {type}
-        </JoloText>
-      </CredentialCard>
+      <BasInteractionBody>
+        <CredentialCard>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.middle}
+            color={Colors.black}
+          >
+            {type}
+          </JoloText>
+        </CredentialCard>
+      </BasInteractionBody>
       <InteractionFooter cta={strings.RECEIVE} onSubmit={handleSubmit} />
     </BasWrapper>
   )
