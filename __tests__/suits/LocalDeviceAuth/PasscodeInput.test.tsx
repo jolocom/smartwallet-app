@@ -9,6 +9,11 @@ const props = {
   onSubmit: jest.fn,
 }
 
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+}))
+
 test('Input should have asterics as values and should call sibmit function', () => {
   const { getAllByTestId, rerender } = render(
     <PasscodeInput {...props} hasError={false} />,

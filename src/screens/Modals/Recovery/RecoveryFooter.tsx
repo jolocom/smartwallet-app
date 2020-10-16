@@ -21,7 +21,6 @@ import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
 import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
-import { isLocalAuthSet } from '~/modules/account/selectors'
 import { ScreenNames } from '~/types/screens'
 
 interface RecoveryFooterI {
@@ -37,7 +36,6 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const SDK = useSDK()
   const route = useRoute()
 
-  const isAuthSet = useSelector(isLocalAuthSet)
   const navigation = useNavigation()
 
   const resetPin = useResetKeychainValues(PIN_SERVICE)

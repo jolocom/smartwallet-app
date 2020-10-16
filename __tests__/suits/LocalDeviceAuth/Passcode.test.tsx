@@ -10,6 +10,7 @@ import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 jest.mock('../../../src/hooks/useRedirectTo')
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
+  useSelector: jest.fn(),
 }))
 jest.useFakeTimers()
 jest.mock('react-native-keychain', () => {

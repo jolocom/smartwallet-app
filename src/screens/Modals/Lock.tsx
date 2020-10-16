@@ -21,7 +21,6 @@ import { JoloTextSizes } from '~/utils/fonts'
 
 import { ScreenNames } from '~/types/screens'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
-import { useDispatch } from 'react-redux'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { getBiometryDescription } from './DeviceAuthentication/utils/getText'
 
@@ -60,15 +59,13 @@ const Lock = () => {
     isBiometrySelected,
   } = useGetStoredAuthValues()
 
-  const dispatch = useDispatch()
-
   /* START -> Biometry authentication if applicatble */
   const handleBiometryAuthentication = async () => {
     try {
       await FingerprintScanner.authenticate({
         description: getBiometryDescription(biometryType),
       })
-      dispatch(unlockApp())
+      unlockApp()
     } catch (err) {
       if (err.name === 'FingerprintScannerNotEnrolled') {
         handleNotEnrolled(biometryType)

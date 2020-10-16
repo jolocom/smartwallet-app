@@ -32,6 +32,21 @@ const validSeedKeys = [
   'celery',
 ]
 
+const mockedRoute = {
+  params: {
+    isAccessRestore: false,
+  },
+}
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useIsFocused: jest.fn(() => true),
+  useRoute: () => mockedRoute,
+  useNavigation: () => ({
+    dispatch: jest.fn(),
+    goBack: jest.fn(),
+  }),
+}))
+
 describe('User on a Recovery screen', () => {
   test('sees screen with initial state', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
@@ -40,9 +55,7 @@ describe('User on a Recovery screen', () => {
     redux.useSelector.mockImplementation((callback: (state: any) => void) => {
       return callback(mockAppState)
     })
-    const { getByText, getByTestId, getAllByTestId } = renderWithSafeArea(
-      <Recovery />,
-    )
+    const { getByText, getByTestId } = renderWithSafeArea(<Recovery />)
     expect(getByText(strings.RECOVERY)).toBeDefined()
     expect(getByText(strings.START_ENTERING_SEED_PHRASE)).toBeDefined()
     expect(getByTestId('seedphrase-input')).toBeDefined()
