@@ -33,10 +33,8 @@ const styles = StyleSheet.create({
   arrows: {
     position: 'absolute',
     top: BP({
+      default: 18,
       xsmall: 0,
-      small: 18,
-      medium: 18,
-      large: 18,
     }),
     paddingVertical: 15,
     paddingHorizontal: 20,

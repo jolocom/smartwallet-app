@@ -39,9 +39,7 @@ const SCANNER_BTN_MARGIN = 16
 const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
 const TABS_POSITION_BOTTOM = BP({
-  large: 0.2 * TAB_IMAGE_HEIGHT,
-  medium: 0.2 * TAB_IMAGE_HEIGHT,
-  small: 0.2 * TAB_IMAGE_HEIGHT,
+  default: 0.2 * TAB_IMAGE_HEIGHT,
   xsmall: 0.1 * TAB_IMAGE_HEIGHT,
 })
 /* picture has invisble bottom margins, therefore adding 1 point to hide it */
@@ -102,9 +100,7 @@ const ScannerButton = () => {
       >
         <View
           style={{
-            transform: [
-              { scale: BP({ large: 1, medium: 1, small: 1, xsmall: 0.9 }) },
-            ],
+            transform: [{ scale: BP({ default: 1, xsmall: 0.9 }) }],
           }}
         >
           <ScannerIcon />
@@ -223,7 +219,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     flex: 0.37,
-    // transform: [{ scale: BP({ large: 1, medium: 1, small: 1, xsmall: 0.8 }) }],
   },
   iconContainer: {
     marginTop: 5,

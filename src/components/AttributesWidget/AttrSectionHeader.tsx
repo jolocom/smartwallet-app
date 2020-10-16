@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   plus: {
     transform: [{ scale: 0.6 }],
     marginRight: 1,
-    marginBottom: BP({ large: 4, medium: 4, small: 1, xsmall: 1 }),
+    marginBottom: BP({ default: 1, medium: 4, large: 4 }),
   },
 })
 

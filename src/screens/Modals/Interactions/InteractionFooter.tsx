@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   FASfooter: {
     bottom: 0,
     height: 106,
-    paddingTop: BP({ large: 25, medium: 25, small: 25, xsmall: 25 }),
+    paddingTop: 25,
     backgroundColor: Colors.black,
     justifyContent: 'flex-start',
     borderTopRightRadius: 22,

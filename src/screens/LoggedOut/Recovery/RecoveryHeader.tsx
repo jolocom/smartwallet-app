@@ -58,9 +58,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                     ...Platform.select({
                       ios: {
                         lineHeight: BP({
-                          large: 26,
-                          medium: 26,
-                          small: 26,
+                          default: 26,
                           xsmall: 22,
                         }),
                       },
@@ -78,9 +76,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
               ...Platform.select({
                 android: {
                   paddingBottom: BP({
-                    large: 79,
-                    medium: 79,
-                    small: 79,
+                    default: 79,
                     xsmall: 44,
                   }),
                 },
@@ -111,7 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     ...Platform.select({
       android: {
-        height: BP({ large: 137, medium: 137, small: 137, xsmall: 97 }),
+        height: BP({ default: 137, xsmall: 97 }),
       },
     }),
   },
