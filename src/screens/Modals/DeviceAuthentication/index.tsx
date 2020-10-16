@@ -9,7 +9,7 @@ import DeviceAuthContextProvider, {
   useDeviceAuthState,
 } from './module/deviceAuthContext'
 import { setBiometryType } from './module/deviceAuthActions'
-import RegisterPin from './utils/RegisterPin'
+import RegisterPin from './RegisterPin'
 import RegisterBiometry from './RegisterBiometry'
 
 const Stack = createStackNavigator()

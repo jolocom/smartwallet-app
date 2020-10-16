@@ -15,12 +15,12 @@ import BP from '~/utils/breakpoints'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useRedirectToLoggedIn } from '../useRedirectToLoggedIn'
+import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 import {
   useDeviceAuthDispatch,
   useDeviceAuthState,
-} from '../module/deviceAuthContext'
-import { showBiometry } from '../module/deviceAuthActions'
+} from './module/deviceAuthContext'
+import { showBiometry } from './module/deviceAuthActions'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 
