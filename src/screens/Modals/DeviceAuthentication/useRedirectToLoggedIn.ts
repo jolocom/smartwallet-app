@@ -5,7 +5,7 @@ import { ScreenNames } from '~/types/screens'
 
 export const useRedirectToLoggedIn = () => {
   const dispatch = useDispatch()
-  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
+  const redirectToLoggedIn = useRedirectTo(ScreenNames.Tabs)
   return () => {
     dispatch(setLocalAuth(true))
     redirectToLoggedIn()

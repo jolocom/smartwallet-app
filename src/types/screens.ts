@@ -8,6 +8,7 @@ export enum ScreenNames {
   SeedPhraseRepeat = 'SeedPhraseRepeat',
   // Logged In Tabs
   LoggedIn = 'LoggedIn',
+  Tabs = 'Tabs',
   Claims = 'Claims',
   Documents = 'Documents',
   History = 'History',

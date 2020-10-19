@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import {
+  createBottomTabNavigator,
+  BottomTabBarProps,
+} from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { AppStateStatus, Platform } from 'react-native'
@@ -9,6 +13,12 @@ import { ScreenNames } from '~/types/screens'
 import { getLoaderState } from '~/modules/loader/selectors'
 import { isLocalAuthSet, isLogged } from '~/modules/account/selectors'
 import useRedirectTo from '~/hooks/useRedirectTo'
+
+import Interactions from '~/screens/Modals/Interactions'
+import DeviceAuthentication from '~/screens/Modals/DeviceAuthentication'
+import PinRecoveryInstructions from '~/screens/Modals/PinRecoveryInstructions'
+import Lock from '~/screens/Modals/Lock'
+import SettingsList from '~/screens/SettingsList'
 
 import Claims from './Claims'
 import Documents from './Documents'
@@ -27,6 +37,20 @@ import { useSyncStorageAttributes } from '~/hooks/attributes'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
 
 const MainTabs = createBottomTabNavigator()
+const LoggedInStack = createStackNavigator()
+
+const Tabs = () => (
+  <MainTabs.Navigator
+    tabBar={(props: BottomTabBarProps) => {
+      return <BottomBar {...props} />
+    }}
+  >
+    <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />
+    <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
+    <MainTabs.Screen name={ScreenNames.History} component={History} />
+    <MainTabs.Screen name={ScreenNames.Settings} component={Settings} />
+  </MainTabs.Navigator>
+)
 
 const LoggedInTabs: React.FC = () => {
   const redirectToDeviceAuth = useRedirectTo(ScreenNames.DeviceAuth)
@@ -105,16 +129,38 @@ const LoggedInTabs: React.FC = () => {
   useBackHandler(() => true)
 
   return (
-    <MainTabs.Navigator
-      tabBar={(props) => {
-        return <BottomBar {...props} />
-      }}
+    <LoggedInStack.Navigator
+      headerMode="none"
+      mode="modal"
+      initialRouteName={ScreenNames.Tabs}
     >
-      <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />
-      <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
-      <MainTabs.Screen name={ScreenNames.History} component={History} />
-      <MainTabs.Screen name={ScreenNames.Settings} component={Settings} />
-    </MainTabs.Navigator>
+      <LoggedInStack.Screen name={ScreenNames.Tabs} component={Tabs} />
+      {/* Modals -> Start */}
+      <LoggedInStack.Screen
+        name={ScreenNames.SettingsList}
+        component={SettingsList}
+      />
+
+      <LoggedInStack.Screen
+        name={ScreenNames.Interactions}
+        component={Interactions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.DeviceAuth}
+        component={DeviceAuthentication}
+        options={{ gestureEnabled: false }}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.Lock}
+        component={Lock}
+        options={{ gestureEnabled: false }}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.PinRecoveryInstructions}
+        component={PinRecoveryInstructions}
+      />
+      {/* Modals -> End */}
+    </LoggedInStack.Navigator>
   )
 }
 
