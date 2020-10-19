@@ -1,4 +1,4 @@
-process.version = 'v11.13.0'
+import './globals'
 
 import { AppRegistry } from 'react-native'
 import App from './App'
