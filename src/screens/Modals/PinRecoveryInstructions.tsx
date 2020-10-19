@@ -38,7 +38,6 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
         weight={JoloTextWeight.regular}
         color={Colors.white85}
         customStyles={{
-          paddingTop: BP({ xsmall: 20, small: 20, medium: 30, large: 50 }),
           alignSelf: 'flex-start',
         }}
       >
