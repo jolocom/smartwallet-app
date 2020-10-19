@@ -28,6 +28,12 @@ const Lock = () => {
   const [pin, setPin] = useState('')
   const [hasError, setHasError] = useState(false)
 
+  const {
+    biometryType,
+    keychainPin,
+    isBiometrySelected,
+  } = useGetStoredAuthValues()
+
   const { keyboardHeight } = useKeyboard()
 
   const navigation = useNavigation()
@@ -52,12 +58,6 @@ const Lock = () => {
     }
   }, [isFocused])
   /* END -> This is for showing and hiding keyboard when we move away from Lock screen */
-
-  const {
-    biometryType,
-    keychainPin,
-    isBiometrySelected,
-  } = useGetStoredAuthValues()
 
   /* START -> Biometry authentication if applicatble */
   const handleBiometryAuthentication = async () => {
