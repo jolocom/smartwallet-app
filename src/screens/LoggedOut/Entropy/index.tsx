@@ -13,7 +13,8 @@ import { EntropyCanvas } from './EntropyCanvas'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useIdentityCreate } from '~/hooks/sdk'
+import { useIdentityCreate, useGenerateSeed } from '~/hooks/sdk'
+import { useLoader } from '~/hooks/useLoader'
 
 //NOTE: Determines the duration of entropy collection
 const ENOUGH_ENTROPY_PROGRESS = Platform.select({
@@ -25,11 +26,14 @@ const ENOUGH_ENTROPY_PROGRESS = Platform.select({
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
   const refreshEntropy = useReplaceWith(ScreenNames.Entropy)
-  const createIdentity = useIdentityCreate()
+  //const createIdentity = useIdentityCreate()
+  const generateSeed = useGenerateSeed()
+  const loader = useLoader()
 
-  //NOTE: not using the entropy
+  //NOTE: not using the user generated entropy
   const submitEntropy = async (entropy: string) => {
-    const success = await createIdentity()
+    const success = await loader(generateSeed, { showSuccess: false })
+
     if (success) {
       return redirectToSeedPhrase()
     }

@@ -44,7 +44,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
       sdk.setDefaultDidMethod('jun')
 
       const passwordStore = new JolocomKeychainPasswordStore()
-      let agent = await sdk.createAgent(passwordStore)
+      const agent = new Agent({ passwordStore, sdk })
       agentRef.current = agent
 
       // NOTE: If loading the identity fails, we don't set the did and the logged state, thus navigating

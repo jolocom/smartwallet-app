@@ -26,7 +26,7 @@ type PreInteractionHandler = (i: Interaction) => boolean
 
 export const useAgent = () => {
   const agent = useContext(AgentContext)
-  if (!agent?.current) throw new Error('SDK was not found!')
+  if (!agent?.current) throw new Error('Agent was not found!')
   return agent.current
 }
 
@@ -49,33 +49,44 @@ export const useMnemonic = () => {
   }
 }
 
+export const useGenerateSeed = () => {
+  const agent = useAgent()
+
+  return async () => {
+    // FIXME use the seed generated on the entropy screen. Currently the entropy
+    // seed generates 24 word seedphrases
+    const seed = await generateSecureRandomBytes(16)
+
+    const identity = await agent.loadFromMnemonic(entropyToMnemonic(seed))
+    const encryptedSeed = await identity.asymEncryptToDid(
+      Buffer.from(seed),
+      identity.did,
+      {
+        prefix: '',
+        resolve: async (_) => identity.identity,
+      },
+    )
+
+    await agent.storage.store.setting('encryptedSeed', {
+      b64Encoded: encryptedSeed.toString('base64'),
+    })
+
+    return seed
+  }
+}
+
 export const useIdentityCreate = () => {
   const agent = useAgent()
   const loader = useLoader()
   const dispatch = useDispatch()
+  const getMnemonic = useMnemonic()
 
   return async () => {
     return loader(
       async () => {
-        // FIXME use the seed generated on the entropy screen. Currently the entropy
-        // seed generates 24 word seedphrases
-        const seed = await generateSecureRandomBytes(16)
-
-        const identity = await agent.loadFromMnemonic(entropyToMnemonic(seed))
+        const mnemonic = await getMnemonic()
+        const identity = await agent.loadFromMnemonic(mnemonic)
         dispatch(setDid(identity.did))
-
-        const encryptedSeed = await identity.asymEncryptToDid(
-          Buffer.from(seed),
-          identity.did,
-          {
-            prefix: '',
-            resolve: async (_) => identity.identity,
-          },
-        )
-
-        await agent.storage.store.setting('encryptedSeed', {
-          b64Encoded: encryptedSeed.toString('base64'),
-        })
       },
       {
         loading: strings.CREATING,
@@ -86,8 +97,10 @@ export const useIdentityCreate = () => {
 
 export const useSubmitSeedphraseBackup = () => {
   const agent = useAgent()
+  const createIdentity = useIdentityCreate()
 
   return async () => {
+    await createIdentity()
     await agent.storage.store.setting('encryptedSeed', {})
     // TODO: set seedBackedUp to true (storage)
   }
