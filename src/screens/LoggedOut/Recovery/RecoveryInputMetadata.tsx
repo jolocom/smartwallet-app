@@ -6,6 +6,7 @@ import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 
 interface RecoveryInputMetadataI {
   keyHasError: boolean
@@ -24,7 +25,11 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
             {strings.CANT_MATCH_WORD}
           </JoloText>
         ) : (
-          <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size={JoloTextSizes.middle}
+            color={Colors.white}
+          >
             {strings.WHAT_IF_I_FORGOT}
           </JoloText>
         )}
@@ -35,12 +40,14 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
 
 const styles = StyleSheet.create({
   inputMeta: {
-    marginTop: 15,
+    marginTop: BP({ default: 15, xsmall: 7 }),
   },
 })
 
 export default function () {
   // extracting only keyHasError property from the context to avoid unnecessary re-renders
-  const { keyHasError } = useRecoveryState()
-  return <RecoveryInputMetadata keyHasError={keyHasError} />
+  const { keyHasError, suggestedKeys } = useRecoveryState()
+  return (
+    <RecoveryInputMetadata keyHasError={keyHasError && !suggestedKeys.length} />
+  )
 }

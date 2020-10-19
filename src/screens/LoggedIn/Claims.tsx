@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn from '~/components/Btn'
-import useRedirectTo from '~/hooks/useRedirectTo'
-import { ScreenNames } from '~/types/screens'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
@@ -37,7 +35,6 @@ const Claims: React.FC = () => {
     )
   }
 
-  const openScanner = useRedirectTo(ScreenNames.Interactions)
   const attributes = useSelector(getAttributes)
 
   const startShare = () => {
@@ -48,6 +45,18 @@ const Claims: React.FC = () => {
           { type: ['Credential', 'ProofOfEmailCredential'], constraints: [] },
           { type: ['Credential', 'ProofOfNameCredential'], constraints: [] },
         ],
+      })
+      .then(startInteraction)
+  }
+
+  const startAuthorization = () => {
+    sdk
+      .authorizationRequestToken({
+        callbackURL: 'test',
+        description:
+          'The  http://google.com is ready to share a scooter with you, unlock to start your ride',
+        action: 'unlock the scooter',
+        imageURL: 'http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png',
       })
       .then(startInteraction)
   }
@@ -64,8 +73,8 @@ const Claims: React.FC = () => {
         />
       </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>
-      <Btn onPress={openScanner}>Open scanner</Btn>
       <Btn onPress={startShare}>Start Share</Btn>
+      <Btn onPress={startAuthorization}>Start Authz</Btn>
     </ScreenContainer>
   )
 }

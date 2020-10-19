@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Animated } from 'react-native'
 
-const useCollapsedScrollViewAnimations = (animationStart: number) => {
+const useCollapsedScrollViewAnimations = (headerHeight: number) => {
   const yPositionValue = useRef(new Animated.Value(0)).current
 
   const interpolateScroll = (inputRange: number[], outputRange: number[]) =>
@@ -21,15 +21,15 @@ const useCollapsedScrollViewAnimations = (animationStart: number) => {
   )
 
   const headerOpacityValue = interpolateScroll(
-    [animationStart + 10, animationStart + 15],
+    [headerHeight * 0.2, headerHeight * 0.3],
     [0, 1],
   )
   const headerTextPositionValue = interpolateScroll(
-    [animationStart, animationStart + 50],
+    [headerHeight * 0.6, headerHeight * 0.8],
     [50, 0],
   )
   const headerTextOpacityValue = interpolateScroll(
-    [animationStart + 30, animationStart + 40],
+    [headerHeight * 0.7, headerHeight * 0.8],
     [0, 1],
   )
 

@@ -39,8 +39,8 @@ const arrangeFontStyle = (
 export const titleFontStyles: Record<JoloTextSizes, FontSetI> = {
   big: {
     ...arrangeFontStyle(
-      BP({ xsmall: 26, small: 30, medium: 34, large: 34 }),
-      BP({ xsmall: 32, small: 36, medium: 40, large: 40 }),
+      BP({ xsmall: 26, small: 30, default: 34 }),
+      BP({ xsmall: 32, small: 36, default: 40 }),
       0,
       Colors.white90,
       Fonts.Medium,
@@ -48,8 +48,8 @@ export const titleFontStyles: Record<JoloTextSizes, FontSetI> = {
   },
   middle: {
     ...arrangeFontStyle(
-      BP({ xsmall: 24, small: 28, medium: 28, large: 28 }),
-      BP({ xsmall: 28, small: 32, medium: 32, large: 32 }),
+      BP({ xsmall: 24, default: 28 }),
+      BP({ xsmall: 28, default: 32 }),
       0,
       Colors.white90,
       Fonts.Medium,
@@ -57,8 +57,8 @@ export const titleFontStyles: Record<JoloTextSizes, FontSetI> = {
   },
   mini: {
     ...arrangeFontStyle(
-      BP({ xsmall: 14, small: 18, medium: 18, large: 18 }),
-      BP({ xsmall: 20, small: 24, medium: 24, large: 24 }),
+      BP({ xsmall: 14, default: 18 }),
+      BP({ xsmall: 20, default: 24 }),
       0,
       Colors.white90,
       Fonts.Medium,
@@ -72,12 +72,11 @@ export const titleFontStyles: Record<JoloTextSizes, FontSetI> = {
 export const subtitleFontStyles = {
   big: {
     ...arrangeFontStyle(
-      BP({ xsmall: 18, small: 20, medium: 22, large: 22 }),
-      BP({ xsmall: 22, small: 24, medium: 26, large: 26 }),
-      BP({ xsmall: 0.12, small: 0.14, medium: 0.15, large: 0.15 }),
+      BP({ xsmall: 18, small: 20, default: 22 }),
+      BP({ xsmall: 22, small: 24, default: 26 }),
+      BP({ xsmall: 0.12, small: 0.14, default: 0.15 }),
       BP({
-        xsmall: Colors.white90,
-        small: Colors.white90,
+        default: Colors.white90,
         medium: Colors.white80,
         large: Colors.white80,
       }),
@@ -86,12 +85,11 @@ export const subtitleFontStyles = {
   },
   middle: {
     ...arrangeFontStyle(
-      BP({ xsmall: 16, small: 16, medium: 20, large: 20 }),
-      BP({ xsmall: 18, small: 18, medium: 22, large: 22 }),
-      BP({ xsmall: 0.11, small: 0.11, medium: 0.14, large: 0.14 }),
+      BP({ default: 16, medium: 20, large: 20 }),
+      BP({ default: 18, medium: 22, large: 22 }),
+      BP({ default: 0.11, medium: 0.14, large: 0.14 }),
       BP({
-        xsmall: Colors.white90,
-        small: Colors.white90,
+        default: Colors.white90,
         medium: Colors.white70,
         large: Colors.white70,
       }),
@@ -100,9 +98,9 @@ export const subtitleFontStyles = {
   },
   mini: {
     ...arrangeFontStyle(
-      BP({ xsmall: 14, small: 16, medium: 16, large: 16 }),
-      BP({ xsmall: 14, small: 16, medium: 16, large: 16 }),
-      BP({ xsmall: 0, small: 0, medium: 0, large: 0 }),
+      BP({ xsmall: 14, default: 16 }),
+      BP({ xsmall: 14, default: 16 }),
+      0,
       Colors.white40,
       Fonts.Regular,
     ),

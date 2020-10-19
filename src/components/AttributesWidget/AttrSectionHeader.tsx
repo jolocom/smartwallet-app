@@ -7,6 +7,7 @@ import { PlusIcon } from '~/assets/svg'
 import { AttrKeys, AttrKeysUpper } from '~/types/credentials'
 import JoloText, { JoloTextKind } from '../JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 
 interface AttrSectionHeaderPropsI {
   sectionKey: AttrKeys
@@ -21,7 +22,7 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
     <View style={styles.headerContainer}>
       <JoloText
         kind={JoloTextKind.subtitle}
-        size={JoloTextSizes.mini}
+        size={JoloTextSizes.middle}
         color={Colors.white70}
         customStyles={{ opacity: 0.6 }}
       >
@@ -36,7 +37,7 @@ const AttrSectionHeader: React.FC<AttrSectionHeaderPropsI> = ({
         </View>
         <JoloText
           kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.mini}
+          size={JoloTextSizes.middle}
           color={Colors.white}
         >
           {strings.CREATE_NEW_ONE}
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
+    marginTop: -10,
     marginBottom: -5,
   },
   createNewBtn: {
@@ -59,9 +61,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   plus: {
-    transform: [{ scale: 0.7 }],
-    marginRight: 3,
-    marginBottom: 2,
+    transform: [{ scale: 0.6 }],
+    marginRight: 1,
+    marginBottom: BP({ default: 1, medium: 4, large: 4 }),
   },
 })
 

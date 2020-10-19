@@ -10,12 +10,11 @@ const AttributeWidgetWrapper: React.FC<{
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginHorizontal: 17,
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingVertical: 30,
     backgroundColor: Colors.lightBlack,
     borderRadius: 20,
-    marginBottom: 46,
+    marginBottom: 52,
     // Shadows
     shadowColor: Colors.black50,
     shadowOffset: {

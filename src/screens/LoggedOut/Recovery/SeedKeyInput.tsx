@@ -6,6 +6,7 @@ import {
   NativeSyntheticEvent,
   TextInputSubmitEditingEventData,
   Platform,
+  Dimensions,
 } from 'react-native'
 import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 
@@ -30,6 +31,10 @@ import {
   submitKey,
   hideSuggestions,
 } from './module/recoveryActions'
+import { useSelector } from 'react-redux'
+import { getLoaderState } from '~/modules/loader/selectors'
+
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const SeedKeyInput: React.FC = () => {
   const inputRef = useRef<TextInput>(null)
@@ -45,6 +50,7 @@ const SeedKeyInput: React.FC = () => {
   } = useRecoveryState()
 
   const [isSuccessBorder, setIsSuccessBorder] = useState(keyIsValid)
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
 
   const selectPrevWord = () => {
     dispatch(setCurrentWordIdx(currentWordIdx - 1))
@@ -87,12 +93,13 @@ const SeedKeyInput: React.FC = () => {
       if (
         inputRef.current &&
         inputRef.current.isFocused &&
-        !inputRef.current.isFocused()
+        !inputRef.current.isFocused() &&
+        !isLoaderVisible
       ) {
         inputRef.current?.focus()
       }
     }
-  }, [currentWordIdx])
+  }, [currentWordIdx, isLoaderVisible])
 
   // when we move with arrows select a current seedKey
   useEffect(() => {
@@ -178,48 +185,45 @@ const SeedKeyInput: React.FC = () => {
           <RightArrow handlePress={selectNextWord} />
         )}
       </View>
-      {!suggestedKeys.length && <RecoveryInputMetadata />}
+      <RecoveryInputMetadata />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   inputContainer: {
-    width: '100%',
-    marginTop: BP({
-      large: 70,
-      medium: 50,
-      small: 30,
-      xsmall: 30,
+    ...Platform.select({
+      ios: {
+        position: 'absolute',
+        top: 0.25 * SCREEN_HEIGHT,
+        marginTop: BP({
+          default: 30,
+          medium: 50,
+          large: 70,
+        }),
+      },
     }),
+    width: '100%',
   },
   inputField: {
     width: '100%',
     backgroundColor: 'black',
     height: BP({
+      default: 87,
       xsmall: 50,
-      small: 80,
-      medium: 80,
-      large: 80,
     }),
     borderRadius: 7,
-    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     textAlign: 'center',
     borderWidth: 2,
-    alignItems: 'center',
   },
   input: {
     width: '70%',
     color: Colors.white,
     textDecorationLine: 'none',
-    lineHeight: BP({ xsmall: 26, small: 30, medium: 34, large: 34 }),
-    ...Platform.select({
-      ios: {
-        marginTop: 2,
-      },
-    }),
+    lineHeight: BP({ xsmall: 28, small: 32, default: 36 }),
   },
   inputError: {
     borderColor: Colors.error,
