@@ -8,7 +8,6 @@ import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useAgent, useInteractionStart } from '~/hooks/sdk'
-import { InteractionTransportType } from 'react-native-jolocom'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -17,9 +16,7 @@ const ContainerComponent: React.FC = ({ children }) => {
 const Claims: React.FC = () => {
   const loader = useLoader()
   const agent = useAgent()
-  const { startInteraction } = useInteractionStart(
-    InteractionTransportType.HTTP,
-  )
+  const { startInteraction } = useInteractionStart()
 
   const openLoader = async () => {
     await loader(

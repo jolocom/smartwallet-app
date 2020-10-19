@@ -7,7 +7,6 @@ import {
   FlowType,
   Interaction,
   SDKError,
-  InteractionTransportType,
   JolocomLib,
 } from 'react-native-jolocom'
 import { CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/types'
@@ -93,7 +92,7 @@ export const useSubmitSeedphraseBackup = () => {
   }
 }
 
-export const useInteractionStart = (channel: InteractionTransportType) => {
+export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
   const loader = useLoader()
