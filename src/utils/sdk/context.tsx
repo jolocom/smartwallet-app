@@ -5,7 +5,7 @@ import React, {
   useRef,
   useEffect,
 } from 'react'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, StatusBar } from 'react-native'
 import { useDispatch } from 'react-redux'
 import Keychain from 'react-native-keychain'
 
@@ -77,6 +77,12 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   if (isLoading) {
     return (
       <ScreenContainer>
+        <StatusBar
+          backgroundColor={'transparent'}
+          animated
+          translucent
+          barStyle="light-content"
+        />
         <ActivityIndicator />
       </ScreenContainer>
     )

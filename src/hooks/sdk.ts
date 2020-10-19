@@ -154,6 +154,11 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
   }
 
   const startInteraction = async (jwt: string) => {
+    // NOTE: we're parsing the jwt here, even though it will be parsed in `agent.processJWT`
+    // below. This is to assure the error is caught before the loading screen, so that it can
+    // be handled by the scanner component.
+    parseJWT(jwt)
+
     return loader(
       async () => {
         const interaction = await agent.processJWT(jwt)

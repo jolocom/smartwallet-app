@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { FlowType } from 'react-native-jolocom'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'

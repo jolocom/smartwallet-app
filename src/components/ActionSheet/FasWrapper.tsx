@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions } from 'react-native'
 
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
+import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 
 const WINDOW = Dimensions.get('window')
@@ -19,14 +20,17 @@ const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
     <View style={styles.wrapper}>
       <CollapsedScrollView
         collapsedTitle={collapsedTitle}
-        collapseStart={20}
         renderCollapsingComponent={() => (
-          <IconWrapper customStyle={{ marginTop: 35 }}>
+          <IconWrapper
+            customStyle={{
+              marginTop: BP({ large: 35, medium: 35, default: 20 }),
+            }}
+          >
             <InteractionIcon />
           </IconWrapper>
         )}
       >
-        <View style={{ paddingTop: 12 }}>{children}</View>
+        {children}
       </CollapsedScrollView>
     </View>
   )

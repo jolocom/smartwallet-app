@@ -1,12 +1,13 @@
 import React, { memo } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import ScreenHeader from '~/components/ScreenHeader'
 import { JoloTextSizes } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 
 interface RecoveryHeaderI {
   phrase: string[]
@@ -43,6 +44,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                 <JoloText
                   kind={JoloTextKind.title}
                   size={JoloTextSizes.middle}
+                  weight={JoloTextWeight.regular}
                   key={seedKey + idx}
                   color={
                     currentWordIdx === 12
@@ -51,7 +53,17 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                       ? Colors.white
                       : Colors.activity
                   }
-                  customStyles={{ marginHorizontal: 3 }}
+                  customStyles={{
+                    marginHorizontal: 3,
+                    ...Platform.select({
+                      ios: {
+                        lineHeight: BP({
+                          default: 26,
+                          xsmall: 22,
+                        }),
+                      },
+                    }),
+                  }}
                 >
                   {seedKey}
                 </JoloText>
@@ -59,10 +71,23 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
             </View>
           </>
         ) : (
-          <ScreenHeader
-            title={strings.RECOVERY}
-            subtitle={strings.START_ENTERING_SEED_PHRASE}
-          />
+          <View
+            style={{
+              ...Platform.select({
+                android: {
+                  paddingBottom: BP({
+                    default: 79,
+                    xsmall: 44,
+                  }),
+                },
+              }),
+            }}
+          >
+            <ScreenHeader
+              title={strings.RECOVERY}
+              subtitle={strings.START_ENTERING_SEED_PHRASE}
+            />
+          </View>
         )}
       </View>
     )
@@ -80,6 +105,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 5,
+    ...Platform.select({
+      android: {
+        height: BP({ default: 137, xsmall: 97 }),
+      },
+    }),
   },
 })
 

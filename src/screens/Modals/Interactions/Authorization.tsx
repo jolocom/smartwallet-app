@@ -1,8 +1,10 @@
 import { useSelector } from 'react-redux'
 import React from 'react'
-import { Image, View, StyleSheet } from 'react-native'
+import { Image, View, StyleSheet, Dimensions } from 'react-native'
 
-import BasWrapper from '~/components/ActionSheet/BasWrapper'
+import BasWrapper, {
+  BasInteractionBody,
+} from '~/components/ActionSheet/BasWrapper'
 import {
   getAuthorizationDetails,
   getCounterpartyName,
@@ -12,6 +14,8 @@ import { strings } from '~/translations/strings'
 import InteractionFooter from './InteractionFooter'
 import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
+
+const SCREEN_WIDTH = Dimensions.get('window').width
 
 const Authorization = () => {
   const { imageURL, action } = useSelector(getAuthorizationDetails)
@@ -29,15 +33,17 @@ const Authorization = () => {
     <BasWrapper>
       <InteractionHeader {...{ title, description }} />
       {imageURL && (
-        <View style={styles.imageWrapper}>
-          <Image
-            source={{ uri: imageURL }}
-            style={styles.image}
-            // NOTE: it will take max Dimension size (260 - width) and make height
-            // based on the aspect ration of actual image size
-            resizeMode="cover"
-          />
-        </View>
+        <BasInteractionBody>
+          <View style={styles.imageWrapper}>
+            <Image
+              source={{ uri: imageURL }}
+              style={styles.image}
+              // NOTE: it will take max Dimension size (260 - width) and make height
+              // based on the aspect ration of actual image size
+              resizeMode="cover"
+            />
+          </View>
+        </BasInteractionBody>
       )}
       <InteractionFooter cta={cta} onSubmit={handleSubmit} />
     </BasWrapper>
@@ -50,8 +56,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 260,
-    height: 230,
+    width: SCREEN_WIDTH * 0.6,
+    height: SCREEN_WIDTH * 0.6 * 0.88,
   },
 })
 

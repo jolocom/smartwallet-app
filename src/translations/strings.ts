@@ -54,8 +54,8 @@ const passcode = {
   VERIFY_PASSCODE: 'Verify PIN',
   IN_ORDER_TO_PROTECT_YOUR_DATA:
     'In order to protect your data from other users and maintain confidentiality',
-  YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
-    'You won’t be able to easily check it again, so please memorise it',
+  ADDING_AN_EXTRA_LAYER_OF_SECURITY:
+    'Adding an extra layer of security helps prevent unwanted access to your wallet',
   PINS_DONT_MATCH: "PINs don't match",
 }
 const seedphrase = {
@@ -64,8 +64,8 @@ const seedphrase = {
     'Write down the collection of words exactly as shown above. Keep this safe!',
   DONE: 'Done',
   WHY_SO_ANALOGUE: 'Why so analogue?',
-  ANY_FUTURE_PASSCODE_RESTORE:
-    'Any future passcode restore is possible only with your secret phrase',
+  YOU_CAN_CHANGE_THE_PASSCODE:
+    'You can change the passcode later by using your secret phrase',
 }
 
 const deviceAuthentication = {

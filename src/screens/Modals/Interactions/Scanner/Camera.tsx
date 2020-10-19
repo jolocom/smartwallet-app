@@ -4,7 +4,6 @@ import {
   useWindowDimensions,
   Dimensions,
   StyleSheet,
-  StatusBar,
   TouchableHighlight,
   Animated,
 } from 'react-native'
@@ -111,8 +110,7 @@ const Camera = () => {
   }
 
   return (
-    <ScreenContainer isFullscreen>
-      <StatusBar hidden />
+    <ScreenContainer isFullscreen hideStatusBar backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
         {overlayVisible && (
           <View style={styles.navigationContainer}>
@@ -226,8 +224,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black65,
     width: '100%',
     height: BP({
-      xsmall: 165,
-      small: 165,
+      default: 165,
       medium: 175,
       large: 185,
     }),
@@ -258,10 +255,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: BP({
-      large: 60,
+      default: 20,
       medium: 40,
-      small: 20,
-      xsmall: 20,
+      large: 60,
     }),
   },
 })

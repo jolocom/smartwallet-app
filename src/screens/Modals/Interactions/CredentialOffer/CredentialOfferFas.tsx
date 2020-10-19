@@ -15,7 +15,6 @@ import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
-import { debugView } from '~/utils/dev'
 
 const CredentialOfferFas = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
@@ -23,23 +22,29 @@ const CredentialOfferFas = () => {
   const handleSubmit = useCredentialOfferSubmit()
 
   const renderCredentials = (credentials: OfferUICredential[]) =>
-    credentials.map(({ type, invalid }) => (
-      <CredentialCard disabled={invalid}>
-        <JoloText
-          kind={JoloTextKind.title}
-          size={JoloTextSizes.middle}
-          color={Colors.black}
-        >
-          {type}
-        </JoloText>
-      </CredentialCard>
+    credentials.map(({ type, invalid }, idx) => (
+      <View
+        style={{
+          marginBottom: idx === credentials.length - 1 ? 0 : 30,
+        }}
+      >
+        <CredentialCard disabled={invalid}>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.middle}
+            color={Colors.black}
+          >
+            {type}
+          </JoloText>
+        </CredentialCard>
+      </View>
     ))
 
   return (
     <>
       <FasWrapper collapsedTitle={getHeaderText().title}>
         <InteractionHeader {...getHeaderText()} />
-        <View style={{ paddingHorizontal: 27 }}>
+        <View style={{ alignItems: 'center' }}>
           <InteractionSection
             visible={!!documents.length}
             title={strings.DOCUMENTS}
