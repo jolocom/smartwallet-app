@@ -13,7 +13,7 @@ import { EntropyCanvas } from './EntropyCanvas'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useIdentityCreate, useGenerateSeed } from '~/hooks/sdk'
+import { useGenerateSeed } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/useLoader'
 
 //NOTE: Determines the duration of entropy collection

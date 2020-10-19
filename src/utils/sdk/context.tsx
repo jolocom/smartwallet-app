@@ -9,11 +9,6 @@ import { ActivityIndicator } from 'react-native'
 import { useDispatch } from 'react-redux'
 import Keychain from 'react-native-keychain'
 
-import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
-
-import { initSDK } from './'
-import { PIN_SERVICE } from '../keychainConsts'
-import ScreenContainer from '~/components/ScreenContainer'
 import {
   JolocomKeychainPasswordStore,
   SDKError,
@@ -21,6 +16,12 @@ import {
   JolocomLinking,
   JolocomWebSockets,
 } from 'react-native-jolocom'
+
+import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
+
+import { initSDK } from './'
+import { PIN_SERVICE } from '../keychainConsts'
+import ScreenContainer from '~/components/ScreenContainer'
 
 export const AgentContext = createContext<MutableRefObject<Agent | null> | null>(
   null,
