@@ -7,7 +7,6 @@ import Btn from '~/components/Btn'
 import { useLoader } from '~/hooks/useLoader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
-import { useAgent, useInteractionStart } from '~/hooks/sdk'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -15,8 +14,6 @@ const ContainerComponent: React.FC = ({ children }) => {
 
 const Claims: React.FC = () => {
   const loader = useLoader()
-  const agent = useAgent()
-  const { startInteraction } = useInteractionStart()
 
   const openLoader = async () => {
     await loader(
@@ -34,30 +31,6 @@ const Claims: React.FC = () => {
 
   const attributes = useSelector(getAttributes)
 
-  const startShare = () => {
-    agent
-      .credRequestToken({
-        callbackURL: 'test',
-        credentialRequirements: [
-          { type: ['Credential', 'ProofOfEmailCredential'], constraints: [] },
-          { type: ['Credential', 'ProofOfNameCredential'], constraints: [] },
-        ],
-      })
-      .then(startInteraction)
-  }
-
-  const startAuthorization = () => {
-    sdk
-      .authorizationRequestToken({
-        callbackURL: 'test',
-        description:
-          'The  http://google.com is ready to share a scooter with you, unlock to start your ride',
-        action: 'unlock the scooter',
-        imageURL: 'http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png',
-      })
-      .then(startInteraction)
-  }
-
   return (
     <ScreenContainer>
       <ContainerComponent>
@@ -70,8 +43,6 @@ const Claims: React.FC = () => {
         />
       </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>
-      <Btn onPress={startShare}>Start Share</Btn>
-      <Btn onPress={startAuthorization}>Start Authz</Btn>
     </ScreenContainer>
   )
 }
