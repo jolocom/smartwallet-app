@@ -6,7 +6,7 @@ import {
   useRoute,
   RouteProp,
 } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { setLogged, setDid } from '~/modules/account/actions'
 
@@ -17,7 +17,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { strings } from '~/translations/strings'
 
 import { useLoader } from '~/hooks/useLoader'
-import { useAgent } from '~/hooks/sdk'
+import { useAgent, useShouldRecoverFromSeed } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
@@ -40,35 +40,31 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
   const agent = useAgent()
+  const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
+  const resetPin = useResetKeychainValues(PIN_SERVICE)
 
   const route = useRoute<RouteProp<RootStackParamList, 'Recovery'>>()
-
   const navigation = useNavigation()
-
-  const resetPin = useResetKeychainValues(PIN_SERVICE)
 
   const { isAccessRestore } = route.params
 
   const restoreEntropy = async () => {
-    // TODO: do actual phrase comparison
-    await resetPin()
-    // throw new Error('oops')
+    const shouldRecover = await shouldRecoverFromSeed()
+
+    if (shouldRecover) {
+      await resetPin()
+    } else {
+      throw new Error('Failed to reset the Passcode!')
+    }
   }
 
   const submitCb = async () => {
-    await loader(
-      async () => {
-        if (isAccessRestore) {
-          await restoreEntropy()
-        } else {
-          const idw = await agent.loadFromMnemonic(phrase.join(' '))
-          dispatch(setDid(idw.did))
-        }
-      },
-      {
-        loading: strings.MATCHING,
-      },
-    )
+    if (isAccessRestore) {
+      await restoreEntropy()
+    } else {
+      const idw = await agent.loadFromMnemonic(phrase.join(' '))
+      dispatch(setDid(idw.did))
+    }
   }
 
   const handlePhraseSubmit = useCallback(async () => {

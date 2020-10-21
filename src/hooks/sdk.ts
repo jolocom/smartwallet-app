@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { entropyToMnemonic } from 'bip39'
+import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
 
 import {
   FlowType,
@@ -46,6 +46,35 @@ export const useMnemonic = () => {
     )
 
     return entropyToMnemonic(decrypted)
+  }
+}
+
+//TODO: should split utils from this file depending on functionality e.g. identity creation, interactions, etc.
+export const useShouldRecoverFromSeed = (phrase: string[]) => {
+  const agent = useAgent()
+
+  return async () => {
+    let recovered = false
+
+    try {
+      const recoveredEntropy = Buffer.from(
+        mnemonicToEntropy(phrase.join(' ')),
+        'hex',
+      )
+
+      if (agent.didMethod.recoverFromSeed) {
+        const { identityWallet } = await agent.didMethod.recoverFromSeed(
+          recoveredEntropy,
+          await agent.passwordStore.getPassword(),
+        )
+        recovered = identityWallet.did === agent.idw.did
+      }
+    } catch (e) {
+      console.warn(e)
+      recovered = false
+    }
+
+    return recovered
   }
 }
 
@@ -102,7 +131,6 @@ export const useSubmitSeedphraseBackup = () => {
   return async () => {
     await createIdentity()
     await agent.storage.store.setting('encryptedSeed', {})
-    // TODO: set seedBackedUp to true (storage)
   }
 }
 
