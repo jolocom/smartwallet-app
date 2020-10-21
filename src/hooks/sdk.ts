@@ -23,7 +23,6 @@ import { getAllCredentials } from '~/modules/credentials/selectors'
 import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
-import { initAgent } from '~/utils/sdk'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 
 type PreInteractionHandler = (i: Interaction) => boolean
