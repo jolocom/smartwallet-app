@@ -31,25 +31,29 @@ type PreInteractionHandler = (i: Interaction) => boolean
 export const useWalletInit = () => {
   const dispatch = useDispatch()
 
-  return async (): Promise<Agent> => {
-    let [agent, pin] = await Promise.all([
-      initAgent(),
-      Keychain.getGenericPassword({
-        service: PIN_SERVICE,
-      }),
-    ])
+  return async (agent: Agent) => {
+    const pin = await Keychain.getGenericPassword({
+      service: PIN_SERVICE,
+    })
 
     // NOTE: If loading the identity fails, we don't set the did and the logged state, thus navigating
     // to the @LoggedOut section
-    const idw = await agent.loadIdentity()
-    dispatch(setDid(idw.did))
-    dispatch(setLogged(true))
+    agent
+      .loadIdentity()
+      .then((idw) => {
+        dispatch(setDid(idw.did))
+        dispatch(setLogged(true))
 
-    if (pin) {
-      dispatch(setLocalAuth(true))
-    }
-
-    return agent
+        if (pin) {
+          dispatch(setLocalAuth(true))
+        }
+      })
+      .catch((err) => {
+        if (err.code !== SDKError.codes.NoWallet) {
+          console.warn(err)
+          throw new Error('Failed loading identity')
+        }
+      })
   }
 }
 

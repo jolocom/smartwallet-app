@@ -7,10 +7,11 @@ import React, {
 } from 'react'
 import { ActivityIndicator, StatusBar } from 'react-native'
 
-import { SDKError, Agent } from 'react-native-jolocom'
+import { Agent } from 'react-native-jolocom'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import { useWalletInit } from '~/hooks/sdk'
+import { initAgent } from '.'
 
 export const AgentContext = createContext<MutableRefObject<Agent | null> | null>(
   null,
@@ -23,13 +24,13 @@ export const AgentContextProvider: React.FC = ({ children }) => {
 
   const initializeAll = async () => {
     try {
-      const agent = await initWallet()
+      const agent = await initAgent()
       agentRef.current = agent
+
+      await initWallet(agent)
     } catch (err) {
-      if (err.code !== SDKError.codes.NoWallet) {
-        console.warn(err)
-        throw new Error('Root initialization failed')
-      }
+      console.warn(err)
+      throw new Error('Agent initialization failed')
     } finally {
       setIsLoading(false)
     }
