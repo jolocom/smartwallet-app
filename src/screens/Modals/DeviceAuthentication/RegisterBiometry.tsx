@@ -2,30 +2,30 @@ import React from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { useBackHandler } from '@react-native-community/hooks'
+import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import ScreenHeader from '~/components/ScreenHeader'
+import BiometryAnimation from '~/components/BiometryAnimation'
 
 import { strings } from '~/translations/strings'
 
 import useSuccess from '~/hooks/useSuccess'
 
-import { Colors } from '~/utils/colors'
+import { setPopup } from '~/modules/appState/actions'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'
-
-import { getBiometryHeader, getBiometryDescription } from './utils/getText'
-import BiometryAnimation from '~/components/BiometryAnimation'
-import { handleNotEnrolled } from '~/utils/biometryErrors'
-import { setPopup } from '~/modules/appState/actions'
-import { useDispatch } from 'react-redux'
 import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
-import ScreenHeader from '~/components/ScreenHeader'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { getBiometryHeader, getBiometryDescription } from './utils/getText'
+
+import { handleNotEnrolled } from '~/utils/biometryErrors'
+import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-const Biometry: React.FC = () => {
+const RegisterBiometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
   const displaySuccessLoader = useSuccess()
 
@@ -81,4 +81,4 @@ const Biometry: React.FC = () => {
   )
 }
 
-export default Biometry
+export default RegisterBiometry

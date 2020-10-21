@@ -1,17 +1,16 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 
 import LoggedOut from '~/screens/LoggedOut'
-import DeviceAuthentication from './screens/DeviceAuthentication'
 import LoggedIn from '~/screens/LoggedIn'
-import Interactions from '~/screens/Modals/Interactions'
-import SettingsList from '~/screens/SettingsList'
+
+import Recovery from '~/screens/Modals/Recovery'
 
 import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
-import { useSelector } from 'react-redux'
 
 const RootStack = createStackNavigator()
 
@@ -22,25 +21,21 @@ const RootNavigation: React.FC = () => {
     <NavigationContainer>
       <RootStack.Navigator headerMode="none" mode="modal">
         {isLoggedIn ? (
-          <RootStack.Screen name={ScreenNames.LoggedIn} component={LoggedIn} />
+          <RootStack.Screen
+            name={ScreenNames.LoggedIn}
+            component={LoggedIn}
+            options={{ gestureEnabled: false }}
+          />
         ) : (
           <RootStack.Screen
             name={ScreenNames.LoggedOut}
             component={LoggedOut}
           />
         )}
-        <RootStack.Screen
-          name={ScreenNames.DeviceAuth}
-          component={DeviceAuthentication}
-        />
-        <RootStack.Screen
-          name={ScreenNames.SettingsList}
-          component={SettingsList}
-        />
-        <RootStack.Screen
-          name={ScreenNames.Interactions}
-          component={Interactions}
-        />
+
+        {/* Modals -> Start */}
+        <RootStack.Screen name={ScreenNames.Recovery} component={Recovery} />
+        {/* Modals -> End */}
       </RootStack.Navigator>
     </NavigationContainer>
   )

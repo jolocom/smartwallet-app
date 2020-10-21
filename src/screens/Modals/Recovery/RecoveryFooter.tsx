@@ -1,7 +1,7 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
+import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { setLogged, setDid } from '~/modules/account/actions'
 
@@ -19,6 +19,9 @@ import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
+import useResetKeychainValues from '~/hooks/useResetKeychainValues'
+import { PIN_SERVICE } from '~/utils/keychainConsts'
+import { ScreenNames } from '~/types/screens'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -31,20 +34,39 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
   const SDK = useSDK()
+  const route = useRoute()
+
+  const navigation = useNavigation()
+
+  const resetPin = useResetKeychainValues(PIN_SERVICE)
+
+  const { isAccessRestore } = route.params
+
+  const restoreEntropy = async () => {
+    // TODO: do actual phrase comparison
+    await resetPin()
+    // throw new Error('oops')
+  }
+
+  const submitCb = async () => {
+    if (isAccessRestore) {
+      await restoreEntropy()
+    } else {
+      const idw = await SDK.initWithMnemonic(phrase.join(' '))
+      dispatch(setDid(idw.did))
+    }
+  }
 
   const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(
-      async () => {
-        const idw = await SDK.initWithMnemonic(phrase.join(' '))
-        dispatch(setDid(idw.did))
-      },
-      {
-        loading: strings.MATCHING,
-      },
-    )
+    const success = await loader(async () => await submitCb(), {
+      loading: strings.MATCHING,
+    })
 
-    if (success) dispatch(setLogged(true))
-    else recoveryDispatch(resetPhrase())
+    if (success) {
+      dispatch(setLogged(true))
+      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
+      navigation.dispatch(replaceAction)
+    } else recoveryDispatch(resetPhrase())
   }, [phrase])
 
   const isPhraseComplete = phrase.length === 12

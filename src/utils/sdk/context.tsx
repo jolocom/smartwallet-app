@@ -35,6 +35,7 @@ export const SDKContextProvider: React.FC = ({ children }) => {
           service: PIN_SERVICE,
         }),
       ])
+
       sdkRef.current = sdk
       let iw = await sdk.init({ dontAutoRegister: true })
       if (iw.did) {
@@ -43,7 +44,7 @@ export const SDKContextProvider: React.FC = ({ children }) => {
       }
 
       if (pin) {
-        dispatch(setLocalAuth())
+        dispatch(setLocalAuth(true))
       }
     } catch (err) {
       if (err.message !== BackendMiddlewareErrorCodes.NoEntropy) {

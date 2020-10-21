@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 
 interface NestedSceenI {
@@ -7,10 +7,10 @@ interface NestedSceenI {
 
 const useRedirectTo = (
   screenName: ScreenNames,
-  nestedScreen: NestedSceenI = {},
+  params: Record<string, any> & NestedSceenI = {},
 ) => {
   const navigation = useNavigation()
-  const redirectTo = () => navigation.navigate(screenName, nestedScreen)
+  const redirectTo = () => navigation.navigate(screenName, params)
   return redirectTo
 }
 

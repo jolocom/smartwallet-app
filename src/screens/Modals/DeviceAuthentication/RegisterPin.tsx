@@ -11,31 +11,31 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
-import {
-  useDeviceAuthState,
-  useDeviceAuthDispatch,
-} from './module/deviceAuthContext'
-import { showBiometry } from './module/deviceAuthActions'
 import BP from '~/utils/breakpoints'
-import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import {
+  useDeviceAuthDispatch,
+  useDeviceAuthState,
+} from './module/deviceAuthContext'
+import { showBiometry } from './module/deviceAuthActions'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const Passcode = () => {
+const RegisterPin = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [passcode, setPasscode] = useState('')
   const [verifiedPasscode, setVerifiedPasscode] = useState('')
   const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
 
+  const handleRedirectToLoggedIn = useRedirectToLoggedIn()
+
   const { biometryType } = useDeviceAuthState()
   const dispatchToLocalAuth = useDeviceAuthDispatch()
-
-  const handleRedirectToLoggedIn = useRedirectToLoggedIn()
 
   const displaySuccessLoader = useSuccess()
 
@@ -63,7 +63,6 @@ const Passcode = () => {
       } catch (err) {
         console.log({ err })
       }
-      // redirect to Biometry screen if biometry is supported on a device, otherwise, redirect to LoggedIn section
       redirectTo()
     } else {
       setHasError(true)
@@ -157,4 +156,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Passcode
+export default RegisterPin

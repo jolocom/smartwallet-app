@@ -4,20 +4,15 @@ import Keychain from 'react-native-keychain'
 
 import { ScreenNames } from '~/types/screens'
 
-import Passcode from './Passcode'
-import Biometry from './Biometry'
-
 import DeviceAuthContextProvider, {
   useDeviceAuthDispatch,
   useDeviceAuthState,
 } from './module/deviceAuthContext'
 import { setBiometryType } from './module/deviceAuthActions'
+import RegisterPin from './RegisterPin'
+import RegisterBiometry from './RegisterBiometry'
 
 const Stack = createStackNavigator()
-
-const disableGesturesOptions = {
-  gestureEnabled: false,
-}
 
 const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
@@ -40,16 +35,11 @@ const DeviceAuthentication: React.FC = () => {
   return (
     <Stack.Navigator headerMode="none">
       {isPasscodeView ? (
-        <Stack.Screen
-          name={ScreenNames.Passcode}
-          component={Passcode}
-          options={disableGesturesOptions}
-        />
+        <Stack.Screen name={ScreenNames.RegisterPin} component={RegisterPin} />
       ) : (
         <Stack.Screen
-          name={ScreenNames.Biometry}
-          component={Biometry}
-          options={disableGesturesOptions}
+          name={ScreenNames.RegisterBiometry}
+          component={RegisterBiometry}
         />
       )}
     </Stack.Navigator>

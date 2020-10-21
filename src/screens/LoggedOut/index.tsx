@@ -5,7 +5,6 @@ import { ScreenNames } from '~/types/screens'
 
 import Walkthrough from './Walkthrough'
 import Entropy from './Entropy'
-import Recovery from './Recovery'
 import SeedPhrase from './SeedPhrase'
 import SeedPhraseRepeat from './SeedPhraseRepeat'
 
@@ -19,7 +18,6 @@ const LoggedOut: React.FC = () => {
     >
       <Stack.Screen name={ScreenNames.Walkthrough} component={Walkthrough} />
       <Stack.Screen name={ScreenNames.Entropy} component={Entropy} />
-      <Stack.Screen name={ScreenNames.Recovery} component={Recovery} />
       <Stack.Screen name={ScreenNames.SeedPhrase} component={SeedPhrase} />
       <Stack.Screen
         name={ScreenNames.SeedPhraseRepeat}
