@@ -12,7 +12,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { strings } from '~/translations/strings'
 
 import { useLoader } from '~/hooks/useLoader'
-import { useSDK } from '~/hooks/sdk'
+import { useAgent } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
@@ -33,7 +33,6 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
-  const SDK = useSDK()
   const route = useRoute()
 
   const navigation = useNavigation()
@@ -41,6 +40,18 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const resetPin = useResetKeychainValues(PIN_SERVICE)
 
   const { isAccessRestore } = route.params
+  const agent = useAgent()
+
+  const handlePhraseSubmit = useCallback(async () => {
+    const success = await loader(async () => await submitCb(), {
+      loading: strings.MATCHING,
+    })
+    if (success) {
+      dispatch(setLogged(true))
+      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
+      navigation.dispatch(replaceAction)
+    } else recoveryDispatch(resetPhrase())
+  }, [phrase])
 
   const restoreEntropy = async () => {
     // TODO: do actual phrase comparison
@@ -52,22 +63,10 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
     if (isAccessRestore) {
       await restoreEntropy()
     } else {
-      const idw = await SDK.initWithMnemonic(phrase.join(' '))
+      const idw = await agent.loadFromMnemonic(phrase.join(' '))
       dispatch(setDid(idw.did))
     }
   }
-
-  const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(async () => await submitCb(), {
-      loading: strings.MATCHING,
-    })
-
-    if (success) {
-      dispatch(setLogged(true))
-      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
-      navigation.dispatch(replaceAction)
-    } else recoveryDispatch(resetPhrase())
-  }, [phrase])
 
   const isPhraseComplete = phrase.length === 12
 

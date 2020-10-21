@@ -2,7 +2,7 @@ import { useInteraction } from '~/hooks/sdk'
 import {
   CredentialOfferFlowState,
   SignedCredentialWithMetadata,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { OfferUICredential } from '~/types/credentials'
 import { strings } from '~/translations/strings'
@@ -48,12 +48,7 @@ const useCredentialOfferFlow = () => {
     if (!responseToken)
       throw new Error('Could not find the CredentialOfferResponse token')
 
-    const receiveToken = await interaction.send(responseToken)
-
-    if (!receiveToken)
-      throw new Error('Failed to fetch the CredentialsReceive token')
-
-    await interaction.processInteractionToken(receiveToken)
+    await interaction.send(responseToken)
   }
 
   /**

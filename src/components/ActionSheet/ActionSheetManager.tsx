@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSafeArea } from 'react-native-safe-area-context'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+
+import { FlowType } from 'react-native-jolocom'
 
 import Authentication from '~/screens/Modals/Interactions/Authentication'
 import Authorization from '~/screens/Modals/Interactions/Authorization'

@@ -1,6 +1,5 @@
 export enum AccountActions {
   setDid = 'setDid',
-  setEntropy = 'setEntropy',
   setLogged = 'setLogged',
   resetAccount = 'resetAccount',
   setLocalAuth = 'setLocalAuth',
@@ -9,7 +8,6 @@ export enum AccountActions {
 
 export interface AccountState {
   did: string
-  entropy: string
   loggedIn: boolean
   isLocalAuthSet: boolean
 }
