@@ -21,7 +21,7 @@ const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
         weight={JoloTextWeight.regular}
         customStyles={{
           textAlign: 'left',
-          marginBottom: BP({ large: 12, medium: 12, small: 12, xsmall: 12 }),
+          marginBottom: 12,
         }}
       >
         {title}
@@ -33,7 +33,7 @@ const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginBottom: BP({ large: 36, medium: 36, small: 24, xsmall: 24 }),
+    marginBottom: BP({ large: 36, medium: 36, default: 24 }),
   },
 })
 

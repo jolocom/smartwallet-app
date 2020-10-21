@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, StyleSheet, StyleProp, ViewProps } from 'react-native'
-import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 
 const AttributeWidgetWrapper: React.FC<{
@@ -15,7 +14,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     backgroundColor: Colors.lightBlack,
     borderRadius: 20,
-    marginBottom: BP({ large: 52, medium: 52, small: 52, xsmall: 52 }),
+    marginBottom: 52,
     // Shadows
     shadowColor: Colors.black50,
     shadowOffset: {

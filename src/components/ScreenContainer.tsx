@@ -78,8 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: '5%',
     paddingTop: BP({
-      large: 40,
-      medium: 40,
+      default: 40,
       small: 15,
       xsmall: 15,
     }),

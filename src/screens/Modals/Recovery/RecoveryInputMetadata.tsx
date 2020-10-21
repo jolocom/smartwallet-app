@@ -40,7 +40,7 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
 
 const styles = StyleSheet.create({
   inputMeta: {
-    marginTop: BP({ large: 15, medium: 15, small: 15, xsmall: 7 }),
+    marginTop: BP({ default: 15, xsmall: 7 }),
   },
 })
 

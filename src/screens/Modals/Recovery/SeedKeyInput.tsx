@@ -197,10 +197,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0.25 * SCREEN_HEIGHT,
         marginTop: BP({
-          large: 70,
+          default: 30,
           medium: 50,
-          small: 30,
-          xsmall: 30,
+          large: 70,
         }),
       },
     }),
@@ -210,10 +209,8 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'black',
     height: BP({
+      default: 87,
       xsmall: 50,
-      small: 87,
-      medium: 87,
-      large: 87,
     }),
     borderRadius: 7,
     flexDirection: 'row',
@@ -226,7 +223,7 @@ const styles = StyleSheet.create({
     width: '70%',
     color: Colors.white,
     textDecorationLine: 'none',
-    lineHeight: BP({ xsmall: 28, small: 32, medium: 36, large: 36 }),
+    lineHeight: BP({ xsmall: 28, small: 32, default: 36 }),
   },
   inputError: {
     borderColor: Colors.error,

@@ -176,7 +176,7 @@ export const getIsFullscreenCredShare = createSelector(
 
     return onlyAttributes
       ? numberOfFieldsDisplayed >
-          BP({ large: 3, medium: 3, small: 3, xsmall: 2 })
+          BP({ default: 3, xsmall: 2 })
       : isOnlyOneCredential
       ? false
       : true
