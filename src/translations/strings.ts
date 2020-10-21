@@ -103,6 +103,7 @@ const deviceAuthentication = {
     'Scan your fingerprint on the device scanner to continue',
   SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed
   RESET: 'Reset',
+  RESTORE_ACCESS: 'Restore access',
 }
 
 const scanner = {
@@ -179,6 +180,18 @@ const attributes = {
   SAVE_YOUR_ATTRIBUTE: (attr: AttrKeys) => `Save your attribute ${attr}`,
 }
 
+const recoverPin = {
+  REPEAT_YOUR_PHRASE: 'Repeat your phrase',
+  WORD_BY_WORD: 'word by word',
+  STORING_NO_AFFECT_DATA:
+    'Setting a new passcode will not affect your stored data',
+  HOW_TO_CHANGE_PIN: 'How to change your PIN',
+  WE_ARE_SORRY_THAT_YOU_FORGOT:
+    'We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!',
+  YOU_CAN_CHANGE_PIN:
+    'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -193,4 +206,5 @@ export const strings = {
   ...lock,
   ...interactions,
   ...attributes,
+  ...recoverPin,
 }

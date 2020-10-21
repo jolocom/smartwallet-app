@@ -34,6 +34,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   const dispatch = useDispatch()
 
   const initializeAll = async () => {
+    //TODO move this functionality into a hook
     try {
       let [sdk, pin] = await Promise.all([
         initSDK(),
@@ -55,7 +56,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
       dispatch(setLogged(true))
 
       if (pin) {
-        dispatch(setLocalAuth())
+        dispatch(setLocalAuth(true))
       }
     } catch (err) {
       if (err.code !== SDKError.codes.NoWallet) {
