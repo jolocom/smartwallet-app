@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
+import Keychain from 'react-native-keychain'
 
 import {
   FlowType,
@@ -9,6 +10,7 @@ import {
   SDKError,
   InteractionTransportType,
   JolocomLib,
+  Agent,
 } from 'react-native-jolocom'
 import { CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/types'
 
@@ -18,11 +20,38 @@ import { setInteractionDetails } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { getMappedInteraction, isTypeAttribute } from '~/utils/dataMapping'
 import { getAllCredentials } from '~/modules/credentials/selectors'
-import { setDid } from '~/modules/account/actions'
+import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
+import { initAgent } from '~/utils/sdk'
+import { PIN_SERVICE } from '~/utils/keychainConsts'
 
 type PreInteractionHandler = (i: Interaction) => boolean
+
+export const useWalletInit = () => {
+  const dispatch = useDispatch()
+
+  return async (): Promise<Agent> => {
+    let [agent, pin] = await Promise.all([
+      initAgent(),
+      Keychain.getGenericPassword({
+        service: PIN_SERVICE,
+      }),
+    ])
+
+    // NOTE: If loading the identity fails, we don't set the did and the logged state, thus navigating
+    // to the @LoggedOut section
+    const idw = await agent.loadIdentity()
+    dispatch(setDid(idw.did))
+    dispatch(setLogged(true))
+
+    if (pin) {
+      dispatch(setLocalAuth(true))
+    }
+
+    return agent
+  }
+}
 
 export const useAgent = () => {
   const agent = useContext(AgentContext)
