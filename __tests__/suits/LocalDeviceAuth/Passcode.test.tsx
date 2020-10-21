@@ -2,7 +2,7 @@ import React from 'react'
 import { fireEvent } from '@testing-library/react-native'
 import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
 
-import Passcode from '~/screens/DeviceAuthentication/Passcode'
+import Passcode from '~/screens/Modals/DeviceAuthentication/RegisterPin'
 import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
@@ -10,6 +10,7 @@ import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 jest.mock('../../../src/hooks/useRedirectTo')
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
+  useSelector: jest.fn(),
 }))
 jest.useFakeTimers()
 jest.mock('react-native-keychain', () => {

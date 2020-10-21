@@ -8,18 +8,20 @@ export enum ScreenNames {
   SeedPhraseRepeat = 'SeedPhraseRepeat',
   // Logged In Tabs
   LoggedIn = 'LoggedIn',
+  Tabs = 'Tabs',
   Claims = 'Claims',
   Documents = 'Documents',
   History = 'History',
   Settings = 'Settings',
   // Device Authentication
   DeviceAuth = 'DeviceAuth',
-  Passcode = 'Passcode',
-  Biometry = 'Biometry',
-  Loading = 'Loading',
+  RegisterPin = 'RegisterPin',
+  RegisterBiometry = 'RegisterBiometry',
   // Modals
   Loader = 'Loader',
   Interactions = 'Interactions',
+  Lock = 'Lock',
+  PinRecoveryInstructions = 'PinRecoveryInstructions',
   //Settings
   SettingsList = 'SettingsList',
   ChangePin = 'ChangePin',

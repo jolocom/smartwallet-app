@@ -3,25 +3,14 @@ import * as redux from 'react-redux'
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock'
 import { getGenericPassword } from 'react-native-keychain'
 
-import LockContainer, { Lock } from '~/modals/Lock'
+import Lock from '~/screens/Modals/Lock'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 
 import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { Colors } from '~/utils/colors'
-import { unlockApp } from '~/modules/account/actions'
-import { applyMiddleware } from 'redux'
 
-const mockAppState = {
-  account: {
-    loggedIn: true,
-    isAppLocked: true,
-    isLocalAuthSet: true,
-  },
-  appState: {
-    isPopup: false,
-  },
-}
+const mockedGoBack = jest.fn()
 
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)
 jest.mock('react-native-keychain', () => ({
@@ -35,13 +24,16 @@ jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useSelector: jest.fn(),
 }))
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useIsFocused: jest.fn(() => true),
+  useNavigation: () => ({
+    goBack: mockedGoBack,
+  }),
+}))
 
 describe('Lock screen', () => {
   test('displays body and unlocks the app', async () => {
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
-    const mockDispatchFn = jest.fn()
-    useDispatchSpy.mockReturnValue(mockDispatchFn)
-
     const { getByTestId, getAllByTestId, getByText } = renderWithSafeArea(
       <Lock />,
     )
@@ -60,22 +52,6 @@ describe('Lock screen', () => {
 
     fireEvent(passcodeInput, 'focus')
     fireEvent.changeText(passcodeInput, '5555')
-    expect(mockDispatchFn).toHaveBeenCalledWith(unlockApp())
-  })
-
-  test('is displayed', async () => {
-    redux.useSelector.mockImplementation((callback: (state: any) => void) => {
-      return callback(mockAppState)
-    })
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
-    const mockDispatchFn = jest.fn()
-    useDispatchSpy.mockReturnValue(mockDispatchFn)
-
-    const { findByText } = renderWithSafeArea(<LockContainer />)
-
-    const lockText = await findByText(strings.ENTER_YOUR_PIN)
-    expect(lockText).toBeDefined()
-
-    redux.useSelector.mockClear()
+    expect(mockedGoBack).toHaveBeenCalledTimes(1)
   })
 })

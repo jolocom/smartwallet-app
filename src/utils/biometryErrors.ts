@@ -1,8 +1,8 @@
 import { Alert, Linking } from 'react-native'
+import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
+import { getBiometryIsDisabledText } from '~/screens/Modals/DeviceAuthentication/utils/getText'
 
 import { strings } from '~/translations/strings'
-import { BiometryTypes } from '~/screens/DeviceAuthentication/module/deviceAuthTypes'
-import { getBiometryIsDisabledText } from '~/screens/DeviceAuthentication/utils/getText'
 
 export const handleNotEnrolled = (biometryType: BiometryTypes) => {
   Alert.alert(

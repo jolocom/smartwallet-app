@@ -12,7 +12,7 @@ import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
 import useDelay from '~/hooks/useDelay'
 import { dismissLoader } from '~/modules/loader/actions'
-import { isAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
+import { isLocalAuthSet } from '~/modules/account/selectors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 10
+    zIndex: 10,
   },
   tickContainer: {
     width: 100,
@@ -212,12 +212,11 @@ const styles = StyleSheet.create({
 })
 
 export default function () {
-  const { isVisible } = useSelector(getLoaderState)
-  const isLocked = useSelector(isAppLocked)
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
   const isAuthSet = useSelector(isLocalAuthSet)
 
   // isVisible && isLocked && !isAuthSet => Logged out section
-  if ((isVisible && !isLocked) || (isVisible && isLocked && !isAuthSet)) {
+  if (isLoaderVisible || (isLoaderVisible && !isAuthSet)) {
     return <Loader />
   }
   return null
