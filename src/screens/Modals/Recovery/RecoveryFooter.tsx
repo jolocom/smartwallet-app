@@ -1,6 +1,11 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
-import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { setLogged, setDid } from '~/modules/account/actions'
@@ -22,6 +27,7 @@ import { useKeyboard } from './useKeyboard'
 import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
+import { RootStackParamList } from '~/RootNavigation'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -35,14 +41,13 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const dispatch = useDispatch()
   const agent = useAgent()
 
-  const route = useRoute()
+  const route = useRoute<RouteProp<RootStackParamList, 'Recovery'>>()
 
   const navigation = useNavigation()
 
   const resetPin = useResetKeychainValues(PIN_SERVICE)
 
-  //FIXME: fix type
-  const { isAccessRestore } = route.params as { isAccessRestore: boolean }
+  const { isAccessRestore } = route.params
 
   const restoreEntropy = async () => {
     // TODO: do actual phrase comparison

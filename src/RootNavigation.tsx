@@ -12,7 +12,15 @@ import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
 
-const RootStack = createStackNavigator()
+export type RootStackParamList = {
+  Recovery: {
+    isAccessRestore: boolean
+  }
+  LoggedIn: undefined
+  LoggedOut: undefined
+}
+
+const RootStack = createStackNavigator<RootStackParamList>()
 
 const RootNavigation: React.FC = () => {
   const isLoggedIn = useSelector(isLogged)
