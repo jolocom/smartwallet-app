@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 
 import { resetInteraction } from '~/modules/interaction/actions'
-import { useInteraction } from '../sdk'
+import { useInteraction } from '.'
 
 const useAuthSubmit = () => {
   const interaction = useInteraction()

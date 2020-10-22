@@ -1,13 +1,15 @@
-import { useInteraction } from '~/hooks/sdk'
+import { useSelector } from 'react-redux'
+
 import {
   CredentialOfferFlowState,
   SignedCredentialWithMetadata,
 } from '@jolocom/sdk/js/interactionManager/types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+
 import { OfferUICredential } from '~/types/credentials'
 import { strings } from '~/translations/strings'
-import { useSelector } from 'react-redux'
 import { getCounterpartyName } from '~/modules/interaction/selectors'
+import { useInteraction } from '.'
 
 /**
  * Custom hook that exposes a collection of utils for the Credential Offer interaction

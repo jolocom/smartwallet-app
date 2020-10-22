@@ -11,7 +11,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import { useSelector } from 'react-redux'
 
-import { SDKError, InteractionTransportType } from 'react-native-jolocom'
+import { SDKError } from 'react-native-jolocom'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
@@ -23,7 +23,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
 import useDelay from '~/hooks/useDelay'
-import { useInteractionStart } from '~/hooks/sdk'
+import { useInteractionStart } from '~/hooks/interactions'
 
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 
@@ -33,7 +33,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
-  const { startInteraction } = useInteractionStart()
+  const startInteraction = useInteractionStart()
 
   const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
