@@ -2,12 +2,13 @@ import React from 'react'
 import { fireEvent } from '@testing-library/react-native'
 import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
 
-import Passcode from '~/screens/Modals/DeviceAuthentication/RegisterPin'
+import RegisterPin from '~/screens/Modals/DeviceAuthentication/RegisterPin'
 import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
 jest.mock('../../../src/hooks/navigation', () => ({
+  useRedirectToLoggedIn: () => jest.fn(),
   useRedirectTo: jest.fn(),
 }))
 jest.mock('react-redux', () => ({
@@ -39,7 +40,7 @@ jest.mock(
 
 test('It displays Create or Verify PIN screen correctly', () => {
   const { getByText, getByTestId, getAllByTestId } = renderWithSafeArea(
-    <Passcode />,
+    <RegisterPin />,
   )
 
   expect(getByText(strings.CREATE_PASSCODE)).toBeDefined()
@@ -73,7 +74,7 @@ test('It displays Create or Verify PIN screen correctly', () => {
 })
 
 test('it saves PIN to the Keychain', async () => {
-  const { getByText, getByTestId } = renderWithSafeArea(<Passcode />)
+  const { getByText, getByTestId } = renderWithSafeArea(<RegisterPin />)
   const input = getByTestId('passcode-digit-input')
   fireEvent.changeText(input, '1234')
 
@@ -88,7 +89,7 @@ test('it saves PIN to the Keychain', async () => {
 })
 
 test('it resets setting up PIN flow', async () => {
-  const { getByText, getByTestId } = renderWithSafeArea(<Passcode />)
+  const { getByText, getByTestId } = renderWithSafeArea(<RegisterPin />)
   const input = getByTestId('passcode-digit-input')
   fireEvent.changeText(input, '1234')
   expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()

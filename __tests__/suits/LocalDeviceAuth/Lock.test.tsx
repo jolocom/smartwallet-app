@@ -1,6 +1,4 @@
 import React from 'react'
-import * as redux from 'react-redux'
-import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock'
 import { getGenericPassword } from 'react-native-keychain'
 
 import Lock from '~/screens/Modals/Lock'
@@ -12,7 +10,6 @@ import { Colors } from '~/utils/colors'
 
 const mockedGoBack = jest.fn()
 
-jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)
 jest.mock('react-native-keychain', () => ({
   getGenericPassword: jest.fn(() =>
     Promise.resolve({

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import PasscodeInput from '~/components/PasscodeInput'
@@ -21,7 +22,6 @@ import {
   useDeviceAuthState,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
-import { useBackHandler } from '@react-native-community/hooks'
 import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
