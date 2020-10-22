@@ -17,11 +17,12 @@ jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
 }))
 
-jest.mock('../../src/hooks/sdk', () => ({
-  useAgent: () => ({
-    initWithMnemonic: jest.fn().mockResolvedValue(true),
-  }),
-}))
+/* // TODO: this definitely should not be here */
+// jest.mock('../../src/hooks/sdk', () => ({
+//   useAgent: () => ({
+//     initWithMnemonic: jest.fn().mockResolvedValue(true),
+//   }),
+// }))
 
 jest.mock('react-native-randombytes', () => ({
   randomBytes: jest.fn().mockResolvedValue('sdsd'),

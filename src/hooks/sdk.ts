@@ -3,13 +3,7 @@ import { Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { entropyToMnemonic } from 'bip39'
 
-import {
-  FlowType,
-  Interaction,
-  SDKError,
-  InteractionTransportType,
-  JolocomLib,
-} from 'react-native-jolocom'
+import { Interaction, InteractionTransportType } from 'react-native-jolocom'
 import { CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/types'
 
 import { AgentContext } from '~/utils/sdk/context'
@@ -21,6 +15,7 @@ import { getAllCredentials } from '~/modules/credentials/selectors'
 import { setDid } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
+import { parseJWT } from '~/utils/parseJWT'
 
 type PreInteractionHandler = (i: Interaction) => boolean
 
@@ -109,22 +104,9 @@ export const useSubmitSeedphraseBackup = () => {
 export const useInteractionStart = (channel: InteractionTransportType) => {
   const agent = useAgent()
   const dispatch = useDispatch()
+
   const loader = useLoader()
   const credentials = useSelector(getAllCredentials)
-
-  const parseJWT = (jwt: string) => {
-    try {
-      return JolocomLib.parse.interactionToken.fromJWT(jwt)
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        throw new Error(SDKError.codes.ParseJWTFailed)
-      } else if (e.message === 'Token expired') {
-        throw new Error(SDKError.codes.TokenExpired)
-      } else {
-        throw new Error(SDKError.codes.Unknown)
-      }
-    }
-  }
 
   /*
    * Used for any actions that have to be run before the interaction starts. If
@@ -132,7 +114,8 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
    * from the SDK).
    */
   const preInteractionHandler: Record<string, PreInteractionHandler> = {
-    [FlowType.CredentialShare]: (interaction) => {
+    // [FlowType.CredentialShare]: (interaction) => {
+    CredentialShare: (interaction) => {
       const { constraints } = interaction.getSummary()
         .state as CredentialRequestFlowState
       const { requestedCredentialTypes } = constraints[0]
@@ -167,27 +150,27 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
   }
 
   const startInteraction = async (jwt: string) => {
-    const token = parseJWT(jwt)
+      const token = parseJWT(jwt)
 
-    await loader(
-      async () => {
-        const interaction = await agent.interactionManager.start(channel, token)
-        const mappedInteraction = getMappedInteraction(interaction)
-        const shouldStart = preInteractionHandler[interaction.flow.type]
-          ? preInteractionHandler[interaction.flow.type](interaction)
-          : true
+      await loader(
+        async () => {
+          const interaction = await agent.interactionManager.start(token)
+          const mappedInteraction = getMappedInteraction(interaction)
+          const shouldStart = preInteractionHandler[interaction.flow.type]
+            ? preInteractionHandler[interaction.flow.type](interaction)
+            : true
 
-        shouldStart &&
-          dispatch(
-            setInteractionDetails({
-              id: interaction.id,
-              flowType: interaction.flow.type,
-              ...mappedInteraction,
-            }),
-          )
-      },
-      { showSuccess: false },
-    )
+          shouldStart &&
+            dispatch(
+              setInteractionDetails({
+                id: interaction.id,
+                flowType: interaction.flow.type,
+                ...mappedInteraction,
+              }),
+            )
+        },
+        { showSuccess: false },
+      )
   }
 
   return { startInteraction }
