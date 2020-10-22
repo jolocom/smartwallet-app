@@ -6,16 +6,16 @@ import Btn from '~/components/Btn'
 import { setLogged } from '~/modules/account/actions'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useSubmitSeedphraseBackup } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/loader'
+import { useSubmitIdentity } from '~/hooks/sdk'
 
 const SeedPhraseRepeat: React.FC = () => {
   const dispatch = useDispatch()
-  const submitBackup = useSubmitSeedphraseBackup()
+  const submitIdentity = useSubmitIdentity()
   const loader = useLoader()
 
   const onSubmit = async () => {
-    const success = await loader(submitBackup)
+    const success = await loader(submitIdentity)
     if (success) dispatch(setLogged(true))
   }
 

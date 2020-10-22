@@ -39,7 +39,7 @@ export const useWalletInit = () => {
       service: PIN_SERVICE,
     })
 
-    agent
+    return agent
       .loadIdentity()
       .then((idw) => {
         dispatch(setDid(idw.did))
@@ -121,7 +121,7 @@ export const useIdentityCreate = () => {
  *
  * @returns () => Promise<void>
  */
-export const useSubmitSeedphraseBackup = () => {
+export const useSubmitIdentity = () => {
   const agent = useAgent()
   const createIdentity = useIdentityCreate()
 
