@@ -13,7 +13,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
-import useRedirectTo from '~/hooks/useRedirectTo'
+import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'

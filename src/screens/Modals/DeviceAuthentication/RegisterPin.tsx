@@ -15,7 +15,7 @@ import BP from '~/utils/breakpoints'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import { useRedirectToLoggedIn } from '~/hooks/navigation'
 import {
   useDeviceAuthDispatch,
   useDeviceAuthState,

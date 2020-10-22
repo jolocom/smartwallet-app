@@ -3,7 +3,7 @@ import { View, StyleSheet, Platform } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 
-import useReplaceWith from '~/hooks/useReplaceWith'
+import { useReplaceWith } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 

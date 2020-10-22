@@ -7,7 +7,9 @@ import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
-jest.mock('../../../src/hooks/useRedirectTo')
+jest.mock('../../../src/hooks/navigation', () => ({
+  useRedirectTo: jest.fn(),
+}))
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
   useSelector: jest.fn(),

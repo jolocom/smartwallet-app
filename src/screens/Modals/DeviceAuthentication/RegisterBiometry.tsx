@@ -18,7 +18,7 @@ import useSuccess from '~/hooks/useSuccess'
 import { setPopup } from '~/modules/appState/actions'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'
-import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import { useRedirectToLoggedIn } from '~/hooks/navigation'
 import { getBiometryHeader, getBiometryDescription } from './utils/getText'
 
 import { handleNotEnrolled } from '~/utils/biometryErrors'

@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { getLoaderState } from '~/modules/loader/selectors'
 import { isLocalAuthSet, isLogged } from '~/modules/account/selectors'
-import useRedirectTo from '~/hooks/useRedirectTo'
+import { useRedirectTo } from '~/hooks/navigation'
 
 import Interactions from '~/screens/Modals/Interactions'
 import DeviceAuthentication from '~/screens/Modals/DeviceAuthentication'
