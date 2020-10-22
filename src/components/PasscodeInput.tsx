@@ -17,7 +17,7 @@ import {
 } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import useDelay from '~/hooks/useDelay'
+import { useDelay } from '~/hooks/generic'
 import { useAppState } from '~/hooks/useAppState'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)

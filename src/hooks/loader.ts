@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { strings } from '~/translations/strings'
-import useDelay from './useDelay'
+import { useDelay } from './generic'
 
 export interface LoaderConfig {
   showFailed?: boolean

@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
 import BP from '~/utils/breakpoints'
-import useHideStatusBar from '~/hooks/useHideStatusBar'
+import { useHideStatusBar } from '~/hooks/generic'
 
 interface ScreenContainerI {
   isTransparent?: boolean

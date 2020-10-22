@@ -18,7 +18,7 @@ import {
 } from '~/hooks/deviceAuth'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import useDelay from '~/hooks/useDelay'
+import { useDelay } from '~/hooks/generic'
 import { ScreenNames } from '~/types/screens'
 import { useRedirectTo } from '~/hooks/navigation'
 
