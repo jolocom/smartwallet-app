@@ -26,7 +26,6 @@ const ENOUGH_ENTROPY_PROGRESS = Platform.select({
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
   const refreshEntropy = useReplaceWith(ScreenNames.Entropy)
-  //const createIdentity = useIdentityCreate()
   const generateSeed = useGenerateSeed()
   const loader = useLoader()
 

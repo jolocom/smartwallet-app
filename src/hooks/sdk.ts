@@ -35,9 +35,7 @@ export const useWalletInit = () => {
       service: PIN_SERVICE,
     })
 
-    // NOTE: If loading the identity fails, we don't set the did and the logged state, thus navigating
-    // to the @LoggedOut section
-    agent
+    return agent
       .loadIdentity()
       .then((idw) => {
         dispatch(setDid(idw.did))
@@ -156,7 +154,7 @@ export const useIdentityCreate = () => {
   }
 }
 
-export const useSubmitSeedphraseBackup = () => {
+export const useSubmitIdentity = () => {
   const agent = useAgent()
   const createIdentity = useIdentityCreate()
 
