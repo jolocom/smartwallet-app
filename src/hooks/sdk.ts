@@ -12,6 +12,25 @@ import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 
+/**
+ * Custom hook that returns the current @Agent.
+ *
+ * @returns Agent
+ */
+export const useAgent = () => {
+  const agent = useContext(AgentContext)
+  if (!agent?.current) throw new Error('Agent was not found!')
+
+  return agent.current
+}
+
+/**
+ * Returns a function that takes an @Agent and tries to load a stored identity.
+ * If there is an identity found (agent.loadIdentity doesn't throw), the user is
+ * logged in. Otherwise, the user stays logged out.
+ *
+ * @returns () => Promise<void>
+ */
 export const useWalletInit = () => {
   const dispatch = useDispatch()
 
@@ -39,32 +58,85 @@ export const useWalletInit = () => {
   }
 }
 
-export const useAgent = () => {
-  const agent = useContext(AgentContext)
-  if (!agent?.current) throw new Error('Agent was not found!')
-  return agent.current
-}
-
-export const useMnemonic = () => {
+/**
+ * Returns a function that generates a random seed and stores it after encryption.
+ *
+ * @returns () => Promise<Buffer>
+ */
+export const useGenerateSeed = () => {
   const agent = useAgent()
 
   return async () => {
-    const encryptedSeed = await agent.storage.get.setting('encryptedSeed')
+    // FIXME use the seed generated on the entropy screen. Currently the entropy
+    // seed generates 24 word seedphrases
+    const seed = await generateSecureRandomBytes(16)
 
-    if (!encryptedSeed) {
-      throw new Error('Can not retrieve Seed from database')
-    }
-
-    const decrypted = await agent.idw.asymDecrypt(
-      Buffer.from(encryptedSeed.b64Encoded, 'base64'),
-      await agent.passwordStore.getPassword(),
+    const identity = await agent.loadFromMnemonic(entropyToMnemonic(seed))
+    const encryptedSeed = await identity.asymEncryptToDid(
+      Buffer.from(seed),
+      identity.did,
+      {
+        prefix: '',
+        resolve: async (_) => identity.identity,
+      },
     )
 
-    return entropyToMnemonic(decrypted)
+    await agent.storage.store.setting('encryptedSeed', {
+      b64Encoded: encryptedSeed.toString('base64'),
+    })
+
+    return seed
   }
 }
 
-//TODO: should split utils from this file depending on functionality e.g. identity creation, interactions, etc.
+/**
+ * Returns a function that creates an identity using the stored encrypted seed and logs
+ * the user in. If identity creation failed, will return @false.
+ *
+ * @returns () => Promise<boolean>
+ */
+export const useIdentityCreate = () => {
+  const agent = useAgent()
+  const loader = useLoader()
+  const dispatch = useDispatch()
+  const getStoredMnemonic = useStoredMnemonic()
+
+  return async () => {
+    return loader(
+      async () => {
+        const mnemonic = await getStoredMnemonic()
+        const identity = await agent.loadFromMnemonic(mnemonic)
+        dispatch(setDid(identity.did))
+      },
+      {
+        loading: strings.CREATING,
+      },
+    )
+  }
+}
+
+/**
+ * Returns a function that handles the last step of the onboarding flow, which is
+ * creating an identity and clearing up @encryptedSeed from the storage.
+ *
+ * @returns () => Promise<void>
+ */
+export const useSubmitSeedphraseBackup = () => {
+  const agent = useAgent()
+  const createIdentity = useIdentityCreate()
+
+  return async () => {
+    await createIdentity()
+    await agent.storage.store.setting('encryptedSeed', {})
+  }
+}
+
+/**
+ * Returns a function that checks whether the user input seedphrase corresponds to
+ * the stored identity.
+ *
+ * @returns () => Promise<boolean>
+ */
 export const useShouldRecoverFromSeed = (phrase: string[]) => {
   const agent = useAgent()
 
@@ -93,58 +165,26 @@ export const useShouldRecoverFromSeed = (phrase: string[]) => {
   }
 }
 
-export const useGenerateSeed = () => {
+/**
+ * Returns a function which gets the seedphrase from the stored @encryptedEntropy.
+ *
+ * @returns () => Promise<string>
+ */
+export const useStoredMnemonic = () => {
   const agent = useAgent()
 
   return async () => {
-    // FIXME use the seed generated on the entropy screen. Currently the entropy
-    // seed generates 24 word seedphrases
-    const seed = await generateSecureRandomBytes(16)
+    const encryptedSeed = await agent.storage.get.setting('encryptedSeed')
 
-    const identity = await agent.loadFromMnemonic(entropyToMnemonic(seed))
-    const encryptedSeed = await identity.asymEncryptToDid(
-      Buffer.from(seed),
-      identity.did,
-      {
-        prefix: '',
-        resolve: async (_) => identity.identity,
-      },
+    if (!encryptedSeed) {
+      throw new Error('Can not retrieve Seed from database')
+    }
+
+    const decrypted = await agent.idw.asymDecrypt(
+      Buffer.from(encryptedSeed.b64Encoded, 'base64'),
+      await agent.passwordStore.getPassword(),
     )
 
-    await agent.storage.store.setting('encryptedSeed', {
-      b64Encoded: encryptedSeed.toString('base64'),
-    })
-
-    return seed
-  }
-}
-
-export const useIdentityCreate = () => {
-  const agent = useAgent()
-  const loader = useLoader()
-  const dispatch = useDispatch()
-  const getMnemonic = useMnemonic()
-
-  return async () => {
-    return loader(
-      async () => {
-        const mnemonic = await getMnemonic()
-        const identity = await agent.loadFromMnemonic(mnemonic)
-        dispatch(setDid(identity.did))
-      },
-      {
-        loading: strings.CREATING,
-      },
-    )
-  }
-}
-
-export const useSubmitSeedphraseBackup = () => {
-  const agent = useAgent()
-  const createIdentity = useIdentityCreate()
-
-  return async () => {
-    await createIdentity()
-    await agent.storage.store.setting('encryptedSeed', {})
+    return entropyToMnemonic(decrypted)
   }
 }

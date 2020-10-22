@@ -19,7 +19,7 @@ import { Colors } from '~/utils/colors'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
-import { useMnemonic } from '~/hooks/sdk'
+import { useStoredMnemonic } from '~/hooks/sdk'
 import { InfoIcon } from '~/assets/svg'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -40,7 +40,7 @@ const SeedPhrase: React.FC = () => {
 
   const [showInfo, setShowInfo] = useState(true)
   const [seedphrase, setSeedphrase] = useState('')
-  const getMnemonic = useMnemonic()
+  const getMnemonic = useStoredMnemonic()
 
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
