@@ -9,7 +9,7 @@ import {
 } from 'react-native-jolocom'
 import { CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/types'
 
-import { useLoader } from '../useLoader'
+import { useLoader } from '../loader'
 import { setInteractionDetails } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { getMappedInteraction, isTypeAttribute } from '~/utils/dataMapping'

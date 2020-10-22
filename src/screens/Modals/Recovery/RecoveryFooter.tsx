@@ -16,7 +16,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
 
-import { useLoader } from '~/hooks/useLoader'
+import { useLoader } from '~/hooks/loader'
 import { useAgent, useShouldRecoverFromSeed } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'

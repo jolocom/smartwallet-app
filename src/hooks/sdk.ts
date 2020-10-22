@@ -6,7 +6,7 @@ import Keychain from 'react-native-keychain'
 import { SDKError, Agent } from 'react-native-jolocom'
 
 import { AgentContext } from '~/utils/sdk/context'
-import { useLoader } from './useLoader'
+import { useLoader } from './loader'
 import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'

@@ -7,7 +7,7 @@ import { setLogged } from '~/modules/account/actions'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useSubmitSeedphraseBackup } from '~/hooks/sdk'
-import { useLoader } from '~/hooks/useLoader'
+import { useLoader } from '~/hooks/loader'
 
 const SeedPhraseRepeat: React.FC = () => {
   const dispatch = useDispatch()

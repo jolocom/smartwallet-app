@@ -12,9 +12,7 @@ import ScreenHeader from '~/components/ScreenHeader'
 import BiometryAnimation from '~/components/BiometryAnimation'
 
 import { strings } from '~/translations/strings'
-
-import useSuccess from '~/hooks/useSuccess'
-
+import { useSuccess } from '~/hooks/loader'
 import { setPopup } from '~/modules/appState/actions'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'

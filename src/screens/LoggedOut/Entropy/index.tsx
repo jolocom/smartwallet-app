@@ -14,7 +14,7 @@ import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useGenerateSeed } from '~/hooks/sdk'
-import { useLoader } from '~/hooks/useLoader'
+import { useLoader } from '~/hooks/loader'
 
 //NOTE: Determines the duration of entropy collection
 const ENOUGH_ENTROPY_PROGRESS = Platform.select({
