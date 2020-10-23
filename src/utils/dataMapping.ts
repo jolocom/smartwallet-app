@@ -133,25 +133,11 @@ export const getMappedInteraction = (interaction: Interaction) => {
     return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
   } else if (interaction.flow.type === 'CredentialShare') {
     return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
-    // } else if (interaction.flow.type === FlowType.CredentialOffer) {
   } else if (interaction.flow.type === FlowType.Authentication) {
     return mapAuthenticationData(summary as SummaryI<AuthenticationFlowState>)
   } else if (interaction.flow.type === FlowType.Authorization) {
     return mapAuthorizationData(summary as SummaryI<AuthorizationFlowState>)
   }
-
-  // if (interaction.flow.type === FlowType.Authentication) {
-  //   return mapAuthenticationData(summary as SummaryI<AuthenticationFlowState>)
-  // } else if (interaction.flow.type === FlowType.CredentialShare) {
-  //   return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
-  // // } else if (interaction.flow.type === FlowType.CredentialOffer) {
-  // } else if (interaction.flow.type ==='CredentialOffer') {
-  //   console.log(interaction.flow.type);
-
-  //   return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
-  // } else if (interaction.flow.type === FlowType.Authorization) {
-  //   return mapAuthorizationData(summary as SummaryI<AuthorizationFlowState>)
-  // }
 }
 
 export const getClaim = (attributeKey: AttrKeys, value: string) => {
