@@ -131,7 +131,7 @@ export const getMappedInteraction = (interaction: Interaction) => {
   const summary = interaction.getSummary()
   if (interaction.flow.type === 'CredentialOffer') {
     return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
-  } else if (interaction.flow.type === FlowType.CredentialShare) {
+  } else if (interaction.flow.type === 'CredentialShare') {
     return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
     // } else if (interaction.flow.type === FlowType.CredentialOffer) {
   } else if (interaction.flow.type === FlowType.Authentication) {

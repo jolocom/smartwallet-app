@@ -10,7 +10,7 @@ import { setInteractionDetails } from '~/modules/interaction/actions'
 import { getMappedInteraction } from '~/utils/dataMapping'
 
 const mockedJWT = 'token'
-const mockedInteraction = {
+const mockedInteractionCredOffer = {
   id: '123',
   flow: {
     type: FlowType.CredentialOffer,
@@ -30,17 +30,49 @@ const mockedInteraction = {
   }),
 }
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useContext: jest.fn().mockReturnValue({
-    current: {
-      interactionManager: {
-        start: jest
-          .fn()
-          .mockImplementationOnce(() => Promise.resolve(mockedInteraction)),
-      },
+const mockedInteractionCredShare = {
+  id: '123',
+  flow: {
+    type: FlowType.CredentialOffer,
+  },
+  getSummary: jest.fn().mockReturnValue({
+    initiator: {
+      did: 'did123',
+    },
+    state: {
+      // constraints: [
+      //   {requestedCredentialTypes}
+      // ]
     },
   }),
+}
+
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useContext: jest
+    .fn()
+    .mockReturnValueOnce({
+      current: {
+        interactionManager: {
+          start: jest
+            .fn()
+            .mockImplementationOnce(() =>
+              Promise.resolve(mockedInteractionCredOffer),
+            ),
+        },
+      },
+    })
+    .mockReturnValueOnce({
+      current: {
+        interactionManager: {
+          start: jest
+            .fn()
+            .mockImplementationOnce(() =>
+              Promise.resolve(mockedInteractionCredShare),
+            ),
+        },
+      },
+    }),
 }))
 
 jest.mock('react-redux', () => ({
@@ -52,13 +84,21 @@ jest.mock('../../../src/utils/parseJWT', () => ({
   parseJWT: jest.fn().mockReturnValue(mockedJWT),
 }))
 
-describe('Correct data was set in the store for ', () => {
-  it('Credential Offer', async () => {
-    // ARRANGE
-    const mockDispatchFn = jest.fn()
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
-    useDispatchSpy.mockReturnValue(mockDispatchFn)
+const getMockedDispatch = () => {
+  const mockDispatchFn = jest.fn()
+  const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
+  useDispatchSpy.mockReturnValue(mockDispatchFn)
+  return mockDispatchFn
+}
 
+describe('Correct data was set in the store for ', () => {
+  let mockDispatchFn: jest.Mock
+  beforeEach(() => {
+    mockDispatchFn = getMockedDispatch()
+  })
+  afterEach(jest.clearAllMocks)
+
+  it('Credential Offer', async () => {
     const { result } = renderHook(() =>
       agentHooks.useInteractionStart(InteractionTransportType.HTTP),
     )
@@ -73,14 +113,28 @@ describe('Correct data was set in the store for ', () => {
     )
 
     // @ts-ignore
-    const mappedInteraction = getMappedInteraction(mockedInteraction)
+    const mappedInteraction = getMappedInteraction(mockedInteractionCredOffer)
 
     expect(mockDispatchFn).toHaveBeenCalledWith(
       setInteractionDetails({
-        id: mockedInteraction.id,
-        flowType: mockedInteraction.flow.type,
+        id: mockedInteractionCredOffer.id,
+        flowType: mockedInteractionCredOffer.flow.type,
         ...mappedInteraction,
       }),
+    )
+  })
+
+  it('Credential Share', async () => {
+    const { result } = renderHook(() =>
+      agentHooks.useInteractionStart(InteractionTransportType.HTTP),
+    )
+    const { startInteraction } = result.current
+
+    // ACTION
+    await act(async () => await startInteraction(mockedJWT))
+
+    expect(mockDispatchFn).toHaveBeenCalledWith(
+      setLoader({ type: LoaderTypes.default, msg: strings.LOADING }),
     )
   })
 })
