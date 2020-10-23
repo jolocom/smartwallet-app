@@ -17,6 +17,7 @@ import {
 import { FlowType, Interaction, IdentitySummary } from 'react-native-jolocom'
 
 import { AttributeI } from '~/modules/attributes/types'
+import { Flow } from '@jolocom/sdk/js/interactionManager/flow'
 
 //TODO: move to `~/types/credentials`
 export const fieldNames = {
@@ -129,13 +130,13 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
 
 export const getMappedInteraction = (interaction: Interaction) => {
   const summary = interaction.getSummary()
-  if (interaction.flow.type === 'CredentialOffer') {
+  if (interaction.flow.type === FlowType.CredentialOffer) {
     return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
-  } else if (interaction.flow.type === 'CredentialShare') {
+  } else if (interaction.flow.type === FlowType.CredentialShare) {
     return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
-  } else if (interaction.flow.type === 'Authentication') {
+  } else if (interaction.flow.type === FlowType.Authentication) {
     return mapAuthenticationData(summary as SummaryI<AuthenticationFlowState>)
-  } else if (interaction.flow.type === 'Authorization') {
+  } else if (interaction.flow.type === FlowType.Authorization) {
     return mapAuthorizationData(summary as SummaryI<AuthorizationFlowState>)
   }
 }

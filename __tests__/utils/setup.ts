@@ -28,8 +28,13 @@ jest.mock('react-native-randombytes', () => ({
   randomBytes: jest.fn().mockResolvedValue('sdsd'),
 }))
 
-// TODO: shouldn't really have to mock error codes :)
 jest.mock('react-native-jolocom', () => ({
+  FlowType: {
+    Authentication: 'Authentication',
+    CredentialShare: "CredentialShare",
+    CredentialOffer: "CredentialOffer",
+    Authorization: "Authorization",
+  },
   SDKError: {
     codes: {
       ParseJWTFailed: 'ParseJWT',
