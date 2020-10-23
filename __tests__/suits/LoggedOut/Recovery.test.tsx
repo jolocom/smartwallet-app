@@ -47,11 +47,19 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/sdk', () => ({
+  ...jest.requireActual('react'),
+  useAgent: jest.fn().mockImplementation(() => ({
+    loadFromMnemonic: jest.fn().mockReturnValue({ did: '123did' }),
+  })),
+}))
+
 describe('User on a Recovery screen', () => {
   test('sees screen with initial state', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
     const mockDispatchFn = jest.fn()
     useDispatchSpy.mockReturnValue(mockDispatchFn)
+    // @ts-ignore
     redux.useSelector.mockImplementation((callback: (state: any) => void) => {
       return callback(mockAppState)
     })

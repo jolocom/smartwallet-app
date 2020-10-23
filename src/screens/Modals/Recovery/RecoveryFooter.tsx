@@ -34,13 +34,13 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
   const route = useRoute()
+  const agent = useAgent()
 
   const navigation = useNavigation()
 
   const resetPin = useResetKeychainValues(PIN_SERVICE)
 
   const { isAccessRestore } = route.params
-  const agent = useAgent()
 
   const handlePhraseSubmit = useCallback(async () => {
     const success = await loader(async () => await submitCb(), {

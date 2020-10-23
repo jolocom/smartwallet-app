@@ -17,7 +17,7 @@ import {
   mockedInteractionAuthz,
   mockedNoCredentials,
   mockedHasCredentials,
-} from './mockedValues'
+} from '../../utils/mockedValues'
 
 export const mockedJWT = 'token'
 jest.mock('react', () => ({
