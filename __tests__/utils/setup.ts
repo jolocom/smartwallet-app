@@ -18,9 +18,22 @@ jest.mock('react-redux', () => ({
 }))
 
 jest.mock('../../src/hooks/sdk', () => ({
-  useSDK: () => ({
+  useAgent: () => ({
     initWithMnemonic: jest.fn().mockResolvedValue(true),
   }),
+}))
+
+jest.mock('react-native-randombytes', () => ({
+  randomBytes: jest.fn().mockResolvedValue('sdsd'),
+}))
+
+// TODO: shouldn't really have to mock error codes :)
+jest.mock('react-native-jolocom', () => ({
+  SDKError: {
+    codes: {
+      ParseJWTFailed: 'ParseJWT',
+    },
+  },
 }))
 
 // TODO remove when something is imported. Used b/c of the --isolatedModules issue

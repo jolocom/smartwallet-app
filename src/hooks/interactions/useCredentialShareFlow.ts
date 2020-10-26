@@ -37,16 +37,13 @@ export const useCredentialShareFlow = () => {
   const assembleShareResponseToken = async () => {
     if (selectedShareCredentials) {
       const mappedSelection = Object.values(selectedShareCredentials).map(
-        (id) => ({
-          id,
-        }),
+        (id) => id,
       )
       const response = await interaction.createCredentialResponse(
-        // @ts-ignore is fixed in future SDK version. Should work this way, since we only need the @id
         mappedSelection,
       )
-      //TODO: uncomment when the constraints bug on the SDK is fixed
-      //await interaction.processInteractionToken(response)
+
+      await interaction.processInteractionToken(response)
       await interaction.send(response)
     }
   }

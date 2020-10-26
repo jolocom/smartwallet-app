@@ -47,6 +47,13 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/sdk.ts', () => ({
+  useShouldRecoverFromSeed: jest.fn(() => Promise.resolve(true)),
+  useAgent: () => ({
+    loadFromMnemonic: (_: string) => Promise.resolve('did:jun:test'),
+  }),
+}))
+
 describe('User on a Recovery screen', () => {
   test('sees screen with initial state', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')

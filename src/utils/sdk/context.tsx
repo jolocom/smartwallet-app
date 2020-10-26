@@ -6,51 +6,31 @@ import React, {
   useEffect,
 } from 'react'
 import { ActivityIndicator, StatusBar } from 'react-native'
-import { useDispatch } from 'react-redux'
-import { JolocomSDK } from '@jolocom/sdk'
-import Keychain from 'react-native-keychain'
 
-import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
+import { Agent } from 'react-native-jolocom'
 
-import { initSDK } from './'
-import { PIN_SERVICE } from '../keychainConsts'
 import ScreenContainer from '~/components/ScreenContainer'
-import { BackendMiddlewareErrorCodes } from '@jolocom/sdk/js/src/lib/errors/types'
+import { useWalletInit } from '~/hooks/sdk'
+import { initAgent } from '.'
 
-export const SDKContext = createContext<MutableRefObject<JolocomSDK | null> | null>(
+export const AgentContext = createContext<MutableRefObject<Agent | null> | null>(
   null,
 )
 
-export const SDKContextProvider: React.FC = ({ children }) => {
-  const sdkRef = useRef<JolocomSDK | null>(null)
+export const AgentContextProvider: React.FC = ({ children }) => {
+  const agentRef = useRef<Agent | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-
-  const dispatch = useDispatch()
+  const initWallet = useWalletInit()
 
   const initializeAll = async () => {
     try {
-      let [sdk, pin] = await Promise.all([
-        initSDK(),
-        Keychain.getGenericPassword({
-          service: PIN_SERVICE,
-        }),
-      ])
+      const agent = await initAgent()
+      agentRef.current = agent
 
-      sdkRef.current = sdk
-      let iw = await sdk.init({ dontAutoRegister: true })
-      if (iw.did) {
-        dispatch(setDid(iw.did))
-        dispatch(setLogged(true))
-      }
-
-      if (pin) {
-        dispatch(setLocalAuth(true))
-      }
+      await initWallet(agent)
     } catch (err) {
-      if (err.message !== BackendMiddlewareErrorCodes.NoEntropy) {
-        console.warn(err)
-        throw new Error('Root initialization failed')
-      }
+      console.warn(err)
+      throw new Error('Agent initialization failed')
     } finally {
       setIsLoading(false)
     }
@@ -60,7 +40,7 @@ export const SDKContextProvider: React.FC = ({ children }) => {
     initializeAll()
     return () => {
       setIsLoading(false)
-      sdkRef.current = null
+      agentRef.current = null
     }
   }, [])
 
@@ -77,5 +57,5 @@ export const SDKContextProvider: React.FC = ({ children }) => {
       </ScreenContainer>
     )
   }
-  return <SDKContext.Provider value={sdkRef} children={children} />
+  return <AgentContext.Provider value={agentRef} children={children} />
 }

@@ -1,7 +1,12 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
-import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
 
 import { setLogged, setDid } from '~/modules/account/actions'
 
@@ -12,7 +17,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { strings } from '~/translations/strings'
 
 import { useLoader } from '~/hooks/useLoader'
-import { useSDK } from '~/hooks/sdk'
+import { useAgent, useShouldRecoverFromSeed } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
@@ -22,6 +27,7 @@ import { useKeyboard } from './useKeyboard'
 import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
+import { RootStackParamList } from '~/RootNavigation'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -33,26 +39,30 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
-  const SDK = useSDK()
-  const route = useRoute()
-
-  const navigation = useNavigation()
-
+  const agent = useAgent()
+  const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
   const resetPin = useResetKeychainValues(PIN_SERVICE)
+
+  const route = useRoute<RouteProp<RootStackParamList, 'Recovery'>>()
+  const navigation = useNavigation()
 
   const { isAccessRestore } = route.params
 
   const restoreEntropy = async () => {
-    // TODO: do actual phrase comparison
-    await resetPin()
-    // throw new Error('oops')
+    const shouldRecover = await shouldRecoverFromSeed()
+
+    if (shouldRecover) {
+      await resetPin()
+    } else {
+      throw new Error('Failed to reset the Passcode!')
+    }
   }
 
   const submitCb = async () => {
     if (isAccessRestore) {
       await restoreEntropy()
     } else {
-      const idw = await SDK.initWithMnemonic(phrase.join(' '))
+      const idw = await agent.loadFromMnemonic(phrase.join(' '))
       dispatch(setDid(idw.did))
     }
   }

@@ -10,11 +10,11 @@ import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { EntropyIntro } from './EntropyIntro'
 import { EntropyGenerator } from './EntropyGenerator'
 import { EntropyCanvas } from './EntropyCanvas'
-import { useDispatch } from 'react-redux'
-import { setEntropy } from '~/modules/account/actions'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useGenerateSeed } from '~/hooks/sdk'
+import { useLoader } from '~/hooks/useLoader'
 
 //NOTE: Determines the duration of entropy collection
 const ENOUGH_ENTROPY_PROGRESS = Platform.select({
@@ -25,11 +25,18 @@ const ENOUGH_ENTROPY_PROGRESS = Platform.select({
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
-  const dispatch = useDispatch()
+  const refreshEntropy = useReplaceWith(ScreenNames.Entropy)
+  const generateSeed = useGenerateSeed()
+  const loader = useLoader()
 
+  //NOTE: not using the user generated entropy
   const submitEntropy = async (entropy: string) => {
-    dispatch(setEntropy(entropy))
-    redirectToSeedPhrase()
+    const success = await loader(generateSeed, { showSuccess: false })
+
+    if (success) {
+      return redirectToSeedPhrase()
+    }
+    return refreshEntropy()
   }
 
   const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)

@@ -1,7 +1,13 @@
-import { JolocomSDK } from '@jolocom/sdk'
-import { JolocomTypeormStorage } from '@jolocom/sdk-storage-typeorm'
-import { KeyChain } from '@jolocom/sdk-password-store-mobile-keychain'
 import { createConnection, getConnection } from 'typeorm'
+import {
+  JolocomKeychainPasswordStore,
+  Agent,
+  JolocomLinking,
+  JolocomWebSockets,
+  JolocomTypeormStorage,
+  JolocomSDK,
+} from 'react-native-jolocom'
+
 import typeormConfig from './ormconfig'
 
 const initConnection = async () => {
@@ -23,6 +29,16 @@ export const initSDK = async () => {
   const connection = await initConnection()
   await connection.synchronize()
   const storage = new JolocomTypeormStorage(connection)
-  const passwordStore = new KeyChain()
-  return new JolocomSDK({ storage, passwordStore })
+  return new JolocomSDK({ storage })
+}
+
+export const initAgent = async (): Promise<Agent> => {
+  const sdk = await initSDK()
+
+  await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+  sdk.setDefaultDidMethod('jun')
+
+  const passwordStore = new JolocomKeychainPasswordStore()
+
+  return new Agent({ passwordStore, sdk })
 }

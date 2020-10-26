@@ -5,7 +5,7 @@ import {
   CredOfferI,
   CredShareI,
 } from './types'
-import { FlowType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { FlowType } from 'react-native-jolocom'
 
 export function isAuthDetails(details: any): details is AuthenticationDetailsI {
   return (
