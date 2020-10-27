@@ -18,7 +18,6 @@ import Interactions from '~/screens/Modals/Interactions'
 import DeviceAuthentication from '~/screens/Modals/DeviceAuthentication'
 import PinRecoveryInstructions from '~/screens/Modals/PinRecoveryInstructions'
 import Lock from '~/screens/Modals/Lock'
-import SettingsList from '~/screens/SettingsList'
 
 import Claims from './Claims'
 import Documents from './Documents'
@@ -136,11 +135,6 @@ const LoggedInTabs: React.FC = () => {
     >
       <LoggedInStack.Screen name={ScreenNames.Tabs} component={Tabs} />
       {/* Modals -> Start */}
-      <LoggedInStack.Screen
-        name={ScreenNames.SettingsList}
-        component={SettingsList}
-      />
-
       <LoggedInStack.Screen
         name={ScreenNames.Interactions}
         component={Interactions}
