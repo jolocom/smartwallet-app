@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Keychain from 'react-native-keychain'
 import { ActivityIndicator } from 'react-native'
+import { NavigationProp } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
 
 import PasscodeHeader from '~/components/PasscodeHeader'
 import PasscodeInput from '~/components/PasscodeInput'
@@ -10,15 +12,15 @@ import { strings } from '~/translations/strings'
 import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 
 import SingleSettingView from './SingleSettingView'
-import useResetKeychainValues from '~/hooks/useResetKeychainValues'
-import { useDispatch } from 'react-redux'
+import {
+  useResetKeychainValues,
+  useGetStoredAuthValues,
+} from '~/hooks/deviceAuth'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import useDelay from '~/hooks/useDelay'
-import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
+import { useDelay } from '~/hooks/generic'
 import { ScreenNames } from '~/types/screens'
-import useRedirectTo from '~/hooks/useRedirectTo'
-import { NavigationProp } from '@react-navigation/native'
+import { useRedirectTo } from '~/hooks/navigation'
 
 interface PropsI {
   onSuccessRedirectToScreen?: ScreenNames

@@ -13,8 +13,8 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 
 import { useKeyboard } from '~/screens/Modals/Recovery/useKeyboard'
 
-import useGetStoredAuthValues from '~/hooks/useGetStoredAuthValues'
-import useRedirectTo from '~/hooks/useRedirectTo'
+import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
+import { useRedirectTo } from '~/hooks/navigation'
 
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'

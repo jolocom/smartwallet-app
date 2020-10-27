@@ -13,7 +13,7 @@ import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 import LeftArrow from '~/components/LeftArrow'
 import RightArrow from '~/components/RightArrow'
 
-import useDelay from '~/hooks/useDelay'
+import { useDelay } from '~/hooks/generic'
 
 import { titleFontStyles } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'

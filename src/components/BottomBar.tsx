@@ -21,7 +21,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
-import useRedirectTo from '~/hooks/useRedirectTo'
+import { useRedirectTo } from '~/hooks/navigation'
 import BP from '~/utils/breakpoints'
 
 interface IconPropsI {
