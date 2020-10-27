@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn from '~/components/Btn'
-import { useLoader } from '~/hooks/useLoader'
+import { useLoader } from '~/hooks/loader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
 

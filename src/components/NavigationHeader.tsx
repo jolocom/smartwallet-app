@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+
 import CloseIcon from '~/assets/svg/CloseIcon'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import useNavigateBack from '~/hooks/useNavigateBack'
+import { useNavigateBack } from '~/hooks/navigation'
 import IconBtn from './IconBtn'
 import { BackArrowIcon } from '~/assets/svg'
 

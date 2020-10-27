@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { useInteraction } from '../sdk'
+
 import {
   getSelectedShareCredentials,
   getAvailableAttributesToShare,
@@ -15,6 +15,7 @@ import {
   selectShareCredential,
 } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
+import { useInteraction } from '.'
 
 /**
  * A custom hook which exposes a collection of utils for the Credential Share interaction

@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { getLoaderState } from '~/modules/loader/selectors'
 import { isLocalAuthSet, isLogged } from '~/modules/account/selectors'
-import useRedirectTo from '~/hooks/useRedirectTo'
+import { useRedirectTo } from '~/hooks/navigation'
 
 import Interactions from '~/screens/Modals/Interactions'
 import DeviceAuthentication from '~/screens/Modals/DeviceAuthentication'
@@ -36,7 +36,7 @@ import { useAppState } from '~/hooks/useAppState'
 
 import { useSyncStorageAttributes } from '~/hooks/attributes'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
-import SettingsGeneral from './Settings/General'
+import Settings from './Settings'
 import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
 import FAQ from './Settings/FAQ'
@@ -57,7 +57,7 @@ const Tabs = () => (
     <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />
     <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
     <MainTabs.Screen name={ScreenNames.History} component={History} />
-    <MainTabs.Screen name={ScreenNames.Settings} component={SettingsGeneral} />
+    <MainTabs.Screen name={ScreenNames.Settings} component={Settings} />
   </MainTabs.Navigator>
 )
 

@@ -1,12 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import PasscodeInput from '~/components/PasscodeInput'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
-import useSuccess from '~/hooks/useSuccess'
+import { useSuccess } from '~/hooks/loader'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
@@ -15,13 +16,12 @@ import BP from '~/utils/breakpoints'
 import ScreenHeader from '~/components/ScreenHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useRedirectToLoggedIn } from './useRedirectToLoggedIn'
+import { useRedirectToLoggedIn } from '~/hooks/navigation'
 import {
   useDeviceAuthDispatch,
   useDeviceAuthState,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
-import { useBackHandler } from '@react-native-community/hooks'
 import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height

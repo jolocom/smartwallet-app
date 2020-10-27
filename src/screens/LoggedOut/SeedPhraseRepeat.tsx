@@ -6,8 +6,8 @@ import Btn from '~/components/Btn'
 import { setLogged } from '~/modules/account/actions'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useLoader } from '~/hooks/loader'
 import { useSubmitIdentity } from '~/hooks/sdk'
-import { useLoader } from '~/hooks/useLoader'
 
 const SeedPhraseRepeat: React.FC = () => {
   const dispatch = useDispatch()

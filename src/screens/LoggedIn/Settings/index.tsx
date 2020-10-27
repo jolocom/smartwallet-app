@@ -4,8 +4,6 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import useRedirectTo from '~/hooks/useRedirectTo'
-import useResetKeychainValues from '~/hooks/useResetKeychainValues'
 
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
@@ -16,6 +14,8 @@ import { useDispatch } from 'react-redux'
 import { accountReset } from '~/modules/account/actions'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
+import { useRedirectTo } from '~/hooks/navigation'
+import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
 const SECTIONS = [
   {

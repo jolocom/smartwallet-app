@@ -1,11 +1,28 @@
 import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import Keychain from 'react-native-keychain'
 import AsyncStorage from '@react-native-community/async-storage'
 
+import { setLocalAuth } from '~/modules/account/actions'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
-import { BiometryTypes } from '~/screens/DeviceAuthentication/module/deviceAuthTypes'
+import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
 
-const useGetStoredAuthValues = () => {
+export const useResetKeychainValues = (service: string) => {
+  const dispatch = useDispatch()
+  const resetServiceValuesInKeychain = async () => {
+    try {
+      await Keychain.resetGenericPassword({
+        service,
+      })
+      dispatch(setLocalAuth(false))
+    } catch (err) {
+      console.log({ err })
+    }
+  }
+  return resetServiceValuesInKeychain
+}
+
+export const useGetStoredAuthValues = () => {
   const [isLoadingStorage, setIsLoadingStorage] = useState(false)
   const [biometryType, setBiometryType] = useState<BiometryTypes>(null)
   const [keychainPin, setKeychainPin] = useState('')
@@ -53,5 +70,3 @@ const useGetStoredAuthValues = () => {
     isBiometrySelected,
   }
 }
-
-export default useGetStoredAuthValues
