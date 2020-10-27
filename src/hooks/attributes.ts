@@ -52,7 +52,7 @@ export const useCreateAttributes = () => {
     attributeKey: AttrKeys,
     value: string,
   ) => {
-    const password = await agent.keyProvider.getPassword()
+    const password = await agent.passwordStore.getPassword()
     const metadata = claimsMetadata[attributeKey]
     if (!metadata) throw new Error('Attribute key is not supported')
 
