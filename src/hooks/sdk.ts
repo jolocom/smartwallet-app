@@ -8,7 +8,6 @@ import {
   FlowType,
   Interaction,
   SDKError,
-  InteractionTransportType,
   JolocomLib,
   Agent,
 } from 'react-native-jolocom'
@@ -164,7 +163,7 @@ export const useSubmitIdentity = () => {
   }
 }
 
-export const useInteractionStart = (channel: InteractionTransportType) => {
+export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
   const loader = useLoader()
@@ -225,11 +224,14 @@ export const useInteractionStart = (channel: InteractionTransportType) => {
   }
 
   const startInteraction = async (jwt: string) => {
-    const token = parseJWT(jwt)
+    // NOTE: we're parsing the jwt here, even though it will be parsed in `agent.processJWT`
+    // below. This is to assure the error is caught before the loading screen, so that it can
+    // be handled by the scanner component.
+    parseJWT(jwt)
 
-    await loader(
+    return loader(
       async () => {
-        const interaction = await agent.interactionManager.start(channel, token)
+        const interaction = await agent.processJWT(jwt)
         const mappedInteraction = getMappedInteraction(interaction)
         const shouldStart = preInteractionHandler[interaction.flow.type]
           ? preInteractionHandler[interaction.flow.type](interaction)

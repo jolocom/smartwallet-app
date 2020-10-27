@@ -21,6 +21,7 @@ import IntermediarySheetBody from './IntermediarySheetBody'
 import { IntermediarySheetState } from '~/modules/interaction/types'
 import Loader from '~/modals/Loader'
 import ActionSheet from './ActionSheet'
+import Resolution from '~/screens/Modals/Interactions/Resolution'
 
 enum ActionSheetTypes {
   InteractionSheet,
@@ -114,6 +115,8 @@ const ActionSheetManager: React.FC = () => {
         return <CredentialShare />
       case FlowType.CredentialOffer:
         return <CredentialOffer />
+      case FlowType.Resolution:
+        return <Resolution />
       default:
         return null
     }

@@ -33,9 +33,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
-  const { startInteraction } = useInteractionStart(
-    InteractionTransportType.HTTP,
-  )
+  const { startInteraction } = useInteractionStart()
 
   const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)

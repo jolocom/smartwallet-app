@@ -3,6 +3,7 @@ import {
   CredentialOfferFlowState,
   SignedCredentialWithMetadata,
 } from '@jolocom/sdk/js/interactionManager/types'
+import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { OfferUICredential } from '~/types/credentials'
 import { strings } from '~/translations/strings'
@@ -61,17 +62,23 @@ const useCredentialOfferFlow = () => {
       issued,
       credentialsValidity,
     } = state as CredentialOfferFlowState
+    const issuanceResult = (interaction.flow as CredentialOfferFlow).getIssuanceResult()
 
     return issued.map((cred, i) => {
       const offer = offerSummary.find(({ type }) => type === cred.type[1])
       if (!offer)
         throw new Error('Could not find the offer for received credential')
 
+      const isInvalid =
+        !credentialsValidity[i] ||
+        !!issuanceResult[i].validationErrors.invalidIssuer ||
+        !!issuanceResult[i].validationErrors.invalidSubject
+
       return {
         type: offer.type,
         renderInfo: offer.renderInfo,
         issuer: initiator,
-        invalid: !credentialsValidity[i],
+        invalid: isInvalid,
       }
     })
   }

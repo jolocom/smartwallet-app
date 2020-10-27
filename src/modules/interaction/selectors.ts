@@ -20,6 +20,7 @@ import {
   isCredOfferDetails,
   isCredShareDetails,
   isNotActiveInteraction,
+  isResolutionDetails,
 } from './guards'
 import { createInteractionSelector } from './utils'
 import { strings } from '~/translations/strings'
@@ -106,6 +107,9 @@ export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
 export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
 export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
 export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
+export const getResolutionDetails = createInteractionSelector(
+  isResolutionDetails,
+)
 
 /** CredentialShare selectors **/
 
