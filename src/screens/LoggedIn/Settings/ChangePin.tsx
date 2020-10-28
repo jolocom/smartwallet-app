@@ -11,7 +11,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { strings } from '~/translations/strings'
 import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 
-import SingleSettingView from './SingleSettingView'
 import {
   useResetKeychainValues,
   useGetStoredAuthValues,
@@ -71,40 +70,39 @@ const ChangePin: React.FC<PropsI> = ({
   }
 
   return (
-    <SingleSettingView>
-      <ScreenContainer
-        customStyles={{
-          marginTop: '30%',
-          justifyContent: 'flex-start',
-          paddingTop: 0,
-        }}
-      >
-        <PasscodeHeader>
-          {hasError
-            ? strings.WRONG_PIN
-            : isCreateNew
-            ? strings.CREATE_NEW_PASSCODE
-            : strings.CURRENT_PASSCODE}
-        </PasscodeHeader>
-        {isLoadingStorage ? (
-          <ActivityIndicator />
-        ) : isCreateNew ? (
-          <PasscodeInput
-            value={newPin}
-            stateUpdaterFn={setNewPin}
-            onSubmit={handleSetNewPin}
-          />
-        ) : (
-          <PasscodeInput
-            value={pin}
-            stateUpdaterFn={setPin}
-            errorStateUpdaterFn={setHasError}
-            onSubmit={handlePinVerification}
-            hasError={hasError}
-          />
-        )}
-      </ScreenContainer>
-    </SingleSettingView>
+    <ScreenContainer
+      customStyles={{
+        marginTop: '30%',
+        justifyContent: 'flex-start',
+        paddingTop: 0,
+      }}
+      hasHeaderBack
+    >
+      <PasscodeHeader>
+        {hasError
+          ? strings.WRONG_PIN
+          : isCreateNew
+          ? strings.CREATE_NEW_PASSCODE
+          : strings.CURRENT_PASSCODE}
+      </PasscodeHeader>
+      {isLoadingStorage ? (
+        <ActivityIndicator />
+      ) : isCreateNew ? (
+        <PasscodeInput
+          value={newPin}
+          stateUpdaterFn={setNewPin}
+          onSubmit={handleSetNewPin}
+        />
+      ) : (
+        <PasscodeInput
+          value={pin}
+          stateUpdaterFn={setPin}
+          errorStateUpdaterFn={setHasError}
+          onSubmit={handlePinVerification}
+          hasError={hasError}
+        />
+      )}
+    </ScreenContainer>
   )
 }
 

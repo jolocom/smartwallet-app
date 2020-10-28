@@ -41,7 +41,6 @@ import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
 import FAQ from './Settings/FAQ'
 import ContactUs from './Settings/ContactUs'
-import RateUs from './Settings/RateUs'
 import About from './Settings/About'
 import Imprint from './Settings/Imprint'
 
@@ -177,11 +176,6 @@ const LoggedInTabs: React.FC = () => {
       <LoggedInStack.Screen
         name={ScreenNames.ContactUs}
         component={ContactUs}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.RateUs}
-        component={RateUs}
         options={settingsScreenTransitionOptions}
       />
       <LoggedInStack.Screen
