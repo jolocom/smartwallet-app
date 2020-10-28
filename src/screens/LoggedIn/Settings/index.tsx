@@ -2,20 +2,23 @@ import React, { useCallback } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import { Alert, StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+import Btn, { BtnTypes } from '~/components/Btn'
 
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useDispatch } from 'react-redux'
-import { accountReset } from '~/modules/account/actions'
-import Btn, { BtnTypes } from '~/components/Btn'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
+import { accountReset } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
-import SectionOption from './SectionOption'
+
+import SectionOption from './components/SectionOption'
 
 const SECTIONS = [
   {
@@ -53,10 +56,11 @@ const SECTIONS = [
   },
 ]
 
-const SettingsGeneral = () => {
+const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
   const dispatch = useDispatch()
+  const navigation = useNavigation()
   const handleLogout = useCallback(async () => {
     try {
       await AsyncStorage.removeItem('biometry')
@@ -68,9 +72,11 @@ const SettingsGeneral = () => {
     }
   }, [dispatch])
 
-  const handleOptionPress = (name: string) => {
-    if (name === 'rateus') {
+  const handleOptionPress = (name: string, screen?: ScreenNames) => {
+    if (name === 'rateus' && !screen) {
       Alert.alert('Rate us', 'Please rate us')
+    } else {
+      screen && navigation.navigate(screen)
     }
   }
 
@@ -104,9 +110,15 @@ const SettingsGeneral = () => {
                 <SectionOption
                   key={option.id}
                   label={option.name}
-                  screenRedirectTo={option.screen}
-                  onPress={() => handleOptionPress(option.id)}
-                />
+                  onPress={() => handleOptionPress(option.id, option.screen)}
+                >
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    size={JoloTextSizes.middle}
+                  >
+                    arrow
+                  </JoloText>
+                </SectionOption>
               ))}
             </View>
           </View>
@@ -130,14 +142,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     width: '100%',
     borderRadius: 8,
-  },
-  sectionOption: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 18,
-    width: '100%',
-    borderBottomColor: Colors.mainBlack,
-    borderBottomWidth: 1,
   },
 })
 
