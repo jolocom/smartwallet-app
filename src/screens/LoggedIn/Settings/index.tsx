@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -14,8 +14,8 @@ import { useDispatch } from 'react-redux'
 import { accountReset } from '~/modules/account/actions'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
-import { useRedirectTo } from '~/hooks/navigation'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
+import SectionOption from './SectionOption'
 
 const SECTIONS = [
   {
@@ -46,38 +46,12 @@ const SECTIONS = [
         name: strings.CONTACT_US,
         screen: ScreenNames.ContactUs,
       },
-      { id: 'rateus', name: strings.RATE_US, screen: ScreenNames.RateUs },
+      { id: 'rateus', name: strings.RATE_US },
       { id: 'about', name: strings.ABOUT, screen: ScreenNames.About },
       { id: 'imprint', name: strings.IMPRINT, screen: ScreenNames.Imprint },
     ],
   },
 ]
-
-interface SectionOptionPropsI {
-  label: string
-  screenRedirectTo?: ScreenNames
-  onPress?: () => void
-}
-
-const SectionOption: React.FC<SectionOptionPropsI> = ({
-  label,
-  screenRedirectTo,
-  onPress,
-}) => {
-  const handlePress = screenRedirectTo
-    ? useRedirectTo(screenRedirectTo)
-    : onPress
-  return (
-    <TouchableOpacity onPress={handlePress} style={styles.sectionOption}>
-      <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-        {label}
-      </JoloText>
-      <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-        arrow
-      </JoloText>
-    </TouchableOpacity>
-  )
-}
 
 const SettingsGeneral = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -94,6 +68,12 @@ const SettingsGeneral = () => {
     }
   }, [dispatch])
 
+  const handleOptionPress = (name: string) => {
+    if (name === 'rateus') {
+      Alert.alert('Rate us', 'Please rate us')
+    }
+  }
+
   return (
     <ScreenContainer
       customStyles={{
@@ -105,6 +85,7 @@ const SettingsGeneral = () => {
         contentContainerStyle={{ paddingBottom: 100 }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
+        overScrollMode="never"
       >
         {SECTIONS.map((section) => (
           <View style={styles.sectionContainer}>
@@ -119,10 +100,12 @@ const SettingsGeneral = () => {
               {section.name}
             </JoloText>
             <View style={styles.sectionOptionContainer}>
-              {section.screens.map((option, idx) => (
+              {section.screens.map((option) => (
                 <SectionOption
+                  key={option.id}
                   label={option.name}
                   screenRedirectTo={option.screen}
+                  onPress={() => handleOptionPress(option.id)}
                 />
               ))}
             </View>

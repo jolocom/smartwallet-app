@@ -67,7 +67,7 @@ const settingsScreenTransitionOptions = {
       ...TransitionPresets.SlideFromRightIOS,
     },
     android: {
-      ...TransitionPresets.ScaleFromCenterAndroid,
+      ...TransitionPresets.DefaultTransition,
     },
   }),
 }
