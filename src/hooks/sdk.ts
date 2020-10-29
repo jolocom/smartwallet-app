@@ -48,7 +48,7 @@ export const useWalletInit = () => {
     const onboardingSetting = await agent.storage.get.setting(
       StorageKeys.isOnboardingDone,
     )
-    if (!onboardingSetting.finished) return agent
+    if (!onboardingSetting?.finished) return
 
     return agent
       .loadIdentity()
