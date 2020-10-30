@@ -10,50 +10,23 @@ import { useSafeArea } from 'react-native-safe-area-context'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
+import { useToasts } from '~/hooks/toasts'
+import { ToastType } from '~/types/toasts'
 
-export enum NotificationType {
-  Info = 'Info',
-  Warning = 'Warning',
-}
+const SCREEN_WIDTH = Dimensions.get('window').width
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
 interface PropsI {
   title: string
-  description: string
-  type: NotificationType
+  message: string
+  type: ToastType
   isInteractive?: boolean
   onInteract?: () => void
 }
 
-const SCREEN_WIDTH = Dimensions.get('window').width
-const SCREEN_HEIGHT = Dimensions.get('window').height
-const DESCRIPTIONS = [
-  'You should have all you need to continue your interaction now, You should have all you need to continue your interaction now, You should have all you need to continue your interaction now, You should have all you need to continue your interaction now',
-  'You should have all you need to continue your interaction now',
-]
-const NOTIFICATION_DETAILS = [
-  {
-    title: 'Great success!',
-    description: DESCRIPTIONS[0],
-    type: NotificationType.Info,
-  },
-  {
-    title: 'Awkward',
-    description: DESCRIPTIONS[1],
-    type: NotificationType.Warning,
-  },
-]
-
-const getRandomString = () => {
-  return Math.random().toString(36).substring(7)
-}
-
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * Math.floor(max))
-}
-
 const Notification: React.FC<PropsI> = ({
   title,
-  description,
+  message,
   type,
   onInteract,
 }) => {
@@ -64,12 +37,15 @@ const Notification: React.FC<PropsI> = ({
     inputRange: [-300, -50, 0],
     outputRange: [0, 0, 1],
   })
+
   useEffect(() => {
     Animated.timing(containerTranslateY, {
       toValue: 0,
+      duration: 600,
       useNativeDriver: true,
     }).start()
   }, [])
+
   const animationStyles = {
     transform: [{ translateY: containerTranslateY }],
     opacity: containerOpacity,
@@ -83,6 +59,7 @@ const Notification: React.FC<PropsI> = ({
       onInteract && onInteract()
     })
   }, [JSON.stringify(containerTranslateY)])
+
   return (
     <TouchableWithoutFeedback onPress={handleInteract}>
       <Animated.View
@@ -95,7 +72,7 @@ const Notification: React.FC<PropsI> = ({
         <JoloText
           kind={JoloTextKind.title}
           size={JoloTextSizes.mini}
-          color={type === NotificationType.Info ? Colors.white : Colors.error}
+          color={type === ToastType.info ? Colors.white : Colors.error}
         >
           {title}
         </JoloText>
@@ -104,7 +81,7 @@ const Notification: React.FC<PropsI> = ({
           size={JoloTextSizes.tiniest}
           color={Colors.white}
         >
-          {description}
+          {message}
         </JoloText>
       </Animated.View>
     </TouchableWithoutFeedback>
@@ -112,37 +89,19 @@ const Notification: React.FC<PropsI> = ({
 }
 
 export default () => {
-  const [notifications, setNotifications] = useState([
-    { ...NOTIFICATION_DETAILS[0], id: getRandomString() },
-  ])
-  const handleInteract = (id: string) => {
-    setNotifications([])
-  }
+  const { activeToast, invokeInteract } = useToasts()
 
-  useEffect(() => {
-    if (notifications.length === 0) {
-      setNotifications([
-        {
-          id: getRandomString(),
-          ...NOTIFICATION_DETAILS[getRandomInt(2)],
-        },
-      ])
-    }
-  }, [notifications.length])
-
-  return (
+  return activeToast ? (
     <View style={styles.notifications}>
-      {notifications.map((el) => (
-        <Notification
-          key={el.id}
-          title={el.id + ' ' + el.title}
-          description={el.description}
-          type={el.type}
-          onInteract={() => handleInteract(el.id)}
-        />
-      ))}
+      <Notification
+        key={activeToast.id}
+        title={activeToast.title}
+        message={activeToast.message}
+        type={activeToast.type}
+        onInteract={invokeInteract}
+      />
     </View>
-  )
+  ) : null
 }
 
 const styles = StyleSheet.create({
@@ -153,7 +112,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   notificationContainer: {
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.black65,
     paddingBottom: 20,
     paddingHorizontal: 25,
   },
