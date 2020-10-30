@@ -11,10 +11,15 @@ import { InteractionActions } from './interaction/types'
 
 import attrsReducer from './attributes/reducer'
 import { AttrActions } from './attributes/types'
+
 import appStateReducer from './appState/reducer'
 import { AppStateActions } from './appState/types'
+
 import credentialsReducer from './credentials/reducer'
 import { CredentialActions } from './credentials/types'
+
+import toastsReducer from './toasts/reducer'
+import { ToastsActions } from './toasts/types'
 
 const rootReducer = combineReducers({
   loader: loaderReducer,
@@ -23,6 +28,7 @@ const rootReducer = combineReducers({
   attrs: attrsReducer,
   appState: appStateReducer,
   credentials: credentialsReducer,
+  toasts: toastsReducer,
 })
 
 export type RootActions =
@@ -32,5 +38,6 @@ export type RootActions =
   | AttrActions
   | AppStateActions
   | CredentialActions
+  | ToastsActions
 
 export default rootReducer
