@@ -45,10 +45,12 @@ interface ToastBase {
 
 type PartialToast = Partial<ToastBase> & ToastInteract & ToastDismiss
 
+export type ToastBody = PartialToast & ToastMessage
+
 let toastIds = 0
 
 const createToastFactory = (template: PartialToast & Omit<ToastBase, 'id'>) => (
-  overrides: PartialToast & ToastMessage,
+  overrides: ToastBody,
 ): Toast =>
   ({
     id: toastIds++,

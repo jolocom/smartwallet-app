@@ -6,6 +6,7 @@ import {
   createInfoToast,
   createWarningToast,
   createStickyToast,
+  ToastBody,
 } from '~/types/toasts'
 import { scheduleToast } from '~/modules/toasts/actions'
 
@@ -13,15 +14,15 @@ export const useToasts = () => {
   const dispatch = useDispatch()
   const activeToast = useSelector(getActiveToast)
 
-  const scheduleInfo = (toast: any) => {
+  const scheduleInfo = (toast: ToastBody) => {
     dispatch(scheduleToast(createInfoToast(toast)))
   }
 
-  const scheduleWarning = (toast: any) => {
+  const scheduleWarning = (toast: ToastBody) => {
     dispatch(scheduleToast(createWarningToast(toast)))
   }
 
-  const scheduleSticky = (toast: any) => {
+  const scheduleSticky = (toast: ToastBody) => {
     dispatch(scheduleToast(createStickyToast(toast)))
   }
 
