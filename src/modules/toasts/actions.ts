@@ -16,10 +16,10 @@ export const scheduleToast = (toast: Toast): ThunkAction => (dispatch) => {
   return dispatch(updateToastState)
 }
 
-export const removeToast = (toast: Toast, clearActive = true): ThunkAction => (
-  dispatch,
-  getState,
-) => {
+export const removeToastAndUpdate = (
+  toast: Toast,
+  clearActive = true,
+): ThunkAction => (dispatch, getState) => {
   dispatch(removeFromQueue(toast))
 
   if (clearActive) {
@@ -65,7 +65,7 @@ const updateToastState: ThunkAction = async (dispatch, getState) => {
 
   // un-queue the active toast if it is expired
   if (active && isActiveExpired) {
-    dispatch(removeToast(active, false))
+    dispatch(removeToastAndUpdate(active, false))
   }
 
   // clear the active toast if it should be filtered

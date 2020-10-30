@@ -8,7 +8,7 @@ import {
   createStickyToast,
   ToastBody,
 } from '~/types/toasts'
-import { scheduleToast } from '~/modules/toasts/actions'
+import { scheduleToast, removeToastAndUpdate } from '~/modules/toasts/actions'
 
 export const useToasts = () => {
   const dispatch = useDispatch()
@@ -27,7 +27,7 @@ export const useToasts = () => {
   }
 
   const removeToast = (toast: Toast) => {
-    dispatch(removeToast(toast))
+    dispatch(removeToastAndUpdate(toast))
   }
 
   const invokeInteract = () => {
