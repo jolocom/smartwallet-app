@@ -1,17 +1,17 @@
-interface NotificationMessage {
+interface ToastMessage {
   title: string
   message?: string
 }
 
 /**
- * A notification is either dismissible or not
+ * A toast is either dismissible or not
  * if it is dismissible it can also optionally have
  * - a label (for the dismiss button)
  * - a timeout (to auto-dismiss)
  * - a callback
  */
 
-export interface NotificationDismiss {
+interface ToastDismiss {
   dismiss?:
     | false
     | {
@@ -22,73 +22,68 @@ export interface NotificationDismiss {
 }
 
 /**
- * A notification may have a call to action button,
+ * A toast may have a call to action button,
  * with a label and an onInteract callback
  * It is not possible to simply specify a boolean, because if an interaction is
  * expected then a callback and label are required.
  */
-interface NotificationInteract {
+interface ToastInteract {
   interact?: {
     label: string
     onInteract: (...args: any) => void | boolean | Promise<void | boolean>
   }
 }
 
-type NotificationPayload = {
-  type: NotificationType.warning | NotificationType.info
-} & NotificationMessage
+type ToastPayload = {
+  type: ToastType.warning | ToastType.info
+} & ToastMessage
 
-interface NotificationBase {
+interface ToastBase {
   id: string
-  type: NotificationType
+  type: ToastType
 }
 
-type PartialNotification = Partial<NotificationBase> &
-  NotificationInteract &
-  NotificationDismiss
+type PartialToast = Partial<ToastBase> & ToastInteract & ToastDismiss
 
-let notifIds = 0
+let toastIds = 0
 
-const createNotificationFactory = (
-  template: PartialNotification & Omit<NotificationBase, 'id'>,
-) => (overrides: PartialNotification & NotificationMessage): Notification =>
+const createToastFactory = (template: PartialToast & Omit<ToastBase, 'id'>) => (
+  overrides: PartialToast & ToastMessage,
+): Toast =>
   ({
-    id: notifIds++,
+    id: toastIds++,
     ...template,
     ...overrides,
-  } as Notification)
+  } as Toast)
 
-export type Notification = NotificationBase &
-  NotificationInteract &
-  NotificationDismiss &
-  NotificationPayload
+export type Toast = ToastBase & ToastInteract & ToastDismiss & ToastPayload
 
-export enum NotificationFilter {
+export enum ToastFilter {
   none,
   all,
   onlyDismissible,
 }
 
-export enum NotificationType {
+export enum ToastType {
   info = 'info',
   warning = 'warning',
 }
 
-export const createInfoNotification = createNotificationFactory({
-  type: NotificationType.info,
+export const createInfoToast = createToastFactory({
+  type: ToastType.info,
   dismiss: {
     timeout: 3000,
   },
 })
 
-export const createWarningNotification = createNotificationFactory({
-  type: NotificationType.warning,
+export const createWarningToast = createToastFactory({
+  type: ToastType.warning,
   dismiss: {
     timeout: 3000,
   },
 })
 
-export const createStickyNotification = createNotificationFactory({
-  type: NotificationType.info,
+export const createStickyToast = createToastFactory({
+  type: ToastType.info,
   dismiss: false,
 })

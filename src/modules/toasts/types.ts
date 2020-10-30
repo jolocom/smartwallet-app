@@ -1,16 +1,16 @@
-import { Notification, NotificationFilter } from '~/types/toasts'
+import { Toast, ToastFilter } from '~/types/toasts'
 
 export enum ToastsActions {
-  scheduleToast = 'scheduleToast',
-  removeToast = 'removeToast',
+  addToQueue = 'addToQueue',
+  removeFromQueue = 'removeFromQueue',
   setActiveToast = 'setActiveToast',
   clearToasts = 'clearToasts',
   setActiveFilter = 'setActiveFilter',
 }
 
 export interface ToastsState {
-  queue: Notification[]
-  active: Notification | null
+  queue: Toast[]
+  active: Toast | null
   activeExpiryTs: number
-  activeFilter: NotificationFilter
+  activeFilter: ToastFilter
 }
