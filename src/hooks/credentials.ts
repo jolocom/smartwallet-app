@@ -17,12 +17,7 @@ export const useSyncStorageCredentials = () => {
   const credentialToUICredential = async (
     cred: SignedCredential,
   ): Promise<UICredential> => {
-    //FIXME: @issuer from @CredentialMetadata entity returns string, should
-    // return @IdentitySummary
-    const {
-      renderInfo,
-      //issu
-    } = await agent.storage.get.credentialMetadata(cred)
+    const { renderInfo } = await agent.storage.get.credentialMetadata(cred)
     const {
       name,
       expires,
@@ -65,7 +60,6 @@ export const useSyncStorageCredentials = () => {
       },
       Promise.resolve([]),
     )
-
     dispatch(setCredentials(credentials))
   }
 }

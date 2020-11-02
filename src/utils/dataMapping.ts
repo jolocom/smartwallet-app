@@ -14,6 +14,7 @@ import {
   AuthenticationFlowState,
   AuthorizationFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
+import { ResolutionFlowState } from '@jolocom/sdk/js/interactionManager/resolutionFlow'
 import { FlowType, Interaction, IdentitySummary } from 'react-native-jolocom'
 
 import { AttributeI } from '~/modules/attributes/types'
@@ -128,16 +129,28 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
   }
 }
 
+const mapResolutionData = (summary: SummaryI<ResolutionFlowState>) => {
+  return {
+    counterparty: summary.initiator,
+    uri: summary.state.request?.uri,
+    description: summary.state.request?.description,
+  }
+}
+
 export const getMappedInteraction = (interaction: Interaction) => {
   const summary = interaction.getSummary()
-  if (interaction.flow.type === FlowType.CredentialOffer) {
-    return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
-  } else if (interaction.flow.type === FlowType.CredentialShare) {
-    return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
-  } else if (interaction.flow.type === FlowType.Authentication) {
-    return mapAuthenticationData(summary as SummaryI<AuthenticationFlowState>)
-  } else if (interaction.flow.type === FlowType.Authorization) {
-    return mapAuthorizationData(summary as SummaryI<AuthorizationFlowState>)
+
+  switch (interaction.flow.type) {
+    case FlowType.Authentication:
+      return mapAuthenticationData(summary as SummaryI<AuthenticationFlowState>)
+    case FlowType.Authorization:
+      return mapAuthorizationData(summary as SummaryI<AuthorizationFlowState>)
+    case FlowType.CredentialShare:
+      return mapCredShareData(summary as SummaryI<CredentialRequestFlowState>)
+    case FlowType.CredentialOffer:
+      return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
+    case FlowType.Resolution:
+      return mapResolutionData(summary as SummaryI<ResolutionFlowState>)
   }
 }
 

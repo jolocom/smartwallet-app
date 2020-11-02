@@ -3,17 +3,17 @@ import { useDispatch } from 'react-redux'
 import { resetInteraction } from '~/modules/interaction/actions'
 import { useInteraction } from '.'
 
-const useAuthzSubmit = () => {
+const useResolutionSubmit = () => {
   const interaction = useInteraction()
   const dispatch = useDispatch()
 
   return async () => {
-    const authzResponse = await interaction.createAuthorizationResponse()
-    await interaction.processInteractionToken(authzResponse)
-    await interaction.send(authzResponse)
+    const resolutionResponse = await interaction.createResolutionResponse()
+    await interaction.processInteractionToken(resolutionResponse)
+    await interaction.send(resolutionResponse)
 
     dispatch(resetInteraction())
   }
 }
 
-export default useAuthzSubmit
+export default useResolutionSubmit

@@ -9,7 +9,7 @@ import BtnGroup from '~/components/BtnGroup'
 
 import { ScreenNames } from '~/types/screens'
 
-import useRedirectTo from '~/hooks/useRedirectTo'
+import { useRedirectTo } from '~/hooks/navigation'
 import {
   Walkthrough1,
   Walkthrough2,

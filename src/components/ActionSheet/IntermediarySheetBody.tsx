@@ -10,7 +10,7 @@ import {
 import BasWrapper from './BasWrapper'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { ATTR_KEYBOARD_TYPE, ATTR_UI_NAMES } from '~/types/credentials'
-import { useLoader } from '~/hooks/useLoader'
+import { useLoader } from '~/hooks/loader'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import { strings } from '~/translations/strings'

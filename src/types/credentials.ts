@@ -1,8 +1,6 @@
 import { KeyboardTypeOptions } from 'react-native'
 
 import { IdentitySummary } from 'react-native-jolocom'
-
-// FIXME: expose these types from react-native-jolocom
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 

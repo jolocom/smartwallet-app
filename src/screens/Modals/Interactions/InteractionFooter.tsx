@@ -9,7 +9,7 @@ import { resetInteraction } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
-import { useLoader } from '~/hooks/useLoader'
+import { useLoader } from '~/hooks/loader'
 import BP from '~/utils/breakpoints'
 
 export const FooterContainer: React.FC = ({ children }) => {

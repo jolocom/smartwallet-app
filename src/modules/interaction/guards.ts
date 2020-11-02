@@ -4,6 +4,7 @@ import {
   AuthorizationDetailsI,
   CredOfferI,
   CredShareI,
+  ResolutionDetailsI,
 } from './types'
 import { FlowType } from 'react-native-jolocom'
 
@@ -38,6 +39,12 @@ export function isCredShareDetails(details: any): details is CredShareI {
     !!details.requestedCredentials &&
     !!details.selectedCredentials
   )
+}
+
+export function isResolutionDetails(
+  details: any,
+): details is ResolutionDetailsI {
+  return details.flowType === FlowType.Resolution
 }
 
 export function isNotActiveInteraction(

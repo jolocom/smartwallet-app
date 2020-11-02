@@ -1,9 +1,8 @@
 import * as react from 'react'
 import * as redux from 'react-redux'
 import { act, renderHook } from '@testing-library/react-hooks'
-import { InteractionTransportType } from '@jolocom/sdk'
 
-import * as agentHooks from '~/hooks/sdk'
+import * as interactionsHooks from '~/hooks/interactions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { strings } from '~/translations/strings'
@@ -26,57 +25,45 @@ jest.mock('react', () => ({
     .fn()
     .mockReturnValueOnce({
       current: {
-        interactionManager: {
-          start: jest
-            .fn()
-            .mockImplementationOnce(() =>
-              Promise.resolve(mockedInteractionCredOffer),
-            ),
-        },
+        processJWT: jest
+          .fn()
+          .mockImplementationOnce(() =>
+            Promise.resolve(mockedInteractionCredOffer),
+          ),
       },
     })
     .mockReturnValueOnce({
       current: {
-        interactionManager: {
-          start: jest
-            .fn()
-            .mockImplementationOnce(() =>
-              Promise.resolve(mockedInteractionCredShare),
-            ),
-        },
+        processJWT: jest
+          .fn()
+          .mockImplementationOnce(() =>
+            Promise.resolve(mockedInteractionCredShare),
+          ),
       },
     })
     .mockReturnValueOnce({
       current: {
-        interactionManager: {
-          start: jest
-            .fn()
-            .mockImplementationOnce(() =>
-              Promise.resolve(mockedInteractionCredShare),
-            ),
-        },
+        processJWT: jest
+          .fn()
+          .mockImplementationOnce(() =>
+            Promise.resolve(mockedInteractionCredShare),
+          ),
       },
     })
     .mockReturnValueOnce({
       current: {
-        interactionManager: {
-          start: jest
-            .fn()
-            .mockImplementationOnce(() =>
-              Promise.resolve(mockedInteractionAuth),
-            ),
-        },
+        processJWT: jest
+          .fn()
+          .mockImplementationOnce(() => Promise.resolve(mockedInteractionAuth)),
       },
     })
     .mockReturnValueOnce({
       current: {
-        interactionManager: {
-          start: jest
-            .fn()
-            .mockImplementationOnce(() =>
-              Promise.resolve(mockedInteractionAuthz),
-            ),
-        },
+        processJWT: jest
+          .fn()
+          .mockImplementationOnce(() =>
+            Promise.resolve(mockedInteractionAuthz),
+          ),
       },
     }),
 }))
@@ -99,10 +86,9 @@ const getMockedDispatch = () => {
 
 const arrangeActHook = async () => {
   // ARRANGE
-  const { result } = renderHook(() =>
-    agentHooks.useInteractionStart(InteractionTransportType.HTTP),
-  )
-  const { startInteraction } = result.current
+  const { result } = renderHook(() => interactionsHooks.useInteractionStart())
+
+  const startInteraction = result.current
 
   // ACTION
   await act(async () => await startInteraction(mockedJWT))

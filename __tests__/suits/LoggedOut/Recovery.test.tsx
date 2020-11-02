@@ -47,11 +47,11 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
-jest.mock('../../../src/hooks/sdk', () => ({
-  ...jest.requireActual('react'),
-  useAgent: jest.fn().mockImplementation(() => ({
-    loadFromMnemonic: jest.fn().mockReturnValue({ did: '123did' }),
-  })),
+jest.mock('../../../src/hooks/sdk.ts', () => ({
+  useShouldRecoverFromSeed: jest.fn(() => Promise.resolve(true)),
+  useAgent: () => ({
+    loadFromMnemonic: (_: string) => Promise.resolve('did:jun:test'),
+  }),
 }))
 
 describe('User on a Recovery screen', () => {

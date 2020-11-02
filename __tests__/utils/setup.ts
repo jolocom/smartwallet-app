@@ -1,3 +1,6 @@
+// @ts-ignore missing declaration file
+import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock'
+
 jest.mock('react-native-keychain', () => ({
   SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
   SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
@@ -40,7 +43,13 @@ jest.mock('react-native-jolocom', () => ({
       ParseJWTFailed: 'ParseJWT',
     },
   },
+  JolocomLib: {
+    parse: {
+      interactionToken: {
+        fromJWT: jest.fn()
+      }
+    }
+  }
 }))
 
-// TODO remove when something is imported. Used b/c of the --isolatedModules issue
-export {}
+jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)

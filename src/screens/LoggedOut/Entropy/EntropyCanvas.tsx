@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { PanResponder, GestureResponderEvent, Animated } from 'react-native'
+import { PanResponder, GestureResponderEvent } from 'react-native'
 import { Svg, Path, Rect, Circle } from 'react-native-svg'
 
-import { useForceUpdate } from '~/hooks/useForceUpdate'
+import { useForceUpdate } from '~/hooks/generic'
 import {
   findIntersections,
   Coordinates,

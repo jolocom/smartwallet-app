@@ -3,7 +3,7 @@ import { View, StyleSheet, Platform } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 
-import useReplaceWith from '~/hooks/useReplaceWith'
+import { useReplaceWith } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 
@@ -14,7 +14,7 @@ import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useGenerateSeed } from '~/hooks/sdk'
-import { useLoader } from '~/hooks/useLoader'
+import { useLoader } from '~/hooks/loader'
 
 //NOTE: Determines the duration of entropy collection
 const ENOUGH_ENTROPY_PROGRESS = Platform.select({
@@ -26,7 +26,6 @@ const ENOUGH_ENTROPY_PROGRESS = Platform.select({
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
   const refreshEntropy = useReplaceWith(ScreenNames.Entropy)
-  //const createIdentity = useIdentityCreate()
   const generateSeed = useGenerateSeed()
   const loader = useLoader()
 

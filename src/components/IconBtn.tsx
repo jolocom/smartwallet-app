@@ -1,8 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
-import CloseIcon from '~/assets/svg/CloseIcon'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import useNavigateBack from '~/hooks/useNavigateBack'
+import { StyleSheet, ViewStyle, TouchableOpacity } from 'react-native'
 
 interface Props {
   onPress: () => void

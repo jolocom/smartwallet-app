@@ -1,7 +1,12 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
-import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
 
 import { setLogged, setDid } from '~/modules/account/actions'
 
@@ -11,17 +16,18 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { strings } from '~/translations/strings'
 
-import { useLoader } from '~/hooks/useLoader'
-import { useAgent } from '~/hooks/sdk'
+import { useLoader } from '~/hooks/loader'
+import { useAgent, useShouldRecoverFromSeed } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
 import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
-import useResetKeychainValues from '~/hooks/useResetKeychainValues'
+import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
+import { RootStackParamList } from '~/RootNavigation'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -33,12 +39,13 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
-  const route = useRoute()
+
   const agent = useAgent()
-
-  const navigation = useNavigation()
-
+  const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
   const resetPin = useResetKeychainValues(PIN_SERVICE)
+
+  const route = useRoute<RouteProp<RootStackParamList, 'Recovery'>>()
+  const navigation = useNavigation()
 
   const { isAccessRestore } = route.params
 
@@ -54,9 +61,13 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   }, [phrase])
 
   const restoreEntropy = async () => {
-    // TODO: do actual phrase comparison
-    await resetPin()
-    // throw new Error('oops')
+    const shouldRecover = await shouldRecoverFromSeed()
+
+    if (shouldRecover) {
+      await resetPin()
+    } else {
+      throw new Error('Failed to reset the Passcode!')
+    }
   }
 
   const submitCb = async () => {
