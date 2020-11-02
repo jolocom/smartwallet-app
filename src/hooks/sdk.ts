@@ -12,6 +12,13 @@ import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 
+// TODO: add a hook which manages setting/getting properties from storage
+// and handles their types
+export enum StorageKeys {
+  isOnboardingDone = 'isOnboardingDone',
+  encryptedSeed = 'encryptedSeed',
+}
+
 /**
  * Custom hook that returns the current @Agent.
  *
@@ -38,6 +45,10 @@ export const useWalletInit = () => {
     const pin = await Keychain.getGenericPassword({
       service: PIN_SERVICE,
     })
+    const onboardingSetting = await agent.storage.get.setting(
+      StorageKeys.isOnboardingDone,
+    )
+    if (!onboardingSetting?.finished) return
 
     return agent
       .loadIdentity()
@@ -81,7 +92,7 @@ export const useGenerateSeed = () => {
       },
     )
 
-    await agent.storage.store.setting('encryptedSeed', {
+    await agent.storage.store.setting(StorageKeys.encryptedSeed, {
       b64Encoded: encryptedSeed.toString('base64'),
     })
 
@@ -106,6 +117,9 @@ export const useIdentityCreate = () => {
       async () => {
         const mnemonic = await getStoredMnemonic()
         const identity = await agent.loadFromMnemonic(mnemonic)
+        await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
+          finished: true,
+        })
         dispatch(setDid(identity.did))
       },
       {
@@ -127,7 +141,7 @@ export const useSubmitIdentity = () => {
 
   return async () => {
     await createIdentity()
-    await agent.storage.store.setting('encryptedSeed', {})
+    await agent.storage.store.setting(StorageKeys.encryptedSeed, {})
   }
 }
 
@@ -174,7 +188,9 @@ export const useStoredMnemonic = () => {
   const agent = useAgent()
 
   return async () => {
-    const encryptedSeed = await agent.storage.get.setting('encryptedSeed')
+    const encryptedSeed = await agent.storage.get.setting(
+      StorageKeys.encryptedSeed,
+    )
 
     if (!encryptedSeed) {
       throw new Error('Can not retrieve Seed from database')
