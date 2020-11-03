@@ -178,6 +178,9 @@ const settings = {
   WRONG_PIN: 'Wrong PIN',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
   LOG_OUT: 'Log out',
+  DE_VERSION: 'DE Version',
+  PRIVACY_POLICY: 'Privacy Policy',
+  TERMS_OF_SERVICE: 'Terms of Service',
 }
 
 const attributes = {
@@ -201,7 +204,6 @@ const recoverPin = {
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
 }
 
-
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -217,4 +219,5 @@ export const strings = {
   ...interactions,
   ...attributes,
   ...recoverPin,
+  ...settings,
 }
