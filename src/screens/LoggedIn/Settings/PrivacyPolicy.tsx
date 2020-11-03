@@ -1,7 +1,7 @@
 import React from 'react'
 
 import LegalTextWrapper from './components/LegalTextWrapper'
-import { privacyPolicyEN, privacyPolicyDE } from './terms'
+import { privacyPolicyEN, privacyPolicyDE } from '~/translations/terms'
 import { strings } from '~/translations/strings'
 
 const PrivacyPolicy = () => (

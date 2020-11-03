@@ -1,7 +1,7 @@
 import React from 'react'
 
 import LegalTextWrapper from './components/LegalTextWrapper'
-import { impressumEN, impressumDE } from './terms'
+import { impressumEN, impressumDE } from '~/translations/terms'
 import { strings } from '~/translations/strings'
 
 const Imprint = () => (
