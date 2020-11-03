@@ -4,15 +4,13 @@ import LegalTextWrapper from './components/LegalTextWrapper'
 import { termsOfServiceEN, termsOfServiceDE } from './terms'
 import { strings } from '~/translations/strings'
 
-const TermsOfService = () => {
-  return (
-    <LegalTextWrapper
-      locale="en"
-      title={strings.TERMS_OF_SERVICE}
-      enText={termsOfServiceEN}
-      deText={termsOfServiceDE}
-    />
-  )
-}
+const TermsOfService = () => (
+  <LegalTextWrapper
+    locale="en"
+    title={strings.TERMS_OF_SERVICE}
+    enText={termsOfServiceEN}
+    deText={termsOfServiceDE}
+  />
+)
 
 export default TermsOfService
