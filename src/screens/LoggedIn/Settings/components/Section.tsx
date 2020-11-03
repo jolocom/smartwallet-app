@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   sectionOptionContainer: {
     backgroundColor: Colors.haiti,
-
+    elevation: 15,
     width: '100%',
     borderRadius: 8,
   },
