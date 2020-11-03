@@ -167,6 +167,7 @@ const settings = {
   LANGUAGE: 'Language',
   SECURITY: 'Security',
   CHANGE_PIN: 'Change PIN',
+  BACKUP_IDENTITY: 'Backup Identity',
   GENERAL: 'General',
   FAQ: 'FAQ',
   CONTACT_US: 'Contact us',
@@ -178,6 +179,7 @@ const settings = {
   WRONG_PIN: 'Wrong PIN',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
   LOG_OUT: 'Log out',
+  YOUR_DOCUMENTS_ARE_AT_RISK: 'Your documents are at risk of permanent loss without a backup'
 }
 
 const attributes = {

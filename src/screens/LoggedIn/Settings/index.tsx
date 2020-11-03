@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
-import { Alert } from 'react-native'
+import { Alert, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
@@ -16,8 +16,10 @@ import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { accountReset } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
-import SectionOption from './components/SectionOption'
-import Section from './Section'
+import Section from './components/Section'
+import { Colors } from '~/utils/colors'
+import Option from './components/Option'
+import { CaretRight } from '~/assets/svg'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -57,63 +59,52 @@ const SettingsGeneral: React.FC = () => {
         overScrollMode="never"
       >
         <Section title={strings.APP_PREFERENCES}>
-          <SectionOption
-            label={strings.LANGUAGE}
-            onPress={() => handleNavigateToScreen(ScreenNames.Language)}
-          >
-            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-              arrow
-            </JoloText>
-          </SectionOption>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.Language)}>
+            <Option.Title title={strings.LANGUAGE} />
+            <CaretRight />
+          </Option>
         </Section>
         <Section title={strings.SECURITY}>
-          <SectionOption
-            label={strings.CHANGE_PIN}
-            onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}>
+            <Option.Title title={strings.CHANGE_PIN} />
+            <CaretRight />
+          </Option>
+          <Option
+            onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
           >
-            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-              arrow
-            </JoloText>
-          </SectionOption>
+            <View style={{ alignItems: 'flex-start' }}>
+              <Option.Title title={strings.BACKUP_IDENTITY} />
+              <JoloText
+                kind={JoloTextKind.subtitle}
+                size={JoloTextSizes.mini}
+                color={Colors.error}
+                customStyles={{ textAlign: 'left', lineHeight: 14 }}
+              >
+                {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
+              </JoloText>
+            </View>
+          </Option>
         </Section>
         <Section title={strings.GENERAL}>
-          <SectionOption
-            label={strings.FAQ}
-            onPress={() => handleNavigateToScreen(ScreenNames.FAQ)}
-          >
-            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-              arrow
-            </JoloText>
-          </SectionOption>
-          <SectionOption
-            label={strings.CONTACT_US}
-            onPress={() => handleNavigateToScreen(ScreenNames.ContactUs)}
-          >
-            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-              arrow
-            </JoloText>
-          </SectionOption>
-          <SectionOption label={strings.RATE_US} onPress={handleRate}>
-            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-              arrow
-            </JoloText>
-          </SectionOption>
-          <SectionOption
-            label={strings.ABOUT}
-            onPress={() => handleNavigateToScreen(ScreenNames.About)}
-          >
-            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-              arrow
-            </JoloText>
-          </SectionOption>
-          <SectionOption
-            label={strings.IMPRINT}
-            onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}
-          >
-            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
-              arrow
-            </JoloText>
-          </SectionOption>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.FAQ)}>
+            <Option.Title title={strings.FAQ} />
+            <CaretRight />
+          </Option>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.ContactUs)}>
+            <Option.Title title={strings.CONTACT_US} />
+            <CaretRight />
+          </Option>
+          <Option onPress={handleRate}>
+            <Option.Title title={strings.RATE_US} />
+          </Option>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.About)}>
+            <Option.Title title={strings.ABOUT} />
+            <CaretRight />
+          </Option>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
+            <Option.Title title={strings.IMPRINT} />
+            <CaretRight />
+          </Option>
         </Section>
         <Btn type={BtnTypes.secondary} onPress={handleLogout}>
           {strings.LOG_OUT}

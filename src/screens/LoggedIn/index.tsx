@@ -43,6 +43,7 @@ import FAQ from './Settings/FAQ'
 import ContactUs from './Settings/ContactUs'
 import About from './Settings/About'
 import Imprint from './Settings/Imprint'
+import BackupIdentity from './Settings/BackupIdentity'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -166,6 +167,11 @@ const LoggedInTabs: React.FC = () => {
       <LoggedInStack.Screen
         name={ScreenNames.ChangePin}
         component={ChangePin}
+        options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.BackupIdentity}
+        component={BackupIdentity}
         options={settingsScreenTransitionOptions}
       />
       <LoggedInStack.Screen
