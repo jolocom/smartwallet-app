@@ -43,6 +43,7 @@ import FAQ from './Settings/FAQ'
 import ContactUs from './Settings/ContactUs'
 import About from './Settings/About'
 import Imprint from './Settings/Imprint'
+import TermsOfService from './Settings/TermsOfService'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -186,6 +187,11 @@ const LoggedInTabs: React.FC = () => {
       <LoggedInStack.Screen
         name={ScreenNames.Imprint}
         component={Imprint}
+        options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.TermsOfService}
+        component={TermsOfService}
         options={settingsScreenTransitionOptions}
       />
       {/* Settings Screens -> End   */}

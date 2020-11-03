@@ -51,6 +51,11 @@ const SECTIONS = [
       },
       { id: 'rateus', name: strings.RATE_US },
       { id: 'about', name: strings.ABOUT, screen: ScreenNames.About },
+      {
+        id: 'termsOfService',
+        name: strings.TERMS_OF_SERVICE,
+        screen: ScreenNames.TermsOfService,
+      },
       { id: 'imprint', name: strings.IMPRINT, screen: ScreenNames.Imprint },
     ],
   },
@@ -111,14 +116,7 @@ const SettingsGeneral: React.FC = () => {
                   key={option.id}
                   label={option.name}
                   onPress={() => handleOptionPress(option.id, option.screen)}
-                >
-                  <JoloText
-                    kind={JoloTextKind.subtitle}
-                    size={JoloTextSizes.middle}
-                  >
-                    arrow
-                  </JoloText>
-                </SectionOption>
+                ></SectionOption>
               ))}
             </View>
           </View>

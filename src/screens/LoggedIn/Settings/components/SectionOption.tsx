@@ -15,7 +15,13 @@ const SectionOption: React.FC<SectionOptionPropsI> = ({
   children: rightSideComponent,
 }) => {
   return (
-    <View style={{ borderBottomColor: Colors.mainBlack, borderBottomWidth: 1 }}>
+    <View
+      style={{
+        borderBottomColor: Colors.mainBlack,
+        borderBottomWidth: 1,
+        elevation: 20,
+      }}
+    >
       <TouchableOpacity onPress={onPress} style={styles.sectionOption}>
         <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
           {label}
