@@ -56,6 +56,11 @@ const SECTIONS = [
         name: strings.TERMS_OF_SERVICE,
         screen: ScreenNames.TermsOfService,
       },
+      {
+        id: 'privacyPolicy',
+        name: strings.PRIVACY_POLICY,
+        screen: ScreenNames.PrivacyPolicy,
+      },
       { id: 'imprint', name: strings.IMPRINT, screen: ScreenNames.Imprint },
     ],
   },
