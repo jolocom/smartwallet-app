@@ -16,56 +16,19 @@ import {
   mockedInteractionAuthz,
   mockedNoCredentials,
   mockedHasCredentials,
+  mockedAgent,
 } from '../../utils/mockedValues'
 
-export const mockedJWT = 'token'
+const mockedJWT = 'token'
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
   useContext: jest
     .fn()
-    .mockReturnValueOnce({
-      current: {
-        processJWT: jest
-          .fn()
-          .mockImplementationOnce(() =>
-            Promise.resolve(mockedInteractionCredOffer),
-          ),
-      },
-    })
-    .mockReturnValueOnce({
-      current: {
-        processJWT: jest
-          .fn()
-          .mockImplementationOnce(() =>
-            Promise.resolve(mockedInteractionCredShare),
-          ),
-      },
-    })
-    .mockReturnValueOnce({
-      current: {
-        processJWT: jest
-          .fn()
-          .mockImplementationOnce(() =>
-            Promise.resolve(mockedInteractionCredShare),
-          ),
-      },
-    })
-    .mockReturnValueOnce({
-      current: {
-        processJWT: jest
-          .fn()
-          .mockImplementationOnce(() => Promise.resolve(mockedInteractionAuth)),
-      },
-    })
-    .mockReturnValueOnce({
-      current: {
-        processJWT: jest
-          .fn()
-          .mockImplementationOnce(() =>
-            Promise.resolve(mockedInteractionAuthz),
-          ),
-      },
-    }),
+    .mockImplementationOnce(() => mockedAgent(mockedInteractionCredOffer))
+    .mockImplementationOnce(() => mockedAgent(mockedInteractionCredShare))
+    .mockImplementationOnce(() => mockedAgent(mockedInteractionCredShare))
+    .mockImplementationOnce(() => mockedAgent(mockedInteractionAuth))
+    .mockImplementationOnce(() => mockedAgent(mockedInteractionAuthz)),
 }))
 
 jest.mock('react-redux', () => ({
@@ -91,7 +54,9 @@ const arrangeActHook = async () => {
   const startInteraction = result.current
 
   // ACTION
-  await act(async () => await startInteraction(mockedJWT))
+  await act(async () => {
+    await startInteraction(mockedJWT)
+  })
 }
 
 const assertInteractionDetails = (

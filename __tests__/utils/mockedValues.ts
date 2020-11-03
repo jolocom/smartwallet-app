@@ -1,5 +1,15 @@
 import { FlowType } from "@jolocom/sdk"
 
+export const mockedAgent = (value: any) => {
+  return {
+    current: {
+      processJWT: jest
+        .fn()
+        .mockImplementationOnce(() => Promise.resolve(value)),
+    },
+  }
+}
+
 export const mockedInteractionCredOffer = {
   id: '123',
   flow: {
