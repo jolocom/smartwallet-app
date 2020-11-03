@@ -23,6 +23,8 @@ import { ScreenNames } from '~/types/screens'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { getBiometryDescription } from './DeviceAuthentication/utils/getText'
+import { useDispatch } from 'react-redux'
+import { setAppLocked } from '~/modules/account/actions'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
@@ -35,6 +37,7 @@ const Lock = () => {
   } = useGetStoredAuthValues()
 
   const { keyboardHeight } = useKeyboard()
+  const dispatch = useDispatch()
 
   const navigation = useNavigation()
 
@@ -43,6 +46,7 @@ const Lock = () => {
   )
 
   const unlockApp = useCallback(() => {
+    dispatch(setAppLocked(false))
     navigation.goBack()
   }, [])
 

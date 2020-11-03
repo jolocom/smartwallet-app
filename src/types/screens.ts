@@ -22,7 +22,6 @@ export enum ScreenNames {
   Interactions = 'Interactions',
   Lock = 'Lock',
   PinRecoveryInstructions = 'PinRecoveryInstructions',
-  TermsConsent = 'TermsConsent',
   //Settings
   SettingsGeneral = 'SettingsGeneral',
   Language = 'Language',

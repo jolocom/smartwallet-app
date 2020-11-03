@@ -45,6 +45,8 @@ import About from './Settings/About'
 import Imprint from './Settings/Imprint'
 import PrivacyPolicy from './Settings/PrivacyPolicy'
 import TermsOfService from './Settings/TermsOfService'
+import useTermsConsent from '~/hooks/consent'
+import { setAppLocked } from '~/modules/account/actions'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -74,13 +76,24 @@ const settingsScreenTransitionOptions = {
 }
 
 const LoggedInTabs: React.FC = () => {
+  const navigation = useNavigation()
+  const dispatch = useDispatch()
+
   const redirectToDeviceAuth = useRedirectTo(ScreenNames.DeviceAuth)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
   const isAuthSet = useSelector(isLocalAuthSet)
   const isLoggedIn = useSelector(isLogged)
 
+  /* All about when lock screen comes up - START */
+  const isPopup = useSelector(
+    getIsPopup,
+  ) /* isPopup is used as a workaround for Android app state change */
+
+  const isPopupRef = useRef<boolean>(isPopup)
+
   const syncAttributes = useSyncStorageAttributes()
   const syncCredentials = useSyncStorageCredentials()
+  const { checkConsent } = useTermsConsent()
 
   /* this hook is responsible for displaying device auth screen only after the Loader modal is hidden
   otherwise, the keyboard appears on top loader modal */
@@ -90,34 +103,25 @@ const LoggedInTabs: React.FC = () => {
     }
   }, [isLoaderVisible, isAuthSet])
 
-  /* Loading attributes and credentials into the store */
   useEffect(() => {
+    /* This will trigger the lock screen on starting the app when identity was created */
+    if (isAuthSet) {
+      lockApp()
+    }
+    /* Checking if the Terms of Service have changed */
+    checkConsent()
+
+    /* Loading attributes and credentials into the store */
     syncAttributes()
     syncCredentials()
   }, [])
-
-  /* All about when lock screen comes up - START */
-  const isPopup = useSelector(
-    getIsPopup,
-  ) /* isPopup is used as a workaround for Android app state change */
-
-  const isPopupRef = useRef<boolean>(isPopup)
-
-  const navigation = useNavigation()
-  const dispatch = useDispatch()
 
   useEffect(() => {
     isPopupRef.current = isPopup
   }, [isPopup])
 
-  /* This will trigger the lock screen on starting the app when identity was created */
-  useEffect(() => {
-    if (isAuthSet) {
-      lockApp()
-    }
-  }, [])
-
   const lockApp = useCallback(() => {
+    dispatch(setAppLocked(true))
     navigation.navigate(ScreenNames.Lock)
   }, [])
 
