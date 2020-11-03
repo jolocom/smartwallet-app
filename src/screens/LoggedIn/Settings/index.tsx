@@ -1,70 +1,25 @@
 import React, { useCallback } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
-import { Alert, StyleSheet, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
-import BP from '~/utils/breakpoints'
-import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { accountReset } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
-import SectionOption from './components/SectionOption'
-
-const SECTIONS = [
-  {
-    id: 'appPref',
-    name: strings.APP_PREFERENCES,
-    screens: [
-      { id: 'language', name: strings.LANGUAGE, screen: ScreenNames.Language },
-    ],
-  },
-  {
-    id: 'security',
-    name: strings.SECURITY,
-    screens: [
-      {
-        id: 'changePasscode',
-        name: strings.CHANGE_PIN,
-        screen: ScreenNames.ChangePin,
-      },
-    ],
-  },
-  {
-    id: 'general',
-    name: strings.GENERAL,
-    screens: [
-      { id: 'faq', name: strings.FAQ, screen: ScreenNames.FAQ },
-      {
-        id: 'contactus',
-        name: strings.CONTACT_US,
-        screen: ScreenNames.ContactUs,
-      },
-      { id: 'rateus', name: strings.RATE_US },
-      { id: 'about', name: strings.ABOUT, screen: ScreenNames.About },
-      {
-        id: 'termsOfService',
-        name: strings.TERMS_OF_SERVICE,
-        screen: ScreenNames.TermsOfService,
-      },
-      {
-        id: 'privacyPolicy',
-        name: strings.PRIVACY_POLICY,
-        screen: ScreenNames.PrivacyPolicy,
-      },
-      { id: 'imprint', name: strings.IMPRINT, screen: ScreenNames.Imprint },
-    ],
-  },
-]
+import Section from './components/Section'
+import { Colors } from '~/utils/colors'
+import Option from './components/Option'
+import { CaretRight } from '~/assets/svg'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -82,12 +37,12 @@ const SettingsGeneral: React.FC = () => {
     }
   }, [dispatch])
 
-  const handleOptionPress = (name: string, screen?: ScreenNames) => {
-    if (name === 'rateus' && !screen) {
-      Alert.alert('Rate us', 'Please rate us')
-    } else {
-      screen && navigation.navigate(screen)
-    }
+  const handleNavigateToScreen = (screenName: ScreenNames) => {
+    navigation.navigate(screenName)
+  }
+
+  const handleRate = () => {
+    Alert.alert('Rate us', 'Please rate us')
   }
 
   return (
@@ -103,29 +58,70 @@ const SettingsGeneral: React.FC = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
       >
-        {SECTIONS.map((section) => (
-          <View style={styles.sectionContainer}>
-            <JoloText
-              kind={JoloTextKind.title}
-              size={JoloTextSizes.middle}
-              weight={JoloTextWeight.regular}
-              customStyles={{
-                marginBottom: BP({ large: 40, medium: 40, default: 20 }),
-              }}
-            >
-              {section.name}
-            </JoloText>
-            <View style={styles.sectionOptionContainer}>
-              {section.screens.map((option) => (
-                <SectionOption
-                  key={option.id}
-                  label={option.name}
-                  onPress={() => handleOptionPress(option.id, option.screen)}
-                ></SectionOption>
-              ))}
+        <Section title={strings.APP_PREFERENCES}>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.Language)}>
+            <Option.Title title={strings.LANGUAGE} />
+            <Option.RightIcon />
+          </Option>
+        </Section>
+        <Section title={strings.SECURITY}>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}>
+            <Option.Title title={strings.CHANGE_PIN} />
+            <Option.RightIcon />
+          </Option>
+          <Option
+            onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
+          >
+            <View style={{ alignItems: 'flex-start' }}>
+              <Option.Title title={strings.BACKUP_IDENTITY} />
+              <JoloText
+                kind={JoloTextKind.subtitle}
+                size={JoloTextSizes.mini}
+                color={Colors.error}
+                customStyles={{
+                  textAlign: 'left',
+                  lineHeight: 14,
+                  marginTop: 10,
+                }}
+              >
+                {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
+              </JoloText>
             </View>
-          </View>
-        ))}
+          </Option>
+        </Section>
+        <Section title={strings.GENERAL}>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.FAQ)}>
+            <Option.Title title={strings.FAQ} />
+            <Option.RightIcon />
+          </Option>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.ContactUs)}>
+            <Option.Title title={strings.CONTACT_US} />
+            <Option.RightIcon />
+          </Option>
+          <Option onPress={handleRate}>
+            <Option.Title title={strings.RATE_US} />
+          </Option>
+          <Option
+            onPress={() => handleNavigateToScreen(ScreenNames.TermsOfService)}
+          >
+            <Option.Title title={strings.TERMS_OF_SERVICE} />
+            <Option.RightIcon />
+          </Option>
+          <Option
+            onPress={() => handleNavigateToScreen(ScreenNames.PrivacyPolicy)}
+          >
+            <Option.Title title={strings.PRIVACY_POLICY} />
+            <Option.RightIcon />
+          </Option>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
+            <Option.Title title={strings.IMPRINT} />
+            <Option.RightIcon />
+          </Option>
+          <Option onPress={() => handleNavigateToScreen(ScreenNames.About)}>
+            <Option.Title title={strings.ABOUT} />
+            <Option.RightIcon />
+          </Option>
+        </Section>
         <Btn type={BtnTypes.secondary} onPress={handleLogout}>
           {strings.LOG_OUT}
         </Btn>
@@ -133,19 +129,5 @@ const SettingsGeneral: React.FC = () => {
     </ScreenContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    justifyContent: 'flex-start',
-    marginBottom: 44,
-    alignItems: 'flex-start',
-    width: '100%',
-  },
-  sectionOptionContainer: {
-    backgroundColor: Colors.black,
-    width: '100%',
-    borderRadius: 8,
-  },
-})
 
 export default SettingsGeneral

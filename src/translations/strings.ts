@@ -167,6 +167,7 @@ const settings = {
   LANGUAGE: 'Language',
   SECURITY: 'Security',
   CHANGE_PIN: 'Change PIN',
+  BACKUP_IDENTITY: 'Backup Identity',
   GENERAL: 'General',
   FAQ: 'FAQ',
   CONTACT_US: 'Contact us',
@@ -181,6 +182,8 @@ const settings = {
   DE_VERSION: 'DE Version',
   PRIVACY_POLICY: 'Privacy Policy',
   TERMS_OF_SERVICE: 'Terms of Service',
+  YOUR_DOCUMENTS_ARE_AT_RISK:
+    'Your documents are at risk of permanent loss without a backup',
 }
 
 const termsConsent = {

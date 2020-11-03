@@ -47,6 +47,7 @@ import PrivacyPolicy from './Settings/PrivacyPolicy'
 import TermsOfService from './Settings/TermsOfService'
 import useTermsConsent from '~/hooks/consent'
 import { setAppLocked } from '~/modules/account/actions'
+import BackupIdentity from './Settings/BackupIdentity'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -172,6 +173,11 @@ const LoggedInTabs: React.FC = () => {
       <LoggedInStack.Screen
         name={ScreenNames.ChangePin}
         component={ChangePin}
+        options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.BackupIdentity}
+        component={BackupIdentity}
         options={settingsScreenTransitionOptions}
       />
       <LoggedInStack.Screen

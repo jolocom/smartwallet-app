@@ -26,6 +26,7 @@ export enum ScreenNames {
   SettingsGeneral = 'SettingsGeneral',
   Language = 'Language',
   ChangePin = 'ChangePin',
+  BackupIdentity = 'BackupIdentity',
   FAQ = 'FAQ',
   ContactUs = 'ContactUs',
   RateUs = 'RateUs',
