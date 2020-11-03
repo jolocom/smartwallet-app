@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     //TODO: fix color
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.haiti,
     zIndex: 2,
     paddingTop: 18,
     paddingBottom: 24,
@@ -82,8 +82,7 @@ const BottomSheet: React.FC<Props> = (props) => {
           height: 300,
           left: 0,
           right: 0,
-          //TODO: fix color
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.haiti,
         }}
       />
     </Animated.View>
