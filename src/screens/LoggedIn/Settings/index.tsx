@@ -101,18 +101,6 @@ const SettingsGeneral: React.FC = () => {
           <Option onPress={handleRate}>
             <Option.Title title={strings.RATE_US} />
           </Option>
-          <Option
-            onPress={() => handleNavigateToScreen(ScreenNames.TermsOfService)}
-          >
-            <Option.Title title={strings.TERMS_OF_SERVICE} />
-            <Option.RightIcon />
-          </Option>
-          <Option
-            onPress={() => handleNavigateToScreen(ScreenNames.PrivacyPolicy)}
-          >
-            <Option.Title title={strings.PRIVACY_POLICY} />
-            <Option.RightIcon />
-          </Option>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
             <Option.Title title={strings.IMPRINT} />
             <Option.RightIcon />
