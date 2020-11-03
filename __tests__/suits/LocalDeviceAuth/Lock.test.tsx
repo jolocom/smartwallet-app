@@ -1,5 +1,6 @@
 import React from 'react'
 import { getGenericPassword } from 'react-native-keychain'
+import * as redux from 'react-redux'
 
 import Lock from '~/screens/Modals/Lock'
 import { fireEvent, waitFor } from '@testing-library/react-native'
@@ -31,6 +32,10 @@ jest.mock('@react-navigation/native', () => ({
 
 describe('Lock screen', () => {
   test('displays body and unlocks the app', async () => {
+    const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
+    const mockDispatchFn = jest.fn()
+    useDispatchSpy.mockReturnValue(mockDispatchFn)
+
     const { getByTestId, getAllByTestId, getByText } = renderWithSafeArea(
       <Lock />,
     )
