@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 interface PropsI {
@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   sectionOptionContainer: {
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.haiti,
+
     width: '100%',
     borderRadius: 8,
   },

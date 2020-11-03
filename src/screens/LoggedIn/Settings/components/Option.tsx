@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { CaretRight } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -13,13 +14,20 @@ const Title: React.FC<TitlePropsI> = ({ title }) => (
   </JoloText>
 )
 
+const RightIcon: React.FC = () => (
+  <View style={styles.rightIcon}>
+    <CaretRight />
+  </View>
+)
+
 interface PropsI {
   onPress?: () => void
 }
-const Option: React.FC<PropsI> & { Title: React.FC<TitlePropsI> } = ({
-  onPress,
-  children,
-}) => {
+
+const Option: React.FC<PropsI> & {
+  Title: React.FC<TitlePropsI>
+  RightIcon: React.FC
+} = ({ onPress, children }) => {
   return (
     <View style={{ borderBottomColor: Colors.mainBlack, borderBottomWidth: 1 }}>
       <TouchableOpacity onPress={onPress} style={styles.sectionOption}>
@@ -30,15 +38,19 @@ const Option: React.FC<PropsI> & { Title: React.FC<TitlePropsI> } = ({
 }
 
 Option.Title = Title
+Option.RightIcon = RightIcon
 
 const styles = StyleSheet.create({
   sectionOption: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 18,
+    paddingHorizontal: 13,
     paddingVertical: 8,
     width: '100%',
     alignItems: 'center',
+  },
+  rightIcon: {
+    transform: [{ scale: 0.8 }],
   },
 })
 

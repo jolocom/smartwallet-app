@@ -61,13 +61,13 @@ const SettingsGeneral: React.FC = () => {
         <Section title={strings.APP_PREFERENCES}>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.Language)}>
             <Option.Title title={strings.LANGUAGE} />
-            <CaretRight />
+            <Option.RightIcon />
           </Option>
         </Section>
         <Section title={strings.SECURITY}>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}>
             <Option.Title title={strings.CHANGE_PIN} />
-            <CaretRight />
+            <Option.RightIcon />
           </Option>
           <Option
             onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
@@ -88,22 +88,22 @@ const SettingsGeneral: React.FC = () => {
         <Section title={strings.GENERAL}>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.FAQ)}>
             <Option.Title title={strings.FAQ} />
-            <CaretRight />
+            <Option.RightIcon />
           </Option>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.ContactUs)}>
             <Option.Title title={strings.CONTACT_US} />
-            <CaretRight />
+            <Option.RightIcon />
           </Option>
           <Option onPress={handleRate}>
             <Option.Title title={strings.RATE_US} />
           </Option>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.About)}>
             <Option.Title title={strings.ABOUT} />
-            <CaretRight />
+            <Option.RightIcon />
           </Option>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
             <Option.Title title={strings.IMPRINT} />
-            <CaretRight />
+            <Option.RightIcon />
           </Option>
         </Section>
         <Btn type={BtnTypes.secondary} onPress={handleLogout}>
