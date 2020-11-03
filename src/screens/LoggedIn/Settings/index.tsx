@@ -1,60 +1,23 @@
 import React, { useCallback } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
-import { Alert, StyleSheet, View } from 'react-native'
+import { Alert } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
-import BP from '~/utils/breakpoints'
-import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { accountReset } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
 import SectionOption from './components/SectionOption'
-
-const SECTIONS = [
-  {
-    id: 'appPref',
-    name: strings.APP_PREFERENCES,
-    screens: [
-      { id: 'language', name: strings.LANGUAGE, screen: ScreenNames.Language },
-    ],
-  },
-  {
-    id: 'security',
-    name: strings.SECURITY,
-    screens: [
-      {
-        id: 'changePasscode',
-        name: strings.CHANGE_PIN,
-        screen: ScreenNames.ChangePin,
-      },
-    ],
-  },
-  {
-    id: 'general',
-    name: strings.GENERAL,
-    screens: [
-      { id: 'faq', name: strings.FAQ, screen: ScreenNames.FAQ },
-      {
-        id: 'contactus',
-        name: strings.CONTACT_US,
-        screen: ScreenNames.ContactUs,
-      },
-      { id: 'rateus', name: strings.RATE_US },
-      { id: 'about', name: strings.ABOUT, screen: ScreenNames.About },
-      { id: 'imprint', name: strings.IMPRINT, screen: ScreenNames.Imprint },
-    ],
-  },
-]
+import Section from './Section'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -72,12 +35,12 @@ const SettingsGeneral: React.FC = () => {
     }
   }, [dispatch])
 
-  const handleOptionPress = (name: string, screen?: ScreenNames) => {
-    if (name === 'rateus' && !screen) {
-      Alert.alert('Rate us', 'Please rate us')
-    } else {
-      screen && navigation.navigate(screen)
-    }
+  const handleNavigateToScreen = (screenName: ScreenNames) => {
+    navigation.navigate(screenName)
+  }
+
+  const handleRate = () => {
+    Alert.alert('Rate us', 'Please rate us')
   }
 
   return (
@@ -93,36 +56,65 @@ const SettingsGeneral: React.FC = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
       >
-        {SECTIONS.map((section) => (
-          <View style={styles.sectionContainer}>
-            <JoloText
-              kind={JoloTextKind.title}
-              size={JoloTextSizes.middle}
-              weight={JoloTextWeight.regular}
-              customStyles={{
-                marginBottom: BP({ large: 40, medium: 40, default: 20 }),
-              }}
-            >
-              {section.name}
+        <Section title={strings.APP_PREFERENCES}>
+          <SectionOption
+            label={strings.LANGUAGE}
+            onPress={() => handleNavigateToScreen(ScreenNames.Language)}
+          >
+            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+              arrow
             </JoloText>
-            <View style={styles.sectionOptionContainer}>
-              {section.screens.map((option) => (
-                <SectionOption
-                  key={option.id}
-                  label={option.name}
-                  onPress={() => handleOptionPress(option.id, option.screen)}
-                >
-                  <JoloText
-                    kind={JoloTextKind.subtitle}
-                    size={JoloTextSizes.middle}
-                  >
-                    arrow
-                  </JoloText>
-                </SectionOption>
-              ))}
-            </View>
-          </View>
-        ))}
+          </SectionOption>
+        </Section>
+        <Section title={strings.SECURITY}>
+          <SectionOption
+            label={strings.CHANGE_PIN}
+            onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
+          >
+            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+              arrow
+            </JoloText>
+          </SectionOption>
+        </Section>
+        <Section title={strings.GENERAL}>
+          <SectionOption
+            label={strings.FAQ}
+            onPress={() => handleNavigateToScreen(ScreenNames.FAQ)}
+          >
+            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+              arrow
+            </JoloText>
+          </SectionOption>
+          <SectionOption
+            label={strings.CONTACT_US}
+            onPress={() => handleNavigateToScreen(ScreenNames.ContactUs)}
+          >
+            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+              arrow
+            </JoloText>
+          </SectionOption>
+          <SectionOption label={strings.RATE_US} onPress={handleRate}>
+            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+              arrow
+            </JoloText>
+          </SectionOption>
+          <SectionOption
+            label={strings.ABOUT}
+            onPress={() => handleNavigateToScreen(ScreenNames.About)}
+          >
+            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+              arrow
+            </JoloText>
+          </SectionOption>
+          <SectionOption
+            label={strings.IMPRINT}
+            onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}
+          >
+            <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+              arrow
+            </JoloText>
+          </SectionOption>
+        </Section>
         <Btn type={BtnTypes.secondary} onPress={handleLogout}>
           {strings.LOG_OUT}
         </Btn>
@@ -130,19 +122,5 @@ const SettingsGeneral: React.FC = () => {
     </ScreenContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    justifyContent: 'flex-start',
-    marginBottom: 44,
-    alignItems: 'flex-start',
-    width: '100%',
-  },
-  sectionOptionContainer: {
-    backgroundColor: Colors.black,
-    width: '100%',
-    borderRadius: 8,
-  },
-})
 
 export default SettingsGeneral
