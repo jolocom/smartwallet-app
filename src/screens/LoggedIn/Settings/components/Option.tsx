@@ -45,12 +45,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 13,
-    paddingVertical: 8,
+    paddingVertical: 16,
     width: '100%',
     alignItems: 'center',
   },
   rightIcon: {
-    transform: [{ scale: 0.8 }],
+    position: 'absolute',
+    right: 16,
   },
 })
 

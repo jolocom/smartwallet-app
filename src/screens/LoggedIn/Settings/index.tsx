@@ -78,7 +78,11 @@ const SettingsGeneral: React.FC = () => {
                 kind={JoloTextKind.subtitle}
                 size={JoloTextSizes.mini}
                 color={Colors.error}
-                customStyles={{ textAlign: 'left', lineHeight: 14 }}
+                customStyles={{
+                  textAlign: 'left',
+                  lineHeight: 14,
+                  marginTop: 10,
+                }}
               >
                 {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
               </JoloText>
