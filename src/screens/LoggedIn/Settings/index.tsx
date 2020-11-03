@@ -76,7 +76,7 @@ const SettingsGeneral: React.FC = () => {
               <Option.Title title={strings.BACKUP_IDENTITY} />
               <JoloText
                 kind={JoloTextKind.subtitle}
-                size={JoloTextSizes.mini}
+                size={JoloTextSizes.tiniest}
                 color={Colors.error}
                 customStyles={{
                   textAlign: 'left',
