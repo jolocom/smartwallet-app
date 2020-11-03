@@ -23,8 +23,16 @@ export enum ScreenNames {
   Lock = 'Lock',
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   //Settings
-  SettingsList = 'SettingsList',
+  SettingsGeneral = 'SettingsGeneral',
+  Language = 'Language',
   ChangePin = 'ChangePin',
+  FAQ = 'FAQ',
+  ContactUs = 'ContactUs',
+  RateUs = 'RateUs',
+  About = 'About',
+  Imprint = 'Imprint',
+  TermsAndConditions = 'TermsAndConditions',
+  PrivacyPolicy = 'PrivacyPolicy',
   // Interactions
   Scanner = 'Scanner',
   ScannerPermission = 'ScannerPermission',
