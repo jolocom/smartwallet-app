@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import {
   Animated,
   Dimensions,
+  LayoutChangeEvent,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -12,25 +13,17 @@ import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 import { useToasts } from '~/hooks/toasts'
 import { ToastType } from '~/types/toasts'
+import { usePrevious } from '~/hooks/generic'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-interface PropsI {
-  title: string
-  message: string
-  type: ToastType
-  isInteractive?: boolean
-  onInteract?: () => void
-}
-
-const Notification: React.FC<PropsI> = ({
-  title,
-  message,
-  type,
-  onInteract,
-}) => {
+const Notification: React.FC = () => {
+  const { activeToast } = useToasts()
   const { top } = useSafeArea()
+
+  const prevActive = usePrevious(activeToast)
+  console.log({ prevActive })
 
   const containerTranslateY = useRef(new Animated.Value(-SCREEN_HEIGHT)).current
   const containerOpacity = containerTranslateY.interpolate({
@@ -38,30 +31,44 @@ const Notification: React.FC<PropsI> = ({
     outputRange: [0, 0, 1],
   })
 
+  const toastToShow = activeToast ? activeToast : prevActive ? prevActive : null
+
   useEffect(() => {
-    Animated.timing(containerTranslateY, {
-      toValue: 0,
-      duration: 600,
-      useNativeDriver: true,
-    }).start()
-  }, [])
+    console.log({ activeToast })
+    if (activeToast && !prevActive) {
+      Animated.timing(containerTranslateY, {
+        toValue: 0,
+        useNativeDriver: true,
+      }).start()
+    }
+    if (!activeToast && prevActive) {
+      Animated.timing(containerTranslateY, {
+        toValue: -SCREEN_HEIGHT,
+        useNativeDriver: true,
+      }).start()
+    } else if (activeToast && prevActive) {
+      Animated.sequence([
+        Animated.timing(containerTranslateY, {
+          toValue: -SCREEN_HEIGHT,
+          useNativeDriver: true,
+        }),
+        Animated.timing(containerTranslateY, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]).start()
+    }
+  }, [JSON.stringify(activeToast)])
 
   const animationStyles = {
     transform: [{ translateY: containerTranslateY }],
     opacity: containerOpacity,
   }
 
-  const handleInteract = useCallback(() => {
-    Animated.timing(containerTranslateY, {
-      toValue: -300,
-      useNativeDriver: true,
-    }).start(() => {
-      onInteract && onInteract()
-    })
-  }, [JSON.stringify(containerTranslateY)])
-
+  if (!toastToShow) return null
   return (
-    <TouchableWithoutFeedback onPress={handleInteract}>
+    <TouchableWithoutFeedback onPress={() => {}}>
       <Animated.View
         style={[
           styles.notificationContainer,
@@ -72,16 +79,18 @@ const Notification: React.FC<PropsI> = ({
         <JoloText
           kind={JoloTextKind.title}
           size={JoloTextSizes.mini}
-          color={type === ToastType.info ? Colors.white : Colors.error}
+          color={
+            toastToShow.type === ToastType.info ? Colors.white : Colors.error
+          }
         >
-          {title}
+          {toastToShow.title}
         </JoloText>
         <JoloText
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.tiniest}
           color={Colors.white}
         >
-          {message}
+          {toastToShow.message}
         </JoloText>
       </Animated.View>
     </TouchableWithoutFeedback>
@@ -89,19 +98,11 @@ const Notification: React.FC<PropsI> = ({
 }
 
 export default () => {
-  const { activeToast, invokeInteract } = useToasts()
-
-  return activeToast ? (
+  return (
     <View style={styles.notifications}>
-      <Notification
-        key={activeToast.id}
-        title={activeToast.title}
-        message={activeToast.message}
-        type={activeToast.type}
-        onInteract={invokeInteract}
-      />
+      <Notification />
     </View>
-  ) : null
+  )
 }
 
 const styles = StyleSheet.create({

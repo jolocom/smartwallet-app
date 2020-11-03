@@ -7,6 +7,7 @@ import Btn from '~/components/Btn'
 import { useLoader } from '~/hooks/loader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
+import { useToasts } from '~/hooks/toasts'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -14,6 +15,7 @@ const ContainerComponent: React.FC = ({ children }) => {
 
 const Claims: React.FC = () => {
   const loader = useLoader()
+  const { scheduleInfo } = useToasts()
 
   const openLoader = async () => {
     await loader(
@@ -27,6 +29,13 @@ const Claims: React.FC = () => {
         failed: 'Bad loader',
       },
     )
+  }
+
+  const scheduleInfoNotification = () => {
+    scheduleInfo({
+      title: 'Title',
+      message: 'Message',
+    })
   }
 
   const attributes = useSelector(getAttributes)
@@ -43,6 +52,7 @@ const Claims: React.FC = () => {
         />
       </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>
+      <Btn onPress={scheduleInfoNotification}>Schedule Info</Btn>
     </ScreenContainer>
   )
 }
