@@ -2,7 +2,6 @@ import React from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import { useState } from 'react'
 import { ConsentText } from './ConsentText'
 import ConsentButton from './ConsentTextButton'
@@ -10,7 +9,6 @@ import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 
 interface Props {
   locale: string
@@ -24,6 +22,7 @@ const LegalTextWrapper: React.FC<Props> = ({
   title,
   enText,
   deText,
+  children,
 }) => {
   const legalText = locale === 'en' ? enText : deText
   const [toggleGerman, setToggleGerman] = useState(false)
@@ -44,7 +43,7 @@ const LegalTextWrapper: React.FC<Props> = ({
   }
 
   return (
-    <ScreenContainer hasHeaderBack>
+    <ScreenContainer hasHeaderBack customStyles={{ paddingTop: 24 }}>
       <View style={styles.wrapper}>
         <JoloText
           color={Colors.white90}
@@ -62,14 +61,15 @@ const LegalTextWrapper: React.FC<Props> = ({
           overScrollMode="never"
         >
           <JoloText
-            color={Colors.white40}
+            color={Colors.white80}
             kind={JoloTextKind.subtitle}
             size={JoloTextSizes.middle}
-            customStyles={{ textAlign: 'left' }}
+            customStyles={{ textAlign: 'left', opacity: 0.8 }}
           >
             {legalText}
           </JoloText>
           {renderGermanToggle()}
+          {children}
         </ScrollView>
       </View>
     </ScreenContainer>
