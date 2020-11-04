@@ -34,7 +34,7 @@ export const useInteractionStart = () => {
 
   const parseJWT = (jwt: string) => {
     try {
-      return JolocomLib.parse.interactionToken.fromJWT(jwt)
+      return JolocomLib.parse.interactionToken.fromJWT(jwt);
     } catch (e) {
       if (e instanceof SyntaxError) {
         throw new Error(SDKError.codes.ParseJWTFailed)
@@ -112,4 +112,5 @@ export const useInteractionStart = () => {
       { showSuccess: false },
     )
   }
+
 }
