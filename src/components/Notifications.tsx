@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  PanResponder,
 } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { Colors } from '~/utils/colors'
@@ -13,6 +14,7 @@ import JoloText, { JoloTextKind } from './JoloText'
 import { useToasts } from '~/hooks/toasts'
 import { ToastType } from '~/types/toasts'
 import { usePrevious } from '~/hooks/generic'
+import { removeToastAndUpdate } from '~/modules/toasts/actions'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -28,6 +30,27 @@ const Notification: React.FC = () => {
     inputRange: [-300, -50, 0],
     outputRange: [0, 0, 1],
   })
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: Animated.event([null, { dy: containerTranslateY }]),
+      onPanResponderRelease: (e, gesture) => {
+        if (gesture.dy < 0) {
+          if (activeToast) {
+            removeToastAndUpdate(activeToast, true)
+          }
+        } else {
+          Animated.timing(containerTranslateY, {
+            toValue: 0,
+            duration: 100,
+            useNativeDriver: true,
+          }).start()
+        }
+      },
+    }),
+  ).current
 
   const toastToShow = activeToast ? activeToast : prevActive ? prevActive : null
   const toastColor = toastToShow
@@ -78,13 +101,19 @@ const Notification: React.FC = () => {
         animationStyles,
       ]}
     >
-      <View style={toastToShow.interact && styles.withInteractContainer}>
+      <View
+        style={toastToShow.interact && styles.withInteractContainer}
+        {...panResponder.panHandlers}
+      >
         <View style={toastToShow.interact && styles.withInteractText}>
           <JoloText
             kind={JoloTextKind.title}
             size={JoloTextSizes.mini}
             color={toastColor}
-            customStyles={{ letterSpacing: 0.09 }}
+            customStyles={{
+              letterSpacing: 0.09,
+              ...(toastToShow.interact && { textAlign: 'left' }),
+            }}
           >
             {toastToShow.title}
           </JoloText>

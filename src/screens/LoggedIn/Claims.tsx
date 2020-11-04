@@ -15,7 +15,7 @@ const ContainerComponent: React.FC = ({ children }) => {
 
 const Claims: React.FC = () => {
   const loader = useLoader()
-  const { scheduleWarning } = useToasts()
+  const { scheduleWarning, scheduleSticky } = useToasts()
 
   const openLoader = async () => {
     await loader(
