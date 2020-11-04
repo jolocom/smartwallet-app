@@ -3,13 +3,14 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import { JoloTextSizes } from '~/utils/fonts'
 import { JolocomLogoBig } from '~/assets/svg'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import BtnGroup from '~/components/BtnGroup'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 // @ts-ignore
 import packageJson from '~/../package.json'
+import { strings } from '~/translations/strings'
 
 const About = () => {
   const redirectToTerms = useRedirectTo(ScreenNames.TermsOfService)
@@ -19,13 +20,7 @@ const About = () => {
 
   return (
     <ScreenContainer hasHeaderBack>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+      <View style={styles.container}>
         <JoloText
           customStyles={{
             position: 'absolute',
@@ -43,17 +38,27 @@ const About = () => {
           <JolocomLogoBig />
         </View>
       </View>
-      <View style={{ flex: 1, width: '100%', justifyContent: 'center' }}>
+      <View style={styles.container}>
         <BtnGroup>
           <Btn onPress={redirectToTerms} type={BtnTypes.secondary}>
-            Terms of Service
+            {strings.TERMS_OF_SERVICE}
           </Btn>
           <Btn onPress={redirectToPrivacyPolicy} type={BtnTypes.secondary}>
-            Privacy Policy
+            {strings.PRIVACY_POLICY}
           </Btn>
         </BtnGroup>
       </View>
     </ScreenContainer>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
+
 export default About
