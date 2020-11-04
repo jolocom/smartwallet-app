@@ -28,7 +28,7 @@ const LegalTextWrapper: React.FC<Props> = ({
   const [toggleGerman, setToggleGerman] = useState(false)
 
   const renderGermanToggle = () => {
-    if (locale === 'en') {
+    if (locale !== 'de') {
       return toggleGerman ? (
         <ConsentText text={deText} onPress={() => setToggleGerman(false)} />
       ) : (
