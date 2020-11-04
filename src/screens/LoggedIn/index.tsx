@@ -3,7 +3,10 @@ import {
   createBottomTabNavigator,
   BottomTabBarProps,
 } from '@react-navigation/bottom-tabs'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { AppStateStatus, Platform } from 'react-native'
@@ -18,12 +21,10 @@ import Interactions from '~/screens/Modals/Interactions'
 import DeviceAuthentication from '~/screens/Modals/DeviceAuthentication'
 import PinRecoveryInstructions from '~/screens/Modals/PinRecoveryInstructions'
 import Lock from '~/screens/Modals/Lock'
-import SettingsList from '~/screens/SettingsList'
 
 import Claims from './Claims'
 import Documents from './Documents'
 import History from './History'
-import Settings from './Settings'
 
 import { dismissLoader } from '~/modules/loader/actions'
 import { resetInteraction } from '~/modules/interaction/actions'
@@ -35,6 +36,14 @@ import { useAppState } from '~/hooks/useAppState'
 
 import { useSyncStorageAttributes } from '~/hooks/attributes'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
+import Settings from './Settings'
+import Language from './Settings/Language'
+import ChangePin from './Settings/ChangePin'
+import FAQ from './Settings/FAQ'
+import ContactUs from './Settings/ContactUs'
+import About from './Settings/About'
+import Imprint from './Settings/Imprint'
+import BackupIdentity from './Settings/BackupIdentity'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -51,6 +60,17 @@ const Tabs = () => (
     <MainTabs.Screen name={ScreenNames.Settings} component={Settings} />
   </MainTabs.Navigator>
 )
+
+const settingsScreenTransitionOptions = {
+  ...Platform.select({
+    ios: {
+      ...TransitionPresets.SlideFromRightIOS,
+    },
+    android: {
+      ...TransitionPresets.DefaultTransition,
+    },
+  }),
+}
 
 const LoggedInTabs: React.FC = () => {
   const redirectToDeviceAuth = useRedirectTo(ScreenNames.DeviceAuth)
@@ -135,12 +155,48 @@ const LoggedInTabs: React.FC = () => {
       initialRouteName={ScreenNames.Tabs}
     >
       <LoggedInStack.Screen name={ScreenNames.Tabs} component={Tabs} />
-      {/* Modals -> Start */}
-      <LoggedInStack.Screen
-        name={ScreenNames.SettingsList}
-        component={SettingsList}
-      />
 
+      {/* Settings Screens -> Start   */}
+      <LoggedInStack.Screen
+        name={ScreenNames.Language}
+        component={Language}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.ChangePin}
+        component={ChangePin}
+        options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.BackupIdentity}
+        component={BackupIdentity}
+        options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.FAQ}
+        component={FAQ}
+        options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.ContactUs}
+        component={ContactUs}
+        options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.About}
+        component={About}
+        options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.Imprint}
+        component={Imprint}
+        options={settingsScreenTransitionOptions}
+      />
+      {/* Settings Screens -> End   */}
+
+      {/* Modals -> Start */}
       <LoggedInStack.Screen
         name={ScreenNames.Interactions}
         component={Interactions}

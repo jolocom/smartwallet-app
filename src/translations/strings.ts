@@ -163,12 +163,23 @@ const lock = {
 }
 
 const settings = {
+  APP_PREFERENCES: 'App preferences',
+  LANGUAGE: 'Language',
+  SECURITY: 'Security',
   CHANGE_PIN: 'Change PIN',
+  BACKUP_IDENTITY: 'Backup Identity',
+  GENERAL: 'General',
+  FAQ: 'FAQ',
+  CONTACT_US: 'Contact us',
+  RATE_US: 'Rate us',
+  ABOUT: 'About',
+  IMPRINT: 'Imprint',
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
   WRONG_PIN: 'Wrong PIN',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
   LOG_OUT: 'Log out',
+  YOUR_DOCUMENTS_ARE_AT_RISK: 'Your documents are at risk of permanent loss without a backup'
 }
 
 const attributes = {
@@ -191,6 +202,7 @@ const recoverPin = {
   YOU_CAN_CHANGE_PIN:
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
 }
+
 
 export const strings = {
   ...loaderMsgs,
