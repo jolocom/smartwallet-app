@@ -32,7 +32,7 @@ export enum ScreenNames {
   RateUs = 'RateUs',
   About = 'About',
   Imprint = 'Imprint',
-  TermsAndConditions = 'TermsAndConditions',
+  TermsOfService = 'TermsOfService',
   PrivacyPolicy = 'PrivacyPolicy',
   // Interactions
   Scanner = 'Scanner',

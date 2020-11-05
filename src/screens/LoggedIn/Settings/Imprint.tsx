@@ -1,14 +1,16 @@
 import React from 'react'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import ScreenContainer from '~/components/ScreenContainer'
-import { JoloTextSizes } from '~/utils/fonts'
+
+import LegalTextWrapper from './components/LegalTextWrapper'
+import { impressumEN, impressumDE } from '~/translations/terms'
+import { strings } from '~/translations/strings'
 
 const Imprint = () => (
-  <ScreenContainer hasHeaderBack>
-    <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
-      Imprint
-    </JoloText>
-  </ScreenContainer>
+  <LegalTextWrapper
+    enText={impressumEN}
+    deText={impressumDE}
+    title={strings.IMPRINT}
+    locale="en"
+  />
 )
 
 export default Imprint
