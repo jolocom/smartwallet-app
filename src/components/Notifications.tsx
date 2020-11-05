@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import {
   Animated,
   Dimensions,
@@ -14,43 +14,50 @@ import JoloText, { JoloTextKind } from './JoloText'
 import { useToasts } from '~/hooks/toasts'
 import { ToastType } from '~/types/toasts'
 import { usePrevious } from '~/hooks/generic'
-import { removeToastAndUpdate } from '~/modules/toasts/actions'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const Notification: React.FC = () => {
-  const { activeToast, invokeInteract } = useToasts()
+  const { activeToast, invokeInteract, removeToast } = useToasts()
+
   const { top } = useSafeArea()
 
   const prevActive = usePrevious(activeToast)
 
-  const containerTranslateY = useRef(new Animated.Value(-SCREEN_HEIGHT)).current
+  const containerTranslateY = useRef(new Animated.Value(-SCREEN_HEIGHT / 2))
+    .current
   const containerOpacity = containerTranslateY.interpolate({
     inputRange: [-300, -50, 0],
     outputRange: [0, 0, 1],
   })
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, { dy: containerTranslateY }]),
-      onPanResponderRelease: (e, gesture) => {
-        if (gesture.dy < 0) {
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: (e, gestureEvent) => {
+          Animated.event([null, { dy: containerTranslateY }], {
+            useNativeDriver: false,
+          })(e, gestureEvent)
+        },
+        onPanResponderRelease: (e, gesture) => {
           if (activeToast) {
-            removeToastAndUpdate(activeToast, true)
+            if (gesture.dy < 0 && activeToast.dismiss) {
+              removeToast(activeToast)
+            } else {
+              Animated.timing(containerTranslateY, {
+                toValue: 0,
+                duration: 100,
+                useNativeDriver: true,
+              }).start()
+            }
           }
-        } else {
-          Animated.timing(containerTranslateY, {
-            toValue: 0,
-            duration: 100,
-            useNativeDriver: true,
-          }).start()
-        }
-      },
-    }),
-  ).current
+        },
+      }),
+    [JSON.stringify(activeToast)],
+  )
 
   const toastToShow = activeToast ? activeToast : prevActive ? prevActive : null
   const toastColor = toastToShow
@@ -68,13 +75,13 @@ const Notification: React.FC = () => {
     }
     if (!activeToast && prevActive) {
       Animated.timing(containerTranslateY, {
-        toValue: -SCREEN_HEIGHT,
+        toValue: -SCREEN_HEIGHT / 2,
         useNativeDriver: true,
       }).start()
     } else if (activeToast && prevActive) {
       Animated.sequence([
         Animated.timing(containerTranslateY, {
-          toValue: -SCREEN_HEIGHT,
+          toValue: -SCREEN_HEIGHT / 2,
           useNativeDriver: true,
         }),
         Animated.timing(containerTranslateY, {
