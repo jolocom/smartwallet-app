@@ -7,7 +7,7 @@ import { ConsentText } from './ConsentText'
 import ConsentButton from './ConsentTextButton'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
+import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
@@ -56,7 +56,7 @@ const LegalTextWrapper: React.FC<Props> = ({
           color={Colors.white90}
           kind={JoloTextKind.title}
           size={JoloTextSizes.middle}
-          customStyles={{ marginBottom: 22 }}
+          customStyles={{ marginBottom: 22, fontFamily: Fonts.Regular }}
         >
           {title}
         </JoloText>
