@@ -14,7 +14,7 @@ export const initApp: ThunkAction = async (
   backendMiddleware,
 ) => {
   try {
-    const storedSettings = await backendMiddleware.storageLib.get.settingsObject()
+    const storedSettings = await backendMiddleware.storage.get.settingsObject()
 
     // locale setup
     if (storedSettings.locale) I18n.locale = storedSettings.locale.selected

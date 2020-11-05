@@ -1,6 +1,15 @@
+/**
+ * NOTE: This migration has been disabled because newer version of the wallet
+ * have switched to the "did:jun" identities and there is no upgrade path
+ *
+ * The rest is here only for historical reasons.
+ *
+ ******************************************************************************/
+
 import { MigrationInterface, QueryRunner } from 'typeorm'
+/*
 import { KeyChain } from 'src/lib/keychain'
-import { MasterKeyEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
+import { MasterKeyEntity } from '@jolocom/sdk-storage-typeorm/js/src/entities'
 import {
   encryptWithLib4,
   decryptWithLib4,
@@ -10,10 +19,11 @@ import {
 
 const getMasterKeys = (queryRunner: QueryRunner): Promise<MasterKeyEntity[]> =>
   queryRunner.query('SELECT encryptedEntropy FROM master_keys;')
+*/
 
 // Migration for JolocomLib 3.0.0 to JolocomLib 4.0.0.
 export class Lib3To41580937907601 implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<any> {
+  public async up(queryRunner: QueryRunner): Promise<any> {/*
     let pass: string
     try {
       pass = await new KeyChain().getPassword()
@@ -37,9 +47,9 @@ export class Lib3To41580937907601 implements MigrationInterface {
         )
       }),
     )
-  }
+  */}
 
-  public async down(queryRunner: QueryRunner): Promise<any> {
+  public async down(queryRunner: QueryRunner): Promise<any> {/*
     let pass: string
 
     try {
@@ -65,5 +75,5 @@ export class Lib3To41580937907601 implements MigrationInterface {
         )
       }),
     )
-  }
+  */}
 }

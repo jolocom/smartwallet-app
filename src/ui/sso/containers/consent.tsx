@@ -7,9 +7,9 @@ import { withLoading, withErrorScreen } from 'src/actions/modifiers'
 import {
   CredentialVerificationSummary,
   CredentialTypeSummary,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+  InteractionSummary
+} from '@jolocom/sdk/js/interactionManager/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
 
 interface CredentialRequestNavigationParams {
   interactionId: string

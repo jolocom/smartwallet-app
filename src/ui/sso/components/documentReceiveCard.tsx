@@ -14,7 +14,7 @@ import {
 import React, { useRef, useState } from 'react'
 import Interactable, { IDragEvent, ISnapEvent } from 'react-native-interactable'
 import { Colors, Typefaces } from '../../../styles'
-import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/interactionManager/types'
 
 const styles = StyleSheet.create({
   wrapper: {

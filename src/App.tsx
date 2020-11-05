@@ -18,6 +18,7 @@ import {
   JolocomWebSockets,
   JolocomKeychainPasswordStore,
   JolocomSDK,
+  Agent,
 } from 'react-native-jolocom'
 
 import { backgroundDarkMain } from './styles/colors'
@@ -65,11 +66,15 @@ export default class App extends React.PureComponent<
     if (!sdkPromise) {
       sdkPromise = initTypeorm().then(async storage => {
         const passwordStore = new JolocomKeychainPasswordStore()
-        const sdk = new JolocomSDK({ storage, passwordStore })
-        await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        const sdk = new JolocomSDK({ storage })
         sdk.setDefaultDidMethod('jun')
+        await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        const agent = new Agent({
+          sdk,
+          passwordStore,
+        })
 
-        store = initStore(sdk)
+        store = initStore(agent)
         this.setState({ ready: true })
         return sdk
       })

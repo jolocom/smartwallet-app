@@ -140,9 +140,8 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
           .map(field => claimData[field])
 
         // at least one claim of size > 0
-        return
-        fieldValuesToCheck.some(field => field.length > 0) &&
-          fieldValuesToCheck.every(validator)
+        return fieldValuesToCheck.some(field => field.length > 0) &&
+            fieldValuesToCheck.every(validator)
       }
       return claimData[c].length > 0 && validator(claimData[c])
     })

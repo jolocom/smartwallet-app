@@ -5,6 +5,7 @@ import {
   ClaimsContainerProps,
 } from 'src/ui/home/containers/claims'
 import { initialState } from '../../../src/reducers/account/claims'
+import { createMockNavigationScreenProp } from 'tests/utils'
 
 describe('Claims container', () => {
   const COMMON_PROPS: ClaimsContainerProps = {
@@ -12,6 +13,7 @@ describe('Claims container', () => {
     openClaimDetails: jest.fn(),
     checkLocalAuthSet: jest.fn(),
     did: '',
+    navigation: createMockNavigationScreenProp({}),
   }
 
   it('mounts correctly and matches the snapshot', () => {

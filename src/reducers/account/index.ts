@@ -9,7 +9,7 @@ import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { IdentitySummary } from '../../actions/sso/types'
+import { IdentitySummary } from '@jolocom/sdk'
 
 export interface DecoratedClaims {
   credentialType: string

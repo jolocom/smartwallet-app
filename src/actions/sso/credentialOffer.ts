@@ -1,5 +1,3 @@
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { CredentialOfferRequest } from 'jolocom-lib/js/interactionTokens/credentialOfferRequest'
 import { ThunkAction } from '../../store'
 import { navigationActions } from '../index'
 import { routeList } from '../../routeList'
@@ -10,31 +8,27 @@ import { scheduleNotification } from '../notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import {
-  InteractionTransportType,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { cancelSSO } from './index'
+import { Interaction, InteractionTransportType } from '@jolocom/sdk'
 
 export const consumeCredentialOfferRequest = (
-  credentialOfferRequest: JSONWebToken<CredentialOfferRequest>,
-  interactionChannel: InteractionTransportType,
+  interaction: Interaction
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
-  const interaction = await interactionManager.start(
-    interactionChannel,
-    credentialOfferRequest,
-  )
-
+  const interactionSummary = interaction.getSummary()
+  const passedValidation = (interactionSummary.state as CredentialOfferFlowState)
+          .offerSummary.map(_ => true)
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialReceive,
       params: {
-        interactionId: credentialOfferRequest.nonce,
-        interactionSummary: interaction.getSummary(),
-        passedValidation: (interaction.getSummary().state as CredentialOfferFlowState)
-          .offerSummary.map(_ => true)
+        interactionId: interaction.id,
+        interactionSummary,
+        passedValidation,
       },
     }),
   )
@@ -58,21 +52,18 @@ export const consumeCredentialReceive = (
 
   await interaction.processInteractionToken(response)
 
-  const credentialReceive = await interaction.send(
+  await interaction.send(
     await interaction.createCredentialOfferResponseToken(
       selectedSignedCredentialWithMetadata,
     ),
   )
 
-  if (credentialReceive) {
-    await interaction.processInteractionToken(credentialReceive)
-    return dispatch(
-      validateSelectionAndSave(
-        selectedSignedCredentialWithMetadata,
-        interaction.id,
-      ),
-    )
-  }
+  return dispatch(
+    validateSelectionAndSave(
+      selectedSignedCredentialWithMetadata,
+      interaction.id,
+    ),
+  )
 }
 
 /**
@@ -94,7 +85,7 @@ export const validateSelectionAndSave = (
 ): ThunkAction => async (
   dispatch,
   getState,
-  { interactionManager, storageLib },
+  { interactionManager, storage },
 ) => {
   const interaction = interactionManager.getInteraction(interactionId)
   const { offerSummary, issued } = interaction.getSummary()
@@ -150,7 +141,7 @@ export const validateSelectionAndSave = (
       (interaction.getSummary().state as CredentialOfferFlowState).offerSummary,
       interaction.participants.requester!.did,
       //@ts-ignore
-      storageLib.store.credentialMetadata,
+      storage.store.credentialMetadata,
     )
     */
 

@@ -1,3 +1,6 @@
+import { Interaction, FlowType } from '@jolocom/sdk'
+import { ThunkAction } from 'src/store'
+
 import * as accountActions from 'src/actions/account/'
 import * as registrationActions from 'src/actions/registration/'
 import * as navigationActions from 'src/actions/navigation/'
@@ -14,4 +17,14 @@ export {
   ssoActions,
   recoveryActions,
   notificationsActions,
+}
+
+export const interactionHandlers: {
+  [flowType: string]: (interxn: Interaction) => ThunkAction
+} = {
+  [FlowType.Authentication]: ssoActions.consumeAuthenticationRequest,
+  [FlowType.CredentialOffer]: ssoActions.consumeCredentialOfferRequest,
+  [FlowType.CredentialShare]: ssoActions.consumeCredentialRequest,
+  [FlowType.EstablishChannel]: ssoActions.consumeEstablishChannelRequest,
+  [FlowType.Resolution]: ssoActions.consumeResolutionRequest,
 }

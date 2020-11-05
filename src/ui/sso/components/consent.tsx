@@ -2,16 +2,16 @@ import React from 'react'
 import { Text, ScrollView, View, StyleSheet } from 'react-native'
 import { Wrapper } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
-import { IdentitySummary } from '../../../actions/sso/types'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import { IssuerCard } from '../../documents/components/issuerCard'
 import strings from '../../../locales/strings'
 import { Typography, Colors, Spacing } from 'src/styles'
 import { CredentialSectionCard } from './credentialsSectionCard'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
+import { IdentitySummary } from '@jolocom/sdk'
 
 interface Props {
   did: string

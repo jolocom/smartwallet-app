@@ -44,15 +44,6 @@ export const ScannerContainer: React.FC<Props> = props => {
   const reactivate = () => scannerRef && scannerRef.current?.reactivate()
   const [showCamera, setShowCamera] = useState(true)
 
-  // NOTE: this is needed because QRScanner behaves weirdly when the screen is
-  // remounted.... but we don't have error state here because rebase
-  // FIXME TODO @mnzaki
-  //if (!isError) reactivate()
-
-  const rerender = () => {
-    reactivate()
-  }
-
   useEffect(() => {
     const backListener = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -66,7 +57,7 @@ export const ScannerContainer: React.FC<Props> = props => {
     if (navigation) {
       listener = navigation.addListener('didFocus', () => {
         setShowCamera(true)
-        rerender()
+        reactivate()
       })
     }
     checkCameraPermissions()

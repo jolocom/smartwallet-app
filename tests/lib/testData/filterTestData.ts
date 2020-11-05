@@ -1,6 +1,6 @@
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { DecoratedClaims } from 'src/reducers/account'
-import { getUiCredentialTypeByType } from '@jolocom/sdk/js/src/lib/util'
+import { getUiCredentialTypeByType } from 'src/lib/util'
 
 const lastYear = new Date()
 lastYear.setFullYear(lastYear.getFullYear() - 1)

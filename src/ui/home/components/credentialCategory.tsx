@@ -74,6 +74,7 @@ export const CredentialCategory: React.FC<Props> = props => {
 
         return (
           <CredentialCardToRender
+            key={i}
             did={did}
             credential={credential}
             onPress={() => onEdit(credential)}

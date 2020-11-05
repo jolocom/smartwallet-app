@@ -5,13 +5,13 @@ import strings from '../../../locales/strings'
 import { centeredText, fontMain, fontMedium } from '../../../styles/typography'
 import React, { useRef } from 'react'
 import { black065, greyLight, overflowBlack } from '../../../styles/colors'
-import { IssuerPublicProfileSummary } from '../../../actions/sso/types'
 import { DocumentReceiveCard } from './documentReceiveCard'
 import {
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import LinearGradient from 'react-native-linear-gradient'
+import { IssuerPublicProfileSummary } from '@jolocom/sdk'
 
 const styles = StyleSheet.create({
   logo: {

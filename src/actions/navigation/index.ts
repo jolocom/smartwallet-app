@@ -9,12 +9,9 @@ import {
   StackActions,
 } from 'react-navigation'
 import { routeList } from 'src/routeList'
-import { JolocomLib } from 'jolocom-lib'
-import { interactionHandlers } from 'src/lib/interactionHandlers'
 import { AppError, ErrorCode } from '../../lib/errors'
-import { withErrorScreen, withLoading } from 'src/actions/modifiers'
 import { ThunkAction } from 'src/store'
-import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { consumeInteractionToken } from '../sso/consumeInteractionToken'
 
 const deferredNavActions: NavigationAction[] = []
 let dispatchNavigationAction = (action: NavigationAction) => {
@@ -109,11 +106,11 @@ export const navigatorResetHome = (): ThunkAction => dispatch =>
 export const handleDeepLink = (url: string): ThunkAction => (
   dispatch,
   getState,
-  backendMiddleware,
+  agent,
 ) => {
   // The identityWallet is initialised before the deep link is handled. If it
   // is not initialized, then we may not even have an identity.
-  if (!backendMiddleware.identityWallet) {
+  if (!agent.identityWallet) {
     return dispatch(
       navigate({
         routeName: routeList.Landing,
@@ -140,23 +137,11 @@ export const handleDeepLink = (url: string): ThunkAction => (
 
   const supportedRoutes = ['consent', 'authenticate']
   if (supportedRoutes.includes(routeName)) {
-    const interactionToken = JolocomLib.parse.interactionToken.fromJWT(params)
-    const handler = interactionHandlers[interactionToken.interactionType]
-
-    if (handler) {
-      return dispatch(
-        withLoading(
-          withErrorScreen(
-            handler(interactionToken, InteractionTransportType.Deeplink),
-          ),
-        ),
-      )
-    }
+    return dispatch(consumeInteractionToken(params))
+  } else {
+    throw new AppError(
+      ErrorCode.DeepLinkUrlNotFound,
+      new Error('Could not handle interaction token'),
+    )
   }
-
-  /** @TODO Use error code */
-  throw new AppError(
-    ErrorCode.ParseJWTFailed,
-    new Error('Could not handle interaction token'),
-  )
 }

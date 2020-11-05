@@ -99,40 +99,40 @@ const navOptScreenWCancel = {
 export const BottomTabBarRoutes = {
   [routeList.Claims]: {
     screen: Claims,
-    title: strings.IDENTITY,
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: IdentityIcon,
+      tabBarLabel: strings.IDENTITY,
       // @ts-ignore
       notifications: NotificationFilter.all,
     },
   },
   [routeList.Documents]: {
     screen: Documents,
-    title: strings.DOCUMENTS,
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: DocsIcon,
+      tabBarLabel: strings.DOCUMENTS,
       // @ts-ignore
       notifications: NotificationFilter.all,
     },
   },
   [routeList.Records]: {
     screen: Records,
-    title: strings.HISTORY,
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: HistoryIcon,
+      tabBarLabel: strings.HISTORY,
       // @ts-ignore
       notifications: NotificationFilter.onlyDismissible,
     },
   },
   [routeList.Settings]: {
     screen: Settings,
-    title: strings.SETTINGS,
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: SettingsIcon,
+      tabBarLabel: strings.SETTINGS,
       // @ts-ignore
       notifications: NotificationFilter.onlyDismissible,
     },
@@ -206,7 +206,7 @@ const MainStack = createStackNavigator(
         gestureEnabled: false,
         // @ts-ignore
         notifications: NotificationFilter.none,
-        ...lockTransition
+        ...lockTransition,
       },
     },
     [routeList.RegisterPIN]: {
@@ -215,7 +215,7 @@ const MainStack = createStackNavigator(
         gestureEnabled: false,
         // @ts-ignore
         notifications: NotificationFilter.none,
-        ...lockTransition
+        ...lockTransition,
       },
     },
 
@@ -373,6 +373,7 @@ export const Routes = createSwitchNavigator(
   },
   {
     initialRouteName: routeList.AppInit,
+    backBehavior: 'initialRoute',
   },
 )
 

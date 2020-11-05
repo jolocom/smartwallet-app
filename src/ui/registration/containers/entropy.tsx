@@ -7,7 +7,7 @@ import {
   EntropyGeneratorInterface,
   EntropyGenerator,
 } from 'src/lib/entropyGenerator'
-import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
+import { generateSecureRandomBytes } from '@jolocom/sdk/js/util'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { ThunkDispatch } from 'src/store'
 import { AppError, ErrorCode } from 'src/lib/errors'

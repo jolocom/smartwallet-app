@@ -7,7 +7,7 @@ import { IssuerCard } from '../../documents/components/issuerCard'
 import {
   InteractionSummary,
   AuthenticationFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
 import { Wrapper } from '../../structure'
 
