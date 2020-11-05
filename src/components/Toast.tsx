@@ -19,7 +19,7 @@ import { usePrevious } from '~/hooks/generic'
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const Notification: React.FC = () => {
+const Toast: React.FC = () => {
   const { activeToast, invokeInteract, removeToast } = useToasts()
 
   const { top } = useSafeArea()
@@ -165,7 +165,7 @@ const Notification: React.FC = () => {
 export default () => {
   return (
     <View style={styles.notifications}>
-      <Notification />
+      <Toast />
     </View>
   )
 }
