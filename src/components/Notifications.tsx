@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   PanResponder,
+  Platform,
 } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { Colors } from '~/utils/colors'
@@ -38,9 +39,11 @@ const Notification: React.FC = () => {
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
         onPanResponderMove: (e, gestureEvent) => {
-          Animated.event([null, { dy: containerTranslateY }], {
-            useNativeDriver: false,
-          })(e, gestureEvent)
+          if (gestureEvent.dy < 0) {
+            Animated.event([null, { dy: containerTranslateY }], {
+              useNativeDriver: false,
+            })(e, gestureEvent)
+          }
         },
         onPanResponderRelease: (e, gesture) => {
           if (activeToast) {
@@ -146,7 +149,7 @@ const Notification: React.FC = () => {
                 customStyles={{
                   fontSize: 12,
                   letterSpacing: 0.8,
-                  lineHeight: 6.4,
+                  lineHeight: 12,
                 }}
               >
                 {toastToShow.interact.label}
@@ -189,9 +192,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   interactBtn: {
-    paddingTop: 9,
-    paddingBottom: 6,
-
+    paddingTop: 3,
+    paddingBottom: Platform.OS === 'ios' ? 5 : 3,
     borderWidth: 1,
     borderColor: Colors.silverChalice,
     borderRadius: 6.4,
