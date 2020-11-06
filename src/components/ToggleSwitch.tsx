@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
-import { StyleSheet, TouchableWithoutFeedback, Animated } from 'react-native'
+import { StyleSheet, Animated } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { Colors } from '~/utils/colors'
 
