@@ -188,6 +188,16 @@ const settings = {
     'If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.',
 }
 
+const termsConsent = {
+  SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY:
+    'SmartWallet introducing Terms and Conditions and Privacy Policy',
+  YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW:
+    'You can find the German and English version of the documents below. Please note that the German version is legally binding',
+  I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY:
+    'I understand and accept the Terms of Service and Privacy Policy',
+  ACCEPT_NEW_TERMS: 'Accept new terms',
+}
+
 const attributes = {
   CREATE_NEW_ONE: 'Create new one',
   NAME: 'Name',
@@ -225,4 +235,5 @@ export const strings = {
   ...attributes,
   ...recoverPin,
   ...settings,
+  ...termsConsent,
 }

@@ -6,9 +6,12 @@ import Loader from '~/modals/Loader'
 import ActionSheetManager from './components/ActionSheet/ActionSheetManager'
 import Notifications from './components/Notifications'
 import { getInteractionType } from './modules/interaction/selectors'
+import { getIsAppLocked } from './modules/account/selectors'
+import TermsConsent from './screens/Modals/TermsConsent'
 
 const Overlays = () => {
   const isInteracting = useSelector(getInteractionType)
+  const isAppLocked = useSelector(getIsAppLocked)
 
   return (
     <>
@@ -20,7 +23,8 @@ const Overlays = () => {
       />
       <Loader />
       <Notifications />
-      {isInteracting ? <ActionSheetManager /> : null}
+      {!isAppLocked && <TermsConsent />}
+      {isInteracting && <ActionSheetManager />}
     </>
   )
 }
