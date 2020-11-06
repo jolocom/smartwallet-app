@@ -7,8 +7,9 @@ import { ConsentText } from './ConsentText'
 import ConsentButton from './ConsentTextButton'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
+import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
 
 interface Props {
   locale: string
@@ -28,7 +29,7 @@ const LegalTextWrapper: React.FC<Props> = ({
   const [toggleGerman, setToggleGerman] = useState(false)
 
   const renderGermanToggle = () => {
-    if (locale === 'en') {
+    if (locale !== 'de') {
       return toggleGerman ? (
         <ConsentText text={deText} onPress={() => setToggleGerman(false)} />
       ) : (
@@ -43,13 +44,19 @@ const LegalTextWrapper: React.FC<Props> = ({
   }
 
   return (
-    <ScreenContainer hasHeaderBack customStyles={{ paddingTop: 24 }}>
+    <ScreenContainer
+      hasHeaderBack
+      customStyles={{
+        paddingTop: 24,
+        paddingHorizontal: BP({ default: 16, medium: 20, large: 28 }),
+      }}
+    >
       <View style={styles.wrapper}>
         <JoloText
           color={Colors.white90}
           kind={JoloTextKind.title}
           size={JoloTextSizes.middle}
-          customStyles={{ marginBottom: 22 }}
+          customStyles={{ marginBottom: 22, fontFamily: Fonts.Regular }}
         >
           {title}
         </JoloText>
