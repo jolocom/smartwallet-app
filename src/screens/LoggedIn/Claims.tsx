@@ -15,7 +15,7 @@ const ContainerComponent: React.FC = ({ children }) => {
 
 const Claims: React.FC = () => {
   const loader = useLoader()
-  const { scheduleWarning } = useToasts()
+  const { scheduleWarning, scheduleSticky } = useToasts()
 
   const openLoader = async () => {
     await loader(
@@ -32,10 +32,26 @@ const Claims: React.FC = () => {
   }
 
   const scheduleInfoNotification = () => {
-    scheduleWarning({
-      title: 'Lorem ipsum dolor sit amet',
+    // scheduleWarning({
+    //   title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
+    //   message:
+    //     'consectetur adipisicing elit. Tempora nam quisquam blanditiis dolorum reiciendis. consectetur adipisicing ',
+    //   interact: {
+    //     label: 'Show',
+    //     onInteract: () => {
+    //       console.log('Interracted with toast')
+    //     },
+    //   },
+    // })
+    // scheduleWarning({
+    //   title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
+    //   message:
+    //     'consectetur adipisicing elit. Tempora nam quisquam blanditiis dolorum reiciendis. consectetur adipisicing ',
+    // })
+    scheduleSticky({
+      title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
       message:
-        'consectetur adipisicing elit. Tempora nam quisquam blanditiis dolorum reiciendis.',
+        'consectetur adipisicing elit. Tempora nam quisquam blanditiis dolorum reiciendis. consectetur adipisicing ',
       interact: {
         label: 'Show',
         onInteract: () => {
