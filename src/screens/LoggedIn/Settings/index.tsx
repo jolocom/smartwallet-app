@@ -52,10 +52,11 @@ const SettingsGeneral: React.FC = () => {
       customStyles={{
         justifyContent: 'flex-start',
         paddingHorizontal: 10,
+        paddingTop: 0,
       }}
     >
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 100, marginTop: 56 }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
