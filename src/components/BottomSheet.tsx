@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {
   Animated,
   LayoutChangeEvent,
@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     height: 'auto',
     position: 'absolute',
     bottom: 0,
-    //TODO: fix color
     backgroundColor: Colors.haiti,
     zIndex: 2,
     paddingTop: 18,
@@ -34,7 +33,7 @@ const BottomSheet: React.FC<Props> = (props) => {
   const { showSlide, customStyles = {} } = props
   // NOTE: default height is 9999 to make sure the view is hidden on first render
   const [viewHeight, setViewHeight] = useState(9999)
-  const [animatedValue] = useState(new Animated.Value(0))
+  const animatedValue = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
     setTimeout(() => {

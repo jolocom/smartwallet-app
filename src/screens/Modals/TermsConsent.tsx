@@ -53,12 +53,7 @@ const TermsConsent: React.FC = () => {
   return (
     <ModalScreen isVisible={shouldShowConsent}>
       <ScreenContainer customStyles={{ paddingHorizontal: 0 }}>
-        <View
-          style={{
-            paddingHorizontal: BP({ xsmall: 20, small: 20, default: 32 }),
-            marginBottom: BP({ default: 14, medium: 22, large: 22 }),
-          }}
-        >
+        <View style={styles.header}>
           <JoloText
             kind={JoloTextKind.title}
             size={JoloTextSizes.middle}
@@ -158,6 +153,10 @@ const TermsConsent: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
+  header: {
+    paddingHorizontal: BP({ xsmall: 20, small: 20, default: 32 }),
+    marginBottom: BP({ default: 14, medium: 22, large: 22 }),
+  },
   bottomBar: {
     paddingTop: 26,
     paddingBottom: 40,
