@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Platform } from 'react-native'
 import { CaretRight } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
@@ -45,7 +45,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 13,
-    paddingVertical: 11,
+    paddingVertical: Platform.select({
+      ios: 11,
+      android: 16,
+    }),
     width: '100%',
     alignItems: 'center',
   },
