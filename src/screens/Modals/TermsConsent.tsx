@@ -67,7 +67,7 @@ const TermsConsent: React.FC = () => {
         </View>
         <View style={styles.termsWrapper}>
           <ScrollView
-            contentContainerStyle={{ paddingBottom: '50%' }}
+            contentContainerStyle={{ paddingBottom: 200 }}
             showsVerticalScrollIndicator={false}
             overScrollMode={'never'}
           >
@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: BP({ xsmall: 20, small: 20, default: 32 }),
     marginBottom: BP({ default: 14, medium: 22, large: 22 }),
+    width: '100%',
   },
   bottomBar: {
     paddingTop: 26,
