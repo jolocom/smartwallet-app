@@ -31,13 +31,17 @@ const ToggleSwitch = (props: Props) => {
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
-      onToggle(!toggled)
       setToggled(!toggled)
     })
+    onToggle(!toggled)
   }
 
   return (
-    <TouchableWithoutFeedback style={styles.track} onPressIn={onPress}>
+    <TouchableWithoutFeedback
+      testID="toggleSwitch"
+      style={styles.track}
+      onPressIn={onPress}
+    >
       <Animated.View
         style={{
           ...styles.toggle,
