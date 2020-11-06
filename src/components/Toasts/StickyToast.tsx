@@ -9,7 +9,7 @@ const StickyToast = () => {
   const { toastToShow, invokeInteract } = useToastToShow()
   if (toastToShow && !toastToShow?.dismiss) {
     return (
-      <TouchableOpacity onPress={invokeInteract}>
+      <TouchableOpacity onPressIn={invokeInteract}>
         <ToastTitle />
         <ToastDescription />
       </TouchableOpacity>

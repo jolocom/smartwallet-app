@@ -36,7 +36,7 @@ const InteractiveToast = React.forwardRef<View, IProps>(
               ref={ref}
             >
               <TouchableOpacity
-                onPress={invokeInteract}
+                onPressIn={invokeInteract}
                 style={styles.interactBtn}
               >
                 <JoloText
