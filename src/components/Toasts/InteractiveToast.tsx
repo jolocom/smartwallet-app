@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   interactBtn: {
-    paddingTop: 3,
-    paddingBottom: Platform.OS === 'ios' ? 5 : 3,
+    paddingTop: Platform.select({ ios: 3, android: 6 }),
+    paddingBottom: Platform.select({ ios: 5, android: 6 }),
     borderWidth: 1,
     borderColor: Colors.silverChalice,
     borderRadius: 6.4,
