@@ -30,7 +30,11 @@ const Option: React.FC<PropsI> & {
 } = ({ onPress, children }) => {
   return (
     <View style={{ borderBottomColor: Colors.mainBlack, borderBottomWidth: 1 }}>
-      <TouchableOpacity onPress={onPress} style={styles.sectionOption}>
+      <TouchableOpacity
+        activeOpacity={onPress ? 0.2 : 1}
+        onPress={onPress}
+        style={styles.sectionOption}
+      >
         {children}
       </TouchableOpacity>
     </View>
