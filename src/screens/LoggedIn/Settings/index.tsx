@@ -56,7 +56,7 @@ const SettingsGeneral: React.FC = () => {
       }}
     >
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 100, marginTop: 56 }}
+        contentContainerStyle={{ paddingBottom: 150, marginTop: 56 }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
