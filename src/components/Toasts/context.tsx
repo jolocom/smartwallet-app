@@ -3,7 +3,7 @@ import { Toast } from '~/types/toasts'
 import { Colors } from '~/utils/colors'
 
 interface IToastContext {
-  toastToShow: Toast | null
+  toastToShow: Toast | null | undefined
   toastColor: Colors
   invokeInteract: () => void
 }

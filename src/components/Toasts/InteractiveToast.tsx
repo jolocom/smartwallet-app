@@ -1,5 +1,11 @@
 import React from 'react'
-import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
+import {
+  LayoutChangeEvent,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -9,7 +15,11 @@ import { useToastToShow } from './context'
 import Description from './Description'
 import Title from './Title'
 
-const InteractiveToast = React.forwardRef(
+interface IProps {
+  handleInteractionBtnLayout: (e: LayoutChangeEvent) => void
+}
+
+const InteractiveToast = React.forwardRef<View, IProps>(
   ({ handleInteractionBtnLayout }, ref) => {
     const { toastToShow, toastColor, invokeInteract } = useToastToShow()
     if (toastToShow?.interact) {

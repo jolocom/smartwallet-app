@@ -10,7 +10,7 @@ import {
 import { useSafeArea } from 'react-native-safe-area-context'
 import { Colors } from '~/utils/colors'
 import { useToasts } from '~/hooks/toasts'
-import { ToastType } from '~/types/toasts'
+import { Toast, ToastType } from '~/types/toasts'
 import { usePrevious } from '~/hooks/generic'
 import { ToastToShowContext } from './context'
 import NormalToast from './NormalToast'
@@ -96,28 +96,37 @@ const Toasts: React.FC = () => {
 
   useEffect(() => {
     if (activeToast && !prevActive) {
+      // this is for the first time we show toast
+      setToastToShow(activeToast)
       Animated.timing(containerTranslateY, {
         toValue: 0,
         useNativeDriver: true,
       }).start()
     }
     if (!activeToast && prevActive) {
+      // this is for the last time we show toast
+      setToastToShow(prevActive)
       Animated.timing(containerTranslateY, {
         toValue: -SCREEN_HEIGHT,
         useNativeDriver: true,
       }).start()
     } else if (activeToast && prevActive) {
-      Animated.sequence([
-        Animated.timing(containerTranslateY, {
-          toValue: -SCREEN_HEIGHT,
-          useNativeDriver: true,
-        }),
+      // this is when we change toast from one to another
+      // 1. We first show the old toast and when animation hiding the old toast complete
+      setToastToShow(prevActive)
+      Animated.timing(containerTranslateY, {
+        toValue: -SCREEN_HEIGHT,
+        useNativeDriver: true,
+      }).start(() => {
+        // 2. We change value of the toast to show to active toast
+        setToastToShow(activeToast)
+        // 3. And run animation to show it
         Animated.timing(containerTranslateY, {
           toValue: 0,
           duration: 600,
           useNativeDriver: true,
-        }),
-      ]).start()
+        }).start()
+      })
     }
   }, [JSON.stringify(activeToast)])
 
@@ -176,7 +185,11 @@ const Toasts: React.FC = () => {
   ])
   /* AreaToAvoidPressing -> End */
 
-  const toastToShow = activeToast ? activeToast : prevActive ? prevActive : null
+  /* Context value that will be share with consumern -> Start */
+  const [toastToShow, setToastToShow] = useState<Toast | null | undefined>(
+    activeToast,
+  )
+
   const toastColor = toastToShow
     ? toastToShow.type === ToastType.info && toastToShow.dismiss
       ? Colors.white
@@ -189,8 +202,9 @@ const Toasts: React.FC = () => {
       toastColor,
       invokeInteract,
     }),
-    [JSON.stringify(prevActive), JSON.stringify(activeToast)],
+    [JSON.stringify(toastToShow)],
   )
+  /* Context value that will be share with consumern -> End */
 
   return (
     <Animated.View
