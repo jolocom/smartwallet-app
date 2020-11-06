@@ -1,19 +1,21 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
 import { Colors } from '~/utils/colors'
 
 interface Props {
-  toggled: boolean
-  onToggle: () => void
+  initialState: boolean
+  onToggle: (state: boolean) => void
 }
 
 const ON_POSITION = 17
 const OFF_POSITION = 2
 
 const ToggleSwitch = (props: Props) => {
-  const { onToggle, toggled } = props
+  const { onToggle, initialState } = props
+
+  const [toggled, setToggled] = useState(initialState)
 
   const onGradientColors = [Colors.carnationPink, Colors.hyacinthPink]
   const offGradientColors = [Colors.haiti, Colors.haiti]
@@ -22,21 +24,13 @@ const ToggleSwitch = (props: Props) => {
     new Animated.Value(toggled ? ON_POSITION : OFF_POSITION),
   ).current
 
-  useEffect(() => {
-    animateToggle(toggled ? ON_POSITION : OFF_POSITION)
-  }, [toggled])
-
-  const animateToggle = (value: number) => {
+  const onPress = () => {
     Animated.timing(positionValue, {
-      toValue: value,
+      toValue: toggled ? OFF_POSITION : ON_POSITION,
       duration: 300,
       useNativeDriver: true,
-    }).start()
-  }
-
-  const onPress = () => {
-    animateToggle(toggled ? OFF_POSITION : ON_POSITION)
-    onToggle()
+    }).start(() => setToggled(!toggled))
+    onToggle(!toggled)
   }
 
   return (
