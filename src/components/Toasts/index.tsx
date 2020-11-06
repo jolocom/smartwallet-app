@@ -94,38 +94,38 @@ const Toasts: React.FC = () => {
     [JSON.stringify(activeToast), JSON.stringify(areaToAvoidPressing)],
   )
 
+  const animateToast = (toValue: number) => {
+    return (cb = () => {}) => {
+      Animated.timing(containerTranslateY, {
+        toValue: toValue,
+        useNativeDriver: true,
+      }).start(cb)
+    }
+  }
+
+  const animateToastIn = animateToast(0)
+
+  const animateToastOut = animateToast(-SCREEN_HEIGHT)
+
   useEffect(() => {
     if (activeToast && !prevActive) {
       // this is for the first time we show toast
       setToastToShow(activeToast)
-      Animated.timing(containerTranslateY, {
-        toValue: 0,
-        useNativeDriver: true,
-      }).start()
+      animateToastIn()
     }
     if (!activeToast && prevActive) {
       // this is for the last time we show toast: we want to show the value of a toast therefore using prevActive value
       setToastToShow(prevActive)
-      Animated.timing(containerTranslateY, {
-        toValue: -SCREEN_HEIGHT,
-        useNativeDriver: true,
-      }).start()
+      animateToastOut()
     } else if (activeToast && prevActive) {
       // this is when we change toast from one to another
       // 1. We first show the old toast and when animation hiding the old toast complete
       setToastToShow(prevActive)
-      Animated.timing(containerTranslateY, {
-        toValue: -SCREEN_HEIGHT,
-        useNativeDriver: true,
-      }).start(() => {
+      animateToastOut(() => {
         // 2. We change value of the toast to show to active toast
         setToastToShow(activeToast)
         // 3. And run animation to show it
-        Animated.timing(containerTranslateY, {
-          toValue: 0,
-          duration: 600,
-          useNativeDriver: true,
-        }).start()
+        animateToastIn()
       })
     }
   }, [JSON.stringify(activeToast)])
@@ -202,7 +202,7 @@ const Toasts: React.FC = () => {
       toastColor,
       invokeInteract,
     }),
-    [JSON.stringify(toastToShow)],
+    [JSON.stringify(toastToShow), invokeInteract],
   )
   /* Context value that will be share with consumern -> End */
 

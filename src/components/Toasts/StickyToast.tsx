@@ -2,16 +2,16 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 
 import { useToastToShow } from './context'
-import Description from './Description'
-import Title from './Title'
+import ToastDescription from './ToastDescription'
+import ToastTitle from './ToastTitle'
 
 const StickyToast = () => {
-  const { toastToShow, toastColor, invokeInteract } = useToastToShow()
-  if (toastToShow && !toastToShow?.dismiss && !toastToShow.interact) {
+  const { toastToShow, invokeInteract } = useToastToShow()
+  if (toastToShow && !toastToShow?.dismiss) {
     return (
       <TouchableOpacity onPress={invokeInteract}>
-        <Title />
-        <Description />
+        <ToastTitle />
+        <ToastDescription />
       </TouchableOpacity>
     )
   }

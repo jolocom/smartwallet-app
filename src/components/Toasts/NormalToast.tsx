@@ -1,7 +1,7 @@
 import React from 'react'
 import { useToastToShow } from './context'
-import Description from './Description'
-import Title from './Title'
+import ToastDescription from './ToastDescription'
+import ToastTitle from './ToastTitle'
 
 const NormalToast = () => {
   const { toastToShow } = useToastToShow()
@@ -9,8 +9,8 @@ const NormalToast = () => {
   if (toastToShow && toastToShow.dismiss && !toastToShow?.interact) {
     return (
       <>
-        <Title />
-        <Description />
+        <ToastTitle />
+        <ToastDescription />
       </>
     )
   }

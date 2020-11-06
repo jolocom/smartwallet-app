@@ -5,7 +5,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useToastToShow } from './context'
 
-const Description = ({ customStyles = {} }) => {
+const ToastDescription = ({ customStyles = {} }) => {
   const { toastToShow } = useToastToShow()
   if (!toastToShow) return null
   return (
@@ -23,4 +23,4 @@ const Description = ({ customStyles = {} }) => {
   )
 }
 
-export default Description
+export default ToastDescription

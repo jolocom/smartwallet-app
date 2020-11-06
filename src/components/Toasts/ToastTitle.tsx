@@ -4,7 +4,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from '../JoloText'
 import { useToastToShow } from './context'
 
-const Title = ({ customStyles = {} }) => {
+const ToastTitle = ({ customStyles = {} }) => {
   const { toastToShow, toastColor } = useToastToShow()
   if (!toastToShow) return null
   return (
@@ -23,4 +23,4 @@ const Title = ({ customStyles = {} }) => {
   )
 }
 
-export default Title
+export default ToastTitle

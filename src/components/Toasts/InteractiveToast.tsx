@@ -12,8 +12,8 @@ import { JoloTextSizes } from '~/utils/fonts'
 
 import JoloText, { JoloTextKind } from '../JoloText'
 import { useToastToShow } from './context'
-import Description from './Description'
-import Title from './Title'
+import ToastDescription from './ToastDescription'
+import ToastTitle from './ToastTitle'
 
 interface IProps {
   handleInteractionBtnLayout: (e: LayoutChangeEvent) => void
@@ -22,13 +22,13 @@ interface IProps {
 const InteractiveToast = React.forwardRef<View, IProps>(
   ({ handleInteractionBtnLayout }, ref) => {
     const { toastToShow, toastColor, invokeInteract } = useToastToShow()
-    if (toastToShow?.interact) {
+    if (toastToShow?.interact && toastToShow.dismiss) {
       return (
         <>
-          <Title customStyles={{ textAlign: 'left' }} />
+          <ToastTitle customStyles={{ textAlign: 'left' }} />
           <View style={styles.withInteractContainer}>
             <View style={styles.withInteractText}>
-              <Description customStyles={{ textAlign: 'left' }} />
+              <ToastDescription customStyles={{ textAlign: 'left' }} />
             </View>
             <View
               style={styles.interactBtnContainer}
