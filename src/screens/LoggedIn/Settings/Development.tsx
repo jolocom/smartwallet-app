@@ -6,17 +6,16 @@ import Option from './components/Option'
 import ToggleSwitch from '~/components/ToggleSwitch'
 
 const DevelopmentSection = () => {
-  const [toggled, setToggled] = useState(false)
-  const handleToggle = () => {
-    setToggled(!toggled)
+  const handleToggle = (toggled: boolean) => {
+    console.log({ toggled })
   }
 
   return (
     <Section title={'Development'}>
-      <Option onPress={handleToggle}>
+      <Option>
         <Option.Title title={'Toggle Switch'} />
         <View style={{ position: 'absolute', right: 16 }}>
-          <ToggleSwitch toggled={toggled} onToggle={handleToggle} />
+          <ToggleSwitch initialState={false} onToggle={handleToggle} />
         </View>
       </Option>
     </Section>
