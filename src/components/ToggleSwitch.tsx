@@ -30,8 +30,10 @@ const ToggleSwitch = (props: Props) => {
       toValue: toggled ? OFF_POSITION : ON_POSITION,
       duration: 300,
       useNativeDriver: true,
-    }).start(() => setToggled(!toggled))
-    onToggle(!toggled)
+    }).start(() => {
+      onToggle(!toggled)
+      setToggled(!toggled)
+    })
   }
 
   return (
@@ -68,6 +70,14 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
+    elevation: 10,
+    shadowColor: Colors.black06,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 1,
+    shadowOpacity: 1,
   },
   gradientWrapper: {
     width: '100%',
