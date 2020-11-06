@@ -15,7 +15,7 @@ const ContainerComponent: React.FC = ({ children }) => {
 
 const Claims: React.FC = () => {
   const loader = useLoader()
-  const { scheduleWarning, scheduleSticky } = useToasts()
+  const { scheduleWarning, scheduleSticky, scheduleInfo } = useToasts()
 
   const openLoader = async () => {
     await loader(
@@ -32,26 +32,44 @@ const Claims: React.FC = () => {
   }
 
   const scheduleInfoNotification = () => {
-    // scheduleWarning({
-    //   title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
-    //   message:
-    //     'consectetur adipisicing elit. Tempora nam quisquam blanditiis dolorum reiciendis. consectetur adipisicing ',
-    //   interact: {
-    //     label: 'Show',
-    //     onInteract: () => {
-    //       console.log('Interracted with toast')
-    //     },
-    //   },
-    // })
-    // scheduleWarning({
-    //   title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
-    //   message:
-    //     'consectetur adipisicing elit. Tempora nam quisquam blanditiis dolorum reiciendis. consectetur adipisicing ',
-    // })
-    scheduleSticky({
+    scheduleInfo({
       title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
       message:
         'consectetur adipisicing elit. Tempora nam quisquam blanditiis dolorum reiciendis. consectetur adipisicing ',
+      interact: {
+        label: 'Show',
+        onInteract: () => {
+          console.log('Interracted with toast')
+        },
+      },
+    })
+  }
+
+  const scheduleWarningNotification = () => {
+    scheduleWarning({
+      title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
+      message:
+        'consectetur adipisicing elit. Tempora nam quisquam blanditiis dolorum reiciendis. consectetur adipisicing ',
+      interact: {
+        label: 'Show',
+        onInteract: () => {
+          console.log('Interracted with toast')
+        },
+      },
+    })
+  }
+
+  const scheduleStickyNotification = () => {
+    scheduleSticky({
+      title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
+      message: 'consectetur adipisicing elit. ',
+    })
+  }
+
+  const scheduleStickyInteractNotification = () => {
+    scheduleSticky({
+      title: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet',
+      message: 'consectetur adipisicing elit. ',
       interact: {
         label: 'Show',
         onInteract: () => {
@@ -76,6 +94,11 @@ const Claims: React.FC = () => {
       </ContainerComponent>
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={scheduleInfoNotification}>Schedule Info</Btn>
+      <Btn onPress={scheduleWarningNotification}>Schedule Warning</Btn>
+      <Btn onPress={scheduleStickyNotification}>Schedule Sticky</Btn>
+      <Btn onPress={scheduleStickyInteractNotification}>
+        Schedule Sticky Interact
+      </Btn>
     </ScreenContainer>
   )
 }

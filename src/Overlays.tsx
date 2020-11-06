@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import Loader from '~/modals/Loader'
 import ActionSheetManager from './components/ActionSheet/ActionSheetManager'
-import Toast from './components/Toast'
+import Toasts from './components/Toasts'
 import { getInteractionType } from './modules/interaction/selectors'
 
 const Overlays = () => {
@@ -19,7 +19,7 @@ const Overlays = () => {
         barStyle="light-content"
       />
       <Loader />
-      <Toast />
+      <Toasts />
       {isInteracting ? <ActionSheetManager /> : null}
     </>
   )
