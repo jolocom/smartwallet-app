@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import { Alert, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -19,7 +19,9 @@ import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import Section from './components/Section'
 import { Colors } from '~/utils/colors'
 import Option from './components/Option'
-import { CaretRight } from '~/assets/svg'
+import { debugView } from '~/utils/dev'
+import ToggleSwitch from '~/components/ToggleSwitch'
+import DevelopmentSection from './Development'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -58,6 +60,7 @@ const SettingsGeneral: React.FC = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
       >
+        {__DEV__ && <DevelopmentSection />}
         <Section title={strings.APP_PREFERENCES}>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.Language)}>
             <Option.Title title={strings.LANGUAGE} />
