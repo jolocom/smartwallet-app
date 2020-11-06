@@ -104,7 +104,7 @@ const Toasts: React.FC = () => {
       }).start()
     }
     if (!activeToast && prevActive) {
-      // this is for the last time we show toast
+      // this is for the last time we show toast: we want to show the value of a toast therefore using prevActive value
       setToastToShow(prevActive)
       Animated.timing(containerTranslateY, {
         toValue: -SCREEN_HEIGHT,
