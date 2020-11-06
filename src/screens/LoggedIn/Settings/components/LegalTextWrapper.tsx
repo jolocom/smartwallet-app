@@ -2,15 +2,14 @@ import React from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import { useState } from 'react'
 import { ConsentText } from './ConsentText'
 import ConsentButton from './ConsentTextButton'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
+import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
+import BP from '~/utils/breakpoints'
 
 interface Props {
   locale: string
@@ -24,12 +23,13 @@ const LegalTextWrapper: React.FC<Props> = ({
   title,
   enText,
   deText,
+  children,
 }) => {
   const legalText = locale === 'en' ? enText : deText
   const [toggleGerman, setToggleGerman] = useState(false)
 
   const renderGermanToggle = () => {
-    if (locale === 'en') {
+    if (locale !== 'de') {
       return toggleGerman ? (
         <ConsentText text={deText} onPress={() => setToggleGerman(false)} />
       ) : (
@@ -44,13 +44,19 @@ const LegalTextWrapper: React.FC<Props> = ({
   }
 
   return (
-    <ScreenContainer hasHeaderBack>
+    <ScreenContainer
+      hasHeaderBack
+      customStyles={{
+        paddingTop: 24,
+        paddingHorizontal: BP({ default: 16, medium: 20, large: 28 }),
+      }}
+    >
       <View style={styles.wrapper}>
         <JoloText
           color={Colors.white90}
           kind={JoloTextKind.title}
           size={JoloTextSizes.middle}
-          customStyles={{ marginBottom: 22 }}
+          customStyles={{ marginBottom: 22, fontFamily: Fonts.Regular }}
         >
           {title}
         </JoloText>
@@ -62,14 +68,15 @@ const LegalTextWrapper: React.FC<Props> = ({
           overScrollMode="never"
         >
           <JoloText
-            color={Colors.white40}
+            color={Colors.white80}
             kind={JoloTextKind.subtitle}
             size={JoloTextSizes.middle}
-            customStyles={{ textAlign: 'left' }}
+            customStyles={{ textAlign: 'left', opacity: 0.8 }}
           >
             {legalText}
           </JoloText>
           {renderGermanToggle()}
+          {children}
         </ScrollView>
       </View>
     </ScreenContainer>

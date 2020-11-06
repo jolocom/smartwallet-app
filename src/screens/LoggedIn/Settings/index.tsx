@@ -76,12 +76,11 @@ const SettingsGeneral: React.FC = () => {
               <Option.Title title={strings.BACKUP_IDENTITY} />
               <JoloText
                 kind={JoloTextKind.subtitle}
-                size={JoloTextSizes.mini}
+                size={JoloTextSizes.tiniest}
                 color={Colors.error}
                 customStyles={{
                   textAlign: 'left',
                   lineHeight: 14,
-                  marginTop: 10,
                 }}
               >
                 {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
@@ -101,18 +100,6 @@ const SettingsGeneral: React.FC = () => {
           <Option onPress={handleRate}>
             <Option.Title title={strings.RATE_US} />
           </Option>
-          <Option
-            onPress={() => handleNavigateToScreen(ScreenNames.TermsOfService)}
-          >
-            <Option.Title title={strings.TERMS_OF_SERVICE} />
-            <Option.RightIcon />
-          </Option>
-          <Option
-            onPress={() => handleNavigateToScreen(ScreenNames.PrivacyPolicy)}
-          >
-            <Option.Title title={strings.PRIVACY_POLICY} />
-            <Option.RightIcon />
-          </Option>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
             <Option.Title title={strings.IMPRINT} />
             <Option.RightIcon />
@@ -122,9 +109,11 @@ const SettingsGeneral: React.FC = () => {
             <Option.RightIcon />
           </Option>
         </Section>
-        <Btn type={BtnTypes.secondary} onPress={handleLogout}>
-          {strings.LOG_OUT}
-        </Btn>
+        {__DEV__ ? (
+          <Btn type={BtnTypes.secondary} onPress={handleLogout}>
+            {strings.LOG_OUT}
+          </Btn>
+        ) : null}
       </ScrollView>
     </ScreenContainer>
   )

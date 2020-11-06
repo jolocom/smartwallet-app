@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import Loader from '~/modals/Loader'
 import ActionSheetManager from './components/ActionSheet/ActionSheetManager'
+import Notifications from './components/Notifications'
 import { getInteractionType } from './modules/interaction/selectors'
 import { getIsAppLocked } from './modules/account/selectors'
 import TermsConsent from './screens/Modals/TermsConsent'
@@ -21,6 +22,7 @@ const Overlays = () => {
         barStyle="light-content"
       />
       <Loader />
+      <Notifications />
       {!isAppLocked && <TermsConsent />}
       {isInteracting && <ActionSheetManager />}
     </>
