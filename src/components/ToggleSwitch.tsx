@@ -35,9 +35,9 @@ const ToggleSwitch = (props: Props) => {
 
   return (
     <TouchableOpacity
-      onPress={onPress}
       activeOpacity={0.8}
       style={styles.track}
+      onPressIn={onPress}
     >
       <Animated.View
         style={{
