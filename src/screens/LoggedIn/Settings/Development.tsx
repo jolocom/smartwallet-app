@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 
 import Section from './components/Section'
 import Option from './components/Option'
 import ToggleSwitch from '~/components/ToggleSwitch'
+import { useToasts } from '~/hooks/toasts'
 
 const DevelopmentSection = () => {
+  const { scheduleInfo } = useToasts()
+
   const handleToggle = (toggled: boolean) => {
-    console.log({ toggled })
+    scheduleInfo({
+      title: 'ToggleSwitch',
+      message: `I am ${toggled ? 'toggled' : 'not toggled'}!`,
+    })
   }
 
   return (
